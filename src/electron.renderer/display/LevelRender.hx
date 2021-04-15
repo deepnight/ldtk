@@ -1,8 +1,6 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var FIELD_TEXT_SCALE : Float = 1.0;
-
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
