@@ -43,6 +43,7 @@
   - Fixed a crash when adding a single entity point
   - Fixed Enum value renaming in Level fields
   - Fixed Enum value renaming in Entity fields
+  - Fixed button color in extern enums list
   - Fixed Save or Update operations going super slow while the app wasn't focused
   - Fixed incorrect values listed in the "out-of-bounds policy" select in pure auto-layers rules
   - Fixed email address on contact links
