@@ -198,7 +198,7 @@ class RuleEditor extends ui.modal.Dialog {
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");
 		jOutOfBounds.empty();
 		var idx = 1;
-		var values = [null, 0].concat( layerDef.getAllIntGridValues().map( iv->idx++ ) );
+		var values = [null, 0].concat( sourceDef.getAllIntGridValues().map( iv->idx++ ) );
 		for(v in values) {
 			var jOpt = new J('<option value="$v"/>');
 			jOpt.appendTo(jOutOfBounds);
@@ -206,7 +206,7 @@ class RuleEditor extends ui.modal.Dialog {
 				case null: jOpt.text("This rule should not apply when reading cells outside of layer bounds (default)");
 				case 0: jOpt.text("Empty cells");
 				case _:
-					var iv = layerDef.getIntGridValueDef(v);
+					var iv = sourceDef.getIntGridValueDef(v);
 					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
 					jOpt.css({
 						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
@@ -223,7 +223,7 @@ class RuleEditor extends ui.modal.Dialog {
 		});
 		jOutOfBounds.val( rule.outOfBoundsValue==null ? "null" : Std.string(rule.outOfBoundsValue) );
 		if( rule.outOfBoundsValue!=null && rule.outOfBoundsValue>0 ) {
-			var iv = layerDef.getIntGridValueDef(rule.outOfBoundsValue);
+			var iv = sourceDef.getIntGridValueDef(rule.outOfBoundsValue);
 			jOutOfBounds.addClass("hasValue").css({
 				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
 				borderColor: C.intToHex( iv.color ),
