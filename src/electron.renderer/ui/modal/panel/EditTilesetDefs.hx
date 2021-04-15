@@ -266,5 +266,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 				},
 			]);
 		}
+
+		// Make list sortable
+		JsTools.makeSortable(jList, function(ev) {
+			var moved = project.defs.sortTilesetDef(ev.oldIndex, ev.newIndex);
+			selectTileset(moved);
+			editor.ge.emit(TilesetDefSorted);
+		});
+
 	}
 }

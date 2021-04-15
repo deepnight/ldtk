@@ -206,6 +206,8 @@ class LevelRender extends dn.Process {
 
 			case TilesetDefAdded(td):
 
+			case TilesetDefSorted:
+
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				for(li in editor.curLevel.layerInstances)
 					if( li.def.type==Entities )

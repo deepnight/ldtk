@@ -1283,6 +1283,7 @@ class Editor extends Page {
 				case TilesetMetaDataChanged(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
 				case TilesetDefPixelDataCacheRebuilt(td): extra = td.uid;
+				case TilesetDefSorted:
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
@@ -1437,7 +1438,7 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 
-			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted:
+			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted, TilesetDefSorted:
 				updateTool();
 				updateGuide();
 
