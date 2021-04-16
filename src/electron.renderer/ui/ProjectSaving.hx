@@ -48,7 +48,7 @@ class ProjectSaving extends dn.Process {
 	inline function log(str:String) App.LOG.add("save", '[${project.filePath.fileName}] $str');
 	inline function logState() log('=> $state...');
 
-	function fail(str:LocaleString) {
+	function error(str:LocaleString) {
 		var fp = project.filePath.clone();
 
 		var m = new ui.modal.dialog.Message(str);
@@ -69,7 +69,7 @@ class ProjectSaving extends dn.Process {
 			m.close();
 		 } );
 		m.addCancel();
-		destroy();
+		complete(false);
 	}
 
 	function beginState(s:SavingState) {
@@ -82,9 +82,25 @@ class ProjectSaving extends dn.Process {
 				logState();
 				var dir = project.getAbsExternalFilesDir();
 				if( NT.fileExists(dir) && !NT.isDirectory(dir) ) {
+					// An existing dir conflicts
 					var f = project.filePath.fileName;
-					fail( L.t._('I need to create a folder named "::name::", but there is a file with the exact same name there.', {name:f} ) );
+					error( L.t._('I need to create a folder named "::name::", but there is a file with the exact same name there.', {name:f} ) );
 					return;
+				}
+				else if( !NT.fileExists(project.filePath.full) ) {
+					// Saving to a new file, try to write some dummy empty file first, to check if this will work.
+					var ok = try {
+						NT.writeFileString(project.filePath.full, "-");
+						true;
+					}
+					catch(_) false;
+					if( !ok || !NT.fileExists(project.filePath.full) ) {
+						N.error("Couldn't create this project file! Maybe try to check that you have the right to write files here.");
+						complete(false);
+						return;
+					}
+					else
+						beginState(BeforeSavingActions);
 				}
 				else
 					beginState(BeforeSavingActions);
