@@ -1168,7 +1168,7 @@ namespace ldtk
         public TileInstance[] GridTiles { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 0.9.1+
+        /// **WARNING**: this deprecated value will be *removed* completely on version 0.10.0+
         /// Replaced by: `intGridCsv`
         /// </summary>
         [JsonProperty("intGrid", NullValueHandling = NullValueHandling.Ignore)]

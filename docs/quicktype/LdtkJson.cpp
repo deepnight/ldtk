@@ -1515,7 +1515,7 @@ namespace quicktype {
         void set_grid_tiles(const std::vector<TileInstance> & value) { this->grid_tiles = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 0.9.1+
+         * **WARNING**: this deprecated value will be *removed* completely on version 0.10.0+
          * Replaced by: `intGridCsv`
          */
         std::shared_ptr<std::vector<IntGridValueInstance>> get_int_grid() const { return int_grid; }

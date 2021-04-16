@@ -1215,7 +1215,7 @@ class LayerInstance:
     auto_layer_tiles: List[TileInstance]
     entity_instances: List[EntityInstance]
     grid_tiles: List[TileInstance]
-    """**WARNING**: this deprecated value will be *removed* completely on version 0.9.1+
+    """**WARNING**: this deprecated value will be *removed* completely on version 0.10.0+
     Replaced by: `intGridCsv`
     """
     int_grid: Optional[List[IntGridValueInstance]]
