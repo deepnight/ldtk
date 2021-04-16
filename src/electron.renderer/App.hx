@@ -117,6 +117,8 @@ class App extends dn.Process {
 			// Load page
 			if( path!=null )
 				loadProject(path.full, levelIndex);
+			else if( settings.v.openLastProject && settings.v.lastProject!=null && NT.fileExists(settings.v.lastProject.filePath) )
+				loadProject(settings.v.lastProject.filePath);
 			else
 				loadPage( ()->new page.Home() );
 		}, 0.2);
@@ -416,6 +418,8 @@ class App extends dn.Process {
 
 		// Load
 		settings = new Settings();
+		if( settings.v.lastKnownVersion==null )
+			LOG.warning("  -> New settings");
 
 		// Import recent projects to dirs
 		if( settings.v.recentDirs==null ) {

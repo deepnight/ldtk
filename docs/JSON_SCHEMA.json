@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 0.9.0 JSON schema",
+	"title": "LDtk 0.9.1 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "0.9.0",
+	"version": "0.9.1",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -1230,7 +1230,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.1+  Replaced by: `intGridCsv`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.10.0+  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},

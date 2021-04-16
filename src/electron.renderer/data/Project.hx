@@ -559,10 +559,10 @@ class Project {
 	}
 
 
-	public function getLevelIndex(l:Level) : Int {
+	public function getLevelIndex(?l:Level, ?uid:Int) : Int {
 		var i = 0;
 		for(ol in levels)
-			if( ol==l )
+			if( l!=null && ol==l || uid!=null && ol.uid==uid )
 				return i;
 			else
 				i++;

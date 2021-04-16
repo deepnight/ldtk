@@ -121,15 +121,25 @@ class Editor extends Page {
 			);
 		}
 
-		// Auto-load provided level index
-		if( loadLevelIndex!=null )
+		if( loadLevelIndex!=null ) {
+			// Auto-load provided level index
 			if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
 				selectLevel( project.levels[loadLevelIndex] );
 				camera.fit(true);
 			}
 			else
 				N.error('Invalid level index $loadLevelIndex');
+		}
+		else if( settings.v.lastProject!=null ) {
+			// Auto load last level UID
+			var l = project.getLevel( settings.v.lastProject.levelUid );
+			if( l!=null ) {
+				selectLevel(l);
+				camera.fit(true);
+			}
+		}
 
+		saveLastProjectInfos();
 		setCompactMode( settings.v.compactMode, true );
 		dn.Process.resizeAll();
 	}
@@ -954,6 +964,19 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
+
+		saveLastProjectInfos();
+	}
+
+
+	function saveLastProjectInfos() {
+		if( settings.v.openLastProject ) {
+			settings.v.lastProject = {
+				filePath: project.filePath.full,
+				levelUid: curLevelId,
+			}
+			settings.save();
+		}
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {

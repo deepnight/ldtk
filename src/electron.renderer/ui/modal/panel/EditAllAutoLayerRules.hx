@@ -193,6 +193,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function showAffectedCells(r:data.def.AutoLayerRuleDef) {
+		if( App.ME.isCtrlDown() )
+			return;
+
 		if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
 			editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
 			editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
@@ -399,6 +402,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		if( rg==null )
 			rg = ld.getParentRuleGroup(r);
 
+		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
 		var jPrevList = jContent.find('ul[groupUid=${rg.uid}]');
@@ -575,11 +579,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		if( rg.collapsed )
 			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
 
+		JsTools.parseComponents(jGroup);
 		return jGroup;
 	}
 
 
 	function updateRule(r:data.def.AutoLayerRuleDef) {
+		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
 		var jPrev = jContent.find('li[ruleUid=${r.uid}]');
@@ -778,11 +784,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			editor.ge.emit( LayerRuleChanged(r) );
 		});
 
-		// Delete
-		// jRule.find("button.delete").click( function(ev) {
-		// 	deleteRule(rg, r);
-		// });
-
 		// Rule context menu
 		ContextMenu.addTo(jRule, [
 			{
@@ -800,6 +801,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 		]);
 
+
+		JsTools.parseComponents(jRule);
 		return jRule;
 	}
 

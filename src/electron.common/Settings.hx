@@ -13,6 +13,9 @@ typedef AppSettings = {
 	var smartCpuThrottling : Bool;
 	var fixTileFlickering : Bool;
 
+	var openLastProject : Bool;
+	var lastProject : Null<{ filePath:String, levelUid:Int }>;
+
 	var appUiScale : Float;
 	var editorUiScale : Float;
 	var mouseWheelSpeed : Float;
@@ -54,6 +57,9 @@ class Settings {
 			smartCpuThrottling: true,
 			startFullScreen: false,
 			fixTileFlickering: true,
+
+			openLastProject: false,
+			lastProject: null,
 
 			autoWorldModeSwitch: ZoomInAndOut,
 			appUiScale: 1.0,
