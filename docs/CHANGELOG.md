@@ -1,8 +1,8 @@
 # 0.9.1
 
+ - **Fixed broken "New project" button. Sorry!**
  - Added an option to **re-open last project** when starting LDtk (open Settings with `F12`)
  - Hold `CTRL` to disable preview when moving mouse over auto-layer rules.
- - Fixed broken "New file" action. Sorry!
  - Fixed missing tooltips in rules panel.
  - Fixed tooltips staying on screen in rules panel.
 
