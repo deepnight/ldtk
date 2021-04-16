@@ -402,6 +402,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		if( rg==null )
 			rg = ld.getParentRuleGroup(r);
 
+		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
 		var jPrevList = jContent.find('ul[groupUid=${rg.uid}]');
@@ -578,11 +579,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		if( rg.collapsed )
 			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
 
+		JsTools.parseComponents(jGroup);
 		return jGroup;
 	}
 
 
 	function updateRule(r:data.def.AutoLayerRuleDef) {
+		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
 		var jPrev = jContent.find('li[ruleUid=${r.uid}]');
