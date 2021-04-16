@@ -1,3 +1,8 @@
+# 0.9.1
+
+ - Hold `CTRL` to disable preview when moving mouse over auto-layer rules.
+
+
 # 0.9.0 - Biomes and tags
 
 ## New features

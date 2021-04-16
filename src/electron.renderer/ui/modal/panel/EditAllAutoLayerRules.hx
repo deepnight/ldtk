@@ -193,6 +193,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function showAffectedCells(r:data.def.AutoLayerRuleDef) {
+		if( App.ME.isCtrlDown() )
+			return;
+
 		if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
 			editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
 			editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
