@@ -803,6 +803,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 		]);
 
+
+		JsTools.parseComponents(jRule);
 		return jRule;
 	}
 
