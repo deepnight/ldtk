@@ -1230,7 +1230,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.9.1+  Replaced by: `intGridCsv`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.10.0+  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
