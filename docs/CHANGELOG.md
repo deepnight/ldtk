@@ -1,6 +1,6 @@
 # 0.9.0 - Biomes and tags
 
-## Major changes
+## New features
 
   - **Optional auto-layer rules**: this new key feature allows to create "biome" and "variations" by defining group of rules that only apply to specific levels. Please check the new sample "`AutoLayers_5_OptionalRules`". How does it work: simply right click on a group of rules in the Rules panel to mark it as `Optional`. This group will then be disabled by default everywhere, and you'll be able to manually enable it in some specific levels only.
   - **Tile tags**: you can now associate an Enum to a Tileset, then "paint" values from this Enum freely on each tiles in the tileset. This could be useful to mark collisions, water tiles, surface sounds or whatever tag you could think of. To use this new feature, just open the Tileset panel, select an existing Enum for a tileset, and start tagging directly.
@@ -13,8 +13,9 @@
   - Array of Points in Entities can now be displayed as "**looping paths**".
 
 ## JSON format
- - Added tileset tags: `enumTags` array in `Tileset definition JSON`
+
  - **WARNING**: last call before the removal of the deprecated value `intGrid` in `Layer instances`! If not done yet, please switch to the `intGridCsv` value. The old value will be removed on 0.9.1 update.
+ - Added **tileset tags**: new array `enumTags` in `Tileset definition JSON` (see https://ldtk.io/json/)
 
 ## Other
 
