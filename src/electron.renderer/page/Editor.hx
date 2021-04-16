@@ -1270,7 +1270,7 @@ class Editor extends Page {
 				case LayerRuleGroupChanged(rg): extra = rg.uid;
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
 				case LayerRuleGroupSorted:
-				case LayerRuleGroupCollapseChanged:
+				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
 				case LayerInstanceChanged:
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
@@ -1392,7 +1392,7 @@ class Editor extends Page {
 			case LayerRuleGroupAdded:
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:
-			case LayerRuleGroupCollapseChanged:
+			case LayerRuleGroupCollapseChanged(rg):
 
 			case BeforeProjectSaving:
 			case ProjectSaved:

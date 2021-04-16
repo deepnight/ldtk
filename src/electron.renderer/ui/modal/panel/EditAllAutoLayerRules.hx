@@ -66,8 +66,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 				updateAllRuleGroups();
 
-			case LayerRuleGroupCollapseChanged:
-				updateAllRuleGroups(); // TODO optimize
+			case LayerRuleGroupCollapseChanged(rg):
+				updateRuleGroup(rg);
 
 			case LayerRuleGroupChangedActiveState(rg):
 				for(r in rg.rules)
@@ -429,7 +429,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jGroupHeader.find("div.name")
 			.click( function(_) {
 				rg.collapsed = !rg.collapsed;
-				editor.ge.emit(LayerRuleGroupCollapseChanged);
+				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
 			.find(".text").text(rg.name).parent()
 			.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "folderClose" : "folderOpen");

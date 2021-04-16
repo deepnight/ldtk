@@ -35,7 +35,7 @@ enum GlobalEvent {
 	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupSorted;
-	LayerRuleGroupCollapseChanged;
+	LayerRuleGroupCollapseChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 
 	LayerInstanceSelected;
 	LayerInstanceChanged;
