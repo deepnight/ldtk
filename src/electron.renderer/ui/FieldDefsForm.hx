@@ -75,7 +75,7 @@ class FieldDefsForm {
 						new ui.modal.dialog.Choice(
 							L.t._("This project contains no Enum yet. You first need to create one from the Enum panel."),
 							[
-								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnums() }
+								{ label:L.t._("Open enum panel"), cb:()->new ui.modal.panel.EditEnumDefs() }
 							]
 						);
 						return;
@@ -334,8 +334,10 @@ class FieldDefsForm {
 						curField.isArray
 						? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
 						: L.t._('Show "::name::=..."', { name:curField.identifier });
+					case Points: curField.isArray ? L.t._("Show isolated points") : L.t._("Show isolated point");
 					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
 					case PointPath: L.t._("Show path of points");
+					case PointPathLoop: L.t._("Show path of points (looping)");
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
 					case EntityTile: L.t._("Replace entity tile");
@@ -351,10 +353,10 @@ class FieldDefsForm {
 					case EntityTile:
 						curField.isEnum() && fieldParent==FP_Entity;
 
-					case PointStar:
+					case Points, PointStar:
 						curField.type==F_Point && fieldParent==FP_Entity;
 
-					case PointPath:
+					case PointPath, PointPathLoop:
 						curField.type==F_Point && curField.isArray && fieldParent==FP_Entity;
 
 					case RadiusPx, RadiusGrid:
@@ -384,7 +386,7 @@ class FieldDefsForm {
 			case ValueOnly, NameAndValue:
 				i.setEnabled(true);
 
-			case Hidden, PointStar, PointPath, RadiusPx, RadiusGrid, EntityTile:
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:
 				i.setEnabled(false);
 		}
 		i.onChange = onFieldChange;
@@ -424,12 +426,6 @@ class FieldDefsForm {
 						}
 					);
 				});
-				// defInput.change( function(ev) {
-				// 	curField.setDefault( defInput.val() );
-				// 	N.debug( defInput.val() );
-				// 	onFieldChange();
-				// 	defInput.val( curField.defaultOverride==null ? "" : Std.string(curField.getUntypedDefault()) );
-				// });
 
 
 			case F_Int, F_Float, F_String, F_Point:

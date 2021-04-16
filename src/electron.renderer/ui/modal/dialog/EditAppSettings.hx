@@ -18,7 +18,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		jForm.off().find("*").off();
 
 		// Log button
-		jContent.find( "button.log").click( (_)->JsTools.exploreToFile( JsTools.getLogPath(), true ) );
+		jContent.find( "button.log").click( (_)->ET.locate( JsTools.getLogPath(), true ) );
 		jContent.find(".logPath").text( JsTools.getLogPath() );
 
 		// World mode using mousewheel
@@ -55,7 +55,16 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Fullscreen
 		var i = Input.linkToHtmlInput(settings.v.startFullScreen, jForm.find("#startFullScreen"));
 		i.onValueChange = (v)->{
-			App.ME.setFullScreen(v);
+			ET.setFullScreen(v);
+			onSettingChanged();
+			App.ME.updateBodyClasses();
+		}
+
+		// Tile flickering fix
+		var i = Input.linkToHtmlInput(settings.v.fixTileFlickering, jForm.find("#fixTileFlickering"));
+		i.onChange = ()->{
+			if( Editor.exists() )
+				Editor.ME.levelRender.invalidateAll();
 			onSettingChanged();
 		}
 

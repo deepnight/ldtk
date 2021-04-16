@@ -5,7 +5,7 @@ class HxEnum {
 	public static function load(relPath:String, isSync:Bool) {
 		var curProject = Editor.ME.project;
 		var absPath = curProject.makeAbsoluteFilePath(relPath);
-		var fileContent = JsTools.readFileString(absPath);
+		var fileContent = NT.readFileString(absPath);
 
 		// File not found
 		if( fileContent==null ) {

@@ -98,10 +98,8 @@ class Cursor {
 				}
 		}
 
-		if( needRender ) {
-			// N.debug("[!] render needed: old="+type+" new="+c);
+		if( needRender )
 			invalidateRender();
-		}
 		type = c;
 
 
@@ -186,7 +184,7 @@ class Cursor {
 
 			case Tiles(li, tileIds, cx, cy, flips):
 				initRender();
-				var td = li.getTiledsetDef();
+				var td = li.getTilesetDef();
 				if( td!=null ) {
 					var left = Const.INFINITE;
 					var right = 0;

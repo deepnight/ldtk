@@ -12,6 +12,7 @@ class RuleEditor extends ui.modal.Dialog {
 	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleEditor");
 
+		setTransparentMask();
 		this.layerDef = layerDef;
 		this.rule = rule;
 		sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef( layerDef.autoSourceLayerDefUid );
@@ -74,8 +75,8 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Tile(s)
 		var jTilePicker = JsTools.createTilePicker(
-			layerDef.autoTilesetDefUid,
-			rule.tileMode==Single?MultiTiles:RectOnly,
+			Editor.ME.curLayerInstance.getTilesetUid(),
+			rule.tileMode==Single?Free:RectOnly,
 			rule.tileIds,
 			function(tids) {
 				rule.tileIds = tids.copy();
@@ -193,10 +194,49 @@ class RuleEditor extends ui.modal.Dialog {
 		});
 		jSizes.val(rule.size);
 
+		// Out-of-bounds policy
+		var jOutOfBounds = jContent.find("#outOfBoundsValue");
+		jOutOfBounds.empty();
+		var idx = 1;
+		var values = [null, 0].concat( sourceDef.getAllIntGridValues().map( iv->idx++ ) );
+		for(v in values) {
+			var jOpt = new J('<option value="$v"/>');
+			jOpt.appendTo(jOutOfBounds);
+			switch v {
+				case null: jOpt.text("This rule should not apply when reading cells outside of layer bounds (default)");
+				case 0: jOpt.text("Empty cells");
+				case _:
+					var iv = sourceDef.getIntGridValueDef(v);
+					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
+					jOpt.css({
+						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+						borderColor: C.intToHex( iv.color ),
+					});
+			}
+		}
+		jOutOfBounds.click(_->Tip.clear());
+		jOutOfBounds.change( _->{
+			var v = jOutOfBounds.val()=="null" ? null : Std.parseInt(jOutOfBounds.val());
+			rule.outOfBoundsValue = v;
+			editor.ge.emit( LayerRuleChanged(rule) );
+			renderAll();
+		});
+		jOutOfBounds.val( rule.outOfBoundsValue==null ? "null" : Std.string(rule.outOfBoundsValue) );
+		if( rule.outOfBoundsValue!=null && rule.outOfBoundsValue>0 ) {
+			var iv = sourceDef.getIntGridValueDef(rule.outOfBoundsValue);
+			jOutOfBounds.addClass("hasValue").css({
+				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+				borderColor: C.intToHex( iv.color ),
+			});
+		}
+		jOutOfBounds.removeClass("disableTip");
+
 		// Finalize
 		updateValuePicker();
 		if( guidedMode )
 			enableGuidedMode();
+
+		JsTools.parseComponents(jContent);
 	}
 
 }

@@ -268,7 +268,7 @@ class FieldInstance {
 
 					if( !valueIsNull(idx) ) {
 						var absPath = _project.makeAbsoluteFilePath( getFilePath(idx) );
-						if( !misc.JsTools.fileExists(absPath) )
+						if( !NT.fileExists(absPath) )
 							return "FileNotFound";
 					}
 				}

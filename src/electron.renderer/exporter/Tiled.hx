@@ -372,11 +372,11 @@ class Tiled extends Exporter {
 			// Auto-layer tiles
 			if( ld.autoTilesetDefUid!=null ) {
 				log.add("layer", "  Exporting Auto-Layer tiles...");
-				var td = p.defs.getTilesetDef(ld.autoTilesetDefUid);
+				var td = li.getTilesetDef();
 				var csvLayers : Array<Csv> = [];
 				var hasIncompatibleTiles = false;
 
-				ld.iterateActiveRulesInDisplayOrder( (r)->{
+				ld.iterateActiveRulesInDisplayOrder( li, (r)->{
 					if( !li.autoTilesCache.exists(r.uid) )
 						return;
 

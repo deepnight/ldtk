@@ -1,3 +1,58 @@
+# 0.9.0 - Biomes and tags
+
+## New features
+
+  - **Optional auto-layer rules**: this new key feature allows to create "biome" and "variations" by defining group of rules that only apply to specific levels. Please check the new sample "`AutoLayers_5_OptionalRules`". How it works: simply right click on a group of rules in the Rules panel to mark it as `Optional`. This group will then be disabled by default everywhere, and you'll be able to manually enable it in some specific levels only.
+  - **Tile tags**: you can now associate an Enum to a Tileset, then "paint" values from this Enum freely on each tiles in the tileset. This could be useful to mark collisions, water tiles, surface sounds or whatever tag you could think of. To use this new feature, just open the Tileset panel, select an existing Enum for a tileset, and start tagging directly.
+  - **Tile custom data**: you can add totally custom text values to each tile in any tileset. This could be plain text, JSON, XML, etc.
+  - **Auto level naming**: you can let LDtk name your level identifiers automatically using a **custom pattern**, as defined from the Project settings panel. Some examples:
+    - default pattern "`Level_%idx`" will name levels "Level_0", "Level_1" etc, based on their order of creation (or order in array, in Horizontal/Vertical world layouts)
+    - with the pattern `MyLevel_%gx_%gy`, each level will be named using the world grid X/Y coordinates (only applies to GridVania world layouts).
+  - **Auto-layers tileset switching**: in each level and for each layer, you can now switch the tileset on-the-fly.
+  - Added "Isolated points" as new display option for points in Entities (thanks to *Stuart Adams*)
+  - Each **enum value** can now be associated with a custom color for easier reading in the UI.
+  - Re-worked the **Rules panel** to have less buttons and lost space. Some actions where moved to the context menu (eg. renaming a group of rules)
+  - Array of Points in Entities can now be displayed as "**looping paths**".
+
+## JSON format
+
+ - **WARNING**: last call before the removal of the deprecated value `intGrid` in `Layer instances`! If not done yet, please switch to the `intGridCsv` value. The old value will be removed on 0.9.1 update.
+ - Added **tileset tags**: new array `enumTags` in `Tileset definition JSON` (see https://ldtk.io/json/)
+
+## Other
+
+  - Completely reworked the way the "Auto-layer rules" panel was updated. This should reduce UI flickering and slow-downs while editing rules.
+  - Tilesets can now be manually sorted in Tilesets panel
+  - Added a new "Optional rules" sample map.
+  - Double click on Entities to automatically select all their connected Points.
+  - Added a one-time "enable backup" recommendation popup for medium/large projects.
+  - Added a "Create level" button in world panel.
+  - Added an error message when trying to create a new project in an invalid folder.
+  - Added a warning notification when moving an Entity or a Point out of level bounds
+  - Added a "close" button on Home screen, when in fullscreen mode
+  - Added a popup with various options when project saving goes wrong.
+  - Increased max width/height for Entities
+  - The keyboard shortcut to toggle auto-layers rendering is now `SHIFT-R`.
+  - Reduced tile flickering while zooming in/out (this reduction can be disabled from the app settings)
+  - Adjusted custom fields scaling policy (especially for multi-lines fields).
+  - Disabled level dimming while editing an auto-layer Rule.
+  - Extended app logging limit (from 500 to 5000 lines)
+  - Fixed default "smart" color of entities. It uses the first color value found among fields, in order of appearance, otherwise it defaults to entity main color.
+  - Fixed fullscreen not applying at startup on Debian (not tested, hope it'll work!)
+  - Fixed entity handles not disappearing when movin a resizable entity out of level bounds
+  - Fixed a rare crash when saving a project without providing file extension.
+  - Fixed various rare minor errors while saving.
+  - Fixed "Create group" button in Auto-layer Rules panel
+  - Fixed a crash when adding a single entity point
+  - Fixed Enum value renaming in Level fields
+  - Fixed Enum value renaming in Entity fields
+  - Fixed button color in extern enums list
+  - Fixed Save or Update operations going super slow while the app wasn't focused
+  - Fixed incorrect values listed in the "out-of-bounds policy" select in pure auto-layers rules
+  - Fixed email address on contact links
+  - Fixed auto-layers baking giving different results if they contained any stacked tiles.
+  - Updated various internal libs
+
 # 0.8.1
 
   - **Fullscreen mode**: just press `F11` to toggle this mode.

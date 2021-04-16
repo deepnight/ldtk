@@ -35,19 +35,22 @@ enum GlobalEvent {
 	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupSorted;
-	LayerRuleGroupCollapseChanged;
+	LayerRuleGroupCollapseChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 
 	LayerInstanceSelected;
 	LayerInstanceChanged;
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
 	LayerInstanceRestoredFromHistory(li:data.inst.LayerInstance);
 	AutoLayerRenderingChanged;
+	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);
 
 	TilesetDefChanged(td:data.def.TilesetDef);
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);
+	TilesetMetaDataChanged(td:data.def.TilesetDef);
 	TilesetSelectionSaved(td:data.def.TilesetDef);
 	TilesetDefPixelDataCacheRebuilt(td:data.def.TilesetDef);
+	TilesetDefSorted;
 
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
@@ -157,12 +160,17 @@ enum AtlasLoadingResult {
 	RemapSuccessful;
 }
 
-enum TilePickerMode {
-	ToolPicker;
-	MultiTiles;
-	SingleTile;
-	ViewOnly;
+enum TilesetSelectionMode {
+	None;
+	PickAndClose;
+	PickSingle;
+	Free;
 	RectOnly;
+}
+
+enum TilePickerDisplayMode {
+	ShowOpaques;
+	ShowPixelData;
 }
 
 typedef FileSavingData = {

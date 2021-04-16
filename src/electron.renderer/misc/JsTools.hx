@@ -5,6 +5,11 @@ import sortablejs.Sortable;
 import js.node.Fs;
 
 class JsTools {
+
+	/**
+		Use SortableJS to make some list sortable
+		See: https://github.com/SortableJS/Sortable
+	**/
 	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
 		if( jSortable.length!=1 )
 			throw "Used sortable on a set of "+jSortable.length+" element(s)";
@@ -175,11 +180,6 @@ class JsTools {
 							var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
 							scaleX = s;
 							scaleY = s;
-
-						// case Crop:
-						// 	scaleX = scaleY = scale;
-						// 	x = Std.int(ed.width*ed.pivotX*scale - td.tileGridSize*ed.pivotX*scale);
-						// 	y = Std.int(ed.height*ed.pivotY*scale - td.tileGridSize*ed.pivotY*scale);
 					}
 					td.drawTileToCanvas( jCanvas, ed.tileId, x, y, scaleX, scaleY );
 				}
@@ -237,10 +237,10 @@ class JsTools {
 			var path = dn.FilePath.fromFile(App.APP_ASSETS_DIR + "tpl/" + name);
 			path.extension = "html";
 
-			if( !fileExists(path.full) )
+			if( !NT.fileExists(path.full) )
 				throw "File not found "+path.full;
 
-			_fileCache.set( name, readFileString(path.full) );
+			_fileCache.set( name, NT.readFileString(path.full) );
 		}
 		else
 			App.LOG.fileOp("Reading HTML template "+name+" from cache");
@@ -301,38 +301,53 @@ class JsTools {
 		return new J('<span class="key">$keyLabel</span>');
 	}
 
-	public static function parseKeys(rawKeys:String) : Array<js.jquery.JQuery> {
-		var jKeys = [];
+	public static function parseKeysIn(jTarget:js.jquery.JQuery) {
 		var funcKeyReg = ~/^f[0-9]{1,2}$/gi;
 
-		for(k in rawKeys.split(" ")) {
-			if( k==null || k.length==0 )
-				continue;
+		var content = jTarget.contents();
+		var jReplace = new J("<div/>");
 
+		content.each( (idx,e)->{
+			var j = new J(e);
 
-			jKeys.push( switch k.toLowerCase() {
-				case "mouseleft": new J('<span class="icon mouseleft"></span>');
-				case "mouseright": new J('<span class="icon mouseright"></span>');
-				case "mousewheel": new J('<span class="icon mousewheel"></span>');
+			switch e.nodeType {
 
-				case "+", "-", "to", "/", "or" : new J('<span class="misc">$k</span>');
+				// Parse a text to create "keys"
+				case js.html.Node.TEXT_NODE:
+					for(k in e.textContent.split(" ")) {
+						if( k==null || k.length==0 )
+							continue;
 
-				case k.charAt(0) => "(": new J("<span/>").append(k);
-				case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
+						jReplace.append( switch k.toLowerCase() {
+							case "mouseleft": new J('<span class="icon mouseleft"></span>');
+							case "mouseright": new J('<span class="icon mouseright"></span>');
+							case "mousewheel": new J('<span class="icon mousewheel"></span>');
+
+							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
+
+							case k.charAt(0) => "(": new J("<span/>").append(k);
+							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
+
+							case _:
+								var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
+								switch k.toLowerCase() {
+									case "shift", "alt" : jKey.addClass( k.toLowerCase() );
+									case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
+									case "delete", "escape": jKey.addClass("special");
+									case _ if(funcKeyReg.match(k)): jKey.addClass("special");
+									case _:
+								}
+								jKey;
+						});
+					}
 
 				case _:
-					var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
-					switch k.toLowerCase() {
-						case "shift", "alt" : jKey.addClass( k.toLowerCase() );
-						case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
-						case "delete", "escape": jKey.addClass("special");
-						case _ if(funcKeyReg.match(k)): jKey.addClass("special");
-						case _:
-					}
-					jKey;
-			});
-		}
-		return jKeys;
+					// Keep other DOM elements as-is
+					jReplace.append(j);
+			}
+		});
+
+		jTarget.empty().append( jReplace.contents() );
 	}
 
 
@@ -476,130 +491,11 @@ class JsTools {
 
 	// *** File API (node) **************************************
 
-	public static function fileExists(path:String) {
-		if( path==null )
-			return false;
-		else {
-			js.node.Require.require("fs");
-			return js.node.Fs.existsSync(path);
-		}
-	}
-
-	public static function renameFile(oldPath:String, newPath:String) {
-		if( !fileExists(oldPath) || fileExists(newPath) )
-			return false;
-		else {
-			js.node.Require.require("fs");
-			App.LOG.fileOp('Renaming $oldPath -> $newPath...');
-			return
-				try { js.node.Fs.renameSync(oldPath,newPath); true; }
-				catch(e:Dynamic) false;
-		}
-	}
-
-	public static function removeFile(path:String) {
-		if( !fileExists(path) )
-			return false;
-		else {
-			js.node.Require.require("fs");
-			App.LOG.fileOp('Deleting file $path...');
-			return
-				try { js.node.Fs.unlinkSync(path); true; }
-				catch(e:Dynamic) false;
-		}
-	}
-
-	public static function readFileString(path:String) : Null<String> {
-		if( !fileExists(path) )
-			return null;
-		else
-			return js.node.Fs.readFileSync(path).toString();
-	}
-
-	public static function writeFileString(path:String, str:String) {
-		js.node.Require.require("fs");
-		js.node.Fs.writeFileSync( path, str );
-	}
-
-	public static function readFileBytes(path:String) : Null<haxe.io.Bytes> {
-		if( !fileExists(path) )
-			return null;
-		else
-			return js.node.Fs.readFileSync(path).hxToBytes();
-	}
-
-	public static function writeFileBytes(path:String, bytes:haxe.io.Bytes) {
-		js.node.Require.require("fs");
-		js.node.Fs.writeFileSync( path, js.node.Buffer.hxFromBytes(bytes) );
-	}
-
-	public static function createDirs(path:String) {
-		if( fileExists(path) )
-			return;
-
-
-		// Split sub dirs
-		js.node.Require.require("fs");
-		var subDirs = dn.FilePath.fromDir(path).getSubDirectories(true);
-		for(subPath in subDirs)
-			if( !fileExists(subPath) ) {
-				App.LOG.fileOp("Creating dir "+subPath+"...");
-				js.node.Fs.mkdirSync(subPath);
-			}
-	}
-
-	public static function copyFile(from:String, to:String) {
-		if( !fileExists(from) )
-			return;
-		App.LOG.fileOp('Copying $from -> $to...');
-		js.node.Require.require("fs");
-		(cast js.node.Fs).copyFileSync(from, to);
-	}
-
-	public static function removeDir(path:String) {
-		if( !fileExists(path) )
-			return;
-
-		App.LOG.fileOp("Removing dir "+path+"...");
-		js.node.Require.require("fs");
-		js.node.Fs.rmdirSync(path, {
-			recursive: true, retryDelay: 1000, maxRetries: 3 // WARNING: requires NodeJS 12+
-		});
-	}
-
-	/** Check if dir is empty. Return FALSE even if it only contains empty sub dirs. **/
-	public static function isDirEmpty(path:String) {
-		if( !fileExists(path) )
-			return true;
-
-		for( f in js.node.Fs.readdirSync(path) )
-			return false;
-
-		return true;
-	}
-
-	/** Check if dir is empty, or if it only contains empty dirs **/
-	public static function isDirEmptyRec(path:String) {
-		if( !fileExists(path) )
-			return true;
-
-		var pendings = [ path ];
-		while( pendings.length>0 ) {
-			var fp = dn.FilePath.fromDir( pendings.shift() );
-			for( f in Fs.readdirSync(fp.full) ) {
-				var inf = Fs.lstatSync(fp.full+"/"+f);
-				if( !inf.isDirectory() )
-					return false;
-				else if( !inf.isSymbolicLink() ) {}
-					pendings.push( fp.full+"/"+f );
-			}
-		}
-
-		return true;
-	}
-
 	public static function emptyDir(path:String, ?onlyExts:Array<String>) {
-		if( !fileExists(path) )
+		if( !NT.fileExists(path) )
+			return;
+
+		if( !NT.isDirectory(path) )
 			return;
 
 		var extMap = new Map();
@@ -618,23 +514,15 @@ class JsTools {
 		}
 	}
 
-	public static function readDir(path:String) : Array<String> {
-		if( !fileExists(path) )
-			return [];
-
-		js.node.Require.require("fs");
-		return js.node.Fs.readdirSync(path);
-	}
-
 	public static function findFilesRec(dirPath:String, ?ext:String) : Array<dn.FilePath> {
-		if( !fileExists(dirPath) )
+		if( !NT.fileExists(dirPath) )
 			return [];
 
 		var all = [];
 		var pendings = [dirPath];
 		while( pendings.length>0 ) {
 			var dir = pendings.shift();
-			for(f in readDir(dir)) {
+			for(f in NT.readDir(dir)) {
 				var fp = dn.FilePath.fromFile(dir+"/"+f);
 				if( js.node.Fs.lstatSync(fp.full).isFile() ) {
 					if( ext==null || fp.extension==ext )
@@ -653,9 +541,9 @@ class JsTools {
 
 	public static function getExeDir() {
 		#if !debug
-		var path = electron.renderer.IpcRenderer.sendSync("getExeDir");
+		var path = ET.getExeDir();
 		#else
-		var path = getAppResourceDir()+"/foo.exe";
+		var path = ET.getAppResourceDir()+"/foo.exe";
 		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
@@ -663,31 +551,6 @@ class JsTools {
 	public static function getSamplesDir() {
 		var raw = getExeDir() + ( App.isMac() ? "/../samples" : "/samples" );
 		return dn.FilePath.fromDir( raw ).directory;
-	}
-
-	public static function getAppResourceDir() {
-		var path = electron.renderer.IpcRenderer.sendSync("getAppResourceDir");
-		return dn.FilePath.fromDir( path ).useSlashes().directory;
-	}
-
-	public static function getCwd() {
-		var path = electron.renderer.IpcRenderer.sendSync("getCwd");
-		return dn.FilePath.fromDir( path ).useSlashes().directory;
-	}
-
-	public static function exploreToFile(path:String, isFile:Bool) {
-		var fp = isFile ? dn.FilePath.fromFile(path) : dn.FilePath.fromDir(path);
-
-		if( isWindows() )
-			fp.useBackslashes();
-
-		if( !fileExists(fp.full) )
-			fp.fileWithExt = null;
-
-		if( fp.fileWithExt==null )
-			electron.Shell.openPath(fp.full);
-		else
-			electron.Shell.showItemInFolder(fp.full);
 	}
 
 	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
@@ -698,12 +561,12 @@ class JsTools {
 			if( filePath==null )
 				N.error("No file");
 			else {
-				if( !JsTools.fileExists(filePath) )
+				if( !NT.fileExists(filePath) )
 					N.error("Sorry, but this file couldn't be found.");
 				else {
 					ev.preventDefault();
 					ev.stopPropagation();
-					exploreToFile(filePath, isFile);
+					ET.locate(filePath, isFile);
 				}
 			}
 		});
@@ -743,7 +606,7 @@ class JsTools {
 
 	public static function createTilePicker(
 		tilesetId: Null<Int>,
-		mode: TilePickerMode=MultiTiles,
+		selectMode: TilesetSelectionMode=Free,
 		tileIds: Array<Int>,
 		onPick: (tileIds:Array<Int>)->Void
 	) {
@@ -757,13 +620,13 @@ class JsTools {
 				// No tile selected
 				jTileCanvas.addClass("empty");
 			}
-			else if( mode!=RectOnly ) {
+			else if( selectMode!=RectOnly ) {
 				// Single/random tiles
 				jTileCanvas.removeClass("empty");
 				jTileCanvas.attr("width", td.tileGridSize);
 				jTileCanvas.attr("height", td.tileGridSize);
 				td.drawTileToCanvas(jTileCanvas, tileIds[0]);
-				if( tileIds.length>1 && mode!=RectOnly ) {
+				if( tileIds.length>1 && selectMode!=RectOnly ) {
 					// Cycling animation among multiple tiles
 					jTileCanvas.addClass("multi");
 					var idx = 0;
@@ -808,9 +671,9 @@ class JsTools {
 				var m = new ui.Modal();
 				m.addClass("singleTilePicker");
 
-				var tp = new ui.TilesetPicker(m.jContent, td, mode);
+				var tp = new ui.Tileset(m.jContent, td, selectMode);
 				tp.setSelectedTileIds(tileIds);
-				if( mode==SingleTile )
+				if( selectMode==PickAndClose )
 					tp.onSingleTileSelect = function(tileId) {
 						m.close();
 						onPick([tileId]);
@@ -870,7 +733,7 @@ class JsTools {
 		// Existing image assets
 		var allImages = Editor.ME.project.getAllCachedImages();
 		if( allImages.length>0 ) {
-			var jRecall = new J('<button class="recall"> <span class="icon expand"/> </button>');
+			var jRecall = new J('<button class="recall"> <span class="icon expandMore"/> </button>');
 			jRecall.appendTo(jWrapper);
 			jRecall.click( (ev:js.jquery.Event)->{
 				var ctx = new ui.modal.ContextMenu();
@@ -887,7 +750,7 @@ class JsTools {
 		if( curRelPath!=null ) {
 			var abs = Editor.ME.project.makeAbsoluteFilePath(curRelPath);
 			ui.Tip.attach(jPick, abs);
-			if( !JsTools.fileExists(abs) ) {
+			if( !NT.fileExists(abs) ) {
 				jWrapper.addClass("error");
 				jPick.text(L.t._("File not found!"));
 			}

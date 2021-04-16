@@ -1,8 +1,6 @@
 package display;
 
 class LevelRender extends dn.Process {
-	static var FIELD_TEXT_SCALE : Float = 1.0;
-
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
@@ -127,6 +125,9 @@ class LevelRender extends dn.Process {
 					if( li.def.isAutoLayer() )
 						invalidateLayer(li);
 
+			case LayerInstanceTilesetChanged(cli):
+				invalidateLayer(cli);
+
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
 				invalidateUi();
@@ -185,13 +186,15 @@ class LevelRender extends dn.Process {
 			case LayerRuleGroupSorted:
 				invalidateLayer( editor.curLayerInstance );
 
-			case LayerRuleGroupCollapseChanged:
+			case LayerRuleGroupCollapseChanged(rg):
 
 			case LayerInstanceChanged:
 
 			case TilesetSelectionSaved(td):
 
 			case TilesetDefPixelDataCacheRebuilt(td):
+
+			case TilesetMetaDataChanged(td):
 
 			case TilesetDefRemoved(td):
 				invalidateAll();
@@ -202,6 +205,8 @@ class LevelRender extends dn.Process {
 						invalidateLayer(li);
 
 			case TilesetDefAdded(td):
+
+			case TilesetDefSorted:
 
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				for(li in editor.curLevel.layerInstances)

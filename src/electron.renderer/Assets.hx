@@ -10,6 +10,7 @@ class Assets {
 	public static var fontPixelOutline : h2d.Font;
 
 	public static var elements : dn.heaps.slib.SpriteLib;
+	public static var elementsPixels : hxd.Pixels;
 
 	public static function init() {
 		fontPixelOutline = hxd.Res.fonts.minecraftiaOutline.toFont();
@@ -21,6 +22,8 @@ class Assets {
 		fontLight_xlarge = hxd.Res.fonts.roboto72.toFont();
 
 		elements = dn.heaps.assets.Atlas.load("appElements.atlas");
+		elementsPixels = elements.tile.getTexture().capturePixels();
+
 	}
 }
 

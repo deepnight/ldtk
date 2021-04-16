@@ -178,6 +178,12 @@ button {
 		// }
 	}
 
+	&.strong {
+		padding-top: 24px;
+		padding-bottom: 24px;
+		font-size: 13pt;
+	}
+
 	&[href] {
 		display: flex;
 		justify-content: center;
@@ -302,6 +308,16 @@ button {
 			background: black;
 		}
 	}
+
+	&.pending {
+		color: $orange;
+		background-color: $bgMed;
+		outline: none;
+		border: 1px solid $orange;
+		border-radius: 3px;
+		box-shadow: none;
+		cursor: crosshair;
+	}
 }
 
 
@@ -404,7 +420,7 @@ button {
 		display: none;
 	}
 	button.small {
-		flex: 0.2 1 0;
+		flex: 0 1 0;
 	}
 }
 
@@ -414,6 +430,31 @@ button {
 	font-size: 1.1em;
 	padding: 10px;
 	border: 1px dotted $help;
+
+	&.guide {
+		position: absolute;
+		z-index: 2;
+		display: none;
+		background-color: $helpDark;
+		right: 0;
+
+		dl {
+			margin: 0;
+			padding: 0;
+
+			display: grid;
+			grid-template-columns: min-content auto;
+
+			dt {
+				font-family: monospace;
+				color: $orange;
+			}
+			dd {
+				padding-left: 8px;
+				padding-bottom: 8px;
+			}
+		}
+	}
 }
 
 a.exploreTo {
@@ -791,7 +832,7 @@ ul.niceList {
 			color: white;
 
 			&:hover {
-				background-color: white;
+				background-color: $orange;
 			}
 		}
 	}
@@ -955,6 +996,11 @@ ul.log {
 	background-repeat: no-repeat;
 	background-size: contain;
 }
+.icon.left				{ background-image: url("../icons/arrow_left.svg"); }
+.icon.right				{ background-image: url("../icons/arrow_right.svg"); }
+.icon.up				{ background-image: url("../icons/arrow_up.svg"); }
+.icon.down				{ background-image: url("../icons/arrow_down.svg"); }
+
 .icon.active			{ background-image: url("../icons/active.png"); }
 .icon.add				{ background-image: url("../icons/add.svg"); }
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
@@ -975,8 +1021,11 @@ ul.log {
 .icon.entity			{ background-image: url("../icons/entity.png"); }
 .icon.enum				{ background-image: url("../icons/enum.png"); }
 .icon.exit				{ background-image: url("../icons/exit.svg"); }
-.icon.expand			{ background-image: url("../icons/expand.svg"); }
+.icon.expandMore		{ background-image: url("../icons/expandMore.svg"); }
+.icon.expandLess		{ background-image: url("../icons/expandLess.svg"); }
 .icon.folder			{ background-image: url("../icons/folder.svg"); }
+.icon.folderOpen		{ background-image: url("../icons/folderOpen.svg"); }
+.icon.folderClose		{ background-image: url("../icons/folderClose.svg"); }
 .icon.fullscreen		{ background-image: url("../icons/fullscreen.svg"); }
 .icon.fullscreen_exit	{ background-image: url("../icons/fullscreen_exit.svg"); }
 .icon.ghost				{ background-image: url("../icons/ghost.svg"); }
@@ -1146,7 +1195,8 @@ ul.form {
 		}
 
 		&.full {
-			max-width: none;
+			width: auto !important;
+			max-width: none !important;
 			grid-column: 1/3;
 		}
 	}
@@ -1393,6 +1443,10 @@ select {
 		color: $orange;
 		background-color: $bgMed;
 		cursor: pointer;
+		&:disabled {
+			color: $bgLight;
+			font-style: italic;
+		}
 	}
 
 	&:empty {
@@ -1600,6 +1654,13 @@ textarea {
 
 		.key {
 			color: white;
+		}
+
+		p {
+			margin: 0;
+			&+p {
+				margin-top: 4px;
+			}
 		}
 	}
 
@@ -1845,7 +1906,7 @@ textarea {
 		box-shadow: 0px 0px 32px black, 0px 8px 32px rgba(0, 0, 0, 0.3);
 
 
-		h2:first-of-type {
+		>.content>h2:first-of-type {
 			display: grid;
 			grid-template-columns: min-content auto;
 			grid-auto-flow: column;
@@ -1857,6 +1918,7 @@ textarea {
 
 			color: white;
 			font-size: 15pt;
+			white-space: nowrap;
 
 			border: 0;
 			background-color: $bgLight;
@@ -1981,12 +2043,24 @@ textarea {
 
 .window.textEditor {
 	.wrapper .content {
+		display: grid;
+		grid-template-rows: min-content min-content auto;
+		width: 80vw;
+		height: 70vh;
+
 		h2 {
 			margin-bottom: 8px;
 		}
+
+		.header {
+			&:not(:empty) {
+				padding-top: 8px;
+				padding-bottom: 8px;
+			}
+		}
 		.CodeMirror {
-			width: 80vw;
-			height: 70vh;
+			width: 100%;
+			height: 100%;
 		}
 	}
 }
@@ -2151,6 +2225,7 @@ textarea {
 					text-transform: none;
 					color: $bgLighter;
 					font-size: 9pt;
+					max-width: 300px;
 				}
 
 				&.crash:not(:hover) {
@@ -2186,8 +2261,22 @@ textarea {
 	}
 
 	&.warning .wrapper {
+		max-width: 400px;
 		background-color: $darkRed;
 		border-color: $red;
+	}
+
+	&.error .wrapper {
+		max-width: 450px;
+		background-color: $darkRed;
+		border-color: $red;
+
+		h2:first-of-type {
+			background-color: $red;
+		}
+		button {
+			white-space: nowrap;
+		}
 	}
 
 	&.choice .wrapper {
@@ -2241,8 +2330,10 @@ textarea {
 			flex-wrap: wrap;
 
 			button {
-				flex: 1 1 0;
 				margin: 1px;
+				&:not(.small) {
+					flex: 1 1 0;
+				}
 			}
 
 			button.confirm {
@@ -2255,7 +2346,6 @@ textarea {
 		max-width: 400px;
 	}
 }
-
 
 .window.sync {
 	.wrapper .content {
@@ -2628,17 +2718,24 @@ div.sortHandle {
 	max-width: 40vw;
 	pointer-events: none;
 
+	p, pre {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
+
 	p {
 		@include resetMargin();
 		margin: 0;
 	}
+
+	pre {
+		margin: 0;
+		padding: 0;
+		font-family: Roboto;
+	}
+
 	p+p {
 		margin-top: 3px;
-		pre {
-			margin: 0;
-			padding: 0;
-			font-family: Roboto;
-		}
 	}
 }
 
@@ -3247,7 +3344,7 @@ canvas#webgl {
 
 	&>.wrapper {
 		display: grid;
-		grid-template-columns: auto;
+		grid-template-columns: 100%;
 		grid-template-rows: min-content 50vh min-content;
 		box-sizing: border-box;
 		width: 80vw;
@@ -3315,7 +3412,7 @@ canvas#webgl {
 
 		.main {
 			display: grid;
-			width: 70vw;
+			width: 100%;
 			grid-template-columns: auto 250px;
 			box-sizing: border-box;
 			padding-top: 30px;
@@ -3353,6 +3450,15 @@ canvas#webgl {
 				}
 				&.settings {
 					flex: 0 1 0px;
+				}
+
+				&.exit {
+					display: none;
+					flex: 0 1 0px;
+				}
+
+				@at-root body.fullscreen .buttons .exit {
+					display: inherit !important;
 				}
 			}
 		}
@@ -3499,9 +3605,6 @@ canvas#webgl {
 
 			.buttons {
 				margin: 0;
-				.exit {
-					flex: 0.3 1 0;
-				}
 			}
 		}
 
@@ -3933,14 +4036,28 @@ canvas#webgl {
 }
 
 
-.tilesetPicker {
+.tileset {
+	width: 100%;
+	height: 100%;
+	padding: 1px;
 	position: relative;
 	overflow: hidden;
 	box-sizing: border-box;
 
-	padding: 1px;
-	width: 100%;
-	height: 100%;
+	.tilesetWrapper {
+		width: 100%;
+		height: 100%;
+
+		position: relative;
+		overflow: hidden;
+		box-sizing: border-box;
+
+		&[cursor=pan]		{ cursor: grab; }
+		&[cursor=pick]		{ cursor: pointer; }
+		&[cursor=forbidden]	{ cursor: not-allowed; }
+		&[cursor=paint]		{ cursor: crosshair; }
+	}
+
 
 	canvas {
 		image-rendering: pixelated;
@@ -3996,12 +4113,6 @@ canvas#webgl {
 			&.top {		border-top-width: 1px; }
 			&.bottom {	border-bottom-width: 1px; }
 
-			// &.stampMode.left {	box-shadow: 0px -3px 0px #61a187; }
-			// &.stampMode.left {		box-shadow: -3px 0px 0px #ff8344; }
-			// &.stampMode.right {		box-shadow: 3px 0px 0px #ff8344; }
-			// &.stampMode.top {		box-shadow: 0px -3px 0px #ff8344; }
-			// &.stampMode.bottom {	box-shadow: 0px 3px 0px #ff8344; }
-
 			&.remove {
 				border-color: red;
 			}
@@ -4009,7 +4120,51 @@ canvas#webgl {
 
 		}
 	}
+
+
+	&.tileTagger {
+		display: grid;
+		grid-template-columns: auto;
+		grid-auto-flow: column;
+		grid-auto-columns: min-content;
+
+		.tools {
+			display: grid;
+			overflow: hidden;
+			grid-template-rows: auto;
+			width: 130px;
+
+			ul.values {
+				overflow-y: auto;
+				li {
+					overflow: hidden;
+					grid-template-columns: min-content;
+					grid-auto-flow: column;
+					grid-auto-columns: auto;
+					text-overflow: ellipsis;
+					border: none;
+					border-left: 5px solid white;
+					white-space: nowrap;
+
+					&.active {
+						color: inherit;
+						outline: 2px solid white;
+						outline-offset: -2px;
+						box-shadow: none;
+					}
+					&.none {
+						border: none;
+						background-color: $bgMed;
+						color: $bgLighter;
+					}
+				}
+
+			}
+		}
+	}
 }
+
+
 
 .window.singleTilePicker {
 	z-index: 99;
@@ -4479,14 +4634,14 @@ dl.form.fieldInstanceEditor {
 	}
 }
 
-.window.panel.layerDefs,
-.window.panel.tilesetDefs {
+.window.panel.editLayerDefs,
+.window.panel.editTilesetDefs {
 	.content{
 		display: grid;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
-		grid-template-rows: min-content auto;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px auto;
 
 		.path {
@@ -4494,7 +4649,10 @@ dl.form.fieldInstanceEditor {
 			box-sizing: border-box;
 		}
 
-		> .header {
+		>h2:first-of-type {
+			grid-column: 1/3;
+		}
+		>.header {
 			grid-column: 1/3;
 		}
 
@@ -4518,8 +4676,13 @@ dl.form.fieldInstanceEditor {
 		gap: 16px;
 		height: 100%;
 
-		ul.form>li>label:first-of-type {
-			flex: 0 0 250px;
+		dl.form>dt {
+			max-width: none;
+			width: 250px;
+
+			&>label:first-of-type {
+				max-width: none;
+			}
 		}
 
 		ul.advanced {
@@ -4537,7 +4700,7 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		li.advancedWarning {
+		.advancedWarning {
 			display: block;
 			color: $lightRed;
 			a {
@@ -4548,29 +4711,8 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		li.pngPattern {
+		dd.pngPattern {
 			position: relative;
-			dl.guide {
-				position: absolute;
-				z-index: 2;
-
-				display: grid;
-				grid-template-columns: min-content auto;
-				top: 48px;
-				right: 0;
-				padding: 16px;
-				border-radius: 3px;
-				background-color: $helpDark;
-
-				dt {
-					font-family: monospace;
-					color: $orange;
-				}
-				dd {
-					padding-left: 8px;
-					padding-bottom: 8px;
-				}
-			}
 			.example {
 				flex: 1 0 100%;
 				text-align: right;
@@ -4590,13 +4732,17 @@ dl.form.fieldInstanceEditor {
 }
 
 
-.window.panel.editEnums {
+.window.panel.editEnumDefs {
 	.content {
 		display: grid;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px auto;
-		grid-template-rows: min-content auto;
 		gap: 16px;
 		height: 100%;
+
+		>h2:first-of-type {
+			grid-column: 1/3;
+		}
 
 		.header {
 			grid-column: 1/3;
@@ -4624,13 +4770,17 @@ dl.form.fieldInstanceEditor {
 				li {
 					display: grid;
 					gap: 3px;
-					grid-template-columns: min-content 32px auto 32px;
+					grid-template-columns: min-content 32px 32px auto 32px;
 					grid-auto-flow: column;
-					grid-auto-columns: min-content;
 					margin-bottom: 4px;
 
 					input[type=color] {
-						height: 24px;
+						width: auto;
+						height: 32px;
+						border: 1px solid $orange;
+						&:hover {
+							border-color: white;
+						}
 					}
 					input[type=text] {
 						padding: 3px;
@@ -4673,9 +4823,9 @@ dl.form.fieldInstanceEditor {
 }
 
 
-.window.panel.layerDefs {
+.window.panel.editLayerDefs {
 	.mainList {
-		grid-row: 2/4;
+		grid-row: 3/5;
 		ul li {
 			grid-template-columns: min-content auto min-content;
 
@@ -4796,6 +4946,18 @@ body.sorting ul.collapsedSortTarget {
 		.levelFields {
 			display: grid;
 			grid-template-rows: min-content auto;
+		}
+
+		button:not(.running) span.running {
+			display: none;
+		}
+		button.running {
+			outline: 1px solid $orange;
+			box-shadow: 0px 0px 16px $red;
+			opacity: 0.5;
+			span.ready {
+				display: none;
+			}
 		}
 
 		ul.form .GridVania,
@@ -4945,18 +5107,6 @@ body.sorting ul.collapsedSortTarget {
 		button {
 			white-space: nowrap;
 		}
-
-		button:not(.running) span.running {
-			display: none;
-		}
-		button.running {
-			outline: 1px solid $orange;
-			box-shadow: 0px 0px 16px $red;
-			opacity: 0.5;
-			span.ready {
-				display: none;
-			}
-		}
 	}
 }
 
@@ -4993,12 +5143,14 @@ body.sorting ul.collapsedSortTarget {
 			display: flex;
 			width: 100%;
 			align-items: stretch;
+			flex-wrap: wrap;
 
 			>*+* {
-				margin-left: 4px;
+				margin: 1px;
 			}
 
 			button {
+				flex: 1 1 0px;
 				white-space: nowrap;
 				font-size: 9pt;
 			}
@@ -5025,6 +5177,10 @@ body.sorting ul.collapsedSortTarget {
 					background-color: $orange;
 				}
 			}
+
+			select {
+				width: 100%;
+			}
 		}
 
 		ul.ruleGroups {
@@ -5039,8 +5195,13 @@ body.sorting ul.collapsedSortTarget {
 			}
 
 			li.placeholder {
+				grid-template-columns: auto min-content;
 				display: grid;
+				overflow: hidden;
+				word-wrap: nowrap;
 				cursor: not-allowed;
+				background-image: url("../img/stripes.png");
+
 				strong {
 					font-weight: bold;
 				}
@@ -5050,7 +5211,8 @@ body.sorting ul.collapsedSortTarget {
 			}
 
 			li div.warning {
-				max-width: 300px;
+				grid-column: 1/99;
+				margin: 0;
 			}
 
 			&:empty {
@@ -5063,11 +5225,38 @@ body.sorting ul.collapsedSortTarget {
 
 			>li { // Group
 				position: relative;
+				display: grid;
+				grid-template-columns: 28px auto;
 				border: 1px solid $bgLight;
 				padding: 4px;
-				margin-bottom: 16px;
 				box-shadow: 0px 2px 4px black;
 				background-color: $bgMed;
+
+				&:not(:first-child) {
+					margin-top: 8px;
+				}
+
+				&:not(:last-child) {
+					margin-bottom: 8px;
+				}
+
+				.sortHandle {
+					grid-column: 1/2;
+				}
+				header {
+					grid-column: 2/3;
+				}
+				ul.ruleGroup {
+					grid-column: 1/3;
+				}
+
+				>.sortHandle {
+					background-color: $bgLight;
+					opacity: 1;
+					&:hover {
+						background-color: $orange !important;
+					}
+				}
 
 				&.highlight header {
 					outline: 1px solid #ff00ff;
@@ -5077,6 +5266,9 @@ body.sorting ul.collapsedSortTarget {
 				&.inactive {
 					background-image: url("../img/stripes.png");
 					background-color: $darkRed;
+					>.sortHandle {
+						background-color: $darkRed;
+					}
 					header {
 						background-color: $darkRed;
 						background-image: url("../img/stripes.png");
@@ -5087,11 +5279,12 @@ body.sorting ul.collapsedSortTarget {
 				}
 
 				&.collapsed {
-					border-style: dashed;
+					margin-top: 0;
+					margin-bottom: 1px;
+					padding: 0;
 					opacity: 0.66;
 					box-shadow: none;
-					margin-bottom: 4px;
-					padding-bottom: 0;
+					border: 0;
 
 					header .name {
 						cursor: cell;
@@ -5123,28 +5316,33 @@ body.sorting ul.collapsedSortTarget {
 
 				header {
 					display: grid;
-					grid-template-columns: auto repeat(4, min-content);
+					grid-template-columns: auto;
+					grid-auto-flow: column;
+					grid-auto-columns: min-content;
 					align-items: stretch;
-					width: calc( 100% + 6px );
+					width: 100%;
 					height: 32px;
-					margin: -3px;
-					border-bottom: 2px solid $bgDark;
-
 					background-color: $bgLight;
 
 					div.name {
 						display: grid;
+						grid-template-columns: 20px auto;
 						align-content: center;
+						gap: 4px;
+						width: 100%;
 						height: 100%;
-						padding-left: 8px;
 
 						font-weight: bold;
 
 						overflow-x: hidden;
 						white-space: nowrap;
-						max-width: 150px;
 
 						cursor: zoom-out;
+
+						.text {
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
 
 						&:hover {
 							background-color: $orange;
@@ -5152,7 +5350,22 @@ body.sorting ul.collapsedSortTarget {
 					}
 					input.name {
 						display: none;
-						width: 110px;
+						width: 90%;
+					}
+
+					.optional {
+						align-self: center;
+						display: flex;
+						align-items: center;
+						padding: 1px 4px;
+						color: white;
+						font-size: 8pt;
+						height: 1.3em;
+						border-radius: 3px;
+						border: 1px solid #00f1ff;
+						background-color: #1e94c5;
+						box-shadow: 0px 0px 16px #00f1ff;
+						cursor: help;
 					}
 
 					button {
@@ -5180,8 +5393,6 @@ body.sorting ul.collapsedSortTarget {
 					grid-template-columns: auto;
 					grid-auto-rows: min-content;
 					gap: 2px;
-
-					margin-top: 16px;
 
 					&:empty {
 						background-image: url("../img/stripes.png");
@@ -5616,7 +5827,7 @@ $patternSize : 32px;
 	>.wrapper .content {
 		display: grid;
 		gap: $gutter;
-		grid-template-rows: repeat(3, min-content);
+		grid-template-rows: repeat(4, min-content);
 		padding: 4px;
 		width: min-content;
 		min-width: 300px;
@@ -5635,6 +5846,7 @@ $patternSize : 32px;
 		}
 
 		.explain,
+		.outOfBounds,
 		.tileSettings,
 		.pattern .editor,
 		.pattern .values {
@@ -5671,6 +5883,27 @@ $patternSize : 32px;
 			p {
 				margin: 0;
 				padding: 0;
+			}
+		}
+
+		.outOfBounds {
+			display: grid;
+			grid-template-columns: min-content auto;
+			gap: 8px;
+			align-items: center;
+
+			select {
+				max-width: 250px;
+				text-overflow: ellipsis;
+
+				&.hasValue {
+					border-left: 5px solid $bgLight;
+				}
+			}
+			label {
+				color: $bgLighter;
+				font-size: 9pt;
+				white-space: nowrap;
 			}
 		}
 
@@ -5790,21 +6023,23 @@ $patternSize : 32px;
 	}
 }
 
-.window.panel.tilesetDefs {
+.window.panel.editTilesetDefs {
 	.mainList ul:empty::before {
 		content: "No tileset";
 	}
 
 	.content {
-		grid-template-rows: min-content min-content min-content auto;
+		width: 890px;
+		grid-template-rows: min-content min-content auto;
 		.mainList {
-			grid-row: 2/5;
+			grid-row: 3/5;
 		}
-		ul.form {
-			grid-row: 2/3;
-		}
-		.tilesDemo {
+		dl.form {
 			grid-row: 3/4;
+			dt {
+				max-width: none;
+				white-space: nowrap;
+			}
 		}
 		.pickerWrapper {
 			grid-row: 4/5;
@@ -5815,9 +6050,11 @@ $patternSize : 32px;
 			width: 100%;
 			image-rendering: pixelated;
 		}
+
 		.pickerWrapper {
 			overflow: hidden;
 			outline: 1px solid white;
+			outline-offset: -1px;
 			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4) inset;
 			background-color: rgba(0, 0, 0, 0.4);
 		}
@@ -5831,10 +6068,13 @@ $patternSize : 32px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 200px auto;
-		grid-template-rows: min-content auto;
 		// overflow: hidden;
 
+		>h2:first-of-type {
+			grid-column: 1/3;
+		}
 		>.header {
 			grid-column: 1/3;
 		}

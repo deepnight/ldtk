@@ -2,7 +2,7 @@ import electron.renderer.IpcRenderer;
 
 class App extends dn.Process {
 	public static var ME : App;
-	public static var LOG : dn.Log = new dn.Log( #if debug 1000 #else 500 #end );
+	public static var LOG : dn.Log = new dn.Log(5000);
 	public static var APP_RESOURCE_DIR = "./"; // with trailing slash
 	public static var APP_ASSETS_DIR(get,never) : String;
 		static inline function get_APP_ASSETS_DIR() return APP_RESOURCE_DIR+"assets/";
@@ -38,16 +38,15 @@ class App extends dn.Process {
 		LOG.add("BOOT","App started");
 		LOG.add("BOOT","Version: "+Const.getAppVersion());
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
-		LOG.add("BOOT","Resources: "+JsTools.getAppResourceDir());
+		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
+		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
 
 		loadingLog = new dn.Log();
 		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
 
 		// App arguments
-		var electronArgs : Array<String> = try electron.renderer.IpcRenderer.sendSync("getArgs") catch(_) [];
-		electronArgs.shift();
-		args = new dn.Args( electronArgs.join(" ") );
+		args = ET.getArgs();
 		LOG.add("BOOT", args.toString());
 
 		// Init
@@ -59,6 +58,7 @@ class App extends dn.Process {
 
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);
+		IpcRenderer.on("settingsApplied", ()->updateBodyClasses());
 
 		var win = js.Browser.window;
 		win.onblur = onAppBlur;
@@ -87,13 +87,14 @@ class App extends dn.Process {
 		Boot.ME.s2d.addEventListener(onHeapsEvent);
 
 		// Init dirs
-		var fp = dn.FilePath.fromDir( JsTools.getAppResourceDir() );
+		var fp = dn.FilePath.fromDir( ET.getAppResourceDir() );
 		fp.useSlashes();
 		APP_RESOURCE_DIR = fp.directoryWithSlash;
 
 		// Restore settings
 		loadSettings();
 		settings.save();
+		LOG.add("BOOT","AppZoomFactor: "+settings.getAppZoomFactor());
 
 		// Auto updater
 		initAutoUpdater();
@@ -120,10 +121,8 @@ class App extends dn.Process {
 				loadPage( ()->new page.Home() );
 		}, 0.2);
 
-		if( settings.v.startFullScreen )
-			setFullScreen(true);
-
 		IpcRenderer.invoke("appReady");
+		updateBodyClasses();
 	}
 
 
@@ -169,7 +168,7 @@ class App extends dn.Process {
 
 				if( Editor.ME!=null && Editor.ME.needSaving )
 					new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->bt.show());
-				else
+				else if( !ui.modal.Progress.hasAny() )
 					applyUpdate();
 			});
 		}
@@ -224,6 +223,18 @@ class App extends dn.Process {
 			else
 				miniNotif('App is up-to-date.');
 		});
+	}
+
+
+	inline function setBodyClassIf(className:String, cond:Void->Bool) {
+		if( cond() )
+			jBody.addClass(className);
+		else
+			jBody.removeClass(className);
+	}
+
+	public function updateBodyClasses() {
+		setBodyClassIf("fullscreen", ET.isFullScreen);
 	}
 
 	function getArgPath() : Null<dn.FilePath> {
@@ -309,17 +320,14 @@ class App extends dn.Process {
 
 			// Fullscreen
 			case K.F11 if( !hasAnyToggleKeyDown() && !hasInputFocus() ):
-				var isFullScreen: Bool = IpcRenderer.sendSync("isFullScreen")==true;
+				var isFullScreen = ET.isFullScreen();
 				if( !isFullScreen )
 					N.success("Press F11 to leave fullscreen");
-				setFullScreen(!isFullScreen);
+				ET.setFullScreen(!isFullScreen);
+				updateBodyClasses();
 
 			case _:
 		}
-	}
-
-	public inline function setFullScreen(v:Bool) {
-		IpcRenderer.invoke("setFullScreen", v);
 	}
 
 	public function addMask() {
@@ -388,7 +396,7 @@ class App extends dn.Process {
 		keyDowns = new Map();
 		if( hasPage() )
 			curPageProcess.onAppBlur();
-		hxd.System.fpsLimit = 4;
+		// Note: FPS limit is done during update
 	}
 
 	function onAppResize(ev:js.html.Event) {
@@ -598,7 +606,7 @@ class App extends dn.Process {
 
 	public function getDefaultDialogDir() {
 		if( settings.v.recentProjects.length==0 )
-			return #if debug JsTools.getAppResourceDir() #else JsTools.getExeDir() #end;
+			return #if debug ET.getAppResourceDir() #else JsTools.getExeDir() #end;
 
 		var last = settings.v.recentProjects[settings.v.recentProjects.length-1];
 		return dn.FilePath.fromFile(last).directory;
@@ -611,7 +619,7 @@ class App extends dn.Process {
 		else
 			str = str + "    --    "+base;
 
-		IpcRenderer.invoke("setWinTitle", str);
+		ET.setWindowTitle(str);
 	}
 
 	public inline function hasPage() {
@@ -634,22 +642,16 @@ class App extends dn.Process {
 				LOG.general("Exiting.");
 			LOG.trimFileLines();
 			LOG.flushToFile();
-			IpcRenderer.invoke("exitApp");
+			ET.exitApp();
 		}
 	}
 
-	public inline function getElectronZoomFactor() {
-		return electron.renderer.WebFrame.getZoomFactor();
-	}
-
-	#if debug
-	public function reload() {
-		IpcRenderer.invoke("reload");
-	}
-	#end
-
 	override function update() {
 		super.update();
+
+		// FPS limit while app isn't focused
+		if( !focused && !ui.modal.Progress.hasAny() && ( !Editor.exists() || !Editor.ME.camera.isAnimated() ) )
+			hxd.System.fpsLimit = 4;
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
@@ -664,7 +666,7 @@ class App extends dn.Process {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
-			debugPre("electronZoom="+M.pretty(getElectronZoomFactor(),2));
+			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());
 				var cam = Editor.ME.camera;

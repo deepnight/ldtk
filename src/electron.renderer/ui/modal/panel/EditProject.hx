@@ -26,7 +26,7 @@ class EditProject extends ui.modal.Panel {
 			jSaveAs.hide();
 
 		jContent.find("button.locate").click( function(ev) {
-			JsTools.exploreToFile(project.filePath.full, true);
+			ET.locate( project.filePath.full, true );
 		});
 
 		if( !project.isBackup() )
@@ -50,7 +50,7 @@ class EditProject extends ui.modal.Panel {
 
 	function updateProjectForm() {
 		ui.Tip.clear();
-		var jForm = jContent.find("ul.form:first");
+		var jForm = jContent.find("dl.form:first");
 		jForm.off().find("*").off();
 
 		// File extension
@@ -61,7 +61,7 @@ class EditProject extends ui.modal.Panel {
 			var old = project.filePath.full;
 			var fp = project.filePath.clone();
 			fp.extension = v ? Const.FILE_EXTENSION : "json";
-			if( JsTools.fileExists(old) && JsTools.renameFile(old, fp.full) ) {
+			if( NT.fileExists(old) && NT.renameFile(old, fp.full) ) {
 				App.ME.renameRecentProject(old, fp.full);
 				project.filePath.parseFilePath(fp.full);
 				N.success(L.t._("Changed file extension to ::ext::", { ext:fp.extWithDot }));
@@ -105,19 +105,9 @@ class EditProject extends ui.modal.Panel {
 		// Png export
 		var i = Input.linkToHtmlInput( project.exportPng, jForm.find("#png") );
 		i.linkEvent(ProjectSettingsChanged);
+
 		var jLocate = jForm.find("#png").siblings(".locate").empty();
-		if( project.exportPng )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
-		var jFilePattern = jForm.find("#png").siblings(".pattern").hide();
-		if( project.exportPng ) {
-			jFilePattern.show();
-			var i = new form.input.StringInput(jFilePattern, ()->"", (v)->{});
-			i.setPlaceholder("%level-%layer-%name");
-		}
-
-
 		var jFilePattern : js.jquery.JQuery = jForm.find("#png").siblings(".pattern").hide();
-		var jGuide : js.jquery.JQuery = jForm.find("#png").siblings(".guide").hide();
 		var jExample : js.jquery.JQuery = jForm.find("#png").siblings(".example").hide();
 		var jReset : js.jquery.JQuery = jForm.find("#png").siblings(".reset").hide();
 		if( project.exportPng ) {
@@ -128,6 +118,8 @@ class EditProject extends ui.modal.Panel {
 				project.pngFilePattern = null;
 				editor.ge.emit(ProjectSettingsChanged);
 			});
+			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
+
 			var i = new form.input.StringInput(
 				jFilePattern,
 				()->project.getPngFilePattern(),
@@ -136,8 +128,6 @@ class EditProject extends ui.modal.Panel {
 					editor.ge.emit(ProjectSettingsChanged);
 				}
 			);
-			jFilePattern.focus( (_)->jGuide.show() );
-			jFilePattern.blur( (_)->jGuide.hide() );
 			jFilePattern.keyup( (_)->{
 				var pattern = jFilePattern.val()==null ? project.getDefaultPngFilePattern() : jFilePattern.val();
 				jExample.text( '"'+project.getPngFileName(pattern, editor.curLevel, editor.curLayerDef)+'.png"' );
@@ -183,6 +173,11 @@ class EditProject extends ui.modal.Panel {
 				editor.ge.emit(ProjectSettingsChanged);
 			}
 		));
+
+		// Level name pattern
+		var i = Input.linkToHtmlInput( project.levelNamePattern, jForm.find("input.levelNamePattern") );
+		i.linkEvent(ProjectSettingsChanged);
+		i.onChange = ()->project.tidy();
 
 
 		// Advanced options

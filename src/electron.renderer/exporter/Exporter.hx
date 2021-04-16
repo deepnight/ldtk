@@ -67,7 +67,7 @@ class Exporter {
 	function writeFiles() {
 		for(f in outputFiles) {
 			log.fileOp('  ${f.path}...');
-			JsTools.writeFileBytes(f.path, f.bytes);
+			NT.writeFileBytes(f.path, f.bytes);
 		}
 	}
 
@@ -77,7 +77,7 @@ class Exporter {
 
 
 		log.fileOp("  Initializing dir...");
-		JsTools.createDirs(outputPath.full);
+		NT.createDirs(outputPath.full);
 		if( removeAllFilesInDir )
 			JsTools.emptyDir(outputPath.full);
 	}

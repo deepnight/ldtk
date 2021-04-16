@@ -19,6 +19,7 @@ class Level {
 	public var bgPos: Null<ldtk.Json.BgImagePos>;
 	public var bgPivotX: Float;
 	public var bgPivotY: Float;
+	public var useAutoIdentifier: Bool;
 
 	@:allow(ui.modal.panel.LevelInstancePanel)
 	var bgColor : Null<UInt>;
@@ -41,6 +42,7 @@ class Level {
 		this._project = project;
 		this.identifier = "Level"+uid;
 		this.bgColor = null;
+		useAutoIdentifier = true;
 
 		for(ld in _project.defs.layers)
 			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
@@ -101,6 +103,7 @@ class Level {
 			pxHei: pxHei,
 			__bgColor: JsonTools.writeColor( getBgColor() ),
 			bgColor: JsonTools.writeColor(bgColor, true),
+			useAutoIdentifier: useAutoIdentifier,
 
 			bgRelPath: bgRelPath,
 			bgPos: JsonTools.writeEnum(bgPos, true),
@@ -150,6 +153,7 @@ class Level {
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
 		l.externalRelPath = json.externalRelPath;
+		l.useAutoIdentifier = JsonTools.readBool(json.useAutoIdentifier, false); // older projects should keep their original IDs untouched
 
 		l.bgRelPath = json.bgRelPath;
 		l.bgPos = JsonTools.readEnum(ldtk.Json.BgImagePos, json.bgPos, true);
@@ -479,8 +483,9 @@ class Level {
 
 					case Hidden:
 					case EntityTile:
+					case Points:
 					case PointStar:
-					case PointPath:
+					case PointPath, PointPathLoop:
 					case RadiusPx:
 					case RadiusGrid:
 				}

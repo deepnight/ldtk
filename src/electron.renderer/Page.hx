@@ -24,9 +24,9 @@ class Page extends dn.Process {
 	public function loadPageTemplate(id:String, ?vars:Dynamic) {
 		var path = App.APP_ASSETS_DIR + 'tpl/pages/$id.html';
 		App.LOG.fileOp("Loading page template: "+id+" from "+path);
-		var raw = JsTools.readFileString(path);
+		var raw = NT.readFileString(path);
 		if( raw==null )
-			throw "Page not found: "+id+" in "+path+"( cwd="+JsTools.getAppResourceDir()+")";
+			throw "Page not found: "+id+" in "+path+"( cwd="+ET.getAppResourceDir()+")";
 
 		if( vars!=null ) {
 			for(k in Reflect.fields(vars))

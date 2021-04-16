@@ -14,7 +14,7 @@ class EditLayerDefs extends ui.modal.Panel {
 	public function new() {
 		super();
 
-		loadTemplate( "editLayerDefs", "defEditor layerDefs" );
+		loadTemplate( "editLayerDefs", "defEditor editLayerDefs" );
 		jList = jModalAndMask.find(".mainList ul");
 		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editLayers");
@@ -98,6 +98,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		newLd.tilesetDefUid = ld.autoTilesetDefUid;
 
 		// Update layer instances
+		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
 		for(l in project.levels) {
 			var sourceLi = l.getLayerInstance(ld);
@@ -105,7 +106,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			ops.push({
 				label: l.identifier,
 				cb: ()->{
-					ld.iterateActiveRulesInDisplayOrder( (r)->{
+					ld.iterateActiveRulesInDisplayOrder( newLi, (r)->{ // TODO not sure which "li" should be used here
 						if( sourceLi.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in sourceLi.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
@@ -113,7 +114,8 @@ class EditLayerDefs extends ui.modal.Panel {
 									Std.int(tileInfos.x/ld.gridSize),
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,
-									tileInfos.flips
+									tileInfos.flips,
+									!td.isTileOpaque(tileInfos.tid)
 								);
 							}
 						}

@@ -9,9 +9,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 	public function new(?selectedDef:data.def.TilesetDef) {
 		super();
 
-		loadTemplate( "editTilesetDefs", "defEditor tilesetDefs" );
+		loadTemplate( "editTilesetDefs", "defEditor editTilesetDefs" );
 		jList = jModalAndMask.find(".mainList ul");
-		jForm = jModalAndMask.find("ul.form");
+		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editTilesets");
 
 		// Create tileset
@@ -51,6 +51,9 @@ class EditTilesetDefs extends ui.modal.Panel {
 				if( td==curTd )
 					rebuildPixelData();
 
+			case TilesetMetaDataChanged(td):
+				updateTilesetPreview();
+
 			case TilesetDefPixelDataCacheRebuilt(td):
 				if( td==curTd )
 					updateTilesetPreview();
@@ -69,45 +72,48 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 
 	function updateTilesetPreview() {
+		ui.Tip.clear();
+
 		var jPickerWrapper = jContent.find(".pickerWrapper");
 
+		// No atlas
 		if( curTd==null ) {
 			jPickerWrapper.hide();
-			jContent.find(".tilesDemo").hide();
+			// jContent.find(".tilesDemo").hide();
 			return;
 		}
 
-		jContent.find(".tilesDemo").show();
+		jPickerWrapper.off().empty();
+		// jContent.find(".tilesDemo").show();
 
-		// Main tileset view
-		jPickerWrapper.show().empty();
-		if( curTd.isAtlasLoaded() ) {
-			var picker = new TilesetPicker(jPickerWrapper, curTd, ViewOnly);
-			picker.renderGrid();
-			picker.resetScroll();
-		}
+		// Picker / tagger
+		jPickerWrapper.show();
+		if( curTd.isAtlasLoaded() )
+			new ui.ts.TileTagger(jPickerWrapper, curTd);
 
-		// Demo tiles
-		var padding = 8;
-		var jDemo = jContent.find(".tilesDemo canvas");
-		JsTools.clearCanvas(jDemo);
+		// // Demo tiles
+		// var padding = 8;
+		// var jDemo = jContent.find(".tilesDemo canvas");
+		// JsTools.clearCanvas(jDemo);
 
-		if( curTd!=null && curTd.isAtlasLoaded() ) {
-			jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
-			jDemo.attr("height", curTd.tileGridSize);
+		// if( curTd!=null && curTd.isAtlasLoaded() ) {
+		// 	jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
+		// 	jDemo.attr("height", curTd.tileGridSize);
 
-			var idx = 0;
-			function renderDemoTile(tcx,tcy) {
-				curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
-			}
-			renderDemoTile(0,0);
-			renderDemoTile(1,0);
-			renderDemoTile(2,0);
-			renderDemoTile(0,1);
-			renderDemoTile(0,2);
-			renderDemoTile(0,3);
-			renderDemoTile(0,4);
-		}
+		// 	var idx = 0;
+		// 	function renderDemoTile(tcx,tcy) {
+		// 		curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
+		// 	}
+		// 	renderDemoTile(0,0);
+		// 	renderDemoTile(1,0);
+		// 	renderDemoTile(2,0);
+		// 	renderDemoTile(0,1);
+		// 	renderDemoTile(0,2);
+		// 	renderDemoTile(0,3);
+		// 	renderDemoTile(0,4);
+		// }
+
+		JsTools.parseComponents(jPickerWrapper);
 	}
 
 
@@ -169,7 +175,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			updateTilesetPreview();
 			editor.ge.emit( TilesetDefChanged(curTd) );
 		});
-		jImg.insertAfter( jForm.find("li.img>label:first") );
+		jImg.appendTo( jForm.find("dd.img") );
 
 
 		// Fields
@@ -188,6 +194,51 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curTd.padding, jForm.find("input[name=padding]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
+
+		// Tags source Enum selector
+		var jSelect = jForm.find("#tagsSourceEnumUid");
+		jSelect.empty();
+		var jOpt = new J('<option value="">-- None --</option>');
+		jOpt.appendTo(jSelect);
+		for( ed in project.defs.getAllEnumsSorted() ) {
+			var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
+			if( ed.isExternal() ) {
+				jOpt.prop("disabled",true);
+				jOpt.append(' (unsupported external enum)');
+			}
+			jOpt.appendTo(jSelect);
+		}
+		var oldUid = curTd.tagsSourceEnumUid;
+		jSelect.change( ev->{
+			// Change enum
+			var uid = Std.parseInt( jSelect.val() );
+			if( !M.isValidNumber(uid) )
+				uid = null;
+
+			function _apply() {
+				curTd.tagsSourceEnumUid = uid;
+				editor.ge.emit( TilesetDefChanged(curTd) );
+			}
+			if( oldUid!=null && oldUid!=uid && curTd.hasAnyTag() )
+				new ui.modal.dialog.Confirm(
+					jSelect,
+					L.t._("Be careful: you have tags in this tileset. You will LOSE them by changing the source Enum!"),
+					true,
+					()->{
+						new LastChance(L.t._("Tileset tags removed"), project);
+						_apply();
+					},
+					()->jSelect.val(Std.string(oldUid))
+				);
+			else
+				_apply();
+		});
+		if( curTd.tagsSourceEnumUid!=null ) {
+			jSelect.removeClass("noValue");
+			jSelect.val(curTd.tagsSourceEnumUid);
+		}
+		else
+			jSelect.addClass("noValue");
 	}
 
 
@@ -219,5 +270,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 				},
 			]);
 		}
+
+		// Make list sortable
+		JsTools.makeSortable(jList, function(ev) {
+			var moved = project.defs.sortTilesetDef(ev.oldIndex, ev.newIndex);
+			selectTileset(moved);
+			editor.ge.emit(TilesetDefSorted);
+		});
+
 	}
 }

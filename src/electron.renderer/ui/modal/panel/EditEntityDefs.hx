@@ -191,7 +191,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Dimensions
 		var i = Input.linkToHtmlInput( curEntity.width, jEntityForm.find("input[name='width']") );
-		i.setBounds(1,256);
+		i.setBounds(1,2048);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Resizable
@@ -204,7 +204,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.setEnabled( curEntity.resizableX && curEntity.resizableY );
 
 		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );
-		i.setBounds(1,256);
+		i.setBounds(1,2048);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
 		// Display renderMode form fields based on current mode
@@ -293,7 +293,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		if( curEntity.renderMode==Tile ) {
 			var jPicker = JsTools.createTilePicker(
 				curEntity.tilesetId,
-				SingleTile,
+				PickAndClose,
 				curEntity.tileId==null ? [] : [curEntity.tileId],
 				(tileIds)->{
 					curEntity.tileId = tileIds[0];

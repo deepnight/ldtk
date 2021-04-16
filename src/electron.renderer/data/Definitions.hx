@@ -450,6 +450,22 @@ class Definitions {
 		}
 	}
 
+	public function sortTilesetDef(from:Int, to:Int) : Null<data.def.TilesetDef> {
+		if( from<0 || from>=tilesets.length || from==to )
+			return null;
+
+		if( to<0 || to>=tilesets.length )
+			return null;
+
+		_project.tidy();
+
+		var moved = tilesets.splice(from,1)[0];
+		tilesets.insert(to, moved);
+
+		return moved;
+	}
+
+
 
 	/**  ENUM DEFS  *****************************************/
 
@@ -580,6 +596,12 @@ class Definitions {
 
 	public inline function getAllExternalEnumsFrom(relPath:String) {
 		return externalEnums.filter( function(ed) return ed.externalRelPath==relPath );
+	}
+
+	public function getAllEnumsSorted() : Array<data.def.EnumDef> {
+		var all = enums.concat(externalEnums);
+		all.sort( (a,b)->Reflect.compare(a.identifier.toLowerCase(), b.identifier.toLowerCase()) );
+		return all;
 	}
 
 

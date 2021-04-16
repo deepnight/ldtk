@@ -11,6 +11,7 @@ class AutoLayerRuleDef {
 	public var breakOnMatch = true;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
+	public var outOfBoundsValue : Null<Int>;
 	public var flipX = false;
 	public var flipY = false;
 	public var active = true;
@@ -121,6 +122,7 @@ class AutoLayerRuleDef {
 			tileMode: JsonTools.writeEnum(tileMode, false),
 			pivotX: JsonTools.writeFloat(pivotX),
 			pivotY: JsonTools.writeFloat(pivotY),
+			outOfBoundsValue: outOfBoundsValue,
 
 			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
@@ -136,6 +138,7 @@ class AutoLayerRuleDef {
 		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false); // default to FALSE to avoid breaking old maps
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
+		r.outOfBoundsValue = JsonTools.readNullableInt(json.outOfBoundsValue);
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
 		r.checker = JsonTools.readEnum(ldtk.Json.AutoLayerRuleCheckerMode, json.checker, false, None);
@@ -241,6 +244,8 @@ class AutoLayerRuleDef {
 			return false;
 
 		// Rule check
+		// var isOutOfBounds = false;
+		var value : Null<Int> = 0;
 		var radius = Std.int( size/2 );
 		for(px in 0...size)
 		for(py in 0...size) {
@@ -248,23 +253,30 @@ class AutoLayerRuleDef {
 			if( pattern[coordId]==0 )
 				continue;
 
-			if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+			// isOutOfBounds = !source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) );
+			value = source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
+				? source.getIntGrid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
+				: outOfBoundsValue;
+
+			if( value==null )
 				return false;
+			// if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+			// 	return false;
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING+1 ) {
 				// "Anything" checks
-				if( pattern[coordId]>0 && !source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]>0 && value==0 )
 					return false;
 
-				if( pattern[coordId]<0 && source.hasIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
+				if( pattern[coordId]<0 && value!=0 )
 					return false;
 			}
 			else {
 				// Specific value checks
-				if( pattern[coordId]>0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) != pattern[coordId] )
+				if( pattern[coordId]>0 && value != pattern[coordId] )
 					return false;
 
-				if( pattern[coordId]<0 && source.getIntGrid(cx+dirX*(px-radius), cy+dirY*(py-radius)) == -pattern[coordId] )
+				if( pattern[coordId]<0 && value == -pattern[coordId] )
 					return false;
 			}
 		}

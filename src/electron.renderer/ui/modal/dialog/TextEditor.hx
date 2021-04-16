@@ -4,14 +4,17 @@ package ui.modal.dialog;
 import codemirror.CodeMirror;
 
 class TextEditor extends ui.modal.Dialog {
+	public var jHeader : js.jquery.JQuery;
 
-	public function new(str:String, ?title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
+	public function new(str:String, title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
 		super("textEditor");
 
 		var anyChange = false;
 
-		if( title!=null )
-			new J('<h2>$title</h2>').appendTo(jContent);
+		new J('<h2>$title</h2>').appendTo(jContent);
+
+		jHeader = new J('<div class="header"/>');
+		jHeader.appendTo(jContent);
 
 		var jTextArea = new J('<textarea/>');
 		jTextArea.appendTo(jContent);
@@ -37,12 +40,18 @@ class TextEditor extends ui.modal.Dialog {
 			cm.setOption("autoCloseBrackets", true);
 		}
 
-		addClose();
 		onCloseCb = ()->{
 			 var out = cm.getValue();
 			 if( anyChange && str!=out )
 				onChange(out);
 		}
+
+		addClose();
+
+		addIconButton("delete", "red small", ()->{
+			cm.setValue("");
+			close();
+		} );
 	}
 
 	inline function requireMode(mode:ldtk.Json.TextLanguageMode) : Dynamic {
@@ -80,13 +89,13 @@ class TextEditor extends ui.modal.Dialog {
 	/** Open an external text file and edit it **/
 	public static function editExternalFile(filePath:String) {
 		var fp = dn.FilePath.fromFile(filePath);
-		if( !JsTools.fileExists(fp.full) ) {
+		if( !NT.fileExists(fp.full) ) {
 			N.error(L.t._("File not found."));
 			return false;
 		}
 
 		// Read file
-		var bytes = JsTools.readFileBytes(fp.full);
+		var bytes = NT.readFileBytes(fp.full);
 		if( bytes==null ) {
 			N.error(L.t._("Could not read file content."));
 			return false;
@@ -134,10 +143,19 @@ class TextEditor extends ui.modal.Dialog {
 			fp.fileWithExt,
 			mode,
 			(str)->{
-				JsTools.writeFileString(fp.full, str);
+				NT.writeFileString(fp.full, str);
 				N.success( L.t._('File "::name::" saved.', { name:fp.fileWithExt }) );
 			}
 		);
 		return true;
+	}
+
+	override function onKeyPress(keyCode:Int) {
+		super.onKeyPress(keyCode);
+
+		switch keyCode {
+			case K.ESCAPE: close();
+			case _:
+		}
 	}
 }

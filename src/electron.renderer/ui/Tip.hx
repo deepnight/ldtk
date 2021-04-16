@@ -1,14 +1,23 @@
 package ui;
 
 class Tip extends dn.Process {
-	var jTip : js.jquery.JQuery;
+	static var CURRENT : Tip = null;
 
-	private function new(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
+	var jTip : js.jquery.JQuery;
+	var text(default,null) : String;
+
+	private function new(?target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
 		super(Editor.ME);
 
+		clear();
+		CURRENT = this;
+		text = str;
 		jTip = new J("xml#tip").clone().children().first();
 		jTip.appendTo(App.ME.jBody);
-		jTip.css("min-width", target.outerWidth()+"px");
+
+		if( target!=null )
+			jTip.css("min-width", target.outerWidth()+"px");
+
 		if( className!=null )
 			jTip.addClass(className);
 
@@ -17,6 +26,8 @@ class Tip extends dn.Process {
 		// Multilines
 		if( str.indexOf("\\n")>=0 )
 			str = "<p>" + str.split("\\n").join("</p><p>") + "</p>";
+		else if( str.indexOf("\n")>=0 )
+			str = "<p>" + str.split("\n").join("</p><p>") + "</p>";
 
 		// Bold
 		var parts = str.split("**");
@@ -39,24 +50,57 @@ class Tip extends dn.Process {
 				jKeys.append( JsTools.createKey(kid) );
 		}
 
-		// Position
-		var tOff = target.offset();
-		var x = tOff.left;
-		if( x>=js.Browser.window.innerWidth*0.7 )
-			 x = tOff.left + target.innerWidth() - jTip.outerWidth();
+		// Position near target
+		if( target!=null ) {
+			var tOff = target.offset();
+			var x = tOff.left;
+			if( x>=js.Browser.window.innerWidth*0.7 )
+				 x = tOff.left + target.innerWidth() - jTip.outerWidth();
 
-		var y = tOff.top + target.outerHeight() + 4;
-		if( target.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-50 )
-			y = tOff.top - jTip.outerHeight() - 4;
+			var y = tOff.top + target.outerHeight() + 4;
+			if( target.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-150 )
+				y = tOff.top - jTip.outerHeight() - 4;
 
-		jTip.offset({
-			left: x,
-			top: y,
-		});
+			jTip.offset({
+				left: x,
+				top: y,
+			});
+		}
+
+		if( Editor.exists() )
+			Editor.ME.requestFps();
 	}
 
 	public static function clear() {
-		App.ME.jBody.find(".tip").not("xml .tip").remove();
+		if( CURRENT!=null ) {
+			CURRENT.destroy();
+			CURRENT = null;
+			if( Editor.exists() )
+				Editor.ME.requestFps();
+		}
+	}
+
+	public function setColor(c:Int) {
+		jTip.css({
+			backgroundColor: C.intToHex( C.toBlack(c,0.4) ),
+		});
+
+		jTip.find(".text").css({
+			color: C.intToHex( C.toWhite(c,0.7) ),
+		});
+	}
+
+
+	public static function simpleTip(pageX:Float, pageY:Float, str:String) {
+		if( CURRENT==null || CURRENT.destroyed || CURRENT.text!=str )
+			new Tip(str);
+
+		var docHei = App.ME.jDoc.innerHeight();
+		CURRENT.jTip.offset({
+			left: pageX - 16,
+			top: pageY>=docHei-150 ? docHei-150 : pageY+24,
+		});
+		return CURRENT;
 	}
 
 
@@ -68,7 +112,7 @@ class Tip extends dn.Process {
 		target
 			.off(".tip")
 			.on( "mouseenter.tip", function(ev) {
-				if( cur==null && !target.hasClass("disableTip") )
+				if( cur==null && !target.hasClass("disableTip") && App.ME.focused )
 					cur = new Tip(target, str, keys, className, forceBelow);
 			})
 			.on( "mouseleave.tip", function(ev) {
@@ -90,5 +134,8 @@ class Tip extends dn.Process {
 
 		jTip.remove();
 		jTip = null;
+
+		if( CURRENT==this )
+			CURRENT = null;
 	}
 }

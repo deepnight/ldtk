@@ -1,4 +1,4 @@
-# LDtk Json structure (version 0.8.1)
+# LDtk Json structure (version 0.9.0)
 
 ## Table of contents
    - [LDtk Json root](#ldtk-ProjectJson)
@@ -44,7 +44,8 @@ Value | Type | Description
 `defaultPivotY`<br/><sup class="internal">*Internal editor data*</sup> | Float | Default Y pivot (0 to 1) for new entities
 `exportPng`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)
 `exportTiled`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
-`flags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
+`flags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
+`levelNamePattern`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | String | The default naming convention for level identifiers.
 `minifyJson`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 `nextUid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Next Unique integer ID available
 `pngFilePattern`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
@@ -65,7 +66,7 @@ Value | Type | Description
 `__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map. In "linear" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**) : *A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).*</li><li>**`levelUid`** **(Int**)</li></ul>
 `bgRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | The *optional* relative path to the level background image.
 `externalRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
-`fieldInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-green.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array containing this level custom field values.
+`fieldInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array containing this level custom field values.
 `identifier` | String | Unique String identifier
 `layerInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.7.0-gray.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing all Layer instances. **IMPORTANT**: if the project option "*Save levels separately*" is enabled, this field will be `null`.<br/>		This array is **sorted in display order**: the 1st layer is the top-most and the last is behind.
 `pxHei` | Int | Height of the level in pixels
@@ -77,6 +78,7 @@ Value | Type | Description
 `bgPivotX`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Float | Background image X pivot (0-1)
 `bgPivotY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Float | Background image Y pivot (0-1)
 `bgPos`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info.<br/> Possible values: &lt;`null`&gt;, `Unscaled`, `Contain`, `Cover`, `CoverDirty`
+`useAutoIdentifier`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Bool | If TRUE, the level identifier will always automatically use the naming pattern as defined in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by user.
 
 <a id="ldtk-LayerInstanceJson" name="ldtk-LayerInstanceJson"></a>
 ## 2.1. Layer instance   
@@ -95,15 +97,16 @@ Value | Type | Description
 `autoLayerTiles`<br/><sup class="only">Only *Auto-layers*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;[Tile&nbsp;instance](#ldtk-Tile) | An array containing all tiles generated by Auto-layer rules. The array is already sorted in display order (ie. 1st tile is beneath 2nd, which is beneath 3rd etc.).<br/><br/>		Note: if multiple tiles are stacked in the same cell as the result of different rules, all tiles behind opaque ones will be discarded.
 `entityInstances`<br/><sup class="only">Only *Entity layers*</sup> | Array&nbsp;of&nbsp;[Entity&nbsp;instance](#ldtk-EntityInstanceJson) | 
 `gridTiles`<br/><sup class="only">Only *Tile layers*</sup> | Array&nbsp;of&nbsp;[Tile&nbsp;instance](#ldtk-Tile) | 
-`intGridCsv`<br/><sup class="only">Only *IntGrid layers*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;Int | A list of all values in the IntGrid layer, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means "empty cell" and IntGrid values start at 1. This array size is `__cWid` x `__cHei` cells.
+`intGridCsv`<br/><sup class="only">Only *IntGrid layers*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Int | A list of all values in the IntGrid layer, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means "empty cell" and IntGrid values start at 1. This array size is `__cWid` x `__cHei` cells.
 `layerDefUid` | Int | Reference the Layer definition UID
 `levelId` | Int | Reference to the UID of the level containing this layer instance
 `overrideTilesetUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | This layer can use another tileset by overriding the tileset UID here.
 `pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetX`)
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetY`)
-`visible`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | Layer instance visibility
+`visible`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | Layer instance visibility
+`optionalRules`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Array&nbsp;of&nbsp;Int | An Array containing the UIDs of optional rules that were enabled in this specific layer instance.
 `seed`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Int | Random seed used for Auto-Layers rendering
-~~`intGrid`~~<br/><sup class="only">Only *IntGrid layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-green.svg)  | Array&nbsp;of&nbsp;Object | **WARNING**: this deprecated value will be *removed* completely on version 0.9.0+<br/> <br/> Replaced by: `intGridCsv`
+~~`intGrid`~~<br/><sup class="only">Only *IntGrid layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Object | **WARNING**: this deprecated value will be *removed* completely on version 0.9.1+<br/> <br/> Replaced by: `intGridCsv`
 
 <a id="ldtk-Tile" name="ldtk-Tile"></a>
 ## 2.1.1. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
@@ -127,9 +130,9 @@ Value | Type | Description
 `__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).<br/> This object contains the following fields:<br/> <ul><li>**`srcRect`** **(Array of Int**) : *An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`*</li><li>**`tilesetUid`** **(Int**) : *Tileset ID*</li></ul>
 `defUid` | Int | Reference of the **Entity definition** UID
 `fieldInstances` | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array of all custom fields and their values.
-`height`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Int | Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.
+`height`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.
 `px`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget optional layer offsets, if they exist!
-`width`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Int | Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.
+`width`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.
 
 <a id="ldtk-FieldInstanceJson" name="ldtk-FieldInstanceJson"></a>
 ## 2.1.3. Field instance   
@@ -153,7 +156,7 @@ Value | Type | Description
 `enums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | 
 `externalEnums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file.
 `layers` | Array&nbsp;of&nbsp;[Layer&nbsp;definition](#ldtk-LayerDefJson) | 
-`levelFields`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | An array containing all custom fields available to all levels.
+`levelFields`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | An array containing all custom fields available to all levels.
 `tilesets` | Array&nbsp;of&nbsp;[Tileset&nbsp;definition](#ldtk-TilesetDefJson) | 
 
 <a id="ldtk-LayerDefJson" name="ldtk-LayerDefJson"></a>
@@ -162,18 +165,18 @@ Value | Type | Description
 -- | -- | --
 `__type` | String | Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
 `autoSourceLayerDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
-`autoTilesetDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this auto-layer rules
+`autoTilesetDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | Unique String identifier
-`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value. The array is sorted using value (ascending).<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *Unique String identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  : *The IntGrid value itself*</li></ul>
+`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup> | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value. The array is sorted using value (ascending).<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *Unique String identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
 `pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
-`tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this Tile layer
+`tilesetDefUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the Tileset UID being used by this Tile layer. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.
 `uid` | Int | Unique Int identifier
-`autoRuleGroups`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/> This object contains the following fields:<br/> <ul><li>**`active`** **(Bool**)</li><li>**`collapsed`** **(Bool**)</li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#ldtk-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li></ul>
-`excludedTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of tags to forbid some Entities in this layer
-`requiredTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of tags to filter Entities that can be added to this layer
+`autoRuleGroups`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/> This object contains the following fields:<br/> <ul><li>**`active`** **(Bool**)</li><li>**`collapsed`** **(Bool**)</li><li>**`isOptional`** **(Bool**)  ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg) </li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#ldtk-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li></ul>
+`excludedTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of tags to forbid some Entities in this layer
+`requiredTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of tags to filter Entities that can be added to this layer
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `type`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Type of the layer as Haxe Enum<br/> Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`
@@ -190,6 +193,7 @@ Value | Type | Description
 `checker`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Checker mode<br/> Possible values: `None`, `Horizontal`, `Vertical`
 `flipX`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, allow rule to be matched by flipping its pattern horizontally
 `flipY`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, allow rule to be matched by flipping its pattern vertically
+`outOfBoundsValue`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default IntGrid value when checking cells outside of level bounds
 `pattern`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;Int | Rule pattern (size x size)
 `perlinActive`<br/><sup class="internal">*Internal editor data*</sup> | Bool | If TRUE, enable Perlin filtering to only apply rule on specific random area
 `perlinOctaves`<br/><sup class="internal">*Internal editor data*</sup> | Float | 
@@ -218,19 +222,19 @@ Value | Type | Description
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
 `fieldDefs`<br/><sup class="internal">*Internal editor data*</sup> | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
-`fillOpacity`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Float | 
-`hollow`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | 
-`keepAspectRatio`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.
+`fillOpacity`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Float | 
+`hollow`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
+`keepAspectRatio`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.
 `limitBehavior`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
-`limitScope`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Enum | If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level".<br/> Possible values: `PerLayer`, `PerLevel`, `PerWorld`
-`lineOpacity`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Float | 
-`maxCount`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-green.svg)  | Int | Max instances count
+`limitScope`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Enum | If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level".<br/> Possible values: `PerLayer`, `PerLevel`, `PerWorld`
+`lineOpacity`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Float | 
+`maxCount`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Int | Max instances count
 `renderMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`
-`resizableX`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
-`resizableY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
+`resizableX`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
+`resizableY`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
-`tags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
-`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-green.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
+`tags`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
+`tileRenderMode`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>
 ## 3.2.1. Field definition  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) 
@@ -250,10 +254,10 @@ Value | Type | Description
 `min`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Internal editor data*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
 `regex`<br/><sup class="only">Only *String*</sup><br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
 `type`<br/><sup class="internal">*Internal editor data*</sup> | Dynamic&nbsp;(anything) | Internal type enum
-`uid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Unique Intidentifier
+`uid`<br/><sup class="internal">*Internal editor data*</sup> | Int | Unique Int identifier
 `editorAlwaysShow`<br/><sup class="internal">*Internal editor data*</sup> | Bool | 
-`editorCutLongValues`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-green.svg)  | Bool | 
-`editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `PointStar`, `PointPath`, `RadiusPx`, `RadiusGrid`
+`editorCutLongValues`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
+`editorDisplayMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
 `editorDisplayPos`<br/><sup class="internal">*Internal editor data*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
 `textLangageMode`<br/><sup class="internal">*Internal editor data*</sup> | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
 
@@ -263,12 +267,17 @@ The `Tileset` definition is the most important part among project definitions. I
 
 Value | Type | Description
 -- | -- | --
+`__cHei`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Int | Grid-based height
+`__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Int | Grid-based width
+`customData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array of custom tile metadata<br/> This object contains the following fields:<br/> <ul><li>**`data`** **(String**)</li><li>**`tileId`** **(Int**)</li></ul>
+`enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
 `identifier` | String | Unique String identifier
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels
 `relPath` | String | Path to the source file, relative to the current project JSON file
 `spacing` | Int | Space in pixels between all tiles
+`tagsSourceEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier
 `cachedPixelData`<br/><sup class="internal">*Internal editor data*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/> This object contains the following fields:<br/> <ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
@@ -289,6 +298,7 @@ Value | Type | Description
 ## 3.4.1. Enum value definition   
 Value | Type | Description
 -- | -- | --
-`__tileSrcRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
+`__tileSrcRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
+`color`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-green.svg)  | Int | Optional color
 `id` | String | Enum value
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | The optional ID of the tile

@@ -63,9 +63,12 @@ class GenericLevelElementGroup {
 	public inline function getElement(idx:Int) return elements[idx];
 
 	public function add(ge:GenericLevelElement) {
+		// Already in selection?
 		for(e in elements)
 			if( ge.equals(e) )
 				return false;
+
+		// Add
 		elements.push(ge);
 		invalidateBounds();
 		invalidateSelectRender();
@@ -254,7 +257,7 @@ class GenericLevelElementGroup {
 								ghost.endFill();
 
 							case Tiles:
-								var td = li.getTiledsetDef();
+								var td = li.getTilesetDef();
 								for( t in li.getGridTileStack(cx,cy) ) {
 									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
 									bmp.x = li.pxTotalOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
@@ -468,8 +471,11 @@ class GenericLevelElementGroup {
 			switch ge {
 				case Entity(li,ei):
 					for(fi in ei.getFieldInstancesOfType(F_Point)) {
-						if( fi.def.editorDisplayMode!=PointPath && fi.def.editorDisplayMode!=PointStar )
-							continue;
+						switch fi.def.editorDisplayMode {
+							case PointStar, PointPath, PointPathLoop:
+							case Points: continue;
+							case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid: continue;
+						}
 
 						// Links to Entity own field points
 						for( i in 0...fi.getArrayLength() ) {
@@ -635,6 +641,7 @@ class GenericLevelElementGroup {
 		}
 
 		// Prepare movement effects
+		var outOfBoundsRemovals : Array<String> = [];
 		var moveGrid = getSmartSnapGrid();
 		for( i in 0...elements.length ) {
 			var ge = elements[i];
@@ -657,6 +664,7 @@ class GenericLevelElementGroup {
 					// Out of bounds
 					if( ei.x<li.pxTotalOffsetX || ei.x>li.pxTotalOffsetX+li.cWid*li.def.gridSize
 					|| ei.y<li.pxTotalOffsetY || ei.y>li.pxTotalOffsetY+li.cHei*li.def.gridSize ) {
+						outOfBoundsRemovals.push(ei.def.identifier);
 						li.removeEntityInstance(ei);
 						elements[i] = null;
 
@@ -743,6 +751,7 @@ class GenericLevelElementGroup {
 							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
 						else {
 							// Out of bounds
+							outOfBoundsRemovals.push(fi.def.identifier);
 							fi.removeArrayValue(arrayIdx);
 							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
 							elements[i] = null;
@@ -752,6 +761,10 @@ class GenericLevelElementGroup {
 						changedLayers.set(li,li);
 					}
 			}
+		}
+
+		if( outOfBoundsRemovals.length>0 ) {
+			N.warning( L.t._("Out-of-bounds entity removed: ::names::", {names:outOfBoundsRemovals.join(", ")}) );
 		}
 
 		// Execute move

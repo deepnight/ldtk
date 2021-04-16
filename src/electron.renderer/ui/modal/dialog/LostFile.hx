@@ -13,7 +13,7 @@ class LostFile extends ui.modal.Dialog {
 		var lostName = fp.fileName;
 		var lostExt = fp.extension;
 
-		addTitle( Lang.t._("File not found!") );
+		addTitle( Lang.t._("File not found!"), true );
 		addParagraph(Lang.t._("The following file cannot be found anymore:") );
 
 		jContent.append( JsTools.makePath(lostPath) );
@@ -22,7 +22,7 @@ class LostFile extends ui.modal.Dialog {
 		addButton(Lang.t._("Locate the file"), "confirm", function() {
 			var lostFullPath = project.makeAbsoluteFilePath( fp.full );
 			var lostDir = dn.FilePath.extractDirectoryWithoutSlash(lostFullPath, true);
-			var baseDir = JsTools.fileExists(lostDir) ? lostDir : project.getProjectDir();
+			var baseDir = NT.fileExists(lostDir) ? lostDir : project.getProjectDir();
 
 			dn.js.ElectronDialogs.openFile(lostExt==null ? null : ["."+lostExt], baseDir, function(newPath:String) {
 				newPath = StringTools.replace(newPath, "\\", "/");

@@ -122,10 +122,14 @@ class WorldRender extends dn.Process {
 
 			case WorldLevelMoved:
 				updateLayout();
+				updateLabels(true);
 				updateCurrentHighlight();
 
 			case ProjectSelected:
 				renderAll();
+
+			case EnumDefChanged, EnumDefAdded, EnumDefRemoved, EnumDefValueRemoved:
+				invalidateAllLevelFields();
 
 			case FieldInstanceChanged(fi):
 				var l = project.getLevelUsingFieldInst(fi);
@@ -186,14 +190,14 @@ class WorldRender extends dn.Process {
 				invalidateLevel(l);
 				invalidateLevelFields(l);
 				updateLayout();
+				updateLabels(true);
 				renderWorldBounds();
-				// if( editor.worldMode )
-				// 	camera.scrollToLevel(l);
 
 			case LevelRemoved(l):
 				removeLevel(l.uid);
 				removeLevelFields(l.uid);
 				updateLayout();
+				updateLabels(true);
 				renderWorldBounds();
 
 			case _:
@@ -285,7 +289,7 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	function updateLabels() {
+	function updateLabels(refreshText=false) {
 		var minZoom = switch project.worldLayout {
 			case Free, GridVania: 0.1;
 			case LinearHorizontal, LinearVertical: 0.1;
@@ -324,7 +328,11 @@ class WorldRender extends dn.Process {
 					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
 			}
 			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.15 ) ) );
+
+			if( refreshText )
+				updateLabelText(l);
 		}
+
 	}
 
 	function renderGrids() {
@@ -578,7 +586,7 @@ class WorldRender extends dn.Process {
 
 			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 				// Auto layer
-				var td = editor.project.defs.getTilesetDef( li.def.autoTilesetDefUid );
+				var td = li.getTilesetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					pixelGrid.x = li.pxTotalOffsetX;
@@ -586,7 +594,7 @@ class WorldRender extends dn.Process {
 					var c = 0x0;
 					var cx = 0;
 					var cy = 0;
-					li.def.iterateActiveRulesInDisplayOrder( (r)->{
+					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
@@ -618,7 +626,7 @@ class WorldRender extends dn.Process {
 			}
 			else if( li.def.type==Tiles ) {
 				// Classic tiles
-				var td = li.getTiledsetDef();
+				var td = li.getTilesetDef();
 				if( td!=null && td.isAtlasLoaded() ) {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					pixelGrid.x = li.pxTotalOffsetX;
@@ -660,12 +668,22 @@ class WorldRender extends dn.Process {
 		// Identifier
 		wl.label.color.setColor( C.addAlphaF(0x464e79) );
 		wl.label.alpha = 0.8;
+		updateLabelText(l);
+	}
 
 
+	function updateLabelText(l:data.Level) {
+		var wl = levels.get(l.uid);
+		if( wl==null )
+			return;
+
+		wl.label.removeChildren();
+		var error = l.getFirstError();
 		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
 		tf.text = l.identifier;
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
 		tf.x = 8;
+
 		if( error!=null ) {
 			tf.textColor = 0xff0000;
 			tf.text +=
@@ -690,7 +708,7 @@ class WorldRender extends dn.Process {
 
 		var waitTileset = false;
 		for(td in project.defs.tilesets)
-			if( td.hasAtlasPath() && !td.hasValidPixelData() && JsTools.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
 				waitTileset = true;
 				break;
 			}

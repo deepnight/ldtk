@@ -44,55 +44,8 @@ class ElectronMain {
 			});
 		});
 
-		IpcMain.handle("exitApp", function(event) {
-			App.exit();
-		});
-
-		IpcMain.handle("reload", function(event) {
-			mainWindow.reload();
-		});
-
-		IpcMain.handle("setFullScreen", function(event,flag) {
-			mainWindow.setFullScreen(flag);
-		});
-
-		IpcMain.handle("setWinTitle", function(event,args) {
-			mainWindow.title = args;
-		});
-
 
 		// *** sendSync/on *****************************************************
-
-		IpcMain.on("getScreenWidth", function(event) {
-			event.returnValue = electron.main.Screen.getPrimaryDisplay().size.width;
-		});
-
-		IpcMain.on("getScreenHeight", function(event) {
-			event.returnValue = electron.main.Screen.getPrimaryDisplay().size.height;
-		});
-
-		IpcMain.on("getCwd", function(event) {
-			event.returnValue = process.cwd();
-		});
-
-		IpcMain.on("getArgs", function(event) {
-			event.returnValue = process.argv;
-		});
-
-		IpcMain.on("getAppResourceDir", function(event) {
-			event.returnValue = App.getAppPath();
-		});
-
-		IpcMain.on("getExeDir", function(event) {
-			event.returnValue = App.getPath("exe");
-		});
-
-		IpcMain.on("getUserDataDir", function(event) {
-			event.returnValue = App.getPath("userData");
-		});
-		IpcMain.on("isFullScreen", function(event) {
-			event.returnValue = mainWindow.isFullScreen();
-		});
 	}
 
 
@@ -128,9 +81,12 @@ class ElectronMain {
 			backgroundColor: '#1e2229'
 		});
 		mainWindow.once("ready-to-show", ev->{
-			var disp = electron.main.Screen.getPrimaryDisplay();
 			mainWindow.webContents.setZoomFactor( settings.getAppZoomFactor() );
+			if( settings.v.startFullScreen )
+				dn.js.ElectronTools.setFullScreen(true);
+			mainWindow.webContents.send("settingsApplied");
 		});
+		dn.js.ElectronTools.initMain(mainWindow);
 
 		// Window menu
 		#if debug

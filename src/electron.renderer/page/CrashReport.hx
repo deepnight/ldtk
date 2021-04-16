@@ -90,12 +90,12 @@ class CrashReport extends Page {
 					var fp = ui.ProjectSaving.makeBackupFilePath(unsavedProject, "crash");
 
 					// Init dirs
-					if( !JsTools.fileExists(fp.directory) )
-						JsTools.createDirs(fp.directory);
+					if( !NT.fileExists(fp.directory) )
+						NT.createDirs(fp.directory);
 
 					// Save
 					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
-					JsTools.writeFileString(fp.full, data.projectJson);
+					NT.writeFileString(fp.full, data.projectJson);
 					jBackup.html("But don't worry, your work was saved in a backup file! ");
 
 					// Register in recents

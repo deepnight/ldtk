@@ -124,10 +124,10 @@ class FieldInstanceRender {
 				tf.text = fd.identifier;
 
 				// Value
-				valueFlow.addChild( FieldInstanceRender.renderValue(fi, C.toWhite(baseColor, 0.8)) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
 
 			case ValueOnly:
-				valueFlow.addChild( FieldInstanceRender.renderValue(fi, C.toWhite(baseColor, 0.8)) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
 
 			case RadiusPx:
 				switch ctx {
@@ -149,11 +149,13 @@ class FieldInstanceRender {
 
 			case EntityTile:
 
-			case PointStar, PointPath:
+			case Points, PointStar, PointPath, PointPathLoop:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
 						var fx = ei.getPointOriginX(ld) - ei.x;
 						var fy = ei.getPointOriginY(ld) - ei.y;
+						var startX = fx;
+						var startY = fy;
 						g.lineStyle(1, baseColor, 0.66);
 
 						for(i in 0...fi.getArrayLength()) {
@@ -163,14 +165,24 @@ class FieldInstanceRender {
 
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
-							renderDashedLine(g, fx,fy, tx,ty, 3);
+							if( fd.editorDisplayMode!=Points )
+								renderDashedLine(g, fx,fy, tx,ty, 3);
+
 							g.drawRect( tx-2, ty-2, 4, 4 );
 
-							if( fd.editorDisplayMode==PointPath ) {
-								fx = tx;
-								fy = ty;
+							switch fd.editorDisplayMode {
+								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+								case Points, PointStar:
+								case PointPath, PointPathLoop:
+									// Next point connects to this one
+									fx = tx;
+									fy = ty;
 							}
 						}
+
+						// Loop to Entity
+						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
+							renderDashedLine(g, fx,fy, startX, startY, 3);
 
 					case LevelCtx(_):
 				}
@@ -181,7 +193,7 @@ class FieldInstanceRender {
 
 
 
-	static function renderValue(fi:data.inst.FieldInstance, textColor:Int) : h2d.Flow {
+	static function renderValue(ctx:FieldRenderContext, fi:data.inst.FieldInstance, textColor:Int) : h2d.Flow {
 		var valuesFlow = new h2d.Flow();
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
@@ -222,7 +234,13 @@ class FieldInstanceRender {
 					// Text render
 					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
 					tf.textColor = textColor;
-					tf.maxWidth = 400 * ( 0.5 + 0.5*settings.v.editorUiScale );
+					switch ctx {
+						case EntityCtx(g, ei, ld):
+							tf.maxWidth = 400;
+
+						case LevelCtx(l):
+							tf.maxWidth = 800;
+					}
 					var v = fi.getForDisplay(idx);
 					if( fi.def.type==F_Bool && fi.def.editorDisplayMode==ValueOnly )
 						tf.text = '${fi.getBool(idx)?"+":"-"}${fi.def.identifier}';

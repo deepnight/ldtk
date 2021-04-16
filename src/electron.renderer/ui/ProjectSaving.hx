@@ -2,6 +2,7 @@ package ui;
 
 private enum SavingState {
 	InQueue;
+	PreChecks;
 	BeforeSavingActions;
 	AutoLayers;
 	Backup;
@@ -47,11 +48,46 @@ class ProjectSaving extends dn.Process {
 	inline function log(str:String) App.LOG.add("save", '[${project.filePath.fileName}] $str');
 	inline function logState() log('=> $state...');
 
+	function fail(str:LocaleString) {
+		var fp = project.filePath.clone();
+
+		var m = new ui.modal.dialog.Message(str);
+		m.addClass("error");
+		m.addParagraph(L.t._("The project was NOT saved properly!"));
+
+		m.removeButtons();
+		m.addButton( L.t._("Retry"), ()->{
+			Editor.ME.onSave();
+			m.close();
+		} );
+		m.addButton( L.t._("Save as..."), ()->{
+			Editor.ME.onSave(true);
+			m.close();
+		} );
+		m.addButton( L.t._("Open project folder"), "gray small", ()->{
+			ET.locate(fp.full, true);
+			m.close();
+		 } );
+		m.addCancel();
+		destroy();
+	}
+
 	function beginState(s:SavingState) {
 		state = s;
 
 		switch s {
 			case InQueue:
+
+			case PreChecks:
+				logState();
+				var dir = project.getAbsExternalFilesDir();
+				if( NT.fileExists(dir) && !NT.isDirectory(dir) ) {
+					var f = project.filePath.fileName;
+					fail( L.t._('I need to create a folder named "::name::", but there is a file with the exact same name there.', {name:f} ) );
+					return;
+				}
+				else
+					beginState(BeforeSavingActions);
 
 			case BeforeSavingActions:
 				if( hasEditor() ) {
@@ -79,14 +115,14 @@ class ProjectSaving extends dn.Process {
 
 					// Save a duplicate in backups folder
 					var savingData = prepareProjectSavingData(project, true);
-					JsTools.writeFileString(fp.full, savingData.projectJson);
+					NT.writeFileString(fp.full, savingData.projectJson);
 
 					// Delete extra backup files
 					var all = listBackupFiles(project.filePath.full);
 					if( all.length>project.backupLimit ) {
 						for(i in project.backupLimit...all.length ) {
 							log("Discarded backup: "+all[i].backup.full);
-							JsTools.removeFile( all[i].backup.full );
+							NT.removeFile( all[i].backup.full );
 						}
 					}
 				}
@@ -100,7 +136,7 @@ class ProjectSaving extends dn.Process {
 				savingData = ui.ProjectSaving.prepareProjectSavingData(project);
 
 				log('  Writing ${project.filePath.full}...');
-				JsTools.writeFileString(project.filePath.full, savingData.projectJson);
+				NT.writeFileString(project.filePath.full, savingData.projectJson);
 
 				beginState(SavingExternLevels);
 
@@ -118,15 +154,15 @@ class ProjectSaving extends dn.Process {
 						ops.push({
 							label: "Level "+l.id,
 							cb: ()->{
-								JsTools.writeFileString(fp.full, l.json);
+								NT.writeFileString(fp.full, l.json);
 							}
 						});
 					}
 					new ui.modal.Progress(Lang.t._("Saving levels"), 3, ops);
 				}
 				else {
-					// Remove previous external lmevels
-					if( JsTools.fileExists(levelDir) )
+					// Remove previous external levels
+					if( NT.fileExists(levelDir) )
 						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
 
 					beginState(SavingLayerImages);
@@ -164,7 +200,7 @@ class ProjectSaving extends dn.Process {
 										var fp = dn.FilePath.fromDir(pngDir);
 										fp.fileName = project.getPngFileName(level, li.def, i.suffix);
 										fp.extension = "png";
-										JsTools.writeFileBytes(fp.full, i.bytes);
+										NT.writeFileBytes(fp.full, i.bytes);
 										count++;
 									}
 								}
@@ -178,8 +214,8 @@ class ProjectSaving extends dn.Process {
 				}
 				else {
 					// Delete previous PNG dir
-					if( JsTools.fileExists(pngDir) )
-						JsTools.removeDir(pngDir);
+					if( NT.fileExists(pngDir) )
+						NT.removeDir(pngDir);
 					beginState(ExportingTiled);
 				}
 
@@ -198,8 +234,8 @@ class ProjectSaving extends dn.Process {
 				else {
 					// Remove previous tiled dir
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
-					if( JsTools.fileExists(dir) )
-						JsTools.removeDir(dir);
+					if( NT.fileExists(dir) )
+						NT.removeDir(dir);
 				}
 
 				beginState(Done);
@@ -208,9 +244,9 @@ class ProjectSaving extends dn.Process {
 			case Done:
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
-				if( JsTools.fileExists(dir) && JsTools.isDirEmptyRec(dir) ) {
+				if( NT.fileExists(dir) && !NT.dirContainsAnyFile(dir) ) {
 					log('Removing empty dir: $dir');
-					JsTools.removeDir(dir);
+					NT.removeDir(dir);
 				}
 
 				// Finalize
@@ -223,8 +259,8 @@ class ProjectSaving extends dn.Process {
 
 
 	function initDir(dirPath:String, ?removeFileExt:String) {
-		if( !JsTools.fileExists(dirPath) )
-			JsTools.createDirs(dirPath);
+		if( !NT.fileExists(dirPath) )
+			NT.createDirs(dirPath);
 		else if( removeFileExt!=null )
 			JsTools.emptyDir(dirPath, [removeFileExt]);
 	}
@@ -241,7 +277,9 @@ class ProjectSaving extends dn.Process {
 		switch state {
 			case InQueue:
 				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
-					beginState(BeforeSavingActions);
+					beginState(PreChecks);
+
+			case PreChecks:
 
 			case BeforeSavingActions:
 				if( !ui.modal.Progress.hasAny() )
@@ -369,17 +407,17 @@ class ProjectSaving extends dn.Process {
 		fp.appendDirectory("backups");
 		fp.fileName = null;
 		fp.extension = null;
-		return JsTools.fileExists(fp.full) && !JsTools.isDirEmpty(fp.full);
+		return NT.fileExists(fp.full) && NT.dirContainsAnyFile(fp.full);
 	}
 
 	public static function listBackupFiles(projectFilePath:String) {
 		var fp = dn.FilePath.fromFile(projectFilePath);
 		var dir = dn.FilePath.fromDir( fp.directory+"/"+fp.fileName+"/backups" );
-		if( !JsTools.fileExists(dir.full) )
+		if( !NT.fileExists(dir.full) )
 			return [];
 
 		var all = [];
-		for( f in JsTools.readDir(dir.full) ) {
+		for( f in NT.readDir(dir.full) ) {
 			if( dn.FilePath.extractExtension(f) != Const.FILE_EXTENSION )
 				continue;
 

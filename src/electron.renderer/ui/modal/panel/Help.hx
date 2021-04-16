@@ -16,8 +16,7 @@ class Help extends ui.modal.Panel {
 
 		jContent.find("dt").each( function(idx, e) {
 			var jDt = new J(e);
-			var jKeys = JsTools.parseKeys( jDt.text() );
-			jDt.empty().append(jKeys);
+			JsTools.parseKeysIn( jDt );
 		});
 	}
 

@@ -53,7 +53,7 @@ class LevelHistory {
 			case LayerRuleGroupChanged(rg):
 			case LayerRuleGroupChangedActiveState(rg):
 			case LayerRuleGroupSorted:
-			case LayerRuleGroupCollapseChanged:
+			case LayerRuleGroupCollapseChanged(rg):
 
 			case ViewportChanged:
 
@@ -78,6 +78,8 @@ class LevelHistory {
 			case TilesetSelectionSaved(td):
 			case TilesetDefAdded(td):
 			case TilesetDefPixelDataCacheRebuilt(td):
+			case TilesetMetaDataChanged(td):
+			case TilesetDefSorted:
 
 			case EntityDefSorted, FieldDefSorted, FieldDefChanged(_):
 			case FieldInstanceChanged(fi):
@@ -90,6 +92,7 @@ class LevelHistory {
 			case AutoLayerRenderingChanged:
 
 			case LayerInstanceRestoredFromHistory(_):
+			case LayerInstanceTilesetChanged(li):
 			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
 			case GridChanged(active):

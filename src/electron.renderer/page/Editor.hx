@@ -95,19 +95,20 @@ class Editor extends Page {
 		selectProject(p);
 
 		// Suggest backups
-		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=10 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
+		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=8 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
 			var w = new ui.modal.dialog.Choice(
-				L.t._("As your project is growing bigger, it is recommended to enable Backups, to secure your work a little bit more."),
+				L.t._("As your project is growing bigger, it is STRONGLY advised to enable BACKUPS, to secure your work."),
 				[
 					{
 						label:L.t._("Enable backups when saving"),
+						className: "strong",
 						cb: ()->{
 							project.backupOnSave = true;
 							ge.emit(ProjectSettingsChanged);
-						}
+						},
 					},
 					{
-						label:L.t._("No, I'm fine."),
+						label:L.t._("No, and I understand the risk."),
 						className: "gray",
 						cb: ()->{
 							project.setFlag(IgnoreBackupSuggest, true);
@@ -115,6 +116,7 @@ class Editor extends Page {
 						},
 					}
 				],
+				L.t._("Enable backups"),
 				false
 			);
 		}
@@ -130,6 +132,10 @@ class Editor extends Page {
 
 		setCompactMode( settings.v.compactMode, true );
 		dn.Process.resizeAll();
+	}
+
+	public static inline function exists() {
+		return ME!=null && !ME.destroyed;
 	}
 
 	function initUI() {
@@ -184,10 +190,10 @@ class Editor extends Page {
 
 		jMainPanel.find("button.editEnums").click( function(_) {
 			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditEnums) )
+			if( ui.Modal.isOpen(ui.modal.panel.EditEnumDefs) )
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.EditEnums();
+				new ui.modal.panel.EditEnumDefs();
 		});
 
 
@@ -246,7 +252,7 @@ class Editor extends Page {
 		// Check external enums
 		if( !project.isBackup() )
 			for( relPath in project.defs.getExternalEnumPaths() ) {
-				if( !JsTools.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
+				if( !NT.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
 					// File not found
 					new ui.modal.dialog.LostFile(relPath, function(newAbsPath) {
 						var newRel = project.makeRelativeFilePath(newAbsPath);
@@ -258,7 +264,7 @@ class Editor extends Page {
 				}
 				else {
 					// Verify checksum
-					var f = JsTools.readFileString( project.makeAbsoluteFilePath(relPath) );
+					var f = NT.readFileString( project.makeAbsoluteFilePath(relPath) );
 					var checksum = haxe.crypto.Md5.encode(f);
 					for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
 						if( ed.externalFileChecksum!=checksum ) {
@@ -291,6 +297,8 @@ class Editor extends Page {
 			for(td in project.defs.tilesets)
 				if( reloadTileset(td, true) )
 					tilesetChanged = true;
+
+		project.tidy(); // Needed to fix enum value colors
 
 		ge.emit(ProjectSelected);
 
@@ -485,7 +493,7 @@ class Editor extends Page {
 					new ui.modal.dialog.EditAppSettings();
 				}
 
-			case K.R if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
@@ -902,7 +910,7 @@ class Editor extends Page {
 		var m = getMouse();
 		requestFps(0.85);
 
-		var speed = App.ME.getElectronZoomFactor() * settings.v.mouseWheelSpeed;
+		var speed = ET.getZoom() * settings.v.mouseWheelSpeed;
 		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
 
@@ -1144,7 +1152,7 @@ class Editor extends Page {
 		}
 
 		// Check missing file
-		if( !bypasses.exists("missing") && !JsTools.fileExists(project.filePath.full) ) {
+		if( !bypasses.exists("missing") && !NT.fileExists(project.filePath.full) ) {
 			needSaving = true;
 			new ui.modal.dialog.Confirm(
 				null,
@@ -1185,7 +1193,7 @@ class Editor extends Page {
 			Lang.t._("Do you want to want to RESTORE this backup?"),
 			()->{
 				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
-				if( !JsTools.fileExists(original.full) ) {
+				if( !NT.fileExists(original.full) ) {
 					// Project not found
 					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the corresponding project file."));
 				}
@@ -1206,7 +1214,7 @@ class Editor extends Page {
 
 							// Delete crash backup
 							if( crashFile!=null )
-								JsTools.removeFile(crashFile);
+								NT.removeFile(crashFile);
 						}
 					);
 				}
@@ -1262,17 +1270,20 @@ class Editor extends Page {
 				case LayerRuleGroupChanged(rg): extra = rg.uid;
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
 				case LayerRuleGroupSorted:
-				case LayerRuleGroupCollapseChanged:
+				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
 				case LayerInstanceChanged:
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
+				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
 				case AutoLayerRenderingChanged:
 				case TilesetDefChanged(td): extra = td.uid;
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
+				case TilesetMetaDataChanged(td): extra = td.uid;
 				case TilesetSelectionSaved(td): extra = td.uid;
 				case TilesetDefPixelDataCacheRebuilt(td): extra = td.uid;
+				case TilesetDefSorted:
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
@@ -1330,7 +1341,11 @@ class Editor extends Page {
 			case FieldInstanceChanged(fi):
 
 			case EntityInstanceAdded(ei):
+
 			case EntityInstanceRemoved(ei):
+				if( resizeTool!=null && resizeTool.isOnEntity(ei) )
+					clearResizeTool();
+
 			case EntityInstanceChanged(ei):
 
 			case ToolOptionChanged:
@@ -1377,7 +1392,7 @@ class Editor extends Page {
 			case LayerRuleGroupAdded:
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:
-			case LayerRuleGroupCollapseChanged:
+			case LayerRuleGroupCollapseChanged(rg):
 
 			case BeforeProjectSaving:
 			case ProjectSaved:
@@ -1416,17 +1431,23 @@ class Editor extends Page {
 				updateGuide();
 				updateTool();
 
+			case LayerInstanceTilesetChanged(li):
+
 			case TilesetDefRemoved(_):
 				updateLayerList(); // for rule-based layers
 				updateTool();
 				updateGuide();
 
-			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted:
+			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted, TilesetDefSorted:
 				updateTool();
 				updateGuide();
 
+			case TilesetMetaDataChanged(td):
+
 			case TilesetSelectionSaved(td):
+
 			case TilesetDefPixelDataCacheRebuilt(td):
+				project.tidy();
 
 			case TilesetDefAdded(td):
 
@@ -1657,7 +1678,7 @@ class Editor extends Page {
 		App.ME.jCanvas.hide();
 		Boot.ME.s2d.removeEventListener(onHeapsEvent);
 		Tool.clearSelectionMemory();
-		ui.TilesetPicker.clearScrollMemory();
+		ui.Tileset.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
 

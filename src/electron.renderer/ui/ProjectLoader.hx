@@ -13,7 +13,7 @@ class ProjectLoader {
 	public static function load(filePath:String, onComplete:(?p:data.Project, ?err:LoadingError)->Void) {
 		log.clear();
 
-		if( !JsTools.fileExists(filePath) ) {
+		if( !NT.fileExists(filePath) ) {
 			onComplete(NotFound);
 			return;
 		}
@@ -21,7 +21,7 @@ class ProjectLoader {
 		// Parse main JSON
 		log.fileOp('Loading project $filePath...');
 		var json = null;
-		var raw = try JsTools.readFileString(filePath)
+		var raw = try NT.readFileString(filePath)
 			catch(err:Dynamic) {
 				log.error( Std.string(err) );
 				onComplete( FileRead( Std.string(err) ) );
@@ -51,7 +51,7 @@ class ProjectLoader {
 			var idx = 0;
 			for(l in p.levels) {
 				var path = p.makeAbsoluteFilePath(l.externalRelPath);
-				if( !JsTools.fileExists(path) ) {
+				if( !NT.fileExists(path) ) {
 					// TODO better lost level management
 					log.error("Level file not found "+l.externalRelPath);
 					p.levels.splice(idx,1);
@@ -61,7 +61,7 @@ class ProjectLoader {
 					// Parse level
 					try {
 						log.fileOp("Loading external level "+l.externalRelPath+"...");
-						var raw = JsTools.readFileString(path);
+						var raw = NT.readFileString(path);
 						var lJson = haxe.Json.parse(raw);
 						var l = data.Level.fromJson(p, lJson);
 						p.levels[idx] = l;

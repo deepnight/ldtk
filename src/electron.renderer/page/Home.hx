@@ -74,6 +74,10 @@ class Home extends Page {
 			new ui.modal.dialog.EditAppSettings();
 		});
 
+		jPage.find("button.exit").click( function(ev) {
+			App.ME.exit();
+		});
+
 		updateRecents();
 	}
 
@@ -121,7 +125,7 @@ class Home extends Page {
 	}
 
 
-	function updateRecents() {
+	function updateRecents() : Void {
 		ui.Tip.clear();
 		var uniqueColorMix = 0x6066d3;
 
@@ -153,7 +157,7 @@ class Home extends Page {
 			var fp = dn.FilePath.fromFile(recents[i]);
 			var backup = fp.clone();
 			backup.fileName+=Const.BACKUP_NAME_SUFFIX;
-			if( !App.ME.recentProjectsContains(backup.full) && JsTools.fileExists(backup.full) )
+			if( !App.ME.recentProjectsContains(backup.full) && NT.fileExists(backup.full) )
 				recents.insert(i+1, backup.full);
 			i++;
 		}
@@ -236,7 +240,7 @@ class Home extends Page {
 					App.ME.loadProject(filePath);
 				});
 
-				if( !JsTools.fileExists(filePath) )
+				if( !NT.fileExists(filePath) )
 					li.addClass("missing");
 
 				if( isBackupFile )
@@ -276,7 +280,7 @@ class Home extends Page {
 											true,
 											()->{
 												for(fp in crashBackups)
-													JsTools.removeFile(fp.full);
+													NT.removeFile(fp.full);
 												updateRecents();
 											}
 										);
@@ -295,7 +299,7 @@ class Home extends Page {
 					{
 						label: L.t._("Locate file"),
 						cond: null,
-						cb: JsTools.exploreToFile.bind(filePath, true),
+						cb: ET.locate.bind(filePath, true),
 					},
 					{
 						label: L.t._("Remove from history"),
@@ -309,7 +313,7 @@ class Home extends Page {
 						label: L.t._("Delete this BACKUP file"),
 						cond: ()->isBackupFile,
 						cb: ()->{
-							JsTools.removeFile(filePath);
+							NT.removeFile(filePath);
 							App.ME.unregisterRecentProject(filePath);
 							updateRecents();
 						}
@@ -367,7 +371,7 @@ class Home extends Page {
 			var li = new J('<li/>');
 			try {
 
-				if( !JsTools.fileExists(fp.directory) )
+				if( !NT.fileExists(fp.directory) )
 					li.addClass("missing");
 
 				if( App.ME.isInAppDir(fp.full,true) )
@@ -377,14 +381,14 @@ class Home extends Page {
 				var col = C.toWhite( C.pickUniqueColorFor( shortFp.getDirectoryArray()[0] ), 0.3 );
 				li.append( JsTools.makePath( shortFp.full, col ) );
 				li.click( (_)->{
-					if( JsTools.fileExists(fp.directory) )
+					if( NT.fileExists(fp.directory) )
 						onLoad(fp.directory);
 					else {
 						App.ME.unregisterRecentDir(fp.directory);
 
 						// Try to open parent
 						fp.removeLastDirectory();
-						if( JsTools.fileExists(fp.directory) )
+						if( NT.fileExists(fp.directory) )
 							onLoad(fp.directory);
 						else
 							N.error("Removed lost folder from history");
@@ -397,7 +401,7 @@ class Home extends Page {
 					{
 						label: L.t._("Locate folder"),
 						cond: null,
-						cb: JsTools.exploreToFile.bind(fp.directory, false),
+						cb: ET.locate.bind(fp.directory, false),
 					},
 					{
 						label: L.t._("Remove from history"),
@@ -477,6 +481,12 @@ class Home extends Page {
 			fp.extension = "ldtk";
 
 			var p = data.Project.createEmpty(fp.full);
+			if( !NT.fileExists(fp.full) ) {
+				N.error("Couldn't create this project file! Maybe try to check that you have the right to write files here.");
+				return;
+			}
+
+
 			var data = ui.ProjectSaving.prepareProjectSavingData(p);
 			new ui.ProjectSaving(this, p, (success)->{
 				if( success ) {

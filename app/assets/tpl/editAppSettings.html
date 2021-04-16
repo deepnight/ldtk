@@ -9,7 +9,7 @@
 	</dd>
 
 	<dt>
-		<label for="fontScale">Font size in levels</label>
+		<label for="fontScale">Level UI scale</label>
 	</dt>
 	<dd>
 		<select id="fontScale" title="This setting will affect the scale of texts and icons in the editor view (ie. for Entities and Custom Fields, mostly)"></select>
@@ -49,6 +49,14 @@
 	</dt>
 	<dd>
 		<input type="checkbox" id="gpu" title="When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances. This might use extra battery life." />
+		<span>(Recommended)</span>
+	</dd>
+
+	<dt>
+		<label for="fixTileFlickering">Reduce tile flickering</label>
+	</dt>
+	<dd>
+		<input type="checkbox" id="fixTileFlickering" title="This option will reduce tile 'flickering' while zooming in/out on tile-based layers or auto-layers. As this uses some extra GPU power (not much though), feel free to disable it on low-end setups." />
 		<span>(Recommended)</span>
 	</dd>
 

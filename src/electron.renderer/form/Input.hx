@@ -30,10 +30,27 @@ class Input<T> {
 
 		jInput.on("focus.input", function(ev) {
 			jInput.select();
+			checkGuide();
+		});
+		jInput.on("blur.input", function(ev) {
+			checkGuide();
 		});
 		jInput.on("change.input", function(_) {
 			onInputChange();
 		});
+	}
+
+	function checkGuide() {
+		if( jInput.is("[type=checkbox], [type=radio]") )
+			return;
+
+		var jGuide = jInput.siblings(".guide");
+		if( jInput.is(":focus") ) {
+			jGuide.show();
+			jGuide.css("margin-top", (-jGuide.outerHeight() - 4)+"px");
+		}
+		else
+			jGuide.hide();
 	}
 
 	function getter() {

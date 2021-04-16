@@ -2,6 +2,7 @@ package tool;
 
 class SelectionTool extends Tool<Int> {
 	var moveStarted = false;
+	var startedOverSelecton = false;
 	var movePreview : h2d.Graphics;
 	var isCopy = false;
 	var group : GenericLevelElementGroup;
@@ -202,13 +203,15 @@ class SelectionTool extends Tool<Int> {
 	override function startUsing(ev:hxd.Event, m:Coords) {
 		isCopy = App.ME.isCtrlDown() && App.ME.isAltDown();
 		moveStarted = false;
+		startedOverSelecton = false;
 		editor.clearSpecialTool();
 		movePreview.clear();
 
 		super.startUsing(ev,m);
 
 		if( ev.button==0 ) {
-			if( !App.ME.isAltDown() || group.isOveringSelection(m) ) {
+			if( group.isOveringSelection(m) ) {
+				startedOverSelecton = true;
 				// Move existing selection
 				if( group.hasIncompatibleGridSizes() ) {
 					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
@@ -313,6 +316,28 @@ class SelectionTool extends Tool<Int> {
 		movePreview.clear();
 		if( moveStarted )
 			group.onMoveEnd();
+		else {
+			if( startedOverSelecton && group.isOveringSelection(m) ) {
+				// Extend selection when re-selecting entity/points
+				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
+				switch ge {
+				case null:
+				case GridCell(li, cx, cy):
+				case Entity(li, ei):
+					for(fi in ei.fieldInstances)
+						if( fi.def.type==F_Point )
+							for(i in 0...fi.getArrayLength())
+								group.add( PointField(li,ei,fi,i) );
+				case PointField(li, ei, fi, arrayIdx):
+					group.add( Entity(li,ei) );
+					for(fi in ei.fieldInstances)
+						if( fi.def.type==F_Point )
+							for(i in 0...fi.getArrayLength())
+								group.add( PointField(li,ei,fi,i) );
+
+				}
+			}
+		}
 	}
 
 

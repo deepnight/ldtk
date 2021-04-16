@@ -155,6 +155,9 @@ class WorldTool extends dn.Process {
 
 				switch project.worldLayout {
 					case Free, GridVania:
+						project.applyAutoLevelIdentifiers();
+						editor.ge.emit(WorldLevelMoved);
+
 					case LinearHorizontal:
 						var i = getLinearInsertPoint(m,false);
 						if( i!=null ) {

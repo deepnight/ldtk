@@ -1,8 +1,9 @@
+<h2>
+	<div class="icon tile"></div>
+	Project tilesets
+</h2>
+
 <div class="header">
-	<h2>
-		<div class="icon tile"></div>
-		Project tilesets
-	</h2>
 	<div class="help">
 		Tilesets are large images in which you pick sub-parts to draw them in your levels. They can also be used as icons for some specific elements (like Enums).
 	</div>
@@ -15,39 +16,39 @@
 	<ul class="niceList"></ul>
 </div>
 
-<ul class="form">
-	<li class="img">
+<dl class="form">
+	<dt>
 		<label>Tileset image</label>
-	</li>
+	</dt>
+	<dd class="img">
+	</dd>
 
-	<li>
+	<dt>
 		<label for="name">Identifier</label>
+	</dt>
+	<dd>
 		<input type="text" name="name" id="name"/>
 		<div class="info identifier"></div>
-	</li>
+	</dd>
 
-	<li>
-		<label for="tilesetGridSize">Tile size</label>
+	<dt>
+		<label for="tilesetGridSize">Layout</label>
+	</dt>
+	<dd>
 		<input type="text" id="tilesetGridSize" name="tilesetGridSize"/>
+		<span>px tiles, spaced by</span>
+		<input type="text" id="spacing" name="spacing" title="This is the distance between each tile."/>
+		<span>px, with an atlas padding of </span>
+		<input type="text" id="padding" name="padding" title="This is the empty space surrounding the WHOLE image."/>
 		<span>px</span>
-	</li>
+	</dd>
 
-	<li>
-		<label for="tilesetGridSize">Tile spacing</label>
-		<input type="text" id="spacing" name="spacing"/>
-		<span>px</span>
-	</li>
-
-	<li>
-		<label for="tilesetGridSize">Atlas image padding</label>
-		<input type="text" id="padding" name="padding"/>
-		<span>px</span>
-	</li>
-</ul>
-
-<div class="tilesDemo">
-	<h4>Extracted tiles examples</h4>
-	<canvas class="demo" width="512" height="16"></canvas>
-</div>
+	<dt>
+		<label for="tagsSourceEnumUid">Enum used for tags</label>
+	</dt>
+	<dd>
+		<select id="tagsSourceEnumUid" title="By linking an Enum to this tileset, you will be able to tag tiles using values from this Enum. For example, you could mark tiles as Water, SlopeLeft, MetallicSound etc."></select>
+	</dd>
+</dl>
 
 <div class="pickerWrapper"></div>

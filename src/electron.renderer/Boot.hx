@@ -10,6 +10,7 @@ class Boot extends hxd.App {
 
 		h3d.Engine.getCurrent().backgroundColor = 0xffffff;
 		hxd.Res.initEmbed();
+		hxd.Timer.smoothFactor = 0;
 
 		Assets.init();
 		Lang.init();

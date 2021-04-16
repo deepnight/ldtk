@@ -34,8 +34,12 @@ class Dialog extends ui.Modal {
 	}
 
 
-	public function addTitle(label:dn.data.GetText.LocaleString) {
-		jContent.append('<h2>$label</h2>');
+	public function addTitle(label:dn.data.GetText.LocaleString, atTheBeginning:Bool) {
+		var t = new J('<h2>$label</h2>');
+		if( atTheBeginning )
+			jContent.prepend(t);
+		else
+			jContent.append(t);
 	}
 
 	public function addParagraph(str:dn.data.GetText.LocaleString) {
@@ -48,6 +52,19 @@ class Dialog extends ui.Modal {
 		jButtons.show().append(b);
 		b.attr("type","button");
 		b.text(label);
+		if( className!=null )
+			b.addClass(className);
+		b.click( function(ev) {
+			cb();
+		});
+		return b;
+	}
+
+	public function addIconButton(iconId:String, ?className:String, cb:Void->Void) : js.jquery.JQuery {
+		var b = new J("<button/>");
+		jButtons.show().append(b);
+		b.attr("type","button");
+		b.append('<span class="icon $iconId"></span>');
 		if( className!=null )
 			b.addClass(className);
 		b.click( function(ev) {
