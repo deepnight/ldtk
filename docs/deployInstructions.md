@@ -1,7 +1,7 @@
 # Deploy instructions
 
 ## Preparation & checks
-- [ ] Define a GITHUB_TOKEN env var
+- [ ] Define a GH_TOKEN env var
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Rebuild all LDtk sample maps
@@ -17,7 +17,7 @@
 
 ## Prepare GitHub release
 - [ ] Run `npm run publish-github`
-- [ ] Copy *Releases notes* to GitHub
+- [ ] Copy *Releases notes* to GitHub ([link](https://github.com/deepnight/ldtk/releases))
 - [ ] Build macOS and Linux distribs
 - [ ] Attach macOS to GitHub Release
 - [ ] Attach Linux to GitHub Release
@@ -30,7 +30,7 @@
 - [ ] Upload QuickType parsers
 
 ## Publish
-- [ ] Upload HaxeLib
+- [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
 - [ ] Add "x.x.x-rcX" tag to Haxe API repo
 - [ ] Run `npm run publish-itchio`
 - [ ] Upload macOS build to Itch.io
