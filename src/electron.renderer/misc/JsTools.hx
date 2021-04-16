@@ -301,38 +301,53 @@ class JsTools {
 		return new J('<span class="key">$keyLabel</span>');
 	}
 
-	public static function parseKeys(rawKeys:String) : Array<js.jquery.JQuery> {
-		var jKeys = [];
+	public static function parseKeysIn(jTarget:js.jquery.JQuery) {
 		var funcKeyReg = ~/^f[0-9]{1,2}$/gi;
 
-		for(k in rawKeys.split(" ")) {
-			if( k==null || k.length==0 )
-				continue;
+		var content = jTarget.contents();
+		var jReplace = new J("<div/>");
 
+		content.each( (idx,e)->{
+			var j = new J(e);
 
-			jKeys.push( switch k.toLowerCase() {
-				case "mouseleft": new J('<span class="icon mouseleft"></span>');
-				case "mouseright": new J('<span class="icon mouseright"></span>');
-				case "mousewheel": new J('<span class="icon mousewheel"></span>');
+			switch e.nodeType {
 
-				case "+", "-", "to", "/", "or" : new J('<span class="misc">$k</span>');
+				// Parse a text to create "keys"
+				case js.html.Node.TEXT_NODE:
+					for(k in e.textContent.split(" ")) {
+						if( k==null || k.length==0 )
+							continue;
 
-				case k.charAt(0) => "(": new J("<span/>").append(k);
-				case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
+						jReplace.append( switch k.toLowerCase() {
+							case "mouseleft": new J('<span class="icon mouseleft"></span>');
+							case "mouseright": new J('<span class="icon mouseright"></span>');
+							case "mousewheel": new J('<span class="icon mousewheel"></span>');
+
+							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
+
+							case k.charAt(0) => "(": new J("<span/>").append(k);
+							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
+
+							case _:
+								var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
+								switch k.toLowerCase() {
+									case "shift", "alt" : jKey.addClass( k.toLowerCase() );
+									case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
+									case "delete", "escape": jKey.addClass("special");
+									case _ if(funcKeyReg.match(k)): jKey.addClass("special");
+									case _:
+								}
+								jKey;
+						});
+					}
 
 				case _:
-					var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
-					switch k.toLowerCase() {
-						case "shift", "alt" : jKey.addClass( k.toLowerCase() );
-						case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
-						case "delete", "escape": jKey.addClass("special");
-						case _ if(funcKeyReg.match(k)): jKey.addClass("special");
-						case _:
-					}
-					jKey;
-			});
-		}
-		return jKeys;
+					// Keep other DOM elements as-is
+					jReplace.append(j);
+			}
+		});
+
+		jTarget.empty().append( jReplace.contents() );
 	}
 
 
