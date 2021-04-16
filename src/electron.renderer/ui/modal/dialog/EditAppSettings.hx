@@ -60,6 +60,14 @@ class EditAppSettings extends ui.modal.Dialog {
 			App.ME.updateBodyClasses();
 		}
 
+		// Load last project
+		var i = Input.linkToHtmlInput(settings.v.openLastProject, jForm.find("#openLastProject"));
+		i.onValueChange = (v)->{
+			if( !v )
+				settings.v.lastProject = null;
+			onSettingChanged();
+		}
+
 		// Tile flickering fix
 		var i = Input.linkToHtmlInput(settings.v.fixTileFlickering, jForm.find("#fixTileFlickering"));
 		i.onChange = ()->{
