@@ -52,7 +52,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updateRuleGroup(r);
 
 			case LayerRuleRemoved(r): // invalidation is done before removal
-				updateRuleGroup(r);
+				updateAllRuleGroups();
 
 			case LayerRuleGroupRemoved(rg): // invalidation is done before removal
 				updateAllRuleGroups();
