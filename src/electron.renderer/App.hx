@@ -418,6 +418,8 @@ class App extends dn.Process {
 
 		// Load
 		settings = new Settings();
+		if( settings.v.lastKnownVersion==null )
+			LOG.warning("  -> New settings");
 
 		// Import recent projects to dirs
 		if( settings.v.recentDirs==null ) {
