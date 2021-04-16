@@ -1,7 +1,11 @@
 # Deploy instructions
 
+## Tools
+- [ ] Define a `GH_TOKEN` env var  ([link](https://github.com/settings/tokens))
+- [ ] Install "**Itch.io Butler**" ([download](https://itchio.itch.io/butler)) & login (`butler login`, [doc](https://itch.io/docs/butler/))
+- [ ] Add butler to env `PATH`
+
 ## Preparation & checks
-- [ ] Define a GH_TOKEN env var
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Rebuild all LDtk sample maps
@@ -33,7 +37,7 @@
 - [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
 - [ ] Add "x.x.x-rcX" tag to Haxe API repo
 - [ ] Run `npm run publish-itchio`
-- [ ] Upload macOS build to Itch.io
+- [ ] Upload macOS build to Itch.io ([link](https://itch.io/dashboard))
 - [ ] Upload Linux build to Itch.io
 - [ ] Publish GitHub release
 - [ ] *[Optional]* Update Itch.io page
