@@ -1,6 +1,7 @@
 # Deploy instructions
 
 ## Preparation & checks
+- [ ] Define a GITHUB_TOKEN env var
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Rebuild all LDtk sample maps
