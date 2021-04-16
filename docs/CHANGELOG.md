@@ -2,10 +2,12 @@
 
 ## New features
 
-  - **Optional auto-layer rules**: this new key feature allows to create "biome" and "variations" by defining group of rules that only apply to specific levels. Please check the new sample "`AutoLayers_5_OptionalRules`". How does it work: simply right click on a group of rules in the Rules panel to mark it as `Optional`. This group will then be disabled by default everywhere, and you'll be able to manually enable it in some specific levels only.
+  - **Optional auto-layer rules**: this new key feature allows to create "biome" and "variations" by defining group of rules that only apply to specific levels. Please check the new sample "`AutoLayers_5_OptionalRules`". How it works: simply right click on a group of rules in the Rules panel to mark it as `Optional`. This group will then be disabled by default everywhere, and you'll be able to manually enable it in some specific levels only.
   - **Tile tags**: you can now associate an Enum to a Tileset, then "paint" values from this Enum freely on each tiles in the tileset. This could be useful to mark collisions, water tiles, surface sounds or whatever tag you could think of. To use this new feature, just open the Tileset panel, select an existing Enum for a tileset, and start tagging directly.
   - **Tile custom data**: you can add totally custom text values to each tile in any tileset. This could be plain text, JSON, XML, etc.
-  - **Auto level naming**: you can let LDtk name your level identifiers automatically using a **custom pattern**, as defined from the Project settings panel. For example, with the pattern `MyLevel_%gx_%gy`, each level will be named using the world grid X/Y coordinates (only applies to GridVania world layouts).
+  - **Auto level naming**: you can let LDtk name your level identifiers automatically using a **custom pattern**, as defined from the Project settings panel. Some examples:
+    - default pattern "`Level_%idx`" will name levels "Level_0", "Level_1" etc, based on their order of creation (or order in array, in Horizontal/Vertical world layouts)
+    - with the pattern `MyLevel_%gx_%gy`, each level will be named using the world grid X/Y coordinates (only applies to GridVania world layouts).
   - **Auto-layers tileset switching**: in each level and for each layer, you can now switch the tileset on-the-fly.
   - Added "Isolated points" as new display option for points in Entities (thanks to *Stuart Adams*)
   - Each **enum value** can now be associated with a custom color for easier reading in the UI.
