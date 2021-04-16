@@ -781,11 +781,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			editor.ge.emit( LayerRuleChanged(r) );
 		});
 
-		// Delete
-		// jRule.find("button.delete").click( function(ev) {
-		// 	deleteRule(rg, r);
-		// });
-
 		// Rule context menu
 		ContextMenu.addTo(jRule, [
 			{
