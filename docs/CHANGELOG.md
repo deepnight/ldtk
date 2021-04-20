@@ -1,7 +1,9 @@
 # 0.9.2
 
-  - Fixed rule editor not updating when chaning pivot
+  - Fixed rule editor not updating when changing pivot
   - Fixed incorrect "Perlin noise" preview when right click on the Perlin option in Rules panel.
+  - Fixed "shrinking" tileset view when panning it
+  - Fixed discarded "levelPaths" array when importing OGMO projects
 
 # 0.9.1
 
