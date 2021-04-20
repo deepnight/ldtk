@@ -1,6 +1,7 @@
 # 0.9.2
 
   - Fixed rule editor not updating when chaning pivot
+  - Fixed incorrect "Perlin noise" preview when right click on the Perlin option in Rules panel.
 
 # 0.9.1
 
