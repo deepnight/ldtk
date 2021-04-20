@@ -95,7 +95,7 @@ class RuleEditor extends ui.modal.Dialog {
 					rule.pivotX = xr;
 					rule.pivotY = yr;
 					editor.ge.emit( LayerRuleChanged(rule) );
-					updateTileSettings();
+					renderAll();
 				});
 				jTileOptions.append(jPivot);
 		}
