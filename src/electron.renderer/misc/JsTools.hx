@@ -515,6 +515,8 @@ class JsTools {
 	}
 
 	public static function findFilesRec(dirPath:String, ?ext:String) : Array<dn.FilePath> {
+		dirPath = dn.FilePath.cleanUp(dirPath, false);
+
 		if( !NT.fileExists(dirPath) )
 			return [];
 

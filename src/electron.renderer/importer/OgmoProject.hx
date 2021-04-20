@@ -262,23 +262,33 @@ class OgmoProject {
 
 			// Levels **************************************************************
 			log.general('Reading levels...');
-			var allFiles = JsTools.findFilesRec(fp.directory, "json");
+			var allFiles : Array<dn.FilePath> = [];
+			for(dir in json.levelPaths) {
+				var path = dn.FilePath.cleanUp( fp.directory+"/"+dir, false );
+				log.general("Exploring dir: "+path);
+				allFiles = allFiles.concat( JsTools.findFilesRec(path, "json") );
+			}
+			var dones : Map<String,Bool> = new Map();
 			log.indentMore();
 			for(fp in allFiles) {
+				if( dones.exists(fp.full) )
+					continue;
+
 				log.general("Found "+fp.full);
 				log.indentMore();
+				dones.set(fp.full,true);
 
 				// Read level file
 				var raw = try NT.readFileString(fp.full)
 					catch(e:Dynamic) {
-						log.error("Could not open level file: "+fp.full);
+						log.error("Could not open file: "+fp.full);
 						continue;
 					}
 
 				// Parse level JSON
 				var levelJson : OgmoLevelJson = try haxe.Json.parse(raw)
 					catch(e:Dynamic) {
-						log.error("Could not parse level JSON: "+fp.fileWithExt);
+						log.warning("Could not parse supposed level JSON: "+fp.fileWithExt);
 						continue;
 					}
 
