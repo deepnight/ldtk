@@ -1,5 +1,7 @@
 # 0.9.2
 
+  - Added a tiny "(...)" above entities with fields when they are hidden
+  - Fixed "re-open last project" that could sometime reset app settings
   - Fixed rule editor not updating when changing pivot
   - Fixed incorrect "Perlin noise" preview when right click on the Perlin option in Rules panel.
   - Fixed "shrinking" tileset view when panning it
