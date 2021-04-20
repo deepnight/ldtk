@@ -20,8 +20,6 @@ class App extends dn.Process {
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
 	public var focused(default,null) = true;
 
-	public var loadingLog : dn.Log;
-
 	public function new() {
 		super();
 
@@ -41,10 +39,6 @@ class App extends dn.Process {
 		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
 		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
-
-		loadingLog = new dn.Log();
-		loadingLog.onAdd = (l)->LOG.addLogEntry(l);
-
 		// App arguments
 		args = ET.getArgs();
 		LOG.add("BOOT", args.toString());
