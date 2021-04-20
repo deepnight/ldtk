@@ -65,6 +65,8 @@ class EditAppSettings extends ui.modal.Dialog {
 		i.onValueChange = (v)->{
 			if( !v )
 				settings.v.lastProject = null;
+			else if( Editor.exists() )
+				Editor.ME.saveLastProjectInfos();
 			onSettingChanged();
 		}
 

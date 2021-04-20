@@ -969,7 +969,7 @@ class Editor extends Page {
 	}
 
 
-	function saveLastProjectInfos() {
+	public function saveLastProjectInfos() {
 		if( settings.v.openLastProject ) {
 			settings.v.lastProject = {
 				filePath: project.filePath.full,
