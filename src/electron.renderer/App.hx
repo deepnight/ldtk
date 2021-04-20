@@ -42,6 +42,8 @@ class App extends dn.Process {
 		// App arguments
 		args = ET.getArgs();
 		LOG.add("BOOT", args.toString());
+		LOG.flushToFile();
+		LOG.flushOnAdd = true; // disabled after App init sequence
 
 		// Init
 		ME = this;
@@ -109,16 +111,25 @@ class App extends dn.Process {
 			LOG.add("BOOT", 'Start args: path=$path levelIndex=$levelIndex');
 
 			// Load page
-			if( path!=null )
+			if( path!=null ) {
+				LOG.add("BOOT", 'Loading project from args (${path.full})...');
 				loadProject(path.full, levelIndex);
-			else if( settings.v.openLastProject && settings.v.lastProject!=null && NT.fileExists(settings.v.lastProject.filePath) )
-				loadProject(settings.v.lastProject.filePath);
-			else
+			}
+			else if( settings.v.openLastProject && settings.v.lastProject!=null && NT.fileExists(settings.v.lastProject.filePath) ) {
+				var path = settings.v.lastProject.filePath;
+				LOG.add("BOOT", 'Re-opening last project ($path)...');
+				loadProject(path);
+			}
+			else {
+				LOG.add("BOOT", 'Loading Home...');
 				loadPage( ()->new page.Home() );
+			}
 		}, 0.2);
 
+		LOG.add("BOOT", "Calling appReady...");
 		IpcRenderer.invoke("appReady");
 		updateBodyClasses();
+		LOG.flushOnAdd = false;
 	}
 
 
@@ -327,12 +338,16 @@ class App extends dn.Process {
 	}
 
 	public function addMask() {
-		jBody.find("#appMask").remove();
+		removeMask();
 		jBody.append('<div id="appMask"/>');
 	}
 
 	public function fadeOutMask() {
 		jBody.find("#appMask").fadeOut(200);
+	}
+
+	public function removeMask() {
+		jBody.find("#appMask").remove();
 	}
 
 	public function miniNotif(html:String, fadeDelayS=0.5, persist=false) {
