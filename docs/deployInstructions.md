@@ -42,6 +42,9 @@
 - [ ] Publish GitHub release
 - [ ] *[Optional]* Update Itch.io page
 
+## Community APIs
+- [ ] Update API list ([issue](https://github.com/deepnight/ldtk/issues/273))
+
 ## Communication
 - [ ] Add a devlog post on Itch.io
 - [ ] Announce on Twitter
