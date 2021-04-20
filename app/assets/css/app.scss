@@ -6030,7 +6030,7 @@ $patternSize : 32px;
 
 	.content {
 		width: 890px;
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content min-content min-content auto;
 		.mainList {
 			grid-row: 3/5;
 		}

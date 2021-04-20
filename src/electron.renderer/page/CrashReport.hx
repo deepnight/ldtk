@@ -6,8 +6,11 @@ class CrashReport extends Page {
 	public function new(error:js.lib.Error, activeProcesses:String, ?unsavedProject:data.Project, ?projectFilePath:String) {
 		super();
 
+		App.LOG.flushToFile();
+
 		dn.Process.destroyAllExcept([this, App.ME]);
 		App.ME.delayer.cancelEverything();
+		App.ME.removeMask();
 
 		if( Editor.ME!=null )
 			Editor.ME.destroy();
@@ -23,23 +26,25 @@ class CrashReport extends Page {
 		try {
 			// Logging
 			App.LOG.error('${error.message} (${error.name})');
-			App.LOG.error('${error.stack})');
+			App.LOG.error('${error.stack}');
 			App.LOG.emptyEntry();
 			App.LOG.general("\n"+dn.Process.rprintAll());
 			App.LOG.emptyEntry();
 			App.LOG.flushToFile();
 
 			// Parse stack
-			var stackReg = ~/ at (.*?) \((.*?):([0-9]+):([0-9]+)\)/gim;
-			var raw = error.stack;
-			var niceStack = [];
-			while( raw!=null && stackReg.match(raw) ) {
-				niceStack.push({
-					func: stackReg.matched(1),
-					file: stackReg.matched(2),
-					col: Std.parseInt( stackReg.matched(3) ),
-				});
-				raw = stackReg.matchedRight();
+			if( error.stack!=null ) {
+				var stackReg = ~/ at (.*?) \((.*?):([0-9]+):([0-9]+)\)/gim;
+				var raw = error.stack;
+				var niceStack = [];
+				while( stackReg.match(raw) ) {
+					niceStack.push({
+						func: stackReg.matched(1),
+						file: stackReg.matched(2),
+						col: Std.parseInt( stackReg.matched(3) ),
+					});
+					raw = stackReg.matchedRight();
+				}
 			}
 
 			// Error description

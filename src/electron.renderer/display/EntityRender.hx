@@ -15,6 +15,7 @@ class EntityRender extends dn.Process {
 	var center: h2d.Flow;
 	var beneath: h2d.Flow;
 	var fieldGraphics : h2d.Graphics;
+	var simpleLabel : h2d.Flow; // only shown when out of entity layer
 
 	public var posInvalidated = true;
 
@@ -42,8 +43,12 @@ class EntityRender extends dn.Process {
 
 		beneath = new h2d.Flow(root);
 		beneath.layout = Vertical;
-		beneath.horizontalAlign = Left;
+		beneath.horizontalAlign = Middle;
 		beneath.verticalSpacing = 1;
+
+		simpleLabel = new h2d.Flow(root);
+		simpleLabel.layout = Vertical;
+		simpleLabel.horizontalAlign = Middle;
 
 		renderAll();
 	}
@@ -226,6 +231,7 @@ class EntityRender extends dn.Process {
 		center.removeChildren();
 		beneath.removeChildren();
 		fieldGraphics.clear();
+		simpleLabel.removeChildren();
 
 		// Attach fields
 		var color = ei.getSmartColor(true);
@@ -242,6 +248,18 @@ class EntityRender extends dn.Process {
 			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd) ),
 			color, ctx, beneath
 		);
+
+
+		// Simple label
+		if( ei.def.showName || above.numChildren>0 || center.numChildren>0 || beneath.numChildren>0 ) {
+			var tf = new h2d.Text(getDefaultFont(), simpleLabel);
+			tf.scale(settings.v.editorUiScale);
+			tf.textColor = ei.getSmartColor(true);
+			tf.text = "(···)";
+			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
+			tf.y = 0;
+			// FieldInstanceRender.addBg(simpleLabel, ei.getSmartColor(true), 0.82);
+		}
 
 
 		// Identifier label
@@ -276,9 +294,10 @@ class EntityRender extends dn.Process {
 		// Update field wrappers
 		above.visible = center.visible = beneath.visible = Editor.ME.curLayerInstance.containsEntity(ei);
 		if( above.visible ) {
+			simpleLabel.visible = false;
 			above.setScale(scale);
 			above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
-			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 1 );
+			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 2 );
 			above.alpha = alpha;
 
 			center.setScale(scale);
@@ -290,6 +309,13 @@ class EntityRender extends dn.Process {
 			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
 			beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
 			beneath.alpha = alpha;
+		}
+		else {
+			simpleLabel.visible = true;
+			simpleLabel.setScale(scale);
+			simpleLabel.x = Std.int( -ei.width*ed.pivotX - simpleLabel.outerWidth*0.5*simpleLabel.scaleX + ei.width*0.5 );
+			simpleLabel.y = Std.int( -simpleLabel.outerHeight*simpleLabel.scaleY - ei.height*ed.pivotY - 2 );
+			simpleLabel.alpha = alpha;
 		}
 	}
 
