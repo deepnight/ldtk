@@ -6,7 +6,7 @@ Links: [Official website](https://ldtk.io/) | [Haxe API (on GitHub)](https://git
 
 [![GitHub All Releases](https://img.shields.io/github/downloads/deepnight/ldtk/total?color=%2389b&label=Downloads)](https://github.com/deepnight/ldtk/releases/latest)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk/test-windows?label=LDtk%20build)
-[![Travis (.com)](https://img.shields.io/travis/com/deepnight/ldtk-haxe-api?label=Haxe%20API)](https://travis-ci.com/github/deepnight/ldtk-haxe-api)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk-haxe-api/Unit%20tests?label=API%20unit%20tests)
 
 # Getting LDtk latest version
 
