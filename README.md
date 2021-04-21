@@ -4,6 +4,7 @@
 
 Links: [Official website](https://ldtk.io/) | [Haxe API (on GitHub)](https://github.com/deepnight/ldtk-haxe-api)
 
+[![GitHub Repo stars](https://img.shields.io/github/stars/deepnight/ldtk?color=%23dca&label=%E2%AD%90)](https://github.com/deepnight/ldtk)
 [![GitHub All Releases](https://img.shields.io/github/downloads/deepnight/ldtk/total?color=%2389b&label=Downloads)](https://github.com/deepnight/ldtk/releases/latest)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk/test-windows?label=LDtk%20build)](https://github.com/deepnight/ldtk/actions/workflows/test-windows.yml)
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk-haxe-api/Unit%20tests?label=API%20unit%20tests)](https://github.com/deepnight/ldtk-haxe-api/actions/workflows/unitTests.yml)
