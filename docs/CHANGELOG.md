@@ -1,3 +1,7 @@
+# 0.9.3
+
+  - **Aseprite support**: you can now load an Aseprite image directly as a tileset or a level background image. It will be automatically reloaded if it changes on the disk, just like any another image.
+
 # 0.9.2
 
   - Added a tiny "(...)" above entities with fields when they are hidden
