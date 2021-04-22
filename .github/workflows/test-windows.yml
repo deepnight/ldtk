@@ -39,6 +39,7 @@ jobs:
       - run: haxelib git heaps https://github.com/deepnight/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
       - run: haxelib git electron https://github.com/tong/hxelectron.git
+      - run: haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git
 
       # Install haxe API from same branch (if it exists)...
       - name: Install Haxe API from same branch
