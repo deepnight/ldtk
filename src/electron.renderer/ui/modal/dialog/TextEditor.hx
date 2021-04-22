@@ -104,7 +104,7 @@ class TextEditor extends ui.modal.Dialog {
 		// Check if file can be edited in plain text
 		switch dn.Identify.getType(bytes) {
 			case Unknown:
-			case Png, Jpeg, Gif, Bmp:
+			case Aseprite, Png, Jpeg, Gif, Bmp:
 				N.error("You cannot edit an image here.");
 				return false;
 		}
