@@ -451,8 +451,13 @@ class Project {
 				App.LOG.add("cache", 'Caching image $relPath...');
 				var absPath = makeAbsoluteFilePath(relPath);
 				var bytes = NT.readFileBytes(absPath);
+				App.LOG.add("cache", " -> identified as "+dn.Identify.getType(bytes));
 				var base64 = haxe.crypto.Base64.encode(bytes);
 				var pixels = dn.ImageDecoder.decodePixels(bytes);
+				if( pixels==null ) {
+					App.LOG.error('Failed to decode pixels: $relPath (identified as ${dn.Identify.getType(bytes)}, err=${dn.ImageDecoder.lastError})');
+					throw "decodePixels failed";
+				}
 				var texture = h3d.mat.Texture.fromPixels(pixels);
 				imageCache.set( relPath, {
 					fileName: dn.FilePath.extractFileWithExt(relPath),
