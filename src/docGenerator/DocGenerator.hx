@@ -254,7 +254,7 @@ class DocGenerator {
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
 
 				if( f.isInternal || type.onlyInternalFields )
-					cell.push('<sup class="internal">*Internal editor data*</sup>');
+					cell.push('<sup class="internal">*Only used by editor*</sup>');
 
 				if( f.deprecation!=null ) {
 					cell[0] = "~~"+cell[0]+"~~";
@@ -295,9 +295,8 @@ class DocGenerator {
 
 		// Header
 		var headerMd = [
-			'# LDtk Json structure (version $appVersion)',
+			'## LDtk Json structure (version $appVersion)',
 			'',
-			'## Table of contents',
 		];
 
 		// Table of content
