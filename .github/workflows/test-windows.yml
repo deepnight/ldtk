@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: krdlab/setup-haxe@v1
         with:
-          haxe-version: 4.1.4
+          haxe-version: 4.2.0
       - run: haxe -version
 
       # Install libs
