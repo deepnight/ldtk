@@ -1,5 +1,3 @@
-# Deploy instructions
-
 ## Tools
 - [ ] Define a `GH_TOKEN` env var  ([link](https://github.com/settings/tokens))
 - [ ] Install "**Itch.io Butler**" ([download](https://itchio.itch.io/butler)) & login (`butler login`, [doc](https://itch.io/docs/butler/))
