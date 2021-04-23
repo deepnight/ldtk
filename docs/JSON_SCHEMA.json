@@ -343,7 +343,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tilesets": {
-					"description": "",
+					"description": "All tilesets",
 					"items": {
 						"$ref": "#/otherTypes/TilesetDef"
 					},
@@ -352,7 +352,7 @@
 					]
 				},
 				"layers": {
-					"description": "",
+					"description": "All layer definitions",
 					"items": {
 						"$ref": "#/otherTypes/LayerDef"
 					},
@@ -361,7 +361,7 @@
 					]
 				},
 				"levelFields": {
-					"description": "An array containing all custom fields available to all levels.",
+					"description": "All custom fields available to all levels.",
 					"items": {
 						"$ref": "#/otherTypes/FieldDef"
 					},
@@ -370,7 +370,7 @@
 					]
 				},
 				"enums": {
-					"description": "",
+					"description": "All internal enums",
 					"items": {
 						"$ref": "#/otherTypes/EnumDef"
 					},
@@ -379,7 +379,7 @@
 					]
 				},
 				"entities": {
-					"description": "All entities, including their custom fields",
+					"description": "All entities definitions, including their custom fields",
 					"items": {
 						"$ref": "#/otherTypes/EntityDef"
 					},

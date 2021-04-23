@@ -151,12 +151,12 @@ The 2 only definition types you might need here are **Tilesets** and **Enums**.
 
 Value | Type | Description
 -- | -- | --
-`entities` | Array&nbsp;of&nbsp;[Entity&nbsp;definition](#ldtk-EntityDefJson) | All entities, including their custom fields
-`enums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | 
+`entities` | Array&nbsp;of&nbsp;[Entity&nbsp;definition](#ldtk-EntityDefJson) | All entities definitions, including their custom fields
+`enums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | All internal enums
 `externalEnums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file.
-`layers` | Array&nbsp;of&nbsp;[Layer&nbsp;definition](#ldtk-LayerDefJson) | 
-`levelFields`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | An array containing all custom fields available to all levels.
-`tilesets` | Array&nbsp;of&nbsp;[Tileset&nbsp;definition](#ldtk-TilesetDefJson) | 
+`layers` | Array&nbsp;of&nbsp;[Layer&nbsp;definition](#ldtk-LayerDefJson) | All layer definitions
+`levelFields`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | All custom fields available to all levels.
+`tilesets` | Array&nbsp;of&nbsp;[Tileset&nbsp;definition](#ldtk-TilesetDefJson) | All tilesets
 
 <a id="ldtk-LayerDefJson" name="ldtk-LayerDefJson"></a>
 ## 3.1. Layer definition   
