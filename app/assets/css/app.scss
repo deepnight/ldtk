@@ -3457,7 +3457,7 @@ canvas#webgl {
 					flex: 0 1 0px;
 				}
 
-				@at-root body.fullscreen .buttons .exit {
+				@at-root body.fullscreen #page.home .buttons .exit {
 					display: inherit !important;
 				}
 			}
