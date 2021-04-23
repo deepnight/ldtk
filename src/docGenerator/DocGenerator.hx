@@ -301,13 +301,16 @@ class DocGenerator {
 			'',
 		];
 
+		var raw = sys.io.File.getContent("docs/example.md");
+		headerMd = headerMd.concat( raw.split("\n") );
+
 		// Table of content
-		for(e in toc) {
-			var indent = " -";
-			for(i in 0...e.depth)
-				indent = "  "+indent;
-			headerMd.push('$indent [${e.name}](#${e.anchor})');
-		}
+		// for(e in toc) {
+		// 	var indent = " -";
+		// 	for(i in 0...e.depth)
+		// 		indent = "  "+indent;
+		// 	headerMd.push('$indent [${e.name}](#${e.anchor})');
+		// }
 
 		md = headerMd.concat(md);
 

@@ -1,19 +1,28 @@
 ## LDtk Json structure (version 0.9.3)
 
-   - [LDtk Json root](#ldtk-ProjectJson)
-   - [Level](#ldtk-LevelJson)
-     - [Layer instance](#ldtk-LayerInstanceJson)
-       - [Tile instance](#ldtk-Tile)
-       - [Entity instance](#ldtk-EntityInstanceJson)
-       - [Field instance](#ldtk-FieldInstanceJson)
-   - [Definitions](#ldtk-DefinitionsJson)
-     - [Layer definition](#ldtk-LayerDefJson)
-       - [Auto-layer rule definition](#ldtk-AutoRuleDef)
-     - [Entity definition](#ldtk-EntityDefJson)
-       - [Field definition](#ldtk-FieldDefJson)
-     - [Tileset definition](#ldtk-TilesetDefJson)
-     - [Enum definition](#ldtk-EnumDefJson)
-       - [Enum value definition](#ldtk-EnumDefValues)
+`{`
+ - `"__header__"` `{` ... `}` *-- File header*
+ - [Global project properties](#ldtk-ProjectJson)
+
+ - `"defs" : {`
+    - `"layers" : [ ` [&lt;Layer definitions&gt;]() `],`
+    - `"entities" : [ ` [&lt;Entity definitions&gt;]() with [&lt;Field definitions&gt;]() `],`
+    - `"tilesets" : [ ` [&lt;Tileset definitions&gt;]() `],`
+    - `"enums" : [ ` [&lt;Enum definitions&gt;]() `],`
+    - `"externalEnums" : [ ` [&lt;Enum definitions&gt;]() `],`
+    - `"levelFields" : [ ` [&lt;Field definitions&gt;]() `]`
+  - `}`
+
+  - `"levels" : [`
+    - `{`
+      - [&lt;Level properties&gt;]()
+	  - `"layers" : [ ` [&lt;Layer instances&gt;]() `]`
+    - `},`
+    - ...
+  - `]`
+
+`}`
+
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## 1. LDtk Json root   
