@@ -1,0 +1,19 @@
+--cmd haxelib git castle https://github.com/deepnight/castle --always
+
+--next
+--cmd haxelib git heaps https://github.com/deepnight/heaps.git --always
+
+--next
+--cmd haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git --always
+
+--next
+--cmd haxelib git electron https://github.com/tong/hxelectron.git --always
+
+--next
+--cmd haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git --always
+
+--next
+--cmd haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+
+--next
+--cmd haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
