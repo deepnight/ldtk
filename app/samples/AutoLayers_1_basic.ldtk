@@ -5,10 +5,10 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.9.2",
+		"appVersion": "0.9.3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.9.2",
+	"jsonVersion": "0.9.3",
 	"nextUid": 108,
 	"worldLayout": "Free",
 	"worldGridWidth": 128,
@@ -23,7 +23,7 @@
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
-	"exportPng": false,
+	"imageExportMode": "None",
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
@@ -314,7 +314,7 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLangageMode": null
+			"textLanguageMode": null
 		},
 		{
 			"identifier": "color",
@@ -334,7 +334,7 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16777215] },
-			"textLangageMode": null
+			"textLanguageMode": null
 		}
 	] },
 	"levels": [
