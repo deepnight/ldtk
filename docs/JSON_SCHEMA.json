@@ -671,6 +671,21 @@
 						"Beneath"
 					]
 				},
+				"textLanguageMode": {
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
+					"enum": [
+						"LangPython",
+						"LangRuby",
+						"LangJS",
+						"LangLua",
+						"LangC",
+						"LangHaxe",
+						"LangMarkdown",
+						"LangJson",
+						"LangXml",
+						null
+					]
+				},
 				"max": {
 					"description": "Max limit for value, if applicable",
 					"type": [
@@ -686,21 +701,6 @@
 				},
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
-				},
-				"textLangageMode": {
-					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
-					"enum": [
-						"LangPython",
-						"LangRuby",
-						"LangJS",
-						"LangLua",
-						"LangC",
-						"LangHaxe",
-						"LangMarkdown",
-						"LangJson",
-						"LangXml",
-						null
-					]
 				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",

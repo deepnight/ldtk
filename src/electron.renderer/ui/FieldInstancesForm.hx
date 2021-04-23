@@ -247,7 +247,7 @@ class FieldInstancesForm {
 					new ui.modal.dialog.TextEditor(
 						fi.getString(arrayIdx),
 						getInstanceName()+"."+fi.def.identifier,
-						fi.def.textLangageMode,
+						fi.def.textLanguageMode,
 						(v)->{
 							fi.parseValue(arrayIdx, v);
 							onFieldChange(fi);
