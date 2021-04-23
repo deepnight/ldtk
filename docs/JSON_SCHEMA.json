@@ -24,9 +24,9 @@
 			"defaultLevelWidth",
 			"defaultPivotX",
 			"defaultPivotY",
-			"exportPng",
 			"exportTiled",
 			"flags",
+			"imageExportMode",
 			"levelNamePattern",
 			"minifyJson",
 			"nextUid"
@@ -66,6 +66,14 @@
 				"description": "Next Unique integer ID available",
 				"type": [
 					"integer"
+				]
+			},
+			"imageExportMode": {
+				"description": "\"Image export\" option when saving project. Possible values: `None`, `OneImagePerLayer`, `OneImagePerLevel`",
+				"enum": [
+					"None",
+					"OneImagePerLayer",
+					"OneImagePerLevel"
 				]
 			},
 			"defaultPivotY": {
@@ -114,9 +122,10 @@
 				]
 			},
 			"exportPng": {
-				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
+				"description": "**WARNING**: this deprecated value is no longer exported since version 0.9.2  Replaced by: `imageExportMode`",
 				"type": [
-					"boolean"
+					"boolean",
+					"null"
 				]
 			},
 			"defaultLevelWidth": {
