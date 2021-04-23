@@ -1,4 +1,4 @@
-## LDtk Json structure (version 0.9.2)
+## LDtk Json structure (version 0.9.3)
 
    - [LDtk Json root](#ldtk-ProjectJson)
    - [Level](#ldtk-LevelJson)
@@ -21,7 +21,7 @@ This is the root of any Project JSON file. It contains:
 
 - the project settings,
 - an array of levels,
-- and a definition object (that can probably be safely ignored for most users).
+- a group of definitions (that can probably be safely ignored for most users).
 
 Value | Type | Description
 -- | -- | --
