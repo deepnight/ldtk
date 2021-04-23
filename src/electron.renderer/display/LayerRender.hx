@@ -195,6 +195,25 @@ class LayerRender {
 		return out;
 	}
 
+
+	public function drawToTexture(tex:h3d.mat.Texture, p:data.Project, l:data.Level, li:data.inst.LayerInstance) : Bool {
+		switch li.def.type {
+		case IntGrid, Tiles, AutoLayer:
+			if( li.def.isAutoLayer() || li.def.type==Tiles ) {
+				// Tiles
+				render(li);
+				root.drawTo(tex);
+				return true;
+			}
+			else
+				return false;
+
+		case Entities:
+			return false;
+		}
+	}
+
+
 	public function clear() {
 		for(er in entityRenders)
 			er.destroy();

@@ -45,14 +45,17 @@
 	</dd>
 
 	<dt>
-		<label for="png">Export layers as PNG</label>
+		<label for="png">Export as PNG</label>
 	</dt>
-	<dd class="pngPattern">
-		<input type="checkbox" id="png" title='Each layer in each level will be exported as an individual PNG image. Note that IntGrid layer values will be exported as tiny images where 1px = 1 layer grid cell. WARNING: this will increase saving time on large projects.'/>
+	<dd class="imageExportMode">
 		<div class="locate"></div>
+
+		<select title="This option allows you to export 'flatten' PNG images, in addition to JSON data, when saving your project.">
+		</select>
+
+		<!-- <input type="checkbox" id="png" title='Each layer in each level will be exported as an individual PNG image. Note that IntGrid layer values will be exported as tiny images where 1px = 1 layer grid cell. WARNING: this will increase saving time on large projects.'/> -->
+
 		<input type="text" class="pattern"/>
-		<button class="reset dark small">Reset</button>
-		<div class="example"></div>
 		<div class="help guide">
 			<dl>
 				<dt>%level_name</dt> <dd>Level text identifier</dd>
@@ -61,6 +64,10 @@
 				<dt>%layer_idx</dt> <dd>Layer index in render order</dd>
 			</dl>
 		</div>
+
+		<button class="reset dark small">Reset</button>
+
+		<div class="example"></div>
 	</dd>
 
 	<dt>

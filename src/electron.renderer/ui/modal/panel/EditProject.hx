@@ -102,15 +102,29 @@ class EditProject extends ui.modal.Panel {
 		if( project.externalLevels )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
 
-		// Png export
-		var i = Input.linkToHtmlInput( project.exportPng, jForm.find("#png") );
+		// Image export
+		var jImgExport = jForm.find(".imageExportMode");
+		var jSelect = jImgExport.find("select");
+		var i = new form.input.EnumSelect(
+			jSelect,
+			ldtk.Json.ImageExportMode,
+			()->project.imageExportMode,
+			(v)->{
+				project.pngFilePattern = null;
+				project.imageExportMode = v;
+			},
+			(v)->switch v {
+				case None: L.t._("Don't export any image");
+				case OneImagePerLayer: L.t._("Export one PNG for each individual layer, in each level");
+				case OneImagePerLevel: L.t._("Export only one PNG per level");
+			}
+		);
 		i.linkEvent(ProjectSettingsChanged);
-
-		var jLocate = jForm.find("#png").siblings(".locate").empty();
-		var jFilePattern : js.jquery.JQuery = jForm.find("#png").siblings(".pattern").hide();
-		var jExample : js.jquery.JQuery = jForm.find("#png").siblings(".example").hide();
-		var jReset : js.jquery.JQuery = jForm.find("#png").siblings(".reset").hide();
-		if( project.exportPng ) {
+		var jLocate = jImgExport.find(".locate").empty();
+		var jFilePattern : js.jquery.JQuery = jImgExport.find(".pattern").hide();
+		var jExample : js.jquery.JQuery = jImgExport.find(".example").hide();
+		var jReset : js.jquery.JQuery = jImgExport.find(".reset").hide();
+		if( project.imageExportMode!=None ) {
 			jFilePattern.show();
 			jExample.show();
 			jReset.show();
@@ -122,14 +136,14 @@ class EditProject extends ui.modal.Panel {
 
 			var i = new form.input.StringInput(
 				jFilePattern,
-				()->project.getPngFilePattern(),
+				()->project.getImageExportFilePattern(),
 				(v)->{
-					project.pngFilePattern = v==project.getDefaultPngFilePattern() ? null : v;
+					project.pngFilePattern = v==project.getDefaultImageExportFilePattern() ? null : v;
 					editor.ge.emit(ProjectSettingsChanged);
 				}
 			);
 			jFilePattern.keyup( (_)->{
-				var pattern = jFilePattern.val()==null ? project.getDefaultPngFilePattern() : jFilePattern.val();
+				var pattern = jFilePattern.val()==null ? project.getDefaultImageExportFilePattern() : jFilePattern.val();
 				jExample.text( '"'+project.getPngFileName(pattern, editor.curLevel, editor.curLayerDef)+'.png"' );
 			} ).keyup();
 		}
