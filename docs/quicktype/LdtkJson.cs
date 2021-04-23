@@ -19,7 +19,7 @@ namespace ldtk
     /// This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
     ///
     /// This is the root of any Project JSON file. It contains:  - the project settings, - an
-    /// array of levels, - and a definition object (that can probably be safely ignored for most
+    /// array of levels, - a group of definitions (that can probably be safely ignored for most
     /// users).
     /// </summary>
     public partial class LdtkJson
@@ -85,11 +85,11 @@ namespace ldtk
         public Definitions Defs { get; set; }
 
         /// <summary>
-        /// If TRUE, all layers in all levels will also be exported as PNG along with the project
-        /// file (default is FALSE)
+        /// **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
+        /// by: `imageExportMode`
         /// </summary>
         [JsonProperty("exportPng")]
-        public bool ExportPng { get; set; }
+        public bool? ExportPng { get; set; }
 
         /// <summary>
         /// If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file
@@ -111,6 +111,13 @@ namespace ldtk
         /// </summary>
         [JsonProperty("flags")]
         public Flag[] Flags { get; set; }
+
+        /// <summary>
+        /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+        /// `OneImagePerLevel`
+        /// </summary>
+        [JsonProperty("imageExportMode")]
+        public ImageExportMode ImageExportMode { get; set; }
 
         /// <summary>
         /// File format version
@@ -184,11 +191,14 @@ namespace ldtk
     public partial class Definitions
     {
         /// <summary>
-        /// All entities, including their custom fields
+        /// All entities definitions, including their custom fields
         /// </summary>
         [JsonProperty("entities")]
         public EntityDefinition[] Entities { get; set; }
 
+        /// <summary>
+        /// All internal enums
+        /// </summary>
         [JsonProperty("enums")]
         public EnumDefinition[] Enums { get; set; }
 
@@ -199,15 +209,21 @@ namespace ldtk
         [JsonProperty("externalEnums")]
         public EnumDefinition[] ExternalEnums { get; set; }
 
+        /// <summary>
+        /// All layer definitions
+        /// </summary>
         [JsonProperty("layers")]
         public LayerDefinition[] Layers { get; set; }
 
         /// <summary>
-        /// An array containing all custom fields available to all levels.
+        /// All custom fields available to all levels.
         /// </summary>
         [JsonProperty("levelFields")]
         public FieldDefinition[] LevelFields { get; set; }
 
+        /// <summary>
+        /// All tilesets
+        /// </summary>
         [JsonProperty("tilesets")]
         public TilesetDefinition[] Tilesets { get; set; }
     }
@@ -445,8 +461,8 @@ namespace ldtk
         /// Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
         /// `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
         /// </summary>
-        [JsonProperty("textLangageMode")]
-        public TextLangageMode? TextLangageMode { get; set; }
+        [JsonProperty("textLanguageMode")]
+        public TextLanguageMode? TextLanguageMode { get; set; }
 
         /// <summary>
         /// Internal type enum
@@ -1399,7 +1415,7 @@ namespace ldtk
     /// </summary>
     public enum EditorDisplayPos { Above, Beneath, Center };
 
-    public enum TextLangageMode { LangC, LangHaxe, LangJs, LangJson, LangLua, LangMarkdown, LangPython, LangRuby, LangXml };
+    public enum TextLanguageMode { LangC, LangHaxe, LangJs, LangJson, LangLua, LangMarkdown, LangPython, LangRuby, LangXml };
 
     /// <summary>
     /// Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
@@ -1440,6 +1456,12 @@ namespace ldtk
 
     public enum Flag { DiscardPreCsvIntGrid, IgnoreBackupSuggest };
 
+    /// <summary>
+    /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+    /// `OneImagePerLevel`
+    /// </summary>
+    public enum ImageExportMode { None, OneImagePerLayer, OneImagePerLevel };
+
     public enum BgPos { Contain, Cover, CoverDirty, Unscaled };
 
     /// <summary>
@@ -1468,7 +1490,7 @@ namespace ldtk
             {
                 EditorDisplayModeConverter.Singleton,
                 EditorDisplayPosConverter.Singleton,
-                TextLangageModeConverter.Singleton,
+                TextLanguageModeConverter.Singleton,
                 LimitBehaviorConverter.Singleton,
                 LimitScopeConverter.Singleton,
                 RenderModeConverter.Singleton,
@@ -1477,6 +1499,7 @@ namespace ldtk
                 TileModeConverter.Singleton,
                 TypeEnumConverter.Singleton,
                 FlagConverter.Singleton,
+                ImageExportModeConverter.Singleton,
                 BgPosConverter.Singleton,
                 WorldLayoutConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
@@ -1611,9 +1634,9 @@ namespace ldtk
         public static readonly EditorDisplayPosConverter Singleton = new EditorDisplayPosConverter();
     }
 
-    internal class TextLangageModeConverter : JsonConverter
+    internal class TextLanguageModeConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(TextLangageMode) || t == typeof(TextLangageMode?);
+        public override bool CanConvert(Type t) => t == typeof(TextLanguageMode) || t == typeof(TextLanguageMode?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
@@ -1622,25 +1645,25 @@ namespace ldtk
             switch (value)
             {
                 case "LangC":
-                    return TextLangageMode.LangC;
+                    return TextLanguageMode.LangC;
                 case "LangHaxe":
-                    return TextLangageMode.LangHaxe;
+                    return TextLanguageMode.LangHaxe;
                 case "LangJS":
-                    return TextLangageMode.LangJs;
+                    return TextLanguageMode.LangJs;
                 case "LangJson":
-                    return TextLangageMode.LangJson;
+                    return TextLanguageMode.LangJson;
                 case "LangLua":
-                    return TextLangageMode.LangLua;
+                    return TextLanguageMode.LangLua;
                 case "LangMarkdown":
-                    return TextLangageMode.LangMarkdown;
+                    return TextLanguageMode.LangMarkdown;
                 case "LangPython":
-                    return TextLangageMode.LangPython;
+                    return TextLanguageMode.LangPython;
                 case "LangRuby":
-                    return TextLangageMode.LangRuby;
+                    return TextLanguageMode.LangRuby;
                 case "LangXml":
-                    return TextLangageMode.LangXml;
+                    return TextLanguageMode.LangXml;
             }
-            throw new Exception("Cannot unmarshal type TextLangageMode");
+            throw new Exception("Cannot unmarshal type TextLanguageMode");
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
@@ -1650,41 +1673,41 @@ namespace ldtk
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (TextLangageMode)untypedValue;
+            var value = (TextLanguageMode)untypedValue;
             switch (value)
             {
-                case TextLangageMode.LangC:
+                case TextLanguageMode.LangC:
                     serializer.Serialize(writer, "LangC");
                     return;
-                case TextLangageMode.LangHaxe:
+                case TextLanguageMode.LangHaxe:
                     serializer.Serialize(writer, "LangHaxe");
                     return;
-                case TextLangageMode.LangJs:
+                case TextLanguageMode.LangJs:
                     serializer.Serialize(writer, "LangJS");
                     return;
-                case TextLangageMode.LangJson:
+                case TextLanguageMode.LangJson:
                     serializer.Serialize(writer, "LangJson");
                     return;
-                case TextLangageMode.LangLua:
+                case TextLanguageMode.LangLua:
                     serializer.Serialize(writer, "LangLua");
                     return;
-                case TextLangageMode.LangMarkdown:
+                case TextLanguageMode.LangMarkdown:
                     serializer.Serialize(writer, "LangMarkdown");
                     return;
-                case TextLangageMode.LangPython:
+                case TextLanguageMode.LangPython:
                     serializer.Serialize(writer, "LangPython");
                     return;
-                case TextLangageMode.LangRuby:
+                case TextLanguageMode.LangRuby:
                     serializer.Serialize(writer, "LangRuby");
                     return;
-                case TextLangageMode.LangXml:
+                case TextLanguageMode.LangXml:
                     serializer.Serialize(writer, "LangXml");
                     return;
             }
-            throw new Exception("Cannot marshal type TextLangageMode");
+            throw new Exception("Cannot marshal type TextLanguageMode");
         }
 
-        public static readonly TextLangageModeConverter Singleton = new TextLangageModeConverter();
+        public static readonly TextLanguageModeConverter Singleton = new TextLanguageModeConverter();
     }
 
     internal class LimitBehaviorConverter : JsonConverter
@@ -2058,6 +2081,52 @@ namespace ldtk
         }
 
         public static readonly FlagConverter Singleton = new FlagConverter();
+    }
+
+    internal class ImageExportModeConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(ImageExportMode) || t == typeof(ImageExportMode?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "None":
+                    return ImageExportMode.None;
+                case "OneImagePerLayer":
+                    return ImageExportMode.OneImagePerLayer;
+                case "OneImagePerLevel":
+                    return ImageExportMode.OneImagePerLevel;
+            }
+            throw new Exception("Cannot unmarshal type ImageExportMode");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (ImageExportMode)untypedValue;
+            switch (value)
+            {
+                case ImageExportMode.None:
+                    serializer.Serialize(writer, "None");
+                    return;
+                case ImageExportMode.OneImagePerLayer:
+                    serializer.Serialize(writer, "OneImagePerLayer");
+                    return;
+                case ImageExportMode.OneImagePerLevel:
+                    serializer.Serialize(writer, "OneImagePerLevel");
+                    return;
+            }
+            throw new Exception("Cannot marshal type ImageExportMode");
+        }
+
+        public static readonly ImageExportModeConverter Singleton = new ImageExportModeConverter();
     }
 
     internal class BgPosConverter : JsonConverter

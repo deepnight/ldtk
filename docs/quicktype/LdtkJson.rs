@@ -17,7 +17,7 @@ use std::collections::HashMap;
 /// This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
 ///
 /// This is the root of any Project JSON file. It contains:  - the project settings, - an
-/// array of levels, - and a definition object (that can probably be safely ignored for most
+/// array of levels, - a group of definitions (that can probably be safely ignored for most
 /// users).
 #[derive(Serialize, Deserialize)]
 pub struct LdtkJson {
@@ -61,10 +61,10 @@ pub struct LdtkJson {
     #[serde(rename = "defs")]
     defs: Definitions,
 
-    /// If TRUE, all layers in all levels will also be exported as PNG along with the project
-    /// file (default is FALSE)
+    /// **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
+    /// by: `imageExportMode`
     #[serde(rename = "exportPng")]
-    export_png: bool,
+    export_png: Option<bool>,
 
     /// If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file
     /// (default is FALSE)
@@ -80,6 +80,11 @@ pub struct LdtkJson {
     /// values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
     #[serde(rename = "flags")]
     flags: Vec<Flag>,
+
+    /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+    /// `OneImagePerLevel`
+    #[serde(rename = "imageExportMode")]
+    image_export_mode: ImageExportMode,
 
     /// File format version
     #[serde(rename = "jsonVersion")]
@@ -132,10 +137,11 @@ pub struct LdtkJson {
 /// **Tilesets** and **Enums**.
 #[derive(Serialize, Deserialize)]
 pub struct Definitions {
-    /// All entities, including their custom fields
+    /// All entities definitions, including their custom fields
     #[serde(rename = "entities")]
     entities: Vec<EntityDefinition>,
 
+    /// All internal enums
     #[serde(rename = "enums")]
     enums: Vec<EnumDefinition>,
 
@@ -144,13 +150,15 @@ pub struct Definitions {
     #[serde(rename = "externalEnums")]
     external_enums: Vec<EnumDefinition>,
 
+    /// All layer definitions
     #[serde(rename = "layers")]
     layers: Vec<LayerDefinition>,
 
-    /// An array containing all custom fields available to all levels.
+    /// All custom fields available to all levels.
     #[serde(rename = "levelFields")]
     level_fields: Vec<FieldDefinition>,
 
+    /// All tilesets
     #[serde(rename = "tilesets")]
     tilesets: Vec<TilesetDefinition>,
 }
@@ -318,8 +326,8 @@ pub struct FieldDefinition {
 
     /// Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
     /// `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
-    #[serde(rename = "textLangageMode")]
-    text_langage_mode: Option<TextLangageMode>,
+    #[serde(rename = "textLanguageMode")]
+    text_language_mode: Option<TextLanguageMode>,
 
     /// Internal type enum
     #[serde(rename = "type")]
@@ -1040,7 +1048,7 @@ pub enum EditorDisplayPos {
 }
 
 #[derive(Serialize, Deserialize)]
-pub enum TextLangageMode {
+pub enum TextLanguageMode {
     #[serde(rename = "LangC")]
     LangC,
 
@@ -1175,6 +1183,20 @@ pub enum Flag {
 
     #[serde(rename = "IgnoreBackupSuggest")]
     IgnoreBackupSuggest,
+}
+
+/// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+/// `OneImagePerLevel`
+#[derive(Serialize, Deserialize)]
+pub enum ImageExportMode {
+    #[serde(rename = "None")]
+    None,
+
+    #[serde(rename = "OneImagePerLayer")]
+    OneImagePerLayer,
+
+    #[serde(rename = "OneImagePerLevel")]
+    OneImagePerLevel,
 }
 
 #[derive(Serialize, Deserialize)]

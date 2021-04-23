@@ -21,32 +21,33 @@ func (r *LdtkJSON) Marshal() ([]byte, error) {
 // This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
 //
 // This is the root of any Project JSON file. It contains:  - the project settings, - an
-// array of levels, - and a definition object (that can probably be safely ignored for most
+// array of levels, - a group of definitions (that can probably be safely ignored for most
 // users).
 type LdtkJSON struct {
-	BackupLimit         int64       `json:"backupLimit"`        // Number of backup files to keep, if the `backupOnSave` is TRUE
-	BackupOnSave        bool        `json:"backupOnSave"`       // If TRUE, an extra copy of the project will be created in a sub folder, when saving.
-	BgColor             string      `json:"bgColor"`            // Project background color
-	DefaultGridSize     int64       `json:"defaultGridSize"`    // Default grid size for new layers
-	DefaultLevelBgColor string      `json:"defaultLevelBgColor"`// Default background color of levels
-	DefaultLevelHeight  int64       `json:"defaultLevelHeight"` // Default new level height
-	DefaultLevelWidth   int64       `json:"defaultLevelWidth"`  // Default new level width
-	DefaultPivotX       float64     `json:"defaultPivotX"`      // Default X pivot (0 to 1) for new entities
-	DefaultPivotY       float64     `json:"defaultPivotY"`      // Default Y pivot (0 to 1) for new entities
-	Defs                Definitions `json:"defs"`               // A structure containing all the definitions of this project
-	ExportPNG           bool        `json:"exportPng"`          // If TRUE, all layers in all levels will also be exported as PNG along with the project; file (default is FALSE)
-	ExportTiled         bool        `json:"exportTiled"`        // If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file; (default is FALSE)
-	ExternalLevels      bool        `json:"externalLevels"`     // If TRUE, one file will be saved for the project (incl. all its definitions) and one file; in a sub-folder for each level.
-	Flags               []Flag      `json:"flags"`              // An array containing various advanced flags (ie. options or other states). Possible; values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
-	JSONVersion         string      `json:"jsonVersion"`        // File format version
-	LevelNamePattern    string      `json:"levelNamePattern"`   // The default naming convention for level identifiers.
-	Levels              []Level     `json:"levels"`             // All levels. The order of this array is only relevant in `LinearHorizontal` and; `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to; the `worldX`,`worldY` coordinates of each Level.
-	MinifyJSON          bool        `json:"minifyJson"`         // If TRUE, the Json is partially minified (no indentation, nor line breaks, default is; FALSE)
-	NextUid             int64       `json:"nextUid"`            // Next Unique integer ID available
-	PNGFilePattern      *string     `json:"pngFilePattern"`     // File naming pattern for exported PNGs
-	WorldGridHeight     int64       `json:"worldGridHeight"`    // Height of the world grid in pixels.
-	WorldGridWidth      int64       `json:"worldGridWidth"`     // Width of the world grid in pixels.
-	WorldLayout         WorldLayout `json:"worldLayout"`        // An enum that describes how levels are organized in this project (ie. linearly or in a 2D; space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+	BackupLimit         int64           `json:"backupLimit"`        // Number of backup files to keep, if the `backupOnSave` is TRUE
+	BackupOnSave        bool            `json:"backupOnSave"`       // If TRUE, an extra copy of the project will be created in a sub folder, when saving.
+	BgColor             string          `json:"bgColor"`            // Project background color
+	DefaultGridSize     int64           `json:"defaultGridSize"`    // Default grid size for new layers
+	DefaultLevelBgColor string          `json:"defaultLevelBgColor"`// Default background color of levels
+	DefaultLevelHeight  int64           `json:"defaultLevelHeight"` // Default new level height
+	DefaultLevelWidth   int64           `json:"defaultLevelWidth"`  // Default new level width
+	DefaultPivotX       float64         `json:"defaultPivotX"`      // Default X pivot (0 to 1) for new entities
+	DefaultPivotY       float64         `json:"defaultPivotY"`      // Default Y pivot (0 to 1) for new entities
+	Defs                Definitions     `json:"defs"`               // A structure containing all the definitions of this project
+	ExportPNG           *bool           `json:"exportPng"`          // **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced; by: `imageExportMode`
+	ExportTiled         bool            `json:"exportTiled"`        // If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file; (default is FALSE)
+	ExternalLevels      bool            `json:"externalLevels"`     // If TRUE, one file will be saved for the project (incl. all its definitions) and one file; in a sub-folder for each level.
+	Flags               []Flag          `json:"flags"`              // An array containing various advanced flags (ie. options or other states). Possible; values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
+	ImageExportMode     ImageExportMode `json:"imageExportMode"`    // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,; `OneImagePerLevel`
+	JSONVersion         string          `json:"jsonVersion"`        // File format version
+	LevelNamePattern    string          `json:"levelNamePattern"`   // The default naming convention for level identifiers.
+	Levels              []Level         `json:"levels"`             // All levels. The order of this array is only relevant in `LinearHorizontal` and; `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to; the `worldX`,`worldY` coordinates of each Level.
+	MinifyJSON          bool            `json:"minifyJson"`         // If TRUE, the Json is partially minified (no indentation, nor line breaks, default is; FALSE)
+	NextUid             int64           `json:"nextUid"`            // Next Unique integer ID available
+	PNGFilePattern      *string         `json:"pngFilePattern"`     // File naming pattern for exported PNGs
+	WorldGridHeight     int64           `json:"worldGridHeight"`    // Height of the world grid in pixels.
+	WorldGridWidth      int64           `json:"worldGridWidth"`     // Width of the world grid in pixels.
+	WorldLayout         WorldLayout     `json:"worldLayout"`        // An enum that describes how levels are organized in this project (ie. linearly or in a 2D; space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
 }
 
 // A structure containing all the definitions of this project
@@ -58,12 +59,12 @@ type LdtkJSON struct {
 // `__identifier` or `__type`).  The 2 only definition types you might need here are
 // **Tilesets** and **Enums**.
 type Definitions struct {
-	Entities      []EntityDefinition  `json:"entities"`     // All entities, including their custom fields
-	Enums         []EnumDefinition    `json:"enums"`        
+	Entities      []EntityDefinition  `json:"entities"`     // All entities definitions, including their custom fields
+	Enums         []EnumDefinition    `json:"enums"`        // All internal enums
 	ExternalEnums []EnumDefinition    `json:"externalEnums"`// Note: external enums are exactly the same as `enums`, except they have a `relPath` to; point to an external source file.
-	Layers        []LayerDefinition   `json:"layers"`       
-	LevelFields   []FieldDefinition   `json:"levelFields"`  // An array containing all custom fields available to all levels.
-	Tilesets      []TilesetDefinition `json:"tilesets"`     
+	Layers        []LayerDefinition   `json:"layers"`       // All layer definitions
+	LevelFields   []FieldDefinition   `json:"levelFields"`  // All custom fields available to all levels.
+	Tilesets      []TilesetDefinition `json:"tilesets"`     // All tilesets
 }
 
 type EntityDefinition struct {
@@ -110,7 +111,7 @@ type FieldDefinition struct {
 	Max                 *float64          `json:"max"`                // Max limit for value, if applicable
 	Min                 *float64          `json:"min"`                // Min limit for value, if applicable
 	Regex               *string           `json:"regex"`              // Optional regular expression that needs to be matched to accept values. Expected format:; `/some_reg_ex/g`, with optional "i" flag.
-	TextLangageMode     *TextLangageMode  `json:"textLangageMode"`    // Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,; `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
+	TextLanguageMode    *TextLanguageMode `json:"textLanguageMode"`   // Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,; `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
 	FieldDefinitionType interface{}       `json:"type"`               // Internal type enum
 	Uid                 int64             `json:"uid"`                // Unique Int identifier
 }
@@ -347,17 +348,17 @@ const (
 	Center EditorDisplayPos = "Center"
 )
 
-type TextLangageMode string
+type TextLanguageMode string
 const (
-	LangC TextLangageMode = "LangC"
-	LangHaxe TextLangageMode = "LangHaxe"
-	LangJS TextLangageMode = "LangJS"
-	LangJSON TextLangageMode = "LangJson"
-	LangLua TextLangageMode = "LangLua"
-	LangMarkdown TextLangageMode = "LangMarkdown"
-	LangPython TextLangageMode = "LangPython"
-	LangRuby TextLangageMode = "LangRuby"
-	LangXML TextLangageMode = "LangXml"
+	LangC TextLanguageMode = "LangC"
+	LangHaxe TextLanguageMode = "LangHaxe"
+	LangJS TextLanguageMode = "LangJS"
+	LangJSON TextLanguageMode = "LangJson"
+	LangLua TextLanguageMode = "LangLua"
+	LangMarkdown TextLanguageMode = "LangMarkdown"
+	LangPython TextLanguageMode = "LangPython"
+	LangRuby TextLanguageMode = "LangRuby"
+	LangXML TextLanguageMode = "LangXml"
 )
 
 // Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
@@ -398,8 +399,8 @@ const (
 // Checker mode Possible values: `None`, `Horizontal`, `Vertical`
 type Checker string
 const (
+	CheckerNone Checker = "None"
 	Horizontal Checker = "Horizontal"
-	None Checker = "None"
 	Vertical Checker = "Vertical"
 )
 
@@ -424,6 +425,15 @@ type Flag string
 const (
 	DiscardPreCSVIntGrid Flag = "DiscardPreCsvIntGrid"
 	IgnoreBackupSuggest Flag = "IgnoreBackupSuggest"
+)
+
+// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+// `OneImagePerLevel`
+type ImageExportMode string
+const (
+	ImageExportModeNone ImageExportMode = "None"
+	OneImagePerLayer ImageExportMode = "OneImagePerLayer"
+	OneImagePerLevel ImageExportMode = "OneImagePerLevel"
 )
 
 type BgPos string

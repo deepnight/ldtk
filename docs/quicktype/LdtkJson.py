@@ -96,7 +96,7 @@ class EditorDisplayPos(Enum):
     CENTER = "Center"
 
 
-class TextLangageMode(Enum):
+class TextLanguageMode(Enum):
     LANG_C = "LangC"
     LANG_HAXE = "LangHaxe"
     LANG_JS = "LangJS"
@@ -153,13 +153,13 @@ class FieldDefinition:
     """Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
     `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
     """
-    text_langage_mode: Optional[TextLangageMode]
+    text_language_mode: Optional[TextLanguageMode]
     """Internal type enum"""
     field_definition_type: Any
     """Unique Int identifier"""
     uid: int
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], array_max_length: Optional[int], array_min_length: Optional[int], can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], text_langage_mode: Optional[TextLangageMode], field_definition_type: Any, uid: int) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], array_max_length: Optional[int], array_min_length: Optional[int], can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], text_language_mode: Optional[TextLanguageMode], field_definition_type: Any, uid: int) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.array_max_length = array_max_length
@@ -175,7 +175,7 @@ class FieldDefinition:
         self.max = max
         self.min = min
         self.regex = regex
-        self.text_langage_mode = text_langage_mode
+        self.text_language_mode = text_language_mode
         self.field_definition_type = field_definition_type
         self.uid = uid
 
@@ -197,10 +197,10 @@ class FieldDefinition:
         max = from_union([from_none, from_float], obj.get("max"))
         min = from_union([from_none, from_float], obj.get("min"))
         regex = from_union([from_none, from_str], obj.get("regex"))
-        text_langage_mode = from_union([from_none, TextLangageMode], obj.get("textLangageMode"))
+        text_language_mode = from_union([from_none, TextLanguageMode], obj.get("textLanguageMode"))
         field_definition_type = obj.get("type")
         uid = from_int(obj.get("uid"))
-        return FieldDefinition(type, accept_file_types, array_max_length, array_min_length, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, identifier, is_array, max, min, regex, text_langage_mode, field_definition_type, uid)
+        return FieldDefinition(type, accept_file_types, array_max_length, array_min_length, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, identifier, is_array, max, min, regex, text_language_mode, field_definition_type, uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -219,7 +219,7 @@ class FieldDefinition:
         result["max"] = from_union([from_none, to_float], self.max)
         result["min"] = from_union([from_none, to_float], self.min)
         result["regex"] = from_union([from_none, from_str], self.regex)
-        result["textLangageMode"] = from_union([from_none, lambda x: to_enum(TextLangageMode, x)], self.text_langage_mode)
+        result["textLanguageMode"] = from_union([from_none, lambda x: to_enum(TextLanguageMode, x)], self.text_language_mode)
         result["type"] = self.field_definition_type
         result["uid"] = from_int(self.uid)
         return result
@@ -895,16 +895,19 @@ class Definitions:
     `__identifier` or `__type`).  The 2 only definition types you might need here are
     **Tilesets** and **Enums**.
     """
-    """All entities, including their custom fields"""
+    """All entities definitions, including their custom fields"""
     entities: List[EntityDefinition]
+    """All internal enums"""
     enums: List[EnumDefinition]
     """Note: external enums are exactly the same as `enums`, except they have a `relPath` to
     point to an external source file.
     """
     external_enums: List[EnumDefinition]
+    """All layer definitions"""
     layers: List[LayerDefinition]
-    """An array containing all custom fields available to all levels."""
+    """All custom fields available to all levels."""
     level_fields: List[FieldDefinition]
+    """All tilesets"""
     tilesets: List[TilesetDefinition]
 
     def __init__(self, entities: List[EntityDefinition], enums: List[EnumDefinition], external_enums: List[EnumDefinition], layers: List[LayerDefinition], level_fields: List[FieldDefinition], tilesets: List[TilesetDefinition]) -> None:
@@ -940,6 +943,15 @@ class Definitions:
 class Flag(Enum):
     DISCARD_PRE_CSV_INT_GRID = "DiscardPreCsvIntGrid"
     IGNORE_BACKUP_SUGGEST = "IgnoreBackupSuggest"
+
+
+class ImageExportMode(Enum):
+    """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+    `OneImagePerLevel`
+    """
+    NONE = "None"
+    ONE_IMAGE_PER_LAYER = "OneImagePerLayer"
+    ONE_IMAGE_PER_LEVEL = "OneImagePerLevel"
 
 
 class LevelBackgroundPosition:
@@ -1506,7 +1518,7 @@ class LdtkJSON:
     """This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
     
     This is the root of any Project JSON file. It contains:  - the project settings, - an
-    array of levels, - and a definition object (that can probably be safely ignored for most
+    array of levels, - a group of definitions (that can probably be safely ignored for most
     users).
     """
     """Number of backup files to keep, if the `backupOnSave` is TRUE"""
@@ -1529,10 +1541,10 @@ class LdtkJSON:
     default_pivot_y: float
     """A structure containing all the definitions of this project"""
     defs: Definitions
-    """If TRUE, all layers in all levels will also be exported as PNG along with the project
-    file (default is FALSE)
+    """**WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
+    by: `imageExportMode`
     """
-    export_png: bool
+    export_png: Optional[bool]
     """If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file
     (default is FALSE)
     """
@@ -1545,6 +1557,10 @@ class LdtkJSON:
     values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
     """
     flags: List[Flag]
+    """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+    `OneImagePerLevel`
+    """
+    image_export_mode: ImageExportMode
     """File format version"""
     json_version: str
     """The default naming convention for level identifiers."""
@@ -1571,7 +1587,7 @@ class LdtkJSON:
     """
     world_layout: WorldLayout
 
-    def __init__(self, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: int, default_level_width: int, default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: bool, export_tiled: bool, external_levels: bool, flags: List[Flag], json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], world_grid_height: int, world_grid_width: int, world_layout: WorldLayout) -> None:
+    def __init__(self, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: int, default_level_width: int, default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], world_grid_height: int, world_grid_width: int, world_layout: WorldLayout) -> None:
         self.backup_limit = backup_limit
         self.backup_on_save = backup_on_save
         self.bg_color = bg_color
@@ -1586,6 +1602,7 @@ class LdtkJSON:
         self.export_tiled = export_tiled
         self.external_levels = external_levels
         self.flags = flags
+        self.image_export_mode = image_export_mode
         self.json_version = json_version
         self.level_name_pattern = level_name_pattern
         self.levels = levels
@@ -1609,10 +1626,11 @@ class LdtkJSON:
         default_pivot_x = from_float(obj.get("defaultPivotX"))
         default_pivot_y = from_float(obj.get("defaultPivotY"))
         defs = Definitions.from_dict(obj.get("defs"))
-        export_png = from_bool(obj.get("exportPng"))
+        export_png = from_union([from_none, from_bool], obj.get("exportPng"))
         export_tiled = from_bool(obj.get("exportTiled"))
         external_levels = from_bool(obj.get("externalLevels"))
         flags = from_list(Flag, obj.get("flags"))
+        image_export_mode = ImageExportMode(obj.get("imageExportMode"))
         json_version = from_str(obj.get("jsonVersion"))
         level_name_pattern = from_str(obj.get("levelNamePattern"))
         levels = from_list(Level.from_dict, obj.get("levels"))
@@ -1622,7 +1640,7 @@ class LdtkJSON:
         world_grid_height = from_int(obj.get("worldGridHeight"))
         world_grid_width = from_int(obj.get("worldGridWidth"))
         world_layout = WorldLayout(obj.get("worldLayout"))
-        return LdtkJSON(backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, world_grid_height, world_grid_width, world_layout)
+        return LdtkJSON(backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, world_grid_height, world_grid_width, world_layout)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1636,10 +1654,11 @@ class LdtkJSON:
         result["defaultPivotX"] = to_float(self.default_pivot_x)
         result["defaultPivotY"] = to_float(self.default_pivot_y)
         result["defs"] = to_class(Definitions, self.defs)
-        result["exportPng"] = from_bool(self.export_png)
+        result["exportPng"] = from_union([from_none, from_bool], self.export_png)
         result["exportTiled"] = from_bool(self.export_tiled)
         result["externalLevels"] = from_bool(self.external_levels)
         result["flags"] = from_list(lambda x: to_enum(Flag, x), self.flags)
+        result["imageExportMode"] = to_enum(ImageExportMode, self.image_export_mode)
         result["jsonVersion"] = from_str(self.json_version)
         result["levelNamePattern"] = from_str(self.level_name_pattern)
         result["levels"] = from_list(lambda x: to_class(Level, x), self.levels)

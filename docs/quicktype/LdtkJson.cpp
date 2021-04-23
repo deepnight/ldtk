@@ -69,7 +69,7 @@ namespace quicktype {
      */
     enum class EditorDisplayPos : int { ABOVE, BENEATH, CENTER };
 
-    enum class TextLangageMode : int { LANG_C, LANG_HAXE, LANG_JS, LANG_JSON, LANG_LUA, LANG_MARKDOWN, LANG_PYTHON, LANG_RUBY, LANG_XML };
+    enum class TextLanguageMode : int { LANG_C, LANG_HAXE, LANG_JS, LANG_JSON, LANG_LUA, LANG_MARKDOWN, LANG_PYTHON, LANG_RUBY, LANG_XML };
 
     /**
      * This section is mostly only intended for the LDtk editor app itself. You can safely
@@ -96,7 +96,7 @@ namespace quicktype {
         std::shared_ptr<double> max;
         std::shared_ptr<double> min;
         std::shared_ptr<std::string> regex;
-        std::shared_ptr<TextLangageMode> text_langage_mode;
+        std::shared_ptr<TextLanguageMode> text_language_mode;
         nlohmann::json field_definition_type;
         int64_t uid;
 
@@ -203,8 +203,8 @@ namespace quicktype {
          * Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
          * `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
          */
-        std::shared_ptr<TextLangageMode> get_text_langage_mode() const { return text_langage_mode; }
-        void set_text_langage_mode(std::shared_ptr<TextLangageMode> value) { this->text_langage_mode = value; }
+        std::shared_ptr<TextLanguageMode> get_text_language_mode() const { return text_language_mode; }
+        void set_text_language_mode(std::shared_ptr<TextLanguageMode> value) { this->text_language_mode = value; }
 
         /**
          * Internal type enum
@@ -1074,12 +1074,15 @@ namespace quicktype {
 
         public:
         /**
-         * All entities, including their custom fields
+         * All entities definitions, including their custom fields
          */
         const std::vector<EntityDefinition> & get_entities() const { return entities; }
         std::vector<EntityDefinition> & get_mutable_entities() { return entities; }
         void set_entities(const std::vector<EntityDefinition> & value) { this->entities = value; }
 
+        /**
+         * All internal enums
+         */
         const std::vector<EnumDefinition> & get_enums() const { return enums; }
         std::vector<EnumDefinition> & get_mutable_enums() { return enums; }
         void set_enums(const std::vector<EnumDefinition> & value) { this->enums = value; }
@@ -1092,23 +1095,35 @@ namespace quicktype {
         std::vector<EnumDefinition> & get_mutable_external_enums() { return external_enums; }
         void set_external_enums(const std::vector<EnumDefinition> & value) { this->external_enums = value; }
 
+        /**
+         * All layer definitions
+         */
         const std::vector<LayerDefinition> & get_layers() const { return layers; }
         std::vector<LayerDefinition> & get_mutable_layers() { return layers; }
         void set_layers(const std::vector<LayerDefinition> & value) { this->layers = value; }
 
         /**
-         * An array containing all custom fields available to all levels.
+         * All custom fields available to all levels.
          */
         const std::vector<FieldDefinition> & get_level_fields() const { return level_fields; }
         std::vector<FieldDefinition> & get_mutable_level_fields() { return level_fields; }
         void set_level_fields(const std::vector<FieldDefinition> & value) { this->level_fields = value; }
 
+        /**
+         * All tilesets
+         */
         const std::vector<TilesetDefinition> & get_tilesets() const { return tilesets; }
         std::vector<TilesetDefinition> & get_mutable_tilesets() { return tilesets; }
         void set_tilesets(const std::vector<TilesetDefinition> & value) { this->tilesets = value; }
     };
 
     enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, IGNORE_BACKUP_SUGGEST };
+
+    /**
+     * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+     * `OneImagePerLevel`
+     */
+    enum class ImageExportMode : int { NONE, ONE_IMAGE_PER_LAYER, ONE_IMAGE_PER_LEVEL };
 
     /**
      * Level background image position info
@@ -1795,7 +1810,7 @@ namespace quicktype {
      * This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
      *
      * This is the root of any Project JSON file. It contains:  - the project settings, - an
-     * array of levels, - and a definition object (that can probably be safely ignored for most
+     * array of levels, - a group of definitions (that can probably be safely ignored for most
      * users).
      */
     class LdtkJson {
@@ -1814,10 +1829,11 @@ namespace quicktype {
         double default_pivot_x;
         double default_pivot_y;
         Definitions defs;
-        bool export_png;
+        std::shared_ptr<bool> export_png;
         bool export_tiled;
         bool external_levels;
         std::vector<Flag> flags;
+        ImageExportMode image_export_mode;
         std::string json_version;
         std::string level_name_pattern;
         std::vector<Level> levels;
@@ -1900,12 +1916,11 @@ namespace quicktype {
         void set_defs(const Definitions & value) { this->defs = value; }
 
         /**
-         * If TRUE, all layers in all levels will also be exported as PNG along with the project
-         * file (default is FALSE)
+         * **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
+         * by: `imageExportMode`
          */
-        const bool & get_export_png() const { return export_png; }
-        bool & get_mutable_export_png() { return export_png; }
-        void set_export_png(const bool & value) { this->export_png = value; }
+        std::shared_ptr<bool> get_export_png() const { return export_png; }
+        void set_export_png(std::shared_ptr<bool> value) { this->export_png = value; }
 
         /**
          * If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file
@@ -1930,6 +1945,14 @@ namespace quicktype {
         const std::vector<Flag> & get_flags() const { return flags; }
         std::vector<Flag> & get_mutable_flags() { return flags; }
         void set_flags(const std::vector<Flag> & value) { this->flags = value; }
+
+        /**
+         * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+         * `OneImagePerLevel`
+         */
+        const ImageExportMode & get_image_export_mode() const { return image_export_mode; }
+        ImageExportMode & get_mutable_image_export_mode() { return image_export_mode; }
+        void set_image_export_mode(const ImageExportMode & value) { this->image_export_mode = value; }
 
         /**
          * File format version
@@ -2066,8 +2089,8 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::EditorDisplayPos & x);
     void to_json(json & j, const quicktype::EditorDisplayPos & x);
 
-    void from_json(const json & j, quicktype::TextLangageMode & x);
-    void to_json(json & j, const quicktype::TextLangageMode & x);
+    void from_json(const json & j, quicktype::TextLanguageMode & x);
+    void to_json(json & j, const quicktype::TextLanguageMode & x);
 
     void from_json(const json & j, quicktype::LimitBehavior & x);
     void to_json(json & j, const quicktype::LimitBehavior & x);
@@ -2093,6 +2116,9 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::Flag & x);
     void to_json(json & j, const quicktype::Flag & x);
 
+    void from_json(const json & j, quicktype::ImageExportMode & x);
+    void to_json(json & j, const quicktype::ImageExportMode & x);
+
     void from_json(const json & j, quicktype::BgPos & x);
     void to_json(json & j, const quicktype::BgPos & x);
 
@@ -2115,7 +2141,7 @@ namespace nlohmann {
         x.set_max(quicktype::get_optional<double>(j, "max"));
         x.set_min(quicktype::get_optional<double>(j, "min"));
         x.set_regex(quicktype::get_optional<std::string>(j, "regex"));
-        x.set_text_langage_mode(quicktype::get_optional<quicktype::TextLangageMode>(j, "textLangageMode"));
+        x.set_text_language_mode(quicktype::get_optional<quicktype::TextLanguageMode>(j, "textLanguageMode"));
         x.set_field_definition_type(quicktype::get_untyped(j, "type"));
         x.set_uid(j.at("uid").get<int64_t>());
     }
@@ -2137,7 +2163,7 @@ namespace nlohmann {
         j["max"] = x.get_max();
         j["min"] = x.get_min();
         j["regex"] = x.get_regex();
-        j["textLangageMode"] = x.get_text_langage_mode();
+        j["textLanguageMode"] = x.get_text_language_mode();
         j["type"] = x.get_field_definition_type();
         j["uid"] = x.get_uid();
     }
@@ -2617,10 +2643,11 @@ namespace nlohmann {
         x.set_default_pivot_x(j.at("defaultPivotX").get<double>());
         x.set_default_pivot_y(j.at("defaultPivotY").get<double>());
         x.set_defs(j.at("defs").get<quicktype::Definitions>());
-        x.set_export_png(j.at("exportPng").get<bool>());
+        x.set_export_png(quicktype::get_optional<bool>(j, "exportPng"));
         x.set_export_tiled(j.at("exportTiled").get<bool>());
         x.set_external_levels(j.at("externalLevels").get<bool>());
         x.set_flags(j.at("flags").get<std::vector<quicktype::Flag>>());
+        x.set_image_export_mode(j.at("imageExportMode").get<quicktype::ImageExportMode>());
         x.set_json_version(j.at("jsonVersion").get<std::string>());
         x.set_level_name_pattern(j.at("levelNamePattern").get<std::string>());
         x.set_levels(j.at("levels").get<std::vector<quicktype::Level>>());
@@ -2648,6 +2675,7 @@ namespace nlohmann {
         j["exportTiled"] = x.get_export_tiled();
         j["externalLevels"] = x.get_external_levels();
         j["flags"] = x.get_flags();
+        j["imageExportMode"] = x.get_image_export_mode();
         j["jsonVersion"] = x.get_json_version();
         j["levelNamePattern"] = x.get_level_name_pattern();
         j["levels"] = x.get_levels();
@@ -2705,30 +2733,30 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::TextLangageMode & x) {
-        if (j == "LangC") x = quicktype::TextLangageMode::LANG_C;
-        else if (j == "LangHaxe") x = quicktype::TextLangageMode::LANG_HAXE;
-        else if (j == "LangJS") x = quicktype::TextLangageMode::LANG_JS;
-        else if (j == "LangJson") x = quicktype::TextLangageMode::LANG_JSON;
-        else if (j == "LangLua") x = quicktype::TextLangageMode::LANG_LUA;
-        else if (j == "LangMarkdown") x = quicktype::TextLangageMode::LANG_MARKDOWN;
-        else if (j == "LangPython") x = quicktype::TextLangageMode::LANG_PYTHON;
-        else if (j == "LangRuby") x = quicktype::TextLangageMode::LANG_RUBY;
-        else if (j == "LangXml") x = quicktype::TextLangageMode::LANG_XML;
+    inline void from_json(const json & j, quicktype::TextLanguageMode & x) {
+        if (j == "LangC") x = quicktype::TextLanguageMode::LANG_C;
+        else if (j == "LangHaxe") x = quicktype::TextLanguageMode::LANG_HAXE;
+        else if (j == "LangJS") x = quicktype::TextLanguageMode::LANG_JS;
+        else if (j == "LangJson") x = quicktype::TextLanguageMode::LANG_JSON;
+        else if (j == "LangLua") x = quicktype::TextLanguageMode::LANG_LUA;
+        else if (j == "LangMarkdown") x = quicktype::TextLanguageMode::LANG_MARKDOWN;
+        else if (j == "LangPython") x = quicktype::TextLanguageMode::LANG_PYTHON;
+        else if (j == "LangRuby") x = quicktype::TextLanguageMode::LANG_RUBY;
+        else if (j == "LangXml") x = quicktype::TextLanguageMode::LANG_XML;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::TextLangageMode & x) {
+    inline void to_json(json & j, const quicktype::TextLanguageMode & x) {
         switch (x) {
-            case quicktype::TextLangageMode::LANG_C: j = "LangC"; break;
-            case quicktype::TextLangageMode::LANG_HAXE: j = "LangHaxe"; break;
-            case quicktype::TextLangageMode::LANG_JS: j = "LangJS"; break;
-            case quicktype::TextLangageMode::LANG_JSON: j = "LangJson"; break;
-            case quicktype::TextLangageMode::LANG_LUA: j = "LangLua"; break;
-            case quicktype::TextLangageMode::LANG_MARKDOWN: j = "LangMarkdown"; break;
-            case quicktype::TextLangageMode::LANG_PYTHON: j = "LangPython"; break;
-            case quicktype::TextLangageMode::LANG_RUBY: j = "LangRuby"; break;
-            case quicktype::TextLangageMode::LANG_XML: j = "LangXml"; break;
+            case quicktype::TextLanguageMode::LANG_C: j = "LangC"; break;
+            case quicktype::TextLanguageMode::LANG_HAXE: j = "LangHaxe"; break;
+            case quicktype::TextLanguageMode::LANG_JS: j = "LangJS"; break;
+            case quicktype::TextLanguageMode::LANG_JSON: j = "LangJson"; break;
+            case quicktype::TextLanguageMode::LANG_LUA: j = "LangLua"; break;
+            case quicktype::TextLanguageMode::LANG_MARKDOWN: j = "LangMarkdown"; break;
+            case quicktype::TextLanguageMode::LANG_PYTHON: j = "LangPython"; break;
+            case quicktype::TextLanguageMode::LANG_RUBY: j = "LangRuby"; break;
+            case quicktype::TextLanguageMode::LANG_XML: j = "LangXml"; break;
             default: throw "This should not happen";
         }
     }
@@ -2859,6 +2887,22 @@ namespace nlohmann {
         switch (x) {
             case quicktype::Flag::DISCARD_PRE_CSV_INT_GRID: j = "DiscardPreCsvIntGrid"; break;
             case quicktype::Flag::IGNORE_BACKUP_SUGGEST: j = "IgnoreBackupSuggest"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::ImageExportMode & x) {
+        if (j == "None") x = quicktype::ImageExportMode::NONE;
+        else if (j == "OneImagePerLayer") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER;
+        else if (j == "OneImagePerLevel") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::ImageExportMode & x) {
+        switch (x) {
+            case quicktype::ImageExportMode::NONE: j = "None"; break;
+            case quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
+            case quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
             default: throw "This should not happen";
         }
     }

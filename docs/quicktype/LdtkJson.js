@@ -161,10 +161,11 @@ const typeMap = {
         { json: "defaultPivotX", js: "defaultPivotX", typ: 3.14 },
         { json: "defaultPivotY", js: "defaultPivotY", typ: 3.14 },
         { json: "defs", js: "defs", typ: r("Definitions") },
-        { json: "exportPng", js: "exportPng", typ: true },
+        { json: "exportPng", js: "exportPng", typ: u(undefined, u(true, null)) },
         { json: "exportTiled", js: "exportTiled", typ: true },
         { json: "externalLevels", js: "externalLevels", typ: true },
         { json: "flags", js: "flags", typ: a(r("Flag")) },
+        { json: "imageExportMode", js: "imageExportMode", typ: r("ImageExportMode") },
         { json: "jsonVersion", js: "jsonVersion", typ: "" },
         { json: "levelNamePattern", js: "levelNamePattern", typ: "" },
         { json: "levels", js: "levels", typ: a(r("Level")) },
@@ -224,7 +225,7 @@ const typeMap = {
         { json: "max", js: "max", typ: u(undefined, u(3.14, null)) },
         { json: "min", js: "min", typ: u(undefined, u(3.14, null)) },
         { json: "regex", js: "regex", typ: u(undefined, u(null, "")) },
-        { json: "textLangageMode", js: "textLangageMode", typ: u(undefined, u(r("TextLangageMode"), null)) },
+        { json: "textLanguageMode", js: "textLanguageMode", typ: u(undefined, u(r("TextLanguageMode"), null)) },
         { json: "type", js: "type", typ: "any" },
         { json: "uid", js: "uid", typ: 0 },
     ], false),
@@ -417,7 +418,7 @@ const typeMap = {
         "Beneath",
         "Center",
     ],
-    "TextLangageMode": [
+    "TextLanguageMode": [
         "LangC",
         "LangHaxe",
         "LangJS",
@@ -468,6 +469,11 @@ const typeMap = {
     "Flag": [
         "DiscardPreCsvIntGrid",
         "IgnoreBackupSuggest",
+    ],
+    "ImageExportMode": [
+        "None",
+        "OneImagePerLayer",
+        "OneImagePerLevel",
     ],
     "BgPos": [
         "Contain",
