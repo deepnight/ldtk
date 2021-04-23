@@ -1,3 +1,11 @@
+# 0.9.3 - Ludum Dare 48 edition
+
+  - **Aseprite support**: you can now load an Aseprite image directly as a tileset or as a level background. It will be automatically reloaded if it changes on the disk, just like any another image.
+  - **Level PNG export**: it's now possible to export a single flattened PNG per level, making the "*Easy to integrate with your game engine*"-thing even easier. You can still export one PNG per layer per level if you prefer.
+  - Fixed offseted "Close project" button
+  - Fixed "textLanguageMode" typo in JSON
+  - Minor bug & doc fixes
+
 # 0.9.2
 
   - Added a tiny "(...)" above entities with fields when they are hidden

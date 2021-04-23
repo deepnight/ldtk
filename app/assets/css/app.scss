@@ -1441,7 +1441,7 @@ select {
 	option {
 		overflow: hidden;
 		color: $orange;
-		background-color: $bgMed;
+		background-color: $bgLight;
 		cursor: pointer;
 		&:disabled {
 			color: $bgLight;
@@ -3457,7 +3457,7 @@ canvas#webgl {
 					flex: 0 1 0px;
 				}
 
-				@at-root body.fullscreen .buttons .exit {
+				@at-root body.fullscreen #page.home .buttons .exit {
 					display: inherit !important;
 				}
 			}
@@ -4711,10 +4711,26 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		dd.pngPattern {
+		dd.imageExportMode {
 			position: relative;
+			display: grid;
+			grid-template-columns: min-content auto min-content;
+			gap: 4px;
+
+			.locate {
+				grid-column: 1/2;
+			}
+			select {
+				grid-column: 2/4;
+				width: 100%;
+			}
+			input[type=text] {
+				grid-column: 1/3;
+				width: auto;
+			}
 			.example {
-				flex: 1 0 100%;
+				grid-row: 3/4;
+				grid-column: 1/4;
 				text-align: right;
 				color: $help;
 				font-family: monospace;

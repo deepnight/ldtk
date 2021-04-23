@@ -27,7 +27,7 @@ class Project {
 	public var minifyJson = false;
 	public var externalLevels = false;
 	public var exportTiled = false;
-	public var exportPng = false;
+	public var imageExportMode : ldtk.Json.ImageExportMode = None;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 	public var levelNamePattern : String;
@@ -67,21 +67,27 @@ class Project {
 		return filePath.fileName;
 	}
 
-	public function getDefaultPngFilePattern() {
-		return "%level_idx-%level_name--%layer_idx-%layer_name";
+	public function getDefaultImageExportFilePattern() {
+		return switch imageExportMode {
+			case None, OneImagePerLayer:
+				"%level_idx-%level_name--%layer_idx-%layer_name";
+
+			case OneImagePerLevel:
+				"%level_idx-%level_name";
+		}
 	}
 
-	public function getPngFilePattern() {
+	public function getImageExportFilePattern() {
 		return pngFilePattern!=null
 			? pngFilePattern
-			: getDefaultPngFilePattern();
+			: getDefaultImageExportFilePattern();
 	}
 
 	public function getPngFileName(?pattern:String, level:data.Level, ld:data.def.LayerDef, ?extraSuffix:String) {
 		if( ld==null )
 			return "--ERROR: no layer--";
 
-		var p = pattern!=null ? pattern : getPngFilePattern();
+		var p = pattern!=null ? pattern : getImageExportFilePattern();
 
 		var vars = [
 			"%level_name"=>()->level.identifier,
@@ -216,9 +222,12 @@ class Project {
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
-		p.exportPng = JsonTools.readBool( json.exportPng, false );
 		p.pngFilePattern = json.pngFilePattern;
 		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
+
+		p.imageExportMode = JsonTools.readEnum( ldtk.Json.ImageExportMode, json.imageExportMode, false, None );
+		if( json.exportPng!=null )
+			p.imageExportMode = json.exportPng==true ? OneImagePerLayer : None;
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -287,7 +296,7 @@ class Project {
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
-			exportPng: exportPng,
+			imageExportMode: JsonTools.writeEnum(imageExportMode, false),
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,

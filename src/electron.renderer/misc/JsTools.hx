@@ -726,7 +726,7 @@ class JsTools {
 
 			ui.Tip.clear();
 
-			dn.js.ElectronDialogs.openFile([".png", ".gif", ".jpg", ".jpeg"], path, function(absPath) {
+			dn.js.ElectronDialogs.openFile([".png", ".gif", ".jpg", ".jpeg", ".aseprite", ".ase"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);
 				_pickImage(relPath);
 			});

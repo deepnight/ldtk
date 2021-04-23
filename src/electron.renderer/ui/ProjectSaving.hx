@@ -187,7 +187,7 @@ class ProjectSaving extends dn.Process {
 
 			case SavingLayerImages:
 				var pngDir = project.getAbsExternalFilesDir()+"/png";
-				if( project.exportPng ) {
+				if( project.imageExportMode!=None ) {
 					logState();
 					var ops = [];
 					var count = 0;
@@ -195,34 +195,53 @@ class ProjectSaving extends dn.Process {
 
 					// Export level layers
 					var lr = new display.LayerRender();
-					var levelIdx = 0;
 					for( level in project.levels ) {
-						var layerIdx = 0;
-						for( li in level.layerInstances ) {
-							var level = level;
-							var li = li;
-							var levelIdx = levelIdx;
-							var layerIdx = layerIdx;
-							ops.push({
-								label: "Level "+level.identifier+": "+li.def.identifier,
-								cb: ()->{
-									// Draw
-									var allImages = lr.createPngs(project, level, li);
-									if( allImages.length==0 )
-										return;
+						var level = level;
 
-									// Save PNGs
-									for(i in allImages) {
+						ops.push({
+							label: "Level "+level.identifier,
+							cb: ()->{
+								log('Level ${level.identifier}...');
+
+								switch project.imageExportMode {
+									case None: // N/A
+
+									case OneImagePerLayer:
+										for( li in level.layerInstances ) {
+											log('   -> Layer ${li.def.identifier}...');
+
+											// Draw
+											var allImages = lr.createPngs(project, level, li);
+											if( allImages.length==0 )
+												continue;
+
+											// Save PNGs
+											for(i in allImages) {
+												var fp = dn.FilePath.fromDir(pngDir);
+												fp.fileName = project.getPngFileName(level, li.def, i.suffix);
+												fp.extension = "png";
+												NT.writeFileBytes(fp.full, i.bytes);
+												count++;
+											}
+										}
+
+									case OneImagePerLevel:
+										var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+										level.iterateLayerInstancesInRenderOrder((li)->{
+											lr.drawToTexture(tex, project, level, li);
+										});
+										var pngBytes = tex.capturePixels().toPNG();
+
+										// Save PNG
 										var fp = dn.FilePath.fromDir(pngDir);
-										fp.fileName = project.getPngFileName(level, li.def, i.suffix);
+										fp.fileName = project.getPngFileName(level, project.defs.layers[0]);
 										fp.extension = "png";
-										NT.writeFileBytes(fp.full, i.bytes);
+										NT.writeFileBytes(fp.full, pngBytes);
 										count++;
-									}
+
 								}
-							});
-						}
-						levelIdx++;
+							}
+						});
 					}
 					new ui.modal.Progress(Lang.t._("PNG export"), 2, ops, ()->{
 						log('  Saved $count PNG(s)...');

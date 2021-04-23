@@ -69,7 +69,7 @@ typedef SchemaType = {
 
 
 class DocGenerator {
-	#if macro
+	#if( macro || display )
 	static var allGlobalTypes: Array<GlobalType>;
 	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
@@ -188,11 +188,15 @@ class DocGenerator {
 	**/
 	static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
+		var root : GlobalType = null;
 		var toc = [];
 		var md = [];
 		for(type in allGlobalTypes) {
 			if( type.inlined )
 				continue;
+
+			if( type.section=="1" )
+				root = type;
 
 			md.push("");
 			var depth = 0;
@@ -254,7 +258,7 @@ class DocGenerator {
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
 
 				if( f.isInternal || type.onlyInternalFields )
-					cell.push('<sup class="internal">*Internal editor data*</sup>');
+					cell.push('<sup class="internal">*Only used by editor*</sup>');
 
 				if( f.deprecation!=null ) {
 					cell[0] = "~~"+cell[0]+"~~";
@@ -291,13 +295,10 @@ class DocGenerator {
 		}
 
 
-
-
 		// Header
 		var headerMd = [
-			'# LDtk Json structure (version $appVersion)',
+			'## LDtk Json structure (version $appVersion)',
 			'',
-			'## Table of contents',
 		];
 
 		// Table of content

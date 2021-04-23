@@ -419,7 +419,7 @@ class FieldDefsForm {
 					new ui.modal.dialog.TextEditor(
 						curField.getStringDefault(),
 						curField.identifier,
-						curField.textLangageMode,
+						curField.textLanguageMode,
 						(v)->{
 							curField.setDefault(v);
 							onFieldChange();
@@ -603,9 +603,9 @@ class FieldDefsForm {
 				jForm.find("#textLanguage"),
 				ldtk.Json.TextLanguageMode,
 				true,
-				()->curField.textLangageMode,
+				()->curField.textLanguageMode,
 				(e)->{
-					curField.textLangageMode = e;
+					curField.textLanguageMode = e;
 				},
 				(e)->Lang.getTextLanguageMode(e)
 			);

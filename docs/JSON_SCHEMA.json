@@ -1,11 +1,11 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 0.9.2 JSON schema",
+	"title": "LDtk 0.9.3 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "0.9.2",
+	"version": "0.9.3",
 	"LdtkJsonRoot": {
-		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - and a definition object (that can probably be safely ignored for most users).",
+		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
@@ -24,9 +24,9 @@
 			"defaultLevelWidth",
 			"defaultPivotX",
 			"defaultPivotY",
-			"exportPng",
 			"exportTiled",
 			"flags",
+			"imageExportMode",
 			"levelNamePattern",
 			"minifyJson",
 			"nextUid"
@@ -66,6 +66,14 @@
 				"description": "Next Unique integer ID available",
 				"type": [
 					"integer"
+				]
+			},
+			"imageExportMode": {
+				"description": "\"Image export\" option when saving project. Possible values: `None`, `OneImagePerLayer`, `OneImagePerLevel`",
+				"enum": [
+					"None",
+					"OneImagePerLayer",
+					"OneImagePerLevel"
 				]
 			},
 			"defaultPivotY": {
@@ -114,9 +122,10 @@
 				]
 			},
 			"exportPng": {
-				"description": "If TRUE, all layers in all levels will also be exported as PNG along with the project file (default is FALSE)",
+				"description": "**WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced by: `imageExportMode`",
 				"type": [
-					"boolean"
+					"boolean",
+					"null"
 				]
 			},
 			"defaultLevelWidth": {
@@ -343,7 +352,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tilesets": {
-					"description": "",
+					"description": "All tilesets",
 					"items": {
 						"$ref": "#/otherTypes/TilesetDef"
 					},
@@ -352,7 +361,7 @@
 					]
 				},
 				"layers": {
-					"description": "",
+					"description": "All layer definitions",
 					"items": {
 						"$ref": "#/otherTypes/LayerDef"
 					},
@@ -361,7 +370,7 @@
 					]
 				},
 				"levelFields": {
-					"description": "An array containing all custom fields available to all levels.",
+					"description": "All custom fields available to all levels.",
 					"items": {
 						"$ref": "#/otherTypes/FieldDef"
 					},
@@ -370,7 +379,7 @@
 					]
 				},
 				"enums": {
-					"description": "",
+					"description": "All internal enums",
 					"items": {
 						"$ref": "#/otherTypes/EnumDef"
 					},
@@ -379,7 +388,7 @@
 					]
 				},
 				"entities": {
-					"description": "All entities, including their custom fields",
+					"description": "All entities definitions, including their custom fields",
 					"items": {
 						"$ref": "#/otherTypes/EntityDef"
 					},
@@ -662,6 +671,21 @@
 						"Beneath"
 					]
 				},
+				"textLanguageMode": {
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
+					"enum": [
+						"LangPython",
+						"LangRuby",
+						"LangJS",
+						"LangLua",
+						"LangC",
+						"LangHaxe",
+						"LangMarkdown",
+						"LangJson",
+						"LangXml",
+						null
+					]
+				},
 				"max": {
 					"description": "Max limit for value, if applicable",
 					"type": [
@@ -677,21 +701,6 @@
 				},
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
-				},
-				"textLangageMode": {
-					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
-					"enum": [
-						"LangPython",
-						"LangRuby",
-						"LangJS",
-						"LangLua",
-						"LangC",
-						"LangHaxe",
-						"LangMarkdown",
-						"LangJson",
-						"LangXml",
-						null
-					]
 				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",

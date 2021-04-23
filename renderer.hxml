@@ -8,12 +8,13 @@
 -lib hxnodejs
 -lib electron
 -lib ldtk-haxe-api
+-lib heaps-aseprite
 
 -D editor
 -D electron
 
 -main Boot
--dce full
+# -dce full
 -js app/assets/js/renderer.js
 
 --macro Const.dumpBuildVersionToFile()

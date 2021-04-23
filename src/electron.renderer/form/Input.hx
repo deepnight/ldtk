@@ -44,7 +44,10 @@ class Input<T> {
 		if( jInput.is("[type=checkbox], [type=radio]") )
 			return;
 
-		var jGuide = jInput.siblings(".guide");
+		var jGuide = jInput.next(".guide");
+		if( jGuide.length==0 )
+			jInput.prev(".guide");
+
 		if( jInput.is(":focus") ) {
 			jGuide.show();
 			jGuide.css("margin-top", (-jGuide.outerHeight() - 4)+"px");
