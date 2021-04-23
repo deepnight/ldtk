@@ -54,6 +54,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			cb: ()->ET.locate(JsTools.getLogPath(), true)
 		});
 
+
 		#if debug
 		add({
 			label: L.untranslated("Emulate new update"),
@@ -165,5 +166,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 			}
 		});
 		#end // End of "if debug"
+
+
+		add({
+			label: L.untranslated("Open dev tools"),
+			cb: ()->ET.openDevTools()
+		});
 	}
 }
