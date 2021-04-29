@@ -1,3 +1,8 @@
+# 0.9.4
+
+  - Fixed a bug when reloading a tileset while its size changed.
+  - Minor bug fixes.
+
 # 0.9.3 - Ludum Dare 48 edition
 
   - **Aseprite support**: you can now load an Aseprite image directly as a tileset or as a level background. It will be automatically reloaded if it changes on the disk, just like any another image.
