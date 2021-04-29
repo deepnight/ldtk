@@ -243,7 +243,7 @@ class TilesetDef {
 
 
 	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.AtlasLoadingResult {
-		App.LOG.general('Tileset remapping...');
+		App.LOG.warning('Tileset remapping...');
 
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
@@ -256,22 +256,26 @@ class TilesetDef {
 
 		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
 
-		// Layers remapping
+		// Tiles layers remapping
 		for(l in _project.levels)
-		for(li in l.layerInstances)
-		for( coordId in li.gridTiles.keys() ) {
-			if( !li.gridTiles.exists(coordId) )
+		for(li in l.layerInstances) {
+			if( li.def.type!=Tiles || li.def.tilesetDefUid!=uid )
 				continue;
 
-			var i = 0;
-			while( i < li.gridTiles.get(coordId).length ) {
-				var tileInf = li.gridTiles.get(coordId)[i];
-				var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
-				if( remappedTileId==null )
-					li.gridTiles.get(coordId).splice(i,1);
-				else {
-					tileInf.tileId = remappedTileId;
-					i++;
+			App.LOG.general(' > level ${l.identifier} layer ${li.def.identifier}');
+
+			for( coordId in li.gridTiles.keys() ) {
+				var i = 0;
+				while( i < li.gridTiles.get(coordId).length ) {
+					var tileInf = li.gridTiles.get(coordId)[i];
+					var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
+					if( remappedTileId==null )
+						li.gridTiles.get(coordId).splice(i,1);
+					else {
+						App.LOG.general(' > ${tileInf.tileId} => $remappedTileId');
+						tileInf.tileId = remappedTileId;
+						i++;
+					}
 				}
 			}
 		}
