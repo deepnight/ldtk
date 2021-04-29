@@ -108,7 +108,7 @@ class Lang {
 				Lang.t._("\"::name::\" image was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { name:name } );
 
 			case RemapSuccessful:
-				Lang.t._("Tileset image \"::name::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { name:name } );
+				Lang.t._("Tileset image \"::name::\" was reloaded and the new version was larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { name:name } );
 		}
 	}
 
