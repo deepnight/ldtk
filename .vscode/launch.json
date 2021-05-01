@@ -11,7 +11,7 @@
 			"cwd": "${workspaceFolder}/app",
 			"webRoot": "${workspaceFolder}/app",
 			"windows": {
-				"runtimeExecutable": "${workspaceFolder}/app/node_modules/.bin/electron.cmd"
+				"runtimeExecutable": "${workspaceFolder}/app/node_modules/electron/dist/electron.exe"
 			},
 			"runtimeArgs" : [
 				".",
