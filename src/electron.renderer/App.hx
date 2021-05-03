@@ -19,7 +19,7 @@ class App extends dn.Process {
 	public var args: dn.Args;
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
 	public var focused(default,null) = true;
-	var macCmdDown = false;
+	var jsMetaKeyDown = false;
 
 	public function new() {
 		super();
@@ -274,14 +274,14 @@ class App extends dn.Process {
 		if( ev.keyCode==K.ALT )
 			ev.preventDefault();
 
-		macCmdDown = ev.metaKey && isMac();
+		jsMetaKeyDown = ev.metaKey;
 		keyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
 		keyDowns.remove(ev.keyCode);
-		macCmdDown = false;
+		jsMetaKeyDown = false;
 	}
 
 	function onHeapsKeyDown(ev:hxd.Event) {
@@ -307,7 +307,11 @@ class App extends dn.Process {
 
 	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
 	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
-	public inline function isCtrlDown() return (App.isMac() ? macCmdDown || keyDowns.get(K.LEFT_WINDOW_KEY) || keyDowns.get(K.RIGHT_WINDOW_KEY) : keyDowns.get(K.CTRL))==true;
+	public inline function isCtrlDown() {
+		return App.isMac()
+			? jsMetaKeyDown || keyDowns.get(91)==true || keyDowns.get(93)==true
+			: keyDowns.get(K.CTRL)==true;
+	}
 	public inline function isAltDown() return keyDowns.get(K.ALT)==true;
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
@@ -400,7 +404,7 @@ class App extends dn.Process {
 	function onAppFocus(ev:js.html.Event) {
 		focused = true;
 		keyDowns = new Map();
-		macCmdDown = false;
+		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppFocus();
 		hxd.System.fpsLimit = -1;
@@ -409,7 +413,7 @@ class App extends dn.Process {
 	function onAppBlur(ev:js.html.Event) {
 		focused = false;
 		keyDowns = new Map();
-		macCmdDown = false;
+		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppBlur();
 		// Note: FPS limit is done during update
