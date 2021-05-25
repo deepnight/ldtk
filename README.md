@@ -17,11 +17,29 @@ Visit [LDtk.io](https://ldtk.io) to get latest version.
 
 ## Requirements
 
- - **[NPM](https://www.npmjs.com/)**: this package manager is used for various install and packaging scripts
+ - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install to build LDtk. (Installed manually or using Lix with npm)
+ - **[NPM](https://www.npmjs.com/)**: this package manager is used for various install and packaging scripts.
+
+### Installing Haxe libs
+
+Install required haxe libs:
+```
+haxelib git heaps https://github.com/deepnight/heaps.git
+
+haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+
+haxelib git electron https://github.com/tong/hxelectron.git
+
+haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
+
+haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
+
+haxelib git castle https://github.com/ncannasse/castle.git
+```
 
 ### Installing Node dependencies
 
-Run the following command:
+Run the following command in the `app` folder:
 ```
 npm i
 ```
@@ -50,6 +68,12 @@ If you want to try a future version of LDtk, you can checkout branches named `de
 
 **IMPORTANT**:
  - these *dev* branches might be unstables, or even broken. Therefore, it's not recommended to use, unless you plan to add or fix something on LDtk.
+ - because *dev* branches might change quickly, you will need to update haxelibs often, or run `lix download` for new branches.
+ - you will need to switch the *LDtk haxe API* to the **same** branch as LDtk repo. (adapt the branch name below accordingly):
+
+```
+haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.6.0
+```
 
 ## Running
 
