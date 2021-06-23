@@ -1122,7 +1122,7 @@
 							"fieldInstances": [
 								{
 									"__identifier": "content",
-									"__value": [ "Sword", "Heavy sword", "Bow" ],
+									"__value": [ "Sword", "Heavy_sword", "Bow" ],
 									"__type": "Array<LocalEnum.ItemType>",
 									"defUid": 21,
 									"realEditorValues": [ {
@@ -1130,7 +1130,7 @@
 										"params": ["Sword"]
 									}, {
 										"id": "V_String",
-										"params": ["Heavy sword"]
+										"params": ["Heavy_sword"]
 									}, {
 										"id": "V_String",
 										"params": ["Bow"]
