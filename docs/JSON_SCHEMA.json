@@ -1237,6 +1237,7 @@
 					]
 				},
 				"__tilesetDefUid": {
+					"title": "TilesetDefUid",
 					"description": "The definition UID of corresponding Tileset, if any.",
 					"type": [
 						"integer",
@@ -1853,6 +1854,7 @@
 					]
 				},
 				"bgRelPath": {
+					"title": "BgRelPath",
 					"description": "The *optional* relative path to the level background image.",
 					"type": [
 						"string",
