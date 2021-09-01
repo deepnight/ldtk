@@ -86,16 +86,16 @@ class FieldDefsForm {
 					ctx.addTitle(L.t._("Pick an existing enum"));
 					for(ed in project.defs.enums) {
 						ctx.add({
-							label: ed.identifier,
+							label: L.untranslated(ed.identifier),
 							cb: ()->_create(ev, F_Enum(ed.uid)),
 						});
 					}
 
 					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {
-						ctx.addTitle( dn.FilePath.fromFile(ext.key).fileWithExt );
+						ctx.addTitle( L.untranslated( dn.FilePath.fromFile(ext.key).fileWithExt ) );
 						for(ed in ext.value)
 							ctx.add({
-								label: ed.identifier,
+								label: L.untranslated(ed.identifier),
 								cb: ()->_create(ev, F_Enum(ed.uid)),
 							});
 					}

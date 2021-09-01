@@ -109,7 +109,7 @@ class WorldTool extends dn.Process {
 					label: L.t._("Delete"),
 					cb: ()->{
 						var closest = project.getClosestLevelFrom(l);
-						new ui.LastChance('Level ${l.identifier} removed', project);
+						new ui.LastChance(L.t._('Level ::id:: removed', {id:l.identifier}), project);
 						project.removeLevel(l);
 						editor.ge.emit( LevelRemoved(l) );
 						editor.selectLevel( closest );

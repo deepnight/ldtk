@@ -34,7 +34,7 @@ class LayerDef {
 		this.uid = uid;
 		type = t;
 		#if editor
-		identifier = Lang.getLayerType(type)+uid;
+		identifier = Std.string( Lang.getLayerType(type) ) + uid;
 		#else
 		identifier = type+uid;
 		#end

@@ -113,7 +113,7 @@ class Home extends Page {
 			var ctx = new ui.modal.ContextMenu(ev);
 				for( c in Const.getChangeLog().entries )
 				ctx.add({
-					label: c.version.numbers + ( c.title!=null ? " - "+c.title : "" ),
+					label: L.t.untranslated( c.version.numbers + ( c.title!=null ? " - "+c.title : "" ) ),
 					cb: ()->{
 						w.close();
 						showUpdate(c.version);

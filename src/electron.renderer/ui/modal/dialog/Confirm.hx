@@ -15,7 +15,7 @@ class Confirm extends ui.modal.Dialog {
 		if( str==null )
 			str = L.t._("Confirm this action?");
 		else
-			str = '<p>'+str.split("\n").join("</p><p>")+'</p>';
+			str = L.untranslated( '<p>'+str.split("\n").join("</p><p>")+'</p>' );
 		jContent.html(str);
 
 		addConfirm(onConfirm);
