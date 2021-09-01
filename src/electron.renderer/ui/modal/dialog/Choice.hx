@@ -6,7 +6,7 @@ class Choice extends ui.modal.Dialog {
 
 		jModalAndMask.addClass("choice");
 
-		str = '<p>'+str.split("\n").join("</p><p>")+'</p>';
+		str = L.untranslated( '<p>'+str.split("\n").join("</p><p>")+'</p>' );
 		jContent.html(str);
 
 		if( title!=null )
@@ -14,7 +14,7 @@ class Choice extends ui.modal.Dialog {
 
 		for(c in choices)
 			if( c.cond==null || c.cond() )
-				addButton(c.label, c.className, ()->{
+				addButton(L.untranslated(c.label), c.className, ()->{ // HACK untranslated
 					close();
 					c.cb();
 				});

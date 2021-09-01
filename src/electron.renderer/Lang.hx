@@ -131,14 +131,18 @@ class Lang {
 			return date(d);
 
 		if( deltaS<60 )
-			return '$deltaS seconds ago';
+			return t._('::s:: seconds ago', {s:deltaS});
 		else if( deltaS<60*60 ) {
 			var m = Std.int( deltaS/60 );
-			return m<=1 ? '1 minute ago' : '$m minutes ago';
+			return m<=1
+				? t._('1 minute ago')
+				: t._('::m:: minutes ago', {m:m});
 		}
 		else if( deltaS<60*60*24 ) {
 			var h = Std.int( deltaS / (60*60) );
-			return h<=1 ? '1 hour ago' : '$h hours ago';
+			return h<=1
+				? t._('1 hour ago')
+				: t._('::h:: hours ago', {h:h});
 		}
 		else
 			return date(d);

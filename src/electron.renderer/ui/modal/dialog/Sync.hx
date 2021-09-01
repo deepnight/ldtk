@@ -52,7 +52,7 @@ class Sync extends ui.modal.Dialog {
 		}
 
 		// Buttons
-		addButton("Apply these changes", "confirm", function() {
+		addButton(L.t._("Apply these changes"), "confirm", function() {
 			new LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), editor.project );
 			editor.selectProject(newProject);
 		});

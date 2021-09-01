@@ -23,7 +23,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 				true,
 				()->{
 					var closest = project.getClosestLevelFrom(level);
-					new LastChance('Level ${level.identifier} removed', project);
+					new LastChance( L.t._('Level ::id:: removed', {id:level.identifier}), project);
 					var deleted = level;
 					close();
 					editor.selectLevel( closest );

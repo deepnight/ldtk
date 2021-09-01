@@ -39,7 +39,7 @@ class TagEditor {
 				var ctx = new ui.modal.ContextMenu(ev);
 				for(v in allValuesGetter())
 					ctx.add({
-						label: v,
+						label: L.untranslated(v),
 						cb: ()->{
 							tags.set(v);
 							onChange();

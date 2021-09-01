@@ -128,7 +128,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 							}
 							catch(e:Dynamic) {
-								new ui.modal.dialog.Message("Failed on "+fp.fileName);
+								new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) );
 							}
 						}
 					});
