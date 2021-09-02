@@ -6,7 +6,7 @@
 	"configurations": [
 		{
 			"name": "Debug renderer",
-			"type": "chrome",
+			"type": "pwa-chrome",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/app",
 			"webRoot": "${workspaceFolder}/app",
