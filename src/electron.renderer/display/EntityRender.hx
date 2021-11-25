@@ -74,7 +74,7 @@ class EntityRender extends dn.Process {
 	}
 
 
-	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : h2d.Object {
+	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef, ?ld:data.def.LayerDef) : h2d.Object {
 		if( ei==null && ed==null )
 			throw "Need at least 1 parameter";
 
@@ -92,8 +92,8 @@ class EntityRender extends dn.Process {
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -w*ed.pivotX );
-		g.y = Std.int( -h*ed.pivotY );
+		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
+		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		// Render a tile
 		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:ldtk.Json.EntityTileRenderMode) {
@@ -200,7 +200,7 @@ class EntityRender extends dn.Process {
 
 	public function renderAll() {
 		core.removeChildren();
-		core.addChild( renderCore(ei,ed) );
+		core.addChild( renderCore(ei,ed,ld) );
 
 		renderFields();
 	}
