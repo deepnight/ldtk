@@ -62,6 +62,7 @@ class App extends dn.Process {
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
+		#if !debug
 		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
 			var processes = dn.Process.rprintAll();
 			ui.modal.Progress.stopAll();
@@ -72,6 +73,7 @@ class App extends dn.Process {
 			loadPage( ()->new page.CrashReport(error, processes, project, path) );
 			return false;
 		}
+		#end
 
 		// Track mouse buttons
 		jDoc.mousedown( onAppMouseDown );
