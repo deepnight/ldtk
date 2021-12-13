@@ -1,6 +1,6 @@
 # 0.9.4
 
-  - Optimized saving time for large projects (approx. 8 times faster) by caching data that wasn't modified.
+  - Optimized saving time for large projects (approx. 8-15 times faster) by caching data that wasn't modified.
 
   - Modified but unsaved levels now have a small "*" near their name in the World view.
   - Added a proper "progress bar" during backups saving
