@@ -12,5 +12,9 @@ class UnsavedChanges extends ui.modal.Dialog {
 		});
 		addButton(L.t._("No"), after);
 		addCancel( onCancel );
+
+		#if debug
+		after();
+		#end
 	}
 }
