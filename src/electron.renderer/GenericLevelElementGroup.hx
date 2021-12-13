@@ -735,30 +735,32 @@ class GenericLevelElementGroup {
 						elements[i] = null;
 					else {
 						var pt = fi.getPointGrid(arrayIdx);
-						// Duplicate
-						if( isCopy ) {
-							fi.addArrayValue();
-							var newIdx = fi.getArrayLength()-1;
-							fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
-							pt = fi.getPointGrid(newIdx);
-							elements[i] = PointField(li,ei,fi,newIdx);
+						if( pt!=null ) {
+							// Duplicate
+							if( isCopy ) {
+								fi.addArrayValue();
+								var newIdx = fi.getArrayLength()-1;
+								fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
+								pt = fi.getPointGrid(newIdx);
+								elements[i] = PointField(li,ei,fi,newIdx);
+							}
+
+							pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
+							pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
+
+							if( li.isValid(pt.cx,pt.cy) )
+								fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+							else {
+								// Out of bounds
+								outOfBoundsRemovals.push(fi.def.identifier);
+								fi.removeArrayValue(arrayIdx);
+								decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+								elements[i] = null;
+							}
+							editor.ge.emit( EntityInstanceChanged(ei) );
+
+							changedLayers.set(li,li);
 						}
-
-						pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
-						pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
-
-						if( li.isValid(pt.cx,pt.cy) )
-							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-						else {
-							// Out of bounds
-							outOfBoundsRemovals.push(fi.def.identifier);
-							fi.removeArrayValue(arrayIdx);
-							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
-							elements[i] = null;
-						}
-						editor.ge.emit( EntityInstanceChanged(ei) );
-
-						changedLayers.set(li,li);
 					}
 			}
 		}
