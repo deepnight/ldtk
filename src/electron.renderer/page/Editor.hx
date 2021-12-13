@@ -403,7 +403,7 @@ class Editor extends Page {
 					levelRender.invalidateAll();
 				});
 
-			case LoadingFailed(err):
+			case LoadingFailed(_):
 				new ui.modal.dialog.Warning(msg);
 
 			case RemapLoss:
