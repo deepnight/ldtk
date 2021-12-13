@@ -1248,7 +1248,7 @@ class Editor extends Page {
 		return switch(e) {
 			case ViewportChanged: false;
 			case WorldLevelMoved: false;
-			case LayerInstanceChanged: false;
+			case LayerInstanceChanged(_): false;
 			case WorldMode(_): false;
 			case GridChanged(_): false;
 			case _: true;
@@ -1294,7 +1294,7 @@ class Editor extends Page {
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
-				case LayerInstanceChanged:
+				case LayerInstanceChanged(li):
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
@@ -1356,11 +1356,13 @@ class Editor extends Page {
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
-			case LayerInstanceChanged:
+			case LayerInstanceChanged(li):
+				onLevelChange( project.getLevelUsingLayerInst(li) );
 
 			case FieldDefChanged(fd):
 			case FieldDefSorted:
 			case FieldInstanceChanged(fi):
+				onLevelChange( project.getLevelUsingFieldInst(fi) );
 
 			case EntityInstanceAdded(ei):
 
@@ -1495,6 +1497,16 @@ class Editor extends Page {
 			curLevelHistory.manualOnGlobalEvent(e);
 
 		updateTitle();
+	}
+
+	function onLevelChange(l:data.Level) {
+		if( l==null ) {
+			N.error("Unknown changed level");
+			return;
+		}
+
+		l.invalidateJsonCache();
+		N.debug("Invalidated: "+l.identifier);
 	}
 
 

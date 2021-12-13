@@ -280,8 +280,8 @@ class SelectionTool extends Tool<Int> {
 				for(li in layerInsts) {
 					editor.curLevelHistory.saveLayerState(li);
 					editor.levelRender.invalidateLayer(li);
+					editor.ge.emit( LayerInstanceChanged(li) );
 				}
-				editor.ge.emit(LayerInstanceChanged);
 				select();
 		}
 	}

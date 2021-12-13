@@ -3,6 +3,8 @@ package data;
 class Level {
 	var _project : Project;
 
+	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
+
 	@:allow(data.Project)
 	public var uid(default,null) : Int;
 	public var identifier(default,set): String;
@@ -57,6 +59,9 @@ class Level {
 	}
 
 	public function toJson() : ldtk.Json.LevelJson {
+		if( hasJsonCache() )
+			return getCacheJsonObject();
+
 		// List nearby levels
 		var neighbours = switch _project.worldLayout {
 			case Free, GridVania:
@@ -94,7 +99,7 @@ class Level {
 		}
 
 		// Json
-		return {
+		var json : ldtk.Json.LevelJson = {
 			identifier: identifier,
 			uid: uid,
 			worldX: worldX,
@@ -134,6 +139,14 @@ class Level {
 			layerInstances: layerInstances.map( li->li.toJson() ),
 			__neighbours: neighbours,
 		}
+
+		// Rebuild cache
+		_cachedJson = {
+			str: ui.ProjectSaving.jsonStringify(_project, json),
+			json: json,
+		}
+
+		return json;
 	}
 
 	public function makeExternalRelPath(idx:Int) {
@@ -173,11 +186,28 @@ class Level {
 				l.fieldInstances.set(fi.defUid, fi);
 			}
 
+		l._cachedJson = {
+			str: ui.ProjectSaving.jsonStringify(p, json),
+			json: json
+		}
+
 		return l;
 	}
 
 	public inline function hasBgImage() {
 		return bgRelPath!=null;
+	}
+
+
+	public inline function hasJsonCache() return _cachedJson!=null;
+	public inline function invalidateJsonCache() _cachedJson = null;
+
+	public inline function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
+		return hasJsonCache() ? _cachedJson.json : null;
+	}
+
+	public inline function getCacheJsonString() : Null<String> {
+		return hasJsonCache() ? _cachedJson.str : null;
 	}
 
 	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {

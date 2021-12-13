@@ -129,21 +129,36 @@ class ProjectSaving extends dn.Process {
 
 					initDir(fp.directory);
 
+					var ops = [];
+
 					// Save a duplicate in backups folder
-					var savingData = prepareProjectSavingData(project, true);
-					NT.writeFileString(fp.full, savingData.projectJson);
+					ops.push({
+						label: L.t._("Writing backup..."),
+						cb: ()->{
+							var savingData = prepareProjectSavingData(project, true);
+							NT.writeFileString(fp.full, savingData.projectJson);
+						}
+					});
 
 					// Delete extra backup files
-					var all = listBackupFiles(project.filePath.full);
-					if( all.length>project.backupLimit ) {
-						for(i in project.backupLimit...all.length ) {
-							log("Discarded backup: "+all[i].backup.full);
-							NT.removeFile( all[i].backup.full );
+					ops.push({
+						label: L.t._("Cleaning backups..."),
+						cb: ()->{
+							var all = listBackupFiles(project.filePath.full);
+							if( all.length>project.backupLimit ) {
+								for(i in project.backupLimit...all.length ) {
+									log("Discarded backup: "+all[i].backup.full);
+									NT.removeFile( all[i].backup.full );
+								}
+							}
 						}
-					}
-				}
+					});
 
-				beginState(SavingMainFile);
+					new ui.modal.Progress( L.t._("Backups"), 1, ops, ()->beginState(SavingMainFile) );
+				}
+				else
+					beginState(SavingMainFile);
+
 
 			case SavingMainFile:
 				logState();
@@ -174,7 +189,7 @@ class ProjectSaving extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), 3, ops);
+					new ui.modal.Progress(Lang.t._("Saving levels"), 5, ops);
 				}
 				else {
 					// Remove previous external levels
@@ -342,7 +357,7 @@ class ProjectSaving extends dn.Process {
 
 
 
-	static inline function jsonStringify(p:data.Project, json:Dynamic) {
+	public static inline function jsonStringify(p:data.Project, json:Dynamic) {
 		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
 	}
 
@@ -358,7 +373,7 @@ class ProjectSaving extends dn.Process {
 			// Separate level JSONs
 			var idx = 0;
 			var externLevels = project.levels.map( (l)->{
-				json: jsonStringify( project, l.toJson() ),
+				json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 				relPath: l.makeExternalRelPath(idx++),
 				id: l.identifier,
 			});

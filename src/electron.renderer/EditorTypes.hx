@@ -38,7 +38,7 @@ enum GlobalEvent {
 	LayerRuleGroupCollapseChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 
 	LayerInstanceSelected;
-	LayerInstanceChanged;
+	LayerInstanceChanged(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
 	LayerInstanceRestoredFromHistory(li:data.inst.LayerInstance);
 	AutoLayerRenderingChanged;

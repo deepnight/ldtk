@@ -1,5 +1,8 @@
 # 0.9.4
 
+  - Optimized saving time for large projects (approx. 8 times faster) by caching data that wasn't modified.
+
+  - Added a proper "progress bar" during backups saving
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files

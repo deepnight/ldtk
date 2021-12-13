@@ -128,6 +128,8 @@ class EditLayerDefs extends ui.modal.Panel {
 							sourceLi.autoTilesCache = null;
 						case KeepBakedLayer:
 					}
+
+					editor.ge.emit( LayerInstanceChanged(newLi) );
 				}
 			});
 		}
@@ -155,7 +157,6 @@ class EditLayerDefs extends ui.modal.Panel {
 				// ld.autoSourceLayerDefUid = null;
 				// ld.autoTilesetDefUid = null;
 
-				editor.ge.emit( LayerInstanceChanged );
 				editor.ge.emit( LayerDefAdded );
 				// editor.ge.emit( LayerDefConverted );
 				new LastChance( L.t._("Baked layer ::name::", {name:ld.identifier}), oldProject );

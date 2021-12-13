@@ -587,6 +587,15 @@ class Project {
 		return -1;
 	}
 
+	public function getLevelUsingLayerInst(li:data.inst.LayerInstance) : Null<data.Level> {
+		for(l in levels)
+		for(lli in l.layerInstances)
+			if( lli==li )
+				return l;
+
+		return null;
+	}
+
 	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
 		for(l in levels)
 		for(lfi in l.fieldInstances)

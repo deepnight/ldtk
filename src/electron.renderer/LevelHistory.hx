@@ -87,7 +87,7 @@ class LevelHistory {
 			case EntityInstanceRemoved(ei):
 			case EntityInstanceChanged(ei):
 
-			case LayerInstanceChanged:
+			case LayerInstanceChanged(_):
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
 			case AutoLayerRenderingChanged:
 

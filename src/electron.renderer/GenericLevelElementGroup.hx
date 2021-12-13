@@ -776,7 +776,7 @@ class GenericLevelElementGroup {
 		// Call refresh events
 		var affectedLayers = [];
 		for(li in changedLayers) {
-			editor.ge.emit( LayerInstanceChanged );
+			editor.ge.emit( LayerInstanceChanged(li) );
 			editor.levelRender.invalidateLayer(li);
 			affectedLayers.push(li);
 		}
