@@ -1,4 +1,4 @@
-# 0.9.4
+# 0.10.0
 
   - Optimized saving time for large projects (approx. 8-15 times faster) by caching data that wasn't modified.
 
