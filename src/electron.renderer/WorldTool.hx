@@ -108,6 +108,10 @@ class WorldTool extends dn.Process {
 				ctx.add({
 					label: L.t._("Delete"),
 					cb: ()->{
+						if( project.levels.length==1 ) {
+							N.error(L.t._("You can't delete the last level."));
+							return;
+						}
 						var closest = project.getClosestLevelFrom(l);
 						new ui.LastChance(L.t._('Level ::id:: removed', {id:l.identifier}), project);
 						project.removeLevel(l);

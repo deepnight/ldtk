@@ -14,7 +14,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 		// Delete button
 		jContent.find("button.delete").click( (_)->{
 			if( project.levels.length<=1 ) {
-				N.error( L.t._("You can't remove last level.") );
+				N.error(L.t._("You can't delete the last level."));
 				return;
 			}
 
