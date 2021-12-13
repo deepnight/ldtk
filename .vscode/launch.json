@@ -11,6 +11,9 @@
 			"cwd": "${workspaceFolder}/app",
 			"webRoot": "${workspaceFolder}/app",
 			"windows": {
+				"name": "Debug renderer win",
+				"request": "launch",
+				"type": "pwa-chrome",
 				"runtimeExecutable": "${workspaceFolder}/app/node_modules/electron/dist/electron.exe"
 			},
 			"runtimeArgs" : [
