@@ -32,7 +32,7 @@ class App extends dn.Process {
 		LOG.tagColors.set("tidy", "#8ed1ac");
 		LOG.tagColors.set("save", "#ff6f14");
 		#if debug
-		LOG.printOnAdd = true;
+		// LOG.printOnAdd = true;
 		#end
 		LOG.add("BOOT","App started");
 		LOG.add("BOOT","Version: "+Const.getAppVersion());
