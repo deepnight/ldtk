@@ -462,11 +462,14 @@ class Project {
 				var bytes = NT.readFileBytes(absPath);
 				App.LOG.add("cache", " -> identified as "+dn.Identify.getType(bytes));
 				var base64 = haxe.crypto.Base64.encode(bytes);
+				App.LOG.add("cache", " -> base64 "+base64.length);
 				var pixels = dn.ImageDecoder.decodePixels(bytes);
 				if( pixels==null ) {
 					App.LOG.error('Failed to decode pixels: $relPath (identified as ${dn.Identify.getType(bytes)}, err=${dn.ImageDecoder.lastError})');
 					throw "decodePixels failed";
 				}
+				App.LOG.add("cache", " -> pixels "+pixels.width+"x"+pixels.height);
+				pixels.convert(RGBA);
 				var texture = h3d.mat.Texture.fromPixels(pixels);
 				imageCache.set( relPath, {
 					fileName: dn.FilePath.extractFileWithExt(relPath),
@@ -480,6 +483,7 @@ class Project {
 			return imageCache.get(relPath);
 		}
 		catch( e:Dynamic ) {
+			App.LOG.error(e);
 			return null;
 		}
 	}
