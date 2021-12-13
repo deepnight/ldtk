@@ -14,6 +14,7 @@ enum GlobalEvent {
 	LevelRemoved(level:data.Level);
 	LevelResized(level:data.Level);
 	LevelRestoredFromHistory(level:data.Level);
+	LevelJsonCacheInvalidated(level:data.Level);
 
 	WorldLevelMoved;
 	WorldSettingsChanged;

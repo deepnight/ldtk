@@ -1275,6 +1275,7 @@ class Editor extends Page {
 				case LevelRemoved(l): extra = l.uid;
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
+				case LevelJsonCacheInvalidated(l): extra = l.uid;
 				case WorldLevelMoved:
 				case WorldSettingsChanged:
 				case LayerDefAdded:
@@ -1437,7 +1438,8 @@ class Editor extends Page {
 
 			case LevelSettingsChanged(l):
 				updateGuide();
-
+				
+			case LevelJsonCacheInvalidated(l):
 			case LevelAdded(l):
 			case LevelRemoved(l):
 			case LevelResized(l):
@@ -1511,7 +1513,10 @@ class Editor extends Page {
 			return;
 		}
 
-		l.invalidateJsonCache();
+		if( l.hasJsonCache() ) {
+			l.invalidateJsonCache();
+			ge.emit( LevelJsonCacheInvalidated(l) );
+		}
 		N.debug("Invalidated: "+l.identifier);
 	}
 

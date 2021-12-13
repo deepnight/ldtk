@@ -125,6 +125,12 @@ class WorldRender extends dn.Process {
 				updateLabels(true);
 				updateCurrentHighlight();
 
+			case ProjectSaved:
+				updateLabels(true);
+
+			case LevelJsonCacheInvalidated(l):
+				updateLabels(true);
+
 			case ProjectSelected:
 				renderAll();
 
@@ -132,7 +138,7 @@ class WorldRender extends dn.Process {
 				invalidateAllLevelFields();
 
 			case EntityFieldInstanceChanged(ei,fi):
-				
+
 			case LevelFieldInstanceChanged(l,fi):
 				invalidateLevelFields(l);
 
@@ -680,9 +686,8 @@ class WorldRender extends dn.Process {
 		wl.label.removeChildren();
 		var error = l.getFirstError();
 		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
-		tf.text = l.identifier;
+		tf.text = l.identifier + ( l.hasJsonCache() ? "" : "*" );
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
-		tf.textColor = l.hasJsonCache() ? 0x00ff00 : 0xff0000;
 		tf.x = 8;
 
 		if( error!=null ) {

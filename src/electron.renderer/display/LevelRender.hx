@@ -137,6 +137,8 @@ class LevelRender extends dn.Process {
 			case LevelSettingsChanged(l):
 				invalidateUi();
 
+			case LevelJsonCacheInvalidated(l):
+
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
 					layerRenders.get(uid).dispose();
@@ -224,7 +226,7 @@ class LevelRender extends dn.Process {
 						invalidateLayer(li);
 
 			case LevelFieldInstanceChanged(l,fi):
-				
+
 			case EntityFieldInstanceChanged(ei,fi):
 				var ed = editor.project.defs.getEntityDefUsingField(fi.def);
 				if( ed!=null ) {
