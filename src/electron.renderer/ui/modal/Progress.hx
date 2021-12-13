@@ -9,6 +9,7 @@ class Progress extends ui.Modal {
 	static var ALL: Array<Progress> = [];
 
 	public var done(default,null) = false;
+	var nextLocked = false;
 
 	public function new(title:String, opsPerCycle=1, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
 		super();
@@ -27,13 +28,28 @@ class Progress extends ui.Modal {
 		var log = [];
 		var cur = 0;
 		var total = ops.length;
+
+		function _updateBar(?label:String) {
+			var pct = 100 * cur/total;
+			jBar.find(".bar").css({ width:pct+"%" });
+			if( label!=null )
+				jBar.find(".label").text( label );
+		}
+
 		var time = haxe.Timer.stamp();
 		createChildProcess( (p)->{
-			if( ops.length==0 && !delayer.hasAny() ) {
+			if( editor!=null )
+				editor.requestFps();
+
+			if( nextLocked )
+				return;
+
+			if( ops.length==0 ) {
 				// All done!
 				canBeClosedManually = true;
 				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
 				done = true;
+				_updateBar();
 
 				if( !App.ME.isCtrlDown() || !App.ME.isShiftDown() )
 					close();
@@ -54,17 +70,18 @@ class Progress extends ui.Modal {
 			}
 			else {
 				// Execute "opsPerCycle" operation(s)
-				if( editor!=null )
-					editor.requestFps();
+
 				var i = 0;
 				while( i++<opsPerCycle && ops.length>0 ) {
 					var op = ops.shift();
-					delayer.addF(op.cb, 1);
-					cur++;
-					var pct = 100 * cur/total;
-					jBar.find(".bar").css({ width:pct+"%" });
-					jBar.find(".label").text( op.label );
+					nextLocked = true;
+					delayer.addF(()->{
+						op.cb();
+						nextLocked = false;
+					}, 1);
+					_updateBar(op.label);
 					log.push(op.label);
+					cur++;
 				}
 			}
 
