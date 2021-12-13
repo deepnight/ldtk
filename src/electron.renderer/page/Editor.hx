@@ -404,7 +404,6 @@ class Editor extends Page {
 				});
 
 			case LoadingFailed(err):
-				throw "check";
 				new ui.modal.dialog.Warning(msg);
 
 			case RemapLoss:
