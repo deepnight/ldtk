@@ -7,7 +7,7 @@
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
-  - Fixed a bug when reloading a tileset while its size changed.
+  - Fixed a bug when reloading a tileset while its width changed.
   - Minor bug fixes.
 
 # 0.9.3 - Ludum Dare 48 edition
