@@ -111,8 +111,9 @@ class LevelInstancePanel extends ui.modal.Panel {
 			case FieldDefSorted, FieldDefRemoved(_), FieldDefChanged(_), FieldDefAdded(_):
 				updateFieldsForm();
 
-			case FieldInstanceChanged(fd):
-				updateFieldsForm();
+			case LevelFieldInstanceChanged(l,fi):
+				if( l==level )
+					updateFieldsForm();
 
 			case _:
 		}

@@ -131,10 +131,10 @@ class WorldRender extends dn.Process {
 			case EnumDefChanged, EnumDefAdded, EnumDefRemoved, EnumDefValueRemoved:
 				invalidateAllLevelFields();
 
-			case FieldInstanceChanged(fi):
-				var l = project.getLevelUsingFieldInst(fi);
-				if( l!=null )
-					invalidateLevelFields(l);
+			case EntityFieldInstanceChanged(ei,fi):
+				
+			case LevelFieldInstanceChanged(l,fi):
+				invalidateLevelFields(l);
 
 			case FieldDefRemoved(fd):
 				invalidateAllLevelFields();
@@ -682,6 +682,7 @@ class WorldRender extends dn.Process {
 		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
 		tf.text = l.identifier;
 		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
+		tf.textColor = l.hasJsonCache() ? 0x00ff00 : 0xff0000;
 		tf.x = 8;
 
 		if( error!=null ) {

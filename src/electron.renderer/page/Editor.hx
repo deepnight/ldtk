@@ -1309,7 +1309,9 @@ class Editor extends Page {
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
-				case FieldInstanceChanged(fi): extra = fi.defUid;
+				case LevelFieldInstanceChanged(l,fi): extra = fi.defUid;
+				case EntityFieldInstanceChanged(ei,fi): extra = fi.defUid;
+
 				case EntityDefAdded:
 				case EntityDefRemoved:
 				case EntityDefChanged:
@@ -1361,8 +1363,12 @@ class Editor extends Page {
 
 			case FieldDefChanged(fd):
 			case FieldDefSorted:
-			case FieldInstanceChanged(fi):
-				onLevelChange( project.getLevelUsingFieldInst(fi) );
+
+			case LevelFieldInstanceChanged(l,fi):
+				onLevelChange(l);
+
+			case EntityFieldInstanceChanged(ei,fi):
+				onLevelChange(curLevel);
 
 			case EntityInstanceAdded(ei):
 

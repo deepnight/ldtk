@@ -534,7 +534,10 @@ class FieldInstancesForm {
 
 		onBeforeRender();
 		renderForm();
-		editor.ge.emit( FieldInstanceChanged(fi) );
+		switch relatedInstance {
+			case Entity(ei): editor.ge.emit( EntityFieldInstanceChanged(ei,fi) );
+			case Level(l): editor.ge.emit( LevelFieldInstanceChanged(l,fi) );
+		}
 		onChange();
 	}
 

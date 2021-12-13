@@ -82,10 +82,12 @@ class LevelHistory {
 			case TilesetDefSorted:
 
 			case EntityDefSorted, FieldDefSorted, FieldDefChanged(_):
-			case FieldInstanceChanged(fi):
 			case EntityInstanceAdded(ei):
 			case EntityInstanceRemoved(ei):
 			case EntityInstanceChanged(ei):
+
+			case LevelFieldInstanceChanged(l,fi):
+			case EntityFieldInstanceChanged(ei,fi):
 
 			case LayerInstanceChanged(_):
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):

@@ -65,7 +65,8 @@ enum GlobalEvent {
 	FieldDefRemoved(fd:data.def.FieldDef);
 	FieldDefChanged(fd:data.def.FieldDef);
 	FieldDefSorted;
-	FieldInstanceChanged(fi:data.inst.FieldInstance);
+	LevelFieldInstanceChanged(l:data.Level, fi:data.inst.FieldInstance);
+	EntityFieldInstanceChanged(ei:data.inst.EntityInstance, fi:data.inst.FieldInstance);
 
 	EnumDefAdded;
 	EnumDefRemoved;
