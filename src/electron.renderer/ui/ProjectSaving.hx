@@ -189,7 +189,7 @@ class ProjectSaving extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), 5, ops);
+					new ui.modal.Progress(Lang.t._("Saving levels"), 10, ops);
 				}
 				else {
 					// Remove previous external levels
