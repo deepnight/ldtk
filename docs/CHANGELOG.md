@@ -1,5 +1,6 @@
 # 0.9.4
 
+  - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
   - Fixed a bug when reloading a tileset while its size changed.
