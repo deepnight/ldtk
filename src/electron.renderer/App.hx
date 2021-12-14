@@ -688,6 +688,7 @@ class App extends dn.Process {
 		if( cd.has("debugTools") ) {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
+			debugPre('Electron: ${Const.getElectronVersion()}');
 			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {

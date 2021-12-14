@@ -25,6 +25,14 @@ class Const {
 		#end
 	}
 
+	public static function getElectronVersion() {
+		#if macro
+		return "";
+		#else
+		return js.Node.process.versions.get("electron");
+		#end
+	}
+
 	public static function getJsonVersion() {
 		return getAppVersion(true);
 	}
