@@ -176,11 +176,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			});
 		}
 
-		// Refresh world renders
+		// Refresh world renders & break caches
 		for(l in affectedLevels.keys())
 			ops.push({
 				label: 'Refreshing world render for ${l.identifier}...',
-				cb: ()->editor.worldRender.invalidateLevel(l),
+				cb: ()->{
+					editor.worldRender.invalidateLevel(l);
+					editor.invalidateLevelCache(l);
+				},
 			});
 
 		if( ops.length>0 ) {

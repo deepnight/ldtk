@@ -1360,16 +1360,16 @@ class Editor extends Page {
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
 			case LayerInstanceChanged(li):
-				onLevelChange( project.getLevelUsingLayerInst(li) );
+				invalidateLevelCache( project.getLevelUsingLayerInst(li) );
 
 			case FieldDefChanged(fd):
 			case FieldDefSorted:
 
 			case LevelFieldInstanceChanged(l,fi):
-				onLevelChange(l);
+				invalidateLevelCache(l);
 
 			case EntityFieldInstanceChanged(ei,fi):
-				onLevelChange(curLevel);
+				invalidateLevelCache(curLevel);
 
 			case EntityInstanceAdded(ei):
 
@@ -1438,7 +1438,7 @@ class Editor extends Page {
 
 			case LevelSettingsChanged(l):
 				updateGuide();
-				
+
 			case LevelJsonCacheInvalidated(l):
 			case LevelAdded(l):
 			case LevelRemoved(l):
@@ -1507,9 +1507,9 @@ class Editor extends Page {
 		updateTitle();
 	}
 
-	function onLevelChange(l:data.Level) {
+	public function invalidateLevelCache(l:data.Level) {
 		if( l==null ) {
-			N.error("Unknown changed level");
+			N.error("Unknown level in invalidateLevelCache()");
 			return;
 		}
 
