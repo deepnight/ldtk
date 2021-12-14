@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.8.0",
+		"appVersion": "0.10.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.8.0",
+	"jsonVersion": "0.10.0",
 	"nextUid": 35,
-	"worldLayout": "Free",
+	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultPivotX": 0,
@@ -23,11 +23,12 @@
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
-	"exportPng": false,
+	"imageExportMode": "None",
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"advancedOptionFlags": [],
+	"levelNamePattern": "Level_%idx",
+	"flags": [],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
@@ -38,7 +39,9 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
-			"intGridValues": [{ "identifier": null, "color": "#000000" }],
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -55,7 +58,9 @@
 			"displayOpacity": 1,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
-			"intGridValues": [{ "identifier": null, "color": "#000000" }],
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -67,15 +72,23 @@
 		{
 			"identifier": "Item",
 			"uid": 4,
+			"tags": [],
 			"width": 16,
 			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
 			"color": "#13B1A7",
 			"renderMode": "Ellipse",
 			"showName": false,
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
-			"maxPerLevel": 0,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 0.5,
@@ -98,7 +111,7 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLangageMode": null
+					"textLanguageMode": null
 				},
 				{
 					"identifier": "count",
@@ -118,7 +131,7 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [1] },
-					"textLangageMode": null
+					"textLanguageMode": null
 				},
 				{
 					"identifier": "radius",
@@ -138,7 +151,7 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [1] },
-					"textLangageMode": null
+					"textLanguageMode": null
 				},
 				{
 					"identifier": "path",
@@ -158,7 +171,7 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLangageMode": null
+					"textLanguageMode": null
 				},
 				{
 					"identifier": "Multilines",
@@ -178,12 +191,14 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLangageMode": null
+					"textLanguageMode": null
 				}
 			]
 		}
 	], "tilesets": [
 		{
+			"__cWid": 8,
+			"__cHei": 8,
 			"identifier": "FoodIcons_by_Henry_Software",
 			"uid": 33,
 			"relPath": "atlas/foodIcons_by_Henry_Software.png",
@@ -192,6 +207,9 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000",
@@ -199,10 +217,10 @@
 			}
 		}
 	], "enums": [{ "identifier": "Food", "uid": 32, "values": [
-		{ "id": "Sushi", "tileId": 7, "__tileSrcRect": [112,0,16,16] },
-		{ "id": "Pickle", "tileId": 39, "__tileSrcRect": [112,64,16,16] },
-		{ "id": "Chicken", "tileId": 50, "__tileSrcRect": [32,96,16,16] },
-		{ "id": "Cake", "tileId": 36, "__tileSrcRect": [64,64,16,16] }
+		{ "id": "Sushi", "tileId": 7, "color": 10061943, "__tileSrcRect": [112,0,16,16] },
+		{ "id": "Pickle", "tileId": 39, "color": 5588002, "__tileSrcRect": [112,64,16,16] },
+		{ "id": "Chicken", "tileId": 50, "color": 10048819, "__tileSrcRect": [32,96,16,16] },
+		{ "id": "Cake", "tileId": 36, "color": 11167317, "__tileSrcRect": [64,64,16,16] }
 	], "iconTilesetUid": 33, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "tutorial",
@@ -222,7 +240,7 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLangageMode": null
+			"textLanguageMode": null
 		},
 		{
 			"identifier": "script",
@@ -242,7 +260,7 @@
 			"regex": null,
 			"acceptFileTypes": [ ".lua", ".hx", ".md", ".xml", ".json" ],
 			"defaultOverride": null,
-			"textLangageMode": null
+			"textLanguageMode": null
 		},
 		{
 			"identifier": "music",
@@ -262,7 +280,7 @@
 			"regex": null,
 			"acceptFileTypes": [ ".ogg", ".wav", ".mp3" ],
 			"defaultOverride": null,
-			"textLangageMode": null
+			"textLanguageMode": null
 		},
 		{
 			"identifier": "color",
@@ -282,7 +300,7 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16766208] },
-			"textLangageMode": null
+			"textLanguageMode": null
 		}
 	] },
 	"levels": [
@@ -311,13 +329,13 @@
 				},
 				{
 					"__identifier": "tutorial",
-					"__value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.\n\nVolutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor.",
+					"__value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.  Volutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor.",
 					"__type": "String",
 					"defUid": 12,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.\n\nVolutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor."
+							"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.  Volutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor."
 						]
 					}]
 				},
@@ -401,13 +419,13 @@
 								},
 								{
 									"__identifier": "Multilines",
-									"__value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.\n\nVolutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor.",
+									"__value": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.  Volutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor.",
 									"__type": "String",
 									"defUid": 29,
 									"realEditorValues": [{
 										"id": "V_String",
 										"params": [
-											"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.\n\nVolutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor."
+											"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget nunc scelerisque viverra mauris. Pharetra massa massa ultricies mi quis hendrerit dolor magna eget. Consequat nisl vel pretium lectus quam id leo. Sagittis eu volutpat odio facilisis mauris sit amet massa vitae. Fermentum et sollicitudin ac orci phasellus egestas tellus rutrum. Sed pulvinar proin gravida hendrerit lectus a. Scelerisque purus semper eget duis at tellus at. Ut diam quam nulla porttitor. Elementum integer enim neque volutpat ac tincidunt. Pulvinar etiam non quam lacus suspendisse faucibus interdum posuere lorem. Leo urna molestie at elementum eu facilisis sed odio morbi. Tempor commodo ullamcorper a lacus vestibulum sed arcu. In dictum non consectetur a erat nam. Enim nulla aliquet porttitor lacus luctus accumsan tortor.  Volutpat odio facilisis mauris sit amet massa vitae. Tincidunt id aliquet risus feugiat in ante metus dictum at. Eu nisl nunc mi ipsum faucibus vitae aliquet nec ullamcorper. Pretium nibh ipsum consequat nisl vel pretium lectus quam. Varius quam quisque id diam vel quam elementum. In fermentum et sollicitudin ac orci phasellus egestas. Ornare lectus sit amet est placerat in egestas erat imperdiet. Quam id leo in vitae turpis massa sed elementum. Consectetur libero id faucibus nisl tincidunt eget nullam non. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. At imperdiet dui accumsan sit amet nulla facilisi morbi. Consequat ac felis donec et odio pellentesque diam. Vitae semper quis lectus nulla at. Nunc sed id semper risus in. Sed ullamcorper morbi tincidunt ornare massa. Sed enim ut sem viverra aliquet. Convallis tellus id interdum velit laoreet id donec ultrices. Velit ut tortor pretium viverra suspendisse potenti nullam ac tortor."
 										]
 									}]
 								},
