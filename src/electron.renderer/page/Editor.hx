@@ -917,10 +917,13 @@ class Editor extends Page {
 
 	function onMouseWheel(e:hxd.Event) {
 		var m = getMouse();
-		requestFps(0.85);
+		requestFps();
 
-		var speed = ET.getZoom() * settings.v.mouseWheelSpeed;
-		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
+		var sign = -M.sign( e.wheelDelta );
+		var spd = 0.15 * settings.v.mouseWheelSpeed;
+		camera.deltaZoomTo( m.levelX, m.levelY, sign*spd );
+		// var speed = ET.getZoom() * settings.v.mouseWheelSpeed;
+		// camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
 
 		cursor.onMouseMove( getMouse() );
