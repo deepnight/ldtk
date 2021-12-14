@@ -29,12 +29,6 @@ class EditProject extends ui.modal.Panel {
 			ET.locate( project.filePath.full, true );
 		});
 
-		if( !project.isBackup() )
-			jContent.find("button.settings").click( function(ev) {
-				close();
-				new ui.modal.dialog.EditAppSettings();
-			});
-
 		updateProjectForm();
 	}
 
