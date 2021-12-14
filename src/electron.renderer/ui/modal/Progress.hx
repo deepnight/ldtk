@@ -1,7 +1,7 @@
 package ui.modal;
 
 typedef ProgressOp = {
-	var label : String;
+	var ?label : Null<String>;
 	var cb : Void->Void;
 }
 
@@ -80,7 +80,8 @@ class Progress extends ui.Modal {
 						nextLocked = false;
 					}, 1);
 					_updateBar(op.label);
-					log.push(op.label);
+					if( op.label!=null )
+						log.push(op.label);
 					cur++;
 				}
 			}
@@ -88,6 +89,12 @@ class Progress extends ui.Modal {
 		}, true);
 
 		updateAllPositions();
+	}
+
+
+	public static function single( label:LocaleString, cb:Void->Void, onComplete:Void->Void ) : Progress {
+		var p = new Progress(label, 1, [{ cb:cb }], onComplete);
+		return p;
 	}
 
 	public static function hasAny() {

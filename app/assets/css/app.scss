@@ -937,7 +937,8 @@ ul.log {
 	overflow: auto;
 
 	li {
-		padding: 8px;
+		padding: 4px;
+		padding-left: 8px;
 	}
 	li:hover {
 		outline: 1px dashed $bgLight;
@@ -2374,8 +2375,31 @@ textarea {
 	.wrapper .content {
 		max-width: 70vw;
 
+		.logHeader {
+			display: grid;
+			grid-template-columns: 1fr 0.5fr;
+			min-width: 400px;
+			padding: 8px;
+			margin-bottom: 8px;
+			background-color: $bgDark;
+			border-radius: 4px;
+
+			.content {
+				display: grid;
+				align-items: center;
+			}
+
+			&.error {
+				background-color: $darkRed;
+			}
+		}
+
 		ul.log {
 			min-width: auto;
+			&:empty {
+				display: none;
+			}
+
 			li {
 				font-family: monospace;
 				white-space: pre-wrap;
@@ -2383,12 +2407,22 @@ textarea {
 				padding-left: 8px;
 				color: white;
 			}
+
 			li.critical {
-				border-top: 1px solid $bgLight;
-				border-bottom: 1px solid $bgLight;
-				border-right: 1px solid $bgLight;
-				padding-top: 8px;
-				padding-bottom: 8px;
+				padding: 12px;
+
+				border-left-color: $orangeLight;
+				border-top: 1px solid $lightRed;
+				border-bottom: 1px solid $lightRed;
+				border-right: 1px solid $lightRed;
+				background-color: $red;
+				box-shadow: 0px 0px 16px $red;
+				color: white;
+				font-weight: bold;
+
+				&+.critical {
+					margin-top: 4px;
+				}
 			}
 		}
 	}

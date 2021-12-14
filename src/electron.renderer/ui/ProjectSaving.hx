@@ -273,22 +273,29 @@ class ProjectSaving extends dn.Process {
 			case ExportingTiled:
 				if( project.exportTiled ) {
 					logState();
-					var e = new exporter.Tiled();
-					e.addExtraLogger( App.LOG, "TiledExport" );
-					e.run( project, project.filePath.full );
-					if( e.hasErrors() )
-						N.error('Tiled export has errors.');
-					else
-						N.success('Saved Tiled files.');
+					ui.modal.Progress.single(
+						L.t._("Exporting Tiled..."),
+						()->{
+							var e = new exporter.Tiled();
+							e.addExtraLogger( App.LOG, "TiledExport" );
+							e.run( project, project.filePath.full );
+							if( e.hasErrors() )
+								N.error('Tiled export has errors.');
+							else
+								N.success('Saved Tiled files.');
+						},
+						()->{
+							beginState(Done);
+						}
+					);
 				}
 				else {
 					// Remove previous tiled dir
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
 					if( NT.fileExists(dir) )
 						NT.removeDir(dir);
+					beginState(Done);
 				}
-
-				beginState(Done);
 
 
 			case Done:

@@ -129,7 +129,10 @@ class Tiled extends Exporter {
 			tileset.set("spacing", ""+td.spacing );
 
 			var relPath = remapRelativePath(td.relPath);
-			log.add("tileset", '  Adding image ${relPath}...');
+			log.add("tileset", '  Adding image: ${relPath}');
+			var fp = dn.FilePath.fromFile(td.relPath);
+			if( fp.extension!=null && ( fp.extension.toLowerCase()=="aseprite" || fp.extension.toLowerCase()=="ase" ) )
+				log.error('Aseprite format (from tileset ${td.identifier}) is not supported in Tiled.');
 			var image = Xml.createElement("image");
 			tileset.addChild(image);
 			image.set("source", relPath);
@@ -261,7 +264,7 @@ class Tiled extends Exporter {
 							csv.set( cx, cy, _makeTiledTileId(li.def.uid, li.getIntGrid(cx,cy)-1, 0) );
 
 					// Build layer XML
-					log.add("layer", "  Exporting IntGrid values...");
+					log.add("layer", "  Exporting IntGrid values");
 					var layer = _createLayer("layer", li, li.def.isAutoLayer() ? "_values" : null);
 					var data = Xml.createElement("data");
 					layer.addChild(data);
@@ -348,7 +351,7 @@ class Tiled extends Exporter {
 					for( layerIdx in 0...maxStack ) {
 						// Build CSV
 						var csv = new Csv(li.cWid, li.cHei);
-						log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+						log.add("layer", "    Building CSV "+(layerIdx+1));
 						for( coordId in li.gridTiles.keys() ) {
 							var stack = li.gridTiles.get(coordId);
 							if( layerIdx < stack.length ) {
@@ -371,7 +374,7 @@ class Tiled extends Exporter {
 
 			// Auto-layer tiles
 			if( ld.autoTilesetDefUid!=null ) {
-				log.add("layer", "  Exporting Auto-Layer tiles...");
+				log.add("layer", "  Exporting Auto-Layer tiles");
 				var td = li.getTilesetDef();
 				var csvLayers : Array<Csv> = [];
 				var hasIncompatibleTiles = false;
@@ -411,7 +414,7 @@ class Tiled extends Exporter {
 				var layerIdx = 0;
 				for(csv in csvLayers) {
 					var layer = _createLayer("layer", li, csvLayers.length>1 ? "_"+(layerIdx+1) : "");
-					log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+					log.add("layer", "    Building CSV "+(layerIdx+1));
 					var data = Xml.createElement("data");
 					layer.addChild(data);
 					data.set("encoding","csv");
