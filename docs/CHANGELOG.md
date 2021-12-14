@@ -4,6 +4,7 @@
 
   - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
   - Added a progress bar when loading large projects
+  - Entity and Level custom fields that are not using default values are now MUCH more visible in forms
 
 ## UI
 

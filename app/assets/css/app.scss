@@ -1193,6 +1193,14 @@ ul.form {
 		&.isDefault {
 			color: $bgLighter;
 			font-style: italic;
+			opacity: 0.66;
+		}
+		&:not(.isDefault) {
+			label {
+				background-color: $bgLighter;
+				padding: 8px;
+				border-radius: 4px;
+			}
 		}
 
 		&.full {
@@ -1206,6 +1214,13 @@ ul.form {
 		grid-column: 2/3;
 		margin: 0;
 		margin-bottom: 8px;
+
+		&.isDefault {
+			opacity: 0.35;
+			input[type=checkbox] {
+				opacity: 0.35;
+			}
+		}
 	}
 
 	>dd,
