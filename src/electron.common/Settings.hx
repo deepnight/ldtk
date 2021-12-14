@@ -76,9 +76,10 @@ class Settings {
 	}
 
 	public function getAppZoomFactor() : Float {
-		var w = dn.js.ElectronTools.getScreenWidth();
-		var h = dn.js.ElectronTools.getScreenHeight();
-		return v.appUiScale * dn.M.fmax(1, dn.M.fmin( w/1350, h/1024 ) );
+		// var w = dn.js.ElectronTools.getScreenWidth();
+		// var h = dn.js.ElectronTools.getScreenHeight();
+		// return v.appUiScale * dn.M.fmax(1, dn.M.fmin( w/1350, h/1024 ) );
+		return v.appUiScale; // HACK disabled base scaling
 	}
 
 
