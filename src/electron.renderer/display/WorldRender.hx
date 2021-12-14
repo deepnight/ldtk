@@ -548,7 +548,7 @@ class WorldRender extends dn.Process {
 		var tf = new h2d.Text(Assets.fontLight_large, f);
 		tf.text = '"${l.identifier}"';
 		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.6);
+		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.85);
 		if( fWrapper.identifier!=null )
 			fWrapper.identifier.remove();
 		fWrapper.identifier = f;
