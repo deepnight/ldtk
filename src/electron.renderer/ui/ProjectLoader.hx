@@ -107,7 +107,7 @@ class ProjectLoader {
 						});
 						idx++;
 					}
-					new ui.modal.Progress(L.t._("Loading levels..."), lops, ()->done(p));
+					new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), lops, ()->done(p));
 				}
 				else
 					done(p);
@@ -116,7 +116,7 @@ class ProjectLoader {
 		});
 
 		// Run
-		progress = new ui.modal.Progress( L.t._("Loading project ::file::", {file:fileName}), ops );
+		progress = new ui.modal.Progress( L.t._("::file::: Project...", {file:fileName}), ops );
 	}
 
 	function done(p:data.Project) {
