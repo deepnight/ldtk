@@ -218,6 +218,14 @@ class Editor extends Page {
 				onHelp();
 		});
 
+		jMainPanel.find("button.settings").click( function(_) {
+			if( isPaused() ) return;
+			if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
+				ui.Modal.closeAll();
+				new ui.modal.dialog.EditAppSettings();
+			}
+		});
+
 
 		// Option checkboxes
 		updateEditOptions();

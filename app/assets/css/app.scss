@@ -3181,8 +3181,8 @@ canvas#webgl {
 			#mainBar {
 				.buttons {
 					display: grid;
-					grid-template-columns: repeat(4, 25%);
-					grid-template-rows: repeat(2, 32px);
+					grid-template-columns: repeat(5, 20%);
+					grid-template-rows: repeat(2, 30px);
 					button {
 						z-index: 1; // fix box-shadow depth
 						margin: 0px;
@@ -3195,9 +3195,14 @@ canvas#webgl {
 					// 	grid-column: 3/4;
 					// 	z-index: 0;
 					// }
-					button.close {
+					button.settings {
 						grid-row: 1/2;
 						grid-column: 4/5;
+						z-index: 0;
+					}
+					button.close {
+						grid-row: 1/2;
+						grid-column: 5/6;
 						z-index: 0;
 					}
 					.icon {
