@@ -1,19 +1,29 @@
 # 0.10.0
 
-  - Optimized saving time for large projects (approx. 8-15 times faster) by caching data that wasn't modified.
+## Major changes
+
+  - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
+  - Added a progress bar when loading large projects
+
+## UI
 
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
-  - Added a progress bar when loading large projects
+  - Added more values for App UI scaling setting.
+  - Level identifiers are now displayed in the top-left corner of levels in World view
+  - Better Level identifiers rendering in World view (they should now be easier to read in general)
+  - Zooming out a lot now has a subtle dimming effect.
+
+## Bug fixes
+
   - Fixed the progress bar when saving large projects
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
   - Fixed a bug when reloading a tileset while its width changed.
   - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
-  - Added more values for App UI scaling setting.
-  - Minor bug fixes.
+  - Many minor bug fixes.
 
 # 0.9.3 - Ludum Dare 48 edition
 
