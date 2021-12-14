@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.9.3",
+		"appVersion": "0.10.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.9.3",
+	"jsonVersion": "0.10.0",
 	"nextUid": 148,
-	"worldLayout": "GridVania",
+	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultPivotX": 0,
@@ -1400,13 +1400,13 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "This sample shows how to use OPTIONAL rules to create biomes and variations easily.\n\nClick the \"RULES\" button on the left to see all the rule groups. Some are marked as \"OPT.\": they are optional which means they are disabled by default, and can be enabled only in specific levels.",
+					"__value": "This sample shows how to use OPTIONAL rules to create biomes and variations easily.  Click the \"RULES\" button on the left to see all the rule groups. Some are marked as \"OPT.\": they are optional which means they are disabled by default, and can be enabled only in specific levels.",
 					"__type": "String",
 					"defUid": 113,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"This sample shows how to use OPTIONAL rules to create biomes and variations easily.\n\nClick the \"RULES\" button on the left to see all the rule groups. Some are marked as \"OPT.\": they are optional which means they are disabled by default, and can be enabled only in specific levels."
+							"This sample shows how to use OPTIONAL rules to create biomes and variations easily.  Click the \"RULES\" button on the left to see all the rule groups. Some are marked as \"OPT.\": they are optional which means they are disabled by default, and can be enabled only in specific levels."
 						]
 					}]
 				},
