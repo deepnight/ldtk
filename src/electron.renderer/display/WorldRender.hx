@@ -46,6 +46,7 @@ class WorldRender extends dn.Process {
 			col: new h2d.Bitmap(w),
 			tex: new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1, w),
 		}
+		worldBg.col.colorAdd = new h3d.Vector(0,0,0,0);
 		worldBg.tex.alpha = 0.5;
 		editor.root.add(worldBg.wrapper, Const.DP_BG);
 		worldBg.wrapper.alpha = 0;
@@ -112,6 +113,7 @@ class WorldRender extends dn.Process {
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
 				renderAxes();
 				renderGrids();
+				updateBgColor();
 				updateLabels();
 				updateTitle();
 				updateFieldsPos();
@@ -245,11 +247,18 @@ class WorldRender extends dn.Process {
 		updateLayout();
 	}
 
+
+	function updateBgColor() {
+		var r = -M.fclamp( 0.9 * 0.04/camera.adjustedZoom, 0, 1);
+		worldBg.col.colorAdd.set(r,r,r,0);
+	}
+
 	function renderBg() {
 		worldBg.tex.resize( camera.iWidth, camera.iHeight );
 		worldBg.col.tile = h2d.Tile.fromColor(worldBgColor);
 		worldBg.col.scaleX = camera.width;
 		worldBg.col.scaleY = camera.height;
+		updateBgColor();
 	}
 
 	function updateTitle() {
@@ -278,7 +287,7 @@ class WorldRender extends dn.Process {
 				continue;
 
 			// Above
-			fr.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.above.outerWidth) );
+			fr.above.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.above.outerWidth, l.pxHei/fr.above.outerHeight) ) );
 			fr.above.x = Std.int( l.worldCenterX - fr.above.outerWidth*0.5*fr.above.scaleX );
 			if( editor.worldMode )
 				fr.above.y = l.worldY;
@@ -286,7 +295,7 @@ class WorldRender extends dn.Process {
 				fr.above.y = Std.int( l.worldY - padding - fr.above.outerHeight*fr.above.scaleY );
 
 			// Beneath
-			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.beneath.outerWidth) );
+			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.beneath.outerWidth, l.pxHei/fr.beneath.outerHeight) ) );
 			fr.beneath.x = Std.int( l.worldCenterX - fr.beneath.outerWidth*0.5*fr.beneath.scaleX );
 			if( editor.worldMode )
 				fr.beneath.y = Std.int( l.worldY + l.pxHei - fr.beneath.outerHeight*fr.beneath.scaleY );
@@ -295,48 +304,56 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	function updateLabels(refreshText=false) {
+	function updateLabels(refreshTexts=false) {
 		var minZoom = switch project.worldLayout {
-			case Free, GridVania: 0.1;
-			case LinearHorizontal, LinearVertical: 0.1;
+			case Free, GridVania: 0.06;
+			case LinearVertical: 0.04;
+			case LinearHorizontal: 0.04;
 		}
 
 		for( l in editor.project.levels ) {
 			if( !levels.exists(l.uid) )
 				continue;
 
+			// Update text
+			if( refreshTexts )
+				updateLabelText(l);
+
 			var e = levels.get(l.uid);
+
+			// Visibility
 			e.label.visible = camera.adjustedZoom>=minZoom && ( l!=editor.curLevel || editor.worldMode );
 			if( !e.label.visible )
 				continue;
-
 			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
+
+			// Scaling
 			switch project.worldLayout {
 				case Free, GridVania:
-					e.label.setScale( M.fmin( 0.8*l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
+					e.label.setScale( M.fmin( l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
 
 				case LinearHorizontal, LinearVertical:
 					e.label.setScale( 1/camera.adjustedZoom );
 			}
 
+			// Position
 			switch project.worldLayout {
 				case Free, GridVania:
-					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
-					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
+					e.label.x = Std.int( l.worldX );
+					e.label.y = Std.int( l.worldY );
 
 				case LinearHorizontal:
 					e.label.x = Std.int( l.worldX + l.pxWid*0.3 );
 					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
-					e.label.rotation = -0.3;
+					e.label.rotation = -0.4;
 
 				case LinearVertical:
 					e.label.x = Std.int( l.worldX - e.label.width*e.label.scaleX - 30 );
 					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
 			}
-			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.15 ) ) );
 
-			if( refreshText )
-				updateLabelText(l);
+			// Color
+			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.8 ) ) );
 		}
 
 	}
@@ -559,8 +576,8 @@ class WorldRender extends dn.Process {
 		var _depth = 0;
 		levelsWrapper.add(wl.bgWrapper, _depth++);
 		levelsWrapper.add(wl.render, _depth++);
-		levelsWrapper.add(wl.bounds, _depth++);
 		levelsWrapper.add(wl.label, _depth++);
+		levelsWrapper.add(wl.bounds, _depth++);
 		levels.set(l.uid, wl);
 
 		// Bg color
@@ -650,31 +667,39 @@ class WorldRender extends dn.Process {
 			}
 		}
 
-		var error = l.getFirstError();
-
-		// Bounds
-		var thick = 1*camera.pixelRatio;
-		var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.4);
-		if( error!=null ) {
-			thick*=3;
-			c = 0xff0000;
-		}
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(0, 0, l.pxWid, thick); // top
-
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
-
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(0, 0, thick, l.pxHei); // left
-
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
+		updateLevelBounds(l);
 
 		// Identifier
 		wl.label.color.setColor( C.addAlphaF(0x464e79) );
 		wl.label.alpha = 0.8;
 		updateLabelText(l);
+	}
+
+
+	inline function updateLevelBounds(l:data.Level) {
+		var wl = levels.get(l.uid);
+		if( wl!=null ) {
+			var error = l.getFirstError();
+
+			var thick = 1*camera.pixelRatio / camera.adjustedZoom;
+			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.4);
+			if( error!=null ) {
+				thick*=8;
+				c = 0xff0000;
+			}
+			wl.bounds.clear();
+			wl.bounds.beginFill(c);
+			wl.bounds.drawRect(0, 0, l.pxWid, thick); // top
+
+			wl.bounds.beginFill(c);
+			wl.bounds.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
+
+			wl.bounds.beginFill(c);
+			wl.bounds.drawRect(0, 0, thick, l.pxHei); // left
+
+			wl.bounds.beginFill(c);
+			wl.bounds.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
+		}
 	}
 
 
@@ -685,9 +710,9 @@ class WorldRender extends dn.Process {
 
 		wl.label.removeChildren();
 		var error = l.getFirstError();
-		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
+		var tf = new h2d.Text(Assets.fontLight_regular, wl.label);
 		tf.text = l.identifier + ( l.hasJsonCache() ? "" : "*" );
-		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
+		tf.textColor = C.toWhite( l.getBgColor(), 0.65 );
 		tf.x = 8;
 
 		if( error!=null ) {

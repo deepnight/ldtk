@@ -383,7 +383,7 @@ class Project {
 	}
 
 	public function reorganizeWorld() {
-		var spacing = 32;
+		var spacing = 48;
 		switch worldLayout {
 			case Free:
 

@@ -75,11 +75,11 @@ class FieldInstanceRender {
 			fr.value.minWidth = Std.int( maxValueWidth );
 			if( fr.label.numChildren==0 )
 				fr.value.minWidth += Std.int( maxLabelWidth);
-			addBg(fr.value, baseColor, 0.5);
+			addBg(fr.value, baseColor, 0.75);
 
 			if( fr.label.numChildren>0 )
 				fr.label.minHeight = fr.value.outerHeight;
-			addBg(fr.label, baseColor, 0.7);
+			addBg(fr.label, baseColor, 0.88);
 		}
 	}
 
