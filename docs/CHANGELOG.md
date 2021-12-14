@@ -2,7 +2,8 @@
 
   - Optimized saving time for large projects (approx. 8-15 times faster) by caching data that wasn't modified.
 
-  - Modified but unsaved levels now have a small "*" near their name in the World view.
+  - Added an "App Settings" button to the main panel in editor
+  - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Added a proper "progress bar" during backups saving
   - Fixed a crash when deleting the last level
