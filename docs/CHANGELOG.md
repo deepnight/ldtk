@@ -9,6 +9,8 @@
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
   - Fixed a bug when reloading a tileset while its width changed.
+  - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
+  - Added more values for App UI scaling setting.
   - Minor bug fixes.
 
 # 0.9.3 - Ludum Dare 48 edition
