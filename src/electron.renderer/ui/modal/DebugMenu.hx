@@ -97,11 +97,9 @@ class DebugMenu extends ui.modal.ContextMenu {
 							// Loading
 							log.fileOp(fp.fileName+"...");
 							log.general(" -> Loading...");
-							try {
-								ui.ProjectLoader.load(fp.full, (?p,?err)->{
-									if( p==null )
-										throw "Failed on "+fp.full;
-
+							new ui.ProjectLoader(
+								fp.full,
+								(p)->{
 									// IntGrid CSV change
 									p.setFlag(DiscardPreCsvIntGrid, true);
 
@@ -124,12 +122,10 @@ class DebugMenu extends ui.modal.ContextMenu {
 									// Write sample map
 									log.general(" -> Saving "+fp.fileName+"...");
 									var s = new ui.ProjectSaving(App.ME, p);
-								});
-
-							}
-							catch(e:Dynamic) {
-								new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) );
-							}
+								},
+								(err)->new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) )
+							);
+							return;
 						}
 					});
 				}

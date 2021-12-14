@@ -573,11 +573,10 @@ class App extends dn.Process {
 
 
 	public function loadProject(filePath:String, ?levelIndex:Int) : Void {
-		ui.ProjectLoader.load(filePath, (?p,?err)->{
-			if( p!=null ) {
-				loadPage( ()->new page.Editor(p, levelIndex) );
-			}
-			else {
+		new ui.ProjectLoader(
+			filePath,
+			(p)->loadPage( ()->new page.Editor(p, levelIndex) ),
+			(err)->{
 				// Failed
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
 				N.error(switch err {
@@ -599,7 +598,7 @@ class App extends dn.Process {
 				});
 				loadPage( ()->new page.Home() );
 			}
-		});
+		);
 	}
 
 	public inline function clearDebug() {

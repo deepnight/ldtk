@@ -91,7 +91,6 @@ class Progress extends ui.Modal {
 		updateAllPositions();
 	}
 
-
 	public static function single( label:LocaleString, cb:Void->Void, onComplete:Void->Void ) : Progress {
 		var p = new Progress(label, 1, [{ cb:cb }], onComplete);
 		return p;
@@ -108,6 +107,10 @@ class Progress extends ui.Modal {
 	static function stopAll() {
 		for(e in ALL)
 			e.destroy();
+	}
+
+	public function cancel() {
+		destroy();
 	}
 
 	static function updateAllPositions() {

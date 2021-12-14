@@ -5,7 +5,8 @@
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
-  - Added a proper "progress bar" during backups saving
+  - Added a progress bar when loading large projects
+  - Fixed the progress bar when saving large projects
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
