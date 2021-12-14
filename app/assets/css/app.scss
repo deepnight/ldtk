@@ -1190,19 +1190,6 @@ ul.form {
 		font-size: 10pt;
 		// white-space: nowrap;
 
-		&.isDefault {
-			color: $bgLighter;
-			font-style: italic;
-			opacity: 0.66;
-		}
-		&:not(.isDefault) {
-			label {
-				background-color: $bgLighter;
-				padding: 8px;
-				border-radius: 4px;
-			}
-		}
-
 		&.full {
 			width: auto !important;
 			max-width: none !important;
@@ -1214,13 +1201,6 @@ ul.form {
 		grid-column: 2/3;
 		margin: 0;
 		margin-bottom: 8px;
-
-		&.isDefault {
-			opacity: 0.35;
-			input[type=checkbox] {
-				opacity: 0.35;
-			}
-		}
 	}
 
 	>dd,
@@ -4433,6 +4413,27 @@ canvas#webgl {
 dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
+
+	dt.isDefault {
+		color: $bgLighter;
+		font-style: italic;
+		opacity: 0.5;
+	}
+
+	dt:not(.isDefault) {
+		label {
+			background-color: $bgLighter;
+			padding: 8px;
+			border-radius: 4px;
+		}
+	}
+
+	dd.isDefault {
+		opacity: 0.35;
+		input[type=checkbox] {
+			opacity: 0.35;
+		}
+	}
 
 	span.inputWithDefaultOption {
 		display: flex;
