@@ -232,4 +232,17 @@ class Modal extends dn.Process {
 		JsTools.parseComponents(jContent);
 		ui.Tip.clear();
 	}
+
+
+	override function onResize() {
+		super.onResize();
+
+		// Force scrollbars when modal is bigger than window
+		if( jModalAndMask.hasClass("centered") ) {
+			if( !jModalAndMask.hasClass("forceScroll") && jContent.outerHeight()>=App.ME.jDoc.innerHeight() )
+				jModalAndMask.addClass("forceScroll");
+			else if( jModalAndMask.hasClass("forceScroll") && jContent.outerHeight()<App.ME.jDoc.innerHeight() )
+				jModalAndMask.removeClass("forceScroll");
+		}
+	}
 }
