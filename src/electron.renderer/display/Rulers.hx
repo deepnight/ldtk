@@ -125,7 +125,7 @@ class Rulers extends dn.Process {
 		if( color==null )
 			color = C.toWhite(editor.project.bgColor,0.5);
 
-		var tf = new h2d.Text(smallFont ? Assets.fontLight_tiny : Assets.fontLight_small, wrapper);
+		var tf = new h2d.Text(smallFont ? Assets.fontLight_tiny : Assets.fontLight_regular, wrapper);
 		tf.text = str;
 		tf.textColor = color;
 		tf.scale(scale);

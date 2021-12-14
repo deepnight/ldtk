@@ -222,7 +222,7 @@ class EntityRender extends dn.Process {
 
 
 	inline function getDefaultFont() {
-		return Editor.ME.camera.pixelRatio<=1 ? Assets.fontLight_tiny : Assets.fontLight_small;
+		return Editor.ME.camera.pixelRatio<=1 ? Assets.fontLight_tiny : Assets.fontLight_regular;
 	}
 
 

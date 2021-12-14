@@ -8,7 +8,7 @@ enum FieldRenderContext {
 class FieldInstanceRender {
 	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
 
-	static function getDefaultFont() return Assets.fontLight_small;
+	static function getDefaultFont() return Assets.fontLight_regular;
 
 
 
