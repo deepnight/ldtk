@@ -26,13 +26,15 @@ class FileWatcher extends dn.Process {
 
 					case "change":
 						App.LOG.fileOp("Changed on disk: "+absFilePath);
-						if( App.ME.focused ) {
+						if( isReadyToReload() ) {
+							// Update now
 							delayer.cancelById(absFilePath);
 							delayer.addS(absFilePath, ()->{
 								queuedChanges.set(absFilePath, onChange);
 							}, 1);
 						}
 						else {
+							// Update later
 							queuedChanges.set(absFilePath, onChange);
 						}
 
@@ -53,6 +55,11 @@ class FileWatcher extends dn.Process {
 		catch(e:Dynamic) {
 			App.LOG.error("Couldn't initialize FSWatcher for "+absFilePath);
 		}
+	}
+
+
+	inline function isReadyToReload() {
+		return App.ME.focused && !ui.modal.Progress.hasAny();
 	}
 
 	public function watchEnum(ed:data.def.EnumDef) {
@@ -107,7 +114,7 @@ class FileWatcher extends dn.Process {
 		super.postUpdate();
 
 		// Delayed changes
-		if( App.ME.focused ) {
+		if( isReadyToReload() ) {
 			for(cb in queuedChanges)
 				cb();
 			queuedChanges = new Map();
