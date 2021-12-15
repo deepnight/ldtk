@@ -50,7 +50,7 @@ class LayerInstance {
 
 
 	@:keep public function toString() {
-		return 'Instance[#$layerDefUid,${def.identifier}:${def.type}]';
+		return 'LayerInstance[#$layerDefUid,${def.identifier}:${def.type}]';
 	}
 
 
@@ -366,8 +366,9 @@ class LayerInstance {
 		return Std.int( ( levelY - pxTotalOffsetY ) / def.gridSize );
 	}
 
-	public function tidy(p:Project) {
+	public function tidy(p:Project) : Bool {
 		_project = p;
+		var anyChange = false;
 
 		// Remove lost optional rule group UIDs
 		var keep = false;
@@ -376,6 +377,7 @@ class LayerInstance {
 			if( rg==null || !rg.isOptional ) {
 				App.LOG.add("tidy", 'Removed lost optional rule group #$optGroupUid in $this');
 				optionalRules.remove(optGroupUid);
+				anyChange = true;
 			}
 		}
 
@@ -386,8 +388,11 @@ class LayerInstance {
 				if( def.type==IntGrid )
 					for(cy in 0...cHei)
 					for(cx in 0...cWid)
-						if( !def.hasIntGridValue( getIntGrid(cx,cy) ) )
+						if( hasIntGrid(cx,cy) && !def.hasIntGridValue( getIntGrid(cx,cy) ) ) {
 							removeIntGrid(cx,cy);
+							anyChange = true;
+							// no logging as this could be a LOT of entries
+						}
 
 				if( def.isAutoLayer() && autoTilesCache!=null ) {
 					// Discard lost rules autoTiles
@@ -395,11 +400,13 @@ class LayerInstance {
 						if( !def.hasRule(rUid) ) {
 							App.LOG.add("tidy", 'Removed lost rule cache in $this');
 							autoTilesCache.remove(rUid);
+							anyChange = true;
 						}
 
 					if( !def.autoLayerRulesCanBeUsed() ) {
 						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
 						autoTilesCache = new Map();
+						anyChange = true;
 					}
 				}
 
@@ -413,6 +420,7 @@ class LayerInstance {
 						// Remove lost entities (def removed)
 						App.LOG.add("tidy", 'Removed lost entity in $this');
 						entityInstances.splice(i,1);
+						anyChange = true;
 					}
 					else
 						i++;
@@ -420,10 +428,13 @@ class LayerInstance {
 
 				// Cleanup field instances
 				for(ei in entityInstances)
-					ei.tidy(_project, this);
+					if( ei.tidy(_project, this) )
+						anyChange = true;
 
 			case Tiles:
 		}
+
+		return anyChange;
 	}
 
 

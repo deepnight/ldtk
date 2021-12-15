@@ -206,6 +206,10 @@ class Level {
 		return hasJsonCache() ? _cachedJson.json : null;
 	}
 
+	public inline function getDisplayIdentifier() {
+		return identifier + ( hasJsonCache() ? "" : "*" );
+	}
+
 	public inline function getCacheJsonString() : Null<String> {
 		return hasJsonCache() ? _cachedJson.str : null;
 	}
@@ -387,6 +391,7 @@ class Level {
 			if( layerInstances[i].def==null ) {
 				App.LOG.add("tidy", 'Removed lost layer instance in $this');
 				layerInstances.splice(i,1);
+				invalidateJsonCache();
 			}
 			else
 				i++;
@@ -405,12 +410,14 @@ class Level {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
 						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
 					}
+				invalidateJsonCache();
 				break;
 			}
 
 		// Tidy layer instances
 		for(li in layerInstances)
-			li.tidy(_project);
+			if( li.tidy(_project) )
+				invalidateJsonCache();
 
 
 		// Remove field instances whose def was removed
@@ -418,6 +425,7 @@ class Level {
 			if( e.value.def==null ) {
 				App.LOG.add("tidy", 'Removed lost fieldInstance in $this');
 				fieldInstances.remove(e.key);
+				invalidateJsonCache();
 			}
 
 		// Create missing field instances
@@ -425,7 +433,8 @@ class Level {
 			getFieldInstance(fd);
 
 		for(fi in fieldInstances)
-			fi.tidy(_project);
+			if( fi.tidy(_project) )
+				invalidateJsonCache();
 	}
 
 
@@ -487,8 +496,10 @@ class Level {
 
 	/** Get (and automatically creates) a field instance **/
 	public function getFieldInstance(fd:data.def.FieldDef) : data.inst.FieldInstance{
-		if( !fieldInstances.exists(fd.uid) )
+		if( !fieldInstances.exists(fd.uid) ) {
 			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
+			invalidateJsonCache();
+		}
 		return fieldInstances.get(fd.uid);
 	}
 

@@ -437,8 +437,9 @@ class FieldInstance {
 		}
 	}
 
-	public function tidy(p:Project, ?li:LayerInstance) {
+	public function tidy(p:Project, ?li:LayerInstance) : Bool {
 		_project = p;
+		var anyChange = false;
 
 		switch def.type {
 			case F_Int:
@@ -457,6 +458,7 @@ class FieldInstance {
 						if( pt!=null && ( pt.cx<0 || pt.cx>=li.cWid || pt.cy<0 || pt.cy>=li.cHei ) ) {
 							App.LOG.add("tidy", 'Removed pt ${pt.cx},${pt.cy} in $this (out of bounds)');
 							removeArrayValue(i);
+							anyChange = true;
 						}
 						else
 							i++;
@@ -470,7 +472,10 @@ class FieldInstance {
 					if( getEnumValue(i)!=null && !ed.hasValue( getEnumValue(i) ) ) {
 						App.LOG.add("tidy", 'Removed enum value in $this');
 						parseValue(i, null);
+						anyChange = true;
 					}
 		}
+
+		return anyChange;
 	}
 }

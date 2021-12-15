@@ -189,6 +189,7 @@ class EntityInstance {
 
 	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
+		var anyChange = false;
 
 		// Remove field instances whose def was removed
 		for(e in fieldInstances.keyValueIterator())
@@ -203,6 +204,8 @@ class EntityInstance {
 
 		for(fi in fieldInstances)
 			fi.tidy(_project, li);
+
+		return anyChange;
 	}
 
 
