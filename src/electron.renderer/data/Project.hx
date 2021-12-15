@@ -355,6 +355,9 @@ class Project {
 			case LinearVertical:
 		}
 
+		for(l in levels)
+			l.invalidateJsonCache();
+
 		tidy();
 	}
 
