@@ -118,6 +118,7 @@ class FieldDefsForm {
 
 			w.close();
 			editor.ge.emit( FieldDefAdded(fd) );
+			onAnyChange();
 			selectField(fd);
 			jForm.find("input:not([readonly]):first").focus().select();
 		}
@@ -175,6 +176,7 @@ class FieldDefsForm {
 		fieldDefs.remove(fd);
 		project.tidy();
 		editor.ge.emit( FieldDefRemoved(fd) );
+		onAnyChange();
 		selectField( fieldDefs[0] );
 	}
 
@@ -207,6 +209,7 @@ class FieldDefsForm {
 					cb:()->{
 						var copy = duplicateField(fd);
 						editor.ge.emit( FieldDefAdded(fd) );
+						onAnyChange();
 						selectField(copy);
 					}
 				},
@@ -232,17 +235,32 @@ class FieldDefsForm {
 
 			selectField(moved);
 			editor.ge.emit( FieldDefSorted );
+			onAnyChange();
 		});
 
 		JsTools.parseComponents(jList);
 	}
 
 
+	function onAnyChange() {
+		switch fieldParent {
+			case FP_Entity:
+				for( l in project.levels )
+					l.invalidateJsonCache();
+
+			case FP_Level:
+				for( l in project.levels )
+					l.invalidateJsonCache();
+				editor.worldRender.invalidateAllLevelFields();
+		}
+	}
+
 
 	function onFieldChange() {
 		editor.ge.emit( FieldDefChanged(curField) );
 		updateList();
 		updateForm();
+		onAnyChange();
 	}
 
 
