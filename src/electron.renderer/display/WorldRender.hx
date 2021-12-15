@@ -128,6 +128,7 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 
 			case ProjectSaved:
+				invalidateAllLevelFields();
 				updateLabels(true);
 
 			case LevelJsonCacheInvalidated(l):
@@ -550,7 +551,7 @@ class WorldRender extends dn.Process {
 		f.horizontalAlign = Middle;
 		f.padding = 6;
 		var tf = new h2d.Text(Assets.fontLight_large, f);
-		tf.text = '"${l.identifier}"';
+		tf.text = '"${l.getDisplayIdentifier()}"';
 		tf.textColor = l.getSmartColor(true);
 		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.85);
 		if( fWrapper.identifier!=null )
@@ -715,7 +716,7 @@ class WorldRender extends dn.Process {
 		wl.label.removeChildren();
 		var error = l.getFirstError();
 		var tf = new h2d.Text(Assets.fontLight_regular, wl.label);
-		tf.text = l.identifier + ( l.hasJsonCache() ? "" : "*" );
+		tf.text = l.getDisplayIdentifier();
 		tf.textColor = C.toWhite( l.getSmartColor(false), 0.65 );
 		tf.x = 8;
 
@@ -761,12 +762,11 @@ class WorldRender extends dn.Process {
 			}
 
 		// Fields
-		// var limit = 2;
+		var limit = 15;
 		for( uid in levelFieldsInvalidation.keys() ) {
 			renderFields( editor.project.getLevel(uid) );
-			break;
-			// if( limit--<=0 )
-			// 	break;
+			if( limit--<=0 )
+				break;
 		}
 	}
 
