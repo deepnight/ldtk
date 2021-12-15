@@ -1456,8 +1456,10 @@ class Editor extends Page {
 			case LevelResized(l):
 			case WorldLevelMoved(l):
 				invalidateLevelCache(l);
-				
+
 			case WorldSettingsChanged:
+				for(l in project.levels)
+					invalidateLevelCache(l);
 
 			case LevelSelected(l):
 				updateLayerList();
