@@ -446,6 +446,42 @@ class Editor extends Page {
 		return App.ME.hasInputFocus();
 	}
 
+
+
+	var spaceKeyTime = 0.;
+	override function onKeyDown(keyCode:Int) {
+		super.onKeyDown(keyCode);
+
+		switch keyCode {
+			case K.SPACE if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				N.debug("down");
+				spaceKeyTime = haxe.Timer.stamp();
+
+			case _:
+		}
+	}
+
+
+	override function onKeyUp(keyCode:Int) {
+		super.onKeyDown(keyCode);
+
+		switch keyCode {
+			case K.SPACE if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				N.debug("up");
+				if( haxe.Timer.stamp()-spaceKeyTime<=0.2 ) {
+					spaceKeyTime = 0;
+					camera.fit();
+				}
+
+			case _:
+		}
+	}
+
+
+	public inline function cancelSpaceKey() {
+		spaceKeyTime = 0;
+	}
+
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
@@ -500,9 +536,6 @@ class Editor extends Page {
 						onSave(true);
 					else
 						onSave();
-
-			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				camera.fit();
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {

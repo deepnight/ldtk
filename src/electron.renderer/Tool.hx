@@ -171,6 +171,7 @@ class Tool<T> extends dn.Process {
 			if( anyChange )
 				editor.levelRender.invalidateLayerArea(curLayerInstance, cx,cx, cy,cy);
 		});
+		editor.cancelSpaceKey();
 		editor.requestFps();
 		return anyChange;
 	}
