@@ -20,6 +20,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			selectTileset(td);
 			editor.ge.emit( TilesetDefAdded(td) );
 			jForm.find("input").first().focus().select();
+			jForm.find(".imagePicker .pick").click();
 		});
 
 		selectTileset(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);

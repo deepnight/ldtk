@@ -16,6 +16,7 @@
   - Added more values for App UI scaling setting.
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
+  - Clicking on the "New Tileset" button immediately invokes the "Pick image file" dialog.
   - Zooming out a lot now has a subtle dimming effect.
 
 ## Bug fixes & misc
