@@ -28,7 +28,7 @@ class WorldRender extends dn.Process {
 	var currentHighlight : h2d.Graphics;
 	public var levelsWrapper : h2d.Layers;
 	var fieldsWrapper : h2d.Object;
-	var fieldRenders : Map<Int, { above:h2d.Flow, beneath:h2d.Flow, identifier:h2d.Flow }> = new Map();
+	var fieldRenders : Map<Int, { customFields:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
 	var levelInvalidations : Map<Int,Bool> = new Map();
 	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
@@ -122,7 +122,7 @@ class WorldRender extends dn.Process {
 			case GridChanged(active):
 				renderGrids();
 
-			case WorldLevelMoved:
+			case WorldLevelMoved(l):
 				updateLayout();
 				updateLabels(true);
 				updateCurrentHighlight();
@@ -280,37 +280,54 @@ class WorldRender extends dn.Process {
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
 			var fr = f.value;
-			fr.above.visible = fr.beneath.visible = editor.worldMode || editor.curLevel==l;
-			fr.identifier.visible = !editor.worldMode;
+			fr.customFields.visible = editor.worldMode || editor.curLevel==l;
+			fr.identifier.visible = !editor.worldMode && camera.adjustedZoom>=getMinVisibilityZoom();
+			fr.customFields.alpha = getAlphaFromZoom();
 
-			if( !fr.above.visible )
+			if( !fr.customFields.visible )
 				continue;
 
-			// Above
-			fr.above.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.above.outerWidth, l.pxHei/fr.above.outerHeight) ) );
-			fr.above.x = Std.int( l.worldCenterX - fr.above.outerWidth*0.5*fr.above.scaleX );
-			if( editor.worldMode )
-				fr.above.y = l.worldY;
-			else
-				fr.above.y = Std.int( l.worldY - padding - fr.above.outerHeight*fr.above.scaleY );
+			// Custom fields
+			if( editor.worldMode ) {
+				switch project.worldLayout {
+					case Free, GridVania:
+						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
+						fr.customFields.y = Std.int( l.worldY + l.pxHei - fr.customFields.outerHeight*fr.customFields.scaleY );
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
 
-			// Beneath
-			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.beneath.outerWidth, l.pxHei/fr.beneath.outerHeight) ) );
-			fr.beneath.x = Std.int( l.worldCenterX - fr.beneath.outerWidth*0.5*fr.beneath.scaleX );
-			if( editor.worldMode )
-				fr.beneath.y = Std.int( l.worldY + l.pxHei - fr.beneath.outerHeight*fr.beneath.scaleY );
-			else
-				fr.beneath.y = l.worldY + l.pxHei + padding;
+					case LinearHorizontal:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.customFields.outerWidth ) );
+						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
+						fr.customFields.y = Std.int( l.worldY + l.pxHei + 32 );
+
+					case LinearVertical:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxHei/fr.customFields.outerHeight ) );
+						fr.customFields.x = Std.int( l.worldX + l.worldX+l.pxWid+32 );
+						fr.customFields.y = Std.int( l.worldCenterY - fr.customFields.outerHeight*0.5*fr.customFields.scaleY );
+				}
+			}
+			else {
+				fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
+				fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
+				fr.customFields.y = Std.int( l.worldY - padding - fr.customFields.outerHeight*fr.customFields.scaleY );
+			}
 		}
 	}
 
-	function updateLabels(refreshTexts=false) {
-		var minZoom = switch project.worldLayout {
+	inline function getMinVisibilityZoom() {
+		return switch project.worldLayout {
 			case Free, GridVania: 0.06;
 			case LinearVertical: 0.04;
 			case LinearHorizontal: 0.04;
 		}
+	}
 
+	inline function getAlphaFromZoom() {
+		var minZoom = getMinVisibilityZoom();
+		return M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
+	}
+
+	function updateLabels(refreshTexts=false) {
 		for( l in editor.project.levels ) {
 			if( !levels.exists(l.uid) )
 				continue;
@@ -322,10 +339,10 @@ class WorldRender extends dn.Process {
 			var e = levels.get(l.uid);
 
 			// Visibility
-			e.label.visible = camera.adjustedZoom>=minZoom && ( l!=editor.curLevel || editor.worldMode );
+			e.label.visible = camera.adjustedZoom>=getMinVisibilityZoom() && ( l!=editor.curLevel || editor.worldMode );
 			if( !e.label.visible )
 				continue;
-			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
+			e.label.alpha = getAlphaFromZoom();
 
 			// Scaling
 			switch project.worldLayout {
@@ -497,8 +514,7 @@ class WorldRender extends dn.Process {
 
 	function removeLevelFields(uid:Int) {
 		if( fieldRenders.exists(uid) ) {
-			fieldRenders.get(uid).above.remove();
-			fieldRenders.get(uid).beneath.remove();
+			fieldRenders.get(uid).customFields.remove();
 			fieldRenders.remove(uid);
 		}
 	}
@@ -509,12 +525,7 @@ class WorldRender extends dn.Process {
 		// Init wrapper
 		if( !fieldRenders.exists(l.uid) ) {
 			fieldRenders.set(l.uid, {
-				above: {
-					var f = new h2d.Flow(fieldsWrapper);
-					f.layout = Vertical;
-					f;
-				},
-				beneath: {
+				customFields: {
 					var f = new h2d.Flow(fieldsWrapper);
 					f.layout = Vertical;
 					f;
@@ -523,26 +534,19 @@ class WorldRender extends dn.Process {
 			});
 		}
 		var fWrapper = fieldRenders.get(l.uid);
-		fWrapper.above.removeChildren();
-		fWrapper.beneath.removeChildren();
+		fWrapper.customFields.removeChildren();
 
-		// Attach fields
+		// Attach custom fields
 		FieldInstanceRender.renderFields(
-			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Above ).map( fd->l.getFieldInstance(fd) ),
+			project.defs.levelFields.map( fd->l.getFieldInstance(fd) ),
 			l.getSmartColor(true),
 			LevelCtx(l),
-			fWrapper.above
-		);
-		FieldInstanceRender.renderFields(
-			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->l.getFieldInstance(fd) ),
-			l.getSmartColor(true),
-			LevelCtx(l),
-			fWrapper.beneath
+			fWrapper.customFields
 		);
 
 		// Level identifier
-		var f = new h2d.Flow(fWrapper.above);
-		f.minWidth = f.maxWidth = fWrapper.above.outerWidth;
+		var f = new h2d.Flow(fWrapper.customFields);
+		f.minWidth = f.maxWidth = fWrapper.customFields.outerWidth;
 		f.horizontalAlign = Middle;
 		f.padding = 6;
 		var tf = new h2d.Text(Assets.fontLight_large, f);
@@ -681,7 +685,7 @@ class WorldRender extends dn.Process {
 		if( wl!=null ) {
 			var error = l.getFirstError();
 
-			var thick = 1*camera.pixelRatio / camera.adjustedZoom;
+			var thick = 2*camera.pixelRatio;
 			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.4);
 			if( error!=null ) {
 				thick*=8;
@@ -712,7 +716,7 @@ class WorldRender extends dn.Process {
 		var error = l.getFirstError();
 		var tf = new h2d.Text(Assets.fontLight_regular, wl.label);
 		tf.text = l.identifier + ( l.hasJsonCache() ? "" : "*" );
-		tf.textColor = C.toWhite( l.getBgColor(), 0.65 );
+		tf.textColor = C.toWhite( l.getSmartColor(false), 0.65 );
 		tf.x = 8;
 
 		if( error!=null ) {
