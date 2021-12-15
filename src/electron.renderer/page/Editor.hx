@@ -1258,7 +1258,7 @@ class Editor extends Page {
 	inline function shouldLogEvent(e:GlobalEvent) {
 		return switch(e) {
 			case ViewportChanged: false;
-			case WorldLevelMoved: false;
+			case WorldLevelMoved(_): false;
 			case LayerInstanceChanged(_): false;
 			case WorldMode(_): false;
 			case GridChanged(_): false;
@@ -1287,7 +1287,7 @@ class Editor extends Page {
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
 				case LevelJsonCacheInvalidated(l): extra = l.uid;
-				case WorldLevelMoved:
+				case WorldLevelMoved(l): extra = l.uid;
 				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
@@ -1454,7 +1454,9 @@ class Editor extends Page {
 			case LevelAdded(l):
 			case LevelRemoved(l):
 			case LevelResized(l):
-			case WorldLevelMoved:
+			case WorldLevelMoved(l):
+				invalidateLevelCache(l);
+				
 			case WorldSettingsChanged:
 
 			case LevelSelected(l):

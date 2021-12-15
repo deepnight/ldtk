@@ -104,7 +104,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 				if( l==level )
 					close();
 
-			case WorldLevelMoved:
+			case WorldLevelMoved(_):
 				updateLevelForm();
 				updateFieldsForm();
 

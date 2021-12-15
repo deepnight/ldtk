@@ -160,7 +160,7 @@ class WorldTool extends dn.Process {
 				switch project.worldLayout {
 					case Free, GridVania:
 						project.applyAutoLevelIdentifiers();
-						editor.ge.emit(WorldLevelMoved);
+						editor.ge.emit(WorldLevelMoved(clickedLevel));
 
 					case LinearHorizontal:
 						var i = getLinearInsertPoint(m,false);
@@ -169,7 +169,7 @@ class WorldTool extends dn.Process {
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							project.sortLevel(curIdx, toIdx);
 							project.reorganizeWorld();
-							editor.ge.emit(WorldLevelMoved);
+							editor.ge.emit(WorldLevelMoved(clickedLevel));
 						}
 
 					case LinearVertical:
@@ -179,7 +179,7 @@ class WorldTool extends dn.Process {
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							project.sortLevel(curIdx, toIdx);
 							project.reorganizeWorld();
-							editor.ge.emit(WorldLevelMoved);
+							editor.ge.emit(WorldLevelMoved(clickedLevel));
 						}
 				}
 
@@ -521,7 +521,7 @@ class WorldTool extends dn.Process {
 			}
 
 			// Refresh render
-			editor.ge.emit( WorldLevelMoved );
+			editor.ge.emit( WorldLevelMoved(clickedLevel) );
 			editor.requestFps();
 			ev.cancel = true;
 		}

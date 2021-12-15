@@ -68,7 +68,7 @@ class Rulers extends dn.Process {
 			case LevelSelected(l):
 				invalidate();
 
-			case ViewportChanged, WorldLevelMoved:
+			case ViewportChanged, WorldLevelMoved(_):
 				root.x = levelRender.root.x;
 				root.y = levelRender.root.y;
 				root.setScale( levelRender.root.scaleX );
@@ -291,7 +291,7 @@ class Rulers extends dn.Process {
 					editor.selectionTool.clear();
 					editor.ge.emit( LevelResized(curLevel) );
 					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
-					editor.ge.emit( WorldLevelMoved );
+					editor.ge.emit( WorldLevelMoved(curLevel) );
 				}
 			}
 		}
