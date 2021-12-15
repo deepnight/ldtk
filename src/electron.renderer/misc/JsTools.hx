@@ -701,10 +701,9 @@ class JsTools {
 	public static function createImagePicker( curRelPath:Null<String>, onChange : (?relPath:String)->Void ) : js.jquery.JQuery {
 		var jWrapper = new J('<div class="imagePicker"/>');
 
-		function _pickImage(relPath:String) {
-			if( relPath==null )
-				return false;
+		var fileName = curRelPath==null ? null : dn.FilePath.extractFileWithExt(curRelPath);
 
+		function _load(relPath:String) {
 			var img = Editor.ME.project.getOrLoadImage(relPath);
 			if( img!=null ) {
 				onChange(relPath);
@@ -714,6 +713,23 @@ class JsTools {
 				N.error('Couldn\'t read image file: $relPath');
 				return false;
 			}
+		}
+
+		function _pickImage(relPath:String) {
+			if( relPath==null )
+				return false;
+
+			return _load(relPath);
+		}
+
+		// Reload image
+		if( curRelPath!=null ) {
+			var jReload = new J('<button class="reload" title="Manually reload file"> <span class="icon refresh"/> </button>');
+			jReload.appendTo(jWrapper);
+			jReload.click( (_)->{
+				if( _load(curRelPath) )
+					N.success(L.t._("Image reloaded: ::file::", {file:fileName}));
+			});
 		}
 
 		// Pick image button
@@ -765,17 +781,19 @@ class JsTools {
 			jPick.text("[ No image ]");
 		}
 
-		// Remove bg
+		// Remove
 		var jRemove = new J('<button class="remove gray"> <span class="icon delete"/> </button>');
 		jRemove.appendTo(jWrapper);
 		jRemove.click( (_)->{
 			new ui.modal.dialog.Confirm(jRemove, L.t._("Remove this image?"), true, onChange.bind(null));
 		});
 
-		// Locate bg image
+		// Locate
 		var jLocate = makeExploreLink(Editor.ME.project.makeAbsoluteFilePath(curRelPath), true);
 		jLocate.appendTo(jWrapper);
 
+
+		parseComponents(jWrapper);
 		return jWrapper;
 	}
 }

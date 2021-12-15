@@ -65,8 +65,9 @@ class TilesetDef {
 		return withExt ? dn.FilePath.extractFileWithExt(relPath) : dn.FilePath.extractFileName(relPath);
 	}
 
-	public function removeAtlasImage() {
-		relPath = null;
+	public function removeAtlasImage(keepPath=false) {
+		if( !keepPath )
+			relPath = null;
 		pxWid = pxHei = 0;
 		savedSelections = [];
 	}
@@ -218,8 +219,7 @@ class TilesetDef {
 		var img = _project.getOrLoadImage(relFilePath);
 		if( img==null ) {
 			App.LOG.error("Image loading failed");
-			removeAtlasImage();
-			return LoadingFailed("Unknown error");
+			return LoadingFailed("Could not read image file");
 		}
 		else {
 			App.LOG.fileOp(' -> Loaded ${img.bytes.length} bytes.');

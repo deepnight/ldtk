@@ -7,6 +7,7 @@
   - Entity and Level custom fields that are not using default values are now MUCH more visible in forms
   - Updated editor UI font to Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
+  - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
 
 ## UI
 
@@ -21,6 +22,7 @@
 
 ## Bug fixes & misc
 
+  - Fixed a crash that could happen during reloading of an image, if it was being used by another app.
   - Fixed the progress bar when saving large projects
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value

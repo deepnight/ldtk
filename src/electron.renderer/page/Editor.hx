@@ -412,7 +412,7 @@ class Editor extends Page {
 				});
 
 			case LoadingFailed(_):
-				new ui.modal.dialog.Warning(msg);
+				new ui.modal.dialog.Retry(msg, ()->reloadTileset(td, isInitialLoading));
 
 			case RemapLoss:
 				changed = true;

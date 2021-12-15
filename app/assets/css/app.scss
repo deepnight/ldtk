@@ -1048,6 +1048,7 @@ ul.log {
 .icon.partial			{ background-image: url("../icons/partial.png"); }
 .icon.paste				{ background-image: url("../icons/paste.svg"); }
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
+.icon.refresh			{ background-image: url("../icons/refresh.svg"); }
 .icon.rule				{ background-image: url("../icons/rule.svg"); }
 .icon.settings			{ background-image: url("../icons/settings.svg"); }
 .icon.singleLayer		{ background-image: url("../icons/singleLayer.svg"); }
@@ -1274,6 +1275,10 @@ ul.form {
 		.imagePicker {
 			display: flex;
 			align-items: stretch;
+			button.reload {
+				flex: 0 1 0px;
+				padding: 3px;
+			}
 			button.pick {
 				flex: 1 1 auto;
 				text-transform: none;
