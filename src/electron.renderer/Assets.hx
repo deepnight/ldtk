@@ -21,7 +21,7 @@ class Assets {
 		fontLight_large = hxd.Res.fonts.roboto48.toFont();
 		fontLight_xlarge = hxd.Res.fonts.roboto72.toFont();
 
-		elements = dn.heaps.assets.Atlas.load("appElements.atlas");
+		elements = dn.heaps.assets.Aseprite.convertToSLib( Const.FPS, hxd.Res.atlas.appElements.toAseprite() );
 		elementsPixels = elements.tile.getTexture().capturePixels();
 
 	}
