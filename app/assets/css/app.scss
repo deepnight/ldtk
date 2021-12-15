@@ -4415,7 +4415,7 @@ dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
 
-	dt.isDefault {
+	dt.isDefault:not(:hover) {
 		color: $bgLighter;
 		font-style: italic;
 		opacity: 0.5;
@@ -4424,12 +4424,12 @@ dl.form.fieldInstanceEditor {
 	dt:not(.isDefault) {
 		label {
 			background-color: $bgLighter;
-			padding: 8px;
+			padding: 4px;
 			border-radius: 4px;
 		}
 	}
 
-	dd.isDefault {
+	dd.isDefault:not(:hover) {
 		opacity: 0.35;
 		input[type=checkbox] {
 			opacity: 0.35;
