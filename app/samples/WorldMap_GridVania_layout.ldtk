@@ -803,7 +803,6 @@
 	] },
 	"levels": [
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Entrance",
 			"uid": 0,
 			"worldX": 0,
@@ -1631,10 +1630,9 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 4, "dir": "s" }, { "levelUid": 66, "dir": "w" }, { "levelUid": 51, "dir": "e" }, { "levelUid": 100, "dir": "n" } ]
+			"__neighbours": [ { "levelUid": 4, "dir": "s" }, { "levelUid": 66, "dir": "w" }, { "levelUid": 51, "dir": "e" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Cross_roads",
 			"uid": 4,
 			"worldX": 0,
@@ -2943,7 +2941,6 @@
 			"__neighbours": [ { "levelUid": 0, "dir": "n" }, { "levelUid": 66, "dir": "w" }, { "levelUid": 41, "dir": "e" }, { "levelUid": 42, "dir": "e" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Ossuary",
 			"uid": 65,
 			"worldX": -1024,
@@ -4883,7 +4880,6 @@
 			"__neighbours": [{ "levelUid": 66, "dir": "e" }]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Water_supply",
 			"uid": 66,
 			"worldX": -512,
@@ -6402,7 +6398,6 @@
 			"__neighbours": [ { "levelUid": 0, "dir": "e" }, { "levelUid": 4, "dir": "e" }, { "levelUid": 65, "dir": "w" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Sewers2",
 			"uid": 59,
 			"worldX": 512,
@@ -7776,7 +7771,6 @@
 			"__neighbours": [ { "levelUid": 61, "dir": "s" }, { "levelUid": 42, "dir": "n" }, { "levelUid": 43, "dir": "n" }, { "levelUid": 71, "dir": "e" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Sewers_trash",
 			"uid": 61,
 			"worldX": 256,
@@ -9091,7 +9085,6 @@
 			"__neighbours": [{ "levelUid": 59, "dir": "n" }]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Boss_room",
 			"uid": 47,
 			"worldX": 1536,
@@ -10965,7 +10958,6 @@
 			]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Large_water",
 			"uid": 56,
 			"worldX": 1024,
@@ -12283,7 +12275,6 @@
 			"__neighbours": [ { "levelUid": 63, "dir": "e" }, { "levelUid": 51, "dir": "w" }, { "levelUid": 52, "dir": "s" }, { "levelUid": 87, "dir": "s" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Shop",
 			"uid": 41,
 			"worldX": 512,
@@ -12822,7 +12813,6 @@
 			"__neighbours": [ { "levelUid": 4, "dir": "w" }, { "levelUid": 42, "dir": "s" }, { "levelUid": 50, "dir": "e" }, { "levelUid": 51, "dir": "n" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Sewers1",
 			"uid": 42,
 			"worldX": 512,
@@ -13660,7 +13650,6 @@
 			]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "The_ponds",
 			"uid": 43,
 			"worldX": 768,
@@ -14688,7 +14677,6 @@
 			]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Pit",
 			"uid": 50,
 			"worldX": 768,
@@ -15462,7 +15450,6 @@
 			]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "The_tower",
 			"uid": 63,
 			"worldX": 1536,
@@ -16581,7 +16568,6 @@
 			"__neighbours": [ { "levelUid": 47, "dir": "s" }, { "levelUid": 56, "dir": "w" }, { "levelUid": 84, "dir": "e" }, { "levelUid": 87, "dir": "w" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Garden",
 			"uid": 51,
 			"worldX": 512,
@@ -18047,16 +18033,9 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [
-				{ "levelUid": 0, "dir": "w" },
-				{ "levelUid": 56, "dir": "e" },
-				{ "levelUid": 41, "dir": "s" },
-				{ "levelUid": 50, "dir": "s" },
-				{ "levelUid": 100, "dir": "w" }
-			]
+			"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 56, "dir": "e" }, { "levelUid": 41, "dir": "s" }, { "levelUid": 50, "dir": "s" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Save",
 			"uid": 52,
 			"worldX": 1024,
@@ -20081,7 +20060,6 @@
 			"__neighbours": [ { "levelUid": 59, "dir": "w" }, { "levelUid": 47, "dir": "e" }, { "levelUid": 43, "dir": "n" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Long_hallway",
 			"uid": 84,
 			"worldX": 1792,
@@ -22012,7 +21990,6 @@
 			"__neighbours": [ { "levelUid": 47, "dir": "s" }, { "levelUid": 63, "dir": "w" }, { "levelUid": 85, "dir": "n" } ]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Exit",
 			"uid": 85,
 			"worldX": 2816,
@@ -22767,7 +22744,6 @@
 			"__neighbours": [{ "levelUid": 84, "dir": "s" }]
 		},
 		{
-			"__header__": { "fileType": "LDtk Project JSON", "app": "LDtk", "doc": "https://ldtk.io/json", "schema": "https://ldtk.io/files/JSON_SCHEMA.json", "appAuthor": "Sebastien 'deepnight' Benard", "appVersion": "0.10.0", "url": "https://ldtk.io" },
 			"identifier": "Hidden_cave",
 			"uid": 87,
 			"worldX": 1280,

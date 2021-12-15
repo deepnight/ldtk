@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.9.3",
+		"appVersion": "0.10.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.9.3",
+	"jsonVersion": "0.10.0",
 	"nextUid": 91,
-	"worldLayout": "Free",
+	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultPivotX": 0.5,
@@ -990,22 +990,22 @@
 		}
 	], "enums": [
 		{ "identifier": "ItemType", "uid": 5, "values": [
-			{ "id": "Gold", "tileId": 447, "color": -1, "__tileSrcRect": [240,432,16,16] },
-			{ "id": "Trout", "tileId": 300, "color": -1, "__tileSrcRect": [192,288,16,16] },
-			{ "id": "Sword", "tileId": 1563, "color": -1, "__tileSrcRect": [176,1552,16,16] },
-			{ "id": "Heavy_sword", "tileId": 1736, "color": -1, "__tileSrcRect": [128,1728,16,16] },
-			{ "id": "Bow", "tileId": 1493, "color": -1, "__tileSrcRect": [80,1488,16,16] },
-			{ "id": "Arrow", "tileId": 1447, "color": -1, "__tileSrcRect": [112,1440,16,16] },
-			{ "id": "Staff", "tileId": 1672, "color": -1, "__tileSrcRect": [128,1664,16,16] },
-			{ "id": "Magic_ring", "tileId": 1122, "color": -1, "__tileSrcRect": [32,1120,16,16] },
-			{ "id": "Healing_potion", "tileId": 590, "color": -1, "__tileSrcRect": [224,576,16,16] },
-			{ "id": "Mana_potion", "tileId": 720, "color": -1, "__tileSrcRect": [0,720,16,16] }
+			{ "id": "Gold", "tileId": 447, "color": 13412949, "__tileSrcRect": [240,432,16,16] },
+			{ "id": "Trout", "tileId": 300, "color": 8939076, "__tileSrcRect": [192,288,16,16] },
+			{ "id": "Sword", "tileId": 1563, "color": 10061960, "__tileSrcRect": [176,1552,16,16] },
+			{ "id": "Heavy_sword", "tileId": 1736, "color": 8952234, "__tileSrcRect": [128,1728,16,16] },
+			{ "id": "Bow", "tileId": 1493, "color": 8943479, "__tileSrcRect": [80,1488,16,16] },
+			{ "id": "Arrow", "tileId": 1447, "color": 8943462, "__tileSrcRect": [112,1440,16,16] },
+			{ "id": "Staff", "tileId": 1672, "color": 10053205, "__tileSrcRect": [128,1664,16,16] },
+			{ "id": "Magic_ring", "tileId": 1122, "color": 11176055, "__tileSrcRect": [32,1120,16,16] },
+			{ "id": "Healing_potion", "tileId": 590, "color": 11180441, "__tileSrcRect": [224,576,16,16] },
+			{ "id": "Mana_potion", "tileId": 720, "color": 10070715, "__tileSrcRect": [0,720,16,16] }
 		], "iconTilesetUid": 59, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "MonsterType", "uid": 48, "values": [
-			{ "id": "Fighter", "tileId": 204, "color": -1, "__tileSrcRect": [128,320,32,32] },
-			{ "id": "Rat", "tileId": 75, "color": -1, "__tileSrcRect": [480,96,32,32] },
-			{ "id": "Snek", "tileId": 46, "color": -1, "__tileSrcRect": [192,64,32,32] },
-			{ "id": "Beholder", "tileId": 146, "color": -1, "__tileSrcRect": [192,224,32,32] }
+			{ "id": "Fighter", "tileId": 204, "color": 11167317, "__tileSrcRect": [128,320,32,32] },
+			{ "id": "Rat", "tileId": 75, "color": 8939093, "__tileSrcRect": [480,96,32,32] },
+			{ "id": "Snek", "tileId": 46, "color": 10053239, "__tileSrcRect": [192,64,32,32] },
+			{ "id": "Beholder", "tileId": 146, "color": 6710903, "__tileSrcRect": [192,224,32,32] }
 		], "iconTilesetUid": 47, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "TriggerCondition", "uid": 84, "values": [
 			{ "id": "OnPlayerEnter", "tileId": null, "color": 0, "__tileSrcRect": null },
@@ -1058,8 +1058,8 @@
 		{
 			"identifier": "Entities_demo",
 			"uid": 0,
-			"worldX": -112,
-			"worldY": 32,
+			"worldX": 0,
+			"worldY": 0,
 			"pxWid": 688,
 			"pxHei": 320,
 			"__bgColor": "#79799A",
