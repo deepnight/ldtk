@@ -34,17 +34,14 @@ class EntityRender extends dn.Process {
 		above = new h2d.Flow(root);
 		above.layout = Vertical;
 		above.horizontalAlign = Middle;
-		above.verticalSpacing = 1;
 
 		center = new h2d.Flow(root);
 		center.layout = Vertical;
 		center.horizontalAlign = Middle;
-		center.verticalSpacing = 1;
 
 		beneath = new h2d.Flow(root);
 		beneath.layout = Vertical;
 		beneath.horizontalAlign = Middle;
-		beneath.verticalSpacing = 1;
 
 		simpleLabel = new h2d.Flow(root);
 		simpleLabel.layout = Vertical;
@@ -274,7 +271,7 @@ class EntityRender extends dn.Process {
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
-			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.82);
+			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.95);
 		}
 
 		updatePos();

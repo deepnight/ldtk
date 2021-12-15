@@ -577,7 +577,7 @@ class WorldRender extends dn.Process {
 			bgWrapper: new h2d.Object(),
 			render : new h2d.Object(),
 			bounds : new h2d.Graphics(),
-			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 5, 5),
+			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 2, 2),
 		}
 		var _depth = 0;
 		levelsWrapper.add(wl.bgWrapper, _depth++);
