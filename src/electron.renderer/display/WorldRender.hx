@@ -316,15 +316,16 @@ class WorldRender extends dn.Process {
 	}
 
 	inline function getMinVisibilityZoom() {
-		return switch project.worldLayout {
-			case Free, GridVania: 0.06;
-			case LinearVertical: 0.04;
-			case LinearHorizontal: 0.04;
-		}
+		return camera.getMinZoom();
+		// return switch project.worldLayout {
+		// 	case Free, GridVania: 0.06;
+		// 	case LinearVertical: 0.04;
+		// 	case LinearHorizontal: 0.04;
+		// }
 	}
 
 	inline function getAlphaFromZoom() {
-		var minZoom = getMinVisibilityZoom();
+		var minZoom = camera.getMinZoom();
 		return M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
 	}
 

@@ -199,7 +199,7 @@ class Camera extends dn.Process {
 		targetWorldY = wy;
 	}
 
-	inline function getMinZoom() {
+	public inline function getMinZoom() {
 		return editor.worldMode ? MIN_WORLD_ZOOM : MIN_LEVEL_ZOOM;
 	}
 
