@@ -454,7 +454,6 @@ class Editor extends Page {
 
 		switch keyCode {
 			case K.SPACE if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				N.debug("down");
 				spaceKeyTime = haxe.Timer.stamp();
 
 			case _:
@@ -467,7 +466,6 @@ class Editor extends Page {
 
 		switch keyCode {
 			case K.SPACE if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				N.debug("up");
 				if( haxe.Timer.stamp()-spaceKeyTime<=0.2 ) {
 					spaceKeyTime = 0;
 					camera.fit();
