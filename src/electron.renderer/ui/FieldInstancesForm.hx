@@ -482,7 +482,7 @@ class FieldInstancesForm {
 		// Connect to last point of existing path
 		if( fi.def.isArray )
 			switch fi.def.editorDisplayMode {
-				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 				case Points, PointStar:
 				case PointPath, PointPathLoop:
 					var pt = fi.getPointGrid( editIdx-1 );
@@ -501,7 +501,7 @@ class FieldInstancesForm {
 
 				// Connect to previous point in path mode
 				switch fi.def.editorDisplayMode {
-					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 					case Points, PointStar:
 					case PointPath, PointPathLoop:
 						var pt = fi.getPointGrid( editIdx-1 );

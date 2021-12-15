@@ -341,6 +341,8 @@ class FieldDefsForm {
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
 					case EntityTile: L.t._("Replace entity tile");
+					case ArrayCountWithLabel: L.t._("Show array length with label");
+					case ArrayCountNoLabel: L.t._("Show array length only");
 				}
 			},
 
@@ -349,6 +351,7 @@ class FieldDefsForm {
 					case Hidden: true;
 					case ValueOnly: curField.type!=F_Point;
 					case NameAndValue: true;
+					case ArrayCountNoLabel, ArrayCountWithLabel: curField.isArray;
 
 					case EntityTile:
 						curField.isEnum() && fieldParent==FP_Entity;
@@ -383,7 +386,7 @@ class FieldDefsForm {
 			}
 		);
 		switch curField.editorDisplayMode {
-			case ValueOnly, NameAndValue:
+			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
 				i.setEnabled(true);
 
 			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:

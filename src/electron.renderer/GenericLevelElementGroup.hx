@@ -474,7 +474,7 @@ class GenericLevelElementGroup {
 						switch fi.def.editorDisplayMode {
 							case PointStar, PointPath, PointPathLoop:
 							case Points: continue;
-							case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid: continue;
+							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, RadiusPx, RadiusGrid: continue;
 						}
 
 						// Links to Entity own field points

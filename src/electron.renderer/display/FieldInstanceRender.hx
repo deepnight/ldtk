@@ -13,7 +13,7 @@ class FieldInstanceRender {
 
 
 	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
-		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 2, 2 );
+		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 1, 1 );
 		f.addChildAt(bg, 0);
 		f.getProperties(bg).isAbsolute = true;
 		bg.color.setColor( C.addAlphaF( C.toBlack( baseColor, darken ) ) );
@@ -129,6 +129,22 @@ class FieldInstanceRender {
 			case ValueOnly:
 				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
 
+			case ArrayCountWithLabel:
+				// Label
+				var tf = new h2d.Text(getDefaultFont(), labelFlow);
+				tf.textColor = baseColor;
+				tf.text = fd.identifier;
+
+				// Value
+				var tf = new h2d.Text(getDefaultFont(), valueFlow);
+				tf.textColor = baseColor;
+				tf.text = '${fi.getArrayLength()} value(s)';
+
+			case ArrayCountNoLabel:
+				var tf = new h2d.Text(getDefaultFont(), valueFlow);
+				tf.textColor = baseColor;
+				tf.text = '${fi.getArrayLength()} value(s)';
+
 			case RadiusPx:
 				switch ctx {
 					case EntityCtx(g,_):
@@ -171,7 +187,7 @@ class FieldInstanceRender {
 							g.drawRect( tx-2, ty-2, 4, 4 );
 
 							switch fd.editorDisplayMode {
-								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 								case Points, PointStar:
 								case PointPath, PointPathLoop:
 									// Next point connects to this one

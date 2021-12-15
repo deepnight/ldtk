@@ -518,7 +518,7 @@ class Level {
 		for(fi in fieldInstances)
 			if( fi.def.editorAlwaysShow || !fi.isUsingDefault(0) ) {
 				switch fi.def.editorDisplayMode {
-					case ValueOnly, NameAndValue:
+					case ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel:
 						if( fi.def.editorDisplayPos==pos )
 							return true;
 
