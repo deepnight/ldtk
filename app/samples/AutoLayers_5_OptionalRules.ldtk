@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"nextUid": 148,
-	"worldLayout": "LinearVertical",
+	"nextUid": 149,
+	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultPivotX": 0,
@@ -1378,6 +1378,26 @@
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16766464] },
 			"textLanguageMode": null
+		},
+		{
+			"identifier": "fog_intensity",
+			"__type": "Float",
+			"uid": 148,
+			"type": "F_Float",
+			"isArray": false,
+			"canBeNull": false,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "NameAndValue",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
+			"min": 0,
+			"max": 1,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": null,
+			"textLanguageMode": null
 		}
 	] },
 	"levels": [
@@ -1410,7 +1430,14 @@
 						]
 					}]
 				},
-				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] }
+				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] },
+				{
+					"__identifier": "fog_intensity",
+					"__value": 0.2,
+					"__type": "Float",
+					"defUid": 148,
+					"realEditorValues": [{ "id": "V_Float", "params": [0.2] }]
+				}
 			],
 			"layerInstances": [
 				{
@@ -2558,7 +2585,7 @@
 		{
 			"identifier": "Frozen_caves",
 			"uid": 90,
-			"worldX": 256,
+			"worldX": 304,
 			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
@@ -2573,7 +2600,14 @@
 			"externalRelPath": null,
 			"fieldInstances": [
 				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 113, "realEditorValues": [] },
-				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] }
+				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] },
+				{
+					"__identifier": "fog_intensity",
+					"__value": 0.9,
+					"__type": "Float",
+					"defUid": 148,
+					"realEditorValues": [{ "id": "V_Float", "params": [0.9] }]
+				}
 			],
 			"layerInstances": [
 				{
@@ -3704,12 +3738,12 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 49, "dir": "w" }, { "levelUid": 45, "dir": "e" } ]
+			"__neighbours": [ { "levelUid": 45, "dir": "e" }, { "levelUid": 49, "dir": "w" } ]
 		},
 		{
 			"identifier": "Antique_manor",
 			"uid": 45,
-			"worldX": 512,
+			"worldX": 608,
 			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
@@ -3730,7 +3764,8 @@
 					"defUid": 113,
 					"realEditorValues": [null]
 				},
-				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] }
+				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] },
+				{ "__identifier": "fog_intensity", "__value": 0, "__type": "Float", "defUid": 148, "realEditorValues": [] }
 			],
 			"layerInstances": [
 				{
@@ -4820,12 +4855,12 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 90, "dir": "w" }, { "levelUid": 116, "dir": "e" } ]
+			"__neighbours": [ { "levelUid": 116, "dir": "e" }, { "levelUid": 90, "dir": "w" } ]
 		},
 		{
 			"identifier": "Only_base_rules",
 			"uid": 116,
-			"worldX": 768,
+			"worldX": 912,
 			"worldY": 0,
 			"pxWid": 256,
 			"pxHei": 256,
@@ -4855,6 +4890,13 @@
 					"__type": "Color",
 					"defUid": 115,
 					"realEditorValues": [{ "id": "V_Int", "params": [5303728] }]
+				},
+				{
+					"__identifier": "fog_intensity",
+					"__value": 0.5,
+					"__type": "Float",
+					"defUid": 148,
+					"realEditorValues": [{ "id": "V_Float", "params": [0.5] }]
 				}
 			],
 			"layerInstances": [
