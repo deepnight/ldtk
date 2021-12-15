@@ -5,6 +5,7 @@
   - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
   - Added a progress bar when loading large projects
   - Entity and Level custom fields that are not using default values are now MUCH more visible in forms
+  - Updated editor UI font to Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
 
 ## UI
 
@@ -16,7 +17,7 @@
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
   - Zooming out a lot now has a subtle dimming effect.
 
-## Bug fixes
+## Bug fixes & misc
 
   - Fixed the progress bar when saving large projects
   - Fixed a crash when deleting the last level
@@ -24,6 +25,7 @@
   - Fixed a rare crash when loading Aseprite files
   - Fixed a bug when reloading a tileset while its width changed.
   - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
+  - Updated sample maps
   - Many minor bug fixes.
 
 # 0.9.3 - Ludum Dare 48 edition
