@@ -2072,28 +2072,47 @@ textarea {
 
 
 .window.buy {
+	.mask {
+		background-color: transparentize($color: black, $amount: 0.2);
+	}
 	.wrapper .content {
-		max-width: 380px;
+		width: 700px;
+
+
+		h2 {
+			background-color: black;
+			border: 0px;
+		}
 
 		header {
 			display: grid;
 			justify-items: center;
 			align-items: center;
 
-			margin: -16px;
+			margin: -20px;
 			margin-bottom: 16px;
 			padding: 8px;
 
 			background-color: $bgDark;
+			background-image: url(../img/githubBanner.png);
+			background-position: center;
+			background-size: cover;
+			min-height: 300px;
 
 			.icon {
-				width: 70px;
-				height: 70px;
+				width: 100px;
+				height: 100px;
 			}
+		}
+
+		p {
+			margin-top: 16px;
+			margin-bottom: 16px;
 		}
 
 		strong {
 			color: $orange;
+			font-size: 1.6em;
 		}
 	}
 }
