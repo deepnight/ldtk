@@ -6,6 +6,7 @@
   - Added a progress bar when loading large projects
   - Entity and Level custom fields that are not using default values are now MUCH more visible in forms
   - Updated editor UI font to Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
+  - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
 
 ## UI
 

@@ -2,6 +2,7 @@ package misc;
 
 class FileWatcher extends dn.Process {
 	var all : Array<{ watcher:js.node.fs.FSWatcher, path:String, cb:Void->Void }> = [];
+	var queuedChanges : Map<String, Void->Void> = new Map();
 
 	public function new() {
 		super(Editor.ME);
@@ -24,11 +25,16 @@ class FileWatcher extends dn.Process {
 						// TODO support renaming?
 
 					case "change":
-						delayer.cancelById(absFilePath);
-						delayer.addS(absFilePath, ()->{
-							App.LOG.fileOp("Changed on disk: "+absFilePath);
-							onChange();
-						}, 1);
+						App.LOG.fileOp("Changed on disk: "+absFilePath);
+						if( App.ME.focused ) {
+							delayer.cancelById(absFilePath);
+							delayer.addS(absFilePath, ()->{
+								queuedChanges.set(absFilePath, onChange);
+							}, 1);
+						}
+						else {
+							queuedChanges.set(absFilePath, onChange);
+						}
 
 					case _:
 				}
@@ -72,6 +78,7 @@ class FileWatcher extends dn.Process {
 
 	public function clearAllWatches() {
 		App.LOG.fileOp("Cleared all file watches");
+		queuedChanges = new Map();
 		for( w in all )
 			w.watcher.close();
 		all = [];
@@ -94,5 +101,16 @@ class FileWatcher extends dn.Process {
 			}
 			else
 				i++;
+	}
+
+	override function postUpdate() {
+		super.postUpdate();
+
+		// Delayed changes
+		if( App.ME.focused ) {
+			for(cb in queuedChanges)
+				cb();
+			queuedChanges = new Map();
+		}
 	}
 }
