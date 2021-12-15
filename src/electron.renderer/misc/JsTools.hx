@@ -411,7 +411,7 @@ class JsTools {
 
 
 		// Auto tool-tips
-		jCtx.find("[title], [data-title]").each( function(idx,e) {
+		jCtx.find("[title]:not([noTip]), [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
 			var tipStr = jThis.attr("data-title");
 			if( tipStr==null ) {

@@ -13,6 +13,7 @@ class Home extends Page {
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
+			buildDate: dn.MacroTools.getHumanBuildDate(),
 			latestVer: changeLog.latest.version,
 			latestDesc: changeLog.latest.title==null ? L.t._("Read latest changes") : '"'+changeLog.latest.title+'"',
 			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
