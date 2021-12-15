@@ -15,7 +15,8 @@ class App extends dn.Process {
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
 	public var settings : Settings;
-	var keyDowns : Map<Int,Bool> = new Map();
+	var jsKeyDowns : Map<Int,Bool> = new Map();
+	var heapsKeyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
 	public var focused(default,null) = true;
@@ -276,23 +277,27 @@ class App extends dn.Process {
 		if( ev.keyCode==K.ALT )
 			ev.preventDefault();
 
+		if( !isKeyDown(ev.keyCode) )
+			onKeyDown(ev.keyCode);
 		jsMetaKeyDown = ev.metaKey;
-		keyDowns.set(ev.keyCode, true);
+		jsKeyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
-		keyDowns.remove(ev.keyCode);
 		jsMetaKeyDown = false;
+		onKeyUp(ev.keyCode);
 	}
 
 	function onHeapsKeyDown(ev:hxd.Event) {
-		keyDowns.set(ev.keyCode, true);
+		if( !isKeyDown(ev.keyCode) )
+			onKeyDown(ev.keyCode);
+		heapsKeyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
 
 	function onHeapsKeyUp(ev:hxd.Event) {
-		keyDowns.remove(ev.keyCode);
+		onKeyUp(ev.keyCode);
 	}
 
 	function onWindowCloseButton() {
@@ -307,19 +312,35 @@ class App extends dn.Process {
 	public static inline function isWindows() return js.node.Os.platform()=="win32";
 	public static inline function isMac() return js.node.Os.platform()=="darwin";
 
-	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
-	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
+	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
+	public inline function isShiftDown() return isKeyDown(K.SHIFT);
 	public inline function isCtrlDown() {
 		return App.isMac()
-			? jsMetaKeyDown || keyDowns.get(91)==true || keyDowns.get(93)==true
-			: keyDowns.get(K.CTRL)==true;
+			? jsMetaKeyDown || isKeyDown(91) || isKeyDown(93)
+			: isKeyDown(K.CTRL);
 	}
-	public inline function isAltDown() return keyDowns.get(K.ALT)==true;
+	public inline function isAltDown() return isKeyDown(K.ALT);
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
 	public inline function hasInputFocus() {
 		return jBody.find("input:focus, textarea:focus").length>0;
 	}
+
+
+	function onKeyDown(keyCode:Int) {
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onKeyDown(keyCode);
+	}
+
+
+	function onKeyUp(keyCode:Int) {
+		jsKeyDowns.remove(keyCode);
+		heapsKeyDowns.remove(keyCode);
+
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onKeyUp(keyCode);
+	}
+
 
 	function onKeyPress(keyCode:Int) {
 		if( hasPage() && !curPageProcess.isPaused() )
@@ -405,7 +426,8 @@ class App extends dn.Process {
 
 	function onAppFocus(ev:js.html.Event) {
 		focused = true;
-		keyDowns = new Map();
+		jsKeyDowns = new Map();
+		heapsKeyDowns = new Map();
 		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppFocus();
@@ -414,7 +436,8 @@ class App extends dn.Process {
 
 	function onAppBlur(ev:js.html.Event) {
 		focused = false;
-		keyDowns = new Map();
+		jsKeyDowns = new Map();
+		heapsKeyDowns = new Map();
 		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppBlur();
@@ -698,6 +721,8 @@ class App extends dn.Process {
 				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
 			}
 
+			debugPre("keyDown(Heaps)="+heapsKeyDowns);
+			debugPre("keyDown(JS)="+jsKeyDowns);
 			debugPre("appButtons="
 				+ ( isMouseButtonDown(0) ? "[left] " : "" )
 				+ ( isMouseButtonDown(2) ? "[right] " : "" )

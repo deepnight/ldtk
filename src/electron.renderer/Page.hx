@@ -19,6 +19,8 @@ class Page extends dn.Process {
 	public function onAppMouseUp() {}
 	public function onAppFocus() {}
 	public function onAppResize() {}
+	public function onKeyDown(keyCode:Int) {}
+	public function onKeyUp(keyCode:Int) {}
 	public function onKeyPress(keyCode:Int) {}
 
 	public function loadPageTemplate(id:String, ?vars:Dynamic) {
