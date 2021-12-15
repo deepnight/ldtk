@@ -765,7 +765,9 @@ class WorldRender extends dn.Process {
 		// Fields
 		var limit = 15;
 		for( uid in levelFieldsInvalidation.keys() ) {
-			renderFields( editor.project.getLevel(uid) );
+			var l = editor.project.getLevel(uid);
+			renderFields(l);
+			updateLabelText(l);
 			if( limit--<=0 )
 				break;
 		}
