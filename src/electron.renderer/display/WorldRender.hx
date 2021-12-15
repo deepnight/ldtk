@@ -60,7 +60,7 @@ class WorldRender extends dn.Process {
 		axes = new h2d.Graphics();
 		editor.root.add(axes, Const.DP_BG);
 
-		title = new h2d.Text(Assets.fontLight_xlarge);
+		title = new h2d.Text(Assets.fontLight_title);
 		title.text = "hello world";
 		editor.root.add(title, Const.DP_TOP);
 
@@ -551,7 +551,7 @@ class WorldRender extends dn.Process {
 		f.minWidth = f.maxWidth = fWrapper.customFields.outerWidth;
 		f.horizontalAlign = Middle;
 		f.padding = 6;
-		var tf = new h2d.Text(Assets.fontLight_large, f);
+		var tf = new h2d.Text(Assets.getLargeFont(), f);
 		tf.text = '"${l.getDisplayIdentifier()}"';
 		tf.textColor = l.getSmartColor(true);
 		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.85);
@@ -716,7 +716,7 @@ class WorldRender extends dn.Process {
 
 		wl.label.removeChildren();
 		var error = l.getFirstError();
-		var tf = new h2d.Text(Assets.fontLight_regular, wl.label);
+		var tf = new h2d.Text(Assets.getRegularFont(), wl.label);
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = C.toWhite( l.getSmartColor(false), 0.65 );
 		tf.x = 8;

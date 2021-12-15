@@ -218,11 +218,6 @@ class EntityRender extends dn.Process {
 	}
 
 
-	inline function getDefaultFont() {
-		return Editor.ME.camera.pixelRatio<=1 ? Assets.fontLight_tiny : Assets.fontLight_regular;
-	}
-
-
 	public function renderFields() {
 		above.removeChildren();
 		center.removeChildren();
@@ -249,7 +244,7 @@ class EntityRender extends dn.Process {
 
 		// Simple label
 		if( ei.def.showName || above.numChildren>0 || center.numChildren>0 || beneath.numChildren>0 ) {
-			var tf = new h2d.Text(getDefaultFont(), simpleLabel);
+			var tf = new h2d.Text(Assets.getRegularFont(), simpleLabel);
 			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = "(···)";
@@ -265,7 +260,7 @@ class EntityRender extends dn.Process {
 			f.minWidth = above.innerWidth;
 			f.horizontalAlign = Middle;
 			f.padding = 2;
-			var tf = new h2d.Text(getDefaultFont(), f);
+			var tf = new h2d.Text(Assets.getRegularFont(), f);
 			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = ed.identifier.substr(0,16);
