@@ -1727,6 +1727,7 @@ class Editor extends Page {
 					// Toggle this one
 					heldVisibilitySet = !levelRender.isLayerVisible(li);
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
+					invalidateLevelCache(curLevel);
 				}
 			});
 		}
