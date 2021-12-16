@@ -246,11 +246,11 @@ class FieldDefsForm {
 		switch fieldParent {
 			case FP_Entity:
 				for( l in project.levels )
-					l.invalidateJsonCache();
+					editor.invalidateLevelCache(l);
 
 			case FP_Level:
 				for( l in project.levels )
-					l.invalidateJsonCache();
+					editor.invalidateLevelCache(l);
 				editor.worldRender.invalidateAllLevelFields();
 		}
 	}
