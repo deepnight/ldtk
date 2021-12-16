@@ -13,6 +13,7 @@ class ProjectLoader {
 	var progress : ui.modal.Progress;
 	var onLoad : data.Project -> Void;
 	var onError : LoadingError->Void;
+	var needUpgrade = false;
 
 	public function new(filePath:String, onLoad, onError) {
 		this.onLoad = onLoad;
@@ -25,9 +26,10 @@ class ProjectLoader {
 		}
 
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
-		var json : Dynamic = null;
+		var json : ldtk.Json.ProjectJson = null;
 		var raw : String = null;
 		var p : data.Project = null;
+
 
 		// Parse main JSON
 		ops.push({
@@ -50,6 +52,11 @@ class ProjectLoader {
 						error( JsonParse( Std.string(err) ) );
 						null;
 					}
+
+				// Check for a need for upgrade
+				if( json!=null && Version.lower(json.jsonVersion, Const.getJsonVersion()) )
+					needUpgrade = true;
+
 			}
 		});
 
@@ -115,11 +122,16 @@ class ProjectLoader {
 			}
 		});
 
+
 		// Run
 		progress = new ui.modal.Progress( L.t._("::file::: Project...", {file:fileName}), ops );
 	}
 
 	function done(p:data.Project) {
+		if( needUpgrade )
+			for(l in p.levels)
+				l.invalidateJsonCache();
+
 		onLoad(p);
 		if( log.containsAnyCriticalEntry() )
 			new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
