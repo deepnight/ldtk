@@ -1157,6 +1157,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#FFEE80",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [

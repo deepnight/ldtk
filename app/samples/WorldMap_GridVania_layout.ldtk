@@ -535,6 +535,8 @@
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -555,6 +557,8 @@
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
 					"min": 0,
 					"max": null,
 					"regex": null,
@@ -601,6 +605,8 @@
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": true,
 					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -621,6 +627,8 @@
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": true,
 					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
 					"min": 1,
 					"max": 10,
 					"regex": null,
@@ -692,6 +700,8 @@
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -779,6 +789,8 @@
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
 			"editorCutLongValues": true,
+			"editorTextSuffix": null,
+			"editorTextPrefix": null,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -799,6 +811,8 @@
 			"editorDisplayPos": "Above",
 			"editorAlwaysShow": false,
 			"editorCutLongValues": true,
+			"editorTextSuffix": null,
+			"editorTextPrefix": null,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -822,6 +836,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#FFE680",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -1652,6 +1667,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -2960,6 +2976,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -4899,6 +4916,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -6423,6 +6441,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -7796,6 +7815,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -9110,6 +9130,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#CC9A9A",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -10983,6 +11004,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -12300,6 +12322,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#938EE4",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -12838,6 +12861,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -13675,6 +13699,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -14702,6 +14727,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -15475,6 +15501,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -16593,6 +16620,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -18061,6 +18089,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#80F1FF",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -18779,6 +18808,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -20084,6 +20114,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -22014,6 +22045,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#FFEB80",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -22768,6 +22800,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
+			"__smartColor": "#9BA4A7",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
