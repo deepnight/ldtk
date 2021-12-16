@@ -115,6 +115,8 @@ class Level {
 			bgPivotX: JsonTools.writeFloat(bgPivotX),
 			bgPivotY: JsonTools.writeFloat(bgPivotY),
 
+			__smartColor: JsonTools.writeColor( getSmartColor(true) ),
+
 			__bgPos: {
 				var bg = getBgTileInfos();
 				if( bg==null )
