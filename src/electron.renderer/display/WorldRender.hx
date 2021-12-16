@@ -552,7 +552,7 @@ class WorldRender extends dn.Process {
 		f.horizontalAlign = Middle;
 		f.padding = 6;
 		var tf = new h2d.Text(Assets.getLargeFont(), f);
-		tf.text = '"${l.getDisplayIdentifier()}"';
+		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
 		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.85);
 		if( fWrapper.identifier!=null )
