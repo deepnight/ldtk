@@ -291,7 +291,7 @@ class LayerInstance {
 
 		// Entities
 		for( entityJson in json.entityInstances )
-			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
+			li.entityInstances.push( EntityInstance.fromJson(p, li, entityJson) );
 
 		// Auto-layer tiles
 		if( json.autoLayerTiles!=null ) {
@@ -562,7 +562,7 @@ class LayerInstance {
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 
-		var ei = new EntityInstance(_project, ed.uid);
+		var ei = new EntityInstance(_project, this, ed.uid);
 		entityInstances.push(ei);
 		return ei;
 	}
@@ -575,7 +575,7 @@ class LayerInstance {
 	}
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
-		var copy = EntityInstance.fromJson( _project, ei.toJson(this) );
+		var copy = EntityInstance.fromJson( _project, this, ei.toJson(this) );
 		entityInstances.push(copy);
 
 		return copy;

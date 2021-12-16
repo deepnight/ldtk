@@ -27,8 +27,9 @@ class EntityInstance {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + height-1;
 
 
-	public function new(p:Project, entityDefUid:Int) {
+	public function new(p:Project, li:LayerInstance, entityDefUid:Int) {
 		_project = p;
+		_li = li;
 		defUid = entityDefUid;
 	}
 
@@ -71,14 +72,14 @@ class EntityInstance {
 		}
 	}
 
-	public static function fromJson(project:Project, json:ldtk.Json.EntityInstanceJson) {
+	public static function fromJson(project:Project, li:LayerInstance, json:ldtk.Json.EntityInstanceJson) {
 		if( (cast json).x!=null ) // Convert old coordinates
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];
 
 		if( (cast json).defId!=null ) json.defUid = (cast json).defId;
 
 
-		var ei = new EntityInstance(project, JsonTools.readInt(json.defUid));
+		var ei = new EntityInstance(project, li, JsonTools.readInt(json.defUid));
 		ei.x = JsonTools.readInt( json.px[0], 0 );
 		ei.y = JsonTools.readInt( json.px[1], 0 );
 
