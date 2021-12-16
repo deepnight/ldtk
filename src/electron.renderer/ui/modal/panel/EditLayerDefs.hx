@@ -201,6 +201,7 @@ class EditLayerDefs extends ui.modal.Panel {
 	}
 
 	function updateForm() {
+		Tip.clear();
 		jForm.find("*").off(); // cleanup event listeners
 		jForm.find(".tmp").remove();
 
@@ -242,6 +243,9 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.enablePercentageMode();
 		i.setBounds(0.1, 1);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
+		var i = Input.linkToHtmlInput( cur.fadeInactive, jForm.find("input[name='fadeInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
@@ -536,6 +540,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 	function updateList() {
+		Tip.clear();
 		jList.empty();
 
 		for(ld in project.defs.layers) {

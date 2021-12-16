@@ -466,6 +466,8 @@ class LevelRender extends dn.Process {
 		lr.root.visible = isLayerVisible(li);
 		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
+		if( li!=editor.curLayerInstance && li.def.fadeInactive )
+			lr.root.alpha *= 0.4;
 	}
 
 	function getSingleLayerModeFilter() : h2d.filter.Filter {
