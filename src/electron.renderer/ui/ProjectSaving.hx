@@ -162,14 +162,25 @@ class ProjectSaving extends dn.Process {
 
 			case SavingMainFile:
 				logState();
+				var ops : Array<ui.modal.Progress.ProgressOp> = [];
 
-				log('  Preparing SavingData...');
-				savingData = ui.ProjectSaving.prepareProjectSavingData(project);
+				ops.push({
+					label: "Preparing...",
+					cb: ()->{
+						log('  Preparing SavingData...');
+						savingData = ui.ProjectSaving.prepareProjectSavingData(project);
+					}
+				});
 
-				log('  Writing ${project.filePath.full}...');
-				NT.writeFileString(project.filePath.full, savingData.projectJson);
+				ops.push({
+					label: "Writing main file...",
+					cb: ()->{
+						log('  Writing ${project.filePath.full}...');
+						NT.writeFileString(project.filePath.full, savingData.projectJson);
+					}
+				});
 
-				beginState(SavingExternLevels);
+				new ui.modal.Progress("Saving main file...", ops, ()->beginState(SavingExternLevels));
 
 
 			case SavingExternLevels:
@@ -385,7 +396,7 @@ class ProjectSaving extends dn.Process {
 				id: l.identifier,
 			});
 
-			// Build project JSON without level datav
+			// Build project JSON without level data
 			var idx = 0;
 			var trimmedProjectJson = project.toJson();
 			for(l in trimmedProjectJson.levels) {
