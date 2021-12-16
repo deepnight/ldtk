@@ -10,13 +10,11 @@ class FieldInstanceRender {
 
 
 	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
-		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 1, 1 );
+		var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.6 ) );
 		f.addChildAt(bg, 0);
 		f.getProperties(bg).isAbsolute = true;
-		bg.color.setColor( C.addAlphaF( C.toBlack( baseColor, darken ) ) );
-		bg.setPosition(0,0);
-		bg.width = f.outerWidth;
-		bg.height = f.outerHeight;
+		bg.scaleX = f.outerWidth;
+		bg.scaleY = f.outerHeight+1;
 	}
 
 
@@ -65,18 +63,18 @@ class FieldInstanceRender {
 			maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
 		}
 		for(fr in allRenders) {
-			if( fr.label.numChildren>0 ) {
+			if( fr.label.numChildren>0 )
 				fr.label.minWidth = Std.int( maxLabelWidth );
-			}
 
 			fr.value.minWidth = Std.int( maxValueWidth );
 			if( fr.label.numChildren==0 )
 				fr.value.minWidth += Std.int( maxLabelWidth);
 			addBg(fr.value, baseColor, 0.75);
 
-			if( fr.label.numChildren>0 )
+			if( fr.label.numChildren>0 ) {
 				fr.label.minHeight = fr.value.outerHeight;
-			addBg(fr.label, baseColor, 0.88);
+				addBg(fr.label, baseColor, 0.88);
+			}
 		}
 	}
 
