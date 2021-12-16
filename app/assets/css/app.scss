@@ -4439,6 +4439,10 @@ canvas#webgl {
 dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
+	grid-template-columns: 40% auto;
+	>dt {
+		max-width: none;
+	}
 
 	dt.isDefault:not(:hover) {
 		color: $bgLighter;
