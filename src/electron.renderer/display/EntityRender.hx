@@ -269,7 +269,7 @@ class EntityRender extends dn.Process {
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
 		var alpha = 1.0;
-		var maxFieldsWid = ei.width*1.25;
+		var maxFieldsWid = ei.width*1.5;
 
 		root.x = ei.x;
 		root.y = ei.y;
