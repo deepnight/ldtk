@@ -14,6 +14,7 @@
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
+  - Entity fields and related visuals will now be faded away when not working in their layer.
   - Added more values for App UI scaling setting.
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)

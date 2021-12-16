@@ -1,5 +1,9 @@
 package display;
 
+typedef CoreRender = {
+	var wrapper : h2d.Object;
+	var g : h2d.Graphics;
+}
 
 class EntityRender extends dn.Process {
 	var ei : data.inst.EntityInstance;
@@ -9,6 +13,7 @@ class EntityRender extends dn.Process {
 	var ld : data.def.LayerDef;
 
 	var core: h2d.Object;
+	var _coreRender : Null<CoreRender>;
 
 	// Field wrappers
 	var above: h2d.Flow;
@@ -71,7 +76,7 @@ class EntityRender extends dn.Process {
 	}
 
 
-	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef, ?ld:data.def.LayerDef) : h2d.Object {
+	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef, ?ld:data.def.LayerDef) : CoreRender {
 		if( ei==null && ed==null )
 			throw "Need at least 1 parameter";
 
@@ -89,6 +94,7 @@ class EntityRender extends dn.Process {
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
+		// _coreGraphics = g;
 		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
 		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
@@ -191,13 +197,17 @@ class EntityRender extends dn.Process {
 			pivotSize, pivotSize
 		);
 
-		return wrapper;
+		return {
+			wrapper: wrapper,
+			g: g,
+		}
 	}
 
 
 	public function renderAll() {
 		core.removeChildren();
-		core.addChild( renderCore(ei,ed,ld) );
+		_coreRender = renderCore(ei, ed, ld);
+		core.addChild( _coreRender.wrapper );
 
 		renderFields();
 	}
@@ -244,12 +254,12 @@ class EntityRender extends dn.Process {
 
 		// Simple label
 		if( ei.def.showName || above.numChildren>0 || center.numChildren>0 || beneath.numChildren>0 ) {
-			var tf = new h2d.Text(Assets.getRegularFont(), simpleLabel);
-			tf.scale(settings.v.editorUiScale);
-			tf.textColor = ei.getSmartColor(true);
-			tf.text = "(···)";
-			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
-			tf.y = 0;
+			// var tf = new h2d.Text(Assets.getRegularFont(), simpleLabel);
+			// tf.scale(settings.v.editorUiScale);
+			// tf.textColor = ei.getSmartColor(true);
+			// tf.text = "...";
+			// tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
+			// tf.y = 0;
 			// FieldInstanceRender.addBg(simpleLabel, ei.getSmartColor(true), 0.82);
 		}
 
@@ -282,9 +292,20 @@ class EntityRender extends dn.Process {
 		root.x = ei.x;
 		root.y = ei.y;
 
+		var fullVis = ei._li==Editor.ME.curLayerInstance;
+
+		// Base
+		if( _coreRender!=null ) {
+			_coreRender.wrapper.alpha = fullVis ? 1 : 0.8;
+			_coreRender.g.alpha = fullVis ? 1 : 0.25;
+		}
+
+		// Graphics
+		fieldGraphics.alpha = fullVis ? 1 : 0.2;
+
 
 		// Update field wrappers
-		above.visible = center.visible = beneath.visible = Editor.ME.curLayerInstance.containsEntity(ei);
+		above.visible = center.visible = beneath.visible = fullVis;
 		if( above.visible ) {
 			simpleLabel.visible = false;
 			above.setScale(scale);

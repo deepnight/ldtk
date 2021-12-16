@@ -2,6 +2,7 @@ package data.inst;
 
 class EntityInstance {
 	public var _project : Project;
+	public var _li(default,null) : LayerInstance;
 	public var def(get,never) : data.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defUid);
 
 	public var defUid(default,null) : Int;
@@ -189,6 +190,7 @@ class EntityInstance {
 
 	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
+		_li = li;
 		var anyChange = false;
 
 		// Remove field instances whose def was removed

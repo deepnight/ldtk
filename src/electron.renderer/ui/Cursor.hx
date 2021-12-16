@@ -178,9 +178,9 @@ class Cursor {
 
 			case Entity(li, def, ei, x, y):
 				initRender();
-				var o = display.EntityRender.renderCore(ei,def);
-				wrapper.addChild(o);
-				o.alpha = 0.33;
+				var core = display.EntityRender.renderCore(ei,def);
+				wrapper.addChild(core.wrapper);
+				core.wrapper.alpha = 0.33;
 
 			case Tiles(li, tileIds, cx, cy, flips):
 				initRender();
