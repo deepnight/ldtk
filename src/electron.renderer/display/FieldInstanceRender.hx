@@ -10,7 +10,7 @@ class FieldInstanceRender {
 
 
 	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
-		var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.6 ) );
+		var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.87 ) );
 		f.addChildAt(bg, 0);
 		f.getProperties(bg).isAbsolute = true;
 		bg.scaleX = f.outerWidth;

@@ -15,6 +15,7 @@
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Entity fields and related visuals will now be faded away when not working in their layer.
+  - Entity fields width will now be limited by their entity width (this greatly reduces screen clutter when having many fields displayed)
   - Added more values for App UI scaling setting.
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
