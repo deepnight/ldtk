@@ -268,7 +268,7 @@ class Editor extends Page {
 			setPermanentNotification("backup");
 
 		// Check external enums
-		if( !project.isBackup() )
+		if( !project.isBackup() ) {
 			for( relPath in project.defs.getExternalEnumPaths() ) {
 				if( !NT.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
 					// File not found
@@ -293,6 +293,8 @@ class Editor extends Page {
 						}
 				}
 			}
+		}
+
 
 
 		curLevelId = project.levels[0].uid;
@@ -339,6 +341,15 @@ class Editor extends Page {
 		});
 
 		needSaving = tilesetChanged;
+
+		// Check level caches
+		if( !project.isBackup() ) {
+			for(l in project.levels)
+				if( !l.hasJsonCache() ) {
+					needSaving = true;
+					break;
+				}
+		}
 	}
 
 
