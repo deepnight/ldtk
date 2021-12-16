@@ -6,6 +6,7 @@ private enum SavingState {
 	BeforeSavingActions;
 	AutoLayers;
 	Backup;
+	CheckLevelCache;
 	SavingMainFile;
 	SavingExternLevels;
 	SavingLayerImages;
@@ -154,10 +155,24 @@ class ProjectSaving extends dn.Process {
 						}
 					});
 
-					new ui.modal.Progress( L.t._("Backups"), 1, ops, ()->beginState(SavingMainFile) );
+					new ui.modal.Progress( L.t._("Backups"), 1, ops, ()->beginState(CheckLevelCache) );
 				}
 				else
-					beginState(SavingMainFile);
+					beginState(CheckLevelCache);
+
+			case CheckLevelCache:
+				// Rebuild levels cache if necessary
+				var ops : Array<ui.modal.Progress.ProgressOp> = [];
+				for(l in project.levels) {
+					ops.push({
+						label: l.identifier,
+						cb: ()->{
+							if( !l.hasJsonCache() )
+								l.rebuildCache();
+						}
+					});
+				}
+				new ui.modal.Progress("Preparing levels...", 5, ops, ()->beginState(SavingMainFile));
 
 
 			case SavingMainFile:
@@ -356,6 +371,8 @@ class ProjectSaving extends dn.Process {
 			case AutoLayers:
 
 			case Backup:
+
+			case CheckLevelCache:
 
 			case SavingMainFile:
 

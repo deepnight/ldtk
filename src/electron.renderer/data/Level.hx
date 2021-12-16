@@ -203,6 +203,10 @@ class Level {
 
 	public inline function hasJsonCache() return _cachedJson!=null;
 	public inline function invalidateJsonCache() _cachedJson = null;
+	public function rebuildCache() {
+		_cachedJson = null;
+		toJson();
+	}
 
 	public inline function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
 		return hasJsonCache() ? _cachedJson.json : null;
