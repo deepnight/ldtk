@@ -4677,6 +4677,13 @@ dl.form.fieldInstanceEditor {
 				flex-wrap: nowrap;
 				overflow: hidden;
 
+				span:not([class]) {
+					align-self: center;
+					padding-left: 2px;
+					padding-right: 2px;
+					color: $bgLighter;
+				}
+
 				.sortHandle {
 					flex: 0 1 0px;
 				}
