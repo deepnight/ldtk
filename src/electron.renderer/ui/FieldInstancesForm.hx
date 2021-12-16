@@ -127,6 +127,11 @@ class FieldInstancesForm {
 
 	function createFieldInput(domId:String, fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
 		jTarget.addClass( fi.def.type.getName() );
+
+		// Prefix
+		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+			jTarget.append('<span>${fi.def.editorTextPrefix}</span>');
+
 		switch fi.def.type {
 			case F_Int:
 				var jInput = new J("<input/>");
@@ -436,6 +441,11 @@ class FieldInstancesForm {
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
 		}
+
+		// Suffix
+		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+			jTarget.append('<span>${fi.def.editorTextSuffix}</span>');
+
 	}
 
 	function getInstanceName() {
