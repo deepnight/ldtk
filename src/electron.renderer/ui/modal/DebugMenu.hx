@@ -23,6 +23,14 @@ class DebugMenu extends ui.modal.ContextMenu {
 		if( editor!=null ) {
 
 			add({
+				label: L.untranslated("Clear levels cache"),
+				cb: ()->{
+					for(l in project.levels)
+						editor.invalidateLevelCache(l);
+				}
+			});
+
+			add({
 				label: L.untranslated("Rebuild tilesets pixel cache"),
 				cb: ()->{
 					for(td in project.defs.tilesets)
@@ -100,6 +108,10 @@ class DebugMenu extends ui.modal.ContextMenu {
 							new ui.ProjectLoader(
 								fp.full,
 								(p)->{
+									// Break level caching
+									for(l in p.levels)
+										l.invalidateJsonCache();
+
 									// IntGrid CSV change
 									p.setFlag(DiscardPreCsvIntGrid, true);
 
