@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"nextUid": 92,
+	"nextUid": 91,
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -32,38 +32,17 @@
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
-			"identifier": "Actors",
+			"identifier": "Entities",
 			"type": "Entities",
-			"uid": 91,
+			"uid": 7,
 			"gridSize": 16,
 			"displayOpacity": 1,
 			"fadeInactive": false,
 			"hideInList": false,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
-			"requiredTags": ["actor"],
-			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
-			"autoTilesetDefUid": null,
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
-		},
-		{
-			"__type": "Entities",
-			"identifier": "Other_entities",
-			"type": "Entities",
-			"uid": 7,
-			"gridSize": 16,
-			"displayOpacity": 1,
-			"fadeInactive": true,
-			"hideInList": false,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
 			"requiredTags": [],
-			"excludedTags": ["actor"],
+			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
@@ -712,7 +691,7 @@
 			"identifier": "Chest",
 			"uid": 8,
 			"tags": ["interactive"],
-			"width": 32,
+			"width": 24,
 			"height": 24,
 			"resizableX": false,
 			"resizableY": false,
@@ -725,7 +704,7 @@
 			"showName": false,
 			"tilesetId": 59,
 			"tileId": 1010,
-			"tileRenderMode": "FitInside",
+			"tileRenderMode": "Stretch",
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -741,7 +720,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -761,7 +740,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -1099,13 +1078,13 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.  They can have many kind of customizable properties, including arrays, enums or coordinates.",
+					"__value": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",
 					"__type": "String",
 					"defUid": 80,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"Entities can be used to represent any gameplay element, such as player, enemies, items etc.  They can have many kind of customizable properties, including arrays, enums or coordinates."
+							"Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates."
 						]
 					}]
 				},
@@ -1113,222 +1092,7 @@
 			],
 			"layerInstances": [
 				{
-					"__identifier": "Actors",
-					"__type": "Entities",
-					"__cWid": 43,
-					"__cHei": 20,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"levelId": 0,
-					"layerDefUid": 91,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 8238736,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Player",
-							"__grid": [2,10],
-							"__pivot": [0.5,1],
-							"__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] },
-							"width": 20,
-							"height": 20,
-							"defUid": 1,
-							"px": [40,176],
-							"fieldInstances": [
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValues": [] },
-								{
-									"__identifier": "isAwaken",
-									"__value": true,
-									"__type": "Bool",
-									"defUid": 3,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "bag",
-									"__value": [ "Magic_ring", "Healing_potion" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 19,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Magic_ring"]
-									}, {
-										"id": "V_String",
-										"params": ["Healing_potion"]
-									} ]
-								},
-								{
-									"__identifier": "weapon",
-									"__value": "Trout",
-									"__type": "LocalEnum.ItemType",
-									"defUid": 29,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Trout"]
-									}]
-								}
-							]
-						},
-						{
-							"__identifier": "Enemy",
-							"__grid": [9,8],
-							"__pivot": [0.5,1],
-							"__tile": { "tilesetUid": 47, "srcRect": [128,320,32,32] },
-							"width": 64,
-							"height": 64,
-							"defUid": 37,
-							"px": [152,144],
-							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [
-										{ "cx": 13, "cy": 8 },
-										{ "cx": 13, "cy": 10 },
-										{ "cx": 18, "cy": 10 },
-										{ "cx": 18, "cy": 9 },
-										{ "cx": 21, "cy": 9 }
-									],
-									"__type": "Array<Point>",
-									"defUid": 38,
-									"realEditorValues": [
-										{
-											"id": "V_String",
-											"params": ["13,8"]
-										},
-										{
-											"id": "V_String",
-											"params": ["13,10"]
-										},
-										{
-											"id": "V_String",
-											"params": ["18,10"]
-										},
-										{
-											"id": "V_String",
-											"params": ["18,9"]
-										},
-										{
-											"id": "V_String",
-											"params": ["21,9"]
-										}
-									]
-								},
-								{
-									"__identifier": "loots",
-									"__value": [ "Gold", "Magic_ring" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 39,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Gold"]
-									}, {
-										"id": "V_String",
-										"params": ["Magic_ring"]
-									} ]
-								},
-								{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
-								{
-									"__identifier": "type",
-									"__value": "Fighter",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Fighter"]
-									}]
-								}
-							]
-						},
-						{
-							"__identifier": "Enemy",
-							"__grid": [26,15],
-							"__pivot": [0.5,1],
-							"__tile": { "tilesetUid": 47, "srcRect": [192,64,32,32] },
-							"width": 32,
-							"height": 32,
-							"defUid": 37,
-							"px": [424,256],
-							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 19, "cy": 15 }],
-									"__type": "Array<Point>",
-									"defUid": 38,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["19,15"]
-									}]
-								},
-								{
-									"__identifier": "loots",
-									"__value": ["Gold"],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 39,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Gold"]
-									}]
-								},
-								{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
-								{
-									"__identifier": "type",
-									"__value": "Snek",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Snek"]
-									}]
-								}
-							]
-						},
-						{
-							"__identifier": "Enemy",
-							"__grid": [36,17],
-							"__pivot": [0.5,1],
-							"__tile": { "tilesetUid": 47, "srcRect": [480,96,32,32] },
-							"width": 32,
-							"height": 32,
-							"defUid": 37,
-							"px": [584,288],
-							"fieldInstances": [
-								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] },
-								{
-									"__identifier": "loots",
-									"__value": ["Mana_potion"],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 39,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Mana_potion"]
-									}]
-								},
-								{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
-								{
-									"__identifier": "type",
-									"__value": "Rat",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Rat"]
-									}]
-								}
-							]
-						}
-					]
-				},
-				{
-					"__identifier": "Other_entities",
+					"__identifier": "Entities",
 					"__type": "Entities",
 					"__cWid": 43,
 					"__cHei": 20,
@@ -1355,7 +1119,7 @@
 							"__grid": [38,17],
 							"__pivot": [0.5,1],
 							"__tile": { "tilesetUid": 59, "srcRect": [32,1008,16,16] },
-							"width": 32,
+							"width": 24,
 							"height": 24,
 							"defUid": 8,
 							"px": [616,288],
@@ -1495,7 +1259,7 @@
 							"__grid": [37,5],
 							"__pivot": [0.5,1],
 							"__tile": { "tilesetUid": 59, "srcRect": [32,1008,16,16] },
-							"width": 32,
+							"width": 24,
 							"height": 24,
 							"defUid": 8,
 							"px": [600,96],
@@ -1519,6 +1283,82 @@
 									"__type": "Bool",
 									"defUid": 28,
 									"realEditorValues": [null]
+								}
+							]
+						},
+						{
+							"__identifier": "Enemy",
+							"__grid": [9,8],
+							"__pivot": [0.5,1],
+							"__tile": { "tilesetUid": 47, "srcRect": [128,320,32,32] },
+							"width": 64,
+							"height": 64,
+							"defUid": 37,
+							"px": [152,144],
+							"fieldInstances": [
+								{
+									"__identifier": "patrol",
+									"__value": [
+										{ "cx": 13, "cy": 8 },
+										{ "cx": 13, "cy": 10 },
+										{ "cx": 18, "cy": 10 },
+										{ "cx": 18, "cy": 9 },
+										{ "cx": 21, "cy": 9 }
+									],
+									"__type": "Array<Point>",
+									"defUid": 38,
+									"realEditorValues": [
+										{
+											"id": "V_String",
+											"params": ["13,8"]
+										},
+										{
+											"id": "V_String",
+											"params": ["13,10"]
+										},
+										{
+											"id": "V_String",
+											"params": ["18,10"]
+										},
+										{
+											"id": "V_String",
+											"params": ["18,9"]
+										},
+										{
+											"id": "V_String",
+											"params": ["21,9"]
+										}
+									]
+								},
+								{
+									"__identifier": "loots",
+									"__value": [ "Gold", "Healing_potion" ],
+									"__type": "Array<LocalEnum.ItemType>",
+									"defUid": 39,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["Gold"]
+									}, {
+										"id": "V_String",
+										"params": ["Healing_potion"]
+									} ]
+								},
+								{
+									"__identifier": "hp",
+									"__value": 10,
+									"__type": "Int",
+									"defUid": 40,
+									"realEditorValues": [{ "id": "V_Int", "params": [10] }]
+								},
+								{
+									"__identifier": "type",
+									"__value": "Fighter",
+									"__type": "LocalEnum.MonsterType",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Fighter"]
+									}]
 								}
 							]
 						},
@@ -1586,6 +1426,80 @@
 							}]
 						},
 						{
+							"__identifier": "Enemy",
+							"__grid": [26,15],
+							"__pivot": [0.5,1],
+							"__tile": { "tilesetUid": 47, "srcRect": [192,64,32,32] },
+							"width": 32,
+							"height": 32,
+							"defUid": 37,
+							"px": [424,256],
+							"fieldInstances": [
+								{
+									"__identifier": "patrol",
+									"__value": [{ "cx": 19, "cy": 15 }],
+									"__type": "Array<Point>",
+									"defUid": 38,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["19,15"]
+									}]
+								},
+								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
+								{
+									"__identifier": "hp",
+									"__value": 3,
+									"__type": "Int",
+									"defUid": 40,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "type",
+									"__value": "Snek",
+									"__type": "LocalEnum.MonsterType",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Snek"]
+									}]
+								}
+							]
+						},
+						{
+							"__identifier": "Enemy",
+							"__grid": [35,17],
+							"__pivot": [0.5,1],
+							"__tile": { "tilesetUid": 47, "srcRect": [480,96,32,32] },
+							"width": 32,
+							"height": 32,
+							"defUid": 37,
+							"px": [568,288],
+							"fieldInstances": [
+								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] },
+								{
+									"__identifier": "loots",
+									"__value": ["Mana_potion"],
+									"__type": "Array<LocalEnum.ItemType>",
+									"defUid": 39,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Mana_potion"]
+									}]
+								},
+								{ "__identifier": "hp", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
+								{
+									"__identifier": "type",
+									"__value": "Rat",
+									"__type": "LocalEnum.MonsterType",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Rat"]
+									}]
+								}
+							]
+						},
+						{
 							"__identifier": "Door",
 							"__grid": [17,15],
 							"__pivot": [0.5,1],
@@ -1601,6 +1515,43 @@
 								"defUid": 50,
 								"realEditorValues": [null]
 							}]
+						},
+						{
+							"__identifier": "Player",
+							"__grid": [2,10],
+							"__pivot": [0.5,1],
+							"__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] },
+							"width": 20,
+							"height": 20,
+							"defUid": 1,
+							"px": [40,176],
+							"fieldInstances": [
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "defUid": 3, "realEditorValues": [] },
+								{
+									"__identifier": "bag",
+									"__value": [ "Magic_ring", "Healing_potion" ],
+									"__type": "Array<LocalEnum.ItemType>",
+									"defUid": 19,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["Magic_ring"]
+									}, {
+										"id": "V_String",
+										"params": ["Healing_potion"]
+									} ]
+								},
+								{
+									"__identifier": "weapon",
+									"__value": "Trout",
+									"__type": "LocalEnum.ItemType",
+									"defUid": 29,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Trout"]
+									}]
+								}
+							]
 						},
 						{
 							"__identifier": "Trigger",
