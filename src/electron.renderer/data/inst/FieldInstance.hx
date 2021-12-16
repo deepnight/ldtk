@@ -331,7 +331,9 @@ class FieldInstance {
 		if( v==null )
 			return "null";
 		else switch def.type {
-			case F_Int, F_Float, F_Bool, F_Color: return Std.string(v);
+			case F_Int, F_Float:
+				return (def.editorTextPrefix==null?"":def.editorTextPrefix) + Std.string(v) + (def.editorTextSuffix==null?"":def.editorTextSuffix);
+			case F_Bool, F_Color: return Std.string(v);
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
 			case F_String, F_Text, F_Path: return '"$v"';

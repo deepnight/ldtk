@@ -17,6 +17,8 @@ class FieldDef {
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
+	public var editorTextPrefix : Null<String>;
+	public var editorTextSuffix : Null<String>;
 	public var editorCutLongValues : Bool;
 	public var isArray : Bool;
 
@@ -81,6 +83,8 @@ class FieldDef {
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
+		o.editorTextPrefix = json.editorTextPrefix;
+		o.editorTextSuffix = json.editorTextSuffix;
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
 		o.regex = JsonTools.unescapeString( json.regex );
@@ -108,6 +112,8 @@ class FieldDef {
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorAlwaysShow: editorAlwaysShow,
 			editorCutLongValues: editorCutLongValues,
+			editorTextSuffix: editorTextSuffix,
+			editorTextPrefix: editorTextPrefix,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),

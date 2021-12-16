@@ -417,6 +417,15 @@ class FieldDefsForm {
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
 
+		var i = Input.linkToHtmlInput( curField.editorTextPrefix, jForm.find("input[name=editorTextPrefix]") );
+		i.onChange = onFieldChange;
+		i.trimRight = false;
+
+		var i = Input.linkToHtmlInput( curField.editorTextSuffix, jForm.find("input[name=editorTextSuffix]") );
+		i.onChange = onFieldChange;
+		i.trimLeft = false;
+
+
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
 		i.onChange = onFieldChange;
 		i.fixValue = (v)->project.makeUniqueIdStr(v, false, (id)->isFieldIdentifierUnique(id,curField));

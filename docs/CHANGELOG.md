@@ -16,6 +16,7 @@
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Entity fields and related visuals will now be faded away when not working in their layer.
   - Entity fields width will now be limited by their entity width (this greatly reduces screen clutter when having many fields displayed)
+  - Custom fields of type Integer or Float can now have an optional text prefix/suffix to display in editor. Useful to display a unit near a value, like "0.5sec" or "$17".
   - Added more values for App UI scaling setting.
   - Added a Layer option to fade it away when it's not currently selected
   - Added a Layer option to hide it from the layers list
