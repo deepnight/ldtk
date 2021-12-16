@@ -1505,6 +1505,8 @@
 				"uid",
 				"autoRuleGroups",
 				"excludedTags",
+				"fadeInactive",
+				"hideInList",
 				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
@@ -1528,6 +1530,12 @@
 					"description": "Opacity of the layer (0 to 1.0)",
 					"type": [
 						"number"
+					]
+				},
+				"hideInList": {
+					"description": "Hide the layer from the list on the side of the editor view.",
+					"type": [
+						"boolean"
 					]
 				},
 				"__type": {
@@ -1581,6 +1589,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"fadeInactive": {
+					"description": "When TRUE, the layer will be faded out if it isn't the active one.",
+					"type": [
+						"boolean"
 					]
 				},
 				"autoRuleGroups": {

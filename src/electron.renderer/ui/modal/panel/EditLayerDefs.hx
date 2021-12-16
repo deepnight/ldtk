@@ -248,11 +248,26 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.fadeInactive, jForm.find("input[name='fadeInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
+		var i = Input.linkToHtmlInput( cur.hideInList, jForm.find("input[name='hideInList']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
 		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+
+
+		// Edit rules
+		if( cur.isAutoLayer() ) {
+			var jButton = jForm.find("button.editAutoRules");
+			jButton.click( (_)->{
+				close();
+				var li = editor.curLevel.getLayerInstance(cur);
+				editor.selectLayerInstance(li);
+				new ui.modal.panel.EditAllAutoLayerRules(li);
+			});
+		}
 
 
 		// Baking
@@ -546,6 +561,10 @@ class EditLayerDefs extends ui.modal.Panel {
 		for(ld in project.defs.layers) {
 			var e = new J("<li/>");
 			jList.append(e);
+
+			if( ld.hideInList )
+				e.addClass("hidden");
+			e.addClass( Std.string(ld.type) );
 
 			e.append( JsTools.createLayerTypeIcon2(ld.type) );
 

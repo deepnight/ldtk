@@ -89,7 +89,6 @@ class EntityRender extends dn.Process {
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		// _coreGraphics = g;
 		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
 		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
@@ -280,7 +279,7 @@ class EntityRender extends dn.Process {
 		// Base
 		if( _coreRender!=null ) {
 			_coreRender.wrapper.alpha = fullVis ? 1 : 0.8;
-			_coreRender.g.alpha = fullVis ? 1 : 0.25;
+			_coreRender.g.alpha = fullVis ? 1 : 0.5;
 		}
 
 		// Graphics

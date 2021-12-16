@@ -17,7 +17,8 @@
   - Entity fields and related visuals will now be faded away when not working in their layer.
   - Entity fields width will now be limited by their entity width (this greatly reduces screen clutter when having many fields displayed)
   - Added more values for App UI scaling setting.
-  - Added an option for layers to fade them away when they are not currently selected
+  - Added a Layer option to fade it away when it's not currently selected
+  - Added a Layer option to hide it from the layers list
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
   - Clicking on the "New Tileset" button immediately invokes the "Pick image file" dialog.

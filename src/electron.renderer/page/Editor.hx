@@ -1661,6 +1661,9 @@ class Editor extends Page {
 
 		var idx = 1;
 		for(ld in project.defs.layers) {
+			if( ld.hideInList )
+				continue;
+
 			var li = curLevel.getLayerInstance(ld);
 			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			jLayerList.append(e);

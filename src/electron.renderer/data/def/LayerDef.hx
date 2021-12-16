@@ -10,6 +10,7 @@ class LayerDef {
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var displayOpacity : Float = 1.0;
 	public var fadeInactive = false;
+	public var hideInList = false;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 
@@ -61,6 +62,7 @@ class LayerDef {
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 		o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
+		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 
@@ -103,6 +105,7 @@ class LayerDef {
 			gridSize: gridSize,
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			fadeInactive: fadeInactive,
+			hideInList: hideInList,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			requiredTags: requiredTags.toJson(),

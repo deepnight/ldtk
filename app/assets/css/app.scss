@@ -1024,6 +1024,7 @@ ul.log {
 .icon.exit				{ background-image: url("../icons/exit.svg"); }
 .icon.expandMore		{ background-image: url("../icons/expandMore.svg"); }
 .icon.expandLess		{ background-image: url("../icons/expandLess.svg"); }
+.icon.flatten			{ background-image: url("../icons/flatten.svg"); }
 .icon.folder			{ background-image: url("../icons/folder.svg"); }
 .icon.folderOpen		{ background-image: url("../icons/folderOpen.svg"); }
 .icon.folderClose		{ background-image: url("../icons/folderClose.svg"); }
@@ -4934,6 +4935,13 @@ dl.form.fieldInstanceEditor {
 		ul li {
 			grid-template-columns: min-content auto min-content;
 
+			&.hidden {
+				&:not(.active) {
+					color: $lightRed;
+				}
+				font-style: italic;
+				opacity: 0.8;
+			}
 			.icon {
 				width: 1.8em;
 				height: 1.8em;
