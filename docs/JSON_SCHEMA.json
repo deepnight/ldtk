@@ -617,6 +617,13 @@
 						"null"
 					]
 				},
+				"editorTextSuffix": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
+					]
+				},
 				"min": {
 					"description": "Min limit for value, if applicable",
 					"type": [
@@ -657,6 +664,13 @@
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"editorTextPrefix": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"isArray": {
@@ -1716,6 +1730,7 @@
 				"uid",
 				"worldX",
 				"worldY",
+				"__smartColor",
 				"bgPivotX",
 				"bgPivotY",
 				"useAutoIdentifier"
@@ -1802,6 +1817,12 @@
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"__smartColor": {
+					"description": "The \"guessed\" color for this level in the editor, decided using either the background color or an existing custom field.",
+					"type": [
+						"string"
 					]
 				},
 				"fieldInstances": {

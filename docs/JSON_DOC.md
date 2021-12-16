@@ -74,6 +74,7 @@ Value | Type | Description
 `uid` | Int | Unique Int identifier
 `worldX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | World X coordinate in pixels
 `worldY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | World Y coordinate in pixels
+`__smartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | The "guessed" color for this level in the editor, decided using either the background color or an existing custom field.
 `bgColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)*<br/><small class="color"> *Hex color "#rrggbb"* </small> | Background color of the level. If `null`, the project `defaultLevelBgColor` should be used.
 `bgPivotX`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Float | Background image X pivot (0-1)
 `bgPivotY`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Float | Background image Y pivot (0-1)
@@ -261,6 +262,8 @@ Value | Type | Description
 `editorCutLongValues`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.10.0-green.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`
 `editorDisplayPos`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
+`editorTextPrefix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
+`editorTextSuffix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `textLanguageMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.9.3-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
