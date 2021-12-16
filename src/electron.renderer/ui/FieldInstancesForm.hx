@@ -571,7 +571,8 @@ class FieldInstancesForm {
 				jDt.append('<label for="$domId">${fi.def.identifier}</label>');
 			else
 				jDt.append('<label for="$domId">${fi.def.identifier} (${fi.getArrayLength()})</label>');
-			// jDt.attr("title", fi.def.identifier);
+			jDt.attr("title", fi.def.identifier);
+			jDt.attr("noTip", "noTip");
 
 			// Field is not manually defined
 			if( !fd.isArray && fi.isUsingDefault(0) || fd.isArray && fi.getArrayLength()==0 ) {
