@@ -313,10 +313,9 @@ class Editor extends Page {
 
 		// Load tilesets
 		var tilesetChanged = false;
-		if( !project.isBackup() )
-			for(td in project.defs.tilesets)
-				if( reloadTileset(td, true) )
-					tilesetChanged = true;
+		for(td in project.defs.tilesets)
+			if( reloadTileset(td, true) )
+				tilesetChanged = true;
 
 		project.tidy(); // Needed to fix enum value colors
 
