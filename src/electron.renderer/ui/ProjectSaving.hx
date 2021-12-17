@@ -526,13 +526,13 @@ class ProjectSaving extends dn.Process {
 	}
 
 	public static inline function isBackupFile(filePath:String) {
-		var dir = dn.FilePath.fromFile(filePath).getDirectoryArray();
-		return dir!=null && dir.length>=2 && dir[dir.length-2]==Const.BACKUP_DIR;
+		var inf = extractBackupInfosFromFileName(filePath);
+		return inf!=null;
 	}
 
 	public static inline function isCrashFile(backupAbsPath:String) {
 		var inf = extractBackupInfosFromFileName(backupAbsPath);
-		return inf==null ? null : inf.crash;
+		return inf!=null && inf.crash;
 	}
 
 	public static function makeOriginalPathFromBackup(backupAbsPath:String) : Null<dn.FilePath> {
