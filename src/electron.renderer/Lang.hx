@@ -117,7 +117,7 @@ class Lang {
 	public static function date(date:Date) : LocaleString {
 		var day = date.getDate();
 		return untranslated(
-			MONTHS[ date.getMonth()+1 ]
+			MONTHS[ date.getMonth() ]
 			+" " + day + ( day==1?"st" : day==2?"nd" : day==3?"rd" : "th" )
 			+" " + date.getFullYear()
 			+" "+t._("at")
