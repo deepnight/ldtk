@@ -464,7 +464,6 @@ class Project {
 
 
 	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
-		trace("getorload "+relPath);
 		try {
 			if( !imageCache.exists(relPath) ) {
 				// Load it from the disk
