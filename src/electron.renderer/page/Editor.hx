@@ -1427,6 +1427,7 @@ class Editor extends Page {
 				invalidateLevelCache( project.getLevelUsingLayerInst(li) );
 
 			case FieldDefChanged(fd):
+
 			case FieldDefSorted:
 
 			case LevelFieldInstanceChanged(l,fi):
@@ -1517,8 +1518,7 @@ class Editor extends Page {
 				invalidateLevelCache(l);
 
 			case WorldSettingsChanged:
-				for(l in project.levels)
-					invalidateLevelCache(l);
+				invalidateAllLevelsCache();
 
 			case LevelSelected(l):
 				updateLayerList();
@@ -1579,6 +1579,11 @@ class Editor extends Page {
 			curLevelHistory.manualOnGlobalEvent(e);
 
 		updateTitle();
+	}
+
+	public function invalidateAllLevelsCache() {
+		for(l in project.levels)
+			invalidateLevelCache(l);
 	}
 
 	public function invalidateLevelCache(l:data.Level) {
