@@ -442,6 +442,25 @@ class ProjectSaving extends dn.Process {
 				},
 			});
 		}
+
+		// Remove old backups
+		ops.push({
+			label: "Removing older backups",
+			cb: ()->{
+				var all = listBackupFiles(p.filePath.full);
+				while( all.length>p.backupLimit ) {
+					var b = all.pop();
+					try {
+						log("Removing older backup: "+b.backup.getLastDirectory());
+						NT.removeDir(b.backup.directory);
+					}
+					catch(_) {
+						App.LOG.error("Failed to remove old backup: "+b.backup);
+					}
+				}
+			}
+		});
+
 		new ui.modal.Progress("Backup", 5, ops, ()->{
 			log('  Done!');
 			if( anyError )
