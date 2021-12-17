@@ -1,5 +1,5 @@
 #Specify the file name
-$fileName = "cavesofgallet_tiles.png"
+$fileName = "atlas\cavesofgallet_tiles.png"
 
 #Open the file in read only mode, without sharing (I.e., locked as requested)
 $file = [System.io.File]::Open($fileName, 'Open', 'Read', 'None')
