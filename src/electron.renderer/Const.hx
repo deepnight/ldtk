@@ -42,6 +42,7 @@ class Const {
 	public static final LEVEL_EXTENSION = "ldtkl";
 	public static final POINT_SEPARATOR = ",";
 	public static final BACKUP_NAME_SUFFIX = ".backup";
+	public static final BACKUP_DIR = "backups";
 	public static final LEVEL_FILE_LEADER_ZEROS = 4;
 	public static final DEFAULT_BACKUP_LIMIT = 10;
 

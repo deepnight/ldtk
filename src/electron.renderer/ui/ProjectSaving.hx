@@ -123,39 +123,42 @@ class ProjectSaving extends dn.Process {
 					beginState(Backup);
 
 			case Backup:
-				var backupDir = project.getAbsExternalFilesDir() + "/backups";
+				// var backupDir = project.getAbsExternalFilesDir() + "/backups";
 				if( project.backupOnSave ) {
 					logState();
+					backupProjectFiles(project, ()->{
+						beginState(CheckLevelCache);
+					});
 					var fp = ProjectSaving.makeBackupFilePath(project);
 
-					initDir(fp.directory);
+					// initDir(fp.directory);
 
-					var ops = [];
+					// var ops = [];
 
-					// Save a duplicate in backups folder
-					ops.push({
-						label: L.t._("Writing backup..."),
-						cb: ()->{
-							var savingData = prepareProjectSavingData(project, true);
-							NT.writeFileString(fp.full, savingData.projectJson);
-						}
-					});
+					// // Save a duplicate in backups folder
+					// ops.push({
+					// 	label: L.t._("Writing backup..."),
+					// 	cb: ()->{
+					// 		var savingData = prepareProjectSavingData(project, true);
+					// 		NT.writeFileString(fp.full, savingData.projectJson);
+					// 	}
+					// });
 
 					// Delete extra backup files
-					ops.push({
-						label: L.t._("Cleaning backups..."),
-						cb: ()->{
-							var all = listBackupFiles(project.filePath.full);
-							if( all.length>project.backupLimit ) {
-								for(i in project.backupLimit...all.length ) {
-									log("Discarded backup: "+all[i].backup.full);
-									NT.removeFile( all[i].backup.full );
-								}
-							}
-						}
-					});
+					// ops.push({
+					// 	label: L.t._("Cleaning backups..."),
+					// 	cb: ()->{
+					// 		var all = listBackupFiles(project.filePath.full);
+					// 		if( all.length>project.backupLimit ) {
+					// 			for(i in project.backupLimit...all.length ) {
+					// 				log("Discarded backup: "+all[i].backup.full);
+					// 				NT.removeFile( all[i].backup.full );
+					// 			}
+					// 		}
+					// 	}
+					// });
 
-					new ui.modal.Progress( L.t._("Backups"), 1, ops, ()->beginState(CheckLevelCache) );
+					// new ui.modal.Progress( L.t._("Backups"), 1, ops, ()->beginState(CheckLevelCache) );
 				}
 				else
 					beginState(CheckLevelCache);
@@ -389,6 +392,36 @@ class ProjectSaving extends dn.Process {
 	}
 
 
+	function backupProjectFiles(p:data.Project, onComplete:Void->Void) {
+		var sourceDir = dn.FilePath.fromDir( p.filePath.directoryWithSlash );
+		var backupDir = dn.FilePath.fromDir( p.getAbsExternalFilesDir() + "/" + Const.BACKUP_DIR + "/" + DateTools.format(Date.now(), "%Y-%m-%d_%H-%M-%S") );
+		log('Backing up $sourceDir to $backupDir...');
+		var allRelFiles = [ p.filePath.fileWithExt ];
+		if( p.externalLevels ) {
+			var i = 0;
+			for( l in p.levels )
+				allRelFiles.push( l.makeExternalRelPath(i++) );
+		}
+		log('  Found ${allRelFiles.length} files.');
+		initDir( backupDir.full );
+		var ops : Array<ui.modal.Progress.ProgressOp> = [];
+		for(f in allRelFiles) {
+			var from = dn.FilePath.fromFile(sourceDir.full+"/"+f);
+			var to = dn.FilePath.fromFile(backupDir.full+"/"+f);
+			ops.push({
+				label: from.fileWithExt,
+				cb: ()->{
+					dn.js.NodeTools.createDirs(to.directory);
+					dn.js.NodeTools.copyFile(from.full, to.full);
+				},
+			});
+		}
+		new ui.modal.Progress("Backup", 5, ops, ()->{
+			log('  Done!');
+			onComplete();
+		});
+	}
+
 
 	public static inline function jsonStringify(p:data.Project, json:Dynamic) {
 		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
@@ -472,7 +505,10 @@ class ProjectSaving extends dn.Process {
 	}
 
 	public static inline function isBackupFile(filePath:String) {
-		return filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>0;
+		var dir = dn.FilePath.fromFile(filePath).getDirectoryArray();
+		return dir!=null && dir.length>=2 && dir[dir.length-2]==Const.BACKUP_DIR;
+		// return dn.FilePath.extractDirectoryWithSlash(filePath).indexOf("backups");
+		// return filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>0;
 	}
 
 	public static inline function isCrashFile(filePath:String) {
