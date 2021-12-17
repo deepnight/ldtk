@@ -409,6 +409,8 @@ class ProjectSaving extends dn.Process {
 		var sourceDir = dn.FilePath.fromDir( p.filePath.directoryWithSlash );
 		var backupDir = dn.FilePath.fromDir( subProjectDir + "/" + Const.BACKUP_DIR + "/backup_" + DateTools.format(Date.now(), "%Y-%m-%d_%H-%M-%S") );
 		log('Backing up $sourceDir to $backupDir...');
+
+		// List potential external levels
 		var allRelFiles = [ p.filePath.fileWithExt ];
 		if( NT.fileExists(subProjectDir) ) {
 			for( f in NT.readDir(subProjectDir) ) {
@@ -417,14 +419,11 @@ class ProjectSaving extends dn.Process {
 				allRelFiles.push(p.filePath.fileName+"/"+f);
 			}
 		}
-		// if( p.externalLevels ) {
-		// 	var i = 0;
-		// 	for( l in p.levels )
-		// 		allRelFiles.push( l.makeExternalRelPath(i++) );
-		// }
 
+		// Copy files
 		log('  Found ${allRelFiles.length} files.');
 		initDir( backupDir.full );
+		var anyError = false;
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
 		for(f in allRelFiles) {
 			var from = dn.FilePath.fromFile(sourceDir.full+"/"+f);
@@ -432,14 +431,23 @@ class ProjectSaving extends dn.Process {
 			ops.push({
 				label: from.fileWithExt,
 				cb: ()->{
-					dn.js.NodeTools.createDirs(to.directory);
-					dn.js.NodeTools.copyFile(from.full, to.full);
+					try {
+						dn.js.NodeTools.createDirs(to.directory);
+						dn.js.NodeTools.copyFile(from.full, to.full);
+					}
+					catch(_) {
+						App.LOG.error("Failed to backup file: "+from.fileWithExt);
+						anyError = true;
+					}
 				},
 			});
 		}
 		new ui.modal.Progress("Backup", 5, ops, ()->{
 			log('  Done!');
-			onComplete();
+			if( anyError )
+				error(L.t._("Backup failed!"));
+			else
+				onComplete();
 		});
 	}
 
