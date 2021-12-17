@@ -115,6 +115,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// }
 
 		JsTools.parseComponents(jPickerWrapper);
+
+		checkBackup();
 	}
 
 
@@ -240,6 +242,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 		else
 			jSelect.addClass("noValue");
+
+		checkBackup();
 	}
 
 
@@ -279,5 +283,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 			editor.ge.emit(TilesetDefSorted);
 		});
 
+		checkBackup();
 	}
 }

@@ -234,5 +234,6 @@ class EditProject extends ui.modal.Panel {
 		}
 
 		JsTools.parseComponents(jForm);
+		checkBackup();
 	}
 }

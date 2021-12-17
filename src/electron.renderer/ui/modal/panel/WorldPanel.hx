@@ -99,6 +99,7 @@ class WorldPanel extends ui.modal.Panel {
 		i.onChange = ()->project.onWorldGridChange(project.worldGridWidth, old);
 
 		JsTools.parseComponents(jForm);
+		checkBackup();
 	}
 
 

@@ -273,10 +273,13 @@ class LevelInstancePanel extends ui.modal.Panel {
 
 
 		JsTools.parseComponents(jForm);
+
+		checkBackup();
 	}
 
 
 	function updateFieldsForm() {
 		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd) );
+		checkBackup();
 	}
 }

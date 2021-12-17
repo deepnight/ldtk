@@ -35,6 +35,20 @@ class Panel extends ui.Modal {
 		insertCloseButton();
 	}
 
+	function checkBackup() {
+		if( !project.isBackup() )
+			return;
+
+		jContent.find("*:not(.close)")
+			.off()
+			.mouseover( (ev)->ev.preventDefault() );
+		jContent.find("input").prop("disabled",true);
+
+		jWrapper.find(".backupNotice").remove();
+		jWrapper.append('<div class="backupNotice"><span>This panel is disabled for backup files.</span></div>');
+		jWrapper.addClass("backupLock");
+	}
+
 	override function onResize() {
 		super.onResize();
 		var jBar = editor.jMainPanel.find("#mainBar");

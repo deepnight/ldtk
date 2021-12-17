@@ -219,6 +219,8 @@ class EditEnumDefs extends ui.modal.Panel {
 			selectEnum(moved);
 			editor.ge.emit(EnumDefSorted);
 		});
+
+		checkBackup();
 	}
 
 
@@ -387,5 +389,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				curEnum.values.insert(ev.newIndex, v);
 				editor.ge.emit(EnumDefChanged);
 			});
+
+		checkBackup();
 	}
 }

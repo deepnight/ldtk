@@ -550,7 +550,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 		JsTools.parseComponents(jForm);
-
+		checkBackup();
 	}
 
 
@@ -596,5 +596,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			select(moved);
 			editor.ge.emit(LayerDefSorted);
 		});
+		checkBackup();
 	}
 }

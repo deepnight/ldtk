@@ -355,6 +355,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			editor.ge.emit(EntityDefChanged);
 		});
 		jPivots.append(p);
+
+		checkBackup();
 	}
 
 
@@ -365,6 +367,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			fieldsForm.useFields([]);
 			fieldsForm.hide();
 		}
+		checkBackup();
 	}
 
 
@@ -435,6 +438,8 @@ class EditEntityDefs extends ui.modal.Panel {
 				editor.ge.emit(EntityDefSorted);
 			});
 		}
+
+		checkBackup();
 	}
 
 
