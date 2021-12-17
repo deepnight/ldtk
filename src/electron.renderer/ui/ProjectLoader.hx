@@ -1,7 +1,7 @@
 package ui;
 
 enum LoadingError {
-	NotFound;
+	ProjectNotFound;
 	FileRead(err:String);
 	JsonParse(err:String);
 	ProjectInit(err:String);
@@ -21,7 +21,7 @@ class ProjectLoader {
 		var fileName = dn.FilePath.extractFileWithExt(filePath);
 
 		if( !NT.fileExists(filePath) ) {
-			error(NotFound);
+			error(ProjectNotFound);
 			return;
 		}
 
@@ -142,14 +142,20 @@ class ProjectLoader {
 			progress.cancel();
 
 		log.error( switch err {
-			case NotFound: "File not found";
+			case ProjectNotFound: "Project file not found";
 			case FileRead(err): err;
 			case JsonParse(err): err;
 			case ProjectInit(err): err;
 		});
 
 		onError(err);
-		new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
+		switch err {
+			case ProjectNotFound:
+				N.error("Project file not found");
+
+			case FileRead(_), JsonParse(_), ProjectInit(_):
+				new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
+		}
 	}
 
 

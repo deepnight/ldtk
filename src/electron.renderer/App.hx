@@ -606,9 +606,9 @@ class App extends dn.Process {
 					case null:
 						L.t._("Unknown error");
 
-					case NotFound:
+					case ProjectNotFound:
 						unregisterRecentProject(filePath);
-						L.t._("File not found");
+						L.t._("Project file not found");
 
 					case JsonParse(err):
 						L.t._("Failed to parse project JSON file!");
