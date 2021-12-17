@@ -201,7 +201,7 @@ class LevelRender extends dn.Process {
 			case TilesetDefRemoved(td):
 				invalidateAll();
 
-			case TilesetDefChanged(td):
+			case TilesetImageLoaded(td, _), TilesetDefChanged(td):
 				for(li in editor.curLevel.layerInstances)
 					if( li.isUsingTileset(td) )
 						invalidateLayer(li);

@@ -427,7 +427,7 @@ class Editor extends Page {
 					var newRelPath = project.makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( newRelPath );
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
-					ge.emit( TilesetDefChanged(td) );
+					ge.emit( TilesetImageLoaded(td, false) );
 					levelRender.invalidateAll();
 				});
 
@@ -457,7 +457,7 @@ class Editor extends Page {
 			td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 		}
 
-		ge.emit( TilesetDefChanged(td) );
+		ge.emit( TilesetImageLoaded(td, isInitialLoading) );
 		return changed;
 	}
 
@@ -1339,8 +1339,8 @@ class Editor extends Page {
 				case LevelRemoved(l): extra = l.uid;
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
-				case LevelJsonCacheInvalidated(l): extra = l.uid;
-				case WorldLevelMoved(l): extra = l.uid;
+				case LevelJsonCacheInvalidated(l):
+				case WorldLevelMoved(l):
 				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
@@ -1359,7 +1359,7 @@ class Editor extends Page {
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
-				case LayerInstanceChanged(li): extra = li.layerDefUid;
+				case LayerInstanceChanged(li):
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
@@ -1445,6 +1445,9 @@ class Editor extends Page {
 			case AutoLayerRenderingChanged:
 			case LayerInstanceTilesetChanged(li): invalidateLevelCache(li.level);
 			case TilesetDefChanged(td): invalidateAllLevelsCache();
+			case TilesetImageLoaded(td, init):
+				if( !init )
+					invalidateAllLevelsCache();
 			case TilesetDefAdded(td):
 			case TilesetDefRemoved(td): invalidateAllLevelsCache();
 			case TilesetMetaDataChanged(td):
@@ -1486,6 +1489,9 @@ class Editor extends Page {
 			case ToolOptionChanged:
 			case BeforeProjectSaving:
 			case ProjectSaved:
+			case TilesetImageLoaded(td,init):
+				if( !init )
+					needSaving = true;
 
 			case _:
 				needSaving = true;
@@ -1617,6 +1623,9 @@ class Editor extends Page {
 			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted, TilesetDefSorted:
 				updateTool();
 				updateGuide();
+
+			case TilesetImageLoaded(td, init):
+				updateTool();
 
 			case TilesetMetaDataChanged(td):
 

@@ -45,6 +45,7 @@ enum GlobalEvent {
 	AutoLayerRenderingChanged;
 	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);
 
+	TilesetImageLoaded(td:data.def.TilesetDef, isInitial:Bool);
 	TilesetDefChanged(td:data.def.TilesetDef);
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);

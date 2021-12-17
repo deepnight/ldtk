@@ -76,6 +76,7 @@ class LevelHistory {
 			case LayerDefSorted:
 
 			case TilesetDefChanged(td):
+			case TilesetImageLoaded(td, init):
 			case TilesetSelectionSaved(td):
 			case TilesetDefAdded(td):
 			case TilesetDefPixelDataCacheRebuilt(td):

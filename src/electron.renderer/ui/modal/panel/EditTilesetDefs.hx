@@ -52,6 +52,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 				if( td==curTd )
 					rebuildPixelData();
 
+			case TilesetImageLoaded(td, init):
+				updateForm();
+				updateTilesetPreview();
+				if( td==curTd )
+					rebuildPixelData();
+
 			case TilesetMetaDataChanged(td):
 				updateTilesetPreview();
 
@@ -176,7 +182,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			}
 
 			updateTilesetPreview();
-			editor.ge.emit( TilesetDefChanged(curTd) );
+			editor.ge.emit( TilesetImageLoaded(curTd, false) );
 		});
 		jImg.appendTo( jForm.find("dd.img") );
 
