@@ -18,7 +18,7 @@ class Progress extends ui.Modal {
 		canBeClosedManually = false;
 		jModalAndMask.addClass("progress");
 		jMask.hide().fadeIn(500);
-		App.LOG.general('"$title", ${ops.length} operation(s):');
+		App.LOG.general('Progress started: "$title", ${ops.length} operation(s)');
 
 		jContent.append('<div class="title">$title</div>');
 
@@ -47,7 +47,7 @@ class Progress extends ui.Modal {
 			if( ops.length==0 ) {
 				// All done!
 				canBeClosedManually = true;
-				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
+				App.LOG.general('Progress completed: "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
 				done = true;
 				_updateBar();
 

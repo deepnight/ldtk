@@ -28,7 +28,7 @@ class ProjectSaving extends dn.Process {
 		this.project = project; // WARNING: no clone() here, so the project should NOT be modified during saving!!
 		QUEUE.push(this);
 
-		log("Preparing project saving...");
+		log('Preparing project saving: ${project.filePath.full}...');
 		project.garbageCollectUnusedImages();
 		beginState(InQueue);
 		updateState();
@@ -46,7 +46,7 @@ class ProjectSaving extends dn.Process {
 
 	inline function hasEditor() return Editor.ME!=null && !Editor.ME.destroyed;
 
-	inline function log(str:String) App.LOG.add("save", '[${project.filePath.fileName}] $str');
+	inline function log(str:String) App.LOG.add("save", '$str');
 	inline function logState() log('=> $state...');
 
 	function error(str:LocaleString) {
@@ -215,7 +215,7 @@ class ProjectSaving extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), 10, ops);
+					new ui.modal.Progress(Lang.t._("Saving levels"), 10, ops, ()->beginState(SavingLayerImages));
 				}
 				else {
 					// Remove previous external levels
@@ -377,8 +377,6 @@ class ProjectSaving extends dn.Process {
 			case SavingMainFile:
 
 			case SavingExternLevels:
-				if( !ui.modal.Progress.hasAny() )
-					beginState(SavingLayerImages);
 
 			case SavingLayerImages:
 				if( !ui.modal.Progress.hasAny() )
