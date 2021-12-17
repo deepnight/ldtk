@@ -1398,6 +1398,83 @@ class Editor extends Page {
 		}
 
 
+		// Level cache invalidation
+		switch e {
+			case ViewportChanged:
+			case AppSettingsChanged:
+			case ProjectSelected:
+			case ProjectSettingsChanged:
+			case BeforeProjectSaving:
+			case ProjectSaved:
+			case LevelSelected(level):
+			case LevelSettingsChanged(_), LevelAdded(_): invalidateAllLevelsCache();
+			case LevelRemoved(_):
+				switch project.worldLayout {
+					case Free, GridVania:
+					case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
+				}
+			case LevelResized(level): invalidateLevelCache(level);
+			case LevelRestoredFromHistory(level): invalidateLevelCache(level);
+			case LevelJsonCacheInvalidated(level):
+			case WorldLevelMoved(level):
+				switch project.worldLayout {
+					case Free, GridVania: invalidateLevelCache(level);
+					case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
+				}
+			case WorldSettingsChanged: invalidateAllLevelsCache();
+			case LayerDefAdded: invalidateAllLevelsCache();
+			case LayerDefRemoved(defUid): invalidateAllLevelsCache();
+			case LayerDefChanged: invalidateAllLevelsCache();
+			case LayerDefSorted: invalidateAllLevelsCache();
+			case LayerDefConverted: invalidateAllLevelsCache();
+			case LayerRuleChanged(rule): invalidateAllLevelsCache();
+			case LayerRuleAdded(rule): invalidateAllLevelsCache();
+			case LayerRuleRemoved(rule): invalidateAllLevelsCache();
+			case LayerRuleSeedChanged: invalidateAllLevelsCache();
+			case LayerRuleSorted: invalidateAllLevelsCache();
+			case LayerRuleGroupAdded: invalidateAllLevelsCache();
+			case LayerRuleGroupRemoved(rg): invalidateAllLevelsCache();
+			case LayerRuleGroupChanged(rg): invalidateAllLevelsCache();
+			case LayerRuleGroupChangedActiveState(rg): invalidateAllLevelsCache();
+			case LayerRuleGroupSorted: invalidateAllLevelsCache();
+			case LayerRuleGroupCollapseChanged(rg):
+			case LayerInstanceSelected:
+			case LayerInstanceChanged(li): invalidateLevelCache(li.level);
+			case LayerInstanceVisiblityChanged(li):
+			case LayerInstanceRestoredFromHistory(li): invalidateLevelCache(li.level);
+			case AutoLayerRenderingChanged:
+			case LayerInstanceTilesetChanged(li): invalidateLevelCache(li.level);
+			case TilesetDefChanged(td): invalidateAllLevelsCache();
+			case TilesetDefAdded(td):
+			case TilesetDefRemoved(td): invalidateAllLevelsCache();
+			case TilesetMetaDataChanged(td):
+			case TilesetSelectionSaved(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
+			case TilesetDefSorted:
+			case EntityInstanceAdded(ei): invalidateLevelCache(ei._li.level);
+			case EntityInstanceRemoved(ei): invalidateLevelCache(ei._li.level);
+			case EntityInstanceChanged(ei): invalidateLevelCache(ei._li.level);
+			case EntityDefAdded:
+			case EntityDefRemoved: invalidateAllLevelsCache();
+			case EntityDefChanged: invalidateAllLevelsCache();
+			case EntityDefSorted:
+			case FieldDefAdded(fd): invalidateAllLevelsCache();
+			case FieldDefRemoved(fd): invalidateAllLevelsCache();
+			case FieldDefChanged(fd): invalidateAllLevelsCache();
+			case FieldDefSorted: invalidateAllLevelsCache();
+			case LevelFieldInstanceChanged(l, fi): invalidateLevelCache(l);
+			case EntityFieldInstanceChanged(ei, fi): invalidateLevelCache(ei._li.level);
+			case EnumDefAdded:
+			case EnumDefRemoved: invalidateAllLevelsCache();
+			case EnumDefChanged: invalidateAllLevelsCache();
+			case EnumDefSorted:
+			case EnumDefValueRemoved: invalidateAllLevelsCache();
+			case ToolOptionChanged:
+			case WorldMode(active):
+			case GridChanged(active):
+		}
+
+
 		// Check if events changes the NeedSaving flag
 		switch e {
 			case WorldMode(_):
@@ -1425,17 +1502,14 @@ class Editor extends Page {
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
 			case LayerInstanceChanged(li):
-				invalidateLevelCache( project.getLevelUsingLayerInst(li) );
 
 			case FieldDefChanged(fd):
 
 			case FieldDefSorted:
 
 			case LevelFieldInstanceChanged(l,fi):
-				invalidateLevelCache(l);
 
 			case EntityFieldInstanceChanged(ei,fi):
-				invalidateLevelCache(curLevel);
 
 			case EntityInstanceAdded(ei):
 
@@ -1504,22 +1578,17 @@ class Editor extends Page {
 
 			case LevelSettingsChanged(l):
 				updateGuide();
-				invalidateLevelCache(l);
 
 			case LevelJsonCacheInvalidated(l):
 			case LevelAdded(l):
-				invalidateLevelCache(l);
 
 			case LevelRemoved(l):
 
 			case LevelResized(l):
-				invalidateLevelCache(l);
 
 			case WorldLevelMoved(l):
-				invalidateLevelCache(l);
 
 			case WorldSettingsChanged:
-				invalidateAllLevelsCache();
 
 			case LevelSelected(l):
 				updateLayerList();
@@ -1597,7 +1666,6 @@ class Editor extends Page {
 			l.invalidateJsonCache();
 			ge.emit( LevelJsonCacheInvalidated(l) );
 		}
-		N.debug("Invalidated: "+l.identifier);
 	}
 
 
