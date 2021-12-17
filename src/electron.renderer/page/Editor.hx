@@ -1344,7 +1344,7 @@ class Editor extends Page {
 				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
-				case LayerDefRemoved(defUid):
+				case LayerDefRemoved(defUid): extra = defUid;
 				case LayerDefChanged:
 				case LayerDefSorted:
 				case LayerRuleChanged(rule): extra = rule.uid;
@@ -1359,7 +1359,7 @@ class Editor extends Page {
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
-				case LayerInstanceChanged(li):
+				case LayerInstanceChanged(li): extra = li.layerDefUid;
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
@@ -1392,6 +1392,7 @@ class Editor extends Page {
 				case EnumDefValueRemoved:
 				case ToolOptionChanged:
 				case GridChanged(active):
+				case _:
 			}
 			App.LOG.add( "event", e.getName() + (extra==null ? "" : " "+Std.string(extra)) );
 		}
