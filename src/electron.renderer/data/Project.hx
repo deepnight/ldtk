@@ -130,6 +130,7 @@ class Project {
 		if( relPath==null )
 			return null;
 
+		relPath = fixRelativePath(relPath);
 		var fp = dn.FilePath.fromFile(relPath);
 		fp.useSlashes();
 		return fp.hasDriveLetter()
@@ -453,7 +454,17 @@ class Project {
 		}
 	}
 
+
+	/**
+		Append required ".."s if the current project is a backup
+	**/
+	public inline function fixRelativePath(relPath:Null<String>) : Null<String> {
+		return relPath==null ? null : isBackup() ? "../../../"+relPath : relPath;
+	}
+
+
 	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
+		trace("getorload "+relPath);
 		try {
 			if( !imageCache.exists(relPath) ) {
 				// Load it from the disk
