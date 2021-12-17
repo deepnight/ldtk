@@ -126,11 +126,13 @@ class Project {
 		return fp.full;
 	}
 
-	public function makeAbsoluteFilePath(relPath:String) {
+	public function makeAbsoluteFilePath(relPath:String, fixBackupPaths=true) {
 		if( relPath==null )
 			return null;
 
-		relPath = fixRelativePath(relPath);
+		if( fixBackupPaths )
+			relPath = fixRelativePath(relPath);
+
 		var fp = dn.FilePath.fromFile(relPath);
 		fp.useSlashes();
 		return fp.hasDriveLetter()

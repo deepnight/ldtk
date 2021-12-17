@@ -265,14 +265,14 @@ class Editor extends Page {
 			var jBackup = new J('<div class="backupHeader"/>');
 			var jDesc = new J('<div class="desc"/>');
 			jDesc.appendTo(jBackup);
-			jDesc.text( L.t._("This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.") );
+			jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
+			var inf = ui.ProjectSaving.extractBackupInfosFromFileName(project.filePath.full);
+			if( inf!=null )
+				jDesc.append("<p>"+inf.date+"</p>");
 			var jRestore = new J('<button>Restore this backup</button>');
 			jRestore.click( _->onBackupRestore() );
 			jRestore.appendTo(jBackup);
 			setPermanentNotification("backup", jBackup);
-			// , ()->{
-				// onBackupRestore();
-			// });
 		}
 		else
 			setPermanentNotification("backup");
@@ -1274,33 +1274,29 @@ class Editor extends Page {
 
 	function onBackupRestore() {
 		new ui.modal.dialog.Confirm(
-			Lang.t._("Do you want to want to RESTORE this backup?"),
+			L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
 			()->{
 				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
-				if( !NT.fileExists(original.full) ) {
+				if( original.full==null || !NT.fileExists(original.full) ) {
 					// Project not found
-					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the corresponding project file."));
+					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
 				}
 				else {
-					new ui.modal.dialog.Confirm( // extra confirmation
-						Lang.t._("WARNING: I will REPLACE the original project file with this backup. Are you sure?"),
-						true,
-						()->{
-							App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-							var crashFile = ui.ProjectSaving.isCrashFile(project.filePath.full) ? project.filePath.full : null;
+					App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
+					var crashBackupDir = ui.ProjectSaving.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
 
-							// Save upon original
-							App.LOG.fileOp('Backup original: ${original.full}...');
-							project.filePath = original.clone();
-							setPermanentNotification("backup");
-							onSave();
-							selectProject(project);
+					// Save upon original
+					App.LOG.fileOp('Backup original: ${original.full}...');
+					project.filePath = original.clone();
+					setPermanentNotification("backup");
+					for(l in project.levels)
+						invalidateLevelCache(l);
+					onSave();
+					selectProject(project);
 
-							// Delete crash backup
-							if( crashFile!=null )
-								NT.removeFile(crashFile);
-						}
-					);
+					// Delete crash backup
+					if( crashBackupDir!=null )
+						NT.removeDir(crashBackupDir);
 				}
 			}
 		);
@@ -1500,11 +1496,17 @@ class Editor extends Page {
 
 			case LevelSettingsChanged(l):
 				updateGuide();
+				invalidateLevelCache(l);
 
 			case LevelJsonCacheInvalidated(l):
 			case LevelAdded(l):
+				invalidateLevelCache(l);
+
 			case LevelRemoved(l):
+
 			case LevelResized(l):
+				invalidateLevelCache(l);
+
 			case WorldLevelMoved(l):
 				invalidateLevelCache(l);
 

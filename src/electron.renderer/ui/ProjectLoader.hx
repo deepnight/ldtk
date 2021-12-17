@@ -93,7 +93,7 @@ class ProjectLoader {
 						lops.push({
 							label: l.identifier,
 							cb: ()->{
-								var path = p.makeAbsoluteFilePath(l.externalRelPath);
+								var path = p.makeAbsoluteFilePath(l.externalRelPath, false);
 								if( !NT.fileExists(path) ) {
 									_invalidLevel(curIdx, "Level file not found "+l.externalRelPath);
 								}

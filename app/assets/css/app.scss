@@ -2926,9 +2926,15 @@ canvas#webgl {
 					display: grid;
 					align-items: center;
 					text-align: left;
+					p {
+						margin-top: 4px;
+						margin-bottom: 4px;
+					}
 				}
 				button {
 					width: 250px;
+					height: 40px;
+					align-self: center;
 				}
 			}
 		}
