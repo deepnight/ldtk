@@ -549,7 +549,9 @@ class Editor extends Page {
 			#end
 
 			case K.S:
-				if( !hasInputFocus() && App.ME.isCtrlDown() )
+				if( project.isBackup() )
+					N.error("Cannot save over a backup file.");
+				else if( !hasInputFocus() && App.ME.isCtrlDown() )
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
