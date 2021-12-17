@@ -1296,6 +1296,10 @@ class Editor extends Page {
 					onSave();
 					selectProject(project);
 
+					if( worldMode )
+						setWorldMode(false);
+					ui.Modal.closeAll();
+
 					// Delete crash backup
 					if( crashBackupDir!=null )
 						NT.removeDir(crashBackupDir);
