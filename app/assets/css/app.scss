@@ -2019,7 +2019,7 @@ textarea {
 				span {
 					padding: 16px;
 					border-radius: 4px;
-					background-color: $red;
+					background-color: $helpMed;
 					box-shadow: 0px 0px 16px transparentize($color: black, $amount: 0.6);
 				}
 			}
@@ -2907,21 +2907,29 @@ canvas#webgl {
 		top: 0;
 		left: $mainPanelNormalWid;
 		width: calc( 100vw - #{ $mainPanelNormalWid } );
-		z-index: 9999;
+		z-index: 1;
 		li {
-			padding: 8px;
+			padding: 32px 32px;
 			font-size: 9pt;
 			color: white;
 			font-weight: bold;
 			text-align: center;
 			background-color: $red;
-			&.noClick {
-				pointer-events: none;
-			}
-			&:not(.noClick):hover {
-				outline: 1px solid white;
-				outline-offset: -1px;
-				cursor: pointer;
+
+			.backupHeader {
+				display: grid;
+				max-width: 600px;
+				margin: auto;
+				grid-template-columns: auto min-content;
+				gap: 16px;
+				.desc {
+					display: grid;
+					align-items: center;
+					text-align: left;
+				}
+				button {
+					width: 250px;
+				}
 			}
 		}
 		li#backup {

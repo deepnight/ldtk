@@ -238,15 +238,16 @@ class Editor extends Page {
 		});
 	}
 
-	public function setPermanentNotification(id:String, ?msg:dn.data.GetText.LocaleString, ?onClick:Void->Void) {
+	public function setPermanentNotification(id:String, ?jContent:js.jquery.JQuery) {
 		jPage.find('#permanentNotifications #$id').remove();
-		if( msg!=null ) {
-			var jLi = new J('<li id="$id">$msg</li>');
+		if( jContent!=null ) {
+			var jLi = new J('<li id="$id"></li>');
+			jLi.append(jContent);
 			jPage.find("#permanentNotifications").append(jLi);
-			if( onClick!=null )
-				jLi.click( (_)->onClick() );
-			else
-				jLi.addClass("noClick");
+			// if( onClick!=null )
+			// 	jLi.click( (_)->onClick() );
+			// else
+			// 	jLi.addClass("noClick");
 		}
 	}
 
@@ -259,10 +260,19 @@ class Editor extends Page {
 
 		var all = ui.ProjectSaving.listBackupFiles(project.filePath.full);
 
+		// Backup header
 		if( project.isBackup() ) {
-			setPermanentNotification("backup", L.t._("This file is a BACKUP: some external files such as images and tilesets are temporarily unavailable, but that's normal. The backup project file isn't stored in the same location as the original file. Click on this message to RESTORE this backup."), ()->{
-				onBackupRestore();
-			});
+			var jBackup = new J('<div class="backupHeader"/>');
+			var jDesc = new J('<div class="desc"/>');
+			jDesc.appendTo(jBackup);
+			jDesc.text( L.t._("This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.") );
+			var jRestore = new J('<button>Restore this backup</button>');
+			jRestore.click( _->onBackupRestore() );
+			jRestore.appendTo(jBackup);
+			setPermanentNotification("backup", jBackup);
+			// , ()->{
+				// onBackupRestore();
+			// });
 		}
 		else
 			setPermanentNotification("backup");
