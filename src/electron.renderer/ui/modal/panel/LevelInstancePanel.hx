@@ -47,6 +47,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 				case LinearVertical:
 			}
 			editor.ge.emit( LevelAdded(copy) );
+			editor.invalidateLevelCache(copy);
 		});
 
 		// World panel
@@ -121,6 +122,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 
 	function onFieldChange() {
 		editor.ge.emit( LevelSettingsChanged(level) );
+		editor.invalidateLevelCache(level);
 	}
 
 	function onLevelResized(newPxWid:Int,newPxHei:Int) {
@@ -129,6 +131,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 		curLevel.applyNewBounds(0, 0, newPxWid, newPxHei);
 		onFieldChange();
 		editor.ge.emit( LevelResized(level) );
+		editor.invalidateLevelCache(level);
 		editor.curLevelHistory.saveResizedState( before, level.toJson() );
 		new J("dl#levelForm *:focus").blur();
 	}
