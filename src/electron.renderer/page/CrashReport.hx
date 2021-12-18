@@ -79,7 +79,7 @@ class CrashReport extends Page {
 
 			// Report
 			jContent.find("button.report").click( (_)->{
-				electron.Shell.openExternal( Const.ISSUES_URL );
+				electron.Shell.openExternal( Const.REPORT_BUG_URL );
 			});
 
 			// Restart
