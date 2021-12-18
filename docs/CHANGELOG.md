@@ -4,10 +4,11 @@
 
   - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
   - Added a progress bar when loading large projects
+  - Complete rework of the backup system which is now much faster and more reliable
   - Entity and Level custom fields that are not using default values are now MUCH more visible in forms
-  - Updated editor UI font to Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
+  - Updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
 
 ## UI
 
