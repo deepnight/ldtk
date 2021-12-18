@@ -3412,8 +3412,12 @@ canvas#webgl {
 				}
 
 				.backup {
-					color: $help;
+					background-color: $helpMed;
+					padding: 8px;
+					border-radius: 4px;
+					color: white;
 					font-weight: bold;
+
 					&:empty {
 						display: none;
 					}

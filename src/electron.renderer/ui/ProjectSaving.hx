@@ -368,6 +368,9 @@ class ProjectSaving extends dn.Process {
 		}
 	}
 
+	public inline static function makeBackupDirName(?suffix:String) {
+		return "backup_" + DateTools.format(Date.now(), "%Y-%m-%d_%H-%M-%S") + (suffix==null?"":"_"+suffix);
+	}
 
 	function backupProjectFiles(p:data.Project, onComplete:Void->Void) {
 		if( !NT.fileExists(p.filePath.full) ) {
@@ -377,7 +380,7 @@ class ProjectSaving extends dn.Process {
 
 		var subProjectDir = p.getAbsExternalFilesDir();
 		var sourceDir = dn.FilePath.fromDir( p.filePath.directoryWithSlash );
-		var backupDir = dn.FilePath.fromDir( subProjectDir + "/" + Const.BACKUP_DIR + "/backup_" + DateTools.format(Date.now(), "%Y-%m-%d_%H-%M-%S") );
+		var backupDir = dn.FilePath.fromDir( subProjectDir + "/" + Const.BACKUP_DIR + "/" + makeBackupDirName() );
 		log('Backing up $sourceDir to $backupDir...');
 
 		// List potential external levels
@@ -445,8 +448,8 @@ class ProjectSaving extends dn.Process {
 		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
 	}
 
-	public static function prepareProjectSavingData(project:data.Project, isBackup=false) : FileSavingData {
-		if( !project.externalLevels || isBackup ) {
+	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
+		if( !project.externalLevels || forceSingleFile ) {
 			// Full single JSON
 			return {
 				projectJson: jsonStringify( project, project.toJson() ),
