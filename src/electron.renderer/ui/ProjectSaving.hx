@@ -136,36 +136,6 @@ class ProjectSaving extends dn.Process {
 					backupProjectFiles(project, ()->{
 						beginState(CheckLevelCache);
 					});
-					var fp = ProjectSaving.makeBackupFilePath(project);
-
-					// initDir(fp.directory);
-
-					// var ops = [];
-
-					// // Save a duplicate in backups folder
-					// ops.push({
-					// 	label: L.t._("Writing backup..."),
-					// 	cb: ()->{
-					// 		var savingData = prepareProjectSavingData(project, true);
-					// 		NT.writeFileString(fp.full, savingData.projectJson);
-					// 	}
-					// });
-
-					// Delete extra backup files
-					// ops.push({
-					// 	label: L.t._("Cleaning backups..."),
-					// 	cb: ()->{
-					// 		var all = listBackupFiles(project.filePath.full);
-					// 		if( all.length>project.backupLimit ) {
-					// 			for(i in project.backupLimit...all.length ) {
-					// 				log("Discarded backup: "+all[i].backup.full);
-					// 				NT.removeFile( all[i].backup.full );
-					// 			}
-					// 		}
-					// 	}
-					// });
-
-					// new ui.modal.Progress( L.t._("Backups"), 1, ops, ()->beginState(CheckLevelCache) );
 				}
 				else
 					beginState(CheckLevelCache);
