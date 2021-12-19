@@ -603,8 +603,11 @@ class Editor extends Page {
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setGrid( !settings.v.grid );
 
-			case K.H if( !hasInputFocus() ):
+			case K.H if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				onHelp();
+
+			case K.H if( !hasInputFocus() && App.ME.isCtrlDown() ):
+				setShowDetails( !settings.v.showDetails );
 
 			case k if( k>=48 && k<=57 && !hasInputFocus() ):
 				var idx = k==48 ? 9 : k-49;
@@ -1162,6 +1165,14 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
+	}
+
+	public function setShowDetails(v:Bool) {
+		settings.v.showDetails = v;
+		App.ME.settings.save();
+		selectionTool.clear();
+		N.quick( settings.v.showDetails ? L.t._("Showing everything") : L.t._("Showing tiles only"));
 		updateEditOptions();
 	}
 

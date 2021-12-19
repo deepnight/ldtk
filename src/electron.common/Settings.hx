@@ -8,6 +8,7 @@ typedef AppSettings = {
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
+	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
 	var smartCpuThrottling : Bool;
@@ -53,6 +54,7 @@ class Settings {
 			singleLayerMode: false,
 			emptySpaceSelection: false,
 			tileStacking: false,
+			showDetails: true,
 			useBestGPU: true,
 			smartCpuThrottling: true,
 			startFullScreen: false,
