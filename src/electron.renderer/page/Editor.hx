@@ -982,18 +982,21 @@ class Editor extends Page {
 
 
 	function onMouseWheel(e:hxd.Event) {
-		var m = getMouse();
-		requestFps();
+		deltaZoom( M.sign( -e.wheelDelta )*settings.v.mouseWheelSpeed, getMouse() );
+		cursor.onMouseMove( getMouse() );
+	}
 
-		var sign = -M.sign( e.wheelDelta );
-		var spd = 0.15 * settings.v.mouseWheelSpeed;
-		camera.deltaZoomTo( m.levelX, m.levelY, sign*spd );
+
+	function deltaZoom(delta:Float, c:Coords) {
+		var spd = 0.15;
+		camera.deltaZoomTo( c.levelX, c.levelY, delta*spd );
 		camera.cancelAllAutoMovements();
 
-		cursor.onMouseMove( getMouse() );
+		// cursor.onMouseMove( getMouse() );
+		requestFps();
 
 		// Auto world mode on zoom out
-		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
+		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && delta<0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
 			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 || camera.adjustedZoom<=camera.getMinZoom() )
@@ -1001,12 +1004,12 @@ class Editor extends Page {
 		}
 
 		// Auto level mode on zoom in
-		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && e.wheelDelta<0 ) {
+		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && delta>0 ) {
 			// Find closest level to cursor
 			var dh = new dn.DecisionHelper(project.levels);
-			dh.keepOnly( l->l.isWorldOver(m.worldX, m.worldY, 500) );
-			dh.score( l->l.isWorldOver(m.worldX, m.worldY) ? 100 : 0 );
-			dh.score( l->-l.getDist(m.worldX,m.worldY) );
+			dh.keepOnly( l->l.isWorldOver(c.worldX, c.worldY, 500) );
+			dh.score( l->l.isWorldOver(c.worldX, c.worldY) ? 100 : 0 );
+			dh.score( l->-l.getDist(c.worldX,c.worldY) );
 
 			var l = dh.getBest();
 			if( l!=null ) {
@@ -1018,6 +1021,7 @@ class Editor extends Page {
 				}
 			}
 		}
+
 	}
 
 
@@ -1926,6 +1930,17 @@ class Editor extends Page {
 
 		if( camera.isAnimated() )
 			cursor.onMouseMove( getMouse() );
+
+
+		// Zoom keyboard shortcuts
+		if( App.ME.focused && !App.ME.hasInputFocus() ) {
+			if( App.ME.isKeyDown(K.PGUP) )
+				deltaZoom(0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
+
+			if( App.ME.isKeyDown(K.PGDOWN) )
+				deltaZoom(-0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
+		}
+
 
 		// Smart FPS limiting
 		if( App.ME.focused && settings.v.smartCpuThrottling ) {

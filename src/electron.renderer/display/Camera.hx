@@ -43,6 +43,12 @@ class Camera extends dn.Process {
 	var targetWorldY: Null<Float>;
 	var targetZoom: Null<Float>;
 
+	@:allow(tool.PanView)
+	var kdx = 0.;
+
+	@:allow(tool.PanView)
+	var kdy = 0.;
+
 	public function new() {
 		super(Editor.ME);
 		worldX = worldY = 0;
@@ -116,6 +122,7 @@ class Camera extends dn.Process {
 	public function fit(immediate=false) {
 		cancelAutoScrolling();
 		cancelAutoZoom();
+		cancelKeyboardPanning();
 
 		if( editor.worldMode ) {
 			var b = editor.project.getWorldBounds();
@@ -182,6 +189,10 @@ class Camera extends dn.Process {
 		targetZoom = null;
 	}
 
+	public function cancelKeyboardPanning() {
+		kdx = kdy = 0;
+	}
+
 	public inline function isAnimated() return targetWorldX!=null || targetZoom!=null;
 
 	public inline function cancelAllAutoMovements() {
@@ -239,6 +250,14 @@ class Camera extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
+
+		// Keyboard panning
+		levelX += kdx*tmod;
+		levelY += kdy*tmod;
+		kdx *= Math.pow(0.85,tmod);
+		kdy *= Math.pow(0.85,tmod);
+		if( M.fabs(kdx)<=0.01 ) kdx = 0;
+		if( M.fabs(kdy)<=0.01 ) kdy = 0;
 
 		// Animated zoom
 		if( targetZoom!=null ) {
