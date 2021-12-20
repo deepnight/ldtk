@@ -1,7 +1,7 @@
 package display;
 
 class Camera extends dn.Process {
-	static var MIN_LEVEL_ZOOM = 0.4;
+	static var DEFAULT_MIN_LEVEL_ZOOM = 0.3;
 	static var MIN_WORLD_ZOOM = 0.03;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
@@ -199,8 +199,13 @@ class Camera extends dn.Process {
 		targetWorldY = wy;
 	}
 
-	public inline function getMinZoom() {
-		return editor.worldMode ? MIN_WORLD_ZOOM : MIN_LEVEL_ZOOM;
+	public function getMinZoom() {
+		if( editor.worldMode )
+			return MIN_WORLD_ZOOM;
+		else if( editor!=null && editor.curLevel!=null )
+			return M.fmin( width/(editor.curLevel.pxWid*1.5), height/(editor.curLevel.pxHei*1.5) );
+		else
+			return DEFAULT_MIN_LEVEL_ZOOM;
 	}
 
 	public function setZoom(v) {

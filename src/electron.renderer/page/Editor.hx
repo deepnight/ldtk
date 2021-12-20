@@ -11,7 +11,7 @@ class Editor extends Page {
 	var jMouseCoords : js.jquery.JQuery;
 
 	public var curLevel(get,never) : data.Level;
-		inline function get_curLevel() return project.getLevel(curLevelId);
+		inline function get_curLevel() return project==null ? null : project.getLevel(curLevelId);
 
 	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
 		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
@@ -996,7 +996,7 @@ class Editor extends Page {
 		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
-			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 )
+			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 || camera.adjustedZoom<=camera.getMinZoom() )
 				setWorldMode(true, true);
 		}
 
