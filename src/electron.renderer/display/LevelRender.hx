@@ -91,9 +91,6 @@ class LevelRender extends dn.Process {
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
 
-				for(l in layerRenders)
-					l.onViewportChange();
-
 			case ProjectSaved, BeforeProjectSaving:
 
 			case ProjectSelected:
@@ -131,8 +128,6 @@ class LevelRender extends dn.Process {
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
 				invalidateUi();
-				for(l in layerRenders)
-					l.onLayerSelection();
 
 			case LevelSettingsChanged(l):
 				invalidateUi();
@@ -252,6 +247,9 @@ class LevelRender extends dn.Process {
 			case EnumDefAdded:
 			case EnumDefSorted:
 		}
+
+		for(lr in layerRenders)
+			lr.onGlobalEvent(e);
 	}
 
 	public inline function isAutoLayerRenderingEnabled() {
@@ -464,6 +462,17 @@ class LevelRender extends dn.Process {
 			return;
 
 		lr.root.visible = isLayerVisible(li);
+		if( !App.ME.settings.v.showDetails ) {
+			switch li.def.type {
+				case IntGrid:
+					if( !li.def.isAutoLayer() )
+						lr.root.visible = false;
+				case Entities:
+					lr.root.visible = false;
+				case Tiles:
+				case AutoLayer:
+			}
+		}
 		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
 		if( li!=editor.curLayerInstance && li.def.fadeInactive )

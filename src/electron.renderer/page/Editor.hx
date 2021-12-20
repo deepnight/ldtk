@@ -1085,12 +1085,15 @@ class Editor extends Page {
 		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
 		applyEditOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
+		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
 		applyEditOption(
 			jEditOptions.find("li.tileStacking"),
 			()->settings.v.tileStacking,
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
+
+		JsTools.parseComponents(jEditOptions);
 	}
 
 	inline function applyEditOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
@@ -1171,6 +1174,7 @@ class Editor extends Page {
 	public function setShowDetails(v:Bool) {
 		settings.v.showDetails = v;
 		App.ME.settings.save();
+		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
 		N.quick( settings.v.showDetails ? L.t._("Showing everything") : L.t._("Showing tiles only"));
 		updateEditOptions();

@@ -19,17 +19,21 @@ class LayerRender {
 		entityRenders = null;
 	}
 
-
-	public function onViewportChange() {
-		for(e in entityRenders)
-			e.onViewportChange();
+	public function onGlobalEvent(ev:GlobalEvent) {
+		for(er in entityRenders)
+			er.onGlobalEvent(ev);
 	}
 
+	// public function onViewportChange() {
+	// 	for(e in entityRenders)
+	// 		e.onViewportChange();
+	// }
 
-	public function onLayerSelection() {
-		for(e in entityRenders)
-			e.onLayerSelection();
-	}
+
+	// public function onLayerSelection() {
+	// 	for(e in entityRenders)
+	// 		e.onLayerSelection();
+	// }
 
 
 	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {

@@ -21,7 +21,7 @@ class EntityRender extends dn.Process {
 	var beneath: h2d.Flow;
 	var fieldGraphics : h2d.Graphics;
 
-	public var posInvalidated = true;
+	var layoutInvalidated = true;
 
 
 	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, p:h2d.Object) {
@@ -62,12 +62,15 @@ class EntityRender extends dn.Process {
 	}
 
 
-	public function onViewportChange() {
-		posInvalidated = true;
-	}
+	public function onGlobalEvent(ev:GlobalEvent) {
+		switch( ev ) {
+			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
 
-	public function onLayerSelection() {
-		posInvalidated = true;
+			case LayerInstanceSelected:
+				layoutInvalidated = true;
+
+			case _:
+		}
 	}
 
 
@@ -260,11 +263,11 @@ class EntityRender extends dn.Process {
 			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.95);
 		}
 
-		updatePos();
+		updateLayout();
 	}
 
-	public inline function updatePos() {
-		posInvalidated = false;
+	public inline function updateLayout() {
+		layoutInvalidated = false;
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
@@ -306,9 +309,9 @@ class EntityRender extends dn.Process {
 		}
 	}
 
-	override function update() {
-		super.update();
-		if( posInvalidated )
-			updatePos();
+	override function postUpdate() {
+		super.postUpdate();
+		if( layoutInvalidated )
+			updateLayout();
 	}
 }
