@@ -13,6 +13,7 @@ typedef AppSettings = {
 	var startFullScreen: Bool;
 	var smartCpuThrottling : Bool;
 	var fixTileFlickering : Bool;
+	var showProjectColors : Bool;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -59,6 +60,7 @@ class Settings {
 			smartCpuThrottling: true,
 			startFullScreen: false,
 			fixTileFlickering: true,
+			showProjectColors: true,
 
 			openLastProject: false,
 			lastProject: null,

@@ -7,6 +7,7 @@ class Project {
 	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
 
 	public var filePath : dn.FilePath; // not stored in JSON
+	var usedColors : Map<Int,Int> = new Map();
 
 	var nextUid = 0;
 	public var defs : Definitions;
@@ -279,6 +280,56 @@ class Project {
 				flags.remove(f);
 	}
 
+	public inline function registerUsedColor(c:Null<Int>) {
+		if( c!=null )
+			if( !usedColors.exists(c) )
+				usedColors.set(c, 1);
+			else
+				usedColors.set(c, usedColors.get(c)+1);
+	}
+
+	public inline function unregisterColor(c:Int) {
+		if( usedColors.exists(c) )
+			if( usedColors.get(c)>1 )
+				usedColors.set(c, usedColors.get(c)-1);
+			else
+				usedColors.remove(c);
+	}
+
+	public inline function getUsedColorsAsArray() {
+		var all = [];
+		for(c in usedColors.keys())
+			all.push(c);
+		all.sort( (a,b)->Reflect.compare(C.getHue(a), C.getHue(b)) );
+		return all;
+	}
+
+	public function initUsedColors() {
+		usedColors = new Map();
+		registerUsedColor(bgColor);
+		for(level in levels) {
+			registerUsedColor(@:privateAccess level.bgColor);
+
+			// Level fields
+			for(fi in level.fieldInstances)
+				if( fi.def.type==F_Color )
+					for(i in 0...fi.getArrayLength())
+						registerUsedColor(fi.getColorAsInt(i));
+
+			// Entity fields
+			for(li in level.layerInstances) {
+				if( li.def.type!=Entities )
+					continue;
+
+				for(ei in li.entityInstances)
+				for(fi in ei.fieldInstances)
+					if( fi.def.type==F_Color )
+						for(i in 0...fi.getArrayLength())
+							registerUsedColor(fi.getColorAsInt(i));
+			}
+		}
+	}
+
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
 			jsonVersion: jsonVersion,
@@ -382,7 +433,6 @@ class Project {
 			l.worldX = wcx * worldGridWidth;
 			l.worldY = wcy * worldGridHeight;
 		}
-
 	}
 
 	public function reorganizeWorld() {
@@ -423,6 +473,7 @@ class Project {
 		for(level in levels)
 			level.tidy(this);
 		applyAutoLevelIdentifiers();
+		initUsedColors();
 	}
 
 

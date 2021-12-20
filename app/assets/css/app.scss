@@ -2656,6 +2656,45 @@ textarea {
 					opacity: 0.2;
 				}
 			}
+
+			.expand {
+				color: $bgLighter;
+				font-size: 0.8em;
+				padding-top: 2px;
+				padding-bottom: 2px;
+
+				&:hover {
+					color: $orange;
+				}
+				&.on {
+					cursor: pointer;
+				}
+				&.off {
+					cursor: cell;
+				}
+				&.on .off {
+					display: none;
+				}
+				&.off .on {
+					display: none;
+				}
+			}
+			.recents {
+				display: grid;
+				grid-template-columns: repeat(12, auto);
+				grid-auto-rows: 24px;
+				max-width: 320px;
+				max-height: 180px;
+				overflow-y: auto;
+				.color {
+					border: 1px solid black;
+					cursor: pointer;
+					&:hover {
+						outline: 2px solid white;
+						outline-offset: -2px;
+					}
+				}
+			}
 		}
 	}
 }

@@ -3,6 +3,7 @@ package ui.modal.dialog;
 class ColorPicker extends ui.modal.Dialog {
 	var picker : simpleColorPicker.ColorPicker;
 	var jTargetInput : js.jquery.JQuery;
+	var originalColor : Int;
 
 	public function new(?target:js.jquery.JQuery, ?color:UInt) {
 		super();
@@ -48,9 +49,45 @@ class ColorPicker extends ui.modal.Dialog {
 		});
 
 
+		//
+		var jExpand = jContent.find(".expand");
+		var jRecents = jContent.find(".recents");
+		function _updateRecents() {
+			jRecents.empty();
+			jExpand.removeClass("on");
+			jExpand.removeClass("off");
+
+			if( settings.v.showProjectColors ) {
+				// Update recent colors list
+				for(c in project.getUsedColorsAsArray()) {
+					var jC = new J('<div class="color"/>');
+					jC.css("background-color", C.intToHex(c));
+					jC.appendTo(jRecents);
+					jC.click((_)->{
+						picker.setColor(c);
+						jInput.val( C.intToHex(c,false) );
+					});
+				}
+				jExpand.addClass("on");
+			}
+			else
+				jExpand.addClass("off");
+		}
+		jExpand.click( _->{
+			settings.v.showProjectColors = !settings.v.showProjectColors;
+			settings.save();
+			if( settings.v.showProjectColors )
+				jExpand.next().slideDown(100);
+			else
+				jExpand.next().slideUp(60);
+			_updateRecents();
+		});
+		_updateRecents();
+
+
 		// Color picker
 		picker = new simpleColorPicker.ColorPicker({});
-		picker.setColor(color);
+		picker.setSize(320, 150);
 		picker.appendTo( jContent.find(".picker").get(0) );
 		picker.onChange( c->{
 			if( picker.isChoosing )
@@ -64,6 +101,7 @@ class ColorPicker extends ui.modal.Dialog {
 			picker.setColor(color);
 		else if( jTargetInput!=null )
 			picker.setColor( jTargetInput.val() );
+		originalColor = getColor();
 
 		// Init elements
 		jInput
@@ -71,7 +109,6 @@ class ColorPicker extends ui.modal.Dialog {
 			.focus()
 			.select();
 		jPreview.css({ backgroundColor:picker.getHexString() });
-		picker.setSize(jContent.innerWidth(), 150);
 	}
 
 	function updatePaste() {
@@ -102,7 +139,9 @@ class ColorPicker extends ui.modal.Dialog {
 		if( jTargetInput!=null )
 			jTargetInput.val( picker.getHexString() ).change();
 
-		onValidate( picker.getHexNumber() );
+		project.unregisterColor( originalColor );
+		project.registerUsedColor( getColor() );
+		onValidate( getColor() );
 	}
 
 	public dynamic function onValidate(c:UInt) {}

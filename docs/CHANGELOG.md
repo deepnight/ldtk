@@ -9,6 +9,7 @@
   - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
+  - Added "Colors used in this project" to all color pickers
 
 ## UI
 
