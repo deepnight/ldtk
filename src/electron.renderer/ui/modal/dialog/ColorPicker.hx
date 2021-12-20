@@ -89,7 +89,7 @@ class ColorPicker extends ui.modal.Dialog {
 
 		switch keyCode {
 			case K.ESCAPE:
-				onCancel();
+				validate();
 				close();
 
 			case K.ENTER:
