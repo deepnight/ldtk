@@ -3238,9 +3238,10 @@ canvas#webgl {
 				}
 
 				&.warnOff {
-					border-color: $red;
+					border-color: $orange;
 					background-color: $darkRed;
-					box-shadow: 0px 0px 16px $red;
+					// box-shadow: 0px 0px 24px $red;
+					box-shadow: 0px 0px 16px $red, 0px 0px 16px $red inset;
 				}
 			}
 
