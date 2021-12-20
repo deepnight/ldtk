@@ -3203,6 +3203,13 @@ canvas#webgl {
 			padding: 4px;
 			cursor: pointer;
 
+			&.separator {
+				padding: 0;
+				cursor: default;
+				border: none;
+				height: 16px;
+			}
+
 			.icon {
 				width: 24px;
 				height: 24px;
@@ -3227,6 +3234,12 @@ canvas#webgl {
 				}
 				.icon {
 					opacity: 0.66;
+				}
+
+				&.warnOff {
+					border-color: $red;
+					background-color: $darkRed;
+					box-shadow: 0px 0px 16px $red;
 				}
 			}
 

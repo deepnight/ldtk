@@ -1074,6 +1074,8 @@ class Editor extends Page {
 	}
 
 	function updateEditOptions() {
+		ui.Tip.clear();
+
 		// Init
 		jEditOptions
 			.off()
@@ -1082,10 +1084,11 @@ class Editor extends Page {
 				.off();
 
 		// Update all
-		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
-		applyEditOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
+
+		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
+		applyEditOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		applyEditOption(
 			jEditOptions.find("li.tileStacking"),
 			()->settings.v.tileStacking,
@@ -1504,6 +1507,7 @@ class Editor extends Page {
 			case ToolOptionChanged:
 			case BeforeProjectSaving:
 			case ProjectSaved:
+			case GridChanged(active):
 			case TilesetImageLoaded(td,init):
 				if( !init )
 					needSaving = true;

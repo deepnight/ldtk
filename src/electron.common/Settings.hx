@@ -53,7 +53,7 @@ class Settings {
 			grid: true,
 			singleLayerMode: false,
 			emptySpaceSelection: false,
-			tileStacking: false,
+			tileStacking: true,
 			showDetails: true,
 			useBestGPU: true,
 			smartCpuThrottling: true,
