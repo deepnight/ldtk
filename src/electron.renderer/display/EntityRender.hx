@@ -65,6 +65,7 @@ class EntityRender extends dn.Process {
 	public function onGlobalEvent(ev:GlobalEvent) {
 		switch( ev ) {
 			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
+				layoutInvalidated = true;
 
 			case LayerInstanceSelected:
 				layoutInvalidated = true;
@@ -271,13 +272,13 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		var alpha = 1.0;
-		var maxFieldsWid = ei.width*2;
+		final alpha = 1.0;
+		final maxFieldsWid = ei.width*2;
 
 		root.x = ei.x;
 		root.y = ei.y;
 
-		var fullVis = ei._li==Editor.ME.curLayerInstance;
+		final fullVis = ei._li==Editor.ME.curLayerInstance;
 
 		// Base
 		if( _coreRender!=null ) {
