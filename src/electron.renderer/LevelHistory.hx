@@ -100,6 +100,7 @@ class LevelHistory {
 			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
 			case GridChanged(active):
+			case ShowDetailsChanged(active):
 		}
 	}
 

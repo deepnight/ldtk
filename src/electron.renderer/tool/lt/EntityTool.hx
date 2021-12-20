@@ -24,7 +24,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 	override function canEdit():Bool {
-		return super.canEdit() && getSelectedValue()>=0;
+		return super.canEdit() && getSelectedValue()>=0 && settings.v.showDetails;
 	}
 
 	override function getDefaultValue():Int{
@@ -50,6 +50,10 @@ class EntityTool extends tool.LayerTool<Int> {
 		super.customCursor(ev,m);
 
 		if( curEntityDef==null ) {
+			editor.cursor.set(Forbidden);
+			ev.cancel = true;
+		}
+		else if( !settings.v.showDetails ) {
 			editor.cursor.set(Forbidden);
 			ev.cancel = true;
 		}

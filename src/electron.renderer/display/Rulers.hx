@@ -308,6 +308,6 @@ class Rulers extends dn.Process {
 		if( invalidated )
 			render();
 
-		labels.visible = !editor.worldMode;
+		labels.visible = !editor.worldMode && App.ME.settings.v.showDetails;
 	}
 }

@@ -1177,9 +1177,9 @@ class Editor extends Page {
 	public function setShowDetails(v:Bool) {
 		settings.v.showDetails = v;
 		App.ME.settings.save();
-		levelRender.applyAllLayersVisibility();
 		selectionTool.clear();
 		N.quick( settings.v.showDetails ? L.t._("Showing everything") : L.t._("Showing tiles only"));
+		ge.emit( ShowDetailsChanged(v) );
 		updateEditOptions();
 	}
 
@@ -1493,6 +1493,7 @@ class Editor extends Page {
 			case ToolOptionChanged:
 			case WorldMode(active):
 			case GridChanged(active):
+			case ShowDetailsChanged(active):
 		}
 
 
@@ -1508,6 +1509,7 @@ class Editor extends Page {
 			case BeforeProjectSaving:
 			case ProjectSaved:
 			case GridChanged(active):
+			case ShowDetailsChanged(active):
 			case TilesetImageLoaded(td,init):
 				if( !init )
 					needSaving = true;
@@ -1547,6 +1549,8 @@ class Editor extends Page {
 			case ToolOptionChanged:
 
 			case GridChanged(active):
+
+			case ShowDetailsChanged(active):
 
 			case LayerInstanceSelected:
 				updateTool();

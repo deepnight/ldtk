@@ -209,6 +209,18 @@ class WorldRender extends dn.Process {
 				updateLabels(true);
 				renderWorldBounds();
 
+			case ShowDetailsChanged(active):
+				fieldsWrapper.visible = active;
+				if( active )
+					invalidateAllLevelFields();
+				else
+					updateFieldsPos();
+				updateTitle();
+				updateLabels(active);
+				renderAxes();
+				for(l in project.levels)
+					updateLevelBounds(l);
+
 			case _:
 		}
 	}
@@ -263,7 +275,7 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateTitle() {
-		title.visible = editor.worldMode;
+		title.visible = editor.worldMode && settings.v.showDetails;
 		if( title.visible ) {
 			var b = project.getWorldBounds();
 			var w = b.right-b.left;
@@ -277,6 +289,9 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateFieldsPos() {
+		if( !settings.v.showDetails )
+			return;
+
 		var padding = Std.int( Rulers.PADDING*3 );
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
@@ -341,7 +356,7 @@ class WorldRender extends dn.Process {
 			var e = levels.get(l.uid);
 
 			// Visibility
-			e.label.visible = camera.adjustedZoom>=getMinVisibilityZoom() && ( l!=editor.curLevel || editor.worldMode );
+			e.label.visible = camera.adjustedZoom>=getMinVisibilityZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
 			if( !e.label.visible )
 				continue;
 			e.label.alpha = getAlphaFromZoom();
@@ -420,6 +435,9 @@ class WorldRender extends dn.Process {
 
 	function renderAxes() {
 		axes.clear();
+		if( !settings.v.showDetails )
+			return;
+
 		axes.lineStyle(3*camera.pixelRatio, worldLineColor, 1);
 
 		// Horizontal
@@ -682,9 +700,13 @@ class WorldRender extends dn.Process {
 	}
 
 
-	inline function updateLevelBounds(l:data.Level) {
+	function updateLevelBounds(l:data.Level) {
 		var wl = levels.get(l.uid);
 		if( wl!=null ) {
+			wl.bounds.clear();
+			if( !settings.v.showDetails )
+				return;
+
 			var error = l.getFirstError();
 
 			var thick = 2*camera.pixelRatio;
@@ -693,7 +715,6 @@ class WorldRender extends dn.Process {
 				thick*=8;
 				c = 0xff0000;
 			}
-			wl.bounds.clear();
 			wl.bounds.beginFill(c);
 			wl.bounds.drawRect(0, 0, l.pxWid, thick); // top
 

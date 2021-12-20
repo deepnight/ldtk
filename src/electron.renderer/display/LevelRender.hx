@@ -86,6 +86,9 @@ class LevelRender extends dn.Process {
 			case GridChanged(active):
 				applyGridVisibility();
 
+			case ShowDetailsChanged(active):
+				applyAllLayersVisibility();
+
 			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );

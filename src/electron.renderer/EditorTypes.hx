@@ -80,6 +80,7 @@ enum GlobalEvent {
 
 	WorldMode(active:Bool);
 	GridChanged(active:Bool);
+	ShowDetailsChanged(active:Bool);
 }
 
 enum CursorType {
