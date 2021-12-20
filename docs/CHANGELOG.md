@@ -12,6 +12,7 @@
 
 ## UI
 
+  - Added a new option (`CTRL-H`) to hide everything except Tiles in layers (entities, labels, intGrids etc.)
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
@@ -21,7 +22,8 @@
   - Added more values for App UI scaling setting.
   - Added a Layer option to fade it away when it's not currently selected
   - Added a Layer option to hide it from the layers list
-  - Locked all panels when opening a Backup file.
+  - Tool tips are now larger and easier to read.
+  - If you open a Backup copy of a project, all panels will be locked, preventing any edit. You may only Restore the backup.
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
   - Clicking on the "New Tileset" button immediately invokes the "Pick image file" dialog.
