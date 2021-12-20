@@ -270,7 +270,16 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function isLayerVisible(li:data.inst.LayerInstance) {
-		return li!=null && li.visible;
+		if( li==null || !li.visible )
+			return false;
+		else if( !settings.v.showDetails )
+			return switch li.def.type {
+				case IntGrid: li.def.isAutoLayer();
+				case Entities: false;
+				case Tiles, AutoLayer: true;
+			}
+		else
+			return true;
 	}
 
 	public function toggleLayer(li:data.inst.LayerInstance) {
@@ -465,17 +474,6 @@ class LevelRender extends dn.Process {
 			return;
 
 		lr.root.visible = isLayerVisible(li);
-		if( !App.ME.settings.v.showDetails ) {
-			switch li.def.type {
-				case IntGrid:
-					if( !li.def.isAutoLayer() )
-						lr.root.visible = false;
-				case Entities:
-					lr.root.visible = false;
-				case Tiles:
-				case AutoLayer:
-			}
-		}
 		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
 		if( li!=editor.curLayerInstance && li.def.fadeInactive )
