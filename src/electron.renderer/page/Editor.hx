@@ -988,8 +988,6 @@ class Editor extends Page {
 		var sign = -M.sign( e.wheelDelta );
 		var spd = 0.15 * settings.v.mouseWheelSpeed;
 		camera.deltaZoomTo( m.levelX, m.levelY, sign*spd );
-		// var speed = ET.getZoom() * settings.v.mouseWheelSpeed;
-		// camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
 		camera.cancelAllAutoMovements();
 
 		cursor.onMouseMove( getMouse() );
@@ -998,7 +996,6 @@ class Editor extends Page {
 		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
-			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
 			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 )
 				setWorldMode(true, true);
 		}
@@ -1015,7 +1012,6 @@ class Editor extends Page {
 			if( l!=null ) {
 				var wr = camera.getLevelWidthRatio(l);
 				var hr = camera.getLevelHeightRatio(l);
-				// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
 				if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
 					selectLevel(l);
 					setWorldMode(false, true);
