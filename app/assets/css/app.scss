@@ -1631,23 +1631,24 @@ textarea {
 
 		width: 100%;
 
-		padding: 4px;
-		padding-left: 8px;
-		padding-right: 8px;
+		padding: 8px;
+		padding-left: 12px;
+		padding-right: 12px;
 		align-items: center;
 
-		font-size: 0.8em;
+		font-size: 1em;
 		color: $help;
 
 		.text {
 			max-width: 250px;
 			text-shadow: 0px 1px 0px rgba(0,0,0, 0.5), 0px 2px 4px rgba(0,0,0, 0.5);
-			font-style: italic;
+			// font-style: italic;
 			strong {
 				display: block;
 				color: white;
+				font-size: 1.2em;
 				font-style: normal;
-				margin-bottom: 2px;
+				margin-bottom: 4px;
 			}
 		}
 
