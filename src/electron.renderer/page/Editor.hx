@@ -92,6 +92,8 @@ class Editor extends Page {
 		initUI();
 		updateCanvasSize();
 
+		settings.v.showDetails = true;
+
 		selectProject(p);
 
 		// Suggest backups
