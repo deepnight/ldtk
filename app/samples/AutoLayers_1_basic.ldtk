@@ -364,13 +364,13 @@
 			"fieldInstances": [
 				{
 					"__identifier": "tutorial",
-					"__value": "IntGrid layers can paint tiles automatically using simple RULE SETS.\n\n - Press \"SHIFT + R\" to toggle auto-layer rendering\n\n - Click on the RULES button on the left to see/edit rules.",
+					"__value": "IntGrid layers can paint tiles automatically using simple RULE SETS.\n\n - Press \"SHIFT + R\" to toggle auto-layer rendering\n - Click on the RULES button on the left to see/edit rules.",
 					"__type": "String",
 					"defUid": 105,
 					"realEditorValues": [{
 						"id": "V_String",
 						"params": [
-							"IntGrid layers can paint tiles automatically using simple RULE SETS.\n\n - Press \"SHIFT + R\" to toggle auto-layer rendering\n\n - Click on the RULES button on the left to see/edit rules."
+							"IntGrid layers can paint tiles automatically using simple RULE SETS.\n\n - Press \"SHIFT + R\" to toggle auto-layer rendering\n - Click on the RULES button on the left to see/edit rules."
 						]
 					}]
 				},
