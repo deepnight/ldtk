@@ -1,8 +1,8 @@
 package display;
 
 class Camera extends dn.Process {
-	static var DEFAULT_MIN_LEVEL_ZOOM = 0.3;
 	static var MIN_WORLD_ZOOM = 0.03;
+	static var DEFAULT_MIN_LEVEL_ZOOM = MIN_WORLD_ZOOM;
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
 	static var MAX_FOCUS_PADDING_Y = 400;
@@ -159,7 +159,7 @@ class Camera extends dn.Process {
 
 
 	inline function set_levelX(v:Float) {
-		if( editor.curLevelId!=null && !editor.worldMode )
+		if( editor.curLevelId!=null && !editor.worldMode && !isAnimated() )
 			v = M.fclamp( v, -MAX_FOCUS_PADDING_X/adjustedZoom, editor.curLevel.pxWid + MAX_FOCUS_PADDING_X/adjustedZoom );
 
 		return worldX = v + editor.curLevel.worldX;
@@ -171,7 +171,7 @@ class Camera extends dn.Process {
 
 
 	inline function set_levelY(v:Float) {
-		if( editor.curLevelId!=null && !editor.worldMode )
+		if( editor.curLevelId!=null && !editor.worldMode && !isAnimated() )
 			v = M.fclamp( v, -MAX_FOCUS_PADDING_Y/adjustedZoom, editor.curLevel.pxHei+MAX_FOCUS_PADDING_Y/adjustedZoom );
 
 		return worldY = v + editor.curLevel.worldY;
@@ -213,7 +213,7 @@ class Camera extends dn.Process {
 	public function getMinZoom() {
 		if( editor.worldMode )
 			return MIN_WORLD_ZOOM;
-		else if( editor!=null && editor.curLevel!=null )
+		else if( editor!=null && editor.curLevel!=null && !isAnimated() )
 			return M.fmin( width/(editor.curLevel.pxWid*1.5), height/(editor.curLevel.pxHei*1.5) );
 		else
 			return DEFAULT_MIN_LEVEL_ZOOM;
