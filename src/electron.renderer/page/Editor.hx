@@ -262,7 +262,7 @@ class Editor extends Page {
 
 		var all = ui.ProjectSaving.listBackupFiles(project.filePath.full);
 
-		// Backup header
+		// Display "backup" header
 		if( project.isBackup() ) {
 			var jBackup = new J('<div class="backupHeader"/>');
 			var jDesc = new J('<div class="desc"/>');
