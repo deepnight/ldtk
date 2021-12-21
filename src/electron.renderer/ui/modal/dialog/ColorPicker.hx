@@ -88,7 +88,7 @@ class ColorPicker extends ui.modal.Dialog {
 					else {
 						// Show all button
 						if( !showAll ) {
-							var jShowAll = new J('<a class="showAll">Show all used colors</a>');
+							var jShowAll = new J('<a class="showAll">Show all colors used in this project</a>');
 							jShowAll.click(_->{
 								showAll = true;
 								_updateRecents();
@@ -107,7 +107,7 @@ class ColorPicker extends ui.modal.Dialog {
 				settings.v.showProjectColors = !settings.v.showProjectColors;
 				settings.save();
 				if( settings.v.showProjectColors )
-					jExpand.next().slideDown(100);
+					jExpand.next().slideDown(100).css('display','grid');
 				else
 					jExpand.next().slideUp(60);
 				_updateRecents();
