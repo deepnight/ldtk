@@ -18,17 +18,25 @@ class FieldInstanceRender {
 	}
 
 
-	static inline function renderDashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=4.) {
+	static inline function renderLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=5.) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
-		var cur = 0.;
-		var count = M.ceil( len/(dashLen*2) );
-		var dashLen = len / ( count%2==0 ? count+1 : count );
+		var count = M.ceil( len/dashLen );
+		dashLen = len/count;
 
-		while( cur<len ) {
-			g.moveTo( fx+Math.cos(a)*cur, fy+Math.sin(a)*cur );
-			g.lineTo( fx+Math.cos(a)*(cur+dashLen), fy+Math.sin(a)*(cur+dashLen) );
-			cur+=dashLen*2;
+		var n = 0;
+		var sign = 1;
+		final off = 1;
+		var x = fx;
+		var y = fy;
+		while( n<count ) {
+			g.lineStyle(1, color, 0.2 + 0.6*n/count);
+			g.moveTo(x,y);
+			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off;
+			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off;
+			g.lineTo(x,y);
+			sign = -sign;
+			n++;
 		}
 	}
 
@@ -174,7 +182,6 @@ class FieldInstanceRender {
 						var fy = ei.getPointOriginY(ld) - ei.y;
 						var startX = fx;
 						var startY = fy;
-						g.lineStyle(1, baseColor, 0.66);
 
 						for(i in 0...fi.getArrayLength()) {
 							var pt = fi.getPointGrid(i);
@@ -184,9 +191,17 @@ class FieldInstanceRender {
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
 							if( fd.editorDisplayMode!=Points )
-								renderDashedLine(g, fx,fy, tx,ty, 3);
+								renderLink(g, baseColor, fx,fy, tx,ty);
 
-							g.drawRect( tx-2, ty-2, 4, 4 );
+							g.lineStyle(1, baseColor, 0.66);
+							g.beginFill( C.toBlack(baseColor, 0.6) );
+							final s = 4;
+							g.moveTo(tx, ty-s);
+							g.lineTo(tx+s, ty);
+							g.lineTo(tx, ty+s);
+							g.lineTo(tx-s, ty);
+							g.lineTo(tx, ty-s);
+							g.endFill();
 
 							switch fd.editorDisplayMode {
 								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
@@ -200,7 +215,7 @@ class FieldInstanceRender {
 
 						// Loop to Entity
 						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
-							renderDashedLine(g, fx,fy, startX, startY, 3);
+							renderLink(g, baseColor, fx,fy, startX, startY);
 
 					case LevelCtx(_):
 				}
