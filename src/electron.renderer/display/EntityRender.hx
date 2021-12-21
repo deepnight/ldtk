@@ -211,21 +211,6 @@ class EntityRender extends dn.Process {
 	}
 
 
-	inline function renderDashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=4.) {
-		var a = Math.atan2(ty-fy, tx-fx);
-		var len = M.dist(fx,fy, tx,ty);
-		var cur = 0.;
-		var count = M.ceil( len/(dashLen*2) );
-		var dashLen = len / ( count%2==0 ? count+1 : count );
-
-		while( cur<len ) {
-			g.moveTo( fx+Math.cos(a)*cur, fy+Math.sin(a)*cur );
-			g.lineTo( fx+Math.cos(a)*(cur+dashLen), fy+Math.sin(a)*(cur+dashLen) );
-			cur+=dashLen*2;
-		}
-	}
-
-
 	public function renderFields() {
 		above.removeChildren();
 		center.removeChildren();
