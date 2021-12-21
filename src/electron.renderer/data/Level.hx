@@ -511,13 +511,36 @@ class Level {
 
 
 	public function getSmartColor(bright:Bool) {
-		for(fi in fieldInstances) {
-			if( fi.def.type==F_Color )
-				for(i in 0...fi.getArrayLength())
-					if( !fi.valueIsNull(i) )
-						return bright ? dn.Color.toWhite(fi.getColorAsInt(i), 0.5) : fi.getColorAsInt(i);
+		inline function _adjust(c:Int) {
+			return bright ? dn.Color.toWhite(c, 0.45) : c;
 		}
-		return bright ? dn.Color.toWhite(getBgColor(), 0.5) : getBgColor();
+
+		for(fi in fieldInstances) {
+			switch fi.def.type {
+				case F_Int:
+				case F_Float:
+				case F_String:
+				case F_Text:
+				case F_Bool:
+				case F_Color:
+					for(i in 0...fi.getArrayLength())
+						if( !fi.valueIsNull(i) )
+							return _adjust( fi.getColorAsInt(i) );
+
+				case F_Enum(enumDefUid):
+					for(i in 0...fi.getArrayLength())
+						if( !fi.valueIsNull(i) ) {
+							var ev = fi.def.getEnumDef().getValue( fi.getEnumValue(i) );
+							if( ev!=null )
+								return _adjust( ev.color );
+						}
+
+				case F_Point:
+				case F_Path:
+			}
+		}
+
+		return _adjust( getBgColor() );
 	}
 
 	public function hasAnyFieldDisplayedAt(pos:ldtk.Json.FieldDisplayPosition) {

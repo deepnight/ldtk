@@ -575,7 +575,7 @@ class WorldRender extends dn.Process {
 		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.85);
+		FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
 		if( fWrapper.identifier!=null )
 			fWrapper.identifier.remove();
 		fWrapper.identifier = f;
@@ -743,7 +743,7 @@ class WorldRender extends dn.Process {
 		var tf = new h2d.Text(Assets.getRegularFont(), wl.label);
 		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
-		tf.textColor = C.toWhite( l.getSmartColor(false), 0.65 );
+		tf.textColor = l.getSmartColor(true);
 		tf.x = 8;
 		tf.smooth = true;
 
