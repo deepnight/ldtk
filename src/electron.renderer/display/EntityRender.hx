@@ -259,7 +259,8 @@ class EntityRender extends dn.Process {
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
 		final alpha = 1.0;
-		final maxFieldsWid = ei.width*2;
+		final maxFieldsWid = ei.width*1.5;
+		final maxFieldsHei = ei.height*1.5;
 
 		root.x = ei.x;
 		root.y = ei.y;
@@ -284,7 +285,7 @@ class EntityRender extends dn.Process {
 			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 2 );
 			above.alpha = alpha;
 
-			center.setScale( M.fmin(scale, maxFieldsWid/center.outerWidth) );
+			center.setScale( M.fmin(scale, M.fmin(maxFieldsWid/center.outerWidth, maxFieldsHei/center.outerHeight)) );
 			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
 			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
 			center.alpha = alpha;
