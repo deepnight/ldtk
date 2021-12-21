@@ -19,6 +19,7 @@
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Added `PAGEUP`/`PAGEDOWN` keyboard shortcuts to zoom in/out
   - Added `ARROWS` keyboard shortcuts to move the view
+  - Added a "Rename project" button in Project panel
   - Entity fields and related visuals will now be faded away when not working in their layer.
   - Entity fields width will now be limited by their entity width (this greatly reduces screen clutter when having many fields displayed)
   - Custom fields of type Integer or Float can now have an optional text prefix/suffix to display in editor. Useful to display a unit near a value, like "0.5sec" or "$17".

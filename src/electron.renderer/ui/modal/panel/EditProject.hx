@@ -25,6 +25,62 @@ class EditProject extends ui.modal.Panel {
 		if( project.isBackup() )
 			jSaveAs.hide();
 
+
+		var jRename = jContent.find("button.rename").click( function(ev) {
+			new ui.modal.dialog.InputDialog(
+				L.t._("Enter the new project file name :"),
+				project.filePath.fileName,
+				project.filePath.extWithDot,
+				(str)->{
+					if( str==null || str.length==0 )
+						return L.t._("Invalid file name");
+
+					var clean = dn.FilePath.cleanUp(str, true);
+					if( clean.length==0 )
+						return L.t._("Invalid file name");
+
+					return null;
+				},
+				(str)->{
+					return dn.FilePath.cleanUpFileName(str);
+				},
+				(fileName)->{
+					// Rename project
+					App.LOG.fileOp('Renaming project: ${project.filePath.fileName} -> $fileName');
+					try {
+						// Rename project file
+						App.LOG.fileOp('  Renaming project file...');
+						var oldProjectPath = project.filePath.full;
+						var oldExtDir = project.getAbsExternalFilesDir();
+						project.filePath.fileName = fileName;
+
+						// Rename sub dir
+						if( NT.fileExists(oldExtDir) ) {
+							App.LOG.fileOp('  Renaming project sub dir...');
+							NT.renameFile(oldExtDir, project.getAbsExternalFilesDir());
+						}
+
+						// Re-save project
+						editor.invalidateAllLevelsCache();
+						App.LOG.fileOp('  Saving project...');
+						new ui.ProjectSaving(this, project, (success)->{
+							// Remove old project file
+							App.LOG.fileOp('  Deleting old project file...');
+							NT.removeFile(oldProjectPath);
+							App.ME.unregisterRecentProject(oldProjectPath);
+
+							// Success!
+							N.success("Renamed project!");
+							editor.needSaving = false;
+							App.LOG.fileOp('  Done.');
+						});
+					}
+				}
+			);
+		});
+		if( project.isBackup() )
+			jRename.hide();
+
 		jContent.find("button.locate").click( function(ev) {
 			ET.locate( project.filePath.full, true );
 		});
