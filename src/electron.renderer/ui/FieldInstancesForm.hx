@@ -193,6 +193,7 @@ class FieldInstancesForm {
 				input.attr("id",domId);
 				input.appendTo(jWrapper);
 				input.attr("type","color");
+				input.attr("colorTag", "e_"+fi.def.identifier);
 				input.addClass("advanced");
 				input.val(cHex);
 				input.change( function(ev) {

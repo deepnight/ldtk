@@ -468,7 +468,7 @@ class JsTools {
 				.on("click.picker", (ev:js.jquery.Event)->{
 					ev.stopPropagation();
 					ev.preventDefault();
-					new ui.modal.dialog.ColorPicker( jInput );
+					new ui.modal.dialog.ColorPicker( jInput.attr("colorTag"), jInput );
 				});
 		});
 	}
