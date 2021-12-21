@@ -1072,6 +1072,35 @@ ul.log {
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 
+.accordion {
+	.expand {
+		color: $bgLighter;
+		font-size: 0.8em;
+		padding-top: 2px;
+		padding-bottom: 2px;
+		padding-left: 24px;
+		background-repeat: no-repeat;
+		background-position: left center;
+
+		&:hover {
+			color: $orange;
+		}
+
+		&.expanded {
+			cursor: pointer;
+			color: white;
+			background-color: $bgLight;
+			background-image: url("../icons/expandMore.svg");
+		}
+		&.collapsed {
+			cursor: cell;
+			background-color: $bgMed;
+			background-image: url("../icons/expandLess.svg");
+		}
+	}
+}
+
+
 .layerType {
 	display: grid;
 	grid-template-columns: min-content auto;

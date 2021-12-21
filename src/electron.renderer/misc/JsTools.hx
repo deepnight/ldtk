@@ -471,6 +471,29 @@ class JsTools {
 					new ui.modal.dialog.ColorPicker( jInput.attr("colorTag"), jInput );
 				});
 		});
+
+
+		// Accordions
+		jCtx.find(".accordion").each( (idx,e)->{ // TODO unfinished
+			var jAccordion = new J(e);
+			var jExpand = jAccordion.find(".expand");
+			var jContent = jExpand.nextAll();
+			jContent.hide();
+			jExpand.addClass("collapsed");
+			jExpand.click( _->{
+				var expanded = jContent.is(":visible");
+				jExpand.removeClass("collapsed");
+				jExpand.removeClass("expanded");
+				if( expanded ) {
+					jExpand.addClass("collapsed");
+					jContent.slideUp(70);
+				}
+				else {
+					jExpand.addClass("expanded");
+					jContent.slideDown(50);
+				}
+			});
+		});
 	}
 
 
