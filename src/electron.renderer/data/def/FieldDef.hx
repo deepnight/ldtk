@@ -293,7 +293,7 @@ class FieldDef {
 	}
 
 	public function getEnumDef() : Null<EnumDef> {
-		return !isEnum()
+		return isEnum()
 			?  _project.defs.getEnumDef(switch type {
 				case F_Enum(enumDefUid): enumDefUid;
 				case _: throw "unexpected";
