@@ -826,7 +826,7 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "activationTargets",
+					"identifier": "targets",
 					"__type": "Array<Point>",
 					"uid": 44,
 					"type": "F_Point",
@@ -1513,7 +1513,7 @@
 							"px": [680,168],
 							"fieldInstances": [
 								{
-									"__identifier": "activationTargets",
+									"__identifier": "targets",
 									"__value": [ { "cx": 28, "cy": 9 }, { "cx": 34, "cy": 15 } ],
 									"__type": "Array<Point>",
 									"defUid": 44,
