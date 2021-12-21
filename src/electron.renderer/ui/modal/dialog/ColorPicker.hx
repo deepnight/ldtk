@@ -52,8 +52,8 @@ class ColorPicker extends ui.modal.Dialog {
 
 
 		// Recently used colors
-		var jExpand = jContent.find(".expand");
-		var jRecents = jContent.find(".recents");
+		var jExpand = jContent.find(".recentColors .expand");
+		var jRecents = jContent.find(".recentColors .recents");
 		if( usedColorsTag==null ) {
 			jExpand.hide();
 			jRecents.hide();
@@ -140,6 +140,8 @@ class ColorPicker extends ui.modal.Dialog {
 			.focus()
 			.select();
 		jPreview.css({ backgroundColor:picker.getHexString() });
+
+		JsTools.parseComponents(jContent);
 	}
 
 	function updatePaste() {
