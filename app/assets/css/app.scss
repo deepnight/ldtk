@@ -2617,6 +2617,35 @@ textarea {
 	}
 }
 
+.window.dialog.inputDialog {
+	>.wrapper {
+		min-width: 400px;
+		.inputWrapper {
+			display: grid;
+			grid-template-columns: auto min-content;
+			align-items: center;
+			.suffix {
+				padding-left: 4px;
+				&:empty {
+					display: none;
+				}
+			}
+		}
+
+		.error {
+			color: $red;
+			padding: 8px;
+			border-top: 1px dashed $red;
+			background-color: $darkRed;
+
+			&:empty {
+				display: none;
+			}
+		}
+	}
+}
+
+
 .window.dialog.colorPicker {
 	>.wrapper {
 		padding: 4px;
