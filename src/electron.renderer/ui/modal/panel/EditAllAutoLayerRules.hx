@@ -395,6 +395,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
 			editor.ge.emit(LayerRuleGroupSorted);
 		});
+
+		checkBackup();
 	}
 
 
