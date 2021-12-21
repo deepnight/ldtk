@@ -380,6 +380,7 @@ class WorldRender extends dn.Process {
 				case LinearHorizontal:
 					e.label.x = Std.int( l.worldX + l.pxWid*0.3 );
 					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
+					e.label.smooth = true;
 					e.label.rotation = -0.4;
 
 				case LinearVertical:
@@ -571,6 +572,7 @@ class WorldRender extends dn.Process {
 		f.horizontalAlign = Middle;
 		f.padding = 6;
 		var tf = new h2d.Text(Assets.getLargeFont(), f);
+		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
 		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.85);
@@ -739,9 +741,11 @@ class WorldRender extends dn.Process {
 		wl.label.removeChildren();
 		var error = l.getFirstError();
 		var tf = new h2d.Text(Assets.getRegularFont(), wl.label);
+		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = C.toWhite( l.getSmartColor(false), 0.65 );
 		tf.x = 8;
+		tf.smooth = true;
 
 		if( error!=null ) {
 			tf.textColor = 0xff0000;

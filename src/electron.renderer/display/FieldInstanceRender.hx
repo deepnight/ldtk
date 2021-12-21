@@ -78,6 +78,13 @@ class FieldInstanceRender {
 		}
 	}
 
+
+	static inline function createText(target:h2d.Object) {
+		var tf = new h2d.Text(Assets.getRegularFont(), target);
+		tf.smooth = true;
+		return tf;
+	}
+
 	static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
 
@@ -92,11 +99,11 @@ class FieldInstanceRender {
 		// Value error
 		var err = fi.getFirstErrorInValues();
 		if( err!=null ) {
-			var tf = new h2d.Text(Assets.getRegularFont(), labelFlow);
+			var tf = createText(labelFlow);
 			tf.textColor = baseColor;
 			tf.text = fd.identifier;
 
-			var tf = new h2d.Text(Assets.getRegularFont(), valueFlow);
+			var tf = createText(valueFlow);
 			tf.textColor = 0xff4400;
 			tf.text = '<$err>';
 			return { label:labelFlow, value:valueFlow };
@@ -114,7 +121,7 @@ class FieldInstanceRender {
 
 			case NameAndValue:
 				// Label
-				var tf = new h2d.Text(Assets.getRegularFont(), labelFlow);
+				var tf = createText(labelFlow);
 				tf.textColor = baseColor;
 				tf.text = fd.identifier;
 
@@ -126,17 +133,17 @@ class FieldInstanceRender {
 
 			case ArrayCountWithLabel:
 				// Label
-				var tf = new h2d.Text(Assets.getRegularFont(), labelFlow);
+				var tf = createText(labelFlow);
 				tf.textColor = baseColor;
 				tf.text = fd.identifier;
 
 				// Value
-				var tf = new h2d.Text(Assets.getRegularFont(), valueFlow);
+				var tf = createText(valueFlow);
 				tf.textColor = baseColor;
 				tf.text = '${fi.getArrayLength()} value(s)';
 
 			case ArrayCountNoLabel:
-				var tf = new h2d.Text(Assets.getRegularFont(), valueFlow);
+				var tf = createText(valueFlow);
 				tf.textColor = baseColor;
 				tf.text = '${fi.getArrayLength()} value(s)';
 
@@ -211,14 +218,14 @@ class FieldInstanceRender {
 
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text( Assets.getRegularFont(), valuesFlow );
+			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "[";
 		}
 
 		// Empty array with "always" display
 		if( fi.def.isArray && fi.getArrayLength()==0 && fi.def.editorAlwaysShow ) {
-			var tf = new h2d.Text( Assets.getRegularFont(), valuesFlow );
+			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "--empty--";
 		}
@@ -243,7 +250,7 @@ class FieldInstanceRender {
 				}
 				else {
 					// Text render
-					var tf = new h2d.Text(Assets.getRegularFont(), valuesFlow);
+					var tf = createText(valuesFlow);
 					tf.textColor = textColor;
 					switch ctx {
 						case EntityCtx(g, ei, ld):
@@ -272,7 +279,7 @@ class FieldInstanceRender {
 
 			// Array separator
 			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = new h2d.Text(Assets.getRegularFont(), valuesFlow);
+				var tf = createText(valuesFlow);
 				tf.textColor = textColor;
 				tf.text = ",";
 			}
@@ -280,7 +287,7 @@ class FieldInstanceRender {
 
 		// Array closing
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(Assets.getRegularFont(), valuesFlow);
+			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "]";
 		}
