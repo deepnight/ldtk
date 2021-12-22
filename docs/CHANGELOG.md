@@ -10,6 +10,7 @@
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - Added "Colors used in this project" to all color pickers
+  - Implemented various optimizations to boost general performances & reduce CPU usage.
 
 ## UI
 
