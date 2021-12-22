@@ -819,10 +819,18 @@ class WorldRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
+		// Fade bg
+		var ta = ( editor.worldMode ? 0.3 : 0 );
+		if( worldBg.wrapper.alpha!=ta ) {
+			worldBg.wrapper.alpha += ( ta - worldBg.wrapper.alpha ) * 0.1;
+			if( M.fabs(worldBg.wrapper.alpha-ta) <= 0.03 )
+				worldBg.wrapper.alpha = ta;
+		}
+
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
 		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
 
+		// Check if a tileset is being loaded
 		var waitTileset = false;
 		for(td in project.defs.tilesets)
 			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
