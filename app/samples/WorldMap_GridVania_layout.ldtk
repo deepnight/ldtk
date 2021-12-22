@@ -537,6 +537,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
+					"useForSmartColor": false,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -559,6 +560,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
+					"useForSmartColor": false,
 					"min": 0,
 					"max": null,
 					"regex": null,
@@ -607,6 +609,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
+					"useForSmartColor": false,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -629,6 +632,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
+					"useForSmartColor": false,
 					"min": 1,
 					"max": 10,
 					"regex": null,
@@ -702,6 +706,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
+					"useForSmartColor": false,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -770,10 +775,11 @@
 			{ "id": "Vorpal_blade", "tileId": 1585, "color": 8943530, "__tileSrcRect": [16,1584,16,16] }
 		], "iconTilesetUid": 73, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "RoomType", "uid": 98, "values": [
-			{ "id": "Entrance", "tileId": 1019, "color": 10066312, "__tileSrcRect": [176,1008,16,16] },
-			{ "id": "Exit", "tileId": 490, "color": 11171652, "__tileSrcRect": [160,480,16,16] },
-			{ "id": "Shop", "tileId": 958, "color": 12285798, "__tileSrcRect": [224,944,16,16] },
-			{ "id": "Boss", "tileId": 1339, "color": 11171686, "__tileSrcRect": [176,1328,16,16] }
+			{ "id": "Entrance", "tileId": 1019, "color": 65314, "__tileSrcRect": [176,1008,16,16] },
+			{ "id": "Exit", "tileId": 490, "color": 16763904, "__tileSrcRect": [160,480,16,16] },
+			{ "id": "Shop", "tileId": 958, "color": 24063, "__tileSrcRect": [224,944,16,16] },
+			{ "id": "Boss", "tileId": 1339, "color": 16728064, "__tileSrcRect": [176,1328,16,16] },
+			{ "id": "Save", "tileId": 910, "color": 9175733, "__tileSrcRect": [224,896,16,16] }
 		], "iconTilesetUid": 73, "externalRelPath": null, "externalFileChecksum": null }
 	], "externalEnums": [], "levelFields": [
 		{
@@ -791,6 +797,7 @@
 			"editorCutLongValues": true,
 			"editorTextSuffix": null,
 			"editorTextPrefix": null,
+			"useForSmartColor": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -813,6 +820,7 @@
 			"editorCutLongValues": true,
 			"editorTextSuffix": null,
 			"editorTextPrefix": null,
+			"useForSmartColor": false,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -829,14 +837,14 @@
 			"worldY": 0,
 			"pxWid": 512,
 			"pxHei": 256,
-			"__bgColor": "#FFCC00",
-			"bgColor": "#FFCC00",
+			"__bgColor": "#37494E",
+			"bgColor": null,
 			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFE680",
+			"__smartColor": "#73FF85",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -1667,7 +1675,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -2976,7 +2984,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -4916,7 +4924,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -6441,7 +6449,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -7815,7 +7823,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -9123,14 +9131,14 @@
 			"worldY": 512,
 			"pxWid": 512,
 			"pxHei": 768,
-			"__bgColor": "#993535",
-			"bgColor": "#993535",
+			"__bgColor": "#37494E",
+			"bgColor": null,
 			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#CC9A9A",
+			"__smartColor": "#FF9673",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -11004,7 +11012,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -12315,14 +12323,14 @@
 			"worldY": 256,
 			"pxWid": 256,
 			"pxHei": 256,
-			"__bgColor": "#271DCA",
-			"bgColor": "#271DCA",
+			"__bgColor": "#37494E",
+			"bgColor": null,
 			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#938EE4",
+			"__smartColor": "#73A6FF",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -12861,7 +12869,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -13699,7 +13707,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -14727,7 +14735,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -15501,7 +15509,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -16620,7 +16628,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -18082,19 +18090,28 @@
 			"worldY": 256,
 			"pxWid": 256,
 			"pxHei": 512,
-			"__bgColor": "#00E2FF",
-			"bgColor": "#00E2FF",
+			"__bgColor": "#37494E",
+			"bgColor": null,
 			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#80F1FF",
+			"__smartColor": "#C074D6",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
 				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
+				{
+					"__identifier": "roomType",
+					"__value": "Save",
+					"__type": "LocalEnum.RoomType",
+					"defUid": 99,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["Save"]
+					}]
+				}
 			],
 			"layerInstances": [
 				{
@@ -18808,7 +18825,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -20114,7 +20131,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -22038,14 +22055,14 @@
 			"worldY": 0,
 			"pxWid": 512,
 			"pxHei": 256,
-			"__bgColor": "#FFD700",
-			"bgColor": "#FFD700",
+			"__bgColor": "#37494E",
+			"bgColor": null,
 			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEB80",
+			"__smartColor": "#FFE373",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -22800,7 +22817,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9BA4A7",
+			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
