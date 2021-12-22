@@ -377,7 +377,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				if( canUndo )
 					new ui.LastChance(L.t._("Changed layer tileset"), project);
 				curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
-				editor.ge.emit( LayerDefChanged );
+				editor.ge.emit( LayerInstanceChanged(curLayerInstance) );
 			}
 			var isBad = jTilesets.find(":selected").hasClass("bad");
 			if( isBad )

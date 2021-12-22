@@ -59,7 +59,7 @@ class Rulers extends dn.Process {
 			case FieldDefChanged(_), FieldDefRemoved(_):
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
+			case LayerDefChanged(_), LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
 				invalidate();
 
 			case LevelSettingsChanged(_):

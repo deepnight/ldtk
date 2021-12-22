@@ -72,7 +72,7 @@ class LevelHistory {
 			case WorldSettingsChanged:
 
 			case ProjectSettingsChanged:
-			case LayerDefChanged, EntityDefChanged:
+			case LayerDefChanged(_), EntityDefChanged:
 			case LayerDefSorted:
 
 			case TilesetDefChanged(td):

@@ -1367,7 +1367,7 @@ class Editor extends Page {
 				case LayerDefAdded:
 				case LayerDefConverted:
 				case LayerDefRemoved(defUid): extra = defUid;
-				case LayerDefChanged:
+				case LayerDefChanged(defUid): extra = defUid;
 				case LayerDefSorted:
 				case LayerRuleChanged(rule): extra = rule.uid;
 				case LayerRuleAdded(rule): extra = rule.uid;
@@ -1446,7 +1446,7 @@ class Editor extends Page {
 			case WorldSettingsChanged: invalidateAllLevelsCache();
 			case LayerDefAdded: invalidateAllLevelsCache();
 			case LayerDefRemoved(defUid): invalidateAllLevelsCache();
-			case LayerDefChanged: invalidateAllLevelsCache();
+			case LayerDefChanged(defUid): invalidateAllLevelsCache();
 			case LayerDefSorted: invalidateAllLevelsCache();
 			case LayerDefConverted: invalidateAllLevelsCache();
 			case LayerRuleChanged(rule): invalidateAllLevelsCache();
@@ -1666,7 +1666,7 @@ class Editor extends Page {
 			case ProjectSettingsChanged:
 				updateAppBg();
 
-			case LayerDefChanged:
+			case LayerDefChanged(defUid):
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				resetTools();

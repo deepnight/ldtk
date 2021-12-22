@@ -153,7 +153,10 @@ class LevelRender extends dn.Process {
 						layersWrapper.add( layerRenders.get(li.layerDefUid).root, depth );
 				}
 
-			case LayerDefChanged, LayerDefConverted:
+			case LayerDefChanged(defUid):
+				invalidateLayer(defUid);
+
+			case LayerDefConverted:
 				invalidateAll();
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
@@ -557,7 +560,7 @@ class LevelRender extends dn.Process {
 		if( allInvalidated ) {
 			// Full
 			renderAll();
-			App.LOG.warning("Full render requested");
+			App.LOG.warning("Full level render requested");
 		}
 		else {
 			// UI & bg elements

@@ -21,7 +21,7 @@ enum GlobalEvent {
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
-	LayerDefChanged;
+	LayerDefChanged(defUid:Int);
 	LayerDefSorted;
 	LayerDefConverted;
 

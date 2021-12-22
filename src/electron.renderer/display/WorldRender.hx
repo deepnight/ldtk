@@ -196,7 +196,7 @@ class WorldRender extends dn.Process {
 			case LayerDefSorted:
 				invalidateAllLevelRenders();
 
-			case LayerDefChanged, LayerDefConverted:
+			case LayerDefChanged(_), LayerDefConverted:
 				invalidateAllLevelRenders();
 
 			case TilesetDefPixelDataCacheRebuilt(td):

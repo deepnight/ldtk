@@ -180,7 +180,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				updateList();
 				updateForm();
 
-			case LayerDefChanged:
+			case LayerDefChanged(defUid):
 				updateList();
 				updateForm();
 
@@ -234,28 +234,28 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Fields
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
 		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.enablePercentageMode();
 		i.setBounds(0.1, 1);
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		var i = Input.linkToHtmlInput( cur.fadeInactive, jForm.find("input[name='fadeInactive']") );
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		var i = Input.linkToHtmlInput( cur.hideInList, jForm.find("input[name='hideInList']") );
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
-		i.onChange = editor.ge.emit.bind(LayerDefChanged);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 
 		// Edit rules
@@ -313,7 +313,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 				// TODO cleanup rules with invalid tileIDs
 
-				editor.ge.emit( LayerDefChanged);
+				editor.ge.emit( LayerDefChanged(cur.uid) );
 			});
 			if( cur.autoTilesetDefUid!=null )
 				jTileset.val( cur.autoTilesetDefUid );
@@ -331,7 +331,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				var addButton = valuesList.find("li.add");
 				addButton.find("button").off().click( function(ev) {
 					cur.addIntGridValue(0xff0000);
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit(LayerDefChanged(cur.uid));
 					updateForm();
 				});
 
@@ -362,7 +362,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					);
 					i.validityCheck = cur.isIntGridValueIdentifierValid;
 					i.validityError = N.invalidIdentifier;
-					i.onChange = editor.ge.emit.bind(LayerDefChanged);
+					i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 					i.jInput.css({
 						backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
 					});
@@ -375,7 +375,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
 						cur.getIntGridValueDef(intValue).color = C.hexToInt( col.val() );
-						editor.ge.emit(LayerDefChanged);
+						editor.ge.emit(LayerDefChanged(cur.uid));
 						updateForm();
 					});
 
@@ -384,7 +384,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						function run() {
 							cur.removeIntGridValue(intValue);
 							project.tidy();
-							editor.ge.emit(LayerDefChanged);
+							editor.ge.emit(LayerDefChanged(cur.uid));
 							updateForm();
 						}
 						if( project.isIntGridValueUsed(cur, intValue) ) {
@@ -443,7 +443,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						cur.autoSourceLayerDefUid = v;
 						cur.gridSize = project.defs.getLayerDef(v).gridSize;
 					}
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit(LayerDefChanged(cur.uid));
 				});
 
 				jForm.find("#gridSize").prop("readonly",true);
@@ -460,14 +460,14 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Tags
 				var ted = new ui.TagEditor(
 					cur.requiredTags,
-					()->editor.ge.emit(LayerDefChanged),
+					()->editor.ge.emit(LayerDefChanged(cur.uid)),
 					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
 				);
 				jForm.find("#requiredTags").empty().append( ted.jEditor );
 
 				var ted = new ui.TagEditor(
 					cur.excludedTags,
-					()->editor.ge.emit(LayerDefChanged),
+					()->editor.ge.emit(LayerDefChanged(cur.uid)),
 					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
 				);
 				jForm.find("#excludedTags").empty().append( ted.jEditor );
@@ -524,7 +524,7 @@ class EditLayerDefs extends ui.modal.Panel {
 							cur.tilesetDefUid = v;
 							cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
 						}
-						editor.ge.emit(LayerDefChanged);
+						editor.ge.emit(LayerDefChanged(cur.uid));
 					});
 
 					var td = project.defs.getTilesetDef(cur.tilesetDefUid);
@@ -544,7 +544,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				var p = JsTools.createPivotEditor(cur.tilePivotX, cur.tilePivotY, 0x0, function(x,y) {
 					cur.tilePivotX = x;
 					cur.tilePivotY = y;
-					editor.ge.emit(LayerDefChanged);
+					editor.ge.emit(LayerDefChanged(cur.uid));
 				});
 				p.appendTo(jPivots);
 		}
