@@ -256,7 +256,7 @@ class Camera extends dn.Process {
 	public function deltaZoomTo(zoomFocusX:Float, zoomFocusY:Float, delta:Float) {
 		var old = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
 
-		rawZoom += delta * rawZoom;
+		rawZoom += delta;
 		rawZoom = M.fclamp(rawZoom, getMinZoom(), MAX_ZOOM);
 
 		editor.ge.emit(ViewportChanged);
@@ -297,7 +297,7 @@ class Camera extends dn.Process {
 		// Animated zoom
 		if( targetZoom!=null ) {
 			editor.requestFps();
-			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.22*tmod/rawZoom) );
+			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, M.fmax(0.1, 0.22*adjustedZoom)*tmod) );
 			if( M.fabs(targetZoom-rawZoom) <= 0.04*rawZoom )
 				cancelAutoZoom();
 		}

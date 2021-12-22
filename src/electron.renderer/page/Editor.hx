@@ -989,7 +989,7 @@ class Editor extends Page {
 
 	function deltaZoom(delta:Float, c:Coords) {
 		var spd = 0.15;
-		camera.deltaZoomTo( c.levelX, c.levelY, delta*spd );
+		camera.deltaZoomTo( c.levelX, c.levelY, delta*spd*camera.adjustedZoom );
 		camera.cancelAllAutoMovements();
 
 		// cursor.onMouseMove( getMouse() );
