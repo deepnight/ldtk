@@ -226,11 +226,14 @@ class Camera extends dn.Process {
 		targetWorldY = wy;
 	}
 
-	public function getMinZoom() {
-		if( editor.worldMode )
+	public function getMinZoom(?l:data.Level) {
+		final mul = 2.3;
+		if( l!=null )
+			return M.fmin( width/(l.pxWid*mul), height/(l.pxHei*mul) );
+		else if( editor.worldMode )
 			return MIN_WORLD_ZOOM;
 		else if( editor!=null && editor.curLevel!=null && !isAnimated() )
-			return M.fmin( width/(editor.curLevel.pxWid*1.5), height/(editor.curLevel.pxHei*1.5) );
+			return M.fmin( width/(editor.curLevel.pxWid*mul), height/(editor.curLevel.pxHei*mul) );
 		else
 			return DEFAULT_MIN_LEVEL_ZOOM;
 	}
@@ -268,14 +271,14 @@ class Camera extends dn.Process {
 		return wx>=left && wx<=right && wy>=top && wy<=bottom;
 	}
 
-	public inline function isOnScreenLevel(l:data.Level) {
-		return isOnScreenRect(l.worldX, l.worldY, l.pxWid, l.pxHei);
+	public inline function isOnScreenLevel(l:data.Level, padding=0.) {
+		return isOnScreenRect(l.worldX, l.worldY, l.pxWid, l.pxHei, padding);
 	}
 
-	public inline function isOnScreenRect(wx:Float, wy:Float, wid:Float, hei:Float) {
+	public inline function isOnScreenRect(wx:Float, wy:Float, wid:Float, hei:Float, padding=0.) {
 		return dn.Lib.rectangleTouches(
 			wx,wy, wid,hei,
-			left, top, width/adjustedZoom, height/adjustedZoom
+			left-padding, top-padding, width/adjustedZoom+padding*2, height/adjustedZoom+padding*2
 		);
 	}
 

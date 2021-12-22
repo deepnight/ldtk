@@ -119,6 +119,8 @@ class WorldRender extends dn.Process {
 				updateWorldTitle();
 				updateFieldsPos();
 				updateCurrentHighlight();
+				for(l in project.levels)
+					updateLevelVisibility(l);
 
 			case GridChanged(active):
 				renderGrids();
@@ -345,14 +347,19 @@ class WorldRender extends dn.Process {
 		if( !settings.v.showDetails )
 			return;
 
+		var minZoom = 0.1;
 		var padding = Std.int( Rulers.PADDING*3 );
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
 			var fr = f.value;
+			if( !camera.isOnScreenLevel(l, 256) ) {
+				fr.customFields.visible = false;
+				continue;
+			}
 			fr.customFields.visible = editor.worldMode || editor.curLevel==l;
-			fr.identifier.visible = !editor.worldMode && camera.adjustedZoom>=getMinVisibilityZoom();
+			fr.identifier.visible = !editor.worldMode && camera.adjustedZoom>=minZoom;
 			if( editor.worldMode )
-				fr.customFields.alpha = getAlphaFromZoom();
+				fr.customFields.alpha = getAlphaFromZoom(minZoom);
 
 			if( !fr.customFields.visible )
 				continue;
@@ -384,12 +391,7 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	inline function getMinVisibilityZoom() {
-		return camera.getMinZoom();
-	}
-
-	inline function getAlphaFromZoom() {
-		var minZoom = camera.getMinZoom();
+	inline function getAlphaFromZoom(minZoom:Float) {
 		return M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
 	}
 
@@ -490,6 +492,30 @@ class WorldRender extends dn.Process {
 		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
 	}
 
+
+	function updateLevelVisibility(l:data.Level) {
+		var wl = getWorldLevel(l.uid);
+		if( l.uid==editor.curLevelId && !editor.worldMode ) {
+			// Hide current level in editor mode
+			wl.bounds.visible = false;
+			wl.render.visible = false;
+		}
+		else if( editor.worldMode ) {
+			// Show everything in world mode
+			wl.render.visible = wl.bounds.visible = camera.isOnScreenLevel(l);
+			wl.bounds.alpha = 1;
+			wl.render.alpha = 1;
+		}
+		else {
+			// Fade other levels in editor mode
+			var dist = editor.curLevel.getBoundsDist(l);
+			wl.bounds.alpha = 0.3;
+			wl.bounds.visible = camera.isOnScreenLevel(l);
+			wl.render.alpha = 0.5;
+			wl.render.visible = wl.bounds.visible && dist<=300;
+		}
+	}
+
 	public function updateLayout() {
 		var cur = editor.curLevel;
 
@@ -502,36 +528,20 @@ class WorldRender extends dn.Process {
 		};
 
 		// Level layout
-		for( l in editor.project.levels )
-			if( worldLevels.exists(l.uid) ) {
-				var e = getWorldLevel(l.uid);
+		for( l in editor.project.levels ) {
+			if( !worldLevels.exists(l.uid) )
+				continue;
 
-				e.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
+			var wl = getWorldLevel(l.uid);
+			wl.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
 
-				if( l.uid==editor.curLevelId && !editor.worldMode ) {
-					// Hide current level in editor mode
-					e.bounds.visible = false;
-					e.render.visible = false;
-				}
-				else if( editor.worldMode ) {
-					// Show everything in world mode
-					e.render.visible = true;
-					e.render.alpha = 1;
-					e.bounds.alpha = 1;
-				}
-				else {
-					// Fade other levels in editor mode
-					var dist = cur.getBoundsDist(l);
-					e.bounds.alpha = 0.3;
-					e.render.alpha = 0.5;
-					e.render.visible = dist<=300;
-				}
+			updateLevelVisibility(l);
 
-				// Position
-				e.render.setPosition( l.worldX, l.worldY );
-				e.bounds.setPosition( l.worldX, l.worldY );
-				e.bgWrapper.setPosition( l.worldX, l.worldY );
-			}
+			// Position
+			wl.render.setPosition( l.worldX, l.worldY );
+			wl.bounds.setPosition( l.worldX, l.worldY );
+			wl.bgWrapper.setPosition( l.worldX, l.worldY );
+		}
 
 		updateAllLevelIdentifiers(false);
 	}
@@ -769,11 +779,11 @@ class WorldRender extends dn.Process {
 		}
 
 		// Visibility
-		wl.identifier.visible = camera.adjustedZoom>=getMinVisibilityZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
+		wl.identifier.visible = camera.adjustedZoom>=camera.getMinZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
 		if( !wl.identifier.visible )
 			return;
 
-		wl.identifier.alpha = getAlphaFromZoom();
+		wl.identifier.alpha = getAlphaFromZoom( camera.getMinZoom()*0.8 );
 
 		// Scaling
 		switch project.worldLayout {
