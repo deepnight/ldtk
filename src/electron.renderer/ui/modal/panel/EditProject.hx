@@ -72,6 +72,7 @@ class EditProject extends ui.modal.Panel {
 							// Success!
 							N.success("Renamed project!");
 							editor.needSaving = false;
+							App.ME.registerRecentProject(editor.project.filePath.full);
 							App.LOG.fileOp('  Done.');
 						});
 					}
