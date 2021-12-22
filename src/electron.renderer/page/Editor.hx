@@ -999,7 +999,8 @@ class Editor extends Page {
 		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && delta<0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
-			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 || camera.adjustedZoom<=camera.getMinZoom() )
+			// if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 || camera.adjustedZoom<=camera.getMinZoom() )
+			if( camera.adjustedZoom<=camera.getMinZoom() )
 				setWorldMode(true, true);
 		}
 
@@ -1015,7 +1016,8 @@ class Editor extends Page {
 			if( l!=null ) {
 				var wr = camera.getLevelWidthRatio(l);
 				var hr = camera.getLevelHeightRatio(l);
-				if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
+				// if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
+				if( camera.adjustedZoom>camera.getMinZoom(l) ) {
 					selectLevel(l);
 					setWorldMode(false, true);
 				}
