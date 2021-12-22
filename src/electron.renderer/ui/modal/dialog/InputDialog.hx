@@ -21,6 +21,12 @@ class InputDialog<T> extends ui.modal.Dialog {
 			}
 			jInput.val( Std.string( parser(jInput.val()) ) );
 		});
+		jInput.keypress( ev->{
+			switch ev.key {
+				case "Enter": onConfirm( parser(jInput.val()) );
+				case _:
+			}
+		});
 
 		if( suffix!=null )
 			jContent.find(".suffix").text(suffix);
