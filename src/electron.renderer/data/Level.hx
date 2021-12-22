@@ -515,29 +515,12 @@ class Level {
 			return bright ? dn.Color.toWhite(c, 0.45) : c;
 		}
 
-		for(fi in fieldInstances) {
-			switch fi.def.type {
-				case F_Int:
-				case F_Float:
-				case F_String:
-				case F_Text:
-				case F_Bool:
-				case F_Color:
-					for(i in 0...fi.getArrayLength())
-						if( !fi.valueIsNull(i) )
-							return _adjust( fi.getColorAsInt(i) );
-
-				case F_Enum(enumDefUid):
-					for(i in 0...fi.getArrayLength())
-						if( !fi.valueIsNull(i) ) {
-							var ev = fi.def.getEnumDef().getValue( fi.getEnumValue(i) );
-							if( ev!=null )
-								return _adjust( ev.color );
-						}
-
-				case F_Point:
-				case F_Path:
-			}
+		var c : Null<Int> = null;
+		for(fd in _project.defs.levelFields) {
+			var fi = getFieldInstance(fd);
+			c = fi.getSmartColor();
+			if( c!=null )
+				return _adjust(c);
 		}
 
 		return _adjust( getBgColor() );

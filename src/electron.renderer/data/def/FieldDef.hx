@@ -31,6 +31,8 @@ class FieldDef {
 	public var acceptFileTypes : Array<String>;
 	public var regex : Null<String>;
 
+	public var useForSmartColor : Bool;
+
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
 
 	var _project : data.Project;
@@ -50,7 +52,18 @@ class FieldDef {
 		arrayMinLength = arrayMaxLength = null;
 		textLanguageMode = null;
 		min = max = null;
+		useForSmartColor = getDefaultUseForSmartColor(t);
 		defaultOverride = null;
+	}
+
+	static inline function getDefaultUseForSmartColor(t:FieldType) : Bool {
+		return switch t {
+			case F_Int, F_Float, F_Bool: false;
+			case F_String, F_Text: false;
+			case F_Color: true;
+			case F_Enum(enumDefUid): false;
+			case F_Point, F_Path: false;
+		};
 	}
 
 	function set_identifier(id:String) {
@@ -94,6 +107,7 @@ class FieldDef {
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
 		o.textLanguageMode = JsonTools.readEnum(ldtk.Json.TextLanguageMode, json.textLanguageMode, true);
+		o.useForSmartColor = JsonTools.readBool(json.useForSmartColor, getDefaultUseForSmartColor(o.type));
 
 		return o;
 	}
@@ -114,6 +128,7 @@ class FieldDef {
 			editorCutLongValues: editorCutLongValues,
 			editorTextSuffix: editorTextSuffix,
 			editorTextPrefix: editorTextPrefix,
+			useForSmartColor: useForSmartColor,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),

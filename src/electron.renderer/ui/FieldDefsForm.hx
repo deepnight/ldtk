@@ -24,7 +24,11 @@ class FieldDefsForm {
 		this.fieldDefs = [];
 
 		jWrapper = new J('<div class="fieldDefsForm"/>');
-		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm") );
+		var parentName = switch fieldParent {
+			case FP_Entity: "Entity";
+			case FP_Level: "Level";
+		}
+		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm", { parent:parentName }) );
 
 		// Create single field
 		jButtons.find("button.createSingle").click( function(ev) {
@@ -538,6 +542,10 @@ class FieldDefsForm {
 
 		// Cut long values
 		var i = Input.linkToHtmlInput( curField.editorCutLongValues, jForm.find("input#editorCutLongValues") );
+		i.onChange = onFieldChange;
+
+		// Use for smart color
+		var i = Input.linkToHtmlInput( curField.useForSmartColor, jForm.find("input#useForSmartColor") );
 		i.onChange = onFieldChange;
 
 		// Multi-lines

@@ -142,13 +142,11 @@ class EntityInstance {
 	}
 
 	public function getSmartColor(bright:Bool) {
-		var fi = null;
+		var c : Null<Int> = null;
 		for(fd in def.fieldDefs) {
-			fi = getFieldInstance(fd);
-			if( fi.def.type==F_Color )
-				for(i in 0...fi.getArrayLength())
-					if( !fi.valueIsNull(i) )
-						return bright ? dn.Color.toWhite(fi.getColorAsInt(i), 0.5) : fi.getColorAsInt(i);
+			c = getFieldInstance(fd).getSmartColor();
+			if( c!=null )
+				return c;
 		}
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}

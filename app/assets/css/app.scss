@@ -4630,6 +4630,12 @@ canvas#webgl {
 		&.type-F_String .F_String,
 		&.type-F_Path .F_Path {
 			display: flex;
+			&:not(li) {
+				display: inherit;
+			}
+			&.info {
+				display: grid;
+			}
 		}
 
 		&.type-F_Path .F_Path.file-select {

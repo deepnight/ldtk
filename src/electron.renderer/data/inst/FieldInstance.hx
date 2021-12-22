@@ -362,6 +362,36 @@ class FieldInstance {
 		}
 	}
 
+	public function getSmartColor() : Null<Int> {
+		if( !def.useForSmartColor )
+			return null;
+
+		switch def.type {
+			case F_Int:
+			case F_Float:
+			case F_String:
+			case F_Text:
+			case F_Bool:
+			case F_Color:
+				for(i in 0...getArrayLength())
+					if( !valueIsNull(i) )
+						return getColorAsInt(i);
+
+			case F_Enum(enumDefUid):
+				for(i in 0...getArrayLength())
+					if( !valueIsNull(i) ) {
+						var ev = def.getEnumDef().getValue( getEnumValue(i) );
+						if( ev!=null )
+							return ev.color;
+					}
+
+			case F_Point:
+			case F_Path:
+		}
+
+		return null;
+	}
+
 	public function getColorAsInt(arrayIdx:Int) : Null<Int> {
 		require(F_Color);
 		return isUsingDefault(arrayIdx) ? def.getColorDefault() : switch internalValues[arrayIdx] {
