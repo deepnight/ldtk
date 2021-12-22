@@ -4,7 +4,7 @@ typedef WorldLevelRender = {
 	var bgWrapper: h2d.Object;
 	var bounds: h2d.Graphics;
 	var render: h2d.Object;
-	var label: h2d.ScaleGrid;
+	var identifier: h2d.ScaleGrid;
 }
 
 class WorldRender extends dn.Process {
@@ -114,7 +114,7 @@ class WorldRender extends dn.Process {
 				renderAxes();
 				renderGrids();
 				updateBgColor();
-				updateLabels();
+				updateAllIdentifiers();
 				updateTitle();
 				updateFieldsPos();
 				updateCurrentHighlight();
@@ -124,15 +124,15 @@ class WorldRender extends dn.Process {
 
 			case WorldLevelMoved(l):
 				updateLayout();
-				updateLabels(true);
+				updateAllIdentifiers(true);
 				updateCurrentHighlight();
 
 			case ProjectSaved:
 				invalidateAllLevelFields();
-				updateLabels(true);
+				updateAllIdentifiers(true);
 
 			case LevelJsonCacheInvalidated(l):
-				updateLabels(true);
+				updateAllIdentifiers(true);
 
 			case ProjectSelected:
 				renderAll();
@@ -199,14 +199,14 @@ class WorldRender extends dn.Process {
 				invalidateLevel(l);
 				invalidateLevelFields(l);
 				updateLayout();
-				updateLabels(true);
+				updateAllIdentifiers(true);
 				renderWorldBounds();
 
 			case LevelRemoved(l):
 				removeLevel(l.uid);
 				removeLevelFields(l.uid);
 				updateLayout();
-				updateLabels(true);
+				updateAllIdentifiers(true);
 				renderWorldBounds();
 
 			case ShowDetailsChanged(active):
@@ -216,7 +216,7 @@ class WorldRender extends dn.Process {
 				else
 					updateFieldsPos();
 				updateTitle();
-				updateLabels(active);
+				updateAllIdentifiers(active);
 				renderAxes();
 				for(l in project.levels)
 					updateLevelBounds(l);
@@ -345,51 +345,51 @@ class WorldRender extends dn.Process {
 		return M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
 	}
 
-	function updateLabels(refreshTexts=false) {
+	function updateAllIdentifiers(refreshTexts=false) {
 		for( l in editor.project.levels ) {
 			if( !levels.exists(l.uid) )
 				continue;
 
 			// Update text
 			if( refreshTexts )
-				updateLabelText(l);
+				updateIdentifierText(l);
 
 			var e = levels.get(l.uid);
 
 			// Visibility
-			e.label.visible = camera.adjustedZoom>=getMinVisibilityZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
-			if( !e.label.visible )
+			e.identifier.visible = camera.adjustedZoom>=getMinVisibilityZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
+			if( !e.identifier.visible )
 				continue;
-			e.label.alpha = getAlphaFromZoom();
+			e.identifier.alpha = getAlphaFromZoom();
 
 			// Scaling
 			switch project.worldLayout {
 				case Free, GridVania:
-					e.label.setScale( M.fmin( l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
+					e.identifier.setScale( M.fmin( l.pxWid / e.identifier.width, 1/camera.adjustedZoom ) );
 
 				case LinearHorizontal, LinearVertical:
-					e.label.setScale( 1/camera.adjustedZoom );
+					e.identifier.setScale( 1/camera.adjustedZoom );
 			}
 
 			// Position
 			switch project.worldLayout {
 				case Free, GridVania:
-					e.label.x = Std.int( l.worldX );
-					e.label.y = Std.int( l.worldY );
+					e.identifier.x = Std.int( l.worldX );
+					e.identifier.y = Std.int( l.worldY );
 
 				case LinearHorizontal:
-					e.label.x = Std.int( l.worldX + l.pxWid*0.3 );
-					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
-					e.label.smooth = true;
-					e.label.rotation = -0.4;
+					e.identifier.x = Std.int( l.worldX + l.pxWid*0.3 );
+					e.identifier.y = Std.int( l.worldY - e.identifier.height*e.identifier.scaleY );
+					e.identifier.smooth = true;
+					e.identifier.rotation = -0.4;
 
 				case LinearVertical:
-					e.label.x = Std.int( l.worldX - e.label.width*e.label.scaleX - 30 );
-					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
+					e.identifier.x = Std.int( l.worldX - e.identifier.width*e.identifier.scaleX - 30 );
+					e.identifier.y = Std.int( l.worldY + l.pxHei*0.5 - e.identifier.height*e.identifier.scaleY*0.5 );
 			}
 
 			// Color
-			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.8 ) ) );
+			e.identifier.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.8 ) ) );
 		}
 
 	}
@@ -520,7 +520,7 @@ class WorldRender extends dn.Process {
 				e.bgWrapper.setPosition( l.worldX, l.worldY );
 			}
 
-		updateLabels();
+		updateAllIdentifiers();
 	}
 
 	function removeLevel(uid:Int) {
@@ -529,7 +529,7 @@ class WorldRender extends dn.Process {
 			lr.render.remove();
 			lr.bounds.remove();
 			lr.bgWrapper.remove();
-			lr.label.remove();
+			lr.identifier.remove();
 			levels.remove(uid);
 		}
 	}
@@ -567,18 +567,18 @@ class WorldRender extends dn.Process {
 		);
 
 		// Level identifier
-		var f = new h2d.Flow(fWrapper.customFields);
-		f.minWidth = f.maxWidth = fWrapper.customFields.outerWidth;
-		f.horizontalAlign = Middle;
-		f.padding = 6;
-		var tf = new h2d.Text(Assets.getLargeFont(), f);
-		tf.smooth = true;
-		tf.text = l.getDisplayIdentifier();
-		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
-		if( fWrapper.identifier!=null )
-			fWrapper.identifier.remove();
-		fWrapper.identifier = f;
+		// var f = new h2d.Flow(fWrapper.customFields);
+		// f.minWidth = f.maxWidth = fWrapper.customFields.outerWidth;
+		// f.horizontalAlign = Middle;
+		// f.padding = 6;
+		// var tf = new h2d.Text(Assets.getLargeFont(), f);
+		// tf.smooth = true;
+		// tf.text = l.getDisplayIdentifier();
+		// tf.textColor = l.getSmartColor(true);
+		// FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
+		// if( fWrapper.identifier!=null )
+		// 	fWrapper.identifier.remove();
+		// fWrapper.identifier = f;
 
 		updateFieldsPos();
 	}
@@ -598,12 +598,12 @@ class WorldRender extends dn.Process {
 			bgWrapper: new h2d.Object(),
 			render : new h2d.Object(),
 			bounds : new h2d.Graphics(),
-			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 2, 2),
+			identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 2, 2),
 		}
 		var _depth = 0;
 		levelsWrapper.add(wl.bgWrapper, _depth++);
 		levelsWrapper.add(wl.render, _depth++);
-		levelsWrapper.add(wl.label, _depth++);
+		levelsWrapper.add(wl.identifier, _depth++);
 		levelsWrapper.add(wl.bounds, _depth++);
 		levels.set(l.uid, wl);
 
@@ -697,9 +697,9 @@ class WorldRender extends dn.Process {
 		updateLevelBounds(l);
 
 		// Identifier
-		wl.label.color.setColor( C.addAlphaF(0x464e79) );
-		wl.label.alpha = 0.8;
-		updateLabelText(l);
+		wl.identifier.color.setColor( C.addAlphaF(0x464e79) );
+		wl.identifier.alpha = 0.8;
+		updateIdentifierText(l);
 	}
 
 
@@ -733,14 +733,14 @@ class WorldRender extends dn.Process {
 	}
 
 
-	function updateLabelText(l:data.Level) {
+	function updateIdentifierText(l:data.Level) {
 		var wl = levels.get(l.uid);
 		if( wl==null )
 			return;
 
-		wl.label.removeChildren();
+		wl.identifier.removeChildren();
 		var error = l.getFirstError();
-		var tf = new h2d.Text(Assets.getRegularFont(), wl.label);
+		var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
 		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
@@ -757,8 +757,8 @@ class WorldRender extends dn.Process {
 				}) + ">";
 		}
 
-		wl.label.width = tf.x*2 + tf.textWidth;
-		wl.label.height = tf.textHeight;
+		wl.identifier.width = tf.x*2 + tf.textWidth;
+		wl.identifier.height = tf.textHeight;
 	}
 
 
@@ -793,7 +793,7 @@ class WorldRender extends dn.Process {
 		for( uid in levelFieldsInvalidation.keys() ) {
 			var l = editor.project.getLevel(uid);
 			renderFields(l);
-			updateLabelText(l);
+			updateIdentifierText(l);
 			if( limit--<=0 )
 				break;
 		}
