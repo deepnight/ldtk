@@ -449,6 +449,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
+					"useForSmartColor": false,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -495,6 +496,7 @@
 			"editorCutLongValues": true,
 			"editorTextSuffix": null,
 			"editorTextPrefix": null,
+			"useForSmartColor": false,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -517,6 +519,7 @@
 			"editorCutLongValues": true,
 			"editorTextSuffix": null,
 			"editorTextPrefix": null,
+			"useForSmartColor": true,
 			"min": null,
 			"max": null,
 			"regex": null,
@@ -540,7 +543,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -996,7 +999,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -1683,7 +1686,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -2227,7 +2230,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -2657,7 +2660,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -3297,7 +3300,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -3848,7 +3851,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -4284,7 +4287,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [
@@ -4792,7 +4795,7 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#FFEC73",
 			"__bgPos": null,
 			"externalRelPath": null,
 			"fieldInstances": [

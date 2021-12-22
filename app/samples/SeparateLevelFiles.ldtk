@@ -67,33 +67,12 @@
 			"editorCutLongValues": false,
 			"editorTextSuffix": null,
 			"editorTextPrefix": null,
+			"useForSmartColor": false,
 			"min": null,
 			"max": null,
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
-		},
-		{
-			"identifier": "textColor",
-			"__type": "Color",
-			"uid": 9,
-			"type": "F_Color",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": { "id": "V_Int", "params": [16768000] },
 			"textLanguageMode": null
 		}
 	] },
@@ -112,31 +91,28 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#92BCAB",
 			"__bgPos": null,
 			"externalRelPath": "SeparateLevelFiles/0000-Level_0.ldtkl",
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
-					"__type": "String",
-					"defUid": 8,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": [
-							"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
-						]
-					}]
-				},
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
-			],
+			"fieldInstances": [{
+				"__identifier": "tutorial",
+				"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
+				"__type": "String",
+				"defUid": 8,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": [
+						"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
+					]
+				}]
+			}],
 			"layerInstances": null,
 			"__neighbours": [{ "levelUid": 2, "dir": "e" }]
 		},
 		{
 			"identifier": "Level_1",
 			"uid": 2,
-			"worldX": 272,
+			"worldX": 288,
 			"worldY": 0,
 			"pxWid": 240,
 			"pxHei": 240,
@@ -147,20 +123,17 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#9B9DB9",
 			"__bgPos": null,
 			"externalRelPath": "SeparateLevelFiles/0001-Level_1.ldtkl",
-			"fieldInstances": [
-				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] },
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
 			"layerInstances": null,
 			"__neighbours": [ { "levelUid": 3, "dir": "e" }, { "levelUid": 0, "dir": "w" } ]
 		},
 		{
 			"identifier": "Level_2",
 			"uid": 3,
-			"worldX": 544,
+			"worldX": 576,
 			"worldY": 0,
 			"pxWid": 240,
 			"pxHei": 240,
@@ -171,13 +144,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEE80",
+			"__smartColor": "#C5A0AC",
 			"__bgPos": null,
 			"externalRelPath": "SeparateLevelFiles/0002-Level_2.ldtkl",
-			"fieldInstances": [
-				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] },
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
 			"layerInstances": null,
 			"__neighbours": [{ "levelUid": 2, "dir": "w" }]
 		}

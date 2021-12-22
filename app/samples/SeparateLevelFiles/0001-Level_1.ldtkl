@@ -10,7 +10,7 @@
 	},
 	"identifier": "Level_1",
 	"uid": 2,
-	"worldX": 272,
+	"worldX": 288,
 	"worldY": 0,
 	"pxWid": 240,
 	"pxHei": 240,
@@ -21,13 +21,10 @@
 	"bgPos": null,
 	"bgPivotX": 0.5,
 	"bgPivotY": 0.5,
-	"__smartColor": "#FFEE80",
+	"__smartColor": "#9B9DB9",
 	"__bgPos": null,
 	"externalRelPath": null,
-	"fieldInstances": [
-		{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] },
-		{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
-	],
+	"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
 	"layerInstances": [
 		{
 			"__identifier": "IntGrid",
