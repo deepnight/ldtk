@@ -23,7 +23,9 @@ class InputDialog<T> extends ui.modal.Dialog {
 		});
 		jInput.keypress( ev->{
 			switch ev.key {
-				case "Enter": onConfirm( parser(jInput.val()) );
+				case "Enter":
+					onConfirm( parser(jInput.val()) );
+					close();
 				case _:
 			}
 		});
