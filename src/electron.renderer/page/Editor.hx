@@ -399,7 +399,7 @@ class Editor extends Page {
 			// Update level bgs
 			for(l in project.levels)
 				if( l.bgRelPath==relPath ) {
-					worldRender.invalidateLevel(l);
+					worldRender.invalidateLevelRender(l);
 					if( curLevel==l )
 						levelRender.invalidateBg();
 				}
@@ -1027,7 +1027,7 @@ class Editor extends Page {
 
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
-			worldRender.invalidateLevel(curLevel);
+			worldRender.invalidateLevelRender(curLevel);
 
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );

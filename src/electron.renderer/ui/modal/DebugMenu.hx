@@ -31,6 +31,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 			});
 
 			add({
+				label: L.untranslated("Invalidate world render"),
+				cb: editor.worldRender.invalidateAll,
+			});
+
+			add({
 				label: L.untranslated("Rebuild tilesets pixel cache"),
 				cb: ()->{
 					for(td in project.defs.tilesets)
@@ -47,7 +52,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 					editor.checkAutoLayersCache( (_)->{
 						N.success("Done");
 						editor.levelRender.invalidateAll();
-						editor.worldRender.renderAll();
+						editor.worldRender.invalidateAll();
 					});
 				}
 			});

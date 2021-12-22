@@ -26,6 +26,7 @@ class Camera extends dn.Process {
 			return js.Browser.window.devicePixelRatio;
 		}
 
+
 	public var width(get,never) : Float;
 		inline function get_width() return App.ME.jCanvas.outerWidth() * pixelRatio;
 
@@ -37,6 +38,19 @@ class Camera extends dn.Process {
 
 	public var iHeight(get,never) : Int;
 		inline function get_iHeight() return M.ceil(height);
+
+
+	public var left(get,never) : Float;
+		inline function get_left() return worldX - 0.5*width/adjustedZoom;
+
+	public var right(get,never) : Float;
+		inline function get_right() return worldX + 0.5*width/adjustedZoom;
+
+	public var top(get,never) : Float;
+		inline function get_top() return worldY - 0.5*height/adjustedZoom;
+
+	public var bottom(get,never) : Float;
+		inline function get_bottom() return worldY + 0.5*height/adjustedZoom;
 
 
 	var targetWorldX: Null<Float>;
@@ -250,31 +264,47 @@ class Camera extends dn.Process {
 	}
 
 
+	public inline function isOnScreen(wx:Float, wy:Float) {
+		return wx>=left && wx<=right && wy>=top && wy<=bottom;
+	}
+
+	public inline function isOnScreenLevel(l:data.Level) {
+		return isOnScreenRect(l.worldX, l.worldY, l.pxWid, l.pxHei);
+	}
+
+	public inline function isOnScreenRect(wx:Float, wy:Float, wid:Float, hei:Float) {
+		return dn.Lib.rectangleTouches(
+			wx,wy, wid,hei,
+			left, top, width/adjustedZoom, height/adjustedZoom
+		);
+	}
+
+
 	override function postUpdate() {
 		super.postUpdate();
 
 		// Keyboard panning
 		levelX += kdx*tmod;
 		levelY += kdy*tmod;
-		kdx *= Math.pow(0.85,tmod);
-		kdy *= Math.pow(0.85,tmod);
-		if( M.fabs(kdx)<=0.01 ) kdx = 0;
-		if( M.fabs(kdy)<=0.01 ) kdy = 0;
+		kdx *= Math.pow(0.83,tmod);
+		kdy *= Math.pow(0.83,tmod);
+		if( M.fabs(kdx)<=0.1 ) kdx = 0;
+		if( M.fabs(kdy)<=0.1 ) kdy = 0;
 
 		// Animated zoom
 		if( targetZoom!=null ) {
 			editor.requestFps();
-			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.08*tmod/rawZoom) );
-			if( M.fabs(targetZoom-rawZoom) <= 0.01*rawZoom )
+			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, 0.22*tmod/rawZoom) );
+			if( M.fabs(targetZoom-rawZoom) <= 0.04*rawZoom )
 				cancelAutoZoom();
 		}
 
 		// Animated scrolling
 		if( targetWorldX!=null ) {
 			editor.requestFps();
-			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.1*tmod);
-			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.1*tmod);
-			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=4 )
+			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.15*tmod);
+			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.15*tmod);
+			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=6 )
 				cancelAutoScrolling();
 		}
 	}

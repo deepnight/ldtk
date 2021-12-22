@@ -181,7 +181,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			ops.push({
 				label: 'Refreshing world render for ${l.identifier}...',
 				cb: ()->{
-					editor.worldRender.invalidateLevel(l);
+					editor.worldRender.invalidateLevelRender(l);
 					editor.invalidateLevelCache(l);
 				},
 			});

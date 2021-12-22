@@ -58,11 +58,11 @@ class PanView extends Tool<Int> {
 	}
 
 
-	override function postUpdate() {
-		super.postUpdate();
+	override function preUpdate() {
+		super.preUpdate();
 
 		if( App.ME.focused && !App.ME.hasInputFocus() ) {
-			var spd = 5 / editor.camera.adjustedZoom;
+			var spd = 3 / editor.camera.adjustedZoom;
 			if( App.ME.isKeyDown(K.LEFT) ) {
 				editor.camera.cancelAllAutoMovements();
 				editor.camera.kdx -= spd*tmod;
