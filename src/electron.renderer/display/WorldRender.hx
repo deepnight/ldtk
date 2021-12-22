@@ -274,7 +274,7 @@ class WorldRender extends dn.Process {
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				bounds : new h2d.Graphics(),
-				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 2, 2),
+				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
 			}
 
 			var _depth = 0;
@@ -812,7 +812,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Color
-		wl.identifier.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.8 ) ) );
+		wl.identifier.color.setColor( C.addAlphaF( C.toBlack( l.getSmartColor(false), 0.6 ) ) );
 	}
 
 
