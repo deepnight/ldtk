@@ -146,14 +146,16 @@ class Camera extends dn.Process {
 	}
 
 	inline function set_worldX(v) {
+		if( worldX!=v )
+			editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		worldX = v;
-		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return worldX;
 	}
 
 	inline function set_worldY(v) {
+		if( worldY!=v )
+			editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		worldY = v;
-		editor.ge.emitAtTheEndOfFrame( ViewportChanged );
 		return worldY;
 	}
 
