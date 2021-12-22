@@ -588,7 +588,8 @@
 				"editorAlwaysShow",
 				"editorCutLongValues",
 				"editorDisplayMode",
-				"editorDisplayPos"
+				"editorDisplayPos",
+				"useForSmartColor"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -602,6 +603,12 @@
 					"type": [
 						"array",
 						"null"
+					]
+				},
+				"useForSmartColor": {
+					"description": "If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.",
+					"type": [
+						"boolean"
 					]
 				},
 				"editorAlwaysShow": {
