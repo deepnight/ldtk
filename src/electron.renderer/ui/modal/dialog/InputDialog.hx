@@ -1,6 +1,8 @@
 package ui.modal.dialog;
 
 class InputDialog<T> extends ui.modal.Dialog {
+	var confirm : Void->Void;
+
 	public function new(desc:dn.data.GetText.LocaleString, ?curValue:T, ?suffix="", ?checkError:String->Null<String>, parser:String->T, onConfirm:T->Void) {
 		super("inputDialog");
 
@@ -21,21 +23,22 @@ class InputDialog<T> extends ui.modal.Dialog {
 			}
 			jInput.val( Std.string( parser(jInput.val()) ) );
 		});
-		jInput.keypress( ev->{
-			switch ev.key {
-				case "Enter":
-					onConfirm( parser(jInput.val()) );
-					close();
-				case _:
-			}
-		});
 
 		if( suffix!=null )
 			jContent.find(".suffix").text(suffix);
 
-		addConfirm( ()->{
+		confirm = ()->{
 			onConfirm( parser(jInput.val()) );
-		} );
+			close();
+		}
+
+		addConfirm( confirm );
 		addCancel();
+	}
+
+	override function onKeyPress(keyCode:Int) {
+		super.onKeyPress(keyCode);
+		if( keyCode==K.ENTER )
+			confirm();
 	}
 }
