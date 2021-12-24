@@ -452,6 +452,13 @@ class WorldRender extends dn.Process {
 			return;
 		}
 
+		switch project.worldLayout {
+			case Free, GridVania:
+			case LinearHorizontal, LinearVertical:
+				axes.visible = false;
+				return;
+		}
+
 		axes.clear();
 		axes.visible = true;
 		axes.lineStyle(3*camera.pixelRatio, worldLineColor, 1);
