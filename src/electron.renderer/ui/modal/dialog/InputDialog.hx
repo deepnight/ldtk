@@ -1,44 +1,77 @@
 package ui.modal.dialog;
 
 class InputDialog<T> extends ui.modal.Dialog {
-	var confirm : Void->Void;
+	var jValidate : js.jquery.JQuery;
+	var jInput : js.jquery.JQuery;
 
-	public function new(desc:dn.data.GetText.LocaleString, ?curValue:T, ?suffix="", ?checkError:String->Null<String>, parser:String->T, onConfirm:T->Void) {
+	var getError : Null< T->Null<String> >;
+	var parser : String->T;
+	var onConfirm : T->Void;
+
+	public function new(desc:dn.data.GetText.LocaleString, ?curValue:T, ?suffix="", ?getError:T->Null<String>, parser:String->T, onConfirm:T->Void) {
 		super("inputDialog");
 
+		this.getError = getError;
+		this.onConfirm = onConfirm;
+		this.parser = parser;
+
 		loadTemplate("inputDialog");
+
+		// Label
 		var jDesc = jContent.find(".desc");
 		var p = '<p>' + StringTools.replace(desc,"\n","</p><p>") + '</p>';
 		jDesc.append(p);
 
-		var jError = jContent.find(".error");
-		var jInput = jContent.find("input[type=text]");
+		// Input
+		jInput = jContent.find("input[type=text]");
 		if( curValue!=null )
 			jInput.val( Std.string(curValue) );
 		jInput.focus().select();
+		jInput.keyup( _->updateError() );
 		jInput.blur( _->{
-			if( checkError!=null ) {
-				var err = checkError( jInput.val() );
-				jError.text(err);
-			}
+			updateError();
 			jInput.val( Std.string( parser(jInput.val()) ) );
 		});
 
 		if( suffix!=null )
 			jContent.find(".suffix").text(suffix);
 
-		confirm = ()->{
-			onConfirm( parser(jInput.val()) );
+		// Buttons
+		jValidate = addButton( L.t._("Validate"), tryToValidate );
+		addCancel();
+		updateError();
+	}
+
+	function updateError() {
+		if( getError==null )
+			return;
+
+		var err = getError( getValue() );
+		if( err!=null ) {
+			jValidate.prop("disabled",true);
+			jContent.find(".error").text(err);
+		}
+		else {
+			jValidate.prop("disabled",false);
+			jContent.find(".error").empty();
+		}
+	}
+
+	function tryToValidate() {
+		updateError();
+		if( getError(getValue())==null ) {
+			onConfirm( getValue() );
 			close();
 		}
+	}
 
-		addConfirm( confirm );
-		addCancel();
+	inline function getValue() : T {
+		return parser( jInput.val() );
 	}
 
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 		if( keyCode==K.ENTER )
-			confirm();
+			tryToValidate();
 	}
 }

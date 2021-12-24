@@ -1730,7 +1730,7 @@ class Editor extends Page {
 		dn.Process.resizeAll();
 	}
 
-	function updateTitle() {
+	public function updateTitle() {
 		App.ME.setWindowTitle(
 			project.filePath.fileName
 			+ ( needSaving ? " [UNSAVED]" : "" )

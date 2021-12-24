@@ -39,6 +39,13 @@ class EditProject extends ui.modal.Panel {
 					if( clean.length==0 )
 						return L.t._("Invalid file name");
 
+					if( project.filePath.fileName==str )
+						return L.t._("Enter a new project file name.");
+
+					var newPath = project.filePath.directoryWithSlash + str + project.filePath.extWithDot;
+					if( NT.fileExists(newPath) )
+						return L.t._("This file name is already in use.");
+
 					return null;
 				},
 				(str)->{
@@ -72,6 +79,7 @@ class EditProject extends ui.modal.Panel {
 							// Success!
 							N.success("Renamed project!");
 							editor.needSaving = false;
+							editor.updateTitle();
 							App.ME.registerRecentProject(editor.project.filePath.full);
 							App.LOG.fileOp('  Done.');
 						});
