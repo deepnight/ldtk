@@ -1138,6 +1138,8 @@ class Editor extends Page {
 			ui.Modal.closeAll();
 			new ui.modal.panel.WorldPanel();
 		}
+		else
+			updateLayerList();
 
 		camera.onWorldModeChange(worldMode, usedMouseWheel);
 		worldTool.onWorldModeChange(worldMode);

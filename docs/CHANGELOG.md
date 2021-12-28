@@ -43,6 +43,7 @@
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
   - Fixed a bug when reloading a tileset while its width changed.
+  - Fixed layers list not being properly updated when leaving world mode.
   - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
   - Updated sample maps
   - Many minor bug fixes.
