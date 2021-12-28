@@ -3,30 +3,42 @@
 
 
 <dl class="form" id="levelForm">
-	<dt> <label for="identifier">Level identifier</label> </dt>
+	<dt>
+		<label for="identifier">Level identifier</label>
+		<div class="info">The level identifier must be unique. It will be used for the level file name if the "Save levels to separate files" option is enabled (see Project panel).</div>
+	</dt>
 	<dd>
 		<input type="text" id="identifier"/>
 		<div class="info identifier"></div>
 	</dd>
 
-	<dt> <label for="identifier">Use auto identifier</label> </dt>
+	<dt>
+		<label for="identifier">Use auto identifier</label>
+		<div class="info">If enabled, the level identifier is managed automatically by LDtk, based on your prefered naming convention as defined in the Project panel.</div>
+	</dt>
 	<dd>
-		<input type="checkbox" id="useAutoIdentifier" title="Check this to auto-rename this level identifier based on Project level naming pattern (see Project settings panel)"/>
+		<input type="checkbox" id="useAutoIdentifier" />
 	</dd>
 
-	<dt> <label for="name">World coords</label> </dt>
+	<dt>
+		<label for="name">World coords</label>
+		<div class="info">Level X and Y coordinates in pixels, in the world coordinate system.</div>
+	</dt>
 	<dd>
-		<input type="text" id="worldX" class="small" title="Level X coordinate in pixels"/>
+		<input type="text" id="worldX" class="small"/>
 		<span>,</span>
-		<input type="text" id="worldY" class="small" title="Level Y coordinate in pixels"/>
+		<input type="text" id="worldY" class="small"/>
 		<span>px</span>
 	</dd>
 
-	<dt> <label for="name">Size</label> </dt>
+	<dt>
+		<label for="name">Size</label>
+		<div class="info">Level width and height in pixels.</div>
+	</dt>
 	<dd>
-		<input type="text" id="width" class="small" title="Level width in pixels"/>
+		<input type="text" id="width" class="small"/>
 		<span>x</span>
-		<input type="text" id="height" class="small" title="Level height in pixels"/>
+		<input type="text" id="height" class="small"/>
 		<span>px</span>
 	</dd>
 
@@ -55,8 +67,8 @@
 
 <!-- Custom level fields -->
 <h2>
-	Fields
-	<a class="editFields">Edit custom fields</a>
+	Custom fields
+	<a class="editFields">Edit or create fields</a>
 </h2>
 
 <div id="fieldInstances"></div>
