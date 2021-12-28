@@ -144,6 +144,7 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
+		p.setFlag(DiscardPreCsvIntGrid, true);
 		p.createLevel();
 
 		return p;

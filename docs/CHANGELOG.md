@@ -11,6 +11,7 @@
   - Updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - Added "Colors used in this project" to all color pickers
   - Implemented various optimizations to boost general performances & reduce CPU usage.
+  - DEPRECATION NOTICE: all new projects will now discard by default the deprecated data of IntGrid layers (ie. the pre-"CSV format" data). More informations here: https://github.com/deepnight/ldtk/issues/358
 
 ## UI
 
