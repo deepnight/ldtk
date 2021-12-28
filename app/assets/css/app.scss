@@ -1758,7 +1758,7 @@ textarea {
 		p {
 			margin: 0;
 			&+p {
-				margin-top: 4px;
+				margin-top: 7px;
 			}
 		}
 	}
@@ -5312,7 +5312,10 @@ dl.form.fieldInstanceEditor {
 	dl.form.type-AutoLayer .AutoLayer,
 	dl.form.type-Entities .Entities,
 	dl.form.type-Tiles .Tiles {
-		display: flex;
+		display: grid;
+		&:not(dt) {
+			display: flex;
+		}
 	}
 }
 
@@ -5395,7 +5398,7 @@ body.sorting ul.collapsedSortTarget {
 		display: grid;
 		grid-template-rows: repeat(4,min-content) auto;
 		gap: 8px;
-		width: 400px;
+		width: 500px;
 		height: 100%;
 
 		a.editFields {
@@ -5414,6 +5417,10 @@ body.sorting ul.collapsedSortTarget {
 		}
 
 		#levelForm {
+			dt {
+				width: 140px;
+				max-width: none;
+			}
 			input#identifier {
 				font-size: 14pt;
 			}
