@@ -175,7 +175,7 @@ class EditProject extends ui.modal.Panel {
 			(v)->switch v {
 				case None: L.t._("Don't export any image");
 				case OneImagePerLayer: L.t._("Export one PNG for each individual layer, in each level");
-				case OneImagePerLevel: L.t._("Export only one PNG per level");
+				case OneImagePerLevel: L.t._("Export a single PNG per level (all layers are merged down)");
 			}
 		);
 		i.linkEvent(ProjectSettingsChanged);
