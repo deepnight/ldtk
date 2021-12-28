@@ -29,14 +29,15 @@
 
 	<dt>
 		<label for="lName">Layer identifier</label>
+		<div class="info identifier"></div>
 	</dt>
 	<dd>
 		<input type="text" name="name" id="lName"/>
-		<div class="info identifier"></div>
 	</dd>
 
 	<dt class="Tiles">
 		<label>Default tileset</label>
+		<div class="info">Default tileset used by this layer. It can be changed in each level from the left tool panel.</div>
 	</dt>
 	<dd class="Tiles">
 		<select name="tilesets"></select>
@@ -47,6 +48,7 @@
 
 	<dt>
 		<label for="gridSize">Grid size</label>
+		<div class="info">Snap grid dimensions in pixels.</div>
 	</dt>
 	<dd>
 		<input type="text" name="gridSize" class="small" id="gridSize"/>
@@ -56,11 +58,12 @@
 
 	<dt>
 		<label for="offsetX">Offsets</label>
+		<div class="info">The offset is used to adjust the horizontal and vertical position of this layer relatively to the level and the other layers.</div>
 	</dt>
 	<dd>
-		<span>X=</span>
+		<span>X offset=</span>
 		<input type="text" name="offsetX" class="small" id="offsetX"/>
-		<span>px, Y=</span>
+		<span>px, Y offset=</span>
 		<input type="text" name="offsetY" class="small" id="offsetY"/>
 		<span>px</span>
 	</dd>
@@ -68,6 +71,7 @@
 
 	<dt>
 		<label for="opacity">Display opacity</label>
+		<div class="info">Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).</div>
 	</dt>
 	<dd>
 		<input type="text" name="displayOpacity" class="small" id="opacity"/>
@@ -77,22 +81,28 @@
 
 	<dt>
 		<label for="fadeInactive">Fade when inactive</label>
+		<div class="info">If enabled, this layer will be faded out (ie. slightly transparent) if it isn't currently selected.</div>
 	</dt>
 	<dd>
-		<input type="checkbox" name="fadeInactive" class="small" id="fadeInactive" title="If enabled, this layer will be faded out if it isn't the active one."/>
+		<input type="checkbox" name="fadeInactive" class="small" id="fadeInactive"/>
 	</dd>
 
 
 	<dt>
 		<label for="hideInList">Hide in list</label>
+		<div class="info">
+			If enabled, the layer will not be shown in layers list in the editor view.
+			Note: the layer will still be rendered normally in levels and listed in the Layers panel.
+		</div>
 	</dt>
 	<dd>
-		<input type="checkbox" name="hideInList" class="small" id="hideInList" title="If enabled, the layer will not be shown in layers list in the editor view. The layer will still be rendered in levels and visible in this panel list."/>
+		<input type="checkbox" name="hideInList" class="small" id="hideInList"/>
 	</dd>
 
 
 	<dt class="IntGrid">
 		<label>Grid values</label>
+		<div class="info">The list of all Integer values that could be painted in this IntGrid layer.</div>
 	</dt>
 	<dd class="IntGrid">
 		<ul class="intGridValues">
@@ -111,10 +121,11 @@
 
 	<dt class="Tiles">
 		<label>Tile pivot point</label>
+		<div class="info">This is only useful if the Tileset grid size is different from the layer grid size. In this case, the pivot will dictate the position of the tiles relatively to the layer grid.</div>
 	</dt>
 	<dd class="Tiles">
 		<div class="pivot"></div>
-		<span class="long">This is only useful if the Tileset grid size is different from the layer grid size.</span>
+		<span class="long"></span>
 	</dd>
 
 
@@ -129,12 +140,13 @@
 
 	<dt class="IntGrid AutoLayer">
 		<label>Auto-layer tileset</label>
+		<div class="info">
+			Selecting a Tileset here will enable all Auto-Layer rendering capabilities for this layer.
+			This allows to render automatically tiles based on the IntGrid values (eg. painting random "grass" tiles above cells containing "collision" values).
+		</div>
 	</dt>
 	<dd class="IntGrid AutoLayer">
 		<select name="autoTileset"></select>
-		<div class="help IntGrid">
-			Selecting a Tileset above will enable Auto-Layer capabilities on this layer. This allows to render automatically tiles based on the IntGrid values (eg. adding "grass" tiles above cells with "walls" value).
-		</div>
 	</dd>
 
 
@@ -147,6 +159,10 @@
 
 	<dt class="Entities">
 		<label>Required tags</label>
+		<div class="info">
+			Only entities that have at least ONE of the required tags will be allowed in this layer.
+			Note: this won't affect previously added entities.
+		</div>
 	</dt>
 	<dd class="Entities">
 		<div id="requiredTags"></div>
@@ -154,6 +170,10 @@
 
 	<dt class="Entities">
 		<label>Excluded tags</label>
+		<div class="info">
+			Entities that have at least ONE of the forbidden tags will not be allowed in this layer.
+			Note: this won't affect previously added entities.
+		</div>
 	</dt>
 	<dd class="Entities">
 		<div id="excludedTags"></div>
@@ -162,6 +182,7 @@
 
 	<dt class="IntGridAutoLayer AutoLayer">
 		<label>Bake</label>
+		<div class="info">Baking will flatten this auto-layer into a single new Tiles layer. Various options are available.</div>
 	</dt>
 	<dd class="IntGridAutoLayer AutoLayer">
 		<button class="bake">
