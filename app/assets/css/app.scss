@@ -1381,6 +1381,12 @@ ul.form {
 			}
 		}
 
+		a[href] {
+			font-size: 0.8em;
+			margin-left: 8px;
+			align-self: center;
+		}
+
 		div.info {
 			flex: 0 0 32px;
 		}
@@ -5306,17 +5312,17 @@ body.sorting ul.collapsedSortTarget {
 			}
 		}
 
-		ul.form .GridVania,
-		ul.form .LinearHorizontal,
-		ul.form .LinearVertical,
-		ul.form .Free {
+		dl.form .GridVania,
+		dl.form .LinearHorizontal,
+		dl.form .LinearVertical,
+		dl.form .Free {
 			display: none;
 		}
 
-		ul.form.layout-GridVania .GridVania,
-		ul.form.layout-LinearHorizontal .LinearHorizontal,
-		ul.form.layout-LinearVertical .LinearVertical,
-		ul.form.layout-Free .Free {
+		dl.form.layout-GridVania .GridVania,
+		dl.form.layout-LinearHorizontal .LinearHorizontal,
+		dl.form.layout-LinearVertical .LinearVertical,
+		dl.form.layout-Free .Free {
 			display: flex;
 		}
 	}
