@@ -365,6 +365,15 @@ class JsTools {
 				jThis.empty();
 			}
 			ui.Tip.attach(jThis, jThis.data("str"), "infoTip");
+
+			if( jThis.parent("dt")!=null ) {
+				jThis.mouseover( _->{
+					jThis.parent().next("dd").addClass("infoHighlight");
+				});
+				jThis.mouseout( _->{
+					jThis.parent().next("dd").removeClass("infoHighlight");
+				});
+			}
 		});
 
 		// External links

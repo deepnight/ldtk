@@ -13,17 +13,21 @@
 <dl class="form projectForm">
 	<dt class="full"> <h3>Project file settings</h3> </dt>
 
-	<dt><label for="useAppExtension">Use .::ext:: extension</label></dt>
+	<dt>
+		<label for="useAppExtension">Use .::ext:: extension</label>
+		<div class="info">If checked, the project file will use the official extension ".::ext::" instead of the standard ".json". This is recommended for proper file association & identification on your OS.</div>
+	</dt>
 	<dd>
-		<input type="checkbox" name="useAppExtension" id="useAppExtension" title='The project JSON file will use the app extension ".::ext::" instead of ".json"'/>
+		<input type="checkbox" name="useAppExtension" id="useAppExtension"/>
 		<span>(recommended)</span>
 	</dd>
 
 	<dt>
 		<label for="backup">Backup on save</label>
+		<div class="info">Everytime you save your project, an extra backup copy will be created in a subfolder. Note that backups will obviously increase saving time and disk usage.</div>
 	</dt>
 	<dd>
-		<input type="checkbox" id="backup" title="Everytime you save your project, an extra backup copy will be created in a subfolder. Note that backups will obviously increase saving time and disk usage."/>
+		<input type="checkbox" id="backup" />
 		<div class="locate"></div>
 		<span>Max backup files: </span>
 		<input type="text" id="backupCount"/>
@@ -31,26 +35,29 @@
 
 	<dt>
 		<label for="minify">Minify JSON</label>
+		<div class="info">Project JSON file will be saved without any "pretty" formatting (ie. spaces and indentation), making it smaller.</div>
 	</dt>
 	<dd>
-		<input type="checkbox" name="minify" id="minify" title='Project JSON file will be saved without any "pretty" formatting (ie. spaces and indentation), making it smaller.'/>
+		<input type="checkbox" name="minify" id="minify"/>
 	</dd>
 
 	<dt>
 		<label for="externalLevels">Save levels to separate files</label>
+		<div class="info">Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder). This is highly RECOMMENDED for large projects or projects shared among multiple users.</div>
 	</dt>
 	<dd>
-		<input type="checkbox" id="externalLevels" title='Separate project data in multiple files: one for the project itself (ie. settings, definitions etc.) and one per-level in a sub-folder.'/>
+		<input type="checkbox" id="externalLevels"/>
 		<div class="locate"></div>
 	</dd>
 
 	<dt>
 		<label for="png">Export as PNG</label>
+		<div class="info">This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</div>
 	</dt>
 	<dd class="imageExportMode">
 		<div class="locate"></div>
 
-		<select title="This option allows you to export 'flatten' PNG images, in addition to JSON data, when saving your project.">
+		<select>
 		</select>
 
 		<!-- <input type="checkbox" id="png" title='Each layer in each level will be exported as an individual PNG image. Note that IntGrid layer values will be exported as tiny images where 1px = 1 layer grid cell. WARNING: this will increase saving time on large projects.'/> -->
@@ -72,9 +79,10 @@
 
 	<dt>
 		<label for="tiled">Export Tiled TMX</label>
+		<div class="info">Enable this to create Tiled TMX files (one per level) in a sub folder, every time you save your project. Warning: this Tiled export is made for quick integration with game frameworks that don't support LDtk yet, but it comes with some limitations!</div>
 	</dt>
 	<dd>
-		<input type="checkbox" id="tiled" title='Every time you save, Tiled TMX files (one per level) will also be created in a sub folder, for easier integration with existing frameworks.'/>
+		<input type="checkbox" id="tiled"/>
 		<div class="locate"></div>
 		<a href="https://ldtk.io/go/tiled">Learn more about Tiled export limitations</a>
 	</dd>
@@ -85,6 +93,7 @@
 
 	<dt>
 		<label for="defaultGridSize">Default layer grid</label>
+		<div class="info">Set the default grid size when creating new layers in this project.</div>
 	</dt>
 	<dd>
 		<input type="text" name="defaultGridSize" id="defaultGridSize"/>
@@ -93,12 +102,12 @@
 
 	<dt>
 		<label for="levelName">Default level identifiers</label>
-	</dt>
-	<dd>
-		<input type="text" class="levelNamePattern"/>
 		<div class="info">
 			You can customize the default naming convention for all level identifiers. Note that level identifiers must be UNIQUE and as such, an extra auto-increment might be added to levels sharing getting the same name, to avoid collisions. Also, remember the identifiers should only contain letters, numbers, "-" and "_".
 		</div>
+	</dt>
+	<dd>
+		<input type="text" class="levelNamePattern"/>
 		<div class="help guide">
 			<dl>
 				<dt>%idx</dt> <dd>Level index in array, starting at 0</dd>
@@ -111,6 +120,7 @@
 
 	<dt>
 		<label for="bgColor">Workspace background color</label>
+		<div class="info">Base background color of the project workspace</div>
 	</dt>
 	<dd>
 		<input type="color" name="bgColor" id="bgColor"/>
@@ -118,6 +128,7 @@
 
 	<dt>
 		<label for="defaultLevelbgColor">Default level bg color</label>
+		<div class="info">Default background color of all levels.</div>
 	</dt>
 	<dd>
 		<input type="color" name="defaultLevelbgColor" id="defaultLevelbgColor"/>

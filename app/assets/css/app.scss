@@ -585,6 +585,24 @@ div.info {
 	}
 }
 
+.infoHighlight {
+	background-color: $helpDark;
+	box-shadow: 0px 0px 16px $helpDark;
+
+	span {
+		color: $help;
+	}
+
+	select {
+		border-color: $help;
+		background-color: $helpMed;
+	}
+	input[type=text] {
+		border-color: $helpMed;
+		background-color: $helpDarker;
+	}
+}
+
 span.key,
 div.key {
 	display: inline-block;
@@ -1230,6 +1248,10 @@ ul.form {
 
 	>dt {
 		grid-column: 1/2;
+
+		display: grid;
+		grid-template-columns: auto min-content;
+
 		min-width: 90px;
 		max-width: 110px;
 		padding-right: 8px;
@@ -1244,6 +1266,26 @@ ul.form {
 			width: auto !important;
 			max-width: none !important;
 			grid-column: 1/3;
+		}
+
+		div.info {
+			width: 24px;
+			height: 16px;
+			margin-left: 8px;
+			font-size: 8pt;
+			border-width: 1px;
+			border-color: $bgLight;
+			color: $bgLight;
+
+			&::before {
+				content: "?";
+			}
+			&:hover {
+				border-color: $help;
+				box-shadow: 0px 0px 16px $helpMed;
+				color: black;
+				background-color: $help;
+			}
 		}
 	}
 
