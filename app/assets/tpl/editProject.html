@@ -35,7 +35,11 @@
 
 	<dt>
 		<label for="minify">Minify JSON</label>
-		<div class="info">Project JSON file will be saved without any "pretty" formatting (ie. spaces and indentation), making it smaller.</div>
+		<div class="info">
+			Enable this to save project JSON file without any "pretty" formatting (ie. white spaces and indentation).
+			This is NOT necessarily recommended if your project is stored on a versioning system (git, svn etc.) because this could cause issues with diffs and merging operations.
+			Only use this option if you really need to reduce the project files size.
+		</div>
 	</dt>
 	<dd>
 		<input type="checkbox" name="minify" id="minify"/>
@@ -43,7 +47,10 @@
 
 	<dt>
 		<label for="externalLevels">Save levels to separate files</label>
-		<div class="info">Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder). This is highly RECOMMENDED for large projects or projects shared among multiple users.</div>
+		<div class="info">
+			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
+			This is highly RECOMMENDED for large projects or projects shared among multiple users.
+		</div>
 	</dt>
 	<dd>
 		<input type="checkbox" id="externalLevels"/>
