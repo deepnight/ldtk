@@ -806,6 +806,7 @@ class WorldRender extends dn.Process {
 			case Free, GridVania:
 				wl.identifier.x = Std.int( l.worldX );
 				wl.identifier.y = Std.int( l.worldY );
+				wl.identifier.rotation = 0;
 
 			case LinearHorizontal:
 				wl.identifier.x = Std.int( l.worldX + l.pxWid*0.3 );
@@ -816,6 +817,7 @@ class WorldRender extends dn.Process {
 			case LinearVertical:
 				wl.identifier.x = Std.int( l.worldX - wl.identifier.width*wl.identifier.scaleX - 30 );
 				wl.identifier.y = Std.int( l.worldY + l.pxHei*0.5 - wl.identifier.height*wl.identifier.scaleY*0.5 );
+				wl.identifier.rotation = 0;
 		}
 
 		// Color
