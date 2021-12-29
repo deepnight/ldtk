@@ -6,7 +6,7 @@ import codemirror.CodeMirror;
 class TextEditor extends ui.modal.Dialog {
 	public var jHeader : js.jquery.JQuery;
 
-	public function new(str:String, title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
+	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
 		super("textEditor");
 
 		var anyChange = false;
@@ -15,6 +15,11 @@ class TextEditor extends ui.modal.Dialog {
 
 		jHeader = new J('<div class="header"/>');
 		jHeader.appendTo(jContent);
+
+		if( desc!=null ) {
+			var parags = "<p>" + desc.split("\\n").join("</p><p>") + "</p>";
+			new J('<div class="help">$parags</div>').appendTo(jHeader);
+		}
 
 		var jTextArea = new J('<textarea/>');
 		jTextArea.appendTo(jContent);

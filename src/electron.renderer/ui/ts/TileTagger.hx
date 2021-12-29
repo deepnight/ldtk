@@ -236,6 +236,7 @@ class TileTagger extends ui.Tileset {
 				var te = new ui.modal.dialog.TextEditor(
 					tilesetDef.hasTileCustomData(tid) ? tilesetDef.getTileCustomData(tid) : "",
 					'Tile $tid custom data',
+					'You can enter any kind of data here, which will be associated to this tile and stored in the project JSON.\nThis data could either be numbers, text, JSON, XML etc. Basically, any tile related info you would like to pass to your game engine.',
 					LangJson,
 					(str)->{
 						str = StringTools.trim(str);
