@@ -1951,7 +1951,7 @@ class Editor extends Page {
 
 
 		// Smart FPS limiting
-		if( App.ME.focused && settings.v.smartCpuThrottling ) {
+		if( settings.v.smartCpuThrottling ) {
 			var maxCap = 0.;
 			for(k in fpsRequests.keys()) {
 				maxCap = M.fmax(k/100,maxCap);
