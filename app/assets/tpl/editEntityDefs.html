@@ -26,22 +26,28 @@
 		<dl class="form">
 			<dt>
 				<label for="eName">Entity identifier</label>
+				<div class="info identifier"></div>
 			</dt>
 			<dd>
 				<input type="text" name="name" id="eName"/>
-				<div class="info identifier"></div>
 			</dd>
 
 			<dt>
 				<label>Tags</label>
+				<div class="info">
+					Tags are used to group entities in custom categories. Multiple tags can be assigned to a single entity.
+					You may also use tags in Layers settings to filter which entities are allowed and which are not.
+					Example: add an "Actor" tag to some entities and create an Entity layer that only accepts "Actors" entities in it.
+				</div>
 			</dt>
 			<dd>
 				<div id="tags"></div>
-				<div class="info" title="Tags can be used to filter Entities allowed in Entity layers."></div>
+				<div class="info"></div>
 			</dd>
 
 			<dt>
 				<label for="width">Size</label>
+				<div class="info">Minimal width and height in pixels of this entity.</div>
 			</dt>
 			<dd>
 				<input type="text" name="width" class="small" id="width"/>
@@ -61,6 +67,7 @@
 
 			<dt>
 				<label>Editor visual</label>
+				<div class="info">Customize visual representation of the entity in the editor view.</div>
 			</dt>
 			<dd class="renderMode">
 				<input type="color" name="color" id="eColor"/>
@@ -86,6 +93,10 @@
 
 			<dt>
 				<label>Pivot point</label>
+				<div class="info">
+					The pivot of the entity is its actual pixel coordinate of the entity in the level.
+					The pivot alignment can be customized to adjust the position of the entity bounds relatively to thes coordinates: the entity could be centered over the point, above it, on the right, etc.
+				</div>
 			</dt>
 			<dd>
 				<div class="pivot"></div>
@@ -93,6 +104,11 @@
 
 			<dt>
 				<label for="maxCount">Max count</label>
+				<div class="info">
+					An entity can be limited to a specific number of instances per level or per world.
+					Examples: a PlayerStart entity could be limited to 1 max per world, or you may limit LightSource entities to 10 per level etc.
+					What actually happens when you reach the limit is also customizable.
+				</div>
 			</dt>
 			<dd>
 				<input type="text" id="maxCount" placeholder="Unlimited" class="small"/>
