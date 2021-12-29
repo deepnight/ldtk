@@ -5268,6 +5268,13 @@ dl.form.fieldInstanceEditor {
 		width: 2.5em;
 		height: 2.5em;
 	}
+
+	button.editAutoRules {
+		flex-grow: 0;
+		white-space: nowrap;
+		margin-left: 2px;
+	}
+
 	ul.intGridValues {
 		li {
 			position: relative;

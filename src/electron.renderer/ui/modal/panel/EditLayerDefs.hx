@@ -259,8 +259,10 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 		// Edit rules
-		if( cur.isAutoLayer() ) {
-			var jButton = jForm.find("button.editAutoRules");
+		var jButton = jForm.find("button.editAutoRules");
+		if( cur.autoLayerRulesCanBeUsed() ) {
+			jButton.show();
+
 			jButton.click( (_)->{
 				close();
 				var li = editor.curLevel.getLayerInstance(cur);
@@ -268,6 +270,8 @@ class EditLayerDefs extends ui.modal.Panel {
 				new ui.modal.panel.EditAllAutoLayerRules(li);
 			});
 		}
+		else
+			jButton.hide();
 
 
 		// Baking
