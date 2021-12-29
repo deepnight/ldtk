@@ -354,7 +354,7 @@ class JsTools {
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) {
 		// (i) Info bubbles
-		jCtx.find(".info").each( function(idx, e) {
+		jCtx.find(".info, info").each( function(idx, e) {
 			var jThis = new J(e);
 
 			if( jThis.data("str")==null ) {
