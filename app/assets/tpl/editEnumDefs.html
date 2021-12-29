@@ -17,51 +17,51 @@
 	<ul class="niceList"></ul>
 </div>
 
-<dl class="form enumForm">
-	<dd class="onlyExternal">
-		<div class="help">External enums can be manually synced with their source file.</div>
-	</dd>
+<div class="enumFormWrapper">
+	<dl class="form enumForm">
+		<dd class="onlyExternal">
+			<div class="help">External enums can be manually synced with their source file.</div>
+		</dd>
 
 
-	<dd class="source">
-		<label>Source file</label>
-	</dd>
+		<dd class="source">
+			<label>Source file</label>
+		</dd>
 
 
-	<dt>
-		<label for="id">Enum identifier</label>
-		<div class="info identifier"></div>
-	</dt>
-	<dd>
-		<input type="text" name="id" id="id"/>
-	</dd>
+		<dt>
+			<label for="id">Enum identifier</label>
+			<div class="info identifier"></div>
+		</dt>
+		<dd>
+			<input type="text" name="id" id="id"/>
+		</dd>
 
 
-	<dt>
-		<label for="icons">Icon tileset</label>
-		<div class="info">You can link an existing Tileset to this Enum to associate icons to each enum values.</div>
-	</dt>
-	<dd>
-		<select id="icons"></select>
-	</dd>
+		<dt>
+			<label for="icons">Icon tileset</label>
+			<div class="info">You can link an existing Tileset to this Enum to associate icons to each enum values.</div>
+		</dt>
+		<dd>
+			<select id="icons"></select>
+		</dd>
+	</dl>
 
 
-	<dt>
-		<label for="eValues">Possible values</label>
-		<div class="info">The complete list of possible values for this Enum.</div>
-	</dt>
-	<dd>
+	<div class="valuesWrapper">
+		<h2>All possible enum values</h2>
+		<button class="createEnumValue noExternal gray">Add a new value</button>
 		<ul class="enumValues"></ul>
-		<button class="createEnumValue noExternal gray">Add value</button>
+	</div>
 
-		<!-- Template -->
-		<xml class="enum">
-			<div class="sortHandle"></div>
-			<div class="pickerWrapper"></div>
-			<input type="color" name="color"/>
-			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
-			<button class="delete gray noExternal">🗑️</button>
-		</xml>
-	</dd>
-</dl>
+</div>
 
+
+<!-- Template -->
+<xml class="enum">
+	<div class="sortHandle"></div>
+	<div class="pickerWrapper"></div>
+	<input type="color" name="color"/>
+	<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
+	<button class="delete gray noExternal">🗑️</button>
+</xml>

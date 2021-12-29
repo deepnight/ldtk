@@ -5140,42 +5140,11 @@ dl.form.fieldInstanceEditor {
 				}
 			}
 		}
-		dl.enumForm {
-			grid-column: 2/3;
-
-			button.createEnumValue {
-				flex: 1 0 100%;
-			}
-
-			ul.enumValues {
-				li {
-					display: grid;
-					gap: 3px;
-					grid-template-columns: min-content 32px 32px auto 32px;
-					grid-auto-flow: column;
-					margin-bottom: 4px;
-
-					input[type=color] {
-						width: auto;
-						height: 32px;
-						border: 1px solid $orange;
-						&:hover {
-							border-color: white;
-						}
-					}
-					input[type=text] {
-						padding: 3px;
-					}
-					button {
-						padding: 0;
-					}
-				}
-			}
-
-
-			.onlyExternal {
-				display: none;
-			}
+		.enumFormWrapper {
+			overflow-y: hidden;
+			display: grid;
+			grid-template-columns: 100%;
+			grid-template-rows: min-content auto;
 
 			&.externalEnum {
 				.noExternal {
@@ -5199,7 +5168,64 @@ dl.form.fieldInstanceEditor {
 					padding: 6px;
 				}
 			}
+
+
+			dl.enumForm {
+
+				button.createEnumValue {
+					flex: 1 0 100%;
+				}
+
+				.onlyExternal {
+					display: none;
+				}
+			}
+
+
+			.valuesWrapper {
+				display: grid;
+				padding-right: 1px;
+				overflow-y: hidden;
+				grid-template-rows: min-content min-content auto;
+
+				ul.enumValues {
+					overflow-x: hidden;
+					overflow-y: auto;
+					li {
+						display: grid;
+						gap: 3px;
+						grid-template-columns: min-content 32px 32px auto 32px;
+						grid-auto-flow: column;
+						margin-bottom: 4px;
+
+						input[type=color] {
+							width: auto;
+							height: 32px;
+							border: 1px solid $orange;
+							&:hover {
+								border-color: white;
+							}
+						}
+						input[type=text] {
+							padding: 3px;
+						}
+						button {
+							padding: 0;
+						}
+					}
+				}
+
+				>h2 {
+					margin-bottom: 8px;
+				}
+
+				>button {
+					margin-bottom: 4px;
+				}
+			}
+
 		}
+
 	}
 }
 

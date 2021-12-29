@@ -226,40 +226,43 @@ class EditEnumDefs extends ui.modal.Panel {
 
 
 	function updateEnumForm() {
-		var jForm = jContent.find("dl.enumForm");
-		jForm.find("*").off();
+		var jFormWrapper = jContent.find(".enumFormWrapper");
+		jFormWrapper.find("*").off();
+
+		var jDefForm = jContent.find("dl.enumForm");
 
 		if( curEnum==null ) {
-			jForm.hide();
+			jFormWrapper.hide();
 			return;
 		}
-		jForm.show();
-		jForm.find("input").not("xml input").removeAttr("readonly");
+		jFormWrapper.show();
+		jFormWrapper.find("input").not("xml input").removeAttr("readonly");
 
 		if( curEnum.isExternal() )
-			jForm.addClass("externalEnum");
+			jFormWrapper.addClass("externalEnum");
 		else
-			jForm.removeClass("externalEnum");
+			jFormWrapper.removeClass("externalEnum");
+
 
 
 		// Enum ID
-		var i = Input.linkToHtmlInput( curEnum.identifier, jForm.find("[name=id]") );
+		var i = Input.linkToHtmlInput( curEnum.identifier, jDefForm.find("[name=id]") );
 		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEnumIdentifierUnique(id, curEnum));
 		i.linkEvent(EnumDefChanged);
 
 		// Source path
 		if( curEnum.isExternal() ) {
-			jForm.find(".source .path, .source .exploreTo").remove();
-			jForm.find(".source")
+			jDefForm.find(".source .path, .source .exploreTo").remove();
+			jDefForm.find(".source")
 				.show()
 				.append( JsTools.makePath(curEnum.externalRelPath) )
 				.append( JsTools.makeExploreLink( project.makeAbsoluteFilePath(curEnum.externalRelPath), true ) );
 		}
 		else
-			jForm.find(".source").hide();
+			jDefForm.find(".source").hide();
 
 		// Tilesets
-		var jSelect = jForm.find("select#icons");
+		var jSelect = jDefForm.find("select#icons");
 		jSelect.show();
 		jSelect.empty();
 		if( curEnum.iconTilesetUid==null )
@@ -301,9 +304,9 @@ class EditEnumDefs extends ui.modal.Panel {
 
 
 		// Values
-		var jList = jForm.find("ul.enumValues");
+		var jList = jFormWrapper.find("ul.enumValues");
 		jList.empty().off();
-		var xml = jForm.find("xml.enum").children();
+		var xml = jContent.find("xml.enum").children();
 		for(eValue in curEnum.values) {
 			var li = new J("<li/>");
 			li.appendTo(jList);
@@ -354,32 +357,38 @@ class EditEnumDefs extends ui.modal.Panel {
 			if( !curEnum.isExternal() ) {
 				li.find(".delete").click( function(ev) {
 					var isUsed = project.isEnumValueUsed(curEnum, eValue.id );
-					new ui.modal.dialog.Confirm(
-						ev.getThis(),
-						isUsed
-							? Lang.t._("WARNING! This enum value is USED in one or more entity instances. These values will also be removed!")
-							: Lang.t._("This enum value is not used and can be safely removed."),
-						isUsed,
-						function() {
-							new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
-							project.defs.removeEnumDefValue(curEnum, eValue.id);
-							editor.ge.emit(EnumDefValueRemoved);
-						}
-					);
+					if( isUsed ) {
+						new ui.modal.dialog.Confirm(
+							ev.getThis(),
+							Lang.t._("WARNING! This enum value is USED in one or more entity instances. These values will also be removed!"),
+							isUsed,
+							function() {
+								new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
+								project.defs.removeEnumDefValue(curEnum, eValue.id);
+								editor.ge.emit(EnumDefValueRemoved);
+							}
+						);
+					}
+					else {
+						project.defs.removeEnumDefValue(curEnum, eValue.id);
+						editor.ge.emit(EnumDefValueRemoved);
+					}
 				});
 			}
 		}
 
-		jForm.find(".createEnumValue").click( function(_) {
+		jFormWrapper.find(".createEnumValue").click( function(_) {
 			var uid = 0;
 			while( !curEnum.addValue(curEnum.identifier+uid) )
 				uid++;
 			editor.ge.emit(EnumDefChanged);
-			jContent.find("ul.enumValues li:last input[type=text]").select();
+			var jElem = jFormWrapper.find("ul.enumValues li:last input[type=text]");
+			jElem.select();
+			JsTools.focusScrollableList( jFormWrapper.find("ul.enumValues"), jElem);
 		});
 
 		if( curEnum.isExternal() )
-			jForm.find("input").not("xml input").attr("readonly", "readonly");
+			jFormWrapper.find("input").not("xml input").attr("readonly", "readonly");
 
 		// Make fields list sortable
 		if( !curEnum.isExternal() )
@@ -389,7 +398,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				editor.ge.emit(EnumDefChanged);
 			});
 
-		JsTools.parseComponents(jForm);
+		JsTools.parseComponents(jFormWrapper);
 		checkBackup();
 	}
 }
