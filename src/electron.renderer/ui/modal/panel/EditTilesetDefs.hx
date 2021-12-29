@@ -86,39 +86,15 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// No atlas
 		if( curTd==null ) {
 			jPickerWrapper.hide();
-			// jContent.find(".tilesDemo").hide();
 			return;
 		}
 
 		jPickerWrapper.off().empty();
-		// jContent.find(".tilesDemo").show();
 
 		// Picker / tagger
 		jPickerWrapper.show();
 		if( curTd.isAtlasLoaded() )
 			new ui.ts.TileTagger(jPickerWrapper, curTd);
-
-		// // Demo tiles
-		// var padding = 8;
-		// var jDemo = jContent.find(".tilesDemo canvas");
-		// JsTools.clearCanvas(jDemo);
-
-		// if( curTd!=null && curTd.isAtlasLoaded() ) {
-		// 	jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
-		// 	jDemo.attr("height", curTd.tileGridSize);
-
-		// 	var idx = 0;
-		// 	function renderDemoTile(tcx,tcy) {
-		// 		curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
-		// 	}
-		// 	renderDemoTile(0,0);
-		// 	renderDemoTile(1,0);
-		// 	renderDemoTile(2,0);
-		// 	renderDemoTile(0,1);
-		// 	renderDemoTile(0,2);
-		// 	renderDemoTile(0,3);
-		// 	renderDemoTile(0,4);
-		// }
 
 		JsTools.parseComponents(jPickerWrapper);
 
@@ -136,7 +112,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		if( curTd==null ) {
 			jForm.hide();
-			// jContent.find(".noTileLayer").hide();
 			jContent.find(".none").show();
 			return;
 		}
@@ -144,10 +119,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
-		// if( !project.defs.hasLayerType(Tiles) && !project.defs.hasAutoLayer() )
-		// 	jContent.find(".noTileLayer").show();
-		// else
-		// 	jContent.find(".noTileLayer").hide();
 
 		// Image file picker
 		jForm.find(".imagePicker").remove();
