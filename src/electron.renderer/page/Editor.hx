@@ -1459,7 +1459,11 @@ class Editor extends Page {
 			case LayerRuleGroupAdded: invalidateAllLevelsCache();
 			case LayerRuleGroupRemoved(rg): invalidateAllLevelsCache();
 			case LayerRuleGroupChanged(rg): invalidateAllLevelsCache();
-			case LayerRuleGroupChangedActiveState(rg): invalidateAllLevelsCache();
+			case LayerRuleGroupChangedActiveState(rg):
+				if( rg.isOptional )
+					invalidateLevelCache(curLevel);
+				else
+					invalidateAllLevelsCache();
 			case LayerRuleGroupSorted: invalidateAllLevelsCache();
 			case LayerRuleGroupCollapseChanged(rg):
 			case LayerInstanceSelected:
