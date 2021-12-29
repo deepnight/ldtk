@@ -14,7 +14,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			var ed = project.defs.createEnumDef();
 			editor.ge.emit(EnumDefAdded);
 			selectEnum(ed);
-			jContent.find("ul.enumForm input:first").focus();
+			jContent.find("dl.enumForm input:first").focus();
 		});
 
 		// Import
@@ -226,7 +226,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 
 	function updateEnumForm() {
-		var jForm = jContent.find("ul.enumForm");
+		var jForm = jContent.find("dl.enumForm");
 		jForm.find("*").off();
 
 		if( curEnum==null ) {
@@ -369,7 +369,6 @@ class EditEnumDefs extends ui.modal.Panel {
 				});
 			}
 		}
-		JsTools.parseComponents(jList);
 
 		jForm.find(".createEnumValue").click( function(_) {
 			var uid = 0;
@@ -390,6 +389,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				editor.ge.emit(EnumDefChanged);
 			});
 
+		JsTools.parseComponents(jForm);
 		checkBackup();
 	}
 }

@@ -17,28 +17,40 @@
 	<ul class="niceList"></ul>
 </div>
 
-<ul class="form enumForm">
-	<li class="onlyExternal">
+<dl class="form enumForm">
+	<dd class="onlyExternal">
 		<div class="help">External enums can be manually synced with their source file.</div>
-	</li>
+	</dd>
 
-	<li class="source">
+
+	<dd class="source">
 		<label>Source file</label>
-	</li>
+	</dd>
 
-	<li>
+
+	<dt>
 		<label for="id">Enum identifier</label>
+		<div class="info identifier"></div>
+	</dt>
+	<dd>
 		<input type="text" name="id" id="id"/>
-	</li>
+	</dd>
 
-	<li>
+
+	<dt>
 		<label for="icons">Icon tileset</label>
+		<div class="info">You can link an existing Tileset to this Enum to associate icons to each enum values.</div>
+	</dt>
+	<dd>
 		<select id="icons"></select>
-	</li>
+	</dd>
 
-	<li>
+
+	<dt>
 		<label for="eValues">Possible values</label>
-
+		<div class="info">The complete list of possible values for this Enum.</div>
+	</dt>
+	<dd>
 		<ul class="enumValues"></ul>
 		<button class="createEnumValue noExternal gray">Add value</button>
 
@@ -50,6 +62,6 @@
 			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
 			<button class="delete gray noExternal">🗑️</button>
 		</xml>
-	</li>
-</ul>
+	</dd>
+</dl>
 
