@@ -16,7 +16,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		this.li = li;
 		jMask.hide();
 
-		loadTemplate("editAllAutoLayerRules");
+		loadTemplate("editAllAutoLayerRules", { layer : li.def.identifier });
 		updateFullPanel();
 	}
 
