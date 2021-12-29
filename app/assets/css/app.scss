@@ -445,7 +445,19 @@ button {
 	font-family: Roboto;
 	font-size: 1.1em;
 	padding: 10px;
-	border: 1px dotted $help;
+	padding-left: 60px;
+	border: 1px dashed $help;
+	border-radius: 6px;
+	background-image: url("../icons/helpBg.svg");
+	background-repeat: no-repeat;
+	background-position: 6px 6px;
+
+	p {
+		margin: 0;
+		&+p {
+			margin-top: 8px;
+		}
+	}
 
 	&.guide {
 		position: absolute;
@@ -2194,9 +2206,20 @@ textarea {
 		}
 
 		.header {
+			display: grid;
+			grid-auto-columns: auto;
+			grid-auto-flow: column;
+			gap: 8px;
+
 			&:not(:empty) {
 				padding-top: 8px;
 				padding-bottom: 8px;
+			}
+
+			.desc {
+				background-color: $bgDark;
+				padding: 8px;
+				color: $help;
 			}
 		}
 		.CodeMirror {
