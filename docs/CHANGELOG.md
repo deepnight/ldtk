@@ -23,6 +23,7 @@
   - Added `ARROWS` keyboard shortcuts to move the view
   - Added a "Rename project" button in Project panel
   - Reworked and streamlined contextual help tips in every existing panels: you now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
+  - Reworked the Enum panel and fixed many UX issues
   - Replaced the dashed lines used to connect points by a smoother zig-zag line
   - Entity fields and related visuals will now be faded away when not working in their layer.
   - Entity fields width will now be limited by their entity width (this greatly reduces screen clutter when having many fields displayed)
