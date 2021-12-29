@@ -265,6 +265,16 @@ class LayerDef {
 		return false;
 	}
 
+	public inline function isRuleOptional(ruleUid:Int) {
+		var r = getRule(ruleUid);
+		if( r==null )
+			return false;
+		else {
+			var rg = getParentRuleGroup(r);
+			return rg!=null && rg.isOptional;
+		}
+	}
+
 	public function getRule(uid:Int) : Null<AutoLayerRuleDef> {
 		for( rg in autoRuleGroups )
 		for( r in rg.rules )

@@ -40,6 +40,7 @@
 
 ## Bug fixes & misc
 
+  - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed a crash that could happen during reloading of an image, if it was being used by another app.
   - Fixed the progress bar when saving large projects
   - Fixed a crash when deleting the last level

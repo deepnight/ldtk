@@ -70,8 +70,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				updateRuleGroup(rg);
 
 			case LayerRuleGroupChangedActiveState(rg):
-				for(r in rg.rules)
-					invalidateRuleAndOnesBelow(r);
+				if( !rg.isOptional )
+					for(r in rg.rules)
+						invalidateRuleAndOnesBelow(r);
 				updateRuleGroup(rg);
 
 			case LayerRuleGroupAdded:
@@ -467,12 +468,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Enable/disable group
 		jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
-			if( rg.rules.length>0 )
+			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
+
 			if( rg.isOptional )
 				li.toggleRuleGroupHere(rg);
 			else
 				rg.active = !rg.active;
+
 			editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 		});
 
