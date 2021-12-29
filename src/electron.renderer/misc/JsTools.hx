@@ -358,8 +358,14 @@ class JsTools {
 			var jThis = new J(e);
 
 			if( jThis.data("str")==null ) {
-				if( jThis.hasClass("identifier") )
-					jThis.data( "str", L.t._("An identifier should be UNIQUE (in this context) and can only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
+				if( jThis.hasClass("identifier") ) {
+					var extra = jThis.text();
+					jThis.data(
+						"str",
+						L.t._("An identifier should be UNIQUE (in this context) and can only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").")
+						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
+					);
+				}
 				else
 					jThis.data("str", jThis.text());
 				jThis.empty();

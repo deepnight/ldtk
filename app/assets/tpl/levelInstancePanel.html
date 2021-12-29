@@ -4,20 +4,19 @@
 
 <dl class="form" id="levelForm">
 	<dt>
-		<label for="identifier">Level identifier</label>
-		<div class="info">The level identifier must be unique. It will be used for the level file name if the "Save levels to separate files" option is enabled (see Project panel).</div>
-	</dt>
-	<dd>
-		<input type="text" id="identifier"/>
-		<div class="info identifier"></div>
-	</dd>
-
-	<dt>
 		<label for="identifier">Use auto identifier</label>
 		<div class="info">If enabled, the level identifier is managed automatically by LDtk, based on your prefered naming convention as defined in the Project panel.</div>
 	</dt>
 	<dd>
 		<input type="checkbox" id="useAutoIdentifier" />
+	</dd>
+
+	<dt>
+		<label for="identifier">Level identifier</label>
+		<info class="identifier">It will be used for the level file name if the "Save levels to separate files" option is enabled (see Project panel).</info>
+	</dt>
+	<dd>
+		<input type="text" id="identifier"/>
 	</dd>
 
 	<dt>
