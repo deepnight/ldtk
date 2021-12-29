@@ -598,7 +598,12 @@ div.info {
 	}
 }
 
-.infoHighlight {
+dt.infoHighlight {
+	color: $help;
+	text-shadow: 0px 0px 8px $help;
+}
+
+dd.infoHighlight {
 	background-color: $helpDark;
 	box-shadow: 0px 0px 16px $helpDark;
 
@@ -1286,15 +1291,19 @@ ul.form {
 			width: 24px;
 			height: 16px;
 			margin-left: 8px;
-			font-size: 8pt;
-			border-width: 1px;
-			border-color: $bgLight;
-			color: $bgLight;
+			font-size: 9pt;
+			border: none;
+			// border-width: 1px;
+			// border-color: $bgLight;
+			background-color: $bgLight;
+			color: $bgDark;
+			opacity: 0.45;
 
 			&::before {
 				content: "?";
 			}
 			&:hover {
+				opacity: 1;
 				border-color: $help;
 				box-shadow: 0px 0px 16px $helpMed;
 				color: black;

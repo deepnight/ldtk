@@ -374,10 +374,10 @@ class JsTools {
 
 			if( jThis.parent("dt")!=null ) {
 				jThis.mouseover( _->{
-					jThis.parent().next("dd").addClass("infoHighlight");
+					jThis.parent().addClass("infoHighlight").next("dd").addClass("infoHighlight");
 				});
 				jThis.mouseout( _->{
-					jThis.parent().next("dd").removeClass("infoHighlight");
+					jThis.parent().removeClass("infoHighlight").next("dd").removeClass("infoHighlight");
 				});
 			}
 		});
