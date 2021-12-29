@@ -14,7 +14,7 @@ class FieldDefsForm {
 	var fieldParent : FieldParent;
 	public var jWrapper : js.jquery.JQuery;
 	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList");
-	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("ul.form");
+	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("dl.form");
 	var jButtons(get,never) : js.jquery.JQuery; inline function get_jButtons() return jList.siblings(".buttons");
 	var fieldDefs : Array<FieldDef>;
 	var curField : Null<FieldDef>;
@@ -283,10 +283,14 @@ class FieldDefsForm {
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+curField.type.getName());
 
-		if( curField.isArray )
+		if( curField.isArray ) {
 			jForm.addClass("type-Array");
-		else
+			jForm.removeClass("type-NotArray");
+		}
+		else {
 			jForm.removeClass("type-Array");
+			jForm.addClass("type-NotArray");
+		}
 
 		// Type desc
 		jForm.find(".type").val( curField.getShortDescription() );
