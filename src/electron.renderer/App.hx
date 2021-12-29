@@ -698,7 +698,7 @@ class App extends dn.Process {
 
 		// FPS limit while app isn't focused
 		if( !focused && !ui.modal.Progress.hasAny() && ( !Editor.exists() || !Editor.ME.camera.isAnimated() ) )
-			hxd.System.fpsLimit = 4;
+			hxd.System.fpsLimit = 2;
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
