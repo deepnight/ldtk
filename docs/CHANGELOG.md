@@ -22,6 +22,7 @@
   - Added `PAGEUP`/`PAGEDOWN` keyboard shortcuts to zoom in/out
   - Added `ARROWS` keyboard shortcuts to move the view
   - Added a "Rename project" button in Project panel
+  - Added Youtube video tutorials to the Help panel
   - Reworked and streamlined contextual help tips in every existing panels: you now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
   - Reworked the Enum panel and fixed many UX issues
   - Replaced the dashed lines used to connect points by a smoother zig-zag line
@@ -36,6 +37,8 @@
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
   - Clicking on the "New Tileset" button immediately invokes the "Pick image file" dialog.
+  - Changed the "Help" button color in the main editor bar.
+  - Changed the aspect of various help-related elements.
   - Zooming out a lot now has a subtle dimming effect.
 
 ## Bug fixes & misc

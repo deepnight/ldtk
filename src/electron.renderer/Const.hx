@@ -52,7 +52,7 @@ class Const {
 	// URLs: LDtk home
 	public static var LDTK_DOMAIN = "https://ldtk.io";
 	public static var HOME_URL = LDTK_DOMAIN;
-	public static var DOCUMENTATION_URL = LDTK_DOMAIN+"/docs/";
+	public static var DOCUMENTATION_URL = LDTK_DOMAIN+"/docs";
 	public static var DISCORD_URL = LDTK_DOMAIN+"/go/discord";
 
 	// URLs: misc
