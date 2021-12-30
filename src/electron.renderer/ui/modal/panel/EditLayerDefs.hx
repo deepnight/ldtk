@@ -42,6 +42,16 @@ class EditLayerDefs extends ui.modal.Panel {
 					_create(type);
 					w.close();
 				});
+
+				var jDesc = new J('<div class="desc"/>');
+				jDesc.appendTo(w.jContent);
+				var desc = switch type {
+					case IntGrid: "Contains grids of Integer numbers (ie. 1, 2, 3 etc.). It can be used to mark collisions in your levels or various other informations. It can be also rendered automatically to tiles using dynamic rules.";
+					case Entities: "Contains Entity instances, which are generic objects such as the Player start position or Items to pick up.";
+					case Tiles: "Contains image tiles picked from a Tileset.";
+					case AutoLayer: "This special layer is rendered automatically using dynamic rules and an IntGrid layer as source for its data.";
+				}
+				jDesc.text(desc);
 			}
 
 		});

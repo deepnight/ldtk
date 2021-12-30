@@ -2968,7 +2968,8 @@ textarea {
 .window.dialog.layerTypes {
 	.content {
 		grid-auto-rows: 100px;
-		grid-template-columns: repeat(2, 100px);
+		grid-template-columns: 100px 300px;
+		gap: 4px !important;
 
 		.icon {
 			display: block;
@@ -2976,6 +2977,15 @@ textarea {
 			height: 3em;
 			margin: auto;
 			margin-bottom: 4px;
+		}
+		.desc {
+			display: grid;
+			align-items: center;
+			padding: 8px;
+			color: $help;
+			background-color: $helpDark;
+			border-radius: 4px;
+			border: 1px dashed $helpMed;
 		}
 		.layerType {
 			display: block;
