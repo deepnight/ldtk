@@ -6,6 +6,8 @@ class LayerRender {
 	public var root(default,null) : Null<h2d.Object>;
 	var entityRenders : Array<EntityRender> = [];
 
+	var lastLi : Null<data.inst.LayerInstance>;
+
 
 	public function new() {}
 
@@ -22,24 +24,44 @@ class LayerRender {
 	public function onGlobalEvent(ev:GlobalEvent) {
 		for(er in entityRenders)
 			er.onGlobalEvent(ev);
+
+		switch( ev ) {
+			case ViewportChanged:
+				updateParallax();
+
+			case LayerDefChanged(defUid):
+				if( lastLi!=null && lastLi.layerDefUid==defUid )
+					updateParallax();
+
+			case _:
+		}
 	}
 
-	// public function onViewportChange() {
-	// 	for(e in entityRenders)
-	// 		e.onViewportChange();
-	// }
 
+	function updateParallax() {
+		if( lastLi==null )
+			return;
 
-	// public function onLayerSelection() {
-	// 	for(e in entityRenders)
-	// 		e.onLayerSelection();
-	// }
+		switch lastLi.def.parallaxType {
+			case ScaleAndScroll:
+				root.x = editor.camera.getParallaxOffsetX(lastLi);
+				root.y = editor.camera.getParallaxOffsetY(lastLi);
+				root.setScale( 1-lastLi.def.parallaxFactor );
+
+			case ScrollOnly:
+				root.x = editor.camera.getParallaxOffsetX(lastLi);
+				root.y = editor.camera.getParallaxOffsetY(lastLi);
+				root.setScale(1);
+		}
+
+	}
 
 
 	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {
 		// Cleanup
 		if( root!=null )
 			clear();
+		lastLi = li;
 
 		// Init root
 		if( root==null )

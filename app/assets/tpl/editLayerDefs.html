@@ -75,6 +75,22 @@
 
 
 	<dt>
+		<label for="parallaxFactor">Parallax factor</label>
+		<info>
+			The parallax factor is applied to the layer by transforming it to make it move slower or faster than the camera, creating a fake 3D depth effect.
+			- Greater than zero factor will make the layer movement slower than the camera (eg. mountains in a far background).
+			- Zero means the layer moves at the same rate as the camera.
+			- Less than zero means the layer moves faster than the camera (eg. fog in the foreground)
+		</info>
+	</dt>
+	<dd>
+		<input type="text" name="parallaxFactor" class="small"/>
+		<span>%</span>
+		<select name="parallaxType"></select>
+	</dd>
+
+
+	<dt>
 		<label for="opacity">Display opacity</label>
 		<info>Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).</info>
 	</dt>
