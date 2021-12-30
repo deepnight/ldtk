@@ -2,6 +2,11 @@ package ui.modal.panel;
 
 class EditProject extends ui.modal.Panel {
 
+	var showAdvanced = false;
+	var allAdvancedOptions = [
+		ldtk.Json.ProjectFlag.DiscardPreCsvIntGrid,
+	];
+
 	public function new() {
 		super();
 
@@ -10,6 +15,8 @@ class EditProject extends ui.modal.Panel {
 			ext: Const.FILE_EXTENSION,
 		});
 		linkToButton("button.editProject");
+
+		showAdvanced = project.hasAnyFlag(allAdvancedOptions);
 
 		var jSave = jContent.find("button.save").click( function(ev) {
 			editor.onSave();
@@ -254,27 +261,24 @@ class EditProject extends ui.modal.Panel {
 
 
 		// Advanced options
-		var options = [
-			ldtk.Json.ProjectFlag.DiscardPreCsvIntGrid,
-		];
-		var jAdvanceds = jForm.find("ul.advanced");
-		if( project.hasAnyFlag(options) || cd.has("showAdvanced") ) {
-			jForm.find(".advancedWarning a").hide();
+		var jAdvanceds = jForm.find(".adv");
+		if( showAdvanced ) {
+			jForm.find("a.showAdv").hide();
 			jAdvanceds.show();
-			cd.setS("showAdvanced",Const.INFINITE);
 		}
 		else {
-			jForm.find(".advancedWarning a").show().click(ev->{
+			jForm.find("a.showAdv").show().click(ev->{
 				jAdvanceds.show();
-				cd.setS("showAdvanced",Const.INFINITE);
+				showAdvanced = true;
 				ev.getThis().hide();
 			});
 			jAdvanceds.hide();
 		}
-		jAdvanceds.empty();
-		for( e in options ) {
+		var jAdvancedFlags = jAdvanceds.find("ul.advFlags");
+		jAdvancedFlags.empty();
+		for( e in allAdvancedOptions ) {
 			var jLi = new J('<li/>');
-			jLi.appendTo(jAdvanceds);
+			jLi.appendTo(jAdvancedFlags);
 
 			var jInput = new J('<input type="checkbox" id="$e"/>');
 			jInput.appendTo(jLi);
@@ -284,7 +288,7 @@ class EditProject extends ui.modal.Panel {
 			switch e {
 				case DiscardPreCsvIntGrid:
 					jLabel.text("Discard pre-CSV IntGrid layer data in level data");
-					jInput.attr("title", L.t._("If checked, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Only use this if your game API supports LDtk 0.8.x or more."));
+					jInput.attr("title", L.t._("If enabled, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Only use this if your game API supports LDtk 0.8.x or more."));
 				case _:
 			}
 

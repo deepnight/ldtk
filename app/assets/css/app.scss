@@ -5096,28 +5096,28 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		ul.advanced {
-			li {
-				display: flex;
-				flex-wrap: nowrap;
-				align-items: center;
-				label {
-					flex: 1 0 auto !important;
-					margin: 0;
-					margin-left: 8px;
-					text-transform: none;
-					cursor: pointer;
-				}
-			}
-		}
-
-		.advancedWarning {
-			display: block;
-			color: $lightRed;
+		.adv {
+			display: none;
 			a {
 				cursor: pointer;
 				&:hover {
 					color: white;
+				}
+			}
+
+			ul.advFlags {
+				padding-bottom: 48px;
+				li {
+					display: flex;
+					flex-wrap: nowrap;
+					align-items: center;
+					label {
+						flex: 1 0 auto !important;
+						margin: 0;
+						margin-left: 8px;
+						text-transform: none;
+						cursor: pointer;
+					}
 				}
 			}
 		}

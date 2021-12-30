@@ -15,7 +15,10 @@
 
 	<dt>
 		<label for="useAppExtension">Use .::ext:: extension</label>
-		<div class="info">If checked, the project file will use the official extension ".::ext::" instead of the standard ".json". This is recommended for proper file association & identification on your OS.</div>
+		<info>
+			If checked, the project file will use the official extension ".::ext::" instead of the standard ".json".
+			This setting is recommended for proper file identification and association on your system.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" name="useAppExtension" id="useAppExtension"/>
@@ -24,7 +27,11 @@
 
 	<dt>
 		<label for="backup">Backup on save</label>
-		<div class="info">Everytime you save your project, an extra backup copy will be created in a subfolder. Note that backups will obviously increase saving time and disk usage.</div>
+		<info>
+			Everytime you save your project, an extra backup copy will be created in a subfolder.
+			Backups will obviously increase saving time and disk usage, but that's not a reason for not using them ;)
+			Note: in case of a crash, a special backup will be created, even if this setting is disabled.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="backup" />
@@ -35,11 +42,11 @@
 
 	<dt>
 		<label for="minify">Minify JSON</label>
-		<div class="info">
+		<info>
 			Enable this to save project JSON file without any "pretty" formatting (ie. white spaces and indentation).
 			This is NOT necessarily recommended if your project is stored on a versioning system (git, svn etc.) because this could cause issues with diffs and merging operations.
 			Only use this option if you really need to reduce the project files size.
-		</div>
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" name="minify" id="minify"/>
@@ -47,10 +54,10 @@
 
 	<dt>
 		<label for="externalLevels">Save levels to separate files</label>
-		<div class="info">
+		<info>
 			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
 			This is highly RECOMMENDED for large projects or projects shared among multiple users.
-		</div>
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="externalLevels"/>
@@ -59,7 +66,7 @@
 
 	<dt>
 		<label for="png">Export as PNG</label>
-		<div class="info">This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</div>
+		<info>This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</info>
 	</dt>
 	<dd class="imageExportMode">
 		<div class="locate"></div>
@@ -86,7 +93,11 @@
 
 	<dt>
 		<label for="tiled">Export Tiled TMX</label>
-		<div class="info">Enable this to create Tiled TMX files (one per level) in a sub folder, every time you save your project. Warning: this Tiled export is made for quick integration with game frameworks that don't support LDtk yet, but it comes with some limitations!</div>
+		<info>
+			Enable this to create Tiled TMX files (one per level) in a sub folder, every time you save your project.
+			Warning: this Tiled export is made for quick integration with game frameworks that don't support LDtk yet, but it comes with some limitations!
+			See the link for more info.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="tiled"/>
@@ -100,18 +111,20 @@
 
 	<dt>
 		<label for="defaultGridSize">Default layer grid</label>
-		<div class="info">Set the default grid size when creating new layers in this project.</div>
+		<info>Set the default grid size when creating new layers in this project.</info>
 	</dt>
 	<dd>
-		<input type="text" name="defaultGridSize" id="defaultGridSize"/>
+		<input type="text" name="defaultGridSize" id="defaultGridSize" class="small"/>
 		<span>px</span>
 	</dd>
 
 	<dt>
 		<label for="levelName">Default level identifiers</label>
-		<div class="info">
-			You can customize the default naming convention for all level identifiers. Note that level identifiers must be UNIQUE and as such, an extra auto-increment might be added to levels sharing getting the same name, to avoid collisions. Also, remember the identifiers should only contain letters, numbers, "-" and "_".
-		</div>
+		<info>
+			You can customize the default naming convention for all level identifiers.
+			Note that level identifiers must be UNIQUE and as such, an extra auto-increment might be added to levels sharing getting the same name, to avoid collisions.
+			Also, remember the identifiers should only contain letters, numbers, "-" and "_".
+		</info>
 	</dt>
 	<dd>
 		<input type="text" class="levelNamePattern"/>
@@ -127,7 +140,7 @@
 
 	<dt>
 		<label for="bgColor">Workspace background color</label>
-		<div class="info">Base background color of the project workspace</div>
+		<info>Base background color of the project workspace</info>
 	</dt>
 	<dd>
 		<input type="color" name="bgColor" id="bgColor"/>
@@ -135,7 +148,7 @@
 
 	<dt>
 		<label for="defaultLevelbgColor">Default level bg color</label>
-		<div class="info">Default background color of all levels.</div>
+		<info>Default background color of all levels.</info>
 	</dt>
 	<dd>
 		<input type="color" name="defaultLevelbgColor" id="defaultLevelbgColor"/>
@@ -143,6 +156,10 @@
 
 	<dt>
 		<label>Default pivot point for new entities</label>
+		<info>
+			Default entity pivot point position for all entities.
+			See the Entity panel for more information about the pivot point.
+		</info>
 	</dt>
 	<dd>
 		<div class="pivot"></div>
@@ -150,13 +167,20 @@
 
 
 
-	<dt class="full"> <h3>Advanced export settings</h3> </dt>
+	<dt class="full">
+		<a class="showAdv">[ Show advanced settings ]</a>
+	</dt>
 
-	<dt class="full advancedWarning">
-		Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
-		<a>[ Show advanced settings ]</a>
+	<dt class="full adv"> <h3>Advanced export settings</h3> </dt>
 
-		<ul class="advanced"></ul>
+	<dt class="full adv">
+		<div class="help">
+			Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
+		</div>
+	</dt>
+
+	<dt class="full adv">
+		<ul class="advFlags"></ul>
 	</dt>
 
 
