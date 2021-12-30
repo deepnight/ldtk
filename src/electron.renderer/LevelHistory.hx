@@ -99,6 +99,7 @@ class LevelHistory {
 			case LayerInstanceTilesetChanged(li):
 			case LevelRestoredFromHistory(l):
 			case ToolOptionChanged:
+			case ToolValueSelected:
 			case GridChanged(active):
 			case ShowDetailsChanged(active):
 		}

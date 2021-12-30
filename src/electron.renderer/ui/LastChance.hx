@@ -42,6 +42,7 @@ class LastChance extends dn.Process {
 			case LevelSelected(l):
 			case LayerInstanceSelected:
 			case LayerInstanceVisiblityChanged(li):
+			case ToolValueSelected:
 			case ToolOptionChanged:
 			case TilesetDefPixelDataCacheRebuilt(td):
 

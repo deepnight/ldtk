@@ -457,7 +457,7 @@ class Tileset {
 						else
 							i++;
 				}
-				Editor.ME.ge.emit(ToolOptionChanged);
+				Editor.ME.ge.emit(ToolValueSelected);
 
 			// case PaintId( valueGetter, paint ):
 			// 	if( valueGetter()!=null )

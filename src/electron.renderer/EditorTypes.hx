@@ -76,6 +76,7 @@ enum GlobalEvent {
 	EnumDefSorted;
 	EnumDefValueRemoved;
 
+	ToolValueSelected;
 	ToolOptionChanged;
 
 	WorldMode(active:Bool);

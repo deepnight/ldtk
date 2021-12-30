@@ -1415,6 +1415,7 @@ class Editor extends Page {
 				case EnumDefSorted:
 				case EnumDefValueRemoved:
 				case ToolOptionChanged:
+				case ToolValueSelected:
 				case GridChanged(active):
 				case _:
 			}
@@ -1500,6 +1501,7 @@ class Editor extends Page {
 			case EnumDefChanged: invalidateAllLevelsCache();
 			case EnumDefSorted:
 			case EnumDefValueRemoved: invalidateAllLevelsCache();
+			case ToolValueSelected:
 			case ToolOptionChanged:
 			case WorldMode(active):
 			case GridChanged(active):
@@ -1516,6 +1518,7 @@ class Editor extends Page {
 			case LevelSelected(_):
 			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
+			case ToolValueSelected:
 			case BeforeProjectSaving:
 			case ProjectSaved:
 			case GridChanged(active):
@@ -1557,6 +1560,9 @@ class Editor extends Page {
 			case EntityInstanceChanged(ei):
 
 			case ToolOptionChanged:
+				updateTool();
+
+			case ToolValueSelected:
 
 			case GridChanged(active):
 
