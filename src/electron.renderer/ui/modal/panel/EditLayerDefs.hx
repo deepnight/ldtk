@@ -14,7 +14,10 @@ class EditLayerDefs extends ui.modal.Panel {
 	public function new() {
 		super();
 
-		loadTemplate( "editLayerDefs", "defEditor editLayerDefs" );
+		loadTemplate( "editLayerDefs", "defEditor editLayerDefs",  {
+			tilesUrl: Const.DOCUMENTATION_URL+"/tutorials/tile-layers",
+			autoLayersUrl: Const.DOCUMENTATION_URL+"/tutorials/auto-layers",
+		} );
 		jList = jModalAndMask.find(".mainList ul");
 		jForm = jModalAndMask.find("dl.form");
 		linkToButton("button.editLayers");
