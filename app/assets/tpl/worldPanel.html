@@ -6,14 +6,17 @@
 <dl class="form">
 	<dt>
 		<label for="color">World layout</label>
+		<info>
+			This setting will affect how all levels are be positioned in the world space.
+		</info>
 	</dt>
 	<dd>
 		<select name="worldLayout"></select>
-		<div class="info">This setting will affect how all levels are be positioned in the "world".</div>
 	</dd>
 
 	<dt class="GridVania">
 		<label for="worldGridWidth">Gridvania grid size</label>
+		<info>Size in pixels of the large grid that will contain levels. This grid will constraint levels position and their size.</info>
 	</dt>
 	<dd class="GridVania">
 		<input type="text" id="worldGridWidth" name="worldGridWidth" class="small"/> <span>x</span>
@@ -22,6 +25,7 @@
 
 	<dt>
 		<label for="defaultLevelWidth">Default "new level" size</label>
+		<info>Default level width and height in pixels for all future levels.</info>
 	</dt>
 	<dd>
 		<input type="text" id="defaultLevelWidth" class="small"/> <span>x</span>
@@ -30,7 +34,7 @@
 </dl>
 
 <div class="buttons">
-	<button class="create">
+	<button class="create" title="You can also right click an empty space in the world view to create a new level there.">
 		<span class="ready">Create level</span>
 		<span class="running">Pick a spot <span class="icon right"></span></span>
 	</button>
