@@ -158,6 +158,13 @@ class LayerDef {
 		return rg;
 	}
 
+	public inline function getScale() : Float {
+		return parallaxFactor==0 ? 1 : switch parallaxType {
+			case ScaleAndScroll: M.fmax( 0.01, 1-parallaxFactor );
+			case ScrollOnly: 1;
+		}
+	}
+
 
 	public function addIntGridValue(col:UInt, ?id:String) {
 		if( !isIntGridValueIdentifierValid(id) )

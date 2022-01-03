@@ -93,6 +93,7 @@ class LevelRender extends dn.Process {
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
+				updateGridPos();
 
 			case ProjectSaved, BeforeProjectSaving:
 
@@ -400,6 +401,12 @@ class LevelRender extends dn.Process {
 		grid.visible = settings.v.grid && !editor.worldMode;
 	}
 
+	inline function updateGridPos() {
+		grid.x = camera.getParallaxOffsetX(editor.curLayerInstance);
+		grid.y = camera.getParallaxOffsetY(editor.curLayerInstance);
+		grid.setScale( editor.curLayerDef.getScale() );
+	}
+
 	function renderGrid() {
 		grid.clear();
 		applyGridVisibility();
@@ -417,7 +424,7 @@ class LevelRender extends dn.Process {
 		var x = 0;
 		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
 			x = cx*li.def.gridSize + li.pxTotalOffsetX;
-			if( x<0 || x>=level.pxWid )
+			if( x<0 || x>level.pxWid )
 				continue;
 
 			grid.moveTo( x, M.fmax(0,li.pxTotalOffsetY) );
@@ -427,12 +434,14 @@ class LevelRender extends dn.Process {
 		var y = 0;
 		for( cy in 0...editor.curLayerInstance.cHei+1 ) {
 			y = cy*li.def.gridSize + li.pxTotalOffsetY;
-			if( y<0 || y>=level.pxHei)
+			if( y<0 || y>level.pxHei)
 				continue;
 
 			grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
 			grid.lineTo( M.fmin(li.cWid*li.def.gridSize, level.pxWid), y );
 		}
+
+		updateGridPos();
 	}
 
 

@@ -42,18 +42,9 @@ class LayerRender {
 		if( lastLi==null )
 			return;
 
-		switch lastLi.def.parallaxType {
-			case ScaleAndScroll:
-				root.x = editor.camera.getParallaxOffsetX(lastLi);
-				root.y = editor.camera.getParallaxOffsetY(lastLi);
-				root.setScale( 1-lastLi.def.parallaxFactor );
-
-			case ScrollOnly:
-				root.x = editor.camera.getParallaxOffsetX(lastLi);
-				root.y = editor.camera.getParallaxOffsetY(lastLi);
-				root.setScale(1);
-		}
-
+		root.x = editor.camera.getParallaxOffsetX(lastLi);
+		root.y = editor.camera.getParallaxOffsetY(lastLi);
+		root.setScale( lastLi.def.getScale() );
 	}
 
 
