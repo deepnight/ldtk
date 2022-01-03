@@ -155,6 +155,7 @@ class LevelRender extends dn.Process {
 
 			case LayerDefChanged(defUid):
 				invalidateLayer(defUid);
+				renderGrid();
 
 			case LayerDefConverted:
 				invalidateAll();
