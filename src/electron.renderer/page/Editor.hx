@@ -705,29 +705,29 @@ class Editor extends Page {
 		updateTool();
 	}
 
-	public function getGenericLevelElementAt(levelX:Int, levelY:Int, limitToActiveLayer=false) : Null<GenericLevelElement> {
+	public function getGenericLevelElementAt(m:Coords, limitToActiveLayer=false) : Null<GenericLevelElement> {
+		var m = m.clone();
+
 		function getElement(li:data.inst.LayerInstance) {
 			var ge : GenericLevelElement = null;
 
 			if( !levelRender.isLayerVisible(li) )
 				return null;
 
-			var layerX = levelX - li.pxTotalOffsetX;
-			var layerY = levelY - li.pxTotalOffsetY;
-			var cx = Std.int( layerX / li.def.gridSize );
-			var cy = Std.int( layerY / li.def.gridSize );
+			m.setRelativeLayer(li);
 
 			switch li.def.type {
 				case IntGrid:
-					if( li.getIntGrid(cx,cy)>0 )
-						ge = GenericLevelElement.GridCell( li, cx, cy );
+					if( li.getIntGrid(m.cx,m.cy)>0 )
+						ge = GenericLevelElement.GridCell( li, m.cx, m.cy );
 
 				case AutoLayer:
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(layerX, layerY) )
+						if( ei.isOver(m.layerX, m.layerY) ) {
 							ge = GenericLevelElement.Entity(li, ei);
+						}
 						else {
 							// Points
 							for(fi in ei.fieldInstances) {
@@ -735,7 +735,7 @@ class Editor extends Page {
 									continue;
 								for(i in 0...fi.getArrayLength()) {
 									var pt = fi.getPointGrid(i);
-									if( pt!=null && cx==pt.cx && cy==pt.cy )
+									if( pt!=null && m.cx==pt.cx && m.cy==pt.cy )
 										ge = GenericLevelElement.PointField(li, ei, fi, i);
 								}
 							}
@@ -743,8 +743,8 @@ class Editor extends Page {
 					}
 
 				case Tiles:
-					if( li.hasAnyGridTile(cx,cy) )
-						ge = GenericLevelElement.GridCell(li, cx, cy);
+					if( li.hasAnyGridTile(m.cx, m.cy) )
+						ge = GenericLevelElement.GridCell(li, m.cx, m.cy);
 			}
 			return ge;
 		}
@@ -947,7 +947,7 @@ class Editor extends Page {
 				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
 				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
 			}
-			var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
+			var overed = getGenericLevelElementAt(m, settings.v.singleLayerMode);
 			switch overed {
 				case null:
 				case GridCell(li, cx, cy):

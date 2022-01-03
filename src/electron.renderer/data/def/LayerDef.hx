@@ -8,6 +8,7 @@ class LayerDef {
 	public var type : ldtk.Json.LayerType;
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
+	public var scaledGridSize(get,never) : Float; inline function get_scaledGridSize() return gridSize*getScale();
 	public var displayOpacity : Float = 1.0;
 	public var fadeInactive = false;
 	public var hideInList = false;

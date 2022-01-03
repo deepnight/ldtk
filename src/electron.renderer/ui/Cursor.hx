@@ -249,6 +249,11 @@ class Cursor {
 		label.f.setScale( 1/cam.adjustedZoom * settings.v.editorUiScale );
 	}
 
+	inline function applyLayerScale(s:Float) {
+		wrapper.setScale(s);
+		g.setScale(s);
+	}
+
 	/** Mouse moved **/
 	public inline function onMouseMove(m:Coords) {
 		if( type!=None ) {
@@ -266,20 +271,23 @@ class Cursor {
 					root.y += y*cam.adjustedZoom;
 
 				case GridCell(li, cx, cy, _), GridRect(li, cx, cy, _):
-					root.x += ( li.pxTotalOffsetX + cx*li.def.gridSize ) * cam.adjustedZoom;
-					root.y += ( li.pxTotalOffsetY + cy*li.def.gridSize ) * cam.adjustedZoom;
+					root.x += ( li.pxParallaxX + cx*li.def.scaledGridSize ) * cam.adjustedZoom;
+					root.y += ( li.pxParallaxY + cy*li.def.scaledGridSize ) * cam.adjustedZoom;
+					applyLayerScale( li.def.getScale() );
 					centerLabelAbove(li.def.gridSize*0.5, 0);
 
 				case Entity(li, def, ei, x, y):
-					root.x += x*cam.adjustedZoom;
-					root.y += y*cam.adjustedZoom;
+					root.x += x*cam.adjustedZoom * li.def.getScale() + li.pxParallaxX * cam.adjustedZoom;
+					root.y += y*cam.adjustedZoom * li.def.getScale() + li.pxParallaxY * cam.adjustedZoom;
+					applyLayerScale( li.def.getScale() );
 					var w = ei==null ? def.width : ei.width;
 					var h = ei==null ? def.height : ei.height;
 					centerLabelAbove( ( 0.5-def.pivotX )*w, (0-def.pivotY)*h );
 
 				case Tiles(li, tileIds, cx, cy, flips):
-					root.x += ( li.pxTotalOffsetX + cx*li.def.gridSize ) * cam.adjustedZoom;
-					root.y += ( li.pxTotalOffsetY + cy*li.def.gridSize ) * cam.adjustedZoom;
+					root.x += ( li.pxParallaxX + cx*li.def.scaledGridSize ) * cam.adjustedZoom;
+					root.y += ( li.pxParallaxY + cy*li.def.scaledGridSize ) * cam.adjustedZoom;
+					applyLayerScale( li.def.getScale() );
 					centerLabelAbove(li.def.gridSize*0.5, 0);
 
 				case Link(fx, fy, tx, ty, color):

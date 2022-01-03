@@ -138,7 +138,7 @@ class EntityInstance {
 				&& !( layerX >= left+overPad && layerX<=right-overPad && layerY>=top+overPad && layerY<=bottom-overPad );
 		}
 		else
-			return layerX >= left && layerX <= right && layerY>=top && layerY<=bottom;
+			return layerX>=left && layerX<=right && layerY>=top && layerY<=bottom;
 	}
 
 	public function getSmartColor(bright:Bool) {

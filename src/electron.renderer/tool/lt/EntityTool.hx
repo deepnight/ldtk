@@ -42,7 +42,7 @@ class EntityTool extends tool.LayerTool<Int> {
 
 	function getPlacementY(m:Coords) {
 		return snapToGrid()
-			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize )
+			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize)
 			: m.levelY;
 	}
 
@@ -62,7 +62,7 @@ class EntityTool extends tool.LayerTool<Int> {
 			ev.cancel = true;
 		}
 		else if( curLevel.inBounds(m.levelX, m.levelY) ) {
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
+			var ge = editor.getGenericLevelElementAt(m, true);
 			switch ge {
 				case Entity(li, ei):
 					editor.cursor.set( Entity(curLayerInstance, ei.def, ei, ei.x, ei.y) );
@@ -85,7 +85,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function startUsing(ev:hxd.Event, m:Coords) {
 		super.startUsing(ev,m);
 
-		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+		var ge = editor.getGenericLevelElementAt(m);
 		switch ge {
 			case Entity(_) if( ev.button==0 ):
 				editor.selectionTool.startUsing(ev,m);
@@ -182,12 +182,12 @@ class EntityTool extends tool.LayerTool<Int> {
 
 
 	function removeAnyEntityOrPointAt(m:Coords) {
-		var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, true);
+		var ge = editor.getGenericLevelElementAt(m, true);
 		switch ge {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
 				editor.ge.emit( EntityInstanceRemoved(instance) );
-				editor.levelRender.bleepEntity(instance);
+				editor.levelRender.bleepEntity(curLayerInstance, instance);
 				return true;
 
 			case PointField(li, ei, fi, arrayIdx):
@@ -220,7 +220,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		super.onMouseMove(ev,m);
 
 		if( !ev.cancel ) {
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			var ge = editor.getGenericLevelElementAt(m);
 			switch ge {
 				case Entity(_), PointField(_): editor.selectionTool.onMouseMove(ev,m);
 				case _:

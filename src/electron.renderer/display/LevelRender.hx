@@ -311,37 +311,51 @@ class LevelRender extends dn.Process {
 		setLayerVisibility(li, false);
 	}
 
-	public function bleepRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
+	public function bleepLevelRectPx(x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1) {
 		var pad = 5;
 		var g = new h2d.Graphics();
 		rectBleeps.push(g);
 		g.lineStyle(thickness, col);
-		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
+		g.drawRect(
+			Std.int(-pad-w*0.5),
+			Std.int(-pad-h*0.5),
+			(w+pad*2),
+			(h+pad*2)
+		);
 		g.setPosition(
-			Std.int(x+w*0.5) + editor.curLayerInstance.pxTotalOffsetX,
-			Std.int(y+h*0.5) + editor.curLayerInstance.pxTotalOffsetY
+			Std.int(x + w*0.5),
+			Std.int(y + h*0.5)
 		);
 		root.add(g, Const.DP_UI);
 	}
 
-	public inline function bleepRectCase(cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) {
-		var li = editor.curLayerInstance;
-		bleepRectPx(
-			cx*li.def.gridSize,
-			cy*li.def.gridSize,
-			cWid*li.def.gridSize,
-			cHei*li.def.gridSize,
-			col, 2
+	public inline function bleepLayerRectPx(li:data.inst.LayerInstance, x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1) {
+		bleepLevelRectPx(
+			x+li.pxParallaxX, y+li.pxParallaxY,
+			w*li.def.getScale(), h*li.def.getScale(),
+			col, thickness
 		);
 	}
 
-	public inline function bleepHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
-		bleepRectPx(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
+	public inline function bleepLayerRectCase(li:data.inst.LayerInstance, cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) {
+		bleepLevelRectPx(
+			cx*li.def.scaledGridSize + li.pxParallaxX, cy*li.def.scaledGridSize + li.pxParallaxY,
+			cWid*li.def.scaledGridSize, cHei*li.def.scaledGridSize,
+			col, thickness
+		);
 	}
-	public inline function bleepEntity(ei:data.inst.EntityInstance) {
-		bleepRectPx(
-			Std.int( ei.x-ei.width*ei.def.pivotX ),
-			Std.int( ei.y-ei.height*ei.def.pivotY ),
+
+	public inline function bleepHistoryBounds(layerDefUid:Int, bounds:HistoryStateBounds, col:UInt) {
+		var li = editor.curLevel.getLayerInstance(layerDefUid);
+		if( li!=null )
+			bleepLayerRectPx(li, bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
+	}
+
+	public inline function bleepEntity(li:data.inst.LayerInstance, ei:data.inst.EntityInstance) {
+		bleepLayerRectPx(
+			li,
+			Std.int( (ei.x-ei.width*ei.def.pivotX) * li.def.getScale() ),
+			Std.int( (ei.y-ei.height*ei.def.pivotY) * li.def.getScale() ),
 			ei.width,
 			ei.height,
 			ei.getSmartColor(true), 2
