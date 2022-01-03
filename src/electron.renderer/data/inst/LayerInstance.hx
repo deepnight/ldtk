@@ -4,8 +4,15 @@ import data.DataTypes;
 
 class LayerInstance {
 	var _project : Project;
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefUid);
-	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);
+
+	public var def(get,never) : data.def.LayerDef;
+		inline function get_def() return _project.defs.getLayerDef(layerDefUid);
+
+	public var level(get,never) : Level;
+		inline function get_level() return _project.getLevel(levelId);
+
+	var camera(get,never) : display.Camera;
+		inline function get_camera() return Editor.ME.camera;
 
 	public var levelId : Int;
 	public var layerDefUid : Int;
@@ -17,8 +24,18 @@ class LayerInstance {
 	@:allow(importer)
 	var pxOffsetY : Int = 0;
 
-	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
-	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
+	public var pxTotalOffsetX(get,never) : Int;
+		inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
+
+	public var pxTotalOffsetY(get,never) : Int;
+		inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
+
+	public var pxParallaxX(get,never) : Int;
+		inline function get_pxParallaxX() return M.round( pxTotalOffsetX + camera.getParallaxOffsetX(this) );
+
+	public var pxParallaxY(get,never) : Int;
+		inline function get_pxParallaxY() return M.round( pxTotalOffsetY + camera.getParallaxOffsetY(this) );
+
 	public var seed : Int;
 	public var optionalRules : Map<Int,Bool> = new Map();
 
@@ -358,11 +375,11 @@ class LayerInstance {
 		return Std.int(coordId/cWid);
 	}
 
-	public inline function levelToLayerCx(levelX:Int) {
+	public inline function levelToLayerCx(levelX:Float) {
 		return Std.int( ( levelX - pxTotalOffsetX ) / def.gridSize ); // TODO not tested: check if this works with the new layerDef offsets
 	}
 
-	public inline function levelToLayerCy(levelY:Int) {
+	public inline function levelToLayerCy(levelY:Float) {
 		return Std.int( ( levelY - pxTotalOffsetY ) / def.gridSize );
 	}
 

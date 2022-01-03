@@ -64,16 +64,21 @@ class Coords {
 		inline function get_layerX() {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
+			else if( getRelativeLayerInst()==null )
+				return levelX;
 			else
-				return levelX - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxTotalOffsetX : 0 );
+				return Std.int( ( levelX - getRelativeLayerInst().pxParallaxX ) / getRelativeLayerInst().def.getScale() );
 		}
 
 	public var layerY(get,never) : Int;
 		inline function get_layerY() {
 			if( Editor.ME==null || Editor.ME.destroyed )
 				return -1;
+			else if( getRelativeLayerInst()==null )
+				return levelY;
+
 			else
-				return levelY - ( getRelativeLayerInst()!=null ? getRelativeLayerInst().pxTotalOffsetY : 0 );
+				return Std.int( ( levelY - getRelativeLayerInst().pxParallaxY ) / getRelativeLayerInst().def.getScale() );
 		}
 
 	// Level cell
@@ -141,6 +146,10 @@ class Coords {
 		return m;
 	}
 
+	public inline function setRelativeLayer(li:data.inst.LayerInstance) {
+		_relativeLayerInst = li;
+	}
+
 	public function clone() {
 		return new Coords(pageX, pageY);
 	}
@@ -155,11 +164,11 @@ class Coords {
 	}
 
 	public function getLayerCx(li:data.inst.LayerInstance) {
-		return Std.int( ( layerX + getRelativeLayerInst().pxTotalOffsetX - li.pxTotalOffsetX ) / li.def.gridSize );
+		return Std.int( ( layerX + getRelativeLayerInst().pxParallaxX - li.pxParallaxX ) / li.def.scaledGridSize );
 	}
 
 	public function getLayerCy(li:data.inst.LayerInstance) {
-		return Std.int( ( layerY + getRelativeLayerInst().pxTotalOffsetY - li.pxTotalOffsetY ) / li.def.gridSize );
+		return Std.int( ( layerY + getRelativeLayerInst().pxParallaxY - li.pxParallaxY ) / li.def.scaledGridSize );
 	}
 
 	public inline function getPageDist(with:Coords) {
