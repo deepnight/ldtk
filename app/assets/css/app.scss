@@ -2659,7 +2659,7 @@ textarea {
 
 			.links {
 				display: grid;
-				grid-template-columns: auto 200px;
+				grid-template-columns: 200px auto;
 				gap: 16px;
 				.buttons {
 					display: block;
@@ -2678,7 +2678,7 @@ textarea {
 		.videos {
 			display: grid;
 			gap: 4px;
-			grid-template-columns: repeat(3, 1fr);
+			grid-template-columns: repeat(2, 1fr);
 
 			>a {
 				border: 1px solid black;
