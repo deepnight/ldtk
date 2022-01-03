@@ -1,8 +1,11 @@
 package misc;
 
 class Coords {
+	static var cam(get,never): display.Camera;
+		static inline function get_cam() return Editor.ME.camera;
+
 	static var pixelRatio(get,never): Float;
-		static inline function get_pixelRatio() return Editor.ME.camera.pixelRatio;
+		static inline function get_pixelRatio() return cam.pixelRatio;
 
 	// HTML Page
 	public var pageX : Int;
