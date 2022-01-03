@@ -2663,6 +2663,9 @@ textarea {
 				gap: 16px;
 				.buttons {
 					display: block;
+					button {
+						justify-content: start;
+					}
 				}
 			}
 
