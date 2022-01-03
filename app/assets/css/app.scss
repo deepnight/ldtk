@@ -2651,26 +2651,30 @@ textarea {
 		.content {
 			width: auto;
 			display: grid;
-			grid-template-rows: min-content auto;
-			grid-template-columns: 420px 420px;
 			gap: 16px;
-
-			h2:first-of-type {
-				grid-column: 1/3;
-			}
-			.buttons {
-				grid-column: 1/3;
-			}
 
 			h3 {
 				margin-top: 0;
+			}
+
+			.links {
+				display: grid;
+				grid-template-columns: auto 200px;
+				gap: 16px;
+				.buttons {
+					display: block;
+				}
+			}
+
+			.keys {
+				display: grid;
+				grid-template-columns: repeat(2, 420px);
+				gap: 16px;
 			}
 		}
 	}
 
 	.videosWrapper {
-		grid-column: 1/3;
-
 		.videos {
 			display: grid;
 			gap: 4px;
