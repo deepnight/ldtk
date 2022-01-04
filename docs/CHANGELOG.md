@@ -2,16 +2,23 @@
 
 ## Major changes
 
-  - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
-  - Added a progress bar when loading large projects
-  - Complete rework of the backup system which is now much faster and more reliable
-  - Entity and Level custom fields that are not using default values are now MUCH more visible in forms
-  - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
-  - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
-  - Updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
-  - Added "Colors used in this project" to all color pickers
-  - Implemented various optimizations to boost general performances & reduce CPU usage.
-  - DEPRECATION NOTICE: all new projects will now discard by default the deprecated data of IntGrid layers (ie. the pre-"CSV format" data). More informations here: https://github.com/deepnight/ldtk/issues/358
+  - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will be probably be updated in future updates.
+  - **Reworked loading/saving**:
+    - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
+    - Added various progress bars when loading or saving large projects
+    - Complete rework of the backup system which is now much faster and more reliable
+  - **Project colors**: added "Colors used in this project" to all color pickers
+  - **Help**: reworked and streamlined contextual help tips in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
+  - **Custom fields**: Entity and Level custom fields that are not using default values are now MUCH more visible in forms
+  - **Image reloading bug fixes**:
+    - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
+    - Fixed a critical crash when reloading an image which has a different width/height
+  - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
+  - **Performances**: implemented various optimizations to boost general performances & reduce CPU usage.
+
+## DEPRECATION NOTICE
+
+All new projects will now discard by default the deprecated data of IntGrid layers (ie. the pre-"CSV format" data). More informations here: https://github.com/deepnight/ldtk/issues/358
 
 ## UI
 
@@ -23,7 +30,6 @@
   - Added `ARROWS` keyboard shortcuts to move the view
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
-  - Reworked and streamlined contextual help tips in every existing panels: you now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
   - Reworked the Enum panel and fixed many UX issues
   - Replaced the dashed lines used to connect points by a smoother zig-zag line
   - Entity fields and related visuals will now be faded away when not working in their layer.
@@ -32,6 +38,7 @@
   - Added more values for App UI scaling setting.
   - Added a Layer option to fade it away when it's not currently selected
   - Added a Layer option to hide it from the layers list
+  - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Tool tips are now larger and easier to read.
   - If you open a Backup copy of a project, all panels will be locked, preventing any edit. You may only Restore the backup.
   - Level identifiers are now displayed in the top-left corner of levels in World view
@@ -43,9 +50,9 @@
 
 ## Bug fixes & misc
 
+  - Fixed a crash that could happen during reloading of an image, if it was being used by another app.
   - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
-  - Fixed a crash that could happen during reloading of an image, if it was being used by another app.
   - Fixed the progress bar when saving large projects
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
