@@ -199,6 +199,8 @@ class WorldRender extends dn.Process {
 			case LayerDefChanged(_), LayerDefConverted:
 				invalidateAllLevelRenders();
 
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+
 			case TilesetDefPixelDataCacheRebuilt(td):
 				invalidateAllLevelRenders();
 

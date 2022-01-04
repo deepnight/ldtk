@@ -43,6 +43,9 @@ class LevelHistory {
 				clearHistory();
 
 			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				if( used )
+					clearHistory();
 
 			case LayerRuleChanged(r):
 			case LayerRuleAdded(r):

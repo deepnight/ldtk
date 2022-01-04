@@ -206,6 +206,9 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerDefIntGridValuesSorted(defUid):
 				updateForm();
 
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				updateForm();
+
 			case _:
 		}
 	}
@@ -429,13 +432,13 @@ class EditLayerDefs extends ui.modal.Panel {
 
 					// Remove
 					e.find("a.remove").click( function(ev) {
+						var isUsed = project.isIntGridValueUsed(cur, intGridVal.value);
 						function run() {
 							cur.removeIntGridValue(intGridVal.value);
 							project.tidy();
-							editor.ge.emit(LayerDefChanged(cur.uid));
-							updateForm();
+							editor.ge.emit( LayerDefIntGridValueRemoved(cur.uid, intGridVal.value, isUsed) );
 						}
-						if( project.isIntGridValueUsed(cur, intGridVal.value) ) {
+						if( isUsed ) {
 							new ui.modal.dialog.Confirm(
 								e.find("a.remove"),
 								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),

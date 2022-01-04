@@ -163,6 +163,10 @@ class LevelRender extends dn.Process {
 
 			case LayerDefIntGridValuesSorted(defUid):
 
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				if( used )
+					invalidateLayer(defUid);
+
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
 				li.applyAutoLayerRuleToAllLayer(r, true);

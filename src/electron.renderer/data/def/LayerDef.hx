@@ -206,7 +206,7 @@ class LayerDef {
 	}
 
 	public inline function hasIntGridValue(v:Int) {
-		return v>0 && v<=intGridValues.length;
+		return getIntGridValueDef(v)!=null;
 	}
 
 	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDef> {
@@ -240,12 +240,12 @@ class LayerDef {
 	}
 
 	public function removeIntGridValue(v:Int) : Bool {
-		if( hasIntGridValue(v) ) {
-			intGridValues.splice(v-1, 1);
-			return true;
-		}
-		else
-			return false;
+		for(i in 0...intGridValues.length)
+			if( intGridValues[i].value==v ) {
+				intGridValues.splice(i,1);
+				return true;
+			}
+		return false;
 	}
 
 	public inline function getAllIntGridValues() return intGridValues;

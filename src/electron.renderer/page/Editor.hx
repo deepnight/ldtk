@@ -1371,6 +1371,7 @@ class Editor extends Page {
 				case LayerDefRemoved(defUid): extra = defUid;
 				case LayerDefChanged(defUid): extra = defUid;
 				case LayerDefSorted:
+				case LayerDefIntGridValueRemoved(defUid, valueId, isUsed): extra = defUid+'($valueId, $isUsed)';
 				case LayerRuleChanged(rule): extra = rule.uid;
 				case LayerRuleAdded(rule): extra = rule.uid;
 				case LayerRuleRemoved(rule): extra = rule.uid;
@@ -1452,6 +1453,14 @@ class Editor extends Page {
 			case LayerDefChanged(defUid): invalidateAllLevelsCache();
 			case LayerDefSorted: invalidateAllLevelsCache();
 			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				if( used ) {
+					invalidateAllLevelsCache();
+					checkAutoLayersCache( anyChange->{
+						if( anyChange )
+							worldRender.invalidateAllLevelRenders();
+					});
+				}
 			case LayerDefConverted: invalidateAllLevelsCache();
 			case LayerRuleChanged(rule): invalidateAllLevelsCache();
 			case LayerRuleAdded(rule): invalidateAllLevelsCache();
@@ -1693,6 +1702,9 @@ class Editor extends Page {
 				updateLayerList();
 
 			case LayerDefIntGridValuesSorted(defUid):
+				updateTool();
+
+			case LayerDefIntGridValueRemoved(defUid,value,used):
 				updateTool();
 		}
 

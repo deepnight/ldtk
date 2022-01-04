@@ -409,6 +409,8 @@ class LayerInstance {
 					for(cx in 0...cWid)
 						if( hasIntGrid(cx,cy) && !def.hasIntGridValue( getIntGrid(cx,cy) ) ) {
 							removeIntGrid(cx,cy);
+							if( def.isAutoLayer() )
+								autoTilesCache = null;
 							anyChange = true;
 							// no logging as this could be a LOT of entries
 						}
