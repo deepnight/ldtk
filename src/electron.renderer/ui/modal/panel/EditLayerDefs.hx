@@ -272,20 +272,6 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.enablePercentageMode();
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		new form.input.EnumSelect(
-			jForm.find("select[name=parallaxType]"),
-			ldtk.Json.ParallaxType, false,
-			()->cur.parallaxType,
-			(v)->{
-				cur.parallaxType = v;
-				editor.ge.emit( LayerDefChanged(cur.uid) );
-			},
-			(v)->switch v {
-				case ScaleAndScroll: L.t._("Scale layer accordingly");
-				case ScrollOnly: L.t._("Do not scale layer");
-			}
-		);
-
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 

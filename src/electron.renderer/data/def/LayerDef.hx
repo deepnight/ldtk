@@ -15,7 +15,6 @@ class LayerDef {
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 	public var parallaxFactor : Float = 0.;
-	public var parallaxType : ldtk.Json.ParallaxType = ScaleAndScroll;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -69,7 +68,6 @@ class LayerDef {
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 		o.parallaxFactor = JsonTools.readFloat(json.parallaxFactor, 0);
-		o.parallaxType = JsonTools.readEnum(ldtk.Json.ParallaxType, json.parallaxType, false, ScaleAndScroll);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
@@ -114,7 +112,6 @@ class LayerDef {
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			parallaxFactor: parallaxFactor,
-			parallaxType: JsonTools.writeEnum(parallaxType, false),
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
 
@@ -160,10 +157,7 @@ class LayerDef {
 	}
 
 	public inline function getScale() : Float {
-		return parallaxFactor==0 ? 1 : switch parallaxType {
-			case ScaleAndScroll: M.fmax( 0.01, 1-parallaxFactor );
-			case ScrollOnly: 1;
-		}
+		return parallaxFactor==0 ? 1 : M.fmax( 0.01, 1-parallaxFactor );
 	}
 
 
