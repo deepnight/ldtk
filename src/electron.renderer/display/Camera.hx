@@ -10,10 +10,14 @@ class Camera extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
+	/** Centered world X coord **/
 	public var worldX(default,set) : Float;
+	/** Centered world Y coord **/
 	public var worldY(default,set) : Float;
 
+	/** Centered level X coord **/
 	public var levelX(get,set) : Float;
+	/** Centered level Y coord **/
 	public var levelY(get,set) : Float;
 
 	public var adjustedZoom(get,never) : Float;
@@ -283,12 +287,18 @@ class Camera extends dn.Process {
 	}
 
 
-	public inline function getParallaxOffsetX(li:data.inst.LayerInstance) {
-		return li==null ? 0 : levelX*li.def.parallaxFactor;
+	public inline function getParallaxOffsetX(li:data.inst.LayerInstance) : Float {
+		if( li==null || li.def.parallaxFactor==0 )
+			return 0;
+		else
+			return levelX*li.def.parallaxFactor;
 	}
 
-	public inline function getParallaxOffsetY(li:data.inst.LayerInstance) {
-		return li==null ? 0 : levelY*li.def.parallaxFactor;
+	public inline function getParallaxOffsetY(li:data.inst.LayerInstance) : Float {
+		if( li==null )
+			return 0;
+		else
+			return levelY*li.def.parallaxFactor;
 	}
 
 
