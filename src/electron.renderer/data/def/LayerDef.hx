@@ -188,14 +188,10 @@ class LayerDef {
 	}
 
 	function getNextIntGridValue() {
-		var next = 1;
-		while( true ) {
-			if( getIntGridValueDef(next)!=null )
-				next++;
-			else
-				return next;
-		}
-		return next;
+		var max = -1;
+		for(v in intGridValues)
+			max = M.imax(v.value, max);
+		return max+1;
 	}
 
 	public function addIntGridValue(col:UInt, ?id:String) {
