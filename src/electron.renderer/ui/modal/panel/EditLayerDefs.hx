@@ -272,6 +272,9 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.enablePercentageMode();
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
+		var i = Input.linkToHtmlInput( cur.parallaxScaling, jForm.find("input[name='parallaxScaling']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 

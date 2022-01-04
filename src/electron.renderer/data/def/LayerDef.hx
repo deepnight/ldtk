@@ -15,6 +15,7 @@ class LayerDef {
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 	public var parallaxFactor : Float = 0.;
+	public var parallaxScaling : Bool = true;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -68,6 +69,7 @@ class LayerDef {
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 		o.parallaxFactor = JsonTools.readFloat(json.parallaxFactor, 0);
+		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
@@ -112,6 +114,7 @@ class LayerDef {
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			parallaxFactor: parallaxFactor,
+			parallaxScaling: parallaxScaling,
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
 
@@ -157,7 +160,7 @@ class LayerDef {
 	}
 
 	public inline function getScale() : Float {
-		return parallaxFactor==0 ? 1 : M.fmax( 0.01, 1-parallaxFactor );
+		return !parallaxScaling || parallaxFactor==0 ? 1 : M.fmax( 0.01, 1-parallaxFactor );
 	}
 
 
