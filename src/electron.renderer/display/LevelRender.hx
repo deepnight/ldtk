@@ -418,13 +418,15 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function applyGridVisibility() {
-		grid.visible = settings.v.grid && !editor.worldMode;
+		grid.visible = settings.v.grid && !editor.worldMode && editor.curLayerInstance!=null;
 	}
 
 	inline function updateGridPos() {
-		grid.x = camera.getParallaxOffsetX(editor.curLayerInstance);
-		grid.y = camera.getParallaxOffsetY(editor.curLayerInstance);
-		grid.setScale( editor.curLayerDef.getScale() );
+		if( editor.curLayerInstance!=null ) {
+			grid.x = camera.getParallaxOffsetX(editor.curLayerInstance);
+			grid.y = camera.getParallaxOffsetY(editor.curLayerInstance);
+			grid.setScale( editor.curLayerDef.getScale() );
+		}
 	}
 
 	function renderGrid() {
