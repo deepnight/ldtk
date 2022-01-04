@@ -3,7 +3,7 @@
 <dl class="form">
 	<dt>
 		<label for="appScale">General UI scale</label>
-		<div class="info">This setting will affect the whole User Interface size.</div>
+		<info>This setting will affect the whole User Interface size.</info>
 	</dt>
 	<dd>
 		<select id="appScale"></select>
@@ -11,7 +11,7 @@
 
 	<dt>
 		<label for="fontScale">Level UI scale</label>
-		<div class="info">This setting will only affect the size of texts and icons in the EDITOR VIEW (including entities custom fields and level custom fields).</div>
+		<info>This setting will only affect the size of texts and icons in the EDITOR VIEW (including entities custom fields and level custom fields).</info>
 	</dt>
 	<dd>
 		<select id="fontScale"></select>
@@ -19,7 +19,7 @@
 
 	<dt>
 		<label for="mouseWheelSpeed">Mouse wheel speed</label>
-		<div class="info">This setting affects the zoom in/out speed when using the mouse wheel.</div>
+		<info>This setting affects the zoom in/out speed when using the mouse wheel.</info>
 	</dt>
 	<dd>
 		<input type="text" id="mouseWheelSpeed"/>
@@ -28,7 +28,10 @@
 
 	<dt>
 		<label for="autoSwitchOnZoom">World view with mouse wheel</label>
-		<div class="info">This setting allows to automatically switch to the World view when zooming out from a level. You can then zoom back in to any level to select it.</div>
+		<info>
+			This setting allows to automatically switch to the World view when zooming out from a level.
+			You can then zoom back in to any level to select it.
+		</info>
 	</dt>
 	<dd>
 		<select id="autoSwitchOnZoom"></select>
@@ -36,7 +39,10 @@
 
 	<dt>
 		<label for="startFullScreen">Start in fullscreen mode</label>
-		<div class="info">Set default "Full screen" state when starting ::app::. You may also toggle fullscreen mode at any time using the F11 key.</div>
+		<info>
+			Set default "Full screen" state when starting ::app::.
+			You may also toggle fullscreen mode at any time using the F11 key.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="startFullScreen" />
@@ -44,7 +50,7 @@
 
 	<dt>
 		<label for="openLastProject">Re-open last project</label>
-		<div class="info">If enabled, ::app:: will automatically re-open your last project and select the last level you were in.</div>
+		<info>If enabled, ::app:: will automatically re-open your last project and select the last level you were in.</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="openLastProject" />
@@ -57,7 +63,10 @@
 
 	<dt>
 		<label for="gpu">Try to use best GPU</label>
-		<div class="info">When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances. This might use extra battery life.</div>
+		<info>
+			When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances.
+			This might use extra battery life.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="gpu"/>
@@ -66,7 +75,10 @@
 
 	<dt>
 		<label for="fixTileFlickering">Reduce tile flickering</label>
-		<div class="info">This option will reduce tile 'flickering' while zooming in/out on tile-based layers or auto-layers. As this uses some extra GPU power (not much though), feel free to disable it on low-end setups.</div>
+		<info>
+			This option will reduce tile 'flickering' while zooming in/out on tile-based layers or auto-layers.
+			As this uses some extra GPU power (not much though), feel free to disable it on low-end setups.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="fixTileFlickering" />
@@ -75,7 +87,11 @@
 
 	<dt>
 		<label for="smartCpuThrottling">Smart CPU throttling</label>
-		<div class="info">When enabled, ::app:: will limit CPU usage when idling or not doing something too demanding. This might make the app very slightly less responsive, but that shouldn't be too noticeable. This option also helps reducing laptop battery drain. Disable to allow full CPU all the time.</div>
+		<info>
+			When enabled, ::app:: will limit CPU usage when idling or not doing something too demanding.
+			This might make the app very slightly less responsive, but that shouldn't be too noticeable.
+			This option also helps reducing laptop battery drain. Disable to allow full CPU all the time.
+		</info>
 	</dt>
 	<dd>
 		<input type="checkbox" id="smartCpuThrottling"/>
@@ -84,7 +100,10 @@
 
 	<dt>
 		<label>App log file</label>
-		<div class="info">The LOG file is only useful when reporting bugs. You can attach it to an e-mail or when you create an issue on GitHub site. It doesn't contain any sensitive or personal information, except used file paths.</div>
+		<info>
+			The LOG file is only useful when reporting bugs. You can attach it to an e-mail or when you create an issue on GitHub site.
+			It doesn't contain any sensitive or personal information, except used file paths.
+		</info>
 	</dt>
 	<dd>
 		<span class="logPath"></span>
