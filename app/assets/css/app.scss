@@ -2701,6 +2701,10 @@ textarea {
 				border: 1px solid black;
 				cursor: pointer;
 				box-shadow: 0px 0px 8px transparentize($color: black, $amount: 0.5);
+				background-color: black;
+				background-image: url("../img/stripesLight.png");
+				background-repeat: repeat;
+				min-height: 64px;
 
 				img {
 					width: 100%;
