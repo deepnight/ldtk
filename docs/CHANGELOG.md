@@ -2,7 +2,7 @@
 
 ## Major changes
 
-  - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will be probably be updated in future updates.
+  - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will probably be updated in future updates.
   - **Reworked loading/saving**:
     - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
     - Added various progress bars when loading or saving large projects
