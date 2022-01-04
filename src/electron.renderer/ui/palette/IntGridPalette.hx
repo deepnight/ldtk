@@ -42,10 +42,10 @@ class IntGridPalette extends ui.ToolPalette {
 			if( intGridVal.identifier!=null )
 				e.append(intGridVal.identifier);
 
-			var curIdx = intGridVal.value;
+			var curValue = intGridVal.value;
 			e.click( function(_) {
 				if( Editor.ME.isPaused() ) return;
-				tool.selectValue(curIdx);
+				tool.selectValue(curValue);
 				render();
 			});
 		}
