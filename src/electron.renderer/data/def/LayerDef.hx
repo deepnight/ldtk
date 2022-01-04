@@ -81,9 +81,10 @@ class LayerDef {
 		o.excludedTags = Tags.fromJson(json.excludedTags);
 
 		o.intGridValues = [];
-		var idx = 0;
-		for( v in JsonTools.readArray(json.intGridValues) ) {
+		var all : Array<IntGridValueDef> = JsonTools.readArray(json.intGridValues);
+		for( v in all ) {
 			o.intGridValues.push({
+				value: v.value,
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
@@ -171,11 +172,23 @@ class LayerDef {
 	}
 
 
+	function getNextIntGridValue() {
+		var next = 1;
+		while( true ) {
+			if( getIntGridValueDef(next)!=null )
+				next++;
+			else
+				return next;
+		}
+		return next;
+	}
+
 	public function addIntGridValue(col:UInt, ?id:String) {
 		if( !isIntGridValueIdentifierValid(id) )
 			throw "Invalid intGrid value identifier "+id;
 
 		intGridValues.push({
+			value: getNextIntGridValue(),
 			color: col,
 			identifier: id,
 		});
@@ -185,8 +198,14 @@ class LayerDef {
 		return v>0 && v<=intGridValues.length;
 	}
 
-	public inline function getIntGridValueDef(v:Int) : Null<IntGridValueDef> {
-		return intGridValues[v-1];
+	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDef> {
+		var out : Null<IntGridValueDef> = null;
+		for(v in intGridValues)
+			if( v.value==value ) {
+				out = v;
+				break;
+			}
+		return out;
 	}
 
 	public function getIntGridIndexFromIdentifier(id:String) : Int {

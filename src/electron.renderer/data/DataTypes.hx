@@ -8,6 +8,7 @@ package data;
 */
 
 typedef IntGridValueDef = {
+	var value : Int;
 	var identifier : Null<String>;
 	var color : UInt;
 }
