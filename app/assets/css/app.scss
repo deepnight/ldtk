@@ -16,7 +16,7 @@ $helpMed: #5eab6b;
 $helpDark: #3c6148;
 $helpDarker: #273f2f;
 $mainPanelNormalWid: 300px;
-$mainPanelCompactWid: 150px;
+$mainPanelCompactWid: 130px;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -3549,8 +3549,20 @@ canvas#webgl {
 		}
 	}
 
+	&:not(.compactPanel) .onlyCompact {
+		display: none;
+	}
 
 	&.compactPanel {
+
+		.notCompact {
+			display: none;
+		}
+
+		.onlyCompact{
+			display: block;
+		}
+
 		#mainPanel {
 			width: $mainPanelCompactWid;
 			grid-template-rows: min-content 200px min-content auto;
@@ -3599,10 +3611,18 @@ canvas#webgl {
 				.name {
 					font-size: 8pt;
 				}
-				.actions a {
-					padding: 2px;
-					font-size: 7pt;
-					text-transform: none;
+				.actions {
+					.vis {
+						font-size: 8pt;
+					}
+					a {
+						padding: 2px;
+						font-size: 7pt;
+						text-transform: none;
+						&:hover .icon {
+							filter: brightness(0);
+						}
+					}
 				}
 			}
 
