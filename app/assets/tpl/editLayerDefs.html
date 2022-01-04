@@ -75,17 +75,22 @@
 
 
 	<dt>
-		<label for="parallaxFactor">Parallax factor</label>
+		<label for="parallaxFactor">Parallax factors</label>
 		<info>
-			The parallax factor is applied to the layer (coordinates and scale) to make it move "slower" or "faster" than the camera, creating a fake 3D depth effect.
+			These parallax factors are applied to the layer (coordinates and scale) to make it move "slower" or "faster" than the camera, creating a fake 3D depth effect.
 			- Greater than zero factor will make the layer movement slower than the camera (eg. mountains in a far background).
 			- Zero means the layer moves at the same rate as the camera.
 			- Less than zero means the layer moves faster than the camera (eg. fog in the foreground)
 		</info>
 	</dt>
 	<dd>
-		<input type="text" name="parallaxFactor" class="small"/>
-		<span>%, </span>
+		<span>x=</span>
+		<input type="text" name="parallaxFactorX" class="small"/>
+		<span>%, y=</span>
+		<input type="text" name="parallaxFactorY" class="small"/>
+		<span>%</span>
+	</dd>
+	<dd>
 		<input type="checkbox" name="parallaxScaling" title="If checked, the layer will also be scaled up/down accodingly with the parallax factor."/>
 		<span>Scale ?</span>
 	</dd>

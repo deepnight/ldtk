@@ -14,7 +14,8 @@ class LayerDef {
 	public var hideInList = false;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
-	public var parallaxFactor : Float = 0.;
+	public var parallaxFactorX : Float = 0.;
+	public var parallaxFactorY : Float = 0.;
 	public var parallaxScaling : Bool = true;
 
 	// Entities
@@ -58,7 +59,11 @@ class LayerDef {
 	}
 
 	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.LayerDefJson) {
-		if( (cast json).tilesetDefId!=null ) json.tilesetDefUid = (cast json).tilesetDefId;
+		if( (cast json).tilesetDefId!=null )
+			json.tilesetDefUid = (cast json).tilesetDefId;
+
+		if( (cast json).parallaxFactor!=null )
+			json.parallaxFactorX = json.parallaxFactorY = (cast json).parallaxFactor;
 
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
@@ -68,7 +73,8 @@ class LayerDef {
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
-		o.parallaxFactor = JsonTools.readFloat(json.parallaxFactor, 0);
+		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
+		o.parallaxFactorY = JsonTools.readFloat(json.parallaxFactorY, 0);
 		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
@@ -113,7 +119,8 @@ class LayerDef {
 			hideInList: hideInList,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
-			parallaxFactor: parallaxFactor,
+			parallaxFactorX: parallaxFactorX,
+			parallaxFactorY: parallaxFactorY,
 			parallaxScaling: parallaxScaling,
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
@@ -160,7 +167,7 @@ class LayerDef {
 	}
 
 	public inline function getScale() : Float {
-		return !parallaxScaling || parallaxFactor==0 ? 1 : M.fmax( 0.01, 1-parallaxFactor );
+		return !parallaxScaling || parallaxFactorX==0 ? 1 : M.fmax( 0.01, 1-parallaxFactorX );
 	}
 
 

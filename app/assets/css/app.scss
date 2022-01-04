@@ -1610,6 +1610,10 @@ input[type=number] {
 		box-shadow: 0px 0px 4px $red;
 		outline: none;
 	}
+	&.grayed {
+		font-style: italic;
+		color: $bgLighter;
+	}
 }
 
 input.slider:not(:disabled) {

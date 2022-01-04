@@ -291,14 +291,14 @@ class Camera extends dn.Process {
 		if( li==null )
 			return 0;
 		else
-			return levelX*li.def.parallaxFactor;
+			return levelX*li.def.parallaxFactorX;
 	}
 
 	public inline function getParallaxOffsetY(li:data.inst.LayerInstance) : Float {
 		if( li==null )
 			return 0;
 		else
-			return levelY*li.def.parallaxFactor;
+			return levelY*li.def.parallaxFactorY;
 	}
 
 

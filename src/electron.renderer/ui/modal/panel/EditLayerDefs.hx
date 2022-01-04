@@ -267,13 +267,38 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		var i = Input.linkToHtmlInput( cur.parallaxFactor, jForm.find("input[name='parallaxFactor']") );
+		var equal = cur.parallaxFactorX==cur.parallaxFactorY;
+		var i = Input.linkToHtmlInput( cur.parallaxFactorX, jForm.find("input[name='parallaxFactorX']") );
 		i.setBounds(-1,1);
 		i.enablePercentageMode();
-		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.onChange = ()->{
+			if( equal )
+				cur.parallaxFactorY = cur.parallaxFactorX;
+			editor.ge.emit(LayerDefChanged(cur.uid));
+		}
+
+		var i = Input.linkToHtmlInput( cur.parallaxFactorY, jForm.find("input[name='parallaxFactorY']") );
+		i.setBounds(-1,1);
+		i.enablePercentageMode();
+		if( equal )
+			i.jInput.addClass("grayed");
+		else
+			i.jInput.removeClass("grayed");
+		i.setEnabled(!cur.parallaxScaling);
+		i.allowNull = true;
+		i.fixValue = v->{
+			return v==null ? cur.parallaxFactorX*100 : v;
+		}
+		i.onChange = ()->{
+			editor.ge.emit(LayerDefChanged(cur.uid));
+		}
 
 		var i = Input.linkToHtmlInput( cur.parallaxScaling, jForm.find("input[name='parallaxScaling']") );
-		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.onChange = ()->{
+			if( cur.parallaxScaling )
+				cur.parallaxFactorY = cur.parallaxFactorX;
+			editor.ge.emit(LayerDefChanged(cur.uid));
+		}
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
