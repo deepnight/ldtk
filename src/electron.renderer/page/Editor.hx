@@ -1457,8 +1457,7 @@ class Editor extends Page {
 				if( used ) {
 					invalidateAllLevelsCache();
 					checkAutoLayersCache( anyChange->{
-						if( anyChange )
-							worldRender.invalidateAllLevelRenders();
+						worldRender.invalidateAllLevelRenders();
 					});
 				}
 			case LayerDefConverted: invalidateAllLevelsCache();
