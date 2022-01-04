@@ -17,9 +17,10 @@
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various optimizations to boost general performances & reduce CPU usage.
 
-## DEPRECATION NOTICE
+## JSON format changes
 
-All new projects will now discard by default the deprecated data of IntGrid layers (ie. the pre-"CSV format" data). More informations here: https://github.com/deepnight/ldtk/issues/358
+ - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
+ - **IntGridValues** array order should no longer be used to guess IntGrid values, see https://github.com/deepnight/ldtk/issues/553
 
 ## UI
 
