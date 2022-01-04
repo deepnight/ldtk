@@ -3644,12 +3644,6 @@ canvas#webgl {
 				height: 18px;
 			}
 		}
-
-		.window.panel {
-			&:not(.editAllAutoLayerRules):not(.levelPanel) {
-				width: calc( 100vw - #{ $mainPanelCompactWid } );
-			}
-		}
 	}
 }
 
