@@ -38,6 +38,10 @@ class Input<T> {
 		jInput.on("change.input", function(_) {
 			onInputChange();
 		});
+		jInput.on("keydown.input", function(ev:js.jquery.Event) {
+			if( ev.key=="Enter" )
+				jInput.blur();
+		});
 	}
 
 	function checkGuide() {
