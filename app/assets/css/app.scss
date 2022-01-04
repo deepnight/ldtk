@@ -5422,7 +5422,6 @@ dl.form.fieldInstanceEditor {
 			}
 
 			a.remove {
-				display: none;
 				position: absolute;
 				top: 0px;
 				right: 0px;
@@ -5431,10 +5430,6 @@ dl.form.fieldInstanceEditor {
 				padding: 3px;
 				text-decoration: none;
 			}
-		}
-
-		li.value.removable a.remove {
-			display: block;
 		}
 
 		li.add button {

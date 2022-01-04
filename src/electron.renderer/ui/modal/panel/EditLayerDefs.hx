@@ -418,9 +418,6 @@ class EditLayerDefs extends ui.modal.Panel {
 						backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
 					});
 
-					if( cur.countIntGridValues()>1 && intGridVal.value==cur.countIntGridValues() )
-						e.addClass("removable");
-
 					// Edit color
 					var col = e.find("input[type=color]");
 					col.val( C.intToHex(intGridVal.color) );
