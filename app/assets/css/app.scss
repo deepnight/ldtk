@@ -5396,7 +5396,7 @@ dl.form.fieldInstanceEditor {
 		li.value {
 			display: grid;
 			align-items: center;
-			grid-template-columns: 2em auto 64px;
+			grid-template-columns: min-content 2em auto 64px;
 			gap: 4px;
 
 			input[type=color] {
