@@ -10,6 +10,7 @@
   - **Project colors**: added "Colors used in this project" to all color pickers
   - **Help**: reworked and streamlined contextual help tips in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
   - **Custom fields**: Entity and Level custom fields that are not using default values are now MUCH more visible in forms
+  - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap: moving value "1" down will not change it ("1" value stays "1").
   - **Image reloading bug fixes**:
     - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
     - Fixed a critical crash when reloading an image which has a different width/height
