@@ -54,8 +54,10 @@ class LayerInstance {
 			>
 		> > = null;
 
-	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( ( level.pxWid-pxOffsetX ) / def.gridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( ( level.pxHei-pxOffsetY ) / def.gridSize );
+	public var pxWid(get,never) : Int; inline function get_pxWid() return level.pxWid - pxOffsetX;
+	public var pxHei(get,never) : Int; inline function get_pxHei() return level.pxHei - pxOffsetY;
+	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( pxWid / def.gridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( pxHei / def.gridSize );
 
 
 	public function new(p:Project, levelId:Int, layerDefUid:Int) {
