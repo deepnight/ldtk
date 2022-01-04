@@ -188,7 +188,9 @@ class LayerDef {
 	}
 
 	function getNextIntGridValue() {
-		var max = -1;
+		if( intGridValues.length==0 )
+			return 1;
+		var max = 1;
 		for(v in intGridValues)
 			max = M.imax(v.value, max);
 		return max+1;
