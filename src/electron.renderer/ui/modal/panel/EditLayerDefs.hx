@@ -431,7 +431,8 @@ class EditLayerDefs extends ui.modal.Panel {
 					});
 
 					// Remove
-					e.find("a.remove").click( function(ev) {
+					e.find("button.remove").click( function(ev:js.jquery.Event) {
+						var jThis = ev.getThis();
 						var isUsed = project.isIntGridValueUsed(cur, intGridVal.value);
 						function run() {
 							cur.removeIntGridValue(intGridVal.value);
@@ -440,7 +441,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						}
 						if( isUsed ) {
 							new ui.modal.dialog.Confirm(
-								e.find("a.remove"),
+								jThis,
 								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
 								true,
 								run

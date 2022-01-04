@@ -5396,7 +5396,7 @@ dl.form.fieldInstanceEditor {
 		li.value {
 			display: grid;
 			align-items: center;
-			grid-template-columns: min-content 2em auto 64px;
+			grid-template-columns: min-content 2em auto 64px min-content;
 			gap: 4px;
 
 			input[type=color] {
@@ -5421,14 +5421,10 @@ dl.form.fieldInstanceEditor {
 				border-radius: 3px;
 			}
 
-			a.remove {
-				position: absolute;
-				top: 0px;
-				right: 0px;
-				background: black;
-				color: white;
-				padding: 3px;
-				text-decoration: none;
+			button.remove {
+				align-self: stretch;
+				padding: 0;
+				width: 28px;
 			}
 		}
 
