@@ -1521,8 +1521,9 @@
 				"gridSize",
 				"identifier",
 				"intGridValues",
-				"parallaxFactor",
-				"parallaxType",
+				"parallaxFactorX",
+				"parallaxFactorY",
+				"parallaxScaling",
 				"pxOffsetX",
 				"pxOffsetY",
 				"uid",
@@ -1551,6 +1552,12 @@
 				},
 				"displayOpacity": {
 					"description": "Opacity of the layer (0 to 1.0)",
+					"type": [
+						"number"
+					]
+				},
+				"parallaxFactorY": {
+					"description": "Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
 					"type": [
 						"number"
 					]
@@ -1588,6 +1595,12 @@
 						"null"
 					]
 				},
+				"parallaxScaling": {
+					"description": "If true (default), a layer with a parallax factor will also be scaled up/down accordingly.",
+					"type": [
+						"boolean"
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
@@ -1603,13 +1616,6 @@
 					},
 					"type": [
 						"array"
-					]
-				},
-				"parallaxType": {
-					"description": "Possible values: `ScaleAndScroll`, `ScrollOnly`",
-					"enum": [
-						"ScaleAndScroll",
-						"ScrollOnly"
 					]
 				},
 				"intGridValues": {
@@ -1674,16 +1680,16 @@
 						"number"
 					]
 				},
-				"parallaxFactor": {
-					"description": "Parallax factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
-					"type": [
-						"number"
-					]
-				},
 				"gridSize": {
 					"description": "Width and height of the grid in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"parallaxFactorX": {
+					"description": "Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
+					"type": [
+						"number"
 					]
 				}
 			},
