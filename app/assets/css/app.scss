@@ -2291,7 +2291,7 @@ textarea {
 
 .window.changeLog {
 	.wrapper .content {
-		width: 600px;
+		width: 750px;
 
 		header {
 			margin-bottom: 16px;
@@ -2329,7 +2329,7 @@ textarea {
 			margin-right: -20px;
 			margin-bottom: 16px;
 			padding: 20px;
-			max-height: 45vh;
+			max-height: 55vh;
 
 			overflow-y: auto;
 			background-color: $bgDark;
@@ -2349,6 +2349,16 @@ textarea {
 				border-bottom: 1px dashed $bgMed;
 				padding-bottom: 8px;
 				margin-bottom: 8px;
+				ul {
+					margin-top: 16px;
+					list-style: square;
+					li {
+						margin-left: 16px;
+					}
+					li+li {
+						margin-top: 8px;
+					}
+				}
 			}
 		}
 
