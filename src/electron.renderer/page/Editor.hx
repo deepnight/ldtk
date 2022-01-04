@@ -1451,6 +1451,7 @@ class Editor extends Page {
 			case LayerDefRemoved(defUid): invalidateAllLevelsCache();
 			case LayerDefChanged(defUid): invalidateAllLevelsCache();
 			case LayerDefSorted: invalidateAllLevelsCache();
+			case LayerDefIntGridValuesSorted(defUid):
 			case LayerDefConverted: invalidateAllLevelsCache();
 			case LayerRuleChanged(rule): invalidateAllLevelsCache();
 			case LayerRuleAdded(rule): invalidateAllLevelsCache();
@@ -1690,6 +1691,9 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 				updateLayerList();
+
+			case LayerDefIntGridValuesSorted(defUid):
+				updateTool();
 		}
 
 		// Broadcast to LevelHistory

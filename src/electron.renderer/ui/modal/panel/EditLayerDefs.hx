@@ -203,6 +203,9 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerDefSorted:
 				updateList();
 
+			case LayerDefIntGridValuesSorted(defUid):
+				updateForm();
+
 			case _:
 		}
 	}
@@ -374,26 +377,24 @@ class EditLayerDefs extends ui.modal.Panel {
 		switch cur.type {
 
 			case IntGrid:
-				var valuesList = jForm.find("ul.intGridValues");
-				valuesList.find("li.value").remove();
+				var jValuesList = jForm.find("ul.intGridValues");
+				jValuesList.find("li.value").remove();
 
 				// Add intGrid value button
-				var addButton = valuesList.find("li.add");
-				addButton.find("button").off().click( function(ev) {
+				var jAddButton = jValuesList.find("li.add");
+				jAddButton.find("button").off().click( function(ev) {
 					cur.addIntGridValue(0xff0000);
 					editor.ge.emit(LayerDefChanged(cur.uid));
 					updateForm();
 				});
 
 				// Existing values
-				var idx = 1;
 				for( intGridVal in cur.getAllIntGridValues() ) {
-					var intValue = idx++;
 					var e = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 					e.addClass("value");
-					e.insertBefore(addButton);
+					e.insertBefore(jAddButton);
 					e.find(".id")
-						.html( Std.string(intValue) )
+						.html( Std.string(intGridVal.value) )
 						.css({
 							color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
 							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
@@ -417,14 +418,14 @@ class EditLayerDefs extends ui.modal.Panel {
 						backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
 					});
 
-					if( cur.countIntGridValues()>1 && intValue==cur.countIntGridValues() )
+					if( cur.countIntGridValues()>1 && intGridVal.value==cur.countIntGridValues() )
 						e.addClass("removable");
 
 					// Edit color
 					var col = e.find("input[type=color]");
 					col.val( C.intToHex(intGridVal.color) );
 					col.change( function(ev) {
-						cur.getIntGridValueDef(intValue).color = C.hexToInt( col.val() );
+						cur.getIntGridValueDef(intGridVal.value).color = C.hexToInt( col.val() );
 						editor.ge.emit(LayerDefChanged(cur.uid));
 						updateForm();
 					});
@@ -432,12 +433,12 @@ class EditLayerDefs extends ui.modal.Panel {
 					// Remove
 					e.find("a.remove").click( function(ev) {
 						function run() {
-							cur.removeIntGridValue(intValue);
+							cur.removeIntGridValue(intGridVal.value);
 							project.tidy();
 							editor.ge.emit(LayerDefChanged(cur.uid));
 							updateForm();
 						}
-						if( project.isIntGridValueUsed(cur, intValue) ) {
+						if( project.isIntGridValueUsed(cur, intGridVal.value) ) {
 							new ui.modal.dialog.Confirm(
 								e.find("a.remove"),
 								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
@@ -450,6 +451,13 @@ class EditLayerDefs extends ui.modal.Panel {
 							run();
 					});
 				}
+
+
+				// Make intGrid valueslist sortable
+				JsTools.makeSortable(jValuesList, function(ev) {
+					var moved = cur.sortIntGridValueDef(ev.oldIndex, ev.newIndex);
+					editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
+				});
 
 				initAutoTilesetSelect();
 

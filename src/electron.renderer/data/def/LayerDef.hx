@@ -107,7 +107,6 @@ class LayerDef {
 	}
 
 	public function toJson() : ldtk.Json.LayerDefJson {
-		var valueIdx = 1;
 		return {
 			__type: Std.string(type),
 
@@ -127,7 +126,7 @@ class LayerDef {
 			excludedTags: excludedTags.toJson(),
 
 			intGridValues: intGridValues.map( function(iv) return {
-				value: valueIdx++,
+				value: iv.value,
 				identifier: iv.identifier,
 				color: JsonTools.writeColor(iv.color),
 			}),
@@ -171,6 +170,22 @@ class LayerDef {
 		return !parallaxScaling || parallaxFactorX==0 ? 1 : M.fmax( 0.01, 1-parallaxFactorX );
 	}
 
+
+	public function sortIntGridValueDef(from:Int, to:Int) : Null<IntGridValueDef> {
+		if( type!=IntGrid )
+			return null;
+
+		if( from<0 || from>=intGridValues.length || from==to )
+			return null;
+
+		if( to<0 || to>=intGridValues.length )
+			return null;
+
+		var moved = intGridValues.splice(from,1)[0];
+		intGridValues.insert(to, moved);
+
+		return moved;
+	}
 
 	function getNextIntGridValue() {
 		var next = 1;

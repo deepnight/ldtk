@@ -24,6 +24,7 @@ enum GlobalEvent {
 	LayerDefChanged(defUid:Int);
 	LayerDefSorted;
 	LayerDefConverted;
+	LayerDefIntGridValuesSorted(defUid:Int);
 
 	LayerRuleChanged(rule:data.def.AutoLayerRuleDef);
 	LayerRuleAdded(rule:data.def.AutoLayerRuleDef);

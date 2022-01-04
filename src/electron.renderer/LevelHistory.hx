@@ -42,6 +42,8 @@ class LevelHistory {
 			case LayerDefRemoved(_), EntityDefRemoved, FieldDefRemoved(_), EnumDefRemoved, TilesetDefRemoved(_), EnumDefValueRemoved, LayerDefConverted:
 				clearHistory();
 
+			case LayerDefIntGridValuesSorted(defUid):
+
 			case LayerRuleChanged(r):
 			case LayerRuleAdded(r):
 			case LayerRuleRemoved(r):
