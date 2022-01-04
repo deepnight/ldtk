@@ -5351,13 +5351,15 @@ dl.form.fieldInstanceEditor {
 
 .window.panel.editLayerDefs {
 	dl.form {
+		overflow-x: hidden;
+		padding-right: 4px;
+		overflow-y: auto;
 		grid-template-columns: 130px auto;
 		>dt {
 			max-width: none;
 		}
 	}
 	.mainList {
-		grid-row: 3/5;
 		ul li {
 			grid-template-columns: min-content auto min-content;
 
