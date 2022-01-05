@@ -499,7 +499,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
 				},
 				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-				cond: ()->!rg.isOptional,
+				show: ()->!rg.isOptional,
 			},
 			{
 				label: L.t._("Disable OPTIONAL state"),
@@ -515,7 +515,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						}
 					);
 				},
-				cond: ()->rg.isOptional,
+				show: ()->rg.isOptional,
 			},
 			{
 				label: L.t._("Duplicate group"),

@@ -291,20 +291,18 @@ class Home extends Page {
 					}
 				}
 
-				ui.modal.ContextMenu.addTo(li, [
+				var act : ui.modal.ContextMenu.ContextActions = [
 					{
 						label: L.t._("Load from this folder"),
-						cond: null,
 						cb: onLoad.bind( dn.FilePath.fromFile(filePath).directory ),
 					},
 					{
 						label: L.t._("Locate file"),
-						cond: null,
 						cb: ET.locate.bind(filePath, true),
 					},
 					{
 						label: L.t._("Remove from history"),
-						cond: ()->!isBackupFile,
+						show: ()->!isBackupFile,
 						cb: ()->{
 							App.ME.unregisterRecentProject(filePath);
 							updateRecents();
@@ -312,7 +310,7 @@ class Home extends Page {
 					},
 					{
 						label: L._Delete(L.t._("Backup file")),
-						cond: ()->isBackupFile,
+						show: ()->isBackupFile,
 						cb: ()->{
 							NT.removeFile(filePath);
 							App.ME.unregisterRecentProject(filePath);
@@ -321,13 +319,13 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Clear all history"),
-						cond: null,
 						cb: ()->{
 							App.ME.clearRecentProjects();
 							updateRecents();
 						}
 					},
-				]);
+				];
+				ui.modal.ContextMenu.addTo(li, act );
 
 
 				li.appendTo(jRecentFiles);
@@ -401,12 +399,10 @@ class Home extends Page {
 				ui.modal.ContextMenu.addTo(li, [
 					{
 						label: L.t._("Locate folder"),
-						cond: null,
 						cb: ET.locate.bind(fp.directory, false),
 					},
 					{
 						label: L.t._("Remove from history"),
-						cond: null,
 						cb: ()->{
 							App.ME.unregisterRecentDir(fp.directory);
 							updateRecents();
@@ -414,7 +410,6 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Clear all folder history"),
-						cond: null,
 						cb: ()->{
 							App.ME.clearRecentDirs();
 							updateRecents();

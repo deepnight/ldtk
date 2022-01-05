@@ -2,12 +2,14 @@ package ui.modal;
 
 import dn.data.GetText.LocaleString;
 
+typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {
 	var label : LocaleString;
 	var ?sub : Null<LocaleString>;
 	var ?className : String;
 	var cb : Void->Void;
-	var ?cond : Void->Bool;
+	var ?show : Void->Bool;
+	var ?enable : Void->Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -59,7 +61,7 @@ class ContextMenu extends ui.Modal {
 			ME = null;
 	}
 
-	public static function addTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:Array<ContextAction>) {
+	public static function addTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:ContextActions) {
 		// Cleanup
 		jTarget
 			.off(".context")
@@ -68,9 +70,14 @@ class ContextMenu extends ui.Modal {
 		// Open callback
 		function _open(event:js.jquery.Event) {
 			var ctx = new ContextMenu(event);
-			for(a in actions)
-				if( a.cond==null || a.cond() )
-					ctx.add(a);
+			for(a in actions) {
+				if( a.show!=null && !a.show() )
+					continue;
+
+				var jBt = ctx.add(a);
+				if( a.enable!=null && !a.enable() )
+					jBt.prop("disabled", true);
+			}
 		}
 
 		// Menu button
