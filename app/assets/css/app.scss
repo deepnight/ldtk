@@ -1065,6 +1065,7 @@ ul.log {
 .icon.bug				{ background-image: url("../icons/bug.svg"); }
 .icon.checker			{ background-image: url("../icons/checker.svg"); }
 .icon.close				{ background-image: url("../icons/close.png"); }
+.icon.collapsed			{ background-image: url("../icons/collapsed.svg"); }
 .icon.community			{ background-image: url("../icons/community.svg"); }
 .icon.contextMenu		{ background-image: url("../icons/contextMenu.svg"); }
 .icon.contextMenuOpen	{ background-image: url("../icons/contextMenuOpen.svg"); }
@@ -1079,8 +1080,7 @@ ul.log {
 .icon.entity			{ background-image: url("../icons/entity.png"); }
 .icon.enum				{ background-image: url("../icons/enum.png"); }
 .icon.exit				{ background-image: url("../icons/exit.svg"); }
-.icon.expandMore		{ background-image: url("../icons/expandMore.svg"); }
-.icon.expandLess		{ background-image: url("../icons/expandLess.svg"); }
+.icon.expanded			{ background-image: url("../icons/expanded.svg"); }
 .icon.flatten			{ background-image: url("../icons/flatten.svg"); }
 .icon.folder			{ background-image: url("../icons/folder.svg"); }
 .icon.folderOpen		{ background-image: url("../icons/folderOpen.svg"); }
@@ -1106,6 +1106,7 @@ ul.log {
 .icon.partial			{ background-image: url("../icons/partial.png"); }
 .icon.paste				{ background-image: url("../icons/paste.svg"); }
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
+.icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
 .icon.rule				{ background-image: url("../icons/rule.svg"); }
 .icon.settings			{ background-image: url("../icons/settings.svg"); }
@@ -1147,12 +1148,12 @@ ul.log {
 			cursor: pointer;
 			color: white;
 			background-color: $bgLight;
-			background-image: url("../icons/expandMore.svg");
+			background-image: url("../icons/expanded.svg");
 		}
 		&.collapsed {
 			cursor: cell;
 			background-color: $bgMed;
-			background-image: url("../icons/expandLess.svg");
+			background-image: url("../icons/collapsed.svg");
 		}
 	}
 }
@@ -5864,7 +5865,7 @@ body.sorting ul.collapsedSortTarget {
 					margin-top: 0;
 					margin-bottom: 1px;
 					padding: 0;
-					opacity: 0.66;
+					// opacity: 0.66;
 					box-shadow: none;
 					border: 0;
 
@@ -5927,7 +5928,7 @@ body.sorting ul.collapsedSortTarget {
 						}
 
 						&:hover {
-							background-color: $orange;
+							background-color: $bgLighter;
 						}
 					}
 					input.name {

@@ -792,7 +792,7 @@ class JsTools {
 		// Existing image assets
 		var allImages = Editor.ME.project.getAllCachedImages();
 		if( allImages.length>0 ) {
-			var jRecall = new J('<button class="recall"> <span class="icon expandMore"/> </button>');
+			var jRecall = new J('<button class="recall"> <span class="icon recall"/> </button>');
 			jRecall.appendTo(jWrapper);
 			jRecall.click( (ev:js.jquery.Event)->{
 				var ctx = new ui.modal.ContextMenu();

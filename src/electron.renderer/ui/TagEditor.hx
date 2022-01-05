@@ -33,7 +33,7 @@ class TagEditor {
 
 		// Recall button
 		if( allValuesGetter().length>0 ) {
-			var jRecall = new J('<button class="recall dark"> <span class="icon expandMore"/> </button>');
+			var jRecall = new J('<button class="recall dark"> <span class="icon recall"/> </button>');
 			jRecall.appendTo(jButtons);
 			jRecall.click( ev->{
 				var ctx = new ui.modal.ContextMenu(ev);
