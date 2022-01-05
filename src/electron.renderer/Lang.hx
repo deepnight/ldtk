@@ -3,11 +3,10 @@ import dn.data.GetText;
 class Lang {
 	// Text constants
 	public static var _Duplicate = ()->t._("Duplicate");
-	public static var _Delete = (?v:LocaleString)->{
-		return v==null
-			? t._("Delete")
-			: t._("Delete: ::e::", {e:v});
-	}
+	public static var _Copy = ()->t._("Copy");
+	public static var _Paste = (?v:String) -> v==null ? t._("Paste") : t._("Paste: ::e::", {e:v});
+	public static var _PasteAfter = ()->t._("Paste after");
+	public static var _Delete = (?v:LocaleString) -> v==null ? t._("Delete") : t._("Delete: ::e::", {e:v});
 
 
 	// Misc
