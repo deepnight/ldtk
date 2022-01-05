@@ -45,6 +45,10 @@ class Clipboard {
 			case CLayerDef:
 				var json : ldtk.Json.LayerDefJson = cast data;
 				return 'Layer definition "${json.identifier}"';
+
+			case CEntityDef:
+				var json : ldtk.Json.EntityDefJson = cast data;
+				return 'Entity definition "${json.identifier}"';
 		}
 	}
 

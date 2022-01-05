@@ -376,6 +376,19 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		var allTags = project.defs.getEntityTagCategories();
 
+		// List context menu
+		ContextMenu.addTo(jEntityList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = project.defs.parseEntityDef(App.ME.clipboard);
+					editor.ge.emit(EntityDefAdded);
+					selectEntity(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CEntityDef),
+			}
+		]);
+
 		// Tags
 		for(t in allTags) {
 			if( allTags.length>1 ) {
@@ -411,6 +424,26 @@ class EditEntityDefs extends ui.modal.Panel {
 
 
 				ContextMenu.addTo(jEnt, [
+					{
+						label: L._Copy(),
+						cb: ()->App.ME.clipboard.copy(CEntityDef, ed.toJson()),
+					},
+					{
+						label: L._Cut(),
+						cb: ()->{
+							App.ME.clipboard.copy(CEntityDef, ed.toJson());
+							deleteEntityDef(ed);
+						},
+					},
+					{
+						label: L._PasteAfter(),
+						cb: ()->{
+							var copy = project.defs.parseEntityDef(App.ME.clipboard, ed);
+							editor.ge.emit(EntityDefAdded);
+							selectEntity(copy);
+						},
+						enable: ()->App.ME.clipboard.is(CEntityDef),
+					},
 					{
 						label: L._Duplicate(),
 						cb:()->{

@@ -290,6 +290,27 @@ class Definitions {
 		return copy;
 	}
 
+	public function parseEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
+		if( !c.is(CEntityDef) )
+			return null;
+
+		var json : ldtk.Json.EntityDefJson = c.data;
+		var copy = data.def.EntityDef.fromJson( _project, json );
+		copy.uid = _project.makeUniqueIdInt();
+
+		for(fd in copy.fieldDefs)
+			fd.uid = _project.makeUniqueIdInt();
+		copy.identifier = _project.makeUniqueIdStr(json.identifier, (id)->isEntityIdentifierUnique(id));
+
+		if( after==null )
+			entities.push(copy);
+		else
+			entities.insert( dn.Lib.getArrayIndex(after, entities)+1, copy );
+		_project.tidy();
+
+		return copy;
+	}
+
 	public function removeEntityDef(ed:data.def.EntityDef) {
 		entities.remove(ed);
 		_project.tidy();
