@@ -115,8 +115,18 @@ class Definitions {
 		return l;
 	}
 
-	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : data.def.LayerDef {
-		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, ld.toJson() );
+	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
+		var c = new Clipboard();
+		c.set( CLayerDef, ld.toJson() );
+		return pasteLayerDef(c, ld, baseName);
+	}
+
+	public function pasteLayerDef(c:Clipboard, ?after:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
+		if( !c.is(CLayerDef) )
+			return null;
+
+		var json : ldtk.Json.LayerDefJson = c.data;
+		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, json );
 		copy.uid = _project.makeUniqueIdInt();
 
 		for(rg in copy.autoRuleGroups) {
@@ -125,8 +135,11 @@ class Definitions {
 				r.uid = _project.makeUniqueIdInt();
 		}
 
-		copy.identifier = _project.makeUniqueIdStr(baseName==null ? ld.identifier : baseName, (id)->isLayerNameUnique(id));
-		layers.insert( dn.Lib.getArrayIndex(ld, layers), copy );
+		copy.identifier = _project.makeUniqueIdStr(baseName==null ? json.identifier : baseName, (id)->isLayerNameUnique(id));
+		if( after!=null )
+			layers.insert( dn.Lib.getArrayIndex(after, layers)+1, copy );
+		else
+			layers.push(copy);
 		_project.tidy();
 		return copy;
 	}

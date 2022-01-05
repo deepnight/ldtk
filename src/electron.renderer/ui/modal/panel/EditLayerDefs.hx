@@ -619,6 +619,20 @@ class EditLayerDefs extends ui.modal.Panel {
 		Tip.clear();
 		jList.empty();
 
+		ContextMenu.addTo(jList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = project.defs.pasteLayerDef(App.ME.clipboard);
+					if( copy!=null ) {
+						editor.ge.emit(LayerDefAdded);
+						select(copy);
+					}
+				},
+				enable: ()->App.ME.clipboard.is(CLayerDef),
+			},
+		]);
+
 		for(ld in project.defs.layers) {
 			var e = new J("<li/>");
 			jList.append(e);
@@ -635,11 +649,29 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			ContextMenu.addTo(e, [
 				{
+					label: L._Copy(),
+					cb: ()->{
+						App.ME.clipboard.set(CLayerDef, ld.toJson());
+						JsTools.parseComponents(jContent);
+					},
+				},
+				{
+					label: L._PasteAfter(),
+					cb: ()->{
+						var copy = project.defs.pasteLayerDef(App.ME.clipboard, ld);
+						if( copy!=null ) {
+							editor.ge.emit(LayerDefAdded);
+							select(copy);
+						}
+					},
+					enable: ()->App.ME.clipboard.is(CLayerDef),
+				},
+				{
 					label: L._Duplicate(),
 					cb: ()->{
-						project.defs.duplicateLayerDef(ld);
-						editor.checkAutoLayersCache( (_)->{} );
+						var copy = project.defs.duplicateLayerDef(ld);
 						editor.ge.emit(LayerDefAdded);
+						select(copy);
 					},
 				},
 				{
