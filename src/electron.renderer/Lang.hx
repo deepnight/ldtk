@@ -3,10 +3,10 @@ import dn.data.GetText;
 class Lang {
 	// Text constants
 	public static var _Duplicate = ()->t._("Duplicate");
-	public static var _Copy = ()->t._("Copy");
-	public static var _Cut = ()->t._("Cut");
+	public static var _Copy = (?v:String) -> v==null ? t._("Copy") : t._("Copy ::e::", {e:v});
+	public static var _Cut = (?v:String) -> v==null ? t._("Cut") : t._("Cut ::e::", {e:v});
 	public static var _Paste = (?v:String) -> v==null ? t._("Paste") : t._("Paste ::e::", {e:v});
-	public static var _PasteAfter = ()->t._("Paste after");
+	public static var _PasteAfter = (?v:String) -> v==null ? t._("Paste after") : t._("Paste ::e:: after", {e:v});
 	public static var _Delete = (?v:LocaleString) -> v==null ? t._("Delete") : t._("Delete ::e::", {e:v});
 
 

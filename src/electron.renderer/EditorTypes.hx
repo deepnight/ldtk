@@ -193,4 +193,5 @@ enum LevelError {
 enum ClipboardType {
 	CLayerDef;
 	CRuleGroup;
+	CRule;
 }

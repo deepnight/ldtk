@@ -394,7 +394,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Global context menu
 		ContextMenu.addTo(jRuleGroupList, false, [
 			{
-				label: L._Paste(),
+				label: L._Paste("group"),
 				cb: ()->{
 					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
 					editor.ge.emit(LayerRuleGroupAdded);
@@ -516,7 +516,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
 				show: ()->!rg.isOptional,
 			},
-			
+
 			{
 				label: L.t._("Disable OPTIONAL state"),
 				cb: ()->{
@@ -535,20 +535,31 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
-				label: L._Copy(),
+				label: L._PasteAfter("rule"),
+				cb: ()->{
+					var copy = ld.pasteRule(project, rg, App.ME.clipboard);
+					lastRule = copy;
+					editor.ge.emit( LayerRuleAdded(copy) );
+					invalidateRuleAndOnesBelow(copy);
+				},
+				enable: ()->return App.ME.clipboard.is(CRule),
+			},
+
+			{
+				label: L._Copy("Group"),
 				cb: ()->{
 					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
 				}
 			},
 			{
-				label: L._Cut(),
+				label: L._Cut("Group"),
 				cb: ()->{
 					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
 					deleteRuleGroup(rg);
 				}
 			},
 			{
-				label: L._PasteAfter(),
+				label: L._PasteAfter("group"),
 				cb: ()->{
 					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
 					editor.ge.emit(LayerRuleGroupAdded);
@@ -834,6 +845,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Rule context menu
 		ContextMenu.addTo(jRule, [
+			{
+				label: L._Copy("Rule"),
+				cb: ()->{
+					App.ME.clipboard.copy(CRule, r.toJson());
+				},
+			},
+			{
+				label: L._Cut("Rule"),
+				cb: ()->{
+					App.ME.clipboard.copy(CRule, r.toJson());
+					deleteRule(rg,r);
+				},
+			},
+			{
+				label: L._PasteAfter("rule"),
+				cb: ()->{
+					var copy = ld.pasteRule(project, rg, App.ME.clipboard, r);
+					trace(copy);
+					lastRule = copy;
+					editor.ge.emit( LayerRuleAdded(copy) );
+					invalidateRuleAndOnesBelow(copy);
+				},
+				enable: ()->return App.ME.clipboard.is(CRule),
+			},
 			{
 				label: L.t._("Duplicate rule"),
 				cb: ()->{

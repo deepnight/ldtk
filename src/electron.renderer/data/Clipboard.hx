@@ -11,6 +11,12 @@ class Clipboard {
 	@:keep
 	public function toString() return "Clipboard("+getName()+")";
 
+	public static function create(type:ClipboardType, data:Dynamic) : Clipboard {
+		var c = new Clipboard();
+		c.copy(type, data);
+		return c;
+	}
+
 	public function copy(type:ClipboardType, data:Dynamic) {
 		this.type = type;
 		this.data = data;
@@ -28,6 +34,10 @@ class Clipboard {
 			return L.t._("Empty");
 
 		return switch type {
+			case CRule:
+				var json : data.def.AutoLayerRuleDef = cast data;
+				return 'Rule "${json.uid}"';
+
 			case CRuleGroup:
 				var json : data.DataTypes.AutoLayerRuleGroup = cast data;
 				return 'Rule group "${json.name}"';

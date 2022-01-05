@@ -374,23 +374,30 @@ class LayerDef {
 	}
 
 	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
-		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
+		return pasteRule( p, rg, Clipboard.create(CRule,r.toJson()) );
+	}
+
+	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroup, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {
+		trace(c);
+		if( !c.is(CRule) )
+			return null;
+
+		var json : ldtk.Json.AutoRuleDef = c.data;
+		trace(json);
+		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, json );
+		trace(copy);
 		copy.uid = p.makeUniqueIdInt();
-		rg.rules.insert( dn.Lib.getArrayIndex(r, rg.rules)+1, copy );
+		if( after==null )
+			rg.rules.push(copy);
+		else
+			rg.rules.insert( dn.Lib.getArrayIndex(after, rg.rules)+1, copy );
 
 		p.tidy();
 		return copy;
 	}
 
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
-		var copy = parseJsonRuleGroup( p.jsonVersion, toJsonRuleGroup(rg) );
-
-		copy.uid = p.makeUniqueIdInt();
-		for(r in copy.rules)
-			r.uid = p.makeUniqueIdInt();
-
-		p.tidy();
-		return copy;
+		return pasteRuleGroup( p, Clipboard.create(CRuleGroup,toJsonRuleGroup(rg)) );
 	}
 
 	public function pasteRuleGroup(p:data.Project, c:Clipboard, ?after:AutoLayerRuleGroup) : Null<AutoLayerRuleGroup> {
