@@ -159,9 +159,13 @@ button {
 		text-shadow: none;
 		box-shadow: 0px 0px 2px $bgLighter inset;
 		cursor: not-allowed;
-		background-color: $bgMed;
+		background-color: $bgDark;
 		background-image: url("../img/stripesLight.png");
 		background-repeat: repeat;
+
+		.icon {
+			opacity: 0.3;
+		}
 
 		&:hover {
 			color: $bgLighter;
@@ -432,12 +436,12 @@ button {
 	button {
 		flex: 1 1 0;
 	}
+	button.small {
+		flex-grow: 0;
+	}
 	button.debug {
 		flex: 0 0 0;
 		display: none;
-	}
-	button.small {
-		flex: 0 1 0;
 	}
 }
 
@@ -2444,6 +2448,12 @@ textarea {
 					color: $bgLighter;
 					font-size: 9pt;
 					max-width: 300px;
+				}
+				&:disabled {
+					color: $bgLight;
+					font-style: italic;
+					background-repeat: repeat;
+					background-image: url("../img/stripesLight.png");
 				}
 
 				&.crash:not(:hover) {
