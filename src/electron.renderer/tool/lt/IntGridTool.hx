@@ -18,11 +18,11 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 	override function getDefaultValue():Int {
-		return 1;
+		return curLayerInstance!=null && curLayerInstance.def.countIntGridValues()>0 ? 1 : -1;
 	}
 
 	inline function getSelectedColor() {
-		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
+		return getSelectedValue()>0 ? curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color : 0x0;
 	}
 
 	override function startUsing(ev:hxd.Event, m:Coords) {
@@ -39,7 +39,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 			ev.cancel = true;
 		}
-		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
+		else if( getSelectedValue()>0 && curLayerInstance.isValid(m.cx,m.cy) ) {
 			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
 			ev.cancel = true;
 		}
