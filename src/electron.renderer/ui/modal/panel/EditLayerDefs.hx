@@ -435,6 +435,8 @@ class EditLayerDefs extends ui.modal.Panel {
 						var jThis = ev.getThis();
 						var isUsed = project.isIntGridValueUsed(cur, intGridVal.value);
 						function run() {
+							if( isUsed )
+								new LastChance(L.t._("IntGrid value removed"), project);
 							cur.removeIntGridValue(intGridVal.value);
 							project.tidy();
 							editor.ge.emit( LayerDefIntGridValueRemoved(cur.uid, intGridVal.value, isUsed) );
