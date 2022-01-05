@@ -59,39 +59,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
-			label: L.untranslated("Open settings dir"),
-			cb: ()->ET.locate(Settings.getDir(), false)
-		});
-		add({
-			label: L.untranslated("Locate log file"),
-			cb: ()->ET.locate(JsTools.getLogPath(), true)
-		});
-
-
-		#if debug
-		add({
-			label: L.untranslated("Emulate new update"),
-			cb: ()->{
-				App.ME.settings.v.lastKnownVersion = null;
-				App.ME.settings.save();
-				dn.js.ElectronUpdater.emulate();
-			}
-		});
-
-		add({
-			label: L.untranslated("Print full log"),
-			cb: ()->App.LOG.printAll()
-		});
-
-		add({
-			label: L.untranslated("Flush log to disk"),
-			cb: ()->{
-				App.LOG.flushToFile();
-				N.success("Flushed.");
-			}
-		});
-
-		add({
 			label: L.untranslated("Update sample maps"),
 			cb: ()->{
 				var path = JsTools.getSamplesDir();
@@ -150,6 +117,23 @@ class DebugMenu extends ui.modal.ContextMenu {
 			}
 		});
 
+		addTitle(L.untranslated("App"));
+		add({
+			label: L.untranslated("Open settings dir"),
+			cb: ()->ET.locate(Settings.getDir(), false)
+		});
+
+
+		#if debug
+		add({
+			label: L.untranslated("Emulate new update"),
+			cb: ()->{
+				App.ME.settings.v.lastKnownVersion = null;
+				App.ME.settings.save();
+				dn.js.ElectronUpdater.emulate();
+			}
+		});
+
 		add({
 			label: L.untranslated("Process profiling"),
 			cb: ()->{
@@ -185,5 +169,28 @@ class DebugMenu extends ui.modal.ContextMenu {
 			label: L.untranslated("Open dev tools"),
 			cb: ()->ET.openDevTools()
 		});
+
+
+
+		addTitle(L.untranslated("Log"));
+
+		add({
+			label: L.untranslated("Locate log file"),
+			cb: ()->ET.locate(JsTools.getLogPath(), true)
+		});
+
+		add({
+			label: L.untranslated("Print full log"),
+			cb: ()->App.LOG.printAll()
+		});
+
+		add({
+			label: L.untranslated("Flush log to disk"),
+			cb: ()->{
+				App.LOG.flushToFile();
+				N.success("Flushed.");
+			}
+		});
+
 	}
 }
