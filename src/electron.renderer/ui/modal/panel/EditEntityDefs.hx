@@ -381,7 +381,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			{
 				label: L._Paste(),
 				cb: ()->{
-					var copy = project.defs.parseEntityDef(App.ME.clipboard);
+					var copy = project.defs.pasteEntityDef(App.ME.clipboard);
 					editor.ge.emit(EntityDefAdded);
 					selectEntity(copy);
 				},
@@ -438,7 +438,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					{
 						label: L._PasteAfter(),
 						cb: ()->{
-							var copy = project.defs.parseEntityDef(App.ME.clipboard, ed);
+							var copy = project.defs.pasteEntityDef(App.ME.clipboard, ed);
 							editor.ge.emit(EntityDefAdded);
 							selectEntity(copy);
 						},

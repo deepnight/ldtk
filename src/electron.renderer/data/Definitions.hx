@@ -277,10 +277,10 @@ class Definitions {
 	}
 
 	public function duplicateEntityDef(ed:data.def.EntityDef) {
-		return parseEntityDef( Clipboard.create(CEntityDef,ed.toJson()), ed );
+		return pasteEntityDef( Clipboard.create(CEntityDef,ed.toJson()), ed );
 	}
 
-	public function parseEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
+	public function pasteEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
 		if( !c.is(CEntityDef) )
 			return null;
 
@@ -523,11 +523,22 @@ class Definitions {
 	}
 
 	public function duplicateEnumDef(ed:data.def.EnumDef) {
-		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, ed.toJson(_project) );
+		return pasteEnumDef( Clipboard.create(CEnumDef,ed.toJson(_project)), ed);
+	}
+
+	public function pasteEnumDef(c:Clipboard, ?after:data.def.EnumDef) : Null<data.def.EnumDef> {
+		if( !c.is(CEnumDef) )
+			return null;
+
+		var json : ldtk.Json.EnumDefJson = c.data;
+		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, json );
 		copy.uid = _project.makeUniqueIdInt();
 
-		copy.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
-		enums.insert( dn.Lib.getArrayIndex(ed, enums)+1, copy );
+		copy.identifier = _project.makeUniqueIdStr(json.identifier, (id)->isEnumIdentifierUnique(id));
+		if( after==null )
+			enums.push(copy);
+		else
+			enums.insert( dn.Lib.getArrayIndex(after, enums)+1, copy );
 		_project.tidy();
 		return copy;
 	}

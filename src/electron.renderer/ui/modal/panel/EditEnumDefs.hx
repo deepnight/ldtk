@@ -119,6 +119,19 @@ class EditEnumDefs extends ui.modal.Panel {
 		var jList = jContent.find(".enumList ul");
 		jList.empty();
 
+		// List context menu
+		ContextMenu.addTo(jList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = project.defs.pasteEnumDef(App.ME.clipboard);
+					editor.ge.emit(EnumDefAdded);
+					selectEnum(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CEnumDef),
+			},
+		]);
+
 		for(ed in project.defs.enums) {
 			var e = new J("<li/>");
 			e.appendTo(jList);
@@ -130,6 +143,26 @@ class EditEnumDefs extends ui.modal.Panel {
 			});
 
 			ContextMenu.addTo(e, [
+				{
+					label: L._Copy(),
+					cb: ()->App.ME.clipboard.copy(CEnumDef, ed.toJson(project)),
+				},
+				{
+					label: L._Cut(),
+					cb: ()->{
+						App.ME.clipboard.copy(CEnumDef, ed.toJson(project));
+						deleteEnumDef(ed, true);
+					},
+				},
+				{
+					label: L._PasteAfter(),
+					cb: ()->{
+						var copy = project.defs.pasteEnumDef(App.ME.clipboard, ed);
+						editor.ge.emit(EnumDefAdded);
+						selectEnum(copy);
+					},
+					enable: ()->App.ME.clipboard.is(CEnumDef),
+				},
 				{
 					label: L._Duplicate(),
 					cb: ()->{
