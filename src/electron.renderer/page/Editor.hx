@@ -1598,6 +1598,7 @@ class Editor extends Page {
 				updateTool();
 
 			case LayerDefAdded:
+				checkAutoLayersCache( (_)->{} );
 				updateLayerList();
 				updateTool();
 
