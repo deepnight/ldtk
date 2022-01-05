@@ -86,7 +86,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		var isUsed = project.isEntityDefUsed(ed);
 		if( isUsed && !bypassConfirm) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("WARNING! This entity is used in one more levels. The corresponding instances will also be deleted!"),
+				Lang.t._("WARNING! This entity is used in one or more levels. The corresponding instances will also be deleted!"),
 				true,
 				deleteEntityDef.bind(ed,true)
 			);
