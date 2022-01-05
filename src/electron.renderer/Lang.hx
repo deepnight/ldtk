@@ -3,7 +3,11 @@ import dn.data.GetText;
 class Lang {
 	// Text constants
 	public static var _Duplicate = ()->t._("Duplicate");
-	public static var _Delete = ()->t._("Delete");
+	public static var _Delete = (?v:LocaleString)->{
+		return v==null
+			? t._("Delete")
+			: t._("Delete: ::e::", {e:v});
+	}
 
 
 	// Misc

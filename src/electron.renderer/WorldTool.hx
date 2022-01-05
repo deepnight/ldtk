@@ -106,7 +106,7 @@ class WorldTool extends dn.Process {
 
 				// Delete
 				ctx.add({
-					label: L.t._("Delete"),
+					label: L._Delete(),
 					cb: ()->{
 						if( project.levels.length==1 ) {
 							N.error(L.t._("You can't delete the last level."));

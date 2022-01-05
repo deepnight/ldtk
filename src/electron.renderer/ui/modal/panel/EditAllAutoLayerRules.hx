@@ -528,7 +528,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 			},
 			{
-				label: L.t._("Delete group"),
+				label: L._Delete(L.t._("Rule group")),
 				cb: deleteRuleGroup.bind(rg),
 			},
 		]);

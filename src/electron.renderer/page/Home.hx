@@ -311,7 +311,7 @@ class Home extends Page {
 						}
 					},
 					{
-						label: L.t._("Delete this BACKUP file"),
+						label: L._Delete(L.t._("Backup file")),
 						cond: ()->isBackupFile,
 						cb: ()->{
 							NT.removeFile(filePath);
