@@ -887,6 +887,7 @@ class Project {
 		for(l in levels) {
 			if( l.useAutoIdentifier ) {
 				var id = levelNamePattern;
+				id = StringTools.replace(id, "%idx1", Std.string(idx+1) );
 				id = StringTools.replace(id, "%idx", Std.string(idx) );
 				id = StringTools.replace(id, "%gx", Std.string( switch worldLayout {
 					case Free: "NA";
