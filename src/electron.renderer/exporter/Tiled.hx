@@ -26,7 +26,7 @@ class Tiled extends Exporter {
 		};
 
 		/**
-			Determine a unique "grid size" value because it doesn't support different
+			Determine a unique "grid size" value because Tiled doesn't support yet different
 			grid sizes in the same map file.
 		**/
 		tiledGridSize = p.defaultGridSize;
@@ -247,7 +247,7 @@ class Tiled extends Exporter {
 		allInst.reverse();
 		for(li in allInst) {
 			if( li.def.gridSize!=tiledGridSize ) {
-				log.warning("Discarded layer "+li.def.identifier+" (incompatible grid size)");
+				log.error("In level "+level.identifier+": discarded layer "+li.def.identifier+" (incompatible grid size)");
 				continue;
 			}
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
