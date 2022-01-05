@@ -1273,12 +1273,16 @@ ul.form {
 		min-width: 110px;
 		max-width: 130px;
 		padding-right: 8px;
-		padding-top: 8px;
+		// padding-top: 8px;
 
 		overflow-x: hidden;
 		text-overflow: ellipsis;
 		font-size: 10pt;
 		// white-space: nowrap;
+
+		label {
+			padding-top: 8px;
+		}
 
 		&.full {
 			width: auto !important;
@@ -1315,6 +1319,10 @@ ul.form {
 	>dd {
 		grid-column: 2/3;
 		margin: 0;
+		// margin-bottom: 8px;
+	}
+
+	>dt, >dd {
 		margin-bottom: 8px;
 	}
 
@@ -4837,6 +4845,20 @@ dl.form.fieldInstanceEditor {
 		color: $bgLighter;
 		font-style: italic;
 		opacity: 0.9;
+	}
+
+	dt[error] {
+		color: $red !important;
+		opacity: 1 !important;
+		background-color: $darkRed !important;
+		label {
+			background: transparent !important;
+		}
+	}
+	dd[error] {
+		border-left: 4px solid $red;
+		background-color: $darkRed;
+		opacity: 1 !important;
 	}
 
 	dt:not(.isDefault) {

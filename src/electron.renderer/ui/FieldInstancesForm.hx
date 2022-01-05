@@ -92,7 +92,7 @@ class FieldInstancesForm {
 				input.hide();
 
 				if( isRequired )
-					jRep.addClass("required");
+					markError(jRep);
 
 				input.on("blur.def", function(ev) {
 					jRep.remove();
@@ -124,6 +124,13 @@ class FieldInstancesForm {
 		}
 	}
 
+	function markError(e:js.jquery.JQuery, ?customClass="required") {
+		final a = "error";
+		e.attr(a,a);
+		e.closest("dd").attr(a,a).prev("dt").attr(a,a);
+		if( customClass!=null )
+			e.addClass(customClass);
+	}
 
 	function createFieldInput(domId:String, fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
 		jTarget.addClass( fi.def.type.getName() );
@@ -271,7 +278,7 @@ class FieldInstancesForm {
 					jPick.appendTo(jTarget);
 					jPick.addClass("point");
 					if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull ) {
-						jPick.addClass("required");
+						markError(jPick);
 						jPick.text( "Point required!" );
 					}
 					else
@@ -320,10 +327,10 @@ class FieldInstancesForm {
 						opt.text("-- null --");
 					else {
 						// SELECT shouldn't be null
-						jSelect.addClass("required");
+						markError(jSelect);
 						opt.text("[ Value required ]");
 						jSelect.click( function(ev) {
-							jSelect.removeClass("required");
+							jSelect.removeAttr("error").removeClass("required");
 							jSelect.blur( function(ev) renderForm() );
 						});
 					}
@@ -380,7 +387,7 @@ class FieldInstancesForm {
 				input.prop("readonly",true);
 
 				if( isRequired )
-					input.addClass("required");
+					markError(input);
 
 				if( !fi.isUsingDefault(arrayIdx) ) {
 					var fp = dn.FilePath.fromFile( fi.getFilePath(arrayIdx) );
@@ -606,6 +613,7 @@ class FieldInstancesForm {
 						: fd.arrayMaxLength==null ? fd.arrayMinLength+"+"
 						: fd.arrayMinLength+"-"+fd.arrayMaxLength;
 					jArray.append('<div class="warning">Array should have $bounds value(s)</div>');
+					markError(jArray);
 				}
 
 				var jArrayInputs = new J('<ul class="values"/>');
