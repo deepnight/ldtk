@@ -53,6 +53,10 @@ class Clipboard {
 			case CEnumDef:
 				var json : ldtk.Json.EnumDefJson = cast data;
 				return 'Enum definition "${json.identifier}"';
+
+			case CTilesetDef:
+				var json : ldtk.Json.TilesetDefJson = cast data;
+				return 'Tileset definition "${json.identifier}"';
 		}
 	}
 

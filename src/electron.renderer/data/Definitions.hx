@@ -430,10 +430,21 @@ class Definitions {
 	}
 
 	public function duplicateTilesetDef(td:data.def.TilesetDef) {
-		var copy = data.def.TilesetDef.fromJson( _project, td.toJson() );
+		return pasteTilesetDef( Clipboard.create(CTilesetDef,td.toJson()), td );
+	}
+
+	public function pasteTilesetDef(c:Clipboard, ?after:data.def.TilesetDef) : Null<data.def.TilesetDef> {
+		if( !c.is(CTilesetDef) )
+			return null;
+
+		var json : ldtk.Json.TilesetDefJson = c.data;
+		var copy = data.def.TilesetDef.fromJson( _project, json );
 		copy.uid = _project.makeUniqueIdInt();
-		copy.identifier = _project.makeUniqueIdStr(td.identifier, id->isTilesetIdentifierUnique(id));
-		tilesets.insert( dn.Lib.getArrayIndex(td, tilesets)+1, copy );
+		copy.identifier = _project.makeUniqueIdStr(json.identifier, id->isTilesetIdentifierUnique(id));
+		if( after==null )
+			tilesets.push(copy);
+		else
+			tilesets.insert( dn.Lib.getArrayIndex(after, tilesets)+1, copy );
 
 		_project.tidy();
 		return copy;

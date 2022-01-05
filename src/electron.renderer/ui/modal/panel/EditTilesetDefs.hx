@@ -227,6 +227,19 @@ class EditTilesetDefs extends ui.modal.Panel {
 	function updateList() {
 		jList.empty();
 
+		// List context menu
+		ContextMenu.addTo(jList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = project.defs.pasteTilesetDef(App.ME.clipboard);
+					editor.ge.emit( TilesetDefAdded(copy) );
+					selectTileset(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CTilesetDef),
+			},
+		]);
+
 		for(td in project.defs.tilesets) {
 			var e = new J("<li/>");
 			jList.append(e);
@@ -238,6 +251,26 @@ class EditTilesetDefs extends ui.modal.Panel {
 			e.click( function(_) selectTileset(td) );
 
 			ContextMenu.addTo(e, [
+				{
+					label: L._Copy(),
+					cb: ()->App.ME.clipboard.copy(CTilesetDef, td.toJson()),
+				},
+				{
+					label: L._Cut(),
+					cb: ()->{
+						App.ME.clipboard.copy(CTilesetDef, td.toJson());
+						deleteTilesetDef(td);
+					},
+				},
+				{
+					label: L._PasteAfter(),
+					cb: ()->{
+						var copy = project.defs.pasteTilesetDef(App.ME.clipboard, td);
+						editor.ge.emit( TilesetDefAdded(copy) );
+						selectTileset(copy);
+					},
+					enable: ()->App.ME.clipboard.is(CTilesetDef),
+				},
 				{
 					label: L._Duplicate(),
 					cb: ()-> {
