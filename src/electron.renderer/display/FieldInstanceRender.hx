@@ -30,7 +30,7 @@ class FieldInstanceRender {
 		var x = fx;
 		var y = fy;
 		while( n<count ) {
-			g.lineStyle(1, color, 0.2 + 0.6*n/count);
+			g.lineStyle(1, color, 0.4 + 0.6*n/count);
 			g.moveTo(x,y);
 			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off;
 			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off;
