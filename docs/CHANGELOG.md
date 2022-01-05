@@ -13,7 +13,8 @@
   - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap them: so moving value "1" down, for example, will not modify it ("1" value stays "1"), only values order changes.
   - **Image reloading bug fixes**:
     - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
-    - Fixed a critical crash when reloading an image which has a different width/height
+    - Fixed a critical crash when reloading an image which has a different width/height.
+    - You are no longer limited to deleting the last IntGrid value.
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various optimizations to boost general performances & reduce CPU usage.
 
