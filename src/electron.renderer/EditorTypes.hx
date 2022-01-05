@@ -196,6 +196,8 @@ enum ClipboardType {
 	CEnumDef;
 	CTilesetDef;
 
+	CFieldDef;
+
 	CRuleGroup;
 	CRule;
 }

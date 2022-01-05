@@ -209,10 +209,30 @@ class FieldDefsForm {
 
 			ui.modal.ContextMenu.addTo(li, [
 				{
+					label: L._Copy(),
+					cb: ()->App.ME.clipboard.copy(CFieldDef, fd.toJson()),
+				},
+				{
+					label: L._Cut(),
+					cb: ()->{
+						App.ME.clipboard.copy(CFieldDef, fd.toJson());
+						deleteField(fd);
+					},
+				},
+				{
+					label: L._PasteAfter(),
+					cb: ()->{
+						var copy = project.defs.pasteFieldDef(App.ME.clipboard, fd);
+						editor.ge.emit(FieldDefAdded(copy));
+						selectField(copy);
+					},
+					enable: ()->App.ME.clipboard.is(CFieldDef),
+				},
+				{
 					label: L._Duplicate(),
 					cb:()->{
 						var copy = duplicateField(fd);
-						editor.ge.emit( FieldDefAdded(fd) );
+						editor.ge.emit( FieldDefAdded(copy) );
 						onAnyChange();
 						selectField(copy);
 					}

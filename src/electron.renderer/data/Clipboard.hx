@@ -57,6 +57,10 @@ class Clipboard {
 			case CTilesetDef:
 				var json : ldtk.Json.TilesetDefJson = cast data;
 				return 'Tileset definition "${json.identifier}"';
+
+			case CFieldDef:
+				var json : ldtk.Json.FieldDefJson = cast data;
+				return 'Field definition "${json.identifier}"';
 		}
 	}
 
