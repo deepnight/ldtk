@@ -190,9 +190,15 @@ class WorldRender extends dn.Process {
 				updateWorldTitle();
 				updateCurrentHighlight();
 
+			case LayerRuleGroupAdded:
+				invalidateAllLevelRenders();
+
+			case LayerRuleGroupRemoved(rg):
+				invalidateAllLevelRenders();
+
 			case LayerDefAdded:
 				invalidateAllLevelRenders();
-				
+
 			case LayerDefRemoved(uid):
 				invalidateAllLevelRenders();
 
