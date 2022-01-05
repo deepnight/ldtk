@@ -189,3 +189,7 @@ enum LevelError {
 	InvalidEntityField(ei:data.inst.EntityInstance);
 	InvalidBgImage;
 }
+
+enum ClipboardType {
+	CLayerDef;
+}

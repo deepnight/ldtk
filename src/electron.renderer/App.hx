@@ -22,6 +22,8 @@ class App extends dn.Process {
 	public var focused(default,null) = true;
 	var jsMetaKeyDown = false;
 
+	public var clipboard : data.Clipboard;
+
 	public function new() {
 		super();
 
@@ -54,6 +56,7 @@ class App extends dn.Process {
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
 		clearMiniNotif();
+		clipboard = new data.Clipboard();
 
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);
