@@ -3,6 +3,7 @@ $bgDark: #1e2229;
 $bgMed: #2e333f;
 $bgLight: #545d73;
 $bgLighter: #737f9d;
+$almostWhite: #b5bac7;
 $lightRed: #ffa386;
 $red: #e34d00;
 $darkRed: #791105;
@@ -1273,15 +1274,18 @@ ul.form {
 		min-width: 110px;
 		max-width: 130px;
 		padding-right: 8px;
-		// padding-top: 8px;
 
 		overflow-x: hidden;
 		text-overflow: ellipsis;
-		font-size: 10pt;
-		// white-space: nowrap;
+		font-size: 9.5pt;
 
 		label {
-			padding-top: 8px;
+			padding-top: 4px;
+			color: $almostWhite;
+		}
+		.info,
+		info {
+			margin-top: 4px;
 		}
 
 		&.full {
@@ -1319,11 +1323,11 @@ ul.form {
 	>dd {
 		grid-column: 2/3;
 		margin: 0;
-		// margin-bottom: 8px;
 	}
 
-	>dt, >dd {
-		margin-bottom: 8px;
+	>dt,
+	>dd {
+		margin-bottom: 10px;
 	}
 
 	>dd,
