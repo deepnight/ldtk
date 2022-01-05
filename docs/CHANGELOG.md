@@ -46,6 +46,7 @@
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
   - Clicking on the "New Tileset" button immediately invokes the "Pick image file" dialog.
+  - Creating a new Rule group will now immediately offer to rename it.
   - Changed the "Help" button color in the main editor bar.
   - Changed the aspect of various help-related elements.
   - Zooming out a lot now has a subtle dimming effect.

@@ -288,8 +288,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var rg = ld.createRuleGroup(project.makeUniqueIdInt(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
 
-			var jNewGroup = jContent.find("ul[groupUid="+rg.uid+"]");
-			jNewGroup.siblings("header").find(".edit").click();
+			var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
+			onRenameGroup( jGroupHeader, rg );
 		});
 
 
