@@ -141,7 +141,7 @@ class LayerDef {
 		}
 	}
 
-	function toJsonRuleGroup(rg:AutoLayerRuleGroup) : ldtk.Json.AutoLayerRuleGroupJson {
+	public function toJsonRuleGroup(rg:AutoLayerRuleGroup) : ldtk.Json.AutoLayerRuleGroupJson {
 		return {
 			uid: rg.uid,
 			name: rg.name,
@@ -385,6 +385,20 @@ class LayerDef {
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
 		var copy = parseJsonRuleGroup( p.jsonVersion, toJsonRuleGroup(rg) );
 
+		copy.uid = p.makeUniqueIdInt();
+		for(r in copy.rules)
+			r.uid = p.makeUniqueIdInt();
+
+		p.tidy();
+		return copy;
+	}
+
+	public function pasteRuleGroup(p:data.Project, c:Clipboard, ?after:AutoLayerRuleGroup) : Null<AutoLayerRuleGroup> {
+		if( !c.is(CRuleGroup) )
+			return null;
+
+		var json : ldtk.Json.AutoLayerRuleGroupJson = c.data;
+		var copy = parseJsonRuleGroup( p.jsonVersion, json );
 		copy.uid = p.makeUniqueIdInt();
 		for(r in copy.rules)
 			r.uid = p.makeUniqueIdInt();

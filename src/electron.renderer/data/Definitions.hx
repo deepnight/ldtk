@@ -117,7 +117,7 @@ class Definitions {
 
 	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
 		var c = new Clipboard();
-		c.set( CLayerDef, ld.toJson() );
+		c.copy( CLayerDef, ld.toJson() );
 		return pasteLayerDef(c, ld, baseName);
 	}
 

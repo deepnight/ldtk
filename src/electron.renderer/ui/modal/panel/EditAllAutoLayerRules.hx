@@ -391,6 +391,20 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			groupIdx++;
 		}
 
+		// Global context menu
+		ContextMenu.addTo(jRuleGroupList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
+					editor.ge.emit(LayerRuleGroupAdded);
+					for(r in copy.rules)
+						invalidateRuleAndOnesBelow(r);
+				},
+				enable: ()->return App.ME.clipboard.is(CRuleGroup),
+			}
+		]);
+
 		// Make groups sortable
 		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
 			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
@@ -490,6 +504,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
 			},
+
 			{
 				label: L.t._("Turn into an OPTIONAL group"),
 				cb: ()->{
@@ -501,6 +516,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
 				show: ()->!rg.isOptional,
 			},
+			
 			{
 				label: L.t._("Disable OPTIONAL state"),
 				cb: ()->{
@@ -517,6 +533,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 				show: ()->rg.isOptional,
 			},
+
+			{
+				label: L._Copy(),
+				cb: ()->{
+					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
+				}
+			},
+			{
+				label: L._Cut(),
+				cb: ()->{
+					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					deleteRuleGroup(rg);
+				}
+			},
+			{
+				label: L._PasteAfter(),
+				cb: ()->{
+					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
+					editor.ge.emit(LayerRuleGroupAdded);
+					for(r in copy.rules)
+						invalidateRuleAndOnesBelow(r);
+				},
+				enable: ()->App.ME.clipboard.is(CRuleGroup),
+			},
 			{
 				label: L.t._("Duplicate group"),
 				cb: ()->{
@@ -528,7 +568,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 			},
 			{
-				label: L._Delete(L.t._("Rule group")),
+				label: L._Delete(L.t._("Group")),
 				cb: deleteRuleGroup.bind(rg),
 			},
 		]);

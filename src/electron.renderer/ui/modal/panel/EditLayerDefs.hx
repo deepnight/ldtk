@@ -651,8 +651,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				{
 					label: L._Copy(),
 					cb: ()->{
-						App.ME.clipboard.set(CLayerDef, ld.toJson());
-						JsTools.parseComponents(jContent);
+						App.ME.clipboard.copy(CLayerDef, ld.toJson());
 					},
 				},
 				{

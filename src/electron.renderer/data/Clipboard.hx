@@ -11,7 +11,7 @@ class Clipboard {
 	@:keep
 	public function toString() return "Clipboard("+getName()+")";
 
-	public function set(type:ClipboardType, data:Dynamic) {
+	public function copy(type:ClipboardType, data:Dynamic) {
 		this.type = type;
 		this.data = data;
 		N.msg("Copied: "+getName());
@@ -28,6 +28,10 @@ class Clipboard {
 			return L.t._("Empty");
 
 		return switch type {
+			case CRuleGroup:
+				var json : data.DataTypes.AutoLayerRuleGroup = cast data;
+				return 'Rule group "${json.name}"';
+
 			case CLayerDef:
 				var json : ldtk.Json.LayerDefJson = cast data;
 				return 'Layer definition "${json.identifier}"';
