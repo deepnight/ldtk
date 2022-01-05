@@ -59,18 +59,13 @@ class ContextMenu extends ui.Modal {
 			ME = null;
 	}
 
-	public static function addTo(jTarget:js.jquery.JQuery, ?jButtonContext:js.jquery.JQuery, actions:Array<ContextAction>) {
+	public static function addTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:Array<ContextAction>) {
 		// Cleanup
 		jTarget
 			.off(".context")
 			.find("button.context").remove();
 
-		// Init arrow button
-		var jButton = new J('<button class="transparent context"></button>');
-		jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
-		jButton.append('<div class="icon contextMenu"/>');
-
-		// Open
+		// Open callback
 		function _open(event:js.jquery.Event) {
 			var ctx = new ContextMenu(event);
 			for(a in actions)
@@ -78,11 +73,16 @@ class ContextMenu extends ui.Modal {
 					ctx.add(a);
 		}
 
-		// Arrow button
-		jButton.click( (ev:js.jquery.Event)->{
-			ev.stopPropagation();
-			_open(ev);
-		});
+		// Menu button
+		if( showButton ) {
+			var jButton = new J('<button class="transparent context"></button>');
+			jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
+			jButton.append('<div class="icon contextMenu"/>');
+			jButton.click( (ev:js.jquery.Event)->{
+				ev.stopPropagation();
+				_open(ev);
+			});
+		}
 
 		// Right click
 		jTarget.on("contextmenu.context", (ev:js.jquery.Event)->{
