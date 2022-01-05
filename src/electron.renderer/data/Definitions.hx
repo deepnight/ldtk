@@ -277,17 +277,7 @@ class Definitions {
 	}
 
 	public function duplicateEntityDef(ed:data.def.EntityDef) {
-		var copy = data.def.EntityDef.fromJson( _project, ed.toJson() );
-		copy.uid = _project.makeUniqueIdInt();
-
-		for(fd in copy.fieldDefs)
-			fd.uid = _project.makeUniqueIdInt();
-		copy.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEntityIdentifierUnique(id));
-
-		entities.insert( dn.Lib.getArrayIndex(ed, entities)+1, copy );
-		_project.tidy();
-
-		return copy;
+		return parseEntityDef( Clipboard.create(CEntityDef,ed.toJson()), ed );
 	}
 
 	public function parseEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
