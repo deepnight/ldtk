@@ -947,7 +947,6 @@
 			"title": "Auto-layer rule group",
 			"required": [
 				"active",
-				"collapsed",
 				"isOptional",
 				"name",
 				"rules",
@@ -962,9 +961,10 @@
 					]
 				},
 				"collapsed": {
-					"description": "",
+					"description": "This field was removed in version 0.10.0 and should no longer be used.",
 					"type": [
-						"boolean"
+						"boolean",
+						"null"
 					]
 				},
 				"isOptional": {
