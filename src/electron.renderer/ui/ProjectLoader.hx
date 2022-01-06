@@ -13,7 +13,7 @@ class ProjectLoader {
 	var progress : ui.modal.Progress;
 	var onLoad : data.Project -> Void;
 	var onError : LoadingError->Void;
-	var needUpgrade = false;
+	var needReSaving = false;
 
 	public function new(filePath:String, onLoad, onError) {
 		this.onLoad = onLoad;
@@ -53,9 +53,13 @@ class ProjectLoader {
 						null;
 					}
 
-				// Check for a need for upgrade
+				// Project was created with an older appBuildId
+				if( json.appBuildId==null || json.appBuildId < Const.getAppBuildId() )
+					needReSaving = true;
+
+				// Project has an older JSON version
 				if( json!=null && Version.lower(json.jsonVersion, Const.getJsonVersion()) )
-					needUpgrade = true;
+					needReSaving = true;
 
 			}
 		});
@@ -87,12 +91,14 @@ class ProjectLoader {
 					}
 
 					var idx = 0;
+					log.fileOp("Loading external levels...");
 					var lops : Array<ui.modal.Progress.ProgressOp> = [];
 					for(l in p.levels) {
 						var curIdx = idx;
 						lops.push({
 							label: l.identifier,
 							cb: ()->{
+								log.fileOp("  "+l.externalRelPath+"...");
 								var path = p.makeAbsoluteFilePath(l.externalRelPath, false);
 								if( !NT.fileExists(path) ) {
 									_invalidLevel(curIdx, "Level file not found "+l.externalRelPath);
@@ -100,7 +106,7 @@ class ProjectLoader {
 								else {
 									// Parse level
 									try {
-										log.fileOp("Loading external level "+l.externalRelPath+"...");
+
 										var raw = NT.readFileString(path);
 										var lJson = haxe.Json.parse(raw);
 										var l = data.Level.fromJson(p, lJson);
@@ -128,10 +134,13 @@ class ProjectLoader {
 	}
 
 	function done(p:data.Project) {
-		if( needUpgrade )
+		if( needReSaving ) {
+			log.warning("Project file was created using an older version of LDtk, re-saving is recommended to upgrade it.");
 			for(l in p.levels)
 				l.invalidateJsonCache();
+		}
 
+		log.printAllToLog(App.LOG);
 		onLoad(p);
 		if( log.containsAnyCriticalEntry() )
 			new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
