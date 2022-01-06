@@ -8,7 +8,6 @@
     - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
     - Added various progress bars when loading or saving large projects
     - Complete rework of the backup system which is now much faster and more reliable
-  - **Project colors**: added "Colors used in this project" to all color pickers
   - **Help**: reworked and streamlined contextual help tips in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
   - **Custom fields**: Entity and Level custom fields that are not using default values are now MUCH more visible in forms
   - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap them: so moving value "1" down, for example, will not modify it ("1" value stays "1"), only values order changes.
@@ -18,6 +17,7 @@
     - You are no longer limited to deleting the last IntGrid value.
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various optimizations to boost general performances & reduce CPU usage.
+  - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
 
 ## JSON format changes
 
