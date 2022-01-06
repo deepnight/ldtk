@@ -85,6 +85,14 @@ class FieldInstance {
 		return def.isArray ? internalValues.length : 1;
 	}
 
+	public inline function getArrayMinLength() : Int {
+		return def.isArray && def.arrayMinLength!=null ? def.arrayMinLength : -1;
+	}
+
+	public inline function getArrayMaxLength() : Int {
+		return def.isArray && def.arrayMaxLength!=null ? def.arrayMaxLength : -1;
+	}
+
 	public function addArrayValue() {
 		if( def.isArray )
 			internalValues.push(null);

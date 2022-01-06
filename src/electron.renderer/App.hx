@@ -436,6 +436,7 @@ class App extends dn.Process {
 		if( hasPage() )
 			curPageProcess.onAppFocus();
 		hxd.System.fpsLimit = -1;
+		clipboard.readSystemClipboard();
 	}
 
 	function onAppBlur(ev:js.html.Event) {

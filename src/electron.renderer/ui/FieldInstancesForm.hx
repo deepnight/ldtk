@@ -587,8 +587,15 @@ class FieldInstancesForm {
 			// Identifier
 			if( !fd.isArray )
 				jDt.append('<label for="$domId">${fi.def.identifier}</label>');
-			else
-				jDt.append('<label for="$domId">${fi.def.identifier}&nbsp;(${fi.getArrayLength()})</label>');
+			else {
+				var jLabel = new J('<label for="$domId">${fi.def.identifier}</label>');
+				if( fi.def.isArray ) {
+					jLabel.append('&nbsp;${fi.getArrayLength()}');
+					if( fi.getArrayMaxLength()>0 )
+						jLabel.append('/${fi.getArrayMaxLength()}');
+				}
+				jDt.append(jLabel);
+			}
 			jDt.attr("title", jDt.find("label").text());
 			jDt.attr("noTip", "noTip");
 

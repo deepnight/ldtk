@@ -378,14 +378,11 @@ class LayerDef {
 	}
 
 	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroup, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {
-		trace(c);
 		if( !c.is(CRule) )
 			return null;
 
-		var json : ldtk.Json.AutoRuleDef = c.data;
-		trace(json);
+		var json : ldtk.Json.AutoRuleDef = c.json;
 		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, json );
-		trace(copy);
 		copy.uid = p.makeUniqueIdInt();
 		if( after==null )
 			rg.rules.push(copy);
@@ -404,7 +401,7 @@ class LayerDef {
 		if( !c.is(CRuleGroup) )
 			return null;
 
-		var json : ldtk.Json.AutoLayerRuleGroupJson = c.data;
+		var json : ldtk.Json.AutoLayerRuleGroupJson = c.json;
 		var copy = parseJsonRuleGroup( p.jsonVersion, json );
 		copy.uid = p.makeUniqueIdInt();
 		for(r in copy.rules)

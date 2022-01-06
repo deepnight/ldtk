@@ -1,30 +1,40 @@
 package data;
 
 class Clipboard {
-	public var data : Null<Dynamic>;
+	public var json : Null<Dynamic>;
 	var type : Null<ClipboardType>;
 
 	public function new() {
 		clear();
+		readSystemClipboard();
 	}
 
 	@:keep
 	public function toString() return "Clipboard("+getName()+")";
 
-	public static function create(type:ClipboardType, data:Dynamic) : Clipboard {
+	public static function create(type:ClipboardType, json:Dynamic) : Clipboard {
 		var c = new Clipboard();
-		c.copy(type, data);
+		c.copy(type, json);
 		return c;
 	}
 
-	public function copy(type:ClipboardType, data:Dynamic) {
+	public function readSystemClipboard() {
+		trace("read sys clipboard: ");
+		trace(electron.Clipboard.readText());
+	}
+
+	public function copy(type:ClipboardType, json:Dynamic) {
 		this.type = type;
-		this.data = data;
+		this.json = json;
+
+		var str = Std.string(type) + "||||" + haxe.Json.stringify(json);
+		electron.Clipboard.writeText(str);
+
 		N.msg("Copied: "+getName());
 	}
 
 	public function clear() {
-		data = null;
+		json = null;
 		type = null;
 	}
 
@@ -35,31 +45,31 @@ class Clipboard {
 
 		return switch type {
 			case CRule:
-				var json : data.def.AutoLayerRuleDef = cast data;
+				var json : data.def.AutoLayerRuleDef = cast json;
 				return 'Rule "${json.uid}"';
 
 			case CRuleGroup:
-				var json : data.DataTypes.AutoLayerRuleGroup = cast data;
+				var json : data.DataTypes.AutoLayerRuleGroup = cast json;
 				return 'Rule group "${json.name}"';
 
 			case CLayerDef:
-				var json : ldtk.Json.LayerDefJson = cast data;
+				var json : ldtk.Json.LayerDefJson = cast json;
 				return 'Layer definition "${json.identifier}"';
 
 			case CEntityDef:
-				var json : ldtk.Json.EntityDefJson = cast data;
+				var json : ldtk.Json.EntityDefJson = cast json;
 				return 'Entity definition "${json.identifier}"';
 
 			case CEnumDef:
-				var json : ldtk.Json.EnumDefJson = cast data;
+				var json : ldtk.Json.EnumDefJson = cast json;
 				return 'Enum definition "${json.identifier}"';
 
 			case CTilesetDef:
-				var json : ldtk.Json.TilesetDefJson = cast data;
+				var json : ldtk.Json.TilesetDefJson = cast json;
 				return 'Tileset definition "${json.identifier}"';
 
 			case CFieldDef:
-				var json : ldtk.Json.FieldDefJson = cast data;
+				var json : ldtk.Json.FieldDefJson = cast json;
 				return 'Field definition "${json.identifier}"';
 		}
 	}
@@ -75,4 +85,8 @@ class Clipboard {
 
 	public inline function isEmpty() return type==null;
 	public inline function is(t:ClipboardType) return type!=null && t!=null && type.getIndex()==t.getIndex();
+
+	// public inline function as<T>(outType:Class<T>) : Null<T> {
+	// 	return isEmpty() ? null : Std.downcast(json, outType);
+	// }
 }

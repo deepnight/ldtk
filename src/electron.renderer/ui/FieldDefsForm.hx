@@ -173,7 +173,7 @@ class FieldDefsForm {
 		if( !c.is(CFieldDef) )
 			return null;
 
-		var json = c.data;
+		var json : ldtk.Json.FieldDefJson = c.json;
 		var copy = FieldDef.fromJson( project, json );
 		copy.uid = project.makeUniqueIdInt();
 		copy.identifier = project.makeUniqueIdStr(json.identifier, false, (id)->isFieldIdentifierUnique(id));

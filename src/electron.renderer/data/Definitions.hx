@@ -125,7 +125,7 @@ class Definitions {
 		if( !c.is(CLayerDef) )
 			return null;
 
-		var json : ldtk.Json.LayerDefJson = c.data;
+		var json : ldtk.Json.LayerDefJson = c.json;
 		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, json );
 		copy.uid = _project.makeUniqueIdInt();
 
@@ -284,7 +284,7 @@ class Definitions {
 		if( !c.is(CEntityDef) )
 			return null;
 
-		var json : ldtk.Json.EntityDefJson = c.data;
+		var json : ldtk.Json.EntityDefJson = c.json;
 		var copy = data.def.EntityDef.fromJson( _project, json );
 		copy.uid = _project.makeUniqueIdInt();
 
@@ -437,7 +437,7 @@ class Definitions {
 		if( !c.is(CTilesetDef) )
 			return null;
 
-		var json : ldtk.Json.TilesetDefJson = c.data;
+		var json : ldtk.Json.TilesetDefJson = c.json;
 		var copy = data.def.TilesetDef.fromJson( _project, json );
 		copy.uid = _project.makeUniqueIdInt();
 		copy.identifier = _project.makeUniqueIdStr(json.identifier, id->isTilesetIdentifierUnique(id));
@@ -541,7 +541,7 @@ class Definitions {
 		if( !c.is(CEnumDef) )
 			return null;
 
-		var json : ldtk.Json.EnumDefJson = c.data;
+		var json : ldtk.Json.EnumDefJson = c.json;
 		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, json );
 		copy.uid = _project.makeUniqueIdInt();
 
