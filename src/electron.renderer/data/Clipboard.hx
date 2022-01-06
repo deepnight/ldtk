@@ -52,19 +52,16 @@ class Clipboard {
 
 		// Read system clipboard
 		var raw = try electron.Clipboard.readText() catch(_) null;
-		trace("READ SYS");
 		if( _lastKnownSys==raw )
 			return false;
 		_lastKnownSys = raw;
 
 		// Check format
-		trace("signature...");
 		if( raw==null || raw.substr(0,SIGNATURE.length)!=SIGNATURE ) {
 			clearInternal();
 			return false;
 		}
 		raw = StringTools.replace(raw, "\r", ""); // Windows CRLF
-		trace("parts...");
 		var parts = raw.split(SYS_SEP);
 		if( parts.length!=3 ) {
 			clearInternal();
@@ -72,7 +69,6 @@ class Clipboard {
 		}
 
 		// Extract type enum
-		trace("type...");
 		type = try Type.createEnum(ClipboardType, parts[1]) catch(_) null;
 		if( type==null ) {
 			clearInternal();
@@ -80,16 +76,13 @@ class Clipboard {
 		}
 
 		// Extract & check JSON
-		trace("json...");
 		jsonStr = parts[2];
-		trace(jsonStr);
 		jsonObj = try haxe.Json.parse(jsonStr) catch(_) null;
 		if( jsonObj==null ) {
 			clearInternal();
 			return false;
 		}
 
-		trace("OK! "+name);
 		return true;
 	}
 
