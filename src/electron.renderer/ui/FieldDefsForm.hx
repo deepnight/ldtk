@@ -71,7 +71,7 @@ class FieldDefsForm {
 	function onCreateField(anchor:js.jquery.JQuery, isArray:Bool) {
 		var w = new ui.modal.Dialog(anchor,"fieldTypes");
 
-		function _create(ev:js.jquery.Event, type:data.DataTypes.FieldType) {
+		function _create(ev:js.jquery.Event, type:ldtk.Json.FieldType) {
 			switch type {
 				case F_Enum(null):
 					if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
@@ -128,7 +128,7 @@ class FieldDefsForm {
 		}
 
 		// Type picker
-		var types : Array<data.DataTypes.FieldType> = [
+		var types : Array<ldtk.Json.FieldType> = [
 			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null)
 		];
 		if( fieldParent==FP_Entity )
@@ -324,7 +324,7 @@ class FieldDefsForm {
 			jForm.css("visibility","visible");
 
 		// Set form classes
-		for(k in Type.getEnumConstructs(data.DataTypes.FieldType))
+		for(k in Type.getEnumConstructs(ldtk.Json.FieldType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+curField.type.getName());
 

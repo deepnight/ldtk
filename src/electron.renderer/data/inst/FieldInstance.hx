@@ -123,7 +123,7 @@ class FieldInstance {
 
 
 
-	inline function require(type:data.DataTypes.FieldType) {
+	inline function require(type:ldtk.Json.FieldType) {
 		if( def.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
 	}

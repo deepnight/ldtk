@@ -121,7 +121,7 @@ class OgmoProject {
 					log.indentMore();
 
 					// Convert type
-					var type : data.DataTypes.FieldType = switch valJson.definition {
+					var type : ldtk.Json.FieldType = switch valJson.definition {
 						case "Integer": F_Int;
 						case "Float": F_Float;
 						case "Boolean": F_Bool;

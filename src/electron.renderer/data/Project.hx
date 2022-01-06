@@ -935,7 +935,7 @@ class Project {
 			ed.externalRelPath = _remapRelativePath( ed.externalRelPath );
 	}
 
-	public function iterateAllFieldInstances(?searchType:data.DataTypes.FieldType, run:data.inst.FieldInstance->Void) {
+	public function iterateAllFieldInstances(?searchType:ldtk.Json.FieldType, run:data.inst.FieldInstance->Void) {
 		for(l in levels)
 		for(fi in l.fieldInstances)
 			if( searchType==null || fi.def.type.equals(searchType) )

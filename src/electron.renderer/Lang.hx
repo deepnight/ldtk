@@ -46,7 +46,7 @@ class Lang {
 		}
 	}
 
-	public static function getFieldType(type:data.DataTypes.FieldType) : LocaleString {
+	public static function getFieldType(type:ldtk.Json.FieldType) : LocaleString {
 		return switch type {
 			case F_Int: t._("Integer");
 			case F_Color: t._("Color");
@@ -60,7 +60,7 @@ class Lang {
 		}
 	}
 
-	public static function getFieldTypeShortName(type:data.DataTypes.FieldType) : LocaleString {
+	public static function getFieldTypeShortName(type:ldtk.Json.FieldType) : LocaleString {
 		return switch type {
 			case F_Int: t._("123");
 			case F_Color: t._("Col");

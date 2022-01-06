@@ -86,7 +86,7 @@ class JsTools {
 		return wrapper;
 	}
 
-	public static function createFieldTypeIcon(type:data.DataTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createFieldTypeIcon(type:ldtk.Json.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());

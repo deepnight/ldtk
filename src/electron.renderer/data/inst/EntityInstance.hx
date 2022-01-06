@@ -226,7 +226,7 @@ class EntityInstance {
 		return fieldInstances.get( fieldDef.uid );
 	}
 
-	public function getFieldInstancesOfType(type:data.DataTypes.FieldType) {
+	public function getFieldInstancesOfType(type:ldtk.Json.FieldType) {
 		var all = [];
 		for(fi in fieldInstances)
 			if( fi.def.type.getIndex() == type.getIndex() )

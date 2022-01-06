@@ -3,8 +3,8 @@ package misc;
 import data.DataTypes;
 
 typedef Convertor = {
-	var from: data.DataTypes.FieldType;
-	var to: data.DataTypes.FieldType;
+	var from: ldtk.Json.FieldType;
+	var to: ldtk.Json.FieldType;
 	var ?displayName: String;
 	var ?mode: Null<String>;
 	var lossless : Bool;

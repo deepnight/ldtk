@@ -9,7 +9,7 @@ class FieldDef {
 	public var uid(default,null) : Int;
 
 	@:allow(misc.FieldTypeConverter)
-	public var type(default,null) : data.DataTypes.FieldType;
+	public var type(default,null) : ldtk.Json.FieldType;
 	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
@@ -38,7 +38,7 @@ class FieldDef {
 	var _project : data.Project;
 
 	@:allow(data.def.EntityDef, ui.FieldDefsForm)
-	private function new(p:data.Project, uid:Int, t:data.DataTypes.FieldType, array:Bool) {
+	private function new(p:data.Project, uid:Int, t:ldtk.Json.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
 		type = t;
@@ -56,7 +56,7 @@ class FieldDef {
 		defaultOverride = null;
 	}
 
-	static inline function getDefaultUseForSmartColor(t:FieldType) : Bool {
+	static inline function getDefaultUseForSmartColor(t:ldtk.Json.FieldType) : Bool {
 		return switch t {
 			case F_Int, F_Float, F_Bool: false;
 			case F_String, F_Text: false;
@@ -86,7 +86,7 @@ class FieldDef {
 		if( (cast json.type)=="F_File" ) json.type = cast "F_Path"; // patch old type name
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
 
-		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
+		var type = JsonTools.readEnum(ldtk.Json.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
@@ -141,7 +141,7 @@ class FieldDef {
 
 	#if editor
 
-	public static function getTypeColorHex(t:FieldType, luminosity=1.0) : String {
+	public static function getTypeColorHex(t:ldtk.Json.FieldType, luminosity=1.0) : String {
 		var c = switch t {
 			case F_Int: "#1ba7c9";
 			case F_Float: "#1ba7c9";
@@ -204,12 +204,12 @@ class FieldDef {
 	}
 	#end
 
-	public inline function require(type:data.DataTypes.FieldType) {
+	public inline function require(type:ldtk.Json.FieldType) {
 		if( this.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
 	}
 
-	public function requireAny(types:Array<data.DataTypes.FieldType>) {
+	public function requireAny(types:Array<ldtk.Json.FieldType>) {
 		for(type in types)
 			if( this.type.getIndex()==type.getIndex() )
 				return true;
@@ -304,7 +304,7 @@ class FieldDef {
 	}
 
 	public inline function isEnum() {
-		return type.getIndex() == data.DataTypes.FieldType.F_Enum(null).getIndex();
+		return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
 	}
 
 	public function getEnumDef() : Null<EnumDef> {
