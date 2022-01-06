@@ -639,7 +639,7 @@
 					]
 				},
 				"__type": {
-					"description": "Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)",
+					"description": "Human readable value type. Possible values: `Int, Float, String, Bool, Color, ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)",
 					"type": [
 						"string"
 					]
@@ -733,7 +733,18 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum"
+					"description": "Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`",
+					"enum": [
+						"F_Int",
+						"F_Float",
+						"F_String",
+						"F_Text",
+						"F_Bool",
+						"F_Color",
+						"F_Enum",
+						"F_Point",
+						"F_Path"
+					]
 				},
 				"identifier": {
 					"description": "Unique String identifier",
