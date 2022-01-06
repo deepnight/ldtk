@@ -30,13 +30,13 @@ class Tileset {
 	var _internalSelectedIds : Array<Int> = [];
 
 
-	public function new(target:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
+	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
 		tilesetDef = td;
 		selectMode = mode;
 
 		// Create picker elements
 		jWrapper = new J('<div class="tileset"/>');
-		jWrapper.appendTo(target);
+		jWrapper.appendTo(jParent);
 
 		jTilesetWrapper = new J('<div class="tilesetWrapper"/>');
 		jTilesetWrapper.appendTo(jWrapper);
@@ -122,7 +122,7 @@ class Tileset {
 		}
 	}
 
-	public function resetScroll() {
+	function resetScroll() {
 		tx = ty = null;
 		scrollX = 0;
 		scrollY = 0;
