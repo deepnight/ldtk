@@ -1,7 +1,7 @@
 package ui.palette;
 
 class TilePalette extends ui.ToolPalette {
-	public var picker : Null<Tileset>;
+	public var picker : Null<ui.ts.TileToolPicker>;
 
 	public function new(t) {
 		super(t);
@@ -23,7 +23,6 @@ class TilePalette extends ui.ToolPalette {
 
 		// Picker
 		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool);
-		// picker = new ui.Tileset(jContent, tool.curTilesetDef, None, ToolPicker, tool);
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(jContent);
@@ -53,7 +52,7 @@ class TilePalette extends ui.ToolPalette {
 	override function focusOnSelection() {
 		super.focusOnSelection();
 		if( picker!=null )
-			picker.focusOnSelection();
+			picker.focusOnSelection(true);
 	}
 
 	override function update() {
