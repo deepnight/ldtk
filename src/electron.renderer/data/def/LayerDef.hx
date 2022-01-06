@@ -394,7 +394,7 @@ class LayerDef {
 	}
 
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
-		return pasteRuleGroup( p, Clipboard.createTemp(CRuleGroup,toJsonRuleGroup(rg)) );
+		return pasteRuleGroup( p, Clipboard.createTemp(CRuleGroup,toJsonRuleGroup(rg)), rg );
 	}
 
 	public function pasteRuleGroup(p:data.Project, c:Clipboard, ?after:AutoLayerRuleGroup) : Null<AutoLayerRuleGroup> {
@@ -406,6 +406,12 @@ class LayerDef {
 		copy.uid = p.makeUniqueIdInt();
 		for(r in copy.rules)
 			r.uid = p.makeUniqueIdInt();
+
+		// Re-insert after given group because parser already pushed copy in the array
+		if( after!=null ) {
+			autoRuleGroups.remove(copy);
+			autoRuleGroups.insert( dn.Lib.getArrayIndex(after,autoRuleGroups)+1, copy );
+		}
 
 		p.tidy();
 		return copy;

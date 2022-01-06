@@ -391,7 +391,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			groupIdx++;
 		}
 
-		// Global context menu
+		// List context menu
 		ContextMenu.addTo(jRuleGroupList, false, [
 			{
 				label: L._Paste("group"),
@@ -561,7 +561,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L._PasteAfter("group"),
 				cb: ()->{
-					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
+					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
 					editor.ge.emit(LayerRuleGroupAdded);
 					for(r in copy.rules)
 						invalidateRuleAndOnesBelow(r);
