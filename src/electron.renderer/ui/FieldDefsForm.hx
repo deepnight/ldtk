@@ -164,11 +164,23 @@ class FieldDefsForm {
 	}
 
 
-	function duplicateField(fd:FieldDef) : FieldDef {
-		var copy = FieldDef.fromJson( project, fd.toJson() );
+	function duplicateFieldDef(fd:FieldDef) : FieldDef {
+		return pasteFieldDef( data.Clipboard.create(CFieldDef,fd.toJson()), fd );
+	}
+
+
+	function pasteFieldDef(c:data.Clipboard, ?after:FieldDef) : Null<FieldDef> {
+		if( !c.is(CFieldDef) )
+			return null;
+
+		var json = c.data;
+		var copy = FieldDef.fromJson( project, json );
 		copy.uid = project.makeUniqueIdInt();
-		copy.identifier = project.makeUniqueIdStr(fd.identifier, false, (id)->isFieldIdentifierUnique(id));
-		fieldDefs.insert( dn.Lib.getArrayIndex(fd,fieldDefs)+1, copy );
+		copy.identifier = project.makeUniqueIdStr(json.identifier, false, (id)->isFieldIdentifierUnique(id));
+		if( after==null )
+			fieldDefs.push(copy);
+		else
+			fieldDefs.insert( dn.Lib.getArrayIndex(after,fieldDefs)+1, copy );
 
 		project.tidy();
 		return copy;
@@ -187,6 +199,19 @@ class FieldDefsForm {
 
 	function updateList() {
 		jList.off().empty();
+
+		// List context menu
+		ui.modal.ContextMenu.addTo(jList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = pasteFieldDef(App.ME.clipboard);
+					editor.ge.emit(FieldDefAdded(copy));
+					selectField(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CFieldDef),
+			},
+		]);
 
 		for(fd in fieldDefs) {
 			var li = new J("<li/>");
@@ -222,7 +247,7 @@ class FieldDefsForm {
 				{
 					label: L._PasteAfter(),
 					cb: ()->{
-						var copy = project.defs.pasteFieldDef(App.ME.clipboard, fd);
+						var copy = pasteFieldDef(App.ME.clipboard, fd);
 						editor.ge.emit(FieldDefAdded(copy));
 						selectField(copy);
 					},
@@ -231,7 +256,7 @@ class FieldDefsForm {
 				{
 					label: L._Duplicate(),
 					cb:()->{
-						var copy = duplicateField(fd);
+						var copy = duplicateFieldDef(fd);
 						editor.ge.emit( FieldDefAdded(copy) );
 						onAnyChange();
 						selectField(copy);
