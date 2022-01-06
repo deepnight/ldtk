@@ -56,7 +56,7 @@ class App extends dn.Process {
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
 		clearMiniNotif();
-		clipboard = new data.Clipboard();
+		clipboard = data.Clipboard.createSystem();
 
 		// Init window
 		IpcRenderer.on("winClose", onWindowCloseButton);
@@ -726,6 +726,7 @@ class App extends dn.Process {
 				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
 			}
 
+			debugPre("clipboard="+clipboard.name);
 			debugPre("keyDown(Heaps)="+heapsKeyDowns);
 			debugPre("keyDown(JS)="+jsKeyDowns);
 			debugPre("appButtons="

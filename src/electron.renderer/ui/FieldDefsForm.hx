@@ -165,7 +165,7 @@ class FieldDefsForm {
 
 
 	function duplicateFieldDef(fd:FieldDef) : FieldDef {
-		return pasteFieldDef( data.Clipboard.create(CFieldDef,fd.toJson()), fd );
+		return pasteFieldDef( data.Clipboard.createTemp(CFieldDef,fd.toJson()), fd );
 	}
 
 
@@ -173,7 +173,7 @@ class FieldDefsForm {
 		if( !c.is(CFieldDef) )
 			return null;
 
-		var json : ldtk.Json.FieldDefJson = c.json;
+		var json : ldtk.Json.FieldDefJson = c.getParsedJson();
 		var copy = FieldDef.fromJson( project, json );
 		copy.uid = project.makeUniqueIdInt();
 		copy.identifier = project.makeUniqueIdStr(json.identifier, false, (id)->isFieldIdentifierUnique(id));

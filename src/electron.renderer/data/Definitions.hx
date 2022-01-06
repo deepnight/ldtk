@@ -116,16 +116,14 @@ class Definitions {
 	}
 
 	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
-		var c = new Clipboard();
-		c.copy( CLayerDef, ld.toJson() );
-		return pasteLayerDef(c, ld, baseName);
+		return pasteLayerDef( Clipboard.createTemp(CLayerDef, ld.toJson()), ld, baseName);
 	}
 
 	public function pasteLayerDef(c:Clipboard, ?after:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
 		if( !c.is(CLayerDef) )
 			return null;
 
-		var json : ldtk.Json.LayerDefJson = c.json;
+		var json : ldtk.Json.LayerDefJson = c.getParsedJson();
 		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, json );
 		copy.uid = _project.makeUniqueIdInt();
 
@@ -277,14 +275,14 @@ class Definitions {
 	}
 
 	public function duplicateEntityDef(ed:data.def.EntityDef) {
-		return pasteEntityDef( Clipboard.create(CEntityDef,ed.toJson()), ed );
+		return pasteEntityDef( Clipboard.createTemp(CEntityDef,ed.toJson()), ed );
 	}
 
 	public function pasteEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
 		if( !c.is(CEntityDef) )
 			return null;
 
-		var json : ldtk.Json.EntityDefJson = c.json;
+		var json : ldtk.Json.EntityDefJson = c.getParsedJson();
 		var copy = data.def.EntityDef.fromJson( _project, json );
 		copy.uid = _project.makeUniqueIdInt();
 
@@ -430,14 +428,14 @@ class Definitions {
 	}
 
 	public function duplicateTilesetDef(td:data.def.TilesetDef) {
-		return pasteTilesetDef( Clipboard.create(CTilesetDef,td.toJson()), td );
+		return pasteTilesetDef( Clipboard.createTemp(CTilesetDef,td.toJson()), td );
 	}
 
 	public function pasteTilesetDef(c:Clipboard, ?after:data.def.TilesetDef) : Null<data.def.TilesetDef> {
 		if( !c.is(CTilesetDef) )
 			return null;
 
-		var json : ldtk.Json.TilesetDefJson = c.json;
+		var json : ldtk.Json.TilesetDefJson = c.getParsedJson();
 		var copy = data.def.TilesetDef.fromJson( _project, json );
 		copy.uid = _project.makeUniqueIdInt();
 		copy.identifier = _project.makeUniqueIdStr(json.identifier, id->isTilesetIdentifierUnique(id));
@@ -534,14 +532,14 @@ class Definitions {
 	}
 
 	public function duplicateEnumDef(ed:data.def.EnumDef) {
-		return pasteEnumDef( Clipboard.create(CEnumDef,ed.toJson(_project)), ed);
+		return pasteEnumDef( Clipboard.createTemp(CEnumDef,ed.toJson(_project)), ed);
 	}
 
 	public function pasteEnumDef(c:Clipboard, ?after:data.def.EnumDef) : Null<data.def.EnumDef> {
 		if( !c.is(CEnumDef) )
 			return null;
 
-		var json : ldtk.Json.EnumDefJson = c.json;
+		var json : ldtk.Json.EnumDefJson = c.getParsedJson();
 		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, json );
 		copy.uid = _project.makeUniqueIdInt();
 
