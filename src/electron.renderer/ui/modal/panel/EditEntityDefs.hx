@@ -273,7 +273,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			}
 			else {
 				curEntity.tilesetId = null;
-				curEntity.tileRenderMode = Stretch;
+				curEntity.tileRenderMode = FitInside;
 			}
 
 			editor.ge.emit( EntityDefChanged );

@@ -108,7 +108,7 @@ class EntityDef {
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
 
-		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Stretch";
+		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Cover";
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, FitInside);
 
 		o.maxCount = JsonTools.readInt( json.maxCount, 0 );
