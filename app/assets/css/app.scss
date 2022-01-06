@@ -2264,6 +2264,12 @@ textarea {
 	.mask {
 		background-color: transparentize($color: black, $amount: 0.2);
 	}
+
+	.wrapper {
+		border-radius: 8px;
+		box-shadow: 0px 0px 48px black;
+	}
+
 	.wrapper .content {
 		width: 700px;
 
