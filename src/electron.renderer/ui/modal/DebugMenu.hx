@@ -180,8 +180,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 		});
 
 		add({
-			label: L.untranslated("Print full log"),
-			cb: ()->App.LOG.printAll()
+			label: L.untranslated("Print log"),
+			cb: ()->{
+				App.LOG.printAll();
+				App.LOG.printOnAdd = true;
+			}
 		});
 
 		add({
