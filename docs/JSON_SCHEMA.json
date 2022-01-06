@@ -16,6 +16,7 @@
 			"worldGridHeight",
 			"worldGridWidth",
 			"worldLayout",
+			"appBuildId",
 			"backupLimit",
 			"backupOnSave",
 			"defaultGridSize",
@@ -86,6 +87,12 @@
 				"description": "Height of the world grid in pixels.",
 				"type": [
 					"integer"
+				]
+			},
+			"appBuildId": {
+				"description": "LDtk application build identifier.<br/>  This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.",
+				"type": [
+					"number"
 				]
 			},
 			"defaultGridSize": {
@@ -246,6 +253,7 @@
 				"__grid",
 				"__identifier",
 				"__pivot",
+				"__tags",
 				"defUid",
 				"fieldInstances",
 				"height",
@@ -325,6 +333,17 @@
 					"description": "Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.",
 					"type": [
 						"integer"
+					]
+				},
+				"__tags": {
+					"description": "Array of tags defined in this Entity definition",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"width": {
