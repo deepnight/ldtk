@@ -862,7 +862,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L._PasteAfter("rule"),
 				cb: ()->{
 					var copy = ld.pasteRule(project, rg, App.ME.clipboard, r);
-					trace(copy);
 					lastRule = copy;
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
