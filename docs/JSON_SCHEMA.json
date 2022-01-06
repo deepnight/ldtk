@@ -961,7 +961,7 @@
 					]
 				},
 				"collapsed": {
-					"description": "This field was removed in version 0.10.0 and should no longer be used.",
+					"description": "*This field was removed in 0.10.0 and should no longer be used.*",
 					"type": [
 						"boolean",
 						"null"
