@@ -9,6 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
+	"appBuildId": 455968,
 	"nextUid": 10,
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 240,
@@ -41,6 +42,9 @@
 			"hideInList": false,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
+			"parallaxFactorX": 0,
+			"parallaxFactorY": 0,
+			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#000000" }],
