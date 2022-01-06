@@ -42,6 +42,7 @@
   - Added more values for App UI scaling setting.
   - Added a Layer option to fade it away when it's not currently selected
   - Added a Layer option to hide it from the layers list
+  - The "collapsed/expanded" status of a group of auto-layer rules is no longer saved in the project file: all rule groups will now be collapsed by default when loading a project.
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Tool tips are now larger and easier to read.
   - If you open a Backup copy of a project, all panels will be locked, preventing any edit. You may only Restore the backup.

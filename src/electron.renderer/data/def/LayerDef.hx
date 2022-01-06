@@ -97,6 +97,11 @@ class LayerDef {
 		if( json.autoRuleGroups!=null ) {
 			for( ruleGroupJson in json.autoRuleGroups )
 				o.parseJsonRuleGroup(jsonVersion, ruleGroupJson);
+			
+			// Smart unfold single groups
+			if( o.autoRuleGroups.length==1 )
+				for(rg in o.autoRuleGroups)
+					rg.collapsed = false;
 		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
@@ -146,7 +151,6 @@ class LayerDef {
 			uid: rg.uid,
 			name: rg.name,
 			active: rg.active,
-			collapsed: rg.collapsed,
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson() ),
 		}
@@ -158,11 +162,11 @@ class LayerDef {
 			JsonTools.readString(ruleGroupJson.name, "default")
 		);
 		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
-		rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
 		rg.isOptional = JsonTools.readBool( ruleGroupJson.isOptional, false );
 		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
+		rg.collapsed = true;
 		return rg;
 	}
 
