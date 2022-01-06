@@ -14,6 +14,7 @@ class Project {
 	public var levels : Array<Level> = [];
 
 	public var jsonVersion : String;
+	public var appBuildId : Float;
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
@@ -212,6 +213,7 @@ class Project {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
+		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
@@ -351,6 +353,7 @@ class Project {
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
 			jsonVersion: jsonVersion,
+			appBuildId: Const.getAppBuildId(),
 			nextUid: nextUid,
 
 			worldLayout: JsonTools.writeEnum(worldLayout, false),

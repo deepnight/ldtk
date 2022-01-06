@@ -12,6 +12,10 @@ class Const {
 			].join("-");
 	}
 
+	public static function getAppBuildId() : Float {
+		return Std.int(  dn.MacroTools.getBuildTimeStampSeconds() / (60*60)  );
+	}
+
 	public static function getArch() {
 		#if macro
 		return "";
