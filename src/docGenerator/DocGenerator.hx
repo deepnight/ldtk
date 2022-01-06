@@ -41,6 +41,7 @@ typedef FieldInfos = {
 	var isColor: Bool;
 	var isInternal: Bool;
 	var deprecation: Null<DeprecationInfos>;
+	var removed: Null<dn.Version>;
 }
 
 typedef GlobalType = {
@@ -253,7 +254,13 @@ class DocGenerator {
 					Sys.println('  -> ${f.displayName} : ${getTypeMd(f.type)}');
 
 				// Name
-				var cell = [ '`${f.displayName}`' ];
+				var cell = [];
+				if( f.removed==null )
+					cell.push('`${f.displayName}`');
+				else
+					cell.push('~~${f.displayName}~~');
+
+
 				if( f.only!=null )
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
 
@@ -264,6 +271,11 @@ class DocGenerator {
 					cell[0] = "~~"+cell[0]+"~~";
 					cell.push('<sup class="deprecated">*DEPRECATED!*</sup>');
 
+				}
+
+				if( f.removed!=null ) {
+					cell[0] = "~~"+cell[0]+"~~";
+					cell.push('<sup class="removed">*Removed!*</sup>');
 				}
 
 				if( f.hasVersion )
@@ -358,8 +370,11 @@ class DocGenerator {
 
 			// List fields
 			for(f in getFieldsInfos(type.xml.node.a)) {
-				var st = getSchemaType(f.type);
-				st.description = f.descMd.join('\n');
+				var subType = getSchemaType(f.type);
+				subType.description = f.descMd.join('\n');
+
+				if( f.removed!=null )
+					subType.description = "This field was removed in version "+f.removed+" and should no longer be used.";
 
 				// Detect non-nullable fields
 				if( f.deprecation==null ) {
@@ -371,7 +386,7 @@ class DocGenerator {
 						typeJson.required.push(f.displayName);
 				}
 
-				typeJson.properties.set(f.displayName, st);
+				typeJson.properties.set(f.displayName, subType);
 			}
 
 			// Store type
@@ -428,10 +443,13 @@ class DocGenerator {
 		for(f in fields) {
 			var li = [];
 			// Name
-			li.push('**`${f.displayName}`**');
+			if( f.removed==null )
+				li.push('**`${f.displayName}`**');
+			else
+				li.push('~~${f.displayName}~~');
 
 			// Type
-			li.push('**(${getTypeMd(f.type)}**)');
+			li.push('**(${getTypeMd(f.type, f.removed!=null)}**)');
 
 			// Version badges
 			if( f.hasVersion )
@@ -442,7 +460,9 @@ class DocGenerator {
 				li.push( getColorInfosMd(f) );
 
 			// Desc
-			if( f.descMd.length>0 ) {
+			if( f.removed!=null )
+				li.push('This field was removed in ${f.removed.full} and should no longer be used.');
+			else if( f.descMd.length>0 ) {
 				li.push(":");
 				for( descLine in f.descMd )
 					li.push('*$descLine*');
@@ -537,11 +557,12 @@ class DocGenerator {
 				subFields: subFields,
 
 				only: getMeta(fieldXml, "only"),
-				hasVersion: hasMeta(fieldXml, "changed") || hasMeta(fieldXml, "added"),
+				hasVersion: hasMeta(fieldXml,"changed") || hasMeta(fieldXml,"added") || hasMeta(fieldXml,"removed"),
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
 				deprecation: deprecation,
+				removed: hasMeta(fieldXml,"removed") ? getMetaVersion(fieldXml,"removed") : null,
 			});
 		}
 		allFields.sort( (a,b)->{
@@ -564,7 +585,7 @@ class DocGenerator {
 
 
 	/**
-		Create a version info badge ("added/changed" meta)
+		Create a version info badge ("added/changed/removed" meta)
 	**/
 	static function versionBadge(xml:haxe.xml.Access) {
 		var badges = [];
@@ -686,9 +707,11 @@ class DocGenerator {
 	/**
 		Human readable type
 	**/
-	static function getTypeMd(t:FieldType) {
+	static function getTypeMd(t:FieldType, ignoreNullable=false) {
 		var str = switch t {
-			case Nullable(f): getTypeMd(f)+" *(can be `null`)*";
+			case Nullable(f):
+				ignoreNullable ? getTypeMd(f) : getTypeMd(f)+" *(can be `null`)*";
+
 			case Basic(name):
 				switch name {
 					case "UInt": "Unsigned integer";
