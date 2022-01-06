@@ -270,12 +270,6 @@ class DocGenerator {
 				if( f.deprecation!=null ) {
 					cell[0] = "~~"+cell[0]+"~~";
 					cell.push('<sup class="deprecated">*DEPRECATED!*</sup>');
-
-				}
-
-				if( f.removed!=null ) {
-					cell[0] = "~~"+cell[0]+"~~";
-					cell.push('<sup class="removed">*Removed!*</sup>');
 				}
 
 				if( f.hasVersion )
@@ -291,14 +285,18 @@ class DocGenerator {
 				tableCols.push(type);
 
 				// Desc
-				var cell = f.descMd;
-
-				if( f.subFields.length>0 ) {
-					cell.push("This object contains the following fields:");
-					cell.push( getSubFieldsHtml( f.subFields ) );
+				if( f.removed!=null ) {
+					tableCols.push('*This field was removed in ${f.removed.full} and should no longer be used.*');
 				}
+				else {
+					var cell = f.descMd;
 
-				tableCols.push( cell.join("<br/> ") );
+					if( f.subFields.length>0 ) {
+						cell.push("This object contains the following fields:");
+						cell.push( getSubFieldsHtml( f.subFields ) );
+					}
+					tableCols.push( cell.join("<br/> ") );
+				}
 
 				md.push( tableCols.join(" | "));
 				for(row in subRows)
@@ -374,7 +372,7 @@ class DocGenerator {
 				subType.description = f.descMd.join('\n');
 
 				if( f.removed!=null )
-					subType.description = "This field was removed in version "+f.removed+" and should no longer be used.";
+					subType.description = '*This field was removed in ${f.removed.full} and should no longer be used.*';
 
 				// Detect non-nullable fields
 				if( f.deprecation==null ) {
@@ -461,7 +459,7 @@ class DocGenerator {
 
 			// Desc
 			if( f.removed!=null )
-				li.push('This field was removed in ${f.removed.full} and should no longer be used.');
+				li.push('*This field was removed in ${f.removed.full} and should no longer be used.*');
 			else if( f.descMd.length>0 ) {
 				li.push(":");
 				for( descLine in f.descMd )
