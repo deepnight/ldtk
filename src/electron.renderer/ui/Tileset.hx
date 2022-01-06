@@ -213,6 +213,13 @@ class Tileset {
 		}
 	}
 
+	public function useOldTilesetPos(old:Tileset) {
+		scrollX = old.scrollX;
+		scrollY = old.scrollY;
+		tx = old.tx;
+		ty = old.ty;
+	}
+
 	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
