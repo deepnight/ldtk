@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455968,
+	"appBuildId": 455990,
 	"nextUid": 98,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -29,7 +29,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
-	"flags": ["DiscardPreCsvIntGrid"],
+	"flags": [],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
