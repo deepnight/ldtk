@@ -31,6 +31,7 @@ class App extends dn.Process {
 		LOG.logFilePath = JsTools.getLogPath();
 		LOG.trimFileLines();
 		LOG.emptyEntry();
+		LOG.tagColors.set("update", "#6fed76");
 		LOG.tagColors.set("cache", "#edda6f");
 		LOG.tagColors.set("tidy", "#8ed1ac");
 		LOG.tagColors.set("save", "#ff6f14");
@@ -146,22 +147,22 @@ class App extends dn.Process {
 		dn.js.ElectronUpdater.initRenderer();
 		dn.js.ElectronUpdater.onUpdateCheckStart = function() {
 			miniNotif("Looking for update...");
-			LOG.network("Looking for update");
+			LOG.add("update", "Looking for update");
 		}
 		dn.js.ElectronUpdater.onUpdateFound = function(info) {
-			LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
+			LOG.add("update", "Found update: "+info.version+" ("+info.releaseDate+")");
 			miniNotif('Downloading ${info.version}...', true);
 		}
 		dn.js.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.js.ElectronUpdater.onError = function(err) {
 			var errStr = err==null ? null : Std.string(err);
-			LOG.warning("Couldn't check for updates: "+errStr);
+			LOG.add("update", "Warning: couldn't check for updates: "+errStr);
 			if( errStr.length>40 )
 				errStr = errStr.substr(0,40) + "[...]";
 			checkManualUpdate();
 		}
 		dn.js.ElectronUpdater.onUpdateDownloaded = function(info) {
-			LOG.network("Update ready: "+info.version);
+			LOG.add("update", "Update ready: "+info.version);
 			miniNotif('Update ${info.version} ready!');
 
 			var e = jBody.find("#updateInstall");
@@ -202,17 +203,17 @@ class App extends dn.Process {
 
 	function checkManualUpdate() {
 		miniNotif("Checking for update (GitHub)...", true);
-		LOG.network("Fetching latest version from GitHub...");
+		LOG.add("update", "Fetching latest version from GitHub...");
 		dn.js.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
 			if( latest!=null )
-				LOG.network("Found "+latest.full);
+				LOG.add("update", "Found "+latest.full);
 
 			if( latest==null ) {
 				LOG.error("Failed to fetch latest version from GitHub");
 				miniNotif("Couldn't retrieve latest version number from GitHub!", false);
 			}
 			else if( Version.greater(latest.full, Const.getAppVersion(true), true) ) {
-				LOG.network("Update available: "+latest);
+				LOG.add("update", "Update available: "+latest);
 				N.success("Update "+latest.full+" is available!");
 
 				var e = jBody.find("#updateInstall");
@@ -235,8 +236,10 @@ class App extends dn.Process {
 						_download();
 				});
 			}
-			else
+			else {
+				LOG.add("update", "No new update.");
 				miniNotif('App is up-to-date.');
+			}
 		});
 	}
 
