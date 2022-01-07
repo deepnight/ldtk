@@ -96,7 +96,7 @@ class ProjectLoader {
 			label: "Loading levels...",
 			cb: ()->{
 				// Load separate level files
-				if( p.externalLevels && p.levels[0].layerInstances.length==0 ) { // in backup files, levels are actually embedded
+				if( p.externalLevels && p.levels[0].layerInstances.length==0 ) {
 					function _invalidLevel(idx:Int, err:String) {
 						log.error(err);
 						p.levels.splice(idx,1);
