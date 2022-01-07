@@ -450,8 +450,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jGroupHeader = jGroup.find("header");
 
 		// Collapsing
-		jGroupHeader.find("div.name")
-			.click( function(_) {
+		var jName = jGroupHeader.find("div.name");
+		jName.click( function(_) {
 				rg.collapsed = !rg.collapsed;
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
@@ -467,13 +467,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Show cells affected by this whole group
-		jGroupHeader.mouseenter( (ev)->{
+		jName.mouseenter( (ev)->{
 			editor.levelRender.clearTemp();
 			if( li.isRuleGroupActiveHere(rg) )
 				for(r in rg.rules)
 					showAffectedCells(r);
 		});
-		jGroupHeader.mouseleave( (_)->editor.levelRender.clearTemp() );
+		jName.mouseleave( (_)->editor.levelRender.clearTemp() );
 
 
 		jGroupHeader.find(".optional").hide();
@@ -669,13 +669,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jRule.attr("ruleIdx", ruleIdx);
 		jRule.addClass(r.active ? "active" : "inactive");
 
-		// Show affect level cells
-		jRule.mouseenter( (ev)->{
-			editor.levelRender.clearTemp();
-			showAffectedCells(r);
-		} );
-		jRule.mouseleave( (ev)->editor.levelRender.clearTemp() );
-
 		// Insert rule before
 		jRule.find(".insert.before").click( function(_) {
 			onCreateRule(rg, ruleIdx);
@@ -698,6 +691,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jPreview.click( function(ev) {
 			new ui.modal.dialog.RuleEditor(ld, r);
 		});
+
+		// Show affect level cells
+		jPreview.mouseenter( (ev)->{
+			editor.levelRender.clearTemp();
+			showAffectedCells(r);
+		} );
+		jPreview.mouseleave( (ev)->editor.levelRender.clearTemp() );
 
 		// Random chance
 		var old = r.chance;
