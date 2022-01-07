@@ -151,7 +151,29 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
-			label: L.untranslated("Crash"),
+			label: L.untranslated("Test UUID function"),
+			cb: ()->{
+				var uniques = 0;
+				var total = 0;
+				var checkMap = new Map();
+				var duplicates = [];
+				App.ME.createChildProcess( (p)->{
+					App.ME.debug('UUIDs: $uniques/$total (${M.pretty(100*uniques/total,3)}%, dups=${duplicates.length}) \n${duplicates.join("\n")}', true);
+					for(i in 0...10000) {
+						var u = project.generateUniqueId();
+						if( checkMap.exists(u) )
+							duplicates.push(u);
+						else
+							uniques++;
+						checkMap.set(u,true);
+						total++;
+					}
+				});
+			}
+		});
+
+		add({
+			label: L.untranslated("Crash app!"),
 			className: "warning",
 			cb: ()->{
 				App.LOG.warning("Emulating crash...");
