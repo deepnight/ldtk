@@ -264,6 +264,10 @@ class Project {
 		return p;
 	}
 
+	public function recommendsBackup() {
+		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && levels.length>=8;
+	}
+
 	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
 		for(f in among)
 			if( hasFlag(f) )

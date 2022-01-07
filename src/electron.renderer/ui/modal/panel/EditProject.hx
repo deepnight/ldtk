@@ -155,6 +155,7 @@ class EditProject extends ui.modal.Panel {
 			jCount.hide();
 			jCount.siblings("span").hide();
 		}
+		jForm.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
 
 
 		// Json minifiying
@@ -162,6 +163,7 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 
 		// External level files
+		jForm.find(".externRecommend").css("visibility", project.levels.length>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();

@@ -14,6 +14,19 @@
 	<dt class="full"> <h3>Project file settings</h3> </dt>
 
 	<dt>
+		<label for="externalLevels">Save levels to separate files</label>
+		<info>
+			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
+			Saving times are also faster with separate levels enabled because unmodified data is cached and not re-wrote.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" id="externalLevels"/>
+		<div class="locate"></div>
+		<warning class="externRecommend">Saving levels separately is highly recommended for large projects, or projects shared among multiple users. This will also decrease saving time.</warning>
+	</dd>
+
+	<dt>
 		<label for="useAppExtension">Use .::ext:: extension</label>
 		<info>
 			If checked, the project file will use the official extension ".::ext::" instead of the standard ".json".
@@ -38,6 +51,7 @@
 		<div class="locate"></div>
 		<span>Max backup files: </span>
 		<input type="text" id="backupCount"/>
+		<warning class="backupRecommend">It's recommended to enable backups for large or important projects.</warning>
 	</dd>
 
 	<dt>
@@ -50,18 +64,6 @@
 	</dt>
 	<dd>
 		<input type="checkbox" name="minify" id="minify"/>
-	</dd>
-
-	<dt>
-		<label for="externalLevels">Save levels to separate files</label>
-		<info>
-			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
-			This is highly RECOMMENDED for large projects or projects shared among multiple users.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" id="externalLevels"/>
-		<div class="locate"></div>
 	</dd>
 
 	<dt>
