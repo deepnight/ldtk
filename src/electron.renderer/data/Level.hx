@@ -83,6 +83,7 @@ class Level {
 						: l.worldY+l.pxHei<=worldY ? "n"
 						: "s";
 					return {
+						levelIid: l.iid,
 						levelUid: l.uid,
 						dir: dir,
 					}
