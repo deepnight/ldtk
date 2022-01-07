@@ -109,20 +109,41 @@
 	</dd>
 
 
-	<dt class="F_Int F_Float F_String F_Text F_Enum F_Point F_Path">
+	<dt class="F_Int F_Float F_String F_Text">
 		<label for="canBeNull" class="Array">Can contain nulls</label>
 		<label for="canBeNull" class="NotArray">Can be null</label>
+
 		<info class="Array">
 			If enabled, it will be possible to have "null" values inside this array.
 			If disabled, the array values will use the "default" if unspecified.
 		</info>
+
 		<info class="NotArray">
 			If enabled, it will be possible to have no value at all for this field (ie. "null").
 			If disabled, the value will be the "default" one if nothing is entered.
 		</info>
 	</dt>
 	<dd>
-		<input type="checkbox" name="canBeNull" id="canBeNull"/>
+		<input type="checkbox" name="canBeNull"/>
+	</dd>
+
+
+	<dt class="F_Enum F_Path F_Point">
+		<label for="canBeNull" class="Array">Can contain nulls</label>
+		<label for="canBeNull" class="NotArray">Is optional</label>
+
+		<info class="Array">
+			If enabled, it will be possible to have "null" values inside this array.
+			If disabled, the array values will use the "default" if unspecified.
+		</info>
+
+		<info class="NotArray">
+			If enabled, it will be possible to have no value at all for this field (ie. "null").
+			If disabled, the value will become mandatory and an error message will show up if the value is unspecified.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="canBeNull"/>
 	</dd>
 
 

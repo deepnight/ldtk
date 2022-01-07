@@ -586,7 +586,7 @@ class FieldDefsForm {
 		}
 
 		// Nullable
-		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]") );
+		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
 		i.onChange = onFieldChange;
 
 		// Cut long values
