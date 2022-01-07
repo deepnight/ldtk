@@ -142,9 +142,9 @@ class Level {
 			__neighbours: neighbours,
 		}
 
-		// Rebuild cache
+		// Cache new json
 		_cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(_project, json),
+			str: ui.ProjectSaver.jsonStringify(_project, json, true),
 			json: json,
 		}
 
@@ -188,8 +188,9 @@ class Level {
 				l.fieldInstances.set(fi.defUid, fi);
 			}
 
+		// Init cache
 		l._cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(p, json),
+			str: ui.ProjectSaver.jsonStringify(p, json, false), // Json header should not be added, it's already there
 			json: json
 		}
 
@@ -216,7 +217,7 @@ class Level {
 		return identifier + ( hasJsonCache() ? "" : "*" );
 	}
 
-	public inline function getCacheJsonString() : Null<String> {
+	public function getCacheJsonString() : Null<String> {
 		return hasJsonCache() ? _cachedJson.str : null;
 	}
 

@@ -444,15 +444,19 @@ class ProjectSaver extends dn.Process {
 	}
 
 
-	public static inline function jsonStringify(p:data.Project, json:Dynamic) {
-		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, Const.JSON_HEADER);
+	public static function jsonStringify(p:data.Project, json:Dynamic, includeHeader:Bool) {
+		if( includeHeader && Reflect.hasField(json, "__header__") ) {
+			trace("oh wait");
+			trace(haxe.CallStack.callStack().join("\n"));
+		}
+		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, includeHeader ? Const.JSON_HEADER : null);
 	}
 
 	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
 		if( !project.externalLevels || forceSingleFile ) {
 			// Full single JSON
 			return {
-				projectJson: jsonStringify( project, project.toJson() ),
+				projectJson: jsonStringify( project, project.toJson(), true ),
 				externLevelsJson: [],
 			}
 		}
@@ -460,7 +464,7 @@ class ProjectSaver extends dn.Process {
 			// Separate level JSONs
 			var idx = 0;
 			var externLevels = project.levels.map( (l)->{
-				json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
+				json: !l.hasJsonCache() ? jsonStringify( project, l.toJson(), true ) : l.getCacheJsonString(),
 				relPath: l.makeExternalRelPath(idx++),
 				id: l.identifier,
 			});
@@ -474,7 +478,7 @@ class ProjectSaver extends dn.Process {
 			}
 
 			return {
-				projectJson: jsonStringify( project, trimmedProjectJson ),
+				projectJson: jsonStringify( project, trimmedProjectJson, true ),
 				externLevelsJson: externLevels,
 			}
 		}
