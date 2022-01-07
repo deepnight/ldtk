@@ -141,8 +141,11 @@ class RulePatternEditor {
 					}
 					else {
 						// Forbidden value
-						jCell.addClass("not").append('<span class="cross"></span>');
-						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
+						jCell.addClass("not");
+						var icon = intGridVal!=Const.AUTO_LAYER_ANYTHING+1 ? "cross" : "nothing";
+						jCell.append('<span class="cellIcon $icon"></span>');
+
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING+1 ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
 						}
@@ -151,7 +154,7 @@ class RulePatternEditor {
 							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
 						else
-							jCell.addClass("unknown");
+							jCell.addClass("error");
 					}
 				}
 				else {
