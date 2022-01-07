@@ -468,6 +468,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Show cells affected by this whole group
 		jName.mouseenter( (ev)->{
+			if( !editor.levelRender.isAutoLayerRenderingEnabled() )
+				return;
 			editor.levelRender.clearTemp();
 			if( li.isRuleGroupActiveHere(rg) )
 				for(r in rg.rules)
@@ -694,6 +696,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Show affect level cells
 		jPreview.mouseenter( (ev)->{
+			if( !editor.levelRender.isAutoLayerRenderingEnabled() )
+				return;
 			editor.levelRender.clearTemp();
 			showAffectedCells(r);
 		} );
@@ -915,6 +919,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	public function onEditorMouseMove(m:Coords) {
 		jContent.find("li.highlight").removeClass("highlight");
 
+		if( !editor.levelRender.isAutoLayerRenderingEnabled() )
+			return;
+		
 		if( m.cx<0 || m.cx>=li.cWid || m.cy<0 || m.cy>=li.cHei )
 			return;
 
