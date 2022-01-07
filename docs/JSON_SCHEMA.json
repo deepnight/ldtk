@@ -111,11 +111,12 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`",
 				"items": {
 					"enum": [
 						"ExportPreCsvIntGridFormat",
-						"IgnoreBackupSuggest"
+						"IgnoreBackupSuggest",
+						"PrependIndexToLevelFileNames"
 					]
 				},
 				"type": [
@@ -1098,10 +1099,17 @@
 			"title": "Neighbour level",
 			"required": [
 				"dir",
+				"levelIid",
 				"levelUid"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"levelIid": {
+					"description": "Neighbour Instance Identifier",
+					"type": [
+						"string"
+					]
+				},
 				"levelUid": {
 					"description": "",
 					"type": [
@@ -1805,7 +1813,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
-					"description": "An array listing all other levels touching this one on the world map. In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
+					"description": "An array listing all other levels touching this one on the world map.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, this array is always empty.",
 					"items": {
 						"$ref": "#/otherTypes/NeighbourLevel"
 					},
@@ -1820,7 +1828,7 @@
 					]
 				},
 				"worldX": {
-					"description": "World X coordinate in pixels",
+					"description": "World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the value is always -1 here.",
 					"type": [
 						"integer"
 					]
@@ -1868,7 +1876,7 @@
 					]
 				},
 				"worldY": {
-					"description": "World Y coordinate in pixels",
+					"description": "World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the value is always -1 here.",
 					"type": [
 						"integer"
 					]
