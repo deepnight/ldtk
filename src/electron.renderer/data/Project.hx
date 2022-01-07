@@ -613,7 +613,7 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqueIdInt());
+		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqueIdInt(), generateUniqueId());
 		if( insertIdx==null )
 			levels.push(l);
 		else

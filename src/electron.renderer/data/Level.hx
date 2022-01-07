@@ -7,6 +7,7 @@ class Level {
 
 	@:allow(data.Project)
 	public var uid(default,null) : Int;
+	public var iid(default,null) : String;
 	public var identifier(default,set): String;
 	public var worldX : Int;
 	public var worldY : Int;
@@ -34,8 +35,9 @@ class Level {
 
 
 	@:allow(data.Project)
-	private function new(project:Project, wid:Int, hei:Int, uid:Int) {
+	private function new(project:Project, wid:Int, hei:Int, uid:Int, iid:String) {
 		this.uid = uid;
+		this.iid = iid;
 		worldX = worldY = 0;
 		pxWid = wid;
 		pxHei = hei;
@@ -105,6 +107,7 @@ class Level {
 		// Json
 		var json : ldtk.Json.LevelJson = {
 			identifier: identifier,
+			iid: iid,
 			uid: uid,
 			worldX: worldX,
 			worldY: worldY,
@@ -164,9 +167,12 @@ class Level {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
+		if( json.iid==null )
+			json.iid = p.generateUniqueId();
+
 		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
 		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
-		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
+		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid), json.iid );
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
