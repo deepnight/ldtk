@@ -597,21 +597,6 @@ class FieldDefsForm {
 		var i = Input.linkToHtmlInput( curField.useForSmartColor, jForm.find("input#useForSmartColor") );
 		i.onChange = onFieldChange;
 
-		// Multi-lines
-		// if( curField.isString() ) {
-		// 	var i = new form.input.BoolInput(
-		// 		jForm.find("input[name=multiLines]"),
-		// 		()->switch curField.type {
-		// 			case F_String(multilines): multilines;
-		// 			case _: false;
-		// 		},
-		// 		(v)->{
-		// 			curField.convertType( F_String(v) );
-		// 		}
-		// 	);
-		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// }
-
 		// Array size constraints
 		if( curField.isArray ) {
 			// Min
