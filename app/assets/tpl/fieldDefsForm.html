@@ -110,7 +110,8 @@
 
 
 	<dt class="F_Int F_Float F_String F_Text F_Enum F_Point F_Path">
-		<label for="canBeNull">Can be null</label>
+		<label for="canBeNull" class="Array">Can contain nulls</label>
+		<label for="canBeNull" class="NotArray">Can be null</label>
 		<info class="Array">
 			If enabled, it will be possible to have "null" values inside this array.
 			If disabled, the array values will use the "default" if unspecified.
@@ -166,7 +167,9 @@
 	<dt>
 		<label for="editorAlwaysShow">Always show</label>
 		<info>
-			If not checked, the value will only be displayed if it is not using default value.
+			If checked, the value will always be displayed in editor view, even if it is using default value.
+			If not checked, the value will only show up if it is not the default value.
+			Only applies if any display mode was selected above.
 		</info>
 	</dt>
 	<dd>
