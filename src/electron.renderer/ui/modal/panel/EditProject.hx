@@ -77,7 +77,7 @@ class EditProject extends ui.modal.Panel {
 						// Re-save project
 						editor.invalidateAllLevelsCache();
 						App.LOG.fileOp('  Saving project...');
-						new ui.ProjectSaving(this, project, (success)->{
+						new ui.ProjectSaver(this, project, (success)->{
 							// Remove old project file
 							App.LOG.fileOp('  Deleting old project file...');
 							NT.removeFile(oldProjectPath);

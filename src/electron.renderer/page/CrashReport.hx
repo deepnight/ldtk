@@ -94,13 +94,13 @@ class CrashReport extends Page {
 					// Build file name & path
 					var dir = dn.FilePath.fromDir( unsavedProject.getAbsExternalFilesDir() );
 					dir.appendDirectory(Const.BACKUP_DIR);
-					dir.appendDirectory(ui.ProjectSaving.makeBackupDirName("crash"));
+					dir.appendDirectory(ui.ProjectSaver.makeBackupDirName("crash"));
 					NT.createDirs(dir.full);
 
 					// Save main file
 					var fp = dir.clone();
 					fp.fileWithExt = unsavedProject.filePath.fileWithExt;
-					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject);
+					var data = ui.ProjectSaver.prepareProjectSavingData(unsavedProject);
 					NT.writeFileString(fp.full, data.projectJson);
 
 					// Save extern levels

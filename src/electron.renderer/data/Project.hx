@@ -115,7 +115,7 @@ class Project {
 	}
 
 	public inline function isBackup() {
-		return ui.ProjectSaving.isBackupFile(filePath.full);
+		return ui.ProjectSaver.isBackupFile(filePath.full);
 	}
 
 	public function makeRelativeFilePath(absPath:String) {

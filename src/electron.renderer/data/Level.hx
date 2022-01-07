@@ -144,7 +144,7 @@ class Level {
 
 		// Rebuild cache
 		_cachedJson = {
-			str: ui.ProjectSaving.jsonStringify(_project, json),
+			str: ui.ProjectSaver.jsonStringify(_project, json),
 			json: json,
 		}
 
@@ -189,7 +189,7 @@ class Level {
 			}
 
 		l._cachedJson = {
-			str: ui.ProjectSaving.jsonStringify(p, json),
+			str: ui.ProjectSaver.jsonStringify(p, json),
 			json: json
 		}
 

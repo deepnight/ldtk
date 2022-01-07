@@ -309,7 +309,7 @@ class App extends dn.Process {
 	}
 
 	public function isLocked() {
-		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable();
+		return ui.ProjectSaver.hasAny() || ui.Modal.hasAnyUnclosable();
 	}
 
 	public static inline function isLinux() return js.node.Os.platform()=="linux";
@@ -560,7 +560,7 @@ class App extends dn.Process {
 		// #end
 
 		// No backup files
-		if( ui.ProjectSaving.extractBackupInfosFromFileName(path) != null )
+		if( ui.ProjectSaver.extractBackupInfosFromFileName(path) != null )
 			return false;
 
 		path = StringTools.replace(path, "\\", "/");

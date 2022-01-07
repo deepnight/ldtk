@@ -105,7 +105,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 									// Write sample map
 									log.general(" -> Saving "+fp.fileName+"...");
-									var s = new ui.ProjectSaving(App.ME, p);
+									var s = new ui.ProjectSaver(App.ME, p);
 								},
 								(err)->new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) )
 							);

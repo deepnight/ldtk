@@ -260,7 +260,7 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		var all = ui.ProjectSaving.listBackupFiles(project.filePath.full);
+		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
 
 		// Display "backup" header
 		if( project.isBackup() ) {
@@ -268,7 +268,7 @@ class Editor extends Page {
 			var jDesc = new J('<div class="desc"/>');
 			jDesc.appendTo(jBackup);
 			jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
-			var inf = ui.ProjectSaving.extractBackupInfosFromFileName(project.filePath.full);
+			var inf = ui.ProjectSaver.extractBackupInfosFromFileName(project.filePath.full);
 			if( inf!=null )
 				jDesc.append("<p>"+inf.date+"</p>");
 			var jRestore = new J('<button>Restore this backup</button>');
@@ -1280,7 +1280,7 @@ class Editor extends Page {
 		}
 
 		// Save project
-		new ui.ProjectSaving(this, project, (success)->{
+		new ui.ProjectSaver(this, project, (success)->{
 			if( !success )
 				N.error("Saving failed!");
 			else {
@@ -1302,14 +1302,14 @@ class Editor extends Page {
 		new ui.modal.dialog.Confirm(
 			L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
 			()->{
-				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
+				var original = ui.ProjectSaver.makeOriginalPathFromBackup(project.filePath.full);
 				if( original.full==null || !NT.fileExists(original.full) ) {
 					// Project not found
 					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
 				}
 				else {
 					App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-					var crashBackupDir = ui.ProjectSaving.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
+					var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
 
 					// Save upon original
 					App.LOG.fileOp('Backup original: ${original.full}...');

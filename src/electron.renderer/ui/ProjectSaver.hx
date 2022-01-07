@@ -21,8 +21,8 @@ typedef BackupInfos = {
 	var crash: Bool;
 }
 
-class ProjectSaving extends dn.Process {
-	static var QUEUE : Array<ProjectSaving> = [];
+class ProjectSaver extends dn.Process {
+	static var QUEUE : Array<ProjectSaver> = [];
 	var project : data.Project;
 	var state : SavingState;
 	var savingData : Null<FileSavingData>;
@@ -163,7 +163,7 @@ class ProjectSaving extends dn.Process {
 					label: "Preparing...",
 					cb: ()->{
 						log('  Preparing SavingData...');
-						savingData = ui.ProjectSaving.prepareProjectSavingData(project);
+						savingData = ui.ProjectSaver.prepareProjectSavingData(project);
 					}
 				});
 
