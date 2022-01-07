@@ -257,11 +257,18 @@
 				"defUid",
 				"fieldInstances",
 				"height",
+				"iid",
 				"px",
 				"width"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"iid": {
+					"description": "Unique instance identifier",
+					"type": [
+						"string"
+					]
+				},
 				"defUid": {
 					"description": "Reference of the **Entity definition** UID",
 					"type": [
@@ -1784,6 +1791,7 @@
 				"__neighbours",
 				"fieldInstances",
 				"identifier",
+				"iid",
 				"pxHei",
 				"pxWid",
 				"uid",
@@ -1828,6 +1836,12 @@
 					"description": "If TRUE, the level identifier will always automatically use the naming pattern as defined in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by user.",
 					"type": [
 						"boolean"
+					]
+				},
+				"iid": {
+					"description": "Unique instance identifier",
+					"type": [
+						"string"
 					]
 				},
 				"bgColor": {
