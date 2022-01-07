@@ -113,7 +113,7 @@ class RuleEditor extends ui.modal.Dialog {
 			jVal.appendTo(jValues);
 
 			jVal.css("background-color", C.intToHex(v.color));
-			jVal.text( v.identifier!=null ? '${v.identifier} (${idx+1})' : '${idx+1}' );
+			jVal.text( layerDef.getIntGridValueDisplayName(idx+1) );
 
 			if( idx==curValIdx )
 				jVal.addClass("active");
