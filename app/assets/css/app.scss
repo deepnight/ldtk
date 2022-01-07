@@ -603,6 +603,36 @@ div.info {
 	}
 }
 
+warning {
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	box-sizing: border-box;
+	font-size: 15pt;
+	width: 28px;
+	height: 28px;
+	margin-left: 4px;
+
+	font-weight: bold;
+	text-align: center;
+	color: $orange;
+	border: 3px solid $red;
+	border-radius: 16px;
+	cursor: help;
+	box-shadow: 0px 0px 10px $red, 0px 0px 10px $red inset;
+	background-color: $darkRed;
+
+	&:hover {
+		color: $orange;
+		border-color: $orange;
+		background-color: $red;
+	}
+
+	&::before {
+		content: "!";
+	}
+}
+
 dt.infoHighlight {
 	color: $help;
 	text-shadow: 0px 0px 8px $help;
@@ -1473,6 +1503,9 @@ ul.form {
 		info,
 		div.info {
 			flex: 0 0 32px;
+		}
+		warning {
+			flex: 0 0 28px;
 		}
 
 		div.help {

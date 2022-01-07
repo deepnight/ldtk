@@ -353,9 +353,10 @@ class JsTools {
 
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) {
-		// (i) Info bubbles
-		jCtx.find(".info, info").each( function(idx, e) {
+		// Info bubbles: (i) and (!)
+		jCtx.find(".info, info, warning").each( function(idx, e) {
 			var jThis = new J(e);
+			var isInfo = jThis.is("info, .info");
 
 			if( jThis.data("str")==null ) {
 				if( jThis.hasClass("identifier") ) {
@@ -372,7 +373,7 @@ class JsTools {
 			}
 			ui.Tip.attach(jThis, jThis.data("str"), "infoTip");
 
-			if( jThis.parent("dt")!=null ) {
+			if( isInfo && jThis.parent("dt")!=null ) {
 				jThis.mouseover( _->{
 					jThis.parent().addClass("infoHighlight").next("dd").addClass("infoHighlight");
 				});
