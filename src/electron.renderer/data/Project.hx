@@ -150,6 +150,13 @@ class Project {
 		return p;
 	}
 
+
+	public inline function generateUniqueId() : String {
+		// HaxeLib: https://github.com/flashultra/uuid, credits Miroslav "Flashultra" Yordanov
+		// Refs: https://www.sohamkamani.com/uuid-versions-explained/
+		return uuid.Uuid.v1();
+	}
+
 	public function makeUniqueIdInt() return nextUid++;
 
 	public function makeUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
