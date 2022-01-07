@@ -303,7 +303,7 @@ class FieldInstance {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				var e = getEnumValue(arrayIdx);
-				return ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
+				return e!=null && ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
 
 			case _:
 				return false;
