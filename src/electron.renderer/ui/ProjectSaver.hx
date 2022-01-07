@@ -445,10 +445,6 @@ class ProjectSaver extends dn.Process {
 
 
 	public static function jsonStringify(p:data.Project, json:Dynamic, includeHeader:Bool) {
-		if( includeHeader && Reflect.hasField(json, "__header__") ) {
-			trace("oh wait");
-			trace(haxe.CallStack.callStack().join("\n"));
-		}
 		return dn.JsonPretty.stringify(json, p.minifyJson ? Minified : Compact, includeHeader ? Const.JSON_HEADER : null);
 	}
 
