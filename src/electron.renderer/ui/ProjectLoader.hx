@@ -8,7 +8,8 @@ enum LoadingError {
 }
 
 class ProjectLoader {
-	public var log = new dn.Log();
+	public var log : dn.Log;
+	var tag = "load";
 
 	var progress : ui.modal.Progress;
 	var onLoad : data.Project -> Void;
@@ -16,6 +17,10 @@ class ProjectLoader {
 	var needReSaving = false;
 
 	public function new(filePath:String, onLoad, onError) {
+		log = new dn.Log();
+		log.tagColors.set(tag, "#ff43b7");
+		log.onAdd = (e)->App.LOG.addLogEntry(e);
+
 		this.onLoad = onLoad;
 		this.onError = onError;
 		var fileName = dn.FilePath.extractFileWithExt(filePath);
@@ -35,7 +40,7 @@ class ProjectLoader {
 		ops.push({
 			label: 'Reading $fileName...',
 			cb: ()->{
-				log.fileOp('Loading project $fileName...');
+				log.add(tag, 'Loading project $fileName...');
 				raw = try NT.readFileString(filePath)
 					catch(err:Dynamic) {
 						error( FileRead( Std.string(err) ) );
@@ -52,6 +57,11 @@ class ProjectLoader {
 						error( JsonParse( Std.string(err) ) );
 						null;
 					}
+
+				if( json==null )
+					return;
+
+				log.add(tag, "  Project appBuildId="+json.appBuildId+" version="+json.jsonVersion);
 
 				if( !App.ME.isInAppDir(filePath,true) ) { // not a sample
 					// Project was created with an older appBuildId
@@ -94,14 +104,14 @@ class ProjectLoader {
 					}
 
 					var idx = 0;
-					log.fileOp("Loading external levels...");
+					log.add(tag, "Loading external levels...");
 					var lops : Array<ui.modal.Progress.ProgressOp> = [];
 					for(l in p.levels) {
 						var curIdx = idx;
 						lops.push({
 							label: l.identifier,
 							cb: ()->{
-								log.fileOp("  "+l.externalRelPath+"...");
+								log.add(tag, "  "+l.externalRelPath+"...");
 								var path = p.makeAbsoluteFilePath(l.externalRelPath, false);
 								if( !NT.fileExists(path) ) {
 									_invalidLevel(curIdx, "Level file not found "+l.externalRelPath);
@@ -138,12 +148,12 @@ class ProjectLoader {
 
 	function done(p:data.Project) {
 		if( needReSaving ) {
-			log.warning("Project file was created using an older version of LDtk, re-saving is recommended to upgrade it.");
+			log.add(tag, "Project file was created using an older version of LDtk, re-saving is recommended to upgrade it.");
 			for(l in p.levels)
 				l.invalidateJsonCache();
 		}
+		log.add(tag, "Loading complete.");
 
-		log.printAllToLog(App.LOG);
 		onLoad(p);
 		if( log.containsAnyCriticalEntry() )
 			new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
@@ -169,81 +179,4 @@ class ProjectLoader {
 				new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
 		}
 	}
-
-
-
-	/*
-	public static function load(filePath:String, onComplete:(?p:data.Project, ?err:LoadingError)->Void) {
-		log.clear();
-
-		if( !NT.fileExists(filePath) ) {
-			onComplete(NotFound);
-			return;
-		}
-
-		var json = null;
-		var raw = null;
-
-		// Parse main JSON
-		log.fileOp('Loading project $filePath...');
-		raw = try NT.readFileString(filePath)
-			catch(err:Dynamic) {
-				log.error( Std.string(err) );
-				onComplete( FileRead( Std.string(err) ) );
-				return;
-			}
-
-		var json = try haxe.Json.parse(raw)
-			catch(err:Dynamic) {
-				log.error( Std.string(err) );
-				onComplete( JsonParse( Std.string(err) ) );
-				return;
-			}
-
-
-		var p = try data.Project.fromJson(filePath, json)
-			#if debug ;
-			#else
-			catch(err:Dynamic) {
-				log.error( Std.string(err) );
-				onComplete( ProjectInit( Std.string(err) ) );
-				return;
-			}
-			#end
-
-		// Load separate level files
-		if( p.externalLevels && p.levels[0].layerInstances.length==0 ) { // in backup files, levels are actually embedded
-			var idx = 0;
-			for(l in p.levels) {
-				var path = p.makeAbsoluteFilePath(l.externalRelPath);
-				if( !NT.fileExists(path) ) {
-					// TODO better lost level management
-					log.error("Level file not found "+l.externalRelPath);
-					p.levels.splice(idx,1);
-					idx--;
-				}
-				else {
-					// Parse level
-					try {
-						log.fileOp("Loading external level "+l.externalRelPath+"...");
-						var raw = NT.readFileString(path);
-						var lJson = haxe.Json.parse(raw);
-						var l = data.Level.fromJson(p, lJson);
-						p.levels[idx] = l;
-					}
-					catch(e:Dynamic) {
-						// TODO better lost level management
-						log.error("Error while parsing level file "+l.externalRelPath);
-						p.levels.splice(idx,1);
-						idx--;
-					}
-				}
-				idx++;
-			}
-		}
-
-		log.fileOp("Done.");
-		onComplete(p);
-	}
-	*/
 }
