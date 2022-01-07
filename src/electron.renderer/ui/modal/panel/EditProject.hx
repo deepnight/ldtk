@@ -4,7 +4,7 @@ class EditProject extends ui.modal.Panel {
 
 	var showAdvanced = false;
 	var allAdvancedOptions = [
-		ldtk.Json.ProjectFlag.DiscardPreCsvIntGrid,
+		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
 	];
 
 	public function new() {
@@ -288,9 +288,9 @@ class EditProject extends ui.modal.Panel {
 			var jLabel = new J('<label for="$e"/>');
 			jLabel.appendTo(jLi);
 			switch e {
-				case DiscardPreCsvIntGrid:
-					jLabel.text("Discard pre-CSV IntGrid layer data in level data");
-					jInput.attr("title", L.t._("If enabled, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Only use this if your game API supports LDtk 0.8.x or more."));
+				case ExportPreCsvIntGridFormat:
+					jLabel.text("Export legacy pre-CSV IntGrid layers data");
+					jInput.attr("title", L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less."));
 				case _:
 			}
 

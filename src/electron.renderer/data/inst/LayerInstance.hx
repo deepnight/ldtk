@@ -139,17 +139,6 @@ class LayerInstance {
 				arr;
 			},
 
-			intGrid: { // old IntGrid format
-				var arr = [];
-				if( !_project.hasFlag(DiscardPreCsvIntGrid) )
-					for(e in intGrid.keyValueIterator())
-						arr.push({
-							coordId: e.key,
-							v: e.value-1,
-						});
-				arr;
-			},
-
 			intGridCsv: {
 				var csv : Array<Int> = [];
 				if( def.type==IntGrid )
@@ -208,8 +197,18 @@ class LayerInstance {
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 
-		if( _project.hasFlag(DiscardPreCsvIntGrid) )
+		if( _project.hasFlag(ExportPreCsvIntGridFormat) ) {
+			json.intGrid = {
+				var arr = [];
+				for(e in intGrid.keyValueIterator())
+					arr.push({
+						coordId: e.key,
+						v: e.value-1,
+					});
+				arr;
+			}
 			Reflect.deleteField(json, "intGrid");
+		}
 
 		return json;
 	}

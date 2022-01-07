@@ -84,9 +84,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 									for(l in p.levels)
 										l.invalidateJsonCache();
 
-									// IntGrid CSV change
-									p.setFlag(DiscardPreCsvIntGrid, true);
-
 									// Tilesets
 									log.general(" -> Updating tileset data...");
 									for(td in p.defs.tilesets) {

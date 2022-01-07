@@ -145,7 +145,6 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
-		p.setFlag(DiscardPreCsvIntGrid, true);
 		p.createLevel();
 
 		return p;
@@ -246,7 +245,7 @@ class Project {
 		if( json.flags!=null )
 			for(f in json.flags ) {
 				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
-					catch(e:Dynamic) null;
+					catch(_) null;
 
 				if( ev!=null )
 					p.flags.set(ev, true);
