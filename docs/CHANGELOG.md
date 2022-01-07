@@ -4,6 +4,7 @@
 
   - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will probably be updated in future updates.
   - **Copy and paste**: for now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements. You can right click on an element with a context menu to copy/cut/paste/duplicate things! LDtk just entered modern era.
+  - **Space key**: one shortcut to rule them all. Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are). Hold `SPACE` and click left mouse button to scroll the view.
   - **Reworked loading/saving**:
     - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
     - Added various progress bars when loading or saving large projects
