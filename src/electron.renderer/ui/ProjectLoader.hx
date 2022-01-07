@@ -53,14 +53,17 @@ class ProjectLoader {
 						null;
 					}
 
-				// Project was created with an older appBuildId
-				if( json.appBuildId==null || json.appBuildId < Const.getAppBuildId() )
-					needReSaving = true;
+				if( !App.ME.isInAppDir(filePath,true) ) { // not a sample
+					// Project was created with an older appBuildId
+					#if !debug
+					if( json.appBuildId==null || json.appBuildId < Const.getAppBuildId() )
+						needReSaving = true;
+					#end
 
-				// Project has an older JSON version
-				if( json!=null && Version.lower(json.jsonVersion, Const.getJsonVersion()) )
-					needReSaving = true;
-
+					// Project has an older JSON version
+					if( json!=null && Version.lower(json.jsonVersion, Const.getJsonVersion()) )
+						needReSaving = true;
+				}
 			}
 		});
 
