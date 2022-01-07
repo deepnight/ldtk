@@ -5,6 +5,7 @@ class EditProject extends ui.modal.Panel {
 	var showAdvanced = false;
 	var allAdvancedOptions = [
 		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
+		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
 	];
 
 	public function new() {
@@ -291,6 +292,11 @@ class EditProject extends ui.modal.Panel {
 				case ExportPreCsvIntGridFormat:
 					jLabel.text("Export legacy pre-CSV IntGrid layers data");
 					jInput.attr("title", L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less."));
+
+				case PrependIndexToLevelFileNames:
+					jLabel.text("Prepend level index to level file names");
+					jInput.attr("title", L.t._("If enabled, external level file names will be prepended with an index reflecting their position in the levels internal array.\nThis is not recommended because, in versioning systems, inserting a level means renaming files of all subsequent levels in the array.\nThis option used to be the default behavior but was changed in version 0.10.0."));
+
 				case _:
 			}
 
