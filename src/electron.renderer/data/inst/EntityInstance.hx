@@ -5,6 +5,7 @@ class EntityInstance {
 	public var _li(default,null) : LayerInstance;
 	public var def(get,never) : data.def.EntityDef; inline function get_def() return _project.defs.getEntityDef(defUid);
 
+	public var iid : String;
 	public var defUid(default,null) : Int;
 	public var x : Int;
 	public var y : Int;
@@ -27,10 +28,11 @@ class EntityInstance {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + height-1;
 
 
-	public function new(p:Project, li:LayerInstance, entityDefUid:Int) {
+	public function new(p:Project, li:LayerInstance, entityDefUid:Int, iid:String) {
 		_project = p;
 		_li = li;
 		defUid = entityDefUid;
+		this.iid = iid;
 	}
 
 	@:keep public function toString() {
@@ -60,6 +62,7 @@ class EntityInstance {
 					null;
 			},
 
+			iid: iid,
 			width: width,
 			height: height,
 			defUid: defUid,
@@ -77,10 +80,13 @@ class EntityInstance {
 		if( (cast json).x!=null ) // Convert old coordinates
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];
 
-		if( (cast json).defId!=null ) json.defUid = (cast json).defId;
+		if( (cast json).defId!=null ) // Convert renamed defId
+			json.defUid = (cast json).defId;
 
+		if( json.iid==null ) // Init IID
+			json.iid = project.generateUniqueId();
 
-		var ei = new EntityInstance(project, li, JsonTools.readInt(json.defUid));
+		var ei = new EntityInstance(project, li, JsonTools.readInt(json.defUid), json.iid);
 		ei.x = JsonTools.readInt( json.px[0], 0 );
 		ei.y = JsonTools.readInt( json.px[1], 0 );
 
