@@ -298,6 +298,7 @@ class EditProject extends ui.modal.Panel {
 				jInput,
 				()->project.hasFlag(e),
 				(v)->{
+					editor.invalidateAllLevelsCache();
 					project.setFlag(e, v);
 					editor.ge.emit(ProjectSettingsChanged);
 				}

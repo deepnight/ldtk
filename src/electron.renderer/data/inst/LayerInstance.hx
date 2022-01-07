@@ -197,7 +197,7 @@ class LayerInstance {
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 
-		if( _project.hasFlag(ExportPreCsvIntGridFormat) ) {
+		if( _project.hasFlag(ExportPreCsvIntGridFormat) )
 			json.intGrid = {
 				var arr = [];
 				for(e in intGrid.keyValueIterator())
@@ -207,8 +207,6 @@ class LayerInstance {
 					});
 				arr;
 			}
-			Reflect.deleteField(json, "intGrid");
-		}
 
 		return json;
 	}
