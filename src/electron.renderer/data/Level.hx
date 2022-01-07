@@ -69,7 +69,7 @@ class Level {
 		}
 
 		// List nearby levels
-		var neighbours = switch _project.worldLayout {
+		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _project.worldLayout {
 			case Free, GridVania:
 				var nears = _project.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
@@ -88,20 +88,17 @@ class Level {
 					}
 				});
 
+			case LinearHorizontal, LinearVertical: [];
+		}
+
+		// World coords are not stored in JSON for automatically organized layouts
+		var jsonWorldX = worldX;
+		var jsonWorldY = worldY;
+		switch _project.worldLayout {
+			case Free:
+			case GridVania:
 			case LinearHorizontal, LinearVertical:
-				var idx = dn.Lib.getArrayIndex(this, _project.levels);
-				var nears = [];
-				if( idx<_project.levels.length-1 )
-					nears.push({
-						levelUid: _project.levels[idx+1].uid,
-						dir: _project.worldLayout==LinearHorizontal?"e":"s",
-					});
-				if( idx>0 )
-					nears.push({
-						levelUid: _project.levels[idx-1].uid,
-						dir: _project.worldLayout==LinearHorizontal?"w":"n",
-					});
-				nears;
+				jsonWorldX = jsonWorldY = -1;
 		}
 
 		// Json
@@ -109,8 +106,8 @@ class Level {
 			identifier: identifier,
 			iid: iid,
 			uid: uid,
-			worldX: worldX,
-			worldY: worldY,
+			worldX: jsonWorldX,
+			worldY: jsonWorldY,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			__bgColor: JsonTools.writeColor( getBgColor() ),
@@ -161,7 +158,7 @@ class Level {
 	public function makeExternalRelPath(idx:Int) {
 		return
 			_project.getRelExternalFilesDir() + "/"
-			+ (dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-")
+			+ ( _project.hasFlag(PrependIndexToLevelFileNames) ? dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-" : "")
 			+ identifier
 			+ "." + Const.LEVEL_EXTENSION;
 	}
