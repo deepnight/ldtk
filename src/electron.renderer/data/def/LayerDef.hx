@@ -97,7 +97,7 @@ class LayerDef {
 		if( json.autoRuleGroups!=null ) {
 			for( ruleGroupJson in json.autoRuleGroups )
 				o.parseJsonRuleGroup(jsonVersion, ruleGroupJson);
-			
+
 			// Smart unfold single groups
 			if( o.autoRuleGroups.length==1 )
 				for(rg in o.autoRuleGroups)
@@ -237,7 +237,7 @@ class LayerDef {
 
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
 		var vd = getIntGridValueDef(idx);
-		return vd==null ? null : vd.identifier==null ? '#$idx' : '${vd.identifier} #$idx';
+		return vd==null ? null : vd.identifier==null ? '$idx' : '${vd.identifier} ($idx)';
 	}
 
 	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
