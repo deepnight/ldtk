@@ -6446,6 +6446,8 @@ $patternSize : 32px;
 
 		&.guided {
 			grid-template-columns: auto 400px;
+			outline: 1px solid $help;
+			outline-offset: 4px;
 			button.guide {
 				display: none;
 			}
@@ -6466,6 +6468,9 @@ $patternSize : 32px;
 			}
 			&:not(.intro) {
 				grid-column: 2/3;
+			}
+			&.big {
+				grid-row: 3/5;
 			}
 		}
 		>:not(.help) {
@@ -6496,7 +6501,7 @@ $patternSize : 32px;
 		.explain {
 			display: grid;
 			align-items: center;
-			max-width: 400px;
+			max-width: calc(400px + 8px);
 			min-height: calc( 4em + 16px * 2 );
 			font-size: 10pt;
 			text-align: left;
