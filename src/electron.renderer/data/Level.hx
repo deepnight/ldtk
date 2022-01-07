@@ -59,8 +59,12 @@ class Level {
 	}
 
 	public function toJson() : ldtk.Json.LevelJson {
-		if( hasJsonCache() )
-			return getCacheJsonObject();
+		if( hasJsonCache() ) {
+			var o = getCacheJsonObject();
+			if( !_project.externalLevels )
+				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
+			return o;
+		}
 
 		// List nearby levels
 		var neighbours = switch _project.worldLayout {
