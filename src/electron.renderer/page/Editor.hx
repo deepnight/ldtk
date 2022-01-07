@@ -1529,6 +1529,7 @@ class Editor extends Page {
 			case ToolOptionChanged:
 			case ToolValueSelected:
 			case BeforeProjectSaving:
+			case LayerRuleGroupCollapseChanged(rg):
 			case ProjectSaved:
 			case GridChanged(active):
 			case ShowDetailsChanged(active):
