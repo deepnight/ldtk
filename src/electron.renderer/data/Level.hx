@@ -144,7 +144,7 @@ class Level {
 
 		// Cache new json
 		_cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(_project, json, true),
+			str: ui.ProjectSaver.jsonStringify(_project, json ),
 			json: json,
 		}
 
@@ -190,7 +190,7 @@ class Level {
 
 		// Init cache
 		l._cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(p, json, false), // Json header should not be added, it's already there
+			str: ui.ProjectSaver.jsonStringify(p, json, true),
 			json: json
 		}
 
