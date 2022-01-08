@@ -2339,9 +2339,21 @@ textarea {
 			margin-bottom: 16px;
 		}
 
-		strong {
+		.title {
+			margin-top: 32px;
+			margin-bottom: 32px;
 			color: $orange;
 			font-size: 1.6em;
+			font-weight: bold;
+			text-align: center;
+
+			p {
+				margin: 0;
+			}
+		}
+
+		.buttons {
+			margin-top: 32px;
 		}
 	}
 }
