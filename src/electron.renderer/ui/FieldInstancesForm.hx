@@ -459,7 +459,7 @@ class FieldInstancesForm {
 				jInput.attr("placeholder", "(null)");
 				jInput.prop("readonly",true);
 
-				if( isRequired )
+				if( isRequired || fi.hasAnyErrorInValues() )
 					markError(jInput);
 
 				if( !fi.isUsingDefault(arrayIdx) ) {
@@ -471,9 +471,6 @@ class FieldInstancesForm {
 				var jPick = new J('<button class="small pickRef"> <span class="icon pick"/> </button>');
 				jPick.appendTo(jTarget);
 				jPick.click(_->{
-					var all = editor.curLayerInstance.entityInstances;
-					var e = all[Std.random(all.length)];
-					fi.parseValue(arrayIdx, e.iid);
 					onFieldChange(fi);
 				});
 
