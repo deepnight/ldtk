@@ -4999,6 +4999,11 @@ dl.form.fieldInstanceEditor {
 		font-size: 8pt;
 		color: $orange;
 	}
+	[error] .entityRef {
+		color: $lightRed;
+		font-style: italic;
+	}
+
 	button.pickRef,
 	button.removeRef {
 		flex: 0 1 0px;
