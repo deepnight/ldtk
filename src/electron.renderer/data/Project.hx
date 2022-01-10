@@ -151,15 +151,15 @@ class Project {
 	}
 
 
-	public inline function generateUniqueId() : String {
+	public inline function generateUniqueId_UUID() : String {
 		// HaxeLib: https://github.com/flashultra/uuid, credits Miroslav "Flashultra" Yordanov
 		// Refs: https://www.sohamkamani.com/uuid-versions-explained/
 		return uuid.Uuid.v1();
 	}
 
-	public function makeUniqueIdInt() return nextUid++;
+	public function generateUniqueId_int() return nextUid++;
 
-	public function makeUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
+	public function fixUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId,firstCharCap);
 		if( baseId=="_" )
 			baseId = "Unnamed";
@@ -616,13 +616,13 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqueIdInt(), generateUniqueId());
+		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, generateUniqueId_int(), generateUniqueId_UUID());
 		if( insertIdx==null )
 			levels.push(l);
 		else
 			levels.insert(insertIdx,l);
 
-		l.identifier = makeUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
+		l.identifier = fixUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
 
 		tidy(); // this will create layer instances
 		return l;
@@ -632,12 +632,12 @@ class Project {
 		var copy : data.Level = Level.fromJson( this, l.toJson() );
 
 		// Remap IDs
-		copy.uid = makeUniqueIdInt();
+		copy.uid = generateUniqueId_int();
 		for(li in copy.layerInstances)
 			li.levelId = copy.uid;
 
 		// Pick unique identifier
-		copy.identifier = makeUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
+		copy.identifier = fixUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
@@ -917,7 +917,7 @@ class Project {
 					case LinearHorizontal: 0;
 					case LinearVertical: idx;
 				}) );
-				l.identifier = makeUniqueIdStr(id, true, id->isLevelIdentifierUnique(id));
+				l.identifier = fixUniqueIdStr(id, true, id->isLevelIdentifierUnique(id));
 			}
 			idx++;
 		}

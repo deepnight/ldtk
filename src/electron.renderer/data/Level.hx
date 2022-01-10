@@ -166,7 +166,7 @@ class Level {
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
 		if( json.iid==null )
-			json.iid = p.generateUniqueId();
+			json.iid = p.generateUniqueId_UUID();
 
 		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
 		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );

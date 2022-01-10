@@ -580,7 +580,7 @@ class LayerInstance {
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 
-		var ei = new EntityInstance(_project, this, ed.uid, _project.generateUniqueId());
+		var ei = new EntityInstance(_project, this, ed.uid, _project.generateUniqueId_UUID());
 		entityInstances.push(ei);
 		return ei;
 	}

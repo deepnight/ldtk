@@ -84,7 +84,7 @@ class EntityInstance {
 			json.defUid = (cast json).defId;
 
 		if( json.iid==null ) // Init IID
-			json.iid = project.generateUniqueId();
+			json.iid = project.generateUniqueId_UUID();
 
 		var ei = new EntityInstance(project, li, JsonTools.readInt(json.defUid), json.iid);
 		ei.x = JsonTools.readInt( json.px[0], 0 );

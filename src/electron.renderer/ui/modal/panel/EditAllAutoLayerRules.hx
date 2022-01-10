@@ -255,7 +255,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	// Create new rule
 	function onCreateRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
 		App.LOG.general("Added rule");
-		var r = new data.def.AutoLayerRuleDef( project.makeUniqueIdInt() );
+		var r = new data.def.AutoLayerRuleDef( project.generateUniqueId_int() );
 		rg.rules.insert(insertIdx, r);
 
 		if( rg.collapsed )
@@ -285,7 +285,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			App.LOG.general("Added rule group");
 
 			var insertIdx = 0;
-			var rg = ld.createRuleGroup(project.makeUniqueIdInt(), "New group", insertIdx);
+			var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
 
 			var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
@@ -921,7 +921,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		if( !editor.levelRender.isAutoLayerRenderingEnabled() )
 			return;
-		
+
 		if( m.cx<0 || m.cx>=li.cWid || m.cy<0 || m.cy>=li.cHei )
 			return;
 

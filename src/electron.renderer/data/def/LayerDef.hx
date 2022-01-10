@@ -387,7 +387,7 @@ class LayerDef {
 
 		var json : ldtk.Json.AutoRuleDef = c.getParsedJson();
 		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, json );
-		copy.uid = p.makeUniqueIdInt();
+		copy.uid = p.generateUniqueId_int();
 		if( after==null )
 			rg.rules.push(copy);
 		else
@@ -407,9 +407,9 @@ class LayerDef {
 
 		var json : ldtk.Json.AutoLayerRuleGroupJson = c.getParsedJson();
 		var copy = parseJsonRuleGroup( p.jsonVersion, json );
-		copy.uid = p.makeUniqueIdInt();
+		copy.uid = p.generateUniqueId_int();
 		for(r in copy.rules)
-			r.uid = p.makeUniqueIdInt();
+			r.uid = p.generateUniqueId_int();
 
 		// Re-insert after given group because parser already pushed copy in the array
 		if( after!=null ) {

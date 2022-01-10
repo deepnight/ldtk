@@ -160,7 +160,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 				App.ME.createChildProcess( (p)->{
 					App.ME.debug('UUIDs: $uniques/$total (${M.pretty(100*uniques/total,3)}%, dups=${duplicates.length}) \n${duplicates.join("\n")}', true);
 					for(i in 0...10000) {
-						var u = project.generateUniqueId();
+						var u = project.generateUniqueId_UUID();
 						if( checkMap.exists(u) )
 							duplicates.push(u);
 						else

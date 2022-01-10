@@ -280,7 +280,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 		// Enum ID
 		var i = Input.linkToHtmlInput( curEnum.identifier, jDefForm.find("[name=id]") );
-		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEnumIdentifierUnique(id, curEnum));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isEnumIdentifierUnique(id, curEnum));
 		i.linkEvent(EnumDefChanged);
 
 		// Source path

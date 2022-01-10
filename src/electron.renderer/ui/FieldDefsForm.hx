@@ -110,14 +110,14 @@ class FieldDefsForm {
 			}
 
 			// Create field def
-			var fd = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
+			var fd = new FieldDef(project, project.generateUniqueId_int(), type, isArray);
 			var baseName = switch type {
 				case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
 				case _: L.getFieldType(type);
 			}
 			if( isArray )
 				baseName+"_array";
-			fd.identifier = project.makeUniqueIdStr(baseName, false, id->isFieldIdentifierUnique(id) );
+			fd.identifier = project.fixUniqueIdStr(baseName, false, id->isFieldIdentifierUnique(id) );
 			fieldDefs.push(fd);
 
 			w.close();
@@ -175,8 +175,8 @@ class FieldDefsForm {
 
 		var json : ldtk.Json.FieldDefJson = c.getParsedJson();
 		var copy = FieldDef.fromJson( project, json );
-		copy.uid = project.makeUniqueIdInt();
-		copy.identifier = project.makeUniqueIdStr(json.identifier, false, (id)->isFieldIdentifierUnique(id));
+		copy.uid = project.generateUniqueId_int();
+		copy.identifier = project.fixUniqueIdStr(json.identifier, false, (id)->isFieldIdentifierUnique(id));
 		if( after==null )
 			fieldDefs.push(copy);
 		else
@@ -481,7 +481,7 @@ class FieldDefsForm {
 
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
 		i.onChange = onFieldChange;
-		i.fixValue = (v)->project.makeUniqueIdStr(v, false, (id)->isFieldIdentifierUnique(id,curField));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, false, (id)->isFieldIdentifierUnique(id,curField));
 
 		// Default value
 		switch curField.type {
