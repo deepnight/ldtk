@@ -49,7 +49,7 @@ class Level {
 		useAutoIdentifier = true;
 
 		for(ld in _project.defs.layers)
-			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid, _project.generateUniqueId_UUID()) );
 	}
 
 	function set_identifier(id:String) {
@@ -423,7 +423,7 @@ class Level {
 						layerInstances.push( existing.get(ld.uid) );
 					else {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
-						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid, _project.generateUniqueId_UUID()) );
 					}
 				invalidateJsonCache();
 				break;

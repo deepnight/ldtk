@@ -14,6 +14,7 @@ class LayerInstance {
 	var camera(get,never) : display.Camera;
 		inline function get_camera() return Editor.ME.camera;
 
+	public var iid : String;
 	public var levelId : Int;
 	public var layerDefUid : Int;
 	public var visible = true;
@@ -60,8 +61,9 @@ class LayerInstance {
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( pxHei / def.gridSize );
 
 
-	public function new(p:Project, levelId:Int, layerDefUid:Int) {
+	public function new(p:Project, levelId:Int, layerDefUid:Int, layerInstIid:String) {
 		_project = p;
+		iid = layerInstIid;
 		this.levelId = levelId;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
@@ -127,6 +129,7 @@ class LayerInstance {
 			__tilesetDefUid: td!=null ? td.uid : null,
 			__tilesetRelPath: td!=null ? td.relPath : null,
 
+			iid: iid,
 			levelId: levelId,
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
@@ -263,8 +266,10 @@ class LayerInstance {
 
 	public static function fromJson(p:Project, json:ldtk.Json.LayerInstanceJson) {
 		if( (cast json).layerDefId!=null ) json.layerDefUid = (cast json).layerDefId;
+		if( (cast json).iid==null )
+			json.iid = p.generateUniqueId_UUID();
 
-		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid), json.iid );
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
