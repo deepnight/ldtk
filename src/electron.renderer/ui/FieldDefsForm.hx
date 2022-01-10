@@ -590,7 +590,8 @@ class FieldDefsForm {
 
 		// Nullable
 		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
-		i.onChange = onFieldChange;
+		if( i!=null )
+			i.onChange = onFieldChange;
 
 		// Cut long values
 		var i = Input.linkToHtmlInput( curField.editorCutLongValues, jForm.find("input#editorCutLongValues") );
