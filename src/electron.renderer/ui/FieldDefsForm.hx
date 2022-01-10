@@ -129,7 +129,7 @@ class FieldDefsForm {
 
 		// Type picker
 		var types : Array<ldtk.Json.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null), F_EntityRef
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_EntityRef
 		];
 		if( fieldParent==FP_Entity )
 			types.push(F_Point);
@@ -138,7 +138,7 @@ class FieldDefsForm {
 			var b = new J("<button/>");
 			w.jContent.append(b);
 			b.css({
-				backgroundColor: FieldDef.getTypeColorHex(type, 0.55),
+				backgroundColor: FieldDef.getTypeColorHex(type, 0.62),
 			});
 			JsTools.createFieldTypeIcon(type, b);
 			b.click( function(ev) {
@@ -221,15 +221,14 @@ class FieldDefsForm {
 				li.addClass("active");
 
 			var fType = new J('<span class="type"></span>');
-			if( fd.isArray ) {
-				fType.css({ backgroundColor: FieldDef.getTypeColorHex(fd.type, 0.4) });
+			fType.css({ backgroundColor: FieldDef.getTypeColorHex(fd.type, 0.6) });
+			if( fd.isArray )
 				fType.addClass("array");
-			}
 			fType.appendTo(li);
 			fType.text( L.getFieldTypeShortName(fd.type) );
 			fType.css({
-				borderColor: FieldDef.getTypeColorHex(fd.type, fd.isArray ? 1 : 0.4),
-				color: FieldDef.getTypeColorHex(fd.type),
+				borderColor: FieldDef.getTypeColorHex(fd.type, 1),
+				color: FieldDef.getTypeColorHex(fd.type, 1.5),
 			});
 
 			ui.modal.ContextMenu.addTo(li, [

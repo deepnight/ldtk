@@ -463,10 +463,29 @@ class FieldInstancesForm {
 					markError(jInput);
 
 				if( !fi.isUsingDefault(arrayIdx) ) {
-					jInput.val( fi.getEntityRefIID(arrayIdx) );
+					jInput.val( fi.getEntityRefForDisplay(arrayIdx) );
 					jInput.attr("title", fi.getEntityRefIID(arrayIdx));
 				}
 
+				// Pick ref
+				var jPick = new J('<button class="small pickRef"> <span class="icon pick"/> </button>');
+				jPick.appendTo(jTarget);
+				jPick.click(_->{
+					var all = editor.curLayerInstance.entityInstances;
+					var e = all[Std.random(all.length)];
+					fi.parseValue(arrayIdx, e.iid);
+					onFieldChange(fi);
+				});
+
+				// Clear ref
+				if( !fi.valueIsNull(arrayIdx) && fi.def.canBeNull ) {
+					var jRemove = new J('<button class="small red removeRef"> <span class="icon delete"/> </button>');
+					jRemove.appendTo(jTarget);
+					jRemove.click(_->{
+						fi.parseValue(arrayIdx, null);
+						onFieldChange(fi);
+					});
+				}
 		}
 
 		// Suffix

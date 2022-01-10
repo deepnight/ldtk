@@ -48,7 +48,7 @@ class FieldDef {
 		editorAlwaysShow = false;
 		editorCutLongValues = true;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point || type==F_EntityRef && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		textLanguageMode = null;
 		min = max = null;
@@ -144,19 +144,21 @@ class FieldDef {
 
 	public static function getTypeColorHex(t:ldtk.Json.FieldType, luminosity=1.0) : String {
 		var c = switch t {
-			case F_Int: "#1ba7c9";
-			case F_Float: "#1ba7c9";
-			case F_String: "#ffa23c";
-			case F_Text: "#ffa23c";
-			case F_Path: "#ffa23c";
-			case F_Bool: "#3afdff";
-			case F_Color: "#ff6c48";
-			case F_Enum(enumDefUid): "#9bc95a";
-			case F_Point: "#9bc95a";
-			case F_EntityRef: "#9bc95a";
+			case F_Int: "#50b3cb";
+			case F_Float: "#50b3cb";
+			case F_String: "#bd5f32";
+			case F_Text: "#bd5f32";
+			case F_Bool: "#cd88dd";
+			case F_Color: "#99d367";
+			case F_Enum(enumDefUid): "#ff4b4b";
+			case F_Path: "#7779c9";
+			case F_Point: "#7779c9";
+			case F_EntityRef: "#7779c9";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
+		else if( luminosity>1 )
+			return C.intToHex( C.toWhite( C.hexToInt(c), M.fclamp( luminosity-1, 0, 1 ) ) );
 		else
 			return c;
 	}

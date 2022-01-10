@@ -1135,6 +1135,7 @@ ul.log {
 .icon.open				{ background-image: url("../icons/open.svg"); }
 .icon.partial			{ background-image: url("../icons/partial.png"); }
 .icon.paste				{ background-image: url("../icons/paste.svg"); }
+.icon.pick				{ background-image: url("../icons/pick.svg"); }
 .icon.prohibited		{ background-image: url("../icons/prohibited.svg"); }
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
@@ -1209,25 +1210,29 @@ ul.log {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 64px;
-	height: 64px;
+	width: 85px;
+	height: 85px;
 	overflow: hidden;
 	box-sizing: border-box;
 
 	text-transform: none;
 	font-family: Roboto;
 
-	border: 1px dashed rgba(255, 255, 255, 0.8);
+	border: 1px dashed rgba(255, 255, 255, 1);
+	border-radius: 4px;
 
 	.typeName {
+		margin-bottom: 3px;
 		font-style: normal;
-		font-size: 9pt;
-		opacity: 0.7;
+		font-weight: bold;
+		font-size: 13pt;
+		opacity: 1;
+		text-shadow: none;
 	}
 
 	.typeIcon {
 		font-size: 21pt;
-		opacity: 0.8;
+		opacity: 0.5;
 		text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
 	}
 }
@@ -2867,6 +2872,7 @@ textarea {
 
 			button {
 				margin: 0;
+				padding: 6px;
 				&:hover {
 					color: black;
 					background-color: $orange !important;
@@ -3041,7 +3047,7 @@ textarea {
 
 .window.dialog.fieldTypes {
 	.content {
-		grid-template-columns: repeat(3, min-content);
+		grid-template-columns: repeat(5, min-content);
 	}
 }
 
@@ -4812,24 +4818,27 @@ canvas#webgl {
 				padding: 4px;
 				overflow: hidden;
 
-				color: $help;
+				color: white;
+				font-weight: bold;
 				font-size: 8pt;
 				text-align: center;
 
 				border: 1px solid white; // color in code
 				border-radius: 3px;
+				box-shadow: 0px 0px 4px transparentize($color: black, $amount: 0.5);
 
 				&.array {
-					border: 2px solid white; // color in code
+					border-left: 2px solid white !important;
+					border-right: 2px solid white !important;
 					border-top: none;
 					border-bottom: none;
 				}
 			}
-			&.active .type {
-				color: black !important;
-				border-color: black !important;
-				background: transparent !important;
-			}
+			// &.active .type {
+				// color: black !important;
+				// border-color: black !important;
+				// background: transparent !important;
+			// }
 		}
 		&:empty::before {
 			content: "No custom field";
@@ -4879,6 +4888,7 @@ canvas#webgl {
 		&.type-F_Point .F_Point,
 		&.type-F_Text .F_Text,
 		&.type-F_String .F_String,
+		&.type-F_EntityRef .F_EntityRef,
 		&.type-F_Path .F_Path {
 			display: flex;
 			&:not(li) {
@@ -4919,12 +4929,14 @@ dl.form.fieldInstanceEditor {
 		color: $red !important;
 		opacity: 1 !important;
 		background-color: $darkRed !important;
+		border-left: 4px solid $red;
 		label {
 			background: transparent !important;
+			padding: 5px;
+			color: $lightRed;
 		}
 	}
 	dd[error] {
-		border-left: 4px solid $red;
 		background-color: $darkRed;
 		opacity: 1 !important;
 	}
@@ -4983,6 +4995,14 @@ dl.form.fieldInstanceEditor {
 		opacity: 1;
 	}
 
+	.entityRef {
+		font-size: 8pt;
+		color: $orange;
+	}
+	button.pickRef,
+	button.removeRef {
+		flex: 0 1 0px;
+	}
 
 	button.removePoint {
 		flex: 0.2 1 0px;

@@ -349,7 +349,7 @@ class FieldInstance {
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
-			case F_EntityRef: getEntityRefIID(arrayIdx);
+			case F_EntityRef: getEntityRefForDisplay(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -477,6 +477,11 @@ class FieldInstance {
 			case _: throw "unexpected";
 		}
 		return out;
+	}
+
+	public function getEntityRefForDisplay(arrayIdx:Int) : String {
+		var iid = getEntityRefIID(arrayIdx);
+		return "TODO "+iid;
 	}
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
