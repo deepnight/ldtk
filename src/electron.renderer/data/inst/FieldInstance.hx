@@ -290,9 +290,12 @@ class FieldInstance {
 				}
 
 			case F_EntityRef:
-				for( idx in 0...getArrayLength() )
+				for( idx in 0...getArrayLength() ) {
 					if( !def.canBeNull && valueIsNull(idx) )
 						return def.identifier+"?";
+					if( !valueIsNull(idx) && _project.getCachedRef( getEntityRefIID(idx) )==null )
+						return "Lost reference!";
+				}
 		}
 		return null;
 	}
@@ -481,7 +484,11 @@ class FieldInstance {
 
 	public function getEntityRefForDisplay(arrayIdx:Int) : String {
 		var iid = getEntityRefIID(arrayIdx);
-		return "TODO "+iid;
+		var cr = _project.getCachedRef(iid);
+		if( cr==null || cr.ei==null )
+			return "#!REF";
+		return cr.ei.def.identifier
+			+ " in "+cr.level.identifier+"."+cr.li.def.identifier;
 	}
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
@@ -523,7 +530,15 @@ class FieldInstance {
 			case F_Path:
 
 			case F_EntityRef:
-				// TODO check entity ref validity
+				var i = 0;
+				while( i<getArrayLength() ) {
+					if( !valueIsNull(i) && p.getCachedRef( getEntityRefIID(i) )==null ) {
+						App.LOG.add("tidy", 'Removed lost reference in $this');
+						parseValue(i, null);
+					}
+					i++;
+				}
+
 
 			case F_Point:
 				if( li!=null ) {
