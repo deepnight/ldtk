@@ -423,7 +423,9 @@ class Level {
 						layerInstances.push( existing.get(ld.uid) );
 					else {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
-						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid, _project.generateUniqueId_UUID()) );
+						var li = new data.inst.LayerInstance(_project, uid, ld.uid, _project.generateUniqueId_UUID());
+						_project.registerLayerIid(li.iid, this, li);
+						layerInstances.push(li);
 					}
 				invalidateJsonCache();
 				break;

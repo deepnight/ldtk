@@ -67,6 +67,7 @@ class LayerInstance {
 		this.levelId = levelId;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
+		p.initRefCache();
 	}
 
 
@@ -587,6 +588,7 @@ class LayerInstance {
 
 		var ei = new EntityInstance(_project, this, ed.uid, _project.generateUniqueId_UUID());
 		entityInstances.push(ei);
+		_project.initRefCache();
 		return ei;
 	}
 
@@ -604,10 +606,13 @@ class LayerInstance {
 		return copy;
 	}
 
-	public function removeEntityInstance(e:EntityInstance) {
+	public function removeEntityInstance(ei:EntityInstance) {
 		requireType(Entities);
-		if( !entityInstances.remove(e) )
-			throw "Unknown instance "+e;
+		if( !entityInstances.remove(ei) )
+			throw "Unknown instance "+ei;
+
+		_project.unregisterIid(ei.iid);
+		_project.tidy(); // IID refs could be lost
 	}
 
 

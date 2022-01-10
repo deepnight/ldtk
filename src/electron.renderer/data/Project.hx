@@ -38,6 +38,8 @@ class Project {
 	public var backupLimit = 10;
 
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
+	var refsCache : Map<String, CachedReference> = new Map();
+
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -363,6 +365,40 @@ class Project {
 		}
 	}
 
+	public inline function getCachedRef(iid:String) : Null<CachedReference> {
+		return refsCache.get(iid);
+	}
+
+	public inline function registerLayerIid(iid:String, level:Level, li:data.inst.LayerInstance) {
+		refsCache.set(iid, {
+			level: level,
+			li: li,
+		});
+	}
+
+	public inline function unregisterIid(iid:String) {
+		refsCache.remove(iid);
+	}
+
+	public function initRefCache() {
+		var t = haxe.Timer.stamp();
+		refsCache = new Map();
+
+		// Levels
+		for(level in levels) {
+			refsCache.set( level.iid, { level:level });
+
+			// Layers
+			for( li in level.layerInstances ) {
+				refsCache.set( li.iid, { level:level, li:li });
+
+				// Entities
+				for( ei in li.entityInstances )
+					refsCache.set( ei.iid, { level:level, li:li, ei:ei });
+			}
+		}
+	}
+
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
 			jsonVersion: jsonVersion,
@@ -502,6 +538,7 @@ class Project {
 			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 
+		initRefCache();
 		defs.tidy(this);
 		reorganizeWorld();
 		for(level in levels)
