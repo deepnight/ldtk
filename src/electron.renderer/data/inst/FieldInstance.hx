@@ -486,7 +486,7 @@ class FieldInstance {
 		var iid = getEntityRefIID(arrayIdx);
 		var cr = _project.getCachedRef(iid);
 		if( cr==null || cr.ei==null )
-			return "#!REF";
+			return "<Lost reference!>";
 		return cr.ei.def.identifier
 			+ " in "+cr.level.identifier+"."+cr.li.def.identifier;
 	}
@@ -533,8 +533,9 @@ class FieldInstance {
 				var i = 0;
 				while( i<getArrayLength() ) {
 					if( !valueIsNull(i) && p.getCachedRef( getEntityRefIID(i) )==null ) {
-						App.LOG.add("tidy", 'Removed lost reference in $this');
-						parseValue(i, null);
+						// App.LOG.add("tidy", 'Removed lost reference in $this');
+						// parseValue(i, null);
+						parseValue(i, "!lost-ref!");
 					}
 					i++;
 				}

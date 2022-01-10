@@ -612,7 +612,7 @@ class LayerInstance {
 			throw "Unknown instance "+ei;
 
 		_project.unregisterIid(ei.iid);
-		_project.tidy(); // IID refs could be lost
+		_project.tidyFields(); // IID refs could be lost
 	}
 
 

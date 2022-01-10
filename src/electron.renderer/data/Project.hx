@@ -532,6 +532,26 @@ class Project {
 		applyAutoLevelIdentifiers();
 	}
 
+	/**
+		Run tidy() only for custom fields
+	**/
+	public function tidyFields() {
+		initRefCache();
+		for(l in levels) {
+			for(fi in l.layerInstances)
+				fi.tidy(this);
+
+			for(li in l.layerInstances)
+			for(ei in li.entityInstances)
+			for(fi in l.layerInstances)
+				fi.tidy(this);
+		}
+	}
+
+	/**
+		Run tidy() for EVERY project components.
+		This can be really slow because of LayerInstances!
+	**/
 	public function tidy() {
 		if( worldLayout==GridVania ) {
 			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
