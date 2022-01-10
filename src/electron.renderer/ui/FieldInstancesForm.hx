@@ -480,12 +480,12 @@ class FieldInstancesForm {
 							all.push(ei);
 					var targetEi = all[Std.random(all.length)];
 					if( targetEi!=null ) {
-						if( fi.def.symetricalRef ) {
+						if( fi.def.symmetricalRef ) {
 							project.removeReferencesInField(fi.def, sourceEi);
 							project.removeReferencesInField(fi.def, targetEi);
 						}
 						fi.parseValue(arrayIdx, targetEi.iid);
-						fi.setSymetricalRef(arrayIdx, sourceEi);
+						fi.setSymmetricalRef(arrayIdx, sourceEi);
 						onFieldChange(fi);
 					}
 				});
@@ -495,7 +495,7 @@ class FieldInstancesForm {
 					var jRemove = new J('<button class="small red removeRef"> <span class="icon delete"/> </button>');
 					jRemove.appendTo(jTarget);
 					jRemove.click(_->{
-						if( fi.def.symetricalRef )
+						if( fi.def.symmetricalRef )
 							project.removeReferencesInField(fi.def, getEntityInstance());
 						fi.parseValue(arrayIdx, null);
 						onFieldChange(fi);
@@ -713,7 +713,7 @@ class FieldInstancesForm {
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {
-							// if( fi.def.type==F_EntityRef && fi.def.symetricalRef )
+							// if( fi.def.type==F_EntityRef && fi.def.symmetricalRef )
 								// fi.applyReferenceSymetry(idx, getEntityInstance(), false);
 							fi.removeArrayValue(idx);
 							onFieldChange(fi);

@@ -472,7 +472,7 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
-		var i = Input.linkToHtmlInput( curField.symetricalRef, jForm.find("input[name=symetricalRef]") );
+		var i = Input.linkToHtmlInput( curField.symmetricalRef, jForm.find("input[name=symmetricalRef]") );
 		i.onChange = onFieldChange;
 		// i.setEnabled( TODO );
 

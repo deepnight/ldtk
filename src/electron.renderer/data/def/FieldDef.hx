@@ -34,7 +34,7 @@ class FieldDef {
 	public var useForSmartColor : Bool;
 
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
-	public var symetricalRef : Bool;
+	public var symmetricalRef : Bool;
 
 
 	var _project : data.Project;
@@ -56,7 +56,7 @@ class FieldDef {
 		min = max = null;
 		useForSmartColor = getDefaultUseForSmartColor(t);
 		defaultOverride = null;
-		symetricalRef = false;
+		symmetricalRef = false;
 	}
 
 	static inline function getDefaultUseForSmartColor(t:ldtk.Json.FieldType) : Bool {
@@ -107,7 +107,7 @@ class FieldDef {
 		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
-		o.symetricalRef = JsonTools.readBool(json.symetricalRef, false);
+		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
 
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
@@ -140,7 +140,7 @@ class FieldDef {
 			acceptFileTypes: type!=F_Path ? null : acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 			textLanguageMode: type!=F_Text ? null : JsonTools.writeEnum(textLanguageMode, true),
-			symetricalRef: symetricalRef,
+			symmetricalRef: symmetricalRef,
 		}
 	}
 

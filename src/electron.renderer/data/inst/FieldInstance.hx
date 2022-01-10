@@ -249,8 +249,8 @@ class FieldInstance {
 	}
 
 
-	public function setSymetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
-		if( !def.symetricalRef || valueIsNull(arrayIdx) )
+	public function setSymmetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
+		if( !def.symmetricalRef || valueIsNull(arrayIdx) )
 			return;
 
 		var targetEi = getEntityRefInstance(arrayIdx);
