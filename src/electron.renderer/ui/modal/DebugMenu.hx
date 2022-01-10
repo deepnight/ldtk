@@ -60,8 +60,9 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		add({
 			label: L.untranslated("Cached references"),
+			show: ()->Editor.exists(),
 			cb: ()->{
-				App.ME.createChildProcess( (p)->{
+				editor.createChildProcess( (p)->{
 					App.ME.debug('CACHED REFERENCES', true);
 					for(cr in @:privateAccess project.refsCache.keyValueIterator()) {
 						var kind =
@@ -72,6 +73,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 							cr.value.li!=null ? 0x4bff5d : 0xff4b4b;
 						App.ME.debug(kind+" -- "+cr.key, color);
 					}
+				}, (_)->{
+					App.ME.debug("",true);
 				});
 			}
 		});
