@@ -471,7 +471,23 @@ class FieldInstancesForm {
 				var jPick = new J('<button class="small pickRef"> <span class="icon pick"/> </button>');
 				jPick.appendTo(jTarget);
 				jPick.click(_->{
-					onFieldChange(fi);
+					var sourceEi = getEntityInstance();
+					var all = [];
+					for(l in project.levels)
+					for(li in l.layerInstances)
+					for(ei in li.entityInstances)
+						if( ei!=sourceEi )
+							all.push(ei);
+					var targetEi = all[Std.random(all.length)];
+					if( targetEi!=null ) {
+						if( fi.def.symetricalRef ) {
+							project.removeReferencesInField(fi.def, sourceEi);
+							project.removeReferencesInField(fi.def, targetEi);
+						}
+						fi.parseValue(arrayIdx, targetEi.iid);
+						fi.setSymetricalRef(arrayIdx, sourceEi);
+						onFieldChange(fi);
+					}
 				});
 
 				// Clear ref
@@ -479,6 +495,8 @@ class FieldInstancesForm {
 					var jRemove = new J('<button class="small red removeRef"> <span class="icon delete"/> </button>');
 					jRemove.appendTo(jTarget);
 					jRemove.click(_->{
+						if( fi.def.symetricalRef )
+							project.removeReferencesInField(fi.def, getEntityInstance());
 						fi.parseValue(arrayIdx, null);
 						onFieldChange(fi);
 					});
@@ -488,7 +506,14 @@ class FieldInstancesForm {
 		// Suffix
 		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
 			jTarget.append('<span>${fi.def.editorTextSuffix}</span>');
+	}
 
+
+	function getEntityInstance() : Null<data.inst.EntityInstance> {
+		return switch relatedInstance {
+			case Entity(ei): ei;
+			case Level(l): null;
+		}
 	}
 
 	function getInstanceName() {
@@ -686,6 +711,8 @@ class FieldInstancesForm {
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {
+							// if( fi.def.type==F_EntityRef && fi.def.symetricalRef )
+								// fi.applyReferenceSymetry(idx, getEntityInstance(), false);
 							fi.removeArrayValue(idx);
 							onFieldChange(fi);
 						});

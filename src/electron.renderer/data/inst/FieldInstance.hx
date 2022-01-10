@@ -248,6 +248,40 @@ class FieldInstance {
 		}
 	}
 
+
+	public function setSymetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
+		if( !def.symetricalRef || valueIsNull(arrayIdx) )
+			return;
+
+		var targetEi = getEntityRefInstance(arrayIdx);
+		if( targetEi==null )
+			return;
+
+		var targetFi = targetEi.getFieldInstance(def);
+		if( targetFi==null )
+			return;
+
+		if( !def.isArray ) {
+			// Single value
+			if( targetFi.getEntityRefIID(arrayIdx)!=sourceEi.iid)
+				targetFi.parseValue(arrayIdx, sourceEi.iid);
+		}
+		else {
+			// Array
+			var found = false;
+			for(i in 0...targetFi.getArrayLength())
+				if( targetFi.getEntityRefIID(i)==sourceEi.iid ) {
+					found = true;
+					break;
+				}
+			if( !found ) {
+				targetFi.addArrayValue();
+				targetFi.parseValue(targetFi.getArrayLength()-1, sourceEi.iid);
+			}
+		}
+	}
+
+
 	public inline function hasAnyErrorInValues() {
 		return getFirstErrorInValues()!=null;
 	}
@@ -293,7 +327,7 @@ class FieldInstance {
 				for( idx in 0...getArrayLength() ) {
 					if( !def.canBeNull && valueIsNull(idx) )
 						return def.identifier+"?";
-					if( !valueIsNull(idx) && _project.getCachedRef( getEntityRefIID(idx) )==null )
+					else if( !valueIsNull(idx) && _project.getCachedRef( getEntityRefIID(idx) )==null )
 						return "Lost reference!";
 				}
 		}
@@ -482,11 +516,22 @@ class FieldInstance {
 		return out;
 	}
 
-	public function getEntityRefForDisplay(arrayIdx:Int) : String {
+	public function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
 		var iid = getEntityRefIID(arrayIdx);
 		var cr = _project.getCachedRef(iid);
 		if( cr==null || cr.ei==null )
-			return "<Lost reference!>";
+			return null;
+		else
+			return cr.ei;
+	}
+
+	public function getEntityRefForDisplay(arrayIdx:Int) : String {
+		if( valueIsNull(arrayIdx) )
+			return "null";
+		var iid = getEntityRefIID(arrayIdx);
+		var cr = _project.getCachedRef(iid);
+		if( cr==null || cr.ei==null )
+			return "Lost reference!";
 		return cr.ei.def.identifier
 			+ " in "+cr.level.identifier+"."+cr.li.def.identifier;
 	}
@@ -533,9 +578,13 @@ class FieldInstance {
 				var i = 0;
 				while( i<getArrayLength() ) {
 					if( !valueIsNull(i) && p.getCachedRef( getEntityRefIID(i) )==null ) {
-						// App.LOG.add("tidy", 'Removed lost reference in $this');
-						// parseValue(i, null);
-						parseValue(i, "!lost-ref!");
+						App.LOG.add("tidy", 'Removed lost reference in $this');
+						if( def.isArray ) {
+							removeArrayValue(i);
+							i--;
+						}
+						else
+							parseValue(i, null);
 					}
 					i++;
 				}

@@ -532,6 +532,23 @@ class Project {
 		applyAutoLevelIdentifiers();
 	}
 
+
+	public function removeReferencesInField(fd:data.def.FieldDef, refEi:data.inst.EntityInstance) {
+		var i = 0;
+
+		for(l in levels)
+		for(li in l.layerInstances)
+		for(ei in li.entityInstances) {
+			var fi = ei.getFieldInstance(fd);
+			i = 0;
+			while( i<fi.getArrayLength() )
+				if( fi.getEntityRefIID(i)==refEi.iid )
+					fi.removeArrayValue(i);
+				else
+					i++;
+		}
+	}
+
 	/**
 		Run tidy() only for custom fields
 	**/
@@ -543,7 +560,7 @@ class Project {
 
 			for(li in l.layerInstances)
 			for(ei in li.entityInstances)
-			for(fi in l.layerInstances)
+			for(fi in ei.fieldInstances)
 				fi.tidy(this);
 		}
 	}
