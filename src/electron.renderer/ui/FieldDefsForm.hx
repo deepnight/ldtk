@@ -468,6 +468,10 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
+		var i = Input.linkToHtmlInput( curField.symetricalRef, jForm.find("input[name=symetricalRef]") );
+		i.onChange = onFieldChange;
+		// i.setEnabled( TODO );
+
 
 		var i = Input.linkToHtmlInput( curField.editorTextPrefix, jForm.find("input[name=editorTextPrefix]") );
 		i.onChange = onFieldChange;
