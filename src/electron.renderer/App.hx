@@ -638,13 +638,15 @@ class App extends dn.Process {
 			e.empty().hide();
 	}
 
-	public inline function debug(msg:Dynamic, clear=false) {
+	public inline function debug(msg:Dynamic, ?c:Null<Int>, clear=false) {
 		var wrapper = new J("#debug");
 		if( clear )
 			wrapper.empty();
 		wrapper.show();
 
 		var line = new J('<p>${Std.string(msg)}</p>');
+		if( c!=null )
+			line.css("color", C.intToHex(c));
 		line.appendTo(wrapper);
 	}
 

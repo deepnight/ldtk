@@ -59,6 +59,24 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
+			label: L.untranslated("Cached references"),
+			cb: ()->{
+				App.ME.createChildProcess( (p)->{
+					App.ME.debug('CACHED REFERENCES', true);
+					for(cr in @:privateAccess project.refsCache.keyValueIterator()) {
+						var kind =
+							cr.value.ei!=null ? "ENTITY "+cr.value.ei.def.identifier
+							: cr.value.li!=null ? "LAYER "+cr.value.li.def.identifier
+							: "LEVEL "+cr.value.level.identifier;
+						var color = cr.value.ei!=null ? 0x4bdfff :
+							cr.value.li!=null ? 0x4bff5d : 0xff4b4b;
+						App.ME.debug(kind+" -- "+cr.key, color);
+					}
+				});
+			}
+		});
+
+		add({
 			label: L.untranslated("Update sample maps"),
 			cb: ()->{
 				var path = JsTools.getSamplesDir();
