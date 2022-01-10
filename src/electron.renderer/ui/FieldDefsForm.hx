@@ -129,7 +129,7 @@ class FieldDefsForm {
 
 		// Type picker
 		var types : Array<ldtk.Json.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null)
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null), F_EntityRef
 		];
 		if( fieldParent==FP_Entity )
 			types.push(F_Point);
@@ -487,6 +487,8 @@ class FieldDefsForm {
 		switch curField.type {
 			case F_Path:
 
+			case F_EntityRef:
+
 			case F_Text:
 				var defInput = jForm.find("div#fDefMultiLines");
 				if( curField.defaultOverride != null ) {
@@ -529,6 +531,7 @@ class FieldDefsForm {
 						case F_String, F_Text, F_Path: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
+						case F_EntityRef: "N/A";
 					});
 
 				defInput.change( function(ev) {

@@ -57,6 +57,7 @@ class Lang {
 			case F_Point: t._("Point");
 			case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });
 			case F_Path: t._("File path");
+			case F_EntityRef: t._("Entity ref");
 		}
 	}
 
@@ -71,6 +72,7 @@ class Lang {
 			case F_Point: t._("X::sep::Y", { sep:Const.POINT_SEPARATOR });
 			case F_Enum(name): t._("Enu");
 			case F_Path: t._("*.*");
+			case F_EntityRef: t._("Ent");
 		}
 	}
 

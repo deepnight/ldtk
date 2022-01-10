@@ -448,6 +448,25 @@ class FieldInstancesForm {
 					input.addClass("fileNotFound");
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
+
+			case F_EntityRef:
+				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
+
+				// Text input
+				var jInput = new J('<input class="entityRef" type="text"/>');
+				jInput.appendTo(jTarget);
+				jInput.attr("id",domId);
+				jInput.attr("placeholder", "(null)");
+				jInput.prop("readonly",true);
+
+				if( isRequired )
+					markError(jInput);
+
+				if( !fi.isUsingDefault(arrayIdx) ) {
+					jInput.val( fi.getEntityRefIID(arrayIdx) );
+					jInput.attr("title", fi.getEntityRefIID(arrayIdx));
+				}
+
 		}
 
 		// Suffix
@@ -678,6 +697,7 @@ class FieldInstancesForm {
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
 						switch fi.def.type {
 							case F_Int, F_Float, F_String, F_Text, F_Path: jArray.find("a.usingDefault:last").click();
+							case F_EntityRef:
 							case F_Bool:
 							case F_Color:
 							case F_Enum(enumDefUid):

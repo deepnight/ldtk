@@ -63,6 +63,7 @@ class FieldDef {
 			case F_Color: true;
 			case F_Enum(enumDefUid): false;
 			case F_Point, F_Path: false;
+			case F_EntityRef: false;
 		};
 	}
 
@@ -152,6 +153,7 @@ class FieldDef {
 			case F_Color: "#ff6c48";
 			case F_Enum(enumDefUid): "#9bc95a";
 			case F_Point: "#9bc95a";
+			case F_EntityRef: "#9bc95a";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
@@ -170,6 +172,7 @@ class FieldDef {
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 			case F_Path: "File path";
+			case F_EntityRef: "Entity ref";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -187,6 +190,7 @@ class FieldDef {
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 			case F_Path: "FilePath";
+			case F_EntityRef: "EntifyRef";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -348,6 +352,10 @@ class FieldDef {
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
+			case F_EntityRef:
+				rawDef = StringTools.trim(rawDef);
+				defaultOverride = rawDef=="" ? null : V_String(rawDef);
+
 			case F_Bool:
 				rawDef = StringTools.trim(rawDef).toLowerCase();
 				if( rawDef=="true" ) defaultOverride = V_Bool(true);
@@ -382,6 +390,7 @@ class FieldDef {
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
+			case F_EntityRef: null;
 		}
 	}
 

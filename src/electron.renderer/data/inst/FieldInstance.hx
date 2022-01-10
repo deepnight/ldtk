@@ -151,6 +151,7 @@ class FieldInstance {
 				case F_Enum(enumDefUid): return false; // TODO support default enum values
 				case F_Point: return false;
 				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
+				case F_EntityRef: return false;
 			}
 		}
 	}
@@ -190,6 +191,13 @@ class FieldInstance {
 					raw = StringTools.replace(raw, "\\n", " ");
 					setInternal(arrayIdx, V_String(raw) );
 				}
+
+			case F_EntityRef:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else
+					setInternal(arrayIdx, V_String(raw) );
 
 			case F_String:
 				raw = StringTools.trim(raw);
@@ -280,6 +288,11 @@ class FieldInstance {
 							return "FileNotFound";
 					}
 				}
+
+			case F_EntityRef:
+				for( idx in 0...getArrayLength() )
+					if( !def.canBeNull && valueIsNull(idx) )
+						return def.identifier+"?";
 		}
 		return null;
 	}
@@ -294,6 +307,7 @@ class FieldInstance {
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
+			case F_EntityRef: getEntityRefIID(arrayIdx);
 		}
 		return v == null;
 	}
@@ -335,6 +349,7 @@ class FieldInstance {
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
+			case F_EntityRef: getEntityRefIID(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -345,6 +360,7 @@ class FieldInstance {
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
 			case F_String, F_Text, F_Path: return '"$v"';
+			case F_EntityRef: return '@($v)';
 		}
 	}
 
@@ -359,6 +375,7 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
+			case F_EntityRef: getEntityRefIID(arrayIdx);
 		}
 	}
 
@@ -395,6 +412,7 @@ class FieldInstance {
 
 			case F_Point:
 			case F_Path:
+			case F_EntityRef:
 		}
 
 		return null;
@@ -452,6 +470,15 @@ class FieldInstance {
 		return out;
 	}
 
+	public function getEntityRefIID(arrayIdx:Int) : String {
+		def.require(F_EntityRef);
+		var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
+			case V_String(v): v;
+			case _: throw "unexpected";
+		}
+		return out;
+	}
+
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );
 		return isUsingDefault(arrayIdx) ? def.getEnumDefault() : switch internalValues[arrayIdx] {
@@ -489,6 +516,9 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 			case F_Path:
+
+			case F_EntityRef:
+				// TODO check entity ref validity
 
 			case F_Point:
 				if( li!=null ) {
