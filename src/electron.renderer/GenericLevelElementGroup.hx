@@ -474,6 +474,7 @@ class GenericLevelElementGroup {
 					for(fi in ei.getFieldInstancesOfType(F_Point)) {
 						switch fi.def.editorDisplayMode {
 							case PointStar, PointPath, PointPathLoop:
+							case RefLink: continue;
 							case Points: continue;
 							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, RadiusPx, RadiusGrid: continue;
 						}

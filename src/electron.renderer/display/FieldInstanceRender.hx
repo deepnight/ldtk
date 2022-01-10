@@ -18,7 +18,7 @@ class FieldInstanceRender {
 	}
 
 
-	static inline function renderLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=5.) {
+	static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=5.) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
 		var count = M.ceil( len/dashLen );
@@ -26,11 +26,36 @@ class FieldInstanceRender {
 
 		var n = 0;
 		var sign = 1;
-		final off = 1;
+		final off = 2.5;
 		var x = fx;
 		var y = fy;
 		while( n<count ) {
-			g.lineStyle(1, color, 0.4 + 0.6*n/count);
+			final r = n/(count-1);
+			g.lineStyle(1, color, 0.15 + 0.85*(1-r));
+			g.moveTo(x,y);
+			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r);
+			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r);
+			g.lineTo(x,y);
+			sign = -sign;
+			n++;
+		}
+	}
+
+
+	static inline function renderSimpleLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=10.) {
+		var a = Math.atan2(ty-fy, tx-fx);
+		var len = M.dist(fx,fy, tx,ty);
+		var count = M.ceil( len/dashLen );
+		dashLen = len/count;
+
+		var n = 0;
+		var sign = 1;
+		final off = 0.7;
+		var x = fx;
+		var y = fy;
+		while( n<count ) {
+			final r = n/(count-1);
+			g.lineStyle(1, color, 0.4 + 0.6*(1-r));
 			g.moveTo(x,y);
 			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off;
 			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off;
@@ -38,6 +63,7 @@ class FieldInstanceRender {
 			sign = -sign;
 			n++;
 		}
+		g.lineTo(tx,ty);
 	}
 
 
@@ -175,6 +201,24 @@ class FieldInstanceRender {
 
 			case EntityTile:
 
+			case RefLink:
+				switch ctx {
+					case EntityCtx(g, ei, ld):
+						var fx = ei.getPointOriginX(ld) - ei.x;
+						var fy = ei.getPointOriginY(ld) - ei.y;
+						for(i in 0...fi.getArrayLength()) {
+							var tei = fi.getEntityRefInstance(i);
+							if( tei==null )
+								continue;
+							var tx = M.round( tei.getPointOriginX(ld) - ei.x );
+							var ty = M.round( tei.getPointOriginY(ld) - ei.y );
+							renderRefLink(g, baseColor, fx,fy, tx,ty);
+						}
+
+					case LevelCtx(l):
+				}
+
+
 			case Points, PointStar, PointPath, PointPathLoop:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
@@ -191,7 +235,7 @@ class FieldInstanceRender {
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
 							if( fd.editorDisplayMode!=Points )
-								renderLink(g, baseColor, fx,fy, tx,ty);
+								renderSimpleLink(g, baseColor, fx,fy, tx,ty);
 
 							g.lineStyle(1, baseColor, 0.66);
 							g.beginFill( C.toBlack(baseColor, 0.6) );
@@ -206,6 +250,7 @@ class FieldInstanceRender {
 							switch fd.editorDisplayMode {
 								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 								case Points, PointStar:
+								case RefLink:
 								case PointPath, PointPathLoop:
 									// Next point connects to this one
 									fx = tx;
@@ -215,7 +260,7 @@ class FieldInstanceRender {
 
 						// Loop to Entity
 						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
-							renderLink(g, baseColor, fx,fy, startX, startY);
+							renderSimpleLink(g, baseColor, fx,fy, startX, startY);
 
 					case LevelCtx(_):
 				}

@@ -413,6 +413,7 @@ class FieldDefsForm {
 					case EntityTile: L.t._("Replace entity tile");
 					case ArrayCountWithLabel: L.t._("Show array length with label");
 					case ArrayCountNoLabel: L.t._("Show array length only");
+					case RefLink: L.t._("Show a link with reference");
 				}
 			},
 
@@ -425,6 +426,9 @@ class FieldDefsForm {
 
 					case EntityTile:
 						curField.isEnum() && fieldParent==FP_Entity;
+
+					case RefLink:
+						curField.type==F_EntityRef;
 
 					case Points, PointStar:
 						curField.type==F_Point && fieldParent==FP_Entity;
@@ -459,7 +463,7 @@ class FieldDefsForm {
 			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
 				i.setEnabled(true);
 
-			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLink:
 				i.setEnabled(false);
 		}
 		i.onChange = onFieldChange;

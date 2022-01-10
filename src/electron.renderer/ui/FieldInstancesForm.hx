@@ -562,6 +562,7 @@ class FieldInstancesForm {
 			switch fi.def.editorDisplayMode {
 				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 				case Points, PointStar:
+				case RefLink:
 				case PointPath, PointPathLoop:
 					var pt = fi.getPointGrid( editIdx-1 );
 					if( pt!=null )
@@ -581,6 +582,7 @@ class FieldInstancesForm {
 				switch fi.def.editorDisplayMode {
 					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 					case Points, PointStar:
+					case RefLink:
 					case PointPath, PointPathLoop:
 						var pt = fi.getPointGrid( editIdx-1 );
 						if( pt!=null )
