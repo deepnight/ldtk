@@ -177,8 +177,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
 
-		// Pick through
-		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input#hollow") );
+		// Hollow (ie. click through)
+		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input[name=hollow]") );
 		i.linkEvent(EntityDefChanged);
 
 		// Tags editor
