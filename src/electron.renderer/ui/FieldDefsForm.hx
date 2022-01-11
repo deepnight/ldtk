@@ -324,6 +324,7 @@ class FieldDefsForm {
 
 
 	function updateForm() {
+		ui.Tip.clear();
 		jForm.find("*").off(); // cleanup events
 
 		if( curField==null ) {
@@ -501,8 +502,8 @@ class FieldDefsForm {
 				onFieldChange();
 			},
 			(v)->return switch v {
-				case Any: L.t._("Any entity");
-				case OnlySame: L.t._("Only other '::name::'", { name:getParentName() });
+				case Any: L.t._("Reference to any entity");
+				case OnlySame: L.t._("Only references to other '::name::'s", { name:getParentName() });
 				// case Custom: L.t._("Only selected entities");
 			}
 		);
