@@ -603,6 +603,7 @@ class LayerInstance {
 		var copy = EntityInstance.fromJson( _project, this, ei.toJson(this) );
 		copy.iid = _project.generateUniqueId_UUID();
 		entityInstances.push(copy);
+		_project.initRefCache();
 
 		return copy;
 	}
