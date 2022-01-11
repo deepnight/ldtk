@@ -818,14 +818,17 @@ class Editor extends Page {
 
 		panTool.startUsing(ev,m);
 
-		if( !ev.cancel && resizeTool!=null )
+		if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() )
 			resizeTool.onMouseDown( ev, m );
 
-		if( !ev.cancel && !project.isBackup() )
+		if( !ev.cancel && !project.isBackup() && !ui.ValuePicker.exists() )
 			rulers.onMouseDown( ev, m );
 
 		if( !ev.cancel )
 			worldTool.onMouseDown(ev, m);
+
+		if( ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseDown(ev, m);
 
 		if( !ev.cancel && !worldMode && !project.isBackup() ) {
 			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
@@ -845,6 +848,10 @@ class Editor extends Page {
 
 		panTool.stopUsing(m);
 		worldTool.onMouseUp(m);
+
+		if( ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseUp(m);
+
 		if( resizeTool!=null && resizeTool.isRunning() )
 			resizeTool.stopUsing(m);
 
@@ -875,12 +882,17 @@ class Editor extends Page {
 			panTool.onMouseMove(ev,m);
 			panTool.onMouseMoveCursor(cursorEvent,m);
 
-			if( !ev.cancel && resizeTool!=null ) {
+			if( ui.ValuePicker.exists() ) {
+				ui.ValuePicker.ME.onMouseMove(ev,m);
+				ui.ValuePicker.ME.onMouseMoveCursor(cursorEvent,m);
+			}
+
+			if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() ) {
 				resizeTool.onMouseMove(ev,m);
 				resizeTool.onMouseMoveCursor(cursorEvent,m);
 			}
 
-			if( !ev.cancel && !worldMode ) {
+			if( !ev.cancel && !worldMode && !ui.ValuePicker.exists() ) {
 				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() ) {
 					selectionTool.onMouseMove(ev,m);
 					selectionTool.onMouseMoveCursor(cursorEvent,m);
@@ -895,8 +907,10 @@ class Editor extends Page {
 				}
 			}
 
-			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
-			rulers.onMouseMoveCursor(cursorEvent,m);
+			if( !ui.ValuePicker.exists() ) {
+				rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+				rulers.onMouseMoveCursor(cursorEvent,m);
+			}
 
 			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
 			worldTool.onMouseMoveCursor(cursorEvent,m);

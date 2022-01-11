@@ -487,22 +487,35 @@ class FieldInstancesForm {
 				jPick.appendTo(jTarget);
 				jPick.click(_->{
 					var sourceEi = getEntityInstance();
-					var all = []; // HACK
-					for(l in project.levels)
-					for(li in l.layerInstances)
-					for(ei in li.entityInstances)
-						if( ei!=sourceEi && ( fi.def.allowOutOfLevelRef || l==editor.curLevel ) )
-							all.push(ei);
-					var targetEi = all[Std.random(all.length)];
-					if( targetEi!=null ) {
+					var fd = fi.def;
+					var vp = new ui.vp.EntityRefPicker(sourceEi, fd);
+					vp.onPickValue = (targetEi)->{
+						var fi = sourceEi.getFieldInstance(fd);
 						if( fi.def.symmetricalRef ) {
 							project.removeReferencesInField(fi.def, sourceEi);
 							project.removeReferencesInField(fi.def, targetEi);
 						}
 						fi.parseValue(arrayIdx, targetEi.iid);
 						fi.setSymmetricalRef(arrayIdx, sourceEi);
-						onFieldChange(fi);
+						editor.ge.emit( EntityInstanceChanged(sourceEi) );
+						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}
+					// var all = []; // HACK
+					// for(l in project.levels)
+					// for(li in l.layerInstances)
+					// for(ei in li.entityInstances)
+					// 	if( ei!=sourceEi && ( fi.def.allowOutOfLevelRef || l==editor.curLevel ) )
+					// 		all.push(ei);
+					// var targetEi = all[Std.random(all.length)];
+					// if( targetEi!=null ) {
+					// 	if( fi.def.symmetricalRef ) {
+					// 		project.removeReferencesInField(fi.def, sourceEi);
+					// 		project.removeReferencesInField(fi.def, targetEi);
+					// 	}
+					// 	fi.parseValue(arrayIdx, targetEi.iid);
+					// 	fi.setSymmetricalRef(arrayIdx, sourceEi);
+					// 	onFieldChange(fi);
+					// }
 				});
 
 				// Clear ref
