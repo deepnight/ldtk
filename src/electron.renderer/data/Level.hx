@@ -7,7 +7,7 @@ class Level {
 
 	@:allow(data.Project)
 	public var uid(default,null) : Int;
-	public var iid(default,null) : String;
+	public var iid : String;
 	public var identifier(default,set): String;
 	public var worldX : Int;
 	public var worldY : Int;

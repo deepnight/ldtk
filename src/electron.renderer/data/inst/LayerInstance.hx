@@ -601,6 +601,7 @@ class LayerInstance {
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
 		var copy = EntityInstance.fromJson( _project, this, ei.toJson(this) );
+		copy.iid = _project.generateUniqueId_UUID();
 		entityInstances.push(copy);
 
 		return copy;

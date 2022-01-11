@@ -541,7 +541,7 @@ class Project {
 		for(ei in li.entityInstances) {
 			if( !ei.hasField(fd) )
 				continue;
-			
+
 			var fi = ei.getFieldInstance(fd);
 			i = 0;
 			while( i<fi.getArrayLength() )
@@ -709,6 +709,7 @@ class Project {
 		var copy : data.Level = Level.fromJson( this, l.toJson() );
 
 		// Remap IDs
+		copy.iid = generateUniqueId_UUID();
 		copy.uid = generateUniqueId_int();
 		for(li in copy.layerInstances)
 			li.levelId = copy.uid;
