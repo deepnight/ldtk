@@ -21,6 +21,8 @@ $mainPanelCompactWid: 130px;
 
 // Cursors
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
+$cur_expand: cell;
+$cur_collapse: url("../cursors/collapse.svg") 16 16, zoom-out;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -1180,13 +1182,13 @@ ul.log {
 		}
 
 		&.expanded {
-			cursor: pointer;
+			cursor: $cur_collapse;
 			color: white;
 			background-color: $bgLight;
 			background-image: url("../icons/expanded.svg");
 		}
 		&.collapsed {
-			cursor: cell;
+			cursor: $cur_expand;
 			background-color: $bgMed;
 			background-image: url("../icons/collapsed.svg");
 		}
@@ -4777,10 +4779,15 @@ canvas#webgl {
 
 		dt {
 			padding-top: 0;
+			min-width: 80px;
+			align-items: center;
 		}
 
 		dd {
 			color: $bgLighter;
+			&.iid {
+				font-size: 8pt;
+			}
 		}
 	}
 }
@@ -5952,7 +5959,7 @@ body.sorting ul.collapsedSortTarget {
 					border: 0;
 
 					header .name {
-						cursor: cell;
+						cursor: $cur_expand;
 					}
 					ul.ruleGroup {
 						display: none;
@@ -6002,7 +6009,7 @@ body.sorting ul.collapsedSortTarget {
 						overflow-x: hidden;
 						white-space: nowrap;
 
-						cursor: zoom-out;
+						cursor: $cur_collapse;
 
 						.text {
 							overflow: hidden;
