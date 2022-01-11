@@ -20,7 +20,7 @@ class ValuePicker<T> extends dn.Process {
 		ME = this;
 
 		jWindow = new J('<div class="valuePicker"/>');
-		// editor.j
+		App.ME.jPage.append(jWindow);
 	}
 
 	public static inline function exists() return ME!=null && !ME.destroyed;
@@ -32,6 +32,15 @@ class ValuePicker<T> extends dn.Process {
 			ME = null;
 
 		jWindow.remove();
+	}
+
+	public static function cancelCurrent() {
+		if( exists() )
+			ME.cancel();
+	}
+
+	public function cancel() {
+		destroy();
 	}
 
 

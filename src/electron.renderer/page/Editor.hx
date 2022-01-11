@@ -524,7 +524,7 @@ class Editor extends Page {
 					catch(e:Dynamic) {}
 				}
 				else if( ui.ValuePicker.exists() )
-					ui.ValuePicker.ME.destroy();
+					ui.ValuePicker.ME.cancel();
 				else if( curTool!=null && curTool.palettePoppedOut() )
 					curTool.popInPalette();
 				else if( specialTool!=null )

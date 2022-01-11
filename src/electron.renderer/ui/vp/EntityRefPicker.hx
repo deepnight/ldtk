@@ -10,6 +10,15 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		this.fd = fd;
 	}
 
+	override function cancel() {
+		super.cancel();
+		var cr = project.getCachedRef(sourceEi.iid);
+		if( cr!=null && cr.level!=curLevel ) {
+			editor.selectLevel(cr.level);
+			editor.camera.scrollTo(sourceEi.worldX, sourceEi.worldY);
+		}
+	}
+
 	override function onEnter(ei:data.inst.EntityInstance) {
 		super.onEnter(ei);
 		N.success("enter "+ei);
