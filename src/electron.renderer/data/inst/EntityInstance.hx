@@ -48,6 +48,12 @@ class EntityInstance {
 	inline function get_worldY() return Std.int( y + _li.level.worldY );
 
 	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
+		if( customWidth==def.width )
+			customWidth = null;
+
+		if( customHeight==def.height )
+			customHeight = null;
+
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
