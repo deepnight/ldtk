@@ -479,18 +479,38 @@ class FieldInstancesForm {
 					jInput.prop("readonly",true);
 					jInput.click( (_)->{
 						// Follow ref
-						if( !fi.valueIsNull(arrayIdx) ) {
-							var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
-							if( cr==null ) {
-								N.error("Invalid reference");
-								return;
-							}
-							editor.selectLevel(cr.level);
-							if( cr.li!=null )
-								editor.selectLayerInstance(cr.li);
-							if( cr.ei!=null )
-								editor.camera.scrollTo(cr.ei.worldX, cr.ei.worldY);
+						if( fi.valueIsNull(arrayIdx) )
+							return;
+
+						var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
+						if( cr==null ) {
+							N.error("Invalid reference");
+							return;
 						}
+
+						if( cr.level!=editor.curLevel )
+							editor.selectLevel(cr.level);
+
+						if( cr.li!=null )
+							editor.selectLayerInstance(cr.li);
+
+						if( cr.ei!=null ) {
+							editor.camera.scrollTo(cr.ei.worldX, cr.ei.worldY);
+							editor.levelRender.bleepEntity(cr.li, cr.ei);
+						}
+					});
+
+					jInput.mouseover( _->{
+						// Mouse over a ref
+						if( fi.valueIsNull(arrayIdx) )
+							return;
+
+						var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
+						if( cr==null )
+							return;
+
+						if( cr.level==editor.curLevel && cr.li!=null && cr.ei!=null )
+							editor.levelRender.bleepEntity(cr.li, cr.ei);
 					});
 
 					if( fi.hasAnyErrorInValues() )

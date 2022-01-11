@@ -8,6 +8,13 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		super();
 		this.sourceEi = sourceEi;
 		this.fd = fd;
+
+		var targetName = switch fd.allowedRefs {
+			case Any: "any entity";
+			case OnlySame: "another "+sourceEi.def.identifier;
+		}
+		var location = fd.allowOutOfLevelRef ? "in any level" : "in this level";
+		setInstructions("Pick "+targetName+" "+location);
 	}
 
 	override function cancel() {
@@ -21,12 +28,10 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 	override function onEnter(ei:data.inst.EntityInstance) {
 		super.onEnter(ei);
-		N.success("enter "+ei);
 	}
 
 	override function onLeave(ei:data.inst.EntityInstance) {
 		super.onLeave(ei);
-		N.error("leave "+ei);
 	}
 
 	override function pickAt(m:Coords) {
@@ -45,9 +50,23 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 
 	override function isValidPick(ei:data.inst.EntityInstance):Bool {
+		// Not same level
+		if( !fd.allowOutOfLevelRef && ei._li.level!=sourceEi._li.level  )
+			return false;
+
+		// Not right entity type
 		return ei!=sourceEi && switch fd.allowedRefs {
 			case Any: true;
 			case OnlySame: ei.def.identifier==sourceEi.def.identifier;
 		}
+	}
+
+	override function update() {
+		super.update();
+
+		if( !fd.allowOutOfLevelRef && ( curLevel!=sourceEi._li.level || editor.worldMode ) )
+			setError("You can only pick a reference in the same level for this value.");
+		else
+			setError();
 	}
 }

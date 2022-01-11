@@ -19,9 +19,37 @@ class ValuePicker<T> extends dn.Process {
 			ME.destroy();
 		ME = this;
 
+		// Init HTML & load template
 		jWindow = new J('<div class="valuePicker"/>');
 		App.ME.jPage.append(jWindow);
+		var raw = JsTools.getHtmlTemplate("valuePicker");
+		jWindow.html( raw );
+
+		jWindow.find(".cancel").click( _->cancel() );
 	}
+
+
+	function setInstructions(str:String) {
+		jWindow.find(".instructions").html(str);
+	}
+
+
+	var lastError : Null<String>;
+	function setError(?str:String) {
+		if( lastError==str )
+			return;
+
+		if( str==null ) {
+			jWindow.removeClass("error");
+			jWindow.find(".error").empty();
+		}
+		else {
+			jWindow.addClass("error");
+			jWindow.find(".error").html(str);
+		}
+		lastError = str;
+	}
+
 
 	public static inline function exists() return ME!=null && !ME.destroyed;
 
@@ -96,7 +124,6 @@ class ValuePicker<T> extends dn.Process {
 
 	public function onMouseUp(m:Coords) {
 	}
-
 
 	public function isValidPick(v:T) {
 		return true;

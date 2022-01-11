@@ -2045,6 +2045,53 @@ textarea {
 }
 
 
+.valuePicker {
+	position: absolute;
+	z-index: 97;
+	display: grid;
+	grid-template-columns: auto 100px;
+	gap: 16px;
+	align-items: center;
+
+	padding: 16px;
+	border-radius: 4px;
+
+
+	left: calc( 50vw - 200px );
+	top: 85vh;
+	width: 400px;
+
+	background-color: $bgDark;
+	box-shadow: 0px 0px 32px black;
+	border: 1px solid $bgMed;
+
+	&.error {
+		background-color: $red;
+		box-shadow: 0px 0px 32px $red;
+		.instructions {
+			display: none;
+		}
+
+		.error {
+			color: white;
+		}
+	}
+
+	.desc {
+		display: grid;
+		gap: 8px;
+		grid-template-rows: auto auto;
+
+		.instructions {
+			color: $orange;
+			font-weight: bold;
+			text-align: center;
+		}
+	}
+}
+
+
+
 .window {
 	position: absolute;
 	left: 0px;
@@ -5015,6 +5062,9 @@ dl.form.fieldInstanceEditor {
 		font-size: 8pt;
 		color: $orangeLight;
 		cursor: $cur_follow;
+		&:hover {
+			border-color: $orangeLight;
+		}
 	}
 	[error] .entityRef {
 		color: $lightRed;
