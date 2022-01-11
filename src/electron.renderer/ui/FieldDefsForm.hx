@@ -138,10 +138,12 @@ class FieldDefsForm {
 
 		// Type picker
 		var types : Array<ldtk.Json.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_EntityRef
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path
 		];
-		if( isEntityField() )
+		if( isEntityField() ) {
+			types.push(F_EntityRef);
 			types.push(F_Point);
+		}
 
 		for(type in types) {
 			var b = new J("<button/>");
