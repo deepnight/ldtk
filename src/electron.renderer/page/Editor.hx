@@ -1034,6 +1034,7 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
+		ui.Tip.clear();
 
 		saveLastProjectInfos();
 	}
@@ -1059,6 +1060,7 @@ class Editor extends Page {
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 		clearSpecialTool();
+		ui.Tip.clear();
 
 		updateEditOptions();
 	}
