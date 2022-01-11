@@ -145,12 +145,12 @@ class EditEnumDefs extends ui.modal.Panel {
 			ContextMenu.addTo(e, [
 				{
 					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copy(CEnumDef, ed.toJson(project)),
+					cb: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
 				},
 				{
 					label: L._Cut(),
 					cb: ()->{
-						App.ME.clipboard.copy(CEnumDef, ed.toJson(project));
+						App.ME.clipboard.copyData(CEnumDef, ed.toJson(project));
 						deleteEnumDef(ed, true);
 					},
 				},

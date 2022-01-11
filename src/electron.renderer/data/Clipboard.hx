@@ -37,7 +37,7 @@ class Clipboard {
 	/** Create a temporary Clipboard (ie. not connected with the System clipboard) **/
 	public static function createTemp(type:ClipboardType, obj:Dynamic) : Clipboard {
 		var c = new Clipboard(false);
-		c.copy(type, obj);
+		c.copyData(type, obj);
 		return c;
 	}
 
@@ -97,7 +97,7 @@ class Clipboard {
 	/**
 		Write an anonymous object to the clipboard
 	**/
-	public function copy(type:ClipboardType, obj:Dynamic) {
+	public function copyData(type:ClipboardType, obj:Dynamic) {
 		this.type = type;
 		this.jsonObj = obj;
 
@@ -121,6 +121,14 @@ class Clipboard {
 		}
 
 		N.msg("Copied: "+name);
+	}
+
+	public function copyStr(v:String) {
+		if( linkToSystem ) {
+			electron.Clipboard.writeText(v);
+			clearInternal();
+		}
+
 	}
 
 	/**

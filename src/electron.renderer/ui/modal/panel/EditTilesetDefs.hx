@@ -253,12 +253,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			ContextMenu.addTo(e, [
 				{
 					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copy(CTilesetDef, td.toJson()),
+					cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
 				},
 				{
 					label: L._Cut(),
 					cb: ()->{
-						App.ME.clipboard.copy(CTilesetDef, td.toJson());
+						App.ME.clipboard.copyData(CTilesetDef, td.toJson());
 						deleteTilesetDef(td);
 					},
 				},

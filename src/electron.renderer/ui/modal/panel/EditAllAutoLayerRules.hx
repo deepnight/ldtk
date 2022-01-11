@@ -550,13 +550,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L._Copy("Group"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
 				}
 			},
 			{
 				label: L._Cut("Group"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
 					deleteRuleGroup(rg);
 				}
 			},
@@ -852,13 +852,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L._Copy("Rule"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRule, r.toJson());
+					App.ME.clipboard.copyData(CRule, r.toJson());
 				},
 			},
 			{
 				label: L._Cut("Rule"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRule, r.toJson());
+					App.ME.clipboard.copyData(CRule, r.toJson());
 					deleteRule(rg,r);
 				},
 			},

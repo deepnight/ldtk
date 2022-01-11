@@ -66,7 +66,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm(FP_Entity);
+		fieldsForm = new ui.FieldDefsForm( FP_Entity );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 
@@ -362,9 +362,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function updateFieldsForm() {
 		if( curEntity!=null )
-			fieldsForm.useFields(curEntity.fieldDefs);
+			fieldsForm.useFields(curEntity.identifier, curEntity.fieldDefs);
 		else {
-			fieldsForm.useFields([]);
+			fieldsForm.useFields("Entity", []);
 			fieldsForm.hide();
 		}
 		checkBackup();
@@ -426,12 +426,12 @@ class EditEntityDefs extends ui.modal.Panel {
 				ContextMenu.addTo(jEnt, [
 					{
 						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copy(CEntityDef, ed.toJson()),
+						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson()),
 					},
 					{
 						label: L._Cut(),
 						cb: ()->{
-							App.ME.clipboard.copy(CEntityDef, ed.toJson());
+							App.ME.clipboard.copyData(CEntityDef, ed.toJson());
 							deleteEntityDef(ed);
 						},
 					},
