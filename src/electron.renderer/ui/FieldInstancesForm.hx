@@ -458,6 +458,21 @@ class FieldInstancesForm {
 				jInput.attr("id",domId);
 				jInput.attr("placeholder", "(null)");
 				jInput.prop("readonly",true);
+				jInput.click( (_)->{
+					// Follow ref
+					if( !fi.valueIsNull(arrayIdx) ) {
+						var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
+						if( cr==null ) {
+							N.error("Invalid reference");
+							return;
+						}
+						editor.selectLevel(cr.level);
+						if( cr.li!=null )
+							editor.selectLayerInstance(cr.li);
+						if( cr.ei!=null )
+							editor.camera.scrollTo(cr.ei.worldX, cr.ei.worldY);
+					}
+				});
 
 				if( isRequired || fi.hasAnyErrorInValues() )
 					markError(jInput);

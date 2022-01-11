@@ -4998,6 +4998,7 @@ dl.form.fieldInstanceEditor {
 	.entityRef {
 		font-size: 8pt;
 		color: $orange;
+		cursor: url("../cursors/followRef.svg") 16 16, zoom-in;
 	}
 	[error] .entityRef {
 		color: $lightRed;
