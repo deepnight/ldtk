@@ -487,11 +487,11 @@ class FieldInstancesForm {
 				jPick.appendTo(jTarget);
 				jPick.click(_->{
 					var sourceEi = getEntityInstance();
-					var all = [];
+					var all = []; // HACK
 					for(l in project.levels)
 					for(li in l.layerInstances)
 					for(ei in li.entityInstances)
-						if( ei!=sourceEi )
+						if( ei!=sourceEi && ( fi.def.allowOutOfLevelRef || l==editor.curLevel ) )
 							all.push(ei);
 					var targetEi = all[Std.random(all.length)];
 					if( targetEi!=null ) {

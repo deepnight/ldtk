@@ -476,6 +476,9 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		// i.setEnabled( TODO );
 
+		var i = Input.linkToHtmlInput( curField.allowOutOfLevelRef, jForm.find("input[name=allowOutOfLevelRef]") );
+		i.onChange = onFieldChange;
+
 
 		var i = Input.linkToHtmlInput( curField.editorTextPrefix, jForm.find("input[name=editorTextPrefix]") );
 		i.onChange = onFieldChange;
