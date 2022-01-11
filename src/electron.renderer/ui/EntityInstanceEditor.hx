@@ -162,6 +162,11 @@ class EntityInstanceEditor extends dn.Process {
 		jWindow.find(".entityInstanceWrapper").scrollTop( scrollMem );
 	}
 
+	function onEntityFieldChanged() {
+		editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
+		editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
+}
+
 	var scrollMem : Float = 0;
 	final function updateForm() {
 		jWindow.empty();
@@ -198,6 +203,47 @@ class EntityInstanceEditor extends dn.Process {
 		var jExtraInfos = new J('<dl class="form extraInfos"/>');
 		jExtraInfos.appendTo(wrapper);
 
+		// IID
+		jExtraInfos.append('<dt>IID</dt>');
+		jExtraInfos.append('<dd class="iid">${ei.iid}</dd>');
+
+		// Pos
+		jExtraInfos.append('<dt>Coords</dt>');
+		var jCoords = new J('<dd/>');
+		jCoords.append('<input type="text" name="x"/> <span>,</span> <input type="text" name="y"/> <span> ; </span>');
+		jCoords.append('<input type="text" name="w"/> <span>x</span> <input type="text" name="h"/>');
+		var i = Input.linkToHtmlInput(ei.x, jCoords.find("[name=x]"));
+		i.setBounds(0, editor.curLevel.pxWid);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+		var i = Input.linkToHtmlInput(ei.y, jCoords.find("[name=y]"));
+		i.setBounds(0, editor.curLevel.pxHei);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+
+		// Width
+		var i = new form.input.IntInput(
+			jCoords.find("[name=w]"),
+			()->ei.width,
+			(v)->ei.customWidth = v
+		);
+		i.setEnabled( ei.def.isResizable() );
+		i.setBounds(ei.def.width, null);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+
+		// Height
+		var i = new form.input.IntInput(
+			jCoords.find("[name=h]"),
+			()->ei.height,
+			(v)->ei.customHeight = v
+		);
+		i.setEnabled( ei.def.isResizable() );
+		i.setBounds(ei.def.height, null);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+		jExtraInfos.append(jCoords);
+
 		// Entity size
 		if( ei.def.isResizable() ) {
 			jExtraInfos.append('<dt>Size</dt>');
@@ -208,10 +254,7 @@ class EntityInstanceEditor extends dn.Process {
 		var form = new ui.FieldInstancesForm();
 		wrapper.append(form.jWrapper);
 		form.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd) );
-		form.onChange = ()->{
-			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
-			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-		}
+		form.onChange = ()->onEntityFieldChanged();
 
 
 		JsTools.parseComponents(jWindow);

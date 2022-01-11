@@ -51,6 +51,7 @@
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Tool tips are now larger and easier to read.
   - Mouse-overing entire rule blocks in the panel will no longer preview affected cells in the level. Now, to preview affected cells, you have to move your mouse over either the group name, or the "pattern" block.
+  - You can now manually edit X,Y coords and width,height values of an existing Entity.
   - If you open a Backup copy of a project, all panels will be locked, preventing any edit. You may only Restore the backup.
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
