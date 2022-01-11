@@ -238,6 +238,10 @@ class EntityInstance {
 		return false;
 	}
 
+	public function hasField(fieldDef:data.def.FieldDef) {
+		return fieldInstances.exists(fieldDef.uid);
+	}
+
 	public function getFieldInstance(fieldDef:data.def.FieldDef) {
 		if( !fieldInstances.exists(fieldDef.uid) )
 			fieldInstances.set(fieldDef.uid, new data.inst.FieldInstance(_project, fieldDef.uid));

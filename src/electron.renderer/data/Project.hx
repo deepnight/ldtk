@@ -539,6 +539,9 @@ class Project {
 		for(l in levels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances) {
+			if( !ei.hasField(fd) )
+				continue;
+			
 			var fi = ei.getFieldInstance(fd);
 			i = 0;
 			while( i<fi.getArrayLength() )
