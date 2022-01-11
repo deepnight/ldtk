@@ -385,13 +385,10 @@ class Level {
 		return ld!=null ? getLayerInstance(ld) : null;
 	}
 
-	public function getLayerInstanceFromEntity(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : Null<data.inst.LayerInstance> {
-		if( ei==null && ed==null )
-			return null;
-
+	public function getLayerInstanceFromEntity(ei:data.inst.EntityInstance) : Null<data.inst.LayerInstance> {
 		for(li in layerInstances)
 		for(e in li.entityInstances)
-			if( ei!=null && e==ei || ed!=null && e.defUid==ed.uid )
+			if( e.iid==ei.iid )
 				return li;
 
 		return null;

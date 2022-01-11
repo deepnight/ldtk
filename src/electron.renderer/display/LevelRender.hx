@@ -237,11 +237,8 @@ class LevelRender extends dn.Process {
 			case LevelFieldInstanceChanged(l,fi):
 
 			case EntityFieldInstanceChanged(ei,fi):
-				var ed = editor.project.defs.getEntityDefUsingField(fi.def);
-				if( ed!=null ) {
-					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
-					invalidateLayer( li==null ? editor.curLayerInstance : li );
-				}
+				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
+				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
 			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
