@@ -212,7 +212,6 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.getPointOriginX(ld) + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.getPointOriginY(ld) + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							// var ty = M.round( tei.getPointOriginY(ld) - ei.y );
 							renderRefLink(g, baseColor, fx,fy, tx,ty);
 						}
 
