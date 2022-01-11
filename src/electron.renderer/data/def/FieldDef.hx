@@ -36,6 +36,7 @@ class FieldDef {
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
 	public var symmetricalRef : Bool;
 	public var allowOutOfLevelRef : Bool;
+	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
 
 
 	var _project : data.Project;
@@ -59,6 +60,7 @@ class FieldDef {
 		defaultOverride = null;
 		symmetricalRef = false;
 		allowOutOfLevelRef = true;
+		allowedRefs = OnlySame;
 	}
 
 	static inline function getDefaultUseForSmartColor(t:ldtk.Json.FieldType) : Bool {
@@ -111,6 +113,7 @@ class FieldDef {
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
+		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
 
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
@@ -145,6 +148,7 @@ class FieldDef {
 			textLanguageMode: type!=F_Text ? null : JsonTools.writeEnum(textLanguageMode, true),
 			symmetricalRef: symmetricalRef,
 			allowOutOfLevelRef: allowOutOfLevelRef,
+			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
 		}
 	}
 

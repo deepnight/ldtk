@@ -2,7 +2,7 @@ package ui;
 
 import data.def.FieldDef;
 
-enum FieldParent {
+enum FieldParentType {
 	FP_Entity;
 	FP_Level;
 }
@@ -11,7 +11,8 @@ class FieldDefsForm {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 
-	var fieldParent : FieldParent;
+	var parentName : Null<String>;
+	var parentType : FieldParentType;
 	public var jWrapper : js.jquery.JQuery;
 	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList");
 	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("dl.form");
@@ -19,16 +20,12 @@ class FieldDefsForm {
 	var fieldDefs : Array<FieldDef>;
 	var curField : Null<FieldDef>;
 
-	public function new(fieldParent:FieldParent) {
-		this.fieldParent = fieldParent;
+	public function new(parentType:FieldParentType) {
+		this.parentType = parentType;
 		this.fieldDefs = [];
 
 		jWrapper = new J('<div class="fieldDefsForm"/>');
-		var parentName = switch fieldParent {
-			case FP_Entity: "Entity";
-			case FP_Level: "Level";
-		}
-		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm", { parent:parentName }) );
+		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm") );
 
 		// Create single field
 		jButtons.find("button.createSingle").click( function(ev) {
@@ -47,12 +44,24 @@ class FieldDefsForm {
 	}
 
 
+	inline function getParentName() {
+		return parentName!=null ? parentName : switch parentType {
+			case FP_Entity: "Entity";
+			case FP_Level: "Level";
+		}
+	}
+
+
+	inline function isLevelField() return parentType==FP_Level;
+	inline function isEntityField() return parentType==FP_Entity;
+
 	public function hide() {
 		jWrapper.css({ visibility: "hidden" });
 	}
 
 
-	public function useFields(fields:Array<FieldDef>) {
+	public function useFields(parentName:String, fields:Array<FieldDef>) {
+		this.parentName = parentName;
 		jWrapper.css({ visibility: "visible" });
 		fieldDefs = fields;
 
@@ -131,7 +140,7 @@ class FieldDefsForm {
 		var types : Array<ldtk.Json.FieldType> = [
 			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_EntityRef
 		];
-		if( fieldParent==FP_Entity )
+		if( isEntityField() )
 			types.push(F_Point);
 
 		for(type in types) {
@@ -234,12 +243,12 @@ class FieldDefsForm {
 			ui.modal.ContextMenu.addTo(li, [
 				{
 					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copy(CFieldDef, fd.toJson()),
+					cb: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
 				},
 				{
 					label: L._Cut(),
 					cb: ()->{
-						App.ME.clipboard.copy(CFieldDef, fd.toJson());
+						App.ME.clipboard.copyData(CFieldDef, fd.toJson());
 						deleteField(fd);
 					},
 				},
@@ -291,7 +300,7 @@ class FieldDefsForm {
 
 
 	function onAnyChange() {
-		switch fieldParent {
+		switch parentType {
 			case FP_Entity:
 				for( l in project.levels )
 					editor.invalidateLevelCache(l);
@@ -425,19 +434,19 @@ class FieldDefsForm {
 					case ArrayCountNoLabel, ArrayCountWithLabel: curField.isArray;
 
 					case EntityTile:
-						curField.isEnum() && fieldParent==FP_Entity;
+						curField.isEnum() && isEntityField();
 
 					case RefLink:
 						curField.type==F_EntityRef;
 
 					case Points, PointStar:
-						curField.type==F_Point && fieldParent==FP_Entity;
+						curField.type==F_Point && isEntityField();
 
 					case PointPath, PointPathLoop:
-						curField.type==F_Point && curField.isArray && fieldParent==FP_Entity;
+						curField.type==F_Point && curField.isArray && isEntityField();
 
 					case RadiusPx, RadiusGrid:
-						!curField.isArray && ( curField.type==F_Int || curField.type==F_Float ) && fieldParent==FP_Entity;
+						!curField.isArray && ( curField.type==F_Int || curField.type==F_Float ) && isEntityField();
 				}
 			}
 		);
@@ -449,7 +458,7 @@ class FieldDefsForm {
 			ldtk.Json.FieldDisplayPosition,
 			()->curField.editorDisplayPos,
 			(v)->curField.editorDisplayPos = v,
-			(pos)->switch fieldParent {
+			(pos)->switch parentType {
 				case FP_Entity: true;
 				case FP_Level:
 					switch pos {
@@ -474,7 +483,23 @@ class FieldDefsForm {
 
 		var i = Input.linkToHtmlInput( curField.symmetricalRef, jForm.find("input[name=symmetricalRef]") );
 		i.onChange = onFieldChange;
-		// i.setEnabled( TODO );
+		i.setEnabled( curField.allowedRefs==OnlySame );
+
+		var s = new form.input.EnumSelect(
+			jForm.find("[name=allowedRefs]"),
+			ldtk.Json.EntityReferenceTarget,
+			false,
+			()->curField.allowedRefs,
+			(v)->{
+				curField.allowedRefs = v;
+				onFieldChange();
+			},
+			(v)->return switch v {
+				case Any: L.t._("Any entity");
+				case OnlySame: L.t._("Only other '::name::'", { name:getParentName() });
+				// case Custom: L.t._("Only selected entities");
+			}
+		);
 
 		var i = Input.linkToHtmlInput( curField.allowOutOfLevelRef, jForm.find("input[name=allowOutOfLevelRef]") );
 		i.onChange = onFieldChange;
