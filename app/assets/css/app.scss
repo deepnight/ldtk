@@ -19,6 +19,9 @@ $helpDarker: #273f2f;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
 
+// Cursors
+$cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
+
 // Shortcuts
 @mixin resetMargin() {
 	margin: 0;
@@ -4997,8 +5000,8 @@ dl.form.fieldInstanceEditor {
 
 	.entityRef {
 		font-size: 8pt;
-		color: $orange;
-		cursor: url("../cursors/followRef.svg") 16 16, zoom-in;
+		color: $orangeLight;
+		cursor: $cur_follow;
 	}
 	[error] .entityRef {
 		color: $lightRed;
