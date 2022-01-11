@@ -493,6 +493,10 @@ class FieldDefsForm {
 			false,
 			()->curField.allowedRefs,
 			(v)->{
+				switch v {
+					case Any: curField.symmetricalRef = false; // not compatible
+					case OnlySame:
+				}
 				curField.allowedRefs = v;
 				onFieldChange();
 			},

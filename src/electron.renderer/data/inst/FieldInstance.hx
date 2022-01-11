@@ -525,7 +525,7 @@ class FieldInstance {
 			return cr.ei;
 	}
 
-	public function getEntityRefForDisplay(arrayIdx:Int) : String {
+	public function getEntityRefForDisplay(arrayIdx:Int, ?checkLevel:Level) : String {
 		if( valueIsNull(arrayIdx) )
 			return "null";
 		var iid = getEntityRefIID(arrayIdx);
@@ -533,7 +533,7 @@ class FieldInstance {
 		if( cr==null || cr.ei==null )
 			return "Lost reference!";
 		return cr.ei.def.identifier
-			+ " in "+cr.level.identifier+"."+cr.li.def.identifier;
+			+ ( checkLevel==null || checkLevel!=cr.level ? " in "+cr.level.identifier+"."+cr.li.def.identifier : "" );
 	}
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
