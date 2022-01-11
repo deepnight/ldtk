@@ -450,8 +450,6 @@ class FieldInstancesForm {
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
 
 			case F_EntityRef:
-				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
-
 				function _pickRef() {
 					var sourceEi = getEntityInstance();
 					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
@@ -467,7 +465,7 @@ class FieldInstancesForm {
 					}
 				}
 
-				if( isRequired || fi.hasAnyErrorInValues() || fi.valueIsNull(arrayIdx) ) {
+				if( fi.valueIsNull(arrayIdx) ) {
 					var jPick = new J('<button>Pick reference</button>');
 					jPick.appendTo(jTarget);
 					jPick.click( _->_pickRef() );
@@ -495,7 +493,7 @@ class FieldInstancesForm {
 						}
 					});
 
-					if( isRequired || fi.hasAnyErrorInValues() )
+					if( fi.hasAnyErrorInValues() )
 						markError(jInput);
 
 					if( !fi.isUsingDefault(arrayIdx) ) {
@@ -735,6 +733,7 @@ class FieldInstancesForm {
 							// if( fi.def.type==F_EntityRef && fi.def.symmetricalRef )
 								// fi.applyReferenceSymetry(idx, getEntityInstance(), false);
 							fi.removeArrayValue(idx);
+							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
 						});
 					}
