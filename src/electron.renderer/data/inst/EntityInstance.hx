@@ -11,6 +11,8 @@ class EntityInstance {
 	public var y : Int;
 	public var centerX(get,never) : Int;
 	public var centerY(get,never) : Int;
+	public var worldX(get,never) : Int;
+	public var worldY(get,never) : Int;
 	public var customWidth : Null<Int>;
 	public var customHeight: Null<Int>;
 
@@ -41,6 +43,9 @@ class EntityInstance {
 
 	inline function get_centerX() return Std.int( x + (0.5-def.pivotX)*width );
 	inline function get_centerY() return Std.int( y + (0.5-def.pivotY)*height );
+
+	inline function get_worldX() return Std.int( x + _li.level.worldX );
+	inline function get_worldY() return Std.int( y + _li.level.worldY );
 
 	public function toJson(li:data.inst.LayerInstance) : ldtk.Json.EntityInstanceJson {
 		return {
