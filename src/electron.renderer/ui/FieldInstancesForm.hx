@@ -483,7 +483,7 @@ class FieldInstancesForm {
 				}
 
 				// Pick ref
-				var jPick = new J('<button class="small pickRef"> <span class="icon pick"/> </button>');
+				var jPick = new J('<button class="small pickRef"> <span class="icon edit"/> </button>');
 				jPick.appendTo(jTarget);
 				jPick.click(_->{
 					var sourceEi = getEntityInstance();
