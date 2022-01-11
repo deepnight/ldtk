@@ -452,45 +452,10 @@ class FieldInstancesForm {
 			case F_EntityRef:
 				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;
 
-				// Text input
-				var jInput = new J('<input class="entityRef" type="text"/>');
-				jInput.appendTo(jTarget);
-				jInput.attr("id",domId);
-				jInput.attr("placeholder", "(null)");
-				jInput.prop("readonly",true);
-				jInput.click( (_)->{
-					// Follow ref
-					if( !fi.valueIsNull(arrayIdx) ) {
-						var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
-						if( cr==null ) {
-							N.error("Invalid reference");
-							return;
-						}
-						editor.selectLevel(cr.level);
-						if( cr.li!=null )
-							editor.selectLayerInstance(cr.li);
-						if( cr.ei!=null )
-							editor.camera.scrollTo(cr.ei.worldX, cr.ei.worldY);
-					}
-				});
-
-				if( isRequired || fi.hasAnyErrorInValues() )
-					markError(jInput);
-
-				if( !fi.isUsingDefault(arrayIdx) ) {
-					jInput.val( fi.getEntityRefForDisplay(arrayIdx) );
-					jInput.attr("title", fi.getEntityRefIID(arrayIdx));
-				}
-
-				// Pick ref
-				var jPick = new J('<button class="small pickRef"> <span class="icon edit"/> </button>');
-				jPick.appendTo(jTarget);
-				jPick.click(_->{
+				function _pickRef() {
 					var sourceEi = getEntityInstance();
-					var fd = fi.def;
-					var vp = new ui.vp.EntityRefPicker(sourceEi, fd);
+					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
 					vp.onPickValue = (targetEi)->{
-						var fi = sourceEi.getFieldInstance(fd);
 						if( fi.def.symmetricalRef ) {
 							project.removeReferencesInField(fi.def, sourceEi);
 							project.removeReferencesInField(fi.def, targetEi);
@@ -500,23 +465,49 @@ class FieldInstancesForm {
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}
-					// var all = []; // HACK
-					// for(l in project.levels)
-					// for(li in l.layerInstances)
-					// for(ei in li.entityInstances)
-					// 	if( ei!=sourceEi && ( fi.def.allowOutOfLevelRef || l==editor.curLevel ) )
-					// 		all.push(ei);
-					// var targetEi = all[Std.random(all.length)];
-					// if( targetEi!=null ) {
-					// 	if( fi.def.symmetricalRef ) {
-					// 		project.removeReferencesInField(fi.def, sourceEi);
-					// 		project.removeReferencesInField(fi.def, targetEi);
-					// 	}
-					// 	fi.parseValue(arrayIdx, targetEi.iid);
-					// 	fi.setSymmetricalRef(arrayIdx, sourceEi);
-					// 	onFieldChange(fi);
-					// }
-				});
+				}
+
+				if( isRequired || fi.hasAnyErrorInValues() || fi.valueIsNull(arrayIdx) ) {
+					var jPick = new J('<button>Pick reference</button>');
+					jPick.appendTo(jTarget);
+					jPick.click( _->_pickRef() );
+				}
+				else {
+					// Text input
+					var jInput = new J('<input class="entityRef" type="text"/>');
+					jInput.appendTo(jTarget);
+					jInput.attr("id",domId);
+					jInput.attr("placeholder", "(null)");
+					jInput.prop("readonly",true);
+					jInput.click( (_)->{
+						// Follow ref
+						if( !fi.valueIsNull(arrayIdx) ) {
+							var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
+							if( cr==null ) {
+								N.error("Invalid reference");
+								return;
+							}
+							editor.selectLevel(cr.level);
+							if( cr.li!=null )
+								editor.selectLayerInstance(cr.li);
+							if( cr.ei!=null )
+								editor.camera.scrollTo(cr.ei.worldX, cr.ei.worldY);
+						}
+					});
+
+					if( isRequired || fi.hasAnyErrorInValues() )
+						markError(jInput);
+
+					if( !fi.isUsingDefault(arrayIdx) ) {
+						jInput.val( fi.getEntityRefForDisplay(arrayIdx) );
+						jInput.attr("title", fi.getEntityRefIID(arrayIdx));
+					}
+
+					// Pick ref
+					var jPick = new J('<button class="small pickRef"> <span class="icon edit"/> </button>');
+					jPick.appendTo(jTarget);
+					jPick.click( _->_pickRef() );
+				}
 
 				// Clear ref
 				if( !fi.valueIsNull(arrayIdx) && fi.def.canBeNull ) {
