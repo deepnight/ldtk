@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456064,
-	"nextUid": 23,
+	"appBuildId": 456079,
+	"nextUid": 24,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -126,7 +126,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": null,
 					"textLanguageMode": null,
-					"symetricalRef": true
+					"symmetricalRef": true
 				},
 				{
 					"identifier": "refs",
@@ -150,7 +150,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": null,
 					"textLanguageMode": null,
-					"symetricalRef": true
+					"symmetricalRef": false
 				}
 			]
 		},
@@ -200,7 +200,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": null,
 					"textLanguageMode": null,
-					"symetricalRef": false
+					"symmetricalRef": false
 				}
 			]
 		},
@@ -233,148 +233,6 @@
 	"levels": [
 		{
 			"identifier": "Level_0",
-			"iid": "6e7a6010-66b0-11ec-9a9e-8120f2f94fb3",
-			"uid": 0,
-			"worldX": 256,
-			"worldY": 0,
-			"pxWid": 480,
-			"pxHei": 368,
-			"__bgColor": "#0D0E1B",
-			"bgColor": null,
-			"useAutoIdentifier": true,
-			"bgRelPath": null,
-			"bgPos": null,
-			"bgPivotX": 0.5,
-			"bgPivotY": 0.5,
-			"__smartColor": "#7A7A82",
-			"__bgPos": null,
-			"externalRelPath": null,
-			"fieldInstances": [],
-			"layerInstances": [
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 30,
-					"__cHei": 23,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "f3052bf1-66b0-11ec-814c-47d1d4bcdc0d",
-					"levelId": 0,
-					"layerDefUid": 2,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 6710441,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Button",
-							"__grid": [19,11],
-							"__pivot": [0.5,0.5],
-							"__tags": ["blueprint"],
-							"__tile": null,
-							"iid": "504f4c10-66b0-11ec-b4f5-5bad9036e7d7",
-							"width": 16,
-							"height": 16,
-							"defUid": 18,
-							"px": [312,184],
-							"fieldInstances": [
-								{ "__identifier": "ref", "__value": null, "__type": "EntifyRef", "defUid": 14, "realEditorValues": [] },
-								{
-									"__identifier": "Entity_ref",
-									"__value": "51501a40-66b0-11ec-b4f5-0755eaa4b4e5",
-									"__type": "EntifyRef",
-									"defUid": 20,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["51501a40-66b0-11ec-b4f5-0755eaa4b4e5"]
-									}]
-								}
-							]
-						},
-						{
-							"__identifier": "Door",
-							"__grid": [13,10],
-							"__pivot": [0,0],
-							"__tags": ["blueprint"],
-							"__tile": null,
-							"iid": "51501a40-66b0-11ec-b4f5-0755eaa4b4e5",
-							"width": 16,
-							"height": 32,
-							"defUid": 19,
-							"px": [208,160],
-							"fieldInstances": [{
-								"__identifier": "ref",
-								"__value": "01f53e60-66b0-11ec-b4f5-b9d335a89982",
-								"__type": "EntifyRef",
-								"defUid": 14,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["01f53e60-66b0-11ec-b4f5-b9d335a89982"]
-								}]
-							}]
-						}
-					]
-				},
-				{
-					"__identifier": "Collisions",
-					"__type": "IntGrid",
-					"__cWid": 30,
-					"__cHei": 23,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "5afb6220-66b0-11ec-b4f5-99c642a8d6f9",
-					"levelId": 0,
-					"layerDefUid": 21,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-					],
-					"autoLayerTiles": [],
-					"seed": 3883905,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				}
-			],
-			"__neighbours": [{ "levelIid": "f7fac510-66b0-11ec-b4f5-3d79aa9bdce7", "levelUid": 22, "dir": "w" }]
-		},
-		{
-			"identifier": "Level_1",
 			"iid": "f7fac510-66b0-11ec-b4f5-3d79aa9bdce7",
 			"uid": 22,
 			"worldX": 0,
@@ -419,7 +277,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "Foo",
-							"__grid": [4,9],
+							"__grid": [11,12],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
@@ -427,41 +285,16 @@
 							"width": 32,
 							"height": 32,
 							"defUid": 1,
-							"px": [72,152],
+							"px": [184,200],
 							"fieldInstances": [
 								{
 									"__identifier": "ref",
-									"__value": "1175bfe0-66b0-11ec-b4f5-59c8cfc134a6",
+									"__value": "3f85f9a0-66b0-11ec-8041-1dae817d1997",
 									"__type": "EntifyRef",
 									"defUid": 14,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["1175bfe0-66b0-11ec-b4f5-59c8cfc134a6"]
-									}]
-								},
-								{ "__identifier": "refs", "__value": [], "__type": "Array<EntifyRef>", "defUid": 16, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Foo",
-							"__grid": [11,4],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "1175bfe0-66b0-11ec-b4f5-59c8cfc134a6",
-							"width": 32,
-							"height": 32,
-							"defUid": 1,
-							"px": [184,72],
-							"fieldInstances": [
-								{
-									"__identifier": "ref",
-									"__value": "10d82050-66b0-11ec-b4f5-495981f91f3a",
-									"__type": "EntifyRef",
-									"defUid": 14,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["10d82050-66b0-11ec-b4f5-495981f91f3a"]
+										"params": ["3f85f9a0-66b0-11ec-8041-1dae817d1997"]
 									}]
 								},
 								{ "__identifier": "refs", "__value": [], "__type": "Array<EntifyRef>", "defUid": 16, "realEditorValues": [] }
@@ -504,7 +337,115 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "6e7a6010-66b0-11ec-9a9e-8120f2f94fb3", "levelUid": 0, "dir": "e" }]
+			"__neighbours": [{ "levelIid": "3d429950-66b0-11ec-8041-ad2c9f446541", "levelUid": 23, "dir": "e" }]
+		},
+		{
+			"identifier": "Level_1",
+			"iid": "3d429950-66b0-11ec-8041-ad2c9f446541",
+			"uid": 23,
+			"worldX": 256,
+			"worldY": 0,
+			"pxWid": 256,
+			"pxHei": 256,
+			"__bgColor": "#0D0E1B",
+			"bgColor": null,
+			"useAutoIdentifier": true,
+			"bgRelPath": null,
+			"bgPos": null,
+			"bgPivotX": 0.5,
+			"bgPivotY": 0.5,
+			"__smartColor": "#7A7A82",
+			"__bgPos": null,
+			"externalRelPath": null,
+			"fieldInstances": [],
+			"layerInstances": [
+				{
+					"__identifier": "Entities",
+					"__type": "Entities",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "3d429951-66b0-11ec-8041-8b19b2c8388d",
+					"levelId": 23,
+					"layerDefUid": 2,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 9836473,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Foo",
+							"__grid": [6,5],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"iid": "3f85f9a0-66b0-11ec-8041-1dae817d1997",
+							"width": 32,
+							"height": 32,
+							"defUid": 1,
+							"px": [104,88],
+							"fieldInstances": [
+								{
+									"__identifier": "ref",
+									"__value": "10d82050-66b0-11ec-b4f5-495981f91f3a",
+									"__type": "EntifyRef",
+									"defUid": 14,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["10d82050-66b0-11ec-b4f5-495981f91f3a"]
+									}]
+								},
+								{ "__identifier": "refs", "__value": [], "__type": "Array<EntifyRef>", "defUid": 16, "realEditorValues": [] }
+							]
+						}
+					]
+				},
+				{
+					"__identifier": "Collisions",
+					"__type": "IntGrid",
+					"__cWid": 16,
+					"__cHei": 16,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "3d429952-66b0-11ec-8041-17e592cb0f64",
+					"levelId": 23,
+					"layerDefUid": 21,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0
+					],
+					"autoLayerTiles": [],
+					"seed": 2985075,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
+				}
+			],
+			"__neighbours": [{ "levelIid": "f7fac510-66b0-11ec-b4f5-3d79aa9bdce7", "levelUid": 22, "dir": "w" }]
 		}
 	]
 }

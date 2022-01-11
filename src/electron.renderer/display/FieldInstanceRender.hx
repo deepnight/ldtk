@@ -210,8 +210,9 @@ class FieldInstanceRender {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.getPointOriginX(ld) - ei.x );
-							var ty = M.round( tei.getPointOriginY(ld) - ei.y );
+							var tx = M.round( tei.getPointOriginX(ld) + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.getPointOriginY(ld) + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							// var ty = M.round( tei.getPointOriginY(ld) - ei.y );
 							renderRefLink(g, baseColor, fx,fy, tx,ty);
 						}
 
