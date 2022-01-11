@@ -148,37 +148,19 @@
 
 
 	<dt class="F_EntityRef">
-		<label for="allowedRefs">Allowed references</label>
-		<info>
-			This setting restricts which entity can be picked as a reference.
-		</info>
+		<label>Reference options</label>
 	</dt>
 	<dd>
-		<select name="allowedRefs" id="allowedRefs"></select>
+		<input type="checkbox" name="symmetricalRef" id="symmetricalRef" title="If enabled and you pick a target for this value, a symmetrical reference will be set on the target.\nThis only works if the target Entity is of the same type as this one."/>
+		<label for="symmetricalRef">symmetrical</label>
+
+		<input type="checkbox" name="allowOutOfLevelRef" id="allowOutOfLevelRef" title="If enabled, it will be possible to pick an Entity from a different level."/>
+		<label for="allowOutOfLevelRef">in any level</label>
 	</dd>
 
-
-	<dt class="F_EntityRef">
-		<label for="symmetricalRef">Symmetrical ref</label>
-		<info>
-			If enabled and you pick a target for this value, a symmetrical reference will be set on the target.
-		</info>
-	</dt>
 	<dd>
-		<input type="checkbox" name="symmetricalRef" id="symmetricalRef"/>
+		<select name="allowedRefs" id="allowedRefs" title="This setting restricts which entity can be refered at."></select>
 	</dd>
-
-
-	<dt class="F_EntityRef">
-		<label for="allowOutOfLevelRef">Allow out-of-level references</label>
-		<info>
-			If enabled, it will be possible to pick an Entity from a different level.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" name="allowOutOfLevelRef" id="allowOutOfLevelRef"/>
-	</dd>
-
 
 
 	<dt class="Array">
