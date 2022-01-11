@@ -278,7 +278,7 @@ class App extends dn.Process {
 
 
 	function onJsKeyDown(ev:js.jquery.Event) {
-		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
+		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() && !hasInputFocus() )
 			ev.preventDefault();
 
 		if( ev.keyCode==K.ALT )

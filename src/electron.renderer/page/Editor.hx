@@ -535,7 +535,7 @@ class Editor extends Page {
 					selectionTool.clear();
 
 			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() )
+				if( !ui.Modal.hasAnyOpen() && !hasInputFocus() && !ui.EntityInstanceEditor.isOpen() )
 					setCompactMode( !settings.v.compactMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
