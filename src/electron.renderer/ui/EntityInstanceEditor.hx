@@ -205,7 +205,14 @@ class EntityInstanceEditor extends dn.Process {
 
 		// IID
 		jExtraInfos.append('<dt>IID</dt>');
-		jExtraInfos.append('<dd class="iid">${ei.iid}</dd>');
+		var jIid = new J('<dd class="iid"/>');
+		jIid.append('<input type="text" readonly="readonly" class="iid" value="${ei.iid}"/>');
+		jIid.append('<button class="copy gray small" title="Copy IID to clipboard"> <span class="icon copy"/> </button>');
+		jIid.find(".copy").click( _->{
+			App.ME.clipboard.copyStr(ei.iid);
+			N.msg("Copied to clipboard.");
+		});
+		jExtraInfos.append(jIid);
 
 		// Pos
 		jExtraInfos.append('<dt>Coords</dt>');
@@ -243,12 +250,6 @@ class EntityInstanceEditor extends dn.Process {
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 		jExtraInfos.append(jCoords);
-
-		// Entity size
-		if( ei.def.isResizable() ) {
-			jExtraInfos.append('<dt>Size</dt>');
-			jExtraInfos.append('<dd>${ei.width} x ${ei.height}</dd>');
-		}
 
 		// Custom fields
 		var form = new ui.FieldInstancesForm();

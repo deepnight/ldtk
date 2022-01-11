@@ -4786,7 +4786,13 @@ canvas#webgl {
 		dd {
 			color: $bgLighter;
 			&.iid {
-				font-size: 8pt;
+				button.copy {
+					flex: 0 1 0px;
+				}
+				input.iid {
+					color: $almostWhite;
+					font-size: 8pt;
+				}
 			}
 		}
 	}
