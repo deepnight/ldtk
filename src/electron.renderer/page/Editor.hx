@@ -523,6 +523,8 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
+				else if( ui.ValuePicker.exists() )
+					ui.ValuePicker.ME.destroy();
 				else if( curTool!=null && curTool.palettePoppedOut() )
 					curTool.popInPalette();
 				else if( specialTool!=null )
