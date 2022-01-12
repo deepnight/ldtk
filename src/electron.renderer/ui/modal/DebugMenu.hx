@@ -71,28 +71,13 @@ class DebugMenu extends ui.modal.ContextMenu {
 				else {
 					iidsProcess = editor.createChildProcess(
 						(p)->{
-							App.ME.debug('IIDS', true);
+							App.ME.clearDebug();
+							App.ME.debug('ALL IIDS');
 							for(ei in @:privateAccess project.entityIidsCache)
 								App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
-						},
-						(_)->App.ME.clearDebug()
-					);
-				}
-			}
-		});
 
-		add({
-			label: L.untranslated("Reverse IID refs"),
-			show: ()->Editor.exists(),
-			cb: ()->{
-				if( iidsProcess!=null ) {
-					iidsProcess.destroy();
-					iidsProcess = null;
-				}
-				else {
-					iidsProcess = editor.createChildProcess(
-						(p)->{
-							App.ME.debug('REVERSE IID REFS', true);
+							App.ME.debug("");
+							App.ME.debug('REVERSE IID REFS');
 							for(r in @:privateAccess project.reverseIidRefsCache.keyValueIterator()) {
 								var to = project.getEntityInstanceByIid(r.key);
 								for(fromIid in r.value.keys()) {
