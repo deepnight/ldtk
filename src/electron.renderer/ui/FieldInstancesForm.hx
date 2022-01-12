@@ -320,22 +320,22 @@ class FieldInstancesForm {
 
 				// Null value
 				if( fi.def.canBeNull || fi.getEnumValue(arrayIdx)==null ) {
-					var opt = new J('<option/>');
-					opt.appendTo(jSelect);
-					opt.attr("value","");
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value","");
 					if( fi.def.canBeNull )
-						opt.text("-- null --");
+						jOpt.text("-- null --");
 					else {
 						// SELECT shouldn't be null
 						markError(jSelect);
-						opt.text("[ Value required ]");
+						jOpt.text("[ Value required ]");
 						jSelect.click( function(ev) {
 							jSelect.removeAttr("error").removeClass("required");
 							jSelect.blur( function(ev) renderForm() );
 						});
 					}
 					if( fi.getEnumValue(arrayIdx)==null )
-						opt.attr("selected","selected");
+						jOpt.attr("selected","selected");
 				}
 
 				for(v in ed.values) {
