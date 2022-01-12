@@ -39,6 +39,7 @@ class Project {
 
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var iidsCache : Map<String, CachedIID> = new Map();
+	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
 
 
 	private function new() {
@@ -380,9 +381,16 @@ class Project {
 		iidsCache.remove(iid);
 	}
 
+	inline function registerReverseIidRef(from:String, to:String) {
+		if( !reverseIidRefsCache.exists(to) )
+			reverseIidRefsCache.set(to, new Map());
+		reverseIidRefsCache.get(to).set(from,true);
+	}
+
 	public function initIidsCache() {
 		var t = haxe.Timer.stamp();
 		iidsCache = new Map();
+		reverseIidRefsCache = new Map();
 
 		// Levels
 		for(level in levels) {
@@ -393,8 +401,16 @@ class Project {
 				iidsCache.set( li.iid, { level:level, li:li });
 
 				// Entities
-				for( ei in li.entityInstances )
+				for( ei in li.entityInstances ) {
 					iidsCache.set( ei.iid, { level:level, li:li, ei:ei });
+					for(fi in ei.fieldInstances) {
+						if( fi.def.type!=F_EntityRef )
+							continue;
+						for(idx in 0...fi.getArrayLength())
+							if( !fi.valueIsNull(idx) )
+								registerReverseIidRef(ei.iid, fi.getEntityRefIID(idx));
+					}
+				}
 			}
 		}
 	}
