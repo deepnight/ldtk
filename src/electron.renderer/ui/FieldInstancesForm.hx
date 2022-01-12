@@ -435,7 +435,7 @@ class FieldInstancesForm {
 
 				// Clear
 				if( !fi.isUsingDefault(arrayIdx) ) {
-					var jClear = new J('<button class="red" title="Reset"> <span class="icon clear"/> </button>');
+					var jClear = new J('<button class="red"> <span class="icon clear"/> </button>');
 					jClear.appendTo(jTarget);
 					jClear.click( ev->{
 						fi.parseValue(arrayIdx,null);

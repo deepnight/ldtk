@@ -823,10 +823,10 @@ class JsTools {
 		}
 
 		// Remove
-		var jRemove = new J('<button class="remove gray"> <span class="icon delete"/> </button>');
+		var jRemove = new J('<button class="remove gray" title="Stop using this image"> <span class="icon clear"/> </button>');
 		jRemove.appendTo(jWrapper);
 		jRemove.click( (_)->{
-			new ui.modal.dialog.Confirm(jRemove, L.t._("Remove this image?"), true, onChange.bind(null));
+			new ui.modal.dialog.Confirm(jRemove, L.t._("Stop using this image?"), true, onChange.bind(null));
 		});
 
 		// Locate

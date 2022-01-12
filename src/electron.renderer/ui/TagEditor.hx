@@ -61,7 +61,7 @@ class TagEditor {
 			createInput(jTag, k);
 		});
 
-		var jDelete = new J('<button class="delete transparent"> <span class="icon delete"/> </button>');
+		var jDelete = new J('<button class="delete transparent"> <span class="icon clear"/> </button>');
 		jDelete.appendTo(jTag);
 		jDelete.click( _->{
 			tags.unset(k);
