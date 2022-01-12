@@ -380,7 +380,7 @@ class Project {
 		iidsCache.remove(iid);
 	}
 
-	public function initIidCache() {
+	public function initIidsCache() {
 		var t = haxe.Timer.stamp();
 		iidsCache = new Map();
 
@@ -556,7 +556,7 @@ class Project {
 		Run tidy() only for custom fields
 	**/
 	public function tidyFields() {
-		initIidCache();
+		initIidsCache();
 		for(l in levels) {
 			for(fi in l.layerInstances)
 				fi.tidy(this);
@@ -578,7 +578,7 @@ class Project {
 			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 
-		initIidCache();
+		initIidsCache();
 		defs.tidy(this);
 		reorganizeWorld();
 		for(level in levels)

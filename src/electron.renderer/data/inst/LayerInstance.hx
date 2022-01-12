@@ -67,7 +67,7 @@ class LayerInstance {
 		this.levelId = levelId;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
-		p.initIidCache();
+		p.initIidsCache();
 	}
 
 
@@ -588,7 +588,7 @@ class LayerInstance {
 
 		var ei = new EntityInstance(_project, this, ed.uid, _project.generateUniqueId_UUID());
 		entityInstances.push(ei);
-		_project.initIidCache();
+		_project.initIidsCache();
 		return ei;
 	}
 
@@ -603,7 +603,7 @@ class LayerInstance {
 		var copy = EntityInstance.fromJson( _project, this, ei.toJson(this) );
 		copy.iid = _project.generateUniqueId_UUID();
 		entityInstances.push(copy);
-		_project.initIidCache();
+		_project.initIidsCache();
 
 		return copy;
 	}
