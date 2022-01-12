@@ -59,12 +59,12 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
-			label: L.untranslated("Cached references"),
+			label: L.untranslated("Check IIDs"),
 			show: ()->Editor.exists(),
 			cb: ()->{
 				editor.createChildProcess( (p)->{
-					App.ME.debug('CACHED REFERENCES', true);
-					for(cr in @:privateAccess project.refsCache.keyValueIterator()) {
+					App.ME.debug('IIDS', true);
+					for(cr in @:privateAccess project.iidsCache.keyValueIterator()) {
 						var kind =
 							cr.value.ei!=null ? "ENTITY "+cr.value.ei.def.identifier
 							: cr.value.li!=null ? "LAYER "+cr.value.li.def.identifier

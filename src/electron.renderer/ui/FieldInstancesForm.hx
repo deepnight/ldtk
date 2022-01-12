@@ -482,7 +482,7 @@ class FieldInstancesForm {
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
-						var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
+						var cr = project.getCachedIidInfos( fi.getEntityRefIID(arrayIdx) );
 						if( cr==null ) {
 							N.error("Invalid reference");
 							return;
@@ -505,7 +505,7 @@ class FieldInstancesForm {
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
-						var cr = project.getCachedRef( fi.getEntityRefIID(arrayIdx) );
+						var cr = project.getCachedIidInfos( fi.getEntityRefIID(arrayIdx) );
 						if( cr==null )
 							return;
 

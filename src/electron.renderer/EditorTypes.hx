@@ -202,7 +202,7 @@ enum ClipboardType {
 	CRule;
 }
 
-typedef CachedReference = {
+typedef CachedIID = {
 	var level: data.Level;
 	var ?li: data.inst.LayerInstance;
 	var ?ei: data.inst.EntityInstance ;

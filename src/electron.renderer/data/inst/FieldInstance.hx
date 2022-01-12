@@ -327,7 +327,7 @@ class FieldInstance {
 				for( idx in 0...getArrayLength() ) {
 					if( !def.canBeNull && valueIsNull(idx) )
 						return def.identifier+"?";
-					else if( !valueIsNull(idx) && _project.getCachedRef( getEntityRefIID(idx) )==null )
+					else if( !valueIsNull(idx) && _project.getCachedIidInfos( getEntityRefIID(idx) )==null )
 						return "Lost reference!";
 				}
 		}
@@ -518,7 +518,7 @@ class FieldInstance {
 
 	public function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
 		var iid = getEntityRefIID(arrayIdx);
-		var cr = _project.getCachedRef(iid);
+		var cr = _project.getCachedIidInfos(iid);
 		if( cr==null || cr.ei==null )
 			return null;
 		else
@@ -529,7 +529,7 @@ class FieldInstance {
 		if( valueIsNull(arrayIdx) )
 			return "null";
 		var iid = getEntityRefIID(arrayIdx);
-		var cr = _project.getCachedRef(iid);
+		var cr = _project.getCachedIidInfos(iid);
 		if( cr==null || cr.ei==null )
 			return "Lost reference!";
 		return cr.ei.def.identifier
@@ -577,7 +577,7 @@ class FieldInstance {
 			case F_EntityRef:
 				var i = 0;
 				while( i<getArrayLength() ) {
-					if( !valueIsNull(i) && p.getCachedRef( getEntityRefIID(i) )==null ) {
+					if( !valueIsNull(i) && p.getCachedIidInfos( getEntityRefIID(i) )==null ) {
 						App.LOG.add("tidy", 'Removed lost reference in $this');
 						if( def.isArray ) {
 							removeArrayValue(i);

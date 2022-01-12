@@ -19,7 +19,7 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 	override function cancel() {
 		super.cancel();
-		var cr = project.getCachedRef(sourceEi.iid);
+		var cr = project.getCachedIidInfos(sourceEi.iid);
 		if( cr!=null && cr.level!=curLevel ) {
 			editor.selectLevel(cr.level);
 			editor.camera.scrollTo(sourceEi.worldX, sourceEi.worldY);
