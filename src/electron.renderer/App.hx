@@ -638,20 +638,23 @@ class App extends dn.Process {
 			e.empty().hide();
 	}
 
-	public inline function debug(msg:Dynamic, ?c:Null<Int>, clear=false) {
+	public inline function debug(msg:Dynamic, ?c:Null<Int>, clear=false, pre=false) {
 		var wrapper = new J("#debug");
 		if( clear )
 			wrapper.empty();
 		wrapper.show();
 
-		var line = new J('<p>${Std.string(msg)}</p>');
+		var str = StringTools.htmlEscape( Std.string(msg) );
+		if( pre )
+			str = '<pre>$str</pre>';
+		var jLine = new J('<p>$str</p>');
 		if( c!=null )
-			line.css("color", C.intToHex(c));
-		line.appendTo(wrapper);
+			jLine.css("color", C.intToHex(c));
+		jLine.appendTo(wrapper);
 	}
 
-	public inline function debugPre(msg:Dynamic, clear=false) {
-		debug('<pre>$msg</pre>', clear);
+	public inline function debugPre(msg:Dynamic, ?color:Int, clear=false) {
+		debug(msg, color, clear, true);
 	}
 
 	override function onDispose() {
