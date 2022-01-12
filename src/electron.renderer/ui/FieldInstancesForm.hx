@@ -454,12 +454,14 @@ class FieldInstancesForm {
 					var sourceEi = getEntityInstance();
 					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
 					vp.onPickValue = (targetEi)->{
-						if( fi.def.symmetricalRef ) {
-							project.removeReferencesInField(fi.def, sourceEi);
-							project.removeReferencesInField(fi.def, targetEi);
-						}
+						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
+						project.unregisterReverseIidRef(sourceEi, oldTargetEi);
 						fi.parseValue(arrayIdx, targetEi.iid);
+						project.registerReverseIidRef(sourceEi.iid, targetEi.iid);
 						fi.setSymmetricalRef(arrayIdx, sourceEi);
+						if( oldTargetEi!=null )
+							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						targetEi.tidyLostSymmetricalEntityRefs(fi.def);
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}
@@ -530,9 +532,11 @@ class FieldInstancesForm {
 					var jRemove = new J('<button class="small red removeRef"> <span class="icon delete"/> </button>');
 					jRemove.appendTo(jTarget);
 					jRemove.click(_->{
-						if( fi.def.symmetricalRef )
-							project.removeReferencesInField(fi.def, getEntityInstance());
+						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
+						project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);
 						fi.parseValue(arrayIdx, null);
+						if( oldTargetEi!=null )
+							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
 						onFieldChange(fi);
 					});
 				}
@@ -750,7 +754,12 @@ class FieldInstancesForm {
 						jRemove.click( function(_) {
 							// if( fi.def.type==F_EntityRef && fi.def.symmetricalRef )
 								// fi.applyReferenceSymetry(idx, getEntityInstance(), false);
+							var oldTargetEi = fi.getEntityRefInstance(idx);
+							if( fi.def.type==F_EntityRef )
+								project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);
 							fi.removeArrayValue(idx);
+							if( oldTargetEi!=null )
+								oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
 							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
 						});

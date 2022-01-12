@@ -375,24 +375,45 @@ class Project {
 
 		for(fi in ei.fieldInstances)
 			if( fi.def!=null && fi.def.type==F_EntityRef ) // def could be null after removal of a field def, and before proper tidy() calls
-				for(idx in 0...fi.getArrayLength())
-					if( !fi.valueIsNull(idx) )
-						registerReverseIidRef(ei.iid, fi.getEntityRefIID(idx));
+				for(i in 0...fi.getArrayLength())
+					if( !fi.valueIsNull(i) )
+						registerReverseIidRef(ei.iid, fi.getEntityRefIID(i));
 	}
 
 	public inline function unregisterIid(iid:String) {
 		entityIidsCache.remove(iid);
 	}
 
-	public inline function registerReverseIidRef(from:String, to:String) {
-		if( !reverseIidRefsCache.exists(to) )
-			reverseIidRefsCache.set(to, new Map());
-		reverseIidRefsCache.get(to).set(from,true);
+	public inline function registerReverseIidRef(fromIid:String, toIid:String) {
+		if( fromIid!=null && toIid!=null ) {
+			if( !reverseIidRefsCache.exists(toIid) )
+				reverseIidRefsCache.set(toIid, new Map());
+			reverseIidRefsCache.get(toIid).set(fromIid,true);
+		}
 	}
 
-	public inline function unregisterReverseIidRef(from:String, to:String) {
-		if( reverseIidRefsCache.exists(to) )
-			reverseIidRefsCache.get(to).remove(from);
+	public inline function unregisterReverseIidRef(from:data.inst.EntityInstance, to:data.inst.EntityInstance) {
+		if( from!=null && to!=null && reverseIidRefsCache.exists(to.iid) )
+			reverseIidRefsCache.get(to.iid).remove(from.iid);
+	}
+
+	public function unregisterAllReverseIidRefsFor(ei:data.inst.EntityInstance) {
+		reverseIidRefsCache.remove(ei.iid);
+		for(refs in reverseIidRefsCache )
+			refs.remove(ei.iid);
+	}
+
+	public function getEntityInstancesReferingTo(tei:data.inst.EntityInstance) : Array<data.inst.EntityInstance> {
+		if( !reverseIidRefsCache.exists(tei.iid) )
+			return [];
+
+		var all = [];
+		for(iid in reverseIidRefsCache.get(tei.iid).keys()) {
+			var ei = getEntityInstanceByIid(iid);
+			if( ei!=null )
+				all.push(ei);
+		}
+		return all;
 	}
 
 
@@ -545,16 +566,15 @@ class Project {
 	/**
 		Check all FieldInstances and remove any existing references to `targetEi` EntityInstance
 	**/
-	public function removeAnyFieldRefsTo(fd:data.def.FieldDef, targetEi:data.inst.EntityInstance) {
+	public function removeAnyFieldRefsTo(targetEi:data.inst.EntityInstance) {
 		var i = 0;
 
 		for(l in levels)
 		for(li in l.layerInstances)
-		for(ei in li.entityInstances) {
-			if( !ei.hasField(fd) )
+		for(ei in li.entityInstances)
+		for(fi in ei.fieldInstances) {
+			if( fi.def.type!=F_EntityRef )
 				continue;
-
-			var fi = ei.getFieldInstance(fd);
 			i = 0;
 			while( i<fi.getArrayLength() )
 				if( fi.getEntityRefIID(i)==targetEi.iid )

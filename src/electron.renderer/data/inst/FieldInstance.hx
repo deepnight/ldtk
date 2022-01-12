@@ -249,6 +249,30 @@ class FieldInstance {
 	}
 
 
+	public function removeSymmetricalEntityRef(arrayIdx, sourceEi:EntityInstance, allowRec=true) {
+		if( !def.symmetricalRef || valueIsNull(arrayIdx) )
+			return false;
+
+		var tei = getEntityRefInstance(arrayIdx);
+		if( tei==null )
+			return false;
+
+		var tfi = tei.getFieldInstance(def);
+		var i = 0;
+		while( i<tfi.getArrayLength() )
+			if( tfi.getEntityRefIID(i)==sourceEi.iid ) {
+				tfi.removeArrayValue(i);
+				if( allowRec ) {
+					tfi.removeSymmetricalEntityRef(i, tei, false);
+				}
+				return true;
+			}
+			else
+				i++;
+		return false;
+	}
+
+
 	public function setSymmetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
 		if( !def.symmetricalRef || valueIsNull(arrayIdx) )
 			return;
@@ -263,8 +287,10 @@ class FieldInstance {
 
 		if( !def.isArray ) {
 			// Single value
-			if( targetFi.getEntityRefIID(arrayIdx)!=sourceEi.iid)
+			if( targetFi.getEntityRefIID(arrayIdx)!=sourceEi.iid) {
 				targetFi.parseValue(arrayIdx, sourceEi.iid);
+				_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
+			}
 		}
 		else {
 			// Array
@@ -277,6 +303,7 @@ class FieldInstance {
 			if( !found ) {
 				targetFi.addArrayValue();
 				targetFi.parseValue(targetFi.getArrayLength()-1, sourceEi.iid);
+				_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
 			}
 		}
 	}
@@ -507,7 +534,7 @@ class FieldInstance {
 		return out;
 	}
 
-	public function getEntityRefIID(arrayIdx:Int) : String {
+	public function getEntityRefIID(arrayIdx:Int) : Null<String> {
 		def.require(F_EntityRef);
 		var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
 			case V_String(v): v;

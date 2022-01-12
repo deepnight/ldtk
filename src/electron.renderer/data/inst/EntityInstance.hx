@@ -255,4 +255,62 @@ class EntityInstance {
 				all.push(fi);
 		return all;
 	}
+
+
+	/**
+		Return TRUE if target EntityInstance has a reference to This in given field.
+	**/
+	public function hasEntityRefTo(targetEi:EntityInstance, fd:data.def.FieldDef) {
+		if( fd.type!=F_EntityRef || !fd.symmetricalRef )
+			return false;
+
+		var fi = getFieldInstance(fd);
+		if( fi==null )
+			return false;
+
+		for(i in 0...fi.getArrayLength())
+			if( fi.getEntityRefIID(i)==targetEi.iid )
+				return true;
+
+		return false;
+	}
+
+
+
+	/**
+		Clear invalid asymmetrical refs between this EntityInstance and other ones
+	**/
+	public function tidyLostSymmetricalEntityRefs(fd:data.def.FieldDef, allowDeepSearch=true) {
+		if( fd.type!=F_EntityRef || !fd.symmetricalRef )
+			return;
+
+		var fi = getFieldInstance(fd);
+		if( fi==null )
+			return;
+
+		// Check own fields for lost symmetricals
+		var i = 0;
+		while( i<fi.getArrayLength() ) {
+			if( fi.valueIsNull(i) )
+				i++;
+			else {
+				var targetEi = fi.getEntityRefInstance(i);
+				if( !targetEi.hasEntityRefTo(this, fd) ) {
+					_project.unregisterReverseIidRef(this, targetEi);
+					fi.removeArrayValue(i);
+				}
+				else
+					i++;
+			}
+		}
+
+		// Check entities pointing at me
+		if( allowDeepSearch ) {
+			var reverseReferers = _project.getEntityInstancesReferingTo(this);
+			for( ei in reverseReferers )
+				ei.tidyLostSymmetricalEntityRefs(fd, false);
+		}
+	}
+
+
 }

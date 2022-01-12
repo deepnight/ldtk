@@ -95,17 +95,14 @@ class DebugMenu extends ui.modal.ContextMenu {
 							App.ME.debug('REVERSE IID REFS', true);
 							for(r in @:privateAccess project.reverseIidRefsCache.keyValueIterator()) {
 								var to = project.getEntityInstanceByIid(r.key);
+								for(fromIid in r.value.keys()) {
+									var from = project.getEntityInstanceByIid(fromIid);
+									App.ME.debug(from+" => "+to, 0x62ff99);
+									if( from==null )
+										App.ME.debug("  Unknown FROM IID:"+fromIid, 0xff0000);
+								}
 								if( to==null )
-									App.ME.debug("Unknown TO IID:"+r.key, 0xff0000);
-								else
-									for(fromIid in r.value.keys()) {
-										var from = project.getEntityInstanceByIid(fromIid);
-										if( from==null )
-											App.ME.debug("Unknown FROM IID:"+fromIid, 0xff0000);
-										else
-											App.ME.debug(from+" => "+to, 0x62ff99);
-
-									}
+									App.ME.debug("  Unknown TO IID:"+r.key, 0xff0000);
 							}
 						},
 						(_)->App.ME.clearDebug()

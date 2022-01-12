@@ -613,7 +613,9 @@ class LayerInstance {
 		if( !entityInstances.remove(ei) )
 			throw "Unknown instance "+ei;
 
+		_project.removeAnyFieldRefsTo(ei);
 		_project.unregisterIid(ei.iid);
+		_project.unregisterAllReverseIidRefsFor(ei);
 		_project.tidyFields(); // IID refs could be lost
 	}
 
