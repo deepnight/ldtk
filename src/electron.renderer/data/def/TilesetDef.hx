@@ -723,6 +723,16 @@ class TilesetDef {
 		return jImg;
 	}
 
+	public function createTileHtmlUri(tid:Int, ?imgWid:Int, ?imgHei:Int) : Null<String> {
+		if( !isAtlasLoaded() )
+			return null;
+
+		var imgData = _project.getOrLoadImage(relPath);
+		var subPixels = imgData.pixels.sub(getTileSourceX(tid), getTileSourceY(tid), tileGridSize, tileGridSize);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		return 'data:image/png;base64,$b64';
+	}
+
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
