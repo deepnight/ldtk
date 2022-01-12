@@ -61,7 +61,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
-			label: L.untranslated("Check IIDs"),
+			label: L.untranslated("IIDs"),
 			show: ()->Editor.exists(),
 			cb: ()->{
 				if( iidsProcess!=null ) {
@@ -75,7 +75,40 @@ class DebugMenu extends ui.modal.ContextMenu {
 							for(ei in @:privateAccess project.entityIidsCache)
 								App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
 						},
-						(_)->App.ME.debug("",true)
+						(_)->App.ME.clearDebug()
+					);
+				}
+			}
+		});
+
+		add({
+			label: L.untranslated("Reverse IID refs"),
+			show: ()->Editor.exists(),
+			cb: ()->{
+				if( iidsProcess!=null ) {
+					iidsProcess.destroy();
+					iidsProcess = null;
+				}
+				else {
+					iidsProcess = editor.createChildProcess(
+						(p)->{
+							App.ME.debug('REVERSE IID REFS', true);
+							for(r in @:privateAccess project.reverseIidRefsCache.keyValueIterator()) {
+								var to = project.getEntityInstanceByIid(r.key);
+								if( to==null )
+									App.ME.debug("Unknown TO IID:"+r.key, 0xff0000);
+								else
+									for(fromIid in r.value.keys()) {
+										var from = project.getEntityInstanceByIid(fromIid);
+										if( from==null )
+											App.ME.debug("Unknown FROM IID:"+fromIid, 0xff0000);
+										else
+											App.ME.debug(from+" => "+to, 0x62ff99);
+
+									}
+							}
+						},
+						(_)->App.ME.clearDebug()
 					);
 				}
 			}
