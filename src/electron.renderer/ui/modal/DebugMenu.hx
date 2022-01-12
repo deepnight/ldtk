@@ -1,6 +1,8 @@
 package ui.modal;
 
 class DebugMenu extends ui.modal.ContextMenu {
+	static var iidsProcess : Null<dn.Process>;
+
 	public function new() {
 		super();
 
@@ -62,14 +64,20 @@ class DebugMenu extends ui.modal.ContextMenu {
 			label: L.untranslated("Check IIDs"),
 			show: ()->Editor.exists(),
 			cb: ()->{
-				editor.createChildProcess( (p)->{
-					App.ME.debug('IIDS', true);
-					for(ei in @:privateAccess project.entityIidsCache) {
-						App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
-					}
-				}, (_)->{
-					App.ME.debug("",true);
-				});
+				if( iidsProcess!=null ) {
+					iidsProcess.destroy();
+					iidsProcess = null;
+				}
+				else {
+					iidsProcess = editor.createChildProcess(
+						(p)->{
+							App.ME.debug('IIDS', true);
+							for(ei in @:privateAccess project.entityIidsCache)
+								App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
+						},
+						(_)->App.ME.debug("",true)
+					);
+				}
 			}
 		});
 
