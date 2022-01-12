@@ -482,22 +482,20 @@ class FieldInstancesForm {
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
-						var cr = project.getCachedIidInfos( fi.getEntityRefIID(arrayIdx) );
-						if( cr==null ) {
+						var tei = fi.getEntityRefInstance(arrayIdx);
+						if( tei==null ) {
 							N.error("Invalid reference");
 							return;
 						}
 
-						if( cr.level!=editor.curLevel )
-							editor.selectLevel(cr.level);
+						if( tei._li.level!=editor.curLevel )
+							editor.selectLevel(tei._li.level);
 
-						if( cr.li!=null )
-							editor.selectLayerInstance(cr.li);
+						if( tei._li!=editor.curLayerInstance )
+							editor.selectLayerInstance(tei._li);
 
-						if( cr.ei!=null ) {
-							editor.camera.scrollTo(cr.ei.worldX, cr.ei.worldY);
-							editor.levelRender.bleepEntity(cr.li, cr.ei);
-						}
+						editor.camera.scrollTo(tei.worldX, tei.worldY);
+						editor.levelRender.bleepEntity(tei._li, tei);
 					});
 
 					jInput.mouseover( _->{
@@ -505,12 +503,12 @@ class FieldInstancesForm {
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
-						var cr = project.getCachedIidInfos( fi.getEntityRefIID(arrayIdx) );
-						if( cr==null )
+						var tei = fi.getEntityRefInstance(arrayIdx);
+						if( tei==null )
 							return;
 
-						if( cr.level==editor.curLevel && cr.li!=null && cr.ei!=null )
-							editor.levelRender.bleepEntity(cr.li, cr.ei);
+						if( tei._li.level==editor.curLevel )
+							editor.levelRender.bleepEntity(tei._li, tei);
 					});
 
 					if( fi.hasAnyErrorInValues() )

@@ -327,7 +327,7 @@ class FieldInstance {
 				for( idx in 0...getArrayLength() ) {
 					if( !def.canBeNull && valueIsNull(idx) )
 						return def.identifier+"?";
-					else if( !valueIsNull(idx) && _project.getCachedIidInfos( getEntityRefIID(idx) )==null )
+					else if( !valueIsNull(idx) && getEntityRefInstance(idx)==null )
 						return "Lost reference!";
 				}
 		}
@@ -516,24 +516,17 @@ class FieldInstance {
 		return out;
 	}
 
-	public function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
-		var iid = getEntityRefIID(arrayIdx);
-		var cr = _project.getCachedIidInfos(iid);
-		if( cr==null || cr.ei==null )
-			return null;
-		else
-			return cr.ei;
+	public inline function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
+		return valueIsNull(arrayIdx) ? null : _project.getEntityInstanceByIid( getEntityRefIID(arrayIdx) );
 	}
 
 	public function getEntityRefForDisplay(arrayIdx:Int, ?checkLevel:Level) : String {
-		if( valueIsNull(arrayIdx) )
-			return "null";
-		var iid = getEntityRefIID(arrayIdx);
-		var cr = _project.getCachedIidInfos(iid);
-		if( cr==null || cr.ei==null )
+		var ei = getEntityRefInstance(arrayIdx);
+		if( ei==null )
 			return "Lost reference!";
-		return cr.ei.def.identifier
-			+ ( checkLevel==null || checkLevel!=cr.level ? " in "+cr.level.identifier+"."+cr.li.def.identifier : "" );
+		else
+			return ei.def.identifier
+				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
 	}
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
@@ -577,7 +570,7 @@ class FieldInstance {
 			case F_EntityRef:
 				var i = 0;
 				while( i<getArrayLength() ) {
-					if( !valueIsNull(i) && p.getCachedIidInfos( getEntityRefIID(i) )==null ) {
+					if( !valueIsNull(i) && getEntityRefInstance(i)==null ) {
 						App.LOG.add("tidy", 'Removed lost reference in $this');
 						if( def.isArray ) {
 							removeArrayValue(i);

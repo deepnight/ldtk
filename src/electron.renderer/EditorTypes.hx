@@ -204,6 +204,5 @@ enum ClipboardType {
 
 typedef CachedIID = {
 	var level: data.Level;
-	var ?li: data.inst.LayerInstance;
 	var ?ei: data.inst.EntityInstance ;
 }

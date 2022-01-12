@@ -38,7 +38,7 @@ class Project {
 	public var backupLimit = 10;
 
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
-	var iidsCache : Map<String, CachedIID> = new Map();
+	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
 	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
 
 
@@ -366,19 +366,22 @@ class Project {
 		}
 	}
 
-	public inline function getCachedIidInfos(iid:String) : Null<CachedIID> {
-		return iidsCache.get(iid);
+	public inline function getEntityInstanceByIid(iid:String) : Null<data.inst.EntityInstance> {
+		return entityIidsCache.exists(iid) ? entityIidsCache.get(iid) : null;
 	}
 
-	public inline function registerLayerIid(iid:String, level:Level, li:data.inst.LayerInstance) {
-		iidsCache.set(iid, {
-			level: level,
-			li: li,
-		});
+	public inline function registerEntityInstance(ei:data.inst.EntityInstance) {
+		entityIidsCache.set(ei.iid, ei);
+
+		for(fi in ei.fieldInstances)
+			if( fi.def.type==F_EntityRef )
+				for(idx in 0...fi.getArrayLength())
+					if( !fi.valueIsNull(idx) )
+						registerReverseIidRef(ei.iid, fi.getEntityRefIID(idx));
 	}
 
 	public inline function unregisterIid(iid:String) {
-		iidsCache.remove(iid);
+		entityIidsCache.remove(iid);
 	}
 
 	inline function registerReverseIidRef(from:String, to:String) {
@@ -387,32 +390,16 @@ class Project {
 		reverseIidRefsCache.get(to).set(from,true);
 	}
 
-	public function initIidsCache() {
+	public function initEntityIidsCache() {
 		var t = haxe.Timer.stamp();
-		iidsCache = new Map();
+		entityIidsCache = new Map();
 		reverseIidRefsCache = new Map();
 
 		// Levels
-		for(level in levels) {
-			iidsCache.set( level.iid, { level:level });
-
-			// Layers
-			for( li in level.layerInstances ) {
-				iidsCache.set( li.iid, { level:level, li:li });
-
-				// Entities
-				for( ei in li.entityInstances ) {
-					iidsCache.set( ei.iid, { level:level, li:li, ei:ei });
-					for(fi in ei.fieldInstances) {
-						if( fi.def.type!=F_EntityRef )
-							continue;
-						for(idx in 0...fi.getArrayLength())
-							if( !fi.valueIsNull(idx) )
-								registerReverseIidRef(ei.iid, fi.getEntityRefIID(idx));
-					}
-				}
-			}
-		}
+		for(level in levels)
+		for( li in level.layerInstances )
+		for( ei in li.entityInstances )
+			registerEntityInstance(ei);
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
@@ -572,7 +559,7 @@ class Project {
 		Run tidy() only for custom fields
 	**/
 	public function tidyFields() {
-		initIidsCache();
+		initEntityIidsCache();
 		for(l in levels) {
 			for(fi in l.layerInstances)
 				fi.tidy(this);
@@ -594,7 +581,7 @@ class Project {
 			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 
-		initIidsCache();
+		initEntityIidsCache();
 		defs.tidy(this);
 		reorganizeWorld();
 		for(level in levels)

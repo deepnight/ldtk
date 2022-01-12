@@ -64,14 +64,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 			cb: ()->{
 				editor.createChildProcess( (p)->{
 					App.ME.debug('IIDS', true);
-					for(cr in @:privateAccess project.iidsCache.keyValueIterator()) {
-						var kind =
-							cr.value.ei!=null ? "ENTITY "+cr.value.ei.def.identifier
-							: cr.value.li!=null ? "LAYER "+cr.value.li.def.identifier
-							: "LEVEL "+cr.value.level.identifier;
-						var color = cr.value.ei!=null ? 0x4bdfff :
-							cr.value.li!=null ? 0x4bff5d : 0xff4b4b;
-						App.ME.debug(kind+" -- "+cr.key, color);
+					for(ei in @:privateAccess project.entityIidsCache) {
+						App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
 					}
 				}, (_)->{
 					App.ME.debug("",true);
