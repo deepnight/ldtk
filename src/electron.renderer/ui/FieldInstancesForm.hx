@@ -435,7 +435,7 @@ class FieldInstancesForm {
 
 				// Clear
 				if( !fi.isUsingDefault(arrayIdx) ) {
-					var jClear = new J('<button class="red" title="Reset"> <span class="icon delete"/> </button>');
+					var jClear = new J('<button class="red" title="Reset"> <span class="icon clear"/> </button>');
 					jClear.appendTo(jTarget);
 					jClear.click( ev->{
 						fi.parseValue(arrayIdx,null);
@@ -529,7 +529,7 @@ class FieldInstancesForm {
 
 				// Clear ref
 				if( !fi.valueIsNull(arrayIdx) && fi.def.canBeNull ) {
-					var jRemove = new J('<button class="small red removeRef"> <span class="icon delete"/> </button>');
+					var jRemove = new J('<button class="small red removeRef"> <span class="icon clear"/> </button>');
 					jRemove.appendTo(jTarget);
 					jRemove.click(_->{
 						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
@@ -747,13 +747,11 @@ class FieldInstancesForm {
 
 						createFieldInput(domId, fi, i, li);
 
-						// "Remove" button
-						var jRemove = new J('<button class="remove dark">x</button>');
+						// Remove array entry
+						var jRemove = new J('<button class="remove dark"> <span class="icon delete"/> </button>');
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {
-							// if( fi.def.type==F_EntityRef && fi.def.symmetricalRef )
-								// fi.applyReferenceSymetry(idx, getEntityInstance(), false);
 							var oldTargetEi = fi.getEntityRefInstance(idx);
 							if( fi.def.type==F_EntityRef )
 								project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);

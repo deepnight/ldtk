@@ -1099,6 +1099,7 @@ ul.log {
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
 .icon.bug				{ background-image: url("../icons/bug.svg"); }
 .icon.checker			{ background-image: url("../icons/checker.svg"); }
+.icon.clear				{ background-image: url("../icons/clear.svg"); }
 .icon.close				{ background-image: url("../icons/close.png"); }
 .icon.collapsed			{ background-image: url("../icons/collapsed.svg"); }
 .icon.community			{ background-image: url("../icons/community.svg"); }
@@ -5074,6 +5075,11 @@ dl.form.fieldInstanceEditor {
 	button.pickRef,
 	button.removeRef {
 		flex: 0 1 0px;
+		padding: 4px;
+		.icon {
+			width: 16px;
+			height: 16px;
+		}
 	}
 
 	button.removePoint {
@@ -5258,8 +5264,15 @@ dl.form.fieldInstanceEditor {
 				.sortHandle {
 					flex: 0 1 0px;
 				}
+				button {
+					padding: 4px;
+					.icon {
+						width: 13px;
+						height: 13px;
+					}
+				}
 				button.remove {
-					flex: 0 1 24px;
+					flex: 0 1 16px;
 				}
 
 				select {
