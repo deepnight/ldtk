@@ -766,6 +766,13 @@ class Project {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
 
+		for(li in l.layerInstances)
+		for(ei in li.entityInstances) {
+			removeAnyFieldRefsTo(ei);
+			unregisterIid(ei.iid);
+			unregisterAllReverseIidRefsFor(ei);
+		}
+
 		tidy();
 	}
 
