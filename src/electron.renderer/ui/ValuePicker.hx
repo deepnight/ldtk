@@ -15,9 +15,11 @@ class ValuePicker<T> extends dn.Process {
 
 	public function new() {
 		super(Editor.ME);
+
 		if( ME!=null )
 			ME.destroy();
 		ME = this;
+		App.ME.jBody.addClass("hasValuePicker");
 
 		// Init HTML & load template
 		jWindow = new J('<div class="valuePicker"/>');
@@ -60,6 +62,9 @@ class ValuePicker<T> extends dn.Process {
 			ME = null;
 
 		jWindow.remove();
+
+		if( !exists() )
+			App.ME.jBody.removeClass("hasValuePicker");
 	}
 
 	public static function cancelCurrent() {
