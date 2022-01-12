@@ -61,13 +61,13 @@ class LayerInstance {
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( pxHei / def.gridSize );
 
 
-	public function new(p:Project, levelId:Int, layerDefUid:Int, layerInstIid:String) {
+	@:allow(data.Level)
+	private function new(p:Project, levelUid:Int, layerDefUid:Int, layerInstIid:String) {
 		_project = p;
 		iid = layerInstIid;
-		this.levelId = levelId;
+		this.levelId = levelUid;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
-		p.initEntityIidsCache();
 	}
 
 

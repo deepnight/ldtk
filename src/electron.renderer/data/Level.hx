@@ -49,7 +49,7 @@ class Level {
 		useAutoIdentifier = true;
 
 		for(ld in _project.defs.layers)
-			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid, _project.generateUniqueId_UUID()) );
+			createLayerInstance(ld);
 	}
 
 	function set_identifier(id:String) {
@@ -394,6 +394,13 @@ class Level {
 		return null;
 	}
 
+
+	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
+		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID());
+		layerInstances.push(li);
+		return li;
+	}
+
 	public function tidy(p:Project) {
 		_project = p;
 
@@ -411,6 +418,7 @@ class Level {
 		// Create missing layerInstances & check if they're sorted in the same order as defs
 		for(i in 0..._project.defs.layers.length)
 			if( i>=layerInstances.length || layerInstances[i].layerDefUid!=_project.defs.layers[i].uid ) {
+				App.LOG.add("tidy", 'Fixed layer instance array in $this (order mismatch or missing layer instance)');
 				var existing = new Map();
 				for(li in layerInstances)
 					existing.set(li.layerDefUid, li);
@@ -420,8 +428,7 @@ class Level {
 						layerInstances.push( existing.get(ld.uid) );
 					else {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
-						var li = new data.inst.LayerInstance(_project, uid, ld.uid, _project.generateUniqueId_UUID());
-						layerInstances.push(li);
+						createLayerInstance(ld);
 					}
 				invalidateJsonCache();
 				break;
