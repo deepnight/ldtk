@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455990,
+	"appBuildId": 456113,
 	"nextUid": 149,
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
@@ -1408,7 +1408,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "color",
@@ -1431,7 +1434,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16766464] },
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "fog_intensity",
@@ -1454,15 +1460,19 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Green_hills",
+			"iid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24",
 			"uid": 49,
-			"worldX": 0,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#000000",
@@ -1509,6 +1519,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 18,
 					"__tilesetRelPath": "atlas/Cavernas_by_Adam_Saltsman.png",
+					"iid": "a2c54222-66b0-11ec-9cd7-d9c10478d3d9",
 					"levelId": 49,
 					"layerDefUid": 15,
 					"pxOffsetX": 0,
@@ -2638,13 +2649,14 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 90, "dir": "e" }]
+			"__neighbours": []
 		},
 		{
 			"identifier": "Frozen_caves",
+			"iid": "a2c62c80-66b0-11ec-9cd7-41c82a77a0c0",
 			"uid": 90,
-			"worldX": 304,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#000000",
@@ -2680,6 +2692,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 18,
 					"__tilesetRelPath": "atlas/Cavernas_by_Adam_Saltsman.png",
+					"iid": "a2c62c82-66b0-11ec-9cd7-417529e73631",
 					"levelId": 90,
 					"layerDefUid": 15,
 					"pxOffsetX": 0,
@@ -3797,13 +3810,14 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 45, "dir": "e" }, { "levelUid": 49, "dir": "w" } ]
+			"__neighbours": []
 		},
 		{
 			"identifier": "Antique_manor",
+			"iid": "a2c6c8c0-66b0-11ec-9cd7-85ab8a20742b",
 			"uid": 45,
-			"worldX": 608,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#000000",
@@ -3839,6 +3853,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 18,
 					"__tilesetRelPath": "atlas/Cavernas_by_Adam_Saltsman.png",
+					"iid": "a2c6c8c2-66b0-11ec-9cd7-99294427656a",
 					"levelId": 45,
 					"layerDefUid": 15,
 					"pxOffsetX": 0,
@@ -4915,13 +4930,14 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 116, "dir": "e" }, { "levelUid": 90, "dir": "w" } ]
+			"__neighbours": []
 		},
 		{
 			"identifier": "Only_base_rules",
+			"iid": "a2c7b320-66b0-11ec-9cd7-c909139208d9",
 			"uid": 116,
-			"worldX": 912,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#000000",
@@ -4972,6 +4988,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 18,
 					"__tilesetRelPath": "atlas/Cavernas_by_Adam_Saltsman.png",
+					"iid": "a2c7b322-66b0-11ec-9cd7-2d9ed8b33eff",
 					"levelId": 116,
 					"layerDefUid": 15,
 					"pxOffsetX": 0,
@@ -6047,7 +6064,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 45, "dir": "w" }]
+			"__neighbours": []
 		}
 	]
 }

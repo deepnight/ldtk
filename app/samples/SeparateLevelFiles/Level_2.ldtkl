@@ -9,9 +9,10 @@
 		"url": "https://ldtk.io"
 	},
 	"identifier": "Level_2",
+	"iid": "a34a0280-66b0-11ec-9cd7-43e058c8f3de",
 	"uid": 3,
-	"worldX": 576,
-	"worldY": 0,
+	"worldX": -1,
+	"worldY": -1,
 	"pxWid": 240,
 	"pxHei": 240,
 	"__bgColor": "#955268",
@@ -37,6 +38,7 @@
 			"__pxTotalOffsetY": 0,
 			"__tilesetDefUid": null,
 			"__tilesetRelPath": null,
+			"iid": "a34a0282-66b0-11ec-9cd7-9f70bfc51ecd",
 			"levelId": 3,
 			"layerDefUid": 1,
 			"pxOffsetX": 0,
@@ -59,5 +61,5 @@
 			"entityInstances": []
 		}
 	],
-	"__neighbours": [{ "levelUid": 2, "dir": "w" }]
+	"__neighbours": []
 }

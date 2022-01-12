@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455990,
+	"appBuildId": 456113,
 	"nextUid": 101,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -1116,7 +1116,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -1165,7 +1168,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -1214,7 +1220,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				},
 				{
 					"identifier": "patrol",
@@ -1237,7 +1246,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -1286,7 +1298,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		}
@@ -1378,7 +1393,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "textColor",
@@ -1401,12 +1419,16 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16768000] },
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Your_typical_2D_platformer",
+			"iid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -1449,6 +1471,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a315d322-66b0-11ec-9cd7-4318e0a0e578",
 					"levelId": 0,
 					"layerDefUid": 48,
 					"pxOffsetX": 0,
@@ -1467,6 +1490,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a315d323-66b0-11ec-9cd7-8ddce09157bc",
 							"width": 16,
 							"height": 24,
 							"defUid": 46,
@@ -1491,6 +1515,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [32,1008,16,16] },
+							"iid": "a315d324-66b0-11ec-9cd7-0d0128b37734",
 							"width": 32,
 							"height": 24,
 							"defUid": 52,
@@ -1518,6 +1543,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
+							"iid": "a315d325-66b0-11ec-9cd7-f9e1c56d6020",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
@@ -1551,6 +1577,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
+							"iid": "a315d326-66b0-11ec-9cd7-cf3ea20f8dff",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
@@ -1575,6 +1602,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a315d327-66b0-11ec-9cd7-35c28e76b04b",
 							"width": 8,
 							"height": 32,
 							"defUid": 86,
@@ -1593,6 +1621,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a315d328-66b0-11ec-9cd7-c30477cb5ff1",
 							"width": 8,
 							"height": 48,
 							"defUid": 86,
@@ -1612,6 +1641,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a315d329-66b0-11ec-9cd7-cd3fbd05b9cf",
 					"levelId": 0,
 					"layerDefUid": 97,
 					"pxOffsetX": 0,
@@ -1805,6 +1835,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a315d32a-66b0-11ec-9cd7-515d3a6b5733",
 					"levelId": 0,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -2575,6 +2606,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a315fa30-66b0-11ec-9cd7-37e57434aa29",
 					"levelId": 0,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -3063,10 +3095,11 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 89, "dir": "n" }, { "levelUid": 88, "dir": "s" } ]
+			"__neighbours": [ { "levelIid": "a316bd80-66b0-11ec-9cd7-c50cdc9d2cc4", "levelUid": 89, "dir": "n" }, { "levelIid": "a317cef0-66b0-11ec-9cd7-dd2f249c8c8b", "levelUid": 88, "dir": "s" } ]
 		},
 		{
 			"identifier": "Top",
+			"iid": "a316bd80-66b0-11ec-9cd7-c50cdc9d2cc4",
 			"uid": 89,
 			"worldX": 352,
 			"worldY": -352,
@@ -3098,6 +3131,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a316bd85-66b0-11ec-9cd7-4bd06a4903e2",
 					"levelId": 89,
 					"layerDefUid": 48,
 					"pxOffsetX": 0,
@@ -3116,6 +3150,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
+							"iid": "a316bd86-66b0-11ec-9cd7-837d4383ebc8",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
@@ -3140,6 +3175,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
+							"iid": "a316bd87-66b0-11ec-9cd7-df8b07359531",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
@@ -3164,6 +3200,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
+							"iid": "a316bd88-66b0-11ec-9cd7-cbd4e685a38f",
 							"width": 48,
 							"height": 48,
 							"defUid": 54,
@@ -3191,6 +3228,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a316bd89-66b0-11ec-9cd7-69448da578ed",
 							"width": 8,
 							"height": 64,
 							"defUid": 86,
@@ -3203,6 +3241,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [32,1008,16,16] },
+							"iid": "a316bd8a-66b0-11ec-9cd7-a986f709d9f8",
 							"width": 24,
 							"height": 24,
 							"defUid": 52,
@@ -3227,6 +3266,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a316bd8b-66b0-11ec-9cd7-27e78e24a888",
 							"width": 8,
 							"height": 32,
 							"defUid": 86,
@@ -3255,6 +3295,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a316bd8c-66b0-11ec-9cd7-ef61da91c3b3",
 					"levelId": 89,
 					"layerDefUid": 97,
 					"pxOffsetX": 0,
@@ -3377,6 +3418,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a316e490-66b0-11ec-9cd7-774a8b98c637",
 					"levelId": 89,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -4179,6 +4221,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3170ba0-66b0-11ec-9cd7-cf6ab15e2769",
 					"levelId": 89,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -4424,10 +4467,11 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 0, "dir": "s" }]
+			"__neighbours": [{ "levelIid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade", "levelUid": 0, "dir": "s" }]
 		},
 		{
 			"identifier": "Bottom",
+			"iid": "a317cef0-66b0-11ec-9cd7-dd2f249c8c8b",
 			"uid": 88,
 			"worldX": 80,
 			"worldY": 336,
@@ -4459,6 +4503,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a317cef5-66b0-11ec-9cd7-1763e00a48a4",
 					"levelId": 88,
 					"layerDefUid": 48,
 					"pxOffsetX": 0,
@@ -4477,6 +4522,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 91, "srcRect": [176,1328,16,16] },
+							"iid": "a317cef6-66b0-11ec-9cd7-a5ccf047f66e",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
@@ -4517,6 +4563,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a317cef7-66b0-11ec-9cd7-61e9cd78ec4b",
 					"levelId": 88,
 					"layerDefUid": 97,
 					"pxOffsetX": 0,
@@ -4590,6 +4637,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a317cef8-66b0-11ec-9cd7-4de4e6b85e16",
 					"levelId": 88,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -5041,6 +5089,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 2,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a317f600-66b0-11ec-9cd7-1fc5fd2d5a3f",
 					"levelId": 88,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -5140,7 +5189,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 0, "dir": "n" }]
+			"__neighbours": [{ "levelIid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade", "levelUid": 0, "dir": "n" }]
 		}
 	]
 }

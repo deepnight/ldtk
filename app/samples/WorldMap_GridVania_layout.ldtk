@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455990,
+	"appBuildId": 456113,
 	"nextUid": 129,
 	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
@@ -766,7 +766,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				},
 				{
 					"identifier": "price",
@@ -789,7 +792,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -838,7 +844,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				},
 				{
 					"identifier": "HP",
@@ -861,7 +870,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [10] },
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -938,7 +950,10 @@
 						"id": "V_Bool",
 						"params": [ true ]
 					},
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		}
@@ -1026,7 +1041,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "enterMsg",
@@ -1049,12 +1067,16 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Entrance",
+			"iid": "a367c3b0-66b0-11ec-9cd7-91690c910c97",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -1104,6 +1126,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a367c3b5-66b0-11ec-9cd7-a7935e1c2c53",
 					"levelId": 0,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -1122,6 +1145,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a367c3b6-66b0-11ec-9cd7-61bd30243515",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -1146,6 +1170,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] },
+							"iid": "a367c3b7-66b0-11ec-9cd7-65b15caa5ba5",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -1170,6 +1195,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a367c3b8-66b0-11ec-9cd7-313e15c65fee",
 							"width": 16,
 							"height": 24,
 							"defUid": 90,
@@ -1204,6 +1230,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a367c3b9-66b0-11ec-9cd7-dba4fd8c08c4",
 					"levelId": 0,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -1286,6 +1313,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a367c3ba-66b0-11ec-9cd7-61c1299773eb",
 					"levelId": 0,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -1673,6 +1701,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a367c3bb-66b0-11ec-9cd7-3df486083ddc",
 					"levelId": 0,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -1984,10 +2013,15 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 4, "dir": "s" }, { "levelUid": 66, "dir": "w" }, { "levelUid": 51, "dir": "e" } ]
+			"__neighbours": [
+				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "levelUid": 4, "dir": "s" },
+				{ "levelIid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238", "levelUid": 66, "dir": "w" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "levelUid": 51, "dir": "e" }
+			]
 		},
 		{
 			"identifier": "Cross_roads",
+			"iid": "a36811d0-66b0-11ec-9cd7-4367627fb745",
 			"uid": 4,
 			"worldX": 0,
 			"worldY": 256,
@@ -2019,6 +2053,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36811d5-66b0-11ec-9cd7-5711cb441e9c",
 					"levelId": 4,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -2043,6 +2078,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36811d6-66b0-11ec-9cd7-4f58f79fa162",
 					"levelId": 4,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -2146,6 +2182,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36811d7-66b0-11ec-9cd7-c3d11c903515",
 					"levelId": 4,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -3046,6 +3083,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3688700-66b0-11ec-9cd7-5d0a637306d6",
 					"levelId": 4,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -3345,10 +3383,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 0, "dir": "n" }, { "levelUid": 66, "dir": "w" }, { "levelUid": 41, "dir": "e" }, { "levelUid": 42, "dir": "e" } ]
+			"__neighbours": [
+				{ "levelIid": "a367c3b0-66b0-11ec-9cd7-91690c910c97", "levelUid": 0, "dir": "n" },
+				{ "levelIid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238", "levelUid": 66, "dir": "w" },
+				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "levelUid": 41, "dir": "e" },
+				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "levelUid": 42, "dir": "e" }
+			]
 		},
 		{
 			"identifier": "Ossuary",
+			"iid": "a368fc30-66b0-11ec-9cd7-d141af83d44b",
 			"uid": 65,
 			"worldX": -1024,
 			"worldY": 0,
@@ -3380,6 +3424,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a368fc35-66b0-11ec-9cd7-af2d845c740f",
 					"levelId": 65,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -3398,6 +3443,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] },
+							"iid": "a368fc36-66b0-11ec-9cd7-d54493e15d01",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -3422,6 +3468,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,1712,16,16] },
+							"iid": "a368fc37-66b0-11ec-9cd7-6da7cb2a925d",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -3453,6 +3500,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a368fc38-66b0-11ec-9cd7-3fdf9a637a15",
 					"levelId": 65,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -3577,6 +3625,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a368fc39-66b0-11ec-9cd7-c9b9402c11e4",
 					"levelId": 65,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -4860,6 +4909,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3694a50-66b0-11ec-9cd7-a5198b47a7dd",
 					"levelId": 65,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -5355,10 +5405,11 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 66, "dir": "e" }]
+			"__neighbours": [{ "levelIid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238", "levelUid": 66, "dir": "e" }]
 		},
 		{
 			"identifier": "Water_supply",
+			"iid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238",
 			"uid": 66,
 			"worldX": -512,
 			"worldY": 0,
@@ -5390,6 +5441,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36a34b5-66b0-11ec-9cd7-3bdbce2d2f7e",
 					"levelId": 66,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -5408,6 +5460,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [160,432,16,16] },
+							"iid": "a36a34b6-66b0-11ec-9cd7-6192e3dc5680",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -5432,6 +5485,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a36a34b7-66b0-11ec-9cd7-49f57098a445",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -5456,6 +5510,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a36a34b8-66b0-11ec-9cd7-39147f8ceb0e",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -5480,6 +5535,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [128,288,16,16] },
+							"iid": "a36a34b9-66b0-11ec-9cd7-c1de732b0896",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -5510,6 +5566,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] },
+							"iid": "a36a34ba-66b0-11ec-9cd7-3d92ac9679f8",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -5534,6 +5591,7 @@
 							"__pivot": [0,0],
 							"__tags": ["region"],
 							"__tile": null,
+							"iid": "a36a34bb-66b0-11ec-9cd7-5b38c50aa489",
 							"width": 224,
 							"height": 112,
 							"defUid": 96,
@@ -5553,6 +5611,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36a34bc-66b0-11ec-9cd7-8b3509639e48",
 					"levelId": 66,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -5709,6 +5768,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36a5bc0-66b0-11ec-9cd7-d3afe6234c77",
 					"levelId": 66,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -6492,6 +6552,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36a5bc1-66b0-11ec-9cd7-9b69f1f01963",
 					"levelId": 66,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -7028,10 +7089,15 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 0, "dir": "e" }, { "levelUid": 4, "dir": "e" }, { "levelUid": 65, "dir": "w" } ]
+			"__neighbours": [
+				{ "levelIid": "a367c3b0-66b0-11ec-9cd7-91690c910c97", "levelUid": 0, "dir": "e" },
+				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "levelUid": 4, "dir": "e" },
+				{ "levelIid": "a368fc30-66b0-11ec-9cd7-d141af83d44b", "levelUid": 65, "dir": "w" }
+			]
 		},
 		{
 			"identifier": "Sewers2",
+			"iid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56",
 			"uid": 59,
 			"worldX": 512,
 			"worldY": 1024,
@@ -7063,6 +7129,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36b6d35-66b0-11ec-9cd7-430b1023ae6b",
 					"levelId": 59,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -7081,6 +7148,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [48,1456,16,16] },
+							"iid": "a36b6d36-66b0-11ec-9cd7-69fba161c5fc",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -7112,6 +7180,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36b6d37-66b0-11ec-9cd7-79a82019cc1c",
 					"levelId": 59,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -7244,6 +7313,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36b6d38-66b0-11ec-9cd7-078f43aaa6c8",
 					"levelId": 59,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -8128,6 +8198,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36b9440-66b0-11ec-9cd7-41d7e67d7815",
 					"levelId": 59,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -8533,10 +8604,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 61, "dir": "s" }, { "levelUid": 42, "dir": "n" }, { "levelUid": 43, "dir": "n" }, { "levelUid": 71, "dir": "e" } ]
+			"__neighbours": [
+				{ "levelIid": "a36c5790-66b0-11ec-9cd7-0d08d7991930", "levelUid": 61, "dir": "s" },
+				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "levelUid": 42, "dir": "n" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "n" },
+				{ "levelIid": "a373aa90-66b0-11ec-9cd7-a9310f178834", "levelUid": 71, "dir": "e" }
+			]
 		},
 		{
 			"identifier": "Sewers_trash",
+			"iid": "a36c5790-66b0-11ec-9cd7-0d08d7991930",
 			"uid": 61,
 			"worldX": 256,
 			"worldY": 1536,
@@ -8568,6 +8645,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36c5795-66b0-11ec-9cd7-7fa9d2419694",
 					"levelId": 61,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -8586,6 +8664,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,1712,16,16] },
+							"iid": "a36c5796-66b0-11ec-9cd7-abe4f8e55b6a",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -8617,6 +8696,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36c5797-66b0-11ec-9cd7-33e93cba3de6",
 					"levelId": 61,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -8713,6 +8793,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36c5798-66b0-11ec-9cd7-ed61e9aafc9d",
 					"levelId": 61,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -9477,6 +9558,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36c7ea0-66b0-11ec-9cd7-e9658be7d824",
 					"levelId": 61,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -10036,10 +10118,11 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 59, "dir": "n" }]
+			"__neighbours": [{ "levelIid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56", "levelUid": 59, "dir": "n" }]
 		},
 		{
 			"identifier": "Boss_room",
+			"iid": "a36d41f0-66b0-11ec-9cd7-e962574817d4",
 			"uid": 47,
 			"worldX": 1536,
 			"worldY": 512,
@@ -10086,6 +10169,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36d41f5-66b0-11ec-9cd7-a3a7b7c24dbb",
 					"levelId": 47,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -10110,6 +10194,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36d41f6-66b0-11ec-9cd7-a502c7165b4f",
 					"levelId": 47,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -10215,6 +10300,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36d41f7-66b0-11ec-9cd7-3f881e1f54ac",
 					"levelId": 47,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -11275,6 +11361,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36d6900-66b0-11ec-9cd7-d187085e5ca3",
 					"levelId": 47,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -11983,16 +12070,17 @@
 				}
 			],
 			"__neighbours": [
-				{ "levelUid": 43, "dir": "w" },
-				{ "levelUid": 63, "dir": "n" },
-				{ "levelUid": 71, "dir": "w" },
-				{ "levelUid": 84, "dir": "n" },
-				{ "levelUid": 87, "dir": "w" },
-				{ "levelUid": 123, "dir": "e" }
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "w" },
+				{ "levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465", "levelUid": 63, "dir": "n" },
+				{ "levelIid": "a373aa90-66b0-11ec-9cd7-a9310f178834", "levelUid": 71, "dir": "w" },
+				{ "levelIid": "a374bc00-66b0-11ec-9cd7-65fcab2d5d53", "levelUid": 84, "dir": "n" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "levelUid": 87, "dir": "w" },
+				{ "levelIid": "a376dee0-66b0-11ec-9cd7-f17a95c7e88d", "levelUid": 123, "dir": "e" }
 			]
 		},
 		{
 			"identifier": "Large_water",
+			"iid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0",
 			"uid": 56,
 			"worldX": 1024,
 			"worldY": -256,
@@ -12024,6 +12112,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36e7a75-66b0-11ec-9cd7-0ff3971c3248",
 					"levelId": 56,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -12042,6 +12131,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] },
+							"iid": "a36e7a76-66b0-11ec-9cd7-9d8532e17d71",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -12073,6 +12163,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36e7a77-66b0-11ec-9cd7-17af2e50c827",
 					"levelId": 56,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -12173,6 +12264,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36e7a78-66b0-11ec-9cd7-0b7506c4a9dd",
 					"levelId": 56,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -12912,6 +13004,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36ea180-66b0-11ec-9cd7-cbdfb3640417",
 					"levelId": 56,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -13536,10 +13629,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 63, "dir": "e" }, { "levelUid": 51, "dir": "w" }, { "levelUid": 52, "dir": "s" }, { "levelUid": 87, "dir": "s" } ]
+			"__neighbours": [
+				{ "levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465", "levelUid": 63, "dir": "e" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "levelUid": 51, "dir": "w" },
+				{ "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "levelUid": 52, "dir": "s" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "levelUid": 87, "dir": "s" }
+			]
 		},
 		{
 			"identifier": "Shop",
+			"iid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf",
 			"uid": 41,
 			"worldX": 512,
 			"worldY": 256,
@@ -13580,6 +13679,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36f8be5-66b0-11ec-9cd7-779e073cf8d2",
 					"levelId": 41,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -13598,6 +13698,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [128,288,16,16] },
+							"iid": "a36f8be6-66b0-11ec-9cd7-b5a8d5ccc437",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -13628,6 +13729,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [144,64,16,16] },
+							"iid": "a36f8be7-66b0-11ec-9cd7-316971e16d32",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -13658,6 +13760,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [16,1584,16,16] },
+							"iid": "a36f8be8-66b0-11ec-9cd7-fd36870bdef5",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -13688,6 +13791,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [224,976,16,16] },
+							"iid": "a36f8be9-66b0-11ec-9cd7-89a0e2fc55f0",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -13725,6 +13829,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36f8bea-66b0-11ec-9cd7-63b594388049",
 					"levelId": 41,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -13776,6 +13881,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36f8beb-66b0-11ec-9cd7-1fb840bab654",
 					"levelId": 41,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -13966,6 +14072,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36fb2f0-66b0-11ec-9cd7-395726e77cfd",
 					"levelId": 41,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -14125,10 +14232,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 4, "dir": "w" }, { "levelUid": 42, "dir": "s" }, { "levelUid": 50, "dir": "e" }, { "levelUid": 51, "dir": "n" } ]
+			"__neighbours": [
+				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "levelUid": 4, "dir": "w" },
+				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "levelUid": 42, "dir": "s" },
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "levelUid": 50, "dir": "e" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "levelUid": 51, "dir": "n" }
+			]
 		},
 		{
 			"identifier": "Sewers1",
+			"iid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484",
 			"uid": 42,
 			"worldX": 512,
 			"worldY": 512,
@@ -14160,6 +14273,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a36fda05-66b0-11ec-9cd7-1f23fbb89ea4",
 					"levelId": 42,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -14184,6 +14298,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36fda06-66b0-11ec-9cd7-7f842359295f",
 					"levelId": 42,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -14316,6 +14431,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36fda07-66b0-11ec-9cd7-555759bf0c47",
 					"levelId": 42,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -14650,6 +14766,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a36fda08-66b0-11ec-9cd7-995b2e5737da",
 					"levelId": 42,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -15007,15 +15124,16 @@
 				}
 			],
 			"__neighbours": [
-				{ "levelUid": 4, "dir": "w" },
-				{ "levelUid": 59, "dir": "s" },
-				{ "levelUid": 41, "dir": "n" },
-				{ "levelUid": 43, "dir": "e" },
-				{ "levelUid": 50, "dir": "e" }
+				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "levelUid": 4, "dir": "w" },
+				{ "levelIid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56", "levelUid": 59, "dir": "s" },
+				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "levelUid": 41, "dir": "n" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "e" },
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "levelUid": 50, "dir": "e" }
 			]
 		},
 		{
 			"identifier": "The_ponds",
+			"iid": "a3707640-66b0-11ec-9cd7-59efc6b24075",
 			"uid": 43,
 			"worldX": 768,
 			"worldY": 768,
@@ -15047,6 +15165,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a3707645-66b0-11ec-9cd7-cf8dbd45f43c",
 					"levelId": 43,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -15071,6 +15190,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3707646-66b0-11ec-9cd7-8b9b2dc80e86",
 					"levelId": 43,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -15168,6 +15288,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3707647-66b0-11ec-9cd7-4536c23aa95e",
 					"levelId": 43,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -15663,6 +15784,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3709d50-66b0-11ec-9cd7-3d30cf0b6ad6",
 					"levelId": 43,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -16172,17 +16294,18 @@
 				}
 			],
 			"__neighbours": [
-				{ "levelUid": 59, "dir": "s" },
-				{ "levelUid": 47, "dir": "e" },
-				{ "levelUid": 42, "dir": "w" },
-				{ "levelUid": 50, "dir": "n" },
-				{ "levelUid": 52, "dir": "n" },
-				{ "levelUid": 71, "dir": "s" },
-				{ "levelUid": 87, "dir": "n" }
+				{ "levelIid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56", "levelUid": 59, "dir": "s" },
+				{ "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "levelUid": 47, "dir": "e" },
+				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "levelUid": 42, "dir": "w" },
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "levelUid": 50, "dir": "n" },
+				{ "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "levelUid": 52, "dir": "n" },
+				{ "levelIid": "a373aa90-66b0-11ec-9cd7-a9310f178834", "levelUid": 71, "dir": "s" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "levelUid": 87, "dir": "n" }
 			]
 		},
 		{
 			"identifier": "Pit",
+			"iid": "a370eb70-66b0-11ec-9cd7-ef1d13410308",
 			"uid": 50,
 			"worldX": 768,
 			"worldY": 256,
@@ -16214,6 +16337,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a370eb75-66b0-11ec-9cd7-ade0c82bbd94",
 					"levelId": 50,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -16238,6 +16362,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a370eb76-66b0-11ec-9cd7-8110395bfa05",
 					"levelId": 50,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -16335,6 +16460,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a370eb77-66b0-11ec-9cd7-45645e749646",
 					"levelId": 50,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -16664,6 +16790,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a37160a0-66b0-11ec-9cd7-9dd2e5e3927e",
 					"levelId": 50,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -16989,15 +17116,16 @@
 				}
 			],
 			"__neighbours": [
-				{ "levelUid": 41, "dir": "w" },
-				{ "levelUid": 42, "dir": "w" },
-				{ "levelUid": 43, "dir": "s" },
-				{ "levelUid": 51, "dir": "n" },
-				{ "levelUid": 52, "dir": "e" }
+				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "levelUid": 41, "dir": "w" },
+				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "levelUid": 42, "dir": "w" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "s" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "levelUid": 51, "dir": "n" },
+				{ "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "levelUid": 52, "dir": "e" }
 			]
 		},
 		{
 			"identifier": "The_tower",
+			"iid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465",
 			"uid": 63,
 			"worldX": 1536,
 			"worldY": -256,
@@ -17029,6 +17157,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a371aec5-66b0-11ec-9cd7-cd4768d1d266",
 					"levelId": 63,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -17053,6 +17182,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a371aec6-66b0-11ec-9cd7-378648116ce0",
 					"levelId": 63,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -17205,6 +17335,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a371aec7-66b0-11ec-9cd7-2bfcc6c27ecb",
 					"levelId": 63,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -17713,6 +17844,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a371aec8-66b0-11ec-9cd7-9f44147089d0",
 					"levelId": 63,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -18203,10 +18335,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 47, "dir": "s" }, { "levelUid": 56, "dir": "w" }, { "levelUid": 84, "dir": "e" }, { "levelUid": 87, "dir": "w" } ]
+			"__neighbours": [
+				{ "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "levelUid": 47, "dir": "s" },
+				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "levelUid": 56, "dir": "w" },
+				{ "levelIid": "a374bc00-66b0-11ec-9cd7-65fcab2d5d53", "levelUid": 84, "dir": "e" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "levelUid": 87, "dir": "w" }
+			]
 		},
 		{
 			"identifier": "Garden",
+			"iid": "a3727210-66b0-11ec-9cd7-aba0184f5034",
 			"uid": 51,
 			"worldX": 512,
 			"worldY": -256,
@@ -18238,6 +18376,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a3727215-66b0-11ec-9cd7-efb80a85782d",
 					"levelId": 51,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -18256,6 +18395,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a3727216-66b0-11ec-9cd7-f345e02ef7d2",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -18280,6 +18420,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [192,432,16,16] },
+							"iid": "a3727217-66b0-11ec-9cd7-8ff79d11908d",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -18304,6 +18445,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [64,656,16,16] },
+							"iid": "a3727218-66b0-11ec-9cd7-1ddad18de70d",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -18335,6 +18477,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3727219-66b0-11ec-9cd7-bdaa1a67be1f",
 					"levelId": 51,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -18479,6 +18622,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a372721a-66b0-11ec-9cd7-7735b083b358",
 					"levelId": 51,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -19046,6 +19190,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3729920-66b0-11ec-9cd7-47f5874270e3",
 					"levelId": 51,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -19785,10 +19930,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 0, "dir": "w" }, { "levelUid": 56, "dir": "e" }, { "levelUid": 41, "dir": "s" }, { "levelUid": 50, "dir": "s" } ]
+			"__neighbours": [
+				{ "levelIid": "a367c3b0-66b0-11ec-9cd7-91690c910c97", "levelUid": 0, "dir": "w" },
+				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "levelUid": 56, "dir": "e" },
+				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "levelUid": 41, "dir": "s" },
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "levelUid": 50, "dir": "s" }
+			]
 		},
 		{
 			"identifier": "Save",
+			"iid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa",
 			"uid": 52,
 			"worldX": 1024,
 			"worldY": 256,
@@ -19829,6 +19980,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a3735c70-66b0-11ec-9cd7-df3ee759b153",
 					"levelId": 52,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -19853,6 +20005,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3735c71-66b0-11ec-9cd7-453c73ecdaac",
 					"levelId": 52,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -19931,6 +20084,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3735c72-66b0-11ec-9cd7-e32d0c421ba7",
 					"levelId": 52,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -20395,6 +20549,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3738380-66b0-11ec-9cd7-a9de5a745b7a",
 					"levelId": 52,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -20571,10 +20726,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 56, "dir": "n" }, { "levelUid": 43, "dir": "s" }, { "levelUid": 50, "dir": "w" }, { "levelUid": 87, "dir": "e" } ]
+			"__neighbours": [
+				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "levelUid": 56, "dir": "n" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "s" },
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "levelUid": 50, "dir": "w" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "levelUid": 87, "dir": "e" }
+			]
 		},
 		{
 			"identifier": "Flooded_rooms",
+			"iid": "a373aa90-66b0-11ec-9cd7-a9310f178834",
 			"uid": 71,
 			"worldX": 1024,
 			"worldY": 1024,
@@ -20606,6 +20767,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a373aa95-66b0-11ec-9cd7-cb519b308861",
 					"levelId": 71,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -20624,6 +20786,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a373aa96-66b0-11ec-9cd7-7903b95e3e7d",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -20648,6 +20811,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a373aa97-66b0-11ec-9cd7-d715c6c71930",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -20672,6 +20836,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [160,432,16,16] },
+							"iid": "a373aa98-66b0-11ec-9cd7-d5022af1eb97",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -20696,6 +20861,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [192,432,16,16] },
+							"iid": "a373aa99-66b0-11ec-9cd7-d18008148c79",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -20720,6 +20886,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [32,512,16,16] },
+							"iid": "a373aa9a-66b0-11ec-9cd7-c5296becdbb1",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -20744,6 +20911,7 @@
 							"__pivot": [0,0],
 							"__tags": ["region"],
 							"__tile": null,
+							"iid": "a373aa9b-66b0-11ec-9cd7-bd56f31f6283",
 							"width": 416,
 							"height": 272,
 							"defUid": 96,
@@ -20763,6 +20931,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a373aa9c-66b0-11ec-9cd7-e5546a99d8c3",
 					"levelId": 71,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -20813,6 +20982,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a373aa9d-66b0-11ec-9cd7-cb09b9a740ab",
 					"levelId": 71,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -21893,6 +22063,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a373f8b0-66b0-11ec-9cd7-0b5b38e80477",
 					"levelId": 71,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -22307,10 +22478,15 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 59, "dir": "w" }, { "levelUid": 47, "dir": "e" }, { "levelUid": 43, "dir": "n" } ]
+			"__neighbours": [
+				{ "levelIid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56", "levelUid": 59, "dir": "w" },
+				{ "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "levelUid": 47, "dir": "e" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "n" }
+			]
 		},
 		{
 			"identifier": "Long_hallway",
+			"iid": "a374bc00-66b0-11ec-9cd7-65fcab2d5d53",
 			"uid": 84,
 			"worldX": 1792,
 			"worldY": 256,
@@ -22342,6 +22518,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a374bc05-66b0-11ec-9cd7-315ee5c3e0d3",
 					"levelId": 84,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -22366,6 +22543,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a374bc06-66b0-11ec-9cd7-d9a87a661e3f",
 					"levelId": 84,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -22537,6 +22715,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a374bc07-66b0-11ec-9cd7-2bac2861f874",
 					"levelId": 84,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -23603,6 +23782,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a3750a20-66b0-11ec-9cd7-b5f836f73b67",
 					"levelId": 84,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -24396,10 +24576,16 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 47, "dir": "s" }, { "levelUid": 63, "dir": "w" }, { "levelUid": 85, "dir": "n" }, { "levelUid": 123, "dir": "s" } ]
+			"__neighbours": [
+				{ "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "levelUid": 47, "dir": "s" },
+				{ "levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465", "levelUid": 63, "dir": "w" },
+				{ "levelIid": "a375f480-66b0-11ec-9cd7-05be0d3437be", "levelUid": 85, "dir": "n" },
+				{ "levelIid": "a376dee0-66b0-11ec-9cd7-f17a95c7e88d", "levelUid": 123, "dir": "s" }
+			]
 		},
 		{
 			"identifier": "Exit",
+			"iid": "a375f480-66b0-11ec-9cd7-05be0d3437be",
 			"uid": 85,
 			"worldX": 2816,
 			"worldY": 0,
@@ -24449,6 +24635,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a375f485-66b0-11ec-9cd7-0bf99ad3e136",
 					"levelId": 85,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -24467,6 +24654,7 @@
 							"__pivot": [0,0],
 							"__tags": ["region"],
 							"__tile": null,
+							"iid": "a375f486-66b0-11ec-9cd7-fd86a8f321b7",
 							"width": 48,
 							"height": 80,
 							"defUid": 94,
@@ -24486,6 +24674,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a375f487-66b0-11ec-9cd7-496fc9d8fea0",
 					"levelId": 85,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -24559,6 +24748,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a375f488-66b0-11ec-9cd7-7f024607986b",
 					"levelId": 85,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -24913,6 +25103,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a375f489-66b0-11ec-9cd7-c3612a266203",
 					"levelId": 85,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -25213,10 +25404,11 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 84, "dir": "s" }]
+			"__neighbours": [{ "levelIid": "a374bc00-66b0-11ec-9cd7-65fcab2d5d53", "levelUid": 84, "dir": "s" }]
 		},
 		{
 			"identifier": "Hidden_cave",
+			"iid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb",
 			"uid": 87,
 			"worldX": 1280,
 			"worldY": 256,
@@ -25248,6 +25440,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a37690c5-66b0-11ec-9cd7-bd3dc3e25368",
 					"levelId": 87,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -25266,6 +25459,7 @@
 							"__pivot": [0,0],
 							"__tags": ["region"],
 							"__tile": null,
+							"iid": "a37690c6-66b0-11ec-9cd7-91a751d327cb",
 							"width": 192,
 							"height": 176,
 							"defUid": 96,
@@ -25278,6 +25472,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": { "tilesetUid": 73, "srcRect": [16,1584,16,16] },
+							"iid": "a37690c7-66b0-11ec-9cd7-833be48de81f",
 							"width": 24,
 							"height": 24,
 							"defUid": 72,
@@ -25309,6 +25504,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a37690c8-66b0-11ec-9cd7-9d71aa82afca",
 					"levelId": 87,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -25363,6 +25559,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a37690c9-66b0-11ec-9cd7-a39661efaa6f",
 					"levelId": 87,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -25884,6 +26081,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a376b7d0-66b0-11ec-9cd7-fd1ab6fbbf87",
 					"levelId": 87,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -25983,15 +26181,16 @@
 				}
 			],
 			"__neighbours": [
-				{ "levelUid": 47, "dir": "e" },
-				{ "levelUid": 56, "dir": "n" },
-				{ "levelUid": 43, "dir": "s" },
-				{ "levelUid": 63, "dir": "e" },
-				{ "levelUid": 52, "dir": "w" }
+				{ "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "levelUid": 47, "dir": "e" },
+				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "levelUid": 56, "dir": "n" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "levelUid": 43, "dir": "s" },
+				{ "levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465", "levelUid": 63, "dir": "e" },
+				{ "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "levelUid": 52, "dir": "w" }
 			]
 		},
 		{
 			"identifier": "Shortcut",
+			"iid": "a376dee0-66b0-11ec-9cd7-f17a95c7e88d",
 			"uid": 123,
 			"worldX": 2048,
 			"worldY": 512,
@@ -26023,6 +26222,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a376dee5-66b0-11ec-9cd7-ffd9fcd10a89",
 					"levelId": 123,
 					"layerDefUid": 77,
 					"pxOffsetX": 0,
@@ -26047,6 +26247,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a376dee6-66b0-11ec-9cd7-fdd7289ab34b",
 					"levelId": 123,
 					"layerDefUid": 24,
 					"pxOffsetX": 0,
@@ -26126,6 +26327,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a376dee7-66b0-11ec-9cd7-61fc17ebe595",
 					"levelId": 123,
 					"layerDefUid": 1,
 					"pxOffsetX": 0,
@@ -26354,6 +26556,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 6,
 					"__tilesetRelPath": "atlas/SunnyLand_by_Ansimuz-extended.png",
+					"iid": "a376dee8-66b0-11ec-9cd7-4f806ce34dc7",
 					"levelId": 123,
 					"layerDefUid": 103,
 					"pxOffsetX": 0,
@@ -26503,7 +26706,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelUid": 47, "dir": "w" }, { "levelUid": 84, "dir": "n" } ]
+			"__neighbours": [ { "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "levelUid": 47, "dir": "w" }, { "levelIid": "a374bc00-66b0-11ec-9cd7-65fcab2d5d53", "levelUid": 84, "dir": "n" } ]
 		}
 	]
 }

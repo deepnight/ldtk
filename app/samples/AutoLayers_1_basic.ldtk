@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455990,
+	"appBuildId": 456113,
 	"nextUid": 108,
 	"worldLayout": "Free",
 	"worldGridWidth": 128,
@@ -335,7 +335,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "color",
@@ -358,12 +361,16 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16777215] },
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "AutoLayer",
+			"iid": "a2a50ff0-66b0-11ec-9cd7-c721746049b9",
 			"uid": 70,
 			"worldX": 0,
 			"worldY": 40,
@@ -412,6 +419,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 9,
 					"__tilesetRelPath": "atlas/Cavernas_by_Adam_Saltsman.png",
+					"iid": "a2a53701-66b0-11ec-9cd7-43934582bcfa",
 					"levelId": 70,
 					"layerDefUid": 72,
 					"pxOffsetX": 0,

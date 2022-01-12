@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455990,
+	"appBuildId": 456113,
 	"nextUid": 39,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -159,7 +159,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "textColor",
@@ -182,12 +185,16 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16768256] },
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Stamps",
+			"iid": "a2adc280-66b0-11ec-9cd7-efc1cc2829ad",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 32,
@@ -230,6 +237,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/Inca_front_by_Kronbits-extended.png",
+					"iid": "a2ade990-66b0-11ec-9cd7-25309aaffcbd",
 					"levelId": 0,
 					"layerDefUid": 2,
 					"pxOffsetX": 0,

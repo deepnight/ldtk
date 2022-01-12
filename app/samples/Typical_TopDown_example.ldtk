@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455990,
+	"appBuildId": 456113,
 	"nextUid": 86,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -658,7 +658,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [100] },
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				},
 				{
 					"identifier": "ammo",
@@ -681,7 +684,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": { "id": "V_Int", "params": [10] },
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -730,7 +736,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		},
@@ -782,7 +791,10 @@
 						"id": "V_String",
 						"params": ["???"]
 					},
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				},
 				{
 					"identifier": "description",
@@ -805,7 +817,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": "LangMarkdown"
+					"textLanguageMode": "LangMarkdown",
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				},
 				{
 					"identifier": "content",
@@ -828,7 +843,10 @@
 					"regex": null,
 					"acceptFileTypes": null,
 					"defaultOverride": null,
-					"textLanguageMode": null
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame"
 				}
 			]
 		}
@@ -911,7 +929,10 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		},
 		{
 			"identifier": "textColor",
@@ -934,12 +955,16 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16762880] },
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame"
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Entrance",
+			"iid": "a348f110-66b0-11ec-9cd7-352deb718870",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 48,
@@ -988,6 +1013,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a3491826-66b0-11ec-9cd7-2b044c68d8a4",
 					"levelId": 0,
 					"layerDefUid": 54,
 					"pxOffsetX": 0,
@@ -1006,6 +1032,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a3491827-66b0-11ec-9cd7-f7b586989471",
 							"width": 8,
 							"height": 24,
 							"defUid": 62,
@@ -1024,6 +1051,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 67, "srcRect": [240,1328,16,16] },
+							"iid": "a3491828-66b0-11ec-9cd7-cb4d33f76ff0",
 							"width": 10,
 							"height": 10,
 							"defUid": 63,
@@ -1049,6 +1077,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 67, "srcRect": [240,1328,16,16] },
+							"iid": "a3491829-66b0-11ec-9cd7-c5b5ed21037f",
 							"width": 10,
 							"height": 10,
 							"defUid": 63,
@@ -1074,6 +1103,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a349182a-66b0-11ec-9cd7-2b12f6a4d88b",
 							"width": 16,
 							"height": 16,
 							"defUid": 59,
@@ -1096,6 +1126,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a349182b-66b0-11ec-9cd7-3588365261e5",
 					"levelId": 0,
 					"layerDefUid": 4,
 					"pxOffsetX": 0,
@@ -1217,6 +1248,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a349182c-66b0-11ec-9cd7-af91fbec3eec",
 					"levelId": 0,
 					"layerDefUid": 30,
 					"pxOffsetX": 0,
@@ -1275,6 +1307,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a349182d-66b0-11ec-9cd7-852978bb619a",
 					"levelId": 0,
 					"layerDefUid": 2,
 					"pxOffsetX": 0,
@@ -1625,6 +1658,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a349182e-66b0-11ec-9cd7-b57fcc2831ad",
 					"levelId": 0,
 					"layerDefUid": 53,
 					"pxOffsetX": 0,
@@ -1743,6 +1777,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a3493f30-66b0-11ec-9cd7-d9dd42c00b08",
 					"levelId": 0,
 					"layerDefUid": 43,
 					"pxOffsetX": 0,
@@ -2023,10 +2058,11 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 58, "dir": "e" }]
+			"__neighbours": [{ "levelIid": "a3498d50-66b0-11ec-9cd7-11ba70853612", "levelUid": 58, "dir": "e" }]
 		},
 		{
 			"identifier": "I_see_dead_people",
+			"iid": "a3498d50-66b0-11ec-9cd7-11ba70853612",
 			"uid": 58,
 			"worldX": 400,
 			"worldY": 96,
@@ -2058,6 +2094,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": null,
 					"__tilesetRelPath": null,
+					"iid": "a3498d57-66b0-11ec-9cd7-63f43597ba6b",
 					"levelId": 58,
 					"layerDefUid": 54,
 					"pxOffsetX": 0,
@@ -2076,6 +2113,7 @@
 							"__pivot": [0.5,1],
 							"__tags": [],
 							"__tile": null,
+							"iid": "a3498d58-66b0-11ec-9cd7-1d0247b4bded",
 							"width": 8,
 							"height": 24,
 							"defUid": 62,
@@ -2097,6 +2135,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 67, "srcRect": [240,1328,16,16] },
+							"iid": "a3498d59-66b0-11ec-9cd7-9dc769c667cd",
 							"width": 10,
 							"height": 10,
 							"defUid": 63,
@@ -2140,6 +2179,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 67, "srcRect": [240,1328,16,16] },
+							"iid": "a3498d5a-66b0-11ec-9cd7-fd579a8393e6",
 							"width": 10,
 							"height": 10,
 							"defUid": 63,
@@ -2168,6 +2208,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 67, "srcRect": [240,1328,16,16] },
+							"iid": "a3498d5b-66b0-11ec-9cd7-619f3d98c448",
 							"width": 10,
 							"height": 10,
 							"defUid": 63,
@@ -2209,6 +2250,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a3498d5c-66b0-11ec-9cd7-892aee0811f6",
 					"levelId": 58,
 					"layerDefUid": 4,
 					"pxOffsetX": 0,
@@ -2330,6 +2372,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a3498d5d-66b0-11ec-9cd7-2f4c6f59bcd7",
 					"levelId": 58,
 					"layerDefUid": 30,
 					"pxOffsetX": 0,
@@ -2401,6 +2444,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a3498d5e-66b0-11ec-9cd7-b9d89fbe7511",
 					"levelId": 58,
 					"layerDefUid": 2,
 					"pxOffsetX": 0,
@@ -2914,6 +2958,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a349b460-66b0-11ec-9cd7-b14c40f1977d",
 					"levelId": 58,
 					"layerDefUid": 53,
 					"pxOffsetX": 0,
@@ -2994,6 +3039,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/TopDown_by_deepnight.png",
+					"iid": "a349b461-66b0-11ec-9cd7-2578472b67c1",
 					"levelId": 58,
 					"layerDefUid": 43,
 					"pxOffsetX": 0,
@@ -3229,7 +3275,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelUid": 0, "dir": "w" }]
+			"__neighbours": [{ "levelIid": "a348f110-66b0-11ec-9cd7-352deb718870", "levelUid": 0, "dir": "w" }]
 		}
 	]
 }
