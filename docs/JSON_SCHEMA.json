@@ -612,10 +612,13 @@
 				"isArray",
 				"type",
 				"uid",
+				"allowOutOfLevelRef",
+				"allowedRefs",
 				"editorAlwaysShow",
 				"editorCutLongValues",
 				"editorDisplayMode",
 				"editorDisplayPos",
+				"symmetricalRef",
 				"useForSmartColor"
 			],
 			"additionalProperties": false,
@@ -636,6 +639,13 @@
 					"description": "If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.",
 					"type": [
 						"boolean"
+					]
+				},
+				"allowedRefs": {
+					"description": "Possible values: `Any`, `OnlySame`",
+					"enum": [
+						"Any",
+						"OnlySame"
 					]
 				},
 				"editorAlwaysShow": {
@@ -672,7 +682,7 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`",
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`",
 					"enum": [
 						"Hidden",
 						"ValueOnly",
@@ -685,11 +695,18 @@
 						"RadiusPx",
 						"RadiusGrid",
 						"ArrayCountWithLabel",
-						"ArrayCountNoLabel"
+						"ArrayCountNoLabel",
+						"RefLink"
 					]
 				},
 				"canBeNull": {
 					"description": "TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).",
+					"type": [
+						"boolean"
+					]
+				},
+				"symmetricalRef": {
+					"description": "",
 					"type": [
 						"boolean"
 					]
@@ -743,6 +760,12 @@
 						"null"
 					]
 				},
+				"allowOutOfLevelRef": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
 				"editorCutLongValues": {
 					"description": "",
 					"type": [
@@ -760,7 +783,7 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`",
+					"description": "Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`",
 					"enum": [
 						"F_Int",
 						"F_Float",
@@ -770,7 +793,8 @@
 						"F_Color",
 						"F_Enum",
 						"F_Point",
-						"F_Path"
+						"F_Path",
+						"F_EntityRef"
 					]
 				},
 				"identifier": {
@@ -1141,6 +1165,7 @@
 				"autoLayerTiles",
 				"entityInstances",
 				"gridTiles",
+				"iid",
 				"intGridCsv",
 				"layerDefUid",
 				"levelId",
@@ -1169,6 +1194,12 @@
 					"type": [
 						"string",
 						"null"
+					]
+				},
+				"iid": {
+					"description": "Unique layer instance identifier",
+					"type": [
+						"string"
 					]
 				},
 				"levelId": {
