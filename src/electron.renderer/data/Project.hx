@@ -384,11 +384,17 @@ class Project {
 		entityIidsCache.remove(iid);
 	}
 
-	inline function registerReverseIidRef(from:String, to:String) {
+	public inline function registerReverseIidRef(from:String, to:String) {
 		if( !reverseIidRefsCache.exists(to) )
 			reverseIidRefsCache.set(to, new Map());
 		reverseIidRefsCache.get(to).set(from,true);
 	}
+
+	public inline function unregisterReverseIidRef(from:String, to:String) {
+		if( reverseIidRefsCache.exists(to) )
+			reverseIidRefsCache.get(to).remove(from);
+	}
+
 
 	public function initEntityIidsCache() {
 		var t = haxe.Timer.stamp();
@@ -536,7 +542,10 @@ class Project {
 	}
 
 
-	public function removeReferencesInField(fd:data.def.FieldDef, refEi:data.inst.EntityInstance) {
+	/**
+		Check all FieldInstances and remove any existing references to `targetEi` EntityInstance
+	**/
+	public function removeAnyFieldRefsTo(fd:data.def.FieldDef, targetEi:data.inst.EntityInstance) {
 		var i = 0;
 
 		for(l in levels)
@@ -548,7 +557,7 @@ class Project {
 			var fi = ei.getFieldInstance(fd);
 			i = 0;
 			while( i<fi.getArrayLength() )
-				if( fi.getEntityRefIID(i)==refEi.iid )
+				if( fi.getEntityRefIID(i)==targetEi.iid )
 					fi.removeArrayValue(i);
 				else
 					i++;
