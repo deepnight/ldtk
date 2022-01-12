@@ -233,6 +233,17 @@ class EntityRender extends dn.Process {
 			color, ctx, beneath
 		);
 
+		for(refEi in ei._project.getEntityInstancesReferingTo(ei)) {
+			if( refEi._li.level==ei._li.level )
+				continue;
+
+			var col = refEi.getSmartColor(true);
+			var fx = ( refEi.getPointOriginX(ld) + refEi._li.level.worldX ) - ei.worldX;
+			var fy = ( refEi.getPointOriginY(ld) + refEi._li.level.worldY ) - ei.worldY;
+			var tx = ei.getPointOriginX(ld) - ei.x;
+			var ty = ei.getPointOriginY(ld) - ei.y;
+			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
+		}
 
 		// Identifier label
 		if( ei.def.showName ) {

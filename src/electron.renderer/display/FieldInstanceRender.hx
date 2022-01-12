@@ -18,7 +18,7 @@ class FieldInstanceRender {
 	}
 
 
-	static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=5.) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=5.) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
 		var count = M.ceil( len/dashLen );

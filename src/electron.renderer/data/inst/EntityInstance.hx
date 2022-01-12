@@ -260,18 +260,27 @@ class EntityInstance {
 	/**
 		Return TRUE if target EntityInstance has a reference to This in given field.
 	**/
-	public function hasEntityRefTo(targetEi:EntityInstance, fd:data.def.FieldDef) {
-		if( fd.type!=F_EntityRef || !fd.symmetricalRef )
-			return false;
+	public function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef) {
+		if( fd==null ) {
+			// In any field
+			for(fi in fieldInstances)
+			for(i in 0...fi.getArrayLength())
+				if( fi.getEntityRefIID(i)==targetEi.iid )
+					return true;
+		}
+		else {
+			// In specified field
+			if( fd.type!=F_EntityRef || !fd.symmetricalRef )
+				return false;
 
-		var fi = getFieldInstance(fd);
-		if( fi==null )
-			return false;
+			var fi = getFieldInstance(fd);
+			if( fi==null )
+				return false;
 
-		for(i in 0...fi.getArrayLength())
-			if( fi.getEntityRefIID(i)==targetEi.iid )
-				return true;
-
+			for(i in 0...fi.getArrayLength())
+				if( fi.getEntityRefIID(i)==targetEi.iid )
+					return true;
+		}
 		return false;
 	}
 
