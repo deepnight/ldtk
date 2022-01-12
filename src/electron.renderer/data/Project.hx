@@ -370,11 +370,11 @@ class Project {
 		return entityIidsCache.exists(iid) ? entityIidsCache.get(iid) : null;
 	}
 
-	public inline function registerEntityInstance(ei:data.inst.EntityInstance) {
+	public function registerEntityInstance(ei:data.inst.EntityInstance) {
 		entityIidsCache.set(ei.iid, ei);
 
 		for(fi in ei.fieldInstances)
-			if( fi.def.type==F_EntityRef )
+			if( fi.def!=null && fi.def.type==F_EntityRef ) // def could be null after removal of a field def, and before proper tidy() calls
 				for(idx in 0...fi.getArrayLength())
 					if( !fi.valueIsNull(idx) )
 						registerReverseIidRef(ei.iid, fi.getEntityRefIID(idx));
