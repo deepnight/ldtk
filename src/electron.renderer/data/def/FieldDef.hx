@@ -61,6 +61,20 @@ class FieldDef {
 		symmetricalRef = false;
 		allowOutOfLevelRef = true;
 		allowedRefs = OnlySame;
+
+		// Specific default display modes, depending on type
+		switch type {
+			case F_Int:
+			case F_Float:
+			case F_String:
+			case F_Text:
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+			case F_Point: editorDisplayMode = PointPath;
+			case F_Path:
+			case F_EntityRef: editorDisplayMode = RefLink;
+		}
 	}
 
 	static inline function getDefaultUseForSmartColor(t:ldtk.Json.FieldType) : Bool {
