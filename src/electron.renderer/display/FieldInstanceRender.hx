@@ -39,6 +39,7 @@ class FieldInstanceRender {
 			sign = -sign;
 			n++;
 		}
+		g.lineTo(tx,ty);
 	}
 
 
