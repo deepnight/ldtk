@@ -259,6 +259,18 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
+		var i = Input.linkToHtmlInput( cur.guideGridWid, jForm.find("input[name='guideGridWid']") );
+		i.setBounds(0,Const.MAX_GRID_SIZE);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.fixValue = v->return v<=1 ? 0 : v;
+		i.setEmptyValue(0);
+
+		var i = Input.linkToHtmlInput( cur.guideGridHei, jForm.find("input[name='guideGridHei']") );
+		i.setBounds(0,Const.MAX_GRID_SIZE);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.fixValue = v->return v<=1 ? 0 : v;
+		i.setEmptyValue(0);
+
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.enablePercentageMode();
 		i.setBounds(0.1, 1);

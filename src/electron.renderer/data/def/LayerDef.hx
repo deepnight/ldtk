@@ -9,6 +9,8 @@ class LayerDef {
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var scaledGridSize(get,never) : Float; inline function get_scaledGridSize() return gridSize*getScale();
+	public var guideGridWid : Int = 0;
+	public var guideGridHei : Int = 0;
 	public var displayOpacity : Float = 1.0;
 	public var fadeInactive = false;
 	public var hideInList = false;
@@ -68,6 +70,8 @@ class LayerDef {
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
+		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
+		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 		o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
@@ -119,6 +123,8 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,
 			gridSize: gridSize,
+			guideGridWid: guideGridWid,
+			guideGridHei: guideGridHei,
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			fadeInactive: fadeInactive,
 			hideInList: hideInList,
