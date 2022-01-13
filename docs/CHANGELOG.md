@@ -23,9 +23,9 @@
 
 ## JSON format changes
 
- - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
- - **IntGridValues** array order should no longer be used to guess IntGrid values, see https://github.com/deepnight/ldtk/issues/553
- - To avoid unnecessary file changes and renamings (bad for versioning systems), the following changes have been made:
+  - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
+  - **IntGridValues** array index should no longer be used to guess IntGrid values, since the array can be manually sorted by users. See https://github.com/deepnight/ldtk/issues/553
+  - To avoid unnecessary file changes and renamings (bad for versioning systems), the following changes have been made:
   - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
   - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
   - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
