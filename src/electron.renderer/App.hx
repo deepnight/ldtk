@@ -420,8 +420,11 @@ class App extends dn.Process {
 	}
 
 	function onAppMouseWheel(e:js.html.WheelEvent) {
-		if( hasPage() && !curPageProcess.isPaused() )
-			curPageProcess.onAppMouseWheel(e.deltaY, e.ctrlKey);
+		if( hasPage() && !curPageProcess.isPaused() ) {
+			var spd = e.ctrlKey ? 0.20 : 0.01;
+			var delta = spd * -e.deltaY;
+			curPageProcess.onAppMouseWheel(delta);
+		}
 	}
 
 	public inline function isMouseButtonDown(btId:Int) {

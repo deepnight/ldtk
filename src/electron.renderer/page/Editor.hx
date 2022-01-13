@@ -997,18 +997,16 @@ class Editor extends Page {
 	}
 
 
-	override function onAppMouseWheel(delta:Float, pinching:Bool) {
-		super.onAppMouseWheel(delta, pinching);
-
-		var spd = pinching ? 0.20 : 0.01;
-		deltaZoom( spd*-delta*settings.v.mouseWheelSpeed, getMouse() );
-		cursor.onMouseMove( getMouse() );
+	public var lastMouseWheelDelta = 0.;
+	override function onAppMouseWheel(delta:Float) {
+		super.onAppMouseWheel(delta);
+		lastMouseWheelDelta = delta;
 	}
 
 
 	function onHeapsMouseWheel(e:hxd.Event) {
-		// deltaZoom( M.sign( -e.wheelDelta )*settings.v.mouseWheelSpeed, getMouse() );
-		// cursor.onMouseMove( getMouse() );
+		deltaZoom( lastMouseWheelDelta*settings.v.mouseWheelSpeed, getMouse() );
+		cursor.onMouseMove( getMouse() );
 	}
 
 
