@@ -384,7 +384,7 @@ class LayerDef {
 	}
 
 	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
-		return pasteRule( p, rg, Clipboard.createTemp(CRule,r.toJson()) );
+		return pasteRule( p, rg, Clipboard.createTemp(CRule,r.toJson()), r );
 	}
 
 	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroup, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {
