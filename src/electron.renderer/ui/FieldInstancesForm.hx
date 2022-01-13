@@ -537,6 +537,7 @@ class FieldInstancesForm {
 						fi.parseValue(arrayIdx, null);
 						if( oldTargetEi!=null )
 							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						ValuePicker.cancelCurrent();
 						onFieldChange(fi);
 					});
 				}
@@ -647,6 +648,33 @@ class FieldInstancesForm {
 
 
 
+	function activateLastArrayEntry(fd:FieldDef) {
+		var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
+		var jEntry = jArray.find("ul.values >li:last");
+
+		switch fd.type {
+			case F_Int, F_Float, F_String, F_Text, F_Path:
+				jEntry.find("a.usingDefault").click();
+
+			case F_EntityRef:
+				jEntry.find("button:first").click();
+
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+				// see: https://stackoverflow.com/a/10453874
+				// var select = jArray.find("select:last").get(0);
+				// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
+				// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
+				// var ok = select.dispatchEvent(ev);
+
+			case F_Point:
+				// Not done here
+		}
+
+	}
+
+
 	function onFieldChange(fi:FieldInstance, keepCurrentSpecialTool=false) {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
@@ -680,10 +708,8 @@ class FieldInstancesForm {
 			jDt.appendTo(jWrapper);
 
 			var jDd = new J("<dd/>");
-			var li = jDd;
-			// var li = new J("<li/>");
-			li.attr("defUid", fd.uid);
-			li.appendTo(jWrapper);
+			jDd.attr("defUid", fd.uid);
+			jDd.appendTo(jWrapper);
 
 			// Identifier
 			if( !fd.isArray )
@@ -708,12 +734,12 @@ class FieldInstancesForm {
 
 			if( !fd.isArray ) {
 				// Single value
-				createFieldInput(domId, fi, 0, li);
+				createFieldInput(domId, fi, 0, jDd);
 			}
 			else {
 				// Array
 				var jArray = new J('<div class="array"/>');
-				jArray.appendTo(li);
+				jArray.appendTo(jDd);
 				if( fd.arrayMinLength!=null && fi.getArrayLength()<fd.arrayMinLength
 					|| fd.arrayMaxLength!=null && fi.getArrayLength()>fd.arrayMaxLength ) {
 					var bounds : String =
@@ -782,21 +808,7 @@ class FieldInstancesForm {
 							fi.addArrayValue();
 							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
-						}
-						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
-						switch fi.def.type {
-							case F_Int, F_Float, F_String, F_Text, F_Path: jArray.find("a.usingDefault:last").click();
-							case F_EntityRef:
-							case F_Bool:
-							case F_Color:
-							case F_Enum(enumDefUid):
-								// see: https://stackoverflow.com/a/10453874
-								// var select = jArray.find("select:last").get(0);
-								// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
-								// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
-								// var ok = select.dispatchEvent(ev);
-
-							case F_Point:
+							activateLastArrayEntry(fd);
 						}
 					});
 				}
