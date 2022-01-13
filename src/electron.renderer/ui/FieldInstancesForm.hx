@@ -780,6 +780,7 @@ class FieldInstancesForm {
 						}
 						else {
 							fi.addArrayValue();
+							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
 						}
 						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
