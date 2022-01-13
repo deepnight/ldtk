@@ -32,6 +32,7 @@
 
 ## UI
 
+  - Added a new optional "guide" grid per layer. This customizable grid is not used for snapping, and only serves as a visual guide.
   - Better display of entities that have error(s) in their field values.
   - Added a new option (`CTRL-H`) to hide everything except Tiles in layers (entities, labels, intGrids etc.)
   - Added an "App Settings" button to the main panel in editor
