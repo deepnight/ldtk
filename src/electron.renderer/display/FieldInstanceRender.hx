@@ -18,9 +18,10 @@ class FieldInstanceRender {
 	}
 
 
-	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=5.) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
+		var dashLen = M.fmin(5, len*0.05);
 		var count = M.ceil( len/dashLen );
 		dashLen = len/count;
 
@@ -31,10 +32,11 @@ class FieldInstanceRender {
 		var y = fy;
 		while( n<count ) {
 			final r = n/(count-1);
+			final ir = M.fmin(r/0.2, 1);
 			g.lineStyle(1, color, 0.15 + 0.85*(1-r));
 			g.moveTo(x,y);
-			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r);
-			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r);
+			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*ir;
+			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*ir;
 			g.lineTo(x,y);
 			sign = -sign;
 			n++;
@@ -214,14 +216,14 @@ class FieldInstanceRender {
 			case RefLink:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.getPointOriginX(ld) - ei.x;
-						var fy = ei.getPointOriginY(ld) - ei.y;
+						var fx = ei.centerX - ei.x;
+						var fy = ei.centerY - ei.y;
 						for(i in 0...fi.getArrayLength()) {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.getPointOriginX(ld) + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
-							var ty = M.round( tei.getPointOriginY(ld) + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
 							renderRefLink(g, baseColor, fx,fy, tx,ty);
 						}
 
