@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456132,
+	"appBuildId": 456134,
 	"nextUid": 56,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -301,31 +301,6 @@
 		}
 	], "entities": [
 		{
-			"identifier": "OutOfBoundsTest",
-			"uid": 55,
-			"tags": [],
-			"width": 32,
-			"height": 32,
-			"resizableX": true,
-			"resizableY": true,
-			"keepAspectRatio": false,
-			"fillOpacity": 0.8,
-			"lineOpacity": 1,
-			"hollow": false,
-			"color": "#005DFF",
-			"renderMode": "Rectangle",
-			"showName": true,
-			"tilesetId": null,
-			"tileId": null,
-			"tileRenderMode": "FitInside",
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0.5,
-			"pivotY": 0.5,
-			"fieldDefs": []
-		},
-		{
 			"identifier": "Teleport",
 			"uid": 1,
 			"tags": [],
@@ -390,7 +365,7 @@
 			"fillOpacity": 1,
 			"lineOpacity": 1,
 			"hollow": false,
-			"color": "#FFC400",
+			"color": "#0086FF",
 			"renderMode": "Cross",
 			"showName": true,
 			"tilesetId": null,
@@ -514,7 +489,7 @@
 			"uid": 51,
 			"tags": ["triggerable"],
 			"width": 16,
-			"height": 8,
+			"height": 5,
 			"resizableX": false,
 			"resizableY": false,
 			"keepAspectRatio": false,
@@ -546,7 +521,7 @@
 			"fillOpacity": 0.3,
 			"lineOpacity": 1,
 			"hollow": false,
-			"color": "#94D9B3",
+			"color": "#FFE148",
 			"renderMode": "Rectangle",
 			"showName": true,
 			"tilesetId": null,
@@ -707,7 +682,7 @@
 							"__tile": null,
 							"iid": "06a8e6d0-66b0-11ec-8458-c7d91f51e1bc",
 							"width": 16,
-							"height": 8,
+							"height": 5,
 							"defUid": 51,
 							"px": [248,80],
 							"fieldInstances": []
@@ -720,7 +695,7 @@
 							"__tile": null,
 							"iid": "09e721e0-66b0-11ec-8458-9582b736f42f",
 							"width": 16,
-							"height": 8,
+							"height": 5,
 							"defUid": 51,
 							"px": [168,80],
 							"fieldInstances": []
@@ -812,19 +787,6 @@
 									"params": ["a83867b0-66b0-11ec-a322-694fd3f86883"]
 								}]
 							}]
-						},
-						{
-							"__identifier": "OutOfBoundsTest",
-							"__grid": [9,2],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "46004160-66b0-11ec-ad69-e1fc8d6b6a93",
-							"width": 32,
-							"height": 32,
-							"defUid": 55,
-							"px": [152,40],
-							"fieldInstances": []
 						}
 					]
 				},
