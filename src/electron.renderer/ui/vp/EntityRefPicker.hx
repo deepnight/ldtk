@@ -85,6 +85,10 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		if( !fd.allowOutOfLevelRef && ei._li.level!=sourceEi._li.level  )
 			return false;
 
+		// No double-references
+		if( sourceEi.hasEntityRefTo(ei, fd) )
+			return false;
+
 		// Not right entity type
 		return ei!=sourceEi && switch fd.allowedRefs {
 			case Any: true;

@@ -274,7 +274,7 @@ class EntityInstance {
 		}
 		else {
 			// In specified field
-			if( fd.type!=F_EntityRef || !fd.symmetricalRef )
+			if( fd.type!=F_EntityRef )
 				return false;
 
 			var fi = getFieldInstance(fd);
