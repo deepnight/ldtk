@@ -267,7 +267,8 @@ Value | Type | Description
 `type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Internal type enum<br/> Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
 `uid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Unique Int identifier
 `allowOutOfLevelRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Bool | 
-`allowedRefs`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Enum | Possible values: `Any`, `OnlySame`
+`allowedRefTags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Array&nbsp;of&nbsp;String | 
+`allowedRefs`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Enum | Possible values: `Any`, `OnlySame`, `OnlyTags`
 `editorAlwaysShow`<br/><sup class="internal">*Only used by editor*</sup> | Bool | 
 `editorCutLongValues`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.10.0-green.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`

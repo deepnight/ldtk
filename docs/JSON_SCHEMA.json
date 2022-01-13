@@ -613,6 +613,7 @@
 				"type",
 				"uid",
 				"allowOutOfLevelRef",
+				"allowedRefTags",
 				"allowedRefs",
 				"editorAlwaysShow",
 				"editorCutLongValues",
@@ -642,10 +643,11 @@
 					]
 				},
 				"allowedRefs": {
-					"description": "Possible values: `Any`, `OnlySame`",
+					"description": "Possible values: `Any`, `OnlySame`, `OnlyTags`",
 					"enum": [
 						"Any",
-						"OnlySame"
+						"OnlySame",
+						"OnlyTags"
 					]
 				},
 				"editorAlwaysShow": {
@@ -703,6 +705,17 @@
 					"description": "TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).",
 					"type": [
 						"boolean"
+					]
+				},
+				"allowedRefTags": {
+					"description": "",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"symmetricalRef": {
