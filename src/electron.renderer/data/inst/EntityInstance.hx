@@ -24,10 +24,10 @@ class EntityInstance {
 
 	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
-	public var left(get,never) : Int; inline function get_left() return Std.int( x - width*def.pivotX );
-	public var right(get,never) : Int; inline function get_right() return left + width-1;
-	public var top(get,never) : Int; inline function get_top() return Std.int( y - height*def.pivotY );
-	public var bottom(get,never) : Int; inline function get_bottom() return top + height-1;
+	public var left(get,never) : Int; inline function get_left() return M.round( x - width*def.pivotX );
+	public var right(get,never) : Int; inline function get_right() return left + width;
+	public var top(get,never) : Int; inline function get_top() return M.round( y - height*def.pivotY );
+	public var bottom(get,never) : Int; inline function get_bottom() return top + height;
 
 
 	public function new(p:Project, li:LayerInstance, entityDefUid:Int, iid:String) {
@@ -41,8 +41,8 @@ class EntityInstance {
 		return 'Instance<${def.identifier}>@$x,$y';
 	}
 
-	inline function get_centerX() return Std.int( x + (0.5-def.pivotX)*width );
-	inline function get_centerY() return Std.int( y + (0.5-def.pivotY)*height );
+	inline function get_centerX() return M.round( x + (0.5-def.pivotX)*width );
+	inline function get_centerY() return M.round( y + (0.5-def.pivotY)*height );
 
 	inline function get_worldX() return Std.int( x + _li.level.worldX );
 	inline function get_worldY() return Std.int( y + _li.level.worldY );
@@ -133,30 +133,33 @@ class EntityInstance {
 		return def.resizableY ? centerY : ( getCy(ld)+0.5 ) * ld.gridSize;
 	}
 
-	final overPad = 4;
+	final overEdgePad = 4;
+	final overShapePad = 1;
 	public inline function isOver(layerX:Int, layerY:Int) {
-		if( def.renderMode==Ellipse ) {
+		if( M.fabs(layerX-x)>width || M.fabs(layerY-y)>height ) // Fast check
+			return false;
+		else if( def.renderMode==Ellipse ) {
 			if( def.hollow ) {
-				final rxIn2 = M.pow(width*0.5-overPad, 2);
-				final rxOut2 = M.pow(width*0.5+overPad, 2);
-				final ryIn2 = M.pow(height*0.5-overPad, 2);
-				final ryOut2 = M.pow(height*0.5+overPad, 2);
+				final rxIn2 = M.pow(width*0.5-overEdgePad, 2);
+				final rxOut2 = M.pow(width*0.5+overEdgePad, 2);
+				final ryIn2 = M.pow(height*0.5-overEdgePad, 2);
+				final ryOut2 = M.pow(height*0.5+overEdgePad, 2);
 				return
 					M.pow(layerX-centerX, 2) * ryIn2 + M.pow(layerY-centerY, 2) * rxIn2 > rxIn2*ryIn2
 					&& M.pow(layerX-centerX, 2) * ryOut2 + M.pow(layerY-centerY, 2) * rxOut2 <= rxOut2*ryOut2;
 			}
 			else {
-				final rx2 = M.pow(width*0.5, 2);
-				final ry2 = M.pow(height*0.5, 2);
+				final rx2 = M.pow(width*0.5+overShapePad, 2);
+				final ry2 = M.pow(height*0.5+overShapePad, 2);
 				return M.pow(layerX-centerX, 2) * ry2 + M.pow(layerY-centerY, 2) * rx2 <= rx2*ry2;
 			}
 		}
 		else if( def.hollow ) {
-			return layerX >= left-overPad && layerX<=right+overPad && layerY>=top-overPad && layerY<=bottom+overPad
-				&& !( layerX >= left+overPad && layerX<=right-overPad && layerY>=top+overPad && layerY<=bottom-overPad );
+			return layerX >= left-overEdgePad && layerX<=right+overEdgePad && layerY>=top-overEdgePad && layerY<=bottom+overEdgePad
+				&& !( layerX >= left+overEdgePad && layerX<=right-overEdgePad && layerY>=top+overEdgePad && layerY<=bottom-overEdgePad );
 		}
 		else
-			return layerX>=left && layerX<=right && layerY>=top && layerY<=bottom;
+			return layerX>=left-overShapePad && layerX<=right+overShapePad && layerY>=top-overShapePad && layerY<=bottom+overShapePad;
 	}
 
 	public function getSmartColor(bright:Bool) {
