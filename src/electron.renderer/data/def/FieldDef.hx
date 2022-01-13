@@ -223,7 +223,7 @@ class FieldDef {
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 			case F_Path: "FilePath";
-			case F_EntityRef: "EntifyRef";
+			case F_EntityRef: "EntityRef";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
