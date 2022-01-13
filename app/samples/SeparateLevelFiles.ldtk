@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456128,
+	"appBuildId": 456134,
 	"nextUid": 10,
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 240,
@@ -37,6 +37,8 @@
 			"type": "IntGrid",
 			"uid": 1,
 			"gridSize": 16,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
 			"displayOpacity": 1,
 			"fadeInactive": false,
 			"hideInList": false,
