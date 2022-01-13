@@ -782,7 +782,7 @@ class Editor extends Page {
 			case EMove: onMouseMove(e);
 			case EOver:
 			case EOut: onMouseUp();
-			case EWheel: onMouseWheel(e);
+			case EWheel: onHeapsMouseWheel(e);
 			case EFocus:
 			case EFocusLost: onMouseUp();
 			case EKeyDown:
@@ -997,9 +997,18 @@ class Editor extends Page {
 	}
 
 
-	function onMouseWheel(e:hxd.Event) {
-		deltaZoom( M.sign( -e.wheelDelta )*settings.v.mouseWheelSpeed, getMouse() );
+	override function onAppMouseWheel(delta:Float, pinching:Bool) {
+		super.onAppMouseWheel(delta, pinching);
+
+		var spd = pinching ? 0.20 : 0.01;
+		deltaZoom( spd*-delta*settings.v.mouseWheelSpeed, getMouse() );
 		cursor.onMouseMove( getMouse() );
+	}
+
+
+	function onHeapsMouseWheel(e:hxd.Event) {
+		// deltaZoom( M.sign( -e.wheelDelta )*settings.v.mouseWheelSpeed, getMouse() );
+		// cursor.onMouseMove( getMouse() );
 	}
 
 

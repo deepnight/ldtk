@@ -17,6 +17,7 @@ class Page extends dn.Process {
 	public function onAppBlur() {}
 	public function onAppMouseDown() {}
 	public function onAppMouseUp() {}
+	public function onAppMouseWheel(delta:Float, pinching:Bool) {}
 	public function onAppFocus() {}
 	public function onAppResize() {}
 	public function onKeyDown(keyCode:Int) {}

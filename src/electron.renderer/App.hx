@@ -84,6 +84,7 @@ class App extends dn.Process {
 		// Track mouse buttons
 		jDoc.mousedown( onAppMouseDown );
 		jDoc.mouseup( onAppMouseUp );
+		jDoc.get(0).onwheel = onAppMouseWheel;
 
 		// Keyboard events
 		jBody
@@ -416,6 +417,11 @@ class App extends dn.Process {
 		mouseButtonDowns.remove(e.button);
 		if( hasPage() && !curPageProcess.isPaused() )
 			curPageProcess.onAppMouseUp();
+	}
+
+	function onAppMouseWheel(e:js.html.WheelEvent) {
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onAppMouseWheel(e.deltaY, e.ctrlKey);
 	}
 
 	public inline function isMouseButtonDown(btId:Int) {
