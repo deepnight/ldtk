@@ -25,7 +25,10 @@ class FieldDefsForm {
 		this.fieldDefs = [];
 
 		jWrapper = new J('<div class="fieldDefsForm"/>');
-		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm") );
+		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm", { parentType: switch parentType {
+			case FP_Entity: "Entity";
+			case FP_Level: "Level";
+		}}) );
 
 		// Create single field
 		jButtons.find("button.createSingle").click( function(ev) {
