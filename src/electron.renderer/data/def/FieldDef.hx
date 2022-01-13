@@ -37,6 +37,7 @@ class FieldDef {
 	public var symmetricalRef : Bool;
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
+	public var allowedRefTags : Tags;
 
 
 	var _project : data.Project;
@@ -61,6 +62,7 @@ class FieldDef {
 		symmetricalRef = false;
 		allowOutOfLevelRef = true;
 		allowedRefs = OnlySame;
+		allowedRefTags = new Tags();
 
 		// Specific default display modes, depending on type
 		switch type {
@@ -128,6 +130,7 @@ class FieldDef {
 		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
+		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
 
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
@@ -163,6 +166,7 @@ class FieldDef {
 			symmetricalRef: symmetricalRef,
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
+			allowedRefTags: allowedRefTags.toJson(),
 		}
 	}
 

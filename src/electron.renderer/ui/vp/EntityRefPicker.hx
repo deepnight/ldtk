@@ -11,6 +11,7 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 		var targetName = switch fd.allowedRefs {
 			case Any: "any entity";
+			case OnlyTags: "any entity with tag "+"TODO";
 			case OnlySame: "another "+sourceEi.def.identifier;
 		}
 		var location = fd.allowOutOfLevelRef ? "in any level" : "in this level";
@@ -57,6 +58,7 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		// Not right entity type
 		return ei!=sourceEi && switch fd.allowedRefs {
 			case Any: true;
+			case OnlyTags: ei.def.tags.hasAnyTagFoundIn(fd.allowedRefTags);
 			case OnlySame: ei.def.identifier==sourceEi.def.identifier;
 		}
 	}

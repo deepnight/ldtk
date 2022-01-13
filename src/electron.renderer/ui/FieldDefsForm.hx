@@ -493,18 +493,29 @@ class FieldDefsForm {
 			()->curField.allowedRefs,
 			(v)->{
 				switch v {
-					case Any: curField.symmetricalRef = false; // not compatible
+					case Any, OnlyTags: curField.symmetricalRef = false; // not compatible
 					case OnlySame:
 				}
 				curField.allowedRefs = v;
 				onFieldChange();
 			},
 			(v)->return switch v {
-				case Any: L.t._("Reference to any entity");
-				case OnlySame: L.t._("Only references to other '::name::'s", { name:getParentName() });
+				case Any: L.t._("Any entity");
+				case OnlyTags: L.t._("Any entity with one of the specified tags");
+				case OnlySame: L.t._("Only another '::name::'s", { name:getParentName() });
 				// case Custom: L.t._("Only selected entities");
 			}
 		);
+
+		jForm.find(".allowedRefTags").empty();
+		if( curField.allowedRefs==OnlyTags ) {
+			var tagEditor = new TagEditor(
+				curField.allowedRefTags,
+				()->onFieldChange(),
+				()->project.defs.getEntityTagCategories()
+			);
+			jForm.find(".allowedRefTags").append( tagEditor.jEditor );
+		}
 
 		var i = Input.linkToHtmlInput( curField.allowOutOfLevelRef, jForm.find("input[name=allowOutOfLevelRef]") );
 		i.onChange = onFieldChange;

@@ -1409,8 +1409,11 @@ ul.form {
 			flex: 0 1 auto;
 		}
 		>select {
-			width: 0;
+			&:not(.full) {
+				width: 0;
+			}
 			flex: 1 1 0;
+
 		}
 
 		button {
@@ -4940,6 +4943,10 @@ canvas#webgl {
 			padding: 4px;
 			flex: 0 1 0px;
 			align-self: stretch;
+		}
+
+		.allowedRefTags:not(:empty) {
+			margin-top: 4px;
 		}
 
 		*[class*="F_"],
