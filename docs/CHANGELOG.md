@@ -40,6 +40,7 @@
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Added `PAGEUP`/`PAGEDOWN` keyboard shortcuts to zoom in/out
+  - Hold `SPACE` + Right mouse click to zoom in/out
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
   - Reworked the Enum panel and fixed many UX issues
