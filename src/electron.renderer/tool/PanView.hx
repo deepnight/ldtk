@@ -61,24 +61,24 @@ class PanView extends Tool<Int> {
 	override function preUpdate() {
 		super.preUpdate();
 
-		if( App.ME.focused && !App.ME.hasInputFocus() ) {
-			var spd = 3 / editor.camera.adjustedZoom;
-			if( App.ME.isKeyDown(K.LEFT) ) {
-				editor.camera.cancelAllAutoMovements();
-				editor.camera.kdx -= spd*tmod;
-			}
-			if( App.ME.isKeyDown(K.RIGHT) ) {
-				editor.camera.cancelAllAutoMovements();
-				editor.camera.kdx += spd*tmod;
-			}
-			if( App.ME.isKeyDown(K.UP) ) {
-				editor.camera.cancelAllAutoMovements();
-				editor.camera.kdy -= spd*tmod;
-			}
-			if( App.ME.isKeyDown(K.DOWN) ) {
-				editor.camera.cancelAllAutoMovements();
-				editor.camera.kdy += spd*tmod;
-			}
-		}
+		// if( App.ME.focused && !App.ME.hasInputFocus() ) {
+		// 	var spd = 3 / editor.camera.adjustedZoom;
+		// 	if( App.ME.isKeyDown(K.LEFT) ) {
+		// 		editor.camera.cancelAllAutoMovements();
+		// 		editor.camera.kdx -= spd*tmod;
+		// 	}
+		// 	if( App.ME.isKeyDown(K.RIGHT) ) {
+		// 		editor.camera.cancelAllAutoMovements();
+		// 		editor.camera.kdx += spd*tmod;
+		// 	}
+		// 	if( App.ME.isKeyDown(K.UP) ) {
+		// 		editor.camera.cancelAllAutoMovements();
+		// 		editor.camera.kdy -= spd*tmod;
+		// 	}
+		// 	if( App.ME.isKeyDown(K.DOWN) ) {
+		// 		editor.camera.cancelAllAutoMovements();
+		// 		editor.camera.kdy += spd*tmod;
+		// 	}
+		// }
 	}
 }
