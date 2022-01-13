@@ -276,6 +276,23 @@ class FieldInstanceRender {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
+		var multiLinesArray = fi.def.isArray && switch fi.def.type {
+			case F_Int: false;
+			case F_Float: false;
+			case F_String: true;
+			case F_Text: true;
+			case F_Bool: false;
+			case F_Color: false;
+			case F_Enum(enumDefUid): false;
+			case F_Point: false;
+			case F_Path: true;
+			case F_EntityRef: true;
+		}
+		if( multiLinesArray ) {
+			valuesFlow.multiline = true;
+			valuesFlow.maxWidth = 200;
+		}
+
 		// Array opening
 		if( fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = createText(valuesFlow);
