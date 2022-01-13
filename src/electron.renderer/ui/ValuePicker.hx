@@ -20,6 +20,8 @@ class ValuePicker<T> extends dn.Process {
 			ME.destroy();
 		ME = this;
 		App.ME.jBody.addClass("hasValuePicker");
+		editor.levelRender.clearTemp();
+		editor.ge.addGlobalListener(onGlobalEvent);
 
 		// Init HTML & load template
 		jWindow = new J('<div class="valuePicker"/>');
@@ -30,6 +32,7 @@ class ValuePicker<T> extends dn.Process {
 		jWindow.find(".cancel").click( _->cancel() );
 	}
 
+	public function onGlobalEvent(ev:GlobalEvent) {}
 
 	function setInstructions(str:String) {
 		jWindow.find(".instructions").html(str);
@@ -62,9 +65,12 @@ class ValuePicker<T> extends dn.Process {
 			ME = null;
 
 		jWindow.remove();
+		editor.ge.removeListener(onGlobalEvent);
 
-		if( !exists() )
+		if( !exists() ) {
+			editor.levelRender.clearTemp();
 			App.ME.jBody.removeClass("hasValuePicker");
+		}
 	}
 
 	public static function cancelCurrent() {

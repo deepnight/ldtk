@@ -3,6 +3,7 @@ package ui.vp;
 class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 	var sourceEi : data.inst.EntityInstance;
 	var fd : data.def.FieldDef;
+	var validTargetsInvalidated = true;
 
 	public function new(sourceEi:data.inst.EntityInstance, fd:data.def.FieldDef) {
 		super();
@@ -16,6 +17,35 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		}
 		var location = fd.allowOutOfLevelRef ? "in any level" : "in this level";
 		setInstructions("Pick "+targetName+" "+location);
+	}
+
+	override function onGlobalEvent(ev:GlobalEvent) {
+		super.onGlobalEvent(ev);
+
+		switch ev {
+			case WorldMode(active):
+				if( !active )
+					validTargetsInvalidated = true;
+
+			case LevelSelected(level):
+				validTargetsInvalidated = true;
+
+			case _:
+		}
+	}
+
+	function renderValidTargets() {
+		editor.levelRender.clearTemp();
+
+		var g = editor.levelRender.temp;
+		for(li in curLevel.layerInstances)
+		for( ei in li.entityInstances )
+			if( isValidPick(ei) ) {
+				g.lineStyle(1, 0xffcc00);
+				g.drawCircle(ei.centerX, ei.centerY, M.imax(ei.width, ei.height)*0.5 + 8);
+				g.lineStyle(1, 0xffcc00, 0.33);
+				g.drawCircle(ei.centerX, ei.centerY, M.imax(ei.width, ei.height)*0.5 + 12);
+			}
 	}
 
 	override function cancel() {
@@ -63,6 +93,15 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		}
 	}
 
+	override function postUpdate() {
+		super.postUpdate();
+
+		if( validTargetsInvalidated ) {
+			validTargetsInvalidated = false;
+			renderValidTargets();
+		}
+	}
+
 	override function update() {
 		super.update();
 
@@ -70,5 +109,7 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 			setError("You can only pick a reference in the same level for this value.");
 		else
 			setError();
+
+		editor.levelRender.temp.alpha = M.fabs( Math.cos(ftime*0.07) );
 	}
 }

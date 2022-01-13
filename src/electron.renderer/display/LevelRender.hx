@@ -478,6 +478,7 @@ class LevelRender extends dn.Process {
 
 	public inline function clearTemp() {
 		temp.clear();
+		temp.alpha = 1;
 	}
 
 

@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456111,
+	"appBuildId": 456126,
 	"nextUid": 53,
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -342,14 +342,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "Button",
 			"uid": 18,
-			"tags": ["blueprint"],
+			"tags": ["trigger"],
 			"width": 16,
 			"height": 16,
 			"resizableX": false,
@@ -394,14 +395,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "Any"
+					"allowedRefs": "Any",
+					"allowedRefTags": ["triggerable"]
 				}
 			]
 		},
 		{
 			"identifier": "Door",
 			"uid": 19,
-			"tags": ["blueprint"],
+			"tags": ["triggerable"],
 			"width": 10,
 			"height": 32,
 			"resizableX": false,
@@ -471,14 +473,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": true,
 					"allowOutOfLevelRef": false,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "Light",
 			"uid": 51,
-			"tags": ["blueprint"],
+			"tags": ["triggerable"],
 			"width": 16,
 			"height": 8,
 			"resizableX": false,
@@ -591,7 +594,7 @@
 							"__identifier": "Button",
 							"__grid": [5,10],
 							"__pivot": [0.5,0.5],
-							"__tags": ["blueprint"],
+							"__tags": ["trigger"],
 							"__tile": null,
 							"iid": "051c2c50-66b0-11ec-8458-e1e94a7cfae7",
 							"width": 16,
@@ -616,7 +619,7 @@
 							"__identifier": "Light",
 							"__grid": [11,3],
 							"__pivot": [0.5,0],
-							"__tags": ["blueprint"],
+							"__tags": ["triggerable"],
 							"__tile": null,
 							"iid": "06a8e6d0-66b0-11ec-8458-c7d91f51e1bc",
 							"width": 16,
@@ -629,7 +632,7 @@
 							"__identifier": "Light",
 							"__grid": [6,3],
 							"__pivot": [0.5,0],
-							"__tags": ["blueprint"],
+							"__tags": ["triggerable"],
 							"__tile": null,
 							"iid": "09e721e0-66b0-11ec-8458-9582b736f42f",
 							"width": 16,
@@ -1236,6 +1239,19 @@
 									"params": ["d148d560-66b0-11ec-b9c6-d17fcaab62c6"]
 								}]
 							}]
+						},
+						{
+							"__identifier": "Door",
+							"__grid": [11,13],
+							"__pivot": [0.5,1],
+							"__tags": ["triggerable"],
+							"__tile": null,
+							"iid": "e5f30670-66b0-11ec-af78-d91d473abb61",
+							"width": 10,
+							"height": 32,
+							"defUid": 19,
+							"px": [184,224],
+							"fieldInstances": []
 						}
 					]
 				},
@@ -1264,7 +1280,7 @@
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
 						1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
 						0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,
+						1,1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,1,1,1,1,1,1,1,1,1,
 						0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -1422,6 +1438,7 @@
 						{ "px": [32,176], "src": [128,112], "f": 0, "t": 148, "d": [26,222] },
 						{ "px": [48,176], "src": [96,112], "f": 0, "t": 146, "d": [26,223] },
 						{ "px": [64,176], "src": [64,128], "f": 0, "t": 164, "d": [26,224] },
+						{ "px": [176,176], "src": [112,128], "f": 0, "t": 167, "d": [26,231] },
 						{ "px": [256,176], "src": [64,128], "f": 0, "t": 164, "d": [26,236] },
 						{ "px": [272,176], "src": [96,112], "f": 0, "t": 146, "d": [26,237] },
 						{ "px": [288,176], "src": [64,112], "f": 0, "t": 144, "d": [26,238] },
@@ -1803,7 +1820,6 @@
 						{ "px": [128,176], "src": [16,112], "f": 0, "t": 71, "d": [33,228] },
 						{ "px": [144,176], "src": [16,112], "f": 0, "t": 71, "d": [33,229] },
 						{ "px": [160,176], "src": [0,112], "f": 0, "t": 70, "d": [33,230] },
-						{ "px": [176,176], "src": [32,112], "f": 0, "t": 72, "d": [33,231] },
 						{ "px": [192,176], "src": [0,112], "f": 0, "t": 70, "d": [33,232] },
 						{ "px": [208,176], "src": [0,112], "f": 0, "t": 70, "d": [33,233] },
 						{ "px": [224,176], "src": [16,112], "f": 0, "t": 71, "d": [33,234] },
