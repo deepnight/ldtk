@@ -31,6 +31,7 @@
 
 ## UI
 
+  - Better display of entities that have error(s) in their field values.
   - Added a new option (`CTRL-H`) to hide everything except Tiles in layers (entities, labels, intGrids etc.)
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.

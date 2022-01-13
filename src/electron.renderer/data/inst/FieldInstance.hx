@@ -313,13 +313,16 @@ class FieldInstance {
 		return getFirstErrorInValues()!=null;
 	}
 
-	public function getFirstErrorInValues() : Null<String> {
-		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
-			return "ArraySize";
+	public function getErrorInValue(arrayIdx:Int) : Null<String> {
+		// Null not accepted
+		if( !def.canBeNull && valueIsNull(arrayIdx) )
+			switch def.type {
+				case F_Int, F_Float, F_String, F_Text, F_Bool, F_Color:
+				case F_Enum(_), F_Point, F_Path, F_EntityRef:
+					return "Value required";
+			}
 
-		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
-			return "ArraySize";
-
+		// Specific errors
 		switch def.type {
 			case F_Int:
 			case F_Float:
@@ -328,36 +331,36 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 			case F_Point:
-				for( idx in 0...getArrayLength() )
-					if( !def.canBeNull && getPointStr(idx)==null )
-						return def.identifier+"?";
-
 			case F_Enum(enumDefUid):
-				if( !def.canBeNull )
-					for( idx in 0...getArrayLength() )
-						if( getEnumValue(idx)==null )
-							return _project.defs.getEnumDef(enumDefUid).identifier+"?";
-
 			case F_Path:
-				for( idx in 0...getArrayLength() ) {
-					if( !def.canBeNull && valueIsNull(idx) )
-						return def.identifier+"?";
-
-					if( !valueIsNull(idx) ) {
-						var absPath = _project.makeAbsoluteFilePath( getFilePath(idx) );
-						if( !NT.fileExists(absPath) )
-							return "FileNotFound";
-					}
+				if( !valueIsNull(arrayIdx) ) {
+					var absPath = _project.makeAbsoluteFilePath( getFilePath(arrayIdx) );
+					if( !NT.fileExists(absPath) )
+						return "File not found";
 				}
 
 			case F_EntityRef:
-				for( idx in 0...getArrayLength() ) {
-					if( !def.canBeNull && valueIsNull(idx) )
-						return def.identifier+"?";
-					else if( !valueIsNull(idx) && getEntityRefInstance(idx)==null )
-						return "Lost reference!";
-				}
+				if( !valueIsNull(arrayIdx) && getEntityRefInstance(arrayIdx)==null )
+					return "Lost reference!";
 		}
+
+		return null;
+	}
+
+
+	public function getFirstErrorInValues() : Null<String> {
+		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
+			return "Array too short";
+
+		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
+			return "Array too long";
+
+		for(i in 0...getArrayLength()) {
+			var err = getErrorInValue(i);
+			if( err!=null )
+				return err;
+		}
+
 		return null;
 	}
 

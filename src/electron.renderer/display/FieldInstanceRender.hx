@@ -141,14 +141,13 @@ class FieldInstanceRender {
 			var tf = createText(valueFlow);
 			tf.textColor = 0xff4400;
 			tf.text = '<$err>';
-			return { label:labelFlow, value:valueFlow };
 		}
 
 		// Skip hiddens
-		if( fd.editorDisplayMode==Hidden )
+		if( err==null && fd.editorDisplayMode==Hidden )
 			return null;
 
-		if( !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
+		if( err==null && !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
 			return null;
 
 		switch fd.editorDisplayMode {
