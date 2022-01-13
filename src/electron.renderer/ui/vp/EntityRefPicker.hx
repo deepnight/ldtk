@@ -50,11 +50,17 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 	override function cancel() {
 		super.cancel();
-		var tei = project.getEntityInstanceByIid(sourceEi.iid);
-		if( tei!=null && tei._li.level!=curLevel ) {
-			editor.selectLevel(tei._li.level);
-			editor.camera.scrollTo(tei.worldX, tei.worldY);
+		goBackToSource();
+	}
+
+	function goBackToSource() {
+		if( sourceEi._li.level!=curLevel ) {
+			editor.selectLevel(sourceEi._li.level);
+			editor.camera.scrollTo(sourceEi.worldX, sourceEi.worldY);
 		}
+
+		if( sourceEi._li!=curLayerInstance )
+			editor.selectLayerInstance(sourceEi._li);
 	}
 
 	override function onEnter(ei:data.inst.EntityInstance) {
@@ -63,6 +69,11 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 	override function onLeave(ei:data.inst.EntityInstance) {
 		super.onLeave(ei);
+	}
+
+	override function onPick(v:data.inst.EntityInstance) {
+		super.onPick(v);
+		goBackToSource();
 	}
 
 	override function pickAt(m:Coords) {
