@@ -1620,6 +1620,8 @@
 				"autoRuleGroups",
 				"excludedTags",
 				"fadeInactive",
+				"guideGridHei",
+				"guideGridWid",
 				"hideInList",
 				"requiredTags",
 				"tilePivotX",
@@ -1664,8 +1666,14 @@
 						"string"
 					]
 				},
+				"guideGridHei": {
+					"description": "Height of the optional \"guide\" grid in pixels",
+					"type": [
+						"integer"
+					]
+				},
 				"tilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this Tile layer. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.",
+					"description": "Reference to the default Tileset UID being used by this layer definition.<br/>  **WARNING**: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note: since version 0.10.0, the old `autoTilesetDefUid` was removed and merged into this value.",
 					"type": [
 						"integer",
 						"null"
@@ -1679,7 +1687,7 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.12.0+  Replaced by: `tilesetDefUid`",
 					"type": [
 						"integer",
 						"null"
@@ -1745,6 +1753,12 @@
 					"description": "Unique String identifier",
 					"type": [
 						"string"
+					]
+				},
+				"guideGridWid": {
+					"description": "Width of the optional \"guide\" grid in pixels",
+					"type": [
+						"integer"
 					]
 				},
 				"requiredTags": {
