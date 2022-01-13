@@ -309,11 +309,11 @@ class FieldInstance {
 	}
 
 
-	public inline function hasAnyErrorInValues() {
-		return getFirstErrorInValues()!=null;
+	public inline function hasAnyErrorInValues(thisEi:Null<EntityInstance>) {
+		return getFirstErrorInValues(thisEi)!=null;
 	}
 
-	public function getErrorInValue(arrayIdx:Int) : Null<String> {
+	public function getErrorInValue(thisEi:Null<EntityInstance>, arrayIdx:Int) : Null<String> {
 		// Null not accepted
 		if( !def.canBeNull && valueIsNull(arrayIdx) )
 			switch def.type {
@@ -340,15 +340,28 @@ class FieldInstance {
 				}
 
 			case F_EntityRef:
-				if( !valueIsNull(arrayIdx) && getEntityRefInstance(arrayIdx)==null )
+				var tei = getEntityRefInstance(arrayIdx);
+				if( !valueIsNull(arrayIdx) && tei==null )
 					return "Lost reference!";
+
+				if( !valueIsNull(arrayIdx) )
+					switch def.allowedRefs {
+						case Any:
+						case OnlySame:
+							if( thisEi!=null && thisEi.def.identifier!=tei.def.identifier )
+								return "Invalid ref type "+def.identifier+" vs "+tei.def.identifier;
+
+						case OnlyTags:
+							if( !tei.def.tags.hasAnyTagFoundIn(def.allowedRefTags) )
+								return "Invalid ref tags";
+					}
 		}
 
 		return null;
 	}
 
 
-	public function getFirstErrorInValues() : Null<String> {
+	public function getFirstErrorInValues(thisEi:Null<EntityInstance>) : Null<String> {
 		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
 			return "Array too short";
 
@@ -356,7 +369,7 @@ class FieldInstance {
 			return "Array too long";
 
 		for(i in 0...getArrayLength()) {
-			var err = getErrorInValue(i);
+			var err = getErrorInValue(thisEi, i);
 			if( err!=null )
 				return err;
 		}

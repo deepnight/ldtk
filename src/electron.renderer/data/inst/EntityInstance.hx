@@ -233,7 +233,7 @@ class EntityInstance {
 
 	public function hasAnyFieldError() {
 		for(fi in fieldInstances)
-			if( fi.hasAnyErrorInValues() )
+			if( fi.hasAnyErrorInValues(this) )
 				return true;
 		return false;
 	}

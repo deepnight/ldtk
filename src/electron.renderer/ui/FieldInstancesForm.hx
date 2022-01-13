@@ -513,7 +513,7 @@ class FieldInstancesForm {
 							editor.levelRender.bleepEntity(tei._li, tei);
 					});
 
-					if( fi.hasAnyErrorInValues() )
+					if( fi.hasAnyErrorInValues(getEntityInstance()) )
 						markError(jInput);
 
 					if( !fi.isUsingDefault(arrayIdx) ) {

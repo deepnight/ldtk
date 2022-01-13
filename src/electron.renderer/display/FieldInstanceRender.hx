@@ -71,9 +71,14 @@ class FieldInstanceRender {
 	public static function renderFields(fieldInstances:Array<data.inst.FieldInstance>, baseColor:Int, ctx:FieldRenderContext, parent:h2d.Flow) {
 		var allRenders = [];
 
+		var ei = switch ctx {
+			case EntityCtx(g, ei, ld): ei;
+			case LevelCtx(l): null;
+		}
+
 		// Detect errors
 		for(fi in fieldInstances)
-			if( fi.hasAnyErrorInValues() )
+			if( fi.hasAnyErrorInValues(ei) )
 				baseColor = 0xff0000;
 
 		// Create individual field renders
@@ -131,8 +136,13 @@ class FieldInstanceRender {
 		var valueFlow = new h2d.Flow();
 		valueFlow.padding = 6;
 
+		var ei = switch ctx {
+			case EntityCtx(g, ei, ld): ei;
+			case LevelCtx(l): null;
+		}
+
 		// Value error
-		var err = fi.getFirstErrorInValues();
+		var err = fi.getFirstErrorInValues(ei);
 		if( err!=null ) {
 			var tf = createText(labelFlow);
 			tf.textColor = baseColor;
