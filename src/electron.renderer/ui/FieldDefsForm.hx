@@ -466,12 +466,7 @@ class FieldDefsForm {
 			(v)->curField.editorDisplayPos = v,
 			(pos)->switch parentType {
 				case FP_Entity: true;
-				case FP_Level:
-					switch pos {
-						case Above: true;
-						case Center: false;
-						case Beneath: true;
-					}
+				case FP_Level: false;
 			}
 		);
 		switch curField.editorDisplayMode {
