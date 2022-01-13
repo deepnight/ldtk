@@ -27,6 +27,12 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 				if( !active )
 					validTargetsInvalidated = true;
 
+				if( !fd.allowOutOfLevelRef && ( curLevel!=sourceEi._li.level || active ) )
+					setError("You can only pick a reference in the same level for this value.");
+				else
+					setError();
+
+
 			case LevelSelected(level):
 				validTargetsInvalidated = true;
 
@@ -37,6 +43,7 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 	function renderValidTargets() {
 		editor.levelRender.clearTemp();
 
+		var n = 0;
 		var g = editor.levelRender.temp;
 		for(li in curLevel.layerInstances)
 		for( ei in li.entityInstances )
@@ -45,7 +52,11 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 				g.drawCircle(ei.centerX, ei.centerY, M.imax(ei.width, ei.height)*0.5 + 8);
 				g.lineStyle(1, 0xffcc00, 0.33);
 				g.drawCircle(ei.centerX, ei.centerY, M.imax(ei.width, ei.height)*0.5 + 12);
+				n++;
 			}
+
+		if( n==0 )
+			setError("No valid target in this level.");
 	}
 
 	override function cancel() {
@@ -119,11 +130,6 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 	override function update() {
 		super.update();
-
-		if( !fd.allowOutOfLevelRef && ( curLevel!=sourceEi._li.level || editor.worldMode ) )
-			setError("You can only pick a reference in the same level for this value.");
-		else
-			setError();
 
 		editor.levelRender.temp.alpha = M.fabs( Math.cos(ftime*0.07) );
 	}
