@@ -527,7 +527,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "isAwaken",
@@ -556,7 +557,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "weapon",
@@ -582,7 +584,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "bag",
@@ -608,14 +611,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "SpotLight",
 			"uid": 10,
-			"tags": ["interactive"],
+			"tags": ["triggerable"],
 			"width": 16,
 			"height": 12,
 			"resizableX": false,
@@ -660,7 +664,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "colors",
@@ -686,7 +691,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "flickering",
@@ -712,7 +718,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "intensity",
@@ -738,7 +745,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
@@ -790,7 +798,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "life",
@@ -816,7 +825,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "loots",
@@ -842,7 +852,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "patrol",
@@ -868,14 +879,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "Chest",
 			"uid": 8,
-			"tags": ["interactive"],
+			"tags": ["container"],
 			"width": 24,
 			"height": 24,
 			"resizableX": false,
@@ -920,7 +932,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "requireKey",
@@ -946,14 +959,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "Button",
 			"uid": 41,
-			"tags": ["interactive"],
+			"tags": ["trigger"],
 			"width": 16,
 			"height": 16,
 			"resizableX": false,
@@ -998,7 +1012,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": false,
-					"allowedRefs": "Any"
+					"allowedRefs": "OnlyTags",
+					"allowedRefTags": ["triggerable"]
 				},
 				{
 					"identifier": "delay",
@@ -1024,14 +1039,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "Door",
 			"uid": 43,
-			"tags": ["interactive"],
+			"tags": ["triggerable"],
 			"width": 8,
 			"height": 32,
 			"resizableX": false,
@@ -1076,14 +1092,15 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		},
 		{
 			"identifier": "Trigger",
 			"uid": 82,
-			"tags": ["region"],
+			"tags": ["trigger"],
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -1128,7 +1145,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": false,
-					"allowedRefs": "Any"
+					"allowedRefs": "OnlyTags",
+					"allowedRefTags": ["triggerable"]
 				},
 				{
 					"identifier": "condition",
@@ -1154,7 +1172,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				},
 				{
 					"identifier": "message",
@@ -1180,7 +1199,8 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame"
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": []
 				}
 			]
 		}
@@ -1294,7 +1314,8 @@
 			"textLanguageMode": null,
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame"
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		},
 		{
 			"identifier": "textColor",
@@ -1320,7 +1341,8 @@
 			"textLanguageMode": null,
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame"
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		}
 	] },
 	"levels": [
@@ -1386,7 +1408,7 @@
 							"__identifier": "Chest",
 							"__grid": [44,20],
 							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
+							"__tags": ["container"],
 							"__tile": { "tilesetUid": 59, "srcRect": [32,1008,16,16] },
 							"iid": "f80e99e1-66b0-11ec-b121-273dce4c0a94",
 							"width": 24,
@@ -1426,7 +1448,7 @@
 							"__identifier": "SpotLight",
 							"__grid": [21,6],
 							"__pivot": [0.5,0],
-							"__tags": ["interactive"],
+							"__tags": ["triggerable"],
 							"__tile": { "tilesetUid": 59, "srcRect": [48,1216,16,16] },
 							"iid": "f80e99e2-66b0-11ec-b121-67b8aade98d9",
 							"width": 16,
@@ -1468,7 +1490,7 @@
 							"__identifier": "SpotLight",
 							"__grid": [16,6],
 							"__pivot": [0.5,0],
-							"__tags": ["interactive"],
+							"__tags": ["triggerable"],
 							"__tile": { "tilesetUid": 59, "srcRect": [48,1216,16,16] },
 							"iid": "f80e99e3-66b0-11ec-b121-536e1e544f80",
 							"width": 16,
@@ -1510,7 +1532,7 @@
 							"__identifier": "SpotLight",
 							"__grid": [32,8],
 							"__pivot": [0.5,0],
-							"__tags": ["interactive"],
+							"__tags": ["triggerable"],
 							"__tile": { "tilesetUid": 59, "srcRect": [48,1216,16,16] },
 							"iid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 							"width": 16,
@@ -1549,7 +1571,7 @@
 							"__identifier": "Chest",
 							"__grid": [42,8],
 							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
+							"__tags": ["container"],
 							"__tile": { "tilesetUid": 59, "srcRect": [32,1008,16,16] },
 							"iid": "f80ec0f1-66b0-11ec-b121-15a932d92c06",
 							"width": 24,
@@ -1661,7 +1683,7 @@
 							"__identifier": "Door",
 							"__grid": [34,18],
 							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
+							"__tags": ["triggerable"],
 							"__tile": null,
 							"iid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 							"width": 8,
@@ -1683,7 +1705,7 @@
 							"__identifier": "Door",
 							"__grid": [27,12],
 							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
+							"__tags": ["triggerable"],
 							"__tile": null,
 							"iid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 							"width": 8,
@@ -1705,7 +1727,7 @@
 							"__identifier": "Button",
 							"__grid": [42,13],
 							"__pivot": [0.5,0.5],
-							"__tags": ["interactive"],
+							"__tags": ["trigger"],
 							"__tile": { "tilesetUid": 59, "srcRect": [32,224,16,16] },
 							"iid": "f80ee802-66b0-11ec-b121-7703f3b4b3e4",
 							"width": 16,
@@ -1817,7 +1839,7 @@
 							"__identifier": "Door",
 							"__grid": [22,18],
 							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
+							"__tags": ["triggerable"],
 							"__tile": null,
 							"iid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 							"width": 8,
@@ -1836,7 +1858,7 @@
 							"__identifier": "Trigger",
 							"__grid": [15,16],
 							"__pivot": [0,0],
-							"__tags": ["region"],
+							"__tags": ["trigger"],
 							"__tile": null,
 							"iid": "f80f0f10-66b0-11ec-b121-cbb2b35a0142",
 							"width": 64,
@@ -1880,7 +1902,7 @@
 							"__identifier": "Trigger",
 							"__grid": [39,5],
 							"__pivot": [0,0],
-							"__tags": ["region"],
+							"__tags": ["trigger"],
 							"__tile": null,
 							"iid": "f80f0f11-66b0-11ec-b121-f14c96b08517",
 							"width": 112,
