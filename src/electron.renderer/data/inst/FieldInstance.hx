@@ -537,13 +537,17 @@ class FieldInstance {
 		return out;
 	}
 
-	public function getEntityRefIID(arrayIdx:Int) : Null<String> {
-		def.require(F_EntityRef);
-		var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
-			case V_String(v): v;
-			case _: throw "unexpected";
+	public inline function getEntityRefIID(arrayIdx:Int) : Null<String> {
+		if( def.type!=F_EntityRef )
+			return null;
+		else {
+			var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
+				case V_String(v): v;
+				case _: throw "unexpected";
+			}
+			return out;
 		}
-		return out;
+
 	}
 
 	public inline function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
