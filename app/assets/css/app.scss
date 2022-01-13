@@ -4783,6 +4783,7 @@ canvas#webgl {
 		box-sizing: border-box;
 	}
 
+
 	.resizeBar {
 		position: absolute;
 		top: 0;
@@ -4995,7 +4996,7 @@ canvas#webgl {
 dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
-	grid-template-columns: 40% auto;
+	grid-template-columns: 120px auto;
 	>dt {
 		max-width: none;
 	}
