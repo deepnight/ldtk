@@ -204,6 +204,10 @@ class EntityInstance {
 	}
 
 
+	public function isOutOfLayerBounds() {
+		return x<_li.pxTotalOffsetX || x>_li.pxTotalOffsetX+_li.cWid*_li.def.scaledGridSize
+			|| y<_li.pxTotalOffsetY || y>_li.pxTotalOffsetY+_li.cHei*_li.def.scaledGridSize;
+	}
 
 	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
