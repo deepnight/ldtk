@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456113,
+	"appBuildId": 456128,
 	"nextUid": 108,
 	"worldLayout": "Free",
 	"worldGridWidth": 128,
@@ -338,7 +338,8 @@
 			"textLanguageMode": null,
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame"
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		},
 		{
 			"identifier": "color",
@@ -364,7 +365,8 @@
 			"textLanguageMode": null,
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame"
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		}
 	] },
 	"levels": [
