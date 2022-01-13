@@ -19,6 +19,7 @@ class LayerDef {
 	public var parallaxFactorX : Float = 0.;
 	public var parallaxFactorY : Float = 0.;
 	public var parallaxScaling : Bool = true;
+	public var tilesetDefUid : Null<Int>;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -29,12 +30,10 @@ class LayerDef {
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	// IntGrid/AutoLayers
-	public var autoTilesetDefUid : Null<Int>;
 	public var autoSourceLayerDefUid : Null<Int>;
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles
-	public var tilesetDefUid : Null<Int>;
 	public var tilePivotX(default,set) : Float = 0;
 	public var tilePivotY(default,set) : Float = 0;
 
@@ -67,6 +66,9 @@ class LayerDef {
 		if( (cast json).parallaxFactor!=null )
 			json.parallaxFactorX = json.parallaxFactorY = (cast json).parallaxFactor;
 
+		if( (cast json).autoTilesetDefUid!=null && json.tilesetDefUid==null )
+			json.tilesetDefUid = (cast json).autoTilesetDefUid;
+
 		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
@@ -94,7 +96,7 @@ class LayerDef {
 			});
 		}
 
-		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
+		// o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
 
 		// Read auto-layer rules
@@ -142,7 +144,7 @@ class LayerDef {
 				color: JsonTools.writeColor(iv.color),
 			}),
 
-			autoTilesetDefUid: autoTilesetDefUid,
+			autoTilesetDefUid: tilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
@@ -283,14 +285,14 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer;
+		return type==IntGrid && tilesetDefUid!=null || type==AutoLayer;
 	}
 
 	public function autoLayerRulesCanBeUsed() {
 		if( !isAutoLayer() )
 			return false;
 
-		if( autoTilesetDefUid==null )
+		if( tilesetDefUid==null )
 			return false;
 
 		if( type==AutoLayer && autoSourceLayerDefUid==null )
@@ -459,12 +461,6 @@ class LayerDef {
 		if( tilesetDefUid!=null && p.defs.getTilesetDef(tilesetDefUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost tileset in $this');
 			tilesetDefUid = null;
-		}
-
-		// Lost auto-layer tileset
-		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
-			App.LOG.add("tidy", 'Removed lost autoTileset in $this');
-			autoTilesetDefUid = null;
 		}
 
 		// Lost source intGrid layer

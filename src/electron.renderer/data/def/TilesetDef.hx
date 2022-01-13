@@ -307,7 +307,7 @@ class TilesetDef {
 
 		// Auto-layer tiles remapping
 		for(ld in _project.defs.layers)
-			if( ld.isAutoLayer() && ld.autoTilesetDefUid==uid ) {
+			if( ld.isAutoLayer() && ld.tilesetDefUid==uid ) {
 				for(rg in ld.autoRuleGroups)
 				for(r in rg.rules)
 				for(i in 0...r.tileIds.length)

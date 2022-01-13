@@ -278,7 +278,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Add group
 		jContent.find("button.createGroup").click( function(ev) {
-			if( ld.isAutoLayer() && ld.autoTilesetDefUid==null ) {
+			if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 				N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
 				return;
 			}
@@ -339,7 +339,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					jOpt.prop("disabled",true);
 					jOpt.append(' (INCOMPATIBLE SIZE)');
 				}
-				if( td.uid==ld.autoTilesetDefUid )
+				if( td.uid==ld.tilesetDefUid )
 					jOpt.append(' (DEFAULT)');
 			}
 			jSelect.val( curTd.uid );

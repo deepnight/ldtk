@@ -375,7 +375,7 @@ class Tiled extends Exporter {
 
 
 			// Auto-layer tiles
-			if( ld.autoTilesetDefUid!=null ) {
+			if( ld.tilesetDefUid!=null ) {
 				log.add("layer", "  Exporting Auto-Layer tiles");
 				var td = li.getTilesetDef();
 				var csvLayers : Array<Csv> = [];

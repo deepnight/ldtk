@@ -106,9 +106,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		var newLd = project.defs.duplicateLayerDef(ld, ld.identifier+"_baked");
 		newLd.type = Tiles;
 		newLd.autoRuleGroups = [];
-		newLd.autoTilesetDefUid = null;
 		newLd.autoSourceLayerDefUid = null;
-		newLd.tilesetDefUid = ld.autoTilesetDefUid;
+		newLd.tilesetDefUid = ld.tilesetDefUid;
 
 		// Update layer instances
 		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
@@ -375,16 +374,16 @@ class EditLayerDefs extends ui.modal.Panel {
 				if( cur.autoRuleGroups.length!=0 )
 					new LastChance(Lang.t._("Changed auto-layer tileset"), project);
 
-				cur.autoTilesetDefUid = newTilesetUid;
-				if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
-					cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
+				cur.tilesetDefUid = newTilesetUid;
+				if( cur.tilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+					cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
 
 				// TODO cleanup rules with invalid tileIDs
 
 				editor.ge.emit( LayerDefChanged(cur.uid) );
 			});
-			if( cur.autoTilesetDefUid!=null )
-				jTileset.val( cur.autoTilesetDefUid );
+			if( cur.tilesetDefUid!=null )
+				jTileset.val( cur.tilesetDefUid );
 			else
 				jTileset.addClass("noValue");
 		}
@@ -524,7 +523,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Tileset
 				initAutoTilesetSelect();
 				var jSelect = jForm.find("[name=autoTileset]");
-				if( cur.autoTilesetDefUid==null )
+				if( cur.tilesetDefUid==null )
 					jSelect.addClass("required");
 
 

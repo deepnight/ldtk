@@ -83,7 +83,6 @@ class LayerInstance {
 	public function getDefaultTilesetUid() : Null<Int> {
 		return
 			def.tilesetDefUid!=null ? def.tilesetDefUid
-			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
 
@@ -91,7 +90,6 @@ class LayerInstance {
 		return
 			overrideTilesetUid!=null ? overrideTilesetUid
 			: def.tilesetDefUid!=null ? def.tilesetDefUid
-			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
 

@@ -28,6 +28,7 @@
  - To avoid unnecessary file changes and renamings (bad for versioning systems), the following changes have been made:
   - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
   - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
+  - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
   - Not really JSON related, but external level files will no longer be prefixed with their index in array to avoid unnecessary renamings when inserting new levels. This can be re-enabled in Project panel, using an Advanced Option at the bottom.
 
 ## UI
