@@ -238,7 +238,7 @@ class EntityInstanceEditor extends dn.Process {
 			()->ei.width,
 			(v)->ei.customWidth = v
 		);
-		i.setEnabled( ei.def.isResizable() );
+		i.setEnabled( ei.def.resizableX );
 		i.setBounds(ei.def.width, null);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
@@ -249,7 +249,7 @@ class EntityInstanceEditor extends dn.Process {
 			()->ei.height,
 			(v)->ei.customHeight = v
 		);
-		i.setEnabled( ei.def.isResizable() );
+		i.setEnabled( ei.def.resizableY );
 		i.setBounds(ei.def.height, null);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
