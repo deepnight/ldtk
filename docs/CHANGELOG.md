@@ -42,6 +42,7 @@
 
 ## UI
 
+  - Current Level properties can now be edited directly from world view.
   - Entity and Level custom fields that are not using default value are now much more visible in forms.
   - Added a new optional "guide" grid per layer. This customizable grid is not used for snapping, and only serves as a visual guide.
   - Better display of entities that have error(s) in their field values.
