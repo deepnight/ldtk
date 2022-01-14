@@ -160,7 +160,7 @@
 				"$ref": "#/otherTypes/Definitions"
 			},
 			"levels": {
-				"description": "All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
+				"description": "All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
 				"items": {
 					"$ref": "#/otherTypes/Level"
 				},
@@ -430,6 +430,37 @@
 					},
 					"type": [
 						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"EnumTagValue": {
+			"description": "In a tileset definition, enum based tag infos",
+			"title": "ldtk.EnumTagValue",
+			"required": [
+				"enumValueId",
+				"tileIds"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tileIds": {
+					"description": "",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"enumValueId": {
+					"description": "",
+					"type": [
+						"string"
 					]
 				}
 			},
@@ -811,7 +842,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -976,7 +1007,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -1365,6 +1396,32 @@
 				"object"
 			]
 		},
+		"TileCustomMetadata": {
+			"description": "In a tileset definition, user defined meta-data of a tile.",
+			"title": "ldtk.TileCustomMetadata",
+			"required": [
+				"data",
+				"tileId"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tileId": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"data": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"TilesetDef": {
 			"description": "The `Tileset` definition is the most important part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.",
 			"title": "Tileset definition",
@@ -1407,9 +1464,7 @@
 				"customData": {
 					"description": "An array of custom tile metadata",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/TileCustomMetadata"
 					},
 					"type": [
 						"array"
@@ -1437,9 +1492,7 @@
 				"enumTags": {
 					"description": "Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/EnumTagValue"
 					},
 					"type": [
 						"array"
@@ -1464,7 +1517,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -1750,7 +1803,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -1980,7 +2033,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -2065,7 +2118,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -2091,7 +2144,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string",
 						"null"

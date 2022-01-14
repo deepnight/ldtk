@@ -29,7 +29,7 @@ Value | Type | Description
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
 `externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
 `jsonVersion` | String | File format version
-`levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+`levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>		Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
@@ -68,7 +68,7 @@ Value | Type | Description
 `bgRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | The *optional* relative path to the level background image.
 `externalRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
 `fieldInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array containing this level custom field values.
-`identifier` | String | Unique String identifier
+`identifier` | String | User defined unique identifier
 `iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | String | Unique instance identifier
 `layerInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.7.0-gray.svg)  | Array&nbsp;of&nbsp;[Layer&nbsp;instance](#ldtk-LayerInstanceJson)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array containing all Layer instances. **IMPORTANT**: if the project option "*Save levels separately*" is enabled, this field will be `null`.<br/>		This array is **sorted in display order**: the 1st layer is the top-most and the last is behind.
 `pxHei` | Int | Height of the level in pixels
@@ -173,8 +173,8 @@ Value | Type | Description
 `autoSourceLayerDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
-`identifier` | String | Unique String identifier
-`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.10.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *Unique String identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
+`identifier` | String | User defined unique identifier
+`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.10.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *User defined unique identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
 `parallaxFactorX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Float | Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.
 `parallaxFactorY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Float | Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.
 `parallaxScaling`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Bool | If true (default), a layer with a parallax factor will also be scaled up/down accordingly.
@@ -227,7 +227,7 @@ Value | Type | Description
 -- | -- | --
 `color` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Base entity color
 `height` | Int | Pixel height
-`identifier` | String | Unique String identifier
+`identifier` | String | User defined unique identifier
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tile ID used for optional tile display
@@ -261,7 +261,7 @@ Value | Type | Description
 `arrayMinLength`<br/><sup class="only">Only *Array*</sup><br/><sup class="internal">*Only used by editor*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Array min length
 `canBeNull`<br/><sup class="internal">*Only used by editor*</sup> | Bool | TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).
 `defaultOverride`<br/><sup class="internal">*Only used by editor*</sup> | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default value if selected value is null or invalid.
-`identifier`<br/><sup class="internal">*Only used by editor*</sup> | String | Unique String identifier
+`identifier`<br/><sup class="internal">*Only used by editor*</sup> | String | User defined unique identifier
 `isArray`<br/><sup class="internal">*Only used by editor*</sup> | Bool | TRUE if the value is an array of multiple values
 `max`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
@@ -291,7 +291,7 @@ Value | Type | Description
 `__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Grid-based width
 `customData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array of custom tile metadata<br/> This object contains the following fields:<br/> <ul><li>**`data`** **(String**)</li><li>**`tileId`** **(Int**)</li></ul>
 `enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
-`identifier` | String | Unique String identifier
+`identifier` | String | User defined unique identifier
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels
@@ -309,7 +309,7 @@ Value | Type | Description
 -- | -- | --
 `externalRelPath` | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Relative path to the external file providing this Enum
 `iconTilesetUid` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset UID if provided
-`identifier` | String | Unique String identifier
+`identifier` | String | User defined unique identifier
 `uid` | Int | Unique Int identifier
 `values` | Array&nbsp;of&nbsp;[Enum&nbsp;value&nbsp;definition](#ldtk-EnumDefValues) | All possible enum values, with their optional Tile infos.
 `externalFileChecksum`<br/><sup class="internal">*Only used by editor*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
