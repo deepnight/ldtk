@@ -14,6 +14,7 @@ class LayerInstance {
 	var camera(get,never) : display.Camera;
 		inline function get_camera() return Editor.ME.camera;
 
+	public var iid : String;
 	public var levelId : Int;
 	public var layerDefUid : Int;
 	public var visible = true;
@@ -60,9 +61,11 @@ class LayerInstance {
 	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( pxHei / def.gridSize );
 
 
-	public function new(p:Project, levelId:Int, layerDefUid:Int) {
+	@:allow(data.Level)
+	private function new(p:Project, levelUid:Int, layerDefUid:Int, layerInstIid:String) {
 		_project = p;
-		this.levelId = levelId;
+		iid = layerInstIid;
+		this.levelId = levelUid;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
 	}
@@ -80,7 +83,6 @@ class LayerInstance {
 	public function getDefaultTilesetUid() : Null<Int> {
 		return
 			def.tilesetDefUid!=null ? def.tilesetDefUid
-			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
 
@@ -88,7 +90,6 @@ class LayerInstance {
 		return
 			overrideTilesetUid!=null ? overrideTilesetUid
 			: def.tilesetDefUid!=null ? def.tilesetDefUid
-			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
 
@@ -127,6 +128,7 @@ class LayerInstance {
 			__tilesetDefUid: td!=null ? td.uid : null,
 			__tilesetRelPath: td!=null ? td.relPath : null,
 
+			iid: iid,
 			levelId: levelId,
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
@@ -136,17 +138,6 @@ class LayerInstance {
 				var arr = [];
 				for(k in optionalRules.keys())
 					arr.push(k);
-				arr;
-			},
-
-			intGrid: { // old IntGrid format
-				var arr = [];
-				if( !_project.hasFlag(DiscardPreCsvIntGrid) )
-					for(e in intGrid.keyValueIterator())
-						arr.push({
-							coordId: e.key,
-							v: e.value-1,
-						});
 				arr;
 			},
 
@@ -208,8 +199,16 @@ class LayerInstance {
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 
-		if( _project.hasFlag(DiscardPreCsvIntGrid) )
-			Reflect.deleteField(json, "intGrid");
+		if( _project.hasFlag(ExportPreCsvIntGridFormat) )
+			json.intGrid = {
+				var arr = [];
+				for(e in intGrid.keyValueIterator())
+					arr.push({
+						coordId: e.key,
+						v: e.value-1,
+					});
+				arr;
+			}
 
 		return json;
 	}
@@ -266,8 +265,10 @@ class LayerInstance {
 
 	public static function fromJson(p:Project, json:ldtk.Json.LayerInstanceJson) {
 		if( (cast json).layerDefId!=null ) json.layerDefUid = (cast json).layerDefId;
+		if( (cast json).iid==null )
+			json.iid = p.generateUniqueId_UUID();
 
-		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid), json.iid );
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
@@ -583,8 +584,9 @@ class LayerInstance {
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 
-		var ei = new EntityInstance(_project, this, ed.uid);
+		var ei = new EntityInstance(_project, this, ed.uid, _project.generateUniqueId_UUID());
 		entityInstances.push(ei);
+		_project.registerEntityInstance(ei);
 		return ei;
 	}
 
@@ -597,15 +599,22 @@ class LayerInstance {
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
 		var copy = EntityInstance.fromJson( _project, this, ei.toJson(this) );
+		copy.iid = _project.generateUniqueId_UUID();
 		entityInstances.push(copy);
+		_project.registerEntityInstance(copy);
 
 		return copy;
 	}
 
-	public function removeEntityInstance(e:EntityInstance) {
+	public function removeEntityInstance(ei:EntityInstance) {
 		requireType(Entities);
-		if( !entityInstances.remove(e) )
-			throw "Unknown instance "+e;
+		if( !entityInstances.remove(ei) )
+			throw "Unknown instance "+ei;
+
+		_project.removeAnyFieldRefsTo(ei);
+		_project.unregisterIid(ei.iid);
+		_project.unregisterAllReverseIidRefsFor(ei);
+		_project.tidyFields(); // IID refs could be lost
 	}
 
 

@@ -201,3 +201,8 @@ enum ClipboardType {
 	CRuleGroup;
 	CRule;
 }
+
+typedef CachedIID = {
+	var level: data.Level;
+	var ?ei: data.inst.EntityInstance ;
+}

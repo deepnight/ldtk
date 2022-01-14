@@ -237,11 +237,8 @@ class LevelRender extends dn.Process {
 			case LevelFieldInstanceChanged(l,fi):
 
 			case EntityFieldInstanceChanged(ei,fi):
-				var ed = editor.project.defs.getEntityDefUsingField(fi.def);
-				if( ed!=null ) {
-					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
-					invalidateLayer( li==null ? editor.curLayerInstance : li );
-				}
+				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
+				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
 			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei):
 				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
@@ -440,28 +437,80 @@ class LevelRender extends dn.Process {
 
 		var li = editor.curLayerInstance;
 		var level = editor.curLevel;
-		grid.lineStyle(1, col, 0.07);
 
-		// Verticals
+		// Main grid
+		var size = li.def.gridSize;
+		grid.lineStyle(1, col, 0.07);
 		var x = 0;
-		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
-			x = cx*li.def.gridSize + li.pxTotalOffsetX;
+		for( cx in 0...editor.curLayerInstance.cWid+1 ) { // Verticals
+			x = cx*size + li.pxTotalOffsetX;
 			if( x<0 || x>level.pxWid )
 				continue;
 
 			grid.moveTo( x, M.fmax(0,li.pxTotalOffsetY) );
-			grid.lineTo( x, M.fmin(li.cHei*li.def.gridSize, level.pxHei) );
+			grid.lineTo( x, M.fmin(li.cHei*size, level.pxHei) );
 		}
-		// Horizontals
 		var y = 0;
-		for( cy in 0...editor.curLayerInstance.cHei+1 ) {
-			y = cy*li.def.gridSize + li.pxTotalOffsetY;
+		for( cy in 0...editor.curLayerInstance.cHei+1 ) { // Horizontals
+			y = cy*size + li.pxTotalOffsetY;
 			if( y<0 || y>level.pxHei)
 				continue;
 
 			grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
-			grid.lineTo( M.fmin(li.cWid*li.def.gridSize, level.pxWid), y );
+			grid.lineTo( M.fmin(li.cWid*size, level.pxWid), y );
 		}
+
+
+		// Guide grid (verticals)
+		if( editor.curLayerDef.guideGridWid>1 ) {
+			var size = li.def.guideGridWid;
+			grid.lineStyle(1, col, 0.33);
+
+			var cWid = Std.int(editor.curLayerInstance.pxWid/size)+1;
+
+			var x = 0;
+			for( cx in 0...cWid ) { // Verticals
+				x = cx*size + li.pxTotalOffsetX;
+				if( x<0 || x>level.pxWid )
+					continue;
+
+				grid.moveTo( x, M.fmax(0,li.pxTotalOffsetY) );
+				grid.lineTo( x, level.pxHei+li.pxTotalOffsetY );
+			}
+		}
+
+
+		// Guide grid (horizontals)
+		if( editor.curLayerDef.guideGridHei>1 ) {
+			var size = li.def.guideGridHei;
+			grid.lineStyle(1, col, 0.33);
+
+			var cHei = Std.int(editor.curLayerInstance.pxHei/size)+1;
+
+			var y = 0;
+			for( cy in 0...cHei+1 ) { // Horizontals
+				y = cy*size + li.pxTotalOffsetY;
+				if( y<0 || y>level.pxHei)
+					continue;
+
+				grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
+				grid.lineTo( level.pxWid+li.pxTotalOffsetX, y );
+			}
+		}
+
+		// Horizontal guides
+		// grid.lineStyle(1, 0xffcc00, 0.5);
+		// for(v in li.def.guidesH) {
+		// 	grid.moveTo( M.fmax(0,li.pxTotalOffsetX), v+li.pxTotalOffsetY );
+		// 	grid.lineTo( M.fmin(li.cWid*size, level.pxWid), v+li.pxTotalOffsetY );
+		// }
+
+		// Vertical guides
+		// grid.lineStyle(1, 0xffcc00, 0.5);
+		// for(v in li.def.guidesV) {
+		// 	grid.moveTo( v+li.pxTotalOffsetX, M.fmax(0,li.pxTotalOffsetY) );
+		// 	grid.lineTo( v+li.pxTotalOffsetX, M.fmin(li.cHei*size, level.pxHei) );
+		// }
 
 		updateGridPos();
 	}
@@ -481,6 +530,7 @@ class LevelRender extends dn.Process {
 
 	public inline function clearTemp() {
 		temp.clear();
+		temp.alpha = 1;
 	}
 
 

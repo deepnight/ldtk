@@ -307,7 +307,7 @@ class TilesetDef {
 
 		// Auto-layer tiles remapping
 		for(ld in _project.defs.layers)
-			if( ld.isAutoLayer() && ld.autoTilesetDefUid==uid ) {
+			if( ld.isAutoLayer() && ld.tilesetDefUid==uid ) {
 				for(rg in ld.autoRuleGroups)
 				for(r in rg.rules)
 				for(i in 0...r.tileIds.length)
@@ -721,6 +721,16 @@ class TilesetDef {
 			}
 
 		return jImg;
+	}
+
+	public function createTileHtmlUri(tid:Int, ?imgWid:Int, ?imgHei:Int) : Null<String> {
+		if( !isAtlasLoaded() )
+			return null;
+
+		var imgData = _project.getOrLoadImage(relPath);
+		var subPixels = imgData.pixels.sub(getTileSourceX(tid), getTileSourceY(tid), tileGridSize, tileGridSize);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		return 'data:image/png;base64,$b64';
 	}
 
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {

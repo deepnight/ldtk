@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455968,
+	"appBuildId": 456134,
 	"nextUid": 54,
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
@@ -29,7 +29,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
-	"flags": ["DiscardPreCsvIntGrid"],
+	"flags": [],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
@@ -37,6 +37,8 @@
 			"type": "IntGrid",
 			"uid": 2,
 			"gridSize": 16,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
 			"displayOpacity": 1,
 			"fadeInactive": false,
 			"hideInList": false,
@@ -276,6 +278,8 @@
 			"type": "AutoLayer",
 			"uid": 37,
 			"gridSize": 16,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
 			"displayOpacity": 1,
 			"fadeInactive": false,
 			"hideInList": false,
@@ -474,7 +478,11 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		},
 		{
 			"identifier": "textColor",
@@ -497,15 +505,20 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": { "id": "V_Int", "params": [16766208] },
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Mosaic_demo",
+			"iid": "a2b00c70-66b0-11ec-9cd7-cfc05854da53",
 			"uid": 0,
-			"worldX": 0,
-			"worldY": 64,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 288,
 			"pxHei": 208,
 			"__bgColor": "#222225",
@@ -543,6 +556,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
 					"__tilesetRelPath": "atlas/Inca_front_by_Kronbits-extended.png",
+					"iid": "a2b00c73-66b0-11ec-9cd7-03fe4549158d",
 					"levelId": 0,
 					"layerDefUid": 2,
 					"pxOffsetX": 0,
@@ -879,6 +893,7 @@
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 38,
 					"__tilesetRelPath": "atlas/Inca_back2_by_Kronbits.png",
+					"iid": "a2b00c74-66b0-11ec-9cd7-b32406881167",
 					"levelId": 0,
 					"layerDefUid": 37,
 					"pxOffsetX": 0,

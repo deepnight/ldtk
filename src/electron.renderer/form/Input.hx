@@ -260,11 +260,14 @@ class Input<T> {
 
 					case "Bool":
 						return macro {
-							new form.input.BoolInput(
-								$formInput,
-								function() return $variable,
-								function(v) $variable = v
-							);
+							if( $formInput.length==0 || !$formInput.is("[type=checkbox], select") )
+								null;
+							else
+								new form.input.BoolInput(
+									$formInput,
+									function() return $variable,
+									function(v) $variable = v
+								);
 						}
 
 					case "Null":

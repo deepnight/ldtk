@@ -97,7 +97,7 @@ class Editor extends Page {
 		selectProject(p);
 
 		// Suggest backups
-		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=8 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
+		if( project.recommendsBackup() && !project.hasFlag(IgnoreBackupSuggest) ) {
 			var w = new ui.modal.dialog.Choice(
 				L.t._("As your project is growing bigger, it is STRONGLY advised to enable BACKUPS, to secure your work."),
 				[
@@ -260,7 +260,7 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		var all = ui.ProjectSaving.listBackupFiles(project.filePath.full);
+		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
 
 		// Display "backup" header
 		if( project.isBackup() ) {
@@ -268,7 +268,7 @@ class Editor extends Page {
 			var jDesc = new J('<div class="desc"/>');
 			jDesc.appendTo(jBackup);
 			jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
-			var inf = ui.ProjectSaving.extractBackupInfosFromFileName(project.filePath.full);
+			var inf = ui.ProjectSaver.extractBackupInfosFromFileName(project.filePath.full);
 			if( inf!=null )
 				jDesc.append("<p>"+inf.date+"</p>");
 			var jRestore = new J('<button>Restore this backup</button>');
@@ -523,6 +523,8 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
+				else if( ui.ValuePicker.exists() )
+					ui.ValuePicker.ME.cancel();
 				else if( curTool!=null && curTool.palettePoppedOut() )
 					curTool.popInPalette();
 				else if( specialTool!=null )
@@ -535,7 +537,7 @@ class Editor extends Page {
 					selectionTool.clear();
 
 			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() )
+				if( !ui.Modal.hasAnyOpen() && !hasInputFocus() && !ui.EntityInstanceEditor.isOpen() )
 					setCompactMode( !settings.v.compactMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
@@ -780,7 +782,7 @@ class Editor extends Page {
 			case EMove: onMouseMove(e);
 			case EOver:
 			case EOut: onMouseUp();
-			case EWheel: onMouseWheel(e);
+			case EWheel: onHeapsMouseWheel(e);
 			case EFocus:
 			case EFocusLost: onMouseUp();
 			case EKeyDown:
@@ -818,14 +820,17 @@ class Editor extends Page {
 
 		panTool.startUsing(ev,m);
 
-		if( !ev.cancel && resizeTool!=null )
+		if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() )
 			resizeTool.onMouseDown( ev, m );
 
-		if( !ev.cancel && !project.isBackup() )
+		if( !ev.cancel && !project.isBackup() && !ui.ValuePicker.exists() )
 			rulers.onMouseDown( ev, m );
 
 		if( !ev.cancel )
 			worldTool.onMouseDown(ev, m);
+
+		if( ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseDown(ev, m);
 
 		if( !ev.cancel && !worldMode && !project.isBackup() ) {
 			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
@@ -845,6 +850,10 @@ class Editor extends Page {
 
 		panTool.stopUsing(m);
 		worldTool.onMouseUp(m);
+
+		if( ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseUp(m);
+
 		if( resizeTool!=null && resizeTool.isRunning() )
 			resizeTool.stopUsing(m);
 
@@ -875,12 +884,17 @@ class Editor extends Page {
 			panTool.onMouseMove(ev,m);
 			panTool.onMouseMoveCursor(cursorEvent,m);
 
-			if( !ev.cancel && resizeTool!=null ) {
+			if( ui.ValuePicker.exists() ) {
+				ui.ValuePicker.ME.onMouseMove(ev,m);
+				ui.ValuePicker.ME.onMouseMoveCursor(cursorEvent,m);
+			}
+
+			if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() ) {
 				resizeTool.onMouseMove(ev,m);
 				resizeTool.onMouseMoveCursor(cursorEvent,m);
 			}
 
-			if( !ev.cancel && !worldMode ) {
+			if( !ev.cancel && !worldMode && !ui.ValuePicker.exists() ) {
 				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() ) {
 					selectionTool.onMouseMove(ev,m);
 					selectionTool.onMouseMoveCursor(cursorEvent,m);
@@ -895,8 +909,10 @@ class Editor extends Page {
 				}
 			}
 
-			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
-			rulers.onMouseMoveCursor(cursorEvent,m);
+			if( !ui.ValuePicker.exists() ) {
+				rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+				rulers.onMouseMoveCursor(cursorEvent,m);
+			}
 
 			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
 			worldTool.onMouseMoveCursor(cursorEvent,m);
@@ -981,13 +997,20 @@ class Editor extends Page {
 	}
 
 
-	function onMouseWheel(e:hxd.Event) {
-		deltaZoom( M.sign( -e.wheelDelta )*settings.v.mouseWheelSpeed, getMouse() );
+	public var lastMouseWheelDelta = 0.;
+	override function onAppMouseWheel(delta:Float) {
+		super.onAppMouseWheel(delta);
+		lastMouseWheelDelta = delta;
+	}
+
+
+	function onHeapsMouseWheel(e:hxd.Event) {
+		deltaZoom( lastMouseWheelDelta*settings.v.mouseWheelSpeed, getMouse() );
 		cursor.onMouseMove( getMouse() );
 	}
 
 
-	function deltaZoom(delta:Float, c:Coords) {
+	public function deltaZoom(delta:Float, c:Coords) {
 		var spd = 0.15;
 		camera.deltaZoomTo( c.levelX, c.levelY, delta*spd*camera.adjustedZoom );
 		camera.cancelAllAutoMovements();
@@ -1034,6 +1057,7 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
+		ui.Tip.clear();
 
 		saveLastProjectInfos();
 	}
@@ -1059,6 +1083,7 @@ class Editor extends Page {
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 		clearSpecialTool();
+		ui.Tip.clear();
 
 		updateEditOptions();
 	}
@@ -1280,7 +1305,7 @@ class Editor extends Page {
 		}
 
 		// Save project
-		new ui.ProjectSaving(this, project, (success)->{
+		new ui.ProjectSaver(this, project, (success)->{
 			if( !success )
 				N.error("Saving failed!");
 			else {
@@ -1302,14 +1327,14 @@ class Editor extends Page {
 		new ui.modal.dialog.Confirm(
 			L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
 			()->{
-				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
+				var original = ui.ProjectSaver.makeOriginalPathFromBackup(project.filePath.full);
 				if( original.full==null || !NT.fileExists(original.full) ) {
 					// Project not found
 					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
 				}
 				else {
 					App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-					var crashBackupDir = ui.ProjectSaving.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
+					var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
 
 					// Save upon original
 					App.LOG.fileOp('Backup original: ${original.full}...');
@@ -1529,6 +1554,7 @@ class Editor extends Page {
 			case ToolOptionChanged:
 			case ToolValueSelected:
 			case BeforeProjectSaving:
+			case LayerRuleGroupCollapseChanged(rg):
 			case ProjectSaved:
 			case GridChanged(active):
 			case ShowDetailsChanged(active):

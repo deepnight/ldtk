@@ -7,6 +7,7 @@ class Level {
 
 	@:allow(data.Project)
 	public var uid(default,null) : Int;
+	public var iid : String;
 	public var identifier(default,set): String;
 	public var worldX : Int;
 	public var worldY : Int;
@@ -34,8 +35,9 @@ class Level {
 
 
 	@:allow(data.Project)
-	private function new(project:Project, wid:Int, hei:Int, uid:Int) {
+	private function new(project:Project, wid:Int, hei:Int, uid:Int, iid:String) {
 		this.uid = uid;
+		this.iid = iid;
 		worldX = worldY = 0;
 		pxWid = wid;
 		pxHei = hei;
@@ -47,7 +49,7 @@ class Level {
 		useAutoIdentifier = true;
 
 		for(ld in _project.defs.layers)
-			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+			createLayerInstance(ld);
 	}
 
 	function set_identifier(id:String) {
@@ -59,11 +61,15 @@ class Level {
 	}
 
 	public function toJson() : ldtk.Json.LevelJson {
-		if( hasJsonCache() )
-			return getCacheJsonObject();
+		if( hasJsonCache() ) {
+			var o = getCacheJsonObject();
+			if( !_project.externalLevels )
+				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
+			return o;
+		}
 
 		// List nearby levels
-		var neighbours = switch _project.worldLayout {
+		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _project.worldLayout {
 			case Free, GridVania:
 				var nears = _project.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
@@ -77,33 +83,32 @@ class Level {
 						: l.worldY+l.pxHei<=worldY ? "n"
 						: "s";
 					return {
+						levelIid: l.iid,
 						levelUid: l.uid,
 						dir: dir,
 					}
 				});
 
+			case LinearHorizontal, LinearVertical: [];
+		}
+
+		// World coords are not stored in JSON for automatically organized layouts
+		var jsonWorldX = worldX;
+		var jsonWorldY = worldY;
+		switch _project.worldLayout {
+			case Free:
+			case GridVania:
 			case LinearHorizontal, LinearVertical:
-				var idx = dn.Lib.getArrayIndex(this, _project.levels);
-				var nears = [];
-				if( idx<_project.levels.length-1 )
-					nears.push({
-						levelUid: _project.levels[idx+1].uid,
-						dir: _project.worldLayout==LinearHorizontal?"e":"s",
-					});
-				if( idx>0 )
-					nears.push({
-						levelUid: _project.levels[idx-1].uid,
-						dir: _project.worldLayout==LinearHorizontal?"w":"n",
-					});
-				nears;
+				jsonWorldX = jsonWorldY = -1;
 		}
 
 		// Json
 		var json : ldtk.Json.LevelJson = {
 			identifier: identifier,
+			iid: iid,
 			uid: uid,
-			worldX: worldX,
-			worldY: worldY,
+			worldX: jsonWorldX,
+			worldY: jsonWorldY,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			__bgColor: JsonTools.writeColor( getBgColor() ),
@@ -142,9 +147,9 @@ class Level {
 			__neighbours: neighbours,
 		}
 
-		// Rebuild cache
+		// Cache new json
 		_cachedJson = {
-			str: ui.ProjectSaving.jsonStringify(_project, json),
+			str: ui.ProjectSaver.jsonStringify(_project, json ),
 			json: json,
 		}
 
@@ -154,15 +159,18 @@ class Level {
 	public function makeExternalRelPath(idx:Int) {
 		return
 			_project.getRelExternalFilesDir() + "/"
-			+ (dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-")
+			+ ( _project.hasFlag(PrependIndexToLevelFileNames) ? dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-" : "")
 			+ identifier
 			+ "." + Const.LEVEL_EXTENSION;
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
+		if( json.iid==null )
+			json.iid = p.generateUniqueId_UUID();
+
 		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
 		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
-		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
+		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid), json.iid );
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
@@ -188,8 +196,9 @@ class Level {
 				l.fieldInstances.set(fi.defUid, fi);
 			}
 
+		// Init cache
 		l._cachedJson = {
-			str: ui.ProjectSaving.jsonStringify(p, json),
+			str: ui.ProjectSaver.jsonStringify(p, json, true),
 			json: json
 		}
 
@@ -216,7 +225,7 @@ class Level {
 		return identifier + ( hasJsonCache() ? "" : "*" );
 	}
 
-	public inline function getCacheJsonString() : Null<String> {
+	public function getCacheJsonString() : Null<String> {
 		return hasJsonCache() ? _cachedJson.str : null;
 	}
 
@@ -376,16 +385,20 @@ class Level {
 		return ld!=null ? getLayerInstance(ld) : null;
 	}
 
-	public function getLayerInstanceFromEntity(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : Null<data.inst.LayerInstance> {
-		if( ei==null && ed==null )
-			return null;
-
+	public function getLayerInstanceFromEntity(ei:data.inst.EntityInstance) : Null<data.inst.LayerInstance> {
 		for(li in layerInstances)
 		for(e in li.entityInstances)
-			if( ei!=null && e==ei || ed!=null && e.defUid==ed.uid )
+			if( e.iid==ei.iid )
 				return li;
 
 		return null;
+	}
+
+
+	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
+		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID());
+		layerInstances.push(li);
+		return li;
 	}
 
 	public function tidy(p:Project) {
@@ -405,6 +418,7 @@ class Level {
 		// Create missing layerInstances & check if they're sorted in the same order as defs
 		for(i in 0..._project.defs.layers.length)
 			if( i>=layerInstances.length || layerInstances[i].layerDefUid!=_project.defs.layers[i].uid ) {
+				App.LOG.add("tidy", 'Fixed layer instance array in $this (order mismatch or missing layer instance)');
 				var existing = new Map();
 				for(li in layerInstances)
 					existing.set(li.layerDefUid, li);
@@ -414,7 +428,7 @@ class Level {
 						layerInstances.push( existing.get(ld.uid) );
 					else {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
-						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+						createLayerInstance(ld);
 					}
 				invalidateJsonCache();
 				break;
@@ -541,6 +555,7 @@ class Level {
 					case PointPath, PointPathLoop:
 					case RadiusPx:
 					case RadiusGrid:
+					case RefLink:
 				}
 			}
 		return false;

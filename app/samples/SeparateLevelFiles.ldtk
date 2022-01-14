@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 455968,
+	"appBuildId": 456134,
 	"nextUid": 10,
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 240,
@@ -29,7 +29,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
-	"flags": ["DiscardPreCsvIntGrid"],
+	"flags": [],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
@@ -37,6 +37,8 @@
 			"type": "IntGrid",
 			"uid": 1,
 			"gridSize": 16,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
 			"displayOpacity": 1,
 			"fadeInactive": false,
 			"hideInList": false,
@@ -77,15 +79,20 @@
 			"regex": null,
 			"acceptFileTypes": null,
 			"defaultOverride": null,
-			"textLanguageMode": null
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": []
 		}
 	] },
 	"levels": [
 		{
 			"identifier": "Level_0",
+			"iid": "a3053150-66b0-11ec-9cd7-c37b76d449dd",
 			"uid": 0,
-			"worldX": 0,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 240,
 			"pxHei": 224,
 			"__bgColor": "#398666",
@@ -97,7 +104,7 @@
 			"bgPivotY": 0.5,
 			"__smartColor": "#92BCAB",
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/0000-Level_0.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/Level_0.ldtkl",
 			"fieldInstances": [{
 				"__identifier": "tutorial",
 				"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
@@ -111,13 +118,14 @@
 				}]
 			}],
 			"layerInstances": null,
-			"__neighbours": [{ "levelUid": 2, "dir": "e" }]
+			"__neighbours": []
 		},
 		{
 			"identifier": "Level_1",
+			"iid": "a3184420-66b0-11ec-9cd7-531cbe889139",
 			"uid": 2,
-			"worldX": 288,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 240,
 			"pxHei": 240,
 			"__bgColor": "#4A4C7F",
@@ -129,16 +137,17 @@
 			"bgPivotY": 0.5,
 			"__smartColor": "#9B9DB9",
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/0001-Level_1.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/Level_1.ldtkl",
 			"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
 			"layerInstances": null,
-			"__neighbours": [ { "levelUid": 3, "dir": "e" }, { "levelUid": 0, "dir": "w" } ]
+			"__neighbours": []
 		},
 		{
 			"identifier": "Level_2",
+			"iid": "a34a0280-66b0-11ec-9cd7-43e058c8f3de",
 			"uid": 3,
-			"worldX": 576,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"pxWid": 240,
 			"pxHei": 240,
 			"__bgColor": "#955268",
@@ -150,10 +159,10 @@
 			"bgPivotY": 0.5,
 			"__smartColor": "#C5A0AC",
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/0002-Level_2.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/Level_2.ldtkl",
 			"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
 			"layerInstances": null,
-			"__neighbours": [{ "levelUid": 2, "dir": "w" }]
+			"__neighbours": []
 		}
 	]
 }

@@ -34,6 +34,11 @@ class FieldDef {
 	public var useForSmartColor : Bool;
 
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
+	public var symmetricalRef : Bool;
+	public var allowOutOfLevelRef : Bool;
+	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
+	public var allowedRefTags : Tags;
+
 
 	var _project : data.Project;
 
@@ -48,12 +53,30 @@ class FieldDef {
 		editorAlwaysShow = false;
 		editorCutLongValues = true;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point || type==F_EntityRef && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		textLanguageMode = null;
 		min = max = null;
 		useForSmartColor = getDefaultUseForSmartColor(t);
 		defaultOverride = null;
+		symmetricalRef = false;
+		allowOutOfLevelRef = true;
+		allowedRefs = OnlySame;
+		allowedRefTags = new Tags();
+
+		// Specific default display modes, depending on type
+		switch type {
+			case F_Int:
+			case F_Float:
+			case F_String:
+			case F_Text:
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+			case F_Point: editorDisplayMode = PointPath;
+			case F_Path:
+			case F_EntityRef: editorDisplayMode = RefLink;
+		}
 	}
 
 	static inline function getDefaultUseForSmartColor(t:ldtk.Json.FieldType) : Bool {
@@ -63,6 +86,7 @@ class FieldDef {
 			case F_Color: true;
 			case F_Enum(enumDefUid): false;
 			case F_Point, F_Path: false;
+			case F_EntityRef: false;
 		};
 	}
 
@@ -103,6 +127,10 @@ class FieldDef {
 		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
+		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
+		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
+		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
+		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
 
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
@@ -135,6 +163,10 @@ class FieldDef {
 			acceptFileTypes: type!=F_Path ? null : acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 			textLanguageMode: type!=F_Text ? null : JsonTools.writeEnum(textLanguageMode, true),
+			symmetricalRef: symmetricalRef,
+			allowOutOfLevelRef: allowOutOfLevelRef,
+			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
+			allowedRefTags: allowedRefTags.toJson(),
 		}
 	}
 
@@ -143,18 +175,21 @@ class FieldDef {
 
 	public static function getTypeColorHex(t:ldtk.Json.FieldType, luminosity=1.0) : String {
 		var c = switch t {
-			case F_Int: "#1ba7c9";
-			case F_Float: "#1ba7c9";
-			case F_String: "#ffa23c";
-			case F_Text: "#ffa23c";
-			case F_Path: "#ffa23c";
-			case F_Bool: "#3afdff";
-			case F_Color: "#ff6c48";
-			case F_Enum(enumDefUid): "#9bc95a";
-			case F_Point: "#9bc95a";
+			case F_Int: "#50b3cb";
+			case F_Float: "#50b3cb";
+			case F_String: "#bd5f32";
+			case F_Text: "#bd5f32";
+			case F_Bool: "#cd88dd";
+			case F_Color: "#99d367";
+			case F_Enum(enumDefUid): "#ff4b4b";
+			case F_Path: "#7779c9";
+			case F_Point: "#7779c9";
+			case F_EntityRef: "#7779c9";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
+		else if( luminosity>1 )
+			return C.intToHex( C.toWhite( C.hexToInt(c), M.fclamp( luminosity-1, 0, 1 ) ) );
 		else
 			return c;
 	}
@@ -170,6 +205,7 @@ class FieldDef {
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 			case F_Path: "File path";
+			case F_EntityRef: "Entity ref";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -187,6 +223,7 @@ class FieldDef {
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 			case F_Path: "FilePath";
+			case F_EntityRef: "EntityRef";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -348,6 +385,10 @@ class FieldDef {
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
+			case F_EntityRef:
+				rawDef = StringTools.trim(rawDef);
+				defaultOverride = rawDef=="" ? null : V_String(rawDef);
+
 			case F_Bool:
 				rawDef = StringTools.trim(rawDef).toLowerCase();
 				if( rawDef=="true" ) defaultOverride = V_Bool(true);
@@ -382,6 +423,7 @@ class FieldDef {
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
+			case F_EntityRef: null;
 		}
 	}
 

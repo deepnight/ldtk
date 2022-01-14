@@ -322,6 +322,7 @@ class Tiled extends Exporter {
 								case F_Enum(enumDefUid): null;
 								case F_Point: null;
 								case F_Path: "file";
+								case F_EntityRef: null; // TODO entity refs in Tiled?
 							}
 							// Value
 							var v : Dynamic = switch fi.def.type {
@@ -336,6 +337,7 @@ class Tiled extends Exporter {
 									"#ff"+c;
 								case F_Enum(enumDefUid): fi.getEnumValue(i);
 								case F_Point: fi.getPointStr(i);
+								case F_EntityRef: fi.getEntityRefIID(i);
 							}
 							_createProperty(props, fi.def.identifier + (fi.getArrayLength()<=1 ? "" : "_"+i), type, v);
 						}
@@ -373,7 +375,7 @@ class Tiled extends Exporter {
 
 
 			// Auto-layer tiles
-			if( ld.autoTilesetDefUid!=null ) {
+			if( ld.tilesetDefUid!=null ) {
 				log.add("layer", "  Exporting Auto-Layer tiles");
 				var td = li.getTilesetDef();
 				var csvLayers : Array<Csv> = [];

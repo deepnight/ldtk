@@ -172,8 +172,8 @@ class EntityDef {
 	/** FIELDS ****************************/
 
 	public function createFieldDef(project:Project, type:ldtk.Json.FieldType, baseName:String, isArray:Bool) : FieldDef {
-		var f = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
-		f.identifier = project.makeUniqueIdStr( baseName + (isArray?"_array":""), false, (id)->isFieldIdentifierUnique(id) );
+		var f = new FieldDef(project, project.generateUniqueId_int(), type, isArray);
+		f.identifier = project.fixUniqueIdStr( baseName + (isArray?"_array":""), false, (id)->isFieldIdentifierUnique(id) );
 		fieldDefs.push(f);
 		return f;
 	}

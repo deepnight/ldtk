@@ -97,9 +97,9 @@ class Definitions {
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
-		var l = new data.def.LayerDef(_project.makeUniqueIdInt(), type);
+		var l = new data.def.LayerDef(_project.generateUniqueId_int(), type);
 
-		l.identifier = _project.makeUniqueIdStr(id==null ? type.getName() : id, (id)->isLayerNameUnique(id));
+		l.identifier = _project.fixUniqueIdStr(id==null ? type.getName() : id, (id)->isLayerNameUnique(id));
 
 		l.gridSize = _project.defaultGridSize;
 
@@ -125,15 +125,15 @@ class Definitions {
 
 		var json : ldtk.Json.LayerDefJson = c.getParsedJson();
 		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, json );
-		copy.uid = _project.makeUniqueIdInt();
+		copy.uid = _project.generateUniqueId_int();
 
 		for(rg in copy.autoRuleGroups) {
-			rg.uid = _project.makeUniqueIdInt();
+			rg.uid = _project.generateUniqueId_int();
 			for(r in rg.rules)
-				r.uid = _project.makeUniqueIdInt();
+				r.uid = _project.generateUniqueId_int();
 		}
 
-		copy.identifier = _project.makeUniqueIdStr(baseName==null ? json.identifier : baseName, (id)->isLayerNameUnique(id));
+		copy.identifier = _project.fixUniqueIdStr(baseName==null ? json.identifier : baseName, (id)->isLayerNameUnique(id));
 		if( after!=null )
 			layers.insert( dn.Lib.getArrayIndex(after, layers)+1, copy );
 		else
@@ -260,7 +260,7 @@ class Definitions {
 	}
 
 	public function createEntityDef() : data.def.EntityDef {
-		var ed = new data.def.EntityDef(_project.makeUniqueIdInt());
+		var ed = new data.def.EntityDef(_project.generateUniqueId_int());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
@@ -284,11 +284,11 @@ class Definitions {
 
 		var json : ldtk.Json.EntityDefJson = c.getParsedJson();
 		var copy = data.def.EntityDef.fromJson( _project, json );
-		copy.uid = _project.makeUniqueIdInt();
+		copy.uid = _project.generateUniqueId_int();
 
 		for(fd in copy.fieldDefs)
-			fd.uid = _project.makeUniqueIdInt();
-		copy.identifier = _project.makeUniqueIdStr(json.identifier, (id)->isEntityIdentifierUnique(id));
+			fd.uid = _project.generateUniqueId_int();
+		copy.identifier = _project.fixUniqueIdStr(json.identifier, (id)->isEntityIdentifierUnique(id));
 
 		if( after==null )
 			entities.push(copy);
@@ -419,10 +419,10 @@ class Definitions {
 	/**  TILESET DEFS  *****************************************/
 
 	public function createTilesetDef() : data.def.TilesetDef {
-		var td = new data.def.TilesetDef( _project, _project.makeUniqueIdInt() );
+		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
 		tilesets.push(td);
 
-		td.identifier = _project.makeUniqueIdStr("Tileset", id->isTilesetIdentifierUnique(id));
+		td.identifier = _project.fixUniqueIdStr("Tileset", id->isTilesetIdentifierUnique(id));
 		_project.tidy();
 		return td;
 	}
@@ -437,8 +437,8 @@ class Definitions {
 
 		var json : ldtk.Json.TilesetDefJson = c.getParsedJson();
 		var copy = data.def.TilesetDef.fromJson( _project, json );
-		copy.uid = _project.makeUniqueIdInt();
-		copy.identifier = _project.makeUniqueIdStr(json.identifier, id->isTilesetIdentifierUnique(id));
+		copy.uid = _project.generateUniqueId_int();
+		copy.identifier = _project.fixUniqueIdStr(json.identifier, id->isTilesetIdentifierUnique(id));
 		if( after==null )
 			tilesets.push(copy);
 		else
@@ -503,9 +503,9 @@ class Definitions {
 	/**  ENUM DEFS  *****************************************/
 
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
-		var ed = new data.def.EnumDef(_project.makeUniqueIdInt(), "Enum");
+		var ed = new data.def.EnumDef(_project.generateUniqueId_int(), "Enum");
 
-		ed.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
+		ed.identifier = _project.fixUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
 
 		if( externalRelPath!=null ) {
 			ed.externalRelPath = externalRelPath;
@@ -541,9 +541,9 @@ class Definitions {
 
 		var json : ldtk.Json.EnumDefJson = c.getParsedJson();
 		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, json );
-		copy.uid = _project.makeUniqueIdInt();
+		copy.uid = _project.generateUniqueId_int();
 
-		copy.identifier = _project.makeUniqueIdStr(json.identifier, (id)->isEnumIdentifierUnique(id));
+		copy.identifier = _project.fixUniqueIdStr(json.identifier, (id)->isEnumIdentifierUnique(id));
 		if( after==null )
 			enums.push(copy);
 		else

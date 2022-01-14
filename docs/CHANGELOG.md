@@ -2,8 +2,10 @@
 
 ## Major changes
 
+  - **Entity references**: this new "field" type is available to all Entities and is used to store a reference to another Entity. A typical example is a Button entity with a a Reference value pointing to another Entity, like a Door. You can create arrays of References, or define restrictions to which kind of Entity they can point to.
   - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will probably be updated in future updates.
   - **Copy and paste**: for now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements. You can right click on an element with a context menu to copy/cut/paste/duplicate things! LDtk just entered modern era.
+  - **Space key**: one shortcut to rule them all. Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are). Hold `SPACE` and click left mouse button to scroll the view.
   - **Reworked loading/saving**:
     - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
     - Added various progress bars when loading or saving large projects
@@ -21,17 +23,25 @@
 
 ## JSON format changes
 
- - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
- - **IntGridValues** array order should no longer be used to guess IntGrid values, see https://github.com/deepnight/ldtk/issues/553
+  - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
+  - **IntGridValues** array index should no longer be used to guess IntGrid values, since the array can be manually sorted by users. See https://github.com/deepnight/ldtk/issues/553
+  - To avoid unnecessary file changes and renamings (bad for versioning systems), the following changes have been made:
+  - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
+  - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
+  - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
+  - Not really JSON related, but external level files will no longer be prefixed with their index in array to avoid unnecessary renamings when inserting new levels. This can be re-enabled in Project panel, using an Advanced Option at the bottom.
 
 ## UI
 
+  - Added a new optional "guide" grid per layer. This customizable grid is not used for snapping, and only serves as a visual guide.
+  - Better display of entities that have error(s) in their field values.
   - Added a new option (`CTRL-H`) to hide everything except Tiles in layers (entities, labels, intGrids etc.)
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Added `PAGEUP`/`PAGEDOWN` keyboard shortcuts to zoom in/out
-  - Added `ARROWS` keyboard shortcuts to move the view
+  - Hold `SPACE` + Right mouse click to zoom in/out
+  - Better support of trackpad pinch gestures to zoom in/out
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
   - Reworked the Enum panel and fixed many UX issues
@@ -45,6 +55,8 @@
   - The "collapsed/expanded" status of a group of auto-layer rules is no longer saved in the project file: all rule groups will now be collapsed by default when loading a project.
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Tool tips are now larger and easier to read.
+  - Mouse-overing entire rule blocks in the panel will no longer preview affected cells in the level. Now, to preview affected cells, you have to move your mouse over either the group name, or the "pattern" block.
+  - You can now manually edit X,Y coords and width,height values of an existing Entity.
   - If you open a Backup copy of a project, all panels will be locked, preventing any edit. You may only Restore the backup.
   - Level identifiers are now displayed in the top-left corner of levels in World view
   - Better Level identifiers rendering in World view (they should now be easier to read in general)
@@ -61,11 +73,13 @@
   - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
   - Fixed the progress bar when saving large projects
+  - Fixed TAB key behavior when an Entity instance panel is open
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
   - Fixed a bug when reloading a tileset while its width changed.
   - Fixed layers list not being properly updated when leaving world mode.
+  - Fixed a crash when using a field containing an array of null enums.
   - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
   - Updated sample maps
   - Many minor bug fixes.

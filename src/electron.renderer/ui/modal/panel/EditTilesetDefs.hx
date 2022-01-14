@@ -160,7 +160,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Fields
 		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
-		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isTilesetIdentifierUnique(id,curTd));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isTilesetIdentifierUnique(id,curTd));
 		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
 
 		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
@@ -253,12 +253,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			ContextMenu.addTo(e, [
 				{
 					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copy(CTilesetDef, td.toJson()),
+					cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
 				},
 				{
 					label: L._Cut(),
 					cb: ()->{
-						App.ME.clipboard.copy(CTilesetDef, td.toJson());
+						App.ME.clipboard.copyData(CTilesetDef, td.toJson());
 						deleteTilesetDef(td);
 					},
 				},

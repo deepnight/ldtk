@@ -37,7 +37,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				label: L.t._("Rectangle region"),
 				cb: ()->{
 					var ed = _createEntity();
-					ed.identifier = project.makeUniqueIdStr("RectRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.identifier = project.fixUniqueIdStr("RectRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
 					ed.hollow = true;
 					ed.resizableX = true;
 					ed.resizableY = true;
@@ -51,7 +51,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				label: L.t._("Circle region"),
 				cb: ()->{
 					var ed = _createEntity();
-					ed.identifier = project.makeUniqueIdStr("CircleRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.identifier = project.fixUniqueIdStr("CircleRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
 					ed.renderMode = Ellipse;
 					ed.hollow = true;
 					ed.resizableX = true;
@@ -66,7 +66,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm(FP_Entity);
+		fieldsForm = new ui.FieldDefsForm( FP_Entity );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 
@@ -174,11 +174,11 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Name
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
-		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
 
-		// Pick through
-		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input#hollow") );
+		// Hollow (ie. click through)
+		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input[name=hollow]") );
 		i.linkEvent(EntityDefChanged);
 
 		// Tags editor
@@ -362,9 +362,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function updateFieldsForm() {
 		if( curEntity!=null )
-			fieldsForm.useFields(curEntity.fieldDefs);
+			fieldsForm.useFields(curEntity.identifier, curEntity.fieldDefs);
 		else {
-			fieldsForm.useFields([]);
+			fieldsForm.useFields("Entity", []);
 			fieldsForm.hide();
 		}
 		checkBackup();
@@ -426,12 +426,12 @@ class EditEntityDefs extends ui.modal.Panel {
 				ContextMenu.addTo(jEnt, [
 					{
 						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copy(CEntityDef, ed.toJson()),
+						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson()),
 					},
 					{
 						label: L._Cut(),
 						cb: ()->{
-							App.ME.clipboard.copy(CEntityDef, ed.toJson());
+							App.ME.clipboard.copyData(CEntityDef, ed.toJson());
 							deleteEntityDef(ed);
 						},
 					},

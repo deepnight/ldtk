@@ -5,6 +5,7 @@ class IntInput extends form.Input<Int> {
 	var max : Int = M.T_INT16_MAX;
 	public var isColorCode(default,set) = false;
 	public var allowNull = false;
+	var emptyValue : Null<Int>;
 
 	public function new(j:js.jquery.JQuery, getter:Void->Int, setter:Int->Void) {
 		super(j, getter, setter);
@@ -14,6 +15,11 @@ class IntInput extends form.Input<Int> {
 		isColorCode = v;
 		writeValueToInput();
 		return isColorCode;
+	}
+
+	public function setEmptyValue(v:Int) {
+		emptyValue = v;
+		writeValueToInput();
 	}
 
 	override function getSlideDisplayValue(v:Float):String {
@@ -30,7 +36,9 @@ class IntInput extends form.Input<Int> {
 	}
 
 	override function writeValueToInput() {
-		if( isColorCode )
+		if( getter()==emptyValue )
+			jInput.val("");
+		else if( isColorCode )
 			jInput.val( C.intToHex(getter()) );
 		else
 			super.writeValueToInput();

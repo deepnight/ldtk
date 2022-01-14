@@ -151,6 +151,7 @@ class FieldInstance {
 				case F_Enum(enumDefUid): return false; // TODO support default enum values
 				case F_Point: return false;
 				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
+				case F_EntityRef: return false;
 			}
 		}
 	}
@@ -190,6 +191,13 @@ class FieldInstance {
 					raw = StringTools.replace(raw, "\\n", " ");
 					setInternal(arrayIdx, V_String(raw) );
 				}
+
+			case F_EntityRef:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else
+					setInternal(arrayIdx, V_String(raw) );
 
 			case F_String:
 				raw = StringTools.trim(raw);
@@ -240,17 +248,81 @@ class FieldInstance {
 		}
 	}
 
-	public inline function hasAnyErrorInValues() {
-		return getFirstErrorInValues()!=null;
+
+	public function removeSymmetricalEntityRef(arrayIdx, sourceEi:EntityInstance, allowRec=true) {
+		if( !def.symmetricalRef || valueIsNull(arrayIdx) )
+			return false;
+
+		var tei = getEntityRefInstance(arrayIdx);
+		if( tei==null )
+			return false;
+
+		var tfi = tei.getFieldInstance(def);
+		var i = 0;
+		while( i<tfi.getArrayLength() )
+			if( tfi.getEntityRefIID(i)==sourceEi.iid ) {
+				tfi.removeArrayValue(i);
+				if( allowRec ) {
+					tfi.removeSymmetricalEntityRef(i, tei, false);
+				}
+				return true;
+			}
+			else
+				i++;
+		return false;
 	}
 
-	public function getFirstErrorInValues() : Null<String> {
-		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
-			return "ArraySize";
 
-		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
-			return "ArraySize";
+	public function setSymmetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
+		if( !def.symmetricalRef || valueIsNull(arrayIdx) )
+			return;
 
+		var targetEi = getEntityRefInstance(arrayIdx);
+		if( targetEi==null )
+			return;
+
+		var targetFi = targetEi.getFieldInstance(def);
+		if( targetFi==null )
+			return;
+
+		if( !def.isArray ) {
+			// Single value
+			if( targetFi.getEntityRefIID(arrayIdx)!=sourceEi.iid) {
+				targetFi.parseValue(arrayIdx, sourceEi.iid);
+				_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
+			}
+		}
+		else {
+			// Array
+			var found = false;
+			for(i in 0...targetFi.getArrayLength())
+				if( targetFi.getEntityRefIID(i)==sourceEi.iid ) {
+					found = true;
+					break;
+				}
+			if( !found ) {
+				targetFi.addArrayValue();
+				targetFi.parseValue(targetFi.getArrayLength()-1, sourceEi.iid);
+				_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
+			}
+		}
+	}
+
+
+	public inline function hasAnyErrorInValues(thisEi:Null<EntityInstance>) {
+		return getFirstErrorInValues(thisEi)!=null;
+	}
+
+	public function getErrorInValue(thisEi:Null<EntityInstance>, arrayIdx:Int) : Null<String> {
+		// Null not accepted
+		if( !def.canBeNull && valueIsNull(arrayIdx) )
+			switch def.type {
+				case F_Int, F_Float, F_String, F_Text, F_Bool, F_Color:
+				case F_Enum(_), F_Point, F_Path, F_EntityRef:
+					return "Value required";
+			}
+
+		// Specific errors
 		switch def.type {
 			case F_Int:
 			case F_Float:
@@ -259,28 +331,49 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 			case F_Point:
-				for( idx in 0...getArrayLength() )
-					if( !def.canBeNull && getPointStr(idx)==null )
-						return def.identifier+"?";
-
 			case F_Enum(enumDefUid):
-				if( !def.canBeNull )
-					for( idx in 0...getArrayLength() )
-						if( getEnumValue(idx)==null )
-							return _project.defs.getEnumDef(enumDefUid).identifier+"?";
-
 			case F_Path:
-				for( idx in 0...getArrayLength() ) {
-					if( !def.canBeNull && valueIsNull(idx) )
-						return def.identifier+"?";
-
-					if( !valueIsNull(idx) ) {
-						var absPath = _project.makeAbsoluteFilePath( getFilePath(idx) );
-						if( !NT.fileExists(absPath) )
-							return "FileNotFound";
-					}
+				if( !valueIsNull(arrayIdx) ) {
+					var absPath = _project.makeAbsoluteFilePath( getFilePath(arrayIdx) );
+					if( !NT.fileExists(absPath) )
+						return "File not found";
 				}
+
+			case F_EntityRef:
+				var tei = getEntityRefInstance(arrayIdx);
+				if( !valueIsNull(arrayIdx) && tei==null )
+					return "Lost reference!";
+
+				if( !valueIsNull(arrayIdx) )
+					switch def.allowedRefs {
+						case Any:
+						case OnlySame:
+							if( thisEi!=null && thisEi.def.identifier!=tei.def.identifier )
+								return "Invalid ref type "+def.identifier+" vs "+tei.def.identifier;
+
+						case OnlyTags:
+							if( !tei.def.tags.hasAnyTagFoundIn(def.allowedRefTags) )
+								return "Invalid ref tags";
+					}
 		}
+
+		return null;
+	}
+
+
+	public function getFirstErrorInValues(thisEi:Null<EntityInstance>) : Null<String> {
+		if( def.isArray && def.arrayMinLength!=null && getArrayLength()<def.arrayMinLength )
+			return "Array too short";
+
+		if( def.isArray && def.arrayMaxLength!=null && getArrayLength()>def.arrayMaxLength )
+			return "Array too long";
+
+		for(i in 0...getArrayLength()) {
+			var err = getErrorInValue(thisEi, i);
+			if( err!=null )
+				return err;
+		}
+
 		return null;
 	}
 
@@ -294,6 +387,7 @@ class FieldInstance {
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
+			case F_EntityRef: getEntityRefIID(arrayIdx);
 		}
 		return v == null;
 	}
@@ -303,7 +397,7 @@ class FieldInstance {
 			case F_Enum(enumDefUid):
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				var e = getEnumValue(arrayIdx);
-				return ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
+				return e!=null && ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
 
 			case _:
 				return false;
@@ -335,6 +429,7 @@ class FieldInstance {
 			case F_Bool: getBool(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
+			case F_EntityRef: getEntityRefForDisplay(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -345,6 +440,7 @@ class FieldInstance {
 			case F_Enum(name): return '$v';
 			case F_Point: return '$v';
 			case F_String, F_Text, F_Path: return '"$v"';
+			case F_EntityRef: return '@($v)';
 		}
 	}
 
@@ -359,6 +455,7 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
+			case F_EntityRef: getEntityRefIID(arrayIdx);
 		}
 	}
 
@@ -395,6 +492,7 @@ class FieldInstance {
 
 			case F_Point:
 			case F_Path:
+			case F_EntityRef:
 		}
 
 		return null;
@@ -452,6 +550,32 @@ class FieldInstance {
 		return out;
 	}
 
+	public inline function getEntityRefIID(arrayIdx:Int) : Null<String> {
+		if( def.type!=F_EntityRef )
+			return null;
+		else {
+			var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
+				case V_String(v): v;
+				case _: throw "unexpected";
+			}
+			return out;
+		}
+
+	}
+
+	public inline function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
+		return valueIsNull(arrayIdx) ? null : _project.getEntityInstanceByIid( getEntityRefIID(arrayIdx) );
+	}
+
+	public function getEntityRefForDisplay(arrayIdx:Int, ?checkLevel:Level) : String {
+		var ei = getEntityRefInstance(arrayIdx);
+		if( ei==null )
+			return "Lost reference!";
+		else
+			return ei.def.identifier
+				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
+	}
+
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );
 		return isUsingDefault(arrayIdx) ? def.getEnumDefault() : switch internalValues[arrayIdx] {
@@ -489,6 +613,22 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 			case F_Path:
+
+			case F_EntityRef:
+				var i = 0;
+				while( i<getArrayLength() ) {
+					if( !valueIsNull(i) && getEntityRefInstance(i)==null ) {
+						App.LOG.add("tidy", 'Removed lost reference in $this');
+						if( def.isArray ) {
+							removeArrayValue(i);
+							i--;
+						}
+						else
+							parseValue(i, null);
+					}
+					i++;
+				}
+
 
 			case F_Point:
 				if( li!=null ) {

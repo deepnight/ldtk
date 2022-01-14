@@ -38,6 +38,9 @@ class Project {
 	public var backupLimit = 10;
 
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
+	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
+	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
+
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -115,7 +118,7 @@ class Project {
 	}
 
 	public inline function isBackup() {
-		return ui.ProjectSaving.isBackupFile(filePath.full);
+		return ui.ProjectSaver.isBackupFile(filePath.full);
 	}
 
 	public function makeRelativeFilePath(absPath:String) {
@@ -145,15 +148,21 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
-		p.setFlag(DiscardPreCsvIntGrid, true);
 		p.createLevel();
 
 		return p;
 	}
 
-	public function makeUniqueIdInt() return nextUid++;
 
-	public function makeUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
+	public inline function generateUniqueId_UUID() : String {
+		// HaxeLib: https://github.com/flashultra/uuid, credits Miroslav "Flashultra" Yordanov
+		// Refs: https://www.sohamkamani.com/uuid-versions-explained/
+		return uuid.Uuid.v1();
+	}
+
+	public function generateUniqueId_int() return nextUid++;
+
+	public function fixUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId,firstCharCap);
 		if( baseId=="_" )
 			baseId = "Unnamed";
@@ -246,7 +255,7 @@ class Project {
 		if( json.flags!=null )
 			for(f in json.flags ) {
 				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
-					catch(e:Dynamic) null;
+					catch(_) null;
 
 				if( ev!=null )
 					p.flags.set(ev, true);
@@ -260,8 +269,15 @@ class Project {
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
 			p.reorganizeWorld();
 
+		if( Version.lower(json.jsonVersion, "0.10") )
+			p.setFlag(PrependIndexToLevelFileNames, true);
+
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
 		return p;
+	}
+
+	public function recommendsBackup() {
+		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && levels.length>=8;
 	}
 
 	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
@@ -348,6 +364,69 @@ class Project {
 							registerUsedColor("e_"+fi.def.identifier, fi.getColorAsInt(i));
 			}
 		}
+	}
+
+	public inline function getEntityInstanceByIid(iid:String) : Null<data.inst.EntityInstance> {
+		return entityIidsCache.exists(iid) ? entityIidsCache.get(iid) : null;
+	}
+
+	public function registerEntityInstance(ei:data.inst.EntityInstance) {
+		entityIidsCache.set(ei.iid, ei);
+
+		for(fi in ei.fieldInstances)
+			if( fi.def!=null && fi.def.type==F_EntityRef ) // def could be null after removal of a field def, and before proper tidy() calls
+				for(i in 0...fi.getArrayLength())
+					if( !fi.valueIsNull(i) )
+						registerReverseIidRef(ei.iid, fi.getEntityRefIID(i));
+	}
+
+	public inline function unregisterIid(iid:String) {
+		entityIidsCache.remove(iid);
+	}
+
+	public inline function registerReverseIidRef(fromIid:String, toIid:String) {
+		if( fromIid!=null && toIid!=null ) {
+			if( !reverseIidRefsCache.exists(toIid) )
+				reverseIidRefsCache.set(toIid, new Map());
+			reverseIidRefsCache.get(toIid).set(fromIid,true);
+		}
+	}
+
+	public inline function unregisterReverseIidRef(from:data.inst.EntityInstance, to:data.inst.EntityInstance) {
+		if( from!=null && to!=null && reverseIidRefsCache.exists(to.iid) )
+			reverseIidRefsCache.get(to.iid).remove(from.iid);
+	}
+
+	public function unregisterAllReverseIidRefsFor(ei:data.inst.EntityInstance) {
+		reverseIidRefsCache.remove(ei.iid);
+		for(refs in reverseIidRefsCache )
+			refs.remove(ei.iid);
+	}
+
+	public function getEntityInstancesReferingTo(tei:data.inst.EntityInstance) : Array<data.inst.EntityInstance> {
+		if( !reverseIidRefsCache.exists(tei.iid) )
+			return [];
+
+		var all = [];
+		for(iid in reverseIidRefsCache.get(tei.iid).keys()) {
+			var ei = getEntityInstanceByIid(iid);
+			if( ei!=null )
+				all.push(ei);
+		}
+		return all;
+	}
+
+
+	public function initEntityIidsCache() {
+		var t = haxe.Timer.stamp();
+		entityIidsCache = new Map();
+		reverseIidRefsCache = new Map();
+
+		// Levels
+		for(level in levels)
+		for( li in level.layerInstances )
+		for( ei in li.entityInstances )
+			registerEntityInstance(ei);
 	}
 
 	public function toJson() : ldtk.Json.ProjectJson {
@@ -483,12 +562,55 @@ class Project {
 		applyAutoLevelIdentifiers();
 	}
 
+
+	/**
+		Check all FieldInstances and remove any existing references to `targetEi` EntityInstance
+	**/
+	public function removeAnyFieldRefsTo(targetEi:data.inst.EntityInstance) {
+		var i = 0;
+
+		for(l in levels)
+		for(li in l.layerInstances)
+		for(ei in li.entityInstances)
+		for(fi in ei.fieldInstances) {
+			if( fi.def.type!=F_EntityRef )
+				continue;
+			i = 0;
+			while( i<fi.getArrayLength() )
+				if( fi.getEntityRefIID(i)==targetEi.iid )
+					fi.removeArrayValue(i);
+				else
+					i++;
+		}
+	}
+
+	/**
+		Run tidy() only for custom fields
+	**/
+	public function tidyFields() {
+		initEntityIidsCache();
+		for(l in levels) {
+			for(fi in l.layerInstances)
+				fi.tidy(this);
+
+			for(li in l.layerInstances)
+			for(ei in li.entityInstances)
+			for(fi in ei.fieldInstances)
+				fi.tidy(this);
+		}
+	}
+
+	/**
+		Run tidy() for EVERY project components.
+		This can be really slow because of LayerInstances!
+	**/
 	public function tidy() {
 		if( worldLayout==GridVania ) {
 			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
 			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 
+		initEntityIidsCache();
 		defs.tidy(this);
 		reorganizeWorld();
 		for(level in levels)
@@ -603,13 +725,13 @@ class Project {
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, makeUniqueIdInt());
+		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, generateUniqueId_int(), generateUniqueId_UUID());
 		if( insertIdx==null )
 			levels.push(l);
 		else
 			levels.insert(insertIdx,l);
 
-		l.identifier = makeUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
+		l.identifier = fixUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
 
 		tidy(); // this will create layer instances
 		return l;
@@ -619,12 +741,13 @@ class Project {
 		var copy : data.Level = Level.fromJson( this, l.toJson() );
 
 		// Remap IDs
-		copy.uid = makeUniqueIdInt();
+		copy.iid = generateUniqueId_UUID();
+		copy.uid = generateUniqueId_int();
 		for(li in copy.layerInstances)
 			li.levelId = copy.uid;
 
 		// Pick unique identifier
-		copy.identifier = makeUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
+		copy.identifier = fixUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
 		tidy();
@@ -642,6 +765,13 @@ class Project {
 	public function removeLevel(l:Level) {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
+
+		for(li in l.layerInstances)
+		for(ei in li.entityInstances) {
+			removeAnyFieldRefsTo(ei);
+			unregisterIid(ei.iid);
+			unregisterAllReverseIidRefsFor(ei);
+		}
 
 		tidy();
 	}
@@ -904,7 +1034,7 @@ class Project {
 					case LinearHorizontal: 0;
 					case LinearVertical: idx;
 				}) );
-				l.identifier = makeUniqueIdStr(id, true, id->isLevelIdentifierUnique(id));
+				l.identifier = fixUniqueIdStr(id, true, id->isLevelIdentifierUnique(id));
 			}
 			idx++;
 		}

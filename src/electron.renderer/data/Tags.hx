@@ -54,7 +54,7 @@ class Tags {
 		return k!=null && map.exists(k);
 	}
 
-	public function hasTagFoundIn(others:Tags) {
+	public function hasAnyTagFoundIn(others:Tags) {
 		for( k in map.keys() )
 			if( others.has(k) )
 				return true;

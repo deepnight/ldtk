@@ -178,6 +178,8 @@ class OgmoProject {
 
 							case F_Path:
 								fd.setAcceptFileTypes( valJson.extensions.join(" ") );
+
+							case F_EntityRef:
 						}
 
 					}
@@ -387,6 +389,8 @@ class OgmoProject {
 
 											case F_Point:
 											case F_Path:
+
+											case F_EntityRef:
 										}
 
 										if( fi.isEqualToDefault(0) )

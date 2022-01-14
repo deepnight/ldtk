@@ -4,7 +4,8 @@ class EditProject extends ui.modal.Panel {
 
 	var showAdvanced = false;
 	var allAdvancedOptions = [
-		ldtk.Json.ProjectFlag.DiscardPreCsvIntGrid,
+		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
+		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
 	];
 
 	public function new() {
@@ -77,7 +78,7 @@ class EditProject extends ui.modal.Panel {
 						// Re-save project
 						editor.invalidateAllLevelsCache();
 						App.LOG.fileOp('  Saving project...');
-						new ui.ProjectSaving(this, project, (success)->{
+						new ui.ProjectSaver(this, project, (success)->{
 							// Remove old project file
 							App.LOG.fileOp('  Deleting old project file...');
 							NT.removeFile(oldProjectPath);
@@ -155,6 +156,7 @@ class EditProject extends ui.modal.Panel {
 			jCount.hide();
 			jCount.siblings("span").hide();
 		}
+		jForm.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
 
 
 		// Json minifiying
@@ -162,6 +164,7 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 
 		// External level files
+		jForm.find(".externRecommend").css("visibility", project.levels.length>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
@@ -286,9 +289,14 @@ class EditProject extends ui.modal.Panel {
 			var jLabel = new J('<label for="$e"/>');
 			jLabel.appendTo(jLi);
 			switch e {
-				case DiscardPreCsvIntGrid:
-					jLabel.text("Discard pre-CSV IntGrid layer data in level data");
-					jInput.attr("title", L.t._("If enabled, the exported JSON will not contain the deprecated array \"intGrid\", making the file smaller. Only use this if your game API supports LDtk 0.8.x or more."));
+				case ExportPreCsvIntGridFormat:
+					jLabel.text("Export legacy pre-CSV IntGrid layers data");
+					jInput.attr("title", L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less."));
+
+				case PrependIndexToLevelFileNames:
+					jLabel.text("Prefix level file names with their index in array");
+					jInput.attr("title", L.t._("If enabled, external level file names will be prefixed with an index reflecting their position in the internal array.\nThis is NOT recommended because, with versioning systems (such as GIT), inserting a new level means renaming files of all subsequent levels in the array.\nThis option used to be the default behavior but was changed in version 0.10.0."));
+
 				case _:
 			}
 
@@ -296,6 +304,7 @@ class EditProject extends ui.modal.Panel {
 				jInput,
 				()->project.hasFlag(e),
 				(v)->{
+					editor.invalidateAllLevelsCache();
 					project.setFlag(e, v);
 					editor.ge.emit(ProjectSettingsChanged);
 				}

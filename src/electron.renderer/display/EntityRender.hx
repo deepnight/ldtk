@@ -31,9 +31,8 @@ class EntityRender extends dn.Process {
 		ei = inst;
 		ld = layerDef;
 
-		core = new h2d.Object(root);
-
 		fieldGraphics = new h2d.Graphics(root);
+		core = new h2d.Object(root);
 
 		above = new h2d.Flow(root);
 		above.layout = Vertical;
@@ -186,14 +185,11 @@ class EntityRender extends dn.Process {
 			}
 
 		// Pivot
-		g.beginFill(color);
-		g.lineStyle(1, 0x0, 0.5);
-		var pivotSize = 3;
-		g.drawRect(
-			Std.int((w-pivotSize)*ed.pivotX),
-			Std.int((h-pivotSize)*ed.pivotY),
-			pivotSize, pivotSize
-		);
+		g.lineStyle(0);
+		g.beginFill(0x0, 0.4);
+		g.drawRect(w*ed.pivotX-1, h*ed.pivotY-1, 3,3);
+		g.beginFill(color, 1);
+		g.drawRect(w*ed.pivotX, h*ed.pivotY, 1,1);
 
 		return {
 			wrapper: wrapper,
@@ -233,6 +229,17 @@ class EntityRender extends dn.Process {
 			color, ctx, beneath
 		);
 
+		for(refEi in ei._project.getEntityInstancesReferingTo(ei)) {
+			if( refEi._li.level==ei._li.level )
+				continue;
+
+			var col = refEi.getSmartColor(true);
+			var fx = ( refEi.getPointOriginX(ld) + refEi._li.level.worldX ) - ei.worldX;
+			var fy = ( refEi.getPointOriginY(ld) + refEi._li.level.worldY ) - ei.worldY;
+			var tx = ei.getPointOriginX(ld) - ei.x;
+			var ty = ei.getPointOriginY(ld) - ei.y;
+			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
+		}
 
 		// Identifier label
 		if( ei.def.showName ) {

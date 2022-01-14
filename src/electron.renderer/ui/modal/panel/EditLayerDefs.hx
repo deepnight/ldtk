@@ -106,9 +106,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		var newLd = project.defs.duplicateLayerDef(ld, ld.identifier+"_baked");
 		newLd.type = Tiles;
 		newLd.autoRuleGroups = [];
-		newLd.autoTilesetDefUid = null;
 		newLd.autoSourceLayerDefUid = null;
-		newLd.tilesetDefUid = ld.autoTilesetDefUid;
+		newLd.tilesetDefUid = ld.tilesetDefUid;
 
 		// Update layer instances
 		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
@@ -252,12 +251,24 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Fields
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
-		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
 		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+
+		var i = Input.linkToHtmlInput( cur.guideGridWid, jForm.find("input[name='guideGridWid']") );
+		i.setBounds(0,Const.MAX_GRID_SIZE);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.fixValue = v->return v<=1 ? 0 : v;
+		i.setEmptyValue(0);
+
+		var i = Input.linkToHtmlInput( cur.guideGridHei, jForm.find("input[name='guideGridHei']") );
+		i.setBounds(0,Const.MAX_GRID_SIZE);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.fixValue = v->return v<=1 ? 0 : v;
+		i.setEmptyValue(0);
 
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
 		i.enablePercentageMode();
@@ -363,16 +374,16 @@ class EditLayerDefs extends ui.modal.Panel {
 				if( cur.autoRuleGroups.length!=0 )
 					new LastChance(Lang.t._("Changed auto-layer tileset"), project);
 
-				cur.autoTilesetDefUid = newTilesetUid;
-				if( cur.autoTilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
-					cur.gridSize = project.defs.getTilesetDef(cur.autoTilesetDefUid).tileGridSize;
+				cur.tilesetDefUid = newTilesetUid;
+				if( cur.tilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+					cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
 
 				// TODO cleanup rules with invalid tileIDs
 
 				editor.ge.emit( LayerDefChanged(cur.uid) );
 			});
-			if( cur.autoTilesetDefUid!=null )
-				jTileset.val( cur.autoTilesetDefUid );
+			if( cur.tilesetDefUid!=null )
+				jTileset.val( cur.tilesetDefUid );
 			else
 				jTileset.addClass("noValue");
 		}
@@ -512,7 +523,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Tileset
 				initAutoTilesetSelect();
 				var jSelect = jForm.find("[name=autoTileset]");
-				if( cur.autoTilesetDefUid==null )
+				if( cur.tilesetDefUid==null )
 					jSelect.addClass("required");
 
 
@@ -651,13 +662,13 @@ class EditLayerDefs extends ui.modal.Panel {
 				{
 					label: L._Copy(),
 					cb: ()->{
-						App.ME.clipboard.copy(CLayerDef, ld.toJson());
+						App.ME.clipboard.copyData(CLayerDef, ld.toJson());
 					},
 				},
 				{
 					label: L._Cut(),
 					cb: ()->{
-						App.ME.clipboard.copy(CLayerDef, ld.toJson());
+						App.ME.clipboard.copyData(CLayerDef, ld.toJson());
 						deleteLayer(ld);
 					},
 				},

@@ -248,8 +248,8 @@ class Home extends Page {
 					li.addClass("crash");
 
 				// Backups button
-				if( ui.ProjectSaving.hasBackupFiles(filePath) ) {
-					var all = ui.ProjectSaving.listBackupFiles(filePath);
+				if( ui.ProjectSaver.hasBackupFiles(filePath) ) {
+					var all = ui.ProjectSaver.listBackupFiles(filePath);
 					if( all.length>0 ) {
 						var jBackups = new J('<button class="backups gray"/>');
 						jBackups.appendTo(li);
@@ -264,7 +264,7 @@ class Home extends Page {
 									crashBackups.push(b.backup);
 
 								ctx.add({
-									label: ui.ProjectSaving.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
+									label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
 									className: b.crash ? "crash" : null,
 									sub: Lang.date(b.date),
 									cb: ()->App.ME.loadProject(b.backup.full)
@@ -452,7 +452,7 @@ class Home extends Page {
 				var p = i.load();
 				i.log.printAllToLog(App.LOG);
 				if( p!=null ) {
-					new ui.ProjectSaving(this, p, (ok)->{
+					new ui.ProjectSaver(this, p, (ok)->{
 						N.success("Success!");
 						App.ME.loadProject(p.filePath.full);
 					});
@@ -478,8 +478,8 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty(fp.full);
 
-			var data = ui.ProjectSaving.prepareProjectSavingData(p);
-			new ui.ProjectSaving(this, p, (success)->{
+			var data = ui.ProjectSaver.prepareProjectSavingData(p);
+			new ui.ProjectSaver(this, p, (success)->{
 				if( success ) {
 					N.msg("New project created: "+p.filePath.full);
 					App.ME.loadPage( ()->new Editor(p) );

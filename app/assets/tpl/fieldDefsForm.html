@@ -1,6 +1,6 @@
 <div class="buttons">
-	<button type="button" class="createSingle" title="Add a single value field">+ field</button>
-	<button type="button" class="createArray" title="Add an 'array of values' field">+ array</button>
+	<button type="button" class="createSingle" title="Add a field that contains a single value.">+ single value</button>
+	<button type="button" class="createArray" title="Add a field that contains an array of multiple values.">+ array</button>
 </div>
 
 <ul class="niceList fieldList"></ul>
@@ -109,19 +109,63 @@
 	</dd>
 
 
-	<dt class="F_Int F_Float F_String F_Text F_Enum F_Point F_Path">
-		<label for="canBeNull">Can be null</label>
+	<dt class="F_Int F_Float F_String F_Text">
+		<label for="canBeNull" class="Array">Can contain nulls</label>
+		<label for="canBeNull" class="NotArray">Can be null</label>
+
 		<info class="Array">
-			If enabled, it will be possible to have no value at all (ie. "null") for elements in this array.
+			If enabled, it will be possible to have "null" values inside this array.
 			If disabled, the array values will use the "default" if unspecified.
 		</info>
+
 		<info class="NotArray">
 			If enabled, it will be possible to have no value at all for this field (ie. "null").
 			If disabled, the value will be the "default" one if nothing is entered.
 		</info>
 	</dt>
 	<dd>
-		<input type="checkbox" name="canBeNull" id="canBeNull"/>
+		<input type="checkbox" name="canBeNull"/>
+	</dd>
+
+
+	<dt class="F_Enum F_Path F_Point F_EntityRef">
+		<label for="canBeNull" class="Array">Can contain nulls</label>
+		<label for="canBeNull" class="NotArray">Is optional</label>
+
+		<info class="Array">
+			If enabled, it will be possible to have "null" values inside this array.
+			If disabled, the array values will use the "default" if unspecified.
+		</info>
+
+		<info class="NotArray">
+			If enabled, it will be possible to have no value at all for this field (ie. "null").
+			If disabled, the value will become mandatory and an error message will show up if the value is unspecified.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="canBeNull"/>
+	</dd>
+
+
+	<dt class="F_EntityRef">
+		<label>Reference options</label>
+	</dt>
+	<dd>
+		<input type="checkbox" name="symmetricalRef" id="symmetricalRef" title="If enabled and you pick a target for this value, a symmetrical reference will be set on the target.\nThis only works if the target Entity is of the same type as this one."/>
+		<label for="symmetricalRef">symmetrical</label>
+
+		<input type="checkbox" name="allowOutOfLevelRef" id="allowOutOfLevelRef" title="If enabled, it will be possible to pick an Entity from a different level."/>
+		<label for="allowOutOfLevelRef">in any level</label>
+	</dd>
+
+
+	<dt class="F_EntityRef">
+		<label>Allowed references</label>
+		<info>Define which kind of entity is allowed to be picked for this value.</info>
+	</dt>
+	<dd>
+		<select name="allowedRefs" id="allowedRefs" class="full"></select>
+		<div class="allowedRefTags"></div>
 	</dd>
 
 
@@ -166,7 +210,9 @@
 	<dt>
 		<label for="editorAlwaysShow">Always show</label>
 		<info>
-			If not checked, the value will only be displayed if it is not using default value.
+			If checked, the value will always be displayed in editor view, even if it is using default value.
+			If not checked, the value will only show up if it is not the default value.
+			Only applies if any display mode was selected above.
 		</info>
 	</dt>
 	<dd>
@@ -184,13 +230,13 @@
 
 
 	<dt class="F_Color F_Enum">
-		<label for="bDef">Override ::parent:: color</label>
+		<label for="bDef">Override ::parentType:: color</label>
 		<info class="F_Color">
-			If enabled, this color will override the default ::parent:: color when displayed in the editor view.
+			If enabled, this color will override the default ::parentType:: color when displayed in the editor view.
 			For arrays, the first valid value of the array will be used.
 		</info>
 		<info class="F_Enum">
-			If enabled, the color of the Enum value (if any) will override the default ::parent:: color when displayed in the editor view.
+			If enabled, the color of the Enum value (if any) will override the default ::parentType:: color when displayed in the editor view.
 			For arrays, the first valid value of the array will be used.
 		</info>
 	</dt>

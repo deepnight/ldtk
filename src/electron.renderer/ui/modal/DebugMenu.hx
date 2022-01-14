@@ -1,6 +1,8 @@
 package ui.modal;
 
 class DebugMenu extends ui.modal.ContextMenu {
+	static var iidsProcess : Null<dn.Process>;
+
 	public function new() {
 		super();
 
@@ -59,6 +61,42 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
+			label: L.untranslated("IIDs"),
+			show: ()->Editor.exists(),
+			cb: ()->{
+				if( iidsProcess!=null ) {
+					iidsProcess.destroy();
+					iidsProcess = null;
+				}
+				else {
+					iidsProcess = editor.createChildProcess(
+						(p)->{
+							App.ME.clearDebug();
+							App.ME.debug('ALL IIDS');
+							for(ei in @:privateAccess project.entityIidsCache)
+								App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
+
+							App.ME.debug("");
+							App.ME.debug('REVERSE IID REFS');
+							for(r in @:privateAccess project.reverseIidRefsCache.keyValueIterator()) {
+								var to = project.getEntityInstanceByIid(r.key);
+								for(fromIid in r.value.keys()) {
+									var from = project.getEntityInstanceByIid(fromIid);
+									App.ME.debug(from+" => "+to, 0x62ff99);
+									if( from==null )
+										App.ME.debug("  Unknown FROM IID:"+fromIid, 0xff0000);
+								}
+								if( to==null )
+									App.ME.debug("  Unknown TO IID:"+r.key, 0xff0000);
+							}
+						},
+						(_)->App.ME.clearDebug()
+					);
+				}
+			}
+		});
+
+		add({
 			label: L.untranslated("Update sample maps"),
 			cb: ()->{
 				var path = JsTools.getSamplesDir();
@@ -84,9 +122,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 									for(l in p.levels)
 										l.invalidateJsonCache();
 
-									// IntGrid CSV change
-									p.setFlag(DiscardPreCsvIntGrid, true);
-
 									// Tilesets
 									log.general(" -> Updating tileset data...");
 									for(td in p.defs.tilesets) {
@@ -105,7 +140,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 									// Write sample map
 									log.general(" -> Saving "+fp.fileName+"...");
-									var s = new ui.ProjectSaving(App.ME, p);
+									var s = new ui.ProjectSaver(App.ME, p);
 								},
 								(err)->new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) )
 							);
@@ -154,7 +189,29 @@ class DebugMenu extends ui.modal.ContextMenu {
 		}
 
 		add({
-			label: L.untranslated("Crash"),
+			label: L.untranslated("Test UUID function"),
+			cb: ()->{
+				var uniques = 0;
+				var total = 0;
+				var checkMap = new Map();
+				var duplicates = [];
+				App.ME.createChildProcess( (p)->{
+					App.ME.debug('UUIDs: $uniques/$total (${M.pretty(100*uniques/total,3)}%, dups=${duplicates.length}) \n${duplicates.join("\n")}', true);
+					for(i in 0...10000) {
+						var u = project.generateUniqueId_UUID();
+						if( checkMap.exists(u) )
+							duplicates.push(u);
+						else
+							uniques++;
+						checkMap.set(u,true);
+						total++;
+					}
+				});
+			}
+		});
+
+		add({
+			label: L.untranslated("Crash app!"),
 			className: "warning",
 			cb: ()->{
 				App.LOG.warning("Emulating crash...");

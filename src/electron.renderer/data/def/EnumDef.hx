@@ -128,7 +128,7 @@ class EnumDef {
 		if( to=="" || to==null )
 			return false;
 
-		to = project.makeUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
+		to = project.fixUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
 
 		for(i in 0...values.length)
 			if( values[i].id==from ) {

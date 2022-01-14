@@ -27,10 +27,10 @@ class EntityPalette extends ui.ToolPalette {
 
 			var count = 0;
 			for(ed in Editor.ME.project.defs.entities) {
-				if( ed.tags.hasTagFoundIn(ld.excludedTags) || t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
+				if( ed.tags.hasAnyTagFoundIn(ld.excludedTags) || t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
 					continue;
 
-				if( !ld.requiredTags.isEmpty() && !ed.tags.hasTagFoundIn(ld.requiredTags) )
+				if( !ld.requiredTags.isEmpty() && !ed.tags.hasAnyTagFoundIn(ld.requiredTags) )
 					continue;
 
 				var e = new J("<li/>");

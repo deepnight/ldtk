@@ -113,7 +113,7 @@ class RuleEditor extends ui.modal.Dialog {
 			jVal.appendTo(jValues);
 
 			jVal.css("background-color", C.intToHex(v.color));
-			jVal.text( v.identifier!=null ? v.identifier : '#$idx' );
+			jVal.text( layerDef.getIntGridValueDisplayName(idx+1) );
 
 			if( idx==curValIdx )
 				jVal.addClass("active");
@@ -131,7 +131,7 @@ class RuleEditor extends ui.modal.Dialog {
 		var jVal = new J('<li/>');
 		jVal.appendTo(jValues);
 		jVal.addClass("any");
-		jVal.text("Anything");
+		jVal.text("Anything/Nothing");
 		if( curValIdx==Const.AUTO_LAYER_ANYTHING )
 			jVal.addClass("active");
 		jVal.click( function(ev) {

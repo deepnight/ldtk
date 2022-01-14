@@ -474,6 +474,7 @@ class GenericLevelElementGroup {
 					for(fi in ei.getFieldInstancesOfType(F_Point)) {
 						switch fi.def.editorDisplayMode {
 							case PointStar, PointPath, PointPathLoop:
+							case RefLink: continue;
 							case Points: continue;
 							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, RadiusPx, RadiusGrid: continue;
 						}
@@ -663,8 +664,7 @@ class GenericLevelElementGroup {
 					changedLayers.set(li,li);
 
 					// Out of bounds
-					if( ei.x<li.pxParallaxX || ei.x>li.pxParallaxX+li.cWid*li.def.scaledGridSize
-					|| ei.y<li.pxParallaxY || ei.y>li.pxParallaxY+li.cHei*li.def.scaledGridSize ) {
+					if( ei.isOutOfLayerBounds() ) {
 						outOfBoundsRemovals.push(ei.def.identifier);
 						li.removeEntityInstance(ei);
 						elements[i] = null;

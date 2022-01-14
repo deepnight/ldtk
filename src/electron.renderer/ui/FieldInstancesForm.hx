@@ -320,22 +320,22 @@ class FieldInstancesForm {
 
 				// Null value
 				if( fi.def.canBeNull || fi.getEnumValue(arrayIdx)==null ) {
-					var opt = new J('<option/>');
-					opt.appendTo(jSelect);
-					opt.attr("value","");
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value","");
 					if( fi.def.canBeNull )
-						opt.text("-- null --");
+						jOpt.text("-- null --");
 					else {
 						// SELECT shouldn't be null
 						markError(jSelect);
-						opt.text("[ Value required ]");
+						jOpt.text("[ Value required ]");
 						jSelect.click( function(ev) {
 							jSelect.removeAttr("error").removeClass("required");
 							jSelect.blur( function(ev) renderForm() );
 						});
 					}
 					if( fi.getEnumValue(arrayIdx)==null )
-						opt.attr("selected","selected");
+						jOpt.attr("selected","selected");
 				}
 
 				for(v in ed.values) {
@@ -435,7 +435,7 @@ class FieldInstancesForm {
 
 				// Clear
 				if( !fi.isUsingDefault(arrayIdx) ) {
-					var jClear = new J('<button class="red" title="Reset"> <span class="icon delete"/> </button>');
+					var jClear = new J('<button class="red"> <span class="icon clear"/> </button>');
 					jClear.appendTo(jTarget);
 					jClear.click( ev->{
 						fi.parseValue(arrayIdx,null);
@@ -448,12 +448,112 @@ class FieldInstancesForm {
 					input.addClass("fileNotFound");
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
+
+			case F_EntityRef:
+				function _pickRef() {
+					var sourceEi = getEntityInstance();
+					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
+					vp.onPickValue = (targetEi)->{
+						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
+						project.unregisterReverseIidRef(sourceEi, oldTargetEi);
+						fi.parseValue(arrayIdx, targetEi.iid);
+						project.registerReverseIidRef(sourceEi.iid, targetEi.iid);
+						fi.setSymmetricalRef(arrayIdx, sourceEi);
+						if( oldTargetEi!=null )
+							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						targetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						editor.ge.emit( EntityInstanceChanged(sourceEi) );
+						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
+					}
+				}
+
+				if( fi.valueIsNull(arrayIdx) ) {
+					var jPick = new J('<button>Pick reference</button>');
+					jPick.appendTo(jTarget);
+					jPick.click( _->_pickRef() );
+				}
+				else {
+					// Text input
+					var jInput = new J('<input class="entityRef" type="text"/>');
+					jInput.appendTo(jTarget);
+					jInput.attr("id",domId);
+					jInput.attr("placeholder", "(null)");
+					jInput.prop("readonly",true);
+					jInput.click( (_)->{
+						// Follow ref
+						if( fi.valueIsNull(arrayIdx) )
+							return;
+
+						var tei = fi.getEntityRefInstance(arrayIdx);
+						if( tei==null ) {
+							N.error("Invalid reference");
+							return;
+						}
+
+						if( tei._li.level!=editor.curLevel )
+							editor.selectLevel(tei._li.level);
+
+						if( tei._li!=editor.curLayerInstance )
+							editor.selectLayerInstance(tei._li);
+
+						editor.camera.scrollTo(tei.worldX, tei.worldY);
+						editor.levelRender.bleepEntity(tei._li, tei);
+					});
+
+					jInput.mouseover( _->{
+						// Mouse over a ref
+						if( fi.valueIsNull(arrayIdx) )
+							return;
+
+						var tei = fi.getEntityRefInstance(arrayIdx);
+						if( tei==null )
+							return;
+
+						if( tei._li.level==editor.curLevel )
+							editor.levelRender.bleepEntity(tei._li, tei);
+					});
+
+					if( fi.hasAnyErrorInValues(getEntityInstance()) )
+						markError(jInput);
+
+					if( !fi.isUsingDefault(arrayIdx) ) {
+						jInput.val( fi.getEntityRefForDisplay(arrayIdx, editor.curLevel) );
+						jInput.attr("title", fi.getEntityRefIID(arrayIdx));
+					}
+
+					// Pick ref
+					var jPick = new J('<button class="small pickRef"> <span class="icon edit"/> </button>');
+					jPick.appendTo(jTarget);
+					jPick.click( _->_pickRef() );
+				}
+
+				// Clear ref
+				if( !fi.valueIsNull(arrayIdx) && fi.def.canBeNull ) {
+					var jRemove = new J('<button class="small red removeRef"> <span class="icon clear"/> </button>');
+					jRemove.appendTo(jTarget);
+					jRemove.click(_->{
+						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
+						project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);
+						fi.parseValue(arrayIdx, null);
+						if( oldTargetEi!=null )
+							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						ValuePicker.cancelCurrent();
+						onFieldChange(fi);
+					});
+				}
 		}
 
 		// Suffix
 		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
 			jTarget.append('<span>${fi.def.editorTextSuffix}</span>');
+	}
 
+
+	function getEntityInstance() : Null<data.inst.EntityInstance> {
+		return switch relatedInstance {
+			case Entity(ei): ei;
+			case Level(l): null;
+		}
 	}
 
 	function getInstanceName() {
@@ -502,6 +602,7 @@ class FieldInstancesForm {
 			switch fi.def.editorDisplayMode {
 				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 				case Points, PointStar:
+				case RefLink:
 				case PointPath, PointPathLoop:
 					var pt = fi.getPointGrid( editIdx-1 );
 					if( pt!=null )
@@ -521,6 +622,7 @@ class FieldInstancesForm {
 				switch fi.def.editorDisplayMode {
 					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 					case Points, PointStar:
+					case RefLink:
 					case PointPath, PointPathLoop:
 						var pt = fi.getPointGrid( editIdx-1 );
 						if( pt!=null )
@@ -544,6 +646,33 @@ class FieldInstancesForm {
 		Editor.ME.setSpecialTool(t);
 	}
 
+
+
+	function activateLastArrayEntry(fd:FieldDef) {
+		var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
+		var jEntry = jArray.find("ul.values >li:last");
+
+		switch fd.type {
+			case F_Int, F_Float, F_String, F_Text, F_Path:
+				jEntry.find("a.usingDefault").click();
+
+			case F_EntityRef:
+				jEntry.find("button:first").click();
+
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+				// see: https://stackoverflow.com/a/10453874
+				// var select = jArray.find("select:last").get(0);
+				// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
+				// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
+				// var ok = select.dispatchEvent(ev);
+
+			case F_Point:
+				// Not done here
+		}
+
+	}
 
 
 	function onFieldChange(fi:FieldInstance, keepCurrentSpecialTool=false) {
@@ -579,10 +708,8 @@ class FieldInstancesForm {
 			jDt.appendTo(jWrapper);
 
 			var jDd = new J("<dd/>");
-			var li = jDd;
-			// var li = new J("<li/>");
-			li.attr("defUid", fd.uid);
-			li.appendTo(jWrapper);
+			jDd.attr("defUid", fd.uid);
+			jDd.appendTo(jWrapper);
 
 			// Identifier
 			if( !fd.isArray )
@@ -607,12 +734,12 @@ class FieldInstancesForm {
 
 			if( !fd.isArray ) {
 				// Single value
-				createFieldInput(domId, fi, 0, li);
+				createFieldInput(domId, fi, 0, jDd);
 			}
 			else {
 				// Array
 				var jArray = new J('<div class="array"/>');
-				jArray.appendTo(li);
+				jArray.appendTo(jDd);
 				if( fd.arrayMinLength!=null && fi.getArrayLength()<fd.arrayMinLength
 					|| fd.arrayMaxLength!=null && fi.getArrayLength()>fd.arrayMaxLength ) {
 					var bounds : String =
@@ -646,12 +773,18 @@ class FieldInstancesForm {
 
 						createFieldInput(domId, fi, i, li);
 
-						// "Remove" button
-						var jRemove = new J('<button class="remove dark">x</button>');
+						// Remove array entry
+						var jRemove = new J('<button class="remove dark"> <span class="icon delete"/> </button>');
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {
+							var oldTargetEi = fi.getEntityRefInstance(idx);
+							if( fi.def.type==F_EntityRef )
+								project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);
 							fi.removeArrayValue(idx);
+							if( oldTargetEi!=null )
+								oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
 						});
 					}
@@ -673,21 +806,9 @@ class FieldInstancesForm {
 						}
 						else {
 							fi.addArrayValue();
+							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
-						}
-						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
-						switch fi.def.type {
-							case F_Int, F_Float, F_String, F_Text, F_Path: jArray.find("a.usingDefault:last").click();
-							case F_Bool:
-							case F_Color:
-							case F_Enum(enumDefUid):
-								// see: https://stackoverflow.com/a/10453874
-								// var select = jArray.find("select:last").get(0);
-								// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
-								// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
-								// var ok = select.dispatchEvent(ev);
-
-							case F_Point:
+							activateLastArrayEntry(fd);
 						}
 					});
 				}

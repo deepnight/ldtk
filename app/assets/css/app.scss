@@ -19,6 +19,11 @@ $helpDarker: #273f2f;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
 
+// Cursors
+$cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
+$cur_expand: cell;
+$cur_collapse: url("../cursors/collapse.svg") 16 16, zoom-out;
+
 // Shortcuts
 @mixin resetMargin() {
 	margin: 0;
@@ -280,7 +285,7 @@ button {
 
 	&.guide {
 		padding: 8px;
-		font-size: 8.5pt;
+		font-size: 10pt;
 		text-transform: none;
 		background-color: $helpDark;
 		color: $help;
@@ -600,6 +605,36 @@ div.info {
 
 	&::before {
 		content: "i";
+	}
+}
+
+warning {
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	box-sizing: border-box;
+	font-size: 15pt;
+	width: 28px;
+	height: 28px;
+	margin-left: 4px;
+
+	font-weight: bold;
+	text-align: center;
+	color: $orange;
+	border: 3px solid $red;
+	border-radius: 16px;
+	cursor: help;
+	box-shadow: 0px 0px 10px $red, 0px 0px 10px $red inset;
+	background-color: $darkRed;
+
+	&:hover {
+		color: $orange;
+		border-color: $orange;
+		background-color: $red;
+	}
+
+	&::before {
+		content: "!";
 	}
 }
 
@@ -1064,6 +1099,7 @@ ul.log {
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
 .icon.bug				{ background-image: url("../icons/bug.svg"); }
 .icon.checker			{ background-image: url("../icons/checker.svg"); }
+.icon.clear				{ background-image: url("../icons/clear.svg"); }
 .icon.close				{ background-image: url("../icons/close.png"); }
 .icon.collapsed			{ background-image: url("../icons/collapsed.svg"); }
 .icon.community			{ background-image: url("../icons/community.svg"); }
@@ -1105,6 +1141,8 @@ ul.log {
 .icon.open				{ background-image: url("../icons/open.svg"); }
 .icon.partial			{ background-image: url("../icons/partial.png"); }
 .icon.paste				{ background-image: url("../icons/paste.svg"); }
+.icon.pick				{ background-image: url("../icons/pick.svg"); }
+.icon.prohibited		{ background-image: url("../icons/prohibited.svg"); }
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
@@ -1145,13 +1183,13 @@ ul.log {
 		}
 
 		&.expanded {
-			cursor: pointer;
+			cursor: $cur_collapse;
 			color: white;
 			background-color: $bgLight;
 			background-image: url("../icons/expanded.svg");
 		}
 		&.collapsed {
-			cursor: cell;
+			cursor: $cur_expand;
 			background-color: $bgMed;
 			background-image: url("../icons/collapsed.svg");
 		}
@@ -1178,25 +1216,29 @@ ul.log {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 64px;
-	height: 64px;
+	width: 85px;
+	height: 85px;
 	overflow: hidden;
 	box-sizing: border-box;
 
 	text-transform: none;
 	font-family: Roboto;
 
-	border: 1px dashed rgba(255, 255, 255, 0.8);
+	border: 1px dashed rgba(255, 255, 255, 1);
+	border-radius: 4px;
 
 	.typeName {
+		margin-bottom: 3px;
 		font-style: normal;
-		font-size: 9pt;
-		opacity: 0.7;
+		font-weight: bold;
+		font-size: 13pt;
+		opacity: 1;
+		text-shadow: none;
 	}
 
 	.typeIcon {
 		font-size: 21pt;
-		opacity: 0.8;
+		opacity: 0.5;
 		text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
 	}
 }
@@ -1367,8 +1409,11 @@ ul.form {
 			flex: 0 1 auto;
 		}
 		>select {
-			width: 0;
+			&:not(.full) {
+				width: 0;
+			}
 			flex: 1 1 0;
+
 		}
 
 		button {
@@ -1472,6 +1517,9 @@ ul.form {
 		info,
 		div.info {
 			flex: 0 0 32px;
+		}
+		warning {
+			flex: 0 0 28px;
 		}
 
 		div.help {
@@ -2001,6 +2049,58 @@ textarea {
 }
 
 
+.valuePicker {
+	position: absolute;
+	z-index: 97;
+	display: grid;
+	grid-template-columns: 64px auto 100px;
+	gap: 16px;
+	align-items: center;
+
+	padding: 16px;
+	border-radius: 4px;
+
+
+	left: calc( 50vw - 200px );
+	top: 85vh;
+	width: 400px;
+
+	background-color: $bgDark;
+	box-shadow: 0px 0px 32px black, 0px 0px 16px black;
+	border: 1px dashed $orange;
+
+	>.icon {
+		width: 48px;
+		height: 48px;
+	}
+
+	&.error {
+		background-color: $red;
+		box-shadow: 0px 0px 32px $red;
+		.instructions {
+			display: none;
+		}
+
+		.error {
+			color: white;
+		}
+	}
+
+	.desc {
+		display: grid;
+		gap: 8px;
+		grid-template-rows: auto auto;
+
+		.instructions {
+			color: $orange;
+			font-weight: bold;
+			text-align: center;
+		}
+	}
+}
+
+
+
 .window {
 	position: absolute;
 	left: 0px;
@@ -2305,9 +2405,21 @@ textarea {
 			margin-bottom: 16px;
 		}
 
-		strong {
+		.title {
+			margin-top: 32px;
+			margin-bottom: 32px;
 			color: $orange;
 			font-size: 1.6em;
+			font-weight: bold;
+			text-align: center;
+
+			p {
+				margin: 0;
+			}
+		}
+
+		.buttons {
+			margin-top: 32px;
 		}
 	}
 }
@@ -2821,6 +2933,7 @@ textarea {
 
 			button {
 				margin: 0;
+				padding: 6px;
 				&:hover {
 					color: black;
 					background-color: $orange !important;
@@ -2995,7 +3108,7 @@ textarea {
 
 .window.dialog.fieldTypes {
 	.content {
-		grid-template-columns: repeat(3, min-content);
+		grid-template-columns: repeat(5, min-content);
 	}
 }
 
@@ -3216,6 +3329,11 @@ canvas#webgl {
 
 	&.active {
 		height: 100vh !important;
+	}
+
+	@at-root body.hasValuePicker canvas#webgl {
+		outline: 5px dashed $orange !important;
+		outline-offset: -8px;
 	}
 }
 
@@ -4665,6 +4783,7 @@ canvas#webgl {
 		box-sizing: border-box;
 	}
 
+
 	.resizeBar {
 		position: absolute;
 		top: 0;
@@ -4722,10 +4841,21 @@ canvas#webgl {
 
 		dt {
 			padding-top: 0;
+			min-width: 80px;
+			align-items: center;
 		}
 
 		dd {
 			color: $bgLighter;
+			&.iid {
+				button.copy {
+					flex: 0 1 0px;
+				}
+				input.iid {
+					color: $almostWhite;
+					font-size: 8pt;
+				}
+			}
 		}
 	}
 }
@@ -4766,24 +4896,27 @@ canvas#webgl {
 				padding: 4px;
 				overflow: hidden;
 
-				color: $help;
+				color: white;
+				font-weight: bold;
 				font-size: 8pt;
 				text-align: center;
 
 				border: 1px solid white; // color in code
 				border-radius: 3px;
+				box-shadow: 0px 0px 4px transparentize($color: black, $amount: 0.5);
 
 				&.array {
-					border: 2px solid white; // color in code
+					border-left: 2px solid white !important;
+					border-right: 2px solid white !important;
 					border-top: none;
 					border-bottom: none;
 				}
 			}
-			&.active .type {
-				color: black !important;
-				border-color: black !important;
-				background: transparent !important;
-			}
+			// &.active .type {
+				// color: black !important;
+				// border-color: black !important;
+				// background: transparent !important;
+			// }
 		}
 		&:empty::before {
 			content: "No custom field";
@@ -4813,6 +4946,10 @@ canvas#webgl {
 			align-self: stretch;
 		}
 
+		.allowedRefTags:not(:empty) {
+			margin-top: 4px;
+		}
+
 		*[class*="F_"],
 		*[class="NotArray"],
 		*[class="Array"] {
@@ -4833,6 +4970,7 @@ canvas#webgl {
 		&.type-F_Point .F_Point,
 		&.type-F_Text .F_Text,
 		&.type-F_String .F_String,
+		&.type-F_EntityRef .F_EntityRef,
 		&.type-F_Path .F_Path {
 			display: flex;
 			&:not(li) {
@@ -4858,7 +4996,7 @@ canvas#webgl {
 dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
-	grid-template-columns: 40% auto;
+	grid-template-columns: 120px auto;
 	>dt {
 		max-width: none;
 	}
@@ -4873,12 +5011,14 @@ dl.form.fieldInstanceEditor {
 		color: $red !important;
 		opacity: 1 !important;
 		background-color: $darkRed !important;
+		border-left: 4px solid $red;
 		label {
 			background: transparent !important;
+			padding: 5px;
+			color: $lightRed;
 		}
 	}
 	dd[error] {
-		border-left: 4px solid $red;
 		background-color: $darkRed;
 		opacity: 1 !important;
 	}
@@ -4937,6 +5077,28 @@ dl.form.fieldInstanceEditor {
 		opacity: 1;
 	}
 
+	.entityRef {
+		font-size: 8pt;
+		color: $orangeLight;
+		cursor: $cur_follow;
+		&:hover {
+			border-color: $orangeLight;
+		}
+	}
+	[error] .entityRef {
+		color: $lightRed;
+		font-style: italic;
+	}
+
+	button.pickRef,
+	button.removeRef {
+		flex: 0 1 0px;
+		padding: 4px;
+		.icon {
+			width: 16px;
+			height: 16px;
+		}
+	}
 
 	button.removePoint {
 		flex: 0.2 1 0px;
@@ -5120,8 +5282,15 @@ dl.form.fieldInstanceEditor {
 				.sortHandle {
 					flex: 0 1 0px;
 				}
+				button {
+					padding: 4px;
+					.icon {
+						width: 13px;
+						height: 13px;
+					}
+				}
 				button.remove {
-					flex: 0 1 24px;
+					flex: 0 1 16px;
 				}
 
 				select {
@@ -5877,7 +6046,7 @@ body.sorting ul.collapsedSortTarget {
 					border: 0;
 
 					header .name {
-						cursor: cell;
+						cursor: $cur_expand;
 					}
 					ul.ruleGroup {
 						display: none;
@@ -5927,7 +6096,7 @@ body.sorting ul.collapsedSortTarget {
 						overflow-x: hidden;
 						white-space: nowrap;
 
-						cursor: zoom-out;
+						cursor: $cur_collapse;
 
 						.text {
 							overflow: hidden;
@@ -6335,37 +6504,58 @@ $patternSize : 32px;
 		&.not {
 			outline: 2px solid $red;
 			outline-offset: -5px;
-
-			.cross {
-				width: $patternSize;
-				height: $patternSize;
-				position: absolute;
-				top: 0;
-				left: 0;
-				z-index: 1;
-
-				background-image: url("../icons/cross.png");
-				background-repeat: no-repeat;
-				background-size: 80%;
-				background-position: center center;
-				image-rendering: pixelated;
-				width: $patternSize;
-				height: $patternSize;
-			}
 		}
 		&.anything {
-			&::before {
-				content: "?";
+
+			&:not(.not) {
+				font-size: 16pt;
+				font-weight: bold;
+				outline: 1px solid white;
+				outline-offset: -3px;
+				&::before {
+					content: "?";
+				}
+			}
+			&.not {
+				color: $red;
+				font-size: 14pt;
+				outline: 2px solid $red;
+				outline-offset: -4px;
 			}
 		}
 
-		&.unknown {
-			background-color: $darkRed;
+		.cellIcon {
+			width: $patternSize;
+			height: $patternSize;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+
+			background-repeat: no-repeat;
+			background-position: center center;
+			image-rendering: pixelated;
+
+			&.cross {
+				background-image: url("../icons/cross.png");
+				background-size: 50%;
+			}
+
+			&.nothing {
+				background-image: url("../icons/prohibited.svg");
+				background-size: 70%;
+				filter: brightness(0.6) sepia(1) hue-rotate(-0.5rad) saturate(10);
+			}
+		}
+
+		&.error {
+			background-color: #ff00ff;
 			border-color: $red;
-			outline: 2px dashed $red;
+			outline: 2px solid $red;
 			outline-offset: -4px;
+			font-size: 10pt;
 			&::before {
-				content: "!";
+				content: "ERR";
 			}
 		}
 
@@ -6419,20 +6609,40 @@ $patternSize : 32px;
 		gap: $gutter;
 		grid-template-rows: repeat(4, min-content);
 		padding: 4px;
-		width: min-content;
 		min-width: 300px;
 		position: relative;
 
+		&.guided {
+			grid-template-columns: auto 400px;
+			outline: 1px solid $help;
+			outline-offset: 4px;
+			button.guide {
+				display: none;
+			}
+		}
 		&:not(.guided) {
 			.explain,
 			.help {
 				display: none;
 			}
 		}
-		&.guided {
-			button.guide {
-				display: none;
+
+		.help {
+			p+p {
+				margin-top: 8px;
 			}
+			&.intro {
+				grid-column: 1/3;
+			}
+			&:not(.intro) {
+				grid-column: 2/3;
+			}
+			&.big {
+				grid-row: 3/5;
+			}
+		}
+		>:not(.help) {
+			grid-column: 1/2;
 		}
 
 		.explain,
@@ -6459,15 +6669,23 @@ $patternSize : 32px;
 		.explain {
 			display: grid;
 			align-items: center;
+			max-width: calc(400px + 8px);
 			min-height: calc( 4em + 16px * 2 );
-			color: $help;
-			font-size: 8.5pt;
-			text-align: center;
+			font-size: 10pt;
+			text-align: left;
 			transition: background-color 0.3s;
 
 			&:not(:empty) {
+				color: $help;
 				transition: background-color 0.1s;
 				background-color: $helpDark;
+			}
+			&:empty {
+				color: $bgLighter;
+				font-style: italic;
+				&::before {
+					content: "Move your cursor over a cell in the pattern to get more explanations about its meaning.";
+				}
 			}
 
 			p {
@@ -6598,15 +6816,14 @@ $patternSize : 32px;
 				gap: 2px;
 				width: 100%;
 				margin-top: 8px;
+				margin-bottom: 10px;
 
 				li {
-					font-size: 9pt;
 					padding: 6px;
+					margin-left: 8px;
+					font-size: 9pt;
 					border-radius: 3px;
 					background-color: $bgDark;
-				}
-				li+li {
-					margin-left: 4px;
 				}
 			}
 		}

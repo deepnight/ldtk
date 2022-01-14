@@ -255,7 +255,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	// Create new rule
 	function onCreateRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
 		App.LOG.general("Added rule");
-		var r = new data.def.AutoLayerRuleDef( project.makeUniqueIdInt() );
+		var r = new data.def.AutoLayerRuleDef( project.generateUniqueId_int() );
 		rg.rules.insert(insertIdx, r);
 
 		if( rg.collapsed )
@@ -278,14 +278,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Add group
 		jContent.find("button.createGroup").click( function(ev) {
-			if( ld.isAutoLayer() && ld.autoTilesetDefUid==null ) {
+			if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 				N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
 				return;
 			}
 			App.LOG.general("Added rule group");
 
 			var insertIdx = 0;
-			var rg = ld.createRuleGroup(project.makeUniqueIdInt(), "New group", insertIdx);
+			var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
 			editor.ge.emit(LayerRuleGroupAdded);
 
 			var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
@@ -339,7 +339,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					jOpt.prop("disabled",true);
 					jOpt.append(' (INCOMPATIBLE SIZE)');
 				}
-				if( td.uid==ld.autoTilesetDefUid )
+				if( td.uid==ld.tilesetDefUid )
 					jOpt.append(' (DEFAULT)');
 			}
 			jSelect.val( curTd.uid );
@@ -450,8 +450,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jGroupHeader = jGroup.find("header");
 
 		// Collapsing
-		jGroupHeader.find("div.name")
-			.click( function(_) {
+		var jName = jGroupHeader.find("div.name");
+		jName.click( function(_) {
 				rg.collapsed = !rg.collapsed;
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
@@ -467,13 +467,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Show cells affected by this whole group
-		jGroupHeader.mouseenter( (ev)->{
+		jName.mouseenter( (ev)->{
+			if( !editor.levelRender.isAutoLayerRenderingEnabled() )
+				return;
 			editor.levelRender.clearTemp();
 			if( li.isRuleGroupActiveHere(rg) )
 				for(r in rg.rules)
 					showAffectedCells(r);
 		});
-		jGroupHeader.mouseleave( (_)->editor.levelRender.clearTemp() );
+		jName.mouseleave( (_)->editor.levelRender.clearTemp() );
 
 
 		jGroupHeader.find(".optional").hide();
@@ -548,13 +550,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L._Copy("Group"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
 				}
 			},
 			{
 				label: L._Cut("Group"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
 					deleteRuleGroup(rg);
 				}
 			},
@@ -669,13 +671,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jRule.attr("ruleIdx", ruleIdx);
 		jRule.addClass(r.active ? "active" : "inactive");
 
-		// Show affect level cells
-		jRule.mouseenter( (ev)->{
-			editor.levelRender.clearTemp();
-			showAffectedCells(r);
-		} );
-		jRule.mouseleave( (ev)->editor.levelRender.clearTemp() );
-
 		// Insert rule before
 		jRule.find(".insert.before").click( function(_) {
 			onCreateRule(rg, ruleIdx);
@@ -698,6 +693,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jPreview.click( function(ev) {
 			new ui.modal.dialog.RuleEditor(ld, r);
 		});
+
+		// Show affect level cells
+		jPreview.mouseenter( (ev)->{
+			if( !editor.levelRender.isAutoLayerRenderingEnabled() )
+				return;
+			editor.levelRender.clearTemp();
+			showAffectedCells(r);
+		} );
+		jPreview.mouseleave( (ev)->editor.levelRender.clearTemp() );
 
 		// Random chance
 		var old = r.chance;
@@ -848,13 +852,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L._Copy("Rule"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRule, r.toJson());
+					App.ME.clipboard.copyData(CRule, r.toJson());
 				},
 			},
 			{
 				label: L._Cut("Rule"),
 				cb: ()->{
-					App.ME.clipboard.copy(CRule, r.toJson());
+					App.ME.clipboard.copyData(CRule, r.toJson());
 					deleteRule(rg,r);
 				},
 			},
@@ -914,6 +918,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	public function onEditorMouseMove(m:Coords) {
 		jContent.find("li.highlight").removeClass("highlight");
+
+		if( !editor.levelRender.isAutoLayerRenderingEnabled() )
+			return;
 
 		if( m.cx<0 || m.cx>=li.cWid || m.cy<0 || m.cy>=li.cHei )
 			return;
