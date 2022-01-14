@@ -21,6 +21,14 @@ use std::collections::HashMap;
 /// users).
 #[derive(Serialize, Deserialize)]
 pub struct LdtkJson {
+    /// LDtk application build identifier.<br/>  This is only used to identify the LDtk version
+    /// that generated this particular project file, which can be useful for specific bug fixing.
+    /// Note that the build identifier is just the date of the release, so it's not unique to
+    /// each user (one single global ID per LDtk public release), and as a result, completely
+    /// anonymous.
+    #[serde(rename = "appBuildId")]
+    app_build_id: f64,
+
     /// Number of backup files to keep, if the `backupOnSave` is TRUE
     #[serde(rename = "backupLimit")]
     backup_limit: i64,
@@ -77,7 +85,7 @@ pub struct LdtkJson {
     external_levels: bool,
 
     /// An array containing various advanced flags (ie. options or other states). Possible
-    /// values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
+    /// values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`
     #[serde(rename = "flags")]
     flags: Vec<Flag>,
 
@@ -95,8 +103,8 @@ pub struct LdtkJson {
     level_name_pattern: String,
 
     /// All levels. The order of this array is only relevant in `LinearHorizontal` and
-    /// `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to
-    /// the `worldX`,`worldY` coordinates of each Level.
+    /// `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should
+    /// refer to the `worldX`,`worldY` coordinates of each Level.
     #[serde(rename = "levels")]
     levels: Vec<Level>,
 
@@ -125,6 +133,20 @@ pub struct LdtkJson {
     /// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
     #[serde(rename = "worldLayout")]
     world_layout: WorldLayout,
+
+    /// This array is not used yet in current LDtk version (so, for now, it's always
+    /// empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a
+    /// single project, each containing multiple Levels.<br/><br/>What will change when "Multiple
+    /// worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project
+    /// file can only contain a single world with multiple levels in it. In this case, levels and
+    /// world layout related settings are stored in the root of the JSON.<br/> - after the
+    /// "Multiple worlds" update, there will be a `worlds` array in root, each world containing
+    /// levels and layout settings. Basically, it's pretty much only about moving the `levels`
+    /// array to the `worlds` array, along with world layout related values (eg. `worldGridWidth`
+    /// etc).<br/><br/>If you want to start supporting this future update easily, please refer to
+    /// this documentation: https://github.com/deepnight/ldtk/issues/231
+    #[serde(rename = "worlds")]
+    worlds: Vec<World>,
 }
 
 /// A structure containing all the definitions of this project
@@ -183,7 +205,7 @@ pub struct EntityDefinition {
     #[serde(rename = "hollow")]
     hollow: bool,
 
-    /// Unique String identifier
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
 
@@ -261,8 +283,9 @@ pub struct EntityDefinition {
 /// ignore it.
 #[derive(Serialize, Deserialize)]
 pub struct FieldDefinition {
-    /// Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array,
-    /// this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
+    /// Human readable value type. Possible values: `Int, Float, String, Bool, Color,
+    /// ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this
+    /// field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
     #[serde(rename = "__type")]
     field_definition_type: String,
 
@@ -270,6 +293,16 @@ pub struct FieldDefinition {
     /// `.ext`
     #[serde(rename = "acceptFileTypes")]
     accept_file_types: Option<Vec<String>>,
+
+    /// Possible values: `Any`, `OnlySame`, `OnlyTags`
+    #[serde(rename = "allowedRefs")]
+    allowed_refs: AllowedRefs,
+
+    #[serde(rename = "allowedRefTags")]
+    allowed_ref_tags: Vec<String>,
+
+    #[serde(rename = "allowOutOfLevelRef")]
+    allow_out_of_level_ref: bool,
 
     /// Array max length
     #[serde(rename = "arrayMaxLength")]
@@ -295,7 +328,8 @@ pub struct FieldDefinition {
     editor_cut_long_values: bool,
 
     /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-    /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
+    /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+    /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
     #[serde(rename = "editorDisplayMode")]
     editor_display_mode: EditorDisplayMode,
 
@@ -303,7 +337,13 @@ pub struct FieldDefinition {
     #[serde(rename = "editorDisplayPos")]
     editor_display_pos: EditorDisplayPos,
 
-    /// Unique String identifier
+    #[serde(rename = "editorTextPrefix")]
+    editor_text_prefix: Option<String>,
+
+    #[serde(rename = "editorTextSuffix")]
+    editor_text_suffix: Option<String>,
+
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
 
@@ -324,18 +364,28 @@ pub struct FieldDefinition {
     #[serde(rename = "regex")]
     regex: Option<String>,
 
+    #[serde(rename = "symmetricalRef")]
+    symmetrical_ref: bool,
+
     /// Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
     /// `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
     #[serde(rename = "textLanguageMode")]
     text_language_mode: Option<TextLanguageMode>,
 
-    /// Internal type enum
+    /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
+    /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
     #[serde(rename = "type")]
-    purple_type: Option<serde_json::Value>,
+    purple_type: LevelFieldType,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
     uid: i64,
+
+    /// If TRUE, the color associated with this field will override the Entity or Level default
+    /// color in the editor UI. For Enum fields, this would be the color associated to their
+    /// values.
+    #[serde(rename = "useForSmartColor")]
+    use_for_smart_color: bool,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -351,7 +401,7 @@ pub struct EnumDefinition {
     #[serde(rename = "iconTilesetUid")]
     icon_tileset_uid: Option<i64>,
 
-    /// Unique String identifier
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
 
@@ -397,9 +447,8 @@ pub struct LayerDefinition {
     #[serde(rename = "autoSourceLayerDefUid")]
     auto_source_layer_def_uid: Option<i64>,
 
-    /// Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer
-    /// *instances* might use a different tileset. So most of the time, you should probably use
-    /// the `__tilesetDefUid` value from layer instances.
+    /// **WARNING**: this deprecated value will be *removed* completely on version 0.12.0+
+    /// Replaced by: `tilesetDefUid`
     #[serde(rename = "autoTilesetDefUid")]
     auto_tileset_def_uid: Option<i64>,
 
@@ -411,18 +460,49 @@ pub struct LayerDefinition {
     #[serde(rename = "excludedTags")]
     excluded_tags: Vec<String>,
 
+    /// When TRUE, the layer will be faded out if it isn't the active one.
+    #[serde(rename = "fadeInactive")]
+    fade_inactive: bool,
+
     /// Width and height of the grid in pixels
     #[serde(rename = "gridSize")]
     grid_size: i64,
 
-    /// Unique String identifier
+    /// Height of the optional "guide" grid in pixels
+    #[serde(rename = "guideGridHei")]
+    guide_grid_hei: i64,
+
+    /// Width of the optional "guide" grid in pixels
+    #[serde(rename = "guideGridWid")]
+    guide_grid_wid: i64,
+
+    /// Hide the layer from the list on the side of the editor view.
+    #[serde(rename = "hideInList")]
+    hide_in_list: bool,
+
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
 
-    /// An array that defines extra optional info for each IntGrid value. The array is sorted
-    /// using value (ascending).
+    /// An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the
+    /// array order is not related to actual IntGrid values! As user can re-order IntGrid values
+    /// freely, you may value "2" before value "1" in this array.
     #[serde(rename = "intGridValues")]
     int_grid_values: Vec<IntGridValueDefinition>,
+
+    /// Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
+    /// speed of this layer, creating a fake 3D (parallax) effect.
+    #[serde(rename = "parallaxFactorX")]
+    parallax_factor_x: f64,
+
+    /// Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed
+    /// of this layer, creating a fake 3D (parallax) effect.
+    #[serde(rename = "parallaxFactorY")]
+    parallax_factor_y: f64,
+
+    /// If true (default), a layer with a parallax factor will also be scaled up/down accordingly.
+    #[serde(rename = "parallaxScaling")]
+    parallax_scaling: bool,
 
     /// X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`
     /// optional offset)
@@ -448,16 +528,17 @@ pub struct LayerDefinition {
     #[serde(rename = "tilePivotY")]
     tile_pivot_y: f64,
 
-    /// Reference to the Tileset UID being used by this Tile layer. WARNING: some layer
-    /// *instances* might use a different tileset. So most of the time, you should probably use
-    /// the `__tilesetDefUid` value from layer instances.
+    /// Reference to the default Tileset UID being used by this layer definition.<br/>
+    /// **WARNING**: some layer *instances* might use a different tileset. So most of the time,
+    /// you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:
+    /// since version 0.10.0, the old `autoTilesetDefUid` was removed and merged into this value.
     #[serde(rename = "tilesetDefUid")]
     tileset_def_uid: Option<i64>,
 
     /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
     /// `AutoLayer`
     #[serde(rename = "type")]
-    purple_type: Type,
+    purple_type: LayerType,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
@@ -469,8 +550,9 @@ pub struct AutoLayerRuleGroup {
     #[serde(rename = "active")]
     active: bool,
 
+    /// *This field was removed in 0.10.0 and should no longer be used.*
     #[serde(rename = "collapsed")]
-    collapsed: bool,
+    collapsed: Option<bool>,
 
     #[serde(rename = "isOptional")]
     is_optional: bool,
@@ -575,7 +657,7 @@ pub struct IntGridValueDefinition {
     #[serde(rename = "color")]
     color: String,
 
-    /// Unique String identifier
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: Option<String>,
 
@@ -604,14 +686,14 @@ pub struct TilesetDefinition {
 
     /// An array of custom tile metadata
     #[serde(rename = "customData")]
-    custom_data: Vec<HashMap<String, Option<serde_json::Value>>>,
+    custom_data: Vec<LdtkTileCustomMetadata>,
 
     /// Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
     /// element per Enum value, which contains an array of all Tile IDs that are tagged with it.
     #[serde(rename = "enumTags")]
-    enum_tags: Vec<HashMap<String, Option<serde_json::Value>>>,
+    enum_tags: Vec<LdtkEnumTagValue>,
 
-    /// Unique String identifier
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
 
@@ -651,6 +733,26 @@ pub struct TilesetDefinition {
     uid: i64,
 }
 
+/// In a tileset definition, user defined meta-data of a tile.
+#[derive(Serialize, Deserialize)]
+pub struct LdtkTileCustomMetadata {
+    #[serde(rename = "data")]
+    data: String,
+
+    #[serde(rename = "tileId")]
+    tile_id: i64,
+}
+
+/// In a tileset definition, enum based tag infos
+#[derive(Serialize, Deserialize)]
+pub struct LdtkEnumTagValue {
+    #[serde(rename = "enumValueId")]
+    enum_value_id: String,
+
+    #[serde(rename = "tileIds")]
+    tile_ids: Vec<i64>,
+}
+
 /// This section contains all the level data. It can be found in 2 distinct forms, depending
 /// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
 /// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
@@ -670,11 +772,16 @@ pub struct Level {
     #[serde(rename = "__bgPos")]
     bg_pos: Option<LevelBackgroundPosition>,
 
-    /// An array listing all other levels touching this one on the world map. In "linear" world
-    /// layouts, this array is populated with previous/next levels in array, and `dir` depends on
-    /// the linear horizontal/vertical layout.
+    /// An array listing all other levels touching this one on the world map.<br/>  Only relevant
+    /// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
+    /// Horizontal and Vertical layouts, this array is always empty.
     #[serde(rename = "__neighbours")]
     neighbours: Vec<NeighbourLevel>,
+
+    /// The "guessed" color for this level in the editor, decided using either the background
+    /// color or an existing custom field.
+    #[serde(rename = "__smartColor")]
+    smart_color: String,
 
     /// Background color of the level. If `null`, the project `defaultLevelBgColor` should be
     /// used.
@@ -708,9 +815,13 @@ pub struct Level {
     #[serde(rename = "fieldInstances")]
     field_instances: Vec<FieldInstance>,
 
-    /// Unique String identifier
+    /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
+
+    /// Unique instance identifier
+    #[serde(rename = "iid")]
+    iid: String,
 
     /// An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
     /// levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
@@ -736,11 +847,15 @@ pub struct Level {
     #[serde(rename = "useAutoIdentifier")]
     use_auto_identifier: bool,
 
-    /// World X coordinate in pixels
+    /// World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+    /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+    /// value is always -1 here.
     #[serde(rename = "worldX")]
     world_x: i64,
 
-    /// World Y coordinate in pixels
+    /// World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+    /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+    /// value is always -1 here.
     #[serde(rename = "worldY")]
     world_y: i64,
 }
@@ -844,14 +959,19 @@ pub struct LayerInstance {
     #[serde(rename = "gridTiles")]
     grid_tiles: Vec<TileInstance>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 0.10.0+
-    /// Replaced by: `intGridCsv`
+    /// Unique layer instance identifier
+    #[serde(rename = "iid")]
+    iid: String,
+
+    /// **WARNING**: this deprecated value is no longer exported since version 0.10.0  Replaced
+    /// by: `intGridCsv`
     #[serde(rename = "intGrid")]
     int_grid: Option<Vec<IntGridValueInstance>>,
 
-    /// A list of all values in the IntGrid layer, stored from left to right, and top to bottom
-    /// (ie. first row from left to right, followed by second row, etc). `0` means "empty cell"
-    /// and IntGrid values start at 1. This array size is `__cWid` x `__cHei` cells.
+    /// A list of all values in the IntGrid layer, stored in CSV format (Comma Separated
+    /// Values).<br/>  Order is from left to right, and top to bottom (ie. first row from left to
+    /// right, followed by second row, etc).<br/>  `0` means "empty cell" and IntGrid values
+    /// start at 1.<br/>  The array size is `__cWid` x `__cHei` cells.
     #[serde(rename = "intGridCsv")]
     int_grid_csv: Vec<i64>,
 
@@ -933,6 +1053,10 @@ pub struct EntityInstance {
     #[serde(rename = "__pivot")]
     pivot: Vec<f64>,
 
+    /// Array of tags defined in this Entity definition
+    #[serde(rename = "__tags")]
+    tags: Vec<String>,
+
     /// Optional Tile used to display this entity (it could either be the default Entity tile, or
     /// some tile provided by a field value, like an Enum).
     #[serde(rename = "__tile")]
@@ -950,6 +1074,10 @@ pub struct EntityInstance {
     /// definition.
     #[serde(rename = "height")]
     height: i64,
+
+    /// Unique instance identifier
+    #[serde(rename = "iid")]
+    iid: String,
 
     /// Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
     /// optional layer offsets, if they exist!
@@ -995,14 +1123,71 @@ pub struct NeighbourLevel {
     #[serde(rename = "dir")]
     dir: String,
 
+    /// Neighbour Instance Identifier
+    #[serde(rename = "levelIid")]
+    level_iid: String,
+
     #[serde(rename = "levelUid")]
     level_uid: i64,
 }
 
+/// **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented
+/// here as a preview of a planned feature.  A World contains multiple levels, and it has its
+/// own layout settings.
+#[derive(Serialize, Deserialize)]
+pub struct World {
+    /// User defined unique identifier
+    #[serde(rename = "identifier")]
+    identifier: String,
+
+    /// Unique instance identifer
+    #[serde(rename = "iid")]
+    iid: String,
+
+    /// All levels from this world. The order of this array is only relevant in
+    /// `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).
+    /// Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+    #[serde(rename = "levels")]
+    levels: Vec<Level>,
+
+    /// Height of the world grid in pixels.
+    #[serde(rename = "worldGridHeight")]
+    world_grid_height: i64,
+
+    /// Width of the world grid in pixels.
+    #[serde(rename = "worldGridWidth")]
+    world_grid_width: i64,
+
+    /// An enum that describes how levels are organized in this project (ie. linearly or in a 2D
+    /// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+    #[serde(rename = "worldLayout")]
+    world_layout: WorldLayout,
+}
+
+/// Possible values: `Any`, `OnlySame`, `OnlyTags`
+#[derive(Serialize, Deserialize)]
+pub enum AllowedRefs {
+    #[serde(rename = "Any")]
+    Any,
+
+    #[serde(rename = "OnlySame")]
+    OnlySame,
+
+    #[serde(rename = "OnlyTags")]
+    OnlyTags,
+}
+
 /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-/// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
+/// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+/// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
 #[derive(Serialize, Deserialize)]
 pub enum EditorDisplayMode {
+    #[serde(rename = "ArrayCountNoLabel")]
+    ArrayCountNoLabel,
+
+    #[serde(rename = "ArrayCountWithLabel")]
+    ArrayCountWithLabel,
+
     #[serde(rename = "EntityTile")]
     EntityTile,
 
@@ -1030,6 +1215,9 @@ pub enum EditorDisplayMode {
     #[serde(rename = "RadiusPx")]
     RadiusPx,
 
+    #[serde(rename = "RefLink")]
+    RefLink,
+
     #[serde(rename = "ValueOnly")]
     ValueOnly,
 }
@@ -1045,6 +1233,41 @@ pub enum EditorDisplayPos {
 
     #[serde(rename = "Center")]
     Center,
+}
+
+/// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
+/// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+#[derive(Serialize, Deserialize)]
+pub enum LevelFieldType {
+    #[serde(rename = "F_Bool")]
+    FBool,
+
+    #[serde(rename = "F_Color")]
+    FColor,
+
+    #[serde(rename = "F_EntityRef")]
+    FEntityRef,
+
+    #[serde(rename = "F_Enum")]
+    FEnum,
+
+    #[serde(rename = "F_Float")]
+    FFloat,
+
+    #[serde(rename = "F_Int")]
+    FInt,
+
+    #[serde(rename = "F_Path")]
+    FPath,
+
+    #[serde(rename = "F_Point")]
+    FPoint,
+
+    #[serde(rename = "F_String")]
+    FString,
+
+    #[serde(rename = "F_Text")]
+    FText,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -1162,7 +1385,7 @@ pub enum TileMode {
 /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
 /// `AutoLayer`
 #[derive(Serialize, Deserialize)]
-pub enum Type {
+pub enum LayerType {
     #[serde(rename = "AutoLayer")]
     AutoLayer,
 
@@ -1178,11 +1401,14 @@ pub enum Type {
 
 #[derive(Serialize, Deserialize)]
 pub enum Flag {
-    #[serde(rename = "DiscardPreCsvIntGrid")]
-    DiscardPreCsvIntGrid,
+    #[serde(rename = "ExportPreCsvIntGridFormat")]
+    ExportPreCsvIntGridFormat,
 
     #[serde(rename = "IgnoreBackupSuggest")]
     IgnoreBackupSuggest,
+
+    #[serde(rename = "PrependIndexToLevelFileNames")]
+    PrependIndexToLevelFileNames,
 }
 
 /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,

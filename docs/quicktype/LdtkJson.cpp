@@ -59,15 +59,27 @@ namespace quicktype {
     }
 
     /**
-     * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-     * `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
+     * Possible values: `Any`, `OnlySame`, `OnlyTags`
      */
-    enum class EditorDisplayMode : int { ENTITY_TILE, HIDDEN, NAME_AND_VALUE, POINTS, POINT_PATH, POINT_PATH_LOOP, POINT_STAR, RADIUS_GRID, RADIUS_PX, VALUE_ONLY };
+    enum class AllowedRefs : int { ANY, ONLY_SAME, ONLY_TAGS };
+
+    /**
+     * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
+     * `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+     * `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
+     */
+    enum class EditorDisplayMode : int { ARRAY_COUNT_NO_LABEL, ARRAY_COUNT_WITH_LABEL, ENTITY_TILE, HIDDEN, NAME_AND_VALUE, POINTS, POINT_PATH, POINT_PATH_LOOP, POINT_STAR, RADIUS_GRID, RADIUS_PX, REF_LINK, VALUE_ONLY };
 
     /**
      * Possible values: `Above`, `Center`, `Beneath`
      */
     enum class EditorDisplayPos : int { ABOVE, BENEATH, CENTER };
+
+    /**
+     * Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
+     * `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+     */
+    enum class LevelFieldType : int { F_BOOL, F_COLOR, F_ENTITY_REF, F_ENUM, F_FLOAT, F_INT, F_PATH, F_POINT, F_STRING, F_TEXT };
 
     enum class TextLanguageMode : int { LANG_C, LANG_HAXE, LANG_JS, LANG_JSON, LANG_LUA, LANG_MARKDOWN, LANG_PYTHON, LANG_RUBY, LANG_XML };
 
@@ -83,6 +95,9 @@ namespace quicktype {
         private:
         std::string type;
         std::shared_ptr<std::vector<std::string>> accept_file_types;
+        AllowedRefs allowed_refs;
+        std::vector<std::string> allowed_ref_tags;
+        bool allow_out_of_level_ref;
         std::shared_ptr<int64_t> array_max_length;
         std::shared_ptr<int64_t> array_min_length;
         bool can_be_null;
@@ -91,19 +106,24 @@ namespace quicktype {
         bool editor_cut_long_values;
         EditorDisplayMode editor_display_mode;
         EditorDisplayPos editor_display_pos;
+        std::shared_ptr<std::string> editor_text_prefix;
+        std::shared_ptr<std::string> editor_text_suffix;
         std::string identifier;
         bool is_array;
         std::shared_ptr<double> max;
         std::shared_ptr<double> min;
         std::shared_ptr<std::string> regex;
+        bool symmetrical_ref;
         std::shared_ptr<TextLanguageMode> text_language_mode;
-        nlohmann::json field_definition_type;
+        LevelFieldType field_definition_type;
         int64_t uid;
+        bool use_for_smart_color;
 
         public:
         /**
-         * Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array,
-         * this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
+         * Human readable value type. Possible values: `Int, Float, String, Bool, Color,
+         * ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this
+         * field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
          */
         const std::string & get_type() const { return type; }
         std::string & get_mutable_type() { return type; }
@@ -115,6 +135,21 @@ namespace quicktype {
          */
         std::shared_ptr<std::vector<std::string>> get_accept_file_types() const { return accept_file_types; }
         void set_accept_file_types(std::shared_ptr<std::vector<std::string>> value) { this->accept_file_types = value; }
+
+        /**
+         * Possible values: `Any`, `OnlySame`, `OnlyTags`
+         */
+        const AllowedRefs & get_allowed_refs() const { return allowed_refs; }
+        AllowedRefs & get_mutable_allowed_refs() { return allowed_refs; }
+        void set_allowed_refs(const AllowedRefs & value) { this->allowed_refs = value; }
+
+        const std::vector<std::string> & get_allowed_ref_tags() const { return allowed_ref_tags; }
+        std::vector<std::string> & get_mutable_allowed_ref_tags() { return allowed_ref_tags; }
+        void set_allowed_ref_tags(const std::vector<std::string> & value) { this->allowed_ref_tags = value; }
+
+        const bool & get_allow_out_of_level_ref() const { return allow_out_of_level_ref; }
+        bool & get_mutable_allow_out_of_level_ref() { return allow_out_of_level_ref; }
+        void set_allow_out_of_level_ref(const bool & value) { this->allow_out_of_level_ref = value; }
 
         /**
          * Array max length
@@ -153,7 +188,8 @@ namespace quicktype {
 
         /**
          * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-         * `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`
+         * `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+         * `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
          */
         const EditorDisplayMode & get_editor_display_mode() const { return editor_display_mode; }
         EditorDisplayMode & get_mutable_editor_display_mode() { return editor_display_mode; }
@@ -166,8 +202,14 @@ namespace quicktype {
         EditorDisplayPos & get_mutable_editor_display_pos() { return editor_display_pos; }
         void set_editor_display_pos(const EditorDisplayPos & value) { this->editor_display_pos = value; }
 
+        std::shared_ptr<std::string> get_editor_text_prefix() const { return editor_text_prefix; }
+        void set_editor_text_prefix(std::shared_ptr<std::string> value) { this->editor_text_prefix = value; }
+
+        std::shared_ptr<std::string> get_editor_text_suffix() const { return editor_text_suffix; }
+        void set_editor_text_suffix(std::shared_ptr<std::string> value) { this->editor_text_suffix = value; }
+
         /**
-         * Unique String identifier
+         * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
@@ -199,6 +241,10 @@ namespace quicktype {
         std::shared_ptr<std::string> get_regex() const { return regex; }
         void set_regex(std::shared_ptr<std::string> value) { this->regex = value; }
 
+        const bool & get_symmetrical_ref() const { return symmetrical_ref; }
+        bool & get_mutable_symmetrical_ref() { return symmetrical_ref; }
+        void set_symmetrical_ref(const bool & value) { this->symmetrical_ref = value; }
+
         /**
          * Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
          * `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
@@ -207,11 +253,12 @@ namespace quicktype {
         void set_text_language_mode(std::shared_ptr<TextLanguageMode> value) { this->text_language_mode = value; }
 
         /**
-         * Internal type enum
+         * Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
+         * `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
          */
-        const nlohmann::json & get_field_definition_type() const { return field_definition_type; }
-        nlohmann::json & get_mutable_field_definition_type() { return field_definition_type; }
-        void set_field_definition_type(const nlohmann::json & value) { this->field_definition_type = value; }
+        const LevelFieldType & get_field_definition_type() const { return field_definition_type; }
+        LevelFieldType & get_mutable_field_definition_type() { return field_definition_type; }
+        void set_field_definition_type(const LevelFieldType & value) { this->field_definition_type = value; }
 
         /**
          * Unique Int identifier
@@ -219,6 +266,15 @@ namespace quicktype {
         const int64_t & get_uid() const { return uid; }
         int64_t & get_mutable_uid() { return uid; }
         void set_uid(const int64_t & value) { this->uid = value; }
+
+        /**
+         * If TRUE, the color associated with this field will override the Entity or Level default
+         * color in the editor UI. For Enum fields, this would be the color associated to their
+         * values.
+         */
+        const bool & get_use_for_smart_color() const { return use_for_smart_color; }
+        bool & get_mutable_use_for_smart_color() { return use_for_smart_color; }
+        void set_use_for_smart_color(const bool & value) { this->use_for_smart_color = value; }
     };
 
     /**
@@ -303,7 +359,7 @@ namespace quicktype {
         void set_hollow(const bool & value) { this->hollow = value; }
 
         /**
-         * Unique String identifier
+         * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
@@ -496,7 +552,7 @@ namespace quicktype {
         void set_icon_tileset_uid(std::shared_ptr<int64_t> value) { this->icon_tileset_uid = value; }
 
         /**
-         * Unique String identifier
+         * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
@@ -699,7 +755,7 @@ namespace quicktype {
 
         private:
         bool active;
-        bool collapsed;
+        std::shared_ptr<bool> collapsed;
         bool is_optional;
         std::string name;
         std::vector<AutoLayerRuleDefinition> rules;
@@ -710,9 +766,11 @@ namespace quicktype {
         bool & get_mutable_active() { return active; }
         void set_active(const bool & value) { this->active = value; }
 
-        const bool & get_collapsed() const { return collapsed; }
-        bool & get_mutable_collapsed() { return collapsed; }
-        void set_collapsed(const bool & value) { this->collapsed = value; }
+        /**
+         * *This field was removed in 0.10.0 and should no longer be used.*
+         */
+        std::shared_ptr<bool> get_collapsed() const { return collapsed; }
+        void set_collapsed(std::shared_ptr<bool> value) { this->collapsed = value; }
 
         const bool & get_is_optional() const { return is_optional; }
         bool & get_mutable_is_optional() { return is_optional; }
@@ -750,7 +808,7 @@ namespace quicktype {
         void set_color(const std::string & value) { this->color = value; }
 
         /**
-         * Unique String identifier
+         * User defined unique identifier
          */
         std::shared_ptr<std::string> get_identifier() const { return identifier; }
         void set_identifier(std::shared_ptr<std::string> value) { this->identifier = value; }
@@ -767,7 +825,7 @@ namespace quicktype {
      * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
      * `AutoLayer`
      */
-    enum class Type : int { AUTO_LAYER, ENTITIES, INT_GRID, TILES };
+    enum class LayerType : int { AUTO_LAYER, ENTITIES, INT_GRID, TILES };
 
     class LayerDefinition {
         public:
@@ -781,16 +839,23 @@ namespace quicktype {
         std::shared_ptr<int64_t> auto_tileset_def_uid;
         double display_opacity;
         std::vector<std::string> excluded_tags;
+        bool fade_inactive;
         int64_t grid_size;
+        int64_t guide_grid_hei;
+        int64_t guide_grid_wid;
+        bool hide_in_list;
         std::string identifier;
         std::vector<IntGridValueDefinition> int_grid_values;
+        double parallax_factor_x;
+        double parallax_factor_y;
+        bool parallax_scaling;
         int64_t px_offset_x;
         int64_t px_offset_y;
         std::vector<std::string> required_tags;
         double tile_pivot_x;
         double tile_pivot_y;
         std::shared_ptr<int64_t> tileset_def_uid;
-        Type layer_definition_type;
+        LayerType layer_definition_type;
         int64_t uid;
 
         public:
@@ -812,9 +877,8 @@ namespace quicktype {
         void set_auto_source_layer_def_uid(std::shared_ptr<int64_t> value) { this->auto_source_layer_def_uid = value; }
 
         /**
-         * Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer
-         * *instances* might use a different tileset. So most of the time, you should probably use
-         * the `__tilesetDefUid` value from layer instances.
+         * **WARNING**: this deprecated value will be *removed* completely on version 0.12.0+
+         * Replaced by: `tilesetDefUid`
          */
         std::shared_ptr<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
         void set_auto_tileset_def_uid(std::shared_ptr<int64_t> value) { this->auto_tileset_def_uid = value; }
@@ -834,6 +898,13 @@ namespace quicktype {
         void set_excluded_tags(const std::vector<std::string> & value) { this->excluded_tags = value; }
 
         /**
+         * When TRUE, the layer will be faded out if it isn't the active one.
+         */
+        const bool & get_fade_inactive() const { return fade_inactive; }
+        bool & get_mutable_fade_inactive() { return fade_inactive; }
+        void set_fade_inactive(const bool & value) { this->fade_inactive = value; }
+
+        /**
          * Width and height of the grid in pixels
          */
         const int64_t & get_grid_size() const { return grid_size; }
@@ -841,19 +912,64 @@ namespace quicktype {
         void set_grid_size(const int64_t & value) { this->grid_size = value; }
 
         /**
-         * Unique String identifier
+         * Height of the optional "guide" grid in pixels
+         */
+        const int64_t & get_guide_grid_hei() const { return guide_grid_hei; }
+        int64_t & get_mutable_guide_grid_hei() { return guide_grid_hei; }
+        void set_guide_grid_hei(const int64_t & value) { this->guide_grid_hei = value; }
+
+        /**
+         * Width of the optional "guide" grid in pixels
+         */
+        const int64_t & get_guide_grid_wid() const { return guide_grid_wid; }
+        int64_t & get_mutable_guide_grid_wid() { return guide_grid_wid; }
+        void set_guide_grid_wid(const int64_t & value) { this->guide_grid_wid = value; }
+
+        /**
+         * Hide the layer from the list on the side of the editor view.
+         */
+        const bool & get_hide_in_list() const { return hide_in_list; }
+        bool & get_mutable_hide_in_list() { return hide_in_list; }
+        void set_hide_in_list(const bool & value) { this->hide_in_list = value; }
+
+        /**
+         * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
         void set_identifier(const std::string & value) { this->identifier = value; }
 
         /**
-         * An array that defines extra optional info for each IntGrid value. The array is sorted
-         * using value (ascending).
+         * An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the
+         * array order is not related to actual IntGrid values! As user can re-order IntGrid values
+         * freely, you may value "2" before value "1" in this array.
          */
         const std::vector<IntGridValueDefinition> & get_int_grid_values() const { return int_grid_values; }
         std::vector<IntGridValueDefinition> & get_mutable_int_grid_values() { return int_grid_values; }
         void set_int_grid_values(const std::vector<IntGridValueDefinition> & value) { this->int_grid_values = value; }
+
+        /**
+         * Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
+         * speed of this layer, creating a fake 3D (parallax) effect.
+         */
+        const double & get_parallax_factor_x() const { return parallax_factor_x; }
+        double & get_mutable_parallax_factor_x() { return parallax_factor_x; }
+        void set_parallax_factor_x(const double & value) { this->parallax_factor_x = value; }
+
+        /**
+         * Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed
+         * of this layer, creating a fake 3D (parallax) effect.
+         */
+        const double & get_parallax_factor_y() const { return parallax_factor_y; }
+        double & get_mutable_parallax_factor_y() { return parallax_factor_y; }
+        void set_parallax_factor_y(const double & value) { this->parallax_factor_y = value; }
+
+        /**
+         * If true (default), a layer with a parallax factor will also be scaled up/down accordingly.
+         */
+        const bool & get_parallax_scaling() const { return parallax_scaling; }
+        bool & get_mutable_parallax_scaling() { return parallax_scaling; }
+        void set_parallax_scaling(const bool & value) { this->parallax_scaling = value; }
 
         /**
          * X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`
@@ -895,9 +1011,10 @@ namespace quicktype {
         void set_tile_pivot_y(const double & value) { this->tile_pivot_y = value; }
 
         /**
-         * Reference to the Tileset UID being used by this Tile layer. WARNING: some layer
-         * *instances* might use a different tileset. So most of the time, you should probably use
-         * the `__tilesetDefUid` value from layer instances.
+         * Reference to the default Tileset UID being used by this layer definition.<br/>
+         * **WARNING**: some layer *instances* might use a different tileset. So most of the time,
+         * you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:
+         * since version 0.10.0, the old `autoTilesetDefUid` was removed and merged into this value.
          */
         std::shared_ptr<int64_t> get_tileset_def_uid() const { return tileset_def_uid; }
         void set_tileset_def_uid(std::shared_ptr<int64_t> value) { this->tileset_def_uid = value; }
@@ -906,9 +1023,9 @@ namespace quicktype {
          * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
          * `AutoLayer`
          */
-        const Type & get_layer_definition_type() const { return layer_definition_type; }
-        Type & get_mutable_layer_definition_type() { return layer_definition_type; }
-        void set_layer_definition_type(const Type & value) { this->layer_definition_type = value; }
+        const LayerType & get_layer_definition_type() const { return layer_definition_type; }
+        LayerType & get_mutable_layer_definition_type() { return layer_definition_type; }
+        void set_layer_definition_type(const LayerType & value) { this->layer_definition_type = value; }
 
         /**
          * Unique Int identifier
@@ -916,6 +1033,50 @@ namespace quicktype {
         const int64_t & get_uid() const { return uid; }
         int64_t & get_mutable_uid() { return uid; }
         void set_uid(const int64_t & value) { this->uid = value; }
+    };
+
+    /**
+     * In a tileset definition, user defined meta-data of a tile.
+     */
+    class LdtkTileCustomMetadata {
+        public:
+        LdtkTileCustomMetadata() = default;
+        virtual ~LdtkTileCustomMetadata() = default;
+
+        private:
+        std::string data;
+        int64_t tile_id;
+
+        public:
+        const std::string & get_data() const { return data; }
+        std::string & get_mutable_data() { return data; }
+        void set_data(const std::string & value) { this->data = value; }
+
+        const int64_t & get_tile_id() const { return tile_id; }
+        int64_t & get_mutable_tile_id() { return tile_id; }
+        void set_tile_id(const int64_t & value) { this->tile_id = value; }
+    };
+
+    /**
+     * In a tileset definition, enum based tag infos
+     */
+    class LdtkEnumTagValue {
+        public:
+        LdtkEnumTagValue() = default;
+        virtual ~LdtkEnumTagValue() = default;
+
+        private:
+        std::string enum_value_id;
+        std::vector<int64_t> tile_ids;
+
+        public:
+        const std::string & get_enum_value_id() const { return enum_value_id; }
+        std::string & get_mutable_enum_value_id() { return enum_value_id; }
+        void set_enum_value_id(const std::string & value) { this->enum_value_id = value; }
+
+        const std::vector<int64_t> & get_tile_ids() const { return tile_ids; }
+        std::vector<int64_t> & get_mutable_tile_ids() { return tile_ids; }
+        void set_tile_ids(const std::vector<int64_t> & value) { this->tile_ids = value; }
     };
 
     /**
@@ -932,8 +1093,8 @@ namespace quicktype {
         int64_t c_hei;
         int64_t c_wid;
         std::shared_ptr<std::map<std::string, nlohmann::json>> cached_pixel_data;
-        std::vector<std::map<std::string, nlohmann::json>> custom_data;
-        std::vector<std::map<std::string, nlohmann::json>> enum_tags;
+        std::vector<LdtkTileCustomMetadata> custom_data;
+        std::vector<LdtkEnumTagValue> enum_tags;
         std::string identifier;
         int64_t padding;
         int64_t px_hei;
@@ -970,20 +1131,20 @@ namespace quicktype {
         /**
          * An array of custom tile metadata
          */
-        const std::vector<std::map<std::string, nlohmann::json>> & get_custom_data() const { return custom_data; }
-        std::vector<std::map<std::string, nlohmann::json>> & get_mutable_custom_data() { return custom_data; }
-        void set_custom_data(const std::vector<std::map<std::string, nlohmann::json>> & value) { this->custom_data = value; }
+        const std::vector<LdtkTileCustomMetadata> & get_custom_data() const { return custom_data; }
+        std::vector<LdtkTileCustomMetadata> & get_mutable_custom_data() { return custom_data; }
+        void set_custom_data(const std::vector<LdtkTileCustomMetadata> & value) { this->custom_data = value; }
 
         /**
          * Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
          * element per Enum value, which contains an array of all Tile IDs that are tagged with it.
          */
-        const std::vector<std::map<std::string, nlohmann::json>> & get_enum_tags() const { return enum_tags; }
-        std::vector<std::map<std::string, nlohmann::json>> & get_mutable_enum_tags() { return enum_tags; }
-        void set_enum_tags(const std::vector<std::map<std::string, nlohmann::json>> & value) { this->enum_tags = value; }
+        const std::vector<LdtkEnumTagValue> & get_enum_tags() const { return enum_tags; }
+        std::vector<LdtkEnumTagValue> & get_mutable_enum_tags() { return enum_tags; }
+        void set_enum_tags(const std::vector<LdtkEnumTagValue> & value) { this->enum_tags = value; }
 
         /**
-         * Unique String identifier
+         * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
@@ -1117,7 +1278,7 @@ namespace quicktype {
         void set_tilesets(const std::vector<TilesetDefinition> & value) { this->tilesets = value; }
     };
 
-    enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, IGNORE_BACKUP_SUGGEST };
+    enum class Flag : int { EXPORT_PRE_CSV_INT_GRID_FORMAT, IGNORE_BACKUP_SUGGEST, PREPEND_INDEX_TO_LEVEL_FILE_NAMES };
 
     /**
      * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
@@ -1309,10 +1470,12 @@ namespace quicktype {
         std::vector<int64_t> grid;
         std::string identifier;
         std::vector<double> pivot;
+        std::vector<std::string> tags;
         std::shared_ptr<EntityInstanceTile> tile;
         int64_t def_uid;
         std::vector<FieldInstance> field_instances;
         int64_t height;
+        std::string iid;
         std::vector<int64_t> px;
         int64_t width;
 
@@ -1337,6 +1500,13 @@ namespace quicktype {
         const std::vector<double> & get_pivot() const { return pivot; }
         std::vector<double> & get_mutable_pivot() { return pivot; }
         void set_pivot(const std::vector<double> & value) { this->pivot = value; }
+
+        /**
+         * Array of tags defined in this Entity definition
+         */
+        const std::vector<std::string> & get_tags() const { return tags; }
+        std::vector<std::string> & get_mutable_tags() { return tags; }
+        void set_tags(const std::vector<std::string> & value) { this->tags = value; }
 
         /**
          * Optional Tile used to display this entity (it could either be the default Entity tile, or
@@ -1366,6 +1536,13 @@ namespace quicktype {
         const int64_t & get_height() const { return height; }
         int64_t & get_mutable_height() { return height; }
         void set_height(const int64_t & value) { this->height = value; }
+
+        /**
+         * Unique instance identifier
+         */
+        const std::string & get_iid() const { return iid; }
+        std::string & get_mutable_iid() { return iid; }
+        void set_iid(const std::string & value) { this->iid = value; }
 
         /**
          * Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
@@ -1431,6 +1608,7 @@ namespace quicktype {
         std::vector<TileInstance> auto_layer_tiles;
         std::vector<EntityInstance> entity_instances;
         std::vector<TileInstance> grid_tiles;
+        std::string iid;
         std::shared_ptr<std::vector<IntGridValueInstance>> int_grid;
         std::vector<int64_t> int_grid_csv;
         int64_t layer_def_uid;
@@ -1530,16 +1708,24 @@ namespace quicktype {
         void set_grid_tiles(const std::vector<TileInstance> & value) { this->grid_tiles = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 0.10.0+
-         * Replaced by: `intGridCsv`
+         * Unique layer instance identifier
+         */
+        const std::string & get_iid() const { return iid; }
+        std::string & get_mutable_iid() { return iid; }
+        void set_iid(const std::string & value) { this->iid = value; }
+
+        /**
+         * **WARNING**: this deprecated value is no longer exported since version 0.10.0  Replaced
+         * by: `intGridCsv`
          */
         std::shared_ptr<std::vector<IntGridValueInstance>> get_int_grid() const { return int_grid; }
         void set_int_grid(std::shared_ptr<std::vector<IntGridValueInstance>> value) { this->int_grid = value; }
 
         /**
-         * A list of all values in the IntGrid layer, stored from left to right, and top to bottom
-         * (ie. first row from left to right, followed by second row, etc). `0` means "empty cell"
-         * and IntGrid values start at 1. This array size is `__cWid` x `__cHei` cells.
+         * A list of all values in the IntGrid layer, stored in CSV format (Comma Separated
+         * Values).<br/>  Order is from left to right, and top to bottom (ie. first row from left to
+         * right, followed by second row, etc).<br/>  `0` means "empty cell" and IntGrid values
+         * start at 1.<br/>  The array size is `__cWid` x `__cHei` cells.
          */
         const std::vector<int64_t> & get_int_grid_csv() const { return int_grid_csv; }
         std::vector<int64_t> & get_mutable_int_grid_csv() { return int_grid_csv; }
@@ -1616,6 +1802,7 @@ namespace quicktype {
 
         private:
         std::string dir;
+        std::string level_iid;
         int64_t level_uid;
 
         public:
@@ -1626,6 +1813,13 @@ namespace quicktype {
         const std::string & get_dir() const { return dir; }
         std::string & get_mutable_dir() { return dir; }
         void set_dir(const std::string & value) { this->dir = value; }
+
+        /**
+         * Neighbour Instance Identifier
+         */
+        const std::string & get_level_iid() const { return level_iid; }
+        std::string & get_mutable_level_iid() { return level_iid; }
+        void set_level_iid(const std::string & value) { this->level_iid = value; }
 
         const int64_t & get_level_uid() const { return level_uid; }
         int64_t & get_mutable_level_uid() { return level_uid; }
@@ -1651,6 +1845,7 @@ namespace quicktype {
         std::string bg_color;
         std::shared_ptr<LevelBackgroundPosition> bg_pos;
         std::vector<NeighbourLevel> neighbours;
+        std::string smart_color;
         std::shared_ptr<std::string> level_bg_color;
         double bg_pivot_x;
         double bg_pivot_y;
@@ -1659,6 +1854,7 @@ namespace quicktype {
         std::shared_ptr<std::string> external_rel_path;
         std::vector<FieldInstance> field_instances;
         std::string identifier;
+        std::string iid;
         std::shared_ptr<std::vector<LayerInstance>> layer_instances;
         int64_t px_hei;
         int64_t px_wid;
@@ -1683,13 +1879,21 @@ namespace quicktype {
         void set_bg_pos(std::shared_ptr<LevelBackgroundPosition> value) { this->bg_pos = value; }
 
         /**
-         * An array listing all other levels touching this one on the world map. In "linear" world
-         * layouts, this array is populated with previous/next levels in array, and `dir` depends on
-         * the linear horizontal/vertical layout.
+         * An array listing all other levels touching this one on the world map.<br/>  Only relevant
+         * for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
+         * Horizontal and Vertical layouts, this array is always empty.
          */
         const std::vector<NeighbourLevel> & get_neighbours() const { return neighbours; }
         std::vector<NeighbourLevel> & get_mutable_neighbours() { return neighbours; }
         void set_neighbours(const std::vector<NeighbourLevel> & value) { this->neighbours = value; }
+
+        /**
+         * The "guessed" color for this level in the editor, decided using either the background
+         * color or an existing custom field.
+         */
+        const std::string & get_smart_color() const { return smart_color; }
+        std::string & get_mutable_smart_color() { return smart_color; }
+        void set_smart_color(const std::string & value) { this->smart_color = value; }
 
         /**
          * Background color of the level. If `null`, the project `defaultLevelBgColor` should be
@@ -1741,11 +1945,18 @@ namespace quicktype {
         void set_field_instances(const std::vector<FieldInstance> & value) { this->field_instances = value; }
 
         /**
-         * Unique String identifier
+         * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
         void set_identifier(const std::string & value) { this->identifier = value; }
+
+        /**
+         * Unique instance identifier
+         */
+        const std::string & get_iid() const { return iid; }
+        std::string & get_mutable_iid() { return iid; }
+        void set_iid(const std::string & value) { this->iid = value; }
 
         /**
          * An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
@@ -1786,14 +1997,18 @@ namespace quicktype {
         void set_use_auto_identifier(const bool & value) { this->use_auto_identifier = value; }
 
         /**
-         * World X coordinate in pixels
+         * World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+         * positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+         * value is always -1 here.
          */
         const int64_t & get_world_x() const { return world_x; }
         int64_t & get_mutable_world_x() { return world_x; }
         void set_world_x(const int64_t & value) { this->world_x = value; }
 
         /**
-         * World Y coordinate in pixels
+         * World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+         * positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+         * value is always -1 here.
          */
         const int64_t & get_world_y() const { return world_y; }
         int64_t & get_mutable_world_y() { return world_y; }
@@ -1805,6 +2020,71 @@ namespace quicktype {
      * space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
      */
     enum class WorldLayout : int { FREE, GRID_VANIA, LINEAR_HORIZONTAL, LINEAR_VERTICAL };
+
+    /**
+     * **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented
+     * here as a preview of a planned feature.  A World contains multiple levels, and it has its
+     * own layout settings.
+     */
+    class World {
+        public:
+        World() = default;
+        virtual ~World() = default;
+
+        private:
+        std::string identifier;
+        std::string iid;
+        std::vector<Level> levels;
+        int64_t world_grid_height;
+        int64_t world_grid_width;
+        WorldLayout world_layout;
+
+        public:
+        /**
+         * User defined unique identifier
+         */
+        const std::string & get_identifier() const { return identifier; }
+        std::string & get_mutable_identifier() { return identifier; }
+        void set_identifier(const std::string & value) { this->identifier = value; }
+
+        /**
+         * Unique instance identifer
+         */
+        const std::string & get_iid() const { return iid; }
+        std::string & get_mutable_iid() { return iid; }
+        void set_iid(const std::string & value) { this->iid = value; }
+
+        /**
+         * All levels from this world. The order of this array is only relevant in
+         * `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).
+         * Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+         */
+        const std::vector<Level> & get_levels() const { return levels; }
+        std::vector<Level> & get_mutable_levels() { return levels; }
+        void set_levels(const std::vector<Level> & value) { this->levels = value; }
+
+        /**
+         * Height of the world grid in pixels.
+         */
+        const int64_t & get_world_grid_height() const { return world_grid_height; }
+        int64_t & get_mutable_world_grid_height() { return world_grid_height; }
+        void set_world_grid_height(const int64_t & value) { this->world_grid_height = value; }
+
+        /**
+         * Width of the world grid in pixels.
+         */
+        const int64_t & get_world_grid_width() const { return world_grid_width; }
+        int64_t & get_mutable_world_grid_width() { return world_grid_width; }
+        void set_world_grid_width(const int64_t & value) { this->world_grid_width = value; }
+
+        /**
+         * An enum that describes how levels are organized in this project (ie. linearly or in a 2D
+         * space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+         */
+        const WorldLayout & get_world_layout() const { return world_layout; }
+        WorldLayout & get_mutable_world_layout() { return world_layout; }
+        void set_world_layout(const WorldLayout & value) { this->world_layout = value; }
+    };
 
     /**
      * This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
@@ -1819,6 +2099,7 @@ namespace quicktype {
         virtual ~LdtkJson() = default;
 
         private:
+        double app_build_id;
         int64_t backup_limit;
         bool backup_on_save;
         std::string bg_color;
@@ -1843,8 +2124,20 @@ namespace quicktype {
         int64_t world_grid_height;
         int64_t world_grid_width;
         WorldLayout world_layout;
+        std::vector<World> worlds;
 
         public:
+        /**
+         * LDtk application build identifier.<br/>  This is only used to identify the LDtk version
+         * that generated this particular project file, which can be useful for specific bug fixing.
+         * Note that the build identifier is just the date of the release, so it's not unique to
+         * each user (one single global ID per LDtk public release), and as a result, completely
+         * anonymous.
+         */
+        const double & get_app_build_id() const { return app_build_id; }
+        double & get_mutable_app_build_id() { return app_build_id; }
+        void set_app_build_id(const double & value) { this->app_build_id = value; }
+
         /**
          * Number of backup files to keep, if the `backupOnSave` is TRUE
          */
@@ -1940,7 +2233,7 @@ namespace quicktype {
 
         /**
          * An array containing various advanced flags (ie. options or other states). Possible
-         * values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`
+         * values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`
          */
         const std::vector<Flag> & get_flags() const { return flags; }
         std::vector<Flag> & get_mutable_flags() { return flags; }
@@ -1970,8 +2263,8 @@ namespace quicktype {
 
         /**
          * All levels. The order of this array is only relevant in `LinearHorizontal` and
-         * `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to
-         * the `worldX`,`worldY` coordinates of each Level.
+         * `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should
+         * refer to the `worldX`,`worldY` coordinates of each Level.
          */
         const std::vector<Level> & get_levels() const { return levels; }
         std::vector<Level> & get_mutable_levels() { return levels; }
@@ -2019,6 +2312,23 @@ namespace quicktype {
         const WorldLayout & get_world_layout() const { return world_layout; }
         WorldLayout & get_mutable_world_layout() { return world_layout; }
         void set_world_layout(const WorldLayout & value) { this->world_layout = value; }
+
+        /**
+         * This array is not used yet in current LDtk version (so, for now, it's always
+         * empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a
+         * single project, each containing multiple Levels.<br/><br/>What will change when "Multiple
+         * worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project
+         * file can only contain a single world with multiple levels in it. In this case, levels and
+         * world layout related settings are stored in the root of the JSON.<br/> - after the
+         * "Multiple worlds" update, there will be a `worlds` array in root, each world containing
+         * levels and layout settings. Basically, it's pretty much only about moving the `levels`
+         * array to the `worlds` array, along with world layout related values (eg. `worldGridWidth`
+         * etc).<br/><br/>If you want to start supporting this future update easily, please refer to
+         * this documentation: https://github.com/deepnight/ldtk/issues/231
+         */
+        const std::vector<World> & get_worlds() const { return worlds; }
+        std::vector<World> & get_mutable_worlds() { return worlds; }
+        void set_worlds(const std::vector<World> & value) { this->worlds = value; }
     };
 }
 
@@ -2046,6 +2356,12 @@ namespace nlohmann {
 
     void from_json(const json & j, quicktype::LayerDefinition & x);
     void to_json(json & j, const quicktype::LayerDefinition & x);
+
+    void from_json(const json & j, quicktype::LdtkTileCustomMetadata & x);
+    void to_json(json & j, const quicktype::LdtkTileCustomMetadata & x);
+
+    void from_json(const json & j, quicktype::LdtkEnumTagValue & x);
+    void to_json(json & j, const quicktype::LdtkEnumTagValue & x);
 
     void from_json(const json & j, quicktype::TilesetDefinition & x);
     void to_json(json & j, const quicktype::TilesetDefinition & x);
@@ -2080,14 +2396,23 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::Level & x);
     void to_json(json & j, const quicktype::Level & x);
 
+    void from_json(const json & j, quicktype::World & x);
+    void to_json(json & j, const quicktype::World & x);
+
     void from_json(const json & j, quicktype::LdtkJson & x);
     void to_json(json & j, const quicktype::LdtkJson & x);
+
+    void from_json(const json & j, quicktype::AllowedRefs & x);
+    void to_json(json & j, const quicktype::AllowedRefs & x);
 
     void from_json(const json & j, quicktype::EditorDisplayMode & x);
     void to_json(json & j, const quicktype::EditorDisplayMode & x);
 
     void from_json(const json & j, quicktype::EditorDisplayPos & x);
     void to_json(json & j, const quicktype::EditorDisplayPos & x);
+
+    void from_json(const json & j, quicktype::LevelFieldType & x);
+    void to_json(json & j, const quicktype::LevelFieldType & x);
 
     void from_json(const json & j, quicktype::TextLanguageMode & x);
     void to_json(json & j, const quicktype::TextLanguageMode & x);
@@ -2110,8 +2435,8 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::TileMode & x);
     void to_json(json & j, const quicktype::TileMode & x);
 
-    void from_json(const json & j, quicktype::Type & x);
-    void to_json(json & j, const quicktype::Type & x);
+    void from_json(const json & j, quicktype::LayerType & x);
+    void to_json(json & j, const quicktype::LayerType & x);
 
     void from_json(const json & j, quicktype::Flag & x);
     void to_json(json & j, const quicktype::Flag & x);
@@ -2128,6 +2453,9 @@ namespace nlohmann {
     inline void from_json(const json & j, quicktype::FieldDefinition& x) {
         x.set_type(j.at("__type").get<std::string>());
         x.set_accept_file_types(quicktype::get_optional<std::vector<std::string>>(j, "acceptFileTypes"));
+        x.set_allowed_refs(j.at("allowedRefs").get<quicktype::AllowedRefs>());
+        x.set_allowed_ref_tags(j.at("allowedRefTags").get<std::vector<std::string>>());
+        x.set_allow_out_of_level_ref(j.at("allowOutOfLevelRef").get<bool>());
         x.set_array_max_length(quicktype::get_optional<int64_t>(j, "arrayMaxLength"));
         x.set_array_min_length(quicktype::get_optional<int64_t>(j, "arrayMinLength"));
         x.set_can_be_null(j.at("canBeNull").get<bool>());
@@ -2136,20 +2464,27 @@ namespace nlohmann {
         x.set_editor_cut_long_values(j.at("editorCutLongValues").get<bool>());
         x.set_editor_display_mode(j.at("editorDisplayMode").get<quicktype::EditorDisplayMode>());
         x.set_editor_display_pos(j.at("editorDisplayPos").get<quicktype::EditorDisplayPos>());
+        x.set_editor_text_prefix(quicktype::get_optional<std::string>(j, "editorTextPrefix"));
+        x.set_editor_text_suffix(quicktype::get_optional<std::string>(j, "editorTextSuffix"));
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_is_array(j.at("isArray").get<bool>());
         x.set_max(quicktype::get_optional<double>(j, "max"));
         x.set_min(quicktype::get_optional<double>(j, "min"));
         x.set_regex(quicktype::get_optional<std::string>(j, "regex"));
+        x.set_symmetrical_ref(j.at("symmetricalRef").get<bool>());
         x.set_text_language_mode(quicktype::get_optional<quicktype::TextLanguageMode>(j, "textLanguageMode"));
-        x.set_field_definition_type(quicktype::get_untyped(j, "type"));
+        x.set_field_definition_type(j.at("type").get<quicktype::LevelFieldType>());
         x.set_uid(j.at("uid").get<int64_t>());
+        x.set_use_for_smart_color(j.at("useForSmartColor").get<bool>());
     }
 
     inline void to_json(json & j, const quicktype::FieldDefinition & x) {
         j = json::object();
         j["__type"] = x.get_type();
         j["acceptFileTypes"] = x.get_accept_file_types();
+        j["allowedRefs"] = x.get_allowed_refs();
+        j["allowedRefTags"] = x.get_allowed_ref_tags();
+        j["allowOutOfLevelRef"] = x.get_allow_out_of_level_ref();
         j["arrayMaxLength"] = x.get_array_max_length();
         j["arrayMinLength"] = x.get_array_min_length();
         j["canBeNull"] = x.get_can_be_null();
@@ -2158,14 +2493,18 @@ namespace nlohmann {
         j["editorCutLongValues"] = x.get_editor_cut_long_values();
         j["editorDisplayMode"] = x.get_editor_display_mode();
         j["editorDisplayPos"] = x.get_editor_display_pos();
+        j["editorTextPrefix"] = x.get_editor_text_prefix();
+        j["editorTextSuffix"] = x.get_editor_text_suffix();
         j["identifier"] = x.get_identifier();
         j["isArray"] = x.get_is_array();
         j["max"] = x.get_max();
         j["min"] = x.get_min();
         j["regex"] = x.get_regex();
+        j["symmetricalRef"] = x.get_symmetrical_ref();
         j["textLanguageMode"] = x.get_text_language_mode();
         j["type"] = x.get_field_definition_type();
         j["uid"] = x.get_uid();
+        j["useForSmartColor"] = x.get_use_for_smart_color();
     }
 
     inline void from_json(const json & j, quicktype::EntityDefinition& x) {
@@ -2304,7 +2643,7 @@ namespace nlohmann {
 
     inline void from_json(const json & j, quicktype::AutoLayerRuleGroup& x) {
         x.set_active(j.at("active").get<bool>());
-        x.set_collapsed(j.at("collapsed").get<bool>());
+        x.set_collapsed(quicktype::get_optional<bool>(j, "collapsed"));
         x.set_is_optional(j.at("isOptional").get<bool>());
         x.set_name(j.at("name").get<std::string>());
         x.set_rules(j.at("rules").get<std::vector<quicktype::AutoLayerRuleDefinition>>());
@@ -2341,16 +2680,23 @@ namespace nlohmann {
         x.set_auto_tileset_def_uid(quicktype::get_optional<int64_t>(j, "autoTilesetDefUid"));
         x.set_display_opacity(j.at("displayOpacity").get<double>());
         x.set_excluded_tags(j.at("excludedTags").get<std::vector<std::string>>());
+        x.set_fade_inactive(j.at("fadeInactive").get<bool>());
         x.set_grid_size(j.at("gridSize").get<int64_t>());
+        x.set_guide_grid_hei(j.at("guideGridHei").get<int64_t>());
+        x.set_guide_grid_wid(j.at("guideGridWid").get<int64_t>());
+        x.set_hide_in_list(j.at("hideInList").get<bool>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_int_grid_values(j.at("intGridValues").get<std::vector<quicktype::IntGridValueDefinition>>());
+        x.set_parallax_factor_x(j.at("parallaxFactorX").get<double>());
+        x.set_parallax_factor_y(j.at("parallaxFactorY").get<double>());
+        x.set_parallax_scaling(j.at("parallaxScaling").get<bool>());
         x.set_px_offset_x(j.at("pxOffsetX").get<int64_t>());
         x.set_px_offset_y(j.at("pxOffsetY").get<int64_t>());
         x.set_required_tags(j.at("requiredTags").get<std::vector<std::string>>());
         x.set_tile_pivot_x(j.at("tilePivotX").get<double>());
         x.set_tile_pivot_y(j.at("tilePivotY").get<double>());
         x.set_tileset_def_uid(quicktype::get_optional<int64_t>(j, "tilesetDefUid"));
-        x.set_layer_definition_type(j.at("type").get<quicktype::Type>());
+        x.set_layer_definition_type(j.at("type").get<quicktype::LayerType>());
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
@@ -2362,9 +2708,16 @@ namespace nlohmann {
         j["autoTilesetDefUid"] = x.get_auto_tileset_def_uid();
         j["displayOpacity"] = x.get_display_opacity();
         j["excludedTags"] = x.get_excluded_tags();
+        j["fadeInactive"] = x.get_fade_inactive();
         j["gridSize"] = x.get_grid_size();
+        j["guideGridHei"] = x.get_guide_grid_hei();
+        j["guideGridWid"] = x.get_guide_grid_wid();
+        j["hideInList"] = x.get_hide_in_list();
         j["identifier"] = x.get_identifier();
         j["intGridValues"] = x.get_int_grid_values();
+        j["parallaxFactorX"] = x.get_parallax_factor_x();
+        j["parallaxFactorY"] = x.get_parallax_factor_y();
+        j["parallaxScaling"] = x.get_parallax_scaling();
         j["pxOffsetX"] = x.get_px_offset_x();
         j["pxOffsetY"] = x.get_px_offset_y();
         j["requiredTags"] = x.get_required_tags();
@@ -2375,12 +2728,34 @@ namespace nlohmann {
         j["uid"] = x.get_uid();
     }
 
+    inline void from_json(const json & j, quicktype::LdtkTileCustomMetadata& x) {
+        x.set_data(j.at("data").get<std::string>());
+        x.set_tile_id(j.at("tileId").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const quicktype::LdtkTileCustomMetadata & x) {
+        j = json::object();
+        j["data"] = x.get_data();
+        j["tileId"] = x.get_tile_id();
+    }
+
+    inline void from_json(const json & j, quicktype::LdtkEnumTagValue& x) {
+        x.set_enum_value_id(j.at("enumValueId").get<std::string>());
+        x.set_tile_ids(j.at("tileIds").get<std::vector<int64_t>>());
+    }
+
+    inline void to_json(json & j, const quicktype::LdtkEnumTagValue & x) {
+        j = json::object();
+        j["enumValueId"] = x.get_enum_value_id();
+        j["tileIds"] = x.get_tile_ids();
+    }
+
     inline void from_json(const json & j, quicktype::TilesetDefinition& x) {
         x.set_c_hei(j.at("__cHei").get<int64_t>());
         x.set_c_wid(j.at("__cWid").get<int64_t>());
         x.set_cached_pixel_data(quicktype::get_optional<std::map<std::string, json>>(j, "cachedPixelData"));
-        x.set_custom_data(j.at("customData").get<std::vector<std::map<std::string, json>>>());
-        x.set_enum_tags(j.at("enumTags").get<std::vector<std::map<std::string, json>>>());
+        x.set_custom_data(j.at("customData").get<std::vector<quicktype::LdtkTileCustomMetadata>>());
+        x.set_enum_tags(j.at("enumTags").get<std::vector<quicktype::LdtkEnumTagValue>>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_padding(j.at("padding").get<int64_t>());
         x.set_px_hei(j.at("pxHei").get<int64_t>());
@@ -2493,10 +2868,12 @@ namespace nlohmann {
         x.set_grid(j.at("__grid").get<std::vector<int64_t>>());
         x.set_identifier(j.at("__identifier").get<std::string>());
         x.set_pivot(j.at("__pivot").get<std::vector<double>>());
+        x.set_tags(j.at("__tags").get<std::vector<std::string>>());
         x.set_tile(quicktype::get_optional<quicktype::EntityInstanceTile>(j, "__tile"));
         x.set_def_uid(j.at("defUid").get<int64_t>());
         x.set_field_instances(j.at("fieldInstances").get<std::vector<quicktype::FieldInstance>>());
         x.set_height(j.at("height").get<int64_t>());
+        x.set_iid(j.at("iid").get<std::string>());
         x.set_px(j.at("px").get<std::vector<int64_t>>());
         x.set_width(j.at("width").get<int64_t>());
     }
@@ -2506,10 +2883,12 @@ namespace nlohmann {
         j["__grid"] = x.get_grid();
         j["__identifier"] = x.get_identifier();
         j["__pivot"] = x.get_pivot();
+        j["__tags"] = x.get_tags();
         j["__tile"] = x.get_tile();
         j["defUid"] = x.get_def_uid();
         j["fieldInstances"] = x.get_field_instances();
         j["height"] = x.get_height();
+        j["iid"] = x.get_iid();
         j["px"] = x.get_px();
         j["width"] = x.get_width();
     }
@@ -2539,6 +2918,7 @@ namespace nlohmann {
         x.set_auto_layer_tiles(j.at("autoLayerTiles").get<std::vector<quicktype::TileInstance>>());
         x.set_entity_instances(j.at("entityInstances").get<std::vector<quicktype::EntityInstance>>());
         x.set_grid_tiles(j.at("gridTiles").get<std::vector<quicktype::TileInstance>>());
+        x.set_iid(j.at("iid").get<std::string>());
         x.set_int_grid(quicktype::get_optional<std::vector<quicktype::IntGridValueInstance>>(j, "intGrid"));
         x.set_int_grid_csv(j.at("intGridCsv").get<std::vector<int64_t>>());
         x.set_layer_def_uid(j.at("layerDefUid").get<int64_t>());
@@ -2566,6 +2946,7 @@ namespace nlohmann {
         j["autoLayerTiles"] = x.get_auto_layer_tiles();
         j["entityInstances"] = x.get_entity_instances();
         j["gridTiles"] = x.get_grid_tiles();
+        j["iid"] = x.get_iid();
         j["intGrid"] = x.get_int_grid();
         j["intGridCsv"] = x.get_int_grid_csv();
         j["layerDefUid"] = x.get_layer_def_uid();
@@ -2580,12 +2961,14 @@ namespace nlohmann {
 
     inline void from_json(const json & j, quicktype::NeighbourLevel& x) {
         x.set_dir(j.at("dir").get<std::string>());
+        x.set_level_iid(j.at("levelIid").get<std::string>());
         x.set_level_uid(j.at("levelUid").get<int64_t>());
     }
 
     inline void to_json(json & j, const quicktype::NeighbourLevel & x) {
         j = json::object();
         j["dir"] = x.get_dir();
+        j["levelIid"] = x.get_level_iid();
         j["levelUid"] = x.get_level_uid();
     }
 
@@ -2593,6 +2976,7 @@ namespace nlohmann {
         x.set_bg_color(j.at("__bgColor").get<std::string>());
         x.set_bg_pos(quicktype::get_optional<quicktype::LevelBackgroundPosition>(j, "__bgPos"));
         x.set_neighbours(j.at("__neighbours").get<std::vector<quicktype::NeighbourLevel>>());
+        x.set_smart_color(j.at("__smartColor").get<std::string>());
         x.set_level_bg_color(quicktype::get_optional<std::string>(j, "bgColor"));
         x.set_bg_pivot_x(j.at("bgPivotX").get<double>());
         x.set_bg_pivot_y(j.at("bgPivotY").get<double>());
@@ -2601,6 +2985,7 @@ namespace nlohmann {
         x.set_external_rel_path(quicktype::get_optional<std::string>(j, "externalRelPath"));
         x.set_field_instances(j.at("fieldInstances").get<std::vector<quicktype::FieldInstance>>());
         x.set_identifier(j.at("identifier").get<std::string>());
+        x.set_iid(j.at("iid").get<std::string>());
         x.set_layer_instances(quicktype::get_optional<std::vector<quicktype::LayerInstance>>(j, "layerInstances"));
         x.set_px_hei(j.at("pxHei").get<int64_t>());
         x.set_px_wid(j.at("pxWid").get<int64_t>());
@@ -2615,6 +3000,7 @@ namespace nlohmann {
         j["__bgColor"] = x.get_bg_color();
         j["__bgPos"] = x.get_bg_pos();
         j["__neighbours"] = x.get_neighbours();
+        j["__smartColor"] = x.get_smart_color();
         j["bgColor"] = x.get_level_bg_color();
         j["bgPivotX"] = x.get_bg_pivot_x();
         j["bgPivotY"] = x.get_bg_pivot_y();
@@ -2623,6 +3009,7 @@ namespace nlohmann {
         j["externalRelPath"] = x.get_external_rel_path();
         j["fieldInstances"] = x.get_field_instances();
         j["identifier"] = x.get_identifier();
+        j["iid"] = x.get_iid();
         j["layerInstances"] = x.get_layer_instances();
         j["pxHei"] = x.get_px_hei();
         j["pxWid"] = x.get_px_wid();
@@ -2632,7 +3019,27 @@ namespace nlohmann {
         j["worldY"] = x.get_world_y();
     }
 
+    inline void from_json(const json & j, quicktype::World& x) {
+        x.set_identifier(j.at("identifier").get<std::string>());
+        x.set_iid(j.at("iid").get<std::string>());
+        x.set_levels(j.at("levels").get<std::vector<quicktype::Level>>());
+        x.set_world_grid_height(j.at("worldGridHeight").get<int64_t>());
+        x.set_world_grid_width(j.at("worldGridWidth").get<int64_t>());
+        x.set_world_layout(j.at("worldLayout").get<quicktype::WorldLayout>());
+    }
+
+    inline void to_json(json & j, const quicktype::World & x) {
+        j = json::object();
+        j["identifier"] = x.get_identifier();
+        j["iid"] = x.get_iid();
+        j["levels"] = x.get_levels();
+        j["worldGridHeight"] = x.get_world_grid_height();
+        j["worldGridWidth"] = x.get_world_grid_width();
+        j["worldLayout"] = x.get_world_layout();
+    }
+
     inline void from_json(const json & j, quicktype::LdtkJson& x) {
+        x.set_app_build_id(j.at("appBuildId").get<double>());
         x.set_backup_limit(j.at("backupLimit").get<int64_t>());
         x.set_backup_on_save(j.at("backupOnSave").get<bool>());
         x.set_bg_color(j.at("bgColor").get<std::string>());
@@ -2657,10 +3064,12 @@ namespace nlohmann {
         x.set_world_grid_height(j.at("worldGridHeight").get<int64_t>());
         x.set_world_grid_width(j.at("worldGridWidth").get<int64_t>());
         x.set_world_layout(j.at("worldLayout").get<quicktype::WorldLayout>());
+        x.set_worlds(j.at("worlds").get<std::vector<quicktype::World>>());
     }
 
     inline void to_json(json & j, const quicktype::LdtkJson & x) {
         j = json::object();
+        j["appBuildId"] = x.get_app_build_id();
         j["backupLimit"] = x.get_backup_limit();
         j["backupOnSave"] = x.get_backup_on_save();
         j["bgColor"] = x.get_bg_color();
@@ -2685,10 +3094,29 @@ namespace nlohmann {
         j["worldGridHeight"] = x.get_world_grid_height();
         j["worldGridWidth"] = x.get_world_grid_width();
         j["worldLayout"] = x.get_world_layout();
+        j["worlds"] = x.get_worlds();
+    }
+
+    inline void from_json(const json & j, quicktype::AllowedRefs & x) {
+        if (j == "Any") x = quicktype::AllowedRefs::ANY;
+        else if (j == "OnlySame") x = quicktype::AllowedRefs::ONLY_SAME;
+        else if (j == "OnlyTags") x = quicktype::AllowedRefs::ONLY_TAGS;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::AllowedRefs & x) {
+        switch (x) {
+            case quicktype::AllowedRefs::ANY: j = "Any"; break;
+            case quicktype::AllowedRefs::ONLY_SAME: j = "OnlySame"; break;
+            case quicktype::AllowedRefs::ONLY_TAGS: j = "OnlyTags"; break;
+            default: throw "This should not happen";
+        }
     }
 
     inline void from_json(const json & j, quicktype::EditorDisplayMode & x) {
-        if (j == "EntityTile") x = quicktype::EditorDisplayMode::ENTITY_TILE;
+        if (j == "ArrayCountNoLabel") x = quicktype::EditorDisplayMode::ARRAY_COUNT_NO_LABEL;
+        else if (j == "ArrayCountWithLabel") x = quicktype::EditorDisplayMode::ARRAY_COUNT_WITH_LABEL;
+        else if (j == "EntityTile") x = quicktype::EditorDisplayMode::ENTITY_TILE;
         else if (j == "Hidden") x = quicktype::EditorDisplayMode::HIDDEN;
         else if (j == "NameAndValue") x = quicktype::EditorDisplayMode::NAME_AND_VALUE;
         else if (j == "Points") x = quicktype::EditorDisplayMode::POINTS;
@@ -2697,12 +3125,15 @@ namespace nlohmann {
         else if (j == "PointStar") x = quicktype::EditorDisplayMode::POINT_STAR;
         else if (j == "RadiusGrid") x = quicktype::EditorDisplayMode::RADIUS_GRID;
         else if (j == "RadiusPx") x = quicktype::EditorDisplayMode::RADIUS_PX;
+        else if (j == "RefLink") x = quicktype::EditorDisplayMode::REF_LINK;
         else if (j == "ValueOnly") x = quicktype::EditorDisplayMode::VALUE_ONLY;
         else throw "Input JSON does not conform to schema";
     }
 
     inline void to_json(json & j, const quicktype::EditorDisplayMode & x) {
         switch (x) {
+            case quicktype::EditorDisplayMode::ARRAY_COUNT_NO_LABEL: j = "ArrayCountNoLabel"; break;
+            case quicktype::EditorDisplayMode::ARRAY_COUNT_WITH_LABEL: j = "ArrayCountWithLabel"; break;
             case quicktype::EditorDisplayMode::ENTITY_TILE: j = "EntityTile"; break;
             case quicktype::EditorDisplayMode::HIDDEN: j = "Hidden"; break;
             case quicktype::EditorDisplayMode::NAME_AND_VALUE: j = "NameAndValue"; break;
@@ -2712,6 +3143,7 @@ namespace nlohmann {
             case quicktype::EditorDisplayMode::POINT_STAR: j = "PointStar"; break;
             case quicktype::EditorDisplayMode::RADIUS_GRID: j = "RadiusGrid"; break;
             case quicktype::EditorDisplayMode::RADIUS_PX: j = "RadiusPx"; break;
+            case quicktype::EditorDisplayMode::REF_LINK: j = "RefLink"; break;
             case quicktype::EditorDisplayMode::VALUE_ONLY: j = "ValueOnly"; break;
             default: throw "This should not happen";
         }
@@ -2729,6 +3161,36 @@ namespace nlohmann {
             case quicktype::EditorDisplayPos::ABOVE: j = "Above"; break;
             case quicktype::EditorDisplayPos::BENEATH: j = "Beneath"; break;
             case quicktype::EditorDisplayPos::CENTER: j = "Center"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::LevelFieldType & x) {
+        if (j == "F_Bool") x = quicktype::LevelFieldType::F_BOOL;
+        else if (j == "F_Color") x = quicktype::LevelFieldType::F_COLOR;
+        else if (j == "F_EntityRef") x = quicktype::LevelFieldType::F_ENTITY_REF;
+        else if (j == "F_Enum") x = quicktype::LevelFieldType::F_ENUM;
+        else if (j == "F_Float") x = quicktype::LevelFieldType::F_FLOAT;
+        else if (j == "F_Int") x = quicktype::LevelFieldType::F_INT;
+        else if (j == "F_Path") x = quicktype::LevelFieldType::F_PATH;
+        else if (j == "F_Point") x = quicktype::LevelFieldType::F_POINT;
+        else if (j == "F_String") x = quicktype::LevelFieldType::F_STRING;
+        else if (j == "F_Text") x = quicktype::LevelFieldType::F_TEXT;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::LevelFieldType & x) {
+        switch (x) {
+            case quicktype::LevelFieldType::F_BOOL: j = "F_Bool"; break;
+            case quicktype::LevelFieldType::F_COLOR: j = "F_Color"; break;
+            case quicktype::LevelFieldType::F_ENTITY_REF: j = "F_EntityRef"; break;
+            case quicktype::LevelFieldType::F_ENUM: j = "F_Enum"; break;
+            case quicktype::LevelFieldType::F_FLOAT: j = "F_Float"; break;
+            case quicktype::LevelFieldType::F_INT: j = "F_Int"; break;
+            case quicktype::LevelFieldType::F_PATH: j = "F_Path"; break;
+            case quicktype::LevelFieldType::F_POINT: j = "F_Point"; break;
+            case quicktype::LevelFieldType::F_STRING: j = "F_String"; break;
+            case quicktype::LevelFieldType::F_TEXT: j = "F_Text"; break;
             default: throw "This should not happen";
         }
     }
@@ -2859,34 +3321,36 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::Type & x) {
-        if (j == "AutoLayer") x = quicktype::Type::AUTO_LAYER;
-        else if (j == "Entities") x = quicktype::Type::ENTITIES;
-        else if (j == "IntGrid") x = quicktype::Type::INT_GRID;
-        else if (j == "Tiles") x = quicktype::Type::TILES;
+    inline void from_json(const json & j, quicktype::LayerType & x) {
+        if (j == "AutoLayer") x = quicktype::LayerType::AUTO_LAYER;
+        else if (j == "Entities") x = quicktype::LayerType::ENTITIES;
+        else if (j == "IntGrid") x = quicktype::LayerType::INT_GRID;
+        else if (j == "Tiles") x = quicktype::LayerType::TILES;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::Type & x) {
+    inline void to_json(json & j, const quicktype::LayerType & x) {
         switch (x) {
-            case quicktype::Type::AUTO_LAYER: j = "AutoLayer"; break;
-            case quicktype::Type::ENTITIES: j = "Entities"; break;
-            case quicktype::Type::INT_GRID: j = "IntGrid"; break;
-            case quicktype::Type::TILES: j = "Tiles"; break;
+            case quicktype::LayerType::AUTO_LAYER: j = "AutoLayer"; break;
+            case quicktype::LayerType::ENTITIES: j = "Entities"; break;
+            case quicktype::LayerType::INT_GRID: j = "IntGrid"; break;
+            case quicktype::LayerType::TILES: j = "Tiles"; break;
             default: throw "This should not happen";
         }
     }
 
     inline void from_json(const json & j, quicktype::Flag & x) {
-        if (j == "DiscardPreCsvIntGrid") x = quicktype::Flag::DISCARD_PRE_CSV_INT_GRID;
+        if (j == "ExportPreCsvIntGridFormat") x = quicktype::Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT;
         else if (j == "IgnoreBackupSuggest") x = quicktype::Flag::IGNORE_BACKUP_SUGGEST;
+        else if (j == "PrependIndexToLevelFileNames") x = quicktype::Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES;
         else throw "Input JSON does not conform to schema";
     }
 
     inline void to_json(json & j, const quicktype::Flag & x) {
         switch (x) {
-            case quicktype::Flag::DISCARD_PRE_CSV_INT_GRID: j = "DiscardPreCsvIntGrid"; break;
+            case quicktype::Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT: j = "ExportPreCsvIntGridFormat"; break;
             case quicktype::Flag::IGNORE_BACKUP_SUGGEST: j = "IgnoreBackupSuggest"; break;
+            case quicktype::Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES: j = "PrependIndexToLevelFileNames"; break;
             default: throw "This should not happen";
         }
     }
