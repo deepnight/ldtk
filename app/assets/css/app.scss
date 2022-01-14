@@ -3353,8 +3353,9 @@ canvas#webgl {
 	}
 
 	@at-root body.hasValuePicker canvas#webgl {
-		outline: 5px dashed $orange !important;
-		outline-offset: -8px;
+		outline: 4px dashed $orange !important;
+		outline-offset: -16px;
+		filter: sepia(0.4);
 	}
 }
 
