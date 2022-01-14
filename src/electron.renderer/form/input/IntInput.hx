@@ -3,18 +3,13 @@ package form.input;
 class IntInput extends form.Input<Int> {
 	var min : Int = M.T_INT16_MIN;
 	var max : Int = M.T_INT16_MAX;
-	public var isColorCode(default,set) = false;
+	var isColorCode = false;
 	public var allowNull = false;
 	var emptyValue : Null<Int>;
 
 	public function new(j:js.jquery.JQuery, getter:Void->Int, setter:Int->Void) {
+		isColorCode = j.is("[type=color]");
 		super(j, getter, setter);
-	}
-
-	function set_isColorCode(v) {
-		isColorCode = v;
-		writeValueToInput();
-		return isColorCode;
 	}
 
 	public function setEmptyValue(v:Int) {

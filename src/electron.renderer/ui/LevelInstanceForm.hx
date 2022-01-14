@@ -198,7 +198,6 @@ class LevelInstanceForm {
 		var c = level.getBgColor();
 		var i = Input.linkToHtmlInput( c, jForm.find("#bgColor"));
 		i.jInput.attr("colorTag","bg");
-		i.isColorCode = true;
 		i.onChange = ()->{
 			level.bgColor = c==project.defaultLevelBgColor ? null : c;
 			onFieldChange();

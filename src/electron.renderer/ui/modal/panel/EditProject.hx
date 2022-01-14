@@ -236,12 +236,10 @@ class EditProject extends ui.modal.Panel {
 
 		// Workspace bg
 		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=bgColor]"));
-		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Level bg
 		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForm.find("[name=defaultLevelbgColor]"));
-		i.isColorCode = true;
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Default entity pivot
