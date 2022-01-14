@@ -820,6 +820,9 @@ class Editor extends Page {
 
 		panTool.startUsing(ev,m);
 
+		if( !ev.cancel && ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseDown(ev, m);
+
 		if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() )
 			resizeTool.onMouseDown( ev, m );
 
@@ -828,9 +831,6 @@ class Editor extends Page {
 
 		if( !ev.cancel )
 			worldTool.onMouseDown(ev, m);
-
-		if( ui.ValuePicker.exists() )
-			ui.ValuePicker.ME.onMouseDown(ev, m);
 
 		if( !ev.cancel && !worldMode && !project.isBackup() ) {
 			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )

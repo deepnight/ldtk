@@ -120,13 +120,19 @@ class ValuePicker<T> extends dn.Process {
 
 	public dynamic function onPickValue(v:T) {}
 
+	function shouldCancelLeftClickEventAt(m:Coords) {
+		return true;
+	}
+
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
-		// Block right clicks
+		// Right click
 		if( ev.button==1 )
 			ev.cancel = true;
 
-		if( ev.button==0 && curLevel.inBounds(m.levelX,m.levelY) ) {
-			ev.cancel = true;
+		// Left click
+		if( ev.button==0 ) {
+			if( shouldCancelLeftClickEventAt(m) )
+				ev.cancel = true;
 			var v = pickAt(m);
 			if( v!=null )
 				onPick(v);

@@ -74,12 +74,8 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 			editor.selectLayerInstance(sourceEi._li);
 	}
 
-	override function onEnter(ei:data.inst.EntityInstance) {
-		super.onEnter(ei);
-	}
-
-	override function onLeave(ei:data.inst.EntityInstance) {
-		super.onLeave(ei);
+	override function shouldCancelLeftClickEventAt(m:Coords):Bool {
+		return curLevel.inBounds(m.levelX, m.levelY);
 	}
 
 	override function onPick(v:data.inst.EntityInstance) {
