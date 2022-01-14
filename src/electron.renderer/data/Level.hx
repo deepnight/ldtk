@@ -11,6 +11,7 @@ class Level {
 	public var identifier(default,set): String;
 	public var worldX : Int;
 	public var worldY : Int;
+	public var worldDepth : Int;
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
@@ -39,6 +40,7 @@ class Level {
 		this.uid = uid;
 		this.iid = iid;
 		worldX = worldY = 0;
+		worldDepth = 0;
 		pxWid = wid;
 		pxHei = hei;
 		bgPivotX = 0.5;
@@ -109,6 +111,7 @@ class Level {
 			uid: uid,
 			worldX: jsonWorldX,
 			worldY: jsonWorldY,
+			worldDepth: worldDepth,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			__bgColor: JsonTools.writeColor( getBgColor() ),
@@ -173,6 +176,7 @@ class Level {
 		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid), json.iid );
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
+		l.worldDepth = JsonTools.readInt( json.worldDepth, 0 );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
 		l.externalRelPath = json.externalRelPath;
