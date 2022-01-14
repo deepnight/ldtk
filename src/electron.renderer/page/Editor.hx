@@ -529,8 +529,6 @@ class Editor extends Page {
 					curTool.popInPalette();
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( worldMode && worldTool.isInAddMode() )
-					worldTool.stopAddMode();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
 				else if( selectionTool.any() )
@@ -1167,7 +1165,6 @@ class Editor extends Page {
 			updateLayerList();
 
 		camera.onWorldModeChange(worldMode, usedMouseWheel);
-		worldTool.onWorldModeChange(worldMode);
 	}
 
 	public function setGrid(v:Bool, notify=true) {

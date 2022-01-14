@@ -42,8 +42,8 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	}
 
 
-	function createLevelAt(m:Coords) {
-		var b = getLevelInsertBounds(m);
+	public static function tryToCreateLevelAt(project:data.Project, m:Coords) {
+		var b = getLevelInsertBounds(project, m);
 		if( b!=null ) {
 			var l = switch project.worldLayout {
 				case Free, GridVania:
@@ -55,7 +55,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 					l;
 
 				case LinearHorizontal, LinearVertical:
-					var i = getLinearInsertPoint(m, true);
+					var i = getLinearInsertPoint(project, m, true);
 					if( i!=null ) {
 						var l = project.createLevel(i.idx);
 						l;
@@ -66,9 +66,9 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 			if( l!=null ) {
 				N.msg("New level created");
 				project.reorganizeWorld();
-				editor.ge.emit( LevelAdded(l) );
-				editor.selectLevel(l);
-				editor.camera.scrollToLevel(l);
+				Editor.ME.ge.emit( LevelAdded(l) );
+				Editor.ME.selectLevel(l);
+				Editor.ME.camera.scrollToLevel(l);
 			}
 			return true;
 		}
@@ -81,7 +81,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	/**
 		Get linear layout insert point from given Coords
 	**/
-	function getLinearInsertPoint(m:Coords, forCreation:Bool) : Null<LinearInsertPoint> {
+	public static function getLinearInsertPoint(project:data.Project, m:Coords, forCreation:Bool) : Null<LinearInsertPoint> {
 		if( project.levels.length<=1 && !forCreation )
 			return null;
 
@@ -128,7 +128,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	}
 
 
-	inline function boundsOverlaps(l:data.Level, x,y,w,h) {
+	static inline function boundsOverlaps(l:data.Level, x,y,w,h) {
 		return dn.Lib.rectangleOverlaps( x, y, w, h, l.worldX, l.worldY, l.pxWid, l.pxHei );
 	}
 
@@ -136,7 +136,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	/**
 		Return a valid level insertion spot near Coords, or null if none.
 	**/
-	function getLevelInsertBounds(m:Coords) {
+	public static function getLevelInsertBounds(project:data.Project, m:Coords) {
 		var wid = project.defaultLevelWidth;
 		var hei = project.defaultLevelHeight;
 
@@ -187,13 +187,13 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 					b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
 					b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
 				}
-				else if( settings.v.grid ) {
+				else if( App.ME.settings.v.grid ) {
 					b.x = dn.M.round( b.x/project.defaultGridSize ) * project.defaultGridSize;
 					b.y = dn.M.round( b.y/project.defaultGridSize ) * project.defaultGridSize;
 				}
 
 			case LinearHorizontal:
-				var i = getLinearInsertPoint(m, true);
+				var i = getLinearInsertPoint(project, m, true);
 				if( i!=null) {
 					b.x = i.pos-b.wid*0.5;
 					b.y = -32;
@@ -202,7 +202,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 					return null;
 
 			case LinearVertical:
-				var i = getLinearInsertPoint(m, true);
+				var i = getLinearInsertPoint(project, m, true);
 				if( i!=null) {
 					b.x = -32;
 					b.y = i.pos-b.hei*0.5;
@@ -229,7 +229,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 
 		// Preview "add level" location
-		var bounds = getLevelInsertBounds(m);
+		var bounds = getLevelInsertBounds(project, m);
 		insertCursor.visible = bounds!=null;
 		if( bounds!=null ) {
 			var c = bounds.overlaps ? 0xff4400 : 0x8dcbfb;
@@ -264,11 +264,11 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 	override function onPick(m:Coords) {
 		super.onPick(m);
-		createLevelAt(m);
+		tryToCreateLevelAt(project,m);
 	}
 
 	override function pickAt(m:Coords) {
-		var ip = getLevelInsertBounds(m);
+		var ip = getLevelInsertBounds(project, m);
 		if( ip==null || ip.overlaps )
 			return null;
 		else
@@ -277,6 +277,6 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 
 	override function isValidPick(c:Coords):Bool {
-		return getLevelInsertBounds(c) != null;
+		return getLevelInsertBounds(project,c) != null;
 	}
 }
