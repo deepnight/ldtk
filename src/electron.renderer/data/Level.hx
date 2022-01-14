@@ -25,6 +25,7 @@ class Level {
 	public var bgPivotY: Float;
 	public var useAutoIdentifier: Bool;
 
+	@:allow(ui.LevelInstanceForm)
 	@:allow(ui.modal.panel.LevelInstancePanel)
 	var bgColor : Null<UInt>;
 

@@ -5777,7 +5777,7 @@ body.sorting ul.collapsedSortTarget {
 		display: grid;
 		grid-template-rows: repeat(4,min-content) auto;
 		gap: 8px;
-		width: 500px;
+		width: 330px;
 		height: 100%;
 
 		a.editFields {
@@ -5795,9 +5795,10 @@ body.sorting ul.collapsedSortTarget {
 			}
 		}
 
-		#levelForm {
+		dl#levelForm {
+			grid-template-columns: 110px auto;
 			dt {
-				width: 140px;
+				min-width: none;
 				max-width: none;
 			}
 			input#identifier {
@@ -5889,6 +5890,110 @@ body.sorting ul.collapsedSortTarget {
 		}
 	}
 }
+
+
+
+.levelInstanceForm {
+	a.editFields {
+		display: inline-block;
+		margin-left: 8px;
+		padding: 2px 4px;
+		font-size: 9pt;
+		color: black;
+		background-color: $orange;
+		border-radius: 3px;
+		cursor: pointer;
+		vertical-align: middle;
+		&:hover {
+			background-color: white;
+		}
+	}
+
+	dl#levelProps {
+		grid-template-columns: 110px auto;
+		dt {
+			min-width: none;
+			max-width: none;
+		}
+		.bg {
+			display: grid;
+			align-items: stretch;
+
+			button.pick {
+				width: 0;
+			}
+
+			.pos {
+				display: grid;
+				grid-template-columns: 160px min-content;
+				justify-content: stretch;
+				.pivotEditor {
+					grid-template-columns: repeat(3, 14px);
+					grid-template-rows: repeat(3, 14px);
+				}
+				select {
+					font-size: 9pt;
+				}
+			}
+		}
+	}
+
+	.fieldInstanceEditor {
+		margin-left: -8px;
+		margin-right: -8px;
+		padding: 8px;
+
+		&:not(:empty) {
+			box-shadow: 0px 0px 16px black;
+			background-color: $bgMed;
+		}
+		&:empty {
+			padding-top: 32px;
+			color: $bgLighter;
+			text-align: center;
+			grid-template-columns: auto;
+			background-image: url("../img/stripes.png");
+			&::before {
+				content: "No custom field.";
+			}
+		}
+	}
+
+	h2 {
+		margin-top: 16px;
+		margin-bottom: 8px;
+	}
+
+	a.reset {
+		flex: 0 0 auto;
+		align-self: center;
+		font-size: 9pt;
+		text-decoration: underline;
+		margin-left: 8px;
+		padding: 2px 4px;
+		border-radius: 3px;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: none;
+			color: black;
+			background-color: $orange;
+		}
+	}
+
+	.buttons {
+		flex-wrap: nowrap;
+		button.delete {
+			flex: 1 1 auto;
+		}
+	}
+
+	button {
+		white-space: nowrap;
+	}
+}
+
+
 
 .window.panel.editAllAutoLayerRules {
 	width: auto;
