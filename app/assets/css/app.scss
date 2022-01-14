@@ -3,7 +3,7 @@ $bgDark: #1e2229;
 $bgMed: #2e333f;
 $bgLight: #545d73;
 $bgLighter: #737f9d;
-$almostWhite: #b5bac7;
+$almostWhite: #c1cfeb;
 $lightRed: #ffa386;
 $red: #e34d00;
 $darkRed: #791105;
@@ -2469,11 +2469,32 @@ textarea {
 			overflow-y: auto;
 			background-color: $bgDark;
 
-			color: #acb8d1;
+			color: $almostWhite;
 
 
 			strong {
 				color: white;
+			}
+
+			code {
+				display: inline-block;
+				padding: 0px 4px;
+				color: #3fdfac;
+				border: 1px solid $bgMed;
+				white-space: nowrap;
+				border-radius: 3px;
+			}
+
+			h2 {
+				margin-top: 16px;
+			}
+
+			h2+h3 {
+				margin-top: 0;
+			}
+
+			h3 {
+				border: 0;
 			}
 
 			&>p+ul {
