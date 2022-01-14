@@ -233,8 +233,8 @@ class Rulers extends dn.Process {
 	}
 
 	function resizeBoundsValid(b) {
-		var min = getResizeGrid() * 2;
-		return b.newRight>b.newLeft+min && b.newBottom>b.newTop+min;
+		var min = getResizeGrid();
+		return b.newRight>=b.newLeft+min && b.newBottom>=b.newTop+min;
 	}
 
 	function getResizedBounds(m:Coords) {

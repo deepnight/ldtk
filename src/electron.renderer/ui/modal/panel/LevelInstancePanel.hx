@@ -180,13 +180,13 @@ class LevelInstancePanel extends ui.modal.Panel {
 		var tmpHei = level.pxHei;
 		var e = jForm.find("#width"); e.replaceWith( e.clone() ); // block undo/redo
 		var i = Input.linkToHtmlInput( tmpWid, jForm.find("#width") );
-		i.setBounds(project.defaultGridSize*2, 4096);
+		i.setBounds(project.defaultGridSize, 4096);
 		i.onValueChange = (v)->onLevelResized(v, tmpHei);
 		i.fixValue = v->project.snapWorldGridX(v,true);
 
 		var e = jForm.find("#height"); e.replaceWith( e.clone() ); // block undo/redo
 		var i = Input.linkToHtmlInput( tmpHei, jForm.find("#height"));
-		i.setBounds(project.defaultGridSize*2, 4096);
+		i.setBounds(project.defaultGridSize, 4096);
 		i.onValueChange = (v)->onLevelResized(tmpWid, v);
 		i.fixValue = v->project.snapWorldGridY(v,true);
 
