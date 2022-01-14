@@ -15,6 +15,11 @@ class LevelInstanceForm {
 		var raw = JsTools.getHtmlTemplate("levelInstanceForm");
 		jWrapper.html(raw);
 
+		// Create button
+		jWrapper.find("button.create").click( (_)->{
+			var vp = new ui.vp.LevelSpotPicker();
+		});
+
 		// Delete button
 		jWrapper.find("button.delete").click( (_)->{
 			if( project.levels.length<=1 ) {

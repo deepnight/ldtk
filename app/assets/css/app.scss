@@ -5716,15 +5716,19 @@ body.sorting ul.collapsedSortTarget {
 	.content {
 		width: 330px;
 
+		.worldSettings,
+		.currentLevelInstance {
+			h2 {
+				margin-bottom: 8px;
+			}
+		}
+
 		.levelFields {
 			display: grid;
 			grid-template-rows: min-content auto;
 		}
 
 		.worldSettings {
-			h2 {
-				margin-bottom: 16px;
-			}
 
 			.buttons {
 				margin-bottom: 16px;
@@ -5839,6 +5843,22 @@ body.sorting ul.collapsedSortTarget {
 
 
 .levelInstanceForm {
+
+	.buttons {
+		flex-wrap: nowrap;
+		padding-bottom: 16px;
+		margin-bottom: 16px;
+		border-bottom: 1px dashed $bgLight;
+
+		button.delete {
+			flex: 0 1 0px;
+		}
+		button {
+			white-space: nowrap;
+		}
+	}
+
+
 	a.editFields {
 		display: inline-block;
 		margin-left: 8px;
@@ -5926,17 +5946,6 @@ body.sorting ul.collapsedSortTarget {
 			color: black;
 			background-color: $orange;
 		}
-	}
-
-	.buttons {
-		flex-wrap: nowrap;
-		button.delete {
-			flex: 1 1 auto;
-		}
-	}
-
-	button {
-		white-space: nowrap;
 	}
 }
 
