@@ -1,7 +1,6 @@
 package ui.modal.panel;
 
 class WorldPanel extends ui.modal.Panel {
-	var awaitingPick = false;
 	var levelInstanceForm : ui.LevelInstanceForm;
 
 	public function new() {
@@ -10,21 +9,6 @@ class WorldPanel extends ui.modal.Panel {
 		linkToButton("button.world");
 		jMask.hide();
 		loadTemplate("worldPanel");
-
-		// Create button
-		jContent.find("button.create").click( (ev:js.jquery.Event)->{
-			if( editor.worldTool.isInAddMode() ) {
-				editor.worldTool.stopAddMode();
-				ev.getThis().removeClass("running");
-				awaitingPick = false;
-			}
-			else {
-				editor.worldTool.startAddMode();
-				ev.getThis().addClass("running");
-				N.msg(L.t._("Select a spot on the world map..."));
-				awaitingPick = true;
-			}
-		});
 
 		// Current level instance form
 		levelInstanceForm = new ui.LevelInstanceForm();
@@ -127,10 +111,5 @@ class WorldPanel extends ui.modal.Panel {
 		super.update();
 		if( !editor.worldMode )
 			close();
-
-		if( !editor.worldTool.isInAddMode() && awaitingPick ) {
-			awaitingPick = false;
-			jContent.find("button.create").removeClass("running");
-		}
 	}
 }

@@ -5729,6 +5729,7 @@ body.sorting ul.collapsedSortTarget {
 		}
 
 		.worldSettings {
+			margin-bottom: 32px;
 
 			.buttons {
 				margin-bottom: 16px;
@@ -5743,6 +5744,10 @@ body.sorting ul.collapsedSortTarget {
 						display: none;
 					}
 				}
+			}
+
+			dl.form {
+				padding-bottom: 0;
 			}
 
 			dl.form .GridVania,
