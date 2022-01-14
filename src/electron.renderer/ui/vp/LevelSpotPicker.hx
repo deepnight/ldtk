@@ -78,20 +78,6 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 
 
-	function getLevelAt(worldX:Int, worldY:Int, allowSelf:Bool) {
-		if( !allowSelf && editor.curLevel.isWorldOver(worldX,worldY) )
-			return null;
-
-		var i = project.levels.length-1;
-		while( i>=0 )
-			if( project.levels[i].isWorldOver(worldX,worldY) )
-				return project.levels[i];
-			else
-				i--;
-
-		return null;
-	}
-
 	/**
 		Get linear layout insert point from given Coords
 	**/
@@ -99,7 +85,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		if( project.levels.length<=1 && !forCreation )
 			return null;
 
-		var clickedLevel = getLevelAt(m.worldX, m.worldY, editor.worldMode);
+		var clickedLevel = project.getLevelAt(m.worldX, m.worldY);
 
 		// Init possible insert points in linear modes
 		var pts =
