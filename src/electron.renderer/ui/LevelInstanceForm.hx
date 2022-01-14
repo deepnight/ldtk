@@ -86,16 +86,11 @@ class LevelInstanceForm {
 		jWrapper = null;
 		level = null;
 		fieldsForm.dispose();
+		fieldsForm = null;
 	}
 
 	public function onGlobalEvent(ge:GlobalEvent) {
 		switch ge {
-			case WorldSettingsChanged:
-				if( level==null || project.getLevel(level.uid)==null )
-					dispose();
-				else
-					updateLevelPropsForm();
-
 			case ProjectSelected:
 				useLevel(editor.curLevel);
 
@@ -110,12 +105,12 @@ class LevelInstanceForm {
 			case LevelAdded(level):
 
 			case LevelSelected(l):
-				if( !isUsingLevel(l) )
-					dispose();
+				useLevel(l);
+				jWrapper.show();
 
 			case LevelRemoved(l):
 				if( isUsingLevel(l) )
-					dispose();
+					jWrapper.hide();
 
 			case WorldLevelMoved(_):
 				updateLevelPropsForm();
@@ -152,14 +147,11 @@ class LevelInstanceForm {
 	function updateLevelPropsForm() {
 		ui.Tip.clear();
 
-		if( level==null ) {
-			dispose();
-			return;
-		}
-
 		var jForm = jWrapper.find("dl#levelProps");
 		jForm.find("*").off();
 
+		if( level==null )
+			return;
 
 		// Level identifier
 		jWrapper.find(".levelIdentifier").text('"${level.identifier}"');
