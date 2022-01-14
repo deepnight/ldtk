@@ -42,7 +42,7 @@ class Panel extends ui.Modal {
 		jContent.find("*:not(.close)")
 			.off()
 			.mouseover( (ev)->ev.preventDefault() );
-		jContent.find("input").prop("disabled",true);
+		jContent.find("input, select, textarea").prop("disabled",true);
 
 		jWrapper.find(".backupNotice").remove();
 		jWrapper.append('<div class="backupNotice"><span>This panel is disabled for backup files.</span></div>');
