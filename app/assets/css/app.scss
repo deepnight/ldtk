@@ -5713,11 +5713,7 @@ body.sorting ul.collapsedSortTarget {
 	}
 
 	.content {
-		display: grid;
-		grid-auto-rows: min-content auto;
-		gap: 8px;
 		width: 330px;
-		height: 100%;
 
 		.levelFields {
 			display: grid;

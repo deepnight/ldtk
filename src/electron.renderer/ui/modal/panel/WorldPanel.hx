@@ -2,6 +2,7 @@ package ui.modal.panel;
 
 class WorldPanel extends ui.modal.Panel {
 	var awaitingPick = false;
+	var levelInstanceForm : ui.LevelInstanceForm;
 
 	public function new() {
 		super();
@@ -25,9 +26,20 @@ class WorldPanel extends ui.modal.Panel {
 			}
 		});
 
+		// Current level instance form
+		levelInstanceForm = new ui.LevelInstanceForm();
+		jContent.find(".currentLevelInstance").append( levelInstanceForm.jWrapper );
+		levelInstanceForm.useLevel(editor.curLevel);
+
 		updateWorldForm();
 	}
 
+
+	override function onDispose() {
+		super.onDispose();
+		levelInstanceForm.dispose();
+		levelInstanceForm = null;
+	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {
 		super.onGlobalEvent(ge);
@@ -41,6 +53,9 @@ class WorldPanel extends ui.modal.Panel {
 
 			case _:
 		}
+
+		if( levelInstanceForm!=null && !isClosing() )
+			levelInstanceForm.onGlobalEvent(ge);
 	}
 
 
