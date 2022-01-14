@@ -16,6 +16,7 @@
 			"worldGridHeight",
 			"worldGridWidth",
 			"worldLayout",
+			"worlds",
 			"appBuildId",
 			"backupLimit",
 			"backupOnSave",
@@ -61,6 +62,15 @@
 				"description": "Project background color",
 				"type": [
 					"string"
+				]
+			},
+			"worlds": {
+				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
+				"items": {
+					"$ref": "#/otherTypes/World"
+				},
+				"type": [
+					"array"
 				]
 			},
 			"nextUid": {
@@ -1389,6 +1399,66 @@
 					"type": [
 						"array",
 						"null"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"World": {
+			"description": "**IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented here as a preview of a planned feature.  A World contains multiple levels, and it has its own layout settings.",
+			"title": "World",
+			"required": [
+				"identifier",
+				"iid",
+				"levels",
+				"worldGridHeight",
+				"worldGridWidth",
+				"worldLayout"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldGridWidth": {
+					"description": "Width of the world grid in pixels.",
+					"type": [
+						"integer"
+					]
+				},
+				"iid": {
+					"description": "Unique instance identifer",
+					"type": [
+						"string"
+					]
+				},
+				"worldGridHeight": {
+					"description": "Height of the world grid in pixels.",
+					"type": [
+						"integer"
+					]
+				},
+				"worldLayout": {
+					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
+					"enum": [
+						"Free",
+						"GridVania",
+						"LinearHorizontal",
+						"LinearVertical"
+					]
+				},
+				"levels": {
+					"description": "All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
+					"items": {
+						"$ref": "#/otherTypes/Level"
+					},
+					"type": [
+						"array"
+					]
+				},
+				"identifier": {
+					"description": "User defined unique identifier",
+					"type": [
+						"string"
 					]
 				}
 			},

@@ -484,6 +484,8 @@ class Project {
 
 			defs: defs.toJson(this),
 			levels: levels.map( (l)->l.toJson() ),
+
+			worlds: [],
 		}
 
 		return json;

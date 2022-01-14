@@ -1,6 +1,7 @@
 ## LDtk Json structure (version 0.10.0)
 
    - [LDtk Json root](#ldtk-ProjectJson)
+     - [World](#ldtk-WorldJson)
    - [Level](#ldtk-LevelJson)
      - [Layer instance](#ldtk-LayerInstanceJson)
        - [Tile instance](#ldtk-Tile)
@@ -33,6 +34,7 @@ Value | Type | Description
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`worlds`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Array&nbsp;of&nbsp;[World](#ldtk-WorldJson) | This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when "Multiple worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the "Multiple worlds" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231
 `appBuildId`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Float | LDtk application build identifier.<br/>		This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.
 `backupLimit`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
@@ -50,6 +52,21 @@ Value | Type | Description
 `nextUid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Next Unique integer ID available
 `pngFilePattern`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
 ~~`exportPng`~~<br/><sup class="internal">*Only used by editor*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 0.9.3<br/> <br/> Replaced by: `imageExportMode`
+
+<a id="ldtk-WorldJson" name="ldtk-WorldJson"></a>
+## 1.1. World  ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg) 
+**IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented here as a preview of a planned feature.
+
+A World contains multiple levels, and it has its own layout settings.
+
+Value | Type | Description
+-- | -- | --
+`identifier` | String | User defined unique identifier
+`iid` | String | Unique instance identifer
+`levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Height of the world grid in pixels.
+`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Width of the world grid in pixels.
+`worldLayout` | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 2. Level   
