@@ -5720,30 +5720,39 @@ body.sorting ul.collapsedSortTarget {
 			grid-template-rows: min-content auto;
 		}
 
-		button:not(.running) span.running {
-			display: none;
-		}
-		button.running {
-			outline: 1px solid $orange;
-			box-shadow: 0px 0px 16px $red;
-			opacity: 0.5;
-			span.ready {
+		.worldSettings {
+			h2 {
+				margin-bottom: 16px;
+			}
+
+			.buttons {
+				margin-bottom: 16px;
+				button:not(.running) span.running {
+					display: none;
+				}
+				button.running {
+					outline: 1px solid $orange;
+					box-shadow: 0px 0px 16px $red;
+					opacity: 0.5;
+					span.ready {
+						display: none;
+					}
+				}
+			}
+
+			dl.form .GridVania,
+			dl.form .LinearHorizontal,
+			dl.form .LinearVertical,
+			dl.form .Free {
 				display: none;
 			}
-		}
 
-		dl.form .GridVania,
-		dl.form .LinearHorizontal,
-		dl.form .LinearVertical,
-		dl.form .Free {
-			display: none;
-		}
-
-		dl.form.layout-GridVania .GridVania,
-		dl.form.layout-LinearHorizontal .LinearHorizontal,
-		dl.form.layout-LinearVertical .LinearVertical,
-		dl.form.layout-Free .Free {
-			display: flex;
+			dl.form.layout-GridVania .GridVania,
+			dl.form.layout-LinearHorizontal .LinearHorizontal,
+			dl.form.layout-LinearVertical .LinearVertical,
+			dl.form.layout-Free .Free {
+				display: flex;
+			}
 		}
 	}
 }
@@ -5823,67 +5832,6 @@ body.sorting ul.collapsedSortTarget {
 			}
 		}
 
-		.fieldInstanceEditor {
-			margin-left: -8px;
-			margin-right: -8px;
-			padding: 8px;
-
-			&:not(:empty) {
-				box-shadow: 0px 0px 16px black;
-				background-color: $bgMed;
-			}
-			&:empty {
-				padding-top: 32px;
-				color: $bgLighter;
-				text-align: center;
-				grid-template-columns: auto;
-				background-image: url("../img/stripes.png");
-				&::before {
-					content: "No custom field.";
-				}
-			}
-		}
-
-		ul.form>li>label {
-			flex: 0 0 100%;
-			padding: 0;
-			padding-top: 8px;
-			text-align: left;
-			font-size: 10pt;
-			text-transform: none;
-		}
-
-		h2 {
-			margin-bottom: 8px;
-		}
-
-		a.reset {
-			flex: 0 0 auto;
-			align-self: center;
-			font-size: 9pt;
-			text-decoration: underline;
-			margin-left: 8px;
-			padding: 2px 4px;
-			border-radius: 3px;
-			cursor: pointer;
-
-			&:hover {
-				text-decoration: none;
-				color: black;
-				background-color: $orange;
-			}
-		}
-
-		.buttons {
-			flex-wrap: nowrap;
-			button.delete {
-				flex: 1 1 auto;
-			}
-		}
-
-		button {
-			white-space: nowrap;
-		}
 	}
 }
 
@@ -5934,10 +5882,11 @@ body.sorting ul.collapsedSortTarget {
 		}
 	}
 
-	.fieldInstanceEditor {
+	dl.form.fieldInstanceEditor {
 		margin-left: -8px;
 		margin-right: -8px;
 		padding: 8px;
+		border-radius: 4px;
 
 		&:not(:empty) {
 			box-shadow: 0px 0px 16px black;
@@ -5945,6 +5894,7 @@ body.sorting ul.collapsedSortTarget {
 		}
 		&:empty {
 			padding-top: 32px;
+			padding-bottom: 32px;
 			color: $bgLighter;
 			text-align: center;
 			grid-template-columns: auto;
