@@ -5,23 +5,27 @@
   - **Entity references**: this new "field" type is available to all Entities and is used to store a reference to another Entity. A typical example is a Button entity with a a Reference value pointing to another Entity, like a Door. You can create arrays of References, or define restrictions to which kind of Entity they can point to.
   - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will probably be updated in future updates.
   - **Copy and paste**: for now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements. You can right click on an element with a context menu to copy/cut/paste/duplicate things! LDtk just entered modern era.
-  - **Space key**: one shortcut to rule them all. Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are). Hold `SPACE` and click left mouse button to scroll the view.
+  - **Space key**: one shortcut to rule them all:
+    - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
+    - Hold `SPACE` and drag with `Left mouse button` to scroll the view.
+    - Hold `SPACE` and drag with `Right mouse button` to zoom in/out.
   - **Reworked loading/saving**:
     - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
     - Added various progress bars when loading or saving large projects
     - Complete rework of the backup system which is now much faster and more reliable
   - **Help**: reworked and streamlined contextual help tips in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
-  - **Custom fields**: Entity and Level custom fields that are not using default values are now MUCH more visible in forms
   - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap them: so moving value "1" down, for example, will not modify it ("1" value stays "1"), only values order changes.
   - **Image reloading bug fixes**:
     - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
     - Fixed a critical crash when reloading an image which has a different width/height.
     - You are no longer limited to deleting the last IntGrid value.
+  - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various optimizations to boost general performances & reduce CPU usage.
-  - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
 
-## JSON format changes
+## File format changes
+
+### JSON
 
   - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
   - **IntGridValues** array index should no longer be used to guess IntGrid values, since the array can be manually sorted by users. See https://github.com/deepnight/ldtk/issues/553
@@ -29,10 +33,16 @@
   - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
   - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
   - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
-  - Not really JSON related, but external level files will no longer be prefixed with their index in array to avoid unnecessary renamings when inserting new levels. This can be re-enabled in Project panel, using an Advanced Option at the bottom.
+
+### Misc
+
+  - External level files will no longer be prefixed with their index in array to avoid unnecessary renamings when inserting new levels. This can be re-enabled in Project panel, using an Advanced Option at the bottom.
+  - Added `worlds` array and `World` JSON structure to the docs. This was added as a preview for the upcoming new feature "Multiple Worlds in a single project". Learn more about that here: https://github.com/deepnight/ldtk/issues/231
+  - Fixed `enumTags` and `customTileData` typing in QuickTypes files.
 
 ## UI
 
+  - Entity and Level custom fields that are not using default value are now much more visible in forms.
   - Added a new optional "guide" grid per layer. This customizable grid is not used for snapping, and only serves as a visual guide.
   - Better display of entities that have error(s) in their field values.
   - Added a new option (`CTRL-H`) to hide everything except Tiles in layers (entities, labels, intGrids etc.)
@@ -77,6 +87,7 @@
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
+  - Fixed a crash related to Regular Expressions in String fields (thanks to Clement Duranti)
   - Fixed a bug when reloading a tileset while its width changed.
   - Fixed layers list not being properly updated when leaving world mode.
   - Fixed a crash when using a field containing an array of null enums.
