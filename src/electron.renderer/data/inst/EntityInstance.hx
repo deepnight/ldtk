@@ -215,6 +215,7 @@ class EntityInstance {
 	public function tidy(p:data.Project, li:LayerInstance) {
 		_project = p;
 		_li = li;
+		_project.markIidAsUsed(iid);
 		var anyChange = false;
 
 		// Remove field instances whose def was removed

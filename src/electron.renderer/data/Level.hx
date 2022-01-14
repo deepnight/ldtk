@@ -403,6 +403,7 @@ class Level {
 
 	public function tidy(p:Project) {
 		_project = p;
+		_project.markIidAsUsed(iid);
 
 		// Remove layerInstances without layerDefs
 		var i = 0;

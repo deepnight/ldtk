@@ -388,6 +388,7 @@ class LayerInstance {
 
 	public function tidy(p:Project) : Bool {
 		_project = p;
+		_project.markIidAsUsed(iid);
 		var anyChange = false;
 
 		// Remove lost optional rule group UIDs
@@ -612,7 +613,7 @@ class LayerInstance {
 			throw "Unknown instance "+ei;
 
 		_project.removeAnyFieldRefsTo(ei);
-		_project.unregisterIid(ei.iid);
+		_project.unregisterEntityIid(ei.iid);
 		_project.unregisterAllReverseIidRefsFor(ei);
 		_project.tidyFields(); // IID refs could be lost
 	}

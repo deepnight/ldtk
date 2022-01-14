@@ -41,6 +41,9 @@ class Project {
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
 	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
 
+	/** WARNING! This list of "used IIDs" is NOT strictly updated: it's only a "mark" map to avoid IID collisions. **/
+	var usedIids : Map<String,Bool> = new Map();
+
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -157,7 +160,11 @@ class Project {
 	public inline function generateUniqueId_UUID() : String {
 		// HaxeLib: https://github.com/flashultra/uuid, credits Miroslav "Flashultra" Yordanov
 		// Refs: https://www.sohamkamani.com/uuid-versions-explained/
-		return uuid.Uuid.v1();
+		var iid = uuid.Uuid.v1();
+		while( isIidUsed(iid) ) // Will almost never happen, but who knows?
+			iid = uuid.Uuid.v1();
+		markIidAsUsed(iid);
+		return iid;
 	}
 
 	public function generateUniqueId_int() return nextUid++;
@@ -366,6 +373,17 @@ class Project {
 		}
 	}
 
+
+	inline function clearUsedIids() {
+		usedIids = new Map();
+	}
+	public inline function markIidAsUsed(iid:String) {
+		usedIids.set(iid, true);
+	}
+	public inline function isIidUsed(iid:String) {
+		return usedIids.exists(iid);
+	}
+
 	public inline function getEntityInstanceByIid(iid:String) : Null<data.inst.EntityInstance> {
 		return entityIidsCache.exists(iid) ? entityIidsCache.get(iid) : null;
 	}
@@ -380,7 +398,7 @@ class Project {
 						registerReverseIidRef(ei.iid, fi.getEntityRefIID(i));
 	}
 
-	public inline function unregisterIid(iid:String) {
+	public inline function unregisterEntityIid(iid:String) {
 		entityIidsCache.remove(iid);
 	}
 
@@ -610,6 +628,7 @@ class Project {
 			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 
+		clearUsedIids();
 		initEntityIidsCache();
 		defs.tidy(this);
 		reorganizeWorld();
@@ -769,7 +788,7 @@ class Project {
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances) {
 			removeAnyFieldRefsTo(ei);
-			unregisterIid(ei.iid);
+			unregisterEntityIid(ei.iid);
 			unregisterAllReverseIidRefsFor(ei);
 		}
 
