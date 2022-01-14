@@ -13,6 +13,8 @@ class WorldRender extends dn.Process {
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
+	public var curWorldDepth = 0;
+
 	var worldBgColor(get,never) : UInt;
 		inline function get_worldBgColor() return C.interpolateInt(project.bgColor, 0x8187bd, 0.85);
 
@@ -26,7 +28,7 @@ class WorldRender extends dn.Process {
 	var axes : h2d.Graphics;
 	var grids : h2d.Graphics;
 	var currentHighlight : h2d.Graphics;
-	public var worldLevelsWrapper : h2d.Layers;
+	public var worldLayers : Map<Int,h2d.Layers>;
 	var fieldsWrapper : h2d.Object;
 	var fieldRenders : Map<Int, { customFields:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
@@ -68,8 +70,7 @@ class WorldRender extends dn.Process {
 		currentHighlight = new h2d.Graphics();
 		root.add(currentHighlight, Const.DP_TOP);
 
-		worldLevelsWrapper = new h2d.Layers();
-		root.add(worldLevelsWrapper, Const.DP_MAIN);
+		worldLayers = new Map();
 
 		fieldsWrapper = new h2d.Object();
 		root.add(fieldsWrapper, Const.DP_TOP);
@@ -277,6 +278,14 @@ class WorldRender extends dn.Process {
 	}
 
 
+	inline function getWorldLayer(idx:Int) {
+		if( !worldLayers.exists(idx) ) {
+			var l = new h2d.Layers();
+			root.add(l, Const.DP_MAIN);
+			worldLayers.set(idx,l);
+		}
+		return worldLayers.get(idx);
+	}
 
 	/** Return world level if it exists, or create it otherwise **/
 	function getWorldLevel(uid:Int) : WorldLevelRender {
@@ -288,11 +297,12 @@ class WorldRender extends dn.Process {
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
 			}
 
+			var worldLayer = getWorldLayer(0);
 			var _depth = 0;
-			worldLevelsWrapper.add(wl.bgWrapper, _depth++);
-			worldLevelsWrapper.add(wl.render, _depth++);
-			worldLevelsWrapper.add(wl.identifier, _depth++);
-			worldLevelsWrapper.add(wl.bounds, _depth++);
+			worldLayer.add(wl.bgWrapper, _depth++);
+			worldLayer.add(wl.render, _depth++);
+			worldLayer.add(wl.identifier, _depth++);
+			worldLayer.add(wl.bounds, _depth++);
 			worldLevels.set(uid, wl);
 		}
 		return worldLevels.get(uid);
@@ -308,7 +318,8 @@ class WorldRender extends dn.Process {
 
 		// Init world levels
 		worldLevels = new Map();
-		worldLevelsWrapper.removeChildren();
+		for(l in worldLayers)
+			l.removeChildren();
 		for(l in project.levels)
 			getWorldLevel(l.uid);
 
@@ -513,6 +524,9 @@ class WorldRender extends dn.Process {
 
 	function updateLevelVisibility(l:data.Level) {
 		var wl = getWorldLevel(l.uid);
+
+		wl.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
+
 		if( l.uid==editor.curLevelId && !editor.worldMode ) {
 			// Hide current level in editor mode
 			wl.bounds.visible = false;
@@ -532,6 +546,17 @@ class WorldRender extends dn.Process {
 			wl.render.alpha = 0.5;
 			wl.render.visible = wl.bounds.visible && dist<=300;
 		}
+
+		// Depths
+		if( l.worldDepth!=curWorldDepth ) {
+			wl.bgWrapper.alpha*=0.4;
+			wl.render.alpha*=0.5;
+			wl.bounds.alpha*=0.2;
+			wl.render.filter = new h2d.filter.Blur(32);
+		}
+		else
+			wl.render.filter = null;
+
 	}
 
 	public function updateLayout() {
@@ -551,8 +576,6 @@ class WorldRender extends dn.Process {
 				continue;
 
 			var wl = getWorldLevel(l.uid);
-			wl.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
-
 			updateLevelVisibility(l);
 
 			// Position
