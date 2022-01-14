@@ -44,7 +44,7 @@ class LevelInstancePanel extends ui.modal.Panel {
 		}
 
 		// Forward events
-		if( !destroyed && !this.isClosing() )
+		if( !isClosing() )
 			levelForm.onGlobalEvent(ge);
 	}
 }
