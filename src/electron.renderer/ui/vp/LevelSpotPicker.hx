@@ -193,7 +193,8 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 				var i = getLinearInsertPoint(project, m);
 				if( i!=null) {
 					b.x = i.coord-b.wid*0.5;
-					b.y = -32;
+					b.y = -b.hei*0.1;
+					b.hei += Std.int(b.hei*0.2);
 				}
 				else
 					return null;
@@ -201,8 +202,9 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 			case LinearVertical:
 				var i = getLinearInsertPoint(project, m);
 				if( i!=null) {
-					b.x = -32;
-					b.y = i.coord-b.hei*0.5;
+					b.x = -b.wid*0.1;
+					b.y = i.coord -b.hei*0.5;
+					b.wid += Std.int(b.wid*0.2);
 				}
 				else
 					return null;
