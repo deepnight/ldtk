@@ -136,7 +136,7 @@ class WorldTool extends dn.Process {
 						editor.ge.emit(WorldLevelMoved(clickedLevel));
 
 					case LinearHorizontal:
-						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, false);
+						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginX);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
@@ -146,7 +146,7 @@ class WorldTool extends dn.Process {
 						}
 
 					case LinearVertical:
-						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m,false);
+						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginY);
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
@@ -330,14 +330,14 @@ class WorldTool extends dn.Process {
 					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
 
 				case LinearHorizontal:
-					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m,false);
+					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginX);
 					if( i!=null ) {
 						tmpRender.moveTo(i.coord, -100);
 						tmpRender.lineTo(i.coord, project.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
-					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m,false);
+					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginY);
 					if( i!=null ) {
 						tmpRender.moveTo(-100, i.coord);
 						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.coord);

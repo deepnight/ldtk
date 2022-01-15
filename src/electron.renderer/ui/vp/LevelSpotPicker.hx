@@ -1,6 +1,7 @@
 package ui.vp;
 
 private typedef LinearInsertPoint = {
+	var levelIid : String;
 	var idx : Int;
 	var coord : Int;
 }
@@ -57,7 +58,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 					l;
 
 				case LinearHorizontal, LinearVertical:
-					var i = getLinearInsertPoint(project, m, true);
+					var i = getLinearInsertPoint(project, m);
 					if( i!=null ) {
 						var l = project.createLevel(i.idx);
 						l;
@@ -83,11 +84,9 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	/**
 		Get linear layout insert point from given Coords
 	**/
-	public static function getLinearInsertPoint(project:data.Project, m:Coords, forCreation:Bool) : Null<LinearInsertPoint> {
-		if( project.levels.length<=1 && !forCreation )
+	public static function getLinearInsertPoint(project:data.Project, m:Coords, ?movedLevel:data.Level, ?movedLevelInitialCoord:Int) : Null<LinearInsertPoint> {
+		if( project.levels.length<=1 && movedLevel!=null )
 			return null;
-
-		var clickedLevel = project.getLevelAt(m.worldX, m.worldY);
 
 		// Init possible insert points in linear modes
 		var pts : Array<LinearInsertPoint> =
@@ -96,26 +95,22 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 				case LinearHorizontal:
 					var idx = 0;
-					var all = project.levels.map( (l)->{ coord:l==clickedLevel ? clickedLevel.worldX : l.worldX, idx:idx++ } );
+					var all : Array<LinearInsertPoint> = project.levels.map( (l)->{ levelIid:l.iid, coord:l==movedLevel ? movedLevelInitialCoord : l.worldX, idx:idx++ } );
 					var last = project.levels[project.levels.length-1];
-					all.push({ coord:last.worldX+last.pxWid, idx:idx });
+					if( movedLevel==null || last!=movedLevel)
+						all.push({ levelIid:last.iid, coord:last.worldX+last.pxWid, idx:idx });
 					all;
 
 				case LinearVertical:
 					var idx = 0;
-					var all = project.levels.map( (l)->{ coord:l==clickedLevel ? clickedLevel.worldY : l.worldY, idx:idx++ } );
-
+					var all : Array<LinearInsertPoint> = project.levels.map( (l)->{ levelIid:l.iid, coord:l==movedLevel ? movedLevelInitialCoord : l.worldY, idx:idx++ } );
 					var last = project.levels[project.levels.length-1];
-					all.push({ coord:last.worldY+last.pxHei, idx:idx });
+					if( movedLevel==null || last!=movedLevel)
+						all.push({ levelIid:last.iid, coord:last.worldY+last.pxHei, idx:idx });
 					all;
 			}
 
 		var dh = new dn.DecisionHelper(pts);
-		if( clickedLevel!=null ) {
-			var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
-			dh.remove( (i)->i.idx==curIdx+1 );
-		}
-
 		switch project.worldLayout {
 			case Free, GridVania:
 				// N/A
@@ -195,7 +190,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 				}
 
 			case LinearHorizontal:
-				var i = getLinearInsertPoint(project, m, true);
+				var i = getLinearInsertPoint(project, m);
 				if( i!=null) {
 					b.x = i.coord-b.wid*0.5;
 					b.y = -32;
@@ -204,7 +199,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 					return null;
 
 			case LinearVertical:
-				var i = getLinearInsertPoint(project, m, true);
+				var i = getLinearInsertPoint(project, m);
 				if( i!=null) {
 					b.x = -32;
 					b.y = i.coord-b.hei*0.5;
