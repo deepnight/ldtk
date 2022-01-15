@@ -121,7 +121,7 @@ class Camera extends dn.Process {
 	function getFitZoom() : Float {
 		if( editor.worldMode) {
 			var b = editor.project.getWorldBounds();
-			var padX = (b.right-b.left) * 0.1 + 64*pixelRatio;
+			var padX = (b.right-b.left) * 0.1 + 300*pixelRatio;
 			var padY = (b.bottom-b.top) * 0.1;
 			return M.fmin(
 				width / ( b.right-b.left + padX ),
