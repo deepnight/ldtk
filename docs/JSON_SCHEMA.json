@@ -1984,6 +1984,7 @@
 				"pxHei",
 				"pxWid",
 				"uid",
+				"worldDepth",
 				"worldX",
 				"worldY",
 				"__smartColor",
@@ -2135,6 +2136,12 @@
 					"type": [
 						"string",
 						"null"
+					]
+				},
+				"worldDepth": {
+					"description": "Index that represents the \"depth\" of the level in the world. Default is 0, greater means \"above\", lower means \"below\".<br/>  This value is mostly used for display only and is intended to make stacking of levels easier to manage.",
+					"type": [
+						"integer"
 					]
 				}
 			},

@@ -91,6 +91,7 @@ Value | Type | Description
 `pxHei` | Int | Height of the level in pixels
 `pxWid` | Int | Width of the level in pixels
 `uid` | Int | Unique Int identifier
+`worldDepth`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Int | Index that represents the "depth" of the level in the world. Default is 0, greater means "above", lower means "below".<br/>		This value is mostly used for display only and is intended to make stacking of levels easier to manage.
 `worldX`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_0.10.0-green.svg)  | Int | World X coordinate in pixels.<br/>		Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the value is always -1 here.
 `worldY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_0.10.0-green.svg)  | Int | World Y coordinate in pixels.<br/>		Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the value is always -1 here.
 `__smartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | The "guessed" color for this level in the editor, decided using either the background color or an existing custom field.
