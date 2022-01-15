@@ -5881,8 +5881,8 @@ body.sorting ul.collapsedSortTarget {
 
 	dl#levelProps {
 		grid-template-columns: 110px auto;
-		dt {
-			min-width: none;
+		>dt {
+			min-width: 0;
 			max-width: none;
 		}
 		.bg {
