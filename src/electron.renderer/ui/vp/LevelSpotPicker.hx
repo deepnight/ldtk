@@ -1,8 +1,8 @@
 package ui.vp;
 
 private typedef LinearInsertPoint = {
-	var idx:Int;
-	var pos:Int;
+	var idx : Int;
+	var coord : Int;
 }
 
 class LevelSpotPicker extends ui.ValuePicker<Coords> {
@@ -88,23 +88,23 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		var clickedLevel = project.getLevelAt(m.worldX, m.worldY);
 
 		// Init possible insert points in linear modes
-		var pts =
+		var pts : Array<LinearInsertPoint> =
 			switch project.worldLayout {
 				case Free, GridVania: null;
 
 				case LinearHorizontal:
 					var idx = 0;
-					var all = project.levels.map( (l)->{ pos:l==clickedLevel ? clickedLevel.worldX : l.worldX, idx:idx++ } );
+					var all = project.levels.map( (l)->{ coord:l==clickedLevel ? clickedLevel.worldX : l.worldX, idx:idx++ } );
 					var last = project.levels[project.levels.length-1];
-					all.push({ pos:last.worldX+last.pxWid, idx:idx });
+					all.push({ coord:last.worldX+last.pxWid, idx:idx });
 					all;
 
 				case LinearVertical:
 					var idx = 0;
-					var all = project.levels.map( (l)->{ pos:l==clickedLevel ? clickedLevel.worldY : l.worldY, idx:idx++ } );
+					var all = project.levels.map( (l)->{ coord:l==clickedLevel ? clickedLevel.worldY : l.worldY, idx:idx++ } );
 
 					var last = project.levels[project.levels.length-1];
-					all.push({ pos:last.worldY+last.pxHei, idx:idx });
+					all.push({ coord:last.worldY+last.pxHei, idx:idx });
 					all;
 			}
 
@@ -119,10 +119,10 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 				// N/A
 
 			case LinearHorizontal:
-				dh.score( (i)->return -M.fabs(m.worldX-i.pos) );
+				dh.score( (i)->return -M.fabs(m.worldX-i.coord) );
 
 			case LinearVertical:
-				dh.score( (i)->return -M.fabs(m.worldY-i.pos) );
+				dh.score( (i)->return -M.fabs(m.worldY-i.coord) );
 		}
 		return dh.getBest();
 	}
@@ -195,7 +195,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 			case LinearHorizontal:
 				var i = getLinearInsertPoint(project, m, true);
 				if( i!=null) {
-					b.x = i.pos-b.wid*0.5;
+					b.x = i.coord-b.wid*0.5;
 					b.y = -32;
 				}
 				else
@@ -205,7 +205,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 				var i = getLinearInsertPoint(project, m, true);
 				if( i!=null) {
 					b.x = -32;
-					b.y = i.pos-b.hei*0.5;
+					b.y = i.coord-b.hei*0.5;
 				}
 				else
 					return null;

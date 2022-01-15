@@ -332,15 +332,15 @@ class WorldTool extends dn.Process {
 				case LinearHorizontal:
 					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m,false);
 					if( i!=null ) {
-						tmpRender.moveTo(i.pos, -100);
-						tmpRender.lineTo(i.pos, project.getWorldHeight(clickedLevel)+100);
+						tmpRender.moveTo(i.coord, -100);
+						tmpRender.lineTo(i.coord, project.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
 					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m,false);
 					if( i!=null ) {
-						tmpRender.moveTo(-100, i.pos);
-						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.pos);
+						tmpRender.moveTo(-100, i.coord);
+						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.coord);
 					}
 			}
 
