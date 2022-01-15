@@ -15,8 +15,10 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		setInstructions("Pick a spot for a new level");
 
 		initialWorldMode = editor.worldMode;
-		if( !editor.worldMode )
+		if( !editor.worldMode ) {
 			editor.setWorldMode(true);
+			editor.camera.fit();
+		}
 
 		insertCursor = new h2d.Graphics();
 		editor.worldRender.root.add(insertCursor, Const.DP_UI);
