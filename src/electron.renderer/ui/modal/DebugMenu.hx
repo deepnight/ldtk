@@ -75,9 +75,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 							App.ME.debug('ALL IIDS');
 							for(iid in @:privateAccess project.usedIids.keys())
 								App.ME.debug(iid, 0xff6c3c);
-							// App.ME.debug('ALL ENTITY IIDS');
-							// for(ei in @:privateAccess project.entityIidsCache)
-							// 	App.ME.debug(ei.def.identifier+" -- "+ei.iid, 0x4bdfff);
 
 							App.ME.debug("");
 							App.ME.debug('REVERSE ENTITY IID REFS');
