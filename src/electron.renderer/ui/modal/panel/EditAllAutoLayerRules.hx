@@ -477,10 +477,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 		jName.mouseleave( (_)->editor.levelRender.clearTemp() );
 
-
-		jGroupHeader.find(".optional").hide();
+		// Optional state
 		if( rg.isOptional )
-			jGroupHeader.find(".optional").show();
+			jGroup.addClass("optional");
 
 		// Enable/disable group
 		jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {

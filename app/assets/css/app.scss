@@ -6097,11 +6097,14 @@ body.sorting ul.collapsedSortTarget {
 				}
 
 				>.sortHandle {
-					background-color: $bgLight;
 					opacity: 1;
 					&:hover {
 						background-color: $orange !important;
 					}
+				}
+
+				&.optional header {
+					background-color: #1a7bc3;
 				}
 
 				&.highlight header {
@@ -6110,13 +6113,18 @@ body.sorting ul.collapsedSortTarget {
 				}
 
 				&.inactive {
-					background-image: url("../img/stripes.png");
-					background-color: $darkRed;
-					>.sortHandle {
-						background-color: $darkRed;
-					}
 					header {
-						background-color: $darkRed;
+						opacity: 0.5;
+					}
+					&:not(.optional) header {
+						background-color: $bgDark;
+						background-image: url("../img/stripes.png");
+						.name {
+							color: $bgLighter;
+						}
+					}
+					&.optional header {
+						background-color: #0f4973;
 						background-image: url("../img/stripes.png");
 					}
 					ul.ruleGroup {
@@ -6128,7 +6136,6 @@ body.sorting ul.collapsedSortTarget {
 					margin-top: 0;
 					margin-bottom: 1px;
 					padding: 0;
-					// opacity: 0.66;
 					box-shadow: none;
 					border: 0;
 
