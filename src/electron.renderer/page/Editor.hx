@@ -705,7 +705,7 @@ class Editor extends Page {
 		updateTool();
 	}
 
-	public function getGenericLevelElementAt(m:Coords, limitToActiveLayer=false) : Null<GenericLevelElement> {
+	public function getGenericLevelElementAt(m:Coords, ?limitToLayerType:ldtk.Json.LayerType, limitToActiveLayer=false) : Null<GenericLevelElement> {
 		var m = m.clone();
 
 		function getElement(li:data.inst.LayerInstance) {
@@ -751,13 +751,16 @@ class Editor extends Page {
 
 
 		if( limitToActiveLayer )
-			return getElement(curLayerInstance);
+			return limitToLayerType==null || curLayerDef.type==limitToLayerType ? getElement(curLayerInstance) : null;
 		else {
 			// Search in all layers
-			var all = project.defs.layers.copy();
+			var all = project.defs.layers.copy(); // TODO optimize these allocations!
 			all.reverse();
 			var best = null;
 			for(ld in all) {
+				if( limitToLayerType!=null && ld.type!=limitToLayerType )
+					continue;
+
 				var ge = getElement( curLevel.getLayerInstance(ld) );
 				if( ld==curLayerDef && ge!=null && settings.v.singleLayerMode ) // prioritize active layer
 					return ge;
