@@ -615,7 +615,6 @@ class LayerInstance {
 		_project.removeAnyFieldRefsTo(ei);
 		_project.unregisterEntityIid(ei.iid);
 		_project.unregisterAllReverseIidRefsFor(ei);
-		_project.tidyFields(); // IID refs could be lost
 	}
 
 
