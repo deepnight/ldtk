@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456134,
+	"appBuildId": 456213,
 	"nextUid": 99,
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
@@ -37,8 +37,8 @@
 			"type": "Entities",
 			"uid": 7,
 			"gridSize": 16,
-			"guideGridWid": 128,
-			"guideGridHei": 64,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
 			"displayOpacity": 1,
 			"fadeInactive": false,
 			"hideInList": false,
@@ -478,7 +478,7 @@
 				}
 			],
 			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
+			"tilesetDefUid": 60,
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		}
@@ -994,7 +994,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "targets",
-					"__type": "Array<EntifyRef>",
+					"__type": "Array<EntityRef>",
 					"uid": 97,
 					"type": "F_EntityRef",
 					"isArray": true,
@@ -1127,7 +1127,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "target",
-					"__type": "EntifyRef",
+					"__type": "EntityRef",
 					"uid": 98,
 					"type": "F_EntityRef",
 					"isArray": false,
@@ -1356,6 +1356,7 @@
 			"uid": 0,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 816,
 			"pxHei": 400,
 			"__bgColor": "#79799A",
@@ -1749,7 +1750,7 @@
 								{
 									"__identifier": "targets",
 									"__value": [ "f80ee801-66b0-11ec-b121-4d74c475d701", "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e" ],
-									"__type": "Array<EntifyRef>",
+									"__type": "Array<EntityRef>",
 									"defUid": 97,
 									"realEditorValues": [ {
 										"id": "V_String",
@@ -1893,7 +1894,7 @@
 								{
 									"__identifier": "target",
 									"__value": "f80ee805-66b0-11ec-b121-09bc15634dc5",
-									"__type": "EntifyRef",
+									"__type": "EntityRef",
 									"defUid": 98,
 									"realEditorValues": [{
 										"id": "V_String",
@@ -1934,7 +1935,7 @@
 										"params": ["Secret area!"]
 									}]
 								},
-								{ "__identifier": "target", "__value": null, "__type": "EntifyRef", "defUid": 98, "realEditorValues": [] }
+								{ "__identifier": "target", "__value": null, "__type": "EntityRef", "defUid": 98, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3958,5 +3959,6 @@
 			],
 			"__neighbours": []
 		}
-	]
+	],
+	"worlds": []
 }
