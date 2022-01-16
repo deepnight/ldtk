@@ -383,14 +383,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 
-		// Rule groups
-		var groupIdx = 0;
-		for( rg in ld.autoRuleGroups) {
-			var jGroup = createRuleGroupBlock(rg, groupIdx);
-			jRuleGroupList.append(jGroup);
-			groupIdx++;
-		}
-
 		// List context menu
 		ContextMenu.addTo(jRuleGroupList, false, [
 			{
@@ -404,6 +396,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				enable: ()->return App.ME.clipboard.is(CRuleGroup),
 			}
 		]);
+
+		// Rule groups
+		var groupIdx = 0;
+		for( rg in ld.autoRuleGroups) {
+			var jGroup = createRuleGroupBlock(rg, groupIdx);
+			jRuleGroupList.append(jGroup);
+			groupIdx++;
+		}
 
 		// Make groups sortable
 		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
@@ -482,7 +482,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		jGroupHeader.find(".active").click( function(ev:js.jquery.Event) {
+		var jToggle = jGroupHeader.find(".active");
+		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
 
@@ -493,6 +494,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 		});
+		if( rg.isOptional )
+			jToggle.attr("title", (li.isRuleGroupActiveHere(rg)?"Disable":"Enable")+" this group of rules in this level");
+		else
+			jToggle.attr("title", (rg.active?"Disable":"Enable")+" this group of rules everywhere");
 
 		// Add rule
 		jGroupHeader.find(".addRule").click( function(ev:js.jquery.Event) {

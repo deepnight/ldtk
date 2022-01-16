@@ -82,7 +82,7 @@ class ContextMenu extends ui.Modal {
 
 		// Menu button
 		if( showButton ) {
-			var jButton = new J('<button class="transparent context"></button>');
+			var jButton = new J('<button class="transparent context"/>');
 			jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
 			jButton.append('<div class="icon contextMenu"/>');
 			jButton.click( (ev:js.jquery.Event)->{
