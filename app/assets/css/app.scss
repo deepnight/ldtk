@@ -5971,7 +5971,7 @@ body.sorting ul.collapsedSortTarget {
 		grid-template-rows: min-content min-content auto;
 		gap: 8px;
 		height: 100%;
-		width: 320px;
+		width: 340px;
 
 		h2:first-of-type {
 			margin: -8px;
@@ -6103,9 +6103,14 @@ body.sorting ul.collapsedSortTarget {
 					}
 				}
 
-				&.optional header {
-					background-color: #1a7bc3;
+				&.optional {
+					border-color: #1a7bc3;
+
+					header {
+						background-color: #1a7bc3;
+					}
 				}
+
 
 				&.highlight header {
 					outline: 1px solid #ff00ff;
@@ -6196,10 +6201,6 @@ body.sorting ul.collapsedSortTarget {
 							overflow: hidden;
 							text-overflow: ellipsis;
 						}
-
-						&:hover {
-							background-color: $bgLighter;
-						}
 					}
 					input.name {
 						display: none;
@@ -6235,6 +6236,14 @@ body.sorting ul.collapsedSortTarget {
 						opacity: 0.3;
 						background-color: $red;
 					}
+				}
+
+				&:not(.optional) header .name:hover {
+					background-color: $bgLighter;
+				}
+
+				&.optional header .name:hover {
+					background-color: #219df9;
 				}
 
 
