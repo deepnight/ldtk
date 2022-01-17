@@ -3,6 +3,7 @@ package ui;
 import data.inst.EntityInstance;
 
 class EntityInstanceEditor extends dn.Process {
+	public static var UNIT_GRID = false;
 	public static var CURRENT : Null<EntityInstanceEditor> = null;
 	static var PANEL_WIDTH : Float = -1;
 
@@ -218,19 +219,34 @@ class EntityInstanceEditor extends dn.Process {
 		});
 		jExtraInfos.append(jIid);
 
-		// Pos
+		// Coords block
 		jExtraInfos.append('<dt>Coords</dt>');
-		var jCoords = new J('<dd/>');
+		var jCoords = new J('<dd class="coords"/>');
 		jCoords.append('<input type="text" name="x"/> <span>,</span> <input type="text" name="y"/> <span> ; </span>');
 		jCoords.append('<input type="text" name="w"/> <span>x</span> <input type="text" name="h"/>');
+		var jUnit = new J('<span class="unit" ttitle="Change unit"/>');
+		jUnit.text( UNIT_GRID ? "grid" : "px" );
+		jCoords.append(jUnit);
+		jUnit.click( _->{
+			UNIT_GRID = !UNIT_GRID;
+			updateInstancePropsForm();
+		});
+
+		// X
 		var i = Input.linkToHtmlInput(ei.x, jCoords.find("[name=x]"));
 		i.setBounds(0, editor.curLevel.pxWid);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
+
+		// Y
 		var i = Input.linkToHtmlInput(ei.y, jCoords.find("[name=y]"));
 		i.setBounds(0, editor.curLevel.pxHei);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
 
 		// Width
 		var i = new form.input.IntInput(
@@ -242,6 +258,8 @@ class EntityInstanceEditor extends dn.Process {
 		i.setBounds(ei.def.width, null);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
 
 		// Height
 		var i = new form.input.IntInput(
@@ -254,6 +272,8 @@ class EntityInstanceEditor extends dn.Process {
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 		jExtraInfos.append(jCoords);
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
 	}
 
 

@@ -4878,6 +4878,32 @@ canvas#webgl {
 					font-size: 8pt;
 				}
 			}
+
+			&.coords {
+				align-items: center;
+				input {
+					padding: 3px;
+					font-size: 0.8em;
+				}
+			}
+
+			.unit {
+				display: inline-block;
+				padding: 1px 4px;
+				min-width: 20px;
+				font-size: 0.9em;
+				color: $bgLighter;
+				opacity: 1;
+				border: 1px dashed $bgLight;
+				border-radius: 4px;
+				text-align: center;
+				cursor: pointer;
+
+				&:hover {
+					border-color: $orange;
+					color: $orange;
+				}
+			}
 		}
 	}
 }
