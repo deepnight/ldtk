@@ -6,6 +6,7 @@ class IntInput extends form.Input<Int> {
 	var isColorCode = false;
 	public var allowNull = false;
 	var emptyValue : Null<Int>;
+	var unit = 0;
 
 	public function new(j:js.jquery.JQuery, getter:Void->Int, setter:Int->Void) {
 		isColorCode = j.is("[type=color]");
@@ -14,6 +15,11 @@ class IntInput extends form.Input<Int> {
 
 	public function setEmptyValue(v:Int) {
 		emptyValue = v;
+		writeValueToInput();
+	}
+
+	public function setUnit(grid:Int) {
+		unit = grid;
 		writeValueToInput();
 	}
 
@@ -35,6 +41,8 @@ class IntInput extends form.Input<Int> {
 			jInput.val("");
 		else if( isColorCode )
 			jInput.val( C.intToHex(getter()) );
+		else if( unit>1 && getter()!=null )
+			jInput.val( Std.string( getter()/unit ) );
 		else
 			super.writeValueToInput();
 	}
@@ -46,6 +54,13 @@ class IntInput extends form.Input<Int> {
 		if( isColorCode ) {
 			var v = C.hexToInt( jInput.val() );
 			return v;
+		}
+		else if( unit>1 ) {
+			var v = Std.parseFloat( jInput.val() );
+			if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
+				v = 0;
+			v*=unit;
+			return M.iclamp(Std.int(v), min, max);
 		}
 		else {
 			var v = Std.parseInt( jInput.val() );
