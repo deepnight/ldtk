@@ -444,8 +444,9 @@ class WorldRender extends dn.Process {
 		grids.visible = true;
 
 		// Base level grid
-		if( project.worldLayout==Free && camera.adjustedZoom>=1.5 && settings.v.grid ) {
-			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-1.5)/0.6, 1 ) );
+		final minZoom = camera.pixelRatio*0.5;
+		if( project.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
+			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.5 * M.fmin( (camera.adjustedZoom-minZoom)/0.5, 1 ) );
 			var g = project.getSmartLevelGridSize() * camera.adjustedZoom;
 			// Verticals
 			var off = root.x % g;
