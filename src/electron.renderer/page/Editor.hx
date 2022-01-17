@@ -9,6 +9,8 @@ class Editor extends Page {
 	public var jLayerList(get,never) : J; inline function get_jLayerList() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
+	var jDepths : js.jquery.JQuery;
+
 
 	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project==null ? null : project.getLevel(curLevelId);
@@ -38,6 +40,7 @@ class Editor extends Page {
 
 	public var needSaving = false;
 	public var worldMode(default,null) = false;
+	public var curWorldDepth = 0;
 
 	public var camera : display.Camera;
 	public var worldRender : display.WorldRender;
@@ -59,6 +62,7 @@ class Editor extends Page {
 		ME = this;
 		createRoot(parent.root);
 		App.ME.registerRecentProject(p.filePath.full);
+		jDepths = jPage.find("#worldDepths");
 
 		// Events
 		App.ME.jBody
@@ -1032,7 +1036,7 @@ class Editor extends Page {
 		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && delta>0 ) {
 			// Find closest level to cursor
 			var dh = new dn.DecisionHelper(project.levels);
-			dh.keepOnly( l->l.worldDepth==worldRender.curWorldDepth && l.isWorldOver(c.worldX, c.worldY, 500) );
+			dh.keepOnly( l->l.worldDepth==curWorldDepth && l.isWorldOver(c.worldX, c.worldY, 500) );
 			dh.score( l->l.isWorldOver(c.worldX, c.worldY) ? 100 : 0 );
 			dh.score( l->-l.getDist(c.worldX,c.worldY) );
 
@@ -1095,6 +1099,37 @@ class Editor extends Page {
 			case AutoLayer: false;
 			case Entities: true;
 			case Tiles: false;
+		}
+	}
+
+
+	function selectWorldDepth(depth:Int) {
+		if( curWorldDepth==depth )
+			return;
+
+		curWorldDepth = depth;
+		// updateWorldDepthsUI();
+		ge.emit( WorldDepthSelected(curWorldDepth) );
+	}
+
+
+	function updateWorldDepthsUI() {
+		if( !worldMode ) {
+			jDepths.hide();
+			return;
+		}
+		jDepths.empty().show();
+		for(d in 0...4) {
+			var depth = d;
+			var jDepth = new J('<li/>');
+			jDepth.append('<span class="icon"/>');
+			jDepth.append('<span class="label">$depth</label>');
+			jDepth.appendTo(jDepths);
+			if( depth==curWorldDepth )
+				jDepth.addClass("active");
+			jDepth.click( _->{
+				selectWorldDepth(depth);
+			});
 		}
 	}
 
@@ -1538,6 +1573,7 @@ class Editor extends Page {
 			case ToolValueSelected:
 			case ToolOptionChanged:
 			case WorldMode(active):
+			case WorldDepthSelected(worldDepth):
 			case GridChanged(active):
 			case ShowDetailsChanged(active):
 		}
@@ -1546,6 +1582,7 @@ class Editor extends Page {
 		// Check if events changes the NeedSaving flag
 		switch e {
 			case WorldMode(_):
+			case WorldDepthSelected(_):
 			case AppSettingsChanged:
 			case ViewportChanged:
 			case LayerInstanceSelected:
@@ -1570,7 +1607,12 @@ class Editor extends Page {
 		// Use event
 		switch e {
 			case AppSettingsChanged:
+
 			case WorldMode(active):
+				updateWorldDepthsUI();
+
+			case WorldDepthSelected(worldDepth):
+				updateWorldDepthsUI();
 
 			case ViewportChanged:
 
@@ -1672,6 +1714,7 @@ class Editor extends Page {
 			case WorldSettingsChanged:
 
 			case LevelSelected(l):
+				updateWorldDepthsUI();
 				updateLayerList();
 				updateGuide();
 				clearSpecialTool();

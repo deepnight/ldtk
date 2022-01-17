@@ -357,7 +357,7 @@ class WorldTool extends dn.Process {
 
 		var i = project.levels.length-1;
 		while( i>=0 )
-			if( project.levels[i].worldDepth==editor.worldRender.curWorldDepth && project.levels[i].isWorldOver(worldX,worldY) )
+			if( project.levels[i].worldDepth==editor.curWorldDepth && project.levels[i].isWorldOver(worldX,worldY) )
 				return project.levels[i];
 			else
 				i--;

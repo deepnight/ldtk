@@ -3729,34 +3729,65 @@ canvas#webgl {
 		left: calc( $mainPanelNormalWid + 100px );
 
 		display: grid;
-		// gap: 1px;
 		background-color: $bgDark;
 		padding: 3px;
 		border-radius: 4px;
-		border-top-left-radius: 0px;
-		border-bottom-left-radius: 0px;
+
 		li {
 			display: grid;
+			grid-template-columns: min-content min-content;
+			gap: 3px;
 			align-items: center;
 			justify-content: center;
-			border: 1px solid $bgLight;
-			border-radius: 3px;
-			font-size: 14pt;
+			border-radius: 4px;
+			padding-left: 4px;
+			padding-right: 4px;
 			cursor: pointer;
-			padding: 4px 8px;
 
-			&+li {
-				margin-top: 1px;
+			.icon {
+				width: 50px;
+				height: 28px;
+				background-image: url("../icons/worldLayer_below.svg");
+				background-repeat: no-repeat;
+				background-position: left center;
+				background-size: contain;
+			}
+
+			&:first-child .icon {
+				background-image: url("../icons/worldLayer_top.svg");
+			}
+
+			&:last-child .icon {
+				opacity: 0.5;
+			}
+
+			.label {
+				font-size: 14pt;
+				color: $bgLight;
+				padding: 0px 4px;
+				border-radius: 4px;
 			}
 
 			&.active {
-				background-color: $orange;
-				color: black;
+				border-color: $orange;
+				background-color: $bgLight;
+				.icon {
+					filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+				}
+				.label {
+					color: black;
+					background-color: $orange;
+				}
 			}
 
 			&:not(.active):hover {
-				border-color: $orange;
-				color: $orange;
+				background-color: $bgMed;
+				.icon {
+					filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+				}
+				.label {
+					color: $almostWhite;
+				}
 			}
 		}
 	}
