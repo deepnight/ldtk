@@ -1119,8 +1119,9 @@ class Editor extends Page {
 			return;
 		}
 		jDepths.empty().show();
-		for(d in 0...4) {
-			var depth = d;
+		var maxDepth = 3;
+		for(i in 0...maxDepth+1) {
+			var depth = maxDepth-i;
 			var jDepth = new J('<li/>');
 			jDepth.append('<span class="icon"/>');
 			jDepth.append('<span class="label">$depth</label>');
