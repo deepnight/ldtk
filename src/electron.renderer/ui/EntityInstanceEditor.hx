@@ -225,7 +225,7 @@ class EntityInstanceEditor extends dn.Process {
 		jCoords.append('<input type="text" name="x"/> <span>,</span> <input type="text" name="y"/> <span> ; </span>');
 		jCoords.append('<input type="text" name="w"/> <span>x</span> <input type="text" name="h"/>');
 		var jUnit = new J('<span class="unit" ttitle="Change unit"/>');
-		jUnit.text( UNIT_GRID ? "grid" : "px" );
+		jUnit.text( UNIT_GRID ? "cells" : "px" );
 		jCoords.append(jUnit);
 		jUnit.click( _->{
 			UNIT_GRID = !UNIT_GRID;
