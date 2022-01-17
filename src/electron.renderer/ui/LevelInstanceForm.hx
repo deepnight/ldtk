@@ -175,7 +175,12 @@ class LevelInstanceForm {
 			onFieldChange();
 		}
 
+		// World depth
+		var i = Input.linkToHtmlInput( level.worldDepth, jForm.find("#worldDepth"));
+		i.onChange = ()->onFieldChange();
+
 		// Coords
+
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
 		i.onChange = ()->onFieldChange();
 		i.fixValue = v->project.snapWorldGridX(v,false);

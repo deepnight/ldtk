@@ -13,7 +13,7 @@ class WorldRender extends dn.Process {
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
-	public var curWorldDepth = 0;
+	public var curWorldDepth = 1;
 
 	var worldBgColor(get,never) : UInt;
 		inline function get_worldBgColor() return C.interpolateInt(project.bgColor, 0x8187bd, 0.85);
@@ -38,6 +38,10 @@ class WorldRender extends dn.Process {
 	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
 	var levelIdentifiersInvalidation : Map<Int,Bool> = new Map();
 	var invalidatedCameraBasedRenders = true;
+
+	var jDepths : js.jquery.JQuery;
+
+
 
 	public function new() {
 		super(editor);
@@ -81,10 +85,15 @@ class WorldRender extends dn.Process {
 
 		fieldsWrapper = new h2d.Object();
 		root.add(fieldsWrapper, Const.DP_TOP);
+
+		jDepths = new J('#worldDepths');
 	}
 
 	override function onDispose() {
 		super.onDispose();
+
+		jDepths.remove();
+
 		worldBg.wrapper.remove();
 		title.remove();
 		axeH.remove();
@@ -119,6 +128,7 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				updateAxesPos();
 				invalidateCameraBasedRenders();
+				updateWorldDepthsUI();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -186,6 +196,7 @@ class WorldRender extends dn.Process {
 			case LevelSelected(l):
 				invalidateLevelRender(l);
 				invalidateLevelFields(l);
+				selectDepth(l.worldDepth);
 				updateLayout();
 
 			case LevelResized(l):
@@ -350,8 +361,35 @@ class WorldRender extends dn.Process {
 		renderGrids();
 		renderWorldBounds();
 		updateLayout();
+		updateWorldDepthsUI();
 	}
 
+
+	function selectDepth(depth:Int) {
+		curWorldDepth = depth;
+		for(l in project.levels)
+			updateLevelVisibility(l);
+		updateWorldDepthsUI();
+	}
+
+	function updateWorldDepthsUI() {
+		if( !editor.worldMode ) {
+			jDepths.hide();
+			return;
+		}
+		jDepths.empty().show();
+		for(i in 0...3) {
+			var depth = i;
+			var jDepth = new J('<li/>');
+			jDepth.text( Std.string(depth) );
+			jDepth.appendTo(jDepths);
+			if( depth==curWorldDepth )
+				jDepth.addClass("active");
+			jDepth.click( _->{
+				selectDepth(depth);
+			});
+		}
+	}
 
 	function updateBgColor() {
 		var r = -M.fclamp( 0.9 * 0.04/camera.adjustedZoom, 0, 1);
@@ -581,9 +619,9 @@ class WorldRender extends dn.Process {
 			}
 			else {
 				// Beneath
-				wl.bgWrapper.alpha*=0.4;
-				wl.render.alpha*=0.5;
-				wl.bounds.alpha*=0.2;
+				wl.bgWrapper.alpha*=0.2;
+				wl.render.alpha*=0.3;
+				wl.bounds.alpha*=0.3;
 				wl.render.filter = new h2d.filter.Blur(32);
 			}
 		}
@@ -854,6 +892,8 @@ class WorldRender extends dn.Process {
 
 		// Visibility
 		wl.identifier.visible = camera.adjustedZoom>=camera.getMinZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
+		if( l.worldDepth!=curWorldDepth )
+			wl.identifier.visible = false;
 		if( !wl.identifier.visible )
 			return;
 
