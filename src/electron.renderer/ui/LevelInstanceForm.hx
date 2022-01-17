@@ -179,8 +179,25 @@ class LevelInstanceForm {
 		var i = Input.linkToHtmlInput( level.worldDepth, jForm.find("#worldDepth"));
 		i.onChange = ()->onFieldChange();
 
-		// Coords
+		// Depth above
+		var jDepthButton = jForm.find(".worldDepthAbove");
+		jDepthButton.click(_->{
+			if( project.moveLevelToDepthAbove(level) ) {
+				onFieldChange();
+				editor.selectWorldDepth(level.worldDepth);
+			}
+		});
 
+		// Depth brlow
+		var jDepthButton = jForm.find(".worldDepthBelow");
+		jDepthButton.click(_->{
+			if( project.moveLevelToDepthBelow(level) ) {
+				onFieldChange();
+				editor.selectWorldDepth(level.worldDepth);
+			}
+		});
+
+		// Coords
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
 		i.onChange = ()->onFieldChange();
 		i.fixValue = v->project.snapWorldGridX(v,false);

@@ -775,6 +775,62 @@ class Project {
 		return copy;
 	}
 
+	public inline function getLowestLevelDepth() {
+		var d = 0;
+		for(l in levels)
+			d = M.imin(d, l.worldDepth);
+		return d;
+	}
+
+	public inline function getHighestLevelDepth() {
+		var d = 0;
+		for(l in levels)
+			d = M.imax(d, l.worldDepth);
+		return d;
+	}
+
+	public inline function countLevelsInDepth(d:Int) {
+		var n = 0;
+		for(l in levels)
+			if( l.worldDepth==d )
+				n++;
+		return n;
+	}
+
+	public function moveLevelToDepthAbove(l:Level) {
+		// Check if there's any level above this one, or at least in same depth
+		for(ol in levels)
+			if( ol.worldDepth==l.worldDepth+1 || ol!=l && ol.worldDepth==l.worldDepth ) {
+				l.worldDepth++;
+
+				// Shift empty first depth
+				while( countLevelsInDepth(0)==0 )
+					for(ol in levels)
+						ol.worldDepth--;
+
+				return true;
+			}
+
+		return false;
+	}
+
+	public function moveLevelToDepthBelow(l:Level) {
+		// Check if there's any level above this one, or at least in same depth
+		for(ol in levels)
+			if( ol.worldDepth==l.worldDepth-1 || ol!=l && ol.worldDepth==l.worldDepth ) {
+				l.worldDepth--;
+
+				// Fix below zero depths
+				// if( l.worldDepth<0 )
+				// 	for(ol in levels)
+				// 		ol.worldDepth++;
+
+				return true;
+			}
+
+		return false;
+	}
+
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
 		id = cleanupIdentifier(id,true);
 		for(l in levels)

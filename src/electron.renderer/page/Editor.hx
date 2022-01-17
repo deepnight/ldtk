@@ -1103,12 +1103,11 @@ class Editor extends Page {
 	}
 
 
-	function selectWorldDepth(depth:Int) {
+	public function selectWorldDepth(depth:Int) {
 		if( curWorldDepth==depth )
 			return;
 
 		curWorldDepth = depth;
-		// updateWorldDepthsUI();
 		ge.emit( WorldDepthSelected(curWorldDepth) );
 	}
 
@@ -1119,13 +1118,13 @@ class Editor extends Page {
 			return;
 		}
 		jDepths.empty().show();
-		var maxDepth = 3;
-		for(i in 0...maxDepth+1) {
-			var depth = maxDepth-i;
+		var min = project.getLowestLevelDepth();
+		var max = project.getHighestLevelDepth();
+		for(depth in min...max+1) {
 			var jDepth = new J('<li/>');
+			jDepth.prependTo(jDepths);
 			jDepth.append('<span class="icon"/>');
 			jDepth.append('<span class="label">$depth</label>');
-			jDepth.appendTo(jDepths);
 			if( depth==curWorldDepth )
 				jDepth.addClass("active");
 			jDepth.click( _->{
@@ -1610,6 +1609,8 @@ class Editor extends Page {
 			case AppSettingsChanged:
 
 			case WorldMode(active):
+				if( !active && curWorldDepth!=curLevel.worldDepth )
+					selectWorldDepth(curLevel.worldDepth);
 				updateWorldDepthsUI();
 
 			case WorldDepthSelected(worldDepth):
@@ -1702,6 +1703,7 @@ class Editor extends Page {
 
 			case LevelSettingsChanged(l):
 				updateGuide();
+				updateWorldDepthsUI();
 
 			case LevelJsonCacheInvalidated(l):
 			case LevelAdded(l):
@@ -1723,6 +1725,7 @@ class Editor extends Page {
 				updateTool();
 				if( !levelHistory.exists(l.uid) )
 					levelHistory.set(l.uid, new LevelHistory(l.uid) );
+				selectWorldDepth(l.worldDepth);
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
