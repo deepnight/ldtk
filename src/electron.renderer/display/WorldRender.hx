@@ -27,7 +27,8 @@ class WorldRender extends dn.Process {
 	var title : h2d.Text;
 	var axeH : h2d.Bitmap;
 	var axeV : h2d.Bitmap;
-	var grids : h2d.Graphics;
+	var largeGrid : h2d.Graphics;
+	var smallGrid : h2d.Graphics;
 	var currentHighlight : h2d.Graphics;
 	public var worldLayers : Map<Int,h2d.Layers>;
 	var fieldsWrapper : h2d.Object;
@@ -57,8 +58,11 @@ class WorldRender extends dn.Process {
 
 		worldBounds = new h2d.Graphics();
 
-		grids = new h2d.Graphics();
-		editor.root.add(grids, Const.DP_BG);
+		largeGrid = new h2d.Graphics();
+		editor.root.add(largeGrid, Const.DP_BG);
+
+		smallGrid = new h2d.Graphics();
+		editor.root.add(smallGrid, Const.DP_BG);
 
 		axeH = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1) );
 		editor.root.add(axeH, Const.DP_BG);
@@ -85,7 +89,8 @@ class WorldRender extends dn.Process {
 		title.remove();
 		axeH.remove();
 		axeV.remove();
-		grids.remove();
+		smallGrid.remove();
+		largeGrid.remove();
 		currentHighlight.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
@@ -435,51 +440,55 @@ class WorldRender extends dn.Process {
 
 	function renderGrids() {
 		if( !editor.worldMode ) {
-			grids.visible = false;
+			smallGrid.visible = largeGrid.visible = false;
 			return;
 		}
-
-		// App.LOG.render("Rendering world grids...");
-		grids.clear();
-		grids.visible = true;
 
 		// Base level grid
 		final minZoom = camera.pixelRatio*0.5;
 		if( project.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
-			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.5 * M.fmin( (camera.adjustedZoom-minZoom)/0.5, 1 ) );
+			smallGrid.clear();
+			smallGrid.visible = true;
+			smallGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.5 * M.fmin( (camera.adjustedZoom-minZoom)/0.5, 1 ) );
 			var g = project.getSmartLevelGridSize() * camera.adjustedZoom;
 			// Verticals
 			var off = root.x % g;
 			for(i in 0...M.ceil(camera.width/g)) {
-				grids.moveTo(i*g+off, 0);
-				grids.lineTo(i*g+off, camera.height);
+				smallGrid.moveTo(i*g+off, 0);
+				smallGrid.lineTo(i*g+off, camera.height);
 			}
 			// Horizontals
 			var off = root.y % g;
 			for(i in 0...M.ceil(camera.height/g)) {
-				grids.moveTo(0, i*g+off);
-				grids.lineTo(camera.width, i*g+off);
+				smallGrid.moveTo(0, i*g+off);
+				smallGrid.lineTo(camera.width, i*g+off);
 			}
 		}
+		else
+			smallGrid.visible = false;
 
 		// World grid
 		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.2 ) {
-			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.2)/0.3, 1 ) );
+			largeGrid.clear();
+			largeGrid.visible = true;
+			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.2)/0.3, 1 ) );
 			var g = project.worldGridWidth * camera.adjustedZoom;
 			// Verticals
 			var off =  root.x % g;
 			for( i in 0...M.ceil(camera.width/g)+1 ) {
-				grids.moveTo(i*g+off, 0);
-				grids.lineTo(i*g+off, camera.height);
+				largeGrid.moveTo(i*g+off, 0);
+				largeGrid.lineTo(i*g+off, camera.height);
 			}
 			// Horizontals
 			var g = project.worldGridHeight * camera.adjustedZoom;
 			var off =  root.y % g;
 			for( i in 0...M.ceil(camera.height/g)+1 ) {
-				grids.moveTo(0, i*g+off);
-				grids.lineTo(camera.width, i*g+off);
+				largeGrid.moveTo(0, i*g+off);
+				largeGrid.lineTo(camera.width, i*g+off);
 			}
 		}
+		else
+			largeGrid.visible = false;
 	}
 
 	inline function updateAxesPos() {
