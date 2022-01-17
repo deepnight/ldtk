@@ -124,6 +124,7 @@ class WorldRender extends dn.Process {
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
+				renderGrids();
 				updateBgColor();
 				updateAxesPos();
 				updateAllLevelIdentifiers(false);
@@ -468,10 +469,10 @@ class WorldRender extends dn.Process {
 			smallGrid.visible = false;
 
 		// World grid
-		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.2 ) {
+		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.1 ) {
 			largeGrid.clear();
 			largeGrid.visible = true;
-			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.2)/0.3, 1 ) );
+			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
 			var g = project.worldGridWidth * camera.adjustedZoom;
 			// Verticals
 			var off =  root.x % g;
