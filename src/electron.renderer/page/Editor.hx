@@ -1032,7 +1032,7 @@ class Editor extends Page {
 		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && delta>0 ) {
 			// Find closest level to cursor
 			var dh = new dn.DecisionHelper(project.levels);
-			dh.keepOnly( l->l.isWorldOver(c.worldX, c.worldY, 500) );
+			dh.keepOnly( l->l.worldDepth==worldRender.curWorldDepth && l.isWorldOver(c.worldX, c.worldY, 500) );
 			dh.score( l->l.isWorldOver(c.worldX, c.worldY) ? 100 : 0 );
 			dh.score( l->-l.getDist(c.worldX,c.worldY) );
 
