@@ -35,7 +35,7 @@ class WorldRender extends dn.Process {
 	var levelRenderInvalidations : Map<Int,Bool> = new Map();
 	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
 	var levelIdentifiersInvalidation : Map<Int,Bool> = new Map();
-
+	var invalidatedBoundsThickness = true;
 
 	public function new() {
 		super(editor);
@@ -108,6 +108,7 @@ class WorldRender extends dn.Process {
 				updateLayout();
 				updateFieldsPos();
 				updateCurrentHighlight();
+				invalidateBoundsThickness();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -120,6 +121,7 @@ class WorldRender extends dn.Process {
 				updateWorldTitle();
 				updateFieldsPos();
 				updateCurrentHighlight();
+				invalidateBoundsThickness();
 				for(l in project.levels)
 					updateLevelVisibility(l);
 
@@ -250,6 +252,10 @@ class WorldRender extends dn.Process {
 			invalidateLevelIdentifier(l);
 			invalidateLevelRender(l);
 		}
+	}
+
+	inline function invalidateBoundsThickness() {
+		invalidatedBoundsThickness = true;
 	}
 
 	public inline function invalidateLevelRender(l:data.Level) {
@@ -534,7 +540,7 @@ class WorldRender extends dn.Process {
 		}
 		else if( editor.worldMode ) {
 			// Show everything in world mode
-			wl.render.visible = wl.bounds.visible = camera.isOnScreenLevel(l);
+			wl.bgWrapper.visible = wl.render.visible = wl.bounds.visible = camera.isOnScreenLevel(l);
 			wl.bounds.alpha = 1;
 			wl.render.alpha = 1;
 		}
@@ -549,10 +555,18 @@ class WorldRender extends dn.Process {
 
 		// Depths
 		if( l.worldDepth!=curWorldDepth ) {
-			wl.bgWrapper.alpha*=0.4;
-			wl.render.alpha*=0.5;
-			wl.bounds.alpha*=0.2;
-			wl.render.filter = new h2d.filter.Blur(32);
+			if( l.worldDepth>curWorldDepth ) {
+				// Above
+				wl.bgWrapper.visible = false;
+				wl.render.visible = false;
+			}
+			else {
+				// Beneath
+				wl.bgWrapper.alpha*=0.4;
+				wl.render.alpha*=0.5;
+				wl.bounds.alpha*=0.2;
+				wl.render.filter = new h2d.filter.Blur(32);
+			}
 		}
 		else
 			wl.render.filter = null;
@@ -770,10 +784,10 @@ class WorldRender extends dn.Process {
 
 			var error = l.getFirstError();
 
-			var thick = 2*camera.pixelRatio;
-			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.4);
+			var thick = 1*camera.pixelRatio / camera.adjustedZoom;
+			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.7);
 			if( error!=null ) {
-				thick*=8;
+				thick*=4;
 				c = 0xff0000;
 			}
 			wl.bounds.beginFill(c);
@@ -922,6 +936,13 @@ class WorldRender extends dn.Process {
 				if( --limit<=0 )
 					break;
 			}
+		}
+
+		// Refresh bounds thickness
+		if( editor.worldMode && invalidatedBoundsThickness && !cd.hasSetS("boundsRender",0.2) ) {
+			invalidatedBoundsThickness = false;
+			for(l in project.levels)
+				updateLevelBounds(l);
 		}
 	}
 
