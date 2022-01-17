@@ -268,7 +268,7 @@ class EntityInstance {
 	/**
 		Return TRUE if target EntityInstance has a reference to This in given field.
 	**/
-	public function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef) {
+	public function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) {
 		if( fd==null ) {
 			// In any field
 			for(fi in fieldInstances)
@@ -286,7 +286,7 @@ class EntityInstance {
 				return false;
 
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIID(i)==targetEi.iid )
+				if( fi.getEntityRefIID(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLink ) )
 					return true;
 		}
 		return false;
