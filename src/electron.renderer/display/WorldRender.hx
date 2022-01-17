@@ -25,7 +25,8 @@ class WorldRender extends dn.Process {
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
 	var title : h2d.Text;
-	var axes : h2d.Graphics;
+	var axeH : h2d.Bitmap;
+	var axeV : h2d.Bitmap;
 	var grids : h2d.Graphics;
 	var currentHighlight : h2d.Graphics;
 	public var worldLayers : Map<Int,h2d.Layers>;
@@ -35,7 +36,7 @@ class WorldRender extends dn.Process {
 	var levelRenderInvalidations : Map<Int,Bool> = new Map();
 	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
 	var levelIdentifiersInvalidation : Map<Int,Bool> = new Map();
-	var invalidatedBoundsThickness = true;
+	var invalidatedCameraBasedRenders = true;
 
 	public function new() {
 		super(editor);
@@ -55,13 +56,15 @@ class WorldRender extends dn.Process {
 		worldBg.wrapper.alpha = 0;
 
 		worldBounds = new h2d.Graphics();
-		// editor.root.add(worldBounds, Const.DP_BG);
 
 		grids = new h2d.Graphics();
 		editor.root.add(grids, Const.DP_BG);
 
-		axes = new h2d.Graphics();
-		editor.root.add(axes, Const.DP_BG);
+		axeH = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1) );
+		editor.root.add(axeH, Const.DP_BG);
+
+		axeV = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1) );
+		editor.root.add(axeV, Const.DP_BG);
 
 		title = new h2d.Text(Assets.fontLight_title);
 		title.text = "hello world";
@@ -80,7 +83,8 @@ class WorldRender extends dn.Process {
 		super.onDispose();
 		worldBg.wrapper.remove();
 		title.remove();
-		axes.remove();
+		axeH.remove();
+		axeV.remove();
 		grids.remove();
 		currentHighlight.remove();
 		editor.ge.removeListener(onGlobalEvent);
@@ -89,7 +93,7 @@ class WorldRender extends dn.Process {
 	override function onResize() {
 		super.onResize();
 		updateWorldTitle();
-		renderAxes();
+		updateAxesPos();
 		renderGrids();
 		renderWorldBg();
 		updateCurrentHighlight();
@@ -108,20 +112,20 @@ class WorldRender extends dn.Process {
 				updateLayout();
 				updateFieldsPos();
 				updateCurrentHighlight();
-				invalidateBoundsThickness();
+				updateAxesPos();
+				invalidateCameraBasedRenders();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
-				renderAxes();
-				renderGrids();
 				updateBgColor();
+				updateAxesPos();
 				updateAllLevelIdentifiers(false);
 				updateWorldTitle();
 				updateFieldsPos();
 				updateCurrentHighlight();
-				invalidateBoundsThickness();
+				invalidateCameraBasedRenders();
 				for(l in project.levels)
 					updateLevelVisibility(l);
 
@@ -237,7 +241,7 @@ class WorldRender extends dn.Process {
 					updateFieldsPos();
 				updateWorldTitle();
 				updateAllLevelIdentifiers(active);
-				renderAxes();
+				updateAxesPos();
 				for(l in project.levels)
 					updateLevelBounds(l);
 
@@ -254,8 +258,8 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	inline function invalidateBoundsThickness() {
-		invalidatedBoundsThickness = true;
+	inline function invalidateCameraBasedRenders() {
+		invalidatedCameraBasedRenders = true;
 	}
 
 	public inline function invalidateLevelRender(l:data.Level) {
@@ -336,7 +340,7 @@ class WorldRender extends dn.Process {
 		}
 
 		renderWorldBg();
-		renderAxes();
+		updateAxesPos();
 		renderGrids();
 		renderWorldBounds();
 		updateLayout();
@@ -443,11 +447,13 @@ class WorldRender extends dn.Process {
 		if( project.worldLayout==Free && camera.adjustedZoom>=1.5 && settings.v.grid ) {
 			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-1.5)/0.6, 1 ) );
 			var g = project.getSmartLevelGridSize() * camera.adjustedZoom;
+			// Verticals
 			var off = root.x % g;
 			for(i in 0...M.ceil(camera.width/g)) {
 				grids.moveTo(i*g+off, 0);
 				grids.lineTo(i*g+off, camera.height);
 			}
+			// Horizontals
 			var off = root.y % g;
 			for(i in 0...M.ceil(camera.height/g)) {
 				grids.moveTo(0, i*g+off);
@@ -459,11 +465,13 @@ class WorldRender extends dn.Process {
 		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.2 ) {
 			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.2)/0.3, 1 ) );
 			var g = project.worldGridWidth * camera.adjustedZoom;
+			// Verticals
 			var off =  root.x % g;
 			for( i in 0...M.ceil(camera.width/g)+1 ) {
 				grids.moveTo(i*g+off, 0);
 				grids.lineTo(i*g+off, camera.height);
 			}
+			// Horizontals
 			var g = project.worldGridHeight * camera.adjustedZoom;
 			var off =  root.y % g;
 			for( i in 0...M.ceil(camera.height/g)+1 ) {
@@ -473,32 +481,32 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-
-	function renderAxes() {
+	inline function updateAxesPos() {
 		if( !settings.v.showDetails ) {
-			axes.visible = false;
-			return;
+			axeH.visible = axeV.visible = false;
 		}
+		else {
+			switch project.worldLayout {
+				case Free, GridVania:
+					axeH.visible = axeV.visible = true;
 
-		switch project.worldLayout {
-			case Free, GridVania:
-			case LinearHorizontal, LinearVertical:
-				axes.visible = false;
-				return;
+					// Horizontal
+					axeH.y = root.y;
+					axeH.scaleX = camera.iWidth;
+					axeH.scaleY = 3*camera.pixelRatio;
+
+					// Vertical
+					axeV.x = root.x;
+					axeV.scaleX = 3*camera.pixelRatio;
+					axeV.scaleY = camera.iHeight;
+
+				case LinearHorizontal, LinearVertical:
+					axeH.visible = axeV.visible = false;
+					return;
+			}
 		}
-
-		axes.clear();
-		axes.visible = true;
-		axes.lineStyle(3*camera.pixelRatio, worldLineColor, 1);
-
-		// Horizontal
-		axes.moveTo(0, root.y);
-		axes.lineTo(camera.iWidth, root.y);
-
-		// Vertical
-		axes.moveTo(root.x, 0);
-		axes.lineTo(root.x, camera.iHeight);
 	}
+
 
 	function renderWorldBounds() {
 		App.LOG.render("Rendering world bounds...");
@@ -577,7 +585,7 @@ class WorldRender extends dn.Process {
 		var cur = editor.curLevel;
 
 		// Axes visibility
-		axes.visible = editor.worldMode && switch editor.project.worldLayout {
+		axeH.visible = axeV.visible = editor.worldMode && switch editor.project.worldLayout {
 			case Free: true;
 			case GridVania: true;
 			case LinearHorizontal: false;
@@ -938,9 +946,10 @@ class WorldRender extends dn.Process {
 			}
 		}
 
-		// Refresh bounds thickness
-		if( editor.worldMode && invalidatedBoundsThickness && !cd.hasSetS("boundsRender",0.2) ) {
-			invalidatedBoundsThickness = false;
+		// Refresh elements which thickness is linked to camera zoom
+		if( editor.worldMode && invalidatedCameraBasedRenders && !cd.hasSetS("boundsRender",0.2) ) {
+			invalidatedCameraBasedRenders = false;
+			renderGrids();
 			for(l in project.levels)
 				updateLevelBounds(l);
 		}
