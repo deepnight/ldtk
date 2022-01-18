@@ -319,10 +319,10 @@ class JsTools {
 							continue;
 
 						jReplace.append( switch k.toLowerCase() {
-							case "mouseleft": new J('<span class="icon mouseleft"></span>');
-							case "mouseright": new J('<span class="icon mouseright"></span>');
-							case "mousewheel": new J('<span class="icon mousewheel"></span>');
-							case "mousemiddle": new J('<span class="icon mousemiddle"></span>');
+							case "mouseleft": new J('<span class="icon mouseleft" title="Left mouse button"></span>');
+							case "mouseright": new J('<span class="icon mouseright" title="Right mouse button"></span>');
+							case "mousewheel": new J('<span class="icon mousewheel" title="Mouse wheel"></span>');
+							case "mousemiddle": new J('<span class="icon mousemiddle" title="Middle mouse button"></span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
 
