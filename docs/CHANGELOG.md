@@ -86,6 +86,7 @@
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
   - Fixed the progress bar when saving large projects
   - Fixed TAB key behavior when an Entity instance panel is open
+  - Fixed a crash when clicking on a partial tile in the Tilesets panel
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
   - Fixed a rare crash when loading Aseprite files
