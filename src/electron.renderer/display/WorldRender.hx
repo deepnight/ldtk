@@ -140,6 +140,9 @@ class WorldRender extends dn.Process {
 			case WorldDepthSelected(worldDepth):
 				for(l in project.levels)
 					updateLevelVisibility(l);
+				updateCurrentHighlight();
+				updateFieldsPos();
+				updateAllLevelIdentifiers(false);
 
 			case GridChanged(active):
 				renderGrids();
@@ -208,6 +211,8 @@ class WorldRender extends dn.Process {
 				renderWorldBounds();
 				updateWorldTitle();
 				updateCurrentHighlight();
+				applyWorldDepth(l);
+				sortWorldDepths();
 
 			case LayerRuleGroupAdded:
 				invalidateAllLevelRenders();
@@ -239,7 +244,7 @@ class WorldRender extends dn.Process {
 				renderWorldBounds();
 
 			case LevelRemoved(l):
-				removeLevel(l.uid);
+				removeWorldLevel(l.uid);
 				removeLevelFields(l.uid);
 				updateLayout();
 				invalidateAllLevelIdentifiers();
@@ -300,41 +305,59 @@ class WorldRender extends dn.Process {
 	}
 
 
-	inline function getWorldLayer(idx:Int) {
-		if( !worldLayers.exists(idx) ) {
-			var l = new h2d.Layers();
-			root.add(l, Const.DP_MAIN);
-			worldLayers.set(idx,l);
-		}
-		return worldLayers.get(idx);
+
+	/** Z-sort depths wrappers**/
+	function sortWorldDepths() {
+		for(d in project.getLowestLevelDepth()...project.getHighestLevelDepth()+1)
+			if( worldLayers.exists(d) )
+				root.over( worldLayers.get(d) );
 	}
 
-	/** Return world level if it exists, or create it otherwise **/
-	function getWorldLevel(uid:Int) : WorldLevelRender {
-		if( !worldLevels.exists(uid) ) {
+	/** Insert world level to its depth wrapper **/
+	function applyWorldDepth(l:data.Level) {
+		var wl = getWorldLevel(l);
+
+		var worldLayer = getWorldDepthWrapper(l.worldDepth);
+		var _inc = 0;
+		worldLayer.add(wl.bgWrapper, _inc++);
+		worldLayer.add(wl.render, _inc++);
+		worldLayer.add(wl.identifier, _inc++);
+		worldLayer.add(wl.bounds, _inc++);
+	}
+
+	inline function getWorldDepthWrapper(depth:Int) : h2d.Layers {
+		if( !worldLayers.exists(depth) ) {
+			var l = new h2d.Layers();
+			root.add(l, Const.DP_MAIN);
+			worldLayers.set(depth,l);
+			sortWorldDepths();
+		}
+		return worldLayers.get(depth);
+	}
+
+	/**
+		Return world level if it exists, or create it otherwise.
+	**/
+	function getWorldLevel(l:data.Level) : WorldLevelRender {
+		if( !worldLevels.exists(l.uid) ) {
 			var wl : WorldLevelRender = {
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				bounds : new h2d.Graphics(),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
 			}
-
-			var worldLayer = getWorldLayer(0);
-			var _depth = 0;
-			worldLayer.add(wl.bgWrapper, _depth++);
-			worldLayer.add(wl.render, _depth++);
-			worldLayer.add(wl.identifier, _depth++);
-			worldLayer.add(wl.bounds, _depth++);
-			worldLevels.set(uid, wl);
+			worldLevels.set(l.uid, wl);
+			applyWorldDepth(l);
 		}
-		return worldLevels.get(uid);
+		return worldLevels.get(l.uid);
 	}
+
 
 	function renderAll() {
 		App.LOG.render("Rendering all world...");
 
 		for(uid in worldLevels.keys()) {
-			removeLevel(uid);
+			removeWorldLevel(uid);
 			removeLevelFields(uid);
 		}
 
@@ -343,7 +366,7 @@ class WorldRender extends dn.Process {
 		for(l in worldLayers)
 			l.removeChildren();
 		for(l in project.levels)
-			getWorldLevel(l.uid);
+			getWorldLevel(l);
 
 		for(l in editor.project.levels) {
 			invalidateLevelFields(l);
@@ -356,6 +379,7 @@ class WorldRender extends dn.Process {
 		renderGrids();
 		renderWorldBounds();
 		updateLayout();
+		sortWorldDepths();
 	}
 
 	function updateBgColor() {
@@ -540,20 +564,20 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateCurrentHighlight() {
-		currentHighlight.visible = editor.worldMode;
+		final l = editor.curLevel;
+		currentHighlight.visible = editor.worldMode && l.worldDepth==editor.curWorldDepth;
 		if( !currentHighlight.visible )
 			return;
 
 		currentHighlight.clear();
 		currentHighlight.lineStyle(7/camera.adjustedZoom, 0xffcc00);
-		var l = editor.curLevel;
 		var p = 2 / camera.adjustedZoom;
 		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
 	}
 
 
 	function updateLevelVisibility(l:data.Level) {
-		var wl = getWorldLevel(l.uid);
+		var wl = getWorldLevel(l);
 
 		wl.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
 
@@ -581,20 +605,20 @@ class WorldRender extends dn.Process {
 		if( l.worldDepth!=editor.curWorldDepth ) {
 			if( l.worldDepth>editor.curWorldDepth ) {
 				// Above
+				wl.bounds.alpha*=0.33;
 				wl.bgWrapper.visible = false;
 				wl.render.visible = false;
 			}
 			else {
 				// Beneath
-				wl.bgWrapper.alpha*=0.2;
-				wl.render.alpha*=0.3;
-				wl.bounds.alpha*=0.3;
-				wl.render.filter = new h2d.filter.Blur(32);
+				wl.bgWrapper.alpha*=0.8;
+				wl.render.alpha*=0.2;
+				wl.bounds.alpha*=0.2;
+				// wl.render.filter = new h2d.filter.Blur(32);
 			}
 		}
-		else
-			wl.render.filter = null;
-
+		// else
+		// 	wl.render.filter = null;
 	}
 
 	public function updateLayout() {
@@ -613,7 +637,7 @@ class WorldRender extends dn.Process {
 			if( !worldLevels.exists(l.uid) )
 				continue;
 
-			var wl = getWorldLevel(l.uid);
+			var wl = getWorldLevel(l);
 			updateLevelVisibility(l);
 
 			// Position
@@ -625,7 +649,7 @@ class WorldRender extends dn.Process {
 		updateAllLevelIdentifiers(false);
 	}
 
-	function removeLevel(uid:Int) {
+	function removeWorldLevel(uid:Int) {
 		if( worldLevels.exists(uid) ) {
 			var wl = worldLevels.get(uid);
 			wl.render.remove();
@@ -636,8 +660,8 @@ class WorldRender extends dn.Process {
 		}
 	}
 
-	function clearLevelRender(uid:Int) {
-		var wl = getWorldLevel(uid);
+	function clearLevelRender(l:data.Level) {
+		var wl = getWorldLevel(l);
 		wl.bgWrapper.removeChildren();
 		wl.bounds.clear();
 		wl.render.removeChildren();
@@ -699,9 +723,9 @@ class WorldRender extends dn.Process {
 		App.LOG.render('Rendering world level $l...');
 
 		// Cleanup
-		clearLevelRender(l.uid);
+		clearLevelRender(l);
 
-		var wl = getWorldLevel(l.uid);
+		var wl = getWorldLevel(l);
 
 		// Bg color
 		var col = new h2d.Bitmap(h2d.Tile.fromColor(l.getBgColor()), wl.bgWrapper);
@@ -800,7 +824,7 @@ class WorldRender extends dn.Process {
 
 
 	function updateLevelBounds(l:data.Level) {
-		var wl = getWorldLevel(l.uid);
+		var wl = getWorldLevel(l);
 		if( wl!=null ) {
 			wl.bounds.clear();
 			if( !settings.v.showDetails )
@@ -830,7 +854,7 @@ class WorldRender extends dn.Process {
 
 
 	function updateLevelIdentifier(l:data.Level, refreshTexts:Bool) {
-		var wl = getWorldLevel(l.uid);
+		var wl = getWorldLevel(l);
 
 		// Refresh text
 		if( refreshTexts ) {
@@ -927,7 +951,7 @@ class WorldRender extends dn.Process {
 			for( uid in levelRenderInvalidations.keys() ) {
 				if( editor.project.getLevel(uid)==null ) {
 					// Drop lost levels
-					removeLevel(uid);
+					removeWorldLevel(uid);
 					levelRenderInvalidations.remove(uid);
 					continue;
 				}
