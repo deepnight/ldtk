@@ -13,6 +13,7 @@ class Tileset {
 	var jCursor : js.jquery.JQuery;
 	var jSelection : js.jquery.JQuery;
 	var jCanvas : js.jquery.JQuery;
+	var jInfos : js.jquery.JQuery;
 
 	var canvas(get,never) : js.html.CanvasElement;
 		inline function get_canvas() return cast jCanvas.get(0);
@@ -55,6 +56,9 @@ class Tileset {
 		jCanvas.attr("height",tilesetDef.pxHei+"px");
 		renderAtlas();
 		jCanvas.appendTo(jAtlas);
+
+		jInfos = new J('<div class="selectionInfos"/>');
+		jInfos.appendTo(jWrapper);
 
 		// Init events
 		jTilesetWrapper.mousedown( function(ev) {
@@ -333,6 +337,9 @@ class Tileset {
 		var tileId = tilesetDef.getTileId(r.cx,r.cy);
 		jCursor.empty();
 		jCursor.show();
+
+		// Infos
+		jInfos.empty().text("#"+tileId);
 
 		var defaultClass = dragStart==null ? "mouseOver" : null;
 
