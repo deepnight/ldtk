@@ -17,12 +17,18 @@
 	</dd>
 
 	<dt>
-		<label for="worldDepth">TEMP: World depth</label>
+		<label for="worldDepth">World depth</label>
+		<info>
+			You can organize your levels in various "world layers" by changing their depth. Depth is just an index (positive or negative), higher values meaning "this level is above".
+			World layers are completely automatic and created/removed as you need them.
+		</info>
 	</dt>
-	<dd>
+	<dd class="depth">
 		<input type="text" id="worldDepth" class="small"/>
-		<button class="worldDepthAbove">Above</button>
-		<button class="worldDepthBelow">Below</button>
+		<div class="depthButtons">
+			<button class="worldDepthAbove"> <span class="icon up"/> </button>
+			<button class="worldDepthBelow"> <span class="icon down"/> </button>
+		</div>
 	</dd>
 
 	<dt>

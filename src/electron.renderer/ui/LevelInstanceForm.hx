@@ -202,6 +202,7 @@ class LevelInstanceForm {
 
 		// Depth above
 		var jDepthButton = jForm.find(".worldDepthAbove");
+		jDepthButton.prop("disabled", !project.canMoveLevelToDepthAbove(level));
 		jDepthButton.click(_->{
 			if( project.moveLevelToDepthAbove(level) ) {
 				onFieldChange();
@@ -211,6 +212,7 @@ class LevelInstanceForm {
 
 		// Depth brlow
 		var jDepthButton = jForm.find(".worldDepthBelow");
+		jDepthButton.prop("disabled", !project.canMoveLevelToDepthBelow(level));
 		jDepthButton.click(_->{
 			if( project.moveLevelToDepthBelow(level) ) {
 				onFieldChange();

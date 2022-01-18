@@ -796,20 +796,21 @@ class Project {
 				n++;
 		return n;
 	}
-	
 
-	public function moveLevelToDepthAbove(l:Level) {
-		var canDo = l.worldDepth<getHighestLevelDepth();
-		if( !canDo ) {
+	public function canMoveLevelToDepthAbove(l:Level) {
+		if( l.worldDepth<getHighestLevelDepth() )
+			return true;
+		else {
 			// Check if there's any level above this one, or at least in same depth
 			for(ol in levels)
-				if( ol!=l && ol.worldDepth==l.worldDepth ) {
-					canDo = true;
-					break;
-				}
+				if( ol!=l && ol.worldDepth==l.worldDepth )
+					return true;
+			return false;
 		}
+	}
 
-		if( canDo ) {
+	public function moveLevelToDepthAbove(l:Level) {
+		if( canMoveLevelToDepthAbove(l) ) {
 			l.worldDepth++;
 
 			// Shift empty first depth
@@ -824,18 +825,21 @@ class Project {
 	}
 
 
-	public function moveLevelToDepthBelow(l:Level) {
-		var canDo = l.worldDepth>getLowestLevelDepth();
-		if( !canDo ) {
+	public function canMoveLevelToDepthBelow(l:Level) {
+		if( l.worldDepth>getLowestLevelDepth() )
+			return true;
+		else {
 			// Check if there's any other level in current depth
 			for(ol in levels)
-				if( ol!=l && ol.worldDepth==l.worldDepth ) {
-					canDo = true;
-					break;
-				}
-		}
+				if( ol!=l && ol.worldDepth==l.worldDepth )
+					return true;
 
-		if( canDo ) {
+			return false;
+		}
+	}
+
+	public function moveLevelToDepthBelow(l:Level) {
+		if( canMoveLevelToDepthBelow(l) ) {
 			l.worldDepth--;
 
 			// Fix below zero depths

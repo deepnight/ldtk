@@ -601,10 +601,18 @@ div.info {
 	&:hover {
 		color: $orange;
 		border-color: $orange;
+		opacity: 1;
 	}
 
 	&::before {
-		content: "i";
+		content: "?";
+	}
+
+	&.small {
+		width: 16px;
+		height: 16px;
+		font-size: 9pt;
+		border-width: 2px;
 	}
 }
 
@@ -1160,6 +1168,11 @@ ul.log {
 .icon.web				{ background-image: url("../icons/web.svg"); }
 .icon.world				{ background-image: url("../icons/world.svg"); }
 
+.icon.up				{ background-image: url("../icons/up.svg"); }
+.icon.down				{ background-image: url("../icons/down.svg"); }
+.icon.left				{ background-image: url("../icons/left.svg"); }
+.icon.right				{ background-image: url("../icons/right.svg"); }
+
 .icon.mouseLeft			{ background-image: url("../icons/mouseLeft.png"); image-rendering: pixelated; }
 .icon.mouseRight		{ background-image: url("../icons/mouseRight.png"); image-rendering: pixelated; }
 .icon.mouseWheel		{ background-image: url("../icons/mouseWheel.png"); image-rendering: pixelated; }
@@ -1669,6 +1682,7 @@ input[type=number] {
 	}
 	&:read-only {
 		background-color: transparent;
+		color: $bgLighter;
 	}
 	&:focus {
 		border-color: $orange;
@@ -3723,7 +3737,7 @@ canvas#webgl {
 		}
 	}
 
-	ul#worldDepths {
+	#worldDepths {
 		position: absolute;
 		top: 146px;
 		left: calc( $mainPanelNormalWid + 100px );
@@ -3732,63 +3746,86 @@ canvas#webgl {
 		background-color: $bgDark;
 		padding: 3px;
 		border-radius: 4px;
+		max-height: 70vh;
+		overflow-y: auto;
 
-		li {
+		>.title {
 			display: grid;
-			grid-template-columns: min-content min-content;
-			gap: 3px;
-			align-items: center;
-			justify-content: flex-start;
-			border-radius: 4px;
-			padding-left: 4px;
-			padding-right: 4px;
-			cursor: pointer;
+			grid-template-columns: auto min-content;
+			padding-top: 3px;
+			margin-bottom: 8px;
 
-			.icon {
-				width: 50px;
-				height: 28px;
-				background-image: url("../icons/worldLayer_below.svg");
-				background-repeat: no-repeat;
-				background-position: left center;
-				background-size: contain;
+			white-space: nowrap;
+			font-size: 0.8em;
+			font-weight: bold;
+			color: $bgLight;
+			text-align: center;
+
+			info {
+				opacity: 0.66;
 			}
+		}
 
-			&:first-child .icon {
-				background-image: url("../icons/worldLayer_top.svg");
-			}
+		>ul {
+			display: grid;
 
-			&:last-child .icon {
-				opacity: 0.5;
-			}
-
-			.label {
-				font-size: 14pt;
-				color: $bgLight;
-				padding: 0px 4px;
+			li {
+				display: grid;
+				grid-template-columns: min-content min-content;
+				gap: 3px;
+				align-items: center;
+				justify-content: flex-start;
 				border-radius: 4px;
-				min-width: 1em;
-				text-align: center;
-			}
+				padding-left: 4px;
+				padding-right: 4px;
+				cursor: pointer;
 
-			&.active {
-				border-color: $orange;
-				background-color: $bgLight;
 				.icon {
-					filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+					width: 50px;
+					height: 28px;
+					background-image: url("../icons/worldLayer_below.svg");
+					background-repeat: no-repeat;
+					background-position: left center;
+					background-size: contain;
 				}
-				.label {
-					color: black;
-					background-color: $orange;
-				}
-			}
 
-			&:not(.active):hover {
-				background-color: $bgMed;
-				.icon {
-					filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+				&:first-child .icon {
+					background-image: url("../icons/worldLayer_top.svg");
 				}
+
+				&:last-child .icon {
+					opacity: 0.5;
+				}
+
 				.label {
-					color: $almostWhite;
+					font-size: 14pt;
+					color: $bgLight;
+					padding: 0px 4px;
+					border-radius: 4px;
+					min-width: 1em;
+					text-align: center;
+				}
+
+				&.active {
+					border-color: $orange;
+					background-color: $bgLight;
+					.icon {
+						filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+					}
+					.label {
+						color: black;
+						background-color: $orange;
+					}
+				}
+
+				&:not(.active):hover {
+					background-color: $bgMed;
+					.icon {
+						filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
+					}
+					.label {
+						color: $almostWhite;
+					}
 				}
 			}
 		}
@@ -6032,6 +6069,25 @@ body.sorting ul.collapsedSortTarget {
 				}
 				select {
 					font-size: 9pt;
+				}
+			}
+		}
+
+		.depth {
+			align-items: stretch;
+			input {
+				text-align: center;
+			}
+			.depthButtons {
+				display: grid;
+				grid-template-rows: repeat(2, 20px);
+				max-width: 32px;
+				button {
+					padding-top: 0px;
+					padding-bottom: 0px;
+					.icon {
+						height: 20px;
+					}
 				}
 			}
 		}

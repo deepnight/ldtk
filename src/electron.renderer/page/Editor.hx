@@ -1126,10 +1126,14 @@ class Editor extends Page {
 			jDepths.hide();
 			return;
 		}
-		jDepths.empty().show();
+
+		var jList = jDepths.children("ul");
+		jList.empty();
+		jDepths.show();
+
 		for(depth in min...max+1) {
 			var jDepth = new J('<li/>');
-			jDepth.prependTo(jDepths);
+			jDepth.prependTo(jList);
 			jDepth.append('<span class="icon"/>');
 			jDepth.append('<span class="label">$depth</label>');
 			if( depth==curWorldDepth )
@@ -1141,7 +1145,7 @@ class Editor extends Page {
 	}
 
 
-	public function isSnappingToGrid() {
+	public inline function isSnappingToGrid() {
 		return settings.v.grid || !layerSupportsFreeMode();
 	}
 
