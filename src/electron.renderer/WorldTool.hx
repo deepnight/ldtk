@@ -43,7 +43,7 @@ class WorldTool extends dn.Process {
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		// Right click context menu
-		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY,true)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {
+		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {
 			var ctx = new ui.modal.ContextMenu(m);
 			// Create
 			ctx.add({
@@ -58,7 +58,7 @@ class WorldTool extends dn.Process {
 				},
 			});
 
-			var l = getLevelAt(m.worldX, m.worldY, true);
+			var l = getLevelAt(m.worldX, m.worldY);
 			if( l!=null ) {
 				editor.selectLevel(l);
 				// Duplicate
@@ -111,7 +111,7 @@ class WorldTool extends dn.Process {
 		origin = m;
 		dragStarted = false;
 		clicked = true;
-		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode);
+		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode?null:editor.curLevel);
 
 		if( clickedLevel!=null ) {
 			levelOriginX = clickedLevel.worldX;
@@ -212,7 +212,7 @@ class WorldTool extends dn.Process {
 		}
 
 		// Rollover
-		var over = getLevelAt(m.worldX, m.worldY, worldMode);
+		var over = getLevelAt(m.worldX, m.worldY, worldMode?null:editor.curLevel);
 		if( over!=null ) {
 			ev.cancel = true;
 			cursor.clear();
@@ -351,16 +351,15 @@ class WorldTool extends dn.Process {
 		}
 	}
 
-	function getLevelAt(worldX:Int, worldY:Int, allowSelf:Bool) {
-		if( !allowSelf && editor.curLevel.isWorldOver(worldX,worldY) )
-			return null;
-
+	function getLevelAt(worldX:Int, worldY:Int, ?except:data.Level) {
 		var i = project.levels.length-1;
-		while( i>=0 )
-			if( project.levels[i].worldDepth==editor.curWorldDepth && project.levels[i].isWorldOver(worldX,worldY) )
-				return project.levels[i];
+		while( i>=0 ) {
+			final l = project.levels[i];
+			if( l!=except && l.worldDepth==editor.curWorldDepth && l.isWorldOver(worldX,worldY) )
+				return l;
 			else
 				i--;
+		}
 
 		return null;
 	}
