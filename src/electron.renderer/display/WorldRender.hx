@@ -259,6 +259,7 @@ class WorldRender extends dn.Process {
 				updateAllLevelIdentifiers(active);
 				updateAxesPos();
 				renderGrids();
+				updateCurrentHighlight();
 				for(l in project.levels)
 					updateLevelBounds(l);
 
@@ -571,8 +572,9 @@ class WorldRender extends dn.Process {
 			return;
 
 		currentHighlight.clear();
-		currentHighlight.lineStyle(4/camera.adjustedZoom, 0xffcc00);
-		var p = 2 / camera.adjustedZoom;
+		final thick = settings.v.showDetails ? 4 : 1;
+		currentHighlight.lineStyle(thick/camera.adjustedZoom, 0xffcc00);
+		var p = thick*0.5 / camera.adjustedZoom;
 		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
 	}
 
