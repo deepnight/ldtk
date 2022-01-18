@@ -4737,7 +4737,8 @@ canvas#webgl {
 
 	.selectionInfos {
 		position: absolute;
-		z-index: 999;
+		z-index: 2;
+		pointer-events: none;
 		top: 0;
 		right: 0;
 		height: 1em;
@@ -4750,8 +4751,7 @@ canvas#webgl {
 
 	canvas {
 		image-rendering: pixelated;
-		// box-shadow: 0px 0px 32px black;
-		// outline: 1px solid $bgLight;
+		outline: 1px solid rgba(0,0,0, 0.4);
 	}
 
 	&.singleTileMode .selectionsWrapper .tileCursor.selection {
@@ -5962,6 +5962,9 @@ body.sorting ul.collapsedSortTarget {
 		.fieldInstanceEditor {
 			dt, dd {
 				opacity: 0.3;
+			}
+			* {
+				pointer-events: none;
 			}
 		}
 	}

@@ -159,11 +159,6 @@ class LevelInstanceForm {
 		if( level.worldDepth!=editor.curWorldDepth ) {
 			// Disable
 			jWrapper.addClass("disabled");
-			var jForms = jWrapper.find("#levelProps, .fieldInstanceEditor");
-			jForms.find("*:not(.close)")
-				.off()
-				.mouseover( (ev)->ev.preventDefault() );
-			jForms.find("input, select, textarea, button").prop("disabled",true);
 		}
 		else if( jWrapper.hasClass("disabled") ) {
 			// Enable
