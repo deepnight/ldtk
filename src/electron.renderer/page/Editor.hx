@@ -1119,13 +1119,14 @@ class Editor extends Page {
 
 
 	function updateWorldDepthsUI() {
-		if( !worldMode ) {
+		var min = project.getLowestLevelDepth();
+		var max = project.getHighestLevelDepth();
+
+		if( !worldMode || min==max ) {
 			jDepths.hide();
 			return;
 		}
 		jDepths.empty().show();
-		var min = project.getLowestLevelDepth();
-		var max = project.getHighestLevelDepth();
 		for(depth in min...max+1) {
 			var jDepth = new J('<li/>');
 			jDepth.prependTo(jDepths);
