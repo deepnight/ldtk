@@ -5955,6 +5955,17 @@ body.sorting ul.collapsedSortTarget {
 
 .levelInstanceForm {
 
+	&.disabled {
+		background-image: url("../img/stripesLight.png");
+		background-repeat: repeat;
+		#levelProps,
+		.fieldInstanceEditor {
+			dt, dd {
+				opacity: 0.3;
+			}
+		}
+	}
+
 	.buttons {
 		flex-wrap: nowrap;
 		padding-bottom: 16px;

@@ -82,8 +82,10 @@ class LevelInstanceForm {
 
 	public function useLevel(l:data.Level) {
 		level = l;
+		jWrapper.removeClass("disabled");
 		updateLevelPropsForm();
 		updateFieldsForm();
+		checkState();
 	}
 
 	public function dispose() {
@@ -103,6 +105,9 @@ class LevelInstanceForm {
 				if( isUsingLevel(l) )
 					useLevel(l);
 
+			case WorldDepthSelected(worldDepth):
+				checkState();
+
 			case LevelSettingsChanged(l):
 				if( isUsingLevel(l) )
 					updateLevelPropsForm();
@@ -111,6 +116,7 @@ class LevelInstanceForm {
 
 			case LevelSelected(l):
 				useLevel(l);
+
 				jWrapper.show();
 
 			case LevelRemoved(l):
@@ -147,6 +153,26 @@ class LevelInstanceForm {
 		editor.curLevelHistory.saveResizedState( before, level.toJson() );
 		new J("dl#levelForm *:focus").blur();
 	}
+
+
+	function checkState() {
+		if( level.worldDepth!=editor.curWorldDepth ) {
+			// Disable
+			jWrapper.addClass("disabled");
+			var jForms = jWrapper.find("#levelProps, .fieldInstanceEditor");
+			jForms.find("*:not(.close)")
+				.off()
+				.mouseover( (ev)->ev.preventDefault() );
+			jForms.find("input, select, textarea, button").prop("disabled",true);
+		}
+		else if( jWrapper.hasClass("disabled") ) {
+			// Enable
+			jWrapper.removeClass("disabled");
+			updateFieldsForm();
+			updateLevelPropsForm();
+		}
+	}
+
 
 
 	function updateLevelPropsForm() {
