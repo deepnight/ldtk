@@ -65,10 +65,10 @@ class WorldRender extends dn.Process {
 		smallGrid = new h2d.Graphics();
 		editor.root.add(smallGrid, Const.DP_BG);
 
-		axeH = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1) );
+		axeH = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1, 0.15) );
 		editor.root.add(axeH, Const.DP_BG);
 
-		axeV = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1) );
+		axeV = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1, 0.15) );
 		editor.root.add(axeV, Const.DP_BG);
 
 		title = new h2d.Text(Assets.fontLight_title);
@@ -502,7 +502,7 @@ class WorldRender extends dn.Process {
 		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.1 ) {
 			largeGrid.clear();
 			largeGrid.visible = true;
-			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
+			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.1 + 0.2 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
 			var g = project.worldGridWidth * camera.adjustedZoom;
 			// Verticals
 			var off =  root.x % g;
