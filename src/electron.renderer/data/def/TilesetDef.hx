@@ -699,9 +699,15 @@ class TilesetDef {
 		ctx.putImageData(imgData,0,0);
 	}
 
+	inline function isTileInBounds(tid:Int) {
+		return isAtlasLoaded()
+			&& getTileSourceX(tid)>=0 && getTileSourceX(tid)+tileGridSize-1 < pxWid
+			&& getTileSourceY(tid)>=0 && getTileSourceY(tid)+tileGridSize-1 < pxHei;
+	}
+
 	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =
-			if( isAtlasLoaded() ) {
+			if( isAtlasLoaded() && isTileInBounds(tid) ) {
 				var imgData = _project.getOrLoadImage(relPath);
 				var subPixels = imgData.pixels.sub(getTileSourceX(tid), getTileSourceY(tid), tileGridSize, tileGridSize);
 				var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
@@ -724,7 +730,7 @@ class TilesetDef {
 	}
 
 	public function createTileHtmlUri(tid:Int, ?imgWid:Int, ?imgHei:Int) : Null<String> {
-		if( !isAtlasLoaded() )
+		if( !isAtlasLoaded() || !isTileInBounds(tid) )
 			return null;
 
 		var imgData = _project.getOrLoadImage(relPath);
@@ -746,7 +752,7 @@ class TilesetDef {
 		if( !isAtlasLoaded() )
 			return;
 
-		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
+		if( !isTileInBounds(tileId) )
 			return; // out of bounds
 
 		var imgData = _project.getOrLoadImage(relPath);
