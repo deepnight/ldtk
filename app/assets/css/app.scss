@@ -5512,6 +5512,13 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		a.showAdv {
+			cursor: pointer;
+			&:hover {
+				color: white;
+			}
+		}
+
 		.adv {
 			display: none;
 			a {
