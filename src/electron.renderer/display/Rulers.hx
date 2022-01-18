@@ -184,7 +184,7 @@ class Rulers extends dn.Process {
 	}
 
 	function canUseResizers() {
-		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
+		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown() && editor.curWorldDepth==editor.curLevel.worldDepth;
 	}
 
 	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
@@ -309,5 +309,6 @@ class Rulers extends dn.Process {
 			render();
 
 		labels.visible = !editor.worldMode && App.ME.settings.v.showDetails;
+		g.visible = canUseResizers();
 	}
 }
