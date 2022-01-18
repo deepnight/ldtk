@@ -605,15 +605,19 @@ class WorldRender extends dn.Process {
 		if( l.worldDepth!=editor.curWorldDepth ) {
 			if( l.worldDepth>editor.curWorldDepth ) {
 				// Above
-				wl.bounds.alpha*=0.33;
+				wl.bounds.alpha*=0.45;
 				wl.bgWrapper.visible = false;
 				wl.render.visible = false;
+				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
+					wl.bounds.alpha*=0.3;
 			}
 			else {
 				// Beneath
 				wl.bgWrapper.alpha*=0.8;
 				wl.render.alpha*=0.2;
 				wl.bounds.alpha*=0.2;
+				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
+					wl.bgWrapper.alpha*=0.3;
 				// wl.render.filter = new h2d.filter.Blur(32);
 			}
 		}
