@@ -796,39 +796,57 @@ class Project {
 				n++;
 		return n;
 	}
+	
 
 	public function moveLevelToDepthAbove(l:Level) {
-		// Check if there's any level above this one, or at least in same depth
-		for(ol in levels)
-			if( ol.worldDepth==l.worldDepth+1 || ol!=l && ol.worldDepth==l.worldDepth ) {
-				l.worldDepth++;
+		var canDo = l.worldDepth<getHighestLevelDepth();
+		if( !canDo ) {
+			// Check if there's any level above this one, or at least in same depth
+			for(ol in levels)
+				if( ol!=l && ol.worldDepth==l.worldDepth ) {
+					canDo = true;
+					break;
+				}
+		}
 
-				// Shift empty first depth
-				while( countLevelsInDepth(0)==0 )
-					for(ol in levels)
-						ol.worldDepth--;
+		if( canDo ) {
+			l.worldDepth++;
 
-				return true;
-			}
+			// Shift empty first depth
+			while( countLevelsInDepth(0)==0 )
+				for(ol in levels)
+					ol.worldDepth--;
 
-		return false;
+			return true;
+		}
+		else
+			return false;
 	}
 
+
 	public function moveLevelToDepthBelow(l:Level) {
-		// Check if there's any level above this one, or at least in same depth
-		for(ol in levels)
-			if( ol.worldDepth==l.worldDepth-1 || ol!=l && ol.worldDepth==l.worldDepth ) {
-				l.worldDepth--;
+		var canDo = l.worldDepth>getLowestLevelDepth();
+		if( !canDo ) {
+			// Check if there's any other level in current depth
+			for(ol in levels)
+				if( ol!=l && ol.worldDepth==l.worldDepth ) {
+					canDo = true;
+					break;
+				}
+		}
 
-				// Fix below zero depths
-				// if( l.worldDepth<0 )
-				// 	for(ol in levels)
-				// 		ol.worldDepth++;
+		if( canDo ) {
+			l.worldDepth--;
 
-				return true;
-			}
+			// Fix below zero depths
+			// if( l.worldDepth<0 )
+			// 	for(ol in levels)
+			// 		ol.worldDepth++;
 
-		return false;
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
