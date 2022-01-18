@@ -419,8 +419,9 @@ class WorldRender extends dn.Process {
 		for(f in fieldRenders.keyValueIterator()) {
 			var l = project.getLevel(f.key);
 			var fr = f.value;
-			if( !camera.isOnScreenLevel(l, 256) ) {
+			if( !camera.isOnScreenLevel(l, 256) || l.worldDepth!=editor.curWorldDepth ) {
 				fr.customFields.visible = false;
+				fr.identifier.visible = false;
 				continue;
 			}
 			fr.customFields.visible = editor.worldMode || editor.curLevel==l;
