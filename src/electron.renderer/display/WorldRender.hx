@@ -613,8 +613,8 @@ class WorldRender extends dn.Process {
 			}
 			else {
 				// Beneath
-				wl.bgWrapper.alpha*=0.8;
-				wl.render.alpha*=0.2;
+				wl.bgWrapper.alpha*=0.6;
+				wl.render.alpha*=0.15;
 				wl.bounds.alpha*=0.2;
 				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
 					wl.bgWrapper.alpha*=0.3;
