@@ -37,6 +37,7 @@ class Editor extends Page {
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var doNothingTool : tool.lt.DoNothing;
+	var invalidatedMouseCoords = true;
 
 	public var needSaving = false;
 	public var worldMode(default,null) = false;
@@ -936,71 +937,76 @@ class Editor extends Page {
 		}
 
 		// Mouse coords infos
-		if( ui.Modal.hasAnyOpen() || isLocked() )
-			jMouseCoords.hide();
-		else {
-			jMouseCoords.show();
-
-			// Coordinates
-			if( worldMode ) {
-				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
-				jMouseCoords.find(".grid").hide();
-				jMouseCoords.find(".level").hide();
-			}
-			else {
-				if( curLayerInstance!=null )
-					jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
-				else
-					jMouseCoords.find(".grid").hide();
-				jMouseCoords.find(".level").text('Level = ${m.levelX},${m.levelY}');
-				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
-			}
-			if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
-				var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
-				var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
-				jMouseCoords.find(".grid").append(' / ${wid} x $hei');
-			}
-
-			// Overed element infos in footer
-			var jElement = jMouseCoords.find(".element");
-			jElement.removeAttr("style").empty();
-			inline function _colorizeElement(c:UInt) {
-				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
-				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
-			}
-			var overed = getGenericLevelElementAt(m, settings.v.singleLayerMode);
-			switch overed {
-				case null:
-				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) )
-						switch li.def.type {
-							case IntGrid:
-								var v = li.getIntGrid(cx,cy);
-								_colorizeElement( li.def.getIntGridValueColor(v) );
-								jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
-
-							case Tiles:
-								var stack = li.getGridTileStack(cx,cy);
-								if( stack.length==1 )
-									jElement.text('Tile ${ stack[0].tileId }');
-								else
-									jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
-
-							case Entities:
-							case AutoLayer:
-						}
-
-				case Entity(li, ei):
-					_colorizeElement( ei.getSmartColor(false) );
-					jElement.text('${ ei.def.identifier } (Entity)');
-
-				case PointField(li, ei, fi, arrayIdx):
-					_colorizeElement( ei.getSmartColor(false) );
-					jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
-			}
+		if( ui.Modal.hasAnyOpen() || isLocked() || !App.ME.overCanvas ) {
+			if( jMouseCoords.is(":visible") )
+				jMouseCoords.hide();
 		}
+		else
+			invalidatedMouseCoords = true;
 	}
 
+
+	function updateMouseCoordsBlock(m:Coords) {
+		jMouseCoords.show();
+
+		// Coordinates
+		if( worldMode ) {
+			jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
+			jMouseCoords.find(".grid").hide();
+			jMouseCoords.find(".level").hide();
+		}
+		else {
+			if( curLayerInstance!=null )
+				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
+			else
+				jMouseCoords.find(".grid").hide();
+			jMouseCoords.find(".level").text('Level = ${m.levelX},${m.levelY}');
+			jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
+		}
+		if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
+			var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
+			var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
+			jMouseCoords.find(".grid").append(' / ${wid} x $hei');
+		}
+
+		// Overed element infos in footer
+		var jElement = jMouseCoords.find(".element");
+		jElement.removeAttr("style").text("--");
+		inline function _colorizeElement(c:UInt) {
+			jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
+			jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
+		}
+		var overed = getGenericLevelElementAt(m, settings.v.singleLayerMode);
+		switch overed {
+			case null:
+			case GridCell(li, cx, cy):
+				if( li.hasAnyGridValue(cx,cy) )
+					switch li.def.type {
+						case IntGrid:
+							var v = li.getIntGrid(cx,cy);
+							_colorizeElement( li.def.getIntGridValueColor(v) );
+							jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
+
+						case Tiles:
+							var stack = li.getGridTileStack(cx,cy);
+							if( stack.length==1 )
+								jElement.text('Tile ${ stack[0].tileId }');
+							else
+								jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
+
+						case Entities:
+						case AutoLayer:
+					}
+
+			case Entity(li, ei):
+				_colorizeElement( ei.getSmartColor(false) );
+				jElement.text('${ ei.def.identifier } (Entity)');
+
+			case PointField(li, ei, fi, arrayIdx):
+				_colorizeElement( ei.getSmartColor(false) );
+				jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
+		}
+	}
 
 	public var lastMouseWheelDelta = 0.;
 	override function onAppMouseWheel(delta:Float) {
@@ -2064,6 +2070,12 @@ class Editor extends Page {
 				App.ME.jPage.addClass("locked");
 			else if( !isLocked() )
 				App.ME.jPage.removeClass("locked");
+		}
+
+		// Render mouse coords block
+		if( invalidatedMouseCoords && !cd.hasSetS("mouseCoordsLimit",0.06) ) {
+			invalidatedMouseCoords = false;
+			updateMouseCoordsBlock( getMouse() );
 		}
 	}
 }

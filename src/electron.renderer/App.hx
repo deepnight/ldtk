@@ -21,6 +21,7 @@ class App extends dn.Process {
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
 	public var focused(default,null) = true;
 	var jsMetaKeyDown = false;
+	public var overCanvas(default,null) = false;
 
 	public var clipboard : data.Clipboard;
 
@@ -56,6 +57,8 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
+		jCanvas.mouseenter( _->overCanvas = true );
+		jCanvas.mouseleave( _->overCanvas = false );
 		clearMiniNotif();
 		clipboard = data.Clipboard.createSystem();
 
@@ -453,6 +456,7 @@ class App extends dn.Process {
 
 	function onAppBlur(ev:js.html.Event) {
 		focused = false;
+		overCanvas = false;
 		jsKeyDowns = new Map();
 		heapsKeyDowns = new Map();
 		jsMetaKeyDown = false;
