@@ -3,6 +3,7 @@
 ## Major changes
 
   - **Entity references**: this new "field" type is available to all Entities and is used to store a reference to another Entity. A typical example is a Button entity with a a Reference value pointing to another Entity, like a Door. You can create arrays of References, or define restrictions to which kind of Entity they can point to.
+  - **Simplified world layers**: levels can now be organized in depth to support "stacked" levels.
   - **Parallax layers**: you can define a parallax factor for each layer to create a fake 3D depth effect. This feature is still quite experimental and will probably be updated in future updates.
   - **Copy and paste**: for now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements. You can right click on an element with a context menu to copy/cut/paste/duplicate things! LDtk just entered modern era.
   - **Space key**: one shortcut to rule them all:
