@@ -337,7 +337,7 @@ class Tiled extends Exporter {
 									"#ff"+c;
 								case F_Enum(enumDefUid): fi.getEnumValue(i);
 								case F_Point: fi.getPointStr(i);
-								case F_EntityRef: fi.getEntityRefIID(i);
+								case F_EntityRef: fi.getEntityRefIid(i);
 							}
 							_createProperty(props, fi.def.identifier + (fi.getArrayLength()<=1 ? "" : "_"+i), type, v);
 						}

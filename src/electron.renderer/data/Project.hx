@@ -395,7 +395,7 @@ class Project {
 			if( fi.def!=null && fi.def.type==F_EntityRef ) // def could be null after removal of a field def, and before proper tidy() calls
 				for(i in 0...fi.getArrayLength())
 					if( !fi.valueIsNull(i) )
-						registerReverseIidRef(ei.iid, fi.getEntityRefIID(i));
+						registerReverseIidRef(ei.iid, fi.getEntityRefIid(i));
 	}
 
 	public inline function unregisterEntityIid(iid:String) {
@@ -597,7 +597,7 @@ class Project {
 				continue;
 			i = 0;
 			while( i<fi.getArrayLength() )
-				if( fi.getEntityRefIID(i)==targetEi.iid )
+				if( fi.getEntityRefIid(i)==targetEi.iid )
 					fi.removeArrayValue(i);
 				else
 					i++;

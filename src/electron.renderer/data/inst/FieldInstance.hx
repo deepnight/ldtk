@@ -260,7 +260,7 @@ class FieldInstance {
 		var tfi = tei.getFieldInstance(def);
 		var i = 0;
 		while( i<tfi.getArrayLength() )
-			if( tfi.getEntityRefIID(i)==sourceEi.iid ) {
+			if( tfi.getEntityRefIid(i)==sourceEi.iid ) {
 				tfi.removeArrayValue(i);
 				if( allowRec ) {
 					tfi.removeSymmetricalEntityRef(i, tei, false);
@@ -287,7 +287,7 @@ class FieldInstance {
 
 		if( !def.isArray ) {
 			// Single value
-			if( targetFi.getEntityRefIID(arrayIdx)!=sourceEi.iid) {
+			if( targetFi.getEntityRefIid(arrayIdx)!=sourceEi.iid) {
 				targetFi.parseValue(arrayIdx, sourceEi.iid);
 				_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
 			}
@@ -296,7 +296,7 @@ class FieldInstance {
 			// Array
 			var found = false;
 			for(i in 0...targetFi.getArrayLength())
-				if( targetFi.getEntityRefIID(i)==sourceEi.iid ) {
+				if( targetFi.getEntityRefIid(i)==sourceEi.iid ) {
 					found = true;
 					break;
 				}
@@ -387,7 +387,7 @@ class FieldInstance {
 			case F_Bool: getBool(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
-			case F_EntityRef: getEntityRefIID(arrayIdx);
+			case F_EntityRef: getEntityRefIid(arrayIdx);
 		}
 		return v == null;
 	}
@@ -455,7 +455,7 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
-			case F_EntityRef: getEntityRefIID(arrayIdx);
+			case F_EntityRef: getEntityRefIid(arrayIdx);
 		}
 	}
 
@@ -550,7 +550,7 @@ class FieldInstance {
 		return out;
 	}
 
-	public inline function getEntityRefIID(arrayIdx:Int) : Null<String> {
+	public inline function getEntityRefIid(arrayIdx:Int) : Null<String> {
 		if( def.type!=F_EntityRef )
 			return null;
 		else {
@@ -564,7 +564,7 @@ class FieldInstance {
 	}
 
 	public inline function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
-		return valueIsNull(arrayIdx) ? null : _project.getEntityInstanceByIid( getEntityRefIID(arrayIdx) );
+		return valueIsNull(arrayIdx) ? null : _project.getEntityInstanceByIid( getEntityRefIid(arrayIdx) );
 	}
 
 	public function getEntityRefForDisplay(arrayIdx:Int, ?checkLevel:Level) : String {

@@ -518,7 +518,7 @@ class FieldInstancesForm {
 
 					if( !fi.isUsingDefault(arrayIdx) ) {
 						jInput.val( fi.getEntityRefForDisplay(arrayIdx, editor.curLevel) );
-						jInput.attr("title", fi.getEntityRefIID(arrayIdx));
+						jInput.attr("title", fi.getEntityRefIid(arrayIdx));
 					}
 
 					// Pick ref

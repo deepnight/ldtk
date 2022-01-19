@@ -290,7 +290,7 @@ class EntityInstance {
 			// In any field
 			for(fi in fieldInstances)
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIID(i)==targetEi.iid )
+				if( fi.getEntityRefIid(i)==targetEi.iid )
 					return true;
 		}
 		else {
@@ -303,7 +303,7 @@ class EntityInstance {
 				return false;
 
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIID(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLink ) )
+				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLink ) )
 					return true;
 		}
 		return false;
