@@ -410,6 +410,9 @@ class FieldInstance {
 				var e = getEnumValue(arrayIdx);
 				return e!=null && ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
 
+			case F_Tile:
+				return def.tilesetUid!=null && !valueIsNull(arrayIdx);
+
 			case _:
 				return false;
 		}
@@ -424,6 +427,13 @@ class FieldInstance {
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
 				return td.getTile( ed.getValue( getEnumValue(arrayIdx) ).tileId );
+
+			case F_Tile:
+				var td = _project.defs.getTilesetDef(def.tilesetUid);
+				if( td==null )
+					return null;
+				else
+					return td.getTileRect( getTileRectObj(arrayIdx) );
 
 			case _:
 				return null;
