@@ -476,6 +476,9 @@ class TilesetDef {
 
 
 	public function getTileIdsFromRect(r:ldtk.Json.AtlasTileRect) : Array<Int> {
+		if( r==null )
+			return [];
+		
 		var left = xToCx(r.x);
 		var right = xToCx(r.x+r.w-1);
 		var top = yToCy(r.y);
