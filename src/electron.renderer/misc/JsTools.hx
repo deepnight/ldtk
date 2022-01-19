@@ -739,6 +739,52 @@ class JsTools {
 
 
 
+	public static function createTileRectPicker(
+		tilesetId: Null<Int>,
+		cur: Null<ldtk.Json.AtlasTileRect>,
+		onPick: (Null<ldtk.Json.AtlasTileRect>)->Void
+	) {
+		var jTileCanvas = new J('<canvas class="tile"></canvas>');
+
+		if( tilesetId!=null ) {
+			jTileCanvas.addClass("active");
+			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
+
+			if( cur==null ) {
+				// No tile selected
+				jTileCanvas.addClass("empty");
+			}
+			else {
+				// Tile rect
+				jTileCanvas.attr("width", cur.w);
+				jTileCanvas.attr("height", cur.h);
+				var scale = 35 / M.fmax(cur.w, cur.h);
+				jTileCanvas.css("width", cur.w * scale );
+				jTileCanvas.css("height", cur.h * scale );
+				td.drawTileRectToCanvas(jTileCanvas, cur);
+			}
+
+			// Open picker
+			jTileCanvas.click( function(ev) {
+				var m = new ui.Modal();
+				m.addClass("singleTilePicker");
+
+				var tp = new ui.Tileset(m.jContent, td, RectOnly);
+				tp.setSelectedRect(cur);
+				m.onCloseCb = ()->onPick( tp.getSelectedRect() );
+				tp.focusOnSelection(true);
+			});
+		}
+		else {
+			// Invalid tileset
+			jTileCanvas.addClass("empty");
+		}
+
+		return jTileCanvas;
+	}
+
+
+
 	public static function createImagePicker( curRelPath:Null<String>, onChange : (?relPath:String)->Void ) : js.jquery.JQuery {
 		var jWrapper = new J('<div class="imagePicker"/>');
 

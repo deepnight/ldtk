@@ -134,6 +134,16 @@ class Tileset {
 		SCROLL_MEMORY.remove( tilesetDef.relPath );
 	}
 
+	public function getSelectedRect() : Null<ldtk.Json.AtlasTileRect> {
+		return switch selectMode {
+			case None: null;
+			case PickAndClose: null;
+			case PickSingle: null;
+			case Free: null;
+			case RectOnly: tilesetDef.getTileRectFromTileIds( getSelectedTileIds() );
+		}
+	}
+
 	public function getSelectedTileIds() {
 		return switch selectMode {
 			case None: [];
@@ -147,6 +157,10 @@ class Tileset {
 			case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds = tileIds;
 		}
 		renderSelection();
+	}
+
+	public function setSelectedRect(r:ldtk.Json.AtlasTileRect) {
+		setSelectedTileIds( tilesetDef.getTileIdsFromRect(r) );
 	}
 
 	public dynamic function onSingleTileSelect(tileId:Int) {}

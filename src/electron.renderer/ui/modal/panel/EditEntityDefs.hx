@@ -289,15 +289,16 @@ class EditEntityDefs extends ui.modal.Panel {
 		);
 		i.linkEvent( EntityDefChanged );
 
-		// Tile pick
+		// Tile rect picker
 		if( curEntity.renderMode==Tile ) {
-			var jPicker = JsTools.createTilePicker(
+			var jPicker = JsTools.createTileRectPicker(
 				curEntity.tilesetId,
-				PickAndClose,
-				curEntity.tileId==null ? [] : [curEntity.tileId],
-				(tileIds)->{
-					curEntity.tileId = tileIds[0];
-					editor.ge.emit(EntityDefChanged);
+				curEntity.tileRect,
+				(rect)->{
+					if( rect!=null ) {
+						curEntity.tileRect = rect;
+						editor.ge.emit(EntityDefChanged);
+					}
 				}
 			);
 			jPicker.appendTo( jRenderModeBlock.find(".tilePicker") );

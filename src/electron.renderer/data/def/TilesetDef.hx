@@ -383,6 +383,14 @@ class TilesetDef {
 		return padding + getTileCy(tileId) * ( tileGridSize + spacing );
 	}
 
+	public inline function xToCx(v:Float) : Int {
+		return Std.int( ( v - padding ) / (tileGridSize + spacing ) );
+	}
+
+	public inline function yToCy(v:Float) : Int {
+		return Std.int( ( v - padding ) / (tileGridSize + spacing ) );
+	}
+
 
 	public function saveSelection(tsSel:TilesetSelection) {
 		// Remove existing overlapping saved selections
@@ -441,6 +449,44 @@ class TilesetDef {
 			wid: right-left+1,
 			hei: bottom-top+1,
 		}
+	}
+
+
+	public function getTileRectFromTileIds(tileIds:Array<Int>) : Null<ldtk.Json.AtlasTileRect> { // Warning: not good for real-time!
+		if( tileIds==null || tileIds.length==0 )
+			return null;
+
+		var top = 99999;
+		var left = 99999;
+		var right = 0;
+		var bottom = 0;
+		for(tid in tileIds) {
+			top = dn.M.imin( top, getTileSourceY(tid) );
+			bottom = dn.M.imax( bottom, getTileSourceY(tid)+tileGridSize );
+			left = dn.M.imin( left, getTileSourceX(tid) );
+			right = dn.M.imax( right, getTileSourceX(tid)+tileGridSize );
+		}
+		return {
+			x: left,
+			y: top,
+			w: right-left,
+			h: bottom-top,
+		}
+	}
+
+
+	public function getTileIdsFromRect(r:ldtk.Json.AtlasTileRect) : Array<Int> {
+		var left = xToCx(r.x);
+		var right = xToCx(r.x+r.w-1);
+		var top = yToCy(r.y);
+		var bottom = yToCy(r.y+r.h-1);
+
+		var tids = [];
+		for(cx in left...right+1)
+		for(cy in top...bottom+1)
+			tids.push( getTileId(cx,cy) );
+
+		return tids;
 	}
 
 
