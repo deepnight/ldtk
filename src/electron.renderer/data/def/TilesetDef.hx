@@ -774,12 +774,26 @@ class TilesetDef {
 	}
 
 
+	inline function isTileRectInBounds(r:ldtk.Json.AtlasTileRect) {
+		return isAtlasLoaded()
+			&& r.x>=0 && r.x+r.w-1<pxWid
+			&& r.y>=0 && r.y+r.h-1<pxHei;
+	}
+
+	public function drawTileRectToCanvas(jCanvas:js.jquery.JQuery, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+		if( !jCanvas.is("canvas") )
+			throw "Not a canvas";
+
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
+		drawTileRectTo2dContext( canvas.getContext2d(), rect, toX, toY, scaleX, scaleY );
+	}
+
 	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !isAtlasLoaded() )
 			return;
 
-		// if( !isTileInBounds(tileId) )
-		// 	return; // out of bounds
+		if( !isTileRectInBounds(rect) )
+			return; // out of bounds
 
 		var imgData = _project.getOrLoadImage(relPath);
 		var subPixels = imgData.pixels.sub(rect.x, rect.y, rect.w, rect.h);
