@@ -58,6 +58,7 @@ class Lang {
 			case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });
 			case F_Path: t._("File path");
 			case F_EntityRef: t._("Entity ref");
+			case F_Tile: t._("Tile");
 		}
 	}
 
@@ -73,6 +74,7 @@ class Lang {
 			case F_Enum(name): t._("Enu");
 			case F_Path: t._("*.*");
 			case F_EntityRef: t._("Ent");
+			case F_Tile: t._("Tile");
 		}
 	}
 

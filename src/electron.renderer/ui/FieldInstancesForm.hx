@@ -541,6 +541,9 @@ class FieldInstancesForm {
 						onFieldChange(fi);
 					});
 				}
+
+			case F_Tile:
+				// TODO
 		}
 
 		// Suffix
@@ -658,6 +661,9 @@ class FieldInstancesForm {
 
 			case F_EntityRef:
 				jEntry.find("button:first").click();
+
+			case F_Tile:
+				N.debug("TODO"); // TODO
 
 			case F_Bool:
 			case F_Color:

@@ -76,6 +76,7 @@ class FieldDef {
 			case F_Point: editorDisplayMode = PointPath;
 			case F_Path:
 			case F_EntityRef: editorDisplayMode = RefLink;
+			case F_Tile: editorDisplayMode = EntityTile;
 		}
 	}
 
@@ -87,6 +88,7 @@ class FieldDef {
 			case F_Enum(enumDefUid): false;
 			case F_Point, F_Path: false;
 			case F_EntityRef: false;
+			case F_Tile: false;
 		};
 	}
 
@@ -186,6 +188,7 @@ class FieldDef {
 			case F_Path: "#7779c9";
 			case F_Point: "#7779c9";
 			case F_EntityRef: "#7779c9";
+			case F_Tile: "#99d367";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
@@ -207,6 +210,7 @@ class FieldDef {
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 			case F_Path: "File path";
 			case F_EntityRef: "Entity ref";
+			case F_Tile: "Tile";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -225,6 +229,7 @@ class FieldDef {
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 			case F_Path: "FilePath";
 			case F_EntityRef: "EntityRef";
+			case F_Tile: "Tile";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -411,6 +416,16 @@ class FieldDef {
 
 			case F_Enum(name) :
 				defaultOverride = V_String(rawDef);
+
+			case F_Tile:
+				var rawSplit = rawDef.split(",");
+				var arr : Array<Int> = [];
+				for(v in rawSplit) {
+					var n = Std.parseInt(v);
+					if( M.isValidNumber(n) )
+						arr.push(n);
+				}
+				defaultOverride = V_String(arr.join(","));
 		}
 	}
 
@@ -425,6 +440,7 @@ class FieldDef {
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
 			case F_EntityRef: null;
+			case F_Tile: null;
 		}
 	}
 

@@ -180,6 +180,8 @@ class OgmoProject {
 								fd.setAcceptFileTypes( valJson.extensions.join(" ") );
 
 							case F_EntityRef:
+
+							case F_Tile:
 						}
 
 					}
@@ -389,7 +391,7 @@ class OgmoProject {
 
 											case F_Point:
 											case F_Path:
-
+											case F_Tile:
 											case F_EntityRef:
 										}
 

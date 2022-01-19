@@ -299,6 +299,7 @@ class FieldInstanceRender {
 			case F_Point: false;
 			case F_Path: true;
 			case F_EntityRef: true;
+			case F_Tile: false;
 		}
 		if( multiLinesArray ) {
 			valuesFlow.multiline = true;

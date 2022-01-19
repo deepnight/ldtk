@@ -322,6 +322,7 @@ class Tiled extends Exporter {
 								case F_Enum(enumDefUid): null;
 								case F_Point: null;
 								case F_Path: "file";
+								case F_Tile: "tile";
 								case F_EntityRef: null; // TODO entity refs in Tiled?
 							}
 							// Value
@@ -338,6 +339,7 @@ class Tiled extends Exporter {
 								case F_Enum(enumDefUid): fi.getEnumValue(i);
 								case F_Point: fi.getPointStr(i);
 								case F_EntityRef: fi.getEntityRefIid(i);
+								case F_Tile: fi.getTileRectStr(i);
 							}
 							_createProperty(props, fi.def.identifier + (fi.getArrayLength()<=1 ? "" : "_"+i), type, v);
 						}

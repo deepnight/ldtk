@@ -540,6 +540,9 @@ class FieldDefsForm {
 
 			case F_EntityRef:
 
+			case F_Tile:
+				// TODO
+
 			case F_Text:
 				var defInput = jForm.find("div#fDefMultiLines");
 				if( curField.defaultOverride != null ) {
@@ -583,6 +586,7 @@ class FieldDefsForm {
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 						case F_EntityRef: "N/A";
+						case F_Tile: "N/A";
 					});
 
 				defInput.change( function(ev) {

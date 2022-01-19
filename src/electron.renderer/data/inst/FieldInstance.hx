@@ -67,7 +67,7 @@ class FieldInstance {
 
 			defUid: defUid,
 			realEditorValues: internalValues.map( (e)->{
-				return switch e {
+				return cast switch e {
 					case null, V_Int(_), V_Float(_), V_Bool(_):
 						JsonTools.writeEnum(e,true);
 
@@ -151,6 +151,7 @@ class FieldInstance {
 				case F_Enum(enumDefUid): return false; // TODO support default enum values
 				case F_Point: return false;
 				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
+				case F_Tile: return getFilePath(arrayIdx)==def.getDefault();
 				case F_EntityRef: return false;
 			}
 		}
@@ -193,6 +194,13 @@ class FieldInstance {
 				}
 
 			case F_EntityRef:
+				raw = StringTools.trim(raw);
+				if( raw.length==0 )
+					setInternal(arrayIdx, null);
+				else
+					setInternal(arrayIdx, V_String(raw) );
+
+			case F_Tile:
 				raw = StringTools.trim(raw);
 				if( raw.length==0 )
 					setInternal(arrayIdx, null);
@@ -318,7 +326,7 @@ class FieldInstance {
 		if( !def.canBeNull && valueIsNull(arrayIdx) )
 			switch def.type {
 				case F_Int, F_Float, F_String, F_Text, F_Bool, F_Color:
-				case F_Enum(_), F_Point, F_Path, F_EntityRef:
+				case F_Enum(_), F_Point, F_Path, F_EntityRef, F_Tile:
 					return "Value required";
 			}
 
@@ -338,6 +346,8 @@ class FieldInstance {
 					if( !NT.fileExists(absPath) )
 						return "File not found";
 				}
+
+			case F_Tile:
 
 			case F_EntityRef:
 				var tei = getEntityRefInstance(arrayIdx);
@@ -388,6 +398,7 @@ class FieldInstance {
 			case F_Point: getPointStr(arrayIdx);
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_EntityRef: getEntityRefIid(arrayIdx);
+			case F_Tile: getTileRectStr(arrayIdx);
 		}
 		return v == null;
 	}
@@ -430,6 +441,7 @@ class FieldInstance {
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_Point: getPointStr(arrayIdx);
 			case F_EntityRef: getEntityRefForDisplay(arrayIdx);
+			case F_Tile: getTileRectStr(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -441,6 +453,7 @@ class FieldInstance {
 			case F_Point: return '$v';
 			case F_String, F_Text, F_Path: return '"$v"';
 			case F_EntityRef: return '@($v)';
+			case F_Tile: return '$v';
 		}
 	}
 
@@ -456,6 +469,7 @@ class FieldInstance {
 			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
 			case F_EntityRef: getEntityRefIid(arrayIdx);
+			case F_Tile: getTileRectArray(arrayIdx);
 		}
 	}
 
@@ -493,6 +507,7 @@ class FieldInstance {
 			case F_Point:
 			case F_Path:
 			case F_EntityRef:
+			case F_Tile:
 		}
 
 		return null;
@@ -560,7 +575,6 @@ class FieldInstance {
 			}
 			return out;
 		}
-
 	}
 
 	public inline function getEntityRefInstance(arrayIdx:Int) : Null<EntityInstance> {
@@ -574,6 +588,36 @@ class FieldInstance {
 		else
 			return ei.def.identifier
 				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
+	}
+
+	public function getTileRectArray(arrayIdx:Int) : Null<ldtk.Json.AtlasTileRect> {
+		var v = getTileRectStr(arrayIdx);
+		if( v==null )
+			return null;
+
+		var parts = v.split(",");
+		if( parts.length!=4 )
+			return null;
+
+		return {
+			x : Std.parseInt(parts[0]),
+			y : Std.parseInt(parts[1]),
+			w : Std.parseInt(parts[2]),
+			h : Std.parseInt(parts[3]),
+		}
+	}
+
+	public function getTileRectStr(arrayIdx:Int) : Null<String> {
+		if( def.type!=F_Tile )
+			return null;
+		else {
+			var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
+				case V_String(v):
+					v;
+				case _: throw "unexpected";
+			}
+			return out;
+		}
 	}
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
@@ -613,6 +657,7 @@ class FieldInstance {
 			case F_Bool:
 			case F_Color:
 			case F_Path:
+			case F_Tile:
 
 			case F_EntityRef:
 				var i = 0;
