@@ -19,6 +19,7 @@ class EntityDef {
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
 	public var tilesetId : Null<Int>;
 	public var tileId : Null<Int>;
+	public var tileRect : Null<ldtk.Json.AtlasTileRect>;
 
 	public var hollow : Bool;
 
@@ -107,6 +108,7 @@ class EntityDef {
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o.tileId = JsonTools.readNullableInt(json.tileId);
+		o.tileRect = JsonTools.readTileRect(json.tilesetId, json.tileRect, true);
 
 		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Cover";
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, FitInside);
@@ -147,6 +149,7 @@ class EntityDef {
 			tilesetId: tilesetId,
 			tileId: tileId,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
+			tileRect: tileRect,
 
 			maxCount: maxCount,
 			limitScope: JsonTools.writeEnum(limitScope, false),

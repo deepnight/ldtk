@@ -46,6 +46,19 @@ class JsonTools {
 		}
 	}
 
+	public static function readTileRect(tilesetUid:Int, r:ldtk.Json.AtlasTileRect, allowNull:Bool) : ldtk.Json.AtlasTileRect {
+		if( r==null ) {
+			if( allowNull )
+				return null;
+			else
+				throw "Missing TileRect";
+		}
+		else if( !M.isValidNumber(r.x) || !M.isValidNumber(r.y) || !M.isValidNumber(r.w) || !M.isValidNumber(r.h) )
+			throw "TileRect contains an invalid value: "+r;
+		else
+			return r;
+	}
+
 	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt, allowNull=false) : Null<UInt> {
 		if( v==null && defaultIfMissing!=null )
 			return defaultIfMissing;
