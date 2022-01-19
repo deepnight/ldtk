@@ -411,7 +411,7 @@ class FieldInstance {
 				return e!=null && ed.iconTilesetUid!=null && ed.getValue(e).tileId!=null;
 
 			case F_Tile:
-				return def.tilesetUid!=null && !valueIsNull(arrayIdx);
+				return def.tilesetUid!=null && ( !valueIsNull(arrayIdx) || def.getTileRectDefaultStr()!=null );
 
 			case _:
 				return false;
@@ -432,6 +432,8 @@ class FieldInstance {
 				var td = _project.defs.getTilesetDef(def.tilesetUid);
 				if( td==null )
 					return null;
+				else if( isUsingDefault(arrayIdx) && def.getTileRectDefaultStr()!=null )
+					return td.getTileRect( def.getTileRectDefaultObj() );
 				else
 					return td.getTileRect( getTileRectObj(arrayIdx) );
 

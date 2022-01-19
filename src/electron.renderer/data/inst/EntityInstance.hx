@@ -173,11 +173,12 @@ class EntityInstance {
 	public function getSmartTile() : Null<EntitySmartTile> {
 		// Check for a tile provided by a field instance
 		for(fi in fieldInstances) {
-			if( fi.valueIsNull(0) || fi.def.editorDisplayMode!=EntityTile )
-				continue;
 
 			switch fi.def.type {
 				case F_Enum(enumDefUid):
+					if( fi.valueIsNull(0) || fi.def.editorDisplayMode!=EntityTile )
+						continue;
+
 					var ed = _project.defs.getEnumDef(enumDefUid);
 					if( ed.iconTilesetUid==null )
 						continue;
@@ -199,6 +200,20 @@ class EntityInstance {
 
 
 				case F_Tile:
+					if( fi.def.editorDisplayMode!=EntityTile )
+						continue;
+
+					if( fi.valueIsNull(0) ) {
+						// Default rect
+						if( fi.def.getTileRectDefaultObj()==null )
+							continue;
+
+						return {
+							tilesetUid: fi.def.tilesetUid,
+							rect: fi.def.getTileRectDefaultObj(),
+						}
+					}
+
 					return {
 						tilesetUid: fi.def.tilesetUid,
 						rect: fi.getTileRectObj(0),

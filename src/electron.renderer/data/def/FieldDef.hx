@@ -349,6 +349,29 @@ class FieldDef {
 		}
 	}
 
+	public function getTileRectDefaultStr() : Null<String> {
+		require(F_Tile);
+		return switch defaultOverride {
+			case V_String(v): v;
+			case _: null;
+		}
+	}
+
+	public function getTileRectDefaultObj() : Null<ldtk.Json.AtlasTileRect> {
+		var raw = getTileRectDefaultStr();
+		return raw==null ? null : {
+			var parts = raw.split(",");
+			if( parts.length!=4 )
+				null;
+			else {
+				x: Std.parseInt(parts[0]),
+				y: Std.parseInt(parts[1]),
+				w: Std.parseInt(parts[2]),
+				h: Std.parseInt(parts[3]),
+			}
+		}
+	}
+
 	public inline function isEnum() {
 		return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
 	}

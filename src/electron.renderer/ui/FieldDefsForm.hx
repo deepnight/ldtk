@@ -458,7 +458,15 @@ class FieldDefsForm {
 		);
 		i.onChange = onFieldChange;
 
+		// Nullable
+		var nullableInput = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
+		if( nullableInput!=null ) {
+			nullableInput.onChange = onFieldChange;
+			nullableInput.enable();
+		}
 
+
+		// Display pos
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayPos]"),
 			ldtk.Json.FieldDisplayPosition,
@@ -511,6 +519,48 @@ class FieldDefsForm {
 				curField.tilesetUid = uid;
 			onFieldChange();
 		});
+
+		// Default tile
+		var jDef = jForm.find(".defaultTile");
+		jDef.find(".picker").empty();
+		if( curField.tilesetUid!=null ) {
+			jDef.show();
+			var td = project.defs.getTilesetDef(curField.tilesetUid);
+			if( td!=null ) {
+				var def = curField.getTileRectDefaultObj();
+
+				// Picker
+				var jPicker = JsTools.createTileRectPicker(
+					td.uid,
+					def,
+					(r)->{
+						if( r==null )
+							return;
+						curField.setDefault('${r.x},${r.y},${r.w},${r.h}');
+						curField.canBeNull = true;
+						onFieldChange();
+					}
+				);
+				jPicker.appendTo( jDef.find(".picker") );
+
+				// Clear
+				var jClear = jDef.find(".clear");
+				if( def==null ) {
+					nullableInput.enable();
+					jClear.hide();
+				}
+				else {
+					nullableInput.disable();
+					jClear.show();
+					jClear.click(_->{
+						curField.setDefault(null);
+						onFieldChange();
+					});
+				}
+			}
+		}
+		else
+			jDef.hide();
 
 		// Refs
 		var i = Input.linkToHtmlInput( curField.symmetricalRef, jForm.find("input[name=symmetricalRef]") );
@@ -673,11 +723,6 @@ class FieldDefsForm {
 					onFieldChange();
 				});
 		}
-
-		// Nullable
-		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
-		if( i!=null )
-			i.onChange = onFieldChange;
 
 		// Cut long values
 		var i = Input.linkToHtmlInput( curField.editorCutLongValues, jForm.find("input#editorCutLongValues") );

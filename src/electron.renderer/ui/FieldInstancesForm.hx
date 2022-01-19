@@ -549,23 +549,35 @@ class FieldInstancesForm {
 					jTarget.append('<div class="warning">Invalid tileset in field definition.</div>');
 				}
 				else {
+					// Picker
 					var jPicker = JsTools.createTileRectPicker(
 						fi.def.tilesetUid,
-						fi.getTileRectObj(arrayIdx),
+						fi.valueIsNull(arrayIdx) ? fi.def.getTileRectDefaultObj() : fi.getTileRectObj(arrayIdx),
 						(r)->{
+							if( r==null )
+								return;
 							fi.parseValue(arrayIdx, '${r.x},${r.y},${r.w},${r.h}');
 							onFieldChange(fi);
 						}
 					);
 					jPicker.appendTo(jTarget);
 
-					if( fi.def.canBeNull ) {
-						var jClear = new J('<button class="gray clearTile"> <span class="icon clear"/> </button>');
-						jClear.appendTo(jTarget);
-						jClear.click(_->{
-							fi.parseValue(arrayIdx,null);
-							onFieldChange(fi);
-						});
+					if( fi.def.canBeNull || fi.def.getTileRectDefaultStr()!=null ) {
+						// Clear button
+						if( !fi.valueIsNull(arrayIdx) ) {
+							var jClear = new J('<button class="red clearTile"> <span class="icon clear"/> </button>');
+							jClear.appendTo(jTarget);
+							jClear.click(_->{
+								fi.parseValue(arrayIdx,null);
+								onFieldChange(fi);
+							});
+						}
+						// Reset to default
+						// if( fi.def.getTileRectDefaultStr()!=null ) {
+						// 	var jReset = new J('<a class="reset">Reset</a>');
+						// 	jReset.appendTo(jTarget);
+						// 	jReset.click(_->)
+						// }
 					}
 				}
 		}

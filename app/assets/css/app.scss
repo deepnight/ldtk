@@ -5117,6 +5117,23 @@ canvas#webgl {
 			margin-top: 4px;
 		}
 
+		.defaultTile {
+			display: flex;
+			margin-left: 8px;
+
+			>span {
+				align-self: center;
+				color: $bgLighter;
+			}
+
+			.picker canvas.empty:not(:hover) {
+				border-color: $bgLight;
+			}
+			.clear {
+				flex: 0 1 0px;
+			}
+		}
+
 		*[class*="F_"],
 		*[class="NotArray"],
 		*[class="Array"] {
@@ -5289,7 +5306,6 @@ dl.form.fieldInstanceEditor {
 	button.clearTile {
 		flex: 0 1 24px;
 		padding: 4px;
-		align-self: center;
 	}
 
 	input.fileNotFound {
