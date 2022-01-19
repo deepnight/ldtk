@@ -212,6 +212,13 @@ class EntityDef {
 
 
 	public function tidy(p:data.Project) {
+		// Migrate old tileId to tileRect
+		if( tileId!=null && tileRect==null ) {
+			var td = p.defs.getTilesetDef(tilesetId);
+			if( td!=null )
+				tileRect = td.getTileRectFromTileIds([ tileId ]);
+		}
+
 		// Tags
 		tags.tidy();
 
