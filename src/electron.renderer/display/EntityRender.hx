@@ -154,8 +154,10 @@ class EntityRender extends dn.Process {
 
 		// Base render
 		var smartTile = ei==null ? null : ei.getSmartTile();
-		if( smartTile!=null )
+		if( smartTile!=null ) {
+			// Tile (from either Def or a field)
 			_renderTile(smartTile.tilesetUid, smartTile.rect, ed.tileRenderMode);
+		}
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:
@@ -181,7 +183,7 @@ class EntityRender extends dn.Process {
 				g.lineTo(w, 0);
 
 			case Tile:
-				// _renderTile(ed.tilesetId, ed.tileId, ed.tileRenderMode);
+				// Render is done through getSmartTile() method above
 			}
 
 		// Pivot

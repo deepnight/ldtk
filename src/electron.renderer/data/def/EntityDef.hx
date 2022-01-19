@@ -57,7 +57,7 @@ class EntityDef {
 	}
 
 	public function isTileDefined() {
-		return tilesetId!=null && tileId!=null;
+		return tilesetId!=null && ( tileId!=null || tileRect!=null );
 	}
 
 	function set_identifier(id:String) {

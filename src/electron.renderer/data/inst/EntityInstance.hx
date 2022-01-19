@@ -206,12 +206,7 @@ class EntityInstance {
 			var td = _project.defs.getTilesetDef(def.tilesetId);
 			return {
 				tilesetUid: def.tilesetId,
-				rect: {
-					x: td.getTileSourceX(def.tileId),
-					y: td.getTileSourceY(def.tileId),
-					w: td.tileGridSize,
-					h: td.tileGridSize,
-				}
+				rect: def.tileRect,
 			}
 		}
 		else
