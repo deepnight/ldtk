@@ -6,7 +6,7 @@ class Camera extends dn.Process {
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
 	static var MAX_FOCUS_PADDING_Y = 400;
-	static var ANIM_KEEP_DURATION_S = 2;
+	static var ANIM_KEEP_DURATION_S = 1.8;
 
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
