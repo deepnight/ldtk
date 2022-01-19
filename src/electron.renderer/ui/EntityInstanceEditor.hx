@@ -209,7 +209,7 @@ class EntityInstanceEditor extends dn.Process {
 		jExtraInfos.appendTo(jPropsForm);
 
 		// IID
-		jExtraInfos.append('<dt>IID</dt>');
+		jExtraInfos.append('<dt>IID <info>The IID (stands for Instance IDentifier) is a unique string identifier associated with this Entity instance.</info></dt>');
 		var jIid = new J('<dd class="iid"/>');
 		jIid.append('<input type="text" readonly="readonly" class="iid" value="${ei.iid}"/>');
 		jIid.append('<button class="copy gray small" title="Copy IID to clipboard"> <span class="icon copy"/> </button>');
