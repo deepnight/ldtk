@@ -505,6 +505,13 @@ class TilesetDef {
 			return makeErrorTile(tileGridSize);
 	}
 
+	public inline function getTileRect(r:ldtk.Json.AtlasTileRect) : h2d.Tile {
+		if( isAtlasLoaded() )
+			return getAtlasTile().sub( r.x, r.y, r.w, r.h );
+		else
+			return makeErrorTile(tileGridSize);
+	}
+
 	public inline function extractTile(tileX:Int, tileY:Int) : h2d.Tile {
 		if( isAtlasLoaded() )
 			return getAtlasTile().sub( tileX, tileY, tileGridSize, tileGridSize );
@@ -765,6 +772,44 @@ class TilesetDef {
 			ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
 		}
 	}
+
+
+	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+		if( !isAtlasLoaded() )
+			return;
+
+		// if( !isTileInBounds(tileId) )
+		// 	return; // out of bounds
+
+		var imgData = _project.getOrLoadImage(relPath);
+		var subPixels = imgData.pixels.sub(rect.x, rect.y, rect.w, rect.h);
+		ctx.imageSmoothingEnabled = false;
+		var img = new js.html.Image(subPixels.width, subPixels.height);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		img.src = 'data:image/png;base64,$b64';
+		img.onload = function() {
+			ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
+		}
+	}
+
+
+	// public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:CustomTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+	// 	if( !isAtlasLoaded() )
+	// 		return;
+
+	// 	if( !isTileInBounds(tileId) )
+	// 		return; // out of bounds
+
+	// 	var imgData = _project.getOrLoadImage(relPath);
+	// 	var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
+	// 	ctx.imageSmoothingEnabled = false;
+	// 	var img = new js.html.Image(subPixels.width, subPixels.height);
+	// 	var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+	// 	img.src = 'data:image/png;base64,$b64';
+	// 	img.onload = function() {
+	// 		ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
+	// 	}
+	// }
 
 
 

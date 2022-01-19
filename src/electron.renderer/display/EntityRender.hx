@@ -96,8 +96,8 @@ class EntityRender extends dn.Process {
 		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:ldtk.Json.EntityTileRenderMode) {
-			if( tileId==null || tilesetId==null ) {
+		function _renderTile(tilesetUid:Int, rect:ldtk.Json.AtlasTileRect, mode:ldtk.Json.EntityTileRenderMode) {
+			if( rect==null || tilesetUid==null ) {
 				// Missing tile
 				var p = 2;
 				g.lineStyle(3, 0xff0000);
@@ -110,8 +110,8 @@ class EntityRender extends dn.Process {
 				g.beginFill(color, 0.2*ed.fillOpacity);
 				g.drawRect(0, 0, w, h);
 
-				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
-				var t = td.getTile(tileId);
+				var td = Editor.ME.project.defs.getTilesetDef(tilesetUid);
+				var t = td.getTileRect(rect);
 				var alpha = ed.fillOpacity * (ed.hollow ? 0.15 : 1);
 				switch mode {
 					case Stretch:
@@ -153,9 +153,9 @@ class EntityRender extends dn.Process {
 		}
 
 		// Base render
-		var custTile = ei==null ? null : ei.getSmartTile();
-		if( custTile!=null )
-			renderTile(custTile.tilesetUid, custTile.tileId, ed.tileRenderMode);
+		var smartTile = ei==null ? null : ei.getSmartTile();
+		if( smartTile!=null )
+			_renderTile(smartTile.tilesetUid, smartTile.rect, ed.tileRenderMode);
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:
@@ -181,7 +181,7 @@ class EntityRender extends dn.Process {
 				g.lineTo(w, 0);
 
 			case Tile:
-				renderTile(ed.tilesetId, ed.tileId, ed.tileRenderMode);
+				// _renderTile(ed.tilesetId, ed.tileId, ed.tileRenderMode);
 			}
 
 		// Pivot
