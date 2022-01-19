@@ -301,9 +301,9 @@ class TilesetDef {
 					v.tileId = remapTileId(oldCwid, v.tileId);
 
 		// Entity tiles remapping
-		for( ed in _project.defs.entities )
-			if( ed.tilesetId==uid && ed.tileId!=null )
-				ed.tileId = remapTileId(oldCwid, ed.tileId);
+		// for( ed in _project.defs.entities )
+		// 	if( ed.tilesetId==uid && ed.tileId!=null )
+		// 		ed.tileId = remapTileId(oldCwid, ed.tileId);
 
 		// Auto-layer tiles remapping
 		for(ld in _project.defs.layers)
@@ -478,7 +478,7 @@ class TilesetDef {
 	public function getTileIdsFromRect(r:ldtk.Json.AtlasTileRect) : Array<Int> {
 		if( r==null )
 			return [];
-		
+
 		var left = xToCx(r.x);
 		var right = xToCx(r.x+r.w-1);
 		var top = yToCy(r.y);
@@ -490,6 +490,14 @@ class TilesetDef {
 			tids.push( getTileId(cx,cy) );
 
 		return tids;
+	}
+
+
+	public inline function getFirstTileIdFromRect(r:ldtk.Json.AtlasTileRect) : Null<Int> {
+		if( r==null )
+			return null;
+		else
+			return getTileId(xToCx(r.x), yToCy(r.y));
 	}
 
 

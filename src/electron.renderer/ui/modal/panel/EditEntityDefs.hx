@@ -266,7 +266,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			var v : String = jSelect.val();
 			var mode = ldtk.Json.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
 			curEntity.renderMode = mode;
-			curEntity.tileId = null;
+			curEntity.tileRect = null;
 			if( mode==Tile ) {
 				var tdUid = Std.parseInt( v.substr(v.indexOf(".")+1) );
 				curEntity.tilesetId = tdUid;
@@ -427,12 +427,12 @@ class EditEntityDefs extends ui.modal.Panel {
 				ContextMenu.addTo(jEnt, [
 					{
 						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson()),
+						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
 					},
 					{
 						label: L._Cut(),
 						cb: ()->{
-							App.ME.clipboard.copyData(CEntityDef, ed.toJson());
+							App.ME.clipboard.copyData(CEntityDef, ed.toJson(project));
 							deleteEntityDef(ed);
 						},
 					},

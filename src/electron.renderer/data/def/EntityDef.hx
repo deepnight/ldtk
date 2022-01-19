@@ -18,8 +18,8 @@ class EntityDef {
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
 	public var tilesetId : Null<Int>;
-	public var tileId : Null<Int>;
 	public var tileRect : Null<ldtk.Json.AtlasTileRect>;
+	public var _oldTileId : Null<Int>;
 
 	public var hollow : Bool;
 
@@ -57,7 +57,7 @@ class EntityDef {
 	}
 
 	public function isTileDefined() {
-		return tilesetId!=null && ( tileId!=null || tileRect!=null );
+		return tilesetId!=null && tileRect!=null;
 	}
 
 	function set_identifier(id:String) {
@@ -107,7 +107,7 @@ class EntityDef {
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
-		o.tileId = JsonTools.readNullableInt(json.tileId);
+		o._oldTileId = JsonTools.readNullableInt(json.tileId);
 		o.tileRect = JsonTools.readTileRect(json.tilesetId, json.tileRect, true);
 
 		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Cover";
@@ -128,7 +128,7 @@ class EntityDef {
 		return o;
 	}
 
-	public function toJson() : ldtk.Json.EntityDefJson {
+	public function toJson(p:Project) : ldtk.Json.EntityDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -147,7 +147,7 @@ class EntityDef {
 			renderMode: JsonTools.writeEnum(renderMode, false),
 			showName: showName,
 			tilesetId: tilesetId,
-			tileId: tileId,
+			tileId: tileRect==null ? null : try p.defs.getTilesetDef(tilesetId).getFirstTileIdFromRect(tileRect) catch(_) null,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 			tileRect: tileRect,
 
@@ -213,10 +213,10 @@ class EntityDef {
 
 	public function tidy(p:data.Project) {
 		// Migrate old tileId to tileRect
-		if( tileId!=null && tileRect==null ) {
+		if( _oldTileId!=null && tileRect==null ) {
 			var td = p.defs.getTilesetDef(tilesetId);
 			if( td!=null )
-				tileRect = td.getTileRectFromTileIds([ tileId ]);
+				tileRect = td.getTileRectFromTileIds([ _oldTileId ]);
 		}
 
 		// Tags

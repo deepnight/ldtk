@@ -181,7 +181,7 @@ class JsTools {
 							scaleX = s;
 							scaleY = s;
 					}
-					td.drawTileToCanvas( jCanvas, ed.tileId, x, y, scaleX, scaleY );
+					td.drawTileRectToCanvas(jCanvas, ed.tileRect, x,y, scaleX, scaleY);
 				}
 		}
 

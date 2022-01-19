@@ -20,7 +20,7 @@ class Definitions {
 	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
 		return {
 			layers: layers.map( ld->ld.toJson() ),
-			entities: entities.map( ed->ed.toJson() ),
+			entities: entities.map( ed->ed.toJson(p) ),
 			tilesets: tilesets.map( td->td.toJson() ),
 			enums: enums.map( ed->ed.toJson(p) ),
 			externalEnums: externalEnums.map( ed->ed.toJson(p) ),
@@ -275,7 +275,7 @@ class Definitions {
 	}
 
 	public function duplicateEntityDef(ed:data.def.EntityDef) {
-		return pasteEntityDef( Clipboard.createTemp(CEntityDef,ed.toJson()), ed );
+		return pasteEntityDef( Clipboard.createTemp( CEntityDef, ed.toJson(_project) ), ed );
 	}
 
 	public function pasteEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
