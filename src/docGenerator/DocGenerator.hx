@@ -230,7 +230,7 @@ class DocGenerator {
 
 			// No field informations for this type
 			if( !type.xml.hasNode.a ) {
-				md.push('Sorry this type has no documentation yet.');
+				// md.push('Sorry this type has no documentation yet.');
 				continue;
 			}
 
