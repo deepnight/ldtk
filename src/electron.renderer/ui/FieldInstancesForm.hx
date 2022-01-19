@@ -543,7 +543,15 @@ class FieldInstancesForm {
 				}
 
 			case F_Tile:
-				// TODO
+				var jPicker = JsTools.createTileRectPicker(
+					project.defs.tilesets[0].uid,
+					fi.getTileRectObj(arrayIdx),
+					(r)->{
+						fi.parseValue(arrayIdx, '${r.x},${r.y},${r.w},${r.h}');
+						onFieldChange(fi);
+					}
+				);
+				jPicker.appendTo(jTarget);
 		}
 
 		// Suffix

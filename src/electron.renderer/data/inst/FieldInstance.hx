@@ -469,7 +469,7 @@ class FieldInstance {
 			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
 			case F_EntityRef: getEntityRefIid(arrayIdx);
-			case F_Tile: getTileRectArray(arrayIdx);
+			case F_Tile: getTileRectObj(arrayIdx);
 		}
 	}
 
@@ -590,7 +590,7 @@ class FieldInstance {
 				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
 	}
 
-	public function getTileRectArray(arrayIdx:Int) : Null<ldtk.Json.AtlasTileRect> {
+	public function getTileRectObj(arrayIdx:Int) : Null<ldtk.Json.AtlasTileRect> {
 		var v = getTileRectStr(arrayIdx);
 		if( v==null )
 			return null;

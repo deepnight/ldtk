@@ -5138,6 +5138,7 @@ canvas#webgl {
 		&.type-F_Text .F_Text,
 		&.type-F_String .F_String,
 		&.type-F_EntityRef .F_EntityRef,
+		&.type-F_Tile .F_Tile,
 		&.type-F_Path .F_Path {
 			display: flex;
 			&:not(li) {
@@ -5278,6 +5279,11 @@ dl.form.fieldInstanceEditor {
 
 	input[type=color] {
 		width: 100%;
+	}
+
+	canvas.tile {
+		flex: 0 0 auto;
+		zoom: 1.5;
 	}
 
 	input.fileNotFound {
