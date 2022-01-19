@@ -33,6 +33,7 @@
   - To avoid unnecessary file changes and renamings (bad for versioning systems), the following changes have been made:
   - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
   - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
+  - `tileId` in Entity Definitions has been replaced by `tileRect` to support multiple tiles instead of just single ones. The `tileId` will still be exported for now, but will be removed completely soon.
   - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
 
 ### Misc
@@ -43,6 +44,7 @@
 
 ## UI
 
+  - Entities can now use rectangle of tiles for their representation instead of just single tiles.
   - Current Level properties can now be edited directly from world view.
   - Entity and Level custom fields that are not using default value are now much more visible in forms.
   - Added a new optional "guide" grid per layer. This customizable grid is not used for snapping, and only serves as a visual guide.
