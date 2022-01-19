@@ -6,6 +6,8 @@ class Camera extends dn.Process {
 	static var MAX_ZOOM = 32;
 	static var MAX_FOCUS_PADDING_X = 450;
 	static var MAX_FOCUS_PADDING_Y = 400;
+	static var ANIM_KEEP_DURATION_S = 2;
+
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
@@ -85,6 +87,7 @@ class Camera extends dn.Process {
 		if( !usedMouseWheel )
 			if( worldMode ) {
 				targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
+				cd.setS("keepAutoZoom",ANIM_KEEP_DURATION_S);
 				if( editor.project.levels.length<=1 )
 					targetZoom*=0.5;
 			}
@@ -142,6 +145,7 @@ class Camera extends dn.Process {
 		cancelAutoZoom();
 		cancelKeyboardPanning();
 
+		// Scroll
 		if( editor.worldMode ) {
 			var b = editor.project.getWorldBounds();
 			targetWorldX = 0.5 * (b.left + b.right);
@@ -151,8 +155,11 @@ class Camera extends dn.Process {
 			targetWorldX = editor.curLevel.worldX + editor.curLevel.pxWid*0.5;
 			targetWorldY = editor.curLevel.worldY + editor.curLevel.pxHei*0.5;
 		}
+		cd.setS("keepAutoScroll",ANIM_KEEP_DURATION_S);
 
+		// Zoom
 		targetZoom = snapZoomValue( getFitZoom() );
+		cd.setS("keepAutoZoom",ANIM_KEEP_DURATION_S);
 
 		if( immediate ) {
 			worldX = targetWorldX;
@@ -203,10 +210,12 @@ class Camera extends dn.Process {
 
 	public inline function cancelAutoScrolling() {
 		targetWorldX = targetWorldX = null;
+		cd.unset("keepAutoScroll");
 	}
 
 	public inline function cancelAutoZoom() {
 		targetZoom = null;
+		cd.unset("keepAutoZoom");
 	}
 
 	public function cancelKeyboardPanning() {
@@ -223,11 +232,13 @@ class Camera extends dn.Process {
 	public function scrollToLevel(l:data.Level) {
 		targetWorldX = l.worldCenterX;
 		targetWorldY = l.worldCenterY;
+		cd.setS("keepAutoScroll",ANIM_KEEP_DURATION_S);
 	}
 
 	public function scrollTo(wx,wy) {
 		targetWorldX = wx;
 		targetWorldY = wy;
+		cd.setS("keepAutoScroll",ANIM_KEEP_DURATION_S);
 	}
 
 	public function getMinZoom(?l:data.Level) {
@@ -317,7 +328,7 @@ class Camera extends dn.Process {
 		if( targetZoom!=null ) {
 			editor.requestFps();
 			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, M.fmax(0.1, 0.22*adjustedZoom)*tmod) );
-			if( M.fabs(targetZoom-rawZoom) <= 0.04*rawZoom )
+			if( M.fabs(targetZoom-rawZoom) <= 0.04*rawZoom || !cd.has("keepAutoZoom") )
 				cancelAutoZoom();
 		}
 
@@ -326,7 +337,7 @@ class Camera extends dn.Process {
 			editor.requestFps();
 			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.15*tmod);
 			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.15*tmod);
-			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=6 )
+			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=6 || !cd.has("keepAutoScroll") )
 				cancelAutoScrolling();
 		}
 	}
