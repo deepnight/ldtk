@@ -543,15 +543,31 @@ class FieldInstancesForm {
 				}
 
 			case F_Tile:
-				var jPicker = JsTools.createTileRectPicker(
-					project.defs.tilesets[0].uid,
-					fi.getTileRectObj(arrayIdx),
-					(r)->{
-						fi.parseValue(arrayIdx, '${r.x},${r.y},${r.w},${r.h}');
-						onFieldChange(fi);
+				var td = project.defs.getTilesetDef(fi.def.tilesetUid);
+				if( td==null || !td.isAtlasLoaded() ) {
+					// Tileset error
+					jTarget.append('<div class="warning">Invalid tileset in field definition.</div>');
+				}
+				else {
+					var jPicker = JsTools.createTileRectPicker(
+						fi.def.tilesetUid,
+						fi.getTileRectObj(arrayIdx),
+						(r)->{
+							fi.parseValue(arrayIdx, '${r.x},${r.y},${r.w},${r.h}');
+							onFieldChange(fi);
+						}
+					);
+					jPicker.appendTo(jTarget);
+
+					if( fi.def.canBeNull ) {
+						var jClear = new J('<button class="gray clearTile"> <span class="icon clear"/> </button>');
+						jClear.appendTo(jTarget);
+						jClear.click(_->{
+							fi.parseValue(arrayIdx,null);
+							onFieldChange(fi);
+						});
 					}
-				);
-				jPicker.appendTo(jTarget);
+				}
 		}
 
 		// Suffix

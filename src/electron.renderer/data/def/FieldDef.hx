@@ -38,6 +38,7 @@ class FieldDef {
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
 	public var allowedRefTags : Tags;
+	public var tilesetUid : Null<Int>;
 
 
 	var _project : data.Project;
@@ -134,6 +135,7 @@ class FieldDef {
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
+		o.tilesetUid = JsonTools.readNullableInt(json.tilesetUid);
 
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
@@ -170,6 +172,7 @@ class FieldDef {
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
 			allowedRefTags: allowedRefTags.toJson(),
+			tilesetUid: tilesetUid,
 		}
 	}
 
@@ -615,5 +618,10 @@ class FieldDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		if( tilesetUid!=null && p.defs.getTilesetDef(tilesetUid)==null ) {
+			App.LOG.add("tidy", "Lost tileset UID in FieldDef "+toString());
+			tilesetUid = null;
+		}
 	}
 }

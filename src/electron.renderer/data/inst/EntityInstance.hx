@@ -197,6 +197,13 @@ class EntityInstance {
 						}
 					}
 
+
+				case F_Tile:
+					return {
+						tilesetUid: fi.def.tilesetUid,
+						rect: fi.getTileRectObj(0),
+					}
+
 				case _:
 			}
 		}

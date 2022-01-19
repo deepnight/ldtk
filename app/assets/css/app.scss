@@ -5286,6 +5286,12 @@ dl.form.fieldInstanceEditor {
 		zoom: 1.5;
 	}
 
+	button.clearTile {
+		flex: 0 1 24px;
+		padding: 4px;
+		align-self: center;
+	}
+
 	input.fileNotFound {
 		color: $orange;
 		border-color: $orange;

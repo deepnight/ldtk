@@ -440,7 +440,7 @@ class FieldDefsForm {
 					case ArrayCountNoLabel, ArrayCountWithLabel: curField.isArray;
 
 					case EntityTile:
-						curField.isEnum() && isEntityField();
+						curField.isEnum() && isEntityField() || curField.type==F_Tile;
 
 					case RefLink:
 						curField.type==F_EntityRef;
@@ -482,6 +482,37 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
+		// Tileset
+		var jTilesetSelect = jForm.find("#tilesetUid");
+		jTilesetSelect.empty();
+		for(td in project.defs.tilesets) {
+			var jOpt = new J('<option/>');
+			jOpt.appendTo(jTilesetSelect);
+			jOpt.text( td.identifier );
+			jOpt.attr("value", td.uid);
+		}
+		if( curField.tilesetUid==null ) {
+			// No tileset
+			var jOpt = new J('<option>-- Pick a tileset --</option>');
+			jOpt.prependTo(jTilesetSelect);
+			jTilesetSelect.addClass("required");
+			jOpt.attr("value",-1);
+			jTilesetSelect.val(-1);
+		}
+		else {
+			jTilesetSelect.removeClass("required");
+			jTilesetSelect.val(curField.tilesetUid);
+		}
+		jTilesetSelect.change( _->{
+			var uid = Std.parseInt( jTilesetSelect.val() );
+			if( !M.isValidNumber(uid) || uid<0 )
+				curField.tilesetUid = null;
+			else
+				curField.tilesetUid = uid;
+			onFieldChange();
+		});
+
+		// Refs
 		var i = Input.linkToHtmlInput( curField.symmetricalRef, jForm.find("input[name=symmetricalRef]") );
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.allowedRefs==OnlySame );
