@@ -62,13 +62,11 @@ class EntityInstance {
 			__tags: def.tags.toArray(),
 			__tile: {
 				var t = getSmartTile();
-				if( t!=null ) {
-					var td = _project.defs.getTilesetDef(t.tilesetUid);
+				if( t!=null )
 					{
 						tilesetUid: t.tilesetUid,
-						srcRect: [ td.getTileSourceX(t.tileId), td.getTileSourceY(t.tileId), td.tileGridSize, td.tileGridSize ],
+						srcRect: [ t.rect.x, t.rect.y, t.rect.w, t.rect.h ],
 					}
-				}
 				else
 					null;
 			},
@@ -172,26 +170,50 @@ class EntityInstance {
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
-	public function getSmartTile() : Null<{ tilesetUid:Int, tileId:Int }> {
-		for(fi in fieldInstances)
+	public function getSmartTile() : Null<EntitySmartTile> {
+		// Check for a tile provided by a field instance
+		for(fi in fieldInstances) {
+			if( fi.valueIsNull(0) || fi.def.editorDisplayMode!=EntityTile )
+				continue;
+
 			switch fi.def.type {
 				case F_Enum(enumDefUid):
-					if( fi.def.editorDisplayMode==EntityTile && !fi.valueIsNull(0) ) {
-						var ed = _project.defs.getEnumDef(enumDefUid);
-						if( ed.iconTilesetUid!=null )
-							return {
-								tilesetUid: ed.iconTilesetUid,
-								tileId: ed.getValue( fi.getEnumValue(0) ).tileId,
-							}
+					var ed = _project.defs.getEnumDef(enumDefUid);
+					if( ed.iconTilesetUid==null )
+						continue;
+
+					var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
+					if( td==null )
+						return null;
+
+					var tid = ed.getValue( fi.getEnumValue(0) ).tileId;
+					return {
+						tilesetUid: ed.iconTilesetUid,
+						rect: {
+							x: td.getTileSourceX(tid),
+							y: td.getTileSourceY(tid),
+							w: td.tileGridSize,
+							h: td.tileGridSize,
+						}
 					}
+
 				case _:
 			}
+		}
 
-		if( def.isTileDefined() )
+		if( def.isTileDefined() ) {
+			// Use tile from entity definition
+			var td = _project.defs.getTilesetDef(def.tilesetId);
 			return {
 				tilesetUid: def.tilesetId,
-				tileId: def.tileId,
+				rect: {
+					x: td.getTileSourceX(def.tileId),
+					y: td.getTileSourceY(def.tileId),
+					w: td.tileGridSize,
+					h: td.tileGridSize,
+				}
 			}
+		}
 		else
 			return null;
 	}
