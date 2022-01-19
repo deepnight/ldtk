@@ -427,8 +427,11 @@ class WorldRender extends dn.Process {
 			}
 			fr.customFields.visible = editor.worldMode || editor.curLevel==l;
 			fr.identifier.visible = !editor.worldMode && camera.adjustedZoom>=minZoom;
-			if( editor.worldMode )
+			if( editor.worldMode ) {
 				fr.customFields.alpha = getAlphaFromZoom(minZoom);
+				if( fr.customFields.alpha<=0 )
+					fr.customFields.visible = false;
+			}
 
 			if( !fr.customFields.visible )
 				continue;
