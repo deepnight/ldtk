@@ -287,10 +287,10 @@ class EditEntityDefs extends ui.modal.Panel {
 			()->curEntity.tileRenderMode,
 			(v)->curEntity.tileRenderMode = v,
 			(v)->switch v {
-				case Cover: L.t._("Cover shape");
+				case Cover: L.t._("Cover bounds");
 				case FitInside: L.t._("Fit inside bounds");
 				case Repeat: L.t._("Repeat");
-				case Stretch: L.t._("Stretch to bounds");
+				case Stretch: L.t._("Dirty stretch to bounds");
 				case FullSizeCropped: L.t._("Full size (cropped in bounds)");
 				case FullSizeUncropped: L.t._("Full size (not cropped)");
 			}
