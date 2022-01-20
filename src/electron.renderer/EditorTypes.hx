@@ -166,6 +166,7 @@ enum AtlasLoadingResult {
 	TrimmedPadding;
 	RemapLoss;
 	RemapSuccessful;
+	UnsupportedFileOrigin(origin:String);
 }
 
 enum TilesetSelectionMode {

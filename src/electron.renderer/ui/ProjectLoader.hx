@@ -5,6 +5,7 @@ enum LoadingError {
 	FileRead(err:String);
 	JsonParse(err:String);
 	ProjectInit(err:String);
+	UnsupportedWinNetDrive;
 }
 
 class ProjectLoader {
@@ -23,7 +24,13 @@ class ProjectLoader {
 
 		this.onLoad = onLoad;
 		this.onError = onError;
-		var fileName = dn.FilePath.extractFileWithExt(filePath);
+		var fp = dn.FilePath.fromFile(filePath);
+		var fileName = fp.fileWithExt;
+
+		if( fp.isWindowsNetworkDrive ) {
+			error(UnsupportedWinNetDrive);
+			return;
+		}
 
 		if( !NT.fileExists(filePath) ) {
 			error(ProjectNotFound);
@@ -168,12 +175,16 @@ class ProjectLoader {
 			case FileRead(err): err;
 			case JsonParse(err): err;
 			case ProjectInit(err): err;
+			case UnsupportedWinNetDrive: "Unsupported Windows Network Drive";
 		});
 
 		onError(err);
 		switch err {
 			case ProjectNotFound:
 				N.error("Project file not found");
+
+			case UnsupportedWinNetDrive:
+				new ui.modal.dialog.Message( L._UnsupportedWinNetDir() );
 
 			case FileRead(_), JsonParse(_), ProjectInit(_):
 				new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));

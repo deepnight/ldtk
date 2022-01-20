@@ -202,6 +202,9 @@ class TilesetDef {
 			return LoadingFailed("No file path");
 		}
 
+		if( dn.FilePath.fromFile(relFilePath).isWindowsNetworkDrive )
+			return UnsupportedFileOrigin("Windows Network Drive");
+
 		if( !NT.fileExists(_project.makeAbsoluteFilePath(relFilePath)) )
 			return FileNotFound;
 

@@ -788,28 +788,18 @@ class JsTools {
 
 
 
-	public static function createImagePicker( curRelPath:Null<String>, onChange : (?relPath:String)->Void ) : js.jquery.JQuery {
+	public static function createImagePicker( curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {
 		var jWrapper = new J('<div class="imagePicker"/>');
 
 		var fileName = curRelPath==null ? null : dn.FilePath.extractFileWithExt(curRelPath);
 
-		function _load(relPath:String) {
-			var img = Editor.ME.project.getOrLoadImage(relPath);
-			if( img!=null ) {
-				onChange(relPath);
-				return true;
-			}
-			else {
-				N.error('Couldn\'t read image file: $relPath');
-				return false;
-			}
-		}
-
-		function _pickImage(relPath:String) {
+		function _pick(relPath:String) {
 			if( relPath==null )
 				return false;
-
-			return _load(relPath);
+			else {
+				onSelect(relPath);
+				return true;
+			}
 		}
 
 		// Reload image
@@ -817,7 +807,7 @@ class JsTools {
 			var jReload = new J('<button class="reload" title="Manually reload file"> <span class="icon refresh"/> </button>');
 			jReload.appendTo(jWrapper);
 			jReload.click( (_)->{
-				if( _load(curRelPath) )
+				if( _pick(curRelPath) )
 					N.success(L.t._("Image reloaded: ::file::", {file:fileName}));
 			});
 		}
@@ -835,7 +825,7 @@ class JsTools {
 
 			dn.js.ElectronDialogs.openFile([".png", ".gif", ".jpg", ".jpeg", ".aseprite", ".ase"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);
-				_pickImage(relPath);
+				_pick(relPath);
 			});
 		});
 
@@ -850,7 +840,7 @@ class JsTools {
 				for( img in allImages )
 					ctx.add({
 						label: L.untranslated(img.fileName),
-						cb: ()->_pickImage(img.relPath)
+						cb: ()->_pick(img.relPath)
 					});
 			});
 		}
@@ -875,7 +865,7 @@ class JsTools {
 		var jRemove = new J('<button class="remove gray" title="Stop using this image"> <span class="icon clear"/> </button>');
 		jRemove.appendTo(jWrapper);
 		jRemove.click( (_)->{
-			new ui.modal.dialog.Confirm(jRemove, L.t._("Stop using this image?"), true, onChange.bind(null));
+			new ui.modal.dialog.Confirm(jRemove, L.t._("Stop using this image?"), true, ()->onSelect(null));
 		});
 
 		// Locate

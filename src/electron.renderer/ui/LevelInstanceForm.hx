@@ -269,7 +269,7 @@ class LevelInstanceForm {
 
 		// Create bg image picker
 		jForm.find("dd.bg .imagePicker").remove();
-		var jImg = JsTools.createImagePicker(level.bgRelPath, (?relPath)->{
+		var jImg = JsTools.createImagePicker(level.bgRelPath, (relPath)->{
 			var old = level.bgRelPath;
 			if( relPath==null && old!=null ) {
 				// Remove
@@ -279,6 +279,11 @@ class LevelInstanceForm {
 			}
 			else if( relPath!=null ) {
 				// Add or update
+				var img = project.getOrLoadImage(relPath);
+				if( img==null ) {
+					ui.modal.dialog.Message.error( L.t._("Could not load this image") );
+					return;
+				}
 				level.bgRelPath = relPath;
 				if( old!=null )
 					editor.watcher.stopWatchingRel( old );

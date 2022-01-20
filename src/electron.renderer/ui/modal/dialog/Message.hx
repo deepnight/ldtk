@@ -17,4 +17,10 @@ class Message extends ui.modal.Dialog {
 
 		addClose();
 	}
+
+	public static function error(msg:LocaleString) {
+		var m = new Message(msg);
+		m.addClass("error");
+		return m;
+	}
 }

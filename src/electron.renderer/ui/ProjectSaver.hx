@@ -56,27 +56,30 @@ class ProjectSaver extends dn.Process {
 	inline function log(str:String) App.LOG.add("save", '$str');
 	inline function logState() log('=> $state...');
 
-	function error(str:LocaleString) {
+	function error(str:LocaleString, showOptions=true) {
 		var fp = project.filePath.clone();
 
 		var m = new ui.modal.dialog.Message(str);
 		m.addClass("error");
-		m.addParagraph(L.t._("The project was NOT saved properly!"));
 
-		m.removeButtons();
-		m.addButton( L.t._("Retry"), ()->{
-			Editor.ME.onSave();
-			m.close();
-		} );
-		m.addButton( L.t._("Save as..."), ()->{
-			Editor.ME.onSave(true);
-			m.close();
-		} );
-		m.addButton( L.t._("Open project folder"), "gray small", ()->{
-			ET.locate(fp.full, true);
-			m.close();
-		 } );
-		m.addCancel();
+		if( showOptions ) {
+			m.addParagraph(L.t._("The project was NOT saved properly!"));
+
+			m.removeButtons();
+			m.addButton( L.t._("Retry"), ()->{
+				Editor.ME.onSave();
+				m.close();
+			} );
+			m.addButton( L.t._("Save as..."), ()->{
+				Editor.ME.onSave(true);
+				m.close();
+			} );
+			m.addButton( L.t._("Open project folder"), "gray small", ()->{
+				ET.locate(fp.full, true);
+				m.close();
+			 } );
+			m.addCancel();
+		}
 		complete(false);
 	}
 
@@ -88,6 +91,11 @@ class ProjectSaver extends dn.Process {
 
 			case PreChecks:
 				logState();
+				if( project.filePath.isWindowsNetworkDrive ) {
+					error( L._UnsupportedWinNetDir(), false );
+					return;
+				}
+
 				var dir = project.getAbsExternalFilesDir();
 				if( NT.fileExists(dir) && !NT.isDirectory(dir) ) {
 					// An existing dir conflicts
@@ -97,6 +105,8 @@ class ProjectSaver extends dn.Process {
 				}
 				else if( !NT.fileExists(project.filePath.full) ) {
 					// Saving to a new file, try to write some dummy empty file first, to check if this will work.
+					trace(project.filePath.debug());
+					trace(project.filePath.full);
 					var ok = try {
 						NT.writeFileString(project.filePath.full, "-");
 						true;

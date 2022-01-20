@@ -623,23 +623,6 @@ class App extends dn.Process {
 			(err)->{
 				// Failed
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
-				N.error(switch err {
-					case null:
-						L.t._("Unknown error");
-
-					case ProjectNotFound:
-						unregisterRecentProject(filePath);
-						L.t._("Project file not found");
-
-					case JsonParse(err):
-						L.t._("Failed to parse project JSON file!");
-
-					case FileRead(err):
-						L.t._("Failed to read file on disk!");
-
-					case ProjectInit(err):
-						L.t._("Failed to create Project instance!");
-				});
 				loadPage( ()->new page.Home() );
 			}
 		);

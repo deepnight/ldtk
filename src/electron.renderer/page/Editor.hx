@@ -456,6 +456,11 @@ class Editor extends Page {
 			case RemapSuccessful:
 				changed = true;
 				new ui.modal.dialog.Message(msg, "tile");
+
+			case UnsupportedFileOrigin(origin):
+				var m = new ui.modal.dialog.Message(msg);
+				m.addClass("error");
+				return false;
 		}
 
 		// Rebuild "opaque tiles" cache

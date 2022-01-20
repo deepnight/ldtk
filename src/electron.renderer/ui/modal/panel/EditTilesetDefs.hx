@@ -122,7 +122,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		// Image file picker
 		jForm.find(".imagePicker").remove();
-		var jImg = JsTools.createImagePicker(curTd.relPath, (?relPath)->{
+		var jImg = JsTools.createImagePicker(curTd.relPath, (relPath)->{
 			var oldRelPath = curTd.relPath;
 			if( relPath==null ) {
 				// Remove image
@@ -138,7 +138,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				switch result {
 					case Ok:
 
-					case FileNotFound, LoadingFailed(_):
+					case FileNotFound, LoadingFailed(_), UnsupportedFileOrigin(_):
 						new ui.modal.dialog.Warning( Lang.atlasLoadingMessage(relPath, result) );
 						return;
 
