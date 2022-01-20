@@ -623,7 +623,7 @@ class FieldInstance {
 		if( def.type!=F_Tile )
 			return null;
 		else {
-			var out = isUsingDefault(arrayIdx) ? null : switch internalValues[arrayIdx] {
+			var out = isUsingDefault(arrayIdx) ? def.getTileRectDefaultStr() : switch internalValues[arrayIdx] {
 				case V_String(v):
 					v;
 				case _: throw "unexpected";
