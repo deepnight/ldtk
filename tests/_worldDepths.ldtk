@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456303,
+	"appBuildId": 456305,
 	"nextUid": 195,
 	"worldLayout": null,
 	"worldGridWidth": null,
@@ -2000,7 +2000,7 @@
 		}
 	] },
 	"levels": [],
-	"worlds": [{ "worldLayout": "Free", "worldGridWidth": 256, "worldGridHeight": 256, "iid": "TODO", "identifier": "TODO", "levels": [
+	"worlds": [{ "iid": "8d244150-66b0-11ec-bd47-6959af1a7314", "identifier": "World", "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "Free", "levels": [
 		{
 			"identifier": "Level_0",
 			"iid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc",
