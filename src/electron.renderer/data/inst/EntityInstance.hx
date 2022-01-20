@@ -240,7 +240,9 @@ class EntityInstance {
 		if( def.tilesetId==td.uid )
 			return true;
 
-		// TODO check future tile fields
+		for(fi in fieldInstances)
+			if( fi.def.type==F_Tile && fi.def.tilesetUid==td.uid )
+				return true;
 
 		return false;
 	}
