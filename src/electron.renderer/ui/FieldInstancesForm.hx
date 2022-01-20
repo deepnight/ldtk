@@ -562,22 +562,14 @@ class FieldInstancesForm {
 					);
 					jPicker.appendTo(jTarget);
 
-					if( fi.def.canBeNull || fi.def.getTileRectDefaultStr()!=null ) {
-						// Clear button
-						if( !fi.valueIsNull(arrayIdx) ) {
-							var jClear = new J('<button class="red clearTile"> <span class="icon clear"/> </button>');
-							jClear.appendTo(jTarget);
-							jClear.click(_->{
-								fi.parseValue(arrayIdx,null);
-								onFieldChange(fi);
-							});
-						}
-						// Reset to default
-						// if( fi.def.getTileRectDefaultStr()!=null ) {
-						// 	var jReset = new J('<a class="reset">Reset</a>');
-						// 	jReset.appendTo(jTarget);
-						// 	jReset.click(_->)
-						// }
+					// Clear button
+					if( fi.def.canBeNull && !fi.isUsingDefault(arrayIdx) ) {
+						var jClear = new J('<button class="red clearTile"> <span class="icon clear"/> </button>');
+						jClear.appendTo(jTarget);
+						jClear.click(_->{
+							fi.parseValue(arrayIdx,null);
+							onFieldChange(fi);
+						});
 					}
 				}
 		}
