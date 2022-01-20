@@ -70,14 +70,8 @@ class ContextMenu extends ui.Modal {
 		// Open callback
 		function _open(event:js.jquery.Event) {
 			var ctx = new ContextMenu(event);
-			for(a in actions) {
-				if( a.show!=null && !a.show() )
-					continue;
-
-				var jBt = ctx.add(a);
-				if( a.enable!=null && !a.enable() )
-					jBt.prop("disabled", true);
-			}
+			for(a in actions)
+				ctx.add(a);
 		}
 
 		// Menu button
@@ -120,10 +114,15 @@ class ContextMenu extends ui.Modal {
 
 	public function add(a:ContextAction) {
 		var jButton = new J('<button class="transparent"/>');
+		if( a.show!=null && !a.show() )
+			return jButton;
 		jButton.appendTo(jContent);
 		jButton.text(a.label);
 		if( a.sub!=null && a.sub!=a.label )
 			jButton.append('<span class="sub">${a.sub}</span>');
+
+		if( a.enable!=null && !a.enable() )
+			jButton.prop("disabled", true);
 
 		if( a.className!=null )
 			jButton.addClass(a.className);
