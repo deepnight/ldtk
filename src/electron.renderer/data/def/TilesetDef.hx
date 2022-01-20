@@ -196,17 +196,14 @@ class TilesetDef {
 	}
 
 
-	public function importAtlasImage(relFilePath:String) : EditorTypes.AtlasLoadingResult {
-		if( relFilePath==null ) {
-			removeAtlasImage();
-			return LoadingFailed("No file path");
+	public function importAtlasImage(relFilePath:String) : EditorTypes.ImageLoadingResult {
+		// Check common errors
+		var chk = _project.checkImageBeforeLoading(relFilePath);
+		if( chk!=Ok ) {
+			if( relFilePath==null )
+				removeAtlasImage();
+			return chk;
 		}
-
-		if( dn.FilePath.fromFile(relFilePath).isWindowsNetworkDrive )
-			return UnsupportedFileOrigin("Windows Network Drive");
-
-		if( !NT.fileExists(_project.makeAbsoluteFilePath(relFilePath)) )
-			return FileNotFound;
 
 		// Optional previous image infos
 		var oldRelPath = relPath;
@@ -245,7 +242,7 @@ class TilesetDef {
 	}
 
 
-	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.AtlasLoadingResult {
+	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
 		App.LOG.warning('Tileset remapping...');
 
 		if( oldPxWid==pxWid && oldPxHei==pxHei )

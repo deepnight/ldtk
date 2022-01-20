@@ -680,6 +680,19 @@ class Project {
 	}
 
 
+	public function checkImageBeforeLoading(relPath:String) : ImageLoadingResult {
+		if( relPath==null )
+			return LoadingFailed("No file path");
+
+		if( dn.FilePath.fromFile(relPath).isWindowsNetworkDrive )
+			return UnsupportedFileOrigin("Windows Network Drive");
+
+		if( !NT.fileExists(makeAbsoluteFilePath(relPath)) )
+			return FileNotFound;
+
+		return Ok;
+	}
+
 	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
 		try {
 			if( !imageCache.exists(relPath) ) {

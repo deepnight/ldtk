@@ -278,6 +278,12 @@ class LevelInstanceForm {
 				editor.watcher.stopWatchingRel( old );
 			}
 			else if( relPath!=null ) {
+				var chk = project.checkImageBeforeLoading(relPath);
+				if( chk!=Ok ) {
+					ui.modal.dialog.Message.error( L.imageLoadingMessage(relPath, chk) );
+					return;
+				}
+
 				// Add or update
 				var img = project.getOrLoadImage(relPath);
 				if( img==null ) {

@@ -98,7 +98,7 @@ class Lang {
 	}
 
 
-	public static function atlasLoadingMessage(filePath:String, result:AtlasLoadingResult) : LocaleString {
+	public static function imageLoadingMessage(filePath:String, result:ImageLoadingResult) : LocaleString {
 		var name = dn.FilePath.fromFile(filePath).fileWithExt;
 		return switch result {
 			case Ok:

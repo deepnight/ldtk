@@ -139,11 +139,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 					case Ok:
 
 					case FileNotFound, LoadingFailed(_), UnsupportedFileOrigin(_):
-						new ui.modal.dialog.Warning( Lang.atlasLoadingMessage(relPath, result) );
+						new ui.modal.dialog.Warning( Lang.imageLoadingMessage(relPath, result) );
 						return;
 
 					case TrimmedPadding, RemapLoss, RemapSuccessful:
-						new ui.modal.dialog.Message( Lang.atlasLoadingMessage(relPath, result), "tile" );
+						new ui.modal.dialog.Message( Lang.imageLoadingMessage(relPath, result), "tile" );
 				}
 
 				if( oldRelPath!=null )

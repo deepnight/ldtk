@@ -425,7 +425,7 @@ class Editor extends Page {
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
 		var changed = false;
-		var msg = Lang.atlasLoadingMessage(td.relPath, result);
+		var msg = Lang.imageLoadingMessage(td.relPath, result);
 
 		switch result {
 			case FileNotFound:
