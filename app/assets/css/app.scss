@@ -934,6 +934,15 @@ ul.niceList {
 			&:hover {
 				background-color: $orange;
 			}
+
+			&.red:not(:hover) {
+				background-color: $darkRed;
+			}
+
+			.icon {
+				width: 1em;
+				height: 1em;
+			}
 		}
 	}
 	li div.error {
@@ -5680,12 +5689,12 @@ dl.form.fieldInstanceEditor {
 			grid-template-columns: 100%;
 			grid-template-rows: min-content auto;
 
-			&.externalEnum {
+			&.externalEnum dl.enumForm {
 				.noExternal {
 					display: none;
 				}
-				li.onlyExternal {
-					display: flex;
+				dt.onlyExternal {
+					display: grid;
 				}
 				ul.enumValues li {
 					grid-template-columns: min-content auto;

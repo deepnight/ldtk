@@ -34,11 +34,13 @@ class EditEnumDefs extends ui.modal.Panel {
 			});
 			ctx.add({
 				label:L.t._("CastleDB"),
-				cb: ()->N.notImplemented()
+				cb: ()->N.notImplemented(),
+				enable: ()->false,
 			});
 			ctx.add({
 				label:L.t._("JSON"),
-				cb: ()->N.notImplemented()
+				cb: ()->N.notImplemented(),
+				enable: ()->false,
 			});
 		});
 
@@ -207,20 +209,29 @@ class EditEnumDefs extends ui.modal.Panel {
 			var links = new J('<div class="links"/>');
 			links.appendTo(e);
 
+			// Sync button
+			var sync = new J('<a> <span class="icon refresh"/> </a>');
+			sync.appendTo(links);
+			sync.click( function(ev) {
+				importer.HxEnum.load(group.key, true);
+			});
+			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
+
 			// Explore button
 			if( fileExists ) {
 				var a = JsTools.makeExploreLink(fullPath, true);
 				a.appendTo(links);
 			}
 
-			// Sync button
-			var sync = new J('<a/>');
-			sync.appendTo(links);
-			sync.text("⟳");
-			sync.click( function(ev) {
-				importer.HxEnum.load(group.key, true);
-			});
-			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
+			// Delete button
+			if( group.value.length>0 ) {
+				var jDelete = new J('<a class="red"> <span class="icon delete"/> </a>');
+				jDelete.appendTo(links);
+				jDelete.click( function(ev) {
+					deleteEnumDef(group.value[0], false);
+				});
+				Tip.attach(sync, Lang.t._("Remove this external Enum source"));
+			}
 
 			// Values
 			for(ed in group.value) {
@@ -387,8 +398,11 @@ class EditEnumDefs extends ui.modal.Panel {
 			jPicker.appendTo( li.find(".pickerWrapper") );
 
 			// Remove value button
-			if( !curEnum.isExternal() ) {
-				li.find(".delete").click( function(ev) {
+			var jDelete = li.find(".delete");
+			if( curEnum.isExternal() )
+				jDelete.hide();
+			else {
+				jDelete.click( function(ev) {
 					var isUsed = project.isEnumValueUsed(curEnum, eValue.id );
 					if( isUsed ) {
 						new ui.modal.dialog.Confirm(
@@ -410,7 +424,12 @@ class EditEnumDefs extends ui.modal.Panel {
 			}
 		}
 
-		jFormWrapper.find(".createEnumValue").click( function(_) {
+		var jAdd = jFormWrapper.find(".createEnumValue");
+		if( curEnum.isExternal() )
+			jAdd.hide();
+		else
+			jAdd.show();
+		jAdd.click( function(_) {
 			var uid = 0;
 			while( !curEnum.addValue(curEnum.identifier+uid) )
 				uid++;
