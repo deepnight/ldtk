@@ -12,6 +12,7 @@ class Project {
 	var nextUid = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
+	public var worlds : Array<World> = [];
 
 	public var jsonVersion : String;
 	public var appBuildId : Float;
@@ -266,23 +267,32 @@ class Project {
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
-		// Levels
-		if( p.hasFlag(MultiWorlds) )
+		if( p.hasFlag(MultiWorlds) ) {
+			// Multi-worlds
+			for( worldJson in JsonTools.readArray(json.worlds) )
+				p.worlds.push( World.fromJson(p, worldJson) );
+
+			// HACK: read levels from World[0]
 			for( lvlJson in JsonTools.readArray(json.worlds[0].levels) )
 				p.levels.push( Level.fromJson(p, lvlJson) );
-		else
+		}
+		else {
+			// Levels (from json root)
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				p.levels.push( Level.fromJson(p, lvlJson) );
+		}
 
-		// World
+		// World settings
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
 		if( p.hasFlag(MultiWorlds) ) {
+			// HACK: read world settings from World[0]
 			var worldJson = json.worlds[0];
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, worldJson.worldLayout, false, defLayout );
 			p.worldGridWidth = JsonTools.readInt( worldJson.worldGridWidth, p.defaultLevelWidth );
 			p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
 		}
 		else {
+			// World settings in root
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
 			p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
@@ -505,8 +515,8 @@ class Project {
 					worldLayout: JsonTools.writeEnum(worldLayout, false),
 					worldGridWidth: worldGridWidth,
 					worldGridHeight: worldGridHeight,
-					iid: "TODO",
-					identifier: "TODO",
+					iid: null, // TODO
+					identifier: null,
 					levels: levels.map( (l)->l.toJson() ),
 				}
 			],
