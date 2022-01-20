@@ -9,11 +9,11 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456301,
+	"appBuildId": 456303,
 	"nextUid": 195,
-	"worldLayout": "Free",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
+	"worldLayout": null,
+	"worldGridWidth": null,
+	"worldGridHeight": null,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 8,
@@ -29,7 +29,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level %idx",
-	"flags": [],
+	"flags": ["MultiWorlds"],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
@@ -1999,7 +1999,8 @@
 			"tilesetUid": 172
 		}
 	] },
-	"levels": [
+	"levels": [],
+	"worlds": [{ "worldLayout": "Free", "worldGridWidth": 256, "worldGridHeight": 256, "iid": "TODO", "identifier": "TODO", "levels": [
 		{
 			"identifier": "Level_0",
 			"iid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc",
@@ -13792,6 +13793,5 @@
 				{ "levelIid": "74a0e030-66b0-11ec-8211-35643000f436", "levelUid": 163, "dir": "s" }
 			]
 		}
-	],
-	"worlds": []
+	] }]
 }
