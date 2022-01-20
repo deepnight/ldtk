@@ -17,7 +17,7 @@ class World {
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
-			levels: [],
+			levels: levels.map( l->l.toJson() ),
 		}
 	}
 
@@ -26,7 +26,7 @@ class World {
 			json.iid = p.generateUniqueId_UUID();
 
 		if( json.identifier==null )
-			json.identifier = p.fixUniqueIdStr("World", (id)->{ return true; }); // HACK
+			json.identifier = p.fixUniqueIdStr("World", (id)->p.isWorldIdentifierUnique(id)); 
 
 		var w = new World(p);
 		w.iid = json.iid;

@@ -509,17 +509,7 @@ class Project {
 
 			defs: defs.toJson(this),
 			levels: hasFlag(MultiWorlds) ? [] : levels.map( (l)->l.toJson() ),
-
-			worlds: !hasFlag(MultiWorlds) ? [] : [
-				{
-					worldLayout: JsonTools.writeEnum(worldLayout, false),
-					worldGridWidth: worldGridWidth,
-					worldGridHeight: worldGridHeight,
-					iid: null, // TODO
-					identifier: null,
-					levels: levels.map( (l)->l.toJson() ),
-				}
-			],
+			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
 		}
 
 		return json;
@@ -898,6 +888,14 @@ class Project {
 		}
 		else
 			return false;
+	}
+
+	public function isWorldIdentifierUnique(id:String, ?exclude:World) {
+		id = cleanupIdentifier(id,true);
+		for(w in worlds)
+			if( w.identifier==id && w!=exclude )
+				return false;
+		return true;
 	}
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
