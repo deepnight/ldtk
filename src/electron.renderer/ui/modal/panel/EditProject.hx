@@ -6,6 +6,7 @@ class EditProject extends ui.modal.Panel {
 	var allAdvancedOptions = [
 		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
 		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
+		ldtk.Json.ProjectFlag.MultiWorlds,
 	];
 
 	public function new() {
@@ -294,6 +295,10 @@ class EditProject extends ui.modal.Panel {
 				case PrependIndexToLevelFileNames:
 					jLabel.text("Prefix level file names with their index in array");
 					jInput.attr("title", L.t._("If enabled, external level file names will be prefixed with an index reflecting their position in the internal array.\nThis is NOT recommended because, with versioning systems (such as GIT), inserting a new level means renaming files of all subsequent levels in the array.\nThis option used to be the default behavior but was changed in version 0.10.0."));
+
+				case MultiWorlds:
+					jLabel.text("Multi-worlds support");
+					jInput.attr("title", L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly."));
 
 				case _:
 			}

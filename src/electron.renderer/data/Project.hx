@@ -232,6 +232,18 @@ class Project {
 		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 
+		// Advanced flags
+		if( (cast json).advancedOptionFlags!=null )
+			json.flags = (cast json).advancedOptionFlags;
+		if( json.flags!=null )
+			for(f in json.flags ) {
+				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
+					catch(_) null;
+
+				if( ev!=null )
+					p.flags.set(ev, true);
+			}
+
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
@@ -254,25 +266,28 @@ class Project {
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
-		for( lvlJson in JsonTools.readArray(json.levels) )
-			p.levels.push( Level.fromJson(p, lvlJson) );
-
-		if( (cast json).advancedOptionFlags!=null )
-			json.flags = (cast json).advancedOptionFlags;
-		if( json.flags!=null )
-			for(f in json.flags ) {
-				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
-					catch(_) null;
-
-				if( ev!=null )
-					p.flags.set(ev, true);
-			}
+		// Levels
+		if( p.hasFlag(MultiWorlds) )
+			for( lvlJson in JsonTools.readArray(json.worlds[0].levels) )
+				p.levels.push( Level.fromJson(p, lvlJson) );
+		else
+			for( lvlJson in JsonTools.readArray(json.levels) )
+				p.levels.push( Level.fromJson(p, lvlJson) );
 
 		// World
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
-		p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-		p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
-		p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
+		if( p.hasFlag(MultiWorlds) ) {
+			var worldJson = json.worlds[0];
+			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, worldJson.worldLayout, false, defLayout );
+			p.worldGridWidth = JsonTools.readInt( worldJson.worldGridWidth, p.defaultLevelWidth );
+			p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
+		}
+		else {
+			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
+			p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
+			p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
+		}
+
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
 			p.reorganizeWorld();
 
@@ -453,9 +468,9 @@ class Project {
 			appBuildId: Const.getAppBuildId(),
 			nextUid: nextUid,
 
-			worldLayout: JsonTools.writeEnum(worldLayout, false),
-			worldGridWidth: worldGridWidth,
-			worldGridHeight: worldGridHeight,
+			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
+			worldGridWidth: hasFlag(MultiWorlds) ? null : worldGridWidth,
+			worldGridHeight: hasFlag(MultiWorlds) ? null : worldGridHeight,
 
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
@@ -483,9 +498,18 @@ class Project {
 			},
 
 			defs: defs.toJson(this),
-			levels: levels.map( (l)->l.toJson() ),
+			levels: hasFlag(MultiWorlds) ? [] : levels.map( (l)->l.toJson() ),
 
-			worlds: [],
+			worlds: !hasFlag(MultiWorlds) ? [] : [
+				{
+					worldLayout: JsonTools.writeEnum(worldLayout, false),
+					worldGridWidth: worldGridWidth,
+					worldGridHeight: worldGridHeight,
+					iid: "TODO",
+					identifier: "TODO",
+					levels: levels.map( (l)->l.toJson() ),
+				}
+			],
 		}
 
 		return json;
