@@ -137,24 +137,28 @@ class EntityRender extends dn.Process {
 						tt.y = -h*ed.pivotY;
 
 					case Cover:
-						var bmp = new h2d.Bitmap(t, wrapper);
+						var bmp = new h2d.Bitmap(wrapper);
 						bmp.alpha = alpha;
 
-						var s = M.fmax(w / bmp.tile.width, h / bmp.tile.height);
-						bmp.setScale(s);
-						bmp.tile = bmp.tile.sub(
-							0, 0,
-							M.fmin( bmp.tile.width*s, w ) / s,
-							M.fmin( bmp.tile.height*s, h ) / s
+						var s = M.fmax(w / t.width, h / t.height);
+						final fw = M.fmin(w, t.width*s) / s;
+						final fh = M.fmin(h, t.height*s) / s;
+						bmp.tile = t.sub(
+							t.width*ed.pivotX - fw*ed.pivotX,
+							t.height*ed.pivotY - fh*ed.pivotY,
+							fw,fh
 						);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.setScale(s);
 
 					case FullSizeCropped:
 						var bmp = new h2d.Bitmap(wrapper);
+						final fw = M.fmin(w, t.width);
+						final fh = M.fmin(h, t.height);
 						bmp.tile = t.sub(
-							t.width*ed.pivotX + (w-t.width)*ed.pivotX,
-							t.height*ed.pivotY + (h-t.height)*ed.pivotY,
-							w, h
+							t.width*ed.pivotX - fw*ed.pivotX,
+							t.height*ed.pivotY - fh*ed.pivotY,
+							fw, fh
 						);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
