@@ -180,6 +180,9 @@ class JsTools {
 							var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
 							scaleX = s;
 							scaleY = s;
+
+						case FullSizeCropped:
+						case FullSizeUncropped:
 					}
 					td.drawTileRectToCanvas(jCanvas, ed.tileRect, x,y, scaleX, scaleY);
 				}

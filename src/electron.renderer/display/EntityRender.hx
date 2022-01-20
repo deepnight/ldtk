@@ -148,6 +148,21 @@ class EntityRender extends dn.Process {
 							M.fmin( bmp.tile.height*s, h ) / s
 						);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+
+					case FullSizeCropped:
+						var bmp = new h2d.Bitmap(wrapper);
+						bmp.tile = t.sub(
+							t.width*ed.pivotX + (w-t.width)*ed.pivotX,
+							t.height*ed.pivotY + (h-t.height)*ed.pivotY,
+							w, h
+						);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.alpha = alpha;
+
+					case FullSizeUncropped:
+						var bmp = new h2d.Bitmap(t, wrapper);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.alpha = alpha;
 				}
 			}
 		}
