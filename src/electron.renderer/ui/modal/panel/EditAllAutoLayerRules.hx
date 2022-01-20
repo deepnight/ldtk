@@ -911,12 +911,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
-		new ui.modal.dialog.Confirm( Lang.t._("Warning, this cannot be undone!"), true, function() {
-			App.LOG.general("Deleted rule "+r);
-			invalidateRuleAndOnesBelow(r);
-			rg.rules.remove(r);
-			editor.ge.emit( LayerRuleRemoved(r) );
-		});
+		App.LOG.general("Deleted rule "+r);
+		invalidateRuleAndOnesBelow(r);
+		rg.rules.remove(r);
+		editor.ge.emit( LayerRuleRemoved(r) );
 	}
 
 
