@@ -269,20 +269,18 @@ class Project {
 		p.defs = Definitions.fromJson(p, json.defs);
 
 		if( p.hasFlag(MultiWorlds) ) {
-			// Multi-worlds
+			// Read worlds
 			for( worldJson in JsonTools.readArray(json.worlds) )
 				p.worlds.push( World.fromJson(p, worldJson) );
 
-			// HACK: read levels from World[0]
-			for( lvlJson in JsonTools.readArray(json.worlds[0].levels) )
-				p.levels.push( Level.fromJson(p, lvlJson) );
+			p.levels = p.worlds[0].levels; // HACK point root levels to world[0] levels
 		}
 		else {
 			// Levels (from json root)
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				p.levels.push( Level.fromJson(p, lvlJson) );
 
-			p.createWorld();
+			p.createWorld(); // dummy
 		}
 
 		// World settings
