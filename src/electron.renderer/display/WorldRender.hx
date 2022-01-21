@@ -1,11 +1,17 @@
 package display;
 
 typedef WorldLevelRender = {
+	var uid : Int;
 	var rect : misc.WorldRect;
+
 	var bgWrapper: h2d.Object;
 	var outline: h2d.Graphics;
 	var render: h2d.Object;
 	var identifier: h2d.ScaleGrid;
+
+	var renderInvalidated: Bool;
+	var fieldsInvalidated: Bool;
+	var identifierInvalidated: Bool;
 }
 
 class WorldRender extends dn.Process {
@@ -34,9 +40,6 @@ class WorldRender extends dn.Process {
 	var fieldsWrapper : h2d.Object;
 	var fieldRenders : Map<Int, { customFields:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
-	var levelRenderInvalidations : Map<Int,Bool> = new Map();
-	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
-	var levelIdentifiersInvalidation : Map<Int,Bool> = new Map();
 	var invalidatedCameraBasedRenders = true;
 
 
@@ -122,8 +125,6 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				updateAxesPos();
 				invalidateCameraBasedRenders();
-				for(wl in worldLevels)
-					trace(wl.rect);
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -295,7 +296,9 @@ class WorldRender extends dn.Process {
 	}
 
 	public inline function invalidateLevelRender(l:data.Level) {
-		levelRenderInvalidations.set(l.uid, true);
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.renderInvalidated = true;
 	}
 	public inline function invalidateAllLevelRenders() {
 		for(l in project.levels)
@@ -304,7 +307,9 @@ class WorldRender extends dn.Process {
 
 
 	public inline function invalidateLevelFields(l:data.Level) {
-		levelFieldsInvalidation.set(l.uid, true);
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.fieldsInvalidated = true;
 	}
 	public inline function invalidateAllLevelFields() {
 		for(l in project.levels)
@@ -312,7 +317,9 @@ class WorldRender extends dn.Process {
 	}
 
 	public inline function invalidateLevelIdentifier(l:data.Level) {
-		levelIdentifiersInvalidation.set(l.uid, true);
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.identifierInvalidated = true;
 	}
 	public inline function invalidateAllLevelIdentifiers() {
 		for(l in project.levels)
@@ -356,11 +363,17 @@ class WorldRender extends dn.Process {
 	function getWorldLevel(l:data.Level) : WorldLevelRender {
 		if( !worldLevels.exists(l.uid) ) {
 			var wl : WorldLevelRender = {
+				uid: l.uid,
+
 				rect: WorldRect.fromLevel(l),
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				outline : new h2d.Graphics(),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
+
+				renderInvalidated: true,
+				fieldsInvalidated: true,
+				identifierInvalidated: true,
 			}
 			worldLevels.set(l.uid, wl);
 			applyWorldDepth(l);
@@ -952,8 +965,6 @@ class WorldRender extends dn.Process {
 
 		Chrono.init();
 
-		var limit = 0;
-
 		// Fade bg
 		var ta = ( editor.worldMode ? 0.3 : 0 );
 		if( worldBg.wrapper.alpha!=ta ) {
@@ -976,57 +987,45 @@ class WorldRender extends dn.Process {
 			}
 
 		// World levels rendering (max one per frame)
-		Chrono.start("levelRenders", true);
-		if( !cd.hasSetS("levelRendersLock", 0.1) ) {
-			limit = 1;
+		Chrono.start("unifiedRenders", true);
+		if( !cd.hasSetS("levelRendersLock", 0.08) ) {
+			var limitRenders = 1;
+			var limitOthers = 5;
 			if( !waitTileset ) {
 				var l : data.Level = null;
-				for( uid in levelRenderInvalidations.keys() ) {
-					l = editor.project.getLevel(uid);
+				for( wl in worldLevels ) {
+					if( !camera.isOnScreenWorldRect(wl.rect) )
+						continue;
+
+					l = editor.project.getLevel(wl.uid);
 					if( l==null ) {
 						// Drop lost levels
-						removeWorldLevel(uid);
-						levelRenderInvalidations.remove(uid);
+						removeWorldLevel(wl.uid);
 						continue;
 					}
-					if( !camera.isOnScreenLevel(l) )
-						continue;
-					levelRenderInvalidations.remove(uid);
-					renderLevel(l);
-					updateLayout();
-					if( --limit<=0 )
-						break;
+
+					// Level render
+					if( wl.renderInvalidated && limitRenders-->0 ) {
+						wl.renderInvalidated = false;
+						renderLevel(l);
+						updateLayout();
+					}
+
+					// Fields
+					if( wl.fieldsInvalidated && editor.worldMode && limitOthers-->0 ) {
+						wl.fieldsInvalidated = false;
+						renderFields(l);
+					}
+
+					// Level identifiers
+					if( wl.identifierInvalidated && limitOthers-->0 ) {
+						wl.identifierInvalidated = false;
+						updateLevelIdentifier( l, true );
+					}
 				}
 			}
 		}
 
-
-		// Fields
-		Chrono.start("fields", true);
-		if( !cd.hasSetS("fieldRendersLock",0.08) ) {
-			limit = 5;
-			for( uid in levelFieldsInvalidation.keys() ) {
-				if( !editor.worldMode && editor.curLevel.uid!=uid )
-					continue;
-				levelFieldsInvalidation.remove(uid);
-				renderFields( editor.project.getLevel(uid) );
-				if( --limit<=0 )
-					break;
-			}
-		}
-
-
-		// Identifiers
-		Chrono.start("identifiers", true);
-		if( editor.worldMode ) {
-			limit = 10;
-			for( uid in levelIdentifiersInvalidation.keys() ) {
-				levelIdentifiersInvalidation.remove(uid);
-				updateLevelIdentifier( editor.project.getLevel(uid), true );
-				if( --limit<=0 )
-					break;
-			}
-		}
 
 		// Refresh elements which thickness is linked to camera zoom
 		Chrono.start("outlines", true);
