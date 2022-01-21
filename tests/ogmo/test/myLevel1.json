@@ -23,7 +23,7 @@
           "y": 112,
           "originX": 0,
           "originY": 0,
-          "values": {"myBool": true, "myColor": "#aedb4aff", "myEnum": "C", "myFloat": 0.5, "myFilePath": "proj:", "myInt": 5, "myString": "pouet", "myText": "hey \nhello\npouet"}
+          "values": {"myBool": true, "myColor": "#aedb4aff", "myEnum": "C", "myFloat": 0.5, "myInt": 5, "myString": "pouet", "myText": "hey \nhello\npouet", "myPath": "proj:atlas/Inca_back2_by_Kronbits.png"}
         },
         {
           "name": "resizable",
@@ -48,6 +48,16 @@
           "originX": 0,
           "originY": 0,
           "values": {"someString": "world"}
+        },
+        {
+          "name": "foo",
+          "id": 17,
+          "_eid": "74377636",
+          "x": 144,
+          "y": 48,
+          "originX": 0,
+          "originY": 0,
+          "values": {"myBool": false, "myColor": "#000000ff", "myEnum": "A", "myFloat": 0, "myInt": 0, "myString": "", "myText": "line1\nline2", "myPath": "lvl:atlas/Inca_back2_by_Kronbits.png"}
         }
       ]
     },

@@ -117,26 +117,26 @@
       "nodeGhost": true,
       "tags": ["base"],
       "values": [
-        {"name": "myBool", "definition": "Boolean", "display": 2, "defaults": false},
-        {"name": "myColor", "definition": "Color", "display": 1, "defaults": "#000000ff", "includeAlpha": false},
+        {"name": "myBool", "definition": "Boolean", "display": 0, "defaults": false},
+        {"name": "myColor", "definition": "Color", "display": 0, "defaults": "#000000ff", "includeAlpha": false},
         {
           "name": "myEnum",
           "definition": "Enum",
-          "display": 2,
+          "display": 0,
           "choices": ["A", "B", "C"],
           "defaults": 0
         },
         {"name": "myFloat", "definition": "Float", "display": 0, "defaults": 0, "bounded": true, "min": 0, "max": 1},
+        {"name": "myInt", "definition": "Integer", "display": 0, "defaults": 0, "bounded": true, "min": 0, "max": 100},
+        {"name": "myString", "definition": "String", "display": 0, "defaults": "", "maxLength": 0, "trimWhitespace": true},
+        {"name": "myText", "definition": "Text", "display": 0, "defaults": "line1\nline2"},
         {
-          "name": "myFilePath",
+          "name": "myPath",
           "definition": "Filepath",
           "display": 0,
           "defaults": "proj:",
-          "extensions": ["png", "gif", "jpg"]
-        },
-        {"name": "myInt", "definition": "Integer", "display": 1, "defaults": 0, "bounded": true, "min": 0, "max": 100},
-        {"name": "myString", "definition": "String", "display": 1, "defaults": "", "maxLength": 0, "trimWhitespace": true},
-        {"name": "myText", "definition": "Text", "display": 1, "defaults": "line1\nline2"}
+          "extensions": ["png", "gif", "jpg", "jpeg", "aseprite", "ase"]
+        }
       ]
     }
   ],
