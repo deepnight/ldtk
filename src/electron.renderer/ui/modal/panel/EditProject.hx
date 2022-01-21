@@ -302,7 +302,6 @@ class EditProject extends ui.modal.Panel {
 				case ExportPreCsvIntGridFormat:
 					jLabel.text("Export legacy pre-CSV IntGrid layers data");
 					_setDesc( L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less.") );
-					// jInput.attr("title", L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less."));
 
 				case PrependIndexToLevelFileNames:
 					jLabel.text("Prefix level file names with their index in array");
