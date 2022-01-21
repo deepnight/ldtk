@@ -5605,15 +5605,33 @@ dl.form.fieldInstanceEditor {
 			ul.advFlags {
 				padding-bottom: 48px;
 				li {
-					display: flex;
-					flex-wrap: nowrap;
+					display: grid;
+					column-gap: 8px;
+					grid-template-columns: min-content auto;
 					align-items: center;
-					label {
-						flex: 1 0 auto !important;
-						margin: 0;
-						margin-left: 8px;
-						text-transform: none;
+					margin-bottom: 8px;
+
+					input {
 						cursor: pointer;
+					}
+
+					label {
+						margin: 0;
+						text-transform: none;
+						font-weight: bold;
+						color: white;
+						cursor: pointer;
+					}
+					.desc {
+						grid-column: 2/3;
+						font-size: 0.85em;
+						color: $almostWhite;
+						p {
+							margin: 0;
+						}
+						p+p {
+							margin-top: 4px;
+						}
 					}
 				}
 			}

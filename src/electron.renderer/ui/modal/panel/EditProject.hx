@@ -168,6 +168,10 @@ class EditProject extends ui.modal.Panel {
 		jForm.find(".externRecommend").css("visibility", project.levels.length>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
+		i.onValueChange = (v)->{
+			if( v )
+				project.setFlag(MultiWorlds, false); // unsupported
+		}
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
@@ -278,37 +282,46 @@ class EditProject extends ui.modal.Panel {
 		}
 		var jAdvancedFlags = jAdvanceds.find("ul.advFlags");
 		jAdvancedFlags.empty();
-		for( e in allAdvancedOptions ) {
+		for( flag in allAdvancedOptions ) {
 			var jLi = new J('<li/>');
 			jLi.appendTo(jAdvancedFlags);
 
-			var jInput = new J('<input type="checkbox" id="$e"/>');
+			var jInput = new J('<input type="checkbox" id="$flag"/>');
 			jInput.appendTo(jLi);
 
-			var jLabel = new J('<label for="$e"/>');
+			var jLabel = new J('<label for="$flag"/>');
 			jLabel.appendTo(jLi);
-			switch e {
+			var jDesc = new J('<div class="desc"/>');
+			jDesc.appendTo(jLi);
+			inline function _setDesc(str) {
+				jDesc.html('<p>'+str.split("\n").join("</p><p>")+'</p>');
+			}
+			switch flag {
 				case ExportPreCsvIntGridFormat:
 					jLabel.text("Export legacy pre-CSV IntGrid layers data");
-					jInput.attr("title", L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less."));
+					_setDesc( L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less.") );
+					// jInput.attr("title", L.t._("If enabled, the exported JSON file will also contain the now deprecated array \"intGrid\". The file will be significantly larger.\nOnly use this if your game API only supports LDtk 0.8.x or less."));
 
 				case PrependIndexToLevelFileNames:
 					jLabel.text("Prefix level file names with their index in array");
-					jInput.attr("title", L.t._("If enabled, external level file names will be prefixed with an index reflecting their position in the internal array.\nThis is NOT recommended because, with versioning systems (such as GIT), inserting a new level means renaming files of all subsequent levels in the array.\nThis option used to be the default behavior but was changed in version 0.10.0."));
+					_setDesc( L.t._("If enabled, external level file names will be prefixed with an index reflecting their position in the internal array.\nThis is NOT recommended because, with versioning systems (such as GIT), inserting a new level means renaming files of all subsequent levels in the array.\nThis option used to be the default behavior but was changed in version 0.10.0.") );
 
 				case MultiWorlds:
 					jLabel.text("Multi-worlds support");
-					jInput.attr("title", L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly."));
+					_setDesc( L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly.\nThis option is still experimental and is not yet supported if Separate Levels option is enabled.") );
+
+					if( project.externalLevels )
+						jInput.prop("disabled",true);
 
 				case _:
 			}
 
 			var i = new form.input.BoolInput(
 				jInput,
-				()->project.hasFlag(e),
+				()->project.hasFlag(flag),
 				(v)->{
 					editor.invalidateAllLevelsCache();
-					project.setFlag(e, v);
+					project.setFlag(flag, v);
 					editor.ge.emit(ProjectSettingsChanged);
 				}
 			);
