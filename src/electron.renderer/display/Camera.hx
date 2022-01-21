@@ -32,12 +32,20 @@ class Camera extends dn.Process {
 			return js.Browser.window.devicePixelRatio;
 		}
 
+	var _cachedCanvasWidth = -1.;
+	var _cachedCanvasHeight = -1.;
+
+	var canvasWidth(get,never) : Float;
+		inline function get_canvasWidth() return _cachedCanvasWidth<=0 ? _cachedCanvasWidth = App.ME.jCanvas.outerWidth() : _cachedCanvasWidth;
+
+	var canvasHeight(get,never) : Float;
+		inline function get_canvasHeight() return _cachedCanvasHeight<=0 ? _cachedCanvasHeight = App.ME.jCanvas.outerHeight() : _cachedCanvasHeight;
 
 	public var width(get,never) : Float;
-		inline function get_width() return App.ME.jCanvas.outerWidth() * pixelRatio;
+		inline function get_width() return canvasWidth * pixelRatio;
 
 	public var height(get,never) : Float;
-		inline function get_height() return App.ME.jCanvas.outerHeight() * pixelRatio;
+		inline function get_height() return canvasHeight * pixelRatio;
 
 	public var iWidth(get,never) : Int;
 		inline function get_iWidth() return M.ceil(width);
@@ -71,9 +79,14 @@ class Camera extends dn.Process {
 
 	public function new() {
 		super(Editor.ME);
+
 		worldX = worldY = 0;
 		setZoom(3);
 		editor.ge.addGlobalListener(onGlobalEvent);
+	}
+
+	public inline function invalidateCanvasSize() {
+		_cachedCanvasWidth = _cachedCanvasHeight = -1;
 	}
 
 
@@ -288,6 +301,10 @@ class Camera extends dn.Process {
 
 	public inline function isOnScreenLevel(l:data.Level, padding=0.) {
 		return isOnScreenRect(l.worldX, l.worldY, l.pxWid, l.pxHei, padding);
+	}
+
+	public inline function isOnScreenWorldRect(r:WorldRect, padding=0.) {
+		return !( r.right<left || r.left>right || r.bottom<top || r.top>bottom );
 	}
 
 	public inline function isOnScreenRect(wx:Float, wy:Float, wid:Float, hei:Float, padding=0.) {

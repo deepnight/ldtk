@@ -1839,6 +1839,7 @@ class Editor extends Page {
 		App.ME.jCanvas.show();
 		App.ME.jCanvas.css("left", panelWid+"px");
 		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
+		camera.invalidateCanvasSize();
 	}
 
 	function updateAppBg() {
