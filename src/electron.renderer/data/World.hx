@@ -20,6 +20,12 @@ class World {
 		worldLayout = Free;
 	}
 
+	@:keep
+	public function toString() {
+		return Type.getClassName( Type.getClass(this) ) + '.$identifier (${levels.length} levels)';
+	}
+
+
 	public function toJson() : ldtk.Json.WorldJson {
 		return {
 			iid: iid,
@@ -30,6 +36,7 @@ class World {
 			levels: levels.map( l->l.toJson() ),
 		}
 	}
+
 
 	public static function fromJson(p:Project, json:ldtk.Json.WorldJson) : World {
 		if( json.iid==null )
@@ -51,6 +58,7 @@ class World {
 
 		return w;
 	}
+
 
 	public function tidy(p:Project) {
 		_project = p;
