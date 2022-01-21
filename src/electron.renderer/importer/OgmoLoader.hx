@@ -299,6 +299,7 @@ class OgmoLoader {
 				// Create base level
 				var level = p.createLevel();
 				level.identifier = data.Project.cleanupIdentifier(fp.fileName,true);
+				level.useAutoIdentifier = false;
 				level.pxWid = levelJson.width;
 				level.pxHei = levelJson.height;
 				// TODO add level offset to layers
