@@ -941,16 +941,17 @@ class WorldRender extends dn.Process {
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
 		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
 
-		if( !cd.hasSetS("levelRenderLock", 0.1) ) {
-			// Check if a tileset is being loaded
-			var waitTileset = false;
-			for(td in project.defs.tilesets)
-				if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
-					waitTileset = true;
-					break;
-				}
 
-			// World levels rendering (max one per frame)
+		// Check if a tileset is being loaded
+		var waitTileset = false;
+		for(td in project.defs.tilesets)
+			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+				waitTileset = true;
+				break;
+			}
+
+		// World levels rendering (max one per frame)
+		if( !cd.hasSetS("levelRenderLock", 0.1) ) {
 			limit = 1;
 			if( !waitTileset ) {
 				var l : data.Level = null;
