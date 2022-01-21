@@ -963,7 +963,7 @@ class WorldRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		Chrono.init();
+		// Chrono.init();
 
 		// Fade bg
 		var ta = ( editor.worldMode ? 0.3 : 0 );
@@ -978,7 +978,7 @@ class WorldRender extends dn.Process {
 
 
 		// Check if a tileset is being loaded
-		Chrono.start("tilesets", true);
+		// Chrono.start("tilesets", true);
 		var waitTileset = false;
 		for(td in project.defs.tilesets)
 			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
@@ -987,7 +987,7 @@ class WorldRender extends dn.Process {
 			}
 
 		// World levels rendering (max one per frame)
-		Chrono.start("unifiedRenders", true);
+		// Chrono.start("unifiedRenders", true);
 		if( !cd.hasSetS("levelRendersLock", 0.08) ) {
 			var limitRenders = 1;
 			var limitOthers = 5;
@@ -1028,7 +1028,7 @@ class WorldRender extends dn.Process {
 
 
 		// Refresh elements which thickness is linked to camera zoom
-		Chrono.start("outlines", true);
+		// Chrono.start("outlines", true);
 		if( editor.worldMode && invalidatedCameraBasedRenders && !cd.hasSetS("boundsRender",0.15) ) {
 			invalidatedCameraBasedRenders = false;
 			renderGrids();
@@ -1037,7 +1037,7 @@ class WorldRender extends dn.Process {
 				updateLevelBounds(l);
 		}
 
-		App.ME.debugPre( Chrono.getResultsStr().join("\n"), true );
+		// App.ME.debugPre( Chrono.getResultsStr().join("\n"), true );
 	}
 
 }
