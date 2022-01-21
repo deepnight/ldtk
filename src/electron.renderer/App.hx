@@ -641,6 +641,8 @@ class App extends dn.Process {
 			(err)->{
 				// Failed
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
+				if( err==ProjectNotFound )
+					unregisterRecentProject(filePath);
 				loadPage( ()->new page.Home() );
 			}
 		);
