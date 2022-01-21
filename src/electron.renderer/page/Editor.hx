@@ -12,6 +12,9 @@ class Editor extends Page {
 	var jDepths : js.jquery.JQuery;
 
 
+	public var curWorld(get,never) : data.World;
+		inline function get_curWorld() return project==null ? null : project.getWorldIid(curWorldIid);
+
 	public var curLevel(get,never) : data.Level;
 		inline function get_curLevel() return project==null ? null : project.getLevel(curLevelId);
 
@@ -25,6 +28,7 @@ class Editor extends Page {
 	public var ge : GlobalEventDispatcher;
 	public var watcher : misc.FileWatcher;
 	public var project : data.Project;
+	public var curWorldIid : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
 
@@ -313,7 +317,7 @@ class Editor extends Page {
 		}
 
 
-
+		curWorldIid = project.worlds[0].iid;
 		curLevelId = project.levels[0].uid;
 		curLayerDefUid = -1;
 
