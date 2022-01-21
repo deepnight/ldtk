@@ -3393,6 +3393,37 @@ canvas#webgl {
 }
 
 #page.editor {
+
+	#glCtxLost {
+		display: none;
+		position: absolute;
+		align-items: center;
+		justify-content: center;
+		z-index: 3;
+
+		width: 300px;
+		height: 40px;
+		left: calc(50vw - 150px);
+		top: calc(50vh - 20px);
+		padding: 16px;
+
+		color: $red;
+
+		border: 1px solid $red;
+		border-radius: 4px;
+		box-shadow: 0px 0px 32px $darkRed inset;
+		background-color: black;
+	}
+
+	@at-root body.noGlCtx #page.editor {
+		#glCtxLost {
+			display: grid;
+		}
+		canvas {
+			cursor: not-allowed !important;
+		}
+	}
+
 	#permanentNotifications {
 		position: absolute;
 		top: 0;
