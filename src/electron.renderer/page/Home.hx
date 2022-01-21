@@ -447,7 +447,7 @@ class Home extends Page {
 		#end
 
 		dn.js.ElectronDialogs.openFile([".ogmo"], dir, function(filePath) {
-			var i = new importer.OgmoProject(filePath);
+			var i = new importer.OgmoLoader(filePath);
 			new ui.modal.dialog.LockMessage(L.t._("Importing OGMO 3 project..."), ()->{
 				var p = i.load();
 				i.log.printAllToLog(App.LOG);

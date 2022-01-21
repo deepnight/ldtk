@@ -2,7 +2,7 @@ package importer;
 
 import dn.M;
 
-class OgmoProject {
+class OgmoLoader {
 	static var MIN_VERSION = "3.3";
 
 	public var log : dn.Log;
