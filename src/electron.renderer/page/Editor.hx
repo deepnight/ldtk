@@ -241,6 +241,9 @@ class Editor extends Page {
 		// Option checkboxes
 		updateEditOptions();
 
+		// World depths
+		jDepths.hide();
+
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
 			var e = new J(ev.target);
@@ -828,7 +831,7 @@ class Editor extends Page {
 	}
 
 	function onMouseDown(ev:hxd.Event) {
-		if( isLocked() )
+		if( isLocked() || !App.ME.hasGlContext )
 			return;
 
 		var m = getMouse();
@@ -889,6 +892,9 @@ class Editor extends Page {
 	}
 
 	function onMouseMove(ev:hxd.Event) {
+		if( !App.ME.hasGlContext )
+			return;
+
 		var m = getMouse();
 
 		if( !isLocked() ) {

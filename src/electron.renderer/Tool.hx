@@ -69,7 +69,7 @@ class Tool<T> extends dn.Process {
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
-	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
+	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible() && App.ME.hasGlContext;
 	public function isRunning() return curMode!=null;
 
 	public function startUsing(ev:hxd.Event, m:Coords) {
