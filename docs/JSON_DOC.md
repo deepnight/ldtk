@@ -12,6 +12,7 @@
        - [Auto-layer rule definition](#ldtk-AutoRuleDef)
      - [Entity definition](#ldtk-EntityDefJson)
        - [Field definition](#ldtk-FieldDefJson)
+       - [Atlas tile rectangle](#ldtk-AtlasTileRect)
      - [Tileset definition](#ldtk-TilesetDefJson)
      - [Enum definition](#ldtk-EnumDefJson)
        - [Enum value definition](#ldtk-EnumDefValues)
@@ -45,7 +46,7 @@ Value | Type | Description
 `defaultPivotX`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default Y pivot (0 to 1) for new entities
 `exportTiled`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
-`flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`
+`flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`
 `imageExportMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.3-gray.svg)  | Enum | "Image export" option when saving project.<br/> Possible values: `None`, `OneImagePerLayer`, `OneImagePerLevel`
 `levelNamePattern`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | String | The default naming convention for level identifiers.
 `minifyJson`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
@@ -164,7 +165,7 @@ Value | Type | Description
 -- | -- | --
 `__identifier` | String | Field definition identifier
 `__type` | String | Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.
-`__value` | Dynamic&nbsp;(anything) | Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>		It can also be an `Array` of those same types.
+`__value` | Dynamic&nbsp;(anything) | Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>		It can also be an `Array` of those same types.<br/>		For tiles, the value will be of `FieldInstanceTile` type.
 `defUid` | Int | Reference of the **Field definition** UID
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
@@ -248,7 +249,7 @@ Value | Type | Description
 `identifier` | String | User defined unique identifier
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
-`tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tile ID used for optional tile display
+`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | [Atlas&nbsp;tile&nbsp;rectangle](#ldtk-AtlasTileRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of 4 values (`[x,y,width,height]` in pixels) describing a sub rectangle from the tileset pointed by `tilesetId`.
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
@@ -265,7 +266,8 @@ Value | Type | Description
 `resizableY`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
-`tileRenderMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
+`tileRenderMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`
+~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 0.12.0+<br/> <br/> Replaced by: `tileRect`
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>
 ## 3.2.1. Field definition  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) 
@@ -284,7 +286,7 @@ Value | Type | Description
 `max`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
 `min`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min limit for value, if applicable
 `regex`<br/><sup class="only">Only *String*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional "i" flag.
-`type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Internal type enum<br/> Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+`type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Internal type enum<br/> Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
 `uid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Unique Int identifier
 `allowOutOfLevelRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Bool | 
 `allowedRefTags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Array&nbsp;of&nbsp;String | 
@@ -297,7 +299,19 @@ Value | Type | Description
 `editorTextSuffix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `symmetricalRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Bool | 
 `textLanguageMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.9.3-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
+`tilesetUid`<br/><sup class="only">Only *Tile*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | UID of the tileset used for a Tile
 `useForSmartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg)  | Bool | If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.
+
+<a id="ldtk-AtlasTileRect" name="ldtk-AtlasTileRect"></a>
+## 3.2.2. Atlas tile rectangle  ![Generic badge](https://img.shields.io/badge/Added_0.10.0-green.svg) 
+An array of 4 integers (`[x,y,width,height]` in pixels) representing a custom rectangle from a Tileset image.
+
+Value | Type | Description
+-- | -- | --
+`h` | Int | 
+`w` | Int | 
+`x` | Int | X pixel coord of the tile in the Tileset atlas
+`y` | Int | Y pixel coord of the tile in the Tileset atlas
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 3.3. Tileset definition   

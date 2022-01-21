@@ -121,12 +121,13 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`",
 				"items": {
 					"enum": [
 						"ExportPreCsvIntGridFormat",
 						"IgnoreBackupSuggest",
-						"PrependIndexToLevelFileNames"
+						"PrependIndexToLevelFileNames",
+						"MultiWorlds"
 					]
 				},
 				"type": [
@@ -251,7 +252,7 @@
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of those same types."
+					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of those same types.<br/>  For tiles, the value will be of `FieldInstanceTile` type."
 				}
 			},
 			"type": [
@@ -301,7 +302,7 @@
 							]
 						},
 						{
-							"$ref": "#/otherTypes/EntityInstanceTile"
+							"$ref": "#/otherTypes/FieldInstanceTile"
 						}
 					]
 				},
@@ -748,6 +749,13 @@
 						"boolean"
 					]
 				},
+				"tilesetUid": {
+					"description": "UID of the tileset used for a Tile",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"allowedRefTags": {
 					"description": "",
 					"items": {
@@ -837,7 +845,7 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`",
+					"description": "Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`",
 					"enum": [
 						"F_Int",
 						"F_Float",
@@ -848,7 +856,8 @@
 						"F_Enum",
 						"F_Point",
 						"F_Path",
-						"F_EntityRef"
+						"F_EntityRef",
+						"F_Tile"
 					]
 				},
 				"identifier": {
@@ -897,7 +906,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "Tile ID used for optional tile display",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.12.0+  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -954,6 +963,19 @@
 						"string"
 					]
 				},
+				"tileRect": {
+					"description": "An array of 4 values (`[x,y,width,height]` in pixels) describing a sub rectangle from the tileset pointed by `tilesetId`.",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/AtlasTileRect"
+						}
+					]
+				},
 				"fieldDefs": {
 					"description": "Array of field definitions",
 					"items": {
@@ -964,12 +986,14 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`",
+					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`",
 					"enum": [
 						"Cover",
 						"FitInside",
 						"Repeat",
-						"Stretch"
+						"Stretch",
+						"FullSizeCropped",
+						"FullSizeUncropped"
 					]
 				},
 				"limitBehavior": {
@@ -1115,28 +1139,37 @@
 				"object"
 			]
 		},
-		"EntityInstanceTile": {
-			"description": "Tile data in an Entity instance",
-			"title": "Entity instance tile",
+		"AtlasTileRect": {
+			"description": "An array of 4 integers (`[x,y,width,height]` in pixels) representing a custom rectangle from a Tileset image.",
+			"title": "Atlas tile rectangle",
 			"required": [
-				"srcRect",
-				"tilesetUid"
+				"h",
+				"w",
+				"x",
+				"y"
 			],
 			"additionalProperties": false,
 			"properties": {
-				"srcRect": {
-					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
-					"items": {
-						"type": [
-							"integer"
-						]
-					},
+				"h": {
+					"description": "",
 					"type": [
-						"array"
+						"integer"
 					]
 				},
-				"tilesetUid": {
-					"description": "Tileset ID",
+				"x": {
+					"description": "X pixel coord of the tile in the Tileset atlas",
+					"type": [
+						"integer"
+					]
+				},
+				"y": {
+					"description": "Y pixel coord of the tile in the Tileset atlas",
+					"type": [
+						"integer"
+					]
+				},
+				"w": {
+					"description": "",
 					"type": [
 						"integer"
 					]
@@ -1459,6 +1492,37 @@
 					"description": "User defined unique identifier",
 					"type": [
 						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"FieldInstanceTile": {
+			"description": "Tile data in an Field instance",
+			"title": "Field instance tile",
+			"required": [
+				"srcRect",
+				"tilesetUid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"srcRect": {
+					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"tilesetUid": {
+					"description": "Tileset ID",
+					"type": [
+						"integer"
 					]
 				}
 			},
