@@ -519,7 +519,7 @@ class Editor extends Page {
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
-		if( isLocked() ) {
+		if( cd.has("debugLock") ) {
 			#if debug
 			if( keyCode==K.L && App.ME.isCtrlDown() && App.ME.isShiftDown() ) {
 				cd.unset("debugLock");
