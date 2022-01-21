@@ -780,6 +780,35 @@ class Project {
 	}
 
 
+	/**  WORLDS  **************************************/
+
+	public function createWorld() : World {
+		var w = new data.World(this, generateUniqueId_UUID(), "World");
+		w.identifier = fixUniqueIdStr( w.identifier, (id)->isWorldIdentifierUnique(id,w) );
+		worlds.push(w);
+		return w;
+	}
+
+	public function isWorldIdentifierUnique(id:String, ?exclude:World) {
+		id = cleanupIdentifier(id,true);
+		for(w in worlds)
+			if( w.identifier==id && w!=exclude )
+				return false;
+		return true;
+	}
+
+	public function getWorldIid(iid:String) : Null<World> {
+		for(w in worlds)
+			if( w.iid==iid )
+				return w;
+		return null;
+	}
+
+	public inline function getWorldIndex(idx:Int) : Null<World> {
+		return worlds[idx];
+	}
+
+
 	/**  LEVELS  *****************************************/
 
 	public function createLevel(?insertIdx:Int) {
@@ -888,14 +917,6 @@ class Project {
 		}
 		else
 			return false;
-	}
-
-	public function isWorldIdentifierUnique(id:String, ?exclude:World) {
-		id = cleanupIdentifier(id,true);
-		for(w in worlds)
-			if( w.identifier==id && w!=exclude )
-				return false;
-		return true;
 	}
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {

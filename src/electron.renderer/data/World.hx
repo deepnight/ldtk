@@ -1,6 +1,8 @@
 package data;
 
 class World {
+	var _project : data.Project;
+
 	public var iid : String;
 	public var identifier : String;
 	public var levels : Array<Level> = [];
@@ -8,7 +10,15 @@ class World {
 	public var worldGridHeight : Int;
 	public var worldLayout : ldtk.Json.WorldLayout;
 
-	function new(p:Project) {}
+
+	public function new(p:Project, iid:String, identifier:String) {
+		_project = p;
+		this.iid = iid;
+		this.identifier = identifier;
+		worldGridWidth = p.defaultLevelWidth;
+		worldGridHeight= p.defaultLevelHeight;
+		worldLayout = Free;
+	}
 
 	public function toJson() : ldtk.Json.WorldJson {
 		return {
@@ -26,9 +36,9 @@ class World {
 			json.iid = p.generateUniqueId_UUID();
 
 		if( json.identifier==null )
-			json.identifier = p.fixUniqueIdStr("World", (id)->p.isWorldIdentifierUnique(id)); 
+			json.identifier = p.fixUniqueIdStr("World", (id)->p.isWorldIdentifierUnique(id));
 
-		var w = new World(p);
+		var w = new World(p, json.iid, json.identifier);
 		w.iid = json.iid;
 		w.identifier = json.identifier;
 
@@ -39,8 +49,12 @@ class World {
 		for( levelJson in json.levels )
 			w.levels.push( Level.fromJson(p, levelJson) );
 
-		trace(w);
-
 		return w;
+	}
+
+	public function tidy(p:Project) {
+		_project = p;
+		for( l in levels )
+			l.tidy(p);
 	}
 }
