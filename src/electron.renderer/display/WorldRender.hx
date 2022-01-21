@@ -2,7 +2,7 @@ package display;
 
 typedef WorldLevelRender = {
 	var bgWrapper: h2d.Object;
-	var bounds: h2d.Graphics;
+	var outline: h2d.Graphics;
 	var render: h2d.Object;
 	var identifier: h2d.ScaleGrid;
 }
@@ -323,7 +323,7 @@ class WorldRender extends dn.Process {
 		worldLayer.add(wl.bgWrapper, _inc++);
 		worldLayer.add(wl.render, _inc++);
 		worldLayer.add(wl.identifier, _inc++);
-		worldLayer.add(wl.bounds, _inc++);
+		worldLayer.add(wl.outline, _inc++);
 	}
 
 	inline function getWorldDepthWrapper(depth:Int) : h2d.Layers {
@@ -344,7 +344,7 @@ class WorldRender extends dn.Process {
 			var wl : WorldLevelRender = {
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
-				bounds : new h2d.Graphics(),
+				outline : new h2d.Graphics(),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
 			}
 			worldLevels.set(l.uid, wl);
@@ -589,39 +589,39 @@ class WorldRender extends dn.Process {
 
 		if( l.uid==editor.curLevelId && !editor.worldMode ) {
 			// Hide current level in editor mode
-			wl.bounds.visible = false;
+			wl.outline.visible = false;
 			wl.render.visible = false;
 		}
 		else if( editor.worldMode ) {
 			// Show everything in world mode
-			wl.bgWrapper.visible = wl.render.visible = wl.bounds.visible = camera.isOnScreenLevel(l);
-			wl.bounds.alpha = 1;
+			wl.bgWrapper.visible = wl.render.visible = wl.outline.visible = camera.isOnScreenLevel(l);
+			wl.outline.alpha = 1;
 			wl.render.alpha = 1;
 		}
 		else {
 			// Fade other levels in editor mode
 			var dist = editor.curLevel.getBoundsDist(l);
-			wl.bounds.alpha = 0.3;
-			wl.bounds.visible = camera.isOnScreenLevel(l);
+			wl.outline.alpha = 0.3;
+			wl.outline.visible = camera.isOnScreenLevel(l);
 			wl.render.alpha = 0.5;
-			wl.render.visible = wl.bounds.visible && dist<=300;
+			wl.render.visible = wl.outline.visible && dist<=300;
 		}
 
 		// Depths
 		if( l.worldDepth!=editor.curWorldDepth ) {
 			if( l.worldDepth>editor.curWorldDepth ) {
 				// Above
-				wl.bounds.alpha*=0.45;
+				wl.outline.alpha*=0.45;
 				wl.bgWrapper.visible = false;
 				wl.render.visible = false;
 				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
-					wl.bounds.alpha*=0.3;
+					wl.outline.alpha*=0.3;
 			}
 			else {
 				// Beneath
 				wl.bgWrapper.alpha*=0.6;
 				wl.render.alpha*=0.15;
-				wl.bounds.alpha*=0.2;
+				wl.outline.alpha*=0.2;
 				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
 					wl.bgWrapper.alpha*=0.3;
 				// wl.render.filter = new h2d.filter.Blur(32);
@@ -644,7 +644,7 @@ class WorldRender extends dn.Process {
 
 			// Position
 			wl.render.setPosition( l.worldX, l.worldY );
-			wl.bounds.setPosition( l.worldX, l.worldY );
+			wl.outline.setPosition( l.worldX, l.worldY );
 			wl.bgWrapper.setPosition( l.worldX, l.worldY );
 		}
 
@@ -655,7 +655,7 @@ class WorldRender extends dn.Process {
 		if( worldLevels.exists(uid) ) {
 			var wl = worldLevels.get(uid);
 			wl.render.remove();
-			wl.bounds.remove();
+			wl.outline.remove();
 			wl.bgWrapper.remove();
 			wl.identifier.remove();
 			worldLevels.remove(uid);
@@ -665,7 +665,7 @@ class WorldRender extends dn.Process {
 	function clearLevelRender(l:data.Level) {
 		var wl = getWorldLevel(l);
 		wl.bgWrapper.removeChildren();
-		wl.bounds.clear();
+		wl.outline.clear();
 		wl.render.removeChildren();
 	}
 
@@ -828,7 +828,7 @@ class WorldRender extends dn.Process {
 	function updateLevelBounds(l:data.Level) {
 		var wl = getWorldLevel(l);
 		if( wl!=null ) {
-			wl.bounds.clear();
+			wl.outline.clear();
 			if( !settings.v.showDetails )
 				return;
 
@@ -840,17 +840,17 @@ class WorldRender extends dn.Process {
 				thick*=4;
 				c = 0xff0000;
 			}
-			wl.bounds.beginFill(c);
-			wl.bounds.drawRect(0, 0, l.pxWid, thick); // top
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(0, 0, l.pxWid, thick); // top
 
-			wl.bounds.beginFill(c);
-			wl.bounds.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
 
-			wl.bounds.beginFill(c);
-			wl.bounds.drawRect(0, 0, thick, l.pxHei); // left
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(0, 0, thick, l.pxHei); // left
 
-			wl.bounds.beginFill(c);
-			wl.bounds.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
 		}
 	}
 
@@ -928,6 +928,8 @@ class WorldRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
+		Chrono.init();
+
 		var limit = 0;
 
 		// Fade bg
@@ -943,6 +945,7 @@ class WorldRender extends dn.Process {
 
 
 		// Check if a tileset is being loaded
+		Chrono.start("tilesets", true);
 		var waitTileset = false;
 		for(td in project.defs.tilesets)
 			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
@@ -951,6 +954,7 @@ class WorldRender extends dn.Process {
 			}
 
 		// World levels rendering (max one per frame)
+		Chrono.start("levelRenders", true);
 		if( !cd.hasSetS("levelRenderLock", 0.1) ) {
 			limit = 1;
 			if( !waitTileset ) {
@@ -976,6 +980,7 @@ class WorldRender extends dn.Process {
 
 
 		// Fields
+		Chrono.start("fields", true);
 		limit = 5;
 		for( uid in levelFieldsInvalidation.keys() ) {
 			if( !editor.worldMode && editor.curLevel.uid!=uid )
@@ -987,6 +992,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Identifiers
+		Chrono.start("identifiers", true);
 		if( editor.worldMode ) {
 			limit = 10;
 			for( uid in levelIdentifiersInvalidation.keys() ) {
@@ -998,6 +1004,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Refresh elements which thickness is linked to camera zoom
+		Chrono.start("outlines", true);
 		if( editor.worldMode && invalidatedCameraBasedRenders && !cd.hasSetS("boundsRender",0.15) ) {
 			invalidatedCameraBasedRenders = false;
 			renderGrids();
@@ -1005,6 +1012,8 @@ class WorldRender extends dn.Process {
 			for(l in project.levels)
 				updateLevelBounds(l);
 		}
+
+		App.ME.debugPre( Chrono.getResultsStr().join("\n"), true );
 	}
 
 }
