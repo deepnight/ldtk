@@ -23,7 +23,7 @@
     - You are no longer limited to deleting the last IntGrid value.
   - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
-  - **Performances**: implemented various optimizations to boost general performances & reduce CPU usage.
+  - **Performances**: implemented various major optimizations to boost general performances & reduce CPU usage, especially on large projects.
 
 ## File format changes
 
