@@ -38,6 +38,8 @@ class Project {
 	public var backupOnSave = false;
 	public var backupLimit = 10;
 
+	@:allow(data.Level)
+	var quickLevelAccess : Map<Int, Level> = new Map();
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
 	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
@@ -659,8 +661,11 @@ class Project {
 		initEntityIidsCache();
 		defs.tidy(this);
 		reorganizeWorld();
-		for(level in levels)
+		quickLevelAccess = new Map();
+		for(level in levels) {
+			quickLevelAccess.set(level.uid, level);
 			level.tidy(this);
+		}
 		applyAutoLevelIdentifiers();
 		initUsedColors();
 	}
@@ -818,6 +823,7 @@ class Project {
 			levels.push(l);
 		else
 			levels.insert(insertIdx,l);
+		quickLevelAccess.set(l.uid, l);
 
 		l.identifier = fixUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
 
@@ -838,6 +844,7 @@ class Project {
 		copy.identifier = fixUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
+		quickLevelAccess.set(copy.uid, l);
 		tidy();
 		return copy;
 	}
@@ -939,14 +946,16 @@ class Project {
 			unregisterAllReverseIidRefsFor(ei);
 		}
 
+		quickLevelAccess.remove(l.uid);
 		tidy();
 	}
 
-	public function getLevel(?id:String, ?uid:Int) : Null<Level> {
-		for(l in levels)
-			if( l.uid==uid || l.identifier==id )
-				return l;
-		return null;
+	public inline function getLevel(uid:Int) : Null<Level> {
+		return quickLevelAccess.get(uid);
+		// for(l in levels)
+			// if( l.uid==uid )
+				// return l;
+		// return null;
 	}
 
 	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
