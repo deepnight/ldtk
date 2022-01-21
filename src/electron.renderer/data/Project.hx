@@ -152,6 +152,7 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
+		p.createWorld();
 		p.createLevel();
 
 		return p;
@@ -280,6 +281,8 @@ class Project {
 			// Levels (from json root)
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				p.levels.push( Level.fromJson(p, lvlJson) );
+
+			p.createWorld();
 		}
 
 		// World settings
