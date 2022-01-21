@@ -219,6 +219,27 @@ class DebugMenu extends ui.modal.ContextMenu {
 				a.crash = 5;
 			}
 		});
+		add({
+			label: L.untranslated("Lose WebGL context"),
+			className: "warning",
+			cb: ()->{
+				App.LOG.warning("Losing webGL context...");
+				var canvas = Std.downcast(App.ME.jCanvas.get(0), js.html.CanvasElement);
+				// Try on WebGL1
+				var glCtx = canvas.getContextWebGL();
+				if( glCtx!=null ) {
+					App.LOG.warning("  -> WebGL1");
+					glCtx.getExtension(WEBGL_lose_context).loseContext();
+					return;
+				}
+				// Try on WebGL2
+				var glCtx = canvas.getContextWebGL2();
+				if( glCtx!=null ) {
+					App.LOG.warning("  -> WebGL2");
+					glCtx.getExtension(WEBGL_lose_context).loseContext();
+				}
+			}
+		});
 		#end // End of "if debug"
 
 

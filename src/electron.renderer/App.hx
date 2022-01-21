@@ -22,6 +22,7 @@ class App extends dn.Process {
 	public var focused(default,null) = true;
 	var jsMetaKeyDown = false;
 	public var overCanvas(default,null) = false;
+	public var hasGlContext(default,null) = false;
 
 	public var clipboard : data.Clipboard;
 
@@ -59,6 +60,9 @@ class App extends dn.Process {
 		jCanvas.hide();
 		jCanvas.mouseenter( _->overCanvas = true );
 		jCanvas.mouseleave( _->overCanvas = false );
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
+		hasGlContext = canvas.getContextWebGL()!=null || canvas.getContextWebGL2()!=null;
+		canvas.addEventListener("webglcontextlost", (_)->onGlContextLoss());
 		clearMiniNotif();
 		clipboard = data.Clipboard.createSystem();
 
@@ -137,6 +141,9 @@ class App extends dn.Process {
 				LOG.add("BOOT", 'Loading Home...');
 				loadPage( ()->new page.Home() );
 			}
+
+			if( !hasGlContext )
+				onGlContextLoss();
 		}, 0.2);
 
 		LOG.add("BOOT", "Calling appReady...");
@@ -408,6 +415,17 @@ class App extends dn.Process {
 		jBody.find("#miniNotif")
 			.stop(false,true)
 			.fadeOut(1500);
+	}
+
+	function onGlContextLoss() {
+		LOG.error("GL context lost!");
+		hasGlContext = false;
+		jBody.addClass("noGlCtx");
+
+		var m = Editor.exists()
+			? new ui.modal.dialog.Warning( L.t._("The WebGL context was lost!\nDon't worry, it's probably nothing, and no data was lost. You should just save your work and restart the application.") )
+			: new ui.modal.dialog.Warning( L.t._("The WebGL context was lost!\nYou need to restart the application.") );
+		m.addParagraph( L.t._("If this happens a lot, you should try to update your graphic drivers.") );
 	}
 
 	function onAppMouseDown(e:js.jquery.Event) {
