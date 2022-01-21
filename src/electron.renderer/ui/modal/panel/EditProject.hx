@@ -163,12 +163,14 @@ class EditProject extends ui.modal.Panel {
 		// Json minifiying
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
+		i.onChange = editor.invalidateAllLevelsCache;
 
 		// External level files
 		jForm.find(".externRecommend").css("visibility", project.levels.length>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = (v)->{
+			editor.invalidateAllLevelsCache();
 			if( v )
 				project.setFlag(MultiWorlds, false); // unsupported
 		}
