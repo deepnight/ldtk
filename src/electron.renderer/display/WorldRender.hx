@@ -928,6 +928,8 @@ class WorldRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
+		var limit = 0;
+
 		// Fade bg
 		var ta = ( editor.worldMode ? 0.3 : 0 );
 		if( worldBg.wrapper.alpha!=ta ) {
@@ -939,33 +941,38 @@ class WorldRender extends dn.Process {
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
 		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
 
-		// Check if a tileset is being loaded
-		var waitTileset = false;
-		for(td in project.defs.tilesets)
-			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
-				waitTileset = true;
-				break;
-			}
-
-		// World levels rendering (max one per frame)
-		var limit = 1;
-		if( !waitTileset )
-			for( uid in levelRenderInvalidations.keys() ) {
-				if( editor.project.getLevel(uid)==null ) {
-					// Drop lost levels
-					removeWorldLevel(uid);
-					levelRenderInvalidations.remove(uid);
-					continue;
-				}
-				var l = editor.project.getLevel(uid);
-				if( !camera.isOnScreenLevel(l) )
-					continue;
-				levelRenderInvalidations.remove(uid);
-				renderLevel(l);
-				updateLayout();
-				if( --limit<=0 )
+		if( !cd.hasSetS("levelRenderLock", 0.1) ) {
+			// Check if a tileset is being loaded
+			var waitTileset = false;
+			for(td in project.defs.tilesets)
+				if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+					waitTileset = true;
 					break;
+				}
+
+			// World levels rendering (max one per frame)
+			limit = 1;
+			if( !waitTileset ) {
+				var l : data.Level = null;
+				for( uid in levelRenderInvalidations.keys() ) {
+					l = editor.project.getLevel(uid);
+					if( l==null ) {
+						// Drop lost levels
+						removeWorldLevel(uid);
+						levelRenderInvalidations.remove(uid);
+						continue;
+					}
+					if( !camera.isOnScreenLevel(l) )
+						continue;
+					levelRenderInvalidations.remove(uid);
+					renderLevel(l);
+					updateLayout();
+					if( --limit<=0 )
+						break;
+				}
 			}
+		}
+
 
 		// Fields
 		limit = 5;
@@ -973,8 +980,7 @@ class WorldRender extends dn.Process {
 			if( !editor.worldMode && editor.curLevel.uid!=uid )
 				continue;
 			levelFieldsInvalidation.remove(uid);
-			var l = editor.project.getLevel(uid);
-			renderFields(l);
+			renderFields( editor.project.getLevel(uid) );
 			if( --limit<=0 )
 				break;
 		}
