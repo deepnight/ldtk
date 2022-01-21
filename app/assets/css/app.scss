@@ -1189,6 +1189,7 @@ ul.log {
 
 .black		{ filter: brightness(0);}
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
+.icon.red	{ filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6); }
 
 .accordion {
 	.expand {
@@ -3398,26 +3399,37 @@ canvas#webgl {
 		display: none;
 		position: absolute;
 		align-items: center;
-		justify-content: center;
+		justify-items: center;
 		z-index: 3;
 
 		width: 300px;
-		height: 40px;
 		left: calc(50vw - 150px);
 		top: calc(50vh - 20px);
 		padding: 16px;
 
 		color: $red;
+		text-align: center;
 
 		border: 1px solid $red;
 		border-radius: 4px;
 		box-shadow: 0px 0px 32px $darkRed inset;
 		background-color: black;
+		.icon {
+			width: 2em;
+			height: 2em;
+			margin-bottom: 8px;
+		}
+		p {
+			margin: 0;
+			&+p {
+				margin-top: 4px;
+			}
+		}
 	}
 
 	@at-root body.noGlCtx #page.editor {
 		#glCtxLost {
-			display: grid;
+			display: block;
 		}
 		canvas {
 			cursor: not-allowed !important;
