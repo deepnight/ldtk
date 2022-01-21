@@ -963,8 +963,6 @@ class WorldRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		// Chrono.init();
-
 		// Fade bg
 		var ta = ( editor.worldMode ? 0.3 : 0 );
 		if( worldBg.wrapper.alpha!=ta ) {
@@ -977,18 +975,17 @@ class WorldRender extends dn.Process {
 		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
 
 
-		// Check if a tileset is being loaded
-		// Chrono.start("tilesets", true);
-		var waitTileset = false;
-		for(td in project.defs.tilesets)
-			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
-				waitTileset = true;
-				break;
-			}
-
-		// World levels rendering (max one per frame)
-		// Chrono.start("unifiedRenders", true);
+		// Level invalidations
 		if( !cd.hasSetS("levelRendersLock", 0.08) ) {
+			// Check if a tileset is being loaded
+			var waitTileset = false;
+			for(td in project.defs.tilesets)
+				if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+					waitTileset = true;
+					break;
+				}
+
+			// Check various level invalidations
 			var limitRenders = 1;
 			var limitOthers = 5;
 			if( !waitTileset ) {
@@ -1028,7 +1025,6 @@ class WorldRender extends dn.Process {
 
 
 		// Refresh elements which thickness is linked to camera zoom
-		// Chrono.start("outlines", true);
 		if( editor.worldMode && invalidatedCameraBasedRenders && !cd.hasSetS("boundsRender",0.15) ) {
 			invalidatedCameraBasedRenders = false;
 			renderGrids();
@@ -1036,8 +1032,6 @@ class WorldRender extends dn.Process {
 			for(l in project.levels)
 				updateLevelBounds(l);
 		}
-
-		// App.ME.debugPre( Chrono.getResultsStr().join("\n"), true );
 	}
 
 }
