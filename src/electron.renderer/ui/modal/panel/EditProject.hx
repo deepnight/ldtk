@@ -4,9 +4,9 @@ class EditProject extends ui.modal.Panel {
 
 	var showAdvanced = false;
 	var allAdvancedOptions = [
-		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
-		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
 		ldtk.Json.ProjectFlag.MultiWorlds,
+		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
+		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
 	];
 
 	public function new() {
