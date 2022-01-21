@@ -978,17 +978,17 @@ class WorldRender extends dn.Process {
 		// Level invalidations
 		if( !cd.hasSetS("levelRendersLock", 0.08) ) {
 			// Check if a tileset is being loaded
-			var waitTileset = false;
+			var waitingTileset = false;
 			for(td in project.defs.tilesets)
 				if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
-					waitTileset = true;
+					waitingTileset = true;
 					break;
 				}
 
 			// Check various level invalidations
 			var limitRenders = 1;
 			var limitOthers = 5;
-			if( !waitTileset ) {
+			if( !waitingTileset ) {
 				var l : data.Level = null;
 				for( wl in worldLevels ) {
 					if( !camera.isOnScreenWorldRect(wl.rect) )
