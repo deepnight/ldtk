@@ -743,6 +743,11 @@ class App extends dn.Process {
 				+ ( isAltDown() ? "[alt] " : "" )
 			);
 
+			if( Editor.ME!=null ) {
+				final p = Editor.ME.project;
+				debugPre("project.levels="+p.levels.length+" worlds="+p.worlds.length+ (p.worlds.length>0 ? " world[0].levels="+p.worlds[0].levels.length : "") );
+			}
+
 			debug("-- Processes ----------------------------------------");
 			for( line in dn.Process.rprintAll().split('\n') )
 				debugPre(line);
