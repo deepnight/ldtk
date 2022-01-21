@@ -1450,7 +1450,7 @@ class Editor extends Page {
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
 				case LevelJsonCacheInvalidated(l):
-				case WorldLevelMoved(l):
+				case WorldLevelMoved(l,isFinal):
 				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
@@ -1528,11 +1528,13 @@ class Editor extends Page {
 			case LevelResized(level): invalidateLevelCache(level);
 			case LevelRestoredFromHistory(level): invalidateLevelCache(level);
 			case LevelJsonCacheInvalidated(level):
-			case WorldLevelMoved(level):
-				switch project.worldLayout {
-					case Free, GridVania: invalidateLevelCache(level);
-					case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
-				}
+			case WorldLevelMoved(level,isFinal):
+				if( isFinal )
+					switch project.worldLayout {
+						case Free, GridVania: invalidateLevelCache(level);
+						case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
+					}
+
 			case WorldSettingsChanged: invalidateAllLevelsCache();
 			case LayerDefAdded: invalidateAllLevelsCache();
 			case LayerDefRemoved(defUid): invalidateAllLevelsCache();
@@ -1738,7 +1740,7 @@ class Editor extends Page {
 
 			case LevelResized(l):
 
-			case WorldLevelMoved(l):
+			case WorldLevelMoved(l,isFinal):
 
 			case WorldSettingsChanged:
 

@@ -291,7 +291,7 @@ class Rulers extends dn.Process {
 					editor.selectionTool.clear();
 					editor.ge.emit( LevelResized(curLevel) );
 					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
-					editor.ge.emit( WorldLevelMoved(curLevel) );
+					editor.ge.emit( WorldLevelMoved(curLevel,true) );
 				}
 			}
 		}

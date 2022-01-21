@@ -1,6 +1,7 @@
 package display;
 
 typedef WorldLevelRender = {
+	var rect : misc.WorldRect;
 	var bgWrapper: h2d.Object;
 	var outline: h2d.Graphics;
 	var render: h2d.Object;
@@ -121,6 +122,8 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				updateAxesPos();
 				invalidateCameraBasedRenders();
+				for(wl in worldLevels)
+					trace(wl.rect);
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
@@ -146,9 +149,18 @@ class WorldRender extends dn.Process {
 			case GridChanged(active):
 				renderGrids();
 
-			case WorldLevelMoved(l):
+			case WorldLevelMoved(l,isFinal):
 				updateLayout();
 				updateCurrentHighlight();
+				refreshWorldLevelRect(l);
+				if( isFinal ) {
+					switch project.worldLayout {
+						case Free, GridVania:
+						case LinearHorizontal, LinearVertical:
+							for(l in project.levels)
+								refreshWorldLevelRect(l);
+					}
+				}
 
 			case ProjectSaved:
 				invalidateAllLevelFields();
@@ -203,6 +215,7 @@ class WorldRender extends dn.Process {
 				updateLayout();
 				renderWorldBounds();
 				updateCurrentHighlight();
+				refreshWorldLevelRect(l);
 
 			case LevelSettingsChanged(l):
 				invalidateLevelRender(l);
@@ -212,6 +225,7 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				applyWorldDepth(l);
 				sortWorldDepths();
+				refreshWorldLevelRect(l);
 
 			case LayerRuleGroupAdded:
 				invalidateAllLevelRenders();
@@ -342,6 +356,7 @@ class WorldRender extends dn.Process {
 	function getWorldLevel(l:data.Level) : WorldLevelRender {
 		if( !worldLevels.exists(l.uid) ) {
 			var wl : WorldLevelRender = {
+				rect: WorldRect.fromLevel(l),
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				outline : new h2d.Graphics(),
@@ -579,6 +594,13 @@ class WorldRender extends dn.Process {
 		currentHighlight.lineStyle(thick/camera.adjustedZoom, 0xffcc00);
 		var p = thick*0.5 / camera.adjustedZoom;
 		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
+	}
+
+
+	inline function refreshWorldLevelRect(l:data.Level) {
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.rect.useLevel(l);
 	}
 
 
@@ -955,7 +977,7 @@ class WorldRender extends dn.Process {
 
 		// World levels rendering (max one per frame)
 		Chrono.start("levelRenders", true);
-		if( !cd.hasSetS("levelRenderLock", 0.1) ) {
+		if( !cd.hasSetS("levelRendersLock", 0.1) ) {
 			limit = 1;
 			if( !waitTileset ) {
 				var l : data.Level = null;
@@ -981,15 +1003,18 @@ class WorldRender extends dn.Process {
 
 		// Fields
 		Chrono.start("fields", true);
-		limit = 5;
-		for( uid in levelFieldsInvalidation.keys() ) {
-			if( !editor.worldMode && editor.curLevel.uid!=uid )
-				continue;
-			levelFieldsInvalidation.remove(uid);
-			renderFields( editor.project.getLevel(uid) );
-			if( --limit<=0 )
-				break;
+		if( !cd.hasSetS("fieldRendersLock",0.08) ) {
+			limit = 5;
+			for( uid in levelFieldsInvalidation.keys() ) {
+				if( !editor.worldMode && editor.curLevel.uid!=uid )
+					continue;
+				levelFieldsInvalidation.remove(uid);
+				renderFields( editor.project.getLevel(uid) );
+				if( --limit<=0 )
+					break;
+			}
 		}
+
 
 		// Identifiers
 		Chrono.start("identifiers", true);
