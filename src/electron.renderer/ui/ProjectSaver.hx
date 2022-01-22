@@ -162,7 +162,7 @@ class ProjectSaver extends dn.Process {
 						}
 					});
 				}
-				new ui.modal.Progress("Preparing levels...", 10, ops, ()->beginState(SavingMainFile));
+				new ui.modal.Progress("Preparing levels...", ops, ()->beginState(SavingMainFile));
 
 
 			case SavingMainFile:
@@ -205,7 +205,7 @@ class ProjectSaver extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), 20, ops, ()->beginState(SavingLayerImages));
+					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->beginState(SavingLayerImages));
 				}
 				else {
 					// Remove previous external levels
@@ -274,7 +274,7 @@ class ProjectSaver extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("PNG export"), 2, ops, ()->{
+					new ui.modal.Progress(Lang.t._("PNG export"), ops, ()->{
 						log('  Saved $count PNG(s)...');
 					});
 				}
@@ -444,7 +444,7 @@ class ProjectSaver extends dn.Process {
 			}
 		});
 
-		new ui.modal.Progress("Backup", 5, ops, ()->{
+		new ui.modal.Progress("Backup", ops, ()->{
 			log('  Done!');
 			if( anyError )
 				error(L.t._("Backup failed!"));

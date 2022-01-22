@@ -189,7 +189,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		if( ops.length>0 ) {
 			App.LOG.general("Applying invalidated rules...");
-			new Progress(L.t._("Updating auto layers..."), 5, ops, editor.levelRender.renderAll);
+			new Progress(L.t._("Updating auto layers..."), ops, editor.levelRender.renderAll);
 		}
 
 		invalidatedRules = new Map();

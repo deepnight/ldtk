@@ -647,7 +647,7 @@ class TilesetDef {
 			});
 
 		if( !sync )
-			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
+			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', ops, onComplete);
 		else
 			for(op in ops)
 				op.cb();

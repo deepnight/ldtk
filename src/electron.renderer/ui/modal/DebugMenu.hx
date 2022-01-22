@@ -148,7 +148,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 						}
 					});
 				}
-				new ui.modal.Progress("Updating samples", 1, ops);
+				new ui.modal.Progress("Updating samples", ops);
 			}
 		});
 
