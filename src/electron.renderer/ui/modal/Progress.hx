@@ -3,6 +3,7 @@ package ui.modal;
 typedef ProgressOp = {
 	var ?label : Null<String>;
 	var cb : Void->Void;
+	var ?isExpensive : Bool; // true if cb() is guaranteed to take a long time
 }
 
 enum ProgressState {
@@ -43,7 +44,7 @@ class Progress extends ui.Modal {
 
 		jModalAndMask.addClass("progress");
 		jMask.hide().fadeIn(500);
-		App.LOG.general('Progress created: "$title", ${ops.length} operation(s)');
+		App.LOG.general('Progress created.');
 
 		jContent.append('<div class="title">$title</div>');
 
@@ -78,7 +79,7 @@ class Progress extends ui.Modal {
 	/**
 		Create a single op Progress bar (useful for long operations)
 	**/
-	public static inline function single( label:LocaleString, cb:Void->Void, onComplete:Void->Void ) : Progress {
+	public static inline function single( label:String, cb:Void->Void, onComplete:Void->Void ) : Progress {
 		return new Progress(label, [{ cb:cb }], onComplete);
 	}
 
@@ -134,10 +135,10 @@ class Progress extends ui.Modal {
 					state = InitFrame;
 
 			case InitFrame:
-				App.LOG.general('Progress started: "$title"');
+				App.LOG.general('Progress started: : "$title", ${curOps.length} operation(s)');
 				log.def("Started...");
 				state = Running;
-				updateBar();
+				updateBar( curOps.length>0 ? curOps[0].label : null );
 
 			case Running:
 				if( startTime<0 )
@@ -145,12 +146,14 @@ class Progress extends ui.Modal {
 
 				var spent = 0.;
 				while( curOps.length>0 && spent<MAX_FRAME_DURATION_S ) {
+					if( spent>0 && curOps[0].isExpensive ) // ensure "expensive" op start in their own frame
+						break;
+
 					var op = curOps.shift();
 					var start = haxe.Timer.stamp();
 					op.cb();
 					var t = haxe.Timer.stamp()-start;
 					spent += t;
-					updateBar(op.label);
 					curIdx++;
 
 					// #if debug
@@ -159,6 +162,8 @@ class Progress extends ui.Modal {
 				}
 				if( curOps.length==0 )
 					state = EndFrame;
+				else
+					updateBar(curOps[0].label);
 
 			case EndFrame:
 				var t = M.pretty( haxe.Timer.stamp()-startTime, 1 );
