@@ -413,7 +413,7 @@ class Editor extends Page {
 				if( l.bgRelPath==relPath ) {
 					worldRender.invalidateLevelRender(l);
 					if( curLevel==l )
-						levelRender.invalidateBg();
+						levelRender.invalidateUiAndBg();
 				}
 		}
 		else
@@ -1244,7 +1244,7 @@ class Editor extends Page {
 		settings.v.singleLayerMode = v;
 		App.ME.settings.save();
 		levelRender.applyAllLayersVisibility();
-		levelRender.invalidateBg();
+		levelRender.invalidateUiAndBg();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( settings.v.singleLayerMode ));
 		updateEditOptions();

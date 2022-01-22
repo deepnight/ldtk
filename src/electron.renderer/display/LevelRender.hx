@@ -23,6 +23,7 @@ class LevelRender extends dn.Process {
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
 	var uiAndBgInvalidated = false;
+	var gridInvalidated = false;
 	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
@@ -96,6 +97,7 @@ class LevelRender extends dn.Process {
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
 				updateGridPos();
+				invalidateGrid();
 
 			case ProjectSaved, BeforeProjectSaving:
 
@@ -103,7 +105,7 @@ class LevelRender extends dn.Process {
 				renderAll();
 
 			case ProjectSettingsChanged:
-				invalidateUi();
+				invalidateUiAndBg();
 
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
@@ -133,10 +135,10 @@ class LevelRender extends dn.Process {
 
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
-				invalidateUi();
+				invalidateUiAndBg();
 
 			case LevelSettingsChanged(l):
-				invalidateUi();
+				invalidateUiAndBg();
 
 			case LevelJsonCacheInvalidated(l):
 
@@ -442,7 +444,7 @@ class LevelRender extends dn.Process {
 
 		// Main grid
 		var size = li.def.gridSize;
-		grid.lineStyle(1, col, 0.07);
+		grid.lineStyle(1/camera.adjustedZoom, col, 0.07);
 		var x = 0;
 		for( cx in 0...editor.curLayerInstance.cWid+1 ) { // Verticals
 			x = cx*size + li.pxTotalOffsetX;
@@ -466,7 +468,7 @@ class LevelRender extends dn.Process {
 		// Guide grid (verticals)
 		if( editor.curLayerDef.guideGridWid>1 ) {
 			var size = li.def.guideGridWid;
-			grid.lineStyle(1, col, 0.33);
+			grid.lineStyle(1/camera.adjustedZoom, col, 0.33);
 
 			var cWid = Std.int(editor.curLayerInstance.pxWid/size)+1;
 
@@ -485,7 +487,7 @@ class LevelRender extends dn.Process {
 		// Guide grid (horizontals)
 		if( editor.curLayerDef.guideGridHei>1 ) {
 			var size = li.def.guideGridHei;
-			grid.lineStyle(1, col, 0.33);
+			grid.lineStyle(1/camera.adjustedZoom, col, 0.33);
 
 			var cHei = Std.int(editor.curLayerInstance.pxHei/size)+1;
 
@@ -500,14 +502,14 @@ class LevelRender extends dn.Process {
 			}
 		}
 
-		// Horizontal guides
+		// Horizontal guide lines
 		// grid.lineStyle(1, 0xffcc00, 0.5);
 		// for(v in li.def.guidesH) {
 		// 	grid.moveTo( M.fmax(0,li.pxTotalOffsetX), v+li.pxTotalOffsetY );
 		// 	grid.lineTo( M.fmin(li.cWid*size, level.pxWid), v+li.pxTotalOffsetY );
 		// }
 
-		// Vertical guides
+		// Vertical guide lines
 		// grid.lineStyle(1, 0xffcc00, 0.5);
 		// for(v in li.def.guidesV) {
 		// 	grid.moveTo( v+li.pxTotalOffsetX, M.fmax(0,li.pxTotalOffsetY) );
@@ -611,12 +613,12 @@ class LevelRender extends dn.Process {
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
-	public inline function invalidateUi() {
+	public inline function invalidateUiAndBg() {
 		uiAndBgInvalidated = true;
 	}
 
-	public inline function invalidateBg() {
-		uiAndBgInvalidated = true;
+	public inline function invalidateGrid() {
+		gridInvalidated = true;
 	}
 
 	public inline function invalidateAll() {
@@ -652,10 +654,12 @@ class LevelRender extends dn.Process {
 			if( uiAndBgInvalidated ) {
 				renderBg();
 				renderBounds();
-				renderGrid();
 				uiAndBgInvalidated = false;
 				App.LOG.render("Rendered level UI");
 			}
+
+			if( gridInvalidated && !cd.hasSetS("gridRenderLock",0.2) )
+				renderGrid();
 
 			// Layers
 			for( li in editor.curLevel.layerInstances )

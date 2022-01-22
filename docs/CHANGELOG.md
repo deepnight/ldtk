@@ -50,6 +50,7 @@
   - Entity and Level custom fields that are not using default value are now much more visible in forms.
   - Added a new optional "guide" grid per layer. This customizable grid is not used for snapping, and only serves as a visual guide.
   - Better display of entities that have error(s) in their field values.
+  - Grid lines in levels are now truly 1 screen pixel thick.
   - Added a new option (`CTRL-H`) to hide everything except Tiles in layers (entities, labels, intGrids etc.)
   - Added an "App Settings" button to the main panel in editor
   - Added a "*" near level names if they were modified but not saved.
