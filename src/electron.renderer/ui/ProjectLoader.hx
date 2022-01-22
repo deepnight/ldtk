@@ -140,7 +140,7 @@ class ProjectLoader {
 						});
 						idx++;
 					}
-					new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), lops, ()->done(p));
+					new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), 10, lops, ()->done(p));
 				}
 				else
 					done(p);

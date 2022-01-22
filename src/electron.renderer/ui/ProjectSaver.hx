@@ -162,7 +162,7 @@ class ProjectSaver extends dn.Process {
 						}
 					});
 				}
-				new ui.modal.Progress("Preparing levels...", 5, ops, ()->beginState(SavingMainFile));
+				new ui.modal.Progress("Preparing levels...", 10, ops, ()->beginState(SavingMainFile));
 
 
 			case SavingMainFile:
@@ -205,7 +205,7 @@ class ProjectSaver extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), 10, ops, ()->beginState(SavingLayerImages));
+					new ui.modal.Progress(Lang.t._("Saving levels"), 20, ops, ()->beginState(SavingLayerImages));
 				}
 				else {
 					// Remove previous external levels
