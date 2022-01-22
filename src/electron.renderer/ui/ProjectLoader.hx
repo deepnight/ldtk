@@ -37,14 +37,15 @@ class ProjectLoader {
 			return;
 		}
 
-		var ops : Array<ui.modal.Progress.ProgressOp> = [];
+		progress = new ui.modal.Progress( L.t._("::file::: Project...", {file:fileName}) );
+
 		var json : ldtk.Json.ProjectJson = null;
 		var raw : String = null;
 		var p : data.Project = null;
 
 
 		// Parse main JSON
-		ops.push({
+		progress.addOp({
 			label: 'Reading $fileName...',
 			cb: ()->{
 				log.add(tag, 'Loading project $fileName...');
@@ -56,7 +57,7 @@ class ProjectLoader {
 			}
 		});
 
-		ops.push({
+		progress.addOp({
 			label: "Parsing JSON...",
 			cb: ()->{
 				json = try haxe.Json.parse(raw)
@@ -85,7 +86,7 @@ class ProjectLoader {
 		});
 
 
-		ops.push({
+		progress.addOp({
 			label: "Reading project...",
 			cb: ()->{
 				p = try data.Project.fromJson(filePath, json)
@@ -99,11 +100,11 @@ class ProjectLoader {
 			}
 		});
 
-		ops.push({
+		progress.addOp({
 			label: "Loading levels...",
 			cb: ()->{
-				// Load separate level files
 				if( p.externalLevels && p.levels[0].layerInstances.length==0 ) {
+					// Load external level files
 					function _invalidLevel(idx:Int, err:String) {
 						log.error(err);
 						p.levels.splice(idx,1);
@@ -112,10 +113,10 @@ class ProjectLoader {
 
 					var idx = 0;
 					log.add(tag, "Loading external levels...");
-					var lops : Array<ui.modal.Progress.ProgressOp> = [];
+					var levelProgress = new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), ()->done(p));
 					for(l in p.levels) {
 						var curIdx = idx;
-						lops.push({
+						levelProgress.addOp({
 							label: l.identifier,
 							cb: ()->{
 								log.add(tag, "  "+l.externalRelPath+"...");
@@ -140,18 +141,15 @@ class ProjectLoader {
 						});
 						idx++;
 					}
-					new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), lops, ()->done(p));
 				}
-				else
+				else {
+					// Levels are embed
 					done(p);
-
+				}
 			}
 		});
-
-
-		// Run
-		progress = new ui.modal.Progress( L.t._("::file::: Project...", {file:fileName}), ops );
 	}
+
 
 	function done(p:data.Project) {
 		if( needReSaving ) {
