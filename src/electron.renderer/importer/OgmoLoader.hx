@@ -49,7 +49,7 @@ class OgmoLoader {
 		var out = fp.clone();
 		out.extension = Const.FILE_EXTENSION;
 		var p = data.Project.createEmpty(out.full);
-		p.worldLayout = LinearHorizontal;
+		p.worldLayout = Free;
 		p.identifierStyle = Free;
 
 		#if !debug
@@ -275,6 +275,7 @@ class OgmoLoader {
 			}
 			var dones : Map<String,Bool> = new Map();
 			log.indentMore();
+			var levelFiles = new Map();
 			for(fp in allFiles) {
 				if( dones.exists(fp.full) )
 					continue;
@@ -299,6 +300,11 @@ class OgmoLoader {
 
 				// Create base level
 				var level = p.createLevel();
+				levelFiles.set(fp.full, {
+					l: level,
+					fp: fp,
+				});
+				trace(fp.directory);
 				level.identifier = data.Project.cleanupIdentifier(fp.fileName, p.identifierStyle);
 				level.useAutoIdentifier = false;
 				level.pxWid = levelJson.width;
@@ -459,6 +465,37 @@ class OgmoLoader {
 			}
 			log.clearIndent();
 			p.removeLevel( p.levels[0] ); // remove default 1st level
+
+
+			// Organize levels in 2D world space
+			var x = 0;
+			var lines = [];
+			var lineIndexes = new Map();
+			for(l in levelFiles) {
+				if( !lineIndexes.exists(l.fp.directory) ) {
+					lineIndexes.set(l.fp.directory, lines.length);
+					lines.push([]);
+				}
+				lines[ lineIndexes.get(l.fp.directory) ].push(l.l);
+				l.l.worldX = x;
+				x += l.l.pxWid + 16;
+			}
+
+			var gapX = 16;
+			var gapY = 64;
+			var y = 0;
+			for(line in lines) {
+				var lineHei = 0;
+				var x = 0;
+				for(l in line) {
+					l.worldX = x;
+					l.worldY = y;
+					lineHei = M.imax(lineHei, l.pxHei);
+					x += l.pxWid + gapX;
+				}
+				y += lineHei + gapY;
+			}
+
 
 			log.general("Done.");
 			return p;
