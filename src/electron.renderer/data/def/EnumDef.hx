@@ -1,6 +1,8 @@
 package data.def;
 
 class EnumDef {
+	var _project : data.Project;
+
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
@@ -9,7 +11,8 @@ class EnumDef {
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
 
-	public function new(uid:Int, id:String) {
+	public function new(p:Project, uid:Int, id:String) {
+		_project = p;
 		this.uid = uid;
 		this.identifier = id;
 	}
@@ -28,8 +31,8 @@ class EnumDef {
 		return 'EnumDef#$uid.$identifier(${values.length} values)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:ldtk.Json.EnumDefJson) {
-		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
+	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.EnumDefJson) {
+		var ed = new EnumDef(p, JsonTools.readInt(json.uid), json.identifier);
 
 		for(v in JsonTools.readArray(json.values)) {
 			ed.values.push({
@@ -163,6 +166,8 @@ class EnumDef {
 	}
 
 	public function tidy(p:Project) {
+		_project = p;
+
 		// Lost tileset
 		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost enum tileset in $this');

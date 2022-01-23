@@ -41,11 +41,11 @@ class Definitions {
 			d.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
-			d.enums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+			d.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
-				d.externalEnums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+				d.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
@@ -503,7 +503,7 @@ class Definitions {
 	/**  ENUM DEFS  *****************************************/
 
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
-		var ed = new data.def.EnumDef(_project.generateUniqueId_int(), "Enum");
+		var ed = new data.def.EnumDef(_project, _project.generateUniqueId_int(), "Enum");
 
 		ed.identifier = _project.fixUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
 
@@ -540,7 +540,7 @@ class Definitions {
 			return null;
 
 		var json : ldtk.Json.EnumDefJson = c.getParsedJson();
-		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, json );
+		var copy = data.def.EnumDef.fromJson( _project, _project.jsonVersion, json );
 		copy.uid = _project.generateUniqueId_int();
 
 		copy.identifier = _project.fixUniqueIdStr(json.identifier, (id)->isEnumIdentifierUnique(id));
