@@ -236,6 +236,7 @@ class Project {
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
+		p.identifierStyle = JsonTools.readEnum(ldtk.Json.IdentifierStyle, json.identifierStyle, false, Capitalized);
 
 		// Advanced flags
 		if( (cast json).advancedOptionFlags!=null )
@@ -481,6 +482,7 @@ class Project {
 			jsonVersion: jsonVersion,
 			appBuildId: Const.getAppBuildId(),
 			nextUid: nextUid,
+			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: hasFlag(MultiWorlds) ? null : worldGridWidth,
