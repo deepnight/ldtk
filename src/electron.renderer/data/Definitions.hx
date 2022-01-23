@@ -97,7 +97,7 @@ class Definitions {
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
-		var l = new data.def.LayerDef(_project.generateUniqueId_int(), type);
+		var l = new data.def.LayerDef(_project, _project.generateUniqueId_int(), type);
 
 		l.identifier = _project.fixUniqueIdStr(id==null ? type.getName() : id, (id)->isLayerNameUnique(id));
 

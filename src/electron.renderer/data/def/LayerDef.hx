@@ -3,6 +3,8 @@ package data.def;
 import data.DataTypes;
 
 class LayerDef {
+	var _project : Project;
+
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var type : ldtk.Json.LayerType;
@@ -37,7 +39,8 @@ class LayerDef {
 	public var tilePivotX(default,set) : Float = 0;
 	public var tilePivotY(default,set) : Float = 0;
 
-	public function new(uid:Int, t:ldtk.Json.LayerType) {
+	public function new(p:Project, uid:Int, t:ldtk.Json.LayerType) {
+		_project = p;
 		this.uid = uid;
 		type = t;
 		#if editor
@@ -69,7 +72,7 @@ class LayerDef {
 		if( (cast json).autoTilesetDefUid!=null && json.tilesetDefUid==null )
 			json.tilesetDefUid = (cast json).autoTilesetDefUid;
 
-		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
+		var o = new LayerDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
@@ -457,6 +460,8 @@ class LayerDef {
 	}
 
 	public function tidy(p:data.Project) {
+		_project = p;
+
 		// Lost tileset
 		if( tilesetDefUid!=null && p.defs.getTilesetDef(tilesetDefUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost tileset in $this');
