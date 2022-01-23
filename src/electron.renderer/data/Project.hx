@@ -1161,7 +1161,6 @@ class Project {
 
 		// Replace leading numbers with "_"
 		reg =~/^([0-9]+)([a-z0-9_]*)$/gi;
-		// if( reg.match(id) )
 		id = reg.replace(id, "_$2");
 
 		// Trim duplicates "_"
@@ -1176,7 +1175,6 @@ class Project {
 				if( reg.match(id) )
 					id = reg.matched(1) + reg.matched(2).toUpperCase() + reg.matched(3);
 			}
-
 			return id;
 		}
 		else
