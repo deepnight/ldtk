@@ -5,6 +5,8 @@ import data.DataTypes;
 class FieldDef {
 	static var REGEX_REG = ~/^\/(.*)\/([gi]*)$/gi; // regex that recognizes a basic regex string
 
+	var _project : data.Project;
+
 	@:allow(data.Definitions, data.def.EntityDef, ui.FieldDefsForm)
 	public var uid(default,null) : Int;
 
@@ -40,8 +42,6 @@ class FieldDef {
 	public var allowedRefTags : Tags;
 	public var tilesetUid : Null<Int>;
 
-
-	var _project : data.Project;
 
 	@:allow(data.def.EntityDef, ui.FieldDefsForm)
 	private function new(p:data.Project, uid:Int, t:ldtk.Json.FieldType, array:Bool) {
