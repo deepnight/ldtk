@@ -3,6 +3,8 @@ package data.def;
 import data.DataTypes;
 
 class EntityDef {
+	var _project : Project;
+
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 
@@ -36,7 +38,8 @@ class EntityDef {
 	public var fieldDefs : Array<data.def.FieldDef> = [];
 
 
-	public function new(uid:Int) {
+	public function new(p:Project, uid:Int) {
+		_project = p;
 		this.uid = uid;
 		color = 0x94d9b3;
 		fillOpacity = 1;
@@ -89,7 +92,7 @@ class EntityDef {
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
 		if( (cast json).maxPerLevel!=null ) json.maxCount = (cast json).maxPerLevel;
 
-		var o = new EntityDef(JsonTools.readInt(json.uid) );
+		var o = new EntityDef(p, JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
@@ -212,6 +215,8 @@ class EntityDef {
 
 
 	public function tidy(p:data.Project) {
+		_project = p;
+		
 		// Migrate old tileId to tileRect
 		if( _oldTileId!=null && tileRect==null ) {
 			var td = p.defs.getTilesetDef(tilesetId);

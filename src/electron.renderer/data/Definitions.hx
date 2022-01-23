@@ -260,7 +260,7 @@ class Definitions {
 	}
 
 	public function createEntityDef() : data.def.EntityDef {
-		var ed = new data.def.EntityDef(_project.generateUniqueId_int());
+		var ed = new data.def.EntityDef(_project, _project.generateUniqueId_int());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
