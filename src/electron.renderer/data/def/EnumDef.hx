@@ -20,7 +20,7 @@ class EnumDef {
 	public inline function isExternal() return externalRelPath!=null;
 
 	function set_identifier(v:String) {
-		v = Project.cleanupIdentifier(v,true);
+		v = Project.cleanupIdentifier(v, _project.identifierStyle);
 		if( v==null )
 			return identifier;
 		else
@@ -80,7 +80,7 @@ class EnumDef {
 	}
 
 	public function getValue(v:String) : Null<data.DataTypes.EnumDefValue> {
-		v = Project.cleanupIdentifier(v,true);
+		v = Project.cleanupIdentifier(v, _project.identifierStyle);
 		for(ev in values)
 			if( ev.id==v )
 				return ev;
@@ -106,7 +106,7 @@ class EnumDef {
 		if( !isValueIdentifierValidAndUnique(v) )
 			return false;
 
-		v = Project.cleanupIdentifier(v,true);
+		v = Project.cleanupIdentifier(v, _project.identifierStyle);
 		values.push({
 			id: v,
 			tileId: null,

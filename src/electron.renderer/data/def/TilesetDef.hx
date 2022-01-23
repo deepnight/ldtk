@@ -55,7 +55,7 @@ class TilesetDef {
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id, _project.identifierStyle) : identifier;
 	}
 
 	public function getFileName(withExt:Bool) : Null<String> {

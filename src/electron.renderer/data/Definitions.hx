@@ -143,7 +143,7 @@ class Definitions {
 	}
 
 	public function isLayerNameUnique(id:String, ?exclude:data.def.LayerDef) {
-		var id = Project.cleanupIdentifier(id, true);
+		var id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		for(ld in layers)
 			if( ld.identifier==id && ld!=exclude )
 				return false;
@@ -305,7 +305,7 @@ class Definitions {
 	}
 
 	public function isEntityIdentifierUnique(id:String, ?exclude:data.def.EntityDef) {
-		id = Project.cleanupIdentifier(id, true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 
 		for(ed in entities)
 			if( ed.identifier==id && ed!=exclude )
@@ -463,7 +463,7 @@ class Definitions {
 	}
 
 	public function isTilesetIdentifierUnique(id:String, ?exclude:data.def.TilesetDef) {
-		id = Project.cleanupIdentifier(id, true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		for(td in tilesets)
 			if( td.identifier==id && td!=exclude)
 				return false;
@@ -472,9 +472,9 @@ class Definitions {
 
 	public function autoRenameTilesetIdentifier(oldPath:Null<String>, td:data.def.TilesetDef) {
 		var defIdReg = ~/^Tileset[0-9]*/g;
-		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath), true);
+		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath), _project.identifierStyle);
 		if( defIdReg.match(td.identifier) || oldFileName!=null && td.identifier.indexOf(oldFileName)>=0 ) {
-			var base = Project.cleanupIdentifier( td.getFileName(false), true );
+			var base = Project.cleanupIdentifier( td.getFileName(false), _project.identifierStyle );
 			var id = base;
 			var idx = 2;
 			while( !isTilesetIdentifierUnique(id) )
@@ -570,7 +570,7 @@ class Definitions {
 	}
 
 	public function isEnumIdentifierUnique(id:String, ?exclude:data.def.EnumDef) {
-		id = Project.cleanupIdentifier(id, true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		if( id==null )
 			return false;
 

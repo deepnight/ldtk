@@ -22,7 +22,7 @@ class Tags {
 
 	@:allow(ui.TagEditor)
 	inline function cleanUpTag(k:String) : Null<String> {
-		k = Project.cleanupIdentifier(k,false);
+		k = Project.cleanupIdentifier(k,Free);
 		return k==null || k=="_" || k=="" ? null : k;
 	}
 

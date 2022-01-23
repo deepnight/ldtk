@@ -129,7 +129,7 @@ class FieldDefsForm {
 			}
 			if( isArray )
 				baseName+"_array";
-			fd.identifier = project.fixUniqueIdStr(baseName, false, id->isFieldIdentifierUnique(id) );
+			fd.identifier = project.fixUniqueIdStr(baseName, Free, id->isFieldIdentifierUnique(id) );
 			fieldDefs.push(fd);
 
 			w.close();
@@ -170,7 +170,7 @@ class FieldDefsForm {
 
 
 	function isFieldIdentifierUnique(id:String, ?except:FieldDef) {
-		id = data.Project.cleanupIdentifier(id,false);
+		id = data.Project.cleanupIdentifier(id, Free);
 		for(fd in fieldDefs)
 			if( ( except==null || fd!=except ) && fd.identifier==id )
 				return false;
@@ -190,7 +190,7 @@ class FieldDefsForm {
 		var json : ldtk.Json.FieldDefJson = c.getParsedJson();
 		var copy = FieldDef.fromJson( project, json );
 		copy.uid = project.generateUniqueId_int();
-		copy.identifier = project.fixUniqueIdStr(json.identifier, false, (id)->isFieldIdentifierUnique(id));
+		copy.identifier = project.fixUniqueIdStr(json.identifier, Free, (id)->isFieldIdentifierUnique(id));
 		if( after==null )
 			fieldDefs.push(copy);
 		else
@@ -613,7 +613,7 @@ class FieldDefsForm {
 
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
 		i.onChange = onFieldChange;
-		i.fixValue = (v)->project.fixUniqueIdStr(v, false, (id)->isFieldIdentifierUnique(id,curField));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, Free, (id)->isFieldIdentifierUnique(id,curField));
 
 		// Default value
 		switch curField.type {

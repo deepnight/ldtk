@@ -37,6 +37,7 @@ class Project {
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
+	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalized;
 
 	@:allow(data.Level)
 	var quickLevelAccess : Map<Int, Level> = new Map();
@@ -173,8 +174,8 @@ class Project {
 
 	public function generateUniqueId_int() return nextUid++;
 
-	public function fixUniqueIdStr(baseId:String, firstCharCap=true, isUnique:String->Bool) : String {
-		baseId = cleanupIdentifier(baseId,firstCharCap);
+	public function fixUniqueIdStr(baseId:String, ?styleOverride:ldtk.Json.IdentifierStyle, isUnique:String->Bool) : String {
+		baseId = cleanupIdentifier(baseId, styleOverride==null ? identifierStyle : styleOverride);
 		if( baseId=="_" )
 			baseId = "Unnamed";
 
@@ -631,6 +632,28 @@ class Project {
 		}
 	}
 
+	public function applyIdentifierStyleEverywhere(old:ldtk.Json.IdentifierStyle) {
+		if( old==identifierStyle )
+			return false;
+
+		for(l in levels)
+			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
+
+		for(td in defs.tilesets)
+			td.identifier = cleanupIdentifier(td.identifier, identifierStyle);
+
+		for(ld in defs.layers)
+			ld.identifier = cleanupIdentifier(ld.identifier, identifierStyle);
+
+		for(ed in defs.entities)
+			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
+
+		for(ed in defs.enums)
+			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
+
+		return true;
+	}
+
 	/**
 		Run tidy() only for custom fields
 	**/
@@ -796,7 +819,7 @@ class Project {
 	}
 
 	public function isWorldIdentifierUnique(id:String, ?exclude:World) {
-		id = cleanupIdentifier(id,true);
+		id = cleanupIdentifier(id, identifierStyle);
 		for(w in worlds)
 			if( w.identifier==id && w!=exclude )
 				return false;
@@ -928,7 +951,7 @@ class Project {
 	}
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
-		id = cleanupIdentifier(id,true);
+		id = cleanupIdentifier(id, identifierStyle);
 		for(l in levels)
 			if( l.identifier==id && l!=exclude )
 				return false;
@@ -1145,11 +1168,11 @@ class Project {
 	/**  GENERAL TOOLS  *****************************************/
 
 	public static inline function isValidIdentifier(id:String) {
-		return cleanupIdentifier(id,false) != null;
+		return cleanupIdentifier(id, Free) != null;
 	}
 
 
-	public static function cleanupIdentifier(id:String, capitalizeFirstLetter:Bool) : Null<String> {
+	public static function cleanupIdentifier(id:String, style:ldtk.Json.IdentifierStyle) : Null<String> {
 		if( id==null )
 			return null;
 
@@ -1170,10 +1193,20 @@ class Project {
 		// Checks identifier syntax (letters or _ )
 		reg = ~/^[a-z_]+[a-z0-9_]*$/gi;
 		if( reg.match(id) ) {
-			if( capitalizeFirstLetter ) {
-				reg = ~/^(_*)([a-z])([a-zA-Z0-9_]*)/g; // extract first letter, if it's lowercase
-				if( reg.match(id) )
-					id = reg.matched(1) + reg.matched(2).toUpperCase() + reg.matched(3);
+			// Apply style
+			switch style {
+				case Capitalized:
+					reg = ~/^(_*)([a-z])([a-zA-Z0-9_]*)/g; // extract first letter, if it's lowercase
+					if( reg.match(id) )
+						id = reg.matched(1) + reg.matched(2).toUpperCase() + reg.matched(3);
+
+				case Uppercase:
+					id = id.toUpperCase();
+
+				case Lowercase:
+					id = id.toLowerCase();
+
+				case Free:
 			}
 			return id;
 		}
@@ -1212,7 +1245,7 @@ class Project {
 					case LinearHorizontal, LinearVertical: "";
 				}) );
 				id = StringTools.replace(id, "%d", Std.string(l.worldDepth) );
-				l.identifier = fixUniqueIdStr(id, true, id->isLevelIdentifierUnique(id));
+				l.identifier = fixUniqueIdStr(id, id->isLevelIdentifierUnique(id));
 			}
 			idx++;
 		}

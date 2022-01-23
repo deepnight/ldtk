@@ -50,6 +50,7 @@ class OgmoLoader {
 		out.extension = Const.FILE_EXTENSION;
 		var p = data.Project.createEmpty(out.full);
 		p.worldLayout = LinearHorizontal;
+		p.identifierStyle = Free;
 
 		#if !debug
 		try {
@@ -70,7 +71,7 @@ class OgmoLoader {
 				log.indentMore();
 				var td = p.defs.createTilesetDef();
 				ldtkTilesets.set(tilesetJson.label, td);
-				td.identifier = data.Project.cleanupIdentifier(tilesetJson.label,true);
+				td.identifier = data.Project.cleanupIdentifier(tilesetJson.label, p.identifierStyle);
 				td.tileGridSize = readGrid({ x:tilesetJson.tileWidth, y:tilesetJson.tileHeight }, 16);
 				td.spacing = tilesetJson.tileSeparationX;
 				td.padding = tilesetJson.tileMarginX;
@@ -104,7 +105,7 @@ class OgmoLoader {
 				// Create base entity
 				var ed = p.defs.createEntityDef();
 				ldtkEntities.set(entityJson.name, ed);
-				ed.identifier = data.Project.cleanupIdentifier(entityJson.name, true);
+				ed.identifier = data.Project.cleanupIdentifier(entityJson.name, p.identifierStyle);
 				ed.color = convertColor(entityJson.color);
 				ed.width = entityJson.size.x;
 				ed.height = entityJson.size.y;
@@ -133,7 +134,7 @@ class OgmoLoader {
 						case "Enum":
 							// Create enum def
 							var enumDef = p.defs.createEnumDef();
-							enumDef.identifier = data.Project.cleanupIdentifier(entityJson.name+"_"+valJson.name, true);
+							enumDef.identifier = data.Project.cleanupIdentifier(entityJson.name+"_"+valJson.name, p.identifierStyle);
 							for(ev in valJson.choices)
 								if( !enumDef.addValue(ev) )
 									log.error("Enum value is invalid or already used in entity "+entityJson.name+"."+valJson.name);
@@ -212,7 +213,7 @@ class OgmoLoader {
 				switch layerJson.definition {
 					// IntGrid layer def
 					case "grid":
-						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, true));
+						var layer = p.defs.createLayerDef(IntGrid, data.Project.cleanupIdentifier(layerJson.name, p.identifierStyle));
 						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize, 16);
 						layer.intGridValues = [];
@@ -226,17 +227,17 @@ class OgmoLoader {
 								continue;
 							}
 							var baseId = numReg.match(k) ? "v"+k : k;
-							var id = data.Project.cleanupIdentifier(baseId,false);
+							var id = data.Project.cleanupIdentifier(baseId, Free);
 							var inc = 2;
 							while( !layer.isIntGridValueIdentifierValid(id) )
-								id = data.Project.cleanupIdentifier(baseId+"_"+(inc++), false);
+								id = data.Project.cleanupIdentifier(baseId+"_"+(inc++), Free);
 							ldtkIntGridIds.get(layer.uid).set(k, id);
 							layer.addIntGridValue( convertColor( Reflect.field(layerJson.legend,k) ), id );
 						}
 
 					// Entity layer def
 					case "entity":
-						var layer = p.defs.createLayerDef(Entities, data.Project.cleanupIdentifier(layerJson.name, true));
+						var layer = p.defs.createLayerDef(Entities, data.Project.cleanupIdentifier(layerJson.name, p.identifierStyle));
 						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize, 16);
 						layer.requiredTags.fromArray( layerJson.requiredTags );
@@ -244,11 +245,11 @@ class OgmoLoader {
 
 					// Tile layer def
 					case "tile":
-						var layer = p.defs.createLayerDef(Tiles, data.Project.cleanupIdentifier(layerJson.name, true));
+						var layer = p.defs.createLayerDef(Tiles, data.Project.cleanupIdentifier(layerJson.name, p.identifierStyle));
 						ldtkLayerDefs.set(layerJson.name, layer);
 						layer.gridSize = readGrid(layerJson.gridSize, 16);
 						if( layerJson.defaultTileset!=null ) {
-							var td = p.defs.getTilesetDef( data.Project.cleanupIdentifier(layerJson.defaultTileset, true) );
+							var td = p.defs.getTilesetDef( data.Project.cleanupIdentifier(layerJson.defaultTileset, p.identifierStyle) );
 							if( td!=null )
 								layer.tilesetDefUid = td.uid;
 							else
@@ -298,7 +299,7 @@ class OgmoLoader {
 
 				// Create base level
 				var level = p.createLevel();
-				level.identifier = data.Project.cleanupIdentifier(fp.fileName,true);
+				level.identifier = data.Project.cleanupIdentifier(fp.fileName, p.identifierStyle);
 				level.useAutoIdentifier = false;
 				level.pxWid = levelJson.width;
 				level.pxHei = levelJson.height;
@@ -372,7 +373,7 @@ class OgmoLoader {
 								// Fields values
 								if( entJson.values!=null )
 									for(k in Reflect.fields(entJson.values)) {
-										var fd = ed.getFieldDef( data.Project.cleanupIdentifier(k, false) );
+										var fd = ed.getFieldDef( data.Project.cleanupIdentifier(k, Free) );
 										if( fd==null ) {
 											log.error('Unknown value $k in entity ${entJson.name} in level ${fp.fileWithExt}');
 											continue;
@@ -387,7 +388,7 @@ class OgmoLoader {
 												fi.parseValue(0, C.intToHex(convertColor(rawValue)) );
 
 											case F_Enum(enumDefUid):
-												var ev = data.Project.cleanupIdentifier(rawValue,true);
+												var ev = data.Project.cleanupIdentifier(rawValue, p.identifierStyle);
 												fi.parseValue(0, ev);
 
 											case F_Point:

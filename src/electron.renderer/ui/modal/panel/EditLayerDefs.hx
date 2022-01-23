@@ -422,7 +422,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						function(v) {
 							if( v!=null && StringTools.trim(v).length==0 )
 								v = null;
-							intGridVal.identifier = data.Project.cleanupIdentifier(v, false);
+							intGridVal.identifier = data.Project.cleanupIdentifier(v, Free);
 						}
 					);
 					i.validityCheck = cur.isIntGridValueIdentifierValid;

@@ -64,7 +64,7 @@ class EntityDef {
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id, _project.identifierStyle) : identifier;
 	}
 
 	@:keep public function toString() {
@@ -179,7 +179,7 @@ class EntityDef {
 
 	public function createFieldDef(project:Project, type:ldtk.Json.FieldType, baseName:String, isArray:Bool) : FieldDef {
 		var f = new FieldDef(project, project.generateUniqueId_int(), type, isArray);
-		f.identifier = project.fixUniqueIdStr( baseName + (isArray?"_array":""), false, (id)->isFieldIdentifierUnique(id) );
+		f.identifier = project.fixUniqueIdStr( baseName + (isArray?"_array":""), Free, (id)->isFieldIdentifierUnique(id) );
 		fieldDefs.push(f);
 		return f;
 	}
@@ -206,7 +206,7 @@ class EntityDef {
 	}
 
 	public function isFieldIdentifierUnique(id:String) {
-		id = Project.cleanupIdentifier(id,false);
+		id = Project.cleanupIdentifier(id,Free);
 		for(fd in fieldDefs)
 			if( fd.identifier==id )
 				return false;
@@ -216,7 +216,7 @@ class EntityDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
-		
+
 		// Migrate old tileId to tileRect
 		if( _oldTileId!=null && tileRect==null ) {
 			var td = p.defs.getTilesetDef(tilesetId);

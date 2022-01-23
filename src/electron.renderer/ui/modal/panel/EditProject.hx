@@ -225,6 +225,37 @@ class EditProject extends ui.modal.Panel {
 		}
 
 
+		// Identifier style
+		var i = new form.input.EnumSelect(
+			jForm.find("#identifierStyle"),
+			ldtk.Json.IdentifierStyle,
+			false,
+			()->return project.identifierStyle,
+			(v)->{
+				if( v==project.identifierStyle )
+					return;
+
+				var old = project.identifierStyle;
+				new LastChance(L.t._("Identifier style changed"), project);
+				project.identifierStyle = v;
+				project.applyIdentifierStyleEverywhere(old);
+				editor.invalidateAllLevelsCache();
+				editor.ge.emit(ProjectSettingsChanged);
+			},
+			(v)->switch v {
+				case Capitalized: L.t._('"My_identifier_1" -- First letter is always uppercase, the rest is up to you');
+				case Uppercase: L.t._('"MY_IDENTIFIER_1" -- All uppercase');
+				case Lowercase: L.t._('"my_identifier_1" -- All lowercase');
+				case Free: L.t._('"my_IdEnTifIeR_1" -- I wON\'t chaNGe yOuR leTteR caSe');
+			}
+		);
+		i.confirmMessage = L.t._("All identifiers in this project will be converted to the new format!\nAre you sure?");
+		var jStyleWarning = jForm.find("#styleWarning");
+		switch project.identifierStyle {
+			case Capitalized, Uppercase: jStyleWarning.hide();
+			case Lowercase, Free: jStyleWarning.show();
+		}
+
 		// Tiled export
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);

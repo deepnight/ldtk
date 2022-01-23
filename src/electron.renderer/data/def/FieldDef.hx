@@ -94,7 +94,7 @@ class FieldDef {
 	}
 
 	function set_identifier(id:String) {
-		id = Project.cleanupIdentifier(id,false);
+		id = Project.cleanupIdentifier(id, Free);
 		if( id==null )
 			return identifier;
 		else
