@@ -179,6 +179,13 @@ class LevelInstanceForm {
 		if( level==null )
 			return;
 
+		// IID
+		jForm.find("#iid").val(level.iid);
+		jForm.find(".copyIid").click(_->{
+			App.ME.clipboard.copyStr(level.iid);
+			N.copied();
+		});
+
 		// Level identifier
 		jWrapper.find(".levelIdentifier").text('"${level.identifier}"');
 		var i = Input.linkToHtmlInput( level.identifier, jForm.find("#identifier"));
