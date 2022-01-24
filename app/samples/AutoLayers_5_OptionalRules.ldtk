@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456214,
+	"appBuildId": 456399,
 	"nextUid": 157,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1518,7 +1519,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		},
 		{
 			"identifier": "color",
@@ -1545,7 +1547,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		},
 		{
 			"identifier": "fog_intensity",
@@ -1572,7 +1575,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [

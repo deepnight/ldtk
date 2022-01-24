@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456134,
+	"appBuildId": 456399,
 	"nextUid": 45,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -134,7 +135,7 @@
 				]
 			}],
 			"autoSourceLayerDefUid": 1,
-			"tilesetDefUid": null,
+			"tilesetDefUid": 2,
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		},
@@ -307,7 +308,7 @@
 				]
 			}],
 			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
+			"tilesetDefUid": 2,
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		},
@@ -330,7 +331,7 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
-			"autoTilesetDefUid": null,
+			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": 2,
@@ -356,6 +357,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -387,7 +389,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Float",
@@ -414,7 +417,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Boolean",
@@ -441,7 +445,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "String_singleLine",
@@ -468,7 +473,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "String_multiLines",
@@ -495,7 +501,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Enum",
@@ -522,7 +529,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Color",
@@ -549,7 +557,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Point",
@@ -576,7 +585,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "FilePath",
@@ -603,7 +613,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Array_Integer",
@@ -630,7 +641,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Array_Enum",
@@ -657,7 +669,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Array_points",
@@ -684,7 +697,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Array_multilines",
@@ -711,7 +725,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -733,6 +748,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -764,7 +780,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "color",
@@ -791,7 +808,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -813,6 +831,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -844,7 +863,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "Integer",
@@ -871,7 +891,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -893,6 +914,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -924,7 +946,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "text",
@@ -951,7 +974,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		}
@@ -1035,7 +1059,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -1045,6 +1070,7 @@
 			"uid": 0,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 680,
 			"pxHei": 568,
 			"__bgColor": "#6E6F8B",
@@ -1987,6 +2013,7 @@
 			"uid": 32,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#6E6F8B",
@@ -2495,6 +2522,7 @@
 			"uid": 33,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 160,
 			"__bgColor": "#6E6F8B",
@@ -2770,6 +2798,7 @@
 			"uid": 36,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 272,
 			"pxHei": 192,
 			"__bgColor": "#6E6F8B",
@@ -3016,5 +3045,6 @@
 			],
 			"__neighbours": []
 		}
-	]
+	],
+	"worlds": []
 }

@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456320,
+	"appBuildId": 456399,
 	"nextUid": 133,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "GridVania",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -7329,7 +7330,11 @@
 							"px": [216,256],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "abd6a7b0-66b0-11ec-a595-ffcc1299ef8f",
+								"__value": {
+									"entityIid": "abd6a7b0-66b0-11ec-a595-ffcc1299ef8f",
+									"layerIid": "9312a0d1-66b0-11ec-a595-23396da8cf9f",
+									"levelIid": "9312a0d0-66b0-11ec-a595-a934707bd447"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -13422,7 +13427,11 @@
 							"px": [472,464],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "3bde8fe0-66b0-11ec-a595-515a2ae1dbef",
+								"__value": {
+									"entityIid": "3bde8fe0-66b0-11ec-a595-515a2ae1dbef",
+									"layerIid": "07caf541-66b0-11ec-a595-b3726fb46cd5",
+									"levelIid": "07caf540-66b0-11ec-a595-a55a7e13679d"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -16994,7 +17003,11 @@
 							"px": [56,128],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "b70d98a0-66b0-11ec-a595-b125edb525fa",
+								"__value": {
+									"entityIid": "b70d98a0-66b0-11ec-a595-b125edb525fa",
+									"layerIid": "9312a0d1-66b0-11ec-a595-23396da8cf9f",
+									"levelIid": "9312a0d0-66b0-11ec-a595-a934707bd447"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -19014,7 +19027,11 @@
 							"px": [200,688],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "d0d166d0-66b0-11ec-b893-fbba01a4c0d1",
+								"__value": {
+									"entityIid": "d0d166d0-66b0-11ec-b893-fbba01a4c0d1",
+									"layerIid": "a374bc05-66b0-11ec-9cd7-315ee5c3e0d3",
+									"levelIid": "a374bc00-66b0-11ec-9cd7-65fcab2d5d53"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -24400,7 +24417,11 @@
 							"px": [120,176],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "d4c0c970-66b0-11ec-b893-e744143e4b85",
+								"__value": {
+									"entityIid": "d4c0c970-66b0-11ec-b893-e744143e4b85",
+									"layerIid": "a371aec5-66b0-11ec-9cd7-cd4768d1d266",
+									"levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -28411,7 +28432,11 @@
 							"px": [168,224],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "9c20a1d0-66b0-11ec-b893-7dd8e9dfe663",
+								"__value": {
+									"entityIid": "9c20a1d0-66b0-11ec-b893-7dd8e9dfe663",
+									"layerIid": "a36f8be5-66b0-11ec-9cd7-779e073cf8d2",
+									"levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -28959,7 +28984,11 @@
 							"px": [296,528],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "1a247570-66b0-11ec-b893-3368fa8363b5",
+								"__value": {
+									"entityIid": "1a247570-66b0-11ec-b893-3368fa8363b5",
+									"layerIid": "a36b6d35-66b0-11ec-9cd7-430b1023ae6b",
+									"levelIid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{
@@ -28981,7 +29010,11 @@
 							"px": [456,176],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "b9c16e00-66b0-11ec-a595-f73311b85ab0",
+								"__value": {
+									"entityIid": "b9c16e00-66b0-11ec-a595-f73311b85ab0",
+									"layerIid": "a3707645-66b0-11ec-9cd7-cf8dbd45f43c",
+									"levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075"
+								},
 								"__type": "EntityRef",
 								"defUid": 131,
 								"realEditorValues": [{

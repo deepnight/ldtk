@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456213,
+	"appBuildId": 456399,
 	"nextUid": 99,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -501,6 +502,7 @@
 			"tilesetId": 47,
 			"tileId": 306,
 			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 192, "y": 480, "w": 32, "h": 32 },
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
@@ -532,7 +534,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "isAwaken",
@@ -562,7 +565,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "weapon",
@@ -589,7 +593,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "bag",
@@ -616,7 +621,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -638,6 +644,7 @@
 			"tilesetId": 59,
 			"tileId": 1219,
 			"tileRenderMode": "Stretch",
+			"tileRect": { "x": 48, "y": 1216, "w": 16, "h": 16 },
 			"maxCount": 4,
 			"limitScope": "PerLevel",
 			"limitBehavior": "PreventAdding",
@@ -669,7 +676,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "colors",
@@ -696,7 +704,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "flickering",
@@ -723,7 +732,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "intensity",
@@ -750,7 +760,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -772,6 +783,7 @@
 			"tilesetId": 59,
 			"tileId": 1339,
 			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 176, "y": 1328, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -803,7 +815,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "life",
@@ -830,7 +843,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "loots",
@@ -857,7 +871,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "patrol",
@@ -884,7 +899,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -906,6 +922,7 @@
 			"tilesetId": 59,
 			"tileId": 1010,
 			"tileRenderMode": "Stretch",
+			"tileRect": { "x": 32, "y": 1008, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -937,7 +954,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "requireKey",
@@ -964,7 +982,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -986,6 +1005,7 @@
 			"tilesetId": 59,
 			"tileId": 226,
 			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 32, "y": 224, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1017,7 +1037,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
-					"allowedRefTags": ["triggerable"]
+					"allowedRefTags": ["triggerable"],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "delay",
@@ -1044,7 +1065,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -1066,6 +1088,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1097,7 +1120,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -1119,6 +1143,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -1150,7 +1175,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
-					"allowedRefTags": ["triggerable"]
+					"allowedRefTags": ["triggerable"],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "condition",
@@ -1177,7 +1203,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "message",
@@ -1204,7 +1231,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		}
@@ -1319,7 +1347,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		},
 		{
 			"identifier": "textColor",
@@ -1346,7 +1375,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -1749,7 +1779,15 @@
 								},
 								{
 									"__identifier": "targets",
-									"__value": [ "f80ee801-66b0-11ec-b121-4d74c475d701", "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e" ],
+									"__value": [ {
+										"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									}, {
+										"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									} ],
 									"__type": "Array<EntityRef>",
 									"defUid": 97,
 									"realEditorValues": [ {
@@ -1893,7 +1931,11 @@
 								},
 								{
 									"__identifier": "target",
-									"__value": "f80ee805-66b0-11ec-b121-09bc15634dc5",
+									"__value": {
+										"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									},
 									"__type": "EntityRef",
 									"defUid": 98,
 									"realEditorValues": [{

@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456260,
+	"appBuildId": 456399,
 	"nextUid": 104,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -747,6 +748,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
@@ -778,7 +780,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "ammo",
@@ -805,7 +808,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -827,6 +831,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "FitInside",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -858,7 +863,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -880,6 +886,7 @@
 			"tilesetId": 67,
 			"tileId": 1343,
 			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 240, "y": 1328, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -914,7 +921,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "description",
@@ -941,7 +949,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "loot",
@@ -968,7 +977,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -990,6 +1000,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "FitInside",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -1021,7 +1032,8 @@
 					"symmetricalRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		}
@@ -1108,7 +1120,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		},
 		{
 			"identifier": "textColor",
@@ -1135,7 +1148,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -4248,7 +4262,11 @@
 							"px": [56,88],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "88352ed0-66b0-11ec-bae9-d1471137867b",
+								"__value": {
+									"entityIid": "88352ed0-66b0-11ec-bae9-d1471137867b",
+									"layerIid": "6c2901d1-66b0-11ec-bae9-5b123908ec86",
+									"levelIid": "6c2901d0-66b0-11ec-bae9-73f26d40ba65"
+								},
 								"__type": "EntityRef",
 								"defUid": 102,
 								"realEditorValues": [{
@@ -4890,7 +4908,11 @@
 							"px": [120,72],
 							"fieldInstances": [{
 								"__identifier": "destination",
-								"__value": "68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25",
+								"__value": {
+									"entityIid": "68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25",
+									"layerIid": "85fafb30-66b0-11ec-adb8-bf3b739f5ab5",
+									"levelIid": "85fad420-66b0-11ec-adb8-b5aafe4bf8a4"
+								},
 								"__type": "EntityRef",
 								"defUid": 102,
 								"realEditorValues": [{

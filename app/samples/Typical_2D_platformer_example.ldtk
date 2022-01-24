@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456215,
+	"appBuildId": 456399,
 	"nextUid": 104,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -1119,6 +1120,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "PreventAdding",
@@ -1150,7 +1152,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -1172,6 +1175,7 @@
 			"tilesetId": 91,
 			"tileId": 1010,
 			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 32, "y": 1008, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1203,7 +1207,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -1225,6 +1230,7 @@
 			"tilesetId": 91,
 			"tileId": 1339,
 			"tileRenderMode": "Cover",
+			"tileRect": { "x": 176, "y": 1328, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1256,7 +1262,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				},
 				{
 					"identifier": "patrol",
@@ -1283,7 +1290,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -1305,6 +1313,7 @@
 			"tilesetId": null,
 			"tileId": null,
 			"tileRenderMode": "Stretch",
+			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1336,7 +1345,8 @@
 					"symmetricalRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
-					"allowedRefTags": []
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		}
@@ -1432,7 +1442,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		},
 		{
 			"identifier": "textColor",
@@ -1459,7 +1470,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -1469,6 +1481,7 @@
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
+			"worldDepth": 0,
 			"pxWid": 848,
 			"pxHei": 336,
 			"__bgColor": "#50506A",
@@ -4536,6 +4549,7 @@
 			"uid": 88,
 			"worldX": 80,
 			"worldY": 336,
+			"worldDepth": 0,
 			"pxWid": 464,
 			"pxHei": 256,
 			"__bgColor": "#50506A",

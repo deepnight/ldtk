@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456134,
+	"appBuildId": 456399,
 	"nextUid": 10,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 240,
 	"worldGridHeight": 240,
@@ -83,7 +84,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -93,6 +95,7 @@
 			"uid": 0,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 240,
 			"pxHei": 224,
 			"__bgColor": "#398666",
@@ -126,6 +129,7 @@
 			"uid": 2,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 240,
 			"pxHei": 240,
 			"__bgColor": "#4A4C7F",
@@ -148,6 +152,7 @@
 			"uid": 3,
 			"worldX": -1,
 			"worldY": -1,
+			"worldDepth": 0,
 			"pxWid": 240,
 			"pxHei": 240,
 			"__bgColor": "#955268",
@@ -164,5 +169,6 @@
 			"layerInstances": null,
 			"__neighbours": []
 		}
-	]
+	],
+	"worlds": []
 }

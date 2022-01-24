@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456134,
+	"appBuildId": 456399,
 	"nextUid": 71,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -246,7 +247,7 @@
 				}
 			],
 			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
+			"tilesetDefUid": 6,
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		},
@@ -533,7 +534,7 @@
 				}
 			],
 			"autoSourceLayerDefUid": 1,
-			"tilesetDefUid": null,
+			"tilesetDefUid": 6,
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		}
@@ -584,7 +585,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		},
 		{
 			"identifier": "textColor",
@@ -611,7 +613,8 @@
 			"symmetricalRef": false,
 			"allowOutOfLevelRef": true,
 			"allowedRefs": "OnlySame",
-			"allowedRefTags": []
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -621,6 +624,7 @@
 			"uid": 3,
 			"worldX": 144,
 			"worldY": -384,
+			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 400,
 			"__bgColor": "#37494E",
@@ -1152,6 +1156,7 @@
 			"uid": 40,
 			"worldX": 80,
 			"worldY": -640,
+			"worldDepth": 0,
 			"pxWid": 512,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
@@ -1776,6 +1781,7 @@
 			"uid": 0,
 			"worldX": -224,
 			"worldY": -336,
+			"worldDepth": 0,
 			"pxWid": 368,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
@@ -2249,6 +2255,7 @@
 			"uid": 2,
 			"worldX": 400,
 			"worldY": -384,
+			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
@@ -2625,6 +2632,7 @@
 			"uid": 4,
 			"worldX": 432,
 			"worldY": -128,
+			"worldDepth": 0,
 			"pxWid": 448,
 			"pxHei": 256,
 			"__bgColor": "#37494E",
@@ -3278,6 +3286,7 @@
 			"uid": 29,
 			"worldX": 656,
 			"worldY": -416,
+			"worldDepth": 0,
 			"pxWid": 320,
 			"pxHei": 288,
 			"__bgColor": "#37494E",
@@ -3747,6 +3756,7 @@
 			"uid": 30,
 			"worldX": -480,
 			"worldY": -288,
+			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 288,
 			"__bgColor": "#37494E",
@@ -4151,6 +4161,7 @@
 			"uid": 41,
 			"worldX": 592,
 			"worldY": 128,
+			"worldDepth": 0,
 			"pxWid": 400,
 			"pxHei": 224,
 			"__bgColor": "#37494E",
@@ -4622,6 +4633,7 @@
 			"uid": 42,
 			"worldX": 320,
 			"worldY": 128,
+			"worldDepth": 0,
 			"pxWid": 272,
 			"pxHei": 176,
 			"__bgColor": "#37494E",
@@ -4892,5 +4904,6 @@
 			],
 			"__neighbours": [ { "levelIid": "a35a2f20-66b0-11ec-9cd7-db6f994e2834", "levelUid": 4, "dir": "n" }, { "levelIid": "a35acb61-66b0-11ec-9cd7-f76e35cfda30", "levelUid": 41, "dir": "e" } ]
 		}
-	]
+	],
+	"worlds": []
 }
