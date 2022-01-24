@@ -37,7 +37,7 @@ class Project {
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
-	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalized;
+	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 
 	@:allow(data.Level)
 	var quickLevelAccess : Map<Int, Level> = new Map();
@@ -236,7 +236,7 @@ class Project {
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
-		p.identifierStyle = JsonTools.readEnum(ldtk.Json.IdentifierStyle, json.identifierStyle, false, Capitalized);
+		p.identifierStyle = JsonTools.readEnum(ldtk.Json.IdentifierStyle, json.identifierStyle, false, Capitalize);
 
 		// Advanced flags
 		if( (cast json).advancedOptionFlags!=null )
@@ -650,8 +650,11 @@ class Project {
 		for(ed in defs.entities)
 			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
 
-		for(ed in defs.enums)
+		for(ed in defs.enums) {
 			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
+			for( ev in ed.values)
+				ev.id = cleanupIdentifier(ev.id, identifierStyle);
+		}
 
 		return true;
 	}
@@ -1197,7 +1200,7 @@ class Project {
 		if( reg.match(id) ) {
 			// Apply style
 			switch style {
-				case Capitalized:
+				case Capitalize:
 					reg = ~/^(_*)([a-z])([a-zA-Z0-9_]*)/g; // extract first letter, if it's lowercase
 					if( reg.match(id) )
 						id = reg.matched(1) + reg.matched(2).toUpperCase() + reg.matched(3);
