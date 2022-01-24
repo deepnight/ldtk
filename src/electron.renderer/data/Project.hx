@@ -638,9 +638,22 @@ class Project {
 		if( old==identifierStyle )
 			return false;
 
-		for(l in levels)
-			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
+		// Enum defs
+		for(ed in defs.enums) {
+			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
+			for( ev in ed.values)
+				ev.id = cleanupIdentifier(ev.id, identifierStyle);
+		}
 
+		// Layer defs
+		for(ld in defs.layers)
+			ld.identifier = cleanupIdentifier(ld.identifier, identifierStyle);
+
+		// Entity defs
+		for(ed in defs.entities)
+			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
+
+		// Tileset defs
 		for(td in defs.tilesets) {
 			td.identifier = cleanupIdentifier(td.identifier, identifierStyle);
 			var ed = td.getTagsEnumDef();
@@ -649,16 +662,34 @@ class Project {
 					td.enumTags.set( cleanupIdentifier(k, identifierStyle), td.enumTags.get(k) );
 		}
 
-		for(ld in defs.layers)
-			ld.identifier = cleanupIdentifier(ld.identifier, identifierStyle);
+		// Levels
+		for(l in levels) {
+			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
+			// Level fields
+			for(fi in l.fieldInstances) {
+				if( !fi.def.isEnum() )
+					continue;
 
-		for(ed in defs.entities)
-			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
+				var ed = fi.def.getEnumDef();
+				if( ed!=null && ed.isExternal() )
+					continue;
+				for(i in 0...fi.getArrayLength())
+					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+			}
+			// Entity fields
+			for(li in l.layerInstances)
+			for(ei in li.entityInstances)
+			for(fi in ei.fieldInstances) {
+				if( !fi.def.isEnum() )
+					continue;
 
-		for(ed in defs.enums) {
-			ed.identifier = cleanupIdentifier(ed.identifier, identifierStyle);
-			for( ev in ed.values)
-				ev.id = cleanupIdentifier(ev.id, identifierStyle);
+				var ed = fi.def.getEnumDef();
+				if( ed!=null && ed.isExternal() )
+					continue;
+				trace(fi);
+				for(i in 0...fi.getArrayLength())
+					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+			}
 		}
 
 		return true;
