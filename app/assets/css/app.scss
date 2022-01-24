@@ -4129,11 +4129,11 @@ canvas#webgl {
 	&>.wrapper {
 		display: grid;
 		grid-template-columns: 100%;
-		grid-template-rows: min-content 50vh min-content;
+		grid-template-rows: 25vh 65vh 10vh;
 		box-sizing: border-box;
 		width: 80vw;
-		min-width: 850px;
-		max-width: 1000px;
+		min-width: 960px;
+		max-width: 1200px;
 		margin: auto;
 		height: 100%;
 		align-items: center;
@@ -4146,16 +4146,17 @@ canvas#webgl {
 		}
 
 		header {
-			padding-bottom: 30px;
+			display: grid;
+			align-self: stretch;
+			grid-template-rows: auto min-content;
+
+			padding-top: 32px;
+			padding-bottom: 16px;
 
 			background-image: url("../img/homeBg_header.png");
 			background-size: contain;
 			background-repeat: no-repeat;
 			background-position: bottom center;
-
-			.appLogo {
-				min-height: 160px;
-			}
 
 			.version {
 				font-size: 14pt;
@@ -4191,8 +4192,29 @@ canvas#webgl {
 					text-decoration: underline;
 				}
 			}
-
 		}
+
+
+		.footer {
+			display: grid;
+			grid-template-columns: min-content auto;
+			box-sizing: border-box;
+			padding-top: 16px;
+			padding-bottom: 16px;
+			align-self: center;
+
+			a img {
+				height: 2.5em;
+			}
+
+			span {
+				color: $bgLight;
+				text-align: right;
+				margin-top: 20px;
+				font-size: 0.75em;
+			}
+		}
+
 
 		.main {
 			display: grid;
@@ -4679,30 +4701,6 @@ canvas#webgl {
 
 		}
 
-
-		.footer {
-			display: grid;
-			grid-template-columns: min-content auto;
-			box-sizing: border-box;
-			padding-top: 32px;
-			// min-height: 150px;
-
-			// background-image: url("../img/homeBg_footer.png");
-			// background-repeat: no-repeat;
-			// background-position: center top;
-			// background-size: contain;
-
-			a img {
-				height: 3em;
-			}
-
-			span {
-				color: $bgLighter;
-				text-align: right;
-				margin-top: 20px;
-				font-size: 0.8em;
-			}
-		}
 
 	}
 }
