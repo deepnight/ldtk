@@ -15,7 +15,7 @@ class Input<T> {
 	public var validityCheck : Null<T->Bool>;
 	public var validityError : Null<T->Void>;
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
-	public var confirmMessage: Null<LocaleString>;
+	public var customConfirm: (oldValue:T,newValue:T)->Null<LocaleString>;
 
 	private function new(jElement:js.jquery.JQuery, rawGetter:Void->T, rawSetter:T->Void) {
 		if( jElement.length==0 )
@@ -112,18 +112,24 @@ class Input<T> {
 
 
 	function onInputChange(bypassConfirm=false) {
-		if( !bypassConfirm && confirmMessage!=null ) {
-			new ui.modal.dialog.Confirm(
-				jInput,
-				confirmMessage,
-				true,
-				onInputChange.bind(true),
-				()->{
-					setter(lastValidValue);
-					writeValueToInput();
-				}
-			);
-			return;
+		var newValue = parseInputValue();
+		newValue = fixValue(newValue);
+
+		if( !bypassConfirm && customConfirm!=null ) {
+			var msg = customConfirm(lastValidValue, newValue);
+			if( msg!=null ) {
+				new ui.modal.dialog.Confirm(
+					jInput,
+					msg,
+					true,
+					onInputChange.bind(true),
+					()->{
+						setter(lastValidValue);
+						writeValueToInput();
+					}
+				);
+				return;
+			}
 		}
 
 		if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
@@ -138,9 +144,7 @@ class Input<T> {
 		}
 
 		onBeforeSetter();
-		var v = parseInputValue();
-		v = fixValue(v);
-		setter(v);
+		setter(newValue);
 		writeValueToInput();
 		lastValidValue = getter();
 		onChange();

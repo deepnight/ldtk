@@ -249,7 +249,15 @@ class EditProject extends ui.modal.Panel {
 				case Free: L.t._('"my_IdEnTifIeR_1" -- I wON\'t cHaNge yOuR leTteR caSe');
 			}
 		);
-		i.confirmMessage = L.t._("All identifiers in this project will be converted to the new format!\nAre you sure?");
+		i.customConfirm = (oldV,newV)->{
+			switch newV {
+				case Capitalize, Uppercase, Lowercase:
+					L.t._("WARNING!\nPlease make sure the game engine or importer you're using supports this kind of LDtk identifier!\nIf you proceed, all identifiers in this project will be converted to the new format!\nAre you sure?");
+
+				case Free:
+					L.t._("WARNING!\nPlease make sure the game engine or importer you're using supports this kind of LDtk identifier!\nAre you sure?");
+			}
+		}
 		var jStyleWarning = jForm.find("#styleWarning");
 		switch project.identifierStyle {
 			case Capitalize, Uppercase: jStyleWarning.hide();
