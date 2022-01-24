@@ -187,7 +187,11 @@ class EntityInstance {
 					if( td==null )
 						return null;
 
-					var tid = ed.getValue( fi.getEnumValue(0) ).tileId;
+					var ev = ed.getValue( fi.getEnumValue(0) );
+					if( ev==null )
+						return null;
+					
+					var tid = ev.tileId;
 					return {
 						tilesetUid: ed.iconTilesetUid,
 						rect: {
