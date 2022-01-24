@@ -22,6 +22,7 @@
     - Fixed a critical crash when reloading an image which has a different width/height.
     - You are no longer limited to deleting the last IntGrid value.
   - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
+  - **"Identifier" format policy**: you can now pick your prefered "Identifier case policy" (default is "1st letter uppercased").
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various major optimizations to boost general performances & reduce CPU usage, especially on large projects.
 
