@@ -480,7 +480,16 @@ class FieldInstance {
 			case F_Color: getColorAsHexStr(arrayIdx);
 			case F_Point: getPointGrid(arrayIdx);
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
-			case F_EntityRef: getEntityRefIid(arrayIdx);
+
+			case F_EntityRef:
+				var ref = getEntityRefInstance(arrayIdx);
+				var out : ldtk.Json.EntityReferenceInfos = {
+					entityIid: getEntityRefIid(arrayIdx),
+					layerIid: ref==null ? "?" : ref._li.iid,
+					levelIid: ref==null ? "?" : ref._li.level.iid,
+				}
+				out;
+
 			case F_Tile:
 				var r = getTileRectObj(arrayIdx);
 				if( r==null )
