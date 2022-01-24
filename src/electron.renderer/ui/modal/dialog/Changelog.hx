@@ -3,7 +3,7 @@ package ui.modal.dialog;
 class Changelog extends ui.modal.Dialog {
 	var isNewUpdate : Bool;
 
-	public function new(isNewUpdate:Bool) {
+	public function new(isNewUpdate=false) {
 		super("changelog");
 
 		this.isNewUpdate = isNewUpdate;
@@ -24,29 +24,33 @@ class Changelog extends ui.modal.Dialog {
 				}
 		}
 
-		loadTemplate("changeLog", {
+		loadTemplate("changelog", {
 			ver: changeLog.version.numbers,
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
 			md: changeLog.allNoteLines.join("\n"),
 		}, false);
-		if( isNewUpdate )
-			addClass("newUpdate");
 
-		w.jContent.find(".close")
-			.click( (_)->w.close() );
 
-		w.jContent.find(".others").click( ev->{
+		jContent.find(".close")
+			.click( (_)->close() );
+
+		var jOthers = jContent.find(".others");
+		jOthers.click( ev->{
 			var ctx = new ui.modal.ContextMenu(ev);
 				for( c in Const.getChangeLog().entries )
 				ctx.add({
 					label: L.t.untranslated( c.version.numbers + ( c.title!=null ? " - "+c.title : "" ) ),
 					cb: ()->{
-						w.close();
-						showUpdate(c.version);
+						showVersion(c.version);
 					}
 				});
 		} );
+
+		if( isNewUpdate )
+			jOthers.hide();
+		else
+			jContent.find(".newUpdate").hide();
 	}
 
 }
