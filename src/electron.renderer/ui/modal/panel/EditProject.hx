@@ -244,9 +244,9 @@ class EditProject extends ui.modal.Panel {
 			},
 			(v)->switch v {
 				case Capitalize: L.t._('"My_identifier_1" -- First letter is always uppercase, the rest is up to you');
-				case Uppercase: L.t._('"MY_IDENTIFIER_1" -- All uppercase');
-				case Lowercase: L.t._('"my_identifier_1" -- All lowercase');
-				case Free: L.t._('"my_IdEnTifIeR_1" -- I wON\'t chaNGe yOuR leTteR caSe');
+				case Uppercase: L.t._('"MY_IDENTIFIER_1" -- Full uppercase');
+				case Lowercase: L.t._('"my_identifier_1" -- Full lowercase');
+				case Free: L.t._('"my_IdEnTifIeR_1" -- I wON\'t cHaNge yOuR leTteR caSe');
 			}
 		);
 		i.confirmMessage = L.t._("All identifiers in this project will be converted to the new format!\nAre you sure?");
