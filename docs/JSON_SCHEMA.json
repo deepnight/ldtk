@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 0.10.0 JSON schema",
+	"title": "LDtk 1.0.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "0.10.0",
+	"version": "1.0.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -916,7 +916,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.12.0+  Replaced by: `tileRect`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 0.12.0  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -1231,7 +1231,7 @@
 					]
 				},
 				"levelUid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.12.0+  Replaced by: `levelIid`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 0.12.0  Replaced by: `levelIid`",
 					"type": [
 						"integer"
 					]
@@ -1916,7 +1916,7 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.12.0+  Replaced by: `tilesetDefUid`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 0.12.0  Replaced by: `tilesetDefUid`",
 					"type": [
 						"integer",
 						"null"
