@@ -138,6 +138,9 @@ class DebugMenu extends ui.modal.ContextMenu {
 										li.applyAllAutoLayerRules();
 									}
 
+									// Final tidying
+									p.tidy();
+
 									// Write sample map
 									log.general(" -> Saving "+fp.fileName+"...");
 									var s = new ui.ProjectSaver(App.ME, p);
