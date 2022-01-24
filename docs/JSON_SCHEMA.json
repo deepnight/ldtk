@@ -916,7 +916,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "**WARNING**: this deprecated value is no longer exported since version 0.12.0  Replaced by: `tileRect`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -1111,7 +1111,7 @@
 					]
 				},
 				"collapsed": {
-					"description": "*This field was removed in 0.10.0 and should no longer be used.*",
+					"description": "*This field was removed in 1.0.0 and should no longer be used.*",
 					"type": [
 						"boolean",
 						"null"
@@ -1231,7 +1231,7 @@
 					]
 				},
 				"levelUid": {
-					"description": "**WARNING**: this deprecated value is no longer exported since version 0.12.0  Replaced by: `levelIid`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `levelIid`",
 					"type": [
 						"integer"
 					]
@@ -1434,7 +1434,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "**WARNING**: this deprecated value is no longer exported since version 0.10.0  Replaced by: `intGridCsv`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
@@ -1902,7 +1902,7 @@
 					]
 				},
 				"tilesetDefUid": {
-					"description": "Reference to the default Tileset UID being used by this layer definition.<br/>  **WARNING**: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note: since version 0.10.0, the old `autoTilesetDefUid` was removed and merged into this value.",
+					"description": "Reference to the default Tileset UID being used by this layer definition.<br/>  **WARNING**: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note: since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.",
 					"type": [
 						"integer",
 						"null"
@@ -1916,7 +1916,7 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "**WARNING**: this deprecated value is no longer exported since version 0.12.0  Replaced by: `tilesetDefUid`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tilesetDefUid`",
 					"type": [
 						"integer",
 						"null"
