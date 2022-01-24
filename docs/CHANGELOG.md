@@ -40,7 +40,7 @@
     - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
     - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
   - `tileId` in Entity Definitions has been replaced by `tileRect` to support multiple tiles instead of just single ones. The `tileId` will still be exported for now, but will be removed completely soon.
-  - `levelUid` in Neighbours arrays has been replaced by `levelIid` (new string IID). The `levelUid` will still be exported for now, but will be removed completely soon.
+  - `levelUid` in Neighbours arrays has been replaced by `levelIid` (new string based IID). The `levelUid` will still be exported for now, but will be removed completely soon.
   - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
 
 ### Other changes
