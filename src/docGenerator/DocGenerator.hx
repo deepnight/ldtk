@@ -725,7 +725,7 @@ class DocGenerator {
 
 			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
-			case Dyn: "Dynamic (anything)";
+			case Dyn: "Untyped";
 			case Unknown: "???";
 		}
 		return str;
