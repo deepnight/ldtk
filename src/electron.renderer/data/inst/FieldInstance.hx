@@ -265,7 +265,10 @@ class FieldInstance {
 		if( tei==null )
 			return false;
 
-		var tfi = tei.getFieldInstance(def);
+		if( !tei.hasField(def) )
+			return false;
+
+		var tfi = tei.getFieldInstance(def, false);
 		var i = 0;
 		while( i<tfi.getArrayLength() )
 			if( tfi.getEntityRefIid(i)==sourceEi.iid ) {
@@ -289,10 +292,10 @@ class FieldInstance {
 		if( targetEi==null )
 			return;
 
-		var targetFi = targetEi.getFieldInstance(def);
-		if( targetFi==null )
+		if( !targetEi.hasField(def) )
 			return;
 
+		var targetFi = targetEi.getFieldInstance(def, false);
 		if( !def.isArray ) {
 			// Single value
 			if( targetFi.getEntityRefIid(arrayIdx)!=sourceEi.iid) {
@@ -482,13 +485,18 @@ class FieldInstance {
 			case F_Enum(enumDefUid): getEnumValue(arrayIdx);
 
 			case F_EntityRef:
-				var ref = getEntityRefInstance(arrayIdx);
-				var out : ldtk.Json.EntityReferenceInfos = {
-					entityIid: getEntityRefIid(arrayIdx),
-					layerIid: ref==null ? "?" : ref._li.iid,
-					levelIid: ref==null ? "?" : ref._li.level.iid,
+				var iid = getEntityRefIid(arrayIdx);
+				if( iid==null )
+					null;
+				else {
+					var ref = getEntityRefInstance(arrayIdx);
+					var out : ldtk.Json.EntityReferenceInfos = {
+						entityIid: iid,
+						layerIid: ref==null ? "?" : ref._li.iid,
+						levelIid: ref==null ? "?" : ref._li.level.iid,
+					}
+					out;
 				}
-				out;
 
 			case F_Tile:
 				var r = getTileRectObj(arrayIdx);

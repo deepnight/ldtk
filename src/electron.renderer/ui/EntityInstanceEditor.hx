@@ -278,7 +278,7 @@ class EntityInstanceEditor extends dn.Process {
 
 
 	function updateCustomFields() {
-		customFieldsForm.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd) );
+		customFieldsForm.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd,true) );
 	}
 
 

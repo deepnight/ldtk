@@ -163,7 +163,7 @@ class EntityInstance {
 	public function getSmartColor(bright:Bool) {
 		var c : Null<Int> = null;
 		for(fd in def.fieldDefs) {
-			c = getFieldInstance(fd).getSmartColor();
+			c = getFieldInstance(fd,true).getSmartColor();
 			if( c!=null )
 				return c;
 		}
@@ -175,7 +175,7 @@ class EntityInstance {
 		for(fd in def.fieldDefs) {
 			switch fd.type {
 				case F_Enum(enumDefUid):
-					var fi = getFieldInstance(fd);
+					var fi = getFieldInstance(fd,true);
 					if( fi.valueIsNull(0) || fi.def.editorDisplayMode!=EntityTile )
 						continue;
 
@@ -204,7 +204,7 @@ class EntityInstance {
 
 
 				case F_Tile:
-					var fi = getFieldInstance(fd);
+					var fi = getFieldInstance(fd,true);
 					if( fi.def.editorDisplayMode!=EntityTile )
 						continue;
 
@@ -273,7 +273,7 @@ class EntityInstance {
 
 		// Create missing field instances
 		for(fd in def.fieldDefs)
-			getFieldInstance(fd);
+			getFieldInstance(fd,true);
 
 		for(fi in fieldInstances)
 			fi.tidy(_project, li);
@@ -296,8 +296,8 @@ class EntityInstance {
 		return fieldInstances.exists(fieldDef.uid);
 	}
 
-	public function getFieldInstance(fieldDef:data.def.FieldDef) {
-		if( !fieldInstances.exists(fieldDef.uid) )
+	public function getFieldInstance(fieldDef:data.def.FieldDef, createIfMissing:Bool) {
+		if( createIfMissing && !fieldInstances.exists(fieldDef.uid) )
 			fieldInstances.set(fieldDef.uid, new data.inst.FieldInstance(_project, fieldDef.uid));
 		return fieldInstances.get( fieldDef.uid );
 	}
@@ -327,7 +327,7 @@ class EntityInstance {
 			if( fd.type!=F_EntityRef )
 				return false;
 
-			var fi = getFieldInstance(fd);
+			var fi = getFieldInstance(fd,false);
 			if( fi==null )
 				return false;
 
@@ -347,7 +347,7 @@ class EntityInstance {
 		if( fd.type!=F_EntityRef || !fd.symmetricalRef )
 			return;
 
-		var fi = getFieldInstance(fd);
+		var fi = getFieldInstance(fd, false);
 		if( fi==null )
 			return;
 

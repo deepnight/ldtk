@@ -384,7 +384,7 @@ class OgmoLoader {
 											log.error('Unknown value $k in entity ${entJson.name} in level ${fp.fileWithExt}');
 											continue;
 										}
-										var fi = ei.getFieldInstance(fd);
+										var fi = ei.getFieldInstance(fd,true);
 										var rawValue = Std.string( Reflect.field(entJson.values, k) );
 										switch fd.type {
 											case F_Int, F_Float, F_String, F_Text, F_Bool:
