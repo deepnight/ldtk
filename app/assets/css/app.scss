@@ -1164,6 +1164,7 @@ ul.log {
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
 .icon.rule				{ background-image: url("../icons/rule.svg"); }
+.icon.search			{ background-image: url("../icons/search.svg"); }
 .icon.settings			{ background-image: url("../icons/settings.svg"); }
 .icon.showDetailsOff	{ background-image: url("../icons/showDetailsOff.svg"); }
 .icon.showDetailsOn		{ background-image: url("../icons/showDetailsOn.svg"); }
@@ -2163,13 +2164,16 @@ textarea {
 		align-items: initial;
 	}
 
+	&:not(.centered)>.wrapper {
+		top: 50px;
+		left: 50px;
+	}
+
 	&>.wrapper {
 		display: block;
 		position: absolute;
 		overflow: auto;
 		z-index: 2;
-		top: 50px;
-		left: 50px;
 
 		box-sizing: border-box;
 		padding: 20px;
@@ -2449,11 +2453,22 @@ textarea {
 }
 
 .window.changeLog {
+	.wrapper {
+		position: relative;
+	}
 	.wrapper .content {
-		width: 750px;
+		width: 800px;
+
+		.cornerButtons {
+			display: grid;
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			width: auto;
+		}
 
 		header {
-			margin-bottom: 16px;
+			margin-bottom: 8px;
 			font-family: Roboto;
 			text-align: center;
 			color: $orange;
@@ -2484,11 +2499,12 @@ textarea {
 		}
 
 		.changelog {
+
 			margin-left: -20px;
 			margin-right: -20px;
-			margin-bottom: 16px;
+			margin-bottom: -20px;
 			padding: 20px;
-			max-height: 55vh;
+			max-height: 70vh;
 
 			overflow-y: auto;
 			background-color: $bgDark;

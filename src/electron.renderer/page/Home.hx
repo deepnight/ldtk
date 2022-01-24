@@ -107,7 +107,7 @@ class Home extends Page {
 			w.addClass("newUpdate");
 
 		w.jContent.find(".close")
-			.text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
+			// .text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
 			.click( (_)->w.close() );
 
 		w.jContent.find(".others").click( ev->{
