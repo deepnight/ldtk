@@ -46,7 +46,7 @@ class ColorPicker extends ui.modal.Dialog {
 		jContent.find(".copy").click( (ev:js.jquery.Event)->{
 			electron.Clipboard.writeText( picker.getHexString() );
 			ev.getThis().addClass("done");
-			N.quick("Copied to clipboard");
+			N.copied();
 			updatePaste();
 		});
 

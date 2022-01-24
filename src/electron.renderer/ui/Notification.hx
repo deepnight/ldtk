@@ -47,6 +47,13 @@ class Notification extends dn.Process {
 			new Notification(str, 0x42b771);
 	}
 
+	public static function copied(?name:String) {
+		if( name!=null )
+			msg('Copied "$name" to clipboard.', 0x0);
+		else
+			msg("Copied to clipboard.", 0x0);
+	}
+
 	public static function warning(str:String) {
 		if( !sameAsLast(str) )
 			new Notification(str, 0xcb8d13);

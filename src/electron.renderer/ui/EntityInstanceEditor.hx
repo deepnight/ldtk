@@ -215,7 +215,7 @@ class EntityInstanceEditor extends dn.Process {
 		jIid.append('<button class="copy gray small" title="Copy IID to clipboard"> <span class="icon copy"/> </button>');
 		jIid.find(".copy").click( _->{
 			App.ME.clipboard.copyStr(ei.iid);
-			N.msg("Copied to clipboard.");
+			N.copied();
 		});
 		jExtraInfos.append(jIid);
 

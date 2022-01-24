@@ -120,7 +120,7 @@ class Clipboard {
 			electron.Clipboard.writeText(str);
 		}
 
-		N.msg("Copied: "+name);
+		N.copied(name);
 	}
 
 	public function copyStr(v:String) {

@@ -419,8 +419,8 @@ class JsTools {
 						ctx.add({
 							label: L.t._("Copy URL"),
 							cb: ()->{
-								electron.Clipboard.write({ text:url });
-								N.msg("Copied.");
+								App.ME.clipboard.copyStr(url);
+								N.copied();
 							}
 						});
 
