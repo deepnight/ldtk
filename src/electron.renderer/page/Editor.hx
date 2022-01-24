@@ -1309,7 +1309,7 @@ class Editor extends Page {
 		if( needSaving )
 			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
 		else
-			App.ME.loadPage( ()->new Home() );
+			App.ME.loadPage( ()->new Home(), true );
 	}
 
 	public function onSave(saveAs=false, ?bypasses:Map<String,Bool>, ?onComplete:Void->Void) {

@@ -139,7 +139,7 @@ class App extends dn.Process {
 			}
 			else {
 				LOG.add("BOOT", 'Loading Home...');
-				loadPage( ()->new page.Home() );
+				loadPage( ()->new page.Home(), true );
 			}
 
 			if( !hasGlContext )
@@ -626,18 +626,27 @@ class App extends dn.Process {
 		settings.save();
 	}
 
-	public function loadPage( create:()->Page ) {
+	public function loadPage( create:()->Page, checkAndNotifyUpdate=false ) {
 		clearCurPage();
 		LOG.flushToFile();
 		curPageProcess = create();
 		curPageProcess.onAppResize();
-	}
 
+		// Notify app update
+		if( checkAndNotifyUpdate && settings.v.lastKnownVersion!=Const.getAppVersion() ) {
+			trace("update");
+			var prev = settings.v.lastKnownVersion;
+			settings.v.lastKnownVersion = Const.getAppVersion();
+			App.ME.settings.save();
+
+			new ui.modal.dialog.Changelog(true);
+		}
+	}
 
 	public function loadProject(filePath:String, ?levelIndex:Int) : Void {
 		new ui.ProjectLoader(
 			filePath,
-			(p)->loadPage( ()->new page.Editor(p, levelIndex) ),
+			(p)->loadPage( ()->new page.Editor(p, levelIndex), true ),
 			(err)->{
 				// Failed
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);

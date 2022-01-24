@@ -59,17 +59,8 @@ class Home extends Page {
 		});
 
 		jPage.find("button.update").click((_)->{
-			showUpdate();
+			new ui.modal.dialog.Changelog();
 		});
-
-		// Notify app update
-		if( settings.v.lastKnownVersion!=Const.getAppVersion() ) {
-			var prev = settings.v.lastKnownVersion;
-			settings.v.lastKnownVersion = Const.getAppVersion();
-			App.ME.settings.save();
-
-			showUpdate(true);
-		}
 
 		jPage.find("button.settings").click( function(ev) {
 			new ui.modal.dialog.EditAppSettings();
@@ -82,8 +73,7 @@ class Home extends Page {
 		updateRecents();
 	}
 
-	function showUpdate(?version:dn.Version, isNewUpdate=false) {
-		var w = new ui.modal.dialog.Changelog(false);
+	// function showUpdate(?version:dn.Version, isNewUpdate=false) {
 		// var w = new ui.Modal();
 		// w.canBeClosedManually = !isNewUpdate;
 
@@ -124,7 +114,7 @@ class Home extends Page {
 		// } );
 		// if( isNewUpdate )
 		// 	w.jContent.find(".others").hide();
-	}
+	// }
 
 
 	function updateRecents() : Void {
@@ -483,7 +473,7 @@ class Home extends Page {
 			new ui.ProjectSaver(this, p, (success)->{
 				if( success ) {
 					N.msg("New project created: "+p.filePath.full);
-					App.ME.loadPage( ()->new Editor(p) );
+					App.ME.loadPage( ()->new Editor(p), true );
 				}
 				else {
 					N.error("Couldn't create this project file!");
