@@ -28,20 +28,24 @@
 
 ## File format changes
 
-### JSON
+
+### Worlds
+  - Added `worlds` array and `World` JSON structure to the docs. This was added as a preview for the upcoming new feature "Multiple Worlds in a single project". Learn more about that here: https://github.com/deepnight/ldtk/issues/231
+
+### JSON changes
 
   - All new projects will now discard by default the deprecated data of IntGrid layers (ie. the **pre-"CSV format" data**). More informations here: https://github.com/deepnight/ldtk/issues/358
   - **IntGridValues** array index should no longer be used to guess IntGrid values, since the array can be manually sorted by users. See https://github.com/deepnight/ldtk/issues/553
   - To avoid unnecessary file changes and renamings (bad for versioning systems), the following changes have been made:
-  - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
-  - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
+    - Irrelevant worldX/worldY values are now "-1" for all levels if the world layout is Horizontal or Vertical
+    - Irrelevant __neighbours array is now empty for all levels if the world layout is Horizontal or Vertical
   - `tileId` in Entity Definitions has been replaced by `tileRect` to support multiple tiles instead of just single ones. The `tileId` will still be exported for now, but will be removed completely soon.
+  - `levelUid` in Neighbours arrays has been replaced by `levelIid` (new string IID). The `levelUid` will still be exported for now, but will be removed completely soon.
   - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
 
-### Misc
+### Other changes
 
   - External level files will no longer be prefixed with their index in array to avoid unnecessary renamings when inserting new levels. This can be re-enabled in Project panel, using an Advanced Option at the bottom.
-  - Added `worlds` array and `World` JSON structure to the docs. This was added as a preview for the upcoming new feature "Multiple Worlds in a single project". Learn more about that here: https://github.com/deepnight/ldtk/issues/231
   - Fixed `enumTags` and `customTileData` typing in QuickTypes files.
 
 ## UI
