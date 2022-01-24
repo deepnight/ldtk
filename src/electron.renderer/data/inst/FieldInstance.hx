@@ -483,11 +483,15 @@ class FieldInstance {
 			case F_EntityRef: getEntityRefIid(arrayIdx);
 			case F_Tile:
 				var r = getTileRectObj(arrayIdx);
-				var t : ldtk.Json.FieldInstanceTile = {
-					tilesetUid: def.tilesetUid,
-					srcRect: [r.x, r.y, r.w, r.h],
+				if( r==null )
+					null;
+				else {
+					var t : ldtk.Json.FieldInstanceTile = {
+						tilesetUid: def.tilesetUid,
+						srcRect: [r.x, r.y, r.w, r.h],
+					}
+					t;
 				}
-				t;
 		}
 	}
 
