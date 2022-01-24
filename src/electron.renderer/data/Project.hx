@@ -641,8 +641,13 @@ class Project {
 		for(l in levels)
 			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
 
-		for(td in defs.tilesets)
+		for(td in defs.tilesets) {
 			td.identifier = cleanupIdentifier(td.identifier, identifierStyle);
+			var ed = td.getTagsEnumDef();
+			if( ed!=null && !ed.isExternal() )
+				for(k in td.enumTags.keys())
+					td.enumTags.set( cleanupIdentifier(k, identifierStyle), td.enumTags.get(k) );
+		}
 
 		for(ld in defs.layers)
 			ld.identifier = cleanupIdentifier(ld.identifier, identifierStyle);

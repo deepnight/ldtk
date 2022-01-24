@@ -11,8 +11,10 @@ class EnumDef {
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
 
-	public function new(p:Project, uid:Int, id:String) {
+	@:allow(data.Definitions)
+	private function new(p:Project, uid:Int, id:String, externPath:Null<String>) {
 		_project = p;
+		this.externalRelPath = externPath; // needs to be set before any `identifier` modification (for identifier style guessing)
 		this.uid = uid;
 		this.identifier = id;
 	}
@@ -20,7 +22,9 @@ class EnumDef {
 	public inline function isExternal() return externalRelPath!=null;
 
 	function set_identifier(v:String) {
-		v = Project.cleanupIdentifier(v, _project.identifierStyle);
+		if( !isExternal() )
+			v = Project.cleanupIdentifier(v, _project.identifierStyle);
+
 		if( v==null )
 			return identifier;
 		else
@@ -32,7 +36,7 @@ class EnumDef {
 	}
 
 	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.EnumDefJson) {
-		var ed = new EnumDef(p, JsonTools.readInt(json.uid), json.identifier);
+		var ed = new EnumDef(p, JsonTools.readInt(json.uid), json.identifier, json.externalRelPath);
 
 		for(v in JsonTools.readArray(json.values)) {
 			ed.values.push({
@@ -43,7 +47,6 @@ class EnumDef {
 		}
 
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
-		ed.externalRelPath = json.externalRelPath;
 		ed.externalFileChecksum = json.externalFileChecksum;
 
 		return ed;
@@ -80,7 +83,9 @@ class EnumDef {
 	}
 
 	public function getValue(v:String) : Null<data.DataTypes.EnumDefValue> {
-		v = Project.cleanupIdentifier(v, _project.identifierStyle);
+		if( !isExternal() )
+			v = Project.cleanupIdentifier(v, _project.identifierStyle);
+
 		for(ev in values)
 			if( ev.id==v )
 				return ev;
@@ -106,7 +111,9 @@ class EnumDef {
 		if( !isValueIdentifierValidAndUnique(v) )
 			return false;
 
-		v = Project.cleanupIdentifier(v, _project.identifierStyle);
+		if( !isExternal() )
+			v = Project.cleanupIdentifier(v, _project.identifierStyle);
+
 		values.push({
 			id: v,
 			tileId: null,

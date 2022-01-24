@@ -503,14 +503,11 @@ class Definitions {
 	/**  ENUM DEFS  *****************************************/
 
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
-		var ed = new data.def.EnumDef(_project, _project.generateUniqueId_int(), "Enum");
-
+		var ed = new data.def.EnumDef(_project, _project.generateUniqueId_int(), "Enum", externalRelPath);
 		ed.identifier = _project.fixUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
 
-		if( externalRelPath!=null ) {
-			ed.externalRelPath = externalRelPath;
+		if( ed.isExternal() )
 			externalEnums.push(ed);
-		}
 		else
 			enums.push(ed);
 
