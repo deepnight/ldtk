@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456394,
+	"appBuildId": 456398,
 	"nextUid": 196,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -2089,7 +2089,11 @@
 							"fieldInstances": [
 								{
 									"__identifier": "target",
-									"__value": "3e9a3910-66b0-11ec-b507-9712edde9a01",
+									"__value": {
+										"entityIid": "3e9a3910-66b0-11ec-b507-9712edde9a01",
+										"layerIid": "74a0e031-66b0-11ec-8211-fd7671c937e0",
+										"levelIid": "74a0e030-66b0-11ec-8211-35643000f436"
+									},
 									"__type": "EntityRef",
 									"defUid": 159,
 									"realEditorValues": [{
@@ -3577,7 +3581,11 @@
 							"fieldInstances": [
 								{
 									"__identifier": "target",
-									"__value": "562e8f00-66b0-11ec-a3ec-574883a85512",
+									"__value": {
+										"entityIid": "562e8f00-66b0-11ec-a3ec-574883a85512",
+										"layerIid": "19b3bee1-66b0-11ec-8211-a1158b1ce9f9",
+										"levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547"
+									},
 									"__type": "EntityRef",
 									"defUid": 159,
 									"realEditorValues": [{
@@ -4418,7 +4426,11 @@
 							"fieldInstances": [
 								{
 									"__identifier": "target",
-									"__value": "66d72c00-66b0-11ec-9a79-29d2cb85d989",
+									"__value": {
+										"entityIid": "66d72c00-66b0-11ec-9a79-29d2cb85d989",
+										"layerIid": "ead8e4d0-66b0-11ec-b5a9-9f53c4190187",
+										"levelIid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35"
+									},
 									"__type": "EntityRef",
 									"defUid": 159,
 									"realEditorValues": [{
@@ -5684,7 +5696,11 @@
 							"fieldInstances": [
 								{
 									"__identifier": "target",
-									"__value": "69e95ed0-66b0-11ec-a3ec-5f2ca9946bf9",
+									"__value": {
+										"entityIid": "69e95ed0-66b0-11ec-a3ec-5f2ca9946bf9",
+										"layerIid": "b2bbb040-66b0-11ec-911e-fb262ddcd89b",
+										"levelIid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24"
+									},
 									"__type": "EntityRef",
 									"defUid": 159,
 									"realEditorValues": [{
@@ -7059,7 +7075,11 @@
 							"fieldInstances": [
 								{
 									"__identifier": "target",
-									"__value": "38792960-66b0-11ec-b507-8984e6a9a281",
+									"__value": {
+										"entityIid": "38792960-66b0-11ec-b507-8984e6a9a281",
+										"layerIid": "b2bb8930-66b0-11ec-911e-9910a9e63641",
+										"levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc"
+									},
 									"__type": "EntityRef",
 									"defUid": 159,
 									"realEditorValues": [{
@@ -9203,7 +9223,11 @@
 							"fieldInstances": [
 								{
 									"__identifier": "target",
-									"__value": "5fb2b610-66b0-11ec-9a79-5d436ef1a3a2",
+									"__value": {
+										"entityIid": "5fb2b610-66b0-11ec-9a79-5d436ef1a3a2",
+										"layerIid": "c3ebe821-66b0-11ec-b23b-2ffeb48b40c5",
+										"levelIid": "c3ebe820-66b0-11ec-b23b-11b737ea77f1"
+									},
 									"__type": "EntityRef",
 									"defUid": 159,
 									"realEditorValues": [{
