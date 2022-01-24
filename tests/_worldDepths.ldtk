@@ -9,8 +9,9 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "0.10.0",
-	"appBuildId": 456308,
+	"appBuildId": 456394,
 	"nextUid": 196,
+	"identifierStyle": "Capitalize",
 	"worldLayout": null,
 	"worldGridWidth": null,
 	"worldGridHeight": null,
@@ -4359,7 +4360,7 @@
 			"__neighbours": [{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" }]
 		},
 		{
-			"identifier": "Wood_gate",
+			"identifier": "Wood_Gate",
 			"iid": "c3ebe820-66b0-11ec-b23b-11b737ea77f1",
 			"uid": 161,
 			"worldX": 1224,
@@ -5625,7 +5626,7 @@
 			"__neighbours": [ { "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "w" }, { "levelIid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35", "levelUid": 167, "dir": "s" } ]
 		},
 		{
-			"identifier": "West_wing",
+			"identifier": "West_Wing",
 			"iid": "19b3bee0-66b0-11ec-8211-f7fb32016547",
 			"uid": 162,
 			"worldX": 672,
