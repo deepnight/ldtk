@@ -5795,6 +5795,16 @@ dl.form.fieldInstanceEditor {
 				ul.enumValues {
 					overflow-x: hidden;
 					overflow-y: auto;
+
+					&.external {
+						.sortHandle {
+							display: none;
+						}
+						li {
+							grid-template-columns: 32px 32px auto;
+						}
+					}
+
 					li {
 						display: grid;
 						gap: 3px;

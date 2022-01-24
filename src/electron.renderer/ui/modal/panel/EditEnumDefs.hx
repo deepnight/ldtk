@@ -349,6 +349,10 @@ class EditEnumDefs extends ui.modal.Panel {
 
 		// Values
 		var jList = jFormWrapper.find("ul.enumValues");
+		if( curEnum.isExternal() )
+			jList.addClass("external");
+		else
+			jList.removeClass("external");
 		jList.empty().off();
 		var xml = jContent.find("xml.enum").children();
 		for(eValue in curEnum.values) {
@@ -371,9 +375,6 @@ class EditEnumDefs extends ui.modal.Panel {
 					borderColor: C.intToHex( eValue.color ),
 					backgroundColor: C.intToHex( C.toBlack(eValue.color,0.5) ),
 				});
-
-			if( curEnum.isExternal() )
-				li.find(".sortHandle").hide();
 
 			// Color
 			var jColor = li.find("[type=color]");
