@@ -118,6 +118,9 @@ class DebugMenu extends ui.modal.ContextMenu {
 							new ui.ProjectLoader(
 								fp.full,
 								(p)->{
+									// Flags
+									p.setFlag(PrependIndexToLevelFileNames, false);
+
 									// Break level caching
 									for(l in p.levels)
 										l.invalidateJsonCache();
