@@ -159,17 +159,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
-			// jContent.find(".noEntLayer").hide();
 			return;
 		}
 
 		JsTools.parseComponents(jEntityForm);
 		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
-		// if( !project.defs.hasLayerType(Entities) )
-		// 	jContent.find(".noEntLayer").show();
-		// else
-		// 	jContent.find(".noEntLayer").hide();
 
 
 		// Name
