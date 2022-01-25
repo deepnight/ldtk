@@ -256,7 +256,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			var jOpt = new J('<option value="Embed.$k"/>');
 			jOpt.appendTo(jSelect);
 			var inf = Lang.getEmbedAtlasInfos(ldtk.Json.EmbedAtlas.createByName(k));
-			jOpt.text(inf.name+" by "+inf.author);
+			jOpt.text(inf.displayName);
 		}
 		// Append tilesets
 		for( td in project.defs.tilesets ) {

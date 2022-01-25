@@ -430,7 +430,10 @@ class Definitions {
 		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
 		tilesets.push(td);
 		var inf = Lang.getEmbedAtlasInfos(embedId);
-		td.identifier = _project.fixUniqueIdStr( inf.name+" by "+inf.author, id->isTilesetIdentifierUnique(id));
+		var cleanId = Project.cleanupIdentifier(inf.displayName, _project.identifierStyle);
+		while( cleanId.length>0 && cleanId.charAt(0)=="_" )
+			cleanId = cleanId.substr(1);
+		td.identifier = _project.fixUniqueIdStr( cleanId, id->isTilesetIdentifierUnique(id) );
 
 		td.embedAtlas = embedId;
 		switch td.embedAtlas {
