@@ -102,10 +102,11 @@ class Progress extends ui.Modal {
 	}
 
 	static function updateAllPositions() {
+		var off = MetaProgress.exists() ? MetaProgress.getHeight() : 0;
 		for(w in ALL)
 			if( !w.destroyed ) {
 				var idx = w.getStackIndex();
-				w.jWrapper.css({ marginTop:(8 + idx*100)+"px" });
+				w.jWrapper.css({ marginTop:(off + 8 + idx*100)+"px" });
 				if( idx>=6 )
 					w.jWrapper.hide();
 				else {

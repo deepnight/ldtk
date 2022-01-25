@@ -2599,6 +2599,30 @@ textarea {
 	}
 }
 
+.window.metaProgress {
+	display: grid;
+	align-items: flex-start;
+	justify-items: center;
+	>.wrapper {
+		width: 600px;
+		position: static;
+		padding: 8px;
+		background-color: $bgMed;
+		.title {
+			font-family: Roboto;
+			color: $orange;
+			font-size: 14pt;
+			margin-bottom: 8px;
+		}
+		.progressBar {
+			margin-bottom: 0;
+			.bar {
+				background-color: $orangeLight;
+			}
+		}
+	}
+}
+
 
 *.contextMenuOpen {
 	outline: 1px dashed $orange !important;

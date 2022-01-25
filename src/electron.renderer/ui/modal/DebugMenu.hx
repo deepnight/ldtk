@@ -103,10 +103,13 @@ class DebugMenu extends ui.modal.ContextMenu {
 				var files = js.node.Fs.readdirSync(path);
 				var log = new dn.Log();
 				log.printOnAdd = true;
+				var n = 0;
 				for(f in files) {
 					var fp = dn.FilePath.fromFile(path+"/"+f);
 					if( fp.extension!="ldtk" )
 						continue;
+
+					n+=2;
 
 					// Load project
 					log.fileOp(fp.fileName+"...");
@@ -114,6 +117,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 					new ui.ProjectLoader(
 						fp.full,
 						(p)->{
+							MetaProgress.advance();
+
 							// Flags
 							p.setFlag(PrependIndexToLevelFileNames, false);
 
@@ -142,11 +147,15 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 							// Save project
 							log.general(" -> Saving "+fp.fileName+"...");
-							var s = new ui.ProjectSaver(App.ME, p);
+							var s = new ui.ProjectSaver( App.ME, p, (_)->MetaProgress.advance() );
 						},
-						(err)->new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) )
+						(err)->{
+							new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) );
+							MetaProgress.advance(2);
+						}
 					);
 				}
+				ui.modal.MetaProgress.start("Updating all sample maps", n);
 			}
 		});
 
