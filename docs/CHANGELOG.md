@@ -152,7 +152,7 @@
 
 ## JSON format
 
- - **WARNING**: last call before the removal of the deprecated value `intGrid` in `Layer instances`! If not done yet, please switch to the `intGridCsv` value. The old value will be removed on 0.10.0 update.
+ - **WARNING**: last call before the removal of the deprecated value `intGrid` in `Layer instances`! If not done yet, please switch to the `intGridCsv` value. The old value will be removed on 1.0.0 update.
  - Added **tileset tags**: new array `enumTags` in `Tileset definition JSON` (see https://ldtk.io/json/)
 
 ## Other
