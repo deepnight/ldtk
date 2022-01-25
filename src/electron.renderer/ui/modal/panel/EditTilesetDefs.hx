@@ -112,9 +112,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 	function updateForm() {
 		jForm.find("*").off(); // cleanup event listeners
+		var jEmbed = jContent.find("#embedTileset");
 
 		if( curTd==null ) {
 			jForm.hide();
+			jEmbed.hide();
 			jContent.find(".none").show();
 			return;
 		}
@@ -124,7 +126,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 		if( curTd.isUsingEmbedAtlas() ) {
 			var inf = Lang.getEmbedAtlasInfos(curTd.embedAtlas);
-			var jEmbed = jContent.find("#embedTileset");
 			jEmbed.show();
 			jEmbed.find(".author").text("Image by "+inf.author);
 			jEmbed.find(".url").attr("href",inf.url);
@@ -132,7 +133,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			JsTools.parseComponents(jEmbed);
 		}
 		else {
-			jContent.find("#embedTileset").hide();
+			jEmbed.hide();
 			jForm.show();
 		}
 
