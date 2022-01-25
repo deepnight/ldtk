@@ -753,7 +753,7 @@ class Project {
 			return false;
 	}
 
-	function disposeImage(relPath:String) {
+	public function disposeImage(relPath:String) {
 		if( isImageLoaded(relPath) ) {
 			App.LOG.add("cache", 'Disposing cached image $relPath...');
 			var img = imageCache.get(relPath);

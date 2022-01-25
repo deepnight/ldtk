@@ -807,8 +807,11 @@ class JsTools {
 			var jReload = new J('<button class="reload" title="Manually reload file"> <span class="icon refresh"/> </button>');
 			jReload.appendTo(jWrapper);
 			jReload.click( (_)->{
-				if( _pick(curRelPath) )
+				if( curRelPath!=null ) {
+					Editor.ME.project.disposeImage(curRelPath);
+					_pick(curRelPath);
 					N.success(L.t._("Image reloaded: ::file::", {file:fileName}));
+				}
 			});
 		}
 
