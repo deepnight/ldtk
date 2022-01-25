@@ -43,7 +43,7 @@ class Progress extends ui.Modal {
 		this.onComplete = onComplete;
 
 		jModalAndMask.addClass("progress");
-		jMask.hide().fadeIn(500);
+		jMask.hide();
 		App.LOG.general('Progress created.');
 
 		jContent.append('<div class="title">$title</div>');
@@ -103,8 +103,19 @@ class Progress extends ui.Modal {
 
 	static function updateAllPositions() {
 		for(w in ALL)
-			if( !w.destroyed )
-				w.jWrapper.css({ marginTop:(8 + w.getStackIndex()*100)+"px" });
+			if( !w.destroyed ) {
+				var idx = w.getStackIndex();
+				w.jWrapper.css({ marginTop:(8 + idx*100)+"px" });
+				if( idx>=6 )
+					w.jWrapper.hide();
+				else {
+					w.jWrapper.show();
+					if( idx>=4 )
+						w.jWrapper.css({ opacity:0.4 });
+					else
+						w.jWrapper.css({ opacity:1 });
+				}
+			}
 	}
 
 	function getStackIndex() {
@@ -138,6 +149,7 @@ class Progress extends ui.Modal {
 				App.LOG.general('Progress started: : "$title", ${curOps.length} operation(s)');
 				log.def("Started...");
 				state = Running;
+				jMask.fadeIn(500);
 				updateBar( curOps.length>0 ? curOps[0].label : null );
 
 			case Running:
