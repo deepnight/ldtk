@@ -4145,7 +4145,7 @@ canvas#webgl {
 	&>.wrapper {
 		display: grid;
 		grid-template-columns: 100%;
-		grid-template-rows: 25vh 65vh 10vh;
+		grid-template-rows: 32vh 58vh 10vh;
 		box-sizing: border-box;
 		width: 80vw;
 		min-width: 960px;
@@ -4166,8 +4166,8 @@ canvas#webgl {
 			align-self: stretch;
 			grid-template-rows: auto min-content;
 
-			padding-top: 32px;
-			padding-bottom: 16px;
+			padding-top: 48px;
+			padding-bottom: 32px;
 
 			background-image: url("../img/homeBg_header.png");
 			background-size: contain;
