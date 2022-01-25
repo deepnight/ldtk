@@ -354,6 +354,8 @@ button {
 	background-repeat: no-repeat;
 	background-size: contain;
 	background-position: center;
+	image-rendering: -webkit-optimize-contrast;
+
 	&.full {
 		background-image: url("../img/LDtk.svg");
 	}
