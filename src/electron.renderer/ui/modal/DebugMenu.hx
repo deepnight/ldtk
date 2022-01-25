@@ -103,58 +103,50 @@ class DebugMenu extends ui.modal.ContextMenu {
 				var files = js.node.Fs.readdirSync(path);
 				var log = new dn.Log();
 				log.printOnAdd = true;
-				var ops = [];
 				for(f in files) {
 					var fp = dn.FilePath.fromFile(path+"/"+f);
 					if( fp.extension!="ldtk" )
 						continue;
 
-					ops.push({
-						label: fp.fileName,
-						cb: ()->{
-							// Loading
-							log.fileOp(fp.fileName+"...");
-							log.general(" -> Loading...");
-							new ui.ProjectLoader(
-								fp.full,
-								(p)->{
-									// Flags
-									p.setFlag(PrependIndexToLevelFileNames, false);
+					// Load project
+					log.fileOp(fp.fileName+"...");
+					log.general(" -> Loading...");
+					new ui.ProjectLoader(
+						fp.full,
+						(p)->{
+							// Flags
+							p.setFlag(PrependIndexToLevelFileNames, false);
 
-									// Break level caching
-									for(l in p.levels)
-										l.invalidateJsonCache();
+							// Break level caching
+							for(l in p.levels)
+								l.invalidateJsonCache();
 
-									// Tilesets
-									log.general(" -> Updating tileset data...");
-									for(td in p.defs.tilesets) {
-										td.importAtlasImage(td.relPath);
-										td.buildPixelData(()->{}, true);
-									}
+							// Tilesets
+							log.general(" -> Updating tileset data...");
+							for(td in p.defs.tilesets) {
+								td.importAtlasImage(td.relPath);
+								td.buildPixelData(()->{}, true);
+							}
 
-									// Auto layer rules
-									log.general(" -> Updating auto-rules cache...");
-									for(l in p.levels)
-									for(li in l.layerInstances) {
-										if( !li.def.isAutoLayer() )
-											continue;
-										li.applyAllAutoLayerRules();
-									}
+							// Auto layer rules
+							log.general(" -> Updating auto-rules cache...");
+							for(l in p.levels)
+							for(li in l.layerInstances) {
+								if( !li.def.isAutoLayer() )
+									continue;
+								li.applyAllAutoLayerRules();
+							}
 
-									// Final tidying
-									p.tidy();
+							// Final tidying
+							p.tidy();
 
-									// Write sample map
-									log.general(" -> Saving "+fp.fileName+"...");
-									var s = new ui.ProjectSaver(App.ME, p);
-								},
-								(err)->new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) )
-							);
-							return;
-						}
-					});
+							// Save project
+							log.general(" -> Saving "+fp.fileName+"...");
+							var s = new ui.ProjectSaver(App.ME, p);
+						},
+						(err)->new ui.modal.dialog.Message( L.t._("Failed on ::file::", {file:fp.fileName}) )
+					);
 				}
-				new ui.modal.Progress("Updating samples", ops);
 			}
 		});
 
