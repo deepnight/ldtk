@@ -76,6 +76,7 @@ class Settings {
 
 		// Patch settings
 		v.fixTileFlickering = false;
+		v.smartCpuThrottling = true;
 	}
 
 	static inline function isRenderer() {

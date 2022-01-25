@@ -746,11 +746,9 @@ class App extends dn.Process {
 			hxd.System.fpsLimit = -1;
 		else if( !focused && !ui.modal.Progress.hasAny() && !ui.modal.MetaProgress.exists() ) // App is blurred
 			hxd.System.fpsLimit = 2;
-		else if( !settings.v.smartCpuThrottling ) // no CPU throttling
-			hxd.System.fpsLimit = -1;
 		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() ) // progress is running
 			hxd.System.fpsLimit = -1;
-		else if( haxe.Timer.stamp()>requestedCpuEndTime+3.5 ) // last request is long time ago (idling?)
+		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
 			hxd.System.fpsLimit = 10;
 		else
 			hxd.System.fpsLimit = 30;
