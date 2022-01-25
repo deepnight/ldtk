@@ -67,6 +67,8 @@
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
   - Reworked the Enum panel and fixed many UX issues
+  - Removed the "CPU throttling" option from the app settings. The CPU throttling has been reworked and should not longer be noticeable at all. Therefore, it is now always enabled to reduce battery usage on laptops and energy consumption in general.
+  - Removed the "Tile Flickering Fix" option from the app settings: it was costly and inefficient.
   - Replaced the dashed lines used to connect points by a smoother zig-zag line
   - Entity fields and related visuals will now be faded away when not working in their layer.
   - Entity fields width will now be limited by their entity width (this greatly reduces screen clutter when having many fields displayed)
