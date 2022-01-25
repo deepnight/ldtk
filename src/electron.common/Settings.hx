@@ -59,7 +59,7 @@ class Settings {
 			useBestGPU: true,
 			smartCpuThrottling: true,
 			startFullScreen: false,
-			fixTileFlickering: true,
+			fixTileFlickering: false,
 			showProjectColors: true,
 
 			openLastProject: false,
@@ -73,6 +73,9 @@ class Settings {
 
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
+
+		// Patch settings
+		v.fixTileFlickering = false;
 	}
 
 	static inline function isRenderer() {

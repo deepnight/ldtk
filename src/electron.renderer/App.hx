@@ -769,7 +769,7 @@ class App extends dn.Process {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');
-			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(100*hxd.System.fpsLimit/60)}%');
+			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(M.round(100*hxd.System.fpsLimit/60))}%');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());

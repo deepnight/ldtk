@@ -1209,6 +1209,7 @@ class Editor extends Page {
 		if( worldMode==v )
 			return;
 
+		App.ME.requestCpu();
 		selectionTool.clear();
 		project.reorganizeWorld();
 		worldMode = v;
