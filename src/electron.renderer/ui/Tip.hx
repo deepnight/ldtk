@@ -90,7 +90,7 @@ class Tip extends dn.Process {
 		}
 
 		if( Editor.exists() )
-			Editor.ME.requestFps();
+			App.ME.requestCpu();
 	}
 
 	public static function clear() {
@@ -98,7 +98,7 @@ class Tip extends dn.Process {
 			CURRENT.destroy();
 			CURRENT = null;
 			if( Editor.exists() )
-				Editor.ME.requestFps();
+				App.ME.requestCpu();
 		}
 	}
 

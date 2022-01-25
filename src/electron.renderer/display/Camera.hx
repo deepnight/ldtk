@@ -343,7 +343,6 @@ class Camera extends dn.Process {
 
 		// Animated zoom
 		if( targetZoom!=null ) {
-			editor.requestFps();
 			deltaZoomTo( levelX, levelY, ( targetZoom - rawZoom ) * M.fmin(1, M.fmax(0.1, 0.22*adjustedZoom)*tmod) );
 			if( M.fabs(targetZoom-rawZoom) <= 0.04*rawZoom || !cd.has("keepAutoZoom") )
 				cancelAutoZoom();
@@ -351,12 +350,14 @@ class Camera extends dn.Process {
 
 		// Animated scrolling
 		if( targetWorldX!=null ) {
-			editor.requestFps();
 			worldX += ( targetWorldX - worldX ) * M.fmin(1, 0.15*tmod);
 			worldY += ( targetWorldY - worldY ) * M.fmin(1, 0.15*tmod);
 			if( M.dist(targetWorldX, targetWorldY, worldX, worldY)<=6 || !cd.has("keepAutoScroll") )
 				cancelAutoScrolling();
 		}
+
+		if( isAnimated() )
+			App.ME.requestCpu();
 	}
 
 	public inline function getLevelWidthRatio(l:data.Level) {

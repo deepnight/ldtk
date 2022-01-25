@@ -886,11 +886,6 @@ class Editor extends Page {
 		rulers.onMouseUp( m );
 	}
 
-	var fpsRequests : Map<Int, Float> = new Map();
-	public inline function requestFps(ratio=1.0) {
-		fpsRequests.set(M.iclamp(Std.int(ratio*100), 10, 100), 2);
-	}
-
 	function onMouseMove(ev:hxd.Event) {
 		if( !App.ME.hasGlContext )
 			return;
@@ -948,7 +943,7 @@ class Editor extends Page {
 			cursor.onMouseMove(m);
 
 			if( curLevel.inBounds(m.levelX, m.levelY) )
-				requestFps(0.5);
+				App.ME.requestCpu(false);
 		}
 
 		// Mouse coords infos
@@ -1041,8 +1036,7 @@ class Editor extends Page {
 		camera.deltaZoomTo( c.levelX, c.levelY, delta*spd*camera.adjustedZoom );
 		camera.cancelAllAutoMovements();
 
-		// cursor.onMouseMove( getMouse() );
-		requestFps();
+		App.ME.requestCpu();
 
 		// Auto world mode on zoom out
 		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && delta<0 ) {
@@ -2071,19 +2065,6 @@ class Editor extends Page {
 
 			if( App.ME.isKeyDown(K.PGDOWN) )
 				deltaZoom(-0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
-		}
-
-
-		// Smart FPS limiting
-		if( settings.v.smartCpuThrottling ) {
-			var maxCap = 0.;
-			for(k in fpsRequests.keys()) {
-				maxCap = M.fmax(k/100,maxCap);
-				fpsRequests.set(k, fpsRequests.get(k)-tmod/Const.FPS);
-				if( fpsRequests.get(k)<=0 )
-					fpsRequests.remove(k);
-			}
-			hxd.System.fpsLimit = maxCap>=1 ? -1 : M.ceil(30+30*maxCap);
 		}
 
 		// DOM locking

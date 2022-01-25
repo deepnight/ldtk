@@ -222,6 +222,7 @@ class WorldTool extends dn.Process {
 			// var p = project.getSmartLevelGridSize()*0.5;
 			cursor.drawRect(over.worldX, over.worldY, over.pxWid, over.pxHei);
 			ev.cancel = true;
+			App.ME.requestCpu(false);
 		}
 		else
 			cursor.clear();
@@ -346,7 +347,7 @@ class WorldTool extends dn.Process {
 
 			// Refresh render
 			editor.ge.emit( WorldLevelMoved(clickedLevel, false) );
-			editor.requestFps();
+			App.ME.requestCpu();
 			ev.cancel = true;
 		}
 	}

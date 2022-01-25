@@ -26,6 +26,8 @@ class App extends dn.Process {
 
 	public var clipboard : data.Clipboard;
 
+	var requestedCpuEndTime = 0.;
+
 	public function new() {
 		super();
 
@@ -489,9 +491,9 @@ class App extends dn.Process {
 	}
 
 
-	public inline function changeSettings(doChange:Void->Void) {
-		doChange();
-		settings.save();
+
+	public inline function requestCpu(full=true) {
+		requestedCpuEndTime = haxe.Timer.stamp()+2;
 	}
 
 
@@ -740,10 +742,19 @@ class App extends dn.Process {
 		super.update();
 
 		// FPS limit while app isn't focused
-		if( !focused && !ui.modal.Progress.hasAny() && !ui.modal.MetaProgress.exists() && ( !Editor.exists() || !Editor.ME.camera.isAnimated() ) )
-			hxd.System.fpsLimit = 2;
-		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() )
+		if( haxe.Timer.stamp()<=requestedCpuEndTime ) // Has recent request
 			hxd.System.fpsLimit = -1;
+		else if( !focused && !ui.modal.Progress.hasAny() && !ui.modal.MetaProgress.exists() ) // App is blurred
+			hxd.System.fpsLimit = 2;
+		else if( !settings.v.smartCpuThrottling ) // no CPU throttling
+			hxd.System.fpsLimit = -1;
+		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() ) // progress is running
+			hxd.System.fpsLimit = -1;
+		else if( haxe.Timer.stamp()>requestedCpuEndTime+3.5 ) // last request is long time ago (idling?)
+			hxd.System.fpsLimit = 10;
+		else
+			hxd.System.fpsLimit = 30;
+
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
@@ -758,7 +769,7 @@ class App extends dn.Process {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');
-			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
+			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(100*hxd.System.fpsLimit/60)}%');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());

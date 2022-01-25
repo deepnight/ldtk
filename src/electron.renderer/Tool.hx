@@ -73,7 +73,7 @@ class Tool<T> extends dn.Process {
 	public function isRunning() return curMode!=null;
 
 	public function startUsing(ev:hxd.Event, m:Coords) {
-		editor.requestFps();
+		App.ME.requestCpu();
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
@@ -172,7 +172,7 @@ class Tool<T> extends dn.Process {
 				editor.levelRender.invalidateLayerArea(curLayerInstance, cx,cx, cy,cy);
 		});
 		editor.cancelSpaceKey();
-		editor.requestFps();
+		App.ME.requestCpu();
 		return anyChange;
 	}
 
