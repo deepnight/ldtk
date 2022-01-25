@@ -1,8 +1,10 @@
 package misc;
 
 class FileWatcher extends dn.Process {
+	static var MAX_RETRIES = 3;
+
 	var all : Array<{ watcher:js.node.fs.FSWatcher, path:String, cb:Void->Void }> = [];
-	var queuedChanges : Map<String, Void->Void> = new Map();
+	var queuedChanges : Map<String, { absPath:String, cb:Void->Bool, retry:Int }> = new Map();
 
 	public function new() {
 		super(Editor.ME);
@@ -27,15 +29,15 @@ class FileWatcher extends dn.Process {
 					case "change":
 						App.LOG.fileOp("Changed on disk: "+absFilePath);
 						if( isReadyToReload() ) {
-							// Update now
+							// Queue after 1s
 							delayer.cancelById(absFilePath);
 							delayer.addS(absFilePath, ()->{
-								queuedChanges.set(absFilePath, onChange);
+								queueReloading(absFilePath, onChange);
 							}, 1);
 						}
 						else {
-							// Update later
-							queuedChanges.set(absFilePath, onChange);
+							// Queue
+							queueReloading(absFilePath, onChange);
 						}
 
 					case _:
@@ -55,6 +57,17 @@ class FileWatcher extends dn.Process {
 		catch(e:Dynamic) {
 			App.LOG.error("Couldn't initialize FSWatcher for "+absFilePath);
 		}
+	}
+
+	function queueReloading(absPath:String, onChange:Void->Void) {
+		queuedChanges.set( absPath, {
+			absPath: absPath,
+			cb: ()->{
+				try onChange() catch(_) return false;
+				return true;
+			},
+			retry: 0,
+		});
 	}
 
 
@@ -114,10 +127,23 @@ class FileWatcher extends dn.Process {
 		super.postUpdate();
 
 		// Delayed changes
-		if( isReadyToReload() ) {
-			for(cb in queuedChanges)
-				cb();
-			queuedChanges = new Map();
+		if( isReadyToReload() && !cd.has("lock") ) {
+			for(q in queuedChanges.keyValueIterator())
+				if( q.value.cb() )
+					queuedChanges.remove(q.key);
+				else {
+					q.value.retry++;
+					if( q.value.retry>MAX_RETRIES ) {
+						queuedChanges.remove(q.key);
+						N.error("Failed "+MAX_RETRIES+" times, gave up.");
+					}
+					else {
+						var fp = dn.FilePath.fromFile(q.value.absPath);
+						N.error("Error reloading: "+fp.fileWithExt+"\nRetrying ("+q.value.retry+"/"+MAX_RETRIES+")...");
+						cd.setS("lock",2);
+					}
+				}
+
 		}
 	}
 }
