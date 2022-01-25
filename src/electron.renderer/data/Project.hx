@@ -5,6 +5,7 @@ class Project {
 	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
+	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
 	var usedColors : Map<String, Map<Int,Int>> = new Map();
@@ -743,7 +744,7 @@ class Project {
 	}
 
 	public inline function isEmbedImageLoaded(id : Null<ldtk.Json.EmbedAtlas>) {
-		return id!=null && imageCache.exists("embed#"+Std.string(id));
+		return id!=null && imageCache.exists( EMBED_CACHED_IMAGE_PREFIX + Std.string(id) );
 	}
 
 	public function reloadImage(relPath:String) {
@@ -792,10 +793,9 @@ class Project {
 	}
 
 
-
 	public function getOrLoadEmbedImage(id:ldtk.Json.EmbedAtlas) : Null<data.DataTypes.CachedImage> {
 		try {
-			var cacheId = "embed#"+Std.string(id);
+			var cacheId = EMBED_CACHED_IMAGE_PREFIX + Std.string(id);
 			if( !imageCache.exists(cacheId) ) {
 				var fileName = switch id {
 					case LdtkIcons: "finalbossblues-icons_full_16.png";
@@ -886,7 +886,7 @@ class Project {
 
 	public function garbageCollectUnusedImages() {
 		for( k in imageCache.keys() )
-			if( !isCachedImageUsed(imageCache.get(k)) ) {
+			if( k.indexOf(EMBED_CACHED_IMAGE_PREFIX)<0 && !isCachedImageUsed(imageCache.get(k)) ) {
 				App.LOG.add("cache", 'Garbaging unused image $k...');
 				disposeImage(k);
 			}
