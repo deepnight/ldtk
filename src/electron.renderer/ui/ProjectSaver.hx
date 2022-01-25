@@ -27,6 +27,8 @@ class ProjectSaver extends dn.Process {
 	var state : SavingState;
 	var savingData : Null<FileSavingData>;
 	var onComplete : Null< Bool->Void >;
+	var useMetaBar = false;
+
 
 	public function new(p:dn.Process, project:data.Project, ?onComplete:(success:Bool)->Void) {
 		super(p);
@@ -84,12 +86,20 @@ class ProjectSaver extends dn.Process {
 	}
 
 	function beginState(s:SavingState) {
+		if( useMetaBar && state!=s )
+			ui.modal.MetaProgress.advance();
+
 		state = s;
 
 		switch s {
 			case InQueue:
 
 			case PreChecks:
+				if( !ui.modal.MetaProgress.exists() ) {
+					useMetaBar = true;
+					ui.modal.MetaProgress.start('Saving ${project.filePath.fileWithExt}...', 9);
+				}
+
 				logState();
 				if( project.filePath.isWindowsNetworkDrive ) {
 					error( L._UnsupportedWinNetDir(), false );
@@ -315,6 +325,9 @@ class ProjectSaver extends dn.Process {
 
 
 			case Done:
+				if( useMetaBar )
+					ui.modal.MetaProgress.completeCurrent();
+
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
 				if( NT.fileExists(dir) && !NT.dirContainsAnyFile(dir) ) {
