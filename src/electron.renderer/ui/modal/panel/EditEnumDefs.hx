@@ -323,9 +323,23 @@ class EditEnumDefs extends ui.modal.Panel {
 			opt.text( td.identifier );
 		}
 
+		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
+			var id = ldtk.Json.EmbedAtlas.createByName(k);
+			var inf = Lang.getEmbedAtlasInfos(id);
+			var opt = new J('<option value="$k"/>');
+			opt.appendTo(jSelect);
+			opt.text( inf.displayName );
+		}
+
 		jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
 		jSelect.change( function(ev) {
 			var tid = Std.parseInt( jSelect.val() );
+			if( !M.isValidNumber(tid) ) {
+				// Embed tileset
+				var id = ldtk.Json.EmbedAtlas.createByName(jSelect.val());
+				var td = project.defs.getEmbedTileset(id);
+				tid = td.uid;
+			}
 			if( tid==curEnum.iconTilesetUid )
 				return;
 
