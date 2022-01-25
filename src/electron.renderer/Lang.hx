@@ -80,9 +80,9 @@ class Lang {
 	}
 
 
-	public static function getEmbedAtlasName(e:ldtk.Json.EmbedAtlas) : LocaleString {
+	public static function getEmbedAtlasInfos(e:ldtk.Json.EmbedAtlas) : { name:String, author:String, url:String } {
 		return switch e {
-			case LdtkIcons: L.t._("LDtk icons by FinalBossBlues");
+			case LdtkIcons: { name:"Generic icons", author:"FinalBossBlues", url:"https://finalbossblues.itch.io/icons" };
 		}
 	}
 

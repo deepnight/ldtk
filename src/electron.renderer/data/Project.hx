@@ -797,7 +797,9 @@ class Project {
 		try {
 			var cacheId = "embed#"+Std.string(id);
 			if( !imageCache.exists(cacheId) ) {
-				var fileName = Std.string(id)+".png";
+				var fileName = switch id {
+					case LdtkIcons: "finalbossblues-icons_full_16.png";
+				}
 				var fp = dn.FilePath.fromFile( JsTools.getEmbedAtlasDir()+"/"+fileName );
 				if( !NT.fileExists(fp.full) )
 					return null;

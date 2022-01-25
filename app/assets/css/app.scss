@@ -7295,6 +7295,17 @@ $patternSize : 32px;
 		color: $almostWhite;
 		border: 1px dashed $bgLighter;
 		border-radius: 4px;
+		.infos {
+			display: grid;
+			margin-top: 8px;
+			grid-template-columns: min-content min-content;
+			gap: 8px;
+			white-space: nowrap;
+
+			.author {
+				font-style: italic;
+			}
+		}
 	}
 
 	.content {

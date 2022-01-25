@@ -429,12 +429,12 @@ class Definitions {
 
 		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
 		tilesets.push(td);
-		td.identifier = _project.fixUniqueIdStr( Lang.getEmbedAtlasName(embedId), id->isTilesetIdentifierUnique(id));
+		var inf = Lang.getEmbedAtlasInfos(embedId);
+		td.identifier = _project.fixUniqueIdStr( inf.name+" by "+inf.author, id->isTilesetIdentifierUnique(id));
 
 		td.embedAtlas = embedId;
 		switch td.embedAtlas {
-			case LdtkIcons:
-				td.tileGridSize = 16;
+			case LdtkIcons: td.tileGridSize = 16;
 		}
 		td.importAtlasImage(td.embedAtlas);
 		td.buildPixelData(()->{}, true);

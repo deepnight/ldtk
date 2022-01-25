@@ -255,7 +255,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
 			var jOpt = new J('<option value="Embed.$k"/>');
 			jOpt.appendTo(jSelect);
-			jOpt.text( Lang.getEmbedAtlasName(ldtk.Json.EmbedAtlas.createByName(k)) );
+			var inf = Lang.getEmbedAtlasInfos(ldtk.Json.EmbedAtlas.createByName(k));
+			jOpt.text(inf.name+" by "+inf.author);
 		}
 		// Append tilesets
 		for( td in project.defs.tilesets ) {
@@ -276,6 +277,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				case _ : ldtk.Json.EntityRenderMode.createByName(v);
 			}
 			curEntity.renderMode = mode;
+			curEntity._oldTileId = null;
 			curEntity.tileRect = null;
 			if( mode==Tile ) {
 				var suffix = v.substr(v.indexOf(".")+1);

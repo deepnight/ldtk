@@ -119,13 +119,17 @@ class EditTilesetDefs extends ui.modal.Panel {
 			return;
 		}
 
-		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
 
 		if( curTd.isUsingEmbedAtlas() ) {
-			jContent.find("#embedTileset").show();
+			var inf = Lang.getEmbedAtlasInfos(curTd.embedAtlas);
+			var jEmbed = jContent.find("#embedTileset");
+			jEmbed.show();
+			jEmbed.find(".author").text("Image by "+inf.author);
+			jEmbed.find(".url").attr("href",inf.url);
 			jForm.hide();
+			JsTools.parseComponents(jEmbed);
 		}
 		else {
 			jContent.find("#embedTileset").hide();
@@ -179,27 +183,22 @@ class EditTilesetDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isTilesetIdentifierUnique(id,curTd));
 		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
-		// i.setEnabled( !curTd.isUsingEmbedAtlas() );
 
 		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(2, curTd.getMaxTileGridSize());
-		// i.setEnabled( !curTd.isUsingEmbedAtlas() );
 
 		var i = Input.linkToHtmlInput( curTd.spacing, jForm.find("input[name=spacing]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
-		// i.setEnabled( !curTd.isUsingEmbedAtlas() );
 
 		var i = Input.linkToHtmlInput( curTd.padding, jForm.find("input[name=padding]") );
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
-		// i.setEnabled( !curTd.isUsingEmbedAtlas() );
 
 		// Tags source Enum selector
 		var jSelect = jForm.find("#tagsSourceEnumUid");
 		jSelect.empty();
-		// jSelect.prop("disabled", curTd.isUsingEmbedAtlas());
 		var jOpt = new J('<option value="">-- None --</option>');
 		jOpt.appendTo(jSelect);
 		for( ed in project.defs.getAllEnumsSorted() ) {
@@ -242,6 +241,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		else
 			jSelect.addClass("noValue");
 
+		JsTools.parseComponents(jForm);
 		checkBackup();
 	}
 
@@ -279,6 +279,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				{
 					label: L._Copy(),
 					cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
+					enable: ()->!td.isUsingEmbedAtlas(),
 				},
 				{
 					label: L._Cut(),
@@ -286,6 +287,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 						App.ME.clipboard.copyData(CTilesetDef, td.toJson());
 						deleteTilesetDef(td);
 					},
+					enable: ()->!td.isUsingEmbedAtlas(),
 				},
 				{
 					label: L._PasteAfter(),
@@ -303,6 +305,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 						editor.ge.emit( TilesetDefAdded(copy) );
 						selectTileset(copy);
 					},
+					enable: ()->!td.isUsingEmbedAtlas(),
 				},
 				{
 					label: L._Delete(),
