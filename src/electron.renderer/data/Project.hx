@@ -306,7 +306,7 @@ class Project {
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
 			p.reorganizeWorld();
 
-		if( Version.lower(json.jsonVersion, "0.10") )
+		if( Version.lower(json.jsonVersion, "1.0") )
 			p.setFlag(PrependIndexToLevelFileNames, true);
 
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
