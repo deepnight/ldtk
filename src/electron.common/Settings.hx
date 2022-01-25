@@ -11,8 +11,6 @@ typedef AppSettings = {
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
-	var smartCpuThrottling : Bool;
-	var fixTileFlickering : Bool;
 	var showProjectColors : Bool;
 
 	var openLastProject : Bool;
@@ -57,9 +55,7 @@ class Settings {
 			tileStacking: true,
 			showDetails: true,
 			useBestGPU: true,
-			smartCpuThrottling: true,
 			startFullScreen: false,
-			fixTileFlickering: false,
 			showProjectColors: true,
 
 			openLastProject: false,
@@ -73,10 +69,6 @@ class Settings {
 
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
-
-		// Patch settings
-		v.fixTileFlickering = false;
-		v.smartCpuThrottling = true;
 	}
 
 	static inline function isRenderer() {
