@@ -106,8 +106,13 @@ class Tiled extends Exporter {
 		**/
 		var tilesetGids = new Map();
 		for( td in p.defs.tilesets ) {
-			if( !td.hasAtlasPath() ) {
+			if( !td.hasAtlasPointer() ) {
 				log.warning("Skipped undefined tileset: "+td.identifier);
+				continue;
+			}
+
+			if( !td.isUsingEmbedAtlas() ) {
+				log.warning("Skipped embedded tileset: "+td.identifier);
 				continue;
 			}
 

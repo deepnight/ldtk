@@ -1126,6 +1126,7 @@ ul.log {
 .icon.contextMenuOpen	{ background-image: url("../icons/contextMenuOpen.svg"); }
 .icon.copy				{ background-image: url("../icons/copy.svg"); }
 .icon.delete			{ background-image: url("../icons/delete.svg"); }
+.icon.embed				{ background-image: url("../icons/embed.svg"); }
 .icon.discord			{ background-image: url("../icons/discord.svg"); }
 .icon.doc				{ background-image: url("../icons/doc.svg"); }
 .icon.edit				{ background-image: url("../icons/edit.svg"); }
@@ -1190,7 +1191,7 @@ ul.log {
 .icon.mouseWheel		{ background-image: url("../icons/mouseWheel.png"); image-rendering: pixelated; }
 .icon.mouseMiddle		{ background-image: url("../icons/mouseMiddle.png"); image-rendering: pixelated; }
 
-.black		{ filter: brightness(0);}
+.black		{ filter: brightness(0); }
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 .icon.red	{ filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6); }
 
@@ -7289,11 +7290,28 @@ $patternSize : 32px;
 		content: "No tileset";
 	}
 
+	#embedTileset {
+		padding: 16px;
+		color: $almostWhite;
+		border: 1px dashed $bgLighter;
+		border-radius: 4px;
+	}
+
 	.content {
 		width: 890px;
 		grid-template-rows: min-content min-content min-content auto;
 		.mainList {
 			grid-row: 3/5;
+			span.name {
+				display: grid;
+				grid-template-columns: repeat(2,min-content);
+				.icon {
+					margin-right: 4px;
+				}
+			}
+			.active .name .icon {
+				filter: brightness(0);
+			}
 		}
 		dl.form {
 			grid-row: 3/4;

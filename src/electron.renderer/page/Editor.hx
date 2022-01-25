@@ -423,7 +423,7 @@ class Editor extends Page {
 	function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
 		App.LOG.fileOp("Reloading tileset: "+td.identifier+" path="+td.relPath);
 
-		if( !td.hasAtlasPath() )
+		if( !td.hasAtlasPointer() )
 			return false;
 
 		var oldRelPath = td.relPath;

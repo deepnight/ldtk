@@ -418,6 +418,31 @@ class Definitions {
 
 	/**  TILESET DEFS  *****************************************/
 
+	/**
+		Create a special tileset using an embed atlas
+	**/
+	public function getEmbedTileset(embedId:ldtk.Json.EmbedAtlas) {
+		// Return existing one
+		for(td in tilesets)
+			if( td.embedAtlas==embedId )
+				return td;
+
+		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
+		tilesets.push(td);
+		td.identifier = _project.fixUniqueIdStr( Lang.getEmbedAtlasName(embedId), id->isTilesetIdentifierUnique(id));
+
+		td.embedAtlas = embedId;
+		switch td.embedAtlas {
+			case LdtkIcons:
+				td.tileGridSize = 16;
+		}
+		td.importAtlasImage(td.embedAtlas);
+		td.buildPixelData(()->{}, true);
+
+		_project.tidy();
+		return td;
+	}
+
 	public function createTilesetDef() : data.def.TilesetDef {
 		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
 		tilesets.push(td);

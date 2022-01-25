@@ -251,11 +251,16 @@ class EditEntityDefs extends ui.modal.Panel {
 				case Tile: null;
 			});
 		}
+		// Append embed atlas
+		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
+			var jOpt = new J('<option value="Embed.$k"/>');
+			jOpt.appendTo(jSelect);
+			jOpt.text( Lang.getEmbedAtlasName(ldtk.Json.EmbedAtlas.createByName(k)) );
+		}
 		// Append tilesets
-		if( project.defs.tilesets.length==0 )
-			jSelect.append( new J('<option value="Tile">-- No tileset available --</option>') );
-
 		for( td in project.defs.tilesets ) {
+			if( td.isUsingEmbedAtlas() )
+				continue;
 			var jOpt = new J('<option value="Tile.${td.uid}"/>');
 			jOpt.appendTo(jSelect);
 			jOpt.text( Lang.t._("Tile from ::name::", {name:td.identifier}) );
@@ -264,12 +269,28 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Pick render mode
 		jSelect.change( function(ev) {
 			var v : String = jSelect.val();
-			var mode = ldtk.Json.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
+			var prefix = v.indexOf(".")<0 ? null : v.substr(0,v.indexOf("."));
+			var mode : ldtk.Json.EntityRenderMode = switch prefix {
+				case "Tile": Tile;
+				case "Embed": Tile;
+				case _ : ldtk.Json.EntityRenderMode.createByName(v);
+			}
 			curEntity.renderMode = mode;
 			curEntity.tileRect = null;
 			if( mode==Tile ) {
-				var tdUid = Std.parseInt( v.substr(v.indexOf(".")+1) );
-				curEntity.tilesetId = tdUid;
+				var suffix = v.substr(v.indexOf(".")+1);
+				switch prefix {
+					case "Tile":
+						var tdUid = Std.parseInt(suffix);
+						curEntity.tilesetId = tdUid;
+
+					case "Embed":
+						var embedId = ldtk.Json.EmbedAtlas.createByName(suffix);
+						var td = project.defs.getEmbedTileset(embedId);
+						curEntity.tilesetId = td.uid;
+
+					case _:
+				}
 			}
 			else {
 				curEntity.tilesetId = null;
@@ -278,7 +299,16 @@ class EditEntityDefs extends ui.modal.Panel {
 
 			editor.ge.emit( EntityDefChanged );
 		});
-		jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
+		if( curEntity.tilesetId!=null ) {
+			var td = project.defs.getTilesetDef(curEntity.tilesetId);
+			if( td.isUsingEmbedAtlas() )
+				jSelect.val("Embed."+td.embedAtlas);
+			else
+				jSelect.val("Tile."+td.uid);
+		}
+		else
+			jSelect.val( curEntity.renderMode.getName() );
+			// jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
 
 		// Tile render mode
 		var i = new form.input.EnumSelect(

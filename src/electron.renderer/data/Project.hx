@@ -686,7 +686,7 @@ class Project {
 				var ed = fi.def.getEnumDef();
 				if( ed!=null && ed.isExternal() )
 					continue;
-				trace(fi);
+
 				for(i in 0...fi.getArrayLength())
 					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
 			}
@@ -738,8 +738,12 @@ class Project {
 
 	/** CACHED IMAGES ************************************/
 
-	public inline function isImageLoaded(relPath:String) {
+	public inline function isImageLoaded(relPath : Null<String>) {
 		return relPath!=null && imageCache.exists(relPath);
+	}
+
+	public inline function isEmbedImageLoaded(id : Null<ldtk.Json.EmbedAtlas>) {
+		return id!=null && imageCache.exists("embed#"+Std.string(id));
 	}
 
 	public function reloadImage(relPath:String) {
@@ -786,6 +790,43 @@ class Project {
 
 		return Ok;
 	}
+
+
+
+	public function getOrLoadEmbedImage(id:ldtk.Json.EmbedAtlas) : Null<data.DataTypes.CachedImage> {
+		try {
+			var cacheId = "embed#"+Std.string(id);
+			if( !imageCache.exists(cacheId) ) {
+				var fileName = Std.string(id)+".png";
+				var fp = dn.FilePath.fromFile( JsTools.getEmbedAtlasDir()+"/"+fileName );
+				if( !NT.fileExists(fp.full) )
+					return null;
+
+				var bytes = NT.readFileBytes(fp.full);
+				var pixels = dn.ImageDecoder.decodePixels(bytes);
+				pixels.convert(RGBA);
+
+				var base64 = haxe.crypto.Base64.encode(bytes);
+				var texture = h3d.mat.Texture.fromPixels(pixels);
+
+				imageCache.set( cacheId, {
+					fileName: fp.fileWithExt,
+					relPath: fp.full,
+					bytes: bytes,
+					base64: base64,
+					pixels: pixels,
+					tex: texture,
+				});
+			}
+
+			return imageCache.get(cacheId);
+		}
+		catch( e:Dynamic ) {
+			App.LOG.error(e);
+			return null;
+		}
+	}
+
 
 	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
 		try {

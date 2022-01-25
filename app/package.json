@@ -47,6 +47,7 @@
 			"output": "redist"
 		},
 		"extraFiles": [
+			"embedAtlas",
 			"samples",
 			"README.txt"
 		],

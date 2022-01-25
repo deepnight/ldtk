@@ -80,6 +80,13 @@ class Lang {
 	}
 
 
+	public static function getEmbedAtlasName(e:ldtk.Json.EmbedAtlas) : LocaleString {
+		return switch e {
+			case LdtkIcons: L.t._("LDtk icons by FinalBossBlues");
+		}
+	}
+
+
 	public static function getTextLanguageMode(m:Null<ldtk.Json.TextLanguageMode>) : LocaleString {
 		return switch m {
 			case null: t._("Plain text");

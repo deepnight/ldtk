@@ -980,7 +980,7 @@ class WorldRender extends dn.Process {
 			// Check if a tileset is being loaded
 			var waitingTileset = false;
 			for(td in project.defs.tilesets)
-				if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+				if( td.hasAtlasPointer() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
 					waitingTileset = true;
 					break;
 				}

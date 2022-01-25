@@ -600,6 +600,11 @@ class JsTools {
 		return dn.FilePath.fromDir( raw ).directory;
 	}
 
+	public static function getEmbedAtlasDir() {
+		var raw = getExeDir() + ( App.isMac() ? "/../embedAtlas" : "/embedAtlas" );
+		return dn.FilePath.fromDir( raw ).directory;
+	}
+
 	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
