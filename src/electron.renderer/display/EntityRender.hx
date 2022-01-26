@@ -256,7 +256,7 @@ class EntityRender extends dn.Process {
 		);
 
 		for(refEi in ei._project.getEntityInstancesReferingTo(ei)) {
-			if( refEi._li.level==ei._li.level || refEi.hasEntityRefTo(ei,true) )
+			if( refEi._li.level==ei._li.level || !refEi.hasEntityRefTo(ei,true) )
 				continue;
 
 			var col = refEi.getSmartColor(true);
