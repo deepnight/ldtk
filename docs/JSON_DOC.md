@@ -313,6 +313,7 @@ Value | Type | Description
 `allowOutOfLevelRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Bool | 
 `allowedRefTags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | 
 `allowedRefs`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Enum | Possible values: `Any`, `OnlySame`, `OnlyTags`
+`autoChainRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Bool | 
 `editorAlwaysShow`<br/><sup class="internal">*Only used by editor*</sup> | Bool | 
 `editorCutLongValues`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
@@ -344,6 +345,7 @@ Value | Type | Description
 `__cHei`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Grid-based height
 `__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Grid-based width
 `customData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array of custom tile metadata<br/> This object contains the following fields:<br/> <ul><li>**`data`** **(String**)</li><li>**`tileId`** **(Int**)</li></ul>
+`embedAtlas`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | If this value is set, then it means that this atlas uses an internal LDtk atlas image instead of a loaded one.<br/> Possible values: &lt;`null`&gt;, `LdtkIcons`
 `enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
 `identifier` | String | User defined unique identifier
 `padding` | Int | Distance in pixels from image borders

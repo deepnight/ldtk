@@ -667,6 +667,7 @@
 				"allowOutOfLevelRef",
 				"allowedRefTags",
 				"allowedRefs",
+				"autoChainRef",
 				"editorAlwaysShow",
 				"editorCutLongValues",
 				"editorDisplayMode",
@@ -755,6 +756,12 @@
 				},
 				"canBeNull": {
 					"description": "TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).",
+					"type": [
+						"boolean"
+					]
+				},
+				"autoChainRef": {
+					"description": "",
 					"type": [
 						"boolean"
 					]
@@ -1707,6 +1714,13 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"embedAtlas": {
+					"description": "If this value is set, then it means that this atlas uses an internal LDtk atlas image instead of a loaded one. Possible values: &lt;`null`&gt;, `LdtkIcons`",
+					"enum": [
+						"LdtkIcons",
+						null
 					]
 				},
 				"relPath": {
