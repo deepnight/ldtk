@@ -71,6 +71,9 @@ class Definitions {
 
 		for(td in tilesets)
 			td.tidy(p);
+
+		for(fd in levelFields)
+			fd.tidy(p);
 	}
 
 	/**  LAYER DEFS  *****************************************/
