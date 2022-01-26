@@ -697,6 +697,19 @@ class FieldInstance {
 			case F_Color:
 			case F_Path:
 			case F_Tile:
+				var i = 0;
+				while( i<getArrayLength() ) {
+					if( !valueIsNull(i) && ( def.tilesetUid==null || p.defs.getTilesetDef(def.tilesetUid)==null ) ) {
+						App.LOG.add("tidy", 'Removed lost tile in $this');
+						if( def.isArray ) {
+							removeArrayValue(i);
+							i--;
+						}
+						else
+							parseValue(i,null);
+					}
+					i++;
+				}
 
 			case F_EntityRef:
 				var i = 0;
