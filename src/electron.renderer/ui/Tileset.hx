@@ -25,7 +25,7 @@ class Tileset {
 	var tx : Null<Float>;
 	var ty : Null<Float>;
 	var mouseOver = false;
-	var useSavedSelections = true;
+	public var useSavedSelections = true;
 
 	var selectMode : TilesetSelectionMode;
 	var _internalSelectedIds : Array<Int> = [];
@@ -163,7 +163,7 @@ class Tileset {
 		setSelectedTileIds( tilesetDef.getTileIdsFromRect(r) );
 	}
 
-	public dynamic function onSingleTileSelect(tileId:Int) {}
+	public dynamic function onSelectAnything() {}
 
 	function loadScrollPos() {
 		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
@@ -447,7 +447,7 @@ class Tileset {
 			case None:
 
 			case PickAndClose:
-				onSingleTileSelect( selIds[0] );
+				setSelectedTileIds(selIds);
 
 			case Free, RectOnly, PickSingle:
 				if( add ) {
@@ -495,6 +495,7 @@ class Tileset {
 
 		renderSelection();
 		onSelect(selIds, add);
+		onSelectAnything();
 	}
 
 	function onSelect(tileIds:Array<Int>, added:Bool) {}

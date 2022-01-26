@@ -799,9 +799,9 @@ class JsTools {
 				var tp = new ui.Tileset(m.jContent, td, selectMode);
 				tp.setSelectedTileIds(tileIds);
 				if( selectMode==PickAndClose )
-					tp.onSingleTileSelect = function(tileId) {
+					tp.onSelectAnything = ()->{
+						onPick([ tp.getSelectedTileIds()[0] ]);
 						m.close();
-						onPick([tileId]);
 					}
 				else
 					m.onCloseCb = function() {
@@ -851,8 +851,12 @@ class JsTools {
 				m.addClass("singleTilePicker");
 
 				var tp = new ui.Tileset(m.jContent, td, RectOnly);
+				tp.useSavedSelections = false;
 				tp.setSelectedRect(cur);
-				m.onCloseCb = ()->onPick( tp.getSelectedRect() );
+				tp.onSelectAnything = ()->{
+					onPick( tp.getSelectedRect() );
+					m.close();
+				}
 				tp.focusOnSelection(true);
 			});
 		}
