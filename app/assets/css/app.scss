@@ -1335,8 +1335,7 @@ dl.form {
 	margin: 0;
 }
 
-dl.form,
-ul.form {
+dl.form {
 	padding-bottom: 16px;
 
 	>dt {
@@ -1404,8 +1403,7 @@ ul.form {
 		margin-bottom: 10px;
 	}
 
-	>dd,
-	>li {
+	>dd {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: flex-start;
@@ -1556,16 +1554,16 @@ ul.form {
 			box-sizing: border-box;
 		}
 
-		>label:first-child {
-			flex: 0 0 150px;
-			align-self: stretch;
-			padding-top: 8px;
-			padding-right: 16px;
-			font-weight: bold;
-			text-transform: uppercase;
-			text-align: right;
-			font-size: 80%;
-		}
+		// >label:first-child {
+		// 	flex: 0 0 150px;
+		// 	align-self: stretch;
+		// 	padding-top: 8px;
+		// 	padding-right: 16px;
+		// 	font-weight: bold;
+		// 	text-transform: uppercase;
+		// 	text-align: right;
+		// 	font-size: 80%;
+		// }
 
 		input[type=text]:not(:read-only):hover {
 			outline: 1px solid $orange;
@@ -1575,12 +1573,35 @@ ul.form {
 		*+input[type=checkbox] {
 			margin-left: 16px;
 		}
+
 		input[type=checkbox]+label {
 			flex: 0 1 auto;
 			align-self: center;
 			padding-left: 4px;
 			white-space: nowrap;
 			text-align: left;
+		}
+
+		>label {
+			flex: 0 1 0px;
+			display: flex;
+			margin-right: 16px;
+			padding-right: 3px;
+			flex-wrap: nowrap;
+			align-items: center;
+
+			white-space: nowrap;
+			cursor: pointer;
+			border-radius: 4px;
+
+			input {
+				margin-right: 4px;
+			}
+
+			&:hover {
+				color: $orange;
+				background-color: $bgLight;
+			}
 		}
 
 		input[type=color] {
@@ -1735,8 +1756,11 @@ input.slider:not(:disabled) {
 input[type=checkbox] {
 	width: 24px;
 	height: 24px;
-	&:hover {
-		outline: 1px solid $orange;
+	&:not(:disabled) {
+		cursor: pointer;
+		&:hover {
+			outline: 1px solid $orange;
+		}
 	}
 	&:disabled {
 		opacity: 0.3;
@@ -7032,8 +7056,8 @@ $patternSize : 32px;
 .window.dialog.perlinSettings {
 	.content {
 		width: 300px;
-		ul.form {
-			li {
+		dl.form {
+			dd {
 				align-items: stretch;
 			}
 			label {
