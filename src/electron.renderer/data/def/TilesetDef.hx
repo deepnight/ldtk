@@ -918,6 +918,12 @@ class TilesetDef {
 	public function tidy(p:data.Project) {
 		_project = p;
 
+		// Enforce embed atlas ID
+		if( embedAtlas!=null ) {
+			var inf = Lang.getEmbedAtlasInfos(embedAtlas);
+			identifier = Project.cleanupIdentifier(inf.identifier, _project.identifierStyle);
+		}
+
 		// Lost source enum
 		if( tagsSourceEnumUid!=null && getTagsEnumDef()==null ) {
 			App.LOG.add("tidy", "Cleared lost tag enum in "+this);

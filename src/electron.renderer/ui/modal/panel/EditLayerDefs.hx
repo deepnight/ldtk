@@ -351,41 +351,59 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Layer-type specific inits
 		function initAutoTilesetSelect() {
+			JsTools.createTilesetSelect(
+				project,
+				jForm.find("[name=autoTileset]"),
+				cur.tilesetDefUid,
+				true,
+				(uid)->{
+					if( cur.autoRuleGroups.length!=0 )
+						new LastChance(Lang.t._("Changed auto-layer tileset"), project);
 
-			var jTileset = jForm.find("[name=autoTileset]");
-			jTileset.empty();
-			jTileset.removeClass("required");
-			jTileset.removeClass("noValue");
+					cur.tilesetDefUid = uid;
+					if( cur.tilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+						cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
 
-			var opt = new J("<option/>");
-			opt.appendTo(jTileset);
-			opt.attr("value", -1);
-			opt.text("-- Select a tileset --");
+					// TODO cleanup rules with invalid tileIDs
 
-			for(td in project.defs.tilesets) {
-				var opt = new J("<option/>");
-				opt.appendTo(jTileset);
-				opt.attr("value", td.uid);
-				opt.text( td.identifier );
-			}
-			jTileset.change( function(ev) {
-				var newTilesetUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
+					editor.ge.emit( LayerDefChanged(cur.uid) );
+				}
+			);
 
-				if( cur.autoRuleGroups.length!=0 )
-					new LastChance(Lang.t._("Changed auto-layer tileset"), project);
+			// var jTileset = jForm.find("[name=autoTileset]");
+			// jTileset.empty();
+			// jTileset.removeClass("required");
+			// jTileset.removeClass("noValue");
 
-				cur.tilesetDefUid = newTilesetUid;
-				if( cur.tilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
-					cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
+			// var opt = new J("<option/>");
+			// opt.appendTo(jTileset);
+			// opt.attr("value", -1);
+			// opt.text("-- Select a tileset --");
 
-				// TODO cleanup rules with invalid tileIDs
+			// for(td in project.defs.tilesets) {
+			// 	var opt = new J("<option/>");
+			// 	opt.appendTo(jTileset);
+			// 	opt.attr("value", td.uid);
+			// 	opt.text( td.identifier );
+			// }
+			// jTileset.change( function(ev) {
+				// var newTilesetUid = jTileset.val()=="-1" ? null : Std.parseInt( jTileset.val() );
 
-				editor.ge.emit( LayerDefChanged(cur.uid) );
-			});
-			if( cur.tilesetDefUid!=null )
-				jTileset.val( cur.tilesetDefUid );
-			else
-				jTileset.addClass("noValue");
+				// if( cur.autoRuleGroups.length!=0 )
+				// 	new LastChance(Lang.t._("Changed auto-layer tileset"), project);
+
+				// cur.tilesetDefUid = newTilesetUid;
+				// if( cur.tilesetDefUid!=null && editor.curLayerInstance.isEmpty() )
+				// 	cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
+
+				// // TODO cleanup rules with invalid tileIDs
+
+				// editor.ge.emit( LayerDefChanged(cur.uid) );
+			// });
+			// if( cur.tilesetDefUid!=null )
+			// 	jTileset.val( cur.tilesetDefUid );
+			// else
+			// 	jTileset.addClass("noValue");
 		}
 
 		switch cur.type {
@@ -544,70 +562,50 @@ class EditLayerDefs extends ui.modal.Panel {
 				);
 				jForm.find("#excludedTags").empty().append( ted.jEditor );
 
+
 			case Tiles:
-				var select = jForm.find("select[name=tilesets]");
-				var jInfos = select.siblings(".infos");
-				var bt = select.siblings("button.create");
-				select.empty();
-				jInfos.empty();
-
-				if( project.defs.tilesets.length==0 ) {
-					// No tileset in project
-					select.hide();
-					jInfos.hide();
-
-					bt.show().off().click( function(_) {
-						close();
-						new ui.modal.panel.EditTilesetDefs();
-					});
-				}
-				else {
-					// Tileset selector
-					select.show();
-					bt.hide();
-
-					if( cur.tilesetDefUid==null )
-						jInfos.hide();
-					else {
-						jInfos.show();
-						jInfos.text(project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize+"px tiles");
-					}
-
-					var opt = new J("<option/>");
-					opt.appendTo(select);
-					opt.attr("value", -1);
-					opt.text("-- Select a tileset --");
-
-					for(td in project.defs.tilesets) {
-						var opt = new J("<option/>");
-						opt.appendTo(select);
-						opt.attr("value", td.uid);
-						opt.text( td.identifier );
-					}
-
-					select.val( cur.tilesetDefUid==null ? -1 : cur.tilesetDefUid );
-
-					// Change tileset
-					select.change( function(ev) {
-						var v = Std.parseInt( select.val() );
-						if( v<0 )
+				var jSelect = JsTools.createTilesetSelect(
+					project,
+					jForm.find("select[name=tilesets]"),
+					cur.tilesetDefUid,
+					true,
+					(uid)->{
+						if( uid==null )
 							cur.tilesetDefUid = null;
 						else {
-							cur.tilesetDefUid = v;
+							cur.tilesetDefUid = uid;
 							cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
 						}
 						editor.ge.emit(LayerDefChanged(cur.uid));
-					});
-
-					var td = project.defs.getTilesetDef(cur.tilesetDefUid);
-					if( td!=null && cur.gridSize!=td.tileGridSize && ( td.tileGridSize<cur.gridSize || td.tileGridSize%cur.gridSize!=0 ) ) {
-						var warn = new J('<div class="tmp warning"/>');
-						warn.appendTo( select.parent() );
-						warn.text(Lang.t._("Warning: the TILESET grid (::tileset::px) differs from the LAYER grid (::layer::px), and the values aren't multiples, which can lead to unexpected behaviors when adding a group of tiles.", {
-							tileset: td.tileGridSize,
-							layer: cur.gridSize,
-						}));
 					}
+				);
+
+				// Tileset grid size
+				var jInfos = jSelect.siblings(".infos");
+				if( cur.tilesetDefUid==null )
+					jInfos.hide();
+				else {
+					jInfos.show();
+					jInfos.text(project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize+"px tiles");
+				}
+
+				// Create tileset shortcut
+				var jBt = jSelect.siblings("button.create");
+				if( project.defs.tilesets.length==0 )
+					jBt.show();
+				else
+					jBt.hide();
+				jBt.click( _->new ui.modal.panel.EditTilesetDefs() );
+
+				// Different grid size warning
+				var td = project.defs.getTilesetDef(cur.tilesetDefUid);
+				if( td!=null && cur.gridSize!=td.tileGridSize && ( td.tileGridSize<cur.gridSize || td.tileGridSize%cur.gridSize!=0 ) ) {
+					var jWarn = new J('<div class="tmp warning"/>');
+					jWarn.appendTo( jSelect.parent() );
+					jWarn.text(Lang.t._("Warning: the TILESET grid (::tileset::px) differs from the LAYER grid (::layer::px), and the values aren't multiples, which can lead to unexpected behaviors when adding a group of tiles.", {
+						tileset: td.tileGridSize,
+						layer: cur.gridSize,
+					}));
 				}
 
 

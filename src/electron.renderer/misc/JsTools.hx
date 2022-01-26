@@ -50,6 +50,82 @@ class JsTools {
 	}
 
 
+	/**
+		Create a Tileset <select/>
+	**/
+	public static function createTilesetSelect(project:data.Project, ?jSelect:js.jquery.JQuery, curUid:Null<Int>, allowNull=false, onPick:Null<Int>->Void) {
+		// Init select
+		if( jSelect!=null ) {
+			if( !jSelect.is("select") )
+				throw "Need a <select> element!";
+			jSelect.off().empty().show();
+		}
+		else
+			jSelect = new J('<select/>');
+		jSelect.removeClass("required");
+		jSelect.removeClass("noValue");
+
+		// Null value
+		if( allowNull || curUid==null ) {
+			var jOpt = new J('<option value="-1">-- Select a tileset --</option>');
+			jOpt.appendTo(jSelect);
+		}
+
+		// Classes
+		if( curUid!=null && project.defs.getTilesetDef(curUid)==null || !allowNull && curUid==null )
+			jSelect.addClass("required");
+		else if( curUid==null )
+			jSelect.addClass("noValue");
+
+		// Normal tilesets
+		for(td in project.defs.tilesets) {
+			if( td.isUsingEmbedAtlas() )
+				continue;
+			var jOpt = new J('<option value="${td.uid}"/>');
+			jOpt.appendTo(jSelect);
+			jOpt.text( td.identifier );
+		}
+
+		// Embed tilesets
+		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
+			var id = ldtk.Json.EmbedAtlas.createByName(k);
+			var inf = Lang.getEmbedAtlasInfos(id);
+			var jOpt = new J('<option value="$k"/>');
+			jOpt.appendTo(jSelect);
+			jOpt.text( inf.displayName );
+		}
+
+		// Select current one
+		var curTd = curUid==null ? null : project.defs.getTilesetDef(curUid);
+		if( curTd!=null && curTd.isUsingEmbedAtlas() )
+			jSelect.val( curTd.embedAtlas.getName() );
+		else
+			jSelect.val( curUid==null ? "-1" : Std.string(curUid) );
+
+		// Change event
+		jSelect.change( function(ev) {
+			var tid : Null<Int> = Std.parseInt( jSelect.val() );
+			N.debug(jSelect.val());
+			N.debug("=> "+tid);
+			if( jSelect.val()=="-1" )
+				tid = null;
+			else if( !M.isValidNumber(tid) ) {
+				// Embed tileset
+				var id = ldtk.Json.EmbedAtlas.createByName(jSelect.val());
+				N.debug("enum="+id);
+				var td = project.defs.getEmbedTileset(id);
+				tid = td.uid;
+			}
+			if( tid==curUid )
+				return;
+
+			onPick(tid);
+		});
+
+		return jSelect;
+	}
+
+
 	public static function focusScrollableList(jList:js.jquery.JQuery, jElem:js.jquery.JQuery) {
 		var targetY = jElem.position().top + jList.scrollTop();
 
