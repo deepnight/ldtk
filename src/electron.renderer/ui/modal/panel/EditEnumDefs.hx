@@ -318,6 +318,8 @@ class EditEnumDefs extends ui.modal.Panel {
 		opt.appendTo(jSelect);
 
 		for(td in project.defs.tilesets) {
+			if( td.isUsingEmbedAtlas() )
+				continue;
 			var opt = new J('<option value="${td.uid}"/>');
 			opt.appendTo(jSelect);
 			opt.text( td.identifier );
