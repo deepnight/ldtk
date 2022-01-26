@@ -2301,7 +2301,7 @@ textarea {
 		}
 
 		.content {
-			width: 700px;
+			width: 800px;
 
 			h2, h3, h4 {
 				white-space: nowrap;
@@ -5638,11 +5638,12 @@ dl.form.fieldInstanceEditor {
 .window.panel.editTilesetDefs {
 	.content{
 		display: grid;
+		width: 900px;
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
 		grid-template-rows: min-content min-content auto;
-		grid-template-columns: 200px auto;
+		grid-template-columns: 250px auto;
 
 		.path {
 			flex: 1 0 100%;
@@ -5777,7 +5778,7 @@ dl.form.fieldInstanceEditor {
 	.content {
 		display: grid;
 		grid-template-rows: min-content min-content auto;
-		grid-template-columns: 200px auto;
+		grid-template-columns: 250px auto;
 		gap: 16px;
 		height: 100%;
 
@@ -7292,30 +7293,38 @@ $patternSize : 32px;
 
 	#embedTileset {
 		padding: 16px;
-		color: $almostWhite;
 		border: 1px dashed $bgLighter;
 		border-radius: 4px;
-		.infos {
-			display: grid;
-			margin-top: 8px;
-			grid-template-columns: min-content min-content;
-			gap: 8px;
-			white-space: nowrap;
 
-			.author {
-				font-style: italic;
-			}
+		.desc {
+			color: white;
+		}
+
+		.license {
+			margin-top: 8px;
+			color: $orange;
+		}
+
+		.infos {
+			padding-bottom: 8px;
+			margin-bottom: 8px;
+			color: $almostWhite;
+			border-bottom: 1px solid $bgLight;
 		}
 	}
 
 	.content {
-		width: 890px;
 		grid-template-rows: min-content min-content min-content auto;
+		grid-template-columns: 300px auto;
+
 		.mainList {
 			grid-row: 3/5;
 			span.name {
 				display: grid;
 				grid-template-columns: repeat(2,min-content);
+				overflow-x: hidden;
+				width: 100%;
+
 				.icon {
 					margin-right: 4px;
 				}
@@ -7359,7 +7368,7 @@ $patternSize : 32px;
 		justify-content: stretch;
 		gap: 16px;
 		grid-template-rows: min-content min-content auto;
-		grid-template-columns: 200px auto;
+		grid-template-columns: 250px auto;
 		// overflow: hidden;
 
 		>h2:first-of-type {
