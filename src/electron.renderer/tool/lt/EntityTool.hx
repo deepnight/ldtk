@@ -2,12 +2,17 @@ package tool.lt;
 
 class EntityTool extends tool.LayerTool<Int> {
 	public var curEntityDef(get,never) : Null<data.def.EntityDef>;
+	public static var PREV_CHAINABLE_ENT: Null<{ ei:data.inst.EntityInstance, time:Float }>;
 
 	public function new() {
 		super();
 
 		if( curEntityDef==null && project.defs.entities.length>0 )
 			selectValue( project.defs.entities[0].uid );
+	}
+
+	public static inline function clearPrevAutoRefEntity() {
+		PREV_CHAINABLE_ENT = null;
 	}
 
 	override function onBeforeToolActivation() {
@@ -162,6 +167,33 @@ class EntityTool extends tool.LayerTool<Int> {
 
 					// Done
 					if( ei!=null ) {
+						// Try to auto chain previous entity to the new one
+						ei.tidy(project, curLayerInstance); // create field instances
+						var allowChain = true;
+						if( PREV_CHAINABLE_ENT!=null && !PREV_CHAINABLE_ENT.ei._li.containsEntity(PREV_CHAINABLE_ENT.ei) )
+							PREV_CHAINABLE_ENT = null;
+
+						if( PREV_CHAINABLE_ENT!=null && M.fabs(haxe.Timer.stamp()-PREV_CHAINABLE_ENT.time)<=30 ) {
+							// Check if previously added entity has a field with "autoChainRef" enabled
+							for(prevFi in PREV_CHAINABLE_ENT.ei.fieldInstances) {
+								if( prevFi.def.type!=F_EntityRef || !prevFi.def.autoChainRef )
+									continue;
+
+								// Create link to previous
+								if( prevFi.def.acceptsEntityRefTo(PREV_CHAINABLE_ENT.ei, ei) ) {
+									if( prevFi.def.isArray )
+										prevFi.addArrayValue();
+									prevFi.setEntityRefTo(prevFi.getArrayLength()-1, PREV_CHAINABLE_ENT.ei, ei);
+									allowChain = prevFi.def.isArray || !prevFi.def.symmetricalRef;
+								}
+							}
+						}
+						if( allowChain )
+							PREV_CHAINABLE_ENT = { ei:ei, time:haxe.Timer.stamp() }
+						else
+							PREV_CHAINABLE_ENT = null;
+
+						// Finalize entity
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
 						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);

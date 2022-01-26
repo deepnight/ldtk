@@ -37,6 +37,7 @@ class FieldDef {
 
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
 	public var symmetricalRef : Bool;
+	public var autoChainRef : Bool;
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
 	public var allowedRefTags : Tags;
@@ -61,6 +62,7 @@ class FieldDef {
 		useForSmartColor = getDefaultUseForSmartColor(t);
 		defaultOverride = null;
 		symmetricalRef = false;
+		autoChainRef = false;
 		allowOutOfLevelRef = true;
 		allowedRefs = OnlySame;
 		allowedRefTags = new Tags();
@@ -132,6 +134,7 @@ class FieldDef {
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
+		o.autoChainRef = JsonTools.readBool(json.autoChainRef, false);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
@@ -169,6 +172,7 @@ class FieldDef {
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 			textLanguageMode: type!=F_Text ? null : JsonTools.writeEnum(textLanguageMode, true),
 			symmetricalRef: symmetricalRef,
+			autoChainRef: autoChainRef,
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
 			allowedRefTags: allowedRefTags.toJson(),
@@ -521,6 +525,19 @@ class FieldDef {
 		checkMinMax();
 	}
 
+
+	public function acceptsEntityRefTo(sourceEi:data.inst.EntityInstance, targetEi:data.inst.EntityInstance) {
+		if( type!=F_EntityRef )
+			return false;
+
+		return switch allowedRefs {
+			case Any: true;
+			case OnlySame: sourceEi.def.uid==targetEi.def.uid;
+			case OnlyTags: targetEi.def.tags.hasAnyTagFoundIn(allowedRefTags);
+		}
+	}
+
+
 	public function setAcceptFileTypes(raw:Null<String>) {
 		var extReg = ~/\.?([a-z_\-.0-9]+)/gi;
 		var anyValidChar = ~/[a-z0-9]+/gi;
@@ -645,6 +662,7 @@ class FieldDef {
 		if( tilesetUid!=null && p.defs.getTilesetDef(tilesetUid)==null ) {
 			App.LOG.add("tidy", "Lost tileset UID in FieldDef "+toString());
 			tilesetUid = null;
+			defaultOverride = null;
 		}
 	}
 }

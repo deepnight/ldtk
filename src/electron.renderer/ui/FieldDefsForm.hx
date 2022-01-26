@@ -567,6 +567,9 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.allowedRefs==OnlySame );
 
+		var i = Input.linkToHtmlInput( curField.autoChainRef, jForm.find("input[name=autoChainRef]") );
+		i.onChange = onFieldChange;
+
 		var s = new form.input.EnumSelect(
 			jForm.find("[name=allowedRefs]"),
 			ldtk.Json.EntityReferenceTarget,
@@ -574,7 +577,9 @@ class FieldDefsForm {
 			()->curField.allowedRefs,
 			(v)->{
 				switch v {
-					case Any, OnlyTags: curField.symmetricalRef = false; // not compatible
+					case Any, OnlyTags:
+						curField.symmetricalRef = false; // not compatible
+
 					case OnlySame:
 				}
 				curField.allowedRefs = v;

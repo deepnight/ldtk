@@ -164,11 +164,20 @@
 		<label>Reference options</label>
 	</dt>
 	<dd>
-		<input type="checkbox" name="symmetricalRef" id="symmetricalRef" title="If enabled and you pick a target for this value, a symmetrical reference will be set on the target.\nThis only works if the target Entity is of the same type as this one."/>
-		<label for="symmetricalRef">symmetrical</label>
+		<label for="symmetricalRef">
+			<input type="checkbox" name="symmetricalRef" id="symmetricalRef" title="If enabled and you pick a target for this value, a symmetrical reference will be set on the target.\nThis only works if the target Entity is of the same type as this one."/>
+			symmetrical
+		</label>
 
-		<input type="checkbox" name="allowOutOfLevelRef" id="allowOutOfLevelRef" title="If enabled, it will be possible to pick an Entity from a different level."/>
-		<label for="allowOutOfLevelRef">in any level</label>
+		<label for="allowOutOfLevelRef">
+			<input type="checkbox" name="allowOutOfLevelRef" id="allowOutOfLevelRef" title="If enabled, it will be possible to pick an Entity from a different level."/>
+			in any level
+		</label>
+
+		<label for="autoChainRef">
+			<input type="checkbox" name="autoChainRef" id="autoChainRef" title="If enabled, if you place a compatible Entity right after placing this one, this field will automatically reference the newly added Entity."/>
+			auto-chain
+		</label>
 	</dd>
 
 

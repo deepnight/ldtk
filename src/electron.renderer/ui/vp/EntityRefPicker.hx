@@ -108,11 +108,7 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 			return false;
 
 		// Not right entity type
-		return ei!=sourceEi && switch fd.allowedRefs {
-			case Any: true;
-			case OnlyTags: ei.def.tags.hasAnyTagFoundIn(fd.allowedRefTags);
-			case OnlySame: ei.def.identifier==sourceEi.def.identifier;
-		}
+		return ei!=sourceEi && fd.acceptsEntityRefTo(sourceEi, ei);
 	}
 
 	override function postUpdate() {
