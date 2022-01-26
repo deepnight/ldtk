@@ -23,6 +23,7 @@
     - You are no longer limited to deleting the last IntGrid value.
   - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
   - **"Identifier" format policy**: you can now pick your prefered "Identifier case policy" (default is "1st letter uppercased").
+  - **Integrated icons**: to make game-prototype devs even better, LDtk now has an integrated icon tileset to make your Entities easier to read in the editor.
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various major optimizations to boost general performances & reduce CPU usage, especially on large projects.
 
