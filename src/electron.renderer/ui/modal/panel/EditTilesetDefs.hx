@@ -127,8 +127,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 		if( curTd.isUsingEmbedAtlas() ) {
 			var inf = Lang.getEmbedAtlasInfos(curTd.embedAtlas);
 			jEmbed.show();
-			jEmbed.find(".author").text("Image by "+inf.author);
-			jEmbed.find(".url").attr("href",inf.url);
+			jEmbed.find(".author").html('<a href="${inf.url}">${inf.author}</a>');
+			var jInf = jEmbed.find(".infos");
+			jInf.empty().append('Image by <strong>${inf.author}</strong>');
+			jInf.append(' (<a href="${inf.url}">website</a>)');
 			jForm.hide();
 			JsTools.parseComponents(jEmbed);
 		}
