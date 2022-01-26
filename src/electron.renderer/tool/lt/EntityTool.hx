@@ -90,6 +90,9 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function startUsing(ev:hxd.Event, m:Coords) {
 		super.startUsing(ev,m);
 
+		if(ev.button==1)
+			clearPrevAutoRefEntity();
+
 		var ge = editor.getGenericLevelElementAt(m);
 		switch ge {
 			case Entity(_) if( ev.button==0 ):
