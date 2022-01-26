@@ -454,14 +454,8 @@ class FieldInstancesForm {
 					var sourceEi = getEntityInstance();
 					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
 					vp.onPickValue = (targetEi)->{
-						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
-						project.unregisterReverseIidRef(sourceEi, oldTargetEi);
-						fi.parseValue(arrayIdx, targetEi.iid);
-						project.registerReverseIidRef(sourceEi.iid, targetEi.iid);
-						fi.setSymmetricalRef(arrayIdx, sourceEi);
-						if( oldTargetEi!=null )
-							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
-						targetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						tool.lt.EntityTool.clearPrevAutoRefEntity();
+						fi.setEntityRefTo(arrayIdx, sourceEi, targetEi);
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}

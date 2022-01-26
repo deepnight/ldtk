@@ -284,7 +284,7 @@ class FieldInstance {
 	}
 
 
-	public function setSymmetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
+	function setSymmetricalRef(arrayIdx:Int, sourceEi:EntityInstance) {
 		if( !def.symmetricalRef || valueIsNull(arrayIdx) )
 			return;
 
@@ -627,6 +627,46 @@ class FieldInstance {
 		else
 			return ei.def.identifier
 				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
+	}
+
+	public function setEntityRefTo(arrayIdx:Int, sourceEi:EntityInstance, targetEi:EntityInstance) {
+		var oldTargetEi = getEntityRefInstance(arrayIdx);
+		_project.unregisterReverseIidRef(sourceEi, oldTargetEi);
+
+		parseValue(arrayIdx, targetEi.iid);
+		_project.registerReverseIidRef(sourceEi.iid, targetEi.iid);
+
+		// Apply symmetry
+		if( def.symmetricalRef && targetEi.hasField(def) ) {
+			var targetFi = targetEi.getFieldInstance(def, false);
+			if( !def.isArray ) {
+				// Single value
+				if( targetFi.getEntityRefIid(arrayIdx)!=sourceEi.iid) {
+					targetFi.parseValue(arrayIdx, sourceEi.iid);
+					_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
+				}
+			}
+			else {
+				// Array
+				var found = false;
+				for(i in 0...targetFi.getArrayLength())
+					if( targetFi.getEntityRefIid(i)==sourceEi.iid ) {
+						found = true;
+						break;
+					}
+				if( !found ) {
+					targetFi.addArrayValue();
+					targetFi.parseValue(targetFi.getArrayLength()-1, sourceEi.iid);
+					_project.registerReverseIidRef(targetEi.iid, sourceEi.iid);
+				}
+			}
+		}
+		// setSymmetricalRef(arrayIdx, sourceEi);
+
+		// Tidy lost symmetries
+		if( oldTargetEi!=null )
+			oldTargetEi.tidyLostSymmetricalEntityRefs(def);
+		targetEi.tidyLostSymmetricalEntityRefs(def);
 	}
 
 	public function getTileRectObj(arrayIdx:Int) : Null<ldtk.Json.AtlasTileRect> {
