@@ -593,7 +593,7 @@
 			}
 		}
 	], "enums": [{ "identifier": "A", "uid": 25, "values": [
-		{ "id": "A0", "tileId": 193, "color": 14527095, "__tileSrcRect": [16,192,16,16] },
+		{ "id": "A0", "tileId": 93, "color": 11184810, "__tileSrcRect": [208,80,16,16] },
 		{ "id": "A1", "tileId": 230, "color": 7825066, "__tileSrcRect": [96,224,16,16] },
 		{ "id": "A2", "tileId": 315, "color": 3377220, "__tileSrcRect": [176,304,16,16] }
 	], "iconTilesetUid": 17, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },

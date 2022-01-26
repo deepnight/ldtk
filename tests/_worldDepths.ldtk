@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456445,
-	"nextUid": 201,
+	"appBuildId": 456449,
+	"nextUid": 202,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
 	"worldGridWidth": null,
@@ -1689,62 +1689,6 @@
 		}
 	], "entities": [
 		{
-			"identifier": "Ladder",
-			"uid": 175,
-			"tags": ["levelComponent"],
-			"width": 8,
-			"height": 8,
-			"resizableX": false,
-			"resizableY": true,
-			"keepAspectRatio": true,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
-			"hollow": false,
-			"color": "#94D9B3",
-			"renderMode": "Tile",
-			"showName": true,
-			"tilesetId": 18,
-			"tileId": 78,
-			"tileRenderMode": "Repeat",
-			"tileRect": { "x": 48, "y": 48, "w": 8, "h": 8 },
-			"maxCount": 0,
-			"limitScope": "PerLevel",
-			"limitBehavior": "MoveLastOne",
-			"pivotX": 0,
-			"pivotY": 0,
-			"fieldDefs": [
-				{
-					"identifier": "altSkin",
-					"__type": "Tile",
-					"uid": 180,
-					"type": "F_Tile",
-					"isArray": false,
-					"canBeNull": true,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "EntityTile",
-					"editorDisplayPos": "Above",
-					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": false,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": 18
-				}
-			]
-		},
-		{
 			"identifier": "Door",
 			"uid": 158,
 			"tags": ["levelComponent"],
@@ -1802,6 +1746,62 @@
 					"identifier": "altSkin",
 					"__type": "Tile",
 					"uid": 183,
+					"type": "F_Tile",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "EntityTile",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": 18
+				}
+			]
+		},
+		{
+			"identifier": "Ladder",
+			"uid": 175,
+			"tags": ["levelComponent"],
+			"width": 8,
+			"height": 8,
+			"resizableX": false,
+			"resizableY": true,
+			"keepAspectRatio": true,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#94D9B3",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 18,
+			"tileId": 78,
+			"tileRenderMode": "Repeat",
+			"tileRect": { "x": 48, "y": 48, "w": 8, "h": 8 },
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "altSkin",
+					"__type": "Tile",
+					"uid": 180,
 					"type": "F_Tile",
 					"isArray": false,
 					"canBeNull": true,
@@ -1904,7 +1904,7 @@
 		{
 			"__cWid": 16,
 			"__cHei": 64,
-			"identifier": "Icons_by_FinalBossBlues",
+			"identifier": "Internal_Icons",
 			"uid": 196,
 			"relPath": null,
 			"embedAtlas": "LdtkIcons",
@@ -1938,7 +1938,8 @@
 			{ "id": "Mana", "tileId": 280, "color": 7570599, "__tileSrcRect": [128,272,16,16] },
 			{ "id": "Ring", "tileId": 803, "color": 10645569, "__tileSrcRect": [48,800,16,16] },
 			{ "id": "Sword", "tileId": 433, "color": 8691125, "__tileSrcRect": [16,432,16,16] }
-		], "iconTilesetUid": 196, "externalRelPath": null, "externalFileChecksum": null }
+		], "iconTilesetUid": 196, "externalRelPath": null, "externalFileChecksum": null },
+		{ "identifier": "Test", "uid": 201, "values": [], "iconTilesetUid": 18, "externalRelPath": null, "externalFileChecksum": null }
 	], "externalEnums": [
 		{ "identifier": "A", "uid": 192, "values": [
 			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
@@ -3442,8 +3443,8 @@
 			"identifier": "Throne_room",
 			"iid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24",
 			"uid": 49,
-			"worldX": 488,
-			"worldY": 448,
+			"worldX": 504,
+			"worldY": 464,
 			"worldDepth": 1,
 			"pxWid": 264,
 			"pxHei": 160,
@@ -3509,7 +3510,13 @@
 										"params": ["8a0177c0-66b0-11ec-8c34-d9e59232b2d2"]
 									}]
 								},
-								{ "__identifier": "altSkin", "__value": null, "__type": "Tile", "defUid": 183, "realEditorValues": [] }
+								{
+									"__identifier": "altSkin",
+									"__value": null,
+									"__type": "Tile",
+									"defUid": 183,
+									"realEditorValues": [null]
+								}
 							]
 						}
 					]
@@ -4329,7 +4336,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" }]
+			"__neighbours": [ { "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" }, { "levelIid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35", "levelUid": 167, "dir": "s" } ]
 		},
 		{
 			"identifier": "Wood_Gate",
@@ -13777,6 +13784,7 @@
 			],
 			"__neighbours": [
 				{ "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "s" },
+				{ "levelIid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24", "levelUid": 49, "dir": "s" },
 				{ "levelIid": "c3ebe820-66b0-11ec-b23b-11b737ea77f1", "levelUid": 161, "dir": "s" },
 				{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" },
 				{ "levelIid": "74a0e030-66b0-11ec-8211-35643000f436", "levelUid": 163, "dir": "s" }
