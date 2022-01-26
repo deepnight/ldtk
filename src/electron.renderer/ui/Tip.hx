@@ -128,8 +128,13 @@ class Tip extends dn.Process {
 
 	public static function attach(jTarget:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, ?forceBelow:Bool) {
 		var cur : Tip = null;
-		if( jTarget.is("input") && jTarget.attr("id")!=null )
-			jTarget = jTarget.add( App.ME.jPage.find("[for="+jTarget.attr("id")+"]") );
+		if( jTarget.is("input") && jTarget.attr("id")!=null ) {
+			var jLabel = App.ME.jPage.find("[for="+jTarget.attr("id")+"]");
+			if( jLabel.has(jTarget.get(0)).length>0 )
+				jTarget = jLabel;
+			else
+				jTarget = jTarget.add(jLabel);
+		}
 
 		jTarget
 			.off(".tip")
