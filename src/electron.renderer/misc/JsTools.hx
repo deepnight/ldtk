@@ -105,14 +105,11 @@ class JsTools {
 		// Change event
 		jSelect.change( function(ev) {
 			var tid : Null<Int> = Std.parseInt( jSelect.val() );
-			N.debug(jSelect.val());
-			N.debug("=> "+tid);
 			if( jSelect.val()=="-1" )
 				tid = null;
 			else if( !M.isValidNumber(tid) ) {
 				// Embed tileset
 				var id = ldtk.Json.EmbedAtlas.createByName(jSelect.val());
-				N.debug("enum="+id);
 				var td = project.defs.getEmbedTileset(id);
 				tid = td.uid;
 			}
