@@ -107,9 +107,14 @@ class EntityRender extends dn.Process {
 				g.lineTo(p, h-p);
 			}
 			else {
-				g.beginFill(color, 0.2*ed.fillOpacity);
-				g.drawRect(0, 0, w, h);
+				// Bounding box
+				if( ed.isResizable() || ed.hollow ) {
+					g.beginFill(color, 0.2*ed.fillOpacity);
+					g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
+					g.drawRect(0, 0, w, h);
+				}
 
+				// Texture
 				var td = Editor.ME.project.defs.getTilesetDef(tilesetUid);
 				var t = td.getTileRect(rect);
 				var alpha = ed.fillOpacity * (ed.hollow ? 0.15 : 1);
