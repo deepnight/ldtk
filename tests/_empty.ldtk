@@ -5,11 +5,13 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.10.0",
+		"appVersion": "1.0.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.10.0",
+	"jsonVersion": "1.0.0",
+	"appBuildId": 456448,
 	"nextUid": 1,
+	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -28,14 +30,16 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
-	"flags": ["DiscardPreCsvIntGrid"],
+	"flags": [],
 	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
+			"iid": "7f6a3780-66b0-11ec-8260-adeac1689093",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
+			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#696A79",
@@ -52,5 +56,6 @@
 			"layerInstances": [],
 			"__neighbours": []
 		}
-	]
+	],
+	"worlds": []
 }
