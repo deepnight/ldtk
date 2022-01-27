@@ -304,7 +304,6 @@ class OgmoLoader {
 					l: level,
 					fp: fp,
 				});
-				trace(fp.directory);
 				level.identifier = data.Project.cleanupIdentifier(fp.fileName, p.identifierStyle);
 				level.useAutoIdentifier = false;
 				level.pxWid = levelJson.width;

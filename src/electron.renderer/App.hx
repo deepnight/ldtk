@@ -636,7 +636,6 @@ class App extends dn.Process {
 
 		// Notify app update
 		if( checkAndNotifyUpdate && settings.v.lastKnownVersion!=Const.getAppVersion() ) {
-			trace("update");
 			var prev = settings.v.lastKnownVersion;
 			settings.v.lastKnownVersion = Const.getAppVersion();
 			App.ME.settings.save();

@@ -115,8 +115,6 @@ class ProjectSaver extends dn.Process {
 				}
 				else if( !NT.fileExists(project.filePath.full) ) {
 					// Saving to a new file, try to write some dummy empty file first, to check if this will work.
-					trace(project.filePath.debug());
-					trace(project.filePath.full);
 					var ok = try {
 						NT.writeFileString(project.filePath.full, "-");
 						true;
