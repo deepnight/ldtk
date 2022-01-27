@@ -187,7 +187,7 @@ class SelectionTool extends Tool<Int> {
 
 
 			case Entity(li, ei):
-				editor.cursor.set( Entity(li, ei.def, ei, ei.x, ei.y), ei.def.identifier );
+				editor.cursor.set( Entity(li, ei.def, ei, ei.x, ei.y, true), ei.def.identifier );
 
 			case PointField(li, ei, fi, arrayIdx):
 				var pt = fi.getPointGrid(arrayIdx);
@@ -198,6 +198,11 @@ class SelectionTool extends Tool<Int> {
 			if( ge!=null )
 				editor.cursor.overrideNativeCursor("grab");
 		}
+	}
+
+	public function selectAndStartUsing(ev:hxd.Event, m:Coords, e:GenericLevelElement) {
+		startUsing(ev, m);
+		select([e]);
 	}
 
 	override function startUsing(ev:hxd.Event, m:Coords) {

@@ -82,7 +82,7 @@ class EntityTool extends tool.LayerTool<Int> {
 			var ge = editor.getGenericLevelElementAt(m, true);
 			switch ge {
 				case Entity(li, ei):
-					editor.cursor.set( Entity(curLayerInstance, ei.def, ei, ei.x, ei.y) );
+					editor.cursor.set( Entity(curLayerInstance, ei.def, ei, ei.x, ei.y, true) );
 					editor.cursor.overrideNativeCursor("grab");
 
 				case PointField(li, ei, fi, arrayIdx):
@@ -92,7 +92,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					// editor.cursor.overrideNativeCursor("grab");
 
 				case _:
-					editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
+					editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m), false) );
 			}
 			ev.cancel = true;
 			updateChainRefPreview(m);
@@ -106,9 +106,9 @@ class EntityTool extends tool.LayerTool<Int> {
 		var ge = editor.getGenericLevelElementAt(m);
 		switch ge {
 			case Entity(li,ei) if( ev.button==0 ):
-				if( tryToChainRefTo(ei) )
+				if( tryToChainRefTo(PREV_CHAINABLE_EI, ei) )
 					PREV_CHAINABLE_EI = ei;
-				editor.selectionTool.startUsing(ev,m); // TODO fix selection using select()
+				editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
 				stopUsing(m);
 				return;
 
@@ -182,17 +182,7 @@ class EntityTool extends tool.LayerTool<Int> {
 
 					// Done
 					if( ei!=null ) {
-						// Try to auto chain previous entity to the new one
-						ei.tidy(project, curLayerInstance); // Force creation of field instances
-						var chainFi = getEntityChainableFieldInstance(PREV_CHAINABLE_EI);
-						if( chainFi!=null ) {
-							if( tryToChainRefTo(ei) )
-								PREV_CHAINABLE_EI = ei;
-							else
-								cancelRefChaining();
-						}
-						else
-							PREV_CHAINABLE_EI = ei;
+						var prevEi = PREV_CHAINABLE_EI;
 
 						// Finalize entity
 						ei.x = getPlacementX(m);
@@ -203,9 +193,22 @@ class EntityTool extends tool.LayerTool<Int> {
 						if( ei.def.isResizable() && editor.resizeTool!=null )
 							editor.resizeTool.startUsing(ev, m);
 						else
-							editor.selectionTool.startUsing(ev, m);
-						editor.ge.emit( EntityInstanceAdded(ei) );
+							editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
+
+						// Try to auto chain previous entity to the new one
+						ei.tidy(project, curLayerInstance); // Force creation of field instances
+						var chainFi = getEntityChainableFieldInstance(prevEi);
+						if( chainFi!=null ) {
+							if( tryToChainRefTo(prevEi, ei) )
+								PREV_CHAINABLE_EI = ei;
+							else
+								cancelRefChaining();
+						}
+						else
+							PREV_CHAINABLE_EI = ei;
 						updateChainRefPreview(m);
+
+						editor.ge.emit( EntityInstanceAdded(ei) );
 					}
 				}
 
@@ -311,19 +314,19 @@ class EntityTool extends tool.LayerTool<Int> {
 	/**
 		Chain previous EI to target, and return TRUE if chaining should go on
 	**/
-	function tryToChainRefTo(targetEi:data.inst.EntityInstance) {
-		var chainFi = getEntityChainableFieldInstance(PREV_CHAINABLE_EI);
+	function tryToChainRefTo(sourceEi:data.inst.EntityInstance, targetEi:data.inst.EntityInstance) {
+		var chainFi = getEntityChainableFieldInstance(sourceEi);
 		if( chainFi==null )
 			return false;
 
-		if( !chainFi.def.acceptsEntityRefTo(PREV_CHAINABLE_EI, targetEi.def, curLevel) )
+		if( !chainFi.def.acceptsEntityRefTo(sourceEi, targetEi.def, curLevel) )
 			return false;
 
 		if( chainFi.def.isArray )
 			chainFi.addArrayValue();
-		chainFi.setEntityRefTo(chainFi.getArrayLength()-1, PREV_CHAINABLE_EI, targetEi);
+		chainFi.setEntityRefTo(chainFi.getArrayLength()-1, sourceEi, targetEi);
 
-		editor.ge.emitAtTheEndOfFrame( EntityInstanceChanged(PREV_CHAINABLE_EI) );
+		editor.ge.emitAtTheEndOfFrame( EntityInstanceChanged(sourceEi) );
 		return chainFi.def.isArray || !chainFi.def.symmetricalRef;
 	}
 

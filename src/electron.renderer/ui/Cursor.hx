@@ -68,7 +68,7 @@ class Cursor {
 					case _: true;
 				}
 
-			case Entity(li, def, ei, x, y):
+			case Entity(li, def, ei, x, y, highlight):
 				switch type {
 					case Entity(li2, def2, ei2, _): li2!=li || def.uid!=def2.uid || ei2!=ei;
 					case _: true;
@@ -112,7 +112,7 @@ class Cursor {
 				case Eraser(x, y): 0xff0000;
 				case GridCell(li, cx, cy, col): col;
 				case GridRect(li, cx, cy, wid, hei, col): col;
-				case Entity(li, def, ei, x, y): ei==null ? def.color : ei.getSmartColor(false);
+				case Entity(li, def, ei, x, y, highlight): ei==null ? def.color : ei.getSmartColor(false);
 				case Tiles(li, tileIds, cx, cy, flips): 0xffffff;
 				case Link(fx, fy, tx, ty, color): color;
 				case _: 0xffcc00;
@@ -137,6 +137,18 @@ class Cursor {
 		}
 	}
 
+	inline function renderBeveledRect(g:h2d.Graphics, x:Float, y:Float, w:Float, h:Float) {
+		final bev = 3;
+		g.moveTo(x+bev, y);
+		g.lineTo(x+w-bev, y);
+		g.lineTo(x+w, y+bev);
+		g.lineTo(x+w, y+h-bev);
+		g.lineTo(x+w-bev, y+h);
+		g.lineTo(x+bev, y+h);
+		g.lineTo(x, y+h-bev);
+		g.lineTo(x, y+bev);
+		g.lineTo(x+bev, y);
+	}
 
 	/** Render current cursor **/
 	function render() {
@@ -176,11 +188,31 @@ class Cursor {
 				g.beginFill(col,0.35);
 				g.drawRect(0,0, li.def.gridSize*wid, li.def.gridSize*hei);
 
-			case Entity(li, def, ei, x, y):
+			case Entity(li, def, ei, x, y, highlight):
 				initRender();
 				var core = display.EntityRender.renderCore(ei,def);
 				wrapper.addChild(core.wrapper);
 				core.wrapper.alpha = 0.33;
+				setNativeCursor("cell");
+				if( highlight ) {
+					final pad = 3;
+					switch def.renderMode {
+						case Ellipse, Cross:
+							// var r = M.imax(ei.def.width, ei.def.height)*0.5;
+							final rx = ei.width*0.5;
+							final ry = ei.height*0.5;
+							g.lineStyle(1, 0xffcc00, 1);
+							g.drawEllipse(
+								(0.5-def.pivotX)*ei.width, (0.5-def.pivotY)*ei.height,
+								rx+pad, ry+pad,
+								0, rx<=16 && ry<=16 ? 24 : 0
+							);
+
+						case Rectangle, Tile:
+							g.lineStyle(1, 0xffcc00, 1);
+							renderBeveledRect(g, -def.pivotX*ei.width-pad, -def.pivotY*ei.height-pad, ei.width+pad*2, ei.height+pad*2);
+					}
+				}
 
 			case Tiles(li, tileIds, cx, cy, flips):
 				initRender();
@@ -276,7 +308,7 @@ class Cursor {
 					applyLayerScale( li.def.getScale() );
 					centerLabelAbove(li.def.gridSize*0.5, 0);
 
-				case Entity(li, def, ei, x, y):
+				case Entity(li, def, ei, x, y, highlight):
 					root.x += x*cam.adjustedZoom * li.def.getScale() + li.pxParallaxX * cam.adjustedZoom;
 					root.y += y*cam.adjustedZoom * li.def.getScale() + li.pxParallaxY * cam.adjustedZoom;
 					applyLayerScale( li.def.getScale() );
