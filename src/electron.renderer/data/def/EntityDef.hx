@@ -14,6 +14,7 @@ class EntityDef {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var tileOpacity : Float;
 	public var fillOpacity : Float;
 	public var lineOpacity : Float;
 	public var showName : Bool;
@@ -42,6 +43,7 @@ class EntityDef {
 		_project = p;
 		this.uid = uid;
 		color = 0x94d9b3;
+		tileOpacity = 1;
 		fillOpacity = 1;
 		lineOpacity = 1;
 		renderMode = Rectangle;
@@ -92,6 +94,23 @@ class EntityDef {
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
 		if( (cast json).maxPerLevel!=null ) json.maxCount = (cast json).maxPerLevel;
 
+		// Init new 1.0 opacity settings
+		if( json.tileOpacity==null ) {
+			if( json.hollow ) {
+				json.tileOpacity = 0.25;
+				json.fillOpacity = 0.15;
+			}
+			else {
+				switch JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle) {
+					case Rectangle, Ellipse, Cross:
+					case Tile:
+						json.tileOpacity = json.fillOpacity;
+						json.fillOpacity = 0.08;
+						json.lineOpacity = 0;
+				}
+			}
+		}
+
 		var o = new EntityDef(p, JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
@@ -105,6 +124,7 @@ class EntityDef {
 		o.tags = Tags.fromJson(json.tags);
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
+		o.tileOpacity = JsonTools.readFloat( json.tileOpacity, 1 );
 		o.fillOpacity = JsonTools.readFloat( json.fillOpacity, 1 );
 		o.lineOpacity = JsonTools.readFloat( json.lineOpacity, 1 );
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
@@ -141,6 +161,7 @@ class EntityDef {
 			resizableX: resizableX,
 			resizableY: resizableY,
 			keepAspectRatio: keepAspectRatio,
+			tileOpacity: JsonTools.writeFloat(tileOpacity),
 			fillOpacity: JsonTools.writeFloat(fillOpacity),
 			lineOpacity: JsonTools.writeFloat(lineOpacity),
 

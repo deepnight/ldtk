@@ -108,16 +108,14 @@ class EntityRender extends dn.Process {
 			}
 			else {
 				// Bounding box
-				if( ed.isResizable() || ed.hollow ) {
-					g.beginFill(color, 0.2*ed.fillOpacity);
-					g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
-					g.drawRect(0, 0, w, h);
-				}
+				g.beginFill(color, ed.fillOpacity);
+				g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
+				g.drawRect(0, 0, w, h);
 
 				// Texture
 				var td = Editor.ME.project.defs.getTilesetDef(tilesetUid);
 				var t = td.getTileRect(rect);
-				var alpha = ed.fillOpacity * (ed.hollow ? 0.15 : 1);
+				var alpha = ed.tileOpacity;
 				switch mode {
 					case Stretch:
 						var bmp = new h2d.Bitmap(t, wrapper);
@@ -207,7 +205,8 @@ class EntityRender extends dn.Process {
 				g.lineTo(w, 0);
 
 			case Tile:
-				// Render is done through getSmartTile() method above
+				// Render should be done through getSmartTile() method above, but if tile is invalid, we land here
+				_renderTile(ed.tilesetId,null, FitInside);
 			}
 
 		// Pivot

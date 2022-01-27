@@ -30,6 +30,10 @@
 			</dt>
 			<dd>
 				<input type="text" name="name" id="eName"/>
+				<label for="showIdentifier"">
+					<input type="checkbox" name="showIdentifier" id="showIdentifier" title="If enabled, the identifier will be displayed above entities in the editor view."/>
+					Show above
+				</label>
 			</dd>
 
 			<dt>
@@ -56,14 +60,20 @@
 			</dd>
 			<dd>
 				<span>Resizable:</span>
-				<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
-				<label for="resizableX">Width</label>
+				<label for="resizableX">
+					<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
+					Width
+				</label>
 
-				<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
-				<label for="resizableY">Height</label>
+				<label for="resizableY">
+					<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
+					Height
+				</label>
 
-				<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
-				<label for="keepAspectRatio">Keep aspect ratio</label>
+				<label for="keepAspectRatio">
+					<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
+					Keep aspect ratio
+				</label>
 			</dd>
 
 			<dt>
@@ -79,17 +89,20 @@
 			</dd>
 
 			<dd>
-				<span>Fill=</span>
-				<input type="text" id="fillOpacity" class="small"/>
+				<span>Tile=</span>
+				<input type="text" id="tileOpacity" class="tiny" title="Tile opacity"/>
 
-				<span>Line=</span>
-				<input type="text" id="lineOpacity" class="small"/>
+				<span>% Fill=</span>
+				<input type="text" id="fillOpacity" class="tiny" title="Fill color opacity"/>
 
-				<input type="checkbox" id="hollow" name="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
-				<label for="hollow">Hollow</label>
+				<span>% Line=</span>
+				<input type="text" id="lineOpacity" class="tiny" title="Outline color opacity"/>
+				<span>%</span>
 
-				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
-				<label for="showIdentifier">Show identifier</label>
+				<label for="hollow">
+					<input type="checkbox" id="hollow" name="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
+					Hollow
+				</label>
 			</dd>
 
 			<dt>

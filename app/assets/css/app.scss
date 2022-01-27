@@ -1533,6 +1533,16 @@ dl.form {
 			}
 		}
 
+		.tiny {
+			flex: 0 1 45px;
+			&[placeholder] {
+				flex: 0 1 60px;
+			}
+			&.slider:not(:disabled) {
+				flex: 0 1 30px;
+			}
+		}
+
 		a[href] {
 			font-size: 0.8em;
 			margin-left: 8px;

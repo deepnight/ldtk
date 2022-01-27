@@ -218,28 +218,33 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Fill/line opacities
-		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
-		i.setBounds(0.1, 1);
+		var i = Input.linkToHtmlInput(curEntity.tileOpacity, jEntityForm.find("#tileOpacity"));
+		i.setBounds(0, 1);
 		i.enablePercentageMode();
 		i.linkEvent( EntityDefChanged );
-		i.setEnabled(!curEntity.hollow);
+		i.setEnabled(curEntity.renderMode==Tile);
+
+		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
+		i.setBounds(0, 1);
+		i.enablePercentageMode();
+		i.linkEvent( EntityDefChanged );
+
 		var i = Input.linkToHtmlInput(curEntity.lineOpacity, jEntityForm.find("#lineOpacity"));
 		i.setBounds(0, 1);
 		i.enablePercentageMode();
 		i.linkEvent( EntityDefChanged );
-		i.setEnabled(curEntity.renderMode!=Tile);
 
 		// Entity render mode
 		var jSelect = jRenderModeBlock.find(".renderMode");
 		jSelect.empty();
 		for(k in ldtk.Json.EntityRenderMode.getConstructors()) {
-			var e = ldtk.Json.EntityRenderMode.createByName(k);
-			if( e==Tile )
+			var mode = ldtk.Json.EntityRenderMode.createByName(k);
+			if( mode==Tile )
 				continue;
 
 			var jOpt = new J('<option value="$k"/>');
 			jOpt.appendTo(jSelect);
-			jOpt.text(switch e {
+			jOpt.text(switch mode {
 				case Rectangle: Lang.t._("Rectangle");
 				case Ellipse: Lang.t._("Ellipse");
 				case Cross: Lang.t._("Cross");
@@ -264,6 +269,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Pick render mode
 		jSelect.change( function(ev) {
+			var oldMode = curEntity.renderMode;
 			var v : String = jSelect.val();
 			var prefix = v.indexOf(".")<0 ? null : v.substr(0,v.indexOf("."));
 			var mode : ldtk.Json.EntityRenderMode = switch prefix {
@@ -294,8 +300,21 @@ class EditEntityDefs extends ui.modal.Panel {
 				curEntity.tileRenderMode = FitInside;
 			}
 
+			// Re-init opacities
+			if( oldMode!=Tile && mode==Tile ) {
+				curEntity.tileOpacity = 1;
+				curEntity.fillOpacity = 0.08;
+				curEntity.lineOpacity = 0;
+			}
+			if( oldMode==Tile && mode!=Tile ) {
+				curEntity.tileOpacity = 1;
+				curEntity.fillOpacity = 1;
+				curEntity.lineOpacity = 1;
+			}
+
 			editor.ge.emit( EntityDefChanged );
 		});
+
 		if( curEntity.tilesetId!=null ) {
 			var td = project.defs.getTilesetDef(curEntity.tilesetId);
 			if( td.isUsingEmbedAtlas() )
@@ -306,6 +325,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		else
 			jSelect.val( curEntity.renderMode.getName() );
 			// jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
+
 
 		// Tile render mode
 		var i = new form.input.EnumSelect(
