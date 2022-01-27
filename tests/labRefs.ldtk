@@ -779,7 +779,7 @@
 						},
 						{
 							"__identifier": "CircuitBreaker",
-							"__grid": [22,25],
+							"__grid": [22,28],
 							"__pivot": [0,0],
 							"__tags": ["triggerable"],
 							"__tile": { "tilesetUid": 17, "srcRect": [224,176,16,16] },
@@ -787,7 +787,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 27,
-							"px": [352,400],
+							"px": [352,448],
 							"fieldInstances": [{
 								"__identifier": "refs",
 								"__value": [ {
@@ -812,7 +812,7 @@
 						},
 						{
 							"__identifier": "Repeater",
-							"__grid": [23,21],
+							"__grid": [24,22],
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
 							"__tile": { "tilesetUid": 17, "srcRect": [0,16,16,16] },
@@ -820,7 +820,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 15,
-							"px": [376,344],
+							"px": [392,360],
 							"fieldInstances": [
 								{
 									"__identifier": "target",
@@ -867,7 +867,7 @@
 						},
 						{
 							"__identifier": "Repeater",
-							"__grid": [26,23],
+							"__grid": [26,28],
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
 							"__tile": { "tilesetUid": 17, "srcRect": [0,16,16,16] },
@@ -875,7 +875,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 15,
-							"px": [424,376],
+							"px": [424,456],
 							"fieldInstances": [
 								{
 									"__identifier": "target",
@@ -899,6 +899,32 @@
 									"realEditorValues": [{ "id": "V_Float", "params": [1] }]
 								}
 							]
+						},
+						{
+							"__identifier": "Teleport",
+							"__grid": [39,24],
+							"__pivot": [0.5,0.5],
+							"__tags": ["gameObjects"],
+							"__tile": { "tilesetUid": 17, "srcRect": [176,128,16,16] },
+							"iid": "0e785fb0-66b0-11ec-9894-dd9e1b1f63cd",
+							"width": 32,
+							"height": 32,
+							"defUid": 6,
+							"px": [632,392],
+							"fieldInstances": [{
+								"__identifier": "destination",
+								"__value": {
+									"entityIid": "0d97eac0-66b0-11ec-9894-dd41402936fd",
+									"layerIid": "908e20e1-66b0-11ec-abd0-eb7a6d882404",
+									"levelIid": "908e20e0-66b0-11ec-abd0-8d9d4b465507"
+								},
+								"__type": "EntityRef",
+								"defUid": 7,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["0d97eac0-66b0-11ec-9894-dd41402936fd"]
+								}]
+							}]
 						}
 					]
 				},
@@ -3106,7 +3132,34 @@
 					"seed": 9734582,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
-					"entityInstances": []
+					"entityInstances": [
+						{
+							"__identifier": "Teleport",
+							"__grid": [25,10],
+							"__pivot": [0.5,0.5],
+							"__tags": ["gameObjects"],
+							"__tile": { "tilesetUid": 17, "srcRect": [176,128,16,16] },
+							"iid": "0d97eac0-66b0-11ec-9894-dd41402936fd",
+							"width": 32,
+							"height": 32,
+							"defUid": 6,
+							"px": [408,168],
+							"fieldInstances": [{
+								"__identifier": "destination",
+								"__value": {
+									"entityIid": "0e785fb0-66b0-11ec-9894-dd9e1b1f63cd",
+									"layerIid": "0f070c30-66b0-11ec-8917-0548426d19e2",
+									"levelIid": "ee57e400-66b0-11ec-8917-7d1d935ce7e5"
+								},
+								"__type": "EntityRef",
+								"defUid": 7,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["0e785fb0-66b0-11ec-9894-dd9e1b1f63cd"]
+								}]
+							}]
+						}
+					]
 				},
 				{
 					"__identifier": "IntGrid",
