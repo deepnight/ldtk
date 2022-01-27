@@ -316,6 +316,9 @@ class EntityTool extends tool.LayerTool<Int> {
 		if( chainFi==null )
 			return false;
 
+		if( !chainFi.def.acceptsEntityRefTo(PREV_CHAINABLE_EI, targetEi.def, curLevel) )
+			return false;
+
 		if( chainFi.def.isArray )
 			chainFi.addArrayValue();
 		chainFi.setEntityRefTo(chainFi.getArrayLength()-1, PREV_CHAINABLE_EI, targetEi);
