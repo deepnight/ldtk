@@ -1,5 +1,5 @@
 class WorldTool extends dn.Process {
-	static var DRAG_THRESHOLD = 4;
+	static inline function getDragThreshold() return 8*Editor.ME.camera.pixelRatio;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -158,7 +158,7 @@ class WorldTool extends dn.Process {
 
 				editor.ge.emit( LevelSettingsChanged(clickedLevel) );
 			}
-			else if( origin.getPageDist(m)<=DRAG_THRESHOLD ) {
+			else if( !worldMode && getLevelAt(m.worldX, m.worldY)==clickedLevel || origin.getPageDist(m)<=getDragThreshold() ) {
 				// Pick level
 				editor.selectLevel(clickedLevel);
 				if( clickedSameLevel )
@@ -230,7 +230,7 @@ class WorldTool extends dn.Process {
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		// Start dragging
-		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=DRAG_THRESHOLD ) {
+		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=getDragThreshold() ) {
 			var allow = switch project.worldLayout {
 				case Free: true;
 				case GridVania: true;
