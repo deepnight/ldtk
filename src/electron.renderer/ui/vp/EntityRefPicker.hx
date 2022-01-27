@@ -99,16 +99,12 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 
 
 	override function isValidPick(ei:data.inst.EntityInstance):Bool {
-		// Not same level
-		if( !fd.allowOutOfLevelRef && ei._li.level!=sourceEi._li.level  )
-			return false;
-
 		// No double-references
 		if( sourceEi.hasEntityRefTo(ei, fd) )
 			return false;
 
 		// Not right entity type
-		return ei!=sourceEi && fd.acceptsEntityRefTo(sourceEi, ei);
+		return ei!=sourceEi && fd.acceptsEntityRefTo(sourceEi, ei.def, ei._li.level);
 	}
 
 	override function postUpdate() {

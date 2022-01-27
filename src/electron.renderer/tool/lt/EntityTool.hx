@@ -2,7 +2,7 @@ package tool.lt;
 
 class EntityTool extends tool.LayerTool<Int> {
 	public var curEntityDef(get,never) : Null<data.def.EntityDef>;
-	public static var PREV_CHAINABLE_ENT: Null<{ ei:data.inst.EntityInstance, time:Float }>;
+	static var PREV_CHAINABLE_EI: Null<data.inst.EntityInstance>;
 
 	public function new() {
 		super();
@@ -11,8 +11,13 @@ class EntityTool extends tool.LayerTool<Int> {
 			selectValue( project.defs.entities[0].uid );
 	}
 
-	public static inline function clearPrevAutoRefEntity() {
-		PREV_CHAINABLE_ENT = null;
+	public static inline function cancelRefChaining() {
+		Editor.ME.levelRender.clearTemp();
+		PREV_CHAINABLE_EI = null;
+	}
+
+	public static inline function isChainingRef() {
+		return PREV_CHAINABLE_EI!=null; // TODO better check
 	}
 
 	override function onBeforeToolActivation() {
@@ -51,8 +56,15 @@ class EntityTool extends tool.LayerTool<Int> {
 			: m.levelY;
 	}
 
+	override function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
+		super.onMouseMoveCursor(ev, m);
+		updateChainRefPreview(m);
+	}
+
 	override function customCursor(ev:hxd.Event, m:Coords) {
 		super.customCursor(ev,m);
+
+		editor.levelRender.clearTemp();
 
 		if( curEntityDef==null ) {
 			editor.cursor.set(Forbidden);
@@ -83,6 +95,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m)) );
 			}
 			ev.cancel = true;
+			updateChainRefPreview(m);
 		}
 	}
 
@@ -92,8 +105,10 @@ class EntityTool extends tool.LayerTool<Int> {
 
 		var ge = editor.getGenericLevelElementAt(m);
 		switch ge {
-			case Entity(_) if( ev.button==0 ):
-				editor.selectionTool.startUsing(ev,m);
+			case Entity(li,ei) if( ev.button==0 ):
+				if( tryToChainRefTo(ei) )
+					PREV_CHAINABLE_EI = ei;
+				editor.selectionTool.startUsing(ev,m); // TODO fix selection using select()
 				stopUsing(m);
 				return;
 
@@ -168,30 +183,16 @@ class EntityTool extends tool.LayerTool<Int> {
 					// Done
 					if( ei!=null ) {
 						// Try to auto chain previous entity to the new one
-						ei.tidy(project, curLayerInstance); // create field instances
-						var allowChain = true;
-						if( PREV_CHAINABLE_ENT!=null && !PREV_CHAINABLE_ENT.ei._li.containsEntity(PREV_CHAINABLE_ENT.ei) )
-							PREV_CHAINABLE_ENT = null;
-
-						if( PREV_CHAINABLE_ENT!=null && M.fabs(haxe.Timer.stamp()-PREV_CHAINABLE_ENT.time)<=30 ) {
-							// Check if previously added entity has a field with "autoChainRef" enabled
-							for(prevFi in PREV_CHAINABLE_ENT.ei.fieldInstances) {
-								if( prevFi.def.type!=F_EntityRef || !prevFi.def.autoChainRef )
-									continue;
-
-								// Create link to previous
-								if( prevFi.def.acceptsEntityRefTo(PREV_CHAINABLE_ENT.ei, ei) ) {
-									if( prevFi.def.isArray )
-										prevFi.addArrayValue();
-									prevFi.setEntityRefTo(prevFi.getArrayLength()-1, PREV_CHAINABLE_ENT.ei, ei);
-									allowChain = prevFi.def.isArray || !prevFi.def.symmetricalRef;
-								}
-							}
+						ei.tidy(project, curLayerInstance); // Force creation of field instances
+						var chainFi = getEntityChainableFieldInstance(PREV_CHAINABLE_EI);
+						if( chainFi!=null ) {
+							if( tryToChainRefTo(ei) )
+								PREV_CHAINABLE_EI = ei;
+							else
+								cancelRefChaining();
 						}
-						if( allowChain )
-							PREV_CHAINABLE_ENT = { ei:ei, time:haxe.Timer.stamp() }
 						else
-							PREV_CHAINABLE_ENT = null;
+							PREV_CHAINABLE_EI = ei;
 
 						// Finalize entity
 						ei.x = getPlacementX(m);
@@ -204,10 +205,12 @@ class EntityTool extends tool.LayerTool<Int> {
 						else
 							editor.selectionTool.startUsing(ev, m);
 						editor.ge.emit( EntityInstanceAdded(ei) );
+						updateChainRefPreview(m);
 					}
 				}
 
 			case Remove:
+				cancelRefChaining();
 				removeAnyEntityOrPointAt(m);
 		}
 	}
@@ -248,6 +251,80 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
+	function updateChainRefPreview(m:Coords) {
+		if( PREV_CHAINABLE_EI==null )
+			return;
+
+		editor.levelRender.clearTemp();
+
+		if( m==null )
+			return;
+
+		var chainFi = getEntityChainableFieldInstance(PREV_CHAINABLE_EI);
+		if( chainFi!=null && chainFi.def.acceptsEntityRefTo(PREV_CHAINABLE_EI, curEntityDef, curLevel) ) {
+			var ge = editor.getGenericLevelElementAt(m);
+			final alpha = 0.33;
+			switch ge {
+				case Entity(li, ei):
+					display.FieldInstanceRender.renderRefLink(
+						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
+						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
+						ei.centerX, ei.centerY,
+						alpha
+					);
+
+				case _:
+					display.FieldInstanceRender.renderRefLink(
+						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
+						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
+						getPlacementX(m), getPlacementY(m),
+						alpha
+					);
+			}
+		}
+	}
+
+
+	function getEntityChainableFieldInstance(fromEi:data.inst.EntityInstance) : Null<data.inst.FieldInstance> {
+		if( fromEi==null )
+			return null;
+
+		if( fromEi._li==null || !fromEi._li.containsEntity(fromEi) ) {
+			// Prev was lost
+			return null;
+		}
+		else {
+			// Check if previously added entity has a field with "autoChainRef" enabled
+			for(prevFi in fromEi.fieldInstances) {
+				if( prevFi.def.type!=F_EntityRef || !prevFi.def.autoChainRef )
+					continue;
+
+				// Render link preview
+				if( prevFi.def.acceptsEntityRefTo(fromEi, curEntityDef, curLevel) )
+					return prevFi;
+			}
+			return null;
+		}
+	}
+
+
+	/**
+		Chain previous EI to target, and return TRUE if chaining should go on
+	**/
+	function tryToChainRefTo(targetEi:data.inst.EntityInstance) {
+		var chainFi = getEntityChainableFieldInstance(PREV_CHAINABLE_EI);
+		if( chainFi==null )
+			return false;
+
+		if( chainFi.def.isArray )
+			chainFi.addArrayValue();
+		chainFi.setEntityRefTo(chainFi.getArrayLength()-1, PREV_CHAINABLE_EI, targetEi);
+
+		editor.ge.emitAtTheEndOfFrame( EntityInstanceChanged(PREV_CHAINABLE_EI) );
+		return chainFi.def.isArray || !chainFi.def.symmetricalRef;
+	}
+
+
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev,m);
 
@@ -260,6 +337,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		}
 	}
 
+
 	override function useAt(m:Coords, isOnStop) {
 		super.useAt(m,isOnStop);
 
@@ -268,6 +346,7 @@ class EntityTool extends tool.LayerTool<Int> {
 			case Add:
 
 			case Remove:
+				cancelRefChaining();
 				if( removeAnyEntityOrPointAt(m) )
 					return true;
 		}
@@ -283,5 +362,17 @@ class EntityTool extends tool.LayerTool<Int> {
 
 	override function createToolPalette():ui.ToolPalette {
 		return new ui.palette.EntityPalette(this);
+	}
+
+	override function update() {
+		super.update();
+
+		// Suspend chain preview during ALT selections
+		if( App.ME.isAltDown() )
+			updateChainRefPreview(null);
+
+		// Check if chainable entity lost
+		if( PREV_CHAINABLE_EI!=null && PREV_CHAINABLE_EI._li!=null && !PREV_CHAINABLE_EI._li.containsEntity(PREV_CHAINABLE_EI) )
+			cancelRefChaining();
 	}
 }

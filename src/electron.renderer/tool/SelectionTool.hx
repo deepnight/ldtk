@@ -222,6 +222,7 @@ class SelectionTool extends Tool<Int> {
 				// Start a new selection
 				if( !rectangle ) {
 					var ge = editor.getGenericLevelElementAt(m, settings.v.singleLayerMode);
+					tool.lt.EntityTool.cancelRefChaining();
 					if( ge!=null )
 						select([ ge ]);
 					else

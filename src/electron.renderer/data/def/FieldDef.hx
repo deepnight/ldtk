@@ -526,14 +526,17 @@ class FieldDef {
 	}
 
 
-	public function acceptsEntityRefTo(sourceEi:data.inst.EntityInstance, targetEi:data.inst.EntityInstance) {
-		if( type!=F_EntityRef )
+	public function acceptsEntityRefTo(sourceEi:data.inst.EntityInstance, targetEd:data.def.EntityDef, targetLevel:Level) {
+		if( type!=F_EntityRef || sourceEi==null || targetEd==null || targetLevel==null )
+			return false;
+
+		if( !allowOutOfLevelRef && sourceEi._li.level.iid!=targetLevel.iid )
 			return false;
 
 		return switch allowedRefs {
 			case Any: true;
-			case OnlySame: sourceEi.def.uid==targetEi.def.uid;
-			case OnlyTags: targetEi.def.tags.hasAnyTagFoundIn(allowedRefTags);
+			case OnlySame: sourceEi.defUid==targetEd.uid;
+			case OnlyTags: targetEd.tags.hasAnyTagFoundIn(allowedRefTags);
 		}
 	}
 

@@ -454,7 +454,7 @@ class FieldInstancesForm {
 					var sourceEi = getEntityInstance();
 					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
 					vp.onPickValue = (targetEi)->{
-						tool.lt.EntityTool.clearPrevAutoRefEntity();
+						tool.lt.EntityTool.cancelRefChaining();
 						fi.setEntityRefTo(arrayIdx, sourceEi, targetEi);
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei

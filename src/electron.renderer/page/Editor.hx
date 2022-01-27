@@ -540,6 +540,8 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
+				else if( Std.is(curTool, tool.lt.EntityTool) && tool.lt.EntityTool.isChainingRef() )
+					tool.lt.EntityTool.cancelRefChaining();
 				else if( ui.ValuePicker.exists() )
 					ui.ValuePicker.ME.cancel();
 				else if( curTool!=null && curTool.palettePoppedOut() )
@@ -1766,6 +1768,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted, TilesetDefSorted:
+				tool.lt.EntityTool.cancelRefChaining();
 				updateTool();
 				updateGuide();
 

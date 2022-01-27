@@ -18,7 +18,7 @@ class FieldInstanceRender {
 	}
 
 
-	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha=1.0) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
 		var dashLen = M.fmin(5, len*0.05);
@@ -33,7 +33,7 @@ class FieldInstanceRender {
 		while( n<count ) {
 			final r = n/(count-1);
 			final startRatio = M.fmin(r/0.05, 1);
-			g.lineStyle(1, color, 0.15 + 0.85*(1-r));
+			g.lineStyle(1, color, ( 0.15 + 0.85*(1-r) ) * alpha );
 			g.moveTo(x,y);
 			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*startRatio;
 			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*startRatio;
