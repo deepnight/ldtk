@@ -63,6 +63,7 @@
   - Added an error message when exporting to Tiled while having unsupported Aseprite images.
   - Added `PAGEUP`/`PAGEDOWN` keyboard shortcuts to zoom in/out
   - Added a unit selector (pixels/cells) near coordinates/size fields of entity instances
+  - Tiles that overflow outisde of a level are now properly visually cropped.
   - Hold `SPACE` + Right mouse click to zoom in/out
   - Better support of trackpad pinch gestures to zoom in/out
   - Added a "Rename project" button in Project panel

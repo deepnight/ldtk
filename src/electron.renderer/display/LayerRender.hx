@@ -4,6 +4,7 @@ class LayerRender {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 
 	public var root(default,null) : Null<h2d.Object>;
+	var mask : Null<h2d.Mask>;
 	var entityRenders : Array<EntityRender> = [];
 
 	var lastLi : Null<data.inst.LayerInstance>;
@@ -15,8 +16,14 @@ class LayerRender {
 	public function dispose() {
 		clear();
 
+		if( mask!=null ) {
+			mask.remove();
+			mask = null;
+		}
+
 		root.remove();
 		root = null;
+
 
 		entityRenders = null;
 	}
@@ -60,17 +67,37 @@ class LayerRender {
 		else if( target!=null && root.parent!=target )
 			target.addChild(root);
 
+
+		// Init mask
+		switch li.def.type {
+			case IntGrid, Tiles, AutoLayer:
+				if( mask==null )
+					mask = new h2d.Mask(li.pxWid, li.pxHei, root);
+
+			case Entities:
+				if( mask!=null ) {
+					mask.remove();
+					mask = null;
+				}
+		}
+		if( mask!=null ) {
+			mask.width = li.pxWid;
+			mask.height = li.pxHei;
+		}
+
+		var renderTarget = mask!=null ? mask : root;
+
 		switch li.def.type {
 		case IntGrid, AutoLayer:
 			var td = li.getTilesetDef();
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
 				// Auto-layer tiles
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, renderTarget);
 				pixelGrid.x = li.pxTotalOffsetX;
 				pixelGrid.y = li.pxTotalOffsetY;
 
-				var tg = new h2d.TileGroup( td.getAtlasTile(), root);
+				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget);
 
 				if( li.autoTilesCache==null )
 					li.applyAllAutoLayerRules();
@@ -87,7 +114,6 @@ class LayerRender {
 							// 		Std.int(tileInfos.y/grid),
 							// 		td.getAverageTileColor(tileInfos.tid)
 							// 	);
-							
 							// Tile
 							tg.addTransform(
 								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
@@ -103,7 +129,7 @@ class LayerRender {
 			}
 			else if( li.def.type==IntGrid ) {
 				// Normal intGrid
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, root);
+				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, renderTarget);
 				pixelGrid.x = li.pxTotalOffsetX;
 				pixelGrid.y = li.pxTotalOffsetY;
 
@@ -117,14 +143,14 @@ class LayerRender {
 		case Entities:
 			// Entity layer
 			for(ei in li.entityInstances)
-				entityRenders.push( new EntityRender(ei, li.def, root) );
+				entityRenders.push( new EntityRender(ei, li.def, renderTarget) );
 
 
 		case Tiles:
 			// Classic tiles layer
 			var td = li.getTilesetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
-				var tg = new h2d.TileGroup( td.getAtlasTile(), root );
+				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget );
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
@@ -151,7 +177,7 @@ class LayerRender {
 			else {
 				// Missing tileset
 				var tileError = data.def.TilesetDef.makeErrorTile(li.def.gridSize);
-				var tg = new h2d.TileGroup( tileError, root );
+				var tg = new h2d.TileGroup( tileError, renderTarget );
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid)
 					if( li.hasAnyGridTile(cx,cy) )
@@ -224,6 +250,7 @@ class LayerRender {
 		entityRenders = [];
 
 		root.removeChildren();
+		mask = null;
 	}
 
 }
