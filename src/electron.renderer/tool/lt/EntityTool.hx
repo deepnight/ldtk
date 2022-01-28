@@ -38,8 +38,18 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 	override function getDefaultValue():Int{
-		if( project.defs.entities.length>0 )
-			return project.defs.entities[0].uid;
+		if( project.defs.entities.length>0 ) {
+			var ld = curLayerInstance.def;
+			if( ld.requiredTags.isEmpty() && ld.excludedTags.isEmpty() )
+				return project.defs.entities[0].uid;
+
+			for(ed in project.defs.entities)
+				if( ( ld.requiredTags.isEmpty() || ed.tags.hasAnyTagFoundIn(ld.requiredTags) )
+				  && ( ld.excludedTags.isEmpty() || !ed.tags.hasAnyTagFoundIn(ld.excludedTags) ) )
+					return ed.uid;
+
+			return -1;
+		}
 		else
 			return -1;
 	}
