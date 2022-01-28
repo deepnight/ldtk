@@ -168,6 +168,7 @@ class EntityTool extends tool.LayerTool<Int> {
 								while( all.length>=curEntityDef.maxCount ) {
 									var e = all.shift();
 									e.li.removeEntityInstance( e.ei );
+									editor.ge.emit( EntityInstanceRemoved(e.ei) );
 								}
 								ei = curLayerInstance.createEntityInstance(curEntityDef);
 
@@ -183,6 +184,7 @@ class EntityTool extends tool.LayerTool<Int> {
 									e.li.removeEntityInstance(e.ei);
 									curLayerInstance.entityInstances.push(e.ei);
 									editor.levelRender.invalidateLayer(curLayerInstance);
+									editor.ge.emit( EntityInstanceRemoved(e.ei) );
 									ei = e.ei;
 								}
 								else
@@ -204,9 +206,9 @@ class EntityTool extends tool.LayerTool<Int> {
 							editor.resizeTool.startUsing(ev, m);
 						else
 							editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
+						ei.tidy(project, curLayerInstance); // Force creation of field instances & update _li
 
 						// Try to auto chain previous entity to the new one
-						ei.tidy(project, curLayerInstance); // Force creation of field instances
 						var chainFi = getEntityChainableFieldInstance(prevEi);
 						if( chainFi!=null ) {
 							if( tryToChainRefTo(prevEi, ei) )
