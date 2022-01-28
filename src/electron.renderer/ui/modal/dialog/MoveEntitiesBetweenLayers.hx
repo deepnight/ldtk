@@ -96,7 +96,8 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 					}
 			}
 
-			N.debug("Moving "+filterType+":"+filterId+" to "+targetLd.identifier);
+			new LastChance(L.t._("Moved entities between layers"), project);
+
 			// Move entities
 			var n = 0;
 			for(l in project.levels)
@@ -120,7 +121,14 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 				for(ei in movedEis) {
 					fromLi.entityInstances.remove(ei);
 					targetLi.entityInstances.push(ei);
-					n++;
+					ei.tidy(project,targetLi); // fix internal ei._li pointer
+				}
+				n+=movedEis.length;
+
+				if( movedEis.length>0 ) {
+					editor.invalidateLevelCache(l);
+					editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(fromLi) );
+					editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(targetLi) );
 				}
 			}
 

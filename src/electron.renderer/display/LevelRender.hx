@@ -203,7 +203,8 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleGroupCollapseChanged(rg):
 
-			case LayerInstanceChanged(li):
+			case LayerInstanceChangedGlobally(li):
+				invalidateLayer(li);
 
 			case TilesetSelectionSaved(td):
 

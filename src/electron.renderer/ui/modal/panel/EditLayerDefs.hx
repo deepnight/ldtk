@@ -141,7 +141,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						case KeepBakedLayer:
 					}
 
-					editor.ge.emit( LayerInstanceChanged(newLi) );
+					editor.ge.emit( LayerInstanceChangedGlobally(newLi) );
 				}
 			});
 		}

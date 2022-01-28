@@ -1419,7 +1419,7 @@ class Editor extends Page {
 		return switch(e) {
 			case ViewportChanged: false;
 			case WorldLevelMoved(_): false;
-			case LayerInstanceChanged(_): false;
+			// case LayerInstanceChangedGlobally(_): false;
 			case WorldMode(_): false;
 			case GridChanged(_): false;
 			case _: true;
@@ -1467,7 +1467,7 @@ class Editor extends Page {
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
-				case LayerInstanceChanged(li):
+				case LayerInstanceChangedGlobally(li): extra = li.layerDefUid;
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
@@ -1562,7 +1562,7 @@ class Editor extends Page {
 			case LayerRuleGroupSorted: invalidateAllLevelsCache();
 			case LayerRuleGroupCollapseChanged(rg):
 			case LayerInstanceSelected:
-			case LayerInstanceChanged(li): invalidateLevelCache(li.level);
+			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
 			case LayerInstanceVisiblityChanged(li):
 			case LayerInstanceRestoredFromHistory(li): invalidateLevelCache(li.level);
 			case AutoLayerRenderingChanged:
@@ -1645,7 +1645,7 @@ class Editor extends Page {
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
-			case LayerInstanceChanged(li):
+			case LayerInstanceChangedGlobally(li):
 
 			case FieldDefChanged(fd):
 
