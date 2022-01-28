@@ -37,6 +37,19 @@
 		<input type="text" name="name" id="lName"/>
 	</dd>
 
+
+	<dt>
+		<label for="hideInList">Hide in list</label>
+		<info>
+			If enabled, the layer will not be shown in layers list in the editor view.
+			Note: the layer will still be rendered normally in levels and listed in the Layers panel.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="hideInList" class="small" id="hideInList"/>
+	</dd>
+
+
 	<dt class="Tiles">
 		<label>Default tileset</label>
 		<info>Default tileset used by this layer. It can be changed in each level from the left tool panel.</info>
@@ -115,7 +128,8 @@
 	<dt>
 		<label for="opacity">Opacity</label>
 		<info>
-			Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible). The "inactive" opacity is used when the layer is not being selected.
+			Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).
+			The "inactive" opacity is used when the layer is not being selected.
 		</info>
 	</dt>
 	<dd>
@@ -126,18 +140,6 @@
 		<span>Inactive:</span>
 		<input type="text" name="inactiveOpacity" class="small" id="opacity"/>
 		<span>%</span>
-	</dd>
-
-
-	<dt>
-		<label for="hideInList">Hide in list</label>
-		<info>
-			If enabled, the layer will not be shown in layers list in the editor view.
-			Note: the layer will still be rendered normally in levels and listed in the Layers panel.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" name="hideInList" class="small" id="hideInList"/>
 	</dd>
 
 
