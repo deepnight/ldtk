@@ -1689,8 +1689,11 @@ select {
 		background-color: $bgLight;
 		cursor: pointer;
 		&:disabled {
-			color: $bgLight;
+			color: $bgLighter;
 			font-style: italic;
+			&::before {
+				content: "LOCKED";
+			}
 		}
 	}
 
@@ -2370,6 +2373,19 @@ textarea {
 		}
 	}
 }
+
+
+.window.moveEntitiesBetweenLayers {
+	.wrapper>.content {
+		width: 700px;
+
+		select {
+			margin-left: 4px;
+			margin-right: 8px;
+		}
+	}
+}
+
 
 .window.lockMessage {
 	.wrapper .content {

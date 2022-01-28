@@ -1,0 +1,30 @@
+<h2 class="title">Batch move existing entity instances</h2>
+
+<dl class="form">
+	<dd class="full">
+
+		<span>Move all instances</span>
+		<span class="targetPrefix">...</span>
+		<select name="target">
+			<option value="">-- Pick entities --</option>
+			<option value="all.*">All entities</option>
+			<optgroup class="allIds" label="Entity identifiers:">
+				<option>test</option>
+			</optgroup>
+			<optgroup class="allTags" label="With tag:">
+				<option>test</option>
+			</optgroup>
+		</select>
+
+		<span>to layer</span>
+		<select name="layer">
+			<option value="">-- Pick a layer --</option>
+		</select>
+
+	</dd>
+</dl>
+
+<div class="buttons">
+	<button class="confirm">Move entities</button>
+	<button class="cancel">Close</button>
+</div>

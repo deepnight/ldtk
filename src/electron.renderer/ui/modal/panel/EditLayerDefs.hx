@@ -562,6 +562,10 @@ class EditLayerDefs extends ui.modal.Panel {
 				);
 				jForm.find("#excludedTags").empty().append( ted.jEditor );
 
+				// Move entities
+				jForm.find(".moveEntities").click( _->{
+					new ui.modal.dialog.MoveEntitiesBetweenLayers(cur);
+				});
 
 			case Tiles:
 				var jSelect = JsTools.createTilesetSelect(
