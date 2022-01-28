@@ -16,6 +16,7 @@ class LayerDef {
 	public var displayOpacity : Float = 1.0;
 	public var inactiveOpacity : Float = 1.0;
 	public var hideInList = false;
+	public var hideFieldsWhenInactive = false;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 	public var parallaxFactorX : Float = 0.;
@@ -71,7 +72,6 @@ class LayerDef {
 				json.inactiveOpacity = 0.2;
 			else if( json.__type=="Entities" )
 				json.inactiveOpacity = 0.6;
-
 		}
 
 		if( (cast json).parallaxFactor!=null )
@@ -89,6 +89,7 @@ class LayerDef {
 		o.inactiveOpacity = JsonTools.readFloat(json.inactiveOpacity, 1);
 		// o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
+		o.hideFieldsWhenInactive = JsonTools.readBool(json.hideFieldsWhenInactive, true);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
@@ -142,6 +143,7 @@ class LayerDef {
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			inactiveOpacity: JsonTools.writeFloat(inactiveOpacity),
 			hideInList: hideInList,
+			hideFieldsWhenInactive: hideFieldsWhenInactive,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			parallaxFactorX: parallaxFactorX,

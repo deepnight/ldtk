@@ -305,7 +305,12 @@ class EntityRender extends dn.Process {
 			_coreRender.wrapper.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 
 		// Graphics
-		fieldGraphics.alpha = fullVis ? 1 : 0.2;
+		if( !fullVis && ei._li.def.hideFieldsWhenInactive )
+			fieldGraphics.visible = false;
+		else {
+			fieldGraphics.visible = true;
+			fieldGraphics.alpha = fullVis ? 1 : 0.2;
+		}
 
 
 		// Update field wrappers
