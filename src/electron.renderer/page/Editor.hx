@@ -730,7 +730,7 @@ class Editor extends Page {
 		function getElement(li:data.inst.LayerInstance) {
 			var ge : GenericLevelElement = null;
 
-			if( !levelRender.isLayerVisible(li) )
+			if( !levelRender.isLayerVisible(li) || curLayerInstance!=li && li.def.inactiveOpacity<=0 )
 				return null;
 
 			m.setRelativeLayer(li);
