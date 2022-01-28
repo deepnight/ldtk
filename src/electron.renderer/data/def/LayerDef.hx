@@ -14,7 +14,7 @@ class LayerDef {
 	public var guideGridWid : Int = 0;
 	public var guideGridHei : Int = 0;
 	public var displayOpacity : Float = 1.0;
-	public var fadeInactive = false;
+	public var inactiveOpacity : Float = 1.0;
 	public var hideInList = false;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
@@ -66,6 +66,14 @@ class LayerDef {
 		if( (cast json).tilesetDefId!=null )
 			json.tilesetDefUid = (cast json).tilesetDefId;
 
+		if( json.inactiveOpacity==null ) {
+			if( (cast json).fadeInactive==true )
+				json.inactiveOpacity = 0.2;
+			else if( json.__type=="Entities" )
+				json.inactiveOpacity = 0.6;
+
+		}
+
 		if( (cast json).parallaxFactor!=null )
 			json.parallaxFactorX = json.parallaxFactorY = (cast json).parallaxFactor;
 
@@ -78,7 +86,8 @@ class LayerDef {
 		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
 		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
-		o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
+		o.inactiveOpacity = JsonTools.readFloat(json.inactiveOpacity, 1);
+		// o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
@@ -131,7 +140,7 @@ class LayerDef {
 			guideGridWid: guideGridWid,
 			guideGridHei: guideGridHei,
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
-			fadeInactive: fadeInactive,
+			inactiveOpacity: JsonTools.writeFloat(inactiveOpacity),
 			hideInList: hideInList,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,

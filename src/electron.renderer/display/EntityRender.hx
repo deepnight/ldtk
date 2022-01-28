@@ -301,11 +301,8 @@ class EntityRender extends dn.Process {
 
 		final fullVis = ei._li==Editor.ME.curLayerInstance;
 
-		// Base
-		if( _coreRender!=null ) {
-			_coreRender.wrapper.alpha = fullVis ? 1 : 0.8;
-			_coreRender.g.alpha = fullVis ? 1 : 0.5;
-		}
+		if( _coreRender!=null )
+			_coreRender.wrapper.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 
 		// Graphics
 		fieldGraphics.alpha = fullVis ? 1 : 0.2;

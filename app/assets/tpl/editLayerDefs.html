@@ -111,20 +111,18 @@
 
 	<dt>
 		<label for="opacity">Opacity</label>
-		<info>Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).</info>
+		<info>
+			Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible). The "inactive" opacity is used when the layer is not being selected.
+		</info>
 	</dt>
 	<dd>
+		<span>Active:</span>
 		<input type="text" name="displayOpacity" class="small" id="opacity"/>
 		<span>%</span>
-	</dd>
 
-
-	<dt>
-		<label for="fadeInactive">Fade when inactive</label>
-		<info>If enabled, this layer will be faded out (ie. slightly transparent) if it isn't currently selected.</info>
-	</dt>
-	<dd>
-		<input type="checkbox" name="fadeInactive" class="small" id="fadeInactive"/>
+		<span>Inactive:</span>
+		<input type="text" name="inactiveOpacity" class="small" id="opacity"/>
+		<span>%</span>
 	</dd>
 
 
