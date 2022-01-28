@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456490,
-	"nextUid": 101,
+	"appBuildId": 456497,
+	"nextUid": 104,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
@@ -34,47 +34,22 @@
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
-			"identifier": "Gameplay",
+			"identifier": "Entities",
 			"type": "Entities",
 			"uid": 7,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 0.6,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
 			"parallaxFactorY": 0,
 			"parallaxScaling": true,
 			"requiredTags": [],
-			"excludedTags": [ "triggerable", "trigger" ],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
-			"autoTilesetDefUid": null,
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
-		},
-		{
-			"__type": "Entities",
-			"identifier": "Blueprint",
-			"type": "Entities",
-			"uid": 100,
-			"gridSize": 16,
-			"guideGridWid": 0,
-			"guideGridHei": 0,
-			"displayOpacity": 1,
-			"fadeInactive": false,
-			"hideInList": false,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"parallaxFactorX": 0,
-			"parallaxFactorY": 0,
-			"parallaxScaling": true,
-			"requiredTags": [ "triggerable", "trigger" ],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
@@ -93,8 +68,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -526,10 +502,10 @@
 			"color": "#B8DE4F",
 			"renderMode": "Tile",
 			"showName": true,
-			"tilesetId": 47,
-			"tileId": 306,
+			"tilesetId": 99,
+			"tileId": 245,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 192, "y": 480, "w": 32, "h": 32 },
+			"tileRect": { "x": 80, "y": 240, "w": 16, "h": 16 },
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
@@ -662,21 +638,21 @@
 			"uid": 10,
 			"tags": ["triggerable"],
 			"width": 16,
-			"height": 12,
+			"height": 16,
 			"resizableX": false,
 			"resizableY": false,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
 			"hollow": false,
 			"color": "#FFFFFF",
-			"renderMode": "Rectangle",
+			"renderMode": "Tile",
 			"showName": true,
-			"tilesetId": null,
-			"tileId": null,
+			"tilesetId": 99,
+			"tileId": 112,
 			"tileRenderMode": "Stretch",
-			"tileRect": { "x": 48, "y": 1216, "w": 16, "h": 16 },
+			"tileRect": { "x": 0, "y": 112, "w": 16, "h": 16 },
 			"maxCount": 4,
 			"limitScope": "PerLevel",
 			"limitBehavior": "PreventAdding",
@@ -805,22 +781,22 @@
 			"identifier": "Enemy",
 			"uid": 37,
 			"tags": ["actor"],
-			"width": 32,
-			"height": 32,
+			"width": 24,
+			"height": 24,
 			"resizableX": true,
 			"resizableY": true,
 			"keepAspectRatio": true,
 			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
+			"fillOpacity": 0.23,
+			"lineOpacity": 0.85,
 			"hollow": false,
-			"color": "#B80000",
-			"renderMode": "Rectangle",
-			"showName": false,
-			"tilesetId": null,
-			"tileId": null,
+			"color": "#FF0000",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 99,
+			"tileId": 6,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 176, "y": 1328, "w": 16, "h": 16 },
+			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -955,16 +931,16 @@
 			"resizableY": false,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
 			"hollow": false,
 			"color": "#8A5B38",
-			"renderMode": "Rectangle",
+			"renderMode": "Tile",
 			"showName": false,
-			"tilesetId": null,
-			"tileId": null,
+			"tilesetId": 99,
+			"tileId": 570,
 			"tileRenderMode": "Stretch",
-			"tileRect": { "x": 32, "y": 1008, "w": 16, "h": 16 },
+			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1041,16 +1017,16 @@
 			"resizableY": false,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
-			"fillOpacity": 1,
-			"lineOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
 			"hollow": false,
 			"color": "#FFFFFF",
-			"renderMode": "Rectangle",
+			"renderMode": "Tile",
 			"showName": true,
-			"tilesetId": null,
-			"tileId": null,
+			"tilesetId": 99,
+			"tileId": 56,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 32, "y": 224, "w": 16, "h": 16 },
+			"tileRect": { "x": 128, "y": 48, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1183,7 +1159,7 @@
 			"resizableX": true,
 			"resizableY": true,
 			"keepAspectRatio": false,
-			"tileOpacity": 0.25,
+			"tileOpacity": 0.14,
 			"fillOpacity": 0.15,
 			"lineOpacity": 1,
 			"hollow": true,
@@ -1192,7 +1168,7 @@
 			"showName": true,
 			"tilesetId": 99,
 			"tileId": 71,
-			"tileRenderMode": "FitInside",
+			"tileRenderMode": "Repeat",
 			"tileRect": { "x": 112, "y": 64, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
@@ -1288,29 +1264,94 @@
 					"tilesetUid": null
 				}
 			]
+		},
+		{
+			"identifier": "TriggerRepeater",
+			"uid": 101,
+			"tags": ["triggerable"],
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.13,
+			"lineOpacity": 0.55,
+			"hollow": false,
+			"color": "#00D660",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 99,
+			"tileId": 81,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 16, "y": 80, "w": 16, "h": 16 },
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "targets",
+					"__type": "Array<EntityRef>",
+					"uid": 102,
+					"type": "F_EntityRef",
+					"isArray": true,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLink",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": false,
+					"allowedRefs": "OnlyTags",
+					"allowedRefTags": ["triggerable"],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "delay",
+					"__type": "Float",
+					"uid": 103,
+					"type": "F_Float",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": "s",
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": 0,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
-		{
-			"__cWid": 20,
-			"__cHei": 20,
-			"identifier": "Monsters_and_Minions_by_Beowulf",
-			"uid": 47,
-			"relPath": "atlas/Monsters_and_Minions_by_Beowulf.png",
-			"embedAtlas": null,
-			"pxWid": 640,
-			"pxHei": 640,
-			"tileGridSize": 32,
-			"spacing": 0,
-			"padding": 0,
-			"tagsSourceEnumUid": null,
-			"enumTags": [],
-			"customData": [],
-			"savedSelections": [],
-			"cachedPixelData": {
-				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-				"averageColors": "9a999a99647464741a991a998a35994776a576a5c746c7469a649a6479667966bbbbcaab5aab6abbac98aca899669966b866b86678369a2476a476a4d635d6359b749b7498547753caaae99a76667566ad99ad89a5758aa99966797779678836869489a59625c6479b96aa53c854cb879aaa9ba995239523ad998d89a685a464c85698667989a746b794b895b757b646ba53d9436b63a8659ddc9bbb975578557dd48dd4759ca58ccc43cb54aa87aa8799889998ae85ad8682549575868a868a687468745ba95ba9cbc4b8a4c6ac79eeeb434b43a755a755b876b876bc757b65c464946479666a66cb88cb88ab75ab96a9a4a9a4868b768abc44aa436767b656abb89bb8ab758b75a465a565b99ab99a9975a584bb769b98c9a4c794869b769b8944ca55a66798589bb89cb88b65bc75a475a585757a879ba676b995a97789886999ac75998668a499439b65ca77ab87ab776c44683356238966c8669bbb8cba8277a48767556866da776ccba643974377335843c856b866ca54863466234623d7456845aaaa4bbb9445a476a843b954ba75ab659784a784aa65aa54b966a9779b549b559a45aa55b8669855bccbbdcbb477b477a844b8549b64aa65a784a455a965aa647866c9769b559b449b55aa34b866a866bccaacbab477c4779844c84446739a84c668c77985338633879948a86c773c7767bd98cdba7789778db8aaa788ac88ac4dda9cc98684cc95eb989777a523a523c8986798ba77ad77a8ac88abb434a534b5967686a8bca8bc887688768675964577778878aaa8947597989787bc76cc87a7bcb7bc8a8797668bb79a54a7bca8bc7a978aa8bc74a86488789999b798aa4588879688dc86bc7697bc97ac49878b988a998c75b7bcb7ac9aa89ba89b96cc97acc88c976b768b66589949993746a7785757648a188625755c966c9755c876d847bd4addcc969a669ba77da8a986b977b7777888c868b77858577789b987a8866d956d9553c673b756ac87cdbc97bca78ba77ba78a55aa4588889888887877789557a656a88698867d959d9694c795c788cc88ccada7ac979ba7abb88a559a458788988887789878a6469556aa9798779d958c9595c795c768bc88cc"
-			}
-		},
 		{
 			"__cWid": 11,
 			"__cHei": 11,
@@ -1367,11 +1408,11 @@
 			{ "id": "Mana_potion", "tileId": 281, "color": 8224922, "__tileSrcRect": [144,272,16,16] }
 		], "iconTilesetUid": 99, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "MonsterType", "uid": 48, "values": [
-			{ "id": "Fighter", "tileId": 204, "color": 11167317, "__tileSrcRect": [128,320,32,32] },
-			{ "id": "Rat", "tileId": 75, "color": 8939093, "__tileSrcRect": [480,96,32,32] },
-			{ "id": "Snek", "tileId": 46, "color": 10053239, "__tileSrcRect": [192,64,32,32] },
-			{ "id": "Beholder", "tileId": 146, "color": 6710903, "__tileSrcRect": [192,224,32,32] }
-		], "iconTilesetUid": 47, "externalRelPath": null, "externalFileChecksum": null },
+			{ "id": "Fighter", "tileId": 455, "color": 10075084, "__tileSrcRect": [112,448,16,16] },
+			{ "id": "Thief", "tileId": 448, "color": 10066363, "__tileSrcRect": [0,448,16,16] },
+			{ "id": "Worm", "tileId": 901, "color": 11171720, "__tileSrcRect": [80,896,16,16] },
+			{ "id": "Beholder", "tileId": 211, "color": 11189179, "__tileSrcRect": [48,208,16,16] }
+		], "iconTilesetUid": 99, "externalRelPath": null, "externalFileChecksum": null },
 		{ "identifier": "TriggerCondition", "uid": 84, "values": [
 			{ "id": "OnPlayerEnter", "tileId": 243, "color": 10458705, "__tileSrcRect": [48,240,16,16] },
 			{ "id": "OnPlayerAttack", "tileId": 245, "color": 11036746, "__tileSrcRect": [80,240,16,16] },
@@ -1474,7 +1515,7 @@
 			],
 			"layerInstances": [
 				{
-					"__identifier": "Gameplay",
+					"__identifier": "Entities",
 					"__type": "Entities",
 					"__cWid": 51,
 					"__cHei": 25,
@@ -1502,7 +1543,7 @@
 							"__grid": [44,20],
 							"__pivot": [0.5,1],
 							"__tags": ["container"],
-							"__tile": null,
+							"__tile": { "tilesetUid": 99, "srcRect": [160,560,16,16] },
 							"iid": "f80e99e1-66b0-11ec-b121-273dce4c0a94",
 							"width": 24,
 							"height": 24,
@@ -1542,10 +1583,10 @@
 							"__grid": [21,6],
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
-							"__tile": null,
+							"__tile": { "tilesetUid": 99, "srcRect": [0,112,16,16] },
 							"iid": "f80e99e2-66b0-11ec-b121-67b8aade98d9",
 							"width": 16,
-							"height": 12,
+							"height": 16,
 							"defUid": 10,
 							"px": [344,96],
 							"fieldInstances": [
@@ -1581,55 +1622,13 @@
 						},
 						{
 							"__identifier": "SpotLight",
-							"__grid": [16,6],
-							"__pivot": [0.5,0],
-							"__tags": ["triggerable"],
-							"__tile": null,
-							"iid": "f80e99e3-66b0-11ec-b121-536e1e544f80",
-							"width": 16,
-							"height": 12,
-							"defUid": 10,
-							"px": [264,96],
-							"fieldInstances": [
-								{
-									"__identifier": "flickering",
-									"__value": false,
-									"__type": "Bool",
-									"defUid": 12,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "colors",
-									"__value": ["#FFEF85"],
-									"__type": "Array<Color>",
-									"defUid": 26,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "radius",
-									"__value": 3,
-									"__type": "Float",
-									"defUid": 45,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "intensity",
-									"__value": 30,
-									"__type": "Int",
-									"defUid": 92,
-									"realEditorValues": [{ "id": "V_Int", "params": [30] }]
-								}
-							]
-						},
-						{
-							"__identifier": "SpotLight",
 							"__grid": [32,8],
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
-							"__tile": null,
+							"__tile": { "tilesetUid": 99, "srcRect": [0,112,16,16] },
 							"iid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 							"width": 16,
-							"height": 12,
+							"height": 16,
 							"defUid": 10,
 							"px": [520,128],
 							"fieldInstances": [
@@ -1661,48 +1660,14 @@
 							]
 						},
 						{
-							"__identifier": "Chest",
-							"__grid": [42,8],
-							"__pivot": [0.5,1],
-							"__tags": ["container"],
-							"__tile": null,
-							"iid": "f80ec0f1-66b0-11ec-b121-15a932d92c06",
-							"width": 24,
-							"height": 24,
-							"defUid": 8,
-							"px": [680,144],
-							"fieldInstances": [
-								{
-									"__identifier": "content",
-									"__value": [ "Bow", "Arrow" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 21,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Bow"]
-									}, {
-										"id": "V_String",
-										"params": ["Arrow"]
-									} ]
-								},
-								{
-									"__identifier": "requireKey",
-									"__value": false,
-									"__type": "Bool",
-									"defUid": 28,
-									"realEditorValues": [null]
-								}
-							]
-						},
-						{
 							"__identifier": "Enemy",
 							"__grid": [14,11],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 47, "srcRect": [128,320,32,32] },
+							"__tile": { "tilesetUid": 99, "srcRect": [112,448,16,16] },
 							"iid": "f80ec0f2-66b0-11ec-b121-d96e502df2fb",
-							"width": 64,
-							"height": 64,
+							"width": 48,
+							"height": 48,
 							"defUid": 37,
 							"px": [232,192],
 							"fieldInstances": [
@@ -1818,15 +1783,15 @@
 						},
 						{
 							"__identifier": "Button",
-							"__grid": [42,13],
+							"__grid": [39,13],
 							"__pivot": [0.5,0.5],
 							"__tags": ["trigger"],
-							"__tile": null,
+							"__tile": { "tilesetUid": 99, "srcRect": [128,48,16,16] },
 							"iid": "f80ee802-66b0-11ec-b121-7703f3b4b3e4",
 							"width": 16,
 							"height": 16,
 							"defUid": 41,
-							"px": [680,216],
+							"px": [632,216],
 							"fieldInstances": [
 								{
 									"__identifier": "delay",
@@ -1838,7 +1803,7 @@
 								{
 									"__identifier": "targets",
 									"__value": [ {
-										"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
+										"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
 										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
 									}, {
@@ -1850,7 +1815,7 @@
 									"defUid": 97,
 									"realEditorValues": [ {
 										"id": "V_String",
-										"params": ["f80ee801-66b0-11ec-b121-4d74c475d701"]
+										"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
 									}, {
 										"id": "V_String",
 										"params": ["f80ee800-66b0-11ec-b121-9b6ebb5b8d6e"]
@@ -1863,10 +1828,10 @@
 							"__grid": [31,18],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 47, "srcRect": [192,64,32,32] },
+							"__tile": { "tilesetUid": 99, "srcRect": [80,896,16,16] },
 							"iid": "f80ee803-66b0-11ec-b121-6dcb8a513232",
-							"width": 32,
-							"height": 32,
+							"width": 24,
+							"height": 24,
 							"defUid": 37,
 							"px": [504,304],
 							"fieldInstances": [
@@ -1890,12 +1855,12 @@
 								},
 								{
 									"__identifier": "type",
-									"__value": "Snek",
+									"__value": "Worm",
 									"__type": "LocalEnum.MonsterType",
 									"defUid": 49,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["Snek"]
+										"params": ["Worm"]
 									}]
 								}
 							]
@@ -1905,10 +1870,10 @@
 							"__grid": [41,20],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 47, "srcRect": [480,96,32,32] },
+							"__tile": { "tilesetUid": 99, "srcRect": [0,448,16,16] },
 							"iid": "f80ee804-66b0-11ec-b121-874e33fcffe5",
-							"width": 32,
-							"height": 32,
+							"width": 24,
+							"height": 24,
 							"defUid": 37,
 							"px": [664,336],
 							"fieldInstances": [
@@ -1926,12 +1891,12 @@
 								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
 								{
 									"__identifier": "type",
-									"__value": "Rat",
+									"__value": "Thief",
 									"__type": "LocalEnum.MonsterType",
 									"defUid": 49,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["Rat"]
+										"params": ["Thief"]
 									}]
 								}
 							]
@@ -1957,7 +1922,7 @@
 						},
 						{
 							"__identifier": "Trigger",
-							"__grid": [15,16],
+							"__grid": [11,16],
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
 							"__tile": { "tilesetUid": 99, "srcRect": [48,240,16,16] },
@@ -1965,7 +1930,7 @@
 							"width": 64,
 							"height": 48,
 							"defUid": 82,
-							"px": [240,256],
+							"px": [176,256],
 							"fieldInstances": [
 								{
 									"__identifier": "condition",
@@ -1990,7 +1955,7 @@
 								{
 									"__identifier": "target",
 									"__value": {
-										"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
+										"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
 										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
 									},
@@ -1998,7 +1963,7 @@
 									"defUid": 98,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["f80ee805-66b0-11ec-b121-09bc15634dc5"]
+										"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
 									}]
 								}
 							]
@@ -2043,7 +2008,7 @@
 							"__grid": [4,18],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 47, "srcRect": [192,480,32,32] },
+							"__tile": { "tilesetUid": 99, "srcRect": [80,240,16,16] },
 							"iid": "f80f0f12-66b0-11ec-b121-c7e0ed2499ae",
 							"width": 20,
 							"height": 20,
@@ -2076,33 +2041,150 @@
 									}]
 								}
 							]
+						},
+						{
+							"__identifier": "Chest",
+							"__grid": [42,8],
+							"__pivot": [0.5,1],
+							"__tags": ["container"],
+							"__tile": { "tilesetUid": 99, "srcRect": [160,560,16,16] },
+							"iid": "ada47150-66b0-11ec-b043-2d6dd3346abd",
+							"width": 24,
+							"height": 24,
+							"defUid": 8,
+							"px": [680,144],
+							"fieldInstances": [
+								{
+									"__identifier": "content",
+									"__value": [ "Bow", "Arrow" ],
+									"__type": "Array<LocalEnum.ItemType>",
+									"defUid": 21,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["Bow"]
+									}, {
+										"id": "V_String",
+										"params": ["Arrow"]
+									} ]
+								},
+								{
+									"__identifier": "requireKey",
+									"__value": false,
+									"__type": "Bool",
+									"defUid": 28,
+									"realEditorValues": [null]
+								}
+							]
+						},
+						{
+							"__identifier": "SpotLight",
+							"__grid": [19,16],
+							"__pivot": [0.5,0],
+							"__tags": ["triggerable"],
+							"__tile": { "tilesetUid": 99, "srcRect": [0,112,16,16] },
+							"iid": "0ac19200-66b0-11ec-b043-21f75c6683af",
+							"width": 16,
+							"height": 16,
+							"defUid": 10,
+							"px": [312,256],
+							"fieldInstances": [
+								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValues": [] },
+								{
+									"__identifier": "colors",
+									"__value": ["#FFEF85"],
+									"__type": "Array<Color>",
+									"defUid": 26,
+									"realEditorValues": [null]
+								},
+								{
+									"__identifier": "radius",
+									"__value": 1.5,
+									"__type": "Float",
+									"defUid": 45,
+									"realEditorValues": [{ "id": "V_Float", "params": [1.5] }]
+								},
+								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "defUid": 92, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "TriggerRepeater",
+							"__grid": [18,18],
+							"__pivot": [0.5,0.5],
+							"__tags": ["triggerable"],
+							"__tile": { "tilesetUid": 99, "srcRect": [16,80,16,16] },
+							"iid": "34733ef0-66b0-11ec-b043-b1457bc19192",
+							"width": 16,
+							"height": 16,
+							"defUid": 101,
+							"px": [296,296],
+							"fieldInstances": [
+								{
+									"__identifier": "targets",
+									"__value": [ {
+										"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									}, {
+										"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									} ],
+									"__type": "Array<EntityRef>",
+									"defUid": 102,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
+									}, {
+										"id": "V_String",
+										"params": ["f80ee805-66b0-11ec-b121-09bc15634dc5"]
+									} ]
+								},
+								{ "__identifier": "delay", "__value": 0, "__type": "Float", "defUid": 103, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "TriggerRepeater",
+							"__grid": [32,12],
+							"__pivot": [0.5,0.5],
+							"__tags": ["triggerable"],
+							"__tile": { "tilesetUid": 99, "srcRect": [16,80,16,16] },
+							"iid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
+							"width": 16,
+							"height": 16,
+							"defUid": 101,
+							"px": [520,200],
+							"fieldInstances": [
+								{
+									"__identifier": "targets",
+									"__value": [ {
+										"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									}, {
+										"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
+										"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									} ],
+									"__type": "Array<EntityRef>",
+									"defUid": 102,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
+									}, {
+										"id": "V_String",
+										"params": ["f80ee801-66b0-11ec-b121-4d74c475d701"]
+									} ]
+								},
+								{
+									"__identifier": "delay",
+									"__value": 1,
+									"__type": "Float",
+									"defUid": 103,
+									"realEditorValues": [{ "id": "V_Float", "params": [1] }]
+								}
+							]
 						}
 					]
-				},
-				{
-					"__identifier": "Blueprint",
-					"__type": "Entities",
-					"__cWid": 51,
-					"__cHei": 25,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "bb82e3c0-66b0-11ec-b4d9-3deed10d8716",
-					"levelId": 0,
-					"layerDefUid": 100,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 4131539,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
 				},
 				{
 					"__identifier": "Collisions",
@@ -2141,10 +2223,10 @@
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-						1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,
+						0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+						1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,1,
 						1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
 						0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,
@@ -2318,9 +2400,6 @@
 						{ "px": [608,192], "src": [16,32], "f": 0, "t": 23, "d": [74,650] },
 						{ "px": [624,192], "src": [16,32], "f": 0, "t": 23, "d": [74,651] },
 						{ "px": [640,192], "src": [16,32], "f": 0, "t": 23, "d": [74,652] },
-						{ "px": [656,192], "src": [16,32], "f": 0, "t": 23, "d": [74,653] },
-						{ "px": [672,192], "src": [16,32], "f": 0, "t": 23, "d": [74,654] },
-						{ "px": [688,192], "src": [16,32], "f": 0, "t": 23, "d": [74,655] },
 						{ "px": [288,208], "src": [16,32], "f": 0, "t": 23, "d": [74,681] },
 						{ "px": [304,208], "src": [16,32], "f": 0, "t": 23, "d": [74,682] },
 						{ "px": [320,208], "src": [16,32], "f": 0, "t": 23, "d": [74,683] },
@@ -2338,9 +2417,6 @@
 						{ "px": [608,208], "src": [16,32], "f": 0, "t": 23, "d": [74,701] },
 						{ "px": [624,208], "src": [16,32], "f": 0, "t": 23, "d": [74,702] },
 						{ "px": [640,208], "src": [16,32], "f": 0, "t": 23, "d": [74,703] },
-						{ "px": [656,208], "src": [16,32], "f": 0, "t": 23, "d": [74,704] },
-						{ "px": [672,208], "src": [16,32], "f": 0, "t": 23, "d": [74,705] },
-						{ "px": [688,208], "src": [16,32], "f": 0, "t": 23, "d": [74,706] },
 						{ "px": [480,224], "src": [16,32], "f": 0, "t": 23, "d": [74,744] },
 						{ "px": [496,224], "src": [16,32], "f": 0, "t": 23, "d": [74,745] },
 						{ "px": [512,224], "src": [16,32], "f": 0, "t": 23, "d": [74,746] },
@@ -2352,9 +2428,6 @@
 						{ "px": [608,224], "src": [16,32], "f": 0, "t": 23, "d": [74,752] },
 						{ "px": [624,224], "src": [16,32], "f": 0, "t": 23, "d": [74,753] },
 						{ "px": [640,224], "src": [16,32], "f": 0, "t": 23, "d": [74,754] },
-						{ "px": [656,224], "src": [16,32], "f": 0, "t": 23, "d": [74,755] },
-						{ "px": [672,224], "src": [16,32], "f": 0, "t": 23, "d": [74,756] },
-						{ "px": [688,224], "src": [16,32], "f": 0, "t": 23, "d": [74,757] },
 						{ "px": [480,240], "src": [16,32], "f": 0, "t": 23, "d": [74,795] },
 						{ "px": [496,240], "src": [16,32], "f": 0, "t": 23, "d": [74,796] },
 						{ "px": [512,240], "src": [16,32], "f": 0, "t": 23, "d": [74,797] },
@@ -2563,17 +2636,11 @@
 						{ "px": [544,192], "src": [16,80], "f": 0, "t": 56, "d": [87,646] },
 						{ "px": [592,192], "src": [0,64], "f": 0, "t": 44, "d": [87,649] },
 						{ "px": [640,192], "src": [32,64], "f": 0, "t": 46, "d": [87,652] },
-						{ "px": [672,192], "src": [0,80], "f": 0, "t": 55, "d": [87,654] },
-						{ "px": [688,192], "src": [0,80], "f": 0, "t": 55, "d": [87,655] },
 						{ "px": [320,208], "src": [16,64], "f": 0, "t": 45, "d": [87,683] },
 						{ "px": [624,208], "src": [16,80], "f": 0, "t": 56, "d": [87,702] },
 						{ "px": [640,208], "src": [0,64], "f": 0, "t": 44, "d": [87,703] },
-						{ "px": [656,208], "src": [0,64], "f": 0, "t": 44, "d": [87,704] },
-						{ "px": [688,208], "src": [32,80], "f": 0, "t": 57, "d": [87,706] },
 						{ "px": [560,224], "src": [0,64], "f": 0, "t": 44, "d": [87,749] },
 						{ "px": [592,224], "src": [0,64], "f": 0, "t": 44, "d": [87,751] },
-						{ "px": [656,224], "src": [16,64], "f": 0, "t": 45, "d": [87,755] },
-						{ "px": [672,224], "src": [32,80], "f": 0, "t": 57, "d": [87,756] },
 						{ "px": [16,256], "src": [32,64], "f": 0, "t": 46, "d": [87,817] },
 						{ "px": [32,256], "src": [32,80], "f": 0, "t": 57, "d": [87,818] },
 						{ "px": [112,256], "src": [32,80], "f": 0, "t": 57, "d": [87,823] },
@@ -2634,13 +2701,9 @@
 						{ "px": [384,176], "src": [32,112], "f": 0, "t": 79, "d": [64,585] },
 						{ "px": [608,192], "src": [16,112], "f": 0, "t": 78, "d": [64,650] },
 						{ "px": [624,192], "src": [0,112], "f": 0, "t": 77, "d": [64,651] },
-						{ "px": [656,192], "src": [0,112], "f": 0, "t": 77, "d": [64,653] },
 						{ "px": [608,208], "src": [32,112], "f": 0, "t": 79, "d": [64,701] },
 						{ "px": [624,208], "src": [32,112], "f": 0, "t": 79, "d": [64,702] },
 						{ "px": [640,208], "src": [16,112], "f": 0, "t": 78, "d": [64,703] },
-						{ "px": [656,208], "src": [0,112], "f": 0, "t": 77, "d": [64,704] },
-						{ "px": [672,208], "src": [16,112], "f": 0, "t": 78, "d": [64,705] },
-						{ "px": [688,208], "src": [16,112], "f": 0, "t": 78, "d": [64,706] },
 						{ "px": [64,256], "src": [32,112], "f": 0, "t": 79, "d": [64,820] },
 						{ "px": [128,256], "src": [0,112], "f": 0, "t": 77, "d": [64,824] },
 						{ "px": [144,256], "src": [32,112], "f": 0, "t": 79, "d": [64,825] },
@@ -2648,6 +2711,9 @@
 						{ "px": [208,256], "src": [0,112], "f": 0, "t": 77, "d": [64,829] },
 						{ "px": [224,256], "src": [0,112], "f": 0, "t": 77, "d": [64,830] },
 						{ "px": [384,256], "src": [32,112], "f": 0, "t": 79, "d": [64,840] },
+						{ "px": [656,256], "src": [0,112], "f": 0, "t": 77, "d": [64,857] },
+						{ "px": [672,256], "src": [0,112], "f": 0, "t": 77, "d": [64,858] },
+						{ "px": [688,256], "src": [32,112], "f": 0, "t": 79, "d": [64,859] },
 						{ "px": [128,272], "src": [48,112], "f": 0, "t": 80, "d": [64,875] },
 						{ "px": [160,272], "src": [16,112], "f": 0, "t": 78, "d": [64,877] },
 						{ "px": [176,272], "src": [48,112], "f": 0, "t": 80, "d": [64,878] },
@@ -2700,9 +2766,6 @@
 						{ "px": [608,192], "src": [96,16], "f": 0, "t": 17, "d": [76,650] },
 						{ "px": [624,192], "src": [96,16], "f": 0, "t": 17, "d": [76,651] },
 						{ "px": [640,192], "src": [96,16], "f": 0, "t": 17, "d": [76,652] },
-						{ "px": [656,192], "src": [96,16], "f": 0, "t": 17, "d": [76,653] },
-						{ "px": [672,192], "src": [96,16], "f": 0, "t": 17, "d": [76,654] },
-						{ "px": [688,192], "src": [96,16], "f": 0, "t": 17, "d": [76,655] },
 						{ "px": [0,256], "src": [96,16], "f": 0, "t": 17, "d": [76,816] },
 						{ "px": [16,256], "src": [96,16], "f": 0, "t": 17, "d": [76,817] },
 						{ "px": [32,256], "src": [96,16], "f": 0, "t": 17, "d": [76,818] },
@@ -2750,7 +2813,7 @@
 						{ "px": [640,96], "src": [96,32], "f": 0, "t": 28, "d": [77,346] },
 						{ "px": [704,96], "src": [96,32], "f": 1, "t": 28, "d": [77,350] },
 						{ "px": [480,128], "src": [96,32], "f": 0, "t": 28, "d": [77,438] },
-						{ "px": [688,192], "src": [96,32], "f": 1, "t": 28, "d": [77,655] },
+						{ "px": [640,192], "src": [96,32], "f": 1, "t": 28, "d": [77,652] },
 						{ "px": [336,256], "src": [96,32], "f": 1, "t": 28, "d": [77,837] },
 						{ "px": [368,256], "src": [96,32], "f": 0, "t": 28, "d": [77,839] },
 						{ "px": [560,256], "src": [96,32], "f": 0, "t": 28, "d": [77,851] },
@@ -2776,13 +2839,13 @@
 						{ "px": [192,176], "src": [96,0], "f": 0, "t": 6, "d": [78,573] },
 						{ "px": [592,176], "src": [96,0], "f": 1, "t": 6, "d": [78,598] },
 						{ "px": [288,192], "src": [96,0], "f": 0, "t": 6, "d": [78,630] },
-						{ "px": [688,192], "src": [96,0], "f": 1, "t": 6, "d": [78,655] },
+						{ "px": [640,192], "src": [96,0], "f": 1, "t": 6, "d": [78,652] },
 						{ "px": [288,208], "src": [96,0], "f": 0, "t": 6, "d": [78,681] },
 						{ "px": [368,208], "src": [96,0], "f": 1, "t": 6, "d": [78,686] },
 						{ "px": [480,208], "src": [96,0], "f": 0, "t": 6, "d": [78,693] },
-						{ "px": [688,208], "src": [96,0], "f": 1, "t": 6, "d": [78,706] },
+						{ "px": [640,208], "src": [96,0], "f": 1, "t": 6, "d": [78,703] },
 						{ "px": [480,224], "src": [96,0], "f": 0, "t": 6, "d": [78,744] },
-						{ "px": [688,224], "src": [96,0], "f": 1, "t": 6, "d": [78,757] },
+						{ "px": [640,224], "src": [96,0], "f": 1, "t": 6, "d": [78,754] },
 						{ "px": [480,240], "src": [96,0], "f": 0, "t": 6, "d": [78,795] },
 						{ "px": [528,240], "src": [96,0], "f": 1, "t": 6, "d": [78,798] },
 						{ "px": [336,256], "src": [96,0], "f": 1, "t": 6, "d": [78,837] },
@@ -3003,9 +3066,9 @@
 						{ "px": [240,192], "src": [32,96], "f": 0, "t": 68, "d": [62,627] },
 						{ "px": [256,192], "src": [16,96], "f": 0, "t": 67, "d": [62,628] },
 						{ "px": [272,192], "src": [16,96], "f": 0, "t": 67, "d": [62,629] },
-						{ "px": [704,192], "src": [0,96], "f": 0, "t": 66, "d": [62,656] },
-						{ "px": [720,192], "src": [0,96], "f": 0, "t": 66, "d": [62,657] },
-						{ "px": [736,192], "src": [16,96], "f": 0, "t": 67, "d": [62,658] },
+						{ "px": [656,192], "src": [16,96], "f": 0, "t": 67, "d": [62,653] },
+						{ "px": [672,192], "src": [32,96], "f": 0, "t": 68, "d": [62,654] },
+						{ "px": [688,192], "src": [0,96], "f": 0, "t": 66, "d": [62,655] },
 						{ "px": [0,208], "src": [32,96], "f": 0, "t": 68, "d": [62,663] },
 						{ "px": [16,208], "src": [16,96], "f": 0, "t": 67, "d": [62,664] },
 						{ "px": [32,208], "src": [0,96], "f": 0, "t": 66, "d": [62,665] },
@@ -3030,6 +3093,9 @@
 						{ "px": [432,208], "src": [0,96], "f": 0, "t": 66, "d": [62,690] },
 						{ "px": [448,208], "src": [0,96], "f": 0, "t": 66, "d": [62,691] },
 						{ "px": [464,208], "src": [32,96], "f": 0, "t": 68, "d": [62,692] },
+						{ "px": [656,208], "src": [16,96], "f": 0, "t": 67, "d": [62,704] },
+						{ "px": [672,208], "src": [16,96], "f": 0, "t": 67, "d": [62,705] },
+						{ "px": [688,208], "src": [16,96], "f": 0, "t": 67, "d": [62,706] },
 						{ "px": [704,208], "src": [16,96], "f": 0, "t": 67, "d": [62,707] },
 						{ "px": [720,208], "src": [32,96], "f": 0, "t": 68, "d": [62,708] },
 						{ "px": [736,208], "src": [0,96], "f": 0, "t": 66, "d": [62,709] },
@@ -3065,6 +3131,9 @@
 						{ "px": [432,224], "src": [0,96], "f": 0, "t": 66, "d": [62,741] },
 						{ "px": [448,224], "src": [16,96], "f": 0, "t": 67, "d": [62,742] },
 						{ "px": [464,224], "src": [16,96], "f": 0, "t": 67, "d": [62,743] },
+						{ "px": [656,224], "src": [16,96], "f": 0, "t": 67, "d": [62,755] },
+						{ "px": [672,224], "src": [32,96], "f": 0, "t": 68, "d": [62,756] },
+						{ "px": [688,224], "src": [16,96], "f": 0, "t": 67, "d": [62,757] },
 						{ "px": [704,224], "src": [16,96], "f": 0, "t": 67, "d": [62,758] },
 						{ "px": [720,224], "src": [0,96], "f": 0, "t": 66, "d": [62,759] },
 						{ "px": [736,224], "src": [16,96], "f": 0, "t": 67, "d": [62,760] },
@@ -3328,9 +3397,6 @@
 						{ "px": [608,176], "src": [16,48], "f": 2, "t": 34, "d": [65,599] },
 						{ "px": [624,176], "src": [16,48], "f": 2, "t": 34, "d": [65,600] },
 						{ "px": [640,176], "src": [16,48], "f": 2, "t": 34, "d": [65,601] },
-						{ "px": [656,176], "src": [16,48], "f": 2, "t": 34, "d": [65,602] },
-						{ "px": [672,176], "src": [16,48], "f": 2, "t": 34, "d": [65,603] },
-						{ "px": [688,176], "src": [16,48], "f": 2, "t": 34, "d": [65,604] },
 						{ "px": [192,192], "src": [16,48], "f": 0, "t": 34, "d": [65,624] },
 						{ "px": [208,192], "src": [16,48], "f": 0, "t": 34, "d": [65,625] },
 						{ "px": [224,192], "src": [16,48], "f": 0, "t": 34, "d": [65,626] },
@@ -3385,9 +3451,9 @@
 						{ "px": [608,240], "src": [16,48], "f": 0, "t": 34, "d": [65,803] },
 						{ "px": [624,240], "src": [16,48], "f": 0, "t": 34, "d": [65,804] },
 						{ "px": [640,240], "src": [16,48], "f": 0, "t": 34, "d": [65,805] },
-						{ "px": [656,240], "src": [16,48], "f": 0, "t": 34, "d": [65,806] },
-						{ "px": [672,240], "src": [16,48], "f": 0, "t": 34, "d": [65,807] },
-						{ "px": [688,240], "src": [16,48], "f": 0, "t": 34, "d": [65,808] },
+						{ "px": [656,240], "src": [16,48], "f": 2, "t": 34, "d": [65,806] },
+						{ "px": [672,240], "src": [16,48], "f": 2, "t": 34, "d": [65,807] },
+						{ "px": [688,240], "src": [16,48], "f": 2, "t": 34, "d": [65,808] },
 						{ "px": [704,240], "src": [16,48], "f": 2, "t": 34, "d": [65,809] },
 						{ "px": [720,240], "src": [16,48], "f": 2, "t": 34, "d": [65,810] },
 						{ "px": [352,256], "src": [16,48], "f": 2, "t": 34, "d": [65,838] },
@@ -3459,13 +3525,13 @@
 						{ "px": [176,176], "src": [0,32], "f": 0, "t": 22, "d": [69,572] },
 						{ "px": [608,176], "src": [0,32], "f": 1, "t": 22, "d": [69,599] },
 						{ "px": [272,192], "src": [0,32], "f": 0, "t": 22, "d": [69,629] },
-						{ "px": [704,192], "src": [0,32], "f": 1, "t": 22, "d": [69,656] },
+						{ "px": [656,192], "src": [0,32], "f": 1, "t": 22, "d": [69,653] },
 						{ "px": [272,208], "src": [0,32], "f": 0, "t": 22, "d": [69,680] },
 						{ "px": [384,208], "src": [0,32], "f": 1, "t": 22, "d": [69,687] },
 						{ "px": [464,208], "src": [0,32], "f": 0, "t": 22, "d": [69,692] },
-						{ "px": [704,208], "src": [0,32], "f": 1, "t": 22, "d": [69,707] },
+						{ "px": [656,208], "src": [0,32], "f": 1, "t": 22, "d": [69,704] },
 						{ "px": [464,224], "src": [0,32], "f": 0, "t": 22, "d": [69,743] },
-						{ "px": [704,224], "src": [0,32], "f": 1, "t": 22, "d": [69,758] },
+						{ "px": [656,224], "src": [0,32], "f": 1, "t": 22, "d": [69,755] },
 						{ "px": [464,240], "src": [0,32], "f": 0, "t": 22, "d": [69,794] },
 						{ "px": [544,240], "src": [0,32], "f": 1, "t": 22, "d": [69,799] },
 						{ "px": [352,256], "src": [0,32], "f": 0, "t": 22, "d": [69,838] },
@@ -3483,9 +3549,6 @@
 						{ "px": [608,240], "src": [48,0], "f": 0, "t": 3, "d": [71,803] },
 						{ "px": [624,240], "src": [48,0], "f": 0, "t": 3, "d": [71,804] },
 						{ "px": [640,240], "src": [48,0], "f": 0, "t": 3, "d": [71,805] },
-						{ "px": [656,240], "src": [48,0], "f": 0, "t": 3, "d": [71,806] },
-						{ "px": [672,240], "src": [48,0], "f": 0, "t": 3, "d": [71,807] },
-						{ "px": [688,240], "src": [48,0], "f": 0, "t": 3, "d": [71,808] },
 						{ "px": [352,256], "src": [48,32], "f": 0, "t": 25, "d": [72,838] },
 						{ "px": [544,256], "src": [48,32], "f": 0, "t": 25, "d": [72,850] },
 						{ "px": [624,112], "src": [32,48], "f": 2, "t": 35, "d": [66,396] },
@@ -3542,6 +3605,9 @@
 						{ "px": [544,80], "src": [96,16], "f": 0, "t": 17, "d": [96,289] },
 						{ "px": [560,80], "src": [96,16], "f": 0, "t": 17, "d": [96,290] },
 						{ "px": [576,80], "src": [96,16], "f": 0, "t": 17, "d": [96,291] },
+						{ "px": [704,176], "src": [96,16], "f": 2, "t": 17, "d": [96,605] },
+						{ "px": [720,176], "src": [96,16], "f": 2, "t": 17, "d": [96,606] },
+						{ "px": [736,176], "src": [96,16], "f": 2, "t": 17, "d": [96,607] },
 						{ "px": [752,176], "src": [96,16], "f": 2, "t": 17, "d": [96,608] },
 						{ "px": [0,208], "src": [96,16], "f": 0, "t": 17, "d": [96,663] },
 						{ "px": [16,208], "src": [96,16], "f": 0, "t": 17, "d": [96,664] },
@@ -3552,6 +3618,9 @@
 						{ "px": [96,208], "src": [96,16], "f": 0, "t": 17, "d": [96,669] },
 						{ "px": [112,208], "src": [96,16], "f": 0, "t": 17, "d": [96,670] },
 						{ "px": [128,208], "src": [96,16], "f": 0, "t": 17, "d": [96,671] },
+						{ "px": [704,208], "src": [96,16], "f": 0, "t": 17, "d": [96,707] },
+						{ "px": [720,208], "src": [96,16], "f": 0, "t": 17, "d": [96,708] },
+						{ "px": [736,208], "src": [96,16], "f": 0, "t": 17, "d": [96,709] },
 						{ "px": [752,208], "src": [96,16], "f": 0, "t": 17, "d": [96,710] },
 						{ "px": [768,208], "src": [96,16], "f": 0, "t": 17, "d": [96,711] },
 						{ "px": [0,336], "src": [96,16], "f": 2, "t": 17, "d": [96,1071] },
@@ -3630,7 +3699,7 @@
 						{ "px": [144,176], "src": [96,0], "f": 0, "t": 6, "d": [95,570] },
 						{ "px": [752,176], "src": [96,0], "f": 1, "t": 6, "d": [95,608] },
 						{ "px": [144,192], "src": [96,0], "f": 0, "t": 6, "d": [95,621] },
-						{ "px": [736,192], "src": [96,0], "f": 1, "t": 6, "d": [95,658] },
+						{ "px": [688,192], "src": [96,0], "f": 1, "t": 6, "d": [95,655] },
 						{ "px": [768,208], "src": [96,0], "f": 1, "t": 6, "d": [95,711] },
 						{ "px": [768,224], "src": [96,0], "f": 1, "t": 6, "d": [95,762] },
 						{ "px": [768,240], "src": [96,0], "f": 1, "t": 6, "d": [95,813] },
@@ -3934,6 +4003,9 @@
 						{ "px": [96,192], "src": [96,48], "f": 0, "t": 39, "d": [94,618] },
 						{ "px": [112,192], "src": [96,48], "f": 0, "t": 39, "d": [94,619] },
 						{ "px": [128,192], "src": [96,48], "f": 0, "t": 39, "d": [94,620] },
+						{ "px": [704,192], "src": [96,48], "f": 0, "t": 39, "d": [94,656] },
+						{ "px": [720,192], "src": [96,48], "f": 0, "t": 39, "d": [94,657] },
+						{ "px": [736,192], "src": [96,48], "f": 0, "t": 39, "d": [94,658] },
 						{ "px": [752,192], "src": [96,48], "f": 0, "t": 39, "d": [94,659] },
 						{ "px": [768,192], "src": [96,48], "f": 0, "t": 39, "d": [94,660] },
 						{ "px": [784,192], "src": [96,48], "f": 0, "t": 39, "d": [94,661] },
