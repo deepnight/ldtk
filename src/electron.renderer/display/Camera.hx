@@ -319,14 +319,16 @@ class Camera extends dn.Process {
 		if( li==null )
 			return 0;
 		else
-			return levelX*li.def.parallaxFactorX;
+			return levelX*li.def.parallaxFactorX
+				+ ( li.def.parallaxScaling ? 0 : -li.pxWid*0.5*li.def.parallaxFactorX );
 	}
 
 	public inline function getParallaxOffsetY(li:data.inst.LayerInstance) : Float {
 		if( li==null )
 			return 0;
 		else
-			return levelY*li.def.parallaxFactorY;
+			return levelY*li.def.parallaxFactorY
+				+ ( li.def.parallaxScaling ? 0 : -li.pxHei*0.5*li.def.parallaxFactorY );
 	}
 
 
