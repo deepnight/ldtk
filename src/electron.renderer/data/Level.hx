@@ -391,15 +391,6 @@ class Level {
 		return ld!=null ? getLayerInstance(ld) : null;
 	}
 
-	public function getLayerInstanceFromEntity(ei:data.inst.EntityInstance) : Null<data.inst.LayerInstance> {
-		for(li in layerInstances)
-		for(e in li.entityInstances)
-			if( e.iid==ei.iid )
-				return li;
-
-		return null;
-	}
-
 
 	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
 		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID());

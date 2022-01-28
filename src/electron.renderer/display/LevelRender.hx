@@ -241,12 +241,10 @@ class LevelRender extends dn.Process {
 			case LevelFieldInstanceChanged(l,fi):
 
 			case EntityFieldInstanceChanged(ei,fi):
-				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
-				invalidateLayer( li==null ? editor.curLayerInstance : li );
+				invalidateLayer(ei._li);
 
 			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei):
-				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
-				invalidateLayer( li==null ? editor.curLayerInstance : li );
+				invalidateLayer(ei._li);
 
 			case LevelAdded(l):
 
