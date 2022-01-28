@@ -289,7 +289,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		var equal = cur.parallaxFactorX==cur.parallaxFactorY;
 		var i = Input.linkToHtmlInput( cur.parallaxFactorX, jForm.find("input[name='parallaxFactorX']") );
 		i.setBounds(-1,1);
-		i.enablePercentageMode();
+		i.enablePercentageMode(false);
 		i.onChange = ()->{
 			if( equal )
 				cur.parallaxFactorY = cur.parallaxFactorX;
@@ -298,7 +298,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		var i = Input.linkToHtmlInput( cur.parallaxFactorY, jForm.find("input[name='parallaxFactorY']") );
 		i.setBounds(-1,1);
-		i.enablePercentageMode();
+		i.enablePercentageMode(false);
 		if( equal )
 			i.jInput.addClass("grayed");
 		else
@@ -312,7 +312,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit(LayerDefChanged(cur.uid));
 		}
 
-		var i = Input.linkToHtmlInput( cur.parallaxScaling, jForm.find("input[name='parallaxScaling']") );
+		var i = Input.linkToHtmlInput( cur.parallaxScaling, jForm.find("input#parallaxScaling") );
 		i.onChange = ()->{
 			if( cur.parallaxScaling )
 				cur.parallaxFactorY = cur.parallaxFactorX;
