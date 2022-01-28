@@ -286,6 +286,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
+		// HACK Parallax settings disabled (too many bugs)
+		/*
 		var equal = cur.parallaxFactorX==cur.parallaxFactorY;
 		var i = Input.linkToHtmlInput( cur.parallaxFactorX, jForm.find("input[name='parallaxFactorX']") );
 		i.setBounds(-1,1);
@@ -321,6 +323,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		*/
 
 
 		// Edit rules
