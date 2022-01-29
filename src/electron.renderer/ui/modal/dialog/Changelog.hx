@@ -24,11 +24,16 @@ class Changelog extends ui.modal.Dialog {
 				}
 		}
 
+		// Prepare markdown
+		var imgDir = JsTools.getChangelogImgDir();
+		var rawMd = changeLog.allNoteLines.join("\n");
+		rawMd = StringTools.replace(rawMd, "(img/", "("+imgDir+"/");
+
 		loadTemplate("changelog", {
 			ver: changeLog.version.numbers,
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
-			md: changeLog.allNoteLines.join("\n"),
+			md: rawMd,
 		}, false);
 
 

@@ -48,6 +48,7 @@
 		},
 		"extraFiles": [
 			"embedAtlas",
+			"changelogImg",
 			"samples",
 			"README.txt"
 		],

@@ -673,6 +673,11 @@ class JsTools {
 		return dn.FilePath.fromDir( raw ).directory;
 	}
 
+	public static function getChangelogImgDir() {
+		var raw = getExeDir() + ( App.isMac() ? "/../changelogImg" : "/changelogImg" );
+		return dn.FilePath.fromDir( raw ).directory;
+	}
+
 	public static function getEmbedAtlasDir() {
 		var raw = getExeDir() + ( App.isMac() ? "/../embedAtlas" : "/embedAtlas" );
 		return dn.FilePath.fromDir( raw ).directory;
