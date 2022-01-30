@@ -399,6 +399,8 @@ class JsTools {
 							case "mouseright": new J('<span class="icon mouseright" title="Right mouse button"></span>');
 							case "mousewheel": new J('<span class="icon mousewheel" title="Mouse wheel"></span>');
 							case "mousemiddle": new J('<span class="icon mousemiddle" title="Middle mouse button"></span>');
+							case "add": new J('<span class="key" title="Numeric pad +">+</span>');
+							case "sub": new J('<span class="key" title="Numeric pad -">-</span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
 

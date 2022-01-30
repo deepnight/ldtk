@@ -2064,10 +2064,10 @@ class Editor extends Page {
 
 		// Zoom keyboard shortcuts
 		if( App.ME.focused && !App.ME.hasInputFocus() ) {
-			if( App.ME.isKeyDown(K.PGUP) )
+			if( App.ME.isKeyDown(K.NUMPAD_ADD) || App.ME.isKeyDown(K.QWERTY_EQUALS) )
 				deltaZoom(0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
 
-			if( App.ME.isKeyDown(K.PGDOWN) )
+			if( App.ME.isKeyDown(K.NUMPAD_SUB) || App.ME.isKeyDown(K.QWERTY_MINUS) )
 				deltaZoom(-0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
 		}
 

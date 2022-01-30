@@ -674,44 +674,52 @@ dd.infoHighlight {
 span.key,
 div.key {
 	display: inline-block;
-	margin: 2px;
+	margin: 1px;
 	padding: 1px;
-	padding-left: 2px;
-	padding-right: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
 	min-width: 16px;
 
-	// color: #6d5f4d;
 	text-align: center;
 	text-transform: uppercase;
 	font-family: Roboto;
 	font-style: normal;
-	text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.3);
+	font-weight: bold;
+	font-size: 0.9em;
+	text-shadow: 0px 2px 1px rgba(0, 0, 0, 0.5);
 
-	$keyColor: #CFC5AC;
+	$keyColor: #E1D6BB;
 	$opacity: 0.45;
 	$lighten: 0.3;
 	$darken: 0.4;
 	background-color: transparentize( $keyColor, $opacity );
-	border: 1px solid transparentize( lighten( $keyColor, $lighten ), $opacity );
 	border-bottom: 4px solid transparentize( darken( $keyColor, $darken ), $opacity );
-	box-shadow: 0px 0px 4px black;
+	box-shadow: 0px 2px 2px black;
 	border-radius: 2px;
+
+	&+.key {
+		margin-left: 0;
+	}
+
+	&.shift,
+	&.ctrl,
+	&.alt {
+		text-shadow: none;
+	}
 
 	&.shift {
 		color: transparent;
 		text-shadow: none;
-		background-image: url("../icons/shift.png");
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: contain;
 
 		$keyColor : #77B0FD;
+		color: scale-color($color: $keyColor, $lightness: 60%);
 		background-color: transparentize( $keyColor, $opacity );
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
 	}
 	&.special {
 		$keyColor : #B577FD;
+		color: scale-color($color: $keyColor, $lightness: 60%);
 		background-color: transparentize( $keyColor, $opacity );
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
@@ -730,12 +738,14 @@ div.key {
 	}
 	&.ctrl {
 		$keyColor : #FD4F66;
+		color: scale-color($color: $keyColor, $lightness: 60%);
 		background-color: transparentize( $keyColor, $opacity );
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
 	}
 	&.alt {
 		$keyColor : #FDBE22;
+		color: scale-color($color: $keyColor, $lightness: 60%);
 		background-color: transparentize( $keyColor, $opacity );
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
