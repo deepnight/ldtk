@@ -47,10 +47,10 @@
 			"output": "redist"
 		},
 		"extraFiles": [
-			"embedAtlas",
-			"changelogImg",
-			"samples",
-			"README.txt"
+			"extraFiles/embedAtlas",
+			"extraFiles/changelogImg",
+			"extraFiles/samples",
+			"extraFiles/README.txt"
 		],
 		"files": [
 			"assets",

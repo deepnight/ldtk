@@ -668,19 +668,20 @@ class JsTools {
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
 
+	public static function getExtraFilesDir() {
+		return getExeDir() + ( App.isMac() ? "/../extraFiles" : "/extraFiles" );
+	}
+
 	public static function getSamplesDir() {
-		var raw = getExeDir() + ( App.isMac() ? "/../samples" : "/samples" );
-		return dn.FilePath.fromDir( raw ).directory;
+		return dn.FilePath.fromDir( getExtraFilesDir() + "/samples" ).directory;
 	}
 
 	public static function getChangelogImgDir() {
-		var raw = getExeDir() + ( App.isMac() ? "/../changelogImg" : "/changelogImg" );
-		return dn.FilePath.fromDir( raw ).directory;
+		return dn.FilePath.fromDir( getExtraFilesDir() + "/changelogImg" ).directory;
 	}
 
 	public static function getEmbedAtlasDir() {
-		var raw = getExeDir() + ( App.isMac() ? "/../embedAtlas" : "/embedAtlas" );
-		return dn.FilePath.fromDir( raw ).directory;
+		return dn.FilePath.fromDir( getExtraFilesDir() + "/embedAtlas" ).directory;
 	}
 
 	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
