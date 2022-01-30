@@ -630,6 +630,23 @@ class Editor extends Page {
 			case K.H if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				setShowDetails( !settings.v.showDetails );
 
+			case K.PGDOWN if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				if( curWorldDepth<project.getHighestLevelDepth() ) {
+					if( !worldMode )
+						setWorldMode(true);
+					else
+						selectWorldDepth(curWorldDepth+1);
+				}
+
+			case K.PGUP if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				if( curWorldDepth>project.getLowestLevelDepth() ) {
+					if( !worldMode )
+						setWorldMode(true);
+					else
+						selectWorldDepth(curWorldDepth-1);
+				}
+
+
 			case k if( k>=48 && k<=57 && !hasInputFocus() ):
 				var idx = k==48 ? 9 : k-49;
 				if( idx < curLevel.layerInstances.length )
@@ -637,6 +654,7 @@ class Editor extends Page {
 
 			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
 				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+2)+")").click();
+
 		}
 
 		// Propagate to tools
