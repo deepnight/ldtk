@@ -50,7 +50,11 @@
 			"extraFiles/embedAtlas",
 			"extraFiles/changelogImg",
 			"extraFiles/samples",
-			"extraFiles/README.txt"
+			{
+				"from": "extraFiles/README.txt",
+				"to": "README.txt"
+			}
+
 		],
 		"files": [
 			"assets",
