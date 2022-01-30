@@ -2,18 +2,42 @@
 
 ## Major changes
 
-  - **Entity references**: this new "field" type is available to all Entities and is used to store a reference to another Entity. A typical example is a Button entity with a a Reference value pointing to another Entity, like a Door. You can create arrays of References, or define restrictions to which kind of Entity they can point to.
-  - **Simplified world layers**: levels can now be organized in depth to support "stacked" levels.
+### Entity references
+![](1.0.0-entityRefs.png)
+
+This new "field" type is available to all Entities and is used to store a reference to another Entity. A typical example is a Button entity with a a Reference value pointing to another Entity, like a Door.
+
+You can create arrays of References, or define restrictions to which kind of Entity they can point to. This new powerful feature unlocks lots of new exciting possibilities in a very user-friendly interface.
+
+### Simplified world layers
+![](1.0.0-worldLayers.gif)
+
+Levels can now be organized in "depth" to support stacked levels.
+
+### Integrated icons
+![](1.0.0-icons.png)
+
+LDtk now has an integrated icon tileset to make your Entities easier to read in the editor.
+
+Please note that these icons were provided courtesy of their author, FinalBossBlues, and are to be used *only* in the editor environment. If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons))
+
+### Performances
+
+Thanks to major optimizations, general performances will see a big boost, while reducing CPU usage, especially on large projects.
+
+Loading and Saving operations were also vastly improved:
+  - **Saving time** for large projects is much faster (approx. 8-15 times!) by caching elements that weren't modified.
+  - **Progress bars** will provide better feedback when working on large projects.
+  - **Backup** system will be faster and more reliable
+
+### Other major changes
+
   - **Tiles in custom  fields**: this new Custom Field type is available for both Entities and Levels.
   - **Copy and paste**: for now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements. You can right click on an element with a context menu to copy/cut/paste/duplicate things! LDtk just entered modern era.
   - **Space key**: one shortcut to rule them all:
     - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
     - Hold `SPACE` and drag with `Left mouse button` to scroll the view.
     - Hold `SPACE` and drag with `Right mouse button` to zoom in/out.
-  - **Reworked loading/saving**:
-    - Optimized saving time for large projects (approx. 8-15 times faster!) by caching data that wasn't modified.
-    - Added various progress bars when loading or saving large projects
-    - Complete rework of the backup system which is now much faster and more reliable
   - **Help**: reworked and streamlined contextual help tips in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
   - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap them: so moving value "1" down, for example, will not modify it ("1" value stays "1"), only values order changes.
   - **Image reloading bug fixes**:
@@ -22,7 +46,6 @@
     - You are no longer limited to deleting the last IntGrid value.
   - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
   - **"Identifier" format policy**: you can now pick your prefered "Identifier case policy" (default is "1st letter uppercased").
-  - **Integrated icons**: to make game-prototype devs even better, LDtk now has an integrated icon tileset to make your Entities easier to read in the editor.
   - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
   - **Performances**: implemented various major optimizations to boost general performances & reduce CPU usage, especially on large projects.
 

@@ -25,9 +25,9 @@ class Changelog extends ui.modal.Dialog {
 		}
 
 		// Prepare markdown
-		var imgDir = JsTools.getChangelogImgDir();
 		var rawMd = changeLog.allNoteLines.join("\n");
-		rawMd = StringTools.replace(rawMd, "(img/", "("+imgDir+"/");
+		var imgReg = ~/!\[]\((.*?)\)/gim;
+		rawMd = imgReg.replace(rawMd, "![]("+JsTools.getChangelogImgDir()+"/$1)");
 
 		loadTemplate("changelog", {
 			ver: changeLog.version.numbers,

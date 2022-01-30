@@ -2622,11 +2622,14 @@ textarea {
 
 			h3 {
 				border: 0;
+				margin-top: 40px;
 			}
 
 			&>p+ul {
-				border-top: 1px solid $bgLight;
-				margin-top: 32px;
+				list-style: square;
+				padding-left: 32px;
+				// border-top: 1px solid $bgLight;
+				// margin-top: 32px;
 			}
 			&>ul>li {
 				border-bottom: 1px dashed $bgMed;
@@ -2635,9 +2638,7 @@ textarea {
 				ul {
 					margin-top: 16px;
 					list-style: square;
-					li {
-						margin-left: 16px;
-					}
+					padding-left: 32px;
 					li+li {
 						margin-top: 8px;
 					}
