@@ -308,18 +308,17 @@ class EditProject extends ui.modal.Panel {
 
 
 		// Advanced options
-		var jAdvanceds = jForm.find(".adv");
+		var jAdvanceds = App.ME.isInAppDir(project.filePath.full,true) ? jForm.find(".adv") : jForm.find(".adv:not(.sample)");
 		if( showAdvanced ) {
 			jForm.find("a.showAdv").hide();
-			jAdvanceds.show();
+			jAdvanceds.addClass("visible");
 		}
 		else {
 			jForm.find("a.showAdv").show().click(ev->{
-				jAdvanceds.show();
+				jAdvanceds.addClass("visible");
 				showAdvanced = true;
 				ev.getThis().hide();
 			});
-			jAdvanceds.hide();
 		}
 		var jAdvancedFlags = jAdvanceds.find("ul.advFlags");
 		jAdvancedFlags.empty();
@@ -366,6 +365,15 @@ class EditProject extends ui.modal.Panel {
 				}
 			);
 		}
+
+		// Sample description
+		var i = new form.input.StringInput(
+			jForm.find("[name=description]"),
+			()->project.description,
+			(v)->{
+				project.description = v;
+			}
+		);
 
 		JsTools.parseComponents(jForm);
 		checkBackup();

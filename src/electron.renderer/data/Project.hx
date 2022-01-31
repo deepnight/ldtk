@@ -39,6 +39,7 @@ class Project {
 	public var backupOnSave = false;
 	public var backupLimit = 10;
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
+	public var description : Null<String>;
 
 	@:allow(data.Level)
 	var quickLevelAccess : Map<Int, Level> = new Map();
@@ -266,6 +267,7 @@ class Project {
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
 		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
+		p.description = JsonTools.unescapeString(json.description);
 
 		p.imageExportMode = JsonTools.readEnum( ldtk.Json.ImageExportMode, json.imageExportMode, false, None );
 		if( json.exportPng!=null )
@@ -505,6 +507,7 @@ class Project {
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
 			levelNamePattern: levelNamePattern,
+			description : JsonTools.escapeString(description),
 
 			flags: {
 				var all = [];
