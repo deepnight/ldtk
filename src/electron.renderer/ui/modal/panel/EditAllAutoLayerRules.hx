@@ -75,7 +75,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						invalidateRuleAndOnesBelow(r);
 				updateRuleGroup(rg);
 
-			case LayerRuleGroupAdded:
+			case LayerRuleGroupAdded(rg):
 				updateAllRuleGroups();
 
 			case LayerRuleGroupChanged(rg):
@@ -286,7 +286,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			var insertIdx = 0;
 			var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
-			editor.ge.emit(LayerRuleGroupAdded);
+			editor.ge.emit(LayerRuleGroupAdded(rg));
 
 			var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
 			onRenameGroup( jGroupHeader, rg );
@@ -389,7 +389,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L._Paste("group"),
 				cb: ()->{
 					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
-					editor.ge.emit(LayerRuleGroupAdded);
+					editor.ge.emit(LayerRuleGroupAdded(copy));
 					for(r in copy.rules)
 						invalidateRuleAndOnesBelow(r);
 				},
@@ -568,7 +568,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L._PasteAfter("group"),
 				cb: ()->{
 					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
-					editor.ge.emit(LayerRuleGroupAdded);
+					editor.ge.emit(LayerRuleGroupAdded(copy));
 					for(r in copy.rules)
 						invalidateRuleAndOnesBelow(r);
 				},
@@ -579,7 +579,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				cb: ()->{
 					var copy = ld.duplicateRuleGroup(project, rg);
 					lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
-					editor.ge.emit( LayerRuleGroupAdded );
+					editor.ge.emit( LayerRuleGroupAdded(copy) );
 					for(r in copy.rules)
 						invalidateRuleAndOnesBelow(r);
 				},

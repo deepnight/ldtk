@@ -228,8 +228,9 @@ class WorldRender extends dn.Process {
 				sortWorldDepths();
 				refreshWorldLevelRect(l);
 
-			case LayerRuleGroupAdded:
-				invalidateAllLevelRenders();
+			case LayerRuleGroupAdded(rg):
+				if( rg.rules.length>0 )
+					invalidateAllLevelRenders();
 
 			case LayerRuleGroupRemoved(rg):
 				invalidateAllLevelRenders();

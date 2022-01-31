@@ -33,7 +33,7 @@ enum GlobalEvent {
 	LayerRuleSeedChanged;
 	LayerRuleSorted;
 
-	LayerRuleGroupAdded;
+	LayerRuleGroupAdded(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupRemoved(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);

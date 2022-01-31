@@ -53,7 +53,7 @@ class LevelHistory {
 			case LayerRuleSorted:
 			case LayerRuleSeedChanged:
 
-			case LayerRuleGroupAdded:
+			case LayerRuleGroupAdded(rg):
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupChanged(rg):
 			case LayerRuleGroupChangedActiveState(rg):

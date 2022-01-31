@@ -1478,7 +1478,7 @@ class Editor extends Page {
 				case LayerRuleRemoved(rule): extra = rule.uid;
 				case LayerRuleSeedChanged:
 				case LayerRuleSorted:
-				case LayerRuleGroupAdded:
+				case LayerRuleGroupAdded(rg): extra = rg.uid;
 				case LayerRuleGroupRemoved(rg): extra = rg.uid;
 				case LayerRuleGroupChanged(rg): extra = rg.uid;
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
@@ -1569,9 +1569,9 @@ class Editor extends Page {
 			case LayerRuleRemoved(rule): invalidateAllLevelsCache();
 			case LayerRuleSeedChanged: invalidateAllLevelsCache();
 			case LayerRuleSorted: invalidateAllLevelsCache();
-			case LayerRuleGroupAdded: invalidateAllLevelsCache();
-			case LayerRuleGroupRemoved(rg): invalidateAllLevelsCache();
-			case LayerRuleGroupChanged(rg): invalidateAllLevelsCache();
+			case LayerRuleGroupAdded(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
+			case LayerRuleGroupRemoved(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
+			case LayerRuleGroupChanged(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
 			case LayerRuleGroupChangedActiveState(rg):
 				if( rg.isOptional )
 					invalidateLevelCache(curLevel);
@@ -1728,7 +1728,7 @@ class Editor extends Page {
 
 			case LayerRuleGroupChanged(rg):
 			case LayerRuleGroupChangedActiveState(rg):
-			case LayerRuleGroupAdded:
+			case LayerRuleGroupAdded(rg):
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:
 			case LayerRuleGroupCollapseChanged(rg):
