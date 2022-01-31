@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456562,
+	"appBuildId": 456565,
 	"nextUid": 207,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -3430,9 +3430,9 @@
 			"identifier": "Throne_room",
 			"iid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24",
 			"uid": 49,
-			"worldX": 504,
-			"worldY": 464,
-			"worldDepth": 1,
+			"worldX": 480,
+			"worldY": 448,
+			"worldDepth": -1,
 			"pxWid": 264,
 			"pxHei": 160,
 			"__bgColor": "#000000",
@@ -4323,7 +4323,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" }, { "levelIid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35", "levelUid": 167, "dir": "s" } ]
+			"__neighbours": [{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" }]
 		},
 		{
 			"identifier": "Wood_Gate",
@@ -6979,7 +6979,7 @@
 			"uid": 163,
 			"worldX": 920,
 			"worldY": 368,
-			"worldDepth": -1,
+			"worldDepth": 1,
 			"pxWid": 256,
 			"pxHei": 256,
 			"__bgColor": "#000000",
@@ -8236,7 +8236,7 @@
 			"uid": 166,
 			"worldX": 864,
 			"worldY": 240,
-			"worldDepth": -1,
+			"worldDepth": 1,
 			"pxWid": 344,
 			"pxHei": 128,
 			"__bgColor": "#000000",
@@ -9110,7 +9110,7 @@
 			"uid": 167,
 			"worldX": 760,
 			"worldY": 512,
-			"worldDepth": 1,
+			"worldDepth": -1,
 			"pxWid": 808,
 			"pxHei": 328,
 			"__bgColor": "#000000",
@@ -13771,7 +13771,6 @@
 			],
 			"__neighbours": [
 				{ "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "s" },
-				{ "levelIid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24", "levelUid": 49, "dir": "s" },
 				{ "levelIid": "c3ebe820-66b0-11ec-b23b-11b737ea77f1", "levelUid": 161, "dir": "s" },
 				{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" },
 				{ "levelIid": "74a0e030-66b0-11ec-8211-35643000f436", "levelUid": 163, "dir": "s" }
