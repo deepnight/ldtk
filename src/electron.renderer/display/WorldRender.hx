@@ -168,7 +168,8 @@ class WorldRender extends dn.Process {
 				invalidateAllLevelIdentifiers();
 
 			case LevelJsonCacheInvalidated(l):
-				invalidateAllLevelIdentifiers();
+				invalidateLevelFields(l);
+				invalidateLevelIdentifier(l);
 
 			case ProjectSelected:
 				renderAll();
@@ -1007,7 +1008,7 @@ class WorldRender extends dn.Process {
 					}
 
 					// Fields
-					if( wl.fieldsInvalidated && editor.worldMode && limitOthers-->0 ) {
+					if( wl.fieldsInvalidated && ( editor.worldMode || editor.curLevel==l ) && limitOthers-->0 ) {
 						wl.fieldsInvalidated = false;
 						renderFields(l);
 					}
