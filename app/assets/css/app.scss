@@ -649,13 +649,17 @@ warning {
 }
 
 dt.infoHighlight {
-	color: $help;
-	text-shadow: 0px 0px 8px $help;
+	label {
+		color: $help !important;
+		text-shadow: 0px 0px 8px $helpMed;
+	}
 }
 
 dd.infoHighlight {
 	background-color: $helpDark;
 	box-shadow: 0px 0px 16px $helpDark;
+	outline: 1px solid $helpMed;
+	outline-offset: 2px;
 
 	span {
 		color: $help;
@@ -1396,8 +1400,9 @@ dl.form {
 			&:hover {
 				opacity: 1;
 				border-color: $help;
-				box-shadow: 0px 0px 16px $helpMed;
-				color: black;
+				box-shadow: 0px 0px 8px $helpMed;
+				color: white;
+				text-shadow: 0px 0px 2px $help;
 				background-color: $help;
 			}
 		}
