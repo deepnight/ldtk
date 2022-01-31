@@ -9,6 +9,11 @@ class StringInput extends form.Input<String> {
 		super(j, getter, setter);
 	}
 
+	override function onEnterKey() {
+		if( !jInput.is("textarea") )
+			super.onEnterKey();
+	}
+
 	override function parseInputValue() : String {
 		var v = jInput.val();
 		if( allowNull && StringTools.trim(v).length==0 )

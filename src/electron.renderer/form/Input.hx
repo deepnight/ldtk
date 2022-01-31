@@ -40,8 +40,12 @@ class Input<T> {
 		});
 		jInput.on("keydown.input", function(ev:js.jquery.Event) {
 			if( ev.key=="Enter" )
-				jInput.blur();
+				onEnterKey();
 		});
+	}
+
+	function onEnterKey() {
+		jInput.blur();
 	}
 
 	function checkGuide() {
