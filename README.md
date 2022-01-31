@@ -74,7 +74,7 @@ npm run start
 
 # Related tools & licences
 
- - Tileset images: see [README](app/samples/README.md) in samples
+ - Tileset images: see [README](app/extraFiles/samples/README.md) in samples
  - Haxe: https://haxe.org/
  - Heaps.io: https://heaps.io/
  - Electron: https://www.electronjs.org/
