@@ -63,7 +63,7 @@ class Tip extends dn.Process {
 
 			// Custom tip alignment
 			if( jTarget.attr("tip")!=null ) {
-				var dist = 8;
+				var dist = 10;
 				switch jTarget.attr("tip") {
 					case "left":
 						x = tOff.left - jTip.outerWidth() - dist;
