@@ -43,7 +43,7 @@ class App extends dn.Process {
 		// LOG.printOnAdd = true;
 		#end
 		LOG.add("BOOT","App started");
-		LOG.add("BOOT","Version: "+Const.getAppVersion());
+		LOG.add("BOOT","Version: "+Const.getAppVersion()+" (build "+Const.getAppBuildId()+")");
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
 		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
