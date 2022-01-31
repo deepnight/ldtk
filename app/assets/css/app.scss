@@ -3612,28 +3612,32 @@ canvas#webgl {
 			background-color: $backupBg;
 		}
 
-		li#description {
+		li#tutorialDesc {
+			display: flex;
+			justify-content: center;
 			font-size: 11pt;
 			font-weight: normal;
 			background-color: $helpMed;
 
-			.descriptionHeader {
+			.wrapper {
+				display: grid;
+				align-items: center;
 				max-width: 700px;
+				min-height: 64px;
 				padding-left: 64px;
-				margin: auto;
 
 				text-align: left;
 
 				background-image: url("../icons/help.svg");
 				background-repeat: no-repeat;
 				background-position: left center;
-			}
 
-			p {
-				margin: 0;
-			}
-			p+p {
-				margin-top: 4px;
+				p {
+					margin: 0;
+				}
+				p+p {
+					margin-top: 4px;
+				}
 			}
 		}
 	}

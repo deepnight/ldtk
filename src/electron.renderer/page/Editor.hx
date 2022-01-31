@@ -291,16 +291,14 @@ class Editor extends Page {
 		else
 			setPermanentNotification("backup");
 
-		// Display "sample description" header
-		if( project.description!=null ) {
-			var jBanner = new J('<div class="descriptionHeader"/>');
-			var jDesc = new J('<div class="desc"/>');
-			jDesc.html( "<p>" + project.description.split("\n").join("</p><p>") + "</p>" );
-			jDesc.appendTo(jBanner);
-			setPermanentNotification("description", jBanner);
+		// Display "tutorial description" header
+		if( project.tutorialDesc!=null ) {
+			var jDesc = new J('<div class="wrapper"/>');
+			jDesc.html( "<p>" + project.tutorialDesc.split("\n").join("</p><p>") + "</p>" );
+			setPermanentNotification("tutorialDesc", jDesc);
 		}
 		else
-			setPermanentNotification("description");
+			setPermanentNotification("tutorialDesc");
 
 		// Check external enums
 		if( !project.isBackup() ) {

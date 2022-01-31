@@ -368,10 +368,10 @@ class EditProject extends ui.modal.Panel {
 
 		// Sample description
 		var i = new form.input.StringInput(
-			jForm.find("[name=description]"),
-			()->project.description,
+			jForm.find("[name=tutorialDesc]"),
+			()->project.tutorialDesc,
 			(v)->{
-				project.description = v;
+				project.tutorialDesc = v;
 			}
 		);
 
