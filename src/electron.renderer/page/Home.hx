@@ -15,7 +15,7 @@ class Home extends Page {
 			appVer: Const.getAppVersion(),
 			buildDate: dn.MacroTools.getHumanBuildDate(),
 			latestVer: changeLog.latest.version,
-			latestDesc: changeLog.latest.title==null ? L.t._("Read latest changes") : '"'+changeLog.latest.title+'"',
+			latestDesc: changeLog.latest.title==null ? L.t._("Release notes") : '"'+changeLog.latest.title+'"',
 			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
 			discordUrl: Const.DISCORD_URL,
 			docUrl: Const.DOCUMENTATION_URL,
@@ -289,7 +289,7 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Locate file"),
-						cb: ET.locate.bind(filePath, true),
+						cb: JsTools.locateFile.bind(filePath, true),
 					},
 					{
 						label: L.t._("Remove from history"),
@@ -390,7 +390,7 @@ class Home extends Page {
 				ui.modal.ContextMenu.addTo(li, [
 					{
 						label: L.t._("Locate folder"),
-						cb: ET.locate.bind(fp.directory, false),
+						cb: JsTools.locateFile.bind(fp.directory, false),
 					},
 					{
 						label: L.t._("Remove from history"),

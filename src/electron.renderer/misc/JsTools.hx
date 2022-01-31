@@ -482,6 +482,7 @@ class JsTools {
 			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);
+				N.msg("Opening url...");
 			});
 			link.on("auxclick", (ev:js.jquery.Event)->{
 				switch ev.button {
@@ -686,22 +687,27 @@ class JsTools {
 		return dn.FilePath.fromDir( getExtraFilesDir() + "/embedAtlas" ).directory;
 	}
 
+	public static function locateFile(path:String, isFile:Bool) {
+		if( path==null )
+			N.error("No file");
+		else {
+			if( !NT.fileExists(path) )
+				N.error("Sorry, but this file couldn't be found.");
+			else {
+				N.msg("Locating file...");
+				ET.locate(path, isFile);
+			}
+		}
+	}
+
 	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
 		a.find(".icon").addClass( isFile ? "locate" : "folder" );
 		a.click( function(ev) {
-			if( filePath==null )
-				N.error("No file");
-			else {
-				if( !NT.fileExists(filePath) )
-					N.error("Sorry, but this file couldn't be found.");
-				else {
-					ev.preventDefault();
-					ev.stopPropagation();
-					ET.locate(filePath, isFile);
-				}
-			}
+			ev.preventDefault();
+			ev.stopPropagation();
+			locateFile(filePath, isFile);
 		});
 
 		if( filePath==null )

@@ -77,7 +77,7 @@ class ProjectSaver extends dn.Process {
 				m.close();
 			} );
 			m.addButton( L.t._("Open project folder"), "gray small", ()->{
-				ET.locate(fp.full, true);
+				JsTools.locateFile(fp.full, true);
 				m.close();
 			 } );
 			m.addCancel();

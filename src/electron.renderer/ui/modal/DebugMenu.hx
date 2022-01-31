@@ -162,7 +162,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 		addTitle(L.untranslated("App"));
 		add({
 			label: L.untranslated("Open settings dir"),
-			cb: ()->ET.locate(Settings.getDir(), false)
+			cb: ()->JsTools.locateFile(Settings.getDir(), false)
 		});
 
 
@@ -261,7 +261,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		add({
 			label: L.untranslated("Locate log file"),
-			cb: ()->ET.locate(JsTools.getLogPath(), true)
+			cb: ()->JsTools.locateFile(JsTools.getLogPath(), true)
 		});
 
 		add({

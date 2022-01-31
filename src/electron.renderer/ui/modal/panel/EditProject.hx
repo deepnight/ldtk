@@ -100,7 +100,7 @@ class EditProject extends ui.modal.Panel {
 			jRename.hide();
 
 		jContent.find("button.locate").click( function(ev) {
-			ET.locate( project.filePath.full, true );
+			JsTools.locateFile( project.filePath.full, true );
 		});
 
 		updateProjectForm();

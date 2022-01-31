@@ -118,6 +118,7 @@ Loading and Saving operations were also vastly improved:
 ## Bug fixes & misc
 
   - Fixed a crash that could happen during reloading of an image, if it was being used by another app.
+  - Fixed "Locate file" buttons opening Windows explorer in the background
   - Fixed tile picker centering animation when picking a tile from a level (using ALT-click)
   - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
