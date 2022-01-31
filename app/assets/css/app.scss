@@ -2610,7 +2610,11 @@ textarea {
 			}
 
 			h2 {
-				margin-top: 16px;
+				border-bottom-width: 2px;
+			}
+
+			h2:not(:first-child) {
+				margin-top: 48px;
 			}
 
 			h2+h3 {

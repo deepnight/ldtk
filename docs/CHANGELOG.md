@@ -1,8 +1,6 @@
 # 1.0.0
 
-## Major changes
-
-### Entity references
+## Entity references
 
 This new "field" type is available to all Entities and is used to store a reference to another Entity.
 
@@ -12,21 +10,23 @@ You can create arrays of References, or define restrictions to which kind of Ent
 
 ![](1.0.0-entityRefs.png)
 
-### Simplified world layers
+## Simplified world layers
 
 Levels can now be organized in "depth" to support stacked levels.
 
 ![](1.0.0-worldLayers.gif)
 
-### Integrated icons
+## Integrated icons
 
 LDtk now has an integrated icon tileset to make your Entities easier to read in the editor.
 
-Please note that these icons were provided courtesy of their author, **FinalBossBlues**, and are to be used *only* in the editor environment. If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons))
+Please note that these icons were provided courtesy of their author, **FinalBossBlues**, and are to be used *only* in the editor environment.
+
+If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons)). He's a nice person, feel free to send an e-mail to get in touch :)
 
 ![](1.0.0-icons.png)
 
-### Performances
+## Performances
 
 Thanks to major optimizations, general performances will see a big boost, while reducing CPU usage, especially on large projects.
 
@@ -37,13 +37,13 @@ Loading and Saving operations were also vastly improved:
 
 ![](1.0.0-saving.gif)
 
-### Rectangle of tiles for Entities
+## Rectangle of tiles for Entities
 
 Entities (and levels too, actually) can use a new Custom Field type which can store a rectangle of tiles from any Tileset. This can be used as an alternative skin, an array of animation frames, an "opened" visual state for a a chest etc.
 
 ![](1.0.0-tileRect.gif)
 
-### Copy and paste (work in progress)
+## Copy and paste (work in progress)
 
 For now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements.
 
@@ -51,7 +51,7 @@ You can right click on an element with a context menu to copy/cut/paste/duplicat
 
 ![](1.0.0-ruleCopy.gif)
 
-### User interface improvements
+## User interface improvements
 
 The **Space** key: one shortcut to rule them all.
   - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
@@ -64,7 +64,7 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
 
 ![](1.0.0-help.gif)
 
-### Other major changes
+## Other major changes
 
   - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap them: so moving value "1" down, for example, will not modify it ("1" value stays "1"), only values order changes.
   - **Image reloading bug fixes**:
