@@ -630,20 +630,34 @@ class Editor extends Page {
 			case K.H if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				setShowDetails( !settings.v.showDetails );
 
-			case K.PGDOWN if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				if( curWorldDepth>project.getLowestLevelDepth() ) {
-					if( !worldMode )
-						setWorldMode(true);
-					else
+			case K.PGDOWN if( !hasInputFocus() ):
+				if( !worldMode )
+					setWorldMode(true);
+				else if( !App.ME.hasAnyToggleKeyDown() ) {
+					// Change active depth
+					if( curWorldDepth>project.getLowestLevelDepth() )
 						selectWorldDepth(curWorldDepth-1);
 				}
+				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
+					// Move current level closer
+					project.moveLevelToDepthCloser(curLevel);
+					ge.emit( LevelSettingsChanged(curLevel) );
+					selectWorldDepth(curLevel.worldDepth);
+				}
 
-			case K.PGUP if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				if( curWorldDepth<project.getHighestLevelDepth() ) {
-					if( !worldMode )
-						setWorldMode(true);
-					else
+			case K.PGUP if( !hasInputFocus() ):
+				if( !worldMode )
+					setWorldMode(true);
+				else if( !App.ME.hasAnyToggleKeyDown() ) {
+					// Change active depth
+					if( curWorldDepth<project.getHighestLevelDepth() )
 						selectWorldDepth(curWorldDepth+1);
+				}
+				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
+					// Move current level further
+					project.moveLevelToDepthFurther(curLevel);
+					ge.emit( LevelSettingsChanged(curLevel) );
+					selectWorldDepth(curLevel.worldDepth);
 				}
 
 

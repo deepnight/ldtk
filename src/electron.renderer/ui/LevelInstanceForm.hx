@@ -207,21 +207,21 @@ class LevelInstanceForm {
 		var i = Input.linkToHtmlInput( level.worldDepth, jForm.find("#worldDepth"));
 		i.onChange = ()->onFieldChange();
 
-		// Depth above
+		// Depth further
 		var jDepthButton = jForm.find(".worldDepthAbove");
-		jDepthButton.prop("disabled", !project.canMoveLevelToDepthAbove(level));
+		jDepthButton.prop("disabled", !project.canMoveLevelToDepthFurther(level));
 		jDepthButton.click(_->{
-			if( project.moveLevelToDepthAbove(level) ) {
+			if( project.moveLevelToDepthFurther(level) ) {
 				onFieldChange();
 				editor.selectWorldDepth(level.worldDepth);
 			}
 		});
 
-		// Depth brlow
+		// Depth closer
 		var jDepthButton = jForm.find(".worldDepthBelow");
-		jDepthButton.prop("disabled", !project.canMoveLevelToDepthBelow(level));
+		jDepthButton.prop("disabled", !project.canMoveLevelToDepthCloser(level));
 		jDepthButton.click(_->{
-			if( project.moveLevelToDepthBelow(level) ) {
+			if( project.moveLevelToDepthCloser(level) ) {
 				onFieldChange();
 				editor.selectWorldDepth(level.worldDepth);
 			}
