@@ -561,7 +561,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L._Cut("Group"),
 				cb: ()->{
 					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
-					deleteRuleGroup(rg);
+					deleteRuleGroup(rg, false);
 				}
 			},
 			{
@@ -586,7 +586,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 			{
 				label: L._Delete(L.t._("Group")),
-				cb: deleteRuleGroup.bind(rg),
+				cb: deleteRuleGroup.bind(rg, true),
 			},
 		]);
 
@@ -898,8 +898,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function deleteRuleGroup(rg:AutoLayerRuleGroup) {
-		new ui.modal.dialog.Confirm(Lang.t._("Confirm this action?"), true, function() {
+	function deleteRuleGroup(rg:AutoLayerRuleGroup, confirm:Bool) {
+		function _del() {
 			new LastChance(Lang.t._("Rule group removed"), project);
 			App.LOG.general("Deleted rule group "+rg.name);
 			for(r in rg.rules)
@@ -907,7 +907,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			ld.removeRuleGroup(rg);
 			project.tidy();
 			editor.ge.emit( LayerRuleGroupRemoved(rg) );
-		});
+		}
+		if( confirm )
+			new ui.modal.dialog.Confirm(Lang.t._("Confirm this action?"), true, _del);
+		else
+			_del();
 	}
 
 	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
