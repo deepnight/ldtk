@@ -205,6 +205,8 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleGroupCollapseChanged(rg):
 
+			case LayerInstanceEditedByTool(li):
+
 			case LayerInstanceChangedGlobally(li):
 				invalidateLayer(li);
 

@@ -96,6 +96,7 @@ class LevelHistory {
 			case LevelFieldInstanceChanged(l,fi):
 			case EntityFieldInstanceChanged(ei,fi):
 
+			case LayerInstanceEditedByTool(_):
 			case LayerInstanceChangedGlobally(_):
 			case LayerInstanceSelected, LayerInstanceVisiblityChanged(_):
 			case AutoLayerRenderingChanged:

@@ -1594,6 +1594,7 @@ class Editor extends Page {
 			case LayerRuleGroupSorted: invalidateAllLevelsCache();
 			case LayerRuleGroupCollapseChanged(rg):
 			case LayerInstanceSelected:
+			case LayerInstanceEditedByTool(li): invalidateLevelCache(li.level);
 			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
 			case LayerInstanceVisiblityChanged(li):
 			case LayerInstanceRestoredFromHistory(li): invalidateLevelCache(li.level);
@@ -1678,6 +1679,7 @@ class Editor extends Page {
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
 			case LayerInstanceChangedGlobally(li):
+			case LayerInstanceEditedByTool(li):
 
 			case FieldDefChanged(fd):
 
