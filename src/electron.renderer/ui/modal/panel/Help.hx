@@ -15,6 +15,8 @@ class Help extends ui.modal.Panel {
 			ver: Const.getAppVersion(),
 		});
 
+		jContent.find(".changelog").click( _->new ui.modal.dialog.Changelog(false) );
+
 		// Key icons
 		jContent.find("dt").each( function(idx, e) {
 			var jDt = new J(e);

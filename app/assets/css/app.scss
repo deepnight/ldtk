@@ -2628,6 +2628,9 @@ textarea {
 			&>p+ul {
 				list-style: square;
 				padding-left: 32px;
+				li {
+					border: 0;
+				}
 				// border-top: 1px solid $bgLight;
 				// margin-top: 32px;
 			}
@@ -2994,6 +2997,8 @@ textarea {
 					display: block;
 					button {
 						justify-content: start;
+						text-align: inherit;
+						text-transform: none;
 					}
 				}
 			}
