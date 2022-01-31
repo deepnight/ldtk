@@ -18,6 +18,7 @@ $helpDark: #3c6148;
 $helpDarker: #273f2f;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
+$backupBg: #516cf7;
 
 // Cursors
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
@@ -2346,7 +2347,7 @@ textarea {
 				span {
 					padding: 16px;
 					border-radius: 4px;
-					background-color: $helpMed;
+					background-color: $backupBg;
 					box-shadow: 0px 0px 16px transparentize($color: black, $amount: 0.6);
 				}
 			}
@@ -3608,8 +3609,32 @@ canvas#webgl {
 			}
 		}
 		li#backup {
+			background-color: $backupBg;
+		}
+
+		li#description {
+			font-size: 11pt;
+			font-weight: normal;
 			background-color: $helpMed;
-			// color: black;
+
+			.descriptionHeader {
+				max-width: 700px;
+				padding-left: 64px;
+				margin: auto;
+
+				text-align: left;
+
+				background-image: url("../icons/help.svg");
+				background-repeat: no-repeat;
+				background-position: left center;
+			}
+
+			p {
+				margin: 0;
+			}
+			p+p {
+				margin-top: 4px;
+			}
 		}
 	}
 	#mainPanel {
@@ -5789,7 +5814,9 @@ dl.form.fieldInstanceEditor {
 		}
 
 		.adv {
-			display: none;
+			&:not(.visible) {
+				display: none;
+			}
 			a {
 				cursor: pointer;
 				&:hover {

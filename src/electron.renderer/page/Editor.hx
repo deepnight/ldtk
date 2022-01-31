@@ -291,6 +291,17 @@ class Editor extends Page {
 		else
 			setPermanentNotification("backup");
 
+		// Display "sample description" header
+		if( project.description!=null ) {
+			var jBanner = new J('<div class="descriptionHeader"/>');
+			var jDesc = new J('<div class="desc"/>');
+			jDesc.html( "<p>" + project.description.split("\n").join("</p><p>") + "</p>" );
+			jDesc.appendTo(jBanner);
+			setPermanentNotification("description", jBanner);
+		}
+		else
+			setPermanentNotification("description");
+
 		// Check external enums
 		if( !project.isBackup() ) {
 			for( relPath in project.defs.getExternalEnumPaths() ) {
