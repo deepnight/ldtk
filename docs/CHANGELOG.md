@@ -3,23 +3,28 @@
 ## Major changes
 
 ### Entity references
+
+This new "field" type is available to all Entities and is used to store a reference to another Entity.
+
+A typical example is a *Button* entity with a Reference field pointing to another Entity, like a *Door*.
+
+You can create arrays of References, or define restrictions to which kind of Entity they can point at. This new powerful feature unlocks lots of new exciting possibilities in a very user-friendly interface.
+
 ![](1.0.0-entityRefs.png)
 
-This new "field" type is available to all Entities and is used to store a reference to another Entity. A typical example is a Button entity with a a Reference value pointing to another Entity, like a Door.
-
-You can create arrays of References, or define restrictions to which kind of Entity they can point to. This new powerful feature unlocks lots of new exciting possibilities in a very user-friendly interface.
-
 ### Simplified world layers
-![](1.0.0-worldLayers.gif)
 
 Levels can now be organized in "depth" to support stacked levels.
 
+![](1.0.0-worldLayers.gif)
+
 ### Integrated icons
-![](1.0.0-icons.png)
 
 LDtk now has an integrated icon tileset to make your Entities easier to read in the editor.
 
-Please note that these icons were provided courtesy of their author, FinalBossBlues, and are to be used *only* in the editor environment. If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons))
+Please note that these icons were provided courtesy of their author, **FinalBossBlues**, and are to be used *only* in the editor environment. If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons))
+
+![](1.0.0-icons.png)
 
 ### Performances
 
@@ -30,15 +35,37 @@ Loading and Saving operations were also vastly improved:
   - **Progress bars** will provide better feedback when working on large projects.
   - **Backup** system will be faster and more reliable
 
+![](1.0.0-saving.gif)
+
+### Rectangle of tiles for Entities
+
+Entities (and levels too, actually) can use a new Custom Field type which can store a rectangle of tiles from any Tileset. This can be used as an alternative skin, an array of animation frames, an "opened" visual state for a a chest etc.
+
+![](1.0.0-tileRect.gif)
+
+### Copy and paste (work in progress)
+
+For now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements.
+
+You can right click on an element with a context menu to copy/cut/paste/duplicate definitions! LDtk just entered modern era.
+
+![](1.0.0-ruleCopy.gif)
+
+### User interface improvements
+
+The **Space** key: one shortcut to rule them all.
+  - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
+  - Hold `SPACE` and drag with `Left mouse button` to scroll the view.
+  - Hold `SPACE` and drag with `Right mouse button` to zoom in/out.
+
+The editor UI **font** nows uses *Noto* which offers better readability. While I was at it, I also fixed various font size issues with 2K and 4K monitors.
+
+Contextual **help tips** were also reworked and streamlined in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
+
+![](1.0.0-help.gif)
+
 ### Other major changes
 
-  - **Tiles in custom  fields**: this new Custom Field type is available for both Entities and Levels.
-  - **Copy and paste**: for now, this crazy futuristic feature is only available for interface panels (eg. Layer definitions, Auto-layer rules etc.) but will be soon expanded to data in levels, such as entities or large chunks of layer elements. You can right click on an element with a context menu to copy/cut/paste/duplicate things! LDtk just entered modern era.
-  - **Space key**: one shortcut to rule them all:
-    - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
-    - Hold `SPACE` and drag with `Left mouse button` to scroll the view.
-    - Hold `SPACE` and drag with `Right mouse button` to zoom in/out.
-  - **Help**: reworked and streamlined contextual help tips in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
   - **IntGrid values sorting**: that's right, you can now sort your IntGrid values. Please note that re-organizing values will not remap them: so moving value "1" down, for example, will not modify it ("1" value stays "1"), only values order changes.
   - **Image reloading bug fixes**:
     - Reloading of images (tilesets, backgrounds etc.) will no longer occur if the app is not focused. As soon as LDtk is focused, images are updated.
@@ -46,8 +73,6 @@ Loading and Saving operations were also vastly improved:
     - You are no longer limited to deleting the last IntGrid value.
   - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
   - **"Identifier" format policy**: you can now pick your prefered "Identifier case policy" (default is "1st letter uppercased").
-  - **Font**: updated editor UI font which nows uses Noto (better readability) and fixed various font size issues with 2K and 4K monitors.
-  - **Performances**: implemented various major optimizations to boost general performances & reduce CPU usage, especially on large projects.
 
 ## File format changes
 
@@ -91,6 +116,7 @@ Loading and Saving operations were also vastly improved:
   - Better support of trackpad pinch gestures to zoom in/out
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
+  - Added "Release notes" button in Help panel
   - Reworked the Enum panel and fixed many UX issues
   - Removed the "CPU throttling" option from the app settings. The CPU throttling has been reworked and should not longer be noticeable at all. Therefore, it is now always enabled to reduce battery usage on laptops and energy consumption in general.
   - Removed the "Tile Flickering Fix" option from the app settings: it was costly and inefficient.
