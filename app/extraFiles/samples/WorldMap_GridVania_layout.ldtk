@@ -915,8 +915,8 @@
 			"resizableX": true,
 			"resizableY": true,
 			"keepAspectRatio": false,
-			"tileOpacity": 0.25,
-			"fillOpacity": 0.15,
+			"tileOpacity": 0.51,
+			"fillOpacity": 0.25,
 			"lineOpacity": 1,
 			"hollow": true,
 			"color": "#126CCB",
@@ -924,7 +924,7 @@
 			"showName": true,
 			"tilesetId": 133,
 			"tileId": 243,
-			"tileRenderMode": "Stretch",
+			"tileRenderMode": "Repeat",
 			"tileRect": { "x": 48, "y": 240, "w": 16, "h": 16 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
@@ -27927,15 +27927,15 @@
 					"entityInstances": [
 						{
 							"__identifier": "Exit",
-							"__grid": [1,7],
+							"__grid": [1,8],
 							"__pivot": [0,0],
 							"__tags": ["region"],
 							"__tile": { "tilesetUid": 133, "srcRect": [48,240,16,16] },
 							"iid": "a375f486-66b0-11ec-9cd7-fd86a8f321b7",
 							"width": 48,
-							"height": 80,
+							"height": 48,
 							"defUid": 94,
-							"px": [16,112],
+							"px": [16,128],
 							"fieldInstances": []
 						},
 						{
