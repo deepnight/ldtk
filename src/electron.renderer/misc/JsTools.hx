@@ -659,32 +659,40 @@ class JsTools {
 	}
 
 	public static function getLogPath() {
-		return getExeDir()+"/LDtk.log";
+		#if debug
+		return dn.FilePath.fromDir( ET.getAppResourceDir()+"/ldtk.log" ).useSlashes().full;
+		#else
+		return dn.FilePath.fromDir( ET.getLogDir()+"/ldtk.log" ).useSlashes().full;
+		#end
 	}
 
 	public static function getExeDir() {
-		#if !debug
-		var path = ET.getExeDir();
-		#else
+		#if debug
 		var path = ET.getAppResourceDir()+"/foo.exe";
+		#else
+		var path = ET.getExeDir();
 		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
 
-	public static function getExtraFilesDir() {
-		return getExeDir() + ( App.isMac() ? "/../extraFiles" : "/extraFiles" );
+	public static function getExtraFilesDir(?subDir:String) {
+		var base = ET.getAppResourceDir() + "/extraFiles";
+		if( subDir==null || subDir.length==0 )
+			return dn.FilePath.fromDir(base).useSlashes().directory;
+		else
+			return dn.FilePath.fromDir( base+"/"+subDir ).useSlashes().directory;
 	}
 
 	public static function getSamplesDir() {
-		return dn.FilePath.fromDir( getExtraFilesDir() + "/samples" ).directory;
+		return getExtraFilesDir("samples");
 	}
 
 	public static function getChangelogImgDir() {
-		return dn.FilePath.fromDir( getExtraFilesDir() + "/changelogImg" ).directory;
+		return getExtraFilesDir("changelogImg");
 	}
 
 	public static function getEmbedAtlasDir() {
-		return dn.FilePath.fromDir( getExtraFilesDir() + "/embedAtlas" ).directory;
+		return getExtraFilesDir("embedAtlas");
 	}
 
 	public static function locateFile(path:String, isFile:Bool) {

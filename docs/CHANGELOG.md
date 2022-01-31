@@ -95,6 +95,7 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
 
   - External level files will no longer be prefixed with their index in array to avoid unnecessary renamings when inserting new levels. This can be re-enabled in Project panel, using an Advanced Option at the bottom.
   - Fixed `enumTags` and `customTileData` typing in QuickTypes files.
+  - LDtk logs are now stored in a more legitimate location, depending on your OS. To locate your log file, just open settings (`F12` key) and look for the Log File line.
 
 ## UI
 

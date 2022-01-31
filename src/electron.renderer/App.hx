@@ -46,7 +46,7 @@ class App extends dn.Process {
 		LOG.add("BOOT","Version: "+Const.getAppVersion()+" (build "+Const.getAppBuildId()+")");
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
-		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
+		LOG.add("BOOT","ExtraFiles: "+JsTools.getExtraFilesDir());
 		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
 
 		// App arguments
