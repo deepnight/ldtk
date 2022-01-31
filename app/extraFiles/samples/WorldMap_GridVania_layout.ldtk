@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456566,
+	"appBuildId": 456569,
 	"nextUid": 136,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "GridVania",
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "Press [W] to switch to World mode.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -1170,35 +1171,6 @@
 			"allowedRefs": "OnlySame",
 			"allowedRefTags": [],
 			"tilesetUid": null
-		},
-		{
-			"identifier": "enterMsg",
-			"__type": "String",
-			"uid": 88,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "NameAndValue",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -1221,28 +1193,16 @@
 			"__smartColor": "#C7B4AB",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "enterMsg",
-					"__value": "Press \"W\" to switch to World mode.",
-					"__type": "String",
-					"defUid": 88,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Press \"W\" to switch to World mode."]
-					}]
-				},
-				{
-					"__identifier": "roomType",
-					"__value": "Entrance",
-					"__type": "LocalEnum.RoomType",
-					"defUid": 99,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Entrance"]
-					}]
-				}
-			],
+			"fieldInstances": [{
+				"__identifier": "roomType",
+				"__value": "Entrance",
+				"__type": "LocalEnum.RoomType",
+				"defUid": 99,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Entrance"]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -2188,10 +2148,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -3575,10 +3532,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -5611,10 +5565,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -7399,10 +7350,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -9033,10 +8981,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -10686,25 +10631,16 @@
 			"__smartColor": "#C7D0C7",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "enterMsg",
-					"__value": null,
-					"__type": "String",
-					"defUid": 88,
-					"realEditorValues": [null]
-				},
-				{
-					"__identifier": "roomType",
-					"__value": "Boss",
-					"__type": "LocalEnum.RoomType",
-					"defUid": 99,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Boss"]
-					}]
-				}
-			],
+			"fieldInstances": [{
+				"__identifier": "roomType",
+				"__value": "Boss",
+				"__type": "LocalEnum.RoomType",
+				"defUid": 99,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Boss"]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -12707,10 +12643,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -14278,19 +14211,16 @@
 			"__smartColor": "#E3C798",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{
-					"__identifier": "roomType",
-					"__value": "Shop",
-					"__type": "LocalEnum.RoomType",
-					"defUid": 99,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Shop"]
-					}]
-				}
-			],
+			"fieldInstances": [{
+				"__identifier": "roomType",
+				"__value": "Shop",
+				"__type": "LocalEnum.RoomType",
+				"defUid": 99,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Shop"]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -17092,10 +17022,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -17966,10 +17893,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -19179,10 +19103,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -20016,10 +19937,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -21295,10 +21213,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -22918,19 +22833,16 @@
 			"__smartColor": "#C7D0DA",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{
-					"__identifier": "roomType",
-					"__value": "Save",
-					"__type": "LocalEnum.RoomType",
-					"defUid": 99,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Save"]
-					}]
-				}
-			],
+			"fieldInstances": [{
+				"__identifier": "roomType",
+				"__value": "Save",
+				"__type": "LocalEnum.RoomType",
+				"defUid": 99,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Save"]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -23717,10 +23629,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -25482,10 +25391,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -27878,28 +27784,16 @@
 			"__smartColor": "#C7C7A2",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "enterMsg",
-					"__value": "You finally found the exit!",
-					"__type": "String",
-					"defUid": 88,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["You finally found the exit!"]
-					}]
-				},
-				{
-					"__identifier": "roomType",
-					"__value": "Exit",
-					"__type": "LocalEnum.RoomType",
-					"defUid": 99,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["Exit"]
-					}]
-				}
-			],
+			"fieldInstances": [{
+				"__identifier": "roomType",
+				"__value": "Exit",
+				"__type": "LocalEnum.RoomType",
+				"defUid": 99,
+				"realEditorValues": [{
+					"id": "V_String",
+					"params": ["Exit"]
+				}]
+			}],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -28722,10 +28616,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -29506,10 +29397,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -30058,10 +29946,7 @@
 			"__smartColor": "#919B9E",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "enterMsg", "__value": null, "__type": "String", "defUid": 88, "realEditorValues": [] },
-				{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }
-			],
+			"fieldInstances": [{ "__identifier": "roomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 99, "realEditorValues": [] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",

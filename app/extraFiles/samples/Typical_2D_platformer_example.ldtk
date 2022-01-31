@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456566,
+	"appBuildId": 456569,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "This sample demonstrates a typical 2D platformer with auto-rendered walls and various gameplay entities.\nPress [A] to toggle \"Single layer mode\", which helps understanding which layer contains what.\nPress [SHIFT+R] to toggle auto-rendered layers.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -41,9 +42,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"inactiveOpacity": 0.6,
+			"inactiveOpacity": 1,
 			"hideInList": false,
-			"hideFieldsWhenInactive": true,
+			"hideFieldsWhenInactive": false,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -1431,66 +1432,7 @@
 		{ "id": "Boots", "tileId": 754, "color": 9067593, "__tileSrcRect": [32,752,16,16] },
 		{ "id": "Water", "tileId": 272, "color": 9399401, "__tileSrcRect": [0,272,16,16] },
 		{ "id": "Gem", "tileId": 987, "color": 11173944, "__tileSrcRect": [176,976,16,16] }
-	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "tutorial",
-			"__type": "String",
-			"uid": 92,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		},
-		{
-			"identifier": "textColor",
-			"__type": "Color",
-			"uid": 93,
-			"type": "F_Color",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": true,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": { "id": "V_Int", "params": [16768000] },
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Your_typical_2D_platformer",
@@ -1508,24 +1450,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEC73",
+			"__smartColor": "#9F9FAD",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "Press <R> to toggle auto-layers rendering.  Press <A> to toggle \"Single layer mode.\"",
-					"__type": "String",
-					"defUid": 92,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": [
-							"Press <R> to toggle auto-layers rendering.  Press <A> to toggle \"Single layer mode.\""
-						]
-					}]
-				},
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 93, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -3200,13 +3128,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEC73",
+			"__smartColor": "#9F9FAD",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 92, "realEditorValues": [] },
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 93, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -4576,13 +4501,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEC73",
+			"__smartColor": "#9F9FAD",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 92, "realEditorValues": [] },
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 93, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",

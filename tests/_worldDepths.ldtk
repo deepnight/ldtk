@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456566,
+	"appBuildId": 456569,
 	"nextUid": 207,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -27,9 +27,10 @@
 	"exportTiled": false,
 	"imageExportMode": "None",
 	"pngFilePattern": null,
-	"backupOnSave": false,
+	"backupOnSave": true,
 	"backupLimit": 10,
 	"levelNamePattern": "Level %idx",
+	"description": null,
 	"flags": [ "IgnoreBackupSuggest", "PrependIndexToLevelFileNames", "MultiWorlds" ],
 	"defs": { "layers": [
 		{
