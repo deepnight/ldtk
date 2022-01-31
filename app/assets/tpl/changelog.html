@@ -17,6 +17,8 @@
 <!-- Parse markdowns -->
 <script type="text/javascript" src="js/marked.min.js"></script>
 <script type="text/javascript">
+	var rawMd = document.getElementById("updateChangelogMd").textContent;
+	document.getElementById("updateChangelogMd").remove();
 	document.getElementById("updateChangelogHtml").innerHTML =
-		marked( document.getElementById("updateChangelogMd").textContent );
+		marked(rawMd);
 </script>
