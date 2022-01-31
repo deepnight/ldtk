@@ -2544,17 +2544,9 @@ textarea {
 
 			.version {
 				font-weight: bold;
-				font-size: 90pt;
-				line-height: 90pt;
+				font-size: 70pt;
+				line-height: 75pt;
 				text-shadow: 0px 0px 32px $darkOrange;
-				// em {
-				// 	display: block;
-				// 	color: $bgLighter;
-				// 	font-style: normal;
-				// 	text-transform: uppercase;
-				// 	font-size: 15pt;
-				// 	line-height: 1em;
-				// }
 			}
 
 			.title {
@@ -3970,6 +3962,10 @@ canvas#webgl {
 				padding-right: 4px;
 				cursor: pointer;
 
+				&:not(:first-child) {
+					margin-top: -8px;
+				}
+
 				.icon {
 					width: 50px;
 					height: 28px;
@@ -3977,18 +3973,19 @@ canvas#webgl {
 					background-repeat: no-repeat;
 					background-position: left center;
 					background-size: contain;
-				}
-
-				&:first-child .icon {
-					background-image: url("../icons/worldLayer_top.svg");
+					transform: scaleY(-1);
 				}
 
 				&:last-child .icon {
+					background-image: url("../icons/worldLayer_top.svg");
+				}
+
+				&:first-child .icon {
 					opacity: 0.5;
 				}
 
 				.label {
-					font-size: 14pt;
+					font-size: 10pt;
 					color: $bgLight;
 					padding: 0px 4px;
 					border-radius: 4px;
@@ -3997,9 +3994,14 @@ canvas#webgl {
 				}
 
 				&.active {
+					z-index: 2;
+					margin-left: 4px;
 					border-color: $orange;
-					background-color: $bgLight;
+					pointer-events: none;
+					// background-color: $bgMed;
+
 					.icon {
+						opacity: 1;
 						filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);
 					}
 					.label {
@@ -4009,6 +4011,7 @@ canvas#webgl {
 				}
 
 				&:not(.active):hover {
+					margin-left: 2px;
 					background-color: $bgMed;
 					.icon {
 						filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10);

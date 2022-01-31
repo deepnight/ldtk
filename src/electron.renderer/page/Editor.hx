@@ -631,19 +631,19 @@ class Editor extends Page {
 				setShowDetails( !settings.v.showDetails );
 
 			case K.PGDOWN if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				if( curWorldDepth<project.getHighestLevelDepth() ) {
-					if( !worldMode )
-						setWorldMode(true);
-					else
-						selectWorldDepth(curWorldDepth+1);
-				}
-
-			case K.PGUP if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( curWorldDepth>project.getLowestLevelDepth() ) {
 					if( !worldMode )
 						setWorldMode(true);
 					else
 						selectWorldDepth(curWorldDepth-1);
+				}
+
+			case K.PGUP if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				if( curWorldDepth<project.getHighestLevelDepth() ) {
+					if( !worldMode )
+						setWorldMode(true);
+					else
+						selectWorldDepth(curWorldDepth+1);
 				}
 
 

@@ -333,7 +333,7 @@ class WorldRender extends dn.Process {
 	function sortWorldDepths() {
 		for(d in project.getLowestLevelDepth()...project.getHighestLevelDepth()+1)
 			if( worldLayers.exists(d) )
-				root.over( worldLayers.get(d) );
+				root.under( worldLayers.get(d) );
 	}
 
 	/** Insert world level to its depth wrapper **/
@@ -645,7 +645,7 @@ class WorldRender extends dn.Process {
 
 		// Depths
 		if( l.worldDepth!=editor.curWorldDepth ) {
-			if( l.worldDepth>editor.curWorldDepth ) {
+			if( l.worldDepth<editor.curWorldDepth ) {
 				// Above
 				wl.outline.alpha*=0.45;
 				wl.bgWrapper.visible = false;
@@ -660,11 +660,8 @@ class WorldRender extends dn.Process {
 				wl.outline.alpha*=0.2;
 				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
 					wl.bgWrapper.alpha*=0.3;
-				// wl.render.filter = new h2d.filter.Blur(32);
 			}
 		}
-		// else
-		// 	wl.render.filter = null;
 	}
 
 	public function updateLayout() {
