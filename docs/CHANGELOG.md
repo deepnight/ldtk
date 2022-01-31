@@ -1,4 +1,4 @@
-# 1.0.0
+# 1.0.0 - Gone gold!
 
 ## Entity references
 
@@ -32,8 +32,8 @@ Thanks to major optimizations, general performances will see a big boost, while 
 
 Loading and Saving operations were also vastly improved:
   - **Saving time** for large projects is much faster (approx. 8-15 times!) by caching elements that weren't modified.
-  - **Progress bars** will provide better feedback when working on large projects.
-  - **Backup** system will be faster and more reliable
+  - **Progress bars** provide better feedback when working on large projects.
+  - **Backup** system are faster and more reliable.
 
 ![](1.0.0-saving.gif)
 
