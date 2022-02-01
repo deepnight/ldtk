@@ -372,6 +372,7 @@ class EditProject extends ui.modal.Panel {
 			()->project.tutorialDesc,
 			(v)->{
 				project.tutorialDesc = v;
+				editor.ge.emit(ProjectSettingsChanged);
 			}
 		);
 

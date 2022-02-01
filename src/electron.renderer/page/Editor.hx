@@ -265,15 +265,7 @@ class Editor extends Page {
 		}
 	}
 
-	public function selectProject(p:data.Project) {
-		watcher.clearAllWatches();
-		ui.modal.Dialog.closeAll();
-
-		project = p;
-		project.tidy();
-
-		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
-
+	function updateBanners() {
 		// Display "backup" header
 		if( project.isBackup() ) {
 			var jBackup = new J('<div class="backupHeader"/>');
@@ -299,6 +291,18 @@ class Editor extends Page {
 		}
 		else
 			setPermanentNotification("tutorialDesc");
+	}
+
+	public function selectProject(p:data.Project) {
+		watcher.clearAllWatches();
+		ui.modal.Dialog.closeAll();
+
+		project = p;
+		project.tidy();
+
+		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
+
+		updateBanners();
 
 		// Check external enums
 		if( !project.isBackup() ) {
@@ -1828,6 +1832,7 @@ class Editor extends Page {
 			case TilesetDefAdded(td):
 
 			case ProjectSettingsChanged:
+				updateBanners();
 				updateAppBg();
 
 			case LayerDefChanged(defUid):
