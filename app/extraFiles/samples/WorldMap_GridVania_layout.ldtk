@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456585,
+	"appBuildId": 456586,
 	"nextUid": 139,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "GridVania",
@@ -42,7 +42,7 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"inactiveOpacity": 0.6,
+			"inactiveOpacity": 0.8,
 			"hideInList": false,
 			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
