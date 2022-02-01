@@ -405,15 +405,6 @@ class FieldDefsForm {
 		} );
 
 
-		// Ref link to centers
-		var jRefLinkCenter = jForm.find("input[name=refLinkToCenter]");
-		var i = Input.linkToHtmlInput( curField.refLinkToCenter, jRefLinkCenter );
-		i.onChange = onFieldChange;
-		if( curField.editorDisplayMode==RefLink )
-			jRefLinkCenter.parent().show();
-		else
-			jRefLinkCenter.parent().hide();
-
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayMode]"),
 			ldtk.Json.FieldDisplayMode,
@@ -437,7 +428,8 @@ class FieldDefsForm {
 					case EntityTile: L.t._("Replace entity tile");
 					case ArrayCountWithLabel: L.t._("Show array length with label");
 					case ArrayCountNoLabel: L.t._("Show array length only");
-					case RefLink: L.t._("Show a link with reference");
+					case RefLinkBetweenCenters: L.t._("Draw a link between reference centers");
+					case RefLinkBetweenPivots: L.t._("Draw a link between reference pivots");
 				}
 			},
 
@@ -451,7 +443,7 @@ class FieldDefsForm {
 					case EntityTile:
 						curField.isEnum() && isEntityField() || curField.type==F_Tile;
 
-					case RefLink:
+					case RefLinkBetweenCenters, RefLinkBetweenPivots:
 						curField.type==F_EntityRef;
 
 					case Points, PointStar:
@@ -490,7 +482,7 @@ class FieldDefsForm {
 			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
 				i.setEnabled(true);
 
-			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLink:
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters:
 				i.setEnabled(false);
 		}
 		i.onChange = onFieldChange;

@@ -213,17 +213,34 @@ class FieldInstanceRender {
 
 			case EntityTile:
 
-			case RefLink:
+			case RefLinkBetweenCenters:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.getRefAttachX(fd) - ei.x;
-						var fy = ei.getRefAttachY(fd) - ei.y;
+						var fx = ei.centerX - ei.x;
+						var fy = ei.centerY - ei.y;
 						for(i in 0...fi.getArrayLength()) {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.getRefAttachX(fd) + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
-							var ty = M.round( tei.getRefAttachY(fd) + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							renderRefLink(g, baseColor, fx,fy, tx,ty);
+						}
+
+					case LevelCtx(l):
+				}
+
+			case RefLinkBetweenPivots:
+				switch ctx {
+					case EntityCtx(g, ei, ld):
+						var fx = ei.x - ei.x;
+						var fy = ei.y - ei.y;
+						for(i in 0...fi.getArrayLength()) {
+							var tei = fi.getEntityRefInstance(i);
+							if( tei==null )
+								continue;
+							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
 							renderRefLink(g, baseColor, fx,fy, tx,ty);
 						}
 
@@ -262,7 +279,8 @@ class FieldInstanceRender {
 							switch fd.editorDisplayMode {
 								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 								case Points, PointStar:
-								case RefLink:
+								case RefLinkBetweenCenters:
+								case RefLinkBetweenPivots:
 								case PointPath, PointPathLoop:
 									// Next point connects to this one
 									fx = tx;

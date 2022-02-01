@@ -132,10 +132,10 @@ class EntityInstance {
 	}
 
 	public inline function getRefAttachX(fd:data.def.FieldDef) {
-		return fd.refLinkToCenter ? centerX : x;
+		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerX : x;
 	}
 	public inline function getRefAttachY(fd:data.def.FieldDef) {
-		return fd.refLinkToCenter ? centerY : y;
+		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
 	final overEdgePad = 4;
@@ -347,7 +347,7 @@ class EntityInstance {
 				return null;
 
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLink ) )
+				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLinkBetweenCenters || fi.def.editorDisplayMode==RefLinkBetweenPivots ) )
 					return fi;
 		}
 		return null;
