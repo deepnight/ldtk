@@ -62,7 +62,7 @@ class FieldDef {
 		useForSmartColor = getDefaultUseForSmartColor(t);
 		defaultOverride = null;
 		symmetricalRef = false;
-		autoChainRef = false;
+		autoChainRef = true;
 		allowOutOfLevelRef = true;
 		allowedRefs = OnlySame;
 		allowedRefTags = new Tags();
@@ -134,7 +134,7 @@ class FieldDef {
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
-		o.autoChainRef = JsonTools.readBool(json.autoChainRef, false);
+		o.autoChainRef = JsonTools.readBool(json.autoChainRef, true);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
