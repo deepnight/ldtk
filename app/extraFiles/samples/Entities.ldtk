@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456497,
+	"appBuildId": 456585,
 	"nextUid": 104,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -1418,66 +1419,7 @@
 			{ "id": "OnPlayerAttack", "tileId": 245, "color": 11036746, "__tileSrcRect": [80,240,16,16] },
 			{ "id": "OnMobEnter", "tileId": 230, "color": 7823786, "__tileSrcRect": [96,224,16,16] }
 		], "iconTilesetUid": 99, "externalRelPath": null, "externalFileChecksum": null }
-	], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "tutorial",
-			"__type": "String",
-			"uid": 80,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		},
-		{
-			"identifier": "textColor",
-			"__type": "Color",
-			"uid": 81,
-			"type": "F_Color",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": true,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": { "id": "V_Int", "params": [16768000] },
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+	], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Entities_demo",
@@ -1495,24 +1437,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFEC73",
+			"__smartColor": "#B5B5C7",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",
-					"__type": "String",
-					"defUid": 80,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": [
-							"Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates."
-						]
-					}]
-				},
-				{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 81, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",

@@ -26,7 +26,7 @@
 	"__smartColor": "#C5A0AC",
 	"__bgPos": null,
 	"externalRelPath": null,
-	"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
+	"fieldInstances": [],
 	"layerInstances": [
 		{
 			"__identifier": "IntGrid",

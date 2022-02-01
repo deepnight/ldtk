@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456417,
+	"appBuildId": 456585,
 	"nextUid": 10,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -41,8 +42,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -58,36 +60,7 @@
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		}
-	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "tutorial",
-			"__type": "String",
-			"uid": 8,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
@@ -108,18 +81,7 @@
 			"__smartColor": "#92BCAB",
 			"__bgPos": null,
 			"externalRelPath": "SeparateLevelFiles/Level_0.ldtkl",
-			"fieldInstances": [{
-				"__identifier": "tutorial",
-				"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
-				"__type": "String",
-				"defUid": 8,
-				"realEditorValues": [{
-					"id": "V_String",
-					"params": [
-						"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
-					]
-				}]
-			}],
+			"fieldInstances": [],
 			"layerInstances": null,
 			"__neighbours": []
 		},
@@ -142,7 +104,7 @@
 			"__smartColor": "#9B9DB9",
 			"__bgPos": null,
 			"externalRelPath": "SeparateLevelFiles/Level_1.ldtkl",
-			"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
+			"fieldInstances": [],
 			"layerInstances": null,
 			"__neighbours": []
 		},
@@ -165,7 +127,7 @@
 			"__smartColor": "#C5A0AC",
 			"__bgPos": null,
 			"externalRelPath": "SeparateLevelFiles/Level_2.ldtkl",
-			"fieldInstances": [{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 8, "realEditorValues": [] }],
+			"fieldInstances": [],
 			"layerInstances": null,
 			"__neighbours": []
 		}

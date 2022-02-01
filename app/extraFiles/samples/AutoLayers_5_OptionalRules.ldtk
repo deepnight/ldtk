@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456417,
-	"nextUid": 157,
+	"appBuildId": 456585,
+	"nextUid": 159,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "level_x%gx,y%gy",
+	"tutorialDesc": "This sample shows how to use OPTIONAL rules to create biomes and variations easily.\n\nClick the \"RULES\" button on the left to see all the rule groups. Some groups are BLUE: they are optional which means they are disabled by default, and can be enabled only in specific levels.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -41,8 +42,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -1458,6 +1460,7 @@
 			"identifier": "Caves",
 			"uid": 18,
 			"relPath": "atlas/Cavernas_by_Adam_Saltsman.png",
+			"embedAtlas": null,
 			"pxWid": 96,
 			"pxHei": 256,
 			"tileGridSize": 8,
@@ -1493,92 +1496,7 @@
 		{ "id": "Wood_surface", "tileId": null, "color": 8470314, "__tileSrcRect": null },
 		{ "id": "Dirt_surface", "tileId": null, "color": 12753004, "__tileSrcRect": null },
 		{ "id": "Stone_surface", "tileId": null, "color": 8685190, "__tileSrcRect": null }
-	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "tutorial",
-			"__type": "String",
-			"uid": 113,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		},
-		{
-			"identifier": "color",
-			"__type": "Color",
-			"uid": 115,
-			"type": "F_Color",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": true,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": { "id": "V_Int", "params": [16766464] },
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		},
-		{
-			"identifier": "fog_intensity",
-			"__type": "Float",
-			"uid": 148,
-			"type": "F_Float",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "NameAndValue",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": 0,
-			"max": 1,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Green_hills",
@@ -1596,31 +1514,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFE873",
+			"__smartColor": "#737373",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "This sample shows how to use OPTIONAL rules to create biomes and variations easily.  Click the \"RULES\" button on the left to see all the rule groups. Some are marked as \"OPT.\": they are optional which means they are disabled by default, and can be enabled only in specific levels.",
-					"__type": "String",
-					"defUid": 113,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": [
-							"This sample shows how to use OPTIONAL rules to create biomes and variations easily.  Click the \"RULES\" button on the left to see all the rule groups. Some are marked as \"OPT.\": they are optional which means they are disabled by default, and can be enabled only in specific levels."
-						]
-					}]
-				},
-				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] },
-				{
-					"__identifier": "fog_intensity",
-					"__value": 0.2,
-					"__type": "Float",
-					"defUid": 148,
-					"realEditorValues": [{ "id": "V_Float", "params": [0.2] }]
-				}
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -2905,20 +2802,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFE873",
+			"__smartColor": "#737373",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{ "__identifier": "tutorial", "__value": null, "__type": "String", "defUid": 113, "realEditorValues": [] },
-				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] },
-				{
-					"__identifier": "fog_intensity",
-					"__value": 0.9,
-					"__type": "Float",
-					"defUid": 148,
-					"realEditorValues": [{ "id": "V_Float", "params": [0.9] }]
-				}
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -4204,20 +4091,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFE873",
+			"__smartColor": "#737373",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": null,
-					"__type": "String",
-					"defUid": 113,
-					"realEditorValues": [null]
-				},
-				{ "__identifier": "color", "__value": "#FFD600", "__type": "Color", "defUid": 115, "realEditorValues": [] },
-				{ "__identifier": "fog_intensity", "__value": 0, "__type": "Float", "defUid": 148, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",
@@ -5496,35 +5373,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#9FF5D4",
+			"__smartColor": "#737373",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "This level only uses rules that are NOT optional.",
-					"__type": "String",
-					"defUid": 113,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["This level only uses rules that are NOT optional."]
-					}]
-				},
-				{
-					"__identifier": "color",
-					"__value": "#50EDB0",
-					"__type": "Color",
-					"defUid": 115,
-					"realEditorValues": [{ "id": "V_Int", "params": [5303728] }]
-				},
-				{
-					"__identifier": "fog_intensity",
-					"__value": 0.5,
-					"__type": "Float",
-					"defUid": 148,
-					"realEditorValues": [{ "id": "V_Float", "params": [0.5] }]
-				}
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid",

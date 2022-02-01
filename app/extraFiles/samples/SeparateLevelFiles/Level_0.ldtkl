@@ -26,18 +26,7 @@
 	"__smartColor": "#92BCAB",
 	"__bgPos": null,
 	"externalRelPath": null,
-	"fieldInstances": [{
-		"__identifier": "tutorial",
-		"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
-		"__type": "String",
-		"defUid": 8,
-		"realEditorValues": [{
-			"id": "V_String",
-			"params": [
-				"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
-			]
-		}]
-	}],
+	"fieldInstances": [],
 	"layerInstances": [
 		{
 			"__identifier": "IntGrid",
