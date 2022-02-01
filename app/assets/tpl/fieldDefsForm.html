@@ -209,9 +209,14 @@
 			A quick recommendation here: don't display too many entity fields or the editor view would become really cluttered.
 		</info>
 	</dt>
-	<dd>
+	<dd class="displayMode">
 		<select name="editorDisplayMode" id="editorDisplayMode"></select>
 		<select name="editorDisplayPos" id="editorDisplayPos"></select>
+
+		<label for="refLinkToCenter">
+			<input type="checkbox" name="refLinkToCenter" id="refLinkToCenter" title="If enabled, the reference visual link will connect the CENTERS of the entities instead of their PIVOT coordinate."/>
+			draw link to center
+		</label>
 	</dd>
 
 

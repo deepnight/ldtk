@@ -216,14 +216,14 @@ class FieldInstanceRender {
 			case RefLink:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.getRefAttachX() - ei.x;
-						var fy = ei.getRefAttachY() - ei.y;
+						var fx = ei.getRefAttachX(fd) - ei.x;
+						var fy = ei.getRefAttachY(fd) - ei.y;
 						for(i in 0...fi.getArrayLength()) {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.getRefAttachX() + tei._li.level.worldX - ( ei.getRefAttachX() + ei._li.level.worldX ) );
-							var ty = M.round( tei.getRefAttachY() + tei._li.level.worldY - ( ei.getRefAttachY() + ei._li.level.worldY ) );
+							var tx = M.round( tei.getRefAttachX(fd) + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.getRefAttachY(fd) + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
 							renderRefLink(g, baseColor, fx,fy, tx,ty);
 						}
 

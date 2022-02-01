@@ -405,6 +405,15 @@ class FieldDefsForm {
 		} );
 
 
+		// Ref link to centers
+		var jRefLinkCenter = jForm.find("input[name=refLinkToCenter]");
+		var i = Input.linkToHtmlInput( curField.refLinkToCenter, jRefLinkCenter );
+		i.onChange = onFieldChange;
+		if( curField.editorDisplayMode==RefLink )
+			jRefLinkCenter.parent().show();
+		else
+			jRefLinkCenter.parent().hide();
+
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayMode]"),
 			ldtk.Json.FieldDisplayMode,

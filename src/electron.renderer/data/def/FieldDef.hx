@@ -38,6 +38,7 @@ class FieldDef {
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
 	public var symmetricalRef : Bool;
 	public var autoChainRef : Bool;
+	public var refLinkToCenter : Bool;
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
 	public var allowedRefTags : Tags;
@@ -63,6 +64,7 @@ class FieldDef {
 		defaultOverride = null;
 		symmetricalRef = false;
 		autoChainRef = true;
+		refLinkToCenter = false;
 		allowOutOfLevelRef = true;
 		allowedRefs = OnlySame;
 		allowedRefTags = new Tags();
@@ -135,6 +137,7 @@ class FieldDef {
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
 		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
 		o.autoChainRef = JsonTools.readBool(json.autoChainRef, true);
+		o.refLinkToCenter = JsonTools.readBool(json.refLinkToCenter, false);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
@@ -173,6 +176,7 @@ class FieldDef {
 			textLanguageMode: type!=F_Text ? null : JsonTools.writeEnum(textLanguageMode, true),
 			symmetricalRef: symmetricalRef,
 			autoChainRef: autoChainRef,
+			refLinkToCenter: refLinkToCenter,
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
 			allowedRefTags: allowedRefTags.toJson(),

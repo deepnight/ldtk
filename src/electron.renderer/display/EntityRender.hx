@@ -257,14 +257,18 @@ class EntityRender extends dn.Process {
 
 		// Render ref links from entities in different levels
 		for(refEi in ei._project.getEntityInstancesReferingTo(ei)) {
-			if( refEi._li.level==ei._li.level || !refEi.hasEntityRefTo(ei,true) )
+			if( refEi._li.level==ei._li.level )
+				continue;
+
+			var fi = refEi.getEntityRefFieldTo(ei,true);
+			if( fi==null )
 				continue;
 
 			var col = refEi.getSmartColor(true);
-			var fx = ( refEi.getRefAttachX() + refEi._li.level.worldX ) - ei.worldX;
-			var fy = ( refEi.getRefAttachY() + refEi._li.level.worldY ) - ei.worldY;
-			var tx = ei.getRefAttachX() - ei.x;
-			var ty = ei.getRefAttachY() - ei.y;
+			var fx = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			var fy = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var tx = ei.getRefAttachX(fi.def) - ei.x;
+			var ty = ei.getRefAttachY(fi.def) - ei.y;
 			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
 		}
 

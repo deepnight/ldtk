@@ -131,11 +131,11 @@ class EntityInstance {
 		return def.resizableY ? centerY : ( getCy(ld)+0.5 ) * ld.gridSize;
 	}
 
-	public inline function getRefAttachX() {
-		return x;
+	public inline function getRefAttachX(fd:data.def.FieldDef) {
+		return fd.refLinkToCenter ? centerX : x;
 	}
-	public inline function getRefAttachY() {
-		return y;
+	public inline function getRefAttachY(fd:data.def.FieldDef) {
+		return fd.refLinkToCenter ? centerY : y;
 	}
 
 	final overEdgePad = 4;
@@ -321,28 +321,36 @@ class EntityInstance {
 	/**
 		Return TRUE if target EntityInstance has a reference to This in given field.
 	**/
-	public function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) {
-		if( fd==null ) {
+	public inline function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) {
+		return getEntityRefFieldTo(targetEi, fd, onlyIfLinkIsDisplayed) != null;
+	}
+
+
+	/**
+		Return TRUE if target EntityInstance has a reference to This in given field.
+	**/
+	public function getEntityRefFieldTo(targetEi:EntityInstance, ?onlyFd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) : Null<FieldInstance> {
+		if( onlyFd==null ) {
 			// In any field
 			for(fi in fieldInstances)
 			for(i in 0...fi.getArrayLength())
 				if( fi.getEntityRefIid(i)==targetEi.iid )
-					return true;
+					return fi;
 		}
 		else {
 			// In specified field
-			if( fd.type!=F_EntityRef )
-				return false;
+			if( onlyFd.type!=F_EntityRef )
+				return null;
 
-			var fi = getFieldInstance(fd,false);
+			var fi = getFieldInstance(onlyFd,false);
 			if( fi==null )
-				return false;
+				return null;
 
 			for(i in 0...fi.getArrayLength())
 				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLink ) )
-					return true;
+					return fi;
 		}
-		return false;
+		return null;
 	}
 
 

@@ -284,7 +284,7 @@ class EntityTool extends tool.LayerTool<Int> {
 					display.FieldInstanceRender.renderRefLink(
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
-						ei.getRefAttachX(), ei.getRefAttachY(),
+						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
 						alpha
 					);
 
