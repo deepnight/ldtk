@@ -1718,6 +1718,8 @@ class Editor extends Page {
 					clearResizeTool();
 
 			case EntityInstanceChanged(ei):
+				if( selectionTool.any() )
+					selectionTool.invalidateRender();
 
 			case ToolOptionChanged:
 				updateTool();
