@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456586,
+	"appBuildId": 456588,
 	"nextUid": 104,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -1043,7 +1043,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "RefLink",
+					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -1152,7 +1152,7 @@
 			]
 		},
 		{
-			"identifier": "Trigger",
+			"identifier": "TriggerArea",
 			"uid": 82,
 			"tags": ["trigger"],
 			"width": 16,
@@ -1186,7 +1186,7 @@
 					"canBeNull": true,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "RefLink",
+					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -1301,7 +1301,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "RefLink",
+					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -1849,7 +1849,7 @@
 							}]
 						},
 						{
-							"__identifier": "Trigger",
+							"__identifier": "TriggerArea",
 							"__grid": [11,16],
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
@@ -1897,7 +1897,7 @@
 							]
 						},
 						{
-							"__identifier": "Trigger",
+							"__identifier": "TriggerArea",
 							"__grid": [39,5],
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
