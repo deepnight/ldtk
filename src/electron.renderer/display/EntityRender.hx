@@ -261,10 +261,10 @@ class EntityRender extends dn.Process {
 				continue;
 
 			var col = refEi.getSmartColor(true);
-			var fx = ( refEi.centerX + refEi._li.level.worldX ) - ei.worldX;
-			var fy = ( refEi.centerY + refEi._li.level.worldY ) - ei.worldY;
-			var tx = ei.centerX - ei.x;
-			var ty = ei.centerY - ei.y;
+			var fx = ( refEi.getRefAttachX() + refEi._li.level.worldX ) - ei.worldX;
+			var fy = ( refEi.getRefAttachY() + refEi._li.level.worldY ) - ei.worldY;
+			var tx = ei.getRefAttachX() - ei.x;
+			var ty = ei.getRefAttachY() - ei.y;
 			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
 		}
 

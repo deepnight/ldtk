@@ -115,20 +115,27 @@ class EntityInstance {
 		return ei;
 	}
 
-	public function getCx(ld:data.def.LayerDef) {
+	public inline function getCx(ld:data.def.LayerDef) {
 		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCy(ld:data.def.LayerDef) {
+	public inline function getCy(ld:data.def.LayerDef) {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getPointOriginX(ld:data.def.LayerDef) {
+	public inline function getPointOriginX(ld:data.def.LayerDef) {
 		return def.resizableX ? centerX : ( getCx(ld)+0.5 ) * ld.gridSize;
 	}
 
-	public function getPointOriginY(ld:data.def.LayerDef) {
+	public inline function getPointOriginY(ld:data.def.LayerDef) {
 		return def.resizableY ? centerY : ( getCy(ld)+0.5 ) * ld.gridSize;
+	}
+
+	public inline function getRefAttachX() {
+		return x;
+	}
+	public inline function getRefAttachY() {
+		return y;
 	}
 
 	final overEdgePad = 4;
