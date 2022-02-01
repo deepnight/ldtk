@@ -460,7 +460,7 @@
 		},
 		"EnumTagValue": {
 			"description": "In a tileset definition, enum based tag infos",
-			"title": "ldtk.EnumTagValue",
+			"title": "EnumTagValue",
 			"required": [
 				"enumValueId",
 				"tileIds"
@@ -1524,7 +1524,7 @@
 		},
 		"EntityReferenceInfos": {
 			"description": "This object is used in Field Instances to describe an EntityRef value.",
-			"title": "ldtk.EntityReferenceInfos",
+			"title": "EntityReferenceInfos",
 			"required": [
 				"entityIid",
 				"layerIid",
@@ -1588,7 +1588,7 @@
 		},
 		"TileCustomMetadata": {
 			"description": "In a tileset definition, user defined meta-data of a tile.",
-			"title": "ldtk.TileCustomMetadata",
+			"title": "TileCustomMetadata",
 			"required": [
 				"data",
 				"tileId"
