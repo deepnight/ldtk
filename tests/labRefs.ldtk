@@ -648,7 +648,7 @@
 					"uid": 41,
 					"type": "F_EntityRef",
 					"isArray": false,
-					"canBeNull": true,
+					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenPivots",
@@ -669,35 +669,6 @@
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
 					"allowedRefTags": ["MobData"],
-					"tilesetUid": null
-				},
-				{
-					"identifier": "Entity_ref",
-					"__type": "EntityRef",
-					"uid": 44,
-					"type": "F_EntityRef",
-					"isArray": false,
-					"canBeNull": true,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "RefLinkBetweenPivots",
-					"editorDisplayPos": "Above",
-					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
 					"tilesetUid": null
 				}
 			]
@@ -734,7 +705,7 @@
 					"uid": 39,
 					"type": "F_EntityRef",
 					"isArray": false,
-					"canBeNull": true,
+					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenPivots",
@@ -1100,23 +1071,20 @@
 							"height": 24,
 							"defUid": 40,
 							"px": [424,112],
-							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": {
-										"entityIid": "4b2cca30-66b0-11ec-8a2a-27993f5afb45",
-										"layerIid": "0f070c30-66b0-11ec-8917-0548426d19e2",
-										"levelIid": "ee57e400-66b0-11ec-8917-7d1d935ce7e5"
-									},
-									"__type": "EntityRef",
-									"defUid": 41,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["4b2cca30-66b0-11ec-8a2a-27993f5afb45"]
-									}]
+							"fieldInstances": [{
+								"__identifier": "patrol",
+								"__value": {
+									"entityIid": "4b2cca30-66b0-11ec-8a2a-27993f5afb45",
+									"layerIid": "0f070c30-66b0-11ec-8917-0548426d19e2",
+									"levelIid": "ee57e400-66b0-11ec-8917-7d1d935ce7e5"
 								},
-								{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 44, "realEditorValues": [] }
-							]
+								"__type": "EntityRef",
+								"defUid": 41,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["4b2cca30-66b0-11ec-8a2a-27993f5afb45"]
+								}]
+							}]
 						},
 						{
 							"__identifier": "PatrolPoint",
