@@ -16,8 +16,8 @@ class EntityTool extends tool.LayerTool<Int> {
 		PREV_CHAINABLE_EI = null;
 	}
 
-	public static inline function isChainingRef() {
-		return PREV_CHAINABLE_EI!=null; // TODO better check
+	public inline function isChainingRef() {
+		return getEntityChainableFieldInstance(PREV_CHAINABLE_EI)!=null;
 	}
 
 	override function onBeforeToolActivation() {
@@ -118,7 +118,8 @@ class EntityTool extends tool.LayerTool<Int> {
 			case Entity(li,ei) if( ev.button==0 ):
 				if( tryToChainRefTo(PREV_CHAINABLE_EI, ei) )
 					PREV_CHAINABLE_EI = ei;
-				editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
+				if( !editor.gifMode )
+					editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
 				stopUsing(m);
 				return;
 
@@ -199,12 +200,13 @@ class EntityTool extends tool.LayerTool<Int> {
 						// Finalize entity
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
+						// if( !editor.gifMode )
+							// editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
 						if( ei.def.isResizable() && editor.resizeTool!=null )
 							editor.resizeTool.startUsing(ev, m);
-						else
+						else if( !editor.gifMode )
 							editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
 						ei.tidy(project, curLayerInstance); // Force creation of field instances & update _li
 

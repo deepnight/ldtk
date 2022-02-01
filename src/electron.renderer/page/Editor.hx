@@ -53,6 +53,8 @@ class Editor extends Page {
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
+	public var gifMode = false;
+
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -562,7 +564,7 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
-				else if( Std.is(curTool, tool.lt.EntityTool) && tool.lt.EntityTool.isChainingRef() )
+				else if( Std.is(curTool, tool.lt.EntityTool) && Std.downcast(curTool,tool.lt.EntityTool).isChainingRef() )
 					tool.lt.EntityTool.cancelRefChaining();
 				else if( ui.ValuePicker.exists() )
 					ui.ValuePicker.ME.cancel();
