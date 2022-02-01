@@ -3720,6 +3720,13 @@ canvas#webgl {
 					}
 				}
 
+				&.hiddenFromList {
+					.name {
+						font-style: italic;
+						color: $red;
+					}
+				}
+
 				.index {
 					display: flex;
 					align-items: center;
