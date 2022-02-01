@@ -113,6 +113,11 @@ class Definitions {
 			l.tilesetDefUid = td.uid;
 		}
 
+		if( type==Entities ) {
+			l.hideFieldsWhenInactive = true;
+			l.inactiveOpacity = 0.6;
+		}
+
 		layers.insert(0,l);
 		_project.tidy();
 		return l;
