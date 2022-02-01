@@ -100,6 +100,8 @@ class Lang {
 			case LangXml: t._("XML/HTML");
 			case LangMarkdown: t._("Markdown");
 
+			case LangLog: t._("Log file");
+
 			case LangPython: t._("Python");
 			case LangRuby: t._("Ruby");
 			case LangC: t._("C/C++/C#");

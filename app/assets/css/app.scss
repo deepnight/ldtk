@@ -2378,14 +2378,19 @@ textarea {
 				white-space: nowrap;
 			}
 
-			.logPath {
-				flex: 1 0 300px;
-				padding: 4px;
-				text-align: left;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				border: 1px solid $bgLight;
+			dd.log {
+				flex-wrap: nowrap;
+
+				.logPath {
+					flex: 1 0 300px;
+					padding: 4px;
+					text-align: left;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					border: 1px solid $bgLight;
+				}
 			}
+
 		}
 	}
 }

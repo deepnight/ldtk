@@ -23,4 +23,7 @@ typedef CodeMirrorConfig = {
 	var ?indentWithTabs: Bool;
 	var ?tabSize: Int;
 	var ?autofocus: Bool;
+
+	/** True, false or "nocursor" **/
+	var ?readOnly: haxe.extern.EitherType<Bool,String>;
 }
