@@ -112,6 +112,9 @@ class WorldTool extends dn.Process {
 		dragStarted = false;
 		clicked = true;
 		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode?null:editor.curLevel);
+		
+		if( project.isBackup() )
+			clickedLevel = null;
 
 		if( clickedLevel!=null ) {
 			levelOriginX = clickedLevel.worldX;

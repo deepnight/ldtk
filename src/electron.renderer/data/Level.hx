@@ -553,7 +553,8 @@ class Level {
 					case PointPath, PointPathLoop:
 					case RadiusPx:
 					case RadiusGrid:
-					case RefLink:
+					case RefLinkBetweenCenters:
+					case RefLinkBetweenPivots:
 				}
 			}
 		return false;

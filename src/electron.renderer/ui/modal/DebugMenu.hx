@@ -22,6 +22,20 @@ class DebugMenu extends ui.modal.ContextMenu {
 		});
 		#end
 
+		#if debug
+		add({
+			label: L.untranslated("Gif mode="+editor.gifMode),
+			cb: ()->{
+				editor.gifMode = !editor.gifMode;
+				if( editor.gifMode )
+					N.success("GIF mode: ON");
+				else
+					N.error("GIF mode: off");
+				App.ME.clearDebug();
+			}
+		});
+		#end
+
 		if( editor!=null ) {
 
 			add({

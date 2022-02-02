@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456464,
+	"appBuildId": 456585,
 	"nextUid": 64,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "This example demonstrates the use of rules to create complex but dynamic mosaics.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -41,8 +42,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -260,8 +262,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -521,66 +524,7 @@
 				"averageColors": "f234f233f234f234f234f234f344f344f234f234f233f233f233f233f234f234f244f244f233f223f244f244f244f244f244f244f244f244f344f344f234f233f234f234f234f234f223f223f233f233f344f344f234f244f244f244f234f244f244f244f234f234f244f244f244f244f244f244f234f234f234f234f234f234f244f244f234f234f234f244f233f233f233f244f244f244f234f234f234f234f233f234f234f234f244f244f244f234f234f234f233f234f234f234f234f234f234f234f234f244f233f234f233f234f233f12271224122f234f234f233f233f223f234f234f23431221122f234f234f234f244f244f233f234f234f234f234f234f234f233f244f244f233f234f234f234f234f234f234"
 			}
 		}
-	], "enums": [], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "tutorial",
-			"__type": "String",
-			"uid": 51,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		},
-		{
-			"identifier": "textColor",
-			"__type": "Color",
-			"uid": 52,
-			"type": "F_Color",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": true,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": { "id": "V_Int", "params": [16766208] },
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+	], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Mosaic_demo",
@@ -598,22 +542,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFE873",
+			"__smartColor": "#858587",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "This example demonstrates the use of rules to create complex but dynamic mosaics.",
-					"__type": "String",
-					"defUid": 51,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": ["This example demonstrates the use of rules to create complex but dynamic mosaics."]
-					}]
-				},
-				{ "__identifier": "textColor", "__value": "#FFD500", "__type": "Color", "defUid": 52, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Walls",

@@ -213,6 +213,13 @@
 					"boolean"
 				]
 			},
+			"tutorialDesc": {
+				"description": "This optional description is used by LDtk Samples to show up some informations and instructions.",
+				"type": [
+					"string",
+					"null"
+				]
+			},
 			"minifyJson": {
 				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
 				"type": [
@@ -737,7 +744,7 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`",
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`",
 					"enum": [
 						"Hidden",
 						"ValueOnly",
@@ -751,7 +758,8 @@
 						"RadiusGrid",
 						"ArrayCountWithLabel",
 						"ArrayCountNoLabel",
-						"RefLink"
+						"RefLinkBetweenPivots",
+						"RefLinkBetweenCenters"
 					]
 				},
 				"canBeNull": {
@@ -818,7 +826,7 @@
 					]
 				},
 				"textLanguageMode": {
-					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`",
 					"enum": [
 						"LangPython",
 						"LangRuby",
@@ -829,6 +837,7 @@
 						"LangMarkdown",
 						"LangJson",
 						"LangXml",
+						"LangLog",
 						null
 					]
 				},

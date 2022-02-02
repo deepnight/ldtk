@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456417,
-	"nextUid": 45,
+	"appBuildId": 456585,
+	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -41,8 +42,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": false,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -67,8 +69,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -93,8 +96,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -141,15 +145,16 @@
 		},
 		{
 			"__type": "IntGrid",
-			"identifier": "IntGrid_classic",
+			"identifier": "IntGrid_without_rules",
 			"type": "IntGrid",
 			"uid": 1,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -178,8 +183,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -321,8 +327,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -348,6 +355,7 @@
 			"resizableX": false,
 			"resizableY": false,
 			"keepAspectRatio": false,
+			"tileOpacity": 1,
 			"fillOpacity": 1,
 			"lineOpacity": 1,
 			"hollow": false,
@@ -387,6 +395,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -415,6 +424,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -443,6 +453,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -471,6 +482,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -499,6 +511,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -527,6 +540,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -547,7 +561,7 @@
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
-					"useForSmartColor": true,
+					"useForSmartColor": false,
 					"min": null,
 					"max": null,
 					"regex": null,
@@ -555,6 +569,7 @@
 					"defaultOverride": { "id": "V_Int", "params": [0] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -583,6 +598,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -611,6 +627,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -639,6 +656,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -667,6 +685,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -695,6 +714,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -723,6 +743,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": "LangXml",
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -734,25 +755,26 @@
 			"identifier": "Labels",
 			"uid": 10,
 			"tags": [],
-			"width": 8,
-			"height": 8,
-			"resizableX": false,
+			"width": 32,
+			"height": 16,
+			"resizableX": true,
 			"resizableY": false,
 			"keepAspectRatio": false,
+			"tileOpacity": 1,
 			"fillOpacity": 1,
 			"lineOpacity": 1,
 			"hollow": false,
 			"color": "#000000",
-			"renderMode": "Cross",
+			"renderMode": "Rectangle",
 			"showName": false,
 			"tilesetId": null,
 			"tileId": null,
-			"tileRenderMode": "Stretch",
+			"tileRenderMode": "FitInside",
 			"tileRect": null,
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
-			"pivotX": 0.5,
+			"pivotX": 0,
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
@@ -778,6 +800,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -806,6 +829,7 @@
 					"defaultOverride": { "id": "V_Int", "params": [8361387] },
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -822,7 +846,8 @@
 			"resizableX": true,
 			"resizableY": true,
 			"keepAspectRatio": false,
-			"fillOpacity": 1,
+			"tileOpacity": 0.25,
+			"fillOpacity": 0.4,
 			"lineOpacity": 1,
 			"hollow": true,
 			"color": "#A094D9",
@@ -861,6 +886,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -889,6 +915,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -905,7 +932,8 @@
 			"resizableX": true,
 			"resizableY": true,
 			"keepAspectRatio": true,
-			"fillOpacity": 1,
+			"tileOpacity": 0.25,
+			"fillOpacity": 0.3,
 			"lineOpacity": 1,
 			"hollow": true,
 			"color": "#95D994",
@@ -944,6 +972,7 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -972,6 +1001,64 @@
 					"defaultOverride": null,
 					"textLanguageMode": null,
 					"symmetricalRef": false,
+					"autoChainRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
+		},
+		{
+			"identifier": "EntityRefTest",
+			"uid": 46,
+			"tags": [],
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#94D9B3",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 45,
+			"tileId": 30,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "x": 224, "y": 16, "w": 16, "h": 16 },
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "target",
+					"__type": "EntityRef",
+					"uid": 47,
+					"type": "F_EntityRef",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLink",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -986,6 +1073,7 @@
 			"identifier": "Inca_front_by_Kronbits_extended",
 			"uid": 2,
 			"relPath": "atlas/Inca_front_by_Kronbits-extended.png",
+			"embedAtlas": null,
 			"pxWid": 320,
 			"pxHei": 224,
 			"tileGridSize": 16,
@@ -1014,6 +1102,7 @@
 			"identifier": "_Soul_s_RPG_Graphics_Icons",
 			"uid": 31,
 			"relPath": "atlas/RPG Graphics Icons by 7Soul's.png",
+			"embedAtlas": null,
 			"pxWid": 256,
 			"pxHei": 2048,
 			"tileGridSize": 16,
@@ -1023,49 +1112,38 @@
 			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
+			"cachedPixelData": null
+		},
+		{
+			"__cWid": 16,
+			"__cHei": 64,
+			"identifier": "Internal_Icons",
+			"uid": 45,
+			"relPath": null,
+			"embedAtlas": "LdtkIcons",
+			"pxWid": 256,
+			"pxHei": 1024,
+			"tileGridSize": 16,
+			"spacing": 0,
+			"padding": 0,
+			"tagsSourceEnumUid": null,
+			"enumTags": [],
+			"customData": [],
+			"savedSelections": [],
 			"cachedPixelData": {
-				"opaqueTiles": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000100000000100000000000000000000111000000001111101100001100110000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000100000000100000000000000000000111000000001111101100001100110000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-				"averageColors": "985498548854655587537963763386559b639b739b9496939497969b977a9b8a9a63966597779bbb676667666766666666666667666767676666666666666777697769876a9767876798678a688969896987677768886999788a9b765a968877799987668765a978b876a87879ab7987ba98b953c843b854a854b853b999b888b888c975ba65c976b888b852c763b888b744b666a78ad877c777c573c545c867a942aa51a972a471a175a48aa55aaa69a843a344a566a999ba65ba75ba85b785b786b78ab87aba79b975b776b877baa9ba53ba62ba72b772b685b779b768ba68b954b754b865ba98c877c977c987c787c787c789c778c979c877c777c788c999b943ba51b962b471b175b47ab54aba59b743b344b566b999b966c976c986c786c687c789c77ac979c877c677c777c999a953aa53a963a773a764a778a858aa57a953a754a865a9876843a842a843a854a8559843a999a888a999ab97ab75a975ba65aaaab765a568a868a944aa54a964a674a575a568a658aa59a854a555a666a9994ba9886497325a87569b586587436a635a983a77798b74557b734864895676948baa974399525666688869658b6597823a9847847a9c78337c738a7583887b648aaa689978968aa89a435842a59b5a85aa43697577777ca776667a7659975a97799978887997898a9b7a6693ab938b97a56a976588888ca8977877775aaa5a978a5369929a618a768a826b82873394818c979bb79d978b866ba68b9578327a639b968a466b8888328953758a7a74ca748a75858b68aa8b878c8877947c97b766bc9389547ca8859b6965997598539a44a97687547ca8886468538b96a96496326a62695378539657956878548aaa7c8478828b6a89539a869a9a9b86aa87ba6297437692a692865385485684aa88cb9888539853995398549977774399889889988899769b7598649a5398899866945697599a429b629a7295829385936b955a9a699953945596679aaa99769a76998697969687978a97799a79997797779888999968438742984287438743985297779777a999ba97ba65a864895385757853aa75a33495587545777667468a7568548854995299529962986297639756985599559853974298549975a766a866a876a676a676a678a667a768a766a666a666a777872389418952836181648149833888488633833384458aaa88228951896284718264825a8448895987438223855589987796bb64a69c8a8c6987bca5b5568abbc8bbbdba5998788868885a988b74696465566877687768876787678767786778687868776667677768888b768c868ca6879686a8879c877b8c8b8a77856688888bba8c98bb757a657ca97c983ca969896a746b735a868666b455744576777666366768566666666657678aaab77876777aaa7aaa3aaa6a976888688859988cb9ba857a857cb97ca83ca9699a6ba76ba85aaa8888b677766679997888399968796888688859998a87ba6579647b977a873a876885698769877a887a987ba978987899789b788b7b8b7988788978897aab8a428b718b9286938286858c865a8b6a8864844586668aaa69326a616b8265826185647b65596a6a6853634465666aaa6a426b616b8265826286648b665a6b6a6853644566666aaaaa99aa99aaa9a8a9a8aaa89ba99baa9aaaa9a8999aaa9aaa99aa99ab99ab9aab9aaa9aaa99aa9aaaa9aa9abb99aa69aaabaaaaa9abb9a9a9a9bba9aba9abaabbabaaaaaaa99aaaaaabbba9ab59aa8a998a998aa9a9aa88a988aa889b899b8a9a8a998899899a8abb89aa79ab47998a998a998aa988a988aa889b899b8a9a8a999aaa8899899a8abb89aa59aa9a999a999aa998a998ab9a99989b999b9a9a9aa9989999aa9abb98aa79ab9caa9aa99baa9cba99ba99bb99ac9aac9bab9baa99aa9aaa99a99ccc9abb59aaaaaaaaaaaaaaa9aaa9aba9ab999b99aaaaaaaaaaa9aaaaaaaabba9aa59aa7aaa7aaa7aaa999b79aa79aa79ab79ab7aaa7aaa799a79aa7aab79aa99ab389a6aaa6aaa6aaa69aa69aa69ab69ab6aaa6aaa9a9a69aa6aaa6abb69aa389a9aaa999999aa9abb99aa89ab8a9989998aa988a988aa889a899a8a9a8999889989998aaa899a589a8aaa8aaa8aaa89aa89ab89ab89ab8aaa8aaa899a89aa8abb89aa589a8a9989998aa988a988aa889a899b8a9a89998899899a8aab899a589a7aaa7aaa7aaa79aa79aa79ab79ab7aaa7aaa79aa7aaa7abb79aa389a9baa9aa99ba999a999ab99ab99ab9b9a9aaa999a99aa9bbc99ab58aa9aaacb76cb85cb96ca85ca86ca87cb87cb87cb86ca86cb86cb87ab76ac85ab86aa96a986aa89aa78ac88aa76a976aa87ab98ab75ab75ab95a995a886a989a979ab88aa76a976aa87ab999b879c879c979b979b979b989b879c879b879b879b879b975c755c845ca559a557a8599b597a5c9a5b7658765a995cbabb75bb85bb95b985b996b98ab979bb89ba75b876b986bba9ba77bb87bb97b897b898b89bb88abb8ab988b788b888baaab966ba76ba86b686b687b68ab779ba79b776b666b777b999aca9ada9adb9acb9acb9acb9aca9ada9aca9aca9aca9acb9acccacccacccacccacccacccacccacccacccacccacccaccccb76cc75cc86ca85ca86ca88ca78cc78cb76ca76ca76cb98c644c754c764c464c465c457c447c756c544c444c455c677bb76bb75bb85b985b986b989b978bb88ba75b976ba76bb98db64dc74db94d794d597d79cd77bdc8ada65d666d877d998db65dc75db85d795d697d79bd87bdb8ad976d666d877d998db75dc85db86da95d997da99da88dc88db86d976da87db97cb86cca88c97ab97bb868db98dcabdbaadb9adb9ab87cc867b97c998bc97a998bbaa8ccc8dddbdddacccacccaa86ab97a667a8888998998999889a976789b99589438a969a889a988989999997739878787778777877777777777778777877777777777777777777988898889888988898889889988898889888977798889888a877a887a887a787a777a789a778a878a877a677a777a88887779899899969996888a7776777988898887997799779977997799779987998799779977987799779979a979a979a979a979a979a989a989a979a9799979a979a97aa86aa96aa97a996a996a998a997aa87aa96a986a986aa9789979aa98baa6aa96a99aa9669979a979a98ca64c965ca8798889899e999b964ba88bbbbbc96abbbab9abb86a999ab97bbbbca77cb87cb97c897c798c89bc88acb8aca87c788c888cabbbb88bc98bca8b9a8b8a9b9acb99bbc9bba98b889b999bbbbb9aaaaaac7799c96ab73fa648b74939983999188b688889bbabdc8abf479789a96899569b479b86486437853a642f17592968175829796936896b3717472b7a4b6929886e643bbbb9abbb9ac99aa9c8a9d9bbc8abc8abddcfca8f975fa989879c3388337a4386a43a9338933a868f848f848f869f637f757a769f99bf426aa8b9a77879b998af779f7768a75c89bf955f259ca87aaaacba8a78bd999c9a98b74e245968a7789875386877764d582f56adb8a8a978559c9339a58a758aaa7aaa79aa79ba78ba7aaa7aaa7aaa7aaa78ba78ba77ca3aca39cb39cb36cb3a89aa8aaa8ab98ab88aba8aa989aa8aba8aa88ab88ab769ca6ac97ac97ac67acacbbaccc8baa8999aaaa7a998baa7a998cba9bba7bbaabbaabba8bba9aa9bbbaaa99aaaa99999888baaa88889a9989888998aaa98aa9aaa8aaa98a98a998caa99cccab998a9a9a889b69ba767ba5bbbb8ba98a95caa9cc87aa82abab8655b99a99bca7acf68b879c9b528b529a32ba668683b7a4c683f4647a9699729767b963ba8689657974a964fa759b8789758b97986c698ab64a775abb85ba739978e562bbba9bbabba89aa999bc9acdb9bcb8bdbdcdfbacf869f99a9887c4558444a455658ba47b847ba469f58bf57bf68bf469f567a777fa89f975aba998898a969897f867f7798965ca98f79cfa43ca98aaa9c99aaa8ad693c9ab87ace94394627987897589877866d964f964d8ac8a8a8455c47b969ba679497679654789758758659a9648764776498648544889387746654864479359ab4aa8577548654a757a989b8778aba6987987ba95787676667a97785379ab99887888687698779a889988a89989779b97a966a88865699a74aa87a786889878649556aa8678769a65787772868864a9867888733579867932768a7964668a897765627a76797787778a87986678756985997667768a96778768439448768985598876aa76878aa4868865aa868865875489768853888789879987a9779785998a9a87999997788987a9679865a78a9a558a98a8889675b87999758a9949987b8648ab959849879a96487645554a98484349ab5988598858876889687958885856598778885877598749765799587757855899467958676a877a995a9849994854787a6b977a999b9879bc97a97a99bba7798776667ba979547abb79878ba9778869777879799989658a97aa7768768965679bc4877866a985676566546a9869536999887758776a757877877786777a9878676777885556877a76753597568976687677787732876569766987767577788a85a98739876a76389aa497587689853876366639973854388968774877588759875877677758886988598759777a66578aa78868679a87586657775a965965589a5899487678696454767a678658657a96763558675b996a866742986966676aaa698888658a977999aa87789bb7888977ba86766673337a97782279ac888878998888a999877789989a779ba978996aaaab9779bba7a97a98bba7698865556ba969436abb59997bbb7b99789a69a8689a7a99788878877a997a998999889a7b8779889a9987778ba87a65687658765a998aaa977a7ba839766a75368b867649659986386536773986385338994865478847897863578957796755486858895a865b994878567498686a85599a49799744999900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+				"opaqueTiles": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+				"averageColors": "00004b344233459b423349a959a9379c688769758ca4bc9489aab9aa58cc58bc69a969a97a99999999989a85998699767a7579667ccc7ccc7bcb7caa7ccc7ccc59764b97599868ac679a69ab4a84477756787688475347532a932a934a837a8359aa49aa59996999699969aa489949995999799a499949992999299948997889189919991999199939994778166727772889289948993aaa389949a959a959a98aaa8aaa8aaa8aaa8aaa7bbb8aaa7bbb8bcb7aaa8bcb7bcb69aa8aaa8aaa69aa6c526c426c926c91659b649c66a566a46a7b6a7b667766776aba6abb676367636ba5579a6689598658875cb66abb9aa989aa98ac7abc6678968a88877c87cba93ec63da76db79dc7554885498969b4377fa29e8289cdb9ce5ade5ade49ce49ce5d745d867da87e75448c458b86ad76ae68ac679c779b78ce3c9378867ca6adb757a668b899b8449396534493858364836853697769436667755667776c7349886bba79b87d9679ad776a7b988abc8abc4aceaace4bba4bba6b8c4c9c4cac5b7c59aaada7a9bdcdbd59aaada7a9bdcdbd8cb8a9b98ac889b8aabaacc79ea498bd57ac596b55946abb5abb8ca65d8677ac437b5a3368886934547a595897a57b23799a5c817b9b3a886abb8464676a7a967a857a857977898889882a954a956b95499977997868799579875a6465995a8957a66a735ba53a935969479a576a46775744985596659b747a659a76768a7a567675477738873566597698779445946588668a66868a9b8577666a4467846987778a7789797a87888b8676667a767ca5449374934c957c9574847a438475a3958695768565956853b9447a777493a49379547a838394689a49547a6357636975786383848997b38465587374897458847da48ca769768b554b976cba3a824a82696259526a758c986963694268478b85696559555579557458598674573353635677575579667a8758538b848a44838b385437883b95534549555a855877997598772b953b9529a939a95aa84b949a84897687898776878578998485878b789a847b8b6579998a55886998788a879b976ba97988897469646b987a876a997a987b987955766777765c958a85877786775a747b947b967866a855788928884566578879a98864a57923343334333463346a747b846a844997598669987bb8b8aabaa96ba67cba9854687669864a864b8638ab389b48ab47ac49ab48ac579b48ac49ab38ab58bc4b8659aa5c8457ac586a299b2999389a379b38893955589a79bc8c9588bc7a8c599a689a5b8558ac597a2888378936773975579b389a579b488938884b74469a465747785b75568b586a38553865285428444755566455763a64356746743779397445674c63469b585a284437643a7629641555297938874879385438664665355536775a85569a785a5789789b779b6a75668a897b64558555876576798855845694749b74a68a986a47776766678867667799798698768866976685673755387638763b74358b387a5777686569874944498846774677685568646987677778775a456a65ab66ca55355656666656455546455345634558655854aa749854775577737b64777a7a795955895598546c758c75ba76b88797749b75a98967888789978857888788a7886977897799776a748a749a747987ba97aa998ba8a78bab75a87ab89cbb74b97b59645788598858546a7569996a767a766887649c767476797a5476697766797678887a75796577777a869976987799865777667787668a53857a885a9865954687559877a96586779788b9769866888899877576777879647759a8659888a744785477887a55747b7585795b7999a9667456878889aa58997888797b5677685548545854617b644557448744537b85565899899a39994a7a58998999a555898889659744a6559555a55698889486a57aab43a96b9556a665a854a579a744a555596587556677777777778578876687778974867787668876988897779876a74467536556875448225922415851595456654587459456947b48997a8676458556a854a89989998556a7559766a7779976a975997596749a64968a9779a5559545674487549854885594558445a777a7778373579b5a32675584456975958b994477449754b674b469b964b658a766a864a777a975a566a754a677a875b777b96577557754744575567655874469737763776678533455656657785975587788762789287328772a7436793a9457795a84368a3334323364555a757b856aaa9a555888516b5a3349a95964797778987a5375696a536668796577887a847a7479757b537a53767b6769748775767a9a7988759c768a7b957a84777577647864785498999788988998889b879a869a869a8669656567696566776744685467787788678a77997ba647887a7589999ca59ba889aa9999655667bd6ba979a967bc6c736aaa6556518566775965485438985888576546854ca547775999699989997a996678526466335644769c5a7888547a785c4454a658885c946285627b6c54674a33843b33359c337c395c3b853899355653745a33558b536b585b5a755788544526551566274525664a85486546564656377756664655465545454656516a65674964696468553a86485437443645896588548856895477446a7569547a75795436678566399988993b968b955ba658995566588859645a986ca7796477887ca619562a554c665c55156a256a468c557b1a8429744a845a83196b285a496b595b1486248645a7549615782578469a5689187629764a875a861a692a694b7a5b791777277748985888155525554666555619952885488458841112211241125112"
 			}
 		}
 	], "enums": [{ "identifier": "SomeEnum", "uid": 21, "values": [
-		{ "id": "A", "tileId": 60, "color": 8934724, "__tileSrcRect": [192,48,16,16] },
-		{ "id": "B", "tileId": 1145, "color": 13408614, "__tileSrcRect": [144,1136,16,16] },
-		{ "id": "C", "tileId": 678, "color": 13417386, "__tileSrcRect": [96,672,16,16] },
-		{ "id": "D", "tileId": 1723, "color": 11189179, "__tileSrcRect": [176,1712,16,16] }
-	], "iconTilesetUid": 31, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "desc",
-			"__type": "String",
-			"uid": 38,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+		{ "id": "A", "tileId": 304, "color": 10049084, "__tileSrcRect": [0,304,16,16] },
+		{ "id": "B", "tileId": 320, "color": 14332236, "__tileSrcRect": [0,320,16,16] },
+		{ "id": "C", "tileId": 328, "color": 9921830, "__tileSrcRect": [128,320,16,16] },
+		{ "id": "D", "tileId": 347, "color": 11570799, "__tileSrcRect": [176,336,16,16] }
+	], "iconTilesetUid": 45, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "Level_0",
+			"identifier": "Everything",
 			"iid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
 			"uid": 0,
 			"worldX": -1,
@@ -1075,7 +1153,7 @@
 			"pxHei": 568,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
-			"useAutoIdentifier": true,
+			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
@@ -1083,18 +1161,7 @@
 			"__smartColor": "#AFB0BF",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{
-				"__identifier": "desc",
-				"__value": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features.",
-				"__type": "String",
-				"defUid": 38,
-				"realEditorValues": [{
-					"id": "V_String",
-					"params": [
-						"This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features."
-					]
-				}]
-			}],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -1120,81 +1187,6 @@
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": [
-						{
-							"__identifier": "Labels",
-							"__grid": [5,5],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "a3030e78-66b0-11ec-9cd7-4f6ad258b983",
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [88,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "IntGrid (classic)",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["IntGrid (classic)"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [14,5],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "a3030e79-66b0-11ec-9cd7-fb6d56763947",
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [232,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "IntGrid (with rules)",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["IntGrid (with rules)"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [29,5],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "a3030e7a-66b0-11ec-9cd7-0fe25ba701c9",
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [472,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "Tiles",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Tiles"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
 						{
 							"__identifier": "EntityFieldsTest",
 							"__grid": [9,19],
@@ -1343,87 +1335,6 @@
 							]
 						},
 						{
-							"__identifier": "Labels",
-							"__grid": [21,5],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "a3030e7c-66b0-11ec-9cd7-7f8f3c6c0d7b",
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [344,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "PureAutoLayers",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["PureAutoLayers"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [21,6],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "a3030e7d-66b0-11ec-9cd7-8b18b4975bf2",
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [344,104],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "(based on IntGrid_classic)",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["(based on IntGrid_classic)"]
-									}]
-								},
-								{
-									"__identifier": "color",
-									"__value": "#7182B1",
-									"__type": "Color",
-									"defUid": 12,
-									"realEditorValues": [{ "id": "V_Int", "params": [7439025] }]
-								}
-							]
-						},
-						{
-							"__identifier": "Labels",
-							"__grid": [37,5],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"iid": "a3030e7e-66b0-11ec-9cd7-f10da95a3ebc",
-							"width": 8,
-							"height": 8,
-							"defUid": 10,
-							"px": [600,88],
-							"fieldInstances": [
-								{
-									"__identifier": "text",
-									"__value": "IntGrid with a 8px grid size",
-									"__type": "String",
-									"defUid": 11,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["IntGrid with a 8px grid size"]
-									}]
-								},
-								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
-							]
-						},
-						{
 							"__identifier": "RectRegion",
 							"__grid": [23,19],
 							"__pivot": [0,0],
@@ -1487,6 +1398,202 @@
 									}]
 								}
 							]
+						},
+						{
+							"__identifier": "EntityRefTest",
+							"__grid": [7,28],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": { "tilesetUid": 45, "srcRect": [224,16,16,16] },
+							"iid": "d08b1280-66b0-11ec-895f-aff95798ac90",
+							"width": 16,
+							"height": 16,
+							"defUid": 46,
+							"px": [120,456],
+							"fieldInstances": [{
+								"__identifier": "target",
+								"__value": {
+									"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
+									"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
+									"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3"
+								},
+								"__type": "EntityRef",
+								"defUid": 47,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
+								}]
+							}]
+						},
+						{
+							"__identifier": "EntityRefTest",
+							"__grid": [11,27],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": { "tilesetUid": 45, "srcRect": [224,16,16,16] },
+							"iid": "d0e23330-66b0-11ec-895f-e701a663b232",
+							"width": 16,
+							"height": 16,
+							"defUid": 46,
+							"px": [184,440],
+							"fieldInstances": [{
+								"__identifier": "target",
+								"__value": {
+									"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
+									"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
+									"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3"
+								},
+								"__type": "EntityRef",
+								"defUid": 47,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
+								}]
+							}]
+						},
+						{
+							"__identifier": "EntityRefTest",
+							"__grid": [15,28],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": { "tilesetUid": 45, "srcRect": [224,16,16,16] },
+							"iid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
+							"width": 16,
+							"height": 16,
+							"defUid": 46,
+							"px": [248,456],
+							"fieldInstances": [{
+								"__identifier": "target",
+								"__value": null,
+								"__type": "EntityRef",
+								"defUid": 47,
+								"realEditorValues": [null]
+							}]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [19,5],
+							"__pivot": [0,0.5],
+							"__tags": [],
+							"__tile": null,
+							"iid": "566aec40-66b0-11ec-895f-d12a68bdf6fd",
+							"width": 96,
+							"height": 16,
+							"defUid": 10,
+							"px": [304,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "PureAutoLayers\n(based on IntGrid_classic)",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["PureAutoLayers\n(based on IntGrid_classic)"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [27,5],
+							"__pivot": [0,0.5],
+							"__tags": [],
+							"__tile": null,
+							"iid": "79ab46a0-66b0-11ec-895f-419e8391faef",
+							"width": 96,
+							"height": 16,
+							"defUid": 10,
+							"px": [432,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "Tiles",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Tiles"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [35,5],
+							"__pivot": [0,0.5],
+							"__tags": [],
+							"__tile": null,
+							"iid": "806c8df0-66b0-11ec-895f-4f0d1120cc6d",
+							"width": 80,
+							"height": 16,
+							"defUid": 10,
+							"px": [560,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "IntGrid with a 8px grid size",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["IntGrid with a 8px grid size"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [11,5],
+							"__pivot": [0,0.5],
+							"__tags": [],
+							"__tile": null,
+							"iid": "91d04e60-66b0-11ec-895f-fd91d67cb72d",
+							"width": 96,
+							"height": 16,
+							"defUid": 10,
+							"px": [176,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "IntGrid (with rules)",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["IntGrid (with rules)"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Labels",
+							"__grid": [3,5],
+							"__pivot": [0,0.5],
+							"__tags": [],
+							"__tile": null,
+							"iid": "9969cd40-66b0-11ec-895f-5fde9d599388",
+							"width": 96,
+							"height": 16,
+							"defUid": 10,
+							"px": [48,88],
+							"fieldInstances": [
+								{
+									"__identifier": "text",
+									"__value": "IntGrid (classic)",
+									"__type": "String",
+									"defUid": 11,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["IntGrid (classic)"]
+									}]
+								},
+								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
+							]
 						}
 					]
 				},
@@ -1545,33 +1652,33 @@
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,
-						0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,
-						1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,
+						0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,
 						1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+						0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,1,
+						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,1,0,1,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1752,7 +1859,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "IntGrid_classic",
+					"__identifier": "IntGrid_without_rules",
 					"__type": "IntGrid",
 					"__cWid": 43,
 					"__cHei": 36,
@@ -2008,7 +2115,7 @@
 			"__neighbours": []
 		},
 		{
-			"identifier": "Level_1",
+			"identifier": "Autolayer",
 			"iid": "a30383a0-66b0-11ec-9cd7-432bb3e3339c",
 			"uid": 32,
 			"worldX": -1,
@@ -2018,7 +2125,7 @@
 			"pxHei": 256,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
-			"useAutoIdentifier": true,
+			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
@@ -2026,7 +2133,7 @@
 			"__smartColor": "#AFB0BF",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "desc", "__value": null, "__type": "String", "defUid": 38, "realEditorValues": [] }],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -2232,7 +2339,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "IntGrid_classic",
+					"__identifier": "IntGrid_without_rules",
 					"__type": "IntGrid",
 					"__cWid": 16,
 					"__cHei": 16,
@@ -2517,7 +2624,7 @@
 			"__neighbours": []
 		},
 		{
-			"identifier": "Level_2",
+			"identifier": "Tiles_and_intgrid",
 			"iid": "a303f8d0-66b0-11ec-9cd7-91f754bf71d5",
 			"uid": 33,
 			"worldX": -1,
@@ -2527,7 +2634,7 @@
 			"pxHei": 160,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
-			"useAutoIdentifier": true,
+			"useAutoIdentifier": false,
 			"bgRelPath": null,
 			"bgPos": null,
 			"bgPivotX": 0.5,
@@ -2535,7 +2642,7 @@
 			"__smartColor": "#AFB0BF",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "desc", "__value": null, "__type": "String", "defUid": 38, "realEditorValues": [] }],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -2633,7 +2740,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "IntGrid_classic",
+					"__identifier": "IntGrid_without_rules",
 					"__type": "IntGrid",
 					"__cWid": 16,
 					"__cHei": 10,
@@ -2793,7 +2900,7 @@
 			"__neighbours": []
 		},
 		{
-			"identifier": "Level_3",
+			"identifier": "Background_image",
 			"iid": "a304bc20-66b0-11ec-9cd7-7b1d58a7ae0f",
 			"uid": 36,
 			"worldX": -1,
@@ -2803,7 +2910,7 @@
 			"pxHei": 192,
 			"__bgColor": "#6E6F8B",
 			"bgColor": null,
-			"useAutoIdentifier": true,
+			"useAutoIdentifier": false,
 			"bgRelPath": "atlas/Beach by deepnight.png",
 			"bgPos": "Cover",
 			"bgPivotX": 0.5,
@@ -2811,16 +2918,7 @@
 			"__smartColor": "#AFB0BF",
 			"__bgPos": { "topLeftPx": [0,0], "scale": [0.85,0.85], "cropRect": [0,7.058823529411768,320,225.88235294117646] },
 			"externalRelPath": null,
-			"fieldInstances": [{
-				"__identifier": "desc",
-				"__value": "Level background image",
-				"__type": "String",
-				"defUid": 38,
-				"realEditorValues": [{
-					"id": "V_String",
-					"params": ["Level background image"]
-				}]
-			}],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
@@ -2923,7 +3021,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "IntGrid_classic",
+					"__identifier": "IntGrid_without_rules",
 					"__type": "IntGrid",
 					"__cWid": 17,
 					"__cHei": 12,

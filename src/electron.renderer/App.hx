@@ -35,6 +35,7 @@ class App extends dn.Process {
 		LOG.logFilePath = JsTools.getLogPath();
 		LOG.trimFileLines();
 		LOG.emptyEntry();
+		LOG.emptyEntry();
 		LOG.tagColors.set("update", "#6fed76");
 		LOG.tagColors.set("cache", "#edda6f");
 		LOG.tagColors.set("tidy", "#8ed1ac");
@@ -45,7 +46,7 @@ class App extends dn.Process {
 		LOG.add("BOOT","App started");
 		LOG.add("BOOT","Version: "+Const.getAppVersion()+" (build "+Const.getAppBuildId()+")");
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
-		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
+		LOG.add("BOOT","Resources: "+dn.FilePath.convertToSlashes(ET.getAppResourceDir()) );
 		LOG.add("BOOT","ExtraFiles: "+JsTools.getExtraFilesDir());
 		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
 

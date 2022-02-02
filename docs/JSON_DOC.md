@@ -55,6 +55,7 @@ Value | Type | Description
 `minifyJson`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 `nextUid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Next Unique integer ID available
 `pngFilePattern`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
+`tutorialDesc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This optional description is used by LDtk Samples to show up some informations and instructions.
 ~~`exportPng`~~<br/><sup class="internal">*Only used by editor*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 0.9.3<br/> <br/> Replaced by: `imageExportMode`
 
 <a id="ldtk-WorldJson" name="ldtk-WorldJson"></a>
@@ -318,12 +319,12 @@ Value | Type | Description
 `autoChainRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Bool | 
 `editorAlwaysShow`<br/><sup class="internal">*Only used by editor*</sup> | Bool | 
 `editorCutLongValues`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
-`editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
+`editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`
 `editorDisplayPos`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
 `editorTextPrefix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `editorTextSuffix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `symmetricalRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Bool | 
-`textLanguageMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.9.3-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
+`textLanguageMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.9.3-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
 `tilesetUid`<br/><sup class="only">Only *Tile*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | UID of the tileset used for a Tile
 `useForSmartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Bool | If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.
 

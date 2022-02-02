@@ -53,6 +53,8 @@ class Editor extends Page {
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
+	public var gifMode = false;
+
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
 	public var curLevelHistory(get,never) : LevelHistory;
@@ -265,15 +267,7 @@ class Editor extends Page {
 		}
 	}
 
-	public function selectProject(p:data.Project) {
-		watcher.clearAllWatches();
-		ui.modal.Dialog.closeAll();
-
-		project = p;
-		project.tidy();
-
-		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
-
+	function updateBanners() {
 		// Display "backup" header
 		if( project.isBackup() ) {
 			var jBackup = new J('<div class="backupHeader"/>');
@@ -299,6 +293,18 @@ class Editor extends Page {
 		}
 		else
 			setPermanentNotification("tutorialDesc");
+	}
+
+	public function selectProject(p:data.Project) {
+		watcher.clearAllWatches();
+		ui.modal.Dialog.closeAll();
+
+		project = p;
+		project.tidy();
+
+		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
+
+		updateBanners();
 
 		// Check external enums
 		if( !project.isBackup() ) {
@@ -334,12 +340,7 @@ class Editor extends Page {
 		curLayerDefUid = -1;
 
 		// Pick 1st layer in current level
-		if( project.defs.layers.length>0 ) {
-			for(li in curLevel.layerInstances) {
-				selectLayerInstance(li,false);
-				break;
-			}
-		}
+		autoPickFirstValidLayer();
 
 		levelHistory = new Map();
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
@@ -382,6 +383,20 @@ class Editor extends Page {
 					break;
 				}
 		}
+	}
+
+
+	public function autoPickFirstValidLayer() {
+		if( project.defs.layers.length<=0 )
+			return false;
+
+		for(li in curLevel.layerInstances)
+			if( !li.def.hideInList ) {
+				selectLayerInstance(li,false);
+				return true;
+			}
+
+		return false;
 	}
 
 
@@ -549,7 +564,7 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
-				else if( Std.is(curTool, tool.lt.EntityTool) && tool.lt.EntityTool.isChainingRef() )
+				else if( Std.is(curTool, tool.lt.EntityTool) && Std.downcast(curTool,tool.lt.EntityTool).isChainingRef() )
 					tool.lt.EntityTool.cancelRefChaining();
 				else if( ui.ValuePicker.exists() )
 					ui.ValuePicker.ME.cancel();
@@ -1705,6 +1720,8 @@ class Editor extends Page {
 					clearResizeTool();
 
 			case EntityInstanceChanged(ei):
+				if( selectionTool.any() )
+					selectionTool.invalidateRender();
 
 			case ToolOptionChanged:
 				updateTool();
@@ -1828,6 +1845,7 @@ class Editor extends Page {
 			case TilesetDefAdded(td):
 
 			case ProjectSettingsChanged:
+				updateBanners();
 				updateAppBg();
 
 			case LayerDefChanged(defUid):
@@ -1970,32 +1988,36 @@ class Editor extends Page {
 
 		var idx = 1;
 		for(ld in project.defs.layers) {
-			if( ld.hideInList )
+			var li = curLevel.getLayerInstance(ld);
+			var active = li==curLayerInstance;
+			if( ld.hideInList && !active )
 				continue;
 
-			var li = curLevel.getLayerInstance(ld);
-			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-			jLayerList.append(e);
-			e.attr("uid",ld.uid);
+			var jLayer = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			jLayerList.append(jLayer);
+			jLayer.attr("uid",ld.uid);
 
-			if( li==curLayerInstance )
-				e.addClass("active");
+			if( active )
+				jLayer.addClass("active");
 
-			e.find(".index").text( Std.string(idx++) );
+			if( ld.hideInList )
+				jLayer.addClass("hiddenFromList");
+
+			jLayer.find(".index").text( Std.string(idx++) );
 
 			// Icon
-			var jIcon = e.find(">.layerIcon");
+			var jIcon = jLayer.find(">.layerIcon");
 			jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
 
 			// Name
-			var name = e.find(".name");
+			var name = jLayer.find(".name");
 			name.text(li.def.identifier);
-			e.click( function(_) {
+			jLayer.click( function(_) {
 				selectLayerInstance(li);
 			});
 
 			// Rules button
-			var rules = e.find(".rules");
+			var rules = jLayer.find(".rules");
 			if( li.def.isAutoLayer() )
 				rules.show();
 			else
@@ -2010,7 +2032,7 @@ class Editor extends Page {
 			});
 
 			// Visibility button
-			var vis = e.find(".vis");
+			var vis = jLayer.find(".vis");
 			vis.mouseover( (_)->{
 				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
 					levelRender.setLayerVisibility(li, heldVisibilitySet);

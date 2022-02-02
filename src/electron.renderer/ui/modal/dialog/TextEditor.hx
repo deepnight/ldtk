@@ -5,11 +5,13 @@ import codemirror.CodeMirror;
 
 class TextEditor extends ui.modal.Dialog {
 	public var jHeader : js.jquery.JQuery;
+	public var jTextArea : js.jquery.JQuery;
 
-	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
+	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, ?onChange:(str:String)->Void) {
 		super("textEditor");
 
 		var anyChange = false;
+		var readOnly = onChange==null;
 
 		new J('<h2>$title</h2>').appendTo(jContent);
 
@@ -21,7 +23,7 @@ class TextEditor extends ui.modal.Dialog {
 			new J('<div class="help">$parags</div>').appendTo(jHeader);
 		}
 
-		var jTextArea = new J('<textarea/>');
+		jTextArea = new J('<textarea/>');
 		jTextArea.appendTo(jContent);
 		jTextArea.val(str);
 
@@ -31,6 +33,7 @@ class TextEditor extends ui.modal.Dialog {
 			theme: "lucario",
 			lineNumbers: true,
 			lineWrapping: true,
+			readOnly: true,
 			autofocus: true,
 		});
 		cm.on("change", (ev)->anyChange=true );
@@ -47,17 +50,19 @@ class TextEditor extends ui.modal.Dialog {
 
 		onCloseCb = ()->{
 			 var out = cm.getValue();
-			 if( anyChange && str!=out )
+			 if( anyChange && str!=out && onChange!=null )
 				onChange(out);
 		}
 
 		addClose();
 
-		addIconButton("delete", "red small", ()->{
-			cm.setValue("");
-			close();
-		} );
+		if( !readOnly )
+			addIconButton("delete", "red small delete", ()->{
+				cm.setValue("");
+				close();
+			} );
 	}
+
 
 	inline function requireMode(mode:ldtk.Json.TextLanguageMode) : Dynamic {
 		// Get mode addon name
@@ -73,6 +78,8 @@ class TextEditor extends ui.modal.Dialog {
 			case LangJS: "javascript";
 			case LangLua: "lua";
 			case LangC: "clike";
+
+			case LangLog: "ttcn-cfg";
 		}
 		if( modeId==null )
 			return null;

@@ -18,7 +18,7 @@ $helpDark: #3c6148;
 $helpDarker: #273f2f;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
-$backupBg: #516cf7;
+$backupBg: #6594ff;
 
 // Cursors
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
@@ -2378,14 +2378,19 @@ textarea {
 				white-space: nowrap;
 			}
 
-			.logPath {
-				flex: 1 0 300px;
-				padding: 4px;
-				text-align: left;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				border: 1px solid $bgLight;
+			dd.log {
+				flex-wrap: nowrap;
+
+				.logPath {
+					flex: 1 0 300px;
+					padding: 4px;
+					text-align: left;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					border: 1px solid $bgLight;
+				}
 			}
+
 		}
 	}
 }
@@ -3636,7 +3641,7 @@ canvas#webgl {
 					margin: 0;
 				}
 				p+p {
-					margin-top: 4px;
+					margin-top: 6px;
 				}
 			}
 		}
@@ -3717,6 +3722,13 @@ canvas#webgl {
 						.icon {
 							background-image: url("../icons/hidden.png");
 						}
+					}
+				}
+
+				&.hiddenFromList {
+					.name {
+						font-style: italic;
+						color: $red;
 					}
 				}
 
@@ -5267,9 +5279,12 @@ canvas#webgl {
 	overflow: hidden;
 	display: grid;
 	gap: 8px;
-	grid-template-columns: 250px auto;
+	grid-template-columns: 200px auto;
 	grid-template-rows: 40px auto;
 
+	.buttons {
+		flex-wrap: nowrap;
+	}
 	button {
 		white-space: nowrap;
 	}
@@ -5363,6 +5378,12 @@ canvas#webgl {
 			}
 			.clear {
 				flex: 0 1 0px;
+			}
+		}
+
+		dd.displayMode {
+			select:first-of-type {
+				flex: 1 1 150px;
 			}
 		}
 

@@ -245,8 +245,13 @@ class SelectionTool extends Tool<Int> {
 			editor.clearResizeTool();
 		}
 	}
+
+	/** Return TRUE if not empty **/
 	public inline function any() return !group.isEmpty();
+
+	/** Return TRUE if empty **/
 	public inline function isEmpty() return group.isEmpty();
+
 	public inline function isSingle() return group.selectedElementsCount()==1;
 	public inline function isOveringSelection(m) return group.isOveringSelection(m);
 	public inline function debugContent() return group.toString();

@@ -257,14 +257,18 @@ class EntityRender extends dn.Process {
 
 		// Render ref links from entities in different levels
 		for(refEi in ei._project.getEntityInstancesReferingTo(ei)) {
-			if( refEi._li.level==ei._li.level || !refEi.hasEntityRefTo(ei,true) )
+			if( refEi._li.level==ei._li.level )
+				continue;
+
+			var fi = refEi.getEntityRefFieldTo(ei,true);
+			if( fi==null )
 				continue;
 
 			var col = refEi.getSmartColor(true);
-			var fx = ( refEi.centerX + refEi._li.level.worldX ) - ei.worldX;
-			var fy = ( refEi.centerY + refEi._li.level.worldY ) - ei.worldY;
-			var tx = ei.centerX - ei.x;
-			var ty = ei.centerY - ei.y;
+			var fx = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			var fy = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var tx = ei.getRefAttachX(fi.def) - ei.x;
+			var ty = ei.getRefAttachY(fi.def) - ei.y;
 			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
 		}
 
@@ -292,7 +296,6 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		final alpha = 1.0;
 		final maxFieldsWid = ei.width*1.5;
 		final maxFieldsHei = ei.height*1.5;
 
@@ -309,27 +312,27 @@ class EntityRender extends dn.Process {
 			fieldGraphics.visible = false;
 		else {
 			fieldGraphics.visible = true;
-			fieldGraphics.alpha = fullVis ? 1 : 0.2;
+			fieldGraphics.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 		}
 
 
 		// Update field wrappers
-		above.visible = center.visible = beneath.visible = fullVis;
+		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 		if( above.visible ) {
 			above.setScale( M.fmin(scale, maxFieldsWid/above.outerWidth) );
 			above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
 			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 2 );
-			above.alpha = alpha;
+			above.alpha = 1;
 
 			center.setScale( M.fmin(scale, M.fmin(maxFieldsWid/center.outerWidth, maxFieldsHei/center.outerHeight)) );
 			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
 			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
-			center.alpha = alpha;
+			center.alpha = 1;
 
 			beneath.setScale( M.fmin(scale, maxFieldsWid/beneath.outerWidth) );
 			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
 			beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
-			beneath.alpha = alpha;
+			beneath.alpha = 1;
 		}
 	}
 

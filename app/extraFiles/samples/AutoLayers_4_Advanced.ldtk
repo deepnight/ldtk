@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456464,
+	"appBuildId": 456585,
 	"nextUid": 104,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -30,6 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
+	"tutorialDesc": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress [SHIFT + R] to toggle auto-layers rendering",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -41,8 +42,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -1091,8 +1093,9 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"fadeInactive": false,
+			"inactiveOpacity": 1,
 			"hideInList": false,
+			"hideFieldsWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
 			"parallaxFactorX": 0,
@@ -1181,66 +1184,7 @@
 				"averageColors": "f123f224f224f224f224f224f224f224f333f324f323f434f573f453f343f666f666f334f544f544f334f334f3340000f343f223f233f334f445f555f644f2344336323563464346f343f233f233f334f223f778f223f5337335523553366346f224f666f667f974f654f654f533f5332564256435642454f334f236f445f644f544f634f434f3344235000000000000f235f236f334f644f433f223f764f6660000000000000000f447f233f224f223fa54f224f335f446f75400000000f011f236f34af236f623fe41f555f999f888f644f5442000b011f888f78bf888f679fea8fdccfaaaf556f434f12320003111f66af67bf67bf349fe97f453f343f334f654f54400000000f226f224f338f236f423f224f224f224f623f623f267f267711271237112f333f343f224f224f123f852f852f326f325f112f112f11200000000f224f224f224f777f77700000000f744f459f112000000000000000000000000000000000000f743f338f111000000000000000000000000000000000000f223f223f223000000000000000000000000000000000000f223f223f123000000000000000000000000000000000000f223f223f123f22400000000000000000000000000000000f243f233f343f235f123f235000000000000000000000000f233f343f343f224f235f235000000000000000000000000f233f644f333f123f224f224000000000000000000000000f233f754f444f123f224f224000000000000000000000000f233f754f434f123f224f224000000000000000000000000f233f754f444f123f224f224000000000000000000000000f123f864f434f123f235f224000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 			}
 		}
-	], "enums": [], "externalEnums": [], "levelFields": [
-		{
-			"identifier": "tutorial",
-			"__type": "String",
-			"uid": 96,
-			"type": "F_Text",
-			"isArray": false,
-			"canBeNull": true,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "ValueOnly",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": false,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": false,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": null,
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		},
-		{
-			"identifier": "textColor",
-			"__type": "Color",
-			"uid": 97,
-			"type": "F_Color",
-			"isArray": false,
-			"canBeNull": false,
-			"arrayMinLength": null,
-			"arrayMaxLength": null,
-			"editorDisplayMode": "Hidden",
-			"editorDisplayPos": "Above",
-			"editorAlwaysShow": false,
-			"editorCutLongValues": true,
-			"editorTextSuffix": null,
-			"editorTextPrefix": null,
-			"useForSmartColor": true,
-			"min": null,
-			"max": null,
-			"regex": null,
-			"acceptFileTypes": null,
-			"defaultOverride": { "id": "V_Int", "params": [16762880] },
-			"textLanguageMode": null,
-			"symmetricalRef": false,
-			"autoChainRef": false,
-			"allowOutOfLevelRef": true,
-			"allowedRefs": "OnlySame",
-			"allowedRefTags": [],
-			"tilesetUid": null
-		}
-	] },
+	], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "AutoLayers_advanced_demo",
@@ -1258,24 +1202,10 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#FFE173",
+			"__smartColor": "#828491",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [
-				{
-					"__identifier": "tutorial",
-					"__value": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress \"SHIFT + R\" to toggle auto-layers rendering",
-					"__type": "String",
-					"defUid": 96,
-					"realEditorValues": [{
-						"id": "V_String",
-						"params": [
-							"Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress \"SHIFT + R\" to toggle auto-layers rendering"
-						]
-					}]
-				},
-				{ "__identifier": "textColor", "__value": "#FFC800", "__type": "Color", "defUid": 97, "realEditorValues": [] }
-			],
+			"fieldInstances": [],
 			"layerInstances": [
 				{
 					"__identifier": "IntGrid_layer",

@@ -115,20 +115,27 @@ class EntityInstance {
 		return ei;
 	}
 
-	public function getCx(ld:data.def.LayerDef) {
+	public inline function getCx(ld:data.def.LayerDef) {
 		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getCy(ld:data.def.LayerDef) {
+	public inline function getCy(ld:data.def.LayerDef) {
 		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
-	public function getPointOriginX(ld:data.def.LayerDef) {
+	public inline function getPointOriginX(ld:data.def.LayerDef) {
 		return def.resizableX ? centerX : ( getCx(ld)+0.5 ) * ld.gridSize;
 	}
 
-	public function getPointOriginY(ld:data.def.LayerDef) {
+	public inline function getPointOriginY(ld:data.def.LayerDef) {
 		return def.resizableY ? centerY : ( getCy(ld)+0.5 ) * ld.gridSize;
+	}
+
+	public inline function getRefAttachX(fd:data.def.FieldDef) {
+		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerX : x;
+	}
+	public inline function getRefAttachY(fd:data.def.FieldDef) {
+		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
 	final overEdgePad = 4;
@@ -314,28 +321,36 @@ class EntityInstance {
 	/**
 		Return TRUE if target EntityInstance has a reference to This in given field.
 	**/
-	public function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) {
-		if( fd==null ) {
+	public inline function hasEntityRefTo(targetEi:EntityInstance, ?fd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) {
+		return getEntityRefFieldTo(targetEi, fd, onlyIfLinkIsDisplayed) != null;
+	}
+
+
+	/**
+		Return TRUE if target EntityInstance has a reference to This in given field.
+	**/
+	public function getEntityRefFieldTo(targetEi:EntityInstance, ?onlyFd:data.def.FieldDef, onlyIfLinkIsDisplayed=false) : Null<FieldInstance> {
+		if( onlyFd==null ) {
 			// In any field
 			for(fi in fieldInstances)
 			for(i in 0...fi.getArrayLength())
 				if( fi.getEntityRefIid(i)==targetEi.iid )
-					return true;
+					return fi;
 		}
 		else {
 			// In specified field
-			if( fd.type!=F_EntityRef )
-				return false;
+			if( onlyFd.type!=F_EntityRef )
+				return null;
 
-			var fi = getFieldInstance(fd,false);
+			var fi = getFieldInstance(onlyFd,false);
 			if( fi==null )
-				return false;
+				return null;
 
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLink ) )
-					return true;
+				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLinkBetweenCenters || fi.def.editorDisplayMode==RefLinkBetweenPivots ) )
+					return fi;
 		}
-		return false;
+		return null;
 	}
 
 

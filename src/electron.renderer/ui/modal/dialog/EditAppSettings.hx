@@ -18,8 +18,12 @@ class EditAppSettings extends ui.modal.Dialog {
 		jForm.off().find("*").off();
 
 		// Log button
-		jContent.find( "button.log").click( (_)->JsTools.locateFile( JsTools.getLogPath(), true ) );
 		jContent.find(".logPath").text( JsTools.getLogPath() );
+		jContent.find( "button.viewLog").click( (_)->{
+			var raw = NT.readFileString( JsTools.getLogPath() );
+			new TextEditor(raw, "LDtk logs", LangLog);
+		});
+		jContent.find( "button.locateLog").click( (_)->JsTools.locateFile( JsTools.getLogPath(), true ) );
 
 		// World mode using mousewheel
 		var i = new form.input.EnumSelect(

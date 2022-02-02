@@ -308,7 +308,7 @@ class EditProject extends ui.modal.Panel {
 
 
 		// Advanced options
-		var jAdvanceds = App.ME.isInAppDir(project.filePath.full,true) ? jForm.find(".adv") : jForm.find(".adv:not(.sample)");
+		var jAdvanceds = jForm.find(".adv");
 		if( showAdvanced ) {
 			jForm.find("a.showAdv").hide();
 			jAdvanceds.addClass("visible");
@@ -371,7 +371,11 @@ class EditProject extends ui.modal.Panel {
 			jForm.find("[name=tutorialDesc]"),
 			()->project.tutorialDesc,
 			(v)->{
+				v = dn.Lib.trimEmptyLines(v);
+				if( v=="" )
+					v = null;
 				project.tutorialDesc = v;
+				editor.ge.emit(ProjectSettingsChanged);
 			}
 		);
 
