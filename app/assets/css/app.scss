@@ -4156,6 +4156,12 @@ canvas#webgl {
 			}
 		}
 
+
+		#permanentNotifications {
+			left: $mainPanelCompactWid;
+			width: calc( 100vw - #{ $mainPanelCompactWid } );
+		}
+
 		ul#editingOptions {
 			left: $mainPanelCompactWid;
 			top: 74px;
