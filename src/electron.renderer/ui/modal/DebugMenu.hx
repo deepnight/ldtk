@@ -27,10 +27,13 @@ class DebugMenu extends ui.modal.ContextMenu {
 			label: L.untranslated("Gif mode="+editor.gifMode),
 			cb: ()->{
 				editor.gifMode = !editor.gifMode;
-				if( editor.gifMode )
+				if( editor.gifMode ) {
+					editor.setCompactMode(true);
 					N.success("GIF mode: ON");
+				}
 				else
 					N.error("GIF mode: off");
+				App.ME.jBody.find("#miniNotif").hide();
 				App.ME.clearDebug();
 				editor.updateBanners();
 				editor.worldRender.invalidateAll();
