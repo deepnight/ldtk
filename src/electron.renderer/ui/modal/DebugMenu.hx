@@ -32,6 +32,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 				else
 					N.error("GIF mode: off");
 				App.ME.clearDebug();
+				editor.updateBanners();
+				editor.worldRender.invalidateAll();
 			}
 		});
 		#end

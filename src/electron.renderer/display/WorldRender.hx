@@ -428,7 +428,7 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateWorldTitle() {
-		title.visible = editor.worldMode && settings.v.showDetails;
+		title.visible = editor.worldMode && settings.v.showDetails && !editor.gifMode;
 		if( title.visible ) {
 			var b = project.getWorldBounds();
 			var w = b.right-b.left;
@@ -557,7 +557,7 @@ class WorldRender extends dn.Process {
 	}
 
 	inline function updateAxesPos() {
-		if( !settings.v.showDetails ) {
+		if( !settings.v.showDetails || editor.gifMode ) {
 			axeH.visible = axeV.visible = false;
 		}
 		else {

@@ -308,7 +308,7 @@ class Rulers extends dn.Process {
 		if( invalidated )
 			render();
 
-		labels.visible = !editor.worldMode && App.ME.settings.v.showDetails;
+		labels.visible = !editor.worldMode && App.ME.settings.v.showDetails && !editor.gifMode;
 		g.visible = canUseResizers();
 	}
 }
