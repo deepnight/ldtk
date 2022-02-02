@@ -180,6 +180,12 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		addTitle(L.untranslated("App"));
 		add({
+			label: L.untranslated("Open exe dir"),
+			cb: ()->JsTools.locateFile(JsTools.getExeDir(), false)
+		});
+
+		addTitle(L.untranslated("App"));
+		add({
 			label: L.untranslated("Open settings dir"),
 			cb: ()->JsTools.locateFile(Settings.getDir(), false)
 		});
