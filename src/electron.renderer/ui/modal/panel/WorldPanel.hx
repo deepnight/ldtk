@@ -16,6 +16,9 @@ class WorldPanel extends ui.modal.Panel {
 		levelInstanceForm.useLevel(editor.curLevel);
 
 		updateWorldForm();
+
+		if( editor.gifMode )
+			jModalAndMask.hide();
 	}
 
 

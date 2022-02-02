@@ -1185,7 +1185,7 @@ class Editor extends Page {
 		var min = project.getLowestLevelDepth();
 		var max = project.getHighestLevelDepth();
 
-		if( !worldMode || min==max ) {
+		if( gifMode || !worldMode || min==max ) {
 			jDepths.hide();
 			return;
 		}
