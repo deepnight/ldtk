@@ -803,7 +803,8 @@ class Project {
 				var fileName = switch id {
 					case LdtkIcons: "finalbossblues-icons_full_16.png";
 				}
-				var fp = dn.FilePath.fromFile( JsTools.getEmbedAtlasDir()+"/"+fileName );
+				var fp = dn.FilePath.fromFile( JsTools.getAssetsDir()+"/embedAtlas/"+fileName );
+				App.LOG.fileOp('Loading embed atlas $id: ${fp.full} ...');
 				if( !NT.fileExists(fp.full) )
 					return null;
 
