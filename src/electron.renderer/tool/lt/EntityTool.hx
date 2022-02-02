@@ -200,12 +200,13 @@ class EntityTool extends tool.LayerTool<Int> {
 						// Finalize entity
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
-						// if( !editor.gifMode )
-							// editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
 						onEditAnything();
 						stopUsing(m);
-						if( ei.def.isResizable() && editor.resizeTool!=null )
-							editor.resizeTool.startUsing(ev, m);
+						if( ei.def.isResizable() ) {
+							editor.selectionTool.select([ Entity(curLayerInstance, ei) ]);
+							if( editor.resizeTool!=null )
+								editor.resizeTool.startUsing(ev, m);
+						}
 						else if( !editor.gifMode )
 							editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
 						ei.tidy(project, curLayerInstance); // Force creation of field instances & update _li
