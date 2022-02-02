@@ -6172,13 +6172,26 @@ body.sorting ul.collapsedSortTarget {
 	width: auto;
 
 	.wrapper {
-		padding-bottom: 0;
+		padding: 0;
 		box-shadow: none;
 		background-color: $bgDark;
+		overflow: hidden;
+	}
+
+	.scroller {
+		padding: 16px;
+		overflow-y: auto;
 	}
 
 	.content {
 		width: 330px;
+		height: 100%;
+		display: grid;
+		grid-template-rows: min-content auto;
+
+		h2:first-of-type {
+			margin: 0;
+		}
 
 		.worldSettings,
 		.currentLevelInstance {
@@ -6251,6 +6264,10 @@ body.sorting ul.collapsedSortTarget {
 
 .window.panel.levelInstancePanel {
 	width: auto;
+
+	.wrapper {
+		overflow-x: hidden;
+	}
 
 	.content {
 		display: grid;
