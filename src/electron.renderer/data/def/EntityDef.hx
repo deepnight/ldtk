@@ -65,6 +65,31 @@ class EntityDef {
 		return tilesetId!=null && tileRect!=null;
 	}
 
+	public function getDefaultTile() : Null<EntitySmartTile> {
+		// Look inside fields defaults
+		for( fd in fieldDefs )
+			switch fd.type {
+				case F_Tile:
+					var rect = fd.getTileRectDefaultObj();
+					if( rect!=null )
+						return {
+							tilesetUid: fd.tilesetUid,
+							rect: rect,
+						}
+
+				case _:
+			}
+
+		// Check display tile from entity def
+		if( isTileDefined() )
+			return {
+				tilesetUid: tilesetId,
+				rect: tileRect,
+			}
+		else
+			return null;
+	}
+
 	function set_identifier(id:String) {
 		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id, _project.identifierStyle) : identifier;
 	}
