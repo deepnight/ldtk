@@ -22,7 +22,7 @@ class Notification extends dn.Process {
 			elem.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
 		}
 
-		if( Editor.ME.gifMode )
+		if( Editor.exists() && Editor.ME.gifMode )
 			elem.hide();
 
 		delayer.addS(hide, 3 + str.length*0.04 + (long ? 20 : 0));
