@@ -55,6 +55,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 					l.worldY = M.round(b.y);
 					l.pxWid = b.wid;
 					l.pxHei = b.hei;
+					l.worldDepth = Editor.ME.curWorldDepth;
 					l;
 
 				case LinearHorizontal, LinearVertical:
