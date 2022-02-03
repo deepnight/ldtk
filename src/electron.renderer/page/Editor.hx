@@ -16,7 +16,7 @@ class Editor extends Page {
 		inline function get_curWorld() return project==null ? null : project.getWorldIid(curWorldIid);
 
 	public var curLevel(get,never) : data.Level;
-		inline function get_curLevel() return project==null ? null : project.getLevel(curLevelId);
+		inline function get_curLevel() return project==null ? null : project.getLevelAnywhere(curLevelId);
 
 	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
 		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
@@ -145,7 +145,7 @@ class Editor extends Page {
 		}
 		else if( settings.v.lastProject!=null ) {
 			// Auto load last level UID
-			var l = project.getLevel( settings.v.lastProject.levelUid );
+			var l = project.getLevelAnywhere( settings.v.lastProject.levelUid );
 			if( l!=null ) {
 				selectLevel(l);
 				camera.fit(true);

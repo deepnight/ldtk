@@ -496,7 +496,7 @@ class ProjectSaver extends dn.Process {
 			for(levelJson in trimmedProjectJson.levels) {
 				Reflect.deleteField(levelJson, dn.JsonPretty.HEADER_VALUE_NAME);
 				levelJson.layerInstances = null;
-				levelJson.externalRelPath = project.getLevel(levelJson.uid).makeExternalRelPath(idx++);
+				levelJson.externalRelPath = project.getLevelAnywhere(levelJson.uid).makeExternalRelPath(idx++);
 			}
 
 			return {

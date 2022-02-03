@@ -1056,7 +1056,10 @@ class Project {
 		tidy();
 	}
 
-	public inline function getLevel(uid:Int) : Null<Level> {
+	/**
+		Quick access to a level in any world
+	**/
+	public inline function getLevelAnywhere(uid:Int) : Null<Level> {
 		return quickLevelAccess.get(uid);
 	}
 

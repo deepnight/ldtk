@@ -4,7 +4,7 @@ class LevelHistory {
 	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
 	var levelId : Int;
-	var level(get,never): data.Level; inline function get_level() return Editor.ME.project.getLevel(levelId);
+	var level(get,never): data.Level; inline function get_level() return Editor.ME.project.getLevelAnywhere(levelId);
 
 	var curIndex = -1;
 	var states : haxe.ds.Vector< HistoryState >;

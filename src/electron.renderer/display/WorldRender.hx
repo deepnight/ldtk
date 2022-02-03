@@ -448,7 +448,7 @@ class WorldRender extends dn.Process {
 		var minZoom = 0.1;
 		var padding = Std.int( Rulers.PADDING*3 );
 		for(f in fieldRenders.keyValueIterator()) {
-			var l = project.getLevel(f.key);
+			var l = project.getLevelAnywhere(f.key);
 			var fr = f.value;
 			if( !camera.isOnScreenLevel(l, 256) || l.worldDepth!=editor.curWorldDepth ) {
 				fr.customFields.visible = false;
@@ -993,7 +993,7 @@ class WorldRender extends dn.Process {
 					if( !camera.isOnScreenWorldRect(wl.rect) )
 						continue;
 
-					l = editor.project.getLevel(wl.uid);
+					l = editor.project.getLevelAnywhere(wl.uid);
 					if( l==null ) {
 						// Drop lost levels
 						removeWorldLevel(wl.uid);
