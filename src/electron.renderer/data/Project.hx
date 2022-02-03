@@ -206,7 +206,7 @@ class Project {
 	}
 
 	@:keep public function toString() {
-		return 'Project(levels=${redirLevels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
+		return 'Project(worlds=${worlds.length})';
 	}
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
