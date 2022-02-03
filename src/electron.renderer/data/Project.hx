@@ -13,6 +13,7 @@ class Project {
 	var nextUid = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
+	var testLevels(get,never) : Array<Level>; inline function get_testLevels() return levels;
 	public var worlds : Array<World> = [];
 
 	public var jsonVersion : String;
@@ -205,7 +206,7 @@ class Project {
 	}
 
 	@:keep public function toString() {
-		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
+		return 'Project(levels=${testLevels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
 	}
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
@@ -285,7 +286,7 @@ class Project {
 		else {
 			// Levels (from json root)
 			for( lvlJson in JsonTools.readArray(json.levels) )
-				p.levels.push( Level.fromJson(p, lvlJson) );
+				p.testLevels.push( Level.fromJson(p, lvlJson) );
 		}
 
 		if( p.worlds.length==0 )
@@ -318,7 +319,7 @@ class Project {
 	}
 
 	public function recommendsBackup() {
-		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && levels.length>=8;
+		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && testLevels.length>=8;
 	}
 
 	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
@@ -384,7 +385,7 @@ class Project {
 	public function initUsedColors() {
 		usedColors = new Map();
 		registerUsedColor("bg", bgColor);
-		for(level in levels) {
+		for(level in testLevels) {
 			registerUsedColor("bg", @:privateAccess level.bgColor);
 
 			// Level fields
@@ -475,7 +476,7 @@ class Project {
 		reverseIidRefsCache = new Map();
 
 		// Levels
-		for(level in levels)
+		for(level in testLevels)
 		for( li in level.layerInstances )
 		for( ei in li.entityInstances )
 			registerEntityInstance(ei);
@@ -519,7 +520,7 @@ class Project {
 			},
 
 			defs: defs.toJson(this),
-			levels: hasFlag(MultiWorlds) ? [] : levels.map( (l)->l.toJson() ),
+			levels: hasFlag(MultiWorlds) ? [] : testLevels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
 		}
 
@@ -538,7 +539,7 @@ class Project {
 			case GridVania:
 				switch old {
 					case Free:
-						for(l in levels) {
+						for(l in testLevels) {
 							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
 							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
 						}
@@ -547,14 +548,14 @@ class Project {
 
 					case LinearHorizontal:
 						var pos = 0;
-						for(l in levels) {
+						for(l in testLevels) {
 							l.worldX = pos*worldGridWidth;
 							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
 						}
 
 					case LinearVertical:
 						var pos = 0;
-						for(l in levels) {
+						for(l in testLevels) {
 							l.worldY = pos*worldGridHeight;
 							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
 						}
@@ -582,7 +583,7 @@ class Project {
 	}
 
 	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
-		for( l in levels ) {
+		for( l in testLevels ) {
 			var wcx = Std.int(l.worldX/oldWid);
 			var wcy = Std.int(l.worldY/oldHei);
 			l.worldX = wcx * worldGridWidth;
@@ -597,7 +598,7 @@ class Project {
 
 			case LinearHorizontal:
 				var wx = 0;
-				for(l in levels) {
+				for(l in testLevels) {
 					l.worldX = wx;
 					l.worldY = 0;
 					wx += l.pxWid + spacing;
@@ -605,7 +606,7 @@ class Project {
 
 			case LinearVertical:
 				var wy = 0;
-				for(l in levels) {
+				for(l in testLevels) {
 					l.worldX = 0;
 					l.worldY = wy;
 					wy += l.pxHei + spacing;
@@ -624,7 +625,7 @@ class Project {
 	public function removeAnyFieldRefsTo(targetEi:data.inst.EntityInstance) {
 		var i = 0;
 
-		for(l in levels)
+		for(l in testLevels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)
 		for(fi in ei.fieldInstances) {
@@ -668,7 +669,7 @@ class Project {
 		}
 
 		// Levels
-		for(l in levels) {
+		for(l in testLevels) {
 			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
 			// Level fields
 			for(fi in l.fieldInstances) {
@@ -705,7 +706,7 @@ class Project {
 	**/
 	public function tidyFields() {
 		initEntityIidsCache();
-		for(l in levels) {
+		for(l in testLevels) {
 			for(fi in l.layerInstances)
 				fi.tidy(this);
 
@@ -731,7 +732,7 @@ class Project {
 		defs.tidy(this);
 		reorganizeWorld();
 		quickLevelAccess = new Map();
-		for(level in levels) {
+		for(level in testLevels) {
 			quickLevelAccess.set(level.uid, level);
 			level.tidy(this);
 		}
@@ -878,7 +879,7 @@ class Project {
 	}
 
 	function isCachedImageUsed(img:data.DataTypes.CachedImage) {
-		for(l in levels)
+		for(l in testLevels)
 			if( l.bgRelPath==img.relPath )
 				return true;
 
@@ -931,7 +932,7 @@ class Project {
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
 		id = cleanupIdentifier(id, identifierStyle);
-		for(l in levels)
+		for(l in testLevels)
 			if( l.identifier==id && l!=exclude )
 				return false;
 		return true;
@@ -940,9 +941,9 @@ class Project {
 	public function createLevel(?insertIdx:Int) {
 		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, generateUniqueId_int(), generateUniqueId_UUID());
 		if( insertIdx==null )
-			levels.push(l);
+			testLevels.push(l);
 		else
-			levels.insert(insertIdx,l);
+			testLevels.insert(insertIdx,l);
 		quickLevelAccess.set(l.uid, l);
 
 		l.identifier = fixUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
@@ -963,7 +964,7 @@ class Project {
 		// Pick unique identifier
 		copy.identifier = fixUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
 
-		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
+		testLevels.insert( dn.Lib.getArrayIndex(l,testLevels)+1, copy );
 		quickLevelAccess.set(copy.uid, l);
 		tidy();
 		return copy;
@@ -971,21 +972,21 @@ class Project {
 
 	public inline function getLowestLevelDepth() {
 		var d = 0;
-		for(l in levels)
+		for(l in testLevels)
 			d = M.imin(d, l.worldDepth);
 		return d;
 	}
 
 	public inline function getHighestLevelDepth() {
 		var d = 0;
-		for(l in levels)
+		for(l in testLevels)
 			d = M.imax(d, l.worldDepth);
 		return d;
 	}
 
 	public inline function countLevelsInDepth(d:Int) {
 		var n = 0;
-		for(l in levels)
+		for(l in testLevels)
 			if( l.worldDepth==d )
 				n++;
 		return n;
@@ -996,7 +997,7 @@ class Project {
 			return true;
 		else {
 			// Check if there's any level further this one, or at least in same depth
-			for(ol in levels)
+			for(ol in testLevels)
 				if( ol!=l && ol.worldDepth==l.worldDepth )
 					return true;
 			return false;
@@ -1009,7 +1010,7 @@ class Project {
 
 			// Shift empty first depth
 			while( countLevelsInDepth(0)==0 )
-				for(ol in levels)
+				for(ol in testLevels)
 					ol.worldDepth--;
 
 			return true;
@@ -1024,7 +1025,7 @@ class Project {
 			return true;
 		else {
 			// Check if there's any other level in current depth
-			for(ol in levels)
+			for(ol in testLevels)
 				if( ol!=l && ol.worldDepth==l.worldDepth )
 					return true;
 
@@ -1042,7 +1043,7 @@ class Project {
 	}
 
 	public function removeLevel(l:Level) {
-		if( !levels.remove(l) )
+		if( !testLevels.remove(l) )
 			throw "Level not found in this Project";
 
 		for(li in l.layerInstances)
@@ -1064,7 +1065,7 @@ class Project {
 	}
 
 	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
-		for(l in levels)
+		for(l in testLevels)
 			if( l.isWorldOver(worldX, worldY) )
 				return l;
 		return null;
@@ -1073,7 +1074,7 @@ class Project {
 
 	public function getLevelIndex(?l:Level, ?uid:Int) : Int {
 		var i = 0;
-		for(ol in levels)
+		for(ol in testLevels)
 			if( l!=null && ol==l || uid!=null && ol.uid==uid )
 				return i;
 			else
@@ -1082,7 +1083,7 @@ class Project {
 	}
 
 	public function getLevelUsingLayerInst(li:data.inst.LayerInstance) : Null<data.Level> {
-		for(l in levels)
+		for(l in testLevels)
 		for(lli in l.layerInstances)
 			if( lli==li )
 				return l;
@@ -1091,7 +1092,7 @@ class Project {
 	}
 
 	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
-		for(l in levels)
+		for(l in testLevels)
 		for(lfi in l.fieldInstances)
 			if( lfi==fi )
 				return l;
@@ -1100,23 +1101,23 @@ class Project {
 	}
 
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
-		var dh = new dn.DecisionHelper(levels);
+		var dh = new dn.DecisionHelper(testLevels);
 		dh.removeValue(level);
 		dh.score( (l)->-level.getBoundsDist(l) );
 		return dh.getBest();
 	}
 
 	public function sortLevel(from:Int, to:Int) : Null<data.Level> {
-		if( from<0 || from>=levels.length || from==to )
+		if( from<0 || from>=testLevels.length || from==to )
 			return null;
 
-		if( to<0 || to>=levels.length )
+		if( to<0 || to>=testLevels.length )
 			return null;
 
 		tidy();
 
-		var moved = levels.splice(from,1)[0];
-		levels.insert(to, moved);
+		var moved = testLevels.splice(from,1)[0];
+		testLevels.insert(to, moved);
 		reorganizeWorld();
 		return moved;
 	}
@@ -1131,7 +1132,7 @@ class Project {
 		var top = Const.INFINITE;
 		var bottom = -Const.INFINITE;
 
-		for(l in levels) {
+		for(l in testLevels) {
 			left = dn.M.imin(left, l.worldX);
 			right = dn.M.imax(right, l.worldX+l.pxWid);
 			top = dn.M.imin(top, l.worldY);
@@ -1149,7 +1150,7 @@ class Project {
 	public inline function getWorldWidth(?ignoredLevel:data.Level) {
 		var min = Const.INFINITE;
 		var max = -Const.INFINITE;
-		for(l in levels)
+		for(l in testLevels)
 			if( l!=ignoredLevel ) {
 				min = dn.M.imin(min, l.worldX);
 				max = dn.M.imax(max, l.worldX+l.pxWid);
@@ -1161,7 +1162,7 @@ class Project {
 	public inline function getWorldHeight(?ignoredLevel:data.Level) {
 		var min = Const.INFINITE;
 		var max = -Const.INFINITE;
-		for(l in levels)
+		for(l in testLevels)
 			if( l!=ignoredLevel ) {
 				min = dn.M.imin(min, l.worldY);
 				max = dn.M.imax(max, l.worldY+l.pxHei);
@@ -1201,7 +1202,7 @@ class Project {
 	}
 
 	public function isEnumValueUsed(enumDef:data.def.EnumDef, val:String) {
-		for( l in levels )
+		for( l in testLevels )
 		for( li in l.layerInstances ) {
 			if( li.def.type!=Entities )
 				continue;
@@ -1224,7 +1225,7 @@ class Project {
 	}
 
 	public function isEntityDefUsed(ed:data.def.EntityDef) {
-		for(l in levels)
+		for(l in testLevels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Entities )
 				continue;
@@ -1237,7 +1238,7 @@ class Project {
 	}
 
 	public function isIntGridValueUsed(layer:data.def.LayerDef, valueId:Int) {
-		for(l in levels) {
+		for(l in testLevels) {
 			var li = l.getLayerInstance(layer);
 			if( li!=null ) {
 				for(cx in 0...li.cWid)
@@ -1303,13 +1304,13 @@ class Project {
 
 	public function applyAutoLevelIdentifiers() {
 		var uniq = 0;
-		for(l in levels)
+		for(l in testLevels)
 			if( l.useAutoIdentifier )
 				l.identifier = "#"+(uniq++);
 
 		var idx = 0;
 		var b = getWorldBounds();
-		for(l in levels) {
+		for(l in testLevels) {
 			if( l.useAutoIdentifier ) {
 				var id = levelNamePattern;
 				id = StringTools.replace(id, "%idx1", Std.string(idx+1) );
@@ -1366,12 +1367,12 @@ class Project {
 	}
 
 	public function iterateAllFieldInstances(?searchType:ldtk.Json.FieldType, run:data.inst.FieldInstance->Void) {
-		for(l in levels)
+		for(l in testLevels)
 		for(fi in l.fieldInstances)
 			if( searchType==null || fi.def.type.equals(searchType) )
 				run(fi);
 
-		for(l in levels)
+		for(l in testLevels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)
 		for(fi in ei.fieldInstances)
