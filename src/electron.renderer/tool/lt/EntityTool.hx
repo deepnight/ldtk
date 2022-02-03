@@ -158,7 +158,7 @@ class EntityTool extends tool.LayerTool<Int> {
 										all.push({ ei:ei, li:li });
 
 							case PerWorld:
-								for(l in project.levels)
+								for(l in curWorld.levels)
 								for(li in l.layerInstances)
 								for(ei in li.entityInstances)
 									if( ei.defUid==curEntityDef.uid )

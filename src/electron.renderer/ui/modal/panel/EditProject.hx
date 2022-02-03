@@ -166,7 +166,7 @@ class EditProject extends ui.modal.Panel {
 		i.onChange = editor.invalidateAllLevelsCache;
 
 		// External level files
-		jForm.find(".externRecommend").css("visibility", project.levels.length>=10 && !project.externalLevels ? "visible" : "hidden");
+		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = (v)->{

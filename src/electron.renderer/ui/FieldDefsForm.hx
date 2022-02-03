@@ -308,11 +308,13 @@ class FieldDefsForm {
 	function onAnyChange() {
 		switch parentType {
 			case FP_Entity:
-				for( l in project.levels )
+				for( w in project.worlds )
+				for( l in w.levels )
 					editor.invalidateLevelCache(l);
 
 			case FP_Level:
-				for( l in project.levels )
+				for( w in project.worlds )
+				for( l in w.levels )
 					editor.invalidateLevelCache(l);
 				editor.worldRender.invalidateAllLevelFields();
 		}

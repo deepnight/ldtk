@@ -101,7 +101,7 @@ class Camera extends dn.Process {
 			if( worldMode ) {
 				targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
 				cd.setS("keepAutoZoom",ANIM_KEEP_DURATION_S);
-				if( editor.project.levels.length<=1 )
+				if( editor.curWorld.levels.length<=1 )
 					targetZoom*=0.5;
 			}
 			else

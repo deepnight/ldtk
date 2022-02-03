@@ -112,7 +112,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Update layer instances
 		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
-		for(l in project.levels) {
+		for(w in project.worlds)
+		for(l in w.levels) {
 			var sourceLi = l.getLayerInstance(ld);
 			var newLi = l.getLayerInstance(newLd);
 			ops.push({

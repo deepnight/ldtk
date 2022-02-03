@@ -12,7 +12,7 @@ class Project {
 
 	var nextUid = 0;
 	public var defs : Definitions;
-	public var levels : Array<Level> = [];
+	var levels : Array<Level> = [];
 	var redirLevels(get,never) : Array<Level>; inline function get_redirLevels() return worlds[0].levels;
 	public var worlds : Array<World> = [];
 
@@ -914,6 +914,7 @@ class Project {
 	}
 
 	public function getWorldIid(iid:String) : Null<World> {
+		// TODO quick access
 		for(w in worlds)
 			if( w.iid==iid )
 				return w;
@@ -922,6 +923,15 @@ class Project {
 
 	public inline function getWorldIndex(idx:Int) : Null<World> {
 		return worlds[idx];
+	}
+
+
+	public function countAllLevels() {
+		var n = 0;
+		for(w in worlds)
+		for(l in w.levels)
+			n++;
+		return n;
 	}
 
 

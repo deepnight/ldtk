@@ -23,7 +23,7 @@ class LevelInstanceForm {
 
 		// Delete button
 		jWrapper.find("button.delete").click( (_)->{
-			if( project.levels.length<=1 ) {
+			if( curWorld.levels.length<=1 ) {
 				N.error(L.t._("You can't delete the last level."));
 				return;
 			}

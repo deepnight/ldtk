@@ -275,17 +275,17 @@ class LevelHistory {
 		switch s {
 			case ResizedLevel(beforeJson, afterJson):
 				var lidx = 0;
-				while( lidx < editor.project.levels.length )
-					if( editor.project.levels[lidx].uid == editor.curLevelId )
+				while( lidx < world.levels.length )
+					if( world.levels[lidx].uid == editor.curLevelId )
 						break;
 					else
 						lidx++;
 
 				if( isUndo )
-					editor.project.levels[lidx] = data.Level.fromJson(editor.project, world, beforeJson);
+					world.levels[lidx] = data.Level.fromJson(editor.project, world, beforeJson);
 				else
-					editor.project.levels[lidx] = data.Level.fromJson(editor.project, world, afterJson);
-				editor.ge.emit( LevelRestoredFromHistory(editor.project.levels[lidx]) );
+					world.levels[lidx] = data.Level.fromJson(editor.project, world, afterJson);
+				editor.ge.emit( LevelRestoredFromHistory(world.levels[lidx]) );
 
 			case Layer(layerId, bounds, json):
 				var li = data.inst.LayerInstance.fromJson(editor.project, json);

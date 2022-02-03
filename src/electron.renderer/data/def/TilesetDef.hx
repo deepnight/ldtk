@@ -288,7 +288,8 @@ class TilesetDef {
 		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
 
 		// Tiles layers remapping
-		for(l in _project.levels)
+		for(w in _project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Tiles || li.def.tilesetDefUid!=uid )
 				continue;

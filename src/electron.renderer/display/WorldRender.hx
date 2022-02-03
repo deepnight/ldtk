@@ -138,11 +138,11 @@ class WorldRender extends dn.Process {
 				updateWorldTitle();
 				updateFieldsPos();
 				invalidateCameraBasedRenders();
-				for(l in project.levels)
+				for(l in curWorld.levels)
 					updateLevelVisibility(l);
 
 			case WorldDepthSelected(worldDepth):
-				for(l in project.levels)
+				for(l in curWorld.levels)
 					updateLevelVisibility(l);
 				updateCurrentHighlight();
 				updateFieldsPos();
@@ -159,7 +159,7 @@ class WorldRender extends dn.Process {
 					switch project.worldLayout {
 						case Free, GridVania:
 						case LinearHorizontal, LinearVertical:
-							for(l in project.levels)
+							for(l in curWorld.levels)
 								refreshWorldLevelRect(l);
 					}
 				}
@@ -278,7 +278,7 @@ class WorldRender extends dn.Process {
 				updateAxesPos();
 				renderGrids();
 				updateCurrentHighlight();
-				for(l in project.levels)
+				for(l in curWorld.levels)
 					updateLevelBounds(l);
 
 			case _:
@@ -287,7 +287,7 @@ class WorldRender extends dn.Process {
 
 
 	public inline function invalidateAll() {
-		for(l in editor.project.levels) {
+		for(l in editor.curWorld.levels) {
 			invalidateLevelFields(l);
 			invalidateLevelIdentifier(l);
 			invalidateLevelRender(l);
@@ -304,7 +304,7 @@ class WorldRender extends dn.Process {
 			wl.renderInvalidated = true;
 	}
 	public inline function invalidateAllLevelRenders() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelRender(l);
 	}
 
@@ -315,7 +315,7 @@ class WorldRender extends dn.Process {
 			wl.fieldsInvalidated = true;
 	}
 	public inline function invalidateAllLevelFields() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelFields(l);
 	}
 
@@ -325,7 +325,7 @@ class WorldRender extends dn.Process {
 			wl.identifierInvalidated = true;
 	}
 	public inline function invalidateAllLevelIdentifiers() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelIdentifier(l);
 	}
 
@@ -397,10 +397,10 @@ class WorldRender extends dn.Process {
 		worldLevels = new Map();
 		for(l in worldLayers)
 			l.removeChildren();
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			getWorldLevel(l);
 
-		for(l in editor.project.levels) {
+		for(l in editor.curWorld.levels) {
 			invalidateLevelFields(l);
 			invalidateLevelIdentifier(l);
 			invalidateLevelRender(l);
@@ -499,7 +499,7 @@ class WorldRender extends dn.Process {
 	}
 
 	inline function updateAllLevelIdentifiers(refreshTexts:Bool) {
-		for( l in editor.project.levels )
+		for( l in editor.curWorld.levels )
 			if( worldLevels.exists(l.uid) )
 				updateLevelIdentifier(l, refreshTexts);
 	}
@@ -670,7 +670,7 @@ class WorldRender extends dn.Process {
 		var cur = editor.curLevel;
 
 		// Level layout
-		for( l in editor.project.levels ) {
+		for( l in editor.curWorld.levels ) {
 			if( !worldLevels.exists(l.uid) )
 				continue;
 
@@ -972,7 +972,7 @@ class WorldRender extends dn.Process {
 		}
 
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
-		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
+		worldBounds.visible = editor.worldMode && editor.curWorld.levels.length>1;
 
 
 		// Level invalidations
@@ -1029,7 +1029,7 @@ class WorldRender extends dn.Process {
 			invalidatedCameraBasedRenders = false;
 			renderGrids();
 			updateCurrentHighlight();
-			for(l in project.levels)
+			for(l in curWorld.levels)
 				updateLevelBounds(l);
 		}
 	}

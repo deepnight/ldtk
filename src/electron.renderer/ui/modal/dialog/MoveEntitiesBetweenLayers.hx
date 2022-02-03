@@ -98,9 +98,10 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 
 			new LastChance(L.t._("Moved entities between layers"), project);
 
-			// Move entities
+			// Move all existing entities
 			var n = 0;
-			for(l in project.levels)
+			for(w in project.worlds)
+			for(l in w.levels)
 			for(fromLi in l.layerInstances) {
 				if( fromLi.layerDefUid!=fromLd.uid)
 					continue;

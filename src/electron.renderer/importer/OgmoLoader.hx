@@ -463,7 +463,7 @@ class OgmoLoader {
 				log.indentLess();
 			}
 			log.clearIndent();
-			p.removeLevel( p.levels[0] ); // remove default 1st level
+			p.removeLevel( p.worlds[0].levels[0] ); // remove default 1st level
 
 
 			// Organize levels in 2D world space

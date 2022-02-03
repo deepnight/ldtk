@@ -134,14 +134,14 @@ class Editor extends Page {
 			);
 		}
 
-		if( loadLevelIndex!=null ) {
+		if( loadLevelIndex!=null ) { // TODO restore world and level on opening
 			// Auto-load provided level index
-			if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
-				selectLevel( project.levels[loadLevelIndex] );
-				camera.fit(true);
-			}
-			else
-				N.error('Invalid level index $loadLevelIndex');
+			// if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
+			// 	selectLevel( project.levels[loadLevelIndex] );
+			// 	camera.fit(true);
+			// }
+			// else
+			// 	N.error('Invalid level index $loadLevelIndex');
 		}
 		else if( settings.v.lastProject!=null ) {
 			// Auto load last level UID
@@ -332,7 +332,7 @@ class Editor extends Page {
 
 
 		curWorldIid = project.worlds[0].iid;
-		curLevelId = project.levels[0].uid;
+		curLevelId = project.worlds[0].levels[0].uid;
 		curLayerDefUid = -1;
 
 		// Pick 1st layer in current level
@@ -356,9 +356,10 @@ class Editor extends Page {
 			watcher.watchImage(td.relPath);
 
 		// Level bg image hot-reloading
-		for( l in project.levels )
+		for( w in project.worlds )
+		for( l in w.levels )
 			if( l.bgRelPath!=null )
-			watcher.watchImage(l.bgRelPath);
+				watcher.watchImage(l.bgRelPath);
 
 		for( ed in project.defs.externalEnums )
 			watcher.watchEnum(ed);
@@ -373,7 +374,8 @@ class Editor extends Page {
 
 		// Check level caches
 		if( !project.isBackup() ) {
-			for(l in project.levels)
+			for(w in project.worlds)
+			for(l in w.levels)
 				if( !l.hasJsonCache() ) {
 					needSaving = true;
 					break;
@@ -399,7 +401,8 @@ class Editor extends Page {
 	public function checkAutoLayersCache(onDone:(anyChange:Bool)->Void) {
 		var ops = [];
 
-		for(l in project.levels)
+		for(w in project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances)
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				ops.push({
@@ -429,7 +432,8 @@ class Editor extends Page {
 					reloadTileset(td);
 
 			// Update level bgs
-			for(l in project.levels)
+			for(w in project.worlds)
+			for(l in w.levels)
 				if( l.bgRelPath==relPath ) {
 					worldRender.invalidateLevelRender(l);
 					if( curLevel==l )
@@ -1104,7 +1108,7 @@ class Editor extends Page {
 		// Auto level mode on zoom in
 		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && delta>0 ) {
 			// Find closest level to cursor
-			var dh = new dn.DecisionHelper(project.levels);
+			var dh = new dn.DecisionHelper(curWorld.levels);
 			dh.keepOnly( l->l.worldDepth==curWorldDepth && l.isWorldOver(c.worldX, c.worldY, 500) );
 			dh.score( l->l.isWorldOver(c.worldX, c.worldY) ? 100 : 0 );
 			dh.score( l->-l.getDist(c.worldX,c.worldY) );
@@ -1450,7 +1454,8 @@ class Editor extends Page {
 					App.LOG.fileOp('Backup original: ${original.full}...');
 					project.filePath = original.clone();
 					setPermanentNotification("backup");
-					for(l in project.levels)
+					for(w in project.worlds)
+					for(l in w.levels)
 						invalidateLevelCache(l);
 					onSave();
 					selectProject(project);
@@ -1871,8 +1876,9 @@ class Editor extends Page {
 		updateTitle();
 	}
 
-	public function invalidateAllLevelsCache() {
-		for(l in project.levels)
+	public inline function invalidateAllLevelsCache() {
+		for(w in project.worlds)
+		for(l in w.levels)
 			invalidateLevelCache(l);
 	}
 

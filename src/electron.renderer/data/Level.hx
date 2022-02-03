@@ -76,7 +76,7 @@ class Level {
 		// List nearby levels
 		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _project.worldLayout {
 			case Free, GridVania:
-				var nears = _project.levels.filter( (ol)->
+				var nears = _world.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
 					&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
 						&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
@@ -359,7 +359,7 @@ class Level {
 	}
 
 	public function overlapsAnyLevel() {
-		for(l in _project.levels)
+		for(l in _world.levels)
 			if( overlaps(l) )
 				return true;
 
@@ -367,7 +367,7 @@ class Level {
 	}
 
 	public function willOverlapAnyLevel(newWorldX:Int, newWorldY:Int) {
-		for(l in _project.levels)
+		for(l in _world.levels)
 			if( l!=this && dn.Lib.rectangleOverlaps(newWorldX, newWorldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
 				return true;
 
