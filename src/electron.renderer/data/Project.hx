@@ -316,7 +316,7 @@ class Project {
 	}
 
 	public function recommendsBackup() {
-		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && redirLevels.length>=8;
+		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && countAllLevels()>=8;
 	}
 
 	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
@@ -382,7 +382,8 @@ class Project {
 	public function initUsedColors() {
 		usedColors = new Map();
 		registerUsedColor("bg", bgColor);
-		for(level in redirLevels) {
+		for(w in worlds)
+		for(level in w.levels) {
 			registerUsedColor("bg", @:privateAccess level.bgColor);
 
 			// Level fields
@@ -473,7 +474,8 @@ class Project {
 		reverseIidRefsCache = new Map();
 
 		// Levels
-		for(level in redirLevels)
+		for(world in worlds)
+		for(level in world.levels)
 		for( li in level.layerInstances )
 		for( ei in li.entityInstances )
 			registerEntityInstance(ei);
@@ -519,8 +521,6 @@ class Project {
 			defs: defs.toJson(this),
 			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
-			// levels: hasFlag(MultiWorlds) ? [] : redirLevels.map( (l)->l.toJson() ),
-			// worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
 		}
 
 		return json;
@@ -1141,7 +1141,8 @@ class Project {
 	}
 
 	public function isEnumValueUsed(enumDef:data.def.EnumDef, val:String) {
-		for( l in redirLevels )
+		for( w in worlds )
+		for( l in w.levels )
 		for( li in l.layerInstances ) {
 			if( li.def.type!=Entities )
 				continue;
@@ -1164,7 +1165,8 @@ class Project {
 	}
 
 	public function isEntityDefUsed(ed:data.def.EntityDef) {
-		for(l in redirLevels)
+		for(w in worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Entities )
 				continue;
@@ -1177,7 +1179,8 @@ class Project {
 	}
 
 	public function isIntGridValueUsed(layer:data.def.LayerDef, valueId:Int) {
-		for(l in redirLevels) {
+		for(w in worlds)
+		for(l in w.levels) {
 			var li = l.getLayerInstance(layer);
 			if( li!=null ) {
 				for(cx in 0...li.cWid)
@@ -1269,16 +1272,18 @@ class Project {
 	}
 
 	public function iterateAllFieldInstances(?searchType:ldtk.Json.FieldType, run:data.inst.FieldInstance->Void) {
-		for(l in redirLevels)
-		for(fi in l.fieldInstances)
-			if( searchType==null || fi.def.type.equals(searchType) )
-				run(fi);
+		for(w in worlds)
+		for(l in w.levels) {
+			for(fi in l.fieldInstances)
+				if( searchType==null || fi.def.type.equals(searchType) )
+					run(fi);
+			
+			for(li in l.layerInstances)
+			for(ei in li.entityInstances)
+			for(fi in ei.fieldInstances)
+				if( searchType==null || fi.def.type.equals(searchType) )
+					run(fi);
+		}
 
-		for(l in redirLevels)
-		for(li in l.layerInstances)
-		for(ei in li.entityInstances)
-		for(fi in ei.fieldInstances)
-			if( searchType==null || fi.def.type.equals(searchType) )
-				run(fi);
 	}
 }
