@@ -277,16 +277,14 @@ class Project {
 		p.defs = Definitions.fromJson(p, json.defs);
 
 		if( p.hasFlag(MultiWorlds) ) {
-			// Read worlds
+			// Read worlds array
 			for( worldJson in JsonTools.readArray(json.worlds) )
 				p.worlds.push( World.fromJson(p, worldJson) );
-
-			p.levels = p.worlds[0].levels; // HACK point root levels to world[0] levels
 		}
 		else {
-			// Levels (from json root)
+			// Read Levels from root
 			for( lvlJson in JsonTools.readArray(json.levels) )
-				p.testLevels.push( Level.fromJson(p, lvlJson) );
+				p.worlds[0].push( Level.fromJson(p, lvlJson) );
 		}
 
 		if( p.worlds.length==0 )
@@ -520,8 +518,10 @@ class Project {
 			},
 
 			defs: defs.toJson(this),
-			levels: hasFlag(MultiWorlds) ? [] : testLevels.map( (l)->l.toJson() ),
+			levels: hasFlag(MultiWorlds) ? [] : worlds.map( (w)->w.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
+			// levels: hasFlag(MultiWorlds) ? [] : testLevels.map( (l)->l.toJson() ),
+			// worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
 		}
 
 		return json;
