@@ -339,7 +339,7 @@ class Editor extends Page {
 		autoPickFirstValidLayer();
 
 		levelHistory = new Map();
-		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
+		levelHistory.set( curLevelId, new LevelHistory(curLevelId, curWorldIid) );
 
 		// Load tilesets
 		var tilesetChanged = false;
@@ -1805,7 +1805,7 @@ class Editor extends Page {
 				selectionTool.clear();
 				updateTool();
 				if( !levelHistory.exists(l.uid) )
-					levelHistory.set(l.uid, new LevelHistory(l.uid) );
+					levelHistory.set(l.uid, new LevelHistory(l.uid, l._world.iid) );
 				selectWorldDepth(l.worldDepth);
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):

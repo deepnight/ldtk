@@ -284,8 +284,9 @@ class Project {
 		else {
 			// Read Levels from root
 			p.createWorld();
+			var w = p.worlds[0];
 			for( lvlJson in JsonTools.readArray(json.levels) )
-				p.worlds[0].levels.push( Level.fromJson(p, lvlJson) );
+				w.levels.push( Level.fromJson(p, w, lvlJson) );
 		}
 
 		// World settings
@@ -730,10 +731,8 @@ class Project {
 		defs.tidy(this);
 		reorganizeWorld();
 		quickLevelAccess = new Map();
-		for(level in redirLevels) {
-			quickLevelAccess.set(level.uid, level);
-			level.tidy(this);
-		}
+		for(w in worlds)
+			w.tidy(this);
 		applyAutoLevelIdentifiers();
 		initUsedColors();
 	}
@@ -937,35 +936,11 @@ class Project {
 	}
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, generateUniqueId_int(), generateUniqueId_UUID());
-		if( insertIdx==null )
-			redirLevels.push(l);
-		else
-			redirLevels.insert(insertIdx,l);
-		quickLevelAccess.set(l.uid, l);
-
-		l.identifier = fixUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
-
-		tidy(); // this will create layer instances
-		return l;
+		return worlds[0].createLevel(insertIdx);
 	}
 
 	public function duplicateLevel(l:data.Level) {
-		var copy : data.Level = Level.fromJson( this, l.toJson() );
-
-		// Remap IDs
-		copy.iid = generateUniqueId_UUID();
-		copy.uid = generateUniqueId_int();
-		for(li in copy.layerInstances)
-			li.levelId = copy.uid;
-
-		// Pick unique identifier
-		copy.identifier = fixUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
-
-		redirLevels.insert( dn.Lib.getArrayIndex(l,redirLevels)+1, copy );
-		quickLevelAccess.set(copy.uid, l);
-		tidy();
-		return copy;
+		return worlds[0].duplicateLevel(l);
 	}
 
 	public inline function getLowestLevelDepth() {

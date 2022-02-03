@@ -2,6 +2,7 @@ package data;
 
 class Level {
 	var _project : Project;
+	public var _world : World;
 
 	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
 
@@ -37,7 +38,7 @@ class Level {
 
 
 	@:allow(data.Project, data.World)
-	private function new(project:Project, wid:Int, hei:Int, uid:Int, iid:String) {
+	private function new(project:Project, world:World, wid:Int, hei:Int, uid:Int, iid:String) {
 		this.uid = uid;
 		this.iid = iid;
 		worldX = worldY = 0;
@@ -47,6 +48,7 @@ class Level {
 		bgPivotX = 0.5;
 		bgPivotY = 0.5;
 		this._project = project;
+		this._world = world;
 		this.identifier = "Level"+uid;
 		this.bgColor = null;
 		useAutoIdentifier = true;
@@ -168,13 +170,13 @@ class Level {
 			+ "." + Const.LEVEL_EXTENSION;
 	}
 
-	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
+	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson) {
 		if( json.iid==null )
 			json.iid = p.generateUniqueId_UUID();
 
 		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
 		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
-		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid), json.iid );
+		var l = new Level( p, w, wid, hei, JsonTools.readInt(json.uid), json.iid );
 		p.quickLevelAccess.set(l.uid, l);
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
@@ -398,9 +400,10 @@ class Level {
 		return li;
 	}
 
-	public function tidy(p:Project) {
+	public function tidy(p:Project, w:World) {
 		_project = p;
 		_project.markIidAsUsed(iid);
+		_world = w;
 
 		// Remove layerInstances without layerDefs
 		var i = 0;

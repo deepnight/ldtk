@@ -54,14 +54,14 @@ class World {
 		w.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, Free );
 
 		for( levelJson in json.levels )
-			w.levels.push( Level.fromJson(p, levelJson) );
+			w.levels.push( Level.fromJson(p, w, levelJson) );
 
 		return w;
 	}
 
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(_project, _project.defaultLevelWidth, _project.defaultLevelHeight, _project.generateUniqueId_int(), _project.generateUniqueId_UUID());
+		var l = new Level(_project, this, _project.defaultLevelWidth, _project.defaultLevelHeight, _project.generateUniqueId_int(), _project.generateUniqueId_UUID());
 		if( insertIdx==null )
 			levels.push(l);
 		else
@@ -75,7 +75,7 @@ class World {
 	}
 
 	public function duplicateLevel(l:data.Level) {
-		var copy : data.Level = Level.fromJson( _project, l.toJson() );
+		var copy : data.Level = Level.fromJson( _project, this, l.toJson() );
 
 		// Remap IDs
 		copy.iid = _project.generateUniqueId_UUID();
@@ -246,7 +246,10 @@ class World {
 
 	public function tidy(p:Project) {
 		_project = p;
-		for( l in levels )
-			l.tidy(p);
+		
+		for( l in levels ) {
+			_project.quickLevelAccess.set(l.uid, l);
+			l.tidy(p, this);
+		}
 	}
 }
