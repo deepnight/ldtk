@@ -5,7 +5,7 @@ class Level {
 
 	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
 
-	@:allow(data.Project)
+	@:allow(data.Project, data.World)
 	public var uid(default,null) : Int;
 	public var iid : String;
 	public var identifier(default,set): String;
@@ -36,7 +36,7 @@ class Level {
 		inline function get_worldCenterY() return dn.M.round( worldY + pxHei*0.5 );
 
 
-	@:allow(data.Project)
+	@:allow(data.Project, data.World)
 	private function new(project:Project, wid:Int, hei:Int, uid:Int, iid:String) {
 		this.uid = uid;
 		this.iid = iid;

@@ -41,7 +41,7 @@ class Project {
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
 
-	@:allow(data.Level)
+	@:allow(data.Level, data.World)
 	var quickLevelAccess : Map<Int, Level> = new Map();
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
@@ -1117,6 +1117,10 @@ class Project {
 		reorganizeWorld();
 		return moved;
 	}
+
+
+
+	/**  WORLD  *****************************************/
 
 	public function getWorldBounds() {
 		var left = Const.INFINITE;
