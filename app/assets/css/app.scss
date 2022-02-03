@@ -2314,6 +2314,7 @@ textarea {
 		top: 0px;
 		left: 0px;
 		height: 100vh;
+		overflow-x: hidden;
 		border-left: none;
 		border-bottom: none;
 		border-top: none;
@@ -5841,6 +5842,8 @@ dl.form.fieldInstanceEditor {
 
 		a.showAdv {
 			cursor: pointer;
+			padding-top: 4px;
+			padding-bottom: 4px;
 			&:hover {
 				color: white;
 			}
