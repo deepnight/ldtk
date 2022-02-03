@@ -7477,6 +7477,9 @@ $patternSize : 32px;
 		}
 
 		.infos {
+			display: grid;
+			grid-template-columns: auto min-content;
+			align-items: center;
 			padding-bottom: 8px;
 			margin-bottom: 8px;
 			color: $almostWhite;

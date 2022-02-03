@@ -86,6 +86,7 @@ class Lang {
 				displayName: "⚙️ Internal icons by FinalBossBlues",
 				identifier: "Internal_Icons",
 				author: "FinalBossBlues",
+				support: { label:"Patreon", url:"https://www.patreon.com/finalbossblues" },
 				url: "https://finalbossblues.itch.io/icons"
 			}
 		}
