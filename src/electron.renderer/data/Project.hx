@@ -286,9 +286,10 @@ class Project {
 			// Levels (from json root)
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				p.levels.push( Level.fromJson(p, lvlJson) );
-
-			p.createWorld(); // dummy
 		}
+
+		if( p.worlds.length==0 )
+			p.createWorld();
 
 		// World settings
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
@@ -928,6 +929,14 @@ class Project {
 
 	/**  LEVELS  *****************************************/
 
+	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
+		id = cleanupIdentifier(id, identifierStyle);
+		for(l in levels)
+			if( l.identifier==id && l!=exclude )
+				return false;
+		return true;
+	}
+
 	public function createLevel(?insertIdx:Int) {
 		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, generateUniqueId_int(), generateUniqueId_UUID());
 		if( insertIdx==null )
@@ -1032,14 +1041,6 @@ class Project {
 			return false;
 	}
 
-	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
-		id = cleanupIdentifier(id, identifierStyle);
-		for(l in levels)
-			if( l.identifier==id && l!=exclude )
-				return false;
-		return true;
-	}
-
 	public function removeLevel(l:Level) {
 		if( !levels.remove(l) )
 			throw "Level not found in this Project";
@@ -1057,10 +1058,6 @@ class Project {
 
 	public inline function getLevel(uid:Int) : Null<Level> {
 		return quickLevelAccess.get(uid);
-		// for(l in levels)
-			// if( l.uid==uid )
-				// return l;
-		// return null;
 	}
 
 	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
