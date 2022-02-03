@@ -12,7 +12,6 @@ class Project {
 
 	var nextUid = 0;
 	public var defs : Definitions;
-	var oldLevels : Array<Level> = [];
 	var redirLevels(get,never) : Array<Level>; inline function get_redirLevels() return worlds[0].levels;
 	public var worlds : Array<World> = [];
 
@@ -1277,7 +1276,7 @@ class Project {
 			for(fi in l.fieldInstances)
 				if( searchType==null || fi.def.type.equals(searchType) )
 					run(fi);
-			
+
 			for(li in l.layerInstances)
 			for(ei in li.entityInstances)
 			for(fi in ei.fieldInstances)
