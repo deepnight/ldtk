@@ -13,7 +13,7 @@ class Project {
 	var nextUid = 0;
 	public var defs : Definitions;
 	public var levels : Array<Level> = [];
-	var testLevels(get,never) : Array<Level>; inline function get_testLevels() return levels;
+	var testLevels(get,never) : Array<Level>; inline function get_testLevels() return worlds[0].levels;
 	public var worlds : Array<World> = [];
 
 	public var jsonVersion : String;
@@ -283,12 +283,10 @@ class Project {
 		}
 		else {
 			// Read Levels from root
-			for( lvlJson in JsonTools.readArray(json.levels) )
-				p.worlds[0].push( Level.fromJson(p, lvlJson) );
-		}
-
-		if( p.worlds.length==0 )
 			p.createWorld();
+			for( lvlJson in JsonTools.readArray(json.levels) )
+				p.worlds[0].levels.push( Level.fromJson(p, lvlJson) );
+		}
 
 		// World settings
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
@@ -518,7 +516,7 @@ class Project {
 			},
 
 			defs: defs.toJson(this),
-			levels: hasFlag(MultiWorlds) ? [] : worlds.map( (w)->w.toJson() ),
+			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
 			// levels: hasFlag(MultiWorlds) ? [] : testLevels.map( (l)->l.toJson() ),
 			// worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
