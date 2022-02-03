@@ -791,7 +791,7 @@ class App extends dn.Process {
 
 			if( Editor.ME!=null ) {
 				final p = Editor.ME.project;
-				debugPre("project.levels="+@:privateAccess p.levels.length+" worlds="+p.worlds.length+ (p.worlds.length>0 ? " world[0].levels="+p.worlds[0].levels.length : "") );
+				debugPre("project.oldLevels="+@:privateAccess p.oldLevels.length+" worlds="+p.worlds.length+ (p.worlds.length>0 ? " world[0].levels="+p.worlds[0].levels.length : "") );
 				debugPre("curWorld="+Editor.ME.curWorld);
 			}
 

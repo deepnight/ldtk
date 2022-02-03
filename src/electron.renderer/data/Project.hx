@@ -12,7 +12,7 @@ class Project {
 
 	var nextUid = 0;
 	public var defs : Definitions;
-	var levels : Array<Level> = [];
+	var oldLevels : Array<Level> = [];
 	var redirLevels(get,never) : Array<Level>; inline function get_redirLevels() return worlds[0].levels;
 	public var worlds : Array<World> = [];
 
