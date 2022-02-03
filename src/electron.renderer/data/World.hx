@@ -60,6 +60,55 @@ class World {
 	}
 
 
+	/*** WORLDS ************************************************/
+
+	public function getWorldBounds() {
+		var left = Const.INFINITE;
+		var right = -Const.INFINITE;
+		var top = Const.INFINITE;
+		var bottom = -Const.INFINITE;
+
+		for(l in levels) {
+			left = dn.M.imin(left, l.worldX);
+			right = dn.M.imax(right, l.worldX+l.pxWid);
+			top = dn.M.imin(top, l.worldY);
+			bottom = dn.M.imax(bottom, l.worldY+l.pxHei);
+		}
+
+		return {
+			left: left,
+			right: right,
+			top: top,
+			bottom: bottom,
+		}
+	}
+
+	public inline function getWorldWidth(?ignoredLevel:data.Level) {
+		var min = Const.INFINITE;
+		var max = -Const.INFINITE;
+		for(l in levels)
+			if( l!=ignoredLevel ) {
+				min = dn.M.imin(min, l.worldX);
+				max = dn.M.imax(max, l.worldX+l.pxWid);
+			}
+		return max-min;
+	}
+
+
+	public inline function getWorldHeight(?ignoredLevel:data.Level) {
+		var min = Const.INFINITE;
+		var max = -Const.INFINITE;
+		for(l in levels)
+			if( l!=ignoredLevel ) {
+				min = dn.M.imin(min, l.worldY);
+				max = dn.M.imax(max, l.worldY+l.pxHei);
+			}
+		return max-min;
+	}
+
+
+	/*** LEVELS ************************************************/
+
 	public function createLevel(?insertIdx:Int) {
 		var l = new Level(_project, this, _project.defaultLevelWidth, _project.defaultLevelHeight, _project.generateUniqueId_int(), _project.generateUniqueId_UUID());
 		if( insertIdx==null )
@@ -201,24 +250,6 @@ class World {
 		return -1;
 	}
 
-	public function getLevelUsingLayerInst(li:data.inst.LayerInstance) : Null<data.Level> {
-		for(l in levels)
-		for(lli in l.layerInstances)
-			if( lli==li )
-				return l;
-
-		return null;
-	}
-
-	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
-		for(l in levels)
-		for(lfi in l.fieldInstances)
-			if( lfi==fi )
-				return l;
-
-		return null;
-	}
-
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
 		var dh = new dn.DecisionHelper(levels);
 		dh.removeValue(level);
@@ -243,13 +274,53 @@ class World {
 
 
 
+	public function applyAutoLevelIdentifiers() {
+		var uniq = 0;
+		for(l in levels)
+			if( l.useAutoIdentifier )
+				l.identifier = "#"+(uniq++);
+
+		var idx = 0;
+		var b = getWorldBounds();
+		for(l in levels) {
+			if( l.useAutoIdentifier ) {
+				var id = _project.levelNamePattern;
+				id = StringTools.replace(id, "%idx1", Std.string(idx+1) );
+				id = StringTools.replace(id, "%idx", Std.string(idx) );
+				id = StringTools.replace(id, "%gx", Std.string( switch worldLayout {
+					case GridVania: Std.int((l.worldX-b.left) / worldGridWidth);
+					case Free, LinearHorizontal, LinearVertical: "";
+				}) );
+				id = StringTools.replace(id, "%gy", Std.string( switch worldLayout {
+					case GridVania: Std.int((l.worldY-b.top) / worldGridHeight);
+					case Free, LinearHorizontal, LinearVertical: "";
+				}) );
+				id = StringTools.replace(id, "%x", Std.string(switch worldLayout {
+					case Free, GridVania: l.worldX;
+					case LinearHorizontal, LinearVertical: "";
+				}) );
+				id = StringTools.replace(id, "%y", Std.string(switch worldLayout {
+					case Free, GridVania: l.worldY;
+					case LinearHorizontal, LinearVertical: "";
+				}) );
+				id = StringTools.replace(id, "%d", Std.string(l.worldDepth) );
+				l.identifier = _project.fixUniqueIdStr(id, id->_project.isLevelIdentifierUnique(id));
+			}
+			idx++;
+		}
+	}
+
+
 
 	public function tidy(p:Project) {
 		_project = p;
-		
+
 		for( l in levels ) {
 			_project.quickLevelAccess.set(l.uid, l);
 			l.tidy(p, this);
 		}
+
+		applyAutoLevelIdentifiers();
 	}
+
 }

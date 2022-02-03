@@ -538,7 +538,8 @@ class Project {
 			case GridVania:
 				switch old {
 					case Free:
-						for(l in redirLevels) {
+						for(w in worlds)
+						for(l in w.levels) {
 							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
 							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
 						}
@@ -547,14 +548,16 @@ class Project {
 
 					case LinearHorizontal:
 						var pos = 0;
-						for(l in redirLevels) {
+						for(w in worlds)
+						for(l in w.levels) {
 							l.worldX = pos*worldGridWidth;
 							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
 						}
 
 					case LinearVertical:
 						var pos = 0;
-						for(l in redirLevels) {
+						for(w in worlds)
+						for(l in w.levels) {
 							l.worldY = pos*worldGridHeight;
 							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
 						}
@@ -582,7 +585,8 @@ class Project {
 	}
 
 	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
-		for( l in redirLevels ) {
+		for(w in worlds)
+		for(l in w.levels) {
 			var wcx = Std.int(l.worldX/oldWid);
 			var wcy = Std.int(l.worldY/oldHei);
 			l.worldX = wcx * worldGridWidth;
@@ -590,6 +594,10 @@ class Project {
 		}
 	}
 
+
+	/**
+		Auto re-arrange levels based on world layout (only affects linear modes)
+	**/
 	public function reorganizeWorld() {
 		var spacing = 48;
 		switch worldLayout {
@@ -597,24 +605,28 @@ class Project {
 
 			case LinearHorizontal:
 				var wx = 0;
-				for(l in redirLevels) {
-					l.worldX = wx;
-					l.worldY = 0;
-					wx += l.pxWid + spacing;
+				for(w in worlds) {
+					for(l in w.levels) {
+						l.worldX = wx;
+						l.worldY = 0;
+						wx += l.pxWid + spacing;
+					}
+					w.applyAutoLevelIdentifiers();
 				}
 
 			case LinearVertical:
 				var wy = 0;
-				for(l in redirLevels) {
-					l.worldX = 0;
-					l.worldY = wy;
-					wy += l.pxHei + spacing;
+				for(w in worlds) {
+					for(l in w.levels) {
+						l.worldX = 0;
+						l.worldY = wy;
+						wy += l.pxHei + spacing;
+					}
+					w.applyAutoLevelIdentifiers();
 				}
 
 			case GridVania:
 		}
-
-		applyAutoLevelIdentifiers();
 	}
 
 
@@ -624,7 +636,8 @@ class Project {
 	public function removeAnyFieldRefsTo(targetEi:data.inst.EntityInstance) {
 		var i = 0;
 
-		for(l in redirLevels)
+		for(w in worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)
 		for(fi in ei.fieldInstances) {
@@ -667,33 +680,38 @@ class Project {
 					td.enumTags.set( cleanupIdentifier(k, identifierStyle), td.enumTags.get(k) );
 		}
 
-		// Levels
-		for(l in redirLevels) {
-			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
-			// Level fields
-			for(fi in l.fieldInstances) {
-				if( !fi.def.isEnum() )
-					continue;
+		// Worlds
+		for(w in worlds) {
+			w.identifier = cleanupIdentifier(w.identifier, identifierStyle);
 
-				var ed = fi.def.getEnumDef();
-				if( ed!=null && ed.isExternal() )
-					continue;
-				for(i in 0...fi.getArrayLength())
-					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
-			}
-			// Entity fields
-			for(li in l.layerInstances)
-			for(ei in li.entityInstances)
-			for(fi in ei.fieldInstances) {
-				if( !fi.def.isEnum() )
-					continue;
+			// Levels
+			for(l in w.levels) {
+				l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
+				// Level fields
+				for(fi in l.fieldInstances) {
+					if( !fi.def.isEnum() )
+						continue;
 
-				var ed = fi.def.getEnumDef();
-				if( ed!=null && ed.isExternal() )
-					continue;
+					var ed = fi.def.getEnumDef();
+					if( ed!=null && ed.isExternal() )
+						continue;
+					for(i in 0...fi.getArrayLength())
+						fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+				}
+				// Entity fields
+				for(li in l.layerInstances)
+				for(ei in li.entityInstances)
+				for(fi in ei.fieldInstances) {
+					if( !fi.def.isEnum() )
+						continue;
 
-				for(i in 0...fi.getArrayLength())
-					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+					var ed = fi.def.getEnumDef();
+					if( ed!=null && ed.isExternal() )
+						continue;
+
+					for(i in 0...fi.getArrayLength())
+						fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+				}
 			}
 		}
 
@@ -705,7 +723,8 @@ class Project {
 	**/
 	public function tidyFields() {
 		initEntityIidsCache();
-		for(l in redirLevels) {
+		for(w in worlds)
+		for(l in w.levels) {
 			for(fi in l.layerInstances)
 				fi.tidy(this);
 
@@ -733,7 +752,6 @@ class Project {
 		quickLevelAccess = new Map();
 		for(w in worlds)
 			w.tidy(this);
-		applyAutoLevelIdentifiers();
 		initUsedColors();
 	}
 
@@ -876,7 +894,8 @@ class Project {
 	}
 
 	function isCachedImageUsed(img:data.DataTypes.CachedImage) {
-		for(l in redirLevels)
+		for(w in worlds)
+		for(l in w.levels)
 			if( l.bgRelPath==img.relPath )
 				return true;
 
@@ -939,7 +958,8 @@ class Project {
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
 		id = cleanupIdentifier(id, identifierStyle);
-		for(l in redirLevels)
+		for(w in worlds)
+		for(l in w.levels)
 			if( l.identifier==id && l!=exclude )
 				return false;
 		return true;
@@ -1065,23 +1085,6 @@ class Project {
 		return -1;
 	}
 
-	public function getLevelUsingLayerInst(li:data.inst.LayerInstance) : Null<data.Level> {
-		for(l in redirLevels)
-		for(lli in l.layerInstances)
-			if( lli==li )
-				return l;
-
-		return null;
-	}
-
-	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
-		for(l in redirLevels)
-		for(lfi in l.fieldInstances)
-			if( lfi==fi )
-				return l;
-
-		return null;
-	}
 
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
 		var dh = new dn.DecisionHelper(redirLevels);
@@ -1105,54 +1108,6 @@ class Project {
 		return moved;
 	}
 
-
-
-	/**  WORLD  *****************************************/
-
-	public function getWorldBounds() {
-		var left = Const.INFINITE;
-		var right = -Const.INFINITE;
-		var top = Const.INFINITE;
-		var bottom = -Const.INFINITE;
-
-		for(l in redirLevels) {
-			left = dn.M.imin(left, l.worldX);
-			right = dn.M.imax(right, l.worldX+l.pxWid);
-			top = dn.M.imin(top, l.worldY);
-			bottom = dn.M.imax(bottom, l.worldY+l.pxHei);
-		}
-
-		return {
-			left: left,
-			right: right,
-			top: top,
-			bottom: bottom,
-		}
-	}
-
-	public inline function getWorldWidth(?ignoredLevel:data.Level) {
-		var min = Const.INFINITE;
-		var max = -Const.INFINITE;
-		for(l in redirLevels)
-			if( l!=ignoredLevel ) {
-				min = dn.M.imin(min, l.worldX);
-				max = dn.M.imax(max, l.worldX+l.pxWid);
-			}
-		return max-min;
-	}
-
-
-	public inline function getWorldHeight(?ignoredLevel:data.Level) {
-		var min = Const.INFINITE;
-		var max = -Const.INFINITE;
-		for(l in redirLevels)
-			if( l!=ignoredLevel ) {
-				min = dn.M.imin(min, l.worldY);
-				max = dn.M.imax(max, l.worldY+l.pxHei);
-			}
-		return max-min;
-	}
-
 	public inline function getSmartLevelGridSize() {
 		if( defs.layers.length==0 )
 			return defaultGridSize;
@@ -1166,6 +1121,7 @@ class Project {
 			return g==Const.INFINITE ? defaultGridSize : g;
 		}
 	}
+
 
 
 	/**  USED CHECKS  *****************************************/
@@ -1282,43 +1238,6 @@ class Project {
 		}
 		else
 			return null;
-	}
-
-
-	public function applyAutoLevelIdentifiers() {
-		var uniq = 0;
-		for(l in redirLevels)
-			if( l.useAutoIdentifier )
-				l.identifier = "#"+(uniq++);
-
-		var idx = 0;
-		var b = getWorldBounds();
-		for(l in redirLevels) {
-			if( l.useAutoIdentifier ) {
-				var id = levelNamePattern;
-				id = StringTools.replace(id, "%idx1", Std.string(idx+1) );
-				id = StringTools.replace(id, "%idx", Std.string(idx) );
-				id = StringTools.replace(id, "%gx", Std.string( switch worldLayout {
-					case GridVania: Std.int((l.worldX-b.left) / worldGridWidth);
-					case Free, LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%gy", Std.string( switch worldLayout {
-					case GridVania: Std.int((l.worldY-b.top) / worldGridHeight);
-					case Free, LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%x", Std.string(switch worldLayout {
-					case Free, GridVania: l.worldX;
-					case LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%y", Std.string(switch worldLayout {
-					case Free, GridVania: l.worldY;
-					case LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%d", Std.string(l.worldDepth) );
-				l.identifier = fixUniqueIdStr(id, id->isLevelIdentifierUnique(id));
-			}
-			idx++;
-		}
 	}
 
 	public function remapExternEnums(oldHxRelPath:String, newHxRelPath:String) {

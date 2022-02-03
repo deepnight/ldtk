@@ -136,7 +136,7 @@ class WorldTool extends dn.Process {
 
 				switch project.worldLayout {
 					case Free, GridVania:
-						project.applyAutoLevelIdentifiers();
+						curWorld.applyAutoLevelIdentifiers();
 						editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 
 					case LinearHorizontal:
@@ -338,14 +338,14 @@ class WorldTool extends dn.Process {
 					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);
 					if( i!=null ) {
 						tmpRender.moveTo(i.coord, -100);
-						tmpRender.lineTo(i.coord, project.getWorldHeight(clickedLevel)+100);
+						tmpRender.lineTo(i.coord, curWorld.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
 					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginY);
 					if( i!=null ) {
 						tmpRender.moveTo(-100, i.coord);
-						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.coord);
+						tmpRender.lineTo(curWorld.getWorldWidth(clickedLevel)+100, i.coord);
 					}
 			}
 

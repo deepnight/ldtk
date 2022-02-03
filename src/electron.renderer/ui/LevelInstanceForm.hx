@@ -200,7 +200,7 @@ class LevelInstanceForm {
 		// Auto level identifier
 		var i = Input.linkToHtmlInput( level.useAutoIdentifier, jForm.find("#useAutoIdentifier") );
 		i.onChange = ()->{
-			project.applyAutoLevelIdentifiers();
+			curWorld.applyAutoLevelIdentifiers();
 			onFieldChange();
 		}
 

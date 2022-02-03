@@ -431,7 +431,7 @@ class WorldRender extends dn.Process {
 	function updateWorldTitle() {
 		title.visible = editor.worldMode && settings.v.showDetails && !editor.gifMode;
 		if( title.visible ) {
-			var b = project.getWorldBounds();
+			var b = curWorld.getWorldBounds();
 			var w = b.right-b.left;
 			var t = project.filePath.fileName;
 			title.textColor = C.toWhite(project.bgColor, 0.3);
@@ -586,10 +586,10 @@ class WorldRender extends dn.Process {
 
 	function renderWorldBounds() {
 		App.LOG.render("Rendering world bounds...");
-		var pad = editor.project.defaultGridSize*3;
-		var b = editor.project.getWorldBounds();
+		var pad = project.defaultGridSize*3;
+		var b = curWorld.getWorldBounds();
 		worldBounds.clear();
-		worldBounds.beginFill(editor.project.bgColor, 0.8);
+		worldBounds.beginFill(project.bgColor, 0.8);
 		worldBounds.drawRoundedRect(
 			b.left-pad,
 			b.top-pad,
