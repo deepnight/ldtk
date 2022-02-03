@@ -18,6 +18,7 @@ class WorldRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 
