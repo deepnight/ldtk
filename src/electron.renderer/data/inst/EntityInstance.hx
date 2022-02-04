@@ -215,36 +215,17 @@ class EntityInstance {
 					if( fi.def.editorDisplayMode!=EntityTile )
 						continue;
 
-					if( fi.valueIsNull(0) ) {
-						// Default rect
-						if( fi.def.getTileRectDefaultObj()==null )
-							continue;
-
+					if( !fi.valueIsNull(0) )
 						return {
 							tilesetUid: fi.def.tilesetUid,
-							rect: fi.def.getTileRectDefaultObj(),
+							rect: fi.getTileRectObj(0),
 						}
-					}
-
-					return {
-						tilesetUid: fi.def.tilesetUid,
-						rect: fi.getTileRectObj(0),
-					}
 
 				case _:
 			}
 		}
 
-		if( def.isTileDefined() ) {
-			// Use tile from entity definition
-			var td = _project.defs.getTilesetDef(def.tilesetId);
-			return {
-				tilesetUid: def.tilesetId,
-				rect: def.tileRect,
-			}
-		}
-		else
-			return null;
+		return def.getDefaultTile();
 	}
 
 

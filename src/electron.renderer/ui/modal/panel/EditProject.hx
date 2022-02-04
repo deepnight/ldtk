@@ -317,6 +317,7 @@ class EditProject extends ui.modal.Panel {
 			jForm.find("a.showAdv").show().click(ev->{
 				jAdvanceds.addClass("visible");
 				showAdvanced = true;
+				jWrapper.scrollTop( jWrapper.innerHeight() );
 				ev.getThis().hide();
 			});
 		}

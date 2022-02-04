@@ -130,6 +130,10 @@ class Project {
 		return ui.ProjectSaver.isBackupFile(filePath.full);
 	}
 
+	public inline function isSample() {
+		return App.ME.isInAppDir(filePath.full, true);
+	}
+
 	public function makeRelativeFilePath(absPath:String) {
 		if( absPath==null )
 			return null;
@@ -803,7 +807,8 @@ class Project {
 				var fileName = switch id {
 					case LdtkIcons: "finalbossblues-icons_full_16.png";
 				}
-				var fp = dn.FilePath.fromFile( JsTools.getEmbedAtlasDir()+"/"+fileName );
+				var fp = dn.FilePath.fromFile( JsTools.getAssetsDir()+"/embedAtlas/"+fileName );
+				App.LOG.fileOp('Loading embed atlas $id: ${fp.full} ...');
 				if( !NT.fileExists(fp.full) )
 					return null;
 

@@ -27,11 +27,16 @@ class DebugMenu extends ui.modal.ContextMenu {
 			label: L.untranslated("Gif mode="+editor.gifMode),
 			cb: ()->{
 				editor.gifMode = !editor.gifMode;
-				if( editor.gifMode )
+				if( editor.gifMode ) {
+					editor.setCompactMode(true);
 					N.success("GIF mode: ON");
+				}
 				else
 					N.error("GIF mode: off");
+				App.ME.jBody.find("#miniNotif").hide();
 				App.ME.clearDebug();
+				editor.updateBanners();
+				editor.worldRender.invalidateAll();
 			}
 		});
 		#end
@@ -171,6 +176,12 @@ class DebugMenu extends ui.modal.ContextMenu {
 				}
 				ui.modal.MetaProgress.start("Updating all sample maps", n);
 			}
+		});
+
+		addTitle(L.untranslated("App"));
+		add({
+			label: L.untranslated("Open exe dir"),
+			cb: ()->JsTools.locateFile(JsTools.getExeDir(), false)
 		});
 
 		addTitle(L.untranslated("App"));

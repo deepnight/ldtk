@@ -666,6 +666,7 @@ class JsTools {
 		#end
 	}
 
+	/** Path to LDtk exe **/
 	public static function getExeDir() {
 		#if debug
 		var path = ET.getAppResourceDir()+"/foo.exe";
@@ -675,8 +676,14 @@ class JsTools {
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
 
+	/** Return path to the embed "assets" dir **/
+	public static function getAssetsDir() {
+		return dn.FilePath.fromDir( ET.getAppResourceDir()+"/assets" ).useSlashes().directory;
+	}
+
+	/** Return path to the "extraFiles" dir, stored as-is in the LDtk install dir **/
 	public static function getExtraFilesDir(?subDir:String) {
-		var base = ET.getAppResourceDir() + "/extraFiles";
+		var base = getExeDir() + "/extraFiles";
 		if( subDir==null || subDir.length==0 )
 			return dn.FilePath.fromDir(base).useSlashes().directory;
 		else
@@ -685,14 +692,6 @@ class JsTools {
 
 	public static function getSamplesDir() {
 		return getExtraFilesDir("samples");
-	}
-
-	public static function getChangelogImgDir() {
-		return getExtraFilesDir("changelogImg");
-	}
-
-	public static function getEmbedAtlasDir() {
-		return getExtraFilesDir("embedAtlas");
 	}
 
 	public static function locateFile(path:String, isFile:Bool) {

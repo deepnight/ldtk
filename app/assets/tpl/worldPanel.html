@@ -3,41 +3,44 @@
 	World
 </h2>
 
-<div class="worldSettings">
-	<h2>World settings</h2>
+<div class="scroller">
 
-	<dl class="form">
-		<dt>
-			<label for="color">World layout</label>
-			<info>
-				This setting will affect how all levels are be positioned in the world space.
-			</info>
-		</dt>
-		<dd>
-			<select name="worldLayout"></select>
-		</dd>
+	<div class="worldSettings">
+		<h2>World settings</h2>
 
-		<dt class="GridVania">
-			<label for="worldGridWidth">Gridvania grid size</label>
-			<info>Size in pixels of the large grid that will contain levels. This grid will constraint levels position and their size.</info>
-		</dt>
-		<dd class="GridVania">
-			<input type="text" id="worldGridWidth" name="worldGridWidth" class="small"/> <span>x</span>
-			<input type="text" id="worldGridHeight" name="worldGridHeight" class="small"/> <span>px</span>
-		</dd>
+		<dl class="form">
+			<dt>
+				<label for="color">World layout</label>
+				<info>
+					This setting will affect how all levels are be positioned in the world space.
+				</info>
+			</dt>
+			<dd>
+				<select name="worldLayout"></select>
+			</dd>
 
-		<dt>
-			<label for="defaultLevelWidth">Default "new level" size</label>
-			<info>Default level width and height in pixels for all future levels.</info>
-		</dt>
-		<dd>
-			<input type="text" id="defaultLevelWidth" class="small"/> <span>x</span>
-			<input type="text" id="defaultLevelHeight" class="small"/> <span>px</span>
-		</dd>
-	</dl>
-</div>
+			<dt class="GridVania">
+				<label for="worldGridWidth">Gridvania grid size</label>
+				<info>Size in pixels of the large grid that will contain levels. This grid will constraint levels position and their size.</info>
+			</dt>
+			<dd class="GridVania">
+				<input type="text" id="worldGridWidth" name="worldGridWidth" class="small"/> <span>x</span>
+				<input type="text" id="worldGridHeight" name="worldGridHeight" class="small"/> <span>px</span>
+			</dd>
+
+			<dt>
+				<label for="defaultLevelWidth">Default "new level" size</label>
+				<info>Default level width and height in pixels for all future levels.</info>
+			</dt>
+			<dd>
+				<input type="text" id="defaultLevelWidth" class="small"/> <span>x</span>
+				<input type="text" id="defaultLevelHeight" class="small"/> <span>px</span>
+			</dd>
+		</dl>
+	</div>
 
 
-<div class="currentLevelInstance">
-	<h2>Current level</h2>
+	<div class="currentLevelInstance">
+		<h2>Current level</h2>
+	</div>
 </div>

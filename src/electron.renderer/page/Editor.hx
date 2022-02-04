@@ -260,14 +260,10 @@ class Editor extends Page {
 			var jLi = new J('<li id="$id"></li>');
 			jLi.append(jContent);
 			jPage.find("#permanentNotifications").append(jLi);
-			// if( onClick!=null )
-			// 	jLi.click( (_)->onClick() );
-			// else
-			// 	jLi.addClass("noClick");
 		}
 	}
 
-	function updateBanners() {
+	public function updateBanners() {
 		// Display "backup" header
 		if( project.isBackup() ) {
 			var jBackup = new J('<div class="backupHeader"/>');
@@ -286,7 +282,7 @@ class Editor extends Page {
 			setPermanentNotification("backup");
 
 		// Display "tutorial description" header
-		if( project.tutorialDesc!=null ) {
+		if( !gifMode && project.tutorialDesc!=null ) {
 			var jDesc = new J('<div class="wrapper"/>');
 			jDesc.html( "<p>" + project.tutorialDesc.split("\n").join("</p><p>") + "</p>" );
 			setPermanentNotification("tutorialDesc", jDesc);
@@ -1005,7 +1001,7 @@ class Editor extends Page {
 		}
 
 		// Mouse coords infos
-		if( ui.Modal.hasAnyOpen() || isLocked() || !App.ME.overCanvas ) {
+		if( ui.Modal.hasAnyOpen() || isLocked() || !App.ME.overCanvas || gifMode ) {
 			if( jMouseCoords.is(":visible") )
 				jMouseCoords.hide();
 		}
@@ -1189,7 +1185,7 @@ class Editor extends Page {
 		var min = project.getLowestLevelDepth();
 		var max = project.getHighestLevelDepth();
 
-		if( !worldMode || min==max ) {
+		if( gifMode || !worldMode || min==max ) {
 			jDepths.hide();
 			return;
 		}
