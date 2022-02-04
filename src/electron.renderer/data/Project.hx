@@ -806,8 +806,13 @@ class Project {
 		var w = new data.World(this, generateUniqueId_UUID(), "World");
 		w.identifier = fixUniqueIdStr( w.identifier, (id)->isWorldIdentifierUnique(id,w) );
 		worlds.push(w);
+
 		if( alsoCreateLevel )
 			w.createLevel();
+
+		if( worlds.length>1 )
+			setFlag(MultiWorlds,true); // make sure it's enabled
+
 		return w;
 	}
 

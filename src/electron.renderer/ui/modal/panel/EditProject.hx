@@ -357,6 +357,7 @@ class EditProject extends ui.modal.Panel {
 				case MultiWorlds:
 					jLabel.text("Multi-worlds support");
 					_setDesc( L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly.\nThis option is still experimental and is not yet supported if Separate Levels option is enabled.") );
+					jInput.prop("disabled", project.worlds.length>1 );
 
 				case _:
 			}
