@@ -484,6 +484,9 @@ class FieldInstancesForm {
 							return;
 						}
 
+						if( !tei._li.level.isInWorld(editor.curWorld) )
+							editor.selectWorld(tei._li.level._world, false);
+
 						if( tei._li.level!=editor.curLevel )
 							editor.selectLevel(tei._li.level);
 
