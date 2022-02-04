@@ -91,15 +91,15 @@ class WorldPanel extends ui.modal.Panel {
 		i.fixValue = v->curWorld.snapWorldGridY(v,true);
 
 		// World grid
-		var old = project.worldGridWidth;
-		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));
+		var old = curWorld.worldGridWidth;
+		var i = Input.linkToHtmlInput( curWorld.worldGridWidth, jForm.find("[name=worldGridWidth]"));
 		i.linkEvent(WorldSettingsChanged);
 		i.onChange = ()->curWorld.onWorldGridChange(old, project.worldGridHeight);
 
 		var old = project.worldGridHeight;
 		var i = Input.linkToHtmlInput( project.worldGridHeight, jForm.find("[name=worldGridHeight]"));
 		i.linkEvent(WorldSettingsChanged);
-		i.onChange = ()->curWorld.onWorldGridChange(project.worldGridWidth, old);
+		i.onChange = ()->curWorld.onWorldGridChange(curWorld.worldGridWidth, old);
 
 		JsTools.parseComponents(jForm);
 		checkBackup();

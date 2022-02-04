@@ -323,15 +323,15 @@ class WorldTool extends dn.Process {
 					}
 
 				case GridVania:
-					var omx = M.floor( origin.worldX / project.worldGridWidth ) * project.worldGridWidth;
-					var mx = M.floor( m.worldX / project.worldGridWidth ) * project.worldGridWidth;
+					var omx = M.floor( origin.worldX / curWorld.worldGridWidth ) * curWorld.worldGridWidth;
+					var mx = M.floor( m.worldX / curWorld.worldGridWidth ) * curWorld.worldGridWidth;
 					clickedLevel.worldX = levelOriginX + (mx-omx);
 
 					var omy = M.floor( origin.worldY / project.worldGridHeight ) * project.worldGridHeight;
 					var my = M.floor( m.worldY / project.worldGridHeight ) * project.worldGridHeight;
 					clickedLevel.worldY = levelOriginY + (my-omy);
 
-					clickedLevel.worldX = M.floor( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
+					clickedLevel.worldX = M.floor( clickedLevel.worldX/curWorld.worldGridWidth ) * curWorld.worldGridWidth;
 					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
 
 				case LinearHorizontal:

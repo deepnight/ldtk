@@ -538,7 +538,7 @@ class WorldRender extends dn.Process {
 			largeGrid.clear();
 			largeGrid.visible = true;
 			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.1 + 0.2 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
-			var g = project.worldGridWidth * camera.adjustedZoom;
+			var g = curWorld.worldGridWidth * camera.adjustedZoom;
 			// Verticals
 			var off =  root.x % g;
 			for( i in 0...M.ceil(camera.width/g)+1 ) {

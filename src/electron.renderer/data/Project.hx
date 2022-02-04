@@ -25,7 +25,7 @@ class Project {
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
-	public var worldGridWidth : Int;
+	// public var worldGridWidth : Int;
 	public var worldGridHeight : Int;
 
 	public var minifyJson = false;
@@ -60,7 +60,6 @@ class Project {
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
-		worldGridWidth = defaultLevelWidth;
 		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
 		flags = new Map();
@@ -295,19 +294,18 @@ class Project {
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
 		if( p.hasFlag(MultiWorlds) ) {
 			// HACK: read world settings from World[0]
-			var worldJson = json.worlds[0];
-			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, worldJson.worldLayout, false, defLayout );
-			p.worldGridWidth = JsonTools.readInt( worldJson.worldGridWidth, p.defaultLevelWidth );
-			p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
+			// var worldJson = json.worlds[0];
+			// p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, worldJson.worldLayout, false, defLayout );
+			// p.worldGridWidth = JsonTools.readInt( worldJson.worldGridWidth, p.defaultLevelWidth );
+			// p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
 		}
 		else {
-			// World settings still in root
+			// World settings are still in root
 			var w = p.worlds[0];
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-			p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
 			p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
 			w.worldLayout = p.worldLayout;
-			w.worldGridWidth = p.worldGridWidth;
+			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
 			w.worldGridHeight = p.worldGridHeight;
 		}
 
@@ -496,7 +494,7 @@ class Project {
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
-			worldGridWidth: hasFlag(MultiWorlds) ? null : worldGridWidth,
+			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
 			worldGridHeight: hasFlag(MultiWorlds) ? null : worldGridHeight,
 
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
@@ -649,7 +647,10 @@ class Project {
 	**/
 	public function tidy() {
 		if( worldLayout==GridVania ) {
-			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
+			// Fix default level width/height to match the grid
+			// HACK defaultLevelWidth should probably be a world field
+			var w = worlds[0];
+			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/w.worldGridWidth), 1 ) * w.worldGridWidth;
 			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 

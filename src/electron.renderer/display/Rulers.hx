@@ -270,9 +270,10 @@ class Rulers extends dn.Process {
 
 		if( editor.project.worldLayout==GridVania) {
 			// Snap to world grid
-			var p = editor.project;
-			b.newLeft = dn.M.round( b.newLeft/p.worldGridWidth ) * p.worldGridWidth;
-			b.newRight = dn.M.round( b.newRight/p.worldGridWidth ) * p.worldGridWidth;
+			var p = editor.project; // TODO remove this after refacto
+			var w = editor.curWorld;
+			b.newLeft = dn.M.round( b.newLeft/w.worldGridWidth ) * w.worldGridWidth;
+			b.newRight = dn.M.round( b.newRight/w.worldGridWidth ) * w.worldGridWidth;
 			b.newTop = dn.M.round( b.newTop/p.worldGridHeight ) * p.worldGridHeight;
 			b.newBottom = dn.M.round( b.newBottom/p.worldGridHeight ) * p.worldGridHeight;
 		}

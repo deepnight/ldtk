@@ -182,7 +182,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 				// Grid snapping
 				if( project.worldLayout==GridVania ) {
-					b.x = dn.M.round( b.x/project.worldGridWidth ) * project.worldGridWidth;
+					b.x = dn.M.round( b.x/world.worldGridWidth ) * world.worldGridWidth;
 					b.y = dn.M.round( b.y/project.worldGridHeight ) * project.worldGridHeight;
 				}
 				else if( App.ME.settings.v.grid ) {
