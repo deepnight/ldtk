@@ -16,9 +16,9 @@ class World {
 		_project = p;
 		this.iid = iid;
 		this.identifier = identifier;
+		worldLayout = Free;
 		worldGridWidth = p.defaultLevelWidth;
 		worldGridHeight= p.defaultLevelHeight;
-		worldLayout = Free;
 		createLevel();
 	}
 
