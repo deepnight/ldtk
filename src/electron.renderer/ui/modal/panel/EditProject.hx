@@ -304,7 +304,19 @@ class EditProject extends ui.modal.Panel {
 		// Level name pattern
 		var i = Input.linkToHtmlInput( project.levelNamePattern, jForm.find("input.levelNamePattern") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onChange = ()->project.tidy();
+		i.onChange = ()->{
+			project.tidy();
+			editor.invalidateAllLevelsCache();
+		}
+
+		jForm.find(".defaultLevelNamePattern").click(_->{
+			if( project.levelNamePattern!=data.Project.DEFAULT_LEVEL_NAME_PATTERN ) {
+				project.levelNamePattern = data.Project.DEFAULT_LEVEL_NAME_PATTERN;
+				editor.ge.emit(ProjectSettingsChanged);
+				editor.invalidateAllLevelsCache();
+				project.tidy();
+			}
+		});
 
 
 		// Advanced options

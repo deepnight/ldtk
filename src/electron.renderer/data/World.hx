@@ -299,6 +299,8 @@ class World {
 		for(l in levels) {
 			if( l.useAutoIdentifier ) {
 				var id = _project.levelNamePattern;
+				id = StringTools.replace(id, "%world", identifier );
+
 				id = StringTools.replace(id, "%idx1", Std.string(idx+1) );
 				id = StringTools.replace(id, "%idx", Std.string(idx) );
 				id = StringTools.replace(id, "%gx", Std.string( switch worldLayout {

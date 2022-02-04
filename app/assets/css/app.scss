@@ -5841,6 +5841,17 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		a.defaultLevelNamePattern {
+			flex: 0 1 auto;
+			margin-left: 8px;
+			align-self: center;
+			font-size: 9pt;
+			cursor: pointer;
+			&:hover {
+				color: white;
+			}
+		}
+
 		a.showAdv {
 			cursor: pointer;
 			padding-top: 4px;

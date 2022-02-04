@@ -6,7 +6,7 @@ class Project {
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_WIDTH = DEFAULT_GRID_SIZE*16; // px
 	public static var DEFAULT_LEVEL_HEIGHT = DEFAULT_GRID_SIZE*16; // px
-	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
+	public static var DEFAULT_LEVEL_NAME_PATTERN = "%world_Level_%idx";
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
@@ -259,8 +259,11 @@ class Project {
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
-		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
+
+		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
+		if( p.levelNamePattern=="Level_%idx" )
+			p.levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
 
 		p.imageExportMode = JsonTools.readEnum( ldtk.Json.ImageExportMode, json.imageExportMode, false, None );
 		if( json.exportPng!=null )
