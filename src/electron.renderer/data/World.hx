@@ -26,7 +26,6 @@ class World {
 		defaultLevelHeight = Project.DEFAULT_LEVEL_HEIGHT;
 		worldGridWidth = defaultLevelWidth;
 		worldGridHeight= defaultLevelHeight;
-		createLevel();
 	}
 
 	@:keep

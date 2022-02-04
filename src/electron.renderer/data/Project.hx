@@ -153,7 +153,7 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
-		p.createWorld();
+		p.createWorld(true);
 
 		return p;
 	}
@@ -278,8 +278,7 @@ class Project {
 		}
 		else {
 			// Read Levels from root
-			var w = p.createWorld();
-			w.removeLevel(w.levels[0]); // remove first auto-created level
+			var w = p.createWorld(false);
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				w.levels.push( Level.fromJson(p, w, lvlJson) );
 		}
@@ -804,10 +803,12 @@ class Project {
 
 	/**  WORLDS  **************************************/
 
-	public function createWorld() : World {
+	public function createWorld(alsoCreateLevel:Bool) : World {
 		var w = new data.World(this, generateUniqueId_UUID(), "World");
 		w.identifier = fixUniqueIdStr( w.identifier, (id)->isWorldIdentifierUnique(id,w) );
 		worlds.push(w);
+		if( alsoCreateLevel )
+			w.createLevel();
 		return w;
 	}
 
