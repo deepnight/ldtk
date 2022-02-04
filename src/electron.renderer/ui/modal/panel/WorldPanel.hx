@@ -75,8 +75,8 @@ class WorldPanel extends ui.modal.Panel {
 			new LastChance(L.t._("World layout changed"), editor.project);
 		}
 		e.onValueChange = (l)->{
-			project.onWorldLayoutChange(old);
-			project.reorganizeWorld();
+			curWorld.onWorldLayoutChange(old);
+			curWorld.reorganizeWorld();
 		}
 		e.linkEvent( WorldSettingsChanged );
 
@@ -84,22 +84,22 @@ class WorldPanel extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( project.defaultLevelWidth, jForm.find("#defaultLevelWidth"));
 		i.linkEvent(WorldSettingsChanged);
 		i.setBounds(project.defaultGridSize, 9999);
-		i.fixValue = v->project.snapWorldGridX(v,true);
+		i.fixValue = v->curWorld.snapWorldGridX(v,true);
 		var i = Input.linkToHtmlInput( project.defaultLevelHeight, jForm.find("#defaultLevelHeight"));
 		i.linkEvent(WorldSettingsChanged);
 		i.setBounds(project.defaultGridSize, 9999);
-		i.fixValue = v->project.snapWorldGridY(v,true);
+		i.fixValue = v->curWorld.snapWorldGridY(v,true);
 
 		// World grid
 		var old = project.worldGridWidth;
 		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));
 		i.linkEvent(WorldSettingsChanged);
-		i.onChange = ()->project.onWorldGridChange(old, project.worldGridHeight);
+		i.onChange = ()->curWorld.onWorldGridChange(old, project.worldGridHeight);
 
 		var old = project.worldGridHeight;
 		var i = Input.linkToHtmlInput( project.worldGridHeight, jForm.find("[name=worldGridHeight]"));
 		i.linkEvent(WorldSettingsChanged);
-		i.onChange = ()->project.onWorldGridChange(project.worldGridWidth, old);
+		i.onChange = ()->curWorld.onWorldGridChange(project.worldGridWidth, old);
 
 		JsTools.parseComponents(jForm);
 		checkBackup();

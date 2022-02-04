@@ -69,7 +69,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 			}
 			if( l!=null ) {
 				N.msg("New level created");
-				project.reorganizeWorld();
+				world.reorganizeWorld();
 				Editor.ME.ge.emit( LevelAdded(l) );
 				Editor.ME.selectLevel(l);
 				Editor.ME.camera.scrollToLevel(l);

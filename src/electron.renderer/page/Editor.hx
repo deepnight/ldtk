@@ -1269,7 +1269,7 @@ class Editor extends Page {
 
 		App.ME.requestCpu();
 		selectionTool.clear();
-		project.reorganizeWorld();
+		curWorld.reorganizeWorld();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {

@@ -309,7 +309,8 @@ class Project {
 		}
 
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
-			p.reorganizeWorld();
+			for(w in p.worlds)
+				w.reorganizeWorld();
 
 		if( Version.lower(json.jsonVersion, "1.0") )
 			p.setFlag(PrependIndexToLevelFileNames, true);
@@ -533,105 +534,6 @@ class Project {
 		return fromJson( filePath.full, toJson() );
 	}
 
-	public function onWorldLayoutChange(old:ldtk.Json.WorldLayout) {
-		// Convert layout
-		switch worldLayout {
-			case Free:
-
-			case GridVania:
-				switch old {
-					case Free:
-						for(w in worlds)
-						for(l in w.levels) {
-							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
-							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
-						}
-
-					case GridVania:
-
-					case LinearHorizontal:
-						var pos = 0;
-						for(w in worlds)
-						for(l in w.levels) {
-							l.worldX = pos*worldGridWidth;
-							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
-						}
-
-					case LinearVertical:
-						var pos = 0;
-						for(w in worlds)
-						for(l in w.levels) {
-							l.worldY = pos*worldGridHeight;
-							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
-						}
-				}
-
-			case LinearHorizontal:
-			case LinearVertical:
-		}
-
-		tidy();
-	}
-
-	public function snapWorldGridX(v:Int, forceGreaterThanZero:Bool) {
-		return worldLayout!=GridVania ? v
-		: forceGreaterThanZero
-			? M.imax( M.round(v/worldGridWidth), 1 ) * worldGridWidth
-			: M.round(v/worldGridWidth) * worldGridWidth;
-	}
-
-	public function snapWorldGridY(v:Int, forceGreaterThanZero:Bool) {
-		return worldLayout!=GridVania ? v
-		: forceGreaterThanZero
-			? M.imax( M.round(v/worldGridHeight), 1 ) * worldGridHeight
-			: M.round(v/worldGridHeight) * worldGridHeight;
-	}
-
-	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
-		for(w in worlds)
-		for(l in w.levels) {
-			var wcx = Std.int(l.worldX/oldWid);
-			var wcy = Std.int(l.worldY/oldHei);
-			l.worldX = wcx * worldGridWidth;
-			l.worldY = wcy * worldGridHeight;
-		}
-	}
-
-
-	/**
-		Auto re-arrange levels based on world layout (only affects linear modes)
-	**/
-	public function reorganizeWorld() {
-		var spacing = 48;
-		switch worldLayout {
-			case Free:
-
-			case LinearHorizontal:
-				var wx = 0;
-				for(w in worlds) {
-					for(l in w.levels) {
-						l.worldX = wx;
-						l.worldY = 0;
-						wx += l.pxWid + spacing;
-					}
-					w.applyAutoLevelIdentifiers();
-				}
-
-			case LinearVertical:
-				var wy = 0;
-				for(w in worlds) {
-					for(l in w.levels) {
-						l.worldX = 0;
-						l.worldY = wy;
-						wy += l.pxHei + spacing;
-					}
-					w.applyAutoLevelIdentifiers();
-				}
-
-			case GridVania:
-		}
-	}
-
 
 	/**
 		Check all FieldInstances and remove any existing references to `targetEi` EntityInstance
@@ -751,7 +653,6 @@ class Project {
 		clearUsedIids();
 		initEntityIidsCache();
 		defs.tidy(this);
-		reorganizeWorld();
 		quickLevelAccess = new Map();
 		for(w in worlds)
 			w.tidy(this);

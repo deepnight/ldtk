@@ -145,7 +145,7 @@ class WorldTool extends dn.Process {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, curWorld.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							curWorld.sortLevel(curIdx, toIdx);
-							project.reorganizeWorld();
+							curWorld.reorganizeWorld();
 							editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 						}
 
@@ -155,7 +155,7 @@ class WorldTool extends dn.Process {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, curWorld.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							curWorld.sortLevel(curIdx, toIdx);
-							project.reorganizeWorld();
+							curWorld.reorganizeWorld();
 							editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 						}
 				}

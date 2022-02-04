@@ -270,7 +270,7 @@ class World {
 
 		var moved = levels.splice(from,1)[0];
 		levels.insert(to, moved);
-		_project.reorganizeWorld();
+		reorganizeWorld();
 		return moved;
 	}
 
@@ -313,6 +313,99 @@ class World {
 	}
 
 
+	/**
+		Auto re-arrange levels based on world layout (only affects linear modes)
+	**/
+	public function reorganizeWorld() {
+		var spacing = 48;
+		switch worldLayout {
+			case Free:
+
+			case LinearHorizontal:
+				var wx = 0;
+				for(l in levels) {
+					l.worldX = wx;
+					l.worldY = 0;
+					wx += l.pxWid + spacing;
+				}
+
+			case LinearVertical:
+				var wy = 0;
+				for(l in levels) {
+					l.worldX = 0;
+					l.worldY = wy;
+					wy += l.pxHei + spacing;
+				}
+
+			case GridVania:
+		}
+
+		applyAutoLevelIdentifiers();
+	}
+
+
+	public function snapWorldGridX(v:Int, forceGreaterThanZero:Bool) {
+		return worldLayout!=GridVania ? v
+		: forceGreaterThanZero
+			? M.imax( M.round(v/worldGridWidth), 1 ) * worldGridWidth
+			: M.round(v/worldGridWidth) * worldGridWidth;
+	}
+
+	public function snapWorldGridY(v:Int, forceGreaterThanZero:Bool) {
+		return worldLayout!=GridVania ? v
+		: forceGreaterThanZero
+			? M.imax( M.round(v/worldGridHeight), 1 ) * worldGridHeight
+			: M.round(v/worldGridHeight) * worldGridHeight;
+	}
+
+
+	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
+		for(l in levels) {
+			var wcx = Std.int(l.worldX/oldWid);
+			var wcy = Std.int(l.worldY/oldHei);
+			l.worldX = wcx * worldGridWidth;
+			l.worldY = wcy * worldGridHeight;
+		}
+	}
+
+
+	public function onWorldLayoutChange(old:ldtk.Json.WorldLayout) {
+		// Convert layout
+		switch worldLayout {
+			case Free:
+
+			case GridVania:
+				switch old {
+					case Free:
+						for(l in levels) {
+							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
+							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
+						}
+
+					case GridVania:
+
+					case LinearHorizontal:
+						var pos = 0;
+						for(l in levels) {
+							l.worldX = pos*worldGridWidth;
+							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
+						}
+
+					case LinearVertical:
+						var pos = 0;
+						for(l in levels) {
+							l.worldY = pos*worldGridHeight;
+							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
+						}
+				}
+
+			case LinearHorizontal:
+			case LinearVertical:
+		}
+
+		tidy(_project); // for auto level naming
+	}
+
 
 	public function tidy(p:Project) {
 		_project = p;
@@ -322,7 +415,7 @@ class World {
 			l.tidy(p, this);
 		}
 
-		applyAutoLevelIdentifiers();
+		reorganizeWorld();
 	}
 
 }

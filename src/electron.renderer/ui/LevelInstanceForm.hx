@@ -231,11 +231,11 @@ class LevelInstanceForm {
 		// Coords
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
 		i.onChange = ()->onFieldChange();
-		i.fixValue = v->project.snapWorldGridX(v,false);
+		i.fixValue = v->curWorld.snapWorldGridX(v,false);
 
 		var i = Input.linkToHtmlInput( level.worldY, jForm.find("#worldY"));
 		i.onChange = ()->onFieldChange();
-		i.fixValue = v->project.snapWorldGridY(v,false);
+		i.fixValue = v->curWorld.snapWorldGridY(v,false);
 
 		// Size
 		var tmpWid = level.pxWid;
@@ -244,13 +244,13 @@ class LevelInstanceForm {
 		var i = Input.linkToHtmlInput( tmpWid, jForm.find("#width") );
 		i.setBounds(project.defaultGridSize, 4096);
 		i.onValueChange = (v)->onLevelResized(v, tmpHei);
-		i.fixValue = v->project.snapWorldGridX(v,true);
+		i.fixValue = v->curWorld.snapWorldGridX(v,true);
 
 		var e = jForm.find("#height"); e.replaceWith( e.clone() ); // block undo/redo
 		var i = Input.linkToHtmlInput( tmpHei, jForm.find("#height"));
 		i.setBounds(project.defaultGridSize, 4096);
 		i.onValueChange = (v)->onLevelResized(tmpWid, v);
-		i.fixValue = v->project.snapWorldGridY(v,true);
+		i.fixValue = v->curWorld.snapWorldGridY(v,true);
 
 		// Bg color
 		var c = level.getBgColor();
