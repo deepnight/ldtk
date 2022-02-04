@@ -309,5 +309,21 @@ class DebugMenu extends ui.modal.ContextMenu {
 			}
 		});
 
+		
+		addTitle(L.untranslated("Worlds"));
+		for(w in project.worlds)
+			add({
+				label: L.untranslated(w.toString()),
+				cb: ()->editor.selectWorld(w),
+			});
+		add({
+			label: L.untranslated("Create another world"),
+			cb: ()->{
+				project.createWorld(true);
+				N.debug("created");
+			}
+		});
+
+
 	}
 }
