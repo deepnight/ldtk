@@ -169,11 +169,7 @@ class EditProject extends ui.modal.Panel {
 		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onValueChange = (v)->{
-			editor.invalidateAllLevelsCache();
-			if( v )
-				project.setFlag(MultiWorlds, false); // unsupported
-		}
+		i.onValueChange = (v)->editor.invalidateAllLevelsCache();
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
@@ -361,9 +357,6 @@ class EditProject extends ui.modal.Panel {
 				case MultiWorlds:
 					jLabel.text("Multi-worlds support");
 					_setDesc( L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly.\nThis option is still experimental and is not yet supported if Separate Levels option is enabled.") );
-
-					if( project.externalLevels )
-						jInput.prop("disabled",true);
 
 				case _:
 			}
