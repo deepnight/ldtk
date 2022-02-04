@@ -79,6 +79,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			selectEntity( project.defs.getEntityDef(LAST_ENTITY_ID) );
 		else
 			selectEntity(project.defs.entities[0]);
+
+		checkHelp( ()->project.defs.entities.length<=3 );
 	}
 
 

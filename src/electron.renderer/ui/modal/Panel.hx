@@ -35,6 +35,17 @@ class Panel extends ui.Modal {
 		insertCloseButton();
 	}
 
+	/**
+		Show or hide the top Help banner in the panel.
+	**/
+	function checkHelpBanner( ?needsHelp:Void->Bool ) {
+		if( project.isSample() || needsHelp!=null && needsHelp() )
+			jContent.removeClass("noHelp");
+		else
+			jContent.addClass("noHelp");
+
+	}
+
 	function checkBackup() {
 		if( !project.isBackup() )
 			return;
