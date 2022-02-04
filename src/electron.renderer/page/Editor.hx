@@ -1135,6 +1135,7 @@ class Editor extends Page {
 		selectLevel(w.levels[0]);
 
 		if( showUp ) {
+			N.quick("World: "+w.identifier);
 			setWorldMode(true);
 			camera.fit(true);
 		}
