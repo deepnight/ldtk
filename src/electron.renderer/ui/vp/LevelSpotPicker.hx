@@ -135,7 +135,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		Return a valid level insertion spot near Coords, or null if none.
 	**/
 	public static function getLevelInsertBounds(project:data.Project, world:data.World, m:Coords) {
-		var wid = project.defaultLevelWidth;
+		var wid = world.defaultLevelWidth;
 		var hei = project.defaultLevelHeight;
 
 		var b = {

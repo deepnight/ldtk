@@ -20,7 +20,7 @@ class Project {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
-	public var defaultLevelWidth : Int;
+	// public var defaultLevelWidth : Int;
 	public var defaultLevelHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
@@ -52,7 +52,6 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
-		defaultLevelWidth = Project.DEFAULT_GRID_SIZE * 16;
 		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
 		bgColor = DEFAULT_WORKSPACE_BG;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
@@ -254,7 +253,7 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
+		// p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
 		p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
@@ -301,7 +300,8 @@ class Project {
 			var w = p.worlds[0];
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			w.worldLayout = p.worldLayout;
-			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
+			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
+			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
 			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
 		}
 
@@ -496,7 +496,7 @@ class Project {
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
-			defaultLevelWidth: defaultLevelWidth,
+			defaultLevelWidth: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelWidth,
 			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
@@ -642,14 +642,6 @@ class Project {
 		This can be really slow because of LayerInstances!
 	**/
 	public function tidy() {
-		if( worldLayout==GridVania ) {
-			// Fix default level width/height to match the grid
-			// HACK defaultLevelWidth should probably be a world field
-			var w = worlds[0];
-			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/w.worldGridWidth), 1 ) * w.worldGridWidth;
-			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/w.worldGridHeight), 1 ) * w.worldGridHeight;
-		}
-
 		clearUsedIids();
 		initEntityIidsCache();
 		defs.tidy(this);
