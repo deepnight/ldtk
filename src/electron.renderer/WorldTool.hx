@@ -46,7 +46,7 @@ class WorldTool extends dn.Process {
 		// Right click context menu
 		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {
 			var ctx = new ui.modal.ContextMenu(m);
-			// Create
+			// Create new level
 			ctx.add({
 				label: L.t._("New level"),
 				cb: ()->{
@@ -97,6 +97,20 @@ class WorldTool extends dn.Process {
 					}
 				});
 			}
+
+			// Change active world
+			if( project.worlds.length>0 ) {
+				ctx.addTitle(L.t._("Select another world"));
+				for( w in project.worlds )
+					ctx.add({
+						label: L.untranslated( w.toString() ),
+						cb: ()->{
+							editor.selectWorld(w,true);
+							editor.setWorldMode(true);
+						},
+					});
+			}
+
 			ev.cancel = true;
 			return;
 		}
