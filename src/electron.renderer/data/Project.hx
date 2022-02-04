@@ -25,8 +25,6 @@ class Project {
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
-	// public var worldGridWidth : Int;
-	// public var worldGridHeight : Int;
 
 	public var minifyJson = false;
 	public var externalLevels = false;
