@@ -279,14 +279,13 @@ class Project {
 		p.defs = Definitions.fromJson(p, json.defs);
 
 		if( p.hasFlag(MultiWorlds) ) {
-			// Read worlds array
+			// Read normal worlds array
 			for( worldJson in JsonTools.readArray(json.worlds) )
 				p.worlds.push( World.fromJson(p, worldJson) );
 		}
 		else {
 			// Read Levels from root
-			p.createWorld();
-			var w = p.worlds[0];
+			var w = p.createWorld();
 			w.removeLevel(w.levels[0]); // remove first auto-created level
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				w.levels.push( Level.fromJson(p, w, lvlJson) );
@@ -302,10 +301,14 @@ class Project {
 			p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
 		}
 		else {
-			// World settings in root
+			// World settings still in root
+			var w = p.worlds[0];
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
 			p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
+			w.worldLayout = p.worldLayout;
+			w.worldGridWidth = p.worldGridWidth;
+			w.worldGridHeight = p.worldGridHeight;
 		}
 
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
