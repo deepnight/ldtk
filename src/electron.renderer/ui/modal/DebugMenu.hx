@@ -309,6 +309,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			}
 		});
 
+		#if debug
 		add({
 			label: L.untranslated("Create new world"),
 			cb: ()->{
@@ -316,6 +317,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 				editor.selectWorld(w,true);
 			}
 		});
+		#end
 
 	}
 }
