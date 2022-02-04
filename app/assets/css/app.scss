@@ -5796,6 +5796,7 @@ dl.form.fieldInstanceEditor {
 		height: 100%;
 		justify-content: stretch;
 		gap: 16px;
+
 		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 250px auto;
 
@@ -7547,7 +7548,13 @@ $patternSize : 32px;
 		gap: 16px;
 		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 250px auto;
-		// overflow: hidden;
+		&.noHelp {
+			grid-template-rows: min-content auto;
+			&>.header {
+				display: none;
+			}
+		}
+
 
 		>h2:first-of-type {
 			grid-column: 1/3;
