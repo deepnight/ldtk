@@ -1128,14 +1128,16 @@ class Editor extends Page {
 	}
 
 
-	public function selectWorld(w:data.World) {
+	public function selectWorld(w:data.World, showUp=true) {
 		curWorldIid = w.iid;
 
-		// TODO emit new event
-		worldRender.invalidateAll();
-		saveLastProjectInfos();
-
+		ge.emit( WorldSelected(w) );
 		selectLevel(w.levels[0]);
+
+		if( showUp ) {
+			setWorldMode(true);
+			camera.fit(true);
+		}
 
 		ui.Tip.clear();
 	}
@@ -1668,6 +1670,7 @@ class Editor extends Page {
 			case EnumDefValueRemoved: invalidateAllLevelsCache();
 			case ToolValueSelected:
 			case ToolOptionChanged:
+			case WorldSelected(w):
 			case WorldMode(active):
 			case WorldDepthSelected(worldDepth):
 			case GridChanged(active):
@@ -1880,6 +1883,9 @@ class Editor extends Page {
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				updateTool();
+
+			case WorldSelected(w):
+				// NOTE: a LevelSelected event always happens right after this one
 		}
 
 		// Broadcast to LevelHistory

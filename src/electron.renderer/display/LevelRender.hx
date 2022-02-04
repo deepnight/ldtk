@@ -84,6 +84,8 @@ class LevelRender extends dn.Process {
 					resume();
 				}
 
+			case WorldSelected(w):
+
 			case WorldDepthSelected(worldDepth):
 
 			case GridChanged(active):

@@ -82,6 +82,8 @@ enum GlobalEvent {
 	ToolValueSelected;
 	ToolOptionChanged;
 
+	WorldSelected(w:data.World);
+
 	WorldMode(active:Bool);
 	WorldDepthSelected(worldDepth:Int);
 	GridChanged(active:Bool);
