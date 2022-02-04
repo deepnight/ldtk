@@ -22,8 +22,8 @@ class World {
 		this.iid = iid;
 		this.identifier = identifier;
 		worldLayout = Free;
-		defaultLevelWidth = Project.DEFAULT_GRID_SIZE * 16;
-		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
+		defaultLevelWidth = Project.DEFAULT_LEVEL_WIDTH;
+		defaultLevelHeight = Project.DEFAULT_LEVEL_HEIGHT;
 		worldGridWidth = defaultLevelWidth;
 		worldGridHeight= defaultLevelHeight;
 		createLevel();
@@ -60,8 +60,8 @@ class World {
 		w.iid = json.iid;
 		w.identifier = json.identifier;
 
-		w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
-		w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
+		w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_LEVEL_WIDTH );
+		w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_LEVEL_HEIGHT );
 
 		w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
 		w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );

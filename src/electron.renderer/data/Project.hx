@@ -4,6 +4,8 @@ class Project {
 	public static var DEFAULT_WORKSPACE_BG = dn.Color.hexToInt("#40465B");
 	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
+	public static var DEFAULT_LEVEL_WIDTH = DEFAULT_GRID_SIZE*16; // px
+	public static var DEFAULT_LEVEL_HEIGHT = DEFAULT_GRID_SIZE*16; // px
 	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
@@ -252,8 +254,6 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		// p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
-		// p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
@@ -299,7 +299,8 @@ class Project {
 			var w = p.worlds[0];
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			w.worldLayout = p.worldLayout;
-			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
+			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, DEFAULT_LEVEL_WIDTH );
+			w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, DEFAULT_LEVEL_HEIGHT );
 			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
 			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );
 		}
