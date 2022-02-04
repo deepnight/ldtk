@@ -486,9 +486,9 @@ class WorldRender extends dn.Process {
 			if( editor.worldMode ) {
 				switch curWorld.worldLayout {
 					case Free, GridVania:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
 						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
 						fr.customFields.y = Std.int( l.worldY + l.pxHei - fr.customFields.outerHeight*fr.customFields.scaleY );
-						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
 
 					case LinearHorizontal:
 						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.customFields.outerWidth ) );
