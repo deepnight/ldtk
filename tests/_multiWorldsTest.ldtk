@@ -10,7 +10,7 @@
 	},
 	"jsonVersion": "1.0.0",
 	"appBuildId": 456664,
-	"nextUid": 22,
+	"nextUid": 25,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
 	"worldGridWidth": null,
@@ -33,6 +33,33 @@
 	"tutorialDesc": null,
 	"flags": [ "IgnoreBackupSuggest", "MultiWorlds" ],
 	"defs": { "layers": [
+		{
+			"__type": "Entities",
+			"identifier": "Entities",
+			"type": "Entities",
+			"uid": 24,
+			"gridSize": 16,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
+			"displayOpacity": 1,
+			"inactiveOpacity": 0.6,
+			"hideInList": false,
+			"hideFieldsWhenInactive": true,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"parallaxFactorX": 0,
+			"parallaxFactorY": 0,
+			"parallaxScaling": true,
+			"requiredTags": [],
+			"excludedTags": [],
+			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"autoTilesetDefUid": null,
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
 		{
 			"__type": "IntGrid",
 			"identifier": "IntGrid",
@@ -60,12 +87,70 @@
 			"tilePivotX": 0,
 			"tilePivotY": 0
 		}
-	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
+	], "entities": [
+		{
+			"identifier": "Teleport",
+			"uid": 22,
+			"tags": [],
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#006EFF",
+			"renderMode": "Ellipse",
+			"showName": true,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "Entity_ref",
+					"__type": "EntityRef",
+					"uid": 23,
+					"type": "F_EntityRef",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLinkBetweenPivots",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": true,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
+		}
+	], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [],
 	"worlds": [
 		{ "iid": "771850a0-66b0-11ec-b305-afed56219d98", "identifier": "First world", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearHorizontal", "levels": [
 			{
-				"identifier": "World_Level_0",
+				"identifier": "First_world_Level_0",
 				"iid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc",
 				"uid": 0,
 				"worldX": -1,
@@ -85,6 +170,58 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+						"levelId": 0,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 206254,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": [
+							{
+								"__identifier": "Teleport",
+								"__grid": [13,13],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [216,216],
+								"fieldInstances": [{
+									"__identifier": "Entity_ref",
+									"__value": {
+										"entityIid": "a7df0b60-66b0-11ec-a331-bb72de169fd8",
+										"layerIid": "5958a871-66b0-11ec-a331-6be0f3b930ee",
+										"levelIid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6"
+									},
+									"__type": "EntityRef",
+									"defUid": 23,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["a7df0b60-66b0-11ec-a331-bb72de169fd8"]
+									}]
+								}]
+							}
+						]
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -123,7 +260,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "World_Level_1",
+				"identifier": "First_world_Level_1",
 				"iid": "0f2187a1-66b0-11ec-95f2-4b019549917e",
 				"uid": 2,
 				"worldX": -1,
@@ -143,6 +280,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59583341-66b0-11ec-a331-33f3bd4b7c88",
+						"levelId": 2,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 1129682,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -181,7 +343,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "World_Level_2",
+				"identifier": "First_world_Level_2",
 				"iid": "1b2f9eb0-66b0-11ec-95f2-21be880eff86",
 				"uid": 3,
 				"worldX": -1,
@@ -201,6 +363,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59585a50-66b0-11ec-a331-0187fd1ad8f6",
+						"levelId": 3,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 6458590,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -239,7 +426,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "World_Level_3",
+				"identifier": "First_world_Level_3",
 				"iid": "22bff5d0-66b0-11ec-95f2-3588778f1e70",
 				"uid": 4,
 				"worldX": -1,
@@ -259,6 +446,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59585a51-66b0-11ec-a331-b9cc104132f8",
+						"levelId": 4,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 5924529,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -297,7 +509,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "World_Level_4",
+				"identifier": "First_world_Level_4",
 				"iid": "54fa63a0-66b0-11ec-95f2-bf7405efce4c",
 				"uid": 5,
 				"worldX": -1,
@@ -317,6 +529,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59585a52-66b0-11ec-a331-0d0d6ce8c9c7",
+						"levelId": 5,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 2268107,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -357,7 +594,7 @@
 		] },
 		{ "iid": "ae188e70-66b0-11ec-918b-f71efeefb8f8", "identifier": "Second world", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearVertical", "levels": [
 			{
-				"identifier": "World2_Level_0",
+				"identifier": "Second_world_Level_0",
 				"iid": "ae188e71-66b0-11ec-918b-35b60d50f00b",
 				"uid": 13,
 				"worldX": -1,
@@ -377,6 +614,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59588160-66b0-11ec-a331-e9957587ab6b",
+						"levelId": 13,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 224686,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -415,7 +677,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "World2_Level_1",
+				"identifier": "Second_world_Level_1",
 				"iid": "c2217e40-66b0-11ec-918b-891613a010b7",
 				"uid": 14,
 				"worldX": -1,
@@ -435,6 +697,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59588161-66b0-11ec-a331-7502ca67c384",
+						"levelId": 14,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 6574425,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -473,7 +760,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "World2_Level_2",
+				"identifier": "Second_world_Level_2",
 				"iid": "17151fa0-66b0-11ec-918b-919f05f8b82e",
 				"uid": 16,
 				"worldX": -1,
@@ -493,6 +780,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "5958a870-66b0-11ec-a331-3b97a2e820d2",
+						"levelId": 16,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 251426,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -533,7 +845,7 @@
 		] },
 		{ "iid": "dd1cf730-66b0-11ec-9aaf-076088cd0424", "identifier": "Third world", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "GridVania", "levels": [
 			{
-				"identifier": "World3_Level_0",
+				"identifier": "Third_world_Level_0",
 				"iid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6",
 				"uid": 17,
 				"worldX": 1024,
@@ -553,6 +865,58 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 32,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "5958a871-66b0-11ec-a331-6be0f3b930ee",
+						"levelId": 17,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 9928871,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": [
+							{
+								"__identifier": "Teleport",
+								"__grid": [14,5],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "a7df0b60-66b0-11ec-a331-bb72de169fd8",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [232,88],
+								"fieldInstances": [{
+									"__identifier": "Entity_ref",
+									"__value": {
+										"entityIid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
+										"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+										"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+									},
+									"__type": "EntityRef",
+									"defUid": 23,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["a50f2280-66b0-11ec-a331-1f30d28bf473"]
+									}]
+								}]
+							}
+						]
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -603,7 +967,7 @@
 				]
 			},
 			{
-				"identifier": "World3_Level_1",
+				"identifier": "Third_world_Level_1",
 				"iid": "e3f96ad0-66b0-11ec-9d70-cb8b3d84de6f",
 				"uid": 18,
 				"worldX": 1280,
@@ -623,6 +987,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 16,
+						"__cHei": 32,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "5958cf80-66b0-11ec-a331-6325cf374161",
+						"levelId": 18,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 9193039,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -668,7 +1057,7 @@
 				"__neighbours": [ { "levelIid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6", "levelUid": 17, "dir": "w" }, { "levelIid": "e4a2ca30-66b0-11ec-9d70-71ef45ec5a41", "levelUid": 19, "dir": "s" } ]
 			},
 			{
-				"identifier": "World3_Level_2",
+				"identifier": "Third_world_Level_2",
 				"iid": "e4a2ca30-66b0-11ec-9d70-71ef45ec5a41",
 				"uid": 19,
 				"worldX": 1280,
@@ -688,6 +1077,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 32,
+						"__cHei": 32,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "5958f690-66b0-11ec-a331-d76c2a44f0dc",
+						"levelId": 19,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 511190,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -752,7 +1166,7 @@
 				]
 			},
 			{
-				"identifier": "World3_Level_3",
+				"identifier": "Third_world_Level_3",
 				"iid": "e6a15950-66b0-11ec-9d70-57c417810a80",
 				"uid": 20,
 				"worldX": 768,
@@ -772,6 +1186,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 32,
+						"__cHei": 16,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "59591da0-66b0-11ec-a331-0f90c6a7cefc",
+						"levelId": 20,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 4191236,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
@@ -821,7 +1260,7 @@
 				]
 			},
 			{
-				"identifier": "World3_Level_4",
+				"identifier": "Third_world_Level_4",
 				"iid": "ebf44390-66b0-11ec-9d70-630f3718f2b4",
 				"uid": 21,
 				"worldX": 512,
@@ -841,6 +1280,31 @@
 				"externalRelPath": null,
 				"fieldInstances": [],
 				"layerInstances": [
+					{
+						"__identifier": "Entities",
+						"__type": "Entities",
+						"__cWid": 32,
+						"__cHei": 32,
+						"__gridSize": 16,
+						"__opacity": 1,
+						"__pxTotalOffsetX": 0,
+						"__pxTotalOffsetY": 0,
+						"__tilesetDefUid": null,
+						"__tilesetRelPath": null,
+						"iid": "595944b0-66b0-11ec-a331-932c9eecf003",
+						"levelId": 21,
+						"layerDefUid": 24,
+						"pxOffsetX": 0,
+						"pxOffsetY": 0,
+						"visible": true,
+						"optionalRules": [],
+						"intGridCsv": [],
+						"autoLayerTiles": [],
+						"seed": 6798898,
+						"overrideTilesetUid": null,
+						"gridTiles": [],
+						"entityInstances": []
+					},
 					{
 						"__identifier": "IntGrid",
 						"__type": "IntGrid",
