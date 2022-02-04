@@ -401,6 +401,17 @@ class Level {
 	}
 
 
+
+	/**
+		Return TRUE if this level is part of given World
+	**/
+	public inline function isInWorld(w:World) {
+		return w!=null && _world.iid==w.iid;
+	}
+
+	/**
+		Move this level to target World
+	**/
 	public function moveToWorld(target:World) {
 		if( _world.iid==target.iid )
 			return false;

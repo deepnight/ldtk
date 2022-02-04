@@ -121,7 +121,7 @@ class WorldTool extends dn.Process {
 						ctx.add({
 							label: L.untranslated("➔ "+w.identifier),
 							sub: L.untranslated(w.levels.length+" level(s)"),
-							enable: ()->w.iid!=l._world.iid,
+							enable: ()->!l.isInWorld(w),
 							cb: ()->{
 								if( l.moveToWorld(w) ) {
 									editor.selectWorld(w,true);
