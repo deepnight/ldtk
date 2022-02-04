@@ -1128,6 +1128,19 @@ class Editor extends Page {
 	}
 
 
+	public function selectWorld(w:data.World) {
+		curWorldIid = w.iid;
+
+		// TODO emit new event
+		worldRender.invalidateAll();
+		saveLastProjectInfos();
+
+		selectLevel(w.levels[0]);
+
+		ui.Tip.clear();
+	}
+
+
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
 			worldRender.invalidateLevelRender(curLevel);
@@ -1135,9 +1148,9 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
-		ui.Tip.clear();
-
 		saveLastProjectInfos();
+
+		ui.Tip.clear();
 	}
 
 
