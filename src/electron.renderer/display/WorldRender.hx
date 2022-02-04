@@ -156,7 +156,7 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				refreshWorldLevelRect(l);
 				if( isFinal ) {
-					switch project.worldLayout {
+					switch curWorld.worldLayout {
 						case Free, GridVania:
 						case LinearHorizontal, LinearVertical:
 							for(l in curWorld.levels)
@@ -469,7 +469,7 @@ class WorldRender extends dn.Process {
 
 			// Custom fields
 			if( editor.worldMode ) {
-				switch project.worldLayout {
+				switch curWorld.worldLayout {
 					case Free, GridVania:
 						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
 						fr.customFields.y = Std.int( l.worldY + l.pxHei - fr.customFields.outerHeight*fr.customFields.scaleY );
@@ -512,7 +512,7 @@ class WorldRender extends dn.Process {
 
 		// Base level grid
 		final minZoom = camera.pixelRatio*0.5;
-		if( project.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
+		if( curWorld.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
 			smallGrid.clear();
 			smallGrid.visible = true;
 			smallGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.5 * M.fmin( (camera.adjustedZoom-minZoom)/0.5, 1 ) );
@@ -534,7 +534,7 @@ class WorldRender extends dn.Process {
 			smallGrid.visible = false;
 
 		// World grid
-		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.1 && settings.v.showDetails ) {
+		if( curWorld.worldLayout==GridVania && camera.adjustedZoom>=0.1 && settings.v.showDetails ) {
 			largeGrid.clear();
 			largeGrid.visible = true;
 			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.1 + 0.2 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
@@ -562,7 +562,7 @@ class WorldRender extends dn.Process {
 			axeH.visible = axeV.visible = false;
 		}
 		else {
-			switch project.worldLayout {
+			switch curWorld.worldLayout {
 				case Free, GridVania:
 					axeH.visible = axeV.visible = true;
 
@@ -928,7 +928,7 @@ class WorldRender extends dn.Process {
 		wl.identifier.alpha = getAlphaFromZoom( camera.getMinZoom()*0.8 );
 
 		// Scaling
-		switch project.worldLayout {
+		switch curWorld.worldLayout {
 			case Free, GridVania:
 				wl.identifier.setScale( M.fmin( l.pxWid / wl.identifier.width, 1/camera.adjustedZoom ) );
 
@@ -937,7 +937,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Position
-		switch project.worldLayout {
+		switch curWorld.worldLayout {
 			case Free, GridVania:
 				wl.identifier.x = Std.int( l.worldX );
 				wl.identifier.y = Std.int( l.worldY );

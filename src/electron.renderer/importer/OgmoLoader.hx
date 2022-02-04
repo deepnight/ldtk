@@ -49,9 +49,9 @@ class OgmoLoader {
 		var out = fp.clone();
 		out.extension = Const.FILE_EXTENSION;
 		var p = data.Project.createEmpty(out.full);
-		p.worldLayout = Free;
 		p.identifierStyle = Free;
 		var world = p.worlds[0];
+		world.worldLayout = Free;
 
 		#if !debug
 		try {

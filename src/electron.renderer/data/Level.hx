@@ -74,7 +74,7 @@ class Level {
 		}
 
 		// List nearby levels
-		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _project.worldLayout {
+		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _world.worldLayout {
 			case Free, GridVania:
 				var nears = _world.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
@@ -100,7 +100,7 @@ class Level {
 		// World coords are not stored in JSON for automatically organized layouts
 		var jsonWorldX = worldX;
 		var jsonWorldY = worldY;
-		switch _project.worldLayout {
+		switch _world.worldLayout {
 			case Free:
 			case GridVania:
 			case LinearHorizontal, LinearVertical:

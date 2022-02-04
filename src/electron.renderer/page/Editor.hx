@@ -1575,7 +1575,7 @@ class Editor extends Page {
 			case LevelSelected(level):
 			case LevelSettingsChanged(_), LevelAdded(_): invalidateAllLevelsCache();
 			case LevelRemoved(_):
-				switch project.worldLayout {
+				switch curWorld.worldLayout {
 					case Free, GridVania:
 					case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
 				}
@@ -1584,7 +1584,7 @@ class Editor extends Page {
 			case LevelJsonCacheInvalidated(level):
 			case WorldLevelMoved(level,isFinal):
 				if( isFinal )
-					switch project.worldLayout {
+					switch curWorld.worldLayout {
 						case Free, GridVania: invalidateLevelCache(level);
 						case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
 					}

@@ -52,15 +52,15 @@ class WorldPanel extends ui.modal.Panel {
 
 		for(k in ldtk.Json.WorldLayout.getConstructors())
 			jForm.removeClass("layout-"+k);
-		jForm.addClass("layout-"+project.worldLayout.getName());
+		jForm.addClass("layout-"+curWorld.worldLayout.getName());
 
 		// World layout
-		var old = project.worldLayout;
+		var old = curWorld.worldLayout;
 		var e = new form.input.EnumSelect(
 			jForm.find("[name=worldLayout]"),
 			ldtk.Json.WorldLayout,
-			()->project.worldLayout,
-			(l)->project.worldLayout = l,
+			()->curWorld.worldLayout,
+			(l)->curWorld.worldLayout = l,
 			(l)->switch l {
 				case Free: L.t._("2D free map - Freely positioned in space");
 				case GridVania: L.t._("GridVania - Levels are positioned inside a large world-scale grid");

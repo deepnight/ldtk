@@ -48,7 +48,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	public static function tryToCreateLevelAt(project:data.Project, world:data.World, m:Coords) {
 		var b = getLevelInsertBounds(project, world, m);
 		if( b!=null ) {
-			var l = switch project.worldLayout {
+			var l = switch world.worldLayout {
 				case Free, GridVania:
 					var l = world.createLevel();
 					l.worldX = M.round(b.x);
@@ -91,7 +91,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 		// Init possible insert points in linear modes
 		var pts : Array<LinearInsertPoint> =
-			switch project.worldLayout {
+			switch world.worldLayout {
 				case Free, GridVania: null;
 
 				case LinearHorizontal:
@@ -112,7 +112,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 			}
 
 		var dh = new dn.DecisionHelper(pts);
-		switch project.worldLayout {
+		switch world.worldLayout {
 			case Free, GridVania:
 				// N/A
 
@@ -147,7 +147,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		}
 
 		// Find a spot in world space
-		switch project.worldLayout {
+		switch world.worldLayout {
 			case Free, GridVania:
 
 				if( world.getLevelAt(m.worldX, m.worldY)!=null )
@@ -181,7 +181,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 
 				// Grid snapping
-				if( project.worldLayout==GridVania ) {
+				if( world.worldLayout==GridVania ) {
 					b.x = dn.M.round( b.x/world.worldGridWidth ) * world.worldGridWidth;
 					b.y = dn.M.round( b.y/world.worldGridHeight ) * world.worldGridHeight;
 				}

@@ -24,7 +24,7 @@ class Project {
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
-	public var worldLayout : ldtk.Json.WorldLayout;
+	// public var worldLayout : ldtk.Json.WorldLayout;
 
 	public var minifyJson = false;
 	public var externalLevels = false;
@@ -55,7 +55,6 @@ class Project {
 		bgColor = DEFAULT_WORKSPACE_BG;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
-		worldLayout = Free;
 		filePath = new dn.FilePath();
 		flags = new Map();
 		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
@@ -295,8 +294,8 @@ class Project {
 		else {
 			// World settings are still in root
 			var w = p.worlds[0];
-			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-			w.worldLayout = p.worldLayout;
+			// p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
+			w.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, DEFAULT_LEVEL_WIDTH );
 			w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, DEFAULT_LEVEL_HEIGHT );
 			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
@@ -487,7 +486,7 @@ class Project {
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
-			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
+			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worlds[0].worldLayout, false),
 			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
 			worldGridHeight: hasFlag(MultiWorlds) ? null : worlds[0].worldGridHeight,
 			defaultLevelWidth: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelWidth,

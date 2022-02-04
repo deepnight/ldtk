@@ -68,7 +68,7 @@ class WorldTool extends dn.Process {
 					cb: ()->{
 						var copy = curWorld.duplicateLevel(l);
 						editor.selectLevel(copy);
-						switch project.worldLayout {
+						switch curWorld.worldLayout {
 							case Free, GridVania:
 								copy.worldX += project.defaultGridSize*4;
 								copy.worldY += project.defaultGridSize*4;
@@ -134,7 +134,7 @@ class WorldTool extends dn.Process {
 				var initialX = clickedLevel.worldX;
 				var initialY = clickedLevel.worldY;
 
-				switch project.worldLayout {
+				switch curWorld.worldLayout {
 					case Free, GridVania:
 						curWorld.applyAutoLevelIdentifiers();
 						editor.ge.emit(WorldLevelMoved(clickedLevel, true));
@@ -235,7 +235,7 @@ class WorldTool extends dn.Process {
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		// Start dragging
 		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=getDragThreshold() ) {
-			var allow = switch project.worldLayout {
+			var allow = switch curWorld.worldLayout {
 				case Free: true;
 				case GridVania: true;
 				case LinearHorizontal, LinearVertical: curWorld.levels.length>1;
@@ -262,13 +262,13 @@ class WorldTool extends dn.Process {
 			tmpRender.lineStyle(10, 0x72feff, 0.5);
 
 			// Drag
-			var allowX = switch project.worldLayout {
+			var allowX = switch curWorld.worldLayout {
 				case Free: true;
 				case GridVania: true;
 				case LinearHorizontal: true;
 				case LinearVertical: false;
 			}
-			var allowY = switch project.worldLayout {
+			var allowY = switch curWorld.worldLayout {
 				case Free: true;
 				case GridVania: true;
 				case LinearHorizontal: false;
@@ -286,7 +286,7 @@ class WorldTool extends dn.Process {
 			else
 				clickedLevel.worldY = Std.int( -clickedLevel.pxHei*0.8 );
 
-			switch project.worldLayout {
+			switch curWorld.worldLayout {
 				case Free:
 					// Snap to grid
 					if( settings.v.grid ) {

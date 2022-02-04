@@ -47,7 +47,7 @@ class LevelInstanceForm {
 		jWrapper.find("button.duplicate").click( (_)->{
 			var copy = curWorld.duplicateLevel(level);
 			editor.selectLevel(copy);
-			switch project.worldLayout {
+			switch curWorld.worldLayout {
 				case Free, GridVania:
 					copy.worldX += project.defaultGridSize*4;
 					copy.worldY += project.defaultGridSize*4;
