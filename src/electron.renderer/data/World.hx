@@ -8,6 +8,7 @@ class World {
 	public var levels : Array<Level> = [];
 
 	public var defaultLevelWidth : Int;
+	public var defaultLevelHeight : Int;
 
 	public var worldGridWidth : Int;
 	public var worldGridHeight : Int;
@@ -22,8 +23,9 @@ class World {
 		this.identifier = identifier;
 		worldLayout = Free;
 		defaultLevelWidth = Project.DEFAULT_GRID_SIZE * 16;
+		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
 		worldGridWidth = defaultLevelWidth;
-		worldGridHeight= p.defaultLevelHeight;
+		worldGridHeight= defaultLevelHeight;
 		createLevel();
 	}
 
@@ -38,6 +40,7 @@ class World {
 			iid: iid,
 			identifier: identifier,
 			defaultLevelWidth: defaultLevelWidth,
+			defaultLevelHeight: defaultLevelHeight,
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
@@ -58,9 +61,10 @@ class World {
 		w.identifier = json.identifier;
 
 		w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
+		w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 
 		w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
-		w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
+		w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );
 		w.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, Free );
 
 		for( levelJson in json.levels )
@@ -120,7 +124,7 @@ class World {
 	/*** LEVELS ************************************************/
 
 	public function createLevel(?insertIdx:Int) {
-		var l = new Level(_project, this, defaultLevelWidth, _project.defaultLevelHeight, _project.generateUniqueId_int(), _project.generateUniqueId_UUID());
+		var l = new Level(_project, this, defaultLevelWidth, defaultLevelHeight, _project.generateUniqueId_int(), _project.generateUniqueId_UUID());
 		if( insertIdx==null )
 			levels.push(l);
 		else
@@ -421,8 +425,7 @@ class World {
 		// Fix default level width/height to match the grid
 		if( worldLayout==GridVania ) {
 			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
-			// HACK uncomment this!
-			// defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
+			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
 		}
 
 		for( l in levels ) {

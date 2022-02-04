@@ -136,7 +136,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	**/
 	public static function getLevelInsertBounds(project:data.Project, world:data.World, m:Coords) {
 		var wid = world.defaultLevelWidth;
-		var hei = project.defaultLevelHeight;
+		var hei = world.defaultLevelHeight;
 
 		var b = {
 			x : m.worldX-wid*0.5,

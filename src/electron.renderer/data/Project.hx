@@ -21,7 +21,7 @@ class Project {
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
 	// public var defaultLevelWidth : Int;
-	public var defaultLevelHeight : Int;
+	// public var defaultLevelHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
@@ -52,7 +52,6 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
-		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
 		bgColor = DEFAULT_WORKSPACE_BG;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
@@ -254,7 +253,7 @@ class Project {
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
 		// p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
-		p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
+		// p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
@@ -302,7 +301,7 @@ class Project {
 			w.worldLayout = p.worldLayout;
 			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
 			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
-			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
+			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );
 		}
 
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
@@ -492,12 +491,12 @@ class Project {
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
 			worldGridHeight: hasFlag(MultiWorlds) ? null : worlds[0].worldGridHeight,
+			defaultLevelWidth: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelWidth,
+			defaultLevelHeight: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelHeight,
 
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
-			defaultLevelWidth: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelWidth,
-			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 

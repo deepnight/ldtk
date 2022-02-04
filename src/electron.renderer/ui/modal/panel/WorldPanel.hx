@@ -85,7 +85,7 @@ class WorldPanel extends ui.modal.Panel {
 		i.linkEvent(WorldSettingsChanged);
 		i.setBounds(project.defaultGridSize, 9999);
 		i.fixValue = v->curWorld.snapWorldGridX(v,true);
-		var i = Input.linkToHtmlInput( project.defaultLevelHeight, jForm.find("#defaultLevelHeight"));
+		var i = Input.linkToHtmlInput( curWorld.defaultLevelHeight, jForm.find("#defaultLevelHeight"));
 		i.linkEvent(WorldSettingsChanged);
 		i.setBounds(project.defaultGridSize, 9999);
 		i.fixValue = v->curWorld.snapWorldGridY(v,true);

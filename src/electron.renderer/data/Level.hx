@@ -175,7 +175,7 @@ class Level {
 			json.iid = p.generateUniqueId_UUID();
 
 		var wid = JsonTools.readInt( json.pxWid, w.defaultLevelWidth );
-		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
+		var hei = JsonTools.readInt( json.pxHei, w.defaultLevelHeight );
 		var l = new Level( p, w, wid, hei, JsonTools.readInt(json.uid), json.iid );
 		p.quickLevelAccess.set(l.uid, l);
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
