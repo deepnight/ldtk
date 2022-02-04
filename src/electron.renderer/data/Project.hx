@@ -22,8 +22,6 @@ class Project {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
-	// public var defaultLevelWidth : Int;
-	// public var defaultLevelHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
