@@ -130,6 +130,10 @@ class Project {
 		return ui.ProjectSaver.isBackupFile(filePath.full);
 	}
 
+	public inline function isSample() {
+		return App.ME.isInAppDir(filePath.full, true);
+	}
+
 	public function makeRelativeFilePath(absPath:String) {
 		if( absPath==null )
 			return null;
