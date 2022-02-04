@@ -24,7 +24,6 @@ class Project {
 	public var defaultGridSize : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
-	// public var worldLayout : ldtk.Json.WorldLayout;
 
 	public var minifyJson = false;
 	public var externalLevels = false;
@@ -284,17 +283,9 @@ class Project {
 
 		// World settings
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
-		if( p.hasFlag(MultiWorlds) ) {
-			// HACK: read world settings from World[0]
-			// var worldJson = json.worlds[0];
-			// p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, worldJson.worldLayout, false, defLayout );
-			// p.worldGridWidth = JsonTools.readInt( worldJson.worldGridWidth, p.defaultLevelWidth );
-			// p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
-		}
-		else {
+		if( !p.hasFlag(MultiWorlds) ) {
 			// World settings are still in root
 			var w = p.worlds[0];
-			// p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			w.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
 			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, DEFAULT_LEVEL_WIDTH );
 			w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, DEFAULT_LEVEL_HEIGHT );
