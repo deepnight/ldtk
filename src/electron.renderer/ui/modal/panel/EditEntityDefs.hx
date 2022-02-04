@@ -80,7 +80,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		else
 			selectEntity(project.defs.entities[0]);
 
-		checkHelp( ()->project.defs.entities.length<=3 );
+		checkHelpBanner( ()->project.defs.entities.length<=3 );
 	}
 
 
