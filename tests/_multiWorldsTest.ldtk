@@ -9,14 +9,14 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456660,
+	"appBuildId": 456661,
 	"nextUid": 13,
 	"identifierStyle": "Capitalize",
-	"worldLayout": "LinearHorizontal",
-	"worldGridWidth": 256,
-	"worldGridHeight": 256,
-	"defaultLevelWidth": 256,
-	"defaultLevelHeight": 256,
+	"worldLayout": null,
+	"worldGridWidth": null,
+	"worldGridHeight": null,
+	"defaultLevelWidth": null,
+	"defaultLevelHeight": null,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
@@ -31,7 +31,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": null,
-	"flags": [],
+	"flags": ["MultiWorlds"],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
@@ -61,7 +61,8 @@
 			"tilePivotY": 0
 		}
 	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
-	"levels": [
+	"levels": [],
+	"worlds": [{ "iid": "771850a0-66b0-11ec-b305-afed56219d98", "identifier": "World", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearHorizontal", "levels": [
 		{
 			"identifier": "World_Level_0",
 			"iid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc",
@@ -177,6 +178,5 @@
 			"layerInstances": null,
 			"__neighbours": []
 		}
-	],
-	"worlds": []
+	] }]
 }
