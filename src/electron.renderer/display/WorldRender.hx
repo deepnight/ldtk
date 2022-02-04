@@ -1,6 +1,7 @@
 package display;
 
 typedef WorldLevelRender = {
+	var worldIid : String;
 	var uid : Int;
 	var rect : misc.WorldRect;
 
@@ -366,6 +367,7 @@ class WorldRender extends dn.Process {
 	function getWorldLevel(l:data.Level) : WorldLevelRender {
 		if( !worldLevels.exists(l.uid) ) {
 			var wl : WorldLevelRender = {
+				worldIid : l._world.iid,
 				uid: l.uid,
 
 				rect: WorldRect.fromLevel(l),
