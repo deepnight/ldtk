@@ -546,7 +546,7 @@ class WorldRender extends dn.Process {
 				largeGrid.lineTo(i*g+off, camera.height);
 			}
 			// Horizontals
-			var g = project.worldGridHeight * camera.adjustedZoom;
+			var g = curWorld.worldGridHeight * camera.adjustedZoom;
 			var off =  root.y % g;
 			for( i in 0...M.ceil(camera.height/g)+1 ) {
 				largeGrid.moveTo(0, i*g+off);

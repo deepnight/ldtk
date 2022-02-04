@@ -274,8 +274,8 @@ class Rulers extends dn.Process {
 			var w = editor.curWorld;
 			b.newLeft = dn.M.round( b.newLeft/w.worldGridWidth ) * w.worldGridWidth;
 			b.newRight = dn.M.round( b.newRight/w.worldGridWidth ) * w.worldGridWidth;
-			b.newTop = dn.M.round( b.newTop/p.worldGridHeight ) * p.worldGridHeight;
-			b.newBottom = dn.M.round( b.newBottom/p.worldGridHeight ) * p.worldGridHeight;
+			b.newTop = dn.M.round( b.newTop/w.worldGridHeight ) * w.worldGridHeight;
+			b.newBottom = dn.M.round( b.newBottom/w.worldGridHeight ) * w.worldGridHeight;
 		}
 		return b;
 	}

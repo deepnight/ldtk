@@ -327,12 +327,12 @@ class WorldTool extends dn.Process {
 					var mx = M.floor( m.worldX / curWorld.worldGridWidth ) * curWorld.worldGridWidth;
 					clickedLevel.worldX = levelOriginX + (mx-omx);
 
-					var omy = M.floor( origin.worldY / project.worldGridHeight ) * project.worldGridHeight;
-					var my = M.floor( m.worldY / project.worldGridHeight ) * project.worldGridHeight;
+					var omy = M.floor( origin.worldY / curWorld.worldGridHeight ) * curWorld.worldGridHeight;
+					var my = M.floor( m.worldY / curWorld.worldGridHeight ) * curWorld.worldGridHeight;
 					clickedLevel.worldY = levelOriginY + (my-omy);
 
 					clickedLevel.worldX = M.floor( clickedLevel.worldX/curWorld.worldGridWidth ) * curWorld.worldGridWidth;
-					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
+					clickedLevel.worldY = M.floor( clickedLevel.worldY/curWorld.worldGridHeight ) * curWorld.worldGridHeight;
 
 				case LinearHorizontal:
 					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);

@@ -26,7 +26,7 @@ class Project {
 	public var defaultLevelBgColor : UInt;
 	public var worldLayout : ldtk.Json.WorldLayout;
 	// public var worldGridWidth : Int;
-	public var worldGridHeight : Int;
+	// public var worldGridHeight : Int;
 
 	public var minifyJson = false;
 	public var externalLevels = false;
@@ -60,7 +60,6 @@ class Project {
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
 		worldLayout = Free;
-		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
 		flags = new Map();
 		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
@@ -303,10 +302,9 @@ class Project {
 			// World settings are still in root
 			var w = p.worlds[0];
 			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-			p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
 			w.worldLayout = p.worldLayout;
 			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
-			w.worldGridHeight = p.worldGridHeight;
+			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
 		}
 
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
@@ -495,7 +493,7 @@ class Project {
 
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
 			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
-			worldGridHeight: hasFlag(MultiWorlds) ? null : worldGridHeight,
+			worldGridHeight: hasFlag(MultiWorlds) ? null : worlds[0].worldGridHeight,
 
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
@@ -651,7 +649,7 @@ class Project {
 			// HACK defaultLevelWidth should probably be a world field
 			var w = worlds[0];
 			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/w.worldGridWidth), 1 ) * w.worldGridWidth;
-			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
+			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/w.worldGridHeight), 1 ) * w.worldGridHeight;
 		}
 
 		clearUsedIids();
