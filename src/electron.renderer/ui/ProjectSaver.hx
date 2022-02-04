@@ -495,19 +495,22 @@ class ProjectSaver extends dn.Process {
 					id: l.identifier,
 				});
 
-			// project.levels.map( (l)->{
-			// 	json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
-			// 	relPath: l.makeExternalRelPath(idx++),
-			// 	id: l.identifier,
-			// });
-
 			// Build project JSON without level data
 			var idx = 0;
-			var trimmedProjectJson = project.toJson();
-			for(levelJson in trimmedProjectJson.levels) {
+			inline function _clearLevelData(levelJson:ldtk.Json.LevelJson) {
 				Reflect.deleteField(levelJson, dn.JsonPretty.HEADER_VALUE_NAME);
 				levelJson.layerInstances = null;
 				levelJson.externalRelPath = project.getLevelAnywhere(levelJson.uid).makeExternalRelPath(idx++);
+			}
+			var trimmedProjectJson = project.toJson();
+			if( project.hasFlag(MultiWorlds) ) {
+				for(worldJson in trimmedProjectJson.worlds)
+				for(levelJson in worldJson.levels)
+					_clearLevelData(levelJson);
+			}
+			else {
+				for(levelJson in trimmedProjectJson.levels)
+					_clearLevelData(levelJson);
 			}
 
 			return {
