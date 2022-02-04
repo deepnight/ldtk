@@ -50,7 +50,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		if( b!=null ) {
 			var l = switch project.worldLayout {
 				case Free, GridVania:
-					var l = project.createLevel();
+					var l = world.createLevel();
 					l.worldX = M.round(b.x);
 					l.worldY = M.round(b.y);
 					l.pxWid = b.wid;
@@ -61,7 +61,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 				case LinearHorizontal, LinearVertical:
 					var i = getLinearInsertPoint(project, world, m);
 					if( i!=null ) {
-						var l = project.createLevel(i.idx);
+						var l = world.createLevel(i.idx);
 						l;
 					}
 					else
@@ -150,7 +150,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		switch project.worldLayout {
 			case Free, GridVania:
 
-				if( project.getLevelAt(m.worldX, m.worldY)!=null )
+				if( world.getLevelAt(m.worldX, m.worldY)!=null )
 					b.overlaps = true;
 				else {
 					// Deinterlace with existing levels

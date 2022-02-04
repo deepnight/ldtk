@@ -11,13 +11,15 @@ class World {
 	public var worldLayout : ldtk.Json.WorldLayout;
 
 
-	public function new(p:Project, iid:String, identifier:String) {
+	@:allow(data.Project)
+	function new(p:Project, iid:String, identifier:String) {
 		_project = p;
 		this.iid = iid;
 		this.identifier = identifier;
 		worldGridWidth = p.defaultLevelWidth;
 		worldGridHeight= p.defaultLevelHeight;
 		worldLayout = Free;
+		createLevel();
 	}
 
 	@:keep

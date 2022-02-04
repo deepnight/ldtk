@@ -32,11 +32,11 @@ class LevelInstanceForm {
 				Lang.t._("Are you sure you want to delete this level?"),
 				true,
 				()->{
-					var closest = project.getClosestLevelFrom(level);
+					var closest = curWorld.getClosestLevelFrom(level);
 					new LastChance( L.t._('Level ::id:: removed', {id:level.identifier}), project);
 					var deleted = level;
 					editor.selectLevel( closest );
-					project.removeLevel(deleted);
+					curWorld.removeLevel(deleted);
 					editor.ge.emit( LevelRemoved(deleted) );
 					editor.setWorldMode(true);
 				}
@@ -45,7 +45,7 @@ class LevelInstanceForm {
 
 		// Duplicate button
 		jWrapper.find("button.duplicate").click( (_)->{
-			var copy = project.duplicateLevel(level);
+			var copy = curWorld.duplicateLevel(level);
 			editor.selectLevel(copy);
 			switch project.worldLayout {
 				case Free, GridVania:
@@ -210,9 +210,9 @@ class LevelInstanceForm {
 
 		// Depth further
 		var jDepthButton = jForm.find(".worldDepthAbove");
-		jDepthButton.prop("disabled", !project.canMoveLevelToDepthFurther(level));
+		jDepthButton.prop("disabled", !curWorld.canMoveLevelToDepthFurther(level));
 		jDepthButton.click(_->{
-			if( project.moveLevelToDepthFurther(level) ) {
+			if( curWorld.moveLevelToDepthFurther(level) ) {
 				onFieldChange();
 				editor.selectWorldDepth(level.worldDepth);
 			}
@@ -220,9 +220,9 @@ class LevelInstanceForm {
 
 		// Depth closer
 		var jDepthButton = jForm.find(".worldDepthBelow");
-		jDepthButton.prop("disabled", !project.canMoveLevelToDepthCloser(level));
+		jDepthButton.prop("disabled", !curWorld.canMoveLevelToDepthCloser(level));
 		jDepthButton.click(_->{
-			if( project.moveLevelToDepthCloser(level) ) {
+			if( curWorld.moveLevelToDepthCloser(level) ) {
 				onFieldChange();
 				editor.selectWorldDepth(level.worldDepth);
 			}

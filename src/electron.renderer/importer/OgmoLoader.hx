@@ -51,6 +51,7 @@ class OgmoLoader {
 		var p = data.Project.createEmpty(out.full);
 		p.worldLayout = Free;
 		p.identifierStyle = Free;
+		var world = p.worlds[0];
 
 		#if !debug
 		try {
@@ -299,7 +300,7 @@ class OgmoLoader {
 					}
 
 				// Create base level
-				var level = p.createLevel();
+				var level = world.createLevel();
 				levelFiles.set(fp.full, {
 					l: level,
 					fp: fp,
@@ -463,7 +464,7 @@ class OgmoLoader {
 				log.indentLess();
 			}
 			log.clearIndent();
-			p.removeLevel( p.worlds[0].levels[0] ); // remove default 1st level
+			world.removeLevel( world.levels[0] ); // remove default 1st level
 
 
 			// Organize levels in 2D world space

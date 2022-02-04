@@ -659,12 +659,12 @@ class Editor extends Page {
 					setWorldMode(true);
 				else if( !App.ME.hasAnyToggleKeyDown() ) {
 					// Change active depth
-					if( curWorldDepth>project.getLowestLevelDepth() )
+					if( curWorldDepth > curWorld.getLowestLevelDepth() )
 						selectWorldDepth(curWorldDepth-1);
 				}
 				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
 					// Move current level closer
-					project.moveLevelToDepthCloser(curLevel);
+					curWorld.moveLevelToDepthCloser(curLevel);
 					ge.emit( LevelSettingsChanged(curLevel) );
 					selectWorldDepth(curLevel.worldDepth);
 				}
@@ -674,12 +674,12 @@ class Editor extends Page {
 					setWorldMode(true);
 				else if( !App.ME.hasAnyToggleKeyDown() ) {
 					// Change active depth
-					if( curWorldDepth<project.getHighestLevelDepth() )
+					if( curWorldDepth < curWorld.getHighestLevelDepth() )
 						selectWorldDepth(curWorldDepth+1);
 				}
 				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
 					// Move current level further
-					project.moveLevelToDepthFurther(curLevel);
+					curWorld.moveLevelToDepthFurther(curLevel);
 					ge.emit( LevelSettingsChanged(curLevel) );
 					selectWorldDepth(curLevel.worldDepth);
 				}
@@ -1186,8 +1186,8 @@ class Editor extends Page {
 
 
 	function updateWorldDepthsUI() {
-		var min = project.getLowestLevelDepth();
-		var max = project.getHighestLevelDepth();
+		var min = curWorld.getLowestLevelDepth();
+		var max = curWorld.getHighestLevelDepth();
 
 		if( gifMode || !worldMode || min==max ) {
 			jDepths.hide();

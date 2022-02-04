@@ -105,7 +105,7 @@ class Project {
 
 		var vars = [
 			"%level_name"=>()->level.identifier,
-			"%level_idx"=>()->dn.Lib.leadingZeros( getLevelIndex(level), 4),
+			"%level_idx"=>()->dn.Lib.leadingZeros( level._world.getLevelIndex(level), 4),
 			"%layer_name"=>()->ld.identifier,
 			"%layer_idx"=>()->{
 				var i = 0;
@@ -162,7 +162,6 @@ class Project {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
 		p.createWorld();
-		p.createLevel();
 
 		return p;
 	}
@@ -288,6 +287,7 @@ class Project {
 			// Read Levels from root
 			p.createWorld();
 			var w = p.worlds[0];
+			w.removeLevel(w.levels[0]); // remove first auto-created level
 			for( lvlJson in JsonTools.readArray(json.levels) )
 				w.levels.push( Level.fromJson(p, w, lvlJson) );
 		}
@@ -968,147 +968,12 @@ class Project {
 		return true;
 	}
 
-	public function createLevel(?insertIdx:Int) {
-		return worlds[0].createLevel(insertIdx);
-	}
-
-	public function duplicateLevel(l:data.Level) {
-		return worlds[0].duplicateLevel(l);
-	}
-
-	public inline function getLowestLevelDepth() {
-		var d = 0;
-		for(l in redirLevels)
-			d = M.imin(d, l.worldDepth);
-		return d;
-	}
-
-	public inline function getHighestLevelDepth() {
-		var d = 0;
-		for(l in redirLevels)
-			d = M.imax(d, l.worldDepth);
-		return d;
-	}
-
-	public inline function countLevelsInDepth(d:Int) {
-		var n = 0;
-		for(l in redirLevels)
-			if( l.worldDepth==d )
-				n++;
-		return n;
-	}
-
-	public function canMoveLevelToDepthFurther(l:Level) {
-		if( l.worldDepth<getHighestLevelDepth() )
-			return true;
-		else {
-			// Check if there's any level further this one, or at least in same depth
-			for(ol in redirLevels)
-				if( ol!=l && ol.worldDepth==l.worldDepth )
-					return true;
-			return false;
-		}
-	}
-
-	public function moveLevelToDepthFurther(l:Level) {
-		if( canMoveLevelToDepthFurther(l) ) {
-			l.worldDepth++;
-
-			// Shift empty first depth
-			while( countLevelsInDepth(0)==0 )
-				for(ol in redirLevels)
-					ol.worldDepth--;
-
-			return true;
-		}
-		else
-			return false;
-	}
-
-
-	public function canMoveLevelToDepthCloser(l:Level) {
-		if( l.worldDepth>getLowestLevelDepth() )
-			return true;
-		else {
-			// Check if there's any other level in current depth
-			for(ol in redirLevels)
-				if( ol!=l && ol.worldDepth==l.worldDepth )
-					return true;
-
-			return false;
-		}
-	}
-
-	public function moveLevelToDepthCloser(l:Level) {
-		if( canMoveLevelToDepthCloser(l) ) {
-			l.worldDepth--;
-			return true;
-		}
-		else
-			return false;
-	}
-
-	public function removeLevel(l:Level) {
-		if( !redirLevels.remove(l) )
-			throw "Level not found in this Project";
-
-		for(li in l.layerInstances)
-		for(ei in li.entityInstances) {
-			removeAnyFieldRefsTo(ei);
-			unregisterEntityIid(ei.iid);
-			unregisterAllReverseIidRefsFor(ei);
-		}
-
-		quickLevelAccess.remove(l.uid);
-		tidy();
-	}
 
 	/**
 		Quick access to a level in any world
 	**/
 	public inline function getLevelAnywhere(uid:Int) : Null<Level> {
 		return quickLevelAccess.get(uid);
-	}
-
-	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
-		for(l in redirLevels)
-			if( l.isWorldOver(worldX, worldY) )
-				return l;
-		return null;
-	}
-
-
-	public function getLevelIndex(?l:Level, ?uid:Int) : Int {
-		var i = 0;
-		for(ol in redirLevels)
-			if( l!=null && ol==l || uid!=null && ol.uid==uid )
-				return i;
-			else
-				i++;
-		return -1;
-	}
-
-
-	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
-		var dh = new dn.DecisionHelper(redirLevels);
-		dh.removeValue(level);
-		dh.score( (l)->-level.getBoundsDist(l) );
-		return dh.getBest();
-	}
-
-	public function sortLevel(from:Int, to:Int) : Null<data.Level> {
-		if( from<0 || from>=redirLevels.length || from==to )
-			return null;
-
-		if( to<0 || to>=redirLevels.length )
-			return null;
-
-		tidy();
-
-		var moved = redirLevels.splice(from,1)[0];
-		redirLevels.insert(to, moved);
-		reorganizeWorld();
-		return moved;
 	}
 
 	public inline function getSmartLevelGridSize() {

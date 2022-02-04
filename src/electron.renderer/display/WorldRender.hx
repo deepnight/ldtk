@@ -333,7 +333,7 @@ class WorldRender extends dn.Process {
 
 	/** Z-sort depths wrappers**/
 	function sortWorldDepths() {
-		for(d in project.getLowestLevelDepth()...project.getHighestLevelDepth()+1)
+		for(d in curWorld.getLowestLevelDepth()...curWorld.getHighestLevelDepth()+1)
 			if( worldLayers.exists(d) )
 				root.under( worldLayers.get(d) );
 	}

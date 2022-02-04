@@ -66,7 +66,7 @@ class WorldTool extends dn.Process {
 				ctx.add({
 					label: L.t._("Duplicate"),
 					cb: ()->{
-						var copy = project.duplicateLevel(l);
+						var copy = curWorld.duplicateLevel(l);
 						editor.selectLevel(copy);
 						switch project.worldLayout {
 							case Free, GridVania:
@@ -88,9 +88,9 @@ class WorldTool extends dn.Process {
 							N.error(L.t._("You can't delete the last level."));
 							return;
 						}
-						var closest = project.getClosestLevelFrom(l);
+						var closest = curWorld.getClosestLevelFrom(l);
 						new ui.LastChance(L.t._('Level ::id:: removed', {id:l.identifier}), project);
-						project.removeLevel(l);
+						curWorld.removeLevel(l);
 						editor.ge.emit( LevelRemoved(l) );
 						editor.selectLevel( closest );
 						editor.camera.scrollToLevel(closest);
@@ -144,7 +144,7 @@ class WorldTool extends dn.Process {
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, curWorld.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
-							project.sortLevel(curIdx, toIdx);
+							curWorld.sortLevel(curIdx, toIdx);
 							project.reorganizeWorld();
 							editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 						}
@@ -154,7 +154,7 @@ class WorldTool extends dn.Process {
 						if( i!=null ) {
 							var curIdx = dn.Lib.getArrayIndex(clickedLevel, curWorld.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
-							project.sortLevel(curIdx, toIdx);
+							curWorld.sortLevel(curIdx, toIdx);
 							project.reorganizeWorld();
 							editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 						}
@@ -247,7 +247,7 @@ class WorldTool extends dn.Process {
 					editor.selectLevel(clickedLevel);
 
 				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
-					var copy = project.duplicateLevel(clickedLevel);
+					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
 					editor.selectLevel(copy);
 					clickedLevel = copy;
