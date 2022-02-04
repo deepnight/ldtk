@@ -98,17 +98,42 @@ class WorldTool extends dn.Process {
 				});
 			}
 
-			// Change active world
-			if( project.worlds.length>0 ) {
-				ctx.addTitle(L.t._("Select another world"));
-				for( w in project.worlds )
-					ctx.add({
-						label: L.untranslated( w.toString() ),
-						cb: ()->{
-							editor.selectWorld(w,true);
-							editor.setWorldMode(true);
-						},
-					});
+			if( project.worlds.length>1 ) {
+				if( l==null ) {
+					// Change active world
+					ctx.addTitle(L.t._("Go to world:"));
+					for( w in project.worlds ) {
+						ctx.add({
+							label: L.untranslated(w.identifier),
+							sub: L.untranslated(w.levels.length+" level(s)"),
+							enable: ()->w.iid!=editor.curWorldIid,
+							cb: ()->{
+								editor.selectWorld(w,true);
+								editor.setWorldMode(true);
+							},
+						});
+					}
+				}
+				else {
+					// Move level to another world
+					ctx.addTitle(L.t._("Move this level to:"));
+					for( w in project.worlds ) {
+						ctx.add({
+							label: L.untranslated("➔ "+w.identifier),
+							sub: L.untranslated(w.levels.length+" level(s)"),
+							enable: ()->w.iid!=l._world.iid,
+							cb: ()->{
+								if( l.moveToWorld(w) ) {
+									editor.selectWorld(w,true);
+									editor.setWorldMode(true);
+									editor.selectLevel(l);
+									editor.camera.fit(true);
+									N.success("Successfully moved level to world "+w.identifier);
+								}
+							},
+						});
+					}
+				}
 			}
 
 			ev.cancel = true;

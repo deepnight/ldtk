@@ -400,6 +400,23 @@ class Level {
 		return li;
 	}
 
+
+	public function moveToWorld(target:World) {
+		if( _world.iid==target.iid )
+			return false;
+
+		var from = _world;
+		if( !from.levels.remove(this) )
+			return false;
+
+		target.levels.push(this);
+		_world = target;
+		from.reorganizeWorld();
+		target.reorganizeWorld();
+		return true;
+	}
+
+
 	public function tidy(p:Project, w:World) {
 		_project = p;
 		_project.markIidAsUsed(iid);

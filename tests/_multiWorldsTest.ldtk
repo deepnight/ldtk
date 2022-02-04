@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456663,
+	"appBuildId": 456664,
 	"nextUid": 22,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -63,7 +63,7 @@
 	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [],
 	"worlds": [
-		{ "iid": "771850a0-66b0-11ec-b305-afed56219d98", "identifier": "World", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearHorizontal", "levels": [
+		{ "iid": "771850a0-66b0-11ec-b305-afed56219d98", "identifier": "First world", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearHorizontal", "levels": [
 			{
 				"identifier": "World_Level_0",
 				"iid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc",
@@ -355,7 +355,7 @@
 				"__neighbours": []
 			}
 		] },
-		{ "iid": "ae188e70-66b0-11ec-918b-f71efeefb8f8", "identifier": "World2", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearVertical", "levels": [
+		{ "iid": "ae188e70-66b0-11ec-918b-f71efeefb8f8", "identifier": "Second world", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearVertical", "levels": [
 			{
 				"identifier": "World2_Level_0",
 				"iid": "ae188e71-66b0-11ec-918b-35b60d50f00b",
@@ -531,7 +531,7 @@
 				"__neighbours": []
 			}
 		] },
-		{ "iid": "dd1cf730-66b0-11ec-9aaf-076088cd0424", "identifier": "World3", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "GridVania", "levels": [
+		{ "iid": "dd1cf730-66b0-11ec-9aaf-076088cd0424", "identifier": "Third world", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "GridVania", "levels": [
 			{
 				"identifier": "World3_Level_0",
 				"iid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6",
