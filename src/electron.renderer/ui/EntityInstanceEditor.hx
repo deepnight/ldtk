@@ -278,6 +278,19 @@ class EntityInstanceEditor extends dn.Process {
 		jExtraInfos.append(jCoords);
 		if( UNIT_GRID )
 			i.setUnit(ei._li.def.gridSize);
+
+
+		// References to this
+		var refs = project.getEntityInstancesReferingTo(ei);
+		if( refs.length>0 ) {
+			jExtraInfos.append('<dt>References to this entity</dt>');
+			jExtraInfos.append('<dd><div class="entityRefs"/></dd>');
+			var jList = jExtraInfos.find(".entityRefs");
+			for(ei in refs) {
+				var jRef = JsTools.createEntityRef(ei, jList);
+				jRef.click(_->editor.followEntityRef(ei));
+			}
+		}
 	}
 
 

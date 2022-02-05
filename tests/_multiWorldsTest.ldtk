@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456686,
-	"nextUid": 25,
+	"appBuildId": 456687,
+	"nextUid": 26,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
 	"worldGridWidth": null,
@@ -142,6 +142,35 @@
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
 					"tilesetUid": null
+				},
+				{
+					"identifier": "Color",
+					"__type": "Color",
+					"uid": 25,
+					"type": "F_Color",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		}
@@ -205,13 +234,22 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [200,56],
-								"fieldInstances": [{
-									"__identifier": "Entity_ref",
-									"__value": null,
-									"__type": "EntityRef",
-									"defUid": 23,
-									"realEditorValues": [null]
-								}]
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": null,
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [null]
+									},
+									{
+										"__identifier": "Color",
+										"__value": "#FF0000",
+										"__type": "Color",
+										"defUid": 25,
+										"realEditorValues": [{ "id": "V_Int", "params": [16711680] }]
+									}
+								]
 							},
 							{
 								"__identifier": "Teleport",
@@ -224,20 +262,87 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [200,168],
-								"fieldInstances": [{
-									"__identifier": "Entity_ref",
-									"__value": {
-										"entityIid": "2443c500-66b0-11ec-986c-03ccf2e837a3",
-										"layerIid": "59588160-66b0-11ec-a331-e9957587ab6b",
-										"levelIid": "ae188e71-66b0-11ec-918b-35b60d50f00b"
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "2443c500-66b0-11ec-986c-03ccf2e837a3",
+											"layerIid": "59588160-66b0-11ec-a331-e9957587ab6b",
+											"levelIid": "ae188e71-66b0-11ec-918b-35b60d50f00b"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["2443c500-66b0-11ec-986c-03ccf2e837a3"]
+										}]
 									},
-									"__type": "EntityRef",
-									"defUid": 23,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["2443c500-66b0-11ec-986c-03ccf2e837a3"]
-									}]
-								}]
+									{
+										"__identifier": "Color",
+										"__value": "#0EAC41",
+										"__type": "Color",
+										"defUid": 25,
+										"realEditorValues": [{ "id": "V_Int", "params": [961601] }]
+									}
+								]
+							},
+							{
+								"__identifier": "Teleport",
+								"__grid": [3,0],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "8fd65ed0-66b0-11ec-b644-53f57d8e7855",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [56,8],
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "913f3da0-66b0-11ec-b644-1151215dd5ac",
+											"layerIid": "59583341-66b0-11ec-a331-33f3bd4b7c88",
+											"levelIid": "0f2187a1-66b0-11ec-95f2-4b019549917e"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["913f3da0-66b0-11ec-b644-1151215dd5ac"]
+										}]
+									},
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
+							},
+							{
+								"__identifier": "Teleport",
+								"__grid": [2,14],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "92a86a90-66b0-11ec-b644-9d0670854625",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [40,232],
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "8fd65ed0-66b0-11ec-b644-53f57d8e7855",
+											"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+											"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["8fd65ed0-66b0-11ec-b644-53f57d8e7855"]
+										}]
+									},
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
 							}
 						]
 					},
@@ -325,16 +430,61 @@
 						"entityInstances": [
 							{
 								"__identifier": "Teleport",
-								"__grid": [5,4],
+								"__grid": [10,1],
 								"__pivot": [0.5,0.5],
 								"__tags": [],
 								"__tile": null,
-								"iid": "dce5cfa0-66b0-11ec-986c-fbfb68b84a81",
+								"iid": "913f3da0-66b0-11ec-b644-1151215dd5ac",
 								"width": 16,
 								"height": 16,
 								"defUid": 22,
-								"px": [88,72],
-								"fieldInstances": [{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] }]
+								"px": [168,24],
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "91d2a400-66b0-11ec-b644-8f5ca771b223",
+											"layerIid": "59583341-66b0-11ec-a331-33f3bd4b7c88",
+											"levelIid": "0f2187a1-66b0-11ec-95f2-4b019549917e"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["91d2a400-66b0-11ec-b644-8f5ca771b223"]
+										}]
+									},
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
+							},
+							{
+								"__identifier": "Teleport",
+								"__grid": [13,14],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "91d2a400-66b0-11ec-b644-8f5ca771b223",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [216,232],
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "92a86a90-66b0-11ec-b644-9d0670854625",
+											"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+											"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["92a86a90-66b0-11ec-b644-9d0670854625"]
+										}]
+									},
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
 							}
 						]
 					},
@@ -682,20 +832,23 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [88,72],
-								"fieldInstances": [{
-									"__identifier": "Entity_ref",
-									"__value": {
-										"entityIid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
-										"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
-										"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
+											"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+											"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["a50f2280-66b0-11ec-a331-1f30d28bf473"]
+										}]
 									},
-									"__type": "EntityRef",
-									"defUid": 23,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["a50f2280-66b0-11ec-a331-1f30d28bf473"]
-									}]
-								}]
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
 							},
 							{
 								"__identifier": "Teleport",
@@ -708,20 +861,23 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [88,120],
-								"fieldInstances": [{
-									"__identifier": "Entity_ref",
-									"__value": {
-										"entityIid": "13fb9bd0-66b0-11ec-b945-4309a4f5641a",
-										"layerIid": "59588161-66b0-11ec-a331-7502ca67c384",
-										"levelIid": "c2217e40-66b0-11ec-918b-891613a010b7"
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "13fb9bd0-66b0-11ec-b945-4309a4f5641a",
+											"layerIid": "59588161-66b0-11ec-a331-7502ca67c384",
+											"levelIid": "c2217e40-66b0-11ec-918b-891613a010b7"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["13fb9bd0-66b0-11ec-b945-4309a4f5641a"]
+										}]
 									},
-									"__type": "EntityRef",
-									"defUid": 23,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["13fb9bd0-66b0-11ec-b945-4309a4f5641a"]
-									}]
-								}]
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
 							}
 						]
 					},
@@ -818,7 +974,10 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [120,88],
-								"fieldInstances": [{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] }]
+								"fieldInstances": [
+									{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] },
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
 							}
 						]
 					},
@@ -1000,20 +1159,23 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [232,88],
-								"fieldInstances": [{
-									"__identifier": "Entity_ref",
-									"__value": {
-										"entityIid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
-										"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
-										"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+								"fieldInstances": [
+									{
+										"__identifier": "Entity_ref",
+										"__value": {
+											"entityIid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
+											"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+											"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+										},
+										"__type": "EntityRef",
+										"defUid": 23,
+										"realEditorValues": [{
+											"id": "V_String",
+											"params": ["a50f2280-66b0-11ec-a331-1f30d28bf473"]
+										}]
 									},
-									"__type": "EntityRef",
-									"defUid": 23,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["a50f2280-66b0-11ec-a331-1f30d28bf473"]
-									}]
-								}]
+									{ "__identifier": "Color", "__value": "#000000", "__type": "Color", "defUid": 25, "realEditorValues": [] }
+								]
 							}
 						]
 					},

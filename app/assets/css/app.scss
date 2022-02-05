@@ -24,6 +24,7 @@ $backupBg: #6594ff;
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
 $cur_expand: cell;
 $cur_collapse: url("../cursors/collapse.svg") 16 16, zoom-out;
+$cur_locateRef: url("../cursors/locate.svg") 16 16, zoom-out;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -1237,6 +1238,50 @@ ul.log {
 		margin-bottom: 8px;
 	}
 }
+
+
+div.entityRef {
+	display: grid;
+	grid-template-rows: min-content;
+	padding: 4px;
+	cursor: $cur_locateRef;
+	border: 1px solid $bgLight;
+	border-radius: 4px;
+
+	.id {
+		font-size: 9pt;
+		font-weight: bold;
+		color: $orange;
+	}
+	.location {
+		font-size: 8pt;
+		.level {
+			color: $bgLighter
+		}
+		em {
+			opacity: 0.8;
+			font-style: normal;
+		}
+		.world {
+			color: $almostWhite;
+		}
+	}
+
+	&:hover {
+		border-color: $orange;
+		.id {
+			color: white;
+		}
+		.location {
+			color: $white;
+		}
+	}
+
+	&+.entityRef {
+		margin-top: 4px;
+	}
+}
+
 
 .layerType {
 	display: grid;

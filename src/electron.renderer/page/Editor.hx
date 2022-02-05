@@ -1201,6 +1201,22 @@ class Editor extends Page {
 	}
 
 
+	public function followEntityRef(tei:data.inst.EntityInstance) {
+		if( !tei._li.level.isInWorld(curWorld) )
+			selectWorld(tei._li.level._world, false);
+
+		if( tei._li.level!=curLevel )
+			selectLevel(tei._li.level);
+
+		if( tei._li!=curLayerInstance )
+			selectLayerInstance(tei._li);
+
+		camera.scrollTo(tei.worldX, tei.worldY);
+		levelRender.bleepEntity(tei._li, tei);
+		selectionTool.select([ Entity(curLayerInstance, tei) ]);
+	}
+
+
 	function updateWorldDepthsUI() {
 		var min = curWorld.getLowestLevelDepth();
 		var max = curWorld.getHighestLevelDepth();
