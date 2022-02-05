@@ -204,6 +204,10 @@ class EntityInstanceEditor extends dn.Process {
 		});
 		jHeader.append(jEdit);
 
+		// Collapser
+		var jCollapser = new J('<div class="collapser" id="extraEntityInfos">Extra entity infos</div>');
+		jCollapser.appendTo(jPropsForm);
+
 		// Extra bits of info
 		var jExtraInfos = new J('<dl class="form extraInfos"/>');
 		jExtraInfos.appendTo(jPropsForm);
