@@ -287,7 +287,7 @@ class EntityInstanceEditor extends dn.Process {
 			jExtraInfos.append('<dd><div class="entityRefs"/></dd>');
 			var jList = jExtraInfos.find(".entityRefs");
 			for(ei in refs) {
-				var jRef = JsTools.createEntityRef(ei, jList);
+				var jRef = JsTools.createEntityRef(ei, true, jList);
 				jRef.click(_->editor.followEntityRef(ei));
 			}
 		}

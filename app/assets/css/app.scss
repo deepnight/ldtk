@@ -1244,9 +1244,17 @@ div.entityRef {
 	display: grid;
 	grid-template-rows: min-content;
 	padding: 4px;
+	padding-left: 25px;
 	cursor: $cur_locateRef;
 	border: 1px solid $bgLight;
 	border-radius: 4px;
+	background-image: url("../icons/right.svg");
+	background-repeat: no-repeat;
+	background-position: left center;
+
+	&.isBackRef {
+		background-image: url("../icons/left.svg");
+	}
 
 	.id {
 		font-size: 9pt;

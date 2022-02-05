@@ -907,14 +907,20 @@ class JsTools {
 	}
 
 
-	public static function createEntityRef(ei:data.inst.EntityInstance, ?jTarget:js.jquery.JQuery) {
+	public static function createEntityRef(ei:data.inst.EntityInstance, isBackRef=false, ?jTarget:js.jquery.JQuery) {
 		var jRef = new J('<div class="entityRef"/>');
 		if( jTarget!=null )
 			jRef.appendTo(jTarget);
+		
 		jRef.append('<div class="id">${ei.def.identifier}</div>');
 		jRef.append('<div class="location"> <span class="level">${ei._li.level.identifier}</span> </div>');
+
 		if( !ei._li.level.isInWorld(Editor.ME.curWorld) )
 			jRef.find(".location").append(' <em>in</em> <span class="world">${ei._li.level._world.identifier}</span>');
+
+		if( isBackRef )
+			jRef.addClass("isBackRef");
+
 		return jRef;
 	}
 
