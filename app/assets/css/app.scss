@@ -1256,14 +1256,15 @@ div.entityRef {
 	.location {
 		font-size: 8pt;
 		.level {
-			color: $bgLighter
+			font-weight: bold;
+			color: $bgLighter;
 		}
 		em {
-			opacity: 0.8;
+			opacity: 0.7;
 			font-style: normal;
 		}
 		.world {
-			color: $almostWhite;
+			color: $bgLighter;
 		}
 	}
 
@@ -1273,7 +1274,7 @@ div.entityRef {
 			color: white;
 		}
 		.location {
-			color: $white;
+			color: white;
 		}
 	}
 
