@@ -18,8 +18,17 @@ class FieldInstanceRender {
 	}
 
 
-	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha=1.0) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha=1.0, isInSameSpace:Bool) {
 		var a = Math.atan2(ty-fy, tx-fx);
+		if( !isInSameSpace ) {
+			final d = 80;
+			fx = tx - Math.cos(a)*d;
+			fy = ty - Math.sin(a)*d;
+			g.lineStyle(1, color, 1);
+			g.moveTo(fx + Math.cos(a-M.PIHALF)*4, fy + Math.sin(a-M.PIHALF)*4);
+			g.lineTo(fx + Math.cos(a+M.PIHALF)*4, fy + Math.sin(a+M.PIHALF)*4);
+		}
+
 		var len = M.dist(fx,fy, tx,ty);
 		var dashLen = M.fmin(5, len*0.05);
 		var count = M.ceil( len/dashLen );
@@ -224,7 +233,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty);
+							renderRefLink(g, baseColor, fx,fy, tx,ty, ei.isInSameSpaceAs(tei));
 						}
 
 					case LevelCtx(l):
@@ -241,7 +250,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty);
+							renderRefLink(g, baseColor, fx,fy, tx,ty, ei.isInSameSpaceAs(tei));
 						}
 
 					case LevelCtx(l):

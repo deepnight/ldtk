@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456664,
+	"appBuildId": 456685,
 	"nextUid": 25,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -120,7 +120,7 @@
 					"uid": 23,
 					"type": "F_EntityRef",
 					"isArray": false,
-					"canBeNull": false,
+					"canBeNull": true,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenPivots",
@@ -136,7 +136,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": null,
 					"textLanguageMode": null,
-					"symmetricalRef": true,
+					"symmetricalRef": false,
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
@@ -196,7 +196,7 @@
 						"entityInstances": [
 							{
 								"__identifier": "Teleport",
-								"__grid": [13,13],
+								"__grid": [12,3],
 								"__pivot": [0.5,0.5],
 								"__tags": [],
 								"__tile": null,
@@ -204,19 +204,38 @@
 								"width": 16,
 								"height": 16,
 								"defUid": 22,
-								"px": [216,216],
+								"px": [200,56],
+								"fieldInstances": [{
+									"__identifier": "Entity_ref",
+									"__value": null,
+									"__type": "EntityRef",
+									"defUid": 23,
+									"realEditorValues": [null]
+								}]
+							},
+							{
+								"__identifier": "Teleport",
+								"__grid": [12,11],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "225673f0-66b0-11ec-986c-f9a2f3fb530e",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [200,184],
 								"fieldInstances": [{
 									"__identifier": "Entity_ref",
 									"__value": {
-										"entityIid": "a7df0b60-66b0-11ec-a331-bb72de169fd8",
-										"layerIid": "5958a871-66b0-11ec-a331-6be0f3b930ee",
-										"levelIid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6"
+										"entityIid": "2443c500-66b0-11ec-986c-03ccf2e837a3",
+										"layerIid": "59588160-66b0-11ec-a331-e9957587ab6b",
+										"levelIid": "ae188e71-66b0-11ec-918b-35b60d50f00b"
 									},
 									"__type": "EntityRef",
 									"defUid": 23,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["a7df0b60-66b0-11ec-a331-bb72de169fd8"]
+										"params": ["2443c500-66b0-11ec-986c-03ccf2e837a3"]
 									}]
 								}]
 							}
@@ -303,7 +322,21 @@
 						"seed": 1129682,
 						"overrideTilesetUid": null,
 						"gridTiles": [],
-						"entityInstances": []
+						"entityInstances": [
+							{
+								"__identifier": "Teleport",
+								"__grid": [5,4],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "dce5cfa0-66b0-11ec-986c-fbfb68b84a81",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [88,72],
+								"fieldInstances": [{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] }]
+							}
+						]
 					},
 					{
 						"__identifier": "IntGrid",
@@ -637,7 +670,47 @@
 						"seed": 224686,
 						"overrideTilesetUid": null,
 						"gridTiles": [],
-						"entityInstances": []
+						"entityInstances": [
+							{
+								"__identifier": "Teleport",
+								"__grid": [5,4],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "e42cb720-66b0-11ec-b3eb-afa7db4f8b58",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [88,72],
+								"fieldInstances": [{
+									"__identifier": "Entity_ref",
+									"__value": {
+										"entityIid": "a50f2280-66b0-11ec-a331-1f30d28bf473",
+										"layerIid": "59583340-66b0-11ec-a331-6d3cded7cb0b",
+										"levelIid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc"
+									},
+									"__type": "EntityRef",
+									"defUid": 23,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["a50f2280-66b0-11ec-a331-1f30d28bf473"]
+									}]
+								}]
+							},
+							{
+								"__identifier": "Teleport",
+								"__grid": [5,7],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "2443c500-66b0-11ec-986c-03ccf2e837a3",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [88,120],
+								"fieldInstances": [{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] }]
+							}
+						]
 					},
 					{
 						"__identifier": "IntGrid",

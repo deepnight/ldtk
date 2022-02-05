@@ -288,7 +288,8 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
-						alpha
+						alpha,
+						PREV_CHAINABLE_EI.isInSameSpaceAs(ei)
 					);
 
 				case _:
@@ -296,7 +297,8 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						getPlacementX(m), getPlacementY(m),
-						alpha
+						alpha,
+						PREV_CHAINABLE_EI._li.level.isInWorld(curWorld) && PREV_CHAINABLE_EI._li.level.worldDepth==curLevel.worldDepth
 					);
 			}
 		}

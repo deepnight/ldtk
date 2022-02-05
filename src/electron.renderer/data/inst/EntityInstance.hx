@@ -240,6 +240,11 @@ class EntityInstance {
 		return false;
 	}
 
+	public inline function isInSameSpaceAs(ei:EntityInstance) {
+		return ei!=null
+			&& _li.level.worldDepth == ei._li.level.worldDepth
+			&& _li.level.isInWorld(ei._li.level._world);
+	}
 
 	public function isOutOfLayerBounds() {
 		return x<_li.pxTotalOffsetX || x>_li.pxTotalOffsetX+_li.cWid*_li.def.scaledGridSize

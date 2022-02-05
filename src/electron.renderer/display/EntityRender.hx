@@ -265,11 +265,14 @@ class EntityRender extends dn.Process {
 				continue;
 
 			var col = refEi.getSmartColor(true);
-			var fx = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
-			var fy = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
-			var tx = ei.getRefAttachX(fi.def) - ei.x;
-			var ty = ei.getRefAttachY(fi.def) - ei.y;
-			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
+			var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var thisX = ei.getRefAttachX(fi.def) - ei.x;
+			var thisY = ei.getRefAttachY(fi.def) - ei.y;
+			FieldInstanceRender.renderRefLink(
+				fieldGraphics, col, refX, refY, thisX, thisY,
+				ei.isInSameSpaceAs(refEi)
+			);
 		}
 
 		// Identifier label
