@@ -1210,34 +1210,6 @@ ul.log {
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 .icon.red	{ filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6); }
 
-.accordion {
-	.expand {
-		color: $bgLighter;
-		font-size: 0.8em;
-		padding-top: 2px;
-		padding-bottom: 2px;
-		padding-left: 24px;
-		background-repeat: no-repeat;
-		background-position: left center;
-
-		&:hover {
-			color: $orange;
-		}
-
-		&.expanded {
-			cursor: $cur_collapse;
-			color: white;
-			background-color: $bgLight;
-			background-image: url("../icons/expanded.svg");
-		}
-		&.collapsed {
-			cursor: $cur_expand;
-			background-color: $bgMed;
-			background-image: url("../icons/collapsed.svg");
-		}
-	}
-}
-
 .collapser {
 	color: $bgLighter;
 	font-size: 0.8em;

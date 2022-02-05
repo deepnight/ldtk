@@ -570,32 +570,8 @@ class JsTools {
 		});
 
 
-		// Accordions
-		jCtx.find(".accordion").each( (idx,e)->{ // TODO unfinished
-			var jAccordion = new J(e);
-			var jExpand = jAccordion.find(".expand:first");
-			var jContent = jExpand.nextAll();
-			jContent.hide();
-			jExpand.addClass("collapsed");
-			jExpand
-				.off(".accordion")
-				.on("click.accordion", _->{
-					var expanded = jContent.is(":visible");
-					jExpand.removeClass("collapsed");
-					jExpand.removeClass("expanded");
-					if( expanded ) {
-						jExpand.addClass("collapsed");
-						jContent.slideUp(70);
-					}
-					else {
-						jExpand.addClass("expanded");
-						jContent.slideDown(50);
-					}
-				});
-		});
-
 		// Collapser
-		jCtx.find(".collapser").each( (idx,e)->{ // TODO unfinished
+		jCtx.find(".collapser").each( (idx,e)->{
 			var jCollapser = new J(e);
 			var tid = jCollapser.attr("target");
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
