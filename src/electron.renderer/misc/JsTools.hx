@@ -5,6 +5,8 @@ import sortablejs.Sortable;
 import js.node.Fs;
 
 class JsTools {
+	static var COLLAPSER_MEMORY : Map<String,Bool> = new Map();
+
 
 	/**
 		Use SortableJS to make some list sortable
@@ -588,6 +590,45 @@ class JsTools {
 					else {
 						jExpand.addClass("expanded");
 						jContent.slideDown(50);
+					}
+				});
+		});
+
+		// Collapser
+		jCtx.find(".collapser").each( (idx,e)->{ // TODO unfinished
+			var jCollapser = new J(e);
+			var tid = jCollapser.attr("target");
+			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
+			var memoryId = jCollapser.attr("id"); // might be null
+
+			if( memoryId!=null && COLLAPSER_MEMORY.get(memoryId)==true ) {
+				jTarget.show();
+				jCollapser.addClass("expanded");
+			}
+			else {
+				jTarget.hide();
+				jCollapser.addClass("collapsed");
+			}
+
+
+			jCollapser
+				.off(".collapser")
+				.on("click.collapser", _->{
+					var expanded = jTarget.is(":visible");
+					jCollapser.removeClass("collapsed");
+					jCollapser.removeClass("expanded");
+					if( memoryId!=null )
+						COLLAPSER_MEMORY.set(memoryId, !expanded);
+
+					if( expanded ) {
+						jCollapser.addClass("collapsed");
+						jTarget.slideUp(50, ()->dn.Process.resizeAll(false));
+					}
+					else {
+						jCollapser.addClass("expanded");
+						jTarget.slideDown(30, ()->dn.Process.resizeAll(false));
+						jTarget.show();
+						dn.Process.resizeAll(false);
 					}
 				});
 		});
