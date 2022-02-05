@@ -289,7 +289,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
 						alpha,
-						PREV_CHAINABLE_EI.isInSameSpaceAs(ei)
+						Full
 					);
 
 				case _:
@@ -298,7 +298,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						getPlacementX(m), getPlacementY(m),
 						alpha,
-						PREV_CHAINABLE_EI._li.level.isInWorld(curWorld) && PREV_CHAINABLE_EI._li.level.worldDepth==curLevel.worldDepth
+						Full
 					);
 			}
 		}

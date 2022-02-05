@@ -1,5 +1,11 @@
 package display;
 
+enum RefLinkstyle {
+	Full;
+	CutAtOrigin;
+	CutAtTarget;
+}
+
 enum FieldRenderContext {
 	EntityCtx(g:h2d.Graphics, ei:data.inst.EntityInstance, ld:data.def.LayerDef);
 	LevelCtx(l:data.Level);
@@ -18,22 +24,37 @@ class FieldInstanceRender {
 	}
 
 
-	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha=1.0, isInSameSpace:Bool) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, style:RefLinkstyle) {
+		// Optional line cutting
 		var a = Math.atan2(ty-fy, tx-fx);
-		if( !isInSameSpace ) {
-			final d = 80;
-			fx = tx - Math.cos(a)*d;
-			fy = ty - Math.sin(a)*d;
-			g.lineStyle(1, color, 1);
-			g.moveTo(fx + Math.cos(a-M.PIHALF)*4, fy + Math.sin(a-M.PIHALF)*4);
-			g.lineTo(fx + Math.cos(a+M.PIHALF)*4, fy + Math.sin(a+M.PIHALF)*4);
+		final cutDist = 40;
+		switch style {
+			case Full:
+
+			case CutAtOrigin:
+				final cutLine = 2;
+				tx = fx + Math.cos(a)*cutDist;
+				ty = fy + Math.sin(a)*cutDist;
+				g.lineStyle(1, color, 0.5);
+				g.moveTo(tx + Math.cos(a-M.PIHALF)*cutLine, ty + Math.sin(a-M.PIHALF)*cutLine);
+				g.lineTo(tx + Math.cos(a+M.PIHALF)*cutLine, ty + Math.sin(a+M.PIHALF)*cutLine);
+
+			case CutAtTarget:
+				final cutLine = 4;
+				fx = tx - Math.cos(a)*cutDist;
+				fy = ty - Math.sin(a)*cutDist;
+				g.lineStyle(1, color, 1);
+				g.moveTo(fx + Math.cos(a-M.PIHALF)*cutLine, fy + Math.sin(a-M.PIHALF)*cutLine);
+				g.lineTo(fx + Math.cos(a+M.PIHALF)*cutLine, fy + Math.sin(a+M.PIHALF)*cutLine);
 		}
 
+		// Init params
 		var len = M.dist(fx,fy, tx,ty);
 		var dashLen = M.fmin(5, len*0.05);
 		var count = M.ceil( len/dashLen );
 		dashLen = len/count;
 
+		// Draw link
 		var n = 0;
 		var sign = 1;
 		final off = 2.5;
@@ -233,7 +254,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty, ei.isInSameSpaceAs(tei));
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
 					case LevelCtx(l):
@@ -250,7 +271,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty, ei.isInSameSpaceAs(tei));
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
 					case LevelCtx(l):

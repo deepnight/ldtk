@@ -270,8 +270,8 @@ class EntityRender extends dn.Process {
 			var thisX = ei.getRefAttachX(fi.def) - ei.x;
 			var thisY = ei.getRefAttachY(fi.def) - ei.y;
 			FieldInstanceRender.renderRefLink(
-				fieldGraphics, col, refX, refY, thisX, thisY,
-				ei.isInSameSpaceAs(refEi)
+				fieldGraphics, col, refX, refY, thisX, thisY, 1,
+				ei.isInSameSpaceAs(refEi) ? Full : CutAtTarget
 			);
 		}
 

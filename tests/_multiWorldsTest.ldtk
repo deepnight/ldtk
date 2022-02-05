@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456685,
+	"appBuildId": 456686,
 	"nextUid": 25,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -215,7 +215,7 @@
 							},
 							{
 								"__identifier": "Teleport",
-								"__grid": [12,11],
+								"__grid": [12,10],
 								"__pivot": [0.5,0.5],
 								"__tags": [],
 								"__tile": null,
@@ -223,7 +223,7 @@
 								"width": 16,
 								"height": 16,
 								"defUid": 22,
-								"px": [200,184],
+								"px": [200,168],
 								"fieldInstances": [{
 									"__identifier": "Entity_ref",
 									"__value": {
@@ -708,7 +708,20 @@
 								"height": 16,
 								"defUid": 22,
 								"px": [88,120],
-								"fieldInstances": [{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] }]
+								"fieldInstances": [{
+									"__identifier": "Entity_ref",
+									"__value": {
+										"entityIid": "13fb9bd0-66b0-11ec-b945-4309a4f5641a",
+										"layerIid": "59588161-66b0-11ec-a331-7502ca67c384",
+										"levelIid": "c2217e40-66b0-11ec-918b-891613a010b7"
+									},
+									"__type": "EntityRef",
+									"defUid": 23,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["13fb9bd0-66b0-11ec-b945-4309a4f5641a"]
+									}]
+								}]
 							}
 						]
 					},
@@ -793,7 +806,21 @@
 						"seed": 6574425,
 						"overrideTilesetUid": null,
 						"gridTiles": [],
-						"entityInstances": []
+						"entityInstances": [
+							{
+								"__identifier": "Teleport",
+								"__grid": [7,5],
+								"__pivot": [0.5,0.5],
+								"__tags": [],
+								"__tile": null,
+								"iid": "13fb9bd0-66b0-11ec-b945-4309a4f5641a",
+								"width": 16,
+								"height": 16,
+								"defUid": 22,
+								"px": [120,88],
+								"fieldInstances": [{ "__identifier": "Entity_ref", "__value": null, "__type": "EntityRef", "defUid": 23, "realEditorValues": [] }]
+							}
+						]
 					},
 					{
 						"__identifier": "IntGrid",

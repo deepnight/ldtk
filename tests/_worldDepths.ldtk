@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456661,
+	"appBuildId": 456686,
 	"nextUid": 207,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -3465,8 +3465,8 @@
 			"identifier": "Throne_room",
 			"iid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24",
 			"uid": 49,
-			"worldX": 496,
-			"worldY": 472,
+			"worldX": 376,
+			"worldY": 480,
 			"worldDepth": -1,
 			"pxWid": 264,
 			"pxHei": 160,
@@ -4358,7 +4358,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" }]
+			"__neighbours": []
 		},
 		{
 			"identifier": "Wood_Gate",
@@ -7038,12 +7038,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [
-				{ "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "e" },
-				{ "levelIid": "a2c54220-66b0-11ec-9cd7-8fe822b5bd24", "levelUid": 49, "dir": "s" },
-				{ "levelIid": "74a0e030-66b0-11ec-8211-35643000f436", "levelUid": 163, "dir": "s" },
-				{ "levelIid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35", "levelUid": 167, "dir": "s" }
-			]
+			"__neighbours": [ { "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "e" }, { "levelIid": "74a0e030-66b0-11ec-8211-35643000f436", "levelUid": 163, "dir": "s" } ]
 		},
 		{
 			"identifier": "Pit",
@@ -8304,8 +8299,7 @@
 			"__neighbours": [
 				{ "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "s" },
 				{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" },
-				{ "levelIid": "af361970-66b0-11ec-af96-e7e21e3aa57c", "levelUid": 166, "dir": "n" },
-				{ "levelIid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35", "levelUid": 167, "dir": "s" }
+				{ "levelIid": "af361970-66b0-11ec-af96-e7e21e3aa57c", "levelUid": 166, "dir": "n" }
 			]
 		},
 		{
@@ -9189,8 +9183,8 @@
 			"identifier": "Big_cave",
 			"iid": "ead8bdc0-66b0-11ec-b5a9-ef9f86709e35",
 			"uid": 167,
-			"worldX": 896,
-			"worldY": 488,
+			"worldX": 1088,
+			"worldY": 656,
 			"worldDepth": -1,
 			"pxWid": 808,
 			"pxHei": 328,
@@ -13898,12 +13892,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [
-				{ "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "s" },
-				{ "levelIid": "c3ebe820-66b0-11ec-b23b-11b737ea77f1", "levelUid": 161, "dir": "s" },
-				{ "levelIid": "19b3bee0-66b0-11ec-8211-f7fb32016547", "levelUid": 162, "dir": "s" },
-				{ "levelIid": "74a0e030-66b0-11ec-8211-35643000f436", "levelUid": 163, "dir": "s" }
-			]
+			"__neighbours": [ { "levelIid": "9a18c5f0-66b0-11ec-911e-6906115a9ddc", "levelUid": 157, "dir": "s" }, { "levelIid": "c3ebe820-66b0-11ec-b23b-11b737ea77f1", "levelUid": 161, "dir": "s" } ]
 		}
 	] }]
 }
