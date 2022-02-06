@@ -343,8 +343,12 @@ class App extends dn.Process {
 	public inline function isAltDown() return isKeyDown(K.ALT);
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
+
+	var _inputFocusCache : Null<Bool> = null;
 	public inline function hasInputFocus() {
-		return jBody.find("input:focus, textarea:focus").length>0;
+		if( _inputFocusCache==null )
+			_inputFocusCache = jBody.find("input:focus, textarea:focus").length>0;
+		return _inputFocusCache;
 	}
 
 
@@ -736,6 +740,11 @@ class App extends dn.Process {
 			LOG.flushToFile();
 			ET.exitApp();
 		}
+	}
+
+	override function preUpdate() {
+		super.preUpdate();
+		_inputFocusCache = null;
 	}
 
 	override function update() {
