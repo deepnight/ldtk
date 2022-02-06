@@ -4152,11 +4152,11 @@ canvas#webgl {
 						z-index: 1; // fix box-shadow depth
 						margin: 0px;
 					}
-					// button.world {
-					// 	grid-row: 1/2;
-					// 	grid-column: 3/4;
-					// 	z-index: 0;
-					// }
+					button.showHelp {
+						grid-row: 1/2;
+						grid-column: 3/4;
+						z-index: 0;
+					}
 					button.settings {
 						grid-row: 1/2;
 						grid-column: 4/5;
