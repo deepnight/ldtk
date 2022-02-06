@@ -602,6 +602,12 @@ class Editor extends Page {
 					else
 						onSave();
 
+			case K.K if( App.ME.isCtrlDown() ):
+				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
+					ui.Modal.closeAll();
+					new ui.modal.dialog.EditAppSettings();
+				}
+
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
 					ui.Modal.closeAll();
@@ -621,11 +627,11 @@ class Editor extends Page {
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
-			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
+			// case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			// 	setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 
-			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setTileStacking( !settings.v.tileStacking );
+			// case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			// 	setTileStacking( !settings.v.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.v.singleLayerMode );
@@ -690,9 +696,33 @@ class Editor extends Page {
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
-			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
-				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+3)+")").click();
+			// case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
+			// 	jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+3)+")").click();
 
+			// Select layers (F1-F12)
+			case k if( k>=K.F1 && k<=K.F12 && !hasInputFocus() ):
+				var idx = k-K.F1;
+				if( idx < curLevel.layerInstances.length )
+					selectLayerInstance( curLevel.layerInstances[idx] );
+
+
+			case K.P if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editProject").click();
+
+			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editLayers").click();
+
+			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editEntities").click();
+
+			case K.U if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editEnums").click();
+
+			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editTilesets").click();
+
+			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
 		}
 
 		// Propagate to tools
