@@ -3787,16 +3787,16 @@ canvas#webgl {
 					}
 				}
 
-				.index {
+				.shortcut {
 					display: flex;
 					align-items: center;
 					min-width: 1.2em;
 					text-align: center;
 					color: $bgLighter;
 					font-weight: bold;
-					font-size: 14pt;
+					font-size: 8pt;
 				}
-				&.active .index {
+				&.active .shortcut {
 					color: $darkOrange;
 				}
 

@@ -699,8 +699,8 @@ class Editor extends Page {
 			// case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
 			// 	jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+3)+")").click();
 
-			// Select layers (F1-F12)
-			case k if( k>=K.F1 && k<=K.F12 && !hasInputFocus() ):
+			// Select layers (F1-F10)
+			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
 				var idx = k-K.F1;
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
@@ -2071,7 +2071,7 @@ class Editor extends Page {
 			if( ld.hideInList )
 				jLayer.addClass("hiddenFromList");
 
-			jLayer.find(".index").text( Std.string(idx++) );
+			jLayer.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
 
 			// Icon
 			var jIcon = jLayer.find(">.layerIcon");
