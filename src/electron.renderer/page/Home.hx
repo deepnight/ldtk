@@ -511,6 +511,11 @@ class Home extends Page {
 			case K.F12 if( !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) )
 					new ui.modal.dialog.EditAppSettings();
+
+			// Open settings (alt)
+			case K.K if( App.ME.isShiftDown() && App.ME.isCtrlDown() ):
+				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) )
+					new ui.modal.dialog.EditAppSettings();
 		}
 	}
 
