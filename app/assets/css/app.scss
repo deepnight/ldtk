@@ -2585,44 +2585,67 @@ textarea {
 
 
 .window.changelog {
-	.wrapper {
+	&>.wrapper {
 		position: relative;
+		padding: 0 !important;
+		overflow-x: hidden;
+		overflow-y: hidden;
 	}
-	.wrapper .content {
-		width: 800px;
-
-		.cornerButtons {
-			display: grid;
-			position: absolute;
-			top: 8px;
-			right: 8px;
-			width: auto;
-		}
+	&>.wrapper .content {
+		width: 900px;
+		max-height: 96vh;
+		min-height: 50vh;
+		display: grid;
+		grid-template-rows: min-content auto;
+		height: 100%;
 
 		header {
+			display: grid;
+			grid-template-columns: min-content auto min-content;
+
+			align-items: stretch;
 			font-family: Roboto;
-			text-align: center;
-			color: $orange;
 
 			.version {
+				display: grid;
+				align-items: center;
+				padding: 16px;
 				font-weight: bold;
-				font-size: 70pt;
-				line-height: 75pt;
-				text-shadow: 0px 0px 32px $darkOrange;
+				font-size: 50pt;
+				line-height: 55pt;
+				color: $orangeLight;
+				background-color: $bgMed;
+				text-shadow: 0px 0px 16px $darkOrange;
+				border-right: 1px dashed $bgLight;
 			}
 
 			.title {
+				display: grid;
+				align-items: center;
+				padding-left: 16px;
+				padding-top: 16px;
+				padding-bottom: 16px;
+				padding-right: 64px;
 				font-size: 20pt;
 				font-style: italic;
-				margin-bottom: 8px;
+				color: $orange;
+				background-color: $bgMed;
+
 				&:empty {
-					display: none;
+					background-color: $bgMed;
 				}
 			}
 
+			.cornerButtons {
+				display: grid;
+				grid-template-rows: auto;
+				width: auto;
+			}
+
 			.newUpdate {
-				margin-left: -20px;
-				margin-right: -20px;
+				grid-column: 1/4;
+				grid-row: 2/3;
+				padding: 16px 20px;
 				padding-top: 4px;
 				padding-bottom: 4px;
 
@@ -2635,13 +2658,7 @@ textarea {
 		}
 
 		.changelog {
-
-			margin-left: -20px;
-			margin-right: -20px;
-			margin-bottom: -20px;
 			padding: 20px;
-			max-height: 70vh;
-			min-height: 50vh;
 
 			overflow-y: auto;
 			background-color: $bgDark;
@@ -2651,6 +2668,8 @@ textarea {
 			img {
 				width: 100%;
 				height: auto;
+				// max-height: 300px;
+				// object-fit: cover;
 				border: 1px solid black;
 				// outline: 1px solid black;
 				border-radius: 4px;
