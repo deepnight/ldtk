@@ -51,6 +51,24 @@ You can right click on an element with a context menu to copy/cut/paste/duplicat
 
 ![](1.0.0-ruleCopy.gif)
 
+## Reworked toolbar and shortcuts
+
+![](1.0.0-mainBar.png)
+
+The main editor toolbar was reorganized to be a little bit more logical:
+
+ - `Level` button is now near the `World` button. They also share the same color.
+ - The `Project` button is now brown and near the four Definition buttons.
+ - The keyboard shortcuts for the various panels are now:
+   - `P`: project settings panel
+   - `L`: layers panel
+   - `E`: entities panel (replacing the previous "Select empty spaces" option)
+   - `U`: enums panel
+   - `T`: tilesets panel (replacing the previous "Toggle tile stacking" option)
+ - `F1` to `F10` keys are now associated with layers selection (replacing the previous `0-9` keys shortcuts)
+
+
+
 ## User interface improvements
 
 The **Space** key: one shortcut to rule them all.
