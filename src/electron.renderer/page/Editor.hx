@@ -602,12 +602,6 @@ class Editor extends Page {
 					else
 						onSave();
 
-			case K.K if( App.ME.isCtrlDown() ):
-				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
-					ui.Modal.closeAll();
-					new ui.modal.dialog.EditAppSettings();
-				}
-
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
 					ui.Modal.closeAll();
