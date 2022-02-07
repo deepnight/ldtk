@@ -13,8 +13,8 @@ class PanView extends Tool<Int> {
 		return panning || zooming;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 
 		curMode = null;
 		App.ME.jBody.addClass("panning");

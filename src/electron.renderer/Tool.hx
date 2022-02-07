@@ -73,7 +73,7 @@ class Tool<T> extends dn.Process {
 	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible() && App.ME.hasGlContext;
 	public function isRunning() return curMode!=null;
 
-	public function startUsing(ev:hxd.Event, m:Coords) {
+	public function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
 		App.ME.requestCpu();
 		curMode = null;
 		startTime = haxe.Timer.stamp();

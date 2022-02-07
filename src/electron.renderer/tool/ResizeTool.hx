@@ -114,8 +114,8 @@ class ResizeTool extends Tool<Int> {
 		return draggedHandle!=null;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 		curMode = null;
 
 		ev.cancel = true;

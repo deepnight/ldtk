@@ -25,8 +25,8 @@ class IntGridTool extends tool.LayerTool<Int> {
 		return getSelectedValue()>0 ? curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color : 0x0;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 		editor.selectionTool.clear();
 	}
 
