@@ -110,10 +110,10 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 
-		var ge = editor.getGenericLevelElementAt(m);
+		var ge = editor.getGenericLevelElementAt(m, true);
 		switch ge {
 			case Entity(li,ei) if( ev.button==0 ):
 				if( tryToChainRefTo(PREV_CHAINABLE_EI, ei) )
