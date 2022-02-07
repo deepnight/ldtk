@@ -4022,8 +4022,8 @@ canvas#webgl {
 
 	#worldDepths {
 		position: absolute;
-		top: 146px;
-		left: calc( $mainPanelNormalWid + 100px );
+		top: 46px;
+		left: calc( $mainPanelNormalWid + 40px );
 
 		display: grid;
 		background-color: $bgDark;
@@ -4031,6 +4031,7 @@ canvas#webgl {
 		border-radius: 4px;
 		max-height: 70vh;
 		overflow-y: auto;
+		box-shadow: 0px 4px 2px transparentize($color: black, $amount: 0.6);
 
 		>.title {
 			display: grid;
@@ -4096,7 +4097,7 @@ canvas#webgl {
 
 				&.active {
 					z-index: 2;
-					margin-left: 4px;
+					// margin-left: 4px;
 					border-color: $orange;
 					pointer-events: none;
 					// background-color: $bgMed;
