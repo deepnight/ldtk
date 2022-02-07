@@ -7491,7 +7491,7 @@ $patternSize : 32px;
 
 		.pattern {
 			display: grid;
-			grid-template-columns: min-content auto;
+			grid-template-columns: 200px auto;
 			gap: $gutter;
 
 			.editor{
@@ -7512,21 +7512,36 @@ $patternSize : 32px;
 			}
 
 			.values {
+				max-height: 300px;
+				overflow-y: auto;
+
 				ul {
 					display: grid;
-					height: 100%;
-					gap: 2px;
 
 					li {
 						display: grid;
-						align-content: center;
-						justify-content: center;
-						padding: 8px;
-
-						text-shadow: 0px 2px 1px black, 0px 0px 4px black;
-
-						border: 1px solid $bgMed;
+						grid-template-columns: 32px auto;
+						font-weight: bold;
 						cursor: pointer;
+						border-radius: 3px;
+						border-top: 1px solid transparentize($color: white, $amount: 0.7);
+
+						&+li {
+							margin-top: 1px;
+						}
+
+						.value {
+							padding: 8px 4px;
+							font-size: 11pt;
+							text-align: center;
+							color: white;
+							background-color: transparentize($color: black, $amount: 0.9);
+						}
+
+						.name {
+							padding: 8px;
+							font-size: 9pt;
+						}
 
 						&:hover {
 							outline: 1px solid white;
@@ -7534,20 +7549,45 @@ $patternSize : 32px;
 						}
 
 						&.active {
-							border-color: $orange;
-							outline: 1px solid black;
+							// border-color: white !important;
+							outline: 2px solid white;
 							outline-offset: -2px;
-							box-shadow: 0px 0px 8px $red;
+							// box-shadow: 0px 0px 8px $red;
+							.value {
+								color: $bgDark;
+								background-color: white;
+								box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
+							}
 						}
 					}
 					li.any {
 						font-style: italic;
 						background-image: url("../img/any.png");
+						border-color: $bgDark;
 					}
+
 				}
 
 			}
 		}
+
+
+		// &.manyValues {
+		// 	.pattern {
+		// 		grid-template-columns: 300px auto;
+
+		// 		.values ul {
+		// 			grid-template-columns: 1fr 1fr;
+		// 			li {
+		// 				padding-top: 4px;
+		// 				padding-bottom: 4px;
+		// 				overflow: hidden;
+		// 				word-break: break-all;
+		// 				font-size: 9pt;
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		.help {
 			margin-top: 8px;

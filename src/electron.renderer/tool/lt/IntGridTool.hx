@@ -13,7 +13,8 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 	override function selectValue(v:Int) {
-		v = M.iclamp(v, 1, curLayerInstance.def.countIntGridValues());
+		if( !curLayerInstance.def.hasIntGridValue(v) )
+			v = getDefaultValue();
 		super.selectValue(v);
 	}
 

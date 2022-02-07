@@ -104,7 +104,7 @@ class Const {
 
 	public static var MAX_GRID_SIZE = 1024;
 
-	public static var AUTO_LAYER_ANYTHING = 1000000;
+	public static var AUTO_LAYER_ANYTHING = 1000001;
 	public static var MAX_AUTO_PATTERN_SIZE = 7;
 	#end
 
