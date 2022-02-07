@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456686,
+	"appBuildId": 456729,
 	"nextUid": 207,
 	"identifierStyle": "Capitalize",
 	"worldLayout": null,
@@ -1727,7 +1727,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "RefLinkBetweenPivots",
+					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
