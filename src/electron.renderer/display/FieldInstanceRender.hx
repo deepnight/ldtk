@@ -12,6 +12,7 @@ enum FieldRenderContext {
 }
 
 class FieldInstanceRender {
+	static var MAX_TEXT_WIDTH = 250;
 	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
 
 
@@ -336,26 +337,38 @@ class FieldInstanceRender {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
-		var multiLinesArray = fi.def.isArray && switch fi.def.type {
-			case F_Int: false;
-			case F_Float: false;
-			case F_String: true;
-			case F_Text: true;
-			case F_Bool: false;
-			case F_Color: false;
-			case F_Enum(enumDefUid): false;
-			case F_Point: false;
-			case F_Path: true;
-			case F_EntityRef: true;
-			case F_Tile: false;
-		}
-		if( multiLinesArray ) {
-			valuesFlow.multiline = true;
-			valuesFlow.maxWidth = 200;
+		var showArrayBrackets = fi.def.isArray;
+		if( fi.def.isArray ) {
+			var multiLinesArray = false;
+			switch fi.def.type {
+				case F_Int:
+				case F_Float:
+				case F_String: multiLinesArray = true; showArrayBrackets = false;
+				case F_Text: multiLinesArray = true; showArrayBrackets = false;
+				case F_Bool:
+				case F_Color:
+				case F_Enum(enumDefUid):
+				case F_Point:
+				case F_Path: multiLinesArray = true;
+				case F_EntityRef: multiLinesArray = true; showArrayBrackets = false;
+				case F_Tile:
+			}
+			if( multiLinesArray ) {
+				if( showArrayBrackets ) {
+					valuesFlow.multiline = true;
+					valuesFlow.maxWidth = MAX_TEXT_WIDTH;
+				}
+				else {
+					valuesFlow.multiline = true;
+					valuesFlow.maxWidth = MAX_TEXT_WIDTH;
+					valuesFlow.layout = Vertical;
+				}
+			}
 		}
 
+
 		// Array opening
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
+		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "[";
@@ -392,7 +405,7 @@ class FieldInstanceRender {
 					tf.textColor = textColor;
 					switch ctx {
 						case EntityCtx(g, ei, ld):
-							tf.maxWidth = 400;
+							tf.maxWidth = MAX_TEXT_WIDTH;
 
 						case LevelCtx(l):
 							tf.maxWidth = 800;
@@ -416,7 +429,7 @@ class FieldInstanceRender {
 			}
 
 			// Array separator
-			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
+			if( showArrayBrackets && fi.def.isArray && idx<fi.getArrayLength()-1 ) {
 				var tf = createText(valuesFlow);
 				tf.textColor = textColor;
 				tf.text = ",";
@@ -424,7 +437,7 @@ class FieldInstanceRender {
 		}
 
 		// Array closing
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
+		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "]";
