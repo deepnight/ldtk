@@ -128,6 +128,7 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
   - Added more values for App UI scaling setting.
   - Added a Layer option to fade it away when it's not currently selected
   - Added a Layer option to hide it from the layers list
+  - Moving mouse over UI components no longer interrupt view panning (Middle mouse click or Space+click)
   - The "collapsed/expanded" status of a group of auto-layer rules is no longer saved in the project file: all rule groups will now be collapsed by default when loading a project.
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Tool tips are now larger and easier to read.

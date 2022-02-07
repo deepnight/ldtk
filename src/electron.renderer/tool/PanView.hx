@@ -17,6 +17,7 @@ class PanView extends Tool<Int> {
 		super.startUsing(ev,m);
 
 		curMode = null;
+		App.ME.jBody.addClass("panning");
 
 		if( ev.button==2 || ev.button==0 && App.ME.isKeyDown(K.SPACE) ) {
 			clickingOutsideBounds = false;
@@ -39,6 +40,7 @@ class PanView extends Tool<Int> {
 	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
 
+		App.ME.jBody.removeClass("panning");
 		panning = false;
 		zooming = false;
 	}

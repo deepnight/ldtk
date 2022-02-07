@@ -3441,6 +3441,19 @@ ul.sortable:not(.customHandle) li:not(.fixed) {
 		cursor: ns-resize;
 	}
 }
+
+
+body.panning {
+	#worldDepths,
+	#editingOptions,
+	#mainPanel,
+	#permanentNotifications,
+	.entityInstanceEditor {
+		pointer-events: none;
+	}
+}
+
+
 body.sorting {
 	outline: 3px solid red !important;
 	outline-offset: -3px;
