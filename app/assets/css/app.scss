@@ -20,6 +20,8 @@ $editingOptionsY: 46px;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
 $backupBg: #6594ff;
+$tagMed: #a17250;
+$tagLight: #c5926d;
 
 // Cursors
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
@@ -1875,6 +1877,21 @@ textarea {
 	flex-wrap: wrap;
 	justify-items: stretch;
 
+	.empty {
+		flex: 0 0 auto;
+		padding: 4px;
+		padding-right: 16px;
+		font-size: 9pt;
+		white-space: nowrap;
+		color: $bgLighter;
+		font-style: italic;
+		cursor: pointer;
+
+		&:hover {
+			color: $orange;
+		}
+	}
+
 	input[type=text] {
 		width: 5em;
 	}
@@ -1910,8 +1927,8 @@ textarea {
 
 		white-space: nowrap;
 
-		border: 1px solid $bgLighter;
-		background-color: $bgLight;
+		border: 1px solid $tagLight;
+		background-color: $tagMed;
 
 		&:hover {
 			color: $orange;
@@ -5494,6 +5511,10 @@ canvas#webgl {
 			select:first-of-type {
 				flex: 1 1 150px;
 			}
+		}
+
+		select#allowedRefs {
+			flex: 1 0 100%;
 		}
 
 		*[class*="F_"],
