@@ -299,8 +299,8 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		final maxFieldsWid = ei.width*1.5;
-		final maxFieldsHei = ei.height*1.5;
+		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
+		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;
 
 		root.x = ei.x;
 		root.y = ei.y;
