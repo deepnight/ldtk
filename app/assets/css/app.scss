@@ -3042,64 +3042,62 @@ textarea {
 
 
 .window.panel.helpPanel {
-	.wrapper {
-		.content {
-			width: auto;
-			display: grid;
-			gap: 16px;
+	.wrapper .content {
+		width: auto;
+		display: grid;
+		gap: 16px;
+	}
 
-			h3 {
-				margin-top: 0;
+	h3 {
+		margin-top: 0;
+	}
+
+	.links {
+		display: grid;
+		grid-template-columns: auto auto;
+		gap: 16px;
+		.buttons {
+			display: block;
+			button {
+				justify-content: start;
+				text-align: inherit;
+				text-transform: none;
 			}
+		}
 
-			.links {
+		.videosWrapper {
+			.videos {
 				display: grid;
-				grid-template-columns: 250px auto;
-				gap: 16px;
-				.buttons {
-					display: block;
-					button {
-						justify-content: start;
-						text-align: inherit;
-						text-transform: none;
+				gap: 4px;
+				grid-template-columns: repeat(2, 1fr);
+
+				>a {
+					border: 1px solid black;
+					cursor: pointer;
+					box-shadow: 0px 0px 8px transparentize($color: black, $amount: 0.5);
+					background-color: black;
+					background-image: url("../img/stripesLight.png");
+					background-repeat: repeat;
+					height: 180px;
+
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
 					}
+					&:hover {
+						border-color: $orange;
+					}
+					// flex: 1 0.5 auto;
 				}
-			}
-
-			.keys {
-				display: grid;
-				grid-template-columns: repeat(2, 420px);
-				gap: 16px;
 			}
 		}
 	}
 
-	.videosWrapper {
-		.videos {
-			display: grid;
-			gap: 4px;
-			grid-template-columns: repeat(2, 1fr);
-
-			>a {
-				border: 1px solid black;
-				cursor: pointer;
-				box-shadow: 0px 0px 8px transparentize($color: black, $amount: 0.5);
-				background-color: black;
-				background-image: url("../img/stripesLight.png");
-				background-repeat: repeat;
-				min-height: 64px;
-
-				img {
-					width: 100%;
-					height: auto;
-				}
-				&:hover {
-					border-color: $orange;
-				}
-				// flex: 1 0.5 auto;
-			}
-		}
-
+	.keys {
+		display: grid;
+		grid-template-columns: repeat(2, 420px);
+		gap: 16px;
 	}
 
 	dl {
