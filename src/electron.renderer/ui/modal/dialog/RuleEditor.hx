@@ -123,14 +123,10 @@ class RuleEditor extends ui.modal.Dialog {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 
-			// jVal.css("color", C.intToHex( C.toWhite(v.color, 0.75) ) );
-			// jVal.css("border-color", C.intToHex(v.color));
 			jVal.css("background-color", C.intToHex(v.color));
 			jVal.append('<span class="value">${v.value}</span>');
 			jVal.append('<span class="name">${v.identifier!=null ? v.identifier : ""}</span>');
 			jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
-			jVal.find(".name").append( " "+M.pretty(C.getPerceivedLuminosityInt(v.color),2) );
-			// jVal.text( layerDef.getIntGridValueDisplayName(v.value) );
 
 			if( v.value==curValue )
 				jVal.addClass("active");
