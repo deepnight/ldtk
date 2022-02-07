@@ -2056,6 +2056,7 @@ class Editor extends Page {
 
 	override function onAppMouseUp() {
 		super.onAppMouseUp();
+		onMouseUp();
 		heldVisibilitySet = null;
 	}
 
