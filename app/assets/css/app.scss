@@ -2613,9 +2613,9 @@ textarea {
 				font-weight: bold;
 				font-size: 50pt;
 				line-height: 55pt;
-				color: $orangeLight;
-				background-color: $bgMed;
-				text-shadow: 0px 0px 16px $darkOrange;
+				color: $bgDark;
+				background-color: $orange;
+				// text-shadow: 0px 0px 16px $darkOrange;
 				border-right: 1px dashed $bgLight;
 			}
 
@@ -2638,16 +2638,30 @@ textarea {
 
 			.cornerButtons {
 				display: grid;
-				grid-template-rows: auto;
+				grid-template-rows: min-content;
+				align-items: flex-start;
+				padding: 8px;
 				width: auto;
 			}
+		}
 
-			.newUpdate {
-				grid-column: 1/4;
-				grid-row: 2/3;
-				padding: 16px 20px;
-				padding-top: 4px;
-				padding-bottom: 4px;
+		.newUpdate {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 200px;
+			height: 200px;
+			pointer-events: none;
+
+			span {
+				display: block;
+				position: absolute;
+				transform: rotate(45deg);
+				top: 65px;
+				left: -40px;
+				padding: 8px 80px;
+				white-space: nowrap;
+				box-shadow: 0px 4px 8px black;
 
 				font-size: 1.3em;
 				font-family: Roboto;
