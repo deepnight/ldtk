@@ -347,29 +347,58 @@ class Definitions {
 		return moved;
 	}
 
-	public function getEntityTagCategories() : Array< Null<String> > {
+
+	public function getAllTagsFrom<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
+		if( filter==null )
+			filter = (_)->return true;
+
 		// List all unique tags
 		var tagMap = new Map();
 		var anyUntagged = false;
 		var anyTagged = false;
-		for(ed in entities) {
-			if( ed.tags.isEmpty() )
+		for(e in all) {
+			if( !filter(e) )
+				continue;
+
+			if( getTags(e).isEmpty() )
 				anyUntagged = true;
 			else
 				anyTagged = true;
-			for(t in ed.tags.iterator())
+			for(t in getTags(e).iterator())
 				tagMap.set(t,t);
 		}
 
-		// Build array & sort it
-		var allTags = [];
+		// Build array of tags & sort it
+		var sortedTags = [];
 		for(t in tagMap)
-			allTags.push(t);
-		allTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
+			sortedTags.push(t);
+		sortedTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
 		if( anyUntagged )
-			allTags.insert(0, null); // untagged category
+			sortedTags.insert(0, null); // untagged category
 
-		return allTags;
+		return sortedTags;
+	}
+
+	public function groupUsingTags<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<{ tag:Null<String>, all:Array<T> }> {
+		if( filter==null )
+			filter = (_)->return true;
+
+		var sortedTags = getAllTagsFrom(all, getTags, filter);
+
+		// Build array of elements grouped by tags
+		var out = [];
+		for(tag in sortedTags) {
+			out.push({
+				tag: tag,
+				all: [],
+			});
+			var cur = out[out.length-1];
+			for(e in all)
+				if( filter(e) && ( tag==null && getTags(e).isEmpty() || tag!=null && getTags(e).has(tag) ) )
+					cur.all.push(e);
+		}
+
+		return out;
 	}
 
 	public function getRecallEntityTags(?excludes:Array<Tags>) : Array<String> {

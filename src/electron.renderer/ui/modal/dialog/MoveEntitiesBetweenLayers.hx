@@ -36,7 +36,7 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 		// All entity tags
 		var jOptGroup = jTargetSel.find("optGroup.allTags");
 		jOptGroup.empty();
-		for(t in project.defs.getEntityTagCategories())
+		for(t in project.defs.getAllTagsFrom(project.defs.entities, ed->ed.tags))
 			jOptGroup.append('<option value="tag.$t">"$t"</option>');
 
 
