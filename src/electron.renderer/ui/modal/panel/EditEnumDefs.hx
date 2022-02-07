@@ -305,6 +305,14 @@ class EditEnumDefs extends ui.modal.Panel {
 		else
 			jDefForm.find(".source").hide();
 
+		// Tags
+		var ted = new TagEditor(
+			curEnum.tags,
+			()->editor.ge.emit(EnumDefChanged),
+			()->project.defs.getRecallTags(project.defs.enums, ed->ed.tags)
+		);
+		jDefForm.find("#tags").empty().append(ted.jEditor);
+
 		// Tilesets
 		JsTools.createTilesetSelect(
 			project,
@@ -330,62 +338,6 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			}
 		);
-		// var jSelect = jDefForm.find("select#icons");
-		// jSelect.show();
-		// jSelect.empty();
-		// if( curEnum.iconTilesetUid==null )
-		// 	jSelect.addClass("gray");
-		// else
-		// 	jSelect.removeClass("gray");
-
-		// var opt = new J('<option value="-1">-- Select a tileset --</option>');
-		// opt.appendTo(jSelect);
-
-		// for(td in project.defs.tilesets) {
-		// 	if( td.isUsingEmbedAtlas() )
-		// 		continue;
-		// 	var opt = new J('<option value="${td.uid}"/>');
-		// 	opt.appendTo(jSelect);
-		// 	opt.text( td.identifier );
-		// }
-
-		// for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
-		// 	var id = ldtk.Json.EmbedAtlas.createByName(k);
-		// 	var inf = Lang.getEmbedAtlasInfos(id);
-		// 	var opt = new J('<option value="$k"/>');
-		// 	opt.appendTo(jSelect);
-		// 	opt.text( inf.displayName );
-		// }
-
-		// jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
-		// jSelect.change( function(ev) {
-		// 	var tid = Std.parseInt( jSelect.val() );
-		// 	if( !M.isValidNumber(tid) ) {
-		// 		// Embed tileset
-		// 		var id = ldtk.Json.EmbedAtlas.createByName(jSelect.val());
-		// 		var td = project.defs.getEmbedTileset(id);
-		// 		tid = td.uid;
-		// 	}
-		// 	if( tid==curEnum.iconTilesetUid )
-		// 		return;
-
-		// 	// Check if this change will break something
-		// 	if( curEnum.iconTilesetUid!=null )
-		// 		for( v in curEnum.values )
-		// 			if( v.tileId!=null ) {
-		// 				new LastChance(Lang.t._("Enum icons changed"), project);
-		// 				break;
-		// 			}
-
-		// 	// Update tileset link
-		// 	if( tid<0 )
-		// 		curEnum.iconTilesetUid = null;
-		// 	else
-		// 		curEnum.iconTilesetUid = tid;
-		// 	curEnum.clearAllTileIds();
-		// 	editor.ge.emit(EnumDefChanged);
-		// });
-
 
 		// Values
 		var jList = jFormWrapper.find("ul.enumValues");
