@@ -382,6 +382,13 @@ class Definitions {
 		return sortedTags;
 	}
 
+	/**
+		Return a list of tags used for "recall tags" button in tag editor
+	**/
+	public function getRecallTags<T>(all:Array<T>, getTags:T->Tags) {
+		return getAllTagsFrom(all, getTags, e->!getTags(e).isEmpty() );
+	}
+
 
 	/**
 		Return a grouped array of given T, based on tags
@@ -408,6 +415,10 @@ class Definitions {
 		return out;
 	}
 
+
+	/**
+		Return tags to be used for Entities
+	**/
 	public function getRecallEntityTags(?excludes:Array<Tags>) : Array<String> {
 		var all = new Map();
 
