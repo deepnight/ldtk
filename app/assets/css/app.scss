@@ -6181,6 +6181,14 @@ dl.form.fieldInstanceEditor {
 		>dt {
 			max-width: none;
 		}
+
+		.advanced {
+			margin-top: 16px;
+			button {
+				flex: 0 1 auto;
+				min-height: 2.5em;
+			}
+		}
 	}
 	.mainList {
 		ul li {
