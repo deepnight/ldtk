@@ -602,7 +602,8 @@ class FieldDefsForm {
 			var tagEditor = new TagEditor(
 				curField.allowedRefTags,
 				()->onFieldChange(),
-				()->project.defs.getAllTagsFrom(project.defs.entities, ed->ed.tags)
+				()->project.defs.getAllTagsFrom(project.defs.entities, ed->ed.tags),
+				false
 			);
 			jForm.find(".allowedRefTags").append( tagEditor.jEditor );
 		}
