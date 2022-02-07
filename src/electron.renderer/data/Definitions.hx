@@ -348,6 +348,9 @@ class Definitions {
 	}
 
 
+	/**
+		Extract and sort all tags being used in the provided array of T
+	**/
 	public function getAllTagsFrom<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
 		if( filter==null )
 			filter = (_)->return true;
@@ -379,6 +382,10 @@ class Definitions {
 		return sortedTags;
 	}
 
+
+	/**
+		Return a grouped array of given T, based on tags
+	**/
 	public function groupUsingTags<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<{ tag:Null<String>, all:Array<T> }> {
 		if( filter==null )
 			filter = (_)->return true;
