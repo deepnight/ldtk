@@ -16,6 +16,7 @@ $help: #79dd8a;
 $helpMed: #5eab6b;
 $helpDark: #3c6148;
 $helpDarker: #273f2f;
+$editingOptionsY: 46px;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
 $backupBg: #6594ff;
@@ -3947,7 +3948,7 @@ canvas#webgl {
 	ul#editingOptions {
 		position: absolute;
 		z-index: 1;
-		top: 46px;
+		top: $editingOptionsY;
 		left: $mainPanelNormalWid;
 
 		display: grid;
@@ -4022,7 +4023,7 @@ canvas#webgl {
 
 	#worldDepths {
 		position: absolute;
-		top: 46px;
+		top: $editingOptionsY;
 		left: calc( $mainPanelNormalWid + 40px );
 
 		display: grid;

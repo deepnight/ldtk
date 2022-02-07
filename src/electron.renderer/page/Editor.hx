@@ -1343,6 +1343,15 @@ class Editor extends Page {
 		else
 			updateLayerList();
 
+		// Offset editing options & world layers
+		var jFloatingOptions = jPage.find("#editingOptions, #worldDepths");
+		if( !worldMode )
+			jFloatingOptions.css("margin-left", 0);
+		else {
+			var m = App.ME.jBody.find(".worldPanel>.wrapper").outerWidth() - jMainPanel.outerWidth();
+			jFloatingOptions.css("margin-left", m+"px");
+		}
+
 		camera.onWorldModeChange(worldMode, usedMouseWheel);
 	}
 
