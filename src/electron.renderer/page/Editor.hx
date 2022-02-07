@@ -893,7 +893,7 @@ class Editor extends Page {
 			case EFocusLost: onMouseUp();
 			case EKeyDown:
 			case EKeyUp:
-			case EReleaseOutside: onMouseUp();
+			case EReleaseOutside: //onMouseUp();
 			case ETextInput:
 			case ECheck:
 		}
@@ -2050,6 +2050,7 @@ class Editor extends Page {
 
 	override function onAppBlur() {
 		super.onAppBlur();
+		onMouseUp();
 		heldVisibilitySet = null;
 	}
 
