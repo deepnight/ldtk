@@ -2602,6 +2602,9 @@ textarea {
 
 
 .window.changelog {
+	&>.mask {
+		background-color: transparentize($color: black, $amount: 0.1) !important;
+	}
 	&>.wrapper {
 		position: relative;
 		padding: 0 !important;
