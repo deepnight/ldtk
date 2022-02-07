@@ -354,13 +354,10 @@ class FieldInstanceRender {
 				case F_Tile:
 			}
 			if( multiLinesArray ) {
-				if( showArrayBrackets ) {
-					valuesFlow.multiline = true;
-					valuesFlow.maxWidth = MAX_TEXT_WIDTH;
-				}
-				else {
-					valuesFlow.multiline = true;
-					valuesFlow.maxWidth = MAX_TEXT_WIDTH;
+				valuesFlow.multiline = true;
+				valuesFlow.maxWidth = MAX_TEXT_WIDTH;
+				if( !showArrayBrackets ) {
+					valuesFlow.verticalSpacing = 8;
 					valuesFlow.layout = Vertical;
 				}
 			}
