@@ -4021,6 +4021,7 @@ canvas#webgl {
 
 	#worldDepths {
 		position: absolute;
+		z-index: 2;
 		top: $editingOptionsY;
 		left: calc( $mainPanelNormalWid + 40px );
 
