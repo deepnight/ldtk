@@ -101,12 +101,14 @@ class LayerDef {
 
 		o.intGridValues = [];
 		var all : Array<IntGridValueDef> = JsonTools.readArray(json.intGridValues);
+		var fixedIdx = 1; // fix old projects missing intgrid "value" field
 		for( v in all ) {
 			o.intGridValues.push({
-				value: v.value,
+				value: M.isValidNumber(v.value) ? v.value : fixedIdx,
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+			fixedIdx++;
 		}
 
 		// o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
