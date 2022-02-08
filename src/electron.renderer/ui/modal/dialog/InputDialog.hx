@@ -27,6 +27,10 @@ class InputDialog<T> extends ui.modal.Dialog {
 		if( curValue!=null )
 			jInput.val( Std.string(curValue) );
 		jInput.focus().select();
+		jInput.keydown( (ev:js.jquery.Event)->{
+			if( ev.key=="Escape" )
+				close();
+		});
 		jInput.keyup( _->updateError() );
 		jInput.blur( _->{
 			updateError();
