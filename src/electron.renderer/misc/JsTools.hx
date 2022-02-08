@@ -79,23 +79,43 @@ class JsTools {
 		else if( curUid==null )
 			jSelect.addClass("noValue");
 
-		// Normal tilesets
-		for(td in project.defs.tilesets) {
-			if( td.isUsingEmbedAtlas() )
-				continue;
-			var jOpt = new J('<option value="${td.uid}"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text( td.identifier );
+		var tagGroups = project.defs.groupUsingTags(project.defs.tilesets, td->td.tags);
+		for( group in tagGroups ) {
+			var jOptGroup = new J('<optgroup/>');
+			jOptGroup.appendTo(jSelect);
+			if( tagGroups.length<=1 )
+				jOptGroup.attr("label","All tilesets");
+			else
+				jOptGroup.attr("label", group.tag==null ? L._Untagged() : group.tag);
+			for(td in group.all ) {
+				var jOpt = new J('<option value="${td.uid}"/>');
+				jOpt.appendTo(jOptGroup);
+				if( td.isUsingEmbedAtlas() ) {
+					jOpt.attr("value", td.embedAtlas.getName());
+					var inf = Lang.getEmbedAtlasInfos( td.embedAtlas );
+					jOpt.text( inf.displayName );
+				}
+				else {
+					jOpt.attr("value", Std.string(td.uid));
+					jOpt.text( td.identifier );
+				}
+			}
 		}
 
 		// Embed tilesets
+		var jOptGroup = new J('<optgroup label="Integrated LDtk tilesets"/>');
 		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
 			var id = ldtk.Json.EmbedAtlas.createByName(k);
+			if( project.defs.isEmbedAtlasBeingUsed(id) )
+				continue;
+
 			var inf = Lang.getEmbedAtlasInfos(id);
 			var jOpt = new J('<option value="$k"/>');
-			jOpt.appendTo(jSelect);
+			jOpt.appendTo(jOptGroup);
 			jOpt.text( inf.displayName );
 		}
+		if( jOptGroup.children().length>0 )
+			jOptGroup.appendTo(jSelect);
 
 		// Select current one
 		var curTd = curUid==null ? null : project.defs.getTilesetDef(curUid);
@@ -911,7 +931,7 @@ class JsTools {
 		var jRef = new J('<div class="entityRef"/>');
 		if( jTarget!=null )
 			jRef.appendTo(jTarget);
-		
+
 		jRef.append('<div class="id">${ei.def.identifier}</div>');
 		jRef.append('<div class="location"> <span class="level">${ei._li.level.identifier}</span> </div>');
 

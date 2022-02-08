@@ -499,6 +499,13 @@ class Definitions {
 		return td;
 	}
 
+	public function isEmbedAtlasBeingUsed(embedId:ldtk.Json.EmbedAtlas) {
+		for(td in tilesets)
+			if( td.embedAtlas==embedId )
+				return true;
+		return false;
+	}
+
 	public function getTilesetIndex(uid:Int) {
 		var idx = 0;
 		for(ed in tilesets)
