@@ -7774,7 +7774,7 @@ $patternSize : 32px;
 			overflow: hidden;
 			>ul {
 				overflow: auto;
-				li:not(.subList) {
+				li:not(.subList):not(.title) {
 					grid-template-columns: min-content auto min-content;
 					.name {
 						overflow: hidden;

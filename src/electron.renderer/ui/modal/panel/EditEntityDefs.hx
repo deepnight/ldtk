@@ -453,6 +453,24 @@ class EditEntityDefs extends ui.modal.Panel {
 				var jSep = new J('<li class="title fixed"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEntityList);
+
+				// Rename
+				if( group.tag!=null ) {
+					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
+					jSep.append(jLinks);
+					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
+						for(ed in project.defs.entities) {
+							ed.tags.rename(group.tag, t);
+							for(fd in ed.fieldDefs)
+								fd.allowedRefTags.rename(group.tag, t);
+						}
+						for(ld in project.defs.layers) {
+							ld.requiredTags.rename(group.tag, t);
+							ld.excludedTags.rename(group.tag, t);
+						}
+						editor.ge.emit( EntityDefChanged );
+					});
+				}
 			}
 
 			// Create sub list
