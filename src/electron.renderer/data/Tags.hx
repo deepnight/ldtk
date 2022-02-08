@@ -49,6 +49,16 @@ class Tags {
 			set(k);
 	}
 
+	public function rename(oldT:String, newT:String) {
+		if( has(oldT) ) {
+			unset(oldT);
+			set(newT);
+			return true;
+		}
+		else
+			return false;
+	}
+
 	public inline function has(k) {
 		return k!=null && map.exists(k);
 	}
