@@ -8,13 +8,13 @@ A typical example is a *Button* entity with a Reference field pointing to anothe
 
 You can create arrays of References, or define restrictions to which kind of Entity they can point at. This new powerful feature unlocks lots of new exciting possibilities in a very user-friendly interface.
 
-![](1.0.0-entityRefs.png)
+![](1.0.0/entityRefs.png)
 
 ## Simplified world layers
 
 Levels can now be organized in "depth" to support stacked levels.
 
-![](1.0.0-worldLayers.gif)
+![](1.0.0/worldLayers.gif)
 
 ## Integrated icons
 
@@ -24,7 +24,7 @@ Please note that these icons were provided courtesy of their author, **FinalBoss
 
 If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons)). He's a nice person, feel free to send an e-mail to get in touch :)
 
-![](1.0.0-icons.png)
+![](1.0.0/icons.png)
 
 ## Performances
 
@@ -35,13 +35,13 @@ Loading and Saving operations were also vastly improved:
   - **Progress bars** provide better feedback when working on large projects.
   - **Backup** system are faster and more reliable.
 
-![](1.0.0-saving.gif)
+![](1.0.0/saving.gif)
 
 ## Rectangle of tiles for Entities
 
 Entities (and levels too, actually) can use a new Custom Field type which can store a rectangle of tiles from any Tileset. This can be used as an alternative skin, an array of animation frames, an "opened" visual state for a a chest etc.
 
-![](1.0.0-tileRect.gif)
+![](1.0.0/tileRect.gif)
 
 ## Copy and paste (work in progress)
 
@@ -49,11 +49,11 @@ For now, this crazy futuristic feature is only available for interface panels (e
 
 You can right click on an element with a context menu to copy/cut/paste/duplicate definitions! LDtk just entered modern era.
 
-![](1.0.0-ruleCopy.gif)
+![](1.0.0/ruleCopy.gif)
 
 ## Reworked toolbar and shortcuts
 
-![](1.0.0-mainBar.png)
+![](1.0.0/mainBar.png)
 
 The main editor toolbar was reorganized to be a little bit more logical:
 
@@ -71,16 +71,20 @@ The main editor toolbar was reorganized to be a little bit more logical:
 
 ## User interface improvements
 
-The **Space** key: one shortcut to rule them all.
+The **`Space`** key now fulfills various roles:
   - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
   - Hold `SPACE` and drag with `Left mouse button` to scroll the view.
   - Hold `SPACE` and drag with `Right mouse button` to zoom in/out.
 
 The editor UI **font** nows uses *Noto* which offers better readability. While I was at it, I also fixed various font size issues with 2K and 4K monitors.
 
+Enums and Tilesets can now be organized using user defined tags:
+
+![](1.0.0/tags.png)
+
 Contextual **help tips** were also reworked and streamlined in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
 
-![](1.0.0-help.gif)
+![](1.0.0/help.gif)
 
 ## Other major changes
 
