@@ -9,17 +9,17 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456610,
+	"appBuildId": 456760,
 	"nextUid": 165,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
-	"defaultLevelWidth": 256,
-	"defaultLevelHeight": 256,
 	"bgColor": "#40465B",
 	"defaultLevelBgColor": "#000000",
 	"minifyJson": false,
@@ -1532,6 +1532,7 @@
 			"tileGridSize": 8,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": 37,
 			"enumTags": [
 				{ "enumValueId": "Water", "tileIds": [120,121,122,123,132,133,134,135] },
@@ -1562,7 +1563,7 @@
 		{ "id": "Wood_surface", "tileId": null, "color": 8470314, "__tileSrcRect": null },
 		{ "id": "Dirt_surface", "tileId": null, "color": 12753004, "__tileSrcRect": null },
 		{ "id": "Stone_surface", "tileId": null, "color": 8685190, "__tileSrcRect": null }
-	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Green_hills",
