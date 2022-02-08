@@ -69,7 +69,7 @@ class ColorPicker extends ui.modal.Dialog {
 				else
 					jExpand.removeClass("showAll");
 
-				if( settings.v.showProjectColors && usedColorsTag!=null ) {
+				if( settings.getUiStateBool("showProjectColors") && usedColorsTag!=null ) {
 					// Update recent colors list
 					var usedColors = project.getUsedColorsAsArray(showAll ? null : usedColorsTag);
 					for( c in usedColors ) {
@@ -104,9 +104,9 @@ class ColorPicker extends ui.modal.Dialog {
 					jExpand.addClass("off");
 			}
 			jExpand.click( _->{
-				settings.v.showProjectColors = !settings.v.showProjectColors;
+				settings.toggleUiStateBool("showProjectColors");
 				settings.save();
-				if( settings.v.showProjectColors )
+				if( settings.getUiStateBool("showProjectColors") )
 					jExpand.next().slideDown(100).css('display','grid');
 				else
 					jExpand.next().slideUp(60);

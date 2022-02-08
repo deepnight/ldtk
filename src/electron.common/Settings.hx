@@ -11,7 +11,6 @@ typedef AppSettings = {
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
-	var showProjectColors : Bool;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -23,6 +22,8 @@ typedef AppSettings = {
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
+
+	var uiStates : Array<{ id:String, val:Int }>;
 }
 
 
@@ -56,7 +57,6 @@ class Settings {
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,
-			showProjectColors: true,
 
 			openLastProject: false,
 			lastProject: null,
@@ -65,10 +65,69 @@ class Settings {
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
+
+			uiStates: [],
 		}
 
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
+
+		if( !hasUiState("showProjectColors") )
+			setUiStateBool("showProjectColors", true);
+	}
+
+
+	function getOrCreateUiState(id:String) {
+		for(s in v.uiStates)
+			if( s.id==id )
+				return s;
+		v.uiStates.push({ id:id, val:0 });
+		return v.uiStates[v.uiStates.length-1];
+	}
+
+	function hasUiState(id:String) {
+		for(s in v.uiStates)
+			if( s.id==id )
+				return true;
+		return false;
+	}
+
+	function deleteUiState(id:String) {
+		var i = 0;
+		while( i<v.uiStates.length )
+			if( v.uiStates[i].id==id )
+				v.uiStates.splice(i,1);
+			else
+				i++;
+	}
+
+	public inline function setUiStateInt(id:String, v:Int) {
+		getOrCreateUiState(id).val = v;
+		save();
+	}
+
+	public inline function setUiStateBool(id:String, v:Bool) {
+		setUiStateInt(id, v==true ? 1 : 0);
+		save();
+	}
+
+	public inline function toggleUiStateBool(id:String) {
+		setUiStateBool(id, !getUiStateBool(id));
+		save();
+	}
+
+	public function getUiStateInt(id:String) : Int {
+		for(s in v.uiStates)
+			if( s.id==id )
+				return s.val;
+		return 0;
+	}
+
+	public function getUiStateBool(id:String) : Bool {
+		for(s in v.uiStates)
+			if( s.id==id )
+				return s.val!=0;
+		return false;
 	}
 
 	static inline function isRenderer() {

@@ -5,8 +5,6 @@ import sortablejs.Sortable;
 import js.node.Fs;
 
 class JsTools {
-	static var COLLAPSER_MEMORY : Map<String,Bool> = new Map();
-
 
 	/**
 		Use SortableJS to make some list sortable
@@ -595,9 +593,10 @@ class JsTools {
 			var jCollapser = new J(e);
 			var tid = jCollapser.attr("target");
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
-			var memoryId = jCollapser.attr("id"); // might be null
+			var uiStateId = jCollapser.attr("id"); // might be null
 
-			if( memoryId!=null && COLLAPSER_MEMORY.get(memoryId)==true ) {
+			// Init with memory
+			if( uiStateId!=null && App.ME.settings.getUiStateBool(uiStateId)==true ) {
 				jTarget.show();
 				jCollapser.addClass("expanded");
 			}
@@ -613,8 +612,8 @@ class JsTools {
 					var expanded = jTarget.is(":visible");
 					jCollapser.removeClass("collapsed");
 					jCollapser.removeClass("expanded");
-					if( memoryId!=null )
-						COLLAPSER_MEMORY.set(memoryId, !expanded);
+					if( uiStateId!=null )
+						App.ME.settings.setUiStateBool(uiStateId, !expanded);
 
 					if( expanded ) {
 						jCollapser.addClass("collapsed");
