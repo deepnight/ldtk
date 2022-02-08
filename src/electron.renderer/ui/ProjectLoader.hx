@@ -111,10 +111,10 @@ class ProjectLoader {
 						w.createLevel(idx);
 					}
 
+					var levelProgress = new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), ()->done(p));
+					log.add(tag, "Loading external levels...");
 					for(w in p.worlds) {
 						var idx = 0;
-						log.add(tag, "Loading external levels...");
-						var levelProgress = new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), ()->done(p));
 						for(l in w.levels) {
 							var curIdx = idx;
 							levelProgress.addOp({
