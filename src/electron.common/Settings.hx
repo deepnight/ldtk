@@ -26,6 +26,9 @@ typedef AppSettings = {
 	var uiStates : Array<{ id:String, val:Int }>;
 }
 
+enum abstract UiState(String) {
+	var ShowProjectColors;
+}
 
 enum AutoWorldModeSwitch {
 	Never;
@@ -72,60 +75,60 @@ class Settings {
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
 
-		if( !hasUiState("showProjectColors") )
-			setUiStateBool("showProjectColors", true);
+		if( !hasUiState(ShowProjectColors) )
+			setUiStateBool(ShowProjectColors, true);
 	}
 
 
-	function getOrCreateUiState(id:String) {
+	function getOrCreateUiState(id:UiState) {
 		for(s in v.uiStates)
-			if( s.id==id )
+			if( s.id==Std.string(id) )
 				return s;
-		v.uiStates.push({ id:id, val:0 });
+		v.uiStates.push({ id:Std.string(id), val:0 });
 		return v.uiStates[v.uiStates.length-1];
 	}
 
-	function hasUiState(id:String) {
+	function hasUiState(id:UiState) {
 		for(s in v.uiStates)
-			if( s.id==id )
+			if( s.id==Std.string(id) )
 				return true;
 		return false;
 	}
 
-	function deleteUiState(id:String) {
+	function deleteUiState(id:UiState) {
 		var i = 0;
 		while( i<v.uiStates.length )
-			if( v.uiStates[i].id==id )
+			if( v.uiStates[i].id==Std.string(id) )
 				v.uiStates.splice(i,1);
 			else
 				i++;
 	}
 
-	public inline function setUiStateInt(id:String, v:Int) {
+	public inline function setUiStateInt(id:UiState, v:Int) {
 		getOrCreateUiState(id).val = v;
 		save();
 	}
 
-	public inline function setUiStateBool(id:String, v:Bool) {
+	public inline function setUiStateBool(id:UiState, v:Bool) {
 		setUiStateInt(id, v==true ? 1 : 0);
 		save();
 	}
 
-	public inline function toggleUiStateBool(id:String) {
+	public inline function toggleUiStateBool(id:UiState) {
 		setUiStateBool(id, !getUiStateBool(id));
 		save();
 	}
 
-	public function getUiStateInt(id:String) : Int {
+	public function getUiStateInt(id:UiState) : Int {
 		for(s in v.uiStates)
-			if( s.id==id )
+			if( s.id==Std.string(id) )
 				return s.val;
 		return 0;
 	}
 
-	public function getUiStateBool(id:String) : Bool {
+	public function getUiStateBool(id:UiState) : Bool {
 		for(s in v.uiStates)
-			if( s.id==id )
+			if( s.id==Std.string(id) )
 				return s.val!=0;
 		return false;
 	}

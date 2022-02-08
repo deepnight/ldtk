@@ -596,7 +596,7 @@ class JsTools {
 			var uiStateId = jCollapser.attr("id"); // might be null
 
 			// Init with memory
-			if( uiStateId!=null && App.ME.settings.getUiStateBool(uiStateId)==true ) {
+			if( uiStateId!=null && App.ME.settings.getUiStateBool(cast uiStateId)==true ) {
 				jTarget.show();
 				jCollapser.addClass("expanded");
 			}
@@ -613,7 +613,7 @@ class JsTools {
 					jCollapser.removeClass("collapsed");
 					jCollapser.removeClass("expanded");
 					if( uiStateId!=null )
-						App.ME.settings.setUiStateBool(uiStateId, !expanded);
+						App.ME.settings.setUiStateBool(cast uiStateId, !expanded);
 
 					if( expanded ) {
 						jCollapser.addClass("collapsed");
