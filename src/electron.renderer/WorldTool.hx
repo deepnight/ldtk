@@ -3,6 +3,7 @@ class WorldTool extends dn.Process {
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var clickedLevel : Null<data.Level>;
@@ -45,11 +46,11 @@ class WorldTool extends dn.Process {
 		// Right click context menu
 		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {
 			var ctx = new ui.modal.ContextMenu(m);
-			// Create
+			// Create new level
 			ctx.add({
 				label: L.t._("New level"),
 				cb: ()->{
-					if( !ui.vp.LevelSpotPicker.tryToCreateLevelAt(project,m) ) {
+					if( !ui.vp.LevelSpotPicker.tryToCreateLevelAt(project, curWorld, m) ) {
 						new ui.modal.dialog.Confirm(
 							L.t._("No room for a level here! Do you want to pick another location?"),
 							()->new ui.vp.LevelSpotPicker()
@@ -65,9 +66,9 @@ class WorldTool extends dn.Process {
 				ctx.add({
 					label: L.t._("Duplicate"),
 					cb: ()->{
-						var copy = project.duplicateLevel(l);
+						var copy = curWorld.duplicateLevel(l);
 						editor.selectLevel(copy);
-						switch project.worldLayout {
+						switch curWorld.worldLayout {
 							case Free, GridVania:
 								copy.worldX += project.defaultGridSize*4;
 								copy.worldY += project.defaultGridSize*4;
@@ -83,19 +84,58 @@ class WorldTool extends dn.Process {
 				ctx.add({
 					label: L._Delete(),
 					cb: ()->{
-						if( project.levels.length==1 ) {
+						if( curWorld.levels.length==1 ) {
 							N.error(L.t._("You can't delete the last level."));
 							return;
 						}
-						var closest = project.getClosestLevelFrom(l);
+						var closest = curWorld.getClosestLevelFrom(l);
 						new ui.LastChance(L.t._('Level ::id:: removed', {id:l.identifier}), project);
-						project.removeLevel(l);
+						curWorld.removeLevel(l);
 						editor.ge.emit( LevelRemoved(l) );
 						editor.selectLevel( closest );
 						editor.camera.scrollToLevel(closest);
 					}
 				});
 			}
+
+			if( project.worlds.length>1 ) {
+				if( l==null ) {
+					// Change active world
+					ctx.addTitle(L.t._("Go to world:"));
+					for( w in project.worlds ) {
+						ctx.add({
+							label: L.untranslated(w.identifier),
+							sub: L.untranslated(w.levels.length+" level(s)"),
+							enable: ()->w.iid!=editor.curWorldIid,
+							cb: ()->{
+								editor.selectWorld(w,true);
+								editor.setWorldMode(true);
+							},
+						});
+					}
+				}
+				else {
+					// Move level to another world
+					ctx.addTitle(L.t._("Move this level to:"));
+					for( w in project.worlds ) {
+						ctx.add({
+							label: L.untranslated("➔ "+w.identifier),
+							sub: L.untranslated(w.levels.length+" level(s)"),
+							enable: ()->!l.isInWorld(w),
+							cb: ()->{
+								if( l.moveToWorld(w) ) {
+									editor.selectWorld(w,true);
+									editor.setWorldMode(true);
+									editor.selectLevel(l);
+									editor.camera.fit(true);
+									N.success("Successfully moved level to world "+w.identifier);
+								}
+							},
+						});
+					}
+				}
+			}
+
 			ev.cancel = true;
 			return;
 		}
@@ -112,7 +152,7 @@ class WorldTool extends dn.Process {
 		dragStarted = false;
 		clicked = true;
 		clickedLevel = getLevelAt(m.worldX, m.worldY, worldMode?null:editor.curLevel);
-		
+
 		if( project.isBackup() )
 			clickedLevel = null;
 
@@ -133,28 +173,28 @@ class WorldTool extends dn.Process {
 				var initialX = clickedLevel.worldX;
 				var initialY = clickedLevel.worldY;
 
-				switch project.worldLayout {
+				switch curWorld.worldLayout {
 					case Free, GridVania:
-						project.applyAutoLevelIdentifiers();
+						curWorld.applyAutoLevelIdentifiers();
 						editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 
 					case LinearHorizontal:
-						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginX);
+						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);
 						if( i!=null ) {
-							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
+							var curIdx = dn.Lib.getArrayIndex(clickedLevel, curWorld.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
-							project.sortLevel(curIdx, toIdx);
-							project.reorganizeWorld();
+							curWorld.sortLevel(curIdx, toIdx);
+							curWorld.reorganizeWorld();
 							editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 						}
 
 					case LinearVertical:
-						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginY);
+						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginY);
 						if( i!=null ) {
-							var curIdx = dn.Lib.getArrayIndex(clickedLevel, project.levels);
+							var curIdx = dn.Lib.getArrayIndex(clickedLevel, curWorld.levels);
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
-							project.sortLevel(curIdx, toIdx);
-							project.reorganizeWorld();
+							curWorld.sortLevel(curIdx, toIdx);
+							curWorld.reorganizeWorld();
 							editor.ge.emit(WorldLevelMoved(clickedLevel, true));
 						}
 				}
@@ -234,10 +274,10 @@ class WorldTool extends dn.Process {
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		// Start dragging
 		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=getDragThreshold() ) {
-			var allow = switch project.worldLayout {
+			var allow = switch curWorld.worldLayout {
 				case Free: true;
 				case GridVania: true;
-				case LinearHorizontal, LinearVertical: project.levels.length>1;
+				case LinearHorizontal, LinearVertical: curWorld.levels.length>1;
 			}
 			if( allow ) {
 				dragStarted = true;
@@ -246,7 +286,7 @@ class WorldTool extends dn.Process {
 					editor.selectLevel(clickedLevel);
 
 				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
-					var copy = project.duplicateLevel(clickedLevel);
+					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
 					editor.selectLevel(copy);
 					clickedLevel = copy;
@@ -261,13 +301,13 @@ class WorldTool extends dn.Process {
 			tmpRender.lineStyle(10, 0x72feff, 0.5);
 
 			// Drag
-			var allowX = switch project.worldLayout {
+			var allowX = switch curWorld.worldLayout {
 				case Free: true;
 				case GridVania: true;
 				case LinearHorizontal: true;
 				case LinearVertical: false;
 			}
-			var allowY = switch project.worldLayout {
+			var allowY = switch curWorld.worldLayout {
 				case Free: true;
 				case GridVania: true;
 				case LinearHorizontal: false;
@@ -285,7 +325,7 @@ class WorldTool extends dn.Process {
 			else
 				clickedLevel.worldY = Std.int( -clickedLevel.pxHei*0.8 );
 
-			switch project.worldLayout {
+			switch curWorld.worldLayout {
 				case Free:
 					// Snap to grid
 					if( settings.v.grid ) {
@@ -295,7 +335,7 @@ class WorldTool extends dn.Process {
 					}
 
 					// Snap to other levels
-					for(l in project.levels) {
+					for(l in curWorld.levels) {
 						if( l==clickedLevel )
 							continue;
 
@@ -322,29 +362,29 @@ class WorldTool extends dn.Process {
 					}
 
 				case GridVania:
-					var omx = M.floor( origin.worldX / project.worldGridWidth ) * project.worldGridWidth;
-					var mx = M.floor( m.worldX / project.worldGridWidth ) * project.worldGridWidth;
+					var omx = M.floor( origin.worldX / curWorld.worldGridWidth ) * curWorld.worldGridWidth;
+					var mx = M.floor( m.worldX / curWorld.worldGridWidth ) * curWorld.worldGridWidth;
 					clickedLevel.worldX = levelOriginX + (mx-omx);
 
-					var omy = M.floor( origin.worldY / project.worldGridHeight ) * project.worldGridHeight;
-					var my = M.floor( m.worldY / project.worldGridHeight ) * project.worldGridHeight;
+					var omy = M.floor( origin.worldY / curWorld.worldGridHeight ) * curWorld.worldGridHeight;
+					var my = M.floor( m.worldY / curWorld.worldGridHeight ) * curWorld.worldGridHeight;
 					clickedLevel.worldY = levelOriginY + (my-omy);
 
-					clickedLevel.worldX = M.floor( clickedLevel.worldX/project.worldGridWidth ) * project.worldGridWidth;
-					clickedLevel.worldY = M.floor( clickedLevel.worldY/project.worldGridHeight) * project.worldGridHeight;
+					clickedLevel.worldX = M.floor( clickedLevel.worldX/curWorld.worldGridWidth ) * curWorld.worldGridWidth;
+					clickedLevel.worldY = M.floor( clickedLevel.worldY/curWorld.worldGridHeight ) * curWorld.worldGridHeight;
 
 				case LinearHorizontal:
-					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginX);
+					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);
 					if( i!=null ) {
 						tmpRender.moveTo(i.coord, -100);
-						tmpRender.lineTo(i.coord, project.getWorldHeight(clickedLevel)+100);
+						tmpRender.lineTo(i.coord, curWorld.getWorldHeight(clickedLevel)+100);
 					}
 
 				case LinearVertical:
-					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, m, clickedLevel, levelOriginY);
+					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginY);
 					if( i!=null ) {
 						tmpRender.moveTo(-100, i.coord);
-						tmpRender.lineTo(project.getWorldWidth(clickedLevel)+100, i.coord);
+						tmpRender.lineTo(curWorld.getWorldWidth(clickedLevel)+100, i.coord);
 					}
 			}
 
@@ -356,9 +396,9 @@ class WorldTool extends dn.Process {
 	}
 
 	function getLevelAt(worldX:Int, worldY:Int, ?except:data.Level) {
-		var i = project.levels.length-1;
+		var i = curWorld.levels.length-1;
 		while( i>=0 ) {
-			final l = project.levels[i];
+			final l = curWorld.levels[i];
 			if( l!=except && l.worldDepth==editor.curWorldDepth && l.isWorldOver(worldX,worldY) )
 				return l;
 			else

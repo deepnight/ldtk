@@ -110,10 +110,10 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 
-		var ge = editor.getGenericLevelElementAt(m);
+		var ge = editor.getGenericLevelElementAt(m, true);
 		switch ge {
 			case Entity(li,ei) if( ev.button==0 ):
 				if( tryToChainRefTo(PREV_CHAINABLE_EI, ei) )
@@ -158,7 +158,7 @@ class EntityTool extends tool.LayerTool<Int> {
 										all.push({ ei:ei, li:li });
 
 							case PerWorld:
-								for(l in project.levels)
+								for(l in curWorld.levels)
 								for(li in l.layerInstances)
 								for(ei in li.entityInstances)
 									if( ei.defUid==curEntityDef.uid )
@@ -288,7 +288,8 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
-						alpha
+						alpha,
+						Full
 					);
 
 				case _:
@@ -296,7 +297,8 @@ class EntityTool extends tool.LayerTool<Int> {
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						getPlacementX(m), getPlacementY(m),
-						alpha
+						alpha,
+						Full
 					);
 			}
 		}

@@ -118,11 +118,11 @@ class EditEnumDefs extends ui.modal.Panel {
 	}
 
 	function updateEnumList() {
-		var jList = jContent.find(".enumList ul");
-		jList.empty();
+		var jEnumList = jContent.find(".enumList>ul");
+		jEnumList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jList, false, [
+		ContextMenu.addTo(jEnumList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -134,50 +134,81 @@ class EditEnumDefs extends ui.modal.Panel {
 			},
 		]);
 
-		for(ed in project.defs.enums) {
-			var e = new J("<li/>");
-			e.appendTo(jList);
-			if( ed==curEnum )
-				e.addClass("active");
-			e.append('<span class="name">'+ed.identifier+'</span>');
-			e.click( function(_) {
-				selectEnum(ed);
+		var tagGroups = project.defs.groupUsingTags(project.defs.enums, ed->ed.tags);
+		for( group in tagGroups) {
+			// Tag name
+			if( tagGroups.length>1 ) {
+				var jSep = new J('<li class="title fixed"/>');
+				jSep.text( group.tag==null ? L._Untagged() : group.tag );
+				jSep.appendTo(jEnumList);
+			}
+
+			var jLi = new J('<li class="subList"/>');
+			jLi.appendTo(jEnumList);
+			var jSubList = new J('<ul/>');
+			jSubList.appendTo(jLi);
+
+			for(ed in group.all) {
+				var jLi = new J("<li/>");
+				jLi.appendTo(jSubList);
+				jLi.data("uid", ed.uid);
+				if( ed==curEnum )
+					jLi.addClass("active");
+				jLi.append('<span class="name">'+ed.identifier+'</span>');
+				jLi.click( function(_) {
+					selectEnum(ed);
+				});
+
+				ContextMenu.addTo(jLi, [
+					{
+						label: L._Copy(),
+						cb: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
+					},
+					{
+						label: L._Cut(),
+						cb: ()->{
+							App.ME.clipboard.copyData(CEnumDef, ed.toJson(project));
+							deleteEnumDef(ed, true);
+						},
+					},
+					{
+						label: L._PasteAfter(),
+						cb: ()->{
+							var copy = project.defs.pasteEnumDef(App.ME.clipboard, ed);
+							editor.ge.emit(EnumDefAdded);
+							selectEnum(copy);
+						},
+						enable: ()->App.ME.clipboard.is(CEnumDef),
+					},
+					{
+						label: L._Duplicate(),
+						cb: ()->{
+							var copy = project.defs.duplicateEnumDef(ed);
+							editor.ge.emit(EnumDefAdded);
+							selectEnum(copy);
+						},
+					},
+					{
+						label: L._Delete(),
+						cb: deleteEnumDef.bind(ed,true),
+					}
+				]);
+			}
+
+
+			// Make sub list sortable
+			JsTools.makeSortable(jSubList, function(ev) {
+				var jItem = new J(ev.item);
+				var fromIdx = project.defs.getInternalEnumIndex( jItem.data("uid") );
+				var toIdx = ev.newIndex>ev.oldIndex
+					? jItem.prev().length==0 ? 0 : project.defs.getInternalEnumIndex( jItem.prev().data("uid") )
+					: jItem.next().length==0 ? project.defs.entities.length-1 : project.defs.getInternalEnumIndex( jItem.next().data("uid") );
+
+				var moved = project.defs.sortEnumDef(fromIdx, toIdx);
+				selectEnum(moved);
+				editor.ge.emit(EnumDefSorted);
 			});
 
-			ContextMenu.addTo(e, [
-				{
-					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
-				},
-				{
-					label: L._Cut(),
-					cb: ()->{
-						App.ME.clipboard.copyData(CEnumDef, ed.toJson(project));
-						deleteEnumDef(ed, true);
-					},
-				},
-				{
-					label: L._PasteAfter(),
-					cb: ()->{
-						var copy = project.defs.pasteEnumDef(App.ME.clipboard, ed);
-						editor.ge.emit(EnumDefAdded);
-						selectEnum(copy);
-					},
-					enable: ()->App.ME.clipboard.is(CEnumDef),
-				},
-				{
-					label: L._Duplicate(),
-					cb: ()->{
-						var copy = project.defs.duplicateEnumDef(ed);
-						editor.ge.emit(EnumDefAdded);
-						selectEnum(copy);
-					},
-				},
-				{
-					label: L._Delete(),
-					cb: deleteEnumDef.bind(ed,true),
-				}
-			]);
 		}
 
 		var grouped = project.defs.getGroupedExternalEnums();
@@ -187,7 +218,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			// Source name
 			var e = new J("<li/>");
 			e.addClass("title fixed");
-			e.appendTo(jList);
+			e.appendTo(jEnumList);
 			var name = dn.FilePath.fromFile(group.key).fileWithExt;
 			e.html('<span>$name</span>');
 
@@ -210,12 +241,12 @@ class EditEnumDefs extends ui.modal.Panel {
 			links.appendTo(e);
 
 			// Sync button
-			var sync = new J('<a> <span class="icon refresh"/> </a>');
-			sync.appendTo(links);
-			sync.click( function(ev) {
+			var jSync = new J('<a> <span class="icon refresh"/> </a>');
+			jSync.appendTo(links);
+			jSync.click( function(ev) {
 				importer.HxEnum.load(group.key, true);
 			});
-			Tip.attach(sync, Lang.t._("Reload and synchronize Enums"));
+			Tip.attach(jSync, Lang.t._("Reload and synchronize Enums"));
 
 			// Explore button
 			if( fileExists ) {
@@ -230,7 +261,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				jDelete.click( function(ev) {
 					deleteEnumDef(group.value[0], false);
 				});
-				Tip.attach(sync, Lang.t._("Remove this external Enum source"));
+				Tip.attach(jDelete, Lang.t._("Remove this external Enum source"));
 			}
 
 			// Values
@@ -239,7 +270,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				e.addClass("fixed");
 				if( !fileExists )
 					e.addClass("missing");
-				e.appendTo(jList);
+				e.appendTo(jEnumList);
 				if( ed==curEnum )
 					e.addClass("active");
 				e.append('<span class="name">'+ed.identifier+'</span>');
@@ -258,11 +289,11 @@ class EditEnumDefs extends ui.modal.Panel {
 		}
 
 		// Make list sortable
-		JsTools.makeSortable(jList, function(ev) {
-			var moved = project.defs.sortEnumDef(ev.oldIndex, ev.newIndex);
-			selectEnum(moved);
-			editor.ge.emit(EnumDefSorted);
-		});
+		// JsTools.makeSortable(jEnumList, function(ev) {
+		// 	var moved = project.defs.sortEnumDef(ev.oldIndex, ev.newIndex);
+		// 	selectEnum(moved);
+		// 	editor.ge.emit(EnumDefSorted);
+		// });
 
 		checkBackup();
 	}
@@ -305,6 +336,14 @@ class EditEnumDefs extends ui.modal.Panel {
 		else
 			jDefForm.find(".source").hide();
 
+		// Tags
+		var ted = new TagEditor(
+			curEnum.tags,
+			()->editor.ge.emit(EnumDefChanged),
+			()->project.defs.getRecallTags(project.defs.enums, ed->ed.tags)
+		);
+		jDefForm.find("#tags").empty().append(ted.jEditor);
+
 		// Tilesets
 		JsTools.createTilesetSelect(
 			project,
@@ -330,74 +369,18 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			}
 		);
-		// var jSelect = jDefForm.find("select#icons");
-		// jSelect.show();
-		// jSelect.empty();
-		// if( curEnum.iconTilesetUid==null )
-		// 	jSelect.addClass("gray");
-		// else
-		// 	jSelect.removeClass("gray");
-
-		// var opt = new J('<option value="-1">-- Select a tileset --</option>');
-		// opt.appendTo(jSelect);
-
-		// for(td in project.defs.tilesets) {
-		// 	if( td.isUsingEmbedAtlas() )
-		// 		continue;
-		// 	var opt = new J('<option value="${td.uid}"/>');
-		// 	opt.appendTo(jSelect);
-		// 	opt.text( td.identifier );
-		// }
-
-		// for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
-		// 	var id = ldtk.Json.EmbedAtlas.createByName(k);
-		// 	var inf = Lang.getEmbedAtlasInfos(id);
-		// 	var opt = new J('<option value="$k"/>');
-		// 	opt.appendTo(jSelect);
-		// 	opt.text( inf.displayName );
-		// }
-
-		// jSelect.val( curEnum.iconTilesetUid==null ? "-1" : Std.string(curEnum.iconTilesetUid) );
-		// jSelect.change( function(ev) {
-		// 	var tid = Std.parseInt( jSelect.val() );
-		// 	if( !M.isValidNumber(tid) ) {
-		// 		// Embed tileset
-		// 		var id = ldtk.Json.EmbedAtlas.createByName(jSelect.val());
-		// 		var td = project.defs.getEmbedTileset(id);
-		// 		tid = td.uid;
-		// 	}
-		// 	if( tid==curEnum.iconTilesetUid )
-		// 		return;
-
-		// 	// Check if this change will break something
-		// 	if( curEnum.iconTilesetUid!=null )
-		// 		for( v in curEnum.values )
-		// 			if( v.tileId!=null ) {
-		// 				new LastChance(Lang.t._("Enum icons changed"), project);
-		// 				break;
-		// 			}
-
-		// 	// Update tileset link
-		// 	if( tid<0 )
-		// 		curEnum.iconTilesetUid = null;
-		// 	else
-		// 		curEnum.iconTilesetUid = tid;
-		// 	curEnum.clearAllTileIds();
-		// 	editor.ge.emit(EnumDefChanged);
-		// });
-
 
 		// Values
-		var jList = jFormWrapper.find("ul.enumValues");
+		var jValuesList = jFormWrapper.find("ul.enumValues");
 		if( curEnum.isExternal() )
-			jList.addClass("external");
+			jValuesList.addClass("external");
 		else
-			jList.removeClass("external");
-		jList.empty().off();
+			jValuesList.removeClass("external");
+		jValuesList.empty().off();
 		var xml = jContent.find("xml.enum").children();
 		for(eValue in curEnum.values) {
 			var li = new J("<li/>");
-			li.appendTo(jList);
+			li.appendTo(jValuesList);
 			li.append( xml.clone() );
 
 			// Identifier
@@ -485,7 +468,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 		// Make fields list sortable
 		if( !curEnum.isExternal() )
-			JsTools.makeSortable(jList, function(ev) {
+			JsTools.makeSortable(jValuesList, function(ev) {
 				var v = curEnum.values.splice(ev.oldIndex,1)[0];
 				curEnum.values.insert(ev.newIndex, v);
 				editor.ge.emit(EnumDefChanged);

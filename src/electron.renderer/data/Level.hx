@@ -2,10 +2,11 @@ package data;
 
 class Level {
 	var _project : Project;
+	public var _world : World;
 
 	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
 
-	@:allow(data.Project)
+	@:allow(data.Project, data.World)
 	public var uid(default,null) : Int;
 	public var iid : String;
 	public var identifier(default,set): String;
@@ -36,8 +37,8 @@ class Level {
 		inline function get_worldCenterY() return dn.M.round( worldY + pxHei*0.5 );
 
 
-	@:allow(data.Project)
-	private function new(project:Project, wid:Int, hei:Int, uid:Int, iid:String) {
+	@:allow(data.Project, data.World)
+	private function new(project:Project, world:World, wid:Int, hei:Int, uid:Int, iid:String) {
 		this.uid = uid;
 		this.iid = iid;
 		worldX = worldY = 0;
@@ -47,6 +48,7 @@ class Level {
 		bgPivotX = 0.5;
 		bgPivotY = 0.5;
 		this._project = project;
+		this._world = world;
 		this.identifier = "Level"+uid;
 		this.bgColor = null;
 		useAutoIdentifier = true;
@@ -72,9 +74,9 @@ class Level {
 		}
 
 		// List nearby levels
-		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _project.worldLayout {
+		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _world.worldLayout {
 			case Free, GridVania:
-				var nears = _project.levels.filter( (ol)->
+				var nears = _world.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
 					&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
 						&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
@@ -98,7 +100,7 @@ class Level {
 		// World coords are not stored in JSON for automatically organized layouts
 		var jsonWorldX = worldX;
 		var jsonWorldY = worldY;
-		switch _project.worldLayout {
+		switch _world.worldLayout {
 			case Free:
 			case GridVania:
 			case LinearHorizontal, LinearVertical:
@@ -168,13 +170,13 @@ class Level {
 			+ "." + Const.LEVEL_EXTENSION;
 	}
 
-	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
+	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson) {
 		if( json.iid==null )
 			json.iid = p.generateUniqueId_UUID();
 
-		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
-		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
-		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid), json.iid );
+		var wid = JsonTools.readInt( json.pxWid, w.defaultLevelWidth );
+		var hei = JsonTools.readInt( json.pxHei, w.defaultLevelHeight );
+		var l = new Level( p, w, wid, hei, JsonTools.readInt(json.uid), json.iid );
 		p.quickLevelAccess.set(l.uid, l);
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
@@ -357,7 +359,7 @@ class Level {
 	}
 
 	public function overlapsAnyLevel() {
-		for(l in _project.levels)
+		for(l in _world.levels)
 			if( overlaps(l) )
 				return true;
 
@@ -365,7 +367,7 @@ class Level {
 	}
 
 	public function willOverlapAnyLevel(newWorldX:Int, newWorldY:Int) {
-		for(l in _project.levels)
+		for(l in _world.levels)
 			if( l!=this && dn.Lib.rectangleOverlaps(newWorldX, newWorldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
 				return true;
 
@@ -398,9 +400,38 @@ class Level {
 		return li;
 	}
 
-	public function tidy(p:Project) {
+
+
+	/**
+		Return TRUE if this level is part of given World
+	**/
+	public inline function isInWorld(w:World) {
+		return w!=null && _world.iid==w.iid;
+	}
+
+	/**
+		Move this level to target World
+	**/
+	public function moveToWorld(target:World) {
+		if( _world.iid==target.iid )
+			return false;
+
+		var from = _world;
+		if( !from.levels.remove(this) )
+			return false;
+
+		target.levels.push(this);
+		_world = target;
+		from.reorganizeWorld();
+		target.reorganizeWorld();
+		return true;
+	}
+
+
+	public function tidy(p:Project, w:World) {
 		_project = p;
 		_project.markIidAsUsed(iid);
+		_world = w;
 
 		// Remove layerInstances without layerDefs
 		var i = 0;

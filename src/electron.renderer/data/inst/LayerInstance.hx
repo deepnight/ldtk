@@ -9,7 +9,7 @@ class LayerInstance {
 		inline function get_def() return _project.defs.getLayerDef(layerDefUid);
 
 	public var level(get,never) : Level;
-		inline function get_level() return _project.getLevel(levelId);
+		inline function get_level() return _project.getLevelAnywhere(levelId);
 
 	var camera(get,never) : display.Camera;
 		inline function get_camera() return Editor.ME.camera;

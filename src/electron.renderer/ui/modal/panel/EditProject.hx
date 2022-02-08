@@ -166,14 +166,10 @@ class EditProject extends ui.modal.Panel {
 		i.onChange = editor.invalidateAllLevelsCache;
 
 		// External level files
-		jForm.find(".externRecommend").css("visibility", project.levels.length>=10 && !project.externalLevels ? "visible" : "hidden");
+		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onValueChange = (v)->{
-			editor.invalidateAllLevelsCache();
-			if( v )
-				project.setFlag(MultiWorlds, false); // unsupported
-		}
+		i.onValueChange = (v)->editor.invalidateAllLevelsCache();
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
@@ -304,7 +300,19 @@ class EditProject extends ui.modal.Panel {
 		// Level name pattern
 		var i = Input.linkToHtmlInput( project.levelNamePattern, jForm.find("input.levelNamePattern") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onChange = ()->project.tidy();
+		i.onChange = ()->{
+			project.tidy();
+			editor.invalidateAllLevelsCache();
+		}
+
+		jForm.find(".defaultLevelNamePattern").click(_->{
+			if( project.levelNamePattern!=data.Project.DEFAULT_LEVEL_NAME_PATTERN ) {
+				project.levelNamePattern = data.Project.DEFAULT_LEVEL_NAME_PATTERN;
+				editor.ge.emit(ProjectSettingsChanged);
+				editor.invalidateAllLevelsCache();
+				project.tidy();
+			}
+		});
 
 
 		// Advanced options
@@ -349,9 +357,7 @@ class EditProject extends ui.modal.Panel {
 				case MultiWorlds:
 					jLabel.text("Multi-worlds support");
 					_setDesc( L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly.\nThis option is still experimental and is not yet supported if Separate Levels option is enabled.") );
-
-					if( project.externalLevels )
-						jInput.prop("disabled",true);
+					jInput.prop("disabled", project.worlds.length>1 );
 
 				case _:
 			}

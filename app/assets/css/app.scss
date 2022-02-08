@@ -16,14 +16,18 @@ $help: #79dd8a;
 $helpMed: #5eab6b;
 $helpDark: #3c6148;
 $helpDarker: #273f2f;
+$editingOptionsY: 46px;
 $mainPanelNormalWid: 300px;
 $mainPanelCompactWid: 130px;
 $backupBg: #6594ff;
+$tagMed: #a17250;
+$tagLight: #c5926d;
 
 // Cursors
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
 $cur_expand: cell;
 $cur_collapse: url("../cursors/collapse.svg") 16 16, zoom-out;
+$cur_locateRef: url("../cursors/locate.svg") 16 16, zoom-out;
 
 // Shortcuts
 @mixin resetMargin() {
@@ -1210,31 +1214,83 @@ ul.log {
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 .icon.red	{ filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6); }
 
-.accordion {
-	.expand {
-		color: $bgLighter;
-		font-size: 0.8em;
-		padding-top: 2px;
-		padding-bottom: 2px;
-		padding-left: 24px;
-		background-repeat: no-repeat;
-		background-position: left center;
+.collapser {
+	color: $bgLighter;
+	font-size: 0.8em;
+	min-height: 0.8em;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 24px;
+	background-repeat: no-repeat;
+	background-position: left center;
 
-		&:hover {
-			color: $orange;
+	&:hover {
+		color: $orange;
+	}
+
+	&.expanded {
+		cursor: $cur_collapse;
+		color: white;
+		background-color: $bgLight;
+		background-image: url("../icons/expanded.svg");
+	}
+	&.collapsed {
+		cursor: $cur_expand;
+		background-color: $bgMed;
+		background-image: url("../icons/collapsed.svg");
+		margin-bottom: 8px;
+	}
+}
+
+
+div.entityRef {
+	display: grid;
+	grid-template-rows: min-content;
+	padding: 4px;
+	padding-left: 25px;
+	cursor: $cur_locateRef;
+	border: 1px solid $bgLight;
+	border-radius: 4px;
+	background-image: url("../icons/right.svg");
+	background-repeat: no-repeat;
+	background-position: left center;
+
+	&.isBackRef {
+		background-image: url("../icons/left.svg");
+	}
+
+	.id {
+		font-size: 9pt;
+		font-weight: bold;
+		color: $orange;
+	}
+	.location {
+		font-size: 8pt;
+		.level {
+			font-weight: bold;
+			color: $bgLighter;
 		}
+		em {
+			opacity: 0.7;
+			font-style: normal;
+		}
+		.world {
+			color: $bgLighter;
+		}
+	}
 
-		&.expanded {
-			cursor: $cur_collapse;
+	&:hover {
+		border-color: $orange;
+		.id {
 			color: white;
-			background-color: $bgLight;
-			background-image: url("../icons/expanded.svg");
 		}
-		&.collapsed {
-			cursor: $cur_expand;
-			background-color: $bgMed;
-			background-image: url("../icons/collapsed.svg");
+		.location {
+			color: white;
 		}
+	}
+
+	&+.entityRef {
+		margin-top: 4px;
 	}
 }
 
@@ -1821,6 +1877,21 @@ textarea {
 	flex-wrap: wrap;
 	justify-items: stretch;
 
+	.empty {
+		flex: 0 0 auto;
+		padding: 4px;
+		padding-right: 16px;
+		font-size: 9pt;
+		white-space: nowrap;
+		color: $bgLighter;
+		font-style: italic;
+		cursor: pointer;
+
+		&:hover {
+			color: $orange;
+		}
+	}
+
 	input[type=text] {
 		width: 5em;
 	}
@@ -1856,8 +1927,8 @@ textarea {
 
 		white-space: nowrap;
 
-		border: 1px solid $bgLighter;
-		background-color: $bgLight;
+		border: 1px solid $tagLight;
+		background-color: $tagMed;
 
 		&:hover {
 			color: $orange;
@@ -2531,46 +2602,86 @@ textarea {
 
 
 .window.changelog {
-	.wrapper {
-		position: relative;
+	&>.mask {
+		background-color: transparentize($color: black, $amount: 0.1) !important;
 	}
-	.wrapper .content {
-		width: 800px;
-
-		.cornerButtons {
-			display: grid;
-			position: absolute;
-			top: 8px;
-			right: 8px;
-			width: auto;
-		}
+	&>.wrapper {
+		position: relative;
+		padding: 0 !important;
+		overflow-x: hidden;
+		overflow-y: hidden;
+	}
+	&>.wrapper .content {
+		width: 900px;
+		max-height: 96vh;
+		min-height: 50vh;
+		display: grid;
+		grid-template-rows: min-content auto;
+		height: 100%;
 
 		header {
+			display: grid;
+			grid-template-columns: min-content auto min-content;
+
+			align-items: stretch;
 			font-family: Roboto;
-			text-align: center;
-			color: $orange;
 
 			.version {
+				display: grid;
+				align-items: center;
+				padding: 16px;
 				font-weight: bold;
-				font-size: 70pt;
-				line-height: 75pt;
-				text-shadow: 0px 0px 32px $darkOrange;
+				font-size: 50pt;
+				line-height: 55pt;
+				color: $bgDark;
+				background-color: $orange;
+				// text-shadow: 0px 0px 16px $darkOrange;
+				border-right: 1px dashed $bgLight;
 			}
 
 			.title {
+				display: grid;
+				align-items: center;
+				padding-left: 16px;
+				padding-top: 16px;
+				padding-bottom: 16px;
+				padding-right: 64px;
 				font-size: 20pt;
 				font-style: italic;
-				margin-bottom: 8px;
+				color: $orange;
+				background-color: $bgMed;
+
 				&:empty {
-					display: none;
+					background-color: $bgMed;
 				}
 			}
 
-			.newUpdate {
-				margin-left: -20px;
-				margin-right: -20px;
-				padding-top: 4px;
-				padding-bottom: 4px;
+			.cornerButtons {
+				display: grid;
+				grid-template-rows: min-content;
+				align-items: flex-start;
+				padding: 8px;
+				width: auto;
+			}
+		}
+
+		.newUpdate {
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 200px;
+			height: 200px;
+			pointer-events: none;
+
+			span {
+				display: block;
+				position: absolute;
+				transform: rotate(45deg);
+				top: 65px;
+				left: -50px;
+				padding: 16px 80px;
+				white-space: nowrap;
+				box-shadow: 0px 4px 8px black;
 
 				font-size: 1.3em;
 				font-family: Roboto;
@@ -2581,13 +2692,7 @@ textarea {
 		}
 
 		.changelog {
-
-			margin-left: -20px;
-			margin-right: -20px;
-			margin-bottom: -20px;
 			padding: 20px;
-			max-height: 70vh;
-			min-height: 50vh;
 
 			overflow-y: auto;
 			background-color: $bgDark;
@@ -2597,6 +2702,8 @@ textarea {
 			img {
 				width: 100%;
 				height: auto;
+				// max-height: 300px;
+				// object-fit: cover;
 				border: 1px solid black;
 				// outline: 1px solid black;
 				border-radius: 4px;
@@ -2988,64 +3095,62 @@ textarea {
 
 
 .window.panel.helpPanel {
-	.wrapper {
-		.content {
-			width: auto;
-			display: grid;
-			gap: 16px;
+	.wrapper .content {
+		width: auto;
+		display: grid;
+		gap: 16px;
+	}
 
-			h3 {
-				margin-top: 0;
+	h3 {
+		margin-top: 0;
+	}
+
+	.links {
+		display: grid;
+		grid-template-columns: auto auto;
+		gap: 16px;
+		.buttons {
+			display: block;
+			button {
+				justify-content: start;
+				text-align: inherit;
+				text-transform: none;
 			}
+		}
 
-			.links {
+		.videosWrapper {
+			.videos {
 				display: grid;
-				grid-template-columns: 250px auto;
-				gap: 16px;
-				.buttons {
-					display: block;
-					button {
-						justify-content: start;
-						text-align: inherit;
-						text-transform: none;
+				gap: 4px;
+				grid-template-columns: repeat(2, 1fr);
+
+				>a {
+					border: 1px solid black;
+					cursor: pointer;
+					box-shadow: 0px 0px 8px transparentize($color: black, $amount: 0.5);
+					background-color: black;
+					background-image: url("../img/stripesLight.png");
+					background-repeat: repeat;
+					height: 180px;
+
+					img {
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
 					}
+					&:hover {
+						border-color: $orange;
+					}
+					// flex: 1 0.5 auto;
 				}
-			}
-
-			.keys {
-				display: grid;
-				grid-template-columns: repeat(2, 420px);
-				gap: 16px;
 			}
 		}
 	}
 
-	.videosWrapper {
-		.videos {
-			display: grid;
-			gap: 4px;
-			grid-template-columns: repeat(2, 1fr);
-
-			>a {
-				border: 1px solid black;
-				cursor: pointer;
-				box-shadow: 0px 0px 8px transparentize($color: black, $amount: 0.5);
-				background-color: black;
-				background-image: url("../img/stripesLight.png");
-				background-repeat: repeat;
-				min-height: 64px;
-
-				img {
-					width: 100%;
-					height: auto;
-				}
-				&:hover {
-					border-color: $orange;
-				}
-				// flex: 1 0.5 auto;
-			}
-		}
-
+	.keys {
+		display: grid;
+		grid-template-columns: repeat(2, 420px);
+		gap: 16px;
 	}
 
 	dl {
@@ -3389,6 +3494,19 @@ ul.sortable:not(.customHandle) li:not(.fixed) {
 		cursor: ns-resize;
 	}
 }
+
+
+body.panning {
+	#worldDepths,
+	#editingOptions,
+	#mainPanel,
+	#permanentNotifications,
+	.entityInstanceEditor {
+		pointer-events: none;
+	}
+}
+
+
 body.sorting {
 	outline: 3px solid red !important;
 	outline-offset: -3px;
@@ -3734,16 +3852,16 @@ canvas#webgl {
 					}
 				}
 
-				.index {
+				.shortcut {
 					display: flex;
 					align-items: center;
 					min-width: 1.2em;
 					text-align: center;
 					color: $bgLighter;
 					font-weight: bold;
-					font-size: 14pt;
+					font-size: 8pt;
 				}
-				&.active .index {
+				&.active .shortcut {
 					color: $darkOrange;
 				}
 
@@ -3894,7 +4012,7 @@ canvas#webgl {
 	ul#editingOptions {
 		position: absolute;
 		z-index: 1;
-		top: 46px;
+		top: $editingOptionsY;
 		left: $mainPanelNormalWid;
 
 		display: grid;
@@ -3969,8 +4087,9 @@ canvas#webgl {
 
 	#worldDepths {
 		position: absolute;
-		top: 146px;
-		left: calc( $mainPanelNormalWid + 100px );
+		z-index: 2;
+		top: $editingOptionsY;
+		left: calc( $mainPanelNormalWid + 40px );
 
 		display: grid;
 		background-color: $bgDark;
@@ -3978,6 +4097,7 @@ canvas#webgl {
 		border-radius: 4px;
 		max-height: 70vh;
 		overflow-y: auto;
+		box-shadow: 0px 4px 2px transparentize($color: black, $amount: 0.6);
 
 		>.title {
 			display: grid;
@@ -4043,7 +4163,7 @@ canvas#webgl {
 
 				&.active {
 					z-index: 2;
-					margin-left: 4px;
+					// margin-left: 4px;
 					border-color: $orange;
 					pointer-events: none;
 					// background-color: $bgMed;
@@ -4099,11 +4219,11 @@ canvas#webgl {
 						z-index: 1; // fix box-shadow depth
 						margin: 0px;
 					}
-					// button.world {
-					// 	grid-row: 1/2;
-					// 	grid-column: 3/4;
-					// 	z-index: 0;
-					// }
+					button.showHelp {
+						grid-row: 1/2;
+						grid-column: 3/4;
+						z-index: 0;
+					}
 					button.settings {
 						grid-row: 1/2;
 						grid-column: 4/5;
@@ -5396,6 +5516,10 @@ canvas#webgl {
 			}
 		}
 
+		select#allowedRefs {
+			flex: 1 0 100%;
+		}
+
 		*[class*="F_"],
 		*[class="NotArray"],
 		*[class="Array"] {
@@ -5525,6 +5649,7 @@ dl.form.fieldInstanceEditor {
 	}
 
 	.entityRef {
+		flex: 1 0 auto;
 		font-size: 8pt;
 		color: $orangeLight;
 		cursor: $cur_follow;
@@ -5841,6 +5966,17 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		a.defaultLevelNamePattern {
+			flex: 0 1 auto;
+			margin-left: 8px;
+			align-self: center;
+			font-size: 9pt;
+			cursor: pointer;
+			&:hover {
+				color: white;
+			}
+		}
+
 		a.showAdv {
 			cursor: pointer;
 			padding-top: 4px;
@@ -6068,6 +6204,14 @@ dl.form.fieldInstanceEditor {
 		grid-template-columns: 160px auto;
 		>dt {
 			max-width: none;
+		}
+
+		.advanced {
+			margin-top: 16px;
+			button {
+				flex: 0 1 auto;
+				min-height: 2.5em;
+			}
 		}
 	}
 	.mainList {
@@ -7379,7 +7523,7 @@ $patternSize : 32px;
 
 		.pattern {
 			display: grid;
-			grid-template-columns: min-content auto;
+			grid-template-columns: 200px auto;
 			gap: $gutter;
 
 			.editor{
@@ -7400,21 +7544,36 @@ $patternSize : 32px;
 			}
 
 			.values {
+				max-height: 300px;
+				overflow-y: auto;
+
 				ul {
 					display: grid;
-					height: 100%;
-					gap: 2px;
 
 					li {
 						display: grid;
-						align-content: center;
-						justify-content: center;
-						padding: 8px;
-
-						text-shadow: 0px 2px 1px black, 0px 0px 4px black;
-
-						border: 1px solid $bgMed;
+						grid-template-columns: 32px auto;
+						font-weight: bold;
 						cursor: pointer;
+						border-radius: 3px;
+						border-top: 1px solid transparentize($color: white, $amount: 0.7);
+
+						&+li {
+							margin-top: 1px;
+						}
+
+						.value {
+							padding: 8px 4px;
+							font-size: 11pt;
+							text-align: center;
+							color: white;
+							background-color: transparentize($color: black, $amount: 0.9);
+						}
+
+						.name {
+							padding: 8px;
+							font-size: 9pt;
+						}
 
 						&:hover {
 							outline: 1px solid white;
@@ -7422,20 +7581,45 @@ $patternSize : 32px;
 						}
 
 						&.active {
-							border-color: $orange;
-							outline: 1px solid black;
+							// border-color: white !important;
+							outline: 2px solid white;
 							outline-offset: -2px;
-							box-shadow: 0px 0px 8px $red;
+							// box-shadow: 0px 0px 8px $red;
+							.value {
+								color: $bgDark;
+								background-color: white;
+								box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
+							}
 						}
 					}
 					li.any {
 						font-style: italic;
 						background-image: url("../img/any.png");
+						border-color: $bgDark;
 					}
+
 				}
 
 			}
 		}
+
+
+		// &.manyValues {
+		// 	.pattern {
+		// 		grid-template-columns: 300px auto;
+
+		// 		.values ul {
+		// 			grid-template-columns: 1fr 1fr;
+		// 			li {
+		// 				padding-top: 4px;
+		// 				padding-bottom: 4px;
+		// 				overflow: hidden;
+		// 				word-break: break-all;
+		// 				font-size: 9pt;
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 		.help {
 			margin-top: 8px;
@@ -7467,31 +7651,6 @@ $patternSize : 32px;
 		content: "No tileset";
 	}
 
-	#embedTileset {
-		padding: 16px;
-		border: 1px dashed $bgLighter;
-		border-radius: 4px;
-
-		.desc {
-			color: white;
-		}
-
-		.license {
-			margin-top: 8px;
-			color: $orange;
-		}
-
-		.infos {
-			display: grid;
-			grid-template-columns: auto min-content;
-			align-items: center;
-			padding-bottom: 8px;
-			margin-bottom: 8px;
-			color: $almostWhite;
-			border-bottom: 1px solid $bgLight;
-		}
-	}
-
 	.content {
 		grid-template-rows: min-content min-content min-content auto;
 		grid-template-columns: 300px auto;
@@ -7518,6 +7677,52 @@ $patternSize : 32px;
 				max-width: none;
 				white-space: nowrap;
 			}
+
+			&:not(.embed) {
+				.embedTileset {
+					display: none;
+				}
+			}
+			&.embed {
+				padding-bottom: 0;
+
+				.notEmbed {
+					display: none;
+					&+dd {
+						display: none;
+					}
+				}
+
+				dd.embedTileset {
+					display: block;
+					padding: 16px;
+					margin-top: 16px;
+					margin-bottom: 0;
+					border: 1px dashed $bgLighter;
+					border-radius: 4px;
+					grid-column: 1/3;
+
+					.desc {
+						color: white;
+					}
+
+					.license {
+						margin-top: 8px;
+						color: $orange;
+					}
+
+					.infos {
+						display: grid;
+						grid-template-columns: auto min-content;
+						align-items: center;
+						padding-bottom: 8px;
+						margin-bottom: 8px;
+						color: $almostWhite;
+						border-bottom: 1px solid $bgLight;
+					}
+				}
+			}
+
 		}
 		.pickerWrapper {
 			grid-row: 4/5;

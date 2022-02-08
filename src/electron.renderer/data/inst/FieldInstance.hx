@@ -626,7 +626,7 @@ class FieldInstance {
 			return "Lost reference!";
 		else
 			return ei.def.identifier
-				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
+				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier : "" );
 	}
 
 	public function setEntityRefTo(arrayIdx:Int, sourceEi:EntityInstance, targetEi:EntityInstance) {

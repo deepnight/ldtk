@@ -1,6 +1,9 @@
 package ui;
 
 class ToolPalette {
+	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
+	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+
 	public var jContent : js.jquery.JQuery;
 	var tool : Tool<Dynamic>;
 	var canPopOut = false;

@@ -32,11 +32,14 @@ class TilesetDef {
 	public var cHei(get,never) : Int;
 	inline function get_cHei() return !hasAtlasPointer() ? 0 : dn.M.ceil( (pxHei-padding*2) / (tileGridSize+spacing) );
 
+	public var tags : Tags;
+
 
 	public function new(p:Project, uid:Int) {
 		_project = p;
 		this.uid = uid;
 		identifier = "Tileset"+uid;
+		tags = new Tags();
 	}
 
 	public function toString() {
@@ -105,6 +108,7 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+			tags: tags.toJson(),
 
 			tagsSourceEnumUid: tagsSourceEnumUid,
 			enumTags: {
@@ -170,6 +174,7 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.embedAtlas = JsonTools.readEnum(ldtk.Json.EmbedAtlas, json.embedAtlas, true);
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+		td.tags = Tags.fromJson(json.tags);
 
 		// Enum tags
 		if( (cast json).metaDataEnumUid!=null ) json.tagsSourceEnumUid = (cast json).metaDataEnumUid;
@@ -288,7 +293,8 @@ class TilesetDef {
 		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
 
 		// Tiles layers remapping
-		for(l in _project.levels)
+		for(w in _project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Tiles || li.def.tilesetDefUid!=uid )
 				continue;

@@ -1,6 +1,7 @@
 package display;
 
 typedef WorldLevelRender = {
+	var worldIid : String;
 	var uid : Int;
 	var rect : misc.WorldRect;
 
@@ -12,12 +13,18 @@ typedef WorldLevelRender = {
 	var renderInvalidated: Bool;
 	var fieldsInvalidated: Bool;
 	var identifierInvalidated: Bool;
+
+	var fieldsRender: Null<{
+		customFields: h2d.Flow,
+		identifier: h2d.Flow,
+	}>;
 }
 
 class WorldRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 
@@ -38,7 +45,6 @@ class WorldRender extends dn.Process {
 	var currentHighlight : h2d.Graphics;
 	public var worldLayers : Map<Int,h2d.Layers>;
 	var fieldsWrapper : h2d.Object;
-	var fieldRenders : Map<Int, { customFields:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
 	var invalidatedCameraBasedRenders = true;
 
@@ -126,6 +132,11 @@ class WorldRender extends dn.Process {
 				updateAxesPos();
 				invalidateCameraBasedRenders();
 
+			case WorldSelected(w):
+				for(wl in worldLevels)
+					removeWorldLevel(wl.uid);
+				invalidateAll();
+
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
@@ -137,15 +148,15 @@ class WorldRender extends dn.Process {
 				updateWorldTitle();
 				updateFieldsPos();
 				invalidateCameraBasedRenders();
-				for(l in project.levels)
+				for(l in curWorld.levels)
 					updateLevelVisibility(l);
 
 			case WorldDepthSelected(worldDepth):
-				for(l in project.levels)
+				for(l in curWorld.levels)
 					updateLevelVisibility(l);
 				updateCurrentHighlight();
-				updateFieldsPos();
 				updateAllLevelIdentifiers(false);
+				updateFieldsPos();
 
 			case GridChanged(active):
 				renderGrids();
@@ -155,10 +166,10 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				refreshWorldLevelRect(l);
 				if( isFinal ) {
-					switch project.worldLayout {
+					switch curWorld.worldLayout {
 						case Free, GridVania:
 						case LinearHorizontal, LinearVertical:
-							for(l in project.levels)
+							for(l in curWorld.levels)
 								refreshWorldLevelRect(l);
 					}
 				}
@@ -261,7 +272,6 @@ class WorldRender extends dn.Process {
 
 			case LevelRemoved(l):
 				removeWorldLevel(l.uid);
-				removeLevelFields(l.uid);
 				updateLayout();
 				invalidateAllLevelIdentifiers();
 				renderWorldBounds();
@@ -277,7 +287,7 @@ class WorldRender extends dn.Process {
 				updateAxesPos();
 				renderGrids();
 				updateCurrentHighlight();
-				for(l in project.levels)
+				for(l in curWorld.levels)
 					updateLevelBounds(l);
 
 			case _:
@@ -286,7 +296,7 @@ class WorldRender extends dn.Process {
 
 
 	public inline function invalidateAll() {
-		for(l in editor.project.levels) {
+		for(l in editor.curWorld.levels) {
 			invalidateLevelFields(l);
 			invalidateLevelIdentifier(l);
 			invalidateLevelRender(l);
@@ -303,7 +313,7 @@ class WorldRender extends dn.Process {
 			wl.renderInvalidated = true;
 	}
 	public inline function invalidateAllLevelRenders() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelRender(l);
 	}
 
@@ -314,7 +324,7 @@ class WorldRender extends dn.Process {
 			wl.fieldsInvalidated = true;
 	}
 	public inline function invalidateAllLevelFields() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelFields(l);
 	}
 
@@ -324,7 +334,7 @@ class WorldRender extends dn.Process {
 			wl.identifierInvalidated = true;
 	}
 	public inline function invalidateAllLevelIdentifiers() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelIdentifier(l);
 	}
 
@@ -332,7 +342,7 @@ class WorldRender extends dn.Process {
 
 	/** Z-sort depths wrappers**/
 	function sortWorldDepths() {
-		for(d in project.getLowestLevelDepth()...project.getHighestLevelDepth()+1)
+		for(d in curWorld.getLowestLevelDepth()...curWorld.getHighestLevelDepth()+1)
 			if( worldLayers.exists(d) )
 				root.under( worldLayers.get(d) );
 	}
@@ -365,6 +375,7 @@ class WorldRender extends dn.Process {
 	function getWorldLevel(l:data.Level) : WorldLevelRender {
 		if( !worldLevels.exists(l.uid) ) {
 			var wl : WorldLevelRender = {
+				worldIid : l._world.iid,
 				uid: l.uid,
 
 				rect: WorldRect.fromLevel(l),
@@ -376,6 +387,8 @@ class WorldRender extends dn.Process {
 				renderInvalidated: true,
 				fieldsInvalidated: true,
 				identifierInvalidated: true,
+
+				fieldsRender: null,
 			}
 			worldLevels.set(l.uid, wl);
 			applyWorldDepth(l);
@@ -384,22 +397,21 @@ class WorldRender extends dn.Process {
 	}
 
 
+
 	function renderAll() {
 		App.LOG.render("Rendering all world...");
 
-		for(uid in worldLevels.keys()) {
+		for(uid in worldLevels.keys())
 			removeWorldLevel(uid);
-			removeLevelFields(uid);
-		}
 
 		// Init world levels
 		worldLevels = new Map();
 		for(l in worldLayers)
 			l.removeChildren();
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			getWorldLevel(l);
 
-		for(l in editor.project.levels) {
+		for(l in editor.curWorld.levels) {
 			invalidateLevelFields(l);
 			invalidateLevelIdentifier(l);
 			invalidateLevelRender(l);
@@ -430,7 +442,7 @@ class WorldRender extends dn.Process {
 	function updateWorldTitle() {
 		title.visible = editor.worldMode && settings.v.showDetails && !editor.gifMode;
 		if( title.visible ) {
-			var b = project.getWorldBounds();
+			var b = curWorld.getWorldBounds();
 			var w = b.right-b.left;
 			var t = project.filePath.fileName;
 			title.textColor = C.toWhite(project.bgColor, 0.3);
@@ -447,9 +459,13 @@ class WorldRender extends dn.Process {
 
 		var minZoom = 0.1;
 		var padding = Std.int( Rulers.PADDING*3 );
-		for(f in fieldRenders.keyValueIterator()) {
-			var l = project.getLevel(f.key);
-			var fr = f.value;
+
+		for(wl in worldLevels) {
+			if( wl.fieldsRender==null )
+				continue;
+
+			var l = project.getLevelAnywhere(wl.uid);
+			var fr = wl.fieldsRender;
 			if( !camera.isOnScreenLevel(l, 256) || l.worldDepth!=editor.curWorldDepth ) {
 				fr.customFields.visible = false;
 				fr.identifier.visible = false;
@@ -468,11 +484,11 @@ class WorldRender extends dn.Process {
 
 			// Custom fields
 			if( editor.worldMode ) {
-				switch project.worldLayout {
+				switch curWorld.worldLayout {
 					case Free, GridVania:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
 						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
 						fr.customFields.y = Std.int( l.worldY + l.pxHei - fr.customFields.outerHeight*fr.customFields.scaleY );
-						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
 
 					case LinearHorizontal:
 						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.customFields.outerWidth ) );
@@ -498,7 +514,7 @@ class WorldRender extends dn.Process {
 	}
 
 	inline function updateAllLevelIdentifiers(refreshTexts:Bool) {
-		for( l in editor.project.levels )
+		for( l in editor.curWorld.levels )
 			if( worldLevels.exists(l.uid) )
 				updateLevelIdentifier(l, refreshTexts);
 	}
@@ -511,7 +527,7 @@ class WorldRender extends dn.Process {
 
 		// Base level grid
 		final minZoom = camera.pixelRatio*0.5;
-		if( project.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
+		if( curWorld.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
 			smallGrid.clear();
 			smallGrid.visible = true;
 			smallGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.5 * M.fmin( (camera.adjustedZoom-minZoom)/0.5, 1 ) );
@@ -533,11 +549,11 @@ class WorldRender extends dn.Process {
 			smallGrid.visible = false;
 
 		// World grid
-		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.1 && settings.v.showDetails ) {
+		if( curWorld.worldLayout==GridVania && camera.adjustedZoom>=0.1 && settings.v.showDetails ) {
 			largeGrid.clear();
 			largeGrid.visible = true;
 			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.1 + 0.2 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
-			var g = project.worldGridWidth * camera.adjustedZoom;
+			var g = curWorld.worldGridWidth * camera.adjustedZoom;
 			// Verticals
 			var off =  root.x % g;
 			for( i in 0...M.ceil(camera.width/g)+1 ) {
@@ -545,7 +561,7 @@ class WorldRender extends dn.Process {
 				largeGrid.lineTo(i*g+off, camera.height);
 			}
 			// Horizontals
-			var g = project.worldGridHeight * camera.adjustedZoom;
+			var g = curWorld.worldGridHeight * camera.adjustedZoom;
 			var off =  root.y % g;
 			for( i in 0...M.ceil(camera.height/g)+1 ) {
 				largeGrid.moveTo(0, i*g+off);
@@ -561,7 +577,7 @@ class WorldRender extends dn.Process {
 			axeH.visible = axeV.visible = false;
 		}
 		else {
-			switch project.worldLayout {
+			switch curWorld.worldLayout {
 				case Free, GridVania:
 					axeH.visible = axeV.visible = true;
 
@@ -585,10 +601,10 @@ class WorldRender extends dn.Process {
 
 	function renderWorldBounds() {
 		App.LOG.render("Rendering world bounds...");
-		var pad = editor.project.defaultGridSize*3;
-		var b = editor.project.getWorldBounds();
+		var pad = project.defaultGridSize*3;
+		var b = curWorld.getWorldBounds();
 		worldBounds.clear();
-		worldBounds.beginFill(editor.project.bgColor, 0.8);
+		worldBounds.beginFill(project.bgColor, 0.8);
 		worldBounds.drawRoundedRect(
 			b.left-pad,
 			b.top-pad,
@@ -669,7 +685,7 @@ class WorldRender extends dn.Process {
 		var cur = editor.curLevel;
 
 		// Level layout
-		for( l in editor.project.levels ) {
+		for( l in editor.curWorld.levels ) {
 			if( !worldLevels.exists(l.uid) )
 				continue;
 
@@ -685,6 +701,7 @@ class WorldRender extends dn.Process {
 		updateAllLevelIdentifiers(false);
 	}
 
+
 	function removeWorldLevel(uid:Int) {
 		if( worldLevels.exists(uid) ) {
 			var wl = worldLevels.get(uid);
@@ -692,9 +709,14 @@ class WorldRender extends dn.Process {
 			wl.outline.remove();
 			wl.bgWrapper.remove();
 			wl.identifier.remove();
+			if( wl.fieldsRender!=null ) {
+				wl.fieldsRender.customFields.remove();
+				wl.fieldsRender.identifier.remove();
+			}
 			worldLevels.remove(uid);
 		}
 	}
+
 
 	function clearLevelRender(l:data.Level) {
 		var wl = getWorldLevel(l);
@@ -703,41 +725,36 @@ class WorldRender extends dn.Process {
 		wl.render.removeChildren();
 	}
 
-	function removeLevelFields(uid:Int) {
-		if( fieldRenders.exists(uid) ) {
-			fieldRenders.get(uid).customFields.remove();
-			fieldRenders.remove(uid);
-		}
-	}
 
 	function renderFields(l:data.Level) {
 		App.LOG.render('Rendering world level fields $l...');
 
-		// Init wrapper
-		if( !fieldRenders.exists(l.uid) ) {
-			fieldRenders.set(l.uid, {
+		// Init fields wrapper
+		var wl = getWorldLevel(l);
+		if( wl.fieldsRender==null )
+			wl.fieldsRender = {
 				customFields: {
 					var f = new h2d.Flow(fieldsWrapper);
 					f.layout = Vertical;
 					f;
 				},
 				identifier: null,
-			});
-		}
-		var fWrapper = fieldRenders.get(l.uid);
-		fWrapper.customFields.removeChildren();
+			}
+		wl.fieldsRender.customFields.removeChildren();
+		if( wl.fieldsRender.identifier!=null )
+			wl.fieldsRender.identifier.remove();
 
 		// Attach custom fields
 		FieldInstanceRender.renderFields(
 			project.defs.levelFields.map( fd->l.getFieldInstance(fd) ),
 			l.getSmartColor(true),
 			LevelCtx(l),
-			fWrapper.customFields
+			wl.fieldsRender.customFields
 		);
 
-		// Level identifier
-		var f = new h2d.Flow(fWrapper.customFields);
-		f.minWidth = f.maxWidth = fWrapper.customFields.outerWidth;
+		// Init level identifier
+		var f = new h2d.Flow(wl.fieldsRender.customFields);
+		f.minWidth = f.maxWidth = wl.fieldsRender.customFields.outerWidth;
 		f.horizontalAlign = Middle;
 		f.padding = 6;
 		var tf = new h2d.Text(Assets.getLargeFont(), f);
@@ -745,9 +762,7 @@ class WorldRender extends dn.Process {
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
 		FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
-		if( fWrapper.identifier!=null )
-			fWrapper.identifier.remove();
-		fWrapper.identifier = f;
+		wl.fieldsRender.identifier = f;
 
 		updateFieldsPos();
 	}
@@ -927,7 +942,7 @@ class WorldRender extends dn.Process {
 		wl.identifier.alpha = getAlphaFromZoom( camera.getMinZoom()*0.8 );
 
 		// Scaling
-		switch project.worldLayout {
+		switch curWorld.worldLayout {
 			case Free, GridVania:
 				wl.identifier.setScale( M.fmin( l.pxWid / wl.identifier.width, 1/camera.adjustedZoom ) );
 
@@ -936,7 +951,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Position
-		switch project.worldLayout {
+		switch curWorld.worldLayout {
 			case Free, GridVania:
 				wl.identifier.x = Std.int( l.worldX );
 				wl.identifier.y = Std.int( l.worldY );
@@ -971,7 +986,7 @@ class WorldRender extends dn.Process {
 		}
 
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
-		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
+		worldBounds.visible = editor.worldMode && editor.curWorld.levels.length>1;
 
 
 		// Level invalidations
@@ -990,10 +1005,13 @@ class WorldRender extends dn.Process {
 			if( !waitingTileset ) {
 				var l : data.Level = null;
 				for( wl in worldLevels ) {
+					if( wl.worldIid!=editor.curWorldIid )
+						continue;
+
 					if( !camera.isOnScreenWorldRect(wl.rect) )
 						continue;
 
-					l = editor.project.getLevel(wl.uid);
+					l = editor.project.getLevelAnywhere(wl.uid);
 					if( l==null ) {
 						// Drop lost levels
 						removeWorldLevel(wl.uid);
@@ -1028,7 +1046,7 @@ class WorldRender extends dn.Process {
 			invalidatedCameraBasedRenders = false;
 			renderGrids();
 			updateCurrentHighlight();
-			for(l in project.levels)
+			for(l in curWorld.levels)
 				updateLevelBounds(l);
 		}
 	}

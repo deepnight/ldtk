@@ -51,7 +51,7 @@ class Settings {
 			compactMode: false,
 			grid: true,
 			singleLayerMode: false,
-			emptySpaceSelection: false,
+			emptySpaceSelection: true,
 			tileStacking: true,
 			showDetails: true,
 			useBestGPU: true,

@@ -117,7 +117,8 @@ class FieldTypeConverter {
 		var toType = c.to!=null ? c.to : fd.type;
 
 		// Convert field instances
-		for(l in Editor.ME.project.levels)
+		for(w in Editor.ME.project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances)
 			if( li.def.type==Entities )
 				for( ei in li.entityInstances )

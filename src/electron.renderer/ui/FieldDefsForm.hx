@@ -10,6 +10,7 @@ enum FieldParentType {
 class FieldDefsForm {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 
 	var parentName : Null<String>;
 	var parentType : FieldParentType;
@@ -99,12 +100,18 @@ class FieldDefsForm {
 
 					// Enum picker
 					var ctx = new ui.modal.ContextMenu(ev);
-					ctx.addTitle(L.t._("Pick an existing enum"));
-					for(ed in project.defs.enums) {
-						ctx.add({
-							label: L.untranslated(ed.identifier),
-							cb: ()->_create(ev, F_Enum(ed.uid)),
-						});
+					var tagGroups = project.defs.groupUsingTags(project.defs.enums, ed->ed.tags);
+					if( tagGroups.length<=1 )
+						ctx.addTitle(L.t._("Pick an existing enum"));
+					for(group in tagGroups) {
+						if( tagGroups.length>1 )
+							ctx.addTitle( group.tag==null ? L._Untagged() : L.untranslated(group.tag) );
+						for(ed in group.all) {
+							ctx.add({
+								label: L.untranslated(ed.identifier),
+								cb: ()->_create(ev, F_Enum(ed.uid)),
+							});
+						}
 					}
 
 					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {
@@ -307,11 +314,13 @@ class FieldDefsForm {
 	function onAnyChange() {
 		switch parentType {
 			case FP_Entity:
-				for( l in project.levels )
+				for( w in project.worlds )
+				for( l in w.levels )
 					editor.invalidateLevelCache(l);
 
 			case FP_Level:
-				for( l in project.levels )
+				for( w in project.worlds )
+				for( l in w.levels )
 					editor.invalidateLevelCache(l);
 				editor.worldRender.invalidateAllLevelFields();
 		}
@@ -599,7 +608,8 @@ class FieldDefsForm {
 			var tagEditor = new TagEditor(
 				curField.allowedRefTags,
 				()->onFieldChange(),
-				()->project.defs.getEntityTagCategories()
+				()->project.defs.getAllTagsFrom(project.defs.entities, ed->ed.tags),
+				false
 			);
 			jForm.find(".allowedRefTags").append( tagEditor.jEditor );
 		}

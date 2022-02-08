@@ -3,6 +3,7 @@ package ui;
 class LevelInstanceForm {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 
 	public var jWrapper : js.jquery.JQuery;
 	var level: data.Level;
@@ -22,7 +23,7 @@ class LevelInstanceForm {
 
 		// Delete button
 		jWrapper.find("button.delete").click( (_)->{
-			if( project.levels.length<=1 ) {
+			if( curWorld.levels.length<=1 ) {
 				N.error(L.t._("You can't delete the last level."));
 				return;
 			}
@@ -31,11 +32,11 @@ class LevelInstanceForm {
 				Lang.t._("Are you sure you want to delete this level?"),
 				true,
 				()->{
-					var closest = project.getClosestLevelFrom(level);
+					var closest = curWorld.getClosestLevelFrom(level);
 					new LastChance( L.t._('Level ::id:: removed', {id:level.identifier}), project);
 					var deleted = level;
 					editor.selectLevel( closest );
-					project.removeLevel(deleted);
+					curWorld.removeLevel(deleted);
 					editor.ge.emit( LevelRemoved(deleted) );
 					editor.setWorldMode(true);
 				}
@@ -44,9 +45,9 @@ class LevelInstanceForm {
 
 		// Duplicate button
 		jWrapper.find("button.duplicate").click( (_)->{
-			var copy = project.duplicateLevel(level);
+			var copy = curWorld.duplicateLevel(level);
 			editor.selectLevel(copy);
-			switch project.worldLayout {
+			switch curWorld.worldLayout {
 				case Free, GridVania:
 					copy.worldX += project.defaultGridSize*4;
 					copy.worldY += project.defaultGridSize*4;
@@ -199,7 +200,7 @@ class LevelInstanceForm {
 		// Auto level identifier
 		var i = Input.linkToHtmlInput( level.useAutoIdentifier, jForm.find("#useAutoIdentifier") );
 		i.onChange = ()->{
-			project.applyAutoLevelIdentifiers();
+			curWorld.applyAutoLevelIdentifiers();
 			onFieldChange();
 		}
 
@@ -209,9 +210,9 @@ class LevelInstanceForm {
 
 		// Depth further
 		var jDepthButton = jForm.find(".worldDepthAbove");
-		jDepthButton.prop("disabled", !project.canMoveLevelToDepthFurther(level));
+		jDepthButton.prop("disabled", !curWorld.canMoveLevelToDepthFurther(level));
 		jDepthButton.click(_->{
-			if( project.moveLevelToDepthFurther(level) ) {
+			if( curWorld.moveLevelToDepthFurther(level) ) {
 				onFieldChange();
 				editor.selectWorldDepth(level.worldDepth);
 			}
@@ -219,9 +220,9 @@ class LevelInstanceForm {
 
 		// Depth closer
 		var jDepthButton = jForm.find(".worldDepthBelow");
-		jDepthButton.prop("disabled", !project.canMoveLevelToDepthCloser(level));
+		jDepthButton.prop("disabled", !curWorld.canMoveLevelToDepthCloser(level));
 		jDepthButton.click(_->{
-			if( project.moveLevelToDepthCloser(level) ) {
+			if( curWorld.moveLevelToDepthCloser(level) ) {
 				onFieldChange();
 				editor.selectWorldDepth(level.worldDepth);
 			}
@@ -230,11 +231,11 @@ class LevelInstanceForm {
 		// Coords
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
 		i.onChange = ()->onFieldChange();
-		i.fixValue = v->project.snapWorldGridX(v,false);
+		i.fixValue = v->curWorld.snapWorldGridX(v,false);
 
 		var i = Input.linkToHtmlInput( level.worldY, jForm.find("#worldY"));
 		i.onChange = ()->onFieldChange();
-		i.fixValue = v->project.snapWorldGridY(v,false);
+		i.fixValue = v->curWorld.snapWorldGridY(v,false);
 
 		// Size
 		var tmpWid = level.pxWid;
@@ -243,13 +244,13 @@ class LevelInstanceForm {
 		var i = Input.linkToHtmlInput( tmpWid, jForm.find("#width") );
 		i.setBounds(project.defaultGridSize, 4096);
 		i.onValueChange = (v)->onLevelResized(v, tmpHei);
-		i.fixValue = v->project.snapWorldGridX(v,true);
+		i.fixValue = v->curWorld.snapWorldGridX(v,true);
 
 		var e = jForm.find("#height"); e.replaceWith( e.clone() ); // block undo/redo
 		var i = Input.linkToHtmlInput( tmpHei, jForm.find("#height"));
 		i.setBounds(project.defaultGridSize, 4096);
 		i.onValueChange = (v)->onLevelResized(tmpWid, v);
-		i.fixValue = v->project.snapWorldGridY(v,true);
+		i.fixValue = v->curWorld.snapWorldGridY(v,true);
 
 		// Bg color
 		var c = level.getBgColor();

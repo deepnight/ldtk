@@ -432,8 +432,6 @@ class EditEntityDefs extends ui.modal.Panel {
 	function updateEntityList() {
 		jEntityList.empty();
 
-		var allTags = project.defs.getEntityTagCategories();
-
 		// List context menu
 		ContextMenu.addTo(jEntityList, false, [
 			{
@@ -448,30 +446,31 @@ class EditEntityDefs extends ui.modal.Panel {
 		]);
 
 		// Tags
-		for(t in allTags) {
-			if( allTags.length>1 ) {
+		var tagGroups = project.defs.groupUsingTags(project.defs.entities, (ed)->ed.tags);
+		for( group in tagGroups ) {
+			// Tag name
+			if( tagGroups.length>1 ) {
 				var jSep = new J('<li class="title fixed"/>');
-				jSep.text( t==null ? L.t._("Untagged") : t );
+				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEntityList);
 			}
 
+			// Create sub list
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jEntityList);
 			var jSubList = new J('<ul/>');
 			jSubList.appendTo(jLi);
 
-			// Entities per tag
-			for(ed in project.defs.entities) {
-				if( t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
-					continue;
-
+			for(ed in group.all) {
 				var jEnt = new J('<li class="iconLeft"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
 
+				// HTML entity display preview
 				var preview = JsTools.createEntityPreview(editor.project, ed);
 				preview.appendTo(jEnt);
 
+				// Name
 				jEnt.append('<span class="name">${ed.identifier}</span>');
 				if( curEntity==ed ) {
 					jEnt.addClass("active");
@@ -480,7 +479,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				else
 					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
-
+				// Menu
 				ContextMenu.addTo(jEnt, [
 					{
 						label: L._Copy(),
@@ -513,7 +512,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
 				]);
 
-
+				// Click
 				jEnt.click( function(_) selectEntity(ed) );
 			}
 

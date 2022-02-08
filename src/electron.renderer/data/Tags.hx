@@ -83,9 +83,11 @@ class Tags {
 		return toArray();
 	}
 
-	public static function fromJson(json:Dynamic) : Tags {
+	public static function fromJson(json:Null<Dynamic>) : Tags {
 		var o = new Tags();
-		o.fromArray( JsonTools.readArray(json,[]) );
+		if( json!=null )
+			o.fromArray( JsonTools.readArray(json,[]) );
+
 		return o;
 	}
 

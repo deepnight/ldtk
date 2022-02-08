@@ -347,31 +347,78 @@ class Definitions {
 		return moved;
 	}
 
-	public function getEntityTagCategories() : Array< Null<String> > {
+
+	/**
+		Extract and sort all tags being used in the provided array of T
+	**/
+	public function getAllTagsFrom<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
+		if( filter==null )
+			filter = (_)->return true;
+
 		// List all unique tags
 		var tagMap = new Map();
 		var anyUntagged = false;
 		var anyTagged = false;
-		for(ed in entities) {
-			if( ed.tags.isEmpty() )
+		for(e in all) {
+			if( !filter(e) )
+				continue;
+
+			if( getTags(e).isEmpty() )
 				anyUntagged = true;
 			else
 				anyTagged = true;
-			for(t in ed.tags.iterator())
+			for(t in getTags(e).iterator())
 				tagMap.set(t,t);
 		}
 
-		// Build array & sort it
-		var allTags = [];
+		// Build array of tags & sort it
+		var sortedTags = [];
 		for(t in tagMap)
-			allTags.push(t);
-		allTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
+			sortedTags.push(t);
+		sortedTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
 		if( anyUntagged )
-			allTags.insert(0, null); // untagged category
+			sortedTags.insert(0, null); // untagged category
 
-		return allTags;
+		return sortedTags;
 	}
 
+	/**
+		Return a list of tags used for "recall tags" button in tag editor
+	**/
+	public function getRecallTags<T>(all:Array<T>, getTags:T->Tags) {
+		return getAllTagsFrom(all, getTags, e->!getTags(e).isEmpty() );
+	}
+
+
+	/**
+		Return a grouped array of given T, based on tags
+	**/
+	public function groupUsingTags<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<{ tag:Null<String>, all:Array<T> }> {
+		if( filter==null )
+			filter = (_)->return true;
+
+		var sortedTags = getAllTagsFrom(all, getTags, filter);
+
+		// Build array of elements grouped by tags
+		var out = [];
+		for(tag in sortedTags) {
+			out.push({
+				tag: tag,
+				all: [],
+			});
+			var cur = out[out.length-1];
+			for(e in all)
+				if( filter(e) && ( tag==null && getTags(e).isEmpty() || tag!=null && getTags(e).has(tag) ) )
+					cur.all.push(e);
+		}
+
+		return out;
+	}
+
+
+	/**
+		Return tags to be used for Entities
+	**/
 	public function getRecallEntityTags(?excludes:Array<Tags>) : Array<String> {
 		var all = new Map();
 
@@ -450,6 +497,23 @@ class Definitions {
 
 		_project.tidy();
 		return td;
+	}
+
+	public function isEmbedAtlasBeingUsed(embedId:ldtk.Json.EmbedAtlas) {
+		for(td in tilesets)
+			if( td.embedAtlas==embedId )
+				return true;
+		return false;
+	}
+
+	public function getTilesetIndex(uid:Int) {
+		var idx = 0;
+		for(ed in tilesets)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=tilesets.length ? -1 : idx;
 	}
 
 	public function createTilesetDef() : data.def.TilesetDef {
@@ -628,6 +692,16 @@ class Definitions {
 		return null;
 	}
 
+	public function getInternalEnumIndex(uid:Int) {
+		var idx = 0;
+		for(ed in enums)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=enums.length ? -1 : idx;
+	}
+
 	public function sortEnumDef(from:Int, to:Int) : Null<data.def.EnumDef> {
 		if( from<0 || from>=enums.length || from==to )
 			return null;
@@ -673,10 +747,13 @@ class Definitions {
 		return externalEnums.filter( function(ed) return ed.externalRelPath==relPath );
 	}
 
-	public function getAllEnumsSorted() : Array<data.def.EnumDef> {
-		var all = enums.concat(externalEnums);
-		all.sort( (a,b)->Reflect.compare(a.identifier.toLowerCase(), b.identifier.toLowerCase()) );
-		return all;
+	public function getAllEnumsGroupedByTag() : Array<{ tag:String, all:Array<data.def.EnumDef> }> {
+		var tagGroups = [];
+		var externs = getGroupedExternalEnums();
+		for(ex in externs.keyValueIterator())
+			tagGroups.push({ tag:ex.key, all:ex.value });
+		tagGroups = groupUsingTags(enums, ed->ed.tags).concat(tagGroups);
+		return tagGroups;
 	}
 
 

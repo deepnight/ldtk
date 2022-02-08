@@ -204,6 +204,10 @@ class EntityInstanceEditor extends dn.Process {
 		});
 		jHeader.append(jEdit);
 
+		// Collapser
+		var jCollapser = new J('<div class="collapser" id="extraEntityInfos">Extra entity infos</div>');
+		jCollapser.appendTo(jPropsForm);
+
 		// Extra bits of info
 		var jExtraInfos = new J('<dl class="form extraInfos"/>');
 		jExtraInfos.appendTo(jPropsForm);
@@ -220,7 +224,7 @@ class EntityInstanceEditor extends dn.Process {
 		jExtraInfos.append(jIid);
 
 		// Coords block
-		jExtraInfos.append('<dt>Coords</dt>');
+		jExtraInfos.append('<dt>Coords <info>Coordinates and dimensions in pixels or cells (you can switch the unit by click on it)</info></dt>');
 		var jCoords = new J('<dd class="coords"/>');
 		jCoords.append('<input type="text" name="x"/> <span>,</span> <input type="text" name="y"/> <span> ; </span>');
 		jCoords.append('<input type="text" name="w"/> <span>x</span> <input type="text" name="h"/>');
@@ -274,6 +278,19 @@ class EntityInstanceEditor extends dn.Process {
 		jExtraInfos.append(jCoords);
 		if( UNIT_GRID )
 			i.setUnit(ei._li.def.gridSize);
+
+
+		// References to this
+		var refs = project.getEntityInstancesReferingTo(ei);
+		if( refs.length>0 ) {
+			jExtraInfos.append('<dt>References to this entity <info>This is a list of all other Entities having a Reference field pointing to this Entity.</info> </dt>');
+			jExtraInfos.append('<dd><div class="entityRefs"/></dd>');
+			var jList = jExtraInfos.find(".entityRefs");
+			for(ei in refs) {
+				var jRef = JsTools.createEntityRef(ei, true, jList);
+				jRef.click(_->editor.followEntityRef(ei));
+			}
+		}
 	}
 
 

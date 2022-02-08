@@ -265,11 +265,14 @@ class EntityRender extends dn.Process {
 				continue;
 
 			var col = refEi.getSmartColor(true);
-			var fx = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
-			var fy = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
-			var tx = ei.getRefAttachX(fi.def) - ei.x;
-			var ty = ei.getRefAttachY(fi.def) - ei.y;
-			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
+			var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var thisX = ei.getRefAttachX(fi.def) - ei.x;
+			var thisY = ei.getRefAttachY(fi.def) - ei.y;
+			FieldInstanceRender.renderRefLink(
+				fieldGraphics, col, refX, refY, thisX, thisY, 1,
+				ei.isInSameSpaceAs(refEi) ? Full : CutAtTarget
+			);
 		}
 
 		// Identifier label
@@ -296,8 +299,8 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		final maxFieldsWid = ei.width*1.5;
-		final maxFieldsHei = ei.height*1.5;
+		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
+		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;
 
 		root.x = ei.x;
 		root.y = ei.y;
