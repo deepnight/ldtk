@@ -499,6 +499,16 @@ class Definitions {
 		return td;
 	}
 
+	public function getTilesetIndex(uid:Int) {
+		var idx = 0;
+		for(ed in tilesets)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=tilesets.length ? -1 : idx;
+	}
+
 	public function createTilesetDef() : data.def.TilesetDef {
 		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
 		tilesets.push(td);

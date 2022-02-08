@@ -7651,31 +7651,6 @@ $patternSize : 32px;
 		content: "No tileset";
 	}
 
-	#embedTileset {
-		padding: 16px;
-		border: 1px dashed $bgLighter;
-		border-radius: 4px;
-
-		.desc {
-			color: white;
-		}
-
-		.license {
-			margin-top: 8px;
-			color: $orange;
-		}
-
-		.infos {
-			display: grid;
-			grid-template-columns: auto min-content;
-			align-items: center;
-			padding-bottom: 8px;
-			margin-bottom: 8px;
-			color: $almostWhite;
-			border-bottom: 1px solid $bgLight;
-		}
-	}
-
 	.content {
 		grid-template-rows: min-content min-content min-content auto;
 		grid-template-columns: 300px auto;
@@ -7702,6 +7677,52 @@ $patternSize : 32px;
 				max-width: none;
 				white-space: nowrap;
 			}
+
+			&:not(.embed) {
+				.embedTileset {
+					display: none;
+				}
+			}
+			&.embed {
+				padding-bottom: 0;
+
+				.notEmbed {
+					display: none;
+					&+dd {
+						display: none;
+					}
+				}
+
+				dd.embedTileset {
+					display: block;
+					padding: 16px;
+					margin-top: 16px;
+					margin-bottom: 0;
+					border: 1px dashed $bgLighter;
+					border-radius: 4px;
+					grid-column: 1/3;
+
+					.desc {
+						color: white;
+					}
+
+					.license {
+						margin-top: 8px;
+						color: $orange;
+					}
+
+					.infos {
+						display: grid;
+						grid-template-columns: auto min-content;
+						align-items: center;
+						padding-bottom: 8px;
+						margin-bottom: 8px;
+						color: $almostWhite;
+						border-bottom: 1px solid $bgLight;
+					}
+				}
+			}
+
 		}
 		.pickerWrapper {
 			grid-row: 4/5;
