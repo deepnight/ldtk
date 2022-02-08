@@ -123,6 +123,7 @@ class TagEditor {
 				(t)->onRename(t)
 			);
 		});
+		ui.Tip.attach(jTarget, "Rename this tag everywhere");
 	}
 
 }
