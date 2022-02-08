@@ -34,17 +34,17 @@ Value | Type | Description
 `externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>		Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
-`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Height of the world grid in pixels.
-`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Width of the world grid in pixels.
-`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Height of the world grid in pixels.
+`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Width of the world grid in pixels.
+`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: &lt;`null`&gt;, `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
 `worlds`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;[World](#ldtk-WorldJson) | This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when "Multiple worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the "Multiple worlds" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231
 `appBuildId`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Float | LDtk application build identifier.<br/>		This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.
 `backupLimit`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
 `defaultGridSize`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default grid size for new layers
 `defaultLevelBgColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Default background color of levels
-`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level height
-`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level width
+`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level height
+`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level width
 `defaultPivotX`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default Y pivot (0 to 1) for new entities
 `exportTiled`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
@@ -72,6 +72,8 @@ Value | Type | Description
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Width of the world grid in pixels.
 `worldLayout` | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level height
+`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level width
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 2. Level   
@@ -356,6 +358,7 @@ Value | Type | Description
 `pxWid` | Int | Image width in pixels
 `relPath` | String | Path to the source file, relative to the current project JSON file
 `spacing` | Int | Space in pixels between all tiles
+`tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of user-defined tags to organize the Tilesets
 `tagsSourceEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier
@@ -369,6 +372,7 @@ Value | Type | Description
 `externalRelPath` | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Relative path to the external file providing this Enum
 `iconTilesetUid` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset UID if provided
 `identifier` | String | User defined unique identifier
+`tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of user-defined tags to organize the Enums
 `uid` | Int | Unique Int identifier
 `values` | Array&nbsp;of&nbsp;[Enum&nbsp;value&nbsp;definition](#ldtk-EnumDefValues) | All possible enum values, with their optional Tile infos.
 `externalFileChecksum`<br/><sup class="internal">*Only used by editor*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 

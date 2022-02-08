@@ -13,17 +13,12 @@
 			"externalLevels",
 			"jsonVersion",
 			"levels",
-			"worldGridHeight",
-			"worldGridWidth",
-			"worldLayout",
 			"worlds",
 			"appBuildId",
 			"backupLimit",
 			"backupOnSave",
 			"defaultGridSize",
 			"defaultLevelBgColor",
-			"defaultLevelHeight",
-			"defaultLevelWidth",
 			"defaultPivotX",
 			"defaultPivotY",
 			"exportTiled",
@@ -48,9 +43,10 @@
 				]
 			},
 			"worldGridWidth": {
-				"description": "Width of the world grid in pixels.",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Width of the world grid in pixels.",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"defaultLevelBgColor": {
@@ -104,9 +100,10 @@
 				]
 			},
 			"worldGridHeight": {
-				"description": "Height of the world grid in pixels.",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Height of the world grid in pixels.",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"appBuildId": {
@@ -122,12 +119,13 @@
 				]
 			},
 			"worldLayout": {
-				"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
 				"enum": [
 					"Free",
 					"GridVania",
 					"LinearHorizontal",
-					"LinearVertical"
+					"LinearVertical",
+					null
 				]
 			},
 			"flags": {
@@ -158,9 +156,10 @@
 				]
 			},
 			"defaultLevelWidth": {
-				"description": "Default new level width",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Default new level width",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"pngFilePattern": {
@@ -202,9 +201,10 @@
 				]
 			},
 			"defaultLevelHeight": {
-				"description": "Default new level height",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Default new level height",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"externalLevels": {
@@ -1480,7 +1480,9 @@
 				"levels",
 				"worldGridHeight",
 				"worldGridWidth",
-				"worldLayout"
+				"worldLayout",
+				"defaultLevelHeight",
+				"defaultLevelWidth"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1503,12 +1505,19 @@
 					]
 				},
 				"worldLayout": {
-					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
+					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`",
 					"enum": [
 						"Free",
 						"GridVania",
 						"LinearHorizontal",
-						"LinearVertical"
+						"LinearVertical",
+						null
+					]
+				},
+				"defaultLevelWidth": {
+					"description": "Default new level width",
+					"type": [
+						"integer"
 					]
 				},
 				"levels": {
@@ -1518,6 +1527,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"defaultLevelHeight": {
+					"description": "Default new level height",
+					"type": [
+						"integer"
 					]
 				},
 				"identifier": {
@@ -1635,6 +1650,7 @@
 				"pxWid",
 				"relPath",
 				"spacing",
+				"tags",
 				"tileGridSize",
 				"uid",
 				"savedSelections"
@@ -1726,6 +1742,17 @@
 					"items": {
 						"type": [
 							"object"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"tags": {
+					"description": "An array of user-defined tags to organize the Tilesets",
+					"items": {
+						"type": [
+							"string"
 						]
 					},
 					"type": [
@@ -2296,6 +2323,7 @@
 			"title": "Enum definition",
 			"required": [
 				"identifier",
+				"tags",
 				"uid",
 				"values"
 			],
@@ -2341,6 +2369,17 @@
 					"description": "User defined unique identifier",
 					"type": [
 						"string"
+					]
+				},
+				"tags": {
+					"description": "An array of user-defined tags to organize the Enums",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				}
 			},
