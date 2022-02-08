@@ -78,7 +78,7 @@ The **`Space`** key now fulfills various roles:
 
 The editor UI **font** nows uses *Noto* which offers better readability. While I was at it, I also fixed various font size issues with 2K and 4K monitors.
 
-Enums and Tilesets can now be organized using user defined tags:
+Enums and Tilesets can now be organized using **user defined tags**:
 
 ![](1.0.0/tags.png)
 
