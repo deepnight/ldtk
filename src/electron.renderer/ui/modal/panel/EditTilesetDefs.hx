@@ -289,6 +289,17 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var jSep = new J('<li class="title fixed"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jList);
+
+				// Rename
+				if( group.tag!=null ) {
+					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
+					jSep.append(jLinks);
+					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
+						for(td in project.defs.tilesets)
+							td.tags.rename(group.tag, t);
+						editor.ge.emit( TilesetDefChanged(curTd) );
+					});
+				}
 			}
 
 			var jLi = new J('<li class="subList"/>');
