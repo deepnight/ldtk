@@ -10,12 +10,6 @@ You can create arrays of References, or define restrictions to which kind of Ent
 
 ![](1.0.0/entityRefs.png)
 
-## Simplified world layers
-
-Levels can now be organized in "depth" to support stacked levels.
-
-![](1.0.0/worldLayers.gif)
-
 ## Integrated icons
 
 LDtk now has an integrated icon tileset to make your Entities easier to read in the editor.
@@ -51,9 +45,13 @@ You can right click on an element with a context menu to copy/cut/paste/duplicat
 
 ![](1.0.0/ruleCopy.gif)
 
-## Reworked toolbar and shortcuts
+## Simplified world layers
 
-![](1.0.0/mainBar.png)
+Levels can now be organized in "depth" to support stacked levels.
+
+![](1.0.0/worldLayers.gif)
+
+## Reworked toolbar and shortcuts
 
 The main editor toolbar was reorganized to be a little bit more logical:
 
@@ -67,6 +65,7 @@ The main editor toolbar was reorganized to be a little bit more logical:
    - `T`: tilesets panel (replacing the previous "Toggle tile stacking" option)
  - `F1` to `F10` keys are now associated with layers selection (replacing the previous `0-9` keys shortcuts)
 
+![](1.0.0/mainBar.png)
 
 
 ## User interface improvements
