@@ -139,7 +139,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			// Tag name
 			if( tagGroups.length>1 ) {
 				var jSep = new J('<li class="title fixed"/>');
-				jSep.text( group.tag==null ? L.t._("Untagged") : group.tag );
+				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEnumList);
 			}
 

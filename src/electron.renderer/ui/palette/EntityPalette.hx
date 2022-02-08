@@ -25,7 +25,7 @@ class EntityPalette extends ui.ToolPalette {
 			if( allGroups.length>1 && group.all.length>0 ) {
 				var jTag = new J('<li class="title"/>');
 				jTag.appendTo(jList);
-				jTag.text( group.tag==null ? L.t._("Untagged") : group.tag );
+				jTag.text( group.tag==null ? L._Untagged() : group.tag );
 			}
 
 			var jLi = new J('<li class="subList"> <ul/> </li>');
