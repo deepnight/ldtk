@@ -675,6 +675,16 @@ class Definitions {
 		return null;
 	}
 
+	public function getInternalEnumIndex(uid:Int) {
+		var idx = 0;
+		for(ed in enums)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=enums.length ? -1 : idx;
+	}
+
 	public function sortEnumDef(from:Int, to:Int) : Null<data.def.EnumDef> {
 		if( from<0 || from>=enums.length || from==to )
 			return null;
