@@ -118,6 +118,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			}
 		});
 
+		#if debug
 		add({
 			label: L.untranslated("Update sample maps"),
 			cb: ()->{
@@ -182,6 +183,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 				ui.modal.MetaProgress.start("Updating all sample maps", n);
 			}
 		});
+		#end
 
 		addTitle(L.untranslated("App"));
 		add({
@@ -189,7 +191,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 			cb: ()->JsTools.locateFile(JsTools.getExeDir(), false)
 		});
 
-		addTitle(L.untranslated("App"));
 		add({
 			label: L.untranslated("Open settings dir"),
 			cb: ()->JsTools.locateFile(Settings.getDir(), false)
