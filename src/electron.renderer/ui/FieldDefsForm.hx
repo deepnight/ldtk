@@ -100,12 +100,18 @@ class FieldDefsForm {
 
 					// Enum picker
 					var ctx = new ui.modal.ContextMenu(ev);
-					ctx.addTitle(L.t._("Pick an existing enum"));
-					for(ed in project.defs.enums) {
-						ctx.add({
-							label: L.untranslated(ed.identifier),
-							cb: ()->_create(ev, F_Enum(ed.uid)),
-						});
+					var tagGroups = project.defs.groupUsingTags(project.defs.enums, ed->ed.tags);
+					if( tagGroups.length<=1 )
+						ctx.addTitle(L.t._("Pick an existing enum"));
+					for(group in tagGroups) {
+						if( tagGroups.length>1 )
+							ctx.addTitle( group.tag==null ? L._Untagged() : L.untranslated(group.tag) );
+						for(ed in group.all) {
+							ctx.add({
+								label: L.untranslated(ed.identifier),
+								cb: ()->_create(ev, F_Enum(ed.uid)),
+							});
+						}
 					}
 
 					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {

@@ -730,10 +730,13 @@ class Definitions {
 		return externalEnums.filter( function(ed) return ed.externalRelPath==relPath );
 	}
 
-	public function getAllEnumsSorted() : Array<data.def.EnumDef> {
-		var all = enums.concat(externalEnums);
-		all.sort( (a,b)->Reflect.compare(a.identifier.toLowerCase(), b.identifier.toLowerCase()) );
-		return all;
+	public function getAllEnumsGroupedByTag() : Array<{ tag:String, all:Array<data.def.EnumDef> }> {
+		var tagGroups = [];
+		var externs = getGroupedExternalEnums();
+		for(ex in externs.keyValueIterator())
+			tagGroups.push({ tag:ex.key, all:ex.value });
+		tagGroups = groupUsingTags(enums, ed->ed.tags).concat(tagGroups);
+		return tagGroups;
 	}
 
 
