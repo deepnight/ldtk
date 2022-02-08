@@ -563,14 +563,16 @@ class EditLayerDefs extends ui.modal.Panel {
 				var ted = new ui.TagEditor(
 					cur.requiredTags,
 					()->editor.ge.emit(LayerDefChanged(cur.uid)),
-					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
+					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags]),
+					false
 				);
 				jForm.find("#requiredTags").empty().append( ted.jEditor );
 
 				var ted = new ui.TagEditor(
 					cur.excludedTags,
 					()->editor.ge.emit(LayerDefChanged(cur.uid)),
-					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
+					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags]),
+					false
 				);
 				jForm.find("#excludedTags").empty().append( ted.jEditor );
 
