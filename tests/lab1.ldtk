@@ -10,7 +10,7 @@
 	},
 	"jsonVersion": "1.0.0",
 	"appBuildId": 456754,
-	"nextUid": 108,
+	"nextUid": 109,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -1474,7 +1474,10 @@
 		}
 	], "enums": [
 		{ "identifier": "Item", "uid": 28, "values": [
+			{ "id": "Life", "tileId": 1, "color": 12661055, "__tileSrcRect": [16,0,16,16] },
+			{ "id": "ExtraTime", "tileId": 231, "color": 10917991, "__tileSrcRect": [112,224,16,16] },
 			{ "id": "Necklace", "tileId": 791, "color": 7954746, "__tileSrcRect": [112,784,16,16] },
+			{ "id": "Treasure", "tileId": 965, "color": 12294485, "__tileSrcRect": [80,960,16,16] },
 			{ "id": "GoldGem", "tileId": 986, "color": 11701568, "__tileSrcRect": [160,976,16,16] },
 			{ "id": "BlueGem", "tileId": 982, "color": 6849988, "__tileSrcRect": [96,976,16,16] },
 			{ "id": "GreenGem", "tileId": 994, "color": 5874551, "__tileSrcRect": [32,992,16,16] }
@@ -1488,27 +1491,15 @@
 			{ "id": "WaitForPlayer", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "WaitForTrigger", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "AlwaysMoving", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
+		], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": ["level_design"] },
 		{ "identifier": "RoomType", "uid": 92, "values": [ { "id": "Treasure", "tileId": null, "color": 16763904, "__tileSrcRect": null }, { "id": "Boss", "tileId": null, "color": 16711680, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": ["level_design"] },
 		{ "identifier": "TriggerType", "uid": 98, "values": [
 			{ "id": "OnPlayerTouch", "tileId": 240, "color": 10066329, "__tileSrcRect": [0,240,16,16] },
 			{ "id": "OnEnemyTouch", "tileId": 72, "color": 8947865, "__tileSrcRect": [128,64,16,16] },
 			{ "id": "Sight", "tileId": 68, "color": 10066329, "__tileSrcRect": [64,64,16,16] }
-		], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["level_design"] }
-	], "externalEnums": [
-		{ "identifier": "A", "uid": 99, "values": [
-			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "A1", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "A3", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70", "tags": [] },
-		{ "identifier": "B", "uid": 100, "values": [{ "id": "B0", "tileId": null, "color": 0, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70", "tags": [] },
-		{ "identifier": "C", "uid": 101, "values": [
-			{ "id": "C0", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C1", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "enumFiles/TypesTest.hx", "externalFileChecksum": "e01092ff71df428d14dc2d6018651a70", "tags": [] }
-	], "levelFields": [
+		], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["level_design"] },
+		{ "identifier": "EnemyType", "uid": 108, "values": [], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["game_element"] }
+	], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "RoomType",
 			"__type": "LocalEnum.RoomType",
