@@ -522,16 +522,14 @@ class Level {
 
 	public function getFirstError() : Null<LevelError> {
 		for(li in layerInstances)
-			switch li.def.type {
-				case IntGrid:
-				case Entities:
-					for(ei in li.entityInstances)
-						if( ei.hasAnyFieldError() )
-							return InvalidEntityField(ei);
+			for(ei in li.entityInstances) {
+				if( !li.def.isEntityAllowedFromTags(ei) )
+					return InvalidEntityTag(ei);
 
-				case Tiles:
-				case AutoLayer:
+				if( ei.hasAnyFieldError() )
+					return InvalidEntityField(ei);
 			}
+
 
 		if( bgRelPath!=null && !_project.isImageLoaded(bgRelPath) )
 			return InvalidBgImage;

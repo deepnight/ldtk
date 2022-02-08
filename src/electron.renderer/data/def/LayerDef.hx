@@ -368,6 +368,13 @@ class LayerDef {
 		return null;
 	}
 
+	public inline function isEntityAllowedFromTags(ei:data.inst.EntityInstance) {
+		if( !excludedTags.isEmpty() && excludedTags.hasAnyTagFoundIn(ei.def.tags) )
+			return false;
+		else
+			return requiredTags.isEmpty() || requiredTags.hasAnyTagFoundIn(ei.def.tags);
+	}
+
 	public function getParentRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {
 		for( rg in autoRuleGroups )
 		for( rr in rg.rules )

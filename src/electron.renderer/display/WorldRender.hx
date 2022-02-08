@@ -923,8 +923,9 @@ class WorldRender extends dn.Process {
 				tf.text +=
 					" <ERR: " + ( switch error {
 						case null: '???';
-						case InvalidEntityField(ei): '${ei.def.identifier}';
-						case InvalidBgImage: 'bg image';
+						case InvalidEntityTag(ei): 'Incorrect tag: ${ei.def.identifier}';
+						case InvalidEntityField(ei): 'Invalid field value: ${ei.def.identifier}';
+						case InvalidBgImage: 'Bg image';
 					}) + ">";
 			}
 
