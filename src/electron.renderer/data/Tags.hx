@@ -21,7 +21,7 @@ class Tags {
 	public inline function isEmpty() return count()==0;
 
 	@:allow(ui.TagEditor)
-	inline function cleanUpTag(k:String) : Null<String> {
+	public static inline function cleanUpTag(k:String) : Null<String> {
 		k = Project.cleanupIdentifier(k,Free);
 		return k==null || k=="_" || k=="" ? null : k;
 	}

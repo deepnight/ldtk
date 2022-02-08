@@ -141,6 +141,17 @@ class EditEnumDefs extends ui.modal.Panel {
 				var jSep = new J('<li class="title fixed"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEnumList);
+
+				// Rename
+				if( group.tag!=null ) {
+					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
+					jSep.append(jLinks);
+					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
+						for(ed in project.defs.enums)
+							ed.tags.rename(group.tag, t);
+						editor.ge.emit( EnumDefChanged );
+					});
+				}
 			}
 
 			var jLi = new J('<li class="subList"/>');
