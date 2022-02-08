@@ -50,7 +50,6 @@ class Tags {
 	}
 
 	public inline function has(k) {
-		k = cleanUpTag(k);
 		return k!=null && map.exists(k);
 	}
 
