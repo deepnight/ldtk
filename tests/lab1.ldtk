@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456755,
-	"nextUid": 109,
+	"appBuildId": 456759,
+	"nextUid": 110,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -62,6 +62,33 @@
 		},
 		{
 			"__type": "Entities",
+			"identifier": "Gameplay_entities",
+			"type": "Entities",
+			"uid": 2,
+			"gridSize": 8,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
+			"displayOpacity": 1,
+			"inactiveOpacity": 0.8,
+			"hideInList": false,
+			"hideFieldsWhenInactive": false,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"parallaxFactorX": 0,
+			"parallaxFactorY": 0,
+			"parallaxScaling": true,
+			"requiredTags": [],
+			"excludedTags": ["region"],
+			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"autoTilesetDefUid": null,
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
+		{
+			"__type": "Entities",
 			"identifier": "Regions",
 			"type": "Entities",
 			"uid": 8,
@@ -79,33 +106,6 @@
 			"parallaxScaling": true,
 			"requiredTags": ["region"],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
-			"autoTilesetDefUid": null,
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
-		},
-		{
-			"__type": "Entities",
-			"identifier": "Entities",
-			"type": "Entities",
-			"uid": 2,
-			"gridSize": 8,
-			"guideGridWid": 0,
-			"guideGridHei": 0,
-			"displayOpacity": 1,
-			"inactiveOpacity": 0.8,
-			"hideInList": false,
-			"hideFieldsWhenInactive": true,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"parallaxFactorX": 0,
-			"parallaxFactorY": 0,
-			"parallaxScaling": true,
-			"requiredTags": [],
-			"excludedTags": ["region"],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
@@ -1481,7 +1481,7 @@
 			{ "id": "GoldGem", "tileId": 986, "color": 11701568, "__tileSrcRect": [160,976,16,16] },
 			{ "id": "BlueGem", "tileId": 982, "color": 6849988, "__tileSrcRect": [96,976,16,16] },
 			{ "id": "GreenGem", "tileId": 994, "color": 5874551, "__tileSrcRect": [32,992,16,16] }
-		], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["game_element"] },
+		], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["gameplay"] },
 		{ "identifier": "AreaType", "uid": 34, "values": [
 			{ "id": "Exit", "tileId": 243, "color": 10458705, "__tileSrcRect": [48,240,16,16] },
 			{ "id": "SecretArea", "tileId": 68, "color": 9606807, "__tileSrcRect": [64,64,16,16] },
@@ -1498,7 +1498,7 @@
 			{ "id": "OnEnemyTouch", "tileId": 72, "color": 8947865, "__tileSrcRect": [128,64,16,16] },
 			{ "id": "Sight", "tileId": 68, "color": 10066329, "__tileSrcRect": [64,64,16,16] }
 		], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["level_design"] },
-		{ "identifier": "EnemyType", "uid": 108, "values": [], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["game_element"] }
+		{ "identifier": "EnemyType", "uid": 108, "values": [], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["gameplay"] }
 	], "externalEnums": [], "levelFields": [
 		{
 			"identifier": "RoomType",
@@ -1587,91 +1587,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "Regions",
-					"__type": "Entities",
-					"__cWid": 35,
-					"__cHei": 24,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "16fe6236-66b0-11ec-b9f9-57f541d4bdb8",
-					"levelId": 0,
-					"layerDefUid": 8,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 3543808,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Rect",
-							"__grid": [1,8],
-							"__pivot": [0,0],
-							"__tags": ["region"],
-							"__tile": { "tilesetUid": 97, "srcRect": [128,48,16,16] },
-							"iid": "16fe6238-66b0-11ec-b9f9-7d67be789a25",
-							"width": 104,
-							"height": 48,
-							"defUid": 1,
-							"px": [8,64],
-							"fieldInstances": [
-								{
-									"__identifier": "type",
-									"__value": "Trigger",
-									"__type": "LocalEnum.AreaType",
-									"defUid": 35,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Trigger"]
-									}]
-								},
-								{
-									"__identifier": "script",
-									"__value": "scripts/someScript.lua",
-									"__type": "FilePath",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["scripts/someScript.lua"]
-									}]
-								},
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Circle",
-							"__grid": [27,9],
-							"__pivot": [0.5,0.5],
-							"__tags": ["region"],
-							"__tile": null,
-							"iid": "16fe6239-66b0-11ec-b9f9-9f91919e7cbf",
-							"width": 40,
-							"height": 40,
-							"defUid": 47,
-							"px": [220,76],
-							"fieldInstances": [{
-								"__identifier": "type",
-								"__value": "Trigger",
-								"__type": "LocalEnum.AreaType",
-								"defUid": 67,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["Trigger"]
-								}]
-							}]
-						}
-					]
-				},
-				{
-					"__identifier": "Entities",
+					"__identifier": "Gameplay_entities",
 					"__type": "Entities",
 					"__cWid": 35,
 					"__cHei": 24,
@@ -1752,6 +1668,90 @@
 								"__type": "Bool",
 								"defUid": 55,
 								"realEditorValues": [null]
+							}]
+						}
+					]
+				},
+				{
+					"__identifier": "Regions",
+					"__type": "Entities",
+					"__cWid": 35,
+					"__cHei": 24,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "16fe6236-66b0-11ec-b9f9-57f541d4bdb8",
+					"levelId": 0,
+					"layerDefUid": 8,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 3543808,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Rect",
+							"__grid": [1,8],
+							"__pivot": [0,0],
+							"__tags": ["region"],
+							"__tile": { "tilesetUid": 97, "srcRect": [128,48,16,16] },
+							"iid": "16fe6238-66b0-11ec-b9f9-7d67be789a25",
+							"width": 104,
+							"height": 48,
+							"defUid": 1,
+							"px": [8,64],
+							"fieldInstances": [
+								{
+									"__identifier": "type",
+									"__value": "Trigger",
+									"__type": "LocalEnum.AreaType",
+									"defUid": 35,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Trigger"]
+									}]
+								},
+								{
+									"__identifier": "script",
+									"__value": "scripts/someScript.lua",
+									"__type": "FilePath",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["scripts/someScript.lua"]
+									}]
+								},
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Circle",
+							"__grid": [27,9],
+							"__pivot": [0.5,0.5],
+							"__tags": ["region"],
+							"__tile": null,
+							"iid": "16fe6239-66b0-11ec-b9f9-9f91919e7cbf",
+							"width": 40,
+							"height": 40,
+							"defUid": 47,
+							"px": [220,76],
+							"fieldInstances": [{
+								"__identifier": "type",
+								"__value": "Trigger",
+								"__type": "LocalEnum.AreaType",
+								"defUid": 67,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["Trigger"]
+								}]
 							}]
 						}
 					]
@@ -3048,6 +3048,98 @@
 					"entityInstances": []
 				},
 				{
+					"__identifier": "Gameplay_entities",
+					"__type": "Entities",
+					"__cWid": 59,
+					"__cHei": 21,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "16ff4c99-66b0-11ec-b9f9-e5943ba5382d",
+					"levelId": 52,
+					"layerDefUid": 2,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 8574905,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Item",
+							"__grid": [12,9],
+							"__pivot": [0.5,1],
+							"__tags": ["interactive"],
+							"__tile": { "tilesetUid": 97, "srcRect": [112,784,16,16] },
+							"iid": "16ff4c9a-66b0-11ec-b9f9-bfb915a5777e",
+							"width": 12,
+							"height": 12,
+							"defUid": 29,
+							"px": [100,80],
+							"fieldInstances": [{
+								"__identifier": "Item",
+								"__value": "Necklace",
+								"__type": "LocalEnum.Item",
+								"defUid": 30,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["Necklace"]
+								}]
+							}]
+						},
+						{
+							"__identifier": "Door",
+							"__grid": [23,11],
+							"__pivot": [0.5,1],
+							"__tags": ["interactive"],
+							"__tile": { "tilesetUid": 9, "srcRect": [200,152,8,24] },
+							"iid": "16ff4c9b-66b0-11ec-b9f9-910809653fc4",
+							"width": 6,
+							"height": 24,
+							"defUid": 7,
+							"px": [188,96],
+							"fieldInstances": [{
+								"__identifier": "locked",
+								"__value": true,
+								"__type": "Bool",
+								"defUid": 55,
+								"realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}]
+							}]
+						},
+						{
+							"__identifier": "Door",
+							"__grid": [44,11],
+							"__pivot": [0.5,1],
+							"__tags": ["interactive"],
+							"__tile": { "tilesetUid": 9, "srcRect": [200,152,8,24] },
+							"iid": "16ff4c9c-66b0-11ec-b9f9-af1197d2605d",
+							"width": 6,
+							"height": 24,
+							"defUid": 7,
+							"px": [356,96],
+							"fieldInstances": [{
+								"__identifier": "locked",
+								"__value": true,
+								"__type": "Bool",
+								"defUid": 55,
+								"realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}]
+							}]
+						}
+					]
+				},
+				{
 					"__identifier": "Regions",
 					"__type": "Entities",
 					"__cWid": 59,
@@ -3148,98 +3240,6 @@
 								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
 								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
 							]
-						}
-					]
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 59,
-					"__cHei": 21,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "16ff4c99-66b0-11ec-b9f9-e5943ba5382d",
-					"levelId": 52,
-					"layerDefUid": 2,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 8574905,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Item",
-							"__grid": [12,9],
-							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
-							"__tile": { "tilesetUid": 97, "srcRect": [112,784,16,16] },
-							"iid": "16ff4c9a-66b0-11ec-b9f9-bfb915a5777e",
-							"width": 12,
-							"height": 12,
-							"defUid": 29,
-							"px": [100,80],
-							"fieldInstances": [{
-								"__identifier": "Item",
-								"__value": "Necklace",
-								"__type": "LocalEnum.Item",
-								"defUid": 30,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["Necklace"]
-								}]
-							}]
-						},
-						{
-							"__identifier": "Door",
-							"__grid": [23,11],
-							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
-							"__tile": { "tilesetUid": 9, "srcRect": [200,152,8,24] },
-							"iid": "16ff4c9b-66b0-11ec-b9f9-910809653fc4",
-							"width": 6,
-							"height": 24,
-							"defUid": 7,
-							"px": [188,96],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": true,
-								"__type": "Bool",
-								"defUid": 55,
-								"realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ true ]
-								}]
-							}]
-						},
-						{
-							"__identifier": "Door",
-							"__grid": [44,11],
-							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
-							"__tile": { "tilesetUid": 9, "srcRect": [200,152,8,24] },
-							"iid": "16ff4c9c-66b0-11ec-b9f9-af1197d2605d",
-							"width": 6,
-							"height": 24,
-							"defUid": 7,
-							"px": [356,96],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": true,
-								"__type": "Bool",
-								"defUid": 55,
-								"realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ true ]
-								}]
-							}]
 						}
 					]
 				},
@@ -4983,96 +4983,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "Regions",
-					"__type": "Entities",
-					"__cWid": 32,
-					"__cHei": 27,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "17008516-66b0-11ec-b9f9-177683aa03ae",
-					"levelId": 41,
-					"layerDefUid": 8,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 4225315,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Rect",
-							"__grid": [28,5],
-							"__pivot": [0,0],
-							"__tags": ["region"],
-							"__tile": { "tilesetUid": 97, "srcRect": [48,240,16,16] },
-							"iid": "17012150-66b0-11ec-b9f9-f3778a913d48",
-							"width": 32,
-							"height": 40,
-							"defUid": 1,
-							"px": [224,40],
-							"fieldInstances": [
-								{
-									"__identifier": "type",
-									"__value": "Exit",
-									"__type": "LocalEnum.AreaType",
-									"defUid": 35,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Exit"]
-									}]
-								},
-								{ "__identifier": "script", "__value": null, "__type": "FilePath", "defUid": 49, "realEditorValues": [] },
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Rect",
-							"__grid": [17,17],
-							"__pivot": [0,0],
-							"__tags": ["region"],
-							"__tile": { "tilesetUid": 97, "srcRect": [128,48,16,16] },
-							"iid": "17012151-66b0-11ec-b9f9-894b253385e2",
-							"width": 80,
-							"height": 72,
-							"defUid": 1,
-							"px": [136,136],
-							"fieldInstances": [
-								{
-									"__identifier": "type",
-									"__value": "Trigger",
-									"__type": "LocalEnum.AreaType",
-									"defUid": 35,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Trigger"]
-									}]
-								},
-								{
-									"__identifier": "script",
-									"__value": "scripts/someScript.lua",
-									"__type": "FilePath",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["scripts/someScript.lua"]
-									}]
-								},
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
-							]
-						}
-					]
-				},
-				{
-					"__identifier": "Entities",
+					"__identifier": "Gameplay_entities",
 					"__type": "Entities",
 					"__cWid": 32,
 					"__cHei": 27,
@@ -5204,6 +5115,95 @@
 									"params": ["BlueGem"]
 								}]
 							}]
+						}
+					]
+				},
+				{
+					"__identifier": "Regions",
+					"__type": "Entities",
+					"__cWid": 32,
+					"__cHei": 27,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "17008516-66b0-11ec-b9f9-177683aa03ae",
+					"levelId": 41,
+					"layerDefUid": 8,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 4225315,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Rect",
+							"__grid": [28,5],
+							"__pivot": [0,0],
+							"__tags": ["region"],
+							"__tile": { "tilesetUid": 97, "srcRect": [48,240,16,16] },
+							"iid": "17012150-66b0-11ec-b9f9-f3778a913d48",
+							"width": 32,
+							"height": 40,
+							"defUid": 1,
+							"px": [224,40],
+							"fieldInstances": [
+								{
+									"__identifier": "type",
+									"__value": "Exit",
+									"__type": "LocalEnum.AreaType",
+									"defUid": 35,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Exit"]
+									}]
+								},
+								{ "__identifier": "script", "__value": null, "__type": "FilePath", "defUid": 49, "realEditorValues": [] },
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Rect",
+							"__grid": [17,17],
+							"__pivot": [0,0],
+							"__tags": ["region"],
+							"__tile": { "tilesetUid": 97, "srcRect": [128,48,16,16] },
+							"iid": "17012151-66b0-11ec-b9f9-894b253385e2",
+							"width": 80,
+							"height": 72,
+							"defUid": 1,
+							"px": [136,136],
+							"fieldInstances": [
+								{
+									"__identifier": "type",
+									"__value": "Trigger",
+									"__type": "LocalEnum.AreaType",
+									"defUid": 35,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Trigger"]
+									}]
+								},
+								{
+									"__identifier": "script",
+									"__value": "scripts/someScript.lua",
+									"__type": "FilePath",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["scripts/someScript.lua"]
+									}]
+								},
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+							]
 						}
 					]
 				},
@@ -6564,32 +6564,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "Regions",
-					"__type": "Entities",
-					"__cWid": 27,
-					"__cHei": 24,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "170259d1-66b0-11ec-b9f9-f386862d5ee3",
-					"levelId": 56,
-					"layerDefUid": 8,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 2849335,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
+					"__identifier": "Gameplay_entities",
 					"__type": "Entities",
 					"__cWid": 27,
 					"__cHei": 24,
@@ -6678,6 +6653,31 @@
 							]
 						}
 					]
+				},
+				{
+					"__identifier": "Regions",
+					"__type": "Entities",
+					"__cWid": 27,
+					"__cHei": 24,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "170259d1-66b0-11ec-b9f9-f386862d5ee3",
+					"levelId": 56,
+					"layerDefUid": 8,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 2849335,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
 				},
 				{
 					"__identifier": "Collisions",
@@ -7708,32 +7708,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "Regions",
-					"__type": "Entities",
-					"__cWid": 18,
-					"__cHei": 14,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "1702cf06-66b0-11ec-b9f9-f7be7dbf46ff",
-					"levelId": 66,
-					"layerDefUid": 8,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 2953654,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
+					"__identifier": "Gameplay_entities",
 					"__type": "Entities",
 					"__cWid": 18,
 					"__cHei": 14,
@@ -7811,6 +7786,31 @@
 							}]
 						}
 					]
+				},
+				{
+					"__identifier": "Regions",
+					"__type": "Entities",
+					"__cWid": 18,
+					"__cHei": 14,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "1702cf06-66b0-11ec-b9f9-f7be7dbf46ff",
+					"levelId": 66,
+					"layerDefUid": 8,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 2953654,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
 				},
 				{
 					"__identifier": "Collisions",
@@ -8252,32 +8252,7 @@
 					"entityInstances": []
 				},
 				{
-					"__identifier": "Regions",
-					"__type": "Entities",
-					"__cWid": 45,
-					"__cHei": 36,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "17036b46-66b0-11ec-b9f9-c1c02895a8f6",
-					"levelId": 78,
-					"layerDefUid": 8,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 2759164,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": []
-				},
-				{
-					"__identifier": "Entities",
+					"__identifier": "Gameplay_entities",
 					"__type": "Entities",
 					"__cWid": 45,
 					"__cHei": 36,
@@ -8383,6 +8358,31 @@
 							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 55, "realEditorValues": [] }]
 						}
 					]
+				},
+				{
+					"__identifier": "Regions",
+					"__type": "Entities",
+					"__cWid": 45,
+					"__cHei": 36,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "17036b46-66b0-11ec-b9f9-c1c02895a8f6",
+					"levelId": 78,
+					"layerDefUid": 8,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 2759164,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": []
 				},
 				{
 					"__identifier": "Collisions",
@@ -10570,6 +10570,45 @@
 					"entityInstances": []
 				},
 				{
+					"__identifier": "Gameplay_entities",
+					"__type": "Entities",
+					"__cWid": 21,
+					"__cHei": 15,
+					"__gridSize": 8,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "1704f1e7-66b0-11ec-b9f9-874ccfbbd520",
+					"levelId": 96,
+					"layerDefUid": 2,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 2087719,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Player",
+							"__grid": [13,6],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "tilesetUid": 97, "srcRect": [80,240,16,16] },
+							"iid": "41ac15b0-66b0-11ec-83cd-f926d01ebf4c",
+							"width": 12,
+							"height": 16,
+							"defUid": 40,
+							"px": [108,56],
+							"fieldInstances": []
+						}
+					]
+				},
+				{
 					"__identifier": "Regions",
 					"__type": "Entities",
 					"__cWid": 21,
@@ -10590,45 +10629,6 @@
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 506001,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Player",
-							"__grid": [13,6],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 97, "srcRect": [80,240,16,16] },
-							"iid": "170259d2-66b0-11ec-b9f9-c77da7ffde5d",
-							"width": 12,
-							"height": 16,
-							"defUid": 40,
-							"px": [108,56],
-							"fieldInstances": []
-						}
-					]
-				},
-				{
-					"__identifier": "Entities",
-					"__type": "Entities",
-					"__cWid": 21,
-					"__cHei": 15,
-					"__gridSize": 8,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "1704f1e7-66b0-11ec-b9f9-874ccfbbd520",
-					"levelId": 96,
-					"layerDefUid": 2,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 2087719,
 					"overrideTilesetUid": null,
 					"gridTiles": [],
 					"entityInstances": []
