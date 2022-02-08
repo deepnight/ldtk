@@ -18,7 +18,7 @@ class EntityPalette extends ui.ToolPalette {
 		var allGroups = project.defs.groupUsingTags(
 			project.defs.entities,
 			(ed)->ed.tags,
-			(ed)->ed.tags.hasAnyTagFoundIn(ld.excludedTags) && ( ld.requiredTags.isEmpty() || ed.tags.hasAnyTagFoundIn(ld.requiredTags) )
+			(ed)->!ed.tags.hasAnyTagFoundIn(ld.excludedTags) && ( ld.requiredTags.isEmpty() || ed.tags.hasAnyTagFoundIn(ld.requiredTags) )
 		);
 		for(group in allGroups) {
 			// Tag header
