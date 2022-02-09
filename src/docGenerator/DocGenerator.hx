@@ -162,6 +162,10 @@ class DocGenerator {
 		Sys.println("Generating JSON schema...");
 		genJsonSchema(xml, className, xmlPath, jsonPath);
 
+		// Dump version to version.txt
+		Sys.println("Dumping version file...");
+		sys.io.File.saveContent("docs/version.txt", appVersion.numbers);
+
 		// Cleanup
 		if( deleteXml ) {
 			Sys.println("Deleting XML file");
