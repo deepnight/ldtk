@@ -1879,13 +1879,15 @@ textarea {
 
 	.empty {
 		flex: 0 0 auto;
-		padding: 4px;
-		padding-right: 16px;
+		padding: 4px 8px;
+		margin-right: 16px;
 		font-size: 9pt;
 		white-space: nowrap;
 		color: $bgLighter;
 		font-style: italic;
 		cursor: pointer;
+		border: 1px dashed $bgLight;
+		border-radius: 4px;
 
 		&:hover {
 			color: $orange;

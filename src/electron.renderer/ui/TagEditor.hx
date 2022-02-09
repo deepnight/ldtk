@@ -25,20 +25,30 @@ class TagEditor {
 
 		var jButtons = new J('<div class="actions"/>');
 		jButtons.appendTo(jEditor);
+
+		if( tags.isEmpty() ) {
+			// "No tag" label
+			var jEmpty = new J('<span class="empty"></span>');
+			jEmpty.text("(No tag)");
+			if( allowEditing )
+				jEmpty.click( ev->{
+					createInput();
+					jEmpty.remove();
+					jEditor.append(jButtons); // move to end
+				});
+			else
+				jEmpty.click( ev->onRecallTag(ev) );
+			jEditor.prepend(jEmpty);
+		}
+
 		if( allowEditing ) {
 			// Create new tag
 			var jAdd = new J('<button class="add dark"> <span class="icon add"/> </button>');
 			jAdd.appendTo(jButtons);
 			jAdd.click( _->{
 				createInput();
-				jEditor.append(jButtons);
+				jEditor.append(jButtons); // move to end
 			});
-		}
-		else if( tags.isEmpty() ) {
-			// "No tag" label
-			var jEmpty = new J('<span class="empty">(No tag selected)</span>');
-			jEditor.prepend(jEmpty);
-			jEmpty.click( ev->onRecallTag(ev) );
 		}
 
 		// Recall button
@@ -85,6 +95,7 @@ class TagEditor {
 
 
 	function createInput(?jTarget:js.jquery.JQuery, k="") {
+		jEditor.find(".empty").remove();
 		var jInput = new J('<input type="text"/>');
 		if( jTarget!=null ) {
 			jInput.css({ width:jTarget.outerWidth()+"px" });
