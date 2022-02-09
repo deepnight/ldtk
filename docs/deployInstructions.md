@@ -27,9 +27,11 @@
 ## Docs
 - [ ] Build QuickType files
 - [ ] Upload Changelog to FTP
+- [ ] Upload Changelog images to FTP
 - [ ] Upload JSON Doc to FTP
 - [ ] Upload JSON Schema to FTP
 - [ ] Upload QuickType parsers
+- [ ] Check "next" folder on FTP
 
 ## Publish
 - [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
