@@ -237,15 +237,17 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.linkEvent( EntityDefChanged );
 
 		// Entity render mode
-		var jSelect = jRenderModeBlock.find(".renderMode");
-		jSelect.empty();
+		var jRenderSelect = jRenderModeBlock.find(".renderMode");
+		jRenderSelect.empty();
+		var jOptGroup = new J('<optgroup label="Shapes"/>');
+		jOptGroup.appendTo(jRenderSelect);
 		for(k in ldtk.Json.EntityRenderMode.getConstructors()) {
 			var mode = ldtk.Json.EntityRenderMode.createByName(k);
 			if( mode==Tile )
 				continue;
 
-			var jOpt = new J('<option value="$k"/>');
-			jOpt.appendTo(jSelect);
+			var jOpt = new J('<option value="!$k"/>');
+			jOpt.appendTo(jOptGroup);
 			jOpt.text(switch mode {
 				case Rectangle: Lang.t._("Rectangle");
 				case Ellipse: Lang.t._("Ellipse");
@@ -253,62 +255,43 @@ class EditEntityDefs extends ui.modal.Panel {
 				case Tile: null;
 			});
 		}
-		// Append embed atlas
-		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
-			var jOpt = new J('<option value="Embed.$k"/>');
-			jOpt.appendTo(jSelect);
-			var inf = Lang.getEmbedAtlasInfos(ldtk.Json.EmbedAtlas.createByName(k));
-			jOpt.text(inf.displayName);
-		}
-		// Append tilesets
-		for( td in project.defs.tilesets ) {
-			if( td.isUsingEmbedAtlas() )
-				continue;
-			var jOpt = new J('<option value="Tile.${td.uid}"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text( Lang.t._("Tile from ::name::", {name:td.identifier}) );
-		}
+		JsTools.appendTilesetsToSelect(project, jRenderSelect);
 
 		// Pick render mode
-		jSelect.change( function(ev) {
+		jRenderSelect.change( function(ev) {
 			var oldMode = curEntity.renderMode;
-			var v : String = jSelect.val();
-			var prefix = v.indexOf(".")<0 ? null : v.substr(0,v.indexOf("."));
-			var mode : ldtk.Json.EntityRenderMode = switch prefix {
-				case "Tile": Tile;
-				case "Embed": Tile;
-				case _ : ldtk.Json.EntityRenderMode.createByName(v);
-			}
-			curEntity.renderMode = mode;
 			curEntity._oldTileId = null;
 			curEntity.tileRect = null;
-			if( mode==Tile ) {
-				var suffix = v.substr(v.indexOf(".")+1);
-				switch prefix {
-					case "Tile":
-						var tdUid = Std.parseInt(suffix);
-						curEntity.tilesetId = tdUid;
 
-					case "Embed":
-						var embedId = ldtk.Json.EmbedAtlas.createByName(suffix);
-						var td = project.defs.getEmbedTileset(embedId);
-						curEntity.tilesetId = td.uid;
-
-					case _:
-				}
-			}
+			var raw : String = jRenderSelect.val();
+			if( M.isValidNumber(Std.parseInt(raw)) ) {
+				// Tileset UID
+				curEntity.renderMode = Tile;
+				curEntity.tilesetId = Std.parseInt(raw);
+		}
 			else {
-				curEntity.tilesetId = null;
-				curEntity.tileRenderMode = FitInside;
+				if( raw.indexOf("!")==0 ) {
+					// Shape
+					curEntity.renderMode = ldtk.Json.EntityRenderMode.createByName( raw.substr(1) );
+					curEntity.tilesetId = null;
+				}
+				else {
+					// Embed tileset
+					var embedId = ldtk.Json.EmbedAtlas.createByName(raw);
+					N.debug(embedId);
+					var td = project.defs.getEmbedTileset(embedId);
+					curEntity.renderMode = Tile;
+					curEntity.tilesetId = td.uid;
+				}
 			}
 
 			// Re-init opacities
-			if( oldMode!=Tile && mode==Tile ) {
+			if( oldMode!=Tile && curEntity.renderMode==Tile ) {
 				curEntity.tileOpacity = 1;
 				curEntity.fillOpacity = 0.08;
 				curEntity.lineOpacity = 0;
 			}
-			if( oldMode==Tile && mode!=Tile ) {
+			if( oldMode==Tile && curEntity.renderMode!=Tile ) {
 				curEntity.tileOpacity = 1;
 				curEntity.fillOpacity = 1;
 				curEntity.lineOpacity = 1;
@@ -320,13 +303,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		if( curEntity.tilesetId!=null ) {
 			var td = project.defs.getTilesetDef(curEntity.tilesetId);
 			if( td.isUsingEmbedAtlas() )
-				jSelect.val("Embed."+td.embedAtlas);
+				jRenderSelect.val( td.embedAtlas.getName() );
 			else
-				jSelect.val("Tile."+td.uid);
+				jRenderSelect.val( Std.string(td.uid) );
 		}
 		else
-			jSelect.val( curEntity.renderMode.getName() );
-			// jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
+			jRenderSelect.val( "!"+curEntity.renderMode.getName() );
 
 
 		// Tile render mode
