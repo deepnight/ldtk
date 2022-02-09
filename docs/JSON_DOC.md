@@ -66,14 +66,14 @@ A World contains multiple levels, and it has its own layout settings.
 
 Value | Type | Description
 -- | -- | --
-`identifier` | String | User defined unique identifier
-`iid` | String | Unique instance identifer
-`levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
-`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Height of the world grid in pixels.
-`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Width of the world grid in pixels.
-`worldLayout` | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
-`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level height
-`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level width
+`identifier`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | User defined unique identifier
+`iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | Unique instance identifer
+`levels`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Height of the world grid in pixels.
+`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Width of the world grid in pixels.
+`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Default new level height
+`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Default new level width
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 2. Level   
