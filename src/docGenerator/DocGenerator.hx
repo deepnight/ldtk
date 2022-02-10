@@ -724,6 +724,8 @@ class DocGenerator {
 								// Basic types
 								types.push( Basic(t) );
 
+							case "Dynamic":
+
 							case _:
 								var global = getGlobalType(t);
 								if( global==null )
