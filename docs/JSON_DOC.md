@@ -8,7 +8,8 @@
        - [Entity instance](#ldtk-EntityInstanceJson)
        - [Field instance](#ldtk-FieldInstanceJson)
        - [Field instance tile](#ldtk-FieldInstanceTile)
-       - [ldtk.EntityReferenceInfos](#ldtk-EntityReferenceInfos)
+       - [Entity reference infos](#ldtk-EntityReferenceInfos)
+       - [Grid point](#ldtk-GridPoint)
    - [Definitions](#ldtk-DefinitionsJson)
      - [Layer definition](#ldtk-LayerDefJson)
        - [Auto-layer rule definition](#ldtk-AutoRuleDef)
@@ -171,7 +172,7 @@ Value | Type | Description
 -- | -- | --
 `__identifier` | String | Field definition identifier
 `__type` | String | Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.
-`__value` | Untyped | Actual value of the field instance. The value type varies, depending on `__type`:<br/>		 - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>		 - For **Color**, the value is an hexadecimal string using "#rrggbb" format.<br/>		 - For **Enum**, the value is a String representing the selected enum value.<br/>		 - For **Point**, the value is an object `{ cx : Int, cy : Int }` containing grid-based coordinates.<br/>		 - For **Tile**, the value will be an `FieldInstanceTile` object (see below).<br/>		 - For **EntityRef**, the value will be an `EntityReferenceInfos` object (see below).<br/><br/>		If the field is an array, then this `__value` will also be a JSON array.
+`__value` | One&nbsp;of:&nbsp;Int,&nbsp;Float,&nbsp;Bool,&nbsp;String,&nbsp;[Entity&nbsp;reference&nbsp;infos](#ldtk-EntityReferenceInfos),&nbsp;[Grid&nbsp;point](#ldtk-GridPoint),&nbsp;[Field&nbsp;instance&nbsp;tile](#ldtk-FieldInstanceTile) | Actual value of the field instance. The value type varies, depending on `__type`:<br/>		 - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>		 - For **Color**, the value is an hexadecimal string using "#rrggbb" format.<br/>		 - For **Enum**, the value is a String representing the selected enum value.<br/>		 - For **Point**, the value is an object `GridPoint` containing grid-based coordinates.<br/>		 - For **Tile**, the value will be an `FieldInstanceTile` object (see below).<br/>		 - For **EntityRef**, the value will be an `EntityReferenceInfos` object (see below).<br/><br/>		If the field is an array, then this `__value` will also be a JSON array.
 `defUid` | Int | Reference of the **Field definition** UID
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
@@ -185,7 +186,7 @@ Value | Type | Description
 `tilesetUid` | Int | Tileset ID
 
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
-## 2.1.5. ldtk.EntityReferenceInfos  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+## 2.1.5. Entity reference infos  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
 This object is used in Field Instances to describe an EntityRef value.
 
 Value | Type | Description
@@ -193,6 +194,15 @@ Value | Type | Description
 `entityIid` | String | 
 `layerIid` | String | 
 `levelIid` | String | 
+
+<a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
+## 2.1.6. Grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+This object is just a grid-based coordinate used in Field values.
+
+Value | Type | Description
+-- | -- | --
+`cx` | Int | 
+`cy` | Int | 
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 3. Definitions   
