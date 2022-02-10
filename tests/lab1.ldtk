@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456759,
-	"nextUid": 113,
+	"appBuildId": 456802,
+	"nextUid": 114,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -963,7 +963,37 @@
 			"limitBehavior": "MoveLastOne",
 			"pivotX": 0.5,
 			"pivotY": 1,
-			"fieldDefs": []
+			"fieldDefs": [
+				{
+					"identifier": "loot",
+					"__type": "LocalEnum.Item",
+					"uid": 113,
+					"type": { "id": "F_Enum", "params": [28] },
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "ValueOnly",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		},
 		{
 			"identifier": "MovingPlatform",
@@ -1675,27 +1705,8 @@
 							}]
 						},
 						{
-							"__identifier": "Door",
-							"__grid": [14,12],
-							"__pivot": [0.5,1],
-							"__tags": ["interactive"],
-							"__tile": { "tilesetUid": 9, "srcRect": [200,152,8,24] },
-							"iid": "e6652980-66b0-11ec-ae86-5561e77c3c86",
-							"width": 6,
-							"height": 24,
-							"defUid": 7,
-							"px": [116,104],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": false,
-								"__type": "Bool",
-								"defUid": 55,
-								"realEditorValues": [null]
-							}]
-						},
-						{
 							"__identifier": "Mob",
-							"__grid": [11,12],
+							"__grid": [10,12],
 							"__pivot": [0.5,1],
 							"__tags": ["gameplay"],
 							"__tile": { "tilesetUid": 97, "srcRect": [96,0,16,16] },
@@ -1703,8 +1714,21 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 71,
-							"px": [92,104],
-							"fieldInstances": []
+							"px": [84,104],
+							"fieldInstances": [{ "__identifier": "loot", "__value": null, "__type": "LocalEnum.Item", "defUid": 113, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "Door",
+							"__grid": [15,12],
+							"__pivot": [0.5,1],
+							"__tags": ["interactive"],
+							"__tile": { "tilesetUid": 9, "srcRect": [200,152,8,24] },
+							"iid": "23d3fdd0-66b0-11ec-9495-b35a44119df1",
+							"width": 6,
+							"height": 24,
+							"defUid": 7,
+							"px": [124,104],
+							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 55, "realEditorValues": [] }]
 						}
 					]
 				},
@@ -1724,7 +1748,7 @@
 					"layerDefUid": 8,
 					"pxOffsetX": 0,
 					"pxOffsetY": 0,
-					"visible": true,
+					"visible": false,
 					"optionalRules": [],
 					"intGridCsv": [],
 					"autoLayerTiles": [],
@@ -3179,12 +3203,21 @@
 							"__pivot": [0.5,1],
 							"__tags": ["gameplay"],
 							"__tile": { "tilesetUid": 97, "srcRect": [96,0,16,16] },
-							"iid": "71b09e70-66b0-11ec-84ef-5be1d088bdbe",
+							"iid": "2c1ae270-66b0-11ec-8158-69628cb11cae",
 							"width": 16,
 							"height": 16,
 							"defUid": 71,
 							"px": [244,112],
-							"fieldInstances": []
+							"fieldInstances": [{
+								"__identifier": "loot",
+								"__value": "Life",
+								"__type": "LocalEnum.Item",
+								"defUid": 113,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["Life"]
+								}]
+							}]
 						}
 					]
 				},
@@ -5326,7 +5359,7 @@
 							"height": 16,
 							"defUid": 71,
 							"px": [84,80],
-							"fieldInstances": []
+							"fieldInstances": [{ "__identifier": "loot", "__value": null, "__type": "LocalEnum.Item", "defUid": 113, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Mob",
@@ -5339,7 +5372,16 @@
 							"height": 16,
 							"defUid": 71,
 							"px": [28,128],
-							"fieldInstances": []
+							"fieldInstances": [{
+								"__identifier": "loot",
+								"__value": "ExtraTime",
+								"__type": "LocalEnum.Item",
+								"defUid": 113,
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["ExtraTime"]
+								}]
+							}]
 						},
 						{
 							"__identifier": "LightSpot",
