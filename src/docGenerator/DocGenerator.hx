@@ -19,6 +19,7 @@ enum FieldType {
 	Obj(fields:Array<FieldInfos>);
 	Ref(display:String, typeName:String);
 	Dyn;
+	Multiple(possibleTypes:Array<FieldType>);
 	Unknown;
 }
 
@@ -40,7 +41,6 @@ typedef FieldInfos = {
 	var hasVersion: Bool;
 	var isColor: Bool;
 	var isInternal: Bool;
-	var possibleTypes: Array<String>;
 	var deprecation: Null<DeprecationInfos>;
 	var removed: Null<dn.Version>;
 }
@@ -374,25 +374,6 @@ class DocGenerator {
 			// List fields
 			for(f in getFieldsInfos(type.xml.node.a)) {
 				var subType = getSchemaType(f.type);
-
-				// Custom array of possible types
-				if( f.possibleTypes.length>0 ) {
-					subType.oneOf = [];
-					for(t in f.possibleTypes) {
-						switch t {
-							case "Int", "Float", "Bool", "String":
-								// Basic types
-								subType.oneOf.push(  getSchemaType( Basic(t) )  );
-
-							case _:
-								var global = getGlobalType(t);
-								if( global==null )
-									throw "Unrecognized @types value: "+t;
-								// Refs
-								subType.oneOf.push(  getSchemaType( Ref(global.displayName, global.rawName) )  );
-						}
-					}
-				}
 				subType.description = f.descMd.join('\n');
 
 				if( f.removed!=null )
@@ -583,7 +564,6 @@ class DocGenerator {
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
-				possibleTypes: hasMeta(fieldXml, "types") ? getMetaArray(fieldXml,"types") : [],
 				deprecation: deprecation,
 				removed: hasMeta(fieldXml,"removed") ? getMetaVersion(fieldXml,"removed") : null,
 			});
@@ -686,9 +666,9 @@ class DocGenerator {
 	/**
 		Get meta data of a field as String
 	**/
-	static function getMetaArray(xml:haxe.xml.Access, name:String, metaIndex=0) : Null< Array<String> > {
+	static function getMetaArray(xml:haxe.xml.Access, name:String, metaIndex=0) : Array<String> {
 		if( !hasMeta(xml,name) )
-			return null;
+			return [];
 
 		var out = [];
 		for(m in xml.node.meta.nodes.m )
@@ -731,8 +711,33 @@ class DocGenerator {
 				else
 					Basic(fieldXml.node.x.att.path);
 			}
-			else if( fieldXml.hasNode.d )
-				Dyn;
+			else if( fieldXml.hasNode.d ) {
+				// Dynamic
+				var rawPossibleTypes = getMetaArray(fieldXml,"types");
+				if( rawPossibleTypes.length>0 ) {
+					// Known possible types
+					var types = [];
+					for(t in rawPossibleTypes) {
+						switch t {
+							case "Int", "Float", "Bool", "String":
+								// Basic types
+								types.push( Basic(t) );
+
+							case _:
+								var global = getGlobalType(t);
+								if( global==null )
+									throw "Unrecognized @types value: "+t;
+								// Refs
+								types.push( Ref(global.displayName, global.rawName) );
+						}
+					}
+					Multiple(types);
+				}
+				else {
+					// Pure dynamic
+					Dyn;
+				}
+			}
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
 				var typeInfos = allGlobalTypes.filter( (t)->t.rawName==name )[0];
@@ -779,7 +784,13 @@ class DocGenerator {
 
 			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
-			case Dyn: "Untyped";
+
+			case Multiple(possibleTypes):
+				"One of: "+possibleTypes.map( t->getTypeMd(t) ).join(", ");
+
+			case Dyn:
+				"Untyped";
+
 			case Unknown: "???";
 		}
 		return str;
@@ -793,12 +804,19 @@ class DocGenerator {
 				switch f { // ignore Dynamics
 					case Basic("Enum"):
 					case Dyn:
+
+					case Multiple(possibleTypes):
+						st.oneOf = [ { type: ["null"] } ];
+						for(ft in possibleTypes)
+							st.oneOf.push( getSchemaType(ft) );
+
 					case Ref(_):
 						st.oneOf = [
 							{ type: ["null"] },
 							{ ref__: st.ref__ },
 						];
 						Reflect.deleteField(st, "ref__");
+
 					case _:
 						if( st.enum__!=null )
 							st.enum__.push(null);
@@ -829,6 +847,12 @@ class DocGenerator {
 				st.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
 
 			case Dyn:
+
+			case Multiple(possibleTypes):
+				st.oneOf = [];
+				for(ft in possibleTypes)
+					st.oneOf.push( getSchemaType(ft) );
+
 			case Unknown:
 		}
 
