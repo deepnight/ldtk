@@ -4572,6 +4572,10 @@ canvas#webgl {
 					flex: 0 1 0px;
 				}
 
+				&.import {
+					flex: 0 1 0px;
+				}
+
 				@at-root body.fullscreen #page.home .buttons .exit {
 					display: inherit !important;
 				}

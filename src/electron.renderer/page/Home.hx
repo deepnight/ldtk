@@ -41,7 +41,7 @@ class Home extends Page {
 		// Buttons
 		jPage.find(".load").click( (_)->onLoad() );
 		jPage.find(".samples").click( (_)->onLoadSamples() );
-		jPage.find(".loadOgmo").click( (ev)->onImportOgmo() );
+		jPage.find(".import").click( (ev)->onImport(ev) );
 		jPage.find(".new").click( (_)->if( !cd.hasSetS("newLock",0.2) ) onNew() );
 
 		jPage.find(".buy").click( (ev)->{
@@ -430,7 +430,17 @@ class Home extends Page {
 	}
 
 
-	public function onImportOgmo() {
+	function onImport(ev:js.jquery.Event) {
+		var ctx = new ui.modal.ContextMenu(ev);
+		ctx.addTitle( L.t._("Import a project from another app") );
+		ctx.positionNear( new J(ev.target) );
+		ctx.add({
+			label: L.t._("Ogmo 3 project"),
+			cb: ()->onImportOgmo(),
+		});
+	}
+
+	function onImportOgmo() {
 		var dir = App.ME.getDefaultDialogDir();
 
 		#if debug
