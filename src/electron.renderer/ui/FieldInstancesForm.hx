@@ -495,7 +495,7 @@ class FieldInstancesForm {
 							return;
 
 						if( tei._li.level==editor.curLevel )
-							editor.levelRender.bleepEntity(tei._li, tei);
+							editor.levelRender.bleepEntity(tei);
 					});
 
 					if( fi.hasAnyErrorInValues(getEntityInstance()) )

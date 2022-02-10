@@ -116,7 +116,7 @@ class SelectionTool extends Tool<Int> {
 					var t = editor.curTool.as(tool.lt.EntityTool);
 					if( t!=null )
 						t.selectValue(ei.defUid);
-					editor.levelRender.bleepEntity(li, ei);
+					editor.levelRender.bleepEntity(ei);
 					ui.EntityInstanceEditor.openFor(ei);
 					editor.createResizeToolFor(ge);
 

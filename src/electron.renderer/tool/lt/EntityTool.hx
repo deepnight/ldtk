@@ -240,7 +240,7 @@ class EntityTool extends tool.LayerTool<Int> {
 			case Entity(curLayerInstance, instance):
 				curLayerInstance.removeEntityInstance(instance);
 				editor.ge.emit( EntityInstanceRemoved(instance) );
-				editor.levelRender.bleepEntity(curLayerInstance, instance);
+				editor.levelRender.bleepEntity(instance);
 				return true;
 
 			case PointField(li, ei, fi, arrayIdx):

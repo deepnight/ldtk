@@ -363,14 +363,14 @@ class LevelRender extends dn.Process {
 			bleepLayerRectPx(li, bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
 	}
 
-	public inline function bleepEntity(li:data.inst.LayerInstance, ei:data.inst.EntityInstance) {
+	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:Int) {
 		bleepLayerRectPx(
-			li,
-			Std.int( (ei.x-ei.width*ei.def.pivotX) * li.def.getScale() ),
-			Std.int( (ei.y-ei.height*ei.def.pivotY) * li.def.getScale() ),
+			ei._li,
+			Std.int( (ei.x-ei.width*ei.def.pivotX) * ei._li.def.getScale() ),
+			Std.int( (ei.y-ei.height*ei.def.pivotY) * ei._li.def.getScale() ),
 			ei.width,
 			ei.height,
-			ei.getSmartColor(true), 2
+			overrideColor!=null ? overrideColor : ei.getSmartColor(true), 2
 		);
 	}
 
@@ -633,12 +633,27 @@ class LevelRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		// Fade-out temporary rects
+		// Error bleeps
+		if( !cd.has("errorBleeps") )
+			switch editor.curLevel.getFirstError() {
+				case NoError:
+					cd.unset("errorBleeps");
+
+				case InvalidEntityTag(ei), InvalidEntityField(ei):
+					if( !ui.EntityInstanceEditor.existsFor(ei) ) {
+						bleepEntity(ei, 0xff0000);
+						cd.setS("errorBleeps",0.7);
+					}
+
+				case InvalidBgImage:
+			}
+
+		// Fade-out temporary bleeps
 		var i = 0;
 		while( i<rectBleeps.length ) {
 			var o = rectBleeps[i];
-			o.alpha-=tmod*0.042;
-			o.setScale( 1 + 0.2 * (1-o.alpha) );
+			o.alpha -= 0.028 * tmod;
+			o.setScale( 1.5 - 0.5*(1-o.alpha) );
 			if( o.alpha<=0 ) {
 				o.remove();
 				rectBleeps.splice(i,1);

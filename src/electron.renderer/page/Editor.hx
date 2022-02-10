@@ -1241,7 +1241,7 @@ class Editor extends Page {
 			selectLayerInstance(tei._li);
 
 		camera.scrollTo(tei.worldX, tei.worldY);
-		levelRender.bleepEntity(tei._li, tei);
+		levelRender.bleepEntity(tei);
 		selectionTool.select([ Entity(curLayerInstance, tei) ]);
 	}
 

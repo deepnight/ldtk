@@ -81,6 +81,10 @@ Enums and Tilesets can now be organized using **user defined tags**:
 
 ![](1.0.0/tags.png)
 
+Errors in entities, such as a "null" custom field while being defined as "required", are now much more visible in the level view.
+
+![](1.0.0/error.gif)
+
 Contextual **help tips** were also reworked and streamlined in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
 
 ![](1.0.0/help.gif)
