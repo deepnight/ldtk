@@ -54,7 +54,6 @@
 				"from": "extraFiles/README.txt",
 				"to": "README.txt"
 			}
-
 		],
 		"files": [
 			"assets",
