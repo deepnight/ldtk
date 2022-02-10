@@ -789,7 +789,8 @@ class DocGenerator {
 			case Obj(fields): "Object";
 
 			case Multiple(possibleTypes):
-				"Any of: "+possibleTypes.map( t->getTypeMd(t) ).join(", ");
+				// "Any of: "+possibleTypes.map( t->getTypeMd(t) ).join(", ");
+				"Various possible types";
 
 			case Dyn:
 				"Untyped";
