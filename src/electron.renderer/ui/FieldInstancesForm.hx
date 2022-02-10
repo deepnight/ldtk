@@ -485,7 +485,7 @@ class FieldInstancesForm {
 						editor.followEntityRef(tei);
 					});
 
-					jRef.mouseover( _->{
+					jRef.mouseenter( _->{
 						// Mouse over a ref
 						if( fi.valueIsNull(arrayIdx) )
 							return;
@@ -494,9 +494,17 @@ class FieldInstancesForm {
 						if( tei==null )
 							return;
 
-						if( tei._li.level==editor.curLevel )
-							editor.levelRender.bleepEntity(tei);
+						if( tei._li.level==editor.curLevel ) {
+							editor.levelRender.clearTemp();
+							editor.levelRender.temp.lineStyle(2, 0xff00ff);
+							editor.levelRender.temp.drawCircle(tei.centerX, tei.centerY, M.fmax(tei.width,tei.height)*0.5 + 8);
+							editor.levelRender.bleepEntity(tei,0xff00ff);
+						}
 					});
+					jRef.mouseleave( _->{
+						editor.levelRender.clearTemp();
+					});
+
 
 					if( fi.hasAnyErrorInValues(getEntityInstance()) )
 						markError(jRef);
