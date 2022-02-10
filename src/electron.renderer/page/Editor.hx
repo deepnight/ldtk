@@ -1158,6 +1158,7 @@ class Editor extends Page {
 
 	public function selectWorld(w:data.World, showUp=true) {
 		curWorldIid = w.iid;
+		invalidateCachedLevelErrors();
 
 		ge.emit( WorldSelected(w) );
 		selectLevel(w.levels[0]);
@@ -1330,6 +1331,7 @@ class Editor extends Page {
 		App.ME.requestCpu();
 		selectionTool.clear();
 		curWorld.reorganizeWorld();
+		curLevel.invalidateCachedError();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
@@ -1777,20 +1779,26 @@ class Editor extends Page {
 			case LayerInstanceEditedByTool(li):
 
 			case FieldDefChanged(fd):
+				invalidateCachedLevelErrors();
 
 			case FieldDefSorted:
 
 			case LevelFieldInstanceChanged(l,fi):
+				l.invalidateCachedError();
 
 			case EntityFieldInstanceChanged(ei,fi):
+				ei._li.level.invalidateCachedError();
 
 			case EntityInstanceAdded(ei):
+				ei._li.level.invalidateCachedError();
 
 			case EntityInstanceRemoved(ei):
+				ei._li.level.invalidateCachedError();
 				if( resizeTool!=null && resizeTool.isOnEntity(ei) )
 					clearResizeTool();
 
 			case EntityInstanceChanged(ei):
+				ei._li.level.invalidateCachedError();
 				if( selectionTool.any() )
 					selectionTool.invalidateRender();
 
@@ -1882,6 +1890,7 @@ class Editor extends Page {
 				if( !levelHistory.exists(l.uid) )
 					levelHistory.set(l.uid, new LevelHistory(l.uid, l._world.iid) );
 				selectWorldDepth(l.worldDepth);
+				l.invalidateCachedError();
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
@@ -1965,6 +1974,11 @@ class Editor extends Page {
 			l.invalidateJsonCache();
 			ge.emit( LevelJsonCacheInvalidated(l) );
 		}
+	}
+
+	public inline function invalidateCachedLevelErrors() {
+		for(l in curWorld.levels)
+			l.invalidateCachedError();
 	}
 
 

@@ -191,6 +191,7 @@ typedef FileSavingData = {
 }
 
 enum LevelError {
+	NoError;
 	InvalidEntityTag(ei:data.inst.EntityInstance);
 	InvalidEntityField(ei:data.inst.EntityInstance);
 	InvalidBgImage;

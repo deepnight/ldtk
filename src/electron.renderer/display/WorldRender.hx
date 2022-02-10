@@ -892,7 +892,7 @@ class WorldRender extends dn.Process {
 			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.7);
 
 			var error = l.getFirstError();
-			if( error!=null ) {
+			if( error!=NoError ) {
 				thick*=4;
 				c = 0xff0000;
 			}
@@ -917,7 +917,6 @@ class WorldRender extends dn.Process {
 		// Refresh text
 		if( refreshTexts ) {
 			wl.identifier.removeChildren();
-			var error = l.getFirstError();
 			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
 			tf.smooth = true;
 			tf.text = l.getDisplayIdentifier();
@@ -925,11 +924,12 @@ class WorldRender extends dn.Process {
 			tf.x = 8;
 			tf.smooth = true;
 
-			if( error!=null ) {
+			var error = l.getFirstError();
+			if( error!=NoError ) {
 				tf.textColor = 0xff0000;
 				tf.text +=
 					" <ERR: " + ( switch error {
-						case null: '???';
+						case NoError: '???';
 						case InvalidEntityTag(ei): 'Incorrect tag: ${ei.def.identifier}';
 						case InvalidEntityField(ei): 'Invalid field value: ${ei.def.identifier}';
 						case InvalidBgImage: 'Bg image';
@@ -1010,7 +1010,7 @@ class WorldRender extends dn.Process {
 			// Check various level invalidations
 			var limitRenders = 1;
 			var limitOthers = 5;
-			var limitBounds = 15;
+			var limitBounds = 150;
 			if( !waitingTileset ) {
 				var l : data.Level = null;
 				for( wl in worldLevels ) {

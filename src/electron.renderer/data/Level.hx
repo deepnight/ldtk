@@ -516,25 +516,37 @@ class Level {
 	}
 
 
-	public inline function hasAnyError() {
-		return getFirstError()==null;
+	public inline function invalidateCachedError() {
+		_cachedFirstError = null;
 	}
 
-	public function getFirstError() : Null<LevelError> {
-		for(li in layerInstances)
-			for(ei in li.entityInstances) {
-				if( !li.def.isEntityAllowedFromTags(ei) )
-					return InvalidEntityTag(ei);
+	var _cachedFirstError : Null<LevelError> = null;
+	public inline function getFirstError() : LevelError {
+		if( _cachedFirstError!=null )
+			return _cachedFirstError;
+		else {
+			_cachedFirstError = NoError;
 
-				if( ei.hasAnyFieldError() )
-					return InvalidEntityField(ei);
-			}
+			// Layers content
+			for(li in layerInstances)
+				for(ei in li.entityInstances) {
+					if( !li.def.isEntityAllowedFromTags(ei) ) {
+						_cachedFirstError = InvalidEntityTag(ei);
+						break;
+					}
 
+					if( ei.hasAnyFieldError() ) {
+						_cachedFirstError = InvalidEntityField(ei);
+						break;
+					}
+				}
 
-		if( bgRelPath!=null && !_project.isImageLoaded(bgRelPath) )
-			return InvalidBgImage;
+			// Level background images
+			if( _cachedFirstError==NoError && bgRelPath!=null && !_project.isImageLoaded(bgRelPath) )
+				_cachedFirstError = InvalidBgImage;
 
-		return null;
+			return _cachedFirstError;
+		}
 	}
 
 
