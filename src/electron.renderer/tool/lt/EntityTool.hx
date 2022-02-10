@@ -74,7 +74,7 @@ class EntityTool extends tool.LayerTool<Int> {
 	override function customCursor(ev:hxd.Event, m:Coords) {
 		super.customCursor(ev,m);
 
-		editor.levelRender.clearTemp();
+		// editor.levelRender.clearTemp();
 
 		if( curEntityDef==null ) {
 			editor.cursor.set(Forbidden);
