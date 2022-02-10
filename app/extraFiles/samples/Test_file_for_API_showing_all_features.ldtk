@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456760,
+	"appBuildId": 456801,
 	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -30,7 +30,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
-	"tutorialDesc": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses all important LDtk features.",
+	"tutorialDesc": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses most important LDtk features.",
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -1099,25 +1099,6 @@
 		},
 		{
 			"__cWid": 16,
-			"__cHei": 128,
-			"identifier": "_Soul_s_RPG_Graphics_Icons",
-			"uid": 31,
-			"relPath": "atlas/RPG Graphics Icons by 7Soul's.png",
-			"embedAtlas": null,
-			"pxWid": 256,
-			"pxHei": 2048,
-			"tileGridSize": 16,
-			"spacing": 0,
-			"padding": 0,
-			"tags": [],
-			"tagsSourceEnumUid": null,
-			"enumTags": [],
-			"customData": [],
-			"savedSelections": [],
-			"cachedPixelData": null
-		},
-		{
-			"__cWid": 16,
 			"__cHei": 64,
 			"identifier": "Internal_Icons",
 			"uid": 45,
@@ -1235,12 +1216,12 @@
 								},
 								{
 									"__identifier": "String_multiLines",
-									"__value": "foo\nbar",
+									"__value": "foo bar",
 									"__type": "String",
 									"defUid": 20,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["foo\nbar"]
+										"params": ["foo bar"]
 									}]
 								},
 								{
@@ -1324,12 +1305,12 @@
 								},
 								{
 									"__identifier": "Array_multilines",
-									"__value": [ "<foo/>\n<bar>5</bar>", "<hello>world</hello>" ],
+									"__value": [ "<foo/> <bar>5</bar>", "<hello>world</hello>" ],
 									"__type": "Array<String>",
 									"defUid": 37,
 									"realEditorValues": [ {
 										"id": "V_String",
-										"params": ["<foo/>\n<bar>5</bar>"]
+										"params": ["<foo/> <bar>5</bar>"]
 									}, {
 										"id": "V_String",
 										"params": ["<hello>world</hello>"]
@@ -1404,7 +1385,7 @@
 						},
 						{
 							"__identifier": "EntityRefTest",
-							"__grid": [7,28],
+							"__grid": [7,30],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 45, "srcRect": [224,16,16,16] },
@@ -1412,7 +1393,7 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 46,
-							"px": [120,456],
+							"px": [120,488],
 							"fieldInstances": [{
 								"__identifier": "target",
 								"__value": {
@@ -1456,7 +1437,7 @@
 						},
 						{
 							"__identifier": "EntityRefTest",
-							"__grid": [15,28],
+							"__grid": [15,30],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": { "tilesetUid": 45, "srcRect": [224,16,16,16] },
@@ -1464,13 +1445,20 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 46,
-							"px": [248,456],
+							"px": [248,488],
 							"fieldInstances": [{
 								"__identifier": "target",
-								"__value": null,
+								"__value": {
+									"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
+									"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
+									"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3"
+								},
 								"__type": "EntityRef",
 								"defUid": 47,
-								"realEditorValues": [null]
+								"realEditorValues": [{
+									"id": "V_String",
+									"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
+								}]
 							}]
 						},
 						{
@@ -1487,12 +1475,12 @@
 							"fieldInstances": [
 								{
 									"__identifier": "text",
-									"__value": "PureAutoLayers\n(based on IntGrid_classic)",
+									"__value": "PureAutoLayers (based on IntGrid_classic)",
 									"__type": "String",
 									"defUid": 11,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["PureAutoLayers\n(based on IntGrid_classic)"]
+										"params": ["PureAutoLayers (based on IntGrid_classic)"]
 									}]
 								},
 								{ "__identifier": "color", "__value": "#7F95AB", "__type": "Color", "defUid": 12, "realEditorValues": [] }
@@ -2210,12 +2198,12 @@
 								},
 								{
 									"__identifier": "String_multiLines",
-									"__value": "hello\nworld",
+									"__value": "hello world",
 									"__type": "String",
 									"defUid": 20,
 									"realEditorValues": [{
 										"id": "V_String",
-										"params": ["hello\nworld"]
+										"params": ["hello world"]
 									}]
 								},
 								{
