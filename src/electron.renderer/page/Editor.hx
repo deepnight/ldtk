@@ -690,14 +690,18 @@ class Editor extends Page {
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
-			// case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
-			// 	jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+3)+")").click();
-
 			// Select layers (F1-F10)
 			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
 				var idx = k-K.F1;
-				if( idx < curLevel.layerInstances.length )
-					selectLayerInstance( curLevel.layerInstances[idx] );
+				var i = 0;
+				for(l in curLevel.layerInstances)
+					if( !l.def.hideInList ) {
+						if( i==idx ) {
+							selectLayerInstance(l);
+							break;
+						}
+						i++;
+					}
 
 
 			case K.P if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
