@@ -32,11 +32,11 @@
 	"dependencies": {
 		"codemirror": "^5.64.0",
 		"electron-updater": "^4.6.1",
-		"simple-color-picker": "^1.0.4",
-		"sortablejs": "^1.10.2"
+		"simple-color-picker": "^1.0.5",
+		"sortablejs": "^1.14.0"
 	},
 	"devDependencies": {
-		"electron": "^16.0.4",
+		"electron": "^16.0.8",
 		"electron-builder": "^22.14.5"
 	},
 	"build": {
