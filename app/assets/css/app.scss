@@ -4248,7 +4248,7 @@ canvas#webgl {
 			}
 
 			ul#layers li {
-				grid-template-columns: auto min-content;
+				grid-template-columns: min-content auto min-content;
 				.layerIcon,
 				.index {
 					display: none;
@@ -4281,6 +4281,14 @@ canvas#webgl {
 			}
 		}
 
+
+		#mainPaletteWrapper {
+			.niceList li,
+			.intGridValues li {
+				font-size: 9.5pt;
+				border-left-width: 2px;
+			}
+		}
 
 		#permanentNotifications {
 			left: $mainPanelCompactWid;
