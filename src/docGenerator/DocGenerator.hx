@@ -40,6 +40,7 @@ typedef FieldInfos = {
 	var hasVersion: Bool;
 	var isColor: Bool;
 	var isInternal: Bool;
+	var possibleTypes: Array<String>;
 	var deprecation: Null<DeprecationInfos>;
 	var removed: Null<dn.Version>;
 }
@@ -373,6 +374,25 @@ class DocGenerator {
 			// List fields
 			for(f in getFieldsInfos(type.xml.node.a)) {
 				var subType = getSchemaType(f.type);
+
+				// Custom array of possible types
+				if( f.possibleTypes.length>0 ) {
+					subType.oneOf = [];
+					for(t in f.possibleTypes) {
+						switch t {
+							case "Int", "Float", "Bool", "String":
+								// Basic types
+								subType.oneOf.push(  getSchemaType( Basic(t) )  );
+
+							case _:
+								var global = getGlobalType(t);
+								if( global==null )
+									throw "Unrecognized @types value: "+t;
+								// Refs
+								subType.oneOf.push(  getSchemaType( Ref(global.displayName, global.rawName) )  );
+						}
+					}
+				}
 				subType.description = f.descMd.join('\n');
 
 				if( f.removed!=null )
@@ -563,6 +583,7 @@ class DocGenerator {
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
+				possibleTypes: hasMeta(fieldXml, "types") ? getMetaArray(fieldXml,"types") : [],
 				deprecation: deprecation,
 				removed: hasMeta(fieldXml,"removed") ? getMetaVersion(fieldXml,"removed") : null,
 			});
@@ -659,6 +680,35 @@ class DocGenerator {
 			}
 
 		throw "Malformed meta?";
+	}
+
+
+	/**
+		Get meta data of a field as String
+	**/
+	static function getMetaArray(xml:haxe.xml.Access, name:String, metaIndex=0) : Null< Array<String> > {
+		if( !hasMeta(xml,name) )
+			return null;
+
+		var out = [];
+		for(m in xml.node.meta.nodes.m )
+			if( m.att.n == name ) {
+				var i = 0;
+				for(metaValues in m.nodes.e) {
+					if( i++<metaIndex )
+						continue;
+					var v = metaValues.innerHTML;
+					if( v.charAt(0)=="\"" )
+						out.push( v.substring(1, v.length-1) );
+					else
+						out.push(v);
+				}
+			}
+
+		if( out.length>0 )
+			return out;
+		else
+			throw "Malformed meta?";
 	}
 
 
