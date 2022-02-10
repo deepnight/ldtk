@@ -269,38 +269,7 @@
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is an object [GridPoint](#ldtk-GridPoint) containing grid-based coordinates.<br/>   - For **Tile**, the value will be an [FieldInstanceTile](#ldtk-FieldInstanceTile) object (see below).<br/>   - For **EntityRef**, the value will be an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object (see below).<br/><br/>  If the field is an array, then this `__value` will also be a JSON array.",
-					"oneOf": [
-						{
-							"type": [
-								"integer"
-							]
-						},
-						{
-							"type": [
-								"number"
-							]
-						},
-						{
-							"type": [
-								"boolean"
-							]
-						},
-						{
-							"type": [
-								"string"
-							]
-						},
-						{
-							"$ref": "#/otherTypes/GridPoint"
-						},
-						{
-							"$ref": "#/otherTypes/FieldInstanceTile"
-						},
-						{
-							"$ref": "#/otherTypes/EntityReferenceInfos"
-						}
-					]
+					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is an object [GridPoint](#ldtk-GridPoint) containing grid-based coordinates.<br/>   - For **Tile**, the value will be an [FieldInstanceTile](#ldtk-FieldInstanceTile) object (see below).<br/>   - For **EntityRef**, the value will be an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object (see below).<br/><br/>  If the field is an array, then this `__value` will also be a JSON array."
 				}
 			},
 			"type": [

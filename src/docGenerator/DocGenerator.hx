@@ -810,9 +810,9 @@ class DocGenerator {
 					case Dyn:
 
 					case Multiple(possibleTypes):
-						st.oneOf = [ { type: ["null"] } ];
-						for(ft in possibleTypes)
-							st.oneOf.push( getSchemaType(ft) );
+						// st.oneOf = [ { type: ["null"] } ];
+						// for(ft in possibleTypes)
+						// 	st.oneOf.push( getSchemaType(ft) );
 
 					case Ref(_):
 						st.oneOf = [
@@ -853,9 +853,9 @@ class DocGenerator {
 			case Dyn:
 
 			case Multiple(possibleTypes):
-				st.oneOf = [];
-				for(ft in possibleTypes)
-					st.oneOf.push( getSchemaType(ft) );
+				// st.oneOf = [];
+				// for(ft in possibleTypes)
+				// 	st.oneOf.push( getSchemaType(ft) );
 
 			case Unknown:
 		}
