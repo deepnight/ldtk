@@ -313,10 +313,12 @@ class SelectionTool extends Tool<Int> {
 
 				case Entity(li, ei):
 					li.removeEntityInstance(ei);
+					editor.ge.emitAtTheEndOfFrame( EntityInstanceRemoved(ei) );
 
 				case PointField(li, ei, fi, arrayIdx):
 					fi.removeArrayValue(arrayIdx);
 					group.decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+					editor.ge.emitAtTheEndOfFrame( EntityFieldInstanceChanged(ei,fi) );
 			}
 		clear();
 	}
