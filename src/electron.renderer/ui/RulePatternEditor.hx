@@ -193,8 +193,6 @@ class RulePatternEditor {
 						case _:
 					}
 
-					trace(@:privateAccess rule.pattern); // HACK
-
 					// Refresh
 					if( v!=rule.get(cx,cy) ) {
 						anyChange = true;
