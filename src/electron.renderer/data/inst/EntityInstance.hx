@@ -138,10 +138,10 @@ class EntityInstance {
 		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
+	final overShapePad = 3;
 	final overEdgePad = 4;
-	final overShapePad = 1;
 	public inline function isOver(layerX:Int, layerY:Int) {
-		if( M.fabs(layerX-x)>width || M.fabs(layerY-y)>height ) // Fast check
+		if( M.fabs(layerX-x) > width+overEdgePad*2 || M.fabs(layerY-y) > height+overEdgePad*2 ) // Fast check
 			return false;
 		else if( def.renderMode==Ellipse ) {
 			if( def.hollow ) {

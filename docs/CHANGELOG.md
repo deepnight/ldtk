@@ -171,6 +171,7 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
   - Fixed tile picker centering animation when picking a tile from a level (using ALT-click)
   - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
+  - Fixed "hollow" entity selection which was kind of... erratic.
   - Fixed the progress bar when saving large projects
   - Fixed TAB key behavior when an Entity instance panel is open
   - Fixed a crash when clicking on a partial tile in the Tilesets panel
