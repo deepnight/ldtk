@@ -467,7 +467,7 @@
 		},
 		"EnumTagValue": {
 			"description": "In a tileset definition, enum based tag infos",
-			"title": "ldtk.EnumTagValue",
+			"title": "Enum tag value",
 			"required": [
 				"enumValueId",
 				"tileIds"
@@ -1612,7 +1612,7 @@
 		},
 		"TileCustomMetadata": {
 			"description": "In a tileset definition, user defined meta-data of a tile.",
-			"title": "ldtk.TileCustomMetadata",
+			"title": "Tile custom metadata",
 			"required": [
 				"data",
 				"tileId"
