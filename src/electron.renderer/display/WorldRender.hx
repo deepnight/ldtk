@@ -13,6 +13,7 @@ typedef WorldLevelRender = {
 	var renderInvalidated: Bool;
 	var fieldsInvalidated: Bool;
 	var identifierInvalidated: Bool;
+	var boundsInvalidated: Bool;
 
 	var fieldsRender: Null<{
 		customFields: h2d.Flow,
@@ -148,8 +149,10 @@ class WorldRender extends dn.Process {
 				updateWorldTitle();
 				updateFieldsPos();
 				invalidateCameraBasedRenders();
-				for(l in curWorld.levels)
+				for(l in curWorld.levels) {
+					getWorldLevel(l).boundsInvalidated = true;
 					updateLevelVisibility(l);
+				}
 
 			case WorldDepthSelected(worldDepth):
 				for(l in curWorld.levels)
@@ -288,7 +291,10 @@ class WorldRender extends dn.Process {
 				renderGrids();
 				updateCurrentHighlight();
 				for(l in curWorld.levels)
-					updateLevelBounds(l);
+					if( active )
+						getWorldLevel(l).boundsInvalidated = true;
+					else
+						updateLevelBounds(l);
 
 			case _:
 		}
@@ -372,7 +378,7 @@ class WorldRender extends dn.Process {
 	/**
 		Return world level if it exists, or create it otherwise.
 	**/
-	function getWorldLevel(l:data.Level) : WorldLevelRender {
+	inline function getWorldLevel(l:data.Level) : WorldLevelRender {
 		if( !worldLevels.exists(l.uid) ) {
 			var wl : WorldLevelRender = {
 				worldIid : l._world.iid,
@@ -384,6 +390,7 @@ class WorldRender extends dn.Process {
 				outline : new h2d.Graphics(),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
 
+				boundsInvalidated: true,
 				renderInvalidated: true,
 				fieldsInvalidated: true,
 				identifierInvalidated: true,
@@ -881,10 +888,10 @@ class WorldRender extends dn.Process {
 			if( !settings.v.showDetails )
 				return;
 
-			var error = l.getFirstError();
-
 			var thick = 1*camera.pixelRatio / camera.adjustedZoom;
 			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.7);
+
+			var error = l.getFirstError();
 			if( error!=null ) {
 				thick*=4;
 				c = 0xff0000;
@@ -1003,6 +1010,7 @@ class WorldRender extends dn.Process {
 			// Check various level invalidations
 			var limitRenders = 1;
 			var limitOthers = 5;
+			var limitBounds = 15;
 			if( !waitingTileset ) {
 				var l : data.Level = null;
 				for( wl in worldLevels ) {
@@ -1026,6 +1034,12 @@ class WorldRender extends dn.Process {
 						updateLayout();
 					}
 
+					// Bounds
+					if( wl.boundsInvalidated && ( editor.worldMode || editor.curLevel==l ) && limitBounds-->0 ) {
+						wl.boundsInvalidated = false;
+						updateLevelBounds(l);
+					}
+
 					// Fields
 					if( wl.fieldsInvalidated && ( editor.worldMode || editor.curLevel==l ) && limitOthers-->0 ) {
 						wl.fieldsInvalidated = false;
@@ -1047,8 +1061,6 @@ class WorldRender extends dn.Process {
 			invalidatedCameraBasedRenders = false;
 			renderGrids();
 			updateCurrentHighlight();
-			for(l in curWorld.levels)
-				updateLevelBounds(l);
 		}
 	}
 
