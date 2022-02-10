@@ -67,6 +67,7 @@ typedef SchemaType = {
 	var ?enum__: Array<String>;
 	var ?ref__: String;
 	var ?oneOf: Array<SchemaType>;
+	var ?anyOf: Array<SchemaType>;
 }
 
 
