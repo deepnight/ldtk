@@ -1558,19 +1558,19 @@
 			"additionalProperties": false,
 			"properties": {
 				"entityIid": {
-					"description": "",
+					"description": "IID of the refered EntityInstance",
 					"type": [
 						"string"
 					]
 				},
 				"layerIid": {
-					"description": "",
+					"description": "IID of the LayerInstance containing the refered EntityInstance",
 					"type": [
 						"string"
 					]
 				},
 				"levelIid": {
-					"description": "",
+					"description": "IID of the Level containing the refered EntityInstance",
 					"type": [
 						"string"
 					]

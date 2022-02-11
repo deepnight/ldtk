@@ -191,9 +191,9 @@ This object is used in Field Instances to describe an EntityRef value.
 
 Value | Type | Description
 -- | -- | --
-`entityIid` | String | 
-`layerIid` | String | 
-`levelIid` | String | 
+`entityIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the refered EntityInstance
+`layerIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the LayerInstance containing the refered EntityInstance
+`levelIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the Level containing the refered EntityInstance
 
 <a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
 ## 2.4.3. Field instance grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
