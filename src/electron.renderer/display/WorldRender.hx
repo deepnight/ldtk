@@ -753,7 +753,7 @@ class WorldRender extends dn.Process {
 
 		// Attach custom fields
 		FieldInstanceRender.renderFields(
-			project.defs.levelFields.map( fd->l.getFieldInstance(fd) ),
+			project.defs.levelFields.map( fd->l.getFieldInstance(fd,true) ),
 			l.getSmartColor(true),
 			LevelCtx(l),
 			wl.fieldsRender.customFields

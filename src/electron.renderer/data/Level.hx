@@ -479,7 +479,7 @@ class Level {
 
 		// Create missing field instances
 		for(fd in p.defs.levelFields)
-			getFieldInstance(fd);
+			getFieldInstance(fd,true);
 
 		for(fi in fieldInstances)
 			if( fi.tidy(_project) )
@@ -553,9 +553,11 @@ class Level {
 
 	/* CUSTOM FIELDS *******************/
 
-	/** Get (and automatically creates) a field instance **/
-	public function getFieldInstance(fd:data.def.FieldDef) : data.inst.FieldInstance{
-		if( !fieldInstances.exists(fd.uid) ) {
+	/**
+		Get a field instance (or optionnaly, creates it)
+	**/
+	public function getFieldInstance(fd:data.def.FieldDef, createIfMissing:Bool) : Null<data.inst.FieldInstance> {
+		if( createIfMissing && !fieldInstances.exists(fd.uid) ) {
 			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
 			invalidateJsonCache();
 		}
@@ -570,7 +572,9 @@ class Level {
 
 		var c : Null<Int> = null;
 		for(fd in _project.defs.levelFields) {
-			var fi = getFieldInstance(fd);
+			var fi = getFieldInstance(fd,false);
+			if( fi==null )
+				continue;
 			c = fi.getSmartColor();
 			if( c!=null )
 				return _adjust(c);

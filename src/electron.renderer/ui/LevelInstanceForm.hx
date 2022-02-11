@@ -353,6 +353,6 @@ class LevelInstanceForm {
 
 
 	function updateFieldsForm() {
-		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd) );
+		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd, true) );
 	}
 }
