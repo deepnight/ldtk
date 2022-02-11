@@ -144,6 +144,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 							// Flags
 							p.setFlag(PrependIndexToLevelFileNames, false);
+							p.setFlag(UseMultilinesType, true);
 
 							// Break level caching
 							for(w in p.worlds)
