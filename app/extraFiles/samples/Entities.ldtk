@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456824,
+	"appBuildId": 456830,
 	"nextUid": 164,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -647,7 +647,7 @@
 			"tilesetId": 99,
 			"tileId": 245,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 80, "y": 240, "w": 16, "h": 16 },
+			"tileRect": { "x": 80, "y": 240, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
@@ -794,7 +794,7 @@
 			"tilesetId": 99,
 			"tileId": 112,
 			"tileRenderMode": "Stretch",
-			"tileRect": { "x": 0, "y": 112, "w": 16, "h": 16 },
+			"tileRect": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 4,
 			"limitScope": "PerLevel",
 			"limitBehavior": "PreventAdding",
@@ -938,7 +938,7 @@
 			"tilesetId": 99,
 			"tileId": 6,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16 },
+			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1082,7 +1082,7 @@
 			"tilesetId": 99,
 			"tileId": 570,
 			"tileRenderMode": "Stretch",
-			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16 },
+			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1168,7 +1168,7 @@
 			"tilesetId": 99,
 			"tileId": 56,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 128, "y": 48, "w": 16, "h": 16 },
+			"tileRect": { "x": 128, "y": 48, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1311,7 +1311,7 @@
 			"tilesetId": 99,
 			"tileId": 71,
 			"tileRenderMode": "Repeat",
-			"tileRect": { "x": 112, "y": 64, "w": 16, "h": 16 },
+			"tileRect": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -1426,7 +1426,7 @@
 			"tilesetId": 99,
 			"tileId": 81,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 16, "y": 80, "w": 16, "h": 16 },
+			"tileRect": { "x": 16, "y": 80, "w": 16, "h": 16, "tilesetUid": 99 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -2423,39 +2423,27 @@
 							"__grid": [44,20],
 							"__pivot": [0.5,1],
 							"__tags": ["container"],
-							"__tile": { "tilesetUid": 99, "srcRect": [160,560,16,16] },
+							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "f80e99e1-66b0-11ec-b121-273dce4c0a94",
 							"width": 24,
 							"height": 24,
 							"defUid": 8,
 							"px": [712,336],
 							"fieldInstances": [
-								{
-									"__identifier": "content",
-									"__value": [ "Sword", "Heavy sword", "Bow" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 21,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Sword"]
-									}, {
-										"id": "V_String",
-										"params": ["Heavy sword"]
-									}, {
-										"id": "V_String",
-										"params": ["Bow"]
-									} ]
-								},
-								{
-									"__identifier": "requireKey",
-									"__value": true,
-									"__type": "Bool",
-									"defUid": 28,
-									"realEditorValues": [{
-										"id": "V_Bool",
-										"params": [ true ]
-									}]
-								}
+								{ "__identifier": "content", "__value": [ "Sword", "Heavy sword", "Bow" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 21, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Sword"]
+								}, {
+									"id": "V_String",
+									"params": ["Heavy sword"]
+								}, {
+									"id": "V_String",
+									"params": ["Bow"]
+								} ] },
+								{ "__identifier": "requireKey", "__value": true, "__type": "Bool", "__tile": null, "defUid": 28, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] }
 							]
 						},
 						{
@@ -2463,77 +2451,53 @@
 							"__grid": [14,11],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "srcRect": [112,448,16,16] },
+							"__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 },
 							"iid": "f80ec0f2-66b0-11ec-b121-d96e502df2fb",
 							"width": 48,
 							"height": 48,
 							"defUid": 37,
 							"px": [232,192],
 							"fieldInstances": [
-								{
-									"__identifier": "type",
-									"__value": "Fighter",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
+								{ "__identifier": "type", "__value": "Fighter", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Fighter"]
+								}] },
+								{ "__identifier": "life", "__value": 10, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [{ "id": "V_Int", "params": [10] }] },
+								{ "__identifier": "loots", "__value": [ "Gold", "Healing_potion" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Gold"]
+								}, {
+									"id": "V_String",
+									"params": ["Healing_potion"]
+								} ] },
+								{ "__identifier": "patrol", "__value": [
+									{ "cx": 18, "cy": 11 },
+									{ "cx": 18, "cy": 13 },
+									{ "cx": 23, "cy": 13 },
+									{ "cx": 23, "cy": 12 },
+									{ "cx": 26, "cy": 12 }
+								], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [
+									{
 										"id": "V_String",
-										"params": ["Fighter"]
-									}]
-								},
-								{
-									"__identifier": "life",
-									"__value": 10,
-									"__type": "Int",
-									"defUid": 40,
-									"realEditorValues": [{ "id": "V_Int", "params": [10] }]
-								},
-								{
-									"__identifier": "loots",
-									"__value": [ "Gold", "Healing_potion" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 39,
-									"realEditorValues": [ {
+										"params": ["18,11"]
+									},
+									{
 										"id": "V_String",
-										"params": ["Gold"]
-									}, {
+										"params": ["18,13"]
+									},
+									{
 										"id": "V_String",
-										"params": ["Healing_potion"]
-									} ]
-								},
-								{
-									"__identifier": "patrol",
-									"__value": [
-										{ "cx": 18, "cy": 11 },
-										{ "cx": 18, "cy": 13 },
-										{ "cx": 23, "cy": 13 },
-										{ "cx": 23, "cy": 12 },
-										{ "cx": 26, "cy": 12 }
-									],
-									"__type": "Array<Point>",
-									"defUid": 38,
-									"realEditorValues": [
-										{
-											"id": "V_String",
-											"params": ["18,11"]
-										},
-										{
-											"id": "V_String",
-											"params": ["18,13"]
-										},
-										{
-											"id": "V_String",
-											"params": ["23,13"]
-										},
-										{
-											"id": "V_String",
-											"params": ["23,12"]
-										},
-										{
-											"id": "V_String",
-											"params": ["26,12"]
-										}
-									]
-								}
+										"params": ["23,13"]
+									},
+									{
+										"id": "V_String",
+										"params": ["23,12"]
+									},
+									{
+										"id": "V_String",
+										"params": ["26,12"]
+									}
+								] }
 							]
 						},
 						{
@@ -2541,41 +2505,23 @@
 							"__grid": [31,18],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "srcRect": [80,896,16,16] },
+							"__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 },
 							"iid": "f80ee803-66b0-11ec-b121-6dcb8a513232",
 							"width": 24,
 							"height": 24,
 							"defUid": 37,
 							"px": [504,304],
 							"fieldInstances": [
-								{
-									"__identifier": "type",
-									"__value": "Worm",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Worm"]
-									}]
-								},
-								{
-									"__identifier": "life",
-									"__value": 3,
-									"__type": "Int",
-									"defUid": 40,
-									"realEditorValues": [null]
-								},
-								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 24, "cy": 18 }],
-									"__type": "Array<Point>",
-									"defUid": 38,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["24,18"]
-									}]
-								}
+								{ "__identifier": "type", "__value": "Worm", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Worm"]
+								}] },
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [null] },
+								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 24, "cy": 18 }], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["24,18"]
+								}] }
 							]
 						},
 						{
@@ -2583,35 +2529,23 @@
 							"__grid": [41,20],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "srcRect": [0,448,16,16] },
+							"__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 },
 							"iid": "f80ee804-66b0-11ec-b121-874e33fcffe5",
 							"width": 24,
 							"height": 24,
 							"defUid": 37,
 							"px": [664,336],
 							"fieldInstances": [
-								{
-									"__identifier": "type",
-									"__value": "Thief",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Thief"]
-									}]
-								},
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
-								{
-									"__identifier": "loots",
-									"__value": ["Mana_potion"],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 39,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Mana_potion"]
-									}]
-								},
-								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] }
+								{ "__identifier": "type", "__value": "Thief", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Thief"]
+								}] },
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [] },
+								{ "__identifier": "loots", "__value": ["Mana_potion"], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Mana_potion"]
+								}] },
+								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [] }
 							]
 						},
 						{
@@ -2619,38 +2553,26 @@
 							"__grid": [4,18],
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "srcRect": [80,240,16,16] },
+							"__tile": { "x": 80, "y": 240, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "f80f0f12-66b0-11ec-b121-c7e0ed2499ae",
 							"width": 20,
 							"height": 20,
 							"defUid": 1,
 							"px": [72,304],
 							"fieldInstances": [
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValues": [] },
-								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "defUid": 3, "realEditorValues": [] },
-								{
-									"__identifier": "weapon",
-									"__value": "Trout",
-									"__type": "LocalEnum.ItemType",
-									"defUid": 29,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Trout"]
-									}]
-								},
-								{
-									"__identifier": "bag",
-									"__value": [ "Magic_ring", "Healing_potion" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 19,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Magic_ring"]
-									}, {
-										"id": "V_String",
-										"params": ["Healing_potion"]
-									} ]
-								}
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "__tile": null, "defUid": 3, "realEditorValues": [] },
+								{ "__identifier": "weapon", "__value": "Trout", "__type": "LocalEnum.ItemType", "__tile": null, "defUid": 29, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Trout"]
+								}] },
+								{ "__identifier": "bag", "__value": [ "Magic_ring", "Healing_potion" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 19, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Magic_ring"]
+								}, {
+									"id": "V_String",
+									"params": ["Healing_potion"]
+								} ] }
 							]
 						},
 						{
@@ -2658,33 +2580,21 @@
 							"__grid": [42,8],
 							"__pivot": [0.5,1],
 							"__tags": ["container"],
-							"__tile": { "tilesetUid": 99, "srcRect": [160,560,16,16] },
+							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "ada47150-66b0-11ec-b043-2d6dd3346abd",
 							"width": 24,
 							"height": 24,
 							"defUid": 8,
 							"px": [680,144],
 							"fieldInstances": [
-								{
-									"__identifier": "content",
-									"__value": [ "Bow", "Arrow" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 21,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Bow"]
-									}, {
-										"id": "V_String",
-										"params": ["Arrow"]
-									} ]
-								},
-								{
-									"__identifier": "requireKey",
-									"__value": false,
-									"__type": "Bool",
-									"defUid": 28,
-									"realEditorValues": [null]
-								}
+								{ "__identifier": "content", "__value": [ "Bow", "Arrow" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 21, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Bow"]
+								}, {
+									"id": "V_String",
+									"params": ["Arrow"]
+								} ] },
+								{ "__identifier": "requireKey", "__value": false, "__type": "Bool", "__tile": null, "defUid": 28, "realEditorValues": [null] }
 							]
 						}
 					]
@@ -2718,41 +2628,31 @@
 							"__grid": [39,13],
 							"__pivot": [0.5,0.5],
 							"__tags": ["trigger"],
-							"__tile": { "tilesetUid": 99, "srcRect": [128,48,16,16] },
+							"__tile": { "x": 128, "y": 48, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "f80ee802-66b0-11ec-b121-7703f3b4b3e4",
 							"width": 16,
 							"height": 16,
 							"defUid": 41,
 							"px": [632,216],
 							"fieldInstances": [
-								{
-									"__identifier": "targets",
-									"__value": [ {
-										"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									}, {
-										"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									} ],
-									"__type": "Array<EntityRef>",
-									"defUid": 97,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
-									}, {
-										"id": "V_String",
-										"params": ["f80ee800-66b0-11ec-b121-9b6ebb5b8d6e"]
-									} ]
-								},
-								{
-									"__identifier": "delay",
-									"__value": 1.2,
-									"__type": "Float",
-									"defUid": 91,
-									"realEditorValues": [{ "id": "V_Float", "params": [1.2] }]
-								}
+								{ "__identifier": "targets", "__value": [ {
+									"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								}, {
+									"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 97, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
+								}, {
+									"id": "V_String",
+									"params": ["f80ee800-66b0-11ec-b121-9b6ebb5b8d6e"]
+								} ] },
+								{ "__identifier": "delay", "__value": 1.2, "__type": "Float", "__tile": null, "defUid": 91, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] }
 							]
 						},
 						{
@@ -2760,47 +2660,30 @@
 							"__grid": [11,16],
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
-							"__tile": { "tilesetUid": 99, "srcRect": [48,240,16,16] },
+							"__tile": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 },
 							"iid": "f80f0f10-66b0-11ec-b121-cbb2b35a0142",
 							"width": 64,
 							"height": 48,
 							"defUid": 82,
 							"px": [176,256],
 							"fieldInstances": [
-								{
-									"__identifier": "target",
-									"__value": {
-										"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									},
-									"__type": "EntityRef",
-									"defUid": 98,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
-									}]
-								},
-								{
-									"__identifier": "condition",
-									"__value": "OnPlayerEnter",
-									"__type": "LocalEnum.TriggerCondition",
-									"defUid": 85,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["OnPlayerEnter"]
-									}]
-								},
-								{
-									"__identifier": "message",
-									"__value": "Some hidden mechanism opens the door to the right.",
-									"__type": "Multilines",
-									"defUid": 86,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Some hidden mechanism opens the door to the right."]
-									}]
-								}
+								{ "__identifier": "target", "__value": {
+									"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								}, "__type": "EntityRef", "__tile": null, "defUid": 98, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
+								}] },
+								{ "__identifier": "condition", "__value": "OnPlayerEnter", "__type": "LocalEnum.TriggerCondition", "__tile": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 }, "defUid": 85, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["OnPlayerEnter"]
+								}] },
+								{ "__identifier": "message", "__value": "Some hidden mechanism opens the door to the right.", "__type": "Multilines", "__tile": null, "defUid": 86, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Some hidden mechanism opens the door to the right."]
+								}] }
 							]
 						},
 						{
@@ -2808,34 +2691,22 @@
 							"__grid": [40,6],
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
-							"__tile": { "tilesetUid": 99, "srcRect": [48,240,16,16] },
+							"__tile": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 },
 							"iid": "f80f0f11-66b0-11ec-b121-f14c96b08517",
 							"width": 80,
 							"height": 48,
 							"defUid": 82,
 							"px": [640,96],
 							"fieldInstances": [
-								{ "__identifier": "target", "__value": null, "__type": "EntityRef", "defUid": 98, "realEditorValues": [] },
-								{
-									"__identifier": "condition",
-									"__value": "OnPlayerEnter",
-									"__type": "LocalEnum.TriggerCondition",
-									"defUid": 85,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["OnPlayerEnter"]
-									}]
-								},
-								{
-									"__identifier": "message",
-									"__value": "Secret area!",
-									"__type": "Multilines",
-									"defUid": 86,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Secret area!"]
-									}]
-								}
+								{ "__identifier": "target", "__value": null, "__type": "EntityRef", "__tile": null, "defUid": 98, "realEditorValues": [] },
+								{ "__identifier": "condition", "__value": "OnPlayerEnter", "__type": "LocalEnum.TriggerCondition", "__tile": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 }, "defUid": 85, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["OnPlayerEnter"]
+								}] },
+								{ "__identifier": "message", "__value": "Secret area!", "__type": "Multilines", "__tile": null, "defUid": 86, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Secret area!"]
+								}] }
 							]
 						},
 						{
@@ -2843,41 +2714,17 @@
 							"__grid": [21,6],
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 99, "srcRect": [0,112,16,16] },
+							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "f80e99e2-66b0-11ec-b121-67b8aade98d9",
 							"width": 16,
 							"height": 16,
 							"defUid": 10,
 							"px": [344,96],
 							"fieldInstances": [
-								{
-									"__identifier": "radius",
-									"__value": 4.75,
-									"__type": "Float",
-									"defUid": 45,
-									"realEditorValues": [{ "id": "V_Float", "params": [4.75] }]
-								},
-								{
-									"__identifier": "colors",
-									"__value": ["#FFEF85"],
-									"__type": "Array<Color>",
-									"defUid": 26,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "flickering",
-									"__value": false,
-									"__type": "Bool",
-									"defUid": 12,
-									"realEditorValues": [null]
-								},
-								{
-									"__identifier": "intensity",
-									"__value": 50,
-									"__type": "Int",
-									"defUid": 92,
-									"realEditorValues": [{ "id": "V_Int", "params": [50] }]
-								}
+								{ "__identifier": "radius", "__value": 4.75, "__type": "Float", "__tile": null, "defUid": 45, "realEditorValues": [{ "id": "V_Float", "params": [4.75] }] },
+								{ "__identifier": "colors", "__value": ["#FFEF85"], "__type": "Array<Color>", "__tile": null, "defUid": 26, "realEditorValues": [null] },
+								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "__tile": null, "defUid": 12, "realEditorValues": [null] },
+								{ "__identifier": "intensity", "__value": 50, "__type": "Int", "__tile": null, "defUid": 92, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							]
 						},
 						{
@@ -2885,38 +2732,20 @@
 							"__grid": [32,8],
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 99, "srcRect": [0,112,16,16] },
+							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 							"width": 16,
 							"height": 16,
 							"defUid": 10,
 							"px": [520,128],
 							"fieldInstances": [
-								{
-									"__identifier": "radius",
-									"__value": 2.5,
-									"__type": "Float",
-									"defUid": 45,
-									"realEditorValues": [{ "id": "V_Float", "params": [2.5] }]
-								},
-								{
-									"__identifier": "colors",
-									"__value": [ "#FF7D1A", "#B20101" ],
-									"__type": "Array<Color>",
-									"defUid": 26,
-									"realEditorValues": [ { "id": "V_Int", "params": [16743706] }, { "id": "V_Int", "params": [11665665] } ]
-								},
-								{
-									"__identifier": "flickering",
-									"__value": true,
-									"__type": "Bool",
-									"defUid": 12,
-									"realEditorValues": [{
-										"id": "V_Bool",
-										"params": [ true ]
-									}]
-								},
-								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "defUid": 92, "realEditorValues": [] }
+								{ "__identifier": "radius", "__value": 2.5, "__type": "Float", "__tile": null, "defUid": 45, "realEditorValues": [{ "id": "V_Float", "params": [2.5] }] },
+								{ "__identifier": "colors", "__value": [ "#FF7D1A", "#B20101" ], "__type": "Array<Color>", "__tile": null, "defUid": 26, "realEditorValues": [ { "id": "V_Int", "params": [16743706] }, { "id": "V_Int", "params": [11665665] } ] },
+								{ "__identifier": "flickering", "__value": true, "__type": "Bool", "__tile": null, "defUid": 12, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] },
+								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "__tile": null, "defUid": 92, "realEditorValues": [] }
 							]
 						},
 						{
@@ -2930,16 +2759,10 @@
 							"height": 32,
 							"defUid": 43,
 							"px": [552,304],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": true,
-								"__type": "Bool",
-								"defUid": 50,
-								"realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ true ]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "locked", "__value": true, "__type": "Bool", "__tile": null, "defUid": 50, "realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}] }]
 						},
 						{
 							"__identifier": "Door",
@@ -2952,16 +2775,10 @@
 							"height": 48,
 							"defUid": 43,
 							"px": [440,208],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": true,
-								"__type": "Bool",
-								"defUid": 50,
-								"realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ true ]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "locked", "__value": true, "__type": "Bool", "__tile": null, "defUid": 50, "realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}] }]
 						},
 						{
 							"__identifier": "Door",
@@ -2974,42 +2791,24 @@
 							"height": 32,
 							"defUid": 43,
 							"px": [360,304],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": false,
-								"__type": "Bool",
-								"defUid": 50,
-								"realEditorValues": [null]
-							}]
+							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "__tile": null, "defUid": 50, "realEditorValues": [null] }]
 						},
 						{
 							"__identifier": "SpotLight",
 							"__grid": [19,16],
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 99, "srcRect": [0,112,16,16] },
+							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 							"width": 16,
 							"height": 16,
 							"defUid": 10,
 							"px": [312,256],
 							"fieldInstances": [
-								{
-									"__identifier": "radius",
-									"__value": 1.5,
-									"__type": "Float",
-									"defUid": 45,
-									"realEditorValues": [{ "id": "V_Float", "params": [1.5] }]
-								},
-								{
-									"__identifier": "colors",
-									"__value": ["#FFEF85"],
-									"__type": "Array<Color>",
-									"defUid": 26,
-									"realEditorValues": [null]
-								},
-								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValues": [] },
-								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "defUid": 92, "realEditorValues": [] }
+								{ "__identifier": "radius", "__value": 1.5, "__type": "Float", "__tile": null, "defUid": 45, "realEditorValues": [{ "id": "V_Float", "params": [1.5] }] },
+								{ "__identifier": "colors", "__value": ["#FFEF85"], "__type": "Array<Color>", "__tile": null, "defUid": 26, "realEditorValues": [null] },
+								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "__tile": null, "defUid": 12, "realEditorValues": [] },
+								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "__tile": null, "defUid": 92, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3017,35 +2816,31 @@
 							"__grid": [18,18],
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 99, "srcRect": [16,80,16,16] },
+							"__tile": { "x": 16, "y": 80, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 							"width": 16,
 							"height": 16,
 							"defUid": 101,
 							"px": [296,296],
 							"fieldInstances": [
-								{
-									"__identifier": "targets",
-									"__value": [ {
-										"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									}, {
-										"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									} ],
-									"__type": "Array<EntityRef>",
-									"defUid": 102,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
-									}, {
-										"id": "V_String",
-										"params": ["f80ee805-66b0-11ec-b121-09bc15634dc5"]
-									} ]
-								},
-								{ "__identifier": "delay", "__value": 0, "__type": "Float", "defUid": 103, "realEditorValues": [] }
+								{ "__identifier": "targets", "__value": [ {
+									"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								}, {
+									"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
+								}, {
+									"id": "V_String",
+									"params": ["f80ee805-66b0-11ec-b121-09bc15634dc5"]
+								} ] },
+								{ "__identifier": "delay", "__value": 0, "__type": "Float", "__tile": null, "defUid": 103, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3053,41 +2848,31 @@
 							"__grid": [32,12],
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 99, "srcRect": [16,80,16,16] },
+							"__tile": { "x": 16, "y": 80, "w": 16, "h": 16, "tilesetUid": 99 },
 							"iid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 							"width": 16,
 							"height": 16,
 							"defUid": 101,
 							"px": [520,200],
 							"fieldInstances": [
-								{
-									"__identifier": "targets",
-									"__value": [ {
-										"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									}, {
-										"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									} ],
-									"__type": "Array<EntityRef>",
-									"defUid": 102,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
-									}, {
-										"id": "V_String",
-										"params": ["f80ee801-66b0-11ec-b121-4d74c475d701"]
-									} ]
-								},
-								{
-									"__identifier": "delay",
-									"__value": 1,
-									"__type": "Float",
-									"defUid": 103,
-									"realEditorValues": [{ "id": "V_Float", "params": [1] }]
-								}
+								{ "__identifier": "targets", "__value": [ {
+									"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								}, {
+									"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
+								}, {
+									"id": "V_String",
+									"params": ["f80ee801-66b0-11ec-b121-4d74c475d701"]
+								} ] },
+								{ "__identifier": "delay", "__value": 1, "__type": "Float", "__tile": null, "defUid": 103, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
 							]
 						}
 					]
