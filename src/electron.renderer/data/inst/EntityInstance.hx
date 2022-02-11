@@ -60,16 +60,7 @@ class EntityInstance {
 			__grid: [ getCx(li.def), getCy(li.def) ],
 			__pivot: [ JsonTools.writeFloat(def.pivotX), JsonTools.writeFloat(def.pivotY) ],
 			__tags: def.tags.toArray(),
-			__tile: {
-				var t = getSmartTile();
-				if( t!=null )
-					{
-						tilesetUid: t.tilesetUid,
-						srcRect: [ t.x, t.y, t.w, t.h ],
-					}
-				else
-					null;
-			},
+			__tile: getSmartTile(),
 
 			iid: iid,
 			width: width,
