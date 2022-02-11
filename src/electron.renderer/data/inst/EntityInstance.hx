@@ -65,7 +65,7 @@ class EntityInstance {
 				if( t!=null )
 					{
 						tilesetUid: t.tilesetUid,
-						srcRect: [ t.rect.x, t.rect.y, t.rect.w, t.rect.h ],
+						srcRect: [ t.x, t.y, t.w, t.h ],
 					}
 				else
 					null;
@@ -177,7 +177,7 @@ class EntityInstance {
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
-	public function getSmartTile() : Null<EntitySmartTile> {
+	public function getSmartTile() : Null<ldtk.Json.AtlasTileRect> {
 		// Check for a tile provided by a field instance
 		for(fd in def.fieldDefs) {
 			switch fd.type {
@@ -201,12 +201,10 @@ class EntityInstance {
 					var tid = ev.tileId;
 					return {
 						tilesetUid: ed.iconTilesetUid,
-						rect: {
-							x: td.getTileSourceX(tid),
-							y: td.getTileSourceY(tid),
-							w: td.tileGridSize,
-							h: td.tileGridSize,
-						}
+						x: td.getTileSourceX(tid),
+						y: td.getTileSourceY(tid),
+						w: td.tileGridSize,
+						h: td.tileGridSize,
 					}
 
 
@@ -216,10 +214,7 @@ class EntityInstance {
 						continue;
 
 					if( !fi.valueIsNull(0) )
-						return {
-							tilesetUid: fi.def.tilesetUid,
-							rect: fi.getTileRectObj(0),
-						}
+						return fi.getTileRectObj(0);
 
 				case _:
 			}

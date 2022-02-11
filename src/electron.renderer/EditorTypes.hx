@@ -213,8 +213,3 @@ typedef CachedIID = {
 	var level: data.Level;
 	var ?ei: data.inst.EntityInstance ;
 }
-
-typedef EntitySmartTile = {
-	var tilesetUid: Int;
-	var rect : ldtk.Json.AtlasTileRect;
-}

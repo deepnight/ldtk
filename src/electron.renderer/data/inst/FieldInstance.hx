@@ -679,6 +679,7 @@ class FieldInstance {
 			return null;
 
 		return {
+			tilesetUid: def.tilesetUid,
 			x : Std.parseInt(parts[0]),
 			y : Std.parseInt(parts[1]),
 			w : Std.parseInt(parts[2]),

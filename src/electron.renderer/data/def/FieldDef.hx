@@ -369,6 +369,7 @@ class FieldDef {
 			if( parts.length!=4 )
 				null;
 			else {
+				tilesetUid: this.tilesetUid,
 				x: Std.parseInt(parts[0]),
 				y: Std.parseInt(parts[1]),
 				w: Std.parseInt(parts[2]),

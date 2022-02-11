@@ -96,8 +96,8 @@ class EntityRender extends dn.Process {
 		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		// Render a tile
-		function _renderTile(tilesetUid:Int, rect:ldtk.Json.AtlasTileRect, mode:ldtk.Json.EntityTileRenderMode) {
-			if( rect==null || tilesetUid==null ) {
+		function _renderTile(rect:ldtk.Json.AtlasTileRect, mode:ldtk.Json.EntityTileRenderMode) {
+			if( rect==null || Editor.ME.project.defs.getTilesetDef(rect.tilesetUid)==null ) {
 				// Missing tile
 				var p = 2;
 				g.lineStyle(3, 0xff0000);
@@ -113,7 +113,7 @@ class EntityRender extends dn.Process {
 				g.drawRect(0, 0, w, h);
 
 				// Texture
-				var td = Editor.ME.project.defs.getTilesetDef(tilesetUid);
+				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
 				var t = td.getTileRect(rect);
 				var alpha = ed.tileOpacity;
 				switch mode {
@@ -178,7 +178,7 @@ class EntityRender extends dn.Process {
 		var smartTile = ei==null ? ed.getDefaultTile() : ei.getSmartTile();
 		if( smartTile!=null ) {
 			// Tile (from either Def or a field)
-			_renderTile(smartTile.tilesetUid, smartTile.rect, ed.tileRenderMode);
+			_renderTile(smartTile, ed.tileRenderMode);
 		}
 		else
 			switch ed.renderMode {
@@ -206,7 +206,7 @@ class EntityRender extends dn.Process {
 
 			case Tile:
 				// Render should be done through getSmartTile() method above, but if tile is invalid, we land here
-				_renderTile(ed.tilesetId,null, FitInside);
+				_renderTile(null, FitInside);
 			}
 
 		// Pivot

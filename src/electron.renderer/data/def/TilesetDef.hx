@@ -504,6 +504,7 @@ class TilesetDef {
 			right = dn.M.imax( right, getTileSourceX(tid)+tileGridSize );
 		}
 		return {
+			tilesetUid: this.uid,
 			x: left,
 			y: top,
 			w: right-left,

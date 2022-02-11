@@ -261,7 +261,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jRenderSelect.change( function(ev) {
 			var oldMode = curEntity.renderMode;
 			curEntity._oldTileId = null;
-			curEntity.tileRect = null;
+			curEntity.tileRect = null; // NOTE: important to clear as tilesetUid is also stored in it!
 
 			var raw : String = jRenderSelect.val();
 			if( M.isValidNumber(Std.parseInt(raw)) ) {
