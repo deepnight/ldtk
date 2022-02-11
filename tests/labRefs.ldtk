@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456730,
+	"appBuildId": 456824,
 	"nextUid": 45,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "GridVania",
@@ -772,6 +772,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -793,6 +794,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -806,7 +808,7 @@
 		{ "id": "A0", "tileId": 93, "color": 11184810, "__tileSrcRect": [208,80,16,16] },
 		{ "id": "A1", "tileId": 230, "color": 7825066, "__tileSrcRect": [96,224,16,16] },
 		{ "id": "A2", "tileId": 315, "color": 3377220, "__tileSrcRect": [176,304,16,16] }
-	], "iconTilesetUid": 17, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 17, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "World_Level_0",

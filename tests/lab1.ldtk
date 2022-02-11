@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456802,
-	"nextUid": 114,
+	"appBuildId": 456824,
+	"nextUid": 115,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -1554,6 +1554,38 @@
 		{ "identifier": "EnemyType", "uid": 108, "values": [], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["gameplay"] }
 	], "externalEnums": [], "levelFields": [
 		{
+			"identifier": "hasMusic",
+			"__type": "Bool",
+			"uid": 114,
+			"type": "F_Bool",
+			"isArray": false,
+			"canBeNull": false,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "Hidden",
+			"editorDisplayPos": "Above",
+			"editorAlwaysShow": false,
+			"editorCutLongValues": true,
+			"editorTextSuffix": null,
+			"editorTextPrefix": null,
+			"useForSmartColor": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": {
+				"id": "V_Bool",
+				"params": [ true ]
+			},
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"autoChainRef": true,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame",
+			"allowedRefTags": [],
+			"tilesetUid": null
+		},
+		{
 			"identifier": "RoomType",
 			"__type": "LocalEnum.RoomType",
 			"uid": 93,
@@ -1603,16 +1635,19 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{
-				"__identifier": "RoomType",
-				"__value": "Treasure",
-				"__type": "LocalEnum.RoomType",
-				"defUid": 93,
-				"realEditorValues": [{
-					"id": "V_String",
-					"params": ["Treasure"]
-				}]
-			}],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{
+					"__identifier": "RoomType",
+					"__value": "Treasure",
+					"__type": "LocalEnum.RoomType",
+					"defUid": 93,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["Treasure"]
+					}]
+				}
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
@@ -1788,8 +1823,8 @@
 										"params": ["scripts/someScript.lua"]
 									}]
 								},
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] },
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3080,7 +3115,10 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
@@ -3274,7 +3312,6 @@
 									"defUid": 49,
 									"realEditorValues": [null]
 								},
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
 								{
 									"__identifier": "music",
 									"__value": "../../ld30-chipsetZero/sounds/connected.wav",
@@ -3284,7 +3321,8 @@
 										"id": "V_String",
 										"params": ["../../ld30-chipsetZero/sounds/connected.wav"]
 									}]
-								}
+								},
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3319,8 +3357,8 @@
 										"params": ["scripts/someScript.lua"]
 									}]
 								},
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] },
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] }
 							]
 						}
 					]
@@ -5187,7 +5225,10 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
@@ -5445,8 +5486,8 @@
 									}]
 								},
 								{ "__identifier": "script", "__value": null, "__type": "FilePath", "defUid": 49, "realEditorValues": [] },
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] },
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] }
 							]
 						},
 						{
@@ -5481,8 +5522,8 @@
 										"params": ["scripts/someScript.lua"]
 									}]
 								},
-								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] },
-								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] }
+								{ "__identifier": "music", "__value": null, "__type": "FilePath", "defUid": 54, "realEditorValues": [] },
+								{ "__identifier": "onlyTriggerOnce", "__value": true, "__type": "Bool", "defUid": 50, "realEditorValues": [] }
 							]
 						}
 					]
@@ -6822,7 +6863,10 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
@@ -7957,16 +8001,19 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{
-				"__identifier": "RoomType",
-				"__value": "Treasure",
-				"__type": "LocalEnum.RoomType",
-				"defUid": 93,
-				"realEditorValues": [{
-					"id": "V_String",
-					"params": ["Treasure"]
-				}]
-			}],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{
+					"__identifier": "RoomType",
+					"__value": "Treasure",
+					"__type": "LocalEnum.RoomType",
+					"defUid": 93,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["Treasure"]
+					}]
+				}
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
@@ -8501,16 +8548,19 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{
-				"__identifier": "RoomType",
-				"__value": "Boss",
-				"__type": "LocalEnum.RoomType",
-				"defUid": 93,
-				"realEditorValues": [{
-					"id": "V_String",
-					"params": ["Boss"]
-				}]
-			}],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{
+					"__identifier": "RoomType",
+					"__value": "Boss",
+					"__type": "LocalEnum.RoomType",
+					"defUid": 93,
+					"realEditorValues": [{
+						"id": "V_String",
+						"params": ["Boss"]
+					}]
+				}
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
@@ -10798,7 +10848,10 @@
 			"__smartColor": "#898A8F",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }],
+			"fieldInstances": [
+				{ "__identifier": "hasMusic", "__value": true, "__type": "Bool", "defUid": 114, "realEditorValues": [] },
+				{ "__identifier": "RoomType", "__value": null, "__type": "LocalEnum.RoomType", "defUid": 93, "realEditorValues": [] }
+			],
 			"layerInstances": [
 				{
 					"__identifier": "Tiles",
