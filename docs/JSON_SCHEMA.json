@@ -262,6 +262,19 @@
 						"string"
 					]
 				},
+				"__tile": {
+					"description": "Optional AtlasTileRect used to display this field (this can be the field own Tile, or some other Tile guessed from the value, like an Enum).",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/AtlasTileRect"
+						}
+					]
+				},
 				"realEditorValues": {
 					"description": "Editor internal raw values",
 					"items" : {},
@@ -270,7 +283,7 @@
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a [FieldInstanceTile](#ldtk-FieldInstanceTile) object.<br/>   - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an array, then this `__value` will also be a JSON array."
+					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a [AtlasTileRect](#ldtk-AtlasTileRect) object.<br/>   - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an array, then this `__value` will also be a JSON array."
 				}
 			},
 			"type": [
@@ -312,7 +325,7 @@
 					]
 				},
 				"__tile": {
-					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
+					"description": "Optional AtlasTileRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
 					"oneOf": [
 						{
 							"type": [
@@ -320,7 +333,7 @@
 							]
 						},
 						{
-							"$ref": "#/otherTypes/FieldInstanceTile"
+							"$ref": "#/otherTypes/AtlasTileRect"
 						}
 					]
 				},
@@ -992,7 +1005,7 @@
 					]
 				},
 				"tileRect": {
-					"description": "An array of 4 values (`[x,y,width,height]` in pixels) describing a sub rectangle from the tileset pointed by `tilesetId`.",
+					"description": "An object representing a rectangle from an existing Tileset",
 					"oneOf": [
 						{
 							"type": [
@@ -1178,12 +1191,19 @@
 			"title": "Atlas tile rectangle",
 			"required": [
 				"h",
+				"tilesetUid",
 				"w",
 				"x",
 				"y"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"tilesetUid": {
+					"description": "UID of the tileset",
+					"type": [
+						"integer"
+					]
+				},
 				"h": {
 					"description": "Height in pixels",
 					"type": [
@@ -1553,10 +1573,17 @@
 			"required": [
 				"entityIid",
 				"layerIid",
-				"levelIid"
+				"levelIid",
+				"worldIid"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"worldIid": {
+					"description": "IID of the World containing the refered EntityInstance",
+					"type": [
+						"string"
+					]
+				},
 				"entityIid": {
 					"description": "IID of the refered EntityInstance",
 					"type": [
@@ -1573,37 +1600,6 @@
 					"description": "IID of the Level containing the refered EntityInstance",
 					"type": [
 						"string"
-					]
-				}
-			},
-			"type": [
-				"object"
-			]
-		},
-		"FieldInstanceTile": {
-			"description": "This object is used in Field Instances to describe a Tile value.",
-			"title": "Field instance tile",
-			"required": [
-				"srcRect",
-				"tilesetUid"
-			],
-			"additionalProperties": false,
-			"properties": {
-				"srcRect": {
-					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
-					"items": {
-						"type": [
-							"integer"
-						]
-					},
-					"type": [
-						"array"
-					]
-				},
-				"tilesetUid": {
-					"description": "Tileset ID",
-					"type": [
-						"integer"
 					]
 				}
 			},

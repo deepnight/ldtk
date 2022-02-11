@@ -7,7 +7,6 @@
      - [Tile instance](#ldtk-Tile)
      - [Entity instance](#ldtk-EntityInstanceJson)
      - [Field instance](#ldtk-FieldInstanceJson)
-       - [Field instance tile](#ldtk-FieldInstanceTile)
        - [Field instance entity reference](#ldtk-EntityReferenceInfos)
        - [Field instance grid point](#ldtk-GridPoint)
    - [Definitions](#ldtk-DefinitionsJson)
@@ -158,7 +157,7 @@ Value | Type | Description
 `__identifier` | String | Entity definition identifier
 `__pivot`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Array&nbsp;of&nbsp;Float | Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
 `__tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | Array of tags defined in this Entity definition
-`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | [Field&nbsp;instance&nbsp;tile](#ldtk-FieldInstanceTile)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).
+`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | [Atlas&nbsp;tile&nbsp;rectangle](#ldtk-AtlasTileRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional AtlasTileRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).
 `defUid` | Int | Reference of the **Entity definition** UID
 `fieldInstances` | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array of all custom fields and their values.
 `height`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.
@@ -171,19 +170,11 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `__identifier` | String | Field definition identifier
+`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | [Atlas&nbsp;tile&nbsp;rectangle](#ldtk-AtlasTileRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional AtlasTileRect used to display this field (this can be the field own Tile, or some other Tile guessed from the value, like an Enum).
 `__type` | String | Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`, etc.<br/>		NOTE: if you enable the advanced option **Use Multilines type**, you will have "*Multilines*" instead of "*String*" when relevant.
-`__value` | Various&nbsp;possible&nbsp;types | Actual value of the field instance. The value type varies, depending on `__type`:<br/>		 - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>		 - For **Color**, the value is an hexadecimal string using "#rrggbb" format.<br/>		 - For **Enum**, the value is a String representing the selected enum value.<br/>		 - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>		 - For **Tile**, the value is a [FieldInstanceTile](#ldtk-FieldInstanceTile) object.<br/>		 - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>		If the field is an array, then this `__value` will also be a JSON array.
+`__value` | Various&nbsp;possible&nbsp;types | Actual value of the field instance. The value type varies, depending on `__type`:<br/>		 - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>		 - For **Color**, the value is an hexadecimal string using "#rrggbb" format.<br/>		 - For **Enum**, the value is a String representing the selected enum value.<br/>		 - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>		 - For **Tile**, the value is a [AtlasTileRect](#ldtk-AtlasTileRect) object.<br/>		 - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>		If the field is an array, then this `__value` will also be a JSON array.
 `defUid` | Int | Reference of the **Field definition** UID
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
-
-<a id="ldtk-FieldInstanceTile" name="ldtk-FieldInstanceTile"></a>
-## 2.4.1. Field instance tile   
-This object is used in Field Instances to describe a Tile value.
-
-Value | Type | Description
--- | -- | --
-`srcRect` | Array&nbsp;of&nbsp;Int | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
-`tilesetUid` | Int | Tileset ID
 
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
 ## 2.4.2. Field instance entity reference  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
@@ -194,6 +185,7 @@ Value | Type | Description
 `entityIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the refered EntityInstance
 `layerIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the LayerInstance containing the refered EntityInstance
 `levelIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the Level containing the refered EntityInstance
+`worldIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the World containing the refered EntityInstance
 
 <a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
 ## 2.4.3. Field instance grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
@@ -285,7 +277,7 @@ Value | Type | Description
 `identifier` | String | User defined unique identifier
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
-`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | [Atlas&nbsp;tile&nbsp;rectangle](#ldtk-AtlasTileRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of 4 values (`[x,y,width,height]` in pixels) describing a sub rectangle from the tileset pointed by `tilesetId`.
+`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | [Atlas&nbsp;tile&nbsp;rectangle](#ldtk-AtlasTileRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An object representing a rectangle from an existing Tileset
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
@@ -347,6 +339,7 @@ An array of 4 integers (`[x,y,width,height]` in pixels) representing a custom re
 Value | Type | Description
 -- | -- | --
 `h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Height in pixels
+`tilesetUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | UID of the tileset
 `w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Width in pixels
 `x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | X pixel coord of the tile in the Tileset atlas
 `y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Y pixel coord of the tile in the Tileset atlas
