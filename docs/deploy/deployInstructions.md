@@ -32,6 +32,7 @@
 - [ ] Upload JSON Schema to FTP
 - [ ] Upload QuickType parsers
 - [ ] Check "next" folder on FTP
+- [ ] Archive docs to the `docs/archives/x.x.x/` folder
 
 ## Publish
 - [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
