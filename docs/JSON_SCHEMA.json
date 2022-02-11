@@ -129,13 +129,14 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
 				"items": {
 					"enum": [
 						"ExportPreCsvIntGridFormat",
 						"IgnoreBackupSuggest",
 						"PrependIndexToLevelFileNames",
-						"MultiWorlds"
+						"MultiWorlds",
+						"UseMultilinesType"
 					]
 				},
 				"type": [
@@ -244,7 +245,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"__type": {
-					"description": "Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.",
+					"description": "Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`, etc.<br/>  NOTE: if you enable the advanced option **Use Multilines type**, you will have \"*Multilines*\" instead of \"*String*\" when relevant.",
 					"type": [
 						"string"
 					]
@@ -738,7 +739,7 @@
 					]
 				},
 				"__type": {
-					"description": "Human readable value type. Possible values: `Int, Float, String, Bool, Color, ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)",
+					"description": "Human readable value type. Possible values: `Int, Float, String, Bool, Color, ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)<br/>  NOTE: if you enable the advanced option **Use Multilines type**, you will have \"*Multilines*\" instead of \"*String*\" when relevant.",
 					"type": [
 						"string"
 					]
