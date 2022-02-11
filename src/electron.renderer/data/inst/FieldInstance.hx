@@ -495,6 +495,7 @@ class FieldInstance {
 						entityIid: iid,
 						layerIid: ref==null ? "?" : ref._li.iid,
 						levelIid: ref==null ? "?" : ref._li.level.iid,
+						worldIid: ref==null ? "?" : ref._li.level._world.iid,
 					}
 					out;
 				}
