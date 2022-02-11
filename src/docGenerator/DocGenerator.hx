@@ -196,7 +196,6 @@ class DocGenerator {
 	static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
 		var root : GlobalType = null;
-		var toc = [];
 		var md = [];
 		for(type in allGlobalTypes) {
 			if( type.inlined )
@@ -220,13 +219,6 @@ class DocGenerator {
 			if( type.section!="" )
 				title = type.section+". "+title;
 			md.push('## $title');
-
-			// Add to ToC
-			toc.push({
-				name: type.displayName,
-				anchor: anchorId(type.xml.att.path),
-				depth: type.section.split(".").length,
-			});
 
 			// Optional description
 			if( type.description!=null ) {
@@ -313,18 +305,9 @@ class DocGenerator {
 
 		// Header
 		var headerMd = [
-			'## LDtk Json structure (version $appVersion)',
+			'# LDtk Json structure (version $appVersion)',
 			'',
 		];
-
-		// Table of content
-		for(e in toc) {
-			var indent = " -";
-			for(i in 0...e.depth)
-				indent = "  "+indent;
-			headerMd.push('$indent [${e.name}](#${e.anchor})');
-		}
-
 		md = headerMd.concat(md);
 
 

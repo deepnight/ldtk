@@ -1,23 +1,5 @@
-## LDtk Json structure (version 1.0.0)
+# LDtk Json structure (version 1.0.0)
 
-   - [LDtk Json root](#ldtk-ProjectJson)
-     - [World](#ldtk-WorldJson)
-   - [Level](#ldtk-LevelJson)
-     - [Layer instance](#ldtk-LayerInstanceJson)
-     - [Tile instance](#ldtk-Tile)
-     - [Entity instance](#ldtk-EntityInstanceJson)
-     - [Field instance](#ldtk-FieldInstanceJson)
-       - [Field instance entity reference](#ldtk-EntityReferenceInfos)
-       - [Field instance grid point](#ldtk-GridPoint)
-   - [Definitions](#ldtk-DefinitionsJson)
-     - [Layer definition](#ldtk-LayerDefJson)
-       - [Auto-layer rule definition](#ldtk-AutoRuleDef)
-     - [Entity definition](#ldtk-EntityDefJson)
-       - [Field definition](#ldtk-FieldDefJson)
-       - [Tileset rectangle](#ldtk-TilesetRect)
-     - [Tileset definition](#ldtk-TilesetDefJson)
-     - [Enum definition](#ldtk-EnumDefJson)
-       - [Enum value definition](#ldtk-EnumDefValues)
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## 1. LDtk Json root   
