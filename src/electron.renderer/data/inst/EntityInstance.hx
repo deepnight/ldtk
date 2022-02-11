@@ -180,44 +180,9 @@ class EntityInstance {
 	public function getSmartTile() : Null<ldtk.Json.AtlasTileRect> {
 		// Check for a tile provided by a field instance
 		for(fd in def.fieldDefs) {
-			switch fd.type {
-				case F_Enum(enumDefUid):
-					var fi = getFieldInstance(fd,true);
-					if( fi.valueIsNull(0) || fi.def.editorDisplayMode!=EntityTile )
-						continue;
-
-					var ed = _project.defs.getEnumDef(enumDefUid);
-					if( ed.iconTilesetUid==null )
-						continue;
-
-					var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
-					if( td==null )
-						return null;
-
-					var ev = ed.getValue( fi.getEnumValue(0) );
-					if( ev==null )
-						return null;
-
-					var tid = ev.tileId;
-					return {
-						tilesetUid: ed.iconTilesetUid,
-						x: td.getTileSourceX(tid),
-						y: td.getTileSourceY(tid),
-						w: td.tileGridSize,
-						h: td.tileGridSize,
-					}
-
-
-				case F_Tile:
-					var fi = getFieldInstance(fd,true);
-					if( fi.def.editorDisplayMode!=EntityTile )
-						continue;
-
-					if( !fi.valueIsNull(0) )
-						return fi.getTileRectObj(0);
-
-				case _:
-			}
+			var t = getFieldInstance(fd,true).getSmartTile();
+			if( t!=null )
+				return t;
 		}
 
 		return def.getDefaultTile();

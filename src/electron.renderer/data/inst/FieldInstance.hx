@@ -700,6 +700,47 @@ class FieldInstance {
 		}
 	}
 
+
+	public function getSmartTile() : Null<ldtk.Json.AtlasTileRect> {
+		switch def.type {
+			case F_Enum(enumDefUid):
+				if( valueIsNull(0) || def.editorDisplayMode!=EntityTile )
+					return null;
+
+				var ed = _project.defs.getEnumDef(enumDefUid);
+				if( ed.iconTilesetUid==null )
+					return null;
+
+				var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
+				if( td==null )
+					return null;
+
+				var ev = ed.getValue( getEnumValue(0) );
+				if( ev==null )
+					return null;
+
+				var tid = ev.tileId;
+				return {
+					tilesetUid: ed.iconTilesetUid,
+					x: td.getTileSourceX(tid),
+					y: td.getTileSourceY(tid),
+					w: td.tileGridSize,
+					h: td.tileGridSize,
+				}
+
+
+			case F_Tile:
+				if( def.editorDisplayMode==EntityTile && !valueIsNull(0) )
+					return getTileRectObj(0);
+				else
+					return null;
+
+			case _:
+				return null;
+		}
+	}
+
+
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );
 		return isUsingDefault(arrayIdx) ? def.getEnumDefault() : switch internalValues[arrayIdx] {
