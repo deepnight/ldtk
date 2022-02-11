@@ -145,8 +145,8 @@ class Level {
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
 			fieldInstances: {
 				var all = [];
-				for(fi in fieldInstances)
-					all.push( fi.toJson() );
+				for(fd in _project.defs.levelFields)
+					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			},
 			layerInstances: layerInstances.map( li->li.toJson() ),
