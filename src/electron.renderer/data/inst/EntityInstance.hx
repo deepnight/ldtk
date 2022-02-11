@@ -168,7 +168,7 @@ class EntityInstance {
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
-	public function getSmartTile() : Null<ldtk.Json.AtlasTileRect> {
+	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {
 		// Check for a tile provided by a field instance
 		for(fd in def.fieldDefs) {
 			var t = getFieldInstance(fd,true).getSmartTile();

@@ -21,7 +21,7 @@ class EntityDef {
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
 	public var tilesetId : Null<Int>;
-	public var tileRect : Null<ldtk.Json.AtlasTileRect>;
+	public var tileRect : Null<ldtk.Json.TilesetRect>;
 	public var _oldTileId : Null<Int>;
 
 	public var hollow : Bool;
@@ -65,7 +65,7 @@ class EntityDef {
 		return tilesetId!=null && tileRect!=null;
 	}
 
-	public function getDefaultTile() : Null<ldtk.Json.AtlasTileRect> {
+	public function getDefaultTile() : Null<ldtk.Json.TilesetRect> {
 		// Look inside fields defaults
 		for( fd in fieldDefs )
 			switch fd.type {

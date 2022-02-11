@@ -889,8 +889,8 @@ class JsTools {
 
 	public static function createTileRectPicker(
 		tilesetId: Null<Int>,
-		cur: Null<ldtk.Json.AtlasTileRect>,
-		onPick: (Null<ldtk.Json.AtlasTileRect>)->Void
+		cur: Null<ldtk.Json.TilesetRect>,
+		onPick: (Null<ldtk.Json.TilesetRect>)->Void
 	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 

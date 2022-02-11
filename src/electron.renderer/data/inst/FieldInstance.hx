@@ -662,7 +662,7 @@ class FieldInstance {
 		targetEi.tidyLostSymmetricalEntityRefs(def);
 	}
 
-	public function getTileRectObj(arrayIdx:Int) : Null<ldtk.Json.AtlasTileRect> {
+	public function getTileRectObj(arrayIdx:Int) : Null<ldtk.Json.TilesetRect> {
 		var v = getTileRectStr(arrayIdx);
 		if( v==null )
 			return null;
@@ -694,7 +694,7 @@ class FieldInstance {
 	}
 
 
-	public function getSmartTile() : Null<ldtk.Json.AtlasTileRect> {
+	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {
 		switch def.type {
 			case F_Enum(enumDefUid):
 				if( valueIsNull(0) || def.editorDisplayMode!=EntityTile )

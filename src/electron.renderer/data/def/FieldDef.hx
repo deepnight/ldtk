@@ -362,7 +362,7 @@ class FieldDef {
 		}
 	}
 
-	public function getTileRectDefaultObj() : Null<ldtk.Json.AtlasTileRect> {
+	public function getTileRectDefaultObj() : Null<ldtk.Json.TilesetRect> {
 		var raw = getTileRectDefaultStr();
 		return raw==null ? null : {
 			var parts = raw.split(",");

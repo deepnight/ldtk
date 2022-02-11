@@ -489,7 +489,7 @@ class TilesetDef {
 	}
 
 
-	public function getTileRectFromTileIds(tileIds:Array<Int>) : Null<ldtk.Json.AtlasTileRect> { // Warning: not good for real-time!
+	public function getTileRectFromTileIds(tileIds:Array<Int>) : Null<ldtk.Json.TilesetRect> { // Warning: not good for real-time!
 		if( tileIds==null || tileIds.length==0 )
 			return null;
 
@@ -513,7 +513,7 @@ class TilesetDef {
 	}
 
 
-	public function getTileIdsFromRect(r:ldtk.Json.AtlasTileRect) : Array<Int> {
+	public function getTileIdsFromRect(r:ldtk.Json.TilesetRect) : Array<Int> {
 		if( r==null )
 			return [];
 
@@ -531,7 +531,7 @@ class TilesetDef {
 	}
 
 
-	public inline function getFirstTileIdFromRect(r:ldtk.Json.AtlasTileRect) : Null<Int> {
+	public inline function getFirstTileIdFromRect(r:ldtk.Json.TilesetRect) : Null<Int> {
 		if( r==null )
 			return null;
 		else
@@ -600,7 +600,7 @@ class TilesetDef {
 			return makeErrorTile(tileGridSize);
 	}
 
-	public inline function getTileRect(r:ldtk.Json.AtlasTileRect) : h2d.Tile {
+	public inline function getTileRect(r:ldtk.Json.TilesetRect) : h2d.Tile {
 		if( isAtlasLoaded() )
 			return getAtlasTile().sub( r.x, r.y, r.w, r.h );
 		else
@@ -869,13 +869,13 @@ class TilesetDef {
 	}
 
 
-	inline function isTileRectInBounds(r:ldtk.Json.AtlasTileRect) {
+	inline function isTileRectInBounds(r:ldtk.Json.TilesetRect) {
 		return isAtlasLoaded()
 			&& r.x>=0 && r.x+r.w-1<pxWid
 			&& r.y>=0 && r.y+r.h-1<pxHei;
 	}
 
-	public function drawTileRectToCanvas(jCanvas:js.jquery.JQuery, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+	public function drawTileRectToCanvas(jCanvas:js.jquery.JQuery, rect:ldtk.Json.TilesetRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
 
@@ -883,7 +883,7 @@ class TilesetDef {
 		drawTileRectTo2dContext( canvas.getContext2d(), rect, toX, toY, scaleX, scaleY );
 	}
 
-	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.TilesetRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !isAtlasLoaded() )
 			return;
 

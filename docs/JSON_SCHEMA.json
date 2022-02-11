@@ -233,6 +233,53 @@
 		]
 	},
 	"otherTypes": {
+		"TilesetRect": {
+			"description": "This object represents a custom sub rectangle in a Tileset image.",
+			"title": "Tileset rectangle",
+			"required": [
+				"h",
+				"tilesetUid",
+				"w",
+				"x",
+				"y"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tilesetUid": {
+					"description": "UID of the tileset",
+					"type": [
+						"integer"
+					]
+				},
+				"h": {
+					"description": "Height in pixels",
+					"type": [
+						"integer"
+					]
+				},
+				"x": {
+					"description": "X pixels coordinate of the top-left corner in the Tileset image",
+					"type": [
+						"integer"
+					]
+				},
+				"y": {
+					"description": "Y pixels coordinate of the top-left corner in the Tileset image",
+					"type": [
+						"integer"
+					]
+				},
+				"w": {
+					"description": "Width in pixels",
+					"type": [
+						"integer"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"FieldInstance": {
 			"title": "Field instance",
 			"required": [
@@ -263,7 +310,7 @@
 					]
 				},
 				"__tile": {
-					"description": "Optional AtlasTileRect used to display this field (this can be the field own Tile, or some other Tile guessed from the value, like an Enum).",
+					"description": "Optional TilesetRect used to display this field (this can be the field own Tile, or some other Tile guessed from the value, like an Enum).",
 					"oneOf": [
 						{
 							"type": [
@@ -271,7 +318,7 @@
 							]
 						},
 						{
-							"$ref": "#/otherTypes/AtlasTileRect"
+							"$ref": "#/otherTypes/TilesetRect"
 						}
 					]
 				},
@@ -283,7 +330,7 @@
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a [AtlasTileRect](#ldtk-AtlasTileRect) object.<br/>   - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an array, then this `__value` will also be a JSON array."
+					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a [TilesetRect](#ldtk-TilesetRect) object.<br/>   - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an array, then this `__value` will also be a JSON array."
 				}
 			},
 			"type": [
@@ -325,7 +372,7 @@
 					]
 				},
 				"__tile": {
-					"description": "Optional AtlasTileRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
+					"description": "Optional TilesetRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
 					"oneOf": [
 						{
 							"type": [
@@ -333,7 +380,7 @@
 							]
 						},
 						{
-							"$ref": "#/otherTypes/AtlasTileRect"
+							"$ref": "#/otherTypes/TilesetRect"
 						}
 					]
 				},
@@ -1013,7 +1060,7 @@
 							]
 						},
 						{
-							"$ref": "#/otherTypes/AtlasTileRect"
+							"$ref": "#/otherTypes/TilesetRect"
 						}
 					]
 				},
@@ -1179,53 +1226,6 @@
 					},
 					"type": [
 						"array"
-					]
-				}
-			},
-			"type": [
-				"object"
-			]
-		},
-		"AtlasTileRect": {
-			"description": "An array of 4 integers (`[x,y,width,height]` in pixels) representing a custom rectangle from a Tileset image.",
-			"title": "Atlas tile rectangle",
-			"required": [
-				"h",
-				"tilesetUid",
-				"w",
-				"x",
-				"y"
-			],
-			"additionalProperties": false,
-			"properties": {
-				"tilesetUid": {
-					"description": "UID of the tileset",
-					"type": [
-						"integer"
-					]
-				},
-				"h": {
-					"description": "Height in pixels",
-					"type": [
-						"integer"
-					]
-				},
-				"x": {
-					"description": "X pixel coord of the tile in the Tileset atlas",
-					"type": [
-						"integer"
-					]
-				},
-				"y": {
-					"description": "Y pixel coord of the tile in the Tileset atlas",
-					"type": [
-						"integer"
-					]
-				},
-				"w": {
-					"description": "Width in pixels",
-					"type": [
-						"integer"
 					]
 				}
 			},

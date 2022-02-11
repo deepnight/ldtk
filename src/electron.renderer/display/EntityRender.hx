@@ -96,7 +96,7 @@ class EntityRender extends dn.Process {
 		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		// Render a tile
-		function _renderTile(rect:ldtk.Json.AtlasTileRect, mode:ldtk.Json.EntityTileRenderMode) {
+		function _renderTile(rect:ldtk.Json.TilesetRect, mode:ldtk.Json.EntityTileRenderMode) {
 			if( rect==null || Editor.ME.project.defs.getTilesetDef(rect.tilesetUid)==null ) {
 				// Missing tile
 				var p = 2;
