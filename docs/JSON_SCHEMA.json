@@ -1548,7 +1548,7 @@
 		},
 		"EntityReferenceInfos": {
 			"description": "This object is used in Field Instances to describe an EntityRef value.",
-			"title": "Entity reference infos",
+			"title": "Field instance entity reference",
 			"required": [
 				"entityIid",
 				"layerIid",
@@ -2389,7 +2389,7 @@
 		},
 		"GridPoint": {
 			"description": "This object is just a grid-based coordinate used in Field values.",
-			"title": "Grid point",
+			"title": "Field instance grid point",
 			"required": [
 				"cx",
 				"cy"

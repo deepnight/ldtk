@@ -4,12 +4,12 @@
      - [World](#ldtk-WorldJson)
    - [Level](#ldtk-LevelJson)
      - [Layer instance](#ldtk-LayerInstanceJson)
-       - [Tile instance](#ldtk-Tile)
-       - [Entity instance](#ldtk-EntityInstanceJson)
-       - [Field instance](#ldtk-FieldInstanceJson)
+     - [Tile instance](#ldtk-Tile)
+     - [Entity instance](#ldtk-EntityInstanceJson)
+     - [Field instance](#ldtk-FieldInstanceJson)
        - [Field instance tile](#ldtk-FieldInstanceTile)
-       - [Entity reference infos](#ldtk-EntityReferenceInfos)
-       - [Grid point](#ldtk-GridPoint)
+       - [Field instance entity reference](#ldtk-EntityReferenceInfos)
+       - [Field instance grid point](#ldtk-GridPoint)
    - [Definitions](#ldtk-DefinitionsJson)
      - [Layer definition](#ldtk-LayerDefJson)
        - [Auto-layer rule definition](#ldtk-AutoRuleDef)
@@ -139,7 +139,7 @@ Value | Type | Description
 ~~`intGrid`~~<br/><sup class="only">Only *IntGrid layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Array&nbsp;of&nbsp;Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.0.0<br/> <br/> Replaced by: `intGridCsv`
 
 <a id="ldtk-Tile" name="ldtk-Tile"></a>
-## 2.1.1. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
+## 2.2. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
 This structure represents a single tile from a given Tileset.
 
 Value | Type | Description
@@ -151,7 +151,7 @@ Value | Type | Description
 `d`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Internal data used by the editor.<br/>		For auto-layer tiles: `[ruleId, coordId]`.<br/>		For tile-layer tiles: `[coordId]`.
 
 <a id="ldtk-EntityInstanceJson" name="ldtk-EntityInstanceJson"></a>
-## 2.1.2. Entity instance   
+## 2.3. Entity instance   
 Value | Type | Description
 -- | -- | --
 `__grid`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Grid-based coordinates (`[x,y]` format)
@@ -167,7 +167,7 @@ Value | Type | Description
 `width`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.
 
 <a id="ldtk-FieldInstanceJson" name="ldtk-FieldInstanceJson"></a>
-## 2.1.3. Field instance   
+## 2.4. Field instance   
 Value | Type | Description
 -- | -- | --
 `__identifier` | String | Field definition identifier
@@ -177,7 +177,7 @@ Value | Type | Description
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
 <a id="ldtk-FieldInstanceTile" name="ldtk-FieldInstanceTile"></a>
-## 2.1.4. Field instance tile   
+## 2.4.1. Field instance tile   
 This object is used in Field Instances to describe a Tile value.
 
 Value | Type | Description
@@ -186,7 +186,7 @@ Value | Type | Description
 `tilesetUid` | Int | Tileset ID
 
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
-## 2.1.5. Entity reference infos  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+## 2.4.2. Field instance entity reference  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
 This object is used in Field Instances to describe an EntityRef value.
 
 Value | Type | Description
@@ -196,7 +196,7 @@ Value | Type | Description
 `levelIid` | String | 
 
 <a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
-## 2.1.6. Grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+## 2.4.3. Field instance grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
 This object is just a grid-based coordinate used in Field values.
 
 Value | Type | Description
