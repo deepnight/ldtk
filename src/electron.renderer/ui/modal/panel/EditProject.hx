@@ -7,6 +7,7 @@ class EditProject extends ui.modal.Panel {
 		ldtk.Json.ProjectFlag.MultiWorlds,
 		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
 		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
+		ldtk.Json.ProjectFlag.UseMultilinesType,
 	];
 
 	public function new() {
@@ -358,6 +359,10 @@ class EditProject extends ui.modal.Panel {
 					jLabel.text("Multi-worlds support");
 					_setDesc( L.t._("If enabled, levels will be stored in a 'worlds' array at the root of the project JSON instead of the root itself directly.\nThis option is still experimental and is not yet supported if Separate Levels option is enabled.") );
 					jInput.prop("disabled", project.worlds.length>1 );
+
+				case UseMultilinesType:
+					jLabel.text('Use "Multilines" instead of "String" for fields in JSON');
+					_setDesc( L.t._("If enabled, the JSON value \"__type\" for Field Instances and Field Definitions will be \"Multilines\" instead of \"String\" for all fields of Multilines type.") );
 
 				case _:
 			}

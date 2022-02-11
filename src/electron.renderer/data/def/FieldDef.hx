@@ -228,7 +228,7 @@ class FieldDef {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
-			case F_Text: "String";
+			case F_Text: _project.hasFlag(UseMultilinesType) ? "Multilines" : "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
