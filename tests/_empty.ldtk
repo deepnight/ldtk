@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456761,
+	"appBuildId": 456824,
 	"nextUid": 1,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -35,8 +35,8 @@
 	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "Level_0",
-			"iid": "36c03891-66b0-11ec-b921-018e32674aa1",
+			"identifier": "World_Level_0",
+			"iid": "472e4691-66b0-11ec-aa49-8d5f985d2dae",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
