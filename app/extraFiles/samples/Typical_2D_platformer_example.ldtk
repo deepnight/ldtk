@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456760,
+	"appBuildId": 456824,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -1547,16 +1547,6 @@
 							"px": [328,160],
 							"fieldInstances": [
 								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 32, "cy": 9 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["32,9"]
-									}]
-								},
-								{
 									"__identifier": "loot",
 									"__value": ["Meat"],
 									"__type": "Array<LocalEnum.Item>",
@@ -1564,6 +1554,16 @@
 									"realEditorValues": [{
 										"id": "V_String",
 										"params": ["Meat"]
+									}]
+								},
+								{
+									"__identifier": "patrol",
+									"__value": [{ "cx": 32, "cy": 9 }],
+									"__type": "Array<Point>",
+									"defUid": 55,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["32,9"]
 									}]
 								}
 							]
@@ -1580,6 +1580,7 @@
 							"defUid": 54,
 							"px": [264,288],
 							"fieldInstances": [
+								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] },
 								{
 									"__identifier": "patrol",
 									"__value": [{ "cx": 26, "cy": 17 }],
@@ -1589,8 +1590,7 @@
 										"id": "V_String",
 										"params": ["26,17"]
 									}]
-								},
-								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
+								}
 							]
 						},
 						{
@@ -3171,6 +3171,7 @@
 							"defUid": 54,
 							"px": [456,240],
 							"fieldInstances": [
+								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] },
 								{
 									"__identifier": "patrol",
 									"__value": [{ "cx": 22, "cy": 14 }],
@@ -3180,8 +3181,7 @@
 										"id": "V_String",
 										"params": ["22,14"]
 									}]
-								},
-								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
+								}
 							]
 						},
 						{
@@ -3196,6 +3196,7 @@
 							"defUid": 54,
 							"px": [424,336],
 							"fieldInstances": [
+								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] },
 								{
 									"__identifier": "patrol",
 									"__value": [{ "cx": 23, "cy": 20 }],
@@ -3205,8 +3206,7 @@
 										"id": "V_String",
 										"params": ["23,20"]
 									}]
-								},
-								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
+								}
 							]
 						},
 						{
@@ -3221,7 +3221,6 @@
 							"defUid": 54,
 							"px": [200,224],
 							"fieldInstances": [
-								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 55, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": [ "Knife", "Healing_Plant" ],
@@ -3234,7 +3233,8 @@
 										"id": "V_String",
 										"params": ["Healing_Plant"]
 									} ]
-								}
+								},
+								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 55, "realEditorValues": [] }
 							]
 						},
 						{
@@ -4545,16 +4545,6 @@
 							"px": [312,176],
 							"fieldInstances": [
 								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 11, "cy": 10 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["11,10"]
-									}]
-								},
-								{
 									"__identifier": "loot",
 									"__value": ["Healing_Plant"],
 									"__type": "Array<LocalEnum.Item>",
@@ -4562,6 +4552,16 @@
 									"realEditorValues": [{
 										"id": "V_String",
 										"params": ["Healing_Plant"]
+									}]
+								},
+								{
+									"__identifier": "patrol",
+									"__value": [{ "cx": 11, "cy": 10 }],
+									"__type": "Array<Point>",
+									"defUid": 55,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["11,10"]
 									}]
 								}
 							]

@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456760,
+	"appBuildId": 456824,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -1175,8 +1175,8 @@
 							"defUid": 63,
 							"px": [264,120],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Battery"],
@@ -1201,8 +1201,8 @@
 							"defUid": 63,
 							"px": [328,168],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Scraps"],
@@ -1227,8 +1227,8 @@
 							"defUid": 59,
 							"px": [88,168],
 							"fieldInstances": [
-								{ "__identifier": "ammo", "__value": 10, "__type": "Int", "defUid": 60, "realEditorValues": [] },
-								{ "__identifier": "life", "__value": 100, "__type": "Int", "defUid": 61, "realEditorValues": [] }
+								{ "__identifier": "life", "__value": 100, "__type": "Int", "defUid": 61, "realEditorValues": [] },
+								{ "__identifier": "ammo", "__value": 10, "__type": "Int", "defUid": 60, "realEditorValues": [] }
 							]
 						},
 						{
@@ -2881,16 +2881,6 @@
 							"px": [136,296],
 							"fieldInstances": [
 								{
-									"__identifier": "description",
-									"__value": "The crate has some military logo on it.",
-									"__type": "String",
-									"defUid": 64,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["The crate has some military logo on it."]
-									}]
-								},
-								{
 									"__identifier": "label",
 									"__value": "Strange crate",
 									"__type": "String",
@@ -2898,6 +2888,16 @@
 									"realEditorValues": [{
 										"id": "V_String",
 										"params": ["Strange crate"]
+									}]
+								},
+								{
+									"__identifier": "description",
+									"__value": "The crate has some military logo on it.",
+									"__type": "String",
+									"defUid": 64,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["The crate has some military logo on it."]
 									}]
 								},
 								{
@@ -2924,8 +2924,8 @@
 							"defUid": 63,
 							"px": [248,360],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Food"],
@@ -2950,6 +2950,7 @@
 							"defUid": 63,
 							"px": [200,88],
 							"fieldInstances": [
+								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
 								{
 									"__identifier": "description",
 									"__value": "This guy has a **key** attached to its uniform.",
@@ -2960,7 +2961,6 @@
 										"params": ["This guy has a **key** attached to its uniform."]
 									}]
 								},
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Key"],
@@ -2985,8 +2985,8 @@
 							"defUid": 63,
 							"px": [296,344],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Health"],
@@ -4869,8 +4869,8 @@
 							"defUid": 63,
 							"px": [120,360],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Key"],

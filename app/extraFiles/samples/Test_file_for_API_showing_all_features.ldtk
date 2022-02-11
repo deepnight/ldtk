@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456801,
+	"appBuildId": 456824,
 	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -1252,6 +1252,16 @@
 									}]
 								},
 								{
+									"__identifier": "FilePath",
+									"__value": "README.md",
+									"__type": "FilePath",
+									"defUid": 35,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["README.md"]
+									}]
+								},
+								{
 									"__identifier": "Array_Integer",
 									"__value": [1,2,3],
 									"__type": "Array<Int>",
@@ -1292,16 +1302,6 @@
 										"id": "V_String",
 										"params": ["18,19"]
 									} ]
-								},
-								{
-									"__identifier": "FilePath",
-									"__value": "README.md",
-									"__type": "FilePath",
-									"defUid": 35,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["README.md"]
-									}]
 								},
 								{
 									"__identifier": "Array_multilines",
@@ -2225,15 +2225,6 @@
 								},
 								{ "__identifier": "Point", "__value": null, "__type": "Point", "defUid": 24, "realEditorValues": [] },
 								{
-									"__identifier": "Array_Integer",
-									"__value": [10,0,20],
-									"__type": "Array<Int>",
-									"defUid": 25,
-									"realEditorValues": [ { "id": "V_Int", "params": [10] }, null, { "id": "V_Int", "params": [20] } ]
-								},
-								{ "__identifier": "Array_Enum", "__value": [], "__type": "Array<LocalEnum.SomeEnum>", "defUid": 29, "realEditorValues": [] },
-								{ "__identifier": "Array_points", "__value": [], "__type": "Array<Point>", "defUid": 30, "realEditorValues": [] },
-								{
 									"__identifier": "FilePath",
 									"__value": "README.md",
 									"__type": "FilePath",
@@ -2243,6 +2234,15 @@
 										"params": ["README.md"]
 									}]
 								},
+								{
+									"__identifier": "Array_Integer",
+									"__value": [10,0,20],
+									"__type": "Array<Int>",
+									"defUid": 25,
+									"realEditorValues": [ { "id": "V_Int", "params": [10] }, null, { "id": "V_Int", "params": [20] } ]
+								},
+								{ "__identifier": "Array_Enum", "__value": [], "__type": "Array<LocalEnum.SomeEnum>", "defUid": 29, "realEditorValues": [] },
+								{ "__identifier": "Array_points", "__value": [], "__type": "Array<Point>", "defUid": 30, "realEditorValues": [] },
 								{ "__identifier": "Array_multilines", "__value": [], "__type": "Array<String>", "defUid": 37, "realEditorValues": [] }
 							]
 						}

@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456800,
+	"appBuildId": 456824,
 	"nextUid": 164,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -2471,6 +2471,36 @@
 							"px": [232,192],
 							"fieldInstances": [
 								{
+									"__identifier": "type",
+									"__value": "Fighter",
+									"__type": "LocalEnum.MonsterType",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Fighter"]
+									}]
+								},
+								{
+									"__identifier": "life",
+									"__value": 10,
+									"__type": "Int",
+									"defUid": 40,
+									"realEditorValues": [{ "id": "V_Int", "params": [10] }]
+								},
+								{
+									"__identifier": "loots",
+									"__value": [ "Gold", "Healing_potion" ],
+									"__type": "Array<LocalEnum.ItemType>",
+									"defUid": 39,
+									"realEditorValues": [ {
+										"id": "V_String",
+										"params": ["Gold"]
+									}, {
+										"id": "V_String",
+										"params": ["Healing_potion"]
+									} ]
+								},
+								{
 									"__identifier": "patrol",
 									"__value": [
 										{ "cx": 18, "cy": 11 },
@@ -2503,36 +2533,6 @@
 											"params": ["26,12"]
 										}
 									]
-								},
-								{
-									"__identifier": "loots",
-									"__value": [ "Gold", "Healing_potion" ],
-									"__type": "Array<LocalEnum.ItemType>",
-									"defUid": 39,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Gold"]
-									}, {
-										"id": "V_String",
-										"params": ["Healing_potion"]
-									} ]
-								},
-								{
-									"__identifier": "life",
-									"__value": 10,
-									"__type": "Int",
-									"defUid": 40,
-									"realEditorValues": [{ "id": "V_Int", "params": [10] }]
-								},
-								{
-									"__identifier": "type",
-									"__value": "Fighter",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Fighter"]
-									}]
 								}
 							]
 						},
@@ -2549,24 +2549,6 @@
 							"px": [504,304],
 							"fieldInstances": [
 								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 24, "cy": 18 }],
-									"__type": "Array<Point>",
-									"defUid": 38,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["24,18"]
-									}]
-								},
-								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
-								{
-									"__identifier": "life",
-									"__value": 3,
-									"__type": "Int",
-									"defUid": 40,
-									"realEditorValues": [null]
-								},
-								{
 									"__identifier": "type",
 									"__value": "Worm",
 									"__type": "LocalEnum.MonsterType",
@@ -2574,6 +2556,24 @@
 									"realEditorValues": [{
 										"id": "V_String",
 										"params": ["Worm"]
+									}]
+								},
+								{
+									"__identifier": "life",
+									"__value": 3,
+									"__type": "Int",
+									"defUid": 40,
+									"realEditorValues": [null]
+								},
+								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "defUid": 39, "realEditorValues": [] },
+								{
+									"__identifier": "patrol",
+									"__value": [{ "cx": 24, "cy": 18 }],
+									"__type": "Array<Point>",
+									"defUid": 38,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["24,18"]
 									}]
 								}
 							]
@@ -2590,7 +2590,17 @@
 							"defUid": 37,
 							"px": [664,336],
 							"fieldInstances": [
-								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] },
+								{
+									"__identifier": "type",
+									"__value": "Thief",
+									"__type": "LocalEnum.MonsterType",
+									"defUid": 49,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Thief"]
+									}]
+								},
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
 								{
 									"__identifier": "loots",
 									"__value": ["Mana_potion"],
@@ -2601,17 +2611,7 @@
 										"params": ["Mana_potion"]
 									}]
 								},
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 40, "realEditorValues": [] },
-								{
-									"__identifier": "type",
-									"__value": "Thief",
-									"__type": "LocalEnum.MonsterType",
-									"defUid": 49,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Thief"]
-									}]
-								}
+								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 38, "realEditorValues": [] }
 							]
 						},
 						{
@@ -2629,6 +2629,16 @@
 								{ "__identifier": "life", "__value": 3, "__type": "Int", "defUid": 2, "realEditorValues": [] },
 								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "defUid": 3, "realEditorValues": [] },
 								{
+									"__identifier": "weapon",
+									"__value": "Trout",
+									"__type": "LocalEnum.ItemType",
+									"defUid": 29,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["Trout"]
+									}]
+								},
+								{
 									"__identifier": "bag",
 									"__value": [ "Magic_ring", "Healing_potion" ],
 									"__type": "Array<LocalEnum.ItemType>",
@@ -2640,16 +2650,6 @@
 										"id": "V_String",
 										"params": ["Healing_potion"]
 									} ]
-								},
-								{
-									"__identifier": "weapon",
-									"__value": "Trout",
-									"__type": "LocalEnum.ItemType",
-									"defUid": 29,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Trout"]
-									}]
 								}
 							]
 						},
@@ -2726,13 +2726,6 @@
 							"px": [632,216],
 							"fieldInstances": [
 								{
-									"__identifier": "delay",
-									"__value": 1.2,
-									"__type": "Float",
-									"defUid": 91,
-									"realEditorValues": [{ "id": "V_Float", "params": [1.2] }]
-								},
-								{
 									"__identifier": "targets",
 									"__value": [ {
 										"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
@@ -2752,6 +2745,13 @@
 										"id": "V_String",
 										"params": ["f80ee800-66b0-11ec-b121-9b6ebb5b8d6e"]
 									} ]
+								},
+								{
+									"__identifier": "delay",
+									"__value": 1.2,
+									"__type": "Float",
+									"defUid": 91,
+									"realEditorValues": [{ "id": "V_Float", "params": [1.2] }]
 								}
 							]
 						},
@@ -2767,6 +2767,20 @@
 							"defUid": 82,
 							"px": [176,256],
 							"fieldInstances": [
+								{
+									"__identifier": "target",
+									"__value": {
+										"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
+										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
+									},
+									"__type": "EntityRef",
+									"defUid": 98,
+									"realEditorValues": [{
+										"id": "V_String",
+										"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
+									}]
+								},
 								{
 									"__identifier": "condition",
 									"__value": "OnPlayerEnter",
@@ -2786,20 +2800,6 @@
 										"id": "V_String",
 										"params": ["Some hidden mechanism opens the door to the right."]
 									}]
-								},
-								{
-									"__identifier": "target",
-									"__value": {
-										"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
-										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c"
-									},
-									"__type": "EntityRef",
-									"defUid": 98,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
-									}]
 								}
 							]
 						},
@@ -2815,6 +2815,7 @@
 							"defUid": 82,
 							"px": [640,96],
 							"fieldInstances": [
+								{ "__identifier": "target", "__value": null, "__type": "EntityRef", "defUid": 98, "realEditorValues": [] },
 								{
 									"__identifier": "condition",
 									"__value": "OnPlayerEnter",
@@ -2834,8 +2835,7 @@
 										"id": "V_String",
 										"params": ["Secret area!"]
 									}]
-								},
-								{ "__identifier": "target", "__value": null, "__type": "EntityRef", "defUid": 98, "realEditorValues": [] }
+								}
 							]
 						},
 						{
@@ -2851,11 +2851,11 @@
 							"px": [344,96],
 							"fieldInstances": [
 								{
-									"__identifier": "flickering",
-									"__value": false,
-									"__type": "Bool",
-									"defUid": 12,
-									"realEditorValues": [null]
+									"__identifier": "radius",
+									"__value": 4.75,
+									"__type": "Float",
+									"defUid": 45,
+									"realEditorValues": [{ "id": "V_Float", "params": [4.75] }]
 								},
 								{
 									"__identifier": "colors",
@@ -2865,11 +2865,11 @@
 									"realEditorValues": [null]
 								},
 								{
-									"__identifier": "radius",
-									"__value": 4.75,
-									"__type": "Float",
-									"defUid": 45,
-									"realEditorValues": [{ "id": "V_Float", "params": [4.75] }]
+									"__identifier": "flickering",
+									"__value": false,
+									"__type": "Bool",
+									"defUid": 12,
+									"realEditorValues": [null]
 								},
 								{
 									"__identifier": "intensity",
@@ -2893,14 +2893,11 @@
 							"px": [520,128],
 							"fieldInstances": [
 								{
-									"__identifier": "flickering",
-									"__value": true,
-									"__type": "Bool",
-									"defUid": 12,
-									"realEditorValues": [{
-										"id": "V_Bool",
-										"params": [ true ]
-									}]
+									"__identifier": "radius",
+									"__value": 2.5,
+									"__type": "Float",
+									"defUid": 45,
+									"realEditorValues": [{ "id": "V_Float", "params": [2.5] }]
 								},
 								{
 									"__identifier": "colors",
@@ -2910,11 +2907,14 @@
 									"realEditorValues": [ { "id": "V_Int", "params": [16743706] }, { "id": "V_Int", "params": [11665665] } ]
 								},
 								{
-									"__identifier": "radius",
-									"__value": 2.5,
-									"__type": "Float",
-									"defUid": 45,
-									"realEditorValues": [{ "id": "V_Float", "params": [2.5] }]
+									"__identifier": "flickering",
+									"__value": true,
+									"__type": "Bool",
+									"defUid": 12,
+									"realEditorValues": [{
+										"id": "V_Bool",
+										"params": [ true ]
+									}]
 								},
 								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "defUid": 92, "realEditorValues": [] }
 							]
@@ -2994,14 +2994,6 @@
 							"defUid": 10,
 							"px": [312,256],
 							"fieldInstances": [
-								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValues": [] },
-								{
-									"__identifier": "colors",
-									"__value": ["#FFEF85"],
-									"__type": "Array<Color>",
-									"defUid": 26,
-									"realEditorValues": [null]
-								},
 								{
 									"__identifier": "radius",
 									"__value": 1.5,
@@ -3009,6 +3001,14 @@
 									"defUid": 45,
 									"realEditorValues": [{ "id": "V_Float", "params": [1.5] }]
 								},
+								{
+									"__identifier": "colors",
+									"__value": ["#FFEF85"],
+									"__type": "Array<Color>",
+									"defUid": 26,
+									"realEditorValues": [null]
+								},
+								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "defUid": 12, "realEditorValues": [] },
 								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "defUid": 92, "realEditorValues": [] }
 							]
 						},
