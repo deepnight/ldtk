@@ -78,8 +78,8 @@ class EntityInstance {
 			px: [x,y],
 			fieldInstances: {
 				var all = [];
-				for(fi in fieldInstances)
-					all.push( fi.toJson() );
+				for(fd in def.fieldDefs)
+					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			}
 		}
@@ -270,6 +270,8 @@ class EntityInstance {
 
 		for(fi in fieldInstances)
 			fi.tidy(_project, li);
+
+
 
 		return anyChange;
 	}
