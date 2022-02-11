@@ -31,7 +31,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "In \"Free\" world layout, levels are positionned freely in the 2D space.\n\nIn this example, some are even in different world layers (ie. above and behind). Use [PAGE UP] and [PAGE DOWN] to move between world layers.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",

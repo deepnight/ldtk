@@ -31,7 +31,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "AutoLayer",
@@ -1378,7 +1378,7 @@
 				},
 				{
 					"identifier": "message",
-					"__type": "String",
+					"__type": "Multilines",
 					"uid": 86,
 					"type": "F_Text",
 					"isArray": false,
@@ -2794,7 +2794,7 @@
 								{
 									"__identifier": "message",
 									"__value": "Some hidden mechanism opens the door to the right.",
-									"__type": "String",
+									"__type": "Multilines",
 									"defUid": 86,
 									"realEditorValues": [{
 										"id": "V_String",
@@ -2829,7 +2829,7 @@
 								{
 									"__identifier": "message",
 									"__value": "Secret area!",
-									"__type": "String",
+									"__type": "Multilines",
 									"defUid": 86,
 									"realEditorValues": [{
 										"id": "V_String",

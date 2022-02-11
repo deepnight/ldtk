@@ -31,7 +31,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress [SHIFT + R] to toggle auto-layers rendering",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",

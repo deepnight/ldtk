@@ -31,7 +31,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "level_x%gx,y%gy",
 	"tutorialDesc": "This sample shows how to use OPTIONAL rules to create biomes and variations easily.\n\nClick the \"RULES\" button on the left to see all the rule groups. Some groups are BLUE: they are optional which means they are disabled by default, and can be enabled only in specific levels.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",

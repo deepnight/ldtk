@@ -31,7 +31,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.\n\nPress [A] to toggle \"Single Layer Mode\", and see what each layer contains.\n\nPress [SHIFT + R] to toggle rendering of rules based layers.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
@@ -940,7 +940,7 @@
 				},
 				{
 					"identifier": "description",
-					"__type": "String",
+					"__type": "Multilines",
 					"uid": 64,
 					"type": "F_Text",
 					"isArray": false,
@@ -1176,7 +1176,7 @@
 							"px": [264,120],
 							"fieldInstances": [
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Battery"],
@@ -1202,7 +1202,7 @@
 							"px": [328,168],
 							"fieldInstances": [
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Scraps"],
@@ -2893,7 +2893,7 @@
 								{
 									"__identifier": "description",
 									"__value": "The crate has some military logo on it.",
-									"__type": "String",
+									"__type": "Multilines",
 									"defUid": 64,
 									"realEditorValues": [{
 										"id": "V_String",
@@ -2925,7 +2925,7 @@
 							"px": [248,360],
 							"fieldInstances": [
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Food"],
@@ -2954,7 +2954,7 @@
 								{
 									"__identifier": "description",
 									"__value": "This guy has a **key** attached to its uniform.",
-									"__type": "String",
+									"__type": "Multilines",
 									"defUid": 64,
 									"realEditorValues": [{
 										"id": "V_String",
@@ -2986,7 +2986,7 @@
 							"px": [296,344],
 							"fieldInstances": [
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Health"],
@@ -4870,7 +4870,7 @@
 							"px": [120,360],
 							"fieldInstances": [
 								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "defUid": 64, "realEditorValues": [] },
 								{
 									"__identifier": "loot",
 									"__value": ["Key"],
