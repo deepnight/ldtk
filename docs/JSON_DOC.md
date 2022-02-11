@@ -201,8 +201,8 @@ This object is just a grid-based coordinate used in Field values.
 
 Value | Type | Description
 -- | -- | --
-`cx` | Int | 
-`cy` | Int | 
+`cx`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | X grid-based coordinate
+`cy`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Y grid-based coordinate
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 3. Definitions   
@@ -302,7 +302,7 @@ Value | Type | Description
 `resizableY`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
-`tileOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-gray.svg)  | Float | 
+`tileOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Float | 
 `tileRenderMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`
 ~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+<br/> <br/> Replaced by: `tileRect`
 
@@ -346,10 +346,10 @@ An array of 4 integers (`[x,y,width,height]` in pixels) representing a custom re
 
 Value | Type | Description
 -- | -- | --
-`h` | Int | 
-`w` | Int | 
-`x` | Int | X pixel coord of the tile in the Tileset atlas
-`y` | Int | Y pixel coord of the tile in the Tileset atlas
+`h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Height in pixels
+`w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Width in pixels
+`x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | X pixel coord of the tile in the Tileset atlas
+`y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Y pixel coord of the tile in the Tileset atlas
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 3.3. Tileset definition   

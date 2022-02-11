@@ -1185,7 +1185,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"h": {
-					"description": "",
+					"description": "Height in pixels",
 					"type": [
 						"integer"
 					]
@@ -1203,7 +1203,7 @@
 					]
 				},
 				"w": {
-					"description": "",
+					"description": "Width in pixels",
 					"type": [
 						"integer"
 					]
@@ -2398,13 +2398,13 @@
 			"additionalProperties": false,
 			"properties": {
 				"cy": {
-					"description": "",
+					"description": "Y grid-based coordinate",
 					"type": [
 						"integer"
 					]
 				},
 				"cx": {
-					"description": "",
+					"description": "X grid-based coordinate",
 					"type": [
 						"integer"
 					]
