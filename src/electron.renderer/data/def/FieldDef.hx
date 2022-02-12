@@ -228,7 +228,7 @@ class FieldDef {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
-			case F_Text: "String";
+			case F_Text: _project.hasFlag(UseMultilinesType) ? "Multilines" : "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -362,13 +362,14 @@ class FieldDef {
 		}
 	}
 
-	public function getTileRectDefaultObj() : Null<ldtk.Json.AtlasTileRect> {
+	public function getTileRectDefaultObj() : Null<ldtk.Json.TilesetRect> {
 		var raw = getTileRectDefaultStr();
 		return raw==null ? null : {
 			var parts = raw.split(",");
 			if( parts.length!=4 )
 				null;
 			else {
+				tilesetUid: this.tilesetUid,
 				x: Std.parseInt(parts[0]),
 				y: Std.parseInt(parts[1]),
 				w: Std.parseInt(parts[2]),

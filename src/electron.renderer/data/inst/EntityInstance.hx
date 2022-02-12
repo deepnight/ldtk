@@ -60,16 +60,7 @@ class EntityInstance {
 			__grid: [ getCx(li.def), getCy(li.def) ],
 			__pivot: [ JsonTools.writeFloat(def.pivotX), JsonTools.writeFloat(def.pivotY) ],
 			__tags: def.tags.toArray(),
-			__tile: {
-				var t = getSmartTile();
-				if( t!=null )
-					{
-						tilesetUid: t.tilesetUid,
-						srcRect: [ t.rect.x, t.rect.y, t.rect.w, t.rect.h ],
-					}
-				else
-					null;
-			},
+			__tile: getSmartTile(),
 
 			iid: iid,
 			width: width,
@@ -78,8 +69,8 @@ class EntityInstance {
 			px: [x,y],
 			fieldInstances: {
 				var all = [];
-				for(fi in fieldInstances)
-					all.push( fi.toJson() );
+				for(fd in def.fieldDefs)
+					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			}
 		}
@@ -138,10 +129,10 @@ class EntityInstance {
 		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
+	final overShapePad = 3;
 	final overEdgePad = 4;
-	final overShapePad = 1;
 	public inline function isOver(layerX:Int, layerY:Int) {
-		if( M.fabs(layerX-x)>width || M.fabs(layerY-y)>height ) // Fast check
+		if( M.fabs(layerX-x) > width+overEdgePad*2 || M.fabs(layerY-y) > height+overEdgePad*2 ) // Fast check
 			return false;
 		else if( def.renderMode==Ellipse ) {
 			if( def.hollow ) {
@@ -177,52 +168,12 @@ class EntityInstance {
 		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
-	public function getSmartTile() : Null<EntitySmartTile> {
+	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {
 		// Check for a tile provided by a field instance
 		for(fd in def.fieldDefs) {
-			switch fd.type {
-				case F_Enum(enumDefUid):
-					var fi = getFieldInstance(fd,true);
-					if( fi.valueIsNull(0) || fi.def.editorDisplayMode!=EntityTile )
-						continue;
-
-					var ed = _project.defs.getEnumDef(enumDefUid);
-					if( ed.iconTilesetUid==null )
-						continue;
-
-					var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
-					if( td==null )
-						return null;
-
-					var ev = ed.getValue( fi.getEnumValue(0) );
-					if( ev==null )
-						return null;
-
-					var tid = ev.tileId;
-					return {
-						tilesetUid: ed.iconTilesetUid,
-						rect: {
-							x: td.getTileSourceX(tid),
-							y: td.getTileSourceY(tid),
-							w: td.tileGridSize,
-							h: td.tileGridSize,
-						}
-					}
-
-
-				case F_Tile:
-					var fi = getFieldInstance(fd,true);
-					if( fi.def.editorDisplayMode!=EntityTile )
-						continue;
-
-					if( !fi.valueIsNull(0) )
-						return {
-							tilesetUid: fi.def.tilesetUid,
-							rect: fi.getTileRectObj(0),
-						}
-
-				case _:
-			}
+			var t = getFieldInstance(fd,true).getSmartTile();
+			if( t!=null )
+				return t;
 		}
 
 		return def.getDefaultTile();
@@ -240,6 +191,11 @@ class EntityInstance {
 		return false;
 	}
 
+	public inline function isInSameSpaceAs(ei:EntityInstance) {
+		return ei!=null
+			&& _li.level.worldDepth == ei._li.level.worldDepth
+			&& _li.level.isInWorld(ei._li.level._world);
+	}
 
 	public function isOutOfLayerBounds() {
 		return x<_li.pxTotalOffsetX || x>_li.pxTotalOffsetX+_li.cWid*_li.def.scaledGridSize
@@ -265,6 +221,8 @@ class EntityInstance {
 
 		for(fi in fieldInstances)
 			fi.tidy(_project, li);
+
+
 
 		return anyChange;
 	}

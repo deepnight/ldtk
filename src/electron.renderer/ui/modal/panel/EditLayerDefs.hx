@@ -112,7 +112,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Update layer instances
 		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
-		for(l in project.levels) {
+		for(w in project.worlds)
+		for(l in w.levels) {
 			var sourceLi = l.getLayerInstance(ld);
 			var newLi = l.getLayerInstance(newLd);
 			ops.push({
@@ -562,14 +563,16 @@ class EditLayerDefs extends ui.modal.Panel {
 				var ted = new ui.TagEditor(
 					cur.requiredTags,
 					()->editor.ge.emit(LayerDefChanged(cur.uid)),
-					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
+					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags]),
+					false
 				);
 				jForm.find("#requiredTags").empty().append( ted.jEditor );
 
 				var ted = new ui.TagEditor(
 					cur.excludedTags,
 					()->editor.ge.emit(LayerDefChanged(cur.uid)),
-					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags])
+					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags]),
+					false
 				);
 				jForm.find("#excludedTags").empty().append( ted.jEditor );
 

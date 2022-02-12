@@ -82,6 +82,8 @@ enum GlobalEvent {
 	ToolValueSelected;
 	ToolOptionChanged;
 
+	WorldSelected(w:data.World);
+
 	WorldMode(active:Bool);
 	WorldDepthSelected(worldDepth:Int);
 	GridChanged(active:Bool);
@@ -189,6 +191,8 @@ typedef FileSavingData = {
 }
 
 enum LevelError {
+	NoError;
+	InvalidEntityTag(ei:data.inst.EntityInstance);
 	InvalidEntityField(ei:data.inst.EntityInstance);
 	InvalidBgImage;
 }
@@ -208,9 +212,4 @@ enum ClipboardType {
 typedef CachedIID = {
 	var level: data.Level;
 	var ?ei: data.inst.EntityInstance ;
-}
-
-typedef EntitySmartTile = {
-	var tilesetUid: Int;
-	var rect : ldtk.Json.AtlasTileRect;
 }

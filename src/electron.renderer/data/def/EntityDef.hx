@@ -21,7 +21,7 @@ class EntityDef {
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
 	public var tilesetId : Null<Int>;
-	public var tileRect : Null<ldtk.Json.AtlasTileRect>;
+	public var tileRect : Null<ldtk.Json.TilesetRect>;
 	public var _oldTileId : Null<Int>;
 
 	public var hollow : Bool;
@@ -65,27 +65,21 @@ class EntityDef {
 		return tilesetId!=null && tileRect!=null;
 	}
 
-	public function getDefaultTile() : Null<EntitySmartTile> {
+	public function getDefaultTile() : Null<ldtk.Json.TilesetRect> {
 		// Look inside fields defaults
 		for( fd in fieldDefs )
 			switch fd.type {
 				case F_Tile:
 					var rect = fd.getTileRectDefaultObj();
 					if( rect!=null )
-						return {
-							tilesetUid: fd.tilesetUid,
-							rect: rect,
-						}
+						return rect;
 
 				case _:
 			}
 
 		// Check display tile from entity def
 		if( isTileDefined() )
-			return {
-				tilesetUid: tilesetId,
-				rect: tileRect,
-			}
+			return tileRect;
 		else
 			return null;
 	}
@@ -157,6 +151,8 @@ class EntityDef {
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o._oldTileId = JsonTools.readNullableInt(json.tileId);
 		o.tileRect = JsonTools.readTileRect(json.tilesetId, json.tileRect, true);
+		if( o.tileRect!=null && o.tileRect.tilesetUid==null )
+			o.tileRect.tilesetUid = o.tilesetId;
 
 		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Cover";
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, FitInside);

@@ -9,17 +9,17 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456585,
+	"appBuildId": 456830,
 	"nextUid": 10,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 240,
 	"worldGridHeight": 240,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
-	"defaultLevelWidth": 256,
-	"defaultLevelHeight": 256,
 	"bgColor": "#7F8093",
 	"defaultLevelBgColor": "#7F8093",
 	"minifyJson": false,
@@ -29,9 +29,9 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"levelNamePattern": "Level_%idx",
+	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "IntGrid",
@@ -63,7 +63,7 @@
 	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "Level_0",
+			"identifier": "World_Level_0",
 			"iid": "a3053150-66b0-11ec-9cd7-c37b76d449dd",
 			"uid": 0,
 			"worldX": -1,
@@ -80,13 +80,13 @@
 			"bgPivotY": 0.5,
 			"__smartColor": "#92BCAB",
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/Level_0.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/World_Level_0.ldtkl",
 			"fieldInstances": [],
 			"layerInstances": null,
 			"__neighbours": []
 		},
 		{
-			"identifier": "Level_1",
+			"identifier": "World_Level_1",
 			"iid": "a3184420-66b0-11ec-9cd7-531cbe889139",
 			"uid": 2,
 			"worldX": -1,
@@ -103,13 +103,13 @@
 			"bgPivotY": 0.5,
 			"__smartColor": "#9B9DB9",
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/Level_1.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/World_Level_1.ldtkl",
 			"fieldInstances": [],
 			"layerInstances": null,
 			"__neighbours": []
 		},
 		{
-			"identifier": "Level_2",
+			"identifier": "World_Level_2",
 			"iid": "a34a0280-66b0-11ec-9cd7-43e058c8f3de",
 			"uid": 3,
 			"worldX": -1,
@@ -126,7 +126,7 @@
 			"bgPivotY": 0.5,
 			"__smartColor": "#C5A0AC",
 			"__bgPos": null,
-			"externalRelPath": "SeparateLevelFiles/Level_2.ldtkl",
+			"externalRelPath": "SeparateLevelFiles/World_Level_2.ldtkl",
 			"fieldInstances": [],
 			"layerInstances": null,
 			"__neighbours": []

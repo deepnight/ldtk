@@ -1,11 +1,18 @@
 package display;
 
+enum RefLinkstyle {
+	Full;
+	CutAtOrigin;
+	CutAtTarget;
+}
+
 enum FieldRenderContext {
 	EntityCtx(g:h2d.Graphics, ei:data.inst.EntityInstance, ld:data.def.LayerDef);
 	LevelCtx(l:data.Level);
 }
 
 class FieldInstanceRender {
+	static var MAX_TEXT_WIDTH = 250;
 	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
 
 
@@ -18,13 +25,37 @@ class FieldInstanceRender {
 	}
 
 
-	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha=1.0) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, style:RefLinkstyle) {
+		// Optional line cutting
 		var a = Math.atan2(ty-fy, tx-fx);
+		final cutDist = 40;
+		switch style {
+			case Full:
+
+			case CutAtOrigin:
+				final cutLine = 2;
+				tx = fx + Math.cos(a)*cutDist;
+				ty = fy + Math.sin(a)*cutDist;
+				g.lineStyle(1, color, 0.5);
+				g.moveTo(tx + Math.cos(a-M.PIHALF)*cutLine, ty + Math.sin(a-M.PIHALF)*cutLine);
+				g.lineTo(tx + Math.cos(a+M.PIHALF)*cutLine, ty + Math.sin(a+M.PIHALF)*cutLine);
+
+			case CutAtTarget:
+				final cutLine = 4;
+				fx = tx - Math.cos(a)*cutDist;
+				fy = ty - Math.sin(a)*cutDist;
+				g.lineStyle(1, color, 1);
+				g.moveTo(fx + Math.cos(a-M.PIHALF)*cutLine, fy + Math.sin(a-M.PIHALF)*cutLine);
+				g.lineTo(fx + Math.cos(a+M.PIHALF)*cutLine, fy + Math.sin(a+M.PIHALF)*cutLine);
+		}
+
+		// Init params
 		var len = M.dist(fx,fy, tx,ty);
 		var dashLen = M.fmin(5, len*0.05);
 		var count = M.ceil( len/dashLen );
 		dashLen = len/count;
 
+		// Draw link
 		var n = 0;
 		var sign = 1;
 		final off = 2.5;
@@ -224,7 +255,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty);
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
 					case LevelCtx(l):
@@ -241,7 +272,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty);
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
 					case LevelCtx(l):
@@ -306,26 +337,35 @@ class FieldInstanceRender {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
-		var multiLinesArray = fi.def.isArray && switch fi.def.type {
-			case F_Int: false;
-			case F_Float: false;
-			case F_String: true;
-			case F_Text: true;
-			case F_Bool: false;
-			case F_Color: false;
-			case F_Enum(enumDefUid): false;
-			case F_Point: false;
-			case F_Path: true;
-			case F_EntityRef: true;
-			case F_Tile: false;
-		}
-		if( multiLinesArray ) {
-			valuesFlow.multiline = true;
-			valuesFlow.maxWidth = 200;
+		var showArrayBrackets = fi.def.isArray;
+		if( fi.def.isArray ) {
+			var multiLinesArray = false;
+			switch fi.def.type {
+				case F_Int:
+				case F_Float:
+				case F_String: multiLinesArray = true; showArrayBrackets = false;
+				case F_Text: multiLinesArray = true; showArrayBrackets = false;
+				case F_Bool:
+				case F_Color:
+				case F_Enum(enumDefUid):
+				case F_Point:
+				case F_Path: multiLinesArray = true;
+				case F_EntityRef: multiLinesArray = true; showArrayBrackets = false;
+				case F_Tile:
+			}
+			if( multiLinesArray ) {
+				valuesFlow.multiline = true;
+				valuesFlow.maxWidth = MAX_TEXT_WIDTH;
+				if( !showArrayBrackets ) {
+					valuesFlow.verticalSpacing = 8;
+					valuesFlow.layout = Vertical;
+				}
+			}
 		}
 
+
 		// Array opening
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
+		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "[";
@@ -362,7 +402,7 @@ class FieldInstanceRender {
 					tf.textColor = textColor;
 					switch ctx {
 						case EntityCtx(g, ei, ld):
-							tf.maxWidth = 400;
+							tf.maxWidth = MAX_TEXT_WIDTH;
 
 						case LevelCtx(l):
 							tf.maxWidth = 800;
@@ -386,7 +426,7 @@ class FieldInstanceRender {
 			}
 
 			// Array separator
-			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
+			if( showArrayBrackets && fi.def.isArray && idx<fi.getArrayLength()-1 ) {
 				var tf = createText(valuesFlow);
 				tf.textColor = textColor;
 				tf.text = ",";
@@ -394,7 +434,7 @@ class FieldInstanceRender {
 		}
 
 		// Array closing
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
+		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
 			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "]";

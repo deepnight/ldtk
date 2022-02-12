@@ -468,13 +468,11 @@ class FieldInstancesForm {
 				}
 				else {
 					// Text input
-					var jInput = new J('<input class="entityRef" type="text"/>');
-					jInput.appendTo(jTarget);
-					jInput.attr("id",domId);
-					jInput.attr("placeholder", "(null)");
-					jInput.prop("readonly",true);
-					jInput.click( (_)->{
-						// Follow ref
+					var jRef = JsTools.createEntityRef( getEntityInstance(), jTarget );
+					jRef.attr("id",domId);
+
+					// Follow ref
+					jRef.click( (_)->{
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
@@ -484,17 +482,10 @@ class FieldInstancesForm {
 							return;
 						}
 
-						if( tei._li.level!=editor.curLevel )
-							editor.selectLevel(tei._li.level);
-
-						if( tei._li!=editor.curLayerInstance )
-							editor.selectLayerInstance(tei._li);
-
-						editor.camera.scrollTo(tei.worldX, tei.worldY);
-						editor.levelRender.bleepEntity(tei._li, tei);
+						editor.followEntityRef(tei);
 					});
 
-					jInput.mouseover( _->{
+					jRef.mouseenter( _->{
 						// Mouse over a ref
 						if( fi.valueIsNull(arrayIdx) )
 							return;
@@ -503,16 +494,24 @@ class FieldInstancesForm {
 						if( tei==null )
 							return;
 
-						if( tei._li.level==editor.curLevel )
-							editor.levelRender.bleepEntity(tei._li, tei);
+						if( tei._li.level==editor.curLevel ) {
+							editor.levelRender.clearTemp();
+							editor.levelRender.temp.lineStyle(2, 0xff00ff);
+							editor.levelRender.temp.drawCircle(tei.centerX, tei.centerY, M.fmax(tei.width,tei.height)*0.5 + 8);
+							editor.levelRender.bleepEntity(tei,0xff00ff);
+						}
+					});
+					jRef.mouseleave( _->{
+						editor.levelRender.clearTemp();
 					});
 
+
 					if( fi.hasAnyErrorInValues(getEntityInstance()) )
-						markError(jInput);
+						markError(jRef);
 
 					if( !fi.isUsingDefault(arrayIdx) ) {
-						jInput.val( fi.getEntityRefForDisplay(arrayIdx, editor.curLevel) );
-						jInput.attr("title", fi.getEntityRefIid(arrayIdx));
+						// jInput.val( fi.getEntityRefForDisplay(arrayIdx, editor.curLevel) );
+						// jInput.attr("title", fi.getEntityRefIid(arrayIdx));
 					}
 
 					// Pick ref

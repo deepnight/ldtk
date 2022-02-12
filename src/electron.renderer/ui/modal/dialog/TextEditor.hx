@@ -33,7 +33,7 @@ class TextEditor extends ui.modal.Dialog {
 			theme: "lucario",
 			lineNumbers: true,
 			lineWrapping: true,
-			readOnly: true,
+			readOnly: readOnly,
 			autofocus: true,
 		});
 		cm.on("change", (ev)->anyChange=true );

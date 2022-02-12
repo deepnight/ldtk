@@ -96,8 +96,8 @@ class EntityRender extends dn.Process {
 		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		// Render a tile
-		function _renderTile(tilesetUid:Int, rect:ldtk.Json.AtlasTileRect, mode:ldtk.Json.EntityTileRenderMode) {
-			if( rect==null || tilesetUid==null ) {
+		function _renderTile(rect:ldtk.Json.TilesetRect, mode:ldtk.Json.EntityTileRenderMode) {
+			if( rect==null || Editor.ME.project.defs.getTilesetDef(rect.tilesetUid)==null ) {
 				// Missing tile
 				var p = 2;
 				g.lineStyle(3, 0xff0000);
@@ -113,7 +113,7 @@ class EntityRender extends dn.Process {
 				g.drawRect(0, 0, w, h);
 
 				// Texture
-				var td = Editor.ME.project.defs.getTilesetDef(tilesetUid);
+				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
 				var t = td.getTileRect(rect);
 				var alpha = ed.tileOpacity;
 				switch mode {
@@ -178,7 +178,7 @@ class EntityRender extends dn.Process {
 		var smartTile = ei==null ? ed.getDefaultTile() : ei.getSmartTile();
 		if( smartTile!=null ) {
 			// Tile (from either Def or a field)
-			_renderTile(smartTile.tilesetUid, smartTile.rect, ed.tileRenderMode);
+			_renderTile(smartTile, ed.tileRenderMode);
 		}
 		else
 			switch ed.renderMode {
@@ -206,7 +206,7 @@ class EntityRender extends dn.Process {
 
 			case Tile:
 				// Render should be done through getSmartTile() method above, but if tile is invalid, we land here
-				_renderTile(ed.tilesetId,null, FitInside);
+				_renderTile(null, FitInside);
 			}
 
 		// Pivot
@@ -265,11 +265,14 @@ class EntityRender extends dn.Process {
 				continue;
 
 			var col = refEi.getSmartColor(true);
-			var fx = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
-			var fy = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
-			var tx = ei.getRefAttachX(fi.def) - ei.x;
-			var ty = ei.getRefAttachY(fi.def) - ei.y;
-			FieldInstanceRender.renderRefLink(fieldGraphics, col, fx,fy, tx,ty);
+			var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var thisX = ei.getRefAttachX(fi.def) - ei.x;
+			var thisY = ei.getRefAttachY(fi.def) - ei.y;
+			FieldInstanceRender.renderRefLink(
+				fieldGraphics, col, refX, refY, thisX, thisY, 1,
+				ei.isInSameSpaceAs(refEi) ? Full : CutAtTarget
+			);
 		}
 
 		// Identifier label
@@ -296,8 +299,8 @@ class EntityRender extends dn.Process {
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		final maxFieldsWid = ei.width*1.5;
-		final maxFieldsHei = ei.height*1.5;
+		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
+		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;
 
 		root.x = ei.x;
 		root.y = ei.y;

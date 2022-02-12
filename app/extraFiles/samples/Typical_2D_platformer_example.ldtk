@@ -9,17 +9,17 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456569,
+	"appBuildId": 456830,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"defaultPivotX": 0.5,
 	"defaultPivotY": 1,
 	"defaultGridSize": 16,
-	"defaultLevelWidth": 256,
-	"defaultLevelHeight": 256,
 	"bgColor": "#806262",
 	"defaultLevelBgColor": "#50506A",
 	"minifyJson": false,
@@ -29,9 +29,9 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"levelNamePattern": "Level_%idx",
+	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "This sample demonstrates a typical 2D platformer with auto-rendered walls and various gameplay entities.\nPress [A] to toggle \"Single layer mode\", which helps understanding which layer contains what.\nPress [SHIFT+R] to toggle auto-rendered layers.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
@@ -1126,7 +1126,7 @@
 			"tilesetId": 104,
 			"tileId": 240,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 0, "y": 240, "w": 16, "h": 16 },
+			"tileRect": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "PreventAdding",
@@ -1183,7 +1183,7 @@
 			"tilesetId": 104,
 			"tileId": 570,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16 },
+			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 104 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1240,7 +1240,7 @@
 			"tilesetId": 104,
 			"tileId": 6,
 			"tileRenderMode": "Cover",
-			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16 },
+			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -1377,6 +1377,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -1401,7 +1402,7 @@
 			],
 			"cachedPixelData": {
 				"opaqueTiles": "101010100010110110000000000000000001101101101110101010001000000000000000000000000010100000001010101000000101000101000000000000000000000000000010100000001010100000000000000000000000000000000000000000101010000010100100000000000000000000000000000010101010000000000000000000000100000000101010100000000000000001010100000100000001010000100000000000000010100000010011011100000101000000100110000000011011000011101101010100000000000000000000000001011000011101110100000000110000111011100000000",
-				"averageColors": "f9850000f9850000f9850000fa65000069557a65f8450000f644f9650000f965f644000049b5c9950000c99549b5000000000000000000000000000000000000000000000000f955f7450000f745f9550000f865f7450000f745f865f9550000f6450000f9550000f845695500006955f8450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f8550000f85500000000000079a5000079a50000f9550000f8550000f9550000f8457a6569550000000000000000f8550000f855000000000000f7550000f75500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000077a5000078b50000f8450000f7450000947400009474000000000000fa650000f9550000fa6500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000f9550000f6450000f9550000900000000000a955f8450000f845a9550000f85500000000ca65b9650000000000000000000000000000000000000000000000000000a9550000a9550000000000000000000000000000000000000000fa650000f9550000fa650000f4880000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f47700000000000000000000000000000000f7450000f8550000f8550000f8550000000000000000000000000000000000000000000000000000000000000000f3440000f3450000f534000000000000e9950000f9950000e9950000000000000000b855f5340000f534b855000000000000f334000000000000000000000000000000000000000000000000000000000000f7440000f744000000000000000000000000f43500000000f435f4350000f334f436f3350000000000000000b955f5340000f534b95500000000000000000000f34500000000f335f33500000000000000000000000000000000f744f3340000f334f7440000000000000000f344f345f3440000f335f3350000f5340000f4350000f3340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000fa650000f955f9550000000000000000f334f335f3450000f345f335f3340000f75500000000000000000000000000000000f955f9550000000000000000f335f344f3440000f344f344f33500000000000000000000000000000000"
+				"averageColors": "f9850000f9850000f9850000fa65000069557a65f8450000f644f9650000f965f644000049b5c9950000c99549b5000000000000000000000000000000000000000000000000f955f7450000f745f9550000f865f7450000f745f865f9550000f6450000f9550000f845695500006955f8450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f8550000f85500000000000079a5000079a50000f9550000f8550000f9550000f8457a6569550000ab8500000000f8550000f855000000000000f7550000f75500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000077a5000078b50000f8450000f7450000947400009474000000000000fa650000f9550000fa6500002000000000000000459534953595000000000000000000000000000000000000000000000000000000000000000020006000000000000000000000000000000000000000000000000000000088550000f9550000f6450000f9550000900000000000a955f8450000f845a9550000f85500000000ca65b9650000000000000000000000000000000000000000000000000000a9550000a9550000000000000000000000000000000000000000fa650000f9550000fa650000f4880000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f47700000000000000000000000000000000f7450000f8550000f8550000f8550000000000000000000000000000000000000000000000000000000000000000f3440000f3450000f534000000000000e9950000f9950000e9950000000000000000b855f5340000f534b855000000000000f334000000000000000000000000000000000000000000000000000000000000f7440000f744000000000000000000000000f43500000000f435f4350000f334f436f3350000000000000000b955f5340000f534b95500000000000000000000f34500000000f335f33500000000000000000000000000000000f744f3340000f334f7440000000000000000f344f345f3440000f335f3350000f5340000f4350000f3340000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000fa650000f955f9550000000000000000f334f335f3450000f345f335f3340000f75500000000000000000000000000000000f955f9550000000000000000f335f344f3440000f344f344f33500000000000000000000000000000000"
 			}
 		},
 		{
@@ -1416,6 +1417,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -1432,7 +1434,7 @@
 		{ "id": "Boots", "tileId": 754, "color": 9067593, "__tileSrcRect": [32,752,16,16] },
 		{ "id": "Water", "tileId": 272, "color": 9399401, "__tileSrcRect": [0,272,16,16] },
 		{ "id": "Gem", "tileId": 987, "color": 11173944, "__tileSrcRect": [176,976,16,16] }
-	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Your_typical_2D_platformer",
@@ -1484,86 +1486,62 @@
 							"__grid": [11,12],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [0,240,16,16] },
+							"__tile": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a315d323-66b0-11ec-9cd7-8ddce09157bc",
 							"width": 24,
 							"height": 24,
 							"defUid": 46,
 							"px": [184,208],
-							"fieldInstances": [{
-								"__identifier": "items",
-								"__value": [ "Knife", "Boots" ],
-								"__type": "Array<LocalEnum.Item>",
-								"defUid": 51,
-								"realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Knife"]
-								}, {
-									"id": "V_String",
-									"params": ["Boots"]
-								} ]
-							}]
+							"fieldInstances": [{ "__identifier": "items", "__value": [ "Knife", "Boots" ], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 51, "realEditorValues": [ {
+								"id": "V_String",
+								"params": ["Knife"]
+							}, {
+								"id": "V_String",
+								"params": ["Boots"]
+							} ] }]
 						},
 						{
 							"__identifier": "Chest",
 							"__grid": [31,17],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [160,560,16,16] },
+							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a315d324-66b0-11ec-9cd7-0d0128b37734",
 							"width": 32,
 							"height": 24,
 							"defUid": 52,
 							"px": [504,288],
-							"fieldInstances": [{
-								"__identifier": "content",
-								"__value": [ "Healing_Plant", "Water", "Meat" ],
-								"__type": "Array<LocalEnum.Item>",
-								"defUid": 53,
-								"realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Healing_Plant"]
-								}, {
-									"id": "V_String",
-									"params": ["Water"]
-								}, {
-									"id": "V_String",
-									"params": ["Meat"]
-								} ]
-							}]
+							"fieldInstances": [{ "__identifier": "content", "__value": [ "Healing_Plant", "Water", "Meat" ], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 53, "realEditorValues": [ {
+								"id": "V_String",
+								"params": ["Healing_Plant"]
+							}, {
+								"id": "V_String",
+								"params": ["Water"]
+							}, {
+								"id": "V_String",
+								"params": ["Meat"]
+							} ] }]
 						},
 						{
 							"__identifier": "Mob",
 							"__grid": [20,9],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [96,0,16,16] },
+							"__tile": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a315d325-66b0-11ec-9cd7-f9e1c56d6020",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
 							"px": [328,160],
 							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 32, "cy": 9 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["32,9"]
-									}]
-								},
-								{
-									"__identifier": "loot",
-									"__value": ["Meat"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 56,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Meat"]
-									}]
-								}
+								{ "__identifier": "loot", "__value": ["Meat"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 56, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Meat"]
+								}] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 32, "cy": 9 }], "__type": "Array<Point>", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["32,9"]
+								}] }
 							]
 						},
 						{
@@ -1571,24 +1549,18 @@
 							"__grid": [16,17],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [96,0,16,16] },
+							"__tile": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a315d326-66b0-11ec-9cd7-cf3ea20f8dff",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
 							"px": [264,288],
 							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 26, "cy": 17 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["26,17"]
-									}]
-								},
-								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
+								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 56, "realEditorValues": [] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 26, "cy": 17 }], "__type": "Array<Point>", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["26,17"]
+								}] }
 							]
 						},
 						{
@@ -1602,13 +1574,7 @@
 							"height": 32,
 							"defUid": 86,
 							"px": [440,288],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": false,
-								"__type": "Bool",
-								"defUid": 87,
-								"realEditorValues": [null]
-							}]
+							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "__tile": null, "defUid": 87, "realEditorValues": [null] }]
 						},
 						{
 							"__identifier": "Door",
@@ -1621,7 +1587,7 @@
 							"height": 48,
 							"defUid": 86,
 							"px": [568,128],
-							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 87, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "__tile": null, "defUid": 87, "realEditorValues": [] }]
 						}
 					]
 				},
@@ -3162,24 +3128,18 @@
 							"__grid": [28,14],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [96,0,16,16] },
+							"__tile": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a316bd86-66b0-11ec-9cd7-837d4383ebc8",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
 							"px": [456,240],
 							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 22, "cy": 14 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["22,14"]
-									}]
-								},
-								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
+								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 56, "realEditorValues": [] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 22, "cy": 14 }], "__type": "Array<Point>", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["22,14"]
+								}] }
 							]
 						},
 						{
@@ -3187,24 +3147,18 @@
 							"__grid": [26,20],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [96,0,16,16] },
+							"__tile": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a316bd87-66b0-11ec-9cd7-df8b07359531",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
 							"px": [424,336],
 							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 23, "cy": 20 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["23,20"]
-									}]
-								},
-								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "defUid": 56, "realEditorValues": [] }
+								{ "__identifier": "loot", "__value": [], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 56, "realEditorValues": [] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 23, "cy": 20 }], "__type": "Array<Point>", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["23,20"]
+								}] }
 							]
 						},
 						{
@@ -3212,27 +3166,21 @@
 							"__grid": [12,13],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [96,0,16,16] },
+							"__tile": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a316bd88-66b0-11ec-9cd7-cbd4e685a38f",
 							"width": 48,
 							"height": 48,
 							"defUid": 54,
 							"px": [200,224],
 							"fieldInstances": [
-								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "defUid": 55, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": [ "Knife", "Healing_Plant" ],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 56,
-									"realEditorValues": [ {
-										"id": "V_String",
-										"params": ["Knife"]
-									}, {
-										"id": "V_String",
-										"params": ["Healing_Plant"]
-									} ]
-								}
+								{ "__identifier": "loot", "__value": [ "Knife", "Healing_Plant" ], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 56, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Knife"]
+								}, {
+									"id": "V_String",
+									"params": ["Healing_Plant"]
+								} ] },
+								{ "__identifier": "patrol", "__value": [], "__type": "Array<Point>", "__tile": null, "defUid": 55, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3246,32 +3194,26 @@
 							"height": 64,
 							"defUid": 86,
 							"px": [328,224],
-							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "defUid": 87, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "__tile": null, "defUid": 87, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Chest",
 							"__grid": [4,9],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [160,560,16,16] },
+							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a316bd8a-66b0-11ec-9cd7-a986f709d9f8",
 							"width": 24,
 							"height": 24,
 							"defUid": 52,
 							"px": [72,160],
-							"fieldInstances": [{
-								"__identifier": "content",
-								"__value": [ "Gem", "Gem" ],
-								"__type": "Array<LocalEnum.Item>",
-								"defUid": 53,
-								"realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Gem"]
-								}, {
-									"id": "V_String",
-									"params": ["Gem"]
-								} ]
-							}]
+							"fieldInstances": [{ "__identifier": "content", "__value": [ "Gem", "Gem" ], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 53, "realEditorValues": [ {
+								"id": "V_String",
+								"params": ["Gem"]
+							}, {
+								"id": "V_String",
+								"params": ["Gem"]
+							} ] }]
 						},
 						{
 							"__identifier": "Door",
@@ -3284,16 +3226,10 @@
 							"height": 32,
 							"defUid": 86,
 							"px": [120,144],
-							"fieldInstances": [{
-								"__identifier": "locked",
-								"__value": true,
-								"__type": "Bool",
-								"defUid": 87,
-								"realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ true ]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "locked", "__value": true, "__type": "Bool", "__tile": null, "defUid": 87, "realEditorValues": [{
+								"id": "V_Bool",
+								"params": [ true ]
+							}] }]
 						}
 					]
 				},
@@ -4535,33 +4471,21 @@
 							"__grid": [19,10],
 							"__pivot": [0.5,1],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [96,0,16,16] },
+							"__tile": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a317cef6-66b0-11ec-9cd7-a5ccf047f66e",
 							"width": 20,
 							"height": 20,
 							"defUid": 54,
 							"px": [312,176],
 							"fieldInstances": [
-								{
-									"__identifier": "patrol",
-									"__value": [{ "cx": 11, "cy": 10 }],
-									"__type": "Array<Point>",
-									"defUid": 55,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["11,10"]
-									}]
-								},
-								{
-									"__identifier": "loot",
-									"__value": ["Healing_Plant"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 56,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Healing_Plant"]
-									}]
-								}
+								{ "__identifier": "loot", "__value": ["Healing_Plant"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 56, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Healing_Plant"]
+								}] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 11, "cy": 10 }], "__type": "Array<Point>", "__tile": null, "defUid": 55, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["11,10"]
+								}] }
 							]
 						}
 					]

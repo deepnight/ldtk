@@ -161,7 +161,8 @@ class ProjectSaver extends dn.Process {
 			case CheckLevelCache:
 				// Rebuild levels cache if necessary
 				var ops : Array<ui.modal.Progress.ProgressOp> = [];
-				for(l in project.levels) {
+				for(w in project.worlds)
+				for(l in w.levels) {
 					ops.push({
 						label: l.identifier,
 						cb: ()->{
@@ -234,7 +235,8 @@ class ProjectSaver extends dn.Process {
 
 					// Export level layers
 					var lr = new display.LayerRender();
-					for( level in project.levels ) {
+					for( world in project.worlds )
+					for( level in world.levels ) {
 						var level = level;
 
 						ops.push({
@@ -484,19 +486,31 @@ class ProjectSaver extends dn.Process {
 		else {
 			// Separate level JSONs
 			var idx = 0;
-			var externLevels = project.levels.map( (l)->{
-				json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
-				relPath: l.makeExternalRelPath(idx++),
-				id: l.identifier,
-			});
+			var externLevels = [];
+			for(w in project.worlds)
+			for(l in w.levels)
+				externLevels.push({
+					json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
+					relPath: l.makeExternalRelPath(idx++),
+					id: l.identifier,
+				});
 
 			// Build project JSON without level data
 			var idx = 0;
-			var trimmedProjectJson = project.toJson();
-			for(levelJson in trimmedProjectJson.levels) {
+			inline function _clearLevelData(levelJson:ldtk.Json.LevelJson) {
 				Reflect.deleteField(levelJson, dn.JsonPretty.HEADER_VALUE_NAME);
 				levelJson.layerInstances = null;
-				levelJson.externalRelPath = project.getLevel(levelJson.uid).makeExternalRelPath(idx++);
+				levelJson.externalRelPath = project.getLevelAnywhere(levelJson.uid).makeExternalRelPath(idx++);
+			}
+			var trimmedProjectJson = project.toJson();
+			if( project.hasFlag(MultiWorlds) ) {
+				for(worldJson in trimmedProjectJson.worlds)
+				for(levelJson in worldJson.levels)
+					_clearLevelData(levelJson);
+			}
+			else {
+				for(levelJson in trimmedProjectJson.levels)
+					_clearLevelData(levelJson);
 			}
 
 			return {

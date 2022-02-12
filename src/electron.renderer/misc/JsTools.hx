@@ -77,23 +77,8 @@ class JsTools {
 		else if( curUid==null )
 			jSelect.addClass("noValue");
 
-		// Normal tilesets
-		for(td in project.defs.tilesets) {
-			if( td.isUsingEmbedAtlas() )
-				continue;
-			var jOpt = new J('<option value="${td.uid}"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text( td.identifier );
-		}
-
-		// Embed tilesets
-		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
-			var id = ldtk.Json.EmbedAtlas.createByName(k);
-			var inf = Lang.getEmbedAtlasInfos(id);
-			var jOpt = new J('<option value="$k"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text( inf.displayName );
-		}
+		// Fill select
+		appendTilesetsToSelect(project, jSelect);
 
 		// Select current one
 		var curTd = curUid==null ? null : project.defs.getTilesetDef(curUid);
@@ -120,6 +105,51 @@ class JsTools {
 		});
 
 		return jSelect;
+	}
+
+
+	/**
+		Create a Tileset <select/>
+	**/
+	public static function appendTilesetsToSelect(project:data.Project, jSelect:js.jquery.JQuery) {
+		// List tilesets, grouped by tags
+		var tagGroups = project.defs.groupUsingTags(project.defs.tilesets, td->td.tags);
+		for( group in tagGroups ) {
+			var jOptGroup = new J('<optgroup/>');
+			jOptGroup.appendTo(jSelect);
+			if( tagGroups.length<=1 )
+				jOptGroup.attr("label","All tilesets");
+			else
+				jOptGroup.attr("label", group.tag==null ? L._Untagged() : group.tag);
+			for(td in group.all ) {
+				var jOpt = new J('<option value="${td.uid}"/>');
+				jOpt.appendTo(jOptGroup);
+				if( td.isUsingEmbedAtlas() ) {
+					jOpt.attr("value", td.embedAtlas.getName());
+					var inf = Lang.getEmbedAtlasInfos( td.embedAtlas );
+					jOpt.text( inf.displayName );
+				}
+				else {
+					jOpt.attr("value", Std.string(td.uid));
+					jOpt.text( td.identifier );
+				}
+			}
+		}
+
+		// Unused embed tilesets
+		var jOptGroup = new J('<optgroup label="Integrated LDtk tilesets"/>');
+		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
+			var id = ldtk.Json.EmbedAtlas.createByName(k);
+			if( project.defs.isEmbedAtlasBeingUsed(id) )
+				continue;
+
+			var inf = Lang.getEmbedAtlasInfos(id);
+			var jOpt = new J('<option value="$k"/>');
+			jOpt.appendTo(jOptGroup);
+			jOpt.text( inf.displayName );
+		}
+		if( jOptGroup.children().length>0 )
+			jOptGroup.appendTo(jSelect);
 	}
 
 
@@ -568,26 +598,42 @@ class JsTools {
 		});
 
 
-		// Accordions
-		jCtx.find(".accordion").each( (idx,e)->{ // TODO unfinished
-			var jAccordion = new J(e);
-			var jExpand = jAccordion.find(".expand:first");
-			var jContent = jExpand.nextAll();
-			jContent.hide();
-			jExpand.addClass("collapsed");
-			jExpand
-				.off(".accordion")
-				.on("click.accordion", _->{
-					var expanded = jContent.is(":visible");
-					jExpand.removeClass("collapsed");
-					jExpand.removeClass("expanded");
+		// Collapser
+		jCtx.find(".collapser").each( (idx,e)->{
+			var jCollapser = new J(e);
+			var tid = jCollapser.attr("target");
+			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
+			var uiStateId = jCollapser.attr("id"); // might be null
+
+			// Init with memory
+			if( uiStateId!=null && App.ME.settings.getUiStateBool(cast uiStateId)==true ) {
+				jTarget.show();
+				jCollapser.addClass("expanded");
+			}
+			else {
+				jTarget.hide();
+				jCollapser.addClass("collapsed");
+			}
+
+
+			jCollapser
+				.off(".collapser")
+				.on("click.collapser", _->{
+					var expanded = jTarget.is(":visible");
+					jCollapser.removeClass("collapsed");
+					jCollapser.removeClass("expanded");
+					if( uiStateId!=null )
+						App.ME.settings.setUiStateBool(cast uiStateId, !expanded);
+
 					if( expanded ) {
-						jExpand.addClass("collapsed");
-						jContent.slideUp(70);
+						jCollapser.addClass("collapsed");
+						jTarget.slideUp(50, ()->dn.Process.resizeAll(false));
 					}
 					else {
-						jExpand.addClass("expanded");
-						jContent.slideDown(50);
+						jCollapser.addClass("expanded");
+						jTarget.slideDown(30, ()->dn.Process.resizeAll(false));
+						jTarget.show();
+						dn.Process.resizeAll(false);
 					}
 				});
 		});
@@ -843,8 +889,8 @@ class JsTools {
 
 	public static function createTileRectPicker(
 		tilesetId: Null<Int>,
-		cur: Null<ldtk.Json.AtlasTileRect>,
-		onPick: (Null<ldtk.Json.AtlasTileRect>)->Void
+		cur: Null<ldtk.Json.TilesetRect>,
+		onPick: (Null<ldtk.Json.TilesetRect>)->Void
 	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
@@ -889,6 +935,23 @@ class JsTools {
 		return jTileCanvas;
 	}
 
+
+	public static function createEntityRef(ei:data.inst.EntityInstance, isBackRef=false, ?jTarget:js.jquery.JQuery) {
+		var jRef = new J('<div class="entityRef"/>');
+		if( jTarget!=null )
+			jRef.appendTo(jTarget);
+
+		jRef.append('<div class="id">${ei.def.identifier}</div>');
+		jRef.append('<div class="location"> <span class="level">${ei._li.level.identifier}</span> </div>');
+
+		if( !ei._li.level.isInWorld(Editor.ME.curWorld) )
+			jRef.find(".location").append(' <em>in</em> <span class="world">${ei._li.level._world.identifier}</span>');
+
+		if( isBackRef )
+			jRef.addClass("isBackRef");
+
+		return jRef;
+	}
 
 
 	public static function createImagePicker( curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {

@@ -4,14 +4,18 @@ class LevelHistory {
 	var editor(get,never): Editor; inline function get_editor() return Editor.ME;
 
 	var levelId : Int;
-	var level(get,never): data.Level; inline function get_level() return Editor.ME.project.getLevel(levelId);
+	var level(get,never): data.Level; inline function get_level() return Editor.ME.project.getLevelAnywhere(levelId);
+
+	var worldIid : String;
+	var world(get,never): data.World; inline function get_world() return Editor.ME.project.getWorldIid(worldIid);
 
 	var curIndex = -1;
 	var states : haxe.ds.Vector< HistoryState >;
 	var mostAncientLayerStates : Map<Int, HistoryState> = new Map();
 
-	public function new(lid) {
+	public function new(lid, worldIid:String) {
 		levelId = lid;
+		this.worldIid = worldIid;
 		states = new haxe.ds.Vector(MAX_HISTORY);
 		initMostAncientLayerStates(true);
 	}
@@ -73,6 +77,7 @@ class LevelHistory {
 			case LevelSettingsChanged(l):
 			case LevelJsonCacheInvalidated(l):
 
+			case WorldSelected(w):
 			case WorldLevelMoved(l, isFinal):
 			case WorldSettingsChanged:
 
@@ -174,7 +179,7 @@ class LevelHistory {
 			var droppedState = states[0];
 			switch droppedState {
 				case ResizedLevel(beforeJson, afterJson):
-					var level = data.Level.fromJson(editor.project, afterJson);
+					var level = data.Level.fromJson(editor.project, world, afterJson);
 					for(li in level.layerInstances)
 						mostAncientLayerStates.set( li.layerDefUid, Layer(li.layerDefUid, null, li.toJson()) );
 
@@ -219,7 +224,7 @@ class LevelHistory {
 				while( sid>=0 && before==null ) {
 					switch states[sid] {
 					case ResizedLevel(beforeJson, afterJson):
-						var level = data.Level.fromJson(editor.project, afterJson);
+						var level = data.Level.fromJson(editor.project, world, afterJson);
 						for(li in level.layerInstances)
 							if( li.layerDefUid==undoneLayerId ) {
 								before = Layer(li.layerDefUid, null, li.toJson());
@@ -271,17 +276,17 @@ class LevelHistory {
 		switch s {
 			case ResizedLevel(beforeJson, afterJson):
 				var lidx = 0;
-				while( lidx < editor.project.levels.length )
-					if( editor.project.levels[lidx].uid == editor.curLevelId )
+				while( lidx < world.levels.length )
+					if( world.levels[lidx].uid == editor.curLevelId )
 						break;
 					else
 						lidx++;
 
 				if( isUndo )
-					editor.project.levels[lidx] = data.Level.fromJson(editor.project, beforeJson);
+					world.levels[lidx] = data.Level.fromJson(editor.project, world, beforeJson);
 				else
-					editor.project.levels[lidx] = data.Level.fromJson(editor.project, afterJson);
-				editor.ge.emit( LevelRestoredFromHistory(editor.project.levels[lidx]) );
+					world.levels[lidx] = data.Level.fromJson(editor.project, world, afterJson);
+				editor.ge.emit( LevelRestoredFromHistory(world.levels[lidx]) );
 
 			case Layer(layerId, bounds, json):
 				var li = data.inst.LayerInstance.fromJson(editor.project, json);
