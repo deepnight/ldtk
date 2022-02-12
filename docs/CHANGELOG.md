@@ -8,13 +8,7 @@ A typical example is a *Button* entity with a Reference field pointing to anothe
 
 You can create arrays of References, or define restrictions to which kind of Entity they can point at. This new powerful feature unlocks lots of new exciting possibilities in a very user-friendly interface.
 
-![](1.0.0-entityRefs.png)
-
-## Simplified world layers
-
-Levels can now be organized in "depth" to support stacked levels.
-
-![](1.0.0-worldLayers.gif)
+![](1.0.0/entityRefs.png)
 
 ## Integrated icons
 
@@ -24,7 +18,7 @@ Please note that these icons were provided courtesy of their author, **FinalBoss
 
 If you want to use them in your game directly, you will need to license it from its author FinalBossBlue ([itch.io](https://finalbossblues.itch.io/icons)). He's a nice person, feel free to send an e-mail to get in touch :)
 
-![](1.0.0-icons.png)
+![](1.0.0/icons.png)
 
 ## Performances
 
@@ -35,13 +29,13 @@ Loading and Saving operations were also vastly improved:
   - **Progress bars** provide better feedback when working on large projects.
   - **Backup** system are faster and more reliable.
 
-![](1.0.0-saving.gif)
+![](1.0.0/saving.gif)
 
 ## Rectangle of tiles for Entities
 
 Entities (and levels too, actually) can use a new Custom Field type which can store a rectangle of tiles from any Tileset. This can be used as an alternative skin, an array of animation frames, an "opened" visual state for a a chest etc.
 
-![](1.0.0-tileRect.gif)
+![](1.0.0/tileRect.gif)
 
 ## Copy and paste (work in progress)
 
@@ -49,20 +43,51 @@ For now, this crazy futuristic feature is only available for interface panels (e
 
 You can right click on an element with a context menu to copy/cut/paste/duplicate definitions! LDtk just entered modern era.
 
-![](1.0.0-ruleCopy.gif)
+![](1.0.0/ruleCopy.gif)
+
+## Simplified world layers
+
+Levels can now be organized in "depth" to support stacked levels.
+
+![](1.0.0/worldLayers.gif)
+
+## Reworked toolbar and shortcuts
+
+The main editor toolbar was reorganized to be a little bit more logical:
+
+ - `Level` button is now near the `World` button. They also share the same color.
+ - The `Project` button is now brown and near the four Definition buttons.
+ - The keyboard shortcuts for the various panels are now:
+   - `P`: project settings panel
+   - `L`: layers panel
+   - `E`: entities panel (replacing the previous "Select empty spaces" option)
+   - `U`: enums panel
+   - `T`: tilesets panel (replacing the previous "Toggle tile stacking" option)
+ - `F1` to `F10` keys are now associated with layers selection (replacing the previous `0-9` keys shortcuts)
+
+![](1.0.0/mainBar.png)
+
 
 ## User interface improvements
 
-The **Space** key: one shortcut to rule them all.
+The **`Space`** key now fulfills various roles:
   - Hit `SPACE` once to recenter view on current level or on the whole world (depends on where you are).
   - Hold `SPACE` and drag with `Left mouse button` to scroll the view.
   - Hold `SPACE` and drag with `Right mouse button` to zoom in/out.
 
 The editor UI **font** nows uses *Noto* which offers better readability. While I was at it, I also fixed various font size issues with 2K and 4K monitors.
 
+Enums and Tilesets can now be organized using **user defined tags**:
+
+![](1.0.0/tags.png)
+
+Errors in entities, such as a "null" custom field while being defined as "required", are now much more visible in the level view.
+
+![](1.0.0/error.gif)
+
 Contextual **help tips** were also reworked and streamlined in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
 
-![](1.0.0-help.gif)
+![](1.0.0/help.gif)
 
 ## Other major changes
 
@@ -128,6 +153,7 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
   - Added more values for App UI scaling setting.
   - Added a Layer option to fade it away when it's not currently selected
   - Added a Layer option to hide it from the layers list
+  - Moving mouse over UI components no longer interrupt view panning (Middle mouse click or Space+click)
   - The "collapsed/expanded" status of a group of auto-layer rules is no longer saved in the project file: all rule groups will now be collapsed by default when loading a project.
   - You can now manually reload any image asset (tileset, background etc.) using their "↻" button.
   - Tool tips are now larger and easier to read.
@@ -149,6 +175,7 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
   - Fixed tile picker centering animation when picking a tile from a level (using ALT-click)
   - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
+  - Fixed "hollow" entity selection which was kind of... erratic.
   - Fixed the progress bar when saving large projects
   - Fixed TAB key behavior when an Entity instance panel is open
   - Fixed a crash when clicking on a partial tile in the Tilesets panel

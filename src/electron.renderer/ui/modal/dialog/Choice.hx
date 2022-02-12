@@ -1,7 +1,7 @@
 package ui.modal.dialog;
 
 class Choice extends ui.modal.Dialog {
-	public function new(str:LocaleString, choices:Array<{ label:String, cb:Void->Void, ?cond:Void->Bool, ?className:String }>, ?title:LocaleString, canCancel=true) {
+	public function new(str:LocaleString, choices:Array<{ label:String, cb:Void->Void, ?cond:Void->Bool, ?className:String }>, ?title:LocaleString, canCancel=true, ?onCancel:Void->Void) {
 		super();
 
 		jModalAndMask.addClass("choice");
@@ -21,6 +21,6 @@ class Choice extends ui.modal.Dialog {
 
 		canBeClosedManually = canCancel;
 		if( canCancel )
-			addCancel();
+			addCancel(onCancel);
 	}
 }

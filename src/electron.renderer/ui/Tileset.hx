@@ -134,7 +134,7 @@ class Tileset {
 		SCROLL_MEMORY.remove( tilesetDef.relPath );
 	}
 
-	public function getSelectedRect() : Null<ldtk.Json.AtlasTileRect> {
+	public function getSelectedRect() : Null<ldtk.Json.TilesetRect> {
 		return switch selectMode {
 			case None: null;
 			case PickAndClose: null;
@@ -159,7 +159,7 @@ class Tileset {
 		renderSelection();
 	}
 
-	public function setSelectedRect(r:ldtk.Json.AtlasTileRect) {
+	public function setSelectedRect(r:ldtk.Json.TilesetRect) {
 		setSelectedTileIds( tilesetDef.getTileIdsFromRect(r) );
 	}
 

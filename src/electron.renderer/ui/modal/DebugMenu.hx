@@ -23,22 +23,23 @@ class DebugMenu extends ui.modal.ContextMenu {
 		#end
 
 		#if debug
-		add({
-			label: L.untranslated("Gif mode="+editor.gifMode),
-			cb: ()->{
-				editor.gifMode = !editor.gifMode;
-				if( editor.gifMode ) {
-					editor.setCompactMode(true);
-					N.success("GIF mode: ON");
+		if( Editor.exists() )
+			add({
+				label: L.untranslated("Gif mode="+editor.gifMode),
+				cb: ()->{
+					editor.gifMode = !editor.gifMode;
+					if( editor.gifMode ) {
+						editor.setCompactMode(true);
+						N.success("GIF mode: ON");
+					}
+					else
+						N.error("GIF mode: off");
+					App.ME.jBody.find("#miniNotif").hide();
+					App.ME.clearDebug();
+					editor.updateBanners();
+					editor.worldRender.invalidateAll();
 				}
-				else
-					N.error("GIF mode: off");
-				App.ME.jBody.find("#miniNotif").hide();
-				App.ME.clearDebug();
-				editor.updateBanners();
-				editor.worldRender.invalidateAll();
-			}
-		});
+			});
 		#end
 
 		if( editor!=null ) {
@@ -46,7 +47,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 			add({
 				label: L.untranslated("Clear levels cache"),
 				cb: ()->{
-					for(l in project.levels)
+					for(w in project.worlds)
+					for(l in w.levels)
 						editor.invalidateLevelCache(l);
 				}
 			});
@@ -67,7 +69,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 			add({
 				label: L.untranslated("Rebuild all auto-layers"),
 				cb: ()->{
-					for(l in project.levels)
+					for(w in project.worlds)
+					for(l in w.levels)
 					for(li in l.layerInstances)
 						li.autoTilesCache = null;
 					editor.checkAutoLayersCache( (_)->{
@@ -115,6 +118,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 			}
 		});
 
+		#if debug
 		add({
 			label: L.untranslated("Update sample maps"),
 			cb: ()->{
@@ -140,9 +144,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 							// Flags
 							p.setFlag(PrependIndexToLevelFileNames, false);
+							p.setFlag(UseMultilinesType, true);
 
 							// Break level caching
-							for(l in p.levels)
+							for(w in p.worlds)
+							for(l in w.levels)
 								l.invalidateJsonCache();
 
 							// Tilesets
@@ -154,7 +160,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 							// Auto layer rules
 							log.general(" -> Updating auto-rules cache...");
-							for(l in p.levels)
+							for(w in p.worlds)
+							for(l in w.levels)
 							for(li in l.layerInstances) {
 								if( !li.def.isAutoLayer() )
 									continue;
@@ -177,6 +184,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 				ui.modal.MetaProgress.start("Updating all sample maps", n);
 			}
 		});
+		#end
 
 		addTitle(L.untranslated("App"));
 		add({
@@ -184,7 +192,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 			cb: ()->JsTools.locateFile(JsTools.getExeDir(), false)
 		});
 
-		addTitle(L.untranslated("App"));
 		add({
 			label: L.untranslated("Open settings dir"),
 			cb: ()->JsTools.locateFile(Settings.getDir(), false)
@@ -304,6 +311,16 @@ class DebugMenu extends ui.modal.ContextMenu {
 				N.success("Flushed.");
 			}
 		});
+
+		#if debug
+		add({
+			label: L.untranslated("Create new world"),
+			cb: ()->{
+				var w = project.createWorld(true);
+				editor.selectWorld(w,true);
+			}
+		});
+		#end
 
 	}
 }

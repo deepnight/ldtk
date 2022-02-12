@@ -1,23 +1,5 @@
-## LDtk Json structure (version 1.0.0)
+# LDtk Json structure (version 1.0.0)
 
-   - [LDtk Json root](#ldtk-ProjectJson)
-     - [World](#ldtk-WorldJson)
-   - [Level](#ldtk-LevelJson)
-     - [Layer instance](#ldtk-LayerInstanceJson)
-       - [Tile instance](#ldtk-Tile)
-       - [Entity instance](#ldtk-EntityInstanceJson)
-       - [Field instance](#ldtk-FieldInstanceJson)
-       - [Field instance tile](#ldtk-FieldInstanceTile)
-       - [ldtk.EntityReferenceInfos](#ldtk-EntityReferenceInfos)
-   - [Definitions](#ldtk-DefinitionsJson)
-     - [Layer definition](#ldtk-LayerDefJson)
-       - [Auto-layer rule definition](#ldtk-AutoRuleDef)
-     - [Entity definition](#ldtk-EntityDefJson)
-       - [Field definition](#ldtk-FieldDefJson)
-       - [Atlas tile rectangle](#ldtk-AtlasTileRect)
-     - [Tileset definition](#ldtk-TilesetDefJson)
-     - [Enum definition](#ldtk-EnumDefJson)
-       - [Enum value definition](#ldtk-EnumDefValues)
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## 1. LDtk Json root   
@@ -34,21 +16,21 @@ Value | Type | Description
 `externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>		Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
-`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Height of the world grid in pixels.
-`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Int | Width of the world grid in pixels.
-`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Height of the world grid in pixels.
+`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Width of the world grid in pixels.
+`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: &lt;`null`&gt;, `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
 `worlds`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;[World](#ldtk-WorldJson) | This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when "Multiple worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the "Multiple worlds" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231
 `appBuildId`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Float | LDtk application build identifier.<br/>		This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.
 `backupLimit`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
 `defaultGridSize`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default grid size for new layers
 `defaultLevelBgColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Default background color of levels
-`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level height
-`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default new level width
+`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level height
+`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level width
 `defaultPivotX`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default Y pivot (0 to 1) for new entities
 `exportTiled`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
-`flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`
+`flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
 `identifierStyle`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Enum | Naming convention for Identifiers (first-letter uppercase, full uppercase etc.)<br/> Possible values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
 `imageExportMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.3-gray.svg)  | Enum | "Image export" option when saving project.<br/> Possible values: `None`, `OneImagePerLayer`, `OneImagePerLevel`
 `levelNamePattern`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | String | The default naming convention for level identifiers.
@@ -66,12 +48,14 @@ A World contains multiple levels, and it has its own layout settings.
 
 Value | Type | Description
 -- | -- | --
-`identifier` | String | User defined unique identifier
-`iid` | String | Unique instance identifer
-`levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
-`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Height of the world grid in pixels.
-`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup> | Int | Width of the world grid in pixels.
-`worldLayout` | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`identifier`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | User defined unique identifier
+`iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | Unique instance identifer
+`levels`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+`worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Height of the world grid in pixels.
+`worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Width of the world grid in pixels.
+`worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Enum | An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+`defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Default new level height
+`defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Default new level width
 
 <a id="ldtk-LevelJson" name="ldtk-LevelJson"></a>
 ## 2. Level   
@@ -136,7 +120,7 @@ Value | Type | Description
 ~~`intGrid`~~<br/><sup class="only">Only *IntGrid layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Array&nbsp;of&nbsp;Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.0.0<br/> <br/> Replaced by: `intGridCsv`
 
 <a id="ldtk-Tile" name="ldtk-Tile"></a>
-## 2.1.1. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
+## 2.2. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
 This structure represents a single tile from a given Tileset.
 
 Value | Type | Description
@@ -148,14 +132,14 @@ Value | Type | Description
 `d`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Internal data used by the editor.<br/>		For auto-layer tiles: `[ruleId, coordId]`.<br/>		For tile-layer tiles: `[coordId]`.
 
 <a id="ldtk-EntityInstanceJson" name="ldtk-EntityInstanceJson"></a>
-## 2.1.2. Entity instance   
+## 2.3. Entity instance   
 Value | Type | Description
 -- | -- | --
 `__grid`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Grid-based coordinates (`[x,y]` format)
 `__identifier` | String | Entity definition identifier
 `__pivot`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Array&nbsp;of&nbsp;Float | Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
 `__tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | Array of tags defined in this Entity definition
-`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | [Field&nbsp;instance&nbsp;tile](#ldtk-FieldInstanceTile)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).
+`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-green.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional TilesetRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).
 `defUid` | Int | Reference of the **Entity definition** UID
 `fieldInstances` | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array of all custom fields and their values.
 `height`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.
@@ -164,33 +148,35 @@ Value | Type | Description
 `width`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity width in pixels. For non-resizable entities, it will be the same as Entity definition.
 
 <a id="ldtk-FieldInstanceJson" name="ldtk-FieldInstanceJson"></a>
-## 2.1.3. Field instance   
+## 2.4. Field instance   
 Value | Type | Description
 -- | -- | --
 `__identifier` | String | Field definition identifier
-`__type` | String | Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.
-`__value` | Untyped | Actual value of the field instance. The value type varies, depending on `__type`:<br/>		 - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>		 - For **Color**, the value is an hexadecimal string using "#rrggbb" format.<br/>		 - For **Enum**, the value is a String representing the selected enum value.<br/>		 - For **Point**, the value is an object `{ cx : Int, cy : Int }` containing grid-based coordinates.<br/>		 - For **Tile**, the value will be an `FieldInstanceTile` object (see below).<br/>		 - For **EntityRef**, the value will be an `EntityReferenceInfos` object (see below).<br/><br/>		If the field is an array, then this `__value` will also be a JSON array.
+`__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional TilesetRect used to display this field (this can be the field own Tile, or some other Tile guessed from the value, like an Enum).
+`__type` | String | Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`, etc.<br/>		NOTE: if you enable the advanced option **Use Multilines type**, you will have "*Multilines*" instead of "*String*" when relevant.
+`__value` | Various&nbsp;possible&nbsp;types | Actual value of the field instance. The value type varies, depending on `__type`:<br/>		 - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>		 - For **Color**, the value is an hexadecimal string using "#rrggbb" format.<br/>		 - For **Enum**, the value is a String representing the selected enum value.<br/>		 - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>		 - For **Tile**, the value is a [TilesetRect](#ldtk-TilesetRect) object.<br/>		 - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>		If the field is an array, then this `__value` will also be a JSON array.
 `defUid` | Int | Reference of the **Field definition** UID
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
-<a id="ldtk-FieldInstanceTile" name="ldtk-FieldInstanceTile"></a>
-## 2.1.4. Field instance tile   
-This object is used in Field Instances to describe a Tile value.
-
-Value | Type | Description
--- | -- | --
-`srcRect` | Array&nbsp;of&nbsp;Int | An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`
-`tilesetUid` | Int | Tileset ID
-
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
-## 2.1.5. ldtk.EntityReferenceInfos  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+## 2.4.2. Field instance entity reference  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
 This object is used in Field Instances to describe an EntityRef value.
 
 Value | Type | Description
 -- | -- | --
-`entityIid` | String | 
-`layerIid` | String | 
-`levelIid` | String | 
+`entityIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the refered EntityInstance
+`layerIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the LayerInstance containing the refered EntityInstance
+`levelIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the Level containing the refered EntityInstance
+`worldIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | String | IID of the World containing the refered EntityInstance
+
+<a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
+## 2.4.3. Field instance grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+This object is just a grid-based coordinate used in Field values.
+
+Value | Type | Description
+-- | -- | --
+`cx`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | X grid-based coordinate
+`cy`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Y grid-based coordinate
 
 <a id="ldtk-DefinitionsJson" name="ldtk-DefinitionsJson"></a>
 ## 3. Definitions   
@@ -273,7 +259,7 @@ Value | Type | Description
 `identifier` | String | User defined unique identifier
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
-`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | [Atlas&nbsp;tile&nbsp;rectangle](#ldtk-AtlasTileRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An array of 4 values (`[x,y,width,height]` in pixels) describing a sub rectangle from the tileset pointed by `tilesetId`.
+`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An object representing a rectangle from an existing Tileset
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
@@ -290,7 +276,7 @@ Value | Type | Description
 `resizableY`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
-`tileOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.10.0-gray.svg)  | Float | 
+`tileOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Float | 
 `tileRenderMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`
 ~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+<br/> <br/> Replaced by: `tileRect`
 
@@ -300,7 +286,7 @@ This section is mostly only intended for the LDtk editor app itself. You can saf
 
 Value | Type | Description
 -- | -- | --
-`__type`<br/><sup class="internal">*Only used by editor*</sup> | String | Human readable value type. Possible values: `Int, Float, String, Bool, Color, ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>		If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
+`__type`<br/><sup class="internal">*Only used by editor*</sup> | String | Human readable value type. Possible values: `Int, Float, String, Bool, Color, ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>		If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)<br/>		NOTE: if you enable the advanced option **Use Multilines type**, you will have "*Multilines*" instead of "*String*" when relevant.
 `acceptFileTypes`<br/><sup class="only">Only *FilePath*</sup><br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional list of accepted file extensions for FilePath value type. Includes the dot: `.ext`
 `arrayMaxLength`<br/><sup class="only">Only *Array*</sup><br/><sup class="internal">*Only used by editor*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Array max length
 `arrayMinLength`<br/><sup class="only">Only *Array*</sup><br/><sup class="internal">*Only used by editor*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Array min length
@@ -328,16 +314,17 @@ Value | Type | Description
 `tilesetUid`<br/><sup class="only">Only *Tile*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | UID of the tileset used for a Tile
 `useForSmartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Bool | If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.
 
-<a id="ldtk-AtlasTileRect" name="ldtk-AtlasTileRect"></a>
-## 3.2.2. Atlas tile rectangle  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
-An array of 4 integers (`[x,y,width,height]` in pixels) representing a custom rectangle from a Tileset image.
+<a id="ldtk-TilesetRect" name="ldtk-TilesetRect"></a>
+## 3.2.2. Tileset rectangle  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg) 
+This object represents a custom sub rectangle in a Tileset image.
 
 Value | Type | Description
 -- | -- | --
-`h` | Int | 
-`w` | Int | 
-`x` | Int | X pixel coord of the tile in the Tileset atlas
-`y` | Int | Y pixel coord of the tile in the Tileset atlas
+`h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Height in pixels
+`tilesetUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | UID of the tileset
+`w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Width in pixels
+`x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | X pixels coordinate of the top-left corner in the Tileset image
+`y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Int | Y pixels coordinate of the top-left corner in the Tileset image
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 3.3. Tileset definition   
@@ -356,6 +343,7 @@ Value | Type | Description
 `pxWid` | Int | Image width in pixels
 `relPath` | String | Path to the source file, relative to the current project JSON file
 `spacing` | Int | Space in pixels between all tiles
+`tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of user-defined tags to organize the Tilesets
 `tagsSourceEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier
@@ -369,6 +357,7 @@ Value | Type | Description
 `externalRelPath` | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Relative path to the external file providing this Enum
 `iconTilesetUid` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset UID if provided
 `identifier` | String | User defined unique identifier
+`tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-green.svg)  | Array&nbsp;of&nbsp;String | An array of user-defined tags to organize the Enums
 `uid` | Int | Unique Int identifier
 `values` | Array&nbsp;of&nbsp;[Enum&nbsp;value&nbsp;definition](#ldtk-EnumDefValues) | All possible enum values, with their optional Tile infos.
 `externalFileChecksum`<br/><sup class="internal">*Only used by editor*</sup> | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 

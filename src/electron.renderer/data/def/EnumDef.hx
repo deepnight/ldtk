@@ -10,6 +10,7 @@ class EnumDef {
 	public var iconTilesetUid : Null<Int>;
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
+	public var tags : Tags;
 
 	@:allow(data.Definitions)
 	private function new(p:Project, uid:Int, id:String, externPath:Null<String>) {
@@ -17,6 +18,7 @@ class EnumDef {
 		this.externalRelPath = externPath; // needs to be set before any `identifier` modification (for identifier style guessing)
 		this.uid = uid;
 		this.identifier = id;
+		tags = new Tags();
 	}
 
 	public inline function isExternal() return externalRelPath!=null;
@@ -49,6 +51,8 @@ class EnumDef {
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
 		ed.externalFileChecksum = json.externalFileChecksum;
 
+		ed.tags = Tags.fromJson(json.tags);
+
 		return ed;
 	}
 
@@ -75,6 +79,8 @@ class EnumDef {
 			iconTilesetUid: iconTilesetUid,
 			externalRelPath: JsonTools.writePath(externalRelPath),
 			externalFileChecksum: externalFileChecksum,
+
+			tags: tags.toJson(),
 		}
 	}
 

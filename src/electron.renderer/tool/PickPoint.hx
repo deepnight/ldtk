@@ -30,8 +30,8 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		ev.cancel = true;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 
 		if( ev.button==1 )
 			editor.clearSpecialTool();

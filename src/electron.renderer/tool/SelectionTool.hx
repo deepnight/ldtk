@@ -116,7 +116,7 @@ class SelectionTool extends Tool<Int> {
 					var t = editor.curTool.as(tool.lt.EntityTool);
 					if( t!=null )
 						t.selectValue(ei.defUid);
-					editor.levelRender.bleepEntity(li, ei);
+					editor.levelRender.bleepEntity(ei);
 					ui.EntityInstanceEditor.openFor(ei);
 					editor.createResizeToolFor(ge);
 
@@ -201,20 +201,20 @@ class SelectionTool extends Tool<Int> {
 	}
 
 	public function selectAndStartUsing(ev:hxd.Event, m:Coords, e:GenericLevelElement) {
-		startUsing(ev, m);
+		startUsing(ev, m, "noDefaultSelection");
 		select([e]);
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
 		isCopy = App.ME.isCtrlDown() && App.ME.isAltDown();
 		moveStarted = false;
 		startedOverSelecton = false;
 		editor.clearSpecialTool();
 		movePreview.clear();
 
-		super.startUsing(ev,m);
+		super.startUsing(ev,m, extraParam);
 
-		if( ev.button==0 ) {
+		if( ev.button==0 && extraParam!="noDefaultSelection" ) {
 			if( group.isOveringSelection(m) ) {
 				startedOverSelecton = true;
 				// Move existing selection
@@ -313,10 +313,12 @@ class SelectionTool extends Tool<Int> {
 
 				case Entity(li, ei):
 					li.removeEntityInstance(ei);
+					editor.ge.emitAtTheEndOfFrame( EntityInstanceRemoved(ei) );
 
 				case PointField(li, ei, fi, arrayIdx):
 					fi.removeArrayValue(arrayIdx);
 					group.decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+					editor.ge.emitAtTheEndOfFrame( EntityFieldInstanceChanged(ei,fi) );
 			}
 		clear();
 	}

@@ -9,17 +9,17 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.0",
-	"appBuildId": 456585,
+	"appBuildId": 456830,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
+	"defaultLevelWidth": 256,
+	"defaultLevelHeight": 256,
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
-	"defaultLevelWidth": 256,
-	"defaultLevelHeight": 256,
 	"bgColor": "#141522",
 	"defaultLevelBgColor": "#404255",
 	"minifyJson": false,
@@ -29,9 +29,9 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"levelNamePattern": "Level_%idx",
+	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "Using combinations of \"Auto-Layers\" and classic \"Tile layers\", you can achieve great results quickly.\n\nPress [A] to toggle \"Single Layer Mode\", and see what each layer contains.\n\nPress [SHIFT + R] to toggle rendering of rules based layers.",
-	"flags": [],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
@@ -756,7 +756,7 @@
 			"tilesetId": 104,
 			"tileId": 240,
 			"tileRenderMode": "Stretch",
-			"tileRect": { "x": 0, "y": 240, "w": 16, "h": 16 },
+			"tileRect": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
 			"maxCount": 1,
 			"limitScope": "PerWorld",
 			"limitBehavior": "MoveLastOne",
@@ -899,7 +899,7 @@
 			"tilesetId": 104,
 			"tileId": 71,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 112, "y": 64, "w": 16, "h": 16 },
+			"tileRect": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -940,7 +940,7 @@
 				},
 				{
 					"identifier": "description",
-					"__type": "String",
+					"__type": "Multilines",
 					"uid": 64,
 					"type": "F_Text",
 					"isArray": false,
@@ -1017,7 +1017,7 @@
 			"tilesetId": 104,
 			"tileId": 42,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 160, "y": 32, "w": 16, "h": 16 },
+			"tileRect": { "x": 160, "y": 32, "w": 16, "h": 16, "tilesetUid": 104 },
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -1033,7 +1033,7 @@
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "RefLink",
+					"editorDisplayMode": "RefLinkBetweenPivots",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -1068,6 +1068,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -1098,6 +1099,7 @@
 			"tileGridSize": 16,
 			"spacing": 0,
 			"padding": 0,
+			"tags": [],
 			"tagsSourceEnumUid": null,
 			"enumTags": [],
 			"customData": [],
@@ -1114,7 +1116,7 @@
 		{ "id": "Health", "tileId": 277, "color": 10964028, "__tileSrcRect": [80,272,16,16] },
 		{ "id": "PowerOrb", "tileId": 130, "color": 14531195, "__tileSrcRect": [32,128,16,16] },
 		{ "id": "Key", "tileId": 354, "color": 11900495, "__tileSrcRect": [32,352,16,16] }
-	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Entrance",
@@ -1166,25 +1168,19 @@
 							"__grid": [16,7],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a3491828-66b0-11ec-9cd7-cb4d33f76ff0",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [264,120],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": ["Battery"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Battery"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "???", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "loot", "__value": ["Battery"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Battery"]
+								}] }
 							]
 						},
 						{
@@ -1192,25 +1188,19 @@
 							"__grid": [20,10],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a3491829-66b0-11ec-9cd7-c5b5ed21037f",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [328,168],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": ["Scraps"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Scraps"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "???", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "loot", "__value": ["Scraps"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Scraps"]
+								}] }
 							]
 						},
 						{
@@ -1218,15 +1208,15 @@
 							"__grid": [5,10],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [0,240,16,16] },
+							"__tile": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a349182a-66b0-11ec-9cd7-2b12f6a4d88b",
 							"width": 16,
 							"height": 16,
 							"defUid": 59,
 							"px": [88,168],
 							"fieldInstances": [
-								{ "__identifier": "ammo", "__value": 10, "__type": "Int", "defUid": 60, "realEditorValues": [] },
-								{ "__identifier": "life", "__value": 100, "__type": "Int", "defUid": 61, "realEditorValues": [] }
+								{ "__identifier": "life", "__value": 100, "__type": "Int", "__tile": null, "defUid": 61, "realEditorValues": [] },
+								{ "__identifier": "ammo", "__value": 10, "__type": "Int", "__tile": null, "defUid": 60, "realEditorValues": [] }
 							]
 						},
 						{
@@ -1240,7 +1230,7 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [344,200],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Door",
@@ -1253,7 +1243,7 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [488,184],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Door",
@@ -1266,7 +1256,7 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [440,136],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Door",
@@ -1279,13 +1269,7 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [168,168],
-							"fieldInstances": [{
-								"__identifier": "lockedWith",
-								"__value": null,
-								"__type": "LocalEnum.Item",
-								"defUid": 69,
-								"realEditorValues": [null]
-							}]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [null] }]
 						}
 					]
 				},
@@ -2871,43 +2855,25 @@
 							"__grid": [8,18],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a3498d59-66b0-11ec-9cd7-9dc769c667cd",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [136,296],
 							"fieldInstances": [
-								{
-									"__identifier": "description",
-									"__value": "The crate has some military logo on it.",
-									"__type": "String",
-									"defUid": 64,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["The crate has some military logo on it."]
-									}]
-								},
-								{
-									"__identifier": "label",
-									"__value": "Strange crate",
-									"__type": "String",
-									"defUid": 65,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Strange crate"]
-									}]
-								},
-								{
-									"__identifier": "loot",
-									"__value": ["PowerOrb"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["PowerOrb"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "Strange crate", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Strange crate"]
+								}] },
+								{ "__identifier": "description", "__value": "The crate has some military logo on it.", "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["The crate has some military logo on it."]
+								}] },
+								{ "__identifier": "loot", "__value": ["PowerOrb"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["PowerOrb"]
+								}] }
 							]
 						},
 						{
@@ -2915,25 +2881,19 @@
 							"__grid": [15,22],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a3498d5a-66b0-11ec-9cd7-fd579a8393e6",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [248,360],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": ["Food"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Food"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "???", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "loot", "__value": ["Food"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Food"]
+								}] }
 							]
 						},
 						{
@@ -2941,34 +2901,22 @@
 							"__grid": [12,5],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "a3498d5b-66b0-11ec-9cd7-619f3d98c448",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [200,88],
 							"fieldInstances": [
-								{
-									"__identifier": "description",
-									"__value": "This guy has a **key** attached to its uniform.",
-									"__type": "String",
-									"defUid": 64,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["This guy has a **key** attached to its uniform."]
-									}]
-								},
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": ["Key"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Key"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "???", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": "This guy has a **key** attached to its uniform.", "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["This guy has a **key** attached to its uniform."]
+								}] },
+								{ "__identifier": "loot", "__value": ["Key"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Key"]
+								}] }
 							]
 						},
 						{
@@ -2976,25 +2924,19 @@
 							"__grid": [18,21],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "22f16f60-66b0-11ec-adb8-ddc942fd4398",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [296,344],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": ["Health"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Health"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "???", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "loot", "__value": ["Health"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Health"]
+								}] }
 							]
 						},
 						{
@@ -3008,16 +2950,10 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [216,184],
-							"fieldInstances": [{
-								"__identifier": "lockedWith",
-								"__value": "Key",
-								"__type": "LocalEnum.Item",
-								"defUid": 69,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["Key"]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": "Key", "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Key"]
+							}] }]
 						},
 						{
 							"__identifier": "Door",
@@ -3030,7 +2966,7 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [120,120],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Door",
@@ -3043,7 +2979,7 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [120,328],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [] }]
 						}
 					]
 				},
@@ -4175,42 +4111,31 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [56,136],
-							"fieldInstances": [{
-								"__identifier": "lockedWith",
-								"__value": "Key",
-								"__type": "LocalEnum.Item",
-								"defUid": 69,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["Key"]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": "Key", "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Key"]
+							}] }]
 						},
 						{
 							"__identifier": "ElevatorLink",
 							"__grid": [3,5],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [160,32,16,16] },
+							"__tile": { "x": 160, "y": 32, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25",
 							"width": 24,
 							"height": 24,
 							"defUid": 101,
 							"px": [56,88],
-							"fieldInstances": [{
-								"__identifier": "destination",
-								"__value": {
-									"entityIid": "88352ed0-66b0-11ec-bae9-d1471137867b",
-									"layerIid": "6c2901d1-66b0-11ec-bae9-5b123908ec86",
-									"levelIid": "6c2901d0-66b0-11ec-bae9-73f26d40ba65"
-								},
-								"__type": "EntityRef",
-								"defUid": 102,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["88352ed0-66b0-11ec-bae9-d1471137867b"]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "destination", "__value": {
+								"entityIid": "88352ed0-66b0-11ec-bae9-d1471137867b",
+								"layerIid": "6c2901d1-66b0-11ec-bae9-5b123908ec86",
+								"levelIid": "6c2901d0-66b0-11ec-bae9-73f26d40ba65",
+								"worldIid": "3e9ce340-66b0-11ec-bb2d-8536b9db43f7"
+							}, "__type": "EntityRef", "__tile": null, "defUid": 102, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["88352ed0-66b0-11ec-bae9-d1471137867b"]
+							}] }]
 						}
 					]
 				},
@@ -4827,58 +4752,47 @@
 							"height": 16,
 							"defUid": 62,
 							"px": [120,120],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__value": null, "__type": "LocalEnum.Item", "__tile": null, "defUid": 69, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "ElevatorLink",
 							"__grid": [7,4],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [160,32,16,16] },
+							"__tile": { "x": 160, "y": 32, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "88352ed0-66b0-11ec-bae9-d1471137867b",
 							"width": 24,
 							"height": 24,
 							"defUid": 101,
 							"px": [120,72],
-							"fieldInstances": [{
-								"__identifier": "destination",
-								"__value": {
-									"entityIid": "68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25",
-									"layerIid": "85fafb30-66b0-11ec-adb8-bf3b739f5ab5",
-									"levelIid": "85fad420-66b0-11ec-adb8-b5aafe4bf8a4"
-								},
-								"__type": "EntityRef",
-								"defUid": 102,
-								"realEditorValues": [{
-									"id": "V_String",
-									"params": ["68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25"]
-								}]
-							}]
+							"fieldInstances": [{ "__identifier": "destination", "__value": {
+								"entityIid": "68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25",
+								"layerIid": "85fafb30-66b0-11ec-adb8-bf3b739f5ab5",
+								"levelIid": "85fad420-66b0-11ec-adb8-b5aafe4bf8a4",
+								"worldIid": "3e9ce340-66b0-11ec-bb2d-8536b9db43f7"
+							}, "__type": "EntityRef", "__tile": null, "defUid": 102, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["68bc15a0-66b0-11ec-bae9-e3ce0b9e4f25"]
+							}] }]
 						},
 						{
 							"__identifier": "Container",
 							"__grid": [7,22],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
-							"__tile": { "tilesetUid": 104, "srcRect": [112,64,16,16] },
+							"__tile": { "x": 112, "y": 64, "w": 16, "h": 16, "tilesetUid": 104 },
 							"iid": "ad875230-66b0-11ec-bae9-af1c012d1fe8",
 							"width": 20,
 							"height": 20,
 							"defUid": 63,
 							"px": [120,360],
 							"fieldInstances": [
-								{ "__identifier": "description", "__value": null, "__type": "String", "defUid": 64, "realEditorValues": [] },
-								{ "__identifier": "label", "__value": "???", "__type": "String", "defUid": 65, "realEditorValues": [] },
-								{
-									"__identifier": "loot",
-									"__value": ["Key"],
-									"__type": "Array<LocalEnum.Item>",
-									"defUid": 68,
-									"realEditorValues": [{
-										"id": "V_String",
-										"params": ["Key"]
-									}]
-								}
+								{ "__identifier": "label", "__value": "???", "__type": "String", "__tile": null, "defUid": 65, "realEditorValues": [] },
+								{ "__identifier": "description", "__value": null, "__type": "Multilines", "__tile": null, "defUid": 64, "realEditorValues": [] },
+								{ "__identifier": "loot", "__value": ["Key"], "__type": "Array<LocalEnum.Item>", "__tile": null, "defUid": 68, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Key"]
+								}] }
 							]
 						}
 					]

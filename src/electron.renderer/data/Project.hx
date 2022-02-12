@@ -4,7 +4,9 @@ class Project {
 	public static var DEFAULT_WORKSPACE_BG = dn.Color.hexToInt("#40465B");
 	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
-	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
+	public static var DEFAULT_LEVEL_WIDTH = DEFAULT_GRID_SIZE*16; // px
+	public static var DEFAULT_LEVEL_HEIGHT = DEFAULT_GRID_SIZE*16; // px
+	public static var DEFAULT_LEVEL_NAME_PATTERN = "%world_Level_%idx";
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
@@ -12,7 +14,6 @@ class Project {
 
 	var nextUid = 0;
 	public var defs : Definitions;
-	public var levels : Array<Level> = [];
 	public var worlds : Array<World> = [];
 
 	public var jsonVersion : String;
@@ -20,13 +21,8 @@ class Project {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
-	public var defaultLevelWidth : Int;
-	public var defaultLevelHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
-	public var worldLayout : ldtk.Json.WorldLayout;
-	public var worldGridWidth : Int;
-	public var worldGridHeight : Int;
 
 	public var minifyJson = false;
 	public var externalLevels = false;
@@ -41,7 +37,7 @@ class Project {
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
 
-	@:allow(data.Level)
+	@:allow(data.Level, data.World)
 	var quickLevelAccess : Map<Int, Level> = new Map();
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
@@ -54,14 +50,9 @@ class Project {
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
 		defaultGridSize = Project.DEFAULT_GRID_SIZE;
-		defaultLevelWidth = Project.DEFAULT_GRID_SIZE * 16;
-		defaultLevelHeight = Project.DEFAULT_GRID_SIZE * 16;
 		bgColor = DEFAULT_WORKSPACE_BG;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
-		worldLayout = Free;
-		worldGridWidth = defaultLevelWidth;
-		worldGridHeight = defaultLevelHeight;
 		filePath = new dn.FilePath();
 		flags = new Map();
 		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
@@ -105,7 +96,7 @@ class Project {
 
 		var vars = [
 			"%level_name"=>()->level.identifier,
-			"%level_idx"=>()->dn.Lib.leadingZeros( getLevelIndex(level), 4),
+			"%level_idx"=>()->dn.Lib.leadingZeros( level._world.getLevelIndex(level), 4),
 			"%layer_name"=>()->ld.identifier,
 			"%layer_idx"=>()->{
 				var i = 0;
@@ -161,8 +152,7 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
-		p.createWorld();
-		p.createLevel();
+		p.createWorld(true);
 
 		return p;
 	}
@@ -209,7 +199,7 @@ class Project {
 	}
 
 	@:keep public function toString() {
-		return 'Project(levels=${levels.length}, layerDefs=${defs.layers.length}, entDefs=${defs.entities.length})';
+		return 'Project(worlds=${worlds.length})';
 	}
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
@@ -259,8 +249,6 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
-		p.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, Project.DEFAULT_GRID_SIZE*16 );
-		p.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, Project.DEFAULT_GRID_SIZE*16 );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
@@ -270,8 +258,11 @@ class Project {
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
-		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
+
+		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
+		if( p.levelNamePattern=="Level_%idx" )
+			p.levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
 
 		p.imageExportMode = JsonTools.readEnum( ldtk.Json.ImageExportMode, json.imageExportMode, false, None );
 		if( json.exportPng!=null )
@@ -280,38 +271,32 @@ class Project {
 		p.defs = Definitions.fromJson(p, json.defs);
 
 		if( p.hasFlag(MultiWorlds) ) {
-			// Read worlds
+			// Read normal worlds array
 			for( worldJson in JsonTools.readArray(json.worlds) )
 				p.worlds.push( World.fromJson(p, worldJson) );
-
-			p.levels = p.worlds[0].levels; // HACK point root levels to world[0] levels
 		}
 		else {
-			// Levels (from json root)
+			// Read Levels from root
+			var w = p.createWorld(false);
 			for( lvlJson in JsonTools.readArray(json.levels) )
-				p.levels.push( Level.fromJson(p, lvlJson) );
-
-			p.createWorld(); // dummy
+				w.levels.push( Level.fromJson(p, w, lvlJson) );
 		}
 
 		// World settings
 		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
-		if( p.hasFlag(MultiWorlds) ) {
-			// HACK: read world settings from World[0]
-			var worldJson = json.worlds[0];
-			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, worldJson.worldLayout, false, defLayout );
-			p.worldGridWidth = JsonTools.readInt( worldJson.worldGridWidth, p.defaultLevelWidth );
-			p.worldGridHeight = JsonTools.readInt( worldJson.worldGridHeight, p.defaultLevelHeight );
-		}
-		else {
-			// World settings in root
-			p.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
-			p.worldGridWidth = JsonTools.readInt( json.worldGridWidth, p.defaultLevelWidth );
-			p.worldGridHeight = JsonTools.readInt( json.worldGridHeight, p.defaultLevelHeight );
+		if( !p.hasFlag(MultiWorlds) ) {
+			// World settings are still in root
+			var w = p.worlds[0];
+			w.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, defLayout );
+			w.defaultLevelWidth = JsonTools.readInt( json.defaultLevelWidth, DEFAULT_LEVEL_WIDTH );
+			w.defaultLevelHeight = JsonTools.readInt( json.defaultLevelHeight, DEFAULT_LEVEL_HEIGHT );
+			w.worldGridWidth = JsonTools.readInt( json.worldGridWidth, w.defaultLevelWidth );
+			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );
 		}
 
 		if( dn.Version.lower(json.jsonVersion, "0.6") )
-			p.reorganizeWorld();
+			for(w in p.worlds)
+				w.reorganizeWorld();
 
 		if( Version.lower(json.jsonVersion, "1.0") )
 			p.setFlag(PrependIndexToLevelFileNames, true);
@@ -321,7 +306,7 @@ class Project {
 	}
 
 	public function recommendsBackup() {
-		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && levels.length>=8;
+		return !backupOnSave && !isBackup() && !App.ME.isInAppDir(filePath.full,true) && countAllLevels()>=8;
 	}
 
 	public function hasAnyFlag(among:Array<ldtk.Json.ProjectFlag>) {
@@ -387,7 +372,8 @@ class Project {
 	public function initUsedColors() {
 		usedColors = new Map();
 		registerUsedColor("bg", bgColor);
-		for(level in levels) {
+		for(w in worlds)
+		for(level in w.levels) {
 			registerUsedColor("bg", @:privateAccess level.bgColor);
 
 			// Level fields
@@ -478,7 +464,8 @@ class Project {
 		reverseIidRefsCache = new Map();
 
 		// Levels
-		for(level in levels)
+		for(world in worlds)
+		for(level in world.levels)
 		for( li in level.layerInstances )
 		for( ei in li.entityInstances )
 			registerEntityInstance(ei);
@@ -491,15 +478,15 @@ class Project {
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
-			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worldLayout, false),
-			worldGridWidth: hasFlag(MultiWorlds) ? null : worldGridWidth,
-			worldGridHeight: hasFlag(MultiWorlds) ? null : worldGridHeight,
+			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worlds[0].worldLayout, false),
+			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
+			worldGridHeight: hasFlag(MultiWorlds) ? null : worlds[0].worldGridHeight,
+			defaultLevelWidth: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelWidth,
+			defaultLevelHeight: hasFlag(MultiWorlds) ? null : worlds[0].defaultLevelHeight,
 
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
-			defaultLevelWidth: defaultLevelWidth,
-			defaultLevelHeight: defaultLevelHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 
@@ -522,7 +509,7 @@ class Project {
 			},
 
 			defs: defs.toJson(this),
-			levels: hasFlag(MultiWorlds) ? [] : levels.map( (l)->l.toJson() ),
+			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
 		}
 
@@ -533,93 +520,6 @@ class Project {
 		return fromJson( filePath.full, toJson() );
 	}
 
-	public function onWorldLayoutChange(old:ldtk.Json.WorldLayout) {
-		// Convert layout
-		switch worldLayout {
-			case Free:
-
-			case GridVania:
-				switch old {
-					case Free:
-						for(l in levels) {
-							l.worldX = Std.int( l.worldX/worldGridWidth ) * worldGridWidth;
-							l.worldY = Std.int( l.worldY/worldGridHeight ) * worldGridHeight;
-						}
-
-					case GridVania:
-
-					case LinearHorizontal:
-						var pos = 0;
-						for(l in levels) {
-							l.worldX = pos*worldGridWidth;
-							pos+=dn.M.ceil( l.pxWid / worldGridWidth );
-						}
-
-					case LinearVertical:
-						var pos = 0;
-						for(l in levels) {
-							l.worldY = pos*worldGridHeight;
-							pos+=dn.M.ceil( l.pxHei / worldGridHeight );
-						}
-				}
-
-			case LinearHorizontal:
-			case LinearVertical:
-		}
-
-		tidy();
-	}
-
-	public function snapWorldGridX(v:Int, forceGreaterThanZero:Bool) {
-		return worldLayout!=GridVania ? v
-		: forceGreaterThanZero
-			? M.imax( M.round(v/worldGridWidth), 1 ) * worldGridWidth
-			: M.round(v/worldGridWidth) * worldGridWidth;
-	}
-
-	public function snapWorldGridY(v:Int, forceGreaterThanZero:Bool) {
-		return worldLayout!=GridVania ? v
-		: forceGreaterThanZero
-			? M.imax( M.round(v/worldGridHeight), 1 ) * worldGridHeight
-			: M.round(v/worldGridHeight) * worldGridHeight;
-	}
-
-	public function onWorldGridChange(oldWid:Int, oldHei:Int) {
-		for( l in levels ) {
-			var wcx = Std.int(l.worldX/oldWid);
-			var wcy = Std.int(l.worldY/oldHei);
-			l.worldX = wcx * worldGridWidth;
-			l.worldY = wcy * worldGridHeight;
-		}
-	}
-
-	public function reorganizeWorld() {
-		var spacing = 48;
-		switch worldLayout {
-			case Free:
-
-			case LinearHorizontal:
-				var wx = 0;
-				for(l in levels) {
-					l.worldX = wx;
-					l.worldY = 0;
-					wx += l.pxWid + spacing;
-				}
-
-			case LinearVertical:
-				var wy = 0;
-				for(l in levels) {
-					l.worldX = 0;
-					l.worldY = wy;
-					wy += l.pxHei + spacing;
-				}
-
-			case GridVania:
-		}
-
-		applyAutoLevelIdentifiers();
-	}
-
 
 	/**
 		Check all FieldInstances and remove any existing references to `targetEi` EntityInstance
@@ -627,7 +527,8 @@ class Project {
 	public function removeAnyFieldRefsTo(targetEi:data.inst.EntityInstance) {
 		var i = 0;
 
-		for(l in levels)
+		for(w in worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances)
 		for(ei in li.entityInstances)
 		for(fi in ei.fieldInstances) {
@@ -670,33 +571,38 @@ class Project {
 					td.enumTags.set( cleanupIdentifier(k, identifierStyle), td.enumTags.get(k) );
 		}
 
-		// Levels
-		for(l in levels) {
-			l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
-			// Level fields
-			for(fi in l.fieldInstances) {
-				if( !fi.def.isEnum() )
-					continue;
+		// Worlds
+		for(w in worlds) {
+			w.identifier = cleanupIdentifier(w.identifier, identifierStyle);
 
-				var ed = fi.def.getEnumDef();
-				if( ed!=null && ed.isExternal() )
-					continue;
-				for(i in 0...fi.getArrayLength())
-					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
-			}
-			// Entity fields
-			for(li in l.layerInstances)
-			for(ei in li.entityInstances)
-			for(fi in ei.fieldInstances) {
-				if( !fi.def.isEnum() )
-					continue;
+			// Levels
+			for(l in w.levels) {
+				l.identifier = cleanupIdentifier(l.identifier, identifierStyle);
+				// Level fields
+				for(fi in l.fieldInstances) {
+					if( !fi.def.isEnum() )
+						continue;
 
-				var ed = fi.def.getEnumDef();
-				if( ed!=null && ed.isExternal() )
-					continue;
+					var ed = fi.def.getEnumDef();
+					if( ed!=null && ed.isExternal() )
+						continue;
+					for(i in 0...fi.getArrayLength())
+						fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+				}
+				// Entity fields
+				for(li in l.layerInstances)
+				for(ei in li.entityInstances)
+				for(fi in ei.fieldInstances) {
+					if( !fi.def.isEnum() )
+						continue;
 
-				for(i in 0...fi.getArrayLength())
-					fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+					var ed = fi.def.getEnumDef();
+					if( ed!=null && ed.isExternal() )
+						continue;
+
+					for(i in 0...fi.getArrayLength())
+						fi.parseValue( i, cleanupIdentifier(fi.getEnumValue(i), identifierStyle) );
+				}
 			}
 		}
 
@@ -708,7 +614,8 @@ class Project {
 	**/
 	public function tidyFields() {
 		initEntityIidsCache();
-		for(l in levels) {
+		for(w in worlds)
+		for(l in w.levels) {
 			for(fi in l.layerInstances)
 				fi.tidy(this);
 
@@ -724,21 +631,12 @@ class Project {
 		This can be really slow because of LayerInstances!
 	**/
 	public function tidy() {
-		if( worldLayout==GridVania ) {
-			defaultLevelWidth = M.imax( M.round(defaultLevelWidth/worldGridWidth), 1 ) * worldGridWidth;
-			defaultLevelHeight = M.imax( M.round(defaultLevelHeight/worldGridHeight), 1 ) * worldGridHeight;
-		}
-
 		clearUsedIids();
 		initEntityIidsCache();
 		defs.tidy(this);
-		reorganizeWorld();
 		quickLevelAccess = new Map();
-		for(level in levels) {
-			quickLevelAccess.set(level.uid, level);
-			level.tidy(this);
-		}
-		applyAutoLevelIdentifiers();
+		for(w in worlds)
+			w.tidy(this);
 		initUsedColors();
 	}
 
@@ -881,7 +779,8 @@ class Project {
 	}
 
 	function isCachedImageUsed(img:data.DataTypes.CachedImage) {
-		for(l in levels)
+		for(w in worlds)
+		for(l in w.levels)
 			if( l.bgRelPath==img.relPath )
 				return true;
 
@@ -903,10 +802,17 @@ class Project {
 
 	/**  WORLDS  **************************************/
 
-	public function createWorld() : World {
+	public function createWorld(alsoCreateLevel:Bool) : World {
 		var w = new data.World(this, generateUniqueId_UUID(), "World");
 		w.identifier = fixUniqueIdStr( w.identifier, (id)->isWorldIdentifierUnique(id,w) );
 		worlds.push(w);
+
+		if( alsoCreateLevel )
+			w.createLevel();
+
+		if( worlds.length>1 )
+			setFlag(MultiWorlds,true); // make sure it's enabled
+
 		return w;
 	}
 
@@ -919,6 +825,7 @@ class Project {
 	}
 
 	public function getWorldIid(iid:String) : Null<World> {
+		// TODO quick access
 		for(w in worlds)
 			if( w.iid==iid )
 				return w;
@@ -930,243 +837,32 @@ class Project {
 	}
 
 
-	/**  LEVELS  *****************************************/
-
-	public function createLevel(?insertIdx:Int) {
-		var l = new Level(this, defaultLevelWidth, defaultLevelHeight, generateUniqueId_int(), generateUniqueId_UUID());
-		if( insertIdx==null )
-			levels.push(l);
-		else
-			levels.insert(insertIdx,l);
-		quickLevelAccess.set(l.uid, l);
-
-		l.identifier = fixUniqueIdStr("Level1", (id)->isLevelIdentifierUnique(id));
-
-		tidy(); // this will create layer instances
-		return l;
-	}
-
-	public function duplicateLevel(l:data.Level) {
-		var copy : data.Level = Level.fromJson( this, l.toJson() );
-
-		// Remap IDs
-		copy.iid = generateUniqueId_UUID();
-		copy.uid = generateUniqueId_int();
-		for(li in copy.layerInstances)
-			li.levelId = copy.uid;
-
-		// Pick unique identifier
-		copy.identifier = fixUniqueIdStr(l.identifier, (id)->isLevelIdentifierUnique(id));
-
-		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
-		quickLevelAccess.set(copy.uid, l);
-		tidy();
-		return copy;
-	}
-
-	public inline function getLowestLevelDepth() {
-		var d = 0;
-		for(l in levels)
-			d = M.imin(d, l.worldDepth);
-		return d;
-	}
-
-	public inline function getHighestLevelDepth() {
-		var d = 0;
-		for(l in levels)
-			d = M.imax(d, l.worldDepth);
-		return d;
-	}
-
-	public inline function countLevelsInDepth(d:Int) {
+	public function countAllLevels() {
 		var n = 0;
-		for(l in levels)
-			if( l.worldDepth==d )
-				n++;
+		for(w in worlds)
+		for(l in w.levels)
+			n++;
 		return n;
 	}
 
-	public function canMoveLevelToDepthFurther(l:Level) {
-		if( l.worldDepth<getHighestLevelDepth() )
-			return true;
-		else {
-			// Check if there's any level further this one, or at least in same depth
-			for(ol in levels)
-				if( ol!=l && ol.worldDepth==l.worldDepth )
-					return true;
-			return false;
-		}
-	}
 
-	public function moveLevelToDepthFurther(l:Level) {
-		if( canMoveLevelToDepthFurther(l) ) {
-			l.worldDepth++;
-
-			// Shift empty first depth
-			while( countLevelsInDepth(0)==0 )
-				for(ol in levels)
-					ol.worldDepth--;
-
-			return true;
-		}
-		else
-			return false;
-	}
-
-
-	public function canMoveLevelToDepthCloser(l:Level) {
-		if( l.worldDepth>getLowestLevelDepth() )
-			return true;
-		else {
-			// Check if there's any other level in current depth
-			for(ol in levels)
-				if( ol!=l && ol.worldDepth==l.worldDepth )
-					return true;
-
-			return false;
-		}
-	}
-
-	public function moveLevelToDepthCloser(l:Level) {
-		if( canMoveLevelToDepthCloser(l) ) {
-			l.worldDepth--;
-			return true;
-		}
-		else
-			return false;
-	}
+	/**  LEVELS  *****************************************/
 
 	public function isLevelIdentifierUnique(id:String, ?exclude:Level) {
 		id = cleanupIdentifier(id, identifierStyle);
-		for(l in levels)
+		for(w in worlds)
+		for(l in w.levels)
 			if( l.identifier==id && l!=exclude )
 				return false;
 		return true;
 	}
 
-	public function removeLevel(l:Level) {
-		if( !levels.remove(l) )
-			throw "Level not found in this Project";
 
-		for(li in l.layerInstances)
-		for(ei in li.entityInstances) {
-			removeAnyFieldRefsTo(ei);
-			unregisterEntityIid(ei.iid);
-			unregisterAllReverseIidRefsFor(ei);
-		}
-
-		quickLevelAccess.remove(l.uid);
-		tidy();
-	}
-
-	public inline function getLevel(uid:Int) : Null<Level> {
+	/**
+		Quick access to a level in any world
+	**/
+	public inline function getLevelAnywhere(uid:Int) : Null<Level> {
 		return quickLevelAccess.get(uid);
-		// for(l in levels)
-			// if( l.uid==uid )
-				// return l;
-		// return null;
-	}
-
-	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
-		for(l in levels)
-			if( l.isWorldOver(worldX, worldY) )
-				return l;
-		return null;
-	}
-
-
-	public function getLevelIndex(?l:Level, ?uid:Int) : Int {
-		var i = 0;
-		for(ol in levels)
-			if( l!=null && ol==l || uid!=null && ol.uid==uid )
-				return i;
-			else
-				i++;
-		return -1;
-	}
-
-	public function getLevelUsingLayerInst(li:data.inst.LayerInstance) : Null<data.Level> {
-		for(l in levels)
-		for(lli in l.layerInstances)
-			if( lli==li )
-				return l;
-
-		return null;
-	}
-
-	public function getLevelUsingFieldInst(fi:data.inst.FieldInstance) : Null<data.Level> {
-		for(l in levels)
-		for(lfi in l.fieldInstances)
-			if( lfi==fi )
-				return l;
-
-		return null;
-	}
-
-	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
-		var dh = new dn.DecisionHelper(levels);
-		dh.removeValue(level);
-		dh.score( (l)->-level.getBoundsDist(l) );
-		return dh.getBest();
-	}
-
-	public function sortLevel(from:Int, to:Int) : Null<data.Level> {
-		if( from<0 || from>=levels.length || from==to )
-			return null;
-
-		if( to<0 || to>=levels.length )
-			return null;
-
-		tidy();
-
-		var moved = levels.splice(from,1)[0];
-		levels.insert(to, moved);
-		reorganizeWorld();
-		return moved;
-	}
-
-	public function getWorldBounds() {
-		var left = Const.INFINITE;
-		var right = -Const.INFINITE;
-		var top = Const.INFINITE;
-		var bottom = -Const.INFINITE;
-
-		for(l in levels) {
-			left = dn.M.imin(left, l.worldX);
-			right = dn.M.imax(right, l.worldX+l.pxWid);
-			top = dn.M.imin(top, l.worldY);
-			bottom = dn.M.imax(bottom, l.worldY+l.pxHei);
-		}
-
-		return {
-			left: left,
-			right: right,
-			top: top,
-			bottom: bottom,
-		}
-	}
-
-	public inline function getWorldWidth(?ignoredLevel:data.Level) {
-		var min = Const.INFINITE;
-		var max = -Const.INFINITE;
-		for(l in levels)
-			if( l!=ignoredLevel ) {
-				min = dn.M.imin(min, l.worldX);
-				max = dn.M.imax(max, l.worldX+l.pxWid);
-			}
-		return max-min;
-	}
-
-
-	public inline function getWorldHeight(?ignoredLevel:data.Level) {
-		var min = Const.INFINITE;
-		var max = -Const.INFINITE;
-		for(l in levels)
-			if( l!=ignoredLevel ) {
-				min = dn.M.imin(min, l.worldY);
-				max = dn.M.imax(max, l.worldY+l.pxHei);
-			}
-		return max-min;
 	}
 
 	public inline function getSmartLevelGridSize() {
@@ -1182,6 +878,7 @@ class Project {
 			return g==Const.INFINITE ? defaultGridSize : g;
 		}
 	}
+
 
 
 	/**  USED CHECKS  *****************************************/
@@ -1201,7 +898,8 @@ class Project {
 	}
 
 	public function isEnumValueUsed(enumDef:data.def.EnumDef, val:String) {
-		for( l in levels )
+		for( w in worlds )
+		for( l in w.levels )
 		for( li in l.layerInstances ) {
 			if( li.def.type!=Entities )
 				continue;
@@ -1224,7 +922,8 @@ class Project {
 	}
 
 	public function isEntityDefUsed(ed:data.def.EntityDef) {
-		for(l in levels)
+		for(w in worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Entities )
 				continue;
@@ -1237,7 +936,8 @@ class Project {
 	}
 
 	public function isIntGridValueUsed(layer:data.def.LayerDef, valueId:Int) {
-		for(l in levels) {
+		for(w in worlds)
+		for(l in w.levels) {
 			var li = l.getLayerInstance(layer);
 			if( li!=null ) {
 				for(cx in 0...li.cWid)
@@ -1300,43 +1000,6 @@ class Project {
 			return null;
 	}
 
-
-	public function applyAutoLevelIdentifiers() {
-		var uniq = 0;
-		for(l in levels)
-			if( l.useAutoIdentifier )
-				l.identifier = "#"+(uniq++);
-
-		var idx = 0;
-		var b = getWorldBounds();
-		for(l in levels) {
-			if( l.useAutoIdentifier ) {
-				var id = levelNamePattern;
-				id = StringTools.replace(id, "%idx1", Std.string(idx+1) );
-				id = StringTools.replace(id, "%idx", Std.string(idx) );
-				id = StringTools.replace(id, "%gx", Std.string( switch worldLayout {
-					case GridVania: Std.int((l.worldX-b.left) / worldGridWidth);
-					case Free, LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%gy", Std.string( switch worldLayout {
-					case GridVania: Std.int((l.worldY-b.top) / worldGridHeight);
-					case Free, LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%x", Std.string(switch worldLayout {
-					case Free, GridVania: l.worldX;
-					case LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%y", Std.string(switch worldLayout {
-					case Free, GridVania: l.worldY;
-					case LinearHorizontal, LinearVertical: "";
-				}) );
-				id = StringTools.replace(id, "%d", Std.string(l.worldDepth) );
-				l.identifier = fixUniqueIdStr(id, id->isLevelIdentifierUnique(id));
-			}
-			idx++;
-		}
-	}
-
 	public function remapExternEnums(oldHxRelPath:String, newHxRelPath:String) {
 		var any = false;
 		for(ed in defs.externalEnums)
@@ -1366,16 +1029,18 @@ class Project {
 	}
 
 	public function iterateAllFieldInstances(?searchType:ldtk.Json.FieldType, run:data.inst.FieldInstance->Void) {
-		for(l in levels)
-		for(fi in l.fieldInstances)
-			if( searchType==null || fi.def.type.equals(searchType) )
-				run(fi);
+		for(w in worlds)
+		for(l in w.levels) {
+			for(fi in l.fieldInstances)
+				if( searchType==null || fi.def.type.equals(searchType) )
+					run(fi);
 
-		for(l in levels)
-		for(li in l.layerInstances)
-		for(ei in li.entityInstances)
-		for(fi in ei.fieldInstances)
-			if( searchType==null || fi.def.type.equals(searchType) )
-				run(fi);
+			for(li in l.layerInstances)
+			for(ei in li.entityInstances)
+			for(fi in ei.fieldInstances)
+				if( searchType==null || fi.def.type.equals(searchType) )
+					run(fi);
+		}
+
 	}
 }

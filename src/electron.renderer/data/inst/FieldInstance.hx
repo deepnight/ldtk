@@ -64,6 +64,7 @@ class FieldInstance {
 			__identifier: def.identifier,
 			__value: def.isArray ? [ for(i in 0...getArrayLength()) getJsonValue(i) ] : getJsonValue(0),
 			__type: def.getJsonTypeString(),
+			__tile: getSmartTile(),
 
 			defUid: defUid,
 			realEditorValues: internalValues.map( (e)->{
@@ -494,21 +495,13 @@ class FieldInstance {
 						entityIid: iid,
 						layerIid: ref==null ? "?" : ref._li.iid,
 						levelIid: ref==null ? "?" : ref._li.level.iid,
+						worldIid: ref==null ? "?" : ref._li.level._world.iid,
 					}
 					out;
 				}
 
 			case F_Tile:
-				var r = getTileRectObj(arrayIdx);
-				if( r==null )
-					null;
-				else {
-					var t : ldtk.Json.FieldInstanceTile = {
-						tilesetUid: def.tilesetUid,
-						srcRect: [r.x, r.y, r.w, r.h],
-					}
-					t;
-				}
+				getTileRectObj(arrayIdx);
 		}
 	}
 
@@ -626,7 +619,7 @@ class FieldInstance {
 			return "Lost reference!";
 		else
 			return ei.def.identifier
-				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier+"."+ei._li.def.identifier : "" );
+				+ ( checkLevel==null || checkLevel!=ei._li.level ? " in "+ei._li.level.identifier : "" );
 	}
 
 	public function setEntityRefTo(arrayIdx:Int, sourceEi:EntityInstance, targetEi:EntityInstance) {
@@ -669,7 +662,7 @@ class FieldInstance {
 		targetEi.tidyLostSymmetricalEntityRefs(def);
 	}
 
-	public function getTileRectObj(arrayIdx:Int) : Null<ldtk.Json.AtlasTileRect> {
+	public function getTileRectObj(arrayIdx:Int) : Null<ldtk.Json.TilesetRect> {
 		var v = getTileRectStr(arrayIdx);
 		if( v==null )
 			return null;
@@ -679,6 +672,7 @@ class FieldInstance {
 			return null;
 
 		return {
+			tilesetUid: def.tilesetUid,
 			x : Std.parseInt(parts[0]),
 			y : Std.parseInt(parts[1]),
 			w : Std.parseInt(parts[2]),
@@ -698,6 +692,47 @@ class FieldInstance {
 			return out;
 		}
 	}
+
+
+	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {
+		switch def.type {
+			case F_Enum(enumDefUid):
+				if( valueIsNull(0) || def.editorDisplayMode!=EntityTile )
+					return null;
+
+				var ed = _project.defs.getEnumDef(enumDefUid);
+				if( ed.iconTilesetUid==null )
+					return null;
+
+				var td = _project.defs.getTilesetDef(ed.iconTilesetUid);
+				if( td==null )
+					return null;
+
+				var ev = ed.getValue( getEnumValue(0) );
+				if( ev==null )
+					return null;
+
+				var tid = ev.tileId;
+				return {
+					tilesetUid: ed.iconTilesetUid,
+					x: td.getTileSourceX(tid),
+					y: td.getTileSourceY(tid),
+					w: td.tileGridSize,
+					h: td.tileGridSize,
+				}
+
+
+			case F_Tile:
+				if( def.editorDisplayMode==EntityTile && !valueIsNull(0) )
+					return getTileRectObj(0);
+				else
+					return null;
+
+			case _:
+				return null;
+		}
+	}
+
 
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );

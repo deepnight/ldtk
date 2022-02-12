@@ -52,15 +52,15 @@ class WorldPanel extends ui.modal.Panel {
 
 		for(k in ldtk.Json.WorldLayout.getConstructors())
 			jForm.removeClass("layout-"+k);
-		jForm.addClass("layout-"+project.worldLayout.getName());
+		jForm.addClass("layout-"+curWorld.worldLayout.getName());
 
 		// World layout
-		var old = project.worldLayout;
+		var old = curWorld.worldLayout;
 		var e = new form.input.EnumSelect(
 			jForm.find("[name=worldLayout]"),
 			ldtk.Json.WorldLayout,
-			()->project.worldLayout,
-			(l)->project.worldLayout = l,
+			()->curWorld.worldLayout,
+			(l)->curWorld.worldLayout = l,
 			(l)->switch l {
 				case Free: L.t._("2D free map - Freely positioned in space");
 				case GridVania: L.t._("GridVania - Levels are positioned inside a large world-scale grid");
@@ -68,37 +68,38 @@ class WorldPanel extends ui.modal.Panel {
 				case LinearVertical: L.t._("Vertical - One level after the other");
 			}
 		);
-		if( project.levels.length>2 )
+
+		if( project.countAllLevels() > 2 )
 			e.customConfirm = (oldV,newV)->L.t._("Changing this will change ALL the level positions! Please make sure you know what you're doing :)");
 		e.onBeforeSetter = ()->{
 			new LastChance(L.t._("World layout changed"), editor.project);
 		}
 		e.onValueChange = (l)->{
-			project.onWorldLayoutChange(old);
-			project.reorganizeWorld();
+			curWorld.onWorldLayoutChange(old);
+			curWorld.reorganizeWorld();
 		}
 		e.linkEvent( WorldSettingsChanged );
 
 		// Default new level size
-		var i = Input.linkToHtmlInput( project.defaultLevelWidth, jForm.find("#defaultLevelWidth"));
+		var i = Input.linkToHtmlInput( curWorld.defaultLevelWidth, jForm.find("#defaultLevelWidth"));
 		i.linkEvent(WorldSettingsChanged);
 		i.setBounds(project.defaultGridSize, 9999);
-		i.fixValue = v->project.snapWorldGridX(v,true);
-		var i = Input.linkToHtmlInput( project.defaultLevelHeight, jForm.find("#defaultLevelHeight"));
+		i.fixValue = v->curWorld.snapWorldGridX(v,true);
+		var i = Input.linkToHtmlInput( curWorld.defaultLevelHeight, jForm.find("#defaultLevelHeight"));
 		i.linkEvent(WorldSettingsChanged);
 		i.setBounds(project.defaultGridSize, 9999);
-		i.fixValue = v->project.snapWorldGridY(v,true);
+		i.fixValue = v->curWorld.snapWorldGridY(v,true);
 
 		// World grid
-		var old = project.worldGridWidth;
-		var i = Input.linkToHtmlInput( project.worldGridWidth, jForm.find("[name=worldGridWidth]"));
+		var oldW = curWorld.worldGridWidth;
+		var i = Input.linkToHtmlInput( curWorld.worldGridWidth, jForm.find("[name=worldGridWidth]"));
 		i.linkEvent(WorldSettingsChanged);
-		i.onChange = ()->project.onWorldGridChange(old, project.worldGridHeight);
+		i.onChange = ()->curWorld.onWorldGridChange(oldW, curWorld.worldGridHeight);
 
-		var old = project.worldGridHeight;
-		var i = Input.linkToHtmlInput( project.worldGridHeight, jForm.find("[name=worldGridHeight]"));
+		var oldH = curWorld.worldGridHeight;
+		var i = Input.linkToHtmlInput( curWorld.worldGridHeight, jForm.find("[name=worldGridHeight]"));
 		i.linkEvent(WorldSettingsChanged);
-		i.onChange = ()->project.onWorldGridChange(project.worldGridWidth, old);
+		i.onChange = ()->curWorld.onWorldGridChange(curWorld.worldGridWidth, oldH);
 
 		JsTools.parseComponents(jForm);
 		checkBackup();

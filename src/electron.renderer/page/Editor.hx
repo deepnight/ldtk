@@ -16,7 +16,7 @@ class Editor extends Page {
 		inline function get_curWorld() return project==null ? null : project.getWorldIid(curWorldIid);
 
 	public var curLevel(get,never) : data.Level;
-		inline function get_curLevel() return project==null ? null : project.getLevel(curLevelId);
+		inline function get_curLevel() return project==null ? null : project.getLevelAnywhere(curLevelId);
 
 	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
 		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
@@ -134,18 +134,18 @@ class Editor extends Page {
 			);
 		}
 
-		if( loadLevelIndex!=null ) {
+		if( loadLevelIndex!=null ) { // TODO restore world and level on opening
 			// Auto-load provided level index
-			if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
-				selectLevel( project.levels[loadLevelIndex] );
-				camera.fit(true);
-			}
-			else
-				N.error('Invalid level index $loadLevelIndex');
+			// if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
+			// 	selectLevel( project.levels[loadLevelIndex] );
+			// 	camera.fit(true);
+			// }
+			// else
+			// 	N.error('Invalid level index $loadLevelIndex');
 		}
 		else if( settings.v.lastProject!=null ) {
 			// Auto load last level UID
-			var l = project.getLevel( settings.v.lastProject.levelUid );
+			var l = project.getLevelAnywhere( settings.v.lastProject.levelUid );
 			if( l!=null ) {
 				selectLevel(l);
 				camera.fit(true);
@@ -332,14 +332,14 @@ class Editor extends Page {
 
 
 		curWorldIid = project.worlds[0].iid;
-		curLevelId = project.levels[0].uid;
+		curLevelId = project.worlds[0].levels[0].uid;
 		curLayerDefUid = -1;
 
 		// Pick 1st layer in current level
 		autoPickFirstValidLayer();
 
 		levelHistory = new Map();
-		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
+		levelHistory.set( curLevelId, new LevelHistory(curLevelId, curWorldIid) );
 
 		// Load tilesets
 		var tilesetChanged = false;
@@ -356,9 +356,10 @@ class Editor extends Page {
 			watcher.watchImage(td.relPath);
 
 		// Level bg image hot-reloading
-		for( l in project.levels )
+		for( w in project.worlds )
+		for( l in w.levels )
 			if( l.bgRelPath!=null )
-			watcher.watchImage(l.bgRelPath);
+				watcher.watchImage(l.bgRelPath);
 
 		for( ed in project.defs.externalEnums )
 			watcher.watchEnum(ed);
@@ -373,7 +374,8 @@ class Editor extends Page {
 
 		// Check level caches
 		if( !project.isBackup() ) {
-			for(l in project.levels)
+			for(w in project.worlds)
+			for(l in w.levels)
 				if( !l.hasJsonCache() ) {
 					needSaving = true;
 					break;
@@ -399,7 +401,8 @@ class Editor extends Page {
 	public function checkAutoLayersCache(onDone:(anyChange:Bool)->Void) {
 		var ops = [];
 
-		for(l in project.levels)
+		for(w in project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances)
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				ops.push({
@@ -429,7 +432,8 @@ class Editor extends Page {
 					reloadTileset(td);
 
 			// Update level bgs
-			for(l in project.levels)
+			for(w in project.worlds)
+			for(l in w.levels)
 				if( l.bgRelPath==relPath ) {
 					worldRender.invalidateLevelRender(l);
 					if( curLevel==l )
@@ -617,11 +621,11 @@ class Editor extends Page {
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
-			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
+			// case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			// 	setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 
-			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				setTileStacking( !settings.v.tileStacking );
+			// case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			// 	setTileStacking( !settings.v.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.v.singleLayerMode );
@@ -655,12 +659,12 @@ class Editor extends Page {
 					setWorldMode(true);
 				else if( !App.ME.hasAnyToggleKeyDown() ) {
 					// Change active depth
-					if( curWorldDepth>project.getLowestLevelDepth() )
+					if( curWorldDepth > curWorld.getLowestLevelDepth() )
 						selectWorldDepth(curWorldDepth-1);
 				}
 				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
 					// Move current level closer
-					project.moveLevelToDepthCloser(curLevel);
+					curWorld.moveLevelToDepthCloser(curLevel);
 					ge.emit( LevelSettingsChanged(curLevel) );
 					selectWorldDepth(curLevel.worldDepth);
 				}
@@ -670,12 +674,12 @@ class Editor extends Page {
 					setWorldMode(true);
 				else if( !App.ME.hasAnyToggleKeyDown() ) {
 					// Change active depth
-					if( curWorldDepth<project.getHighestLevelDepth() )
+					if( curWorldDepth < curWorld.getHighestLevelDepth() )
 						selectWorldDepth(curWorldDepth+1);
 				}
 				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
 					// Move current level further
-					project.moveLevelToDepthFurther(curLevel);
+					curWorld.moveLevelToDepthFurther(curLevel);
 					ge.emit( LevelSettingsChanged(curLevel) );
 					selectWorldDepth(curLevel.worldDepth);
 				}
@@ -686,9 +690,37 @@ class Editor extends Page {
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
-			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
-				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+2)+")").click();
+			// Select layers (F1-F10)
+			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
+				var idx = k-K.F1;
+				var i = 0;
+				for(l in curLevel.layerInstances)
+					if( !l.def.hideInList ) {
+						if( i==idx ) {
+							selectLayerInstance(l);
+							break;
+						}
+						i++;
+					}
 
+
+			case K.P if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editProject").click();
+
+			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editLayers").click();
+
+			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editEntities").click();
+
+			case K.U if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editEnums").click();
+
+			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editTilesets").click();
+
+			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
 		}
 
 		// Propagate to tools
@@ -859,7 +891,7 @@ class Editor extends Page {
 			case EFocusLost: onMouseUp();
 			case EKeyDown:
 			case EKeyUp:
-			case EReleaseOutside: onMouseUp();
+			case EReleaseOutside: //onMouseUp();
 			case ETextInput:
 			case ECheck:
 		}
@@ -1104,7 +1136,7 @@ class Editor extends Page {
 		// Auto level mode on zoom in
 		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && delta>0 ) {
 			// Find closest level to cursor
-			var dh = new dn.DecisionHelper(project.levels);
+			var dh = new dn.DecisionHelper(curWorld.levels);
 			dh.keepOnly( l->l.worldDepth==curWorldDepth && l.isWorldOver(c.worldX, c.worldY, 500) );
 			dh.score( l->l.isWorldOver(c.worldX, c.worldY) ? 100 : 0 );
 			dh.score( l->-l.getDist(c.worldX,c.worldY) );
@@ -1124,6 +1156,23 @@ class Editor extends Page {
 	}
 
 
+	public function selectWorld(w:data.World, showUp=true) {
+		curWorldIid = w.iid;
+		invalidateCachedLevelErrors();
+
+		ge.emit( WorldSelected(w) );
+		selectLevel(w.levels[0]);
+
+		if( showUp ) {
+			N.quick("World: "+w.identifier);
+			setWorldMode(true);
+			camera.fit(true);
+		}
+
+		ui.Tip.clear();
+	}
+
+
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
 			worldRender.invalidateLevelRender(curLevel);
@@ -1131,9 +1180,9 @@ class Editor extends Page {
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
-		ui.Tip.clear();
-
 		saveLastProjectInfos();
+
+		ui.Tip.clear();
 	}
 
 
@@ -1181,9 +1230,25 @@ class Editor extends Page {
 	}
 
 
+	public function followEntityRef(tei:data.inst.EntityInstance) {
+		if( !tei._li.level.isInWorld(curWorld) )
+			selectWorld(tei._li.level._world, false);
+
+		if( tei._li.level!=curLevel )
+			selectLevel(tei._li.level);
+
+		if( tei._li!=curLayerInstance )
+			selectLayerInstance(tei._li);
+
+		camera.scrollTo(tei.worldX, tei.worldY);
+		levelRender.bleepEntity(tei);
+		selectionTool.select([ Entity(curLayerInstance, tei) ]);
+	}
+
+
 	function updateWorldDepthsUI() {
-		var min = project.getLowestLevelDepth();
-		var max = project.getHighestLevelDepth();
+		var min = curWorld.getLowestLevelDepth();
+		var max = curWorld.getHighestLevelDepth();
 
 		if( gifMode || !worldMode || min==max ) {
 			jDepths.hide();
@@ -1265,7 +1330,8 @@ class Editor extends Page {
 
 		App.ME.requestCpu();
 		selectionTool.clear();
-		project.reorganizeWorld();
+		curWorld.reorganizeWorld();
+		curLevel.invalidateCachedError();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
@@ -1276,6 +1342,15 @@ class Editor extends Page {
 		}
 		else
 			updateLayerList();
+
+		// Offset editing options & world layers
+		var jFloatingOptions = jPage.find("#editingOptions, #worldDepths");
+		if( !worldMode )
+			jFloatingOptions.css("margin-left", 0);
+		else {
+			var m = App.ME.jBody.find(".worldPanel>.wrapper").outerWidth() - jMainPanel.outerWidth();
+			jFloatingOptions.css("margin-left", m+"px");
+		}
 
 		camera.onWorldModeChange(worldMode, usedMouseWheel);
 	}
@@ -1450,7 +1525,8 @@ class Editor extends Page {
 					App.LOG.fileOp('Backup original: ${original.full}...');
 					project.filePath = original.clone();
 					setPermanentNotification("backup");
-					for(l in project.levels)
+					for(w in project.worlds)
+					for(l in w.levels)
 						invalidateLevelCache(l);
 					onSave();
 					selectProject(project);
@@ -1570,7 +1646,7 @@ class Editor extends Page {
 			case LevelSelected(level):
 			case LevelSettingsChanged(_), LevelAdded(_): invalidateAllLevelsCache();
 			case LevelRemoved(_):
-				switch project.worldLayout {
+				switch curWorld.worldLayout {
 					case Free, GridVania:
 					case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
 				}
@@ -1579,7 +1655,7 @@ class Editor extends Page {
 			case LevelJsonCacheInvalidated(level):
 			case WorldLevelMoved(level,isFinal):
 				if( isFinal )
-					switch project.worldLayout {
+					switch curWorld.worldLayout {
 						case Free, GridVania: invalidateLevelCache(level);
 						case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
 					}
@@ -1650,6 +1726,7 @@ class Editor extends Page {
 			case EnumDefValueRemoved: invalidateAllLevelsCache();
 			case ToolValueSelected:
 			case ToolOptionChanged:
+			case WorldSelected(w):
 			case WorldMode(active):
 			case WorldDepthSelected(worldDepth):
 			case GridChanged(active):
@@ -1702,20 +1779,26 @@ class Editor extends Page {
 			case LayerInstanceEditedByTool(li):
 
 			case FieldDefChanged(fd):
+				invalidateCachedLevelErrors();
 
 			case FieldDefSorted:
 
 			case LevelFieldInstanceChanged(l,fi):
+				l.invalidateCachedError();
 
 			case EntityFieldInstanceChanged(ei,fi):
+				ei._li.level.invalidateCachedError();
 
 			case EntityInstanceAdded(ei):
+				ei._li.level.invalidateCachedError();
 
 			case EntityInstanceRemoved(ei):
+				ei._li.level.invalidateCachedError();
 				if( resizeTool!=null && resizeTool.isOnEntity(ei) )
 					clearResizeTool();
 
 			case EntityInstanceChanged(ei):
+				ei._li.level.invalidateCachedError();
 				if( selectionTool.any() )
 					selectionTool.invalidateRender();
 
@@ -1805,8 +1888,9 @@ class Editor extends Page {
 				selectionTool.clear();
 				updateTool();
 				if( !levelHistory.exists(l.uid) )
-					levelHistory.set(l.uid, new LevelHistory(l.uid) );
+					levelHistory.set(l.uid, new LevelHistory(l.uid, l._world.iid) );
 				selectWorldDepth(l.worldDepth);
+				l.invalidateCachedError();
 
 			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
@@ -1862,6 +1946,9 @@ class Editor extends Page {
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				updateTool();
+
+			case WorldSelected(w):
+				// NOTE: a LevelSelected event always happens right after this one
 		}
 
 		// Broadcast to LevelHistory
@@ -1871,8 +1958,9 @@ class Editor extends Page {
 		updateTitle();
 	}
 
-	public function invalidateAllLevelsCache() {
-		for(l in project.levels)
+	public inline function invalidateAllLevelsCache() {
+		for(w in project.worlds)
+		for(l in w.levels)
 			invalidateLevelCache(l);
 	}
 
@@ -1886,6 +1974,11 @@ class Editor extends Page {
 			l.invalidateJsonCache();
 			ge.emit( LevelJsonCacheInvalidated(l) );
 		}
+	}
+
+	public inline function invalidateCachedLevelErrors() {
+		for(l in curWorld.levels)
+			l.invalidateCachedError();
 	}
 
 
@@ -1969,11 +2062,13 @@ class Editor extends Page {
 
 	override function onAppBlur() {
 		super.onAppBlur();
+		onMouseUp();
 		heldVisibilitySet = null;
 	}
 
 	override function onAppMouseUp() {
 		super.onAppMouseUp();
+		onMouseUp();
 		heldVisibilitySet = null;
 	}
 
@@ -1999,7 +2094,7 @@ class Editor extends Page {
 			if( ld.hideInList )
 				jLayer.addClass("hiddenFromList");
 
-			jLayer.find(".index").text( Std.string(idx++) );
+			jLayer.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
 
 			// Icon
 			var jIcon = jLayer.find(">.layerIcon");

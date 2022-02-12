@@ -19,6 +19,8 @@ class Tiled extends Exporter {
 
 		setOutputPath( projectPath.directory + "/" + p.getRelExternalFilesDir() + "/tiled", true );
 
+		var curWorld = p.worlds[0]; // HACK support multi-worlds for Tiled
+
 		// Prepare world object
 		var world = {
 			maps: [],
@@ -39,11 +41,11 @@ class Tiled extends Exporter {
 
 		// Export each level to a separate TMX file
 		var i = 1;
-		for(l in p.levels) {
+		for(l in curWorld.levels) {
 			var bytes = exportLevel(l);
 
 			var fp = outputPath.clone();
-			fp.fileName = ( p.levels.length>1 ? '${dn.Lib.leadingZeros(i,Const.LEVEL_FILE_LEADER_ZEROS)}_' : '' ) + l.identifier;
+			fp.fileName = ( curWorld.levels.length>1 ? '${dn.Lib.leadingZeros(i,Const.LEVEL_FILE_LEADER_ZEROS)}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
 			addOuputFile(fp.full, bytes);
 

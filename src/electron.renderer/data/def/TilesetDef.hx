@@ -32,11 +32,14 @@ class TilesetDef {
 	public var cHei(get,never) : Int;
 	inline function get_cHei() return !hasAtlasPointer() ? 0 : dn.M.ceil( (pxHei-padding*2) / (tileGridSize+spacing) );
 
+	public var tags : Tags;
+
 
 	public function new(p:Project, uid:Int) {
 		_project = p;
 		this.uid = uid;
 		identifier = "Tileset"+uid;
+		tags = new Tags();
 	}
 
 	public function toString() {
@@ -105,6 +108,7 @@ class TilesetDef {
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+			tags: tags.toJson(),
 
 			tagsSourceEnumUid: tagsSourceEnumUid,
 			enumTags: {
@@ -170,6 +174,7 @@ class TilesetDef {
 		td.relPath = json.relPath;
 		td.embedAtlas = JsonTools.readEnum(ldtk.Json.EmbedAtlas, json.embedAtlas, true);
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+		td.tags = Tags.fromJson(json.tags);
 
 		// Enum tags
 		if( (cast json).metaDataEnumUid!=null ) json.tagsSourceEnumUid = (cast json).metaDataEnumUid;
@@ -288,7 +293,8 @@ class TilesetDef {
 		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
 
 		// Tiles layers remapping
-		for(l in _project.levels)
+		for(w in _project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances) {
 			if( li.def.type!=Tiles || li.def.tilesetDefUid!=uid )
 				continue;
@@ -483,7 +489,7 @@ class TilesetDef {
 	}
 
 
-	public function getTileRectFromTileIds(tileIds:Array<Int>) : Null<ldtk.Json.AtlasTileRect> { // Warning: not good for real-time!
+	public function getTileRectFromTileIds(tileIds:Array<Int>) : Null<ldtk.Json.TilesetRect> { // Warning: not good for real-time!
 		if( tileIds==null || tileIds.length==0 )
 			return null;
 
@@ -498,6 +504,7 @@ class TilesetDef {
 			right = dn.M.imax( right, getTileSourceX(tid)+tileGridSize );
 		}
 		return {
+			tilesetUid: this.uid,
 			x: left,
 			y: top,
 			w: right-left,
@@ -506,7 +513,7 @@ class TilesetDef {
 	}
 
 
-	public function getTileIdsFromRect(r:ldtk.Json.AtlasTileRect) : Array<Int> {
+	public function getTileIdsFromRect(r:ldtk.Json.TilesetRect) : Array<Int> {
 		if( r==null )
 			return [];
 
@@ -524,7 +531,7 @@ class TilesetDef {
 	}
 
 
-	public inline function getFirstTileIdFromRect(r:ldtk.Json.AtlasTileRect) : Null<Int> {
+	public inline function getFirstTileIdFromRect(r:ldtk.Json.TilesetRect) : Null<Int> {
 		if( r==null )
 			return null;
 		else
@@ -593,7 +600,7 @@ class TilesetDef {
 			return makeErrorTile(tileGridSize);
 	}
 
-	public inline function getTileRect(r:ldtk.Json.AtlasTileRect) : h2d.Tile {
+	public inline function getTileRect(r:ldtk.Json.TilesetRect) : h2d.Tile {
 		if( isAtlasLoaded() )
 			return getAtlasTile().sub( r.x, r.y, r.w, r.h );
 		else
@@ -862,13 +869,13 @@ class TilesetDef {
 	}
 
 
-	inline function isTileRectInBounds(r:ldtk.Json.AtlasTileRect) {
+	inline function isTileRectInBounds(r:ldtk.Json.TilesetRect) {
 		return isAtlasLoaded()
 			&& r.x>=0 && r.x+r.w-1<pxWid
 			&& r.y>=0 && r.y+r.h-1<pxHei;
 	}
 
-	public function drawTileRectToCanvas(jCanvas:js.jquery.JQuery, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+	public function drawTileRectToCanvas(jCanvas:js.jquery.JQuery, rect:ldtk.Json.TilesetRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
 
@@ -876,7 +883,7 @@ class TilesetDef {
 		drawTileRectTo2dContext( canvas.getContext2d(), rect, toX, toY, scaleX, scaleY );
 	}
 
-	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.AtlasTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.TilesetRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !isAtlasLoaded() )
 			return;
 

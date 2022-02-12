@@ -19,6 +19,7 @@ enum FieldType {
 	Obj(fields:Array<FieldInfos>);
 	Ref(display:String, typeName:String);
 	Dyn;
+	Multiple(possibleTypes:Array<FieldType>);
 	Unknown;
 }
 
@@ -66,6 +67,7 @@ typedef SchemaType = {
 	var ?enum__: Array<String>;
 	var ?ref__: String;
 	var ?oneOf: Array<SchemaType>;
+	var ?anyOf: Array<SchemaType>;
 }
 
 
@@ -162,6 +164,10 @@ class DocGenerator {
 		Sys.println("Generating JSON schema...");
 		genJsonSchema(xml, className, xmlPath, jsonPath);
 
+		// Dump version to version.txt
+		Sys.println("Dumping version file...");
+		sys.io.File.saveContent("docs/version.txt", appVersion.numbers);
+
 		// Cleanup
 		if( deleteXml ) {
 			Sys.println("Deleting XML file");
@@ -190,7 +196,6 @@ class DocGenerator {
 	static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
 		var root : GlobalType = null;
-		var toc = [];
 		var md = [];
 		for(type in allGlobalTypes) {
 			if( type.inlined )
@@ -214,13 +219,6 @@ class DocGenerator {
 			if( type.section!="" )
 				title = type.section+". "+title;
 			md.push('## $title');
-
-			// Add to ToC
-			toc.push({
-				name: type.displayName,
-				anchor: anchorId(type.xml.att.path),
-				depth: type.section.split(".").length,
-			});
 
 			// Optional description
 			if( type.description!=null ) {
@@ -307,18 +305,9 @@ class DocGenerator {
 
 		// Header
 		var headerMd = [
-			'## LDtk Json structure (version $appVersion)',
+			'# LDtk Json structure (version $appVersion)',
 			'',
 		];
-
-		// Table of content
-		for(e in toc) {
-			var indent = " -";
-			for(i in 0...e.depth)
-				indent = "  "+indent;
-			headerMd.push('$indent [${e.name}](#${e.anchor})');
-		}
-
 		md = headerMd.concat(md);
 
 
@@ -659,6 +648,35 @@ class DocGenerator {
 
 
 	/**
+		Get meta data of a field as String
+	**/
+	static function getMetaArray(xml:haxe.xml.Access, name:String, metaIndex=0) : Array<String> {
+		if( !hasMeta(xml,name) )
+			return [];
+
+		var out = [];
+		for(m in xml.node.meta.nodes.m )
+			if( m.att.n == name ) {
+				var i = 0;
+				for(metaValues in m.nodes.e) {
+					if( i++<metaIndex )
+						continue;
+					var v = metaValues.innerHTML;
+					if( v.charAt(0)=="\"" )
+						out.push( v.substring(1, v.length-1) );
+					else
+						out.push(v);
+				}
+			}
+
+		if( out.length>0 )
+			return out;
+		else
+			throw "Malformed meta?";
+	}
+
+
+	/**
 		Get meta data of a field as dn.Version
 	**/
 	static function getMetaVersion(xml:haxe.xml.Access, name:String) : Null<dn.Version> {
@@ -677,8 +695,35 @@ class DocGenerator {
 				else
 					Basic(fieldXml.node.x.att.path);
 			}
-			else if( fieldXml.hasNode.d )
-				Dyn;
+			else if( fieldXml.hasNode.d ) {
+				// Dynamic
+				var rawPossibleTypes = getMetaArray(fieldXml,"types");
+				if( rawPossibleTypes.length>0 ) {
+					// Known possible types
+					var types = [];
+					for(t in rawPossibleTypes) {
+						switch t {
+							case "Int", "Float", "Bool", "String":
+								// Basic types
+								types.push( Basic(t) );
+
+							case "Dynamic":
+
+							case _:
+								var global = getGlobalType(t);
+								if( global==null )
+									throw "Unrecognized @types value: "+t;
+								// Refs
+								types.push( Ref(global.displayName, global.rawName) );
+						}
+					}
+					Multiple(types);
+				}
+				else {
+					// Pure dynamic
+					Dyn;
+				}
+			}
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
 				var typeInfos = allGlobalTypes.filter( (t)->t.rawName==name )[0];
@@ -725,7 +770,14 @@ class DocGenerator {
 
 			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
-			case Dyn: "Untyped";
+
+			case Multiple(possibleTypes):
+				// "Any of: "+possibleTypes.map( t->getTypeMd(t) ).join(", ");
+				"Various possible types";
+
+			case Dyn:
+				"Untyped";
+
 			case Unknown: "???";
 		}
 		return str;
@@ -739,12 +791,19 @@ class DocGenerator {
 				switch f { // ignore Dynamics
 					case Basic("Enum"):
 					case Dyn:
+
+					case Multiple(possibleTypes):
+						// st.oneOf = [ { type: ["null"] } ];
+						// for(ft in possibleTypes)
+						// 	st.oneOf.push( getSchemaType(ft) );
+
 					case Ref(_):
 						st.oneOf = [
 							{ type: ["null"] },
 							{ ref__: st.ref__ },
 						];
 						Reflect.deleteField(st, "ref__");
+
 					case _:
 						if( st.enum__!=null )
 							st.enum__.push(null);
@@ -775,6 +834,12 @@ class DocGenerator {
 				st.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
 
 			case Dyn:
+
+			case Multiple(possibleTypes):
+				// st.oneOf = [];
+				// for(ft in possibleTypes)
+				// 	st.oneOf.push( getSchemaType(ft) );
+
 			case Unknown:
 		}
 

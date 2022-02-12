@@ -11,6 +11,7 @@ class Camera extends dn.Process {
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 
 	/** Centered world X coord **/
 	public var worldX(default,set) : Float;
@@ -101,7 +102,7 @@ class Camera extends dn.Process {
 			if( worldMode ) {
 				targetZoom = snapZoomValue( M.fmax(0.3, getFitZoom()*0.8) );
 				cd.setS("keepAutoZoom",ANIM_KEEP_DURATION_S);
-				if( editor.project.levels.length<=1 )
+				if( curWorld.levels.length<=1 )
 					targetZoom*=0.5;
 			}
 			else
@@ -136,7 +137,7 @@ class Camera extends dn.Process {
 
 	function getFitZoom() : Float {
 		if( editor.worldMode) {
-			var b = editor.project.getWorldBounds();
+			var b = curWorld.getWorldBounds();
 			var padX = (b.right-b.left) * 0.1 + 300*pixelRatio;
 			var padY = (b.bottom-b.top) * 0.1;
 			return M.fmin(
@@ -160,7 +161,7 @@ class Camera extends dn.Process {
 
 		// Scroll
 		if( editor.worldMode ) {
-			var b = editor.project.getWorldBounds();
+			var b = curWorld.getWorldBounds();
 			targetWorldX = 0.5 * (b.left + b.right);
 			targetWorldY = 0.5 * (b.top + b.bottom);
 		}

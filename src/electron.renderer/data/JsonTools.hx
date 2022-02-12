@@ -46,7 +46,7 @@ class JsonTools {
 		}
 	}
 
-	public static function readTileRect(tilesetUid:Int, r:ldtk.Json.AtlasTileRect, allowNull:Bool) : ldtk.Json.AtlasTileRect {
+	public static function readTileRect(tilesetUid:Int, r:ldtk.Json.TilesetRect, allowNull:Bool) : ldtk.Json.TilesetRect {
 		if( r==null ) {
 			if( allowNull )
 				return null;

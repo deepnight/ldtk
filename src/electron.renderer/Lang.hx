@@ -2,6 +2,7 @@ import dn.data.GetText;
 
 class Lang {
 	// Text constants
+	public static var _Untagged = ()->t._("Untagged");
 	public static var _Duplicate = ()->t._("Duplicate");
 	public static var _Copy = (?v:String) -> v==null ? t._("Copy") : t._("Copy ::e::", {e:v});
 	public static var _Cut = (?v:String) -> v==null ? t._("Cut") : t._("Cut ::e::", {e:v});

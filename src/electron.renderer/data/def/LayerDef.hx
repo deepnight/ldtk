@@ -101,12 +101,14 @@ class LayerDef {
 
 		o.intGridValues = [];
 		var all : Array<IntGridValueDef> = JsonTools.readArray(json.intGridValues);
+		var fixedIdx = 1; // fix old projects missing intgrid "value" field
 		for( v in all ) {
 			o.intGridValues.push({
-				value: v.value,
+				value: M.isValidNumber(v.value) ? v.value : fixedIdx,
 				identifier: v.identifier,
 				color: JsonTools.readColor(v.color),
 			});
+			fixedIdx++;
 		}
 
 		// o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
@@ -364,6 +366,13 @@ class LayerDef {
 			if( rg.uid==rgUid )
 				return rg;
 		return null;
+	}
+
+	public inline function isEntityAllowedFromTags(ei:data.inst.EntityInstance) {
+		if( !excludedTags.isEmpty() && excludedTags.hasAnyTagFoundIn(ei.def.tags) )
+			return false;
+		else
+			return requiredTags.isEmpty() || requiredTags.hasAnyTagFoundIn(ei.def.tags);
 	}
 
 	public function getParentRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {

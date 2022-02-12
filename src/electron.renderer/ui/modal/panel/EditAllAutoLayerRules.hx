@@ -125,7 +125,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Apply edited rules to all other levels
 		for(ruleUid in invalidatedRules)
-		for( l in project.levels )
+		for( w in project.worlds )
+		for( l in w.levels )
 		for( li in l.layerInstances ) {
 			if( !li.def.isAutoLayer() )
 				continue;

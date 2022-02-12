@@ -103,43 +103,45 @@ class ProjectLoader {
 		progress.addOp({
 			label: "Loading levels...",
 			cb: ()->{
-				if( p.externalLevels && p.levels[0].layerInstances.length==0 ) {
+				if( p.externalLevels ) {
 					// Load external level files
-					function _invalidLevel(idx:Int, err:String) {
+					function _failedLevel(w:data.World, idx:Int, err:String) {
 						log.error(err);
-						p.levels.splice(idx,1);
-						p.createLevel(idx);
+						w.levels.splice(idx,1);
+						w.createLevel(idx);
 					}
 
-					var idx = 0;
-					log.add(tag, "Loading external levels...");
 					var levelProgress = new ui.modal.Progress(L.t._("::file::: Levels...", {file:fileName}), ()->done(p));
-					for(l in p.levels) {
-						var curIdx = idx;
-						levelProgress.addOp({
-							label: l.identifier,
-							cb: ()->{
-								log.add(tag, "  "+l.externalRelPath+"...");
-								var path = p.makeAbsoluteFilePath(l.externalRelPath, false);
-								if( !NT.fileExists(path) ) {
-									_invalidLevel(curIdx, "Level file not found "+l.externalRelPath);
-								}
-								else {
-									// Parse level
-									try {
+					log.add(tag, "Loading external levels...");
+					for(w in p.worlds) {
+						var idx = 0;
+						for(l in w.levels) {
+							var curIdx = idx;
+							levelProgress.addOp({
+								label: l.identifier,
+								cb: ()->{
+									log.add(tag, "  "+l.externalRelPath+"...");
+									var path = p.makeAbsoluteFilePath(l.externalRelPath, false);
+									if( !NT.fileExists(path) ) {
+										_failedLevel(w, curIdx, "Level file not found "+l.externalRelPath);
+									}
+									else {
+										// Parse level
+										try {
 
-										var raw = NT.readFileString(path);
-										var lJson = haxe.Json.parse(raw);
-										var l = data.Level.fromJson(p, lJson);
-										p.levels[curIdx] = l;
-									}
-									catch(e:Dynamic) {
-										_invalidLevel(curIdx, "Error while parsing level file "+l.externalRelPath);
+											var raw = NT.readFileString(path);
+											var lJson = haxe.Json.parse(raw);
+											var l = data.Level.fromJson(p, w, lJson);
+											w.levels[curIdx] = l;
+										}
+										catch(e:Dynamic) {
+											_failedLevel(w, curIdx, "Error while parsing level file "+l.externalRelPath);
+										}
 									}
 								}
-							}
-						});
-						idx++;
+							});
+							idx++;
+						}
 					}
 				}
 				else {
@@ -154,7 +156,8 @@ class ProjectLoader {
 	function done(p:data.Project) {
 		if( needReSaving ) {
 			log.add(tag, "Project file was created using an older version of LDtk, re-saving is recommended to upgrade it.");
-			for(l in p.levels)
+			for(w in p.worlds)
+			for(l in w.levels)
 				l.invalidateJsonCache();
 		}
 		log.add(tag, "Loading complete.");

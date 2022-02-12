@@ -237,15 +237,17 @@ class EditEntityDefs extends ui.modal.Panel {
 		i.linkEvent( EntityDefChanged );
 
 		// Entity render mode
-		var jSelect = jRenderModeBlock.find(".renderMode");
-		jSelect.empty();
+		var jRenderSelect = jRenderModeBlock.find(".renderMode");
+		jRenderSelect.empty();
+		var jOptGroup = new J('<optgroup label="Shapes"/>');
+		jOptGroup.appendTo(jRenderSelect);
 		for(k in ldtk.Json.EntityRenderMode.getConstructors()) {
 			var mode = ldtk.Json.EntityRenderMode.createByName(k);
 			if( mode==Tile )
 				continue;
 
-			var jOpt = new J('<option value="$k"/>');
-			jOpt.appendTo(jSelect);
+			var jOpt = new J('<option value="!$k"/>');
+			jOpt.appendTo(jOptGroup);
 			jOpt.text(switch mode {
 				case Rectangle: Lang.t._("Rectangle");
 				case Ellipse: Lang.t._("Ellipse");
@@ -253,62 +255,43 @@ class EditEntityDefs extends ui.modal.Panel {
 				case Tile: null;
 			});
 		}
-		// Append embed atlas
-		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
-			var jOpt = new J('<option value="Embed.$k"/>');
-			jOpt.appendTo(jSelect);
-			var inf = Lang.getEmbedAtlasInfos(ldtk.Json.EmbedAtlas.createByName(k));
-			jOpt.text(inf.displayName);
-		}
-		// Append tilesets
-		for( td in project.defs.tilesets ) {
-			if( td.isUsingEmbedAtlas() )
-				continue;
-			var jOpt = new J('<option value="Tile.${td.uid}"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text( Lang.t._("Tile from ::name::", {name:td.identifier}) );
-		}
+		JsTools.appendTilesetsToSelect(project, jRenderSelect);
 
 		// Pick render mode
-		jSelect.change( function(ev) {
+		jRenderSelect.change( function(ev) {
 			var oldMode = curEntity.renderMode;
-			var v : String = jSelect.val();
-			var prefix = v.indexOf(".")<0 ? null : v.substr(0,v.indexOf("."));
-			var mode : ldtk.Json.EntityRenderMode = switch prefix {
-				case "Tile": Tile;
-				case "Embed": Tile;
-				case _ : ldtk.Json.EntityRenderMode.createByName(v);
-			}
-			curEntity.renderMode = mode;
 			curEntity._oldTileId = null;
-			curEntity.tileRect = null;
-			if( mode==Tile ) {
-				var suffix = v.substr(v.indexOf(".")+1);
-				switch prefix {
-					case "Tile":
-						var tdUid = Std.parseInt(suffix);
-						curEntity.tilesetId = tdUid;
+			curEntity.tileRect = null; // NOTE: important to clear as tilesetUid is also stored in it!
 
-					case "Embed":
-						var embedId = ldtk.Json.EmbedAtlas.createByName(suffix);
-						var td = project.defs.getEmbedTileset(embedId);
-						curEntity.tilesetId = td.uid;
-
-					case _:
-				}
-			}
+			var raw : String = jRenderSelect.val();
+			if( M.isValidNumber(Std.parseInt(raw)) ) {
+				// Tileset UID
+				curEntity.renderMode = Tile;
+				curEntity.tilesetId = Std.parseInt(raw);
+		}
 			else {
-				curEntity.tilesetId = null;
-				curEntity.tileRenderMode = FitInside;
+				if( raw.indexOf("!")==0 ) {
+					// Shape
+					curEntity.renderMode = ldtk.Json.EntityRenderMode.createByName( raw.substr(1) );
+					curEntity.tilesetId = null;
+				}
+				else {
+					// Embed tileset
+					var embedId = ldtk.Json.EmbedAtlas.createByName(raw);
+					N.debug(embedId);
+					var td = project.defs.getEmbedTileset(embedId);
+					curEntity.renderMode = Tile;
+					curEntity.tilesetId = td.uid;
+				}
 			}
 
 			// Re-init opacities
-			if( oldMode!=Tile && mode==Tile ) {
+			if( oldMode!=Tile && curEntity.renderMode==Tile ) {
 				curEntity.tileOpacity = 1;
 				curEntity.fillOpacity = 0.08;
 				curEntity.lineOpacity = 0;
 			}
-			if( oldMode==Tile && mode!=Tile ) {
+			if( oldMode==Tile && curEntity.renderMode!=Tile ) {
 				curEntity.tileOpacity = 1;
 				curEntity.fillOpacity = 1;
 				curEntity.lineOpacity = 1;
@@ -320,13 +303,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		if( curEntity.tilesetId!=null ) {
 			var td = project.defs.getTilesetDef(curEntity.tilesetId);
 			if( td.isUsingEmbedAtlas() )
-				jSelect.val("Embed."+td.embedAtlas);
+				jRenderSelect.val( td.embedAtlas.getName() );
 			else
-				jSelect.val("Tile."+td.uid);
+				jRenderSelect.val( Std.string(td.uid) );
 		}
 		else
-			jSelect.val( curEntity.renderMode.getName() );
-			// jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
+			jRenderSelect.val( "!"+curEntity.renderMode.getName() );
 
 
 		// Tile render mode
@@ -432,8 +414,6 @@ class EditEntityDefs extends ui.modal.Panel {
 	function updateEntityList() {
 		jEntityList.empty();
 
-		var allTags = project.defs.getEntityTagCategories();
-
 		// List context menu
 		ContextMenu.addTo(jEntityList, false, [
 			{
@@ -448,30 +428,49 @@ class EditEntityDefs extends ui.modal.Panel {
 		]);
 
 		// Tags
-		for(t in allTags) {
-			if( allTags.length>1 ) {
+		var tagGroups = project.defs.groupUsingTags(project.defs.entities, (ed)->ed.tags);
+		for( group in tagGroups ) {
+			// Tag name
+			if( tagGroups.length>1 ) {
 				var jSep = new J('<li class="title fixed"/>');
-				jSep.text( t==null ? L.t._("Untagged") : t );
+				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEntityList);
+
+				// Rename
+				if( group.tag!=null ) {
+					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
+					jSep.append(jLinks);
+					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
+						for(ed in project.defs.entities) {
+							ed.tags.rename(group.tag, t);
+							for(fd in ed.fieldDefs)
+								fd.allowedRefTags.rename(group.tag, t);
+						}
+						for(ld in project.defs.layers) {
+							ld.requiredTags.rename(group.tag, t);
+							ld.excludedTags.rename(group.tag, t);
+						}
+						editor.ge.emit( EntityDefChanged );
+					});
+				}
 			}
 
+			// Create sub list
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jEntityList);
 			var jSubList = new J('<ul/>');
 			jSubList.appendTo(jLi);
 
-			// Entities per tag
-			for(ed in project.defs.entities) {
-				if( t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
-					continue;
-
+			for(ed in group.all) {
 				var jEnt = new J('<li class="iconLeft"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
 
+				// HTML entity display preview
 				var preview = JsTools.createEntityPreview(editor.project, ed);
 				preview.appendTo(jEnt);
 
+				// Name
 				jEnt.append('<span class="name">${ed.identifier}</span>');
 				if( curEntity==ed ) {
 					jEnt.addClass("active");
@@ -480,7 +479,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				else
 					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
-
+				// Menu
 				ContextMenu.addTo(jEnt, [
 					{
 						label: L._Copy(),
@@ -513,7 +512,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
 				]);
 
-
+				// Click
 				jEnt.click( function(_) selectEntity(ed) );
 			}
 
