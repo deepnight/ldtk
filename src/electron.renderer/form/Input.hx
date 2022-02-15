@@ -52,7 +52,7 @@ class Input<T> {
 		if( jInput.is("[type=checkbox], [type=radio]") )
 			return;
 
-		var jGuide = jInput.next(".guide");
+		var jGuide = jInput.nextAll(".guide");
 		if( jGuide.length==0 )
 			jInput.prev(".guide");
 
