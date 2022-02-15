@@ -1,4 +1,4 @@
-# 1.0.0 - Gone gold!
+# 0.10.0 - Beta 1
 
 ## Entity references
 
