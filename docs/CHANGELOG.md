@@ -1,6 +1,8 @@
 # 0.10.1 - Beta 2
 
  - Reduced "bleep" effect when picking an existing Entity
+ - Added `SHIFT-E` shortcut for "Select empty spaces" option
+ - Added `SHIFT-T` shortcut for "Tile stacking" option
 
 # 0.10.0 - Beta 1
 
@@ -147,6 +149,8 @@ Contextual **help tips** were also reworked and streamlined in every existing pa
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
   - Added "Release notes" button in Help panel
+  - Changed `T` shortcut to `SHIFT-T` for "Tile stacking"
+  - Changed `E` shortcut to `SHIFT-E` for "Select empty spaces"
   - Reworked the Enum panel and fixed many UX issues
   - Removed the "CPU throttling" option from the app settings. The CPU throttling has been reworked and should not longer be noticeable at all. Therefore, it is now always enabled to reduce battery usage on laptops and energy consumption in general.
   - Removed the "Tile Flickering Fix" option from the app settings: it was costly and inefficient.

@@ -621,11 +621,11 @@ class Editor extends Page {
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
-			// case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-			// 	setEmptySpaceSelection( !settings.v.emptySpaceSelection );
+			case K.E if( !hasInputFocus() && App.ME.isShiftDown() ):
+				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 
-			// case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-			// 	setTileStacking( !settings.v.tileStacking );
+			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
+				setTileStacking( !settings.v.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setSingleLayerMode( !settings.v.singleLayerMode );
