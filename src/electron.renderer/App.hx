@@ -170,7 +170,7 @@ class App extends dn.Process {
 		dn.js.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.js.ElectronUpdater.onError = function(err) {
 			var errStr = err==null ? null : Std.string(err);
-			LOG.add("update", "Warning: couldn't check for updates: "+errStr);
+			LOG.add("update", "ERROR: couldn't check for updates. Returned: "+errStr);
 			if( errStr.length>40 )
 				errStr = errStr.substr(0,40) + "[...]";
 			checkManualUpdate();
