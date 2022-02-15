@@ -32,4 +32,7 @@ extern class AutoUpdater {
 	public function checkForUpdates() : Dynamic;
 	public function on(eventId:String, onEvent:UpdateInfo->Void) : Dynamic;
 	public function quitAndInstall(isSilent:Bool=false, isForceRunAfter:Bool=false) : Dynamic;
+
+	/** Expected values: latest/null, beta or alpha **/
+	public var channel : Null<String>;
 }
