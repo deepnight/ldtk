@@ -1,3 +1,7 @@
+# 0.10.1 - Beta 2
+
+ - Reduced "bleep" effect when picking an existing Entity
+
 # 0.10.0 - Beta 1
 
 ## Entity references
