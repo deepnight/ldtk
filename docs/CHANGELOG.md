@@ -3,6 +3,7 @@
  - Reduced "bleep" effect when picking an existing Entity
  - Added `SHIFT-E` shortcut for "Select empty spaces" option
  - Added `SHIFT-T` shortcut for "Tile stacking" option
+ - Fixed guide not displaying when editing the "Default level ID pattern" in Project panel.
 
 # 0.10.0 - Beta 1
 
