@@ -46,9 +46,7 @@
 
 	"win": {
 		"target": "nsis",
-		"publish": [
-			"github"
-		]
+		"publish": ["github"]
 	},
 
 	"mac": {}
