@@ -11,6 +11,7 @@ class IntInput extends form.Input<Int> {
 	public function new(j:js.jquery.JQuery, getter:Void->Int, setter:Int->Void) {
 		isColorCode = j.is("[type=color]");
 		super(j, getter, setter);
+		enableIncrementControls();
 	}
 
 	public function setEmptyValue(v:Int) {

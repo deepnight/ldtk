@@ -75,6 +75,31 @@ class Input<T> {
 		return null;
 	}
 
+	function enableIncrementControls() {
+		function _inc(i:Float) {
+			var v = Std.parseFloat( jInput.val() );
+			if( !M.isValidNumber(v) )
+				v = 0;
+			jInput.val( Std.string(v+i) );
+			onInputChange();
+		}
+		jInput
+			.off(".increment")
+			.on("keydown.increment", (ev:js.jquery.Event)->{
+				switch ev.key {
+					case "ArrowUp":
+						_inc(1);
+						ev.preventDefault();
+
+					case "ArrowDown":
+						_inc(-1);
+						ev.preventDefault();
+
+					case _:
+				}
+			});
+	}
+
 	public function enableSlider(speed=1.0) {
 		if( getSlideDisplayValue(0)==null )
 			throw "Slider is not supported for this Input type";

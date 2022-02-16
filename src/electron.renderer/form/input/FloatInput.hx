@@ -15,6 +15,7 @@ class FloatInput extends form.Input<Float> {
 	public function setValueStep(step:Float) {
 		valueStep = step<=0 ? -1 : step;
 		writeValueToInput();
+		enableIncrementControls();
 	}
 
 
