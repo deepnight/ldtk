@@ -32,13 +32,13 @@ class FieldInstance {
 	public static function fromJson(project:Project, json:ldtk.Json.FieldInstanceJson) {
 		if( (cast json).defId!=null ) json.defUid = (cast json).defId;
 
-		var o = new FieldInstance( project, JsonTools.readInt(json.defUid) );
-		o.internalValues = [];
+		var fi = new FieldInstance( project, JsonTools.readInt(json.defUid) );
+		fi.internalValues = [];
 		if( json.realEditorValues!=null ) {
 			for( jsonVal in JsonTools.readArray(json.realEditorValues) ) {
 				var val = JsonTools.readEnum(ValueWrapper, jsonVal, true);
 
-				if( o.def.type==F_Text ) // Restore end-of-lines
+				if( fi.def.type==F_Text ) // Restore end-of-lines
 					switch val {
 						case null:
 						case V_String(v):
@@ -47,15 +47,15 @@ class FieldInstance {
 						case _:
 					}
 
-				o.internalValues.push( val );
+				fi.internalValues.push( val );
 			}
 		}
 		else {
 			// Old pre-Array format support
-			o.internalValues = [ JsonTools.readEnum(ValueWrapper, (cast json).realEditorValue, true) ];
+			fi.internalValues = [ JsonTools.readEnum(ValueWrapper, (cast json).realEditorValue, true) ];
 		}
 
-		return o;
+		return fi;
 	}
 
 	public function toJson() : ldtk.Json.FieldInstanceJson {
