@@ -2457,12 +2457,16 @@ textarea {
 				flex-wrap: nowrap;
 
 				.logPath {
-					flex: 1 0 300px;
+					flex: 1 0 auto;
 					padding: 4px;
 					text-align: left;
 					overflow: hidden;
 					text-overflow: ellipsis;
 					border: 1px solid $bgLight;
+				}
+
+				button {
+					flex: 0 1 0px;
 				}
 			}
 
