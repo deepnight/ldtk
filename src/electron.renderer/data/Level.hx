@@ -154,10 +154,7 @@ class Level {
 		}
 
 		// Cache new json
-		_cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(_project, json ),
-			json: json,
-		}
+		setJsonCache(json, false);
 
 		return json;
 	}
@@ -205,10 +202,7 @@ class Level {
 			}
 
 		// Init cache
-		l._cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(p, json, true),
-			json: json
-		}
+		l.setJsonCache(json, true);
 
 		return l;
 	}
@@ -223,6 +217,13 @@ class Level {
 	public function rebuildCache() {
 		_cachedJson = null;
 		toJson();
+	}
+
+	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
+		_cachedJson = {
+			str: ui.ProjectSaver.jsonStringify(_project, json, skipHeader ),
+			json: json,
+		}
 	}
 
 	public inline function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
