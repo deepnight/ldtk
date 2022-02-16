@@ -203,30 +203,6 @@ class Project {
 	}
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
-		// Move old settings previously stored in root
-		// if( json.settings==null ) {
-		// 	var v : ldtk.Json.ProjectSettings = {
-		// 		defaultPivotX: json.defaultPivotX,
-		// 		defaultPivotY: json.defaultPivotY,
-		// 		defaultGridSize: json.defaultGridSize,
-		// 		defaultLevelWidth: json.defaultLevelWidth,
-		// 		defaultLevelHeight: json.defaultLevelHeight,
-		// 		bgColor: json.bgColor,
-		// 		defaultLevelBgColor: json.defaultLevelBgColor,
-		// 		externalLevels: json.externalLevels,
-
-		// 		minifyJson: json.minifyJson,
-		// 		exportTiled: json.exportTiled,
-		// 		backupOnSave: json.backupOnSave,
-		// 		backupLimit: json.backupLimit,
-		// 		exportPng: json.exportPng,
-		// 		pngFilePattern: json.pngFilePattern,
-
-		// 		advancedOptionFlags: [],
-		// 	}
-		// 	json.settings = v;
-		// }
-
 		var p = new Project();
 		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
