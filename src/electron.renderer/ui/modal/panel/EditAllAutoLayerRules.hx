@@ -723,29 +723,12 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		else if( r.chance<=0 )
 			i.jInput.addClass("off");
 
-		// X modulo
-		var i = Input.linkToHtmlInput( r.xModulo, jRule.find("[name=xModulo]"));
-		i.onValueChange = (v)->{
-			if( v>1 )
-				invalidateRuleAndOnesBelow(r);
-			r.tidy();
-		}
-		i.linkEvent( LayerRuleChanged(r) );
-		i.setBounds(1,10);
-		if( r.xModulo==1 )
-			i.jInput.addClass("default");
-
-		// Y modulo
-		var i = Input.linkToHtmlInput( r.yModulo, jRule.find("[name=yModulo]"));
-		i.onValueChange = (v)->{
-			if( v>1 )
-				invalidateRuleAndOnesBelow(r);
-			r.tidy();
-		}
-		i.linkEvent( LayerRuleChanged(r) );
-		i.setBounds(1,10);
-		if( r.yModulo==1 )
-			i.jInput.addClass("default");
+		// Modulos
+		var jModulo = jRule.find(".modulo");
+		jModulo.text('${r.xModulo}-${r.yModulo}');
+		if( r.xModulo==1 && r.yModulo==1 )
+			jModulo.addClass("default");
+		jModulo.click( _->new ui.modal.dialog.RuleModuloEditor(ld, r) );
 
 		// Break on match
 		var jFlag = jRule.find("a.break");

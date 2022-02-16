@@ -727,13 +727,13 @@ class LayerInstance {
 			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
 			// Modulos
-			if( r.checker!=Vertical && cy%r.yModulo!=0 )
+			if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
 				return false;
 
 			if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
 				return false;
 
-			if( r.checker!=Horizontal && cx%r.xModulo!=0 )
+			if( r.checker!=Horizontal && (cx-r.xOffset) % r.xModulo!=0 )
 				return false;
 
 			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )

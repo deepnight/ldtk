@@ -20,6 +20,8 @@ class AutoLayerRuleDef {
 	public var pivotY = 0.;
 	public var xModulo = 1;
 	public var yModulo = 1;
+	public var xOffset = 0;
+	public var yOffset = 0;
 	public var checker : ldtk.Json.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
@@ -118,6 +120,8 @@ class AutoLayerRuleDef {
 			flipY: flipY,
 			xModulo: xModulo,
 			yModulo: yModulo,
+			xOffset: xOffset,
+			yOffset: yOffset,
 			checker: JsonTools.writeEnum(checker, false),
 			tileMode: JsonTools.writeEnum(tileMode, false),
 			pivotX: JsonTools.writeFloat(pivotX),
@@ -147,6 +151,8 @@ class AutoLayerRuleDef {
 		r.pivotY = JsonTools.readFloat(json.pivotY, 0);
 		r.xModulo = JsonTools.readInt(json.xModulo, 1);
 		r.yModulo = JsonTools.readInt(json.yModulo, 1);
+		r.xOffset = JsonTools.readInt(json.xOffset, 0);
+		r.yOffset = JsonTools.readInt(json.yOffset, 0);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
