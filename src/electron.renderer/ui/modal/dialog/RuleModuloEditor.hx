@@ -8,28 +8,16 @@ class RuleModuloEditor extends ui.modal.Dialog {
 	var layerDef : data.def.LayerDef;
 	var rule : data.def.AutoLayerRuleDef;
 
-	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
+	public function new(jFrom:js.jquery.JQuery, layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleModuloEditor");
 
+		positionNear(jFrom);
 		setTransparentMask();
+
 		this.layerDef = layerDef;
 		this.rule = rule;
 
-		renderAll();
-	}
 
-	override function onGlobalEvent(e:GlobalEvent) {
-		super.onGlobalEvent(e);
-		switch e {
-			case LayerRuleChanged(r):
-				if( r==rule )
-					renderAll();
-
-			case _:
-		}
-	}
-
-	function renderAll() {
 		loadTemplate("ruleModuloEditor");
 
 		// X modulo
@@ -54,6 +42,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		var i = Input.linkToHtmlInput( rule.xOffset, jContent.find("#xOffset"));
 		i.setBounds(-bounds, bounds);
 		i.linkEvent( LayerRuleChanged(rule) );
+		i.fixValue = (v)->v = v % rule.xModulo;
 		if( rule.xOffset==0 )
 			i.jInput.addClass("default");
 
@@ -64,6 +53,23 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		if( rule.yOffset==0 )
 			i.jInput.addClass("default");
 
+		JsTools.parseComponents(jContent);
+		renderPreview();
+	}
+
+	override function onGlobalEvent(e:GlobalEvent) {
+		super.onGlobalEvent(e);
+		switch e {
+			case LayerRuleChanged(r):
+				if( r==rule )
+					renderPreview();
+
+			case _:
+		}
+	}
+
+
+	function renderPreview() {
 		// Preview
 		var jPreview = jContent.find(".preview");
 		jPreview.empty();
@@ -78,8 +84,6 @@ class RuleModuloEditor extends ui.modal.Dialog {
 			if( (cx-rule.xOffset) % rule.xModulo==0 && (cy-rule.yOffset) % rule.yModulo==0 )
 				jCell.addClass("active");
 		}
-
-		JsTools.parseComponents(jContent);
 	}
 
 }

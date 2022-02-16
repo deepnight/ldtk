@@ -728,7 +728,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jModulo.text('${r.xModulo}-${r.yModulo}');
 		if( r.xModulo==1 && r.yModulo==1 )
 			jModulo.addClass("default");
-		jModulo.click( _->new ui.modal.dialog.RuleModuloEditor(ld, r) );
+		jModulo.click( _->new ui.modal.dialog.RuleModuloEditor(jModulo, ld, r) );
 
 		// Break on match
 		var jFlag = jRule.find("a.break");
