@@ -153,7 +153,7 @@ class Level {
 			__neighbours: neighbours,
 		}
 
-		// Cache new json
+		// Cache this json
 		setJsonCache(json, false);
 
 		return json;
@@ -202,10 +202,55 @@ class Level {
 			}
 
 		// Init cache
+		crawlObjectRec(json); // Because haxe.Json.parse unescapes "\n" chars, we need to re-escape them before caching the JSON object
 		l.setJsonCache(json, true);
 
 		return l;
 	}
+
+	/** Crawl an Object recursively and fixes unescaped \n chars **/
+	static function crawlObjectRec(obj:{}) {
+		for( k in Reflect.fields(obj) ) {
+			var v : Dynamic = Reflect.field(obj, k);
+			switch Type.typeof(v) {
+				case TObject:
+					crawlObjectRec(v);
+
+				case TClass(Array):
+					crawlArray(v);
+
+				case TClass(String):
+					if( v.indexOf("\n")>=0 ) {
+						trace(k+"="+v);
+						Reflect.setField(obj, k, StringTools.replace(v, "\n", "\\n"));
+					}
+
+				case _:
+			}
+		}
+	}
+
+	/** Crawl an Array recursively and fixes unescaped \n chars **/
+	static function crawlArray(arr:Array<Dynamic>) {
+		for( i in 0...arr.length )
+			switch Type.typeof( arr[i] ) {
+				case TObject:
+					crawlObjectRec(arr[i]);
+
+				case TClass(Array):
+					crawlArray(arr[i]);
+
+				case TClass(String):
+					if( arr[i].indexOf("\n")>=0 ) {
+						trace(arr);
+						arr[i] = StringTools.replace(arr[i], "\n", "\\n");
+					}
+
+				case _:
+			}
+	}
+
+
 
 	public inline function hasBgImage() {
 		return bgRelPath!=null;
