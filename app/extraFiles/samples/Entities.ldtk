@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.0.0",
+		"appVersion": "0.10.0-beta1",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "1.0.0",
-	"appBuildId": 456830,
+	"jsonVersion": "0.10.0-beta1",
+	"appBuildId": 456944,
 	"nextUid": 164,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -2424,6 +2424,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["container"],
 							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#8A5B38",
 							"iid": "f80e99e1-66b0-11ec-b121-273dce4c0a94",
 							"width": 24,
 							"height": 24,
@@ -2452,6 +2453,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 },
+							"__smartColor": "#FF0000",
 							"iid": "f80ec0f2-66b0-11ec-b121-d96e502df2fb",
 							"width": 48,
 							"height": 48,
@@ -2506,6 +2508,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 },
+							"__smartColor": "#FF0000",
 							"iid": "f80ee803-66b0-11ec-b121-6dcb8a513232",
 							"width": 24,
 							"height": 24,
@@ -2530,6 +2533,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 },
+							"__smartColor": "#FF0000",
 							"iid": "f80ee804-66b0-11ec-b121-874e33fcffe5",
 							"width": 24,
 							"height": 24,
@@ -2554,6 +2558,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["actor"],
 							"__tile": { "x": 80, "y": 240, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#B8DE4F",
 							"iid": "f80f0f12-66b0-11ec-b121-c7e0ed2499ae",
 							"width": 20,
 							"height": 20,
@@ -2581,6 +2586,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["container"],
 							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#8A5B38",
 							"iid": "ada47150-66b0-11ec-b043-2d6dd3346abd",
 							"width": 24,
 							"height": 24,
@@ -2629,6 +2635,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": ["trigger"],
 							"__tile": { "x": 128, "y": 48, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#FFFFFF",
 							"iid": "f80ee802-66b0-11ec-b121-7703f3b4b3e4",
 							"width": 16,
 							"height": 16,
@@ -2639,12 +2646,12 @@
 									"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								}, {
 									"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 97, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
@@ -2661,6 +2668,7 @@
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
 							"__tile": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 },
+							"__smartColor": "#E4CF05",
 							"iid": "f80f0f10-66b0-11ec-b121-cbb2b35a0142",
 							"width": 64,
 							"height": 48,
@@ -2671,7 +2679,7 @@
 									"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								}, "__type": "EntityRef", "__tile": null, "defUid": 98, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
@@ -2692,6 +2700,7 @@
 							"__pivot": [0,0],
 							"__tags": ["trigger"],
 							"__tile": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 },
+							"__smartColor": "#E4CF05",
 							"iid": "f80f0f11-66b0-11ec-b121-f14c96b08517",
 							"width": 80,
 							"height": 48,
@@ -2715,6 +2724,7 @@
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
 							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#FFEF85",
 							"iid": "f80e99e2-66b0-11ec-b121-67b8aade98d9",
 							"width": 16,
 							"height": 16,
@@ -2733,6 +2743,7 @@
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
 							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#FF7D1A",
 							"iid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 							"width": 16,
 							"height": 16,
@@ -2754,6 +2765,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["triggerable"],
 							"__tile": null,
+							"__smartColor": "#A98B70",
 							"iid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 							"width": 8,
 							"height": 32,
@@ -2770,6 +2782,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["triggerable"],
 							"__tile": null,
+							"__smartColor": "#A98B70",
 							"iid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 							"width": 8,
 							"height": 48,
@@ -2786,6 +2799,7 @@
 							"__pivot": [0.5,1],
 							"__tags": ["triggerable"],
 							"__tile": null,
+							"__smartColor": "#A98B70",
 							"iid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 							"width": 8,
 							"height": 32,
@@ -2799,6 +2813,7 @@
 							"__pivot": [0.5,0],
 							"__tags": ["triggerable"],
 							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#FFEF85",
 							"iid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 							"width": 16,
 							"height": 16,
@@ -2817,6 +2832,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
 							"__tile": { "x": 16, "y": 80, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#00D660",
 							"iid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 							"width": 16,
 							"height": 16,
@@ -2827,12 +2843,12 @@
 									"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								}, {
 									"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
@@ -2849,6 +2865,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
 							"__tile": { "x": 16, "y": 80, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#00D660",
 							"iid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 							"width": 16,
 							"height": 16,
@@ -2859,12 +2876,12 @@
 									"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								}, {
 									"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "3e1b3020-66b0-11ec-bb2d-e5942fb02897"
+									"worldIid": "cc8585b0-8dc0-11ec-92c1-f76862c76ec7"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
