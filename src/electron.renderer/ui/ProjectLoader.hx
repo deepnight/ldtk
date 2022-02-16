@@ -79,7 +79,7 @@ class ProjectLoader {
 					#end
 
 					// Project has an older JSON version
-					if( json!=null && Version.lower(json.jsonVersion, Const.getJsonVersion()) )
+					if( json!=null && Version.lower(json.jsonVersion, Const.getJsonVersion(), false) )
 						needReSaving = true;
 				}
 			}

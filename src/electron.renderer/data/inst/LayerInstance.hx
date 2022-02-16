@@ -287,10 +287,10 @@ class LayerInstance {
 		}
 
 		for( gridTilesJson in json.gridTiles ) {
-			if( dn.Version.lower(p.jsonVersion, "0.4") || gridTilesJson.d==null )
+			if( dn.Version.lower(p.jsonVersion, "0.4", true) || gridTilesJson.d==null )
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
 
-			if( dn.Version.lower(p.jsonVersion, "0.6") )
+			if( dn.Version.lower(p.jsonVersion, "0.6", true) )
 				gridTilesJson.t = gridTilesJson.d[1];
 
 			var coordId = gridTilesJson.d[0];
@@ -323,7 +323,7 @@ class LayerInstance {
 					var ruleId = at.d[0];
 					var coordId = at.d[1];
 
-					if( dn.Version.lower(p.jsonVersion, "0.6") )
+					if( dn.Version.lower(p.jsonVersion, "0.6", true) )
 						at.t = at.d[2];
 
 					if( !li.autoTilesCache.exists(ruleId) )
@@ -332,7 +332,7 @@ class LayerInstance {
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
-					if( dn.Version.lower(p.jsonVersion, "0.5") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+					if( dn.Version.lower(p.jsonVersion, "0.5", true) && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
 						// Fix old coords that included offsets
 						at.px[0]-=li.pxOffsetX;
 						at.px[1]-=li.pxOffsetY;

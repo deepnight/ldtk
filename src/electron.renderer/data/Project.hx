@@ -259,7 +259,7 @@ class Project {
 		}
 
 		// World settings
-		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6") ? LinearHorizontal : Free;
+		var defLayout : ldtk.Json.WorldLayout = dn.Version.lower(json.jsonVersion, "0.6", true) ? LinearHorizontal : Free;
 		if( !p.hasFlag(MultiWorlds) ) {
 			// World settings are still in root
 			var w = p.worlds[0];
@@ -270,11 +270,11 @@ class Project {
 			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );
 		}
 
-		if( dn.Version.lower(json.jsonVersion, "0.6") )
+		if( dn.Version.lower(json.jsonVersion, "0.6", true) )
 			for(w in p.worlds)
 				w.reorganizeWorld();
 
-		if( Version.lower(json.jsonVersion, "0.10") )
+		if( Version.lower(json.jsonVersion, "0.10", true) )
 			p.setFlag(PrependIndexToLevelFileNames, true);
 
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version

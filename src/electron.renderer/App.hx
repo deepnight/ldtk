@@ -226,7 +226,7 @@ class App extends dn.Process {
 				LOG.error("Failed to fetch latest version from GitHub");
 				miniNotif("Couldn't retrieve latest version number from GitHub!", false);
 			}
-			else if( Version.greater(latest.full, Const.getAppVersion(true), true) ) {
+			else if( Version.greater(latest.full, Const.getAppVersion(true), false ) ) {
 				LOG.add("update", "Update available: "+latest);
 				N.success("Update "+latest.full+" is available!");
 

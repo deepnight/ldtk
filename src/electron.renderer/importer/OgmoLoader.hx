@@ -30,7 +30,7 @@ class OgmoLoader {
 			}
 
 		// Version check
-		if( json.ogmoVersion==null || Version.lower(json.ogmoVersion, MIN_VERSION) ) {
+		if( json.ogmoVersion==null || Version.lower(json.ogmoVersion, MIN_VERSION, true) ) {
 			log.error("This Ogmo project should be first saved using Ogmo "+MIN_VERSION+" or later. LDtk doesn't support older file versions.");
 			return null;
 		}
