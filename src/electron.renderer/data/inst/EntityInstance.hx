@@ -61,6 +61,7 @@ class EntityInstance {
 			__pivot: [ JsonTools.writeFloat(def.pivotX), JsonTools.writeFloat(def.pivotY) ],
 			__tags: def.tags.toArray(),
 			__tile: getSmartTile(),
+			__smartColor: C.intToHex( getSmartColor(false) ),
 
 			iid: iid,
 			width: width,
