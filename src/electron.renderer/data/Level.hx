@@ -220,10 +220,8 @@ class Level {
 					crawlArray(v);
 
 				case TClass(String):
-					if( v.indexOf("\n")>=0 ) {
-						trace(k+"="+v);
+					if( v.indexOf("\n")>=0 )
 						Reflect.setField(obj, k, StringTools.replace(v, "\n", "\\n"));
-					}
 
 				case _:
 			}
@@ -241,10 +239,8 @@ class Level {
 					crawlArray(arr[i]);
 
 				case TClass(String):
-					if( arr[i].indexOf("\n")>=0 ) {
-						trace(arr);
+					if( arr[i].indexOf("\n")>=0 )
 						arr[i] = StringTools.replace(arr[i], "\n", "\\n");
-					}
 
 				case _:
 			}

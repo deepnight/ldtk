@@ -99,7 +99,7 @@
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
+					"editorCutLongValues": false,
 					"editorTextSuffix": null,
 					"editorTextPrefix": null,
 					"useForSmartColor": false,
@@ -177,9 +177,9 @@
 							"height": 16,
 							"defUid": 1,
 							"px": [80,64],
-							"fieldInstances": [{ "__identifier": "myText", "__value": "Hello\nWorld", "__type": "String", "__tile": null, "defUid": 2, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "myText", "__value": "Hello\n\nWorld", "__type": "String", "__tile": null, "defUid": 2, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["Hello\nWorld"]
+								"params": ["Hello\n\nWorld"]
 							}] }]
 						}
 					]
