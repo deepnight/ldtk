@@ -22,7 +22,8 @@ class EditAppSettings extends ui.modal.Dialog {
 		jContent.find( "button.viewLog").click( (_)->{
 			App.LOG.flushToFile();
 			var raw = NT.readFileString( JsTools.getLogPath() );
-			new TextEditor(raw, "LDtk logs", LangLog);
+			var te = new TextEditor(raw, "LDtk logs", LangLog);
+			te.scrollToEnd();
 		});
 		jContent.find( "button.locateLog").click( (_)->JsTools.locateFile( JsTools.getLogPath(), true ) );
 

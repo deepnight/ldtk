@@ -6,6 +6,7 @@ import codemirror.CodeMirror;
 class TextEditor extends ui.modal.Dialog {
 	public var jHeader : js.jquery.JQuery;
 	public var jTextArea : js.jquery.JQuery;
+	var cm: CodeMirror;
 
 	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, ?onChange:(str:String)->Void) {
 		super("textEditor");
@@ -28,7 +29,7 @@ class TextEditor extends ui.modal.Dialog {
 		jTextArea.val(str);
 
 		// Init Codemirror
-		var cm = CodeMirror.fromTextArea( cast jTextArea.get(0), {
+		cm = CodeMirror.fromTextArea( cast jTextArea.get(0), {
 			mode: requireMode(mode),
 			theme: "lucario",
 			lineNumbers: true,
@@ -63,6 +64,9 @@ class TextEditor extends ui.modal.Dialog {
 			} );
 	}
 
+	public function scrollToEnd() {
+		cm.execCommand(GoDocEnd);
+	}
 
 	inline function requireMode(mode:ldtk.Json.TextLanguageMode) : Dynamic {
 		// Get mode addon name
