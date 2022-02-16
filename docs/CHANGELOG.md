@@ -4,6 +4,7 @@
  - Added `SHIFT-E` shortcut for "Select empty spaces" option
  - Added `SHIFT-T` shortcut for "Tile stacking" option
  - Fixed guide not displaying when editing the "Default level ID pattern" in Project panel.
+ - Added `__smartColor` to Entity instance JSON.
 
 # 0.10.0 - Beta 1
 
