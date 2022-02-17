@@ -18,7 +18,7 @@ class Changelog extends ui.modal.Dialog {
 		// Pick specific version
 		if( version!=null ) {
 			for( c in Const.getChangeLog().entries )
-				if( c.version.isEqual(version,true) ) {
+				if( c.version.isEqual(version) ) {
 					changeLog = c;
 					break;
 				}
@@ -30,12 +30,14 @@ class Changelog extends ui.modal.Dialog {
 		rawMd = imgReg.replace(rawMd, "![](file:///"+JsTools.getAssetsDir()+"/changelogImg/$1)");
 
 		loadTemplate("changelog", {
-			ver: changeLog.version.numbers,
+			ver: changeLog.version.full,
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
 			md: rawMd,
 		}, false);
 
+		if( changeLog.version.full.length>=8)
+			jContent.find("header .version").addClass("long");
 
 		jContent.find(".close")
 			.click( (_)->close() );
@@ -45,7 +47,7 @@ class Changelog extends ui.modal.Dialog {
 			var ctx = new ui.modal.ContextMenu(ev);
 				for( c in Const.getChangeLog().entries )
 				ctx.add({
-					label: L.t.untranslated( c.version.numbers + ( c.title!=null ? " - "+c.title : "" ) ),
+					label: L.t.untranslated( c.version.full + ( c.title!=null ? " - "+c.title : "" ) ),
 					cb: ()->{
 						showVersion(c.version);
 					}

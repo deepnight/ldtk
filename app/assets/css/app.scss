@@ -2643,6 +2643,11 @@ textarea {
 				background-color: $orange;
 				// text-shadow: 0px 0px 16px $darkOrange;
 				border-right: 1px dashed $bgLight;
+				white-space: nowrap;
+
+				&.long {
+					font-size: 35pt;
+				}
 			}
 
 			.title {

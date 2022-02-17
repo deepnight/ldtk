@@ -1,4 +1,4 @@
-# 0.10.1 - Beta 2
+# 0.10.0-beta2
 
  - Reduced "bleep" effect when picking an existing Entity
  - Added `SHIFT-E` shortcut for "Select empty spaces" option
@@ -7,7 +7,7 @@
  - Added `__smartColor` to Entity instance JSON.
  - Added `up`/`down` arrow keys to quickly increment an input value
 
-# 0.10.0 - Beta 1
+# 0.10.0-beta1
 
 ## Entity references
 
