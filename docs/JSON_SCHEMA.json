@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.0.0 JSON schema",
+	"title": "LDtk 0.10.0-beta1 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.0.0",
+	"version": "0.10.0-beta1",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -343,6 +343,7 @@
 				"__grid",
 				"__identifier",
 				"__pivot",
+				"__smartColor",
 				"__tags",
 				"defUid",
 				"fieldInstances",
@@ -393,6 +394,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"__smartColor": {
+					"description": "The entity \"smart\" color, guessed from either Entity definition, or one its field instances.",
+					"type": [
+						"string"
 					]
 				},
 				"__grid": {
@@ -579,7 +586,9 @@
 				"tileMode",
 				"uid",
 				"xModulo",
-				"yModulo"
+				"xOffset",
+				"yModulo",
+				"yOffset"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -686,6 +695,12 @@
 						"number"
 					]
 				},
+				"yOffset": {
+					"description": "Y cell start offset",
+					"type": [
+						"integer"
+					]
+				},
 				"tileMode": {
 					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
 					"enum": [
@@ -715,6 +730,12 @@
 					"description": "If FALSE, the rule effect isn't applied, and no tiles are generated.",
 					"type": [
 						"boolean"
+					]
+				},
+				"xOffset": {
+					"description": "X cell start offset",
+					"type": [
+						"integer"
 					]
 				}
 			},
@@ -1478,7 +1499,7 @@
 					]
 				},
 				"intGrid": {
-					"description": "**WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced by: `intGridCsv`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.0.0+  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
