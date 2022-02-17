@@ -489,7 +489,7 @@ class DocGenerator {
 
 			var descMd = [];
 			if( deprecation!=null ) {
-				if( appVersion.compare(deprecation.removal)<0 ) {
+				if( appVersion.compareEverything(deprecation.removal)<0 ) {
 					descMd.push('**WARNING**: this deprecated value will be *removed* completely on version ${deprecation.removal}+');
 
 				}
@@ -579,12 +579,12 @@ class DocGenerator {
 
 		if( hasMeta(xml,"added") ) {
 			var version = getMeta(xml,"added");
-			badges.push( badge("Added", version, appVersion.sameMajorAndMinor(version) ? "green" : "gray" ) );
+			badges.push( badge("Added", version, appVersion.hasSameMajorAndMinor(version) ? "green" : "gray" ) );
 		}
 
 		if( hasMeta(xml,"changed") ) {
 			var version = getMeta(xml,"changed");
-			badges.push( badge("Changed", version, appVersion.sameMajorAndMinor(version) ? "green" : "gray" ) );
+			badges.push( badge("Changed", version, appVersion.hasSameMajorAndMinor(version) ? "green" : "gray" ) );
 
 		}
 
