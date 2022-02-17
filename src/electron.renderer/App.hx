@@ -120,6 +120,11 @@ class App extends dn.Process {
 		delayer.addS( ()->{
 			// Look for path and level index in args
 			var path = getArgPath();
+			if( path!=null && !path.isEmpty() && !path.isAbsolute() ) {
+				path = dn.FilePath.fromFile(Sys.getCwd() + path.slash() + path.full);
+				LOG.add("BOOT", "Fixed path argument: "+path.full);
+			}
+
 			var levelIndex : Null<Int> = null;
 			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
 				var indexReg = ~/0*([0-9]+)-.*/gi;
