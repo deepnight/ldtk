@@ -78,7 +78,7 @@ class FieldDef {
 			case F_Enum(enumDefUid):
 			case F_Point: editorDisplayMode = PointPath;
 			case F_Path:
-			case F_EntityRef: editorDisplayMode = RefLinkBetweenPivots;
+			case F_EntityRef: editorDisplayMode = RefLinkBetweenCenters;
 			case F_Tile: editorDisplayMode = EntityTile;
 		}
 	}
@@ -114,7 +114,7 @@ class FieldDef {
 	public static function fromJson(p:Project, json:ldtk.Json.FieldDefJson) {
 		if( (cast json.type)=="F_File" ) json.type = cast "F_Path"; // patch old type name
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
-		if( (cast json.editorDisplayMode)=="RefLink" ) json.editorDisplayMode = cast( ldtk.Json.FieldDisplayMode.RefLinkBetweenPivots.getName() );
+		if( (cast json.editorDisplayMode)=="RefLink" ) json.editorDisplayMode = cast( ldtk.Json.FieldDisplayMode.RefLinkBetweenCenters.getName() );
 		if( json.regex=="//g" ) json.regex = null; // patch broken empty regex
 
 		var type = JsonTools.readEnum(ldtk.Json.FieldType, json.type, false);
