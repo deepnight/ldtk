@@ -2890,6 +2890,10 @@ textarea {
 						background-color: $red;
 					}
 				}
+				&.strong {
+					font-weight: bold;
+					color: $orangeLight;
+				}
 			}
 			button+button {
 				border-top: 1px solid $bgMed;

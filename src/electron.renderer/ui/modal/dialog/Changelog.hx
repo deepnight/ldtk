@@ -45,12 +45,13 @@ class Changelog extends ui.modal.Dialog {
 		var jOthers = jContent.find(".others");
 		jOthers.click( ev->{
 			var ctx = new ui.modal.ContextMenu(ev);
-				for( c in Const.getChangeLog().entries )
+			for( c in Const.getChangeLog().entries )
 				ctx.add({
 					label: L.t.untranslated( c.version.full + ( c.title!=null ? " - "+c.title : "" ) ),
 					cb: ()->{
 						showVersion(c.version);
-					}
+					},
+					className: c.version.patch==0 ? "strong" : null,
 				});
 		} );
 
