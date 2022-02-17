@@ -437,8 +437,8 @@ class FieldDefsForm {
 					case EntityTile: L.t._("Replace entity tile");
 					case ArrayCountWithLabel: L.t._("Show array length with label");
 					case ArrayCountNoLabel: L.t._("Show array length only");
-					case RefLinkBetweenCenters: L.t._("Draw a link between reference centers");
-					case RefLinkBetweenPivots: L.t._("Draw a link between reference pivots");
+					case RefLinkBetweenCenters: L.t._("Reference link (using center coord)");
+					case RefLinkBetweenPivots: L.t._("Reference link (using pivot coord)");
 				}
 			},
 
