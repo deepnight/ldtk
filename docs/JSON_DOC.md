@@ -1,4 +1,4 @@
-# LDtk Json structure (version 0.10.0-beta1)
+# LDtk Json structure (version 0.10.0-beta2)
 
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
