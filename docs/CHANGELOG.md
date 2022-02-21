@@ -1,3 +1,7 @@
+# 0.10.0-beta3
+
+ - Code signing (TODO)
+
 # 0.10.0-beta2
 
  - New dialog to configure auto-layer Rules modulo, with support for X/Y offsets.
