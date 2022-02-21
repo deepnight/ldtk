@@ -1,6 +1,6 @@
 # 0.10.0-beta3
 
- - Code signing (TODO)
+ - LDtk executable is now properly signed on Windows, which should ultimately get rid of "This application could destroy your computer" warning.
 
 # 0.10.0-beta2
 
