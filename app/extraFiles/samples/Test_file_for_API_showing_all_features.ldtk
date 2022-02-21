@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.10.0-beta1",
+		"appVersion": "0.10.0-beta3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.10.0-beta1",
-	"appBuildId": 456944,
+	"jsonVersion": "0.10.0-beta3",
+	"appBuildId": 457078,
 	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -52,7 +52,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"intGridValues": [],
 			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -106,7 +106,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"intGridValues": [],
 			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [{
 				"uid": 27,
@@ -126,6 +126,8 @@
 						"flipY": false,
 						"xModulo": 1,
 						"yModulo": 1,
+						"xOffset": 0,
+						"yOffset": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -213,6 +215,8 @@
 						"flipY": false,
 						"xModulo": 2,
 						"yModulo": 1,
+						"xOffset": 0,
+						"yOffset": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0,
@@ -235,6 +239,8 @@
 						"flipY": false,
 						"xModulo": 2,
 						"yModulo": 1,
+						"xOffset": 0,
+						"yOffset": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0,
@@ -257,6 +263,8 @@
 						"flipY": false,
 						"xModulo": 2,
 						"yModulo": 2,
+						"xOffset": 0,
+						"yOffset": 0,
 						"checker": "None",
 						"tileMode": "Stamp",
 						"pivotX": 0,
@@ -279,6 +287,8 @@
 						"flipY": true,
 						"xModulo": 1,
 						"yModulo": 1,
+						"xOffset": 0,
+						"yOffset": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -301,6 +311,8 @@
 						"flipY": false,
 						"xModulo": 1,
 						"yModulo": 1,
+						"xOffset": 0,
+						"yOffset": 0,
 						"checker": "None",
 						"tileMode": "Single",
 						"pivotX": 0,
@@ -337,7 +349,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"intGridValues": [],
 			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -1300,7 +1312,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "cca3bc10-8dc0-11ec-92c1-d1cd2b34e899"
+								"worldIid": "03a47e40-8dc0-11ec-9765-714c8b08a360"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1322,7 +1334,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "cca3bc10-8dc0-11ec-92c1-d1cd2b34e899"
+								"worldIid": "03a47e40-8dc0-11ec-9765-714c8b08a360"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1344,7 +1356,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "cca3bc10-8dc0-11ec-92c1-d1cd2b34e899"
+								"worldIid": "03a47e40-8dc0-11ec-9765-714c8b08a360"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
