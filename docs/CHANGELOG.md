@@ -1,11 +1,17 @@
 # 0.10.0-beta2
 
- - Reduced "bleep" effect when picking an existing Entity
+ - New dialog to configure auto-layer Rules modulo, with support for X/Y offsets.
  - Added `SHIFT-E` shortcut for "Select empty spaces" option
  - Added `SHIFT-T` shortcut for "Tile stacking" option
- - Fixed guide not displaying when editing the "Default level ID pattern" in Project panel.
  - Added `__smartColor` to Entity instance JSON.
  - Added `up`/`down` arrow keys to quickly increment an input value
+ - Reduced "bleep" effect when picking an existing Entity
+
+## Bug fixes
+
+ - Fixed guide not displaying when editing the "Default level ID pattern" in Project panel.
+ - Fixed "newline character" in multi-lines fields disappearing when resaving projects
+ - Fixed project assets path resolution when starting LDtk from command line and providing just the project file name as an argument (eg. `/path/to/app/LDtk myProject.ldtk`)
 
 # 0.10.0-beta1
 
