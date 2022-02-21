@@ -2,6 +2,8 @@
 - [ ] Define a `GH_TOKEN` env var  ([link](https://github.com/settings/tokens))
 - [ ] Install "**Itch.io Butler**" ([download](https://itchio.itch.io/butler)) & login (`butler login`, [doc](https://itch.io/docs/butler/))
 - [ ] Add butler to env `PATH`
+- [ ] Add code signing files to env
+- [ ] Check code signing exp. date: 2025-02-21
 
 ## Preparation & checks
 - [ ] Verify planned deprecations
