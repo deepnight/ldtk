@@ -1,10 +1,10 @@
 # 0.10.0-beta2
 
  - New dialog to configure auto-layer Rules modulo, with support for X/Y offsets.
+ - You can now use `up`/`down` arrow keys to quickly increment/decrement an input value
  - Added `SHIFT-E` shortcut for "Select empty spaces" option
  - Added `SHIFT-T` shortcut for "Tile stacking" option
  - Added `__smartColor` to Entity instance JSON.
- - Added `up`/`down` arrow keys to quickly increment an input value
  - Reduced "bleep" effect when picking an existing Entity
 
 ## Bug fixes
