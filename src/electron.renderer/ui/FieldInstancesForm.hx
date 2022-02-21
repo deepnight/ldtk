@@ -708,6 +708,8 @@ class FieldInstancesForm {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
 
+		var jPrevFocus = jWrapper.find("input:focus");
+
 		onBeforeRender();
 		renderForm();
 		switch relatedInstance {
@@ -715,6 +717,14 @@ class FieldInstancesForm {
 			case Level(l): editor.ge.emit( LevelFieldInstanceChanged(l,fi) );
 		}
 		onChange();
+
+		// Re-focus input
+		if( jPrevFocus.length>0 ) {
+			if( jPrevFocus.attr("id")!=null )
+				jWrapper.find("#"+jPrevFocus.attr("id")).focus();
+			else if( jPrevFocus.attr("name")!=null )
+				jWrapper.find("[name="+jPrevFocus.attr("id")+"]").focus();
+		}
 	}
 
 	public dynamic function onBeforeRender() {}
