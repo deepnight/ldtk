@@ -657,6 +657,10 @@ class GenericLevelElementGroup {
 						var old = ei;
 						ei = li.duplicateEntityInstance(ei);
 						elements[i] = Entity(li,ei);
+
+						if( editor.resizeTool!=null && editor.resizeTool.isOnEntity(old) )
+							editor.createResizeToolFor( Entity(li,ei) );
+
 						if( ui.EntityInstanceEditor.existsFor(old) )
 							ui.EntityInstanceEditor.openFor(ei);
 					}

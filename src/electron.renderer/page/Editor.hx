@@ -1951,9 +1951,13 @@ class Editor extends Page {
 				// NOTE: a LevelSelected event always happens right after this one
 		}
 
-		// Broadcast to LevelHistory
+		// Propagate to LevelHistory
 		if( curLevelHistory!=null )
 			curLevelHistory.manualOnGlobalEvent(e);
+
+		// Propagate to resize tool
+		if( resizeTool!=null )
+			resizeTool.onGlobalEvent(e);
 
 		updateTitle();
 	}

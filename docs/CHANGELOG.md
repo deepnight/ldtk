@@ -11,6 +11,7 @@
 
  - Fixed guide not displaying when editing the "Default level ID pattern" in Project panel.
  - Fixed "newline character" in multi-lines fields disappearing when resaving projects
+ - Fixed entity "resizing handles" not updating properly when duplicating/moving an Entity
  - Fixed project assets path resolution when starting LDtk from command line and providing just the project file name as an argument (eg. `/path/to/app/LDtk myProject.ldtk`)
 
 # 0.10.0-beta1

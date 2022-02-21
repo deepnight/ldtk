@@ -45,6 +45,22 @@ class ResizeTool extends Tool<Int> {
 		}
 	}
 
+	public function onGlobalEvent(ev:GlobalEvent) {
+		switch ev {
+			case EntityInstanceChanged(ei):
+				if( isOnEntity(ei) )
+					invalidate();
+
+			case EntityInstanceRemoved(ei):
+				if( isOnEntity(ei) ) {
+					editor.clearResizeTool();
+					return;
+				}
+
+			case _:
+		}
+	}
+
 	inline function get_rect() {
 		if( _rect==null )
 			_rect = switch ge {
