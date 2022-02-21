@@ -33,13 +33,15 @@ class EntityInstanceEditor extends dn.Process {
 
 		jWindow = new J('<div class="entityInstanceEditor"/>');
 		App.ME.jPage.append(jWindow);
-		jWindow.append('<div class="entityInstanceWrapper"/>');
-		jWrapper.append( new J('<div class="propsWrapper"></div>') );
-		jWrapper.append( new J('<div class="customFieldsWrapper"></div>') );
+		jWindow.html( JsTools.getHtmlTemplate("entityInstanceEditor", { id : inst.def.identifier }) );
+		// jWindow.append('<div class="entityInstanceWrapper"/>');
+		// jWrapper.append( new J('<div class="propsWrapper"></div>') );
+		// jWrapper.append( new J('<div class="customFieldsWrapper"></div>') );
 
 		// Panel resizing handle
-		var jResizeHandle = new J('<div class="resizeBar"></div>');
-		jResizeHandle.appendTo(jWindow);
+		// var jResizeHandle = new J('<div class="resizeBar"></div>');
+		// jResizeHandle.appendTo(jWindow);
+		var jResizeHandle = jWindow.find(".resizeBar");
 		jResizeHandle.mousedown(function( ev ) {
 			js.Browser.document.addEventListener("mousemove", resizeDrag);
 			js.Browser.document.addEventListener("mouseup", resizeDrag);
@@ -191,46 +193,28 @@ class EntityInstanceEditor extends dn.Process {
 
 
 	function updateInstancePropsForm() {
-		jPropsForm.empty();
+		jPropsForm.find("*").off();
 
 		// Form header
-		var jHeader = new J('<header/>');
-		jHeader.appendTo(jPropsForm);
-		jHeader.append('<div>${ei.def.identifier}</div>');
-		var jEdit = new J('<a class="edit">Edit</a>');
-		jEdit.click( function(ev) {
+		jPropsForm.find("header .edit").click( function(ev) {
 			ev.preventDefault();
 			new ui.modal.panel.EditEntityDefs(ei.def);
 		});
-		jHeader.append(jEdit);
 
-		// Collapser
-		var jCollapser = new J('<div class="collapser" id="extraEntityInfos">Extra entity infos</div>');
-		jCollapser.appendTo(jPropsForm);
-
-		// Extra bits of info
-		var jExtraInfos = new J('<dl class="form extraInfos"/>');
-		jExtraInfos.appendTo(jPropsForm);
+		var jExtraInfos = jPropsForm.find(".form.extraInfos");
 
 		// IID
-		jExtraInfos.append('<dt>IID <info>The IID (stands for Instance IDentifier) is a unique string identifier associated with this Entity instance.</info></dt>');
-		var jIid = new J('<dd class="iid"/>');
-		jIid.append('<input type="text" readonly="readonly" class="iid" value="${ei.iid}"/>');
-		jIid.append('<button class="copy gray small" title="Copy IID to clipboard"> <span class="icon copy"/> </button>');
+		var jIid = jPropsForm.find("dd.iid");
+		jIid.find("input").val(ei.iid);
 		jIid.find(".copy").click( _->{
 			App.ME.clipboard.copyStr(ei.iid);
 			N.copied();
 		});
-		jExtraInfos.append(jIid);
 
 		// Coords block
-		jExtraInfos.append('<dt>Coords <info>Coordinates and dimensions in pixels or cells (you can switch the unit by click on it)</info></dt>');
-		var jCoords = new J('<dd class="coords"/>');
-		jCoords.append('<input type="text" name="x"/> <span>,</span> <input type="text" name="y"/> <span> ; </span>');
-		jCoords.append('<input type="text" name="w"/> <span>x</span> <input type="text" name="h"/>');
-		var jUnit = new J('<span class="unit" ttitle="Change unit"/>');
+		var jCoords = jPropsForm.find(".coords");
+		var jUnit = jCoords.find(".unit");
 		jUnit.text( UNIT_GRID ? "cells" : "px" );
-		jCoords.append(jUnit);
 		jUnit.click( _->{
 			UNIT_GRID = !UNIT_GRID;
 			updateInstancePropsForm();
@@ -275,20 +259,21 @@ class EntityInstanceEditor extends dn.Process {
 		i.setBounds(ei.def.height, null);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
-		jExtraInfos.append(jCoords);
 		if( UNIT_GRID )
 			i.setUnit(ei._li.def.gridSize);
 
 
 		// References to this
 		var refs = project.getEntityInstancesReferingTo(ei);
-		if( refs.length>0 ) {
-			jExtraInfos.append('<dt>References to this entity <info>This is a list of all other Entities having a Reference field pointing to this Entity.</info> </dt>');
-			jExtraInfos.append('<dd><div class="entityRefs"/></dd>');
-			var jList = jExtraInfos.find(".entityRefs");
+		var jRefs = jPropsForm.find(".entityRefs");
+		jRefs.empty();
+		if( refs.length==0 )
+			jPropsForm.find(".refs").hide();
+		else {
+			jPropsForm.find(".refs").show();
 			for(ei in refs) {
-				var jRef = JsTools.createEntityRef(ei, true, jList);
-				jRef.click(_->editor.followEntityRef(ei));
+				var jRef = JsTools.createEntityRef(ei, true, jRefs);
+				jRef.click( _->editor.followEntityRef(ei) );
 			}
 		}
 	}

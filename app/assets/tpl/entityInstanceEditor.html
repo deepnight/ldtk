@@ -1,0 +1,47 @@
+<div class="entityInstanceWrapper">
+	<div class="propsWrapper">
+
+		<header>
+			<div class="id">::id::</div>
+			<a class="edit">Edit</a>
+		</header>
+
+		<div class="collapser" id="extraEntityInfos">
+			Extra entity infos
+		</div>
+
+		<dl class="form extraInfos">
+			<dt>
+				IID
+				<info>The IID (stands for Instance IDentifier) is a unique string identifier associated with this Entity instance.</info>
+			</dt>
+			<dd class="iid">
+				<input type="text" readonly="readonly" class="iid"/>
+				<button class="copy gray small"> <span class="icon copy"></span> </button>
+			</dd>
+
+			<dt>
+				Coords
+				<info>Coordinates and dimensions in pixels or cells (you can switch the unit by click on it)</info>
+			</dt>
+			<dd class="coords">
+				<input type="text" name="x"/> <span>,</span> <input type="text" name="y"/> <span>&nbsp;;&nbsp;</span>
+				<input type="text" name="w"/> <span>x</span> <input type="text" name="h"/>
+				<span class="unit" title="Change coordinates unit"></span>
+			</dd>
+
+			<dt class="refs">
+				References to this entity
+				<info>This is a list of all other Entities having a Reference field pointing to this Entity.</info>
+			</dt>
+			<dd class="refs">
+				<div class="entityRefs"></div>
+			</dd>
+		</dl>
+
+	</div>
+
+	<div class="customFieldsWrapper"></div>
+</div>
+
+<div class="resizeBar"></div>
