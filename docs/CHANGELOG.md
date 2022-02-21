@@ -15,6 +15,9 @@ You can try multi-worlds using debug menu. Please note that this feature is high
    - Navigate through worlds using the context menu in empty spaces between levels.
    - Right click on an existing level in World view to move it between worlds.
 
+## Bug fixes
+
+ - Fixed unexpected `intGridValues` in JSON for non-IntGrid layers
 
 # 0.10.0-beta2
 
