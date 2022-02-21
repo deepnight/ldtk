@@ -1,8 +1,19 @@
 # 0.10.0-beta3
 
- - LDtk executable is now properly signed on Windows, which should ultimately get rid of "This application could destroy your computer" warning.
+## Code signing on Windows
+
+LDtk executable is now properly signed on Windows, which should ultimately get rid of "This application could destroy your computer" warning.
 
 ![](1.0.0/codeSign.gif)
+
+## Multi-worlds preview
+
+You can try multi-worlds using debug menu. Please note that this feature is highly experimental and will probably evolve a lot in upcoming updates. Don't use for production.
+   - Open an existing project
+   - Open debug menu (`CTRL+SHIFT+D`)
+   - Create a new world
+   - Navigate through worlds using the context menu in empty spaces between levels
+
 
 # 0.10.0-beta2
 

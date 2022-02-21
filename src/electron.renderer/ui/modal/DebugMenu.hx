@@ -8,6 +8,16 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		addTitle(L.t._("Debug menu"));
 
+		add({
+			label: L.untranslated("Create new world"),
+			cb: ()->{
+				var w = project.createWorld(true);
+				editor.selectWorld(w,true);
+			},
+			show: ()->Editor.exists(),
+			sub: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
+		});
+
 		#if debug
 		add({
 			label: L.untranslated("Toggle debug print"),
@@ -311,16 +321,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 				N.success("Flushed.");
 			}
 		});
-
-		#if debug
-		add({
-			label: L.untranslated("Create new world"),
-			cb: ()->{
-				var w = project.createWorld(true);
-				editor.selectWorld(w,true);
-			}
-		});
-		#end
 
 	}
 }
