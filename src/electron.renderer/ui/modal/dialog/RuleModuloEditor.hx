@@ -3,7 +3,7 @@ package ui.modal.dialog;
 import data.DataTypes;
 
 class RuleModuloEditor extends ui.modal.Dialog {
-	static var MIN_PREVIEW_SIZE = 6;
+	static var MIN_PREVIEW_SIZE = 8;
 
 	var layerDef : data.def.LayerDef;
 	var rule : data.def.AutoLayerRuleDef;
@@ -27,6 +27,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		i.setBounds(1,40);
 		if( rule.xModulo==1 )
 			i.jInput.addClass("default");
+		i.addAutoClass("default", (v)->v==1);
 		i.jInput.focus();
 
 		// Y modulo
@@ -34,8 +35,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		i.onValueChange = (v)->rule.tidy();
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(1,40);
-		if( rule.yModulo==1 )
-			i.jInput.addClass("default");
+		i.addAutoClass("default", (v)->v==1);
 
 		// X offset
 		final bounds = 4096;
@@ -43,15 +43,13 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		i.setBounds(-bounds, bounds);
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.fixValue = (v)->v = v % rule.xModulo;
-		if( rule.xOffset==0 )
-			i.jInput.addClass("default");
+		i.addAutoClass("default", (v)->v==1);
 
 		// Y offset
 		var i = Input.linkToHtmlInput( rule.yOffset, jContent.find("#yOffset"));
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(-bounds, bounds);
-		if( rule.yOffset==0 )
-			i.jInput.addClass("default");
+		i.addAutoClass("default", (v)->v==1);
 
 		JsTools.parseComponents(jContent);
 		renderPreview();

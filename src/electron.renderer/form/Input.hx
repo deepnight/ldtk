@@ -16,6 +16,7 @@ class Input<T> {
 	public var validityError : Null<T->Void>;
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
 	public var customConfirm: (oldValue:T,newValue:T)->Null<LocaleString>;
+	var autoClasses : Array<{ className:String, cond:T->Bool}> = [];
 
 	private function new(jElement:js.jquery.JQuery, rawGetter:Void->T, rawSetter:T->Void) {
 		if( jElement.length==0 )
@@ -100,6 +101,19 @@ class Input<T> {
 			});
 	}
 
+	public function addAutoClass(className:String, cond:T->Bool) {
+		autoClasses.push({ className:className, cond:cond });
+		checkAutoClasses();
+	}
+
+	function checkAutoClasses() {
+		for( ac in autoClasses )
+			if( ac.cond( getter() ) )
+				jInput.addClass(ac.className);
+			else
+				jInput.removeClass(ac.className);
+	}
+
 	public function enableSlider(speed=1.0) {
 		if( getSlideDisplayValue(0)==null )
 			throw "Slider is not supported for this Input type";
@@ -178,6 +192,7 @@ class Input<T> {
 		lastValidValue = getter();
 		onChange();
 		onValueChange( getter() );
+		checkAutoClasses();
 		for(e in linkedEvents.keys())
 			Editor.ME.ge.emit(e);
 	}
