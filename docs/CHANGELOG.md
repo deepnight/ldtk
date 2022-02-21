@@ -9,10 +9,11 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
 ## Multi-worlds preview
 
 You can try multi-worlds using debug menu. Please note that this feature is highly experimental and will probably evolve a lot in upcoming updates. Don't use for production.
-   - Open an existing project
-   - Open debug menu (`CTRL+SHIFT+D`)
-   - Create a new world
-   - Navigate through worlds using the context menu in empty spaces between levels
+   - Open an existing project,
+   - Open debug menu (`CTRL+SHIFT+D`),
+   - Create a new world,
+   - Navigate through worlds using the context menu in empty spaces between levels.
+   - Right click on an existing level in World view to move it between worlds.
 
 
 # 0.10.0-beta2
