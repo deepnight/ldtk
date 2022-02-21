@@ -2,6 +2,8 @@
 
  - LDtk executable is now properly signed on Windows, which should ultimately get rid of "This application could destroy your computer" warning.
 
+![](1.0.0/codeSign.gif)
+
 # 0.10.0-beta2
 
  - New dialog to configure auto-layer Rules modulo, with support for X/Y offsets.
