@@ -174,7 +174,7 @@ class Level {
 		var wid = JsonTools.readInt( json.pxWid, w.defaultLevelWidth );
 		var hei = JsonTools.readInt( json.pxHei, w.defaultLevelHeight );
 		var l = new Level( p, w, wid, hei, JsonTools.readInt(json.uid), json.iid );
-		p.quickLevelAccess.set(l.uid, l);
+		p.registerLevelQuickAccess(l);
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.worldDepth = JsonTools.readInt( json.worldDepth, 0 );

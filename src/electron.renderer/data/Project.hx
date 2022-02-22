@@ -37,7 +37,6 @@ class Project {
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
 
-	@:allow(data.Level, data.World)
 	var quickLevelAccess : Map<Int, Level> = new Map();
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
@@ -840,6 +839,23 @@ class Project {
 	public inline function getLevelAnywhere(uid:Int) : Null<Level> {
 		return quickLevelAccess.get(uid);
 	}
+
+
+	public inline function registerLevelQuickAccess(l:Level) {
+		quickLevelAccess.set(l.uid, l);
+	}
+
+	public inline function unregisterLevelQuickAccess(l:Level) {
+		quickLevelAccess.remove(l.uid);
+	}
+
+	public function resetQuickLevelAccesses() {
+		quickLevelAccess = new Map();
+		for(w in worlds)
+		for(l in w.levels)
+			registerLevelQuickAccess(l);
+	}
+
 
 	public inline function getSmartLevelGridSize() {
 		if( defs.layers.length==0 )

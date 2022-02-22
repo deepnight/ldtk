@@ -128,7 +128,7 @@ class World {
 			levels.push(l);
 		else
 			levels.insert(insertIdx,l);
-		_project.quickLevelAccess.set(l.uid, l);
+		_project.registerLevelQuickAccess(l);
 
 		l.identifier = _project.fixUniqueIdStr("Level1", (id)->_project.isLevelIdentifierUnique(id));
 
@@ -149,7 +149,7 @@ class World {
 		copy.identifier = _project.fixUniqueIdStr(l.identifier, (id)->_project.isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
-		_project.quickLevelAccess.set(copy.uid, l);
+		_project.registerLevelQuickAccess(copy);
 		tidy(_project);
 		return copy;
 	}
@@ -237,12 +237,12 @@ class World {
 			_project.unregisterAllReverseIidRefsFor(ei);
 		}
 
-		_project.quickLevelAccess.remove(l.uid);
+		_project.unregisterLevelQuickAccess(l);
 		tidy(_project);
 	}
 
 	public inline function getLevel(uid:Int) : Null<Level> {
-		return _project.quickLevelAccess.get(uid);
+		return _project.getLevelAnywhere(uid);
 	}
 
 	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
@@ -430,7 +430,7 @@ class World {
 		}
 
 		for( l in levels ) {
-			_project.quickLevelAccess.set(l.uid, l);
+			_project.registerLevelQuickAccess(l);
 			l.tidy(p, this);
 		}
 
