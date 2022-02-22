@@ -1899,6 +1899,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				updateTool();
+				project.resetQuickLevelAccesses();
 
 			case LayerInstanceTilesetChanged(li):
 

@@ -154,6 +154,13 @@ class ProjectLoader {
 				}
 			}
 		});
+
+
+		progress.addOp({
+			label: "Init quick level access...",
+			cb: ()->p.resetQuickLevelAccesses(),
+		});
+
 	}
 
 
