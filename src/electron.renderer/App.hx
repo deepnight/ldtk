@@ -333,7 +333,6 @@ class App extends dn.Process {
 	}
 
 	function onWindowMove() {
-		N.debug("moved");
 	}
 
 	public function isLocked() {
