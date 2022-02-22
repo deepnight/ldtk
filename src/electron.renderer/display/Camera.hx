@@ -28,9 +28,10 @@ class Camera extends dn.Process {
 	@:allow(display.EntityRender)
 	var rawZoom : Float;
 
+	var _cachedPixelRatio = -1.;
 	public var pixelRatio(get,never) : Float;
 		inline function get_pixelRatio() {
-			return js.Browser.window.devicePixelRatio;
+			return _cachedPixelRatio<0 ? _cachedPixelRatio = js.Browser.window.devicePixelRatio : _cachedPixelRatio;
 		}
 
 	var _cachedCanvasWidth = -1.;
@@ -86,8 +87,9 @@ class Camera extends dn.Process {
 		editor.ge.addGlobalListener(onGlobalEvent);
 	}
 
-	public inline function invalidateCanvasSize() {
+	public inline function invalidateCache() {
 		_cachedCanvasWidth = _cachedCanvasHeight = -1;
+		_cachedPixelRatio = -1;
 	}
 
 

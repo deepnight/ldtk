@@ -39,8 +39,12 @@ class ElectronMain {
 			mainWindow.on('close', function(ev) {
 				if( !dn.js.ElectronUpdater.isIntalling ) {
 					ev.preventDefault();
-					mainWindow.webContents.send("winClose");
+					mainWindow.webContents.send("onWinClose");
 				}
+			});
+			// Window move
+			mainWindow.on('move', function(ev) {
+				mainWindow.webContents.send("onWinMove");
 			});
 		});
 

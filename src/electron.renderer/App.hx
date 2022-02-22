@@ -71,7 +71,8 @@ class App extends dn.Process {
 		clipboard = data.Clipboard.createSystem();
 
 		// Init window
-		IpcRenderer.on("winClose", onWindowCloseButton);
+		IpcRenderer.on("onWinClose", onWindowCloseButton);
+		IpcRenderer.on("onWinMove", onWindowMove);
 		IpcRenderer.on("settingsApplied", ()->updateBodyClasses());
 
 		var win = js.Browser.window;
@@ -329,6 +330,10 @@ class App extends dn.Process {
 
 	function onWindowCloseButton() {
 		exit(false);
+	}
+
+	function onWindowMove() {
+		N.debug("moved");
 	}
 
 	public function isLocked() {

@@ -1991,7 +1991,7 @@ class Editor extends Page {
 		App.ME.jCanvas.show();
 		App.ME.jCanvas.css("left", panelWid+"px");
 		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
-		camera.invalidateCanvasSize();
+		camera.invalidateCache();
 	}
 
 	function updateAppBg() {
@@ -2062,6 +2062,11 @@ class Editor extends Page {
 					// _createGuideBlock([K.SHIFT,K.ALT], "mouseLeft", L.t._("Pick saved selection"));
 			}
 		}
+	}
+
+	override function onAppFocus() {
+		super.onAppFocus();
+		camera.invalidateCache();
 	}
 
 	override function onAppBlur() {
