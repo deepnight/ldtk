@@ -78,6 +78,7 @@ class Level {
 			case Free, GridVania:
 				var nears = _world.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
+					&& ol.worldDepth==worldDepth
 					&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
 						&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
 					)
