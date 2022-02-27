@@ -1,3 +1,8 @@
+# 0.10.0-beta4
+
+ - Fixed big memory messup that could happen after level duplications.
+ - Fixed weird behaviors when clicking on overlapped levels.
+
 # 0.10.0-beta3
 
 ## Code signing on Windows
