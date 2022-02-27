@@ -2,6 +2,7 @@
 
  - Fixed big memory messup that could happen after level duplications.
  - Fixed weird behaviors when clicking on overlapped levels.
+ - Fixed a crash when deleting the active IntGrid value.
 
 # 0.10.0-beta3
 
