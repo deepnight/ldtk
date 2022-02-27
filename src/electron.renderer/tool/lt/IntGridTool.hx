@@ -8,8 +8,8 @@ class IntGridTool extends tool.LayerTool<Int> {
 	override function onBeforeToolActivation() {
 		super.onBeforeToolActivation();
 
-		if( !editor.curLayerDef.hasIntGridValue(getSelectedValue()) )
-			selectValue(1);
+		if( !editor.curLayerDef.hasIntGridValue( getSelectedValue() ) )
+			selectValue( getDefaultValue() );
 	}
 
 	override function selectValue(v:Int) {
@@ -19,7 +19,10 @@ class IntGridTool extends tool.LayerTool<Int> {
 	}
 
 	override function getDefaultValue():Int {
-		return curLayerInstance!=null && curLayerInstance.def.countIntGridValues()>0 ? 1 : -1;
+		if( curLayerInstance==null || curLayerInstance.def.countIntGridValues()==0 )
+			return -1;
+		else
+			return curLayerInstance.def.getAllIntGridValues()[0].value;
 	}
 
 	inline function getSelectedColor() {
