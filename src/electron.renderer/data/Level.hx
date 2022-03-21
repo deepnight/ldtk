@@ -65,15 +65,11 @@ class Level {
 		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
 	}
 
-	public function toJson() : ldtk.Json.LevelJson {
-		if( hasJsonCache() ) {
-			var o = getCacheJsonObject();
-			if( !_project.externalLevels )
-				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
-			return o;
-		}
 
-		// List nearby levels
+	/**
+		List nearby levels
+	**/
+	public function getJsonNeightbours() : Array<ldtk.Json.NeighbourLevel> {
 		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _world.worldLayout {
 			case Free, GridVania:
 				var nears = _world.levels.filter( (ol)->
@@ -95,8 +91,22 @@ class Level {
 					}
 				});
 
-			case LinearHorizontal, LinearVertical: [];
+			case LinearHorizontal, LinearVertical:
+				[];
 		}
+
+		return neighbours;
+	}
+
+
+	public function toJson() : ldtk.Json.LevelJson {
+		if( hasJsonCache() ) {
+			var o = getCacheJsonObject();
+			if( !_project.externalLevels )
+				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
+			return o;
+		}
+
 
 		// World coords are not stored in JSON for automatically organized layouts
 		var jsonWorldX = worldX;
@@ -151,7 +161,7 @@ class Level {
 				all;
 			},
 			layerInstances: layerInstances.map( li->li.toJson() ),
-			__neighbours: neighbours,
+			__neighbours: getJsonNeightbours(),
 		}
 
 		// Cache this json
