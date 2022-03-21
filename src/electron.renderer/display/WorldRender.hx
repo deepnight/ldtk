@@ -1035,7 +1035,7 @@ class WorldRender extends dn.Process {
 					}
 
 					// Bounds
-					if( wl.boundsInvalidated && ( editor.worldMode || editor.curLevel==l ) && limitBounds-->0 ) {
+					if( wl.boundsInvalidated && limitBounds-->0 ) {
 						wl.boundsInvalidated = false;
 						updateLevelBounds(l);
 					}
