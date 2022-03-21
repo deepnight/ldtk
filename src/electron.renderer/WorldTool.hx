@@ -202,7 +202,6 @@ class WorldTool extends dn.Process {
 						}
 				}
 
-				editor.ge.emit( LevelSettingsChanged(clickedLevel) );
 			}
 			else if( !worldMode && getLevelAt(m.worldX, m.worldY)==clickedLevel || origin.getPageDist(m)<=getDragThreshold() ) {
 				// Pick level
