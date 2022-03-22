@@ -36,6 +36,8 @@ class LevelInstanceForm {
 					new LastChance( L.t._('Level ::id:: removed', {id:level.identifier}), project);
 					var deleted = level;
 					editor.selectLevel( closest );
+					for(nl in deleted.getNeighbours())
+						editor.invalidateLevelCache(nl);
 					curWorld.removeLevel(deleted);
 					editor.ge.emit( LevelRemoved(deleted) );
 					editor.setWorldMode(true);

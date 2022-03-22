@@ -91,6 +91,9 @@ class WorldTool extends dn.Process {
 						}
 						var closest = curWorld.getClosestLevelFrom(l);
 						new ui.LastChance(L.t._('Level ::id:: removed', {id:l.identifier}), project);
+						for(nl in l.getNeighbours())
+							editor.invalidateLevelCache(nl);
+
 						curWorld.removeLevel(l);
 						editor.ge.emit( LevelRemoved(l) );
 						editor.selectLevel( closest );
