@@ -229,7 +229,7 @@ class LevelInstanceForm {
 		});
 
 		// Coords
-		var oldNeighbours = level.getNeighboursIids();
+		var oldNeighbours = level.getNeighboursUids();
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
 		i.onChange = ()->{
 			onFieldChange();

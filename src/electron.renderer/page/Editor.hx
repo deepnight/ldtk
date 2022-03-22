@@ -1656,14 +1656,19 @@ class Editor extends Page {
 			case LevelJsonCacheInvalidated(level):
 			case WorldLevelMoved(level,isFinal, oldNeig):
 				if( isFinal ) {
-					var newNeig = level.getNeighboursIids();
+					var newNeig = level.getNeighboursUids();
 					trace("---- OLD ("+oldNeig.length+"): ----");
 					trace(oldNeig.join("\n"));
 					trace("---- NEW ("+newNeig.length+"): ----");
 					trace(newNeig.join("\n"));
 
-					// for(iid in newNeig)
-					// 	invalidateLevelCache( project.getLevelAnywhere())
+					// Invalidate old neighbours
+					for(uid in oldNeig)
+						invalidateLevelCache( project.getLevelAnywhere(uid) );
+
+					// Invalidate new neighbours
+					for(uid in newNeig)
+						invalidateLevelCache( project.getLevelAnywhere(uid) );
 
 					switch curWorld.worldLayout {
 						case Free, GridVania: invalidateLevelCache(level);

@@ -69,8 +69,15 @@ class Level {
 	/**
 		List nearby level (only IIDs)
 	**/
-	public function getNeighboursIids() {
+	public function getNeighboursIids() : Array<String> {
 		return getJsonNeightbours().map( njson->njson.levelIid );
+	}
+
+	/**
+		List nearby level (only int UIDs)
+	**/
+	public function getNeighboursUids() : Array<Int> {
+		return getJsonNeightbours().map( njson->njson.levelUid );
 	}
 
 
