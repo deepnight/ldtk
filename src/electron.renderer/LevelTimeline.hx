@@ -15,12 +15,8 @@ class LevelTimeline {
 		layerStates = new Map();
 	}
 
-	public function saveLayerState(li:data.inst.LayerInstance) {
-		Chrono.init();
-		Chrono.quick();
-		if( !layerStates.exists(li.layerDefUid) )
-			layerStates.set(li.layerDefUid, new haxe.ds.Vector(MAX+EXTRA));
 
+	function advanceIndex() {
 		if( curStateIdx<MAX+EXTRA-1 ) {
 			// Advance
 			curStateIdx++;
@@ -35,6 +31,48 @@ class LevelTimeline {
 			}
 			curStateIdx-=EXTRA;
 		}
+	}
+
+
+	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
+		advanceIndex();
+		for(li in lis)
+			saveLayerState(li, false);
+	}
+
+
+	public function saveAllLayerStates(l:data.Level) {
+		advanceIndex();
+		for(li in l.layerInstances)
+			saveLayerState(li, false);
+	}
+
+
+	inline function shouldSaveLayerState(li:data.inst.LayerInstance) {
+		return switch li.def.type {
+			case IntGrid, Entities, Tiles: true;
+			case AutoLayer: false;
+		}
+	}
+
+
+	public function saveLayerState(li:data.inst.LayerInstance, advanceIndex=true) {
+		// Ignore non-editable layers
+		if( !shouldSaveLayerState(li) )
+			return false;
+
+		#if debug
+		Chrono.init();
+		Chrono.quick();
+		#end
+
+		// Init states
+		if( !layerStates.exists(li.layerDefUid) )
+			layerStates.set(li.layerDefUid, new haxe.ds.Vector(MAX+EXTRA));
+
+		// Advance
+		if( advanceIndex )
+			this.advanceIndex();
 
 		// Store state
 		layerStates.get(li.layerDefUid).set(curStateIdx, {
@@ -42,14 +80,18 @@ class LevelTimeline {
 			after: li.toJson(),
 		});
 
+		#if debug
 		Chrono.quick();
 		debugRender();
+		#end
+
+		return true;
 	}
 
 
-	public function debugRender() {
+	function debugRender() {
 		var jTimeline = new J('<div class="timeline"/>');
-		jTimeline.css({ gridTemplateColumns:'repeat(${MAX+EXTRA+1}, auto)'});
+		jTimeline.css({ gridTemplateColumns:'repeat(${MAX+EXTRA+1}, 1fr)'});
 
 		// Header
 		jTimeline.append('<div class="corner"/>');
@@ -72,6 +114,8 @@ class LevelTimeline {
 
 				if( layerStates.exists(li.layerDefUid) && layerStates.get(li.layerDefUid).get(idx)!=null )
 					jCell.addClass("hasState");
+				else if( !shouldSaveLayerState(li) )
+					jCell.addClass("na");
 				else
 					jCell.addClass("empty");
 			}

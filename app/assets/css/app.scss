@@ -8015,17 +8015,23 @@ $patternSize : 32px;
 			}
 
 			&.current {
-				border: 1px solid $orange;
-				outline: 1px solid black;
+				border: 1px solid black;
+				outline: 1px solid $orange;
 			}
 
 			&.hasState {
 				background-color: $green;
+				border-radius: 3px;
 			}
 
 			&.empty {
-				background-color: $darkRed;
+				background-color: $bgMed;
 				background-image: url("../img/stripes.png");
+				background-repeat: repeat;
+			}
+			&.na {
+				background-color: $darkRed;
+				background-image: url("../img/stripesLight.png");
 				background-repeat: repeat;
 			}
 

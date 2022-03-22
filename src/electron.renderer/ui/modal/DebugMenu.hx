@@ -35,7 +35,15 @@ class DebugMenu extends ui.modal.ContextMenu {
 				editor.project.resetQuickLevelAccesses();
 			}
 		});
+
+		add({
+			label: L.untranslated("Save all layers to timeline"),
+			cb: ()->editor.levelTimeline.saveAllLayerStates(editor.curLevel),
+			show: ()->Editor.exists(),
+		});
 		#end
+
+
 
 
 		add({
