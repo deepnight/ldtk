@@ -1657,10 +1657,6 @@ class Editor extends Page {
 			case WorldLevelMoved(level,isFinal, oldNeig):
 				if( isFinal ) {
 					var newNeig = level.getNeighboursUids();
-					trace("---- OLD ("+oldNeig.length+"): ----");
-					trace(oldNeig.join("\n"));
-					trace("---- NEW ("+newNeig.length+"): ----");
-					trace(newNeig.join("\n"));
 
 					// Invalidate old neighbours
 					for(uid in oldNeig)
