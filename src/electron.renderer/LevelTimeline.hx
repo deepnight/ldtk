@@ -11,6 +11,9 @@ class LevelTimeline {
 	var layerStates : Map<Int, haxe.ds.Vector< Null<{ before:ldtk.Json.LayerInstanceJson, after:ldtk.Json.LayerInstanceJson }> >>;
 	var curStateIdx = -1;
 
+	var debugProcess : Null<dn.Process>;
+	var invalidatedDebug = false;
+
 	public function new() {
 		layerStates = new Map();
 	}
@@ -61,11 +64,6 @@ class LevelTimeline {
 		if( !shouldSaveLayerState(li) )
 			return false;
 
-		#if debug
-		Chrono.init();
-		Chrono.quick();
-		#end
-
 		// Init states
 		if( !layerStates.exists(li.layerDefUid) )
 			layerStates.set(li.layerDefUid, new haxe.ds.Vector(MAX+EXTRA));
@@ -80,51 +78,67 @@ class LevelTimeline {
 			after: li.toJson(),
 		});
 
-		#if debug
-		Chrono.quick();
-		debugRender();
-		#end
-
+		invalidatedDebug = true;
 		return true;
 	}
 
 
-	function debugRender() {
-		var jTimeline = new J('<div class="timeline"/>');
-		jTimeline.css({ gridTemplateColumns:'repeat(${MAX+EXTRA+1}, 1fr)'});
-
-		// Header
-		jTimeline.append('<div class="corner"/>');
-		for(idx in 0...MAX+EXTRA) {
-			var jHeader = new J('<div class="header row">$idx</div>');
-			jTimeline.append(jHeader);
-			if( idx==curStateIdx )
-				jHeader.addClass("current");
+	public function toggleDebug() {
+		if( debugProcess!=null ) {
+			debugProcess.destroy();
+			debugProcess = null;
+			return;
 		}
 
-		// History
-		for(li in curLevel.layerInstances) {
-			jTimeline.append('<div class="header col">${li.def.identifier}</div>');
+		invalidatedDebug = true;
+		debugProcess = editor.createChildProcess();
 
+		debugProcess.onUpdateCb = ()->{
+			if( !invalidatedDebug )
+				return;
+
+			invalidatedDebug = false;
+			var jTimeline = new J('<div class="timeline"/>');
+			jTimeline.css({ gridTemplateColumns:'min-content repeat(${MAX+EXTRA}, 1fr)'});
+
+			// Header
+			jTimeline.append('<div class="corner"/>');
 			for(idx in 0...MAX+EXTRA) {
-				var jCell = new J('<div/>');
-				jCell.appendTo(jTimeline);
+				var jHeader = new J('<div class="header row">$idx</div>');
+				jTimeline.append(jHeader);
 				if( idx==curStateIdx )
-					jCell.addClass("current");
-
-				if( layerStates.exists(li.layerDefUid) && layerStates.get(li.layerDefUid).get(idx)!=null )
-					jCell.addClass("hasState");
-				else if( !shouldSaveLayerState(li) )
-					jCell.addClass("na");
-				else
-					jCell.addClass("empty");
+					jHeader.addClass("current");
 			}
+
+			// History
+			for(li in curLevel.layerInstances) {
+				jTimeline.append('<div class="header col">${li.def.identifier}</div>');
+
+				for(idx in 0...MAX+EXTRA) {
+					var jCell = new J('<div/>');
+					jCell.appendTo(jTimeline);
+					if( idx==curStateIdx )
+						jCell.addClass("current");
+
+					if( layerStates.exists(li.layerDefUid) && layerStates.get(li.layerDefUid).get(idx)!=null )
+						jCell.addClass("hasState");
+					else if( !shouldSaveLayerState(li) )
+						jCell.addClass("na");
+					else
+						jCell.addClass("empty");
+				}
+			}
+
+			// Append to page
+			if( App.ME.jBody.find("#timelineDebug").length==0 )
+				App.ME.jBody.append('<div id="timelineDebug"/>');
+			var jTarget = App.ME.jBody.find("#timelineDebug");
+			jTarget.empty().append(jTimeline);
 		}
 
-		// Append to page
-		if( App.ME.jBody.find("#timelineDebug").length==0 )
-			App.ME.jBody.append('<div id="timelineDebug"/>');
-		var jTarget = App.ME.jBody.find("#timelineDebug");
-		jTarget.empty().append(jTimeline);
+		// Kill
+		debugProcess.onDisposeCb = ()->{
+			App.ME.jBody.find("#timelineDebug").remove();
+		}
 	}
 }

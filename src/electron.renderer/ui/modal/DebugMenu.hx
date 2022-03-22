@@ -71,6 +71,14 @@ class DebugMenu extends ui.modal.ContextMenu {
 		#end
 
 		#if debug
+		add({
+			label: L.untranslated("Toggle timeline debug"),
+			show: ()->Editor.exists(),
+			cb: ()->Editor.ME.levelTimeline.toggleDebug(),
+		});
+		#end
+
+		#if debug
 		if( Editor.exists() )
 			add({
 				label: L.untranslated("Gif mode="+editor.gifMode),

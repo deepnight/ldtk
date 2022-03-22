@@ -7991,27 +7991,32 @@ $patternSize : 32px;
 
 #timelineDebug {
 	position: absolute;
-	top: 50vh;
-	left: 0;
+	top: 10px;
+	right: 10px;
 	z-index: 99;
+
 	.timeline {
 		display: grid;
 		grid-template-rows: 16px;
-		width: 300px;
-		background-color: $bgDark;
 		gap: 1px;
+		padding: 1px;
+		width: 300px;
+		border: 1px solid $bgMed;
+		background-color: transparentize($color: black, $amount: 0.5);
+		box-shadow: 0px 4px 8px black;
 
 
 		&>div {
+			overflow: hidden;
+
 			&.header {
-				font-weight: bold;
 				font-size: 8pt;
 				padding: 3px;
 
 				&.row {
 					text-align: center;
+					font-size: 7pt;
 				}
-
 			}
 
 			&.current {
