@@ -1645,7 +1645,11 @@ class Editor extends Page {
 			case ProjectSaved:
 			case LevelSelected(level):
 			case LevelSettingsChanged(l): invalidateLevelCache(l);
-			case LevelAdded(_): invalidateAllLevelsCache();
+			case LevelAdded(l):
+				for(nl in l.getNeighbours())
+					invalidateLevelCache(nl);
+				invalidateLevelCache(l);
+
 			case LevelRemoved(_):
 				switch curWorld.worldLayout {
 					case Free, GridVania:
