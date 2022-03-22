@@ -70,21 +70,21 @@ class Level {
 		List nearby level (only IIDs)
 	**/
 	public function getNeighboursIids() : Array<String> {
-		return getJsonNeightbours().map( njson->njson.levelIid );
+		return getNeighboursJson().map( njson->njson.levelIid );
 	}
 
 	/**
 		List nearby level (only int UIDs)
 	**/
 	public function getNeighboursUids() : Array<Int> {
-		return getJsonNeightbours().map( njson->njson.levelUid );
+		return getNeighboursJson().map( njson->njson.levelUid );
 	}
 
 
 	/**
 		List nearby levels as JSON
 	**/
-	public function getJsonNeightbours() : Array<ldtk.Json.NeighbourLevel> {
+	public function getNeighboursJson() : Array<ldtk.Json.NeighbourLevel> {
 		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _world.worldLayout {
 			case Free, GridVania:
 				var nears = _world.levels.filter( (ol)->
@@ -176,7 +176,7 @@ class Level {
 				all;
 			},
 			layerInstances: layerInstances.map( li->li.toJson() ),
-			__neighbours: getJsonNeightbours(),
+			__neighbours: getNeighboursJson(),
 		}
 
 		// Cache this json
