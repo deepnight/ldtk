@@ -405,8 +405,9 @@ class WorldTool extends dn.Process {
 
 	function getLevelAt(worldX:Int, worldY:Int, ?except:data.Level) {
 		var i = curWorld.levels.length-1;
+		var l : data.Level = null;
 		while( i>=0 ) {
-			final l = curWorld.levels[i];
+			l = curWorld.levels[i];
 			if( l!=except && l.worldDepth==editor.curWorldDepth && l.isWorldOver(worldX,worldY) )
 				return l;
 			else
