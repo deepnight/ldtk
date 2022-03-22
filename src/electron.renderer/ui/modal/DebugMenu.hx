@@ -8,6 +8,35 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 		addTitle(L.t._("Debug menu"));
 
+
+		#if debug
+		add({
+			label: L.untranslated("Debug memory messup"),
+			cb: ()->{
+				var log = js.html.Console.log;
+				log("Checking base refs...");
+				inline function _checkRef(chkLevel:data.Level) {
+					log("  Checking level ref: "+chkLevel.identifier);
+					for(w in editor.project.worlds)
+					for(l in w.levels)
+						if( l.uid==chkLevel.uid && chkLevel!=l )
+							log("  ERROR: ref mismatch "+chkLevel.toString());
+				}
+				_checkRef(editor.curLevel);
+				log("  editor.curLevel._project="+@:privateAccess (editor.curLevel._project==editor.project)); // true
+				log("  editor.curLevel._world="+@:privateAccess (editor.curLevel._world==editor.curWorld)); // true
+
+				log("Checking quick access refs...");
+				for(e in @:privateAccess editor.project.quickLevelAccess.keyValueIterator())
+					_checkRef(e.value);
+
+				log("Fixing quick access...");
+				editor.project.resetQuickLevelAccesses();
+			}
+		});
+		#end
+
+
 		add({
 			label: L.untranslated("Create new world"),
 			cb: ()->{
@@ -321,6 +350,5 @@ class DebugMenu extends ui.modal.ContextMenu {
 				N.success("Flushed.");
 			}
 		});
-
 	}
 }
