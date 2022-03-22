@@ -67,7 +67,7 @@ class World {
 		w.worldLayout = JsonTools.readEnum( ldtk.Json.WorldLayout, json.worldLayout, false, Free );
 
 		for( levelJson in json.levels )
-			w.levels.push( Level.fromJson(p, w, levelJson) );
+			w.levels.push( Level.fromJson(p, w, levelJson, true) );
 
 		return w;
 	}
@@ -136,7 +136,7 @@ class World {
 	}
 
 	public function duplicateLevel(l:data.Level) {
-		var copy : data.Level = Level.fromJson( _project, this, l.toJson() );
+		var copy : data.Level = Level.fromJson( _project, this, l.toJson(), false );
 
 		// Remap IDs
 		copy.iid = _project.generateUniqueId_UUID();

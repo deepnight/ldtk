@@ -179,7 +179,7 @@ class LevelHistory {
 			var droppedState = states[0];
 			switch droppedState {
 				case ResizedLevel(beforeJson, afterJson):
-					var level = data.Level.fromJson(editor.project, world, afterJson);
+					var level = data.Level.fromJson(editor.project, world, afterJson, false);
 					for(li in level.layerInstances)
 						mostAncientLayerStates.set( li.layerDefUid, Layer(li.layerDefUid, null, li.toJson()) );
 					editor.project.resetQuickLevelAccesses();
@@ -225,7 +225,7 @@ class LevelHistory {
 				while( sid>=0 && before==null ) {
 					switch states[sid] {
 					case ResizedLevel(beforeJson, afterJson):
-						var level = data.Level.fromJson(editor.project, world, afterJson);
+						var level = data.Level.fromJson(editor.project, world, afterJson, false);
 						for(li in level.layerInstances)
 							if( li.layerDefUid==undoneLayerId ) {
 								before = Layer(li.layerDefUid, null, li.toJson());
@@ -284,9 +284,9 @@ class LevelHistory {
 						lidx++;
 
 				if( isUndo )
-					world.levels[lidx] = data.Level.fromJson(editor.project, world, beforeJson);
+					world.levels[lidx] = data.Level.fromJson(editor.project, world, beforeJson, false);
 				else
-					world.levels[lidx] = data.Level.fromJson(editor.project, world, afterJson);
+					world.levels[lidx] = data.Level.fromJson(editor.project, world, afterJson, false);
 				editor.ge.emit( LevelRestoredFromHistory(world.levels[lidx]) );
 
 			case Layer(layerId, bounds, json):

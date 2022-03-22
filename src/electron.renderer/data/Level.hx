@@ -200,14 +200,15 @@ class Level {
 			+ "." + Const.LEVEL_EXTENSION;
 	}
 
-	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson) {
+	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson, registerToQuickAccess:Bool) {
 		if( json.iid==null )
 			json.iid = p.generateUniqueId_UUID();
 
 		var wid = JsonTools.readInt( json.pxWid, w.defaultLevelWidth );
 		var hei = JsonTools.readInt( json.pxHei, w.defaultLevelHeight );
 		var l = new Level( p, w, wid, hei, JsonTools.readInt(json.uid), json.iid );
-		p.registerLevelQuickAccess(l);
+		if( registerToQuickAccess )
+			p.registerLevelQuickAccess(l);
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
 		l.worldDepth = JsonTools.readInt( json.worldDepth, 0 );

@@ -254,7 +254,7 @@ class Project {
 			// Read Levels from root
 			var w = p.createWorld(false);
 			for( lvlJson in JsonTools.readArray(json.levels) )
-				w.levels.push( Level.fromJson(p, w, lvlJson) );
+				w.levels.push( Level.fromJson(p, w, lvlJson, true) );
 		}
 
 		// World settings
