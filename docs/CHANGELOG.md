@@ -1,5 +1,6 @@
 # 0.10.0-beta5
 
+ - Fixed a critical bug which led to super weird behaviours after Level Resizing.
  - Fixed `neighbours` not updating after moving or deleting a level
 
 # 0.10.0-beta4
