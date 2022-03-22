@@ -1,3 +1,7 @@
+# 0.10.0-beta5
+
+ - Fixed `neighbours` not updating after moving or deleting a level
+
 # 0.10.0-beta4
 
  - Fixed big memory messup that could happen after level duplications.
