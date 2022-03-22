@@ -78,7 +78,7 @@ class LevelHistory {
 			case LevelJsonCacheInvalidated(l):
 
 			case WorldSelected(w):
-			case WorldLevelMoved(ix, iy, l, isFinal):
+			case WorldLevelMoved(_):
 			case WorldSettingsChanged:
 
 			case ProjectSettingsChanged:

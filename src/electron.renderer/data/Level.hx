@@ -67,7 +67,15 @@ class Level {
 
 
 	/**
-		List nearby levels
+		List nearby level (only IIDs)
+	**/
+	public function getNeighboursIids() {
+		return getJsonNeightbours().map( njson->njson.levelIid );
+	}
+
+
+	/**
+		List nearby levels as JSON
 	**/
 	public function getJsonNeightbours() : Array<ldtk.Json.NeighbourLevel> {
 		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _world.worldLayout {

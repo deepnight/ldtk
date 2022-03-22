@@ -229,12 +229,19 @@ class LevelInstanceForm {
 		});
 
 		// Coords
+		var oldNeighbours = level.getNeighboursIids();
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
-		i.onChange = ()->onFieldChange();
+		i.onChange = ()->{
+			onFieldChange();
+			editor.ge.emit( WorldLevelMoved(level, true, oldNeighbours) );
+		}
 		i.fixValue = v->curWorld.snapWorldGridX(v,false);
 
 		var i = Input.linkToHtmlInput( level.worldY, jForm.find("#worldY"));
-		i.onChange = ()->onFieldChange();
+		i.onChange = ()->{
+			onFieldChange();
+			editor.ge.emit( WorldLevelMoved(level, true, oldNeighbours) );
+		}
 		i.fixValue = v->curWorld.snapWorldGridY(v,false);
 
 		// Size

@@ -164,7 +164,7 @@ class WorldRender extends dn.Process {
 			case GridChanged(active):
 				renderGrids();
 
-			case WorldLevelMoved(initialX, initialY, l,isFinal):
+			case WorldLevelMoved(l,isFinal, prevNeig):
 				updateLayout();
 				updateCurrentHighlight();
 				refreshWorldLevelRect(l);

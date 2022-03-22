@@ -7,6 +7,7 @@ class WorldTool extends dn.Process {
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var clickedLevel : Null<data.Level>;
+	var initialNeighbours : Null< Array<String> >;
 	var levelOriginX : Int;
 	var levelOriginY : Int;
 	var origin : Coords;
@@ -149,6 +150,7 @@ class WorldTool extends dn.Process {
 
 		tmpRender.clear();
 		origin = m;
+		initialNeighbours = null;
 		dragStarted = false;
 		clicked = true;
 		if( !worldMode && editor.curLevel.inBoundsWorld(m.worldX,m.worldY) )
@@ -164,6 +166,7 @@ class WorldTool extends dn.Process {
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
 			clickedSameLevel = editor.curLevel==clickedLevel;
+			initialNeighbours = clickedLevel.getNeighboursIids();
 		}
 	}
 
@@ -179,7 +182,7 @@ class WorldTool extends dn.Process {
 				switch curWorld.worldLayout {
 					case Free, GridVania:
 						curWorld.applyAutoLevelIdentifiers();
-						editor.ge.emit( WorldLevelMoved(initialX, initialY, clickedLevel, true) );
+						editor.ge.emit( WorldLevelMoved(clickedLevel, true, initialNeighbours) );
 
 					case LinearHorizontal:
 						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);
@@ -188,7 +191,7 @@ class WorldTool extends dn.Process {
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							curWorld.sortLevel(curIdx, toIdx);
 							curWorld.reorganizeWorld();
-							editor.ge.emit( WorldLevelMoved(initialX, initialY, clickedLevel, true) );
+							editor.ge.emit( WorldLevelMoved(clickedLevel, true, initialNeighbours) );
 						}
 
 					case LinearVertical:
@@ -198,7 +201,7 @@ class WorldTool extends dn.Process {
 							var toIdx = i.idx>curIdx ? i.idx-1 : i.idx;
 							curWorld.sortLevel(curIdx, toIdx);
 							curWorld.reorganizeWorld();
-							editor.ge.emit( WorldLevelMoved(initialX, initialY, clickedLevel, true) );
+							editor.ge.emit( WorldLevelMoved(clickedLevel, true, initialNeighbours) );
 						}
 				}
 
@@ -391,7 +394,7 @@ class WorldTool extends dn.Process {
 			}
 
 			// Refresh render
-			editor.ge.emit( WorldLevelMoved(initialX, initialY, clickedLevel, false) );
+			editor.ge.emit( WorldLevelMoved(clickedLevel, false, null) );
 			App.ME.requestCpu();
 			ev.cancel = true;
 		}

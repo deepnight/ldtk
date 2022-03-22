@@ -1575,7 +1575,7 @@ class Editor extends Page {
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
 				case LevelJsonCacheInvalidated(l):
-				case WorldLevelMoved(initialX, initialY, l,isFinal):
+				case WorldLevelMoved(l,isFinal, _): if( isFinal ) extra = l.uid;
 				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
@@ -1654,12 +1654,22 @@ class Editor extends Page {
 			case LevelResized(level): invalidateLevelCache(level);
 			case LevelRestoredFromHistory(level): invalidateLevelCache(level);
 			case LevelJsonCacheInvalidated(level):
-			case WorldLevelMoved(initialX, initialY, level,isFinal):
-				if( isFinal )
+			case WorldLevelMoved(level,isFinal, oldNeig):
+				if( isFinal ) {
+					var newNeig = level.getNeighboursIids();
+					trace("---- OLD ("+oldNeig.length+"): ----");
+					trace(oldNeig.join("\n"));
+					trace("---- NEW ("+newNeig.length+"): ----");
+					trace(newNeig.join("\n"));
+
+					// for(iid in newNeig)
+					// 	invalidateLevelCache( project.getLevelAnywhere())
+
 					switch curWorld.worldLayout {
 						case Free, GridVania: invalidateLevelCache(level);
 						case LinearHorizontal, LinearVertical: invalidateLevelCache(level);
 					}
+				}
 
 			case WorldSettingsChanged: invalidateAllLevelsCache();
 			case LayerDefAdded: invalidateAllLevelsCache();
@@ -1877,7 +1887,7 @@ class Editor extends Page {
 
 			case LevelResized(l):
 
-			case WorldLevelMoved(initialX, initialY, l, isFinal):
+			case WorldLevelMoved(l, isFinal, _):
 
 			case WorldSettingsChanged:
 
