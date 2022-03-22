@@ -182,7 +182,6 @@ class LevelHistory {
 					var level = data.Level.fromJson(editor.project, world, afterJson, false);
 					for(li in level.layerInstances)
 						mostAncientLayerStates.set( li.layerDefUid, Layer(li.layerDefUid, null, li.toJson()) );
-					editor.project.resetQuickLevelAccesses();
 
 				case Layer(layerId, bounds, json):
 					mostAncientLayerStates.set( layerId, droppedState );
