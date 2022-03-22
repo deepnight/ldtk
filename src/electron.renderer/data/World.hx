@@ -128,7 +128,6 @@ class World {
 			levels.push(l);
 		else
 			levels.insert(insertIdx,l);
-		_project.registerLevelQuickAccess(l);
 
 		l.identifier = _project.fixUniqueIdStr("Level1", (id)->_project.isLevelIdentifierUnique(id));
 
@@ -149,7 +148,6 @@ class World {
 		copy.identifier = _project.fixUniqueIdStr(l.identifier, (id)->_project.isLevelIdentifierUnique(id));
 
 		levels.insert( dn.Lib.getArrayIndex(l,levels)+1, copy );
-		_project.registerLevelQuickAccess(copy);
 		tidy(_project);
 		return copy;
 	}
