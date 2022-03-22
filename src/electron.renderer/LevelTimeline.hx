@@ -1,5 +1,6 @@
 class LevelTimeline {
-	static var MAX = 4;
+	static var MAX = 10;
+	static var EXTRA = 5;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -7,32 +8,36 @@ class LevelTimeline {
 	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
-	var layers : Map<Int, haxe.ds.Vector< Null<{ before:ldtk.Json.LayerInstanceJson, after:ldtk.Json.LayerInstanceJson }> >>;
-	var curIndex = 0;
+	var layerStates : Map<Int, haxe.ds.Vector< Null<{ before:ldtk.Json.LayerInstanceJson, after:ldtk.Json.LayerInstanceJson }> >>;
+	var curStateIdx = -1;
 
 	public function new() {
-		layers = new Map();
+		layerStates = new Map();
 	}
 
 	public function saveLayerState(li:data.inst.LayerInstance) {
 		Chrono.init();
 		Chrono.quick();
-		if( !layers.exists(li.layerDefUid) )
-			layers.set(li.layerDefUid, new haxe.ds.Vector(MAX));
+		if( !layerStates.exists(li.layerDefUid) )
+			layerStates.set(li.layerDefUid, new haxe.ds.Vector(MAX+EXTRA));
 
-		if( curIndex<MAX-1 ) {
+		if( curStateIdx<MAX+EXTRA-1 ) {
 			// Advance
-			curIndex++;
+			curStateIdx++;
 		}
 		else {
 			// Reached limit, offset history
-			for(lh in layers)
-			for(i in 0...curIndex)
-				lh.set(i, lh.get(i+1));
+			for(lh in layerStates) {
+				for(i in 0...MAX)
+					lh.set(i, lh.get(i+EXTRA+1));
+				for(i in MAX...MAX+EXTRA)
+					lh.set(i, null);
+			}
+			curStateIdx-=EXTRA;
 		}
 
 		// Store state
-		layers.get(li.layerDefUid).set(curIndex, {
+		layerStates.get(li.layerDefUid).set(curStateIdx, {
 			before: null,
 			after: li.toJson(),
 		});
@@ -44,32 +49,35 @@ class LevelTimeline {
 
 	public function debugRender() {
 		var jTimeline = new J('<div class="timeline"/>');
+		jTimeline.css({ gridTemplateColumns:'repeat(${MAX+EXTRA+1}, auto)'});
 
 		// Header
-		var jRow = new J('<div class="row header"/>');
-		jRow.appendTo(jTimeline);
-		for(idx in 0...MAX) {
-			var jHeader = new J('<div>$idx</div>');
-			jRow.append(jHeader);
-			if( idx==curIndex )
+		jTimeline.append('<div class="corner"/>');
+		for(idx in 0...MAX+EXTRA) {
+			var jHeader = new J('<div class="header row">$idx</div>');
+			jTimeline.append(jHeader);
+			if( idx==curStateIdx )
 				jHeader.addClass("current");
 		}
 
 		// History
 		for(li in curLevel.layerInstances) {
-			var jRow = new J('<div class="row"/>');
-			jRow.appendTo(jTimeline);
+			jTimeline.append('<div class="header col">${li.def.identifier}</div>');
 
-			for(idx in 0...MAX) {
+			for(idx in 0...MAX+EXTRA) {
 				var jCell = new J('<div/>');
-				jCell.appendTo(jRow);
-				if( layers.exists(li.layerDefUid) && layers.get(li.layerDefUid).get(idx)!=null )
+				jCell.appendTo(jTimeline);
+				if( idx==curStateIdx )
+					jCell.addClass("current");
+
+				if( layerStates.exists(li.layerDefUid) && layerStates.get(li.layerDefUid).get(idx)!=null )
 					jCell.addClass("hasState");
 				else
 					jCell.addClass("empty");
 			}
 		}
 
+		// Append to page
 		if( App.ME.jBody.find("#timelineDebug").length==0 )
 			App.ME.jBody.append('<div id="timelineDebug"/>');
 		var jTarget = App.ME.jBody.find("#timelineDebug");
