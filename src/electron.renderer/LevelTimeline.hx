@@ -12,10 +12,17 @@ class LevelTimeline {
 	var curStateIdx = -1;
 
 	var debugProcess : Null<dn.Process>;
-	var invalidatedDebug = false;
+	var invalidatedDebug = true;
 
 	public function new() {
+		clear();
+	}
+
+
+	public function clear() {
 		layerStates = new Map();
+		invalidatedDebug = true;
+		curStateIdx = -1;
 	}
 
 
@@ -51,7 +58,7 @@ class LevelTimeline {
 	}
 
 
-	inline function shouldSaveLayerState(li:data.inst.LayerInstance) {
+	inline function layerIsEditable(li:data.inst.LayerInstance) {
 		return switch li.def.type {
 			case IntGrid, Entities, Tiles: true;
 			case AutoLayer: false;
@@ -61,7 +68,7 @@ class LevelTimeline {
 
 	public function saveLayerState(li:data.inst.LayerInstance, advanceIndex=true) {
 		// Ignore non-editable layers
-		if( !shouldSaveLayerState(li) )
+		if( !layerIsEditable(li) )
 			return false;
 
 		// Init states
@@ -122,7 +129,7 @@ class LevelTimeline {
 
 					if( layerStates.exists(li.layerDefUid) && layerStates.get(li.layerDefUid).get(idx)!=null )
 						jCell.addClass("hasState");
-					else if( !shouldSaveLayerState(li) )
+					else if( !layerIsEditable(li) )
 						jCell.addClass("na");
 					else
 						jCell.addClass("empty");
