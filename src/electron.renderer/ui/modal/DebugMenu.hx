@@ -14,13 +14,14 @@ class DebugMenu extends ui.modal.ContextMenu {
 			label: L.untranslated("Debug memory messup"),
 			cb: ()->{
 				var log = js.html.Console.log;
+				var error = js.html.Console.error;
 				log("Checking base refs...");
 				inline function _checkRef(chkLevel:data.Level) {
 					log("  Checking level ref: "+chkLevel.identifier);
 					for(w in editor.project.worlds)
 					for(l in w.levels)
 						if( l.uid==chkLevel.uid && chkLevel!=l )
-							log("  ERROR: ref mismatch "+chkLevel.toString());
+							error("  ERROR: ref mismatch "+chkLevel.toString());
 				}
 				_checkRef(editor.curLevel);
 				log("  editor.curLevel._project="+@:privateAccess (editor.curLevel._project==editor.project)); // true
