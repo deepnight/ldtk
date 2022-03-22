@@ -57,6 +57,7 @@ class Editor extends Page {
 
 
 	var levelHistory : Map<Int,LevelHistory> = new Map();
+	public var levelTimeline : LevelTimeline;
 	public var curLevelHistory(get,never) : LevelHistory;
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
@@ -370,6 +371,7 @@ class Editor extends Page {
 				needSaving = true;
 		});
 
+		levelTimeline = new LevelTimeline();
 		needSaving = tilesetChanged;
 
 		// Check level caches

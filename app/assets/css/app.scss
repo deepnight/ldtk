@@ -7987,3 +7987,44 @@ $patternSize : 32px;
 	}
 
 }
+
+
+#timelineDebug {
+	position: absolute;
+	top: 50vh;
+	left: 0;
+	z-index: 99;
+	.timeline {
+		width: 300px;
+		background-color: $bgDark;
+
+		.row {
+			display: grid;
+			gap: 1px;
+			grid-auto-flow: column;
+			grid-auto-columns: auto;
+			grid-template-rows: 16px;
+			background-color: $bgMed;
+
+			&>div {
+				&.hasState {
+					background-color: $green;
+				}
+				&.empty {
+					background-color: $darkRed;
+					background-image: url("../img/stripes.png");
+					background-repeat: repeat;
+				}
+			}
+
+			&.header {
+				text-align: center;
+				font-weight: bold;
+				&>div.current {
+					background-color: $orange;
+					color: black;
+				}
+			}
+		}
+	}
+}
