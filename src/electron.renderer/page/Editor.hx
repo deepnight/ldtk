@@ -1982,9 +1982,9 @@ class Editor extends Page {
 		if( curLevelHistory!=null )
 			curLevelHistory.manualOnGlobalEvent(e);
 
-		// Propagate to current LevelTimeline
-		if( curLevelTimeline!=null )
-			curLevelTimeline.manualOnGlobalEvent(e);
+		// Propagate to all LevelTimelines
+		for(tl in levelTimelines)
+			tl.manualOnGlobalEvent(e);
 
 		// Propagate to resize tool
 		if( resizeTool!=null )
