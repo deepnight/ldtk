@@ -31,10 +31,6 @@ class LevelTimeline {
 		this.worldIid = worldIid;
 
 		clear();
-
-		#if debug
-		enableDebug();
-		#end
 	}
 
 
