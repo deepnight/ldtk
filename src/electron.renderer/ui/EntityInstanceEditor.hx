@@ -188,7 +188,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	function onEntityFieldChanged() {
 		editor.curLevelHistory.saveLayerState(ei._li);
-		editor.levelTimeline.saveLayerState(ei._li);
+		editor.curLevelTimeline.saveLayerState(ei._li);
 		editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
 	}
 

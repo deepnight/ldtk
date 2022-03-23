@@ -236,7 +236,7 @@ class Tool<T> extends dn.Process {
 	function saveToHistory() {
 		editor.curLevelHistory.saveLayerState( curLayerInstance );
 		editor.curLevelHistory.flushChangeMarks();
-		editor.levelTimeline.saveLayerState(curLayerInstance);
+		editor.curLevelTimeline.saveLayerState(curLayerInstance);
 		needHistorySaving = false;
 	}
 

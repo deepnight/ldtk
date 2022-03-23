@@ -4,17 +4,22 @@ class LevelTimeline {
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
-	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
-	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
+
+	var levelUid : Int;
+	var level(get,never) : data.Level; inline function get_level() return project.getLevelAnywhere(levelUid);
+	var worldIid : String;
+	var world(get,never) : data.World; inline function get_world() return project.getWorldIid(worldIid);
 
 	var layerStates : Map<Int, haxe.ds.Vector< Null<{ before:ldtk.Json.LayerInstanceJson, after:ldtk.Json.LayerInstanceJson }> >>;
 	var curStateIdx = -1;
 
-	var debugProcess : Null<dn.Process>;
-	var invalidatedDebug = true;
+	static var debugProcess : Null<dn.Process>;
+	static var invalidatedDebug = true;
 
-	public function new() {
+	public function new(levelUid:Int, worldIid:String) {
+		this.levelUid = levelUid;
+		this.worldIid = worldIid;
 		clear();
 	}
 
@@ -23,6 +28,11 @@ class LevelTimeline {
 		layerStates = new Map();
 		invalidatedDebug = true;
 		curStateIdx = -1;
+		saveAllLayerStates();
+	}
+
+
+	public function manualOnGlobalEvent(e:GlobalEvent) {
 	}
 
 
@@ -44,17 +54,31 @@ class LevelTimeline {
 	}
 
 
-	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
+	public function saveLayerState(li:data.inst.LayerInstance) {
 		advanceIndex();
-		for(li in lis)
-			saveLayerState(li, false);
+		saveSingleLayerState(li);
+		prolongatePreviousStates();
 	}
 
 
-	public function saveAllLayerStates(l:data.Level) {
+	function prolongatePreviousStates() {
+		for(ls in layerStates)
+			if( ls.get(curStateIdx)==null )
+				ls.set(curStateIdx, ls.get(curStateIdx-1));
+	}
+
+
+	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
 		advanceIndex();
-		for(li in l.layerInstances)
-			saveLayerState(li, false);
+		for(li in lis)
+			saveSingleLayerState(li);
+	}
+
+
+	public function saveAllLayerStates() {
+		advanceIndex();
+		for(li in level.layerInstances)
+			saveSingleLayerState(li);
 	}
 
 
@@ -66,7 +90,7 @@ class LevelTimeline {
 	}
 
 
-	public function saveLayerState(li:data.inst.LayerInstance, advanceIndex=true) {
+	function saveSingleLayerState(li:data.inst.LayerInstance) {
 		// Ignore non-editable layers
 		if( !layerIsEditable(li) )
 			return false;
@@ -74,10 +98,6 @@ class LevelTimeline {
 		// Init states
 		if( !layerStates.exists(li.layerDefUid) )
 			layerStates.set(li.layerDefUid, new haxe.ds.Vector(MAX+EXTRA));
-
-		// Advance
-		if( advanceIndex )
-			this.advanceIndex();
 
 		// Store state
 		layerStates.get(li.layerDefUid).set(curStateIdx, {
@@ -90,22 +110,40 @@ class LevelTimeline {
 	}
 
 
-	public function toggleDebug() {
+	public static function stopDebug() {
 		if( debugProcess!=null ) {
 			debugProcess.destroy();
 			debugProcess = null;
+		}
+	}
+
+
+	public static function toggleDebug() {
+		if( debugProcess!=null ) {
+			stopDebug();
 			return;
 		}
 
 		invalidatedDebug = true;
-		debugProcess = editor.createChildProcess();
+		var curTimeline : LevelTimeline = null;
+		debugProcess = Editor.ME.createChildProcess();
 
 		debugProcess.onUpdateCb = ()->{
-			if( !invalidatedDebug )
+			if( !invalidatedDebug && curTimeline==Editor.ME.curLevelTimeline )
 				return;
 
+			curTimeline = Editor.ME.curLevelTimeline;
 			invalidatedDebug = false;
+
+			// Init wrapper
+			if( App.ME.jBody.find("#timelineDebug").length==0 )
+				App.ME.jBody.append('<div id="timelineDebug"/>');
+			var jWrapper = App.ME.jBody.find("#timelineDebug");
+			jWrapper.empty();
+			jWrapper.append(curTimeline.level.identifier);
+
 			var jTimeline = new J('<div class="timeline"/>');
+			jTimeline.appendTo( jWrapper);
 			jTimeline.css({ gridTemplateColumns:'min-content repeat(${MAX+EXTRA}, 1fr)'});
 
 			// Header
@@ -113,34 +151,33 @@ class LevelTimeline {
 			for(idx in 0...MAX+EXTRA) {
 				var jHeader = new J('<div class="header row">$idx</div>');
 				jTimeline.append(jHeader);
-				if( idx==curStateIdx )
+				if( idx==curTimeline.curStateIdx )
 					jHeader.addClass("current");
 			}
 
 			// History
-			for(li in curLevel.layerInstances) {
+			for(li in Editor.ME.curLevel.layerInstances) {
 				jTimeline.append('<div class="header col">${li.def.identifier}</div>');
 
 				for(idx in 0...MAX+EXTRA) {
 					var jCell = new J('<div/>');
 					jCell.appendTo(jTimeline);
-					if( idx==curStateIdx )
+					if( idx==curTimeline.curStateIdx )
 						jCell.addClass("current");
 
-					if( layerStates.exists(li.layerDefUid) && layerStates.get(li.layerDefUid).get(idx)!=null )
+					var ls = curTimeline.layerStates.get(li.layerDefUid);
+					if( ls!=null && ls.get(idx)!=null ) {
 						jCell.addClass("hasState");
-					else if( !layerIsEditable(li) )
+						if( idx>0 && ls.get(idx)==ls.get(idx-1) )
+							jCell.addClass("extend");
+					}
+					else if( !curTimeline.layerIsEditable(li) )
 						jCell.addClass("na");
 					else
 						jCell.addClass("empty");
 				}
 			}
 
-			// Append to page
-			if( App.ME.jBody.find("#timelineDebug").length==0 )
-				App.ME.jBody.append('<div id="timelineDebug"/>');
-			var jTarget = App.ME.jBody.find("#timelineDebug");
-			jTarget.empty().append(jTimeline);
 		}
 
 		// Kill

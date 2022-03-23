@@ -7995,16 +7995,20 @@ $patternSize : 32px;
 	right: 10px;
 	z-index: 99;
 
+	padding: 4px;
+	background-color: transparentize($color: black, $amount: 0.5);
+	box-shadow: 0px 4px 8px black;
+
 	.timeline {
 		display: grid;
 		grid-template-rows: 16px;
 		gap: 1px;
-		padding: 1px;
+		padding: 2px;
+		margin-top: 8px;
 		width: 300px;
-		border: 1px solid $bgMed;
-		background-color: transparentize($color: black, $amount: 0.5);
-		box-shadow: 0px 4px 8px black;
 
+		border: 1px solid $bgLight;
+		border-radius: 3px;
 
 		&>div {
 			overflow: hidden;
@@ -8025,8 +8029,15 @@ $patternSize : 32px;
 			}
 
 			&.hasState {
-				background-color: $green;
+				background-color: $help;
 				border-radius: 3px;
+
+				&.extend {
+					background-color: $helpMed;
+					background-image: url("../icons/arrow_right.svg");
+					background-position: center;
+					opacity: 0.66;
+				}
 			}
 
 			&.empty {

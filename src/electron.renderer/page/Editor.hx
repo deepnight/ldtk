@@ -56,8 +56,11 @@ class Editor extends Page {
 	public var gifMode = false;
 
 
+	var levelTimelines : Map<Int,LevelTimeline> = new Map();
+	public var curLevelTimeline(get,never) : LevelTimeline;
+		inline function get_curLevelTimeline() return levelTimelines.get(curLevelId);
+
 	var levelHistory : Map<Int,LevelHistory> = new Map();
-	public var levelTimeline : LevelTimeline;
 	public var curLevelHistory(get,never) : LevelHistory;
 		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
 
@@ -339,6 +342,8 @@ class Editor extends Page {
 		// Pick 1st layer in current level
 		autoPickFirstValidLayer();
 
+		levelTimelines = new Map();
+		levelTimelines.set( curLevelId, new LevelTimeline(curLevelId, curWorldIid) );
 		levelHistory = new Map();
 		levelHistory.set( curLevelId, new LevelHistory(curLevelId, curWorldIid) );
 
@@ -371,7 +376,6 @@ class Editor extends Page {
 				needSaving = true;
 		});
 
-		levelTimeline = new LevelTimeline();
 		needSaving = tilesetChanged;
 
 		// Check level caches
@@ -585,9 +589,11 @@ class Editor extends Page {
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
 				curLevelHistory.undo();
+				// curLevelTimeline.undo();
 
 			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
 				curLevelHistory.redo();
+				// curLevelTimeline.redo();
 
 			#if debug
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
@@ -1907,6 +1913,8 @@ class Editor extends Page {
 				updateTool();
 				if( !levelHistory.exists(l.uid) )
 					levelHistory.set(l.uid, new LevelHistory(l.uid, l._world.iid) );
+				if( !levelTimelines.exists(l.uid) )
+					levelTimelines.set(l.uid, new LevelTimeline(l.uid, l._world.iid) );
 				selectWorldDepth(l.worldDepth);
 				l.invalidateCachedError();
 
@@ -1973,6 +1981,10 @@ class Editor extends Page {
 		// Propagate to LevelHistory
 		if( curLevelHistory!=null )
 			curLevelHistory.manualOnGlobalEvent(e);
+
+		// Propagate to current LevelTimeline
+		if( curLevelTimeline!=null )
+			curLevelTimeline.manualOnGlobalEvent(e);
 
 		// Propagate to resize tool
 		if( resizeTool!=null )
@@ -2226,6 +2238,7 @@ class Editor extends Page {
 		ui.Tileset.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
+		LevelTimeline.stopDebug();
 
 		if( ME==this )
 			ME = null;
