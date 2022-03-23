@@ -1,5 +1,6 @@
 # 0.10.0-beta5
 
+ - Added support for **9-slice scaling** mode for Entity tiles (how it works: https://en.wikipedia.org/wiki/9-slice_scaling).
  - Fixed a critical bug which led to super weird behaviours after Level Resizing.
  - Fixed `neighbours` not updating after moving or deleting a level
  - Full rework of the Undo/Redo command. Changes were mostly only internals, so nothing should change from the user perspective. The only major related change is for selections movements that can now be undone as a single operation (and not per-layer as before).
