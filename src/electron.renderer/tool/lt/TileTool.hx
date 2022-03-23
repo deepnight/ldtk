@@ -158,6 +158,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 					// Erase rectangle
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelHistory.markChange(cx,cy);
+						editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 						if( settings.v.tileStacking )
 							editor.curLayerInstance.removeTopMostGridTile(cx,cy);
 						else
@@ -211,6 +212,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
 				curLayerInstance.addGridTile(x,y, tid, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
 				editor.curLevelHistory.markChange(x,y);
+				editor.curLevelTimeline.markGridChange(curLayerInstance, x, y);
 				anyChange = true;
 			}
 		}
@@ -260,6 +262,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 					if( settings.v.tileStacking )
 						markAsPainted(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
+					editor.curLevelTimeline.markGridChange(li, tcx, tcy);
 					anyChange = true;
 				}
 			}
@@ -301,6 +304,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy) ) {
 					editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
 					editor.curLevelHistory.markChange(tcx,tcy);
+					editor.curLevelTimeline.markGridChange(curLayerInstance, tcx, tcy);
 					anyChange = true;
 				}
 			}

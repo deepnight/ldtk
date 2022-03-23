@@ -1,11 +1,15 @@
 typedef TimelineState = {
 	var layerJsons : Map<Int, ldtk.Json.LayerInstanceJson>;
 	var fullLevelJson : Null<ldtk.Json.LevelJson>;
+	var bounds : Null<h2d.col.Bounds>;
 }
 
 class LevelTimeline {
 	static var STATES_COUNT = 30;
 	static var EXTRA = 10;
+
+	static var debugProcess : Null<dn.Process>;
+	static var invalidatedDebug = true;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -20,9 +24,7 @@ class LevelTimeline {
 	var curStateIdx = -1;
 	var lastOpTimer = -1.;
 
-	static var debugProcess : Null<dn.Process>;
-	static var invalidatedDebug = true;
-
+	var changeBounds: Null<h2d.col.Bounds>;
 
 	public function new(levelUid:Int, worldIid:String) {
 		this.levelUid = levelUid;
@@ -95,8 +97,10 @@ class LevelTimeline {
 		saveSingleLayerState(li);
 		saveDependentLayers([li]);
 		prolongatePreviousStates();
+		flushChangeBounds();
 		stopTimer();
 	}
+
 
 
 	function saveDependentLayers(lis:Array<data.inst.LayerInstance>) {
@@ -132,6 +136,7 @@ class LevelTimeline {
 			saveSingleLayerState(li);
 		saveDependentLayers(lis);
 		prolongatePreviousStates();
+		flushChangeBounds();
 		stopTimer();
 	}
 
@@ -190,6 +195,7 @@ class LevelTimeline {
 			states.set(idx, {
 				layerJsons: new Map(),
 				fullLevelJson: null,
+				bounds: null,
 			});
 	}
 
@@ -239,6 +245,12 @@ class LevelTimeline {
 		if( curStateIdx<=0 )
 			return false;
 
+		if( hasState(curStateIdx) ) {
+			var b = getState(curStateIdx).bounds;
+			if( b!=null )
+				editor.levelRender.bleepLevelRectPx(b.x, b.y, b.width, b.height, 0xff0000, 1, 0.75);
+		}
+
 		startTimer();
 		curStateIdx--;
 		if( getFullLevelJson(curStateIdx)!=getFullLevelJson(curStateIdx+1) )
@@ -264,6 +276,11 @@ class LevelTimeline {
 		if( getFullLevelJson(curStateIdx)!=getFullLevelJson(curStateIdx-1) )
 			restoreFullLevel(curStateIdx);
 		restoreLayerStates(curStateIdx);
+
+		var b = getState(curStateIdx).bounds;
+		if( b!=null )
+			editor.levelRender.bleepLevelRectPx(b.x, b.y, b.width, b.height, 0x00ff00);
+
 		stopTimer();
 		return true;
 	}
@@ -312,6 +329,40 @@ class LevelTimeline {
 		}
 
 		invalidatedDebug = true;
+	}
+
+	function flushChangeBounds() {
+		if( hasState(curStateIdx) )
+			getState(curStateIdx).bounds = changeBounds;
+		changeBounds = null;
+	}
+
+
+	public inline function markEntityChange(ei:data.inst.EntityInstance) {
+		markRectChange(ei._li, ei.left, ei.top, ei.width, ei.height);
+	}
+
+	public inline function markGridChange(li:data.inst.LayerInstance, cx:Int, cy:Int) {
+		markRectChange(
+			li,
+			cx*li.def.gridSize,
+			cy*li.def.gridSize,
+			li.def.gridSize,
+			li.def.gridSize
+		);
+	}
+
+
+
+	public inline function markRectChange(li:data.inst.LayerInstance, x:Int, y:Int, w:Int, h:Int) {
+		if( changeBounds==null )
+			changeBounds = h2d.col.Bounds.fromValues(x+li.pxTotalOffsetX, y+li.pxTotalOffsetY, w, h);
+		else {
+			changeBounds.xMin = M.fmin( changeBounds.xMin, x+li.pxTotalOffsetX );
+			changeBounds.yMin = M.fmin( changeBounds.yMin, y+li.pxTotalOffsetY );
+			changeBounds.xMax = M.fmax( changeBounds.xMax, x+li.pxTotalOffsetX + w-1 );
+			changeBounds.yMax = M.fmax( changeBounds.yMax, y+li.pxTotalOffsetY + h-1 );
+		}
 	}
 
 

@@ -304,16 +304,19 @@ class SelectionTool extends Tool<Int> {
 				case null:
 
 				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) )
+					if( li.hasAnyGridValue(cx,cy) ) {
+						editor.curLevelTimeline.markGridChange(li, cx,cy);
 						switch li.def.type {
 							case IntGrid: li.removeIntGrid(cx,cy);
 							case Tiles: li.removeAllGridTiles(cx,cy);
 							case Entities:
 							case AutoLayer:
 						}
+					}
 
 				case Entity(li, ei):
 					li.removeEntityInstance(ei);
+					editor.curLevelTimeline.markEntityChange(ei);
 					editor.ge.emitAtTheEndOfFrame( EntityInstanceRemoved(ei) );
 
 				case PointField(li, ei, fi, arrayIdx):

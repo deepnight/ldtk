@@ -147,6 +147,7 @@ class Tool<T> extends dn.Process {
 
 			// Apply
 			editor.curLevelHistory.markChange(cur.cx, cur.cy);
+			editor.curLevelTimeline.markGridChange(curLayerInstance, cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
 			affectedPoints.push(cur);
 

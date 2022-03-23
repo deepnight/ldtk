@@ -686,6 +686,8 @@ class GenericLevelElementGroup {
 					else
 						editor.ge.emit( EntityInstanceChanged(ei) );
 
+					editor.curLevelTimeline.markEntityChange(ei);
+
 					// Remap points
 					if( isCopy ) {
 						var dcx = Std.int( getDeltaX(origin,to) / li.def.scaledGridSize );
@@ -703,7 +705,8 @@ class GenericLevelElementGroup {
 					}
 
 				case GridCell(li, cx,cy):
-					if( li.hasAnyGridValue(cx,cy) )
+					if( li.hasAnyGridValue(cx,cy) ) {
+						editor.curLevelTimeline.markGridChange(li, cx,cy);
 						switch li.def.type {
 							case IntGrid:
 								var v = li.getIntGrid(cx,cy);
@@ -735,6 +738,7 @@ class GenericLevelElementGroup {
 							case Entities:
 							case AutoLayer:
 						}
+					}
 
 				case PointField(li, ei, fi, arrayIdx):
 					if( isCopy )
