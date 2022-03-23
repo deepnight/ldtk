@@ -33,6 +33,9 @@ class LevelTimeline {
 	}
 
 
+	/**
+		Global editor event
+	**/
 	public function manualOnGlobalEvent(e:GlobalEvent) {
 	}
 
@@ -64,6 +67,9 @@ class LevelTimeline {
 	}
 
 
+	/**
+		Save a single layer instance state
+	**/
 	public function saveLayerState(li:data.inst.LayerInstance) {
 		startTimer();
 		advanceIndex();
@@ -73,13 +79,9 @@ class LevelTimeline {
 	}
 
 
-	function prolongatePreviousStates() {
-		for(ls in layerStates)
-			if( ls.get(curStateIdx)==null )
-				ls.set(curStateIdx, ls.get(curStateIdx-1));
-	}
-
-
+	/**
+		Save a selection of layer instances states
+	**/
 	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
 		startTimer();
 		advanceIndex();
@@ -90,12 +92,25 @@ class LevelTimeline {
 	}
 
 
+	/**
+		Save all existing layer instances states
+	**/
 	public function saveAllLayerStates() {
 		startTimer();
 		advanceIndex();
 		for(li in level.layerInstances)
 			saveSingleLayerState(li);
 		stopTimer();
+	}
+
+
+	/**
+		Copy previous layer instances states if they didn't change in current index
+	**/
+	function prolongatePreviousStates() {
+		for(ls in layerStates)
+			if( ls.get(curStateIdx)==null )
+				ls.set(curStateIdx, ls.get(curStateIdx-1));
 	}
 
 
@@ -107,6 +122,9 @@ class LevelTimeline {
 	}
 
 
+	/**
+		Internal layer instance saving
+	**/
 	function saveSingleLayerState(li:data.inst.LayerInstance) {
 		// Ignore non-editable layers
 		if( !layerIsEditable(li) )
@@ -127,10 +145,16 @@ class LevelTimeline {
 	}
 
 
+	/**
+		Return TRUE if debugger is active
+	**/
 	public static inline function hasDebug() {
 		return debugProcess!=null && !debugProcess.destroyed;
 	}
 
+	/**
+		Kill debugger
+	**/
 	public static function stopDebug() {
 		if( hasDebug() ) {
 			debugProcess.destroy();
@@ -138,7 +162,9 @@ class LevelTimeline {
 		}
 	}
 
-
+	/**
+		Toggle debugger
+	**/
 	public static function toggleDebug() {
 		if( hasDebug() ) {
 			stopDebug();
