@@ -191,10 +191,10 @@ class GenericLevelElementGroup {
 		selectRender.clear();
 		selectRender.visible = true;
 		var c = SELECTION_COLOR;
-		var a = 1;
+		var alpha = 1;
 
 		for(r in originalRects) {
-			selectRender.beginFill(0x8ab7ff, a);
+			selectRender.beginFill(0x8ab7ff, alpha);
 			selectRender.drawRect(r.leftPx, r.topPx, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
 		}
 
@@ -203,9 +203,9 @@ class GenericLevelElementGroup {
 				case null:
 				case GridCell(li, cx, cy):
 					if( li.hasAnyGridValue(cx,cy) )
-						selectRender.beginFill(c, a);
+						selectRender.beginFill(c, alpha);
 					else
-						selectRender.beginFill(0x8ab7ff, a*0.6);
+						selectRender.beginFill(0x8ab7ff, alpha*0.6);
 					selectRender.drawRect(
 						li.pxParallaxX + cx*li.def.scaledGridSize,
 						li.pxParallaxY + cy*li.def.scaledGridSize,
@@ -214,7 +214,7 @@ class GenericLevelElementGroup {
 					);
 
 				case Entity(li, ei):
-					selectRender.beginFill(c, a);
+					selectRender.beginFill(c, alpha);
 					selectRender.drawRect(
 						li.pxParallaxX + ( ei.x - ei.width * ei.def.pivotX ) * li.def.getScale(),
 						li.pxParallaxY + ( ei.y - ei.height * ei.def.pivotY ) * li.def.getScale(),
@@ -223,7 +223,7 @@ class GenericLevelElementGroup {
 					);
 
 				case PointField(li, ei, fi, arrayIdx):
-					selectRender.beginFill(c, a);
+					selectRender.beginFill(c, alpha);
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null )
 						selectRender.drawCircle(
