@@ -13,6 +13,7 @@ class LevelTimeline {
 
 	var layerStates : Map<Int, haxe.ds.Vector< Null<{ before:ldtk.Json.LayerInstanceJson, after:ldtk.Json.LayerInstanceJson }> >>;
 	var curStateIdx = -1;
+	var debugLastTimer = -1.;
 
 	static var debugProcess : Null<dn.Process>;
 	static var invalidatedDebug = true;
@@ -53,11 +54,22 @@ class LevelTimeline {
 		}
 	}
 
+	inline function startTimer() {
+		debugLastTimer = hasDebug() ? haxe.Timer.stamp() : -1;
+	}
+
+	inline function stopTimer() {
+		if( hasDebug() )
+			debugLastTimer = haxe.Timer.stamp() - debugLastTimer;
+	}
+
 
 	public function saveLayerState(li:data.inst.LayerInstance) {
+		startTimer();
 		advanceIndex();
 		saveSingleLayerState(li);
 		prolongatePreviousStates();
+		stopTimer();
 	}
 
 
@@ -69,16 +81,21 @@ class LevelTimeline {
 
 
 	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
+		startTimer();
 		advanceIndex();
 		for(li in lis)
 			saveSingleLayerState(li);
+		prolongatePreviousStates();
+		stopTimer();
 	}
 
 
 	public function saveAllLayerStates() {
+		startTimer();
 		advanceIndex();
 		for(li in level.layerInstances)
 			saveSingleLayerState(li);
+		stopTimer();
 	}
 
 
@@ -110,8 +127,12 @@ class LevelTimeline {
 	}
 
 
+	public static inline function hasDebug() {
+		return debugProcess!=null && !debugProcess.destroyed;
+	}
+
 	public static function stopDebug() {
-		if( debugProcess!=null ) {
+		if( hasDebug() ) {
 			debugProcess.destroy();
 			debugProcess = null;
 		}
@@ -119,7 +140,7 @@ class LevelTimeline {
 
 
 	public static function toggleDebug() {
-		if( debugProcess!=null ) {
+		if( hasDebug() ) {
 			stopDebug();
 			return;
 		}
@@ -140,7 +161,7 @@ class LevelTimeline {
 				App.ME.jBody.append('<div id="timelineDebug"/>');
 			var jWrapper = App.ME.jBody.find("#timelineDebug");
 			jWrapper.empty();
-			jWrapper.append(curTimeline.level.identifier);
+			jWrapper.append( curTimeline.level.identifier + ( curTimeline.debugLastTimer<0 ? "" : ", "+M.pretty(curTimeline.debugLastTimer)+"s" ) );
 
 			var jTimeline = new J('<div class="timeline"/>');
 			jTimeline.appendTo( jWrapper);
