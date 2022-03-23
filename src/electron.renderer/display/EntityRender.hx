@@ -177,6 +177,7 @@ class EntityRender extends dn.Process {
 							ed.nineSliceBorders[3], ed.nineSliceBorders[0], ed.nineSliceBorders[1], ed.nineSliceBorders[2],
 							wrapper
 						);
+						sg.alpha = ed.tileOpacity;
 						sg.tileBorders = true;
 						sg.tileCenter = true;
 						sg.width = w;

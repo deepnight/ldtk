@@ -2,6 +2,7 @@
 
  - Fixed opacity of layers when exporting PNGs
  - Fixed tile pivot when using 9-slice scaling mode
+ - Fixed 9-scaled tiles to use Tile opacity from their Entity definition
 
 # 0.10.0-beta5
 
