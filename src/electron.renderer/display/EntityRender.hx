@@ -178,6 +178,7 @@ class EntityRender extends dn.Process {
 							wrapper
 						);
 						sg.tileBorders = true;
+						sg.tileCenter = true;
 						sg.width = w;
 						sg.height = h;
 				}
