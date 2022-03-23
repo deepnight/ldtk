@@ -121,8 +121,8 @@ class Level {
 	}
 
 
-	public function toJson() : ldtk.Json.LevelJson {
-		if( hasJsonCache() ) {
+	public function toJson(forTimeline=false) : ldtk.Json.LevelJson {
+		if( !forTimeline && hasJsonCache() ) {
 			var o = getCacheJsonObject();
 			if( !_project.externalLevels )
 				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
@@ -182,12 +182,13 @@ class Level {
 					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			},
-			layerInstances: layerInstances.map( li->li.toJson() ),
-			__neighbours: getNeighboursJson(),
+			layerInstances: forTimeline ? [] : layerInstances.map( li->li.toJson() ),
+			__neighbours: forTimeline ? [] : getNeighboursJson(),
 		}
 
 		// Cache this json
-		setJsonCache(json, false);
+		if( !forTimeline )
+			setJsonCache(json, false);
 
 		return json;
 	}

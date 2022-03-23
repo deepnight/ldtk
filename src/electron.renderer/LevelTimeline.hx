@@ -1,3 +1,8 @@
+typedef TimelineState = {
+	var layerJsons : Map<Int, ldtk.Json.LayerInstanceJson>;
+	var partialLevelJson : ldtk.Json.LevelJson;
+}
+
 class LevelTimeline {
 	static var STATES_COUNT = 5;
 	static var EXTRA = 3;
@@ -11,9 +16,9 @@ class LevelTimeline {
 	var worldIid : String;
 	var world(get,never) : data.World; inline function get_world() return project.getWorldIid(worldIid);
 
-	var states : haxe.ds.Vector< Map<Int, ldtk.Json.LayerInstanceJson> >;
+	var states : haxe.ds.Vector<TimelineState>;
 	var curStateIdx = -1;
-	var debugLastTimer = -1.;
+	var lastOpTimer = -1.;
 
 	static var debugProcess : Null<dn.Process>;
 	static var invalidatedDebug = true;
@@ -72,12 +77,12 @@ class LevelTimeline {
 	}
 
 	inline function startTimer() {
-		debugLastTimer = hasDebug() ? haxe.Timer.stamp() : -1;
+		lastOpTimer = hasDebug() ? haxe.Timer.stamp() : -1;
 	}
 
 	inline function stopTimer() {
 		if( hasDebug() )
-			debugLastTimer = haxe.Timer.stamp() - debugLastTimer;
+			lastOpTimer = haxe.Timer.stamp() - lastOpTimer;
 	}
 
 
@@ -88,8 +93,33 @@ class LevelTimeline {
 		startTimer();
 		advanceIndex();
 		saveSingleLayerState(li);
+		saveDependentLayers([li]);
+		saveLevelPropsState();
 		prolongatePreviousStates();
 		stopTimer();
+	}
+
+
+	function saveDependentLayers(lis:Array<data.inst.LayerInstance>) {
+		// List dependent layer instances
+		var deps = new Map();
+		for(li in lis)
+			switch li.def.type {
+				case IntGrid:
+					// Auto-layers based on this IntGrid layer
+					for(dli in level.layerInstances) {
+						if( !deps.exists(dli.layerDefUid) && dli.def.type==AutoLayer && dli.def.autoSourceLayerDefUid==li.layerDefUid )
+							deps.set(dli.layerDefUid, dli);
+					}
+
+				case Entities:
+				case Tiles:
+				case AutoLayer:
+			}
+
+		// Save dependencies states
+		for(li in deps)
+			saveSingleLayerState(li);
 	}
 
 
@@ -101,6 +131,8 @@ class LevelTimeline {
 		advanceIndex();
 		for(li in lis)
 			saveSingleLayerState(li);
+		saveDependentLayers(lis);
+		saveLevelPropsState();
 		prolongatePreviousStates();
 		stopTimer();
 	}
@@ -114,6 +146,7 @@ class LevelTimeline {
 		advanceIndex();
 		for(li in level.layerInstances)
 			saveSingleLayerState(li);
+		saveLevelPropsState();
 		stopTimer();
 	}
 
@@ -130,17 +163,26 @@ class LevelTimeline {
 	**/
 	function prolongatePreviousStates() {
 		var s = states.get(curStateIdx);
+
+		// Layer JSONs
 		for(li in level.layerInstances)
-			if( !s.exists(li.layerDefUid) )
-				s.set(li.layerDefUid, states.get(curStateIdx-1).get(li.layerDefUid));
+			if( !s.layerJsons.exists(li.layerDefUid) )
+				s.layerJsons.set(li.layerDefUid, states.get(curStateIdx-1).layerJsons.get(li.layerDefUid));
 	}
 
 
-	inline function layerIsEditable(li:data.inst.LayerInstance) {
-		return switch li.def.type {
-			case IntGrid, Entities, Tiles: true;
-			case AutoLayer: false;
-		}
+	inline function isLayerStateStored(ld:data.def.LayerDef) { // TODO useless
+		return true;
+	}
+
+
+	/**
+		Internal level props saving (not including layerInstances)
+	**/
+	function saveLevelPropsState() {
+		var s = states.get(curStateIdx);
+		s.partialLevelJson = level.toJson(true);
+		invalidatedDebug = true;
 	}
 
 
@@ -149,38 +191,57 @@ class LevelTimeline {
 	**/
 	function saveSingleLayerState(li:data.inst.LayerInstance) {
 		// Ignore non-editable layers
-		if( !layerIsEditable(li) )
+		if( !isLayerStateStored(li.def) )
 			return false;
 
 		// Init states
 		if( states.get(curStateIdx)==null )
-			states.set(curStateIdx, new Map());
+			states.set(curStateIdx, {
+				layerJsons: new Map(),
+				partialLevelJson: null,
+			});
 
 		// Store state
-		states.get(curStateIdx).set( li.layerDefUid, li.toJson() );
+		var s = states.get(curStateIdx);
+		s.layerJsons.set( li.layerDefUid, li.toJson() );
 
 		invalidatedDebug = true;
 		return true;
 	}
 
 
-	function getLayerState(stateIdx:Int, layerDefUid:Int) : Null<ldtk.Json.LayerInstanceJson> {
-		if( states.get(stateIdx)==null )
-			return null;
-		else
-			return states.get(stateIdx).get(layerDefUid);
+	inline function getState(idx) : Null<TimelineState> {
+		return idx>=0 && idx<STATES_COUNT+EXTRA ? states.get(idx) : null;
 	}
 
+	inline function hasState(idx) {
+		return getState(idx)!=null;
+	}
+
+
+	inline function getLayerJson(stateIdx:Int, layerDefUid:Int) : Null<ldtk.Json.LayerInstanceJson> {
+		return hasState(stateIdx) ? getState(stateIdx).layerJsons.get(layerDefUid) : null;
+	}
+
+
+	/**
+		Restore previous state
+	**/
 	public function undo() : Bool {
 		if( curStateIdx<=0 )
 			return false;
 
+		startTimer();
 		curStateIdx--;
 		restoreFullState(curStateIdx);
+		stopTimer();
 		return true;
 	}
 
 
+	/**
+		Restore following state
+	**/
 	public function redo() : Bool {
 		if( curStateIdx>=STATES_COUNT+EXTRA-1 )
 			return false;
@@ -188,20 +249,51 @@ class LevelTimeline {
 		if( states.get(curStateIdx+1)==null )
 			return false;
 
+		startTimer();
 		curStateIdx++;
 		restoreFullState(curStateIdx);
+		stopTimer();
 		return true;
 	}
 
 
+	/**
+		Restore given state from history
+	**/
 	function restoreFullState(idx:Int) {
-		for(i in 0...level.layerInstances.length) {
-			var layerJson = getLayerState(idx, level.layerInstances[i].layerDefUid);
-			if( layerJson!=null ) {
+		var state = getState(idx);
+		if( state==null )
+			throw "Null timeline state "+idx;
+
+		// Level
+		var lidx = dn.Lib.getArrayIndex(level, world.levels);
+		world.levels[lidx] = data.Level.fromJson(project, world, state.partialLevelJson, true);
+		project.resetQuickLevelAccesses();
+
+		// Layer instances
+		for(i in 0...project.defs.layers.length) {
+			var layerDef = project.defs.layers[i];
+			if( isLayerStateStored(layerDef) ) {
+				// Restore layer JSON
+				var layerJson = state.layerJsons.get(layerDef.uid);
+				if( layerJson==null )
+					throw "Missing layer JSON in timeline state "+idx;
+
 				level.layerInstances[i] = data.inst.LayerInstance.fromJson(project, layerJson);
 				editor.ge.emitAtTheEndOfFrame( LayerInstanceRestoredFromHistory(level.layerInstances[i]) );
 			}
+			// else {
+			// 	// Rebuild unsaved layer instance
+			// 	level.layerInstances[i] = level.getLayerInstance()
+			// }
 		}
+		trace(world.levels[lidx].layerInstances);
+		Chrono.init();
+		Chrono.quick();
+		level.tidy(project,world);
+		Chrono.quick();
+
+		editor.invalidateLevelCache( world.levels[lidx] );
 		invalidatedDebug = true;
 	}
 
@@ -257,7 +349,7 @@ class LevelTimeline {
 				App.ME.jBody.append('<div id="timelineDebug"/>');
 			var jWrapper = App.ME.jBody.find("#timelineDebug");
 			jWrapper.empty();
-			jWrapper.append( curTimeline.level.identifier + ( curTimeline.debugLastTimer<0 ? "" : ", "+M.pretty(curTimeline.debugLastTimer)+"s" ) );
+			jWrapper.append( curTimeline.level.identifier + ( curTimeline.lastOpTimer<0 ? "" : ", "+M.pretty(curTimeline.lastOpTimer)+"s" ) );
 
 			var jTimeline = new J('<div class="timeline"/>');
 			jTimeline.appendTo( jWrapper);
@@ -282,16 +374,14 @@ class LevelTimeline {
 					if( idx==curTimeline.curStateIdx )
 						jCell.addClass("current");
 
-					var s = curTimeline.states[idx];
-					var ls = s==null ? null : s.get(li.layerDefUid);
-
-					if( !curTimeline.layerIsEditable(li) )
+					var layerJson = curTimeline.getLayerJson(idx, li.layerDefUid);
+					if( !curTimeline.isLayerStateStored(li.def) )
 						jCell.addClass("na");
-					else if( s==null )
+					else if( layerJson==null )
 						jCell.addClass("empty");
 					else {
 						jCell.addClass("hasState");
-						if( idx>0 && curTimeline.states[idx-1].get(li.layerDefUid)==ls )
+						if( idx>0 && layerJson==curTimeline.getLayerJson(idx-1, li.layerDefUid) )
 							jCell.addClass("extend");
 					}
 				}
