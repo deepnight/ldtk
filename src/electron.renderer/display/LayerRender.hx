@@ -199,7 +199,10 @@ class LayerRender {
 				if( li.def.isAutoLayer() || li.def.type==Tiles ) {
 					render(li);
 					var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
-					root.drawTo(tex);
+					var wrapper = new h2d.Object();
+					wrapper.addChild(root);
+					root.alpha = li.def.displayOpacity; // apply layer alpha
+					wrapper.drawTo(tex);
 					out.push({
 						suffix: null,
 						bytes: tex.capturePixels().toPNG(),
@@ -232,7 +235,10 @@ class LayerRender {
 			if( li.def.isAutoLayer() || li.def.type==Tiles ) {
 				// Tiles
 				render(li);
-				root.drawTo(tex);
+				var wrapper = new h2d.Object();
+				wrapper.addChild(root);
+				root.alpha = li.def.displayOpacity; // apply layer alpha
+				wrapper.drawTo(tex);
 				return true;
 			}
 			else

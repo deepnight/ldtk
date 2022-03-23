@@ -1,3 +1,8 @@
+# 0.10.0-beta6
+
+ - Fixed opacity of layers when exporting PNGs
+ - Fixed tile pivot when using 9-slice scaling mode
+
 # 0.10.0-beta5
 
  - Added support for **9-slice scaling** mode for Entity tiles (how it works: https://en.wikipedia.org/wiki/9-slice_scaling).
