@@ -18,21 +18,27 @@ class LevelTimeline {
 	static var debugProcess : Null<dn.Process>;
 	static var invalidatedDebug = true;
 
+
 	public function new(levelUid:Int, worldIid:String) {
 		this.levelUid = levelUid;
 		this.worldIid = worldIid;
+
 		clear();
+
+		#if debug
+		enableDebug();
+		#end
 	}
 
 
+	/**
+		Reset timeline completely
+	**/
 	public function clear() {
 		states = new haxe.ds.Vector(STATES_COUNT+EXTRA);
 		invalidatedDebug = true;
 		curStateIdx = -1;
 		saveAllLayerStates();
-		#if debug
-		enableDebug();
-		#end
 	}
 
 
@@ -43,7 +49,12 @@ class LevelTimeline {
 	}
 
 
+	/**
+		Increment index and trim history above it
+	**/
 	function advanceIndex() {
+		trimFollowingStates();
+
 		if( curStateIdx<STATES_COUNT+EXTRA-1 ) {
 			// Advance
 			curStateIdx++;
@@ -75,7 +86,6 @@ class LevelTimeline {
 	**/
 	public function saveLayerState(li:data.inst.LayerInstance) {
 		startTimer();
-		trimFollowingStates();
 		advanceIndex();
 		saveSingleLayerState(li);
 		prolongatePreviousStates();
@@ -88,7 +98,6 @@ class LevelTimeline {
 	**/
 	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
 		startTimer();
-		trimFollowingStates();
 		advanceIndex();
 		for(li in lis)
 			saveSingleLayerState(li);
@@ -102,7 +111,6 @@ class LevelTimeline {
 	**/
 	public function saveAllLayerStates() {
 		startTimer();
-		trimFollowingStates();
 		advanceIndex();
 		for(li in level.layerInstances)
 			saveSingleLayerState(li);
@@ -174,8 +182,15 @@ class LevelTimeline {
 
 
 	public function redo() : Bool {
-		N.notImplemented();
-		return false;
+		if( curStateIdx>=STATES_COUNT+EXTRA-1 )
+			return false;
+
+		if( states.get(curStateIdx+1)==null )
+			return false;
+
+		curStateIdx++;
+		restoreFullState(curStateIdx);
+		return true;
 	}
 
 
