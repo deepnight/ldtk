@@ -4,8 +4,8 @@ typedef TimelineState = {
 }
 
 class LevelTimeline {
-	static var STATES_COUNT = 5;
-	static var EXTRA = 0;
+	static var STATES_COUNT = 30;
+	static var EXTRA = 10;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -371,7 +371,7 @@ class LevelTimeline {
 
 			var jTimeline = new J('<div class="timeline"/>');
 			jTimeline.appendTo( jWrapper);
-			jTimeline.css({ gridTemplateColumns:'min-content repeat(${STATES_COUNT+EXTRA}, 1fr)'});
+			jTimeline.css({ gridTemplateColumns:'min-content repeat(${STATES_COUNT+EXTRA}, 16px)'});
 
 			// Header
 			jTimeline.append('<div class="corner"/>');
