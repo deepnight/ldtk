@@ -588,12 +588,12 @@ class Editor extends Page {
 					setCompactMode( !settings.v.compactMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				curLevelHistory.undo();
-				// curLevelTimeline.undo();
+				// curLevelHistory.undo();
+				curLevelTimeline.undo();
 
 			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				curLevelHistory.redo();
-				// curLevelTimeline.redo();
+				// curLevelHistory.redo();
+				curLevelTimeline.redo();
 
 			#if debug
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
@@ -2238,7 +2238,7 @@ class Editor extends Page {
 		ui.Tileset.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
-		LevelTimeline.stopDebug();
+		LevelTimeline.disableDebug();
 
 		if( ME==this )
 			ME = null;

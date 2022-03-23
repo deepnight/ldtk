@@ -30,6 +30,9 @@ class LevelTimeline {
 		invalidatedDebug = true;
 		curStateIdx = -1;
 		saveAllLayerStates();
+		#if debug
+		enableDebug();
+		#end
 	}
 
 
@@ -72,6 +75,7 @@ class LevelTimeline {
 	**/
 	public function saveLayerState(li:data.inst.LayerInstance) {
 		startTimer();
+		trimFollowingStates();
 		advanceIndex();
 		saveSingleLayerState(li);
 		prolongatePreviousStates();
@@ -84,6 +88,7 @@ class LevelTimeline {
 	**/
 	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
 		startTimer();
+		trimFollowingStates();
 		advanceIndex();
 		for(li in lis)
 			saveSingleLayerState(li);
@@ -97,10 +102,18 @@ class LevelTimeline {
 	**/
 	public function saveAllLayerStates() {
 		startTimer();
+		trimFollowingStates();
 		advanceIndex();
 		for(li in level.layerInstances)
 			saveSingleLayerState(li);
 		stopTimer();
+	}
+
+
+	function trimFollowingStates() {
+		for(idx in curStateIdx+1...STATES_COUNT+EXTRA)
+			states.set(idx, null);
+		invalidatedDebug = true;
 	}
 
 
@@ -143,9 +156,38 @@ class LevelTimeline {
 	}
 
 
-	function restoreState(idx:Int) {
-		// var ls = layerStates.get(idx);
-		// curStateIdx = idx;
+	function getLayerState(stateIdx:Int, layerDefUid:Int) : Null<ldtk.Json.LayerInstanceJson> {
+		if( states.get(stateIdx)==null )
+			return null;
+		else
+			return states.get(stateIdx).get(layerDefUid);
+	}
+
+	public function undo() : Bool {
+		if( curStateIdx<=0 )
+			return false;
+
+		curStateIdx--;
+		restoreFullState(curStateIdx);
+		return true;
+	}
+
+
+	public function redo() : Bool {
+		N.notImplemented();
+		return false;
+	}
+
+
+	function restoreFullState(idx:Int) {
+		for(i in 0...level.layerInstances.length) {
+			var layerJson = getLayerState(idx, level.layerInstances[i].layerDefUid);
+			if( layerJson!=null ) {
+				level.layerInstances[i] = data.inst.LayerInstance.fromJson(project, layerJson);
+				editor.ge.emitAtTheEndOfFrame( LayerInstanceRestoredFromHistory(level.layerInstances[i]) );
+			}
+		}
+		invalidatedDebug = true;
 	}
 
 
@@ -157,23 +199,32 @@ class LevelTimeline {
 	}
 
 	/**
-		Kill debugger
-	**/
-	public static function stopDebug() {
-		if( hasDebug() ) {
-			debugProcess.destroy();
-			debugProcess = null;
-		}
-	}
-
-	/**
 		Toggle debugger
 	**/
 	public static function toggleDebug() {
-		if( hasDebug() ) {
-			stopDebug();
+		if( hasDebug() )
+			disableDebug();
+		else
+			enableDebug();
+	}
+
+	/**
+		Kill debugger
+	**/
+	public static function disableDebug() {
+		if( !hasDebug() )
 			return;
-		}
+
+		debugProcess.destroy();
+		debugProcess = null;
+	}
+
+	/**
+		Enable debugger
+	**/
+	public static function enableDebug() {
+		if( hasDebug() )
+			return;
 
 		invalidatedDebug = true;
 		var curTimeline : LevelTimeline = null;
