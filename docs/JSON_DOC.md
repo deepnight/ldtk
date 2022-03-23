@@ -260,9 +260,11 @@ Value | Type | Description
 `color` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Base entity color
 `height` | Int | Pixel height
 `identifier` | String | User defined unique identifier
+`nineSliceBorders`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Int | An array of 4 dimensions for the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>		If the tileRenderMode is not NineSlice, then this array is empty.<br/>		See: https://en.wikipedia.org/wiki/9-slice_scaling
 `pivotX` | Float | Pivot X coordinate (from 0 to 1.0)
 `pivotY` | Float | Pivot Y coordinate (from 0 to 1.0)
 `tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | An object representing a rectangle from an existing Tileset
+`tileRenderMode`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | An enum describing how the the Entity tile is rendered inside the Entity bounds.<br/> Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
@@ -274,14 +276,12 @@ Value | Type | Description
 `limitScope`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Enum | If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level".<br/> Possible values: `PerLayer`, `PerLevel`, `PerWorld`
 `lineOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Float | 
 `maxCount`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Int | Max instances count
-`nineSliceBorders`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Dimensions of the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>		See: https://en.wikipedia.org/wiki/9-slice_scaling
 `renderMode`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`
 `resizableX`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
 `resizableY`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable vertically
 `showName`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
 `tileOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | 
-`tileRenderMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.1-gray.svg)  | Enum | Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`
 ~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+<br/> <br/> Replaced by: `tileRect`
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>

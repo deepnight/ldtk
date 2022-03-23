@@ -992,8 +992,10 @@
 				"color",
 				"height",
 				"identifier",
+				"nineSliceBorders",
 				"pivotX",
 				"pivotY",
+				"tileRenderMode",
 				"uid",
 				"width",
 				"fieldDefs",
@@ -1004,14 +1006,12 @@
 				"limitScope",
 				"lineOpacity",
 				"maxCount",
-				"nineSliceBorders",
 				"renderMode",
 				"resizableX",
 				"resizableY",
 				"showName",
 				"tags",
-				"tileOpacity",
-				"tileRenderMode"
+				"tileOpacity"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1096,7 +1096,7 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`",
+					"description": "An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`",
 					"enum": [
 						"Cover",
 						"FitInside",
@@ -1122,7 +1122,7 @@
 					]
 				},
 				"nineSliceBorders": {
-					"description": "Dimensions of the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling",
+					"description": "An array of 4 dimensions for the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling",
 					"items": {
 						"type": [
 							"integer"
