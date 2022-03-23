@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.10.0-beta4",
+		"appVersion": "0.10.0-beta5",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.10.0-beta4",
-	"appBuildId": 457213,
+	"jsonVersion": "0.10.0-beta5",
+	"appBuildId": 457792,
 	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -378,6 +378,7 @@
 			"tileId": null,
 			"tileRenderMode": "Stretch",
 			"tileRect": null,
+			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -783,6 +784,7 @@
 			"tileId": null,
 			"tileRenderMode": "FitInside",
 			"tileRect": null,
+			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -869,6 +871,7 @@
 			"tileId": null,
 			"tileRenderMode": "Stretch",
 			"tileRect": null,
+			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -955,6 +958,7 @@
 			"tileId": null,
 			"tileRenderMode": "Stretch",
 			"tileRect": null,
+			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -1041,6 +1045,7 @@
 			"tileId": 30,
 			"tileRenderMode": "FitInside",
 			"tileRect": { "x": 224, "y": 16, "w": 16, "h": 16, "tilesetUid": 45 },
+			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "MoveLastOne",
@@ -1312,7 +1317,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1b4a71c0-8dc0-11ec-aca9-c31968a6d037"
+								"worldIid": "317b37f0-8dc0-11ec-9d89-c39bb3c51c9b"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1334,7 +1339,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1b4a71c0-8dc0-11ec-aca9-c31968a6d037"
+								"worldIid": "317b37f0-8dc0-11ec-9d89-c39bb3c51c9b"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1356,7 +1361,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1b4a71c0-8dc0-11ec-aca9-c31968a6d037"
+								"worldIid": "317b37f0-8dc0-11ec-9d89-c39bb3c51c9b"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
