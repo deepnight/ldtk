@@ -53,6 +53,26 @@ class LevelTimeline {
 		Global editor event
 	**/
 	public function manualOnGlobalEvent(e:GlobalEvent) {
+		var needsClear = switch e {
+			case ProjectSelected: true;
+			case LayerDefAdded: true;
+			case LayerDefRemoved(defUid): true;
+			case LayerDefChanged(defUid): true;
+			case LayerDefConverted: true;
+			case LayerDefIntGridValueRemoved(defUid, valueId, isUsed): true;
+			case TilesetDefRemoved(td): true;
+			case EntityDefRemoved: true;
+			case EntityDefChanged: true;
+			case FieldDefRemoved(fd): true;
+			case FieldDefChanged(fd): true;
+			case LevelFieldInstanceChanged(l, fi): true;
+			case EnumDefRemoved: true;
+			case EnumDefChanged: true;
+			case EnumDefValueRemoved: true;
+			case _: false;
+		}
+		if( needsClear )
+			clear();
 	}
 
 
