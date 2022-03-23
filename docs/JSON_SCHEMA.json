@@ -1004,6 +1004,7 @@
 				"limitScope",
 				"lineOpacity",
 				"maxCount",
+				"nineSliceBorders",
 				"renderMode",
 				"resizableX",
 				"resizableY",
@@ -1095,14 +1096,15 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`",
+					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`",
 					"enum": [
 						"Cover",
 						"FitInside",
 						"Repeat",
 						"Stretch",
 						"FullSizeCropped",
-						"FullSizeUncropped"
+						"FullSizeUncropped",
+						"NineSlice"
 					]
 				},
 				"limitBehavior": {
@@ -1117,6 +1119,17 @@
 					"description": "",
 					"type": [
 						"number"
+					]
+				},
+				"nineSliceBorders": {
+					"description": "Dimensions of the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"resizableX": {
