@@ -290,7 +290,6 @@ class SelectionTool extends Tool<Int> {
 				deleteSelecteds();
 				for(li in layerInsts) {
 					editor.curLevelHistory.saveLayerState(li);
-					// editor.curLevelTimeline.saveLayerState(li);
 					editor.levelRender.invalidateLayer(li);
 					editor.ge.emit( LayerInstanceChangedGlobally(li) );
 				}
@@ -364,7 +363,6 @@ class SelectionTool extends Tool<Int> {
 				var changedLayers = group.moveSelecteds(origin, m, isCopy);
 				for(li in changedLayers) {
 					editor.curLevelHistory.saveLayerState(li);
-					// editor.curLevelTimeline.saveLayerState(li);
 					if( li!=curLayerInstance )
 						editor.levelRender.invalidateLayer(li); // cur is invalidated by Tool
 				}
