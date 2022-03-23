@@ -5878,6 +5878,8 @@ dl.form.fieldInstanceEditor {
 		border-bottom-left-radius: 8px;
 
 		ul.values {
+			overflow: hidden;
+
 			>li {
 				display: flex;
 				// display: grid;
