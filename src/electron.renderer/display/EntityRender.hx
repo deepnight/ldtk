@@ -170,6 +170,16 @@ class EntityRender extends dn.Process {
 						var bmp = new h2d.Bitmap(t, wrapper);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
+
+					case NineSlice:
+						var sg = new h2d.ScaleGrid(
+							t,
+							ed.nineSliceBorders[3], ed.nineSliceBorders[0], ed.nineSliceBorders[1], ed.nineSliceBorders[2],
+							wrapper
+						);
+						sg.tileBorders = true;
+						sg.width = w;
+						sg.height = h;
 				}
 			}
 		}

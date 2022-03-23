@@ -46,7 +46,6 @@
 			</dt>
 			<dd>
 				<div id="tags"></div>
-				<div class="info"></div>
 			</dd>
 
 			<dt>
@@ -86,6 +85,23 @@
 
 				<div class="tilePicker"></div>
 				<select class="mode_Tile tileRenderMode"></select>
+
+				<span class="nineSlice">
+					<div class="info">
+						9-slice scaling mode splits the selected texture in 9 sections (4 corners, 4 borders and 1 inner).
+						Corners are drawn as-is, Borders are repeated on the sides of the entity, and Inner is stretch at the center of the entity.
+						You can adjust the size of up, down, left and right borders, in pixels.
+					</div>
+					<span>9-slices borders:</span>
+					<span>top=</span>
+					<input type="text" name="nineSliceUp"/>
+					<span>down=</span>
+					<input type="text" name="nineSliceDown"/>
+					<span>left=</span>
+					<input type="text" name="nineSliceLeft"/>
+					<span>right=</span>
+					<input type="text" name="nineSliceRight"/>
+				</span>
 			</dd>
 
 			<dd>

@@ -324,9 +324,31 @@ class EditEntityDefs extends ui.modal.Panel {
 				case Stretch: L.t._("Dirty stretch to bounds");
 				case FullSizeCropped: L.t._("Full size (cropped in bounds)");
 				case FullSizeUncropped: L.t._("Full size (not cropped)");
+				case NineSlice: L.t._("9-slices scaling");
 			}
 		);
 		i.linkEvent( EntityDefChanged );
+
+		if( curEntity.tileRenderMode!=NineSlice )
+			jEntityForm.find(".nineSlice").hide();
+		else {
+			jEntityForm.find(".nineSlice").show();
+			if( curEntity.nineSliceBorders.length!=4 )
+				curEntity.nineSliceBorders = [2,2,2,2];
+
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[0], jEntityForm.find("[name=nineSliceUp]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[1], jEntityForm.find("[name=nineSliceRight]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[2], jEntityForm.find("[name=nineSliceDown]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[3], jEntityForm.find("[name=nineSliceLeft]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+		}
 
 		// Tile rect picker
 		if( curEntity.renderMode==Tile ) {

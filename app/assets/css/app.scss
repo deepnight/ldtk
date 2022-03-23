@@ -7953,6 +7953,21 @@ $patternSize : 32px;
 			.tilePicker {
 				flex: 0 0 auto;
 			}
+
+			.nineSlice {
+				display: flex;
+				flex: 1 0 100%;
+				flex-wrap: nowrap;
+				opacity: 1;
+				align-items: center;
+				span {
+					opacity: 0.8;
+					margin-left: 8px;
+				}
+				input {
+					width: 40px;
+				}
+			}
 		}
 	}
 

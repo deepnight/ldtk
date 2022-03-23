@@ -20,6 +20,7 @@ class EntityDef {
 	public var showName : Bool;
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
+	public var nineSliceBorders : Array<Int>;
 	public var tilesetId : Null<Int>;
 	public var tileRect : Null<ldtk.Json.TilesetRect>;
 	public var _oldTileId : Null<Int>;
@@ -156,6 +157,7 @@ class EntityDef {
 
 		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Cover";
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, FitInside);
+		o.nineSliceBorders = JsonTools.readArray(json.nineSliceBorders, []);
 
 		o.maxCount = JsonTools.readInt( json.maxCount, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
@@ -195,6 +197,7 @@ class EntityDef {
 			tileId: tileRect==null ? null : try p.defs.getTilesetDef(tilesetId).getFirstTileIdFromRect(tileRect) catch(_) null,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 			tileRect: tileRect,
+			nineSliceBorders: nineSliceBorders.copy(),
 
 			maxCount: maxCount,
 			limitScope: JsonTools.writeEnum(limitScope, false),

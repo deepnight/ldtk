@@ -286,6 +286,10 @@ class JsTools {
 
 						case FullSizeCropped:
 						case FullSizeUncropped:
+
+						case NineSlice:
+							scaleX = scale * ed.width / td.tileGridSize; // TODO
+							scaleY = scale * ed.height / td.tileGridSize;
 					}
 					td.drawTileRectToCanvas(jCanvas, ed.tileRect, x,y, scaleX, scaleY);
 				}
