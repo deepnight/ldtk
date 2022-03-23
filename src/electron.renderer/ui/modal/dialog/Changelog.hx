@@ -12,6 +12,8 @@ class Changelog extends ui.modal.Dialog {
 	}
 
 
+	override function openAnim() { /* none */ }
+
 	public function showVersion(?version:dn.Version) {
 		var changeLog = Const.getChangeLog().latest;
 
@@ -23,6 +25,12 @@ class Changelog extends ui.modal.Dialog {
 					break;
 				}
 		}
+
+		// More compact window for short changelogs
+		if( changeLog.allNoteLines.length<=15 )
+			jContent.addClass("short");
+		else
+			jContent.removeClass("short");
 
 		// Prepare markdown
 		var rawMd = changeLog.allNoteLines.join("\n");

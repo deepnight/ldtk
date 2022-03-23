@@ -2625,6 +2625,11 @@ textarea {
 		grid-template-rows: min-content auto;
 		height: 100%;
 
+		&.short {
+			min-height: 40vh;
+			max-height: 70vh;
+		}
+
 		header {
 			display: grid;
 			grid-template-columns: min-content auto min-content;
