@@ -17,6 +17,7 @@ class ResizeTool extends Tool<Int> {
 	var ge: GenericLevelElement;
 	var _handlePosIterator : Array<RectHandlePos>;
 
+	var resizedAnything = false;
 	var invalidated = true;
 	var _rect : Null<ResizeRect>;
 	var rect(get,never) : ResizeRect;
@@ -134,6 +135,7 @@ class ResizeTool extends Tool<Int> {
 		super.startUsing(ev,m,extraParam);
 		curMode = null;
 
+		resizedAnything = false;
 		ev.cancel = true;
 		draggedHandle = getOveredHandle(m);
 		if( draggedHandle==null ) {
@@ -154,6 +156,14 @@ class ResizeTool extends Tool<Int> {
 
 	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
+		if( resizedAnything ) {
+			switch ge {
+				case GridCell(li, cx, cy):
+				case Entity(li, ei): editor.curLevelTimeline.markEntityChange(ei);
+				case PointField(li, ei, fi, arrayIdx):
+			}
+			editor.curLevelTimeline.saveLayerState(curLayerInstance);
+		}
 		draggedHandle = null;
 	}
 
@@ -257,6 +267,7 @@ class ResizeTool extends Tool<Int> {
 
 				case PointField(li, ei, fi, arrayIdx):
 			}
+			resizedAnything = true;
 			dragOrigin = m;
 		}
 	}
