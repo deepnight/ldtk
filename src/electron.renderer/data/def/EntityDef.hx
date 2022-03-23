@@ -54,6 +54,7 @@ class EntityDef {
 		limitBehavior = MoveLastOne;
 		limitScope = PerLevel;
 		tileRenderMode = FitInside;
+		nineSliceBorders = [];
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
