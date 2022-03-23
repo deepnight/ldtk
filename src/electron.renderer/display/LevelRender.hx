@@ -364,12 +364,6 @@ class LevelRender extends dn.Process {
 		);
 	}
 
-	public inline function bleepHistoryBounds(layerDefUid:Int, bounds:HistoryStateBounds, col:UInt) {
-		var li = editor.curLevel.getLayerInstance(layerDefUid);
-		if( li!=null )
-			bleepLayerRectPx(li, bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
-	}
-
 	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:Int, spd=1.0) : Bleep {
 		return bleepLayerRectPx(
 			ei._li,

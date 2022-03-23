@@ -121,18 +121,6 @@ enum ToolEditMode {
 	Remove;
 }
 
-enum HistoryState {
-	ResizedLevel(beforeJson:Dynamic, afterJson:Dynamic);
-	Layer(layerId:Int, bounds:Null<HistoryStateBounds>, json:Dynamic);
-}
-
-typedef HistoryStateBounds = {
-	var x : Int;
-	var y : Int;
-	var wid : Int;
-	var hei : Int;
-}
-
 enum RectHandlePos {
 	Top;
 	Bottom;
