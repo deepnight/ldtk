@@ -153,7 +153,7 @@ class LevelInstanceForm {
 		onFieldChange();
 		editor.ge.emit( LevelResized(level) );
 		editor.invalidateLevelCache(level);
-		editor.curLevelHistory.saveResizedState( before, level.toJson() );
+		editor.curLevelTimeline.saveFullLevelState();
 		new J("dl#levelForm *:focus").blur();
 	}
 

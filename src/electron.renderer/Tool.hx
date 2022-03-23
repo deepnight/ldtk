@@ -94,7 +94,6 @@ class Tool<T> extends dn.Process {
 			return;
 		}
 
-		editor.curLevelHistory.initChangeMarks();
 		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
@@ -146,7 +145,6 @@ class Tool<T> extends dn.Process {
 			check(cur.cx, cur.cy+1);
 
 			// Apply
-			editor.curLevelHistory.markChange(cur.cx, cur.cy);
 			editor.curLevelTimeline.markGridChange(curLayerInstance, cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
 			affectedPoints.push(cur);
@@ -235,8 +233,6 @@ class Tool<T> extends dn.Process {
 
 
 	function saveToHistory() {
-		editor.curLevelHistory.saveLayerState( curLayerInstance );
-		editor.curLevelHistory.flushChangeMarks();
 		editor.curLevelTimeline.saveLayerState(curLayerInstance);
 		needHistorySaving = false;
 	}

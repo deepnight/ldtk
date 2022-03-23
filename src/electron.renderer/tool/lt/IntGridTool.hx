@@ -63,7 +63,6 @@ class IntGridTool extends tool.LayerTool<Int> {
 		}
 
 		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
-			editor.curLevelHistory.markChange(cx,cy);
 			editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 			return true;
 		}
@@ -89,7 +88,6 @@ class IntGridTool extends tool.LayerTool<Int> {
 			}
 
 			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
-				editor.curLevelHistory.markChange(cx,cy);
 				editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 				anyChange = true;
 			}

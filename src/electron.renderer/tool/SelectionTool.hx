@@ -277,7 +277,6 @@ class SelectionTool extends Tool<Int> {
 
 	override function saveToHistory() {
 		// No super() call
-		editor.curLevelHistory.flushChangeMarks();
 	}
 
 
@@ -289,7 +288,6 @@ class SelectionTool extends Tool<Int> {
 				var layerInsts = group.getSelectedLayerInstances();
 				deleteSelecteds();
 				for(li in layerInsts) {
-					editor.curLevelHistory.saveLayerState(li);
 					editor.levelRender.invalidateLayer(li);
 					editor.ge.emit( LayerInstanceChangedGlobally(li) );
 				}
@@ -364,11 +362,9 @@ class SelectionTool extends Tool<Int> {
 			if( isOnStop ) {
 				// Move actual data
 				var changedLayers = group.moveSelecteds(origin, m, isCopy);
-				for(li in changedLayers) {
-					editor.curLevelHistory.saveLayerState(li);
+				for(li in changedLayers)
 					if( li!=curLayerInstance )
 						editor.levelRender.invalidateLayer(li); // cur is invalidated by Tool
-				}
 				editor.curLevelTimeline.saveLayerStates(changedLayers);
 				editor.invalidateResizeTool();
 

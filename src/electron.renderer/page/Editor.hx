@@ -60,10 +60,6 @@ class Editor extends Page {
 	public var curLevelTimeline(get,never) : LevelTimeline;
 		inline function get_curLevelTimeline() return levelTimelines.get(curLevelId);
 
-	var levelHistory : Map<Int,LevelHistory> = new Map();
-	public var curLevelHistory(get,never) : LevelHistory;
-		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
-
 
 	public function new(p:data.Project, ?loadLevelIndex:Int) {
 		super();
@@ -344,8 +340,6 @@ class Editor extends Page {
 
 		levelTimelines = new Map();
 		levelTimelines.set( curLevelId, new LevelTimeline(curLevelId, curWorldIid) );
-		levelHistory = new Map();
-		levelHistory.set( curLevelId, new LevelHistory(curLevelId, curWorldIid) );
 
 		// Load tilesets
 		var tilesetChanged = false;
@@ -1911,8 +1905,6 @@ class Editor extends Page {
 				clearSpecialTool();
 				selectionTool.clear();
 				updateTool();
-				if( !levelHistory.exists(l.uid) )
-					levelHistory.set(l.uid, new LevelHistory(l.uid, l._world.iid) );
 				if( !levelTimelines.exists(l.uid) )
 					levelTimelines.set(l.uid, new LevelTimeline(l.uid, l._world.iid) );
 				selectWorldDepth(l.worldDepth);
@@ -1977,10 +1969,6 @@ class Editor extends Page {
 			case WorldSelected(w):
 				// NOTE: a LevelSelected event always happens right after this one
 		}
-
-		// Propagate to LevelHistory
-		if( curLevelHistory!=null )
-			curLevelHistory.manualOnGlobalEvent(e);
 
 		// Propagate to all LevelTimelines
 		for(tl in levelTimelines)
