@@ -1,6 +1,6 @@
 class LevelTimeline {
-	static var MAX = 10;
-	static var EXTRA = 5;
+	static var STATES_COUNT = 5;
+	static var EXTRA = 3;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -11,7 +11,7 @@ class LevelTimeline {
 	var worldIid : String;
 	var world(get,never) : data.World; inline function get_world() return project.getWorldIid(worldIid);
 
-	var layerStates : Map<Int, haxe.ds.Vector< Null<{ before:ldtk.Json.LayerInstanceJson, after:ldtk.Json.LayerInstanceJson }> >>;
+	var states : haxe.ds.Vector< Map<Int, ldtk.Json.LayerInstanceJson> >;
 	var curStateIdx = -1;
 	var debugLastTimer = -1.;
 
@@ -26,7 +26,7 @@ class LevelTimeline {
 
 
 	public function clear() {
-		layerStates = new Map();
+		states = new haxe.ds.Vector(STATES_COUNT+EXTRA);
 		invalidatedDebug = true;
 		curStateIdx = -1;
 		saveAllLayerStates();
@@ -41,18 +41,18 @@ class LevelTimeline {
 
 
 	function advanceIndex() {
-		if( curStateIdx<MAX+EXTRA-1 ) {
+		if( curStateIdx<STATES_COUNT+EXTRA-1 ) {
 			// Advance
 			curStateIdx++;
 		}
 		else {
 			// Reached limit, offset history
-			for(lh in layerStates) {
-				for(i in 0...MAX)
-					lh.set(i, lh.get(i+EXTRA+1));
-				for(i in MAX...MAX+EXTRA)
-					lh.set(i, null);
-			}
+			for(i in 0...STATES_COUNT)
+				states.set(i, states.get(i+EXTRA+1));
+
+			// Clear above STATES_COUNT
+			for(i in STATES_COUNT...STATES_COUNT+EXTRA)
+				states.set(i, null);
 			curStateIdx-=EXTRA;
 		}
 	}
@@ -108,9 +108,10 @@ class LevelTimeline {
 		Copy previous layer instances states if they didn't change in current index
 	**/
 	function prolongatePreviousStates() {
-		for(ls in layerStates)
-			if( ls.get(curStateIdx)==null )
-				ls.set(curStateIdx, ls.get(curStateIdx-1));
+		var s = states.get(curStateIdx);
+		for(li in level.layerInstances)
+			if( !s.exists(li.layerDefUid) )
+				s.set(li.layerDefUid, states.get(curStateIdx-1).get(li.layerDefUid));
 	}
 
 
@@ -131,17 +132,20 @@ class LevelTimeline {
 			return false;
 
 		// Init states
-		if( !layerStates.exists(li.layerDefUid) )
-			layerStates.set(li.layerDefUid, new haxe.ds.Vector(MAX+EXTRA));
+		if( states.get(curStateIdx)==null )
+			states.set(curStateIdx, new Map());
 
 		// Store state
-		layerStates.get(li.layerDefUid).set(curStateIdx, {
-			before: null,
-			after: li.toJson(),
-		});
+		states.get(curStateIdx).set( li.layerDefUid, li.toJson() );
 
 		invalidatedDebug = true;
 		return true;
+	}
+
+
+	function restoreState(idx:Int) {
+		// var ls = layerStates.get(idx);
+		// curStateIdx = idx;
 	}
 
 
@@ -191,11 +195,11 @@ class LevelTimeline {
 
 			var jTimeline = new J('<div class="timeline"/>');
 			jTimeline.appendTo( jWrapper);
-			jTimeline.css({ gridTemplateColumns:'min-content repeat(${MAX+EXTRA}, 1fr)'});
+			jTimeline.css({ gridTemplateColumns:'min-content repeat(${STATES_COUNT+EXTRA}, 1fr)'});
 
 			// Header
 			jTimeline.append('<div class="corner"/>');
-			for(idx in 0...MAX+EXTRA) {
+			for(idx in 0...STATES_COUNT+EXTRA) {
 				var jHeader = new J('<div class="header row">$idx</div>');
 				jTimeline.append(jHeader);
 				if( idx==curTimeline.curStateIdx )
@@ -203,25 +207,27 @@ class LevelTimeline {
 			}
 
 			// History
-			for(li in Editor.ME.curLevel.layerInstances) {
+			for( li in curTimeline.level.layerInstances ) {
 				jTimeline.append('<div class="header col">${li.def.identifier}</div>');
 
-				for(idx in 0...MAX+EXTRA) {
+				for(idx in 0...STATES_COUNT+EXTRA) {
 					var jCell = new J('<div/>');
 					jCell.appendTo(jTimeline);
 					if( idx==curTimeline.curStateIdx )
 						jCell.addClass("current");
 
-					var ls = curTimeline.layerStates.get(li.layerDefUid);
-					if( ls!=null && ls.get(idx)!=null ) {
+					var s = curTimeline.states[idx];
+					var ls = s==null ? null : s.get(li.layerDefUid);
+
+					if( !curTimeline.layerIsEditable(li) )
+						jCell.addClass("na");
+					else if( s==null )
+						jCell.addClass("empty");
+					else {
 						jCell.addClass("hasState");
-						if( idx>0 && ls.get(idx)==ls.get(idx-1) )
+						if( idx>0 && curTimeline.states[idx-1].get(li.layerDefUid)==ls )
 							jCell.addClass("extend");
 					}
-					else if( !curTimeline.layerIsEditable(li) )
-						jCell.addClass("na");
-					else
-						jCell.addClass("empty");
 				}
 			}
 
