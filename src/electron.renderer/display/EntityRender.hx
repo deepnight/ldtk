@@ -181,6 +181,9 @@ class EntityRender extends dn.Process {
 						sg.tileCenter = true;
 						sg.width = w;
 						sg.height = h;
+						sg.x = -w*ed.pivotX;
+						sg.y = -h*ed.pivotY;
+
 				}
 			}
 		}
