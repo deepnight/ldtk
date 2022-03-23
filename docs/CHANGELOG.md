@@ -2,6 +2,7 @@
 
  - Fixed a critical bug which led to super weird behaviours after Level Resizing.
  - Fixed `neighbours` not updating after moving or deleting a level
+ - Full rework of the Undo/Redo command. Changes were mostly only internals, so nothing should change from the user perspective. The only major related change is for selections movements that can now be undone as a single operation (and not per-layer as before).
 
 # 0.10.0-beta4
 
