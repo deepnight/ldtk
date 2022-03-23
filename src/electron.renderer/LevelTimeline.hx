@@ -1,11 +1,11 @@
 typedef TimelineState = {
 	var layerJsons : Map<Int, ldtk.Json.LayerInstanceJson>;
-	var partialLevelJson : ldtk.Json.LevelJson;
+	var fullLevelJson : Null<ldtk.Json.LevelJson>;
 }
 
 class LevelTimeline {
 	static var STATES_COUNT = 5;
-	static var EXTRA = 3;
+	static var EXTRA = 0;
 
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -43,7 +43,7 @@ class LevelTimeline {
 		states = new haxe.ds.Vector(STATES_COUNT+EXTRA);
 		invalidatedDebug = true;
 		curStateIdx = -1;
-		saveAllLayerStates();
+		saveFullLevelState();
 	}
 
 
@@ -94,7 +94,6 @@ class LevelTimeline {
 		advanceIndex();
 		saveSingleLayerState(li);
 		saveDependentLayers([li]);
-		saveLevelPropsState();
 		prolongatePreviousStates();
 		stopTimer();
 	}
@@ -132,21 +131,28 @@ class LevelTimeline {
 		for(li in lis)
 			saveSingleLayerState(li);
 		saveDependentLayers(lis);
-		saveLevelPropsState();
 		prolongatePreviousStates();
 		stopTimer();
 	}
 
 
 	/**
-		Save all existing layer instances states
+		Save full level JSON to history
 	**/
-	public function saveAllLayerStates() {
+	public function saveFullLevelState() {
 		startTimer();
 		advanceIndex();
-		for(li in level.layerInstances)
-			saveSingleLayerState(li);
-		saveLevelPropsState();
+
+		checkOrInitState(curStateIdx);
+		var s = getState(curStateIdx);
+
+		// Store level JSON
+		s.fullLevelJson = level.toJson();
+
+		// Also store layer instances JSONs (from level JSON)
+		for(layerInstJson in s.fullLevelJson.layerInstances)
+			s.layerJsons.set( layerInstJson.layerDefUid, layerInstJson );
+
 		stopTimer();
 	}
 
@@ -168,6 +174,10 @@ class LevelTimeline {
 		for(li in level.layerInstances)
 			if( !s.layerJsons.exists(li.layerDefUid) )
 				s.layerJsons.set(li.layerDefUid, states.get(curStateIdx-1).layerJsons.get(li.layerDefUid));
+
+		// Level JSON
+		if( s.fullLevelJson==null )
+			s.fullLevelJson = states.get(curStateIdx-1).fullLevelJson;
 	}
 
 
@@ -175,16 +185,13 @@ class LevelTimeline {
 		return true;
 	}
 
-
-	/**
-		Internal level props saving (not including layerInstances)
-	**/
-	function saveLevelPropsState() {
-		var s = states.get(curStateIdx);
-		s.partialLevelJson = level.toJson(true);
-		invalidatedDebug = true;
+	function checkOrInitState(idx:Int) {
+		if( states.get(idx)==null )
+			states.set(idx, {
+				layerJsons: new Map(),
+				fullLevelJson: null,
+			});
 	}
-
 
 	/**
 		Internal layer instance saving
@@ -194,15 +201,11 @@ class LevelTimeline {
 		if( !isLayerStateStored(li.def) )
 			return false;
 
-		// Init states
-		if( states.get(curStateIdx)==null )
-			states.set(curStateIdx, {
-				layerJsons: new Map(),
-				partialLevelJson: null,
-			});
+		// Init state
+		checkOrInitState(curStateIdx);
 
 		// Store state
-		var s = states.get(curStateIdx);
+		var s = getState(curStateIdx);
 		s.layerJsons.set( li.layerDefUid, li.toJson() );
 
 		invalidatedDebug = true;
@@ -224,6 +227,11 @@ class LevelTimeline {
 	}
 
 
+	inline function getFullLevelJson(stateIdx:Int) : Null<ldtk.Json.LevelJson> {
+		return hasState(stateIdx) ? getState(stateIdx).fullLevelJson : null;
+	}
+
+
 	/**
 		Restore previous state
 	**/
@@ -233,7 +241,9 @@ class LevelTimeline {
 
 		startTimer();
 		curStateIdx--;
-		restoreFullState(curStateIdx);
+		if( getFullLevelJson(curStateIdx)!=getFullLevelJson(curStateIdx+1) )
+			restoreFullLevel(curStateIdx);
+		restoreLayerStates(curStateIdx);
 		stopTimer();
 		return true;
 	}
@@ -251,7 +261,9 @@ class LevelTimeline {
 
 		startTimer();
 		curStateIdx++;
-		restoreFullState(curStateIdx);
+		if( getFullLevelJson(curStateIdx)!=getFullLevelJson(curStateIdx-1) )
+			restoreFullLevel(curStateIdx);
+		restoreLayerStates(curStateIdx);
 		stopTimer();
 		return true;
 	}
@@ -260,21 +272,36 @@ class LevelTimeline {
 	/**
 		Restore given state from history
 	**/
-	function restoreFullState(idx:Int) {
+	function restoreFullLevel(idx:Int) {
 		var state = getState(idx);
 		if( state==null )
 			throw "Null timeline state "+idx;
 
-		// Level
+		// Restore full level
+		N.debug("full level JSON restored");
 		var lidx = dn.Lib.getArrayIndex(level, world.levels);
-		world.levels[lidx] = data.Level.fromJson(project, world, state.partialLevelJson, true);
+		world.levels[lidx] = data.Level.fromJson(project, world, state.fullLevelJson, true);
 		project.resetQuickLevelAccesses();
+		level.tidy(project, world);
+		editor.invalidateLevelCache(level);
+		editor.ge.emit( LevelRestoredFromHistory(level) );
 
-		// Layer instances
+		invalidatedDebug = true;
+	}
+
+
+	/**
+		Restore given state from history
+	**/
+	function restoreLayerStates(idx:Int) {
+		var state = getState(idx);
+		if( state==null )
+			throw "Null timeline state "+idx;
+
+		// Restore some layer instances
 		for(i in 0...project.defs.layers.length) {
 			var layerDef = project.defs.layers[i];
 			if( isLayerStateStored(layerDef) ) {
-				// Restore layer JSON
 				var layerJson = state.layerJsons.get(layerDef.uid);
 				if( layerJson==null )
 					throw "Missing layer JSON in timeline state "+idx;
@@ -282,18 +309,8 @@ class LevelTimeline {
 				level.layerInstances[i] = data.inst.LayerInstance.fromJson(project, layerJson);
 				editor.ge.emitAtTheEndOfFrame( LayerInstanceRestoredFromHistory(level.layerInstances[i]) );
 			}
-			// else {
-			// 	// Rebuild unsaved layer instance
-			// 	level.layerInstances[i] = level.getLayerInstance()
-			// }
 		}
-		trace(world.levels[lidx].layerInstances);
-		Chrono.init();
-		Chrono.quick();
-		level.tidy(project,world);
-		Chrono.quick();
 
-		editor.invalidateLevelCache( world.levels[lidx] );
 		invalidatedDebug = true;
 	}
 
@@ -326,6 +343,7 @@ class LevelTimeline {
 		debugProcess = null;
 	}
 
+
 	/**
 		Enable debugger
 	**/
@@ -349,7 +367,7 @@ class LevelTimeline {
 				App.ME.jBody.append('<div id="timelineDebug"/>');
 			var jWrapper = App.ME.jBody.find("#timelineDebug");
 			jWrapper.empty();
-			jWrapper.append( curTimeline.level.identifier + ( curTimeline.lastOpTimer<0 ? "" : ", "+M.pretty(curTimeline.lastOpTimer)+"s" ) );
+			jWrapper.append( curTimeline.level.identifier + ( curTimeline.lastOpTimer<0 ? "" : ", "+M.pretty(curTimeline.lastOpTimer,3)+"s" ) );
 
 			var jTimeline = new J('<div class="timeline"/>');
 			jTimeline.appendTo( jWrapper);
@@ -362,6 +380,23 @@ class LevelTimeline {
 				jTimeline.append(jHeader);
 				if( idx==curTimeline.curStateIdx )
 					jHeader.addClass("current");
+			}
+
+			// Full level states
+			jTimeline.append('<div class="header col level">LEVEL</div>');
+			for(idx in 0...STATES_COUNT+EXTRA) {
+				var jCell = new J('<div class="header row level"/>');
+				jCell.appendTo(jTimeline);
+				if( idx==curTimeline.curStateIdx )
+					jCell.addClass("current");
+
+				if( !curTimeline.hasState(idx) || curTimeline.getState(idx).fullLevelJson==null )
+					jCell.addClass("empty");
+				else {
+					jCell.addClass("hasState");
+					if( idx>0 && curTimeline.getState(idx).fullLevelJson==curTimeline.getState(idx-1).fullLevelJson )
+						jCell.addClass("extend");
+				}
 			}
 
 			// History

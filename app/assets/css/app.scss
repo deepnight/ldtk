@@ -8021,22 +8021,33 @@ $patternSize : 32px;
 					text-align: center;
 					font-size: 7pt;
 				}
+
+				&.level {
+					color: $orange;
+				}
 			}
 
 			&.current {
-				border: 1px solid black;
-				outline: 1px solid $orange;
+				border-right: 3px solid $orange;
+				box-shadow: -2px 0px 0px transparentize($color: black, $amount: 0.5) inset;
 			}
 
 			&.hasState {
 				background-color: $help;
-				border-radius: 3px;
 
 				&.extend {
 					background-color: $helpMed;
+					background-repeat: no-repeat;
 					background-image: url("../icons/arrow_right.svg");
 					background-position: center;
 					opacity: 0.66;
+				}
+
+				&.level {
+					background-color: $orangeLight;
+					&.extend {
+						background-color: $orange;
+					}
 				}
 			}
 
