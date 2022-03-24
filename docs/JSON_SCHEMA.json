@@ -171,6 +171,86 @@
 					"null"
 				]
 			},
+			"__FORCED_REFS": {
+				"description": "This object is not actually used by LDtk. It ONLY exists to force explicit references to all types, to make sure QuickType finds them and integrate all of them. Otherwise, Quicktype will drop types that are not explicitely used.",
+				"properties": {
+					"TilesetRect": {
+						"$ref": "#/otherTypes/TilesetRect"
+					},
+					"FieldInstance": {
+						"$ref": "#/otherTypes/FieldInstance"
+					},
+					"EntityInstance": {
+						"$ref": "#/otherTypes/EntityInstance"
+					},
+					"Definitions": {
+						"$ref": "#/otherTypes/Definitions"
+					},
+					"EnumTagValue": {
+						"$ref": "#/otherTypes/EnumTagValue"
+					},
+					"AutoRuleDef": {
+						"$ref": "#/otherTypes/AutoRuleDef"
+					},
+					"FieldDef": {
+						"$ref": "#/otherTypes/FieldDef"
+					},
+					"EntityDef": {
+						"$ref": "#/otherTypes/EntityDef"
+					},
+					"AutoLayerRuleGroup": {
+						"$ref": "#/otherTypes/AutoLayerRuleGroup"
+					},
+					"IntGridValueInstance": {
+						"$ref": "#/otherTypes/IntGridValueInstance"
+					},
+					"NeighbourLevel": {
+						"$ref": "#/otherTypes/NeighbourLevel"
+					},
+					"LayerInstance": {
+						"$ref": "#/otherTypes/LayerInstance"
+					},
+					"World": {
+						"$ref": "#/otherTypes/World"
+					},
+					"EntityReferenceInfos": {
+						"$ref": "#/otherTypes/EntityReferenceInfos"
+					},
+					"TileCustomMetadata": {
+						"$ref": "#/otherTypes/TileCustomMetadata"
+					},
+					"TilesetDef": {
+						"$ref": "#/otherTypes/TilesetDef"
+					},
+					"EnumDefValues": {
+						"$ref": "#/otherTypes/EnumDefValues"
+					},
+					"Tile": {
+						"$ref": "#/otherTypes/Tile"
+					},
+					"LayerDef": {
+						"$ref": "#/otherTypes/LayerDef"
+					},
+					"LevelBgPosInfos": {
+						"$ref": "#/otherTypes/LevelBgPosInfos"
+					},
+					"Level": {
+						"$ref": "#/otherTypes/Level"
+					},
+					"EnumDef": {
+						"$ref": "#/otherTypes/EnumDef"
+					},
+					"GridPoint": {
+						"$ref": "#/otherTypes/GridPoint"
+					},
+					"IntGridValueDef": {
+						"$ref": "#/otherTypes/IntGridValueDef"
+					}
+				},
+				"type": [
+					"object"
+				]
+			},
 			"exportTiled": {
 				"description": "If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)",
 				"type": [
