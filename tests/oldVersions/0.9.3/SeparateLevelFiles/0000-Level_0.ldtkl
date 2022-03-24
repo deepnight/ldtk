@@ -1,0 +1,76 @@
+{
+	"__header__": {
+		"fileType": "LDtk Project JSON",
+		"app": "LDtk",
+		"doc": "https://ldtk.io/json",
+		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
+		"appAuthor": "Sebastien 'deepnight' Benard",
+		"appVersion": "0.9.3",
+		"url": "https://ldtk.io"
+	},
+	"identifier": "Level_0",
+	"uid": 0,
+	"worldX": 0,
+	"worldY": 0,
+	"pxWid": 240,
+	"pxHei": 224,
+	"__bgColor": "#398666",
+	"bgColor": "#398666",
+	"useAutoIdentifier": true,
+	"bgRelPath": null,
+	"bgPos": null,
+	"bgPivotX": 0.5,
+	"bgPivotY": 0.5,
+	"__bgPos": null,
+	"externalRelPath": null,
+	"fieldInstances": [
+		{
+			"__identifier": "tutorial",
+			"__value": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
+			"__type": "String",
+			"defUid": 8,
+			"realEditorValues": [{
+				"id": "V_String",
+				"params": [
+					"In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective."
+				]
+			}]
+		},
+		{ "__identifier": "textColor", "__value": "#FFDC00", "__type": "Color", "defUid": 9, "realEditorValues": [] }
+	],
+	"layerInstances": [
+		{
+			"__identifier": "IntGrid",
+			"__type": "IntGrid",
+			"__cWid": 15,
+			"__cHei": 14,
+			"__gridSize": 16,
+			"__opacity": 1,
+			"__pxTotalOffsetX": 0,
+			"__pxTotalOffsetY": 0,
+			"__tilesetDefUid": null,
+			"__tilesetRelPath": null,
+			"levelId": 0,
+			"layerDefUid": 1,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"visible": true,
+			"optionalRules": [],
+			"intGridCsv": [
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,
+				0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,
+				0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,
+				1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+				0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+				
+			],
+			"autoLayerTiles": [],
+			"seed": 5411700,
+			"overrideTilesetUid": null,
+			"gridTiles": [],
+			"entityInstances": []
+		}
+	],
+	"__neighbours": [{ "levelUid": 2, "dir": "e" }]
+}
