@@ -1,5 +1,6 @@
 # 0.10.0-beta7
 
+ - Much faster undo/redo for projects with lots of AutoLayer rules.
  - Fixed a crash when saving a project with external levels
 
 
