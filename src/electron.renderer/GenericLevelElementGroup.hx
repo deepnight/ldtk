@@ -719,6 +719,7 @@ class GenericLevelElementGroup {
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
+								editor.curLevelTimeline.markGridChange(li, tcx,tcy);
 
 							case Tiles:
 								var gridRatio = Std.int( moveGrid / li.def.scaledGridSize );
@@ -734,6 +735,7 @@ class GenericLevelElementGroup {
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
+								editor.curLevelTimeline.markGridChange(li, tcx,tcy);
 
 							case Entities:
 							case AutoLayer:
