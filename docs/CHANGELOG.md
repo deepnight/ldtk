@@ -4,6 +4,8 @@
  - Fixed opacity of layers when exporting PNGs
  - Fixed tile pivot when using 9-slice scaling mode
  - Fixed 9-scaled tiles to use Tile opacity from their Entity definition
+ - Fixed Tiled tileset export
+ - Added "Type" value for entities in Tiled exported files
 
 # 0.10.0-beta5
 
