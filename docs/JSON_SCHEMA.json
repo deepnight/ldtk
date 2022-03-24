@@ -129,9 +129,10 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
 				"items": {
 					"enum": [
+						"DiscardPreCsvIntGrid",
 						"ExportPreCsvIntGridFormat",
 						"IgnoreBackupSuggest",
 						"PrependIndexToLevelFileNames",
