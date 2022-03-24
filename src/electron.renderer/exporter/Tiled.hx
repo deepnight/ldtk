@@ -302,6 +302,7 @@ class Tiled extends Exporter {
 						}
 
 						object.set("name",e.def.identifier);
+						object.set("type",e.def.identifier);
 						object.set("x",""+x);
 						object.set("y",""+y);
 						object.set("width",""+e.def.width);
