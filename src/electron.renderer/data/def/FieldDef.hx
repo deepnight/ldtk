@@ -154,7 +154,7 @@ class FieldDef {
 			identifier: identifier,
 			__type: getJsonTypeString(),
 			uid: uid,
-			type: JsonTools.writeEnum(type, false),
+			type: JsonTools.writeEnumAsString(type, false),
 			isArray: isArray,
 			canBeNull: canBeNull,
 			arrayMinLength: arrayMinLength,
