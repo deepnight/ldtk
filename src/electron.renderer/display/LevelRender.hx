@@ -30,7 +30,7 @@ class LevelRender extends dn.Process {
 	var allInvalidated = true;
 	var uiAndBgInvalidated = false;
 	var gridInvalidated = false;
-	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
+	var layerInvalidations : Map<Int, { evaluateRules:Bool, left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
 	public function new() {
@@ -120,7 +120,7 @@ class LevelRender extends dn.Process {
 
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
-					invalidateLayer(li);
+					invalidateLayer(li, false);
 
 			case LevelSelected(l):
 				invalidateAll();
@@ -595,10 +595,10 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int) {
+	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int, evaluateRules=true) {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
-		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
+		layerInvalidations.set( li.layerDefUid, { evaluateRules:evaluateRules, left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
 
 		if( li.def.type==IntGrid )
 			for(l in editor.curLevel.layerInstances)
@@ -606,14 +606,15 @@ class LevelRender extends dn.Process {
 					invalidateLayer(l);
 	}
 
-	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
+	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int, evaluateRules=true) {
 		if( layerInvalidations.exists(li.layerDefUid) ) {
 			var bounds = layerInvalidations.get(li.layerDefUid);
 			bounds.left = M.imin(bounds.left, left);
 			bounds.right = M.imax(bounds.right, right);
+			bounds.evaluateRules = evaluateRules;
 		}
 		else
-			layerInvalidations.set( li.layerDefUid, { left:left, right:right, top:top, bottom:bottom } );
+			layerInvalidations.set( li.layerDefUid, { evaluateRules:evaluateRules, left:left, right:right, top:top, bottom:bottom } );
 
 		// Invalidate linked auto-layers
 		if( li.def.type==IntGrid )
@@ -633,6 +634,38 @@ class LevelRender extends dn.Process {
 	public inline function invalidateAll() {
 		allInvalidated = true;
 	}
+
+
+	public function applyInvalidations() {
+		if( allInvalidated ) {
+			// Full
+			renderAll();
+			App.LOG.warning("Full level render requested");
+		}
+		else {
+			// UI & bg elements
+			if( uiAndBgInvalidated ) {
+				renderBg();
+				renderBounds();
+				uiAndBgInvalidated = false;
+				App.LOG.render("Rendered level UI");
+			}
+
+			if( gridInvalidated && !cd.hasSetS("gridRenderLock",0.2) )
+				renderGrid();
+
+			// Layers
+			for( li in editor.curLevel.layerInstances )
+				if( layerInvalidations.exists(li.layerDefUid) ) {
+					var inv = layerInvalidations.get(li.layerDefUid);
+					if( li.def.isAutoLayer() && inv.evaluateRules )
+						li.applyAllAutoLayerRulesAt( inv.left, inv.top, inv.right-inv.left+1, inv.bottom-inv.top+1 );
+					renderLayer(li);
+				}
+		}
+	}
+
+
 
 	override function postUpdate() {
 		super.postUpdate();
@@ -667,35 +700,7 @@ class LevelRender extends dn.Process {
 				i++;
 		}
 
-
-		// Render invalidation system
-		if( allInvalidated ) {
-			// Full
-			renderAll();
-			App.LOG.warning("Full level render requested");
-		}
-		else {
-			// UI & bg elements
-			if( uiAndBgInvalidated ) {
-				renderBg();
-				renderBounds();
-				uiAndBgInvalidated = false;
-				App.LOG.render("Rendered level UI");
-			}
-
-			if( gridInvalidated && !cd.hasSetS("gridRenderLock",0.2) )
-				renderGrid();
-
-			// Layers
-			for( li in editor.curLevel.layerInstances )
-				if( layerInvalidations.exists(li.layerDefUid) ) {
-					var b = layerInvalidations.get(li.layerDefUid);
-					if( li.def.isAutoLayer() )
-						li.applyAllAutoLayerRulesAt( b.left, b.top, b.right-b.left+1, b.bottom-b.top+1 );
-					renderLayer(li);
-				}
-		}
-
+		applyInvalidations();
 		applyGridVisibility();
 	}
 
