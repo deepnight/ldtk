@@ -374,7 +374,7 @@ class LevelTimeline {
 
 
 
-	public inline function markRectChange(li:data.inst.LayerInstance, x:Int, y:Int, w:Int, h:Int) {
+	inline function markRectChange(li:data.inst.LayerInstance, x:Int, y:Int, w:Int, h:Int) {
 		if( changeBounds==null )
 			changeBounds = h2d.col.Bounds.fromValues(x+li.pxTotalOffsetX, y+li.pxTotalOffsetY, w, h);
 		else {
