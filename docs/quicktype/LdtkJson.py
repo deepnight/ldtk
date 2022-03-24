@@ -83,7 +83,8 @@ class AllowedRefs(Enum):
 class EditorDisplayMode(Enum):
     """Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
     `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
-    `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
+    `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
+    `RefLinkBetweenCenters`
     """
     ARRAY_COUNT_NO_LABEL = "ArrayCountNoLabel"
     ARRAY_COUNT_WITH_LABEL = "ArrayCountWithLabel"
@@ -96,7 +97,8 @@ class EditorDisplayMode(Enum):
     POINT_STAR = "PointStar"
     RADIUS_GRID = "RadiusGrid"
     RADIUS_PX = "RadiusPx"
-    REF_LINK = "RefLink"
+    REF_LINK_BETWEEN_CENTERS = "RefLinkBetweenCenters"
+    REF_LINK_BETWEEN_PIVOTS = "RefLinkBetweenPivots"
     VALUE_ONLY = "ValueOnly"
 
 
@@ -109,7 +111,7 @@ class EditorDisplayPos(Enum):
 
 class LevelFieldType(Enum):
     """Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+    `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
     """
     F_BOOL = "F_Bool"
     F_COLOR = "F_Color"
@@ -121,6 +123,7 @@ class LevelFieldType(Enum):
     F_POINT = "F_Point"
     F_STRING = "F_String"
     F_TEXT = "F_Text"
+    F_TILE = "F_Tile"
 
 
 class TextLanguageMode(Enum):
@@ -128,6 +131,7 @@ class TextLanguageMode(Enum):
     LANG_HAXE = "LangHaxe"
     LANG_JS = "LangJS"
     LANG_JSON = "LangJson"
+    LANG_LOG = "LangLog"
     LANG_LUA = "LangLua"
     LANG_MARKDOWN = "LangMarkdown"
     LANG_PYTHON = "LangPython"
@@ -141,7 +145,9 @@ class FieldDefinition:
     """
     """Human readable value type. Possible values: `Int, Float, String, Bool, Color,
     ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this
-    field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
+    field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)<br/>  NOTE: if
+    you enable the advanced option **Use Multilines type**, you will have "*Multilines*"
+    instead of "*String*" when relevant.
     """
     type: str
     """Optional list of accepted file extensions for FilePath value type. Includes the dot:
@@ -156,6 +162,7 @@ class FieldDefinition:
     array_max_length: Optional[int]
     """Array min length"""
     array_min_length: Optional[int]
+    auto_chain_ref: bool
     """TRUE if the value can be null. For arrays, TRUE means it can contain null values
     (exception: array of Points can't have null values).
     """
@@ -166,7 +173,8 @@ class FieldDefinition:
     editor_cut_long_values: bool
     """Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
     `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
-    `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
+    `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
+    `RefLinkBetweenCenters`
     """
     editor_display_mode: EditorDisplayMode
     """Possible values: `Above`, `Center`, `Beneath`"""
@@ -187,11 +195,13 @@ class FieldDefinition:
     regex: Optional[str]
     symmetrical_ref: bool
     """Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
-    `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
+    `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
     """
     text_language_mode: Optional[TextLanguageMode]
+    """UID of the tileset used for a Tile"""
+    tileset_uid: Optional[int]
     """Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+    `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
     """
     field_definition_type: LevelFieldType
     """Unique Int identifier"""
@@ -202,7 +212,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], field_definition_type: LevelFieldType, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: LevelFieldType, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -210,6 +220,7 @@ class FieldDefinition:
         self.allow_out_of_level_ref = allow_out_of_level_ref
         self.array_max_length = array_max_length
         self.array_min_length = array_min_length
+        self.auto_chain_ref = auto_chain_ref
         self.can_be_null = can_be_null
         self.default_override = default_override
         self.editor_always_show = editor_always_show
@@ -225,6 +236,7 @@ class FieldDefinition:
         self.regex = regex
         self.symmetrical_ref = symmetrical_ref
         self.text_language_mode = text_language_mode
+        self.tileset_uid = tileset_uid
         self.field_definition_type = field_definition_type
         self.uid = uid
         self.use_for_smart_color = use_for_smart_color
@@ -239,6 +251,7 @@ class FieldDefinition:
         allow_out_of_level_ref = from_bool(obj.get("allowOutOfLevelRef"))
         array_max_length = from_union([from_none, from_int], obj.get("arrayMaxLength"))
         array_min_length = from_union([from_none, from_int], obj.get("arrayMinLength"))
+        auto_chain_ref = from_bool(obj.get("autoChainRef"))
         can_be_null = from_bool(obj.get("canBeNull"))
         default_override = obj.get("defaultOverride")
         editor_always_show = from_bool(obj.get("editorAlwaysShow"))
@@ -254,10 +267,11 @@ class FieldDefinition:
         regex = from_union([from_none, from_str], obj.get("regex"))
         symmetrical_ref = from_bool(obj.get("symmetricalRef"))
         text_language_mode = from_union([from_none, TextLanguageMode], obj.get("textLanguageMode"))
+        tileset_uid = from_union([from_none, from_int], obj.get("tilesetUid"))
         field_definition_type = LevelFieldType(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
-        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, field_definition_type, uid, use_for_smart_color)
+        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -268,6 +282,7 @@ class FieldDefinition:
         result["allowOutOfLevelRef"] = from_bool(self.allow_out_of_level_ref)
         result["arrayMaxLength"] = from_union([from_none, from_int], self.array_max_length)
         result["arrayMinLength"] = from_union([from_none, from_int], self.array_min_length)
+        result["autoChainRef"] = from_bool(self.auto_chain_ref)
         result["canBeNull"] = from_bool(self.can_be_null)
         result["defaultOverride"] = self.default_override
         result["editorAlwaysShow"] = from_bool(self.editor_always_show)
@@ -283,6 +298,7 @@ class FieldDefinition:
         result["regex"] = from_union([from_none, from_str], self.regex)
         result["symmetricalRef"] = from_bool(self.symmetrical_ref)
         result["textLanguageMode"] = from_union([from_none, lambda x: to_enum(TextLanguageMode, x)], self.text_language_mode)
+        result["tilesetUid"] = from_union([from_none, from_int], self.tileset_uid)
         result["type"] = to_enum(LevelFieldType, self.field_definition_type)
         result["uid"] = from_int(self.uid)
         result["useForSmartColor"] = from_bool(self.use_for_smart_color)
@@ -313,10 +329,56 @@ class RenderMode(Enum):
     TILE = "Tile"
 
 
+class TilesetRectangle:
+    """This object represents a custom sub rectangle in a Tileset image."""
+    """Height in pixels"""
+    h: int
+    """UID of the tileset"""
+    tileset_uid: int
+    """Width in pixels"""
+    w: int
+    """X pixels coordinate of the top-left corner in the Tileset image"""
+    x: int
+    """Y pixels coordinate of the top-left corner in the Tileset image"""
+    y: int
+
+    def __init__(self, h: int, tileset_uid: int, w: int, x: int, y: int) -> None:
+        self.h = h
+        self.tileset_uid = tileset_uid
+        self.w = w
+        self.x = x
+        self.y = y
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'TilesetRectangle':
+        assert isinstance(obj, dict)
+        h = from_int(obj.get("h"))
+        tileset_uid = from_int(obj.get("tilesetUid"))
+        w = from_int(obj.get("w"))
+        x = from_int(obj.get("x"))
+        y = from_int(obj.get("y"))
+        return TilesetRectangle(h, tileset_uid, w, x, y)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["h"] = from_int(self.h)
+        result["tilesetUid"] = from_int(self.tileset_uid)
+        result["w"] = from_int(self.w)
+        result["x"] = from_int(self.x)
+        result["y"] = from_int(self.y)
+        return result
+
+
 class TileRenderMode(Enum):
-    """Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`"""
+    """An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
+    `FullSizeUncropped`, `NineSlice`
+    """
     COVER = "Cover"
     FIT_INSIDE = "FitInside"
+    FULL_SIZE_CROPPED = "FullSizeCropped"
+    FULL_SIZE_UNCROPPED = "FullSizeUncropped"
+    NINE_SLICE = "NineSlice"
     REPEAT = "Repeat"
     STRETCH = "Stretch"
 
@@ -345,6 +407,11 @@ class EntityDefinition:
     line_opacity: float
     """Max instances count"""
     max_count: int
+    """An array of 4 dimensions for the up/right/down/left borders (in this order) when using
+    9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then
+    this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling
+    """
+    nine_slice_borders: List[int]
     """Pivot X coordinate (from 0 to 1.0)"""
     pivot_x: float
     """Pivot Y coordinate (from 0 to 1.0)"""
@@ -359,9 +426,17 @@ class EntityDefinition:
     show_name: bool
     """An array of strings that classifies this entity"""
     tags: List[str]
-    """Tile ID used for optional tile display"""
+    """**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
+    Replaced by: `tileRect`
+    """
     tile_id: Optional[int]
-    """Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`"""
+    tile_opacity: float
+    """An object representing a rectangle from an existing Tileset"""
+    tile_rect: Optional[TilesetRectangle]
+    """An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
+    `FullSizeUncropped`, `NineSlice`
+    """
     tile_render_mode: TileRenderMode
     """Tileset ID used for optional tile display"""
     tileset_id: Optional[int]
@@ -370,7 +445,7 @@ class EntityDefinition:
     """Pixel width"""
     width: int
 
-    def __init__(self, color: str, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
+    def __init__(self, color: str, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
         self.color = color
         self.field_defs = field_defs
         self.fill_opacity = fill_opacity
@@ -382,6 +457,7 @@ class EntityDefinition:
         self.limit_scope = limit_scope
         self.line_opacity = line_opacity
         self.max_count = max_count
+        self.nine_slice_borders = nine_slice_borders
         self.pivot_x = pivot_x
         self.pivot_y = pivot_y
         self.render_mode = render_mode
@@ -390,6 +466,8 @@ class EntityDefinition:
         self.show_name = show_name
         self.tags = tags
         self.tile_id = tile_id
+        self.tile_opacity = tile_opacity
+        self.tile_rect = tile_rect
         self.tile_render_mode = tile_render_mode
         self.tileset_id = tileset_id
         self.uid = uid
@@ -409,6 +487,7 @@ class EntityDefinition:
         limit_scope = LimitScope(obj.get("limitScope"))
         line_opacity = from_float(obj.get("lineOpacity"))
         max_count = from_int(obj.get("maxCount"))
+        nine_slice_borders = from_list(from_int, obj.get("nineSliceBorders"))
         pivot_x = from_float(obj.get("pivotX"))
         pivot_y = from_float(obj.get("pivotY"))
         render_mode = RenderMode(obj.get("renderMode"))
@@ -417,11 +496,13 @@ class EntityDefinition:
         show_name = from_bool(obj.get("showName"))
         tags = from_list(from_str, obj.get("tags"))
         tile_id = from_union([from_none, from_int], obj.get("tileId"))
+        tile_opacity = from_float(obj.get("tileOpacity"))
+        tile_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("tileRect"))
         tile_render_mode = TileRenderMode(obj.get("tileRenderMode"))
         tileset_id = from_union([from_none, from_int], obj.get("tilesetId"))
         uid = from_int(obj.get("uid"))
         width = from_int(obj.get("width"))
-        return EntityDefinition(color, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_render_mode, tileset_id, uid, width)
+        return EntityDefinition(color, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -436,6 +517,7 @@ class EntityDefinition:
         result["limitScope"] = to_enum(LimitScope, self.limit_scope)
         result["lineOpacity"] = to_float(self.line_opacity)
         result["maxCount"] = from_int(self.max_count)
+        result["nineSliceBorders"] = from_list(from_int, self.nine_slice_borders)
         result["pivotX"] = to_float(self.pivot_x)
         result["pivotY"] = to_float(self.pivot_y)
         result["renderMode"] = to_enum(RenderMode, self.render_mode)
@@ -444,6 +526,8 @@ class EntityDefinition:
         result["showName"] = from_bool(self.show_name)
         result["tags"] = from_list(from_str, self.tags)
         result["tileId"] = from_union([from_none, from_int], self.tile_id)
+        result["tileOpacity"] = to_float(self.tile_opacity)
+        result["tileRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile_rect)
         result["tileRenderMode"] = to_enum(TileRenderMode, self.tile_render_mode)
         result["tilesetId"] = from_union([from_none, from_int], self.tileset_id)
         result["uid"] = from_int(self.uid)
@@ -495,16 +579,19 @@ class EnumDefinition:
     icon_tileset_uid: Optional[int]
     """User defined unique identifier"""
     identifier: str
+    """An array of user-defined tags to organize the Enums"""
+    tags: List[str]
     """Unique Int identifier"""
     uid: int
     """All possible enum values, with their optional Tile infos."""
     values: List[EnumValueDefinition]
 
-    def __init__(self, external_file_checksum: Optional[str], external_rel_path: Optional[str], icon_tileset_uid: Optional[int], identifier: str, uid: int, values: List[EnumValueDefinition]) -> None:
+    def __init__(self, external_file_checksum: Optional[str], external_rel_path: Optional[str], icon_tileset_uid: Optional[int], identifier: str, tags: List[str], uid: int, values: List[EnumValueDefinition]) -> None:
         self.external_file_checksum = external_file_checksum
         self.external_rel_path = external_rel_path
         self.icon_tileset_uid = icon_tileset_uid
         self.identifier = identifier
+        self.tags = tags
         self.uid = uid
         self.values = values
 
@@ -515,9 +602,10 @@ class EnumDefinition:
         external_rel_path = from_union([from_none, from_str], obj.get("externalRelPath"))
         icon_tileset_uid = from_union([from_none, from_int], obj.get("iconTilesetUid"))
         identifier = from_str(obj.get("identifier"))
+        tags = from_list(from_str, obj.get("tags"))
         uid = from_int(obj.get("uid"))
         values = from_list(EnumValueDefinition.from_dict, obj.get("values"))
-        return EnumDefinition(external_file_checksum, external_rel_path, icon_tileset_uid, identifier, uid, values)
+        return EnumDefinition(external_file_checksum, external_rel_path, icon_tileset_uid, identifier, tags, uid, values)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -525,6 +613,7 @@ class EnumDefinition:
         result["externalRelPath"] = from_union([from_none, from_str], self.external_rel_path)
         result["iconTilesetUid"] = from_union([from_none, from_int], self.icon_tileset_uid)
         result["identifier"] = from_str(self.identifier)
+        result["tags"] = from_list(from_str, self.tags)
         result["uid"] = from_int(self.uid)
         result["values"] = from_list(lambda x: to_class(EnumValueDefinition, x), self.values)
         return result
@@ -585,10 +674,14 @@ class AutoLayerRuleDefinition:
     uid: int
     """X cell coord modulo"""
     x_modulo: int
+    """X cell start offset"""
+    x_offset: int
     """Y cell coord modulo"""
     y_modulo: int
+    """Y cell start offset"""
+    y_offset: int
 
-    def __init__(self, active: bool, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: List[int], tile_mode: TileMode, uid: int, x_modulo: int, y_modulo: int) -> None:
+    def __init__(self, active: bool, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: List[int], tile_mode: TileMode, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
         self.active = active
         self.break_on_match = break_on_match
         self.chance = chance
@@ -608,7 +701,9 @@ class AutoLayerRuleDefinition:
         self.tile_mode = tile_mode
         self.uid = uid
         self.x_modulo = x_modulo
+        self.x_offset = x_offset
         self.y_modulo = y_modulo
+        self.y_offset = y_offset
 
     @staticmethod
     def from_dict(obj: Any) -> 'AutoLayerRuleDefinition':
@@ -632,8 +727,10 @@ class AutoLayerRuleDefinition:
         tile_mode = TileMode(obj.get("tileMode"))
         uid = from_int(obj.get("uid"))
         x_modulo = from_int(obj.get("xModulo"))
+        x_offset = from_int(obj.get("xOffset"))
         y_modulo = from_int(obj.get("yModulo"))
-        return AutoLayerRuleDefinition(active, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, uid, x_modulo, y_modulo)
+        y_offset = from_int(obj.get("yOffset"))
+        return AutoLayerRuleDefinition(active, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, uid, x_modulo, x_offset, y_modulo, y_offset)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -656,13 +753,15 @@ class AutoLayerRuleDefinition:
         result["tileMode"] = to_enum(TileMode, self.tile_mode)
         result["uid"] = from_int(self.uid)
         result["xModulo"] = from_int(self.x_modulo)
+        result["xOffset"] = from_int(self.x_offset)
         result["yModulo"] = from_int(self.y_modulo)
+        result["yOffset"] = from_int(self.y_offset)
         return result
 
 
 class AutoLayerRuleGroup:
     active: bool
-    """*This field was removed in 0.10.0 and should no longer be used.*"""
+    """*This field was removed in 1.0.0 and should no longer be used.*"""
     collapsed: Optional[bool]
     is_optional: bool
     name: str
@@ -744,7 +843,7 @@ class LayerDefinition:
     """Contains all the auto-layer rule definitions."""
     auto_rule_groups: List[AutoLayerRuleGroup]
     auto_source_layer_def_uid: Optional[int]
-    """**WARNING**: this deprecated value will be *removed* completely on version 0.12.0+
+    """**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
     Replaced by: `tilesetDefUid`
     """
     auto_tileset_def_uid: Optional[int]
@@ -752,18 +851,19 @@ class LayerDefinition:
     display_opacity: float
     """An array of tags to forbid some Entities in this layer"""
     excluded_tags: List[str]
-    """When TRUE, the layer will be faded out if it isn't the active one."""
-    fade_inactive: bool
     """Width and height of the grid in pixels"""
     grid_size: int
     """Height of the optional "guide" grid in pixels"""
     guide_grid_hei: int
     """Width of the optional "guide" grid in pixels"""
     guide_grid_wid: int
+    hide_fields_when_inactive: bool
     """Hide the layer from the list on the side of the editor view."""
     hide_in_list: bool
     """User defined unique identifier"""
     identifier: str
+    """Alpha of this layer when it is not the active one."""
+    inactive_opacity: float
     """An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the
     array order is not related to actual IntGrid values! As user can re-order IntGrid values
     freely, you may value "2" before value "1" in this array.
@@ -800,7 +900,7 @@ class LayerDefinition:
     """Reference to the default Tileset UID being used by this layer definition.<br/>
     **WARNING**: some layer *instances* might use a different tileset. So most of the time,
     you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:
-    since version 0.10.0, the old `autoTilesetDefUid` was removed and merged into this value.
+    since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.
     """
     tileset_def_uid: Optional[int]
     """Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
@@ -810,19 +910,20 @@ class LayerDefinition:
     """Unique Int identifier"""
     uid: int
 
-    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], display_opacity: float, excluded_tags: List[str], fade_inactive: bool, grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_in_list: bool, identifier: str, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: LayerType, uid: int) -> None:
+    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], display_opacity: float, excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: LayerType, uid: int) -> None:
         self.type = type
         self.auto_rule_groups = auto_rule_groups
         self.auto_source_layer_def_uid = auto_source_layer_def_uid
         self.auto_tileset_def_uid = auto_tileset_def_uid
         self.display_opacity = display_opacity
         self.excluded_tags = excluded_tags
-        self.fade_inactive = fade_inactive
         self.grid_size = grid_size
         self.guide_grid_hei = guide_grid_hei
         self.guide_grid_wid = guide_grid_wid
+        self.hide_fields_when_inactive = hide_fields_when_inactive
         self.hide_in_list = hide_in_list
         self.identifier = identifier
+        self.inactive_opacity = inactive_opacity
         self.int_grid_values = int_grid_values
         self.parallax_factor_x = parallax_factor_x
         self.parallax_factor_y = parallax_factor_y
@@ -845,12 +946,13 @@ class LayerDefinition:
         auto_tileset_def_uid = from_union([from_none, from_int], obj.get("autoTilesetDefUid"))
         display_opacity = from_float(obj.get("displayOpacity"))
         excluded_tags = from_list(from_str, obj.get("excludedTags"))
-        fade_inactive = from_bool(obj.get("fadeInactive"))
         grid_size = from_int(obj.get("gridSize"))
         guide_grid_hei = from_int(obj.get("guideGridHei"))
         guide_grid_wid = from_int(obj.get("guideGridWid"))
+        hide_fields_when_inactive = from_bool(obj.get("hideFieldsWhenInactive"))
         hide_in_list = from_bool(obj.get("hideInList"))
         identifier = from_str(obj.get("identifier"))
+        inactive_opacity = from_float(obj.get("inactiveOpacity"))
         int_grid_values = from_list(IntGridValueDefinition.from_dict, obj.get("intGridValues"))
         parallax_factor_x = from_float(obj.get("parallaxFactorX"))
         parallax_factor_y = from_float(obj.get("parallaxFactorY"))
@@ -863,7 +965,7 @@ class LayerDefinition:
         tileset_def_uid = from_union([from_none, from_int], obj.get("tilesetDefUid"))
         layer_definition_type = LayerType(obj.get("type"))
         uid = from_int(obj.get("uid"))
-        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, display_opacity, excluded_tags, fade_inactive, grid_size, guide_grid_hei, guide_grid_wid, hide_in_list, identifier, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, uid)
+        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, display_opacity, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -873,12 +975,13 @@ class LayerDefinition:
         result["autoTilesetDefUid"] = from_union([from_none, from_int], self.auto_tileset_def_uid)
         result["displayOpacity"] = to_float(self.display_opacity)
         result["excludedTags"] = from_list(from_str, self.excluded_tags)
-        result["fadeInactive"] = from_bool(self.fade_inactive)
         result["gridSize"] = from_int(self.grid_size)
         result["guideGridHei"] = from_int(self.guide_grid_hei)
         result["guideGridWid"] = from_int(self.guide_grid_wid)
+        result["hideFieldsWhenInactive"] = from_bool(self.hide_fields_when_inactive)
         result["hideInList"] = from_bool(self.hide_in_list)
         result["identifier"] = from_str(self.identifier)
+        result["inactiveOpacity"] = to_float(self.inactive_opacity)
         result["intGridValues"] = from_list(lambda x: to_class(IntGridValueDefinition, x), self.int_grid_values)
         result["parallaxFactorX"] = to_float(self.parallax_factor_x)
         result["parallaxFactorY"] = to_float(self.parallax_factor_y)
@@ -894,7 +997,7 @@ class LayerDefinition:
         return result
 
 
-class LdtkTileCustomMetadata:
+class TileCustomMetadata:
     """In a tileset definition, user defined meta-data of a tile."""
     data: str
     tile_id: int
@@ -904,11 +1007,11 @@ class LdtkTileCustomMetadata:
         self.tile_id = tile_id
 
     @staticmethod
-    def from_dict(obj: Any) -> 'LdtkTileCustomMetadata':
+    def from_dict(obj: Any) -> 'TileCustomMetadata':
         assert isinstance(obj, dict)
         data = from_str(obj.get("data"))
         tile_id = from_int(obj.get("tileId"))
-        return LdtkTileCustomMetadata(data, tile_id)
+        return TileCustomMetadata(data, tile_id)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -917,7 +1020,11 @@ class LdtkTileCustomMetadata:
         return result
 
 
-class LdtkEnumTagValue:
+class EmbedAtlas(Enum):
+    LDTK_ICONS = "LdtkIcons"
+
+
+class EnumTagValue:
     """In a tileset definition, enum based tag infos"""
     enum_value_id: str
     tile_ids: List[int]
@@ -927,11 +1034,11 @@ class LdtkEnumTagValue:
         self.tile_ids = tile_ids
 
     @staticmethod
-    def from_dict(obj: Any) -> 'LdtkEnumTagValue':
+    def from_dict(obj: Any) -> 'EnumTagValue':
         assert isinstance(obj, dict)
         enum_value_id = from_str(obj.get("enumValueId"))
         tile_ids = from_list(from_int, obj.get("tileIds"))
-        return LdtkEnumTagValue(enum_value_id, tile_ids)
+        return EnumTagValue(enum_value_id, tile_ids)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -954,11 +1061,15 @@ class TilesetDefinition:
     """
     cached_pixel_data: Optional[Dict[str, Any]]
     """An array of custom tile metadata"""
-    custom_data: List[LdtkTileCustomMetadata]
+    custom_data: List[TileCustomMetadata]
+    """If this value is set, then it means that this atlas uses an internal LDtk atlas image
+    instead of a loaded one. Possible values: &lt;`null`&gt;, `LdtkIcons`
+    """
+    embed_atlas: Optional[EmbedAtlas]
     """Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
     element per Enum value, which contains an array of all Tile IDs that are tagged with it.
     """
-    enum_tags: List[LdtkEnumTagValue]
+    enum_tags: List[EnumTagValue]
     """User defined unique identifier"""
     identifier: str
     """Distance in pixels from image borders"""
@@ -973,17 +1084,20 @@ class TilesetDefinition:
     saved_selections: List[Dict[str, Any]]
     """Space in pixels between all tiles"""
     spacing: int
+    """An array of user-defined tags to organize the Tilesets"""
+    tags: List[str]
     """Optional Enum definition UID used for this tileset meta-data"""
     tags_source_enum_uid: Optional[int]
     tile_grid_size: int
     """Unique Intidentifier"""
     uid: int
 
-    def __init__(self, c_hei: int, c_wid: int, cached_pixel_data: Optional[Dict[str, Any]], custom_data: List[LdtkTileCustomMetadata], enum_tags: List[LdtkEnumTagValue], identifier: str, padding: int, px_hei: int, px_wid: int, rel_path: str, saved_selections: List[Dict[str, Any]], spacing: int, tags_source_enum_uid: Optional[int], tile_grid_size: int, uid: int) -> None:
+    def __init__(self, c_hei: int, c_wid: int, cached_pixel_data: Optional[Dict[str, Any]], custom_data: List[TileCustomMetadata], embed_atlas: Optional[EmbedAtlas], enum_tags: List[EnumTagValue], identifier: str, padding: int, px_hei: int, px_wid: int, rel_path: str, saved_selections: List[Dict[str, Any]], spacing: int, tags: List[str], tags_source_enum_uid: Optional[int], tile_grid_size: int, uid: int) -> None:
         self.c_hei = c_hei
         self.c_wid = c_wid
         self.cached_pixel_data = cached_pixel_data
         self.custom_data = custom_data
+        self.embed_atlas = embed_atlas
         self.enum_tags = enum_tags
         self.identifier = identifier
         self.padding = padding
@@ -992,6 +1106,7 @@ class TilesetDefinition:
         self.rel_path = rel_path
         self.saved_selections = saved_selections
         self.spacing = spacing
+        self.tags = tags
         self.tags_source_enum_uid = tags_source_enum_uid
         self.tile_grid_size = tile_grid_size
         self.uid = uid
@@ -1002,8 +1117,9 @@ class TilesetDefinition:
         c_hei = from_int(obj.get("__cHei"))
         c_wid = from_int(obj.get("__cWid"))
         cached_pixel_data = from_union([from_none, lambda x: from_dict(lambda x: x, x)], obj.get("cachedPixelData"))
-        custom_data = from_list(LdtkTileCustomMetadata.from_dict, obj.get("customData"))
-        enum_tags = from_list(LdtkEnumTagValue.from_dict, obj.get("enumTags"))
+        custom_data = from_list(TileCustomMetadata.from_dict, obj.get("customData"))
+        embed_atlas = from_union([from_none, EmbedAtlas], obj.get("embedAtlas"))
+        enum_tags = from_list(EnumTagValue.from_dict, obj.get("enumTags"))
         identifier = from_str(obj.get("identifier"))
         padding = from_int(obj.get("padding"))
         px_hei = from_int(obj.get("pxHei"))
@@ -1011,18 +1127,20 @@ class TilesetDefinition:
         rel_path = from_str(obj.get("relPath"))
         saved_selections = from_list(lambda x: from_dict(lambda x: x, x), obj.get("savedSelections"))
         spacing = from_int(obj.get("spacing"))
+        tags = from_list(from_str, obj.get("tags"))
         tags_source_enum_uid = from_union([from_none, from_int], obj.get("tagsSourceEnumUid"))
         tile_grid_size = from_int(obj.get("tileGridSize"))
         uid = from_int(obj.get("uid"))
-        return TilesetDefinition(c_hei, c_wid, cached_pixel_data, custom_data, enum_tags, identifier, padding, px_hei, px_wid, rel_path, saved_selections, spacing, tags_source_enum_uid, tile_grid_size, uid)
+        return TilesetDefinition(c_hei, c_wid, cached_pixel_data, custom_data, embed_atlas, enum_tags, identifier, padding, px_hei, px_wid, rel_path, saved_selections, spacing, tags, tags_source_enum_uid, tile_grid_size, uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["__cHei"] = from_int(self.c_hei)
         result["__cWid"] = from_int(self.c_wid)
         result["cachedPixelData"] = from_union([from_none, lambda x: from_dict(lambda x: x, x)], self.cached_pixel_data)
-        result["customData"] = from_list(lambda x: to_class(LdtkTileCustomMetadata, x), self.custom_data)
-        result["enumTags"] = from_list(lambda x: to_class(LdtkEnumTagValue, x), self.enum_tags)
+        result["customData"] = from_list(lambda x: to_class(TileCustomMetadata, x), self.custom_data)
+        result["embedAtlas"] = from_union([from_none, lambda x: to_enum(EmbedAtlas, x)], self.embed_atlas)
+        result["enumTags"] = from_list(lambda x: to_class(EnumTagValue, x), self.enum_tags)
         result["identifier"] = from_str(self.identifier)
         result["padding"] = from_int(self.padding)
         result["pxHei"] = from_int(self.px_hei)
@@ -1030,6 +1148,7 @@ class TilesetDefinition:
         result["relPath"] = from_str(self.rel_path)
         result["savedSelections"] = from_list(lambda x: from_dict(lambda x: x, x), self.saved_selections)
         result["spacing"] = from_int(self.spacing)
+        result["tags"] = from_list(from_str, self.tags)
         result["tagsSourceEnumUid"] = from_union([from_none, from_int], self.tags_source_enum_uid)
         result["tileGridSize"] = from_int(self.tile_grid_size)
         result["uid"] = from_int(self.uid)
@@ -1092,9 +1211,22 @@ class Definitions:
 
 
 class Flag(Enum):
+    DISCARD_PRE_CSV_INT_GRID = "DiscardPreCsvIntGrid"
     EXPORT_PRE_CSV_INT_GRID_FORMAT = "ExportPreCsvIntGridFormat"
     IGNORE_BACKUP_SUGGEST = "IgnoreBackupSuggest"
+    MULTI_WORLDS = "MultiWorlds"
     PREPEND_INDEX_TO_LEVEL_FILE_NAMES = "PrependIndexToLevelFileNames"
+    USE_MULTILINES_TYPE = "UseMultilinesType"
+
+
+class IdentifierStyle(Enum):
+    """Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
+    values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
+    """
+    CAPITALIZE = "Capitalize"
+    FREE = "Free"
+    LOWERCASE = "Lowercase"
+    UPPERCASE = "Uppercase"
 
 
 class ImageExportMode(Enum):
@@ -1146,10 +1278,24 @@ class LevelBackgroundPosition:
 class FieldInstance:
     """Field definition identifier"""
     identifier: str
-    """Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc."""
+    """Optional TilesetRect used to display this field (this can be the field own Tile, or some
+    other Tile guessed from the value, like an Enum).
+    """
+    tile: Optional[TilesetRectangle]
+    """Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`,
+    etc.<br/>  NOTE: if you enable the advanced option **Use Multilines type**, you will have
+    "*Multilines*" instead of "*String*" when relevant.
+    """
     type: str
-    """Actual value of the field instance. The value type may vary, depending on `__type`
-    (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of those same types.
+    """Actual value of the field instance. The value type varies, depending on `__type`:<br/>
+    - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you
+    just get the actual value with the expected type.<br/>   - For **Color**, the value is an
+    hexadecimal string using "#rrggbb" format.<br/>   - For **Enum**, the value is a String
+    representing the selected enum value.<br/>   - For **Point**, the value is a
+    [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a
+    [TilesetRect](#ldtk-TilesetRect) object.<br/>   - For **EntityRef**, the value is an
+    [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an
+    array, then this `__value` will also be a JSON array.
     """
     value: Any
     """Reference of the **Field definition** UID"""
@@ -1157,8 +1303,9 @@ class FieldInstance:
     """Editor internal raw values"""
     real_editor_values: List[Any]
 
-    def __init__(self, identifier: str, type: str, value: Any, def_uid: int, real_editor_values: List[Any]) -> None:
+    def __init__(self, identifier: str, tile: Optional[TilesetRectangle], type: str, value: Any, def_uid: int, real_editor_values: List[Any]) -> None:
         self.identifier = identifier
+        self.tile = tile
         self.type = type
         self.value = value
         self.def_uid = def_uid
@@ -1168,15 +1315,17 @@ class FieldInstance:
     def from_dict(obj: Any) -> 'FieldInstance':
         assert isinstance(obj, dict)
         identifier = from_str(obj.get("__identifier"))
+        tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("__tile"))
         type = from_str(obj.get("__type"))
         value = obj.get("__value")
         def_uid = from_int(obj.get("defUid"))
         real_editor_values = from_list(lambda x: x, obj.get("realEditorValues"))
-        return FieldInstance(identifier, type, value, def_uid, real_editor_values)
+        return FieldInstance(identifier, tile, type, value, def_uid, real_editor_values)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["__identifier"] = from_str(self.identifier)
+        result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
         result["__type"] = from_str(self.type)
         result["__value"] = self.value
         result["defUid"] = from_int(self.def_uid)
@@ -1231,33 +1380,6 @@ class TileInstance:
         return result
 
 
-class EntityInstanceTile:
-    """Tile data in an Entity instance"""
-    """An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,
-    height ]`
-    """
-    src_rect: List[int]
-    """Tileset ID"""
-    tileset_uid: int
-
-    def __init__(self, src_rect: List[int], tileset_uid: int) -> None:
-        self.src_rect = src_rect
-        self.tileset_uid = tileset_uid
-
-    @staticmethod
-    def from_dict(obj: Any) -> 'EntityInstanceTile':
-        assert isinstance(obj, dict)
-        src_rect = from_list(from_int, obj.get("srcRect"))
-        tileset_uid = from_int(obj.get("tilesetUid"))
-        return EntityInstanceTile(src_rect, tileset_uid)
-
-    def to_dict(self) -> dict:
-        result: dict = {}
-        result["srcRect"] = from_list(from_int, self.src_rect)
-        result["tilesetUid"] = from_int(self.tileset_uid)
-        return result
-
-
 class EntityInstance:
     """Grid-based coordinates (`[x,y]` format)"""
     grid: List[int]
@@ -1265,12 +1387,16 @@ class EntityInstance:
     identifier: str
     """Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity"""
     pivot: List[float]
+    """The entity "smart" color, guessed from either Entity definition, or one its field
+    instances.
+    """
+    smart_color: str
     """Array of tags defined in this Entity definition"""
     tags: List[str]
-    """Optional Tile used to display this entity (it could either be the default Entity tile, or
-    some tile provided by a field value, like an Enum).
+    """Optional TilesetRect used to display this entity (it could either be the default Entity
+    tile, or some tile provided by a field value, like an Enum).
     """
-    tile: Optional[EntityInstanceTile]
+    tile: Optional[TilesetRectangle]
     """Reference of the **Entity definition** UID"""
     def_uid: int
     """An array of all custom fields and their values."""
@@ -1290,10 +1416,11 @@ class EntityInstance:
     """
     width: int
 
-    def __init__(self, grid: List[int], identifier: str, pivot: List[float], tags: List[str], tile: Optional[EntityInstanceTile], def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
+    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
         self.grid = grid
         self.identifier = identifier
         self.pivot = pivot
+        self.smart_color = smart_color
         self.tags = tags
         self.tile = tile
         self.def_uid = def_uid
@@ -1309,23 +1436,25 @@ class EntityInstance:
         grid = from_list(from_int, obj.get("__grid"))
         identifier = from_str(obj.get("__identifier"))
         pivot = from_list(from_float, obj.get("__pivot"))
+        smart_color = from_str(obj.get("__smartColor"))
         tags = from_list(from_str, obj.get("__tags"))
-        tile = from_union([from_none, EntityInstanceTile.from_dict], obj.get("__tile"))
+        tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("__tile"))
         def_uid = from_int(obj.get("defUid"))
         field_instances = from_list(FieldInstance.from_dict, obj.get("fieldInstances"))
         height = from_int(obj.get("height"))
         iid = from_str(obj.get("iid"))
         px = from_list(from_int, obj.get("px"))
         width = from_int(obj.get("width"))
-        return EntityInstance(grid, identifier, pivot, tags, tile, def_uid, field_instances, height, iid, px, width)
+        return EntityInstance(grid, identifier, pivot, smart_color, tags, tile, def_uid, field_instances, height, iid, px, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["__grid"] = from_list(from_int, self.grid)
         result["__identifier"] = from_str(self.identifier)
         result["__pivot"] = from_list(to_float, self.pivot)
+        result["__smartColor"] = from_str(self.smart_color)
         result["__tags"] = from_list(from_str, self.tags)
-        result["__tile"] = from_union([from_none, lambda x: to_class(EntityInstanceTile, x)], self.tile)
+        result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
         result["defUid"] = from_int(self.def_uid)
         result["fieldInstances"] = from_list(lambda x: to_class(FieldInstance, x), self.field_instances)
         result["height"] = from_int(self.height)
@@ -1391,8 +1520,8 @@ class LayerInstance:
     grid_tiles: List[TileInstance]
     """Unique layer instance identifier"""
     iid: str
-    """**WARNING**: this deprecated value is no longer exported since version 0.10.0  Replaced
-    by: `intGridCsv`
+    """**WARNING**: this deprecated value will be *removed* completely on version 1.0.0+
+    Replaced by: `intGridCsv`
     """
     int_grid: Optional[List[IntGridValueInstance]]
     """A list of all values in the IntGrid layer, stored in CSV format (Comma Separated
@@ -1523,9 +1652,12 @@ class NeighbourLevel:
     dir: str
     """Neighbour Instance Identifier"""
     level_iid: str
-    level_uid: int
+    """**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
+    Replaced by: `levelIid`
+    """
+    level_uid: Optional[int]
 
-    def __init__(self, dir: str, level_iid: str, level_uid: int) -> None:
+    def __init__(self, dir: str, level_iid: str, level_uid: Optional[int]) -> None:
         self.dir = dir
         self.level_iid = level_iid
         self.level_uid = level_uid
@@ -1535,14 +1667,14 @@ class NeighbourLevel:
         assert isinstance(obj, dict)
         dir = from_str(obj.get("dir"))
         level_iid = from_str(obj.get("levelIid"))
-        level_uid = from_int(obj.get("levelUid"))
+        level_uid = from_union([from_none, from_int], obj.get("levelUid"))
         return NeighbourLevel(dir, level_iid, level_uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["dir"] = from_str(self.dir)
         result["levelIid"] = from_str(self.level_iid)
-        result["levelUid"] = from_int(self.level_uid)
+        result["levelUid"] = from_union([from_none, from_int], self.level_uid)
         return result
 
 
@@ -1612,6 +1744,11 @@ class Level:
     user.
     """
     use_auto_identifier: bool
+    """Index that represents the "depth" of the level in the world. Default is 0, greater means
+    "above", lower means "below".<br/>  This value is mostly used for display only and is
+    intended to make stacking of levels easier to manage.
+    """
+    world_depth: int
     """World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
     positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
     value is always -1 here.
@@ -1623,7 +1760,7 @@ class Level:
     """
     world_y: int
 
-    def __init__(self, bg_color: str, bg_pos: Optional[LevelBackgroundPosition], neighbours: List[NeighbourLevel], smart_color: str, level_bg_color: Optional[str], bg_pivot_x: float, bg_pivot_y: float, level_bg_pos: Optional[BgPos], bg_rel_path: Optional[str], external_rel_path: Optional[str], field_instances: List[FieldInstance], identifier: str, iid: str, layer_instances: Optional[List[LayerInstance]], px_hei: int, px_wid: int, uid: int, use_auto_identifier: bool, world_x: int, world_y: int) -> None:
+    def __init__(self, bg_color: str, bg_pos: Optional[LevelBackgroundPosition], neighbours: List[NeighbourLevel], smart_color: str, level_bg_color: Optional[str], bg_pivot_x: float, bg_pivot_y: float, level_bg_pos: Optional[BgPos], bg_rel_path: Optional[str], external_rel_path: Optional[str], field_instances: List[FieldInstance], identifier: str, iid: str, layer_instances: Optional[List[LayerInstance]], px_hei: int, px_wid: int, uid: int, use_auto_identifier: bool, world_depth: int, world_x: int, world_y: int) -> None:
         self.bg_color = bg_color
         self.bg_pos = bg_pos
         self.neighbours = neighbours
@@ -1642,6 +1779,7 @@ class Level:
         self.px_wid = px_wid
         self.uid = uid
         self.use_auto_identifier = use_auto_identifier
+        self.world_depth = world_depth
         self.world_x = world_x
         self.world_y = world_y
 
@@ -1666,9 +1804,10 @@ class Level:
         px_wid = from_int(obj.get("pxWid"))
         uid = from_int(obj.get("uid"))
         use_auto_identifier = from_bool(obj.get("useAutoIdentifier"))
+        world_depth = from_int(obj.get("worldDepth"))
         world_x = from_int(obj.get("worldX"))
         world_y = from_int(obj.get("worldY"))
-        return Level(bg_color, bg_pos, neighbours, smart_color, level_bg_color, bg_pivot_x, bg_pivot_y, level_bg_pos, bg_rel_path, external_rel_path, field_instances, identifier, iid, layer_instances, px_hei, px_wid, uid, use_auto_identifier, world_x, world_y)
+        return Level(bg_color, bg_pos, neighbours, smart_color, level_bg_color, bg_pivot_x, bg_pivot_y, level_bg_pos, bg_rel_path, external_rel_path, field_instances, identifier, iid, layer_instances, px_hei, px_wid, uid, use_auto_identifier, world_depth, world_x, world_y)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1690,15 +1829,13 @@ class Level:
         result["pxWid"] = from_int(self.px_wid)
         result["uid"] = from_int(self.uid)
         result["useAutoIdentifier"] = from_bool(self.use_auto_identifier)
+        result["worldDepth"] = from_int(self.world_depth)
         result["worldX"] = from_int(self.world_x)
         result["worldY"] = from_int(self.world_y)
         return result
 
 
 class WorldLayout(Enum):
-    """An enum that describes how levels are organized in this project (ie. linearly or in a 2D
-    space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
-    """
     FREE = "Free"
     GRID_VANIA = "GridVania"
     LINEAR_HORIZONTAL = "LinearHorizontal"
@@ -1710,6 +1847,10 @@ class World:
     here as a preview of a planned feature.  A World contains multiple levels, and it has its
     own layout settings.
     """
+    """Default new level height"""
+    default_level_height: int
+    """Default new level width"""
+    default_level_width: int
     """User defined unique identifier"""
     identifier: str
     """Unique instance identifer"""
@@ -1724,11 +1865,13 @@ class World:
     """Width of the world grid in pixels."""
     world_grid_width: int
     """An enum that describes how levels are organized in this project (ie. linearly or in a 2D
-    space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+    space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`
     """
-    world_layout: WorldLayout
+    world_layout: Optional[WorldLayout]
 
-    def __init__(self, identifier: str, iid: str, levels: List[Level], world_grid_height: int, world_grid_width: int, world_layout: WorldLayout) -> None:
+    def __init__(self, default_level_height: int, default_level_width: int, identifier: str, iid: str, levels: List[Level], world_grid_height: int, world_grid_width: int, world_layout: Optional[WorldLayout]) -> None:
+        self.default_level_height = default_level_height
+        self.default_level_width = default_level_width
         self.identifier = identifier
         self.iid = iid
         self.levels = levels
@@ -1739,22 +1882,26 @@ class World:
     @staticmethod
     def from_dict(obj: Any) -> 'World':
         assert isinstance(obj, dict)
+        default_level_height = from_int(obj.get("defaultLevelHeight"))
+        default_level_width = from_int(obj.get("defaultLevelWidth"))
         identifier = from_str(obj.get("identifier"))
         iid = from_str(obj.get("iid"))
         levels = from_list(Level.from_dict, obj.get("levels"))
         world_grid_height = from_int(obj.get("worldGridHeight"))
         world_grid_width = from_int(obj.get("worldGridWidth"))
-        world_layout = WorldLayout(obj.get("worldLayout"))
-        return World(identifier, iid, levels, world_grid_height, world_grid_width, world_layout)
+        world_layout = from_union([from_none, WorldLayout], obj.get("worldLayout"))
+        return World(default_level_height, default_level_width, identifier, iid, levels, world_grid_height, world_grid_width, world_layout)
 
     def to_dict(self) -> dict:
         result: dict = {}
+        result["defaultLevelHeight"] = from_int(self.default_level_height)
+        result["defaultLevelWidth"] = from_int(self.default_level_width)
         result["identifier"] = from_str(self.identifier)
         result["iid"] = from_str(self.iid)
         result["levels"] = from_list(lambda x: to_class(Level, x), self.levels)
         result["worldGridHeight"] = from_int(self.world_grid_height)
         result["worldGridWidth"] = from_int(self.world_grid_width)
-        result["worldLayout"] = to_enum(WorldLayout, self.world_layout)
+        result["worldLayout"] = from_union([from_none, lambda x: to_enum(WorldLayout, x)], self.world_layout)
         return result
 
 
@@ -1782,10 +1929,16 @@ class LdtkJSON:
     default_grid_size: int
     """Default background color of levels"""
     default_level_bg_color: str
-    """Default new level height"""
-    default_level_height: int
-    """Default new level width"""
-    default_level_width: int
+    """**WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    the change immediately.<br/><br/>  Default new level height
+    """
+    default_level_height: Optional[int]
+    """**WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    the change immediately.<br/><br/>  Default new level width
+    """
+    default_level_width: Optional[int]
     """Default X pivot (0 to 1) for new entities"""
     default_pivot_x: float
     """Default Y pivot (0 to 1) for new entities"""
@@ -1805,9 +1958,14 @@ class LdtkJSON:
     """
     external_levels: bool
     """An array containing various advanced flags (ie. options or other states). Possible
-    values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`
+    values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
+    `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
     """
     flags: List[Flag]
+    """Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
+    values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
+    """
+    identifier_style: IdentifierStyle
     """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
     `OneImagePerLevel`
     """
@@ -1829,14 +1987,27 @@ class LdtkJSON:
     next_uid: int
     """File naming pattern for exported PNGs"""
     png_file_pattern: Optional[str]
-    """Height of the world grid in pixels."""
-    world_grid_height: int
-    """Width of the world grid in pixels."""
-    world_grid_width: int
-    """An enum that describes how levels are organized in this project (ie. linearly or in a 2D
-    space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+    """This optional description is used by LDtk Samples to show up some informations and
+    instructions.
     """
-    world_layout: WorldLayout
+    tutorial_desc: Optional[str]
+    """**WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    the change immediately.<br/><br/>  Height of the world grid in pixels.
+    """
+    world_grid_height: Optional[int]
+    """**WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    the change immediately.<br/><br/>  Width of the world grid in pixels.
+    """
+    world_grid_width: Optional[int]
+    """**WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    the change immediately.<br/><br/>  An enum that describes how levels are organized in
+    this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`,
+    `GridVania`, `LinearHorizontal`, `LinearVertical`
+    """
+    world_layout: Optional[WorldLayout]
     """This array is not used yet in current LDtk version (so, for now, it's always
     empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a
     single project, each containing multiple Levels.<br/><br/>What will change when "Multiple
@@ -1851,7 +2022,7 @@ class LdtkJSON:
     """
     worlds: List[World]
 
-    def __init__(self, app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: int, default_level_width: int, default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], world_grid_height: int, world_grid_width: int, world_layout: WorldLayout, worlds: List[World]) -> None:
+    def __init__(self, app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
         self.app_build_id = app_build_id
         self.backup_limit = backup_limit
         self.backup_on_save = backup_on_save
@@ -1867,6 +2038,7 @@ class LdtkJSON:
         self.export_tiled = export_tiled
         self.external_levels = external_levels
         self.flags = flags
+        self.identifier_style = identifier_style
         self.image_export_mode = image_export_mode
         self.json_version = json_version
         self.level_name_pattern = level_name_pattern
@@ -1874,6 +2046,7 @@ class LdtkJSON:
         self.minify_json = minify_json
         self.next_uid = next_uid
         self.png_file_pattern = png_file_pattern
+        self.tutorial_desc = tutorial_desc
         self.world_grid_height = world_grid_height
         self.world_grid_width = world_grid_width
         self.world_layout = world_layout
@@ -1888,8 +2061,8 @@ class LdtkJSON:
         bg_color = from_str(obj.get("bgColor"))
         default_grid_size = from_int(obj.get("defaultGridSize"))
         default_level_bg_color = from_str(obj.get("defaultLevelBgColor"))
-        default_level_height = from_int(obj.get("defaultLevelHeight"))
-        default_level_width = from_int(obj.get("defaultLevelWidth"))
+        default_level_height = from_union([from_none, from_int], obj.get("defaultLevelHeight"))
+        default_level_width = from_union([from_none, from_int], obj.get("defaultLevelWidth"))
         default_pivot_x = from_float(obj.get("defaultPivotX"))
         default_pivot_y = from_float(obj.get("defaultPivotY"))
         defs = Definitions.from_dict(obj.get("defs"))
@@ -1897,6 +2070,7 @@ class LdtkJSON:
         export_tiled = from_bool(obj.get("exportTiled"))
         external_levels = from_bool(obj.get("externalLevels"))
         flags = from_list(Flag, obj.get("flags"))
+        identifier_style = IdentifierStyle(obj.get("identifierStyle"))
         image_export_mode = ImageExportMode(obj.get("imageExportMode"))
         json_version = from_str(obj.get("jsonVersion"))
         level_name_pattern = from_str(obj.get("levelNamePattern"))
@@ -1904,11 +2078,12 @@ class LdtkJSON:
         minify_json = from_bool(obj.get("minifyJson"))
         next_uid = from_int(obj.get("nextUid"))
         png_file_pattern = from_union([from_none, from_str], obj.get("pngFilePattern"))
-        world_grid_height = from_int(obj.get("worldGridHeight"))
-        world_grid_width = from_int(obj.get("worldGridWidth"))
-        world_layout = WorldLayout(obj.get("worldLayout"))
+        tutorial_desc = from_union([from_none, from_str], obj.get("tutorialDesc"))
+        world_grid_height = from_union([from_none, from_int], obj.get("worldGridHeight"))
+        world_grid_width = from_union([from_none, from_int], obj.get("worldGridWidth"))
+        world_layout = from_union([from_none, WorldLayout], obj.get("worldLayout"))
         worlds = from_list(World.from_dict, obj.get("worlds"))
-        return LdtkJSON(app_build_id, backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, world_grid_height, world_grid_width, world_layout, worlds)
+        return LdtkJSON(app_build_id, backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, identifier_style, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1918,8 +2093,8 @@ class LdtkJSON:
         result["bgColor"] = from_str(self.bg_color)
         result["defaultGridSize"] = from_int(self.default_grid_size)
         result["defaultLevelBgColor"] = from_str(self.default_level_bg_color)
-        result["defaultLevelHeight"] = from_int(self.default_level_height)
-        result["defaultLevelWidth"] = from_int(self.default_level_width)
+        result["defaultLevelHeight"] = from_union([from_none, from_int], self.default_level_height)
+        result["defaultLevelWidth"] = from_union([from_none, from_int], self.default_level_width)
         result["defaultPivotX"] = to_float(self.default_pivot_x)
         result["defaultPivotY"] = to_float(self.default_pivot_y)
         result["defs"] = to_class(Definitions, self.defs)
@@ -1927,6 +2102,7 @@ class LdtkJSON:
         result["exportTiled"] = from_bool(self.export_tiled)
         result["externalLevels"] = from_bool(self.external_levels)
         result["flags"] = from_list(lambda x: to_enum(Flag, x), self.flags)
+        result["identifierStyle"] = to_enum(IdentifierStyle, self.identifier_style)
         result["imageExportMode"] = to_enum(ImageExportMode, self.image_export_mode)
         result["jsonVersion"] = from_str(self.json_version)
         result["levelNamePattern"] = from_str(self.level_name_pattern)
@@ -1934,9 +2110,10 @@ class LdtkJSON:
         result["minifyJson"] = from_bool(self.minify_json)
         result["nextUid"] = from_int(self.next_uid)
         result["pngFilePattern"] = from_union([from_none, from_str], self.png_file_pattern)
-        result["worldGridHeight"] = from_int(self.world_grid_height)
-        result["worldGridWidth"] = from_int(self.world_grid_width)
-        result["worldLayout"] = to_enum(WorldLayout, self.world_layout)
+        result["tutorialDesc"] = from_union([from_none, from_str], self.tutorial_desc)
+        result["worldGridHeight"] = from_union([from_none, from_int], self.world_grid_height)
+        result["worldGridWidth"] = from_union([from_none, from_int], self.world_grid_width)
+        result["worldLayout"] = from_union([from_none, lambda x: to_enum(WorldLayout, x)], self.world_layout)
         result["worlds"] = from_list(lambda x: to_class(World, x), self.worlds)
         return result
 

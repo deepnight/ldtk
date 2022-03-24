@@ -49,13 +49,17 @@ pub struct LdtkJson {
     #[serde(rename = "defaultLevelBgColor")]
     default_level_bg_color: String,
 
-    /// Default new level height
+    /// **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    /// It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    /// the change immediately.<br/><br/>  Default new level height
     #[serde(rename = "defaultLevelHeight")]
-    default_level_height: i64,
+    default_level_height: Option<i64>,
 
-    /// Default new level width
+    /// **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    /// It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    /// the change immediately.<br/><br/>  Default new level width
     #[serde(rename = "defaultLevelWidth")]
-    default_level_width: i64,
+    default_level_width: Option<i64>,
 
     /// Default X pivot (0 to 1) for new entities
     #[serde(rename = "defaultPivotX")]
@@ -85,9 +89,15 @@ pub struct LdtkJson {
     external_levels: bool,
 
     /// An array containing various advanced flags (ie. options or other states). Possible
-    /// values: `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`
+    /// values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
+    /// `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
     #[serde(rename = "flags")]
     flags: Vec<Flag>,
+
+    /// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
+    /// values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
+    #[serde(rename = "identifierStyle")]
+    identifier_style: IdentifierStyle,
 
     /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
     /// `OneImagePerLevel`
@@ -121,18 +131,30 @@ pub struct LdtkJson {
     #[serde(rename = "pngFilePattern")]
     png_file_pattern: Option<String>,
 
-    /// Height of the world grid in pixels.
+    /// This optional description is used by LDtk Samples to show up some informations and
+    /// instructions.
+    #[serde(rename = "tutorialDesc")]
+    tutorial_desc: Option<String>,
+
+    /// **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    /// It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    /// the change immediately.<br/><br/>  Height of the world grid in pixels.
     #[serde(rename = "worldGridHeight")]
-    world_grid_height: i64,
+    world_grid_height: Option<i64>,
 
-    /// Width of the world grid in pixels.
+    /// **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    /// It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    /// the change immediately.<br/><br/>  Width of the world grid in pixels.
     #[serde(rename = "worldGridWidth")]
-    world_grid_width: i64,
+    world_grid_width: Option<i64>,
 
-    /// An enum that describes how levels are organized in this project (ie. linearly or in a 2D
-    /// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+    /// **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
+    /// It will then be `null`. You can enable the Multi-worlds advanced project option to enable
+    /// the change immediately.<br/><br/>  An enum that describes how levels are organized in
+    /// this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`,
+    /// `GridVania`, `LinearHorizontal`, `LinearVertical`
     #[serde(rename = "worldLayout")]
-    world_layout: WorldLayout,
+    world_layout: Option<WorldLayout>,
 
     /// This array is not used yet in current LDtk version (so, for now, it's always
     /// empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a
@@ -230,6 +252,12 @@ pub struct EntityDefinition {
     #[serde(rename = "maxCount")]
     max_count: i64,
 
+    /// An array of 4 dimensions for the up/right/down/left borders (in this order) when using
+    /// 9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then
+    /// this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling
+    #[serde(rename = "nineSliceBorders")]
+    nine_slice_borders: Vec<i64>,
+
     /// Pivot X coordinate (from 0 to 1.0)
     #[serde(rename = "pivotX")]
     pivot_x: f64,
@@ -258,11 +286,21 @@ pub struct EntityDefinition {
     #[serde(rename = "tags")]
     tags: Vec<String>,
 
-    /// Tile ID used for optional tile display
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
+    /// Replaced by: `tileRect`
     #[serde(rename = "tileId")]
     tile_id: Option<i64>,
 
-    /// Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
+    #[serde(rename = "tileOpacity")]
+    tile_opacity: f64,
+
+    /// An object representing a rectangle from an existing Tileset
+    #[serde(rename = "tileRect")]
+    tile_rect: Option<TilesetRectangle>,
+
+    /// An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    /// values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
+    /// `FullSizeUncropped`, `NineSlice`
     #[serde(rename = "tileRenderMode")]
     tile_render_mode: TileRenderMode,
 
@@ -285,7 +323,9 @@ pub struct EntityDefinition {
 pub struct FieldDefinition {
     /// Human readable value type. Possible values: `Int, Float, String, Bool, Color,
     /// ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this
-    /// field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)
+    /// field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)<br/>  NOTE: if
+    /// you enable the advanced option **Use Multilines type**, you will have "*Multilines*"
+    /// instead of "*String*" when relevant.
     #[serde(rename = "__type")]
     field_definition_type: String,
 
@@ -312,6 +352,9 @@ pub struct FieldDefinition {
     #[serde(rename = "arrayMinLength")]
     array_min_length: Option<i64>,
 
+    #[serde(rename = "autoChainRef")]
+    auto_chain_ref: bool,
+
     /// TRUE if the value can be null. For arrays, TRUE means it can contain null values
     /// (exception: array of Points can't have null values).
     #[serde(rename = "canBeNull")]
@@ -329,7 +372,8 @@ pub struct FieldDefinition {
 
     /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
     /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
-    /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
+    /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
+    /// `RefLinkBetweenCenters`
     #[serde(rename = "editorDisplayMode")]
     editor_display_mode: EditorDisplayMode,
 
@@ -368,12 +412,16 @@ pub struct FieldDefinition {
     symmetrical_ref: bool,
 
     /// Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
-    /// `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`
+    /// `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
     #[serde(rename = "textLanguageMode")]
     text_language_mode: Option<TextLanguageMode>,
 
+    /// UID of the tileset used for a Tile
+    #[serde(rename = "tilesetUid")]
+    tileset_uid: Option<i64>,
+
     /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+    /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
     #[serde(rename = "type")]
     purple_type: LevelFieldType,
 
@@ -386,6 +434,30 @@ pub struct FieldDefinition {
     /// values.
     #[serde(rename = "useForSmartColor")]
     use_for_smart_color: bool,
+}
+
+/// This object represents a custom sub rectangle in a Tileset image.
+#[derive(Serialize, Deserialize)]
+pub struct TilesetRectangle {
+    /// Height in pixels
+    #[serde(rename = "h")]
+    h: i64,
+
+    /// UID of the tileset
+    #[serde(rename = "tilesetUid")]
+    tileset_uid: i64,
+
+    /// Width in pixels
+    #[serde(rename = "w")]
+    w: i64,
+
+    /// X pixels coordinate of the top-left corner in the Tileset image
+    #[serde(rename = "x")]
+    x: i64,
+
+    /// Y pixels coordinate of the top-left corner in the Tileset image
+    #[serde(rename = "y")]
+    y: i64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -404,6 +476,10 @@ pub struct EnumDefinition {
     /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
+
+    /// An array of user-defined tags to organize the Enums
+    #[serde(rename = "tags")]
+    tags: Vec<String>,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
@@ -447,7 +523,7 @@ pub struct LayerDefinition {
     #[serde(rename = "autoSourceLayerDefUid")]
     auto_source_layer_def_uid: Option<i64>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 0.12.0+
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
     /// Replaced by: `tilesetDefUid`
     #[serde(rename = "autoTilesetDefUid")]
     auto_tileset_def_uid: Option<i64>,
@@ -459,10 +535,6 @@ pub struct LayerDefinition {
     /// An array of tags to forbid some Entities in this layer
     #[serde(rename = "excludedTags")]
     excluded_tags: Vec<String>,
-
-    /// When TRUE, the layer will be faded out if it isn't the active one.
-    #[serde(rename = "fadeInactive")]
-    fade_inactive: bool,
 
     /// Width and height of the grid in pixels
     #[serde(rename = "gridSize")]
@@ -476,6 +548,9 @@ pub struct LayerDefinition {
     #[serde(rename = "guideGridWid")]
     guide_grid_wid: i64,
 
+    #[serde(rename = "hideFieldsWhenInactive")]
+    hide_fields_when_inactive: bool,
+
     /// Hide the layer from the list on the side of the editor view.
     #[serde(rename = "hideInList")]
     hide_in_list: bool,
@@ -483,6 +558,10 @@ pub struct LayerDefinition {
     /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
+
+    /// Alpha of this layer when it is not the active one.
+    #[serde(rename = "inactiveOpacity")]
+    inactive_opacity: f64,
 
     /// An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the
     /// array order is not related to actual IntGrid values! As user can re-order IntGrid values
@@ -531,7 +610,7 @@ pub struct LayerDefinition {
     /// Reference to the default Tileset UID being used by this layer definition.<br/>
     /// **WARNING**: some layer *instances* might use a different tileset. So most of the time,
     /// you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:
-    /// since version 0.10.0, the old `autoTilesetDefUid` was removed and merged into this value.
+    /// since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.
     #[serde(rename = "tilesetDefUid")]
     tileset_def_uid: Option<i64>,
 
@@ -550,7 +629,7 @@ pub struct AutoLayerRuleGroup {
     #[serde(rename = "active")]
     active: bool,
 
-    /// *This field was removed in 0.10.0 and should no longer be used.*
+    /// *This field was removed in 1.0.0 and should no longer be used.*
     #[serde(rename = "collapsed")]
     collapsed: Option<bool>,
 
@@ -646,9 +725,17 @@ pub struct AutoLayerRuleDefinition {
     #[serde(rename = "xModulo")]
     x_modulo: i64,
 
+    /// X cell start offset
+    #[serde(rename = "xOffset")]
+    x_offset: i64,
+
     /// Y cell coord modulo
     #[serde(rename = "yModulo")]
     y_modulo: i64,
+
+    /// Y cell start offset
+    #[serde(rename = "yOffset")]
+    y_offset: i64,
 }
 
 /// IntGrid value definition
@@ -686,12 +773,17 @@ pub struct TilesetDefinition {
 
     /// An array of custom tile metadata
     #[serde(rename = "customData")]
-    custom_data: Vec<LdtkTileCustomMetadata>,
+    custom_data: Vec<TileCustomMetadata>,
+
+    /// If this value is set, then it means that this atlas uses an internal LDtk atlas image
+    /// instead of a loaded one. Possible values: &lt;`null`&gt;, `LdtkIcons`
+    #[serde(rename = "embedAtlas")]
+    embed_atlas: Option<EmbedAtlas>,
 
     /// Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
     /// element per Enum value, which contains an array of all Tile IDs that are tagged with it.
     #[serde(rename = "enumTags")]
-    enum_tags: Vec<LdtkEnumTagValue>,
+    enum_tags: Vec<EnumTagValue>,
 
     /// User defined unique identifier
     #[serde(rename = "identifier")]
@@ -721,6 +813,10 @@ pub struct TilesetDefinition {
     #[serde(rename = "spacing")]
     spacing: i64,
 
+    /// An array of user-defined tags to organize the Tilesets
+    #[serde(rename = "tags")]
+    tags: Vec<String>,
+
     /// Optional Enum definition UID used for this tileset meta-data
     #[serde(rename = "tagsSourceEnumUid")]
     tags_source_enum_uid: Option<i64>,
@@ -735,7 +831,7 @@ pub struct TilesetDefinition {
 
 /// In a tileset definition, user defined meta-data of a tile.
 #[derive(Serialize, Deserialize)]
-pub struct LdtkTileCustomMetadata {
+pub struct TileCustomMetadata {
     #[serde(rename = "data")]
     data: String,
 
@@ -745,7 +841,7 @@ pub struct LdtkTileCustomMetadata {
 
 /// In a tileset definition, enum based tag infos
 #[derive(Serialize, Deserialize)]
-pub struct LdtkEnumTagValue {
+pub struct EnumTagValue {
     #[serde(rename = "enumValueId")]
     enum_value_id: String,
 
@@ -847,6 +943,12 @@ pub struct Level {
     #[serde(rename = "useAutoIdentifier")]
     use_auto_identifier: bool,
 
+    /// Index that represents the "depth" of the level in the world. Default is 0, greater means
+    /// "above", lower means "below".<br/>  This value is mostly used for display only and is
+    /// intended to make stacking of levels easier to manage.
+    #[serde(rename = "worldDepth")]
+    world_depth: i64,
+
     /// World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
     /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
     /// value is always -1 here.
@@ -886,12 +988,26 @@ pub struct FieldInstance {
     #[serde(rename = "__identifier")]
     identifier: String,
 
-    /// Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.
+    /// Optional TilesetRect used to display this field (this can be the field own Tile, or some
+    /// other Tile guessed from the value, like an Enum).
+    #[serde(rename = "__tile")]
+    tile: Option<TilesetRectangle>,
+
+    /// Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`,
+    /// etc.<br/>  NOTE: if you enable the advanced option **Use Multilines type**, you will have
+    /// "*Multilines*" instead of "*String*" when relevant.
     #[serde(rename = "__type")]
     field_instance_type: String,
 
-    /// Actual value of the field instance. The value type may vary, depending on `__type`
-    /// (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of those same types.
+    /// Actual value of the field instance. The value type varies, depending on `__type`:<br/>
+    /// - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you
+    /// just get the actual value with the expected type.<br/>   - For **Color**, the value is an
+    /// hexadecimal string using "#rrggbb" format.<br/>   - For **Enum**, the value is a String
+    /// representing the selected enum value.<br/>   - For **Point**, the value is a
+    /// [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a
+    /// [TilesetRect](#ldtk-TilesetRect) object.<br/>   - For **EntityRef**, the value is an
+    /// [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an
+    /// array, then this `__value` will also be a JSON array.
     #[serde(rename = "__value")]
     value: Option<serde_json::Value>,
 
@@ -963,8 +1079,8 @@ pub struct LayerInstance {
     #[serde(rename = "iid")]
     iid: String,
 
-    /// **WARNING**: this deprecated value is no longer exported since version 0.10.0  Replaced
-    /// by: `intGridCsv`
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.0.0+
+    /// Replaced by: `intGridCsv`
     #[serde(rename = "intGrid")]
     int_grid: Option<Vec<IntGridValueInstance>>,
 
@@ -1053,14 +1169,19 @@ pub struct EntityInstance {
     #[serde(rename = "__pivot")]
     pivot: Vec<f64>,
 
+    /// The entity "smart" color, guessed from either Entity definition, or one its field
+    /// instances.
+    #[serde(rename = "__smartColor")]
+    smart_color: String,
+
     /// Array of tags defined in this Entity definition
     #[serde(rename = "__tags")]
     tags: Vec<String>,
 
-    /// Optional Tile used to display this entity (it could either be the default Entity tile, or
-    /// some tile provided by a field value, like an Enum).
+    /// Optional TilesetRect used to display this entity (it could either be the default Entity
+    /// tile, or some tile provided by a field value, like an Enum).
     #[serde(rename = "__tile")]
-    tile: Option<EntityInstanceTile>,
+    tile: Option<TilesetRectangle>,
 
     /// Reference of the **Entity definition** UID
     #[serde(rename = "defUid")]
@@ -1090,19 +1211,6 @@ pub struct EntityInstance {
     width: i64,
 }
 
-/// Tile data in an Entity instance
-#[derive(Serialize, Deserialize)]
-pub struct EntityInstanceTile {
-    /// An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,
-    /// height ]`
-    #[serde(rename = "srcRect")]
-    src_rect: Vec<i64>,
-
-    /// Tileset ID
-    #[serde(rename = "tilesetUid")]
-    tileset_uid: i64,
-}
-
 /// IntGrid value instance
 #[derive(Serialize, Deserialize)]
 pub struct IntGridValueInstance {
@@ -1127,8 +1235,10 @@ pub struct NeighbourLevel {
     #[serde(rename = "levelIid")]
     level_iid: String,
 
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
+    /// Replaced by: `levelIid`
     #[serde(rename = "levelUid")]
-    level_uid: i64,
+    level_uid: Option<i64>,
 }
 
 /// **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented
@@ -1136,6 +1246,14 @@ pub struct NeighbourLevel {
 /// own layout settings.
 #[derive(Serialize, Deserialize)]
 pub struct World {
+    /// Default new level height
+    #[serde(rename = "defaultLevelHeight")]
+    default_level_height: i64,
+
+    /// Default new level width
+    #[serde(rename = "defaultLevelWidth")]
+    default_level_width: i64,
+
     /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: String,
@@ -1159,9 +1277,9 @@ pub struct World {
     world_grid_width: i64,
 
     /// An enum that describes how levels are organized in this project (ie. linearly or in a 2D
-    /// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
+    /// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`
     #[serde(rename = "worldLayout")]
-    world_layout: WorldLayout,
+    world_layout: Option<WorldLayout>,
 }
 
 /// Possible values: `Any`, `OnlySame`, `OnlyTags`
@@ -1179,7 +1297,8 @@ pub enum AllowedRefs {
 
 /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
 /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
-/// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLink`
+/// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
+/// `RefLinkBetweenCenters`
 #[derive(Serialize, Deserialize)]
 pub enum EditorDisplayMode {
     #[serde(rename = "ArrayCountNoLabel")]
@@ -1215,8 +1334,11 @@ pub enum EditorDisplayMode {
     #[serde(rename = "RadiusPx")]
     RadiusPx,
 
-    #[serde(rename = "RefLink")]
-    RefLink,
+    #[serde(rename = "RefLinkBetweenCenters")]
+    RefLinkBetweenCenters,
+
+    #[serde(rename = "RefLinkBetweenPivots")]
+    RefLinkBetweenPivots,
 
     #[serde(rename = "ValueOnly")]
     ValueOnly,
@@ -1236,7 +1358,7 @@ pub enum EditorDisplayPos {
 }
 
 /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-/// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`
+/// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
 #[derive(Serialize, Deserialize)]
 pub enum LevelFieldType {
     #[serde(rename = "F_Bool")]
@@ -1268,6 +1390,9 @@ pub enum LevelFieldType {
 
     #[serde(rename = "F_Text")]
     FText,
+
+    #[serde(rename = "F_Tile")]
+    FTile,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -1283,6 +1408,9 @@ pub enum TextLanguageMode {
 
     #[serde(rename = "LangJson")]
     LangJson,
+
+    #[serde(rename = "LangLog")]
+    LangLog,
 
     #[serde(rename = "LangLua")]
     LangLua,
@@ -1343,7 +1471,9 @@ pub enum RenderMode {
     Tile,
 }
 
-/// Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`
+/// An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+/// values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
+/// `FullSizeUncropped`, `NineSlice`
 #[derive(Serialize, Deserialize)]
 pub enum TileRenderMode {
     #[serde(rename = "Cover")]
@@ -1351,6 +1481,15 @@ pub enum TileRenderMode {
 
     #[serde(rename = "FitInside")]
     FitInside,
+
+    #[serde(rename = "FullSizeCropped")]
+    FullSizeCropped,
+
+    #[serde(rename = "FullSizeUncropped")]
+    FullSizeUncropped,
+
+    #[serde(rename = "NineSlice")]
+    NineSlice,
 
     #[serde(rename = "Repeat")]
     Repeat,
@@ -1400,15 +1539,47 @@ pub enum LayerType {
 }
 
 #[derive(Serialize, Deserialize)]
+pub enum EmbedAtlas {
+    #[serde(rename = "LdtkIcons")]
+    LdtkIcons,
+}
+
+#[derive(Serialize, Deserialize)]
 pub enum Flag {
+    #[serde(rename = "DiscardPreCsvIntGrid")]
+    DiscardPreCsvIntGrid,
+
     #[serde(rename = "ExportPreCsvIntGridFormat")]
     ExportPreCsvIntGridFormat,
 
     #[serde(rename = "IgnoreBackupSuggest")]
     IgnoreBackupSuggest,
 
+    #[serde(rename = "MultiWorlds")]
+    MultiWorlds,
+
     #[serde(rename = "PrependIndexToLevelFileNames")]
     PrependIndexToLevelFileNames,
+
+    #[serde(rename = "UseMultilinesType")]
+    UseMultilinesType,
+}
+
+/// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
+/// values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
+#[derive(Serialize, Deserialize)]
+pub enum IdentifierStyle {
+    #[serde(rename = "Capitalize")]
+    Capitalize,
+
+    #[serde(rename = "Free")]
+    Free,
+
+    #[serde(rename = "Lowercase")]
+    Lowercase,
+
+    #[serde(rename = "Uppercase")]
+    Uppercase,
 }
 
 /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
@@ -1440,8 +1611,6 @@ pub enum BgPos {
     Unscaled,
 }
 
-/// An enum that describes how levels are organized in this project (ie. linearly or in a 2D
-/// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
 #[derive(Serialize, Deserialize)]
 pub enum WorldLayout {
     #[serde(rename = "Free")]
