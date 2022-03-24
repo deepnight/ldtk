@@ -238,6 +238,7 @@ class EntityTool extends tool.LayerTool<Int> {
 		var ge = editor.getGenericLevelElementAt(m, true);
 		switch ge {
 			case Entity(curLayerInstance, instance):
+				editor.curLevelTimeline.markEntityChange(instance);
 				curLayerInstance.removeEntityInstance(instance);
 				editor.ge.emit( EntityInstanceRemoved(instance) );
 				editor.levelRender.bleepEntity(instance);
