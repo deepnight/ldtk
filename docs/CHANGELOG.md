@@ -1,3 +1,8 @@
+# 0.10.0-beta7
+
+ - Fixed a crash when saving a project with external levels
+
+
 # 0.10.0-beta6
 
  - Added a "click trap" to prevent miss-clicks while the app is not focused. Previously, if you clicked on the LDtk window to re-focus it, you would edit some layer or click a UI element accidentally.
