@@ -52,7 +52,6 @@ class JsonTools {
 				var name = Std.string(o);
 				if( enumParamsReg.match(name) ) {
 					// Enum with parameters
-					trace(name);
 					name = enumParamsReg.matched(1);
 					var rawParams = enumParamsReg.matched(2);
 					var params : Array<Dynamic> = [];
