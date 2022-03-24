@@ -118,8 +118,9 @@ class LevelRender extends dn.Process {
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
 
-			case LayerInstanceRestoredFromHistory(li):
-				invalidateLayer(li);
+			case LayerInstancesRestoredFromHistory(lis):
+				for(li in lis)
+					invalidateLayer(li);
 
 			case LevelSelected(l):
 				invalidateAll();

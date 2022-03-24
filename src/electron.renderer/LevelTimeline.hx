@@ -332,6 +332,7 @@ class LevelTimeline {
 			throw "Null timeline state "+idx;
 
 		// Restore some layer instances
+		var restoreds = [];
 		for(i in 0...project.defs.layers.length) {
 			var layerDef = project.defs.layers[i];
 			if( isLayerStateStored(layerDef) ) {
@@ -340,9 +341,12 @@ class LevelTimeline {
 					throw "Missing layer JSON in timeline state "+idx;
 
 				level.layerInstances[i] = data.inst.LayerInstance.fromJson(project, layerJson);
-				editor.ge.emitAtTheEndOfFrame( LayerInstanceRestoredFromHistory(level.layerInstances[i]) );
+				restoreds.push( level.layerInstances[i] );
 			}
 		}
+
+		if( restoreds.length>0 )
+			editor.ge.emitAtTheEndOfFrame( LayerInstancesRestoredFromHistory(restoreds) );
 
 		invalidatedDebug = true;
 	}

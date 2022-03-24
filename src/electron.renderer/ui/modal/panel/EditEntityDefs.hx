@@ -118,7 +118,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				updateEntityList();
 				selectEntity(project.defs.entities[0]);
 
-			case LayerInstanceRestoredFromHistory(li):
+			case LayerInstancesRestoredFromHistory(_):
 				updatePreview();
 				updateEntityForm();
 				updateFieldsForm();

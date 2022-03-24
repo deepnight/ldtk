@@ -1597,7 +1597,10 @@ class Editor extends Page {
 				case LayerInstanceSelected:
 				case LayerInstanceChangedGlobally(li): extra = li.layerDefUid;
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
-				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
+				case LayerInstancesRestoredFromHistory(lis):
+					extra = "";
+					for(li in lis)
+						extra+=li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
 				case AutoLayerRenderingChanged:
 				case TilesetDefChanged(td): extra = td.uid;
@@ -1709,7 +1712,9 @@ class Editor extends Page {
 			case LayerInstanceEditedByTool(li): invalidateLevelCache(li.level);
 			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
 			case LayerInstanceVisiblityChanged(li):
-			case LayerInstanceRestoredFromHistory(li): invalidateLevelCache(li.level);
+			case LayerInstancesRestoredFromHistory(lis):
+				for(li in lis)
+					invalidateLevelCache(li.level);
 			case AutoLayerRenderingChanged:
 			case LayerInstanceTilesetChanged(li): invalidateLevelCache(li.level);
 			case TilesetDefChanged(td): invalidateAllLevelsCache();
@@ -1908,7 +1913,7 @@ class Editor extends Page {
 				selectWorldDepth(l.worldDepth);
 				l.invalidateCachedError();
 
-			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
+			case LayerInstancesRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
 				clearSpecialTool();
 				updateAppBg();

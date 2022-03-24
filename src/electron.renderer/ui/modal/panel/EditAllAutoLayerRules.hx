@@ -35,9 +35,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			case LevelSelected(l):
 				close();
 
-			case LayerInstanceRestoredFromHistory(li):
-				if( li.layerDefUid==this.li.layerDefUid )
-					this.li = li;
+			case LayerInstancesRestoredFromHistory(lis):
+				for(li in lis)
+					if( li.layerDefUid==this.li.layerDefUid ) 
+						this.li = li;
 				updateFullPanel();
 
 			case BeforeProjectSaving:

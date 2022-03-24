@@ -110,7 +110,7 @@ class EntityInstanceEditor extends dn.Process {
 				if( ei==this.ei )
 					updateAllForms();
 
-			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
+			case LayerInstancesRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				closeExisting(); // TODO do softer refresh
 
 			case LayerInstanceSelected:
