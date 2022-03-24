@@ -113,7 +113,7 @@ class Tiled extends Exporter {
 				continue;
 			}
 
-			if( !td.isUsingEmbedAtlas() ) {
+			if( td.isUsingEmbedAtlas() ) {
 				log.warning("Skipped embedded tileset: "+td.identifier);
 				continue;
 			}
