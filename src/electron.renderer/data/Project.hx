@@ -217,8 +217,14 @@ class Project {
 				var ev = try JsonTools.readEnum(ldtk.Json.ProjectFlag, f, true)
 					catch(_) null;
 
-				if( ev!=null )
-					p.flags.set(ev, true);
+				if( ev!=null ) {
+					switch ev {
+						case DiscardPreCsvIntGrid:
+							p.flags.set(ExportPreCsvIntGridFormat, false);
+						case _:
+							p.flags.set(ev, true);
+					}
+				}
 			}
 
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
