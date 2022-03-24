@@ -6,6 +6,8 @@
  - Fixed 9-scaled tiles to use Tile opacity from their Entity definition
  - Fixed Tiled tileset export
  - Added "Type" value for entities in Tiled exported files
+ - Experimental fix for missing types in Quicktypes
+ - Fixed format of value "type" in JSON (now, it's always a String)
 
 # 0.10.0-beta5
 
