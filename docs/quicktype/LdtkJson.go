@@ -24,44 +24,45 @@ func (r *LdtkJSON) Marshal() ([]byte, error) {
 // array of levels, - a group of definitions (that can probably be safely ignored for most
 // users).
 type LdtkJSON struct {
-	AppBuildID          float64         `json:"appBuildId"`         // LDtk application build identifier.<br/>  This is only used to identify the LDtk version; that generated this particular project file, which can be useful for specific bug fixing.; Note that the build identifier is just the date of the release, so it's not unique to; each user (one single global ID per LDtk public release), and as a result, completely; anonymous.
-	BackupLimit         int64           `json:"backupLimit"`        // Number of backup files to keep, if the `backupOnSave` is TRUE
-	BackupOnSave        bool            `json:"backupOnSave"`       // If TRUE, an extra copy of the project will be created in a sub folder, when saving.
-	BgColor             string          `json:"bgColor"`            // Project background color
-	DefaultGridSize     int64           `json:"defaultGridSize"`    // Default grid size for new layers
-	DefaultLevelBgColor string          `json:"defaultLevelBgColor"`// Default background color of levels
-	DefaultLevelHeight  *int64          `json:"defaultLevelHeight"` // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Default new level height
-	DefaultLevelWidth   *int64          `json:"defaultLevelWidth"`  // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Default new level width
-	DefaultPivotX       float64         `json:"defaultPivotX"`      // Default X pivot (0 to 1) for new entities
-	DefaultPivotY       float64         `json:"defaultPivotY"`      // Default Y pivot (0 to 1) for new entities
-	Defs                Definitions     `json:"defs"`               // A structure containing all the definitions of this project
-	ExportPNG           *bool           `json:"exportPng"`          // **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced; by: `imageExportMode`
-	ExportTiled         bool            `json:"exportTiled"`        // If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file; (default is FALSE)
-	ExternalLevels      bool            `json:"externalLevels"`     // If TRUE, one file will be saved for the project (incl. all its definitions) and one file; in a sub-folder for each level.
-	Flags               []Flag          `json:"flags"`              // An array containing various advanced flags (ie. options or other states). Possible; values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,; `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
-	IdentifierStyle     IdentifierStyle `json:"identifierStyle"`    // Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible; values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
-	ImageExportMode     ImageExportMode `json:"imageExportMode"`    // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,; `OneImagePerLevel`
-	JSONVersion         string          `json:"jsonVersion"`        // File format version
-	LevelNamePattern    string          `json:"levelNamePattern"`   // The default naming convention for level identifiers.
-	Levels              []Level         `json:"levels"`             // All levels. The order of this array is only relevant in `LinearHorizontal` and; `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should; refer to the `worldX`,`worldY` coordinates of each Level.
-	MinifyJSON          bool            `json:"minifyJson"`         // If TRUE, the Json is partially minified (no indentation, nor line breaks, default is; FALSE)
-	NextUid             int64           `json:"nextUid"`            // Next Unique integer ID available
-	PNGFilePattern      *string         `json:"pngFilePattern"`     // File naming pattern for exported PNGs
-	TutorialDesc        *string         `json:"tutorialDesc"`       // This optional description is used by LDtk Samples to show up some informations and; instructions.
-	WorldGridHeight     *int64          `json:"worldGridHeight"`    // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Height of the world grid in pixels.
-	WorldGridWidth      *int64          `json:"worldGridWidth"`     // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Width of the world grid in pixels.
-	WorldLayout         *WorldLayout    `json:"worldLayout"`        // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  An enum that describes how levels are organized in; this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`,; `GridVania`, `LinearHorizontal`, `LinearVertical`
-	Worlds              []World         `json:"worlds"`             // This array is not used yet in current LDtk version (so, for now, it's always; empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a; single project, each containing multiple Levels.<br/><br/>What will change when "Multiple; worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project; file can only contain a single world with multiple levels in it. In this case, levels and; world layout related settings are stored in the root of the JSON.<br/> - after the; "Multiple worlds" update, there will be a `worlds` array in root, each world containing; levels and layout settings. Basically, it's pretty much only about moving the `levels`; array to the `worlds` array, along with world layout related values (eg. `worldGridWidth`; etc).<br/><br/>If you want to start supporting this future update easily, please refer to; this documentation: https://github.com/deepnight/ldtk/issues/231
+	ForcedRefs          *ForcedRefs     `json:"__FORCED_REFS,omitempty"`// This object is not actually used by LDtk. It ONLY exists to force explicit references to; all types, to make sure QuickType finds them and integrate all of them. Otherwise,; Quicktype will drop types that are not explicitely used.
+	AppBuildID          float64         `json:"appBuildId"`             // LDtk application build identifier.<br/>  This is only used to identify the LDtk version; that generated this particular project file, which can be useful for specific bug fixing.; Note that the build identifier is just the date of the release, so it's not unique to; each user (one single global ID per LDtk public release), and as a result, completely; anonymous.
+	BackupLimit         int64           `json:"backupLimit"`            // Number of backup files to keep, if the `backupOnSave` is TRUE
+	BackupOnSave        bool            `json:"backupOnSave"`           // If TRUE, an extra copy of the project will be created in a sub folder, when saving.
+	BgColor             string          `json:"bgColor"`                // Project background color
+	DefaultGridSize     int64           `json:"defaultGridSize"`        // Default grid size for new layers
+	DefaultLevelBgColor string          `json:"defaultLevelBgColor"`    // Default background color of levels
+	DefaultLevelHeight  *int64          `json:"defaultLevelHeight"`     // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Default new level height
+	DefaultLevelWidth   *int64          `json:"defaultLevelWidth"`      // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Default new level width
+	DefaultPivotX       float64         `json:"defaultPivotX"`          // Default X pivot (0 to 1) for new entities
+	DefaultPivotY       float64         `json:"defaultPivotY"`          // Default Y pivot (0 to 1) for new entities
+	Defs                Definitions     `json:"defs"`                   // A structure containing all the definitions of this project
+	ExportPNG           *bool           `json:"exportPng"`              // **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced; by: `imageExportMode`
+	ExportTiled         bool            `json:"exportTiled"`            // If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file; (default is FALSE)
+	ExternalLevels      bool            `json:"externalLevels"`         // If TRUE, one file will be saved for the project (incl. all its definitions) and one file; in a sub-folder for each level.
+	Flags               []Flag          `json:"flags"`                  // An array containing various advanced flags (ie. options or other states). Possible; values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,; `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+	IdentifierStyle     IdentifierStyle `json:"identifierStyle"`        // Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible; values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
+	ImageExportMode     ImageExportMode `json:"imageExportMode"`        // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,; `OneImagePerLevel`
+	JSONVersion         string          `json:"jsonVersion"`            // File format version
+	LevelNamePattern    string          `json:"levelNamePattern"`       // The default naming convention for level identifiers.
+	Levels              []Level         `json:"levels"`                 // All levels. The order of this array is only relevant in `LinearHorizontal` and; `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should; refer to the `worldX`,`worldY` coordinates of each Level.
+	MinifyJSON          bool            `json:"minifyJson"`             // If TRUE, the Json is partially minified (no indentation, nor line breaks, default is; FALSE)
+	NextUid             int64           `json:"nextUid"`                // Next Unique integer ID available
+	PNGFilePattern      *string         `json:"pngFilePattern"`         // File naming pattern for exported PNGs
+	TutorialDesc        *string         `json:"tutorialDesc"`           // This optional description is used by LDtk Samples to show up some informations and; instructions.
+	WorldGridHeight     *int64          `json:"worldGridHeight"`        // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Height of the world grid in pixels.
+	WorldGridWidth      *int64          `json:"worldGridWidth"`         // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Width of the world grid in pixels.
+	WorldLayout         *WorldLayout    `json:"worldLayout"`            // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  An enum that describes how levels are organized in; this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`,; `GridVania`, `LinearHorizontal`, `LinearVertical`
+	Worlds              []World         `json:"worlds"`                 // This array is not used yet in current LDtk version (so, for now, it's always; empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a; single project, each containing multiple Levels.<br/><br/>What will change when "Multiple; worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project; file can only contain a single world with multiple levels in it. In this case, levels and; world layout related settings are stored in the root of the JSON.<br/> - after the; "Multiple worlds" update, there will be a `worlds` array in root, each world containing; levels and layout settings. Basically, it's pretty much only about moving the `levels`; array to the `worlds` array, along with world layout related values (eg. `worldGridWidth`; etc).<br/><br/>If you want to start supporting this future update easily, please refer to; this documentation: https://github.com/deepnight/ldtk/issues/231
 }
 
-// A structure containing all the definitions of this project
-//
 // If you're writing your own LDtk importer, you should probably just ignore *most* stuff in
 // the `defs` section, as it contains data that are mostly important to the editor. To keep
 // you away from the `defs` section and avoid some unnecessary JSON parsing, important data
 // from definitions is often duplicated in fields prefixed with a double underscore (eg.
 // `__identifier` or `__type`).  The 2 only definition types you might need here are
 // **Tilesets** and **Enums**.
+//
+// A structure containing all the definitions of this project
 type Definitions struct {
 	Entities      []EntityDefinition  `json:"entities"`     // All entities definitions, including their custom fields
 	Enums         []EnumDefinition    `json:"enums"`        // All internal enums
@@ -127,7 +128,7 @@ type FieldDefinition struct {
 	SymmetricalRef      bool              `json:"symmetricalRef"`     
 	TextLanguageMode    *TextLanguageMode `json:"textLanguageMode"`   // Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,; `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
 	TilesetUid          *int64            `json:"tilesetUid"`         // UID of the tileset used for a Tile
-	FieldDefinitionType LevelFieldType    `json:"type"`               // Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,; `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
+	FieldDefinitionType FieldDefType      `json:"type"`               // Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,; `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
 	Uid                 int64             `json:"uid"`                // Unique Int identifier
 	UseForSmartColor    bool              `json:"useForSmartColor"`   // If TRUE, the color associated with this field will override the Entity or Level default; color in the editor UI. For Enum fields, this would be the color associated to their; values.
 }
@@ -182,7 +183,7 @@ type LayerDefinition struct {
 	TilePivotX             float64                  `json:"tilePivotX"`            // If the tiles are smaller or larger than the layer grid, the pivot value will be used to; position the tile relatively its grid cell.
 	TilePivotY             float64                  `json:"tilePivotY"`            // If the tiles are smaller or larger than the layer grid, the pivot value will be used to; position the tile relatively its grid cell.
 	TilesetDefUid          *int64                   `json:"tilesetDefUid"`         // Reference to the default Tileset UID being used by this layer definition.<br/>; **WARNING**: some layer *instances* might use a different tileset. So most of the time,; you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:; since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.
-	LayerDefinitionType    LayerType                `json:"type"`                  // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,; `AutoLayer`
+	LayerDefinitionType    LayerDefType             `json:"type"`                  // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,; `AutoLayer`
 	Uid                    int64                    `json:"uid"`                   // Unique Int identifier
 }
 
@@ -265,43 +266,49 @@ type EnumTagValue struct {
 	TileIDS     []int64 `json:"tileIds"`    
 }
 
-// This section contains all the level data. It can be found in 2 distinct forms, depending
-// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
-// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
-// files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one
-// per level). In this case, the main Project JSON file will still contain most level data,
-// except heavy sections, like the `layerInstances` array (which will be null). The
-// `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file
-// containing exactly what is described below.
-type Level struct {
-	BgColor           string                   `json:"__bgColor"`        // Background color of the level (same as `bgColor`, except the default value is; automatically used here if its value is `null`)
-	BgPos             *LevelBackgroundPosition `json:"__bgPos"`          // Position informations of the background image, if there is one.
-	Neighbours        []NeighbourLevel         `json:"__neighbours"`     // An array listing all other levels touching this one on the world map.<br/>  Only relevant; for world layouts where level spatial positioning is manual (ie. GridVania, Free). For; Horizontal and Vertical layouts, this array is always empty.
-	SmartColor        string                   `json:"__smartColor"`     // The "guessed" color for this level in the editor, decided using either the background; color or an existing custom field.
-	LevelBgColor      *string                  `json:"bgColor"`          // Background color of the level. If `null`, the project `defaultLevelBgColor` should be; used.
-	BgPivotX          float64                  `json:"bgPivotX"`         // Background image X pivot (0-1)
-	BgPivotY          float64                  `json:"bgPivotY"`         // Background image Y pivot (0-1)
-	LevelBgPos        *BgPos                   `json:"bgPos"`            // An enum defining the way the background image (if any) is positioned on the level. See; `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,; `Contain`, `Cover`, `CoverDirty`
-	BgRelPath         *string                  `json:"bgRelPath"`        // The *optional* relative path to the level background image.
-	ExternalRelPath   *string                  `json:"externalRelPath"`  // This value is not null if the project option "*Save levels separately*" is enabled. In; this case, this **relative** path points to the level Json file.
-	FieldInstances    []FieldInstance          `json:"fieldInstances"`   // An array containing this level custom field values.
-	Identifier        string                   `json:"identifier"`       // User defined unique identifier
-	Iid               string                   `json:"iid"`              // Unique instance identifier
-	LayerInstances    []LayerInstance          `json:"layerInstances"`   // An array containing all Layer instances. **IMPORTANT**: if the project option "*Save; levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted; in display order**: the 1st layer is the top-most and the last is behind.
-	PxHei             int64                    `json:"pxHei"`            // Height of the level in pixels
-	PxWid             int64                    `json:"pxWid"`            // Width of the level in pixels
-	Uid               int64                    `json:"uid"`              // Unique Int identifier
-	UseAutoIdentifier bool                     `json:"useAutoIdentifier"`// If TRUE, the level identifier will always automatically use the naming pattern as defined; in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by; user.
-	WorldDepth        int64                    `json:"worldDepth"`       // Index that represents the "depth" of the level in the world. Default is 0, greater means; "above", lower means "below".<br/>  This value is mostly used for display only and is; intended to make stacking of levels easier to manage.
-	WorldX            int64                    `json:"worldX"`           // World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial; positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the; value is always -1 here.
-	WorldY            int64                    `json:"worldY"`           // World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial; positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the; value is always -1 here.
+// This object is not actually used by LDtk. It ONLY exists to force explicit references to
+// all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+// Quicktype will drop types that are not explicitely used.
+type ForcedRefs struct {
+	AutoLayerRuleGroup   *AutoLayerRuleGroup           `json:"AutoLayerRuleGroup,omitempty"`  
+	AutoRuleDef          *AutoLayerRuleDefinition      `json:"AutoRuleDef,omitempty"`         
+	Definitions          *Definitions                  `json:"Definitions,omitempty"`         
+	EntityDef            *EntityDefinition             `json:"EntityDef,omitempty"`           
+	EntityInstance       *EntityInstance               `json:"EntityInstance,omitempty"`      
+	EntityReferenceInfos *FieldInstanceEntityReference `json:"EntityReferenceInfos,omitempty"`
+	EnumDef              *EnumDefinition               `json:"EnumDef,omitempty"`             
+	EnumDefValues        *EnumValueDefinition          `json:"EnumDefValues,omitempty"`       
+	EnumTagValue         *EnumTagValue                 `json:"EnumTagValue,omitempty"`        
+	FieldDef             *FieldDefinition              `json:"FieldDef,omitempty"`            
+	FieldInstance        *FieldInstance                `json:"FieldInstance,omitempty"`       
+	GridPoint            *FieldInstanceGridPoint       `json:"GridPoint,omitempty"`           
+	IntGridValueDef      *IntGridValueDefinition       `json:"IntGridValueDef,omitempty"`     
+	IntGridValueInstance *IntGridValueInstance         `json:"IntGridValueInstance,omitempty"`
+	LayerDef             *LayerDefinition              `json:"LayerDef,omitempty"`            
+	LayerInstance        *LayerInstance                `json:"LayerInstance,omitempty"`       
+	Level                *Level                        `json:"Level,omitempty"`               
+	LevelBgPosInfos      *LevelBackgroundPosition      `json:"LevelBgPosInfos,omitempty"`     
+	NeighbourLevel       *NeighbourLevel               `json:"NeighbourLevel,omitempty"`      
+	Tile                 *TileInstance                 `json:"Tile,omitempty"`                
+	TileCustomMetadata   *TileCustomMetadata           `json:"TileCustomMetadata,omitempty"`  
+	TilesetDef           *TilesetDefinition            `json:"TilesetDef,omitempty"`          
+	TilesetRect          *TilesetRectangle             `json:"TilesetRect,omitempty"`         
+	World                *World                        `json:"World,omitempty"`               
 }
 
-// Level background image position info
-type LevelBackgroundPosition struct {
-	CropRect  []float64 `json:"cropRect"` // An array of 4 float values describing the cropped sub-rectangle of the displayed; background image. This cropping happens when original is larger than the level bounds.; Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
-	Scale     []float64 `json:"scale"`    // An array containing the `[scaleX,scaleY]` values of the **cropped** background image,; depending on `bgPos` option.
-	TopLeftPx []int64   `json:"topLeftPx"`// An array containing the `[x,y]` pixel coordinates of the top-left corner of the; **cropped** background image, depending on `bgPos` option.
+type EntityInstance struct {
+	Grid           []int64           `json:"__grid"`        // Grid-based coordinates (`[x,y]` format)
+	Identifier     string            `json:"__identifier"`  // Entity definition identifier
+	Pivot          []float64         `json:"__pivot"`       // Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
+	SmartColor     string            `json:"__smartColor"`  // The entity "smart" color, guessed from either Entity definition, or one its field; instances.
+	Tags           []string          `json:"__tags"`        // Array of tags defined in this Entity definition
+	Tile           *TilesetRectangle `json:"__tile"`        // Optional TilesetRect used to display this entity (it could either be the default Entity; tile, or some tile provided by a field value, like an Enum).
+	DefUid         int64             `json:"defUid"`        // Reference of the **Entity definition** UID
+	FieldInstances []FieldInstance   `json:"fieldInstances"`// An array of all custom fields and their values.
+	Height         int64             `json:"height"`        // Entity height in pixels. For non-resizable entities, it will be the same as Entity; definition.
+	Iid            string            `json:"iid"`           // Unique instance identifier
+	Px             []int64           `json:"px"`            // Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget; optional layer offsets, if they exist!
+	Width          int64             `json:"width"`         // Entity width in pixels. For non-resizable entities, it will be the same as Entity; definition.
 }
 
 type FieldInstance struct {
@@ -311,6 +318,26 @@ type FieldInstance struct {
 	Value            interface{}       `json:"__value"`         // Actual value of the field instance. The value type varies, depending on `__type`:<br/>; - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you; just get the actual value with the expected type.<br/>   - For **Color**, the value is an; hexadecimal string using "#rrggbb" format.<br/>   - For **Enum**, the value is a String; representing the selected enum value.<br/>   - For **Point**, the value is a; [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a; [TilesetRect](#ldtk-TilesetRect) object.<br/>   - For **EntityRef**, the value is an; [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an; array, then this `__value` will also be a JSON array.
 	DefUid           int64             `json:"defUid"`          // Reference of the **Field definition** UID
 	RealEditorValues []interface{}     `json:"realEditorValues"`// Editor internal raw values
+}
+
+// This object is used in Field Instances to describe an EntityRef value.
+type FieldInstanceEntityReference struct {
+	EntityIid string `json:"entityIid"`// IID of the refered EntityInstance
+	LayerIid  string `json:"layerIid"` // IID of the LayerInstance containing the refered EntityInstance
+	LevelIid  string `json:"levelIid"` // IID of the Level containing the refered EntityInstance
+	WorldIid  string `json:"worldIid"` // IID of the World containing the refered EntityInstance
+}
+
+// This object is just a grid-based coordinate used in Field values.
+type FieldInstanceGridPoint struct {
+	Cx int64 `json:"cx"`// X grid-based coordinate
+	Cy int64 `json:"cy"`// Y grid-based coordinate
+}
+
+// IntGrid value instance
+type IntGridValueInstance struct {
+	CoordID int64 `json:"coordId"`// Coordinate ID in the layer grid
+	V       int64 `json:"v"`      // IntGrid value
 }
 
 type LayerInstance struct {
@@ -349,25 +376,43 @@ type TileInstance struct {
 	T   int64   `json:"t"`  // The *Tile ID* in the corresponding tileset.
 }
 
-type EntityInstance struct {
-	Grid           []int64           `json:"__grid"`        // Grid-based coordinates (`[x,y]` format)
-	Identifier     string            `json:"__identifier"`  // Entity definition identifier
-	Pivot          []float64         `json:"__pivot"`       // Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
-	SmartColor     string            `json:"__smartColor"`  // The entity "smart" color, guessed from either Entity definition, or one its field; instances.
-	Tags           []string          `json:"__tags"`        // Array of tags defined in this Entity definition
-	Tile           *TilesetRectangle `json:"__tile"`        // Optional TilesetRect used to display this entity (it could either be the default Entity; tile, or some tile provided by a field value, like an Enum).
-	DefUid         int64             `json:"defUid"`        // Reference of the **Entity definition** UID
-	FieldInstances []FieldInstance   `json:"fieldInstances"`// An array of all custom fields and their values.
-	Height         int64             `json:"height"`        // Entity height in pixels. For non-resizable entities, it will be the same as Entity; definition.
-	Iid            string            `json:"iid"`           // Unique instance identifier
-	Px             []int64           `json:"px"`            // Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget; optional layer offsets, if they exist!
-	Width          int64             `json:"width"`         // Entity width in pixels. For non-resizable entities, it will be the same as Entity; definition.
+// This section contains all the level data. It can be found in 2 distinct forms, depending
+// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
+// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
+// files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one
+// per level). In this case, the main Project JSON file will still contain most level data,
+// except heavy sections, like the `layerInstances` array (which will be null). The
+// `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file
+// containing exactly what is described below.
+type Level struct {
+	BgColor           string                   `json:"__bgColor"`        // Background color of the level (same as `bgColor`, except the default value is; automatically used here if its value is `null`)
+	BgPos             *LevelBackgroundPosition `json:"__bgPos"`          // Position informations of the background image, if there is one.
+	Neighbours        []NeighbourLevel         `json:"__neighbours"`     // An array listing all other levels touching this one on the world map.<br/>  Only relevant; for world layouts where level spatial positioning is manual (ie. GridVania, Free). For; Horizontal and Vertical layouts, this array is always empty.
+	SmartColor        string                   `json:"__smartColor"`     // The "guessed" color for this level in the editor, decided using either the background; color or an existing custom field.
+	LevelBgColor      *string                  `json:"bgColor"`          // Background color of the level. If `null`, the project `defaultLevelBgColor` should be; used.
+	BgPivotX          float64                  `json:"bgPivotX"`         // Background image X pivot (0-1)
+	BgPivotY          float64                  `json:"bgPivotY"`         // Background image Y pivot (0-1)
+	LevelBgPos        *BgPos                   `json:"bgPos"`            // An enum defining the way the background image (if any) is positioned on the level. See; `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,; `Contain`, `Cover`, `CoverDirty`
+	BgRelPath         *string                  `json:"bgRelPath"`        // The *optional* relative path to the level background image.
+	ExternalRelPath   *string                  `json:"externalRelPath"`  // This value is not null if the project option "*Save levels separately*" is enabled. In; this case, this **relative** path points to the level Json file.
+	FieldInstances    []FieldInstance          `json:"fieldInstances"`   // An array containing this level custom field values.
+	Identifier        string                   `json:"identifier"`       // User defined unique identifier
+	Iid               string                   `json:"iid"`              // Unique instance identifier
+	LayerInstances    []LayerInstance          `json:"layerInstances"`   // An array containing all Layer instances. **IMPORTANT**: if the project option "*Save; levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted; in display order**: the 1st layer is the top-most and the last is behind.
+	PxHei             int64                    `json:"pxHei"`            // Height of the level in pixels
+	PxWid             int64                    `json:"pxWid"`            // Width of the level in pixels
+	Uid               int64                    `json:"uid"`              // Unique Int identifier
+	UseAutoIdentifier bool                     `json:"useAutoIdentifier"`// If TRUE, the level identifier will always automatically use the naming pattern as defined; in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by; user.
+	WorldDepth        int64                    `json:"worldDepth"`       // Index that represents the "depth" of the level in the world. Default is 0, greater means; "above", lower means "below".<br/>  This value is mostly used for display only and is; intended to make stacking of levels easier to manage.
+	WorldX            int64                    `json:"worldX"`           // World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial; positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the; value is always -1 here.
+	WorldY            int64                    `json:"worldY"`           // World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial; positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the; value is always -1 here.
 }
 
-// IntGrid value instance
-type IntGridValueInstance struct {
-	CoordID int64 `json:"coordId"`// Coordinate ID in the layer grid
-	V       int64 `json:"v"`      // IntGrid value
+// Level background image position info
+type LevelBackgroundPosition struct {
+	CropRect  []float64 `json:"cropRect"` // An array of 4 float values describing the cropped sub-rectangle of the displayed; background image. This cropping happens when original is larger than the level bounds.; Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
+	Scale     []float64 `json:"scale"`    // An array containing the `[scaleX,scaleY]` values of the **cropped** background image,; depending on `bgPos` option.
+	TopLeftPx []int64   `json:"topLeftPx"`// An array containing the `[x,y]` pixel coordinates of the top-left corner of the; **cropped** background image, depending on `bgPos` option.
 }
 
 // Nearby level info
@@ -431,19 +476,19 @@ const (
 
 // Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
 // `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
-type LevelFieldType string
+type FieldDefType string
 const (
-	FBool LevelFieldType = "F_Bool"
-	FColor LevelFieldType = "F_Color"
-	FEntityRef LevelFieldType = "F_EntityRef"
-	FEnum LevelFieldType = "F_Enum"
-	FFloat LevelFieldType = "F_Float"
-	FInt LevelFieldType = "F_Int"
-	FPath LevelFieldType = "F_Path"
-	FPoint LevelFieldType = "F_Point"
-	FString LevelFieldType = "F_String"
-	FText LevelFieldType = "F_Text"
-	FTile LevelFieldType = "F_Tile"
+	FBool FieldDefType = "F_Bool"
+	FColor FieldDefType = "F_Color"
+	FEntityRef FieldDefType = "F_EntityRef"
+	FEnum FieldDefType = "F_Enum"
+	FFloat FieldDefType = "F_Float"
+	FInt FieldDefType = "F_Int"
+	FPath FieldDefType = "F_Path"
+	FPoint FieldDefType = "F_Point"
+	FString FieldDefType = "F_String"
+	FText FieldDefType = "F_Text"
+	FTile FieldDefType = "F_Tile"
 )
 
 type TextLanguageMode string
@@ -517,12 +562,12 @@ const (
 
 // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
 // `AutoLayer`
-type LayerType string
+type LayerDefType string
 const (
-	AutoLayer LayerType = "AutoLayer"
-	Entities LayerType = "Entities"
-	IntGrid LayerType = "IntGrid"
-	Tiles LayerType = "Tiles"
+	AutoLayer LayerDefType = "AutoLayer"
+	Entities LayerDefType = "Entities"
+	IntGrid LayerDefType = "IntGrid"
+	Tiles LayerDefType = "Tiles"
 )
 
 type EmbedAtlas string
@@ -538,6 +583,22 @@ const (
 	MultiWorlds Flag = "MultiWorlds"
 	PrependIndexToLevelFileNames Flag = "PrependIndexToLevelFileNames"
 	UseMultilinesType Flag = "UseMultilinesType"
+)
+
+type BgPos string
+const (
+	BgPosCover BgPos = "Cover"
+	Contain BgPos = "Contain"
+	CoverDirty BgPos = "CoverDirty"
+	Unscaled BgPos = "Unscaled"
+)
+
+type WorldLayout string
+const (
+	GridVania WorldLayout = "GridVania"
+	LinearHorizontal WorldLayout = "LinearHorizontal"
+	LinearVertical WorldLayout = "LinearVertical"
+	WorldLayoutFree WorldLayout = "Free"
 )
 
 // Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
@@ -557,20 +618,4 @@ const (
 	ImageExportModeNone ImageExportMode = "None"
 	OneImagePerLayer ImageExportMode = "OneImagePerLayer"
 	OneImagePerLevel ImageExportMode = "OneImagePerLevel"
-)
-
-type BgPos string
-const (
-	BgPosCover BgPos = "Cover"
-	Contain BgPos = "Contain"
-	CoverDirty BgPos = "CoverDirty"
-	Unscaled BgPos = "Unscaled"
-)
-
-type WorldLayout string
-const (
-	GridVania WorldLayout = "GridVania"
-	LinearHorizontal WorldLayout = "LinearHorizontal"
-	LinearVertical WorldLayout = "LinearVertical"
-	WorldLayoutFree WorldLayout = "Free"
 )

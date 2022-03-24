@@ -25,6 +25,14 @@ namespace ldtk
     public partial class LdtkJson
     {
         /// <summary>
+        /// This object is not actually used by LDtk. It ONLY exists to force explicit references to
+        /// all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+        /// Quicktype will drop types that are not explicitely used.
+        /// </summary>
+        [JsonProperty("__FORCED_REFS", NullValueHandling = NullValueHandling.Ignore)]
+        public ForcedRefs ForcedRefs { get; set; }
+
+        /// <summary>
         /// LDtk application build identifier.<br/>  This is only used to identify the LDtk version
         /// that generated this particular project file, which can be useful for specific bug fixing.
         /// Note that the build identifier is just the date of the release, so it's not unique to
@@ -231,14 +239,14 @@ namespace ldtk
     }
 
     /// <summary>
-    /// A structure containing all the definitions of this project
-    ///
     /// If you're writing your own LDtk importer, you should probably just ignore *most* stuff in
     /// the `defs` section, as it contains data that are mostly important to the editor. To keep
     /// you away from the `defs` section and avoid some unnecessary JSON parsing, important data
     /// from definitions is often duplicated in fields prefixed with a double underscore (eg.
     /// `__identifier` or `__type`).  The 2 only definition types you might need here are
     /// **Tilesets** and **Enums**.
+    ///
+    /// A structure containing all the definitions of this project
     /// </summary>
     public partial class Definitions
     {
@@ -576,7 +584,7 @@ namespace ldtk
         /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
         /// </summary>
         [JsonProperty("type")]
-        public LevelFieldType FieldDefinitionType { get; set; }
+        public FieldDefType FieldDefinitionType { get; set; }
 
         /// <summary>
         /// Unique Int identifier
@@ -850,7 +858,7 @@ namespace ldtk
         /// `AutoLayer`
         /// </summary>
         [JsonProperty("type")]
-        public LayerType LayerDefinitionType { get; set; }
+        public LayerDefType LayerDefinitionType { get; set; }
 
         /// <summary>
         /// Unique Int identifier
@@ -1171,96 +1179,143 @@ namespace ldtk
     }
 
     /// <summary>
-    /// This section contains all the level data. It can be found in 2 distinct forms, depending
-    /// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
-    /// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
-    /// files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one
-    /// per level). In this case, the main Project JSON file will still contain most level data,
-    /// except heavy sections, like the `layerInstances` array (which will be null). The
-    /// `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file
-    /// containing exactly what is described below.
+    /// This object is not actually used by LDtk. It ONLY exists to force explicit references to
+    /// all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+    /// Quicktype will drop types that are not explicitely used.
     /// </summary>
-    public partial class Level
+    public partial class ForcedRefs
+    {
+        [JsonProperty("AutoLayerRuleGroup", NullValueHandling = NullValueHandling.Ignore)]
+        public AutoLayerRuleGroup AutoLayerRuleGroup { get; set; }
+
+        [JsonProperty("AutoRuleDef", NullValueHandling = NullValueHandling.Ignore)]
+        public AutoLayerRuleDefinition AutoRuleDef { get; set; }
+
+        [JsonProperty("Definitions", NullValueHandling = NullValueHandling.Ignore)]
+        public Definitions Definitions { get; set; }
+
+        [JsonProperty("EntityDef", NullValueHandling = NullValueHandling.Ignore)]
+        public EntityDefinition EntityDef { get; set; }
+
+        [JsonProperty("EntityInstance", NullValueHandling = NullValueHandling.Ignore)]
+        public EntityInstance EntityInstance { get; set; }
+
+        [JsonProperty("EntityReferenceInfos", NullValueHandling = NullValueHandling.Ignore)]
+        public FieldInstanceEntityReference EntityReferenceInfos { get; set; }
+
+        [JsonProperty("EnumDef", NullValueHandling = NullValueHandling.Ignore)]
+        public EnumDefinition EnumDef { get; set; }
+
+        [JsonProperty("EnumDefValues", NullValueHandling = NullValueHandling.Ignore)]
+        public EnumValueDefinition EnumDefValues { get; set; }
+
+        [JsonProperty("EnumTagValue", NullValueHandling = NullValueHandling.Ignore)]
+        public EnumTagValue EnumTagValue { get; set; }
+
+        [JsonProperty("FieldDef", NullValueHandling = NullValueHandling.Ignore)]
+        public FieldDefinition FieldDef { get; set; }
+
+        [JsonProperty("FieldInstance", NullValueHandling = NullValueHandling.Ignore)]
+        public FieldInstance FieldInstance { get; set; }
+
+        [JsonProperty("GridPoint", NullValueHandling = NullValueHandling.Ignore)]
+        public FieldInstanceGridPoint GridPoint { get; set; }
+
+        [JsonProperty("IntGridValueDef", NullValueHandling = NullValueHandling.Ignore)]
+        public IntGridValueDefinition IntGridValueDef { get; set; }
+
+        [JsonProperty("IntGridValueInstance", NullValueHandling = NullValueHandling.Ignore)]
+        public IntGridValueInstance IntGridValueInstance { get; set; }
+
+        [JsonProperty("LayerDef", NullValueHandling = NullValueHandling.Ignore)]
+        public LayerDefinition LayerDef { get; set; }
+
+        [JsonProperty("LayerInstance", NullValueHandling = NullValueHandling.Ignore)]
+        public LayerInstance LayerInstance { get; set; }
+
+        [JsonProperty("Level", NullValueHandling = NullValueHandling.Ignore)]
+        public Level Level { get; set; }
+
+        [JsonProperty("LevelBgPosInfos", NullValueHandling = NullValueHandling.Ignore)]
+        public LevelBackgroundPosition LevelBgPosInfos { get; set; }
+
+        [JsonProperty("NeighbourLevel", NullValueHandling = NullValueHandling.Ignore)]
+        public NeighbourLevel NeighbourLevel { get; set; }
+
+        [JsonProperty("Tile", NullValueHandling = NullValueHandling.Ignore)]
+        public TileInstance Tile { get; set; }
+
+        [JsonProperty("TileCustomMetadata", NullValueHandling = NullValueHandling.Ignore)]
+        public TileCustomMetadata TileCustomMetadata { get; set; }
+
+        [JsonProperty("TilesetDef", NullValueHandling = NullValueHandling.Ignore)]
+        public TilesetDefinition TilesetDef { get; set; }
+
+        [JsonProperty("TilesetRect", NullValueHandling = NullValueHandling.Ignore)]
+        public TilesetRectangle TilesetRect { get; set; }
+
+        [JsonProperty("World", NullValueHandling = NullValueHandling.Ignore)]
+        public World World { get; set; }
+    }
+
+    public partial class EntityInstance
     {
         /// <summary>
-        /// Background color of the level (same as `bgColor`, except the default value is
-        /// automatically used here if its value is `null`)
+        /// Grid-based coordinates (`[x,y]` format)
         /// </summary>
-        [JsonProperty("__bgColor")]
-        public string BgColor { get; set; }
+        [JsonProperty("__grid")]
+        public long[] Grid { get; set; }
 
         /// <summary>
-        /// Position informations of the background image, if there is one.
+        /// Entity definition identifier
         /// </summary>
-        [JsonProperty("__bgPos")]
-        public LevelBackgroundPosition BgPos { get; set; }
+        [JsonProperty("__identifier")]
+        public string Identifier { get; set; }
 
         /// <summary>
-        /// An array listing all other levels touching this one on the world map.<br/>  Only relevant
-        /// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
-        /// Horizontal and Vertical layouts, this array is always empty.
+        /// Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
         /// </summary>
-        [JsonProperty("__neighbours")]
-        public NeighbourLevel[] Neighbours { get; set; }
+        [JsonProperty("__pivot")]
+        public double[] Pivot { get; set; }
 
         /// <summary>
-        /// The "guessed" color for this level in the editor, decided using either the background
-        /// color or an existing custom field.
+        /// The entity "smart" color, guessed from either Entity definition, or one its field
+        /// instances.
         /// </summary>
         [JsonProperty("__smartColor")]
         public string SmartColor { get; set; }
 
         /// <summary>
-        /// Background color of the level. If `null`, the project `defaultLevelBgColor` should be
-        /// used.
+        /// Array of tags defined in this Entity definition
         /// </summary>
-        [JsonProperty("bgColor")]
-        public string LevelBgColor { get; set; }
+        [JsonProperty("__tags")]
+        public string[] Tags { get; set; }
 
         /// <summary>
-        /// Background image X pivot (0-1)
+        /// Optional TilesetRect used to display this entity (it could either be the default Entity
+        /// tile, or some tile provided by a field value, like an Enum).
         /// </summary>
-        [JsonProperty("bgPivotX")]
-        public double BgPivotX { get; set; }
+        [JsonProperty("__tile")]
+        public TilesetRectangle Tile { get; set; }
 
         /// <summary>
-        /// Background image Y pivot (0-1)
+        /// Reference of the **Entity definition** UID
         /// </summary>
-        [JsonProperty("bgPivotY")]
-        public double BgPivotY { get; set; }
+        [JsonProperty("defUid")]
+        public long DefUid { get; set; }
 
         /// <summary>
-        /// An enum defining the way the background image (if any) is positioned on the level. See
-        /// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
-        /// `Contain`, `Cover`, `CoverDirty`
-        /// </summary>
-        [JsonProperty("bgPos")]
-        public BgPos? LevelBgPos { get; set; }
-
-        /// <summary>
-        /// The *optional* relative path to the level background image.
-        /// </summary>
-        [JsonProperty("bgRelPath")]
-        public string BgRelPath { get; set; }
-
-        /// <summary>
-        /// This value is not null if the project option "*Save levels separately*" is enabled. In
-        /// this case, this **relative** path points to the level Json file.
-        /// </summary>
-        [JsonProperty("externalRelPath")]
-        public string ExternalRelPath { get; set; }
-
-        /// <summary>
-        /// An array containing this level custom field values.
+        /// An array of all custom fields and their values.
         /// </summary>
         [JsonProperty("fieldInstances")]
         public FieldInstance[] FieldInstances { get; set; }
 
         /// <summary>
-        /// User defined unique identifier
+        /// Entity height in pixels. For non-resizable entities, it will be the same as Entity
+        /// definition.
         /// </summary>
-        [JsonProperty("identifier")]
-        public string Identifier { get; set; }
+        [JsonProperty("height")]
+        public long Height { get; set; }
 
         /// <summary>
         /// Unique instance identifier
@@ -1269,90 +1324,18 @@ namespace ldtk
         public string Iid { get; set; }
 
         /// <summary>
-        /// An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
-        /// levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
-        /// in display order**: the 1st layer is the top-most and the last is behind.
+        /// Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
+        /// optional layer offsets, if they exist!
         /// </summary>
-        [JsonProperty("layerInstances")]
-        public LayerInstance[] LayerInstances { get; set; }
+        [JsonProperty("px")]
+        public long[] Px { get; set; }
 
         /// <summary>
-        /// Height of the level in pixels
+        /// Entity width in pixels. For non-resizable entities, it will be the same as Entity
+        /// definition.
         /// </summary>
-        [JsonProperty("pxHei")]
-        public long PxHei { get; set; }
-
-        /// <summary>
-        /// Width of the level in pixels
-        /// </summary>
-        [JsonProperty("pxWid")]
-        public long PxWid { get; set; }
-
-        /// <summary>
-        /// Unique Int identifier
-        /// </summary>
-        [JsonProperty("uid")]
-        public long Uid { get; set; }
-
-        /// <summary>
-        /// If TRUE, the level identifier will always automatically use the naming pattern as defined
-        /// in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
-        /// user.
-        /// </summary>
-        [JsonProperty("useAutoIdentifier")]
-        public bool UseAutoIdentifier { get; set; }
-
-        /// <summary>
-        /// Index that represents the "depth" of the level in the world. Default is 0, greater means
-        /// "above", lower means "below".<br/>  This value is mostly used for display only and is
-        /// intended to make stacking of levels easier to manage.
-        /// </summary>
-        [JsonProperty("worldDepth")]
-        public long WorldDepth { get; set; }
-
-        /// <summary>
-        /// World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
-        /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
-        /// value is always -1 here.
-        /// </summary>
-        [JsonProperty("worldX")]
-        public long WorldX { get; set; }
-
-        /// <summary>
-        /// World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
-        /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
-        /// value is always -1 here.
-        /// </summary>
-        [JsonProperty("worldY")]
-        public long WorldY { get; set; }
-    }
-
-    /// <summary>
-    /// Level background image position info
-    /// </summary>
-    public partial class LevelBackgroundPosition
-    {
-        /// <summary>
-        /// An array of 4 float values describing the cropped sub-rectangle of the displayed
-        /// background image. This cropping happens when original is larger than the level bounds.
-        /// Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
-        /// </summary>
-        [JsonProperty("cropRect")]
-        public double[] CropRect { get; set; }
-
-        /// <summary>
-        /// An array containing the `[scaleX,scaleY]` values of the **cropped** background image,
-        /// depending on `bgPos` option.
-        /// </summary>
-        [JsonProperty("scale")]
-        public double[] Scale { get; set; }
-
-        /// <summary>
-        /// An array containing the `[x,y]` pixel coordinates of the top-left corner of the
-        /// **cropped** background image, depending on `bgPos` option.
-        /// </summary>
-        [JsonProperty("topLeftPx")]
-        public long[] TopLeftPx { get; set; }
+        [JsonProperty("width")]
+        public long Width { get; set; }
     }
 
     public partial class FieldInstance
@@ -1403,6 +1386,72 @@ namespace ldtk
         /// </summary>
         [JsonProperty("realEditorValues")]
         public dynamic[] RealEditorValues { get; set; }
+    }
+
+    /// <summary>
+    /// This object is used in Field Instances to describe an EntityRef value.
+    /// </summary>
+    public partial class FieldInstanceEntityReference
+    {
+        /// <summary>
+        /// IID of the refered EntityInstance
+        /// </summary>
+        [JsonProperty("entityIid")]
+        public string EntityIid { get; set; }
+
+        /// <summary>
+        /// IID of the LayerInstance containing the refered EntityInstance
+        /// </summary>
+        [JsonProperty("layerIid")]
+        public string LayerIid { get; set; }
+
+        /// <summary>
+        /// IID of the Level containing the refered EntityInstance
+        /// </summary>
+        [JsonProperty("levelIid")]
+        public string LevelIid { get; set; }
+
+        /// <summary>
+        /// IID of the World containing the refered EntityInstance
+        /// </summary>
+        [JsonProperty("worldIid")]
+        public string WorldIid { get; set; }
+    }
+
+    /// <summary>
+    /// This object is just a grid-based coordinate used in Field values.
+    /// </summary>
+    public partial class FieldInstanceGridPoint
+    {
+        /// <summary>
+        /// X grid-based coordinate
+        /// </summary>
+        [JsonProperty("cx")]
+        public long Cx { get; set; }
+
+        /// <summary>
+        /// Y grid-based coordinate
+        /// </summary>
+        [JsonProperty("cy")]
+        public long Cy { get; set; }
+    }
+
+    /// <summary>
+    /// IntGrid value instance
+    /// </summary>
+    public partial class IntGridValueInstance
+    {
+        /// <summary>
+        /// Coordinate ID in the layer grid
+        /// </summary>
+        [JsonProperty("coordId")]
+        public long CoordId { get; set; }
+
+        /// <summary>
+        /// IntGrid value
+        /// </summary>
+        [JsonProperty("v")]
+        public long V { get; set; }
     }
 
     public partial class LayerInstance
@@ -1596,64 +1645,97 @@ namespace ldtk
         public long T { get; set; }
     }
 
-    public partial class EntityInstance
+    /// <summary>
+    /// This section contains all the level data. It can be found in 2 distinct forms, depending
+    /// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
+    /// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
+    /// files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one
+    /// per level). In this case, the main Project JSON file will still contain most level data,
+    /// except heavy sections, like the `layerInstances` array (which will be null). The
+    /// `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file
+    /// containing exactly what is described below.
+    /// </summary>
+    public partial class Level
     {
         /// <summary>
-        /// Grid-based coordinates (`[x,y]` format)
+        /// Background color of the level (same as `bgColor`, except the default value is
+        /// automatically used here if its value is `null`)
         /// </summary>
-        [JsonProperty("__grid")]
-        public long[] Grid { get; set; }
+        [JsonProperty("__bgColor")]
+        public string BgColor { get; set; }
 
         /// <summary>
-        /// Entity definition identifier
+        /// Position informations of the background image, if there is one.
         /// </summary>
-        [JsonProperty("__identifier")]
-        public string Identifier { get; set; }
+        [JsonProperty("__bgPos")]
+        public LevelBackgroundPosition BgPos { get; set; }
 
         /// <summary>
-        /// Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
+        /// An array listing all other levels touching this one on the world map.<br/>  Only relevant
+        /// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
+        /// Horizontal and Vertical layouts, this array is always empty.
         /// </summary>
-        [JsonProperty("__pivot")]
-        public double[] Pivot { get; set; }
+        [JsonProperty("__neighbours")]
+        public NeighbourLevel[] Neighbours { get; set; }
 
         /// <summary>
-        /// The entity "smart" color, guessed from either Entity definition, or one its field
-        /// instances.
+        /// The "guessed" color for this level in the editor, decided using either the background
+        /// color or an existing custom field.
         /// </summary>
         [JsonProperty("__smartColor")]
         public string SmartColor { get; set; }
 
         /// <summary>
-        /// Array of tags defined in this Entity definition
+        /// Background color of the level. If `null`, the project `defaultLevelBgColor` should be
+        /// used.
         /// </summary>
-        [JsonProperty("__tags")]
-        public string[] Tags { get; set; }
+        [JsonProperty("bgColor")]
+        public string LevelBgColor { get; set; }
 
         /// <summary>
-        /// Optional TilesetRect used to display this entity (it could either be the default Entity
-        /// tile, or some tile provided by a field value, like an Enum).
+        /// Background image X pivot (0-1)
         /// </summary>
-        [JsonProperty("__tile")]
-        public TilesetRectangle Tile { get; set; }
+        [JsonProperty("bgPivotX")]
+        public double BgPivotX { get; set; }
 
         /// <summary>
-        /// Reference of the **Entity definition** UID
+        /// Background image Y pivot (0-1)
         /// </summary>
-        [JsonProperty("defUid")]
-        public long DefUid { get; set; }
+        [JsonProperty("bgPivotY")]
+        public double BgPivotY { get; set; }
 
         /// <summary>
-        /// An array of all custom fields and their values.
+        /// An enum defining the way the background image (if any) is positioned on the level. See
+        /// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
+        /// `Contain`, `Cover`, `CoverDirty`
+        /// </summary>
+        [JsonProperty("bgPos")]
+        public BgPos? LevelBgPos { get; set; }
+
+        /// <summary>
+        /// The *optional* relative path to the level background image.
+        /// </summary>
+        [JsonProperty("bgRelPath")]
+        public string BgRelPath { get; set; }
+
+        /// <summary>
+        /// This value is not null if the project option "*Save levels separately*" is enabled. In
+        /// this case, this **relative** path points to the level Json file.
+        /// </summary>
+        [JsonProperty("externalRelPath")]
+        public string ExternalRelPath { get; set; }
+
+        /// <summary>
+        /// An array containing this level custom field values.
         /// </summary>
         [JsonProperty("fieldInstances")]
         public FieldInstance[] FieldInstances { get; set; }
 
         /// <summary>
-        /// Entity height in pixels. For non-resizable entities, it will be the same as Entity
-        /// definition.
+        /// User defined unique identifier
         /// </summary>
-        [JsonProperty("height")]
-        public long Height { get; set; }
+        [JsonProperty("identifier")]
+        public string Identifier { get; set; }
 
         /// <summary>
         /// Unique instance identifier
@@ -1662,36 +1744,90 @@ namespace ldtk
         public string Iid { get; set; }
 
         /// <summary>
-        /// Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
-        /// optional layer offsets, if they exist!
+        /// An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
+        /// levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
+        /// in display order**: the 1st layer is the top-most and the last is behind.
         /// </summary>
-        [JsonProperty("px")]
-        public long[] Px { get; set; }
+        [JsonProperty("layerInstances")]
+        public LayerInstance[] LayerInstances { get; set; }
 
         /// <summary>
-        /// Entity width in pixels. For non-resizable entities, it will be the same as Entity
-        /// definition.
+        /// Height of the level in pixels
         /// </summary>
-        [JsonProperty("width")]
-        public long Width { get; set; }
+        [JsonProperty("pxHei")]
+        public long PxHei { get; set; }
+
+        /// <summary>
+        /// Width of the level in pixels
+        /// </summary>
+        [JsonProperty("pxWid")]
+        public long PxWid { get; set; }
+
+        /// <summary>
+        /// Unique Int identifier
+        /// </summary>
+        [JsonProperty("uid")]
+        public long Uid { get; set; }
+
+        /// <summary>
+        /// If TRUE, the level identifier will always automatically use the naming pattern as defined
+        /// in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
+        /// user.
+        /// </summary>
+        [JsonProperty("useAutoIdentifier")]
+        public bool UseAutoIdentifier { get; set; }
+
+        /// <summary>
+        /// Index that represents the "depth" of the level in the world. Default is 0, greater means
+        /// "above", lower means "below".<br/>  This value is mostly used for display only and is
+        /// intended to make stacking of levels easier to manage.
+        /// </summary>
+        [JsonProperty("worldDepth")]
+        public long WorldDepth { get; set; }
+
+        /// <summary>
+        /// World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+        /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+        /// value is always -1 here.
+        /// </summary>
+        [JsonProperty("worldX")]
+        public long WorldX { get; set; }
+
+        /// <summary>
+        /// World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+        /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+        /// value is always -1 here.
+        /// </summary>
+        [JsonProperty("worldY")]
+        public long WorldY { get; set; }
     }
 
     /// <summary>
-    /// IntGrid value instance
+    /// Level background image position info
     /// </summary>
-    public partial class IntGridValueInstance
+    public partial class LevelBackgroundPosition
     {
         /// <summary>
-        /// Coordinate ID in the layer grid
+        /// An array of 4 float values describing the cropped sub-rectangle of the displayed
+        /// background image. This cropping happens when original is larger than the level bounds.
+        /// Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
         /// </summary>
-        [JsonProperty("coordId")]
-        public long CoordId { get; set; }
+        [JsonProperty("cropRect")]
+        public double[] CropRect { get; set; }
 
         /// <summary>
-        /// IntGrid value
+        /// An array containing the `[scaleX,scaleY]` values of the **cropped** background image,
+        /// depending on `bgPos` option.
         /// </summary>
-        [JsonProperty("v")]
-        public long V { get; set; }
+        [JsonProperty("scale")]
+        public double[] Scale { get; set; }
+
+        /// <summary>
+        /// An array containing the `[x,y]` pixel coordinates of the top-left corner of the
+        /// **cropped** background image, depending on `bgPos` option.
+        /// </summary>
+        [JsonProperty("topLeftPx")]
+        public long[] TopLeftPx { get; set; }
     }
 
     /// <summary>
@@ -1801,7 +1937,7 @@ namespace ldtk
     /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
     /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
     /// </summary>
-    public enum LevelFieldType { FBool, FColor, FEntityRef, FEnum, FFloat, FInt, FPath, FPoint, FString, FText, FTile };
+    public enum FieldDefType { FBool, FColor, FEntityRef, FEnum, FFloat, FInt, FPath, FPoint, FString, FText, FTile };
 
     public enum TextLanguageMode { LangC, LangHaxe, LangJs, LangJson, LangLog, LangLua, LangMarkdown, LangPython, LangRuby, LangXml };
 
@@ -1842,11 +1978,15 @@ namespace ldtk
     /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
     /// `AutoLayer`
     /// </summary>
-    public enum LayerType { AutoLayer, Entities, IntGrid, Tiles };
+    public enum LayerDefType { AutoLayer, Entities, IntGrid, Tiles };
 
     public enum EmbedAtlas { LdtkIcons };
 
     public enum Flag { DiscardPreCsvIntGrid, ExportPreCsvIntGridFormat, IgnoreBackupSuggest, MultiWorlds, PrependIndexToLevelFileNames, UseMultilinesType };
+
+    public enum BgPos { Contain, Cover, CoverDirty, Unscaled };
+
+    public enum WorldLayout { Free, GridVania, LinearHorizontal, LinearVertical };
 
     /// <summary>
     /// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
@@ -1859,10 +1999,6 @@ namespace ldtk
     /// `OneImagePerLevel`
     /// </summary>
     public enum ImageExportMode { None, OneImagePerLayer, OneImagePerLevel };
-
-    public enum BgPos { Contain, Cover, CoverDirty, Unscaled };
-
-    public enum WorldLayout { Free, GridVania, LinearHorizontal, LinearVertical };
 
     public partial class LdtkJson
     {
@@ -1882,27 +2018,114 @@ namespace ldtk
             DateParseHandling = DateParseHandling.None,
             Converters =
             {
+                CheckerConverter.Singleton,
+                TileModeConverter.Singleton,
                 AllowedRefsConverter.Singleton,
                 EditorDisplayModeConverter.Singleton,
                 EditorDisplayPosConverter.Singleton,
                 TextLanguageModeConverter.Singleton,
-                LevelFieldTypeConverter.Singleton,
+                FieldDefTypeConverter.Singleton,
                 LimitBehaviorConverter.Singleton,
                 LimitScopeConverter.Singleton,
                 RenderModeConverter.Singleton,
                 TileRenderModeConverter.Singleton,
-                CheckerConverter.Singleton,
-                TileModeConverter.Singleton,
-                LayerTypeConverter.Singleton,
+                LayerDefTypeConverter.Singleton,
                 EmbedAtlasConverter.Singleton,
+                BgPosConverter.Singleton,
+                WorldLayoutConverter.Singleton,
                 FlagConverter.Singleton,
                 IdentifierStyleConverter.Singleton,
                 ImageExportModeConverter.Singleton,
-                BgPosConverter.Singleton,
-                WorldLayoutConverter.Singleton,
                 new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
             },
         };
+    }
+
+    internal class CheckerConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(Checker) || t == typeof(Checker?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "Horizontal":
+                    return Checker.Horizontal;
+                case "None":
+                    return Checker.None;
+                case "Vertical":
+                    return Checker.Vertical;
+            }
+            throw new Exception("Cannot unmarshal type Checker");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (Checker)untypedValue;
+            switch (value)
+            {
+                case Checker.Horizontal:
+                    serializer.Serialize(writer, "Horizontal");
+                    return;
+                case Checker.None:
+                    serializer.Serialize(writer, "None");
+                    return;
+                case Checker.Vertical:
+                    serializer.Serialize(writer, "Vertical");
+                    return;
+            }
+            throw new Exception("Cannot marshal type Checker");
+        }
+
+        public static readonly CheckerConverter Singleton = new CheckerConverter();
+    }
+
+    internal class TileModeConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(TileMode) || t == typeof(TileMode?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "Single":
+                    return TileMode.Single;
+                case "Stamp":
+                    return TileMode.Stamp;
+            }
+            throw new Exception("Cannot unmarshal type TileMode");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (TileMode)untypedValue;
+            switch (value)
+            {
+                case TileMode.Single:
+                    serializer.Serialize(writer, "Single");
+                    return;
+                case TileMode.Stamp:
+                    serializer.Serialize(writer, "Stamp");
+                    return;
+            }
+            throw new Exception("Cannot marshal type TileMode");
+        }
+
+        public static readonly TileModeConverter Singleton = new TileModeConverter();
     }
 
     internal class AllowedRefsConverter : JsonConverter
@@ -2179,9 +2402,9 @@ namespace ldtk
         public static readonly TextLanguageModeConverter Singleton = new TextLanguageModeConverter();
     }
 
-    internal class LevelFieldTypeConverter : JsonConverter
+    internal class FieldDefTypeConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(LevelFieldType) || t == typeof(LevelFieldType?);
+        public override bool CanConvert(Type t) => t == typeof(FieldDefType) || t == typeof(FieldDefType?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
@@ -2190,29 +2413,29 @@ namespace ldtk
             switch (value)
             {
                 case "F_Bool":
-                    return LevelFieldType.FBool;
+                    return FieldDefType.FBool;
                 case "F_Color":
-                    return LevelFieldType.FColor;
+                    return FieldDefType.FColor;
                 case "F_EntityRef":
-                    return LevelFieldType.FEntityRef;
+                    return FieldDefType.FEntityRef;
                 case "F_Enum":
-                    return LevelFieldType.FEnum;
+                    return FieldDefType.FEnum;
                 case "F_Float":
-                    return LevelFieldType.FFloat;
+                    return FieldDefType.FFloat;
                 case "F_Int":
-                    return LevelFieldType.FInt;
+                    return FieldDefType.FInt;
                 case "F_Path":
-                    return LevelFieldType.FPath;
+                    return FieldDefType.FPath;
                 case "F_Point":
-                    return LevelFieldType.FPoint;
+                    return FieldDefType.FPoint;
                 case "F_String":
-                    return LevelFieldType.FString;
+                    return FieldDefType.FString;
                 case "F_Text":
-                    return LevelFieldType.FText;
+                    return FieldDefType.FText;
                 case "F_Tile":
-                    return LevelFieldType.FTile;
+                    return FieldDefType.FTile;
             }
-            throw new Exception("Cannot unmarshal type LevelFieldType");
+            throw new Exception("Cannot unmarshal type FieldDefType");
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
@@ -2222,47 +2445,47 @@ namespace ldtk
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (LevelFieldType)untypedValue;
+            var value = (FieldDefType)untypedValue;
             switch (value)
             {
-                case LevelFieldType.FBool:
+                case FieldDefType.FBool:
                     serializer.Serialize(writer, "F_Bool");
                     return;
-                case LevelFieldType.FColor:
+                case FieldDefType.FColor:
                     serializer.Serialize(writer, "F_Color");
                     return;
-                case LevelFieldType.FEntityRef:
+                case FieldDefType.FEntityRef:
                     serializer.Serialize(writer, "F_EntityRef");
                     return;
-                case LevelFieldType.FEnum:
+                case FieldDefType.FEnum:
                     serializer.Serialize(writer, "F_Enum");
                     return;
-                case LevelFieldType.FFloat:
+                case FieldDefType.FFloat:
                     serializer.Serialize(writer, "F_Float");
                     return;
-                case LevelFieldType.FInt:
+                case FieldDefType.FInt:
                     serializer.Serialize(writer, "F_Int");
                     return;
-                case LevelFieldType.FPath:
+                case FieldDefType.FPath:
                     serializer.Serialize(writer, "F_Path");
                     return;
-                case LevelFieldType.FPoint:
+                case FieldDefType.FPoint:
                     serializer.Serialize(writer, "F_Point");
                     return;
-                case LevelFieldType.FString:
+                case FieldDefType.FString:
                     serializer.Serialize(writer, "F_String");
                     return;
-                case LevelFieldType.FText:
+                case FieldDefType.FText:
                     serializer.Serialize(writer, "F_Text");
                     return;
-                case LevelFieldType.FTile:
+                case FieldDefType.FTile:
                     serializer.Serialize(writer, "F_Tile");
                     return;
             }
-            throw new Exception("Cannot marshal type LevelFieldType");
+            throw new Exception("Cannot marshal type FieldDefType");
         }
 
-        public static readonly LevelFieldTypeConverter Singleton = new LevelFieldTypeConverter();
+        public static readonly FieldDefTypeConverter Singleton = new FieldDefTypeConverter();
     }
 
     internal class LimitBehaviorConverter : JsonConverter
@@ -2474,96 +2697,9 @@ namespace ldtk
         public static readonly TileRenderModeConverter Singleton = new TileRenderModeConverter();
     }
 
-    internal class CheckerConverter : JsonConverter
+    internal class LayerDefTypeConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(Checker) || t == typeof(Checker?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "Horizontal":
-                    return Checker.Horizontal;
-                case "None":
-                    return Checker.None;
-                case "Vertical":
-                    return Checker.Vertical;
-            }
-            throw new Exception("Cannot unmarshal type Checker");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (Checker)untypedValue;
-            switch (value)
-            {
-                case Checker.Horizontal:
-                    serializer.Serialize(writer, "Horizontal");
-                    return;
-                case Checker.None:
-                    serializer.Serialize(writer, "None");
-                    return;
-                case Checker.Vertical:
-                    serializer.Serialize(writer, "Vertical");
-                    return;
-            }
-            throw new Exception("Cannot marshal type Checker");
-        }
-
-        public static readonly CheckerConverter Singleton = new CheckerConverter();
-    }
-
-    internal class TileModeConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(TileMode) || t == typeof(TileMode?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "Single":
-                    return TileMode.Single;
-                case "Stamp":
-                    return TileMode.Stamp;
-            }
-            throw new Exception("Cannot unmarshal type TileMode");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (TileMode)untypedValue;
-            switch (value)
-            {
-                case TileMode.Single:
-                    serializer.Serialize(writer, "Single");
-                    return;
-                case TileMode.Stamp:
-                    serializer.Serialize(writer, "Stamp");
-                    return;
-            }
-            throw new Exception("Cannot marshal type TileMode");
-        }
-
-        public static readonly TileModeConverter Singleton = new TileModeConverter();
-    }
-
-    internal class LayerTypeConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(LayerType) || t == typeof(LayerType?);
+        public override bool CanConvert(Type t) => t == typeof(LayerDefType) || t == typeof(LayerDefType?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
@@ -2572,15 +2708,15 @@ namespace ldtk
             switch (value)
             {
                 case "AutoLayer":
-                    return LayerType.AutoLayer;
+                    return LayerDefType.AutoLayer;
                 case "Entities":
-                    return LayerType.Entities;
+                    return LayerDefType.Entities;
                 case "IntGrid":
-                    return LayerType.IntGrid;
+                    return LayerDefType.IntGrid;
                 case "Tiles":
-                    return LayerType.Tiles;
+                    return LayerDefType.Tiles;
             }
-            throw new Exception("Cannot unmarshal type LayerType");
+            throw new Exception("Cannot unmarshal type LayerDefType");
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
@@ -2590,26 +2726,26 @@ namespace ldtk
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (LayerType)untypedValue;
+            var value = (LayerDefType)untypedValue;
             switch (value)
             {
-                case LayerType.AutoLayer:
+                case LayerDefType.AutoLayer:
                     serializer.Serialize(writer, "AutoLayer");
                     return;
-                case LayerType.Entities:
+                case LayerDefType.Entities:
                     serializer.Serialize(writer, "Entities");
                     return;
-                case LayerType.IntGrid:
+                case LayerDefType.IntGrid:
                     serializer.Serialize(writer, "IntGrid");
                     return;
-                case LayerType.Tiles:
+                case LayerDefType.Tiles:
                     serializer.Serialize(writer, "Tiles");
                     return;
             }
-            throw new Exception("Cannot marshal type LayerType");
+            throw new Exception("Cannot marshal type LayerDefType");
         }
 
-        public static readonly LayerTypeConverter Singleton = new LayerTypeConverter();
+        public static readonly LayerDefTypeConverter Singleton = new LayerDefTypeConverter();
     }
 
     internal class EmbedAtlasConverter : JsonConverter
@@ -2644,6 +2780,108 @@ namespace ldtk
         }
 
         public static readonly EmbedAtlasConverter Singleton = new EmbedAtlasConverter();
+    }
+
+    internal class BgPosConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(BgPos) || t == typeof(BgPos?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "Contain":
+                    return BgPos.Contain;
+                case "Cover":
+                    return BgPos.Cover;
+                case "CoverDirty":
+                    return BgPos.CoverDirty;
+                case "Unscaled":
+                    return BgPos.Unscaled;
+            }
+            throw new Exception("Cannot unmarshal type BgPos");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (BgPos)untypedValue;
+            switch (value)
+            {
+                case BgPos.Contain:
+                    serializer.Serialize(writer, "Contain");
+                    return;
+                case BgPos.Cover:
+                    serializer.Serialize(writer, "Cover");
+                    return;
+                case BgPos.CoverDirty:
+                    serializer.Serialize(writer, "CoverDirty");
+                    return;
+                case BgPos.Unscaled:
+                    serializer.Serialize(writer, "Unscaled");
+                    return;
+            }
+            throw new Exception("Cannot marshal type BgPos");
+        }
+
+        public static readonly BgPosConverter Singleton = new BgPosConverter();
+    }
+
+    internal class WorldLayoutConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(WorldLayout) || t == typeof(WorldLayout?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "Free":
+                    return WorldLayout.Free;
+                case "GridVania":
+                    return WorldLayout.GridVania;
+                case "LinearHorizontal":
+                    return WorldLayout.LinearHorizontal;
+                case "LinearVertical":
+                    return WorldLayout.LinearVertical;
+            }
+            throw new Exception("Cannot unmarshal type WorldLayout");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (WorldLayout)untypedValue;
+            switch (value)
+            {
+                case WorldLayout.Free:
+                    serializer.Serialize(writer, "Free");
+                    return;
+                case WorldLayout.GridVania:
+                    serializer.Serialize(writer, "GridVania");
+                    return;
+                case WorldLayout.LinearHorizontal:
+                    serializer.Serialize(writer, "LinearHorizontal");
+                    return;
+                case WorldLayout.LinearVertical:
+                    serializer.Serialize(writer, "LinearVertical");
+                    return;
+            }
+            throw new Exception("Cannot marshal type WorldLayout");
+        }
+
+        public static readonly WorldLayoutConverter Singleton = new WorldLayoutConverter();
     }
 
     internal class FlagConverter : JsonConverter
@@ -2802,107 +3040,5 @@ namespace ldtk
         }
 
         public static readonly ImageExportModeConverter Singleton = new ImageExportModeConverter();
-    }
-
-    internal class BgPosConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(BgPos) || t == typeof(BgPos?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "Contain":
-                    return BgPos.Contain;
-                case "Cover":
-                    return BgPos.Cover;
-                case "CoverDirty":
-                    return BgPos.CoverDirty;
-                case "Unscaled":
-                    return BgPos.Unscaled;
-            }
-            throw new Exception("Cannot unmarshal type BgPos");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (BgPos)untypedValue;
-            switch (value)
-            {
-                case BgPos.Contain:
-                    serializer.Serialize(writer, "Contain");
-                    return;
-                case BgPos.Cover:
-                    serializer.Serialize(writer, "Cover");
-                    return;
-                case BgPos.CoverDirty:
-                    serializer.Serialize(writer, "CoverDirty");
-                    return;
-                case BgPos.Unscaled:
-                    serializer.Serialize(writer, "Unscaled");
-                    return;
-            }
-            throw new Exception("Cannot marshal type BgPos");
-        }
-
-        public static readonly BgPosConverter Singleton = new BgPosConverter();
-    }
-
-    internal class WorldLayoutConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(WorldLayout) || t == typeof(WorldLayout?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "Free":
-                    return WorldLayout.Free;
-                case "GridVania":
-                    return WorldLayout.GridVania;
-                case "LinearHorizontal":
-                    return WorldLayout.LinearHorizontal;
-                case "LinearVertical":
-                    return WorldLayout.LinearVertical;
-            }
-            throw new Exception("Cannot unmarshal type WorldLayout");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (WorldLayout)untypedValue;
-            switch (value)
-            {
-                case WorldLayout.Free:
-                    serializer.Serialize(writer, "Free");
-                    return;
-                case WorldLayout.GridVania:
-                    serializer.Serialize(writer, "GridVania");
-                    return;
-                case WorldLayout.LinearHorizontal:
-                    serializer.Serialize(writer, "LinearHorizontal");
-                    return;
-                case WorldLayout.LinearVertical:
-                    serializer.Serialize(writer, "LinearVertical");
-                    return;
-            }
-            throw new Exception("Cannot marshal type WorldLayout");
-        }
-
-        public static readonly WorldLayoutConverter Singleton = new WorldLayoutConverter();
     }
 }

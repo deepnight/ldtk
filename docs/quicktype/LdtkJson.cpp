@@ -80,7 +80,7 @@ namespace quicktype {
      * Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
      * `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
      */
-    enum class LevelFieldType : int { F_BOOL, F_COLOR, F_ENTITY_REF, F_ENUM, F_FLOAT, F_INT, F_PATH, F_POINT, F_STRING, F_TEXT, F_TILE };
+    enum class FieldDefType : int { F_BOOL, F_COLOR, F_ENTITY_REF, F_ENUM, F_FLOAT, F_INT, F_PATH, F_POINT, F_STRING, F_TEXT, F_TILE };
 
     enum class TextLanguageMode : int { LANG_C, LANG_HAXE, LANG_JS, LANG_JSON, LANG_LOG, LANG_LUA, LANG_MARKDOWN, LANG_PYTHON, LANG_RUBY, LANG_XML };
 
@@ -118,7 +118,7 @@ namespace quicktype {
         bool symmetrical_ref;
         std::shared_ptr<TextLanguageMode> text_language_mode;
         std::shared_ptr<int64_t> tileset_uid;
-        LevelFieldType field_definition_type;
+        FieldDefType field_definition_type;
         int64_t uid;
         bool use_for_smart_color;
 
@@ -272,9 +272,9 @@ namespace quicktype {
          * Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
          * `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
          */
-        const LevelFieldType & get_field_definition_type() const { return field_definition_type; }
-        LevelFieldType & get_mutable_field_definition_type() { return field_definition_type; }
-        void set_field_definition_type(const LevelFieldType & value) { this->field_definition_type = value; }
+        const FieldDefType & get_field_definition_type() const { return field_definition_type; }
+        FieldDefType & get_mutable_field_definition_type() { return field_definition_type; }
+        void set_field_definition_type(const FieldDefType & value) { this->field_definition_type = value; }
 
         /**
          * Unique Int identifier
@@ -944,7 +944,7 @@ namespace quicktype {
      * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
      * `AutoLayer`
      */
-    enum class LayerType : int { AUTO_LAYER, ENTITIES, INT_GRID, TILES };
+    enum class LayerDefType : int { AUTO_LAYER, ENTITIES, INT_GRID, TILES };
 
     class LayerDefinition {
         public:
@@ -975,7 +975,7 @@ namespace quicktype {
         double tile_pivot_x;
         double tile_pivot_y;
         std::shared_ptr<int64_t> tileset_def_uid;
-        LayerType layer_definition_type;
+        LayerDefType layer_definition_type;
         int64_t uid;
 
         public:
@@ -1147,9 +1147,9 @@ namespace quicktype {
          * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
          * `AutoLayer`
          */
-        const LayerType & get_layer_definition_type() const { return layer_definition_type; }
-        LayerType & get_mutable_layer_definition_type() { return layer_definition_type; }
-        void set_layer_definition_type(const LayerType & value) { this->layer_definition_type = value; }
+        const LayerDefType & get_layer_definition_type() const { return layer_definition_type; }
+        LayerDefType & get_mutable_layer_definition_type() { return layer_definition_type; }
+        void set_layer_definition_type(const LayerDefType & value) { this->layer_definition_type = value; }
 
         /**
          * Unique Int identifier
@@ -1353,14 +1353,14 @@ namespace quicktype {
     };
 
     /**
-     * A structure containing all the definitions of this project
-     *
      * If you're writing your own LDtk importer, you should probably just ignore *most* stuff in
      * the `defs` section, as it contains data that are mostly important to the editor. To keep
      * you away from the `defs` section and avoid some unnecessary JSON parsing, important data
      * from definitions is often duplicated in fields prefixed with a double underscore (eg.
      * `__identifier` or `__type`).  The 2 only definition types you might need here are
      * **Tilesets** and **Enums**.
+     *
+     * A structure containing all the definitions of this project
      */
     class Definitions {
         public:
@@ -1421,58 +1421,6 @@ namespace quicktype {
     };
 
     enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, EXPORT_PRE_CSV_INT_GRID_FORMAT, IGNORE_BACKUP_SUGGEST, MULTI_WORLDS, PREPEND_INDEX_TO_LEVEL_FILE_NAMES, USE_MULTILINES_TYPE };
-
-    /**
-     * Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
-     * values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
-     */
-    enum class IdentifierStyle : int { CAPITALIZE, FREE, LOWERCASE, UPPERCASE };
-
-    /**
-     * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
-     * `OneImagePerLevel`
-     */
-    enum class ImageExportMode : int { NONE, ONE_IMAGE_PER_LAYER, ONE_IMAGE_PER_LEVEL };
-
-    /**
-     * Level background image position info
-     */
-    class LevelBackgroundPosition {
-        public:
-        LevelBackgroundPosition() = default;
-        virtual ~LevelBackgroundPosition() = default;
-
-        private:
-        std::vector<double> crop_rect;
-        std::vector<double> scale;
-        std::vector<int64_t> top_left_px;
-
-        public:
-        /**
-         * An array of 4 float values describing the cropped sub-rectangle of the displayed
-         * background image. This cropping happens when original is larger than the level bounds.
-         * Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
-         */
-        const std::vector<double> & get_crop_rect() const { return crop_rect; }
-        std::vector<double> & get_mutable_crop_rect() { return crop_rect; }
-        void set_crop_rect(const std::vector<double> & value) { this->crop_rect = value; }
-
-        /**
-         * An array containing the `[scaleX,scaleY]` values of the **cropped** background image,
-         * depending on `bgPos` option.
-         */
-        const std::vector<double> & get_scale() const { return scale; }
-        std::vector<double> & get_mutable_scale() { return scale; }
-        void set_scale(const std::vector<double> & value) { this->scale = value; }
-
-        /**
-         * An array containing the `[x,y]` pixel coordinates of the top-left corner of the
-         * **cropped** background image, depending on `bgPos` option.
-         */
-        const std::vector<int64_t> & get_top_left_px() const { return top_left_px; }
-        std::vector<int64_t> & get_mutable_top_left_px() { return top_left_px; }
-        void set_top_left_px(const std::vector<int64_t> & value) { this->top_left_px = value; }
-    };
 
     class FieldInstance {
         public:
@@ -1539,62 +1487,6 @@ namespace quicktype {
         const std::vector<nlohmann::json> & get_real_editor_values() const { return real_editor_values; }
         std::vector<nlohmann::json> & get_mutable_real_editor_values() { return real_editor_values; }
         void set_real_editor_values(const std::vector<nlohmann::json> & value) { this->real_editor_values = value; }
-    };
-
-    /**
-     * This structure represents a single tile from a given Tileset.
-     */
-    class TileInstance {
-        public:
-        TileInstance() = default;
-        virtual ~TileInstance() = default;
-
-        private:
-        std::vector<int64_t> d;
-        int64_t f;
-        std::vector<int64_t> px;
-        std::vector<int64_t> src;
-        int64_t t;
-
-        public:
-        /**
-         * Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>
-         * For tile-layer tiles: `[coordId]`.
-         */
-        const std::vector<int64_t> & get_d() const { return d; }
-        std::vector<int64_t> & get_mutable_d() { return d; }
-        void set_d(const std::vector<int64_t> & value) { this->d = value; }
-
-        /**
-         * "Flip bits", a 2-bits integer to represent the mirror transformations of the tile.<br/>
-         * - Bit 0 = X flip<br/>   - Bit 1 = Y flip<br/>   Examples: f=0 (no flip), f=1 (X flip
-         * only), f=2 (Y flip only), f=3 (both flips)
-         */
-        const int64_t & get_f() const { return f; }
-        int64_t & get_mutable_f() { return f; }
-        void set_f(const int64_t & value) { this->f = value; }
-
-        /**
-         * Pixel coordinates of the tile in the **layer** (`[x,y]` format). Don't forget optional
-         * layer offsets, if they exist!
-         */
-        const std::vector<int64_t> & get_px() const { return px; }
-        std::vector<int64_t> & get_mutable_px() { return px; }
-        void set_px(const std::vector<int64_t> & value) { this->px = value; }
-
-        /**
-         * Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
-         */
-        const std::vector<int64_t> & get_src() const { return src; }
-        std::vector<int64_t> & get_mutable_src() { return src; }
-        void set_src(const std::vector<int64_t> & value) { this->src = value; }
-
-        /**
-         * The *Tile ID* in the corresponding tileset.
-         */
-        const int64_t & get_t() const { return t; }
-        int64_t & get_mutable_t() { return t; }
-        void set_t(const int64_t & value) { this->t = value; }
     };
 
     class EntityInstance {
@@ -1707,6 +1599,78 @@ namespace quicktype {
     };
 
     /**
+     * This object is used in Field Instances to describe an EntityRef value.
+     */
+    class FieldInstanceEntityReference {
+        public:
+        FieldInstanceEntityReference() = default;
+        virtual ~FieldInstanceEntityReference() = default;
+
+        private:
+        std::string entity_iid;
+        std::string layer_iid;
+        std::string level_iid;
+        std::string world_iid;
+
+        public:
+        /**
+         * IID of the refered EntityInstance
+         */
+        const std::string & get_entity_iid() const { return entity_iid; }
+        std::string & get_mutable_entity_iid() { return entity_iid; }
+        void set_entity_iid(const std::string & value) { this->entity_iid = value; }
+
+        /**
+         * IID of the LayerInstance containing the refered EntityInstance
+         */
+        const std::string & get_layer_iid() const { return layer_iid; }
+        std::string & get_mutable_layer_iid() { return layer_iid; }
+        void set_layer_iid(const std::string & value) { this->layer_iid = value; }
+
+        /**
+         * IID of the Level containing the refered EntityInstance
+         */
+        const std::string & get_level_iid() const { return level_iid; }
+        std::string & get_mutable_level_iid() { return level_iid; }
+        void set_level_iid(const std::string & value) { this->level_iid = value; }
+
+        /**
+         * IID of the World containing the refered EntityInstance
+         */
+        const std::string & get_world_iid() const { return world_iid; }
+        std::string & get_mutable_world_iid() { return world_iid; }
+        void set_world_iid(const std::string & value) { this->world_iid = value; }
+    };
+
+    /**
+     * This object is just a grid-based coordinate used in Field values.
+     */
+    class FieldInstanceGridPoint {
+        public:
+        FieldInstanceGridPoint() = default;
+        virtual ~FieldInstanceGridPoint() = default;
+
+        private:
+        int64_t cx;
+        int64_t cy;
+
+        public:
+        /**
+         * X grid-based coordinate
+         */
+        const int64_t & get_cx() const { return cx; }
+        int64_t & get_mutable_cx() { return cx; }
+        void set_cx(const int64_t & value) { this->cx = value; }
+
+        /**
+         * Y grid-based coordinate
+         */
+        const int64_t & get_cy() const { return cy; }
+        int64_t & get_mutable_cy() { return cy; }
+        void set_cy(const int64_t & value) { this->cy = value; }
+    };
+
+    /**
      * IntGrid value instance
      */
     class IntGridValueInstance {
@@ -1732,6 +1696,62 @@ namespace quicktype {
         const int64_t & get_v() const { return v; }
         int64_t & get_mutable_v() { return v; }
         void set_v(const int64_t & value) { this->v = value; }
+    };
+
+    /**
+     * This structure represents a single tile from a given Tileset.
+     */
+    class TileInstance {
+        public:
+        TileInstance() = default;
+        virtual ~TileInstance() = default;
+
+        private:
+        std::vector<int64_t> d;
+        int64_t f;
+        std::vector<int64_t> px;
+        std::vector<int64_t> src;
+        int64_t t;
+
+        public:
+        /**
+         * Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>
+         * For tile-layer tiles: `[coordId]`.
+         */
+        const std::vector<int64_t> & get_d() const { return d; }
+        std::vector<int64_t> & get_mutable_d() { return d; }
+        void set_d(const std::vector<int64_t> & value) { this->d = value; }
+
+        /**
+         * "Flip bits", a 2-bits integer to represent the mirror transformations of the tile.<br/>
+         * - Bit 0 = X flip<br/>   - Bit 1 = Y flip<br/>   Examples: f=0 (no flip), f=1 (X flip
+         * only), f=2 (Y flip only), f=3 (both flips)
+         */
+        const int64_t & get_f() const { return f; }
+        int64_t & get_mutable_f() { return f; }
+        void set_f(const int64_t & value) { this->f = value; }
+
+        /**
+         * Pixel coordinates of the tile in the **layer** (`[x,y]` format). Don't forget optional
+         * layer offsets, if they exist!
+         */
+        const std::vector<int64_t> & get_px() const { return px; }
+        std::vector<int64_t> & get_mutable_px() { return px; }
+        void set_px(const std::vector<int64_t> & value) { this->px = value; }
+
+        /**
+         * Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
+         */
+        const std::vector<int64_t> & get_src() const { return src; }
+        std::vector<int64_t> & get_mutable_src() { return src; }
+        void set_src(const std::vector<int64_t> & value) { this->src = value; }
+
+        /**
+         * The *Tile ID* in the corresponding tileset.
+         */
+        const int64_t & get_t() const { return t; }
+        int64_t & get_mutable_t() { return t; }
+        void set_t(const int64_t & value) { this->t = value; }
     };
 
     class LayerInstance {
@@ -1933,6 +1953,46 @@ namespace quicktype {
         const bool & get_visible() const { return visible; }
         bool & get_mutable_visible() { return visible; }
         void set_visible(const bool & value) { this->visible = value; }
+    };
+
+    /**
+     * Level background image position info
+     */
+    class LevelBackgroundPosition {
+        public:
+        LevelBackgroundPosition() = default;
+        virtual ~LevelBackgroundPosition() = default;
+
+        private:
+        std::vector<double> crop_rect;
+        std::vector<double> scale;
+        std::vector<int64_t> top_left_px;
+
+        public:
+        /**
+         * An array of 4 float values describing the cropped sub-rectangle of the displayed
+         * background image. This cropping happens when original is larger than the level bounds.
+         * Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
+         */
+        const std::vector<double> & get_crop_rect() const { return crop_rect; }
+        std::vector<double> & get_mutable_crop_rect() { return crop_rect; }
+        void set_crop_rect(const std::vector<double> & value) { this->crop_rect = value; }
+
+        /**
+         * An array containing the `[scaleX,scaleY]` values of the **cropped** background image,
+         * depending on `bgPos` option.
+         */
+        const std::vector<double> & get_scale() const { return scale; }
+        std::vector<double> & get_mutable_scale() { return scale; }
+        void set_scale(const std::vector<double> & value) { this->scale = value; }
+
+        /**
+         * An array containing the `[x,y]` pixel coordinates of the top-left corner of the
+         * **cropped** background image, depending on `bgPos` option.
+         */
+        const std::vector<int64_t> & get_top_left_px() const { return top_left_px; }
+        std::vector<int64_t> & get_mutable_top_left_px() { return top_left_px; }
+        void set_top_left_px(const std::vector<int64_t> & value) { this->top_left_px = value; }
     };
 
     enum class BgPos : int { CONTAIN, COVER, COVER_DIRTY, UNSCALED };
@@ -2256,6 +2316,128 @@ namespace quicktype {
     };
 
     /**
+     * This object is not actually used by LDtk. It ONLY exists to force explicit references to
+     * all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+     * Quicktype will drop types that are not explicitely used.
+     */
+    class ForcedRefs {
+        public:
+        ForcedRefs() = default;
+        virtual ~ForcedRefs() = default;
+
+        private:
+        std::shared_ptr<AutoLayerRuleGroup> auto_layer_rule_group;
+        std::shared_ptr<AutoLayerRuleDefinition> auto_rule_def;
+        std::shared_ptr<Definitions> definitions;
+        std::shared_ptr<EntityDefinition> entity_def;
+        std::shared_ptr<EntityInstance> entity_instance;
+        std::shared_ptr<FieldInstanceEntityReference> entity_reference_infos;
+        std::shared_ptr<EnumDefinition> enum_def;
+        std::shared_ptr<EnumValueDefinition> enum_def_values;
+        std::shared_ptr<EnumTagValue> enum_tag_value;
+        std::shared_ptr<FieldDefinition> field_def;
+        std::shared_ptr<FieldInstance> field_instance;
+        std::shared_ptr<FieldInstanceGridPoint> grid_point;
+        std::shared_ptr<IntGridValueDefinition> int_grid_value_def;
+        std::shared_ptr<IntGridValueInstance> int_grid_value_instance;
+        std::shared_ptr<LayerDefinition> layer_def;
+        std::shared_ptr<LayerInstance> layer_instance;
+        std::shared_ptr<Level> level;
+        std::shared_ptr<LevelBackgroundPosition> level_bg_pos_infos;
+        std::shared_ptr<NeighbourLevel> neighbour_level;
+        std::shared_ptr<TileInstance> tile;
+        std::shared_ptr<TileCustomMetadata> tile_custom_metadata;
+        std::shared_ptr<TilesetDefinition> tileset_def;
+        std::shared_ptr<TilesetRectangle> tileset_rect;
+        std::shared_ptr<World> world;
+
+        public:
+        std::shared_ptr<AutoLayerRuleGroup> get_auto_layer_rule_group() const { return auto_layer_rule_group; }
+        void set_auto_layer_rule_group(std::shared_ptr<AutoLayerRuleGroup> value) { this->auto_layer_rule_group = value; }
+
+        std::shared_ptr<AutoLayerRuleDefinition> get_auto_rule_def() const { return auto_rule_def; }
+        void set_auto_rule_def(std::shared_ptr<AutoLayerRuleDefinition> value) { this->auto_rule_def = value; }
+
+        std::shared_ptr<Definitions> get_definitions() const { return definitions; }
+        void set_definitions(std::shared_ptr<Definitions> value) { this->definitions = value; }
+
+        std::shared_ptr<EntityDefinition> get_entity_def() const { return entity_def; }
+        void set_entity_def(std::shared_ptr<EntityDefinition> value) { this->entity_def = value; }
+
+        std::shared_ptr<EntityInstance> get_entity_instance() const { return entity_instance; }
+        void set_entity_instance(std::shared_ptr<EntityInstance> value) { this->entity_instance = value; }
+
+        std::shared_ptr<FieldInstanceEntityReference> get_entity_reference_infos() const { return entity_reference_infos; }
+        void set_entity_reference_infos(std::shared_ptr<FieldInstanceEntityReference> value) { this->entity_reference_infos = value; }
+
+        std::shared_ptr<EnumDefinition> get_enum_def() const { return enum_def; }
+        void set_enum_def(std::shared_ptr<EnumDefinition> value) { this->enum_def = value; }
+
+        std::shared_ptr<EnumValueDefinition> get_enum_def_values() const { return enum_def_values; }
+        void set_enum_def_values(std::shared_ptr<EnumValueDefinition> value) { this->enum_def_values = value; }
+
+        std::shared_ptr<EnumTagValue> get_enum_tag_value() const { return enum_tag_value; }
+        void set_enum_tag_value(std::shared_ptr<EnumTagValue> value) { this->enum_tag_value = value; }
+
+        std::shared_ptr<FieldDefinition> get_field_def() const { return field_def; }
+        void set_field_def(std::shared_ptr<FieldDefinition> value) { this->field_def = value; }
+
+        std::shared_ptr<FieldInstance> get_field_instance() const { return field_instance; }
+        void set_field_instance(std::shared_ptr<FieldInstance> value) { this->field_instance = value; }
+
+        std::shared_ptr<FieldInstanceGridPoint> get_grid_point() const { return grid_point; }
+        void set_grid_point(std::shared_ptr<FieldInstanceGridPoint> value) { this->grid_point = value; }
+
+        std::shared_ptr<IntGridValueDefinition> get_int_grid_value_def() const { return int_grid_value_def; }
+        void set_int_grid_value_def(std::shared_ptr<IntGridValueDefinition> value) { this->int_grid_value_def = value; }
+
+        std::shared_ptr<IntGridValueInstance> get_int_grid_value_instance() const { return int_grid_value_instance; }
+        void set_int_grid_value_instance(std::shared_ptr<IntGridValueInstance> value) { this->int_grid_value_instance = value; }
+
+        std::shared_ptr<LayerDefinition> get_layer_def() const { return layer_def; }
+        void set_layer_def(std::shared_ptr<LayerDefinition> value) { this->layer_def = value; }
+
+        std::shared_ptr<LayerInstance> get_layer_instance() const { return layer_instance; }
+        void set_layer_instance(std::shared_ptr<LayerInstance> value) { this->layer_instance = value; }
+
+        std::shared_ptr<Level> get_level() const { return level; }
+        void set_level(std::shared_ptr<Level> value) { this->level = value; }
+
+        std::shared_ptr<LevelBackgroundPosition> get_level_bg_pos_infos() const { return level_bg_pos_infos; }
+        void set_level_bg_pos_infos(std::shared_ptr<LevelBackgroundPosition> value) { this->level_bg_pos_infos = value; }
+
+        std::shared_ptr<NeighbourLevel> get_neighbour_level() const { return neighbour_level; }
+        void set_neighbour_level(std::shared_ptr<NeighbourLevel> value) { this->neighbour_level = value; }
+
+        std::shared_ptr<TileInstance> get_tile() const { return tile; }
+        void set_tile(std::shared_ptr<TileInstance> value) { this->tile = value; }
+
+        std::shared_ptr<TileCustomMetadata> get_tile_custom_metadata() const { return tile_custom_metadata; }
+        void set_tile_custom_metadata(std::shared_ptr<TileCustomMetadata> value) { this->tile_custom_metadata = value; }
+
+        std::shared_ptr<TilesetDefinition> get_tileset_def() const { return tileset_def; }
+        void set_tileset_def(std::shared_ptr<TilesetDefinition> value) { this->tileset_def = value; }
+
+        std::shared_ptr<TilesetRectangle> get_tileset_rect() const { return tileset_rect; }
+        void set_tileset_rect(std::shared_ptr<TilesetRectangle> value) { this->tileset_rect = value; }
+
+        std::shared_ptr<World> get_world() const { return world; }
+        void set_world(std::shared_ptr<World> value) { this->world = value; }
+    };
+
+    /**
+     * Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
+     * values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
+     */
+    enum class IdentifierStyle : int { CAPITALIZE, FREE, LOWERCASE, UPPERCASE };
+
+    /**
+     * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
+     * `OneImagePerLevel`
+     */
+    enum class ImageExportMode : int { NONE, ONE_IMAGE_PER_LAYER, ONE_IMAGE_PER_LEVEL };
+
+    /**
      * This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
      *
      * This is the root of any Project JSON file. It contains:  - the project settings, - an
@@ -2268,6 +2450,7 @@ namespace quicktype {
         virtual ~LdtkJson() = default;
 
         private:
+        std::shared_ptr<ForcedRefs> forced_refs;
         double app_build_id;
         int64_t backup_limit;
         bool backup_on_save;
@@ -2298,6 +2481,14 @@ namespace quicktype {
         std::vector<World> worlds;
 
         public:
+        /**
+         * This object is not actually used by LDtk. It ONLY exists to force explicit references to
+         * all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+         * Quicktype will drop types that are not explicitely used.
+         */
+        std::shared_ptr<ForcedRefs> get_forced_refs() const { return forced_refs; }
+        void set_forced_refs(std::shared_ptr<ForcedRefs> value) { this->forced_refs = value; }
+
         /**
          * LDtk application build identifier.<br/>  This is only used to identify the LDtk version
          * that generated this particular project file, which can be useful for specific bug fixing.
@@ -2565,23 +2756,29 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::Definitions & x);
     void to_json(json & j, const quicktype::Definitions & x);
 
-    void from_json(const json & j, quicktype::LevelBackgroundPosition & x);
-    void to_json(json & j, const quicktype::LevelBackgroundPosition & x);
-
     void from_json(const json & j, quicktype::FieldInstance & x);
     void to_json(json & j, const quicktype::FieldInstance & x);
-
-    void from_json(const json & j, quicktype::TileInstance & x);
-    void to_json(json & j, const quicktype::TileInstance & x);
 
     void from_json(const json & j, quicktype::EntityInstance & x);
     void to_json(json & j, const quicktype::EntityInstance & x);
 
+    void from_json(const json & j, quicktype::FieldInstanceEntityReference & x);
+    void to_json(json & j, const quicktype::FieldInstanceEntityReference & x);
+
+    void from_json(const json & j, quicktype::FieldInstanceGridPoint & x);
+    void to_json(json & j, const quicktype::FieldInstanceGridPoint & x);
+
     void from_json(const json & j, quicktype::IntGridValueInstance & x);
     void to_json(json & j, const quicktype::IntGridValueInstance & x);
 
+    void from_json(const json & j, quicktype::TileInstance & x);
+    void to_json(json & j, const quicktype::TileInstance & x);
+
     void from_json(const json & j, quicktype::LayerInstance & x);
     void to_json(json & j, const quicktype::LayerInstance & x);
+
+    void from_json(const json & j, quicktype::LevelBackgroundPosition & x);
+    void to_json(json & j, const quicktype::LevelBackgroundPosition & x);
 
     void from_json(const json & j, quicktype::NeighbourLevel & x);
     void to_json(json & j, const quicktype::NeighbourLevel & x);
@@ -2591,6 +2788,9 @@ namespace nlohmann {
 
     void from_json(const json & j, quicktype::World & x);
     void to_json(json & j, const quicktype::World & x);
+
+    void from_json(const json & j, quicktype::ForcedRefs & x);
+    void to_json(json & j, const quicktype::ForcedRefs & x);
 
     void from_json(const json & j, quicktype::LdtkJson & x);
     void to_json(json & j, const quicktype::LdtkJson & x);
@@ -2604,8 +2804,8 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::EditorDisplayPos & x);
     void to_json(json & j, const quicktype::EditorDisplayPos & x);
 
-    void from_json(const json & j, quicktype::LevelFieldType & x);
-    void to_json(json & j, const quicktype::LevelFieldType & x);
+    void from_json(const json & j, quicktype::FieldDefType & x);
+    void to_json(json & j, const quicktype::FieldDefType & x);
 
     void from_json(const json & j, quicktype::TextLanguageMode & x);
     void to_json(json & j, const quicktype::TextLanguageMode & x);
@@ -2628,8 +2828,8 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::TileMode & x);
     void to_json(json & j, const quicktype::TileMode & x);
 
-    void from_json(const json & j, quicktype::LayerType & x);
-    void to_json(json & j, const quicktype::LayerType & x);
+    void from_json(const json & j, quicktype::LayerDefType & x);
+    void to_json(json & j, const quicktype::LayerDefType & x);
 
     void from_json(const json & j, quicktype::EmbedAtlas & x);
     void to_json(json & j, const quicktype::EmbedAtlas & x);
@@ -2637,17 +2837,17 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::Flag & x);
     void to_json(json & j, const quicktype::Flag & x);
 
-    void from_json(const json & j, quicktype::IdentifierStyle & x);
-    void to_json(json & j, const quicktype::IdentifierStyle & x);
-
-    void from_json(const json & j, quicktype::ImageExportMode & x);
-    void to_json(json & j, const quicktype::ImageExportMode & x);
-
     void from_json(const json & j, quicktype::BgPos & x);
     void to_json(json & j, const quicktype::BgPos & x);
 
     void from_json(const json & j, quicktype::WorldLayout & x);
     void to_json(json & j, const quicktype::WorldLayout & x);
+
+    void from_json(const json & j, quicktype::IdentifierStyle & x);
+    void to_json(json & j, const quicktype::IdentifierStyle & x);
+
+    void from_json(const json & j, quicktype::ImageExportMode & x);
+    void to_json(json & j, const quicktype::ImageExportMode & x);
 
     inline void from_json(const json & j, quicktype::FieldDefinition& x) {
         x.set_type(j.at("__type").get<std::string>());
@@ -2674,7 +2874,7 @@ namespace nlohmann {
         x.set_symmetrical_ref(j.at("symmetricalRef").get<bool>());
         x.set_text_language_mode(quicktype::get_optional<quicktype::TextLanguageMode>(j, "textLanguageMode"));
         x.set_tileset_uid(quicktype::get_optional<int64_t>(j, "tilesetUid"));
-        x.set_field_definition_type(j.at("type").get<quicktype::LevelFieldType>());
+        x.set_field_definition_type(j.at("type").get<quicktype::FieldDefType>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_use_for_smart_color(j.at("useForSmartColor").get<bool>());
     }
@@ -2929,7 +3129,7 @@ namespace nlohmann {
         x.set_tile_pivot_x(j.at("tilePivotX").get<double>());
         x.set_tile_pivot_y(j.at("tilePivotY").get<double>());
         x.set_tileset_def_uid(quicktype::get_optional<int64_t>(j, "tilesetDefUid"));
-        x.set_layer_definition_type(j.at("type").get<quicktype::LayerType>());
+        x.set_layer_definition_type(j.at("type").get<quicktype::LayerDefType>());
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
@@ -3044,19 +3244,6 @@ namespace nlohmann {
         j["tilesets"] = x.get_tilesets();
     }
 
-    inline void from_json(const json & j, quicktype::LevelBackgroundPosition& x) {
-        x.set_crop_rect(j.at("cropRect").get<std::vector<double>>());
-        x.set_scale(j.at("scale").get<std::vector<double>>());
-        x.set_top_left_px(j.at("topLeftPx").get<std::vector<int64_t>>());
-    }
-
-    inline void to_json(json & j, const quicktype::LevelBackgroundPosition & x) {
-        j = json::object();
-        j["cropRect"] = x.get_crop_rect();
-        j["scale"] = x.get_scale();
-        j["topLeftPx"] = x.get_top_left_px();
-    }
-
     inline void from_json(const json & j, quicktype::FieldInstance& x) {
         x.set_identifier(j.at("__identifier").get<std::string>());
         x.set_tile(quicktype::get_optional<quicktype::TilesetRectangle>(j, "__tile"));
@@ -3074,23 +3261,6 @@ namespace nlohmann {
         j["__value"] = x.get_value();
         j["defUid"] = x.get_def_uid();
         j["realEditorValues"] = x.get_real_editor_values();
-    }
-
-    inline void from_json(const json & j, quicktype::TileInstance& x) {
-        x.set_d(j.at("d").get<std::vector<int64_t>>());
-        x.set_f(j.at("f").get<int64_t>());
-        x.set_px(j.at("px").get<std::vector<int64_t>>());
-        x.set_src(j.at("src").get<std::vector<int64_t>>());
-        x.set_t(j.at("t").get<int64_t>());
-    }
-
-    inline void to_json(json & j, const quicktype::TileInstance & x) {
-        j = json::object();
-        j["d"] = x.get_d();
-        j["f"] = x.get_f();
-        j["px"] = x.get_px();
-        j["src"] = x.get_src();
-        j["t"] = x.get_t();
     }
 
     inline void from_json(const json & j, quicktype::EntityInstance& x) {
@@ -3124,6 +3294,32 @@ namespace nlohmann {
         j["width"] = x.get_width();
     }
 
+    inline void from_json(const json & j, quicktype::FieldInstanceEntityReference& x) {
+        x.set_entity_iid(j.at("entityIid").get<std::string>());
+        x.set_layer_iid(j.at("layerIid").get<std::string>());
+        x.set_level_iid(j.at("levelIid").get<std::string>());
+        x.set_world_iid(j.at("worldIid").get<std::string>());
+    }
+
+    inline void to_json(json & j, const quicktype::FieldInstanceEntityReference & x) {
+        j = json::object();
+        j["entityIid"] = x.get_entity_iid();
+        j["layerIid"] = x.get_layer_iid();
+        j["levelIid"] = x.get_level_iid();
+        j["worldIid"] = x.get_world_iid();
+    }
+
+    inline void from_json(const json & j, quicktype::FieldInstanceGridPoint& x) {
+        x.set_cx(j.at("cx").get<int64_t>());
+        x.set_cy(j.at("cy").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const quicktype::FieldInstanceGridPoint & x) {
+        j = json::object();
+        j["cx"] = x.get_cx();
+        j["cy"] = x.get_cy();
+    }
+
     inline void from_json(const json & j, quicktype::IntGridValueInstance& x) {
         x.set_coord_id(j.at("coordId").get<int64_t>());
         x.set_v(j.at("v").get<int64_t>());
@@ -3133,6 +3329,23 @@ namespace nlohmann {
         j = json::object();
         j["coordId"] = x.get_coord_id();
         j["v"] = x.get_v();
+    }
+
+    inline void from_json(const json & j, quicktype::TileInstance& x) {
+        x.set_d(j.at("d").get<std::vector<int64_t>>());
+        x.set_f(j.at("f").get<int64_t>());
+        x.set_px(j.at("px").get<std::vector<int64_t>>());
+        x.set_src(j.at("src").get<std::vector<int64_t>>());
+        x.set_t(j.at("t").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const quicktype::TileInstance & x) {
+        j = json::object();
+        j["d"] = x.get_d();
+        j["f"] = x.get_f();
+        j["px"] = x.get_px();
+        j["src"] = x.get_src();
+        j["t"] = x.get_t();
     }
 
     inline void from_json(const json & j, quicktype::LayerInstance& x) {
@@ -3188,6 +3401,19 @@ namespace nlohmann {
         j["pxOffsetY"] = x.get_px_offset_y();
         j["seed"] = x.get_seed();
         j["visible"] = x.get_visible();
+    }
+
+    inline void from_json(const json & j, quicktype::LevelBackgroundPosition& x) {
+        x.set_crop_rect(j.at("cropRect").get<std::vector<double>>());
+        x.set_scale(j.at("scale").get<std::vector<double>>());
+        x.set_top_left_px(j.at("topLeftPx").get<std::vector<int64_t>>());
+    }
+
+    inline void to_json(json & j, const quicktype::LevelBackgroundPosition & x) {
+        j = json::object();
+        j["cropRect"] = x.get_crop_rect();
+        j["scale"] = x.get_scale();
+        j["topLeftPx"] = x.get_top_left_px();
     }
 
     inline void from_json(const json & j, quicktype::NeighbourLevel& x) {
@@ -3275,7 +3501,63 @@ namespace nlohmann {
         j["worldLayout"] = x.get_world_layout();
     }
 
+    inline void from_json(const json & j, quicktype::ForcedRefs& x) {
+        x.set_auto_layer_rule_group(quicktype::get_optional<quicktype::AutoLayerRuleGroup>(j, "AutoLayerRuleGroup"));
+        x.set_auto_rule_def(quicktype::get_optional<quicktype::AutoLayerRuleDefinition>(j, "AutoRuleDef"));
+        x.set_definitions(quicktype::get_optional<quicktype::Definitions>(j, "Definitions"));
+        x.set_entity_def(quicktype::get_optional<quicktype::EntityDefinition>(j, "EntityDef"));
+        x.set_entity_instance(quicktype::get_optional<quicktype::EntityInstance>(j, "EntityInstance"));
+        x.set_entity_reference_infos(quicktype::get_optional<quicktype::FieldInstanceEntityReference>(j, "EntityReferenceInfos"));
+        x.set_enum_def(quicktype::get_optional<quicktype::EnumDefinition>(j, "EnumDef"));
+        x.set_enum_def_values(quicktype::get_optional<quicktype::EnumValueDefinition>(j, "EnumDefValues"));
+        x.set_enum_tag_value(quicktype::get_optional<quicktype::EnumTagValue>(j, "EnumTagValue"));
+        x.set_field_def(quicktype::get_optional<quicktype::FieldDefinition>(j, "FieldDef"));
+        x.set_field_instance(quicktype::get_optional<quicktype::FieldInstance>(j, "FieldInstance"));
+        x.set_grid_point(quicktype::get_optional<quicktype::FieldInstanceGridPoint>(j, "GridPoint"));
+        x.set_int_grid_value_def(quicktype::get_optional<quicktype::IntGridValueDefinition>(j, "IntGridValueDef"));
+        x.set_int_grid_value_instance(quicktype::get_optional<quicktype::IntGridValueInstance>(j, "IntGridValueInstance"));
+        x.set_layer_def(quicktype::get_optional<quicktype::LayerDefinition>(j, "LayerDef"));
+        x.set_layer_instance(quicktype::get_optional<quicktype::LayerInstance>(j, "LayerInstance"));
+        x.set_level(quicktype::get_optional<quicktype::Level>(j, "Level"));
+        x.set_level_bg_pos_infos(quicktype::get_optional<quicktype::LevelBackgroundPosition>(j, "LevelBgPosInfos"));
+        x.set_neighbour_level(quicktype::get_optional<quicktype::NeighbourLevel>(j, "NeighbourLevel"));
+        x.set_tile(quicktype::get_optional<quicktype::TileInstance>(j, "Tile"));
+        x.set_tile_custom_metadata(quicktype::get_optional<quicktype::TileCustomMetadata>(j, "TileCustomMetadata"));
+        x.set_tileset_def(quicktype::get_optional<quicktype::TilesetDefinition>(j, "TilesetDef"));
+        x.set_tileset_rect(quicktype::get_optional<quicktype::TilesetRectangle>(j, "TilesetRect"));
+        x.set_world(quicktype::get_optional<quicktype::World>(j, "World"));
+    }
+
+    inline void to_json(json & j, const quicktype::ForcedRefs & x) {
+        j = json::object();
+        j["AutoLayerRuleGroup"] = x.get_auto_layer_rule_group();
+        j["AutoRuleDef"] = x.get_auto_rule_def();
+        j["Definitions"] = x.get_definitions();
+        j["EntityDef"] = x.get_entity_def();
+        j["EntityInstance"] = x.get_entity_instance();
+        j["EntityReferenceInfos"] = x.get_entity_reference_infos();
+        j["EnumDef"] = x.get_enum_def();
+        j["EnumDefValues"] = x.get_enum_def_values();
+        j["EnumTagValue"] = x.get_enum_tag_value();
+        j["FieldDef"] = x.get_field_def();
+        j["FieldInstance"] = x.get_field_instance();
+        j["GridPoint"] = x.get_grid_point();
+        j["IntGridValueDef"] = x.get_int_grid_value_def();
+        j["IntGridValueInstance"] = x.get_int_grid_value_instance();
+        j["LayerDef"] = x.get_layer_def();
+        j["LayerInstance"] = x.get_layer_instance();
+        j["Level"] = x.get_level();
+        j["LevelBgPosInfos"] = x.get_level_bg_pos_infos();
+        j["NeighbourLevel"] = x.get_neighbour_level();
+        j["Tile"] = x.get_tile();
+        j["TileCustomMetadata"] = x.get_tile_custom_metadata();
+        j["TilesetDef"] = x.get_tileset_def();
+        j["TilesetRect"] = x.get_tileset_rect();
+        j["World"] = x.get_world();
+    }
+
     inline void from_json(const json & j, quicktype::LdtkJson& x) {
+        x.set_forced_refs(quicktype::get_optional<quicktype::ForcedRefs>(j, "__FORCED_REFS"));
         x.set_app_build_id(j.at("appBuildId").get<double>());
         x.set_backup_limit(j.at("backupLimit").get<int64_t>());
         x.set_backup_on_save(j.at("backupOnSave").get<bool>());
@@ -3308,6 +3590,7 @@ namespace nlohmann {
 
     inline void to_json(json & j, const quicktype::LdtkJson & x) {
         j = json::object();
+        j["__FORCED_REFS"] = x.get_forced_refs();
         j["appBuildId"] = x.get_app_build_id();
         j["backupLimit"] = x.get_backup_limit();
         j["backupOnSave"] = x.get_backup_on_save();
@@ -3408,34 +3691,34 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::LevelFieldType & x) {
-        if (j == "F_Bool") x = quicktype::LevelFieldType::F_BOOL;
-        else if (j == "F_Color") x = quicktype::LevelFieldType::F_COLOR;
-        else if (j == "F_EntityRef") x = quicktype::LevelFieldType::F_ENTITY_REF;
-        else if (j == "F_Enum") x = quicktype::LevelFieldType::F_ENUM;
-        else if (j == "F_Float") x = quicktype::LevelFieldType::F_FLOAT;
-        else if (j == "F_Int") x = quicktype::LevelFieldType::F_INT;
-        else if (j == "F_Path") x = quicktype::LevelFieldType::F_PATH;
-        else if (j == "F_Point") x = quicktype::LevelFieldType::F_POINT;
-        else if (j == "F_String") x = quicktype::LevelFieldType::F_STRING;
-        else if (j == "F_Text") x = quicktype::LevelFieldType::F_TEXT;
-        else if (j == "F_Tile") x = quicktype::LevelFieldType::F_TILE;
+    inline void from_json(const json & j, quicktype::FieldDefType & x) {
+        if (j == "F_Bool") x = quicktype::FieldDefType::F_BOOL;
+        else if (j == "F_Color") x = quicktype::FieldDefType::F_COLOR;
+        else if (j == "F_EntityRef") x = quicktype::FieldDefType::F_ENTITY_REF;
+        else if (j == "F_Enum") x = quicktype::FieldDefType::F_ENUM;
+        else if (j == "F_Float") x = quicktype::FieldDefType::F_FLOAT;
+        else if (j == "F_Int") x = quicktype::FieldDefType::F_INT;
+        else if (j == "F_Path") x = quicktype::FieldDefType::F_PATH;
+        else if (j == "F_Point") x = quicktype::FieldDefType::F_POINT;
+        else if (j == "F_String") x = quicktype::FieldDefType::F_STRING;
+        else if (j == "F_Text") x = quicktype::FieldDefType::F_TEXT;
+        else if (j == "F_Tile") x = quicktype::FieldDefType::F_TILE;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::LevelFieldType & x) {
+    inline void to_json(json & j, const quicktype::FieldDefType & x) {
         switch (x) {
-            case quicktype::LevelFieldType::F_BOOL: j = "F_Bool"; break;
-            case quicktype::LevelFieldType::F_COLOR: j = "F_Color"; break;
-            case quicktype::LevelFieldType::F_ENTITY_REF: j = "F_EntityRef"; break;
-            case quicktype::LevelFieldType::F_ENUM: j = "F_Enum"; break;
-            case quicktype::LevelFieldType::F_FLOAT: j = "F_Float"; break;
-            case quicktype::LevelFieldType::F_INT: j = "F_Int"; break;
-            case quicktype::LevelFieldType::F_PATH: j = "F_Path"; break;
-            case quicktype::LevelFieldType::F_POINT: j = "F_Point"; break;
-            case quicktype::LevelFieldType::F_STRING: j = "F_String"; break;
-            case quicktype::LevelFieldType::F_TEXT: j = "F_Text"; break;
-            case quicktype::LevelFieldType::F_TILE: j = "F_Tile"; break;
+            case quicktype::FieldDefType::F_BOOL: j = "F_Bool"; break;
+            case quicktype::FieldDefType::F_COLOR: j = "F_Color"; break;
+            case quicktype::FieldDefType::F_ENTITY_REF: j = "F_EntityRef"; break;
+            case quicktype::FieldDefType::F_ENUM: j = "F_Enum"; break;
+            case quicktype::FieldDefType::F_FLOAT: j = "F_Float"; break;
+            case quicktype::FieldDefType::F_INT: j = "F_Int"; break;
+            case quicktype::FieldDefType::F_PATH: j = "F_Path"; break;
+            case quicktype::FieldDefType::F_POINT: j = "F_Point"; break;
+            case quicktype::FieldDefType::F_STRING: j = "F_String"; break;
+            case quicktype::FieldDefType::F_TEXT: j = "F_Text"; break;
+            case quicktype::FieldDefType::F_TILE: j = "F_Tile"; break;
             default: throw "This should not happen";
         }
     }
@@ -3574,20 +3857,20 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::LayerType & x) {
-        if (j == "AutoLayer") x = quicktype::LayerType::AUTO_LAYER;
-        else if (j == "Entities") x = quicktype::LayerType::ENTITIES;
-        else if (j == "IntGrid") x = quicktype::LayerType::INT_GRID;
-        else if (j == "Tiles") x = quicktype::LayerType::TILES;
+    inline void from_json(const json & j, quicktype::LayerDefType & x) {
+        if (j == "AutoLayer") x = quicktype::LayerDefType::AUTO_LAYER;
+        else if (j == "Entities") x = quicktype::LayerDefType::ENTITIES;
+        else if (j == "IntGrid") x = quicktype::LayerDefType::INT_GRID;
+        else if (j == "Tiles") x = quicktype::LayerDefType::TILES;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::LayerType & x) {
+    inline void to_json(json & j, const quicktype::LayerDefType & x) {
         switch (x) {
-            case quicktype::LayerType::AUTO_LAYER: j = "AutoLayer"; break;
-            case quicktype::LayerType::ENTITIES: j = "Entities"; break;
-            case quicktype::LayerType::INT_GRID: j = "IntGrid"; break;
-            case quicktype::LayerType::TILES: j = "Tiles"; break;
+            case quicktype::LayerDefType::AUTO_LAYER: j = "AutoLayer"; break;
+            case quicktype::LayerDefType::ENTITIES: j = "Entities"; break;
+            case quicktype::LayerDefType::INT_GRID: j = "IntGrid"; break;
+            case quicktype::LayerDefType::TILES: j = "Tiles"; break;
             default: throw "This should not happen";
         }
     }
@@ -3626,40 +3909,6 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::IdentifierStyle & x) {
-        if (j == "Capitalize") x = quicktype::IdentifierStyle::CAPITALIZE;
-        else if (j == "Free") x = quicktype::IdentifierStyle::FREE;
-        else if (j == "Lowercase") x = quicktype::IdentifierStyle::LOWERCASE;
-        else if (j == "Uppercase") x = quicktype::IdentifierStyle::UPPERCASE;
-        else throw "Input JSON does not conform to schema";
-    }
-
-    inline void to_json(json & j, const quicktype::IdentifierStyle & x) {
-        switch (x) {
-            case quicktype::IdentifierStyle::CAPITALIZE: j = "Capitalize"; break;
-            case quicktype::IdentifierStyle::FREE: j = "Free"; break;
-            case quicktype::IdentifierStyle::LOWERCASE: j = "Lowercase"; break;
-            case quicktype::IdentifierStyle::UPPERCASE: j = "Uppercase"; break;
-            default: throw "This should not happen";
-        }
-    }
-
-    inline void from_json(const json & j, quicktype::ImageExportMode & x) {
-        if (j == "None") x = quicktype::ImageExportMode::NONE;
-        else if (j == "OneImagePerLayer") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER;
-        else if (j == "OneImagePerLevel") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL;
-        else throw "Input JSON does not conform to schema";
-    }
-
-    inline void to_json(json & j, const quicktype::ImageExportMode & x) {
-        switch (x) {
-            case quicktype::ImageExportMode::NONE: j = "None"; break;
-            case quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
-            case quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
-            default: throw "This should not happen";
-        }
-    }
-
     inline void from_json(const json & j, quicktype::BgPos & x) {
         if (j == "Contain") x = quicktype::BgPos::CONTAIN;
         else if (j == "Cover") x = quicktype::BgPos::COVER;
@@ -3692,6 +3941,40 @@ namespace nlohmann {
             case quicktype::WorldLayout::GRID_VANIA: j = "GridVania"; break;
             case quicktype::WorldLayout::LINEAR_HORIZONTAL: j = "LinearHorizontal"; break;
             case quicktype::WorldLayout::LINEAR_VERTICAL: j = "LinearVertical"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::IdentifierStyle & x) {
+        if (j == "Capitalize") x = quicktype::IdentifierStyle::CAPITALIZE;
+        else if (j == "Free") x = quicktype::IdentifierStyle::FREE;
+        else if (j == "Lowercase") x = quicktype::IdentifierStyle::LOWERCASE;
+        else if (j == "Uppercase") x = quicktype::IdentifierStyle::UPPERCASE;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::IdentifierStyle & x) {
+        switch (x) {
+            case quicktype::IdentifierStyle::CAPITALIZE: j = "Capitalize"; break;
+            case quicktype::IdentifierStyle::FREE: j = "Free"; break;
+            case quicktype::IdentifierStyle::LOWERCASE: j = "Lowercase"; break;
+            case quicktype::IdentifierStyle::UPPERCASE: j = "Uppercase"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::ImageExportMode & x) {
+        if (j == "None") x = quicktype::ImageExportMode::NONE;
+        else if (j == "OneImagePerLayer") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER;
+        else if (j == "OneImagePerLevel") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::ImageExportMode & x) {
+        switch (x) {
+            case quicktype::ImageExportMode::NONE: j = "None"; break;
+            case quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
+            case quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
             default: throw "This should not happen";
         }
     }

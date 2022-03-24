@@ -21,6 +21,12 @@ use std::collections::HashMap;
 /// users).
 #[derive(Serialize, Deserialize)]
 pub struct LdtkJson {
+    /// This object is not actually used by LDtk. It ONLY exists to force explicit references to
+    /// all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+    /// Quicktype will drop types that are not explicitely used.
+    #[serde(rename = "__FORCED_REFS")]
+    forced_refs: Option<ForcedRefs>,
+
     /// LDtk application build identifier.<br/>  This is only used to identify the LDtk version
     /// that generated this particular project file, which can be useful for specific bug fixing.
     /// Note that the build identifier is just the date of the release, so it's not unique to
@@ -171,14 +177,14 @@ pub struct LdtkJson {
     worlds: Vec<World>,
 }
 
-/// A structure containing all the definitions of this project
-///
 /// If you're writing your own LDtk importer, you should probably just ignore *most* stuff in
 /// the `defs` section, as it contains data that are mostly important to the editor. To keep
 /// you away from the `defs` section and avoid some unnecessary JSON parsing, important data
 /// from definitions is often duplicated in fields prefixed with a double underscore (eg.
 /// `__identifier` or `__type`).  The 2 only definition types you might need here are
 /// **Tilesets** and **Enums**.
+///
+/// A structure containing all the definitions of this project
 #[derive(Serialize, Deserialize)]
 pub struct Definitions {
     /// All entities definitions, including their custom fields
@@ -849,137 +855,138 @@ pub struct EnumTagValue {
     tile_ids: Vec<i64>,
 }
 
-/// This section contains all the level data. It can be found in 2 distinct forms, depending
-/// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
-/// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
-/// files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one
-/// per level). In this case, the main Project JSON file will still contain most level data,
-/// except heavy sections, like the `layerInstances` array (which will be null). The
-/// `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file
-/// containing exactly what is described below.
+/// This object is not actually used by LDtk. It ONLY exists to force explicit references to
+/// all types, to make sure QuickType finds them and integrate all of them. Otherwise,
+/// Quicktype will drop types that are not explicitely used.
 #[derive(Serialize, Deserialize)]
-pub struct Level {
-    /// Background color of the level (same as `bgColor`, except the default value is
-    /// automatically used here if its value is `null`)
-    #[serde(rename = "__bgColor")]
-    bg_color: String,
+pub struct ForcedRefs {
+    #[serde(rename = "AutoLayerRuleGroup")]
+    auto_layer_rule_group: Option<AutoLayerRuleGroup>,
 
-    /// Position informations of the background image, if there is one.
-    #[serde(rename = "__bgPos")]
-    bg_pos: Option<LevelBackgroundPosition>,
+    #[serde(rename = "AutoRuleDef")]
+    auto_rule_def: Option<AutoLayerRuleDefinition>,
 
-    /// An array listing all other levels touching this one on the world map.<br/>  Only relevant
-    /// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
-    /// Horizontal and Vertical layouts, this array is always empty.
-    #[serde(rename = "__neighbours")]
-    neighbours: Vec<NeighbourLevel>,
+    #[serde(rename = "Definitions")]
+    definitions: Option<Definitions>,
 
-    /// The "guessed" color for this level in the editor, decided using either the background
-    /// color or an existing custom field.
+    #[serde(rename = "EntityDef")]
+    entity_def: Option<EntityDefinition>,
+
+    #[serde(rename = "EntityInstance")]
+    entity_instance: Option<EntityInstance>,
+
+    #[serde(rename = "EntityReferenceInfos")]
+    entity_reference_infos: Option<FieldInstanceEntityReference>,
+
+    #[serde(rename = "EnumDef")]
+    enum_def: Option<EnumDefinition>,
+
+    #[serde(rename = "EnumDefValues")]
+    enum_def_values: Option<EnumValueDefinition>,
+
+    #[serde(rename = "EnumTagValue")]
+    enum_tag_value: Option<EnumTagValue>,
+
+    #[serde(rename = "FieldDef")]
+    field_def: Option<FieldDefinition>,
+
+    #[serde(rename = "FieldInstance")]
+    field_instance: Option<FieldInstance>,
+
+    #[serde(rename = "GridPoint")]
+    grid_point: Option<FieldInstanceGridPoint>,
+
+    #[serde(rename = "IntGridValueDef")]
+    int_grid_value_def: Option<IntGridValueDefinition>,
+
+    #[serde(rename = "IntGridValueInstance")]
+    int_grid_value_instance: Option<IntGridValueInstance>,
+
+    #[serde(rename = "LayerDef")]
+    layer_def: Option<LayerDefinition>,
+
+    #[serde(rename = "LayerInstance")]
+    layer_instance: Option<LayerInstance>,
+
+    #[serde(rename = "Level")]
+    level: Option<Level>,
+
+    #[serde(rename = "LevelBgPosInfos")]
+    level_bg_pos_infos: Option<LevelBackgroundPosition>,
+
+    #[serde(rename = "NeighbourLevel")]
+    neighbour_level: Option<NeighbourLevel>,
+
+    #[serde(rename = "Tile")]
+    tile: Option<TileInstance>,
+
+    #[serde(rename = "TileCustomMetadata")]
+    tile_custom_metadata: Option<TileCustomMetadata>,
+
+    #[serde(rename = "TilesetDef")]
+    tileset_def: Option<TilesetDefinition>,
+
+    #[serde(rename = "TilesetRect")]
+    tileset_rect: Option<TilesetRectangle>,
+
+    #[serde(rename = "World")]
+    world: Option<World>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct EntityInstance {
+    /// Grid-based coordinates (`[x,y]` format)
+    #[serde(rename = "__grid")]
+    grid: Vec<i64>,
+
+    /// Entity definition identifier
+    #[serde(rename = "__identifier")]
+    identifier: String,
+
+    /// Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
+    #[serde(rename = "__pivot")]
+    pivot: Vec<f64>,
+
+    /// The entity "smart" color, guessed from either Entity definition, or one its field
+    /// instances.
     #[serde(rename = "__smartColor")]
     smart_color: String,
 
-    /// Background color of the level. If `null`, the project `defaultLevelBgColor` should be
-    /// used.
-    #[serde(rename = "bgColor")]
-    level_bg_color: Option<String>,
+    /// Array of tags defined in this Entity definition
+    #[serde(rename = "__tags")]
+    tags: Vec<String>,
 
-    /// Background image X pivot (0-1)
-    #[serde(rename = "bgPivotX")]
-    bg_pivot_x: f64,
+    /// Optional TilesetRect used to display this entity (it could either be the default Entity
+    /// tile, or some tile provided by a field value, like an Enum).
+    #[serde(rename = "__tile")]
+    tile: Option<TilesetRectangle>,
 
-    /// Background image Y pivot (0-1)
-    #[serde(rename = "bgPivotY")]
-    bg_pivot_y: f64,
+    /// Reference of the **Entity definition** UID
+    #[serde(rename = "defUid")]
+    def_uid: i64,
 
-    /// An enum defining the way the background image (if any) is positioned on the level. See
-    /// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
-    /// `Contain`, `Cover`, `CoverDirty`
-    #[serde(rename = "bgPos")]
-    level_bg_pos: Option<BgPos>,
-
-    /// The *optional* relative path to the level background image.
-    #[serde(rename = "bgRelPath")]
-    bg_rel_path: Option<String>,
-
-    /// This value is not null if the project option "*Save levels separately*" is enabled. In
-    /// this case, this **relative** path points to the level Json file.
-    #[serde(rename = "externalRelPath")]
-    external_rel_path: Option<String>,
-
-    /// An array containing this level custom field values.
+    /// An array of all custom fields and their values.
     #[serde(rename = "fieldInstances")]
     field_instances: Vec<FieldInstance>,
 
-    /// User defined unique identifier
-    #[serde(rename = "identifier")]
-    identifier: String,
+    /// Entity height in pixels. For non-resizable entities, it will be the same as Entity
+    /// definition.
+    #[serde(rename = "height")]
+    height: i64,
 
     /// Unique instance identifier
     #[serde(rename = "iid")]
     iid: String,
 
-    /// An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
-    /// levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
-    /// in display order**: the 1st layer is the top-most and the last is behind.
-    #[serde(rename = "layerInstances")]
-    layer_instances: Option<Vec<LayerInstance>>,
+    /// Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
+    /// optional layer offsets, if they exist!
+    #[serde(rename = "px")]
+    px: Vec<i64>,
 
-    /// Height of the level in pixels
-    #[serde(rename = "pxHei")]
-    px_hei: i64,
-
-    /// Width of the level in pixels
-    #[serde(rename = "pxWid")]
-    px_wid: i64,
-
-    /// Unique Int identifier
-    #[serde(rename = "uid")]
-    uid: i64,
-
-    /// If TRUE, the level identifier will always automatically use the naming pattern as defined
-    /// in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
-    /// user.
-    #[serde(rename = "useAutoIdentifier")]
-    use_auto_identifier: bool,
-
-    /// Index that represents the "depth" of the level in the world. Default is 0, greater means
-    /// "above", lower means "below".<br/>  This value is mostly used for display only and is
-    /// intended to make stacking of levels easier to manage.
-    #[serde(rename = "worldDepth")]
-    world_depth: i64,
-
-    /// World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
-    /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
-    /// value is always -1 here.
-    #[serde(rename = "worldX")]
-    world_x: i64,
-
-    /// World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
-    /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
-    /// value is always -1 here.
-    #[serde(rename = "worldY")]
-    world_y: i64,
-}
-
-/// Level background image position info
-#[derive(Serialize, Deserialize)]
-pub struct LevelBackgroundPosition {
-    /// An array of 4 float values describing the cropped sub-rectangle of the displayed
-    /// background image. This cropping happens when original is larger than the level bounds.
-    /// Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
-    #[serde(rename = "cropRect")]
-    crop_rect: Vec<f64>,
-
-    /// An array containing the `[scaleX,scaleY]` values of the **cropped** background image,
-    /// depending on `bgPos` option.
-    #[serde(rename = "scale")]
-    scale: Vec<f64>,
-
-    /// An array containing the `[x,y]` pixel coordinates of the top-left corner of the
-    /// **cropped** background image, depending on `bgPos` option.
-    #[serde(rename = "topLeftPx")]
-    top_left_px: Vec<i64>,
+    /// Entity width in pixels. For non-resizable entities, it will be the same as Entity
+    /// definition.
+    #[serde(rename = "width")]
+    width: i64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -1018,6 +1025,50 @@ pub struct FieldInstance {
     /// Editor internal raw values
     #[serde(rename = "realEditorValues")]
     real_editor_values: Vec<Option<serde_json::Value>>,
+}
+
+/// This object is used in Field Instances to describe an EntityRef value.
+#[derive(Serialize, Deserialize)]
+pub struct FieldInstanceEntityReference {
+    /// IID of the refered EntityInstance
+    #[serde(rename = "entityIid")]
+    entity_iid: String,
+
+    /// IID of the LayerInstance containing the refered EntityInstance
+    #[serde(rename = "layerIid")]
+    layer_iid: String,
+
+    /// IID of the Level containing the refered EntityInstance
+    #[serde(rename = "levelIid")]
+    level_iid: String,
+
+    /// IID of the World containing the refered EntityInstance
+    #[serde(rename = "worldIid")]
+    world_iid: String,
+}
+
+/// This object is just a grid-based coordinate used in Field values.
+#[derive(Serialize, Deserialize)]
+pub struct FieldInstanceGridPoint {
+    /// X grid-based coordinate
+    #[serde(rename = "cx")]
+    cx: i64,
+
+    /// Y grid-based coordinate
+    #[serde(rename = "cy")]
+    cy: i64,
+}
+
+/// IntGrid value instance
+#[derive(Serialize, Deserialize)]
+pub struct IntGridValueInstance {
+    /// Coordinate ID in the layer grid
+    #[serde(rename = "coordId")]
+    coord_id: i64,
+
+    /// IntGrid value
+    #[serde(rename = "v")]
+    v: i64,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -1155,72 +1206,137 @@ pub struct TileInstance {
     t: i64,
 }
 
+/// This section contains all the level data. It can be found in 2 distinct forms, depending
+/// on Project current settings:  - If "*Separate level files*" is **disabled** (default):
+/// full level data is *embedded* inside the main Project JSON file, - If "*Separate level
+/// files*" is **enabled**: level data is stored in *separate* standalone `.ldtkl` files (one
+/// per level). In this case, the main Project JSON file will still contain most level data,
+/// except heavy sections, like the `layerInstances` array (which will be null). The
+/// `externalRelPath` string points to the `ldtkl` file.  A `ldtkl` file is just a JSON file
+/// containing exactly what is described below.
 #[derive(Serialize, Deserialize)]
-pub struct EntityInstance {
-    /// Grid-based coordinates (`[x,y]` format)
-    #[serde(rename = "__grid")]
-    grid: Vec<i64>,
+pub struct Level {
+    /// Background color of the level (same as `bgColor`, except the default value is
+    /// automatically used here if its value is `null`)
+    #[serde(rename = "__bgColor")]
+    bg_color: String,
 
-    /// Entity definition identifier
-    #[serde(rename = "__identifier")]
-    identifier: String,
+    /// Position informations of the background image, if there is one.
+    #[serde(rename = "__bgPos")]
+    bg_pos: Option<LevelBackgroundPosition>,
 
-    /// Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity
-    #[serde(rename = "__pivot")]
-    pivot: Vec<f64>,
+    /// An array listing all other levels touching this one on the world map.<br/>  Only relevant
+    /// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
+    /// Horizontal and Vertical layouts, this array is always empty.
+    #[serde(rename = "__neighbours")]
+    neighbours: Vec<NeighbourLevel>,
 
-    /// The entity "smart" color, guessed from either Entity definition, or one its field
-    /// instances.
+    /// The "guessed" color for this level in the editor, decided using either the background
+    /// color or an existing custom field.
     #[serde(rename = "__smartColor")]
     smart_color: String,
 
-    /// Array of tags defined in this Entity definition
-    #[serde(rename = "__tags")]
-    tags: Vec<String>,
+    /// Background color of the level. If `null`, the project `defaultLevelBgColor` should be
+    /// used.
+    #[serde(rename = "bgColor")]
+    level_bg_color: Option<String>,
 
-    /// Optional TilesetRect used to display this entity (it could either be the default Entity
-    /// tile, or some tile provided by a field value, like an Enum).
-    #[serde(rename = "__tile")]
-    tile: Option<TilesetRectangle>,
+    /// Background image X pivot (0-1)
+    #[serde(rename = "bgPivotX")]
+    bg_pivot_x: f64,
 
-    /// Reference of the **Entity definition** UID
-    #[serde(rename = "defUid")]
-    def_uid: i64,
+    /// Background image Y pivot (0-1)
+    #[serde(rename = "bgPivotY")]
+    bg_pivot_y: f64,
 
-    /// An array of all custom fields and their values.
+    /// An enum defining the way the background image (if any) is positioned on the level. See
+    /// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
+    /// `Contain`, `Cover`, `CoverDirty`
+    #[serde(rename = "bgPos")]
+    level_bg_pos: Option<BgPos>,
+
+    /// The *optional* relative path to the level background image.
+    #[serde(rename = "bgRelPath")]
+    bg_rel_path: Option<String>,
+
+    /// This value is not null if the project option "*Save levels separately*" is enabled. In
+    /// this case, this **relative** path points to the level Json file.
+    #[serde(rename = "externalRelPath")]
+    external_rel_path: Option<String>,
+
+    /// An array containing this level custom field values.
     #[serde(rename = "fieldInstances")]
     field_instances: Vec<FieldInstance>,
 
-    /// Entity height in pixels. For non-resizable entities, it will be the same as Entity
-    /// definition.
-    #[serde(rename = "height")]
-    height: i64,
+    /// User defined unique identifier
+    #[serde(rename = "identifier")]
+    identifier: String,
 
     /// Unique instance identifier
     #[serde(rename = "iid")]
     iid: String,
 
-    /// Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
-    /// optional layer offsets, if they exist!
-    #[serde(rename = "px")]
-    px: Vec<i64>,
+    /// An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
+    /// levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
+    /// in display order**: the 1st layer is the top-most and the last is behind.
+    #[serde(rename = "layerInstances")]
+    layer_instances: Option<Vec<LayerInstance>>,
 
-    /// Entity width in pixels. For non-resizable entities, it will be the same as Entity
-    /// definition.
-    #[serde(rename = "width")]
-    width: i64,
+    /// Height of the level in pixels
+    #[serde(rename = "pxHei")]
+    px_hei: i64,
+
+    /// Width of the level in pixels
+    #[serde(rename = "pxWid")]
+    px_wid: i64,
+
+    /// Unique Int identifier
+    #[serde(rename = "uid")]
+    uid: i64,
+
+    /// If TRUE, the level identifier will always automatically use the naming pattern as defined
+    /// in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
+    /// user.
+    #[serde(rename = "useAutoIdentifier")]
+    use_auto_identifier: bool,
+
+    /// Index that represents the "depth" of the level in the world. Default is 0, greater means
+    /// "above", lower means "below".<br/>  This value is mostly used for display only and is
+    /// intended to make stacking of levels easier to manage.
+    #[serde(rename = "worldDepth")]
+    world_depth: i64,
+
+    /// World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+    /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+    /// value is always -1 here.
+    #[serde(rename = "worldX")]
+    world_x: i64,
+
+    /// World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial
+    /// positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the
+    /// value is always -1 here.
+    #[serde(rename = "worldY")]
+    world_y: i64,
 }
 
-/// IntGrid value instance
+/// Level background image position info
 #[derive(Serialize, Deserialize)]
-pub struct IntGridValueInstance {
-    /// Coordinate ID in the layer grid
-    #[serde(rename = "coordId")]
-    coord_id: i64,
+pub struct LevelBackgroundPosition {
+    /// An array of 4 float values describing the cropped sub-rectangle of the displayed
+    /// background image. This cropping happens when original is larger than the level bounds.
+    /// Array format: `[ cropX, cropY, cropWidth, cropHeight ]`
+    #[serde(rename = "cropRect")]
+    crop_rect: Vec<f64>,
 
-    /// IntGrid value
-    #[serde(rename = "v")]
-    v: i64,
+    /// An array containing the `[scaleX,scaleY]` values of the **cropped** background image,
+    /// depending on `bgPos` option.
+    #[serde(rename = "scale")]
+    scale: Vec<f64>,
+
+    /// An array containing the `[x,y]` pixel coordinates of the top-left corner of the
+    /// **cropped** background image, depending on `bgPos` option.
+    #[serde(rename = "topLeftPx")]
+    top_left_px: Vec<i64>,
 }
 
 /// Nearby level info
@@ -1565,6 +1681,36 @@ pub enum Flag {
     UseMultilinesType,
 }
 
+#[derive(Serialize, Deserialize)]
+pub enum BgPos {
+    #[serde(rename = "Contain")]
+    Contain,
+
+    #[serde(rename = "Cover")]
+    Cover,
+
+    #[serde(rename = "CoverDirty")]
+    CoverDirty,
+
+    #[serde(rename = "Unscaled")]
+    Unscaled,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum WorldLayout {
+    #[serde(rename = "Free")]
+    Free,
+
+    #[serde(rename = "GridVania")]
+    GridVania,
+
+    #[serde(rename = "LinearHorizontal")]
+    LinearHorizontal,
+
+    #[serde(rename = "LinearVertical")]
+    LinearVertical,
+}
+
 /// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
 /// values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
 #[derive(Serialize, Deserialize)]
@@ -1594,34 +1740,4 @@ pub enum ImageExportMode {
 
     #[serde(rename = "OneImagePerLevel")]
     OneImagePerLevel,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum BgPos {
-    #[serde(rename = "Contain")]
-    Contain,
-
-    #[serde(rename = "Cover")]
-    Cover,
-
-    #[serde(rename = "CoverDirty")]
-    CoverDirty,
-
-    #[serde(rename = "Unscaled")]
-    Unscaled,
-}
-
-#[derive(Serialize, Deserialize)]
-pub enum WorldLayout {
-    #[serde(rename = "Free")]
-    Free,
-
-    #[serde(rename = "GridVania")]
-    GridVania,
-
-    #[serde(rename = "LinearHorizontal")]
-    LinearHorizontal,
-
-    #[serde(rename = "LinearVertical")]
-    LinearVertical,
 }
