@@ -188,7 +188,6 @@ class Progress extends ui.Modal {
 			case Completed:
 				if( onComplete!=null )
 					onComplete();
-				log.printAll();
 				destroy();
 		}
 
