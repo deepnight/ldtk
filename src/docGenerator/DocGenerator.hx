@@ -337,6 +337,7 @@ class DocGenerator {
 			otherTypes: new Map<String,Dynamic>(),
 		};
 
+		var otherTypes = [];
 
 		for(type in allGlobalTypes) {
 
@@ -382,7 +383,20 @@ class DocGenerator {
 			else {
 				typeJson.additionalProperties = false;
 				json.otherTypes.set(typeName, typeJson);
+				otherTypes.push(typeName);
 			}
+		}
+
+		// Force refs to all otherTypes (otherwise they are lost by Quicktype conversion)
+		if( otherTypes.length>0 ) {
+			json.LdtkJsonRoot.properties.set("__FORCED_REFS", {
+				description: "This object is not actually used by LDtk. It ONLY exists to force explicit references to all types, to make sure QuickType finds them and integrate all of them. Otherwise, Quicktype will drop types that are not explicitely used.",
+				type: ["object"],
+				properties: new Map(),
+			});
+			var forcedMap = json.LdtkJsonRoot.properties.get("__FORCED_REFS").properties;
+			for(t in otherTypes)
+				forcedMap.set( t, { ref__: makeSchemaRef(t) } );
 		}
 
 		// Default output file name
@@ -831,7 +845,7 @@ class DocGenerator {
 				st.type = ["object"];
 
 			case Ref(display, typeName):
-				st.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
+				st.ref__ = makeSchemaRef(typeName);
 
 			case Dyn:
 
@@ -844,6 +858,10 @@ class DocGenerator {
 		}
 
 		return st;
+	}
+
+	static function makeSchemaRef(typeName:String) {
+		return '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
 	}
 
 
