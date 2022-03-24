@@ -8029,6 +8029,7 @@ $patternSize : 32px;
 	top: 10px;
 	right: 10px;
 	z-index: 99;
+	pointer-events: none;
 
 	padding: 4px;
 	background-color: transparentize($color: black, $amount: 0.3);
