@@ -582,11 +582,9 @@ class Editor extends Page {
 					setCompactMode( !settings.v.compactMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				// curLevelHistory.undo();
 				curLevelTimeline.undo();
 
 			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				// curLevelHistory.redo();
 				curLevelTimeline.redo();
 
 			#if debug
