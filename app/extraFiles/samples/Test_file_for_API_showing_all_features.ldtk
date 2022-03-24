@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "0.10.0-beta5",
+		"appVersion": "0.10.0-beta6",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "0.10.0-beta5",
-	"appBuildId": 457792,
+	"jsonVersion": "0.10.0-beta6",
+	"appBuildId": 457810,
 	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -534,7 +534,7 @@
 					"identifier": "Enum",
 					"__type": "LocalEnum.SomeEnum",
 					"uid": 22,
-					"type": { "id": "F_Enum", "params": [21] },
+					"type": "F_Enum(21)",
 					"isArray": false,
 					"canBeNull": false,
 					"arrayMinLength": null,
@@ -679,7 +679,7 @@
 					"identifier": "Array_Enum",
 					"__type": "Array<LocalEnum.SomeEnum>",
 					"uid": 29,
-					"type": { "id": "F_Enum", "params": [21] },
+					"type": "F_Enum(21)",
 					"isArray": true,
 					"canBeNull": false,
 					"arrayMinLength": null,
@@ -882,7 +882,7 @@
 					"identifier": "SomeEnum",
 					"__type": "LocalEnum.SomeEnum",
 					"uid": 40,
-					"type": { "id": "F_Enum", "params": [21] },
+					"type": "F_Enum(21)",
 					"isArray": false,
 					"canBeNull": false,
 					"arrayMinLength": null,
@@ -969,7 +969,7 @@
 					"identifier": "SomeEnum",
 					"__type": "LocalEnum.SomeEnum",
 					"uid": 43,
-					"type": { "id": "F_Enum", "params": [21] },
+					"type": "F_Enum(21)",
 					"isArray": false,
 					"canBeNull": false,
 					"arrayMinLength": null,
@@ -1317,7 +1317,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "317b37f0-8dc0-11ec-9d89-c39bb3c51c9b"
+								"worldIid": "ddf6e1f0-8dc0-11ec-9908-2d7fcf6dd986"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1339,7 +1339,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "317b37f0-8dc0-11ec-9d89-c39bb3c51c9b"
+								"worldIid": "ddf6e1f0-8dc0-11ec-9908-2d7fcf6dd986"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1361,7 +1361,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "317b37f0-8dc0-11ec-9d89-c39bb3c51c9b"
+								"worldIid": "ddf6e1f0-8dc0-11ec-9908-2d7fcf6dd986"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
