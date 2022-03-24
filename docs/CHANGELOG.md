@@ -1,5 +1,6 @@
 # 0.10.0-beta6
 
+ - Added a "click trap" to prevent miss-clicks while the app is not focused. Previously, if you clicked on the LDtk window to re-focus it, you would edit some layer or click a UI element accidentally.
  - Fixed opacity of layers when exporting PNGs
  - Fixed tile pivot when using 9-slice scaling mode
  - Fixed 9-scaled tiles to use Tile opacity from their Entity definition

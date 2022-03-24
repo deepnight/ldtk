@@ -2086,12 +2086,27 @@ class Editor extends Page {
 	override function onAppFocus() {
 		super.onAppFocus();
 		camera.invalidateCache();
+		delayer.addF(disableClicktrap,2);
 	}
 
 	override function onAppBlur() {
 		super.onAppBlur();
 		onMouseUp();
 		heldVisibilitySet = null;
+
+		if( !ET.isDevToolsOpened() )
+			enableClicktrap();
+	}
+
+	function enableClicktrap() {
+		var jCtrap = App.ME.jBody.find("#clicktrap");
+		jCtrap.show();
+		jCtrap.off().click( _->delayer.addF(disableClicktrap,1) );
+	}
+
+	function disableClicktrap() {
+		var jCtrap = App.ME.jBody.find("#clicktrap");
+		jCtrap.hide().off();
 	}
 
 	override function onAppMouseUp() {
