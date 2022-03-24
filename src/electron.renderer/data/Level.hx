@@ -182,7 +182,7 @@ class Level {
 					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			},
-			layerInstances: forTimeline ? [] : layerInstances.map( li->li.toJson() ),
+			layerInstances: layerInstances.map( li->li.toJson() ),
 			__neighbours: forTimeline ? [] : getNeighboursJson(),
 		}
 

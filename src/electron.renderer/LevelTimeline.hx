@@ -168,7 +168,7 @@ class LevelTimeline {
 		var s = getState(curStateIdx);
 
 		// Store level JSON
-		s.fullLevelJson = level.toJson();
+		s.fullLevelJson = level.toJson(true);
 
 		// Also store layer instances JSONs (from level JSON)
 		for(layerInstJson in s.fullLevelJson.layerInstances)
