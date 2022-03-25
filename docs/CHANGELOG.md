@@ -2,6 +2,8 @@
 
  - Much faster undo/redo for projects with lots of AutoLayer rules.
  - Reorganized the debug menu (`CTRL-SHIFT-D`)
+ - Added "visual bleeps" when undoing an Entity creation/deletion
+ - Fixed undo/redo issues with Auto-Layers
  - Fixed a crash when saving a project with external levels.
  - Fixed nullable Floats fields to now be really null in JSON.
 
