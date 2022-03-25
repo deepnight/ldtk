@@ -476,7 +476,12 @@ class FieldInstance {
 	function getJsonValue(arrayIdx:Int) : Dynamic {
 		return switch def.type {
 			case F_Int: getInt(arrayIdx);
-			case F_Float: JsonTools.writeFloat( getFloat(arrayIdx) );
+			case F_Float:
+				var v= getFloat(arrayIdx);
+				if( v==null )
+					null;
+				else
+					JsonTools.writeFloat(v);
 			case F_String: JsonTools.escapeString( getString(arrayIdx) );
 			case F_Text: JsonTools.escapeString( getString(arrayIdx) );
 			case F_Path: JsonTools.escapeString( getFilePath(arrayIdx) );

@@ -1,7 +1,9 @@
 # 0.10.0-beta7
 
  - Much faster undo/redo for projects with lots of AutoLayer rules.
- - Fixed a crash when saving a project with external levels
+ - Reorganized the debug menu (`CTRL-SHIFT-D`)
+ - Fixed a crash when saving a project with external levels.
+ - Fixed nullable Floats fields to now be really null in JSON.
 
 # 0.10.0-beta6
 
