@@ -27,7 +27,7 @@ jobs:
           haxe-version: 4.2.0
       - run: haxe -version
       - run: haxe setup.hxml
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.10.0
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.10.0 --always
       - run: haxelib list
 
       # Node/NPM commands

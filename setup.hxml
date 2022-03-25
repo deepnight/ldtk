@@ -17,3 +17,6 @@
 
 --next
 --cmd haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+
+--next
+--cmd haxelib install uuid --always
