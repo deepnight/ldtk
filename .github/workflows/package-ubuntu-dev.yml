@@ -1,4 +1,4 @@
-name: package-linux-dev
+name: package-ubuntu-dev
 
 on:
   push:
