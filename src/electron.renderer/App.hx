@@ -80,7 +80,20 @@ class App extends dn.Process {
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
-		#if !debug
+		#if debug
+		// Crash layer
+		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
+			if( jBody.children("#crashed").length==0 )
+				jBody.append('<div id="crashed"/>');
+
+			var jCrash = jBody.children("#crashed");
+			jCrash.append('<p>$msg</p>');
+			var stack = "<p>" + error.stack.split("\n").splice(0,2).join("</p><p>") + "</p>";
+			jCrash.append(stack);
+			return false;
+		}
+		#else
+		// Redirect to crash page
 		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
 			var processes = dn.Process.rprintAll();
 			ui.modal.Progress.stopAll();

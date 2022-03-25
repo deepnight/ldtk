@@ -3668,6 +3668,35 @@ canvas#webgl {
 	}
 }
 
+#crashed {
+	position: absolute;
+	box-sizing: border-box;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 9999;
+	padding-bottom: 20px;
+	pointer-events: none;
+
+	display: flex;
+	flex-flow: column;
+	justify-content: flex-end;
+	align-items: center;
+
+	background-color: transparentize($color: $red, $amount: 0.6);
+	box-shadow: 0px 0px 64px inset $red;
+	background-repeat: repeat;
+
+	&>* {
+		margin: 0;
+		margin-bottom: 3px;
+		color: $orangeLight;
+		text-shadow: 0px 2px 4px black;
+		background-color: transparentize($color: black, $amount: 0.5);
+	}
+}
+
 #clicktrap {
 	position: absolute;
 	display: none;
