@@ -18,6 +18,7 @@
 - [ ] Merge LDtk repo to `master`
 - [ ] Merge LDtk Haxe API repo to `master`
 - [ ] Update `Haxelib.json`
+- [ ] Update branch names in `setup.hxml`
 
 ## Prepare GitHub release
 - [ ] Run `npm run publish-github`
