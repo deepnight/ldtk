@@ -34,7 +34,6 @@ jobs:
         with:
           node-version: '14'
       - run: cd app && npm install
-      - run: cd app && npm run pack-prepare
       - run: cd app && npm run pack-linux-x86
 
       # Upload
