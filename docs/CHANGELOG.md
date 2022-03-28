@@ -1,7 +1,10 @@
 # 0.10.0-beta8
 
+ - Performance boost of rules rendering in large levels.
  - Fixed rules invalidation when painting a very large level.
  - Fixed JSON / Quicktype issues.
+
+![](1.0.0/rulesPerf.gif)
 
 # 0.10.0-beta7
 

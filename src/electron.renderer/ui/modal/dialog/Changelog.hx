@@ -27,10 +27,18 @@ class Changelog extends ui.modal.Dialog {
 		}
 
 		// More compact window for short changelogs
-		if( changeLog.allNoteLines.length<=15 )
-			jContent.addClass("short");
-		else
-			jContent.removeClass("short");
+		jContent.removeClass("short");
+		if( changeLog.allNoteLines.length<=15 ) {
+			var hasImage = false;
+			for(l in changeLog.allNoteLines)
+				if( l.indexOf("![](")>=0 ) {
+					hasImage = true;
+					break;
+				}
+
+			if( !hasImage )
+				jContent.addClass("short");
+		}
 
 		// Prepare markdown
 		var rawMd = changeLog.allNoteLines.join("\n");
