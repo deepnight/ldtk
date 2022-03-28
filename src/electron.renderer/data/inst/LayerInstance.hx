@@ -825,11 +825,12 @@ class LayerInstance {
 		}
 
 		// Adjust bounds to also redraw nearby cells
-		var left = dn.M.imax( 0, cx - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-		var top = dn.M.imax( 0, cy - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-		var right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-		var bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-
+		var cWid = this.cWid;
+		var cHei = this.cHei;
+		var left = 0;
+		var top = 0;
+		var right = 0;
+		var bottom = 0;
 
 		// Apply rules
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
@@ -837,6 +838,10 @@ class LayerInstance {
 			return;
 
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
+			left = dn.M.imax( 0, cx - Std.int(r.size*0.5) );
+			right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(r.size*0.5) );
+			top = dn.M.imax( 0, cy - Std.int(r.size*0.5) );
+			bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(r.size*0.5) );
 			for(cx in left...right+1)
 			for(cy in top...bottom+1)
 				runAutoLayerRuleAt(source, r,cx,cy);
