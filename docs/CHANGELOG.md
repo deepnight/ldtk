@@ -1,5 +1,6 @@
 # 0.10.0-beta8
 
+ - Fixed rules invalidation when painting a very large level.
  - Fixed JSON / Quicktype issues.
 
 # 0.10.0-beta7
