@@ -832,36 +832,26 @@ class LayerInstance {
 			return;
 		}
 
+		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
 		// Adjust bounds to also redraw nearby cells
-		var cWid = this.cWid;
-		var cHei = this.cHei;
-		var left = 0;
-		var top = 0;
-		var right = 0;
-		var bottom = 0;
+		var left = dn.M.imax( 0, cx - maxRadius );
+		var right = dn.M.imin( cWid-1, cx + wid-1 + maxRadius );
+		var top = dn.M.imax( 0, cy - maxRadius );
+		var bottom = dn.M.imin( cHei-1, cy + hei-1 + maxRadius );
+
 
 		// Apply rules
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
 		if( source==null )
 			return;
-
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
-			left = dn.M.imax( 0, cx - Std.int(r.size*0.5) );
-			right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(r.size*0.5) );
-			top = dn.M.imax( 0, cy - Std.int(r.size*0.5) );
-			bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(r.size*0.5) );
-			for(cx in left...right+1)
-			for(cy in top...bottom+1)
-				runAutoLayerRuleAt(source, r,cx,cy);
+			for(x in left...right+1)
+			for(y in top...bottom+1)
+				runAutoLayerRuleAt(source, r, x,y);
 		});
 
-		var radius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
-		applyBreakOnMatchesArea(
-			cx-radius,
-			cy-radius,
-			wid + radius*2+1,
-			hei + radius*2+1
-		);
+		// Discard using break-on-match flag
+		applyBreakOnMatchesArea(left,top, right-left+1, bottom-top+1);
 	}
 
 	/** Apply all rules to all cells **/
