@@ -1,3 +1,7 @@
+# 0.10.0-beta8
+
+ - Fixed JSON / Quicktype issues.
+
 # 0.10.0-beta7
 
  - Much faster undo/redo for projects with lots of AutoLayer rules.
