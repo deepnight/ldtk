@@ -365,6 +365,21 @@ class LevelRender extends dn.Process {
 		);
 	}
 
+	public function bleepDebug(li:data.inst.LayerInstance, cx:Int, cy:Int) {
+		var g = new h2d.Graphics();
+		root.add(g, Const.DP_UI);
+		g.lineStyle(2, 0xffffff, 1);
+		g.drawCircle( 0,0, li.def.gridSize*0.5 );
+		g.setPosition( M.round((cx+0.5)*li.def.gridSize), M.round((cy+0.5)*li.def.gridSize) );
+		createChildProcess( p->{
+			g.alpha-=tmod*0.04;
+			if( g.alpha<=0 ) {
+				g.remove();
+				p.destroy();
+			}
+		});
+	}
+
 	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:Int, spd=1.0) : Bleep {
 		return bleepLayerRectPx(
 			ei._li,
