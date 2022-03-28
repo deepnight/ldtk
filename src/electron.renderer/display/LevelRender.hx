@@ -611,6 +611,8 @@ class LevelRender extends dn.Process {
 			var bounds = layerInvalidations.get(li.layerDefUid);
 			bounds.left = M.imin(bounds.left, left);
 			bounds.right = M.imax(bounds.right, right);
+			bounds.top = M.imin(bounds.top, top);
+			bounds.bottom = M.imax(bounds.bottom, bottom);
 			bounds.evaluateRules = evaluateRules;
 		}
 		else
