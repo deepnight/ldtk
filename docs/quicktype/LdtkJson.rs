@@ -426,10 +426,10 @@ pub struct FieldDefinition {
     #[serde(rename = "tilesetUid")]
     tileset_uid: Option<i64>,
 
-    /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
+    /// Internal enum representing the possible field types. Possible values: F_Int, F_Float,
+    /// F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile
     #[serde(rename = "type")]
-    purple_type: LevelFieldType,
+    purple_type: String,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
@@ -623,7 +623,7 @@ pub struct LayerDefinition {
     /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
     /// `AutoLayer`
     #[serde(rename = "type")]
-    purple_type: LayerType,
+    purple_type: Type,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
@@ -1473,44 +1473,6 @@ pub enum EditorDisplayPos {
     Center,
 }
 
-/// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-/// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
-#[derive(Serialize, Deserialize)]
-pub enum LevelFieldType {
-    #[serde(rename = "F_Bool")]
-    FBool,
-
-    #[serde(rename = "F_Color")]
-    FColor,
-
-    #[serde(rename = "F_EntityRef")]
-    FEntityRef,
-
-    #[serde(rename = "F_Enum")]
-    FEnum,
-
-    #[serde(rename = "F_Float")]
-    FFloat,
-
-    #[serde(rename = "F_Int")]
-    FInt,
-
-    #[serde(rename = "F_Path")]
-    FPath,
-
-    #[serde(rename = "F_Point")]
-    FPoint,
-
-    #[serde(rename = "F_String")]
-    FString,
-
-    #[serde(rename = "F_Text")]
-    FText,
-
-    #[serde(rename = "F_Tile")]
-    FTile,
-}
-
 #[derive(Serialize, Deserialize)]
 pub enum TextLanguageMode {
     #[serde(rename = "LangC")]
@@ -1640,7 +1602,7 @@ pub enum TileMode {
 /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
 /// `AutoLayer`
 #[derive(Serialize, Deserialize)]
-pub enum LayerType {
+pub enum Type {
     #[serde(rename = "AutoLayer")]
     AutoLayer,
 

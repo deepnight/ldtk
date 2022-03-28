@@ -76,12 +76,6 @@ namespace quicktype {
      */
     enum class EditorDisplayPos : int { ABOVE, BENEATH, CENTER };
 
-    /**
-     * Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-     * `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
-     */
-    enum class FieldDefType : int { F_BOOL, F_COLOR, F_ENTITY_REF, F_ENUM, F_FLOAT, F_INT, F_PATH, F_POINT, F_STRING, F_TEXT, F_TILE };
-
     enum class TextLanguageMode : int { LANG_C, LANG_HAXE, LANG_JS, LANG_JSON, LANG_LOG, LANG_LUA, LANG_MARKDOWN, LANG_PYTHON, LANG_RUBY, LANG_XML };
 
     /**
@@ -118,7 +112,7 @@ namespace quicktype {
         bool symmetrical_ref;
         std::shared_ptr<TextLanguageMode> text_language_mode;
         std::shared_ptr<int64_t> tileset_uid;
-        FieldDefType field_definition_type;
+        std::string field_definition_type;
         int64_t uid;
         bool use_for_smart_color;
 
@@ -269,12 +263,12 @@ namespace quicktype {
         void set_tileset_uid(std::shared_ptr<int64_t> value) { this->tileset_uid = value; }
 
         /**
-         * Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-         * `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
+         * Internal enum representing the possible field types. Possible values: F_Int, F_Float,
+         * F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile
          */
-        const FieldDefType & get_field_definition_type() const { return field_definition_type; }
-        FieldDefType & get_mutable_field_definition_type() { return field_definition_type; }
-        void set_field_definition_type(const FieldDefType & value) { this->field_definition_type = value; }
+        const std::string & get_field_definition_type() const { return field_definition_type; }
+        std::string & get_mutable_field_definition_type() { return field_definition_type; }
+        void set_field_definition_type(const std::string & value) { this->field_definition_type = value; }
 
         /**
          * Unique Int identifier
@@ -944,7 +938,7 @@ namespace quicktype {
      * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
      * `AutoLayer`
      */
-    enum class LayerDefType : int { AUTO_LAYER, ENTITIES, INT_GRID, TILES };
+    enum class Type : int { AUTO_LAYER, ENTITIES, INT_GRID, TILES };
 
     class LayerDefinition {
         public:
@@ -975,7 +969,7 @@ namespace quicktype {
         double tile_pivot_x;
         double tile_pivot_y;
         std::shared_ptr<int64_t> tileset_def_uid;
-        LayerDefType layer_definition_type;
+        Type layer_definition_type;
         int64_t uid;
 
         public:
@@ -1147,9 +1141,9 @@ namespace quicktype {
          * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
          * `AutoLayer`
          */
-        const LayerDefType & get_layer_definition_type() const { return layer_definition_type; }
-        LayerDefType & get_mutable_layer_definition_type() { return layer_definition_type; }
-        void set_layer_definition_type(const LayerDefType & value) { this->layer_definition_type = value; }
+        const Type & get_layer_definition_type() const { return layer_definition_type; }
+        Type & get_mutable_layer_definition_type() { return layer_definition_type; }
+        void set_layer_definition_type(const Type & value) { this->layer_definition_type = value; }
 
         /**
          * Unique Int identifier
@@ -2804,9 +2798,6 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::EditorDisplayPos & x);
     void to_json(json & j, const quicktype::EditorDisplayPos & x);
 
-    void from_json(const json & j, quicktype::FieldDefType & x);
-    void to_json(json & j, const quicktype::FieldDefType & x);
-
     void from_json(const json & j, quicktype::TextLanguageMode & x);
     void to_json(json & j, const quicktype::TextLanguageMode & x);
 
@@ -2828,8 +2819,8 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::TileMode & x);
     void to_json(json & j, const quicktype::TileMode & x);
 
-    void from_json(const json & j, quicktype::LayerDefType & x);
-    void to_json(json & j, const quicktype::LayerDefType & x);
+    void from_json(const json & j, quicktype::Type & x);
+    void to_json(json & j, const quicktype::Type & x);
 
     void from_json(const json & j, quicktype::EmbedAtlas & x);
     void to_json(json & j, const quicktype::EmbedAtlas & x);
@@ -2874,7 +2865,7 @@ namespace nlohmann {
         x.set_symmetrical_ref(j.at("symmetricalRef").get<bool>());
         x.set_text_language_mode(quicktype::get_optional<quicktype::TextLanguageMode>(j, "textLanguageMode"));
         x.set_tileset_uid(quicktype::get_optional<int64_t>(j, "tilesetUid"));
-        x.set_field_definition_type(j.at("type").get<quicktype::FieldDefType>());
+        x.set_field_definition_type(j.at("type").get<std::string>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_use_for_smart_color(j.at("useForSmartColor").get<bool>());
     }
@@ -3129,7 +3120,7 @@ namespace nlohmann {
         x.set_tile_pivot_x(j.at("tilePivotX").get<double>());
         x.set_tile_pivot_y(j.at("tilePivotY").get<double>());
         x.set_tileset_def_uid(quicktype::get_optional<int64_t>(j, "tilesetDefUid"));
-        x.set_layer_definition_type(j.at("type").get<quicktype::LayerDefType>());
+        x.set_layer_definition_type(j.at("type").get<quicktype::Type>());
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
@@ -3691,38 +3682,6 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::FieldDefType & x) {
-        if (j == "F_Bool") x = quicktype::FieldDefType::F_BOOL;
-        else if (j == "F_Color") x = quicktype::FieldDefType::F_COLOR;
-        else if (j == "F_EntityRef") x = quicktype::FieldDefType::F_ENTITY_REF;
-        else if (j == "F_Enum") x = quicktype::FieldDefType::F_ENUM;
-        else if (j == "F_Float") x = quicktype::FieldDefType::F_FLOAT;
-        else if (j == "F_Int") x = quicktype::FieldDefType::F_INT;
-        else if (j == "F_Path") x = quicktype::FieldDefType::F_PATH;
-        else if (j == "F_Point") x = quicktype::FieldDefType::F_POINT;
-        else if (j == "F_String") x = quicktype::FieldDefType::F_STRING;
-        else if (j == "F_Text") x = quicktype::FieldDefType::F_TEXT;
-        else if (j == "F_Tile") x = quicktype::FieldDefType::F_TILE;
-        else throw "Input JSON does not conform to schema";
-    }
-
-    inline void to_json(json & j, const quicktype::FieldDefType & x) {
-        switch (x) {
-            case quicktype::FieldDefType::F_BOOL: j = "F_Bool"; break;
-            case quicktype::FieldDefType::F_COLOR: j = "F_Color"; break;
-            case quicktype::FieldDefType::F_ENTITY_REF: j = "F_EntityRef"; break;
-            case quicktype::FieldDefType::F_ENUM: j = "F_Enum"; break;
-            case quicktype::FieldDefType::F_FLOAT: j = "F_Float"; break;
-            case quicktype::FieldDefType::F_INT: j = "F_Int"; break;
-            case quicktype::FieldDefType::F_PATH: j = "F_Path"; break;
-            case quicktype::FieldDefType::F_POINT: j = "F_Point"; break;
-            case quicktype::FieldDefType::F_STRING: j = "F_String"; break;
-            case quicktype::FieldDefType::F_TEXT: j = "F_Text"; break;
-            case quicktype::FieldDefType::F_TILE: j = "F_Tile"; break;
-            default: throw "This should not happen";
-        }
-    }
-
     inline void from_json(const json & j, quicktype::TextLanguageMode & x) {
         if (j == "LangC") x = quicktype::TextLanguageMode::LANG_C;
         else if (j == "LangHaxe") x = quicktype::TextLanguageMode::LANG_HAXE;
@@ -3857,20 +3816,20 @@ namespace nlohmann {
         }
     }
 
-    inline void from_json(const json & j, quicktype::LayerDefType & x) {
-        if (j == "AutoLayer") x = quicktype::LayerDefType::AUTO_LAYER;
-        else if (j == "Entities") x = quicktype::LayerDefType::ENTITIES;
-        else if (j == "IntGrid") x = quicktype::LayerDefType::INT_GRID;
-        else if (j == "Tiles") x = quicktype::LayerDefType::TILES;
+    inline void from_json(const json & j, quicktype::Type & x) {
+        if (j == "AutoLayer") x = quicktype::Type::AUTO_LAYER;
+        else if (j == "Entities") x = quicktype::Type::ENTITIES;
+        else if (j == "IntGrid") x = quicktype::Type::INT_GRID;
+        else if (j == "Tiles") x = quicktype::Type::TILES;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::LayerDefType & x) {
+    inline void to_json(json & j, const quicktype::Type & x) {
         switch (x) {
-            case quicktype::LayerDefType::AUTO_LAYER: j = "AutoLayer"; break;
-            case quicktype::LayerDefType::ENTITIES: j = "Entities"; break;
-            case quicktype::LayerDefType::INT_GRID: j = "IntGrid"; break;
-            case quicktype::LayerDefType::TILES: j = "Tiles"; break;
+            case quicktype::Type::AUTO_LAYER: j = "AutoLayer"; break;
+            case quicktype::Type::ENTITIES: j = "Entities"; break;
+            case quicktype::Type::INT_GRID: j = "IntGrid"; break;
+            case quicktype::Type::TILES: j = "Tiles"; break;
             default: throw "This should not happen";
         }
     }

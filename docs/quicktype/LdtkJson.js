@@ -300,7 +300,7 @@ const typeMap = {
         { json: "symmetricalRef", js: "symmetricalRef", typ: true },
         { json: "textLanguageMode", js: "textLanguageMode", typ: u(undefined, u(r("TextLanguageMode"), null)) },
         { json: "tilesetUid", js: "tilesetUid", typ: u(undefined, u(0, null)) },
-        { json: "type", js: "type", typ: r("FieldDefType") },
+        { json: "type", js: "type", typ: "" },
         { json: "uid", js: "uid", typ: 0 },
         { json: "useForSmartColor", js: "useForSmartColor", typ: true },
     ], false),
@@ -350,7 +350,7 @@ const typeMap = {
         { json: "tilePivotX", js: "tilePivotX", typ: 3.14 },
         { json: "tilePivotY", js: "tilePivotY", typ: 3.14 },
         { json: "tilesetDefUid", js: "tilesetDefUid", typ: u(undefined, u(0, null)) },
-        { json: "type", js: "type", typ: r("LayerDefType") },
+        { json: "type", js: "type", typ: r("Type") },
         { json: "uid", js: "uid", typ: 0 },
     ], false),
     "IntGridValueDefinition": o([
@@ -544,19 +544,6 @@ const typeMap = {
         "LangRuby",
         "LangXml",
     ],
-    "FieldDefType": [
-        "F_Bool",
-        "F_Color",
-        "F_EntityRef",
-        "F_Enum",
-        "F_Float",
-        "F_Int",
-        "F_Path",
-        "F_Point",
-        "F_String",
-        "F_Text",
-        "F_Tile",
-    ],
     "LimitBehavior": [
         "DiscardOldOnes",
         "MoveLastOne",
@@ -582,7 +569,7 @@ const typeMap = {
         "Repeat",
         "Stretch",
     ],
-    "LayerDefType": [
+    "Type": [
         "AutoLayer",
         "Entities",
         "IntGrid",

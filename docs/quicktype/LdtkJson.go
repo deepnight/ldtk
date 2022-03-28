@@ -128,7 +128,7 @@ type FieldDefinition struct {
 	SymmetricalRef      bool              `json:"symmetricalRef"`     
 	TextLanguageMode    *TextLanguageMode `json:"textLanguageMode"`   // Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,; `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
 	TilesetUid          *int64            `json:"tilesetUid"`         // UID of the tileset used for a Tile
-	FieldDefinitionType FieldDefType      `json:"type"`               // Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,; `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
+	FieldDefinitionType string            `json:"type"`               // Internal enum representing the possible field types. Possible values: F_Int, F_Float,; F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile
 	Uid                 int64             `json:"uid"`                // Unique Int identifier
 	UseForSmartColor    bool              `json:"useForSmartColor"`   // If TRUE, the color associated with this field will override the Entity or Level default; color in the editor UI. For Enum fields, this would be the color associated to their; values.
 }
@@ -183,7 +183,7 @@ type LayerDefinition struct {
 	TilePivotX             float64                  `json:"tilePivotX"`            // If the tiles are smaller or larger than the layer grid, the pivot value will be used to; position the tile relatively its grid cell.
 	TilePivotY             float64                  `json:"tilePivotY"`            // If the tiles are smaller or larger than the layer grid, the pivot value will be used to; position the tile relatively its grid cell.
 	TilesetDefUid          *int64                   `json:"tilesetDefUid"`         // Reference to the default Tileset UID being used by this layer definition.<br/>; **WARNING**: some layer *instances* might use a different tileset. So most of the time,; you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:; since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.
-	LayerDefinitionType    LayerDefType             `json:"type"`                  // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,; `AutoLayer`
+	LayerDefinitionType    Type                     `json:"type"`                  // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,; `AutoLayer`
 	Uid                    int64                    `json:"uid"`                   // Unique Int identifier
 }
 
@@ -474,23 +474,6 @@ const (
 	Center EditorDisplayPos = "Center"
 )
 
-// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
-type FieldDefType string
-const (
-	FBool FieldDefType = "F_Bool"
-	FColor FieldDefType = "F_Color"
-	FEntityRef FieldDefType = "F_EntityRef"
-	FEnum FieldDefType = "F_Enum"
-	FFloat FieldDefType = "F_Float"
-	FInt FieldDefType = "F_Int"
-	FPath FieldDefType = "F_Path"
-	FPoint FieldDefType = "F_Point"
-	FString FieldDefType = "F_String"
-	FText FieldDefType = "F_Text"
-	FTile FieldDefType = "F_Tile"
-)
-
 type TextLanguageMode string
 const (
 	LangC TextLanguageMode = "LangC"
@@ -562,12 +545,12 @@ const (
 
 // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
 // `AutoLayer`
-type LayerDefType string
+type Type string
 const (
-	AutoLayer LayerDefType = "AutoLayer"
-	Entities LayerDefType = "Entities"
-	IntGrid LayerDefType = "IntGrid"
-	Tiles LayerDefType = "Tiles"
+	AutoLayer Type = "AutoLayer"
+	Entities Type = "Entities"
+	IntGrid Type = "IntGrid"
+	Tiles Type = "Tiles"
 )
 
 type EmbedAtlas string

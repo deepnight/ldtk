@@ -580,11 +580,11 @@ namespace ldtk
         public long? TilesetUid { get; set; }
 
         /// <summary>
-        /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-        /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
+        /// Internal enum representing the possible field types. Possible values: F_Int, F_Float,
+        /// F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile
         /// </summary>
         [JsonProperty("type")]
-        public FieldDefType FieldDefinitionType { get; set; }
+        public string FieldDefinitionType { get; set; }
 
         /// <summary>
         /// Unique Int identifier
@@ -858,7 +858,7 @@ namespace ldtk
         /// `AutoLayer`
         /// </summary>
         [JsonProperty("type")]
-        public LayerDefType LayerDefinitionType { get; set; }
+        public TypeEnum LayerDefinitionType { get; set; }
 
         /// <summary>
         /// Unique Int identifier
@@ -1933,12 +1933,6 @@ namespace ldtk
     /// </summary>
     public enum EditorDisplayPos { Above, Beneath, Center };
 
-    /// <summary>
-    /// Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    /// `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
-    /// </summary>
-    public enum FieldDefType { FBool, FColor, FEntityRef, FEnum, FFloat, FInt, FPath, FPoint, FString, FText, FTile };
-
     public enum TextLanguageMode { LangC, LangHaxe, LangJs, LangJson, LangLog, LangLua, LangMarkdown, LangPython, LangRuby, LangXml };
 
     /// <summary>
@@ -1978,7 +1972,7 @@ namespace ldtk
     /// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
     /// `AutoLayer`
     /// </summary>
-    public enum LayerDefType { AutoLayer, Entities, IntGrid, Tiles };
+    public enum TypeEnum { AutoLayer, Entities, IntGrid, Tiles };
 
     public enum EmbedAtlas { LdtkIcons };
 
@@ -2024,12 +2018,11 @@ namespace ldtk
                 EditorDisplayModeConverter.Singleton,
                 EditorDisplayPosConverter.Singleton,
                 TextLanguageModeConverter.Singleton,
-                FieldDefTypeConverter.Singleton,
                 LimitBehaviorConverter.Singleton,
                 LimitScopeConverter.Singleton,
                 RenderModeConverter.Singleton,
                 TileRenderModeConverter.Singleton,
-                LayerDefTypeConverter.Singleton,
+                TypeEnumConverter.Singleton,
                 EmbedAtlasConverter.Singleton,
                 BgPosConverter.Singleton,
                 WorldLayoutConverter.Singleton,
@@ -2402,92 +2395,6 @@ namespace ldtk
         public static readonly TextLanguageModeConverter Singleton = new TextLanguageModeConverter();
     }
 
-    internal class FieldDefTypeConverter : JsonConverter
-    {
-        public override bool CanConvert(Type t) => t == typeof(FieldDefType) || t == typeof(FieldDefType?);
-
-        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null) return null;
-            var value = serializer.Deserialize<string>(reader);
-            switch (value)
-            {
-                case "F_Bool":
-                    return FieldDefType.FBool;
-                case "F_Color":
-                    return FieldDefType.FColor;
-                case "F_EntityRef":
-                    return FieldDefType.FEntityRef;
-                case "F_Enum":
-                    return FieldDefType.FEnum;
-                case "F_Float":
-                    return FieldDefType.FFloat;
-                case "F_Int":
-                    return FieldDefType.FInt;
-                case "F_Path":
-                    return FieldDefType.FPath;
-                case "F_Point":
-                    return FieldDefType.FPoint;
-                case "F_String":
-                    return FieldDefType.FString;
-                case "F_Text":
-                    return FieldDefType.FText;
-                case "F_Tile":
-                    return FieldDefType.FTile;
-            }
-            throw new Exception("Cannot unmarshal type FieldDefType");
-        }
-
-        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
-        {
-            if (untypedValue == null)
-            {
-                serializer.Serialize(writer, null);
-                return;
-            }
-            var value = (FieldDefType)untypedValue;
-            switch (value)
-            {
-                case FieldDefType.FBool:
-                    serializer.Serialize(writer, "F_Bool");
-                    return;
-                case FieldDefType.FColor:
-                    serializer.Serialize(writer, "F_Color");
-                    return;
-                case FieldDefType.FEntityRef:
-                    serializer.Serialize(writer, "F_EntityRef");
-                    return;
-                case FieldDefType.FEnum:
-                    serializer.Serialize(writer, "F_Enum");
-                    return;
-                case FieldDefType.FFloat:
-                    serializer.Serialize(writer, "F_Float");
-                    return;
-                case FieldDefType.FInt:
-                    serializer.Serialize(writer, "F_Int");
-                    return;
-                case FieldDefType.FPath:
-                    serializer.Serialize(writer, "F_Path");
-                    return;
-                case FieldDefType.FPoint:
-                    serializer.Serialize(writer, "F_Point");
-                    return;
-                case FieldDefType.FString:
-                    serializer.Serialize(writer, "F_String");
-                    return;
-                case FieldDefType.FText:
-                    serializer.Serialize(writer, "F_Text");
-                    return;
-                case FieldDefType.FTile:
-                    serializer.Serialize(writer, "F_Tile");
-                    return;
-            }
-            throw new Exception("Cannot marshal type FieldDefType");
-        }
-
-        public static readonly FieldDefTypeConverter Singleton = new FieldDefTypeConverter();
-    }
-
     internal class LimitBehaviorConverter : JsonConverter
     {
         public override bool CanConvert(Type t) => t == typeof(LimitBehavior) || t == typeof(LimitBehavior?);
@@ -2697,9 +2604,9 @@ namespace ldtk
         public static readonly TileRenderModeConverter Singleton = new TileRenderModeConverter();
     }
 
-    internal class LayerDefTypeConverter : JsonConverter
+    internal class TypeEnumConverter : JsonConverter
     {
-        public override bool CanConvert(Type t) => t == typeof(LayerDefType) || t == typeof(LayerDefType?);
+        public override bool CanConvert(Type t) => t == typeof(TypeEnum) || t == typeof(TypeEnum?);
 
         public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
         {
@@ -2708,15 +2615,15 @@ namespace ldtk
             switch (value)
             {
                 case "AutoLayer":
-                    return LayerDefType.AutoLayer;
+                    return TypeEnum.AutoLayer;
                 case "Entities":
-                    return LayerDefType.Entities;
+                    return TypeEnum.Entities;
                 case "IntGrid":
-                    return LayerDefType.IntGrid;
+                    return TypeEnum.IntGrid;
                 case "Tiles":
-                    return LayerDefType.Tiles;
+                    return TypeEnum.Tiles;
             }
-            throw new Exception("Cannot unmarshal type LayerDefType");
+            throw new Exception("Cannot unmarshal type TypeEnum");
         }
 
         public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
@@ -2726,26 +2633,26 @@ namespace ldtk
                 serializer.Serialize(writer, null);
                 return;
             }
-            var value = (LayerDefType)untypedValue;
+            var value = (TypeEnum)untypedValue;
             switch (value)
             {
-                case LayerDefType.AutoLayer:
+                case TypeEnum.AutoLayer:
                     serializer.Serialize(writer, "AutoLayer");
                     return;
-                case LayerDefType.Entities:
+                case TypeEnum.Entities:
                     serializer.Serialize(writer, "Entities");
                     return;
-                case LayerDefType.IntGrid:
+                case TypeEnum.IntGrid:
                     serializer.Serialize(writer, "IntGrid");
                     return;
-                case LayerDefType.Tiles:
+                case TypeEnum.Tiles:
                     serializer.Serialize(writer, "Tiles");
                     return;
             }
-            throw new Exception("Cannot marshal type LayerDefType");
+            throw new Exception("Cannot marshal type TypeEnum");
         }
 
-        public static readonly LayerDefTypeConverter Singleton = new LayerDefTypeConverter();
+        public static readonly TypeEnumConverter Singleton = new TypeEnumConverter();
     }
 
     internal class EmbedAtlasConverter : JsonConverter

@@ -109,23 +109,6 @@ class EditorDisplayPos(Enum):
     CENTER = "Center"
 
 
-class LevelFieldType(Enum):
-    """Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
-    """
-    F_BOOL = "F_Bool"
-    F_COLOR = "F_Color"
-    F_ENTITY_REF = "F_EntityRef"
-    F_ENUM = "F_Enum"
-    F_FLOAT = "F_Float"
-    F_INT = "F_Int"
-    F_PATH = "F_Path"
-    F_POINT = "F_Point"
-    F_STRING = "F_String"
-    F_TEXT = "F_Text"
-    F_TILE = "F_Tile"
-
-
 class TextLanguageMode(Enum):
     LANG_C = "LangC"
     LANG_HAXE = "LangHaxe"
@@ -200,10 +183,10 @@ class FieldDefinition:
     text_language_mode: Optional[TextLanguageMode]
     """UID of the tileset used for a Tile"""
     tileset_uid: Optional[int]
-    """Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`,
-    `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`
+    """Internal enum representing the possible field types. Possible values: F_Int, F_Float,
+    F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile
     """
-    field_definition_type: LevelFieldType
+    field_definition_type: str
     """Unique Int identifier"""
     uid: int
     """If TRUE, the color associated with this field will override the Entity or Level default
@@ -212,7 +195,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: LevelFieldType, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -268,7 +251,7 @@ class FieldDefinition:
         symmetrical_ref = from_bool(obj.get("symmetricalRef"))
         text_language_mode = from_union([from_none, TextLanguageMode], obj.get("textLanguageMode"))
         tileset_uid = from_union([from_none, from_int], obj.get("tilesetUid"))
-        field_definition_type = LevelFieldType(obj.get("type"))
+        field_definition_type = from_str(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
         return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
@@ -299,7 +282,7 @@ class FieldDefinition:
         result["symmetricalRef"] = from_bool(self.symmetrical_ref)
         result["textLanguageMode"] = from_union([from_none, lambda x: to_enum(TextLanguageMode, x)], self.text_language_mode)
         result["tilesetUid"] = from_union([from_none, from_int], self.tileset_uid)
-        result["type"] = to_enum(LevelFieldType, self.field_definition_type)
+        result["type"] = from_str(self.field_definition_type)
         result["uid"] = from_int(self.uid)
         result["useForSmartColor"] = from_bool(self.use_for_smart_color)
         return result
@@ -827,7 +810,7 @@ class IntGridValueDefinition:
         return result
 
 
-class LayerType(Enum):
+class TypeEnum(Enum):
     """Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
     `AutoLayer`
     """
@@ -906,11 +889,11 @@ class LayerDefinition:
     """Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
     `AutoLayer`
     """
-    layer_definition_type: LayerType
+    layer_definition_type: TypeEnum
     """Unique Int identifier"""
     uid: int
 
-    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], display_opacity: float, excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: LayerType, uid: int) -> None:
+    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], display_opacity: float, excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, uid: int) -> None:
         self.type = type
         self.auto_rule_groups = auto_rule_groups
         self.auto_source_layer_def_uid = auto_source_layer_def_uid
@@ -963,7 +946,7 @@ class LayerDefinition:
         tile_pivot_x = from_float(obj.get("tilePivotX"))
         tile_pivot_y = from_float(obj.get("tilePivotY"))
         tileset_def_uid = from_union([from_none, from_int], obj.get("tilesetDefUid"))
-        layer_definition_type = LayerType(obj.get("type"))
+        layer_definition_type = TypeEnum(obj.get("type"))
         uid = from_int(obj.get("uid"))
         return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, display_opacity, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, uid)
 
@@ -992,7 +975,7 @@ class LayerDefinition:
         result["tilePivotX"] = to_float(self.tile_pivot_x)
         result["tilePivotY"] = to_float(self.tile_pivot_y)
         result["tilesetDefUid"] = from_union([from_none, from_int], self.tileset_def_uid)
-        result["type"] = to_enum(LayerType, self.layer_definition_type)
+        result["type"] = to_enum(TypeEnum, self.layer_definition_type)
         result["uid"] = from_int(self.uid)
         return result
 
