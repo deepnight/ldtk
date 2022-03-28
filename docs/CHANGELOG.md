@@ -95,7 +95,8 @@ If you want to use them in your game directly, you will need to license it from 
 
 ![](1.0.0/icons.png)
 
-## Performances
+
+## General performances
 
 Thanks to major optimizations, general performances will see a big boost, while reducing CPU usage, especially on large projects.
 
@@ -105,6 +106,21 @@ Loading and Saving operations were also vastly improved:
   - **Backup** system are faster and more reliable.
 
 ![](1.0.0/saving.gif)
+
+
+## Editing performances
+
+The way auto-layer rules are calculated was reworked (and a few bugs were fixed), making their rendering significantly faster, especially in large levels.
+
+![](1.0.0/rulesPerf.gif)
+
+
+## Undo/redo
+
+The undo/redo engine was complitely rewritten in a much more simple and optimized fashion. This results in a huge performance boost for large levels, while also fixing some existing issues when undoing a selection movement.
+
+![](1.0.0/undoRedo.gif)
+
 
 ## Rectangle of tiles for Entities
 
@@ -163,6 +179,12 @@ Errors in entities, such as a "null" custom field while being defined as "requir
 Contextual **help tips** were also reworked and streamlined in every existing panels. You now have a single small "?" indicator that gives all useful info you need for pretty much every editor options.
 
 ![](1.0.0/help.gif)
+
+## Code signing on Windows
+
+LDtk executable is now properly signed on Windows, which should ultimately get rid of "This application could destroy your computer" warning.
+
+![](1.0.0/codeSign.gif)
 
 ## Other major changes
 
