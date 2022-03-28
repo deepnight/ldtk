@@ -787,31 +787,31 @@ class LayerInstance {
 	}
 
 	public function applyBreakOnMatchesArea(cx:Int, cy:Int, wid:Int, hei:Int) {
-		cx = M.imax(0,cx);
-		cy = M.imax(0,cy);
-		var right = M.imin(cWid-1, cx+wid-1);
-		var bottom = M.imin(cHei-1, cy+hei-1);
+		var left = M.imax(0,cx);
+		var top = M.imax(0,cy);
+		var right = M.imin(cWid-1, left + wid-1);
+		var bottom = M.imin(cHei-1, top + hei-1);
 
 		var coordLocks = new Map();
 
 		var td = getTilesetDef();
-		for( cy in cy...bottom+1 )
-		for( cx in cx...right+1 ) {
+		for( y in top...bottom+1 )
+		for( x in left...right+1 ) {
 			def.iterateActiveRulesInEvalOrder( this, (r)->{
-				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
-					if( coordLocks.exists( coordId(cx,cy) ) ) {
+				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(x,y)) ) {
+					if( coordLocks.exists( coordId(x,y) ) ) {
 						// Tiles below locks are discarded
-						autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
+						autoTilesCache.get(r.uid).remove( coordId(x,y) );
 					}
 					else if( r.breakOnMatch ) {
 						// Break on match is ON
-						coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+						coordLocks.set( coordId(x,y), true ); // mark cell as locked
 					}
 					else {
 						// Check for opaque tiles
-						for( t in autoTilesCache.get(r.uid).get( coordId(cx,cy) ) )
+						for( t in autoTilesCache.get(r.uid).get( coordId(x,y) ) )
 							if( td.isTileOpaque(t.tid) ) {
-								coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+								coordLocks.set( coordId(x,y), true ); // mark cell as locked
 								break;
 							}
 					}
