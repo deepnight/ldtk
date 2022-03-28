@@ -215,7 +215,7 @@ class Tool<T> extends dn.Process {
 				else {
 					anyChange = useAt(m,true);
 					if( anyChange )
-						editor.levelRender.invalidateLayer(curLayerInstance);
+						editor.levelRender.invalidateLayerArea(curLayerInstance, m.cx, m.cx, m.cy, m.cy);
 				}
 			}
 
