@@ -37,7 +37,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
-					if( li.layerDefUid==this.li.layerDefUid ) 
+					if( li.layerDefUid==this.li.layerDefUid )
 						this.li = li;
 				updateFullPanel();
 
@@ -175,7 +175,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			affectedLevels.set( affectedLayers.get(li), true );
 			ops.push({
 				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
-				cb: li.applyBreakOnMatches.bind(),
+				cb: li.applyBreakOnMatchesEverywhere.bind(),
 			});
 		}
 
