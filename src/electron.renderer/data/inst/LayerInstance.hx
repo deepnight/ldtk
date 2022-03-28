@@ -783,15 +783,20 @@ class LayerInstance {
 
 
 	public inline function applyBreakOnMatchesEverywhere() {
-		applyBreakOnMatches(0,0,cWid,cHei);
+		applyBreakOnMatchesArea(0,0,cWid,cHei);
 	}
 
-	public function applyBreakOnMatches(cx:Int, cy:Int, wid:Int, hei:Int) {
+	public function applyBreakOnMatchesArea(cx:Int, cy:Int, wid:Int, hei:Int) {
+		cx = M.imax(0,cx);
+		cy = M.imax(0,cy);
+		var right = M.imin(cWid-1, cx+wid-1);
+		var bottom = M.imin(cHei-1, cy+hei-1);
+
 		var coordLocks = new Map();
 
 		var td = getTilesetDef();
-		for( cy in cy...cy+hei )
-		for( cx in cx...cx+wid ) {
+		for( cy in cy...bottom+1 )
+		for( cx in cx...right+1 ) {
 			def.iterateActiveRulesInEvalOrder( this, (r)->{
 				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
 					if( coordLocks.exists( coordId(cx,cy) ) ) {
@@ -851,7 +856,12 @@ class LayerInstance {
 		});
 
 		var radius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
-		applyBreakOnMatches(cx-radius, cy-radius, radius*2+1, radius*2+1);
+		applyBreakOnMatchesArea(
+			cx-radius,
+			cy-radius,
+			wid + radius*2+1,
+			hei + radius*2+1
+		);
 	}
 
 	/** Apply all rules to all cells **/
