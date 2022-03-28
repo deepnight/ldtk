@@ -1034,19 +1034,9 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum Possible values: `F_Int`, `F_Float`, `F_String`, `F_Text`, `F_Bool`, `F_Color`, `F_Enum`, `F_Point`, `F_Path`, `F_EntityRef`, `F_Tile`",
-					"enum": [
-						"F_Int",
-						"F_Float",
-						"F_String",
-						"F_Text",
-						"F_Bool",
-						"F_Color",
-						"F_Enum",
-						"F_Point",
-						"F_Path",
-						"F_EntityRef",
-						"F_Tile"
+					"description": "Internal enum representing the possible field types. Possible values: F_Int, F_Float, F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile",
+					"type": [
+						"string"
 					]
 				},
 				"identifier": {

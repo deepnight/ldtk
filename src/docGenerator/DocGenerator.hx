@@ -120,7 +120,11 @@ class DocGenerator {
 				for(n in type.elements)
 					switch n.name {
 						case "meta", "haxe_doc":
-						case _: enumValues.push(n.name);
+						case _:
+							if( n.has.a )
+								enumValues.push(n.name+"(...)");
+							else
+								enumValues.push(n.name);
 					}
 
 				allEnums.set(type.att.path, enumValues);
@@ -186,7 +190,6 @@ class DocGenerator {
 				return t;
 
 		throw 'Unknown global type $typePath';
-		return null;
 	}
 
 
@@ -551,6 +554,19 @@ class DocGenerator {
 				}
 			}
 
+			// Replace @enum{...} with Enum possible values
+			var typeRefReg = ~/@enum{(.*?)}/im;
+			for(i in 0...descMd.length) {
+				if( typeRefReg.match(descMd[i]) ) {
+					var tmp = descMd[i];
+					while( typeRefReg.match(tmp) ) {
+						var k = typeRefReg.matched(1);
+						descMd[i] = StringTools.replace( descMd[i], "@enum{"+k+"}", allEnums.get(k).join(", ") );
+						tmp = typeRefReg.matchedRight();
+					}
+				}
+			}
+
 			allFields.push({
 				xml: fieldXml,
 				displayName: displayName,
@@ -698,12 +714,33 @@ class DocGenerator {
 	}
 
 
+	static function metaTypeToFieldType(rawType:String) : FieldType {
+		return switch rawType {
+			case "Int", "Float", "Bool", "String":
+				// Basic types
+				Basic(rawType);
+
+			case "Dynamic":
+				Dyn;
+
+			case _:
+				// Reference to a global type
+				var global = getGlobalType(rawType);
+				Ref(global.displayName, global.rawName);
+		}
+	}
+
+
 	/**
 		Return the type Enum of a specific field XML
 	**/
 	static function getFieldType(fieldXml:haxe.xml.Access) : FieldType {
 		return
-			if( fieldXml.hasNode.x ) {
+			if( hasMeta(fieldXml, "docType") ) {
+				// Custom specific type for schema export
+				metaTypeToFieldType( getMeta(fieldXml, "docType") );
+			}
+			else if( fieldXml.hasNode.x ) {
 				if( fieldXml.node.x.att.path=="Null" )
 					Nullable( getFieldType(fieldXml.node.x) );
 				else
@@ -716,20 +753,9 @@ class DocGenerator {
 					// Known possible types
 					var types = [];
 					for(t in rawPossibleTypes) {
-						switch t {
-							case "Int", "Float", "Bool", "String":
-								// Basic types
-								types.push( Basic(t) );
-
-							case "Dynamic":
-
-							case _:
-								var global = getGlobalType(t);
-								if( global==null )
-									throw "Unrecognized @types value: "+t;
-								// Refs
-								types.push( Ref(global.displayName, global.rawName) );
-						}
+						var ft = metaTypeToFieldType(t);
+						if( ft!=null )
+							types.push(ft);
 					}
 					Multiple(types);
 				}
