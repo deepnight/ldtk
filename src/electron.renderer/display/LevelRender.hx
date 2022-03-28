@@ -365,10 +365,10 @@ class LevelRender extends dn.Process {
 		);
 	}
 
-	public function bleepDebug(li:data.inst.LayerInstance, cx:Int, cy:Int) {
+	public function bleepDebug(li:data.inst.LayerInstance, cx:Int, cy:Int, c=0xffffff) {
 		var g = new h2d.Graphics();
 		root.add(g, Const.DP_UI);
-		g.lineStyle(2, 0xffffff, 1);
+		g.lineStyle(2, c, 1);
 		g.drawCircle( 0,0, li.def.gridSize*0.5 );
 		g.setPosition( M.round((cx+0.5)*li.def.gridSize), M.round((cy+0.5)*li.def.gridSize) );
 		createChildProcess( p->{
