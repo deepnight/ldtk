@@ -54,6 +54,7 @@ class LastChance extends dn.Process {
 	public static function end() {
 		if( CUR!=null && CUR.isActive() && !CUR.cd.has("ignoreFrame") ) {
 			CUR.hide();
+			Editor.ME.ge.emit(LastChanceEnded);
 		}
 	}
 

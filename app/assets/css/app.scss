@@ -8060,10 +8060,6 @@ $patternSize : 32px;
 	z-index: 99;
 	pointer-events: none;
 
-	padding: 4px;
-	background-color: transparentize($color: black, $amount: 0.3);
-	box-shadow: 0px 4px 8px black;
-
 	.timeline {
 		display: grid;
 		grid-template-rows: 16px;
@@ -8073,6 +8069,8 @@ $patternSize : 32px;
 
 		border: 1px solid $bgLight;
 		border-radius: 3px;
+		background-color: transparentize($color: black, $amount: 0.3);
+		box-shadow: 0px 4px 8px black;
 
 		&>div {
 			overflow: hidden;
@@ -8128,5 +8126,15 @@ $patternSize : 32px;
 
 		}
 
+	}
+
+	ul.allTimelines {
+		padding-top: 8px;
+		li {
+			text-align: right;
+			font-size: 8pt;
+			color: white;
+			text-shadow: 0px 2px 4px black;
+		}
 	}
 }

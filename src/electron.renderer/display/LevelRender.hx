@@ -68,6 +68,8 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case LastChanceEnded:
+				
 			case AppSettingsChanged:
 				invalidateAll();
 

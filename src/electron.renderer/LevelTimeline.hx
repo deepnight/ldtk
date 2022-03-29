@@ -16,7 +16,7 @@ class LevelTimeline {
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var levelUid : Int;
-	var level(get,never) : data.Level; inline function get_level() return project.getLevelAnywhere(levelUid);
+	var level(get,never) : Null<data.Level>; inline function get_level() return project.getLevelAnywhere(levelUid);
 	var worldIid : String;
 	var world(get,never) : data.World; inline function get_world() return project.getWorldIid(worldIid);
 
@@ -46,10 +46,37 @@ class LevelTimeline {
 
 
 	/**
+		Drop lost level timelines (after level removal)
+	**/
+	public static function garbageCollectTimelines() {
+		for( lt in Editor.ME.levelTimelines )
+			if( lt.level==null ) {
+				App.LOG.add("timeline", "Garbage collected level: #"+lt.levelUid);
+				Editor.ME.levelTimelines.remove(lt.levelUid);
+			}
+	}
+
+	/**
 		Global editor event
 	**/
 	public function manualOnGlobalEvent(e:GlobalEvent) {
-		var needsClear = switch e {
+		// Level removed
+		if( level==null )
+			return;
+		else
+			switch e {
+				case LastChanceEnded:
+					invalidatedDebug = true;
+
+				case LevelRemoved(lr):
+					if( lr.uid==levelUid )
+						return;
+				case _:
+			}
+
+
+		var needsClear : Bool = switch e {
+			case LevelRemoved(lr): false;
 			case ProjectSelected: true;
 			case LayerDefAdded: true;
 			case LayerDefRemoved(defUid): true;
@@ -163,6 +190,9 @@ class LevelTimeline {
 		Save full level JSON to history
 	**/
 	public function saveFullLevelState() {
+		if( level==null )
+			return;
+
 		startTimer();
 		editor.levelRender.applyInvalidations();
 		advanceIndex();
@@ -496,6 +526,15 @@ class LevelTimeline {
 				}
 			}
 
+			// All other timelines
+			var jAll = new J('<ul class="allTimelines"/>');
+			jAll.appendTo(jWrapper);
+			for(lt in Editor.ME.levelTimelines) {
+				var jLi = new J('<li>${lt.levelUid}</li>');
+				jLi.appendTo(jAll);
+				if( lt.level!=null )
+					jLi.append(': ${lt.level.identifier}');
+			}
 		}
 
 		// Kill

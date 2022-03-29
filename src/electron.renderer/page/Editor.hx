@@ -56,6 +56,7 @@ class Editor extends Page {
 	public var gifMode = false;
 
 
+	@:allow(LevelTimeline)
 	var levelTimelines : Map<Int,LevelTimeline> = new Map();
 	public var curLevelTimeline(get,never) : LevelTimeline;
 		inline function get_curLevelTimeline() return levelTimelines.get(curLevelId);
@@ -1640,6 +1641,7 @@ class Editor extends Page {
 
 		// Level cache invalidation
 		switch e {
+			case LastChanceEnded:
 			case ViewportChanged:
 			case AppSettingsChanged:
 			case ProjectSelected:
@@ -1782,6 +1784,9 @@ class Editor extends Page {
 
 		// Use event
 		switch e {
+			case LastChanceEnded:
+				LevelTimeline.garbageCollectTimelines();
+
 			case AppSettingsChanged:
 
 			case WorldMode(active):
