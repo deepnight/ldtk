@@ -120,7 +120,7 @@ The way auto-layer rules are calculated was reworked (and a few bugs were fixed)
 
 ## Undo/redo
 
-The undo/redo engine was complitely rewritten in a much more simple and optimized fashion. This results in a huge performance boost for large levels, while also fixing some existing issues when undoing a selection movement.
+The undo/redo engine was complitely rewritten in a much more simple and optimized fashion. This results in a huge performance boost for large levels, while also fixing some existing issues when undoing a Selection move.
 
 ![](1.0.0/undoRedo.gif)
 
