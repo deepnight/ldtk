@@ -1,82 +1,21 @@
-# 0.10.0-beta8
+# 1.0.0 - Gone gold!
 
- - Performance boost of rules rendering in large levels.
- - Fixed rules invalidation when painting a very large level.
- - Fixed JSON / Quicktype issues.
+### A few words from the author
 
-![](1.0.0/rulesPerf.gif)
+**When I started working on LDtk about 1 year ago (which was known as *LEd* back then), I would not have imagined how far and how big this would get.**
 
-# 0.10.0-beta7
+LDtk was a critical part of my personal game dev plan, as I always wished for a modern, fast and user-friendly level editor. Along the way, a passionate community of level designers, aspiring game devs and tech enthousiasts gathered around the project, providing an incredible support and lots of precious feedback.
 
- - Much faster undo/redo for projects with lots of AutoLayer rules.
- - Reorganized the debug menu (`CTRL-SHIFT-D`)
- - Added "visual bleeps" when undoing an Entity creation/deletion
- - Fixed undo/redo issues with Auto-Layers
- - Fixed a crash when saving a project with external levels.
- - Fixed nullable Floats fields to now be really null in JSON.
+**To everyone, thank you.**
 
-# 0.10.0-beta6
+This 1.0 step is obviously a major milestone for us. It's the biggest update so far which pushed LDtk to the next level (pun intended):
 
- - Added a "click trap" to prevent miss-clicks while the app is not focused. Previously, if you clicked on the LDtk window to re-focus it, you would edit some layer or click a UI element accidentally.
- - Fixed opacity of layers when exporting PNGs
- - Fixed tile pivot when using 9-slice scaling mode
- - Fixed 9-scaled tiles to use Tile opacity from their Entity definition
- - Fixed Tiled tileset export
- - Added "Type" value for entities in Tiled exported files
- - Experimental fix for missing types in Quicktypes
- - Fixed format of value "type" in JSON (now, it's always a String)
+ - New entity reference system
+ - Great performance boost for large projects
+ - Integrated icons and other quality-of-life changes
+ - User interface reworks
 
-# 0.10.0-beta5
-
- - Added support for **9-slice scaling** mode for Entity tiles (how it works: https://en.wikipedia.org/wiki/9-slice_scaling).
- - Fixed a critical bug which led to super weird behaviours after Level Resizing.
- - Fixed `neighbours` not updating after moving or deleting a level
- - Full rework of the Undo/Redo command. Changes were mostly only internals, so nothing should change from the user perspective. The only major related change is for selections movements that can now be undone as a single operation (and not per-layer as before).
-
-# 0.10.0-beta4
-
- - Fixed big memory messup that could happen after level duplications.
- - Fixed weird behaviors when clicking on overlapped levels.
- - Fixed a crash when deleting the active IntGrid value.
-
-# 0.10.0-beta3
-
-## Code signing on Windows
-
-LDtk executable is now properly signed on Windows, which should ultimately get rid of "This application could destroy your computer" warning.
-
-![](1.0.0/codeSign.gif)
-
-## Multi-worlds preview
-
-You can try multi-worlds using debug menu. Please note that this feature is highly experimental and will probably evolve a lot in upcoming updates. Don't use for production.
-   - Open an existing project,
-   - Open debug menu (`CTRL+SHIFT+D`),
-   - Create a new world,
-   - Navigate through worlds using the context menu in empty spaces between levels.
-   - Right click on an existing level in World view to move it between worlds.
-
-## Bug fixes
-
- - Fixed unexpected `intGridValues` in JSON for non-IntGrid layers
-
-# 0.10.0-beta2
-
- - New dialog to configure auto-layer Rules modulo, with support for X/Y offsets.
- - You can now use `up`/`down` arrow keys to quickly increment/decrement an input value
- - Added `SHIFT-E` shortcut for "Select empty spaces" option
- - Added `SHIFT-T` shortcut for "Tile stacking" option
- - Added `__smartColor` to Entity instance JSON.
- - Reduced "bleep" effect when picking an existing Entity
-
-## Bug fixes
-
- - Fixed guide not displaying when editing the "Default level ID pattern" in Project panel.
- - Fixed "newline character" in multi-lines fields disappearing when resaving projects
- - Fixed entity "resizing handles" not updating properly when duplicating/moving an Entity
- - Fixed project assets path resolution when starting LDtk from command line and providing just the project file name as an argument (eg. `/path/to/app/LDtk myProject.ldtk`)
-
-# 0.10.0-beta1
+I hope you will like it, as much as I enjoyed making it :)
 
 ## Entity references
 
@@ -199,10 +138,11 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
   - **Project colors**: when you pick a color, a list of all colors used in this project will be displayed, to make consistent color usage easier.
   - **"Identifier" format policy**: you can now pick your prefered "Identifier case policy" (default is "1st letter uppercased").
 
+
 ## File format changes
 
-
 ### Worlds
+
   - Added `worlds` array and `World` JSON structure to the docs. This was added as a preview for the upcoming new feature "Multiple Worlds in a single project". Learn more about that here: https://github.com/deepnight/ldtk/issues/231
 
 ### JSON changes
@@ -215,6 +155,20 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
   - `tileId` in Entity Definitions has been replaced by `tileRect` to support multiple tiles instead of just single ones. The `tileId` will still be exported for now, but will be removed completely soon.
   - `levelUid` in Neighbours arrays has been replaced by `levelIid` (new string based IID). The `levelUid` will still be exported for now, but will be removed completely soon.
   - Merged the `autoTilesetDefUid` into `tilesetDefUid` for all Layer Definitions. This should have no impact if you properly used the `__tilesetDefUid` found in Layer Instances, as recommended in the docs. The `autoTilesetDefUid` will be dropped completely in a later update.
+  - Added `__smartColor` to Entity instance JSON.
+  - Fixed format of value "type" in JSON (now, it's always a String)
+  - Fixed unexpected `intGridValues` in JSON for non-IntGrid layers
+  - Fixed nullable Floats fields to now be really null in JSON.
+
+
+## Multi-worlds experimental preview
+
+You can try multi-worlds using debug menu. Please note that this feature is highly experimental and will probably evolve a lot in upcoming updates. Don't use for production.
+   - Open an existing project,
+   - Open debug menu (`CTRL+SHIFT+D`),
+   - Create a new world,
+   - Navigate through worlds using the context menu in empty spaces between levels.
+   - Right click on an existing level in World view to move it between worlds.
 
 ### Other changes
 
@@ -225,6 +179,9 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
 ## UI
 
   - Entities can now use rectangle of tiles for their representation instead of just single tiles.
+  - Added support for **9-slice scaling** mode for Entity tiles (how it works: https://en.wikipedia.org/wiki/9-slice_scaling).
+  - New dialog to configure auto-layer Rules modulo, with support for X/Y offsets.
+  - You can now use `up`/`down` arrow keys to quickly increment/decrement an input value
   - You can now freely adjust fill/outline/tile opacities of Entities.
   - Current Level properties can now be edited directly from world view.
   - Entity and Level custom fields that are not using default value are now much more visible in forms.
@@ -243,6 +200,7 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
   - Added a "Rename project" button in Project panel
   - Added Youtube video tutorials to the Help panel
   - Added "Release notes" button in Help panel
+  - Added a "click trap" to prevent miss-clicks while the app is not focused. Previously, if you clicked on the LDtk window to re-focus it, you would edit some layer or click a UI element accidentally.
   - Changed `T` shortcut to `SHIFT-T` for "Tile stacking"
   - Changed `E` shortcut to `SHIFT-E` for "Select empty spaces"
   - Reworked the Enum panel and fixed many UX issues
@@ -269,6 +227,9 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
   - Changed the "Help" button color in the main editor bar.
   - Changed the aspect of various help-related elements.
   - Zooming out a lot now has a subtle dimming effect.
+  - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
+  - Reorganized the debug menu (`CTRL-SHIFT-D`)
+
 
 ## Bug fixes & misc
 
@@ -278,8 +239,10 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
   - Fixed unnecessary re-rendering of all project layers when enabling/disabling optional group of layers
   - Fixed "Smart CPU throttling" slowing down long operations (eg. saving a large project, or updating many auto-layer rules) while the app isn't focused.
   - Fixed "hollow" entity selection which was kind of... erratic.
+  - Fixed entity "resizing handles" not updating properly when duplicating/moving an Entity
   - Fixed the progress bar when saving large projects
   - Fixed TAB key behavior when an Entity instance panel is open
+  - Fixed weird behaviors when clicking on overlapped levels.
   - Fixed a crash when clicking on a partial tile in the Tilesets panel
   - Fixed a crash when deleting the last level
   - Fixed a crash when moving an Entity with a null "point" field value
@@ -288,8 +251,11 @@ LDtk executable is now properly signed on Windows, which should ultimately get r
   - Fixed a bug when reloading a tileset while its width changed.
   - Fixed layers list not being properly updated when leaving world mode.
   - Fixed a crash when using a field containing an array of null enums.
-  - Added scrollbars to dialogs that are larger than app window (this could happen for example when using excessively big App UI scaling settings)
+  - Fixed various Quicktype generation issues.
+  - Fixed opacity of layers when exporting PNGs
+  - Added "Type" value for entities in Tiled exported files
   - Updated sample maps
+  - Fixed project assets path resolution when starting LDtk from command line and providing just the project file name as an argument (eg. `/path/to/app/LDtk myProject.ldtk`)
   - Many minor bug fixes.
 
 # 0.9.3 - Ludum Dare 48 edition
