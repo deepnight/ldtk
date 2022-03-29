@@ -46,15 +46,36 @@ class LevelTimeline {
 
 
 	/**
+		Return the count of states containing anything
+	**/
+	function countStates() {
+		if( level==null )
+			return 0;
+
+		var n = 0;
+		for(s in states)
+			if( s!=null )
+				n++;
+		return n;
+	}
+
+
+	/**
 		Drop lost level timelines (after level removal)
 	**/
 	public static function garbageCollectTimelines() {
-		for( lt in Editor.ME.levelTimelines )
+		for( lt in Editor.ME.levelTimelines ) {
 			if( lt.level==null ) {
 				App.LOG.add("timeline", "Garbage collected level: #"+lt.levelUid);
 				Editor.ME.levelTimelines.remove(lt.levelUid);
 			}
+			if( lt.countStates()==1 && lt.levelUid!=Editor.ME.curLevel.uid ) {
+				App.LOG.add("timeline", "Garbage collected level: #"+lt.levelUid);
+				Editor.ME.levelTimelines.remove(lt.levelUid);
+			}
+		}
 	}
+
 
 	/**
 		Global editor event

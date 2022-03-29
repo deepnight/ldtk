@@ -1184,6 +1184,7 @@ class Editor extends Page {
 		saveLastProjectInfos();
 
 		ui.Tip.clear();
+		LevelTimeline.garbageCollectTimelines();
 	}
 
 
