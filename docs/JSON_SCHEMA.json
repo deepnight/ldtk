@@ -1871,7 +1871,8 @@
 				"relPath": {
 					"description": "Path to the source file, relative to the current project JSON file",
 					"type": [
-						"string"
+						"string",
+						"null"
 					]
 				},
 				"tileGridSize": {
