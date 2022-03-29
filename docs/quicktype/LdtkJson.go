@@ -355,7 +355,7 @@ type LayerInstance struct {
 	EntityInstances    []EntityInstance       `json:"entityInstances"`   
 	GridTiles          []TileInstance         `json:"gridTiles"`         
 	Iid                string                 `json:"iid"`               // Unique layer instance identifier
-	IntGrid            []IntGridValueInstance `json:"intGrid"`           // **WARNING**: this deprecated value will be *removed* completely on version 1.0.0+; Replaced by: `intGridCsv`
+	IntGrid            []IntGridValueInstance `json:"intGrid"`           // **WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced; by: `intGridCsv`
 	IntGridCSV         []int64                `json:"intGridCsv"`        // A list of all values in the IntGrid layer, stored in CSV format (Comma Separated; Values).<br/>  Order is from left to right, and top to bottom (ie. first row from left to; right, followed by second row, etc).<br/>  `0` means "empty cell" and IntGrid values; start at 1.<br/>  The array size is `__cWid` x `__cHei` cells.
 	LayerDefUid        int64                  `json:"layerDefUid"`       // Reference the Layer definition UID
 	LevelID            int64                  `json:"levelId"`           // Reference to the UID of the level containing this layer instance

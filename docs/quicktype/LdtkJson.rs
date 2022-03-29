@@ -1130,8 +1130,8 @@ pub struct LayerInstance {
     #[serde(rename = "iid")]
     iid: String,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.0.0+
-    /// Replaced by: `intGridCsv`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced
+    /// by: `intGridCsv`
     #[serde(rename = "intGrid")]
     int_grid: Option<Vec<IntGridValueInstance>>,
 

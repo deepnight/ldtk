@@ -1068,7 +1068,7 @@ namespace ldtk
         /// source image changes.
         /// </summary>
         [JsonProperty("cachedPixelData")]
-        public Dictionary<string, dynamic> CachedPixelData { get; set; }
+        public System.Collections.Generic.Dictionary<string, dynamic> CachedPixelData { get; set; }
 
         /// <summary>
         /// An array of custom tile metadata
@@ -1124,7 +1124,7 @@ namespace ldtk
         /// Array of group of tiles selections, only meant to be used in the editor
         /// </summary>
         [JsonProperty("savedSelections")]
-        public Dictionary<string, dynamic>[] SavedSelections { get; set; }
+        public System.Collections.Generic.Dictionary<string, dynamic>[] SavedSelections { get; set; }
 
         /// <summary>
         /// Space in pixels between all tiles
@@ -1538,8 +1538,8 @@ namespace ldtk
         public string Iid { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 1.0.0+
-        /// Replaced by: `intGridCsv`
+        /// **WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced
+        /// by: `intGridCsv`
         /// </summary>
         [JsonProperty("intGrid")]
         public IntGridValueInstance[] IntGrid { get; set; }

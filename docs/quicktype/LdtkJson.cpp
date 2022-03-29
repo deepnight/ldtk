@@ -1874,8 +1874,8 @@ namespace quicktype {
         void set_iid(const std::string & value) { this->iid = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 1.0.0+
-         * Replaced by: `intGridCsv`
+         * **WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced
+         * by: `intGridCsv`
          */
         std::shared_ptr<std::vector<IntGridValueInstance>> get_int_grid() const { return int_grid; }
         void set_int_grid(std::shared_ptr<std::vector<IntGridValueInstance>> value) { this->int_grid = value; }

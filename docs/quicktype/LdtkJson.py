@@ -1507,8 +1507,8 @@ class LayerInstance:
     grid_tiles: List[TileInstance]
     """Unique layer instance identifier"""
     iid: str
-    """**WARNING**: this deprecated value will be *removed* completely on version 1.0.0+
-    Replaced by: `intGridCsv`
+    """**WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced
+    by: `intGridCsv`
     """
     int_grid: Optional[List[IntGridValueInstance]]
     """A list of all values in the IntGrid layer, stored in CSV format (Comma Separated
