@@ -24,19 +24,35 @@
 	<dd>
 		<span class="typeIcon"></span>
 		<span class="type"></span>
+		<button class="help Tiles" href="::tilesUrl::" >Tile layer tutorial</button>
+		<button class="help IntGridAutoLayer AutoLayer" href="::autoLayersUrl::" >Auto-layer tutorial</button>
 	</dd>
 
 
 	<dt>
 		<label for="lName">Layer identifier</label>
+		<info class="identifier"></info>
 	</dt>
 	<dd>
 		<input type="text" name="name" id="lName"/>
-		<div class="info identifier"></div>
 	</dd>
+
+
+	<dt>
+		<label for="hideInList">Hide in list</label>
+		<info>
+			If enabled, the layer will not be shown in layers list in the editor view.
+			Note: the layer will still be rendered normally in levels and listed in the Layers panel.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="hideInList" class="small" id="hideInList"/>
+	</dd>
+
 
 	<dt class="Tiles">
 		<label>Default tileset</label>
+		<info>Default tileset used by this layer. It can be changed in each level from the left tool panel.</info>
 	</dt>
 	<dd class="Tiles">
 		<select name="tilesets"></select>
@@ -47,6 +63,7 @@
 
 	<dt>
 		<label for="gridSize">Grid size</label>
+		<info>Snap grid dimensions in pixels.</info>
 	</dt>
 	<dd>
 		<input type="text" name="gridSize" class="small" id="gridSize"/>
@@ -54,8 +71,25 @@
 	</dd>
 
 
+
+	<dt>
+		<label for="guideGridWid">Optional "guide" grid</label>
+		<info>Dimensions of the optional secondary grid. This grid is only a visual guide and is not used for actual snapping like the normal one.</info>
+	</dt>
+	<dd>
+		<input type="text" name="guideGridWid" class="small" id="guideGridWid" placeholder="(width)"/>
+		<span>x</span>
+		<input type="text" name="guideGridHei" class="small" id="guideGridHei" placeholder="(height)"/>
+		<span>px</span>
+	</dd>
+
+
 	<dt>
 		<label for="offsetX">Offsets</label>
+		<info>
+			The offset is used to adjust the horizontal and vertical position of this layer relatively to the level and the other layers.
+			Each offset can be negative or positive.
+		</info>
 	</dt>
 	<dd>
 		<span>X=</span>
@@ -66,17 +100,61 @@
 	</dd>
 
 
-	<dt>
-		<label for="opacity">Display opacity</label>
+	<!-- <dt>
+		<label for="parallaxFactor">Parallax</label>
+		<info>
+			These parallax factors are applied to the layer (coordinates and scale) to make it move "slower" or "faster" than the camera, creating a fake 3D depth effect.
+			- Greater than zero factor will make the layer movement slower than the camera (eg. mountains in a far background).
+			- Zero means the layer moves at the same rate as the camera.
+			- Less than zero means the layer moves faster than the camera (eg. fog in the foreground)
+		</info>
 	</dt>
 	<dd>
+		<span>X=</span>
+		<input type="text" name="parallaxFactorX" class="small"/>
+		<span>%, Y=</span>
+		<input type="text" name="parallaxFactorY" class="small"/>
+		<span>%</span>
+
+		<label for="parallaxScaling">
+			<input type="checkbox" id="parallaxScaling" title="If checked, the layer will also be scaled up/down accodingly with the parallax factor."/>
+			Scale ?
+		</label>
+	</dd> -->
+
+
+	<dt>
+		<label for="opacity">Opacity</label>
+		<info>
+			Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).
+			The "inactive" opacity is used when the layer is not being selected.
+		</info>
+	</dt>
+	<dd>
+		<span>Active:</span>
 		<input type="text" name="displayOpacity" class="small" id="opacity"/>
 		<span>%</span>
+
+		<span>Inactive:</span>
+		<input type="text" name="inactiveOpacity" class="small" id="opacity"/>
+		<span>%</span>
 	</dd>
+
+	<dt class="Entities">
+		<label for="hideFieldsWhenInactive">Hide entity fields when inactive</label>
+		<info>
+			If enabled, entity fields will not be shown if the layer is not currently selected.
+		</info>
+	</dt>
+	<dd class="Entities">
+		<input type="checkbox" name="hideFieldsWhenInactive" class="small" id="hideFieldsWhenInactive"/>
+	</dd>
+
 
 
 	<dt class="IntGrid">
 		<label>Grid values</label>
+		<info>The list of all Integer values that could be painted in this IntGrid layer.</info>
 	</dt>
 	<dd class="IntGrid">
 		<ul class="intGridValues">
@@ -86,19 +164,24 @@
 		</ul>
 
 		<xml id="intGridValue">
+			<div class="sortHandle"></div>
 			<span class="id">?</span>
 			<input type="text" class="name" placeholder="Optional value identifier"/>
 			<input type="color" value="#ffffff"/>
-			<a href="#" class="remove">X</a>
+			<button class="red remove"><span class="icon delete"></span></button>
 		</xml>
 	</dd>
 
 	<dt class="Tiles">
 		<label>Tile pivot point</label>
+		<info>
+			This is only useful if the Tileset grid size is different from the layer grid size.
+			In this case, the pivot will dictate the position of the tiles relatively to the layer grid.
+		</info>
 	</dt>
 	<dd class="Tiles">
 		<div class="pivot"></div>
-		<span class="long">This is only useful if the Tileset grid size is different from the layer grid size.</span>
+		<span class="long"></span>
 	</dd>
 
 
@@ -113,17 +196,23 @@
 
 	<dt class="IntGrid AutoLayer">
 		<label>Auto-layer tileset</label>
+		<info>
+			Selecting a Tileset here will enable all Auto-Layer rendering capabilities for this layer.
+			This allows to render automatically tiles based on the IntGrid values (eg. painting random "grass" tiles above cells containing "collision" values).
+		</info>
 	</dt>
 	<dd class="IntGrid AutoLayer">
 		<select name="autoTileset"></select>
-		<div class="help IntGrid">
-			Selecting a Tileset above will enable Auto-Layer capabilities on this layer. This allows to render automatically tiles based on the IntGrid values (eg. adding "grass" tiles above cells with "walls" value).
-		</div>
+		<button class="editAutoRules">Edit rules</button>
 	</dd>
 
 
 	<dt class="Entities">
 		<label>Required tags</label>
+		<info>
+			Only entities that have at least ONE of the required tags will be allowed in this layer.
+			Note: this won't affect previously added entities.
+		</info>
 	</dt>
 	<dd class="Entities">
 		<div id="requiredTags"></div>
@@ -131,17 +220,26 @@
 
 	<dt class="Entities">
 		<label>Excluded tags</label>
+		<info>
+			Entities that have at least ONE of the forbidden tags will not be allowed in this layer.
+			Note: this won't affect previously added entities.
+		</info>
 	</dt>
 	<dd class="Entities">
 		<div id="excludedTags"></div>
 	</dd>
 
-
-	<dt class="IntGridAutoLayer AutoLayer">
-		<label>Bake</label>
+	<dt class="advanced Entities IntGridAutoLayer AutoLayer">
+		<label>Advanced operations</label>
 	</dt>
-	<dd class="IntGridAutoLayer AutoLayer">
-		<button class="bake">
+	<dd class="advanced Entities">
+		<button class="moveEntities" title="Use this action to quickly move a selection of entity instances from this layer to another one.\nThis is typically useful if, for example, you added an 'Actor' tag to some entities, and you wanted to move all existing Actors to a new 'ActorsOnly' layer.">
+			Move existing entities to another layer
+		</button>
+	</dd>
+	<dd class="advanced IntGridAutoLayer AutoLayer">
+		<button class="bake" title="Baking will flatten this auto-layer into a single new Tiles layer. Various options are available.">
+			<span class="icon flatten"></span>
 			Bake auto-layer
 		</button>
 	</dd>

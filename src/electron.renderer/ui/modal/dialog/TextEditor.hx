@@ -5,27 +5,36 @@ import codemirror.CodeMirror;
 
 class TextEditor extends ui.modal.Dialog {
 	public var jHeader : js.jquery.JQuery;
+	public var jTextArea : js.jquery.JQuery;
+	var cm: CodeMirror;
 
-	public function new(str:String, title:String, ?mode:ldtk.Json.TextLanguageMode, onChange:(str:String)->Void) {
+	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, ?onChange:(str:String)->Void) {
 		super("textEditor");
 
 		var anyChange = false;
+		var readOnly = onChange==null;
 
 		new J('<h2>$title</h2>').appendTo(jContent);
 
 		jHeader = new J('<div class="header"/>');
 		jHeader.appendTo(jContent);
 
-		var jTextArea = new J('<textarea/>');
+		if( desc!=null ) {
+			var parags = "<p>" + desc.split("\\n").join("</p><p>") + "</p>";
+			new J('<div class="help">$parags</div>').appendTo(jHeader);
+		}
+
+		jTextArea = new J('<textarea/>');
 		jTextArea.appendTo(jContent);
 		jTextArea.val(str);
 
 		// Init Codemirror
-		var cm = CodeMirror.fromTextArea( cast jTextArea.get(0), {
+		cm = CodeMirror.fromTextArea( cast jTextArea.get(0), {
 			mode: requireMode(mode),
 			theme: "lucario",
 			lineNumbers: true,
 			lineWrapping: true,
+			readOnly: readOnly,
 			autofocus: true,
 		});
 		cm.on("change", (ev)->anyChange=true );
@@ -42,16 +51,21 @@ class TextEditor extends ui.modal.Dialog {
 
 		onCloseCb = ()->{
 			 var out = cm.getValue();
-			 if( anyChange && str!=out )
+			 if( anyChange && str!=out && onChange!=null )
 				onChange(out);
 		}
 
 		addClose();
 
-		addIconButton("delete", "red small", ()->{
-			cm.setValue("");
-			close();
-		} );
+		if( !readOnly )
+			addIconButton("delete", "red small delete", ()->{
+				cm.setValue("");
+				close();
+			} );
+	}
+
+	public function scrollToEnd() {
+		cm.execCommand(GoDocEnd);
 	}
 
 	inline function requireMode(mode:ldtk.Json.TextLanguageMode) : Dynamic {
@@ -68,6 +82,8 @@ class TextEditor extends ui.modal.Dialog {
 			case LangJS: "javascript";
 			case LangLua: "lua";
 			case LangC: "clike";
+
+			case LangLog: "ttcn-cfg";
 		}
 		if( modeId==null )
 			return null;

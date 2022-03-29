@@ -3,6 +3,8 @@ package data.def;
 import data.DataTypes;
 
 class EntityDef {
+	var _project : Project;
+
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 
@@ -12,13 +14,16 @@ class EntityDef {
 	public var width : Int;
 	public var height : Int;
 	public var color : UInt;
+	public var tileOpacity : Float;
 	public var fillOpacity : Float;
 	public var lineOpacity : Float;
 	public var showName : Bool;
 	public var renderMode : ldtk.Json.EntityRenderMode;
 	public var tileRenderMode : ldtk.Json.EntityTileRenderMode;
+	public var nineSliceBorders : Array<Int>;
 	public var tilesetId : Null<Int>;
-	public var tileId : Null<Int>;
+	public var tileRect : Null<ldtk.Json.TilesetRect>;
+	public var _oldTileId : Null<Int>;
 
 	public var hollow : Bool;
 
@@ -35,9 +40,11 @@ class EntityDef {
 	public var fieldDefs : Array<data.def.FieldDef> = [];
 
 
-	public function new(uid:Int) {
+	public function new(p:Project, uid:Int) {
+		_project = p;
 		this.uid = uid;
 		color = 0x94d9b3;
+		tileOpacity = 1;
 		fillOpacity = 1;
 		lineOpacity = 1;
 		renderMode = Rectangle;
@@ -47,6 +54,7 @@ class EntityDef {
 		limitBehavior = MoveLastOne;
 		limitScope = PerLevel;
 		tileRenderMode = FitInside;
+		nineSliceBorders = [];
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
@@ -56,11 +64,30 @@ class EntityDef {
 	}
 
 	public function isTileDefined() {
-		return tilesetId!=null && tileId!=null;
+		return tilesetId!=null && tileRect!=null;
+	}
+
+	public function getDefaultTile() : Null<ldtk.Json.TilesetRect> {
+		// Look inside fields defaults
+		for( fd in fieldDefs )
+			switch fd.type {
+				case F_Tile:
+					var rect = fd.getTileRectDefaultObj();
+					if( rect!=null )
+						return rect;
+
+				case _:
+			}
+
+		// Check display tile from entity def
+		if( isTileDefined() )
+			return tileRect;
+		else
+			return null;
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id, _project.identifierStyle) : identifier;
 	}
 
 	@:keep public function toString() {
@@ -88,7 +115,24 @@ class EntityDef {
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
 		if( (cast json).maxPerLevel!=null ) json.maxCount = (cast json).maxPerLevel;
 
-		var o = new EntityDef(JsonTools.readInt(json.uid) );
+		// Init new 1.0 opacity settings
+		if( json.tileOpacity==null ) {
+			if( json.hollow ) {
+				json.tileOpacity = 0.25;
+				json.fillOpacity = 0.15;
+			}
+			else {
+				switch JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle) {
+					case Rectangle, Ellipse, Cross:
+					case Tile:
+						json.tileOpacity = json.fillOpacity;
+						json.fillOpacity = 0.08;
+						json.lineOpacity = 0;
+				}
+			}
+		}
+
+		var o = new EntityDef(p, JsonTools.readInt(json.uid) );
 		o.identifier = JsonTools.readString( json.identifier );
 		o.width = JsonTools.readInt( json.width, 16 );
 		o.height = JsonTools.readInt( json.height, 16 );
@@ -101,15 +145,22 @@ class EntityDef {
 		o.tags = Tags.fromJson(json.tags);
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
+		o.tileOpacity = JsonTools.readFloat( json.tileOpacity, 1 );
 		o.fillOpacity = JsonTools.readFloat( json.fillOpacity, 1 );
 		o.lineOpacity = JsonTools.readFloat( json.lineOpacity, 1 );
 		o.renderMode = JsonTools.readEnum(ldtk.Json.EntityRenderMode, json.renderMode, false, Rectangle);
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
-		o.tileId = JsonTools.readNullableInt(json.tileId);
+		o._oldTileId = JsonTools.readNullableInt(json.tileId);
+		o.tileRect = JsonTools.readTileRect(json.tilesetId, json.tileRect, true);
+		if( o.tileRect!=null && o.tileRect.tilesetUid==null )
+			o.tileRect.tilesetUid = o.tilesetId;
 
-		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Stretch";
+		if( (cast json.tileRenderMode)=="Crop" ) json.tileRenderMode = cast "Cover";
 		o.tileRenderMode = JsonTools.readEnum(ldtk.Json.EntityTileRenderMode, json.tileRenderMode, false, FitInside);
+		o.nineSliceBorders = JsonTools.readArray(json.nineSliceBorders, []);
+		if( o.tileRenderMode==NineSlice && o.nineSliceBorders.length!=4 )
+			o.nineSliceBorders = [2,2,2,2];
 
 		o.maxCount = JsonTools.readInt( json.maxCount, 0 );
 		o.pivotX = JsonTools.readFloat( json.pivotX, 0 );
@@ -126,7 +177,7 @@ class EntityDef {
 		return o;
 	}
 
-	public function toJson() : ldtk.Json.EntityDefJson {
+	public function toJson(p:Project) : ldtk.Json.EntityDefJson {
 		return {
 			identifier: identifier,
 			uid: uid,
@@ -136,6 +187,7 @@ class EntityDef {
 			resizableX: resizableX,
 			resizableY: resizableY,
 			keepAspectRatio: keepAspectRatio,
+			tileOpacity: JsonTools.writeFloat(tileOpacity),
 			fillOpacity: JsonTools.writeFloat(fillOpacity),
 			lineOpacity: JsonTools.writeFloat(lineOpacity),
 
@@ -145,8 +197,10 @@ class EntityDef {
 			renderMode: JsonTools.writeEnum(renderMode, false),
 			showName: showName,
 			tilesetId: tilesetId,
-			tileId: tileId,
+			tileId: tileRect==null ? null : try p.defs.getTilesetDef(tilesetId).getFirstTileIdFromRect(tileRect) catch(_) null,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
+			tileRect: tileRect,
+			nineSliceBorders: tileRenderMode==NineSlice ? nineSliceBorders.copy() : [],
 
 			maxCount: maxCount,
 			limitScope: JsonTools.writeEnum(limitScope, false),
@@ -171,9 +225,9 @@ class EntityDef {
 
 	/** FIELDS ****************************/
 
-	public function createFieldDef(project:Project, type:data.DataTypes.FieldType, baseName:String, isArray:Bool) : FieldDef {
-		var f = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
-		f.identifier = project.makeUniqueIdStr( baseName + (isArray?"_array":""), false, (id)->isFieldIdentifierUnique(id) );
+	public function createFieldDef(project:Project, type:ldtk.Json.FieldType, baseName:String, isArray:Bool) : FieldDef {
+		var f = new FieldDef(project, project.generateUniqueId_int(), type, isArray);
+		f.identifier = project.fixUniqueIdStr( baseName + (isArray?"_array":""), Free, (id)->isFieldIdentifierUnique(id) );
 		fieldDefs.push(f);
 		return f;
 	}
@@ -200,7 +254,7 @@ class EntityDef {
 	}
 
 	public function isFieldIdentifierUnique(id:String) {
-		id = Project.cleanupIdentifier(id,false);
+		id = Project.cleanupIdentifier(id,Free);
 		for(fd in fieldDefs)
 			if( fd.identifier==id )
 				return false;
@@ -209,6 +263,15 @@ class EntityDef {
 
 
 	public function tidy(p:data.Project) {
+		_project = p;
+
+		// Migrate old tileId to tileRect
+		if( _oldTileId!=null && tileRect==null ) {
+			var td = p.defs.getTilesetDef(tilesetId);
+			if( td!=null )
+				tileRect = td.getTileRectFromTileIds([ _oldTileId ]);
+		}
+
 		// Tags
 		tags.tidy();
 

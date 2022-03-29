@@ -1,56 +1,73 @@
+<div id="glCtxLost">
+	<span class="icon ghost red"></span>
+	<p>WebGL context is not available :(</p>
+	<p>Please restart the app.</p>
+</div>
+
 <ul id="permanentNotifications"></ul>
 
 <div id="mainPanel">
 	<div id="mainBar">
 		<div class="buttons panels">
-			<button class="world brown" title="World view" keys="W"><div class="icon world"></div></button>
-			<button class="editProject blue" title="Project settings" keys="F1"><div class="icon project"></div></button>
-			<button class="editLevelInstance blue" title="Current level" keys="F2"><div class="icon level"></div></button>
-			<button class="editLayers" title="Layers" keys="F3"><div class="icon layer"></div></button>
-			<button class="editEntities" title="Entities" keys="F4"><div class="icon entity"></div></button>
-			<button class="editEnums" title="Enums" keys="F5"><div class="icon enum"></div></button>
-			<button class="editTilesets" title="Tilesets" keys="F6"><div class="icon tile"></div></button>
-			<button class="showHelp gray" title="Cheat sheet" keys="H"><div class="icon help"></div></button>
-			<button class="close gray" title="Close project" keys="CTRL+W"><div class="icon exit"></div></button>
+			<button class="world blue" title="World view" keys="W"><div class="icon world"></div></button>
+			<button class="editLevelInstance blue" title="Current level settings" keys="C"><div class="icon level"></div></button>
+			<button class="editProject brown" title="Project settings" keys="P"><div class="icon project"></div></button>
+			<button class="editLayers" title="Layers" keys="L"><div class="icon layer"></div></button>
+			<button class="editEntities" title="Entities" keys="E"><div class="icon entity"></div></button>
+			<button class="editEnums" title="Enums" keys="U"><div class="icon enum"></div></button>
+			<button class="editTilesets" title="Tilesets" keys="T"><div class="icon tile"></div></button>
+			<button class="showHelp help" title="Help and shortcuts" keys="H"><div class="icon help"></div></button>
+			<button class="settings gray" title="App settings" keys="F12"><div class="icon settings"></div></button>
+			<button class="close gray dark" title="Close project" keys="CTRL+W"><div class="icon exit"></div></button>
 		</div>
 	</div>
 
 	<ul id="layers" class="niceList"></ul>
 
 	<div id="guide">some useful tips</div>
-	<div id="toolOptions">
-		<select>
-			<option>1</option>
-			<option>2</option>
-			<option>3</option>
-		</select>
-	</div>
+	<div id="toolOptions"></div>
 	<div id="mainPaletteWrapper"></div>
 </div>
 
 
 <ul id="editingOptions">
 
-	<li class="grid" title="**Grid** Show the layer grid. In supported layer types, hidding the grid will also allow free positionning of elements." keys="G">
+	<li class="grid warnOff" title="**Grid** Show the layer grid. In supported layer types, hidding the grid will also allow free positionning of elements." keys="G" tip="right">
 		<div class="icon gridOn on"></div>
 		<div class="icon gridOff off"></div>
 	</li>
 
-	<li class="singleLayerMode" title="**Single layer mode** Focus on active layer only. This will also affect the Selection tool (ie. when holding ALT key)." keys="A">
+	<li class="showDetails warnOff" title="**Show/hide details** When enabled, shows all elements in layers (tiles, entities, intGrid etc.), or only tiles otherwise." keys="CTRL+H" tip="right">
+		<div class="icon showDetailsOn on"></div>
+		<div class="icon showDetailsOff off"></div>
+	</li>
+
+	<li class="separator"></li>
+
+	<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="A" tip="right">
 		<div class="icon singleLayer"></div>
 	</li>
 
-	<li class="emptySpaceSelection" title="**Select empty spaces** Include empty grid cells in selections, when using ALT+SHIFT+click." keys="E">
+	<li class="emptySpaceSelection" title="**Select empty spaces** If this option is enabled when you select a level area with ALT+SHIFT+click, the selection will also include EMPTY grid cells." keys="Shift+E" tip="right">
 		<div class="icon emptySpaceOn on"></div>
 		<div class="icon emptySpaceOff off"></div>
 	</li>
 
-	<li class="tileStacking" title="**Tile stacking** Only applies to Tiles layers. Allow to stack multiple tiles in the same grid cell." keys="T">
+	<li class="tileStacking" title="**Tile stacking** Only applies to Tiles layers. If this option is enabled, you will be able to stack multiple tiles in a single grid cell." keys="Shift+T" tip="right">
 		<div class="icon tile"></div>
 	</li>
 
 </ul>
 
+<div id="worldDepths">
+	<div class="title">
+		World layers
+		<info class="small" tip="right">
+			World layers are created or removed automatically, as you arrange your levels using the "Change depth" buttons (ie. move level above/beneath).
+		</info>
+	</div>
+	<ul></ul>
+</div>
 
 <!-- Element templates -->
 
@@ -64,11 +81,14 @@
 </xml>
 
 <xml class="layer">
-	<span class="index"></span>
+	<span class="shortcut"></span>
 	<span class="layerIcon"></span>
 	<span class="name"></span>
 	<span class="actions">
-		<a class="rules" href="#">Rules</a>
+		<a class="rules" href="#">
+			<span class="icon rule onlyCompact"></span>
+			<span class="notCompact">Rules</span>
+		</a>
 		<span class="vis"> <span class="icon"></span> </span>
 	</span>
 </xml>

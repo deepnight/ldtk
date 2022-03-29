@@ -1,49 +1,117 @@
 package display;
 
+enum RefLinkstyle {
+	Full;
+	CutAtOrigin;
+	CutAtTarget;
+}
+
 enum FieldRenderContext {
 	EntityCtx(g:h2d.Graphics, ei:data.inst.EntityInstance, ld:data.def.LayerDef);
 	LevelCtx(l:data.Level);
 }
 
 class FieldInstanceRender {
+	static var MAX_TEXT_WIDTH = 250;
 	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
-
-	static function getDefaultFont() return Assets.fontLight_small;
-
 
 
 	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
-		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 2, 2 );
+		var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.92 ) );
 		f.addChildAt(bg, 0);
 		f.getProperties(bg).isAbsolute = true;
-		bg.color.setColor( C.addAlphaF( C.toBlack( baseColor, darken ) ) );
-		bg.setPosition(0,0);
-		bg.width = f.outerWidth;
-		bg.height = f.outerHeight;
+		bg.scaleX = f.outerWidth;
+		bg.scaleY = f.outerHeight+1;
 	}
 
 
-	static inline function renderDashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=4.) {
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, style:RefLinkstyle) {
+		// Optional line cutting
+		var a = Math.atan2(ty-fy, tx-fx);
+		final cutDist = 40;
+		switch style {
+			case Full:
+
+			case CutAtOrigin:
+				final cutLine = 2;
+				tx = fx + Math.cos(a)*cutDist;
+				ty = fy + Math.sin(a)*cutDist;
+				g.lineStyle(1, color, 0.5);
+				g.moveTo(tx + Math.cos(a-M.PIHALF)*cutLine, ty + Math.sin(a-M.PIHALF)*cutLine);
+				g.lineTo(tx + Math.cos(a+M.PIHALF)*cutLine, ty + Math.sin(a+M.PIHALF)*cutLine);
+
+			case CutAtTarget:
+				final cutLine = 4;
+				fx = tx - Math.cos(a)*cutDist;
+				fy = ty - Math.sin(a)*cutDist;
+				g.lineStyle(1, color, 1);
+				g.moveTo(fx + Math.cos(a-M.PIHALF)*cutLine, fy + Math.sin(a-M.PIHALF)*cutLine);
+				g.lineTo(fx + Math.cos(a+M.PIHALF)*cutLine, fy + Math.sin(a+M.PIHALF)*cutLine);
+		}
+
+		// Init params
+		var len = M.dist(fx,fy, tx,ty);
+		var dashLen = M.fmin(5, len*0.05);
+		var count = M.ceil( len/dashLen );
+		dashLen = len/count;
+
+		// Draw link
+		var n = 0;
+		var sign = 1;
+		final off = 2.5;
+		var x = fx;
+		var y = fy;
+		while( n<count ) {
+			final r = n/(count-1);
+			final startRatio = M.fmin(r/0.05, 1);
+			g.lineStyle(1, color, ( 0.15 + 0.85*(1-r) ) * alpha );
+			g.moveTo(x,y);
+			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*startRatio;
+			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*startRatio;
+			g.lineTo(x,y);
+			sign = -sign;
+			n++;
+		}
+		g.lineTo(tx,ty);
+	}
+
+
+	static inline function renderSimpleLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=10.) {
 		var a = Math.atan2(ty-fy, tx-fx);
 		var len = M.dist(fx,fy, tx,ty);
-		var cur = 0.;
-		var count = M.ceil( len/(dashLen*2) );
-		var dashLen = len / ( count%2==0 ? count+1 : count );
+		var count = M.ceil( len/dashLen );
+		dashLen = len/count;
 
-		while( cur<len ) {
-			g.moveTo( fx+Math.cos(a)*cur, fy+Math.sin(a)*cur );
-			g.lineTo( fx+Math.cos(a)*(cur+dashLen), fy+Math.sin(a)*(cur+dashLen) );
-			cur+=dashLen*2;
+		var n = 0;
+		var sign = 1;
+		final off = 0.7;
+		var x = fx;
+		var y = fy;
+		while( n<count ) {
+			final r = n/(count-1);
+			g.lineStyle(1, color, 0.4 + 0.6*(1-r));
+			g.moveTo(x,y);
+			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off;
+			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off;
+			g.lineTo(x,y);
+			sign = -sign;
+			n++;
 		}
+		g.lineTo(tx,ty);
 	}
 
 
 	public static function renderFields(fieldInstances:Array<data.inst.FieldInstance>, baseColor:Int, ctx:FieldRenderContext, parent:h2d.Flow) {
 		var allRenders = [];
 
+		var ei = switch ctx {
+			case EntityCtx(g, ei, ld): ei;
+			case LevelCtx(l): null;
+		}
+
 		// Detect errors
 		for(fi in fieldInstances)
-			if( fi.hasAnyErrorInValues() )
+			if( fi.hasAnyErrorInValues(ei) )
 				baseColor = 0xff0000;
 
 		// Create individual field renders
@@ -68,19 +136,26 @@ class FieldInstanceRender {
 			maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
 		}
 		for(fr in allRenders) {
-			if( fr.label.numChildren>0 ) {
+			if( fr.label.numChildren>0 )
 				fr.label.minWidth = Std.int( maxLabelWidth );
-			}
 
 			fr.value.minWidth = Std.int( maxValueWidth );
 			if( fr.label.numChildren==0 )
 				fr.value.minWidth += Std.int( maxLabelWidth);
-			addBg(fr.value, baseColor, 0.5);
+			addBg(fr.value, baseColor, 0.75);
 
-			if( fr.label.numChildren>0 )
+			if( fr.label.numChildren>0 ) {
 				fr.label.minHeight = fr.value.outerHeight;
-			addBg(fr.label, baseColor, 0.7);
+				addBg(fr.label, baseColor, 0.88);
+			}
 		}
+	}
+
+
+	static inline function createText(target:h2d.Object) {
+		var tf = new h2d.Text(Assets.getRegularFont(), target);
+		tf.smooth = true;
+		return tf;
 	}
 
 	static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
@@ -94,24 +169,28 @@ class FieldInstanceRender {
 		var valueFlow = new h2d.Flow();
 		valueFlow.padding = 6;
 
+		var ei = switch ctx {
+			case EntityCtx(g, ei, ld): ei;
+			case LevelCtx(l): null;
+		}
+
 		// Value error
-		var err = fi.getFirstErrorInValues();
+		var err = fi.getFirstErrorInValues(ei);
 		if( err!=null ) {
-			var tf = new h2d.Text(getDefaultFont(), labelFlow);
+			var tf = createText(labelFlow);
 			tf.textColor = baseColor;
 			tf.text = fd.identifier;
 
-			var tf = new h2d.Text(getDefaultFont(), valueFlow);
+			var tf = createText(valueFlow);
 			tf.textColor = 0xff4400;
 			tf.text = '<$err>';
-			return { label:labelFlow, value:valueFlow };
 		}
 
 		// Skip hiddens
-		if( fd.editorDisplayMode==Hidden )
+		if( err==null && fd.editorDisplayMode==Hidden )
 			return null;
 
-		if( !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
+		if( err==null && !fi.def.editorAlwaysShow && ( fi.def.isArray && fi.getArrayLength()==0 || !fi.def.isArray && fi.isUsingDefault(0) ) )
 			return null;
 
 		switch fd.editorDisplayMode {
@@ -119,7 +198,7 @@ class FieldInstanceRender {
 
 			case NameAndValue:
 				// Label
-				var tf = new h2d.Text(getDefaultFont(), labelFlow);
+				var tf = createText(labelFlow);
 				tf.textColor = baseColor;
 				tf.text = fd.identifier;
 
@@ -128,6 +207,22 @@ class FieldInstanceRender {
 
 			case ValueOnly:
 				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
+
+			case ArrayCountWithLabel:
+				// Label
+				var tf = createText(labelFlow);
+				tf.textColor = baseColor;
+				tf.text = fd.identifier;
+
+				// Value
+				var tf = createText(valueFlow);
+				tf.textColor = baseColor;
+				tf.text = '${fi.getArrayLength()} value(s)';
+
+			case ArrayCountNoLabel:
+				var tf = createText(valueFlow);
+				tf.textColor = baseColor;
+				tf.text = '${fi.getArrayLength()} value(s)';
 
 			case RadiusPx:
 				switch ctx {
@@ -149,6 +244,41 @@ class FieldInstanceRender {
 
 			case EntityTile:
 
+			case RefLinkBetweenCenters:
+				switch ctx {
+					case EntityCtx(g, ei, ld):
+						var fx = ei.centerX - ei.x;
+						var fy = ei.centerY - ei.y;
+						for(i in 0...fi.getArrayLength()) {
+							var tei = fi.getEntityRefInstance(i);
+							if( tei==null )
+								continue;
+							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
+						}
+
+					case LevelCtx(l):
+				}
+
+			case RefLinkBetweenPivots:
+				switch ctx {
+					case EntityCtx(g, ei, ld):
+						var fx = ei.x - ei.x;
+						var fy = ei.y - ei.y;
+						for(i in 0...fi.getArrayLength()) {
+							var tei = fi.getEntityRefInstance(i);
+							if( tei==null )
+								continue;
+							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
+							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
+						}
+
+					case LevelCtx(l):
+				}
+
+
 			case Points, PointStar, PointPath, PointPathLoop:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
@@ -156,7 +286,6 @@ class FieldInstanceRender {
 						var fy = ei.getPointOriginY(ld) - ei.y;
 						var startX = fx;
 						var startY = fy;
-						g.lineStyle(1, baseColor, 0.66);
 
 						for(i in 0...fi.getArrayLength()) {
 							var pt = fi.getPointGrid(i);
@@ -166,13 +295,23 @@ class FieldInstanceRender {
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
 							if( fd.editorDisplayMode!=Points )
-								renderDashedLine(g, fx,fy, tx,ty, 3);
+								renderSimpleLink(g, baseColor, fx,fy, tx,ty);
 
-							g.drawRect( tx-2, ty-2, 4, 4 );
+							g.lineStyle(1, baseColor, 0.66);
+							g.beginFill( C.toBlack(baseColor, 0.6) );
+							final s = 4;
+							g.moveTo(tx, ty-s);
+							g.lineTo(tx+s, ty);
+							g.lineTo(tx, ty+s);
+							g.lineTo(tx-s, ty);
+							g.lineTo(tx, ty-s);
+							g.endFill();
 
 							switch fd.editorDisplayMode {
-								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 								case Points, PointStar:
+								case RefLinkBetweenCenters:
+								case RefLinkBetweenPivots:
 								case PointPath, PointPathLoop:
 									// Next point connects to this one
 									fx = tx;
@@ -182,7 +321,7 @@ class FieldInstanceRender {
 
 						// Loop to Entity
 						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
-							renderDashedLine(g, fx,fy, startX, startY, 3);
+							renderSimpleLink(g, baseColor, fx,fy, startX, startY);
 
 					case LevelCtx(_):
 				}
@@ -198,16 +337,43 @@ class FieldInstanceRender {
 		valuesFlow.layout = Horizontal;
 		valuesFlow.verticalAlign = Middle;
 
+		var showArrayBrackets = fi.def.isArray;
+		if( fi.def.isArray ) {
+			var multiLinesArray = false;
+			switch fi.def.type {
+				case F_Int:
+				case F_Float:
+				case F_String: multiLinesArray = true; showArrayBrackets = false;
+				case F_Text: multiLinesArray = true; showArrayBrackets = false;
+				case F_Bool:
+				case F_Color:
+				case F_Enum(enumDefUid):
+				case F_Point:
+				case F_Path: multiLinesArray = true;
+				case F_EntityRef: multiLinesArray = true; showArrayBrackets = false;
+				case F_Tile:
+			}
+			if( multiLinesArray ) {
+				valuesFlow.multiline = true;
+				valuesFlow.maxWidth = MAX_TEXT_WIDTH;
+				if( !showArrayBrackets ) {
+					valuesFlow.verticalSpacing = 8;
+					valuesFlow.layout = Vertical;
+				}
+			}
+		}
+
+
 		// Array opening
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text( getDefaultFont(), valuesFlow );
+		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
+			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "[";
 		}
 
 		// Empty array with "always" display
 		if( fi.def.isArray && fi.getArrayLength()==0 && fi.def.editorAlwaysShow ) {
-			var tf = new h2d.Text( getDefaultFont(), valuesFlow );
+			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "--empty--";
 		}
@@ -232,11 +398,11 @@ class FieldInstanceRender {
 				}
 				else {
 					// Text render
-					var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+					var tf = createText(valuesFlow);
 					tf.textColor = textColor;
 					switch ctx {
 						case EntityCtx(g, ei, ld):
-							tf.maxWidth = 400;
+							tf.maxWidth = MAX_TEXT_WIDTH;
 
 						case LevelCtx(l):
 							tf.maxWidth = 800;
@@ -260,16 +426,16 @@ class FieldInstanceRender {
 			}
 
 			// Array separator
-			if( fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+			if( showArrayBrackets && fi.def.isArray && idx<fi.getArrayLength()-1 ) {
+				var tf = createText(valuesFlow);
 				tf.textColor = textColor;
 				tf.text = ",";
 			}
 		}
 
 		// Array closing
-		if( fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = new h2d.Text(getDefaultFont(), valuesFlow);
+		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
+			var tf = createText(valuesFlow);
 			tf.textColor = textColor;
 			tf.text = "]";
 		}

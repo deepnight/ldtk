@@ -15,12 +15,12 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		super.customCursor(ev, m);
 
 		if( pickOrigin!=null ) {
-			var grid = curLayerInstance.def.gridSize;
+			var grid = curLayerInstance.def.scaledGridSize;
 			editor.cursor.set( Link(
-				curLayerInstance.pxTotalOffsetX + (pickOrigin.cx+0.5)*grid,
-				curLayerInstance.pxTotalOffsetY + (pickOrigin.cy+0.5)*grid,
-				curLayerInstance.pxTotalOffsetX + (m.cx+0.5)*grid,
-				curLayerInstance.pxTotalOffsetY + (m.cy+0.5)*grid,
+				curLayerInstance.pxParallaxX + (pickOrigin.cx+0.5)*grid,
+				curLayerInstance.pxParallaxY + (pickOrigin.cy+0.5)*grid,
+				curLayerInstance.pxParallaxX + (m.cx+0.5)*grid,
+				curLayerInstance.pxParallaxY + (m.cy+0.5)*grid,
 				pickOrigin.color
 			));
 		}
@@ -30,8 +30,8 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 		ev.cancel = true;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 
 		if( ev.button==1 )
 			editor.clearSpecialTool();
@@ -44,7 +44,7 @@ class PickPoint extends Tool<{ x:Int, y:Int }> {
 
 		var li = editor.curLayerInstance;
 		if( button==0 && m.cx>=0 && m.cx<li.cWid && m.cy>=0 && m.cy<li.cHei && canPick(m) ) {
-			editor.levelRender.bleepRectCase(m.cx,m.cy, 1,1, 0xffcc00);
+			editor.levelRender.bleepLayerRectCase(li, m.cx,m.cy, 1,1, 0xffcc00);
 			onPick(m);
 		}
 	}

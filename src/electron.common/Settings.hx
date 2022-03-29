@@ -8,10 +8,9 @@ typedef AppSettings = {
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
+	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
-	var smartCpuThrottling : Bool;
-	var fixTileFlickering : Bool;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -23,8 +22,13 @@ typedef AppSettings = {
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
+
+	var uiStates : Array<{ id:String, val:Int }>;
 }
 
+enum abstract UiState(String) {
+	var ShowProjectColors;
+}
 
 enum AutoWorldModeSwitch {
 	Never;
@@ -51,12 +55,11 @@ class Settings {
 			compactMode: false,
 			grid: true,
 			singleLayerMode: false,
-			emptySpaceSelection: false,
-			tileStacking: false,
+			emptySpaceSelection: true,
+			tileStacking: true,
+			showDetails: true,
 			useBestGPU: true,
-			smartCpuThrottling: true,
 			startFullScreen: false,
-			fixTileFlickering: true,
 
 			openLastProject: false,
 			lastProject: null,
@@ -65,10 +68,69 @@ class Settings {
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
+
+			uiStates: [],
 		}
 
 		// Load
 		v = dn.LocalStorage.readObject("settings", true, defaults);
+
+		if( !hasUiState(ShowProjectColors) )
+			setUiStateBool(ShowProjectColors, true);
+	}
+
+
+	function getOrCreateUiState(id:UiState) {
+		for(s in v.uiStates)
+			if( s.id==Std.string(id) )
+				return s;
+		v.uiStates.push({ id:Std.string(id), val:0 });
+		return v.uiStates[v.uiStates.length-1];
+	}
+
+	function hasUiState(id:UiState) {
+		for(s in v.uiStates)
+			if( s.id==Std.string(id) )
+				return true;
+		return false;
+	}
+
+	function deleteUiState(id:UiState) {
+		var i = 0;
+		while( i<v.uiStates.length )
+			if( v.uiStates[i].id==Std.string(id) )
+				v.uiStates.splice(i,1);
+			else
+				i++;
+	}
+
+	public inline function setUiStateInt(id:UiState, v:Int) {
+		getOrCreateUiState(id).val = v;
+		save();
+	}
+
+	public inline function setUiStateBool(id:UiState, v:Bool) {
+		setUiStateInt(id, v==true ? 1 : 0);
+		save();
+	}
+
+	public inline function toggleUiStateBool(id:UiState) {
+		setUiStateBool(id, !getUiStateBool(id));
+		save();
+	}
+
+	public function getUiStateInt(id:UiState) : Int {
+		for(s in v.uiStates)
+			if( s.id==Std.string(id) )
+				return s.val;
+		return 0;
+	}
+
+	public function getUiStateBool(id:UiState) : Bool {
+		for(s in v.uiStates)
+			if( s.id==Std.string(id) )
+				return s.val!=0;
+		return false;
 	}
 
 	static inline function isRenderer() {
@@ -76,9 +138,10 @@ class Settings {
 	}
 
 	public function getAppZoomFactor() : Float {
-		var w = dn.js.ElectronTools.getScreenWidth();
-		var h = dn.js.ElectronTools.getScreenHeight();
-		return v.appUiScale * dn.M.fmax(1, dn.M.fmin( w/1350, h/1024 ) );
+		// var w = dn.js.ElectronTools.getScreenWidth();
+		// var h = dn.js.ElectronTools.getScreenHeight();
+		// return v.appUiScale * dn.M.fmax(1, dn.M.fmin( w/1350, h/1024 ) );
+		return v.appUiScale; // HACK disabled base scaling
 	}
 
 

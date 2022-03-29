@@ -1,17 +1,33 @@
 package display;
 
 typedef WorldLevelRender = {
+	var worldIid : String;
+	var uid : Int;
+	var rect : misc.WorldRect;
+
 	var bgWrapper: h2d.Object;
-	var bounds: h2d.Graphics;
+	var outline: h2d.Graphics;
 	var render: h2d.Object;
-	var label: h2d.ScaleGrid;
+	var identifier: h2d.ScaleGrid;
+
+	var renderInvalidated: Bool;
+	var fieldsInvalidated: Bool;
+	var identifierInvalidated: Bool;
+	var boundsInvalidated: Bool;
+
+	var fieldsRender: Null<{
+		customFields: h2d.Flow,
+		identifier: h2d.Flow,
+	}>;
 }
 
 class WorldRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
+
 
 	var worldBgColor(get,never) : UInt;
 		inline function get_worldBgColor() return C.interpolateInt(project.bgColor, 0x8187bd, 0.85);
@@ -19,19 +35,20 @@ class WorldRender extends dn.Process {
 	var worldLineColor(get,never) : UInt;
 		inline function get_worldLineColor() return C.toWhite(worldBgColor, 0.0);
 
-	var levels : Map<Int,WorldLevelRender> = new Map();
+	var worldLevels : Map<Int,WorldLevelRender> = new Map();
 	var worldBg : { wrapper:h2d.Object, col:h2d.Bitmap, tex:dn.heaps.TiledTexture };
 	var worldBounds : h2d.Graphics;
 	var title : h2d.Text;
-	var axes : h2d.Graphics;
-	var grids : h2d.Graphics;
+	var axeH : h2d.Bitmap;
+	var axeV : h2d.Bitmap;
+	var largeGrid : h2d.Graphics;
+	var smallGrid : h2d.Graphics;
 	var currentHighlight : h2d.Graphics;
-	public var levelsWrapper : h2d.Layers;
+	public var worldLayers : Map<Int,h2d.Layers>;
 	var fieldsWrapper : h2d.Object;
-	var fieldRenders : Map<Int, { above:h2d.Flow, beneath:h2d.Flow, identifier:h2d.Flow }> = new Map();
 
-	var levelInvalidations : Map<Int,Bool> = new Map();
-	var levelFieldsInvalidation : Map<Int,Bool> = new Map();
+	var invalidatedCameraBasedRenders = true;
+
 
 
 	public function new() {
@@ -46,49 +63,57 @@ class WorldRender extends dn.Process {
 			col: new h2d.Bitmap(w),
 			tex: new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1, w),
 		}
+		worldBg.col.colorAdd = new h3d.Vector(0,0,0,0);
 		worldBg.tex.alpha = 0.5;
 		editor.root.add(worldBg.wrapper, Const.DP_BG);
 		worldBg.wrapper.alpha = 0;
 
 		worldBounds = new h2d.Graphics();
-		// editor.root.add(worldBounds, Const.DP_BG);
 
-		grids = new h2d.Graphics();
-		editor.root.add(grids, Const.DP_BG);
+		largeGrid = new h2d.Graphics();
+		editor.root.add(largeGrid, Const.DP_BG);
 
-		axes = new h2d.Graphics();
-		editor.root.add(axes, Const.DP_BG);
+		smallGrid = new h2d.Graphics();
+		editor.root.add(smallGrid, Const.DP_BG);
 
-		title = new h2d.Text(Assets.fontLight_xlarge);
+		axeH = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1, 0.15) );
+		editor.root.add(axeH, Const.DP_BG);
+
+		axeV = new h2d.Bitmap( h2d.Tile.fromColor(0xffffff, 1, 1, 0.15) );
+		editor.root.add(axeV, Const.DP_BG);
+
+		title = new h2d.Text(Assets.fontLight_title);
 		title.text = "hello world";
 		editor.root.add(title, Const.DP_TOP);
 
-		currentHighlight = new h2d.Graphics();
-		root.add(currentHighlight, Const.DP_TOP);
-
-		levelsWrapper = new h2d.Layers();
-		root.add(levelsWrapper, Const.DP_MAIN);
+		worldLayers = new Map();
 
 		fieldsWrapper = new h2d.Object();
 		root.add(fieldsWrapper, Const.DP_TOP);
+
+		currentHighlight = new h2d.Graphics();
+		root.add(currentHighlight, Const.DP_TOP);
 	}
 
 	override function onDispose() {
 		super.onDispose();
+
 		worldBg.wrapper.remove();
 		title.remove();
-		axes.remove();
-		grids.remove();
+		axeH.remove();
+		axeV.remove();
+		smallGrid.remove();
+		largeGrid.remove();
 		currentHighlight.remove();
 		editor.ge.removeListener(onGlobalEvent);
 	}
 
 	override function onResize() {
 		super.onResize();
-		updateTitle();
-		renderAxes();
+		updateWorldTitle();
+		updateAxesPos();
 		renderGrids();
-		renderBg();
+		renderWorldBg();
 		updateCurrentHighlight();
 	}
 
@@ -99,31 +124,66 @@ class WorldRender extends dn.Process {
 
 			case WorldMode(active):
 				if( active )
-					invalidateLevel(editor.curLevel);
+					invalidateLevelRender(editor.curLevel);
 
 				renderGrids();
 				updateLayout();
 				updateFieldsPos();
 				updateCurrentHighlight();
+				updateAxesPos();
+				invalidateCameraBasedRenders();
+
+			case WorldSelected(w):
+				for(wl in worldLevels)
+					removeWorldLevel(wl.uid);
+				invalidateAll();
 
 			case ViewportChanged:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
-				renderAxes();
 				renderGrids();
-				updateLabels();
-				updateTitle();
+				updateBgColor();
+				updateAxesPos();
+				updateAllLevelIdentifiers(false);
+				updateWorldTitle();
 				updateFieldsPos();
+				invalidateCameraBasedRenders();
+				for(l in curWorld.levels) {
+					getWorldLevel(l).boundsInvalidated = true;
+					updateLevelVisibility(l);
+				}
+
+			case WorldDepthSelected(worldDepth):
+				for(l in curWorld.levels)
+					updateLevelVisibility(l);
 				updateCurrentHighlight();
+				updateAllLevelIdentifiers(false);
+				updateFieldsPos();
 
 			case GridChanged(active):
 				renderGrids();
 
-			case WorldLevelMoved:
+			case WorldLevelMoved(l,isFinal, prevNeig):
 				updateLayout();
-				updateLabels(true);
 				updateCurrentHighlight();
+				refreshWorldLevelRect(l);
+				if( isFinal ) {
+					switch curWorld.worldLayout {
+						case Free, GridVania:
+						case LinearHorizontal, LinearVertical:
+							for(l in curWorld.levels)
+								refreshWorldLevelRect(l);
+					}
+				}
+
+			case ProjectSaved:
+				invalidateAllLevelFields();
+				invalidateAllLevelIdentifiers();
+
+			case LevelJsonCacheInvalidated(l):
+				invalidateLevelFields(l);
+				invalidateLevelIdentifier(l);
 
 			case ProjectSelected:
 				renderAll();
@@ -131,10 +191,10 @@ class WorldRender extends dn.Process {
 			case EnumDefChanged, EnumDefAdded, EnumDefRemoved, EnumDefValueRemoved:
 				invalidateAllLevelFields();
 
-			case FieldInstanceChanged(fi):
-				var l = project.getLevelUsingFieldInst(fi);
-				if( l!=null )
-					invalidateLevelFields(l);
+			case EntityFieldInstanceChanged(ei,fi):
+
+			case LevelFieldInstanceChanged(l,fi):
+				invalidateLevelFields(l);
 
 			case FieldDefRemoved(fd):
 				invalidateAllLevelFields();
@@ -145,111 +205,251 @@ class WorldRender extends dn.Process {
 			case FieldDefSorted:
 				invalidateAllLevelFields();
 
-			case ProjectSettingsChanged, WorldSettingsChanged:
-				renderAll();
+			case ProjectSettingsChanged:
+				renderWorldBg();
+				editor.camera.fit();
+
+			case WorldSettingsChanged:
+				renderGrids();
+				invalidateAll();
 				editor.camera.fit();
 
 			case LevelRestoredFromHistory(l):
-				invalidateLevel(l);
+				invalidateLevelRender(l);
 				invalidateLevelFields(l);
 				updateCurrentHighlight();
 
 			case LevelSelected(l):
-				invalidateLevel(l);
+				invalidateLevelRender(l);
 				invalidateLevelFields(l);
 				updateLayout();
 
 			case LevelResized(l):
-				invalidateLevel(l);
+				invalidateLevelRender(l);
 				invalidateLevelFields(l);
-				updateTitle();
+				updateWorldTitle();
 				updateLayout();
 				renderWorldBounds();
 				updateCurrentHighlight();
+				refreshWorldLevelRect(l);
 
 			case LevelSettingsChanged(l):
-				invalidateLevel(l);
+				invalidateLevelRender(l);
 				invalidateLevelFields(l);
 				renderWorldBounds();
-				updateTitle();
+				updateWorldTitle();
 				updateCurrentHighlight();
+				applyWorldDepth(l);
+				sortWorldDepths();
+				refreshWorldLevelRect(l);
+
+			case LayerRuleGroupAdded(rg):
+				if( rg.rules.length>0 )
+					invalidateAllLevelRenders();
+
+			case LayerRuleGroupRemoved(rg):
+				invalidateAllLevelRenders();
+
+			case LayerDefAdded:
+				invalidateAllLevelRenders();
 
 			case LayerDefRemoved(uid):
-				renderAll();
+				invalidateAllLevelRenders();
 
 			case LayerDefSorted:
-				renderAll();
+				invalidateAllLevelRenders();
 
-			case LayerDefChanged, LayerDefConverted:
-				renderAll();
+			case LayerDefChanged(_), LayerDefConverted:
+				invalidateAllLevelRenders();
+
+			case LayerDefIntGridValueRemoved(defUid,value,used):
 
 			case TilesetDefPixelDataCacheRebuilt(td):
-				renderAll();
+				invalidateAllLevelRenders();
 
 			case LevelAdded(l):
-				invalidateLevel(l);
+				invalidateLevelRender(l);
 				invalidateLevelFields(l);
 				updateLayout();
-				updateLabels(true);
 				renderWorldBounds();
 
 			case LevelRemoved(l):
-				removeLevel(l.uid);
-				removeLevelFields(l.uid);
+				removeWorldLevel(l.uid);
 				updateLayout();
-				updateLabels(true);
+				invalidateAllLevelIdentifiers();
 				renderWorldBounds();
+
+			case ShowDetailsChanged(active):
+				fieldsWrapper.visible = active;
+				if( active )
+					invalidateAllLevelFields();
+				else
+					updateFieldsPos();
+				updateWorldTitle();
+				updateAllLevelIdentifiers(active);
+				updateAxesPos();
+				renderGrids();
+				updateCurrentHighlight();
+				for(l in curWorld.levels)
+					if( active )
+						getWorldLevel(l).boundsInvalidated = true;
+					else
+						updateLevelBounds(l);
 
 			case _:
 		}
 	}
 
-	public inline function invalidateLevel(l:data.Level) {
-		levelInvalidations.set(l.uid, true);
+
+	public inline function invalidateAll() {
+		for(l in editor.curWorld.levels) {
+			invalidateLevelFields(l);
+			invalidateLevelIdentifier(l);
+			invalidateLevelRender(l);
+		}
 	}
+
+	inline function invalidateCameraBasedRenders() {
+		invalidatedCameraBasedRenders = true;
+	}
+
+	public inline function invalidateLevelRender(l:data.Level) {
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.renderInvalidated = true;
+	}
+	public inline function invalidateAllLevelRenders() {
+		for(l in curWorld.levels)
+			invalidateLevelRender(l);
+	}
+
 
 	public inline function invalidateLevelFields(l:data.Level) {
-		levelFieldsInvalidation.set(l.uid, true);
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.fieldsInvalidated = true;
 	}
-
 	public inline function invalidateAllLevelFields() {
-		for(l in project.levels)
+		for(l in curWorld.levels)
 			invalidateLevelFields(l);
 	}
 
-	public function renderAll() {
-		App.LOG.render("Reset world render");
+	public inline function invalidateLevelIdentifier(l:data.Level) {
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.identifierInvalidated = true;
+	}
+	public inline function invalidateAllLevelIdentifiers() {
+		for(l in curWorld.levels)
+			invalidateLevelIdentifier(l);
+	}
 
-		for(uid in levels.keys()) {
-			removeLevel(uid);
-			removeLevelFields(uid);
+
+
+	/** Z-sort depths wrappers**/
+	function sortWorldDepths() {
+		for(d in curWorld.getLowestLevelDepth()...curWorld.getHighestLevelDepth()+1)
+			if( worldLayers.exists(d) )
+				root.under( worldLayers.get(d) );
+	}
+
+	/** Insert world level to its depth wrapper **/
+	function applyWorldDepth(l:data.Level) {
+		var wl = getWorldLevel(l);
+
+		var worldLayer = getWorldDepthWrapper(l.worldDepth);
+		var _inc = 0;
+		worldLayer.add(wl.bgWrapper, _inc++);
+		worldLayer.add(wl.render, _inc++);
+		worldLayer.add(wl.identifier, _inc++);
+		worldLayer.add(wl.outline, _inc++);
+	}
+
+	inline function getWorldDepthWrapper(depth:Int) : h2d.Layers {
+		if( !worldLayers.exists(depth) ) {
+			var l = new h2d.Layers();
+			root.add(l, Const.DP_MAIN);
+			worldLayers.set(depth,l);
+			sortWorldDepths();
 		}
-		levels = new Map();
-		levelsWrapper.removeChildren();
+		return worldLayers.get(depth);
+	}
 
-		for(l in editor.project.levels) {
+	/**
+		Return world level if it exists, or create it otherwise.
+	**/
+	inline function getWorldLevel(l:data.Level) : WorldLevelRender {
+		if( !worldLevels.exists(l.uid) ) {
+			var wl : WorldLevelRender = {
+				worldIid : l._world.iid,
+				uid: l.uid,
+
+				rect: WorldRect.fromLevel(l),
+				bgWrapper: new h2d.Object(),
+				render : new h2d.Object(),
+				outline : new h2d.Graphics(),
+				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
+
+				boundsInvalidated: true,
+				renderInvalidated: true,
+				fieldsInvalidated: true,
+				identifierInvalidated: true,
+
+				fieldsRender: null,
+			}
+			worldLevels.set(l.uid, wl);
+			applyWorldDepth(l);
+		}
+		return worldLevels.get(l.uid);
+	}
+
+
+
+	function renderAll() {
+		App.LOG.render("Rendering all world...");
+
+		for(uid in worldLevels.keys())
+			removeWorldLevel(uid);
+
+		// Init world levels
+		worldLevels = new Map();
+		for(l in worldLayers)
+			l.removeChildren();
+		for(l in curWorld.levels)
+			getWorldLevel(l);
+
+		for(l in editor.curWorld.levels) {
 			invalidateLevelFields(l);
-			invalidateLevel(l);
+			invalidateLevelIdentifier(l);
+			invalidateLevelRender(l);
 		}
 
-		renderBg();
-		renderAxes();
+		renderWorldBg();
+		updateAxesPos();
 		renderGrids();
 		renderWorldBounds();
 		updateLayout();
+		sortWorldDepths();
 	}
 
-	function renderBg() {
+	function updateBgColor() {
+		var r = -M.fclamp( 0.9 * 0.04/camera.adjustedZoom, 0, 1);
+		worldBg.col.colorAdd.set(r,r,r,0);
+	}
+
+	function renderWorldBg() {
+		App.LOG.render('Rendering world bg...');
 		worldBg.tex.resize( camera.iWidth, camera.iHeight );
 		worldBg.col.tile = h2d.Tile.fromColor(worldBgColor);
 		worldBg.col.scaleX = camera.width;
 		worldBg.col.scaleY = camera.height;
+		updateBgColor();
 	}
 
-	function updateTitle() {
-		title.visible = editor.worldMode;
+	function updateWorldTitle() {
+		title.visible = editor.worldMode && settings.v.showDetails && !editor.gifMode;
 		if( title.visible ) {
-			var b = project.getWorldBounds();
+			var b = curWorld.getWorldBounds();
 			var w = b.right-b.left;
 			var t = project.filePath.fileName;
 			title.textColor = C.toWhite(project.bgColor, 0.3);
@@ -261,139 +461,157 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateFieldsPos() {
-		var padding = Std.int( Rulers.PADDING*3 );
-		for(f in fieldRenders.keyValueIterator()) {
-			var l = project.getLevel(f.key);
-			var fr = f.value;
-			fr.above.visible = fr.beneath.visible = editor.worldMode || editor.curLevel==l;
-			fr.identifier.visible = !editor.worldMode;
+		if( !settings.v.showDetails )
+			return;
 
-			if( !fr.above.visible )
+		var minZoom = 0.1;
+		var padding = Std.int( Rulers.PADDING*3 );
+
+		for(wl in worldLevels) {
+			if( wl.fieldsRender==null )
 				continue;
 
-			// Above
-			fr.above.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.above.outerWidth) );
-			fr.above.x = Std.int( l.worldCenterX - fr.above.outerWidth*0.5*fr.above.scaleX );
-			if( editor.worldMode )
-				fr.above.y = l.worldY;
-			else
-				fr.above.y = Std.int( l.worldY - padding - fr.above.outerHeight*fr.above.scaleY );
+			var l = project.getLevelAnywhere(wl.uid);
+			var fr = wl.fieldsRender;
+			if( !camera.isOnScreenLevel(l, 256) || l.worldDepth!=editor.curWorldDepth ) {
+				fr.customFields.visible = false;
+				fr.identifier.visible = false;
+				continue;
+			}
+			fr.customFields.visible = editor.worldMode || editor.curLevel==l;
+			fr.identifier.visible = !editor.worldMode && camera.adjustedZoom>=minZoom;
+			if( editor.worldMode ) {
+				fr.customFields.alpha = getAlphaFromZoom(minZoom);
+				if( fr.customFields.alpha<=0 )
+					fr.customFields.visible = false;
+			}
 
-			// Beneath
-			fr.beneath.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.beneath.outerWidth) );
-			fr.beneath.x = Std.int( l.worldCenterX - fr.beneath.outerWidth*0.5*fr.beneath.scaleX );
-			if( editor.worldMode )
-				fr.beneath.y = Std.int( l.worldY + l.pxHei - fr.beneath.outerHeight*fr.beneath.scaleY );
-			else
-				fr.beneath.y = l.worldY + l.pxHei + padding;
+			if( !fr.customFields.visible )
+				continue;
+
+			// Custom fields
+			if( editor.worldMode ) {
+				switch curWorld.worldLayout {
+					case Free, GridVania:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
+						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
+						fr.customFields.y = Std.int( l.worldY + l.pxHei - fr.customFields.outerHeight*fr.customFields.scaleY );
+
+					case LinearHorizontal:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.customFields.outerWidth ) );
+						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
+						fr.customFields.y = Std.int( l.worldY + l.pxHei + 32 );
+
+					case LinearVertical:
+						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxHei/fr.customFields.outerHeight ) );
+						fr.customFields.x = Std.int( l.worldX + l.worldX+l.pxWid+32 );
+						fr.customFields.y = Std.int( l.worldCenterY - fr.customFields.outerHeight*0.5*fr.customFields.scaleY );
+				}
+			}
+			else {
+				fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
+				fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
+				fr.customFields.y = Std.int( l.worldY - padding - fr.customFields.outerHeight*fr.customFields.scaleY );
+			}
 		}
 	}
 
-	function updateLabels(refreshText=false) {
-		var minZoom = switch project.worldLayout {
-			case Free, GridVania: 0.1;
-			case LinearHorizontal, LinearVertical: 0.1;
-		}
+	inline function getAlphaFromZoom(minZoom:Float) {
+		return M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
+	}
 
-		for( l in editor.project.levels ) {
-			if( !levels.exists(l.uid) )
-				continue;
-
-			var e = levels.get(l.uid);
-			e.label.visible = camera.adjustedZoom>=minZoom && ( l!=editor.curLevel || editor.worldMode );
-			if( !e.label.visible )
-				continue;
-
-			e.label.alpha = M.fmin( (camera.adjustedZoom-minZoom)/minZoom, 1 );
-			switch project.worldLayout {
-				case Free, GridVania:
-					e.label.setScale( M.fmin( 0.8*l.pxWid / e.label.width, 1/camera.adjustedZoom ) );
-
-				case LinearHorizontal, LinearVertical:
-					e.label.setScale( 1/camera.adjustedZoom );
-			}
-
-			switch project.worldLayout {
-				case Free, GridVania:
-					e.label.x = Std.int( l.worldX + l.pxWid*0.5 - e.label.width*e.label.scaleX*0.5 );
-					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
-
-				case LinearHorizontal:
-					e.label.x = Std.int( l.worldX + l.pxWid*0.3 );
-					e.label.y = Std.int( l.worldY - e.label.height*e.label.scaleY );
-					e.label.rotation = -0.3;
-
-				case LinearVertical:
-					e.label.x = Std.int( l.worldX - e.label.width*e.label.scaleX - 30 );
-					e.label.y = Std.int( l.worldY + l.pxHei*0.5 - e.label.height*e.label.scaleY*0.5 );
-			}
-			e.label.color.setColor( C.addAlphaF( C.toBlack( l.getBgColor(), 0.15 ) ) );
-
-			if( refreshText )
-				updateLabelText(l);
-		}
-
+	inline function updateAllLevelIdentifiers(refreshTexts:Bool) {
+		for( l in editor.curWorld.levels )
+			if( worldLevels.exists(l.uid) )
+				updateLevelIdentifier(l, refreshTexts);
 	}
 
 	function renderGrids() {
-		grids.clear();
-
-		if( !editor.worldMode )
+		if( !editor.worldMode ) {
+			smallGrid.visible = largeGrid.visible = false;
 			return;
+		}
 
 		// Base level grid
-		if( project.worldLayout==Free && camera.adjustedZoom>=1.5 && settings.v.grid ) {
-			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-1.5)/0.6, 1 ) );
+		final minZoom = camera.pixelRatio*0.5;
+		if( curWorld.worldLayout==Free && camera.adjustedZoom>=minZoom && settings.v.grid ) {
+			smallGrid.clear();
+			smallGrid.visible = true;
+			smallGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.5 * M.fmin( (camera.adjustedZoom-minZoom)/0.5, 1 ) );
 			var g = project.getSmartLevelGridSize() * camera.adjustedZoom;
+			// Verticals
 			var off = root.x % g;
 			for(i in 0...M.ceil(camera.width/g)) {
-				grids.moveTo(i*g+off, 0);
-				grids.lineTo(i*g+off, camera.height);
+				smallGrid.moveTo(i*g+off, 0);
+				smallGrid.lineTo(i*g+off, camera.height);
 			}
+			// Horizontals
 			var off = root.y % g;
 			for(i in 0...M.ceil(camera.height/g)) {
-				grids.moveTo(0, i*g+off);
-				grids.lineTo(camera.width, i*g+off);
+				smallGrid.moveTo(0, i*g+off);
+				smallGrid.lineTo(camera.width, i*g+off);
 			}
 		}
+		else
+			smallGrid.visible = false;
 
 		// World grid
-		if( project.worldLayout==GridVania && camera.adjustedZoom>=0.2 ) {
-			grids.lineStyle(camera.pixelRatio, worldLineColor, 0.4 * M.fmin( (camera.adjustedZoom-0.2)/0.3, 1 ) );
-			var g = project.worldGridWidth * camera.adjustedZoom;
+		if( curWorld.worldLayout==GridVania && camera.adjustedZoom>=0.1 && settings.v.showDetails ) {
+			largeGrid.clear();
+			largeGrid.visible = true;
+			largeGrid.lineStyle(camera.pixelRatio, worldLineColor, 0.1 + 0.2 * M.fmin( (camera.adjustedZoom-0.1)/0.3, 1 ) );
+			var g = curWorld.worldGridWidth * camera.adjustedZoom;
+			// Verticals
 			var off =  root.x % g;
 			for( i in 0...M.ceil(camera.width/g)+1 ) {
-				grids.moveTo(i*g+off, 0);
-				grids.lineTo(i*g+off, camera.height);
+				largeGrid.moveTo(i*g+off, 0);
+				largeGrid.lineTo(i*g+off, camera.height);
 			}
-			var g = project.worldGridHeight * camera.adjustedZoom;
+			// Horizontals
+			var g = curWorld.worldGridHeight * camera.adjustedZoom;
 			var off =  root.y % g;
 			for( i in 0...M.ceil(camera.height/g)+1 ) {
-				grids.moveTo(0, i*g+off);
-				grids.lineTo(camera.width, i*g+off);
+				largeGrid.moveTo(0, i*g+off);
+				largeGrid.lineTo(camera.width, i*g+off);
+			}
+		}
+		else
+			largeGrid.visible = false;
+	}
+
+	inline function updateAxesPos() {
+		if( !settings.v.showDetails || editor.gifMode ) {
+			axeH.visible = axeV.visible = false;
+		}
+		else {
+			switch curWorld.worldLayout {
+				case Free, GridVania:
+					axeH.visible = axeV.visible = true;
+
+					// Horizontal
+					axeH.y = root.y;
+					axeH.scaleX = camera.iWidth;
+					axeH.scaleY = 3*camera.pixelRatio;
+
+					// Vertical
+					axeV.x = root.x;
+					axeV.scaleX = 3*camera.pixelRatio;
+					axeV.scaleY = camera.iHeight;
+
+				case LinearHorizontal, LinearVertical:
+					axeH.visible = axeV.visible = false;
+					return;
 			}
 		}
 	}
 
 
-	function renderAxes() {
-		axes.clear();
-		axes.lineStyle(3*camera.pixelRatio, worldLineColor, 1);
-
-		// Horizontal
-		axes.moveTo(0, root.y);
-		axes.lineTo(camera.iWidth, root.y);
-
-		// Vertical
-		axes.moveTo(root.x, 0);
-		axes.lineTo(root.x, camera.iHeight);
-	}
-
 	function renderWorldBounds() {
-		var pad = editor.project.defaultGridSize*3;
-		var b = editor.project.getWorldBounds();
+		App.LOG.render("Rendering world bounds...");
+		var pad = project.defaultGridSize*3;
+		var b = curWorld.getWorldBounds();
 		worldBounds.clear();
-		worldBounds.beginFill(editor.project.bgColor, 0.8);
+		worldBounds.beginFill(project.bgColor, 0.8);
 		worldBounds.drawRoundedRect(
 			b.left-pad,
 			b.top-pad,
@@ -404,131 +622,154 @@ class WorldRender extends dn.Process {
 	}
 
 	function updateCurrentHighlight() {
-		currentHighlight.visible = editor.worldMode;
+		final l = editor.curLevel;
+		currentHighlight.visible = editor.worldMode && l.worldDepth==editor.curWorldDepth;
 		if( !currentHighlight.visible )
 			return;
 
 		currentHighlight.clear();
-		currentHighlight.lineStyle(7/camera.adjustedZoom, 0xffcc00);
-		var l = editor.curLevel;
-		var p = 2 / camera.adjustedZoom;
+		final thick = settings.v.showDetails ? 4 : 1;
+		currentHighlight.lineStyle(thick/camera.adjustedZoom, 0xffcc00);
+		var p = thick*0.5 / camera.adjustedZoom;
 		currentHighlight.drawRect(l.worldX-p, l.worldY-p, l.pxWid+p*2, l.pxHei+p*2);
+	}
+
+
+	inline function refreshWorldLevelRect(l:data.Level) {
+		var wl = getWorldLevel(l);
+		if( wl!=null )
+			wl.rect.useLevel(l);
+	}
+
+
+	function updateLevelVisibility(l:data.Level) {
+		var wl = getWorldLevel(l);
+
+		wl.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
+
+		if( l.uid==editor.curLevelId && !editor.worldMode ) {
+			// Hide current level in editor mode
+			wl.outline.visible = false;
+			wl.render.visible = false;
+		}
+		else if( editor.worldMode ) {
+			// Show everything in world mode
+			wl.bgWrapper.visible = wl.render.visible = wl.outline.visible = camera.isOnScreenLevel(l);
+			wl.outline.alpha = 1;
+			wl.render.alpha = 1;
+		}
+		else {
+			// Fade other levels in editor mode
+			var dist = editor.curLevel.getBoundsDist(l);
+			wl.outline.alpha = 0.3;
+			wl.outline.visible = camera.isOnScreenLevel(l);
+			wl.render.alpha = 0.5;
+			wl.render.visible = wl.outline.visible && dist<=300;
+		}
+
+		// Depths
+		if( l.worldDepth!=editor.curWorldDepth ) {
+			if( l.worldDepth<editor.curWorldDepth ) {
+				// Above
+				wl.outline.alpha*=0.45;
+				wl.bgWrapper.visible = false;
+				wl.render.visible = false;
+				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
+					wl.outline.alpha*=0.3;
+			}
+			else {
+				// Beneath
+				wl.bgWrapper.alpha*=0.6;
+				wl.render.alpha*=0.15;
+				wl.outline.alpha*=0.2;
+				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
+					wl.bgWrapper.alpha*=0.3;
+			}
+		}
 	}
 
 	public function updateLayout() {
 		var cur = editor.curLevel;
 
-		// Axes visibility
-		axes.visible = editor.worldMode && switch editor.project.worldLayout {
-			case Free: true;
-			case GridVania: true;
-			case LinearHorizontal: false;
-			case LinearVertical: false;
-		};
-
 		// Level layout
-		for( l in editor.project.levels )
-			if( levels.exists(l.uid) ) {
-				var e = levels.get(l.uid);
+		for( l in editor.curWorld.levels ) {
+			if( !worldLevels.exists(l.uid) )
+				continue;
 
-				e.bgWrapper.alpha = editor.worldMode ? 1 : 0.2;
+			var wl = getWorldLevel(l);
+			updateLevelVisibility(l);
 
-				if( l.uid==editor.curLevelId && !editor.worldMode ) {
-					// Hide current level in editor mode
-					e.bounds.visible = false;
-					e.render.visible = false;
-				}
-				else if( editor.worldMode ) {
-					// Show everything in world mode
-					e.render.visible = true;
-					e.render.alpha = 1;
-					e.bounds.alpha = 1;
-				}
-				else {
-					// Fade other levels in editor mode
-					var dist = cur.getBoundsDist(l);
-					e.bounds.alpha = 0.3;
-					e.render.alpha = 0.5;
-					e.render.visible = dist<=300;
-				}
+			// Position
+			wl.render.setPosition( l.worldX, l.worldY );
+			wl.outline.setPosition( l.worldX, l.worldY );
+			wl.bgWrapper.setPosition( l.worldX, l.worldY );
+		}
 
-				// Position
-				e.render.setPosition( l.worldX, l.worldY );
-				e.bounds.setPosition( l.worldX, l.worldY );
-				e.bgWrapper.setPosition( l.worldX, l.worldY );
+		updateAllLevelIdentifiers(false);
+	}
+
+
+	function removeWorldLevel(uid:Int) {
+		if( worldLevels.exists(uid) ) {
+			var wl = worldLevels.get(uid);
+			wl.render.remove();
+			wl.outline.remove();
+			wl.bgWrapper.remove();
+			wl.identifier.remove();
+			if( wl.fieldsRender!=null ) {
+				wl.fieldsRender.customFields.remove();
+				wl.fieldsRender.identifier.remove();
 			}
-
-		updateLabels();
-	}
-
-	function removeLevel(uid:Int) {
-		if( levels.exists(uid) ) {
-			var lr = levels.get(uid);
-			lr.render.remove();
-			lr.bounds.remove();
-			lr.bgWrapper.remove();
-			lr.label.remove();
-			levels.remove(uid);
+			worldLevels.remove(uid);
 		}
 	}
 
-	function removeLevelFields(uid:Int) {
-		if( fieldRenders.exists(uid) ) {
-			fieldRenders.get(uid).above.remove();
-			fieldRenders.get(uid).beneath.remove();
-			fieldRenders.remove(uid);
-		}
+
+	function clearLevelRender(l:data.Level) {
+		var wl = getWorldLevel(l);
+		wl.bgWrapper.removeChildren();
+		wl.outline.clear();
+		wl.render.removeChildren();
 	}
+
 
 	function renderFields(l:data.Level) {
-		levelFieldsInvalidation.remove(l.uid);
+		App.LOG.render('Rendering world level fields $l...');
 
-		// Init wrapper
-		if( !fieldRenders.exists(l.uid) ) {
-			fieldRenders.set(l.uid, {
-				above: {
-					var f = new h2d.Flow(fieldsWrapper);
-					f.layout = Vertical;
-					f;
-				},
-				beneath: {
+		// Init fields wrapper
+		var wl = getWorldLevel(l);
+		if( wl.fieldsRender==null )
+			wl.fieldsRender = {
+				customFields: {
 					var f = new h2d.Flow(fieldsWrapper);
 					f.layout = Vertical;
 					f;
 				},
 				identifier: null,
-			});
-		}
-		var fWrapper = fieldRenders.get(l.uid);
-		fWrapper.above.removeChildren();
-		fWrapper.beneath.removeChildren();
+			}
+		wl.fieldsRender.customFields.removeChildren();
+		if( wl.fieldsRender.identifier!=null )
+			wl.fieldsRender.identifier.remove();
 
-		// Attach fields
+		// Attach custom fields
 		FieldInstanceRender.renderFields(
-			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Above ).map( fd->l.getFieldInstance(fd) ),
+			project.defs.levelFields.map( fd->l.getFieldInstance(fd,true) ),
 			l.getSmartColor(true),
 			LevelCtx(l),
-			fWrapper.above
-		);
-		FieldInstanceRender.renderFields(
-			project.defs.levelFields.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->l.getFieldInstance(fd) ),
-			l.getSmartColor(true),
-			LevelCtx(l),
-			fWrapper.beneath
+			wl.fieldsRender.customFields
 		);
 
-		// Level identifier
-		var f = new h2d.Flow(fWrapper.above);
-		f.minWidth = f.maxWidth = fWrapper.above.outerWidth;
+		// Init level identifier
+		var f = new h2d.Flow(wl.fieldsRender.customFields);
+		f.minWidth = f.maxWidth = wl.fieldsRender.customFields.outerWidth;
 		f.horizontalAlign = Middle;
 		f.padding = 6;
-		var tf = new h2d.Text(Assets.fontLight_large, f);
-		tf.text = '"${l.identifier}"';
+		var tf = new h2d.Text(Assets.getLargeFont(), f);
+		tf.smooth = true;
+		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.addBg(f, l.getSmartColor(true), 0.6);
-		if( fWrapper.identifier!=null )
-			fWrapper.identifier.remove();
-		fWrapper.identifier = f;
+		FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
+		wl.fieldsRender.identifier = f;
 
 		updateFieldsPos();
 	}
@@ -537,25 +778,12 @@ class WorldRender extends dn.Process {
 		if( l==null )
 			throw "Unknown level";
 
-		App.LOG.render("Rendered world level "+l);
+		App.LOG.render('Rendering world level $l...');
 
 		// Cleanup
-		levelInvalidations.remove(l.uid);
-		removeLevel(l.uid);
+		clearLevelRender(l);
 
-		// Init
-		var wl : WorldLevelRender = {
-			bgWrapper: new h2d.Object(),
-			render : new h2d.Object(),
-			bounds : new h2d.Graphics(),
-			label : new h2d.ScaleGrid(Assets.elements.getTile("fieldBgOutline"), 5, 5),
-		}
-		var _depth = 0;
-		levelsWrapper.add(wl.bgWrapper, _depth++);
-		levelsWrapper.add(wl.render, _depth++);
-		levelsWrapper.add(wl.bounds, _depth++);
-		levelsWrapper.add(wl.label, _depth++);
-		levels.set(l.uid, wl);
+		var wl = getWorldLevel(l);
 
 		// Bg color
 		var col = new h2d.Bitmap(h2d.Tile.fromColor(l.getBgColor()), wl.bgWrapper);
@@ -644,94 +872,195 @@ class WorldRender extends dn.Process {
 			}
 		}
 
-		var error = l.getFirstError();
-
-		// Bounds
-		var thick = 1*camera.pixelRatio;
-		var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.4);
-		if( error!=null ) {
-			thick*=3;
-			c = 0xff0000;
-		}
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(0, 0, l.pxWid, thick); // top
-
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
-
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(0, 0, thick, l.pxHei); // left
-
-		wl.bounds.beginFill(c);
-		wl.bounds.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
+		updateLevelBounds(l);
 
 		// Identifier
-		wl.label.color.setColor( C.addAlphaF(0x464e79) );
-		wl.label.alpha = 0.8;
-		updateLabelText(l);
+		wl.identifier.color.setColor( C.addAlphaF(0x464e79) );
+		wl.identifier.alpha = 0.8;
+		invalidateLevelIdentifier(l);
 	}
 
 
-	function updateLabelText(l:data.Level) {
-		var wl = levels.get(l.uid);
-		if( wl==null )
-			return;
+	function updateLevelBounds(l:data.Level) {
+		var wl = getWorldLevel(l);
+		if( wl!=null ) {
+			wl.outline.clear();
+			if( !settings.v.showDetails )
+				return;
 
-		wl.label.removeChildren();
-		var error = l.getFirstError();
-		var tf = new h2d.Text(Assets.fontLight_large, wl.label);
-		tf.text = l.identifier;
-		tf.textColor = C.toWhite( l.getBgColor(), 0.8 );
-		tf.x = 8;
+			var thick = 1*camera.pixelRatio / camera.adjustedZoom;
+			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.7);
 
-		if( error!=null ) {
-			tf.textColor = 0xff0000;
-			tf.text +=
-				" <ERR: " + ( switch error {
-					case null: '???';
-					case InvalidEntityField(ei): '${ei.def.identifier}';
-					case InvalidBgImage: 'bg image';
-				}) + ">";
+			var error = l.getFirstError();
+			if( error!=NoError ) {
+				thick*=4;
+				c = 0xff0000;
+			}
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(0, 0, l.pxWid, thick); // top
+
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
+
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(0, 0, thick, l.pxHei); // left
+
+			wl.outline.beginFill(c);
+			wl.outline.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
+		}
+	}
+
+
+	function updateLevelIdentifier(l:data.Level, refreshTexts:Bool) {
+		var wl = getWorldLevel(l);
+
+		// Refresh text
+		if( refreshTexts ) {
+			wl.identifier.removeChildren();
+			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
+			tf.smooth = true;
+			tf.text = l.getDisplayIdentifier();
+			tf.textColor = l.getSmartColor(true);
+			tf.x = 8;
+			tf.smooth = true;
+
+			var error = l.getFirstError();
+			if( error!=NoError ) {
+				tf.textColor = 0xff0000;
+				tf.text +=
+					" <ERR: " + ( switch error {
+						case NoError: '???';
+						case InvalidEntityTag(ei): 'Incorrect tag: ${ei.def.identifier}';
+						case InvalidEntityField(ei): 'Invalid field value: ${ei.def.identifier}';
+						case InvalidBgImage: 'Bg image';
+					}) + ">";
+			}
+
+			wl.identifier.width = tf.x*2 + tf.textWidth;
+			wl.identifier.height = tf.textHeight;
 		}
 
-		wl.label.width = tf.x*2 + tf.textWidth;
-		wl.label.height = tf.textHeight;
+		// Visibility
+		wl.identifier.visible = camera.adjustedZoom>=camera.getMinZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
+		if( l.worldDepth!=editor.curWorldDepth )
+			wl.identifier.visible = false;
+		if( !wl.identifier.visible )
+			return;
+
+		wl.identifier.alpha = getAlphaFromZoom( camera.getMinZoom()*0.8 );
+
+		// Scaling
+		switch curWorld.worldLayout {
+			case Free, GridVania:
+				wl.identifier.setScale( M.fmin( l.pxWid / wl.identifier.width, 1/camera.adjustedZoom ) );
+
+			case LinearHorizontal, LinearVertical:
+				wl.identifier.setScale( 1/camera.adjustedZoom );
+		}
+
+		// Position
+		switch curWorld.worldLayout {
+			case Free, GridVania:
+				wl.identifier.x = Std.int( l.worldX );
+				wl.identifier.y = Std.int( l.worldY );
+				wl.identifier.rotation = 0;
+
+			case LinearHorizontal:
+				wl.identifier.x = Std.int( l.worldX + l.pxWid*0.3 );
+				wl.identifier.y = Std.int( l.worldY - wl.identifier.height*wl.identifier.scaleY );
+				wl.identifier.smooth = true;
+				wl.identifier.rotation = -0.4;
+
+			case LinearVertical:
+				wl.identifier.x = Std.int( l.worldX - wl.identifier.width*wl.identifier.scaleX - 30 );
+				wl.identifier.y = Std.int( l.worldY + l.pxHei*0.5 - wl.identifier.height*wl.identifier.scaleY*0.5 );
+				wl.identifier.rotation = 0;
+		}
+
+		// Color
+		wl.identifier.color.setColor( C.addAlphaF( C.toBlack( l.getSmartColor(false), 0.6 ) ) );
 	}
 
 
 	override function postUpdate() {
 		super.postUpdate();
 
-		worldBg.wrapper.alpha += ( ( editor.worldMode ? 0.3 : 0 ) - worldBg.wrapper.alpha ) * 0.1;
+		// Fade bg
+		var ta = ( editor.worldMode ? 0.3 : 0 );
+		if( worldBg.wrapper.alpha!=ta ) {
+			worldBg.wrapper.alpha += ( ta - worldBg.wrapper.alpha ) * 0.1;
+			if( M.fabs(worldBg.wrapper.alpha-ta) <= 0.03 )
+				worldBg.wrapper.alpha = ta;
+		}
+
 		worldBg.wrapper.visible = worldBg.wrapper.alpha>=0.02;
-		worldBounds.visible = editor.worldMode && editor.project.levels.length>1;
+		worldBounds.visible = editor.worldMode && editor.curWorld.levels.length>1;
 
-		var waitTileset = false;
-		for(td in project.defs.tilesets)
-			if( td.hasAtlasPath() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
-				waitTileset = true;
-				break;
-			}
 
-		// World levels rendering (max one per frame)
-		if( !waitTileset )
-			for( uid in levelInvalidations.keys() ) {
-				if( editor.project.getLevel(uid)==null ) {
-					levelInvalidations.remove(uid);
-					continue;
+		// Level invalidations
+		if( !cd.hasSetS("levelRendersLock", 0.08) ) {
+			// Check if a tileset is being loaded
+			var waitingTileset = false;
+			for(td in project.defs.tilesets)
+				if( td.hasAtlasPointer() && !td.hasValidPixelData() && NT.fileExists(project.makeAbsoluteFilePath(td.relPath)) ) {
+					waitingTileset = true;
+					break;
 				}
-				renderLevel( editor.project.getLevel(uid) );
-				updateLayout();
-				break;
-			}
 
-		// Fields
-		// var limit = 2;
-		for( uid in levelFieldsInvalidation.keys() ) {
-			renderFields( editor.project.getLevel(uid) );
-			break;
-			// if( limit--<=0 )
-			// 	break;
+			// Check various level invalidations
+			var limitRenders = 1;
+			var limitOthers = 5;
+			var limitBounds = 150;
+			if( !waitingTileset ) {
+				var l : data.Level = null;
+				for( wl in worldLevels ) {
+					if( wl.worldIid!=editor.curWorldIid )
+						continue;
+
+					if( !camera.isOnScreenWorldRect(wl.rect) )
+						continue;
+
+					l = editor.project.getLevelAnywhere(wl.uid);
+					if( l==null ) {
+						// Drop lost levels
+						removeWorldLevel(wl.uid);
+						continue;
+					}
+
+					// Level render
+					if( wl.renderInvalidated && limitRenders-->0 ) {
+						wl.renderInvalidated = false;
+						renderLevel(l);
+						updateLayout();
+					}
+
+					// Bounds
+					if( wl.boundsInvalidated && limitBounds-->0 ) {
+						wl.boundsInvalidated = false;
+						updateLevelBounds(l);
+					}
+
+					// Fields
+					if( wl.fieldsInvalidated && ( editor.worldMode || editor.curLevel==l ) && limitOthers-->0 ) {
+						wl.fieldsInvalidated = false;
+						renderFields(l);
+					}
+
+					// Level identifiers
+					if( wl.identifierInvalidated && limitOthers-->0 ) {
+						wl.identifierInvalidated = false;
+						updateLevelIdentifier( l, true );
+					}
+				}
+			}
+		}
+
+
+		// Refresh elements which thickness is linked to camera zoom
+		if( editor.worldMode && invalidatedCameraBasedRenders && !cd.hasSetS("boundsRender",0.15) ) {
+			invalidatedCameraBasedRenders = false;
+			renderGrids();
+			updateCurrentHighlight();
 		}
 	}
 

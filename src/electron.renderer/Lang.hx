@@ -2,8 +2,14 @@ import dn.data.GetText;
 
 class Lang {
 	// Text constants
+	public static var _Untagged = ()->t._("Untagged");
 	public static var _Duplicate = ()->t._("Duplicate");
-	public static var _Delete = ()->t._("Delete");
+	public static var _Copy = (?v:String) -> v==null ? t._("Copy") : t._("Copy ::e::", {e:v});
+	public static var _Cut = (?v:String) -> v==null ? t._("Cut") : t._("Cut ::e::", {e:v});
+	public static var _Paste = (?v:String) -> v==null ? t._("Paste") : t._("Paste ::e::", {e:v});
+	public static var _PasteAfter = (?v:String) -> v==null ? t._("Paste after") : t._("Paste ::e:: after", {e:v});
+	public static var _Delete = (?v:LocaleString) -> v==null ? t._("Delete") : t._("Delete ::e::", {e:v});
+	public static var _UnsupportedWinNetDir = ()->L.t._("Sorry but LDtk does not support working on a Network Drive yet.\nSo, for your own safety, operations on Network Drives are not permitted for now to avoid errors and potential data loss.");
 
 
 	// Misc
@@ -21,7 +27,7 @@ class Lang {
 		CUR = lid==null ? DEFAULT : lid;
 
 		t = new GetText();
-		t.readMo( hxd.Res.load("lang/"+CUR+".mo").entry.getBytes() );
+		t.readPo( hxd.Res.load("lang/"+CUR+".po").entry.getBytes() );
 	}
 
 	public static inline function onOff(v:Null<Bool>) {
@@ -42,7 +48,7 @@ class Lang {
 		}
 	}
 
-	public static function getFieldType(type:data.DataTypes.FieldType) : LocaleString {
+	public static function getFieldType(type:ldtk.Json.FieldType) : LocaleString {
 		return switch type {
 			case F_Int: t._("Integer");
 			case F_Color: t._("Color");
@@ -53,10 +59,12 @@ class Lang {
 			case F_Point: t._("Point");
 			case F_Enum(name): name==null ? t._("Enum") : t._("Enum.::e::", { e:name });
 			case F_Path: t._("File path");
+			case F_EntityRef: t._("Entity ref");
+			case F_Tile: t._("Tile");
 		}
 	}
 
-	public static function getFieldTypeShortName(type:data.DataTypes.FieldType) : LocaleString {
+	public static function getFieldTypeShortName(type:ldtk.Json.FieldType) : LocaleString {
 		return switch type {
 			case F_Int: t._("123");
 			case F_Color: t._("Col");
@@ -67,6 +75,21 @@ class Lang {
 			case F_Point: t._("X::sep::Y", { sep:Const.POINT_SEPARATOR });
 			case F_Enum(name): t._("Enu");
 			case F_Path: t._("*.*");
+			case F_EntityRef: t._("Ent");
+			case F_Tile: t._("Tile");
+		}
+	}
+
+
+	public static function getEmbedAtlasInfos(e:ldtk.Json.EmbedAtlas) {
+		return switch e {
+			case LdtkIcons: {
+				displayName: "⚙️ Internal icons by FinalBossBlues",
+				identifier: "Internal_Icons",
+				author: "FinalBossBlues",
+				support: { label:"Patreon", url:"https://www.patreon.com/finalbossblues" },
+				url: "https://finalbossblues.itch.io/icons"
+			}
 		}
 	}
 
@@ -79,6 +102,8 @@ class Lang {
 			case LangXml: t._("XML/HTML");
 			case LangMarkdown: t._("Markdown");
 
+			case LangLog: t._("Log file");
+
 			case LangPython: t._("Python");
 			case LangRuby: t._("Ruby");
 			case LangC: t._("C/C++/C#");
@@ -89,7 +114,7 @@ class Lang {
 	}
 
 
-	public static function atlasLoadingMessage(filePath:String, result:AtlasLoadingResult) : LocaleString {
+	public static function imageLoadingMessage(filePath:String, result:ImageLoadingResult) : LocaleString {
 		var name = dn.FilePath.fromFile(filePath).fileWithExt;
 		return switch result {
 			case Ok:
@@ -108,7 +133,10 @@ class Lang {
 				Lang.t._("\"::name::\" image was updated, but the new version is smaller than the previous one.\nSome tiles might have been lost in the process. It is recommended to check this carefully before saving this project!", { name:name } );
 
 			case RemapSuccessful:
-				Lang.t._("Tileset image \"::name::\" was reloaded and is larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { name:name } );
+				Lang.t._("Tileset image \"::name::\" was reloaded and the new version was larger than the old one.\nTiles coordinates were remapped, everything is ok :)", { name:name } );
+
+			case UnsupportedFileOrigin(origin):
+				Lang.t._("Loading from the following source is not supported: ::origin::", {origin:origin});
 		}
 	}
 
@@ -117,7 +145,7 @@ class Lang {
 	public static function date(date:Date) : LocaleString {
 		var day = date.getDate();
 		return untranslated(
-			MONTHS[ date.getMonth()+1 ]
+			MONTHS[ date.getMonth() ]
 			+" " + day + ( day==1?"st" : day==2?"nd" : day==3?"rd" : "th" )
 			+" " + date.getFullYear()
 			+" "+t._("at")

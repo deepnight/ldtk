@@ -18,31 +18,20 @@ Visit [LDtk.io](https://ldtk.io) to get latest version.
 ## Requirements
 
  - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build LDtk.
- - **[NPM](https://www.npmjs.com/)**: this package manager is used for various install and packaging scripts
+ - **[NPM](https://nodejs.org/en/download/)**: this package manager is used for various install and packaging scripts. It is packaged with NodeJS.
 
-### Installing Haxe libs
+## Installing required stuff
 
-Install required haxe libs:
-```
-haxelib git heaps https://github.com/deepnight/heaps.git
-
-haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
-
-haxelib git electron https://github.com/tong/hxelectron.git
-
-haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git
-
-haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git
-
-haxelib git castle https://github.com/ncannasse/castle.git
-```
-
-### Installing Node dependencies
-
-Run the following command in the `app` folder:
-```
-npm i
-```
+ - Open a command line **in the `ldtk` root dir**,
+ - Install required Haxe libs:
+ ```
+ haxe setup.hxml
+ ```
+ - Install Electron locally and other dependencies through NPM (**IMPORTANT**: you need to be in the `app` dir):
+ ```
+ cd app
+ npm i
+ ```
 
 ## Compiling *master* branch
 
@@ -85,7 +74,7 @@ npm run start
 
 # Related tools & licences
 
- - Tileset images: see [README](app/samples/README.md) in samples
+ - Tileset images: see [README](app/extraFiles/samples/README.md) in samples
  - Haxe: https://haxe.org/
  - Heaps.io: https://heaps.io/
  - Electron: https://www.electronjs.org/

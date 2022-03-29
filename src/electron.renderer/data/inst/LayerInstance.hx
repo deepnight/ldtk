@@ -4,9 +4,17 @@ import data.DataTypes;
 
 class LayerInstance {
 	var _project : Project;
-	public var def(get,never) : data.def.LayerDef; inline function get_def() return _project.defs.getLayerDef(layerDefUid);
-	public var level(get,never) : Level; function get_level() return _project.getLevel(levelId);
 
+	public var def(get,never) : data.def.LayerDef;
+		inline function get_def() return _project.defs.getLayerDef(layerDefUid);
+
+	public var level(get,never) : Level;
+		inline function get_level() return _project.getLevelAnywhere(levelId);
+
+	var camera(get,never) : display.Camera;
+		inline function get_camera() return Editor.ME.camera;
+
+	public var iid : String;
 	public var levelId : Int;
 	public var layerDefUid : Int;
 	public var visible = true;
@@ -17,8 +25,18 @@ class LayerInstance {
 	@:allow(importer)
 	var pxOffsetY : Int = 0;
 
-	public var pxTotalOffsetX(get,never) : Int; inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
-	public var pxTotalOffsetY(get,never) : Int; inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
+	public var pxTotalOffsetX(get,never) : Int;
+		inline function get_pxTotalOffsetX() return pxOffsetX + def.pxOffsetX;
+
+	public var pxTotalOffsetY(get,never) : Int;
+		inline function get_pxTotalOffsetY() return pxOffsetY + def.pxOffsetY;
+
+	public var pxParallaxX(get,never) : Int;
+		inline function get_pxParallaxX() return M.round( pxTotalOffsetX + camera.getParallaxOffsetX(this) );
+
+	public var pxParallaxY(get,never) : Int;
+		inline function get_pxParallaxY() return M.round( pxTotalOffsetY + camera.getParallaxOffsetY(this) );
+
 	public var seed : Int;
 	public var optionalRules : Map<Int,Bool> = new Map();
 
@@ -37,20 +55,24 @@ class LayerInstance {
 			>
 		> > = null;
 
-	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( ( level.pxWid-pxOffsetX ) / def.gridSize );
-	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( ( level.pxHei-pxOffsetY ) / def.gridSize );
+	public var pxWid(get,never) : Int; inline function get_pxWid() return level.pxWid - pxOffsetX;
+	public var pxHei(get,never) : Int; inline function get_pxHei() return level.pxHei - pxOffsetY;
+	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( pxWid / def.gridSize );
+	public var cHei(get,never) : Int; inline function get_cHei() return dn.M.ceil( pxHei / def.gridSize );
 
 
-	public function new(p:Project, levelId:Int, layerDefUid:Int) {
+	@:allow(data.Level)
+	private function new(p:Project, levelUid:Int, layerDefUid:Int, layerInstIid:String) {
 		_project = p;
-		this.levelId = levelId;
+		iid = layerInstIid;
+		this.levelId = levelUid;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
 	}
 
 
 	@:keep public function toString() {
-		return 'Instance[#$layerDefUid,${def.identifier}:${def.type}]';
+		return 'LayerInstance[#$layerDefUid,${def.identifier}:${def.type}]';
 	}
 
 
@@ -61,7 +83,6 @@ class LayerInstance {
 	public function getDefaultTilesetUid() : Null<Int> {
 		return
 			def.tilesetDefUid!=null ? def.tilesetDefUid
-			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
 
@@ -69,7 +90,6 @@ class LayerInstance {
 		return
 			overrideTilesetUid!=null ? overrideTilesetUid
 			: def.tilesetDefUid!=null ? def.tilesetDefUid
-			: def.autoTilesetDefUid!=null ? def.autoTilesetDefUid
 			: null;
 	}
 
@@ -108,6 +128,7 @@ class LayerInstance {
 			__tilesetDefUid: td!=null ? td.uid : null,
 			__tilesetRelPath: td!=null ? td.relPath : null,
 
+			iid: iid,
 			levelId: levelId,
 			layerDefUid: layerDefUid,
 			pxOffsetX: pxOffsetX,
@@ -117,17 +138,6 @@ class LayerInstance {
 				var arr = [];
 				for(k in optionalRules.keys())
 					arr.push(k);
-				arr;
-			},
-
-			intGrid: { // old IntGrid format
-				var arr = [];
-				if( !_project.hasFlag(DiscardPreCsvIntGrid) )
-					for(e in intGrid.keyValueIterator())
-						arr.push({
-							coordId: e.key,
-							v: e.value-1,
-						});
 				arr;
 			},
 
@@ -189,8 +199,16 @@ class LayerInstance {
 			entityInstances: entityInstances.map( function(ei) return ei.toJson(this) ),
 		}
 
-		if( _project.hasFlag(DiscardPreCsvIntGrid) )
-			Reflect.deleteField(json, "intGrid");
+		if( _project.hasFlag(ExportPreCsvIntGridFormat) )
+			json.intGrid = {
+				var arr = [];
+				for(e in intGrid.keyValueIterator())
+					arr.push({
+						coordId: e.key,
+						v: e.value-1,
+					});
+				arr;
+			}
 
 		return json;
 	}
@@ -247,8 +265,10 @@ class LayerInstance {
 
 	public static function fromJson(p:Project, json:ldtk.Json.LayerInstanceJson) {
 		if( (cast json).layerDefId!=null ) json.layerDefUid = (cast json).layerDefId;
+		if( (cast json).iid==null )
+			json.iid = p.generateUniqueId_UUID();
 
-		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid) );
+		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid), json.iid );
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
@@ -267,10 +287,10 @@ class LayerInstance {
 		}
 
 		for( gridTilesJson in json.gridTiles ) {
-			if( dn.Version.lower(p.jsonVersion, "0.4") || gridTilesJson.d==null )
+			if( dn.Version.lower(p.jsonVersion, "0.4", true) || gridTilesJson.d==null )
 				gridTilesJson.d = [ (cast gridTilesJson).coordId, (cast gridTilesJson).tileId ];
 
-			if( dn.Version.lower(p.jsonVersion, "0.6") )
+			if( dn.Version.lower(p.jsonVersion, "0.6", true) )
 				gridTilesJson.t = gridTilesJson.d[1];
 
 			var coordId = gridTilesJson.d[0];
@@ -291,7 +311,7 @@ class LayerInstance {
 
 		// Entities
 		for( entityJson in json.entityInstances )
-			li.entityInstances.push( EntityInstance.fromJson(p, entityJson) );
+			li.entityInstances.push( EntityInstance.fromJson(p, li, entityJson) );
 
 		// Auto-layer tiles
 		if( json.autoLayerTiles!=null ) {
@@ -303,7 +323,7 @@ class LayerInstance {
 					var ruleId = at.d[0];
 					var coordId = at.d[1];
 
-					if( dn.Version.lower(p.jsonVersion, "0.6") )
+					if( dn.Version.lower(p.jsonVersion, "0.6", true) )
 						at.t = at.d[2];
 
 					if( !li.autoTilesCache.exists(ruleId) )
@@ -312,7 +332,7 @@ class LayerInstance {
 					if( !li.autoTilesCache.get(ruleId).exists(coordId) )
 						li.autoTilesCache.get(ruleId).set(coordId, []);
 
-					if( dn.Version.lower(p.jsonVersion, "0.5") && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
+					if( dn.Version.lower(p.jsonVersion, "0.5", true) && ( li.pxOffsetX!=0 || li.pxOffsetY!=0 ) ) {
 						// Fix old coords that included offsets
 						at.px[0]-=li.pxOffsetX;
 						at.px[1]-=li.pxOffsetY;
@@ -358,16 +378,18 @@ class LayerInstance {
 		return Std.int(coordId/cWid);
 	}
 
-	public inline function levelToLayerCx(levelX:Int) {
+	public inline function levelToLayerCx(levelX:Float) {
 		return Std.int( ( levelX - pxTotalOffsetX ) / def.gridSize ); // TODO not tested: check if this works with the new layerDef offsets
 	}
 
-	public inline function levelToLayerCy(levelY:Int) {
+	public inline function levelToLayerCy(levelY:Float) {
 		return Std.int( ( levelY - pxTotalOffsetY ) / def.gridSize );
 	}
 
-	public function tidy(p:Project) {
+	public function tidy(p:Project) : Bool {
 		_project = p;
+		_project.markIidAsUsed(iid);
+		var anyChange = false;
 
 		// Remove lost optional rule group UIDs
 		var keep = false;
@@ -376,6 +398,7 @@ class LayerInstance {
 			if( rg==null || !rg.isOptional ) {
 				App.LOG.add("tidy", 'Removed lost optional rule group #$optGroupUid in $this');
 				optionalRules.remove(optGroupUid);
+				anyChange = true;
 			}
 		}
 
@@ -386,8 +409,13 @@ class LayerInstance {
 				if( def.type==IntGrid )
 					for(cy in 0...cHei)
 					for(cx in 0...cWid)
-						if( !def.hasIntGridValue( getIntGrid(cx,cy) ) )
+						if( hasIntGrid(cx,cy) && !def.hasIntGridValue( getIntGrid(cx,cy) ) ) {
 							removeIntGrid(cx,cy);
+							if( def.isAutoLayer() )
+								autoTilesCache = null;
+							anyChange = true;
+							// no logging as this could be a LOT of entries
+						}
 
 				if( def.isAutoLayer() && autoTilesCache!=null ) {
 					// Discard lost rules autoTiles
@@ -395,11 +423,13 @@ class LayerInstance {
 						if( !def.hasRule(rUid) ) {
 							App.LOG.add("tidy", 'Removed lost rule cache in $this');
 							autoTilesCache.remove(rUid);
+							anyChange = true;
 						}
 
 					if( !def.autoLayerRulesCanBeUsed() ) {
 						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
 						autoTilesCache = new Map();
+						anyChange = true;
 					}
 				}
 
@@ -413,6 +443,7 @@ class LayerInstance {
 						// Remove lost entities (def removed)
 						App.LOG.add("tidy", 'Removed lost entity in $this');
 						entityInstances.splice(i,1);
+						anyChange = true;
 					}
 					else
 						i++;
@@ -420,10 +451,13 @@ class LayerInstance {
 
 				// Cleanup field instances
 				for(ei in entityInstances)
-					ei.tidy(_project, this);
+					if( ei.tidy(_project, this) )
+						anyChange = true;
 
 			case Tiles:
 		}
+
+		return anyChange;
 	}
 
 
@@ -551,8 +585,9 @@ class LayerInstance {
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 
-		var ei = new EntityInstance(_project, ed.uid);
+		var ei = new EntityInstance(_project, this, ed.uid, _project.generateUniqueId_UUID());
 		entityInstances.push(ei);
+		_project.registerEntityInstance(ei);
 		return ei;
 	}
 
@@ -564,16 +599,22 @@ class LayerInstance {
 	}
 
 	public function duplicateEntityInstance(ei:EntityInstance) : EntityInstance {
-		var copy = EntityInstance.fromJson( _project, ei.toJson(this) );
+		var copy = EntityInstance.fromJson( _project, this, ei.toJson(this) );
+		copy.iid = _project.generateUniqueId_UUID();
 		entityInstances.push(copy);
+		_project.registerEntityInstance(copy);
 
 		return copy;
 	}
 
-	public function removeEntityInstance(e:EntityInstance) {
+	public function removeEntityInstance(ei:EntityInstance) {
 		requireType(Entities);
-		if( !entityInstances.remove(e) )
-			throw "Unknown instance "+e;
+		if( !entityInstances.remove(ei) )
+			throw "Unknown instance "+ei;
+
+		_project.removeAnyFieldRefsTo(ei);
+		_project.unregisterEntityIid(ei.iid);
+		_project.unregisterAllReverseIidRefsFor(ei);
 	}
 
 
@@ -686,13 +727,13 @@ class LayerInstance {
 			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
 			// Modulos
-			if( r.checker!=Vertical && cy%r.yModulo!=0 )
+			if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
 				return false;
 
 			if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
 				return false;
 
-			if( r.checker!=Horizontal && cx%r.xModulo!=0 )
+			if( r.checker!=Horizontal && (cx-r.xOffset) % r.xModulo!=0 )
 				return false;
 
 			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
@@ -741,28 +782,36 @@ class LayerInstance {
 	}
 
 
+	public inline function applyBreakOnMatchesEverywhere() {
+		applyBreakOnMatchesArea(0,0,cWid,cHei);
+	}
 
-	public function applyBreakOnMatches() {
+	public function applyBreakOnMatchesArea(cx:Int, cy:Int, wid:Int, hei:Int) {
+		var left = M.imax(0,cx);
+		var top = M.imax(0,cy);
+		var right = M.imin(cWid-1, left + wid-1);
+		var bottom = M.imin(cHei-1, top + hei-1);
+
 		var coordLocks = new Map();
 
 		var td = getTilesetDef();
-		for( cy in 0...cHei )
-		for( cx in 0...cWid ) {
+		for( y in top...bottom+1 )
+		for( x in left...right+1 ) {
 			def.iterateActiveRulesInEvalOrder( this, (r)->{
-				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(cx,cy)) ) {
-					if( coordLocks.exists( coordId(cx,cy) ) ) {
+				if( autoTilesCache.exists(r.uid) && autoTilesCache.get(r.uid).exists(coordId(x,y)) ) {
+					if( coordLocks.exists( coordId(x,y) ) ) {
 						// Tiles below locks are discarded
-						autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
+						autoTilesCache.get(r.uid).remove( coordId(x,y) );
 					}
 					else if( r.breakOnMatch ) {
 						// Break on match is ON
-						coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+						coordLocks.set( coordId(x,y), true ); // mark cell as locked
 					}
 					else {
 						// Check for opaque tiles
-						for( t in autoTilesCache.get(r.uid).get( coordId(cx,cy) ) )
+						for( t in autoTilesCache.get(r.uid).get( coordId(x,y) ) )
 							if( td.isTileOpaque(t.tid) ) {
-								coordLocks.set( coordId(cx,cy), true ); // mark cell as locked
+								coordLocks.set( coordId(x,y), true ); // mark cell as locked
 								break;
 							}
 					}
@@ -783,25 +832,26 @@ class LayerInstance {
 			return;
 		}
 
+		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
 		// Adjust bounds to also redraw nearby cells
-		var left = dn.M.imax( 0, cx - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-		var top = dn.M.imax( 0, cy - Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-		var right = dn.M.imin( cWid-1, cx + wid-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
-		var bottom = dn.M.imin( cHei-1, cy + hei-1 + Std.int(Const.MAX_AUTO_PATTERN_SIZE*0.5) );
+		var left = dn.M.imax( 0, cx - maxRadius );
+		var right = dn.M.imin( cWid-1, cx + wid-1 + maxRadius );
+		var top = dn.M.imax( 0, cy - maxRadius );
+		var bottom = dn.M.imin( cHei-1, cy + hei-1 + maxRadius );
 
 
 		// Apply rules
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
 		if( source==null )
 			return;
-
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
-			for(cx in left...right+1)
-			for(cy in top...bottom+1)
-				runAutoLayerRuleAt(source, r,cx,cy);
+			for(x in left...right+1)
+			for(y in top...bottom+1)
+				runAutoLayerRuleAt(source, r, x,y);
 		});
 
-		applyBreakOnMatches();
+		// Discard using break-on-match flag
+		applyBreakOnMatchesArea(left,top, right-left+1, bottom-top+1);
 	}
 
 	/** Apply all rules to all cells **/
@@ -833,7 +883,7 @@ class LayerInstance {
 			runAutoLayerRuleAt(source, r, cx,cy);
 
 		if( applyBreakOnMatch )
-			applyBreakOnMatches();
+			applyBreakOnMatchesEverywhere();
 	}
 
 }

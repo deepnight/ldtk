@@ -17,6 +17,7 @@ class ResizeTool extends Tool<Int> {
 	var ge: GenericLevelElement;
 	var _handlePosIterator : Array<RectHandlePos>;
 
+	var resizedAnything = false;
 	var invalidated = true;
 	var _rect : Null<ResizeRect>;
 	var rect(get,never) : ResizeRect;
@@ -42,6 +43,22 @@ class ResizeTool extends Tool<Int> {
 		for(p in _handlePosIterator) {
 			if( isHandleActive(p) )
 				g.drawCircle(getHandleX(p), getHandleY(p), HANDLE_RADIUS*0.6, 16);
+		}
+	}
+
+	public function onGlobalEvent(ev:GlobalEvent) {
+		switch ev {
+			case EntityInstanceChanged(ei):
+				if( isOnEntity(ei) )
+					invalidate();
+
+			case EntityInstanceRemoved(ei):
+				if( isOnEntity(ei) ) {
+					editor.clearResizeTool();
+					return;
+				}
+
+			case _:
 		}
 	}
 
@@ -114,10 +131,11 @@ class ResizeTool extends Tool<Int> {
 		return draggedHandle!=null;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 		curMode = null;
 
+		resizedAnything = false;
 		ev.cancel = true;
 		draggedHandle = getOveredHandle(m);
 		if( draggedHandle==null ) {
@@ -138,6 +156,14 @@ class ResizeTool extends Tool<Int> {
 
 	override function stopUsing(m:Coords) {
 		super.stopUsing(m);
+		if( resizedAnything ) {
+			switch ge {
+				case GridCell(li, cx, cy):
+				case Entity(li, ei): editor.curLevelTimeline.markEntityChange(ei);
+				case PointField(li, ei, fi, arrayIdx):
+			}
+			editor.curLevelTimeline.saveLayerState(curLayerInstance);
+		}
 		draggedHandle = null;
 	}
 
@@ -241,6 +267,7 @@ class ResizeTool extends Tool<Int> {
 
 				case PointField(li, ei, fi, arrayIdx):
 			}
+			resizedAnything = true;
 			dragOrigin = m;
 		}
 	}

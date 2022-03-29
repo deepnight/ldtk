@@ -6,6 +6,7 @@ class Tool<T> extends dn.Process {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	@:allow(ui.ToolPalette)
@@ -69,11 +70,11 @@ class Tool<T> extends dn.Process {
 
 	public function as<E:Tool<X>,X>(c:Class<E>) : E return cast this;
 
-	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible();
+	public function canEdit() return getSelectedValue()!=null && editor.isCurrentLayerVisible() && App.ME.hasGlContext;
 	public function isRunning() return curMode!=null;
 
-	public function startUsing(ev:hxd.Event, m:Coords) {
-		editor.requestFps();
+	public function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		App.ME.requestCpu();
 		curMode = null;
 		startTime = haxe.Timer.stamp();
 		clickingOutsideBounds = !curLevel.inBounds(m.levelX, m.levelY);
@@ -93,7 +94,6 @@ class Tool<T> extends dn.Process {
 			return;
 		}
 
-		editor.curLevelHistory.initChangeMarks();
 		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
@@ -145,7 +145,7 @@ class Tool<T> extends dn.Process {
 			check(cur.cx, cur.cy+1);
 
 			// Apply
-			editor.curLevelHistory.markChange(cur.cx, cur.cy);
+			editor.curLevelTimeline.markGridChange(curLayerInstance, cur.cx, cur.cy);
 			setter( cur.cx, cur.cy, getSelectedValue() );
 			affectedPoints.push(cur);
 
@@ -171,7 +171,8 @@ class Tool<T> extends dn.Process {
 			if( anyChange )
 				editor.levelRender.invalidateLayerArea(curLayerInstance, cx,cx, cy,cy);
 		});
-		editor.requestFps();
+		editor.cancelSpaceKey();
+		App.ME.requestCpu();
 		return anyChange;
 	}
 
@@ -214,7 +215,7 @@ class Tool<T> extends dn.Process {
 				else {
 					anyChange = useAt(m,true);
 					if( anyChange )
-						editor.levelRender.invalidateLayer(curLayerInstance);
+						editor.levelRender.invalidateLayerArea(curLayerInstance, m.cx, m.cx, m.cy, m.cy);
 				}
 			}
 
@@ -232,15 +233,14 @@ class Tool<T> extends dn.Process {
 
 
 	function saveToHistory() {
-		editor.curLevelHistory.saveLayerState( curLayerInstance );
-		editor.curLevelHistory.flushChangeMarks();
+		editor.curLevelTimeline.saveLayerState(curLayerInstance);
 		needHistorySaving = false;
 	}
 
 
 	var needHistorySaving = false;
 	final function onEditAnything() {
-		editor.ge.emit(LayerInstanceChanged);
+		editor.ge.emit( LayerInstanceEditedByTool(curLayerInstance) );
 		needHistorySaving = true;
 	}
 

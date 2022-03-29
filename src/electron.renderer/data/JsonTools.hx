@@ -15,6 +15,22 @@ class JsonTools {
 			return e.getName();
 	}
 
+	public static function writeEnumAsString(e:EnumValue, canBeNull:Bool) : Dynamic {
+		if( e==null )
+			if( canBeNull )
+				return null;
+			else
+				throw "Enum is null";
+
+		if( e.getParameters().length>0 ) {
+			var params = e.getParameters().map( p->Std.string(p) ).join(",");
+			return e.getName()+'($params)';
+		}
+		else
+			return e.getName();
+	}
+
+	static var enumParamsReg = ~/(.*?)\((.*)\)/gi;
 	public static function readEnum<T>(e:Enum<T>, o:Dynamic, allowNull:Bool, ?def:T) : T {
 		if( o==null ) {
 			if( def==null && !allowNull )
@@ -26,13 +42,37 @@ class JsonTools {
 		try {
 			switch Type.typeof(o) {
 			case TObject:
+				// Old object format
 				if( Type.typeof(o.id)==TInt )
 					return e.createByIndex(o.id, o.p);
 				else
 					return e.createByName(o.id, o.params);
 
 			case TClass(String):
-				return e.createByName(o);
+				var name = Std.string(o);
+				if( enumParamsReg.match(name) ) {
+					// Enum with parameters
+					name = enumParamsReg.matched(1);
+					var rawParams = enumParamsReg.matched(2);
+					var params : Array<Dynamic> = [];
+					for( p in rawParams.split(",") ) {
+						var v = Std.parseInt(p);
+						if( M.isValidNumber(v) )
+							params.push(v); // Int
+						else {
+							var v = Std.parseFloat(p);
+							if( M.isValidNumber(v) )
+								params.push(v); // Float
+							else
+								params.push(p);
+						}
+					}
+					return e.createByName(name, params);
+				}
+				else {
+					// Enum without parameter
+					return e.createByName(name);
+				}
 
 			case _:
 				throw "Cannot read enum "+e+", data seems corrupted";
@@ -44,6 +84,19 @@ class JsonTools {
 			else
 				throw "Couldn't create "+e+" from "+o+" ("+err+")";
 		}
+	}
+
+	public static function readTileRect(tilesetUid:Int, r:ldtk.Json.TilesetRect, allowNull:Bool) : ldtk.Json.TilesetRect {
+		if( r==null ) {
+			if( allowNull )
+				return null;
+			else
+				throw "Missing TileRect";
+		}
+		else if( !M.isValidNumber(r.x) || !M.isValidNumber(r.y) || !M.isValidNumber(r.w) || !M.isValidNumber(r.h) )
+			throw "TileRect contains an invalid value: "+r;
+		else
+			return r;
 	}
 
 	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt, allowNull=false) : Null<UInt> {

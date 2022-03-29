@@ -13,8 +13,9 @@ class Home extends Page {
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
 			appVer: Const.getAppVersion(),
+			buildDate: dn.MacroTools.getHumanBuildDate(),
 			latestVer: changeLog.latest.version,
-			latestDesc: changeLog.latest.title==null ? L.t._("Read latest changes") : '"'+changeLog.latest.title+'"',
+			latestDesc: changeLog.latest.title==null ? L.t._("Release notes") : '"'+changeLog.latest.title+'"',
 			deepnightUrl: Const.DEEPNIGHT_DOMAIN,
 			discordUrl: Const.DISCORD_URL,
 			docUrl: Const.DOCUMENTATION_URL,
@@ -40,7 +41,7 @@ class Home extends Page {
 		// Buttons
 		jPage.find(".load").click( (_)->onLoad() );
 		jPage.find(".samples").click( (_)->onLoadSamples() );
-		jPage.find(".loadOgmo").click( (ev)->onImportOgmo() );
+		jPage.find(".import").click( (ev)->onImport(ev) );
 		jPage.find(".new").click( (_)->if( !cd.hasSetS("newLock",0.2) ) onNew() );
 
 		jPage.find(".buy").click( (ev)->{
@@ -58,17 +59,8 @@ class Home extends Page {
 		});
 
 		jPage.find("button.update").click((_)->{
-			showUpdate();
+			new ui.modal.dialog.Changelog();
 		});
-
-		// Notify app update
-		if( settings.v.lastKnownVersion!=Const.getAppVersion() ) {
-			var prev = settings.v.lastKnownVersion;
-			settings.v.lastKnownVersion = Const.getAppVersion();
-			App.ME.settings.save();
-
-			showUpdate(true);
-		}
 
 		jPage.find("button.settings").click( function(ev) {
 			new ui.modal.dialog.EditAppSettings();
@@ -81,48 +73,48 @@ class Home extends Page {
 		updateRecents();
 	}
 
-	function showUpdate(?version:dn.Version, isNewUpdate=false) {
-		var w = new ui.Modal();
-		w.canBeClosedManually = !isNewUpdate;
+	// function showUpdate(?version:dn.Version, isNewUpdate=false) {
+		// var w = new ui.Modal();
+		// w.canBeClosedManually = !isNewUpdate;
 
-		var changeLog = Const.getChangeLog().latest;
+		// var changeLog = Const.getChangeLog().latest;
 
-		// Pick specific version
-		if( version!=null ) {
-			for( c in Const.getChangeLog().entries )
-				if( c.version.isEqual(version,true) ) {
-					changeLog = c;
-					break;
-				}
-		}
+		// // Pick specific version
+		// if( version!=null ) {
+		// 	for( c in Const.getChangeLog().entries )
+		// 		if( c.version.isEqual(version,true) ) {
+		// 			changeLog = c;
+		// 			break;
+		// 		}
+		// }
 
-		w.loadTemplate("changeLog", {
-			ver: changeLog.version.numbers,
-			app: Const.APP_NAME,
-			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
-			md: changeLog.allNoteLines.join("\n"),
-		}, false);
-		if( isNewUpdate )
-			w.addClass("newUpdate");
+		// w.loadTemplate("changeLog", {
+		// 	ver: changeLog.version.numbers,
+		// 	app: Const.APP_NAME,
+		// 	title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
+		// 	md: changeLog.allNoteLines.join("\n"),
+		// }, false);
+		// if( isNewUpdate )
+		// 	w.addClass("newUpdate");
 
-		w.jContent.find(".close")
-			.text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
-			.click( (_)->w.close() );
+		// w.jContent.find(".close")
+		// 	// .text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
+		// 	.click( (_)->w.close() );
 
-		w.jContent.find(".others").click( ev->{
-			var ctx = new ui.modal.ContextMenu(ev);
-				for( c in Const.getChangeLog().entries )
-				ctx.add({
-					label: L.t.untranslated( c.version.numbers + ( c.title!=null ? " - "+c.title : "" ) ),
-					cb: ()->{
-						w.close();
-						showUpdate(c.version);
-					}
-				});
-		} );
-		if( isNewUpdate )
-			w.jContent.find(".others").hide();
-	}
+		// w.jContent.find(".others").click( ev->{
+		// 	var ctx = new ui.modal.ContextMenu(ev);
+		// 		for( c in Const.getChangeLog().entries )
+		// 		ctx.add({
+		// 			label: L.t.untranslated( c.version.numbers + ( c.title!=null ? " - "+c.title : "" ) ),
+		// 			cb: ()->{
+		// 				w.close();
+		// 				showUpdate(c.version);
+		// 			}
+		// 		});
+		// } );
+		// if( isNewUpdate )
+		// 	w.jContent.find(".others").hide();
+	// }
 
 
 	function updateRecents() : Void {
@@ -247,8 +239,8 @@ class Home extends Page {
 					li.addClass("crash");
 
 				// Backups button
-				if( ui.ProjectSaving.hasBackupFiles(filePath) ) {
-					var all = ui.ProjectSaving.listBackupFiles(filePath);
+				if( ui.ProjectSaver.hasBackupFiles(filePath) ) {
+					var all = ui.ProjectSaver.listBackupFiles(filePath);
 					if( all.length>0 ) {
 						var jBackups = new J('<button class="backups gray"/>');
 						jBackups.appendTo(li);
@@ -263,7 +255,7 @@ class Home extends Page {
 									crashBackups.push(b.backup);
 
 								ctx.add({
-									label: ui.ProjectSaving.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
+									label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
 									className: b.crash ? "crash" : null,
 									sub: Lang.date(b.date),
 									cb: ()->App.ME.loadProject(b.backup.full)
@@ -290,28 +282,26 @@ class Home extends Page {
 					}
 				}
 
-				ui.modal.ContextMenu.addTo(li, [
+				var act : ui.modal.ContextMenu.ContextActions = [
 					{
 						label: L.t._("Load from this folder"),
-						cond: null,
 						cb: onLoad.bind( dn.FilePath.fromFile(filePath).directory ),
 					},
 					{
 						label: L.t._("Locate file"),
-						cond: null,
-						cb: ET.locate.bind(filePath, true),
+						cb: JsTools.locateFile.bind(filePath, true),
 					},
 					{
 						label: L.t._("Remove from history"),
-						cond: ()->!isBackupFile,
+						show: ()->!isBackupFile,
 						cb: ()->{
 							App.ME.unregisterRecentProject(filePath);
 							updateRecents();
 						}
 					},
 					{
-						label: L.t._("Delete this BACKUP file"),
-						cond: ()->isBackupFile,
+						label: L._Delete(L.t._("Backup file")),
+						show: ()->isBackupFile,
 						cb: ()->{
 							NT.removeFile(filePath);
 							App.ME.unregisterRecentProject(filePath);
@@ -320,13 +310,13 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Clear all history"),
-						cond: null,
 						cb: ()->{
 							App.ME.clearRecentProjects();
 							updateRecents();
 						}
 					},
-				]);
+				];
+				ui.modal.ContextMenu.addTo(li, act );
 
 
 				li.appendTo(jRecentFiles);
@@ -400,12 +390,10 @@ class Home extends Page {
 				ui.modal.ContextMenu.addTo(li, [
 					{
 						label: L.t._("Locate folder"),
-						cond: null,
-						cb: ET.locate.bind(fp.directory, false),
+						cb: JsTools.locateFile.bind(fp.directory, false),
 					},
 					{
 						label: L.t._("Remove from history"),
-						cond: null,
 						cb: ()->{
 							App.ME.unregisterRecentDir(fp.directory);
 							updateRecents();
@@ -413,7 +401,6 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Clear all folder history"),
-						cond: null,
 						cb: ()->{
 							App.ME.clearRecentDirs();
 							updateRecents();
@@ -443,7 +430,17 @@ class Home extends Page {
 	}
 
 
-	public function onImportOgmo() {
+	function onImport(ev:js.jquery.Event) {
+		var ctx = new ui.modal.ContextMenu(ev);
+		ctx.addTitle( L.t._("Import a project from another app") );
+		ctx.positionNear( new J(ev.target) );
+		ctx.add({
+			label: L.t._("Ogmo 3 project"),
+			cb: ()->onImportOgmo(),
+		});
+	}
+
+	function onImportOgmo() {
 		var dir = App.ME.getDefaultDialogDir();
 
 		#if debug
@@ -451,21 +448,25 @@ class Home extends Page {
 		#end
 
 		dn.js.ElectronDialogs.openFile([".ogmo"], dir, function(filePath) {
-			var i = new importer.OgmoProject(filePath);
-			new ui.modal.dialog.LockMessage(L.t._("Importing OGMO 3 project..."), ()->{
+			var i = new importer.OgmoLoader(filePath);
+			ui.modal.MetaProgress.start("Importing OGMO 3 project...", 3);
+			delayer.addS( ()->{
 				var p = i.load();
 				i.log.printAllToLog(App.LOG);
 				if( p!=null ) {
-					new ui.ProjectSaving(this, p, (ok)->{
+					ui.modal.MetaProgress.advance();
+					new ui.ProjectSaver(this, p, (ok)->{
+						ui.modal.MetaProgress.advance();
 						N.success("Success!");
-						App.ME.loadProject(p.filePath.full);
+						App.ME.loadProject(p.filePath.full, (ok)->ui.modal.MetaProgress.completeCurrent());
 					});
 				}
 				else {
+					ui.modal.MetaProgress.closeCurrent();
 					new ui.modal.dialog.LogPrint(i.log);
 					new ui.modal.dialog.Message(L.t._("Failed to import this Ogmo project. If you really need this, feel free to send me the Ogmo project file so I can check and fix the updater (see contact link)."));
 				}
-			});
+			}, 0.1);
 		});
 	}
 
@@ -482,11 +483,11 @@ class Home extends Page {
 
 			var p = data.Project.createEmpty(fp.full);
 
-			var data = ui.ProjectSaving.prepareProjectSavingData(p);
-			new ui.ProjectSaving(this, p, (success)->{
+			var data = ui.ProjectSaver.prepareProjectSavingData(p);
+			new ui.ProjectSaver(this, p, (success)->{
 				if( success ) {
 					N.msg("New project created: "+p.filePath.full);
-					App.ME.loadPage( ()->new Editor(p) );
+					App.ME.loadPage( ()->new Editor(p), true );
 				}
 				else {
 					N.error("Couldn't create this project file!");

@@ -9,6 +9,7 @@
 -lib electron
 -lib ldtk-haxe-api
 -lib heaps-aseprite
+-lib uuid
 
 -D editor
 -D electron

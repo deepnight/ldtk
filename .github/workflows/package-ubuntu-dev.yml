@@ -1,0 +1,44 @@
+name: package-ubuntu-dev
+
+on:
+  push:
+    branches:
+      - dev-0.10.0
+
+  pull_request:
+    branches:
+      - dev-0.10.0
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        haxe: [4.2.0]
+      fail-fast: true
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout, install haxe and libs
+      - uses: actions/checkout@v2
+      - uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.2.0
+      - run: haxe -version
+      - run: haxe setup.hxml
+      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.10.0 --always
+      - run: haxelib list
+
+      # Node/NPM commands
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - run: cd app && npm install
+      - run: cd app && npm run pack-linux-x86
+
+      # Upload
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ubuntu-distribution
+          path: app/redist/LDtk**installer.AppImage

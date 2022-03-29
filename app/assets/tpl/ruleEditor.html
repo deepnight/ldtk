@@ -1,9 +1,13 @@
 <div class="debugInfos"></div>
 
-<button class="guide">Never used LDtk rule system?</button>
-
-<div class="help">
-	First pick which tile(s) you would like to automatically render:
+<div class="help intro">
+	<p>A rule is used to display a specific tile based on the content of an IntGrid layer.</p>
+	<p>
+		For example, you could create a rule that will display "grass" tiles above every walls.
+	</p>
+	<p>
+		To describe the "context" (ie. where and when your tile should be displayed), you paint a pattern: that's the grid below.
+	</p>
 </div>
 
 <div class="tileSettings">
@@ -11,18 +15,11 @@
 	<div class="picker" title="**Choose tile(s)** You can hold mouse button to select multiple tiles."></div>
 	<div class="options" title="For rectangle of tiles, you can adjust the PIVOT point of the rendered rectangle."></div>
 </div>
-
 <div class="help">
-	<p>
-		The center of the PATTERN below is where your TILE(s) will be rendered. Edit the pattern to describe in which situation the tile(s) should be displayed.
-	</p>
-	<ul>
-		<li><span class="icon mouseLeft"></span>: set "This value is required" in a cell</li>
-		<li><span class="icon mouseRight"></span>: set "This value should not be here".</li>
-		<li><span class="icon mouseWheel"></span>: clear cell".</li>
-		<li>Use the <strong>Anything</strong> special value to match "All values" or "No value"</li>
-	</ul>
+	First pick which tile(s) you would like to automatically render. Start with something very simple: a wall block, grass, etc.
 </div>
+
+
 
 <div class="pattern">
 	<div class="values" title="This panel shows all the IntGrid values defined in this layer">
@@ -34,7 +31,26 @@
 		<div class="grid"></div>
 	</div>
 </div>
+<div class="help big">
+	<p>
+		The center of this PATTERN is where your TILE(s) will be rendered (). Paint the pattern to describe in which context the tile(s) should be displayed:
+	</p>
+	<ul>
+		<li><span class="icon mouseLeft"></span>: paint "This IntGrid value is required" in a cell</li>
+		<li><span class="icon mouseRight"></span>: paint "This IntGrid value should NOT be here".</li>
+		<li><span class="icon mouseMiddle"></span>: clear pattern cell".</li>
+		<li>Use the <strong>Anything</strong> special value to match "Any IntGrid value" or "No IntGrid value at all"</li>
+	</ul>
+	<p>
+		For example, if you want to paint "wall blocks" where you have the IntGrid value "1" in your level, you just put the IntGrid value "1" in the center of this pattern.
+	</p>
+	<p>
+		This means: "if any cell in my level contain value 1, paint the given tile(s) there".
+	</p>
+</div>
 
+
+<button class="guide">Enable help</button>
 <div class="explain"></div>
 
 <div class="outOfBounds">

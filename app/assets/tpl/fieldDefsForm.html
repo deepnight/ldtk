@@ -1,100 +1,269 @@
 <div class="buttons">
-	<button type="button" class="createSingle" title="Add a single value field">+ field</button>
-	<button type="button" class="createArray" title="Add an 'array of values' field">+ array</button>
+	<button type="button" class="createSingle" title="Add a field that contains a single value.">+ single value</button>
+	<button type="button" class="createArray" title="Add a field that contains an array of multiple values.">+ array</button>
 </div>
 
 <ul class="niceList fieldList"></ul>
 
 
 
-<ul class="form">
-	<li>
+<dl class="form">
+	<dt>
 		<label>Type</label>
+		<info>This is the type of data stored in this custom field (number, text etc.)</info>
+	</dt>
+	<dd>
 		<input type="text" readonly="readonly" class="type"/>
 		<button class="convert">Convert</button>
-	</li>
-	<li>
+	</dd>
+
+
+	<dt>
 		<label for="fName">Field identifier</label>
+		<info class="identifier"></info>
+	</dt>
+	<dd>
 		<input type="text" name="name" id="fName"/>
-		<div class="info identifier"></div>
-	</li>
+	</dd>
 
-	<li class="F_Int F_Float F_String">
+
+	<dt class="F_Int F_Float F_String">
 		<label for="fDef">Default value</label>
+		<info>This is the default number value for this field, unless overridden with something else.</info>
+	</dt>
+	<dd>
 		<input type="text" name="fDef" placeholder="" id="fDef"/>
-	</li>
+	</dd>
 
-	<li class="F_Text">
+
+	<dt class="F_Text">
 		<label for="fDefMultiLines">Default value</label>
+		<info>This is the default text for this field, unless modified manually.</info>
+	</dt>
+	<dd>
 		<div class="multiLines" id="fDefMultiLines"></div>
-	</li>
+	</dd>
 
-	<li class="F_Bool">
+
+	<dt class="F_Bool">
 		<label for="bDef">Default state</label>
+		<info>This is the default checkbox state for this field, unless modified manually.</info>
+	</dt>
+	<dd>
 		<input type="checkbox" name="bDef" id="bDef"/>
-	</li>
+	</dd>
 
-	<li class="F_Color">
+
+	<dt class="F_Color">
 		<label for="cDef">Default color</label>
+		<info>This is the default color for this field, unless modified manually.</info>
+	</dt>
+	<dd>
 		<input type="color" name="cDef" id="cDef"/>
-	</li>
+	</dd>
 
-	<li class="F_Int F_Float">
+
+	<dt class="F_Int F_Float">
 		<label for="min">Limits</label>
-		<input type="text" name="min" id="min" placeholder="Min"/>
+		<info>You can define a min and/or max limit of this number.</info>
+	</dt>
+	<dd>
+		<input type="text" name="min" id="min" placeholder="Min" title="Value should be GREATER than or EQUAL to this."/>
 		<span>to</span>
-		<input type="text" name="max" id="max" placeholder="Max"/>
-	</li>
+		<input type="text" name="max" id="max" placeholder="Max" title="Value should be LOWER than or EQUAL to this."/>
+	</dd>
 
-	<li class="F_Path">
-		<label for="acceptTypes">Accept types</label>
+
+	<dt class="F_Path">
+		<label for="acceptTypes">File extensions</label>
+		<info>
+			Enter a list of accepted extensions, separated by a space, case insensitive. For example: "txt dat png jpg gif". This filter won't prevent user from picking another file, it's just a display limitation.
+			If empty, all extensions will be accepted.
+		</info>
+	</dt>
+	<dd>
 		<input type="text" name="acceptTypes" id="acceptTypes" placeholder="Any file"/>
-		<div class="info" title='Space separated extensions. For example: "txt dat png jpg gif"'></div>
-	</li>
+	</dd>
 
-	<li class="F_String">
+
+	<dt class="F_String">
 		<label for="regex">Regex check</label>
+		<info>
+			You can enter a Regular Expression here to check the values entered for this field.
+			Any character that doesn't match the RegEx will be discarded (WARNING: existing values in your levels will NOT be affected by a change here)
+		</info>
+	</dt>
+	<dd>
 		<input type="text" id="regex" placeholder="(none)"/>
 		<input type="checkbox" id="flag_i" title='Check to enable "i" flag (case insensitive)'/> <span>i</span>
 		<button class="testRegex small gray" title="Open external website to test your regex">Test</button>
-		<div class="info" title="Values will be tested against this regex and any character that doesn't match will be discarded (WARNING: existing values in your levels will NOT be affected by a change here)"></div>
-	</li>
+	</dd>
 
-	<li class="F_Text">
+
+	<dt class="F_Text">
 		<label for="textLanguage">Language</label>
-		<select id="textLanguage"></select>
 		<div class="info" title="This option will ONLY affect how your text will be displayed in the editor (ie. syntax coloring)."></div>
-	</li>
+	</dt>
+	<dd>
+		<select id="textLanguage"></select>
+	</dd>
 
 
-	<li class="F_Int F_Float F_String F_Text F_Enum F_Point F_Path">
-		<label for="canBeNull">Can be null</label>
-		<input type="checkbox" name="canBeNull" id="canBeNull"/>
-	</li>
+	<dt class="F_Int F_Float F_String F_Text">
+		<label for="canBeNull" class="Array">Can contain nulls</label>
+		<label for="canBeNull" class="NotArray">Can be null</label>
 
-	<li class="Array">
+		<info class="Array">
+			If enabled, it will be possible to have "null" values inside this array.
+			If disabled, the array values will use the "default" if unspecified.
+		</info>
+
+		<info class="NotArray">
+			If enabled, it will be possible to have no value at all for this field (ie. "null").
+			If disabled, the value will be the "default" one if nothing is entered.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="canBeNull"/>
+	</dd>
+
+
+	<dt class="F_Enum F_Path F_Point F_EntityRef F_Tile">
+		<label for="canBeNull" class="Array">Can contain nulls</label>
+		<label for="canBeNull" class="NotArray">Is optional</label>
+
+		<info class="Array">
+			If enabled, it will be possible to have "null" values inside this array.
+			If disabled, the array values will use the "default" if unspecified.
+		</info>
+
+		<info class="NotArray">
+			If enabled, it will be possible to have no value at all for this field (ie. "null").
+			If disabled, the value will become mandatory and an error message will show up if the value is unspecified.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="canBeNull"/>
+	</dd>
+
+
+	<dt class="F_Tile">
+		<label for="tilesetUid">Tileset</label>
+	</dt>
+	<dd class="tile">
+		<select id="tilesetUid"></select>
+		<div class="defaultTile">
+			<span>Default: </span>
+			<div class="picker"></div>
+			<button class="clear gray"> <span class="icon clear"></span> </button>
+		</div>
+	</dd>
+
+
+	<dt class="F_EntityRef">
+		<label>Reference options</label>
+	</dt>
+	<dd>
+		<label for="symmetricalRef">
+			<input type="checkbox" name="symmetricalRef" id="symmetricalRef" title="If enabled and you pick a target for this value, a symmetrical reference will be set on the target.\nThis only works if the target Entity is of the same type as this one."/>
+			symmetrical
+		</label>
+
+		<label for="allowOutOfLevelRef">
+			<input type="checkbox" name="allowOutOfLevelRef" id="allowOutOfLevelRef" title="If enabled, it will be possible to pick an Entity from a different level."/>
+			in any level
+		</label>
+
+		<label for="autoChainRef">
+			<input type="checkbox" name="autoChainRef" id="autoChainRef" title="If enabled, if you place a compatible Entity right after placing this one, this field will automatically reference the newly added Entity."/>
+			auto-chain
+		</label>
+	</dd>
+
+
+	<dt class="F_EntityRef">
+		<label>Allowed references</label>
+		<info>Define which kind of entity is allowed to be picked for this value.</info>
+	</dt>
+	<dd>
+		<select name="allowedRefs" id="allowedRefs" class="full"></select>
+		<div class="allowedRefTags"></div>
+	</dd>
+
+
+	<dt class="Array">
 		<label for="arrayMinLength">Array length</label>
-		<input type="text" name="arrayMinLength" id="arrayMinLength" placeholder="min length"/>
+		<info>Constraints to the array size (ie. min length and/or max length)</info>
+	</dt>
+	<dd>
+		<input type="text" name="arrayMinLength" id="arrayMinLength" placeholder="min length" title="Min array length"/>
 		<span>to</span>
-		<input type="text" name="arrayMaxLength" id="arrayMaxLength" placeholder="max length"/>
-	</li>
+		<input type="text" name="arrayMaxLength" id="arrayMaxLength" placeholder="max length" title="Max array length"/>
+	</dd>
 
-	<li>
+
+	<dt>
 		<label for="editorDisplayMode">Display in editor</label>
+		<info>
+			Customize how values for this field should be displayed in the editor view.
+			A quick recommendation here: don't display too many entity fields or the editor view would become really cluttered.
+		</info>
+	</dt>
+	<dd class="displayMode">
 		<select name="editorDisplayMode" id="editorDisplayMode"></select>
 		<select name="editorDisplayPos" id="editorDisplayPos"></select>
-		<div class="help F_Enum">If this Enum has an ICON, it will be used for display in place of the name.</div>
-	</li>
+	</dd>
 
-	<li>
+
+	<dt class="F_Int F_Float">
+		<label for="editorTextPrefix">Prefix/suffix</label>
+		<info>
+			Optional text prefix and suffix to display around the values in the editor view.
+			Examples: 0.1 seconds, $17
+		</info>
+	</dt>
+	<dd>
+		<input type="text" name="editorTextPrefix" id="editorTextPrefix"/>
+		<span>1234</span>
+		<input type="text" name="editorTextSuffix" id="editorTextSuffix"/>
+	</dd>
+
+
+	<dt>
 		<label for="editorAlwaysShow">Always show</label>
+		<info>
+			If checked, the value will always be displayed in editor view, even if it is using default value.
+			If not checked, the value will only show up if it is not the default value.
+			Only applies if any display mode was selected above.
+		</info>
+	</dt>
+	<dd>
 		<input type="checkbox" name="editorAlwaysShow" id="editorAlwaysShow"/>
-		<div class="info" title="If not checked, the value will only be displayed if it is relevant (ie. different from its default value)."></div>
-	</li>
+	</dd>
 
-	<li class="F_String F_Text">
+
+	<dt class="F_String F_Text">
 		<label for="editorCutLongValues">Only show an excerpt in editor</label>
+		<info>If enabled (recommended), long texts will be cut when displayed in the editor view.</info>
+	</dt>
+	<dd>
 		<input type="checkbox" id="editorCutLongValues"/>
-		<div class="info" title="If enabled (recommended), long texts will be cut when displayed in the editor view."></div>
-	</li>
-</ul>
+	</dd>
+
+
+	<dt class="F_Color F_Enum">
+		<label for="bDef">Override ::parentType:: color</label>
+		<info class="F_Color">
+			If enabled, this color will override the default ::parentType:: color when displayed in the editor view.
+			For arrays, the first valid value of the array will be used.
+		</info>
+		<info class="F_Enum">
+			If enabled, the color of the Enum value (if any) will override the default ::parentType:: color when displayed in the editor view.
+			For arrays, the first valid value of the array will be used.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="useForSmartColor" id="useForSmartColor"/>
+	</dd>
+
+</dl>

@@ -9,9 +9,14 @@ class Editor extends Page {
 	public var jLayerList(get,never) : J; inline function get_jLayerList() return new J("#layers");
 	public var jPalette(get,never) : J; inline function get_jPalette() return jMainPanel.find("#mainPaletteWrapper");
 	var jMouseCoords : js.jquery.JQuery;
+	var jDepths : js.jquery.JQuery;
+
+
+	public var curWorld(get,never) : data.World;
+		inline function get_curWorld() return project==null ? null : project.getWorldIid(curWorldIid);
 
 	public var curLevel(get,never) : data.Level;
-		inline function get_curLevel() return project.getLevel(curLevelId);
+		inline function get_curLevel() return project==null ? null : project.getLevelAnywhere(curLevelId);
 
 	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
 		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
@@ -23,6 +28,7 @@ class Editor extends Page {
 	public var ge : GlobalEventDispatcher;
 	public var watcher : misc.FileWatcher;
 	public var project : data.Project;
+	public var curWorldIid : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
 
@@ -35,9 +41,11 @@ class Editor extends Page {
 	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var doNothingTool : tool.lt.DoNothing;
+	var invalidatedMouseCoords = true;
 
 	public var needSaving = false;
 	public var worldMode(default,null) = false;
+	public var curWorldDepth = 0;
 
 	public var camera : display.Camera;
 	public var worldRender : display.WorldRender;
@@ -45,10 +53,13 @@ class Editor extends Page {
 	public var rulers : display.Rulers;
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
+	public var gifMode = false;
 
-	var levelHistory : Map<Int,LevelHistory> = new Map();
-	public var curLevelHistory(get,never) : LevelHistory;
-		inline function get_curLevelHistory() return levelHistory.get(curLevelId);
+
+	@:allow(LevelTimeline)
+	var levelTimelines : Map<Int,LevelTimeline> = new Map();
+	public var curLevelTimeline(get,never) : LevelTimeline;
+		inline function get_curLevelTimeline() return levelTimelines.get(curLevelId);
 
 
 	public function new(p:data.Project, ?loadLevelIndex:Int) {
@@ -59,6 +70,7 @@ class Editor extends Page {
 		ME = this;
 		createRoot(parent.root);
 		App.ME.registerRecentProject(p.filePath.full);
+		jDepths = jPage.find("#worldDepths");
 
 		// Events
 		App.ME.jBody
@@ -92,10 +104,12 @@ class Editor extends Page {
 		initUI();
 		updateCanvasSize();
 
+		settings.v.showDetails = true;
+
 		selectProject(p);
 
 		// Suggest backups
-		if( !project.isBackup() && !App.ME.isInAppDir(project.filePath.full,true) && project.levels.length>=8 && !project.backupOnSave && !project.hasFlag(IgnoreBackupSuggest) ) {
+		if( project.recommendsBackup() && !project.hasFlag(IgnoreBackupSuggest) ) {
 			var w = new ui.modal.dialog.Choice(
 				L.t._("As your project is growing bigger, it is STRONGLY advised to enable BACKUPS, to secure your work."),
 				[
@@ -121,18 +135,18 @@ class Editor extends Page {
 			);
 		}
 
-		if( loadLevelIndex!=null ) {
+		if( loadLevelIndex!=null ) { // TODO restore world and level on opening
 			// Auto-load provided level index
-			if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
-				selectLevel( project.levels[loadLevelIndex] );
-				camera.fit(true);
-			}
-			else
-				N.error('Invalid level index $loadLevelIndex');
+			// if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
+			// 	selectLevel( project.levels[loadLevelIndex] );
+			// 	camera.fit(true);
+			// }
+			// else
+			// 	N.error('Invalid level index $loadLevelIndex');
 		}
 		else if( settings.v.lastProject!=null ) {
 			// Auto load last level UID
-			var l = project.getLevel( settings.v.lastProject.levelUid );
+			var l = project.getLevelAnywhere( settings.v.lastProject.levelUid );
 			if( l!=null ) {
 				selectLevel(l);
 				camera.fit(true);
@@ -218,9 +232,20 @@ class Editor extends Page {
 				onHelp();
 		});
 
+		jMainPanel.find("button.settings").click( function(_) {
+			if( isPaused() ) return;
+			if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
+				ui.Modal.closeAll();
+				new ui.modal.dialog.EditAppSettings();
+			}
+		});
+
 
 		// Option checkboxes
 		updateEditOptions();
+
+		// World depths
+		jDepths.hide();
 
 		// Space bar blocking
 		new J(js.Browser.window).off().keydown( function(ev) {
@@ -230,16 +255,41 @@ class Editor extends Page {
 		});
 	}
 
-	public function setPermanentNotification(id:String, ?msg:dn.data.GetText.LocaleString, ?onClick:Void->Void) {
+	public function setPermanentNotification(id:String, ?jContent:js.jquery.JQuery) {
 		jPage.find('#permanentNotifications #$id').remove();
-		if( msg!=null ) {
-			var jLi = new J('<li id="$id">$msg</li>');
+		if( jContent!=null ) {
+			var jLi = new J('<li id="$id"></li>');
+			jLi.append(jContent);
 			jPage.find("#permanentNotifications").append(jLi);
-			if( onClick!=null )
-				jLi.click( (_)->onClick() );
-			else
-				jLi.addClass("noClick");
 		}
+	}
+
+	public function updateBanners() {
+		// Display "backup" header
+		if( project.isBackup() ) {
+			var jBackup = new J('<div class="backupHeader"/>');
+			var jDesc = new J('<div class="desc"/>');
+			jDesc.appendTo(jBackup);
+			jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
+			var inf = ui.ProjectSaver.extractBackupInfosFromFileName(project.filePath.full);
+			if( inf!=null )
+				jDesc.append("<p>"+inf.date+"</p>");
+			var jRestore = new J('<button>Restore this backup</button>');
+			jRestore.click( _->onBackupRestore() );
+			jRestore.appendTo(jBackup);
+			setPermanentNotification("backup", jBackup);
+		}
+		else
+			setPermanentNotification("backup");
+
+		// Display "tutorial description" header
+		if( !gifMode && project.tutorialDesc!=null ) {
+			var jDesc = new J('<div class="wrapper"/>');
+			jDesc.html( "<p>" + project.tutorialDesc.split("\n").join("</p><p>") + "</p>" );
+			setPermanentNotification("tutorialDesc", jDesc);
+		}
+		else
+			setPermanentNotification("tutorialDesc");
 	}
 
 	public function selectProject(p:data.Project) {
@@ -249,18 +299,12 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		var all = ui.ProjectSaving.listBackupFiles(project.filePath.full);
+		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
 
-		if( project.isBackup() ) {
-			setPermanentNotification("backup", L.t._("This file is a BACKUP: some external files such as images and tilesets are temporarily unavailable, but that's normal. The backup project file isn't stored in the same location as the original file. Click on this message to RESTORE this backup."), ()->{
-				onBackupRestore();
-			});
-		}
-		else
-			setPermanentNotification("backup");
+		updateBanners();
 
 		// Check external enums
-		if( !project.isBackup() )
+		if( !project.isBackup() ) {
 			for( relPath in project.defs.getExternalEnumPaths() ) {
 				if( !NT.fileExists( project.makeAbsoluteFilePath(relPath) ) ) {
 					// File not found
@@ -285,28 +329,24 @@ class Editor extends Page {
 						}
 				}
 			}
+		}
 
 
-		curLevelId = project.levels[0].uid;
+		curWorldIid = project.worlds[0].iid;
+		curLevelId = project.worlds[0].levels[0].uid;
 		curLayerDefUid = -1;
 
 		// Pick 1st layer in current level
-		if( project.defs.layers.length>0 ) {
-			for(li in curLevel.layerInstances) {
-				selectLayerInstance(li,false);
-				break;
-			}
-		}
+		autoPickFirstValidLayer();
 
-		levelHistory = new Map();
-		levelHistory.set( curLevelId, new LevelHistory(curLevelId) );
+		levelTimelines = new Map();
+		levelTimelines.set( curLevelId, new LevelTimeline(curLevelId, curWorldIid) );
 
 		// Load tilesets
 		var tilesetChanged = false;
-		if( !project.isBackup() )
-			for(td in project.defs.tilesets)
-				if( reloadTileset(td, true) )
-					tilesetChanged = true;
+		for(td in project.defs.tilesets)
+			if( reloadTileset(td, true) )
+				tilesetChanged = true;
 
 		project.tidy(); // Needed to fix enum value colors
 
@@ -317,9 +357,10 @@ class Editor extends Page {
 			watcher.watchImage(td.relPath);
 
 		// Level bg image hot-reloading
-		for( l in project.levels )
+		for( w in project.worlds )
+		for( l in w.levels )
 			if( l.bgRelPath!=null )
-			watcher.watchImage(l.bgRelPath);
+				watcher.watchImage(l.bgRelPath);
 
 		for( ed in project.defs.externalEnums )
 			watcher.watchEnum(ed);
@@ -331,13 +372,38 @@ class Editor extends Page {
 		});
 
 		needSaving = tilesetChanged;
+
+		// Check level caches
+		if( !project.isBackup() ) {
+			for(w in project.worlds)
+			for(l in w.levels)
+				if( !l.hasJsonCache() ) {
+					needSaving = true;
+					break;
+				}
+		}
+	}
+
+
+	public function autoPickFirstValidLayer() {
+		if( project.defs.layers.length<=0 )
+			return false;
+
+		for(li in curLevel.layerInstances)
+			if( !li.def.hideInList ) {
+				selectLayerInstance(li,false);
+				return true;
+			}
+
+		return false;
 	}
 
 
 	public function checkAutoLayersCache(onDone:(anyChange:Bool)->Void) {
 		var ops = [];
 
-		for(l in project.levels)
+		for(w in project.worlds)
+		for(l in w.levels)
 		for(li in l.layerInstances)
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				ops.push({
@@ -367,11 +433,12 @@ class Editor extends Page {
 					reloadTileset(td);
 
 			// Update level bgs
-			for(l in project.levels)
+			for(w in project.worlds)
+			for(l in w.levels)
 				if( l.bgRelPath==relPath ) {
-					worldRender.invalidateLevel(l);
+					worldRender.invalidateLevelRender(l);
 					if( curLevel==l )
-						levelRender.invalidateBg();
+						levelRender.invalidateUiAndBg();
 				}
 		}
 		else
@@ -381,7 +448,7 @@ class Editor extends Page {
 	function reloadTileset(td:data.def.TilesetDef, isInitialLoading=false) {
 		App.LOG.fileOp("Reloading tileset: "+td.identifier+" path="+td.relPath);
 
-		if( !td.hasAtlasPath() )
+		if( !td.hasAtlasPointer() )
 			return false;
 
 		var oldRelPath = td.relPath;
@@ -390,7 +457,7 @@ class Editor extends Page {
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
 
 		var changed = false;
-		var msg = Lang.atlasLoadingMessage(td.relPath, result);
+		var msg = Lang.imageLoadingMessage(td.relPath, result);
 
 		switch result {
 			case FileNotFound:
@@ -399,13 +466,12 @@ class Editor extends Page {
 					var newRelPath = project.makeRelativeFilePath(newAbsPath);
 					td.importAtlasImage( newRelPath );
 					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
-					ge.emit( TilesetDefChanged(td) );
+					ge.emit( TilesetImageLoaded(td, false) );
 					levelRender.invalidateAll();
 				});
 
-			case LoadingFailed(err):
-				throw "check";
-				new ui.modal.dialog.Warning(msg);
+			case LoadingFailed(_):
+				new ui.modal.dialog.Retry(msg, ()->reloadTileset(td, isInitialLoading));
 
 			case RemapLoss:
 				changed = true;
@@ -422,6 +488,11 @@ class Editor extends Page {
 			case RemapSuccessful:
 				changed = true;
 				new ui.modal.dialog.Message(msg, "tile");
+
+			case UnsupportedFileOrigin(origin):
+				var m = new ui.modal.dialog.Message(msg);
+				m.addClass("error");
+				return false;
 		}
 
 		// Rebuild "opaque tiles" cache
@@ -430,7 +501,7 @@ class Editor extends Page {
 			td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
 		}
 
-		ge.emit( TilesetDefChanged(td) );
+		ge.emit( TilesetImageLoaded(td, isInitialLoading) );
 		return changed;
 	}
 
@@ -439,10 +510,44 @@ class Editor extends Page {
 		return App.ME.hasInputFocus();
 	}
 
+
+
+	var spaceKeyTime = 0.;
+	override function onKeyDown(keyCode:Int) {
+		super.onKeyDown(keyCode);
+
+		switch keyCode {
+			case K.SPACE if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				spaceKeyTime = haxe.Timer.stamp();
+
+			case _:
+		}
+	}
+
+
+	override function onKeyUp(keyCode:Int) {
+		super.onKeyDown(keyCode);
+
+		switch keyCode {
+			case K.SPACE if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				if( haxe.Timer.stamp()-spaceKeyTime<=0.2 ) {
+					spaceKeyTime = 0;
+					camera.fit();
+				}
+
+			case _:
+		}
+	}
+
+
+	public inline function cancelSpaceKey() {
+		spaceKeyTime = 0;
+	}
+
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
-		if( isLocked() ) {
+		if( cd.has("debugLock") ) {
 			#if debug
 			if( keyCode==K.L && App.ME.isCtrlDown() && App.ME.isShiftDown() ) {
 				cd.unset("debugLock");
@@ -460,26 +565,28 @@ class Editor extends Page {
 					try App.ME.jBody.find("input:focus, textarea:focus").blur()
 					catch(e:Dynamic) {}
 				}
+				else if( Std.is(curTool, tool.lt.EntityTool) && Std.downcast(curTool,tool.lt.EntityTool).isChainingRef() )
+					tool.lt.EntityTool.cancelRefChaining();
+				else if( ui.ValuePicker.exists() )
+					ui.ValuePicker.ME.cancel();
 				else if( curTool!=null && curTool.palettePoppedOut() )
 					curTool.popInPalette();
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( worldMode && worldTool.isInAddMode() )
-					worldTool.stopAddMode();
 				else if( ui.Modal.hasAnyOpen() )
 					ui.Modal.closeLatest();
 				else if( selectionTool.any() )
 					selectionTool.clear();
 
 			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() )
+				if( !ui.Modal.hasAnyOpen() && !hasInputFocus() && !ui.EntityInstanceEditor.isOpen() )
 					setCompactMode( !settings.v.compactMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				curLevelHistory.undo();
+				curLevelTimeline.undo();
 
 			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				curLevelHistory.redo();
+				curLevelTimeline.redo();
 
 			#if debug
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
@@ -488,14 +595,13 @@ class Editor extends Page {
 			#end
 
 			case K.S:
-				if( !hasInputFocus() && App.ME.isCtrlDown() )
+				if( project.isBackup() )
+					N.error("Cannot save over a backup file.");
+				else if( !hasInputFocus() && App.ME.isCtrlDown() )
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
 						onSave();
-
-			case K.F if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				camera.fit();
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
@@ -516,10 +622,10 @@ class Editor extends Page {
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
-			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.E if( !hasInputFocus() && App.ME.isShiftDown() ):
 				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 
-			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
 				setTileStacking( !settings.v.tileStacking );
 
 			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
@@ -543,16 +649,79 @@ class Editor extends Page {
 			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				setGrid( !settings.v.grid );
 
-			case K.H if( !hasInputFocus() ):
+			case K.H if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				onHelp();
+
+			case K.H if( !hasInputFocus() && App.ME.isCtrlDown() ):
+				setShowDetails( !settings.v.showDetails );
+
+			case K.PGDOWN if( !hasInputFocus() ):
+				if( !worldMode )
+					setWorldMode(true);
+				else if( !App.ME.hasAnyToggleKeyDown() ) {
+					// Change active depth
+					if( curWorldDepth > curWorld.getLowestLevelDepth() )
+						selectWorldDepth(curWorldDepth-1);
+				}
+				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
+					// Move current level closer
+					curWorld.moveLevelToDepthCloser(curLevel);
+					ge.emit( LevelSettingsChanged(curLevel) );
+					selectWorldDepth(curLevel.worldDepth);
+				}
+
+			case K.PGUP if( !hasInputFocus() ):
+				if( !worldMode )
+					setWorldMode(true);
+				else if( !App.ME.hasAnyToggleKeyDown() ) {
+					// Change active depth
+					if( curWorldDepth < curWorld.getHighestLevelDepth() )
+						selectWorldDepth(curWorldDepth+1);
+				}
+				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
+					// Move current level further
+					curWorld.moveLevelToDepthFurther(curLevel);
+					ge.emit( LevelSettingsChanged(curLevel) );
+					selectWorldDepth(curLevel.worldDepth);
+				}
+
 
 			case k if( k>=48 && k<=57 && !hasInputFocus() ):
 				var idx = k==48 ? 9 : k-49;
 				if( idx < curLevel.layerInstances.length )
 					selectLayerInstance( curLevel.layerInstances[idx] );
 
-			case k if( k>=K.F1 && k<=K.F6 && !hasInputFocus() ):
-				jMainPanel.find("#mainBar .buttons button:nth-of-type("+(k-K.F1+2)+")").click();
+			// Select layers (F1-F10)
+			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
+				var idx = k-K.F1;
+				var i = 0;
+				for(l in curLevel.layerInstances)
+					if( !l.def.hideInList ) {
+						if( i==idx ) {
+							selectLayerInstance(l);
+							break;
+						}
+						i++;
+					}
+
+
+			case K.P if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editProject").click();
+
+			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editLayers").click();
+
+			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editEntities").click();
+
+			case K.U if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editEnums").click();
+
+			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editTilesets").click();
+
+			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
 		}
 
 		// Propagate to tools
@@ -640,29 +809,29 @@ class Editor extends Page {
 		updateTool();
 	}
 
-	public function getGenericLevelElementAt(levelX:Int, levelY:Int, limitToActiveLayer=false) : Null<GenericLevelElement> {
+	public function getGenericLevelElementAt(m:Coords, ?limitToLayerType:ldtk.Json.LayerType, limitToActiveLayer=false) : Null<GenericLevelElement> {
+		var m = m.clone();
+
 		function getElement(li:data.inst.LayerInstance) {
 			var ge : GenericLevelElement = null;
 
-			if( !levelRender.isLayerVisible(li) )
+			if( !levelRender.isLayerVisible(li) || curLayerInstance!=li && li.def.inactiveOpacity<=0 )
 				return null;
 
-			var layerX = levelX - li.pxTotalOffsetX;
-			var layerY = levelY - li.pxTotalOffsetY;
-			var cx = Std.int( layerX / li.def.gridSize );
-			var cy = Std.int( layerY / li.def.gridSize );
+			m.setRelativeLayer(li);
 
 			switch li.def.type {
 				case IntGrid:
-					if( li.getIntGrid(cx,cy)>0 )
-						ge = GenericLevelElement.GridCell( li, cx, cy );
+					if( li.getIntGrid(m.cx,m.cy)>0 )
+						ge = GenericLevelElement.GridCell( li, m.cx, m.cy );
 
 				case AutoLayer:
 
 				case Entities:
 					for(ei in li.entityInstances) {
-						if( ei.isOver(layerX, layerY) )
+						if( ei.isOver(m.layerX, m.layerY) ) {
 							ge = GenericLevelElement.Entity(li, ei);
+						}
 						else {
 							// Points
 							for(fi in ei.fieldInstances) {
@@ -670,7 +839,7 @@ class Editor extends Page {
 									continue;
 								for(i in 0...fi.getArrayLength()) {
 									var pt = fi.getPointGrid(i);
-									if( pt!=null && cx==pt.cx && cy==pt.cy )
+									if( pt!=null && m.cx==pt.cx && m.cy==pt.cy )
 										ge = GenericLevelElement.PointField(li, ei, fi, i);
 								}
 							}
@@ -678,21 +847,24 @@ class Editor extends Page {
 					}
 
 				case Tiles:
-					if( li.hasAnyGridTile(cx,cy) )
-						ge = GenericLevelElement.GridCell(li, cx, cy);
+					if( li.hasAnyGridTile(m.cx, m.cy) )
+						ge = GenericLevelElement.GridCell(li, m.cx, m.cy);
 			}
 			return ge;
 		}
 
 
 		if( limitToActiveLayer )
-			return getElement(curLayerInstance);
+			return limitToLayerType==null || curLayerDef.type==limitToLayerType ? getElement(curLayerInstance) : null;
 		else {
 			// Search in all layers
-			var all = project.defs.layers.copy();
+			var all = project.defs.layers.copy(); // TODO optimize these allocations!
 			all.reverse();
 			var best = null;
 			for(ld in all) {
+				if( limitToLayerType!=null && ld.type!=limitToLayerType )
+					continue;
+
 				var ge = getElement( curLevel.getLayerInstance(ld) );
 				if( ld==curLayerDef && ge!=null && settings.v.singleLayerMode ) // prioritize active layer
 					return ge;
@@ -715,12 +887,12 @@ class Editor extends Page {
 			case EMove: onMouseMove(e);
 			case EOver:
 			case EOut: onMouseUp();
-			case EWheel: onMouseWheel(e);
+			case EWheel: onHeapsMouseWheel(e);
 			case EFocus:
 			case EFocusLost: onMouseUp();
 			case EKeyDown:
 			case EKeyUp:
-			case EReleaseOutside: onMouseUp();
+			case EReleaseOutside: //onMouseUp();
 			case ETextInput:
 			case ECheck:
 		}
@@ -746,17 +918,20 @@ class Editor extends Page {
 	}
 
 	function onMouseDown(ev:hxd.Event) {
-		if( isLocked() )
+		if( isLocked() || !App.ME.hasGlContext )
 			return;
 
 		var m = getMouse();
 
 		panTool.startUsing(ev,m);
 
-		if( !ev.cancel && resizeTool!=null )
+		if( !ev.cancel && ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseDown(ev, m);
+
+		if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() )
 			resizeTool.onMouseDown( ev, m );
 
-		if( !ev.cancel && !project.isBackup() )
+		if( !ev.cancel && !project.isBackup() && !ui.ValuePicker.exists() )
 			rulers.onMouseDown( ev, m );
 
 		if( !ev.cancel )
@@ -780,6 +955,10 @@ class Editor extends Page {
 
 		panTool.stopUsing(m);
 		worldTool.onMouseUp(m);
+
+		if( ui.ValuePicker.exists() )
+			ui.ValuePicker.ME.onMouseUp(m);
+
 		if( resizeTool!=null && resizeTool.isRunning() )
 			resizeTool.stopUsing(m);
 
@@ -794,12 +973,10 @@ class Editor extends Page {
 		rulers.onMouseUp( m );
 	}
 
-	var fpsRequests : Map<Int, Float> = new Map();
-	public inline function requestFps(ratio=1.0) {
-		fpsRequests.set(M.iclamp(Std.int(ratio*100), 10, 100), 2);
-	}
-
 	function onMouseMove(ev:hxd.Event) {
+		if( !App.ME.hasGlContext )
+			return;
+
 		var m = getMouse();
 
 		if( !isLocked() ) {
@@ -810,12 +987,17 @@ class Editor extends Page {
 			panTool.onMouseMove(ev,m);
 			panTool.onMouseMoveCursor(cursorEvent,m);
 
-			if( !ev.cancel && resizeTool!=null ) {
+			if( ui.ValuePicker.exists() ) {
+				ui.ValuePicker.ME.onMouseMove(ev,m);
+				ui.ValuePicker.ME.onMouseMoveCursor(cursorEvent,m);
+			}
+
+			if( !ev.cancel && resizeTool!=null && !ui.ValuePicker.exists() ) {
 				resizeTool.onMouseMove(ev,m);
 				resizeTool.onMouseMoveCursor(cursorEvent,m);
 			}
 
-			if( !ev.cancel && !worldMode ) {
+			if( !ev.cancel && !worldMode && !ui.ValuePicker.exists() ) {
 				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() ) {
 					selectionTool.onMouseMove(ev,m);
 					selectionTool.onMouseMoveCursor(cursorEvent,m);
@@ -830,8 +1012,10 @@ class Editor extends Page {
 				}
 			}
 
-			rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
-			rulers.onMouseMoveCursor(cursorEvent,m);
+			if( !ui.ValuePicker.exists() ) {
+				rulers.onMouseMove(ev,m); // Note: event cancelation is checked inside
+				rulers.onMouseMoveCursor(cursorEvent,m);
+			}
 
 			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
 			worldTool.onMouseMoveCursor(cursorEvent,m);
@@ -846,126 +1030,161 @@ class Editor extends Page {
 			cursor.onMouseMove(m);
 
 			if( curLevel.inBounds(m.levelX, m.levelY) )
-				requestFps(0.5);
+				App.ME.requestCpu(false);
 		}
 
 		// Mouse coords infos
-		if( ui.Modal.hasAnyOpen() || isLocked() )
-			jMouseCoords.hide();
-		else {
-			jMouseCoords.show();
-
-			// Coordinates
-			if( worldMode ) {
-				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
-				jMouseCoords.find(".grid").hide();
-				jMouseCoords.find(".level").hide();
-			}
-			else {
-				if( curLayerInstance!=null )
-					jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
-				else
-					jMouseCoords.find(".grid").hide();
-				jMouseCoords.find(".level").text('Level = ${m.levelX},${m.levelY}');
-				jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
-			}
-			if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
-				var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
-				var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
-				jMouseCoords.find(".grid").append(' / ${wid} x $hei');
-			}
-
-			// Overed element infos in footer
-			var jElement = jMouseCoords.find(".element");
-			jElement.removeAttr("style").empty();
-			inline function _colorizeElement(c:UInt) {
-				jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
-				jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
-			}
-			var overed = getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
-			switch overed {
-				case null:
-				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) )
-						switch li.def.type {
-							case IntGrid:
-								var v = li.getIntGrid(cx,cy);
-								_colorizeElement( li.def.getIntGridValueColor(v) );
-								jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
-
-							case Tiles:
-								var stack = li.getGridTileStack(cx,cy);
-								if( stack.length==1 )
-									jElement.text('Tile ${ stack[0].tileId }');
-								else
-									jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
-
-							case Entities:
-							case AutoLayer:
-						}
-
-				case Entity(li, ei):
-					_colorizeElement( ei.getSmartColor(false) );
-					jElement.text('${ ei.def.identifier } (Entity)');
-
-				case PointField(li, ei, fi, arrayIdx):
-					_colorizeElement( ei.getSmartColor(false) );
-					jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
-			}
+		if( ui.Modal.hasAnyOpen() || isLocked() || !App.ME.overCanvas || gifMode ) {
+			if( jMouseCoords.is(":visible") )
+				jMouseCoords.hide();
 		}
+		else
+			invalidatedMouseCoords = true;
 	}
 
 
-	function onMouseWheel(e:hxd.Event) {
-		var m = getMouse();
-		requestFps(0.85);
+	function updateMouseCoordsBlock(m:Coords) {
+		jMouseCoords.show();
 
-		var speed = ET.getZoom() * settings.v.mouseWheelSpeed;
-		camera.deltaZoomTo( m.levelX, m.levelY, -e.wheelDelta * 0.13 * speed );
+		// Coordinates
+		if( worldMode ) {
+			jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
+			jMouseCoords.find(".grid").hide();
+			jMouseCoords.find(".level").hide();
+		}
+		else {
+			if( curLayerInstance!=null )
+				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
+			else
+				jMouseCoords.find(".grid").hide();
+			jMouseCoords.find(".level").text('Level = ${m.levelX},${m.levelY}');
+			jMouseCoords.find(".world").text('World = ${m.worldX},${m.worldY}');
+		}
+		if( curTool.getRunningRectCWid(m)>0 || selectionTool.getRunningRectCWid(m)>0 ) {
+			var wid = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCWid(m);
+			var hei = ( curTool.isRunning() ? curTool : selectionTool ).getRunningRectCHei(m);
+			jMouseCoords.find(".grid").append(' / ${wid} x $hei');
+		}
+
+		// Overed element infos in footer
+		var jElement = jMouseCoords.find(".element");
+		jElement.removeAttr("style").text("--");
+		inline function _colorizeElement(c:UInt) {
+			jElement.css("color", C.intToHex( C.toWhite( c, 0.66 ) ));
+			jElement.css("background-color", C.intToHex( C.toBlack( c, 0.5 ) ));
+		}
+		var overed = getGenericLevelElementAt(m, settings.v.singleLayerMode);
+		switch overed {
+			case null:
+			case GridCell(li, cx, cy):
+				if( li.hasAnyGridValue(cx,cy) )
+					switch li.def.type {
+						case IntGrid:
+							var v = li.getIntGrid(cx,cy);
+							_colorizeElement( li.def.getIntGridValueColor(v) );
+							jElement.text('${ li.def.getIntGridValueDisplayName(v) } (IntGrid)');
+
+						case Tiles:
+							var stack = li.getGridTileStack(cx,cy);
+							if( stack.length==1 )
+								jElement.text('Tile ${ stack[0].tileId }');
+							else
+								jElement.text('Tiles ${ stack.map(t->t.tileId).join(", ") }');
+
+						case Entities:
+						case AutoLayer:
+					}
+
+			case Entity(li, ei):
+				_colorizeElement( ei.getSmartColor(false) );
+				jElement.text('${ ei.def.identifier } (Entity)');
+
+			case PointField(li, ei, fi, arrayIdx):
+				_colorizeElement( ei.getSmartColor(false) );
+				jElement.text('${ ei.def.identifier }.${ fi.def.identifier } (Entity point)');
+		}
+	}
+
+	public var lastMouseWheelDelta = 0.;
+	override function onAppMouseWheel(delta:Float) {
+		super.onAppMouseWheel(delta);
+		lastMouseWheelDelta = delta;
+	}
+
+
+	function onHeapsMouseWheel(e:hxd.Event) {
+		deltaZoom( lastMouseWheelDelta*settings.v.mouseWheelSpeed, getMouse() );
+		cursor.onMouseMove( getMouse() );
+	}
+
+
+	public function deltaZoom(delta:Float, c:Coords) {
+		var spd = 0.15;
+		camera.deltaZoomTo( c.levelX, c.levelY, delta*spd*camera.adjustedZoom );
 		camera.cancelAllAutoMovements();
 
-		cursor.onMouseMove( getMouse() );
+		App.ME.requestCpu();
 
 		// Auto world mode on zoom out
-		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && e.wheelDelta>0 ) {
+		if( settings.v.autoWorldModeSwitch!=Never && !worldMode && delta<0 ) {
 			var wr = camera.getLevelWidthRatio(curLevel);
 			var hr = camera.getLevelHeightRatio(curLevel);
-			// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
-			if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 )
+			// if( wr<=0.3 && hr<=0.3 || wr<=0.22 || hr<=0.22 || camera.adjustedZoom<=camera.getMinZoom() )
+			if( camera.adjustedZoom<=camera.getMinZoom() )
 				setWorldMode(true, true);
 		}
 
 		// Auto level mode on zoom in
-		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && e.wheelDelta<0 ) {
+		if( settings.v.autoWorldModeSwitch==ZoomInAndOut && worldMode && delta>0 ) {
 			// Find closest level to cursor
-			var dh = new dn.DecisionHelper(project.levels);
-			dh.keepOnly( l->l.isWorldOver(m.worldX, m.worldY, 500) );
-			dh.score( l->l.isWorldOver(m.worldX, m.worldY) ? 100 : 0 );
-			dh.score( l->-l.getDist(m.worldX,m.worldY) );
+			var dh = new dn.DecisionHelper(curWorld.levels);
+			dh.keepOnly( l->l.worldDepth==curWorldDepth && l.isWorldOver(c.worldX, c.worldY, 500) );
+			dh.score( l->l.isWorldOver(c.worldX, c.worldY) ? 100 : 0 );
+			dh.score( l->-l.getDist(c.worldX,c.worldY) );
 
 			var l = dh.getBest();
 			if( l!=null ) {
 				var wr = camera.getLevelWidthRatio(l);
 				var hr = camera.getLevelHeightRatio(l);
-				// App.ME.debug( M.pretty(wr)+" x "+M.pretty(hr), true );
-				if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
+				// if( wr>0.3 && hr>0.3 || wr>0.78 || hr>0.78 ) {
+				if( camera.adjustedZoom>camera.getMinZoom(l) ) {
 					selectLevel(l);
 					setWorldMode(false, true);
 				}
 			}
 		}
+
+	}
+
+
+	public function selectWorld(w:data.World, showUp=true) {
+		curWorldIid = w.iid;
+		invalidateCachedLevelErrors();
+
+		ge.emit( WorldSelected(w) );
+		selectLevel(w.levels[0]);
+
+		if( showUp ) {
+			N.quick("World: "+w.identifier);
+			setWorldMode(true);
+			camera.fit(true);
+		}
+
+		ui.Tip.clear();
 	}
 
 
 	public function selectLevel(l:data.Level) {
 		if( curLevel!=null )
-			worldRender.invalidateLevel(curLevel);
+			worldRender.invalidateLevelRender(curLevel);
 
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged );
-
 		saveLastProjectInfos();
+
+		ui.Tip.clear();
+		LevelTimeline.garbageCollectTimelines();
 	}
 
 
@@ -989,6 +1208,7 @@ class Editor extends Page {
 		curLayerDefUid = li.def.uid;
 		ge.emit(LayerInstanceSelected);
 		clearSpecialTool();
+		ui.Tip.clear();
 
 		updateEditOptions();
 	}
@@ -1003,11 +1223,65 @@ class Editor extends Page {
 	}
 
 
-	public function isSnappingToGrid() {
+	public function selectWorldDepth(depth:Int) {
+		if( curWorldDepth==depth )
+			return;
+
+		curWorldDepth = depth;
+		ge.emit( WorldDepthSelected(curWorldDepth) );
+	}
+
+
+	public function followEntityRef(tei:data.inst.EntityInstance) {
+		if( !tei._li.level.isInWorld(curWorld) )
+			selectWorld(tei._li.level._world, false);
+
+		if( tei._li.level!=curLevel )
+			selectLevel(tei._li.level);
+
+		if( tei._li!=curLayerInstance )
+			selectLayerInstance(tei._li);
+
+		camera.scrollTo(tei.worldX, tei.worldY);
+		levelRender.bleepEntity(tei);
+		selectionTool.select([ Entity(curLayerInstance, tei) ]);
+	}
+
+
+	function updateWorldDepthsUI() {
+		var min = curWorld.getLowestLevelDepth();
+		var max = curWorld.getHighestLevelDepth();
+
+		if( gifMode || !worldMode || min==max ) {
+			jDepths.hide();
+			return;
+		}
+
+		var jList = jDepths.children("ul");
+		jList.empty();
+		jDepths.show();
+
+		for(depth in min...max+1) {
+			var jDepth = new J('<li/>');
+			jDepth.prependTo(jList);
+			jDepth.append('<span class="icon"/>');
+			jDepth.append('<span class="label">$depth</label>');
+			if( depth==curWorldDepth )
+				jDepth.addClass("active");
+			jDepth.click( _->{
+				selectWorldDepth(depth);
+			});
+		}
+	}
+
+
+	public inline function isSnappingToGrid() {
 		return settings.v.grid || !layerSupportsFreeMode();
 	}
 
 	function updateEditOptions() {
+		ui.Tip.clear();
+
 		// Init
 		jEditOptions
 			.off()
@@ -1016,8 +1290,10 @@ class Editor extends Page {
 				.off();
 
 		// Update all
-		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
+		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
+
+		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
 		applyEditOption( jEditOptions.find("li.emptySpaceSelection"), ()->settings.v.emptySpaceSelection, (v)->setEmptySpaceSelection(v) );
 		applyEditOption(
 			jEditOptions.find("li.tileStacking"),
@@ -1025,6 +1301,8 @@ class Editor extends Page {
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
+
+		JsTools.parseComponents(jEditOptions);
 	}
 
 	inline function applyEditOption( jOpt:js.jquery.JQuery, getter:()->Bool, setter:Bool->Void, ?isSupported:Void->Bool ) {
@@ -1052,8 +1330,10 @@ class Editor extends Page {
 		if( worldMode==v )
 			return;
 
+		App.ME.requestCpu();
 		selectionTool.clear();
-		project.reorganizeWorld();
+		curWorld.reorganizeWorld();
+		curLevel.invalidateCachedError();
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
@@ -1062,9 +1342,19 @@ class Editor extends Page {
 			ui.Modal.closeAll();
 			new ui.modal.panel.WorldPanel();
 		}
+		else
+			updateLayerList();
+
+		// Offset editing options & world layers
+		var jFloatingOptions = jPage.find("#editingOptions, #worldDepths");
+		if( !worldMode )
+			jFloatingOptions.css("margin-left", 0);
+		else {
+			var m = App.ME.jBody.find(".worldPanel>.wrapper").outerWidth() - jMainPanel.outerWidth();
+			jFloatingOptions.css("margin-left", m+"px");
+		}
 
 		camera.onWorldModeChange(worldMode, usedMouseWheel);
-		worldTool.onWorldModeChange(worldMode);
 	}
 
 	public function setGrid(v:Bool, notify=true) {
@@ -1080,7 +1370,7 @@ class Editor extends Page {
 		settings.v.singleLayerMode = v;
 		App.ME.settings.save();
 		levelRender.applyAllLayersVisibility();
-		levelRender.invalidateBg();
+		levelRender.invalidateUiAndBg();
 		selectionTool.clear();
 		N.quick( "Single layer mode: "+L.onOff( settings.v.singleLayerMode ));
 		updateEditOptions();
@@ -1099,6 +1389,15 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
+	}
+
+	public function setShowDetails(v:Bool) {
+		settings.v.showDetails = v;
+		App.ME.settings.save();
+		selectionTool.clear();
+		N.quick( settings.v.showDetails ? L.t._("Showing everything") : L.t._("Showing tiles only"));
+		ge.emit( ShowDetailsChanged(v) );
 		updateEditOptions();
 	}
 
@@ -1136,7 +1435,7 @@ class Editor extends Page {
 		if( needSaving )
 			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
 		else
-			App.ME.loadPage( ()->new Home() );
+			App.ME.loadPage( ()->new Home(), true );
 	}
 
 	public function onSave(saveAs=false, ?bypasses:Map<String,Bool>, ?onComplete:Void->Void) {
@@ -1193,7 +1492,7 @@ class Editor extends Page {
 		}
 
 		// Save project
-		new ui.ProjectSaving(this, project, (success)->{
+		new ui.ProjectSaver(this, project, (success)->{
 			if( !success )
 				N.error("Saving failed!");
 			else {
@@ -1213,33 +1512,34 @@ class Editor extends Page {
 
 	function onBackupRestore() {
 		new ui.modal.dialog.Confirm(
-			Lang.t._("Do you want to want to RESTORE this backup?"),
+			L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
 			()->{
-				var original = ui.ProjectSaving.makeOriginalPathFromBackup(project.filePath.full);
-				if( !NT.fileExists(original.full) ) {
+				var original = ui.ProjectSaver.makeOriginalPathFromBackup(project.filePath.full);
+				if( original.full==null || !NT.fileExists(original.full) ) {
 					// Project not found
-					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the corresponding project file."));
+					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
 				}
 				else {
-					new ui.modal.dialog.Confirm( // extra confirmation
-						Lang.t._("WARNING: I will REPLACE the original project file with this backup. Are you sure?"),
-						true,
-						()->{
-							App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-							var crashFile = ui.ProjectSaving.isCrashFile(project.filePath.full) ? project.filePath.full : null;
+					App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
+					var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
 
-							// Save upon original
-							App.LOG.fileOp('Backup original: ${original.full}...');
-							project.filePath = original.clone();
-							setPermanentNotification("backup");
-							onSave();
-							selectProject(project);
+					// Save upon original
+					App.LOG.fileOp('Backup original: ${original.full}...');
+					project.filePath = original.clone();
+					setPermanentNotification("backup");
+					for(w in project.worlds)
+					for(l in w.levels)
+						invalidateLevelCache(l);
+					onSave();
+					selectProject(project);
 
-							// Delete crash backup
-							if( crashFile!=null )
-								NT.removeFile(crashFile);
-						}
-					);
+					if( worldMode )
+						setWorldMode(false);
+					ui.Modal.closeAll();
+
+					// Delete crash backup
+					if( crashBackupDir!=null )
+						NT.removeDir(crashBackupDir);
 				}
 			}
 		);
@@ -1248,8 +1548,8 @@ class Editor extends Page {
 	inline function shouldLogEvent(e:GlobalEvent) {
 		return switch(e) {
 			case ViewportChanged: false;
-			case WorldLevelMoved: false;
-			case LayerInstanceChanged: false;
+			case WorldLevelMoved(_): false;
+			// case LayerInstanceChangedGlobally(_): false;
 			case WorldMode(_): false;
 			case GridChanged(_): false;
 			case _: true;
@@ -1276,28 +1576,33 @@ class Editor extends Page {
 				case LevelRemoved(l): extra = l.uid;
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
-				case WorldLevelMoved:
+				case LevelJsonCacheInvalidated(l):
+				case WorldLevelMoved(l,isFinal, _): if( isFinal ) extra = l.uid;
 				case WorldSettingsChanged:
 				case LayerDefAdded:
 				case LayerDefConverted:
-				case LayerDefRemoved(defUid):
-				case LayerDefChanged:
+				case LayerDefRemoved(defUid): extra = defUid;
+				case LayerDefChanged(defUid): extra = defUid;
 				case LayerDefSorted:
+				case LayerDefIntGridValueRemoved(defUid, valueId, isUsed): extra = defUid+'($valueId, $isUsed)';
 				case LayerRuleChanged(rule): extra = rule.uid;
 				case LayerRuleAdded(rule): extra = rule.uid;
 				case LayerRuleRemoved(rule): extra = rule.uid;
 				case LayerRuleSeedChanged:
 				case LayerRuleSorted:
-				case LayerRuleGroupAdded:
+				case LayerRuleGroupAdded(rg): extra = rg.uid;
 				case LayerRuleGroupRemoved(rg): extra = rg.uid;
 				case LayerRuleGroupChanged(rg): extra = rg.uid;
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
 				case LayerInstanceSelected:
-				case LayerInstanceChanged:
+				case LayerInstanceChangedGlobally(li): extra = li.layerDefUid;
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
-				case LayerInstanceRestoredFromHistory(li): extra = li.layerDefUid;
+				case LayerInstancesRestoredFromHistory(lis):
+					extra = "";
+					for(li in lis)
+						extra+=li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
 				case AutoLayerRenderingChanged:
 				case TilesetDefChanged(td): extra = td.uid;
@@ -1310,7 +1615,9 @@ class Editor extends Page {
 				case EntityInstanceAdded(ei): extra = ei.defUid;
 				case EntityInstanceRemoved(ei): extra = ei.defUid;
 				case EntityInstanceChanged(ei): extra = ei.defUid;
-				case FieldInstanceChanged(fi): extra = fi.defUid;
+				case LevelFieldInstanceChanged(l,fi): extra = fi.defUid;
+				case EntityFieldInstanceChanged(ei,fi): extra = fi.defUid;
+
 				case EntityDefAdded:
 				case EntityDefRemoved:
 				case EntityDefChanged:
@@ -1325,23 +1632,151 @@ class Editor extends Page {
 				case EnumDefSorted:
 				case EnumDefValueRemoved:
 				case ToolOptionChanged:
+				case ToolValueSelected:
 				case GridChanged(active):
+				case _:
 			}
 			App.LOG.add( "event", e.getName() + (extra==null ? "" : " "+Std.string(extra)) );
+		}
+
+
+		// Level cache invalidation
+		switch e {
+			case LastChanceEnded:
+			case ViewportChanged:
+			case AppSettingsChanged:
+			case ProjectSelected:
+			case ProjectSettingsChanged:
+			case BeforeProjectSaving:
+			case ProjectSaved:
+			case LevelSelected(level):
+			case LevelSettingsChanged(l): invalidateLevelCache(l);
+			case LevelAdded(l):
+				for(nl in l.getNeighbours())
+					invalidateLevelCache(nl);
+				invalidateLevelCache(l);
+
+			case LevelRemoved(_):
+				switch curWorld.worldLayout {
+					case Free, GridVania:
+					case LinearHorizontal, LinearVertical: invalidateAllLevelsCache();
+				}
+			case LevelResized(level): invalidateLevelCache(level);
+			case LevelRestoredFromHistory(level): invalidateLevelCache(level);
+			case LevelJsonCacheInvalidated(level):
+			case WorldLevelMoved(level,isFinal, oldNeig):
+				if( isFinal ) {
+					var newNeig = level.getNeighboursUids();
+
+					// Invalidate old neighbours
+					for(uid in oldNeig)
+						invalidateLevelCache( project.getLevelAnywhere(uid) );
+
+					// Invalidate new neighbours
+					for(uid in newNeig)
+						invalidateLevelCache( project.getLevelAnywhere(uid) );
+
+					switch curWorld.worldLayout {
+						case Free, GridVania: invalidateLevelCache(level);
+						case LinearHorizontal, LinearVertical: invalidateLevelCache(level);
+					}
+				}
+
+			case WorldSettingsChanged: invalidateAllLevelsCache();
+			case LayerDefAdded: invalidateAllLevelsCache();
+			case LayerDefRemoved(defUid): invalidateAllLevelsCache();
+			case LayerDefChanged(defUid): invalidateAllLevelsCache();
+			case LayerDefSorted: invalidateAllLevelsCache();
+			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				if( used ) {
+					invalidateAllLevelsCache();
+					checkAutoLayersCache( anyChange->{
+						worldRender.invalidateAllLevelRenders();
+					});
+				}
+			case LayerDefConverted: invalidateAllLevelsCache();
+			case LayerRuleChanged(rule): invalidateAllLevelsCache();
+			case LayerRuleAdded(rule): invalidateAllLevelsCache();
+			case LayerRuleRemoved(rule): invalidateAllLevelsCache();
+			case LayerRuleSeedChanged: invalidateAllLevelsCache();
+			case LayerRuleSorted: invalidateAllLevelsCache();
+			case LayerRuleGroupAdded(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
+			case LayerRuleGroupRemoved(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
+			case LayerRuleGroupChanged(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
+			case LayerRuleGroupChangedActiveState(rg):
+				if( rg.isOptional )
+					invalidateLevelCache(curLevel);
+				else
+					invalidateAllLevelsCache();
+			case LayerRuleGroupSorted: invalidateAllLevelsCache();
+			case LayerRuleGroupCollapseChanged(rg):
+			case LayerInstanceSelected:
+			case LayerInstanceEditedByTool(li): invalidateLevelCache(li.level);
+			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
+			case LayerInstanceVisiblityChanged(li):
+			case LayerInstancesRestoredFromHistory(lis):
+				for(li in lis)
+					invalidateLevelCache(li.level);
+			case AutoLayerRenderingChanged:
+			case LayerInstanceTilesetChanged(li): invalidateLevelCache(li.level);
+			case TilesetDefChanged(td): invalidateAllLevelsCache();
+			case TilesetImageLoaded(td, init):
+				if( !init )
+					invalidateAllLevelsCache();
+			case TilesetDefAdded(td):
+			case TilesetDefRemoved(td): invalidateAllLevelsCache();
+			case TilesetMetaDataChanged(td):
+			case TilesetSelectionSaved(td):
+			case TilesetDefPixelDataCacheRebuilt(td):
+			case TilesetDefSorted:
+			case EntityInstanceAdded(ei): invalidateLevelCache(ei._li.level);
+			case EntityInstanceRemoved(ei): invalidateLevelCache(ei._li.level);
+			case EntityInstanceChanged(ei): invalidateLevelCache(ei._li.level);
+			case EntityDefAdded:
+			case EntityDefRemoved: invalidateAllLevelsCache();
+			case EntityDefChanged: invalidateAllLevelsCache();
+			case EntityDefSorted:
+			case FieldDefAdded(fd): invalidateAllLevelsCache();
+			case FieldDefRemoved(fd): invalidateAllLevelsCache();
+			case FieldDefChanged(fd): invalidateAllLevelsCache();
+			case FieldDefSorted: invalidateAllLevelsCache();
+			case LevelFieldInstanceChanged(l, fi): invalidateLevelCache(l);
+			case EntityFieldInstanceChanged(ei, fi): invalidateLevelCache(ei._li.level);
+			case EnumDefAdded:
+			case EnumDefRemoved: invalidateAllLevelsCache();
+			case EnumDefChanged: invalidateAllLevelsCache();
+			case EnumDefSorted:
+			case EnumDefValueRemoved: invalidateAllLevelsCache();
+			case ToolValueSelected:
+			case ToolOptionChanged:
+			case WorldSelected(w):
+			case WorldMode(active):
+			case WorldDepthSelected(worldDepth):
+			case GridChanged(active):
+			case ShowDetailsChanged(active):
 		}
 
 
 		// Check if events changes the NeedSaving flag
 		switch e {
 			case WorldMode(_):
+			case WorldDepthSelected(_):
 			case AppSettingsChanged:
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected(_):
 			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
+			case ToolValueSelected:
 			case BeforeProjectSaving:
+			case LayerRuleGroupCollapseChanged(rg):
 			case ProjectSaved:
+			case GridChanged(active):
+			case ShowDetailsChanged(active):
+			case TilesetImageLoaded(td,init):
+				if( !init )
+					needSaving = true;
 
 			case _:
 				needSaving = true;
@@ -1350,30 +1785,58 @@ class Editor extends Page {
 
 		// Use event
 		switch e {
+			case LastChanceEnded:
+				LevelTimeline.garbageCollectTimelines();
+
 			case AppSettingsChanged:
+
 			case WorldMode(active):
+				if( !active && curWorldDepth!=curLevel.worldDepth )
+					selectWorldDepth(curLevel.worldDepth);
+				updateWorldDepthsUI();
+
+			case WorldDepthSelected(worldDepth):
+				updateWorldDepthsUI();
 
 			case ViewportChanged:
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
-			case LayerInstanceChanged:
+			case LayerInstanceChangedGlobally(li):
+			case LayerInstanceEditedByTool(li):
 
 			case FieldDefChanged(fd):
+				invalidateCachedLevelErrors();
+
 			case FieldDefSorted:
-			case FieldInstanceChanged(fi):
+
+			case LevelFieldInstanceChanged(l,fi):
+				l.invalidateCachedError();
+
+			case EntityFieldInstanceChanged(ei,fi):
+				ei._li.level.invalidateCachedError();
 
 			case EntityInstanceAdded(ei):
+				ei._li.level.invalidateCachedError();
 
 			case EntityInstanceRemoved(ei):
+				ei._li.level.invalidateCachedError();
 				if( resizeTool!=null && resizeTool.isOnEntity(ei) )
 					clearResizeTool();
 
 			case EntityInstanceChanged(ei):
+				ei._li.level.invalidateCachedError();
+				if( selectionTool.any() )
+					selectionTool.invalidateRender();
 
 			case ToolOptionChanged:
+				updateTool();
+
+			case ToolValueSelected:
 
 			case GridChanged(active):
+
+			case ShowDetailsChanged(active):
 
 			case LayerInstanceSelected:
 				updateTool();
@@ -1396,6 +1859,7 @@ class Editor extends Page {
 				updateTool();
 
 			case LayerDefAdded:
+				checkAutoLayersCache( (_)->{} );
 				updateLayerList();
 				updateTool();
 
@@ -1412,7 +1876,7 @@ class Editor extends Page {
 
 			case LayerRuleGroupChanged(rg):
 			case LayerRuleGroupChangedActiveState(rg):
-			case LayerRuleGroupAdded:
+			case LayerRuleGroupAdded(rg):
 			case LayerRuleGroupRemoved(rg):
 			case LayerRuleGroupSorted:
 			case LayerRuleGroupCollapseChanged(rg):
@@ -1430,29 +1894,39 @@ class Editor extends Page {
 
 			case LevelSettingsChanged(l):
 				updateGuide();
+				updateWorldDepthsUI();
 
+			case LevelJsonCacheInvalidated(l):
 			case LevelAdded(l):
+
 			case LevelRemoved(l):
+
 			case LevelResized(l):
-			case WorldLevelMoved:
+
+			case WorldLevelMoved(l, isFinal, _):
+
 			case WorldSettingsChanged:
 
 			case LevelSelected(l):
+				updateWorldDepthsUI();
 				updateLayerList();
 				updateGuide();
 				clearSpecialTool();
 				selectionTool.clear();
 				updateTool();
-				if( !levelHistory.exists(l.uid) )
-					levelHistory.set(l.uid, new LevelHistory(l.uid) );
+				if( !levelTimelines.exists(l.uid) )
+					levelTimelines.set(l.uid, new LevelTimeline(l.uid, l._world.iid) );
+				selectWorldDepth(l.worldDepth);
+				l.invalidateCachedError();
 
-			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
+			case LayerInstancesRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
 				clearSpecialTool();
 				updateAppBg();
 				updateLayerList();
 				updateGuide();
 				updateTool();
+				project.resetQuickLevelAccesses();
 
 			case LayerInstanceTilesetChanged(li):
 
@@ -1462,8 +1936,12 @@ class Editor extends Page {
 				updateGuide();
 
 			case TilesetDefChanged(_), EntityDefChanged, EntityDefAdded, EntityDefRemoved, EntityDefSorted, TilesetDefSorted:
+				tool.lt.EntityTool.cancelRefChaining();
 				updateTool();
 				updateGuide();
+
+			case TilesetImageLoaded(td, init):
+				updateTool();
 
 			case TilesetMetaDataChanged(td):
 
@@ -1475,9 +1953,10 @@ class Editor extends Page {
 			case TilesetDefAdded(td):
 
 			case ProjectSettingsChanged:
+				updateBanners();
 				updateAppBg();
 
-			case LayerDefChanged:
+			case LayerDefChanged(defUid):
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				resetTools();
@@ -1489,13 +1968,49 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 				updateLayerList();
+
+			case LayerDefIntGridValuesSorted(defUid):
+				updateTool();
+
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				updateTool();
+
+			case WorldSelected(w):
+				// NOTE: a LevelSelected event always happens right after this one
 		}
 
-		// Broadcast to LevelHistory
-		if( curLevelHistory!=null )
-			curLevelHistory.manualOnGlobalEvent(e);
+		// Propagate to all LevelTimelines
+		for(tl in levelTimelines)
+			tl.manualOnGlobalEvent(e);
+
+		// Propagate to resize tool
+		if( resizeTool!=null )
+			resizeTool.onGlobalEvent(e);
 
 		updateTitle();
+	}
+
+	public inline function invalidateAllLevelsCache() {
+		for(w in project.worlds)
+		for(l in w.levels)
+			invalidateLevelCache(l);
+	}
+
+	public function invalidateLevelCache(l:data.Level) {
+		if( l==null ) {
+			N.error("Unknown level in invalidateLevelCache()");
+			return;
+		}
+
+		if( l.hasJsonCache() ) {
+			l.invalidateJsonCache();
+			ge.emit( LevelJsonCacheInvalidated(l) );
+		}
+	}
+
+	public inline function invalidateCachedLevelErrors() {
+		for(l in curWorld.levels)
+			l.invalidateCachedError();
 	}
 
 
@@ -1504,6 +2019,7 @@ class Editor extends Page {
 		App.ME.jCanvas.show();
 		App.ME.jCanvas.css("left", panelWid+"px");
 		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
+		camera.invalidateCache();
 	}
 
 	function updateAppBg() {
@@ -1524,7 +2040,7 @@ class Editor extends Page {
 		dn.Process.resizeAll();
 	}
 
-	function updateTitle() {
+	public function updateTitle() {
 		App.ME.setWindowTitle(
 			project.filePath.fileName
 			+ ( needSaving ? " [UNSAVED]" : "" )
@@ -1576,13 +2092,35 @@ class Editor extends Page {
 		}
 	}
 
+	override function onAppFocus() {
+		super.onAppFocus();
+		camera.invalidateCache();
+		delayer.addF(disableClicktrap,2);
+	}
+
 	override function onAppBlur() {
 		super.onAppBlur();
+		onMouseUp();
 		heldVisibilitySet = null;
+
+		if( !ET.isDevToolsOpened() )
+			enableClicktrap();
+	}
+
+	function enableClicktrap() {
+		var jCtrap = App.ME.jBody.find("#clicktrap");
+		jCtrap.show();
+		jCtrap.off().click( _->delayer.addF(disableClicktrap,1) );
+	}
+
+	function disableClicktrap() {
+		var jCtrap = App.ME.jBody.find("#clicktrap");
+		jCtrap.hide().off();
 	}
 
 	override function onAppMouseUp() {
 		super.onAppMouseUp();
+		onMouseUp();
 		heldVisibilitySet = null;
 	}
 
@@ -1594,28 +2132,35 @@ class Editor extends Page {
 		var idx = 1;
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
-			var e = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-			jLayerList.append(e);
-			e.attr("uid",ld.uid);
+			var active = li==curLayerInstance;
+			if( ld.hideInList && !active )
+				continue;
 
-			if( li==curLayerInstance )
-				e.addClass("active");
+			var jLayer = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			jLayerList.append(jLayer);
+			jLayer.attr("uid",ld.uid);
 
-			e.find(".index").text( Std.string(idx++) );
+			if( active )
+				jLayer.addClass("active");
+
+			if( ld.hideInList )
+				jLayer.addClass("hiddenFromList");
+
+			jLayer.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
 
 			// Icon
-			var jIcon = e.find(">.layerIcon");
+			var jIcon = jLayer.find(">.layerIcon");
 			jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
 
 			// Name
-			var name = e.find(".name");
+			var name = jLayer.find(".name");
 			name.text(li.def.identifier);
-			e.click( function(_) {
+			jLayer.click( function(_) {
 				selectLayerInstance(li);
 			});
 
 			// Rules button
-			var rules = e.find(".rules");
+			var rules = jLayer.find(".rules");
 			if( li.def.isAutoLayer() )
 				rules.show();
 			else
@@ -1630,7 +2175,7 @@ class Editor extends Page {
 			});
 
 			// Visibility button
-			var vis = e.find(".vis");
+			var vis = jLayer.find(".vis");
 			vis.mouseover( (_)->{
 				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
@@ -1656,6 +2201,7 @@ class Editor extends Page {
 					// Toggle this one
 					heldVisibilitySet = !levelRender.isLayerVisible(li);
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
+					invalidateLevelCache(curLevel);
 				}
 			});
 		}
@@ -1704,6 +2250,7 @@ class Editor extends Page {
 		ui.Tileset.clearScrollMemory();
 
 		App.ME.jBody.off(".client");
+		LevelTimeline.disableDebug();
 
 		if( ME==this )
 			ME = null;
@@ -1723,16 +2270,14 @@ class Editor extends Page {
 		if( camera.isAnimated() )
 			cursor.onMouseMove( getMouse() );
 
-		// Smart FPS limiting
-		if( App.ME.focused && settings.v.smartCpuThrottling ) {
-			var maxCap = 0.;
-			for(k in fpsRequests.keys()) {
-				maxCap = M.fmax(k/100,maxCap);
-				fpsRequests.set(k, fpsRequests.get(k)-tmod/Const.FPS);
-				if( fpsRequests.get(k)<=0 )
-					fpsRequests.remove(k);
-			}
-			hxd.System.fpsLimit = maxCap>=1 ? -1 : M.ceil(30+30*maxCap);
+
+		// Zoom keyboard shortcuts
+		if( App.ME.focused && !App.ME.hasInputFocus() ) {
+			if( App.ME.isKeyDown(K.NUMPAD_ADD) || App.ME.isKeyDown(K.QWERTY_EQUALS) )
+				deltaZoom(0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
+
+			if( App.ME.isKeyDown(K.NUMPAD_SUB) || App.ME.isKeyDown(K.QWERTY_MINUS) )
+				deltaZoom(-0.45*tmod, Coords.fromLevelCoords(camera.levelX,camera.levelY) );
 		}
 
 		// DOM locking
@@ -1742,6 +2287,12 @@ class Editor extends Page {
 				App.ME.jPage.addClass("locked");
 			else if( !isLocked() )
 				App.ME.jPage.removeClass("locked");
+		}
+
+		// Render mouse coords block
+		if( invalidatedMouseCoords && !cd.hasSetS("mouseCoordsLimit",0.06) ) {
+			invalidatedMouseCoords = false;
+			updateMouseCoordsBlock( getMouse() );
 		}
 	}
 }

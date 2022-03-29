@@ -1,125 +1,166 @@
-<h2><span class="icon help"></span> ::app:: cheat sheet</h2>
-
-<div class="column">
-	<h3>Editing commands</h3>
-	<dl class="major">
-		<dt> mouseleft </dt>
-		<dd>Draw</dd>
-
-		<dt> mouseright </dt>
-		<dd>Erase</dd>
-
-		<dt> alt + mouseleft </dt>
-		<dd>Select a single element</dd>
-
-		<dt> alt shift + mouseleft </dt>
-		<dd>Select all elements in a rectangle area</dd>
-
-		<dt> ctrl alt + mouseleft </dt>
-		<dd>Duplicate all selected elements</dd>
-
-		<dt> space + mouseleft </dt>
-		<dd>Move the current level view</dd>
-
-		<dt> mouseWheel </dt>
-		<dd>Zoom</dd>
-
-		<dt> shift + mouseleft (held) </dt>
-		<dd>Draw a rectangle.</dd>
-
-		<dt> shift + mouseleft (single click) </dt>
-		<dd>Flood-fill the current area with the selected value.</dd>
-	</dl>
-
-	<h3>Auto-layers</h3>
-	<dl class="minor">
-		<dt> Shift + R </dt>
-		<dd>Toggle auto-layers rendering</dd>
-	</dl>
+<h2><span class="icon help"></span> ::app:: help</h2>
 
 
-	<h3>Tile layers</h3>
-	<dl class="minor">
-		<dt> S </dt>
-		<dd>Save current tile selection.</dd>
-
-		<dt> L </dt>
-		<dd>Reload a saved tile selection from currently selected tile.</dd>
-
-		<dt> R </dt>
-		<dd>Toggle randomization of current tile selection.</dd>
-
-		<dt> X </dt>
-		<dd>X-mirror current tile(s)</dd>
-
-		<dt> Y or Z </dt>
-		<dd>Y-mirror current tile(s)</dd>
-	</dl>
-
-
+<div class="links">
+	<div class="buttons">
+		<h3>Online documentation</h3>
+		<button class="changelog"><span class="icon doc"></span> Release notes</button>
+		<button class="help" href="::docsUrl::" tip="right"><span class="icon doc"></span> Website</button>
+		<button class="help" href="::jsonUrl::" tip="right"><span class="icon json"></span> JSON file format</button>
+		<button class="discord" href="::discordUrl::" tip="right"><span class="icon discord"></span> Discord</button>
+	</div>
+	<div class="videosWrapper">
+		<h3>Video guides</h3>
+		<div class="videos">
+			<youtube id="O1pmIImzEts" desc="General LDtk introduction by Gamefromscratch"></youtube>
+			<youtube id="ah5MLaU5m8s" desc="Unity integration by Cammin"></youtube>
+		</div>
+	</div>
 </div>
 
 
-<div class="column">
-	<h3>General shortcuts</h3>
-	<dl class="minor">
-		<dt> mouseright or <span class="icon contextMenu"></span></dt>
-		<dd>Open context menu (works on World map, and or all UI components with "3 vertical dots")</dd>
+<div class="keys">
+	<div class="column">
+		<h3>Most important commands</h3>
+		<dl class="major">
+			<dt> mouseleft </dt>
+			<dd>Draw</dd>
 
-		<dt> ESCAPE </dt>
-		<dd>Clear selection, close panel, etc.</dd>
+			<dt> mouseright </dt>
+			<dd>Erase</dd>
 
-		<dt> TAB </dt>
-		<dd>Toggle compact mode</dd>
+			<dt> mousemiddle or space + mouseleft </dt>
+			<dd>Move the current level view</dd>
 
-		<dt> H </dt>
-		<dd>Show this help</dd>
+			<dt> mouseWheel or space + mouseright </dt>
+			<dd>Zoom</dd>
 
-		<dt> F1 to F6 </dt>
-		<dd>Open editor panels</dd>
+			<dt> add / sub</dt>
+			<dd>Zoom</dd>
 
-		<dt> F11 </dt>
-		<dd>Toggle fullscreen</dd>
+			<dt> mouseright or <span class="icon contextMenu"></span></dt>
+			<dd>Open context menu</dd>
 
-		<dt> F12 </dt>
-		<dd>Open app settings</dd>
+			<dt> ESCAPE </dt>
+			<dd>Clear selection, close panel, cancel an action etc.</dd>
+		</dl>
 
-		<dt> W </dt>
-		<dd>Open world view</dd>
+		<h3>Editing commands</h3>
+		<dl class="major">
+			<dt> alt + mouseleft </dt>
+			<dd>Select a single element</dd>
 
-		<dt> 1 to 9 </dt>
-		<dd>Select layers</dd>
+			<dt> alt shift + mouseleft </dt>
+			<dd>Select all elements in a rectangle area</dd>
 
-		<dt> ctrl S </dt>
-		<dd>Save project</dd>
+			<dt> ctrl alt + mouseleft </dt>
+			<dd>Duplicate all selected elements</dd>
 
-		<dt> ctrl shift S </dt>
-		<dd>Save project as...</dd>
+			<dt> space </dt>
+			<dd>Fit view</dd>
 
-		<dt> ctrl W </dt>
-		<dd>Close project</dd>
+			<dt> shift + mouseleft (held) </dt>
+			<dd>Draw a rectangle.</dd>
 
-		<dt> ctrl Q </dt>
-		<dd>Quit ::app::</dd>
+			<dt> shift + mouseleft (single click) </dt>
+			<dd>Flood-fill the current area with the selected value.</dd>
+		</dl>
 
-		<dt> G </dt>
-		<dd>Show/hide the grid</dd>
+		<h3>Auto-layers</h3>
+		<dl class="minor">
+			<dt> Shift + R </dt>
+			<dd>Toggle auto-layers rendering</dd>
+		</dl>
 
-		<dt> L </dt>
-		<dd>Toggle grid-locking (only works with some layer types)</dd>
 
-		<dt> A </dt>
-		<dd>Toggle "single layer" mode</dd>
+		<h3>Tile layers</h3>
+		<dl class="minor">
+			<dt> S </dt>
+			<dd>Save current tile selection.</dd>
 
-		<dt> ctrl A </dt>
-		<dd>Select all</dd>
+			<dt> L </dt>
+			<dd>Reload a saved tile selection from currently selected tile.</dd>
 
-		<dt> DELETE </dt>
-		<dd>Delete selected elements</dd>
+			<dt> R </dt>
+			<dd>Toggle randomization of current tile selection.</dd>
 
-		<dt> F </dt>
-		<dd>Fit current level or world in screen</dd>
-	</dl>
+			<dt> X </dt>
+			<dd>X-mirror current tile(s)</dd>
+
+			<dt> Y or Z </dt>
+			<dd>Y-mirror current tile(s)</dd>
+		</dl>
+	</div>
+
+
+	<div class="column">
+		<h3>Sections</h3>
+		<dl class="minor">
+			<dt> P </dt>  <dd>Open "Project" panel</dd>
+			<dt> L </dt>  <dd>Open "Layers" panel</dd>
+			<dt> E </dt>  <dd>Open "Entities" panel</dd>
+			<dt> U </dt>  <dd>Open "Enumerations" panel</dd>
+			<dt> T </dt>  <dd>Open "Tileset" panel</dd>
+		</dl>
+
+		<h3>General commands</h3>
+		<dl class="minor">
+			<dt> H </dt>
+			<dd>Show this help</dd>
+
+			<dt> CTRL H </dt>
+			<dd>Show/hide visual details</dd>
+
+			<dt> TAB </dt>
+			<dd>Toggle compact mode</dd>
+
+			<dt> F1 to F10 </dt>
+			<dd>Select layers</dd>
+
+			<dt> F11 </dt>
+			<dd>Toggle fullscreen</dd>
+
+			<dt> F12 </dt>
+			<dd>Open app settings</dd>
+
+			<dt> ctrl S </dt>
+			<dd>Save project</dd>
+
+			<dt> ctrl shift S </dt>
+			<dd>Save project as...</dd>
+
+			<dt> ctrl W </dt>
+			<dd>Close project</dd>
+
+			<dt> ctrl Q </dt>
+			<dd>Quit ::app::</dd>
+
+			<dt> G </dt>
+			<dd>Enable/disable the grid</dd>
+
+			<dt> A </dt>
+			<dd>Toggle "Single layer" mode</dd>
+
+			<dt> ctrl A </dt>
+			<dd>Select all</dd>
+
+			<dt> DELETE </dt>
+			<dd>Delete selected elements</dd>
+		</dl>
+
+		<h3>World mode</h3>
+		<dl class="minor">
+			<dt> W </dt>
+			<dd>Switch between world/level views</dd>
+
+			<dt> pgup / pgdn </dt>
+			<dd>Change active world layer</dd>
+
+			<dt> ctrl + pgup / pgdn </dt>
+			<dd>Move current level between world layers</dd>
+		</dl>
+
+	</div>
 </div>
 
 

@@ -6,12 +6,15 @@
 	"configurations": [
 		{
 			"name": "Debug renderer",
-			"type": "chrome",
+			"type": "pwa-chrome",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/app",
 			"webRoot": "${workspaceFolder}/app",
 			"windows": {
-				"runtimeExecutable": "${workspaceFolder}/app/node_modules/.bin/electron.cmd"
+				"name": "Debug renderer win",
+				"request": "launch",
+				"type": "pwa-chrome",
+				"runtimeExecutable": "${workspaceFolder}/app/node_modules/electron/dist/electron.exe"
 			},
 			"runtimeArgs" : [
 				".",

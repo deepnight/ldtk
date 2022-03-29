@@ -3,14 +3,26 @@ package data.def;
 import data.DataTypes;
 
 class LayerDef {
+	var _project : Project;
+
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var type : ldtk.Json.LayerType;
 	public var identifier(default,set) : String;
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
+	public var scaledGridSize(get,never) : Float; inline function get_scaledGridSize() return gridSize*getScale();
+	public var guideGridWid : Int = 0;
+	public var guideGridHei : Int = 0;
 	public var displayOpacity : Float = 1.0;
+	public var inactiveOpacity : Float = 1.0;
+	public var hideInList = false;
+	public var hideFieldsWhenInactive = false;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
+	public var parallaxFactorX : Float = 0.;
+	public var parallaxFactorY : Float = 0.;
+	public var parallaxScaling : Bool = true;
+	public var tilesetDefUid : Null<Int>;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -21,16 +33,15 @@ class LayerDef {
 	var intGridValues : Array<IntGridValueDef> = [];
 
 	// IntGrid/AutoLayers
-	public var autoTilesetDefUid : Null<Int>;
 	public var autoSourceLayerDefUid : Null<Int>;
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
 
 	// Tiles
-	public var tilesetDefUid : Null<Int>;
 	public var tilePivotX(default,set) : Float = 0;
 	public var tilePivotY(default,set) : Float = 0;
 
-	public function new(uid:Int, t:ldtk.Json.LayerType) {
+	public function new(p:Project, uid:Int, t:ldtk.Json.LayerType) {
+		_project = p;
 		this.uid = uid;
 		type = t;
 		#if editor
@@ -44,7 +55,7 @@ class LayerDef {
 	}
 
 	function set_identifier(id:String) {
-		id = Project.cleanupIdentifier(id,true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		return identifier = id==null ? identifier : id;
 	}
 
@@ -53,34 +64,67 @@ class LayerDef {
 	}
 
 	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.LayerDefJson) {
-		if( (cast json).tilesetDefId!=null ) json.tilesetDefUid = (cast json).tilesetDefId;
+		if( (cast json).tilesetDefId!=null )
+			json.tilesetDefUid = (cast json).tilesetDefId;
 
-		var o = new LayerDef( JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
+		if( json.inactiveOpacity==null ) {
+			if( (cast json).fadeInactive==true )
+				json.inactiveOpacity = 0.2;
+			else if( json.__type=="Entities" )
+				json.inactiveOpacity = 0.6;
+		}
+
+		if( (cast json).parallaxFactor!=null )
+			json.parallaxFactorX = json.parallaxFactorY = (cast json).parallaxFactor;
+
+		if( (cast json).autoTilesetDefUid!=null && json.tilesetDefUid==null )
+			json.tilesetDefUid = (cast json).autoTilesetDefUid;
+
+		var o = new LayerDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
+		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
+		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
+		o.inactiveOpacity = JsonTools.readFloat(json.inactiveOpacity, 1);
+		// o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
+		o.hideInList = JsonTools.readBool(json.hideInList, false);
+		o.hideFieldsWhenInactive = JsonTools.readBool(json.hideFieldsWhenInactive, true);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
+		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
+		o.parallaxFactorY = JsonTools.readFloat(json.parallaxFactorY, 0);
+		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
 
 		o.intGridValues = [];
-		var idx = 0;
-		for( v in JsonTools.readArray(json.intGridValues) ) {
-			o.intGridValues.push({
-				identifier: v.identifier,
-				color: JsonTools.readColor(v.color),
-			});
+		if( o.type==IntGrid ) {
+			var all : Array<IntGridValueDef> = JsonTools.readArray(json.intGridValues);
+			var fixedIdx = 1; // fix old projects missing intgrid "value" field
+			for( v in all ) {
+				o.intGridValues.push({
+					value: M.isValidNumber(v.value) ? v.value : fixedIdx,
+					identifier: v.identifier,
+					color: JsonTools.readColor(v.color),
+				});
+				fixedIdx++;
+			}
 		}
 
-		o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
+		// o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
 
 		// Read auto-layer rules
 		if( json.autoRuleGroups!=null ) {
 			for( ruleGroupJson in json.autoRuleGroups )
 				o.parseJsonRuleGroup(jsonVersion, ruleGroupJson);
+
+			// Smart unfold single groups
+			if( o.autoRuleGroups.length==1 )
+				for(rg in o.autoRuleGroups)
+					rg.collapsed = false;
 		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
@@ -91,7 +135,6 @@ class LayerDef {
 	}
 
 	public function toJson() : ldtk.Json.LayerDefJson {
-		var valueIdx = 1;
 		return {
 			__type: Std.string(type),
 
@@ -99,19 +142,27 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,
 			gridSize: gridSize,
+			guideGridWid: guideGridWid,
+			guideGridHei: guideGridHei,
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
+			inactiveOpacity: JsonTools.writeFloat(inactiveOpacity),
+			hideInList: hideInList,
+			hideFieldsWhenInactive: hideFieldsWhenInactive,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
+			parallaxFactorX: parallaxFactorX,
+			parallaxFactorY: parallaxFactorY,
+			parallaxScaling: parallaxScaling,
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
 
 			intGridValues: intGridValues.map( function(iv) return {
-				value: valueIdx++,
+				value: iv.value,
 				identifier: iv.identifier,
 				color: JsonTools.writeColor(iv.color),
 			}),
 
-			autoTilesetDefUid: autoTilesetDefUid,
+			autoTilesetDefUid: tilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
@@ -121,12 +172,11 @@ class LayerDef {
 		}
 	}
 
-	function toJsonRuleGroup(rg:AutoLayerRuleGroup) : ldtk.Json.AutoLayerRuleGroupJson {
+	public function toJsonRuleGroup(rg:AutoLayerRuleGroup) : ldtk.Json.AutoLayerRuleGroupJson {
 		return {
 			uid: rg.uid,
 			name: rg.name,
 			active: rg.active,
-			collapsed: rg.collapsed,
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson() ),
 		}
@@ -138,31 +188,67 @@ class LayerDef {
 			JsonTools.readString(ruleGroupJson.name, "default")
 		);
 		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
-		rg.collapsed = JsonTools.readBool( ruleGroupJson.collapsed, false );
 		rg.isOptional = JsonTools.readBool( ruleGroupJson.isOptional, false );
 		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
+		rg.collapsed = true;
 		return rg;
 	}
 
+	public inline function getScale() : Float {
+		return !parallaxScaling || parallaxFactorX==0 ? 1 : M.fmax( 0.01, 1-parallaxFactorX );
+	}
+
+
+	public function sortIntGridValueDef(from:Int, to:Int) : Null<IntGridValueDef> {
+		if( type!=IntGrid )
+			return null;
+
+		if( from<0 || from>=intGridValues.length || from==to )
+			return null;
+
+		if( to<0 || to>=intGridValues.length )
+			return null;
+
+		var moved = intGridValues.splice(from,1)[0];
+		intGridValues.insert(to, moved);
+
+		return moved;
+	}
+
+	function getNextIntGridValue() {
+		if( intGridValues.length==0 )
+			return 1;
+		var max = 1;
+		for(v in intGridValues)
+			max = M.imax(v.value, max);
+		return max+1;
+	}
 
 	public function addIntGridValue(col:UInt, ?id:String) {
 		if( !isIntGridValueIdentifierValid(id) )
 			throw "Invalid intGrid value identifier "+id;
 
 		intGridValues.push({
+			value: getNextIntGridValue(),
 			color: col,
 			identifier: id,
 		});
 	}
 
 	public inline function hasIntGridValue(v:Int) {
-		return v>0 && v<=intGridValues.length;
+		return getIntGridValueDef(v)!=null;
 	}
 
-	public inline function getIntGridValueDef(v:Int) : Null<IntGridValueDef> {
-		return intGridValues[v-1];
+	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDef> {
+		var out : Null<IntGridValueDef> = null;
+		for(v in intGridValues)
+			if( v.value==value ) {
+				out = v;
+				break;
+			}
+		return out;
 	}
 
 	public function getIntGridIndexFromIdentifier(id:String) : Int {
@@ -177,7 +263,7 @@ class LayerDef {
 
 	public inline function getIntGridValueDisplayName(idx:Int) : Null<String> {
 		var vd = getIntGridValueDef(idx);
-		return vd==null ? null : vd.identifier==null ? '#$idx' : '${vd.identifier} #$idx';
+		return vd==null ? null : vd.identifier==null ? '$idx' : '${vd.identifier} ($idx)';
 	}
 
 	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
@@ -186,12 +272,12 @@ class LayerDef {
 	}
 
 	public function removeIntGridValue(v:Int) : Bool {
-		if( hasIntGridValue(v) ) {
-			intGridValues.splice(v-1, 1);
-			return true;
-		}
-		else
-			return false;
+		for(i in 0...intGridValues.length)
+			if( intGridValues[i].value==v ) {
+				intGridValues.splice(i,1);
+				return true;
+			}
+		return false;
 	}
 
 	public inline function getAllIntGridValues() return intGridValues;
@@ -217,14 +303,14 @@ class LayerDef {
 
 
 	public inline function isAutoLayer() {
-		return type==IntGrid && autoTilesetDefUid!=null || type==AutoLayer;
+		return type==IntGrid && tilesetDefUid!=null || type==AutoLayer;
 	}
 
 	public function autoLayerRulesCanBeUsed() {
 		if( !isAutoLayer() )
 			return false;
 
-		if( autoTilesetDefUid==null )
+		if( tilesetDefUid==null )
 			return false;
 
 		if( type==AutoLayer && autoSourceLayerDefUid==null )
@@ -259,6 +345,16 @@ class LayerDef {
 		return false;
 	}
 
+	public inline function isRuleOptional(ruleUid:Int) {
+		var r = getRule(ruleUid);
+		if( r==null )
+			return false;
+		else {
+			var rg = getParentRuleGroup(r);
+			return rg!=null && rg.isOptional;
+		}
+	}
+
 	public function getRule(uid:Int) : Null<AutoLayerRuleDef> {
 		for( rg in autoRuleGroups )
 		for( r in rg.rules )
@@ -272,6 +368,13 @@ class LayerDef {
 			if( rg.uid==rgUid )
 				return rg;
 		return null;
+	}
+
+	public inline function isEntityAllowedFromTags(ei:data.inst.EntityInstance) {
+		if( !excludedTags.isEmpty() && excludedTags.hasAnyTagFoundIn(ei.def.tags) )
+			return false;
+		else
+			return requiredTags.isEmpty() || requiredTags.hasAnyTagFoundIn(ei.def.tags);
 	}
 
 	public function getParentRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {
@@ -308,20 +411,44 @@ class LayerDef {
 	}
 
 	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
-		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, r.toJson() );
-		copy.uid = p.makeUniqueIdInt();
-		rg.rules.insert( dn.Lib.getArrayIndex(r, rg.rules)+1, copy );
+		return pasteRule( p, rg, Clipboard.createTemp(CRule,r.toJson()), r );
+	}
+
+	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroup, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {
+		if( !c.is(CRule) )
+			return null;
+
+		var json : ldtk.Json.AutoRuleDef = c.getParsedJson();
+		var copy = AutoLayerRuleDef.fromJson( p.jsonVersion, json );
+		copy.uid = p.generateUniqueId_int();
+		if( after==null )
+			rg.rules.push(copy);
+		else
+			rg.rules.insert( dn.Lib.getArrayIndex(after, rg.rules)+1, copy );
 
 		p.tidy();
 		return copy;
 	}
 
 	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
-		var copy = parseJsonRuleGroup( p.jsonVersion, toJsonRuleGroup(rg) );
+		return pasteRuleGroup( p, Clipboard.createTemp(CRuleGroup,toJsonRuleGroup(rg)), rg );
+	}
 
-		copy.uid = p.makeUniqueIdInt();
+	public function pasteRuleGroup(p:data.Project, c:Clipboard, ?after:AutoLayerRuleGroup) : Null<AutoLayerRuleGroup> {
+		if( !c.is(CRuleGroup) )
+			return null;
+
+		var json : ldtk.Json.AutoLayerRuleGroupJson = c.getParsedJson();
+		var copy = parseJsonRuleGroup( p.jsonVersion, json );
+		copy.uid = p.generateUniqueId_int();
 		for(r in copy.rules)
-			r.uid = p.makeUniqueIdInt();
+			r.uid = p.generateUniqueId_int();
+
+		// Re-insert after given group because parser already pushed copy in the array
+		if( after!=null ) {
+			autoRuleGroups.remove(copy);
+			autoRuleGroups.insert( dn.Lib.getArrayIndex(after,autoRuleGroups)+1, copy );
+		}
 
 		p.tidy();
 		return copy;
@@ -355,27 +482,16 @@ class LayerDef {
 	}
 
 	public function tidy(p:data.Project) {
+		_project = p;
+
 		// Lost tileset
 		if( tilesetDefUid!=null && p.defs.getTilesetDef(tilesetDefUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost tileset in $this');
 			tilesetDefUid = null;
 		}
 
-		// Lost auto-layer tileset
-		if( autoTilesetDefUid!=null && p.defs.getTilesetDef(autoTilesetDefUid)==null ) {
-			App.LOG.add("tidy", 'Removed lost autoTileset in $this');
-			autoTilesetDefUid = null;
-			// for(rg in autoRuleGroups)
-			// for(r in rg.rules)
-			// 	r.tileIds = [];
-		}
-
 		// Lost source intGrid layer
-		if( autoSourceLayerDefUid!=null && p.defs.getLayerDef(autoSourceLayerDefUid)==null ) {
+		if( autoSourceLayerDefUid!=null && p.defs.getLayerDef(autoSourceLayerDefUid)==null )
 			autoSourceLayerDefUid = null;
-			// for(rg in autoRuleGroups)
-			// for(r in rg.rules)
-			// 	r.tileIds = [];
-		}
 	}
 }

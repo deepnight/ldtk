@@ -1,3 +1,12 @@
+--cmd haxelib install ase --always
+
+--next
+--cmd haxelib install uuid --always
+
+--next
+--cmd haxelib install format --always
+
+--next
 --cmd haxelib git castle https://github.com/deepnight/castle --always
 
 --next
@@ -13,7 +22,7 @@
 --cmd haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git --always
 
 --next
---cmd haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+--cmd haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
 
 --next
---cmd haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+--cmd haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always

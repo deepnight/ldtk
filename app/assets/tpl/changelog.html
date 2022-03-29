@@ -1,0 +1,27 @@
+<header>
+	<div class="version">
+		::ver::
+	</div>
+
+	<div class="title">::title::</div>
+
+	<div class="cornerButtons">
+		<button class="close"> <span class="icon close"/> </button>
+		<button class="others" title="Show other versions"> <span class="icon search"/> </button>
+	</div>
+</header>
+
+<div class="newUpdate"> <span>LDtk was updated!</span> </div>
+
+<div class="changelog" id="updateChangelogHtml"></div>
+<div id="updateChangelogMd">::md::</div>
+
+
+<!-- Parse markdowns -->
+<script type="text/javascript" src="js/marked.min.js"></script>
+<script type="text/javascript">
+	var rawMd = document.getElementById("updateChangelogMd").textContent;
+	document.getElementById("updateChangelogMd").remove();
+	document.getElementById("updateChangelogHtml").innerHTML =
+		marked(rawMd);
+</script>

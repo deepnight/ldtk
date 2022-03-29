@@ -42,6 +42,7 @@ class LastChance extends dn.Process {
 			case LevelSelected(l):
 			case LayerInstanceSelected:
 			case LayerInstanceVisiblityChanged(li):
+			case ToolValueSelected:
 			case ToolOptionChanged:
 			case TilesetDefPixelDataCacheRebuilt(td):
 
@@ -53,6 +54,7 @@ class LastChance extends dn.Process {
 	public static function end() {
 		if( CUR!=null && CUR.isActive() && !CUR.cd.has("ignoreFrame") ) {
 			CUR.hide();
+			Editor.ME.ge.emit(LastChanceEnded);
 		}
 	}
 

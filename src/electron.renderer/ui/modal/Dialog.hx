@@ -16,11 +16,14 @@ class Dialog extends ui.Modal {
 		jButtons.hide();
 
 		// Arrival anim
-		jWrapper.hide().slideDown(60);
-
+		openAnim();
 
 		// Position near attach target
 		positionNear(target);
+	}
+
+	function openAnim() {
+		jWrapper.hide().slideDown(60);
 	}
 
 	public static function closeAll() {

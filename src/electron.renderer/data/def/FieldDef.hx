@@ -5,11 +5,13 @@ import data.DataTypes;
 class FieldDef {
 	static var REGEX_REG = ~/^\/(.*)\/([gi]*)$/gi; // regex that recognizes a basic regex string
 
+	var _project : data.Project;
+
 	@:allow(data.Definitions, data.def.EntityDef, ui.FieldDefsForm)
 	public var uid(default,null) : Int;
 
 	@:allow(misc.FieldTypeConverter)
-	public var type(default,null) : data.DataTypes.FieldType;
+	public var type(default,null) : ldtk.Json.FieldType;
 	public var identifier(default,set) : String;
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
@@ -17,6 +19,8 @@ class FieldDef {
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorAlwaysShow: Bool;
+	public var editorTextPrefix : Null<String>;
+	public var editorTextSuffix : Null<String>;
 	public var editorCutLongValues : Bool;
 	public var isArray : Bool;
 
@@ -29,12 +33,19 @@ class FieldDef {
 	public var acceptFileTypes : Array<String>;
 	public var regex : Null<String>;
 
-	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
+	public var useForSmartColor : Bool;
 
-	var _project : data.Project;
+	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
+	public var symmetricalRef : Bool;
+	public var autoChainRef : Bool;
+	public var allowOutOfLevelRef : Bool;
+	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
+	public var allowedRefTags : Tags;
+	public var tilesetUid : Null<Int>;
+
 
 	@:allow(data.def.EntityDef, ui.FieldDefsForm)
-	private function new(p:data.Project, uid:Int, t:data.DataTypes.FieldType, array:Bool) {
+	private function new(p:data.Project, uid:Int, t:ldtk.Json.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
 		type = t;
@@ -44,15 +55,48 @@ class FieldDef {
 		editorAlwaysShow = false;
 		editorCutLongValues = true;
 		identifier = "NewField"+uid;
-		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point && !isArray;
+		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point || type==F_EntityRef && !isArray;
 		arrayMinLength = arrayMaxLength = null;
 		textLanguageMode = null;
 		min = max = null;
+		useForSmartColor = getDefaultUseForSmartColor(t);
 		defaultOverride = null;
+		symmetricalRef = false;
+		autoChainRef = true;
+		allowOutOfLevelRef = true;
+		allowedRefs = OnlySame;
+		allowedRefTags = new Tags();
+
+		// Specific default display modes, depending on type
+		switch type {
+			case F_Int:
+			case F_Float:
+			case F_String:
+			case F_Text:
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+			case F_Point: editorDisplayMode = PointPath;
+			case F_Path:
+			case F_EntityRef: editorDisplayMode = RefLinkBetweenCenters;
+			case F_Tile: editorDisplayMode = EntityTile;
+		}
+	}
+
+	static inline function getDefaultUseForSmartColor(t:ldtk.Json.FieldType) : Bool {
+		return switch t {
+			case F_Int, F_Float, F_Bool: false;
+			case F_String, F_Text: false;
+			case F_Color: true;
+			case F_Enum(enumDefUid): false;
+			case F_Point, F_Path: false;
+			case F_EntityRef: false;
+			case F_Tile: false;
+		};
 	}
 
 	function set_identifier(id:String) {
-		id = Project.cleanupIdentifier(id,false);
+		id = Project.cleanupIdentifier(id, Free);
 		if( id==null )
 			return identifier;
 		else
@@ -70,8 +114,10 @@ class FieldDef {
 	public static function fromJson(p:Project, json:ldtk.Json.FieldDefJson) {
 		if( (cast json.type)=="F_File" ) json.type = cast "F_Path"; // patch old type name
 		if( (cast json).name!=null ) json.identifier = (cast json).name;
+		if( (cast json.editorDisplayMode)=="RefLink" ) json.editorDisplayMode = cast( ldtk.Json.FieldDisplayMode.RefLinkBetweenCenters.getName() );
+		if( json.regex=="//g" ) json.regex = null; // patch broken empty regex
 
-		var type = JsonTools.readEnum(data.DataTypes.FieldType, json.type, false);
+		var type = JsonTools.readEnum(ldtk.Json.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
@@ -81,15 +127,24 @@ class FieldDef {
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
+		o.editorTextPrefix = json.editorTextPrefix;
+		o.editorTextSuffix = json.editorTextSuffix;
 		o.min = JsonTools.readNullableFloat(json.min);
 		o.max = JsonTools.readNullableFloat(json.max);
 		o.regex = JsonTools.unescapeString( json.regex );
 		o.acceptFileTypes = json.acceptFileTypes==null ? null : JsonTools.readArray(json.acceptFileTypes);
 		o.defaultOverride = JsonTools.readEnum(data.DataTypes.ValueWrapper, json.defaultOverride, true);
+		o.symmetricalRef = JsonTools.readBool(json.symmetricalRef, false);
+		o.autoChainRef = JsonTools.readBool(json.autoChainRef, true);
+		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
+		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
+		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
+		o.tilesetUid = JsonTools.readNullableInt(json.tilesetUid);
 
 		if( (cast json).textLangageMode!=null )
 			json.textLanguageMode = (cast json).textLangageMode;
 		o.textLanguageMode = JsonTools.readEnum(ldtk.Json.TextLanguageMode, json.textLanguageMode, true);
+		o.useForSmartColor = JsonTools.readBool(json.useForSmartColor, getDefaultUseForSmartColor(o.type));
 
 		return o;
 	}
@@ -99,7 +154,7 @@ class FieldDef {
 			identifier: identifier,
 			__type: getJsonTypeString(),
 			uid: uid,
-			type: JsonTools.writeEnum(type, false),
+			type: JsonTools.writeEnumAsString(type, false),
 			isArray: isArray,
 			canBeNull: canBeNull,
 			arrayMinLength: arrayMinLength,
@@ -108,32 +163,45 @@ class FieldDef {
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorAlwaysShow: editorAlwaysShow,
 			editorCutLongValues: editorCutLongValues,
+			editorTextSuffix: editorTextSuffix,
+			editorTextPrefix: editorTextPrefix,
+			useForSmartColor: useForSmartColor,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),
 			acceptFileTypes: type!=F_Path ? null : acceptFileTypes,
 			defaultOverride: JsonTools.writeEnum(defaultOverride, true),
 			textLanguageMode: type!=F_Text ? null : JsonTools.writeEnum(textLanguageMode, true),
+			symmetricalRef: symmetricalRef,
+			autoChainRef: autoChainRef,
+			allowOutOfLevelRef: allowOutOfLevelRef,
+			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
+			allowedRefTags: allowedRefTags.toJson(),
+			tilesetUid: tilesetUid,
 		}
 	}
 
 
 	#if editor
 
-	public static function getTypeColorHex(t:FieldType, luminosity=1.0) : String {
+	public static function getTypeColorHex(t:ldtk.Json.FieldType, luminosity=1.0) : String {
 		var c = switch t {
-			case F_Int: "#1ba7c9";
-			case F_Float: "#1ba7c9";
-			case F_String: "#ffa23c";
-			case F_Text: "#ffa23c";
-			case F_Path: "#ffa23c";
-			case F_Bool: "#3afdff";
-			case F_Color: "#ff6c48";
-			case F_Enum(enumDefUid): "#9bc95a";
-			case F_Point: "#9bc95a";
+			case F_Int: "#50b3cb";
+			case F_Float: "#50b3cb";
+			case F_String: "#bd5f32";
+			case F_Text: "#bd5f32";
+			case F_Bool: "#cd88dd";
+			case F_Color: "#99d367";
+			case F_Enum(enumDefUid): "#ff4b4b";
+			case F_Path: "#7779c9";
+			case F_Point: "#7779c9";
+			case F_EntityRef: "#7779c9";
+			case F_Tile: "#99d367";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
+		else if( luminosity>1 )
+			return C.intToHex( C.toWhite( C.hexToInt(c), M.fclamp( luminosity-1, 0, 1 ) ) );
 		else
 			return c;
 	}
@@ -149,6 +217,8 @@ class FieldDef {
 			case F_Point: "Point";
 			case F_Enum(enumDefUid): "Enum."+_project.defs.getEnumDef(enumDefUid).identifier;
 			case F_Path: "File path";
+			case F_EntityRef: "Entity ref";
+			case F_Tile: "Tile";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -158,7 +228,7 @@ class FieldDef {
 			case F_Int: "Int";
 			case F_Float: "Float";
 			case F_String: "String";
-			case F_Text: "String";
+			case F_Text: _project.hasFlag(UseMultilinesType) ? "Multilines" : "String";
 			case F_Bool: "Bool";
 			case F_Color: "Color";
 			case F_Point: "Point";
@@ -166,6 +236,8 @@ class FieldDef {
 				var ed = _project.defs.getEnumDef(enumDefUid);
 				( ed.isExternal() ? "ExternEnum." : "LocalEnum." ) + ed.identifier;
 			case F_Path: "FilePath";
+			case F_EntityRef: "EntityRef";
+			case F_Tile: "Tile";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -183,12 +255,12 @@ class FieldDef {
 	}
 	#end
 
-	public inline function require(type:data.DataTypes.FieldType) {
+	public inline function require(type:ldtk.Json.FieldType) {
 		if( this.type.getIndex()!=type.getIndex() )
 			throw "Only available on "+type+" fields";
 	}
 
-	public function requireAny(types:Array<data.DataTypes.FieldType>) {
+	public function requireAny(types:Array<ldtk.Json.FieldType>) {
 		for(type in types)
 			if( this.type.getIndex()==type.getIndex() )
 				return true;
@@ -282,12 +354,36 @@ class FieldDef {
 		}
 	}
 
+	public function getTileRectDefaultStr() : Null<String> {
+		require(F_Tile);
+		return switch defaultOverride {
+			case V_String(v): v;
+			case _: null;
+		}
+	}
+
+	public function getTileRectDefaultObj() : Null<ldtk.Json.TilesetRect> {
+		var raw = getTileRectDefaultStr();
+		return raw==null ? null : {
+			var parts = raw.split(",");
+			if( parts.length!=4 )
+				null;
+			else {
+				tilesetUid: this.tilesetUid,
+				x: Std.parseInt(parts[0]),
+				y: Std.parseInt(parts[1]),
+				w: Std.parseInt(parts[2]),
+				h: Std.parseInt(parts[3]),
+			}
+		}
+	}
+
 	public inline function isEnum() {
-		return type.getIndex() == data.DataTypes.FieldType.F_Enum(null).getIndex();
+		return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
 	}
 
 	public function getEnumDef() : Null<EnumDef> {
-		return !isEnum()
+		return isEnum()
 			?  _project.defs.getEnumDef(switch type {
 				case F_Enum(enumDefUid): enumDefUid;
 				case _: throw "unexpected";
@@ -327,6 +423,10 @@ class FieldDef {
 				rawDef = StringTools.trim(rawDef);
 				defaultOverride = rawDef=="" ? null : V_String(rawDef);
 
+			case F_EntityRef:
+				rawDef = StringTools.trim(rawDef);
+				defaultOverride = rawDef=="" ? null : V_String(rawDef);
+
 			case F_Bool:
 				rawDef = StringTools.trim(rawDef).toLowerCase();
 				if( rawDef=="true" ) defaultOverride = V_Bool(true);
@@ -348,6 +448,16 @@ class FieldDef {
 
 			case F_Enum(name) :
 				defaultOverride = V_String(rawDef);
+
+			case F_Tile:
+				var rawSplit = rawDef.split(",");
+				var arr : Array<Int> = [];
+				for(v in rawSplit) {
+					var n = Std.parseInt(v);
+					if( M.isValidNumber(n) )
+						arr.push(n);
+				}
+				defaultOverride = V_String(arr.join(","));
 		}
 	}
 
@@ -361,6 +471,8 @@ class FieldDef {
 			case F_Bool: getBoolDefault();
 			case F_Point: getPointDefault();
 			case F_Enum(name): getEnumDefault();
+			case F_EntityRef: null;
+			case F_Tile: null;
 		}
 	}
 
@@ -414,6 +526,22 @@ class FieldDef {
 		}
 		checkMinMax();
 	}
+
+
+	public function acceptsEntityRefTo(sourceEi:data.inst.EntityInstance, targetEd:data.def.EntityDef, targetLevel:Level) {
+		if( type!=F_EntityRef || sourceEi==null || targetEd==null || targetLevel==null )
+			return false;
+
+		if( !allowOutOfLevelRef && sourceEi._li.level.iid!=targetLevel.iid )
+			return false;
+
+		return switch allowedRefs {
+			case Any: true;
+			case OnlySame: sourceEi.defUid==targetEd.uid;
+			case OnlyTags: targetEd.tags.hasAnyTagFoundIn(allowedRefTags);
+		}
+	}
+
 
 	public function setAcceptFileTypes(raw:Null<String>) {
 		var extReg = ~/\.?([a-z_\-.0-9]+)/gi;
@@ -535,5 +663,11 @@ class FieldDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		if( tilesetUid!=null && p.defs.getTilesetDef(tilesetUid)==null ) {
+			App.LOG.add("tidy", "Lost tileset UID in FieldDef "+toString());
+			tilesetUid = null;
+			defaultOverride = null;
+		}
 	}
 }

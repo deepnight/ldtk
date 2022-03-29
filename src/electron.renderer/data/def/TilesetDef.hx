@@ -9,6 +9,7 @@ class TilesetDef {
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
 	public var relPath(default,null) : Null<String>;
+	public var embedAtlas : Null<ldtk.Json.EmbedAtlas>;
 	public var tileGridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var padding : Int = 0; // px dist to atlas borders
 	public var spacing : Int = 0; // px space between consecutive tiles
@@ -26,47 +27,70 @@ class TilesetDef {
 	public var pxHei = 0;
 
 	public var cWid(get,never) : Int;
-	inline function get_cWid() return !hasAtlasPath() ? 0 : dn.M.ceil( (pxWid-padding*2) / (tileGridSize+spacing) );
+	inline function get_cWid() return !hasAtlasPointer() ? 0 : dn.M.ceil( (pxWid-padding*2) / (tileGridSize+spacing) );
 
 	public var cHei(get,never) : Int;
-	inline function get_cHei() return !hasAtlasPath() ? 0 : dn.M.ceil( (pxHei-padding*2) / (tileGridSize+spacing) );
+	inline function get_cHei() return !hasAtlasPointer() ? 0 : dn.M.ceil( (pxHei-padding*2) / (tileGridSize+spacing) );
+
+	public var tags : Tags;
 
 
 	public function new(p:Project, uid:Int) {
 		_project = p;
 		this.uid = uid;
 		identifier = "Tileset"+uid;
+		tags = new Tags();
 	}
 
 	public function toString() {
 		return 'TilesetDef.$identifier($relPath)';
 	}
 
-	public inline function hasAtlasPath() return relPath!=null;
-	public inline function isAtlasLoaded() return _project.isImageLoaded(relPath);
+	/** TRUE if this tileset has a pointer to an atlas image **/
+	public inline function hasAtlasPointer() return relPath!=null || embedAtlas!=null;
+
+	public inline function isAtlasLoaded() {
+		if( !hasAtlasPointer() )
+			return false;
+		else
+			return embedAtlas!=null ? _project.isEmbedImageLoaded(embedAtlas) : _project.isImageLoaded(relPath);
+	}
+
+	public inline function isUsingEmbedAtlas() return embedAtlas!=null;
+
+	function getOrLoadTilesetImage() {
+		if( !hasAtlasPointer() )
+			return null;
+		else
+			return embedAtlas!=null ? _project.getOrLoadEmbedImage(embedAtlas) : _project.getOrLoadImage(relPath);
+	}
 
 	@:allow(data.Project)
-	function unsafeRelPathChange(newRelPath:String) { // should ONLY be used in specific circonstances
+	function unsafeRelPathChange(newRelPath:Null<String>) { // should ONLY be used in specific circonstances
 		relPath = newRelPath;
 	}
 
 	public function getMaxTileGridSize() {
-		return hasAtlasPath() ? dn.M.imin(pxWid, pxHei) : 100;
+		return hasAtlasPointer() ? dn.M.imin(pxWid, pxHei) : 100;
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id, _project.identifierStyle) : identifier;
 	}
 
 	public function getFileName(withExt:Bool) : Null<String> {
-		if( !hasAtlasPath() )
+		if( !hasAtlasPointer() )
 			return null;
 
 		return withExt ? dn.FilePath.extractFileWithExt(relPath) : dn.FilePath.extractFileName(relPath);
 	}
 
-	public function removeAtlasImage() {
-		relPath = null;
+	public function removeAtlasImage(keepPath=false) {
+		if( embedAtlas!=null ) // not allowed
+			return;
+
+		if( !keepPath )
+			relPath = null;
 		pxWid = pxHei = 0;
 		savedSelections = [];
 	}
@@ -78,11 +102,13 @@ class TilesetDef {
 			identifier: identifier,
 			uid: uid,
 			relPath: JsonTools.writePath(relPath),
+			embedAtlas: JsonTools.writeEnum(embedAtlas, true),
 			pxWid: pxWid,
 			pxHei: pxHei,
 			tileGridSize: tileGridSize,
 			spacing: spacing,
 			padding: padding,
+			tags: tags.toJson(),
 
 			tagsSourceEnumUid: tagsSourceEnumUid,
 			enumTags: {
@@ -146,7 +172,9 @@ class TilesetDef {
 		td.pxWid = JsonTools.readInt( json.pxWid );
 		td.pxHei = JsonTools.readInt( json.pxHei );
 		td.relPath = json.relPath;
+		td.embedAtlas = JsonTools.readEnum(ldtk.Json.EmbedAtlas, json.embedAtlas, true);
 		td.identifier = JsonTools.readString(json.identifier, "Tileset"+td.uid);
+		td.tags = Tags.fromJson(json.tags);
 
 		// Enum tags
 		if( (cast json).metaDataEnumUid!=null ) json.tagsSourceEnumUid = (cast json).metaDataEnumUid;
@@ -195,14 +223,16 @@ class TilesetDef {
 	}
 
 
-	public function importAtlasImage(relFilePath:String) : EditorTypes.AtlasLoadingResult {
-		if( relFilePath==null ) {
-			removeAtlasImage();
-			return LoadingFailed("No file path");
+	public function importAtlasImage(?relFilePath:String, ?embedId:ldtk.Json.EmbedAtlas) : EditorTypes.ImageLoadingResult {
+		// Check common errors
+		if( relFilePath!=null ) {
+			var chk = _project.checkImageBeforeLoading(relFilePath);
+			if( chk!=Ok ) {
+				if( relFilePath==null && embedId==null )
+					removeAtlasImage();
+				return chk;
+			}
 		}
-
-		if( !NT.fileExists(_project.makeAbsoluteFilePath(relFilePath)) )
-			return FileNotFound;
 
 		// Optional previous image infos
 		var oldRelPath = relPath;
@@ -210,16 +240,22 @@ class TilesetDef {
 		var oldPxHei = pxHei;
 
 		// Init
-		var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
-		relPath = newPath.full;
+		if( relFilePath!=null ) {
+			var newPath = dn.FilePath.fromFile( relFilePath ).useSlashes();
+			relPath = newPath.full;
+			embedAtlas = null;
+		}
+		else if( embedId!=null ) {
+			relPath = null;
+			embedAtlas = embedId;
+		}
 
 		// Load image
-		App.LOG.fileOp('Loading atlas image: $relFilePath...');
-		var img = _project.getOrLoadImage(relFilePath);
+		App.LOG.fileOp('Loading atlas image: ${embedAtlas!=null ? embedAtlas.getName() : relPath}...');
+		var img = getOrLoadTilesetImage();
 		if( img==null ) {
 			App.LOG.error("Image loading failed");
-			removeAtlasImage();
-			return LoadingFailed("Unknown error");
+			return LoadingFailed("Could not read image file");
 		}
 		else {
 			App.LOG.fileOp(' -> Loaded ${img.bytes.length} bytes.');
@@ -242,8 +278,8 @@ class TilesetDef {
 	}
 
 
-	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.AtlasLoadingResult {
-		App.LOG.general('Tileset remapping...');
+	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
+		App.LOG.warning('Tileset remapping...');
 
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
@@ -256,22 +292,27 @@ class TilesetDef {
 
 		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
 
-		// Layers remapping
-		for(l in _project.levels)
-		for(li in l.layerInstances)
-		for( coordId in li.gridTiles.keys() ) {
-			if( !li.gridTiles.exists(coordId) )
+		// Tiles layers remapping
+		for(w in _project.worlds)
+		for(l in w.levels)
+		for(li in l.layerInstances) {
+			if( li.def.type!=Tiles || li.def.tilesetDefUid!=uid )
 				continue;
 
-			var i = 0;
-			while( i < li.gridTiles.get(coordId).length ) {
-				var tileInf = li.gridTiles.get(coordId)[i];
-				var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
-				if( remappedTileId==null )
-					li.gridTiles.get(coordId).splice(i,1);
-				else {
-					tileInf.tileId = remappedTileId;
-					i++;
+			App.LOG.general(' > level ${l.identifier} layer ${li.def.identifier}');
+
+			for( coordId in li.gridTiles.keys() ) {
+				var i = 0;
+				while( i < li.gridTiles.get(coordId).length ) {
+					var tileInf = li.gridTiles.get(coordId)[i];
+					var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
+					if( remappedTileId==null )
+						li.gridTiles.get(coordId).splice(i,1);
+					else {
+						App.LOG.general(' > ${tileInf.tileId} => $remappedTileId');
+						tileInf.tileId = remappedTileId;
+						i++;
+					}
 				}
 			}
 		}
@@ -297,13 +338,13 @@ class TilesetDef {
 					v.tileId = remapTileId(oldCwid, v.tileId);
 
 		// Entity tiles remapping
-		for( ed in _project.defs.entities )
-			if( ed.tilesetId==uid && ed.tileId!=null )
-				ed.tileId = remapTileId(oldCwid, ed.tileId);
+		// for( ed in _project.defs.entities )
+		// 	if( ed.tilesetId==uid && ed.tileId!=null )
+		// 		ed.tileId = remapTileId(oldCwid, ed.tileId);
 
 		// Auto-layer tiles remapping
 		for(ld in _project.defs.layers)
-			if( ld.isAutoLayer() && ld.autoTilesetDefUid==uid ) {
+			if( ld.isAutoLayer() && ld.tilesetDefUid==uid ) {
 				for(rg in ld.autoRuleGroups)
 				for(r in rg.rules)
 				for(i in 0...r.tileIds.length)
@@ -379,6 +420,14 @@ class TilesetDef {
 		return padding + getTileCy(tileId) * ( tileGridSize + spacing );
 	}
 
+	public inline function xToCx(v:Float) : Int {
+		return Std.int( ( v - padding ) / (tileGridSize + spacing ) );
+	}
+
+	public inline function yToCy(v:Float) : Int {
+		return Std.int( ( v - padding ) / (tileGridSize + spacing ) );
+	}
+
 
 	public function saveSelection(tsSel:TilesetSelection) {
 		// Remove existing overlapping saved selections
@@ -440,6 +489,56 @@ class TilesetDef {
 	}
 
 
+	public function getTileRectFromTileIds(tileIds:Array<Int>) : Null<ldtk.Json.TilesetRect> { // Warning: not good for real-time!
+		if( tileIds==null || tileIds.length==0 )
+			return null;
+
+		var top = 99999;
+		var left = 99999;
+		var right = 0;
+		var bottom = 0;
+		for(tid in tileIds) {
+			top = dn.M.imin( top, getTileSourceY(tid) );
+			bottom = dn.M.imax( bottom, getTileSourceY(tid)+tileGridSize );
+			left = dn.M.imin( left, getTileSourceX(tid) );
+			right = dn.M.imax( right, getTileSourceX(tid)+tileGridSize );
+		}
+		return {
+			tilesetUid: this.uid,
+			x: left,
+			y: top,
+			w: right-left,
+			h: bottom-top,
+		}
+	}
+
+
+	public function getTileIdsFromRect(r:ldtk.Json.TilesetRect) : Array<Int> {
+		if( r==null )
+			return [];
+
+		var left = xToCx(r.x);
+		var right = xToCx(r.x+r.w-1);
+		var top = yToCy(r.y);
+		var bottom = yToCy(r.y+r.h-1);
+
+		var tids = [];
+		for(cx in left...right+1)
+		for(cy in top...bottom+1)
+			tids.push( getTileId(cx,cy) );
+
+		return tids;
+	}
+
+
+	public inline function getFirstTileIdFromRect(r:ldtk.Json.TilesetRect) : Null<Int> {
+		if( r==null )
+			return null;
+		else
+			return getTileId(xToCx(r.x), yToCy(r.y));
+	}
+
+
 	public function getTileGroupWidth(tileIds:Array<Int>) : Int {
 		var min = 99999;
 		var max = 0;
@@ -491,12 +590,19 @@ class TilesetDef {
 	}
 
 	public inline function getAtlasTile() : Null<h2d.Tile> {
-		return isAtlasLoaded() ? h2d.Tile.fromTexture( _project.getOrLoadImage(relPath).tex ) : null;
+		return isAtlasLoaded() ? h2d.Tile.fromTexture( getOrLoadTilesetImage().tex ) : null;
 	}
 
 	public inline function getTile(tileId:Int) : h2d.Tile {
 		if( isAtlasLoaded() )
 			return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
+		else
+			return makeErrorTile(tileGridSize);
+	}
+
+	public inline function getTileRect(r:ldtk.Json.TilesetRect) : h2d.Tile {
+		if( isAtlasLoaded() )
+			return getAtlasTile().sub( r.x, r.y, r.w, r.h );
 		else
 			return makeErrorTile(tileGridSize);
 	}
@@ -567,7 +673,7 @@ class TilesetDef {
 		App.LOG.general("Init pixel data cache for "+relPath);
 		opaqueTiles = new haxe.ds.Vector( cWid*cHei );
 		averageColorsCache = new Map();
-		var img = _project.getOrLoadImage(relPath);
+		var img = getOrLoadTilesetImage();
 		var ops = [];
 		for(tcy in 0...cHei)
 			ops.push({
@@ -579,7 +685,7 @@ class TilesetDef {
 			});
 
 		if( !sync )
-			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', 3, ops, onComplete);
+			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', ops, onComplete);
 		else
 			for(op in ops)
 				op.cb();
@@ -659,7 +765,7 @@ class TilesetDef {
 	public function createAtlasHtmlImage() : js.html.Image {
 		var img = new js.html.Image();
 		if( isAtlasLoaded() ) {
-			var imgData = _project.getOrLoadImage(relPath);
+			var imgData = getOrLoadTilesetImage();
 			img.src = 'data:image/png;base64,${imgData.base64}';
 		}
 		return img;
@@ -677,7 +783,7 @@ class TilesetDef {
 		ctx.imageSmoothingEnabled = false;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-		var imgData = _project.getOrLoadImage(relPath);
+		var imgData = getOrLoadTilesetImage();
 
 		var clampedArray = new js.lib.Uint8ClampedArray( imgData.pixels.width * imgData.pixels.height * 4 );
 		var c = 0;
@@ -695,10 +801,16 @@ class TilesetDef {
 		ctx.putImageData(imgData,0,0);
 	}
 
+	inline function isTileInBounds(tid:Int) {
+		return isAtlasLoaded()
+			&& getTileSourceX(tid)>=0 && getTileSourceX(tid)+tileGridSize-1 < pxWid
+			&& getTileSourceY(tid)>=0 && getTileSourceY(tid)+tileGridSize-1 < pxHei;
+	}
+
 	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =
-			if( isAtlasLoaded() ) {
-				var imgData = _project.getOrLoadImage(relPath);
+			if( isAtlasLoaded() && isTileInBounds(tid) ) {
+				var imgData = getOrLoadTilesetImage();
 				var subPixels = imgData.pixels.sub(getTileSourceX(tid), getTileSourceY(tid), tileGridSize, tileGridSize);
 				var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 				var img = new js.html.Image(subPixels.width, subPixels.height);
@@ -719,6 +831,16 @@ class TilesetDef {
 		return jImg;
 	}
 
+	public function createTileHtmlUri(tid:Int, ?imgWid:Int, ?imgHei:Int) : Null<String> {
+		if( !isAtlasLoaded() || !isTileInBounds(tid) )
+			return null;
+
+		var imgData = getOrLoadTilesetImage();
+		var subPixels = imgData.pixels.sub(getTileSourceX(tid), getTileSourceY(tid), tileGridSize, tileGridSize);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		return 'data:image/png;base64,$b64';
+	}
+
 	public function drawTileToCanvas(jCanvas:js.jquery.JQuery, tileId:Int, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 		if( !jCanvas.is("canvas") )
 			throw "Not a canvas";
@@ -732,10 +854,10 @@ class TilesetDef {
 		if( !isAtlasLoaded() )
 			return;
 
-		if( getTileSourceX(tileId)+tileGridSize>pxWid || getTileSourceY(tileId)+tileGridSize>pxHei )
+		if( !isTileInBounds(tileId) )
 			return; // out of bounds
 
-		var imgData = _project.getOrLoadImage(relPath);
+		var imgData = getOrLoadTilesetImage();
 		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
 		ctx.imageSmoothingEnabled = false;
 		var img = new js.html.Image(subPixels.width, subPixels.height);
@@ -747,9 +869,67 @@ class TilesetDef {
 	}
 
 
+	inline function isTileRectInBounds(r:ldtk.Json.TilesetRect) {
+		return isAtlasLoaded()
+			&& r.x>=0 && r.x+r.w-1<pxWid
+			&& r.y>=0 && r.y+r.h-1<pxHei;
+	}
+
+	public function drawTileRectToCanvas(jCanvas:js.jquery.JQuery, rect:ldtk.Json.TilesetRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+		if( !jCanvas.is("canvas") )
+			throw "Not a canvas";
+
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
+		drawTileRectTo2dContext( canvas.getContext2d(), rect, toX, toY, scaleX, scaleY );
+	}
+
+	public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:ldtk.Json.TilesetRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+		if( !isAtlasLoaded() )
+			return;
+
+		if( !isTileRectInBounds(rect) )
+			return; // out of bounds
+
+		var imgData = getOrLoadTilesetImage();
+		var subPixels = imgData.pixels.sub(rect.x, rect.y, rect.w, rect.h);
+		ctx.imageSmoothingEnabled = false;
+		var img = new js.html.Image(subPixels.width, subPixels.height);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		img.src = 'data:image/png;base64,$b64';
+		img.onload = function() {
+			ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
+		}
+	}
+
+
+	// public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:CustomTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
+	// 	if( !isAtlasLoaded() )
+	// 		return;
+
+	// 	if( !isTileInBounds(tileId) )
+	// 		return; // out of bounds
+
+	// 	var imgData = _project.getOrLoadImage(relPath);
+	// 	var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
+	// 	ctx.imageSmoothingEnabled = false;
+	// 	var img = new js.html.Image(subPixels.width, subPixels.height);
+	// 	var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+	// 	img.src = 'data:image/png;base64,$b64';
+	// 	img.onload = function() {
+	// 		ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
+	// 	}
+	// }
+
+
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		// Enforce embed atlas ID
+		if( embedAtlas!=null ) {
+			var inf = Lang.getEmbedAtlasInfos(embedAtlas);
+			identifier = Project.cleanupIdentifier(inf.identifier, _project.identifierStyle);
+		}
 
 		// Lost source enum
 		if( tagsSourceEnumUid!=null && getTagsEnumDef()==null ) {

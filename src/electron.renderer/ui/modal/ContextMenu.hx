@@ -2,12 +2,14 @@ package ui.modal;
 
 import dn.data.GetText.LocaleString;
 
+typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {
 	var label : LocaleString;
 	var ?sub : Null<LocaleString>;
 	var ?className : String;
 	var cb : Void->Void;
-	var ?cond : Void->Bool;
+	var ?show : Void->Bool;
+	var ?enable : Void->Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -59,30 +61,29 @@ class ContextMenu extends ui.Modal {
 			ME = null;
 	}
 
-	public static function addTo(jTarget:js.jquery.JQuery, ?jButtonContext:js.jquery.JQuery, actions:Array<ContextAction>) {
+	public static function addTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:ContextActions) {
 		// Cleanup
 		jTarget
 			.off(".context")
 			.find("button.context").remove();
 
-		// Init arrow button
-		var jButton = new J('<button class="transparent context"></button>');
-		jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
-		jButton.append('<div class="icon contextMenu"/>');
-
-		// Open
+		// Open callback
 		function _open(event:js.jquery.Event) {
 			var ctx = new ContextMenu(event);
 			for(a in actions)
-				if( a.cond==null || a.cond() )
-					ctx.add(a);
+				ctx.add(a);
 		}
 
-		// Arrow button
-		jButton.click( (ev:js.jquery.Event)->{
-			ev.stopPropagation();
-			_open(ev);
-		});
+		// Menu button
+		if( showButton ) {
+			var jButton = new J('<button class="transparent context"/>');
+			jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
+			jButton.append('<div class="icon contextMenu"/>');
+			jButton.click( (ev:js.jquery.Event)->{
+				ev.stopPropagation();
+				_open(ev);
+			});
+		}
 
 		// Right click
 		jTarget.on("contextmenu.context", (ev:js.jquery.Event)->{
@@ -113,10 +114,15 @@ class ContextMenu extends ui.Modal {
 
 	public function add(a:ContextAction) {
 		var jButton = new J('<button class="transparent"/>');
+		if( a.show!=null && !a.show() )
+			return jButton;
 		jButton.appendTo(jContent);
 		jButton.text(a.label);
 		if( a.sub!=null && a.sub!=a.label )
 			jButton.append('<span class="sub">${a.sub}</span>');
+
+		if( a.enable!=null && !a.enable() )
+			jButton.prop("disabled", true);
 
 		if( a.className!=null )
 			jButton.addClass(a.className);

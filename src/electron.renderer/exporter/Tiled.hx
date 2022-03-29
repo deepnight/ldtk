@@ -19,6 +19,8 @@ class Tiled extends Exporter {
 
 		setOutputPath( projectPath.directory + "/" + p.getRelExternalFilesDir() + "/tiled", true );
 
+		var curWorld = p.worlds[0]; // HACK support multi-worlds for Tiled
+
 		// Prepare world object
 		var world = {
 			maps: [],
@@ -26,7 +28,7 @@ class Tiled extends Exporter {
 		};
 
 		/**
-			Determine a unique "grid size" value because it doesn't support different
+			Determine a unique "grid size" value because Tiled doesn't support yet different
 			grid sizes in the same map file.
 		**/
 		tiledGridSize = p.defaultGridSize;
@@ -39,11 +41,11 @@ class Tiled extends Exporter {
 
 		// Export each level to a separate TMX file
 		var i = 1;
-		for(l in p.levels) {
+		for(l in curWorld.levels) {
 			var bytes = exportLevel(l);
 
 			var fp = outputPath.clone();
-			fp.fileName = ( p.levels.length>1 ? '${dn.Lib.leadingZeros(i,Const.LEVEL_FILE_LEADER_ZEROS)}_' : '' ) + l.identifier;
+			fp.fileName = ( curWorld.levels.length>1 ? '${dn.Lib.leadingZeros(i,Const.LEVEL_FILE_LEADER_ZEROS)}_' : '' ) + l.identifier;
 			fp.extension = "tmx";
 			addOuputFile(fp.full, bytes);
 
@@ -106,8 +108,13 @@ class Tiled extends Exporter {
 		**/
 		var tilesetGids = new Map();
 		for( td in p.defs.tilesets ) {
-			if( !td.hasAtlasPath() ) {
+			if( !td.hasAtlasPointer() ) {
 				log.warning("Skipped undefined tileset: "+td.identifier);
+				continue;
+			}
+
+			if( td.isUsingEmbedAtlas() ) {
+				log.warning("Skipped embedded tileset: "+td.identifier);
 				continue;
 			}
 
@@ -129,7 +136,10 @@ class Tiled extends Exporter {
 			tileset.set("spacing", ""+td.spacing );
 
 			var relPath = remapRelativePath(td.relPath);
-			log.add("tileset", '  Adding image ${relPath}...');
+			log.add("tileset", '  Adding image: ${relPath}');
+			var fp = dn.FilePath.fromFile(td.relPath);
+			if( fp.extension!=null && ( fp.extension.toLowerCase()=="aseprite" || fp.extension.toLowerCase()=="ase" ) )
+				log.error('Aseprite format (from tileset ${td.identifier}) is not supported in Tiled.');
 			var image = Xml.createElement("image");
 			tileset.addChild(image);
 			image.set("source", relPath);
@@ -244,7 +254,7 @@ class Tiled extends Exporter {
 		allInst.reverse();
 		for(li in allInst) {
 			if( li.def.gridSize!=tiledGridSize ) {
-				log.warning("Discarded layer "+li.def.identifier+" (incompatible grid size)");
+				log.error("In level "+level.identifier+": discarded layer "+li.def.identifier+" (incompatible grid size)");
 				continue;
 			}
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
@@ -261,7 +271,7 @@ class Tiled extends Exporter {
 							csv.set( cx, cy, _makeTiledTileId(li.def.uid, li.getIntGrid(cx,cy)-1, 0) );
 
 					// Build layer XML
-					log.add("layer", "  Exporting IntGrid values...");
+					log.add("layer", "  Exporting IntGrid values");
 					var layer = _createLayer("layer", li, li.def.isAutoLayer() ? "_values" : null);
 					var data = Xml.createElement("data");
 					layer.addChild(data);
@@ -292,6 +302,7 @@ class Tiled extends Exporter {
 						}
 
 						object.set("name",e.def.identifier);
+						object.set("type",e.def.identifier);
 						object.set("x",""+x);
 						object.set("y",""+y);
 						object.set("width",""+e.def.width);
@@ -319,6 +330,8 @@ class Tiled extends Exporter {
 								case F_Enum(enumDefUid): null;
 								case F_Point: null;
 								case F_Path: "file";
+								case F_Tile: "tile";
+								case F_EntityRef: null; // TODO entity refs in Tiled?
 							}
 							// Value
 							var v : Dynamic = switch fi.def.type {
@@ -333,6 +346,8 @@ class Tiled extends Exporter {
 									"#ff"+c;
 								case F_Enum(enumDefUid): fi.getEnumValue(i);
 								case F_Point: fi.getPointStr(i);
+								case F_EntityRef: fi.getEntityRefIid(i);
+								case F_Tile: fi.getTileRectStr(i);
 							}
 							_createProperty(props, fi.def.identifier + (fi.getArrayLength()<=1 ? "" : "_"+i), type, v);
 						}
@@ -348,7 +363,7 @@ class Tiled extends Exporter {
 					for( layerIdx in 0...maxStack ) {
 						// Build CSV
 						var csv = new Csv(li.cWid, li.cHei);
-						log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+						log.add("layer", "    Building CSV "+(layerIdx+1));
 						for( coordId in li.gridTiles.keys() ) {
 							var stack = li.gridTiles.get(coordId);
 							if( layerIdx < stack.length ) {
@@ -370,8 +385,8 @@ class Tiled extends Exporter {
 
 
 			// Auto-layer tiles
-			if( ld.autoTilesetDefUid!=null ) {
-				log.add("layer", "  Exporting Auto-Layer tiles...");
+			if( ld.tilesetDefUid!=null ) {
+				log.add("layer", "  Exporting Auto-Layer tiles");
 				var td = li.getTilesetDef();
 				var csvLayers : Array<Csv> = [];
 				var hasIncompatibleTiles = false;
@@ -411,7 +426,7 @@ class Tiled extends Exporter {
 				var layerIdx = 0;
 				for(csv in csvLayers) {
 					var layer = _createLayer("layer", li, csvLayers.length>1 ? "_"+(layerIdx+1) : "");
-					log.add("layer", "    Building CSV "+(layerIdx+1)+"...");
+					log.add("layer", "    Building CSV "+(layerIdx+1));
 					var data = Xml.createElement("data");
 					layer.addChild(data);
 					data.set("encoding","csv");

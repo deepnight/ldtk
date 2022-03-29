@@ -12,6 +12,10 @@ class Const {
 			].join("-");
 	}
 
+	public static function getAppBuildId() : Float {
+		return Std.int(  dn.MacroTools.getBuildTimeStampSeconds() / (60*60)  );
+	}
+
 	public static function getArch() {
 		#if macro
 		return "";
@@ -25,6 +29,14 @@ class Const {
 		#end
 	}
 
+	public static function getElectronVersion() {
+		#if macro
+		return "";
+		#else
+		return js.Node.process.versions.get("electron");
+		#end
+	}
+
 	public static function getJsonVersion() {
 		return getAppVersion(true);
 	}
@@ -34,6 +46,7 @@ class Const {
 	public static final LEVEL_EXTENSION = "ldtkl";
 	public static final POINT_SEPARATOR = ",";
 	public static final BACKUP_NAME_SUFFIX = ".backup";
+	public static final BACKUP_DIR = "backups";
 	public static final LEVEL_FILE_LEADER_ZEROS = 4;
 	public static final DEFAULT_BACKUP_LIMIT = 10;
 
@@ -43,13 +56,14 @@ class Const {
 	// URLs: LDtk home
 	public static var LDTK_DOMAIN = "https://ldtk.io";
 	public static var HOME_URL = LDTK_DOMAIN;
-	public static var DOCUMENTATION_URL = LDTK_DOMAIN+"/docs/";
+	public static var DOCUMENTATION_URL = LDTK_DOMAIN+"/docs";
 	public static var DISCORD_URL = LDTK_DOMAIN+"/go/discord";
 
 	// URLs: misc
 	public static var DOWNLOAD_URL = HOME_URL;
 	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
 	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
+	public static var REPORT_BUG_URL = "https://github.com/deepnight/ldtk/issues/new";
 	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
 	public static var JSON_DOC_URL = LDTK_DOMAIN+"/json";
 	public static var JSON_SCHEMA_URL = LDTK_DOMAIN+"/files/JSON_SCHEMA.json";
@@ -88,12 +102,9 @@ class Const {
 	public static var DP_UI = _inc++;
 	public static var DP_TOP = _inc++;
 
-	public static var DEFAULT_LEVEL_WIDTH = 512;
-	public static var DEFAULT_LEVEL_HEIGHT = 256;
-	public static var DEFAULT_GRID_SIZE = 16;
-	public static var MAX_GRID_SIZE = 256;
+	public static var MAX_GRID_SIZE = 1024;
 
-	public static var AUTO_LAYER_ANYTHING = 1000000;
+	public static var AUTO_LAYER_ANYTHING = 1000001;
 	public static var MAX_AUTO_PATTERN_SIZE = 7;
 	#end
 

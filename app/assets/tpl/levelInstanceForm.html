@@ -1,0 +1,87 @@
+<div class="buttons">
+	<button class="create"> <span class="icon add"></span> Create a new level</button>
+	<button class="delete red small" title="Delete current level"> <span class="icon delete"></span> </button>
+</div>
+
+
+<dl class="form" id="levelProps">
+	<dt>
+		<label for="identifier">IID</label>
+		<info>The IID (stands for Instance IDentifier) is a unique string identifier associated with this Level.</info>
+	</dt>
+	<dd>
+		<input type="text" id="iid" readonly="readonly"/>
+		<button class="small gray copyIid"> <span class="icon copy"></span> </button>
+	</dd>
+	<dt>
+		<label for="identifier">Level identifier</label>
+		<info class="identifier">It will be used for the level file name if the "Save levels to separate files" option is enabled (see Project panel).</info>
+	</dt>
+	<dd>
+		<input type="text" id="identifier"/>
+
+		<input type="checkbox" id="useAutoIdentifier" title="If enabled, the level identifier will be managed automatically by LDtk, based on your prefered naming convention as defined in the Project panel." />
+		<label for="useAutoIdentifier">auto</label>
+	</dd>
+
+	<dt>
+		<label for="worldDepth">World depth</label>
+		<info>
+			You can organize your levels in various "world layers" by changing their depth.
+			Depth is just an index (positive or negative), higher values meaning "this level is further in the background" and lower values meaning "closer to the camera" (kind of).
+			World layers are completely automatic and created/removed as you need them.
+		</info>
+	</dt>
+	<dd class="depth">
+		<input type="text" id="worldDepth" class="small"/>
+		<div class="depthButtons">
+			<button class="worldDepthAbove"> <span class="icon up"/> </button>
+			<button class="worldDepthBelow"> <span class="icon down"/> </button>
+		</div>
+	</dd>
+
+	<dt>
+		<label for="worldX">World coords</label>
+		<div class="info">Level X and Y coordinates in pixels, in the world coordinate system.</div>
+	</dt>
+	<dd>
+		<input type="text" id="worldX" class="small"/>
+		<span>,</span>
+		<input type="text" id="worldY" class="small"/>
+		<span>px</span>
+	</dd>
+
+	<dt>
+		<label for="name">Size</label>
+		<div class="info">Level width and height in pixels.</div>
+	</dt>
+	<dd>
+		<input type="text" id="width" class="small"/>
+		<span>x</span>
+		<input type="text" id="height" class="small"/>
+		<span>px</span>
+	</dd>
+
+	<dt> <label for="bgColor">Bg color</label> </dt>
+	<dd>
+		<input type="color" id="bgColor"/>
+		<a class="reset">Use default</a>
+		<span class="usingDefault">(default)</a>
+	</dd>
+
+	<dt> <label>Bg image</label> </dt>
+	<dd class="bg">
+		<div class="pos">
+			<select id="bgPos"></select>
+			<span class="pivot"></span>
+		</div>
+	</dd>
+</dl>
+
+<!-- Custom level fields -->
+<h2>
+	Custom fields
+	<a class="editFields">Edit fields</a>
+</h2>
+
+<div id="levelCustomFields"></div>

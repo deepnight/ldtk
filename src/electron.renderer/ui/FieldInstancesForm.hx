@@ -92,7 +92,7 @@ class FieldInstancesForm {
 				input.hide();
 
 				if( isRequired )
-					jRep.addClass("required");
+					markError(jRep);
 
 				input.on("blur.def", function(ev) {
 					jRep.remove();
@@ -124,9 +124,21 @@ class FieldInstancesForm {
 		}
 	}
 
+	function markError(e:js.jquery.JQuery, ?customClass="required") {
+		final a = "error";
+		e.attr(a,a);
+		e.closest("dd").attr(a,a).prev("dt").attr(a,a);
+		if( customClass!=null )
+			e.addClass(customClass);
+	}
 
 	function createFieldInput(domId:String, fi:data.inst.FieldInstance, arrayIdx:Int, jTarget:js.jquery.JQuery) {
 		jTarget.addClass( fi.def.type.getName() );
+
+		// Prefix
+		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+			jTarget.append('<span>${fi.def.editorTextPrefix}</span>');
+
 		switch fi.def.type {
 			case F_Int:
 				var jInput = new J("<input/>");
@@ -188,6 +200,7 @@ class FieldInstancesForm {
 				input.attr("id",domId);
 				input.appendTo(jWrapper);
 				input.attr("type","color");
+				input.attr("colorTag", "e_"+fi.def.identifier);
 				input.addClass("advanced");
 				input.val(cHex);
 				input.change( function(ev) {
@@ -265,7 +278,7 @@ class FieldInstancesForm {
 					jPick.appendTo(jTarget);
 					jPick.addClass("point");
 					if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull ) {
-						jPick.addClass("required");
+						markError(jPick);
 						jPick.text( "Point required!" );
 					}
 					else
@@ -307,22 +320,22 @@ class FieldInstancesForm {
 
 				// Null value
 				if( fi.def.canBeNull || fi.getEnumValue(arrayIdx)==null ) {
-					var opt = new J('<option/>');
-					opt.appendTo(jSelect);
-					opt.attr("value","");
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value","");
 					if( fi.def.canBeNull )
-						opt.text("-- null --");
+						jOpt.text("-- null --");
 					else {
 						// SELECT shouldn't be null
-						jSelect.addClass("required");
-						opt.text("[ Value required ]");
+						markError(jSelect);
+						jOpt.text("[ Value required ]");
 						jSelect.click( function(ev) {
-							jSelect.removeClass("required");
+							jSelect.removeAttr("error").removeClass("required");
 							jSelect.blur( function(ev) renderForm() );
 						});
 					}
 					if( fi.getEnumValue(arrayIdx)==null )
-						opt.attr("selected","selected");
+						jOpt.attr("selected","selected");
 				}
 
 				for(v in ed.values) {
@@ -374,7 +387,7 @@ class FieldInstancesForm {
 				input.prop("readonly",true);
 
 				if( isRequired )
-					input.addClass("required");
+					markError(input);
 
 				if( !fi.isUsingDefault(arrayIdx) ) {
 					var fp = dn.FilePath.fromFile( fi.getFilePath(arrayIdx) );
@@ -415,14 +428,14 @@ class FieldInstancesForm {
 					jLocate.click( (_)->{
 						if( !fi.valueIsNull(arrayIdx) ) {
 							var path = project.makeAbsoluteFilePath( fi.getFilePath(arrayIdx) );
-							ET.locate(path, true);
+							JsTools.locateFile(path, true);
 						}
 					});
 				}
 
 				// Clear
 				if( !fi.isUsingDefault(arrayIdx) ) {
-					var jClear = new J('<button class="red" title="Reset"> <span class="icon delete"/> </button>');
+					var jClear = new J('<button class="red"> <span class="icon clear"/> </button>');
 					jClear.appendTo(jTarget);
 					jClear.click( ev->{
 						fi.parseValue(arrayIdx,null);
@@ -435,6 +448,135 @@ class FieldInstancesForm {
 					input.addClass("fileNotFound");
 
 				hideInputIfDefault(arrayIdx, input, fi, isRequired);
+
+			case F_EntityRef:
+				function _pickRef() {
+					var sourceEi = getEntityInstance();
+					var vp = new ui.vp.EntityRefPicker(sourceEi, fi.def);
+					vp.onPickValue = (targetEi)->{
+						tool.lt.EntityTool.cancelRefChaining();
+						fi.setEntityRefTo(arrayIdx, sourceEi, targetEi);
+						editor.ge.emit( EntityInstanceChanged(sourceEi) );
+						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
+					}
+				}
+
+				if( fi.valueIsNull(arrayIdx) ) {
+					var jPick = new J('<button>Pick reference</button>');
+					jPick.appendTo(jTarget);
+					jPick.click( _->_pickRef() );
+				}
+				else {
+					// Text input
+					var jRef = JsTools.createEntityRef( getEntityInstance(), jTarget );
+					jRef.attr("id",domId);
+
+					// Follow ref
+					jRef.click( (_)->{
+						if( fi.valueIsNull(arrayIdx) )
+							return;
+
+						var tei = fi.getEntityRefInstance(arrayIdx);
+						if( tei==null ) {
+							N.error("Invalid reference");
+							return;
+						}
+
+						editor.followEntityRef(tei);
+					});
+
+					jRef.mouseenter( _->{
+						// Mouse over a ref
+						if( fi.valueIsNull(arrayIdx) )
+							return;
+
+						var tei = fi.getEntityRefInstance(arrayIdx);
+						if( tei==null )
+							return;
+
+						if( tei._li.level==editor.curLevel ) {
+							editor.levelRender.clearTemp();
+							editor.levelRender.temp.lineStyle(2, 0xff00ff);
+							editor.levelRender.temp.drawCircle(tei.centerX, tei.centerY, M.fmax(tei.width,tei.height)*0.5 + 8);
+							editor.levelRender.bleepEntity(tei,0xff00ff);
+						}
+					});
+					jRef.mouseleave( _->{
+						editor.levelRender.clearTemp();
+					});
+
+
+					if( fi.hasAnyErrorInValues(getEntityInstance()) )
+						markError(jRef);
+
+					if( !fi.isUsingDefault(arrayIdx) ) {
+						// jInput.val( fi.getEntityRefForDisplay(arrayIdx, editor.curLevel) );
+						// jInput.attr("title", fi.getEntityRefIid(arrayIdx));
+					}
+
+					// Pick ref
+					var jPick = new J('<button class="small pickRef"> <span class="icon edit"/> </button>');
+					jPick.appendTo(jTarget);
+					jPick.click( _->_pickRef() );
+				}
+
+				// Clear ref
+				if( !fi.valueIsNull(arrayIdx) && fi.def.canBeNull ) {
+					var jRemove = new J('<button class="small red removeRef"> <span class="icon clear"/> </button>');
+					jRemove.appendTo(jTarget);
+					jRemove.click(_->{
+						var oldTargetEi = fi.getEntityRefInstance(arrayIdx);
+						project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);
+						fi.parseValue(arrayIdx, null);
+						if( oldTargetEi!=null )
+							oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+						ValuePicker.cancelCurrent();
+						onFieldChange(fi);
+					});
+				}
+
+			case F_Tile:
+				var td = project.defs.getTilesetDef(fi.def.tilesetUid);
+				if( td==null || !td.isAtlasLoaded() ) {
+					// Tileset error
+					jTarget.append('<div class="warning">Invalid tileset in field definition.</div>');
+				}
+				else {
+					// Picker
+					var jPicker = JsTools.createTileRectPicker(
+						fi.def.tilesetUid,
+						fi.valueIsNull(arrayIdx) ? fi.def.getTileRectDefaultObj() : fi.getTileRectObj(arrayIdx),
+						(r)->{
+							if( r==null )
+								return;
+							fi.parseValue(arrayIdx, '${r.x},${r.y},${r.w},${r.h}');
+							onFieldChange(fi);
+						}
+					);
+					jPicker.appendTo(jTarget);
+
+					// Clear button
+					if( fi.def.canBeNull && !fi.isUsingDefault(arrayIdx) ) {
+						var jClear = new J('<button class="red clearTile"> <span class="icon clear"/> </button>');
+						jClear.appendTo(jTarget);
+						jClear.click(_->{
+							fi.parseValue(arrayIdx,null);
+							onFieldChange(fi);
+						});
+					}
+				}
+		}
+
+		// Suffix
+		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+			jTarget.append('<span>${fi.def.editorTextSuffix}</span>');
+	}
+
+
+	function getEntityInstance() : Null<data.inst.EntityInstance> {
+		return switch relatedInstance {
+			case Entity(ei): ei;
+			case Level(l): null;
 		}
 	}
 
@@ -482,8 +624,10 @@ class FieldInstancesForm {
 		// Connect to last point of existing path
 		if( fi.def.isArray )
 			switch fi.def.editorDisplayMode {
-				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 				case Points, PointStar:
+				case RefLinkBetweenCenters:
+				case RefLinkBetweenPivots:
 				case PointPath, PointPathLoop:
 					var pt = fi.getPointGrid( editIdx-1 );
 					if( pt!=null )
@@ -501,8 +645,10 @@ class FieldInstancesForm {
 
 				// Connect to previous point in path mode
 				switch fi.def.editorDisplayMode {
-					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid:
+					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 					case Points, PointStar:
+					case RefLinkBetweenPivots:
+					case RefLinkBetweenCenters:
 					case PointPath, PointPathLoop:
 						var pt = fi.getPointGrid( editIdx-1 );
 						if( pt!=null )
@@ -528,14 +674,57 @@ class FieldInstancesForm {
 
 
 
+	function activateLastArrayEntry(fd:FieldDef) {
+		var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
+		var jEntry = jArray.find("ul.values >li:last");
+
+		switch fd.type {
+			case F_Int, F_Float, F_String, F_Text, F_Path:
+				jEntry.find("a.usingDefault").click();
+
+			case F_EntityRef:
+				jEntry.find("button:first").click();
+
+			case F_Tile:
+				N.debug("TODO"); // TODO
+
+			case F_Bool:
+			case F_Color:
+			case F_Enum(enumDefUid):
+				// see: https://stackoverflow.com/a/10453874
+				// var select = jArray.find("select:last").get(0);
+				// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
+				// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
+				// var ok = select.dispatchEvent(ev);
+
+			case F_Point:
+				// Not done here
+		}
+
+	}
+
+
 	function onFieldChange(fi:FieldInstance, keepCurrentSpecialTool=false) {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
 
+		var jPrevFocus = jWrapper.find("input:focus");
+
 		onBeforeRender();
 		renderForm();
-		editor.ge.emit( FieldInstanceChanged(fi) );
+		switch relatedInstance {
+			case Entity(ei): editor.ge.emit( EntityFieldInstanceChanged(ei,fi) );
+			case Level(l): editor.ge.emit( LevelFieldInstanceChanged(l,fi) );
+		}
 		onChange();
+
+		// Re-focus input
+		if( jPrevFocus.length>0 ) {
+			if( jPrevFocus.attr("id")!=null )
+				jWrapper.find("#"+jPrevFocus.attr("id")).focus();
+			else if( jPrevFocus.attr("name")!=null )
+				jWrapper.find("[name="+jPrevFocus.attr("id")+"]").focus();
+		}
 	}
 
 	public dynamic function onBeforeRender() {}
@@ -558,29 +747,38 @@ class FieldInstancesForm {
 			jDt.appendTo(jWrapper);
 
 			var jDd = new J("<dd/>");
-			var li = jDd;
-			// var li = new J("<li/>");
-			li.attr("defUid", fd.uid);
-			li.appendTo(jWrapper);
+			jDd.attr("defUid", fd.uid);
+			jDd.appendTo(jWrapper);
 
 			// Identifier
 			if( !fd.isArray )
 				jDt.append('<label for="$domId">${fi.def.identifier}</label>');
-			else
-				jDt.append('<label for="$domId">${fi.def.identifier} (${fi.getArrayLength()})</label>');
+			else {
+				var jLabel = new J('<label for="$domId">${fi.def.identifier}</label>');
+				if( fi.def.isArray ) {
+					jLabel.append('&nbsp;${fi.getArrayLength()}');
+					if( fi.getArrayMaxLength()>0 )
+						jLabel.append('/${fi.getArrayMaxLength()}');
+				}
+				jDt.append(jLabel);
+			}
+			jDt.attr("title", jDt.find("label").text());
+			jDt.attr("noTip", "noTip");
 
 			// Field is not manually defined
-			if( !fd.isArray && fi.isUsingDefault(0) || fd.isArray && fi.getArrayLength()==0 )
+			if( !fd.isArray && fi.isUsingDefault(0) || fd.isArray && fi.getArrayLength()==0 ) {
 				jDt.addClass("isDefault");
+				jDd.addClass("isDefault");
+			}
 
 			if( !fd.isArray ) {
 				// Single value
-				createFieldInput(domId, fi, 0, li);
+				createFieldInput(domId, fi, 0, jDd);
 			}
 			else {
 				// Array
 				var jArray = new J('<div class="array"/>');
-				jArray.appendTo(li);
+				jArray.appendTo(jDd);
 				if( fd.arrayMinLength!=null && fi.getArrayLength()<fd.arrayMinLength
 					|| fd.arrayMaxLength!=null && fi.getArrayLength()>fd.arrayMaxLength ) {
 					var bounds : String =
@@ -588,6 +786,7 @@ class FieldInstancesForm {
 						: fd.arrayMaxLength==null ? fd.arrayMinLength+"+"
 						: fd.arrayMinLength+"-"+fd.arrayMaxLength;
 					jArray.append('<div class="warning">Array should have $bounds value(s)</div>');
+					markError(jArray);
 				}
 
 				var jArrayInputs = new J('<ul class="values"/>');
@@ -613,12 +812,18 @@ class FieldInstancesForm {
 
 						createFieldInput(domId, fi, i, li);
 
-						// "Remove" button
-						var jRemove = new J('<button class="remove dark">x</button>');
+						// Remove array entry
+						var jRemove = new J('<button class="remove dark"> <span class="icon delete"/> </button>');
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {
+							var oldTargetEi = fi.getEntityRefInstance(idx);
+							if( fi.def.type==F_EntityRef )
+								project.unregisterReverseIidRef(getEntityInstance(), oldTargetEi);
 							fi.removeArrayValue(idx);
+							if( oldTargetEi!=null )
+								oldTargetEi.tidyLostSymmetricalEntityRefs(fi.def);
+							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
 						});
 					}
@@ -640,21 +845,9 @@ class FieldInstancesForm {
 						}
 						else {
 							fi.addArrayValue();
+							ValuePicker.cancelCurrent();
 							onFieldChange(fi);
-						}
-						var jArray = jWrapper.find('[defuid=${fd.uid}] .array');
-						switch fi.def.type {
-							case F_Int, F_Float, F_String, F_Text, F_Path: jArray.find("a.usingDefault:last").click();
-							case F_Bool:
-							case F_Color:
-							case F_Enum(enumDefUid):
-								// see: https://stackoverflow.com/a/10453874
-								// var select = jArray.find("select:last").get(0);
-								// var ev : js.html.MouseEvent = cast js.Browser.document.createEvent("MouseEvents");
-								// ev.initMouseEvent("mousedown", true, true, js.Browser.window, 0, 5, 5, 5, 5, false, false, false, false, 0, null);
-								// var ok = select.dispatchEvent(ev);
-
-							case F_Point:
+							activateLastArrayEntry(fd);
 						}
 					});
 				}

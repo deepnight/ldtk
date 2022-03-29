@@ -25,4 +25,4 @@ app/assets/js/*.map
 
 art/export_appElements
 
-tests/_doNotShare
+tests/_private

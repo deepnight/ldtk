@@ -21,8 +21,8 @@ class Tags {
 	public inline function isEmpty() return count()==0;
 
 	@:allow(ui.TagEditor)
-	inline function cleanUpTag(k:String) : Null<String> {
-		k = Project.cleanupIdentifier(k,false);
+	public static inline function cleanUpTag(k:String) : Null<String> {
+		k = Project.cleanupIdentifier(k,Free);
 		return k==null || k=="_" || k=="" ? null : k;
 	}
 
@@ -49,12 +49,21 @@ class Tags {
 			set(k);
 	}
 
+	public function rename(oldT:String, newT:String) {
+		if( has(oldT) ) {
+			unset(oldT);
+			set(newT);
+			return true;
+		}
+		else
+			return false;
+	}
+
 	public inline function has(k) {
-		k = cleanUpTag(k);
 		return k!=null && map.exists(k);
 	}
 
-	public function hasTagFoundIn(others:Tags) {
+	public function hasAnyTagFoundIn(others:Tags) {
 		for( k in map.keys() )
 			if( others.has(k) )
 				return true;
@@ -83,9 +92,11 @@ class Tags {
 		return toArray();
 	}
 
-	public static function fromJson(json:Dynamic) : Tags {
+	public static function fromJson(json:Null<Dynamic>) : Tags {
 		var o = new Tags();
-		o.fromArray( JsonTools.readArray(json,[]) );
+		if( json!=null )
+			o.fromArray( JsonTools.readArray(json,[]) );
+
 		return o;
 	}
 

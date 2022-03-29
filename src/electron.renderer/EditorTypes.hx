@@ -2,6 +2,7 @@
 enum GlobalEvent {
 	ViewportChanged;
 	AppSettingsChanged;
+	LastChanceEnded;
 
 	ProjectSelected;
 	ProjectSettingsChanged;
@@ -14,15 +15,18 @@ enum GlobalEvent {
 	LevelRemoved(level:data.Level);
 	LevelResized(level:data.Level);
 	LevelRestoredFromHistory(level:data.Level);
+	LevelJsonCacheInvalidated(level:data.Level);
 
-	WorldLevelMoved;
+	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourUids:Null<Array<Int>>);
 	WorldSettingsChanged;
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
-	LayerDefChanged;
+	LayerDefChanged(defUid:Int);
 	LayerDefSorted;
 	LayerDefConverted;
+	LayerDefIntGridValuesSorted(defUid:Int);
+	LayerDefIntGridValueRemoved(defUid:Int, valueId:Int, isUsed:Bool);
 
 	LayerRuleChanged(rule:data.def.AutoLayerRuleDef);
 	LayerRuleAdded(rule:data.def.AutoLayerRuleDef);
@@ -30,7 +34,7 @@ enum GlobalEvent {
 	LayerRuleSeedChanged;
 	LayerRuleSorted;
 
-	LayerRuleGroupAdded;
+	LayerRuleGroupAdded(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupRemoved(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
@@ -38,12 +42,14 @@ enum GlobalEvent {
 	LayerRuleGroupCollapseChanged(rg:data.DataTypes.AutoLayerRuleGroup);
 
 	LayerInstanceSelected;
-	LayerInstanceChanged;
+	LayerInstanceEditedByTool(li:data.inst.LayerInstance);
+	LayerInstanceChangedGlobally(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
-	LayerInstanceRestoredFromHistory(li:data.inst.LayerInstance);
+	LayerInstancesRestoredFromHistory(lis:Array<data.inst.LayerInstance>);
 	AutoLayerRenderingChanged;
 	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);
 
+	TilesetImageLoaded(td:data.def.TilesetDef, isInitial:Bool);
 	TilesetDefChanged(td:data.def.TilesetDef);
 	TilesetDefAdded(td:data.def.TilesetDef);
 	TilesetDefRemoved(td:data.def.TilesetDef);
@@ -65,7 +71,8 @@ enum GlobalEvent {
 	FieldDefRemoved(fd:data.def.FieldDef);
 	FieldDefChanged(fd:data.def.FieldDef);
 	FieldDefSorted;
-	FieldInstanceChanged(fi:data.inst.FieldInstance);
+	LevelFieldInstanceChanged(l:data.Level, fi:data.inst.FieldInstance);
+	EntityFieldInstanceChanged(ei:data.inst.EntityInstance, fi:data.inst.FieldInstance);
 
 	EnumDefAdded;
 	EnumDefRemoved;
@@ -73,10 +80,15 @@ enum GlobalEvent {
 	EnumDefSorted;
 	EnumDefValueRemoved;
 
+	ToolValueSelected;
 	ToolOptionChanged;
 
+	WorldSelected(w:data.World);
+
 	WorldMode(active:Bool);
+	WorldDepthSelected(worldDepth:Int);
 	GridChanged(active:Bool);
+	ShowDetailsChanged(active:Bool);
 }
 
 enum CursorType {
@@ -94,7 +106,7 @@ enum CursorType {
 	Eraser(x:Int,y:Int);
 	GridCell(li:data.inst.LayerInstance, cx:Int, cy:Int, ?col:UInt);
 	GridRect(li:data.inst.LayerInstance, cx:Int, cy:Int, wid:Int, hei:Int, ?col:UInt);
-	Entity(li:data.inst.LayerInstance, def:data.def.EntityDef, ?ei:data.inst.EntityInstance, x:Int, y:Int);
+	Entity(li:data.inst.LayerInstance, def:data.def.EntityDef, ?ei:data.inst.EntityInstance, x:Int, y:Int, highlight:Bool);
 	Tiles(li:data.inst.LayerInstance, tileIds:Array<Int>, cx:Int, cy:Int, flips:Int);
 	Link(fx:Float, fy:Float, tx:Float, ty:Float, color:UInt);
 }
@@ -108,18 +120,6 @@ enum GenericLevelElement {
 enum ToolEditMode {
 	Add;
 	Remove;
-}
-
-enum HistoryState {
-	ResizedLevel(beforeJson:Dynamic, afterJson:Dynamic);
-	Layer(layerId:Int, bounds:Null<HistoryStateBounds>, json:Dynamic);
-}
-
-typedef HistoryStateBounds = {
-	var x : Int;
-	var y : Int;
-	var wid : Int;
-	var hei : Int;
 }
 
 enum RectHandlePos {
@@ -151,13 +151,14 @@ enum SyncOp {
 	DateUpdated;
 }
 
-enum AtlasLoadingResult {
+enum ImageLoadingResult {
 	Ok;
 	FileNotFound;
 	LoadingFailed(err:String);
 	TrimmedPadding;
 	RemapLoss;
 	RemapSuccessful;
+	UnsupportedFileOrigin(origin:String);
 }
 
 enum TilesetSelectionMode {
@@ -179,6 +180,25 @@ typedef FileSavingData = {
 }
 
 enum LevelError {
+	NoError;
+	InvalidEntityTag(ei:data.inst.EntityInstance);
 	InvalidEntityField(ei:data.inst.EntityInstance);
 	InvalidBgImage;
+}
+
+enum ClipboardType {
+	CLayerDef;
+	CEntityDef;
+	CEnumDef;
+	CTilesetDef;
+
+	CFieldDef;
+
+	CRuleGroup;
+	CRule;
+}
+
+typedef CachedIID = {
+	var level: data.Level;
+	var ?ei: data.inst.EntityInstance ;
 }

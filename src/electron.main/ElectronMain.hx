@@ -39,8 +39,12 @@ class ElectronMain {
 			mainWindow.on('close', function(ev) {
 				if( !dn.js.ElectronUpdater.isIntalling ) {
 					ev.preventDefault();
-					mainWindow.webContents.send("winClose");
+					mainWindow.webContents.send("onWinClose");
 				}
+			});
+			// Window move
+			mainWindow.on('move', function(ev) {
+				mainWindow.webContents.send("onWinMove");
 			});
 		});
 
@@ -73,7 +77,7 @@ class ElectronMain {
 
 		// Init window
 		mainWindow = new electron.main.BrowserWindow({
-			webPreferences: { nodeIntegration:true },
+			webPreferences: { nodeIntegration:true, contextIsolation:false },
 			fullscreenable: true,
 			show: false,
 			title: "LDtk",
@@ -92,7 +96,8 @@ class ElectronMain {
 		#if debug
 		enableDebugMenu();
 		#else
-		mainWindow.setMenu(null);
+		electron.main.Menu.setApplicationMenu( electron.main.Menu.buildFromTemplate( [] ) ); // macos
+		mainWindow.removeMenu(); // windows
 		#end
 
 		// Load app page

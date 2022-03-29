@@ -1,29 +1,32 @@
 #if !macro
 
 class Assets {
-	public static var fontLight_tiny : h2d.Font;
-	public static var fontLight_small : h2d.Font;
-	public static var fontLight_medium : h2d.Font;
-	public static var fontLight_large : h2d.Font;
-	public static var fontLight_xlarge : h2d.Font;
+	static var fontLight_tiny : h2d.Font;
+	static var fontLight_regular : h2d.Font;
+	static var fontLight_large : h2d.Font;
+	public static var fontLight_title : h2d.Font;
 	public static var fontPixel : h2d.Font;
-	public static var fontPixelOutline : h2d.Font;
 
 	public static var elements : dn.heaps.slib.SpriteLib;
 	public static var elementsPixels : hxd.Pixels;
 
 	public static function init() {
-		fontPixelOutline = hxd.Res.fonts.minecraftiaOutline.toFont();
 		fontPixel = hxd.Res.fonts.pixel_berry_xml.toFont();
-		fontLight_tiny = hxd.Res.fonts.roboto24.toFont();
-		fontLight_small = hxd.Res.fonts.roboto30.toFont();
-		fontLight_medium = hxd.Res.fonts.roboto36.toFont();
-		fontLight_large = hxd.Res.fonts.roboto48.toFont();
-		fontLight_xlarge = hxd.Res.fonts.roboto72.toFont();
+		fontLight_tiny = hxd.Res.fonts.noto_sans_display_semicondensed_semibold_15_xml.toFont();
+		fontLight_regular = hxd.Res.fonts.noto_sans_display_semicondensed_medium_19_xml.toFont();
+		fontLight_large = hxd.Res.fonts.noto_sans_display_semicondensed_light_30_xml.toFont();
+		fontLight_title = hxd.Res.fonts.noto_sans_display_semicondensed_extralight_90_xml.toFont();
 
-		elements = dn.heaps.assets.Atlas.load("appElements.atlas");
+		elements = dn.heaps.assets.Aseprite.convertToSLib( Const.FPS, hxd.Res.atlas.appElements.toAseprite() );
 		elementsPixels = elements.tile.getTexture().capturePixels();
+	}
 
+	public static inline function getRegularFont() {
+		return js.Browser.window.devicePixelRatio<=1 ? fontLight_tiny : fontLight_regular;
+	}
+
+	public static inline function getLargeFont() {
+		return fontLight_large;
 	}
 }
 

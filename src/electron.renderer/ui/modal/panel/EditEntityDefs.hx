@@ -37,7 +37,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				label: L.t._("Rectangle region"),
 				cb: ()->{
 					var ed = _createEntity();
-					ed.identifier = project.makeUniqueIdStr("RectRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.identifier = project.fixUniqueIdStr("RectRegion", (s)->project.defs.isEntityIdentifierUnique(s));
 					ed.hollow = true;
 					ed.resizableX = true;
 					ed.resizableY = true;
@@ -51,7 +51,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				label: L.t._("Circle region"),
 				cb: ()->{
 					var ed = _createEntity();
-					ed.identifier = project.makeUniqueIdStr("CircleRegion", true, (s)->project.defs.isEntityIdentifierUnique(s));
+					ed.identifier = project.fixUniqueIdStr("CircleRegion", (s)->project.defs.isEntityIdentifierUnique(s));
 					ed.renderMode = Ellipse;
 					ed.hollow = true;
 					ed.resizableX = true;
@@ -66,7 +66,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm(FP_Entity);
+		fieldsForm = new ui.FieldDefsForm( FP_Entity );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 
@@ -79,6 +79,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			selectEntity( project.defs.getEntityDef(LAST_ENTITY_ID) );
 		else
 			selectEntity(project.defs.entities[0]);
+
+		checkHelpBanner( ()->project.defs.entities.length<=3 );
 	}
 
 
@@ -86,7 +88,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		var isUsed = project.isEntityDefUsed(ed);
 		if( isUsed && !bypassConfirm) {
 			new ui.modal.dialog.Confirm(
-				Lang.t._("WARNING! This entity is used in one more levels. The corresponding instances will also be deleted!"),
+				Lang.t._("WARNING! This entity is used in one or more levels. The corresponding instances will also be deleted!"),
 				true,
 				deleteEntityDef.bind(ed,true)
 			);
@@ -116,7 +118,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				updateEntityList();
 				selectEntity(project.defs.entities[0]);
 
-			case LayerInstanceRestoredFromHistory(li):
+			case LayerInstancesRestoredFromHistory(_):
 				updatePreview();
 				updateEntityForm();
 				updateFieldsForm();
@@ -159,26 +161,21 @@ class EditEntityDefs extends ui.modal.Panel {
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
-			// jContent.find(".noEntLayer").hide();
 			return;
 		}
 
 		JsTools.parseComponents(jEntityForm);
 		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
-		// if( !project.defs.hasLayerType(Entities) )
-		// 	jContent.find(".noEntLayer").show();
-		// else
-		// 	jContent.find(".noEntLayer").hide();
 
 
 		// Name
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
-		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
 
-		// Pick through
-		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input#hollow") );
+		// Hollow (ie. click through)
+		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input[name=hollow]") );
 		i.linkEvent(EntityDefChanged);
 
 		// Tags editor
@@ -223,81 +220,146 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Fill/line opacities
-		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
-		i.setBounds(0.1, 1);
+		var i = Input.linkToHtmlInput(curEntity.tileOpacity, jEntityForm.find("#tileOpacity"));
+		i.setBounds(0, 1);
 		i.enablePercentageMode();
 		i.linkEvent( EntityDefChanged );
-		i.setEnabled(!curEntity.hollow);
+		i.setEnabled(curEntity.renderMode==Tile);
+
+		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
+		i.setBounds(0, 1);
+		i.enablePercentageMode();
+		i.linkEvent( EntityDefChanged );
+
 		var i = Input.linkToHtmlInput(curEntity.lineOpacity, jEntityForm.find("#lineOpacity"));
 		i.setBounds(0, 1);
 		i.enablePercentageMode();
 		i.linkEvent( EntityDefChanged );
-		i.setEnabled(curEntity.renderMode!=Tile);
 
 		// Entity render mode
-		var jSelect = jRenderModeBlock.find(".renderMode");
-		jSelect.empty();
+		var jRenderSelect = jRenderModeBlock.find(".renderMode");
+		jRenderSelect.empty();
+		var jOptGroup = new J('<optgroup label="Shapes"/>');
+		jOptGroup.appendTo(jRenderSelect);
 		for(k in ldtk.Json.EntityRenderMode.getConstructors()) {
-			var e = ldtk.Json.EntityRenderMode.createByName(k);
-			if( e==Tile )
+			var mode = ldtk.Json.EntityRenderMode.createByName(k);
+			if( mode==Tile )
 				continue;
 
-			var jOpt = new J('<option value="$k"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text(switch e {
+			var jOpt = new J('<option value="!$k"/>');
+			jOpt.appendTo(jOptGroup);
+			jOpt.text(switch mode {
 				case Rectangle: Lang.t._("Rectangle");
 				case Ellipse: Lang.t._("Ellipse");
 				case Cross: Lang.t._("Cross");
 				case Tile: null;
 			});
 		}
-		// Append tilesets
-		if( project.defs.tilesets.length==0 )
-			jSelect.append( new J('<option value="Tile">-- No tileset available --</option>') );
-
-		for( td in project.defs.tilesets ) {
-			var jOpt = new J('<option value="Tile.${td.uid}"/>');
-			jOpt.appendTo(jSelect);
-			jOpt.text( Lang.t._("Tile from ::name::", {name:td.identifier}) );
-		}
+		JsTools.appendTilesetsToSelect(project, jRenderSelect);
 
 		// Pick render mode
-		jSelect.change( function(ev) {
-			var v : String = jSelect.val();
-			var mode = ldtk.Json.EntityRenderMode.createByName( v.indexOf(".")<0 ? v : v.substr(0,v.indexOf(".")) );
-			curEntity.renderMode = mode;
-			curEntity.tileId = null;
-			if( mode==Tile ) {
-				var tdUid = Std.parseInt( v.substr(v.indexOf(".")+1) );
-				curEntity.tilesetId = tdUid;
-			}
+		jRenderSelect.change( function(ev) {
+			var oldMode = curEntity.renderMode;
+			curEntity._oldTileId = null;
+			curEntity.tileRect = null; // NOTE: important to clear as tilesetUid is also stored in it!
+
+			var raw : String = jRenderSelect.val();
+			if( M.isValidNumber(Std.parseInt(raw)) ) {
+				// Tileset UID
+				curEntity.renderMode = Tile;
+				curEntity.tilesetId = Std.parseInt(raw);
+		}
 			else {
-				curEntity.tilesetId = null;
-				curEntity.tileRenderMode = Stretch;
+				if( raw.indexOf("!")==0 ) {
+					// Shape
+					curEntity.renderMode = ldtk.Json.EntityRenderMode.createByName( raw.substr(1) );
+					curEntity.tilesetId = null;
+				}
+				else {
+					// Embed tileset
+					var embedId = ldtk.Json.EmbedAtlas.createByName(raw);
+					N.debug(embedId);
+					var td = project.defs.getEmbedTileset(embedId);
+					curEntity.renderMode = Tile;
+					curEntity.tilesetId = td.uid;
+				}
+			}
+
+			// Re-init opacities
+			if( oldMode!=Tile && curEntity.renderMode==Tile ) {
+				curEntity.tileOpacity = 1;
+				curEntity.fillOpacity = 0.08;
+				curEntity.lineOpacity = 0;
+			}
+			if( oldMode==Tile && curEntity.renderMode!=Tile ) {
+				curEntity.tileOpacity = 1;
+				curEntity.fillOpacity = 1;
+				curEntity.lineOpacity = 1;
 			}
 
 			editor.ge.emit( EntityDefChanged );
 		});
-		jSelect.val( curEntity.renderMode.getName() + ( curEntity.renderMode==Tile ? "."+curEntity.tilesetId : "" ) );
+
+		if( curEntity.tilesetId!=null ) {
+			var td = project.defs.getTilesetDef(curEntity.tilesetId);
+			if( td.isUsingEmbedAtlas() )
+				jRenderSelect.val( td.embedAtlas.getName() );
+			else
+				jRenderSelect.val( Std.string(td.uid) );
+		}
+		else
+			jRenderSelect.val( "!"+curEntity.renderMode.getName() );
+
 
 		// Tile render mode
 		var i = new form.input.EnumSelect(
 			jEntityForm.find("select.tileRenderMode"),
 			ldtk.Json.EntityTileRenderMode,
 			()->curEntity.tileRenderMode,
-			(v)->curEntity.tileRenderMode = v
+			(v)->curEntity.tileRenderMode = v,
+			(v)->switch v {
+				case Cover: L.t._("Cover bounds");
+				case FitInside: L.t._("Fit inside bounds");
+				case Repeat: L.t._("Repeat");
+				case Stretch: L.t._("Dirty stretch to bounds");
+				case FullSizeCropped: L.t._("Full size (cropped in bounds)");
+				case FullSizeUncropped: L.t._("Full size (not cropped)");
+				case NineSlice: L.t._("9-slices scaling");
+			}
 		);
 		i.linkEvent( EntityDefChanged );
 
-		// Tile pick
+		if( curEntity.tileRenderMode!=NineSlice )
+			jEntityForm.find(".nineSlice").hide();
+		else {
+			jEntityForm.find(".nineSlice").show();
+			if( curEntity.nineSliceBorders.length!=4 )
+				curEntity.nineSliceBorders = [2,2,2,2];
+
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[0], jEntityForm.find("[name=nineSliceUp]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[1], jEntityForm.find("[name=nineSliceRight]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[2], jEntityForm.find("[name=nineSliceDown]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[3], jEntityForm.find("[name=nineSliceLeft]"));
+			i.linkEvent(EntityDefChanged);
+			i.setBounds(1, null);
+		}
+
+		// Tile rect picker
 		if( curEntity.renderMode==Tile ) {
-			var jPicker = JsTools.createTilePicker(
+			var jPicker = JsTools.createTileRectPicker(
 				curEntity.tilesetId,
-				PickAndClose,
-				curEntity.tileId==null ? [] : [curEntity.tileId],
-				(tileIds)->{
-					curEntity.tileId = tileIds[0];
-					editor.ge.emit(EntityDefChanged);
+				curEntity.tileRect,
+				(rect)->{
+					if( rect!=null ) {
+						curEntity.tileRect = rect;
+						editor.ge.emit(EntityDefChanged);
+					}
 				}
 			);
 			jPicker.appendTo( jRenderModeBlock.find(".tilePicker") );
@@ -355,49 +417,82 @@ class EditEntityDefs extends ui.modal.Panel {
 			editor.ge.emit(EntityDefChanged);
 		});
 		jPivots.append(p);
+
+		checkBackup();
 	}
 
 
 	function updateFieldsForm() {
 		if( curEntity!=null )
-			fieldsForm.useFields(curEntity.fieldDefs);
+			fieldsForm.useFields(curEntity.identifier, curEntity.fieldDefs);
 		else {
-			fieldsForm.useFields([]);
+			fieldsForm.useFields("Entity", []);
 			fieldsForm.hide();
 		}
+		checkBackup();
 	}
 
 
 	function updateEntityList() {
 		jEntityList.empty();
 
-		var allTags = project.defs.getEntityTagCategories();
+		// List context menu
+		ContextMenu.addTo(jEntityList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = project.defs.pasteEntityDef(App.ME.clipboard);
+					editor.ge.emit(EntityDefAdded);
+					selectEntity(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CEntityDef),
+			}
+		]);
 
 		// Tags
-		for(t in allTags) {
-			if( allTags.length>1 ) {
+		var tagGroups = project.defs.groupUsingTags(project.defs.entities, (ed)->ed.tags);
+		for( group in tagGroups ) {
+			// Tag name
+			if( tagGroups.length>1 ) {
 				var jSep = new J('<li class="title fixed"/>');
-				jSep.text( t==null ? L.t._("Untagged") : t );
+				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEntityList);
+
+				// Rename
+				if( group.tag!=null ) {
+					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
+					jSep.append(jLinks);
+					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
+						for(ed in project.defs.entities) {
+							ed.tags.rename(group.tag, t);
+							for(fd in ed.fieldDefs)
+								fd.allowedRefTags.rename(group.tag, t);
+						}
+						for(ld in project.defs.layers) {
+							ld.requiredTags.rename(group.tag, t);
+							ld.excludedTags.rename(group.tag, t);
+						}
+						editor.ge.emit( EntityDefChanged );
+					});
+				}
 			}
 
+			// Create sub list
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jEntityList);
 			var jSubList = new J('<ul/>');
 			jSubList.appendTo(jLi);
 
-			// Entities per tag
-			for(ed in project.defs.entities) {
-				if( t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
-					continue;
-
+			for(ed in group.all) {
 				var jEnt = new J('<li class="iconLeft"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
 
+				// HTML entity display preview
 				var preview = JsTools.createEntityPreview(editor.project, ed);
 				preview.appendTo(jEnt);
 
+				// Name
 				jEnt.append('<span class="name">${ed.identifier}</span>');
 				if( curEntity==ed ) {
 					jEnt.addClass("active");
@@ -406,8 +501,28 @@ class EditEntityDefs extends ui.modal.Panel {
 				else
 					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
-
+				// Menu
 				ContextMenu.addTo(jEnt, [
+					{
+						label: L._Copy(),
+						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
+					},
+					{
+						label: L._Cut(),
+						cb: ()->{
+							App.ME.clipboard.copyData(CEntityDef, ed.toJson(project));
+							deleteEntityDef(ed);
+						},
+					},
+					{
+						label: L._PasteAfter(),
+						cb: ()->{
+							var copy = project.defs.pasteEntityDef(App.ME.clipboard, ed);
+							editor.ge.emit(EntityDefAdded);
+							selectEntity(copy);
+						},
+						enable: ()->App.ME.clipboard.is(CEntityDef),
+					},
 					{
 						label: L._Duplicate(),
 						cb:()->{
@@ -419,7 +534,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
 				]);
 
-
+				// Click
 				jEnt.click( function(_) selectEntity(ed) );
 			}
 
@@ -435,6 +550,8 @@ class EditEntityDefs extends ui.modal.Panel {
 				editor.ge.emit(EntityDefSorted);
 			});
 		}
+
+		checkBackup();
 	}
 
 

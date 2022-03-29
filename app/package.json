@@ -1,85 +1,42 @@
 {
 	"name": "ldtk",
-	"version": "0.9.3",
+	"version": "1.0.0",
 	"main": "assets/main.js",
 	"productName": "LDtk",
 	"author": "Sebastien Benard",
 	"description": "2D level editor",
 	"scripts": {
-		"start":			"electron .",
-		"compile":			"cd ..  &&  haxe main.hxml  &&  haxe renderer.hxml",
-		"doc":				"cd ..  &&  haxe doc.hxml",
-		"pack-prepare":		"npm run doc  &&  npm run compile",
-		"pack-test":		"npm run pack-prepare  &&  electron-builder build --win --dir --publish never",
-		"pack-win":			"npm run pack-prepare  &&  electron-builder build --win --x64 --ia32",
-		"pack-macos":		"npm run pack-prepare  &&  electron-builder build --mac --publish never",
-		"pack-linux-x86":	"npm run pack-prepare  &&  electron-builder build --linux --publish never",
-		"pack-linux-arm64":	"npm run pack-prepare  &&  electron-builder build --linux --arm64 --publish never",
-		"publish-github":	"npm run pack-win -- --publish always",
-		"publish-itchio":	"npm run pack-win  &&  butler push \"redist/LDtk %npm_package_version% installer.exe\" deepnight/ldtk:win --userversion-file ../lastBuildVersion.txt",
-		"quicktype":		"npm i -g quicktype  &&  npm run qt-cs  &&  npm run qt-js  &&  npm run qt-py  &&  npm run qt-rs  &&  npm run qt-go  &&  npm run qt-cpp",
-		"qt-cs":			"quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cs --namespace ldtk --any-type dynamic",
-		"qt-js":			"quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.js",
-		"qt-py":			"quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.py",
-		"qt-rs":			"quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.rs",
-		"qt-go":			"quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.go",
-		"qt-cpp":			"quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cpp"
+		"start": "electron .",
+		"compile": "cd ..  &&  haxe main.hxml  &&  haxe renderer.hxml",
+		"doc": "cd ..  &&  haxe doc.hxml",
+		"pack-prepare": "npm run doc  &&  npm run compile",
+		"pack-test": "npm run pack-prepare  &&  electron-builder build --win --dir --publish never",
+		"pack-win": "npm run pack-prepare  &&  electron-builder build --win --x64 --ia32",
+		"pack-macos": "npm run pack-prepare  &&  electron-builder build --mac --publish never",
+		"pack-linux-x86": "npm run pack-prepare  &&  electron-builder build --linux --publish never",
+		"pack-linux-arm64": "npm run pack-prepare  &&  electron-builder build --linux --arm64 --publish never",
+		"publish-github": "npm run pack-win -- --publish always",
+		"publish-itchio": "npm run pack-win  &&  butler push \"redist/LDtk %npm_package_version% installer.exe\" deepnight/ldtk:win --userversion-file ../lastBuildVersion.txt",
+		"quicktype": "npm i -g quicktype  &&  npm run qt-cs  &&  npm run qt-js  &&  npm run qt-py  &&  npm run qt-rs  &&  npm run qt-go  &&  npm run qt-cpp",
+		"qt-cs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cs --namespace ldtk --any-type dynamic",
+		"qt-js": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.js",
+		"qt-py": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.py",
+		"qt-rs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.rs",
+		"qt-go": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.go",
+		"qt-cpp": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cpp"
 	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/deepnight/ldtk.git"
 	},
 	"dependencies": {
-		"codemirror": "^5.59.2",
-		"electron-updater": "^4.3.5",
-		"simple-color-picker": "^1.0.4",
-		"sortablejs": "^1.10.2"
+		"codemirror": "^5.64.0",
+		"electron-updater": "^4.6.1",
+		"simple-color-picker": "^1.0.5",
+		"sortablejs": "^1.14.0"
 	},
 	"devDependencies": {
-		"electron": "^10.1.5",
-		"electron-builder": "^22.9.1"
-	},
-	"build": {
-		"appId": "com.deepnight.ldtk",
-		"artifactName": "${productName} ${version} installer.${ext}",
-		"directories": {
-			"buildResources": "buildAssets",
-			"output": "redist"
-		},
-		"extraFiles": [
-			"samples",
-			"README.txt"
-		],
-		"files": [
-			"assets",
-			"package.json"
-		],
-		"fileAssociations": [
-			{
-				"ext": "ldtk",
-				"name": "LDTK Project File",
-				"mimeType": "application/json",
-				"icon": "project.ico",
-				"role": "Editor"
-			},
-			{
-				"ext": "ldtkl",
-				"name": "LDTK Level File",
-				"mimeType": "application/json",
-				"icon": "level.ico",
-				"role": "Editor"
-			}
-		],
-		"nsis": {
-			"oneClick": true,
-			"shortcutName": "LDtk"
-		},
-		"win": {
-			"target": "nsis",
-			"publish": [
-				"github"
-			]
-		},
-		"mac": {}
+		"electron": "^16.0.8",
+		"electron-builder": "^22.14.13"
 	}
 }

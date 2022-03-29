@@ -26,41 +26,58 @@
 		<dl class="form">
 			<dt>
 				<label for="eName">Entity identifier</label>
+				<div class="info identifier"></div>
 			</dt>
 			<dd>
 				<input type="text" name="name" id="eName"/>
-				<div class="info identifier"></div>
+				<label for="showIdentifier"">
+					<input type="checkbox" name="showIdentifier" id="showIdentifier" title="If enabled, the identifier will be displayed above entities in the editor view."/>
+					Show above
+				</label>
 			</dd>
 
 			<dt>
 				<label>Tags</label>
+				<div class="info">
+					Tags are used to group entities in custom categories. Multiple tags can be assigned to a single entity.
+					You may also use tags in Layers settings to filter which entities are allowed and which are not.
+					Example: add an "Actor" tag to some entities and create an Entity layer that only accepts "Actors" entities in it.
+				</div>
 			</dt>
 			<dd>
 				<div id="tags"></div>
-				<div class="info" title="Tags can be used to filter Entities allowed in Entity layers."></div>
 			</dd>
 
 			<dt>
 				<label for="width">Size</label>
+				<div class="info">Minimal width and height in pixels of this entity.</div>
 			</dt>
 			<dd>
 				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
-
+			</dd>
+			<dd>
 				<span>Resizable:</span>
-				<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
-				<label for="resizableX">Width</label>
+				<label for="resizableX">
+					<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
+					Width
+				</label>
 
-				<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
-				<label for="resizableY">Height</label>
+				<label for="resizableY">
+					<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
+					Height
+				</label>
 
-				<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
-				<label for="keepAspectRatio">Keep aspect ratio</label>
+				<label for="keepAspectRatio">
+					<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
+					Keep aspect ratio
+				</label>
 			</dd>
 
 			<dt>
 				<label>Editor visual</label>
+				<div class="info">Customize visual representation of the entity in the editor view.</div>
 			</dt>
 			<dd class="renderMode">
 				<input type="color" name="color" id="eColor"/>
@@ -69,23 +86,47 @@
 				<div class="tilePicker"></div>
 				<select class="mode_Tile tileRenderMode"></select>
 
-				<span>Fill=</span>
-				<input type="text" id="fillOpacity" class="small"/>
-
-				<span>Line=</span>
-				<input type="text" id="lineOpacity" class="small"/>
+				<span class="nineSlice">
+					<div class="info">
+						9-slice scaling mode splits the selected texture in 9 sections (4 corners, 4 borders and 1 inner).
+						Corners are drawn as-is, Borders are repeated on the sides of the entity, and Inner is stretch at the center of the entity.
+						You can adjust the size of up, down, left and right borders, in pixels.
+					</div>
+					<span>9-slices borders:</span>
+					<span>top=</span>
+					<input type="text" name="nineSliceUp"/>
+					<span>down=</span>
+					<input type="text" name="nineSliceDown"/>
+					<span>left=</span>
+					<input type="text" name="nineSliceLeft"/>
+					<span>right=</span>
+					<input type="text" name="nineSliceRight"/>
+				</span>
 			</dd>
 
 			<dd>
-				<input type="checkbox" id="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
-				<label for="hollow">Hollow</label>
+				<span>Tile=</span>
+				<input type="text" id="tileOpacity" class="tiny" title="Tile opacity"/>
 
-				<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
-				<label for="showIdentifier">Show identifier</label>
+				<span>% Fill=</span>
+				<input type="text" id="fillOpacity" class="tiny" title="Fill color opacity"/>
+
+				<span>% Line=</span>
+				<input type="text" id="lineOpacity" class="tiny" title="Outline color opacity"/>
+				<span>%</span>
+
+				<label for="hollow">
+					<input type="checkbox" id="hollow" name="hollow" title="Clicks will pass through 'hollow' entities, except on edges. They don't have any fill color (only an outline and/or a tile)."/>
+					Hollow
+				</label>
 			</dd>
 
 			<dt>
 				<label>Pivot point</label>
+				<div class="info">
+					The pivot of the entity is its actual pixel coordinate of the entity in the level.
+					The pivot alignment can be customized to adjust the position of the entity bounds relatively to these coordinates: the entity could be centered over the point, above it, on the right, etc.
+				</div>
 			</dt>
 			<dd>
 				<div class="pivot"></div>
@@ -93,6 +134,11 @@
 
 			<dt>
 				<label for="maxCount">Max count</label>
+				<div class="info">
+					An entity can be limited to a specific number of instances per level or per world.
+					Examples: a PlayerStart entity could be limited to 1 max per world, or you may limit LightSource entities to 10 per level etc.
+					What actually happens when you reach the limit is also customizable.
+				</div>
 			</dt>
 			<dd>
 				<input type="text" id="maxCount" placeholder="Unlimited" class="small"/>

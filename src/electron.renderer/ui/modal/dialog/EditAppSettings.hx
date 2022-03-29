@@ -18,8 +18,14 @@ class EditAppSettings extends ui.modal.Dialog {
 		jForm.off().find("*").off();
 
 		// Log button
-		jContent.find( "button.log").click( (_)->ET.locate( JsTools.getLogPath(), true ) );
 		jContent.find(".logPath").text( JsTools.getLogPath() );
+		jContent.find( "button.viewLog").click( (_)->{
+			App.LOG.flushToFile();
+			var raw = NT.readFileString( JsTools.getLogPath() );
+			var te = new TextEditor(raw, "LDtk logs", LangLog);
+			te.scrollToEnd();
+		});
+		jContent.find( "button.locateLog").click( (_)->JsTools.locateFile( JsTools.getLogPath(), true ) );
 
 		// World mode using mousewheel
 		var i = new form.input.EnumSelect(
@@ -45,13 +51,6 @@ class EditAppSettings extends ui.modal.Dialog {
 			needRestart = true;
 		}
 
-		// CPU throttling
-		var i = Input.linkToHtmlInput(settings.v.smartCpuThrottling, jForm.find("#smartCpuThrottling"));
-		i.onChange = ()->{
-			hxd.System.fpsLimit = -1;
-			onSettingChanged();
-		}
-
 		// Fullscreen
 		var i = Input.linkToHtmlInput(settings.v.startFullScreen, jForm.find("#startFullScreen"));
 		i.onValueChange = (v)->{
@@ -70,14 +69,6 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
-		// Tile flickering fix
-		var i = Input.linkToHtmlInput(settings.v.fixTileFlickering, jForm.find("#fixTileFlickering"));
-		i.onChange = ()->{
-			if( Editor.exists() )
-				Editor.ME.levelRender.invalidateAll();
-			onSettingChanged();
-		}
-
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);
@@ -91,7 +82,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// App scaling
 		var jScale = jForm.find("#appScale");
 		jScale.empty();
-		for(s in [0.7, 0.8, 0.9, 1, 1.1, 1.2]) {
+		for(s in [0.5, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]) {
 			var jOpt = new J('<option value="$s"/>');
 			jScale.append(jOpt);
 			jOpt.text('${Std.int(s*100)}%');
@@ -145,5 +136,6 @@ class EditAppSettings extends ui.modal.Dialog {
 		if( hasEditor() )
 			Editor.ME.ge.emit( AppSettingsChanged );
 		updateForm();
+		dn.Process.resizeAll();
 	}
 }

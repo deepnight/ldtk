@@ -67,9 +67,9 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return true;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
 		paintedCells = new Map();
-		super.startUsing(ev,m);
+		super.startUsing(ev,m,extraParam);
 	}
 
 	inline function markAsPainted(cx,cy) paintedCells.set( curLayerInstance.coordId(cx,cy), true );
@@ -157,7 +157,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				case Remove:
 					// Erase rectangle
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
-						editor.curLevelHistory.markChange(cx,cy);
+						editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 						if( settings.v.tileStacking )
 							editor.curLayerInstance.removeTopMostGridTile(cx,cy);
 						else
@@ -210,7 +210,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			if( onlyCoordsMask==null || onlyCoordsMask.exists(curLayerInstance.coordId(x,y)) )
 			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
 				curLayerInstance.addGridTile(x,y, tid, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
-				editor.curLevelHistory.markChange(x,y);
+				editor.curLevelTimeline.markGridChange(curLayerInstance, x, y);
 				anyChange = true;
 			}
 		}
@@ -259,7 +259,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 					li.addGridTile(tcx,tcy,tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
 					if( settings.v.tileStacking )
 						markAsPainted(tcx,tcy);
-					editor.curLevelHistory.markChange(tcx,tcy);
+					editor.curLevelTimeline.markGridChange(li, tcx, tcy);
 					anyChange = true;
 				}
 			}
@@ -300,7 +300,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
 				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy) ) {
 					editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
-					editor.curLevelHistory.markChange(tcx,tcy);
+					editor.curLevelTimeline.markGridChange(curLayerInstance, tcx, tcy);
 					anyChange = true;
 				}
 			}
@@ -377,7 +377,8 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				if( canUndo )
 					new ui.LastChance(L.t._("Changed layer tileset"), project);
 				curLayerInstance.setOverrideTileset( Std.parseInt( jTilesets.val() ) );
-				editor.ge.emit( LayerDefChanged );
+				editor.ge.emit( ToolOptionChanged );
+				editor.ge.emit( LayerInstanceChangedGlobally(curLayerInstance) );
 			}
 			var isBad = jTilesets.find(":selected").hasClass("bad");
 			if( isBad )

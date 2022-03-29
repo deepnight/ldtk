@@ -25,6 +25,7 @@ class Rulers extends dn.Process {
 	var dragOrigin : Null<Coords>;
 	var dragStarted = false;
 	var resizePreview : h2d.Graphics;
+	var oldNeighbours : Null< Array<Int> >;
 
 	public function new() {
 		super(editor);
@@ -59,7 +60,7 @@ class Rulers extends dn.Process {
 			case FieldDefChanged(_), FieldDefRemoved(_):
 				invalidate();
 
-			case LayerDefChanged, LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
+			case LayerDefChanged(_), LayerDefRemoved(_), LevelResized(_), LevelRestoredFromHistory(_):
 				invalidate();
 
 			case LevelSettingsChanged(_):
@@ -68,7 +69,7 @@ class Rulers extends dn.Process {
 			case LevelSelected(l):
 				invalidate();
 
-			case ViewportChanged, WorldLevelMoved:
+			case ViewportChanged, WorldLevelMoved(_):
 				root.x = levelRender.root.x;
 				root.y = levelRender.root.y;
 				root.setScale( levelRender.root.scaleX );
@@ -109,8 +110,8 @@ class Rulers extends dn.Process {
 
 	function addLabel(str:String, pos:RectHandlePos, smallFont=true, distancePx=0, ?color:UInt) {
 		var scale : Float = switch pos {
-			case Top, Bottom: editor.curLevel.pxWid<400 ? 0.5 : 1;
-			case Left, Right: editor.curLevel.pxHei<300 ? 0.5 : 1;
+			case Top, Bottom: editor.curLevel.pxWid<200 ? 0.5 : 1;
+			case Left, Right: editor.curLevel.pxHei<200 ? 0.5 : 1;
 			case _: 1;
 		}
 
@@ -125,7 +126,7 @@ class Rulers extends dn.Process {
 		if( color==null )
 			color = C.toWhite(editor.project.bgColor,0.5);
 
-		var tf = new h2d.Text(smallFont ? Assets.fontLight_tiny : Assets.fontLight_small, wrapper);
+		var tf = new h2d.Text(Assets.getRegularFont(), wrapper);
 		tf.text = str;
 		tf.textColor = color;
 		tf.scale(scale);
@@ -167,6 +168,7 @@ class Rulers extends dn.Process {
 		dragOrigin = null;
 		dragStarted = false;
 		draggedPos = null;
+		oldNeighbours = null;
 
 		if( ev.button!=0 || !canUseResizers() )
 			return;
@@ -179,12 +181,13 @@ class Rulers extends dn.Process {
 
 		if( draggedPos!=null ) {
 			ev.cancel = true;
+			oldNeighbours = curLevel.getNeighboursUids();
 			// editor.curTool.stopUsing(m);
 		}
 	}
 
 	function canUseResizers() {
-		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown();
+		return !App.ME.isKeyDown(K.SPACE) && !App.ME.hasAnyToggleKeyDown() && editor.curWorldDepth==editor.curLevel.worldDepth;
 	}
 
 	public function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
@@ -223,7 +226,7 @@ class Rulers extends dn.Process {
 			resizePreview.lineStyle(4, !resizeBoundsValid(b) ? 0xff0000 : 0xffcc00);
 			resizePreview.drawRect(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 			editor.cursor.set( Moving, (b.newRight-b.newLeft)+"x"+(b.newBottom-b.newTop)+"px" );
-			editor.requestFps();
+			App.ME.requestCpu();
 			ev.cancel = true;
 		}
 	}
@@ -233,8 +236,8 @@ class Rulers extends dn.Process {
 	}
 
 	function resizeBoundsValid(b) {
-		var min = getResizeGrid() * 2;
-		return b.newRight>b.newLeft+min && b.newBottom>b.newTop+min;
+		var min = getResizeGrid();
+		return b.newRight>=b.newLeft+min && b.newBottom>=b.newTop+min;
 	}
 
 	function getResizedBounds(m:Coords) {
@@ -268,13 +271,13 @@ class Rulers extends dn.Process {
 
 		}
 
-		if( editor.project.worldLayout==GridVania) {
+		if( editor.curWorld.worldLayout==GridVania) {
 			// Snap to world grid
-			var p = editor.project;
-			b.newLeft = dn.M.round( b.newLeft/p.worldGridWidth ) * p.worldGridWidth;
-			b.newRight = dn.M.round( b.newRight/p.worldGridWidth ) * p.worldGridWidth;
-			b.newTop = dn.M.round( b.newTop/p.worldGridHeight ) * p.worldGridHeight;
-			b.newBottom = dn.M.round( b.newBottom/p.worldGridHeight ) * p.worldGridHeight;
+			var w = editor.curWorld;
+			b.newLeft = dn.M.round( b.newLeft/w.worldGridWidth ) * w.worldGridWidth;
+			b.newRight = dn.M.round( b.newRight/w.worldGridWidth ) * w.worldGridWidth;
+			b.newTop = dn.M.round( b.newTop/w.worldGridHeight ) * w.worldGridHeight;
+			b.newBottom = dn.M.round( b.newBottom/w.worldGridHeight ) * w.worldGridHeight;
 		}
 		return b;
 	}
@@ -285,13 +288,15 @@ class Rulers extends dn.Process {
 			if( b.newLeft!=0 || b.newTop!=0 || b.newRight!=curLevel.pxWid || b.newBottom!=curLevel.pxHei ) {
 				if( resizeBoundsValid(b) ) {
 					var before = curLevel.toJson();
+					var initialX = curLevel.worldX;
+					var initialY = curLevel.worldY;
 					curLevel.worldX += b.newLeft;
 					curLevel.worldY += b.newTop;
 					curLevel.applyNewBounds(b.newLeft, b.newTop, b.newRight-b.newLeft, b.newBottom-b.newTop);
 					editor.selectionTool.clear();
 					editor.ge.emit( LevelResized(curLevel) );
-					editor.curLevelHistory.saveResizedState( before, curLevel.toJson() );
-					editor.ge.emit( WorldLevelMoved );
+					editor.curLevelTimeline.saveFullLevelState();
+					editor.ge.emit( WorldLevelMoved(curLevel, true, oldNeighbours) );
 				}
 			}
 		}
@@ -308,6 +313,7 @@ class Rulers extends dn.Process {
 		if( invalidated )
 			render();
 
-		labels.visible = !editor.worldMode;
+		labels.visible = !editor.worldMode && App.ME.settings.v.showDetails && !editor.gifMode;
+		g.visible = canUseResizers();
 	}
 }

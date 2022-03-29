@@ -20,7 +20,7 @@ class Definitions {
 	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
 		return {
 			layers: layers.map( ld->ld.toJson() ),
-			entities: entities.map( ed->ed.toJson() ),
+			entities: entities.map( ed->ed.toJson(p) ),
 			tilesets: tilesets.map( td->td.toJson() ),
 			enums: enums.map( ed->ed.toJson(p) ),
 			externalEnums: externalEnums.map( ed->ed.toJson(p) ),
@@ -41,11 +41,11 @@ class Definitions {
 			d.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
-			d.enums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+			d.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
-				d.externalEnums.push( data.def.EnumDef.fromJson(p.jsonVersion, enumJson) );
+				d.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
@@ -71,6 +71,9 @@ class Definitions {
 
 		for(td in tilesets)
 			td.tidy(p);
+
+		for(fd in levelFields)
+			fd.tidy(p);
 	}
 
 	/**  LAYER DEFS  *****************************************/
@@ -97,9 +100,9 @@ class Definitions {
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
-		var l = new data.def.LayerDef(_project.makeUniqueIdInt(), type);
+		var l = new data.def.LayerDef(_project, _project.generateUniqueId_int(), type);
 
-		l.identifier = _project.makeUniqueIdStr(id==null ? type.getName() : id, (id)->isLayerNameUnique(id));
+		l.identifier = _project.fixUniqueIdStr(id==null ? type.getName() : id, (id)->isLayerNameUnique(id));
 
 		l.gridSize = _project.defaultGridSize;
 
@@ -110,29 +113,45 @@ class Definitions {
 			l.tilesetDefUid = td.uid;
 		}
 
+		if( type==Entities ) {
+			l.hideFieldsWhenInactive = true;
+			l.inactiveOpacity = 0.6;
+		}
+
 		layers.insert(0,l);
 		_project.tidy();
 		return l;
 	}
 
-	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : data.def.LayerDef {
-		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, ld.toJson() );
-		copy.uid = _project.makeUniqueIdInt();
+	public function duplicateLayerDef(ld:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
+		return pasteLayerDef( Clipboard.createTemp(CLayerDef, ld.toJson()), ld, baseName);
+	}
+
+	public function pasteLayerDef(c:Clipboard, ?after:data.def.LayerDef, ?baseName:String) : Null<data.def.LayerDef> {
+		if( !c.is(CLayerDef) )
+			return null;
+
+		var json : ldtk.Json.LayerDefJson = c.getParsedJson();
+		var copy = data.def.LayerDef.fromJson( _project, _project.jsonVersion, json );
+		copy.uid = _project.generateUniqueId_int();
 
 		for(rg in copy.autoRuleGroups) {
-			rg.uid = _project.makeUniqueIdInt();
+			rg.uid = _project.generateUniqueId_int();
 			for(r in rg.rules)
-				r.uid = _project.makeUniqueIdInt();
+				r.uid = _project.generateUniqueId_int();
 		}
 
-		copy.identifier = _project.makeUniqueIdStr(baseName==null ? ld.identifier : baseName, (id)->isLayerNameUnique(id));
-		layers.insert( dn.Lib.getArrayIndex(ld, layers), copy );
+		copy.identifier = _project.fixUniqueIdStr(baseName==null ? json.identifier : baseName, (id)->isLayerNameUnique(id));
+		if( after!=null )
+			layers.insert( dn.Lib.getArrayIndex(after, layers)+1, copy );
+		else
+			layers.push(copy);
 		_project.tidy();
 		return copy;
 	}
 
 	public function isLayerNameUnique(id:String, ?exclude:data.def.LayerDef) {
-		var id = Project.cleanupIdentifier(id, true);
+		var id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		for(ld in layers)
 			if( ld.identifier==id && ld!=exclude )
 				return false;
@@ -249,7 +268,7 @@ class Definitions {
 	}
 
 	public function createEntityDef() : data.def.EntityDef {
-		var ed = new data.def.EntityDef(_project.makeUniqueIdInt());
+		var ed = new data.def.EntityDef(_project, _project.generateUniqueId_int());
 		entities.push(ed);
 
 		ed.setPivot( _project.defaultPivotX, _project.defaultPivotY );
@@ -264,14 +283,25 @@ class Definitions {
 	}
 
 	public function duplicateEntityDef(ed:data.def.EntityDef) {
-		var copy = data.def.EntityDef.fromJson( _project, ed.toJson() );
-		copy.uid = _project.makeUniqueIdInt();
+		return pasteEntityDef( Clipboard.createTemp( CEntityDef, ed.toJson(_project) ), ed );
+	}
+
+	public function pasteEntityDef(c:Clipboard, ?after:data.def.EntityDef) : Null<data.def.EntityDef> {
+		if( !c.is(CEntityDef) )
+			return null;
+
+		var json : ldtk.Json.EntityDefJson = c.getParsedJson();
+		var copy = data.def.EntityDef.fromJson( _project, json );
+		copy.uid = _project.generateUniqueId_int();
 
 		for(fd in copy.fieldDefs)
-			fd.uid = _project.makeUniqueIdInt();
-		copy.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEntityIdentifierUnique(id));
+			fd.uid = _project.generateUniqueId_int();
+		copy.identifier = _project.fixUniqueIdStr(json.identifier, (id)->isEntityIdentifierUnique(id));
 
-		entities.insert( dn.Lib.getArrayIndex(ed, entities)+1, copy );
+		if( after==null )
+			entities.push(copy);
+		else
+			entities.insert( dn.Lib.getArrayIndex(after, entities)+1, copy );
 		_project.tidy();
 
 		return copy;
@@ -283,7 +313,7 @@ class Definitions {
 	}
 
 	public function isEntityIdentifierUnique(id:String, ?exclude:data.def.EntityDef) {
-		id = Project.cleanupIdentifier(id, true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 
 		for(ed in entities)
 			if( ed.identifier==id && ed!=exclude )
@@ -317,31 +347,78 @@ class Definitions {
 		return moved;
 	}
 
-	public function getEntityTagCategories() : Array< Null<String> > {
+
+	/**
+		Extract and sort all tags being used in the provided array of T
+	**/
+	public function getAllTagsFrom<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
+		if( filter==null )
+			filter = (_)->return true;
+
 		// List all unique tags
 		var tagMap = new Map();
 		var anyUntagged = false;
 		var anyTagged = false;
-		for(ed in entities) {
-			if( ed.tags.isEmpty() )
+		for(e in all) {
+			if( !filter(e) )
+				continue;
+
+			if( getTags(e).isEmpty() )
 				anyUntagged = true;
 			else
 				anyTagged = true;
-			for(t in ed.tags.iterator())
+			for(t in getTags(e).iterator())
 				tagMap.set(t,t);
 		}
 
-		// Build array & sort it
-		var allTags = [];
+		// Build array of tags & sort it
+		var sortedTags = [];
 		for(t in tagMap)
-			allTags.push(t);
-		allTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
+			sortedTags.push(t);
+		sortedTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
 		if( anyUntagged )
-			allTags.insert(0, null); // untagged category
+			sortedTags.insert(0, null); // untagged category
 
-		return allTags;
+		return sortedTags;
 	}
 
+	/**
+		Return a list of tags used for "recall tags" button in tag editor
+	**/
+	public function getRecallTags<T>(all:Array<T>, getTags:T->Tags) {
+		return getAllTagsFrom(all, getTags, e->!getTags(e).isEmpty() );
+	}
+
+
+	/**
+		Return a grouped array of given T, based on tags
+	**/
+	public function groupUsingTags<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<{ tag:Null<String>, all:Array<T> }> {
+		if( filter==null )
+			filter = (_)->return true;
+
+		var sortedTags = getAllTagsFrom(all, getTags, filter);
+
+		// Build array of elements grouped by tags
+		var out = [];
+		for(tag in sortedTags) {
+			out.push({
+				tag: tag,
+				all: [],
+			});
+			var cur = out[out.length-1];
+			for(e in all)
+				if( filter(e) && ( tag==null && getTags(e).isEmpty() || tag!=null && getTags(e).has(tag) ) )
+					cur.all.push(e);
+		}
+
+		return out;
+	}
+
+
+	/**
+		Return tags to be used for Entities
+	**/
 	public function getRecallEntityTags(?excludes:Array<Tags>) : Array<String> {
 		var all = new Map();
 
@@ -396,20 +473,74 @@ class Definitions {
 
 	/**  TILESET DEFS  *****************************************/
 
+	/**
+		Create a special tileset using an embed atlas
+	**/
+	public function getEmbedTileset(embedId:ldtk.Json.EmbedAtlas) {
+		// Return existing one
+		for(td in tilesets)
+			if( td.embedAtlas==embedId )
+				return td;
+
+		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
+		tilesets.push(td);
+		var inf = Lang.getEmbedAtlasInfos(embedId);
+		var cleanId = Project.cleanupIdentifier(inf.identifier, _project.identifierStyle);
+		td.identifier = _project.fixUniqueIdStr( cleanId, id->isTilesetIdentifierUnique(id) );
+
+		td.embedAtlas = embedId;
+		switch td.embedAtlas {
+			case LdtkIcons: td.tileGridSize = 16;
+		}
+		td.importAtlasImage(td.embedAtlas);
+		td.buildPixelData(()->{}, true);
+
+		_project.tidy();
+		return td;
+	}
+
+	public function isEmbedAtlasBeingUsed(embedId:ldtk.Json.EmbedAtlas) {
+		for(td in tilesets)
+			if( td.embedAtlas==embedId )
+				return true;
+		return false;
+	}
+
+	public function getTilesetIndex(uid:Int) {
+		var idx = 0;
+		for(ed in tilesets)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=tilesets.length ? -1 : idx;
+	}
+
 	public function createTilesetDef() : data.def.TilesetDef {
-		var td = new data.def.TilesetDef( _project, _project.makeUniqueIdInt() );
+		var td = new data.def.TilesetDef( _project, _project.generateUniqueId_int() );
 		tilesets.push(td);
 
-		td.identifier = _project.makeUniqueIdStr("Tileset", id->isTilesetIdentifierUnique(id));
+		td.identifier = _project.fixUniqueIdStr("Tileset", id->isTilesetIdentifierUnique(id));
 		_project.tidy();
 		return td;
 	}
 
 	public function duplicateTilesetDef(td:data.def.TilesetDef) {
-		var copy = data.def.TilesetDef.fromJson( _project, td.toJson() );
-		copy.uid = _project.makeUniqueIdInt();
-		copy.identifier = _project.makeUniqueIdStr(td.identifier, id->isTilesetIdentifierUnique(id));
-		tilesets.insert( dn.Lib.getArrayIndex(td, tilesets)+1, copy );
+		return pasteTilesetDef( Clipboard.createTemp(CTilesetDef,td.toJson()), td );
+	}
+
+	public function pasteTilesetDef(c:Clipboard, ?after:data.def.TilesetDef) : Null<data.def.TilesetDef> {
+		if( !c.is(CTilesetDef) )
+			return null;
+
+		var json : ldtk.Json.TilesetDefJson = c.getParsedJson();
+		var copy = data.def.TilesetDef.fromJson( _project, json );
+		copy.uid = _project.generateUniqueId_int();
+		copy.identifier = _project.fixUniqueIdStr(json.identifier, id->isTilesetIdentifierUnique(id));
+		if( after==null )
+			tilesets.push(copy);
+		else
+			tilesets.insert( dn.Lib.getArrayIndex(after, tilesets)+1, copy );
 
 		_project.tidy();
 		return copy;
@@ -430,7 +561,7 @@ class Definitions {
 	}
 
 	public function isTilesetIdentifierUnique(id:String, ?exclude:data.def.TilesetDef) {
-		id = Project.cleanupIdentifier(id, true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		for(td in tilesets)
 			if( td.identifier==id && td!=exclude)
 				return false;
@@ -439,9 +570,9 @@ class Definitions {
 
 	public function autoRenameTilesetIdentifier(oldPath:Null<String>, td:data.def.TilesetDef) {
 		var defIdReg = ~/^Tileset[0-9]*/g;
-		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath), true);
+		var oldFileName = oldPath==null ? null : Project.cleanupIdentifier(dn.FilePath.extractFileName(oldPath), _project.identifierStyle);
 		if( defIdReg.match(td.identifier) || oldFileName!=null && td.identifier.indexOf(oldFileName)>=0 ) {
-			var base = Project.cleanupIdentifier( td.getFileName(false), true );
+			var base = Project.cleanupIdentifier( td.getFileName(false), _project.identifierStyle );
 			var id = base;
 			var idx = 2;
 			while( !isTilesetIdentifierUnique(id) )
@@ -470,14 +601,11 @@ class Definitions {
 	/**  ENUM DEFS  *****************************************/
 
 	public function createEnumDef(?externalRelPath:String) : data.def.EnumDef {
-		var ed = new data.def.EnumDef(_project.makeUniqueIdInt(), "Enum");
+		var ed = new data.def.EnumDef(_project, _project.generateUniqueId_int(), "Enum", externalRelPath);
+		ed.identifier = _project.fixUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
 
-		ed.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
-
-		if( externalRelPath!=null ) {
-			ed.externalRelPath = externalRelPath;
+		if( ed.isExternal() )
 			externalEnums.push(ed);
-		}
 		else
 			enums.push(ed);
 
@@ -499,11 +627,22 @@ class Definitions {
 	}
 
 	public function duplicateEnumDef(ed:data.def.EnumDef) {
-		var copy = data.def.EnumDef.fromJson( _project.jsonVersion, ed.toJson(_project) );
-		copy.uid = _project.makeUniqueIdInt();
+		return pasteEnumDef( Clipboard.createTemp(CEnumDef,ed.toJson(_project)), ed);
+	}
 
-		copy.identifier = _project.makeUniqueIdStr(ed.identifier, (id)->isEnumIdentifierUnique(id));
-		enums.insert( dn.Lib.getArrayIndex(ed, enums)+1, copy );
+	public function pasteEnumDef(c:Clipboard, ?after:data.def.EnumDef) : Null<data.def.EnumDef> {
+		if( !c.is(CEnumDef) )
+			return null;
+
+		var json : ldtk.Json.EnumDefJson = c.getParsedJson();
+		var copy = data.def.EnumDef.fromJson( _project, _project.jsonVersion, json );
+		copy.uid = _project.generateUniqueId_int();
+
+		copy.identifier = _project.fixUniqueIdStr(json.identifier, (id)->isEnumIdentifierUnique(id));
+		if( after==null )
+			enums.push(copy);
+		else
+			enums.insert( dn.Lib.getArrayIndex(after, enums)+1, copy );
 		_project.tidy();
 		return copy;
 	}
@@ -526,7 +665,7 @@ class Definitions {
 	}
 
 	public function isEnumIdentifierUnique(id:String, ?exclude:data.def.EnumDef) {
-		id = Project.cleanupIdentifier(id, true);
+		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		if( id==null )
 			return false;
 
@@ -551,6 +690,16 @@ class Definitions {
 				return ed;
 
 		return null;
+	}
+
+	public function getInternalEnumIndex(uid:Int) {
+		var idx = 0;
+		for(ed in enums)
+			if( ed.uid==uid )
+				break;
+			else
+				idx++;
+		return idx>=enums.length ? -1 : idx;
 	}
 
 	public function sortEnumDef(from:Int, to:Int) : Null<data.def.EnumDef> {
@@ -598,10 +747,13 @@ class Definitions {
 		return externalEnums.filter( function(ed) return ed.externalRelPath==relPath );
 	}
 
-	public function getAllEnumsSorted() : Array<data.def.EnumDef> {
-		var all = enums.concat(externalEnums);
-		all.sort( (a,b)->Reflect.compare(a.identifier.toLowerCase(), b.identifier.toLowerCase()) );
-		return all;
+	public function getAllEnumsGroupedByTag() : Array<{ tag:String, all:Array<data.def.EnumDef> }> {
+		var tagGroups = [];
+		var externs = getGroupedExternalEnums();
+		for(ex in externs.keyValueIterator())
+			tagGroups.push({ tag:ex.key, all:ex.value });
+		tagGroups = groupUsingTags(enums, ed->ed.tags).concat(tagGroups);
+		return tagGroups;
 	}
 
 

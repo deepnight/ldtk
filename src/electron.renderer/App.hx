@@ -15,10 +15,18 @@ class App extends dn.Process {
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
 	public var settings : Settings;
-	var keyDowns : Map<Int,Bool> = new Map();
+	var jsKeyDowns : Map<Int,Bool> = new Map();
+	var heapsKeyDowns : Map<Int,Bool> = new Map();
 	public var args: dn.Args;
 	var mouseButtonDowns : Map<Int,Bool> = new Map();
 	public var focused(default,null) = true;
+	var jsMetaKeyDown = false;
+	public var overCanvas(default,null) = false;
+	public var hasGlContext(default,null) = false;
+
+	public var clipboard : data.Clipboard;
+
+	var requestedCpuEndTime = 0.;
 
 	public function new() {
 		super();
@@ -27,18 +35,22 @@ class App extends dn.Process {
 		LOG.logFilePath = JsTools.getLogPath();
 		LOG.trimFileLines();
 		LOG.emptyEntry();
+		LOG.emptyEntry();
+		LOG.tagColors.set("update", "#6fed76");
 		LOG.tagColors.set("cache", "#edda6f");
 		LOG.tagColors.set("tidy", "#8ed1ac");
 		LOG.tagColors.set("save", "#ff6f14");
 		#if debug
-		LOG.printOnAdd = true;
+		// LOG.printOnAdd = true;
 		#end
 		LOG.add("BOOT","App started");
-		LOG.add("BOOT","Version: "+Const.getAppVersion());
+		LOG.add("BOOT","Version: "+Const.getAppVersion()+" (build "+Const.getAppBuildId()+")");
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
-		LOG.add("BOOT","Resources: "+ET.getAppResourceDir());
-		LOG.add("BOOT","SamplesPath: "+JsTools.getSamplesDir());
+		LOG.add("BOOT","Assets: "+JsTools.getAssetsDir());
+		LOG.add("BOOT","ExtraFiles: "+JsTools.getExtraFilesDir());
+		LOG.add("BOOT","CWD: "+Sys.getCwd());
 		LOG.add("BOOT","Display: "+ET.getScreenWidth()+"x"+ET.getScreenHeight());
+
 		// App arguments
 		args = ET.getArgs();
 		LOG.add("BOOT", args.toString());
@@ -50,10 +62,17 @@ class App extends dn.Process {
 		createRoot(Boot.ME.s2d);
 		lastKnownMouse = { pageX:0, pageY:0 }
 		jCanvas.hide();
+		jCanvas.mouseenter( _->overCanvas = true );
+		jCanvas.mouseleave( _->overCanvas = false );
+		var canvas = Std.downcast(jCanvas.get(0), js.html.CanvasElement);
+		hasGlContext = canvas.getContextWebGL()!=null || canvas.getContextWebGL2()!=null;
+		canvas.addEventListener("webglcontextlost", (_)->onGlContextLoss());
 		clearMiniNotif();
+		clipboard = data.Clipboard.createSystem();
 
 		// Init window
-		IpcRenderer.on("winClose", onWindowCloseButton);
+		IpcRenderer.on("onWinClose", onWindowCloseButton);
+		IpcRenderer.on("onWinMove", onWindowMove);
 		IpcRenderer.on("settingsApplied", ()->updateBodyClasses());
 
 		var win = js.Browser.window;
@@ -61,6 +80,20 @@ class App extends dn.Process {
 		win.onfocus = onAppFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
+		#if debug
+		// Crash layer
+		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
+			if( jBody.children("#crashed").length==0 )
+				jBody.append('<div id="crashed"/>');
+
+			var jCrash = jBody.children("#crashed");
+			jCrash.append('<p>$msg</p>');
+			var stack = "<p>" + error.stack.split("\n").splice(0,2).join("</p><p>") + "</p>";
+			jCrash.append(stack);
+			return false;
+		}
+		#else
+		// Redirect to crash page
 		win.onerror = (msg, url, lineNo, columnNo, error:js.lib.Error)->{
 			var processes = dn.Process.rprintAll();
 			ui.modal.Progress.stopAll();
@@ -71,10 +104,12 @@ class App extends dn.Process {
 			loadPage( ()->new page.CrashReport(error, processes, project, path) );
 			return false;
 		}
+		#end
 
 		// Track mouse buttons
 		jDoc.mousedown( onAppMouseDown );
 		jDoc.mouseup( onAppMouseUp );
+		jDoc.get(0).onwheel = onAppMouseWheel;
 
 		// Keyboard events
 		jBody
@@ -99,6 +134,11 @@ class App extends dn.Process {
 		delayer.addS( ()->{
 			// Look for path and level index in args
 			var path = getArgPath();
+			if( path!=null && !path.isEmpty() && !path.isAbsolute() ) {
+				path = dn.FilePath.fromFile(Sys.getCwd() + path.slash() + path.full);
+				LOG.add("BOOT", "Fixed path argument: "+path.full);
+			}
+
 			var levelIndex : Null<Int> = null;
 			if( path!=null && path.extension==Const.LEVEL_EXTENSION ) {
 				var indexReg = ~/0*([0-9]+)-.*/gi;
@@ -122,8 +162,11 @@ class App extends dn.Process {
 			}
 			else {
 				LOG.add("BOOT", 'Loading Home...');
-				loadPage( ()->new page.Home() );
+				loadPage( ()->new page.Home(), true );
 			}
+
+			if( !hasGlContext )
+				onGlContextLoss();
 		}, 0.2);
 
 		LOG.add("BOOT", "Calling appReady...");
@@ -138,22 +181,22 @@ class App extends dn.Process {
 		dn.js.ElectronUpdater.initRenderer();
 		dn.js.ElectronUpdater.onUpdateCheckStart = function() {
 			miniNotif("Looking for update...");
-			LOG.network("Looking for update");
+			LOG.add("update", "Looking for update");
 		}
 		dn.js.ElectronUpdater.onUpdateFound = function(info) {
-			LOG.network("Found update: "+info.version+" ("+info.releaseDate+")");
+			LOG.add("update", "Found update: "+info.version+" ("+info.releaseDate+")");
 			miniNotif('Downloading ${info.version}...', true);
 		}
 		dn.js.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.js.ElectronUpdater.onError = function(err) {
 			var errStr = err==null ? null : Std.string(err);
-			LOG.warning("Couldn't check for updates: "+errStr);
+			LOG.add("update", "ERROR: couldn't check for updates. Returned: "+errStr);
 			if( errStr.length>40 )
 				errStr = errStr.substr(0,40) + "[...]";
 			checkManualUpdate();
 		}
 		dn.js.ElectronUpdater.onUpdateDownloaded = function(info) {
-			LOG.network("Update ready: "+info.version);
+			LOG.add("update", "Update ready: "+info.version);
 			miniNotif('Update ${info.version} ready!');
 
 			var e = jBody.find("#updateInstall");
@@ -194,17 +237,17 @@ class App extends dn.Process {
 
 	function checkManualUpdate() {
 		miniNotif("Checking for update (GitHub)...", true);
-		LOG.network("Fetching latest version from GitHub...");
+		LOG.add("update", "Fetching latest version from GitHub...");
 		dn.js.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
 			if( latest!=null )
-				LOG.network("Found "+latest.full);
+				LOG.add("update", "Found "+latest.full);
 
 			if( latest==null ) {
 				LOG.error("Failed to fetch latest version from GitHub");
 				miniNotif("Couldn't retrieve latest version number from GitHub!", false);
 			}
-			else if( Version.greater(latest.full, Const.getAppVersion(true), true) ) {
-				LOG.network("Update available: "+latest);
+			else if( Version.greater(latest.full, Const.getAppVersion(true), false ) ) {
+				LOG.add("update", "Update available: "+latest);
 				N.success("Update "+latest.full+" is available!");
 
 				var e = jBody.find("#updateInstall");
@@ -227,8 +270,10 @@ class App extends dn.Process {
 						_download();
 				});
 			}
-			else
+			else {
+				LOG.add("update", "No new update.");
 				miniNotif('App is up-to-date.');
+			}
 		});
 	}
 
@@ -267,50 +312,83 @@ class App extends dn.Process {
 
 
 	function onJsKeyDown(ev:js.jquery.Event) {
-		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() )
+		if( ev.keyCode==K.TAB && !ui.Modal.hasAnyOpen() && !hasInputFocus() )
 			ev.preventDefault();
 
 		if( ev.keyCode==K.ALT )
 			ev.preventDefault();
 
-		keyDowns.set(ev.keyCode, true);
+		if( !isKeyDown(ev.keyCode) )
+			onKeyDown(ev.keyCode);
+		jsMetaKeyDown = ev.metaKey;
+		jsKeyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
 
 	function onJsKeyUp(ev:js.jquery.Event) {
-		keyDowns.remove(ev.keyCode);
+		jsMetaKeyDown = false;
+		onKeyUp(ev.keyCode);
 	}
 
 	function onHeapsKeyDown(ev:hxd.Event) {
-		keyDowns.set(ev.keyCode, true);
+		if( !isKeyDown(ev.keyCode) )
+			onKeyDown(ev.keyCode);
+		heapsKeyDowns.set(ev.keyCode, true);
 		onKeyPress(ev.keyCode);
 	}
 
 	function onHeapsKeyUp(ev:hxd.Event) {
-		keyDowns.remove(ev.keyCode);
+		onKeyUp(ev.keyCode);
 	}
 
 	function onWindowCloseButton() {
 		exit(false);
 	}
 
+	function onWindowMove() {
+	}
+
 	public function isLocked() {
-		return ui.ProjectSaving.hasAny() || ui.Modal.hasAnyUnclosable();
+		return ui.ProjectSaver.hasAny() || ui.Modal.hasAnyUnclosable();
 	}
 
 	public static inline function isLinux() return js.node.Os.platform()=="linux";
 	public static inline function isWindows() return js.node.Os.platform()=="win32";
 	public static inline function isMac() return js.node.Os.platform()=="darwin";
 
-	public inline function isKeyDown(keyId:Int) return keyDowns.get(keyId)==true;
-	public inline function isShiftDown() return keyDowns.get(K.SHIFT)==true;
-	public inline function isCtrlDown() return (App.isMac() ? keyDowns.get(K.LEFT_WINDOW_KEY) || keyDowns.get(K.RIGHT_WINDOW_KEY) : keyDowns.get(K.CTRL))==true;
-	public inline function isAltDown() return keyDowns.get(K.ALT)==true;
+	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
+	public inline function isShiftDown() return isKeyDown(K.SHIFT);
+	public inline function isCtrlDown() {
+		return App.isMac()
+			? jsMetaKeyDown || isKeyDown(91) || isKeyDown(93)
+			: isKeyDown(K.CTRL);
+	}
+	public inline function isAltDown() return isKeyDown(K.ALT);
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
+
+	var _inputFocusCache : Null<Bool> = null;
 	public inline function hasInputFocus() {
-		return jBody.find("input:focus, textarea:focus").length>0;
+		if( _inputFocusCache==null )
+			_inputFocusCache = jBody.find("input:focus, textarea:focus").length>0;
+		return _inputFocusCache;
 	}
+
+
+	function onKeyDown(keyCode:Int) {
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onKeyDown(keyCode);
+	}
+
+
+	function onKeyUp(keyCode:Int) {
+		jsKeyDowns.remove(keyCode);
+		heapsKeyDowns.remove(keyCode);
+
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onKeyUp(keyCode);
+	}
+
 
 	function onKeyPress(keyCode:Int) {
 		if( hasPage() && !curPageProcess.isPaused() )
@@ -369,6 +447,17 @@ class App extends dn.Process {
 			.fadeOut(1500);
 	}
 
+	function onGlContextLoss() {
+		LOG.error("GL context lost!");
+		hasGlContext = false;
+		jBody.addClass("noGlCtx");
+
+		var m = Editor.exists()
+			? new ui.modal.dialog.Warning( L.t._("The WebGL context was lost!\nDon't worry, it's probably nothing, and no data was lost. You should just save your work and restart the application.") )
+			: new ui.modal.dialog.Warning( L.t._("The WebGL context was lost!\nYou need to restart the application.") );
+		m.addParagraph( L.t._("If this happens a lot, you should try to update your graphic drivers.") );
+	}
+
 	function onAppMouseDown(e:js.jquery.Event) {
 		mouseButtonDowns.set(e.button,true);
 		if( hasPage() && !curPageProcess.isPaused() )
@@ -379,6 +468,14 @@ class App extends dn.Process {
 		mouseButtonDowns.remove(e.button);
 		if( hasPage() && !curPageProcess.isPaused() )
 			curPageProcess.onAppMouseUp();
+	}
+
+	function onAppMouseWheel(e:js.html.WheelEvent) {
+		if( hasPage() && !curPageProcess.isPaused() ) {
+			var spd = e.ctrlKey ? 0.20 : 0.01;
+			var delta = spd * -e.deltaY;
+			curPageProcess.onAppMouseWheel(delta);
+		}
 	}
 
 	public inline function isMouseButtonDown(btId:Int) {
@@ -396,15 +493,21 @@ class App extends dn.Process {
 
 	function onAppFocus(ev:js.html.Event) {
 		focused = true;
-		keyDowns = new Map();
+		jsKeyDowns = new Map();
+		heapsKeyDowns = new Map();
+		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppFocus();
 		hxd.System.fpsLimit = -1;
+		clipboard.readSystemClipboard();
 	}
 
 	function onAppBlur(ev:js.html.Event) {
 		focused = false;
-		keyDowns = new Map();
+		overCanvas = false;
+		jsKeyDowns = new Map();
+		heapsKeyDowns = new Map();
+		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppBlur();
 		// Note: FPS limit is done during update
@@ -416,9 +519,9 @@ class App extends dn.Process {
 	}
 
 
-	public inline function changeSettings(doChange:Void->Void) {
-		doChange();
-		settings.save();
+
+	public inline function requestCpu(full=true) {
+		requestedCpuEndTime = haxe.Timer.stamp()+2;
 	}
 
 
@@ -521,7 +624,7 @@ class App extends dn.Process {
 		// #end
 
 		// No backup files
-		if( ui.ProjectSaving.extractBackupInfosFromFileName(path) != null )
+		if( ui.ProjectSaver.extractBackupInfosFromFileName(path) != null )
 			return false;
 
 		path = StringTools.replace(path, "\\", "/");
@@ -553,42 +656,40 @@ class App extends dn.Process {
 		settings.save();
 	}
 
-	public function loadPage( create:()->Page ) {
+	public function loadPage( create:()->Page, checkAndNotifyUpdate=false ) {
 		clearCurPage();
 		LOG.flushToFile();
 		curPageProcess = create();
 		curPageProcess.onAppResize();
+
+		// Notify app update
+		if( checkAndNotifyUpdate && settings.v.lastKnownVersion!=Const.getAppVersion() ) {
+			var prev = settings.v.lastKnownVersion;
+			settings.v.lastKnownVersion = Const.getAppVersion();
+			App.ME.settings.save();
+
+			new ui.modal.dialog.Changelog(true);
+		}
 	}
 
-
-	public function loadProject(filePath:String, ?levelIndex:Int) : Void {
-		ui.ProjectLoader.load(filePath, (?p,?err)->{
-			if( p!=null ) {
-				loadPage( ()->new page.Editor(p, levelIndex) );
-			}
-			else {
+	public function loadProject(filePath:String, ?levelIndex:Int, ?onComplete:Bool->Void) : Void {
+		new ui.ProjectLoader(
+			filePath,
+			(p)->{
+				if( onComplete!=null )
+					onComplete(true);
+				loadPage( ()->new page.Editor(p, levelIndex), true );
+			},
+			(err)->{
 				// Failed
+				if( onComplete!=null )
+					onComplete(false);
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
-				N.error(switch err {
-					case null:
-						L.t._("Unknown error");
-
-					case NotFound:
-						unregisterRecentProject(filePath);
-						L.t._("File not found");
-
-					case JsonParse(err):
-						L.t._("Failed to parse project JSON file!");
-
-					case FileRead(err):
-						L.t._("Failed to read file on disk!");
-
-					case ProjectInit(err):
-						L.t._("Failed to create Project instance!");
-				});
+				if( err==ProjectNotFound )
+					unregisterRecentProject(filePath);
 				loadPage( ()->new page.Home() );
 			}
-		});
+		);
 	}
 
 	public inline function clearDebug() {
@@ -597,18 +698,23 @@ class App extends dn.Process {
 			e.empty().hide();
 	}
 
-	public inline function debug(msg:Dynamic, clear=false) {
+	public inline function debug(msg:Dynamic, ?c:Null<Int>, clear=false, pre=false) {
 		var wrapper = new J("#debug");
 		if( clear )
 			wrapper.empty();
 		wrapper.show();
 
-		var line = new J('<p>${Std.string(msg)}</p>');
-		line.appendTo(wrapper);
+		var str = StringTools.htmlEscape( Std.string(msg) );
+		if( pre )
+			str = '<pre>$str</pre>';
+		var jLine = new J('<p>$str</p>');
+		if( c!=null )
+			jLine.css("color", C.intToHex(c));
+		jLine.appendTo(wrapper);
 	}
 
-	public inline function debugPre(msg:Dynamic, clear=false) {
-		debug('<pre>$msg</pre>', clear);
+	public inline function debugPre(msg:Dynamic, ?color:Int, clear=false) {
+		debug(msg, color, clear, true);
 	}
 
 	override function onDispose() {
@@ -659,12 +765,26 @@ class App extends dn.Process {
 		}
 	}
 
+	override function preUpdate() {
+		super.preUpdate();
+		_inputFocusCache = null;
+	}
+
 	override function update() {
 		super.update();
 
 		// FPS limit while app isn't focused
-		if( !focused && !ui.modal.Progress.hasAny() && ( !Editor.exists() || !Editor.ME.camera.isAnimated() ) )
-			hxd.System.fpsLimit = 4;
+		if( haxe.Timer.stamp()<=requestedCpuEndTime ) // Has recent request
+			hxd.System.fpsLimit = -1;
+		else if( !focused && !ui.modal.Progress.hasAny() && !ui.modal.MetaProgress.exists() ) // App is blurred
+			hxd.System.fpsLimit = 2;
+		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() ) // progress is running
+			hxd.System.fpsLimit = -1;
+		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
+			hxd.System.fpsLimit = 10;
+		else
+			hxd.System.fpsLimit = 30;
+
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
@@ -678,7 +798,8 @@ class App extends dn.Process {
 		if( cd.has("debugTools") ) {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
-			debugPre('FPS limit=${hxd.System.fpsLimit<=0 ? "none":Std.string(hxd.System.fpsLimit)}');
+			debugPre('Electron: ${Const.getElectronVersion()}');
+			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(M.round(100*hxd.System.fpsLimit/60))}%');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());
@@ -687,6 +808,9 @@ class App extends dn.Process {
 				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
 			}
 
+			debugPre("clipboard="+clipboard.name);
+			debugPre("keyDown(Heaps)="+heapsKeyDowns);
+			debugPre("keyDown(JS)="+jsKeyDowns);
 			debugPre("appButtons="
 				+ ( isMouseButtonDown(0) ? "[left] " : "" )
 				+ ( isMouseButtonDown(2) ? "[right] " : "" )
@@ -696,6 +820,12 @@ class App extends dn.Process {
 				+ ( isShiftDown() ? "[shift] " : "" )
 				+ ( isAltDown() ? "[alt] " : "" )
 			);
+
+			if( Editor.ME!=null ) {
+				final p = Editor.ME.project;
+				debugPre("worlds="+p.worlds.length+ (p.worlds.length>0 ? " world[0].levels="+p.worlds[0].levels.length : "") );
+				debugPre("curWorld="+Editor.ME.curWorld);
+			}
 
 			debug("-- Processes ----------------------------------------");
 			for( line in dn.Process.rprintAll().split('\n') )

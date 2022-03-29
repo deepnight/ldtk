@@ -2,7 +2,7 @@ package ui;
 
 import data.def.FieldDef;
 
-enum FieldParent {
+enum FieldParentType {
 	FP_Entity;
 	FP_Level;
 }
@@ -10,21 +10,26 @@ enum FieldParent {
 class FieldDefsForm {
 	var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 
-	var fieldParent : FieldParent;
+	var parentName : Null<String>;
+	var parentType : FieldParentType;
 	public var jWrapper : js.jquery.JQuery;
 	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList");
-	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("ul.form");
+	var jForm(get,never) : js.jquery.JQuery; inline function get_jForm() return jWrapper.find("dl.form");
 	var jButtons(get,never) : js.jquery.JQuery; inline function get_jButtons() return jList.siblings(".buttons");
 	var fieldDefs : Array<FieldDef>;
 	var curField : Null<FieldDef>;
 
-	public function new(fieldParent:FieldParent) {
-		this.fieldParent = fieldParent;
+	public function new(parentType:FieldParentType) {
+		this.parentType = parentType;
 		this.fieldDefs = [];
 
 		jWrapper = new J('<div class="fieldDefsForm"/>');
-		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm") );
+		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm", { parentType: switch parentType {
+			case FP_Entity: "Entity";
+			case FP_Level: "Level";
+		}}) );
 
 		// Create single field
 		jButtons.find("button.createSingle").click( function(ev) {
@@ -43,12 +48,24 @@ class FieldDefsForm {
 	}
 
 
+	inline function getParentName() {
+		return parentName!=null ? parentName : switch parentType {
+			case FP_Entity: "Entity";
+			case FP_Level: "Level";
+		}
+	}
+
+
+	inline function isLevelField() return parentType==FP_Level;
+	inline function isEntityField() return parentType==FP_Entity;
+
 	public function hide() {
 		jWrapper.css({ visibility: "hidden" });
 	}
 
 
-	public function useFields(fields:Array<FieldDef>) {
+	public function useFields(parentName:String, fields:Array<FieldDef>) {
+		this.parentName = parentName;
 		jWrapper.css({ visibility: "visible" });
 		fieldDefs = fields;
 
@@ -67,7 +84,7 @@ class FieldDefsForm {
 	function onCreateField(anchor:js.jquery.JQuery, isArray:Bool) {
 		var w = new ui.modal.Dialog(anchor,"fieldTypes");
 
-		function _create(ev:js.jquery.Event, type:data.DataTypes.FieldType) {
+		function _create(ev:js.jquery.Event, type:ldtk.Json.FieldType) {
 			switch type {
 				case F_Enum(null):
 					if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
@@ -83,12 +100,18 @@ class FieldDefsForm {
 
 					// Enum picker
 					var ctx = new ui.modal.ContextMenu(ev);
-					ctx.addTitle(L.t._("Pick an existing enum"));
-					for(ed in project.defs.enums) {
-						ctx.add({
-							label: L.untranslated(ed.identifier),
-							cb: ()->_create(ev, F_Enum(ed.uid)),
-						});
+					var tagGroups = project.defs.groupUsingTags(project.defs.enums, ed->ed.tags);
+					if( tagGroups.length<=1 )
+						ctx.addTitle(L.t._("Pick an existing enum"));
+					for(group in tagGroups) {
+						if( tagGroups.length>1 )
+							ctx.addTitle( group.tag==null ? L._Untagged() : L.untranslated(group.tag) );
+						for(ed in group.all) {
+							ctx.add({
+								label: L.untranslated(ed.identifier),
+								cb: ()->_create(ev, F_Enum(ed.uid)),
+							});
+						}
 					}
 
 					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {
@@ -106,34 +129,37 @@ class FieldDefsForm {
 			}
 
 			// Create field def
-			var fd = new FieldDef(project, project.makeUniqueIdInt(), type, isArray);
+			var fd = new FieldDef(project, project.generateUniqueId_int(), type, isArray);
 			var baseName = switch type {
 				case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
 				case _: L.getFieldType(type);
 			}
 			if( isArray )
 				baseName+"_array";
-			fd.identifier = project.makeUniqueIdStr(baseName, false, id->isFieldIdentifierUnique(id) );
+			fd.identifier = project.fixUniqueIdStr(baseName, Free, id->isFieldIdentifierUnique(id) );
 			fieldDefs.push(fd);
 
 			w.close();
 			editor.ge.emit( FieldDefAdded(fd) );
+			onAnyChange();
 			selectField(fd);
 			jForm.find("input:not([readonly]):first").focus().select();
 		}
 
 		// Type picker
-		var types : Array<data.DataTypes.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Path, F_Color, F_Enum(null)
+		var types : Array<ldtk.Json.FieldType> = [
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_Tile,
 		];
-		if( fieldParent==FP_Entity )
+		if( isEntityField() ) {
+			types.push(F_EntityRef);
 			types.push(F_Point);
+		}
 
 		for(type in types) {
 			var b = new J("<button/>");
 			w.jContent.append(b);
 			b.css({
-				backgroundColor: FieldDef.getTypeColorHex(type, 0.55),
+				backgroundColor: FieldDef.getTypeColorHex(type, 0.62),
 			});
 			JsTools.createFieldTypeIcon(type, b);
 			b.click( function(ev) {
@@ -151,7 +177,7 @@ class FieldDefsForm {
 
 
 	function isFieldIdentifierUnique(id:String, ?except:FieldDef) {
-		id = data.Project.cleanupIdentifier(id,false);
+		id = data.Project.cleanupIdentifier(id, Free);
 		for(fd in fieldDefs)
 			if( ( except==null || fd!=except ) && fd.identifier==id )
 				return false;
@@ -159,11 +185,23 @@ class FieldDefsForm {
 	}
 
 
-	function duplicateField(fd:FieldDef) : FieldDef {
-		var copy = FieldDef.fromJson( project, fd.toJson() );
-		copy.uid = project.makeUniqueIdInt();
-		copy.identifier = project.makeUniqueIdStr(fd.identifier, false, (id)->isFieldIdentifierUnique(id));
-		fieldDefs.insert( dn.Lib.getArrayIndex(fd,fieldDefs)+1, copy );
+	function duplicateFieldDef(fd:FieldDef) : FieldDef {
+		return pasteFieldDef( data.Clipboard.createTemp(CFieldDef,fd.toJson()), fd );
+	}
+
+
+	function pasteFieldDef(c:data.Clipboard, ?after:FieldDef) : Null<FieldDef> {
+		if( !c.is(CFieldDef) )
+			return null;
+
+		var json : ldtk.Json.FieldDefJson = c.getParsedJson();
+		var copy = FieldDef.fromJson( project, json );
+		copy.uid = project.generateUniqueId_int();
+		copy.identifier = project.fixUniqueIdStr(json.identifier, Free, (id)->isFieldIdentifierUnique(id));
+		if( after==null )
+			fieldDefs.push(copy);
+		else
+			fieldDefs.insert( dn.Lib.getArrayIndex(after,fieldDefs)+1, copy );
 
 		project.tidy();
 		return copy;
@@ -175,12 +213,26 @@ class FieldDefsForm {
 		fieldDefs.remove(fd);
 		project.tidy();
 		editor.ge.emit( FieldDefRemoved(fd) );
+		onAnyChange();
 		selectField( fieldDefs[0] );
 	}
 
 
 	function updateList() {
 		jList.off().empty();
+
+		// List context menu
+		ui.modal.ContextMenu.addTo(jList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = pasteFieldDef(App.ME.clipboard);
+					editor.ge.emit(FieldDefAdded(copy));
+					selectField(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CFieldDef),
+			},
+		]);
 
 		for(fd in fieldDefs) {
 			var li = new J("<li/>");
@@ -190,23 +242,43 @@ class FieldDefsForm {
 				li.addClass("active");
 
 			var fType = new J('<span class="type"></span>');
-			if( fd.isArray ) {
-				fType.css({ backgroundColor: FieldDef.getTypeColorHex(fd.type, 0.4) });
+			fType.css({ backgroundColor: FieldDef.getTypeColorHex(fd.type, 0.6) });
+			if( fd.isArray )
 				fType.addClass("array");
-			}
 			fType.appendTo(li);
 			fType.text( L.getFieldTypeShortName(fd.type) );
 			fType.css({
-				borderColor: FieldDef.getTypeColorHex(fd.type, fd.isArray ? 1 : 0.4),
-				color: FieldDef.getTypeColorHex(fd.type),
+				borderColor: FieldDef.getTypeColorHex(fd.type, 1),
+				color: FieldDef.getTypeColorHex(fd.type, 1.5),
 			});
 
 			ui.modal.ContextMenu.addTo(li, [
 				{
+					label: L._Copy(),
+					cb: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
+				},
+				{
+					label: L._Cut(),
+					cb: ()->{
+						App.ME.clipboard.copyData(CFieldDef, fd.toJson());
+						deleteField(fd);
+					},
+				},
+				{
+					label: L._PasteAfter(),
+					cb: ()->{
+						var copy = pasteFieldDef(App.ME.clipboard, fd);
+						editor.ge.emit(FieldDefAdded(copy));
+						selectField(copy);
+					},
+					enable: ()->App.ME.clipboard.is(CFieldDef),
+				},
+				{
 					label: L._Duplicate(),
 					cb:()->{
-						var copy = duplicateField(fd);
-						editor.ge.emit( FieldDefAdded(fd) );
+						var copy = duplicateFieldDef(fd);
+						editor.ge.emit( FieldDefAdded(copy) );
+						onAnyChange();
 						selectField(copy);
 					}
 				},
@@ -232,21 +304,39 @@ class FieldDefsForm {
 
 			selectField(moved);
 			editor.ge.emit( FieldDefSorted );
+			onAnyChange();
 		});
 
 		JsTools.parseComponents(jList);
 	}
 
 
+	function onAnyChange() {
+		switch parentType {
+			case FP_Entity:
+				for( w in project.worlds )
+				for( l in w.levels )
+					editor.invalidateLevelCache(l);
+
+			case FP_Level:
+				for( w in project.worlds )
+				for( l in w.levels )
+					editor.invalidateLevelCache(l);
+				editor.worldRender.invalidateAllLevelFields();
+		}
+	}
+
 
 	function onFieldChange() {
 		editor.ge.emit( FieldDefChanged(curField) );
 		updateList();
 		updateForm();
+		onAnyChange();
 	}
 
 
 	function updateForm() {
+		ui.Tip.clear();
 		jForm.find("*").off(); // cleanup events
 
 		if( curField==null ) {
@@ -257,14 +347,18 @@ class FieldDefsForm {
 			jForm.css("visibility","visible");
 
 		// Set form classes
-		for(k in Type.getEnumConstructs(data.DataTypes.FieldType))
+		for(k in Type.getEnumConstructs(ldtk.Json.FieldType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+curField.type.getName());
 
-		if( curField.isArray )
+		if( curField.isArray ) {
 			jForm.addClass("type-Array");
-		else
+			jForm.removeClass("type-NotArray");
+		}
+		else {
 			jForm.removeClass("type-Array");
+			jForm.addClass("type-NotArray");
+		}
 
 		// Type desc
 		jForm.find(".type").val( curField.getShortDescription() );
@@ -335,12 +429,16 @@ class FieldDefsForm {
 						? L.t._('Show "::name::=[...values...]"', { name:curField.identifier })
 						: L.t._('Show "::name::=..."', { name:curField.identifier });
 					case Points: curField.isArray ? L.t._("Show isolated points") : L.t._("Show isolated point");
-					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show point");
+					case PointStar: curField.isArray ? L.t._("Show star of points") : L.t._("Show connected point");
 					case PointPath: L.t._("Show path of points");
 					case PointPathLoop: L.t._("Show path of points (looping)");
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
 					case EntityTile: L.t._("Replace entity tile");
+					case ArrayCountWithLabel: L.t._("Show array length with label");
+					case ArrayCountNoLabel: L.t._("Show array length only");
+					case RefLinkBetweenCenters: L.t._("Reference link (using center coord)");
+					case RefLinkBetweenPivots: L.t._("Reference link (using pivot coord)");
 				}
 			},
 
@@ -349,44 +447,51 @@ class FieldDefsForm {
 					case Hidden: true;
 					case ValueOnly: curField.type!=F_Point;
 					case NameAndValue: true;
+					case ArrayCountNoLabel, ArrayCountWithLabel: curField.isArray;
 
 					case EntityTile:
-						curField.isEnum() && fieldParent==FP_Entity;
+						curField.isEnum() && isEntityField() || curField.type==F_Tile;
+
+					case RefLinkBetweenCenters, RefLinkBetweenPivots:
+						curField.type==F_EntityRef;
 
 					case Points, PointStar:
-						curField.type==F_Point && fieldParent==FP_Entity;
+						curField.type==F_Point && isEntityField();
 
 					case PointPath, PointPathLoop:
-						curField.type==F_Point && curField.isArray && fieldParent==FP_Entity;
+						curField.type==F_Point && curField.isArray && isEntityField();
 
 					case RadiusPx, RadiusGrid:
-						!curField.isArray && ( curField.type==F_Int || curField.type==F_Float ) && fieldParent==FP_Entity;
+						!curField.isArray && ( curField.type==F_Int || curField.type==F_Float ) && isEntityField();
 				}
 			}
 		);
 		i.onChange = onFieldChange;
 
+		// Nullable
+		var nullableInput = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
+		if( nullableInput!=null ) {
+			nullableInput.onChange = onFieldChange;
+			nullableInput.enable();
+		}
 
+
+		// Display pos
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayPos]"),
 			ldtk.Json.FieldDisplayPosition,
 			()->curField.editorDisplayPos,
 			(v)->curField.editorDisplayPos = v,
-			(pos)->switch fieldParent {
+			(pos)->switch parentType {
 				case FP_Entity: true;
-				case FP_Level:
-					switch pos {
-						case Above: true;
-						case Center: false;
-						case Beneath: true;
-					}
+				case FP_Level: false;
 			}
 		);
 		switch curField.editorDisplayMode {
-			case ValueOnly, NameAndValue:
+			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
 				i.setEnabled(true);
 
-			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile:
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters:
 				i.setEnabled(false);
 		}
 		i.onChange = onFieldChange;
@@ -395,14 +500,145 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
 
+		// Tileset
+		var jTilesetSelect = jForm.find("#tilesetUid");
+		jTilesetSelect.empty();
+		for(td in project.defs.tilesets) {
+			var jOpt = new J('<option/>');
+			jOpt.appendTo(jTilesetSelect);
+			jOpt.text( td.identifier );
+			jOpt.attr("value", td.uid);
+		}
+		if( curField.tilesetUid==null ) {
+			// No tileset
+			var jOpt = new J('<option>-- Pick a tileset --</option>');
+			jOpt.prependTo(jTilesetSelect);
+			jTilesetSelect.addClass("required");
+			jOpt.attr("value",-1);
+			jTilesetSelect.val(-1);
+		}
+		else {
+			jTilesetSelect.removeClass("required");
+			jTilesetSelect.val(curField.tilesetUid);
+		}
+		jTilesetSelect.change( _->{
+			var uid = Std.parseInt( jTilesetSelect.val() );
+			if( !M.isValidNumber(uid) || uid<0 )
+				curField.tilesetUid = null;
+			else
+				curField.tilesetUid = uid;
+			onFieldChange();
+		});
+
+		// Default tile
+		var jDef = jForm.find(".defaultTile");
+		jDef.find(".picker").empty();
+		if( curField.tilesetUid!=null ) {
+			jDef.show();
+			var td = project.defs.getTilesetDef(curField.tilesetUid);
+			if( td!=null ) {
+				var def = curField.getTileRectDefaultObj();
+
+				// Picker
+				var jPicker = JsTools.createTileRectPicker(
+					td.uid,
+					def,
+					(r)->{
+						if( r==null )
+							return;
+						curField.setDefault('${r.x},${r.y},${r.w},${r.h}');
+						curField.canBeNull = true;
+						onFieldChange();
+					}
+				);
+				jPicker.appendTo( jDef.find(".picker") );
+
+				// Clear
+				var jClear = jDef.find(".clear");
+				if( def==null ) {
+					nullableInput.enable();
+					jClear.hide();
+				}
+				else {
+					nullableInput.disable();
+					jClear.show();
+					jClear.click(_->{
+						curField.setDefault(null);
+						onFieldChange();
+					});
+				}
+			}
+		}
+		else
+			jDef.hide();
+
+		// Refs
+		var i = Input.linkToHtmlInput( curField.symmetricalRef, jForm.find("input[name=symmetricalRef]") );
+		i.onChange = onFieldChange;
+		i.setEnabled( curField.allowedRefs==OnlySame );
+
+		var i = Input.linkToHtmlInput( curField.autoChainRef, jForm.find("input[name=autoChainRef]") );
+		i.onChange = onFieldChange;
+
+		var s = new form.input.EnumSelect(
+			jForm.find("[name=allowedRefs]"),
+			ldtk.Json.EntityReferenceTarget,
+			false,
+			()->curField.allowedRefs,
+			(v)->{
+				switch v {
+					case Any, OnlyTags:
+						curField.symmetricalRef = false; // not compatible
+
+					case OnlySame:
+				}
+				curField.allowedRefs = v;
+				onFieldChange();
+			},
+			(v)->return switch v {
+				case Any: L.t._("Any entity");
+				case OnlyTags: L.t._("Any entity with one of the specified tags");
+				case OnlySame: L.t._("Only another '::name::'s", { name:getParentName() });
+				// case Custom: L.t._("Only selected entities");
+			}
+		);
+
+		jForm.find(".allowedRefTags").empty();
+		if( curField.allowedRefs==OnlyTags ) {
+			var tagEditor = new TagEditor(
+				curField.allowedRefTags,
+				()->onFieldChange(),
+				()->project.defs.getAllTagsFrom(project.defs.entities, ed->ed.tags),
+				false
+			);
+			jForm.find(".allowedRefTags").append( tagEditor.jEditor );
+		}
+
+		var i = Input.linkToHtmlInput( curField.allowOutOfLevelRef, jForm.find("input[name=allowOutOfLevelRef]") );
+		i.onChange = onFieldChange;
+
+
+		var i = Input.linkToHtmlInput( curField.editorTextPrefix, jForm.find("input[name=editorTextPrefix]") );
+		i.onChange = onFieldChange;
+		i.trimRight = false;
+
+		var i = Input.linkToHtmlInput( curField.editorTextSuffix, jForm.find("input[name=editorTextSuffix]") );
+		i.onChange = onFieldChange;
+		i.trimLeft = false;
+
 
 		var i = Input.linkToHtmlInput( curField.identifier, jForm.find("input[name=name]") );
 		i.onChange = onFieldChange;
-		i.fixValue = (v)->project.makeUniqueIdStr(v, false, (id)->isFieldIdentifierUnique(id,curField));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, Free, (id)->isFieldIdentifierUnique(id,curField));
 
 		// Default value
 		switch curField.type {
 			case F_Path:
+
+			case F_EntityRef:
+
+			case F_Tile:
+				// TODO
 
 			case F_Text:
 				var defInput = jForm.find("div#fDefMultiLines");
@@ -446,6 +682,8 @@ class FieldDefsForm {
 						case F_String, F_Text, F_Path: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
 						case F_Bool, F_Color, F_Enum(_): "N/A";
+						case F_EntityRef: "N/A";
+						case F_Tile: "N/A";
 					});
 
 				defInput.change( function(ev) {
@@ -502,28 +740,13 @@ class FieldDefsForm {
 				});
 		}
 
-		// Nullable
-		var i = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]") );
-		i.onChange = onFieldChange;
-
 		// Cut long values
 		var i = Input.linkToHtmlInput( curField.editorCutLongValues, jForm.find("input#editorCutLongValues") );
 		i.onChange = onFieldChange;
 
-		// Multi-lines
-		// if( curField.isString() ) {
-		// 	var i = new form.input.BoolInput(
-		// 		jForm.find("input[name=multiLines]"),
-		// 		()->switch curField.type {
-		// 			case F_String(multilines): multilines;
-		// 			case _: false;
-		// 		},
-		// 		(v)->{
-		// 			curField.convertType( F_String(v) );
-		// 		}
-		// 	);
-		// 	i.linkEvent( EntityFieldDefChanged(curEntity) );
-		// }
+		// Use for smart color
+		var i = Input.linkToHtmlInput( curField.useForSmartColor, jForm.find("input#useForSmartColor") );
+		i.onChange = onFieldChange;
 
 		// Array size constraints
 		if( curField.isArray ) {

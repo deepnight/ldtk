@@ -15,24 +15,24 @@ class EntityPalette extends ui.ToolPalette {
 
 		var ld = Editor.ME.curLayerDef;
 
-		var allTags = Editor.ME.project.defs.getEntityTagCategories();
-		for(t in allTags) {
+		var allGroups = project.defs.groupUsingTags(
+			project.defs.entities,
+			(ed)->ed.tags,
+			(ed)->!ed.tags.hasAnyTagFoundIn(ld.excludedTags) && ( ld.requiredTags.isEmpty() || ed.tags.hasAnyTagFoundIn(ld.requiredTags) )
+		);
+		for(group in allGroups) {
 			// Tag header
-			var jTag = new J('<li class="title"/>');
-			jTag.appendTo(jList);
-			jTag.text( t==null ? L.t._("Untagged") : t );
+			if( allGroups.length>1 && group.all.length>0 ) {
+				var jTag = new J('<li class="title"/>');
+				jTag.appendTo(jList);
+				jTag.text( group.tag==null ? L._Untagged() : group.tag );
+			}
+
 			var jLi = new J('<li class="subList"> <ul/> </li>');
 			jLi.appendTo(jList);
 			var jSubList = jLi.find("ul");
 
-			var count = 0;
-			for(ed in Editor.ME.project.defs.entities) {
-				if( ed.tags.hasTagFoundIn(ld.excludedTags) || t==null && !ed.tags.isEmpty() || t!=null && !ed.tags.has(t) )
-					continue;
-
-				if( !ld.requiredTags.isEmpty() && !ed.tags.hasTagFoundIn(ld.requiredTags) )
-					continue;
-
+			for(ed in group.all) {
 				var e = new J("<li/>");
 				e.appendTo(jSubList);
 				e.attr("data-defUid", ed.uid);
@@ -57,15 +57,8 @@ class EntityPalette extends ui.ToolPalette {
 					tool.selectValue(ed.uid);
 					render();
 				});
-
-				count++;
 			}
-
-			// Empty tag
-			if( count==0 || allTags.length==1 )
-				jTag.hide();
 		}
-
 	}
 
 	override function focusOnSelection() {

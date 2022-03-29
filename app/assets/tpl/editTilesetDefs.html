@@ -17,37 +17,73 @@
 </div>
 
 <dl class="form">
-	<dt>
-		<label>Tileset image</label>
+	<dt class="notEmbed">
+		<label>Source image</label>
+		<info>
+			This is the tileset "atlas" image which contains all the tiles organized in a grid layout.
+			Supported file formats: Aseprite (recommended), PNG, GIF and JPEG.
+		</info>
 	</dt>
 	<dd class="img">
 	</dd>
 
-	<dt>
+	<dt class="notEmbed">
 		<label for="name">Identifier</label>
+		<info class="identifier"></info>
 	</dt>
 	<dd>
 		<input type="text" name="name" id="name"/>
-		<div class="info identifier"></div>
 	</dd>
 
-	<dt>
-		<label for="tilesetGridSize">Layout</label>
+	<dt class="notEmbed">
+		<label for="tilesetGridSize">Tiles layout</label>
+		<info>
+			These values describe how tiles are arranged inside the source image.
+			You can check the preview of the tile grid below.
+			Tiles are listed as a grid, from left to right, top to bottom, and their index starts at ZERO.
+		</info>
 	</dt>
 	<dd>
 		<input type="text" id="tilesetGridSize" name="tilesetGridSize"/>
 		<span>px tiles, spaced by</span>
-		<input type="text" id="spacing" name="spacing" title="This is the distance between each tile."/>
+		<input type="text" id="spacing" name="spacing" title="This is the gap (in pixels) between each tile."/>
 		<span>px, with an atlas padding of </span>
 		<input type="text" id="padding" name="padding" title="This is the empty space surrounding the WHOLE image."/>
 		<span>px</span>
 	</dd>
 
 	<dt>
-		<label for="tagsSourceEnumUid">Enum used for tags</label>
+		<label for="tags">Tags</label>
+		<div class="info">Tags are used to freely organize your Enums.</div>
 	</dt>
 	<dd>
-		<select id="tagsSourceEnumUid" title="By linking an Enum to this tileset, you will be able to tag tiles using values from this Enum. For example, you could mark tiles as Water, SlopeLeft, MetallicSound etc."></select>
+		<div id="tags"></div>
+	</dd>
+
+
+	<dt class="notEmbed">
+		<label for="tagsSourceEnumUid">Enum for tile marking</label>
+		<info>
+			By linking an Enum to this tileset, you will be able to mark tiles using values from this Enum.
+			For example, you could mark tiles with following informations:
+			- Collision informations (wall block, slope left/right, thin platform etc.)
+			- Special material (water, lava etc.),
+			- Footstep sound (metal, wood etc.)
+		</info>
+	</dt>
+	<dd>
+		<select id="tagsSourceEnumUid"></select>
+	</dd>
+
+	<dd class="embedTileset">
+		<div class="infos"></div>
+		<div class="desc">
+			This tileset is using an embedded image from LDtk and cannot be modified. The tileset was added to your Project because an element (an Entity or an Enum) uses it.
+		</div>
+		<div class="license">
+			<strong>LICENSING</strong>: this image is <em>only</em> meant to be used inside LDtk <strong>and cannot be redistributed in any way</strong>.
+			Please contact the author (<span class="author"></span>) if you want to license this image for your own use in your game.
+		</div>
 	</dd>
 </dl>
 

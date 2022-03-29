@@ -8,25 +8,29 @@ class IntGridTool extends tool.LayerTool<Int> {
 	override function onBeforeToolActivation() {
 		super.onBeforeToolActivation();
 
-		if( !editor.curLayerDef.hasIntGridValue(getSelectedValue()) )
-			selectValue(1);
+		if( !editor.curLayerDef.hasIntGridValue( getSelectedValue() ) )
+			selectValue( getDefaultValue() );
 	}
 
 	override function selectValue(v:Int) {
-		v = M.iclamp(v, 1, curLayerInstance.def.countIntGridValues());
+		if( !curLayerInstance.def.hasIntGridValue(v) )
+			v = getDefaultValue();
 		super.selectValue(v);
 	}
 
 	override function getDefaultValue():Int {
-		return 1;
+		if( curLayerInstance==null || curLayerInstance.def.countIntGridValues()==0 )
+			return -1;
+		else
+			return curLayerInstance.def.getAllIntGridValues()[0].value;
 	}
 
 	inline function getSelectedColor() {
-		return curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color;
+		return getSelectedValue()>0 ? curLayerInstance.def.getIntGridValueDef( getSelectedValue() ).color : 0x0;
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
-		super.startUsing(ev,m);
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
+		super.startUsing(ev,m,extraParam);
 		editor.selectionTool.clear();
 	}
 
@@ -39,7 +43,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 			editor.cursor.set( GridRect(curLayerInstance, r.left, r.top, r.wid, r.hei, getSelectedColor()) );
 			ev.cancel = true;
 		}
-		else if( curLayerInstance.isValid(m.cx,m.cy) ) {
+		else if( getSelectedValue()>0 && curLayerInstance.isValid(m.cx,m.cy) ) {
 			editor.cursor.set( GridCell(curLayerInstance, m.cx, m.cy, getSelectedColor()) );
 			ev.cancel = true;
 		}
@@ -59,7 +63,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 		}
 
 		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
-			editor.curLevelHistory.markChange(cx,cy);
+			editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 			return true;
 		}
 		else
@@ -84,7 +88,7 @@ class IntGridTool extends tool.LayerTool<Int> {
 			}
 
 			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
-				editor.curLevelHistory.markChange(cx,cy);
+				editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 				anyChange = true;
 			}
 		}

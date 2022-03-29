@@ -50,6 +50,109 @@ class JsTools {
 	}
 
 
+	/**
+		Create a Tileset <select/>
+	**/
+	public static function createTilesetSelect(project:data.Project, ?jSelect:js.jquery.JQuery, curUid:Null<Int>, allowNull=false, onPick:Null<Int>->Void) {
+		// Init select
+		if( jSelect!=null ) {
+			if( !jSelect.is("select") )
+				throw "Need a <select> element!";
+			jSelect.off().empty().show();
+		}
+		else
+			jSelect = new J('<select/>');
+		jSelect.removeClass("required");
+		jSelect.removeClass("noValue");
+
+		// Null value
+		if( allowNull || curUid==null ) {
+			var jOpt = new J('<option value="-1">-- Select a tileset --</option>');
+			jOpt.appendTo(jSelect);
+		}
+
+		// Classes
+		if( curUid!=null && project.defs.getTilesetDef(curUid)==null || !allowNull && curUid==null )
+			jSelect.addClass("required");
+		else if( curUid==null )
+			jSelect.addClass("noValue");
+
+		// Fill select
+		appendTilesetsToSelect(project, jSelect);
+
+		// Select current one
+		var curTd = curUid==null ? null : project.defs.getTilesetDef(curUid);
+		if( curTd!=null && curTd.isUsingEmbedAtlas() )
+			jSelect.val( curTd.embedAtlas.getName() );
+		else
+			jSelect.val( curUid==null ? "-1" : Std.string(curUid) );
+
+		// Change event
+		jSelect.change( function(ev) {
+			var tid : Null<Int> = Std.parseInt( jSelect.val() );
+			if( jSelect.val()=="-1" )
+				tid = null;
+			else if( !M.isValidNumber(tid) ) {
+				// Embed tileset
+				var id = ldtk.Json.EmbedAtlas.createByName(jSelect.val());
+				var td = project.defs.getEmbedTileset(id);
+				tid = td.uid;
+			}
+			if( tid==curUid )
+				return;
+
+			onPick(tid);
+		});
+
+		return jSelect;
+	}
+
+
+	/**
+		Create a Tileset <select/>
+	**/
+	public static function appendTilesetsToSelect(project:data.Project, jSelect:js.jquery.JQuery) {
+		// List tilesets, grouped by tags
+		var tagGroups = project.defs.groupUsingTags(project.defs.tilesets, td->td.tags);
+		for( group in tagGroups ) {
+			var jOptGroup = new J('<optgroup/>');
+			jOptGroup.appendTo(jSelect);
+			if( tagGroups.length<=1 )
+				jOptGroup.attr("label","All tilesets");
+			else
+				jOptGroup.attr("label", group.tag==null ? L._Untagged() : group.tag);
+			for(td in group.all ) {
+				var jOpt = new J('<option value="${td.uid}"/>');
+				jOpt.appendTo(jOptGroup);
+				if( td.isUsingEmbedAtlas() ) {
+					jOpt.attr("value", td.embedAtlas.getName());
+					var inf = Lang.getEmbedAtlasInfos( td.embedAtlas );
+					jOpt.text( inf.displayName );
+				}
+				else {
+					jOpt.attr("value", Std.string(td.uid));
+					jOpt.text( td.identifier );
+				}
+			}
+		}
+
+		// Unused embed tilesets
+		var jOptGroup = new J('<optgroup label="Integrated LDtk tilesets"/>');
+		for(k in ldtk.Json.EmbedAtlas.getConstructors()) {
+			var id = ldtk.Json.EmbedAtlas.createByName(k);
+			if( project.defs.isEmbedAtlasBeingUsed(id) )
+				continue;
+
+			var inf = Lang.getEmbedAtlasInfos(id);
+			var jOpt = new J('<option value="$k"/>');
+			jOpt.appendTo(jOptGroup);
+			jOpt.text( inf.displayName );
+		}
+		if( jOptGroup.children().length>0 )
+			jOptGroup.appendTo(jSelect);
+	}
+
+
 	public static function focusScrollableList(jList:js.jquery.JQuery, jElem:js.jquery.JQuery) {
 		var targetY = jElem.position().top + jList.scrollTop();
 
@@ -86,7 +189,7 @@ class JsTools {
 		return wrapper;
 	}
 
-	public static function createFieldTypeIcon(type:data.DataTypes.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
+	public static function createFieldTypeIcon(type:ldtk.Json.FieldType, withName=true, ?ctx:js.jquery.JQuery) : js.jquery.JQuery {
 		var icon = new J("<span/>");
 		icon.addClass("icon fieldType");
 		icon.addClass(type.getName());
@@ -180,8 +283,15 @@ class JsTools {
 							var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
 							scaleX = s;
 							scaleY = s;
+
+						case FullSizeCropped:
+						case FullSizeUncropped:
+
+						case NineSlice:
+							scaleX = scale * ed.width / td.tileGridSize; // TODO
+							scaleY = scale * ed.height / td.tileGridSize;
 					}
-					td.drawTileToCanvas( jCanvas, ed.tileId, x, y, scaleX, scaleY );
+					td.drawTileRectToCanvas(jCanvas, ed.tileRect, x,y, scaleX, scaleY);
 				}
 		}
 
@@ -319,9 +429,12 @@ class JsTools {
 							continue;
 
 						jReplace.append( switch k.toLowerCase() {
-							case "mouseleft": new J('<span class="icon mouseleft"></span>');
-							case "mouseright": new J('<span class="icon mouseright"></span>');
-							case "mousewheel": new J('<span class="icon mousewheel"></span>');
+							case "mouseleft": new J('<span class="icon mouseleft" title="Left mouse button"></span>');
+							case "mouseright": new J('<span class="icon mouseright" title="Right mouse button"></span>');
+							case "mousewheel": new J('<span class="icon mousewheel" title="Mouse wheel"></span>');
+							case "mousemiddle": new J('<span class="icon mousemiddle" title="Middle mouse button"></span>');
+							case "add": new J('<span class="key" title="Numeric pad +">+</span>');
+							case "sub": new J('<span class="key" title="Numeric pad -">-</span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
 
@@ -352,18 +465,34 @@ class JsTools {
 
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) {
-		// (i) Info bubbles
-		jCtx.find(".info").each( function(idx, e) {
+		// Info bubbles: (i) and (!)
+		jCtx.find(".info, info, warning").each( function(idx, e) {
 			var jThis = new J(e);
+			var isInfo = jThis.is("info, .info");
 
 			if( jThis.data("str")==null ) {
-				if( jThis.hasClass("identifier") )
-					jThis.data( "str", L.t._("An identifier should be UNIQUE (in this context) and can only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").") );
+				if( jThis.hasClass("identifier") ) {
+					var extra = jThis.text();
+					jThis.data(
+						"str",
+						L.t._("An identifier should be UNIQUE (in this context) and can only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").")
+						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
+					);
+				}
 				else
 					jThis.data("str", jThis.text());
 				jThis.empty();
 			}
 			ui.Tip.attach(jThis, jThis.data("str"), "infoTip");
+
+			if( isInfo && jThis.parent("dt")!=null ) {
+				jThis.mouseover( _->{
+					jThis.parent().addClass("infoHighlight").next("dd").addClass("infoHighlight");
+				});
+				jThis.mouseout( _->{
+					jThis.parent().removeClass("infoHighlight").next("dd").removeClass("infoHighlight");
+				});
+			}
 		});
 
 		// External links
@@ -387,6 +516,7 @@ class JsTools {
 			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
 				electron.Shell.openExternal(url);
+				N.msg("Opening url...");
 			});
 			link.on("auxclick", (ev:js.jquery.Event)->{
 				switch ev.button {
@@ -399,8 +529,8 @@ class JsTools {
 						ctx.add({
 							label: L.t._("Copy URL"),
 							cb: ()->{
-								electron.Clipboard.write({ text:url });
-								N.msg("Copied.");
+								App.ME.clipboard.copyStr(url);
+								N.copied();
 							}
 						});
 
@@ -411,7 +541,7 @@ class JsTools {
 
 
 		// Auto tool-tips
-		jCtx.find("[title], [data-title]").each( function(idx,e) {
+		jCtx.find("[title]:not([noTip]), [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
 			var tipStr = jThis.attr("data-title");
 			if( tipStr==null ) {
@@ -467,7 +597,48 @@ class JsTools {
 				.on("click.picker", (ev:js.jquery.Event)->{
 					ev.stopPropagation();
 					ev.preventDefault();
-					new ui.modal.dialog.ColorPicker( jInput );
+					new ui.modal.dialog.ColorPicker( jInput.attr("colorTag"), jInput );
+				});
+		});
+
+
+		// Collapser
+		jCtx.find(".collapser").each( (idx,e)->{
+			var jCollapser = new J(e);
+			var tid = jCollapser.attr("target");
+			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
+			var uiStateId = jCollapser.attr("id"); // might be null
+
+			// Init with memory
+			if( uiStateId!=null && App.ME.settings.getUiStateBool(cast uiStateId)==true ) {
+				jTarget.show();
+				jCollapser.addClass("expanded");
+			}
+			else {
+				jTarget.hide();
+				jCollapser.addClass("collapsed");
+			}
+
+
+			jCollapser
+				.off(".collapser")
+				.on("click.collapser", _->{
+					var expanded = jTarget.is(":visible");
+					jCollapser.removeClass("collapsed");
+					jCollapser.removeClass("expanded");
+					if( uiStateId!=null )
+						App.ME.settings.setUiStateBool(cast uiStateId, !expanded);
+
+					if( expanded ) {
+						jCollapser.addClass("collapsed");
+						jTarget.slideUp(50, ()->dn.Process.resizeAll(false));
+					}
+					else {
+						jCollapser.addClass("expanded");
+						jTarget.slideDown(30, ()->dn.Process.resizeAll(false));
+						jTarget.show();
+						dn.Process.resizeAll(false);
+					}
 				});
 		});
 	}
@@ -538,21 +709,52 @@ class JsTools {
 	}
 
 	public static function getLogPath() {
-		return getExeDir()+"/LDtk.log";
+		#if debug
+		return dn.FilePath.fromDir( ET.getAppResourceDir()+"/ldtk.log" ).useSlashes().full;
+		#else
+		return dn.FilePath.fromDir( ET.getLogDir()+"/ldtk.log" ).useSlashes().full;
+		#end
 	}
 
+	/** Path to LDtk exe **/
 	public static function getExeDir() {
-		#if !debug
-		var path = ET.getExeDir();
-		#else
+		#if debug
 		var path = ET.getAppResourceDir()+"/foo.exe";
+		#else
+		var path = ET.getExeDir();
 		#end
 		return dn.FilePath.fromFile( path ).useSlashes().directory;
 	}
 
+	/** Return path to the embed "assets" dir **/
+	public static function getAssetsDir() {
+		return dn.FilePath.fromDir( ET.getAppResourceDir()+"/assets" ).useSlashes().directory;
+	}
+
+	/** Return path to the "extraFiles" dir, stored as-is in the LDtk install dir **/
+	public static function getExtraFilesDir(?subDir:String) {
+		var base = getExeDir() + "/extraFiles";
+		if( subDir==null || subDir.length==0 )
+			return dn.FilePath.fromDir(base).useSlashes().directory;
+		else
+			return dn.FilePath.fromDir( base+"/"+subDir ).useSlashes().directory;
+	}
+
 	public static function getSamplesDir() {
-		var raw = getExeDir() + ( App.isMac() ? "/../samples" : "/samples" );
-		return dn.FilePath.fromDir( raw ).directory;
+		return getExtraFilesDir("samples");
+	}
+
+	public static function locateFile(path:String, isFile:Bool) {
+		if( path==null )
+			N.error("No file");
+		else {
+			if( !NT.fileExists(path) )
+				N.error("Sorry, but this file couldn't be found.");
+			else {
+				N.msg("Locating file...");
+				ET.locate(path, isFile);
+			}
+		}
 	}
 
 	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
@@ -560,17 +762,9 @@ class JsTools {
 		a.append('<span class="icon"/>');
 		a.find(".icon").addClass( isFile ? "locate" : "folder" );
 		a.click( function(ev) {
-			if( filePath==null )
-				N.error("No file");
-			else {
-				if( !NT.fileExists(filePath) )
-					N.error("Sorry, but this file couldn't be found.");
-				else {
-					ev.preventDefault();
-					ev.stopPropagation();
-					ET.locate(filePath, isFile);
-				}
-			}
+			ev.preventDefault();
+			ev.stopPropagation();
+			locateFile(filePath, isFile);
 		});
 
 		if( filePath==null )
@@ -676,9 +870,9 @@ class JsTools {
 				var tp = new ui.Tileset(m.jContent, td, selectMode);
 				tp.setSelectedTileIds(tileIds);
 				if( selectMode==PickAndClose )
-					tp.onSingleTileSelect = function(tileId) {
+					tp.onSelectAnything = ()->{
+						onPick([ tp.getSelectedTileIds()[0] ]);
 						m.close();
-						onPick([tileId]);
 					}
 				else
 					m.onCloseCb = function() {
@@ -697,22 +891,98 @@ class JsTools {
 
 
 
-	public static function createImagePicker( curRelPath:Null<String>, onChange : (?relPath:String)->Void ) : js.jquery.JQuery {
-		var jWrapper = new J('<div class="imagePicker"/>');
+	public static function createTileRectPicker(
+		tilesetId: Null<Int>,
+		cur: Null<ldtk.Json.TilesetRect>,
+		onPick: (Null<ldtk.Json.TilesetRect>)->Void
+	) {
+		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
-		function _pickImage(relPath:String) {
-			if( relPath==null )
-				return false;
+		if( tilesetId!=null ) {
+			jTileCanvas.addClass("active");
+			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
-			var img = Editor.ME.project.getOrLoadImage(relPath);
-			if( img!=null ) {
-				onChange(relPath);
-				return true;
+			if( cur==null ) {
+				// No tile selected
+				jTileCanvas.addClass("empty");
 			}
 			else {
-				N.error('Couldn\'t read image file: $relPath');
-				return false;
+				// Tile rect
+				jTileCanvas.attr("width", cur.w);
+				jTileCanvas.attr("height", cur.h);
+				var scale = 35 / M.fmax(cur.w, cur.h);
+				jTileCanvas.css("width", cur.w * scale );
+				jTileCanvas.css("height", cur.h * scale );
+				td.drawTileRectToCanvas(jTileCanvas, cur);
 			}
+
+			// Open picker
+			jTileCanvas.click( function(ev) {
+				var m = new ui.Modal();
+				m.addClass("singleTilePicker");
+
+				var tp = new ui.Tileset(m.jContent, td, RectOnly);
+				tp.useSavedSelections = false;
+				tp.setSelectedRect(cur);
+				tp.onSelectAnything = ()->{
+					onPick( tp.getSelectedRect() );
+					m.close();
+				}
+				tp.focusOnSelection(true);
+			});
+		}
+		else {
+			// Invalid tileset
+			jTileCanvas.addClass("empty");
+		}
+
+		return jTileCanvas;
+	}
+
+
+	public static function createEntityRef(ei:data.inst.EntityInstance, isBackRef=false, ?jTarget:js.jquery.JQuery) {
+		var jRef = new J('<div class="entityRef"/>');
+		if( jTarget!=null )
+			jRef.appendTo(jTarget);
+
+		jRef.append('<div class="id">${ei.def.identifier}</div>');
+		jRef.append('<div class="location"> <span class="level">${ei._li.level.identifier}</span> </div>');
+
+		if( !ei._li.level.isInWorld(Editor.ME.curWorld) )
+			jRef.find(".location").append(' <em>in</em> <span class="world">${ei._li.level._world.identifier}</span>');
+
+		if( isBackRef )
+			jRef.addClass("isBackRef");
+
+		return jRef;
+	}
+
+
+	public static function createImagePicker( curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {
+		var jWrapper = new J('<div class="imagePicker"/>');
+
+		var fileName = curRelPath==null ? null : dn.FilePath.extractFileWithExt(curRelPath);
+
+		function _pick(relPath:String) {
+			if( relPath==null )
+				return false;
+			else {
+				onSelect(relPath);
+				return true;
+			}
+		}
+
+		// Reload image
+		if( curRelPath!=null ) {
+			var jReload = new J('<button class="reload" title="Manually reload file"> <span class="icon refresh"/> </button>');
+			jReload.appendTo(jWrapper);
+			jReload.click( (_)->{
+				if( curRelPath!=null ) {
+					Editor.ME.project.disposeImage(curRelPath);
+					_pick(curRelPath);
+					N.success(L.t._("Image reloaded: ::file::", {file:fileName}));
+				}
+			});
 		}
 
 		// Pick image button
@@ -728,14 +998,14 @@ class JsTools {
 
 			dn.js.ElectronDialogs.openFile([".png", ".gif", ".jpg", ".jpeg", ".aseprite", ".ase"], path, function(absPath) {
 				var relPath = project.makeRelativeFilePath(absPath);
-				_pickImage(relPath);
+				_pick(relPath);
 			});
 		});
 
 		// Existing image assets
 		var allImages = Editor.ME.project.getAllCachedImages();
 		if( allImages.length>0 ) {
-			var jRecall = new J('<button class="recall"> <span class="icon expandMore"/> </button>');
+			var jRecall = new J('<button class="recall"> <span class="icon recall"/> </button>');
 			jRecall.appendTo(jWrapper);
 			jRecall.click( (ev:js.jquery.Event)->{
 				var ctx = new ui.modal.ContextMenu();
@@ -743,7 +1013,7 @@ class JsTools {
 				for( img in allImages )
 					ctx.add({
 						label: L.untranslated(img.fileName),
-						cb: ()->_pickImage(img.relPath)
+						cb: ()->_pick(img.relPath)
 					});
 			});
 		}
@@ -764,17 +1034,19 @@ class JsTools {
 			jPick.text("[ No image ]");
 		}
 
-		// Remove bg
-		var jRemove = new J('<button class="remove gray"> <span class="icon delete"/> </button>');
+		// Remove
+		var jRemove = new J('<button class="remove gray" title="Stop using this image"> <span class="icon clear"/> </button>');
 		jRemove.appendTo(jWrapper);
 		jRemove.click( (_)->{
-			new ui.modal.dialog.Confirm(jRemove, L.t._("Remove this image?"), true, onChange.bind(null));
+			new ui.modal.dialog.Confirm(jRemove, L.t._("Stop using this image?"), true, ()->onSelect(null));
 		});
 
-		// Locate bg image
+		// Locate
 		var jLocate = makeExploreLink(Editor.ME.project.makeAbsoluteFilePath(curRelPath), true);
 		jLocate.appendTo(jWrapper);
 
+
+		parseComponents(jWrapper);
 		return jWrapper;
 	}
 }

@@ -3,8 +3,23 @@
 	<meta charset="utf-8"/>
 	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; img-src * data:">
 
+	<!-- Fix jQuery conflict -->
+	<script>
+		if( typeof module === 'object' ) {
+			window.module = module;
+			module = undefined;
+		}
+	</script>
+
 	<!-- Scripts -->
-	<script type="text/javascript" src="js/jquery-git.min.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script> <!-- REMINDER: update version at the end of this file! -->
+
+	<!-- Restore module value -->
+	<script>
+		if (window.module)
+			module = window.module;
+	</script>
+
 
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="css/app.min.css"/>
@@ -20,6 +35,7 @@
 
 	<div id="miniNotif"></div>
 	<div id="updateInstall"> <button></button> </div>
+	<div id="clicktrap"></div>
 
 	<canvas id="webgl"></canvas>
 	<div id="page"></div>
@@ -65,7 +81,7 @@
 
 	<!-- Fix jquery/electron issue -->
 	<script type="text/javascript">
-		window.$ = window.jQuery = window.jquery = require('./js/jquery-git.min.js');
+		window.$ = window.jQuery = window.jquery = require('./js/jquery.min.js');
 	</script>
 </body>
 </html>

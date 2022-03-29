@@ -1,4 +1,4 @@
-<h2><span class="icon rule"></span>  Rules</h2>
+<h2><span class="icon rule"></span>  Rules: ::layer::</h2>
 
 <header>
 	<button class="createGroup">+ group</button>
@@ -23,11 +23,9 @@
 			<div class="text"></div>
 		</div>
 		<input type="text" class="name"/>
-		<span class="optional" title="This group of rules is marked as 'OPTIONAL'. That means it's DISABLED by default, and it can be manually enabled separately in each level instance.">Opt.</span>
-		<!-- <button class="edit transparent" title="Edit group">🖊</button> -->
-		<button class="active transparent" title="Enable/disable this group of rules"> <span class="icon"></span> </button>
+		<!-- <span class="optional" title="This group of rules is marked as 'OPTIONAL'. That means it's DISABLED by default, and it can be manually enabled separately in each level instance.">Opt.</span> -->
+		<button class="active transparent"> <span class="icon"></span> </button>
 		<button class="addRule" title="Add a new rule in this group">+</button>
-		<!-- <button class="delete transparent" title="Delele group and rules">🗑️</button> -->
 	</header>
 
 	<ul class="ruleGroup"></ul>
@@ -43,8 +41,7 @@
 			<input type="text" name="random"/>
 			<span>%</span>
 		</div>
-		<input type="text" name="xModulo" title="X modulo: only apply this rule every X columns"/>
-		<input type="text" name="yModulo" title="Y modulo: only apply this rule every Y rows"/>
+		<div class="modulo"></div>
 
 		<a class="active" title="Enable/disable this rule"> <span class="icon"></span> </a>
 		<a class="break" title="**Stop on match** If this rule is applied in a grid cell, it will prevent all following rules to apply too"> <span class="icon stop"></span> </a>

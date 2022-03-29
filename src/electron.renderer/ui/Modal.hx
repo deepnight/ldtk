@@ -6,6 +6,7 @@ class Modal extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	public var curLevel(get,never) : data.Level; inline function get_curLevel() return Editor.ME.curLevel;
+	public var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var jModalAndMask: js.jquery.JQuery;
@@ -231,5 +232,18 @@ class Modal extends dn.Process {
 		jContent.empty().off().append( html );
 		JsTools.parseComponents(jContent);
 		ui.Tip.clear();
+	}
+
+
+	override function onResize() {
+		super.onResize();
+
+		// Force scrollbars when modal is bigger than window
+		if( jModalAndMask.hasClass("centered") ) {
+			if( !jModalAndMask.hasClass("forceScroll") && jContent.outerHeight()>=App.ME.jDoc.innerHeight() )
+				jModalAndMask.addClass("forceScroll");
+			else if( jModalAndMask.hasClass("forceScroll") && jContent.outerHeight()<App.ME.jDoc.innerHeight() )
+				jModalAndMask.removeClass("forceScroll");
+		}
 	}
 }

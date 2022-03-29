@@ -6,7 +6,7 @@ class Tip extends dn.Process {
 	var jTip : js.jquery.JQuery;
 	var text(default,null) : String;
 
-	private function new(?target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
+	private function new(?jTarget:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, forceBelowPos=false) {
 		super(Editor.ME);
 
 		clear();
@@ -15,8 +15,8 @@ class Tip extends dn.Process {
 		jTip = new J("xml#tip").clone().children().first();
 		jTip.appendTo(App.ME.jBody);
 
-		if( target!=null )
-			jTip.css("min-width", target.outerWidth()+"px");
+		if( jTarget!=null )
+			jTip.css("min-width", jTarget.outerWidth()+"px");
 
 		if( className!=null )
 			jTip.addClass(className);
@@ -50,16 +50,38 @@ class Tip extends dn.Process {
 				jKeys.append( JsTools.createKey(kid) );
 		}
 
-		// Position near target
-		if( target!=null ) {
-			var tOff = target.offset();
+		// Position near jTarget
+		if( jTarget!=null ) {
+			var tOff = jTarget.offset();
 			var x = tOff.left;
 			if( x>=js.Browser.window.innerWidth*0.7 )
-				 x = tOff.left + target.innerWidth() - jTip.outerWidth();
+				 x = tOff.left + jTarget.innerWidth() - jTip.outerWidth();
 
-			var y = tOff.top + target.outerHeight() + 4;
-			if( target.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-150 )
-				y = tOff.top - jTip.outerHeight() - 4;
+			var y = tOff.top + jTarget.outerHeight() + 8;
+			if( jTarget.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-150 )
+				y = tOff.top - jTip.outerHeight() - 8;
+
+			// Custom tip alignment
+			if( jTarget.attr("tip")!=null ) {
+				var dist = 10;
+				switch jTarget.attr("tip") {
+					case "left":
+						x = tOff.left - jTip.outerWidth() - dist;
+						y = tOff.top;
+
+					case "right":
+						x = tOff.left + jTarget.outerWidth() + dist;
+						y = tOff.top;
+
+					case "top":
+						x = tOff.left;
+						y = tOff.top - jTip.outerHeight() - dist;
+
+					case "bottom":
+						x = tOff.left;
+						y = tOff.top + jTarget.outerHeight() + dist;
+				}
+			}
 
 			jTip.offset({
 				left: x,
@@ -68,7 +90,7 @@ class Tip extends dn.Process {
 		}
 
 		if( Editor.exists() )
-			Editor.ME.requestFps();
+			App.ME.requestCpu();
 	}
 
 	public static function clear() {
@@ -76,7 +98,7 @@ class Tip extends dn.Process {
 			CURRENT.destroy();
 			CURRENT = null;
 			if( Editor.exists() )
-				Editor.ME.requestFps();
+				App.ME.requestCpu();
 		}
 	}
 
@@ -104,16 +126,21 @@ class Tip extends dn.Process {
 	}
 
 
-	public static function attach(target:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, ?forceBelow:Bool) {
+	public static function attach(jTarget:js.jquery.JQuery, str:String, ?keys:Array<Int>, ?className:String, ?forceBelow:Bool) {
 		var cur : Tip = null;
-		if( target.is("input") && target.attr("id")!=null )
-			target = target.add( App.ME.jPage.find("[for="+target.attr("id")+"]") );
+		if( jTarget.is("input") && jTarget.attr("id")!=null ) {
+			var jLabel = App.ME.jPage.find("[for="+jTarget.attr("id")+"]");
+			if( jLabel.has(jTarget.get(0)).length>0 )
+				jTarget = jLabel;
+			else
+				jTarget = jTarget.add(jLabel);
+		}
 
-		target
+		jTarget
 			.off(".tip")
 			.on( "mouseenter.tip", function(ev) {
-				if( cur==null && !target.hasClass("disableTip") && App.ME.focused )
-					cur = new Tip(target, str, keys, className, forceBelow);
+				if( cur==null && !jTarget.hasClass("disableTip") && App.ME.focused )
+					cur = new Tip(jTarget, str, keys, className, forceBelow);
 			})
 			.on( "mouseleave.tip", function(ev) {
 				if( cur!=null ) {

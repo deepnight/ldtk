@@ -17,8 +17,11 @@ class Page extends dn.Process {
 	public function onAppBlur() {}
 	public function onAppMouseDown() {}
 	public function onAppMouseUp() {}
+	public function onAppMouseWheel(delta:Float) {}
 	public function onAppFocus() {}
 	public function onAppResize() {}
+	public function onKeyDown(keyCode:Int) {}
+	public function onKeyUp(keyCode:Int) {}
 	public function onKeyPress(keyCode:Int) {}
 
 	public function loadPageTemplate(id:String, ?vars:Dynamic) {

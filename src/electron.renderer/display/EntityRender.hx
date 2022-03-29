@@ -1,5 +1,9 @@
 package display;
 
+typedef CoreRender = {
+	var wrapper : h2d.Object;
+	var g : h2d.Graphics;
+}
 
 class EntityRender extends dn.Process {
 	var ei : data.inst.EntityInstance;
@@ -9,15 +13,15 @@ class EntityRender extends dn.Process {
 	var ld : data.def.LayerDef;
 
 	var core: h2d.Object;
+	var _coreRender : Null<CoreRender>;
 
 	// Field wrappers
 	var above: h2d.Flow;
 	var center: h2d.Flow;
 	var beneath: h2d.Flow;
 	var fieldGraphics : h2d.Graphics;
-	var simpleLabel : h2d.Flow; // only shown when out of entity layer
 
-	public var posInvalidated = true;
+	var layoutInvalidated = true;
 
 
 	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, p:h2d.Object) {
@@ -27,28 +31,20 @@ class EntityRender extends dn.Process {
 		ei = inst;
 		ld = layerDef;
 
-		core = new h2d.Object(root);
-
 		fieldGraphics = new h2d.Graphics(root);
+		core = new h2d.Object(root);
 
 		above = new h2d.Flow(root);
 		above.layout = Vertical;
 		above.horizontalAlign = Middle;
-		above.verticalSpacing = 1;
 
 		center = new h2d.Flow(root);
 		center.layout = Vertical;
 		center.horizontalAlign = Middle;
-		center.verticalSpacing = 1;
 
 		beneath = new h2d.Flow(root);
 		beneath.layout = Vertical;
 		beneath.horizontalAlign = Middle;
-		beneath.verticalSpacing = 1;
-
-		simpleLabel = new h2d.Flow(root);
-		simpleLabel.layout = Vertical;
-		simpleLabel.horizontalAlign = Middle;
 
 		renderAll();
 	}
@@ -65,16 +61,20 @@ class EntityRender extends dn.Process {
 	}
 
 
-	public function onViewportChange() {
-		posInvalidated = true;
+	public function onGlobalEvent(ev:GlobalEvent) {
+		switch( ev ) {
+			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
+				layoutInvalidated = true;
+
+			case LayerInstanceSelected:
+				layoutInvalidated = true;
+
+			case _:
+		}
 	}
 
-	public function onLayerSelection() {
-		posInvalidated = true;
-	}
 
-
-	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : h2d.Object {
+	public static function renderCore(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef, ?ld:data.def.LayerDef) : CoreRender {
 		if( ei==null && ed==null )
 			throw "Need at least 1 parameter";
 
@@ -92,12 +92,12 @@ class EntityRender extends dn.Process {
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -w*ed.pivotX );
-		g.y = Std.int( -h*ed.pivotY );
+		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
+		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		// Render a tile
-		function renderTile(tilesetId:Null<Int>, tileId:Null<Int>, mode:ldtk.Json.EntityTileRenderMode) {
-			if( tileId==null || tilesetId==null ) {
+		function _renderTile(rect:ldtk.Json.TilesetRect, mode:ldtk.Json.EntityTileRenderMode) {
+			if( rect==null || Editor.ME.project.defs.getTilesetDef(rect.tilesetUid)==null ) {
 				// Missing tile
 				var p = 2;
 				g.lineStyle(3, 0xff0000);
@@ -107,12 +107,15 @@ class EntityRender extends dn.Process {
 				g.lineTo(p, h-p);
 			}
 			else {
-				g.beginFill(color, 0.2*ed.fillOpacity);
+				// Bounding box
+				g.beginFill(color, ed.fillOpacity);
+				g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
 				g.drawRect(0, 0, w, h);
 
-				var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
-				var t = td.getTile(tileId);
-				var alpha = ed.fillOpacity * (ed.hollow ? 0.15 : 1);
+				// Texture
+				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
+				var t = td.getTileRect(rect);
+				var alpha = ed.tileOpacity;
 				switch mode {
 					case Stretch:
 						var bmp = new h2d.Bitmap(t, wrapper);
@@ -137,25 +140,61 @@ class EntityRender extends dn.Process {
 						tt.y = -h*ed.pivotY;
 
 					case Cover:
-						var bmp = new h2d.Bitmap(t, wrapper);
+						var bmp = new h2d.Bitmap(wrapper);
 						bmp.alpha = alpha;
 
-						var s = M.fmax(w / bmp.tile.width, h / bmp.tile.height);
-						bmp.setScale(s);
-						bmp.tile = bmp.tile.sub(
-							0, 0,
-							M.fmin( bmp.tile.width*s, w ) / s,
-							M.fmin( bmp.tile.height*s, h ) / s
+						var s = M.fmax(w / t.width, h / t.height);
+						final fw = M.fmin(w, t.width*s) / s;
+						final fh = M.fmin(h, t.height*s) / s;
+						bmp.tile = t.sub(
+							t.width*ed.pivotX - fw*ed.pivotX,
+							t.height*ed.pivotY - fh*ed.pivotY,
+							fw,fh
 						);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.setScale(s);
+
+					case FullSizeCropped:
+						var bmp = new h2d.Bitmap(wrapper);
+						final fw = M.fmin(w, t.width);
+						final fh = M.fmin(h, t.height);
+						bmp.tile = t.sub(
+							t.width*ed.pivotX - fw*ed.pivotX,
+							t.height*ed.pivotY - fh*ed.pivotY,
+							fw, fh
+						);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.alpha = alpha;
+
+					case FullSizeUncropped:
+						var bmp = new h2d.Bitmap(t, wrapper);
+						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.alpha = alpha;
+
+					case NineSlice:
+						var sg = new h2d.ScaleGrid(
+							t,
+							ed.nineSliceBorders[3], ed.nineSliceBorders[0], ed.nineSliceBorders[1], ed.nineSliceBorders[2],
+							wrapper
+						);
+						sg.alpha = ed.tileOpacity;
+						sg.tileBorders = true;
+						sg.tileCenter = true;
+						sg.width = w;
+						sg.height = h;
+						sg.x = -w*ed.pivotX;
+						sg.y = -h*ed.pivotY;
+
 				}
 			}
 		}
 
 		// Base render
-		var custTile = ei==null ? null : ei.getSmartTile();
-		if( custTile!=null )
-			renderTile(custTile.tilesetUid, custTile.tileId, ed.tileRenderMode);
+		var smartTile = ei==null ? ed.getDefaultTile() : ei.getSmartTile();
+		if( smartTile!=null ) {
+			// Tile (from either Def or a field)
+			_renderTile(smartTile, ed.tileRenderMode);
+		}
 		else
 			switch ed.renderMode {
 			case Rectangle, Ellipse:
@@ -181,48 +220,30 @@ class EntityRender extends dn.Process {
 				g.lineTo(w, 0);
 
 			case Tile:
-				renderTile(ed.tilesetId, ed.tileId, ed.tileRenderMode);
+				// Render should be done through getSmartTile() method above, but if tile is invalid, we land here
+				_renderTile(null, FitInside);
 			}
 
 		// Pivot
-		g.beginFill(color);
-		g.lineStyle(1, 0x0, 0.5);
-		var pivotSize = 3;
-		g.drawRect(
-			Std.int((w-pivotSize)*ed.pivotX),
-			Std.int((h-pivotSize)*ed.pivotY),
-			pivotSize, pivotSize
-		);
+		g.lineStyle(0);
+		g.beginFill(0x0, 0.4);
+		g.drawRect(w*ed.pivotX-1, h*ed.pivotY-1, 3,3);
+		g.beginFill(color, 1);
+		g.drawRect(w*ed.pivotX, h*ed.pivotY, 1,1);
 
-		return wrapper;
+		return {
+			wrapper: wrapper,
+			g: g,
+		}
 	}
 
 
 	public function renderAll() {
 		core.removeChildren();
-		core.addChild( renderCore(ei,ed) );
+		_coreRender = renderCore(ei, ed, ld);
+		core.addChild( _coreRender.wrapper );
 
 		renderFields();
-	}
-
-
-	inline function renderDashedLine(g:h2d.Graphics, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=4.) {
-		var a = Math.atan2(ty-fy, tx-fx);
-		var len = M.dist(fx,fy, tx,ty);
-		var cur = 0.;
-		var count = M.ceil( len/(dashLen*2) );
-		var dashLen = len / ( count%2==0 ? count+1 : count );
-
-		while( cur<len ) {
-			g.moveTo( fx+Math.cos(a)*cur, fy+Math.sin(a)*cur );
-			g.lineTo( fx+Math.cos(a)*(cur+dashLen), fy+Math.sin(a)*(cur+dashLen) );
-			cur+=dashLen*2;
-		}
-	}
-
-
-	inline function getDefaultFont() {
-		return Editor.ME.camera.pixelRatio<=1 ? Assets.fontLight_tiny : Assets.fontLight_small;
 	}
 
 
@@ -231,36 +252,43 @@ class EntityRender extends dn.Process {
 		center.removeChildren();
 		beneath.removeChildren();
 		fieldGraphics.clear();
-		simpleLabel.removeChildren();
 
 		// Attach fields
 		var color = ei.getSmartColor(true);
 		var ctx : display.FieldInstanceRender.FieldRenderContext = EntityCtx(fieldGraphics, ei, ld);
 		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd) ),
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd,true) ),
 			color, ctx, above
 		);
 		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Center ).map( fd->ei.getFieldInstance(fd) ),
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Center ).map( fd->ei.getFieldInstance(fd,true) ),
 			color, ctx, center
 		);
 		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd) ),
+			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd,true) ),
 			color, ctx, beneath
 		);
 
 
-		// Simple label
-		if( ei.def.showName || above.numChildren>0 || center.numChildren>0 || beneath.numChildren>0 ) {
-			var tf = new h2d.Text(getDefaultFont(), simpleLabel);
-			tf.scale(settings.v.editorUiScale);
-			tf.textColor = ei.getSmartColor(true);
-			tf.text = "(···)";
-			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
-			tf.y = 0;
-			// FieldInstanceRender.addBg(simpleLabel, ei.getSmartColor(true), 0.82);
-		}
+		// Render ref links from entities in different levels
+		for(refEi in ei._project.getEntityInstancesReferingTo(ei)) {
+			if( refEi._li.level==ei._li.level )
+				continue;
 
+			var fi = refEi.getEntityRefFieldTo(ei,true);
+			if( fi==null )
+				continue;
+
+			var col = refEi.getSmartColor(true);
+			var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var thisX = ei.getRefAttachX(fi.def) - ei.x;
+			var thisY = ei.getRefAttachY(fi.def) - ei.y;
+			FieldInstanceRender.renderRefLink(
+				fieldGraphics, col, refX, refY, thisX, thisY, 1,
+				ei.isInSameSpaceAs(refEi) ? Full : CutAtTarget
+			);
+		}
 
 		// Identifier label
 		if( ei.def.showName ) {
@@ -268,60 +296,67 @@ class EntityRender extends dn.Process {
 			f.minWidth = above.innerWidth;
 			f.horizontalAlign = Middle;
 			f.padding = 2;
-			var tf = new h2d.Text(getDefaultFont(), f);
+			var tf = new h2d.Text(Assets.getRegularFont(), f);
+			tf.smooth = true;
 			tf.scale(settings.v.editorUiScale);
 			tf.textColor = ei.getSmartColor(true);
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
-			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.82);
+			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.95);
 		}
 
-		updatePos();
+		updateLayout();
 	}
 
-	public inline function updatePos() {
-		posInvalidated = false;
+	public inline function updateLayout() {
+		layoutInvalidated = false;
 		var cam = Editor.ME.camera;
 		var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
 		var scale = (1-downScale) / cam.adjustedZoom;
-		var alpha = 1.0;
+		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
+		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;
 
 		root.x = ei.x;
 		root.y = ei.y;
 
+		final fullVis = ei._li==Editor.ME.curLayerInstance;
+
+		if( _coreRender!=null )
+			_coreRender.wrapper.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
+
+		// Graphics
+		if( !fullVis && ei._li.def.hideFieldsWhenInactive )
+			fieldGraphics.visible = false;
+		else {
+			fieldGraphics.visible = true;
+			fieldGraphics.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
+		}
+
 
 		// Update field wrappers
-		above.visible = center.visible = beneath.visible = Editor.ME.curLayerInstance.containsEntity(ei);
+		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 		if( above.visible ) {
-			simpleLabel.visible = false;
-			above.setScale(scale);
+			above.setScale( M.fmin(scale, maxFieldsWid/above.outerWidth) );
 			above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
 			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 2 );
-			above.alpha = alpha;
+			above.alpha = 1;
 
-			center.setScale(scale);
+			center.setScale( M.fmin(scale, M.fmin(maxFieldsWid/center.outerWidth, maxFieldsHei/center.outerHeight)) );
 			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
 			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
-			center.alpha = alpha;
+			center.alpha = 1;
 
-			beneath.setScale(scale);
+			beneath.setScale( M.fmin(scale, maxFieldsWid/beneath.outerWidth) );
 			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
 			beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
-			beneath.alpha = alpha;
-		}
-		else {
-			simpleLabel.visible = true;
-			simpleLabel.setScale(scale);
-			simpleLabel.x = Std.int( -ei.width*ed.pivotX - simpleLabel.outerWidth*0.5*simpleLabel.scaleX + ei.width*0.5 );
-			simpleLabel.y = Std.int( -simpleLabel.outerHeight*simpleLabel.scaleY - ei.height*ed.pivotY - 2 );
-			simpleLabel.alpha = alpha;
+			beneath.alpha = 1;
 		}
 	}
 
-	override function update() {
-		super.update();
-		if( posInvalidated )
-			updatePos();
+	override function postUpdate() {
+		super.postUpdate();
+		if( layoutInvalidated )
+			updateLayout();
 	}
 }

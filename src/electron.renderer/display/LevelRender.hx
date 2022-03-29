@@ -1,5 +1,11 @@
 package display;
 
+typedef Bleep = {
+	var spd : Float;
+	var extraScale : Float;
+	var g : h2d.Graphics;
+}
+
 class LevelRender extends dn.Process {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var camera(get,never) : display.Camera; inline function get_camera() return Editor.ME.camera;
@@ -17,13 +23,14 @@ class LevelRender extends dn.Process {
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
-	var rectBleeps : Array<h2d.Object> = [];
+	var rectBleeps : Array<Bleep> = [];
 	public var temp : h2d.Graphics;
 
 	// Invalidation system (ie. render calls)
 	var allInvalidated = true;
 	var uiAndBgInvalidated = false;
-	var layerInvalidations : Map<Int, { left:Int, right:Int, top:Int, bottom:Int }> = new Map();
+	var gridInvalidated = false;
+	var layerInvalidations : Map<Int, { evaluateRules:Bool, left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
 	public function new() {
@@ -61,6 +68,8 @@ class LevelRender extends dn.Process {
 
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
+			case LastChanceEnded:
+				
 			case AppSettingsChanged:
 				invalidateAll();
 
@@ -83,16 +92,22 @@ class LevelRender extends dn.Process {
 					resume();
 				}
 
+			case WorldSelected(w):
+
+			case WorldDepthSelected(worldDepth):
+
 			case GridChanged(active):
 				applyGridVisibility();
 
-			case ViewportChanged, WorldLevelMoved, WorldSettingsChanged:
+			case ShowDetailsChanged(active):
+				applyAllLayersVisibility();
+
+			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( editor.camera.width*0.5 - camera.levelX * camera.adjustedZoom );
 				root.y = M.round( editor.camera.height*0.5 - camera.levelY * camera.adjustedZoom );
-
-				for(l in layerRenders)
-					l.onViewportChange();
+				updateGridPos();
+				invalidateGrid();
 
 			case ProjectSaved, BeforeProjectSaving:
 
@@ -100,13 +115,14 @@ class LevelRender extends dn.Process {
 				renderAll();
 
 			case ProjectSettingsChanged:
-				invalidateUi();
+				invalidateUiAndBg();
 
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
 
-			case LayerInstanceRestoredFromHistory(li):
-				invalidateLayer(li);
+			case LayerInstancesRestoredFromHistory(lis):
+				for(li in lis)
+					invalidateLayer(li, false);
 
 			case LevelSelected(l):
 				invalidateAll();
@@ -130,12 +146,12 @@ class LevelRender extends dn.Process {
 
 			case LayerInstanceSelected:
 				applyAllLayersVisibility();
-				invalidateUi();
-				for(l in layerRenders)
-					l.onLayerSelection();
+				invalidateUiAndBg();
 
 			case LevelSettingsChanged(l):
-				invalidateUi();
+				invalidateUiAndBg();
+
+			case LevelJsonCacheInvalidated(l):
 
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
@@ -153,8 +169,18 @@ class LevelRender extends dn.Process {
 						layersWrapper.add( layerRenders.get(li.layerDefUid).root, depth );
 				}
 
-			case LayerDefChanged, LayerDefConverted:
+			case LayerDefChanged(defUid):
+				invalidateLayer(defUid);
+				renderGrid();
+
+			case LayerDefConverted:
 				invalidateAll();
+
+			case LayerDefIntGridValuesSorted(defUid):
+
+			case LayerDefIntGridValueRemoved(defUid,value,used):
+				if( used )
+					invalidateLayer(defUid);
 
 			case LayerRuleChanged(r), LayerRuleAdded(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
@@ -171,7 +197,9 @@ class LevelRender extends dn.Process {
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
 				invalidateLayer( li==null ? editor.curLayerInstance : li );
 
-			case LayerRuleGroupAdded:
+			case LayerRuleGroupAdded(rg):
+				if( rg.rules.length>0 )
+					invalidateLayer(editor.curLayerInstance);
 
 			case LayerRuleGroupRemoved(rg):
 				editor.curLayerInstance.applyAllAutoLayerRules();
@@ -188,7 +216,10 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleGroupCollapseChanged(rg):
 
-			case LayerInstanceChanged:
+			case LayerInstanceEditedByTool(li):
+
+			case LayerInstanceChangedGlobally(li):
+				invalidateLayer(li);
 
 			case TilesetSelectionSaved(td):
 
@@ -199,7 +230,7 @@ class LevelRender extends dn.Process {
 			case TilesetDefRemoved(td):
 				invalidateAll();
 
-			case TilesetDefChanged(td):
+			case TilesetImageLoaded(td, _), TilesetDefChanged(td):
 				for(li in editor.curLevel.layerInstances)
 					if( li.isUsingTileset(td) )
 						invalidateLayer(li);
@@ -223,16 +254,13 @@ class LevelRender extends dn.Process {
 					if( li.def.type==Entities )
 						invalidateLayer(li);
 
-			case FieldInstanceChanged(fi):
-				var ed = editor.project.defs.getEntityDefUsingField(fi.def);
-				if( ed!=null ) {
-					var li = editor.curLevel.getLayerInstanceFromEntity(ed);
-					invalidateLayer( li==null ? editor.curLayerInstance : li );
-				}
+			case LevelFieldInstanceChanged(l,fi):
+
+			case EntityFieldInstanceChanged(ei,fi):
+				invalidateLayer(ei._li);
 
 			case EntityInstanceAdded(ei), EntityInstanceRemoved(ei), EntityInstanceChanged(ei):
-				var li = editor.curLevel.getLayerInstanceFromEntity(ei);
-				invalidateLayer( li==null ? editor.curLayerInstance : li );
+				invalidateLayer(ei._li);
 
 			case LevelAdded(l):
 
@@ -244,10 +272,14 @@ class LevelRender extends dn.Process {
 			case EntityDefAdded:
 
 			case ToolOptionChanged:
+			case ToolValueSelected:
 
 			case EnumDefAdded:
 			case EnumDefSorted:
 		}
+
+		for(lr in layerRenders)
+			lr.onGlobalEvent(e);
 	}
 
 	public inline function isAutoLayerRenderingEnabled() {
@@ -265,7 +297,16 @@ class LevelRender extends dn.Process {
 	}
 
 	public inline function isLayerVisible(li:data.inst.LayerInstance) {
-		return li!=null && li.visible;
+		if( li==null || !li.visible )
+			return false;
+		else if( !settings.v.showDetails )
+			return switch li.def.type {
+				case IntGrid: li.def.isAutoLayer();
+				case Entities: false;
+				case Tiles, AutoLayer: true;
+			}
+		else
+			return true;
 	}
 
 	public function toggleLayer(li:data.inst.LayerInstance) {
@@ -291,50 +332,76 @@ class LevelRender extends dn.Process {
 		setLayerVisibility(li, false);
 	}
 
-	public function bleepRectPx(x:Int, y:Int, w:Int, h:Int, col:UInt, thickness=1) {
+	public function bleepLevelRectPx(x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1, spd=1.0) : Bleep {
 		var pad = 5;
 		var g = new h2d.Graphics();
-		rectBleeps.push(g);
+		rectBleeps.push({ g:g, spd:spd, extraScale:0 });
 		g.lineStyle(thickness, col);
-		g.drawRect( Std.int(-pad-w*0.5), Std.int(-pad-h*0.5), w+pad*2, h+pad*2 );
+		g.drawRect(
+			Std.int(-pad-w*0.5),
+			Std.int(-pad-h*0.5),
+			(w+pad*2),
+			(h+pad*2)
+		);
 		g.setPosition(
-			Std.int(x+w*0.5) + editor.curLayerInstance.pxTotalOffsetX,
-			Std.int(y+h*0.5) + editor.curLayerInstance.pxTotalOffsetY
+			Std.int(x + w*0.5),
+			Std.int(y + h*0.5)
 		);
 		root.add(g, Const.DP_UI);
+		return rectBleeps[rectBleeps.length-1];
 	}
 
-	public inline function bleepRectCase(cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) {
-		var li = editor.curLayerInstance;
-		bleepRectPx(
-			cx*li.def.gridSize,
-			cy*li.def.gridSize,
-			cWid*li.def.gridSize,
-			cHei*li.def.gridSize,
-			col, 2
+	public inline function bleepLayerRectPx(li:data.inst.LayerInstance, x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1, spd=1.0) : Bleep {
+		return bleepLevelRectPx(
+			x+li.pxParallaxX, y+li.pxParallaxY,
+			w*li.def.getScale(), h*li.def.getScale(),
+			col, thickness, spd
 		);
 	}
 
-	public inline function bleepHistoryBounds(layerId:Int, bounds:HistoryStateBounds, col:UInt) {
-		bleepRectPx(bounds.x, bounds.y, bounds.wid, bounds.hei, col, 2);
+	public inline function bleepLayerRectCase(li:data.inst.LayerInstance, cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) : Bleep {
+		return bleepLevelRectPx(
+			cx*li.def.scaledGridSize + li.pxParallaxX, cy*li.def.scaledGridSize + li.pxParallaxY,
+			cWid*li.def.scaledGridSize, cHei*li.def.scaledGridSize,
+			col, thickness
+		);
 	}
-	public inline function bleepEntity(ei:data.inst.EntityInstance) {
-		bleepRectPx(
-			Std.int( ei.x-ei.width*ei.def.pivotX ),
-			Std.int( ei.y-ei.height*ei.def.pivotY ),
+
+	public function bleepDebug(li:data.inst.LayerInstance, cx:Int, cy:Int, c=0xffffff) {
+		var g = new h2d.Graphics();
+		root.add(g, Const.DP_UI);
+		g.lineStyle(2, c, 1);
+		g.drawCircle( 0,0, li.def.gridSize*0.5 );
+		g.setPosition( M.round((cx+0.5)*li.def.gridSize), M.round((cy+0.5)*li.def.gridSize) );
+		createChildProcess( p->{
+			g.alpha-=tmod*0.04;
+			if( g.alpha<=0 ) {
+				g.remove();
+				p.destroy();
+			}
+		});
+	}
+
+	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:Int, spd=1.0) : Bleep {
+		return bleepLayerRectPx(
+			ei._li,
+			Std.int( (ei.x-ei.width*ei.def.pivotX) * ei._li.def.getScale() ),
+			Std.int( (ei.y-ei.height*ei.def.pivotY) * ei._li.def.getScale() ),
 			ei.width,
 			ei.height,
-			ei.getSmartColor(true), 2
+			overrideColor!=null ? overrideColor : ei.getSmartColor(true),
+			2, spd
 		);
 	}
 
-	public inline function bleepPoint(x:Float, y:Float, col:UInt, thickness=2) {
+	public inline function bleepPoint(x:Float, y:Float, col:UInt, thickness=2, spd=1.0) : Bleep {
 		var g = new h2d.Graphics();
-		rectBleeps.push(g);
+		rectBleeps.push({ g:g, spd:spd, extraScale:0 });
 		g.lineStyle(thickness, col);
 		g.drawCircle( 0,0, 16 );
 		g.setPosition( M.round(x), M.round(y) );
 		root.add(g, Const.DP_UI);
+		return rectBleeps[rectBleeps.length-1];
 	}
 
 
@@ -378,7 +445,15 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function applyGridVisibility() {
-		grid.visible = settings.v.grid && !editor.worldMode;
+		grid.visible = settings.v.grid && !editor.worldMode && editor.curLayerInstance!=null;
+	}
+
+	inline function updateGridPos() {
+		if( editor.curLayerInstance!=null ) {
+			grid.x = camera.getParallaxOffsetX(editor.curLayerInstance);
+			grid.y = camera.getParallaxOffsetY(editor.curLayerInstance);
+			grid.setScale( editor.curLayerDef.getScale() );
+		}
 	}
 
 	function renderGrid() {
@@ -392,28 +467,82 @@ class LevelRender extends dn.Process {
 
 		var li = editor.curLayerInstance;
 		var level = editor.curLevel;
-		grid.lineStyle(1, col, 0.07);
 
-		// Verticals
+		// Main grid
+		var size = li.def.gridSize;
+		grid.lineStyle(1/camera.adjustedZoom, col, 0.07);
 		var x = 0;
-		for( cx in 0...editor.curLayerInstance.cWid+1 ) {
-			x = cx*li.def.gridSize + li.pxTotalOffsetX;
-			if( x<0 || x>=level.pxWid )
+		for( cx in 0...editor.curLayerInstance.cWid+1 ) { // Verticals
+			x = cx*size + li.pxTotalOffsetX;
+			if( x<0 || x>level.pxWid )
 				continue;
 
 			grid.moveTo( x, M.fmax(0,li.pxTotalOffsetY) );
-			grid.lineTo( x, M.fmin(li.cHei*li.def.gridSize, level.pxHei) );
+			grid.lineTo( x, M.fmin(li.cHei*size, level.pxHei) );
 		}
-		// Horizontals
 		var y = 0;
-		for( cy in 0...editor.curLayerInstance.cHei+1 ) {
-			y = cy*li.def.gridSize + li.pxTotalOffsetY;
-			if( y<0 || y>=level.pxHei)
+		for( cy in 0...editor.curLayerInstance.cHei+1 ) { // Horizontals
+			y = cy*size + li.pxTotalOffsetY;
+			if( y<0 || y>level.pxHei)
 				continue;
 
 			grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
-			grid.lineTo( M.fmin(li.cWid*li.def.gridSize, level.pxWid), y );
+			grid.lineTo( M.fmin(li.cWid*size, level.pxWid), y );
 		}
+
+
+		// Guide grid (verticals)
+		if( editor.curLayerDef.guideGridWid>1 ) {
+			var size = li.def.guideGridWid;
+			grid.lineStyle(1/camera.adjustedZoom, col, 0.33);
+
+			var cWid = Std.int(editor.curLayerInstance.pxWid/size)+1;
+
+			var x = 0;
+			for( cx in 0...cWid ) { // Verticals
+				x = cx*size + li.pxTotalOffsetX;
+				if( x<0 || x>level.pxWid )
+					continue;
+
+				grid.moveTo( x, M.fmax(0,li.pxTotalOffsetY) );
+				grid.lineTo( x, level.pxHei+li.pxTotalOffsetY );
+			}
+		}
+
+
+		// Guide grid (horizontals)
+		if( editor.curLayerDef.guideGridHei>1 ) {
+			var size = li.def.guideGridHei;
+			grid.lineStyle(1/camera.adjustedZoom, col, 0.33);
+
+			var cHei = Std.int(editor.curLayerInstance.pxHei/size)+1;
+
+			var y = 0;
+			for( cy in 0...cHei+1 ) { // Horizontals
+				y = cy*size + li.pxTotalOffsetY;
+				if( y<0 || y>level.pxHei)
+					continue;
+
+				grid.moveTo( M.fmax(0,li.pxTotalOffsetX), y );
+				grid.lineTo( level.pxWid+li.pxTotalOffsetX, y );
+			}
+		}
+
+		// Horizontal guide lines
+		// grid.lineStyle(1, 0xffcc00, 0.5);
+		// for(v in li.def.guidesH) {
+		// 	grid.moveTo( M.fmax(0,li.pxTotalOffsetX), v+li.pxTotalOffsetY );
+		// 	grid.lineTo( M.fmin(li.cWid*size, level.pxWid), v+li.pxTotalOffsetY );
+		// }
+
+		// Vertical guide lines
+		// grid.lineStyle(1, 0xffcc00, 0.5);
+		// for(v in li.def.guidesV) {
+		// 	grid.moveTo( v+li.pxTotalOffsetX, M.fmax(0,li.pxTotalOffsetY) );
+		// 	grid.lineTo( v+li.pxTotalOffsetX, M.fmin(li.cHei*size, level.pxHei) );
+		// }
+
+		updateGridPos();
 	}
 
 
@@ -431,6 +560,7 @@ class LevelRender extends dn.Process {
 
 	public inline function clearTemp() {
 		temp.clear();
+		temp.alpha = 1;
 	}
 
 
@@ -462,6 +592,8 @@ class LevelRender extends dn.Process {
 		lr.root.visible = isLayerVisible(li);
 		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
+		if( li!=editor.curLayerInstance )
+			lr.root.alpha *= li.def.inactiveOpacity;
 	}
 
 	function getSingleLayerModeFilter() : h2d.filter.Filter {
@@ -480,10 +612,10 @@ class LevelRender extends dn.Process {
 		}
 	}
 
-	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int) {
+	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int, evaluateRules=true) {
 		if( li==null )
 			li = editor.curLevel.getLayerInstance(layerDefUid);
-		layerInvalidations.set( li.layerDefUid, { left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
+		layerInvalidations.set( li.layerDefUid, { evaluateRules:evaluateRules, left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
 
 		if( li.def.type==IntGrid )
 			for(l in editor.curLevel.layerInstances)
@@ -491,14 +623,17 @@ class LevelRender extends dn.Process {
 					invalidateLayer(l);
 	}
 
-	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int) {
+	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int, evaluateRules=true) {
 		if( layerInvalidations.exists(li.layerDefUid) ) {
 			var bounds = layerInvalidations.get(li.layerDefUid);
 			bounds.left = M.imin(bounds.left, left);
 			bounds.right = M.imax(bounds.right, right);
+			bounds.top = M.imin(bounds.top, top);
+			bounds.bottom = M.imax(bounds.bottom, bottom);
+			bounds.evaluateRules = evaluateRules;
 		}
 		else
-			layerInvalidations.set( li.layerDefUid, { left:left, right:right, top:top, bottom:bottom } );
+			layerInvalidations.set( li.layerDefUid, { evaluateRules:evaluateRules, left:left, right:right, top:top, bottom:bottom } );
 
 		// Invalidate linked auto-layers
 		if( li.def.type==IntGrid )
@@ -507,62 +642,84 @@ class LevelRender extends dn.Process {
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
-	public inline function invalidateUi() {
+	public inline function invalidateUiAndBg() {
 		uiAndBgInvalidated = true;
 	}
 
-	public inline function invalidateBg() {
-		uiAndBgInvalidated = true;
+	public inline function invalidateGrid() {
+		gridInvalidated = true;
 	}
 
 	public inline function invalidateAll() {
 		allInvalidated = true;
 	}
 
-	override function postUpdate() {
-		super.postUpdate();
 
-		// Fade-out temporary rects
-		var i = 0;
-		while( i<rectBleeps.length ) {
-			var o = rectBleeps[i];
-			o.alpha-=tmod*0.042;
-			o.setScale( 1 + 0.2 * (1-o.alpha) );
-			if( o.alpha<=0 ) {
-				o.remove();
-				rectBleeps.splice(i,1);
-			}
-			else
-				i++;
-		}
-
-
-		// Render invalidation system
+	public function applyInvalidations() {
 		if( allInvalidated ) {
 			// Full
 			renderAll();
-			App.LOG.warning("Full render requested");
+			App.LOG.warning("Full level render requested");
 		}
 		else {
 			// UI & bg elements
 			if( uiAndBgInvalidated ) {
 				renderBg();
 				renderBounds();
-				renderGrid();
 				uiAndBgInvalidated = false;
 				App.LOG.render("Rendered level UI");
 			}
 
+			if( gridInvalidated && !cd.hasSetS("gridRenderLock",0.2) )
+				renderGrid();
+
 			// Layers
 			for( li in editor.curLevel.layerInstances )
 				if( layerInvalidations.exists(li.layerDefUid) ) {
-					var b = layerInvalidations.get(li.layerDefUid);
-					if( li.def.isAutoLayer() )
-						li.applyAllAutoLayerRulesAt( b.left, b.top, b.right-b.left+1, b.bottom-b.top+1 );
+					var inv = layerInvalidations.get(li.layerDefUid);
+					if( li.def.isAutoLayer() && inv.evaluateRules )
+						li.applyAllAutoLayerRulesAt( inv.left, inv.top, inv.right-inv.left+1, inv.bottom-inv.top+1 );
 					renderLayer(li);
 				}
 		}
+	}
 
+
+
+	override function postUpdate() {
+		super.postUpdate();
+
+		// Error bleeps
+		if( !cd.has("errorBleeps") )
+			switch editor.curLevel.getFirstError() {
+				case NoError:
+					cd.unset("errorBleeps");
+
+				case InvalidEntityTag(ei), InvalidEntityField(ei):
+					if( !ui.EntityInstanceEditor.existsFor(ei) ) {
+						var b = bleepEntity(ei, 0xff0000, 0.4);
+						b.extraScale = 1;
+						cd.setS("errorBleeps",0.7);
+					}
+
+				case InvalidBgImage:
+			}
+
+		// Fade-out temporary bleeps
+		var i = 0;
+		while( i<rectBleeps.length ) {
+			var b = rectBleeps[i];
+			b.g.alpha -= 0.064 * tmod * ( b.spd!=null ? b.spd : 1 );
+			b.g.setScale( (b.extraScale + 1.6) - (b.extraScale + 0.6)*(1-b.g.alpha) );
+			if( b.g.alpha<=0 ) {
+				b.g.remove();
+				rectBleeps.splice(i,1);
+			}
+			else
+				i++;
+		}
+
+		applyInvalidations();
 		applyGridVisibility();
 	}
 

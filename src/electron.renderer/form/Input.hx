@@ -15,7 +15,8 @@ class Input<T> {
 	public var validityCheck : Null<T->Bool>;
 	public var validityError : Null<T->Void>;
 	var linkedEvents : Map<GlobalEvent,Bool> = new Map();
-	public var confirmMessage: Null<LocaleString>;
+	public var customConfirm: (oldValue:T,newValue:T)->Null<LocaleString>;
+	var autoClasses : Array<{ className:String, cond:T->Bool}> = [];
 
 	private function new(jElement:js.jquery.JQuery, rawGetter:Void->T, rawSetter:T->Void) {
 		if( jElement.length==0 )
@@ -38,13 +39,21 @@ class Input<T> {
 		jInput.on("change.input", function(_) {
 			onInputChange();
 		});
+		jInput.on("keydown.input", function(ev:js.jquery.Event) {
+			if( ev.key=="Enter" )
+				onEnterKey();
+		});
+	}
+
+	function onEnterKey() {
+		jInput.blur();
 	}
 
 	function checkGuide() {
 		if( jInput.is("[type=checkbox], [type=radio]") )
 			return;
 
-		var jGuide = jInput.next(".guide");
+		var jGuide = jInput.nextAll(".guide");
 		if( jGuide.length==0 )
 			jInput.prev(".guide");
 
@@ -65,6 +74,44 @@ class Input<T> {
 
 	function getSlideDisplayValue(v:Float) : String {
 		return null;
+	}
+
+	function enableIncrementControls() {
+		function _inc(i:Float) {
+			var v = Std.parseFloat( jInput.val() );
+			if( !M.isValidNumber(v) )
+				v = 0;
+			jInput.val( Std.string(v+i) );
+			onInputChange();
+		}
+		jInput
+			.off(".increment")
+			.on("keydown.increment", (ev:js.jquery.Event)->{
+				switch ev.key {
+					case "ArrowUp":
+						_inc(1);
+						ev.preventDefault();
+
+					case "ArrowDown":
+						_inc(-1);
+						ev.preventDefault();
+
+					case _:
+				}
+			});
+	}
+
+	public function addAutoClass(className:String, cond:T->Bool) {
+		autoClasses.push({ className:className, cond:cond });
+		checkAutoClasses();
+	}
+
+	function checkAutoClasses() {
+		for( ac in autoClasses )
+			if( ac.cond( getter() ) )
+				jInput.addClass(ac.className);
+			else
+				jInput.removeClass(ac.className);
 	}
 
 	public function enableSlider(speed=1.0) {
@@ -108,18 +155,24 @@ class Input<T> {
 
 
 	function onInputChange(bypassConfirm=false) {
-		if( !bypassConfirm && confirmMessage!=null ) {
-			new ui.modal.dialog.Confirm(
-				jInput,
-				confirmMessage,
-				true,
-				onInputChange.bind(true),
-				()->{
-					setter(lastValidValue);
-					writeValueToInput();
-				}
-			);
-			return;
+		var newValue = parseInputValue();
+		newValue = fixValue(newValue);
+
+		if( !bypassConfirm && customConfirm!=null ) {
+			var msg = customConfirm(lastValidValue, newValue);
+			if( msg!=null ) {
+				new ui.modal.dialog.Confirm(
+					jInput,
+					msg,
+					true,
+					onInputChange.bind(true),
+					()->{
+						setter(lastValidValue);
+						writeValueToInput();
+					}
+				);
+				return;
+			}
 		}
 
 		if( validityCheck!=null && !validityCheck(parseInputValue()) ) {
@@ -134,13 +187,12 @@ class Input<T> {
 		}
 
 		onBeforeSetter();
-		var v = parseInputValue();
-		v = fixValue(v);
-		setter(v);
+		setter(newValue);
 		writeValueToInput();
 		lastValidValue = getter();
 		onChange();
 		onValueChange( getter() );
+		checkAutoClasses();
 		for(e in linkedEvents.keys())
 			Editor.ME.ge.emit(e);
 	}
@@ -256,11 +308,14 @@ class Input<T> {
 
 					case "Bool":
 						return macro {
-							new form.input.BoolInput(
-								$formInput,
-								function() return $variable,
-								function(v) $variable = v
-							);
+							if( $formInput.length==0 || !$formInput.is("[type=checkbox], select") )
+								null;
+							else
+								new form.input.BoolInput(
+									$formInput,
+									function() return $variable,
+									function(v) $variable = v
+								);
 						}
 
 					case "Null":

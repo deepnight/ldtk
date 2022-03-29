@@ -3,10 +3,13 @@ package ui.modal.dialog;
 class ColorPicker extends ui.modal.Dialog {
 	var picker : simpleColorPicker.ColorPicker;
 	var jTargetInput : js.jquery.JQuery;
+	var originalColor : Int;
+	var usedColorsTag : Null<String>;
 
-	public function new(?target:js.jquery.JQuery, ?color:UInt) {
+	public function new(?usedColorsTag:String, ?target:js.jquery.JQuery, ?color:UInt) {
 		super();
 
+		this.usedColorsTag = usedColorsTag;
 		loadTemplate("colorPicker");
 
 		if( target!=null ) {
@@ -43,14 +46,79 @@ class ColorPicker extends ui.modal.Dialog {
 		jContent.find(".copy").click( (ev:js.jquery.Event)->{
 			electron.Clipboard.writeText( picker.getHexString() );
 			ev.getThis().addClass("done");
-			N.quick("Copied to clipboard");
+			N.copied();
 			updatePaste();
 		});
 
 
+		// Recently used colors
+		var jExpand = jContent.find(".recentColors .expand");
+		var jRecents = jContent.find(".recentColors .recents");
+		if( usedColorsTag==null ) {
+			jExpand.hide();
+			jRecents.hide();
+		}
+		else {
+			var showAll = false;
+			function _updateRecents() {
+				jRecents.empty();
+				jExpand.removeClass("on");
+				jExpand.removeClass("off");
+				if( showAll )
+					jExpand.addClass("showAll");
+				else
+					jExpand.removeClass("showAll");
+
+				if( settings.getUiStateBool(ShowProjectColors) && usedColorsTag!=null ) {
+					// Update recent colors list
+					var usedColors = project.getUsedColorsAsArray(showAll ? null : usedColorsTag);
+					for( c in usedColors ) {
+						var jC = new J('<div class="color"/>');
+						jC.css("background-color", C.intToHex(c));
+						jC.appendTo(jRecents);
+						jC.click((_)->{
+							picker.setColor(c);
+							jInput.val( C.intToHex(c,false) );
+						});
+					}
+					if( usedColors.length==0 ) {
+						jRecents.addClass("empty");
+						jRecents.append("Empty");
+					}
+					else {
+						// Show all button
+						if( !showAll ) {
+							var jShowAll = new J('<a class="showAll">Show all colors used in this project</a>');
+							jShowAll.click(_->{
+								showAll = true;
+								_updateRecents();
+							});
+							jShowAll.appendTo(jRecents);
+						}
+						jRecents.removeClass("empty");
+					}
+
+					jExpand.addClass("on");
+				}
+				else
+					jExpand.addClass("off");
+			}
+			jExpand.click( _->{
+				settings.toggleUiStateBool(ShowProjectColors);
+				settings.save();
+				if( settings.getUiStateBool(ShowProjectColors) )
+					jExpand.next().slideDown(100).css('display','grid');
+				else
+					jExpand.next().slideUp(60);
+				_updateRecents();
+			});
+			_updateRecents();
+		}
+
+
 		// Color picker
 		picker = new simpleColorPicker.ColorPicker({});
-		picker.setColor(color);
+		picker.setSize(320, 150);
 		picker.appendTo( jContent.find(".picker").get(0) );
 		picker.onChange( c->{
 			if( picker.isChoosing )
@@ -64,6 +132,7 @@ class ColorPicker extends ui.modal.Dialog {
 			picker.setColor(color);
 		else if( jTargetInput!=null )
 			picker.setColor( jTargetInput.val() );
+		originalColor = getColor();
 
 		// Init elements
 		jInput
@@ -71,7 +140,8 @@ class ColorPicker extends ui.modal.Dialog {
 			.focus()
 			.select();
 		jPreview.css({ backgroundColor:picker.getHexString() });
-		picker.setSize(jContent.innerWidth(), 150);
+
+		JsTools.parseComponents(jContent);
 	}
 
 	function updatePaste() {
@@ -89,7 +159,7 @@ class ColorPicker extends ui.modal.Dialog {
 
 		switch keyCode {
 			case K.ESCAPE:
-				onCancel();
+				validate();
 				close();
 
 			case K.ENTER:
@@ -102,7 +172,9 @@ class ColorPicker extends ui.modal.Dialog {
 		if( jTargetInput!=null )
 			jTargetInput.val( picker.getHexString() ).change();
 
-		onValidate( picker.getHexNumber() );
+		project.unregisterColor( usedColorsTag, originalColor );
+		project.registerUsedColor( usedColorsTag, getColor() );
+		onValidate( getColor() );
 	}
 
 	public dynamic function onValidate(c:UInt) {}

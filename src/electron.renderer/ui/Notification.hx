@@ -22,6 +22,9 @@ class Notification extends dn.Process {
 			elem.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
 		}
 
+		if( Editor.exists() && Editor.ME.gifMode )
+			elem.hide();
+
 		delayer.addS(hide, 3 + str.length*0.04 + (long ? 20 : 0));
 		elem.addClass("latest");
 	}
@@ -45,6 +48,13 @@ class Notification extends dn.Process {
 	public static function success(str:String) {
 		if( !sameAsLast(str) )
 			new Notification(str, 0x42b771);
+	}
+
+	public static function copied(?name:String) {
+		if( name!=null )
+			msg('Copied "$name" to clipboard.', 0x0);
+		else
+			msg("Copied to clipboard.", 0x0);
 	}
 
 	public static function warning(str:String) {
@@ -93,6 +103,9 @@ class Notification extends dn.Process {
 
 		if( Editor.ME!=null )
 			e.css("left", (Editor.ME.jMainPanel.outerWidth()+15)+"px");
+
+		if( Editor.ME.gifMode )
+			e.hide();
 
 		e.fadeOut(1200);
 	}

@@ -79,7 +79,7 @@ class CrashReport extends Page {
 
 			// Report
 			jContent.find("button.report").click( (_)->{
-				electron.Shell.openExternal( Const.ISSUES_URL );
+				electron.Shell.openExternal( Const.REPORT_BUG_URL );
 			});
 
 			// Restart
@@ -92,16 +92,24 @@ class CrashReport extends Page {
 			if( unsavedProject!=null ) {
 				try {
 					// Build file name & path
-					var fp = ui.ProjectSaving.makeBackupFilePath(unsavedProject, "crash");
+					var dir = dn.FilePath.fromDir( unsavedProject.getAbsExternalFilesDir() );
+					dir.appendDirectory(Const.BACKUP_DIR);
+					dir.appendDirectory(ui.ProjectSaver.makeBackupDirName("crash"));
+					NT.createDirs(dir.full);
 
-					// Init dirs
-					if( !NT.fileExists(fp.directory) )
-						NT.createDirs(fp.directory);
-
-					// Save
-					var data = ui.ProjectSaving.prepareProjectSavingData(unsavedProject, true);
+					// Save main file
+					var fp = dir.clone();
+					fp.fileWithExt = unsavedProject.filePath.fileWithExt;
+					var data = ui.ProjectSaver.prepareProjectSavingData(unsavedProject);
 					NT.writeFileString(fp.full, data.projectJson);
-					jBackup.html("But don't worry, your work was saved in a backup file! ");
+
+					// Save extern levels
+					for(l in data.externLevelsJson) {
+						var lfp = dn.FilePath.fromFile(dir.full+"/"+l.relPath);
+						NT.createDirs(lfp.directory);
+						NT.writeFileString(lfp.full, l.json);
+					}
+					jBackup.html("But don't worry, your work was saved in a backup file!");
 
 					// Register in recents
 					App.ME.registerRecentProject(fp.full);

@@ -8,11 +8,11 @@ class RulePatternEditor {
 	var layerDef : data.def.LayerDef;
 	var previewMode : Bool;
 	var explainCell : Null< (desc:Null<String>)->Void >;
-	var getSelectedValIdx: Null< Void->Int >;
+	var getSelectedValue: Null< Void->Int >;
 	var onChange: Null< Void->Void >;
 
 	var drawButton = -1;
-	var startValueIdx : Null<Int> = null; // value when clicking starts
+	var valueAtStartPoint : Null<Int> = null; // value when clicking starts
 
 	public function new(
 		rule: data.def.AutoLayerRuleDef,
@@ -20,7 +20,7 @@ class RulePatternEditor {
 		layerDef: data.def.LayerDef,
 		previewMode=false,
 		?explainCell: (desc:Null<String>)->Void,
-		?getSelectedValIdx: Void->Int,
+		?getSelectedValue: Void->Int,
 		?onChange: Void->Void
 	) {
 		this.rule = rule;
@@ -28,10 +28,10 @@ class RulePatternEditor {
 		this.layerDef = layerDef;
 		this.previewMode = previewMode;
 		this.explainCell = explainCell;
-		this.getSelectedValIdx = getSelectedValIdx;
+		this.getSelectedValue = getSelectedValue;
 		this.onChange = onChange;
 
-		startValueIdx = null;
+		valueAtStartPoint = null;
 		jRoot = new J('<div/>');
 
 		render();
@@ -128,7 +128,7 @@ class RulePatternEditor {
 					var intGridVal = M.iabs(ruleValue);
 					if( ruleValue>0 ) {
 						// Required value
-						if( intGridVal == Const.AUTO_LAYER_ANYTHING+1 ) {
+						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
@@ -141,7 +141,10 @@ class RulePatternEditor {
 					}
 					else {
 						// Forbidden value
-						jCell.addClass("not").append('<span class="cross"></span>');
+						jCell.addClass("not");
+						var icon = intGridVal!=Const.AUTO_LAYER_ANYTHING ? "cross" : "nothing";
+						jCell.append('<span class="cellIcon $icon"></span>');
+
 						if( intGridVal == Const.AUTO_LAYER_ANYTHING ) {
 							jCell.addClass("anything");
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
@@ -151,7 +154,7 @@ class RulePatternEditor {
 							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
 						else
-							jCell.addClass("unknown");
+							jCell.addClass("error");
 					}
 				}
 				else {
@@ -170,16 +173,16 @@ class RulePatternEditor {
 					var v = rule.get(cx,cy);
 					switch drawButton {
 						case 0:
-							// Add value
-							if( startValueIdx>=0 )
-								rule.set(cx,cy, getSelectedValIdx()+1); // avoid zero value
+							// Require value
+							if( valueAtStartPoint>=0 )
+								rule.set(cx,cy, getSelectedValue());
 							else if( v<0 )
 								rule.set(cx,cy, 0);
 
 						case 2:
-							// Forbid
-							if( startValueIdx==0 )
-								rule.set(cx,cy, -getSelectedValIdx()-1);
+							// Forbid value
+							if( valueAtStartPoint==0 )
+								rule.set(cx,cy, -getSelectedValue());
 							else
 								rule.set(cx,cy, 0);
 
@@ -199,7 +202,7 @@ class RulePatternEditor {
 				}
 
 				jCell.mousedown( (ev:js.jquery.Event)->{
-					startValueIdx = rule.get(cx,cy);
+					valueAtStartPoint = rule.get(cx,cy);
 					drawButton = ev.button;
 					App.ME.jBody.on("mouseup.rulePattern", (_)->{
 						drawButton = -1;

@@ -85,7 +85,7 @@ class SelectionTool extends Tool<Int> {
 								var t = editor.curTool.as(tool.lt.IntGridTool);
 								if( t!=null )
 									t.selectValue(v);
-								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, li.getIntGridColorAt(cx,cy) );
+								editor.levelRender.bleepLayerRectCase( li, cx, cy, 1,1, li.getIntGridColorAt(cx,cy) );
 
 							case Tiles:
 								var tileInf = li.getTopMostGridTile(cx,cy);
@@ -104,7 +104,7 @@ class SelectionTool extends Tool<Int> {
 									t.flipY = M.hasBit(tileInf.flips,1);
 								}
 
-								editor.levelRender.bleepRectPx( cx*li.def.gridSize, cy*li.def.gridSize, li.def.gridSize, li.def.gridSize, 0xffcc00 );
+								editor.levelRender.bleepLayerRectCase( li, cx, cy, 1,1, 0xffcc00 );
 
 							case AutoLayer:
 							case Entities:
@@ -116,7 +116,7 @@ class SelectionTool extends Tool<Int> {
 					var t = editor.curTool.as(tool.lt.EntityTool);
 					if( t!=null )
 						t.selectValue(ei.defUid);
-					editor.levelRender.bleepRectPx( ei.left, ei.top, ei.width, ei.height, ei.def.color );
+					editor.levelRender.bleepEntity(ei);
 					ui.EntityInstanceEditor.openFor(ei);
 					editor.createResizeToolFor(ge);
 
@@ -127,7 +127,7 @@ class SelectionTool extends Tool<Int> {
 
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null)
-						editor.levelRender.bleepRectCase( pt.cx, pt.cy, 1, 1, ei.def.color );
+						editor.levelRender.bleepLayerRectCase( li, pt.cx, pt.cy, 1, 1, ei.def.color );
 					ui.EntityInstanceEditor.openFor(ei);
 			}
 
@@ -154,7 +154,7 @@ class SelectionTool extends Tool<Int> {
 		}
 		else if( !isRunning() ) {
 			// Preview picking
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
+			var ge = editor.getGenericLevelElementAt(m, settings.v.singleLayerMode);
 			ev.cancel = true;
 
 			switch ge {
@@ -187,7 +187,7 @@ class SelectionTool extends Tool<Int> {
 
 
 			case Entity(li, ei):
-				editor.cursor.set( Entity(li, ei.def, ei, ei.x, ei.y), ei.def.identifier );
+				editor.cursor.set( Entity(li, ei.def, ei, ei.x, ei.y, true), ei.def.identifier );
 
 			case PointField(li, ei, fi, arrayIdx):
 				var pt = fi.getPointGrid(arrayIdx);
@@ -200,28 +200,34 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	override function startUsing(ev:hxd.Event, m:Coords) {
+	public function selectAndStartUsing(ev:hxd.Event, m:Coords, e:GenericLevelElement) {
+		startUsing(ev, m, "noDefaultSelection");
+		select([e]);
+	}
+
+	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
 		isCopy = App.ME.isCtrlDown() && App.ME.isAltDown();
 		moveStarted = false;
 		startedOverSelecton = false;
 		editor.clearSpecialTool();
 		movePreview.clear();
 
-		super.startUsing(ev,m);
+		super.startUsing(ev,m, extraParam);
 
-		if( ev.button==0 ) {
+		if( ev.button==0 && extraParam!="noDefaultSelection" ) {
 			if( group.isOveringSelection(m) ) {
 				startedOverSelecton = true;
 				// Move existing selection
 				if( group.hasIncompatibleGridSizes() ) {
-					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements from using different grid sizes."));
+					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements using different grid sizes."));
 					stopUsing(m);
 				}
 			}
 			else {
 				// Start a new selection
 				if( !rectangle ) {
-					var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
+					var ge = editor.getGenericLevelElementAt(m, settings.v.singleLayerMode);
+					tool.lt.EntityTool.cancelRefChaining();
 					if( ge!=null )
 						select([ ge ]);
 					else
@@ -239,8 +245,13 @@ class SelectionTool extends Tool<Int> {
 			editor.clearResizeTool();
 		}
 	}
+
+	/** Return TRUE if not empty **/
 	public inline function any() return !group.isEmpty();
+
+	/** Return TRUE if empty **/
 	public inline function isEmpty() return group.isEmpty();
+
 	public inline function isSingle() return group.selectedElementsCount()==1;
 	public inline function isOveringSelection(m) return group.isOveringSelection(m);
 	public inline function debugContent() return group.toString();
@@ -266,7 +277,6 @@ class SelectionTool extends Tool<Int> {
 
 	override function saveToHistory() {
 		// No super() call
-		editor.curLevelHistory.flushChangeMarks();
 	}
 
 
@@ -278,10 +288,10 @@ class SelectionTool extends Tool<Int> {
 				var layerInsts = group.getSelectedLayerInstances();
 				deleteSelecteds();
 				for(li in layerInsts) {
-					editor.curLevelHistory.saveLayerState(li);
 					editor.levelRender.invalidateLayer(li);
+					editor.ge.emit( LayerInstanceChangedGlobally(li) );
 				}
-				editor.ge.emit(LayerInstanceChanged);
+				editor.curLevelTimeline.saveLayerStates(layerInsts);
 				select();
 		}
 	}
@@ -292,20 +302,25 @@ class SelectionTool extends Tool<Int> {
 				case null:
 
 				case GridCell(li, cx, cy):
-					if( li.hasAnyGridValue(cx,cy) )
+					if( li.hasAnyGridValue(cx,cy) ) {
+						editor.curLevelTimeline.markGridChange(li, cx,cy);
 						switch li.def.type {
 							case IntGrid: li.removeIntGrid(cx,cy);
 							case Tiles: li.removeAllGridTiles(cx,cy);
 							case Entities:
 							case AutoLayer:
 						}
+					}
 
 				case Entity(li, ei):
 					li.removeEntityInstance(ei);
+					editor.curLevelTimeline.markEntityChange(ei);
+					editor.ge.emitAtTheEndOfFrame( EntityInstanceRemoved(ei) );
 
 				case PointField(li, ei, fi, arrayIdx):
 					fi.removeArrayValue(arrayIdx);
 					group.decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+					editor.ge.emitAtTheEndOfFrame( EntityFieldInstanceChanged(ei,fi) );
 			}
 		clear();
 	}
@@ -319,7 +334,7 @@ class SelectionTool extends Tool<Int> {
 		else {
 			if( startedOverSelecton && group.isOveringSelection(m) ) {
 				// Extend selection when re-selecting entity/points
-				var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY, settings.v.singleLayerMode);
+				var ge = editor.getGenericLevelElementAt(m, settings.v.singleLayerMode);
 				switch ge {
 				case null:
 				case GridCell(li, cx, cy):
@@ -347,11 +362,10 @@ class SelectionTool extends Tool<Int> {
 			if( isOnStop ) {
 				// Move actual data
 				var changedLayers = group.moveSelecteds(origin, m, isCopy);
-				for(li in changedLayers) {
-					editor.curLevelHistory.saveLayerState(li);
+				for(li in changedLayers)
 					if( li!=curLayerInstance )
 						editor.levelRender.invalidateLayer(li); // cur is invalidated by Tool
-				}
+				editor.curLevelTimeline.saveLayerStates(changedLayers);
 				editor.invalidateResizeTool();
 
 				return changedLayers.length>0;
@@ -380,7 +394,7 @@ class SelectionTool extends Tool<Int> {
 	override function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int):Bool {
 		if( left==right && top==bottom ) {
 			// Actually picking a single value, even though "rectangle" was triggered
-			var ge = editor.getGenericLevelElementAt(m.levelX, m.levelY);
+			var ge = editor.getGenericLevelElementAt(m);
 			if( ge!=null )
 				select([ ge ], true);
 			else
@@ -388,20 +402,20 @@ class SelectionTool extends Tool<Int> {
 		}
 		else {
 			// Pick every objects under rectangle
-			var leftPx = curLayerInstance.pxTotalOffsetX + left * curLayerInstance.def.gridSize;
-			var rightPx = curLayerInstance.pxTotalOffsetX + (right+1) * curLayerInstance.def.gridSize - 1;
-			var topPx = curLayerInstance.pxTotalOffsetY + top * curLayerInstance.def.gridSize;
-			var bottomPx = curLayerInstance.pxTotalOffsetY + (bottom+1) * curLayerInstance.def.gridSize - 1;
+			var leftPx = Std.int( curLayerInstance.pxParallaxX + left * curLayerInstance.def.scaledGridSize );
+			var rightPx = Std.int( curLayerInstance.pxParallaxX + (right+1) * curLayerInstance.def.scaledGridSize - 1 );
+			var topPx = Std.int( curLayerInstance.pxParallaxY + top * curLayerInstance.def.scaledGridSize );
+			var bottomPx = Std.int( curLayerInstance.pxParallaxY + (bottom+1) * curLayerInstance.def.scaledGridSize - 1 );
 
 			var all : Array<GenericLevelElement> = [];
 			function _addRectFromLayer(li:data.inst.LayerInstance) {
 				if( !editor.levelRender.isLayerVisible(li) )
 					return;
 
-				var cLeft = Std.int( (leftPx-li.pxTotalOffsetX) / li.def.gridSize );
-				var cRight = Std.int( (rightPx-li.pxTotalOffsetX) / li.def.gridSize );
-				var cTop = Std.int( (topPx-li.pxTotalOffsetY) /li.def.gridSize );
-				var cBottom = Std.int( (bottomPx-li.pxTotalOffsetY) /li.def.gridSize );
+				var cLeft = Std.int( (leftPx-li.pxParallaxX) / li.def.scaledGridSize );
+				var cRight = Std.int( (rightPx-li.pxParallaxX) / li.def.scaledGridSize );
+				var cTop = Std.int( (topPx-li.pxParallaxY) /li.def.scaledGridSize );
+				var cBottom = Std.int( (bottomPx-li.pxParallaxY) /li.def.scaledGridSize );
 
 				for( cy in cTop...cBottom+1 )
 				for( cx in cLeft...cRight+1 ) {

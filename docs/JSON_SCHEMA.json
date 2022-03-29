@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 0.9.3 JSON schema",
+	"title": "LDtk 1.0.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "0.9.3",
+	"version": "1.0.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -13,19 +13,17 @@
 			"externalLevels",
 			"jsonVersion",
 			"levels",
-			"worldGridHeight",
-			"worldGridWidth",
-			"worldLayout",
+			"worlds",
+			"appBuildId",
 			"backupLimit",
 			"backupOnSave",
 			"defaultGridSize",
 			"defaultLevelBgColor",
-			"defaultLevelHeight",
-			"defaultLevelWidth",
 			"defaultPivotX",
 			"defaultPivotY",
 			"exportTiled",
 			"flags",
+			"identifierStyle",
 			"imageExportMode",
 			"levelNamePattern",
 			"minifyJson",
@@ -45,9 +43,10 @@
 				]
 			},
 			"worldGridWidth": {
-				"description": "Width of the world grid in pixels.",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Width of the world grid in pixels.",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"defaultLevelBgColor": {
@@ -60,6 +59,15 @@
 				"description": "Project background color",
 				"type": [
 					"string"
+				]
+			},
+			"worlds": {
+				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
+				"items": {
+					"$ref": "#/otherTypes/World"
+				},
+				"type": [
+					"array"
 				]
 			},
 			"nextUid": {
@@ -76,6 +84,15 @@
 					"OneImagePerLevel"
 				]
 			},
+			"identifierStyle": {
+				"description": "Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`",
+				"enum": [
+					"Capitalize",
+					"Uppercase",
+					"Lowercase",
+					"Free"
+				]
+			},
 			"defaultPivotY": {
 				"description": "Default Y pivot (0 to 1) for new entities",
 				"type": [
@@ -83,9 +100,16 @@
 				]
 			},
 			"worldGridHeight": {
-				"description": "Height of the world grid in pixels.",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Height of the world grid in pixels.",
 				"type": [
-					"integer"
+					"integer",
+					"null"
+				]
+			},
+			"appBuildId": {
+				"description": "LDtk application build identifier.<br/>  This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.",
+				"type": [
+					"number"
 				]
 			},
 			"defaultGridSize": {
@@ -95,20 +119,25 @@
 				]
 			},
 			"worldLayout": {
-				"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`",
 				"enum": [
 					"Free",
 					"GridVania",
 					"LinearHorizontal",
-					"LinearVertical"
+					"LinearVertical",
+					null
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `IgnoreBackupSuggest`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
 				"items": {
 					"enum": [
 						"DiscardPreCsvIntGrid",
-						"IgnoreBackupSuggest"
+						"ExportPreCsvIntGridFormat",
+						"IgnoreBackupSuggest",
+						"PrependIndexToLevelFileNames",
+						"MultiWorlds",
+						"UseMultilinesType"
 					]
 				},
 				"type": [
@@ -129,9 +158,10 @@
 				]
 			},
 			"defaultLevelWidth": {
-				"description": "Default new level width",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Default new level width",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"pngFilePattern": {
@@ -139,6 +169,86 @@
 				"type": [
 					"string",
 					"null"
+				]
+			},
+			"__FORCED_REFS": {
+				"description": "This object is not actually used by LDtk. It ONLY exists to force explicit references to all types, to make sure QuickType finds them and integrate all of them. Otherwise, Quicktype will drop types that are not explicitely used.",
+				"properties": {
+					"TilesetRect": {
+						"$ref": "#/otherTypes/TilesetRect"
+					},
+					"FieldInstance": {
+						"$ref": "#/otherTypes/FieldInstance"
+					},
+					"EntityInstance": {
+						"$ref": "#/otherTypes/EntityInstance"
+					},
+					"Definitions": {
+						"$ref": "#/otherTypes/Definitions"
+					},
+					"EnumTagValue": {
+						"$ref": "#/otherTypes/EnumTagValue"
+					},
+					"AutoRuleDef": {
+						"$ref": "#/otherTypes/AutoRuleDef"
+					},
+					"FieldDef": {
+						"$ref": "#/otherTypes/FieldDef"
+					},
+					"EntityDef": {
+						"$ref": "#/otherTypes/EntityDef"
+					},
+					"AutoLayerRuleGroup": {
+						"$ref": "#/otherTypes/AutoLayerRuleGroup"
+					},
+					"IntGridValueInstance": {
+						"$ref": "#/otherTypes/IntGridValueInstance"
+					},
+					"NeighbourLevel": {
+						"$ref": "#/otherTypes/NeighbourLevel"
+					},
+					"LayerInstance": {
+						"$ref": "#/otherTypes/LayerInstance"
+					},
+					"World": {
+						"$ref": "#/otherTypes/World"
+					},
+					"EntityReferenceInfos": {
+						"$ref": "#/otherTypes/EntityReferenceInfos"
+					},
+					"TileCustomMetadata": {
+						"$ref": "#/otherTypes/TileCustomMetadata"
+					},
+					"TilesetDef": {
+						"$ref": "#/otherTypes/TilesetDef"
+					},
+					"EnumDefValues": {
+						"$ref": "#/otherTypes/EnumDefValues"
+					},
+					"Tile": {
+						"$ref": "#/otherTypes/Tile"
+					},
+					"LayerDef": {
+						"$ref": "#/otherTypes/LayerDef"
+					},
+					"LevelBgPosInfos": {
+						"$ref": "#/otherTypes/LevelBgPosInfos"
+					},
+					"Level": {
+						"$ref": "#/otherTypes/Level"
+					},
+					"EnumDef": {
+						"$ref": "#/otherTypes/EnumDef"
+					},
+					"GridPoint": {
+						"$ref": "#/otherTypes/GridPoint"
+					},
+					"IntGridValueDef": {
+						"$ref": "#/otherTypes/IntGridValueDef"
+					}
+				},
+				"type": [
+					"object"
 				]
 			},
 			"exportTiled": {
@@ -152,7 +262,7 @@
 				"$ref": "#/otherTypes/Definitions"
 			},
 			"levels": {
-				"description": "All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
+				"description": "All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
 				"items": {
 					"$ref": "#/otherTypes/Level"
 				},
@@ -173,15 +283,23 @@
 				]
 			},
 			"defaultLevelHeight": {
-				"description": "Default new level height",
+				"description": "**WARNING**: this field will move to the `worlds` array after the \"multi-worlds\" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>  Default new level height",
 				"type": [
-					"integer"
+					"integer",
+					"null"
 				]
 			},
 			"externalLevels": {
 				"description": "If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.",
 				"type": [
 					"boolean"
+				]
+			},
+			"tutorialDesc": {
+				"description": "This optional description is used by LDtk Samples to show up some informations and instructions.",
+				"type": [
+					"string",
+					"null"
 				]
 			},
 			"minifyJson": {
@@ -196,6 +314,53 @@
 		]
 	},
 	"otherTypes": {
+		"TilesetRect": {
+			"description": "This object represents a custom sub rectangle in a Tileset image.",
+			"title": "Tileset rectangle",
+			"required": [
+				"h",
+				"tilesetUid",
+				"w",
+				"x",
+				"y"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tilesetUid": {
+					"description": "UID of the tileset",
+					"type": [
+						"integer"
+					]
+				},
+				"h": {
+					"description": "Height in pixels",
+					"type": [
+						"integer"
+					]
+				},
+				"x": {
+					"description": "X pixels coordinate of the top-left corner in the Tileset image",
+					"type": [
+						"integer"
+					]
+				},
+				"y": {
+					"description": "Y pixels coordinate of the top-left corner in the Tileset image",
+					"type": [
+						"integer"
+					]
+				},
+				"w": {
+					"description": "Width in pixels",
+					"type": [
+						"integer"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"FieldInstance": {
 			"title": "Field instance",
 			"required": [
@@ -208,7 +373,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"__type": {
-					"description": "Type of the field, such as `Int`, `Float`, `Enum(my_enum_name)`, `Bool`, etc.",
+					"description": "Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`, etc.<br/>  NOTE: if you enable the advanced option **Use Multilines type**, you will have \"*Multilines*\" instead of \"*String*\" when relevant.",
 					"type": [
 						"string"
 					]
@@ -225,6 +390,19 @@
 						"string"
 					]
 				},
+				"__tile": {
+					"description": "Optional TilesetRect used to display this field (this can be the field own Tile, or some other Tile guessed from the value, like an Enum).",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"realEditorValues": {
 					"description": "Editor internal raw values",
 					"items" : {},
@@ -233,7 +411,7 @@
 					]
 				},
 				"__value": {
-					"description": "Actual value of the field instance. The value type may vary, depending on `__type` (Integer, Boolean, String etc.)<br/>  It can also be an `Array` of those same types."
+					"description": "Actual value of the field instance. The value type varies, depending on `__type`:<br/>   - For **classic types** (ie. Integer, Float, Boolean, String, Text and FilePath), you just get the actual value with the expected type.<br/>   - For **Color**, the value is an hexadecimal string using \"#rrggbb\" format.<br/>   - For **Enum**, the value is a String representing the selected enum value.<br/>   - For **Point**, the value is a [GridPoint](#ldtk-GridPoint) object.<br/>   - For **Tile**, the value is a [TilesetRect](#ldtk-TilesetRect) object.<br/>   - For **EntityRef**, the value is an [EntityReferenceInfos](#ldtk-EntityReferenceInfos) object.<br/><br/>  If the field is an array, then this `__value` will also be a JSON array."
 				}
 			},
 			"type": [
@@ -246,14 +424,23 @@
 				"__grid",
 				"__identifier",
 				"__pivot",
+				"__smartColor",
+				"__tags",
 				"defUid",
 				"fieldInstances",
 				"height",
+				"iid",
 				"px",
 				"width"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"iid": {
+					"description": "Unique instance identifier",
+					"type": [
+						"string"
+					]
+				},
 				"defUid": {
 					"description": "Reference of the **Entity definition** UID",
 					"type": [
@@ -267,7 +454,7 @@
 					]
 				},
 				"__tile": {
-					"description": "Optional Tile used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
+					"description": "Optional TilesetRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).",
 					"oneOf": [
 						{
 							"type": [
@@ -275,7 +462,7 @@
 							]
 						},
 						{
-							"$ref": "#/otherTypes/EntityInstanceTile"
+							"$ref": "#/otherTypes/TilesetRect"
 						}
 					]
 				},
@@ -288,6 +475,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"__smartColor": {
+					"description": "The entity \"smart\" color, guessed from either Entity definition, or one its field instances.",
+					"type": [
+						"string"
 					]
 				},
 				"__grid": {
@@ -325,6 +518,17 @@
 					"description": "Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.",
 					"type": [
 						"integer"
+					]
+				},
+				"__tags": {
+					"description": "Array of tags defined in this Entity definition",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"width": {
@@ -410,6 +614,37 @@
 				"object"
 			]
 		},
+		"EnumTagValue": {
+			"description": "In a tileset definition, enum based tag infos",
+			"title": "Enum tag value",
+			"required": [
+				"enumValueId",
+				"tileIds"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tileIds": {
+					"description": "",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"enumValueId": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"AutoRuleDef": {
 			"description": "This complex section isn't meant to be used by game devs at all, as these rules are completely resolved internally by the editor before any saving. You should just ignore this part.",
 			"title": "Auto-layer rule definition",
@@ -432,7 +667,9 @@
 				"tileMode",
 				"uid",
 				"xModulo",
-				"yModulo"
+				"xOffset",
+				"yModulo",
+				"yOffset"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -539,6 +776,12 @@
 						"number"
 					]
 				},
+				"yOffset": {
+					"description": "Y cell start offset",
+					"type": [
+						"integer"
+					]
+				},
 				"tileMode": {
 					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
 					"enum": [
@@ -569,6 +812,12 @@
 					"type": [
 						"boolean"
 					]
+				},
+				"xOffset": {
+					"description": "X cell start offset",
+					"type": [
+						"integer"
+					]
 				}
 			},
 			"type": [
@@ -585,10 +834,16 @@
 				"isArray",
 				"type",
 				"uid",
+				"allowOutOfLevelRef",
+				"allowedRefTags",
+				"allowedRefs",
+				"autoChainRef",
 				"editorAlwaysShow",
 				"editorCutLongValues",
 				"editorDisplayMode",
-				"editorDisplayPos"
+				"editorDisplayPos",
+				"symmetricalRef",
+				"useForSmartColor"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -604,6 +859,20 @@
 						"null"
 					]
 				},
+				"useForSmartColor": {
+					"description": "If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.",
+					"type": [
+						"boolean"
+					]
+				},
+				"allowedRefs": {
+					"description": "Possible values: `Any`, `OnlySame`, `OnlyTags`",
+					"enum": [
+						"Any",
+						"OnlySame",
+						"OnlyTags"
+					]
+				},
 				"editorAlwaysShow": {
 					"description": "",
 					"type": [
@@ -617,6 +886,13 @@
 						"null"
 					]
 				},
+				"editorTextSuffix": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
+					]
+				},
 				"min": {
 					"description": "Min limit for value, if applicable",
 					"type": [
@@ -625,13 +901,13 @@
 					]
 				},
 				"__type": {
-					"description": "Human readable value type (eg. `Int`, `Float`, `Point`, etc.). If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)",
+					"description": "Human readable value type. Possible values: `Int, Float, String, Bool, Color, ExternEnum.XXX, LocalEnum.XXX, Point, FilePath`.<br/>  If the field is an array, this field will look like `Array<...>` (eg. `Array<Int>`, `Array<Point>` etc.)<br/>  NOTE: if you enable the advanced option **Use Multilines type**, you will have \"*Multilines*\" instead of \"*String*\" when relevant.",
 					"type": [
 						"string"
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`",
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`",
 					"enum": [
 						"Hidden",
 						"ValueOnly",
@@ -642,7 +918,11 @@
 						"PointPath",
 						"PointPathLoop",
 						"RadiusPx",
-						"RadiusGrid"
+						"RadiusGrid",
+						"ArrayCountWithLabel",
+						"ArrayCountNoLabel",
+						"RefLinkBetweenPivots",
+						"RefLinkBetweenCenters"
 					]
 				},
 				"canBeNull": {
@@ -651,10 +931,47 @@
 						"boolean"
 					]
 				},
+				"autoChainRef": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"tilesetUid": {
+					"description": "UID of the tileset used for a Tile",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
+				"allowedRefTags": {
+					"description": "",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"symmetricalRef": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
 						"integer"
+					]
+				},
+				"editorTextPrefix": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"isArray": {
@@ -672,7 +989,7 @@
 					]
 				},
 				"textLanguageMode": {
-					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`",
+					"description": "Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`",
 					"enum": [
 						"LangPython",
 						"LangRuby",
@@ -683,6 +1000,7 @@
 						"LangMarkdown",
 						"LangJson",
 						"LangXml",
+						"LangLog",
 						null
 					]
 				},
@@ -691,6 +1009,12 @@
 					"type": [
 						"number",
 						"null"
+					]
+				},
+				"allowOutOfLevelRef": {
+					"description": "",
+					"type": [
+						"boolean"
 					]
 				},
 				"editorCutLongValues": {
@@ -710,10 +1034,13 @@
 					]
 				},
 				"type": {
-					"description": "Internal type enum"
+					"description": "Internal enum representing the possible field types. Possible values: F_Int, F_Float, F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile",
+					"type": [
+						"string"
+					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -736,8 +1063,10 @@
 				"color",
 				"height",
 				"identifier",
+				"nineSliceBorders",
 				"pivotX",
 				"pivotY",
+				"tileRenderMode",
 				"uid",
 				"width",
 				"fieldDefs",
@@ -753,12 +1082,12 @@
 				"resizableY",
 				"showName",
 				"tags",
-				"tileRenderMode"
+				"tileOpacity"
 			],
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "Tile ID used for optional tile display",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -815,6 +1144,19 @@
 						"string"
 					]
 				},
+				"tileRect": {
+					"description": "An object representing a rectangle from an existing Tileset",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"fieldDefs": {
 					"description": "Array of field definitions",
 					"items": {
@@ -825,12 +1167,15 @@
 					]
 				},
 				"tileRenderMode": {
-					"description": "Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`",
+					"description": "An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`",
 					"enum": [
 						"Cover",
 						"FitInside",
 						"Repeat",
-						"Stretch"
+						"Stretch",
+						"FullSizeCropped",
+						"FullSizeUncropped",
+						"NineSlice"
 					]
 				},
 				"limitBehavior": {
@@ -839,6 +1184,23 @@
 						"DiscardOldOnes",
 						"PreventAdding",
 						"MoveLastOne"
+					]
+				},
+				"tileOpacity": {
+					"description": "",
+					"type": [
+						"number"
+					]
+				},
+				"nineSliceBorders": {
+					"description": "An array of 4 dimensions for the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"resizableX": {
@@ -878,7 +1240,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -924,7 +1286,6 @@
 			"title": "Auto-layer rule group",
 			"required": [
 				"active",
-				"collapsed",
 				"isOptional",
 				"name",
 				"rules",
@@ -939,9 +1300,10 @@
 					]
 				},
 				"collapsed": {
-					"description": "",
+					"description": "*This field was removed in 1.0.0 and should no longer be used.*",
 					"type": [
-						"boolean"
+						"boolean",
+						"null"
 					]
 				},
 				"isOptional": {
@@ -969,37 +1331,6 @@
 					},
 					"type": [
 						"array"
-					]
-				}
-			},
-			"type": [
-				"object"
-			]
-		},
-		"EntityInstanceTile": {
-			"description": "Tile data in an Entity instance",
-			"title": "Entity instance tile",
-			"required": [
-				"srcRect",
-				"tilesetUid"
-			],
-			"additionalProperties": false,
-			"properties": {
-				"srcRect": {
-					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
-					"items": {
-						"type": [
-							"integer"
-						]
-					},
-					"type": [
-						"array"
-					]
-				},
-				"tilesetUid": {
-					"description": "Tileset ID",
-					"type": [
-						"integer"
 					]
 				}
 			},
@@ -1038,12 +1369,18 @@
 			"title": "Neighbour level",
 			"required": [
 				"dir",
-				"levelUid"
+				"levelIid"
 			],
 			"additionalProperties": false,
 			"properties": {
+				"levelIid": {
+					"description": "Neighbour Instance Identifier",
+					"type": [
+						"string"
+					]
+				},
 				"levelUid": {
-					"description": "",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `levelIid`",
 					"type": [
 						"integer"
 					]
@@ -1073,6 +1410,7 @@
 				"autoLayerTiles",
 				"entityInstances",
 				"gridTiles",
+				"iid",
 				"intGridCsv",
 				"layerDefUid",
 				"levelId",
@@ -1101,6 +1439,12 @@
 					"type": [
 						"string",
 						"null"
+					]
+				},
+				"iid": {
+					"description": "Unique layer instance identifier",
+					"type": [
+						"string"
 					]
 				},
 				"levelId": {
@@ -1154,7 +1498,7 @@
 					]
 				},
 				"intGridCsv": {
-					"description": "A list of all values in the IntGrid layer, stored from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc). `0` means \"empty cell\" and IntGrid values start at 1. This array size is `__cWid` x `__cHei` cells.",
+					"description": "A list of all values in the IntGrid layer, stored in CSV format (Comma Separated Values).<br/>  Order is from left to right, and top to bottom (ie. first row from left to right, followed by second row, etc).<br/>  `0` means \"empty cell\" and IntGrid values start at 1.<br/>  The array size is `__cWid` x `__cHei` cells.",
 					"items": {
 						"type": [
 							"integer"
@@ -1239,12 +1583,154 @@
 					]
 				},
 				"intGrid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 0.10.0+  Replaced by: `intGridCsv`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced by: `intGridCsv`",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
 					"type": [
+						"array",
+						"null"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"World": {
+			"description": "**IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented here as a preview of a planned feature.  A World contains multiple levels, and it has its own layout settings.",
+			"title": "World",
+			"required": [
+				"identifier",
+				"iid",
+				"levels",
+				"worldGridHeight",
+				"worldGridWidth",
+				"worldLayout",
+				"defaultLevelHeight",
+				"defaultLevelWidth"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldGridWidth": {
+					"description": "Width of the world grid in pixels.",
+					"type": [
+						"integer"
+					]
+				},
+				"iid": {
+					"description": "Unique instance identifer",
+					"type": [
+						"string"
+					]
+				},
+				"worldGridHeight": {
+					"description": "Height of the world grid in pixels.",
+					"type": [
+						"integer"
+					]
+				},
+				"worldLayout": {
+					"description": "An enum that describes how levels are organized in this project (ie. linearly or in a 2D space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`",
+					"enum": [
+						"Free",
+						"GridVania",
+						"LinearHorizontal",
+						"LinearVertical",
+						null
+					]
+				},
+				"defaultLevelWidth": {
+					"description": "Default new level width",
+					"type": [
+						"integer"
+					]
+				},
+				"levels": {
+					"description": "All levels from this world. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value). Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.",
+					"items": {
+						"$ref": "#/otherTypes/Level"
+					},
+					"type": [
 						"array"
+					]
+				},
+				"defaultLevelHeight": {
+					"description": "Default new level height",
+					"type": [
+						"integer"
+					]
+				},
+				"identifier": {
+					"description": "User defined unique identifier",
+					"type": [
+						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"EntityReferenceInfos": {
+			"description": "This object is used in Field Instances to describe an EntityRef value.",
+			"title": "Field instance entity reference",
+			"required": [
+				"entityIid",
+				"layerIid",
+				"levelIid",
+				"worldIid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldIid": {
+					"description": "IID of the World containing the refered EntityInstance",
+					"type": [
+						"string"
+					]
+				},
+				"entityIid": {
+					"description": "IID of the refered EntityInstance",
+					"type": [
+						"string"
+					]
+				},
+				"layerIid": {
+					"description": "IID of the LayerInstance containing the refered EntityInstance",
+					"type": [
+						"string"
+					]
+				},
+				"levelIid": {
+					"description": "IID of the Level containing the refered EntityInstance",
+					"type": [
+						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TileCustomMetadata": {
+			"description": "In a tileset definition, user defined meta-data of a tile.",
+			"title": "Tile custom metadata",
+			"required": [
+				"data",
+				"tileId"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"tileId": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"data": {
+					"description": "",
+					"type": [
+						"string"
 					]
 				}
 			},
@@ -1266,6 +1752,7 @@
 				"pxWid",
 				"relPath",
 				"spacing",
+				"tags",
 				"tileGridSize",
 				"uid",
 				"savedSelections"
@@ -1294,9 +1781,7 @@
 				"customData": {
 					"description": "An array of custom tile metadata",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/TileCustomMetadata"
 					},
 					"type": [
 						"array"
@@ -1324,9 +1809,7 @@
 				"enumTags": {
 					"description": "Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.",
 					"items": {
-						"type": [
-							"object"
-						]
+						"$ref": "#/otherTypes/EnumTagValue"
 					},
 					"type": [
 						"array"
@@ -1351,7 +1834,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -1365,6 +1848,24 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"tags": {
+					"description": "An array of user-defined tags to organize the Tilesets",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"embedAtlas": {
+					"description": "If this value is set, then it means that this atlas uses an internal LDtk atlas image instead of a loaded one. Possible values: &lt;`null`&gt;, `LdtkIcons`",
+					"enum": [
+						"LdtkIcons",
+						null
 					]
 				},
 				"relPath": {
@@ -1498,11 +1999,19 @@
 				"gridSize",
 				"identifier",
 				"intGridValues",
+				"parallaxFactorX",
+				"parallaxFactorY",
+				"parallaxScaling",
 				"pxOffsetX",
 				"pxOffsetY",
 				"uid",
 				"autoRuleGroups",
 				"excludedTags",
+				"guideGridHei",
+				"guideGridWid",
+				"hideFieldsWhenInactive",
+				"hideInList",
+				"inactiveOpacity",
 				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
@@ -1528,14 +2037,32 @@
 						"number"
 					]
 				},
+				"parallaxFactorY": {
+					"description": "Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
+					"type": [
+						"number"
+					]
+				},
+				"hideInList": {
+					"description": "Hide the layer from the list on the side of the editor view.",
+					"type": [
+						"boolean"
+					]
+				},
 				"__type": {
 					"description": "Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)",
 					"type": [
 						"string"
 					]
 				},
+				"guideGridHei": {
+					"description": "Height of the optional \"guide\" grid in pixels",
+					"type": [
+						"integer"
+					]
+				},
 				"tilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this Tile layer. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.",
+					"description": "Reference to the default Tileset UID being used by this layer definition.<br/>  **WARNING**: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note: since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.",
 					"type": [
 						"integer",
 						"null"
@@ -1549,10 +2076,22 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "Reference to the Tileset UID being used by this auto-layer rules. WARNING: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value from layer instances.",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tilesetDefUid`",
 					"type": [
 						"integer",
 						"null"
+					]
+				},
+				"parallaxScaling": {
+					"description": "If true (default), a layer with a parallax factor will also be scaled up/down accordingly.",
+					"type": [
+						"boolean"
+					]
+				},
+				"inactiveOpacity": {
+					"description": "Alpha of this layer when it is not the active one.",
+					"type": [
+						"number"
 					]
 				},
 				"uid": {
@@ -1572,8 +2111,14 @@
 						"array"
 					]
 				},
+				"hideFieldsWhenInactive": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
 				"intGridValues": {
-					"description": "An array that defines extra optional info for each IntGrid value. The array is sorted using value (ascending).",
+					"description": "An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value \"2\" before value \"1\" in this array.",
 					"items": {
 						"$ref": "#/otherTypes/IntGridValueDef"
 					},
@@ -1600,9 +2145,15 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
+					]
+				},
+				"guideGridWid": {
+					"description": "Width of the optional \"guide\" grid in pixels",
+					"type": [
+						"integer"
 					]
 				},
 				"requiredTags": {
@@ -1632,6 +2183,12 @@
 					"description": "Width and height of the grid in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"parallaxFactorX": {
+					"description": "Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
+					"type": [
+						"number"
 					]
 				}
 			},
@@ -1695,11 +2252,14 @@
 				"__neighbours",
 				"fieldInstances",
 				"identifier",
+				"iid",
 				"pxHei",
 				"pxWid",
 				"uid",
+				"worldDepth",
 				"worldX",
 				"worldY",
+				"__smartColor",
 				"bgPivotX",
 				"bgPivotY",
 				"useAutoIdentifier"
@@ -1707,7 +2267,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
-					"description": "An array listing all other levels touching this one on the world map. In \"linear\" world layouts, this array is populated with previous/next levels in array, and `dir` depends on the linear horizontal/vertical layout.",
+					"description": "An array listing all other levels touching this one on the world map.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, this array is always empty.",
 					"items": {
 						"$ref": "#/otherTypes/NeighbourLevel"
 					},
@@ -1722,7 +2282,7 @@
 					]
 				},
 				"worldX": {
-					"description": "World X coordinate in pixels",
+					"description": "World X coordinate in pixels.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the value is always -1 here.",
 					"type": [
 						"integer"
 					]
@@ -1738,6 +2298,12 @@
 					"description": "If TRUE, the level identifier will always automatically use the naming pattern as defined in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by user.",
 					"type": [
 						"boolean"
+					]
+				},
+				"iid": {
+					"description": "Unique instance identifier",
+					"type": [
+						"string"
 					]
 				},
 				"bgColor": {
@@ -1764,7 +2330,7 @@
 					]
 				},
 				"worldY": {
-					"description": "World Y coordinate in pixels",
+					"description": "World Y coordinate in pixels.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, the value is always -1 here.",
 					"type": [
 						"integer"
 					]
@@ -1788,6 +2354,12 @@
 						"integer"
 					]
 				},
+				"__smartColor": {
+					"description": "The \"guessed\" color for this level in the editor, decided using either the background color or an existing custom field.",
+					"type": [
+						"string"
+					]
+				},
 				"fieldInstances": {
 					"description": "An array containing this level custom field values.",
 					"items": {
@@ -1804,7 +2376,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
 					]
@@ -1837,6 +2409,12 @@
 						"string",
 						"null"
 					]
+				},
+				"worldDepth": {
+					"description": "Index that represents the \"depth\" of the level in the world. Default is 0, greater means \"above\", lower means \"below\".<br/>  This value is mostly used for display only and is intended to make stacking of levels easier to manage.",
+					"type": [
+						"integer"
+					]
 				}
 			},
 			"type": [
@@ -1847,6 +2425,7 @@
 			"title": "Enum definition",
 			"required": [
 				"identifier",
+				"tags",
 				"uid",
 				"values"
 			],
@@ -1889,9 +2468,46 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string"
+					]
+				},
+				"tags": {
+					"description": "An array of user-defined tags to organize the Enums",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"GridPoint": {
+			"description": "This object is just a grid-based coordinate used in Field values.",
+			"title": "Field instance grid point",
+			"required": [
+				"cx",
+				"cy"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"cy": {
+					"description": "Y grid-based coordinate",
+					"type": [
+						"integer"
+					]
+				},
+				"cx": {
+					"description": "X grid-based coordinate",
+					"type": [
+						"integer"
 					]
 				}
 			},
@@ -1915,7 +2531,7 @@
 					]
 				},
 				"identifier": {
-					"description": "Unique String identifier",
+					"description": "User defined unique identifier",
 					"type": [
 						"string",
 						"null"

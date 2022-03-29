@@ -3,7 +3,7 @@ package ui.modal.dialog;
 import data.DataTypes;
 
 class RuleEditor extends ui.modal.Dialog {
-	var curValIdx = 0;
+	var curValue = -1;
 	var layerDef : data.def.LayerDef;
 	var sourceDef : data.def.LayerDef;
 	var rule : data.def.AutoLayerRuleDef;
@@ -16,6 +16,12 @@ class RuleEditor extends ui.modal.Dialog {
 		this.layerDef = layerDef;
 		this.rule = rule;
 		sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef( layerDef.autoSourceLayerDefUid );
+
+		curValue = -1;
+		for(iv in layerDef.getAllIntGridValues()) {
+			curValue = iv.value;
+			break;
+		}
 
 		renderAll();
 	}
@@ -106,36 +112,43 @@ class RuleEditor extends ui.modal.Dialog {
 	function updateValuePicker() {
 		var jValues = jContent.find(">.pattern .values ul").empty();
 
+		var allValues = sourceDef.getAllIntGridValues();
+		if( allValues.length>8 )
+			jContent.addClass("manyValues");
+		else
+			jContent.removeClass("manyValues");
+
 		// Values picker
-		var idx = 0;
-		for(v in sourceDef.getAllIntGridValues()) {
+		for(v in allValues) {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 
 			jVal.css("background-color", C.intToHex(v.color));
-			jVal.text( v.identifier!=null ? v.identifier : '#$idx' );
+			jVal.append('<span class="value">${v.value}</span>');
+			jVal.append('<span class="name">${v.identifier!=null ? v.identifier : ""}</span>');
+			jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
 
-			if( idx==curValIdx )
+			if( v.value==curValue )
 				jVal.addClass("active");
 
-			var i = idx;
+			var id = v.value;
 			jVal.click( function(ev) {
-				curValIdx = i;
+				curValue = id;
 				editor.ge.emit( LayerRuleChanged(rule) );
 				updateValuePicker();
 			});
-			idx++;
 		}
 
 		// "Anything" value
 		var jVal = new J('<li/>');
 		jVal.appendTo(jValues);
 		jVal.addClass("any");
-		jVal.text("Anything");
-		if( curValIdx==Const.AUTO_LAYER_ANYTHING )
+		jVal.append('<span class="value"></span>');
+		jVal.append('<span class="name">Anything/Nothing</span>');
+		if( curValue==Const.AUTO_LAYER_ANYTHING )
 			jVal.addClass("active");
 		jVal.click( function(ev) {
-			curValIdx = Const.AUTO_LAYER_ANYTHING;
+			curValue = Const.AUTO_LAYER_ANYTHING;
 			editor.ge.emit( LayerRuleChanged(rule) );
 			updateValuePicker();
 		});
@@ -170,7 +183,7 @@ class RuleEditor extends ui.modal.Dialog {
 					jExplain.html(str);
 				}
 			},
-			()->curValIdx,
+			()->curValue,
 			()->editor.ge.emit( LayerRuleChanged(rule) )
 		);
 		jContent.find(">.pattern .editor .grid").empty().append( patternEditor.jRoot );
@@ -197,8 +210,7 @@ class RuleEditor extends ui.modal.Dialog {
 		// Out-of-bounds policy
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");
 		jOutOfBounds.empty();
-		var idx = 1;
-		var values = [null, 0].concat( sourceDef.getAllIntGridValues().map( iv->idx++ ) );
+		var values = [null, 0].concat( sourceDef.getAllIntGridValues().map( iv->iv.value ) );
 		for(v in values) {
 			var jOpt = new J('<option value="$v"/>');
 			jOpt.appendTo(jOutOfBounds);

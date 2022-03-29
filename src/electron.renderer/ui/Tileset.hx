@@ -13,6 +13,7 @@ class Tileset {
 	var jCursor : js.jquery.JQuery;
 	var jSelection : js.jquery.JQuery;
 	var jCanvas : js.jquery.JQuery;
+	var jInfos : js.jquery.JQuery;
 
 	var canvas(get,never) : js.html.CanvasElement;
 		inline function get_canvas() return cast jCanvas.get(0);
@@ -24,19 +25,19 @@ class Tileset {
 	var tx : Null<Float>;
 	var ty : Null<Float>;
 	var mouseOver = false;
-	var useSavedSelections = true;
+	public var useSavedSelections = true;
 
 	var selectMode : TilesetSelectionMode;
 	var _internalSelectedIds : Array<Int> = [];
 
 
-	public function new(target:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
+	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
 		tilesetDef = td;
 		selectMode = mode;
 
 		// Create picker elements
 		jWrapper = new J('<div class="tileset"/>');
-		jWrapper.appendTo(target);
+		jWrapper.appendTo(jParent);
 
 		jTilesetWrapper = new J('<div class="tilesetWrapper"/>');
 		jTilesetWrapper.appendTo(jWrapper);
@@ -55,6 +56,9 @@ class Tileset {
 		jCanvas.attr("height",tilesetDef.pxHei+"px");
 		renderAtlas();
 		jCanvas.appendTo(jAtlas);
+
+		jInfos = new J('<div class="selectionInfos"/>');
+		jInfos.appendTo(jWrapper);
 
 		// Init events
 		jTilesetWrapper.mousedown( function(ev) {
@@ -122,12 +126,22 @@ class Tileset {
 		}
 	}
 
-	public function resetScroll() {
+	function resetScroll() {
 		tx = ty = null;
 		scrollX = 0;
 		scrollY = 0;
 		zoom = 3;
 		SCROLL_MEMORY.remove( tilesetDef.relPath );
+	}
+
+	public function getSelectedRect() : Null<ldtk.Json.TilesetRect> {
+		return switch selectMode {
+			case None: null;
+			case PickAndClose: null;
+			case PickSingle: null;
+			case Free: null;
+			case RectOnly: tilesetDef.getTileRectFromTileIds( getSelectedTileIds() );
+		}
 	}
 
 	public function getSelectedTileIds() {
@@ -145,7 +159,11 @@ class Tileset {
 		renderSelection();
 	}
 
-	public dynamic function onSingleTileSelect(tileId:Int) {}
+	public function setSelectedRect(r:ldtk.Json.TilesetRect) {
+		setSelectedTileIds( tilesetDef.getTileIdsFromRect(r) );
+	}
+
+	public dynamic function onSelectAnything() {}
 
 	function loadScrollPos() {
 		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
@@ -211,6 +229,13 @@ class Tileset {
 
 			case None:
 		}
+	}
+
+	public function useOldTilesetPos(old:Tileset) {
+		scrollX = old.scrollX;
+		scrollY = old.scrollY;
+		tx = old.tx;
+		ty = old.ty;
 	}
 
 	public function focusOnSelection(instant=false) {
@@ -327,6 +352,9 @@ class Tileset {
 		jCursor.empty();
 		jCursor.show();
 
+		// Infos
+		jInfos.empty().text("#"+tileId);
+
 		var defaultClass = dragStart==null ? "mouseOver" : null;
 
 		if( selectMode==PickAndClose ) {
@@ -419,7 +447,7 @@ class Tileset {
 			case None:
 
 			case PickAndClose:
-				onSingleTileSelect( selIds[0] );
+				setSelectedTileIds(selIds);
 
 			case Free, RectOnly, PickSingle:
 				if( add ) {
@@ -457,7 +485,7 @@ class Tileset {
 						else
 							i++;
 				}
-				Editor.ME.ge.emit(ToolOptionChanged);
+				Editor.ME.ge.emit(ToolValueSelected);
 
 			// case PaintId( valueGetter, paint ):
 			// 	if( valueGetter()!=null )
@@ -467,6 +495,7 @@ class Tileset {
 
 		renderSelection();
 		onSelect(selIds, add);
+		onSelectAnything();
 	}
 
 	function onSelect(tileIds:Array<Int>, added:Bool) {}

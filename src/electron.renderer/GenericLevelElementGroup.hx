@@ -1,4 +1,4 @@
-typedef SelectionBounds = { top:Int, left:Int, right:Int, bottom:Int }
+typedef SelectionBounds = { top:Float, left:Float, right:Float, bottom:Float }
 
 class GenericLevelElementGroup {
 	static var SELECTION_COLOR = 0xffcc00;
@@ -15,7 +15,7 @@ class GenericLevelElementGroup {
 
 	var invalidatedSelectRender = true;
 
-	var originalRects : Array< { leftPx:Int, rightPx:Int, topPx:Int, bottomPx:Int } > = [];
+	var originalRects : Array< { leftPx:Float, rightPx:Float, topPx:Float, bottomPx:Float } > = [];
 
 	public function new(?elems:Array<GenericLevelElement>) {
 		if( elems!=null )
@@ -138,35 +138,35 @@ class GenericLevelElementGroup {
 
 				for(e in elements) {
 					var x = switch e {
-						case GridCell(li, cx, cy): li.pxTotalOffsetX + cx*li.def.gridSize;
-						case Entity(li, ei): li.pxTotalOffsetX + ei.x;
+						case GridCell(li, cx, cy): li.pxParallaxX + cx*li.def.scaledGridSize;
+						case Entity(li, ei): li.pxParallaxX + ei.x*li.def.getScale();
 						case PointField(li, ei, fi, arrayIdx):
 							var pt = fi.getPointGrid(arrayIdx);
 							if( pt!=null )
-								li.pxTotalOffsetX + pt.cx*li.def.gridSize;
+								li.pxParallaxX + pt.cx*li.def.scaledGridSize;
 							else
 								0;
 					}
 					var y = switch e {
-						case GridCell(li, cx, cy): li.pxTotalOffsetY + cy*li.def.gridSize;
-						case Entity(li, ei): li.pxTotalOffsetY +  ei.y;
+						case GridCell(li, cx, cy): li.pxParallaxY + cy*li.def.scaledGridSize;
+						case Entity(li, ei): li.pxParallaxY + ei.y*li.def.getScale();
 						case PointField(li, ei, fi, arrayIdx):
 							var pt = fi.getPointGrid(arrayIdx);
 							if( pt!=null )
-								li.pxTotalOffsetY + pt.cy*li.def.gridSize;
+								li.pxParallaxY + pt.cy*li.def.scaledGridSize;
 							else
 								0;
 					}
-					_cachedBounds.top = M.imin( _cachedBounds.top, y );
-					_cachedBounds.bottom = M.imax( _cachedBounds.bottom, y );
-					_cachedBounds.left = M.imin( _cachedBounds.left, x );
-					_cachedBounds.right = M.imax( _cachedBounds.right, x );
+					_cachedBounds.top = M.fmin( _cachedBounds.top, y );
+					_cachedBounds.bottom = M.fmax( _cachedBounds.bottom, y );
+					_cachedBounds.left = M.fmin( _cachedBounds.left, x );
+					_cachedBounds.right = M.fmax( _cachedBounds.right, x );
 
 					for(r in originalRects) {
-						_cachedBounds.top = M.imin( _cachedBounds.top, r.topPx );
-						_cachedBounds.bottom = M.imax( _cachedBounds.bottom, r.bottomPx );
-						_cachedBounds.left = M.imin( _cachedBounds.left, r.leftPx );
-						_cachedBounds.right = M.imax( _cachedBounds.right, r.rightPx );
+						_cachedBounds.top = M.fmin( _cachedBounds.top, r.topPx );
+						_cachedBounds.bottom = M.fmax( _cachedBounds.bottom, r.bottomPx );
+						_cachedBounds.left = M.fmin( _cachedBounds.left, r.leftPx );
+						_cachedBounds.right = M.fmax( _cachedBounds.right, r.rightPx );
 					}
 
 				}
@@ -191,10 +191,10 @@ class GenericLevelElementGroup {
 		selectRender.clear();
 		selectRender.visible = true;
 		var c = SELECTION_COLOR;
-		var a = 1;
+		var alpha = 1;
 
 		for(r in originalRects) {
-			selectRender.beginFill(0x8ab7ff, a);
+			selectRender.beginFill(0x8ab7ff, alpha);
 			selectRender.drawRect(r.leftPx, r.topPx, r.rightPx-r.leftPx, r.bottomPx-r.topPx);
 		}
 
@@ -203,33 +203,33 @@ class GenericLevelElementGroup {
 				case null:
 				case GridCell(li, cx, cy):
 					if( li.hasAnyGridValue(cx,cy) )
-						selectRender.beginFill(c, a);
+						selectRender.beginFill(c, alpha);
 					else
-						selectRender.beginFill(0x8ab7ff, a*0.6);
+						selectRender.beginFill(0x8ab7ff, alpha*0.6);
 					selectRender.drawRect(
-						li.pxTotalOffsetX + cx*li.def.gridSize,
-						li.pxTotalOffsetY + cy*li.def.gridSize,
-						li.def.gridSize,
-						li.def.gridSize
+						li.pxParallaxX + cx*li.def.scaledGridSize,
+						li.pxParallaxY + cy*li.def.scaledGridSize,
+						li.def.scaledGridSize,
+						li.def.scaledGridSize
 					);
 
 				case Entity(li, ei):
-					selectRender.beginFill(c, a);
+					selectRender.beginFill(c, alpha);
 					selectRender.drawRect(
-						li.pxTotalOffsetX + ei.x - ei.width * ei.def.pivotX,
-						li.pxTotalOffsetY + ei.y - ei.height * ei.def.pivotY,
-						ei.width,
-						ei.height
+						li.pxParallaxX + ( ei.x - ei.width * ei.def.pivotX ) * li.def.getScale(),
+						li.pxParallaxY + ( ei.y - ei.height * ei.def.pivotY ) * li.def.getScale(),
+						ei.width * li.def.getScale(),
+						ei.height * li.def.getScale()
 					);
 
 				case PointField(li, ei, fi, arrayIdx):
-					selectRender.beginFill(c, a);
+					selectRender.beginFill(c, alpha);
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null )
 						selectRender.drawCircle(
-							li.pxTotalOffsetX + (pt.cx+0.5)*li.def.gridSize,
-							li.pxTotalOffsetY + (pt.cy+0.5)*li.def.gridSize,
-							li.def.gridSize*0.4
+							li.pxParallaxX + (pt.cx+0.5)*li.def.scaledGridSize,
+							li.pxParallaxY + (pt.cy+0.5)*li.def.scaledGridSize,
+							li.def.scaledGridSize*0.4
 						);
 			}
 		}
@@ -249,10 +249,10 @@ class GenericLevelElementGroup {
 								ghost.lineStyle();
 								ghost.beginFill( li.getIntGridColorAt(cx,cy) );
 								ghost.drawRect(
-									li.pxTotalOffsetX + cx*li.def.gridSize - bounds.left,
-									li.pxTotalOffsetY + cy*li.def.gridSize - bounds.top,
-									li.def.gridSize,
-									li.def.gridSize
+									li.pxParallaxX + cx*li.def.scaledGridSize - bounds.left,
+									li.pxParallaxY + cy*li.def.scaledGridSize - bounds.top,
+									li.def.scaledGridSize,
+									li.def.scaledGridSize
 								);
 								ghost.endFill();
 
@@ -260,8 +260,8 @@ class GenericLevelElementGroup {
 								var td = li.getTilesetDef();
 								for( t in li.getGridTileStack(cx,cy) ) {
 									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
-									bmp.x = li.pxTotalOffsetX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.gridSize - bounds.left;
-									bmp.y = li.pxTotalOffsetY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.gridSize - bounds.top;
+									bmp.x = li.pxParallaxX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.scaledGridSize - bounds.left;
+									bmp.y = li.pxParallaxY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.scaledGridSize - bounds.top;
 									bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
 									bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
 								}
@@ -271,23 +271,23 @@ class GenericLevelElementGroup {
 						}
 
 				case Entity(li, ei):
-					var o = display.EntityRender.renderCore(ei);
-					ghost.addChild(o);
-					o.alpha = 0.5;
-					o.x = li.pxTotalOffsetX + ei.x - bounds.left;
-					o.y = li.pxTotalOffsetY + ei.y - bounds.top;
+					var core = display.EntityRender.renderCore(ei);
+					ghost.addChild(core.wrapper);
+					core.wrapper.alpha = 0.5;
+					core.wrapper.x = li.pxParallaxX + ei.x - bounds.left;
+					core.wrapper.y = li.pxParallaxY + ei.y - bounds.top;
 
 				case PointField(li, ei, fi, arrayIdx):
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null ) {
-						var x = li.pxTotalOffsetX + (pt.cx+0.5)*li.def.gridSize - bounds.left;
-						var y = li.pxTotalOffsetY + (pt.cy+0.5)*li.def.gridSize - bounds.top;
+						var x = li.pxParallaxX + (pt.cx+0.5)*li.def.scaledGridSize - bounds.left;
+						var y = li.pxParallaxY + (pt.cy+0.5)*li.def.scaledGridSize - bounds.top;
 						ghost.lineStyle(1, ei.getSmartColor(false));
-						ghost.drawCircle(x, y, li.def.gridSize*0.5);
+						ghost.drawCircle(x, y, li.def.scaledGridSize*0.5);
 
 						ghost.lineStyle();
 						ghost.beginFill(ei.getSmartColor(false) );
-						ghost.drawCircle(x, y, li.def.gridSize*0.3);
+						ghost.drawCircle(x, y, li.def.scaledGridSize*0.3);
 						ghost.endFill();
 					}
 			}
@@ -321,7 +321,7 @@ class GenericLevelElementGroup {
 				case null:
 
 				case GridCell(li, _), Entity(li, _), PointField(li, _):
-					if( l==null || li.def.gridSize>l.def.gridSize )
+					if( l==null || li.def.scaledGridSize>l.def.scaledGridSize )
 						l = li;
 			}
 		return l;
@@ -329,11 +329,12 @@ class GenericLevelElementGroup {
 
 	inline function getSmartSnapGrid() {
 		var li = getSmartRelativeLayerInstance();
-		return li==null ? 1 : li.def.gridSize;
+		return li==null ? 1 : li.def.scaledGridSize;
 	}
 
 	public function hasIncompatibleGridSizes() {
-		var grid = getSmartSnapGrid();
+		var li  = getSmartRelativeLayerInstance();
+		var grid = li==null ? 1 : li.def.gridSize;
 		for( ge in elements )
 			switch ge {
 			case null:
@@ -421,10 +422,10 @@ class GenericLevelElementGroup {
 			arrow.visible = false;
 		else {
 			var grid = getSmartSnapGrid();
-			var fx = rel.pxTotalOffsetX + (origin.cx+0.5) * grid;
-			var fy = rel.pxTotalOffsetY + (origin.cy+0.5) * grid;
-			var tx = rel.pxTotalOffsetX + (now.cx+0.5) * grid;
-			var ty = rel.pxTotalOffsetY + (now.cy+0.5) * grid;
+			var fx = rel.pxParallaxX + (origin.cx+0.5) * grid;
+			var fy = rel.pxParallaxY + (origin.cy+0.5) * grid;
+			var tx = rel.pxParallaxX + (now.cx+0.5) * grid;
+			var ty = rel.pxParallaxY + (now.cy+0.5) * grid;
 
 			var a = Math.atan2(ty-fy, tx-fx);
 			var size = 6;
@@ -473,8 +474,10 @@ class GenericLevelElementGroup {
 					for(fi in ei.getFieldInstancesOfType(F_Point)) {
 						switch fi.def.editorDisplayMode {
 							case PointStar, PointPath, PointPathLoop:
+							case RefLinkBetweenCenters: continue;
+							case RefLinkBetweenPivots: continue;
 							case Points: continue;
-							case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid: continue;
+							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, RadiusPx, RadiusGrid: continue;
 						}
 
 						// Links to Entity own field points
@@ -491,14 +494,14 @@ class GenericLevelElementGroup {
 							if( pt!=null )
 								if( isFieldValueSelected(fi,i) ) {
 									pointLinks.lineTo(
-										levelToGhostX( li.pxTotalOffsetX+(pt.cx+0.5)*li.def.gridSize ),
-										levelToGhostY( li.pxTotalOffsetY+(pt.cy+0.5)*li.def.gridSize )
+										levelToGhostX( li.pxParallaxX+(pt.cx+0.5)*li.def.scaledGridSize ),
+										levelToGhostY( li.pxParallaxY+(pt.cy+0.5)*li.def.scaledGridSize )
 									);
 								}
 								else
 									pointLinks.lineTo(
-										li.pxTotalOffsetX+(pt.cx+0.5)*li.def.gridSize,
-										li.pxTotalOffsetY+(pt.cy+0.5)*li.def.gridSize
+										li.pxParallaxX+(pt.cx+0.5)*li.def.scaledGridSize,
+										li.pxParallaxY+(pt.cy+0.5)*li.def.scaledGridSize
 									);
 						}
 					}
@@ -507,8 +510,8 @@ class GenericLevelElementGroup {
 					pointLinks.lineStyle(1,ei.getSmartColor(true));
 					var pt = fi.getPointGrid(arrayIdx);
 					if( pt!=null ) {
-						var x = levelToGhostX( li.pxTotalOffsetX+(pt.cx+0.5)*li.def.gridSize );
-						var y = levelToGhostY( li.pxTotalOffsetY+(pt.cy+0.5)*li.def.gridSize );
+						var x = levelToGhostX( li.pxParallaxX+(pt.cx+0.5)*li.def.scaledGridSize );
+						var y = levelToGhostY( li.pxParallaxY+(pt.cy+0.5)*li.def.scaledGridSize );
 
 						// Link to entity
 						if( fi.def.editorDisplayMode==PointStar || arrayIdx==0 ) {
@@ -530,13 +533,13 @@ class GenericLevelElementGroup {
 									pointLinks.moveTo(x,y);
 									if( isFieldValueSelected(fi,arrayIdx-1) )
 										pointLinks.lineTo(
-											levelToGhostX( li.pxTotalOffsetX+(prev.cx+0.5)*li.def.gridSize ),
-											levelToGhostY( li.pxTotalOffsetX+(prev.cy+0.5)*li.def.gridSize )
+											levelToGhostX( li.pxParallaxX+(prev.cx+0.5)*li.def.scaledGridSize ),
+											levelToGhostY( li.pxParallaxX+(prev.cy+0.5)*li.def.scaledGridSize )
 										);
 									else
 										pointLinks.lineTo(
-											li.pxTotalOffsetX+(prev.cx+0.5)*li.def.gridSize,
-											li.pxTotalOffsetY+(prev.cy+0.5)*li.def.gridSize
+											li.pxParallaxX+(prev.cx+0.5)*li.def.scaledGridSize,
+											li.pxParallaxY+(prev.cy+0.5)*li.def.scaledGridSize
 										);
 								}
 							}
@@ -548,13 +551,13 @@ class GenericLevelElementGroup {
 									pointLinks.moveTo(x,y);
 									if( isFieldValueSelected(fi,arrayIdx+1) )
 										pointLinks.lineTo(
-											levelToGhostX( li.pxTotalOffsetX+(next.cx+0.5)*li.def.gridSize ),
-											levelToGhostY( li.pxTotalOffsetX+(next.cy+0.5)*li.def.gridSize )
+											levelToGhostX( li.pxParallaxX+(next.cx+0.5)*li.def.scaledGridSize ),
+											levelToGhostY( li.pxParallaxX+(next.cy+0.5)*li.def.scaledGridSize )
 										);
 									else
 										pointLinks.lineTo(
-											li.pxTotalOffsetX+(next.cx+0.5)*li.def.gridSize,
-											li.pxTotalOffsetY+(next.cy+0.5)*li.def.gridSize
+											li.pxParallaxX+(next.cx+0.5)*li.def.scaledGridSize,
+											li.pxParallaxY+(next.cy+0.5)*li.def.scaledGridSize
 										);
 								}
 							}
@@ -654,16 +657,19 @@ class GenericLevelElementGroup {
 						var old = ei;
 						ei = li.duplicateEntityInstance(ei);
 						elements[i] = Entity(li,ei);
+
+						if( editor.resizeTool!=null && editor.resizeTool.isOnEntity(old) )
+							editor.createResizeToolFor( Entity(li,ei) );
+
 						if( ui.EntityInstanceEditor.existsFor(old) )
 							ui.EntityInstanceEditor.openFor(ei);
 					}
-					ei.x += getDeltaX(origin, to);
-					ei.y += getDeltaY(origin, to);
+					ei.x += Std.int( getDeltaX(origin, to) );
+					ei.y += Std.int( getDeltaY(origin, to) );
 					changedLayers.set(li,li);
 
 					// Out of bounds
-					if( ei.x<li.pxTotalOffsetX || ei.x>li.pxTotalOffsetX+li.cWid*li.def.gridSize
-					|| ei.y<li.pxTotalOffsetY || ei.y>li.pxTotalOffsetY+li.cHei*li.def.gridSize ) {
+					if( ei.isOutOfLayerBounds() ) {
 						outOfBoundsRemovals.push(ei.def.identifier);
 						li.removeEntityInstance(ei);
 						elements[i] = null;
@@ -680,10 +686,12 @@ class GenericLevelElementGroup {
 					else
 						editor.ge.emit( EntityInstanceChanged(ei) );
 
+					editor.curLevelTimeline.markEntityChange(ei);
+
 					// Remap points
 					if( isCopy ) {
-						var dcx = Std.int( getDeltaX(origin,to) / li.def.gridSize );
-						var dcy = Std.int( getDeltaY(origin,to) / li.def.gridSize );
+						var dcx = Std.int( getDeltaX(origin,to) / li.def.scaledGridSize );
+						var dcy = Std.int( getDeltaY(origin,to) / li.def.scaledGridSize );
 
 						for(fi in ei.getFieldInstancesOfType(F_Point))
 						for( i in 0...fi.getArrayLength() ) {
@@ -697,11 +705,12 @@ class GenericLevelElementGroup {
 					}
 
 				case GridCell(li, cx,cy):
-					if( li.hasAnyGridValue(cx,cy) )
+					if( li.hasAnyGridValue(cx,cy) ) {
+						editor.curLevelTimeline.markGridChange(li, cx,cy);
 						switch li.def.type {
 							case IntGrid:
 								var v = li.getIntGrid(cx,cy);
-								var gridRatio = Std.int( moveGrid / li.def.gridSize );
+								var gridRatio = Std.int( moveGrid / li.def.scaledGridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
 								if( !isCopy && li.hasIntGrid(cx,cy) )
@@ -710,9 +719,10 @@ class GenericLevelElementGroup {
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
+								editor.curLevelTimeline.markGridChange(li, tcx,tcy);
 
 							case Tiles:
-								var gridRatio = Std.int( moveGrid / li.def.gridSize );
+								var gridRatio = Std.int( moveGrid / li.def.scaledGridSize );
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
 
@@ -725,40 +735,44 @@ class GenericLevelElementGroup {
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
+								editor.curLevelTimeline.markGridChange(li, tcx,tcy);
 
 							case Entities:
 							case AutoLayer:
 						}
+					}
 
 				case PointField(li, ei, fi, arrayIdx):
 					if( isCopy )
 						elements[i] = null;
 					else {
 						var pt = fi.getPointGrid(arrayIdx);
-						// Duplicate
-						if( isCopy ) {
-							fi.addArrayValue();
-							var newIdx = fi.getArrayLength()-1;
-							fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
-							pt = fi.getPointGrid(newIdx);
-							elements[i] = PointField(li,ei,fi,newIdx);
+						if( pt!=null ) {
+							// Duplicate
+							if( isCopy ) {
+								fi.addArrayValue();
+								var newIdx = fi.getArrayLength()-1;
+								fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
+								pt = fi.getPointGrid(newIdx);
+								elements[i] = PointField(li,ei,fi,newIdx);
+							}
+
+							pt.cx += Std.int( getDeltaX(origin, to) / li.def.scaledGridSize );
+							pt.cy += Std.int( getDeltaY(origin, to) / li.def.scaledGridSize );
+
+							if( li.isValid(pt.cx,pt.cy) )
+								fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+							else {
+								// Out of bounds
+								outOfBoundsRemovals.push(fi.def.identifier);
+								fi.removeArrayValue(arrayIdx);
+								decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+								elements[i] = null;
+							}
+							editor.ge.emit( EntityInstanceChanged(ei) );
+
+							changedLayers.set(li,li);
 						}
-
-						pt.cx += Std.int( getDeltaX(origin, to) / li.def.gridSize );
-						pt.cy += Std.int( getDeltaY(origin, to) / li.def.gridSize );
-
-						if( li.isValid(pt.cx,pt.cy) )
-							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-						else {
-							// Out of bounds
-							outOfBoundsRemovals.push(fi.def.identifier);
-							fi.removeArrayValue(arrayIdx);
-							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
-							elements[i] = null;
-						}
-						editor.ge.emit( EntityInstanceChanged(ei) );
-
-						changedLayers.set(li,li);
 					}
 			}
 		}
@@ -774,7 +788,7 @@ class GenericLevelElementGroup {
 		// Call refresh events
 		var affectedLayers = [];
 		for(li in changedLayers) {
-			editor.ge.emit( LayerInstanceChanged );
+			editor.ge.emit( LayerInstanceChangedGlobally(li) );
 			editor.levelRender.invalidateLayer(li);
 			affectedLayers.push(li);
 		}

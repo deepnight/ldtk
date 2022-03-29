@@ -6,54 +6,75 @@
 <div class="buttons">
 	<button class="save" title="Save project" keys="CTRL+S">Save project</button>
 	<button class="saveAs" title="Save project to a different file" keys="CTRL+SHIFT+S">Save as...</button>
+	<button class="rename" title="Renaming should only happen from inside the app as various internal file paths will also need to be updated accordingly.">Rename project</button>
 	<button class="locate gray small" title="Locate project file"><span class="icon locate"></span> </button>
-	<button class="settings gray" title="Application settings" keys="F12"><span class="icon settings"></span> ::app:: settings</button>
 </div>
 
 <dl class="form projectForm">
 	<dt class="full"> <h3>Project file settings</h3> </dt>
 
-	<dt><label for="useAppExtension">Use .::ext:: extension</label></dt>
+	<dt>
+		<label for="externalLevels">Save levels to separate files</label>
+		<info>
+			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
+			Saving times are also faster with separate levels enabled because unmodified data is cached and not re-wrote.
+		</info>
+	</dt>
 	<dd>
-		<input type="checkbox" name="useAppExtension" id="useAppExtension" title='The project JSON file will use the app extension ".::ext::" instead of ".json"'/>
+		<input type="checkbox" id="externalLevels"/>
+		<div class="locate"></div>
+		<warning class="externRecommend">Saving levels separately is highly recommended for large projects, or projects shared among multiple users. This will also decrease saving time.</warning>
+	</dd>
+
+	<dt>
+		<label for="useAppExtension">Use .::ext:: extension</label>
+		<info>
+			If checked, the project file will use the official extension ".::ext::" instead of the standard ".json".
+			This setting is recommended for proper file identification and association on your system.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="useAppExtension" id="useAppExtension"/>
 		<span>(recommended)</span>
 	</dd>
 
 	<dt>
 		<label for="backup">Backup on save</label>
+		<info>
+			Everytime you save your project, an extra backup copy will be created in a subfolder.
+			Backups will obviously increase saving time and disk usage, but that's not a reason for not using them ;)
+			Note: in case of a crash, a special backup will be created, even if this setting is disabled.
+		</info>
 	</dt>
 	<dd>
-		<input type="checkbox" id="backup" title="Everytime you save your project, an extra backup copy will be created in a subfolder. This might increase saving time and disk occupation."/>
+		<input type="checkbox" id="backup" />
 		<div class="locate"></div>
 		<span>Max backup files: </span>
 		<input type="text" id="backupCount"/>
+		<warning class="backupRecommend">It's recommended to enable backups for large or important projects.</warning>
 	</dd>
 
 	<dt>
 		<label for="minify">Minify JSON</label>
+		<info>
+			Enable this to save project JSON file without any "pretty" formatting (ie. white spaces and indentation).
+			This is NOT necessarily recommended if your project is stored on a versioning system (git, svn etc.) because this could cause issues with diffs and merging operations.
+			Only use this option if you really need to reduce the project files size.
+		</info>
 	</dt>
 	<dd>
-		<input type="checkbox" name="minify" id="minify" title='Project JSON file will be saved without any "pretty" formatting (ie. spaces and indentation), making it smaller.'/>
-	</dd>
-
-	<dt>
-		<label for="externalLevels">Save levels to separate files</label>
-	</dt>
-	<dd>
-		<input type="checkbox" id="externalLevels" title='Separate project data in multiple files: one for the project itself (ie. settings, definitions etc.) and one per-level in a sub-folder.'/>
-		<div class="locate"></div>
+		<input type="checkbox" name="minify" id="minify"/>
 	</dd>
 
 	<dt>
 		<label for="png">Export as PNG</label>
+		<info>This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</info>
 	</dt>
 	<dd class="imageExportMode">
 		<div class="locate"></div>
 
-		<select title="This option allows you to export 'flatten' PNG images, in addition to JSON data, when saving your project.">
+		<select>
 		</select>
-
-		<!-- <input type="checkbox" id="png" title='Each layer in each level will be exported as an individual PNG image. Note that IntGrid layer values will be exported as tiny images where 1px = 1 layer grid cell. WARNING: this will increase saving time on large projects.'/> -->
 
 		<input type="text" class="pattern"/>
 		<div class="help guide">
@@ -70,12 +91,28 @@
 		<div class="example"></div>
 	</dd>
 
+
 	<dt>
-		<label for="tiled">Export Tiled TMX</label>
+		<label for="png">Identifers format convention</label>
+		<info>This option allows to customize the constraints on "identifiers" format. It's recommended to keep the default "First letter uppercased" format, unless you know what you're doing.</info>
 	</dt>
 	<dd>
-		<input type="checkbox" id="tiled" title='Every time you save, Tiled TMX files (one per level) will also be created in a sub folder, for easier integration with existing frameworks.'/>
+		<select id="identifierStyle"></select>
+	</dd>
+
+
+	<dt>
+		<label for="tiled">Export Tiled TMX</label>
+		<info>
+			Enable this to create Tiled TMX files (one per level) in a sub folder, every time you save your project.
+			Warning: this Tiled export is made for quick integration with game frameworks that don't support LDtk yet, but it comes with some limitations!
+			See the link for more info.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" id="tiled"/>
 		<div class="locate"></div>
+		<a href="https://ldtk.io/go/tiled">Learn more about Tiled export limitations</a>
 	</dd>
 
 
@@ -84,25 +121,34 @@
 
 	<dt>
 		<label for="defaultGridSize">Default layer grid</label>
+		<info>Set the default grid size when creating new layers in this project.</info>
 	</dt>
 	<dd>
-		<input type="text" name="defaultGridSize" id="defaultGridSize"/>
+		<input type="text" name="defaultGridSize" id="defaultGridSize" class="small"/>
 		<span>px</span>
 	</dd>
 
 	<dt>
 		<label for="levelName">Default level identifiers</label>
+		<info>
+			You can customize the default naming convention for all level identifiers.
+			Note that level identifiers must be UNIQUE and as such, an extra auto-increment might be added to levels sharing getting the same name, to avoid collisions.
+			Also, remember the identifiers should only contain letters, numbers, "-" and "_".
+		</info>
 	</dt>
 	<dd>
 		<input type="text" class="levelNamePattern"/>
-		<div class="info">
-			You can customize the default naming convention for all level identifiers. Note that level identifiers must be UNIQUE and as such, an extra auto-increment might be added to levels sharing getting the same name, to avoid collisions. Also, remember the identifiers should only contain letters, numbers, "-" and "_".
-		</div>
+		<a class="defaultLevelNamePattern">[reset]</a>
 		<div class="help guide">
 			<dl>
+				<dt>%world</dt> <dd>World string identifier</dd>
 				<dt>%idx</dt> <dd>Level index in array, starting at 0</dd>
+				<dt>%idx1</dt> <dd>Level index in array, starting at 1</dd>
 				<dt>%gx</dt> <dd>World grid X (only in GridVania world layout)</dd>
 				<dt>%gy</dt> <dd>World grid Y (only in GridVania world layout)</dd>
+				<dt>%x</dt> <dd>World X (only in GridVania and Free world layouts)</dd>
+				<dt>%y</dt> <dd>World Y (only in GridVania and Free world layouts)</dd>
+				<dt>%d</dt> <dd>World depth</dd>
 			</dl>
 		</div>
 
@@ -110,6 +156,7 @@
 
 	<dt>
 		<label for="bgColor">Workspace background color</label>
+		<info>Base background color of the project workspace</info>
 	</dt>
 	<dd>
 		<input type="color" name="bgColor" id="bgColor"/>
@@ -117,6 +164,7 @@
 
 	<dt>
 		<label for="defaultLevelbgColor">Default level bg color</label>
+		<info>Default background color of all levels.</info>
 	</dt>
 	<dd>
 		<input type="color" name="defaultLevelbgColor" id="defaultLevelbgColor"/>
@@ -124,6 +172,10 @@
 
 	<dt>
 		<label>Default pivot point for new entities</label>
+		<info>
+			Default entity pivot point position for all entities.
+			See the Entity panel for more information about the pivot point.
+		</info>
 	</dt>
 	<dd>
 		<div class="pivot"></div>
@@ -131,14 +183,32 @@
 
 
 
-	<dt class="full"> <h3>Advanced export settings</h3> </dt>
-
-	<dt class="full advancedWarning">
-		Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
-		<a>[ Show advanced settings ]</a>
-
-		<ul class="advanced"></ul>
+	<dt class="full">
+		<a class="showAdv">[ Show advanced settings ]</a>
 	</dt>
+
+	<dt class="full adv"> <h3>Advanced export settings</h3> </dt>
+
+	<dt class="full adv">
+		<div class="help">
+			Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
+		</div>
+	</dt>
+
+	<dt class="full adv">
+		<ul class="advFlags"></ul>
+	</dt>
+
+	<dt class="sample adv">
+		Tutorial description
+		<info>
+			This optional description is displayed in a permanent banner on top of LDtk while this project is open.
+			It is mainly used in LDtk sample maps to provide extra explanations of provided examples.
+		</info>
+	</dt>
+	<dd class="sample adv">
+		<textarea name="tutorialDesc"></textarea>
+	</dd>
 
 
 </dl>

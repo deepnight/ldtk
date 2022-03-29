@@ -11,17 +11,16 @@ class IntGridPalette extends ui.ToolPalette {
 		jList = new J('<ul class="intGridValues niceList"/>');
 		jList.appendTo(jContent);
 
-		var valueIdx = 1;
 		for( intGridVal in tool.curLayerInstance.def.getAllIntGridValues() ) {
 			var e = new J("<li/>");
-			e.attr("data-id", valueIdx);
+			e.attr("data-id", intGridVal.value);
 			e.appendTo(jList);
 			e.addClass("color");
 
 			e.css( "border-color", C.intToHex(intGridVal.color) );
 
 			// State
-			if( valueIdx==tool.getSelectedValue() ) {
+			if( intGridVal.value==tool.getSelectedValue() ) {
 				e.addClass("active");
 				e.css( "background-color", makeBgActiveColor(intGridVal.color) );
 			}
@@ -31,7 +30,7 @@ class IntGridPalette extends ui.ToolPalette {
 			}
 
 			// Value
-			var jVal = new J('<div class="intGridValue">$valueIdx</div>');
+			var jVal = new J('<div class="intGridValue">${intGridVal.value}</div>');
 			e.append(jVal);
 			jVal.css({
 				color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
@@ -43,13 +42,12 @@ class IntGridPalette extends ui.ToolPalette {
 			if( intGridVal.identifier!=null )
 				e.append(intGridVal.identifier);
 
-			var curIdx = valueIdx;
+			var curValue = intGridVal.value;
 			e.click( function(_) {
 				if( Editor.ME.isPaused() ) return;
-				tool.selectValue(curIdx);
+				tool.selectValue(curValue);
 				render();
 			});
-			valueIdx++;
 		}
 	}
 

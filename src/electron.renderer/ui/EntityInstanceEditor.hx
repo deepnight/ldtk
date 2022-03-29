@@ -3,6 +3,7 @@ package ui;
 import data.inst.EntityInstance;
 
 class EntityInstanceEditor extends dn.Process {
+	public static var UNIT_GRID = false;
 	public static var CURRENT : Null<EntityInstanceEditor> = null;
 	static var PANEL_WIDTH : Float = -1;
 
@@ -13,6 +14,10 @@ class EntityInstanceEditor extends dn.Process {
 	var ei : EntityInstance;
 	var link : h2d.Graphics;
 	var minPanelWidth : Int;
+	var customFieldsForm : FieldInstancesForm;
+
+	var jWrapper(get,never) : js.jquery.JQuery; inline function get_jWrapper() return jWindow.find(".entityInstanceWrapper");
+	var jPropsForm(get,never) : js.jquery.JQuery; inline function get_jPropsForm() return jWindow.find(".propsWrapper");
 
 
 	private function new(inst:data.inst.EntityInstance) {
@@ -28,11 +33,30 @@ class EntityInstanceEditor extends dn.Process {
 
 		jWindow = new J('<div class="entityInstanceEditor"/>');
 		App.ME.jPage.append(jWindow);
+		jWindow.html( JsTools.getHtmlTemplate("entityInstanceEditor", { id : inst.def.identifier }) );
+		// jWindow.append('<div class="entityInstanceWrapper"/>');
+		// jWrapper.append( new J('<div class="propsWrapper"></div>') );
+		// jWrapper.append( new J('<div class="customFieldsWrapper"></div>') );
+
+		// Panel resizing handle
+		// var jResizeHandle = new J('<div class="resizeBar"></div>');
+		// jResizeHandle.appendTo(jWindow);
+		var jResizeHandle = jWindow.find(".resizeBar");
+		jResizeHandle.mousedown(function( ev ) {
+			js.Browser.document.addEventListener("mousemove", resizeDrag);
+			js.Browser.document.addEventListener("mouseup", resizeDrag);
+		});
 		minPanelWidth = Std.int( jWindow.innerWidth() );
 		if( PANEL_WIDTH<=0 )
 			PANEL_WIDTH = minPanelWidth;
+		jWindow.css("width", Math.ceil(PANEL_WIDTH) + "px");
 
-		updateForm();
+		// Create custom fields form
+		customFieldsForm = new ui.FieldInstancesForm();
+		customFieldsForm.onChange = ()->onEntityFieldChanged();
+		jWrapper.find(".customFieldsWrapper").append( customFieldsForm.jWrapper );
+
+		updateAllForms();
 	}
 
 	override function onDispose() {
@@ -69,10 +93,10 @@ class EntityInstanceEditor extends dn.Process {
 				if( ei==null || ei.def==null )
 					destroy();
 				else
-					updateForm();
+					updateAllForms();
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
-				updateForm();
+				updateAllForms();
 
 			case EntityInstanceRemoved(ei):
 				if( ei==this.ei )
@@ -80,12 +104,13 @@ class EntityInstanceEditor extends dn.Process {
 
 			case EntityInstanceChanged(ei):
 				if( ei==this.ei )
-					updateForm();
+					updateAllForms();
 
-			case FieldInstanceChanged(fi):
-				updateForm();
+			case EntityFieldInstanceChanged(ei,fi):
+				if( ei==this.ei )
+					updateAllForms();
 
-			case LayerInstanceRestoredFromHistory(_), LevelRestoredFromHistory(_):
+			case LayerInstancesRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				closeExisting(); // TODO do softer refresh
 
 			case LayerInstanceSelected:
@@ -158,69 +183,124 @@ class EntityInstanceEditor extends dn.Process {
 
 
 	inline function applyScrollMemory() {
-		jWindow.find(".entityInstanceWrapper").scrollTop( scrollMem );
+		jWrapper.scrollTop( scrollMem );
 	}
 
-	var scrollMem : Float = 0;
-	final function updateForm() {
-		jWindow.empty();
-		jWindow.css("width", Math.ceil(PANEL_WIDTH) + "px");
+	function onEntityFieldChanged() {
+		editor.curLevelTimeline.markEntityChange(ei);
+		editor.curLevelTimeline.saveLayerState(ei._li);
+	}
 
+
+	function updateInstancePropsForm() {
+		jPropsForm.find("*").off();
+
+		// Form header
+		jPropsForm.find("header .edit").click( function(ev) {
+			ev.preventDefault();
+			new ui.modal.panel.EditEntityDefs(ei.def);
+		});
+
+		var jExtraInfos = jPropsForm.find(".form.extraInfos");
+
+		// IID
+		var jIid = jPropsForm.find("dd.iid");
+		jIid.find("input").val(ei.iid);
+		jIid.find(".copy").click( _->{
+			App.ME.clipboard.copyStr(ei.iid);
+			N.copied();
+		});
+
+		// Coords block
+		var jCoords = jPropsForm.find(".coords");
+		var jUnit = jCoords.find(".unit");
+		jUnit.text( UNIT_GRID ? "cells" : "px" );
+		jUnit.click( _->{
+			UNIT_GRID = !UNIT_GRID;
+			updateInstancePropsForm();
+		});
+
+		// X
+		var i = Input.linkToHtmlInput(ei.x, jCoords.find("[name=x]"));
+		i.setBounds(0, editor.curLevel.pxWid);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
+
+		// Y
+		var i = Input.linkToHtmlInput(ei.y, jCoords.find("[name=y]"));
+		i.setBounds(0, editor.curLevel.pxHei);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
+
+		// Width
+		var i = new form.input.IntInput(
+			jCoords.find("[name=w]"),
+			()->ei.width,
+			(v)->ei.customWidth = v
+		);
+		i.setEnabled( ei.def.resizableX );
+		i.setBounds(ei.def.width, null);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
+
+		// Height
+		var i = new form.input.IntInput(
+			jCoords.find("[name=h]"),
+			()->ei.height,
+			(v)->ei.customHeight = v
+		);
+		i.setEnabled( ei.def.resizableY );
+		i.setBounds(ei.def.height, null);
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+		if( UNIT_GRID )
+			i.setUnit(ei._li.def.gridSize);
+
+
+		// References to this
+		var refs = project.getEntityInstancesReferingTo(ei);
+		var jRefs = jPropsForm.find(".entityRefs");
+		jRefs.empty();
+		if( refs.length==0 )
+			jPropsForm.find(".refs").hide();
+		else {
+			jPropsForm.find(".refs").show();
+			for(ei in refs) {
+				var jRef = JsTools.createEntityRef(ei, true, jRefs);
+				jRef.click( _->editor.followEntityRef(ei) );
+			}
+		}
+	}
+
+
+	function updateCustomFields() {
+		customFieldsForm.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd,true) );
+	}
+
+
+	var scrollMem : Float = 0;
+	final function updateAllForms() {
 		if( ei==null || ei.def==null ) {
 			destroy();
 			return;
 		}
 
-
-		var resizer = new J('<div class="resizeBar"></div>');
-		resizer.appendTo(jWindow);
-		resizer.mousedown(function( ev ) {
-			js.Browser.document.addEventListener("mousemove", resizeDrag);
-			js.Browser.document.addEventListener("mouseup", resizeDrag);
-		});
-
-		var wrapper = new J('<div class="entityInstanceWrapper"></div>');
-		wrapper.appendTo(jWindow);
-
-		// Form header
-		var jHeader = new J('<header/>');
-		jHeader.appendTo(wrapper);
-		jHeader.append('<div>${ei.def.identifier}</div>');
-		var jEdit = new J('<a class="edit">Edit</a>');
-		jEdit.click( function(ev) {
-			ev.preventDefault();
-			new ui.modal.panel.EditEntityDefs(ei.def);
-		});
-		jHeader.append(jEdit);
-
-		// Extra bits of info
-		var jExtraInfos = new J('<dl class="form extraInfos"/>');
-		jExtraInfos.appendTo(wrapper);
-
-		// Entity size
-		if( ei.def.isResizable() ) {
-			jExtraInfos.append('<dt>Size</dt>');
-			jExtraInfos.append('<dd>${ei.width} x ${ei.height}</dd>');
-		}
-
-		// Custom fields
-		var form = new ui.FieldInstancesForm();
-		wrapper.append(form.jWrapper);
-		form.use( Entity(ei), ei.def.fieldDefs, (fd)->ei.getFieldInstance(fd) );
-		form.onChange = ()->{
-			editor.curLevelHistory.saveLayerState( editor.curLayerInstance );
-			editor.curLevelHistory.setLastStateBounds( ei.left, ei.top, ei.def.width, ei.def.height );
-		}
-
-
+		updateInstancePropsForm();
+		updateCustomFields();
 		JsTools.parseComponents(jWindow);
 		renderLink();
 
 		// Re-position
 		onResize();
 		applyScrollMemory();
-		wrapper.scroll( (_)->{
-			scrollMem = wrapper.scrollTop();
+		jWrapper.scroll( (_)->{
+			scrollMem = jWrapper.scrollTop();
 		});
 	}
 

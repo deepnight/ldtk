@@ -1,0 +1,15 @@
+<svg width="32" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" fill-opacity="">
+	<!-- Softened top lines -->
+	<polyline stroke="#fff" opacity="0.7" points="10 3.6, 12 2.7" stroke-linecap="round"/>
+	<polyline stroke="#fff" opacity="0.7" points="22 3.6, 20 2.7" stroke-linecap="round"/>
+
+	<!-- Top outline -->
+	<!-- <polyline points="12 2.7, 2 7, 16 13, 30 7, 20 2.7" fill="none" stroke="white" stroke-linecap="round" /> -->
+	<polyline points="10 3.6, 2 7, 16 13, 30 7, 22 3.6" fill="none" stroke="white" stroke-linecap="round" />
+	<!-- Top fill -->
+	<polyline points="12 2.7, 2 7, 16 13, 30 7, 20 2.7, 16 4.5" stroke="none" fill="white" fill-opacity="0.7"/>
+
+	<!-- Bottom -->
+	<polyline stroke="#fff" points="2 9, 16 15, 30 9" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.3" fill="none"/>
+
+</svg>

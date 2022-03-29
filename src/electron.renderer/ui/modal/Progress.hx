@@ -1,81 +1,92 @@
 package ui.modal;
 
 typedef ProgressOp = {
-	var label : String;
+	var ?label : Null<String>;
 	var cb : Void->Void;
+	var ?isExpensive : Bool; // true if cb() is guaranteed to take a long time
+}
+
+enum ProgressState {
+	WaitingOther;
+	InitFrame;
+	Running;
+	EndFrame;
+	Completed;
 }
 
 class Progress extends ui.Modal {
 	static var ALL: Array<Progress> = [];
+	static var MAX_FRAME_DURATION_S = 0.25;
 
-	public var done(default,null) = false;
+	public var log : dn.Log;
 
-	public function new(title:String, opsPerCycle=1, ops:Array<ProgressOp>, ?onComplete:Void->Void) {
+	var state = WaitingOther;
+	var curOps : Array<ProgressOp> = [];
+	var curIdx = 0;
+	var opsCount : Int;
+	var startTime = -1.;
+	var jBar : js.jquery.JQuery;
+	var title : String;
+	var onComplete : Null<Void->Void>;
+
+	public function new(title:String, ?ops:Array<ProgressOp>, ?onComplete:Void->Void) {
 		super();
 
+		log = new dn.Log();
+		var name = dn.Lib.buildShortName(title, 10);
+		log.def = (s)->log.add("progress", '$name: '+s);
+		this.title = title;
 		ALL.push(this);
 		canBeClosedManually = false;
+		curOps = ops==null ? [] : ops;
+		opsCount = curOps.length;
+		this.onComplete = onComplete;
+
 		jModalAndMask.addClass("progress");
-		jMask.hide().fadeIn(500);
-		App.LOG.general('"$title", ${ops.length} operation(s):');
+		jMask.hide();
+		App.LOG.general('Progress created.');
 
 		jContent.append('<div class="title">$title</div>');
 
-		var jBar = App.ME.jBody.find("xml#progressBar").children().clone();
+		jBar = App.ME.jBody.find("xml#progressBar").children().clone();
 		jBar.appendTo(jContent);
 
-		var log = [];
-		var cur = 0;
-		var total = ops.length;
-		var time = haxe.Timer.stamp();
-		createChildProcess( (p)->{
-			if( ops.length==0 && !delayer.hasAny() ) {
-				// All done!
-				canBeClosedManually = true;
-				App.LOG.general('Done "$title" (${M.pretty(haxe.Timer.stamp()-time)}s)');
-				done = true;
-
-				if( !App.ME.isCtrlDown() || !App.ME.isShiftDown() )
-					close();
-				else {
-					// Display debug log
-					var jButton = new J('<button>Close</button>');
-					jButton.appendTo(jContent);
-					var jLog = new J('<ul class="log"/>');
-					jLog.appendTo(jContent);
-					for(l in log)
-						jLog.append('<li>$l</li>');
-					jButton.click( (_)->close() );
-					p.destroy();
-				}
-
-				if( onComplete!=null )
-					onComplete();
-			}
-			else {
-				// Execute "opsPerCycle" operation(s)
-				if( editor!=null )
-					editor.requestFps();
-				var i = 0;
-				while( i++<opsPerCycle && ops.length>0 ) {
-					var op = ops.shift();
-					delayer.addF(op.cb, 1);
-					cur++;
-					var pct = 100 * cur/total;
-					jBar.find(".bar").css({ width:pct+"%" });
-					jBar.find(".label").text( op.label );
-					log.push(op.label);
-				}
-			}
-
-		}, true);
-
+		updateBar();
 		updateAllPositions();
 	}
 
+
+	public function addOp(op:ProgressOp) {
+		if( destroyed || state==Completed )
+			throw "addOp() called on completed Progress";
+
+		curOps.push(op);
+		opsCount++;
+		updateBar();
+	}
+
+
+	function updateBar(?label:String) {
+		var pct = 100 * curIdx/opsCount;
+		jBar.find(".bar").css({ width:pct+"%" });
+
+		if( label!=null )
+			jBar.find(".label").text( label );
+		else
+			jBar.find(".label").empty();
+	}
+
+	/**
+		Create a single op Progress bar (useful for long operations)
+	**/
+	public static inline function single( label:String, cb:Void->Void, onComplete:Void->Void ) : Progress {
+		return new Progress(label, [{ cb:cb }], onComplete);
+	}
+
+
 	public static function hasAny() {
 		for(e in ALL)
-			if( !e.destroyed && !e.done )
+			if( !e.destroyed )
 				return true;
 		return false;
 	}
@@ -86,10 +97,26 @@ class Progress extends ui.Modal {
 			e.destroy();
 	}
 
+	public function cancel() {
+		destroy();
+	}
+
 	static function updateAllPositions() {
+		var off = MetaProgress.exists() ? MetaProgress.getHeight() : 0;
 		for(w in ALL)
-			if( !w.destroyed )
-				w.jWrapper.css({ marginTop:(8 + w.getStackIndex()*100)+"px" });
+			if( !w.destroyed ) {
+				var idx = w.getStackIndex();
+				w.jWrapper.css({ marginTop:(off + 8 + idx*100)+"px" });
+				if( idx>=6 )
+					w.jWrapper.hide();
+				else {
+					w.jWrapper.show();
+					if( idx>=4 )
+						w.jWrapper.css({ opacity:0.4 });
+					else
+						w.jWrapper.css({ opacity:1 });
+				}
+			}
 	}
 
 	function getStackIndex() {
@@ -102,9 +129,67 @@ class Progress extends ui.Modal {
 		return 0;
 	}
 
+
 	override function onDispose() {
 		super.onDispose();
 		ALL.remove(this);
 		updateAllPositions();
+	}
+
+
+	override function update() {
+		super.update();
+
+		switch state {
+			case WaitingOther:
+				log.def("Waiting...");
+				if( ALL[0]==this )
+					state = InitFrame;
+
+			case InitFrame:
+				App.LOG.general('Progress started: : "$title", ${curOps.length} operation(s)');
+				log.def("Started...");
+				state = Running;
+				jMask.fadeIn(500);
+				updateBar( curOps.length>0 ? curOps[0].label : null );
+
+			case Running:
+				if( startTime<0 )
+					startTime = haxe.Timer.stamp();
+
+				var spent = 0.;
+				while( curOps.length>0 && spent<MAX_FRAME_DURATION_S ) {
+					if( spent>0 && curOps[0].isExpensive ) // ensure "expensive" op start in their own frame
+						break;
+
+					var op = curOps.shift();
+					var start = haxe.Timer.stamp();
+					op.cb();
+					var t = haxe.Timer.stamp()-start;
+					spent += t;
+					curIdx++;
+
+					// #if debug
+					// log.def("  "+(op.label==null?"Unknown":op.label)+": "+M.pretty(t,1)+"s");
+					// #end
+				}
+				if( curOps.length==0 )
+					state = EndFrame;
+				else
+					updateBar(curOps[0].label);
+
+			case EndFrame:
+				var t = M.pretty( haxe.Timer.stamp()-startTime, 1 );
+				log.def('Completed (${t}s)...');
+				App.LOG.general('Progress completed: "$title" (${t}s)');
+				state = Completed;
+				updateBar();
+
+			case Completed:
+				if( onComplete!=null )
+					onComplete();
+				destroy();
+		}
+
 	}
 }

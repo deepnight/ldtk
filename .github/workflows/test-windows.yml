@@ -35,6 +35,7 @@ jobs:
       - run: haxe -version
 
       # Install libs
+      - run: haxelib install uuid
       - run: haxelib git castle https://github.com/ncannasse/castle
       - run: haxelib git heaps https://github.com/deepnight/heaps.git
       - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git

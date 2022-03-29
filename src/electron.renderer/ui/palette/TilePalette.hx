@@ -1,7 +1,9 @@
 package ui.palette;
 
 class TilePalette extends ui.ToolPalette {
-	public var picker : Null<Tileset>;
+
+	// NOTE: the picker is re-created on every render!
+	public var picker : Null<ui.ts.TileToolPicker>;
 
 	public function new(t) {
 		super(t);
@@ -22,8 +24,10 @@ class TilePalette extends ui.ToolPalette {
 		jContent.removeClass("invalid");
 
 		// Picker
+		var old = picker;
 		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool);
-		// picker = new ui.Tileset(jContent, tool.curTilesetDef, None, ToolPicker, tool);
+		if( old!=null )
+			picker.useOldTilesetPos(old);
 
 		var options = new J('<div class="toolOptions"/>');
 		options.appendTo(jContent);

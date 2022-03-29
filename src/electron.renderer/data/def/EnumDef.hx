@@ -1,6 +1,8 @@
 package data.def;
 
 class EnumDef {
+	var _project : data.Project;
+
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var identifier(default,set) : String;
@@ -8,16 +10,23 @@ class EnumDef {
 	public var iconTilesetUid : Null<Int>;
 	public var externalRelPath : Null<String>;
 	public var externalFileChecksum : Null<String>;
+	public var tags : Tags;
 
-	public function new(uid:Int, id:String) {
+	@:allow(data.Definitions)
+	private function new(p:Project, uid:Int, id:String, externPath:Null<String>) {
+		_project = p;
+		this.externalRelPath = externPath; // needs to be set before any `identifier` modification (for identifier style guessing)
 		this.uid = uid;
 		this.identifier = id;
+		tags = new Tags();
 	}
 
 	public inline function isExternal() return externalRelPath!=null;
 
 	function set_identifier(v:String) {
-		v = Project.cleanupIdentifier(v,true);
+		if( !isExternal() )
+			v = Project.cleanupIdentifier(v, _project.identifierStyle);
+
 		if( v==null )
 			return identifier;
 		else
@@ -28,8 +37,8 @@ class EnumDef {
 		return 'EnumDef#$uid.$identifier(${values.length} values)';
 	}
 
-	public static function fromJson(jsonVersion:String, json:ldtk.Json.EnumDefJson) {
-		var ed = new EnumDef(JsonTools.readInt(json.uid), json.identifier);
+	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.EnumDefJson) {
+		var ed = new EnumDef(p, JsonTools.readInt(json.uid), json.identifier, json.externalRelPath);
 
 		for(v in JsonTools.readArray(json.values)) {
 			ed.values.push({
@@ -40,8 +49,9 @@ class EnumDef {
 		}
 
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
-		ed.externalRelPath = json.externalRelPath;
 		ed.externalFileChecksum = json.externalFileChecksum;
+
+		ed.tags = Tags.fromJson(json.tags);
 
 		return ed;
 	}
@@ -69,6 +79,8 @@ class EnumDef {
 			iconTilesetUid: iconTilesetUid,
 			externalRelPath: JsonTools.writePath(externalRelPath),
 			externalFileChecksum: externalFileChecksum,
+
+			tags: tags.toJson(),
 		}
 	}
 
@@ -77,7 +89,9 @@ class EnumDef {
 	}
 
 	public function getValue(v:String) : Null<data.DataTypes.EnumDefValue> {
-		v = Project.cleanupIdentifier(v,true);
+		if( !isExternal() )
+			v = Project.cleanupIdentifier(v, _project.identifierStyle);
+
 		for(ev in values)
 			if( ev.id==v )
 				return ev;
@@ -103,7 +117,9 @@ class EnumDef {
 		if( !isValueIdentifierValidAndUnique(v) )
 			return false;
 
-		v = Project.cleanupIdentifier(v,true);
+		if( !isExternal() )
+			v = Project.cleanupIdentifier(v, _project.identifierStyle);
+
 		values.push({
 			id: v,
 			tileId: null,
@@ -128,7 +144,7 @@ class EnumDef {
 		if( to=="" || to==null )
 			return false;
 
-		to = project.makeUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
+		to = project.fixUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
 
 		for(i in 0...values.length)
 			if( values[i].id==from ) {
@@ -163,6 +179,8 @@ class EnumDef {
 	}
 
 	public function tidy(p:Project) {
+		_project = p;
+
 		// Lost tileset
 		if( iconTilesetUid!=null && p.defs.getTilesetDef(iconTilesetUid)==null ) {
 			App.LOG.add("tidy", 'Removed lost enum tileset in $this');

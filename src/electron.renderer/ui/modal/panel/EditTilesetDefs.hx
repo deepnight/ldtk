@@ -20,6 +20,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			selectTileset(td);
 			editor.ge.emit( TilesetDefAdded(td) );
 			jForm.find("input").first().focus().select();
+			jForm.find(".imagePicker .pick").click();
 		});
 
 		selectTileset(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
@@ -39,13 +40,19 @@ class EditTilesetDefs extends ui.modal.Panel {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_), LevelSelected(_):
 				close();
 
-			case LayerInstanceRestoredFromHistory(li):
+			case LayerInstancesRestoredFromHistory(_):
 				updateList();
 				updateForm();
 				updateTilesetPreview();
 
 			case TilesetDefChanged(td):
 				updateList();
+				updateForm();
+				updateTilesetPreview();
+				if( td==curTd )
+					rebuildPixelData();
+
+			case TilesetImageLoaded(td, init):
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
@@ -79,41 +86,22 @@ class EditTilesetDefs extends ui.modal.Panel {
 		// No atlas
 		if( curTd==null ) {
 			jPickerWrapper.hide();
-			// jContent.find(".tilesDemo").hide();
 			return;
 		}
 
 		jPickerWrapper.off().empty();
-		// jContent.find(".tilesDemo").show();
 
 		// Picker / tagger
 		jPickerWrapper.show();
 		if( curTd.isAtlasLoaded() )
-			new ui.ts.TileTagger(jPickerWrapper, curTd);
-
-		// // Demo tiles
-		// var padding = 8;
-		// var jDemo = jContent.find(".tilesDemo canvas");
-		// JsTools.clearCanvas(jDemo);
-
-		// if( curTd!=null && curTd.isAtlasLoaded() ) {
-		// 	jDemo.attr("width", curTd.tileGridSize*8 + padding*7);
-		// 	jDemo.attr("height", curTd.tileGridSize);
-
-		// 	var idx = 0;
-		// 	function renderDemoTile(tcx,tcy) {
-		// 		curTd.drawTileToCanvas(jDemo, curTd.getTileId(tcx,tcy), (idx++)*(curTd.tileGridSize+padding), 0);
-		// 	}
-		// 	renderDemoTile(0,0);
-		// 	renderDemoTile(1,0);
-		// 	renderDemoTile(2,0);
-		// 	renderDemoTile(0,1);
-		// 	renderDemoTile(0,2);
-		// 	renderDemoTile(0,3);
-		// 	renderDemoTile(0,4);
-		// }
+			if( curTd.isUsingEmbedAtlas() )
+				new ui.Tileset(jPickerWrapper, curTd);
+			else
+				new ui.ts.TileTagger(jPickerWrapper, curTd);
 
 		JsTools.parseComponents(jPickerWrapper);
+
+		checkBackup();
 	}
 
 
@@ -124,63 +112,79 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 	function updateForm() {
 		jForm.find("*").off(); // cleanup event listeners
+		var jEmbed = jContent.find(".embedTileset");
 
 		if( curTd==null ) {
 			jForm.hide();
-			// jContent.find(".noTileLayer").hide();
+			jEmbed.hide();
 			jContent.find(".none").show();
 			return;
 		}
 
-		JsTools.parseComponents(jForm);
 		jForm.show();
 		jContent.find(".none").hide();
-		// if( !project.defs.hasLayerType(Tiles) && !project.defs.hasAutoLayer() )
-		// 	jContent.find(".noTileLayer").show();
-		// else
-		// 	jContent.find(".noTileLayer").hide();
+
+		if( curTd.isUsingEmbedAtlas() ) {
+			jForm.addClass("embed");
+			var inf = Lang.getEmbedAtlasInfos(curTd.embedAtlas);
+			jEmbed.find(".author").html('<a href="${inf.url}">${inf.author}</a>');
+			var jInfoWrapper = jEmbed.find(".infos");
+			jInfoWrapper.empty();
+			var jInfAuthor = new J('<div class="author"/>');
+			jInfoWrapper.append(jInfAuthor);
+			jInfAuthor.append('Image by <strong>${inf.author}</strong>');
+			jInfAuthor.append(' (<a href="${inf.url}">website</a>)');
+			jInfoWrapper.append('<button class="blue" href="${inf.support.url}"><span class="icon love"></span> ${inf.support.label}</button>');
+			JsTools.parseComponents(jEmbed);
+		}
+		else
+			jForm.removeClass("embed");
 
 		// Image file picker
-		jForm.find(".imagePicker").remove();
-		var jImg = JsTools.createImagePicker(curTd.relPath, (?relPath)->{
-			var oldRelPath = curTd.relPath;
-			if( relPath==null ) {
-				// Remove image
-				if( oldRelPath!=null )
-					editor.watcher.stopWatchingRel(oldRelPath);
-				curTd.removeAtlasImage();
-			}
-			else {
-				// Load image
-				App.LOG.fileOp("Loading atlas: "+project.makeAbsoluteFilePath(relPath));
+		jForm.find("dd.img").empty();
+		if( curTd.isUsingEmbedAtlas() )
+			jForm.find("dd.img").append("<span>This tileset uses an embed atlas image.</span>");
+		else {
+			var jImg = JsTools.createImagePicker(curTd.relPath, (relPath)->{
+				var oldRelPath = curTd.relPath;
+				if( relPath==null ) {
+					// Remove image
+					if( oldRelPath!=null )
+						editor.watcher.stopWatchingRel(oldRelPath);
+					curTd.removeAtlasImage();
+				}
+				else {
+					// Load image
+					App.LOG.fileOp("Loading atlas: "+project.makeAbsoluteFilePath(relPath));
 
-				var result = curTd.importAtlasImage(relPath);
-				switch result {
-					case Ok:
+					var result = curTd.importAtlasImage(relPath);
+					switch result {
+						case Ok:
 
-					case FileNotFound, LoadingFailed(_):
-						new ui.modal.dialog.Warning( Lang.atlasLoadingMessage(relPath, result) );
-						return;
+						case FileNotFound, LoadingFailed(_), UnsupportedFileOrigin(_):
+							new ui.modal.dialog.Warning( Lang.imageLoadingMessage(relPath, result) );
+							return;
 
-					case TrimmedPadding, RemapLoss, RemapSuccessful:
-						new ui.modal.dialog.Message( Lang.atlasLoadingMessage(relPath, result), "tile" );
+						case TrimmedPadding, RemapLoss, RemapSuccessful:
+							new ui.modal.dialog.Message( Lang.imageLoadingMessage(relPath, result), "tile" );
+					}
+
+					if( oldRelPath!=null )
+						editor.watcher.stopWatchingRel(oldRelPath);
+					editor.watcher.watchImage(curTd.relPath);
+					project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
 				}
 
-				if( oldRelPath!=null )
-					editor.watcher.stopWatchingRel(oldRelPath);
-				editor.watcher.watchImage(curTd.relPath);
-				project.defs.autoRenameTilesetIdentifier(oldRelPath, curTd);
-			}
-
-			updateTilesetPreview();
-			editor.ge.emit( TilesetDefChanged(curTd) );
-		});
-		jImg.appendTo( jForm.find("dd.img") );
+				updateTilesetPreview();
+				editor.ge.emit( TilesetImageLoaded(curTd, false) );
+			});
+			jImg.appendTo( jForm.find("dd.img") );
+		}
 
 
 		// Fields
 		var i = Input.linkToHtmlInput(curTd.identifier, jForm.find("input[name='name']") );
-		i.fixValue = (v)->project.makeUniqueIdStr(v, (id)->project.defs.isTilesetIdentifierUnique(id,curTd));
+		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isTilesetIdentifierUnique(id,curTd));
 		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
 
 		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
@@ -195,18 +199,35 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(0, curTd.getMaxTileGridSize());
 
+
+		// Tags
+		var ted = new TagEditor(
+			curTd.tags,
+			()->editor.ge.emit(TilesetDefChanged(curTd)),
+			()->project.defs.getRecallTags(project.defs.tilesets, td->td.tags),
+			true
+		);
+		jForm.find("#tags").empty().append(ted.jEditor);
+
 		// Tags source Enum selector
 		var jSelect = jForm.find("#tagsSourceEnumUid");
 		jSelect.empty();
 		var jOpt = new J('<option value="">-- None --</option>');
 		jOpt.appendTo(jSelect);
-		for( ed in project.defs.getAllEnumsSorted() ) {
-			var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
-			if( ed.isExternal() ) {
-				jOpt.prop("disabled",true);
-				jOpt.append(' (unsupported external enum)');
+		var tagGroups = project.defs.getAllEnumsGroupedByTag();
+		for( group in tagGroups ) {
+			var jOptGroup = new J('<optgroup label="All enums"/>');
+			jOptGroup.appendTo(jSelect);
+			if( tagGroups.length>1 )
+				jOptGroup.attr('label', group.tag==null ? L._Untagged() : group.tag);
+			for(ed in group.all) {
+				var jOpt = new J('<option value="${ed.uid}">${ed.identifier}</option>');
+				if( ed.isExternal() ) {
+					jOpt.prop("disabled",true);
+					jOpt.append(' (unsupported external enum)');
+				}
+				jOpt.appendTo(jOptGroup);
 			}
-			jOpt.appendTo(jSelect);
 		}
 		var oldUid = curTd.tagsSourceEnumUid;
 		jSelect.change( ev->{
@@ -239,44 +260,120 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 		else
 			jSelect.addClass("noValue");
+
+		JsTools.parseComponents(jForm);
+		checkBackup();
 	}
 
 
 	function updateList() {
 		jList.empty();
 
-		for(td in project.defs.tilesets) {
-			var e = new J("<li/>");
-			jList.append(e);
+		// List context menu
+		ContextMenu.addTo(jList, false, [
+			{
+				label: L._Paste(),
+				cb: ()->{
+					var copy = project.defs.pasteTilesetDef(App.ME.clipboard);
+					editor.ge.emit( TilesetDefAdded(copy) );
+					selectTileset(copy);
+				},
+				enable: ()->App.ME.clipboard.is(CTilesetDef),
+			},
+		]);
 
-			e.append('<span class="name">'+td.identifier+'</span>');
-			if( curTd==td )
-				e.addClass("active");
+		var tagGroups = project.defs.groupUsingTags(project.defs.tilesets, td->td.tags);
+		for( group in tagGroups) {
+			// Tag name
+			if( tagGroups.length>1 ) {
+				var jSep = new J('<li class="title fixed"/>');
+				jSep.text( group.tag==null ? L._Untagged() : group.tag );
+				jSep.appendTo(jList);
 
-			e.click( function(_) selectTileset(td) );
+				// Rename
+				if( group.tag!=null ) {
+					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
+					jSep.append(jLinks);
+					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
+						for(td in project.defs.tilesets)
+							td.tags.rename(group.tag, t);
+						editor.ge.emit( TilesetDefChanged(curTd) );
+					});
+				}
+			}
 
-			ContextMenu.addTo(e, [
-				{
-					label: L._Duplicate(),
-					cb: ()-> {
-						var copy = project.defs.duplicateTilesetDef(td);
-						editor.ge.emit( TilesetDefAdded(copy) );
-						selectTileset(copy);
+			var jLi = new J('<li class="subList"/>');
+			jLi.appendTo(jList);
+			var jSubList = new J('<ul/>');
+			jSubList.appendTo(jLi);
+
+			for(td in group.all) {
+				var jLi = new J("<li/>");
+				jSubList.append(jLi);
+
+				jLi.append('<span class="name">'+td.identifier+'</span>');
+				jLi.data("uid",td.uid);
+				if( curTd==td )
+					jLi.addClass("active");
+
+				if( td.isUsingEmbedAtlas() )
+					jLi.find(".name").prepend('<span class="icon embed"/>');
+
+				jLi.click( function(_) selectTileset(td) );
+
+				ContextMenu.addTo(jLi, [
+					{
+						label: L._Copy(),
+						cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
+						enable: ()->!td.isUsingEmbedAtlas(),
 					},
-				},
-				{
-					label: L._Delete(),
-					cb: deleteTilesetDef.bind(td),
-				},
-			]);
+					{
+						label: L._Cut(),
+						cb: ()->{
+							App.ME.clipboard.copyData(CTilesetDef, td.toJson());
+							deleteTilesetDef(td);
+						},
+						enable: ()->!td.isUsingEmbedAtlas(),
+					},
+					{
+						label: L._PasteAfter(),
+						cb: ()->{
+							var copy = project.defs.pasteTilesetDef(App.ME.clipboard, td);
+							editor.ge.emit( TilesetDefAdded(copy) );
+							selectTileset(copy);
+						},
+						enable: ()->App.ME.clipboard.is(CTilesetDef),
+					},
+					{
+						label: L._Duplicate(),
+						cb: ()-> {
+							var copy = project.defs.duplicateTilesetDef(td);
+							editor.ge.emit( TilesetDefAdded(copy) );
+							selectTileset(copy);
+						},
+						enable: ()->!td.isUsingEmbedAtlas(),
+					},
+					{
+						label: L._Delete(),
+						cb: deleteTilesetDef.bind(td),
+					},
+				]);
+			}
+
+			// Make list sortable
+			JsTools.makeSortable(jSubList, function(ev) {
+				var jItem = new J(ev.item);
+				var fromIdx = project.defs.getTilesetIndex( jItem.data("uid") );
+				var toIdx = ev.newIndex>ev.oldIndex
+					? jItem.prev().length==0 ? 0 : project.defs.getTilesetIndex( jItem.prev().data("uid") )
+					: jItem.next().length==0 ? project.defs.tilesets.length-1 : project.defs.getTilesetIndex( jItem.next().data("uid") );
+
+				var moved = project.defs.sortTilesetDef(fromIdx, toIdx);
+				selectTileset(moved);
+				editor.ge.emit(TilesetDefSorted);
+			});
 		}
 
-		// Make list sortable
-		JsTools.makeSortable(jList, function(ev) {
-			var moved = project.defs.sortTilesetDef(ev.oldIndex, ev.newIndex);
-			selectTileset(moved);
-			editor.ge.emit(TilesetDefSorted);
-		});
-
+		checkBackup();
 	}
 }

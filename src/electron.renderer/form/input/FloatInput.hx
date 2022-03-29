@@ -15,6 +15,7 @@ class FloatInput extends form.Input<Float> {
 	public function setValueStep(step:Float) {
 		valueStep = step<=0 ? -1 : step;
 		writeValueToInput();
+		enableIncrementControls();
 	}
 
 
@@ -49,8 +50,13 @@ class FloatInput extends form.Input<Float> {
 	override function getter():Float {
 		if( rawGetter()==null )
 			return null;
-		else
-			return applyStep( rawGetter() * ( displayAsPct ? 100 : 1 ) );
+		else {
+			var v : Float = applyStep( rawGetter() * ( displayAsPct ? 100 : 1 ) );
+			if( M.fabs(v-Std.int(v))<=0.000001 )
+				return Std.int(v);
+			else
+				return v;
+		}
 	}
 
 	override function setter(v:Float) {

@@ -1,10 +1,11 @@
 <h2>
 	<div class="icon enum"></div>
-	Entity enums
+	Project Enums
 </h2>
 <div class="header">
 	<div class="help">
-		Enumerations (Enums) are special value types of Entities. They could be for example the list of possible Enemy types, or a list of Item identifiers.
+		Enumerations (Enums) are list of values.
+		Examples: the list of possible Enemy types, a list of Item identifiers, etc.
 	</div>
 </div>
 
@@ -17,39 +18,58 @@
 	<ul class="niceList"></ul>
 </div>
 
-<ul class="form enumForm">
-	<li class="onlyExternal">
-		<div class="help">External enums can be manually synced with their source file.</div>
-	</li>
+<div class="enumFormWrapper">
+	<dl class="form enumForm">
+		<dt class="onlyExternal">
+			<label>Source file</label>
+			<info>This Enum was imported from an external file and can be kept in-sync with it.</info>
+		</dt>
 
-	<li class="source">
-		<label>Source file</label>
-	</li>
+		<dd class="source">
+		</dd>
 
-	<li>
-		<label for="id">Enum identifier</label>
-		<input type="text" name="id" id="id"/>
-	</li>
 
-	<li>
-		<label for="icons">Icon tileset</label>
-		<select id="icons"></select>
-	</li>
+		<dt>
+			<label for="id">Enum identifier</label>
+			<div class="info identifier"></div>
+		</dt>
+		<dd>
+			<input type="text" name="id" id="id"/>
+		</dd>
 
-	<li>
-		<label for="eValues">Possible values</label>
 
+		<dt>
+			<label for="icons">Icon tileset</label>
+			<div class="info">You can link an existing Tileset to this Enum to associate icons to each enum values.</div>
+		</dt>
+		<dd>
+			<select id="icons"></select>
+		</dd>
+
+		<dt class="noExternal">
+			<label for="tags">Tags</label>
+			<div class="info">Tags are used to freely organize your Enums.</div>
+		</dt>
+		<dd class="noExternal">
+			<div id="tags"></div>
+		</dd>
+	</dl>
+
+
+	<div class="valuesWrapper">
+		<h2>All possible enum values</h2>
+		<button class="createEnumValue noExternal gray">Add a new value</button>
 		<ul class="enumValues"></ul>
-		<button class="createEnumValue noExternal gray">Add value</button>
+	</div>
 
-		<!-- Template -->
-		<xml class="enum">
-			<div class="sortHandle"></div>
-			<div class="pickerWrapper"></div>
-			<input type="color" name="color"/>
-			<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
-			<button class="delete gray noExternal">🗑️</button>
-		</xml>
-	</li>
-</ul>
+</div>
 
+
+<!-- Template -->
+<xml class="enum">
+	<div class="sortHandle"></div>
+	<div class="pickerWrapper"></div>
+	<input type="color" name="color"/>
+	<input type="text" class="name" placeholder="REQUIRED - Unique identifier"/>
+	<button class="delete gray noExternal"> <span class="icon delete"></span> </button>
+</xml>

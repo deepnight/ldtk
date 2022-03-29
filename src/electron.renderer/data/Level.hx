@@ -2,12 +2,17 @@ package data;
 
 class Level {
 	var _project : Project;
+	public var _world : World;
 
-	@:allow(data.Project)
+	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
+
+	@:allow(data.Project, data.World)
 	public var uid(default,null) : Int;
+	public var iid : String;
 	public var identifier(default,set): String;
 	public var worldX : Int;
 	public var worldY : Int;
+	public var worldDepth : Int;
 	public var pxWid : Int;
 	public var pxHei : Int;
 	public var layerInstances : Array<data.inst.LayerInstance> = [];
@@ -21,6 +26,7 @@ class Level {
 	public var bgPivotY: Float;
 	public var useAutoIdentifier: Bool;
 
+	@:allow(ui.LevelInstanceForm)
 	@:allow(ui.modal.panel.LevelInstancePanel)
 	var bgColor : Null<UInt>;
 
@@ -31,37 +37,66 @@ class Level {
 		inline function get_worldCenterY() return dn.M.round( worldY + pxHei*0.5 );
 
 
-	@:allow(data.Project)
-	private function new(project:Project, wid:Int, hei:Int, uid:Int) {
+	@:allow(data.Project, data.World)
+	private function new(project:Project, world:World, wid:Int, hei:Int, uid:Int, iid:String) {
 		this.uid = uid;
+		this.iid = iid;
 		worldX = worldY = 0;
+		worldDepth = 0;
 		pxWid = wid;
 		pxHei = hei;
 		bgPivotX = 0.5;
 		bgPivotY = 0.5;
 		this._project = project;
+		this._world = world;
 		this.identifier = "Level"+uid;
 		this.bgColor = null;
 		useAutoIdentifier = true;
 
 		for(ld in _project.defs.layers)
-			layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+			createLayerInstance(ld);
 	}
 
 	function set_identifier(id:String) {
-		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id,true) : identifier;
+		return identifier = Project.isValidIdentifier(id) ? Project.cleanupIdentifier(id, _project.identifierStyle) : identifier;
 	}
 
 	@:keep public function toString() {
 		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
 	}
 
-	public function toJson() : ldtk.Json.LevelJson {
-		// List nearby levels
-		var neighbours = switch _project.worldLayout {
+
+	/**
+		List nearby level (only IIDs)
+	**/
+	public function getNeighboursIids() : Array<String> {
+		return getNeighboursJson().map( njson->njson.levelIid );
+	}
+
+	/**
+		List nearby level (only int UIDs)
+	**/
+	public function getNeighboursUids() : Array<Int> {
+		return getNeighboursJson().map( njson->njson.levelUid );
+	}
+
+	/**
+		List nearby level
+	**/
+	public function getNeighbours() : Array<Level> {
+		return getNeighboursJson().map( njson->_project.getLevelAnywhere(njson.levelUid) );
+	}
+
+
+	/**
+		List nearby levels as JSON
+	**/
+	public function getNeighboursJson() : Array<ldtk.Json.NeighbourLevel> {
+		var neighbours : Array<ldtk.Json.NeighbourLevel> = switch _world.worldLayout {
 			case Free, GridVania:
-				var nears = _project.levels.filter( (ol)->
+				var nears = _world.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
+					&& ol.worldDepth==worldDepth
 					&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
 						&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY )
 					)
@@ -72,33 +107,47 @@ class Level {
 						: l.worldY+l.pxHei<=worldY ? "n"
 						: "s";
 					return {
+						levelIid: l.iid,
 						levelUid: l.uid,
 						dir: dir,
 					}
 				});
 
 			case LinearHorizontal, LinearVertical:
-				var idx = dn.Lib.getArrayIndex(this, _project.levels);
-				var nears = [];
-				if( idx<_project.levels.length-1 )
-					nears.push({
-						levelUid: _project.levels[idx+1].uid,
-						dir: _project.worldLayout==LinearHorizontal?"e":"s",
-					});
-				if( idx>0 )
-					nears.push({
-						levelUid: _project.levels[idx-1].uid,
-						dir: _project.worldLayout==LinearHorizontal?"w":"n",
-					});
-				nears;
+				[];
+		}
+
+		return neighbours;
+	}
+
+
+	public function toJson(forTimeline=false) : ldtk.Json.LevelJson {
+		if( !forTimeline && hasJsonCache() ) {
+			var o = getCacheJsonObject();
+			if( !_project.externalLevels )
+				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
+			return o;
+		}
+
+
+		// World coords are not stored in JSON for automatically organized layouts
+		var jsonWorldX = worldX;
+		var jsonWorldY = worldY;
+		switch _world.worldLayout {
+			case Free:
+			case GridVania:
+			case LinearHorizontal, LinearVertical:
+				jsonWorldX = jsonWorldY = -1;
 		}
 
 		// Json
-		return {
+		var json : ldtk.Json.LevelJson = {
 			identifier: identifier,
+			iid: iid,
 			uid: uid,
-			worldX: worldX,
-			worldY: worldY,
+			worldX: jsonWorldX,
+			worldY: jsonWorldY,
+			worldDepth: worldDepth,
 			pxWid: pxWid,
 			pxHei: pxHei,
 			__bgColor: JsonTools.writeColor( getBgColor() ),
@@ -109,6 +158,8 @@ class Level {
 			bgPos: JsonTools.writeEnum(bgPos, true),
 			bgPivotX: JsonTools.writeFloat(bgPivotX),
 			bgPivotY: JsonTools.writeFloat(bgPivotY),
+
+			__smartColor: JsonTools.writeColor( getSmartColor(true) ),
 
 			__bgPos: {
 				var bg = getBgTileInfos();
@@ -127,29 +178,41 @@ class Level {
 			externalRelPath: null, // is only set upon actual saving, if project uses externalLevels option
 			fieldInstances: {
 				var all = [];
-				for(fi in fieldInstances)
-					all.push( fi.toJson() );
+				for(fd in _project.defs.levelFields)
+					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			},
 			layerInstances: layerInstances.map( li->li.toJson() ),
-			__neighbours: neighbours,
+			__neighbours: forTimeline ? [] : getNeighboursJson(),
 		}
+
+		// Cache this json
+		if( !forTimeline )
+			setJsonCache(json, false);
+
+		return json;
 	}
 
 	public function makeExternalRelPath(idx:Int) {
 		return
 			_project.getRelExternalFilesDir() + "/"
-			+ (dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-")
+			+ ( _project.hasFlag(PrependIndexToLevelFileNames) ? dn.Lib.leadingZeros(idx,Const.LEVEL_FILE_LEADER_ZEROS)+"-" : "")
 			+ identifier
 			+ "." + Const.LEVEL_EXTENSION;
 	}
 
-	public static function fromJson(p:Project, json:ldtk.Json.LevelJson) {
-		var wid = JsonTools.readInt( json.pxWid, p.defaultLevelWidth );
-		var hei = JsonTools.readInt( json.pxHei, p.defaultLevelHeight );
-		var l = new Level( p, wid, hei, JsonTools.readInt(json.uid) );
+	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson, registerToQuickAccess:Bool) {
+		if( json.iid==null )
+			json.iid = p.generateUniqueId_UUID();
+
+		var wid = JsonTools.readInt( json.pxWid, w.defaultLevelWidth );
+		var hei = JsonTools.readInt( json.pxHei, w.defaultLevelHeight );
+		var l = new Level( p, w, wid, hei, JsonTools.readInt(json.uid), json.iid );
+		if( registerToQuickAccess )
+			p.registerLevelQuickAccess(l);
 		l.worldX = JsonTools.readInt( json.worldX, 0 );
 		l.worldY = JsonTools.readInt( json.worldY, 0 );
+		l.worldDepth = JsonTools.readInt( json.worldDepth, 0 );
 		l.identifier = JsonTools.readString(json.identifier, "Level"+l.uid);
 		l.bgColor = JsonTools.readColor(json.bgColor, true);
 		l.externalRelPath = json.externalRelPath;
@@ -173,11 +236,82 @@ class Level {
 				l.fieldInstances.set(fi.defUid, fi);
 			}
 
+		// Init cache
+		crawlObjectRec(json); // Because haxe.Json.parse unescapes "\n" chars, we need to re-escape them before caching the JSON object
+		l.setJsonCache(json, true);
+
 		return l;
 	}
 
+	/** Crawl an Object recursively and fixes unescaped \n chars **/
+	static function crawlObjectRec(obj:{}) {
+		for( k in Reflect.fields(obj) ) {
+			var v : Dynamic = Reflect.field(obj, k);
+			switch Type.typeof(v) {
+				case TObject:
+					crawlObjectRec(v);
+
+				case TClass(Array):
+					crawlArray(v);
+
+				case TClass(String):
+					if( v.indexOf("\n")>=0 )
+						Reflect.setField(obj, k, StringTools.replace(v, "\n", "\\n"));
+
+				case _:
+			}
+		}
+	}
+
+	/** Crawl an Array recursively and fixes unescaped \n chars **/
+	static function crawlArray(arr:Array<Dynamic>) {
+		for( i in 0...arr.length )
+			switch Type.typeof( arr[i] ) {
+				case TObject:
+					crawlObjectRec(arr[i]);
+
+				case TClass(Array):
+					crawlArray(arr[i]);
+
+				case TClass(String):
+					if( arr[i].indexOf("\n")>=0 )
+						arr[i] = StringTools.replace(arr[i], "\n", "\\n");
+
+				case _:
+			}
+	}
+
+
+
 	public inline function hasBgImage() {
 		return bgRelPath!=null;
+	}
+
+
+	public inline function hasJsonCache() return _cachedJson!=null;
+	public inline function invalidateJsonCache() _cachedJson = null;
+	public function rebuildCache() {
+		_cachedJson = null;
+		toJson();
+	}
+
+	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
+		_cachedJson = {
+			str: ui.ProjectSaver.jsonStringify(_project, json, skipHeader ),
+			json: json,
+		}
+	}
+
+	public inline function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
+		return hasJsonCache() ? _cachedJson.json : null;
+	}
+
+	public inline function getDisplayIdentifier() {
+		return identifier + ( hasJsonCache() ? "" : "*" );
+	}
+
+	public function getCacheJsonString() : Null<String> {
+		return hasJsonCache() ? _cachedJson.str : null;
 	}
 
 	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {
@@ -302,7 +436,7 @@ class Level {
 	}
 
 	public function overlapsAnyLevel() {
-		for(l in _project.levels)
+		for(l in _world.levels)
 			if( overlaps(l) )
 				return true;
 
@@ -310,7 +444,7 @@ class Level {
 	}
 
 	public function willOverlapAnyLevel(newWorldX:Int, newWorldY:Int) {
-		for(l in _project.levels)
+		for(l in _world.levels)
 			if( l!=this && dn.Lib.rectangleOverlaps(newWorldX, newWorldY, pxWid, pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
 				return true;
 
@@ -336,20 +470,45 @@ class Level {
 		return ld!=null ? getLayerInstance(ld) : null;
 	}
 
-	public function getLayerInstanceFromEntity(?ei:data.inst.EntityInstance, ?ed:data.def.EntityDef) : Null<data.inst.LayerInstance> {
-		if( ei==null && ed==null )
-			return null;
 
-		for(li in layerInstances)
-		for(e in li.entityInstances)
-			if( ei!=null && e==ei || ed!=null && e.defUid==ed.uid )
-				return li;
-
-		return null;
+	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
+		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID());
+		layerInstances.push(li);
+		return li;
 	}
 
-	public function tidy(p:Project) {
+
+
+	/**
+		Return TRUE if this level is part of given World
+	**/
+	public inline function isInWorld(w:World) {
+		return w!=null && _world.iid==w.iid;
+	}
+
+	/**
+		Move this level to target World
+	**/
+	public function moveToWorld(target:World) {
+		if( _world.iid==target.iid )
+			return false;
+
+		var from = _world;
+		if( !from.levels.remove(this) )
+			return false;
+
+		target.levels.push(this);
+		_world = target;
+		from.reorganizeWorld();
+		target.reorganizeWorld();
+		return true;
+	}
+
+
+	public function tidy(p:Project, w:World) {
 		_project = p;
+		_project.markIidAsUsed(iid);
+		_world = w;
 
 		// Remove layerInstances without layerDefs
 		var i = 0;
@@ -357,6 +516,7 @@ class Level {
 			if( layerInstances[i].def==null ) {
 				App.LOG.add("tidy", 'Removed lost layer instance in $this');
 				layerInstances.splice(i,1);
+				invalidateJsonCache();
 			}
 			else
 				i++;
@@ -364,6 +524,7 @@ class Level {
 		// Create missing layerInstances & check if they're sorted in the same order as defs
 		for(i in 0..._project.defs.layers.length)
 			if( i>=layerInstances.length || layerInstances[i].layerDefUid!=_project.defs.layers[i].uid ) {
+				App.LOG.add("tidy", 'Fixed layer instance array in $this (order mismatch or missing layer instance)');
 				var existing = new Map();
 				for(li in layerInstances)
 					existing.set(li.layerDefUid, li);
@@ -373,14 +534,16 @@ class Level {
 						layerInstances.push( existing.get(ld.uid) );
 					else {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
-						layerInstances.push( new data.inst.LayerInstance(_project, uid, ld.uid) );
+						createLayerInstance(ld);
 					}
+				invalidateJsonCache();
 				break;
 			}
 
 		// Tidy layer instances
 		for(li in layerInstances)
-			li.tidy(_project);
+			if( li.tidy(_project) )
+				invalidateJsonCache();
 
 
 		// Remove field instances whose def was removed
@@ -388,14 +551,16 @@ class Level {
 			if( e.value.def==null ) {
 				App.LOG.add("tidy", 'Removed lost fieldInstance in $this');
 				fieldInstances.remove(e.key);
+				invalidateJsonCache();
 			}
 
 		// Create missing field instances
 		for(fd in p.defs.levelFields)
-			getFieldInstance(fd);
+			getFieldInstance(fd,true);
 
 		for(fi in fieldInstances)
-			fi.tidy(_project);
+			if( fi.tidy(_project) )
+				invalidateJsonCache();
 	}
 
 
@@ -428,56 +593,78 @@ class Level {
 	}
 
 
-	public inline function hasAnyError() {
-		return getFirstError()==null;
+	public inline function invalidateCachedError() {
+		_cachedFirstError = null;
 	}
 
-	public function getFirstError() : Null<LevelError> {
-		for(li in layerInstances)
-			switch li.def.type {
-				case IntGrid:
-				case Entities:
-					for(ei in li.entityInstances)
-						if( ei.hasAnyFieldError() )
-							return InvalidEntityField(ei);
+	var _cachedFirstError : Null<LevelError> = null;
+	public inline function getFirstError() : LevelError {
+		if( _cachedFirstError!=null )
+			return _cachedFirstError;
+		else {
+			_cachedFirstError = NoError;
 
-				case Tiles:
-				case AutoLayer:
-			}
+			// Layers content
+			for(li in layerInstances)
+				for(ei in li.entityInstances) {
+					if( !li.def.isEntityAllowedFromTags(ei) ) {
+						_cachedFirstError = InvalidEntityTag(ei);
+						break;
+					}
 
-		if( bgRelPath!=null && !_project.isImageLoaded(bgRelPath) )
-			return InvalidBgImage;
+					if( ei.hasAnyFieldError() ) {
+						_cachedFirstError = InvalidEntityField(ei);
+						break;
+					}
+				}
 
-		return null;
+			// Level background images
+			if( _cachedFirstError==NoError && bgRelPath!=null && !_project.isImageLoaded(bgRelPath) )
+				_cachedFirstError = InvalidBgImage;
+
+			return _cachedFirstError;
+		}
 	}
 
 
 
 	/* CUSTOM FIELDS *******************/
 
-	/** Get (and automatically creates) a field instance **/
-	public function getFieldInstance(fd:data.def.FieldDef) : data.inst.FieldInstance{
-		if( !fieldInstances.exists(fd.uid) )
+	/**
+		Get a field instance (or optionnaly, creates it)
+	**/
+	public function getFieldInstance(fd:data.def.FieldDef, createIfMissing:Bool) : Null<data.inst.FieldInstance> {
+		if( createIfMissing && !fieldInstances.exists(fd.uid) ) {
 			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
+			invalidateJsonCache();
+		}
 		return fieldInstances.get(fd.uid);
 	}
 
 
 	public function getSmartColor(bright:Bool) {
-		for(fi in fieldInstances) {
-			if( fi.def.type==F_Color )
-				for(i in 0...fi.getArrayLength())
-					if( !fi.valueIsNull(i) )
-						return bright ? dn.Color.toWhite(fi.getColorAsInt(i), 0.5) : fi.getColorAsInt(i);
+		inline function _adjust(c:Int) {
+			return bright ? dn.Color.toWhite(c, 0.45) : c;
 		}
-		return bright ? dn.Color.toWhite(getBgColor(), 0.5) : getBgColor();
+
+		var c : Null<Int> = null;
+		for(fd in _project.defs.levelFields) {
+			var fi = getFieldInstance(fd,false);
+			if( fi==null )
+				continue;
+			c = fi.getSmartColor();
+			if( c!=null )
+				return _adjust(c);
+		}
+
+		return _adjust( getBgColor() );
 	}
 
 	public function hasAnyFieldDisplayedAt(pos:ldtk.Json.FieldDisplayPosition) {
 		for(fi in fieldInstances)
 			if( fi.def.editorAlwaysShow || !fi.isUsingDefault(0) ) {
 				switch fi.def.editorDisplayMode {
-					case ValueOnly, NameAndValue:
+					case ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel:
 						if( fi.def.editorDisplayPos==pos )
 							return true;
 
@@ -488,6 +675,8 @@ class Level {
 					case PointPath, PointPathLoop:
 					case RadiusPx:
 					case RadiusGrid:
+					case RefLinkBetweenCenters:
+					case RefLinkBetweenPivots:
 				}
 			}
 		return false;

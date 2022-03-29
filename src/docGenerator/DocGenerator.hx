@@ -19,6 +19,7 @@ enum FieldType {
 	Obj(fields:Array<FieldInfos>);
 	Ref(display:String, typeName:String);
 	Dyn;
+	Multiple(possibleTypes:Array<FieldType>);
 	Unknown;
 }
 
@@ -41,6 +42,7 @@ typedef FieldInfos = {
 	var isColor: Bool;
 	var isInternal: Bool;
 	var deprecation: Null<DeprecationInfos>;
+	var removed: Null<dn.Version>;
 }
 
 typedef GlobalType = {
@@ -65,6 +67,7 @@ typedef SchemaType = {
 	var ?enum__: Array<String>;
 	var ?ref__: String;
 	var ?oneOf: Array<SchemaType>;
+	var ?anyOf: Array<SchemaType>;
 }
 
 
@@ -117,7 +120,11 @@ class DocGenerator {
 				for(n in type.elements)
 					switch n.name {
 						case "meta", "haxe_doc":
-						case _: enumValues.push(n.name);
+						case _:
+							if( n.has.a )
+								enumValues.push(n.name+"(...)");
+							else
+								enumValues.push(n.name);
 					}
 
 				allEnums.set(type.att.path, enumValues);
@@ -161,6 +168,10 @@ class DocGenerator {
 		Sys.println("Generating JSON schema...");
 		genJsonSchema(xml, className, xmlPath, jsonPath);
 
+		// Dump version to version.txt
+		Sys.println("Dumping version file...");
+		sys.io.File.saveContent("docs/version.txt", appVersion.full);
+
 		// Cleanup
 		if( deleteXml ) {
 			Sys.println("Deleting XML file");
@@ -179,7 +190,6 @@ class DocGenerator {
 				return t;
 
 		throw 'Unknown global type $typePath';
-		return null;
 	}
 
 
@@ -189,7 +199,6 @@ class DocGenerator {
 	static function genMarkdownDoc(xml:haxe.xml.Access, className:String, xmlPath:String, ?mdPath:String) {
 		// Print types
 		var root : GlobalType = null;
-		var toc = [];
 		var md = [];
 		for(type in allGlobalTypes) {
 			if( type.inlined )
@@ -214,13 +223,6 @@ class DocGenerator {
 				title = type.section+". "+title;
 			md.push('## $title');
 
-			// Add to ToC
-			toc.push({
-				name: type.displayName,
-				anchor: anchorId(type.xml.att.path),
-				depth: type.section.split(".").length,
-			});
-
 			// Optional description
 			if( type.description!=null ) {
 				md.push(type.description);
@@ -229,7 +231,7 @@ class DocGenerator {
 
 			// No field informations for this type
 			if( !type.xml.hasNode.a ) {
-				md.push('Sorry this type has no documentation yet.');
+				// md.push('Sorry this type has no documentation yet.');
 				continue;
 			}
 
@@ -253,7 +255,13 @@ class DocGenerator {
 					Sys.println('  -> ${f.displayName} : ${getTypeMd(f.type)}');
 
 				// Name
-				var cell = [ '`${f.displayName}`' ];
+				var cell = [];
+				if( f.removed==null )
+					cell.push('`${f.displayName}`');
+				else
+					cell.push('~~${f.displayName}~~');
+
+
 				if( f.only!=null )
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
 
@@ -263,7 +271,6 @@ class DocGenerator {
 				if( f.deprecation!=null ) {
 					cell[0] = "~~"+cell[0]+"~~";
 					cell.push('<sup class="deprecated">*DEPRECATED!*</sup>');
-
 				}
 
 				if( f.hasVersion )
@@ -279,14 +286,18 @@ class DocGenerator {
 				tableCols.push(type);
 
 				// Desc
-				var cell = f.descMd;
-
-				if( f.subFields.length>0 ) {
-					cell.push("This object contains the following fields:");
-					cell.push( getSubFieldsHtml( f.subFields ) );
+				if( f.removed!=null ) {
+					tableCols.push('*This field was removed in ${f.removed.full} and should no longer be used.*');
 				}
+				else {
+					var cell = f.descMd;
 
-				tableCols.push( cell.join("<br/> ") );
+					if( f.subFields.length>0 ) {
+						cell.push("This object contains the following fields:");
+						cell.push( getSubFieldsHtml( f.subFields ) );
+					}
+					tableCols.push( cell.join("<br/> ") );
+				}
 
 				md.push( tableCols.join(" | "));
 				for(row in subRows)
@@ -297,18 +308,9 @@ class DocGenerator {
 
 		// Header
 		var headerMd = [
-			'## LDtk Json structure (version $appVersion)',
+			'# LDtk Json structure (version $appVersion)',
 			'',
 		];
-
-		// Table of content
-		for(e in toc) {
-			var indent = " -";
-			for(i in 0...e.depth)
-				indent = "  "+indent;
-			headerMd.push('$indent [${e.name}](#${e.anchor})');
-		}
-
 		md = headerMd.concat(md);
 
 
@@ -338,6 +340,7 @@ class DocGenerator {
 			otherTypes: new Map<String,Dynamic>(),
 		};
 
+		var otherTypes = [];
 
 		for(type in allGlobalTypes) {
 
@@ -358,8 +361,11 @@ class DocGenerator {
 
 			// List fields
 			for(f in getFieldsInfos(type.xml.node.a)) {
-				var st = getSchemaType(f.type);
-				st.description = f.descMd.join('\n');
+				var subType = getSchemaType(f.type);
+				subType.description = f.descMd.join('\n');
+
+				if( f.removed!=null )
+					subType.description = '*This field was removed in ${f.removed.full} and should no longer be used.*';
 
 				// Detect non-nullable fields
 				if( f.deprecation==null ) {
@@ -371,7 +377,7 @@ class DocGenerator {
 						typeJson.required.push(f.displayName);
 				}
 
-				typeJson.properties.set(f.displayName, st);
+				typeJson.properties.set(f.displayName, subType);
 			}
 
 			// Store type
@@ -380,7 +386,20 @@ class DocGenerator {
 			else {
 				typeJson.additionalProperties = false;
 				json.otherTypes.set(typeName, typeJson);
+				otherTypes.push(typeName);
 			}
+		}
+
+		// Force refs to all otherTypes (otherwise they are lost by Quicktype conversion)
+		if( otherTypes.length>0 ) {
+			json.LdtkJsonRoot.properties.set("__FORCED_REFS", {
+				description: "This object is not actually used by LDtk. It ONLY exists to force explicit references to all types, to make sure QuickType finds them and integrate all of them. Otherwise, Quicktype will drop types that are not explicitely used.",
+				type: ["object"],
+				properties: new Map(),
+			});
+			var forcedMap = json.LdtkJsonRoot.properties.get("__FORCED_REFS").properties;
+			for(t in otherTypes)
+				forcedMap.set( t, { ref__: makeSchemaRef(t) } );
 		}
 
 		// Default output file name
@@ -393,8 +412,8 @@ class DocGenerator {
 		// Write Json file
 		var header = {
 			"$schema": "https://json-schema.org/draft-07/schema#",
-			title: "LDtk "+appVersion.numbers+" JSON schema",
-			version: appVersion.numbers,
+			title: "LDtk "+appVersion.full+" JSON schema",
+			version: appVersion.full,
 			description: "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
 			"$ref" : "#/LdtkJsonRoot",
 		}
@@ -428,10 +447,13 @@ class DocGenerator {
 		for(f in fields) {
 			var li = [];
 			// Name
-			li.push('**`${f.displayName}`**');
+			if( f.removed==null )
+				li.push('**`${f.displayName}`**');
+			else
+				li.push('~~${f.displayName}~~');
 
 			// Type
-			li.push('**(${getTypeMd(f.type)}**)');
+			li.push('**(${getTypeMd(f.type, f.removed!=null)}**)');
 
 			// Version badges
 			if( f.hasVersion )
@@ -442,7 +464,9 @@ class DocGenerator {
 				li.push( getColorInfosMd(f) );
 
 			// Desc
-			if( f.descMd.length>0 ) {
+			if( f.removed!=null )
+				li.push('*This field was removed in ${f.removed.full} and should no longer be used.*');
+			else if( f.descMd.length>0 ) {
 				li.push(":");
 				for( descLine in f.descMd )
 					li.push('*$descLine*');
@@ -482,7 +506,7 @@ class DocGenerator {
 
 			var descMd = [];
 			if( deprecation!=null ) {
-				if( appVersion.compare(deprecation.removal)<0 ) {
+				if( appVersion.compareEverything(deprecation.removal)<0 ) {
 					descMd.push('**WARNING**: this deprecated value will be *removed* completely on version ${deprecation.removal}+');
 
 				}
@@ -530,6 +554,19 @@ class DocGenerator {
 				}
 			}
 
+			// Replace @enum{...} with Enum possible values
+			var typeRefReg = ~/@enum{(.*?)}/im;
+			for(i in 0...descMd.length) {
+				if( typeRefReg.match(descMd[i]) ) {
+					var tmp = descMd[i];
+					while( typeRefReg.match(tmp) ) {
+						var k = typeRefReg.matched(1);
+						descMd[i] = StringTools.replace( descMd[i], "@enum{"+k+"}", allEnums.get(k).join(", ") );
+						tmp = typeRefReg.matchedRight();
+					}
+				}
+			}
+
 			allFields.push({
 				xml: fieldXml,
 				displayName: displayName,
@@ -537,11 +574,12 @@ class DocGenerator {
 				subFields: subFields,
 
 				only: getMeta(fieldXml, "only"),
-				hasVersion: hasMeta(fieldXml, "changed") || hasMeta(fieldXml, "added"),
+				hasVersion: hasMeta(fieldXml,"changed") || hasMeta(fieldXml,"added") || hasMeta(fieldXml,"removed"),
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
 				deprecation: deprecation,
+				removed: hasMeta(fieldXml,"removed") ? getMetaVersion(fieldXml,"removed") : null,
 			});
 		}
 		allFields.sort( (a,b)->{
@@ -564,19 +602,19 @@ class DocGenerator {
 
 
 	/**
-		Create a version info badge ("added/changed" meta)
+		Create a version info badge ("added/changed/removed" meta)
 	**/
 	static function versionBadge(xml:haxe.xml.Access) {
 		var badges = [];
 
 		if( hasMeta(xml,"added") ) {
 			var version = getMeta(xml,"added");
-			badges.push( badge("Added", version, appVersion.sameMajorAndMinor(version) ? "green" : "gray" ) );
+			badges.push( badge("Added", version, appVersion.hasSameMajorAndMinor(version) ? "green" : "gray" ) );
 		}
 
 		if( hasMeta(xml,"changed") ) {
 			var version = getMeta(xml,"changed");
-			badges.push( badge("Changed", version, appVersion.sameMajorAndMinor(version) ? "green" : "gray" ) );
+			badges.push( badge("Changed", version, appVersion.hasSameMajorAndMinor(version) ? "green" : "gray" ) );
 
 		}
 
@@ -640,10 +678,56 @@ class DocGenerator {
 
 
 	/**
+		Get meta data of a field as String
+	**/
+	static function getMetaArray(xml:haxe.xml.Access, name:String, metaIndex=0) : Array<String> {
+		if( !hasMeta(xml,name) )
+			return [];
+
+		var out = [];
+		for(m in xml.node.meta.nodes.m )
+			if( m.att.n == name ) {
+				var i = 0;
+				for(metaValues in m.nodes.e) {
+					if( i++<metaIndex )
+						continue;
+					var v = metaValues.innerHTML;
+					if( v.charAt(0)=="\"" )
+						out.push( v.substring(1, v.length-1) );
+					else
+						out.push(v);
+				}
+			}
+
+		if( out.length>0 )
+			return out;
+		else
+			throw "Malformed meta?";
+	}
+
+
+	/**
 		Get meta data of a field as dn.Version
 	**/
 	static function getMetaVersion(xml:haxe.xml.Access, name:String) : Null<dn.Version> {
 		return new dn.Version( getMeta(xml, name) );
+	}
+
+
+	static function metaTypeToFieldType(rawType:String) : FieldType {
+		return switch rawType {
+			case "Int", "Float", "Bool", "String":
+				// Basic types
+				Basic(rawType);
+
+			case "Dynamic":
+				Dyn;
+
+			case _:
+				// Reference to a global type
+				var global = getGlobalType(rawType);
+				Ref(global.displayName, global.rawName);
+		}
 	}
 
 
@@ -652,14 +736,34 @@ class DocGenerator {
 	**/
 	static function getFieldType(fieldXml:haxe.xml.Access) : FieldType {
 		return
-			if( fieldXml.hasNode.x ) {
+			if( hasMeta(fieldXml, "docType") ) {
+				// Custom specific type for schema export
+				metaTypeToFieldType( getMeta(fieldXml, "docType") );
+			}
+			else if( fieldXml.hasNode.x ) {
 				if( fieldXml.node.x.att.path=="Null" )
 					Nullable( getFieldType(fieldXml.node.x) );
 				else
 					Basic(fieldXml.node.x.att.path);
 			}
-			else if( fieldXml.hasNode.d )
-				Dyn;
+			else if( fieldXml.hasNode.d ) {
+				// Dynamic
+				var rawPossibleTypes = getMetaArray(fieldXml,"types");
+				if( rawPossibleTypes.length>0 ) {
+					// Known possible types
+					var types = [];
+					for(t in rawPossibleTypes) {
+						var ft = metaTypeToFieldType(t);
+						if( ft!=null )
+							types.push(ft);
+					}
+					Multiple(types);
+				}
+				else {
+					// Pure dynamic
+					Dyn;
+				}
+			}
 			else if( fieldXml.hasNode.t ) {
 				var name = fieldXml.node.t.att.path;
 				var typeInfos = allGlobalTypes.filter( (t)->t.rawName==name )[0];
@@ -686,9 +790,11 @@ class DocGenerator {
 	/**
 		Human readable type
 	**/
-	static function getTypeMd(t:FieldType) {
+	static function getTypeMd(t:FieldType, ignoreNullable=false) {
 		var str = switch t {
-			case Nullable(f): getTypeMd(f)+" *(can be `null`)*";
+			case Nullable(f):
+				ignoreNullable ? getTypeMd(f) : getTypeMd(f)+" *(can be `null`)*";
+
 			case Basic(name):
 				switch name {
 					case "UInt": "Unsigned integer";
@@ -704,7 +810,14 @@ class DocGenerator {
 
 			case Arr(t): 'Array of ${getTypeMd(t)}';
 			case Obj(fields): "Object";
-			case Dyn: "Dynamic (anything)";
+
+			case Multiple(possibleTypes):
+				// "Any of: "+possibleTypes.map( t->getTypeMd(t) ).join(", ");
+				"Various possible types";
+
+			case Dyn:
+				"Untyped";
+
 			case Unknown: "???";
 		}
 		return str;
@@ -718,12 +831,19 @@ class DocGenerator {
 				switch f { // ignore Dynamics
 					case Basic("Enum"):
 					case Dyn:
+
+					case Multiple(possibleTypes):
+						// st.oneOf = [ { type: ["null"] } ];
+						// for(ft in possibleTypes)
+						// 	st.oneOf.push( getSchemaType(ft) );
+
 					case Ref(_):
 						st.oneOf = [
 							{ type: ["null"] },
 							{ ref__: st.ref__ },
 						];
 						Reflect.deleteField(st, "ref__");
+
 					case _:
 						if( st.enum__!=null )
 							st.enum__.push(null);
@@ -751,13 +871,23 @@ class DocGenerator {
 				st.type = ["object"];
 
 			case Ref(display, typeName):
-				st.ref__ = '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
+				st.ref__ = makeSchemaRef(typeName);
 
 			case Dyn:
+
+			case Multiple(possibleTypes):
+				// st.oneOf = [];
+				// for(ft in possibleTypes)
+				// 	st.oneOf.push( getSchemaType(ft) );
+
 			case Unknown:
 		}
 
 		return st;
+	}
+
+	static function makeSchemaRef(typeName:String) {
+		return '#/otherTypes/${typeName.replace("ldtk.", "").replace("Json", "")}';
 	}
 
 
