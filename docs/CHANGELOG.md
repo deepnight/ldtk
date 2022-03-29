@@ -2,17 +2,18 @@
 
 ### A few words from the author
 
-**When I started working on LDtk about 1 year ago (which was known as *LEd* back then), I would not have imagined how far and how big this would get.**
+**When I started working on LDtk about 1 year ago (which was known as *LEd* back then), I would not have imagined how far and how big this would get.** LDtk was a critical part of my personal game dev plan, because I knew I needed a modern, fast and user-friendly level editor for my future projects.
 
-LDtk was a critical part of my personal game dev plan, as I always wished for a modern, fast and user-friendly level editor. Along the way, a passionate community of level designers, aspiring game devs and tech enthousiasts gathered around the project, providing an incredible support and lots of precious feedback.
+Along the way, a passionate community of level designers, aspiring game devs and tech enthousiasts gathered around the project, providing an incredible support and lots of precious feedback.
 
-**To everyone, thank you.**
+**To all of you, thank you.**
 
-This 1.0 step is obviously a major milestone for us. It's the biggest update so far which pushed LDtk to the next level (pun intended):
+This 1.0 step is obviously a *major* milestone. It is the *biggest* update so far and it pushes LDtk to the next level (pun intended):
 
  - New entity reference system
  - Great performance boost for large projects
- - Integrated icons and other quality-of-life changes
+ - Integrated icons and many quality-of-life changes
+ - New world layers
  - User interface reworks
 
 I hope you will like it, as much as I enjoyed making it :)
