@@ -22,10 +22,9 @@ jobs:
     steps:
       # Checkout, install haxe and libs
       - uses: actions/checkout@v2
-
       - uses: krdlab/setup-haxe@v1
         with:
-          haxe-version: 4.1.4
+          haxe-version: 4.2.0
 
         # Snapcraft required for ARM build
       - name: Install Snapcraft
@@ -40,7 +39,6 @@ jobs:
         with:
           node-version: '14'
       - run: cd app && npm install
-      - run: cd app && npm run pack-prepare
       - run: cd app && npm run pack-linux-arm64
 
       # Upload
