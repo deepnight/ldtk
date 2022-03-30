@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.1",
-	"appBuildId": 457954,
+	"appBuildId": 457955,
 	"nextUid": 4,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -79,7 +79,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": null, "color": "#000000" }],
+			"intGridValues": [],
 			"autoTilesetDefUid": 3,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
