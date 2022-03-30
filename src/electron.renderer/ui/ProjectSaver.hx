@@ -325,31 +325,39 @@ class ProjectSaver extends dn.Process {
 				}
 
 			case ExportingGMS:
+				// #if !debug
+
+				beginState(Done);
+
+				// #else
+
 				// if( project.exportTiled ) {
-					logState();
-					ui.modal.Progress.single(
-						L.t._("Exporting Tiled..."),
-						()->{
-							var e = new exporter.GameMakerStudio2();
-							e.addExtraLogger( App.LOG, "GMSExport" );
-							e.run( project, project.filePath.full );
-							if( e.hasErrors() )
-								N.error('Game Maker Studio export has errors.');
-							else
-								N.success('Saved Game Maker Studio files.');
-						},
-						()->{
-							beginState(Done);
-						}
-					);
+				// 	logState();
+				// 	ui.modal.Progress.single(
+				// 		L.t._("Exporting Tiled..."),
+				// 		()->{
+				// 			var e = new exporter.GameMakerStudio2();
+				// 			e.addExtraLogger( App.LOG, "GMSExport" );
+				// 			e.run( project, project.filePath.full );
+				// 			if( e.hasErrors() )
+				// 				N.error('Game Maker Studio export has errors.');
+				// 			else
+				// 				N.success('Saved Game Maker Studio files.');
+				// 		},
+				// 		()->{
+				// 			beginState(Done);
+				// 		}
+				// 	);
 				// }
 				// else {
 				// 	// Remove previous tiled dir
-				// 	var dir = project.getAbsExternalFilesDir() + "/tiled";
+				// 	var dir = project.getAbsExternalFilesDir() + "/gms2";
 				// 	if( NT.fileExists(dir) )
 				// 		NT.removeDir(dir);
 				// 	beginState(Done);
 				// }
+
+				// #end
 
 
 			case Done:
