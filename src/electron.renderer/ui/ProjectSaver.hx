@@ -13,6 +13,7 @@ private enum SavingState {
 	SavingLayerImages;
 	ExportingTiled;
 	ExportingGMS;
+	WritingSimplifiedEntities;
 	Done;
 }
 
@@ -369,6 +370,51 @@ class ProjectSaver extends dn.Process {
 				// #end
 
 
+			case WritingSimplifiedEntities:
+				beginNextState();
+				// var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() + "/entities" );
+
+				// if( true ) { // TODO check project export setting
+				// 	NT.createDirs(dirFp.full);
+
+				// 	var p = new ui.modal.Progress( "Simplified entities...", ()->beginNextState() );
+				// 	for(w in project.worlds)
+				// 	for(l in w.levels) {
+				// 		p.addOp({
+				// 			label: l.identifier,
+				// 			cb: ()->{
+				// 				var all = new Map();
+
+				// 				for(li in l.layerInstances) {
+				// 					if( li.def.type!=Entities )
+				// 						continue;
+
+				// 					all.set(li.def.identifier, []);
+				// 					for(ei in li.entityInstances)
+				// 						all.get(li.def.identifier).push( ei.toJson(li) );
+				// 				}
+
+				// 				// Prepare JSON
+				// 				var simpleJson = {}
+				// 				for(o in all.keyValueIterator())
+				// 					Reflect.setField(simpleJson, o.key, o.value);
+
+				// 				// Write file
+				// 				var fp = dirFp.clone();
+				// 				fp.fileName = l.identifier;
+				// 				fp.extension = "json";
+				// 				NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson ) );
+				// 			},
+				// 		});
+				// 	}
+				// }
+				// else {
+				// 	if( NT.fileExists(dirFp.full) )
+				// 		NT.removeDir(dirFp.full);
+				// 	beginNextState();
+				// }
+
+
 			case Done:
 				if( useMetaBar )
 					ui.modal.MetaProgress.completeCurrent();
@@ -433,6 +479,8 @@ class ProjectSaver extends dn.Process {
 			case ExportingTiled:
 
 			case ExportingGMS:
+
+			case WritingSimplifiedEntities:
 
 			case Done:
 		}
