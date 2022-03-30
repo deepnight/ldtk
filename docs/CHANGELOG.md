@@ -1,3 +1,7 @@
+# 1.0.1
+
+ - Updated the look of notifications in the bottom right corner
+
 # 1.0.0 - Gone gold!
 
 ### A few words from the author
