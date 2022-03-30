@@ -2708,10 +2708,12 @@ textarea {
 				transform: rotate(45deg);
 				top: 65px;
 				left: -50px;
-				padding: 16px 80px;
+				width: 300px;
+				padding: 16px;
 				white-space: nowrap;
 				box-shadow: 0px 4px 8px black;
 
+				text-align: center;
 				font-size: 1.3em;
 				font-family: Roboto;
 				text-transform: uppercase;
@@ -2735,6 +2737,10 @@ textarea {
 				border-radius: 4px;
 				box-shadow: 0px 0px 16px black inset;
 				image-rendering: -webkit-optimize-contrast;
+			}
+
+			a:hover {
+				color: white;
 			}
 
 			strong {

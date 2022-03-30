@@ -11,7 +11,7 @@
 	</div>
 </header>
 
-<div class="newUpdate"> <span>LDtk was updated!</span> </div>
+<div class="newUpdate"> <span>New update</span> </div>
 
 <div class="changelog" id="updateChangelogHtml"></div>
 <div id="updateChangelogMd">::md::</div>
@@ -25,3 +25,9 @@
 	document.getElementById("updateChangelogHtml").innerHTML =
 		marked(rawMd);
 </script>
+
+<xml id="previousUpdate">
+	<a href="#">
+		See changes from <span class="version"></span>
+	</a>
+</xml>

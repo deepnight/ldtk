@@ -1,6 +1,7 @@
 # 1.0.1
 
  - Updated the look of notifications in the bottom right corner
+ - Added a shortcut link to previous major version notes in "Release Notes" window
 
 # 1.0.0 - Gone gold!
 
