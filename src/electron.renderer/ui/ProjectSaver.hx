@@ -11,6 +11,7 @@ private enum SavingState {
 	SavingExternLevels;
 	SavingLayerImages;
 	ExportingTiled;
+	ExportingGMS;
 	Done;
 }
 
@@ -311,7 +312,7 @@ class ProjectSaver extends dn.Process {
 								N.success('Saved Tiled files.');
 						},
 						()->{
-							beginState(Done);
+							beginState(ExportingGMS);
 						}
 					);
 				}
@@ -320,8 +321,35 @@ class ProjectSaver extends dn.Process {
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
 					if( NT.fileExists(dir) )
 						NT.removeDir(dir);
-					beginState(Done);
+					beginState(ExportingGMS);
 				}
+
+			case ExportingGMS:
+				// if( project.exportTiled ) {
+					logState();
+					ui.modal.Progress.single(
+						L.t._("Exporting Tiled..."),
+						()->{
+							var e = new exporter.GameMakerStudio2();
+							e.addExtraLogger( App.LOG, "GMSExport" );
+							e.run( project, project.filePath.full );
+							if( e.hasErrors() )
+								N.error('Game Maker Studio export has errors.');
+							else
+								N.success('Saved Game Maker Studio files.');
+						},
+						()->{
+							beginState(Done);
+						}
+					);
+				// }
+				// else {
+				// 	// Remove previous tiled dir
+				// 	var dir = project.getAbsExternalFilesDir() + "/tiled";
+				// 	if( NT.fileExists(dir) )
+				// 		NT.removeDir(dir);
+				// 	beginState(Done);
+				// }
 
 
 			case Done:
@@ -386,6 +414,8 @@ class ProjectSaver extends dn.Process {
 					beginState(ExportingTiled);
 
 			case ExportingTiled:
+
+			case ExportingGMS:
 
 			case Done:
 		}
