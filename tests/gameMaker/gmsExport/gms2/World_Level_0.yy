@@ -18,7 +18,7 @@
 	"layers": [
 		{
 			"resourceVersion": "1.0",
-			"resourceType": "GMRInstanceLayer",
+			"resourceType": "?",
 			"name": "IntGrid",
 			"tags": [],
 			"properties": [],
@@ -32,12 +32,11 @@
 			"hierarchyFrozen": false,
 			"inheritLayerSettings": false,
 			"depth": 0,
-			"visible": true,
-			"instances": []
+			"visible": true
 		},
 		{
 			"resourceVersion": "1.0",
-			"resourceType": "GMRInstanceLayer",
+			"resourceType": "GMRTileLayer",
 			"name": "Tiles",
 			"tags": [],
 			"properties": [],
@@ -52,7 +51,13 @@
 			"inheritLayerSettings": false,
 			"depth": 100,
 			"visible": true,
-			"instances": []
+			"tiles": [],
+			"x": 0,
+			"y": 0,
+			"tilesetId": {
+				"name": "TODO",
+				"path": "TODO"
+			}
 		}
 	],
 	"views": [],
