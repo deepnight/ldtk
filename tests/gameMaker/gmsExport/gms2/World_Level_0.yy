@@ -2,6 +2,7 @@
 	"name": "World_Level_0",
 	"resourceType": "GMRoom",
 	"resourceVersion": "1.0",
+	"tags": [],
 	"parent": {
 		"name": "",
 		"path": ""
@@ -12,10 +13,48 @@
 	"inheritCreationOrder": false,
 	"instanceCreationOrder": [],
 	"volume": 1,
-	"tags": [],
 	"creationCodeFile": "",
 	"sequenceId": null,
-	"layers": [],
+	"layers": [
+		{
+			"resourceVersion": "1.0",
+			"resourceType": "GMRInstanceLayer",
+			"name": "IntGrid",
+			"tags": [],
+			"properties": [],
+			"layers": [],
+			"gridX": 16,
+			"gridY": 16,
+			"effectType": null,
+			"effectEnabled": true,
+			"userdefinedDepth": false,
+			"inheritLayerDepth": false,
+			"hierarchyFrozen": false,
+			"inheritLayerSettings": false,
+			"depth": 0,
+			"visible": true,
+			"instances": []
+		},
+		{
+			"resourceVersion": "1.0",
+			"resourceType": "GMRInstanceLayer",
+			"name": "Tiles",
+			"tags": [],
+			"properties": [],
+			"layers": [],
+			"gridX": 16,
+			"gridY": 16,
+			"effectType": null,
+			"effectEnabled": true,
+			"userdefinedDepth": false,
+			"inheritLayerDepth": false,
+			"hierarchyFrozen": false,
+			"inheritLayerSettings": false,
+			"depth": 100,
+			"visible": true,
+			"instances": []
+		}
+	],
 	"views": [],
 	"physicsSettings": {
 		"inheritPhysicsSettings": false,
