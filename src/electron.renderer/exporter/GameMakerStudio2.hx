@@ -2,6 +2,8 @@ package exporter;
 
 import ldtk.Json;
 
+// Tiled GMS export: https://doc.mapeditor.org/en/latest/manual/export-yy/
+
 typedef GMResource = {
 	var resourceVersion: String;
 	var resourceType: String;
@@ -94,7 +96,11 @@ typedef GMRLayer = {
 
 	// Tile layer
 	var ?tilesetId: GMPath;
-	var ?tiles: Dynamic; // TODO
+	var ?tiles: {
+		var SerialiseWidth: Int;
+		var SerialiseHeight: Int;
+		var TileSerialiseData: Array<Float>;
+	}
 
 	// Background layer
 	var ?spriteId: Null<Dynamic>; // TODO
@@ -115,6 +121,10 @@ typedef GMRInstance = {
 	var objectId: GMPath;
 }
 
+typedef GMRTileset = {
+	>GMResource,
+}
+
 
 
 class GameMakerStudio2 extends Exporter {
@@ -129,12 +139,49 @@ class GameMakerStudio2 extends Exporter {
 
 		setOutputPath( projectPath.directory + "/" + p.getRelExternalFilesDir() + "/gms2", true );
 
+
+		// Resources references
+		var resourcesPaths : Map<String, GMPath> = new Map();
+		function _storeRsc(name:String, absPath:String) {
+			var relPath = dn.FilePath.fromFile(absPath);
+			relPath.makeRelativeTo( outputPath.full );
+			resourcesPaths.set(name, {
+				name: name,
+				path: relPath.full,
+			});
+		}
+		function _getRsc(name:String) {
+			if( !resourcesPaths.exists(name) )
+				throw 'Unknown resource $name';
+			return resourcesPaths.get(name);
+		}
+
+
+		// Init tilesets JSON
+		for(td in p.defs.tilesets) {
+			var tilesetJson : GMRTileset = {
+				name: td.identifier,
+				tags: [],
+				resourceType: "GMRTileset",
+				resourceVersion: RESOURCE_VERSION,
+			}
+
+			var fp = outputPath.clone();
+			fp.fileName = td.identifier;
+			fp.extension = "yy";
+			addOuputFile(
+				fp.full,
+				haxe.io.Bytes.ofString( dn.JsonPretty.stringify(tilesetJson) )
+			);
+
+			_storeRsc(td.identifier, fp.full);
+		}
+
+
+		// Levels
 		for(w in p.worlds)
 		for(l in w.levels) {
-			var fp = outputPath.clone();
-			fp.fileName = l.identifier;
-			fp.extension = "yy";
-
+			// Init room JSON
 			var roomJson : GMRoom = {
 				name: l.identifier,
 				resourceType: "GMRoom",
@@ -179,13 +226,16 @@ class GameMakerStudio2 extends Exporter {
 				},
 			}
 
+
+			// Layers
 			var depth = 0;
 			for(li in l.layerInstances) {
+				// Base layer JSON
 				var layerJson : GMRLayer = {
 					resourceVersion: RESOURCE_VERSION,
 					resourceType: switch li.def.type {
 						case IntGrid: "?";
-						case Entities: "?";
+						case Entities: "GMRInstanceLayer";
 						case Tiles: "GMRTileLayer";
 						case AutoLayer: "GMRTileLayer";
 					},
@@ -207,17 +257,34 @@ class GameMakerStudio2 extends Exporter {
 					depth: depth*100,
 					visible: true,
 				}
+
+				// Specific layer data depending on type
 				switch li.def.type {
 					case IntGrid:
+
 					case Entities:
+						// Instance layer
+						layerJson.instances = [];
+
 					case Tiles:
-						layerJson.tiles = [];
+						// Tile layers
+						var tilesData = [];
+						for(cy in 0...li.cHei)
+						for(cx in 0...li.cWid) {
+							var ts = li.getGridTileStack(cx,cy);
+							if( ts.length==0 )
+								tilesData.push(2147483648);
+							else
+								tilesData.push(ts[0].tileId);
+						}
+						layerJson.tiles = {
+							SerialiseWidth: li.cWid,
+							SerialiseHeight: li.cHei,
+							TileSerialiseData: tilesData,
+						}
 						layerJson.x = li.pxTotalOffsetX;
 						layerJson.y = li.pxTotalOffsetY;
-						layerJson.tilesetId = {
-							name: "TODO",
-							path: "TODO",
-						}
+						layerJson.tilesetId = _getRsc( li.getTilesetDef().identifier );
 
 					case AutoLayer:
 				}
@@ -226,13 +293,14 @@ class GameMakerStudio2 extends Exporter {
 			}
 
 			// Save room JSON
-			var jsonStr = dn.JsonPretty.stringify(roomJson, Full);
-			addOuputFile(fp.full, haxe.io.Bytes.ofString(jsonStr));
+			var fp = outputPath.clone();
+			fp.fileName = l.identifier;
+			fp.extension = "yy";
+			addOuputFile(
+				fp.full,
+				haxe.io.Bytes.ofString( dn.JsonPretty.stringify(roomJson) )
+			);
 		}
-
-		// var fp = outputPath.clone();
-		// fp.fileName = projectPath.fileName;
-		// fp.extension = "yy";
-		// addOuputFile(fp.full, haxe.io.Bytes.ofString(json));
 	}
+
 }
