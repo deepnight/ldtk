@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.1",
-	"appBuildId": 457955,
+	"appBuildId": 457957,
 	"nextUid": 4,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -203,6 +203,10 @@
 					"seed": 8750629,
 					"overrideTilesetUid": null,
 					"gridTiles": [
+						{ "px": [0,0], "src": [0,0], "f": 0, "t": 0, "d": [0] },
+						{ "px": [16,0], "src": [16,0], "f": 0, "t": 1, "d": [1] },
+						{ "px": [0,16], "src": [0,16], "f": 0, "t": 20, "d": [16] },
+						{ "px": [16,16], "src": [16,16], "f": 0, "t": 21, "d": [17] },
 						{ "px": [80,80], "src": [0,0], "f": 0, "t": 0, "d": [85] },
 						{ "px": [96,80], "src": [16,0], "f": 0, "t": 1, "d": [86] },
 						{ "px": [144,80], "src": [32,0], "f": 0, "t": 2, "d": [89] },

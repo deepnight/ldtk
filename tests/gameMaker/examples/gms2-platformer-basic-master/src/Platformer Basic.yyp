@@ -1,0 +1,54 @@
+{
+  "resources": [
+    {"id":{"name":"sPlayer","path":"sprites/sPlayer/sPlayer.yy",},"order":1,},
+    {"id":{"name":"sBlock","path":"sprites/sBlock/sBlock.yy",},"order":3,},
+    {"id":{"name":"sBackground","path":"sprites/sBackground/sBackground.yy",},"order":5,},
+    {"id":{"name":"oInit","path":"objects/oInit/oInit.yy",},"order":1,},
+    {"id":{"name":"oPlayer","path":"objects/oPlayer/oPlayer.yy",},"order":3,},
+    {"id":{"name":"oBlock","path":"objects/oBlock/oBlock.yy",},"order":5,},
+    {"id":{"name":"roomInit","path":"rooms/roomInit/roomInit.yy",},"order":0,},
+    {"id":{"name":"roomMain","path":"rooms/roomMain/roomMain.yy",},"order":1,},
+    {"id":{"name":"readme","path":"notes/readme/readme.yy",},"order":1,},
+  ],
+  "Options": [
+    {"name":"Linux","path":"options/linux/options_linux.yy",},
+    {"name":"Windows","path":"options/windows/options_windows.yy",},
+    {"name":"macOS","path":"options/mac/options_mac.yy",},
+    {"name":"Main","path":"options/main/options_main.yy",},
+    {"name":"iOS","path":"options/ios/options_ios.yy",},
+    {"name":"Android","path":"options/android/options_android.yy",},
+    {"name":"tvOS","path":"options/tvos/options_tvos.yy",},
+    {"name":"Amazon Fire","path":"options/amazonfire/options_amazonfire.yy",},
+  ],
+  "isDnDProject": false,
+  "isEcma": false,
+  "tutorialPath": "",
+  "configs": {
+    "name": "Default",
+    "children": [],
+  },
+  "RoomOrderNodes": [
+    {"roomId":{"name":"roomInit","path":"rooms/roomInit/roomInit.yy",},},
+    {"roomId":{"name":"roomMain","path":"rooms/roomMain/roomMain.yy",},},
+  ],
+  "Folders": [
+    {"folderPath":"folders/스프라이트.yy","order":1,"resourceVersion":"1.0","name":"스프라이트","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/객체.yy","order":3,"resourceVersion":"1.0","name":"객체","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/룸.yy","order":5,"resourceVersion":"1.0","name":"룸","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/필기.yy","order":7,"resourceVersion":"1.0","name":"필기","tags":[],"resourceType":"GMFolder",},
+  ],
+  "AudioGroups": [
+    {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
+  ],
+  "TextureGroups": [
+    {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
+  ],
+  "IncludedFiles": [],
+  "MetaData": {
+    "IDEVersion": "23.1.1.300",
+  },
+  "resourceVersion": "1.4",
+  "name": "Platformer Basic",
+  "tags": [],
+  "resourceType": "GMProject",
+}
