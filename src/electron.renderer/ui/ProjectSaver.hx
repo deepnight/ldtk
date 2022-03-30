@@ -335,84 +335,76 @@ class ProjectSaver extends dn.Process {
 				}
 
 			case ExportingGMS:
-				// #if !debug
-
-				beginNextState();
-
-				// #else
-
-				// if( project.exportTiled ) {
-				// 	logState();
-				// 	ui.modal.Progress.single(
-				// 		L.t._("Exporting Tiled..."),
-				// 		()->{
-				// 			var e = new exporter.GameMakerStudio2();
-				// 			e.addExtraLogger( App.LOG, "GMSExport" );
-				// 			e.run( project, project.filePath.full );
-				// 			if( e.hasErrors() )
-				// 				N.error('Game Maker Studio export has errors.');
-				// 			else
-				// 				N.success('Saved Game Maker Studio files.');
-				// 		},
-				// 		()->{
-				// 			beginNextState();
-				// 		}
-				// 	);
-				// }
-				// else {
-				// 	// Remove previous tiled dir
-				// 	var dir = project.getAbsExternalFilesDir() + "/gms2";
-				// 	if( NT.fileExists(dir) )
-				// 		NT.removeDir(dir);
-				// 	beginNextState();
-				// }
-
-				// #end
+				if( false ) { // TODO check actual project export setting
+					logState();
+					ui.modal.Progress.single(
+						L.t._("Exporting Tiled..."),
+						()->{
+							var e = new exporter.GameMakerStudio2();
+							e.addExtraLogger( App.LOG, "GMSExport" );
+							e.run( project, project.filePath.full );
+							if( e.hasErrors() )
+								N.error('Game Maker Studio export has errors.');
+							else
+								N.success('Saved Game Maker Studio files.');
+						},
+						()->{
+							beginNextState();
+						}
+					);
+				}
+				else {
+					// Remove previous GMS dir
+					var dir = project.getAbsExternalFilesDir() + "/gms2";
+					if( NT.fileExists(dir) )
+						NT.removeDir(dir);
+					beginNextState();
+				}
 
 
 			case WritingSimplifiedEntities:
-				beginNextState();
-				// var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() + "/entities" );
+				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() + "/entities" );
 
-				// if( true ) { // TODO check project export setting
-				// 	NT.createDirs(dirFp.full);
+				if( false ) { // TODO check actual project export setting
+					logState();
+					initDir(dirFp.full, "json");
 
-				// 	var p = new ui.modal.Progress( "Simplified entities...", ()->beginNextState() );
-				// 	for(w in project.worlds)
-				// 	for(l in w.levels) {
-				// 		p.addOp({
-				// 			label: l.identifier,
-				// 			cb: ()->{
-				// 				var all = new Map();
+					var p = new ui.modal.Progress( "Simplified entities...", ()->beginNextState() );
+					for(w in project.worlds)
+					for(l in w.levels) {
+						p.addOp({
+							label: l.identifier,
+							cb: ()->{
+								var all = new Map();
 
-				// 				for(li in l.layerInstances) {
-				// 					if( li.def.type!=Entities )
-				// 						continue;
+								for(li in l.layerInstances) {
+									if( li.def.type!=Entities )
+										continue;
 
-				// 					all.set(li.def.identifier, []);
-				// 					for(ei in li.entityInstances)
-				// 						all.get(li.def.identifier).push( ei.toJson(li) );
-				// 				}
+									all.set(li.def.identifier, []);
+									for(ei in li.entityInstances)
+										all.get(li.def.identifier).push( ei.toSimplifiedJson() );
+								}
 
-				// 				// Prepare JSON
-				// 				var simpleJson = {}
-				// 				for(o in all.keyValueIterator())
-				// 					Reflect.setField(simpleJson, o.key, o.value);
+								// Prepare JSON
+								var simpleJson = {}
+								for(o in all.keyValueIterator())
+									Reflect.setField(simpleJson, o.key, o.value);
 
-				// 				// Write file
-				// 				var fp = dirFp.clone();
-				// 				fp.fileName = l.identifier;
-				// 				fp.extension = "json";
-				// 				NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson ) );
-				// 			},
-				// 		});
-				// 	}
-				// }
-				// else {
-				// 	if( NT.fileExists(dirFp.full) )
-				// 		NT.removeDir(dirFp.full);
-				// 	beginNextState();
-				// }
+								// Write file
+								var fp = dirFp.clone();
+								fp.fileName = l.identifier;
+								fp.extension = "json";
+								NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson, Full ) );
+							},
+						});
+					}
+				}
+				else {
+					if( NT.fileExists(dirFp.full) )
+						NT.removeDir(dirFp.full);
+					beginNextState();
+				}
 
 
 			case Done:
