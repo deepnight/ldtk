@@ -1,6 +1,7 @@
 package ui;
 
 private enum SavingState {
+	/* !! WARNING !! The ordering of this enum is used by beginNextState()!  */
 	InQueue;
 	PreChecks;
 	BeforeSavingActions;
@@ -86,6 +87,16 @@ class ProjectSaver extends dn.Process {
 		complete(false);
 	}
 
+
+	function beginNextState() {
+		var from = state;
+		var idx = dn.Lib.getArrayIndex( state.getName(), SavingState.getConstructors() );
+		var to = SavingState.createByIndex(idx+1);
+		trace(from+" => "+to);
+		beginState(to);
+	}
+
+
 	function beginState(s:SavingState) {
 		if( useMetaBar && state!=s )
 			ui.modal.MetaProgress.advance();
@@ -127,10 +138,10 @@ class ProjectSaver extends dn.Process {
 						return;
 					}
 					else
-						beginState(BeforeSavingActions);
+						beginNextState();
 				}
 				else
-					beginState(BeforeSavingActions);
+					beginNextState();
 
 			case BeforeSavingActions:
 				if( hasEditor() ) {
@@ -138,7 +149,7 @@ class ProjectSaver extends dn.Process {
 					Editor.ME.ge.emit(BeforeProjectSaving);
 				}
 				else
-					beginState(AutoLayers);
+					beginNextState();
 
 			case AutoLayers:
 				if( hasEditor() ) { // TODO support this without an Editor?
@@ -146,18 +157,18 @@ class ProjectSaver extends dn.Process {
 					Editor.ME.checkAutoLayersCache( (anyChange)->beginState(Backup) );
 				}
 				else
-					beginState(Backup);
+					beginNextState();
 
 			case Backup:
 				// var backupDir = project.getAbsExternalFilesDir() + "/backups";
 				if( project.backupOnSave ) {
 					logState();
 					backupProjectFiles(project, ()->{
-						beginState(CheckLevelCache);
+						beginNextState();
 					});
 				}
 				else
-					beginState(CheckLevelCache);
+					beginNextState();
 
 			case CheckLevelCache:
 				// Rebuild levels cache if necessary
@@ -172,7 +183,7 @@ class ProjectSaver extends dn.Process {
 						}
 					});
 				}
-				new ui.modal.Progress("Preparing levels...", ops, ()->beginState(SavingMainFile));
+				new ui.modal.Progress("Preparing levels...", ops, ()->beginNextState());
 
 
 			case SavingMainFile:
@@ -195,7 +206,7 @@ class ProjectSaver extends dn.Process {
 					}
 				});
 
-				new ui.modal.Progress("Saving main file...", ops, ()->beginState(SavingExternLevels));
+				new ui.modal.Progress("Saving main file...", ops, ()->beginNextState());
 
 
 			case SavingExternLevels:
@@ -215,14 +226,14 @@ class ProjectSaver extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->beginState(SavingLayerImages));
+					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->beginNextState());
 				}
 				else {
 					// Remove previous external levels
 					if( NT.fileExists(levelDir) )
 						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
 
-					beginState(SavingLayerImages);
+					beginNextState();
 				}
 
 
@@ -293,7 +304,7 @@ class ProjectSaver extends dn.Process {
 					// Delete previous PNG dir
 					if( NT.fileExists(pngDir) )
 						NT.removeDir(pngDir);
-					beginState(ExportingTiled);
+					beginNextState();
 				}
 
 
@@ -312,7 +323,7 @@ class ProjectSaver extends dn.Process {
 								N.success('Saved Tiled files.');
 						},
 						()->{
-							beginState(ExportingGMS);
+							beginNextState();
 						}
 					);
 				}
@@ -321,13 +332,13 @@ class ProjectSaver extends dn.Process {
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
 					if( NT.fileExists(dir) )
 						NT.removeDir(dir);
-					beginState(ExportingGMS);
+					beginNextState();
 				}
 
 			case ExportingGMS:
 				// #if !debug
 
-				beginState(Done);
+				beginNextState();
 
 				// #else
 
@@ -345,7 +356,7 @@ class ProjectSaver extends dn.Process {
 				// 				N.success('Saved Game Maker Studio files.');
 				// 		},
 				// 		()->{
-				// 			beginState(Done);
+				// 			beginNextState();
 				// 		}
 				// 	);
 				// }
@@ -354,7 +365,7 @@ class ProjectSaver extends dn.Process {
 				// 	var dir = project.getAbsExternalFilesDir() + "/gms2";
 				// 	if( NT.fileExists(dir) )
 				// 		NT.removeDir(dir);
-				// 	beginState(Done);
+				// 	beginNextState();
 				// }
 
 				// #end
@@ -399,13 +410,13 @@ class ProjectSaver extends dn.Process {
 		switch state {
 			case InQueue:
 				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
-					beginState(PreChecks);
+					beginNextState();
 
 			case PreChecks:
 
 			case BeforeSavingActions:
 				if( !ui.modal.Progress.hasAny() )
-					beginState(AutoLayers);
+					beginNextState();
 
 			case AutoLayers:
 
@@ -419,7 +430,7 @@ class ProjectSaver extends dn.Process {
 
 			case SavingLayerImages:
 				if( !ui.modal.Progress.hasAny() )
-					beginState(ExportingTiled);
+					beginNextState();
 
 			case ExportingTiled:
 
