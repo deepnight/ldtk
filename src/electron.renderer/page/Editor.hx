@@ -594,7 +594,7 @@ class Editor extends Page {
 				N.msg("Locked.", 0xff7700);
 
 			case K.D if( !worldMode && !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
-				N.debug("Test","Some subtitle");
+				N.debug("Test "+dn.Lib.repeatChar("x",Std.random(20)),"Some subtitle");
 			#end
 
 			case K.S:
