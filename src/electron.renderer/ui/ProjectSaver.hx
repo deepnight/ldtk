@@ -89,10 +89,8 @@ class ProjectSaver extends dn.Process {
 
 
 	function beginNextState() {
-		var from = state;
 		var idx = dn.Lib.getArrayIndex( state.getName(), SavingState.getConstructors() );
 		var to = SavingState.createByIndex(idx+1);
-		trace(from+" => "+to);
 		beginState(to);
 	}
 
