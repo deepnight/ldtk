@@ -6,7 +6,7 @@ class Notification extends dn.Process {
 
 	var elem : js.jquery.JQuery;
 
-	private function new(str:String, ?col:UInt, ?long=false) {
+	private function new(str:String, ?sub:String, ?col:UInt, ?long=false) {
 		super(Editor.ME);
 
 		var jList = new J("#notificationList");
@@ -15,7 +15,13 @@ class Notification extends dn.Process {
 		elem = new J("xml#notification").clone().children().first();
 		elem.appendTo(jList);
 
-		elem.find(".content").html(str);
+		var jContent = elem.find(".content");
+		if( sub==null )
+			jContent.html(str);
+		else {
+			jContent.append('<div class="title">$str</div>');
+			jContent.append('<div class="sub">$sub</div>');
+		}
 		if( col!=null ) {
 			var defColor = C.hexToInt( elem.css("background-color") );
 			elem.css("border-color", C.intToHex(col));
@@ -40,14 +46,14 @@ class Notification extends dn.Process {
 	}
 
 
-	public static function msg(str:String, ?c:UInt) {
+	public static function msg(str:String, ?sub:String, ?c:UInt) {
 		if( !sameAsLast(str) )
-			new Notification(str, c);
+			new Notification(str, sub, c);
 	}
 
-	public static function success(str:String) {
+	public static function success(str:String, ?sub:String) {
 		if( !sameAsLast(str) )
-			new Notification(str, 0x42b771);
+			new Notification(str, sub, 0x42b771);
 	}
 
 	public static function copied(?name:String) {
@@ -81,11 +87,11 @@ class Notification extends dn.Process {
 		error("Feature not implemented yet.");
 	}
 
-	public static inline function debug(str:Dynamic, long=false) {
+	public static inline function debug(str:Dynamic, ?sub:String, long=false) {
 		#if debug
 		var str = StringTools.replace( Std.string(str), ",", ", " );
 		str = StringTools.htmlEscape(str);
-		new Notification(str, 0xff00ff, long);
+		new Notification(str, sub, 0xff00ff, long);
 		#end
 	}
 

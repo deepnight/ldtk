@@ -2040,7 +2040,7 @@ textarea {
 
 	box-sizing: border-box;
 	z-index: 99;
-	bottom: 0px;
+	bottom: 10vh;
 	right: 0px;
 	padding-bottom: 30px;
 	overflow: hidden;
@@ -2052,13 +2052,25 @@ textarea {
 		margin-bottom: 8px;
 
 		background-color: $bgDark;
-		border-left: 10px solid $bgLight;
-		box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+		border: 1px dotted $bgLight;
+		border-right: 10px solid $bgLight;
+		border-top-left-radius: 3px;
+		border-bottom-left-radius: 3px;
+		box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.5);
 		animation: slideUp 1s;
 
 		.content {
-			padding: 20px;
+			padding: 10px;
 			padding-right: 80px;
+
+			.title {
+				font-weight: bold;
+				margin-bottom: 4px;
+			}
+			.sub {
+				opacity: 0.8;
+				padding-left: 4px;
+			}
 
 			pre {
 				font-size: 8pt;
@@ -2068,8 +2080,11 @@ textarea {
 
 	.notification:not(.latest) {
 		opacity: 0.5;
-		border-left-width: 3px;
+		border-right-width: 4px;
 		transition: border 0.3s, opacity 0.3s;
+		background-image: url("../img/stripesLight.png");
+		background-repeat: repeat;
+
 		.content {
 			transition: padding 0.3s ease;
 			padding-top: 10px;

@@ -592,6 +592,9 @@ class Editor extends Page {
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				cd.setS("debugLock",Const.INFINITE);
 				N.msg("Locked.", 0xff7700);
+
+			case K.D if( !worldMode && !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
+				N.debug("Test","Some subtitle");
 			#end
 
 			case K.S:
@@ -1497,7 +1500,7 @@ class Editor extends Page {
 				N.error("Saving failed!");
 			else {
 				App.LOG.fileOp('Saved "${project.filePath.fileWithExt}".');
-				N.success('Saved "${project.filePath.fileName}".');
+				N.success('Saved project', project.filePath.fileName);
 
 				App.ME.registerRecentProject(project.filePath.full);
 				this.needSaving = false;
