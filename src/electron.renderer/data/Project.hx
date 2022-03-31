@@ -6,7 +6,7 @@ class Project {
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_WIDTH = DEFAULT_GRID_SIZE*16; // px
 	public static var DEFAULT_LEVEL_HEIGHT = DEFAULT_GRID_SIZE*16; // px
-	public static var DEFAULT_LEVEL_NAME_PATTERN = "%world_Level_%idx";
+	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
@@ -74,10 +74,10 @@ class Project {
 	public function getDefaultImageExportFilePattern() {
 		return switch imageExportMode {
 			case None, OneImagePerLayer:
-				"%level_idx-%level_name--%layer_idx-%layer_name";
+				"%level_name__%layer_idx__%layer_name";
 
 			case OneImagePerLevel:
-				"%level_idx-%level_name";
+				"%level_name";
 		}
 	}
 
@@ -108,6 +108,7 @@ class Project {
 
 		var vars = [
 			"%level_name"=>()->level.identifier,
+			"%world"=>()->level._world.identifier,
 			"%level_idx"=>()->dn.Lib.leadingZeros( level._world.getLevelIndex(level), 4),
 			"%layer_name"=>()->ld.identifier,
 			"%layer_idx"=>()->{

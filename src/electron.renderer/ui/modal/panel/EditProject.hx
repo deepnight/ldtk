@@ -11,6 +11,7 @@ class EditProject extends ui.modal.Panel {
 	];
 
 	var levelNamePatternEditor : ui.FilePatternEditor;
+	var pngPatternEditor : ui.FilePatternEditor;
 
 	public function new() {
 		super();
@@ -106,7 +107,29 @@ class EditProject extends ui.modal.Panel {
 			JsTools.locateFile( project.filePath.full, true );
 		});
 
+		pngPatternEditor = new ui.FilePatternEditor(
+			"png",
+			project.getImageExportFilePattern(),
+			[
+				{ k:"world", name:"World name" },
+				{ k:"level_name", name:"Level name" },
+				{ k:"level_idx", name:"Level idx)" },
+				{ k:"layer_name", name:"Layer name" },
+				{ k:"layer_idx", name:"Layer idx" },
+			],
+			(pat)->{
+				project.pngFilePattern = pat==project.getDefaultImageExportFilePattern() ? null : pat;
+				editor.ge.emit(ProjectSettingsChanged);
+			},
+			()->{
+				project.pngFilePattern = null;
+				editor.ge.emit(ProjectSettingsChanged);
+			}
+		);
+		jContent.find(".pngPatternEditor").empty().append( pngPatternEditor.jEditor );
+
 		levelNamePatternEditor = new ui.FilePatternEditor(
+			"levelId",
 			project.levelNamePattern,
 			[
 				{ k:"world", name:"World ID" },
@@ -226,31 +249,14 @@ class EditProject extends ui.modal.Panel {
 		);
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = jImgExport.find(".locate").empty();
-		var jFilePattern : js.jquery.JQuery = jImgExport.find(".pattern").hide();
-		var jExample : js.jquery.JQuery = jImgExport.find(".example").hide();
-		var jReset : js.jquery.JQuery = jImgExport.find(".reset").hide();
+		pngPatternEditor.jEditor.hide();
+		jForm.find(".imageExportOnly").hide();
 		if( project.imageExportMode!=None ) {
-			jFilePattern.show();
-			jExample.show();
-			jReset.show();
-			jReset.click( (_)->{
-				project.pngFilePattern = null;
-				editor.ge.emit(ProjectSettingsChanged);
-			});
+			jForm.find(".imageExportOnly").show();
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
 
-			var i = new form.input.StringInput(
-				jFilePattern,
-				()->project.getImageExportFilePattern(),
-				(v)->{
-					project.pngFilePattern = v==project.getDefaultImageExportFilePattern() ? null : v;
-					editor.ge.emit(ProjectSettingsChanged);
-				}
-			);
-			jFilePattern.keyup( (_)->{
-				var pattern = jFilePattern.val()==null ? project.getDefaultImageExportFilePattern() : jFilePattern.val();
-				jExample.text( '"'+project.getPngFileName(pattern, editor.curLevel, editor.curLayerDef)+'.png"' );
-			} ).keyup();
+			pngPatternEditor.jEditor.show();
+			pngPatternEditor.ofString( project.getImageExportFilePattern() );
 		}
 
 

@@ -11,6 +11,7 @@ class FilePatternEditor {
 	static var SEP = "%";
 
 	public var jEditor : js.jquery.JQuery;
+	var eventId : String;
 	var jPattern : js.jquery.JQuery;
 	var onChange : String->Void;
 	var onReset: Void->Void;
@@ -21,7 +22,8 @@ class FilePatternEditor {
 	var curEditIndex : Null<Int>;
 
 
-	public function new(cur:String, stocks, onChange:String->Void, onReset:Void->Void) {
+	public function new(eventId:String, cur:String, stocks, onChange:String->Void, onReset:Void->Void) {
+		this.eventId = eventId;
 		this.stocks = stocks;
 		this.onChange = onChange;
 		this.onReset = onReset;
@@ -36,8 +38,8 @@ class FilePatternEditor {
 		var jReset = new J('<a class="reset">[reset]</a>');
 		jReset.appendTo(jEditor);
 
-		App.ME.jBody.off(".patternEditor");
-		App.ME.jBody.on("keydown.patternEditor", onKey);
+		App.ME.jBody.off(".patternEditor_"+eventId);
+		App.ME.jBody.on("keydown.patternEditor_"+eventId, onKey);
 		ofString(cur);
 		renderAll();
 	}
@@ -45,7 +47,7 @@ class FilePatternEditor {
 
 	function onKey(ev:js.jquery.Event) {
 		if( jEditor.closest("body").length==0 ) {
-			App.ME.jBody.off(".patternEditor");
+			App.ME.jBody.off(".patternEditor_"+eventId);
 			return;
 		}
 
@@ -187,7 +189,7 @@ class FilePatternEditor {
 			curInput = null;
 		}
 
-		jPattern.find(".selected").removeClass("selected");
+		App.ME.jBody.find(".filePatternEditor .selected").removeClass("selected");
 	}
 
 	function selectAt(idx:Int, cursorAtStart=false) {
@@ -300,25 +302,30 @@ class FilePatternEditor {
 					usedMap.set(v,true);
 			}
 
-		var ctx = new ui.modal.ContextMenu(jNear);
-		for(s in stocks) {
-			ctx.add({
-				label: L.untranslated(s.desc==null ? s.name : s.desc),
-				cb: ()->{
-					if( replaceIndex!=null ) {
-						blocks[replaceIndex] = Var(s.k);
-						onChange( toString() );
-						unselect();
-						selectAt(replaceIndex);
-					}
-					else {
-						blocks.push( Var(s.k) );
-						onChange( toString() );
-						selectAt(blocks.length-1);
-					}
-				},
-				show: ()->!usedMap.exists(s.k),
-			});
+		var ctxAct : Array<ui.modal.ContextMenu.ContextAction> = [];
+		for(s in stocks)
+			if( !usedMap.exists(s.k))
+				ctxAct.push({
+					label: L.untranslated(s.desc==null ? s.name : s.desc),
+					cb: ()->{
+						if( replaceIndex!=null ) {
+							blocks[replaceIndex] = Var(s.k);
+							onChange( toString() );
+							unselect();
+							selectAt(replaceIndex);
+						}
+						else {
+							blocks.push( Var(s.k) );
+							onChange( toString() );
+							selectAt(blocks.length-1);
+						}
+					},
+				});
+
+		if( ctxAct.length>0 ) {
+			var ctx = new ui.modal.ContextMenu(jNear);
+			for(a in ctxAct)
+				ctx.add(a);
 		}
 	}
 
@@ -371,7 +378,10 @@ class FilePatternEditor {
 
 		// Sorting
 		JsTools.makeSortable(jPattern, (ev:sortablejs.Sortable.SortableDragEvent)->{
+			trace(ev.oldIndex+"=>"+ev.newIndex);
 			var moved = blocks.splice(ev.oldIndex,1)[0];
+			if( moved==null )
+				return;
 			blocks.insert(ev.newIndex, moved);
 			onChange( toString() );
 			renderAll();

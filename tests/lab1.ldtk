@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.0.1",
-	"appBuildId": 457982,
+	"appBuildId": 457983,
 	"nextUid": 120,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -29,7 +29,7 @@
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"levelNamePattern": "%world_Level_%idx1",
+	"levelNamePattern": "Level_%idx1",
 	"tutorialDesc": null,
 	"flags": [ "IgnoreBackupSuggest", "PrependIndexToLevelFileNames" ],
 	"defs": { "layers": [
@@ -1788,7 +1788,7 @@
 	] },
 	"levels": [
 		{
-			"identifier": "World_Level_1",
+			"identifier": "Level_1",
 			"iid": "16fe6230-66b0-11ec-b9f9-775985b5fe30",
 			"uid": 0,
 			"worldX": -112,
@@ -3238,7 +3238,7 @@
 			]
 		},
 		{
-			"identifier": "World_Level_2",
+			"identifier": "Level_2",
 			"iid": "16ff4c90-66b0-11ec-b9f9-8d27a348b086",
 			"uid": 52,
 			"worldX": -440,
@@ -5317,7 +5317,7 @@
 			]
 		},
 		{
-			"identifier": "World_Level_3",
+			"identifier": "Level_3",
 			"iid": "17008510-66b0-11ec-b9f9-bfd4ec51917d",
 			"uid": 41,
 			"worldX": -584,
@@ -6911,7 +6911,7 @@
 			]
 		},
 		{
-			"identifier": "World_Level_4",
+			"identifier": "Level_4",
 			"iid": "1701bd90-66b0-11ec-b9f9-4950ab4c77ef",
 			"uid": 56,
 			"worldX": -328,
@@ -8032,7 +8032,7 @@
 			]
 		},
 		{
-			"identifier": "World_Level_5",
+			"identifier": "Level_5",
 			"iid": "1702cf00-66b0-11ec-b9f9-2f7173383fbf",
 			"uid": 66,
 			"worldX": -728,
@@ -8564,7 +8564,7 @@
 			"__neighbours": [{ "levelIid": "17008510-66b0-11ec-b9f9-bfd4ec51917d", "levelUid": 41, "dir": "e" }]
 		},
 		{
-			"identifier": "World_Level_6",
+			"identifier": "Level_6",
 			"iid": "17036b40-66b0-11ec-b9f9-7133888a2ba5",
 			"uid": 78,
 			"worldX": -328,
@@ -10848,7 +10848,7 @@
 			]
 		},
 		{
-			"identifier": "World_Level_7",
+			"identifier": "Level_7",
 			"iid": "1704f1e0-66b0-11ec-b9f9-fbb840f29a29",
 			"uid": 96,
 			"worldX": 32,

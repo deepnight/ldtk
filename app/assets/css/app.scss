@@ -1956,7 +1956,7 @@ textarea {
 
 .filePatternEditor {
 	display: grid;
-	grid-template-columns: min-content min-content min-content;
+	grid-template-columns: auto min-content min-content;
 	align-items: center;
 
 	a.reset {
@@ -1970,11 +1970,9 @@ textarea {
 
 	.pattern {
 		display: flex;
-		flex-wrap: nowrap;
+		flex-wrap: wrap;
 		padding: 4px;
 		padding-bottom: 2px;
-		max-width: 100%;
-		overflow-x: auto;
 
 
 		border: 1px solid $bgLight;
@@ -6275,6 +6273,9 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		dd.imageExportOnly {
+			display: none;
+		}
 		dd.imageExportMode {
 			position: relative;
 			display: grid;
@@ -6298,6 +6299,9 @@ dl.form.fieldInstanceEditor {
 				text-align: right;
 				color: $help;
 				font-family: monospace;
+			}
+			.pngPatternEditor {
+				grid-column: 1/4;
 			}
 		}
 
