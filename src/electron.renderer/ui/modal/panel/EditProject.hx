@@ -10,6 +10,8 @@ class EditProject extends ui.modal.Panel {
 		ldtk.Json.ProjectFlag.UseMultilinesType,
 	];
 
+	var levelNamePatternEditor : ui.FilePatternEditor;
+
 	public function new() {
 		super();
 
@@ -103,6 +105,17 @@ class EditProject extends ui.modal.Panel {
 		jContent.find("button.locate").click( function(ev) {
 			JsTools.locateFile( project.filePath.full, true );
 		});
+
+		levelNamePatternEditor = new ui.FilePatternEditor(
+			project.levelNamePattern,
+			(pat)->{
+				project.levelNamePattern = pat;
+				editor.ge.emit(ProjectSettingsChanged);
+				editor.invalidateAllLevelsCache();
+				project.tidy();
+			}
+		);
+		jContent.find(".levelNamePatternEditor").empty().append( levelNamePatternEditor.jEditor );
 
 		updateProjectForm();
 	}
@@ -306,23 +319,7 @@ class EditProject extends ui.modal.Panel {
 			editor.invalidateAllLevelsCache();
 		}
 
-		var pe = new ui.FilePatternEditor(
-			project.levelNamePattern,
-			(pat)->{
-				project.levelNamePattern = pat;
-				editor.ge.emit(ProjectSettingsChanged);
-				editor.invalidateAllLevelsCache();
-				project.tidy();
-			},
-			()->{
-				project.levelNamePattern = data.Project.DEFAULT_LEVEL_NAME_PATTERN;
-				editor.ge.emit(ProjectSettingsChanged);
-				editor.invalidateAllLevelsCache();
-				project.tidy();
-				return project.levelNamePattern;
-			}
-		);
-		jForm.find(".levelNamePatternEditor").empty().append( pe.jEditor );
+		levelNamePatternEditor.ofString(project.levelNamePattern);
 
 		jForm.find(".defaultLevelNamePattern").click(_->{
 			if( project.levelNamePattern!=data.Project.DEFAULT_LEVEL_NAME_PATTERN ) {

@@ -1992,6 +1992,14 @@ textarea {
 				// font-style: italic;
 				background-color: $bgMed;
 			}
+			&.empty {
+				min-width: 0.4ch;
+				&:hover {
+					min-width: 1ch;
+					border-style: dashed;
+					background-color: $bgLight;
+				}
+			}
 
 			&:hover {
 				border-color: white;
@@ -2002,12 +2010,12 @@ textarea {
 				display: none;
 			}
 
-			// &.var.selected {
-			// 	color: black;
-			// 	box-shadow: 0px 0px 3px $orange, 0px 0px 8px $orange;
-			// 	border: 1px solid $orangeLight;
-			// 	background-color: $orange;
-			// }
+			&.var.selected {
+				color: black;
+				box-shadow: 0px 0px 3px $orange, 0px 0px 8px $orange;
+				border: 1px solid $orangeLight;
+				background-color: $orange;
+			}
 		}
 
 		.block.tmp {
@@ -2017,8 +2025,11 @@ textarea {
 		input[type=text] {
 			padding: 3px;
 			min-width: 2ch;
-			font-size: 10pt;
+			font-size: 9pt;
+			color: $orange;
 			border: none;
+			border-bottom: 1px dashed $orange;
+			border-radius: 0;
 			box-shadow: none;
 		}
 
@@ -2026,7 +2037,7 @@ textarea {
 			flex: 1 0 auto;
 			background-color: blue;
 		}
-		&.sorting .filler {
+		&.sorting .fixed {
 			display: none;
 		}
 	}
