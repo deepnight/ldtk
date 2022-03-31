@@ -10,8 +10,8 @@ class EditProject extends ui.modal.Panel {
 		ldtk.Json.ProjectFlag.UseMultilinesType,
 	];
 
-	var levelNamePatternEditor : ui.FilePatternEditor;
-	var pngPatternEditor : ui.FilePatternEditor;
+	var levelNamePatternEditor : NamePatternEditor;
+	var pngPatternEditor : ui.NamePatternEditor;
 
 	public function new() {
 		super();
@@ -107,7 +107,7 @@ class EditProject extends ui.modal.Panel {
 			JsTools.locateFile( project.filePath.full, true );
 		});
 
-		pngPatternEditor = new ui.FilePatternEditor(
+		pngPatternEditor = new ui.NamePatternEditor(
 			"png",
 			project.getImageExportFilePattern(),
 			[
@@ -128,7 +128,7 @@ class EditProject extends ui.modal.Panel {
 		);
 		jContent.find(".pngPatternEditor").empty().append( pngPatternEditor.jEditor );
 
-		levelNamePatternEditor = new ui.FilePatternEditor(
+		levelNamePatternEditor = new ui.NamePatternEditor(
 			"levelId",
 			project.levelNamePattern,
 			[

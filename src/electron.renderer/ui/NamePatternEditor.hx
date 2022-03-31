@@ -7,7 +7,7 @@ enum PatternBlock {
 }
 
 
-class FilePatternEditor {
+class NamePatternEditor {
 	static var SEP = "%";
 
 	public var jEditor : js.jquery.JQuery;
@@ -27,7 +27,7 @@ class FilePatternEditor {
 		this.stocks = stocks;
 		this.onChange = onChange;
 		this.onReset = onReset;
-		jEditor = new J('<div class="filePatternEditor"/>');
+		jEditor = new J('<div class="namePatternEditor"/>');
 
 		jPattern = new J('<div class="pattern"/>');
 		jPattern.appendTo(jEditor);
@@ -189,7 +189,7 @@ class FilePatternEditor {
 			curInput = null;
 		}
 
-		App.ME.jBody.find(".filePatternEditor .selected").removeClass("selected");
+		App.ME.jBody.find(".namePatternEditor .selected").removeClass("selected");
 	}
 
 	function selectAt(idx:Int, cursorAtStart=false) {
