@@ -1,44 +1,46 @@
 package ui;
 
 enum PatternBlock {
+	Empty;
 	Str(v:String);
 	Var(v:String);
 }
 
+
 class FilePatternEditor {
 	static var SEP = "%";
-	static var BLOCKS = [
-		"level_idx",
-		"level_name",
-		"world",
-		"idx",
-	];
 
 	public var jEditor : js.jquery.JQuery;
 	var jPattern : js.jquery.JQuery;
 	var jExample : js.jquery.JQuery;
 	var onChange : String->Void;
 	var blocks : Array<PatternBlock>;
+	var stocks : Array<{ k:String, name:String, ?desc:String }> = [];
 
 	var curInput : Null<js.jquery.JQuery>;
 	var curEditIndex : Null<Int>;
 
-	public function new(cur:String, onChange:String->Void) {
+
+	public function new(cur:String, stocks, onChange:String->Void) {
+		this.stocks = stocks;
 		this.onChange = onChange;
 		jEditor = new J('<div class="filePatternEditor"/>');
 
 		jPattern = new J('<div class="pattern"/>');
 		jPattern.appendTo(jEditor);
 
+		var jAdd = new J('<button class="add gray">+</button>');
+		jAdd.appendTo(jEditor);
+
 		jExample = new J('<div class="example"/>');
 		jExample.appendTo(jEditor);
 
-
 		App.ME.jBody.off(".patternEditor");
 		App.ME.jBody.on("keydown.patternEditor", onKey);
-		N.debug("bound");
 		ofString(cur);
+		renderAll();
 	}
+
 
 	function onKey(ev:js.jquery.Event) {
 		if( jEditor.closest("body").length==0 ) {
@@ -46,11 +48,11 @@ class FilePatternEditor {
 			return;
 		}
 
-		if( curEditIndex==null )
+		if( curEditIndex==null || blocks.length==0 )
 			return;
 
 		switch blocks[curEditIndex] {
-			case Str(v):
+			case Str(_), Empty:
 				return;
 
 			case Var(v):
@@ -77,10 +79,11 @@ class FilePatternEditor {
 					case "Delete", "Backspace":
 						blocks.splice(curEditIndex, 1);
 						renderAll();
+						onChange( toString() );
 						if( curEditIndex>=blocks.length && blocks.length>0 )
 							selectAt(blocks.length-1);
 						else if( curEditIndex<blocks.length )
-							selectAt(curEditIndex, true);
+							selectAt(curEditIndex-1, ev.key=="Backspace");
 				}
 		}
 
@@ -95,10 +98,10 @@ class FilePatternEditor {
 		while( remain.length>0 ) {
 			if( remain.charAt(0)==SEP ) {
 				var found = false;
-				for(b in BLOCKS)
-					if( remain.indexOf(SEP+b)==0 ) {
-						blocks.push( Var(b) );
-						remain = remain.substr(SEP.length + b.length);
+				for(b in stocks)
+					if( remain.indexOf(SEP+b.k)==0 ) {
+						blocks.push( Var(b.k) );
+						remain = remain.substr(SEP.length + b.k.length);
 						found = true;
 						break;
 					}
@@ -127,6 +130,19 @@ class FilePatternEditor {
 				}
 			}
 		}
+
+		// Add empty blocks
+		if( blocks.length==0 || isVar(blocks.length-1) )
+			blocks.push(Empty);
+		if( isVar(0) )
+			blocks.insert(0, Empty);
+		var i = 0;
+		while( i<blocks.length ) {
+			if( isVar(i) && isVar(i-1) )
+				blocks.insert(i, Empty);
+			i++;
+		}
+
 		renderAll();
 	}
 
@@ -137,10 +153,10 @@ class FilePatternEditor {
 	}
 
 	public function toString() {
-		trace(blocks);
 		var out = "";
 		for(b in blocks)
 			out += switch b {
+				case Empty: "";
 				case Str(v): cleanupFileName(v);
 				case Var(v): SEP+v;
 			}
@@ -174,34 +190,19 @@ class FilePatternEditor {
 	}
 
 	function selectAt(idx:Int, cursorAtStart=false) {
+		var old = curEditIndex;
 		unselect();
 		curEditIndex = idx;
 		var b = blocks[curEditIndex];
-
-		// Edit next Str block if this is a Var
-		// switch b {
-		// 	case null:
-		// 	case Str(v):
-		// 	case Var(v):
-		// 		var next = blocks[curEditIndex+1];
-		// 		if( next!=null && next.getIndex()==Str(null).getIndex() ) {
-		// 			editAt(curEditIndex+1, true);
-		// 			return;
-		// 		}
-		// }
 
 		var jBlock = getBlock(curEditIndex);
 		jBlock.addClass("selected");
 
 		switch b {
-			case Str(v):
+			case Empty, Str(_):
 				// Create input
 				curInput = new J('<input type="text"/>');
-				// if( curEditIndex>=0 ) {
-					curInput.insertAfter(jBlock);
-				// }
-				// else
-				// 	curInput.prependTo(jPattern);
+				curInput.insertAfter(jBlock);
 
 				// Events
 				curInput.on("input", _->{
@@ -219,18 +220,15 @@ class FilePatternEditor {
 							if( i.selectionStart==0 && curEditIndex>0 ) {
 								ev.stopPropagation();
 								applyEdit( curInput.val() );
-								trace(curEditIndex);
 								selectAt(curEditIndex-1);
 							}
 
 						case "ArrowRight", "Delete":
-							if( curEditIndex<blocks.length-1 && i.selectionStart==curInput.val().length ) {
+							if( curEditIndex<blocks.length-1 && i.selectionStart>=curInput.val().length ) {
 								ev.stopPropagation();
 								applyEdit( curInput.val() );
-								if( curInput.val().length==0 )
-									selectAt(curEditIndex);
-								else
-									selectAt(curEditIndex+1);
+								renderAll();
+								selectAt(curEditIndex+1);
 							}
 
 						case _:
@@ -242,7 +240,11 @@ class FilePatternEditor {
 				});
 
 				// Default input value
-				curInput.val(v);
+				switch b {
+					case Empty:
+					case Str(v): curInput.val(v);
+					case Var(v):
+				}
 				resizeInput();
 
 				// Position cursor
@@ -257,13 +259,16 @@ class FilePatternEditor {
 			case Var(v):
 		}
 
+		if( old==curEditIndex && isVar(curEditIndex) )
+			openVariableMenu(jBlock, curEditIndex);
 	}
 
 
 	function applyEdit(v:String) {
+		var old = toString();
 		if( curEditIndex>=0 && curEditIndex<blocks.length ) {
 			switch blocks[curEditIndex] {
-				case Str(_):
+				case Str(_), Empty:
 					blocks[curEditIndex] = Str(v);
 
 				case Var(_):
@@ -274,81 +279,88 @@ class FilePatternEditor {
 			blocks.insert(0, Str(v));
 		else
 			blocks.push( Str(v) );
-		onChange( toString() );
+
+		if( old!=toString() )
+			onChange( toString() );
 	}
+
+	inline function isVar(idx:Int) {
+		return idx>=0  &&  idx<blocks.length  && blocks[idx].getIndex() == Var(null).getIndex();
+	}
+
+
+	function openVariableMenu(jNear:js.jquery.JQuery, ?replaceIndex:Int) {
+		var ctx = new ui.modal.ContextMenu(jNear);
+		for(s in stocks) {
+			ctx.add({
+				label: L.untranslated(s.desc==null ? s.name : s.desc),
+				cb: ()->{
+					if( replaceIndex!=null ) {
+						blocks[replaceIndex] = Var(s.k);
+						onChange( toString() );
+						unselect();
+						selectAt(replaceIndex);
+					}
+					else {
+						blocks.push( Var(s.k) );
+						onChange( toString() );
+						selectAt(blocks.length-1);
+					}
+				}
+			});
+		}
+	}
+
 
 
 	function renderAll() {
 		jPattern.empty();
 
+		// Blocks
 		var idx = 0;
 		for(b in blocks) {
 			var i = idx;
-			switch b {
-				case Str(v):
-				case Var(v):
-					if( idx==0 || blocks[idx-1].getIndex()==Var(null).getIndex() ) {
-						// Empty slot before var
-						var jBlock = new J('<div class="block str empty fixed"/>');
-						jBlock.appendTo(jPattern);
-						jBlock.click(_->{
-							blocks.insert(i, Str(""));
-							renderAll();
-							selectAt(i);
-						});
-					}
-			}
+
 			// jQuery block
 			var jBlock = new J('<div class="block"/>');
 			jBlock.attr("block-idx", idx);
 			jBlock.appendTo(jPattern);
+			if( idx==blocks.length-1 )
+				jBlock.addClass("last");
 			switch b {
+				case Empty:
+					jBlock.addClass("str empty fixed");
+
 				case Str(v):
 					jBlock.addClass("str");
 					jBlock.append(v);
 
 				case Var(v):
 					jBlock.addClass("var");
-					jBlock.append('&lt;$v&gt;');
+					for(s in stocks)
+						if( s.k==v ) {
+							jBlock.append(s.name);
+							break;
+						}
 			}
-			jBlock.click( (ev:js.jquery.Event)->{
-				switch b {
-					case Str(v):
-						selectAt(i);
 
-					case Var(v):
-						selectAt(i);
-						// var x = ev.pageX - jBlock.offset().left;
-						// if( x < jBlock.outerWidth()*0.5 )
-						// 	editAt(i-1);
-						// else
-						// 	editAt(i);
-				}
+			// Selection
+			jBlock.click( (ev:js.jquery.Event)->{
+				selectAt(i);
 			});
+
 			idx++;
 		}
 
-		// End filler
-		var jFiller = new J('<div class="filler fixed"/>');
-		jFiller.appendTo(jPattern);
-		jFiller.click( _->{
-			switch blocks[blocks.length-1] {
-				case null, Var(_):
-					blocks.push( Str("") );
-					renderAll();
-					selectAt(blocks.length-1);
-
-				case Str(v):
-					selectAt(blocks.length-1);
-			}
-		} );
+		// Add button
+		jEditor.find(".add").click( (ev:js.jquery.Event)->openVariableMenu( new J(ev.currentTarget)) );
 
 		// Sorting
-		// JsTools.makeSortable(jPattern, (ev:sortablejs.Sortable.SortableDragEvent)->{
-		// 	var moved = blocks.splice(ev.oldIndex,1)[0];
-		// 	blocks.insert(ev.newIndex, moved);
-		// 	onChange( toString() );
-		// 	renderAll();
-		// });
+		JsTools.makeSortable(jPattern, (ev:sortablejs.Sortable.SortableDragEvent)->{
+			var moved = blocks.splice(ev.oldIndex,1)[0];
+			blocks.insert(ev.newIndex, moved);
+			onChange( toString() );
+			renderAll();
+		});
 	}
 }

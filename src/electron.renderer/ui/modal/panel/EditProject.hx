@@ -108,6 +108,16 @@ class EditProject extends ui.modal.Panel {
 
 		levelNamePatternEditor = new ui.FilePatternEditor(
 			project.levelNamePattern,
+			[
+				{ k:"world", name:"World ID" },
+				{ k:"idx1", name:"Level_index(1)", desc:"Level index (starting at 1)" },
+				{ k:"idx", name:"Level_index(0)", desc:"Level index (starting at 0)" },
+				{ k:"x", name:"x", desc:"X coordinate of the level" },
+				{ k:"y", name:"y", desc:"Y coordinate of the level" },
+				{ k:"gx", name:"Grid_X", desc:"X grid coordinate of the level" },
+				{ k:"gy", name:"Grid_Y", desc:"Y grid coordinate of the level" },
+				{ k:"depth", name:"World depth", desc:"Level depth in the world" },
+			],
 			(pat)->{
 				project.levelNamePattern = pat;
 				editor.ge.emit(ProjectSettingsChanged);
