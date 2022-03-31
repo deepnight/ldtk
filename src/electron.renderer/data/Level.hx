@@ -193,6 +193,36 @@ class Level {
 		return json;
 	}
 
+
+	public function toSimplifiedJson() {
+		var json = toJson(false);
+		return {
+			x : json.worldX,
+			y : json.worldY,
+			width : json.pxWid,
+			height : json.pxHei,
+			entities : {
+				var all = new Map();
+
+				// List entities grouped per layer
+				for(li in layerInstances) {
+					if( li.def.type!=Entities )
+						continue;
+
+					all.set(li.def.identifier, []);
+					for(ei in li.entityInstances)
+						all.get(li.def.identifier).push( ei.toSimplifiedJson() );
+				}
+
+				// Prepare JSON
+				var simpleJson = {}
+				for(o in all.keyValueIterator())
+					Reflect.setField(simpleJson, o.key, o.value);
+				all;
+			}
+		}
+	}
+
 	public function makeExternalRelPath(idx:Int) {
 		return
 			_project.getRelExternalFilesDir() + "/"

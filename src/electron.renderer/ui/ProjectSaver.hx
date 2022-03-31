@@ -375,21 +375,8 @@ class ProjectSaver extends dn.Process {
 						p.addOp({
 							label: l.identifier,
 							cb: ()->{
-								var all = new Map();
-
-								for(li in l.layerInstances) {
-									if( li.def.type!=Entities )
-										continue;
-
-									all.set(li.def.identifier, []);
-									for(ei in li.entityInstances)
-										all.get(li.def.identifier).push( ei.toSimplifiedJson() );
-								}
-
-								// Prepare JSON
-								var simpleJson = {}
-								for(o in all.keyValueIterator())
-									Reflect.setField(simpleJson, o.key, o.value);
+								// Build JSON
+								var simpleJson = l.toSimplifiedJson();
 
 								// Write file
 								var fp = dirFp.clone();
