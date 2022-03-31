@@ -12,7 +12,6 @@ class FilePatternEditor {
 
 	public var jEditor : js.jquery.JQuery;
 	var jPattern : js.jquery.JQuery;
-	var jExample : js.jquery.JQuery;
 	var onChange : String->Void;
 	var blocks : Array<PatternBlock>;
 	var stocks : Array<{ k:String, name:String, ?desc:String }> = [];
@@ -31,9 +30,6 @@ class FilePatternEditor {
 
 		var jAdd = new J('<button class="add gray">+</button>');
 		jAdd.appendTo(jEditor);
-
-		jExample = new J('<div class="example"/>');
-		jExample.appendTo(jEditor);
 
 		App.ME.jBody.off(".patternEditor");
 		App.ME.jBody.on("keydown.patternEditor", onKey);

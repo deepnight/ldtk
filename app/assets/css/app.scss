@@ -1958,10 +1958,6 @@ textarea {
 	display: grid;
 	grid-template-columns: min-content min-content;
 
-	.example {
-		grid-column: 1/3;
-	}
-
 	.pattern {
 		display: flex;
 		flex-wrap: nowrap;
