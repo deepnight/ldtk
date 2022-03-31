@@ -1956,7 +1956,17 @@ textarea {
 
 .filePatternEditor {
 	display: grid;
-	grid-template-columns: min-content min-content;
+	grid-template-columns: min-content min-content min-content;
+	align-items: center;
+
+	a.reset {
+		font-size: 9pt;
+		margin-left: 4px;
+		cursor: pointer;
+		&:hover {
+			color: white;
+		}
+	}
 
 	.pattern {
 		display: flex;
@@ -2194,6 +2204,7 @@ textarea {
 		.content {
 			padding: 6px;
 			padding-right: 40px;
+			padding-left: 20px;
 
 			.title {
 				font-weight: bold;

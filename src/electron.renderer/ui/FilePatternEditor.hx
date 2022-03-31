@@ -13,6 +13,7 @@ class FilePatternEditor {
 	public var jEditor : js.jquery.JQuery;
 	var jPattern : js.jquery.JQuery;
 	var onChange : String->Void;
+	var onReset: Void->Void;
 	var blocks : Array<PatternBlock>;
 	var stocks : Array<{ k:String, name:String, ?desc:String }> = [];
 
@@ -20,16 +21,20 @@ class FilePatternEditor {
 	var curEditIndex : Null<Int>;
 
 
-	public function new(cur:String, stocks, onChange:String->Void) {
+	public function new(cur:String, stocks, onChange:String->Void, onReset:Void->Void) {
 		this.stocks = stocks;
 		this.onChange = onChange;
+		this.onReset = onReset;
 		jEditor = new J('<div class="filePatternEditor"/>');
 
 		jPattern = new J('<div class="pattern"/>');
 		jPattern.appendTo(jEditor);
 
-		var jAdd = new J('<button class="add gray">+</button>');
+		var jAdd = new J('<button class="add gray"> <span class="icon add"></span> </button>');
 		jAdd.appendTo(jEditor);
+
+		var jReset = new J('<a class="reset">[reset]</a>');
+		jReset.appendTo(jEditor);
 
 		App.ME.jBody.off(".patternEditor");
 		App.ME.jBody.on("keydown.patternEditor", onKey);
@@ -286,6 +291,15 @@ class FilePatternEditor {
 
 
 	function openVariableMenu(jNear:js.jquery.JQuery, ?replaceIndex:Int) {
+		var usedMap = new Map();
+		for(b in blocks)
+			switch b {
+				case Empty:
+				case Str(v):
+				case Var(v):
+					usedMap.set(v,true);
+			}
+
 		var ctx = new ui.modal.ContextMenu(jNear);
 		for(s in stocks) {
 			ctx.add({
@@ -302,7 +316,8 @@ class FilePatternEditor {
 						onChange( toString() );
 						selectAt(blocks.length-1);
 					}
-				}
+				},
+				show: ()->!usedMap.exists(s.k),
 			});
 		}
 	}
@@ -348,8 +363,11 @@ class FilePatternEditor {
 			idx++;
 		}
 
-		// Add button
+		// Other buttons
 		jEditor.find(".add").click( (ev:js.jquery.Event)->openVariableMenu( new J(ev.currentTarget)) );
+		jEditor.find(".reset").click( _->{
+			onReset();
+		});
 
 		// Sorting
 		JsTools.makeSortable(jPattern, (ev:sortablejs.Sortable.SortableDragEvent)->{
