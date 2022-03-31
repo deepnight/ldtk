@@ -27,6 +27,7 @@ class Project {
 	public var minifyJson = false;
 	public var externalLevels = false;
 	public var exportTiled = false;
+	public var simplifiedExport = false;
 	public var imageExportMode : ldtk.Json.ImageExportMode = None;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
@@ -74,7 +75,7 @@ class Project {
 	public function getDefaultImageExportFilePattern() {
 		return switch imageExportMode {
 			case None, OneImagePerLayer:
-				"%level_name__%layer_idx__%layer_name";
+				"%level_name__%layer_name";
 
 			case OneImagePerLevel:
 				"%level_name";
@@ -250,6 +251,7 @@ class Project {
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
+		p.simplifiedExport = JsonTools.readBool( json.simplifiedExport, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
@@ -488,6 +490,7 @@ class Project {
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
+			simplifiedExport: simplifiedExport,
 			imageExportMode: JsonTools.writeEnum(imageExportMode, false),
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,

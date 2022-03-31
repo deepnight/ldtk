@@ -221,6 +221,17 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 		i.onChange = editor.invalidateAllLevelsCache;
 
+		// Simplified format
+		var i = Input.linkToHtmlInput( project.simplifiedExport, jForm.find("[name=simplifiedExport]") );
+		i.onChange = ()->{
+			if( project.simplifiedExport ) {
+				project.imageExportMode = OneImagePerLayer;
+				project.pngFilePattern = null;
+			}
+			editor.invalidateAllLevelsCache();
+			editor.ge.emit(ProjectSettingsChanged);
+		}
+
 		// External level files
 		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );

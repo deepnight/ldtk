@@ -363,13 +363,13 @@ class ProjectSaver extends dn.Process {
 
 
 			case WritingSimplifiedEntities:
-				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() + "/entities" );
+				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() );
 
-				if( false ) { // TODO check actual project export setting
+				if( project.simplifiedExport ) {
 					logState();
 					initDir(dirFp.full, "json");
 
-					var p = new ui.modal.Progress( "Simplified entities...", ()->beginNextState() );
+					var p = new ui.modal.Progress( "Simplified data...", ()->beginNextState() );
 					for(w in project.worlds)
 					for(l in w.levels) {
 						p.addOp({

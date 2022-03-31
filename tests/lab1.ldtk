@@ -25,6 +25,7 @@
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
+	"simplifiedExport": false,
 	"imageExportMode": "None",
 	"pngFilePattern": null,
 	"backupOnSave": false,
