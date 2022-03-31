@@ -81,6 +81,19 @@ class Project {
 		}
 	}
 
+	/**
+		Return old pattern before renaming
+	**/
+	public function getLegacyDefaultImageExportFilePattern() {
+		return switch imageExportMode {
+			case None, OneImagePerLayer:
+				"%level_idx-%level_name--%layer_idx-%layer_name";
+
+			case OneImagePerLevel:
+				"%level_idx-%level_name";
+		}
+	}
+
 	public function getImageExportFilePattern() {
 		return pngFilePattern!=null
 			? pngFilePattern

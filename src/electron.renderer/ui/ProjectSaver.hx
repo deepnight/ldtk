@@ -365,7 +365,7 @@ class ProjectSaver extends dn.Process {
 			case WritingSimplifiedEntities:
 				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() + "/entities" );
 
-				if( false ) { // TODO check actual project export setting
+				if( true ) { // TODO check actual project export setting
 					logState();
 					initDir(dirFp.full, "json");
 
