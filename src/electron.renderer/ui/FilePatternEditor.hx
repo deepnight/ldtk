@@ -83,11 +83,17 @@ class FilePatternEditor {
 		renderAll();
 	}
 
+
+	function cleanupFileName(str:String) {
+		var reg = ~/[ \/\\.%$:?"<>|*]/gim;
+		return reg.replace(str, "_");
+	}
+
 	public function toString() {
 		var out = "";
 		for(b in blocks)
 			out += switch b {
-				case Str(v): v;
+				case Str(v): cleanupFileName(v);
 				case Var(v): SEP+v;
 			}
 		return out;
@@ -123,66 +129,72 @@ class FilePatternEditor {
 		stopEdit();
 		curEditIndex = idx;
 
-		if( curEditIndex>=0 && curEditIndex<blocks.length ) {
-			var b = blocks[curEditIndex];
-			switch b {
-				case Str(v):
-				case Var(v):
-					var next = blocks[curEditIndex+1];
-					if( next!=null && next.getIndex()==Str(null).getIndex() ) {
-						editAt(curEditIndex+1, true);
-						return;
-					}
-			}
+		if( curEditIndex >= blocks.length ) {
+			editAt(blocks.length-1);
+			return;
+		}
 
+		// Edit next Str block if this is a Var
+		var b = blocks[curEditIndex];
+		switch b {
+			case null:
+			case Str(v):
+			case Var(v):
+				var next = blocks[curEditIndex+1];
+				if( next!=null && next.getIndex()==Str(null).getIndex() ) {
+					editAt(curEditIndex+1, true);
+					return;
+				}
+		}
+
+		// Create input
+		curInput = new J('<input type="text"/>');
+		if( curEditIndex>=0 ) {
 			var jBlock = getBlock(curEditIndex);
 			jBlock.addClass("selected");
-
-			// Create input
-			curInput = new J('<input type="text"/>');
 			curInput.insertAfter(jBlock);
-			curInput.on("input", _->{
-				resizeInput();
-			});
-			curInput.keydown( (ev:js.jquery.Event)->{
-				switch ev.key {
-					case "Escape", "Enter":
-						ev.preventDefault();
-						ev.stopPropagation();
-						curInput.blur();
+		}
+		else
+			curInput.prependTo(jPattern);
 
-					case _:
-				}
-			});
-			curInput.blur( _->{
-				applyEdit( curInput.val() );
-				stopEdit();
-			});
-
-			switch b {
-				case Str(v):
-					curInput.val(v);
-
-				case Var(v):
-			}
+		// Events
+		curInput.on("input", _->{
 			resizeInput();
+		});
+		curInput.keydown( (ev:js.jquery.Event)->{
+			switch ev.key {
+				case "Escape", "Enter":
+					ev.preventDefault();
+					ev.stopPropagation();
+					curInput.blur();
 
-			// Position cursor
-			curInput.focus();
-			if( cursorAtStart ) {
-				var i : js.html.InputElement = cast curInput.get(0);
-				i.setSelectionRange(0,0);
+				case _:
 			}
-			// else
-				// curInput.select();
+		});
+		curInput.blur( _->{
+			applyEdit( curInput.val() );
+			stopEdit();
+		});
+
+		// Default input value
+		switch b {
+			case Str(v):
+				curInput.val(v);
+
+			case Var(v):
+
+			case null:
 		}
-		else if( curEditIndex<0 ) {
-			// Pre-edit
+		resizeInput();
+
+		// Position cursor
+		curInput.focus();
+		if( cursorAtStart ) {
+			var i : js.html.InputElement = cast curInput.get(0);
+			i.setSelectionRange(0,0);
 		}
-		else {
-			// Post-edit
-			editAt(blocks.length-1);
-		}
+		// else
+			// curInput.select();
 	}
 
 
@@ -238,8 +250,16 @@ class FilePatternEditor {
 			idx++;
 		}
 
-		var jFiller = new J('<div class="filler"/>');
+		var jFiller = new J('<div class="filler fixed"/>');
 		jFiller.appendTo(jPattern);
 		jFiller.click( _->editAt(blocks.length) );
+
+		// Sorting
+		JsTools.makeSortable(jPattern, (ev:sortablejs.Sortable.SortableDragEvent)->{
+			var moved = blocks.splice(ev.oldIndex,1)[0];
+			blocks.insert(ev.newIndex, moved);
+			onChange( toString() );
+			renderAll();
+		});
 	}
 }

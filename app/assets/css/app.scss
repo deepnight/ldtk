@@ -2018,11 +2018,16 @@ textarea {
 			padding: 3px;
 			min-width: 2ch;
 			font-size: 10pt;
+			border: none;
+			box-shadow: none;
 		}
 
 		.filler {
 			flex: 1 0 auto;
 			background-color: blue;
+		}
+		&.sorting .filler {
+			display: none;
 		}
 	}
 }
@@ -3621,11 +3626,6 @@ body.panning {
 	}
 }
 
-
-body.sorting {
-	outline: 3px solid red !important;
-	outline-offset: -3px;
-}
 
 ul.sortable li.dragging {
 	color: white;
