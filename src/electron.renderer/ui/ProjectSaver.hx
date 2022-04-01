@@ -323,7 +323,7 @@ class ProjectSaver extends dn.Process {
 											var fp = dn.FilePath.fromDir(pngDir);
 											fp.fileName = project.simplifiedExport
 												? "_composite"
-												: project.getPngFileName(level, project.defs.layers[0]);
+												: level.identifier;
 											fp.extension = "png";
 											NT.writeFileBytes(fp.full, pngBytes);
 											count++;
