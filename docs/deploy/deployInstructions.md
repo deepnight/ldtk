@@ -35,7 +35,6 @@
 - [ ] Upload JSON Schema to FTP
 - [ ] Upload QuickType parsers
 - [ ] Check "next" folder on FTP
-- [ ] Archive docs to the `docs/archives/x.x.x/` folder
 
 ## Publish
 - [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
@@ -51,6 +50,11 @@
 
 ## Communication
 - [ ] Add a devlog post on Itch.io
+- [ ] Publish the devlog post on Itch.io
 - [ ] Announce on Twitter
 - [ ] Announce on Discord
 - [ ] Announce on Reddit (major releases only)
+
+## Archives
+- [ ] Archive docs to the `docs/archives/x.x.x/` folder
+- [ ] Archive previous installer to Google Drive
