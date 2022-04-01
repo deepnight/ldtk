@@ -71,6 +71,10 @@ class Home extends Page {
 		});
 
 		updateRecents();
+		if( settings.v.lastProject!=null ) {
+			settings.v.lastProject = null;
+			settings.save();
+		}
 	}
 
 	// function showUpdate(?version:dn.Version, isNewUpdate=false) {
