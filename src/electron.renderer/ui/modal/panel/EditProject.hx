@@ -168,6 +168,9 @@ class EditProject extends ui.modal.Panel {
 			case ProjectSettingsChanged:
 				updateProjectForm();
 
+			case ProjectSaved:
+				updateProjectForm();
+
 			case _:
 		}
 	}
@@ -214,7 +217,7 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = i.jInput.siblings(".locate").empty();
 		if( project.backupOnSave )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/backups", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/backups", false) );
 		var jCount = jForm.find("#backupCount");
 		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
 		if( project.backupOnSave ) {
@@ -246,17 +249,13 @@ class EditProject extends ui.modal.Panel {
 			if( project.simplifiedExport )
 				recommendSaving();
 		}
-		var jLocate = jForm.find(".simplifiedExport .locate");
-		if( project.simplifiedExport ) {
-			jLocate.show().click(_->{
-				if( NT.fileExists( project.getAbsExternalFilesDir() ) )
-					JsTools.locateFile( project.getAbsExternalFilesDir()+"/simplified", false);
-				else
-					JsTools.locateFile( project.filePath.full, true);
-			});
-		}
-		else
-			jLocate.hide();
+		var jLocate = jForm.find(".simplifiedExport .locate").empty();
+		if( project.simplifiedExport )
+			jLocate.append(
+				NT.fileExists( project.getAbsExternalFilesDir() )
+					? JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/simplified", false)
+					: JsTools.makeLocateLink(project.filePath.full, true)
+			);
 
 		// External level files
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
@@ -267,7 +266,7 @@ class EditProject extends ui.modal.Panel {
 		}
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir(), false) );
 
 		// Image export
 		var jImgExport = jForm.find(".imageExportMode");
@@ -295,7 +294,7 @@ class EditProject extends ui.modal.Panel {
 		jForm.find(".imageExportOnly").hide();
 		if( project.imageExportMode!=None && !project.simplifiedExport ) {
 			jForm.find(".imageExportOnly").show();
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/png", false) );
 
 			pngPatternEditor.jEditor.show();
 			pngPatternEditor.ofString( project.getImageExportFilePattern() );
@@ -354,7 +353,7 @@ class EditProject extends ui.modal.Panel {
 		}
 		var jLocate = jForm.find("#tiled").siblings(".locate").empty();
 		if( project.exportTiled )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/tiled", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/tiled", false) );
 
 		// Level grid size
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );

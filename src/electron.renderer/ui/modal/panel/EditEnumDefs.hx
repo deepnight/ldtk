@@ -261,7 +261,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			// Explore button
 			if( fileExists ) {
-				var a = JsTools.makeExploreLink(fullPath, true);
+				var a = JsTools.makeLocateLink(fullPath, true);
 				a.appendTo(links);
 			}
 
@@ -342,7 +342,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			jDefForm.find(".source")
 				.show()
 				.append( JsTools.makePath(curEnum.externalRelPath) )
-				.append( JsTools.makeExploreLink( project.makeAbsoluteFilePath(curEnum.externalRelPath), true ) );
+				.append( JsTools.makeLocateLink( project.makeAbsoluteFilePath(curEnum.externalRelPath), true ) );
 		}
 		else
 			jDefForm.find(".source").hide();

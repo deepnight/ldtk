@@ -759,7 +759,7 @@ class JsTools {
 		}
 	}
 
-	public static function makeExploreLink(filePath:Null<String>, isFile:Bool) {
+	public static function makeLocateLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
 		a.find(".icon").addClass( isFile ? "locate" : "folder" );
@@ -1044,7 +1044,7 @@ class JsTools {
 		});
 
 		// Locate
-		var jLocate = makeExploreLink(Editor.ME.project.makeAbsoluteFilePath(curRelPath), true);
+		var jLocate = makeLocateLink(Editor.ME.project.makeAbsoluteFilePath(curRelPath), true);
 		jLocate.appendTo(jWrapper);
 
 
