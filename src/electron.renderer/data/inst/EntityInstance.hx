@@ -78,20 +78,19 @@ class EntityInstance {
 	}
 
 	public function toSimplifiedJson() : Dynamic {
-		var json = toJson(_li);
-
 		var customFields = {};
-		for( fi in json.fieldInstances )
-			Reflect.setField(customFields, fi.__identifier, fi.__value);
+		for( fi in fieldInstances )
+			Reflect.setField(customFields, fi.def.identifier, fi.toJson().__value);
 
 		return {
-			id: json.__identifier,
-			iid: json.iid,
-			x : json.px[0],
-			y : json.px[1],
-			width: json.width,
-			height: json.height,
-			color: json.__smartColor,
+			id: def.identifier,
+			iid: iid,
+			layer: _li.def.identifier,
+			x : x,
+			y : y,
+			width: width,
+			height: height,
+			color: getSmartColor(false),
 			customFields: customFields,
 		}
 	}

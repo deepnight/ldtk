@@ -196,7 +196,8 @@ class Level {
 
 	public function toSimplifiedJson() {
 		var json = toJson(false);
-		return {
+
+		var simpleJson = {
 			x : json.worldX,
 			y : json.worldY,
 			width : json.pxWid,
@@ -218,26 +219,27 @@ class Level {
 				out;
 			},
 
-			entities : {
-				var all = new Map();
+			entities : {},
+		}
 
-				// List entities grouped per layer
-				for(li in layerInstances) {
-					if( li.def.type!=Entities )
-						continue;
+		// Group entities by identifier
+		var ents = new Map();
+		for(li in layerInstances) {
+			if( li.def.type!=Entities )
+				continue;
 
-					all.set(li.def.identifier, []);
-					for(ei in li.entityInstances)
-						all.get(li.def.identifier).push( ei.toSimplifiedJson() );
-				}
-
-				// Prepare JSON
-				var simpleJson = {}
-				for(o in all.keyValueIterator())
-					Reflect.setField(simpleJson, o.key, o.value);
-				all;
+			for( ei in li.entityInstances ) {
+				if( !ents.exists(ei.def.identifier) )
+					ents.set(ei.def.identifier, []);
+				ents.get(ei.def.identifier).push( ei.toSimplifiedJson() );
 			}
 		}
+
+		// Add entities to JSON
+		for(g in ents.keyValueIterator())
+			Reflect.setField(simpleJson.entities, g.key, g.value);
+
+		return simpleJson;
 	}
 
 	public function makeExternalRelPath(idx:Int) {
