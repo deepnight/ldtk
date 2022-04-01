@@ -19,6 +19,7 @@ You will get:
  - Updated the look of notifications in the bottom right corner. Errors and Warnings will now also blink once to catch more user's attention, as needed.
  - Added a shortcut link to previous major version notes in "Release Notes" window
  - If you have "Open last project" enabled, but close current project, then re-opening LDtk will now bring you back to Home screen.
+ - Removed recommendation to enable "External levels" in Project Settings panel.
  - Fixed missing coordinates display after going to World view.
  - Fixed `intGridValue` presence in JSON for non-IntGrid layers
 

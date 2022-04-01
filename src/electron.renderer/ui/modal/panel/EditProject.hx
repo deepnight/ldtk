@@ -259,7 +259,6 @@ class EditProject extends ui.modal.Panel {
 			jLocate.hide();
 
 		// External level files
-		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = (v)->{
