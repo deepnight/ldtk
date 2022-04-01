@@ -10,7 +10,7 @@ private enum SavingState {
 	CheckLevelCache;
 	SavingMainFile;
 	SavingExternLevels;
-	SavingLayerImages;
+	WritingImages;
 	ExportingTiled;
 	ExportingGMS;
 	WritingSimplifiedFormat;
@@ -236,7 +236,7 @@ class ProjectSaver extends dn.Process {
 				}
 
 
-			case SavingLayerImages:
+			case WritingImages:
 				var baseDir = project.simplifiedExport
 					? project.getAbsExternalFilesDir()+"/simplified"
 					: project.getAbsExternalFilesDir()+"/png";
@@ -353,10 +353,13 @@ class ProjectSaver extends dn.Process {
 				}
 				else {
 					// Delete previous PNG dir
-					if( NT.fileExists(baseDir) )
-						NT.removeDir(baseDir);
+					NT.removeDir( project.getAbsExternalFilesDir()+"/png" );
 					beginNextState();
 				}
+
+				// Also remove PNG dir if Simplified export is enabled
+				if( project.simplifiedExport )
+					NT.removeDir( project.getAbsExternalFilesDir()+"/png" );
 
 
 			case ExportingTiled:
@@ -503,7 +506,7 @@ class ProjectSaver extends dn.Process {
 
 			case SavingExternLevels:
 
-			case SavingLayerImages:
+			case WritingImages:
 				if( !ui.modal.Progress.hasAny() )
 					beginNextState();
 
