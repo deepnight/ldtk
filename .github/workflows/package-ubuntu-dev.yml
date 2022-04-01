@@ -3,11 +3,11 @@ name: package-ubuntu-dev
 on:
   push:
     branches:
-      - dev-0.10.0
+      - 'dev-**'
 
   pull_request:
     branches:
-      - dev-0.10.0
+      - 'dev-**'
 
 jobs:
   build:
