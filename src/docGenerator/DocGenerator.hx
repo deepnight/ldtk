@@ -81,7 +81,7 @@ class DocGenerator {
 	/**
 		Generate Markdown doc and Json schema
 	**/
-	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, deleteXml=false) {
+	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, ?minimalJsonPath:String, deleteXml=false) {
 		allGlobalTypes = [];
 		allEnums = [];
 
@@ -166,7 +166,11 @@ class DocGenerator {
 
 		// Json schema output
 		Sys.println("Generating JSON schema...");
-		genJsonSchema(xml, className, xmlPath, jsonPath);
+		genJsonSchema(xml, className, xmlPath, jsonPath, false);
+
+		// Minimal Json schema output
+		Sys.println("Generating Minimal JSON schema...");
+		genJsonSchema(xml, className, xmlPath, minimalJsonPath, true);
 
 		// Dump version to version.txt
 		Sys.println("Dumping version file...");
@@ -333,7 +337,7 @@ class DocGenerator {
 	/**
 		Build Json schema
 	**/
-	static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String) {
+	static function genJsonSchema(xml:haxe.xml.Access, className:String, xmlPath:String, ?jsonPath:String, isMinimal:Bool) {
 		// Prepare Json structure
 		var json = {
 			LdtkJsonRoot: null,
@@ -361,6 +365,9 @@ class DocGenerator {
 
 			// List fields
 			for(f in getFieldsInfos(type.xml.node.a)) {
+				if( (f.removed != null || f.isInternal || type.onlyInternalFields || f.deprecation != null) && isMinimal )
+					continue;
+
 				var subType = getSchemaType(f.type);
 				subType.description = f.descMd.join('\n');
 
