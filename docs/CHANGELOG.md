@@ -1,7 +1,22 @@
-# 1.0.1
+# 1.1.0 - Introducing the Super Simple export
+
+## Super Simple export
+
+**I know: for every new tool out there, there is this moment when you need to write the importer for your favorite game engine.**
+
+I’ve been there too, so LDtk offers a *Super simple export* option. You can enable it from the **Project settings panel**.
+
+You will get:
+
+ - **One PNG per layer** in each level
+ - A **composite” PNG per level** (ie. all layers merged together)
+ - A very simple, straightforward and optional **JSON** file per level, if you want to access your Entities data or other information.
+
+## Other changes
 
  - Updated the look of notifications in the bottom right corner
  - Added a shortcut link to previous major version notes in "Release Notes" window
+ - Fixed missing coordinates display after going to World view.
  - Fixed `intGridValue` presence in JSON for non-IntGrid layers
 
 # 1.0.0 - Gone gold!
