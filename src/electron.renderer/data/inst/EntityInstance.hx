@@ -77,6 +77,24 @@ class EntityInstance {
 		}
 	}
 
+	public function toSimplifiedJson() : Dynamic {
+		var customFields = {};
+		for( fi in fieldInstances )
+			Reflect.setField(customFields, fi.def.identifier, fi.toJson().__value);
+
+		return {
+			id: def.identifier,
+			iid: iid,
+			layer: _li.def.identifier,
+			x : x,
+			y : y,
+			width: width,
+			height: height,
+			color: getSmartColor(false),
+			customFields: customFields,
+		}
+	}
+
 	public static function fromJson(project:Project, li:LayerInstance, json:ldtk.Json.EntityInstanceJson) {
 		if( (cast json).x!=null ) // Convert old coordinates
 			json.px = [ JsonTools.readInt( (cast json).x, 0 ), JsonTools.readInt((cast json).y,0) ];

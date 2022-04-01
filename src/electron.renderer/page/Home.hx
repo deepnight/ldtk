@@ -71,50 +71,11 @@ class Home extends Page {
 		});
 
 		updateRecents();
+		if( settings.v.lastProject!=null ) {
+			settings.v.lastProject = null;
+			settings.save();
+		}
 	}
-
-	// function showUpdate(?version:dn.Version, isNewUpdate=false) {
-		// var w = new ui.Modal();
-		// w.canBeClosedManually = !isNewUpdate;
-
-		// var changeLog = Const.getChangeLog().latest;
-
-		// // Pick specific version
-		// if( version!=null ) {
-		// 	for( c in Const.getChangeLog().entries )
-		// 		if( c.version.isEqual(version,true) ) {
-		// 			changeLog = c;
-		// 			break;
-		// 		}
-		// }
-
-		// w.loadTemplate("changeLog", {
-		// 	ver: changeLog.version.numbers,
-		// 	app: Const.APP_NAME,
-		// 	title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
-		// 	md: changeLog.allNoteLines.join("\n"),
-		// }, false);
-		// if( isNewUpdate )
-		// 	w.addClass("newUpdate");
-
-		// w.jContent.find(".close")
-		// 	// .text(isNewUpdate ? L.t._("Continue") : L.t._("Close"))
-		// 	.click( (_)->w.close() );
-
-		// w.jContent.find(".others").click( ev->{
-		// 	var ctx = new ui.modal.ContextMenu(ev);
-		// 		for( c in Const.getChangeLog().entries )
-		// 		ctx.add({
-		// 			label: L.t.untranslated( c.version.numbers + ( c.title!=null ? " - "+c.title : "" ) ),
-		// 			cb: ()->{
-		// 				w.close();
-		// 				showUpdate(c.version);
-		// 			}
-		// 		});
-		// } );
-		// if( isNewUpdate )
-		// 	w.jContent.find(".others").hide();
-	// }
 
 
 	function updateRecents() : Void {

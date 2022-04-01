@@ -421,7 +421,7 @@ button {
 
 		text-align: left;
 
-		animation: slideUp 2s;
+		animation: anim_slideUp 2s;
 		box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
 
 		strong {
@@ -1614,11 +1614,16 @@ dl.form {
 				flex: 0 1 30px;
 			}
 		}
+		button.tiny {
+			padding: 4px;
+		}
 
 		a[href] {
+			flex-grow: 0;
 			font-size: 0.8em;
 			margin-left: 8px;
 			align-self: center;
+			white-space: nowrap;
 		}
 
 		info,
@@ -1954,6 +1959,143 @@ textarea {
 	}
 }
 
+.namePatternEditor {
+	display: grid;
+	grid-template-columns: auto min-content min-content;
+	align-items: center;
+
+	a.reset {
+		font-size: 9pt;
+		margin-left: 4px;
+		cursor: pointer;
+		&:hover {
+			color: white;
+		}
+	}
+
+	.pattern {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 4px;
+		padding-bottom: 2px;
+
+
+		border: 1px solid $bgLight;
+		background-color: $bgDark;
+		>* {
+			margin-bottom: 2px;
+		}
+
+		.block {
+			flex: 0 1 0px;
+			padding: 3px;
+			min-height: 1ch;
+
+			font-size: 9pt;
+			white-space: nowrap;
+
+			border-radius: 3px;
+			border: 1px solid $bgDark;
+
+			&.var {
+				font-weight: bold;
+				font-size: 9pt;
+				font-family: 'Courier New', Courier, monospace;
+				text-transform: uppercase;
+				border: 1px solid $bgLighter;
+				background-color: $bgLight;
+				border-left-color: $almostWhite;
+				border-right-color: $almostWhite;
+				&:hover {
+					border-color: $almostWhite;
+				}
+			}
+
+			&.str {
+				// font-family: 'Courier New', Courier, monospace;
+				// font-style: italic;
+				background-color: $bgMed;
+				border-bottom-color: $bgLight;
+				&:hover {
+					border-color: white;
+				}
+			}
+			&.empty {
+				min-width: 0.4ch;
+				&:hover {
+					min-width: 1ch;
+					border-style: dashed;
+					background-color: $bgLight;
+				}
+			}
+			&.empty.last {
+				min-width: 2ch;
+			}
+
+			&:hover {
+				cursor: pointer;
+			}
+
+			&.str.selected {
+				display: none;
+			}
+
+			&.var.selected {
+				border: 1px solid $orangeLight;
+				background-color: $darkOrange;
+			}
+		}
+
+		.block.tmp {
+			white-space: pre;
+		}
+		.block.tmp,
+		input[type=text] {
+			padding: 3px;
+			min-width: 2ch;
+			font-size: 9pt;
+			color: $orange;
+			border: none;
+			border-bottom: 1px dashed $orange;
+			border-radius: 0;
+			box-shadow: none;
+		}
+
+		button.add {
+			flex: 0 1 0px;
+			white-space: nowrap;
+		}
+
+		&.sorting .fixed {
+			display: none;
+		}
+	}
+
+	.stocks {
+		.stock {
+			font-size: 9pt;
+			margin-bottom: 1px;
+			strong {
+				display: inline-block;
+				margin-right: 8px;
+				padding: 2px 4px;
+				min-width: 15ch;
+				border-radius: 3px;
+				background-color: $bgLight;
+			}
+			em {
+				font-style: normal;
+				color: $bgLighter;
+			}
+
+			&:hover {
+				color: white;
+				background-color: $bgLight;
+			}
+		}
+	}
+}
+
 .tip {
 	position: absolute;
 	z-index: 99;
@@ -2035,45 +2177,73 @@ textarea {
 
 #notificationList {
 	position: absolute;
+	z-index: 99;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
+	align-items: flex-end;
 
-	box-sizing: border-box;
-	z-index: 99;
-	bottom: 0px;
-	right: 0px;
+	padding-left: 10px;
+	padding-top: 10px;
 	padding-bottom: 30px;
+	bottom: 10vh;
+	right: 0px;
+
 	overflow: hidden;
 	pointer-events: none;
 
 	.notification {
+		flex: 0 1 auto;
+		width: fit-content;
 		min-width: 150px;
-		max-width: 300px;
 		margin-bottom: 8px;
 
 		background-color: $bgDark;
-		border-left: 10px solid $bgLight;
-		box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-		animation: slideUp 1s;
+		border: 1px solid $bgLight;
+		border-right: 8px solid $bgLight;
+		border-top-left-radius: 3px;
+		border-bottom-left-radius: 3px;
+		box-shadow: 0px 2px 4px black, 0px 8px 4px rgba(0, 0, 0, 0.5);
+		animation: 1.3s anim_slideUp;
 
 		.content {
-			padding: 20px;
-			padding-right: 80px;
+			padding: 6px;
+			padding-right: 40px;
+			padding-left: 20px;
+
+			.title {
+				font-weight: bold;
+				margin-bottom: 4px;
+			}
+			.sub {
+				opacity: 0.8;
+				padding-left: 4px;
+			}
 
 			pre {
 				font-size: 8pt;
 			}
 		}
+
+		&.blink {
+			animation: 1s anim_slideUp, 1.5s 0.25s anim_blinkOnce;
+		}
 	}
 
 	.notification:not(.latest) {
-		opacity: 0.5;
-		border-left-width: 3px;
+		opacity: 0.8;
+		border-right-width: 4px;
 		transition: border 0.3s, opacity 0.3s;
+		background-image: url("../img/stripesLight.png");
+		background-repeat: repeat;
+
 		.content {
+			zoom: 0.9;
+			opacity: 0.8;
 			transition: padding 0.3s ease;
-			padding-top: 10px;
-			padding-bottom: 10px;
+			padding-top: 4px;
+			padding-bottom: 4px;
+			padding-right: 20px;
 		}
 	}
 }
@@ -2112,7 +2282,7 @@ textarea {
 	}
 }
 
-@keyframes slideUp {
+@keyframes anim_slideUp {
 	from {
 		max-height: 0;
 		overflow: hidden;
@@ -2120,6 +2290,13 @@ textarea {
 	to {
 		max-height: 200;
 	}
+}
+
+@keyframes anim_blinkOnce {
+	0% { filter: brightness(7); }
+	10% { filter: brightness(3); }
+	40% { filter: brightness(1.5); }
+	100% { filter: brightness(1); }
 }
 
 .lastChance {
@@ -2133,7 +2310,7 @@ textarea {
 	background-color: $darkRed;
 	border-left: 4px solid $red;
 	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-	animation: slideUp 1.2s;
+	animation: anim_slideUp 1.2s;
 
 	.content {
 		display: grid;
@@ -2693,10 +2870,12 @@ textarea {
 				transform: rotate(45deg);
 				top: 65px;
 				left: -50px;
-				padding: 16px 80px;
+				width: 300px;
+				padding: 16px;
 				white-space: nowrap;
 				box-shadow: 0px 4px 8px black;
 
+				text-align: center;
 				font-size: 1.3em;
 				font-family: Roboto;
 				text-transform: uppercase;
@@ -2720,6 +2899,10 @@ textarea {
 				border-radius: 4px;
 				box-shadow: 0px 0px 16px black inset;
 				image-rendering: -webkit-optimize-contrast;
+			}
+
+			a:hover {
+				color: white;
 			}
 
 			strong {
@@ -3521,11 +3704,6 @@ body.panning {
 	}
 }
 
-
-body.sorting {
-	outline: 3px solid red !important;
-	outline-offset: -3px;
-}
 
 ul.sortable li.dragging {
 	color: white;
@@ -4386,7 +4564,7 @@ canvas#webgl {
 			text-align: center;
 			border-radius: 3px;
 			background-color: $orange;
-			animation: slideUp 1s;
+			animation: anim_slideUp 1s;
 
 		}
 	}
@@ -6113,6 +6291,9 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		dd.imageExportOnly {
+			display: none;
+		}
 		dd.imageExportMode {
 			position: relative;
 			display: grid;
@@ -6136,6 +6317,9 @@ dl.form.fieldInstanceEditor {
 				text-align: right;
 				color: $help;
 				font-family: monospace;
+			}
+			.pngPatternEditor {
+				grid-column: 1/4;
 			}
 		}
 

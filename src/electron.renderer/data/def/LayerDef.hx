@@ -49,7 +49,8 @@ class LayerDef {
 		#else
 		identifier = type+uid;
 		#end
-		addIntGridValue(0x0);
+		if( type==IntGrid )
+			addIntGridValue(0x0);
 		requiredTags = new Tags();
 		excludedTags = new Tags();
 	}

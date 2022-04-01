@@ -1,6 +1,7 @@
 package ui;
 
 private enum SavingState {
+	/* !! WARNING !! The ordering of this enum is used by beginNextState()!  */
 	InQueue;
 	PreChecks;
 	BeforeSavingActions;
@@ -9,8 +10,10 @@ private enum SavingState {
 	CheckLevelCache;
 	SavingMainFile;
 	SavingExternLevels;
-	SavingLayerImages;
+	WritingImages;
 	ExportingTiled;
+	ExportingGMS;
+	WritingSimplifiedFormat;
 	Done;
 }
 
@@ -85,6 +88,14 @@ class ProjectSaver extends dn.Process {
 		complete(false);
 	}
 
+
+	function beginNextState() {
+		var idx = dn.Lib.getArrayIndex( state.getName(), SavingState.getConstructors() );
+		var to = SavingState.createByIndex(idx+1);
+		beginState(to);
+	}
+
+
 	function beginState(s:SavingState) {
 		if( useMetaBar && state!=s )
 			ui.modal.MetaProgress.advance();
@@ -126,10 +137,10 @@ class ProjectSaver extends dn.Process {
 						return;
 					}
 					else
-						beginState(BeforeSavingActions);
+						beginNextState();
 				}
 				else
-					beginState(BeforeSavingActions);
+					beginNextState();
 
 			case BeforeSavingActions:
 				if( hasEditor() ) {
@@ -137,7 +148,7 @@ class ProjectSaver extends dn.Process {
 					Editor.ME.ge.emit(BeforeProjectSaving);
 				}
 				else
-					beginState(AutoLayers);
+					beginNextState();
 
 			case AutoLayers:
 				if( hasEditor() ) { // TODO support this without an Editor?
@@ -145,18 +156,18 @@ class ProjectSaver extends dn.Process {
 					Editor.ME.checkAutoLayersCache( (anyChange)->beginState(Backup) );
 				}
 				else
-					beginState(Backup);
+					beginNextState();
 
 			case Backup:
 				// var backupDir = project.getAbsExternalFilesDir() + "/backups";
 				if( project.backupOnSave ) {
 					logState();
 					backupProjectFiles(project, ()->{
-						beginState(CheckLevelCache);
+						beginNextState();
 					});
 				}
 				else
-					beginState(CheckLevelCache);
+					beginNextState();
 
 			case CheckLevelCache:
 				// Rebuild levels cache if necessary
@@ -171,7 +182,7 @@ class ProjectSaver extends dn.Process {
 						}
 					});
 				}
-				new ui.modal.Progress("Preparing levels...", ops, ()->beginState(SavingMainFile));
+				new ui.modal.Progress("Preparing levels...", ops, ()->beginNextState());
 
 
 			case SavingMainFile:
@@ -194,7 +205,7 @@ class ProjectSaver extends dn.Process {
 					}
 				});
 
-				new ui.modal.Progress("Saving main file...", ops, ()->beginState(SavingExternLevels));
+				new ui.modal.Progress("Saving main file...", ops, ()->beginNextState());
 
 
 			case SavingExternLevels:
@@ -214,29 +225,47 @@ class ProjectSaver extends dn.Process {
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->beginState(SavingLayerImages));
+					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->beginNextState());
 				}
 				else {
 					// Remove previous external levels
 					if( NT.fileExists(levelDir) )
-						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
+						JsTools.removeDirFiles(levelDir, [Const.LEVEL_EXTENSION]);
 
-					beginState(SavingLayerImages);
+					beginNextState();
 				}
 
 
-			case SavingLayerImages:
-				var pngDir = project.getAbsExternalFilesDir()+"/png";
-				if( project.imageExportMode!=None ) {
+			case WritingImages:
+				var baseDir = project.simplifiedExport
+					? project.getAbsExternalFilesDir()+"/simplified"
+					: project.getAbsExternalFilesDir()+"/png";
+
+				if( project.getImageExportMode()!=None ) {
 					logState();
 					var ops = [];
 					var count = 0;
-					initDir(pngDir, "png");
+
+					// Init dir
+					if( project.simplifiedExport ) {
+						if( NT.fileExists(baseDir) )
+							NT.removeDir(baseDir);
+						NT.createDirs(baseDir);
+					}
+					else
+						initDir(baseDir, "png");
+
 
 					// Export level layers
 					var lr = new display.LayerRender();
 					for( world in project.worlds )
 					for( level in world.levels ) {
+						var pngDir = baseDir;
+						if( project.simplifiedExport ) {
+							pngDir = baseDir + "/" + level.identifier;
+							initDir(pngDir, "png");
+						}
+
 						var level = level;
 
 						ops.push({
@@ -244,10 +273,11 @@ class ProjectSaver extends dn.Process {
 							cb: ()->{
 								log('Level ${level.identifier}...');
 
-								switch project.imageExportMode {
+								switch project.getImageExportMode() {
 									case None: // N/A
 
-									case OneImagePerLayer:
+									case OneImagePerLayer, LayersAndLevels:
+										var mainLayerImages = new Map();
 										for( li in level.layerInstances ) {
 											log('   -> Layer ${li.def.identifier}...');
 
@@ -258,12 +288,45 @@ class ProjectSaver extends dn.Process {
 
 											// Save PNGs
 											for(i in allImages) {
+												if( i.secondarySuffix==null )
+													mainLayerImages.set(li.layerDefUid, i);
 												var fp = dn.FilePath.fromDir(pngDir);
-												fp.fileName = project.getPngFileName(level, li.def, i.suffix);
+												fp.fileName = project.getPngFileName(
+													project.simplifiedExport ? "%layer_name" : null,
+													level,
+													li.def,
+													i.secondarySuffix
+												);
 												fp.extension = "png";
 												NT.writeFileBytes(fp.full, i.bytes);
 												count++;
 											}
+										}
+
+										// Both layers + levels export
+										if( project.getImageExportMode()==LayersAndLevels ) {
+											// Rebuild level render
+											var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+											var wrapper = new h2d.Object();
+											level.iterateLayerInstancesInRenderOrder( (li)->{
+												var img = mainLayerImages.get(li.layerDefUid);
+												if( img!=null && img.tex!=null ) {
+													var t = h2d.Tile.fromTexture(img.tex);
+													var bmp = new h2d.Bitmap(t, wrapper);
+													bmp.alpha = li.def.displayOpacity;
+												}
+											});
+											wrapper.drawTo(tex);
+											var pngBytes = tex.capturePixels().toPNG();
+
+											// Save PNG
+											var fp = dn.FilePath.fromDir(pngDir);
+											fp.fileName = project.simplifiedExport
+												? "_composite"
+												: level.identifier;
+											fp.extension = "png";
+											NT.writeFileBytes(fp.full, pngBytes);
+											count++;
 										}
 
 									case OneImagePerLevel:
@@ -290,10 +353,13 @@ class ProjectSaver extends dn.Process {
 				}
 				else {
 					// Delete previous PNG dir
-					if( NT.fileExists(pngDir) )
-						NT.removeDir(pngDir);
-					beginState(ExportingTiled);
+					NT.removeDir( project.getAbsExternalFilesDir()+"/png" );
+					beginNextState();
 				}
+
+				// Also remove PNG dir if Simplified export is enabled
+				if( project.simplifiedExport )
+					NT.removeDir( project.getAbsExternalFilesDir()+"/png" );
 
 
 			case ExportingTiled:
@@ -311,7 +377,7 @@ class ProjectSaver extends dn.Process {
 								N.success('Saved Tiled files.');
 						},
 						()->{
-							beginState(Done);
+							beginNextState();
 						}
 					);
 				}
@@ -320,7 +386,66 @@ class ProjectSaver extends dn.Process {
 					var dir = project.getAbsExternalFilesDir() + "/tiled";
 					if( NT.fileExists(dir) )
 						NT.removeDir(dir);
-					beginState(Done);
+					beginNextState();
+				}
+
+			case ExportingGMS:
+				if( false ) { // TODO check actual project export setting
+					logState();
+					ui.modal.Progress.single(
+						L.t._("Exporting Tiled..."),
+						()->{
+							var e = new exporter.GameMakerStudio2();
+							e.addExtraLogger( App.LOG, "GMSExport" );
+							e.run( project, project.filePath.full );
+							if( e.hasErrors() )
+								N.error('Game Maker Studio export has errors.');
+							else
+								N.success('Saved Game Maker Studio files.');
+						},
+						()->{
+							beginNextState();
+						}
+					);
+				}
+				else {
+					// Remove previous GMS dir
+					var dir = project.getAbsExternalFilesDir() + "/gms2";
+					if( NT.fileExists(dir) )
+						NT.removeDir(dir);
+					beginNextState();
+				}
+
+
+			case WritingSimplifiedFormat:
+				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir()+"/simplified" );
+
+				if( project.simplifiedExport ) {
+					logState();
+					initDir(dirFp.full, "json");
+
+					var p = new ui.modal.Progress( "Simplified data...", ()->beginNextState() );
+					for(w in project.worlds)
+					for(l in w.levels) {
+						p.addOp({
+							label: l.identifier,
+							cb: ()->{
+								// Build JSON
+								var simpleJson = l.toSimplifiedJson();
+
+								// Write file
+								var fp = dirFp.clone();
+								fp.appendDirectory(l.identifier);
+								fp.fileWithExt = "data.json";
+								NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson, Full ) );
+							},
+						});
+					}
+				}
+				else {
+					if( NT.fileExists(dirFp.full) )
+						NT.removeDir(dirFp.full);
+					beginNextState();
 				}
 
 
@@ -348,7 +473,7 @@ class ProjectSaver extends dn.Process {
 		if( !NT.fileExists(dirPath) )
 			NT.createDirs(dirPath);
 		else if( removeFileExt!=null )
-			JsTools.emptyDir(dirPath, [removeFileExt]);
+			JsTools.removeDirFiles(dirPath, [removeFileExt]);
 	}
 
 
@@ -363,13 +488,13 @@ class ProjectSaver extends dn.Process {
 		switch state {
 			case InQueue:
 				if( QUEUE[0]==this && !ui.modal.Progress.hasAny() )
-					beginState(PreChecks);
+					beginNextState();
 
 			case PreChecks:
 
 			case BeforeSavingActions:
 				if( !ui.modal.Progress.hasAny() )
-					beginState(AutoLayers);
+					beginNextState();
 
 			case AutoLayers:
 
@@ -381,11 +506,15 @@ class ProjectSaver extends dn.Process {
 
 			case SavingExternLevels:
 
-			case SavingLayerImages:
+			case WritingImages:
 				if( !ui.modal.Progress.hasAny() )
-					beginState(ExportingTiled);
+					beginNextState();
 
 			case ExportingTiled:
+
+			case ExportingGMS:
+
+			case WritingSimplifiedFormat:
 
 			case Done:
 		}

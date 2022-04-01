@@ -14,6 +14,23 @@
 	<dt class="full"> <h3>Project file settings</h3> </dt>
 
 	<dt>
+		<label for="minify">Super simple export ❤</label>
+		<info tip="bottom">
+			Enable this to export your level data in a secondary super simple format, ideal for quick integration in ANY existing engine.
+			You will get:
+			 - one PNG per layer,
+			 - one composite PNG per level,
+			 - a single JSON file per level containing main level infos and entities.
+
+		</info>
+	</dt>
+	<dd class="simplifiedExport">
+		<input type="checkbox" name="simplifiedExport" id="simplifiedExport"/>
+		<div class="locate"></div>
+		<a href="https://ldtk.io/go/simple">Learn more about this format</a>
+	</dd>
+
+	<dt>
 		<label for="externalLevels">Save levels to separate files</label>
 		<info>
 			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
@@ -23,7 +40,6 @@
 	<dd>
 		<input type="checkbox" id="externalLevels"/>
 		<div class="locate"></div>
-		<warning class="externRecommend">Saving levels separately is highly recommended for large projects, or projects shared among multiple users. This will also decrease saving time.</warning>
 	</dd>
 
 	<dt>
@@ -66,29 +82,20 @@
 		<input type="checkbox" name="minify" id="minify"/>
 	</dd>
 
-	<dt>
+	<dt class="notSimplified">
 		<label for="png">Export as PNG</label>
 		<info>This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</info>
 	</dt>
-	<dd class="imageExportMode">
+	<dd class="imageExportMode notSimplified">
 		<div class="locate"></div>
 
 		<select>
 		</select>
+	</dd>
 
-		<input type="text" class="pattern"/>
-		<div class="help guide">
-			<dl>
-				<dt>%level_name</dt> <dd>Level text identifier</dd>
-				<dt>%level_idx</dt> <dd>Level index in array, starting at 0</dd>
-				<dt>%layer_name</dt> <dd>Layer text identifier</dd>
-				<dt>%layer_idx</dt> <dd>Layer index in render order</dd>
-			</dl>
-		</div>
-
-		<button class="reset dark small">Reset</button>
-
-		<div class="example"></div>
+	<dt class="imageExportOnly notSimplified">PNG file names</dt>
+	<dd class="imageExportOnly notSimplified">
+		<div class="pngPatternEditor"></div>
 	</dd>
 
 
@@ -137,21 +144,7 @@
 		</info>
 	</dt>
 	<dd>
-		<input type="text" class="levelNamePattern"/>
-		<a class="defaultLevelNamePattern">[reset]</a>
-		<div class="help guide">
-			<dl>
-				<dt>%world</dt> <dd>World string identifier</dd>
-				<dt>%idx</dt> <dd>Level index in array, starting at 0</dd>
-				<dt>%idx1</dt> <dd>Level index in array, starting at 1</dd>
-				<dt>%gx</dt> <dd>World grid X (only in GridVania world layout)</dd>
-				<dt>%gy</dt> <dd>World grid Y (only in GridVania world layout)</dd>
-				<dt>%x</dt> <dd>World X (only in GridVania and Free world layouts)</dd>
-				<dt>%y</dt> <dd>World Y (only in GridVania and Free world layouts)</dd>
-				<dt>%d</dt> <dd>World depth</dd>
-			</dl>
-		</div>
-
+		<div class="levelNamePatternEditor"></div>
 	</dd>
 
 	<dt>

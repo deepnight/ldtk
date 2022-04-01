@@ -175,6 +175,7 @@ const typeMap = {
         { json: "minifyJson", js: "minifyJson", typ: true },
         { json: "nextUid", js: "nextUid", typ: 0 },
         { json: "pngFilePattern", js: "pngFilePattern", typ: u(undefined, u(null, "")) },
+        { json: "simplifiedExport", js: "simplifiedExport", typ: true },
         { json: "tutorialDesc", js: "tutorialDesc", typ: u(undefined, u(null, "")) },
         { json: "worldGridHeight", js: "worldGridHeight", typ: u(undefined, u(0, null)) },
         { json: "worldGridWidth", js: "worldGridWidth", typ: u(undefined, u(0, null)) },
@@ -605,6 +606,7 @@ const typeMap = {
         "Uppercase",
     ],
     "ImageExportMode": [
+        "LayersAndLevels",
         "None",
         "OneImagePerLayer",
         "OneImagePerLevel",

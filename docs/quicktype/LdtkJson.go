@@ -41,13 +41,14 @@ type LdtkJSON struct {
 	ExternalLevels      bool            `json:"externalLevels"`         // If TRUE, one file will be saved for the project (incl. all its definitions) and one file; in a sub-folder for each level.
 	Flags               []Flag          `json:"flags"`                  // An array containing various advanced flags (ie. options or other states). Possible; values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,; `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
 	IdentifierStyle     IdentifierStyle `json:"identifierStyle"`        // Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible; values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
-	ImageExportMode     ImageExportMode `json:"imageExportMode"`        // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,; `OneImagePerLevel`
+	ImageExportMode     ImageExportMode `json:"imageExportMode"`        // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,; `OneImagePerLevel`, `LayersAndLevels`
 	JSONVersion         string          `json:"jsonVersion"`            // File format version
 	LevelNamePattern    string          `json:"levelNamePattern"`       // The default naming convention for level identifiers.
 	Levels              []Level         `json:"levels"`                 // All levels. The order of this array is only relevant in `LinearHorizontal` and; `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should; refer to the `worldX`,`worldY` coordinates of each Level.
 	MinifyJSON          bool            `json:"minifyJson"`             // If TRUE, the Json is partially minified (no indentation, nor line breaks, default is; FALSE)
 	NextUid             int64           `json:"nextUid"`                // Next Unique integer ID available
 	PNGFilePattern      *string         `json:"pngFilePattern"`         // File naming pattern for exported PNGs
+	SimplifiedExport    bool            `json:"simplifiedExport"`       // If TRUE, a very simplified will be generated on saving, for quicker & easier engine; integration.
 	TutorialDesc        *string         `json:"tutorialDesc"`           // This optional description is used by LDtk Samples to show up some informations and; instructions.
 	WorldGridHeight     *int64          `json:"worldGridHeight"`        // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Height of the world grid in pixels.
 	WorldGridWidth      *int64          `json:"worldGridWidth"`         // **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.; It will then be `null`. You can enable the Multi-worlds advanced project option to enable; the change immediately.<br/><br/>  Width of the world grid in pixels.
@@ -595,10 +596,11 @@ const (
 )
 
 // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
-// `OneImagePerLevel`
+// `OneImagePerLevel`, `LayersAndLevels`
 type ImageExportMode string
 const (
 	ImageExportModeNone ImageExportMode = "None"
+	LayersAndLevels ImageExportMode = "LayersAndLevels"
 	OneImagePerLayer ImageExportMode = "OneImagePerLayer"
 	OneImagePerLevel ImageExportMode = "OneImagePerLevel"
 )

@@ -193,6 +193,55 @@ class Level {
 		return json;
 	}
 
+
+	public function toSimplifiedJson() {
+		var json = toJson(false);
+
+		var simpleJson = {
+			x : json.worldX,
+			y : json.worldY,
+			width : json.pxWid,
+			height : json.pxHei,
+			iid: json.iid,
+
+			layers : {
+				var out = [];
+				iterateLayerInstancesInRenderOrder( (li)->{
+					var show = switch li.def.type {
+						case IntGrid: li.def.isAutoLayer();
+						case Entities: false;
+						case Tiles: true;
+						case AutoLayer: true;
+					}
+					if( show )
+						out.push( li.def.identifier+".png" );
+				});
+				out;
+			},
+
+			entities : {},
+		}
+
+		// Group entities by identifier
+		var ents = new Map();
+		for(li in layerInstances) {
+			if( li.def.type!=Entities )
+				continue;
+
+			for( ei in li.entityInstances ) {
+				if( !ents.exists(ei.def.identifier) )
+					ents.set(ei.def.identifier, []);
+				ents.get(ei.def.identifier).push( ei.toSimplifiedJson() );
+			}
+		}
+
+		// Add entities to JSON
+		for(g in ents.keyValueIterator())
+			Reflect.setField(simpleJson.entities, g.key, g.value);
+
+		return simpleJson;
+	}
+
 	public function makeExternalRelPath(idx:Int) {
 		return
 			_project.getRelExternalFilesDir() + "/"

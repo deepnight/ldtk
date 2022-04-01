@@ -16,21 +16,21 @@ class ContextMenu extends ui.Modal {
 	public static var ME : ContextMenu;
 	var jAttachTarget : js.jquery.JQuery; // could be empty
 
-	public function new(?m:Coords, ?openEvent:js.jquery.Event) {
+	public function new(?m:Coords, ?jNear:js.jquery.JQuery, ?openEvent:js.jquery.Event) {
 		super();
 
 		if( ME!=null && !ME.destroyed )
 			ME.destroy();
 		ME = this;
 
-		if( openEvent!=null ) {
-			var jEventTarget = new J(openEvent.currentTarget);
+		if( openEvent!=null || jNear!=null ) {
+			var jEventTarget = jNear!=null ? jNear : new J(openEvent.currentTarget);
 			jAttachTarget = jEventTarget;
 			if( jAttachTarget.is("button.context") )
 				jAttachTarget = jAttachTarget.parent();
 			jAttachTarget.addClass("contextMenuOpen");
 
-			if( jEventTarget.is("button.context") )
+			if( jEventTarget.is("button.context") || jNear!=null )
 				positionNear(jEventTarget);
 			else if( openEvent!=null )
 				positionNear( new Coords(openEvent.pageX, openEvent.pageY) );

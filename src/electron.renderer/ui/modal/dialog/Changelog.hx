@@ -15,11 +15,12 @@ class Changelog extends ui.modal.Dialog {
 	override function openAnim() { /* none */ }
 
 	public function showVersion(?version:dn.Version) {
-		var changeLog = Const.getChangeLog().latest;
+		var all = Const.getChangeLog();
+		var changeLog = all.latest;
 
 		// Pick specific version
 		if( version!=null ) {
-			for( c in Const.getChangeLog().entries )
+			for( c in all.entries )
 				if( c.version.isEqual(version) ) {
 					changeLog = c;
 					break;
@@ -53,6 +54,25 @@ class Changelog extends ui.modal.Dialog {
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
 			md: rawMd,
 		}, false);
+
+		// Optional link to previous noteworthy version
+		if( changeLog.version.patch!=0 ) {
+			var next = false;
+			for(c in all.entries) {
+				if( c.version.isEqual(changeLog.version) )
+					next = true;
+				else if( next && c.version.patch==0 ) {
+					var jPrevLink = jContent.find("xml#previousUpdate").clone().children();
+					jPrevLink.appendTo("#updateChangelogHtml");
+					jPrevLink.find(".version").text( c.version.toString() );
+					jPrevLink.click( ev->{
+						showVersion(c.version);
+						ev.preventDefault();
+					 });
+					break;
+				}
+			}
+		}
 
 		if( changeLog.version.full.length>=8)
 			jContent.find("header .version").addClass("long");

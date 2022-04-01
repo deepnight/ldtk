@@ -10,6 +10,9 @@ class EditProject extends ui.modal.Panel {
 		ldtk.Json.ProjectFlag.UseMultilinesType,
 	];
 
+	var levelNamePatternEditor : NamePatternEditor;
+	var pngPatternEditor : ui.NamePatternEditor;
+
 	public function new() {
 		super();
 
@@ -104,6 +107,58 @@ class EditProject extends ui.modal.Panel {
 			JsTools.locateFile( project.filePath.full, true );
 		});
 
+		pngPatternEditor = new ui.NamePatternEditor(
+			"png",
+			project.getImageExportFilePattern(),
+			[
+				{ k:"world", name:"World name" },
+				{ k:"level_name", name:"Level name" },
+				{ k:"level_idx", name:"Level idx)" },
+				{ k:"layer_name", name:"Layer name" },
+				{ k:"layer_idx", name:"Layer idx" },
+			],
+			(pat)->{
+				project.pngFilePattern = pat==project.getDefaultImageExportFilePattern() ? null : pat;
+				editor.ge.emit(ProjectSettingsChanged);
+			},
+			()->{
+				project.pngFilePattern = null;
+				editor.ge.emit(ProjectSettingsChanged);
+			}
+		);
+		jContent.find(".pngPatternEditor").empty().append( pngPatternEditor.jEditor );
+
+		levelNamePatternEditor = new ui.NamePatternEditor(
+			"levelId",
+			project.levelNamePattern,
+			[
+				{ k:"world", name:"World ID" },
+				{ k:"idx1", name:"Level_index(1)", desc:"Level index (starting at 1)" },
+				{ k:"idx", name:"Level_index(0)", desc:"Level index (starting at 0)" },
+				{ k:"x", name:"x", desc:"X coordinate of the level" },
+				{ k:"y", name:"y", desc:"Y coordinate of the level" },
+				{ k:"gx", name:"Grid_X", desc:"X grid coordinate of the level" },
+				{ k:"gy", name:"Grid_Y", desc:"Y grid coordinate of the level" },
+				{ k:"depth", name:"World depth", desc:"Level depth in the world" },
+			],
+			(pat)->{
+				project.levelNamePattern = pat;
+				editor.ge.emit(ProjectSettingsChanged);
+				editor.invalidateAllLevelsCache();
+				project.tidy();
+			},
+			()->{
+				if( project.levelNamePattern!=data.Project.DEFAULT_LEVEL_NAME_PATTERN ) {
+					project.levelNamePattern = data.Project.DEFAULT_LEVEL_NAME_PATTERN;
+					editor.ge.emit(ProjectSettingsChanged);
+					editor.invalidateAllLevelsCache();
+					project.tidy();
+					N.success("Value reset.");
+				}
+			}
+		);
+		jContent.find(".levelNamePatternEditor").empty().append( levelNamePatternEditor.jEditor );
+
 		updateProjectForm();
 	}
 
@@ -113,14 +168,31 @@ class EditProject extends ui.modal.Panel {
 			case ProjectSettingsChanged:
 				updateProjectForm();
 
+			case ProjectSaved:
+				updateProjectForm();
+
 			case _:
 		}
+	}
+
+	function recommendSaving() {
+		if( !cd.hasSetS("saveReco",2) )
+			N.warning(
+				L.t._("Project file setting changed"),
+				L.t._("You should save the project at least once for this setting to apply its effects.")
+			);
 	}
 
 	function updateProjectForm() {
 		ui.Tip.clear();
 		var jForm = jContent.find("dl.form:first");
 		jForm.off().find("*").off();
+
+		// Simplified format adjustments
+		if( project.simplifiedExport )
+			jForm.find(".notSimplified").hide();
+		else
+			jForm.find(".notSimplified").show();
 
 		// File extension
 		var ext = project.filePath.extension;
@@ -145,7 +217,7 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = i.jInput.siblings(".locate").empty();
 		if( project.backupOnSave )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/backups", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/backups", false) );
 		var jCount = jForm.find("#backupCount");
 		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
 		if( project.backupOnSave ) {
@@ -164,16 +236,37 @@ class EditProject extends ui.modal.Panel {
 		// Json minifiying
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onChange = editor.invalidateAllLevelsCache;
+		i.onChange = ()->{
+			editor.invalidateAllLevelsCache;
+			recommendSaving();
+		}
+
+		// Simplified format
+		var i = Input.linkToHtmlInput( project.simplifiedExport, jForm.find("[name=simplifiedExport]") );
+		i.onChange = ()->{
+			editor.invalidateAllLevelsCache();
+			editor.ge.emit(ProjectSettingsChanged);
+			if( project.simplifiedExport )
+				recommendSaving();
+		}
+		var jLocate = jForm.find(".simplifiedExport .locate").empty();
+		if( project.simplifiedExport )
+			jLocate.append(
+				NT.fileExists( project.getAbsExternalFilesDir() )
+					? JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/simplified", false)
+					: JsTools.makeLocateLink(project.filePath.full, true)
+			);
 
 		// External level files
-		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onValueChange = (v)->editor.invalidateAllLevelsCache();
+		i.onValueChange = (v)->{
+			editor.invalidateAllLevelsCache();
+			recommendSaving();
+		}
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir(), false) );
 
 		// Image export
 		var jImgExport = jForm.find(".imageExportMode");
@@ -185,40 +278,26 @@ class EditProject extends ui.modal.Panel {
 			(v)->{
 				project.pngFilePattern = null;
 				project.imageExportMode = v;
+				if( v!=None )
+					recommendSaving();
 			},
 			(v)->switch v {
 				case None: L.t._("Don't export any image");
 				case OneImagePerLayer: L.t._("Export one PNG for each individual layer, in each level");
 				case OneImagePerLevel: L.t._("Export a single PNG per level (all layers are merged down)");
+				case LayersAndLevels: L.t._("Export images for both layers and levels");
 			}
 		);
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = jImgExport.find(".locate").empty();
-		var jFilePattern : js.jquery.JQuery = jImgExport.find(".pattern").hide();
-		var jExample : js.jquery.JQuery = jImgExport.find(".example").hide();
-		var jReset : js.jquery.JQuery = jImgExport.find(".reset").hide();
-		if( project.imageExportMode!=None ) {
-			jFilePattern.show();
-			jExample.show();
-			jReset.show();
-			jReset.click( (_)->{
-				project.pngFilePattern = null;
-				editor.ge.emit(ProjectSettingsChanged);
-			});
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
+		pngPatternEditor.jEditor.hide();
+		jForm.find(".imageExportOnly").hide();
+		if( project.imageExportMode!=None && !project.simplifiedExport ) {
+			jForm.find(".imageExportOnly").show();
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/png", false) );
 
-			var i = new form.input.StringInput(
-				jFilePattern,
-				()->project.getImageExportFilePattern(),
-				(v)->{
-					project.pngFilePattern = v==project.getDefaultImageExportFilePattern() ? null : v;
-					editor.ge.emit(ProjectSettingsChanged);
-				}
-			);
-			jFilePattern.keyup( (_)->{
-				var pattern = jFilePattern.val()==null ? project.getDefaultImageExportFilePattern() : jFilePattern.val();
-				jExample.text( '"'+project.getPngFileName(pattern, editor.curLevel, editor.curLayerDef)+'.png"' );
-			} ).keyup();
+			pngPatternEditor.jEditor.show();
+			pngPatternEditor.ofString( project.getImageExportFilePattern() );
 		}
 
 
@@ -265,12 +344,16 @@ class EditProject extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = function(v) {
-			if( v )
-				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project");
+			if( v ) {
+				new ui.modal.dialog.Message(
+					Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project",
+					()->recommendSaving()
+				);
+			}
 		}
 		var jLocate = jForm.find("#tiled").siblings(".locate").empty();
 		if( project.exportTiled )
-			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/tiled", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/tiled", false) );
 
 		// Level grid size
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
@@ -299,22 +382,7 @@ class EditProject extends ui.modal.Panel {
 		));
 
 		// Level name pattern
-		var i = Input.linkToHtmlInput( project.levelNamePattern, jForm.find("input.levelNamePattern") );
-		i.linkEvent(ProjectSettingsChanged);
-		i.onChange = ()->{
-			project.tidy();
-			editor.invalidateAllLevelsCache();
-		}
-
-		jForm.find(".defaultLevelNamePattern").click(_->{
-			if( project.levelNamePattern!=data.Project.DEFAULT_LEVEL_NAME_PATTERN ) {
-				project.levelNamePattern = data.Project.DEFAULT_LEVEL_NAME_PATTERN;
-				editor.ge.emit(ProjectSettingsChanged);
-				editor.invalidateAllLevelsCache();
-				project.tidy();
-			}
-		});
-
+		levelNamePatternEditor.ofString(project.levelNamePattern);
 
 		// Advanced options
 		var jAdvanceds = jForm.find(".adv");

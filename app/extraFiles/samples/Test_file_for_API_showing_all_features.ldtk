@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.0.0",
+		"appVersion": "1.1.0",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "1.0.0",
-	"appBuildId": 457928,
+	"jsonVersion": "1.1.0",
+	"appBuildId": 458002,
 	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -25,6 +25,7 @@
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
+	"simplifiedExport": false,
 	"imageExportMode": "None",
 	"pngFilePattern": null,
 	"backupOnSave": false,
@@ -1317,7 +1318,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "e5349900-8dc0-11ec-812f-6514ee68b83c"
+								"worldIid": "9fa8a580-8dc0-11ec-932a-37afd4bdbcc3"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1339,7 +1340,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "e5349900-8dc0-11ec-812f-6514ee68b83c"
+								"worldIid": "9fa8a580-8dc0-11ec-932a-37afd4bdbcc3"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1361,7 +1362,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "e5349900-8dc0-11ec-812f-6514ee68b83c"
+								"worldIid": "9fa8a580-8dc0-11ec-932a-37afd4bdbcc3"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="2">
+ <editorsettings>
+  <export target="gmsTiled.yy" format="yy"/>
+ </editorsettings>
+ <tileset firstgid="1" source="Inca.tsx"/>
+ <layer id="1" name="MyTileLayer" width="10" height="10">
+  <data encoding="csv">
+1,2,0,0,0,0,0,0,0,0,
+21,22,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="2" name="MyObjectLayer">
+  <object id="1" name="pouet" type="MyType" x="41.3333" y="28.3333" width="21.3333" height="20.6667">
+   <properties>
+    <property name="custInt" type="int" value="1"/>
+    <property name="custStr" value="hello"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

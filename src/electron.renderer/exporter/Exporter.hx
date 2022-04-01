@@ -28,17 +28,23 @@ class Exporter {
 		}
 
 		log.general("Init...");
-		init();
+		try {
+			init();
 
-		log.general("Converting project ("+Type.getClassName(Type.getClass(this))+")...");
-		log.fileOp('  Project: ${projectPath.full}');
-		log.fileOp('  Output: ${outputPath.full}');
-		convert();
+			log.general("Converting project ("+Type.getClassName(Type.getClass(this))+")...");
+			log.fileOp('  Project: ${projectPath.full}');
+			log.fileOp('  Output: ${outputPath.full}');
+			convert();
 
-		log.fileOp('Writing ${outputFiles.length} output file(s)...');
-		writeFiles();
+			log.fileOp('Writing ${outputFiles.length} output file(s)...');
+			writeFiles();
 
-		log.general('Done.');
+			log.general('Done.');
+		}
+		catch(e:Dynamic) {
+			log.error("Exporter failed with exception");
+			log.error( Std.string(e) );
+		}
 
 		// Display log
 		#if !debug
@@ -79,7 +85,7 @@ class Exporter {
 		log.fileOp("  Initializing dir...");
 		NT.createDirs(outputPath.full);
 		if( removeAllFilesInDir )
-			JsTools.emptyDir(outputPath.full);
+			JsTools.removeDirFiles(outputPath.full);
 	}
 
 	function remapRelativePath(relPath:String) : String {

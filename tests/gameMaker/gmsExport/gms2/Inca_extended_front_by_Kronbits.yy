@@ -1,0 +1,1 @@
+{ "name": "Inca_extended_front_by_Kronbits", "tags": [], "resourceType": "GMRTileset", "resourceVersion": "1.0" }

@@ -6,7 +6,7 @@ class Project {
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_WIDTH = DEFAULT_GRID_SIZE*16; // px
 	public static var DEFAULT_LEVEL_HEIGHT = DEFAULT_GRID_SIZE*16; // px
-	public static var DEFAULT_LEVEL_NAME_PATTERN = "%world_Level_%idx";
+	public static var DEFAULT_LEVEL_NAME_PATTERN = "Level_%idx";
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
@@ -27,7 +27,10 @@ class Project {
 	public var minifyJson = false;
 	public var externalLevels = false;
 	public var exportTiled = false;
-	public var imageExportMode : ldtk.Json.ImageExportMode = None;
+	public var simplifiedExport = false;
+
+	@:allow(ui.modal.panel.EditProject)
+	var imageExportMode : ldtk.Json.ImageExportMode = None;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 	public var levelNamePattern : String;
@@ -74,11 +77,34 @@ class Project {
 	public function getDefaultImageExportFilePattern() {
 		return switch imageExportMode {
 			case None, OneImagePerLayer:
+				"%level_name__%layer_name";
+
+			case OneImagePerLevel:
+				"%level_name";
+
+			case LayersAndLevels:
+				"%level_name__%layer_name";
+		}
+	}
+
+	/**
+		Return old pattern before renaming
+	**/
+	public function getLegacyDefaultImageExportFilePattern() {
+		return switch imageExportMode {
+			case None, OneImagePerLayer:
 				"%level_idx-%level_name--%layer_idx-%layer_name";
 
 			case OneImagePerLevel:
 				"%level_idx-%level_name";
+
+			case LayersAndLevels:
+				"%level_idx-%level_name"; // N/A
 		}
+	}
+
+	public function getImageExportMode() : ldtk.Json.ImageExportMode {
+		return simplifiedExport ? LayersAndLevels : imageExportMode;
 	}
 
 	public function getImageExportFilePattern() {
@@ -95,6 +121,7 @@ class Project {
 
 		var vars = [
 			"%level_name"=>()->level.identifier,
+			"%world"=>()->level._world.identifier,
 			"%level_idx"=>()->dn.Lib.leadingZeros( level._world.getLevelIndex(level), 4),
 			"%layer_name"=>()->ld.identifier,
 			"%layer_idx"=>()->{
@@ -236,6 +263,7 @@ class Project {
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
+		p.simplifiedExport = JsonTools.readBool( json.simplifiedExport, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
@@ -474,6 +502,7 @@ class Project {
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
+			simplifiedExport: simplifiedExport,
 			imageExportMode: JsonTools.writeEnum(imageExportMode, false),
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
