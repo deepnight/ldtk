@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.0.1 JSON schema",
+	"title": "LDtk 1.1.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -27,7 +27,8 @@
 			"imageExportMode",
 			"levelNamePattern",
 			"minifyJson",
-			"nextUid"
+			"nextUid",
+			"simplifiedExport"
 		],
 		"properties": {
 			"backupLimit": {
@@ -77,11 +78,12 @@
 				]
 			},
 			"imageExportMode": {
-				"description": "\"Image export\" option when saving project. Possible values: `None`, `OneImagePerLayer`, `OneImagePerLevel`",
+				"description": "\"Image export\" option when saving project. Possible values: `None`, `OneImagePerLayer`, `OneImagePerLevel`, `LayersAndLevels`",
 				"enum": [
 					"None",
 					"OneImagePerLayer",
-					"OneImagePerLevel"
+					"OneImagePerLevel",
+					"LayersAndLevels"
 				]
 			},
 			"identifierStyle": {
@@ -287,6 +289,12 @@
 				"type": [
 					"integer",
 					"null"
+				]
+			},
+			"simplifiedExport": {
+				"description": "If TRUE, a very simplified will be generated on saving, for quicker & easier engine integration.",
+				"type": [
+					"boolean"
 				]
 			},
 			"externalLevels": {
