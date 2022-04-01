@@ -12,10 +12,13 @@ You will get:
  - A **composite” PNG per level** (ie. all layers merged together)
  - A very simple, straightforward and optional **JSON** file per level, if you want to access your Entities data or other information.
 
+![](1.0.1/simplifiedFormat.png)
+
 ## Other changes
 
  - Updated the look of notifications in the bottom right corner
  - Added a shortcut link to previous major version notes in "Release Notes" window
+ - If you have "Open last project" enabled, but close current project, then re-opening LDtk will now bring you back to Home screen.
  - Fixed missing coordinates display after going to World view.
  - Fixed `intGridValue` presence in JSON for non-IntGrid layers
 
