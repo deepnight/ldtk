@@ -12,6 +12,8 @@ You will get:
  - A **composite” PNG per level** (ie. all layers merged together)
  - A very simple, straightforward and optional **JSON** file per level, if you want to access your Entities data or other information.
 
+ More information on [how it works here](https://ldtk.io/go/simple).
+
 ![](1.0.1/simplifiedFormat.png)
 
 ## Other changes
