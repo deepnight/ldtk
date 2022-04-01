@@ -37,7 +37,7 @@ Value | Type | Description
 `minifyJson`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 `nextUid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Next Unique integer ID available
 `pngFilePattern`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
-`simplifiedExport`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a very simplified will be generated on saving, for quicker & easier engine integration.
+`simplifiedExport`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.0-green.svg)  | Bool | If TRUE, a very simplified will be generated on saving, for quicker & easier engine integration.
 `tutorialDesc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This optional description is used by LDtk Samples to show up some informations and instructions.
 ~~`exportPng`~~<br/><sup class="internal">*Only used by editor*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 0.9.3<br/> <br/> Replaced by: `imageExportMode`
 
