@@ -4,7 +4,7 @@ class Notification extends dn.Process {
 	static var LAST : Null<String>;
 	static var LAST_STAMP = 0.;
 
-	var elem : js.jquery.JQuery;
+	var jNotif : js.jquery.JQuery;
 
 	private function new(str:String, ?sub:String, ?col:UInt, ?long=false) {
 		super(Editor.ME);
@@ -12,10 +12,10 @@ class Notification extends dn.Process {
 		var jList = new J("#notificationList");
 		jList.find(".latest").removeClass("latest");
 
-		elem = new J("xml#notification").clone().children().first();
-		elem.appendTo(jList);
+		jNotif = new J("xml#notification").clone().children().first();
+		jNotif.appendTo(jList);
 
-		var jContent = elem.find(".content");
+		var jContent = jNotif.find(".content");
 		if( sub==null )
 			jContent.html(str);
 		else {
@@ -23,16 +23,21 @@ class Notification extends dn.Process {
 			jContent.append('<div class="sub">$sub</div>');
 		}
 		if( col!=null ) {
-			var defColor = C.hexToInt( elem.css("background-color") );
-			elem.css("border-color", C.intToHex(col));
-			elem.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
+			var defColor = C.hexToInt( jNotif.css("background-color") );
+			jNotif.css("border-color", C.intToHex(col));
+			jNotif.css("background-color", C.intToHex( C.mix(col,defColor,0.66) ));
 		}
 
 		if( Editor.exists() && Editor.ME.gifMode )
-			elem.hide();
+			jNotif.hide();
 
-		delayer.addS(hide, 3 + str.length*0.04 + (long ? 20 : 0));
-		elem.addClass("latest");
+		var len = str.length + ( sub!=null ? sub.length : 0 );
+		delayer.addS(hide, 3 + len*0.04 + (long ? 20 : 0));
+		jNotif.addClass("latest");
+	}
+
+	inline function blink() {
+		jNotif.addClass("blink");
 	}
 
 	static function sameAsLast(str:String) {
@@ -46,9 +51,12 @@ class Notification extends dn.Process {
 	}
 
 
-	public static function msg(str:String, ?sub:String, ?c:UInt) {
-		if( !sameAsLast(str) )
-			new Notification(str, sub, c);
+	public static function msg(str:String, ?sub:String, ?c:UInt, blink=false) {
+		if( !sameAsLast(str) ) {
+			var n = new Notification(str, sub, c);
+			if( blink )
+				n.blink();
+		}
 	}
 
 	public static function success(str:String, ?sub:String) {
@@ -64,8 +72,11 @@ class Notification extends dn.Process {
 	}
 
 	public static function warning(str:String, ?sub:String) {
-		if( !sameAsLast(str) )
-			new Notification(str, sub, 0xcb8d13);
+		if( !sameAsLast(str) ) {
+			var n = new Notification(str, sub, 0xcb8d13);
+			n.blink();
+		}
+
 	}
 
 	public static function appUpdate(str:String) {
@@ -75,8 +86,10 @@ class Notification extends dn.Process {
 
 	public static function error(str:String) {
 		App.LOG.error(str);
-		if( !sameAsLast(str) )
-			new Notification(str, 0xff0000);
+		if( !sameAsLast(str) ) {
+			var n = new Notification(str, 0xff0000);
+			n.blink();
+		}
 	}
 
 	public static function invalidIdentifier(id:String) {
@@ -119,13 +132,13 @@ class Notification extends dn.Process {
 	public function hide() {
 		if( destroyed || cd.hasSetS("hideOnce",Const.INFINITE) )
 			return;
-		elem.slideUp(100, function(_) destroy());
+		jNotif.slideUp(100, function(_) destroy());
 	}
 
 	override function onDispose() {
 		super.onDispose();
 
-		elem.remove();
-		elem = null;
+		jNotif.remove();
+		jNotif = null;
 	}
 }

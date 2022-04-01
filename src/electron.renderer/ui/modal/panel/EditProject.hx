@@ -172,6 +172,14 @@ class EditProject extends ui.modal.Panel {
 		}
 	}
 
+	function recommendSaving() {
+		if( !cd.hasSetS("saveReco",2) )
+			N.warning(
+				L.t._("Project file setting changed"),
+				L.t._("You should save the project at least once for this setting to apply its effects.")
+			);
+	}
+
 	function updateProjectForm() {
 		ui.Tip.clear();
 		var jForm = jContent.find("dl.form:first");
@@ -225,13 +233,18 @@ class EditProject extends ui.modal.Panel {
 		// Json minifiying
 		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onChange = editor.invalidateAllLevelsCache;
+		i.onChange = ()->{
+			editor.invalidateAllLevelsCache;
+			recommendSaving();
+		}
 
 		// Simplified format
 		var i = Input.linkToHtmlInput( project.simplifiedExport, jForm.find("[name=simplifiedExport]") );
 		i.onChange = ()->{
 			editor.invalidateAllLevelsCache();
 			editor.ge.emit(ProjectSettingsChanged);
+			if( project.simplifiedExport )
+				recommendSaving();
 		}
 		var jLocate = jForm.find(".simplifiedExport .locate");
 		if( project.simplifiedExport ) {
@@ -249,7 +262,10 @@ class EditProject extends ui.modal.Panel {
 		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");
 		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
-		i.onValueChange = (v)->editor.invalidateAllLevelsCache();
+		i.onValueChange = (v)->{
+			editor.invalidateAllLevelsCache();
+			recommendSaving();
+		}
 		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir(), false) );
@@ -264,6 +280,8 @@ class EditProject extends ui.modal.Panel {
 			(v)->{
 				project.pngFilePattern = null;
 				project.imageExportMode = v;
+				if( v!=None )
+					recommendSaving();
 			},
 			(v)->switch v {
 				case None: L.t._("Don't export any image");
@@ -328,8 +346,12 @@ class EditProject extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = function(v) {
-			if( v )
-				new ui.modal.dialog.Message(Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project");
+			if( v ) {
+				new ui.modal.dialog.Message(
+					Lang.t._("Disclaimer: Tiled export is only meant to load your LDtk project in a game framework that only supports Tiled files. It is recommended to write your own LDtk JSON parser, as some LDtk features may not be supported.\nIt's not so complicated, I promise :)"), "project",
+					()->recommendSaving()
+				);
+			}
 		}
 		var jLocate = jForm.find("#tiled").siblings(".locate").empty();
 		if( project.exportTiled )

@@ -2204,7 +2204,7 @@ textarea {
 		border-top-left-radius: 3px;
 		border-bottom-left-radius: 3px;
 		box-shadow: 0px 2px 4px black, 0px 8px 4px rgba(0, 0, 0, 0.5);
-		animation: 1s anim_slideUp, 1s 0.25s anim_blinkOnce;
+		animation: 1.3s anim_slideUp;
 
 		.content {
 			padding: 6px;
@@ -2223,6 +2223,10 @@ textarea {
 			pre {
 				font-size: 8pt;
 			}
+		}
+
+		&.blink {
+			animation: 1s anim_slideUp, 1.5s 0.25s anim_blinkOnce;
 		}
 	}
 

@@ -1,7 +1,7 @@
 package ui.modal.dialog;
 
 class Message extends ui.modal.Dialog {
-	public function new(str:dn.data.GetText.LocaleString, ?iconId:String) {
+	public function new(str:dn.data.GetText.LocaleString, ?iconId:String, ?onClose:Void->Void) {
 		super("message");
 
 		if( iconId!=null ) {
@@ -14,6 +14,9 @@ class Message extends ui.modal.Dialog {
 
 		var p = '<p>' + StringTools.replace(str,"\n","</p><p>") + '</p>';
 		jMsg.append(p);
+
+		if( onClose!=null )
+			this.onCloseCb = onClose;
 
 		addClose();
 	}
