@@ -224,10 +224,6 @@ class EditProject extends ui.modal.Panel {
 		// Simplified format
 		var i = Input.linkToHtmlInput( project.simplifiedExport, jForm.find("[name=simplifiedExport]") );
 		i.onChange = ()->{
-			if( project.simplifiedExport ) {
-				project.imageExportMode = OneImagePerLayer;
-				project.pngFilePattern = null;
-			}
 			editor.invalidateAllLevelsCache();
 			editor.ge.emit(ProjectSettingsChanged);
 		}
@@ -256,6 +252,7 @@ class EditProject extends ui.modal.Panel {
 				case None: L.t._("Don't export any image");
 				case OneImagePerLayer: L.t._("Export one PNG for each individual layer, in each level");
 				case OneImagePerLevel: L.t._("Export a single PNG per level (all layers are merged down)");
+				case LayersAndLevels: L.t._("Export images for both layers and levels");
 			}
 		);
 		i.linkEvent(ProjectSettingsChanged);

@@ -191,7 +191,11 @@ class LayerRender {
 	}
 
 
-	public function createPngs(p:data.Project, l:data.Level, li:data.inst.LayerInstance) : Array<{ suffix:Null<String>, bytes:haxe.io.Bytes }> {
+	/**
+		Generate all PNGs for a single layer instance (auto-layer IntGrids generate both tiles & pixel images)
+		Note: if `secondarySuffix` is null, then the output image is the "main" render of this layer.
+	**/
+	public function createPngs(p:data.Project, l:data.Level, li:data.inst.LayerInstance) : Array<{ secondarySuffix:Null<String>, bytes:haxe.io.Bytes, obj:Null<h2d.Object> }> {
 		var out = [];
 		switch li.def.type {
 			case IntGrid, Tiles, AutoLayer:
@@ -203,9 +207,11 @@ class LayerRender {
 					wrapper.addChild(root);
 					root.alpha = li.def.displayOpacity; // apply layer alpha
 					wrapper.drawTo(tex);
+					var pixels = tex.capturePixels();
 					out.push({
-						suffix: null,
-						bytes: tex.capturePixels().toPNG(),
+						secondarySuffix: null,
+						bytes: pixels.toPNG(),
+						obj: wrapper,
 					});
 				}
 
@@ -218,8 +224,9 @@ class LayerRender {
 							pixels.setPixel( cx, cy, C.addAlphaF(li.getIntGridColorAt(cx,cy)) );
 					}
 					out.push({
-						suffix: "int",
+						secondarySuffix: "int",
 						bytes: pixels.toPNG(),
+						obj: null,
 					});
 				}
 

@@ -85,7 +85,7 @@ class Exporter {
 		log.fileOp("  Initializing dir...");
 		NT.createDirs(outputPath.full);
 		if( removeAllFilesInDir )
-			JsTools.emptyDir(outputPath.full);
+			JsTools.removeDirFiles(outputPath.full);
 	}
 
 	function remapRelativePath(relPath:String) : String {

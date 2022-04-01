@@ -13,7 +13,7 @@ private enum SavingState {
 	SavingLayerImages;
 	ExportingTiled;
 	ExportingGMS;
-	WritingSimplifiedEntities;
+	WritingSimplifiedFormat;
 	Done;
 }
 
@@ -230,24 +230,44 @@ class ProjectSaver extends dn.Process {
 				else {
 					// Remove previous external levels
 					if( NT.fileExists(levelDir) )
-						JsTools.emptyDir(levelDir, [Const.LEVEL_EXTENSION]);
+						JsTools.removeDirFiles(levelDir, [Const.LEVEL_EXTENSION]);
 
 					beginNextState();
 				}
 
 
 			case SavingLayerImages:
-				var pngDir = project.getAbsExternalFilesDir()+"/png";
-				if( project.imageExportMode!=None ) {
+				var baseDir = project.simplifiedExport
+					? project.getAbsExternalFilesDir()+"/simplified"
+					: project.getAbsExternalFilesDir()+"/png";
+
+				if( project.getImageExportMode()!=None ) {
 					logState();
 					var ops = [];
 					var count = 0;
-					initDir(pngDir, "png");
+
+					// Init dir
+					if( project.simplifiedExport ) {
+						if( NT.fileExists(baseDir) )
+							NT.removeDir(baseDir);
+						NT.createDirs(baseDir);
+					}
+					else
+						initDir(baseDir, "png");
+
 
 					// Export level layers
 					var lr = new display.LayerRender();
 					for( world in project.worlds )
 					for( level in world.levels ) {
+						var pngDir = baseDir;
+						if( project.simplifiedExport ) {
+							pngDir = baseDir + "/" + level.identifier;
+							initDir(pngDir, "png");
+						}
+						else
+							pngDir+="/png";
+
 						var level = level;
 
 						ops.push({
@@ -255,10 +275,11 @@ class ProjectSaver extends dn.Process {
 							cb: ()->{
 								log('Level ${level.identifier}...');
 
-								switch project.imageExportMode {
+								switch project.getImageExportMode() {
 									case None: // N/A
 
-									case OneImagePerLayer:
+									case OneImagePerLayer, LayersAndLevels:
+										var mainLayerImages = new Map();
 										for( li in level.layerInstances ) {
 											log('   -> Layer ${li.def.identifier}...');
 
@@ -269,12 +290,46 @@ class ProjectSaver extends dn.Process {
 
 											// Save PNGs
 											for(i in allImages) {
+												if( i.secondarySuffix==null )
+													mainLayerImages.set(li.layerDefUid, i);
 												var fp = dn.FilePath.fromDir(pngDir);
-												fp.fileName = project.getPngFileName(level, li.def, i.suffix);
+												fp.fileName = project.getPngFileName(
+													project.simplifiedExport ? "%layer_name" : null,
+													level,
+													li.def,
+													i.secondarySuffix
+												);
 												fp.extension = "png";
 												NT.writeFileBytes(fp.full, i.bytes);
 												count++;
 											}
+										}
+
+										// Both layers + levels export
+										if( project.getImageExportMode()==LayersAndLevels ) {
+											trace("levels");
+											var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+											var wrapper = new h2d.Object();
+											level.iterateLayerInstancesInRenderOrder( (li)->{
+												var img = mainLayerImages.get(li.layerDefUid);
+												if( img!=null && img.obj!=null ) {
+													wrapper.addChild(img.obj);
+													img.obj.alpha = li.def.displayOpacity;
+												}
+											});
+											wrapper.drawTo(tex);
+											var pngBytes = tex.capturePixels().toPNG();
+
+											// Save PNG
+											var fp = dn.FilePath.fromDir(pngDir);
+											fp.fileName = project.getPngFileName(
+												project.simplifiedExport ? "_full" : null,
+												level,
+												project.defs.layers[0]
+											);
+											fp.extension = "png";
+											NT.writeFileBytes(fp.full, pngBytes);
+											count++;
 										}
 
 									case OneImagePerLevel:
@@ -301,8 +356,8 @@ class ProjectSaver extends dn.Process {
 				}
 				else {
 					// Delete previous PNG dir
-					if( NT.fileExists(pngDir) )
-						NT.removeDir(pngDir);
+					if( NT.fileExists(baseDir) )
+						NT.removeDir(baseDir);
 					beginNextState();
 				}
 
@@ -362,8 +417,8 @@ class ProjectSaver extends dn.Process {
 				}
 
 
-			case WritingSimplifiedEntities:
-				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir() );
+			case WritingSimplifiedFormat:
+				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir()+"/simplified" );
 
 				if( project.simplifiedExport ) {
 					logState();
@@ -380,8 +435,8 @@ class ProjectSaver extends dn.Process {
 
 								// Write file
 								var fp = dirFp.clone();
-								fp.fileName = l.identifier;
-								fp.extension = "json";
+								fp.appendDirectory(l.identifier);
+								fp.fileWithExt = "data.json";
 								NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson, Full ) );
 							},
 						});
@@ -418,7 +473,7 @@ class ProjectSaver extends dn.Process {
 		if( !NT.fileExists(dirPath) )
 			NT.createDirs(dirPath);
 		else if( removeFileExt!=null )
-			JsTools.emptyDir(dirPath, [removeFileExt]);
+			JsTools.removeDirFiles(dirPath, [removeFileExt]);
 	}
 
 
@@ -459,7 +514,7 @@ class ProjectSaver extends dn.Process {
 
 			case ExportingGMS:
 
-			case WritingSimplifiedEntities:
+			case WritingSimplifiedFormat:
 
 			case Done:
 		}

@@ -664,7 +664,7 @@ class JsTools {
 
 	// *** File API (node) **************************************
 
-	public static function emptyDir(path:String, ?onlyExts:Array<String>) {
+	public static function removeDirFiles(path:String, ?onlyExts:Array<String>) {
 		if( !NT.fileExists(path) )
 			return;
 

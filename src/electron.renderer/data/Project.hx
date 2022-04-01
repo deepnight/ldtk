@@ -28,7 +28,9 @@ class Project {
 	public var externalLevels = false;
 	public var exportTiled = false;
 	public var simplifiedExport = false;
-	public var imageExportMode : ldtk.Json.ImageExportMode = None;
+
+	@:allow(ui.modal.panel.EditProject)
+	var imageExportMode : ldtk.Json.ImageExportMode = None;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 	public var levelNamePattern : String;
@@ -79,6 +81,9 @@ class Project {
 
 			case OneImagePerLevel:
 				"%level_name";
+
+			case LayersAndLevels:
+				"%level_name__%layer_name";
 		}
 	}
 
@@ -92,7 +97,14 @@ class Project {
 
 			case OneImagePerLevel:
 				"%level_idx-%level_name";
+
+			case LayersAndLevels:
+				"%level_idx-%level_name"; // N/A
 		}
+	}
+
+	public function getImageExportMode() : ldtk.Json.ImageExportMode {
+		return simplifiedExport ? LayersAndLevels : imageExportMode;
 	}
 
 	public function getImageExportFilePattern() {
