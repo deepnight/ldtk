@@ -2427,9 +2427,9 @@ namespace quicktype {
 
     /**
      * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
-     * `OneImagePerLevel`
+     * `OneImagePerLevel`, `LayersAndLevels`
      */
-    enum class ImageExportMode : int { NONE, ONE_IMAGE_PER_LAYER, ONE_IMAGE_PER_LEVEL };
+    enum class ImageExportMode : int { LAYERS_AND_LEVELS, NONE, ONE_IMAGE_PER_LAYER, ONE_IMAGE_PER_LEVEL };
 
     /**
      * This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
@@ -2468,6 +2468,7 @@ namespace quicktype {
         bool minify_json;
         int64_t next_uid;
         std::shared_ptr<std::string> png_file_pattern;
+        bool simplified_export;
         std::shared_ptr<std::string> tutorial_desc;
         std::shared_ptr<int64_t> world_grid_height;
         std::shared_ptr<int64_t> world_grid_width;
@@ -2608,7 +2609,7 @@ namespace quicktype {
 
         /**
          * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
-         * `OneImagePerLevel`
+         * `OneImagePerLevel`, `LayersAndLevels`
          */
         const ImageExportMode & get_image_export_mode() const { return image_export_mode; }
         ImageExportMode & get_mutable_image_export_mode() { return image_export_mode; }
@@ -2657,6 +2658,14 @@ namespace quicktype {
          */
         std::shared_ptr<std::string> get_png_file_pattern() const { return png_file_pattern; }
         void set_png_file_pattern(std::shared_ptr<std::string> value) { this->png_file_pattern = value; }
+
+        /**
+         * If TRUE, a very simplified will be generated on saving, for quicker & easier engine
+         * integration.
+         */
+        const bool & get_simplified_export() const { return simplified_export; }
+        bool & get_mutable_simplified_export() { return simplified_export; }
+        void set_simplified_export(const bool & value) { this->simplified_export = value; }
 
         /**
          * This optional description is used by LDtk Samples to show up some informations and
@@ -3572,6 +3581,7 @@ namespace nlohmann {
         x.set_minify_json(j.at("minifyJson").get<bool>());
         x.set_next_uid(j.at("nextUid").get<int64_t>());
         x.set_png_file_pattern(quicktype::get_optional<std::string>(j, "pngFilePattern"));
+        x.set_simplified_export(j.at("simplifiedExport").get<bool>());
         x.set_tutorial_desc(quicktype::get_optional<std::string>(j, "tutorialDesc"));
         x.set_world_grid_height(quicktype::get_optional<int64_t>(j, "worldGridHeight"));
         x.set_world_grid_width(quicktype::get_optional<int64_t>(j, "worldGridWidth"));
@@ -3605,6 +3615,7 @@ namespace nlohmann {
         j["minifyJson"] = x.get_minify_json();
         j["nextUid"] = x.get_next_uid();
         j["pngFilePattern"] = x.get_png_file_pattern();
+        j["simplifiedExport"] = x.get_simplified_export();
         j["tutorialDesc"] = x.get_tutorial_desc();
         j["worldGridHeight"] = x.get_world_grid_height();
         j["worldGridWidth"] = x.get_world_grid_width();
@@ -3923,7 +3934,8 @@ namespace nlohmann {
     }
 
     inline void from_json(const json & j, quicktype::ImageExportMode & x) {
-        if (j == "None") x = quicktype::ImageExportMode::NONE;
+        if (j == "LayersAndLevels") x = quicktype::ImageExportMode::LAYERS_AND_LEVELS;
+        else if (j == "None") x = quicktype::ImageExportMode::NONE;
         else if (j == "OneImagePerLayer") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER;
         else if (j == "OneImagePerLevel") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL;
         else throw "Input JSON does not conform to schema";
@@ -3931,6 +3943,7 @@ namespace nlohmann {
 
     inline void to_json(json & j, const quicktype::ImageExportMode & x) {
         switch (x) {
+            case quicktype::ImageExportMode::LAYERS_AND_LEVELS: j = "LayersAndLevels"; break;
             case quicktype::ImageExportMode::NONE: j = "None"; break;
             case quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
             case quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;

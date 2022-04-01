@@ -2055,8 +2055,9 @@ class IdentifierStyle(Enum):
 
 class ImageExportMode(Enum):
     """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
-    `OneImagePerLevel`
+    `OneImagePerLevel`, `LayersAndLevels`
     """
+    LAYERS_AND_LEVELS = "LayersAndLevels"
     NONE = "None"
     ONE_IMAGE_PER_LAYER = "OneImagePerLayer"
     ONE_IMAGE_PER_LEVEL = "OneImagePerLevel"
@@ -2129,7 +2130,7 @@ class LdtkJSON:
     """
     identifier_style: IdentifierStyle
     """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
-    `OneImagePerLevel`
+    `OneImagePerLevel`, `LayersAndLevels`
     """
     image_export_mode: ImageExportMode
     """File format version"""
@@ -2149,6 +2150,10 @@ class LdtkJSON:
     next_uid: int
     """File naming pattern for exported PNGs"""
     png_file_pattern: Optional[str]
+    """If TRUE, a very simplified will be generated on saving, for quicker & easier engine
+    integration.
+    """
+    simplified_export: bool
     """This optional description is used by LDtk Samples to show up some informations and
     instructions.
     """
@@ -2184,7 +2189,7 @@ class LdtkJSON:
     """
     worlds: List[World]
 
-    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
+    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
         self.forced_refs = forced_refs
         self.app_build_id = app_build_id
         self.backup_limit = backup_limit
@@ -2209,6 +2214,7 @@ class LdtkJSON:
         self.minify_json = minify_json
         self.next_uid = next_uid
         self.png_file_pattern = png_file_pattern
+        self.simplified_export = simplified_export
         self.tutorial_desc = tutorial_desc
         self.world_grid_height = world_grid_height
         self.world_grid_width = world_grid_width
@@ -2242,12 +2248,13 @@ class LdtkJSON:
         minify_json = from_bool(obj.get("minifyJson"))
         next_uid = from_int(obj.get("nextUid"))
         png_file_pattern = from_union([from_none, from_str], obj.get("pngFilePattern"))
+        simplified_export = from_bool(obj.get("simplifiedExport"))
         tutorial_desc = from_union([from_none, from_str], obj.get("tutorialDesc"))
         world_grid_height = from_union([from_none, from_int], obj.get("worldGridHeight"))
         world_grid_width = from_union([from_none, from_int], obj.get("worldGridWidth"))
         world_layout = from_union([from_none, WorldLayout], obj.get("worldLayout"))
         worlds = from_list(World.from_dict, obj.get("worlds"))
-        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, identifier_style, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
+        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, identifier_style, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -2275,6 +2282,7 @@ class LdtkJSON:
         result["minifyJson"] = from_bool(self.minify_json)
         result["nextUid"] = from_int(self.next_uid)
         result["pngFilePattern"] = from_union([from_none, from_str], self.png_file_pattern)
+        result["simplifiedExport"] = from_bool(self.simplified_export)
         result["tutorialDesc"] = from_union([from_none, from_str], self.tutorial_desc)
         result["worldGridHeight"] = from_union([from_none, from_int], self.world_grid_height)
         result["worldGridWidth"] = from_union([from_none, from_int], self.world_grid_width)
