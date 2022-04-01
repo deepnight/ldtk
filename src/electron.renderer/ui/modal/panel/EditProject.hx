@@ -177,6 +177,12 @@ class EditProject extends ui.modal.Panel {
 		var jForm = jContent.find("dl.form:first");
 		jForm.off().find("*").off();
 
+		// Simplified format adjustments
+		if( project.simplifiedExport )
+			jForm.find(".notSimplified").hide();
+		else
+			jForm.find(".notSimplified").show();
+
 		// File extension
 		var ext = project.filePath.extension;
 		var usesAppDefault = ext==Const.FILE_EXTENSION;
@@ -259,7 +265,7 @@ class EditProject extends ui.modal.Panel {
 		var jLocate = jImgExport.find(".locate").empty();
 		pngPatternEditor.jEditor.hide();
 		jForm.find(".imageExportOnly").hide();
-		if( project.imageExportMode!=None ) {
+		if( project.imageExportMode!=None && !project.simplifiedExport ) {
 			jForm.find(".imageExportOnly").show();
 			jLocate.append( JsTools.makeExploreLink(project.getAbsExternalFilesDir()+"/png", false) );
 
