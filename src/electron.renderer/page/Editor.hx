@@ -1056,6 +1056,8 @@ class Editor extends Page {
 			jMouseCoords.find(".level").hide();
 		}
 		else {
+			jMouseCoords.find(".level").show();
+			jMouseCoords.find(".grid").show();
 			if( curLayerInstance!=null )
 				jMouseCoords.find(".grid").text('Grid = ${m.cx},${m.cy}');
 			else
