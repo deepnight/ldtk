@@ -63,9 +63,9 @@ class Notification extends dn.Process {
 			msg("Copied to clipboard.", 0x0);
 	}
 
-	public static function warning(str:String) {
+	public static function warning(str:String, ?sub:String) {
 		if( !sameAsLast(str) )
-			new Notification(str, 0xcb8d13);
+			new Notification(str, sub, 0xcb8d13);
 	}
 
 	public static function appUpdate(str:String) {

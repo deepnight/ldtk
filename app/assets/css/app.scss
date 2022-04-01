@@ -421,7 +421,7 @@ button {
 
 		text-align: left;
 
-		animation: slideUp 2s;
+		animation: anim_slideUp 2s;
 		box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
 
 		strong {
@@ -2183,6 +2183,8 @@ textarea {
 	flex-direction: column;
 	align-items: flex-end;
 
+	padding-left: 10px;
+	padding-top: 10px;
 	padding-bottom: 30px;
 	bottom: 10vh;
 	right: 0px;
@@ -2197,12 +2199,12 @@ textarea {
 		margin-bottom: 8px;
 
 		background-color: $bgDark;
-		border: 1px dotted $bgLight;
+		border: 1px solid $bgLight;
 		border-right: 8px solid $bgLight;
 		border-top-left-radius: 3px;
 		border-bottom-left-radius: 3px;
-		box-shadow: 0px 8px 4px rgba(0, 0, 0, 0.5);
-		animation: slideUp 1s;
+		box-shadow: 0px 2px 4px black, 0px 8px 4px rgba(0, 0, 0, 0.5);
+		animation: 1s anim_slideUp, 1s 0.25s anim_blinkOnce;
 
 		.content {
 			padding: 6px;
@@ -2276,7 +2278,7 @@ textarea {
 	}
 }
 
-@keyframes slideUp {
+@keyframes anim_slideUp {
 	from {
 		max-height: 0;
 		overflow: hidden;
@@ -2284,6 +2286,13 @@ textarea {
 	to {
 		max-height: 200;
 	}
+}
+
+@keyframes anim_blinkOnce {
+	0% { filter: brightness(7); }
+	10% { filter: brightness(3); }
+	40% { filter: brightness(1.5); }
+	100% { filter: brightness(1); }
 }
 
 .lastChance {
@@ -2297,7 +2306,7 @@ textarea {
 	background-color: $darkRed;
 	border-left: 4px solid $red;
 	box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
-	animation: slideUp 1.2s;
+	animation: anim_slideUp 1.2s;
 
 	.content {
 		display: grid;
@@ -4551,7 +4560,7 @@ canvas#webgl {
 			text-align: center;
 			border-radius: 3px;
 			background-color: $orange;
-			animation: slideUp 1s;
+			animation: anim_slideUp 1s;
 
 		}
 	}
