@@ -265,8 +265,6 @@ class ProjectSaver extends dn.Process {
 							pngDir = baseDir + "/" + level.identifier;
 							initDir(pngDir, "png");
 						}
-						else
-							pngDir+="/png";
 
 						var level = level;
 
