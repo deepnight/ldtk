@@ -307,14 +307,15 @@ class ProjectSaver extends dn.Process {
 
 										// Both layers + levels export
 										if( project.getImageExportMode()==LayersAndLevels ) {
-											trace("levels");
+											// Rebuild level render
 											var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
 											var wrapper = new h2d.Object();
 											level.iterateLayerInstancesInRenderOrder( (li)->{
 												var img = mainLayerImages.get(li.layerDefUid);
-												if( img!=null && img.obj!=null ) {
-													wrapper.addChild(img.obj);
-													img.obj.alpha = li.def.displayOpacity;
+												if( img!=null && img.tex!=null ) {
+													var t = h2d.Tile.fromTexture(img.tex);
+													var bmp = new h2d.Bitmap(t, wrapper);
+													bmp.alpha = li.def.displayOpacity;
 												}
 											});
 											wrapper.drawTo(tex);
@@ -322,11 +323,9 @@ class ProjectSaver extends dn.Process {
 
 											// Save PNG
 											var fp = dn.FilePath.fromDir(pngDir);
-											fp.fileName = project.getPngFileName(
-												project.simplifiedExport ? "_full" : null,
-												level,
-												project.defs.layers[0]
-											);
+											fp.fileName = project.simplifiedExport
+												? "_composite"
+												: project.getPngFileName(level, project.defs.layers[0]);
 											fp.extension = "png";
 											NT.writeFileBytes(fp.full, pngBytes);
 											count++;
