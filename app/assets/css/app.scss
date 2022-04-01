@@ -1614,11 +1614,16 @@ dl.form {
 				flex: 0 1 30px;
 			}
 		}
+		button.tiny {
+			padding: 4px;
+		}
 
 		a[href] {
+			flex-grow: 0;
 			font-size: 0.8em;
 			margin-left: 8px;
 			align-self: center;
+			white-space: nowrap;
 		}
 
 		info,

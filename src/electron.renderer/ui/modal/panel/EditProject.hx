@@ -233,6 +233,17 @@ class EditProject extends ui.modal.Panel {
 			editor.invalidateAllLevelsCache();
 			editor.ge.emit(ProjectSettingsChanged);
 		}
+		var jLocate = jForm.find(".simplifiedExport .locate");
+		if( project.simplifiedExport ) {
+			jLocate.show().click(_->{
+				if( NT.fileExists( project.getAbsExternalFilesDir() ) )
+					JsTools.locateFile( project.getAbsExternalFilesDir()+"/simplified", false);
+				else
+					JsTools.locateFile( project.filePath.full, true);
+			});
+		}
+		else
+			jLocate.hide();
 
 		// External level files
 		jForm.find(".externRecommend").css("visibility", project.countAllLevels()>=10 && !project.externalLevels ? "visible" : "hidden");

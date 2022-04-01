@@ -14,6 +14,23 @@
 	<dt class="full"> <h3>Project file settings</h3> </dt>
 
 	<dt>
+		<label for="minify">Super simple export ❤</label>
+		<info tip="bottom">
+			Enable this to export your level data in a secondary super simple format, ideal for quick integration in ANY existing engine.
+			You will get:
+			 - one PNG per layer,
+			 - one composite PNG per level,
+			 - a single JSON file per level containing main level infos and entities.
+
+		</info>
+	</dt>
+	<dd class="simplifiedExport">
+		<input type="checkbox" name="simplifiedExport" id="simplifiedExport"/>
+		<button class="gray locate tiny"> <span class="icon locate"></span> </button>
+		<a href="https://ldtk.io/go/simple">Learn more about this format</a>
+	</dd>
+
+	<dt>
 		<label for="externalLevels">Save levels to separate files</label>
 		<info>
 			Enable this to separate the main project file (containing settings, definitions etc.) from the level files (one file per level, stored in a sub-folder).
@@ -64,16 +81,6 @@
 	</dt>
 	<dd>
 		<input type="checkbox" name="minify" id="minify"/>
-	</dd>
-
-	<dt>
-		<label for="minify">Super simple export</label>
-		<info>
-			Enable this to export your level data in a secondary super simple format, which requires very few parsing. Ideal for quick integration in any existing engine.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" name="simplifiedExport" id="simplifiedExport"/>
 	</dd>
 
 	<dt class="notSimplified">
