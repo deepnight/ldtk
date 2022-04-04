@@ -165,11 +165,20 @@ class World {
 		for(fi in ei.fieldInstances) {
 			switch fi.def.type {
 				case F_EntityRef:
-					for(i in 0...fi.getArrayLength()) {
+					var i = 0;
+					while( i<fi.getArrayLength() ) {
 						var oldIid = fi.getEntityRefIid(i);
 						if( remaps.exists(oldIid) ) {
 							var tei = _project.getEntityInstanceByIid( remaps.get(oldIid) );
 							fi.setEntityRefTo(i, ei, tei);
+							i++;
+						}
+						else {
+							var tei = fi.getEntityRefInstance(i);
+							if( tei._li.levelId != copy.uid )
+								fi.removeArrayValue(i);
+							else
+								i++;
 						}
 					}
 				case _:
