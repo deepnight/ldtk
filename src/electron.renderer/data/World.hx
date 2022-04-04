@@ -144,6 +144,38 @@ class World {
 		for(li in copy.layerInstances)
 			li.levelId = copy.uid;
 
+		// Init IIDs
+		var remaps = new Map();
+		inline function _remap(iid:String) : String {
+			var newIid = _project.generateUniqueId_UUID();
+			remaps.set(iid, newIid);
+			return newIid;
+		}
+		for(li in copy.layerInstances) {
+			li.iid = _remap(li.iid);
+			for( ei in li.entityInstances ) {
+				ei.iid = _remap(ei.iid);
+				_project.registerEntityInstance(ei);
+			}
+		}
+
+		// Remap IID references in fields
+		for(li in copy.layerInstances)
+		for(ei in li.entityInstances)
+		for(fi in ei.fieldInstances) {
+			switch fi.def.type {
+				case F_EntityRef:
+					for(i in 0...fi.getArrayLength()) {
+						var oldIid = fi.getEntityRefIid(i);
+						if( remaps.exists(oldIid) ) {
+							var tei = _project.getEntityInstanceByIid( remaps.get(oldIid) );
+							fi.setEntityRefTo(i, ei, tei);
+						}
+					}
+				case _:
+			}
+		}
+
 		// Pick unique identifier
 		copy.identifier = _project.fixUniqueIdStr(l.identifier, (id)->_project.isLevelIdentifierUnique(id));
 
