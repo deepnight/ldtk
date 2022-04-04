@@ -245,6 +245,9 @@ class LevelTimeline {
 	function prolongatePreviousStates() {
 		var s = states.get(curStateIdx);
 
+		if( s.layerJsons==null )
+			s.layerJsons = new Map(); // not sure why this could happen
+
 		// Layer JSONs
 		for(li in level.layerInstances)
 			if( !s.layerJsons.exists(li.layerDefUid) )
