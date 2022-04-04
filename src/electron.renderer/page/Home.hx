@@ -354,6 +354,10 @@ class Home extends Page {
 						cb: JsTools.locateFile.bind(fp.directory, false),
 					},
 					{
+						label: L.t._("New project in this folder"),
+						cb: onNew.bind(fp.directory),
+					},
+					{
 						label: L.t._("Remove from history"),
 						cb: ()->{
 							App.ME.unregisterRecentDir(fp.directory);
@@ -437,8 +441,8 @@ class Home extends Page {
 		});
 	}
 
-	public function onNew() {
-		dn.js.ElectronDialogs.saveFileAs(["."+Const.FILE_EXTENSION], App.ME.getDefaultDialogDir(), function(filePath) {
+	public function onNew(?openPath:String) {
+		dn.js.ElectronDialogs.saveFileAs(["."+Const.FILE_EXTENSION], openPath!=null ? openPath : App.ME.getDefaultDialogDir(), function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "ldtk";
 

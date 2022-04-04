@@ -1,5 +1,6 @@
 # 1.1.1
 
+- You can right click on a folder on the Home screen to create a new project there.
 - Fixed IID's values and Entity references when duplicating a level.
 - Fixed unexpected fill color for "hollow" Entities that use a Tile as a texture.
 
