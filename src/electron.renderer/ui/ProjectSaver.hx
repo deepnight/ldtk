@@ -427,19 +427,37 @@ class ProjectSaver extends dn.Process {
 					var p = new ui.modal.Progress( "Simplified data...", ()->beginNextState() );
 					for(w in project.worlds)
 					for(l in w.levels) {
+						// Main level JSON
 						p.addOp({
 							label: l.identifier,
 							cb: ()->{
 								// Build JSON
 								var simpleJson = l.toSimplifiedJson();
 
-								// Write file
+								// Write data.json file
 								var fp = dirFp.clone();
 								fp.appendDirectory(l.identifier);
 								fp.fileWithExt = "data.json";
 								NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson, Full ) );
 							},
 						});
+
+						// IntGrids as CSV
+						for( li in l.layerInstances) {
+							if( li.def.type!=IntGrid )
+								continue;
+							var csv = new exporter.Csv(li.cWid, li.cHei);
+							for(cy in 0...li.cHei)
+							for(cx in 0...li.cWid)
+								csv.set(cx,cy, li.getIntGrid(cx,cy));
+
+							// Write CSV file
+							var fp = dirFp.clone();
+							fp.appendDirectory(l.identifier);
+							fp.fileName = li.def.identifier;
+							fp.extension = "csv";
+							NT.writeFileString( fp.full, csv.toString2D() );
+						}
 					}
 				}
 				else {
