@@ -1,3 +1,8 @@
+# 1.1.1
+
+- Fixed IID's values and Entity references when duplicating a level.
+- Fixed unexpected fill color for "hollow" Entities that use a Tile as a texture.
+
 # 1.1.0 - Introducing the Super Simple export
 
 ## Super Simple export
