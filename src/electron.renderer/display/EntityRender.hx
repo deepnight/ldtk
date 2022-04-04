@@ -108,7 +108,8 @@ class EntityRender extends dn.Process {
 			}
 			else {
 				// Bounding box
-				g.beginFill(color, ed.fillOpacity);
+				if( !ed.hollow )
+					g.beginFill(color, ed.fillOpacity);
 				g.lineStyle(1, C.toWhite(color, 0.3), ed.lineOpacity);
 				g.drawRect(0, 0, w, h);
 

@@ -229,6 +229,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput(curEntity.fillOpacity, jEntityForm.find("#fillOpacity"));
 		i.setBounds(0, 1);
 		i.enablePercentageMode();
+		i.setEnabled(!curEntity.hollow);
 		i.linkEvent( EntityDefChanged );
 
 		var i = Input.linkToHtmlInput(curEntity.lineOpacity, jEntityForm.find("#lineOpacity"));
