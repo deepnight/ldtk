@@ -46,7 +46,7 @@ class EnumSync extends ui.modal.Dialog {
 			var jValuesList = new J('<ul class="values"/>');
 			jValuesList.appendTo(jEnum);
 
-			// List possible rename targets
+			// List possible "rename value" targets
 			var renameValues = [];
 			for(op in ops) {
 				if( op.enumId!=enumId )
