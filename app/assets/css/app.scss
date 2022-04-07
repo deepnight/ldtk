@@ -3224,6 +3224,17 @@ textarea {
 		}
 
 
+		select {
+			display: inline-block;
+			margin-left: 16px;
+			background-color: $bgMed;
+
+			&.required {
+				border: 1px solid $red;
+				color: $lightRed;
+			}
+		}
+
 		ul.log {
 			li:hover {
 				outline: none;
@@ -3232,6 +3243,7 @@ textarea {
 			li.enum {
 				.title {
 					font-size: 12pt;
+					white-space: nowrap;
 				}
 
 				&.added {
@@ -3275,17 +3287,6 @@ textarea {
 					li.removed {
 						color: $red;
 						text-decoration: line-through;
-					}
-
-					select {
-						display: inline-block;
-						margin-left: 16px;
-						background-color: $bgMed;
-
-						&.required {
-							border: 1px solid $red;
-							color: $lightRed;
-						}
 					}
 				}
 			}

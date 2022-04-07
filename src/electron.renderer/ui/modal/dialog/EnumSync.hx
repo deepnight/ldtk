@@ -32,11 +32,18 @@ class EnumSync extends ui.modal.Dialog {
 		// Group ops by enums
 		var enumIds = [];
 		var changedEnums = new Map();
-		for(op in ops)
+		var renameEnums = [];
+		for(op in ops) {
+			switch op.type {
+				case AddEnum(values): renameEnums.push(op.enumId);
+				case _:
+			}
+
 			if( !changedEnums.exists(op.enumId) ) {
 				changedEnums.set(op.enumId, true);
 				enumIds.push(op.enumId);
 			}
+		}
 
 		// Print changes
 		var jEnumsList = jContent.find(".log");
@@ -96,6 +103,35 @@ class EnumSync extends ui.modal.Dialog {
 					case RemoveEnum(used):
 						jEnum.find(".title").append('<div class="label removed">Removed</div>');
 						jEnum.addClass("removed");
+
+						// Select to rename enums
+						if( renameEnums.length>0 ) {
+							var initialOp = op;
+							var jSelect = new J('<select/>');
+							jSelect.appendTo( jEnum.find(".title") );
+							jSelect.append('<option value="">-- Choose an action --</option>');
+							for(v in renameEnums)
+								jSelect.append('<option value="rename:$v" to="$v">Rename ${initialOp.enumId} ➜ $v</option>');
+							jSelect.append('<option value="remove">REMOVE FROM PROJECT</option>');
+							jSelect.change( _->{
+								checkActions();
+								N.notImplemented();
+								// var raw = Std.string( jSelect.val() );
+								// if( raw.indexOf("rename")==0 ) {
+								// 	// Rename enums
+								// 	ops[opIdx] = {
+								// 		type: Special,
+								// 		enumId: initialOp.enumId,
+								// 		cb: (p)->{
+								// 			p.defs.getEnumDef(initialOp.enumId).identifier = raw.split(":")[1];
+								// 			// initialOp.cb(p); // still delete old value
+								// 		}
+								// 	}
+								// }
+								// else
+								// 	ops[opIdx] = initialOp; // back to initial operation
+							});
+						}
 
 					case AddValue(val):
 						jLi.append( val );

@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458150,
-	"nextUid": 15,
+	"appBuildId": 458152,
+	"nextUid": 20,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -90,10 +90,10 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "local",
-					"__type": "LocalEnum.Local",
-					"uid": 11,
-					"type": "F_Enum(9)",
+					"identifier": "cdb",
+					"__type": "ExternEnum.Test",
+					"uid": 19,
+					"type": "F_Enum(15)",
 					"isArray": false,
 					"canBeNull": false,
 					"arrayMinLength": null,
@@ -125,7 +125,20 @@
 		{ "id": "Local1", "tileId": null, "color": 0, "__tileSrcRect": null },
 		{ "id": "Local2", "tileId": null, "color": 0, "__tileSrcRect": null },
 		{ "id": "Local3", "tileId": null, "color": 0, "__tileSrcRect": null }
-	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [
+		{ "identifier": "Test", "uid": 15, "values": [
+			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Foo", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
+		{ "identifier": "Third", "uid": 17, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
+		{ "identifier": "Other", "uid": 18, "values": [
+			{ "id": "Cool", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Some", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Thing", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] }
+	], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
@@ -184,9 +197,9 @@
 							"height": 16,
 							"defUid": 1,
 							"px": [104,104],
-							"fieldInstances": [{ "__identifier": "local", "__value": "Local0", "__type": "LocalEnum.Local", "__tile": null, "defUid": 11, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "Foo", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["Local0"]
+								"params": ["Foo"]
 							}] }]
 						}
 					]
