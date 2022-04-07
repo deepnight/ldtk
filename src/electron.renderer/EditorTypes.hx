@@ -141,14 +141,18 @@ typedef ParsedExternalEnum = {
 
 typedef EnumSyncOp = {
 	var type : SyncOp;
-	var desc: String;
+	var enumId : String;
 	var cb: data.Project->Void;
 }
 
 enum SyncOp {
-	Add;
-	Remove(used:Bool);
-	ChecksumUpdated;
+	AddEnum(values:Array<String>);
+	RemoveEnum(used:Bool);
+
+	AddValue(val:String);
+	RemoveValue(val:String, used:Bool);
+
+	Special;
 	DateUpdated;
 }
 

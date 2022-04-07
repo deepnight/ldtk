@@ -739,6 +739,18 @@ class FieldInstance {
 	}
 
 
+	public function renameEnumValue(oldV:String, newV:String) {
+		trace("rename "+oldV+"=>"+newV);
+		for(i in 0...getArrayLength()) {
+			trace(getEnumValue(i));
+			if( getEnumValue(i)==oldV ) {
+				parseValue(i, newV);
+				trace(" => "+getEnumValue(i));
+			}
+		}
+	}
+
+
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );
 		return isUsingDefault(arrayIdx) ? def.getEnumDefault() : switch internalValues[arrayIdx] {

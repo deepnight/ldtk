@@ -1,61 +1,169 @@
 package ui.modal.dialog;
 
 class EnumSync extends ui.modal.Dialog {
-	public function new(ops:Array<EnumSyncOp>, filePath:String, onSync:Array<EnumSyncOp>->Void) {
+	// TODO close existing EnumSyncs
+
+	var jConfirm : js.jquery.JQuery;
+
+	public function new(ops:Array<EnumSyncOp>, relSourcePath:String, onSync:Array<EnumSyncOp>->Void) {
 		super();
 
-		var fileName = dn.FilePath.fromFile(filePath).fileWithExt;
+		var fileName = dn.FilePath.fromFile(relSourcePath).fileWithExt;
 		loadTemplate("sync");
 		jContent.find("h2 .file").text( fileName );
-
-		// // Add "DateUpdated" line
-		// log = log.copy();
-		// log.push({ op:DateUpdated, str:'File date of $fileName' });
 
 		// Warning
 		jContent.find(".warning").hide();
 		for(op in ops)
 			switch op.type {
-				case Add:
-				case ChecksumUpdated:
+				case AddEnum(_):
+				case AddValue(val):
 				case DateUpdated:
-				case Remove(used): if( used ) jContent.find(".warning").show();
+				case Special:
+				case RemoveEnum(used), RemoveValue(_,used):
+					if( used )
+						jContent.find(".warning").show();
 			}
 
 		// Hide safe notice
 		if( jContent.find(".warning").is(":visible") )
 			jContent.find(".safe").hide();
 
-		// Log
-		var jList = jContent.find(".log");
-		for(op in ops) {
-			var li = new J('<li></li>');
-			var label = op.desc;
-			switch op.type {
-				case Add: li.append('<span class="op">New</op>');
-
-				case Remove(used):
-					li.append('<span class="op">Removed</op>');
-					if( !used )
-						li.addClass("unused");
-					label += used ? L.t._(" (USED IN PROJECT!)") : L.t._(" (not used in this project)");
-
-				case ChecksumUpdated:
-					li.append('<span class="op">No change</op>');
-
-				case DateUpdated:
-					li.append('<span class="op">Updated</op>');
+		// Group ops by enums
+		var enumIds = [];
+		var changedEnums = new Map();
+		for(op in ops)
+			if( !changedEnums.exists(op.enumId) ) {
+				changedEnums.set(op.enumId, true);
+				enumIds.push(op.enumId);
 			}
-			li.append(label);
-			li.addClass("op"+op.type.getName());
-			li.appendTo(jList);
+
+		// Print changes
+		var jEnumsList = jContent.find(".log");
+		for(enumId in enumIds) {
+			var jEnum = new J('<li class="enum"/>').appendTo(jEnumsList);
+			jEnum.append('<div class="title">$enumId</div>');
+			var jValuesList = new J('<ul class="values"/>');
+			jValuesList.appendTo(jEnum);
+
+			// List possible rename targets
+			var renameValues = [];
+			for(op in ops) {
+				if( op.enumId!=enumId )
+					continue;
+
+				switch op.type {
+					case AddValue(val): renameValues.push(val);
+					case _:
+				}
+			}
+
+			// List known values
+			var ed = project.defs.getEnumDef(enumId);
+			if( ed!=null )
+				for(v in ed.values)
+					jValuesList.append('<li value="${v.id}">${v.id}</li>');
+
+			var opIdx = -1;
+			for(op in ops) {
+				opIdx++;
+				var opIdx = opIdx;
+
+				if( op.enumId!=enumId )
+					continue;
+
+				var jLi = new J('<li/>');
+				jLi.appendTo(jValuesList);
+				switch op.type {
+					case DateUpdated:
+
+					case AddEnum(values):
+						jEnum.find(".title").append('<div class="label added">Added</div>');
+						jEnum.addClass("added");
+						jValuesList.empty();
+						for(v in values)
+							jValuesList.append('<li class="added">$v <div class="label added">Added</div></li>');
+
+					case RemoveEnum(used):
+						jEnum.find(".title").append('<div class="label removed">Removed</div>');
+						jEnum.addClass("removed");
+
+					case AddValue(val):
+						jLi.append( val );
+						jLi.addClass("added");
+						jLi.append('<div class="label added">Added</div>');
+
+					case Special: // Should not be there at init
+
+					case RemoveValue(val, used):
+						jLi.append( val );
+						jLi.addClass("removed");
+						jValuesList.find('[value="$val"]').hide();
+						jLi.append('<div class="label removed">Removed</div>');
+
+						if( renameValues.length>0 ) {
+							var initialOp = op;
+							var jSelect = new J('<select/>');
+							jSelect.appendTo(jLi);
+							jSelect.append('<option value="">-- Choose an action --</option>');
+							for(v in renameValues)
+								jSelect.append('<option value="rename:$v" to="$v">Rename $val ➜ $v</option>');
+							jSelect.append('<option value="remove">REMOVE FROM PROJECT</option>');
+							jSelect.change( _->{
+								checkActions();
+								var raw = Std.string( jSelect.val() );
+								if( raw.indexOf("rename")==0 ) {
+									// Rename instance values
+									ops[opIdx] = {
+										type: Special,
+										enumId: initialOp.enumId,
+										cb: (p)->{
+											trace("renaming to "+raw);
+											p.iterateAllFieldInstances( (fi:data.inst.FieldInstance)->{
+												if( fi.def.isEnum() && fi.def.getEnumDef().identifier==initialOp.enumId )
+													fi.renameEnumValue(val, raw.split(":")[1]);
+											});
+											initialOp.cb(p); // still delete old value
+										}
+									}
+								}
+								else
+									ops[opIdx] = initialOp; // back to initial operation
+							});
+						}
+				}
+			}
 		}
 
+		// Unchanged enums
+		for(ed in project.defs.externalEnums)
+			if( ed.externalRelPath==relSourcePath && !changedEnums.exists(ed.identifier) ) {
+				var jLi = new J('<li class="enum unchanged">${ed.identifier}</li>');
+				jLi.appendTo(jEnumsList);
+			}
+
 		// Buttons
-		addButton(L.t._("Apply these changes"), "confirm", function() {
+		jConfirm = addButton(L.t._("Apply these changes"), "confirm", function() {
 			onSync(ops);
 		});
 
 		addCancel();
+
+		checkActions();
+	}
+
+	function checkActions() {
+		var ok = true;
+		jContent.find("select").each( (i,e)->{
+			var jSelect = new J(e);
+			if( jSelect.val()=="" ) {
+				ok = false;
+				jSelect.addClass("required");
+			}
+			else
+				jSelect.removeClass("required");
+		});
+
+		jConfirm.prop("disabled",!ok);
 	}
 }

@@ -98,8 +98,8 @@ class ExternalEnum {
 			// Source file is completely new
 			for(pe in parseds) {
 				syncOps.push({
-					type: Add,
-					desc: 'New enum: "${pe.enumId}"',
+					type: AddEnum(pe.values),
+					enumId: pe.enumId,
 					cb: (p)->{
 						trace('whole new, create $pe');
 						p.defs.createExternalEnumDef(relSourcePath, checksum, pe);
@@ -114,8 +114,8 @@ class ExternalEnum {
 				if( existing==null ) {
 					// New enum found
 					syncOps.push({
-						type: Add,
-						desc: 'New enum: "${pe.enumId}"',
+						type: AddEnum(pe.values),
+						enumId: pe.enumId,
 						cb: (p)->{
 							trace('create $pe');
 							p.defs.createExternalEnumDef(relSourcePath, checksum, pe);
@@ -127,8 +127,8 @@ class ExternalEnum {
 					for(v in pe.values)
 						if( !existing.hasValue(v) ) {
 							syncOps.push({
-								type: Add,
-								desc: 'New enum value: "${pe.enumId}.$v"',
+								type: AddValue(v),
+								enumId: pe.enumId,
 								cb: (p)->{
 									trace('add value $v to ${pe.enumId}');
 									var ed = p.defs.getEnumDef(pe.enumId);
@@ -150,8 +150,8 @@ class ExternalEnum {
 						if( !found ) {
 							var ed = tmpProject.defs.getEnumDef(pe.enumId);
 							syncOps.push({
-								type: Remove( tmpProject.isEnumValueUsed(ed,v.id) ),
-								desc: 'Removed enum value: "${pe.enumId}.${v.id}"',
+								type: RemoveValue( v.id, tmpProject.isEnumValueUsed(ed,v.id) ),
+								enumId: pe.enumId,
 								cb: (p)->{
 									trace('lost value ${v.id} in ${pe.enumId}');
 									var ed = p.defs.getEnumDef(pe.enumId);
@@ -178,8 +178,8 @@ class ExternalEnum {
 
 					if( !found ) {
 						syncOps.push({
-							type: Remove(tmpProject.isEnumDefUsed(ed)),
-							desc: 'Removed enum: ${ed.identifier}',
+							type: RemoveEnum(tmpProject.isEnumDefUsed(ed)),
+							enumId: ed.identifier,
 							cb: (p)->{
 								trace('lost enum ${ed.identifier}');
 								var ed = p.defs.getEnumDef(ed.identifier);
@@ -194,15 +194,18 @@ class ExternalEnum {
 		var needConfirm = false;
 		for(op in syncOps)
 			switch op.type {
-				case Add:
-				case ChecksumUpdated:
+				case AddEnum(_):
+				case AddValue(_):
 				case DateUpdated:
-				case Remove(used):
+				case Special:
+				case RemoveEnum(used), RemoveValue(_,used):
 					if( used ) {
 						needConfirm = true;
 						break;
 					}
 			}
+
+		for(op in syncOps) trace(op.type); // HACK
 
 		var fileName = dn.FilePath.extractFileWithExt(relSourcePath);
 		if( needConfirm ) {
@@ -215,19 +218,20 @@ class ExternalEnum {
 		else if( syncOps.length>0 ) {
 			// Update is easy
 			applySyncOps(syncOps, relSourcePath, checksum);
-			N.success( L.t._("::file:: updated successfully.", { file:fileName }));
+			N.success( fileName, L.t._("Enums updated successfully.") );
 		}
 		else {
 			// No change
-			N.msg(L.t._("File is already up-to-date."));
+			N.msg( fileName, L.t._("Enums are already up-to-date.") );
 		}
 	}
 
 
-	function applySyncOps(ops:Array<EnumSyncOp>, relSourcePath:String, checksum:String) {
-		trace("APPLY:");
-		for(op in ops) trace(op.type); // HACK
 
+	/**
+		Execute a list of sync operations
+	**/
+	function applySyncOps(ops:Array<EnumSyncOp>, relSourcePath:String, checksum:String) {
 		var copy = Editor.ME.project.clone();
 
 		// Run sync ops
@@ -246,15 +250,18 @@ class ExternalEnum {
 		// Break level cache
 		for(op in ops)
 			switch op.type {
-				case Add:
-				case ChecksumUpdated:
+				case AddEnum(_):
+				case AddValue(_):
 				case DateUpdated:
+				case Special:
+					Editor.ME.invalidateAllLevelsCache();
 
-				case Remove(used):
+				case RemoveEnum(used), RemoveValue(_,used):
 					if( used ) {
 						Editor.ME.invalidateAllLevelsCache();
 						break;
 					}
 			}
 	}
+
 }

@@ -1086,7 +1086,7 @@ ul.log {
 		color: $bgLighter;
 		border-radius: 2px;
 	}
-	li.opAdd {
+	li.opAddValue, li.opAddEnum {
 		color: #a7d93d;
 		span.op {
 			color: black;
@@ -1100,7 +1100,8 @@ ul.log {
 			background-color: #58d395;
 		}
 	}
-	li.opRemove {
+	li.opRemoveValue,
+	li.opRemoveEnum {
 		color: $red;
 		span.op {
 			color: white;
@@ -3188,20 +3189,104 @@ textarea {
 .window.sync {
 	.wrapper .content {
 		max-width: none;
-		h2 .file {
-			color: white;
-			text-transform: none;
-		}
-		ul.log {
-			li {
-				display: grid;
-				grid-template-columns: 100px auto;
-				gap: 8px;
-				align-items: center;
 
-				.op {
-					text-align: center;
-					margin: 0;
+		h2 {
+			display: block;
+			.file {
+				color: $orangeLight;
+				text-transform: none;
+			}
+		}
+
+		.label {
+			display: inline-block;
+			padding: 2px 4px;
+			margin-left: 16px;
+
+			font-size: 7.5pt;
+			font-family: Arial;
+			color: black;
+			font-weight: normal;
+			text-decoration: none;
+			text-transform: uppercase;
+
+			border-radius: 3px;
+			background-color: $bgLight;
+
+			&.added {
+				color: black;
+				background-color: $green;
+			}
+			&.removed {
+				color: white;
+				background-color: $red;
+			}
+		}
+
+
+		ul.log {
+			li:hover {
+				outline: none;
+			}
+
+			li.enum {
+				.title {
+					font-size: 12pt;
+				}
+
+				&.added {
+					color: $green;
+				}
+
+				&.removed {
+					color: $red;
+					text-decoration: line-through;
+				}
+
+				&.unchanged {
+					color: $bgLighter;
+				}
+
+				ul.values {
+					width: fit-content;
+					margin-bottom: 8px;
+					margin-left: 8px;
+					padding-left: 12px;
+					padding-right: 16px;
+					padding-top: 4px;
+					padding-bottom: 8px;
+					border-left: 1px solid $bgLight;
+					border-bottom: 1px solid $bgLight;
+					border-bottom-left-radius: 4px;
+					border-bottom-right-radius: 4px;
+
+					li {
+						white-space: nowrap;
+						padding: 0px 2px;
+						font-size: 10pt;
+					}
+					li:not([class]) {
+						color: $bgLight;
+						font-style: italic;
+					}
+					li.added {
+						color: $green;
+					}
+					li.removed {
+						color: $red;
+						text-decoration: line-through;
+					}
+
+					select {
+						display: inline-block;
+						margin-left: 16px;
+						background-color: $bgMed;
+
+						&.required {
+							border: 1px solid $red;
+							color: $lightRed;
+						}
+					}
 				}
 			}
 		}
