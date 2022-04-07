@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458149,
-	"nextUid": 14,
+	"appBuildId": 458150,
+	"nextUid": 15,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -28,7 +28,7 @@
 	"simplifiedExport": false,
 	"imageExportMode": "None",
 	"pngFilePattern": null,
-	"backupOnSave": false,
+	"backupOnSave": true,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
 	"tutorialDesc": null,
@@ -117,64 +117,6 @@
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
 					"tilesetUid": null
-				},
-				{
-					"identifier": "haxe",
-					"__type": "ExternEnum.A",
-					"uid": 6,
-					"type": "F_Enum(2)",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "NameAndValue",
-					"editorDisplayPos": "Above",
-					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				},
-				{
-					"identifier": "cdb",
-					"__type": "ExternEnum.Test",
-					"uid": 7,
-					"type": "F_Enum(5)",
-					"isArray": false,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "NameAndValue",
-					"editorDisplayPos": "Above",
-					"editorAlwaysShow": false,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
 				}
 			]
 		}
@@ -183,33 +125,7 @@
 		{ "id": "Local1", "tileId": null, "color": 0, "__tileSrcRect": null },
 		{ "id": "Local2", "tileId": null, "color": 0, "__tileSrcRect": null },
 		{ "id": "Local3", "tileId": null, "color": 0, "__tileSrcRect": null }
-	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [
-		{ "identifier": "A", "uid": 2, "values": [
-			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "A1", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "A3", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] },
-		{ "identifier": "B", "uid": 3, "values": [{ "id": "B0", "tileId": null, "color": 0, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] },
-		{ "identifier": "C", "uid": 4, "values": [
-			{ "id": "C0", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C1", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C3", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] },
-		{ "identifier": "Test", "uid": 5, "values": [
-			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Foo2", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2b9118f5aed88c13e93f19ac8af5a85e", "tags": [] },
-		{ "identifier": "Other", "uid": 12, "values": [
-			{ "id": "Some", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Thing", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Cool", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2b9118f5aed88c13e93f19ac8af5a85e", "tags": [] },
-		{ "identifier": "Third", "uid": 13, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2b9118f5aed88c13e93f19ac8af5a85e", "tags": [] }
-	], "levelFields": [] },
+	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Level_0",
@@ -268,20 +184,10 @@
 							"height": 16,
 							"defUid": 1,
 							"px": [104,104],
-							"fieldInstances": [
-								{ "__identifier": "local", "__value": "Local0", "__type": "LocalEnum.Local", "__tile": null, "defUid": 11, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Local0"]
-								}] },
-								{ "__identifier": "haxe", "__value": "A0", "__type": "ExternEnum.A", "__tile": null, "defUid": 6, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["A0"]
-								}] },
-								{ "__identifier": "cdb", "__value": "Foo2", "__type": "ExternEnum.Test", "__tile": null, "defUid": 7, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Foo2"]
-								}] }
-							]
+							"fieldInstances": [{ "__identifier": "local", "__value": "Local0", "__type": "LocalEnum.Local", "__tile": null, "defUid": 11, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Local0"]
+							}] }]
 						}
 					]
 				}
