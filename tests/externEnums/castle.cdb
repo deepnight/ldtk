@@ -1,7 +1,7 @@
 {
 	"sheets": [
 		{
-			"name": "Test2",
+			"name": "Test",
 			"columns": [
 				{
 					"typeStr": "11",
@@ -30,8 +30,32 @@
 					"col": 65280
 				},
 				{
-					"id": "Foo",
+					"id": "Foo2",
 					"col": 2949375
+				},
+				{
+					"col": 0,
+					"id": "Bar"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "Other",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Some"
+				},
+				{
+					"id": "Thing"
 				}
 			],
 			"separators": [],

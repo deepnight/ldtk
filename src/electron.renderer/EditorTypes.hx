@@ -139,10 +139,11 @@ typedef ParsedExternalEnum = {
 	var values : Array<String>;
 }
 
-typedef SyncLog = Array<{
-	var op : SyncOp;
-	var str : String;
-}>;
+typedef EnumSyncOp = {
+	var type : SyncOp;
+	var desc: String;
+	var cb: data.Project->Void;
+}
 
 enum SyncOp {
 	Add;

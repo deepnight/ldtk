@@ -1,21 +1,21 @@
 package ui.modal.dialog;
 
-class SyncLogPrint extends ui.modal.Dialog {
-	public function new(log:SyncLog, filePath:String, newProject:data.Project) {
+class EnumSync extends ui.modal.Dialog {
+	public function new(ops:Array<EnumSyncOp>, filePath:String, onSync:Array<EnumSyncOp>->Void) {
 		super();
 
 		var fileName = dn.FilePath.fromFile(filePath).fileWithExt;
 		loadTemplate("sync");
 		jContent.find("h2 .file").text( fileName );
 
-		// Add "DateUpdated" line
-		log = log.copy();
-		log.push({ op:DateUpdated, str:'File date of $fileName' });
+		// // Add "DateUpdated" line
+		// log = log.copy();
+		// log.push({ op:DateUpdated, str:'File date of $fileName' });
 
 		// Warning
 		jContent.find(".warning").hide();
-		for(l in log)
-			switch l.op {
+		for(op in ops)
+			switch op.type {
 				case Add:
 				case ChecksumUpdated:
 				case DateUpdated:
@@ -28,10 +28,10 @@ class SyncLogPrint extends ui.modal.Dialog {
 
 		// Log
 		var jList = jContent.find(".log");
-		for(l in log) {
+		for(op in ops) {
 			var li = new J('<li></li>');
-			var label = l.str;
-			switch l.op {
+			var label = op.desc;
+			switch op.type {
 				case Add: li.append('<span class="op">New</op>');
 
 				case Remove(used):
@@ -47,14 +47,13 @@ class SyncLogPrint extends ui.modal.Dialog {
 					li.append('<span class="op">Updated</op>');
 			}
 			li.append(label);
-			li.addClass("op"+l.op.getName());
+			li.addClass("op"+op.type.getName());
 			li.appendTo(jList);
 		}
 
 		// Buttons
 		addButton(L.t._("Apply these changes"), "confirm", function() {
-			new LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), editor.project );
-			editor.selectProject(newProject);
+			onSync(ops);
 		});
 
 		addCancel();

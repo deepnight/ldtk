@@ -61,9 +61,8 @@ class ExternalEnum {
 			}
 
 			// Try to import/sync
-			var copy = project.clone();
 			var checksum = haxe.crypto.Md5.encode(fileContent);
-			importToProject(copy, relPath, checksum, parseds);
+			importToProject(relPath, checksum, parseds);
 		}
 	}
 
@@ -82,8 +81,8 @@ class ExternalEnum {
 	/**
 		Import parsed enums to existing project
 	**/
-	function importToProject(tmpProject:data.Project, relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) {
-		var log : SyncLog = [];
+	function importToProject(relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) {
+		var tmpProject = Editor.ME.project.clone();
 
 		var isNew = true;
 		for(ed in tmpProject.defs.externalEnums)
@@ -92,13 +91,20 @@ class ExternalEnum {
 				break;
 			}
 
+		var syncOps : Array<EnumSyncOp> = [];
 
 		var shownEnums = new Map();
 		if( isNew ) {
 			// Source file is completely new
 			for(pe in parseds) {
-				log.push({ op:Add, str:'New enum: "${pe.enumId}"' });
-				tmpProject.defs.createExternalEnumDef(relSourcePath, checksum, pe);
+				syncOps.push({
+					type: Add,
+					desc: 'New enum: "${pe.enumId}"',
+					cb: (p)->{
+						trace('whole new, create $pe');
+						p.defs.createExternalEnumDef(relSourcePath, checksum, pe);
+					},
+				});
 			}
 		}
 		else {
@@ -107,15 +113,28 @@ class ExternalEnum {
 				var existing = tmpProject.defs.getEnumDef(pe.enumId);
 				if( existing==null ) {
 					// New enum found
-					tmpProject.defs.createExternalEnumDef(relSourcePath, checksum, pe);
-					log.push({ op:Add, str:'New enum: "${pe.enumId}"' });
+					syncOps.push({
+						type: Add,
+						desc: 'New enum: "${pe.enumId}"',
+						cb: (p)->{
+							trace('create $pe');
+							p.defs.createExternalEnumDef(relSourcePath, checksum, pe);
+						},
+					});
 				}
 				else {
 					// Add new values on existing
 					for(v in pe.values)
 						if( !existing.hasValue(v) ) {
-							existing.addValue(v);
-							log.push({ op:Add, str:'New enum value: "${pe.enumId}.$v"' });
+							syncOps.push({
+								type: Add,
+								desc: 'New enum value: "${pe.enumId}.$v"',
+								cb: (p)->{
+									trace('add value $v to ${pe.enumId}');
+									var ed = p.defs.getEnumDef(pe.enumId);
+									ed.addValue(v);
+								},
+							});
 							shownEnums.set(pe.enumId,true);
 						}
 
@@ -130,12 +149,16 @@ class ExternalEnum {
 
 						if( !found ) {
 							var ed = tmpProject.defs.getEnumDef(pe.enumId);
-							log.push({
-								op:Remove( tmpProject.isEnumValueUsed(ed,v.id) ),
-								str:'Removed enum value: "${pe.enumId}.${v.id}"'
+							syncOps.push({
+								type: Remove( tmpProject.isEnumValueUsed(ed,v.id) ),
+								desc: 'Removed enum value: "${pe.enumId}.${v.id}"',
+								cb: (p)->{
+									trace('lost value ${v.id} in ${pe.enumId}');
+									var ed = p.defs.getEnumDef(pe.enumId);
+									p.defs.removeEnumDefValue(ed, v.id);
+								},
 							});
 							shownEnums.set(pe.enumId,true);
-							tmpProject.defs.removeEnumDefValue(existing, v.id);
 						}
 					}
 
@@ -144,7 +167,7 @@ class ExternalEnum {
 			}
 
 			// Remove lost enums
-			for( ed in tmpProject.defs.externalEnums.copy() )
+			for( ed in tmpProject.defs.externalEnums )
 				if( ed.externalRelPath==relSourcePath ) {
 					var found = false;
 					for(pe in parseds)
@@ -154,51 +177,84 @@ class ExternalEnum {
 						}
 
 					if( !found ) {
-						log.push({ op:Remove(tmpProject.isEnumDefUsed(ed)), str:'Removed enum: ${ed.identifier}' });
-						tmpProject.defs.removeEnumDef(ed);
+						syncOps.push({
+							type: Remove(tmpProject.isEnumDefUsed(ed)),
+							desc: 'Removed enum: ${ed.identifier}',
+							cb: (p)->{
+								trace('lost enum ${ed.identifier}');
+								var ed = p.defs.getEnumDef(ed.identifier);
+								p.defs.removeEnumDef(ed);
+							},
+						});
 					}
 				}
 		}
 
-		// Fix checksum
-		for( ed in tmpProject.defs.externalEnums )
-			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum ) {
-				ed.externalFileChecksum = checksum;
-				if( !shownEnums.exists(ed.identifier) )
-					log.push({ op:ChecksumUpdated, str:"Enum "+ed.identifier });
-			}
-
-
-		tmpProject.tidy();
-
-
 		// Show sync window, if relevant
 		var needConfirm = false;
-		for(l in log)
-			switch l.op {
+		for(op in syncOps)
+			switch op.type {
+				case Add:
+				case ChecksumUpdated:
+				case DateUpdated:
 				case Remove(used):
 					if( used ) {
 						needConfirm = true;
 						break;
 					}
-				case Add:
-				case ChecksumUpdated:
-				case DateUpdated:
 			}
 
+		var fileName = dn.FilePath.extractFileWithExt(relSourcePath);
 		if( needConfirm ) {
 			// Request user confirmation
-			new ui.modal.dialog.SyncLogPrint(log, relSourcePath, tmpProject);
+			new ui.modal.dialog.EnumSync(syncOps, relSourcePath, (updatedOps)->{
+				new ui.LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), Editor.ME.project );
+				applySyncOps(updatedOps, relSourcePath, checksum);
+			});
 		}
-		else if( log.length>0 ) {
-			// Update went well
-			var fp = dn.FilePath.fromFile(relSourcePath);
-			N.success( L.t._("::file:: updated successfully.", { file:fp.fileWithExt }));
-			Editor.ME.selectProject( tmpProject );
+		else if( syncOps.length>0 ) {
+			// Update is easy
+			applySyncOps(syncOps, relSourcePath, checksum);
+			N.success( L.t._("::file:: updated successfully.", { file:fileName }));
 		}
 		else {
 			// No change
 			N.msg(L.t._("File is already up-to-date."));
 		}
+	}
+
+
+	function applySyncOps(ops:Array<EnumSyncOp>, relSourcePath:String, checksum:String) {
+		trace("APPLY:");
+		for(op in ops) trace(op.type); // HACK
+
+		var copy = Editor.ME.project.clone();
+
+		// Run sync ops
+		for( op in ops )
+			op.cb(copy);
+
+		// Fix checksum
+		for( ed in copy.defs.externalEnums )
+			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum )
+				ed.externalFileChecksum = checksum;
+
+		copy.tidy();
+
+		Editor.ME.selectProject(copy);
+
+		// Break level cache
+		for(op in ops)
+			switch op.type {
+				case Add:
+				case ChecksumUpdated:
+				case DateUpdated:
+
+				case Remove(used):
+					if( used ) {
+						Editor.ME.invalidateAllLevelsCache();
+						break;
+					}
+			}
 	}
 }
