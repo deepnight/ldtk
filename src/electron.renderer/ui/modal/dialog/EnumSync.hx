@@ -58,12 +58,21 @@ class EnumSync extends ui.modal.Dialog {
 				}
 			}
 
-			// List known values
+			// List existing values
 			var ed = project.defs.getEnumDef(enumId);
-			if( ed!=null )
+			if( ed!=null ) {
+				var limit = 5;
 				for(v in ed.values)
-					jValuesList.append('<li value="${v.id}">${v.id}</li>');
+					if( limit--<=0 ) {
+						jValuesList.append('<li>(...)</li>');
+						break;
+					}
+					else
+						jValuesList.append('<li value="${v.id}">${v.id}</li>');
 
+			}
+
+			// List pending operations near enum values
 			var opIdx = -1;
 			for(op in ops) {
 				opIdx++;
@@ -101,6 +110,7 @@ class EnumSync extends ui.modal.Dialog {
 						jValuesList.find('[value="$val"]').hide();
 						jLi.append('<div class="label removed">Removed</div>');
 
+						// Select to rename value
 						if( renameValues.length>0 ) {
 							var initialOp = op;
 							var jSelect = new J('<select/>');
@@ -144,6 +154,7 @@ class EnumSync extends ui.modal.Dialog {
 		// Buttons
 		jConfirm = addButton(L.t._("Apply these changes"), "confirm", function() {
 			onSync(ops);
+			close();
 		});
 
 		addCancel();
