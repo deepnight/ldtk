@@ -1,3 +1,7 @@
+# 1.1.2
+
+- Fixed a crash when pressing `Delete` key while having no active selection.
+
 # 1.1.1
 
 - *Super Simple Export* now also creates one **CSV file per IntGrid layer**.

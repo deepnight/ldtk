@@ -286,13 +286,15 @@ class SelectionTool extends Tool<Int> {
 		switch keyId {
 			case K.DELETE:
 				var layerInsts = group.getSelectedLayerInstances();
-				deleteSelecteds();
-				for(li in layerInsts) {
-					editor.levelRender.invalidateLayer(li);
-					editor.ge.emit( LayerInstanceChangedGlobally(li) );
+				if( layerInsts.length>0 ) {
+					deleteSelecteds();
+					for(li in layerInsts) {
+						editor.levelRender.invalidateLayer(li);
+						editor.ge.emit( LayerInstanceChangedGlobally(li) );
+					}
+					editor.curLevelTimeline.saveLayerStates(layerInsts);
+					select();
 				}
-				editor.curLevelTimeline.saveLayerStates(layerInsts);
-				select();
 		}
 	}
 
