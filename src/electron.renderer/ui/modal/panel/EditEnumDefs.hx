@@ -112,7 +112,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				else
 					selectEnum( project.defs.getEnumDef(curEnum.identifier) );
 
-			case EnumDefChanged, EnumDefRemoved, EnumDefValueRemoved, EnumDefSorted:
+			case EnumDefChanged, EnumDefRemoved, EnumDefValueRemoved, EnumDefSorted, ExternalEnumsLoaded:
 				updateEnumList();
 				updateEnumForm();
 

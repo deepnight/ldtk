@@ -69,7 +69,7 @@ class LevelRender extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case LastChanceEnded:
-				
+
 			case AppSettingsChanged:
 				invalidateAll();
 
@@ -113,6 +113,9 @@ class LevelRender extends dn.Process {
 
 			case ProjectSelected:
 				renderAll();
+
+			case ExternalEnumsLoaded:
+				invalidateAll();
 
 			case ProjectSettingsChanged:
 				invalidateUiAndBg();

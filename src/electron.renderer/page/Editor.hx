@@ -1753,6 +1753,7 @@ class Editor extends Page {
 			case EnumDefChanged: invalidateAllLevelsCache();
 			case EnumDefSorted:
 			case EnumDefValueRemoved: invalidateAllLevelsCache();
+			case ExternalEnumsLoaded:
 			case ToolValueSelected:
 			case ToolOptionChanged:
 			case WorldSelected(w):
@@ -1806,6 +1807,12 @@ class Editor extends Page {
 			case ViewportChanged:
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
+
+			case ExternalEnumsLoaded:
+				Tool.clearSelectionMemory();
+				clearSpecialTool();
+				updateTool();
+
 
 			case LayerInstanceChangedGlobally(li):
 			case LayerInstanceEditedByTool(li):

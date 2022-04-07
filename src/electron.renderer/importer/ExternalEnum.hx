@@ -82,10 +82,10 @@ class ExternalEnum {
 		Import parsed enums to existing project
 	**/
 	function importToProject(relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) {
-		var tmpProject = Editor.ME.project.clone();
+		var project = Editor.ME.project;
 
 		var isNew = true;
-		for(ed in tmpProject.defs.externalEnums)
+		for(ed in project.defs.externalEnums)
 			if( ed.externalRelPath==relSourcePath ) {
 				isNew = false;
 				break;
@@ -110,7 +110,7 @@ class ExternalEnum {
 		else {
 			// Source file was previously already imported
 			for(pe in parseds) {
-				var existing = tmpProject.defs.getEnumDef(pe.enumId);
+				var existing = project.defs.getEnumDef(pe.enumId);
 				if( existing==null ) {
 					// New enum found
 					syncOps.push({
@@ -148,9 +148,9 @@ class ExternalEnum {
 							}
 
 						if( !found ) {
-							var ed = tmpProject.defs.getEnumDef(pe.enumId);
+							var ed = project.defs.getEnumDef(pe.enumId);
 							syncOps.push({
-								type: RemoveValue( v.id, tmpProject.isEnumValueUsed(ed,v.id) ),
+								type: RemoveValue( v.id, project.isEnumValueUsed(ed,v.id) ),
 								enumId: pe.enumId,
 								cb: (p)->{
 									trace('lost value ${v.id} in ${pe.enumId}');
@@ -167,7 +167,7 @@ class ExternalEnum {
 			}
 
 			// Remove lost enums
-			for( ed in tmpProject.defs.externalEnums )
+			for( ed in project.defs.externalEnums )
 				if( ed.externalRelPath==relSourcePath ) {
 					var found = false;
 					for(pe in parseds)
@@ -178,7 +178,7 @@ class ExternalEnum {
 
 					if( !found ) {
 						syncOps.push({
-							type: RemoveEnum(tmpProject.isEnumDefUsed(ed)),
+							type: RemoveEnum(project.isEnumDefUsed(ed)),
 							enumId: ed.identifier,
 							cb: (p)->{
 								trace('lost enum ${ed.identifier}');
@@ -205,6 +205,12 @@ class ExternalEnum {
 					}
 			}
 
+		// Update checksums
+		for( ed in project.defs.externalEnums )
+			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum )
+				ed.externalFileChecksum = checksum;
+
+
 		var fileName = dn.FilePath.extractFileWithExt(relSourcePath);
 		if( needConfirm ) {
 			// Request user confirmation
@@ -222,6 +228,7 @@ class ExternalEnum {
 		else {
 			// No change
 			N.msg( fileName, L.t._("Enums are already up-to-date.") );
+			Editor.ME.ge.emit( ExternalEnumsLoaded );
 		}
 	}
 
@@ -231,37 +238,46 @@ class ExternalEnum {
 		Execute a list of sync operations
 	**/
 	function applySyncOps(ops:Array<EnumSyncOp>, relSourcePath:String, checksum:String) {
-		var copy = Editor.ME.project.clone();
+		var project = Editor.ME.project;
 
 		// Run sync ops
 		for( op in ops )
-			op.cb(copy);
-
-		// Fix checksum
-		for( ed in copy.defs.externalEnums )
-			if( ed.externalRelPath==relSourcePath && ed.externalFileChecksum!=checksum )
-				ed.externalFileChecksum = checksum;
-
-		copy.tidy();
-
-		Editor.ME.selectProject(copy);
+			op.cb(project);
 
 		// Break level cache
+		var unsortedEnums = new Map();
 		for(op in ops)
 			switch op.type {
 				case AddEnum(_):
 				case AddValue(_):
+					unsortedEnums.set(op.enumId, true);
+
 				case DateUpdated:
 				case Special:
+					unsortedEnums.set(op.enumId, true);
 					Editor.ME.invalidateAllLevelsCache();
 					break;
 
-				case RemoveEnum(used), RemoveValue(_,used):
+				case RemoveValue(_,used):
 					if( used ) {
 						Editor.ME.invalidateAllLevelsCache();
 						break;
 					}
+
+				case RemoveEnum(used):
+					if( used ) {
+						Editor.ME.invalidateAllLevelsCache();
+						unsortedEnums.set(op.enumId, true);
+						break;
+					}
 			}
+
+		// Re-sort modified enums
+		for(ed in project.defs.externalEnums)
+			if( unsortedEnums.exists(ed.identifier) )
+				ed.alphaSortValues();
+
+		Editor.ME.ge.emit( ExternalEnumsLoaded );
 	}
 
 }
