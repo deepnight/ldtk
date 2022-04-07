@@ -254,6 +254,7 @@ class ExternalEnum {
 				case DateUpdated:
 				case Special:
 					Editor.ME.invalidateAllLevelsCache();
+					break;
 
 				case RemoveEnum(used), RemoveValue(_,used):
 					if( used ) {
