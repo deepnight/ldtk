@@ -6488,6 +6488,10 @@ dl.form.fieldInstanceEditor {
 			}
 
 
+			&.externalEnum .valuesWrapper {
+				grid-template-rows: min-content auto;
+			}
+
 			.valuesWrapper {
 				display: grid;
 				padding-right: 1px;
