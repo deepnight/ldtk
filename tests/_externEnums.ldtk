@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458145,
-	"nextUid": 13,
+	"appBuildId": 458149,
+	"nextUid": 14,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -202,8 +202,13 @@
 			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "Foo2", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "0c85454d2e8ca1a616da7b71ed266907", "tags": [] },
-		{ "identifier": "Other", "uid": 12, "values": [ { "id": "Some", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "Thing", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "0c85454d2e8ca1a616da7b71ed266907", "tags": [] }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2b9118f5aed88c13e93f19ac8af5a85e", "tags": [] },
+		{ "identifier": "Other", "uid": 12, "values": [
+			{ "id": "Some", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Thing", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Cool", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2b9118f5aed88c13e93f19ac8af5a85e", "tags": [] },
+		{ "identifier": "Third", "uid": 13, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2b9118f5aed88c13e93f19ac8af5a85e", "tags": [] }
 	], "levelFields": [] },
 	"levels": [
 		{

@@ -30,7 +30,7 @@
 					"col": 65280
 				},
 				{
-					"id": "Foo2",
+					"id": "Foo",
 					"col": 2949375
 				},
 				{
@@ -56,6 +56,29 @@
 				},
 				{
 					"id": "Thing"
+				},
+				{
+					"id": "Cool"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "Third",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "ThirdA"
+				},
+				{
+					"id": "ThirdB"
 				}
 			],
 			"separators": [],
