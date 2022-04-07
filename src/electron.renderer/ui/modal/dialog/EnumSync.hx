@@ -118,7 +118,6 @@ class EnumSync extends ui.modal.Dialog {
 										type: Special,
 										enumId: initialOp.enumId,
 										cb: (p)->{
-											trace("renaming to "+raw);
 											p.iterateAllFieldInstances( (fi:data.inst.FieldInstance)->{
 												if( fi.def.isEnum() && fi.def.getEnumDef().identifier==initialOp.enumId )
 													fi.renameEnumValue(val, raw.split(":")[1]);

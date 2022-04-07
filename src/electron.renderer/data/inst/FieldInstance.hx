@@ -740,14 +740,9 @@ class FieldInstance {
 
 
 	public function renameEnumValue(oldV:String, newV:String) {
-		trace("rename "+oldV+"=>"+newV);
-		for(i in 0...getArrayLength()) {
-			trace(getEnumValue(i));
-			if( getEnumValue(i)==oldV ) {
+		for(i in 0...getArrayLength())
+			if( getEnumValue(i)==oldV )
 				parseValue(i, newV);
-				trace(" => "+getEnumValue(i));
-			}
-		}
 	}
 
 
