@@ -1,6 +1,6 @@
 package ui.modal.dialog;
 
-class Sync extends ui.modal.Dialog {
+class SyncLogPrint extends ui.modal.Dialog {
 	public function new(log:SyncLog, filePath:String, newProject:data.Project) {
 		super();
 

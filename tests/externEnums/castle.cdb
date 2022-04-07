@@ -1,0 +1,43 @@
+{
+	"sheets": [
+		{
+			"name": "Test2",
+			"columns": [
+				{
+					"typeStr": "11",
+					"name": "col",
+					"display": null
+				},
+				{
+					"typeStr": "14",
+					"name": "icon",
+					"opt": true,
+					"display": null
+				},
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Hello",
+					"col": 16711680
+				},
+				{
+					"id": "World",
+					"col": 65280
+				},
+				{
+					"id": "Foo",
+					"col": 2949375
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}

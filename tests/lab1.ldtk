@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.1.1",
+		"appVersion": "1.1.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "1.1.1",
-	"appBuildId": 458075,
-	"nextUid": 120,
+	"jsonVersion": "1.1.2",
+	"appBuildId": 458144,
+	"nextUid": 127,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -1577,6 +1577,93 @@
 			"pivotX": 0,
 			"pivotY": 0,
 			"fieldDefs": []
+		},
+		{
+			"identifier": "ExternEnum",
+			"uid": 121,
+			"tags": [],
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.26,
+			"lineOpacity": 0.21,
+			"hollow": false,
+			"color": "#A4A4A4",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 97,
+			"tileId": 28,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 97, "x": 192, "y": 16, "w": 16, "h": 16 },
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "val",
+					"__type": "ExternEnum.Test",
+					"uid": 122,
+					"type": "F_Enum(120)",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "A",
+					"__type": "ExternEnum.A",
+					"uid": 126,
+					"type": "F_Enum(123)",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
 		}
 	], "tilesets": [
 		{
@@ -1724,7 +1811,26 @@
 			{ "id": "Sight", "tileId": 68, "color": 10066329, "__tileSrcRect": [64,64,16,16] }
 		], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["level_design"] },
 		{ "identifier": "EnemyType", "uid": 108, "values": [], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["gameplay"] }
-	], "externalEnums": [], "levelFields": [
+	], "externalEnums": [
+		{ "identifier": "Test", "uid": 120, "values": [
+			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Pouet", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "3bdd6ddd72c73e2c96935a2d227dad33", "tags": [] },
+		{ "identifier": "A", "uid": 123, "values": [
+			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "A3", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] },
+		{ "identifier": "B", "uid": 124, "values": [{ "id": "B0", "tileId": null, "color": 0, "__tileSrcRect": null }], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] },
+		{ "identifier": "C", "uid": 125, "values": [
+			{ "id": "C0", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C3", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] }
+	], "levelFields": [
 		{
 			"identifier": "hasMusic",
 			"__type": "Bool",
@@ -1922,6 +2028,29 @@
 							"defUid": 7,
 							"px": [124,104],
 							"fieldInstances": [{ "__identifier": "locked", "__value": false, "__type": "Bool", "__tile": null, "defUid": 55, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "ExternEnum",
+							"__grid": [19,6],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": { "tilesetUid": 97, "x": 192, "y": 16, "w": 16, "h": 16 },
+							"__smartColor": "#A4A4A4",
+							"iid": "908971f0-b4d0-11ec-8c6a-0d6a393c2ed0",
+							"width": 16,
+							"height": 16,
+							"defUid": 121,
+							"px": [156,52],
+							"fieldInstances": [
+								{ "__identifier": "val", "__value": "Pouet", "__type": "ExternEnum.Test", "__tile": null, "defUid": 122, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Pouet"]
+								}] },
+								{ "__identifier": "A", "__value": "A2", "__type": "ExternEnum.A", "__tile": null, "defUid": 126, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["A2"]
+								}] }
+							]
 						}
 					]
 				},
@@ -5519,6 +5648,26 @@
 							"defUid": 88,
 							"px": [148,16],
 							"fieldInstances": [{ "__identifier": "Color", "__value": "#FFCC00", "__type": "Color", "__tile": null, "defUid": 89, "realEditorValues": [] }]
+						},
+						{
+							"__identifier": "ExternEnum",
+							"__grid": [17,7],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": { "tilesetUid": 97, "x": 192, "y": 16, "w": 16, "h": 16 },
+							"__smartColor": "#A4A4A4",
+							"iid": "0fa2cce0-b4d0-11ec-b5c0-3b617d0f61c7",
+							"width": 16,
+							"height": 16,
+							"defUid": 121,
+							"px": [140,60],
+							"fieldInstances": [
+								{ "__identifier": "val", "__value": "Pouet", "__type": "ExternEnum.Test", "__tile": null, "defUid": 122, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Pouet"]
+								}] },
+								{ "__identifier": "A", "__value": null, "__type": "ExternEnum.A", "__tile": null, "defUid": 126, "realEditorValues": [] }
+							]
 						}
 					]
 				},

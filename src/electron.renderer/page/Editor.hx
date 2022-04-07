@@ -312,7 +312,7 @@ class Editor extends Page {
 						var newRel = project.makeRelativeFilePath(newAbsPath);
 						if( project.remapExternEnums(relPath, newRel) )
 							Editor.ME.ge.emit( EnumDefChanged );
-						importer.HxEnum.load(newRel, true);
+						importer.ExternalEnum.sync(newRel);
 						needSaving = true;
 					});
 				}
@@ -323,7 +323,7 @@ class Editor extends Page {
 					for(ed in project.defs.getAllExternalEnumsFrom(relPath) )
 						if( ed.externalFileChecksum!=checksum ) {
 							new ui.modal.dialog.ExternalFileChanged(relPath, function() {
-								importer.HxEnum.load(relPath, true);
+								importer.ExternalEnum.sync(relPath);
 							});
 							break;
 						}
@@ -419,7 +419,7 @@ class Editor extends Page {
 
 
 	public function reloadEnum(ed:data.def.EnumDef) {
-		importer.HxEnum.load(ed.externalRelPath, true);
+		importer.ExternalEnum.sync(ed.externalRelPath);
 	}
 
 

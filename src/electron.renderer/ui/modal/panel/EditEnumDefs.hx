@@ -25,17 +25,28 @@ class EditEnumDefs extends ui.modal.Panel {
 				cb: ()->{
 					dn.js.ElectronDialogs.openFile([".hx"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
-						if( dn.FilePath.extractExtension(absPath)!="hx" )
+						if( dn.FilePath.extractExtension(absPath,true) != "hx" )
 							N.error("The file must have the HX extension.");
-						else
-							importer.HxEnum.load( project.makeRelativeFilePath(absPath), false );
+						else {
+							var i = new importer.HxEnum();
+							i.load( project.makeRelativeFilePath(absPath) );
+						}
 					});
 				}
 			});
 			ctx.add({
 				label:L.t._("CastleDB"),
-				cb: ()->N.notImplemented(),
-				enable: ()->false,
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".cdb"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						if( dn.FilePath.extractExtension(absPath,true) != "cdb" )
+							N.error("The file must have the CDB extension.");
+						else {
+							var i = new importer.CastleDb();
+							i.load( project.makeRelativeFilePath(absPath) );
+						}
+					});
+				},
 			});
 			ctx.add({
 				label:L.t._("JSON"),
@@ -255,7 +266,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			var jSync = new J('<a> <span class="icon refresh"/> </a>');
 			jSync.appendTo(links);
 			jSync.click( function(ev) {
-				importer.HxEnum.load(group.key, true);
+				importer.ExternalEnum.sync(group.key);
 			});
 			Tip.attach(jSync, Lang.t._("Reload and synchronize Enums"));
 
