@@ -1,5 +1,6 @@
 # 1.1.2
 
+- You can now import and sync Enums from a **Castle DB** file (http://castledb.org).
 - Fixed a crash when pressing `Delete` key while having no active selection.
 
 # 1.1.1
