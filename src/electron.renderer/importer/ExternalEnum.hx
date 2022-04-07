@@ -205,14 +205,13 @@ class ExternalEnum {
 					}
 			}
 
-		for(op in syncOps) trace(op.type); // HACK
-
 		var fileName = dn.FilePath.extractFileWithExt(relSourcePath);
 		if( needConfirm ) {
 			// Request user confirmation
 			new ui.modal.dialog.EnumSync(syncOps, relSourcePath, (updatedOps)->{
 				new ui.LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), Editor.ME.project );
 				applySyncOps(updatedOps, relSourcePath, checksum);
+				N.success( fileName, L.t._("Enums updated successfully.") );
 			});
 		}
 		else if( syncOps.length>0 ) {
