@@ -3236,7 +3236,19 @@ textarea {
 
 			&.required {
 				border: 1px solid $red;
-				color: $lightRed;
+				color: $bgLighter;
+			}
+			option {
+				background-color: $bgDark;
+				color: white;
+
+				&.def {
+					color: $bgLighter;
+					font-style: italic;
+				}
+				&.remove {
+					color: $lightRed;
+				}
 			}
 		}
 

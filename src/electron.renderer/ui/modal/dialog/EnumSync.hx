@@ -86,10 +86,10 @@ class EnumSync extends ui.modal.Dialog {
 					if( enumRenameTargets.length>0 ) {
 						var jSelect = new J('<select/>');
 						jSelect.appendTo( jEnum.find(".title") );
-						jSelect.append('<option value="">-- Choose an action --</option>');
+						jSelect.append('<option value="" class="def">-- Choose an action --</option>');
 						for(v in enumRenameTargets)
 							jSelect.append('<option value="rename:$v" to="$v">Rename enum ${eDiff.enumId} ➜ $v</option>');
-						jSelect.append('<option value="remove">REMOVE ${eDiff.enumId} ENUM FROM PROJECT</option>');
+						jSelect.append('<option value="remove" class="remove">REMOVE ${eDiff.enumId} ENUM FROM PROJECT</option>');
 						jSelect.change( _->{
 							var raw = Std.string( jSelect.val() );
 							if( raw.indexOf("rename")==0 ) {
@@ -153,10 +153,10 @@ class EnumSync extends ui.modal.Dialog {
 						if( valueRenameTargets.length>0 ) {
 							var jSelect = new J('<select/>');
 							jSelect.appendTo(jLi);
-							jSelect.append('<option value="">-- Choose an action --</option>');
+							jSelect.append('<option value="" class="def">-- Choose an action --</option>');
 							for(v in valueRenameTargets)
 								jSelect.append('<option value="rename:$v" to="$v">Rename ${vDiff.valueId} ➜ $v</option>');
-							jSelect.append('<option value="remove">REMOVE ${eDiff.enumId}.${vDiff.valueId} FROM PROJECT</option>');
+							jSelect.append('<option value="remove" class="remove">REMOVE ${eDiff.enumId}.${vDiff.valueId} FROM PROJECT</option>');
 							jSelect.change( _->{
 								var raw = Std.string( jSelect.val() );
 								if( raw.indexOf("rename")==0 ) {
