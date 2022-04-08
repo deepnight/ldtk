@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458144,
-	"nextUid": 127,
+	"appBuildId": 458171,
+	"nextUid": 129,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -1582,8 +1582,8 @@
 			"identifier": "ExternEnum",
 			"uid": 121,
 			"tags": [],
-			"width": 16,
-			"height": 16,
+			"width": 32,
+			"height": 32,
 			"resizableX": false,
 			"resizableY": false,
 			"keepAspectRatio": false,
@@ -1606,7 +1606,7 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "val",
+					"identifier": "cdb",
 					"__type": "ExternEnum.Test",
 					"uid": 122,
 					"type": "F_Enum(120)",
@@ -1635,7 +1635,7 @@
 					"tilesetUid": null
 				},
 				{
-					"identifier": "A",
+					"identifier": "haxe",
 					"__type": "ExternEnum.A",
 					"uid": 126,
 					"type": "F_Enum(123)",
@@ -1813,10 +1813,11 @@
 		{ "identifier": "EnemyType", "uid": 108, "values": [], "iconTilesetUid": 97, "externalRelPath": null, "externalFileChecksum": null, "tags": ["gameplay"] }
 	], "externalEnums": [
 		{ "identifier": "Test", "uid": 120, "values": [
+			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Foo", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Pouet", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "3bdd6ddd72c73e2c96935a2d227dad33", "tags": [] },
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
 		{ "identifier": "A", "uid": 123, "values": [
 			{ "id": "A0", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "A1", "tileId": null, "color": 0, "__tileSrcRect": null },
@@ -1829,7 +1830,13 @@
 			{ "id": "C1", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "C3", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/Haxe.hx", "externalFileChecksum": "1df43c73f62b6d732c2602c905ff2a4d", "tags": [] },
+		{ "identifier": "Other", "uid": 127, "values": [
+			{ "id": "Cool", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Some", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Thing", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
+		{ "identifier": "Third", "uid": 128, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] }
 	], "levelFields": [
 		{
 			"identifier": "hasMusic",
@@ -2037,16 +2044,16 @@
 							"__tile": { "tilesetUid": 97, "x": 192, "y": 16, "w": 16, "h": 16 },
 							"__smartColor": "#A4A4A4",
 							"iid": "908971f0-b4d0-11ec-8c6a-0d6a393c2ed0",
-							"width": 16,
-							"height": 16,
+							"width": 32,
+							"height": 32,
 							"defUid": 121,
 							"px": [156,52],
 							"fieldInstances": [
-								{ "__identifier": "val", "__value": "Pouet", "__type": "ExternEnum.Test", "__tile": null, "defUid": 122, "realEditorValues": [{
+								{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 122, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["Pouet"]
+									"params": ["Hello"]
 								}] },
-								{ "__identifier": "A", "__value": "A2", "__type": "ExternEnum.A", "__tile": null, "defUid": 126, "realEditorValues": [{
+								{ "__identifier": "haxe", "__value": "A2", "__type": "ExternEnum.A", "__tile": null, "defUid": 126, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["A2"]
 								}] }
@@ -5657,16 +5664,19 @@
 							"__tile": { "tilesetUid": 97, "x": 192, "y": 16, "w": 16, "h": 16 },
 							"__smartColor": "#A4A4A4",
 							"iid": "0fa2cce0-b4d0-11ec-b5c0-3b617d0f61c7",
-							"width": 16,
-							"height": 16,
+							"width": 32,
+							"height": 32,
 							"defUid": 121,
 							"px": [140,60],
 							"fieldInstances": [
-								{ "__identifier": "val", "__value": "Pouet", "__type": "ExternEnum.Test", "__tile": null, "defUid": 122, "realEditorValues": [{
+								{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 122, "realEditorValues": [{
 									"id": "V_String",
-									"params": ["Pouet"]
+									"params": ["Hello"]
 								}] },
-								{ "__identifier": "A", "__value": null, "__type": "ExternEnum.A", "__tile": null, "defUid": 126, "realEditorValues": [] }
+								{ "__identifier": "haxe", "__value": "A0", "__type": "ExternEnum.A", "__tile": null, "defUid": 126, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["A0"]
+								}] }
 							]
 						}
 					]
