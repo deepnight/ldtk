@@ -135,9 +135,15 @@ enum RectHandlePos {
 	BottomRight;
 }
 
+typedef ParsedExternalEnumData = {
+	var color: Null<Int>;
+}
 typedef ParsedExternalEnum = {
 	var enumId : String;
-	var values : Array<String>;
+	var values : Array<{
+		var valueId: String;
+		var data : ParsedExternalEnumData;
+	}>;
 }
 
 enum EnumSyncChange {
@@ -157,6 +163,7 @@ typedef EnumValueSyncDiff = {
 	var valueId: String;
 	var ?warning: Bool;
 	var change: EnumSyncChange;
+	var data: ParsedExternalEnumData;
 }
 
 enum ImageLoadingResult {

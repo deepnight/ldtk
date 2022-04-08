@@ -137,7 +137,7 @@ class OgmoLoader {
 							var enumDef = p.defs.createEnumDef();
 							enumDef.identifier = data.Project.cleanupIdentifier(entityJson.name+"_"+valJson.name, p.identifierStyle);
 							for(ev in valJson.choices)
-								if( !enumDef.addValue(ev) )
+								if( enumDef.addValue(ev)==null )
 									log.error("Enum value is invalid or already used in entity "+entityJson.name+"."+valJson.name);
 							F_Enum(enumDef.uid);
 

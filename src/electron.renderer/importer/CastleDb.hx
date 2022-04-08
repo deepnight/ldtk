@@ -67,14 +67,18 @@ class CastleDb extends importer.ExternalEnum {
 				var e = Reflect.field(line, idColumn);
 				if( e==null || StringTools.trim(e).length==0 )
 					continue;
-				
+
 				if( !uniq.exists(e) ) {
 					uniq.set(e,true);
-					if( colorColumn!=null ) {
-						var color : Int = Reflect.field(line, colorColumn);
-						// TODO color
-					}
-					enu.values.push(e);
+					enu.values.push({
+						valueId: e,
+						data: {
+							color: colorColumn==null ? null : {
+								var color : Int = Reflect.field(line, colorColumn);
+								color;
+							}
+						},
+					});
 				}
 			}
 

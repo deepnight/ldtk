@@ -479,7 +479,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			jAdd.show();
 		jAdd.click( function(_) {
 			var uid = 0;
-			while( !curEnum.addValue(curEnum.identifier+uid) )
+			while( curEnum.addValue(curEnum.identifier+uid)==null )
 				uid++;
 			editor.ge.emit(EnumDefChanged);
 			var jElem = jFormWrapper.find("ul.enumValues li:last input[type=text]");

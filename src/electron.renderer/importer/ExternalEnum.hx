@@ -27,7 +27,7 @@ class ExternalEnum {
 		if( isSync )
 			App.LOG.add("import", 'Syncing external enums: $relPath');
 		else
-			App.LOG.add("import", 'Loading external enums: $relPath');
+			App.LOG.add("import", 'Importing external enums (new file): $relPath');
 
 		var project = Editor.ME.project;
 		var absPath = project.makeAbsoluteFilePath(relPath);
@@ -120,6 +120,9 @@ class ExternalEnum {
 			if( !ec.valueDiffs.exists(valueId) )
 				ec.valueDiffs.set(valueId, {
 					valueId: valueId,
+					data: {
+						color: null,
+					},
 					change: null, // not meant to be null in the end
 				});
 
@@ -131,8 +134,9 @@ class ExternalEnum {
 			for(pe in parseds) {
 				_getEnumDiff(pe.enumId).change = Added;
 				for(v in pe.values) {
-					var ec = _getValueDiff(pe.enumId, v);
+					var ec = _getValueDiff(pe.enumId, v.valueId);
 					ec.change = Added;
+					ec.data = v.data;
 				}
 			}
 		}
@@ -145,15 +149,16 @@ class ExternalEnum {
 					// New enum
 					_getEnumDiff(pe.enumId).change = Added;
 					for(v in pe.values) {
-						var ec = _getValueDiff(pe.enumId, v);
+						var ec = _getValueDiff(pe.enumId, v.valueId);
 						ec.change = Added;
+						ec.data = v.data;
 					}
 				}
 				else {
 					// New values
 					for(v in pe.values)
-						if( !existing.hasValue(v) ) {
-							var vc = _getValueDiff(pe.enumId, v);
+						if( !existing.hasValue(v.valueId) ) {
+							var vc = _getValueDiff(pe.enumId, v.valueId);
 							vc.change = Added;
 						}
 
@@ -161,7 +166,7 @@ class ExternalEnum {
 					for(edv in existing.values.copy()) {
 						var found = false;
 						for(v2 in pe.values)
-							if( v2==edv.id ) {
+							if( v2.valueId == edv.id ) {
 								found = true;
 								break;
 							}
@@ -256,7 +261,6 @@ class ExternalEnum {
 			new ui.modal.dialog.EnumSync(diff, relSourcePath, (updatedOps)->{
 				App.LOG.add("import", 'Updated sync diff: ${_printDiff(diff)}');
 				new ui.LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), Editor.ME.project );
-				App.LOG.add("import", 'Sync needs user actions');
 				applyDiff(diff, relSourcePath);
 				Editor.ME.invalidateAllLevelsCache();
 				project.tidy();
@@ -313,7 +317,9 @@ class ExternalEnum {
 						switch vDiff.change {
 							case Added: // New value
 								trace('add value ${vDiff.valueId}');
-								ed.addValue(vDiff.valueId);
+								var ev = ed.addValue(vDiff.valueId);
+								if( vDiff.data.color!=null )
+									ev.color = vDiff.data.color;
 								unsortedEnums.set(ed.identifier, true);
 
 							case Removed: // Lost value
@@ -330,8 +336,11 @@ class ExternalEnum {
 					trace('add enum ${eDiff.enumId}');
 					var ed = project.defs.createEnumDef(relSourcePath);
 					ed.identifier = eDiff.enumId;
-					for(v in eDiff.valueDiffs)
-						ed.addValue(v.valueId);
+					for(v in eDiff.valueDiffs) {
+						var ev = ed.addValue(v.valueId);
+						if( v.data.color!=null )
+							ev.color = v.data.color;
+					}
 					unsortedEnums.set(ed.identifier, true);
 
 				case Removed: // Lost enum

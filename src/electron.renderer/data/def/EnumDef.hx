@@ -113,19 +113,20 @@ class EnumDef {
 		return Project.isValidIdentifier(v) && !hasValue(v) || exclude!=null && v==exclude;
 	}
 
-	public function addValue(v:String) {
+	public function addValue(v:String) : Null<data.DataTypes.EnumDefValue> {
 		if( !isValueIdentifierValidAndUnique(v) )
-			return false;
+			return null;
 
 		if( !isExternal() )
 			v = Project.cleanupIdentifier(v, _project.identifierStyle);
 
-		values.push({
+		var ev : data.DataTypes.EnumDefValue = {
 			id: v,
 			tileId: null,
 			color: 0x0,
-		});
-		return true;
+		};
+		values.push(ev);
+		return ev;
 	}
 
 	public function removeValue(valueId:String) {
