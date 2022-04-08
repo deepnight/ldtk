@@ -263,26 +263,32 @@ class ExternalEnum {
 				new ui.LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), Editor.ME.project );
 				applyDiff(diff, relSourcePath);
 				Editor.ME.invalidateAllLevelsCache();
+				copyParsedValuesData(parseds);
 				project.tidy();
 				updateChecksums(relSourcePath, checksum);
 				Editor.ME.ge.emit( ExternalEnumsLoaded(true) );
 				N.success( fileName, L.t._("Enums updated successfully.") );
 			});
 		}
-		else if( Lambda.count(diff)>0 ) {
-			// Update is easy
-			App.LOG.add("import", 'Sync automatically applied.');
-			applyDiff(diff, relSourcePath);
-			updateChecksums(relSourcePath, checksum);
-			Editor.ME.ge.emit( ExternalEnumsLoaded(true) );
-			N.success( fileName, L.t._("Enums updated successfully.") );
-		}
 		else {
-			// No change
-			App.LOG.add("import", 'Nothing to sync.');
-			N.msg( fileName, L.t._("Enums are already up-to-date.") );
-			updateChecksums(relSourcePath, checksum);
-			Editor.ME.ge.emit( ExternalEnumsLoaded(false) );
+			var valuesDataChanged = copyParsedValuesData(parseds);
+			if( Lambda.count(diff)>0 || valuesDataChanged ) {
+				// Simple case: sync operations don't affect any existing project instance
+				App.LOG.add("import", 'Sync automatically applied.');
+				applyDiff(diff, relSourcePath);
+				updateChecksums(relSourcePath, checksum);
+				if( valuesDataChanged )
+					Editor.ME.invalidateAllLevelsCache();
+				Editor.ME.ge.emit( ExternalEnumsLoaded(true) );
+				N.success( fileName, L.t._("Enums updated successfully.") );
+			}
+			else {
+				// No change
+				App.LOG.add("import", 'Nothing to sync.');
+				N.msg( fileName, L.t._("Enums are already up-to-date.") );
+				updateChecksums(relSourcePath, checksum);
+				Editor.ME.ge.emit( ExternalEnumsLoaded(false) );
+			}
 		}
 	}
 
@@ -297,6 +303,37 @@ class ExternalEnum {
 				ed.externalFileChecksum = checksum;
 
 
+	}
+
+
+	function copyParsedValuesData(parseds:Array<ParsedExternalEnum>) {
+		var project = Editor.ME.project;
+
+		var anyChange = false;
+		for(pe in parseds) {
+			var ed = project.defs.getEnumDef(pe.enumId);
+			if( ed==null )
+				continue;
+
+			for(pv in pe.values) {
+				var ev = ed.getValue(pv.valueId);
+				if( ev==null )
+					continue;
+
+				// Update value color
+				if( pv.data.color!=null && pv.data.color!=ev.color ) {
+					ev.color = pv.data.color;
+					anyChange = true;
+				}
+			}
+		}
+
+		if( anyChange )
+			App.LOG.add("import", 'Some enum values data were updated.');
+		else
+			App.LOG.add("import", 'No change in enum values data.');
+
+		return anyChange;
 	}
 
 

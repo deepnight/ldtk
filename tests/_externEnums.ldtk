@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458170,
-	"nextUid": 21,
+	"appBuildId": 458171,
+	"nextUid": 27,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -90,15 +90,73 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "cdb",
+					"identifier": "Test",
 					"__type": "ExternEnum.Test",
-					"uid": 19,
-					"type": "F_Enum(15)",
+					"uid": 24,
+					"type": "F_Enum(21)",
 					"isArray": false,
 					"canBeNull": false,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "NameAndValue",
+					"editorDisplayMode": "ValueOnly",
+					"editorDisplayPos": "Above",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": true,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
+		},
+		{
+			"identifier": "Other",
+			"uid": 25,
+			"tags": [],
+			"width": 32,
+			"height": 32,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 1,
+			"lineOpacity": 1,
+			"hollow": false,
+			"color": "#757575",
+			"renderMode": "Rectangle",
+			"showName": false,
+			"tilesetId": null,
+			"tileId": null,
+			"tileRenderMode": "FitInside",
+			"tileRect": null,
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0.5,
+			"pivotY": 0.5,
+			"fieldDefs": [
+				{
+					"identifier": "other",
+					"__type": "ExternEnum.Other",
+					"uid": 26,
+					"type": "F_Enum(22)",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
@@ -125,18 +183,18 @@
 		{ "id": "Conflict1", "tileId": null, "color": 0, "__tileSrcRect": null },
 		{ "id": "Conflict2", "tileId": null, "color": 0, "__tileSrcRect": null }
 	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [
-		{ "identifier": "Test", "uid": 15, "values": [
-			{ "id": "Bar", "tileId": null, "color": 16711680, "__tileSrcRect": null },
-			{ "id": "Foo", "tileId": null, "color": 65328, "__tileSrcRect": null },
-			{ "id": "Hello", "tileId": null, "color": 16759296, "__tileSrcRect": null },
-			{ "id": "World", "tileId": null, "color": 5877503, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
-		{ "identifier": "Third", "uid": 17, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
-		{ "identifier": "Other", "uid": 18, "values": [
-			{ "id": "Cool", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Some", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Thing", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] }
+		{ "identifier": "Test", "uid": 21, "values": [
+			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Foo", "tileId": null, "color": 2949375, "__tileSrcRect": null },
+			{ "id": "Hello", "tileId": null, "color": 16711680, "__tileSrcRect": null },
+			{ "id": "World", "tileId": null, "color": 16766720, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2d581d79e18c06750867218c7ac6831f", "tags": [] },
+		{ "identifier": "Other", "uid": 22, "values": [
+			{ "id": "Cool", "tileId": null, "color": 16743548, "__tileSrcRect": null },
+			{ "id": "Some", "tileId": null, "color": 13508383, "__tileSrcRect": null },
+			{ "id": "Thing", "tileId": null, "color": 6362389, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2d581d79e18c06750867218c7ac6831f", "tags": [] },
+		{ "identifier": "Third", "uid": 23, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "2d581d79e18c06750867218c7ac6831f", "tags": [] }
 	], "levelFields": [] },
 	"levels": [
 		{
@@ -186,104 +244,155 @@
 					"entityInstances": [
 						{
 							"__identifier": "ExternTest",
-							"__grid": [5,6],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FFBA00",
-							"iid": "0ba66880-b4d0-11ec-bb83-478dbe68eead",
-							"width": 32,
-							"height": 32,
-							"defUid": 1,
-							"px": [88,104],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["Hello"]
-							}] }]
-						},
-						{
-							"__identifier": "ExternTest",
-							"__grid": [9,6],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#59AEFF",
-							"iid": "0d5e9fd0-b4d0-11ec-bb83-e56e09b7c3f7",
-							"width": 32,
-							"height": 32,
-							"defUid": 1,
-							"px": [152,104],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "World", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["World"]
-							}] }]
-						},
-						{
-							"__identifier": "ExternTest",
-							"__grid": [5,10],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FFBA00",
-							"iid": "54537320-b4d0-11ec-ac59-4106f904033b",
-							"width": 32,
-							"height": 32,
-							"defUid": 1,
-							"px": [88,168],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["Hello"]
-							}] }]
-						},
-						{
-							"__identifier": "ExternTest",
-							"__grid": [9,10],
-							"__pivot": [0.5,0.5],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#59AEFF",
-							"iid": "54be9100-b4d0-11ec-ac59-959407ed0ffe",
-							"width": 32,
-							"height": 32,
-							"defUid": 1,
-							"px": [152,168],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "World", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["World"]
-							}] }]
-						},
-						{
-							"__identifier": "ExternTest",
-							"__grid": [7,3],
+							"__grid": [5,4],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#FF0000",
-							"iid": "cfadf8b0-b4d0-11ec-908b-45feb5a3f5d3",
+							"iid": "5c099630-b4d0-11ec-945f-d1bd620f2198",
 							"width": 32,
 							"height": 32,
 							"defUid": 1,
-							"px": [120,56],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "Bar", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
+							"px": [88,72],
+							"fieldInstances": [{ "__identifier": "Test", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 24, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Hello"]
+							}] }]
+						},
+						{
+							"__identifier": "ExternTest",
+							"__grid": [9,4],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFD700",
+							"iid": "647a1420-b4d0-11ec-945f-9b048b414dd7",
+							"width": 32,
+							"height": 32,
+							"defUid": 1,
+							"px": [152,72],
+							"fieldInstances": [{ "__identifier": "Test", "__value": "World", "__type": "ExternEnum.Test", "__tile": null, "defUid": 24, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["World"]
+							}] }]
+						},
+						{
+							"__identifier": "ExternTest",
+							"__grid": [5,7],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FF0000",
+							"iid": "678f4360-b4d0-11ec-945f-a3f4dc687d64",
+							"width": 32,
+							"height": 32,
+							"defUid": 1,
+							"px": [88,120],
+							"fieldInstances": [{ "__identifier": "Test", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 24, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Hello"]
+							}] }]
+						},
+						{
+							"__identifier": "ExternTest",
+							"__grid": [9,7],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FFD700",
+							"iid": "68edc1f0-b4d0-11ec-945f-67fa2b0c99a8",
+							"width": 32,
+							"height": 32,
+							"defUid": 1,
+							"px": [152,120],
+							"fieldInstances": [{ "__identifier": "Test", "__value": "World", "__type": "ExternEnum.Test", "__tile": null, "defUid": 24, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["World"]
+							}] }]
+						},
+						{
+							"__identifier": "ExternTest",
+							"__grid": [7,2],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#2D00FF",
+							"iid": "6a6fa700-b4d0-11ec-945f-5b554063b40d",
+							"width": 32,
+							"height": 32,
+							"defUid": 1,
+							"px": [120,40],
+							"fieldInstances": [{ "__identifier": "Test", "__value": "Foo", "__type": "ExternEnum.Test", "__tile": null, "defUid": 24, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Foo"]
+							}] }]
+						},
+						{
+							"__identifier": "ExternTest",
+							"__grid": [7,9],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#000000",
+							"iid": "6bdc7d70-b4d0-11ec-945f-83595bad078c",
+							"width": 32,
+							"height": 32,
+							"defUid": 1,
+							"px": [120,152],
+							"fieldInstances": [{ "__identifier": "Test", "__value": "Bar", "__type": "ExternEnum.Test", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Bar"]
 							}] }]
 						},
 						{
-							"__identifier": "ExternTest",
-							"__grid": [7,13],
+							"__identifier": "Other",
+							"__grid": [3,13],
 							"__pivot": [0.5,0.5],
 							"__tags": [],
 							"__tile": null,
-							"__smartColor": "#00FF30",
-							"iid": "da092fa0-b4d0-11ec-908b-21bd3cfc2907",
+							"__smartColor": "#FF7C7C",
+							"iid": "a9db0100-b4d0-11ec-945f-4fbaf6881a44",
 							"width": 32,
 							"height": 32,
-							"defUid": 1,
-							"px": [120,216],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "Foo", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
+							"defUid": 25,
+							"px": [56,216],
+							"fieldInstances": [{ "__identifier": "other", "__value": "Cool", "__type": "ExternEnum.Other", "__tile": null, "defUid": 26, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["Foo"]
+								"params": ["Cool"]
+							}] }]
+						},
+						{
+							"__identifier": "Other",
+							"__grid": [6,13],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#CE1F1F",
+							"iid": "ab6a2c80-b4d0-11ec-945f-4fbe35b0f10d",
+							"width": 32,
+							"height": 32,
+							"defUid": 25,
+							"px": [104,216],
+							"fieldInstances": [{ "__identifier": "other", "__value": "Some", "__type": "ExternEnum.Other", "__tile": null, "defUid": 26, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Some"]
+							}] }]
+						},
+						{
+							"__identifier": "Other",
+							"__grid": [9,13],
+							"__pivot": [0.5,0.5],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#611515",
+							"iid": "acc68830-b4d0-11ec-945f-fb6f3da2217d",
+							"width": 32,
+							"height": 32,
+							"defUid": 25,
+							"px": [152,216],
+							"fieldInstances": [{ "__identifier": "other", "__value": "Thing", "__type": "ExternEnum.Other", "__tile": null, "defUid": 26, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Thing"]
 							}] }]
 						}
 					]
