@@ -159,23 +159,6 @@ typedef EnumValueSyncDiff = {
 	var change: EnumSyncChange;
 }
 
-// typedef EnumSyncOp = {
-// 	var type : SyncOp;
-// 	var enumId : String;
-// 	var cb: data.Project->Void;
-// }
-
-// enum SyncOp {
-// 	AddEnum(values:Array<String>);
-// 	RemoveEnum(used:Bool);
-
-// 	AddValue(val:String);
-// 	RemoveValue(val:String, used:Bool);
-
-// 	Special;
-// 	DateUpdated;
-// }
-
 enum ImageLoadingResult {
 	Ok;
 	FileNotFound;

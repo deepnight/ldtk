@@ -40,6 +40,7 @@ class App extends dn.Process {
 		LOG.tagColors.set("cache", "#edda6f");
 		LOG.tagColors.set("tidy", "#8ed1ac");
 		LOG.tagColors.set("save", "#ff6f14");
+		LOG.tagColors.set("import", "#ffcc00");
 		#if debug
 		// LOG.printOnAdd = true;
 		#end

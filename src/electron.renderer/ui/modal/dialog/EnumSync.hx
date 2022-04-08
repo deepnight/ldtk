@@ -89,7 +89,7 @@ class EnumSync extends ui.modal.Dialog {
 						jSelect.append('<option value="">-- Choose an action --</option>');
 						for(v in enumRenameTargets)
 							jSelect.append('<option value="rename:$v" to="$v">Rename enum ${eDiff.enumId} ➜ $v</option>');
-						jSelect.append('<option value="remove">REMOVE ENUM FROM PROJECT</option>');
+						jSelect.append('<option value="remove">REMOVE ${eDiff.enumId} ENUM FROM PROJECT</option>');
 						jSelect.change( _->{
 							var raw = Std.string( jSelect.val() );
 							if( raw.indexOf("rename")==0 ) {
@@ -156,7 +156,7 @@ class EnumSync extends ui.modal.Dialog {
 							jSelect.append('<option value="">-- Choose an action --</option>');
 							for(v in valueRenameTargets)
 								jSelect.append('<option value="rename:$v" to="$v">Rename ${vDiff.valueId} ➜ $v</option>');
-							jSelect.append('<option value="remove">REMOVE FROM PROJECT</option>');
+							jSelect.append('<option value="remove">REMOVE ${eDiff.enumId}.${vDiff.valueId} FROM PROJECT</option>');
 							jSelect.change( _->{
 								var raw = Std.string( jSelect.val() );
 								if( raw.indexOf("rename")==0 ) {
