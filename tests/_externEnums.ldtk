@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458152,
-	"nextUid": 20,
+	"appBuildId": 458170,
+	"nextUid": 21,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -66,8 +66,8 @@
 			"identifier": "ExternTest",
 			"uid": 1,
 			"tags": [],
-			"width": 16,
-			"height": 16,
+			"width": 32,
+			"height": 32,
 			"resizableX": false,
 			"resizableY": false,
 			"keepAspectRatio": false,
@@ -76,7 +76,7 @@
 			"lineOpacity": 1,
 			"hollow": false,
 			"color": "#FFCC00",
-			"renderMode": "Rectangle",
+			"renderMode": "Ellipse",
 			"showName": false,
 			"tilesetId": null,
 			"tileId": null,
@@ -120,17 +120,16 @@
 				}
 			]
 		}
-	], "tilesets": [], "enums": [{ "identifier": "Local", "uid": 9, "values": [
-		{ "id": "Local0", "tileId": null, "color": 0, "__tileSrcRect": null },
-		{ "id": "Local1", "tileId": null, "color": 0, "__tileSrcRect": null },
-		{ "id": "Local2", "tileId": null, "color": 0, "__tileSrcRect": null },
-		{ "id": "Local3", "tileId": null, "color": 0, "__tileSrcRect": null }
+	], "tilesets": [], "enums": [{ "identifier": "Conflict", "uid": 20, "values": [
+		{ "id": "Conflict0", "tileId": null, "color": 0, "__tileSrcRect": null },
+		{ "id": "Conflict1", "tileId": null, "color": 0, "__tileSrcRect": null },
+		{ "id": "Conflict2", "tileId": null, "color": 0, "__tileSrcRect": null }
 	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [
 		{ "identifier": "Test", "uid": 15, "values": [
 			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Foo", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null }
+			{ "id": "World", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Foo", "tileId": null, "color": 0, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
 		{ "identifier": "Third", "uid": 17, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "fcbdb4359746640c161030241a978b08", "tags": [] },
 		{ "identifier": "Other", "uid": 18, "values": [
@@ -193,13 +192,13 @@
 							"__tile": null,
 							"__smartColor": "#FFCC00",
 							"iid": "0423c050-b4d0-11ec-b829-fbf3d09a0163",
-							"width": 16,
-							"height": 16,
+							"width": 32,
+							"height": 32,
 							"defUid": 1,
 							"px": [104,104],
-							"fieldInstances": [{ "__identifier": "cdb", "__value": "Foo", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.Test", "__tile": null, "defUid": 19, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["Foo"]
+								"params": ["Hello"]
 							}] }]
 						}
 					]

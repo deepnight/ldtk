@@ -3221,6 +3221,11 @@ textarea {
 				color: white;
 				background-color: $red;
 			}
+			&.unchanged {
+				color: $bgLighter;
+				font-style: italic;
+				background-color: transparent;
+			}
 		}
 
 

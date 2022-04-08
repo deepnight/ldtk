@@ -1811,6 +1811,7 @@ class Editor extends Page {
 			case ExternalEnumsLoaded:
 				Tool.clearSelectionMemory();
 				clearSpecialTool();
+				selectionTool.clear();
 				updateTool();
 
 

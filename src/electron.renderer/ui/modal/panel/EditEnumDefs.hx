@@ -409,7 +409,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			var i = new form.input.StringInput(li.find(".name"),
 				function() return eValue.id,
 				function(newV) {
-					if( !curEnum.renameValue(project, eValue.id, newV) )
+					if( !curEnum.renameValue(eValue.id, newV) )
 						N.invalidIdentifier(newV);
 				}
 			);
@@ -457,13 +457,15 @@ class EditEnumDefs extends ui.modal.Panel {
 							isUsed,
 							function() {
 								new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
-								project.defs.removeEnumDefValue(curEnum, eValue.id);
+								curEnum.removeValue(eValue.id);
+								project.tidy();
 								editor.ge.emit(EnumDefValueRemoved);
 							}
 						);
 					}
 					else {
-						project.defs.removeEnumDefValue(curEnum, eValue.id);
+						curEnum.removeValue(eValue.id);
+						project.tidy();
 						editor.ge.emit(EnumDefValueRemoved);
 					}
 				});

@@ -140,22 +140,41 @@ typedef ParsedExternalEnum = {
 	var values : Array<String>;
 }
 
-typedef EnumSyncOp = {
-	var type : SyncOp;
-	var enumId : String;
-	var cb: data.Project->Void;
+enum EnumSyncChange {
+	Added;
+	Removed;
+	Renamed(to:String);
 }
 
-enum SyncOp {
-	AddEnum(values:Array<String>);
-	RemoveEnum(used:Bool);
-
-	AddValue(val:String);
-	RemoveValue(val:String, used:Bool);
-
-	Special;
-	DateUpdated;
+typedef EnumSyncDiff = {
+	var enumId: String;
+	var ?warning: Bool;
+	var change: Null<EnumSyncChange>;
+	var valueDiffs: Map<String, EnumValueSyncDiff>;
 }
+
+typedef EnumValueSyncDiff = {
+	var valueId: String;
+	var ?warning: Bool;
+	var change: EnumSyncChange;
+}
+
+// typedef EnumSyncOp = {
+// 	var type : SyncOp;
+// 	var enumId : String;
+// 	var cb: data.Project->Void;
+// }
+
+// enum SyncOp {
+// 	AddEnum(values:Array<String>);
+// 	RemoveEnum(used:Bool);
+
+// 	AddValue(val:String);
+// 	RemoveValue(val:String, used:Bool);
+
+// 	Special;
+// 	DateUpdated;
+// }
 
 enum ImageLoadingResult {
 	Ok;

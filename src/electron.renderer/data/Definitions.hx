@@ -653,17 +653,6 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function removeEnumDefValue(ed:data.def.EnumDef, id:String) {
-		for(e in ed.values)
-			if( e.id==id ) {
-				ed.values.remove(e);
-				_project.tidy();
-				return;
-			}
-
-		throw "EnumDef value not found";
-	}
-
 	public function isEnumIdentifierUnique(id:String, ?exclude:data.def.EnumDef) {
 		id = Project.cleanupIdentifier(id, _project.identifierStyle);
 		if( id==null )

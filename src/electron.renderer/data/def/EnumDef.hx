@@ -128,6 +128,16 @@ class EnumDef {
 		return true;
 	}
 
+	public function removeValue(valueId:String) {
+		for(e in values)
+			if( e.id==valueId ) {
+				values.remove(e);
+				return;
+			}
+
+		throw "EnumDef value not found";
+	}
+
 	public function setValueTileId(id:String, tid:Int) {
 		if( !hasValue(id) || iconTilesetUid==null )
 			return;
@@ -140,18 +150,18 @@ class EnumDef {
 			ev.tileId = null;
 	}
 
-	public function renameValue(project:Project, from:String, to:String) {
+	public function renameValue(from:String, to:String) {
 		if( to=="" || to==null )
 			return false;
 
-		to = project.fixUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
+		to = _project.fixUniqueIdStr(to, id->isValueIdentifierValidAndUnique(id,from));
 
 		for(i in 0...values.length)
 			if( values[i].id==from ) {
 				values[i].id = to;
 
 				// Fix existing fields
-				project.iterateAllFieldInstances( F_Enum(uid), function(fi) {
+				_project.iterateAllFieldInstances( F_Enum(uid), function(fi) {
 					for(i in 0...fi.getArrayLength())
 						if( fi.getEnumValue(i)==from ) {
 							App.LOG.add("tidy", "Renaming enum instance in "+fi+"["+i+"]");
@@ -160,7 +170,7 @@ class EnumDef {
 				});
 
 				// Fix tileset meta-data
-				for(td in project.defs.tilesets)
+				for(td in _project.defs.tilesets)
 					if( td.tagsSourceEnumUid==uid && td.enumTags.exists(from) ) {
 						td.enumTags.set(to, td.enumTags.get(from));
 						td.enumTags.remove(from);
