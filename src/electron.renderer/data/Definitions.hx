@@ -618,8 +618,11 @@ class Definitions {
 		ed.identifier = e.enumId;
 		ed.externalFileChecksum = checksum;
 
-		for(v in e.values)
-			ed.addValue(v);
+		for(v in e.values) {
+			var ev = ed.addValue(v.valueId);
+			if( v.data.color!=null )
+				ev.color = v.data.color;
+		}
 
 		ed.alphaSortValues();
 
