@@ -1,7 +1,7 @@
 {
 	"sheets": [
 		{
-			"name": "Test",
+			"name": "MyCastleDbEnum",
 			"columns": [
 				{
 					"typeStr": "11",
@@ -26,7 +26,7 @@
 					"col": 16711680
 				},
 				{
-					"id": "NewWorld",
+					"id": "World",
 					"col": 786176
 				},
 				{
@@ -42,7 +42,7 @@
 			"props": {}
 		},
 		{
-			"name": "Other",
+			"name": "OtherEnum",
 			"columns": [
 				{
 					"typeStr": "0",
@@ -65,7 +65,7 @@
 			"props": {}
 		},
 		{
-			"name": "Third",
+			"name": "Another",
 			"columns": [
 				{
 					"typeStr": "0",
