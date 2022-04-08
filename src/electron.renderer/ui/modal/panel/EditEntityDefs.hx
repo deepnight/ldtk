@@ -137,6 +137,10 @@ class EditEntityDefs extends ui.modal.Panel {
 				updateEntityList();
 				updateFieldsForm();
 
+			case ExternalEnumsLoaded(anyCriticalChange):
+				updateEntityList();
+				updateFieldsForm();
+
 			case _:
 		}
 	}
