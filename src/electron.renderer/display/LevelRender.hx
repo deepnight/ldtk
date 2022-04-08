@@ -114,7 +114,7 @@ class LevelRender extends dn.Process {
 			case ProjectSelected:
 				renderAll();
 
-			case ExternalEnumsLoaded:
+			case ExternalEnumsLoaded(anyCriticalChange):
 				invalidateAll();
 
 			case ProjectSettingsChanged:

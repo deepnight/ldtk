@@ -113,7 +113,7 @@ class LevelTimeline {
 			case EnumDefRemoved: true;
 			case EnumDefChanged: true;
 			case EnumDefValueRemoved: true;
-			case ExternalEnumsLoaded: true;
+			case ExternalEnumsLoaded(anyCriticalChange): anyCriticalChange;
 			case _: false;
 		}
 		if( needsClear )

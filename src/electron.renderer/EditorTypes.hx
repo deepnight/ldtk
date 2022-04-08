@@ -79,7 +79,7 @@ enum GlobalEvent {
 	EnumDefChanged;
 	EnumDefSorted;
 	EnumDefValueRemoved;
-	ExternalEnumsLoaded;
+	ExternalEnumsLoaded(anyCriticalChange:Bool);
 
 	ToolValueSelected;
 	ToolOptionChanged;

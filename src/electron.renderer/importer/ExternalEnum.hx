@@ -261,7 +261,7 @@ class ExternalEnum {
 				Editor.ME.invalidateAllLevelsCache();
 				project.tidy();
 				updateChecksums(relSourcePath, checksum);
-				Editor.ME.ge.emit( ExternalEnumsLoaded );
+				Editor.ME.ge.emit( ExternalEnumsLoaded(true) );
 				N.success( fileName, L.t._("Enums updated successfully.") );
 			});
 		}
@@ -270,7 +270,7 @@ class ExternalEnum {
 			App.LOG.add("import", 'Sync automatically applied.');
 			applyDiff(diff, relSourcePath);
 			updateChecksums(relSourcePath, checksum);
-			Editor.ME.ge.emit( ExternalEnumsLoaded );
+			Editor.ME.ge.emit( ExternalEnumsLoaded(true) );
 			N.success( fileName, L.t._("Enums updated successfully.") );
 		}
 		else {
@@ -278,7 +278,7 @@ class ExternalEnum {
 			App.LOG.add("import", 'Nothing to sync.');
 			N.msg( fileName, L.t._("Enums are already up-to-date.") );
 			updateChecksums(relSourcePath, checksum);
-			Editor.ME.ge.emit( ExternalEnumsLoaded );
+			Editor.ME.ge.emit( ExternalEnumsLoaded(false) );
 		}
 	}
 
