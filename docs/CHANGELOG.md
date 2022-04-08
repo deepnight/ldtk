@@ -1,6 +1,17 @@
 # 1.1.2
 
-- You can now import and sync Enums from a **Castle DB** file (http://castledb.org).
+## Better imported enums
+
+The sync window for External Enums was completely reworked:
+ - better UI,
+ - added support for enums and values renaming.
+
+You can now also import and sync Enums from a **Castle DB** file (http://castledb.org).
+
+![](1.1.2/sync.png)
+
+## Other changes
+
 - Fixed a crash when pressing `Delete` key while having no active selection.
 
 # 1.1.1
