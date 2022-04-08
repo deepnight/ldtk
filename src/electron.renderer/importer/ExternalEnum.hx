@@ -369,6 +369,7 @@ class ExternalEnum {
 							case Added:
 								trace('add value ${vDiff.valueId}');
 								ed.addValue(vDiff.valueId);
+								unsortedEnums.set(ed.identifier, true);
 
 							case Removed:
 								trace('remove value ${vDiff.valueId}');
@@ -377,6 +378,7 @@ class ExternalEnum {
 							case Renamed(to):
 								trace('rename value ${vDiff.valueId}=>$to');
 								ed.renameValue(vDiff.valueId, to);
+								unsortedEnums.set(ed.identifier, true);
 						}
 
 				case Added:
