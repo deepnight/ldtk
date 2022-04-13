@@ -411,30 +411,35 @@ button {
 	top: 15px;
 	right: 0;
 	z-index: 99;
+	display: grid;
+	grid-template-columns: auto min-content;
+	// box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
 
 	button {
-		display: grid;
-		grid-template-rows: auto auto;
-		width: auto;
-		padding: 8px;
-		padding-right: 16px;
-
-		text-align: left;
-
+		margin: 0;
 		animation: anim_slideUp 2s;
-		box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
 
-		strong {
-			font-size: 1.2em;
-			margin-bottom: 4px;
-		}
+		&.proceed {
+			display: grid;
+			grid-template-rows: auto auto;
+			width: auto;
+			padding: 8px;
+			padding-right: 16px;
+			text-align: left;
 
-		em {
-			opacity: 0.7;
-			font-size: 0.8em;
-			font-style: normal;
+			strong {
+				font-size: 1.2em;
+				margin-bottom: 4px;
+			}
+
+			em {
+				opacity: 0.7;
+				font-size: 0.8em;
+				font-style: normal;
+			}
 		}
 	}
+
 }
 
 
@@ -2622,6 +2627,10 @@ textarea {
 .window.editAppSettings {
 	.wrapper .content {
 		width: 600px;
+
+		button.update {
+			margin-bottom: 32px;
+		}
 
 		dl.form {
 			dt {

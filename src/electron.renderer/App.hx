@@ -192,7 +192,7 @@ class App extends dn.Process {
 				pendingUpdateVersion = info.version;
 				miniNotif('Found update ${info.version}!');
 			}
-			showUpdateButton(info.version, false, ()->{
+			showUpdateButton(info.version, true, ()->{
 				dn.js.ElectronUpdater.downloadAndInstall();
 			});
 		}
@@ -225,6 +225,12 @@ class App extends dn.Process {
 		}
 
 		// Check now
+		checkForUpdate();
+	}
+
+	public function checkForUpdate() {
+		jBody.find("#updateInstall").empty().hide();
+
 		if( App.isWindows() ) {
 			// Windows
 			miniNotif("Checking for update...", true);
@@ -252,6 +258,7 @@ class App extends dn.Process {
 			}
 			else if( Version.greater(latest.full, Const.getAppVersion(true), false ) ) {
 				LOG.add("update", "Update available: "+latest);
+				pendingUpdateVersion = latest.full;
 				N.success("Application update", "Update "+latest.full+" is available!");
 
 				showUpdateButton(latest.full, false, ()->{
@@ -267,23 +274,34 @@ class App extends dn.Process {
 		});
 	}
 
+
 	function showUpdateButton(version:String, isInstall:Bool, applyUpdate:Void->Void) {
-		var e = jBody.find("#updateInstall");
-		e.show();
-		var bt = e.find("button");
-		bt.off().empty();
+		var jWrapper = jBody.find("#updateInstall");
+		jWrapper.empty().show();
+
+		// Install
 		var label = isInstall ? "Install update" : "Download update";
-		bt.append('<strong>$label</strong>');
-		bt.append('<em>Version $version</em>');
-		bt.click(function(_) {
-			bt.hide();
+		var jButton = new J('<button class="proceed"/>').appendTo(jWrapper);
+		jButton.append('<strong>$label</strong>');
+		jButton.append('<em>Version $version</em>');
+		jButton.click(function(_) {
+			jButton.hide();
 
 			if( Editor.exists() && Editor.ME.needSaving )
-				new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->bt.show());
+				new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->jButton.show());
 			else if( !ui.modal.Progress.hasAny() )
 				applyUpdate();
 		});
 
+		// Ignore
+		if( !settings.v.autoInstallUpdates ) {
+			var jIgnore = new J('<button class="skip gray"/>');
+			jIgnore.appendTo(jWrapper);
+			jIgnore.append('Later');
+			jIgnore.click( _->{
+				jWrapper.hide();
+			});
+		}
 	}
 
 

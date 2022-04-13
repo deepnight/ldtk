@@ -13,9 +13,19 @@ class EditAppSettings extends ui.modal.Dialog {
 
 	function updateForm() {
 		// Init
-		loadTemplate("editAppSettings", { app: Const.APP_NAME });
+		loadTemplate("editAppSettings", { app: Const.APP_NAME, updateVer:App.ME.pendingUpdateVersion });
 		var jForm = jContent.find(".form");
 		jForm.off().find("*").off();
+
+		if( App.ME.pendingUpdateVersion==null )
+			jContent.find(".update").hide();
+		else {
+			jContent.find(".update").click(_->{
+				App.ME.checkForUpdate();
+				close();
+				N.debug("dl");
+			});
+		}
 
 		// Log button
 		jContent.find(".logPath").text( JsTools.getLogPath() );
