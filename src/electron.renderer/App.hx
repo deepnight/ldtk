@@ -186,15 +186,13 @@ class App extends dn.Process {
 		}
 		dn.js.ElectronUpdater.onUpdateFound = function(info) {
 			LOG.add("update", "Found update: "+info.version+" ("+info.releaseDate+")");
-			if( settings.v.autoInstallUpdates )
-				miniNotif('Downloading ${info.version}...', true);
-			else {
+			if( !settings.v.autoInstallUpdates ) {
 				pendingUpdateVersion = info.version;
 				miniNotif('Found update ${info.version}!');
+				showUpdateButton(info.version, false, ()->{
+					dn.js.ElectronUpdater.download();
+				});
 			}
-			showUpdateButton(info.version, true, ()->{
-				dn.js.ElectronUpdater.downloadAndInstall();
-			});
 		}
 		dn.js.ElectronUpdater.onUpdateNotFound = function() miniNotif('App is up-to-date.');
 		dn.js.ElectronUpdater.onError = function(err) {
@@ -215,13 +213,10 @@ class App extends dn.Process {
 
 				loadPage( ()->new page.Updating() );
 				delayer.addS(function() {
-					IpcRenderer.invoke("installUpdate");
+					IpcRenderer.invoke("quitAndInstall");
 				}, 1);
 			}
-			if( pendingUpdateVersion!=null )
-				_install();
-			else
-				showUpdateButton(info.version, true, _install);
+			showUpdateButton(info.version, true, _install);
 		}
 
 		// Check now
@@ -285,7 +280,10 @@ class App extends dn.Process {
 		jButton.append('<strong>$label</strong>');
 		jButton.append('<em>Version $version</em>');
 		jButton.click(function(_) {
-			jButton.hide();
+			jWrapper.hide();
+
+			if( !isInstall )
+				N.success('Downloading update...');
 
 			if( Editor.exists() && Editor.ME.needSaving )
 				new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->jButton.show());
