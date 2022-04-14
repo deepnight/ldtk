@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458313,
-	"nextUid": 48,
+	"appBuildId": 458315,
+	"nextUid": 54,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -218,34 +218,30 @@
 			{ "id": "Thing", "tileId": null, "color": 6362389, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] },
 		{ "identifier": "Another", "uid": 23, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] },
-		{ "identifier": "MyEnum", "uid": 35, "values": [
-			{ "id": "A", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "B", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/jsonEnum.json", "externalFileChecksum": "7cadeab414aec74e7986d1615f793a3c", "tags": [] },
-		{ "identifier": "AnotherOne", "uid": 36, "values": [
-			{ "id": "Other1", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Other2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Other3", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/jsonEnum.json", "externalFileChecksum": "7cadeab414aec74e7986d1615f793a3c", "tags": [] },
-		{ "identifier": "Third", "uid": 37, "values": [
-			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Foo", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/jsonEnum.json", "externalFileChecksum": "7cadeab414aec74e7986d1615f793a3c", "tags": [] },
-		{ "identifier": "MyEnumText", "uid": 45, "values": [
+		{ "identifier": "MyEnumText", "uid": 49, "values": [
 			{ "id": "A", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "B", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "C", "tileId": null, "color": 0, "__tileSrcRect": null },
 			{ "id": "D", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "362fd6e7dadb3e665d4797668db41630", "tags": [] },
-		{ "identifier": "OtherEnumText", "uid": 46, "values": [
-			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "B2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null },
-			{ "id": "D2", "tileId": null, "color": 0, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "362fd6e7dadb3e665d4797668db41630", "tags": [] },
-		{ "identifier": "Empty", "uid": 47, "values": [], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "362fd6e7dadb3e665d4797668db41630", "tags": [] }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "be1292b37ca3ad2d3f87d04b4f4892ed", "tags": [] },
+		{ "identifier": "OtherEnumText", "uid": 50, "values": [
+			{ "id": "Other1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Other2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Other3", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Other4", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "be1292b37ca3ad2d3f87d04b4f4892ed", "tags": [] },
+		{ "identifier": "Spaces", "uid": 51, "values": [
+			{ "id": "Space1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Space2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Space3", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "be1292b37ca3ad2d3f87d04b4f4892ed", "tags": [] },
+		{ "identifier": "Empty", "uid": 52, "values": [], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "be1292b37ca3ad2d3f87d04b4f4892ed", "tags": [] },
+		{ "identifier": "CommaEnumText", "uid": 53, "values": [
+			{ "id": "Comma1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Comma2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Comma3", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Comma4", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "be1292b37ca3ad2d3f87d04b4f4892ed", "tags": [] }
 	], "levelFields": [] },
 	"levels": [
 		{

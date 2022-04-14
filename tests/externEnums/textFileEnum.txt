@@ -1,5 +1,6 @@
 MyEnumText: a,b,c,d
-OtherEnumText: a2,b2, c2 ,  d2
-Spaces: a3 b3  c3    d4
+CommaEnumText: comma1,comma2,  comma3  , comma4
+OtherEnumText: other1;other2 ;  other3  ; other4
+Spaces  :   space1  space2    space3
 Invalid
 Empty:
