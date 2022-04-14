@@ -2956,6 +2956,10 @@ textarea {
 				border: 1px solid $bgMed;
 				white-space: nowrap;
 				border-radius: 3px;
+
+				&[class^=language-] {
+					white-space: pre-wrap;
+				}
 			}
 
 			h2 {
