@@ -61,7 +61,7 @@ class Settings {
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,
-			autoInstallUpdates: false, // HACK
+			autoInstallUpdates: true,
 
 			openLastProject: false,
 			lastProject: null,
