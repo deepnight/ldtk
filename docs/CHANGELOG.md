@@ -1,7 +1,45 @@
 # 1.1.2
 
-- You can now import and sync Enums from a **Castle DB** file (http://castledb.org).
+## Import enums from JSON and text files
+
+You may now import project Enums directly from an external file (previously, only Haxe and CastleDB). This enum will be updated as you edit the file and LDtk will take care of value losses or renamings.
+
+The following formats are now accepted :
+
+ - **JSON**: expected format is
+   ```json
+   {
+     "MyEnum1" : "a,b,c",
+     "MyEnum2" : "a b c",
+     "MyEnum3" : [ "a", "b", "c" ]
+   }
+   ```
+ - **Text file**: one enum per line. Each line should use one of these formats:
+   - `MyEnum : valueA, valueB, valueB`
+   - `MyEnum : valueA valueB valueB`
+   - `MyEnum : valueA ; valueB ; valueB`
+
+## Better imported enums
+
+The sync window for External Enums was completely reworked:
+ - better UI,
+ - added support for enums and values renaming.
+
+You can now also import and sync Enums from a **Castle DB** file (http://castledb.org).
+
+![](1.1.2/sync.png)
+
+## Samples list
+
+For new LDtk users, the samples are now much more visible in the default UI. Feel free to hide them by clicking on the [x] button.
+
+![](1.1.2/samples.png)
+
+## Other changes
+
 - Fixed a crash when pressing `Delete` key while having no active selection.
+- Fixed a crash when duplicating a level containing Entity references.
+- Fixed incorrect entity ref description in Entity instance panel.
 
 # 1.1.1
 

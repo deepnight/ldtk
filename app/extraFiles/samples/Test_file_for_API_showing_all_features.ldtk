@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.1.1",
+		"appVersion": "1.1.2",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "1.1.1",
-	"appBuildId": 458076,
-	"nextUid": 48,
+	"jsonVersion": "1.1.2",
+	"appBuildId": 458318,
+	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
 	"worldGridWidth": 256,
@@ -555,6 +555,35 @@
 					"textLanguageMode": null,
 					"symmetricalRef": false,
 					"autoChainRef": false,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefTags": [],
+					"tilesetUid": null
+				},
+				{
+					"identifier": "ExternEnum",
+					"__type": "ExternEnum.AnExternEnum",
+					"uid": 49,
+					"type": "F_Enum(48)",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "NameAndValue",
+					"editorDisplayPos": "Beneath",
+					"editorAlwaysShow": false,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
 					"allowedRefTags": [],
@@ -1142,7 +1171,12 @@
 		{ "id": "B", "tileId": 320, "color": 14332236, "__tileSrcRect": [0,320,16,16] },
 		{ "id": "C", "tileId": 328, "color": 9921830, "__tileSrcRect": [128,320,16,16] },
 		{ "id": "D", "tileId": 347, "color": 11570799, "__tileSrcRect": [176,336,16,16] }
-	], "iconTilesetUid": 45, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
+	], "iconTilesetUid": 45, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [{ "identifier": "AnExternEnum", "uid": 48, "values": [
+		{ "id": "Value1", "tileId": 291, "color": 13408597, "__tileSrcRect": [48,288,16,16] },
+		{ "id": "Value2", "tileId": 303, "color": 4495667, "__tileSrcRect": [240,288,16,16] },
+		{ "id": "Value3", "tileId": 316, "color": 5592456, "__tileSrcRect": [192,304,16,16] },
+		{ "id": "Value4", "tileId": 312, "color": 8939059, "__tileSrcRect": [128,304,16,16] }
+	], "iconTilesetUid": 45, "externalRelPath": "externEnums.txt", "externalFileChecksum": "a9f1cf418e8ee3d8801c0dea9d79d87b", "tags": [] }], "levelFields": [] },
 	"levels": [
 		{
 			"identifier": "Everything",
@@ -1216,6 +1250,10 @@
 								{ "__identifier": "Enum", "__value": "A", "__type": "LocalEnum.SomeEnum", "__tile": null, "defUid": 22, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["A"]
+								}] },
+								{ "__identifier": "ExternEnum", "__value": "Value1", "__type": "ExternEnum.AnExternEnum", "__tile": null, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Value1"]
 								}] },
 								{ "__identifier": "Color", "__value": "#D181E8", "__type": "Color", "__tile": null, "defUid": 23, "realEditorValues": [{ "id": "V_Int", "params": [13730280] }] },
 								{ "__identifier": "Point", "__value": { "cx": 4, "cy": 17 }, "__type": "Point", "__tile": null, "defUid": 24, "realEditorValues": [{
@@ -1318,7 +1356,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "bcc97b00-8dc0-11ec-806e-c9ffad80c347"
+								"worldIid": "e44f6e10-b4d0-11ec-8513-9b545cea1992"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1340,7 +1378,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "bcc97b00-8dc0-11ec-806e-c9ffad80c347"
+								"worldIid": "e44f6e10-b4d0-11ec-8513-9b545cea1992"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1362,7 +1400,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "bcc97b00-8dc0-11ec-806e-c9ffad80c347"
+								"worldIid": "e44f6e10-b4d0-11ec-8513-9b545cea1992"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
@@ -2062,6 +2100,10 @@
 								{ "__identifier": "Enum", "__value": "D", "__type": "LocalEnum.SomeEnum", "__tile": null, "defUid": 22, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["D"]
+								}] },
+								{ "__identifier": "ExternEnum", "__value": "Value2", "__type": "ExternEnum.AnExternEnum", "__tile": null, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Value2"]
 								}] },
 								{ "__identifier": "Color", "__value": "#D63C3C", "__type": "Color", "__tile": null, "defUid": 23, "realEditorValues": [{ "id": "V_Int", "params": [14040124] }] },
 								{ "__identifier": "Point", "__value": null, "__type": "Point", "__tile": null, "defUid": 24, "realEditorValues": [] },

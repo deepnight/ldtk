@@ -21,6 +21,42 @@ class EditEnumDefs extends ui.modal.Panel {
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({
+				label: L.t._("Text file"),
+				sub: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".txt"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						switch dn.FilePath.extractExtension(absPath,true) {
+							case "txt":
+								var i = new importer.enu.TextFileEnum();
+								i.load( project.makeRelativeFilePath(absPath) );
+
+							case _:
+								N.error('The file must have the ".txt" extension.');
+						}
+					});
+				},
+			});
+
+			ctx.add({
+				label: L.t._("JSON"),
+				sub: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".json"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						switch dn.FilePath.extractExtension(absPath,true) {
+							case "json":
+								var i = new importer.enu.JsonEnum();
+								i.load( project.makeRelativeFilePath(absPath) );
+
+							case _:
+								N.error('The file must have the ".json" extension.');
+						}
+					});
+				},
+			});
+
+			ctx.add({
 				label:L.t._("Haxe source code"),
 				cb: ()->{
 					dn.js.ElectronDialogs.openFile([".hx"], project.getProjectDir(), function(absPath:String) {
@@ -28,12 +64,13 @@ class EditEnumDefs extends ui.modal.Panel {
 						if( dn.FilePath.extractExtension(absPath,true) != "hx" )
 							N.error("The file must have the HX extension.");
 						else {
-							var i = new importer.HxEnum();
+							var i = new importer.enu.HxEnum();
 							i.load( project.makeRelativeFilePath(absPath) );
 						}
 					});
 				}
 			});
+
 			ctx.add({
 				label:L.t._("CastleDB"),
 				cb: ()->{
@@ -42,17 +79,13 @@ class EditEnumDefs extends ui.modal.Panel {
 						if( dn.FilePath.extractExtension(absPath,true) != "cdb" )
 							N.error("The file must have the CDB extension.");
 						else {
-							var i = new importer.CastleDb();
+							var i = new importer.enu.CastleDb();
 							i.load( project.makeRelativeFilePath(absPath) );
 						}
 					});
 				},
 			});
-			ctx.add({
-				label:L.t._("JSON"),
-				cb: ()->N.notImplemented(),
-				enable: ()->false,
-			});
+
 		});
 
 		// Default enum selection
@@ -112,7 +145,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				else
 					selectEnum( project.defs.getEnumDef(curEnum.identifier) );
 
-			case EnumDefChanged, EnumDefRemoved, EnumDefValueRemoved, EnumDefSorted:
+			case EnumDefChanged, EnumDefRemoved, EnumDefValueRemoved, EnumDefSorted, ExternalEnumsLoaded(_):
 				updateEnumList();
 				updateEnumForm();
 
@@ -409,7 +442,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			var i = new form.input.StringInput(li.find(".name"),
 				function() return eValue.id,
 				function(newV) {
-					if( !curEnum.renameValue(project, eValue.id, newV) )
+					if( !curEnum.renameValue(eValue.id, newV) )
 						N.invalidIdentifier(newV);
 				}
 			);
@@ -457,13 +490,15 @@ class EditEnumDefs extends ui.modal.Panel {
 							isUsed,
 							function() {
 								new LastChance(L.t._("Enum value ::name:: deleted", { name:curEnum.identifier+"."+eValue.id }), project);
-								project.defs.removeEnumDefValue(curEnum, eValue.id);
+								curEnum.removeValue(eValue.id);
+								project.tidy();
 								editor.ge.emit(EnumDefValueRemoved);
 							}
 						);
 					}
 					else {
-						project.defs.removeEnumDefValue(curEnum, eValue.id);
+						curEnum.removeValue(eValue.id);
+						project.tidy();
 						editor.ge.emit(EnumDefValueRemoved);
 					}
 				});
@@ -477,7 +512,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			jAdd.show();
 		jAdd.click( function(_) {
 			var uid = 0;
-			while( !curEnum.addValue(curEnum.identifier+uid) )
+			while( curEnum.addValue(curEnum.identifier+uid)==null )
 				uid++;
 			editor.ge.emit(EnumDefChanged);
 			var jElem = jFormWrapper.find("ul.enumValues li:last input[type=text]");

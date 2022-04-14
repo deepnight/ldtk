@@ -79,6 +79,7 @@ enum GlobalEvent {
 	EnumDefChanged;
 	EnumDefSorted;
 	EnumDefValueRemoved;
+	ExternalEnumsLoaded(anyCriticalChange:Bool);
 
 	ToolValueSelected;
 	ToolOptionChanged;
@@ -134,21 +135,35 @@ enum RectHandlePos {
 	BottomRight;
 }
 
+typedef ParsedExternalEnumData = {
+	var color: Null<Int>;
+}
 typedef ParsedExternalEnum = {
 	var enumId : String;
-	var values : Array<String>;
+	var values : Array<{
+		var valueId: String;
+		var data : ParsedExternalEnumData;
+	}>;
 }
 
-typedef SyncLog = Array<{
-	var op : SyncOp;
-	var str : String;
-}>;
+enum EnumSyncChange {
+	Added;
+	Removed;
+	Renamed(to:String);
+}
 
-enum SyncOp {
-	Add;
-	Remove(used:Bool);
-	ChecksumUpdated;
-	DateUpdated;
+typedef EnumSyncDiff = {
+	var enumId: String;
+	var ?warning: Bool;
+	var change: Null<EnumSyncChange>;
+	var valueDiffs: Map<String, EnumValueSyncDiff>;
+}
+
+typedef EnumValueSyncDiff = {
+	var valueId: String;
+	var ?warning: Bool;
+	var change: EnumSyncChange;
+	var data: ParsedExternalEnumData;
 }
 
 enum ImageLoadingResult {

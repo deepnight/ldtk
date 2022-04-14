@@ -378,8 +378,14 @@ class FieldDef {
 		}
 	}
 
-	public inline function isEnum() {
-		return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
+	public inline function isEnum(?enumDefUid:Int) {
+		if( enumDefUid!=null )
+			return switch type {
+				case F_Enum(uid): uid==enumDefUid;
+				case _: false;
+			}
+		else
+			return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
 	}
 
 	public function getEnumDef() : Null<EnumDef> {

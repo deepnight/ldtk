@@ -1,7 +1,7 @@
 {
 	"sheets": [
 		{
-			"name": "Test2",
+			"name": "MyCastleDbEnum",
 			"columns": [
 				{
 					"typeStr": "11",
@@ -27,11 +27,58 @@
 				},
 				{
 					"id": "World",
-					"col": 65280
+					"col": 786176
 				},
 				{
 					"id": "Foo",
 					"col": 2949375
+				},
+				{
+					"col": 1513239,
+					"id": "Bar"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "OtherEnum",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "Some"
+				},
+				{
+					"id": "Thing"
+				},
+				{
+					"id": "Cool"
+				}
+			],
+			"separators": [],
+			"props": {}
+		},
+		{
+			"name": "Another",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "ThirdA"
+				},
+				{
+					"id": "ThirdB"
 				}
 			],
 			"separators": [],

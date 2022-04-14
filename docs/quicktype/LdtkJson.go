@@ -246,7 +246,7 @@ type TilesetDefinition struct {
 	Padding           int64                    `json:"padding"`          // Distance in pixels from image borders
 	PxHei             int64                    `json:"pxHei"`            // Image height in pixels
 	PxWid             int64                    `json:"pxWid"`            // Image width in pixels
-	RelPath           string                   `json:"relPath"`          // Path to the source file, relative to the current project JSON file
+	RelPath           *string                  `json:"relPath"`          // Path to the source file, relative to the current project JSON file<br/>  It can be null; if no image was provided, or when using an embed atlas.
 	SavedSelections   []map[string]interface{} `json:"savedSelections"`  // Array of group of tiles selections, only meant to be used in the editor
 	Spacing           int64                    `json:"spacing"`          // Space in pixels between all tiles
 	Tags              []string                 `json:"tags"`             // An array of user-defined tags to organize the Tilesets

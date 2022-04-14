@@ -69,7 +69,7 @@ class LevelRender extends dn.Process {
 	function onGlobalEvent(e:GlobalEvent) {
 		switch e {
 			case LastChanceEnded:
-				
+
 			case AppSettingsChanged:
 				invalidateAll();
 
@@ -114,15 +114,20 @@ class LevelRender extends dn.Process {
 			case ProjectSelected:
 				renderAll();
 
+			case ExternalEnumsLoaded(anyCriticalChange):
+				invalidateAll();
+
 			case ProjectSettingsChanged:
 				invalidateUiAndBg();
 
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
+				editor.curLevel.invalidateCachedError();
 
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
 					invalidateLayer(li, false);
+				editor.curLevel.invalidateCachedError();
 
 			case LevelSelected(l):
 				invalidateAll();

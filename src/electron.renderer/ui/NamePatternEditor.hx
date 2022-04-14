@@ -378,7 +378,6 @@ class NamePatternEditor {
 
 		// Sorting
 		JsTools.makeSortable(jPattern, (ev:sortablejs.Sortable.SortableDragEvent)->{
-			trace(ev.oldIndex+"=>"+ev.newIndex);
 			var moved = blocks.splice(ev.oldIndex,1)[0];
 			if( moved==null )
 				return;

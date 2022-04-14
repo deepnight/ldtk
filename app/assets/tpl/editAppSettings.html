@@ -1,5 +1,11 @@
 <h2><span class="icon settings"></span> Application settings</h2>
 
+<button class="update blue">
+	<span class="icon appUpdate"></span>
+	<strong>A new update is available!</strong>
+	<em>Install ::updateVer::</em>
+</button>
+
 <dl class="form">
 	<dt>
 		<label for="appScale">General UI scale</label>
@@ -71,6 +77,20 @@
 	<dd>
 		<input type="checkbox" id="gpu"/>
 		<span>(Recommended)</span>
+	</dd>
+
+	<dt>
+		<label for="gpu">Auto update</label>
+		<info>
+			When enabled, ::app:: will download and install new updates fully automatically.
+			This is strongly RECOMMENDED as many updates contain important bug fixes and new features.
+			But in some case, like when using an outdated importer for your game engine, you may also prefer to stick to a specific ::app:: version.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" id="autoUpdate"/>
+		<span>(Recommended)</span>
+		<span class="unsupported">Only supported on Windows.</span>
 	</dd>
 
 	<dt>

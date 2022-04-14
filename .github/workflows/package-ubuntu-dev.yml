@@ -27,7 +27,20 @@ jobs:
           haxe-version: 4.2.0
       - run: haxe -version
       - run: haxe setup.hxml
-      - run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.10.0 --always
+
+      # Install haxe API from same branch (if it exists)...
+      - name: Install Haxe API from same branch
+        id: installApiBranch
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
+        continue-on-error: true
+      # ... or from master otherwise
+      - name: Install Haxe API from master
+        if: steps.installApiBranch.outcome == 'failure'
+        run: |
+          haxelib remove ldtk-haxe-api
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+
+      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
       - run: haxelib list
 
       # Node/NPM commands

@@ -10,7 +10,10 @@ class UnsavedChanges extends ui.modal.Dialog {
 			close();
 			Editor.ME.onSave(after);
 		});
-		addButton(L.t._("No"), after);
+		addButton(L.t._("No"), ()->{
+			close();
+			after();
+		});
 		addCancel( onCancel );
 
 		#if debug

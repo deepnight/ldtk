@@ -40,9 +40,13 @@ class Home extends Page {
 
 		// Buttons
 		jPage.find(".load").click( (_)->onLoad() );
-		jPage.find(".samples").click( (_)->onLoadSamples() );
+		jPage.find(".samples").click( (_)->onToggleSamples() );
+		jPage.find(".allSamples .hide").click( (_)->onToggleSamples() );
 		jPage.find(".import").click( (ev)->onImport(ev) );
 		jPage.find(".new").click( (_)->if( !cd.hasSetS("newLock",0.2) ) onNew() );
+
+		if( !settings.getUiStateBool(HideSamplesOnHome) )
+			jPage.find(".allSamples").show();
 
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
@@ -74,6 +78,34 @@ class Home extends Page {
 		if( settings.v.lastProject!=null ) {
 			settings.v.lastProject = null;
 			settings.save();
+		}
+
+		// Samples
+		var path = JsTools.getSamplesDir();
+		var files = js.node.Fs.readdirSync(path);
+		var jSamples = jPage.find(".allSamples");
+		var jScroller = jSamples.children(".scroller");
+		jScroller.on( "wheel", (ev:js.html.WheelEvent)->{
+			var ev = (cast ev).originalEvent;
+			jScroller.scrollLeft( jScroller.scrollLeft() + ev.deltaY );
+			ev.preventDefault();
+		});
+		for(f in files) {
+			var fp = dn.FilePath.fromFile(path+"/"+f);
+			if( fp.extension!="ldtk" )
+				continue;
+
+			var jSample = new J('<div class="sample"/>');
+			jSample.appendTo(jScroller);
+			jSample.append('<div class="thumb" style="background-image:url($path/thumbs/${fp.fileName}.png)"></div>');
+			var name = StringTools.replace( fp.fileName, "_", " " );
+			jSample.append('<div class="name">$name</div>');
+			jSample.click(_->{
+				App.ME.loadProject( fp.full );
+			});
+
+			if( App.ME.recentProjectsContains(fp.full) )
+				jSample.addClass("seen");
 		}
 	}
 
@@ -433,6 +465,14 @@ class Home extends Page {
 				}
 			}, 0.1);
 		});
+	}
+
+	function onToggleSamples() {
+		settings.setUiStateBool( HideSamplesOnHome, jPage.find(".allSamples").is(":visible") );
+		jPage.find(".allSamples").slideToggle(100);
+		settings.save();
+		trace(settings.v.uiStates);
+
 	}
 
 	public function onLoadSamples() {

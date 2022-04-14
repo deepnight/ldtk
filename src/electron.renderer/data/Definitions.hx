@@ -618,8 +618,11 @@ class Definitions {
 		ed.identifier = e.enumId;
 		ed.externalFileChecksum = checksum;
 
-		for(v in e.values)
-			ed.addValue(v);
+		for(v in e.values) {
+			var ev = ed.addValue(v.valueId);
+			if( v.data.color!=null )
+				ev.color = v.data.color;
+		}
 
 		ed.alphaSortValues();
 
@@ -651,17 +654,6 @@ class Definitions {
 		if( ed.isExternal() && !externalEnums.remove(ed) || !ed.isExternal() && !enums.remove(ed) )
 			throw "EnumDef not found";
 		_project.tidy();
-	}
-
-	public function removeEnumDefValue(ed:data.def.EnumDef, id:String) {
-		for(e in ed.values)
-			if( e.id==id ) {
-				ed.values.remove(e);
-				_project.tidy();
-				return;
-			}
-
-		throw "EnumDef value not found";
 	}
 
 	public function isEnumIdentifierUnique(id:String, ?exclude:data.def.EnumDef) {

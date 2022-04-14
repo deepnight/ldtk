@@ -1122,7 +1122,8 @@ namespace ldtk
         public long PxWid { get; set; }
 
         /// <summary>
-        /// Path to the source file, relative to the current project JSON file
+        /// Path to the source file, relative to the current project JSON file<br/>  It can be null
+        /// if no image was provided, or when using an embed atlas.
         /// </summary>
         [JsonProperty("relPath")]
         public string RelPath { get; set; }

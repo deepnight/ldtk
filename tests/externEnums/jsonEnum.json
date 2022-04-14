@@ -1,0 +1,6 @@
+{
+	"myEnum": ["a","b","c"],
+	"anotherOne": "other1, other2,  other3  ",
+	"semicolon": "foo;bar  ;  hello   ",
+	"comma": " comma1,comma2, comma3, comma4  ,"
+}

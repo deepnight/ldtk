@@ -11,6 +11,7 @@ typedef AppSettings = {
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
+	var autoInstallUpdates : Bool;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -28,6 +29,7 @@ typedef AppSettings = {
 
 enum abstract UiState(String) {
 	var ShowProjectColors;
+	var HideSamplesOnHome;
 }
 
 enum AutoWorldModeSwitch {
@@ -60,6 +62,7 @@ class Settings {
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,
+			autoInstallUpdates: true,
 
 			openLastProject: false,
 			lastProject: null,

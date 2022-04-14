@@ -346,7 +346,7 @@ Value | Type | Description
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
 `pxWid` | Int | Image width in pixels
-`relPath` | String | Path to the source file, relative to the current project JSON file
+`relPath` | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Path to the source file, relative to the current project JSON file<br/>		It can be null if no image was provided, or when using an embed atlas.
 `spacing` | Int | Space in pixels between all tiles
 `tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of user-defined tags to organize the Tilesets
 `tagsSourceEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
