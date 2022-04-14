@@ -144,9 +144,11 @@ class EnumSync extends ui.modal.Dialog {
 						jLi.append('<div class="label added">Added</div>');
 
 					case Removed:
+						var cleanId = StringTools.replace(vDiff.valueId, '"', '');
+						cleanId = StringTools.replace(cleanId, '\n', '');
 						jLi.append( vDiff.valueId );
 						jLi.addClass("removed");
-						jValuesList.find('[value="${vDiff.valueId}"]').hide();
+						jValuesList.find('[value="$cleanId"]').hide();
 						jLi.append('<div class="label removed">Removed</div>');
 
 						// Select to rename value

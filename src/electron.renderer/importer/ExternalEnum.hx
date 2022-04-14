@@ -68,6 +68,20 @@ class ExternalEnum {
 		var parseds = parse(fileContent);
 
 		if( parseds.length>0 ) {
+
+			// Sanitize enum IDs and value IDs
+			for(pe in parseds) {
+				pe.enumId = data.Project.cleanupIdentifier(pe.enumId, project.identifierStyle);
+
+				var existing = new Map();
+				for(value in pe.values) {
+					var fixedId = project.fixUniqueIdStr(value.valueId, id->!existing.exists(id));
+					existing.set(fixedId,true);
+					value.valueId = fixedId;
+				}
+				trace(pe);
+			}
+
 			// Check for identifiers conflicts
 			for(pe in parseds) {
 				var ed = project.defs.getEnumDef(pe.enumId);
@@ -76,6 +90,11 @@ class ExternalEnum {
 					N.error("Import failed: the file contains the Enum \""+pe.enumId+"\" which is already used in this project.");
 					return;
 				}
+			}
+
+			// Sanitize enum IDs and value IDs
+			for(pe in parseds) {
+
 			}
 
 			// Try to import/sync
