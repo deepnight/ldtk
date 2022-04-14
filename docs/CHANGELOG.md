@@ -32,6 +32,8 @@ You can now also import and sync Enums from a **Castle DB** file (http://castled
 ## Other changes
 
 - Fixed a crash when pressing `Delete` key while having no active selection.
+- Fixed a crash when duplicating a level containing Entity references.
+- Fixed incorrect entity ref description in Entity instance panel.
 
 # 1.1.1
 

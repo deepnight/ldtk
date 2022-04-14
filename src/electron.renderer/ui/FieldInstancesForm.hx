@@ -468,7 +468,8 @@ class FieldInstancesForm {
 				}
 				else {
 					// Text input
-					var jRef = JsTools.createEntityRef( getEntityInstance(), jTarget );
+					var tei = fi.getEntityRefInstance(arrayIdx);
+					var jRef = JsTools.createEntityRef( tei, jTarget );
 					jRef.attr("id",domId);
 
 					// Follow ref
@@ -476,7 +477,6 @@ class FieldInstancesForm {
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
-						var tei = fi.getEntityRefInstance(arrayIdx);
 						if( tei==null ) {
 							N.error("Invalid reference");
 							return;
@@ -490,7 +490,6 @@ class FieldInstancesForm {
 						if( fi.valueIsNull(arrayIdx) )
 							return;
 
-						var tei = fi.getEntityRefInstance(arrayIdx);
 						if( tei==null )
 							return;
 
