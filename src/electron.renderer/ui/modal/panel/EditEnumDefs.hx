@@ -21,36 +21,8 @@ class EditEnumDefs extends ui.modal.Panel {
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({
-				label:L.t._("Haxe source code"),
-				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".hx"], project.getProjectDir(), function(absPath:String) {
-						absPath = StringTools.replace(absPath,"\\","/");
-						if( dn.FilePath.extractExtension(absPath,true) != "hx" )
-							N.error("The file must have the HX extension.");
-						else {
-							var i = new importer.enu.HxEnum();
-							i.load( project.makeRelativeFilePath(absPath) );
-						}
-					});
-				}
-			});
-			ctx.add({
-				label:L.t._("CastleDB"),
-				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".cdb"], project.getProjectDir(), function(absPath:String) {
-						absPath = StringTools.replace(absPath,"\\","/");
-						if( dn.FilePath.extractExtension(absPath,true) != "cdb" )
-							N.error("The file must have the CDB extension.");
-						else {
-							var i = new importer.enu.CastleDb();
-							i.load( project.makeRelativeFilePath(absPath) );
-						}
-					});
-				},
-			});
-			ctx.add({
 				label: L.t._("Text file"),
-				sub: L.t._("Expected format:\n- One enum per line\n- Each line: \"MyEnumId : value1, value2, value3\""),
+				sub: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
 				cb: ()->{
 					dn.js.ElectronDialogs.openFile([".txt"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
@@ -65,9 +37,10 @@ class EditEnumDefs extends ui.modal.Panel {
 					});
 				},
 			});
+
 			ctx.add({
 				label: L.t._("JSON"),
-				sub: L.t._("TODO"),
+				sub: L.t._('Expected format:\n  {  "MyEnum1":"a,b,c",  "MyEnum2":["a","b","c"]  }'),
 				cb: ()->{
 					dn.js.ElectronDialogs.openFile([".json"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
@@ -82,6 +55,37 @@ class EditEnumDefs extends ui.modal.Panel {
 					});
 				},
 			});
+
+			ctx.add({
+				label:L.t._("Haxe source code"),
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".hx"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						if( dn.FilePath.extractExtension(absPath,true) != "hx" )
+							N.error("The file must have the HX extension.");
+						else {
+							var i = new importer.enu.HxEnum();
+							i.load( project.makeRelativeFilePath(absPath) );
+						}
+					});
+				}
+			});
+
+			ctx.add({
+				label:L.t._("CastleDB"),
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".cdb"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						if( dn.FilePath.extractExtension(absPath,true) != "cdb" )
+							N.error("The file must have the CDB extension.");
+						else {
+							var i = new importer.enu.CastleDb();
+							i.load( project.makeRelativeFilePath(absPath) );
+						}
+					});
+				},
+			});
+			
 		});
 
 		// Default enum selection
