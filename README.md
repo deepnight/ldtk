@@ -1,5 +1,7 @@
 # About
 
+![](https://github.com/deepnight/ldtk/blob/master/app/assets/img/LDtk.svg)
+
 **Level Designer Toolkit** (*LDtk*) is a **modern**, **efficient** and **open-source** 2D level editor with a strong focus on user-friendliness.
 
 Links: [Official website](https://ldtk.io/) | [Haxe API (on GitHub)](https://github.com/deepnight/ldtk-haxe-api)
