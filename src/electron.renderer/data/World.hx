@@ -175,7 +175,7 @@ class World {
 						}
 						else {
 							var tei = fi.getEntityRefInstance(i);
-							if( tei._li.levelId != copy.uid )
+							if( tei!=null && tei._li.levelId != copy.uid )
 								fi.removeArrayValue(i);
 							else
 								i++;
