@@ -207,7 +207,7 @@ class App extends dn.Process {
 			miniNotif('Downloading update: ${Std.int(100*cur/total)}%', true);
 		}
 		dn.js.ElectronUpdater.onUpdateDownloaded = function(info) {
-			LOG.add("update", "Update ready: "+info.version);
+			LOG.add("update", "Update downloaded: "+info.version);
 			miniNotif('Update ${info.version} ready!');
 			function _install() {
 				LOG.general("Installing update");
