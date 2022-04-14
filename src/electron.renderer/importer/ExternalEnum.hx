@@ -13,6 +13,10 @@ class ExternalEnum {
 				var i = new importer.enu.CastleDb();
 				i.load(relPath, true);
 
+			case "txt","csv":
+				var i = new importer.enu.TextFileEnum();
+				i.load(relPath, true);
+
 			case _: N.error('Unsupported extension "$ext" for imported enum file.');
 		}
 	}

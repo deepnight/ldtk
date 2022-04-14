@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458172,
+	"appBuildId": 458312,
 	"nextUid": 28,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -211,13 +211,13 @@
 			{ "id": "Foo", "tileId": null, "color": 2949375, "__tileSrcRect": null },
 			{ "id": "Hello", "tileId": null, "color": 16711680, "__tileSrcRect": null },
 			{ "id": "World", "tileId": null, "color": 786176, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "1290e9c1134d7898460e296e5e371fdc", "tags": [] },
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] },
 		{ "identifier": "OtherEnum", "uid": 22, "values": [
 			{ "id": "Cool", "tileId": null, "color": 16743548, "__tileSrcRect": null },
 			{ "id": "Some", "tileId": null, "color": 13508383, "__tileSrcRect": null },
 			{ "id": "Thing", "tileId": null, "color": 6362389, "__tileSrcRect": null }
-		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "1290e9c1134d7898460e296e5e371fdc", "tags": [] },
-		{ "identifier": "Another", "uid": 23, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "1290e9c1134d7898460e296e5e371fdc", "tags": [] }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] },
+		{ "identifier": "Another", "uid": 23, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] }
 	], "levelFields": [] },
 	"levels": [
 		{

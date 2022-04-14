@@ -3093,6 +3093,7 @@ textarea {
 					text-transform: none;
 					color: $bgLighter;
 					font-size: 9pt;
+					white-space: pre;
 					max-width: 300px;
 				}
 				&:disabled {

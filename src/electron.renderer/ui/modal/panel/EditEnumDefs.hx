@@ -28,7 +28,7 @@ class EditEnumDefs extends ui.modal.Panel {
 						if( dn.FilePath.extractExtension(absPath,true) != "hx" )
 							N.error("The file must have the HX extension.");
 						else {
-							var i = new importer.HxEnum();
+							var i = new importer.enu.HxEnum();
 							i.load( project.makeRelativeFilePath(absPath) );
 						}
 					});
@@ -42,8 +42,25 @@ class EditEnumDefs extends ui.modal.Panel {
 						if( dn.FilePath.extractExtension(absPath,true) != "cdb" )
 							N.error("The file must have the CDB extension.");
 						else {
-							var i = new importer.CastleDb();
+							var i = new importer.enu.CastleDb();
 							i.load( project.makeRelativeFilePath(absPath) );
+						}
+					});
+				},
+			});
+			ctx.add({
+				label: L.t._("Text file or CSV"),
+				sub: L.t._("Expected format:\n- One enum per line\n- Each line: \"MyEnumId : value1, value2, value3\""),
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".txt",".csv"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						switch dn.FilePath.extractExtension(absPath,true) {
+							case "txt","csv":
+								var i = new importer.enu.TextFileEnum();
+								i.load( project.makeRelativeFilePath(absPath) );
+
+							case _:
+								N.error("The file must have the CDB extension.");
 						}
 					});
 				},
