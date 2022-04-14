@@ -812,9 +812,10 @@ pub struct TilesetDefinition {
     #[serde(rename = "pxWid")]
     px_wid: i64,
 
-    /// Path to the source file, relative to the current project JSON file
+    /// Path to the source file, relative to the current project JSON file<br/>  It can be null
+    /// if no image was provided, or when using an embed atlas.
     #[serde(rename = "relPath")]
-    rel_path: String,
+    rel_path: Option<String>,
 
     /// Array of group of tiles selections, only meant to be used in the editor
     #[serde(rename = "savedSelections")]

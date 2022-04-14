@@ -370,7 +370,7 @@ const typeMap = {
         { json: "padding", js: "padding", typ: 0 },
         { json: "pxHei", js: "pxHei", typ: 0 },
         { json: "pxWid", js: "pxWid", typ: 0 },
-        { json: "relPath", js: "relPath", typ: "" },
+        { json: "relPath", js: "relPath", typ: u(undefined, u(null, "")) },
         { json: "savedSelections", js: "savedSelections", typ: a(m("any")) },
         { json: "spacing", js: "spacing", typ: 0 },
         { json: "tags", js: "tags", typ: a("") },

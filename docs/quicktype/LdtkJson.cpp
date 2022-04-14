@@ -1220,7 +1220,7 @@ namespace quicktype {
         int64_t padding;
         int64_t px_hei;
         int64_t px_wid;
-        std::string rel_path;
+        std::shared_ptr<std::string> rel_path;
         std::vector<std::map<std::string, nlohmann::json>> saved_selections;
         int64_t spacing;
         std::vector<std::string> tags;
@@ -1301,11 +1301,11 @@ namespace quicktype {
         void set_px_wid(const int64_t & value) { this->px_wid = value; }
 
         /**
-         * Path to the source file, relative to the current project JSON file
+         * Path to the source file, relative to the current project JSON file<br/>  It can be null
+         * if no image was provided, or when using an embed atlas.
          */
-        const std::string & get_rel_path() const { return rel_path; }
-        std::string & get_mutable_rel_path() { return rel_path; }
-        void set_rel_path(const std::string & value) { this->rel_path = value; }
+        std::shared_ptr<std::string> get_rel_path() const { return rel_path; }
+        void set_rel_path(std::shared_ptr<std::string> value) { this->rel_path = value; }
 
         /**
          * Array of group of tiles selections, only meant to be used in the editor
@@ -3195,7 +3195,7 @@ namespace nlohmann {
         x.set_padding(j.at("padding").get<int64_t>());
         x.set_px_hei(j.at("pxHei").get<int64_t>());
         x.set_px_wid(j.at("pxWid").get<int64_t>());
-        x.set_rel_path(j.at("relPath").get<std::string>());
+        x.set_rel_path(quicktype::get_optional<std::string>(j, "relPath"));
         x.set_saved_selections(j.at("savedSelections").get<std::vector<std::map<std::string, json>>>());
         x.set_spacing(j.at("spacing").get<int64_t>());
         x.set_tags(j.at("tags").get<std::vector<std::string>>());

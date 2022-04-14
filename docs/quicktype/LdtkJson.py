@@ -1061,8 +1061,10 @@ class TilesetDefinition:
     px_hei: int
     """Image width in pixels"""
     px_wid: int
-    """Path to the source file, relative to the current project JSON file"""
-    rel_path: str
+    """Path to the source file, relative to the current project JSON file<br/>  It can be null
+    if no image was provided, or when using an embed atlas.
+    """
+    rel_path: Optional[str]
     """Array of group of tiles selections, only meant to be used in the editor"""
     saved_selections: List[Dict[str, Any]]
     """Space in pixels between all tiles"""
@@ -1075,7 +1077,7 @@ class TilesetDefinition:
     """Unique Intidentifier"""
     uid: int
 
-    def __init__(self, c_hei: int, c_wid: int, cached_pixel_data: Optional[Dict[str, Any]], custom_data: List[TileCustomMetadata], embed_atlas: Optional[EmbedAtlas], enum_tags: List[EnumTagValue], identifier: str, padding: int, px_hei: int, px_wid: int, rel_path: str, saved_selections: List[Dict[str, Any]], spacing: int, tags: List[str], tags_source_enum_uid: Optional[int], tile_grid_size: int, uid: int) -> None:
+    def __init__(self, c_hei: int, c_wid: int, cached_pixel_data: Optional[Dict[str, Any]], custom_data: List[TileCustomMetadata], embed_atlas: Optional[EmbedAtlas], enum_tags: List[EnumTagValue], identifier: str, padding: int, px_hei: int, px_wid: int, rel_path: Optional[str], saved_selections: List[Dict[str, Any]], spacing: int, tags: List[str], tags_source_enum_uid: Optional[int], tile_grid_size: int, uid: int) -> None:
         self.c_hei = c_hei
         self.c_wid = c_wid
         self.cached_pixel_data = cached_pixel_data
@@ -1107,7 +1109,7 @@ class TilesetDefinition:
         padding = from_int(obj.get("padding"))
         px_hei = from_int(obj.get("pxHei"))
         px_wid = from_int(obj.get("pxWid"))
-        rel_path = from_str(obj.get("relPath"))
+        rel_path = from_union([from_none, from_str], obj.get("relPath"))
         saved_selections = from_list(lambda x: from_dict(lambda x: x, x), obj.get("savedSelections"))
         spacing = from_int(obj.get("spacing"))
         tags = from_list(from_str, obj.get("tags"))
@@ -1128,7 +1130,7 @@ class TilesetDefinition:
         result["padding"] = from_int(self.padding)
         result["pxHei"] = from_int(self.px_hei)
         result["pxWid"] = from_int(self.px_wid)
-        result["relPath"] = from_str(self.rel_path)
+        result["relPath"] = from_union([from_none, from_str], self.rel_path)
         result["savedSelections"] = from_list(lambda x: from_dict(lambda x: x, x), self.saved_selections)
         result["spacing"] = from_int(self.spacing)
         result["tags"] = from_list(from_str, self.tags)
