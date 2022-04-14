@@ -15,10 +15,15 @@ class TextFileEnum extends importer.ExternalEnum {
 			if( line.indexOf(":")<0 && StringTools.trim(line).length>0 )
 				continue;
 
-			var enumId = StringTools.trim( line.split(":")[0] );
-			var values = [];
+			var parsed : ParsedExternalEnum = {
+				enumId: StringTools.trim( line.split(":")[0] ),
+				values: [],
+			}
+
+			// Parse values
 			var rawValues = StringTools.trim( line.split(":")[1] );
 			if( rawValues.length>0 ) {
+				// Guess separator
 				var valueSep = null;
 				for(s in [",", ";", " "])
 					if( rawValues.indexOf(s)>=0 ) {
@@ -27,15 +32,19 @@ class TextFileEnum extends importer.ExternalEnum {
 					}
 				if( valueSep==null )
 					continue;
-				values = rawValues.split(valueSep).map( v->{
-					valueId: StringTools.trim(v),
-					data: { color:null },
-				});
+
+				// Split values
+				for( raw in rawValues.split(valueSep) ) {
+					raw = StringTools.trim(raw);
+					if( raw.length==0 )
+						continue;
+					parsed.values.push({
+						valueId: raw,
+						data: { color:null },
+					});
+				}
 			}
-			parseds.push({
-				enumId: enumId,
-				values: values,
-			});
+			parseds.push(parsed);
 		}
 
 		return parseds;

@@ -1,4 +1,5 @@
 MyEnumText: a,b,c,d
 OtherEnumText: a2,b2, c2 ,  d2
+Spaces: a3 b3  c3    d4
 Invalid
 Empty:
