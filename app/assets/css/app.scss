@@ -4965,13 +4965,98 @@ canvas#webgl {
 		.files {
 			display: grid;
 			grid-template-rows: min-content auto;
-			grid-template-columns: 0.5fr 0.5fr;
+			grid-template-columns: 1fr 1fr;
 			gap: 8px;
 			height: 100%;
 			overflow: hidden;
 
 			.buttons {
 				grid-column: 1/3;
+			}
+
+			.allSamples {
+				display: none;
+				grid-column: 1/3;
+				padding: 4px;
+
+				border: 1px solid $help;
+				border-radius: 3px;
+				background-color: $helpDarker;
+
+				.title {
+					display: grid;
+					grid-template-columns: auto min-content;
+					align-items: flex-end;
+
+					margin: -4px;
+					margin-bottom: 0;
+					padding: 8px;
+					font: Roboto;
+					color: $help;
+					font-size: 10pt;
+
+					button.hide {
+						padding: 0;
+						background: $helpDark;
+						box-shadow: none;
+						border: 1px solid $helpMed;
+						margin-top: -4px;
+						margin-bottom: -4px;
+
+						&:hover {
+							border-color: white;
+						}
+					}
+				}
+
+				.scroller {
+					display: flex;
+					overflow-x: auto;
+					padding: 4px;
+					padding-bottom: 8px;
+					background-color: $helpDark;
+				}
+
+				.sample {
+					display: grid;
+					flex: 0 0 128px;
+					border-radius: 4px;
+					overflow: hidden;
+					grid-template-rows: 96px auto;
+					cursor: pointer;
+					background-color: black;
+
+					&:hover {
+						outline: 1px solid white;
+					}
+
+					&.seen {
+						opacity: 0.6;
+						.name  {
+							color: $almostWhite;
+						}
+					}
+
+					.thumb {
+						background-position: center;
+						background-size: cover;
+						border: 1px solid black;
+						box-shadow: 0px 0px 8px black inset, 0px 0px 8px black inset;
+					}
+
+					.name {
+						display: grid;
+						align-content: center;
+						padding: 4px 2px;
+						font-size: 8.5pt;
+						text-align: center;
+						color: white;
+					}
+
+					&+.sample {
+						margin-left: 4px;
+					}
+				}
 			}
 
 			ul.recentFiles,

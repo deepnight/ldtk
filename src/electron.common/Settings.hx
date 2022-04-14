@@ -29,6 +29,7 @@ typedef AppSettings = {
 
 enum abstract UiState(String) {
 	var ShowProjectColors;
+	var HideSamplesOnHome;
 }
 
 enum AutoWorldModeSwitch {
