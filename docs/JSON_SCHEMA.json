@@ -1758,7 +1758,6 @@
 				"padding",
 				"pxHei",
 				"pxWid",
-				"relPath",
 				"spacing",
 				"tags",
 				"tileGridSize",
@@ -1877,9 +1876,10 @@
 					]
 				},
 				"relPath": {
-					"description": "Path to the source file, relative to the current project JSON file",
+					"description": "Path to the source file, relative to the current project JSON file<br/>  It can be null if no image was provided, or when using an embed atlas.",
 					"type": [
-						"string"
+						"string",
+						"null"
 					]
 				},
 				"tileGridSize": {
