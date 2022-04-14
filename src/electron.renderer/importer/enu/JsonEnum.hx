@@ -37,21 +37,10 @@ class JsonEnum extends importer.ExternalEnum {
 
 				case TClass(String):
 					var rawValues : String = e;
-					var sep = rawValues.indexOf(",")>=0 ? ","
-						: rawValues.indexOf(";")>=0 ? ";"
-						: " ";
-
+					var values = parseValuesFromString(rawValues);
 					var parsedEnum : ParsedExternalEnum = {
 						enumId: k,
-						values: [],
-					}
-					for(raw in rawValues.split(sep)) {
-						raw = StringTools.trim(raw);
-						if( raw.length>0 )
-							parsedEnum.values.push({
-								valueId: raw,
-								data: { color:null },
-							});
+						values: values.map( v->{ valueId:v, data:{ color:null } }),
 					}
 					parseds.push( parsedEnum );
 

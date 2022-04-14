@@ -116,6 +116,45 @@ class ExternalEnum {
 
 
 	/**
+		Parse values from a single string, expecting one of these formats:
+		 - valueA, valueB, valueC
+		 - valueA valueB valueC
+		 - valueA ; valueB ; valueC
+	**/
+	function parseValuesFromString(rawValues:String) : Array<String> {
+		if( rawValues==null )
+			return [];
+
+		rawValues = StringTools.trim(rawValues);
+		if( rawValues.length==0 )
+			return [];
+
+		var values = [];
+
+		// Guess separator
+		var valueSep = null;
+		for(s in [",", ";", " "])
+			if( rawValues.indexOf(s)>=0 ) {
+				valueSep = s;
+				break;
+			}
+		if( valueSep==null )
+			return [];
+
+		// Split values
+		for( raw in rawValues.split(valueSep) ) {
+			raw = StringTools.trim(raw);
+			if( raw.length==0 )
+				continue;
+			values.push(raw);
+		}
+
+		return values;
+	}
+
+
+
+	/**
 		Import parsed enums to existing project
 	**/
 	function importToProject(relSourcePath:String, checksum:String, parseds:Array<EditorTypes.ParsedExternalEnum>) {

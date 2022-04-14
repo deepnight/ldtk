@@ -21,29 +21,12 @@ class TextFileEnum extends importer.ExternalEnum {
 			}
 
 			// Parse values
-			var rawValues = StringTools.trim( line.split(":")[1] );
-			if( rawValues.length>0 ) {
-				// Guess separator
-				var valueSep = null;
-				for(s in [",", ";", " "])
-					if( rawValues.indexOf(s)>=0 ) {
-						valueSep = s;
-						break;
-					}
-				if( valueSep==null )
-					continue;
-
-				// Split values
-				for( raw in rawValues.split(valueSep) ) {
-					raw = StringTools.trim(raw);
-					if( raw.length==0 )
-						continue;
-					parsed.values.push({
-						valueId: raw,
-						data: { color:null },
-					});
-				}
-			}
+			var values = parseValuesFromString( line.split(":")[1] );
+			for(v in values)
+				parsed.values.push({
+					valueId: v,
+					data: { color:null },
+				});
 			parseds.push(parsed);
 		}
 
