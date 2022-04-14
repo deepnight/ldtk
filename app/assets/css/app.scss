@@ -411,30 +411,42 @@ button {
 	top: 15px;
 	right: 0;
 	z-index: 99;
+	display: grid;
+	grid-template-columns: auto min-content;
+	// box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
 
 	button {
-		display: grid;
-		grid-template-rows: auto auto;
-		width: auto;
-		padding: 8px;
-		padding-right: 16px;
-
-		text-align: left;
-
+		margin: 0;
 		animation: anim_slideUp 2s;
-		box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
+		padding: 8px;
 
-		strong {
-			font-size: 1.2em;
-			margin-bottom: 4px;
-		}
+		&.proceed {
+			display: grid;
+			grid-template-rows: auto auto;
+			width: auto;
+			text-align: left;
 
-		em {
-			opacity: 0.7;
-			font-size: 0.8em;
-			font-style: normal;
+			.icon {
+				grid-column: 1/2;
+				grid-row: 1/3;
+				align-self: center;
+				margin-right: 10px;
+			}
+			strong {
+				grid-column: 2/3;
+				font-size: 9pt;
+				margin-bottom: 4px;
+			}
+
+			em {
+				grid-column: 2/3;
+				opacity: 0.7;
+				font-style: normal;
+				font-size: 8pt;
+			}
 		}
 	}
+
 }
 
 
@@ -1134,6 +1146,7 @@ ul.log {
 .icon.down				{ background-image: url("../icons/arrow_down.svg"); }
 
 .icon.active			{ background-image: url("../icons/active.png"); }
+.icon.appUpdate			{ background-image: url("../icons/appUpdate.svg"); }
 .icon.add				{ background-image: url("../icons/add.svg"); }
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
 .icon.bug				{ background-image: url("../icons/bug.svg"); }
@@ -1148,6 +1161,7 @@ ul.log {
 .icon.delete			{ background-image: url("../icons/delete.svg"); }
 .icon.embed				{ background-image: url("../icons/embed.svg"); }
 .icon.discord			{ background-image: url("../icons/discord.svg"); }
+.icon.download			{ background-image: url("../icons/download.svg"); }
 .icon.doc				{ background-image: url("../icons/doc.svg"); }
 .icon.edit				{ background-image: url("../icons/edit.svg"); }
 .icon.email				{ background-image: url("../icons/email.svg"); }
@@ -2623,6 +2637,31 @@ textarea {
 .window.editAppSettings {
 	.wrapper .content {
 		width: 600px;
+
+		button.update {
+			display: grid;
+			margin-bottom: 32px;
+			grid-template-columns: min-content min-content;
+			justify-content: center;
+			text-align: left;
+			white-space: nowrap;
+
+			.icon {
+				grid-column: 1/2;
+				grid-row: 1/3;
+				margin-right: 10px;
+				align-self: center;
+			}
+			strong {
+				grid-column: 2/3;
+				font-size: 12pt;
+			}
+			em {
+				grid-column: 2/3;
+				font-style: normal;
+				text-transform: none;
+			}
+		}
 
 		dl.form {
 			dt {
