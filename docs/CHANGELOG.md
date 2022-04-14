@@ -29,6 +29,12 @@ You can now also import and sync Enums from a **Castle DB** file (http://castled
 
 ![](1.1.2/sync.png)
 
+## Samples list
+
+For new LDtk users, the samples are now much more visible in the default UI. Feel free to hide them by clicking on the [x] button.
+
+![](1.1.2/samples.png)
+
 ## Other changes
 
 - Fixed a crash when pressing `Delete` key while having no active selection.
