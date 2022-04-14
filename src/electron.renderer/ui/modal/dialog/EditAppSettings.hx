@@ -65,6 +65,19 @@ class EditAppSettings extends ui.modal.Dialog {
 			needRestart = true;
 		}
 
+		// Auto update
+		var i = Input.linkToHtmlInput(settings.v.autoInstallUpdates, jForm.find("#autoUpdate"));
+		i.onChange = ()->{
+			onSettingChanged();
+			needRestart = true;
+		}
+		i.setEnabled( NT.isWindows() );
+		var jUnsupported = jForm.find("#autoUpdate").siblings(".unsupported");
+		if( NT.isWindows() )
+			jUnsupported.hide();
+		else
+			jUnsupported.show();
+
 		// Fullscreen
 		var i = Input.linkToHtmlInput(settings.v.startFullScreen, jForm.find("#startFullScreen"));
 		i.onValueChange = (v)->{
