@@ -122,10 +122,12 @@ class LevelRender extends dn.Process {
 
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
+				editor.curLevel.invalidateCachedError();
 
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
 					invalidateLayer(li, false);
+				editor.curLevel.invalidateCachedError();
 
 			case LevelSelected(l):
 				invalidateAll();
