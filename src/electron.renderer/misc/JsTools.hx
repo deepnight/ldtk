@@ -947,14 +947,21 @@ class JsTools {
 		if( jTarget!=null )
 			jRef.appendTo(jTarget);
 
-		jRef.append('<div class="id">${ei.def.identifier}</div>');
-		jRef.append('<div class="location"> <span class="level">${ei._li.level.identifier}</span> </div>');
+		if( ei==null ) {
+			jRef.append('<div class="id">Entity not found</div>');
+			jRef.append('<div class="location"> <span class="level">Unknown</span> </div>');
+		}
+		else {
+			jRef.append('<div class="id">${ei.def.identifier}</div>');
+			jRef.append('<div class="location"> <span class="level">${ei._li.level.identifier}</span> </div>');
 
-		if( !ei._li.level.isInWorld(Editor.ME.curWorld) )
-			jRef.find(".location").append(' <em>in</em> <span class="world">${ei._li.level._world.identifier}</span>');
+			if( !ei._li.level.isInWorld(Editor.ME.curWorld) )
+				jRef.find(".location").append(' <em>in</em> <span class="world">${ei._li.level._world.identifier}</span>');
+		}
 
 		if( isBackRef )
 			jRef.addClass("isBackRef");
+
 
 		return jRef;
 	}
