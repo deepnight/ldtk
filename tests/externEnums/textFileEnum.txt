@@ -1,1 +1,4 @@
-myenum: a,b,c,d
+MyEnumText: a,b,c,d
+OtherEnumText: a2,b2, c2 ,  d2
+Invalid
+Empty:

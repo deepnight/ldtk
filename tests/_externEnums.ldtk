@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.2",
-	"appBuildId": 458312,
-	"nextUid": 28,
+	"appBuildId": 458313,
+	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -28,7 +28,7 @@
 	"simplifiedExport": false,
 	"imageExportMode": "None",
 	"pngFilePattern": null,
-	"backupOnSave": true,
+	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
 	"tutorialDesc": null,
@@ -90,7 +90,7 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "Test",
+					"identifier": "cdb",
 					"__type": "ExternEnum.MyCastleDbEnum",
 					"uid": 24,
 					"type": "F_Enum(21)",
@@ -217,7 +217,35 @@
 			{ "id": "Some", "tileId": null, "color": 13508383, "__tileSrcRect": null },
 			{ "id": "Thing", "tileId": null, "color": 6362389, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] },
-		{ "identifier": "Another", "uid": 23, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] }
+		{ "identifier": "Another", "uid": 23, "values": [ { "id": "ThirdA", "tileId": null, "color": 0, "__tileSrcRect": null }, { "id": "ThirdB", "tileId": null, "color": 0, "__tileSrcRect": null } ], "iconTilesetUid": null, "externalRelPath": "externEnums/castle.cdb", "externalFileChecksum": "4d115267dcfc8fa9036dc6c6e2b99c0b", "tags": [] },
+		{ "identifier": "MyEnum", "uid": 35, "values": [
+			{ "id": "A", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "B", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/jsonEnum.json", "externalFileChecksum": "7cadeab414aec74e7986d1615f793a3c", "tags": [] },
+		{ "identifier": "AnotherOne", "uid": 36, "values": [
+			{ "id": "Other1", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Other2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Other3", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/jsonEnum.json", "externalFileChecksum": "7cadeab414aec74e7986d1615f793a3c", "tags": [] },
+		{ "identifier": "Third", "uid": 37, "values": [
+			{ "id": "Bar", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Foo", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "Hello", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/jsonEnum.json", "externalFileChecksum": "7cadeab414aec74e7986d1615f793a3c", "tags": [] },
+		{ "identifier": "MyEnumText", "uid": 45, "values": [
+			{ "id": "A", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "B", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "D", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "362fd6e7dadb3e665d4797668db41630", "tags": [] },
+		{ "identifier": "OtherEnumText", "uid": 46, "values": [
+			{ "id": "A2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "B2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "C2", "tileId": null, "color": 0, "__tileSrcRect": null },
+			{ "id": "D2", "tileId": null, "color": 0, "__tileSrcRect": null }
+		], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "362fd6e7dadb3e665d4797668db41630", "tags": [] },
+		{ "identifier": "Empty", "uid": 47, "values": [], "iconTilesetUid": null, "externalRelPath": "externEnums/textFileEnum.txt", "externalFileChecksum": "362fd6e7dadb3e665d4797668db41630", "tags": [] }
 	], "levelFields": [] },
 	"levels": [
 		{
@@ -277,7 +305,7 @@
 							"height": 32,
 							"defUid": 1,
 							"px": [88,72],
-							"fieldInstances": [{ "__identifier": "Test", "__value": "Hello", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Hello"]
 							}] }]
@@ -294,7 +322,7 @@
 							"height": 32,
 							"defUid": 1,
 							"px": [152,72],
-							"fieldInstances": [{ "__identifier": "Test", "__value": "World", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "World", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["World"]
 							}] }]
@@ -311,7 +339,7 @@
 							"height": 32,
 							"defUid": 1,
 							"px": [88,120],
-							"fieldInstances": [{ "__identifier": "Test", "__value": "Hello", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "Hello", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Hello"]
 							}] }]
@@ -328,7 +356,7 @@
 							"height": 32,
 							"defUid": 1,
 							"px": [152,120],
-							"fieldInstances": [{ "__identifier": "Test", "__value": "World", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "World", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["World"]
 							}] }]
@@ -345,7 +373,7 @@
 							"height": 32,
 							"defUid": 1,
 							"px": [120,40],
-							"fieldInstances": [{ "__identifier": "Test", "__value": "Foo", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "Foo", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Foo"]
 							}] }]
@@ -362,7 +390,7 @@
 							"height": 32,
 							"defUid": 1,
 							"px": [120,152],
-							"fieldInstances": [{ "__identifier": "Test", "__value": "Bar", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "cdb", "__value": "Bar", "__type": "ExternEnum.MyCastleDbEnum", "__tile": null, "defUid": 24, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Bar"]
 							}] }]
