@@ -27,7 +27,7 @@ class App extends dn.Process {
 	public var clipboard : data.Clipboard;
 
 	var requestedCpuEndTime = 0.;
-	public var pendingUpdateVersion : Null<String>;
+	public var pendingUpdate : Null<{ ver:String, github:Bool }>;
 
 	public function new() {
 		super();
@@ -187,9 +187,10 @@ class App extends dn.Process {
 		dn.js.ElectronUpdater.onUpdateFound = function(info) {
 			LOG.add("update", "Found update: "+info.version+" ("+info.releaseDate+")");
 			if( !settings.v.autoInstallUpdates ) {
-				pendingUpdateVersion = info.version;
+				pendingUpdate = { ver:info.version, github:true }
 				miniNotif('Found update ${info.version}!');
-				showUpdateButton(info.version, false, ()->{
+				showUpdateButton(info.version, "download", "Download update", false, ()->{
+					N.success('Downloading update ${info.version}...');
 					dn.js.ElectronUpdater.download();
 				});
 			}
@@ -216,7 +217,12 @@ class App extends dn.Process {
 					IpcRenderer.invoke("quitAndInstall");
 				}, 1);
 			}
-			showUpdateButton(info.version, true, _install);
+			if( settings.v.autoInstallUpdates )
+				showUpdateButton(info.version, "appUpdate", "Install update", _install);
+			else {
+				N.success('Update ${info.version} downloaded.');
+				showUpdateButton(info.version, "appUpdate", "Proceed to install", _install);
+			}
 		}
 
 		// Check now
@@ -253,13 +259,10 @@ class App extends dn.Process {
 			}
 			else if( Version.greater(latest.full, Const.getAppVersion(true), false ) ) {
 				LOG.add("update", "Update available: "+latest);
-				pendingUpdateVersion = latest.full;
-				N.success("Application update", "Update "+latest.full+" is available!");
+				pendingUpdate = { ver:latest.full, github:false }
 
-				showUpdateButton(latest.full, false, ()->{
+				showUpdateButton(latest.full, "world", "Update available", false, ()->{
 					electron.Shell.openExternal(Const.DOWNLOAD_URL);
-					clearCurPage();
-					delayer.addS( exit.bind(), 0.5 );
 				});
 			}
 			else {
@@ -270,32 +273,29 @@ class App extends dn.Process {
 	}
 
 
-	function showUpdateButton(version:String, isInstall:Bool, applyUpdate:Void->Void) {
+	function showUpdateButton(version:String, icon:String, label:String, checkUnsaved=true, proceed:Void->Void) {
 		var jWrapper = jBody.find("#updateInstall");
 		jWrapper.empty().show();
 
 		// Install
-		var label = isInstall ? "Install update" : "Download update";
 		var jButton = new J('<button class="proceed"/>').appendTo(jWrapper);
+		jButton.append('<span class="icon $icon"/>');
 		jButton.append('<strong>$label</strong>');
 		jButton.append('<em>Version $version</em>');
 		jButton.click(function(_) {
 			jWrapper.hide();
 
-			if( !isInstall )
-				N.success('Downloading update...');
-
-			if( Editor.exists() && Editor.ME.needSaving )
-				new ui.modal.dialog.UnsavedChanges(applyUpdate, ()->jButton.show());
+			if( Editor.exists() && Editor.ME.needSaving && checkUnsaved )
+				new ui.modal.dialog.UnsavedChanges(proceed, ()->jWrapper.show());
 			else if( !ui.modal.Progress.hasAny() )
-				applyUpdate();
+				proceed();
 		});
 
 		// Ignore
 		if( !settings.v.autoInstallUpdates ) {
 			var jIgnore = new J('<button class="skip gray"/>');
 			jIgnore.appendTo(jWrapper);
-			jIgnore.append('Later');
+			jIgnore.append('<span class="icon close"/>');
 			jIgnore.click( _->{
 				jWrapper.hide();
 			});

@@ -418,24 +418,31 @@ button {
 	button {
 		margin: 0;
 		animation: anim_slideUp 2s;
+		padding: 8px;
 
 		&.proceed {
 			display: grid;
 			grid-template-rows: auto auto;
 			width: auto;
-			padding: 8px;
-			padding-right: 16px;
 			text-align: left;
 
+			.icon {
+				grid-column: 1/2;
+				grid-row: 1/3;
+				align-self: center;
+				margin-right: 10px;
+			}
 			strong {
-				font-size: 1.2em;
+				grid-column: 2/3;
+				font-size: 9pt;
 				margin-bottom: 4px;
 			}
 
 			em {
+				grid-column: 2/3;
 				opacity: 0.7;
-				font-size: 0.8em;
 				font-style: normal;
+				font-size: 8pt;
 			}
 		}
 	}
@@ -1138,6 +1145,7 @@ ul.log {
 .icon.down				{ background-image: url("../icons/arrow_down.svg"); }
 
 .icon.active			{ background-image: url("../icons/active.png"); }
+.icon.appUpdate			{ background-image: url("../icons/appUpdate.svg"); }
 .icon.add				{ background-image: url("../icons/add.svg"); }
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
 .icon.bug				{ background-image: url("../icons/bug.svg"); }
@@ -1152,6 +1160,7 @@ ul.log {
 .icon.delete			{ background-image: url("../icons/delete.svg"); }
 .icon.embed				{ background-image: url("../icons/embed.svg"); }
 .icon.discord			{ background-image: url("../icons/discord.svg"); }
+.icon.download			{ background-image: url("../icons/download.svg"); }
 .icon.doc				{ background-image: url("../icons/doc.svg"); }
 .icon.edit				{ background-image: url("../icons/edit.svg"); }
 .icon.email				{ background-image: url("../icons/email.svg"); }
@@ -2629,7 +2638,28 @@ textarea {
 		width: 600px;
 
 		button.update {
+			display: grid;
 			margin-bottom: 32px;
+			grid-template-columns: min-content min-content;
+			justify-content: center;
+			text-align: left;
+			white-space: nowrap;
+
+			.icon {
+				grid-column: 1/2;
+				grid-row: 1/3;
+				margin-right: 10px;
+				align-self: center;
+			}
+			strong {
+				grid-column: 2/3;
+				font-size: 12pt;
+			}
+			em {
+				grid-column: 2/3;
+				font-style: normal;
+				text-transform: none;
+			}
 		}
 
 		dl.form {

@@ -13,17 +13,21 @@ class EditAppSettings extends ui.modal.Dialog {
 
 	function updateForm() {
 		// Init
-		loadTemplate("editAppSettings", { app: Const.APP_NAME, updateVer:App.ME.pendingUpdateVersion });
+		loadTemplate("editAppSettings", { app: Const.APP_NAME, updateVer:App.ME.pendingUpdate==null ? null : App.ME.pendingUpdate.ver });
 		var jForm = jContent.find(".form");
 		jForm.off().find("*").off();
 
-		if( App.ME.pendingUpdateVersion==null )
+		// Update available
+		if( App.ME.pendingUpdate==null )
 			jContent.find(".update").hide();
 		else {
 			jContent.find(".update").click(_->{
-				App.ME.checkForUpdate();
+				if( App.ME.pendingUpdate.github ) {
+					App.ME.checkForUpdate();
+				}
+				else
+					electron.Shell.openExternal(Const.DOWNLOAD_URL);
 				close();
-				N.debug("dl");
 			});
 		}
 
