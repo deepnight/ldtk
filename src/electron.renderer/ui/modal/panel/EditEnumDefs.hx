@@ -40,7 +40,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			ctx.add({
 				label: L.t._("JSON"),
-				sub: L.t._('Expected format:\n  {  "MyEnum1":"a,b,c",  "MyEnum2":["a","b","c"]  }'),
+				sub: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
 				cb: ()->{
 					dn.js.ElectronDialogs.openFile([".json"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
@@ -85,7 +85,7 @@ class EditEnumDefs extends ui.modal.Panel {
 					});
 				},
 			});
-			
+
 		});
 
 		// Default enum selection
