@@ -222,7 +222,7 @@ class App extends dn.Process {
 				showUpdateButton(info.version, "appUpdate", "Install update", _install);
 			else {
 				N.success('Update ${info.version} downloaded.');
-				showUpdateButton(info.version, "appUpdate", "Proceed to install", _install);
+				showUpdateButton(info.version, "appUpdate", "Proceed to install", true, false, _install);
 			}
 		}
 
@@ -274,7 +274,7 @@ class App extends dn.Process {
 	}
 
 
-	function showUpdateButton(version:String, icon:String, label:String, checkUnsaved=true, proceed:Void->Void) {
+	function showUpdateButton(version:String, icon:String, label:String, checkUnsaved=true, allowCancel=true, proceed:Void->Void) {
 		var jWrapper = jBody.find("#updateInstall");
 		jWrapper.empty().show();
 
@@ -293,7 +293,7 @@ class App extends dn.Process {
 		});
 
 		// Ignore
-		if( !settings.v.autoInstallUpdates ) {
+		if( allowCancel && !settings.v.autoInstallUpdates ) {
 			var jIgnore = new J('<button class="skip gray"/>');
 			jIgnore.appendTo(jWrapper);
 			jIgnore.append('<span class="icon close"/>');
