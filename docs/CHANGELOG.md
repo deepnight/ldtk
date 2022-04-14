@@ -1,5 +1,14 @@
 # 1.1.2
 
+## Import enums from JSON and text files
+
+You may now import project Enums directly from an external file:
+ - **JSON**: expected format is `{  "MyEnum1":"a,b,c",  "MyEnum2":["a","b","c"]  }`
+ - **Text file**: one enum per line. Each line should use one of these formats:
+   - `MyEnum : valueA, valueB, valueB`
+   - `MyEnum : valueA valueB valueB`
+   - `MyEnum : valueA ; valueB ; valueB`
+
 ## Better imported enums
 
 The sync window for External Enums was completely reworked:
