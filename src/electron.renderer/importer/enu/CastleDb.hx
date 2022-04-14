@@ -1,4 +1,4 @@
-package importer;
+package importer.enu;
 
 
 // Rough CastleDB JSON typedef

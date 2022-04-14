@@ -1,4 +1,4 @@
-package importer;
+package importer.enu;
 
 class HxEnum extends importer.ExternalEnum {
 

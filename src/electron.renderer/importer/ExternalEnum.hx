@@ -6,11 +6,11 @@ class ExternalEnum {
 		var ext = dn.FilePath.extractExtension(relPath,true);
 		switch ext {
 			case "hx":
-				var i = new HxEnum();
+				var i = new importer.enu.HxEnum();
 				i.load(relPath, true);
 
 			case "cdb":
-				var i = new CastleDb();
+				var i = new importer.enu.CastleDb();
 				i.load(relPath, true);
 
 			case _: N.error('Unsupported extension "$ext" for imported enum file.');
