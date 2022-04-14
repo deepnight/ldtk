@@ -369,7 +369,6 @@ class LevelTimeline {
 			throw "Null timeline state "+idx;
 
 		// Restore full level
-		N.debug("full level JSON restored");
 		var lidx = dn.Lib.getArrayIndex(level, world.levels);
 		world.levels[lidx] = data.Level.fromJson(project, world, state.fullLevelJson, true);
 		project.resetQuickLevelAccesses();

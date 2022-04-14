@@ -79,7 +79,6 @@ class ExternalEnum {
 					existing.set(fixedId,true);
 					value.valueId = fixedId;
 				}
-				trace(pe);
 			}
 
 			// Check for identifiers conflicts
@@ -419,24 +418,20 @@ class ExternalEnum {
 					for(vDiff in eDiff.valueDiffs)
 						switch vDiff.change {
 							case Added: // New value
-								trace('add value ${vDiff.valueId}');
 								var ev = ed.addValue(vDiff.valueId);
 								if( vDiff.data.color!=null )
 									ev.color = vDiff.data.color;
 								unsortedEnums.set(ed.identifier, true);
 
 							case Removed: // Lost value
-								trace('remove value ${vDiff.valueId}');
 								ed.removeValue(vDiff.valueId);
 
 							case Renamed(to): // Renamed value
-								trace('rename value ${vDiff.valueId}=>$to');
 								ed.renameValue(vDiff.valueId, to);
 								unsortedEnums.set(ed.identifier, true);
 						}
 
 				case Added: // New enum
-					trace('add enum ${eDiff.enumId}');
 					var ed = project.defs.createEnumDef(relSourcePath);
 					ed.identifier = eDiff.enumId;
 					for(v in eDiff.valueDiffs) {
@@ -447,12 +442,10 @@ class ExternalEnum {
 					unsortedEnums.set(ed.identifier, true);
 
 				case Removed: // Lost enum
-					trace('remove enum ${eDiff.enumId}');
 					var ed = project.defs.getEnumDef(eDiff.enumId);
 					project.defs.removeEnumDef(ed);
 
 				case Renamed(to): // Renamed enum
-					trace('rename enum ${eDiff.enumId}=>$to');
 					var ed = project.defs.getEnumDef(eDiff.enumId);
 					ed.identifier = to;
 			}

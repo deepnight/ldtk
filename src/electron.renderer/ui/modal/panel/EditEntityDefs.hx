@@ -283,7 +283,6 @@ class EditEntityDefs extends ui.modal.Panel {
 				else {
 					// Embed tileset
 					var embedId = ldtk.Json.EmbedAtlas.createByName(raw);
-					N.debug(embedId);
 					var td = project.defs.getEmbedTileset(embedId);
 					curEntity.renderMode = Tile;
 					curEntity.tilesetId = td.uid;
