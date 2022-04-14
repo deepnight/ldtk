@@ -49,26 +49,38 @@ class EditEnumDefs extends ui.modal.Panel {
 				},
 			});
 			ctx.add({
-				label: L.t._("Text file or CSV"),
+				label: L.t._("Text file"),
 				sub: L.t._("Expected format:\n- One enum per line\n- Each line: \"MyEnumId : value1, value2, value3\""),
 				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".txt",".csv"], project.getProjectDir(), function(absPath:String) {
+					dn.js.ElectronDialogs.openFile([".txt"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
 						switch dn.FilePath.extractExtension(absPath,true) {
-							case "txt","csv":
+							case "txt":
 								var i = new importer.enu.TextFileEnum();
 								i.load( project.makeRelativeFilePath(absPath) );
 
 							case _:
-								N.error("The file must have the CDB extension.");
+								N.error('The file must have the ".txt" extension.');
 						}
 					});
 				},
 			});
 			ctx.add({
-				label:L.t._("JSON"),
-				cb: ()->N.notImplemented(),
-				enable: ()->false,
+				label: L.t._("JSON"),
+				sub: L.t._("TODO"),
+				cb: ()->{
+					dn.js.ElectronDialogs.openFile([".json"], project.getProjectDir(), function(absPath:String) {
+						absPath = StringTools.replace(absPath,"\\","/");
+						switch dn.FilePath.extractExtension(absPath,true) {
+							case "json":
+								var i = new importer.enu.JsonEnum();
+								i.load( project.makeRelativeFilePath(absPath) );
+
+							case _:
+								N.error('The file must have the ".json" extension.');
+						}
+					});
+				},
 			});
 		});
 
