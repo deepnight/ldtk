@@ -42,11 +42,12 @@ enum AutoWorldModeSwitch {
 class Settings {
 	var defaults : AppSettings;
 	public var v : AppSettings;
+	var ls : dn.data.LocalStorage;
 
 	public function new() {
 		// Init storage
-		dn.data.LocalStorage.STORAGE_PATH = getDir();
-		dn.data.LocalStorage.JSON_PRETTY_LEVEL = Full;
+		ls = dn.data.LocalStorage.createJsonStorage("settings", Full);
+		ls.setStorageFileDir( getDir() );
 
 		// Init defaults
 		defaults = {
@@ -76,7 +77,7 @@ class Settings {
 		}
 
 		// Load
-		v = dn.data.LocalStorage.readObject("settings", Json, defaults);
+		v = ls.readObject(defaults);
 
 		if( !hasUiState(ShowProjectColors) )
 			setUiStateBool(ShowProjectColors, true);
@@ -162,6 +163,6 @@ class Settings {
 	}
 
 	public function save() {
-		dn.data.LocalStorage.writeObject("settings", Json, v);
+		ls.writeObject(v);
 	}
 }
