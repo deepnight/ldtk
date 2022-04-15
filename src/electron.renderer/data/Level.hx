@@ -125,7 +125,7 @@ class Level {
 		if( !forTimeline && hasJsonCache() ) {
 			var o = getCacheJsonObject();
 			if( !_project.externalLevels )
-				Reflect.deleteField(o, dn.JsonPretty.HEADER_VALUE_NAME);
+				Reflect.deleteField(o, dn.data.JsonPretty.HEADER_VALUE_NAME);
 			return o;
 		}
 

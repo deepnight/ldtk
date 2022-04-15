@@ -45,8 +45,7 @@ class Settings {
 
 	public function new() {
 		// Init storage
-		dn.LocalStorage.BASE_PATH = getDir();
-		dn.LocalStorage.SUB_FOLDER_NAME = null;
+		dn.data.LocalStorage.STORAGE_PATH = getDir();
 
 		// Init defaults
 		defaults = {
@@ -76,7 +75,7 @@ class Settings {
 		}
 
 		// Load
-		v = dn.LocalStorage.readObject("settings", true, defaults);
+		v = dn.data.LocalStorage.readObject("settings", true, defaults);
 
 		if( !hasUiState(ShowProjectColors) )
 			setUiStateBool(ShowProjectColors, true);
@@ -162,6 +161,6 @@ class Settings {
 	}
 
 	public function save() {
-		dn.LocalStorage.writeObject("settings", true, v);
+		dn.data.LocalStorage.writeObject("settings", true, v);
 	}
 }

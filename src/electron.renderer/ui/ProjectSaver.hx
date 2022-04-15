@@ -438,7 +438,7 @@ class ProjectSaver extends dn.Process {
 								var fp = dirFp.clone();
 								fp.appendDirectory(l.identifier);
 								fp.fileWithExt = "data.json";
-								NT.writeFileString( fp.full, dn.JsonPretty.stringify( simpleJson, Full ) );
+								NT.writeFileString( fp.full, dn.data.JsonPretty.stringify( simpleJson, Full ) );
 							},
 						});
 
@@ -615,7 +615,7 @@ class ProjectSaver extends dn.Process {
 
 
 	public static function jsonStringify(p:data.Project, obj:Dynamic, ?skipHeader=false) {
-		return dn.JsonPretty.stringify(
+		return dn.data.JsonPretty.stringify(
 			obj,
 			p.minifyJson ? Minified : Compact,
 			skipHeader ? null : Const.JSON_HEADER
@@ -645,7 +645,7 @@ class ProjectSaver extends dn.Process {
 			// Build project JSON without level data
 			var idx = 0;
 			inline function _clearLevelData(levelJson:ldtk.Json.LevelJson) {
-				Reflect.deleteField(levelJson, dn.JsonPretty.HEADER_VALUE_NAME);
+				Reflect.deleteField(levelJson, dn.data.JsonPretty.HEADER_VALUE_NAME);
 				levelJson.layerInstances = null;
 				levelJson.externalRelPath = project.getLevelAnywhere(levelJson.uid).makeExternalRelPath(idx++);
 			}

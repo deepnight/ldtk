@@ -60,7 +60,7 @@ class Tiled extends Exporter {
 		// Create "world" JSON file
 		log.emptyEntry();
 		log.fileOp("Creating world JSON...");
-		var json = dn.JsonPretty.stringify(world);
+		var json = dn.data.JsonPretty.stringify(world);
 		var fp = outputPath.clone();
 		fp.fileName = projectPath.fileName;
 		fp.extension = "world";

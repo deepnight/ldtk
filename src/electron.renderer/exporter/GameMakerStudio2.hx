@@ -171,7 +171,7 @@ class GameMakerStudio2 extends Exporter {
 			fp.extension = "yy";
 			addOuputFile(
 				fp.full,
-				haxe.io.Bytes.ofString( dn.JsonPretty.stringify(tilesetJson) )
+				haxe.io.Bytes.ofString( dn.data.JsonPretty.stringify(tilesetJson) )
 			);
 
 			_storeRsc(td.identifier, fp.full);
@@ -298,7 +298,7 @@ class GameMakerStudio2 extends Exporter {
 			fp.extension = "yy";
 			addOuputFile(
 				fp.full,
-				haxe.io.Bytes.ofString( dn.JsonPretty.stringify(roomJson) )
+				haxe.io.Bytes.ofString( dn.data.JsonPretty.stringify(roomJson) )
 			);
 		}
 	}
