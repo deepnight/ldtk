@@ -40,13 +40,18 @@ class Home extends Page {
 
 		// Buttons
 		jPage.find(".load").click( (_)->onLoad() );
-		jPage.find(".samples").click( (_)->onToggleSamples() );
-		jPage.find(".allSamples .hide").click( (_)->onToggleSamples() );
+		jPage.find(".samples").click( (_)->{
+			if( settings.getUiStateBool(HideSamplesOnHome) )
+				showSamples();
+			else
+				hideSamples();
+		});
+		jPage.find(".allSamples .hide").click( (_)->hideSamples() );
 		jPage.find(".import").click( (ev)->onImport(ev) );
 		jPage.find(".new").click( (_)->if( !cd.hasSetS("newLock",0.2) ) onNew() );
 
 		if( !settings.getUiStateBool(HideSamplesOnHome) )
-			jPage.find(".allSamples").show();
+			showSamples(false);
 
 		jPage.find(".buy").click( (ev)->{
 			var w = new ui.Modal();
@@ -467,13 +472,23 @@ class Home extends Page {
 		});
 	}
 
-	function onToggleSamples() {
-		settings.setUiStateBool( HideSamplesOnHome, jPage.find(".allSamples").is(":visible") );
-		jPage.find(".allSamples").slideToggle(100);
-		settings.save();
-		trace(settings.v.uiStates);
 
+	function showSamples(anim=true) {
+		jPage.find(".files").addClass("hasSamples");
+		if( anim )
+			jPage.find(".allSamples").slideDown(100);
+		else
+			jPage.find(".allSamples").show();
+		settings.setUiStateBool( HideSamplesOnHome, false );
 	}
+
+
+	function hideSamples() {
+		jPage.find(".files").removeClass("hasSamples");
+		jPage.find(".allSamples").slideUp(60);
+		settings.setUiStateBool( HideSamplesOnHome, true );
+	}
+
 
 	public function onLoadSamples() {
 		dn.js.ElectronDialogs.openFile(["."+Const.FILE_EXTENSION], JsTools.getSamplesDir(), function(filePath) {

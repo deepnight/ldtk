@@ -4964,11 +4964,15 @@ canvas#webgl {
 
 		.files {
 			display: grid;
-			grid-template-rows: min-content auto;
 			grid-template-columns: 1fr 1fr;
+			grid-template-rows: min-content auto;
 			gap: 8px;
 			height: 100%;
 			overflow: hidden;
+
+			&.hasSamples {
+				grid-template-rows: min-content min-content auto;
+			}
 
 			.buttons {
 				grid-column: 1/3;
