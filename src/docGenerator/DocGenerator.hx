@@ -427,7 +427,7 @@ class DocGenerator {
 		if( verbose )
 			Sys.println(' > Writing: ${jsonPath}...');
 		var fo = sys.io.File.write(jsonPath, false);
-		var jsonStr = dn.JsonPretty.stringify(json, Full, header, true);
+		var jsonStr = dn.data.JsonPretty.stringify(json, Full, header, true);
 		jsonStr = jsonStr.replace('"ref__"', "\"$ref\"");
 		jsonStr = jsonStr.replace('"enum__"', '"enum"');
 		fo.writeString(jsonStr);
