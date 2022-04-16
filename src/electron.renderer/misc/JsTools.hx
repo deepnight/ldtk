@@ -680,7 +680,7 @@ class JsTools {
 		App.LOG.fileOp("Emptying dir "+path+" (onlyExts="+onlyExts+")...");
 		js.node.Require.require("fs");
 		var fp = dn.FilePath.fromDir(path);
-		for(f in js.node.Fs.readdirSync(path)) {
+		for(f in NT.readDir(path)) {
 			fp.fileWithExt = f;
 			if( js.node.Fs.lstatSync(fp.full).isFile() && ( onlyExts==null || extMap.exists(fp.extension) ) )
 				js.node.Fs.unlinkSync(fp.full);
@@ -735,11 +735,14 @@ class JsTools {
 
 	/** Return path to the "extraFiles" dir, stored as-is in the LDtk install dir **/
 	public static function getExtraFilesDir(?subDir:String) {
-		var base = getExeDir() + "/extraFiles";
-		if( subDir==null || subDir.length==0 )
-			return dn.FilePath.fromDir(base).useSlashes().directory;
-		else
-			return dn.FilePath.fromDir( base+"/"+subDir ).useSlashes().directory;
+		var fp = dn.FilePath.fromDir( getExeDir() );
+		fp.useSlashes();
+		if( fp.getLastDirectory()=="MacOS" )
+			fp.removeLastDirectory();
+		fp.appendDirectory("extraFiles");
+		if( subDir!=null && subDir.length>0 )
+			fp.appendDirectory(subDir);
+		return fp.full;
 	}
 
 	public static function getSamplesDir() {
