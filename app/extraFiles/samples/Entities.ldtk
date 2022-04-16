@@ -5,11 +5,11 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.1.2",
+		"appVersion": "1.1.3",
 		"url": "https://ldtk.io"
 	},
-	"jsonVersion": "1.1.2",
-	"appBuildId": 458318,
+	"jsonVersion": "1.1.3",
+	"appBuildId": 458364,
 	"nextUid": 164,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -2697,12 +2697,12 @@
 									"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								}, {
 									"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 97, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
@@ -2730,7 +2730,7 @@
 									"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								}, "__type": "EntityRef", "__tile": null, "defUid": 98, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
@@ -2894,12 +2894,12 @@
 									"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								}, {
 									"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
@@ -2927,12 +2927,12 @@
 									"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								}, {
 									"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "e42d8e30-b4d0-11ec-8513-7da4e28db7e6"
+									"worldIid": "cded4250-b4d0-11ec-8148-7f5a9a621caf"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
