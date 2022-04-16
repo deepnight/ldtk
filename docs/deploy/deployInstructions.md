@@ -50,7 +50,7 @@
 
 ## Communication
 - [ ] Add a devlog post on Itch.io
-- [ ] Publish the devlog post on Itch.io
+- [ ] Publish the devlog post on Itch.io ([devLogs](https://itch.io/dashboard/game/740403/devlog))
 - [ ] Announce on Twitter
 - [ ] Announce on Discord
 - [ ] Announce on Reddit (major releases only)
