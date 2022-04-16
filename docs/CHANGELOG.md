@@ -1,3 +1,8 @@
+# 1.1.3
+
+ - Fixed a crash on Home screen for macOS
+ - Fixed path to samples on macOS
+
 # 1.1.2
 
 ## Import enums from JSON and text files
