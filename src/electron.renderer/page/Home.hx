@@ -87,7 +87,8 @@ class Home extends Page {
 
 		// Samples
 		var path = JsTools.getSamplesDir();
-		var files = js.node.Fs.readdirSync(path);
+		App.LOG.debug("samplesDir="+path);
+		var files = NT.readDir(path);
 		var jSamples = jPage.find(".allSamples");
 		var jScroller = jSamples.children(".scroller");
 		jScroller.on( "wheel", (ev:js.html.WheelEvent)->{
