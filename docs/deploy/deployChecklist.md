@@ -6,6 +6,7 @@
 - [ ] Check code signing exp. date: 2025-02-21
 
 ## Preparation & checks
+- [ ] Check the issues in the Pending milestone ([pendings](https://github.com/deepnight/ldtk/milestone/28))
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Rebuild all LDtk sample maps
