@@ -179,7 +179,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 					label: L.untranslated("Update sample maps"),
 					cb: ()->{
 						var path = JsTools.getSamplesDir();
-						var files = js.node.Fs.readdirSync(path);
+						var files = NT.readDir(path);
 						var log = new dn.Log();
 						log.printOnAdd = true;
 						var n = 0;
