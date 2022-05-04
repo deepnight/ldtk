@@ -1,5 +1,7 @@
 # 1.1.4
 
+ - Fixed useless scrollbar in context menus
+
 ## Haxe API
 
  - Added definition JSON access to Layers and Entities
