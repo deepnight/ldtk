@@ -1,3 +1,9 @@
+# 1.1.4
+
+## Haxe API
+
+ - Added definition JSON access to Layers and Entities
+
 # 1.1.3
 
  - Fixed a crash on Home screen for macOS
