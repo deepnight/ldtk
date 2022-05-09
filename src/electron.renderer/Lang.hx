@@ -109,7 +109,7 @@ class Lang {
 			case LangC: t._("C/C++/C#");
 			case LangHaxe: t._("Haxe");
 			case LangJS: t._("Javascript");
-			case LangLua: t._("LUA");
+			case LangLua: t._("Lua");
 		}
 	}
 
