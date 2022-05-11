@@ -340,18 +340,36 @@ class EditEntityDefs extends ui.modal.Panel {
 			if( curEntity.nineSliceBorders.length!=4 )
 				curEntity.nineSliceBorders = [2,2,2,2];
 
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[0], jEntityForm.find("[name=nineSliceUp]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[1], jEntityForm.find("[name=nineSliceRight]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[2], jEntityForm.find("[name=nineSliceDown]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[3], jEntityForm.find("[name=nineSliceLeft]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
+			function createNineSliceInput(idx:Int, htmlName:String) {
+				var i = new form.input.IntInput(
+					jEntityForm.find("[name="+htmlName+"]"),
+					()->curEntity.nineSliceBorders[idx],
+					(v)->{
+						if( v==null )
+							if( idx==0 )
+								v = 1;
+							else
+								v = curEntity.nineSliceBorders[0];
+
+						if( idx==0 ) {
+							// Auto set other borders
+							final arr = curEntity.nineSliceBorders;
+							if( arr[1]==arr[0] && arr[2]==arr[0] && arr[3]==arr[0] )
+								for(i in 1...4)
+									arr[i] = v;
+						}
+
+						curEntity.nineSliceBorders[idx] = v;
+						editor.ge.emit(EntityDefChanged);
+					}
+				);
+				i.setBounds(1,null);
+				i.allowNull = true;
+			}
+			createNineSliceInput(0, "nineSliceUp");
+			createNineSliceInput(1, "nineSliceRight");
+			createNineSliceInput(2, "nineSliceDown");
+			createNineSliceInput(3, "nineSliceLeft");
 		}
 
 		// Tile rect picker
