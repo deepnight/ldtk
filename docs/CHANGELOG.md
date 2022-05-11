@@ -1,6 +1,8 @@
 # 1.1.4
 
- - Fixed useless scrollbar in context menus
+ - Added some useful new "icons" to the embed icons atlas.
+ - Fixed embed icons reloading when the image was resized.
+ - Fixed useless scrollbar in context menus.
 
 ## Haxe API
 
