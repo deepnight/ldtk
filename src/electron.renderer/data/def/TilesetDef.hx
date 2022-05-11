@@ -264,11 +264,12 @@ class TilesetDef {
 			// Update dimensions
 			pxWid = img.pixels.width;
 			pxHei = img.pixels.height;
+			App.LOG.fileOp(' -> Old size: ${oldPxWid}x$oldPxHei -> ${pxWid}x$pxHei');
 			tileGridSize = dn.M.imin( tileGridSize, getMaxTileGridSize() );
 			spacing = dn.M.imin( spacing, getMaxTileGridSize() );
 			padding = dn.M.imin( padding, getMaxTileGridSize() );
 
-			if( oldRelPath!=null ) {
+			if( oldRelPath!=null || isUsingEmbedAtlas() && oldPxWid>0 ) {
 				// Try to update previous image
 				return remapAllTileIds(oldPxWid, oldPxHei);
 			}
