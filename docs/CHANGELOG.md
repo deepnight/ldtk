@@ -5,6 +5,9 @@
 ## Haxe API
 
  - Added definition JSON access to Layers and Entities
+ - Removed irrelevant entity arrays in layers that have "required tags" or "forbidden tags".
+ - Fixed an exception with null defs.
+ - Added `pxWid`/`pxHei` to layers
 
 # 1.1.3
 
