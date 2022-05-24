@@ -2014,6 +2014,7 @@
 				"pxOffsetY",
 				"uid",
 				"autoRuleGroups",
+				"canSelectWhenInactive",
 				"excludedTags",
 				"guideGridHei",
 				"guideGridWid",
@@ -2074,6 +2075,12 @@
 					"type": [
 						"integer",
 						"null"
+					]
+				},
+				"canSelectWhenInactive": {
+					"description": "Allow editor selections when the layer is not currently active.",
+					"type": [
+						"boolean"
 					]
 				},
 				"autoSourceLayerDefUid": {
