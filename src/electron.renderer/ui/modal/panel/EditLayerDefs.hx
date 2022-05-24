@@ -284,6 +284,9 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.hideInList, jForm.find("input[name='hideInList']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
+		var i = Input.linkToHtmlInput( cur.canSelectWhenInactive, jForm.find("input[name='canSelectWhenInactive']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+
 		var i = Input.linkToHtmlInput( cur.hideFieldsWhenInactive, jForm.find("input[name='hideFieldsWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 

@@ -1,6 +1,7 @@
 # 1.1.4
 
  - Added some useful new "icons" to the embed icons atlas.
+ - Added a new layer option to prevent selections when the layer is not active.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.
 

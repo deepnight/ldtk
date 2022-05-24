@@ -865,6 +865,9 @@ class Editor extends Page {
 			all.reverse();
 			var best = null;
 			for(ld in all) {
+				if( !ld.canSelectWhenInactive && ld!=curLayerDef )
+					continue;
+
 				if( limitToLayerType!=null && ld.type!=limitToLayerType )
 					continue;
 
