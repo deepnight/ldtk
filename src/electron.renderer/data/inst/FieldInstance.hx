@@ -173,7 +173,7 @@ class FieldInstance {
 				}
 
 			case F_Color:
-				setInternal( arrayIdx, raw==null ? null : V_Int(dn.Color.hexToInt(raw)) );
+				setInternal( arrayIdx, raw==null ? null : V_Int(dn.legacy.Color.hexToInt(raw)) );
 
 			case F_Float:
 				var v = Std.parseFloat(raw);
@@ -561,9 +561,9 @@ class FieldInstance {
 	public function getColorAsHexStr(arrayIdx:Int) : Null<String> {
 		require(F_Color);
 		return isUsingDefault(arrayIdx)
-			? def.getColorDefault()==null ? null : dn.Color.intToHex(def.getColorDefault())
+			? def.getColorDefault()==null ? null : dn.legacy.Color.intToHex(def.getColorDefault())
 			: switch internalValues[arrayIdx] {
-				case V_Int(v): dn.Color.intToHex(v);
+				case V_Int(v): dn.legacy.Color.intToHex(v);
 				case _: throw "unexpected";
 			}
 	}

@@ -111,7 +111,7 @@ class JsonTools {
 				return null;
 
 			case TClass(String):
-				var c = dn.Color.hexToInt(v);
+				var c = dn.legacy.Color.hexToInt(v);
 				if( !dn.M.isValidNumber(c) ) {
 					if( defaultIfMissing!=null )
 						return defaultIfMissing;
@@ -130,7 +130,7 @@ class JsonTools {
 	}
 
 	public static function writeColor(c:UInt, allowNull=false) : Null<String> {
-		return c==null ? ( allowNull ? null : "#000000" ) : dn.Color.intToHex(c);
+		return c==null ? ( allowNull ? null : "#000000" ) : dn.legacy.Color.intToHex(c);
 	}
 
 	public static function writePath(path:Null<String>) : Null<String> {
