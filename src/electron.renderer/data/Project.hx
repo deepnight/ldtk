@@ -1,8 +1,8 @@
 package data;
 
 class Project {
-	public static var DEFAULT_WORKSPACE_BG = dn.Color.hexToInt("#40465B");
-	public static var DEFAULT_LEVEL_BG = dn.Color.hexToInt("#696a79");
+	public static var DEFAULT_WORKSPACE_BG = dn.legacy.Color.hexToInt("#40465B");
+	public static var DEFAULT_LEVEL_BG = dn.legacy.Color.hexToInt("#696a79");
 	public static var DEFAULT_GRID_SIZE = 16; // px
 	public static var DEFAULT_LEVEL_WIDTH = DEFAULT_GRID_SIZE*16; // px
 	public static var DEFAULT_LEVEL_HEIGHT = DEFAULT_GRID_SIZE*16; // px

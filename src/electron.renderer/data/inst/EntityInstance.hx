@@ -184,7 +184,7 @@ class EntityInstance {
 			if( c!=null )
 				return c;
 		}
-		return bright ? dn.Color.toWhite(def.color, 0.5) : def.color;
+		return bright ? dn.legacy.Color.toWhite(def.color, 0.5) : def.color;
 	}
 
 	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {

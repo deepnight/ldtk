@@ -415,7 +415,7 @@ class FieldDef {
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Int( iClamp(def) );
 
 			case F_Color:
-				var def = dn.Color.hexToInt(rawDef);
+				var def = dn.legacy.Color.hexToInt(rawDef);
 				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Int(def);
 
 			case F_Float:

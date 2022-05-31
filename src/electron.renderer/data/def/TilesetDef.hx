@@ -154,7 +154,7 @@ class TilesetDef {
 				averageColors: {
 					var buf = new StringBuf();
 					for(tid in 0...cWid*cHei)
-						buf.add( dn.Color.intToHex3_ARGB( averageColorsCache.get(tid) ) );
+						buf.add( dn.legacy.Color.intToHex3_ARGB( averageColorsCache.get(tid) ) );
 					buf.toString();
 				},
 			},
@@ -205,7 +205,7 @@ class TilesetDef {
 				var pos = 0;
 				var tid = 0;
 				while( pos<data.averageColors.length ) {
-					td.averageColorsCache.set( tid, dn.Color.hex3ToInt_ARGB( data.averageColors.substr(pos,4) ) );
+					td.averageColorsCache.set( tid, dn.legacy.Color.hex3ToInt_ARGB( data.averageColors.substr(pos,4) ) );
 					tid++;
 					pos+=4;
 				}
@@ -642,21 +642,21 @@ class TilesetDef {
 				pixel = img.pixels.getPixel(px,py);
 
 				// Detect opacity
-				if( opaqueTiles[tid]!=false && dn.Color.getA(pixel) < 1 )
+				if( opaqueTiles[tid]!=false && dn.legacy.Color.getA(pixel) < 1 )
 					opaqueTiles[tid] = false;
 
 				// Average color
-				curA = dn.Color.getA(pixel);
+				curA = dn.legacy.Color.getA(pixel);
 				a += curA;
-				r += dn.Color.getR(pixel) * dn.Color.getR(pixel) * curA;
-				g += dn.Color.getG(pixel) * dn.Color.getG(pixel) * curA;
-				b += dn.Color.getB(pixel) * dn.Color.getB(pixel) * curA;
+				r += dn.legacy.Color.getR(pixel) * dn.legacy.Color.getR(pixel) * curA;
+				g += dn.legacy.Color.getG(pixel) * dn.legacy.Color.getG(pixel) * curA;
+				b += dn.legacy.Color.getB(pixel) * dn.legacy.Color.getB(pixel) * curA;
 				nRGB += curA;
 				nA++;
 			}
 
 			// WARNING: actual color precision will later be reduced upon saving to 4-chars "argb"" String
-			averageColorsCache.set(tid, dn.Color.makeColorArgb( Math.sqrt(r/nRGB), Math.sqrt(g/nRGB), Math.sqrt(b/nRGB), a/nA ));
+			averageColorsCache.set(tid, dn.legacy.Color.makeColorArgb( Math.sqrt(r/nRGB), Math.sqrt(g/nRGB), Math.sqrt(b/nRGB), a/nA ));
 		}
 	}
 
@@ -792,10 +792,10 @@ class TilesetDef {
 		for(x in 0...imgData.pixels.width) {
 			c = imgData.pixels.getPixel(x,y);
 			idx = y*(imgData.pixels.width*4) + x*4;
-			clampedArray[idx] = dn.Color.getRi(c);
-			clampedArray[idx+1] = dn.Color.getGi(c);
-			clampedArray[idx+2] = dn.Color.getBi(c);
-			clampedArray[idx+3] = dn.Color.getAi(c);
+			clampedArray[idx] = dn.legacy.Color.getRi(c);
+			clampedArray[idx+1] = dn.legacy.Color.getGi(c);
+			clampedArray[idx+2] = dn.legacy.Color.getBi(c);
+			clampedArray[idx+3] = dn.legacy.Color.getAi(c);
 		}
 		var imgData = new js.html.ImageData(clampedArray, imgData.pixels.width);
 		ctx.putImageData(imgData,0,0);

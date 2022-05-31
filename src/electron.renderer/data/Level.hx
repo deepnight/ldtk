@@ -693,7 +693,7 @@ class Level {
 
 	public function getSmartColor(bright:Bool) {
 		inline function _adjust(c:Int) {
-			return bright ? dn.Color.toWhite(c, 0.45) : c;
+			return bright ? dn.legacy.Color.toWhite(c, 0.45) : c;
 		}
 
 		var c : Null<Int> = null;
