@@ -246,7 +246,8 @@ class LevelRender extends dn.Process {
 
 			case TilesetEnumChanged:
 				if (settings.v.tileEnumOverlays)
-					invalidateAll();
+					for( li in editor.curLevel.layerInstances)
+						invalidateLayer(li);
 
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				for(li in editor.curLevel.layerInstances)
