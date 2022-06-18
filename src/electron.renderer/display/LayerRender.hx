@@ -179,7 +179,7 @@ class LayerRender {
 						var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
 						tg.addTransform(tx, ty, sx, sy, 0, t);
 
-						if (showEnums) {
+						if (showEnums && ed != null) {
 							var n = 0;
 							for( ev in ed.values) {
 								if( td.hasTag(ev.id, tileInf.tileId)) {
