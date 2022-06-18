@@ -1752,6 +1752,7 @@ class Editor extends Page {
 			case TilesetSelectionSaved(td):
 			case TilesetDefPixelDataCacheRebuilt(td):
 			case TilesetDefSorted:
+			case TilesetEnumChanged:
 			case EntityInstanceAdded(ei): invalidateLevelCache(ei._li.level);
 			case EntityInstanceRemoved(ei): invalidateLevelCache(ei._li.level);
 			case EntityInstanceChanged(ei): invalidateLevelCache(ei._li.level);
@@ -1981,6 +1982,8 @@ class Editor extends Page {
 				project.tidy();
 
 			case TilesetDefAdded(td):
+
+			case TilesetEnumChanged:
 
 			case ProjectSettingsChanged:
 				updateBanners();
