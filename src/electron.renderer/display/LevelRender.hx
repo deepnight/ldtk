@@ -260,8 +260,8 @@ class LevelRender extends dn.Process {
 						invalidateLayer(li);
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
-				for(li in editor.curLevel.layerInstances)
-					if( li.def.type==Entities )
+				for( li in editor.curLevel.layerInstances)
+					if( settings.v.tileEnumOverlays || li.def.type==Entities )
 						invalidateLayer(li);
 
 			case LevelFieldInstanceChanged(l,fi):
