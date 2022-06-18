@@ -8,6 +8,7 @@ typedef AppSettings = {
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
+	var tileEnumOverlays : Bool;
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
@@ -60,6 +61,7 @@ class Settings {
 			singleLayerMode: false,
 			emptySpaceSelection: true,
 			tileStacking: true,
+			tileEnumOverlays : false,
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,

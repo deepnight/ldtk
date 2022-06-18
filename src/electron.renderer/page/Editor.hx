@@ -1309,7 +1309,12 @@ class Editor extends Page {
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
-
+		applyEditOption(
+			jEditOptions.find("li.tileEnums"),
+			()->settings.v.tileEnumOverlays,
+			(v)->setTileEnumOverlays(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
 		JsTools.parseComponents(jEditOptions);
 	}
 
@@ -1397,6 +1402,15 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
+	}
+
+	public function setTileEnumOverlays(v:Bool) {
+		settings.v.tileEnumOverlays = v;
+		App.ME.settings.save();
+		levelRender.invalidateAll();
+		selectionTool.clear();
+		N.quick( "Tile enum overlay: "+L.onOff( settings.v.tileEnumOverlays ));
 		updateEditOptions();
 	}
 
