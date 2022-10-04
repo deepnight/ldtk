@@ -199,6 +199,12 @@ button.blue {
 button.blue:hover {
   background-color: #348fd5;
 }
+button.yellow {
+  background-color: #FFB81C;
+}
+button.yellow:hover {
+  background-color: #FFDF4E;
+}
 button.purple {
   background-color: #9976f1;
 }

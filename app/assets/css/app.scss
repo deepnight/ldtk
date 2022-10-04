@@ -260,6 +260,14 @@ button {
 		}
 	}
 
+	&.yellow {
+		background-color: #FFB81C;
+
+		&:hover {
+			background-color: #E8B90E;
+		}
+	}
+
 	&.purple {
 		background-color: #9976f1;
 
@@ -318,6 +326,14 @@ button {
 
 		&:hover {
 			background-color: #348fd5;
+		}
+	}
+
+	&.yellow {
+		background-color: #FFB81C;
+
+		&:hover {
+			background-color: #FFDF4E;
 		}
 	}
 
