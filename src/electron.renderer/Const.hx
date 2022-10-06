@@ -122,6 +122,31 @@ class Const {
 		return json.version;
 	}
 
+	public static macro function getPokemonCsv(){
+		haxe.macro.Context.registerModuleDependency("Const","resources/essentials/pbs/compressed/pokemon.csv");
+
+		var file =  sys.io.File.read("resources/essentials/pbs/compressed/pokemon.csv", false);
+		var array = new Map<String, Array<String>>();
+
+		var keys = file.readLine().split(",");
+		
+		var pokemons = [];
+		try{
+			while (true) {
+				var values = file.readLine().split(",");
+				pokemons.push(values);
+			}
+		} catch (e:haxe.io.Eof){};
+
+		for (i => key in keys) {
+			array.set(key, new Array<String>());
+			for (pokemon in pokemons){
+				array[key].push(pokemon[i]);
+			}
+		}
+		return macro $v{array};
+	}
+
 	static macro function getPackageVersionMacro() {
 		haxe.macro.Context.registerModuleDependency("Const","app/package.json");
 		return macro $v{ getPackageVersion() };
