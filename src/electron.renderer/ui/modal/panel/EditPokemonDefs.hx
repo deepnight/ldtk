@@ -16,6 +16,7 @@ class EditPokemonDefs extends ui.modal.Panel {
 	function updateEnumList() {
 		var csv = Const.getPokemonCsv();
 
+		trace(project.defs.pokemons);
 		var jEnumList = jContent.find(".pokemonList>ul");
 		jEnumList.empty();
 

@@ -11,6 +11,7 @@ class Definitions {
 	public var enums: Array<data.def.EnumDef> = [];
 	public var externalEnums: Array<data.def.EnumDef> = [];
 	public var levelFields: Array<data.def.FieldDef> = [];
+	public var pokemons: Array<data.def.PokemonDef> = [];
 
 
 	public function new(project:Project) {
@@ -25,6 +26,7 @@ class Definitions {
 			enums: enums.map( ed->ed.toJson(p) ),
 			externalEnums: externalEnums.map( ed->ed.toJson(p) ),
 			levelFields: levelFields.map( fd->fd.toJson() ),
+			pokemons: pokemons.map( pd->pd.toJson() ),
 		}
 	}
 
@@ -42,6 +44,9 @@ class Definitions {
 
 		for( enumJson in JsonTools.readArray(json.enums) )
 			d.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
+
+		for( pokemonJson in JsonTools.readArray(json.pokemons) )
+			d.pokemons.push( data.def.PokemonDef.fromJson(p, pokemonJson) );
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )

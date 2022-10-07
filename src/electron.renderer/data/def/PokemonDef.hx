@@ -22,20 +22,18 @@ class PokemonDef {
 	}
 
 	@:keep public function toString() {
-		return 'Placeholder toString in PokemonDef';
-		//return 'EnumDef#$uid.$identifier(${values.length} values)';
+		return 'PokemonDef#$id.$name';
 	}
 
-	// public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.PokemonDefJson) {
-	// 	var ed = new PokemonDef(p, JsonTools.readInt(json.id), json.name);
+	public static function fromJson(p:Project, json:ldtk.Json.PokemonDefJson) {
+		var pd = new PokemonDef(p, JsonTools.readInt(json.id), json.name);
+		return pd;
+	}
 
-	// 	return ed;
-	// }
-
-	// public function toJson() : ldtk.Json.PokemonDefJson {
-	// 	return {
-	// 		id: id,
-	// 		name: name			
-	// 	}
-	// }
+	public function toJson() : ldtk.Json.PokemonDefJson {
+		return {
+			id: id,
+			name: name			
+		}
+	}
 }
