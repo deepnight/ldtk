@@ -1,11 +1,10 @@
 package data.def;
 
-class PokemonDef {
+class TableDef {
 	var _project : data.Project;
 
 	@:allow(data.Definitions)
-	public var id : Int;
-	public var name : String;
+	public var table: Map<String, Array<String>>;
 	// public var uid(default,null) : Int;
 	// public var identifier(default,set) : String;
 	// public var values : Array<data.DataTypes.EnumDefValue> = [];
@@ -15,25 +14,23 @@ class PokemonDef {
 	// public var tags : Tags;
 
 	@:allow(data.Definitions)
-	private function new(p:Project, id:Int, name:String) {
+	private function new(p:Project, table:Map<String, Array<String>>) {
 		_project = p;
-		this.id = id;
-		this.name = name;
+		this.table = table;
 	}
 
 	@:keep public function toString() {
-		return 'PokemonDef#$id.$name';
+		return 'TableDef#$table';
 	}
 
-	public static function fromJson(p:Project, json:ldtk.Json.PokemonDefJson) {
-		var pd = new PokemonDef(p, JsonTools.readInt(json.id), json.name);
-		return pd;
+	public static function fromJson(p:Project, json:ldtk.Json.TableDefJson) {
+		var td = new TableDef(p, json.table);
+		return td;
 	}
 
-	public function toJson() : ldtk.Json.PokemonDefJson {
+	public function toJson() : ldtk.Json.TableDefJson {
 		return {
-			id: id,
-			name: name			
+			table: table
 		}
 	}
 }

@@ -1,14 +1,14 @@
 package ui.modal.panel;
 
-class EditPokemonDefs extends ui.modal.Panel {
-	var curPokemon : Null<data.def.PokemonDef>;
+class EditTableDefs extends ui.modal.Panel {
+	var curPokemon : Null<data.def.TableDef>;
 
 	public function new() {
 		super();
 
 		// Main page
-		linkToButton("button.editPokemons");
-		loadTemplate("editPokemonDefs");
+		linkToButton("button.editTables");
+		loadTemplate("editTableDefs");
 
 		// Import
 		jContent.find("button.import").click( ev->{
@@ -21,9 +21,9 @@ class EditPokemonDefs extends ui.modal.Panel {
 						absPath = StringTools.replace(absPath,"\\","/");
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "csv":
-								var i = new importer.Pokemon();
+								var i = new importer.Table();
 								var csv = i.load( project.makeRelativeFilePath(absPath) );
-								updatePokemonList(csv);
+								updateTableList(csv);
 							case _:
 								N.error('The file must have the ".csv" extension.');
 						}
@@ -34,9 +34,9 @@ class EditPokemonDefs extends ui.modal.Panel {
 		});
 	}
 
-	function updatePokemonList(csv:Map<String, Array<String>>) {
+	function updateTableList(csv:Map<String, Array<String>>) {
 
-		var jEnumList = jContent.find(".pokemonList>ul");
+		var jEnumList = jContent.find(".tableList>ul");
 		jEnumList.empty();
 
 		var jLi = new J('<li class="subList"/>');

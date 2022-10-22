@@ -243,13 +243,13 @@ class Editor extends Page {
 				new ui.modal.panel.EditTilesetDefs();
 		});
 
-		jMainPanel.find("button.editPokemons").click(function(_) {
+		jMainPanel.find("button.editTables").click(function(_) {
 			if (isPaused())
 				return;
-			if (ui.Modal.isOpen(ui.modal.panel.EditPokemonDefs))
+			if (ui.Modal.isOpen(ui.modal.panel.EditTableDefs))
 				ui.Modal.closeAll();
 			else
-				new ui.modal.panel.EditPokemonDefs();
+				new ui.modal.panel.EditTableDefs();
 		});
 
 		jMainPanel.find("button.editEnums").click(function(_) {

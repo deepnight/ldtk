@@ -1,6 +1,6 @@
 package importer;
 
-class Pokemon {
+class Table {
 
 	public function new() {}
 
@@ -15,7 +15,6 @@ class Pokemon {
 		var fileContent = NT.readFileString(absPath);
 		var lines = fileContent.split("\n");
 
-		// var file =  sys.io.File.read("resources/essentials/pbs/compressed/pokemon.csv", false);
 		var map = new Map<String, Array<String>>();
 
 		var keys_ = lines[0];
