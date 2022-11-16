@@ -1,7 +1,7 @@
 package ui.modal.panel;
 
 class EditTableDefs extends ui.modal.Panel {
-	var curPokemon : Null<data.def.TableDef>;
+	var curTable : Null<data.def.TableDef>;
 
 	public function new() {
 		super();
@@ -11,6 +11,10 @@ class EditTableDefs extends ui.modal.Panel {
 		loadTemplate("editTableDefs");
 
 		// Import
+		jContent.find("button.refresh").click( ev->{
+			updateTableList();
+		});
+
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({
@@ -22,20 +26,25 @@ class EditTableDefs extends ui.modal.Panel {
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "csv":
 								var i = new importer.Table();
-								var csv = i.load( project.makeRelativeFilePath(absPath) );
-								updateTableList(csv);
+								i.load( project.makeRelativeFilePath(absPath) );
 							case _:
 								N.error('The file must have the ".csv" extension.');
 						}
 					});
 				},
 			});
-			// updatePokemonList(csv);
 		});
+		updateTableList();
 	}
 
-	function updateTableList(csv:Map<String, Array<String>>) {
+	function selectTable (td:data.def.TableDef) {
+		curTable = td;
+		updateTableList();
+	}
 
+	function updateTableList() {
+
+		trace(project.defs.tables);
 		var jEnumList = jContent.find(".tableList>ul");
 		jEnumList.empty();
 
@@ -44,11 +53,16 @@ class EditTableDefs extends ui.modal.Panel {
 		var jSubList = new J('<ul/>');
 		jSubList.appendTo(jLi);
 
-		for(n in csv["name"]) {
+		for(t in project.defs.tables) {
 			var jLi = new J("<li/>");
 			jLi.appendTo(jSubList);
-			jLi.data("uid", Std.parseInt(n));
-			jLi.append('<span class="name">'+n+'</span>');
+			jLi.append('<span class="table">'+t.name+'</span>');
+
+			if( t==curTable )
+				jLi.addClass("active");
+			jLi.click( function(_) {
+				selectTable(t);
+			});
 		}
 	}
 }

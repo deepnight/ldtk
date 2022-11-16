@@ -26,3 +26,6 @@
 
 --next
 --cmd haxelib git ldtk-haxe-api https://github.com/Ronaattori/uldtk-haxe-api.git --always
+
+--next
+--cmd haxelib install thx.csv --always

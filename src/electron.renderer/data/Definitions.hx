@@ -81,6 +81,12 @@ class Definitions {
 			fd.tidy(p);
 	}
 
+	/**  TABLE DEFS  *****************************************/
+	public function createTable(name:String, columns:Array<String>, data:Array<Array<Dynamic>>) {
+		var table = new data.def.TableDef(_project, name, columns, data);
+		tables.push(table);
+	}
+
 	/**  LAYER DEFS  *****************************************/
 
 	public function hasLayerType(t:ldtk.Json.LayerType) {

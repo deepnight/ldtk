@@ -1,10 +1,11 @@
 package importer;
+import thx.csv.Csv;
 
 class Table {
 
 	public function new() {}
 
-	public function load(relPath:String, isSync=false):Map<String, Array<String>> {
+	public function load(relPath:String, isSync=false) {
 		// if( isSync )
 		// 	App.LOG.add("import", 'Syncing external enums: $relPath');
 		// else
@@ -13,27 +14,21 @@ class Table {
 		var project = Editor.ME.project;
 		var absPath = project.makeAbsoluteFilePath(relPath);
 		var fileContent = NT.readFileString(absPath);
-		var lines = fileContent.split("\n");
-
-		var map = new Map<String, Array<String>>();
-
-		var keys_ = lines[0];
-		lines.remove(keys_);
-		var keys:Array<String> = keys_.split(",");
+		var table_name = absPath.split("/").pop();
 		
-		var pokemons = [];
-		for (line in lines) {
-			var values = line.split(",");
-			pokemons.push(values);
-		}
+		var data:Array<Array<Dynamic>> = Csv.decode(fileContent);
 
-		for (i => key in keys) {
-			map.set(key, new Array<String>());
-			for (pokemon in pokemons){
-				map[key].push(pokemon[i]);
-			}
-		}
-		return map;
+		var keys:Array<String> = data[0].map(Std.string);
+		data.shift(); // Remove keys from the array
+
+		// for (i => key in keys) {
+		// 	map.set(key, new Array<String>());
+		// 	for (row in data){
+		// 		map[key].push(row[i]);
+		// 	}
+		// }
+		project.defs.createTable(table_name, keys, data);
+		return;
 	}
 
 }

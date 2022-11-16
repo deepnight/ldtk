@@ -10,6 +10,7 @@
 -lib ldtk-haxe-api
 -lib heaps-aseprite
 -lib uuid
+-lib thx.csv
 
 -D editor
 -D electron
