@@ -1,5 +1,7 @@
 package ui.modal.panel;
+import tabulator.Tabulator;
 
+using Lambda;
 class EditTableDefs extends ui.modal.Panel {
 	var curTable : Null<data.def.TableDef>;
 
@@ -40,11 +42,38 @@ class EditTableDefs extends ui.modal.Panel {
 	function selectTable (td:data.def.TableDef) {
 		curTable = td;
 		updateTableList();
+
+		// TODO FIX THIS
+		var table = project.defs.tables[0];
+
+		var data = table.data;
+		var columns = table.columns.map(function(x) return {field: x, editor: true});
+
+		var tabulator = new Tabulator("#tableEditor", {
+			importFormat:"array",
+			height:"311px",
+			data: data,
+			autoColumns: true,
+			autoColumnsDefinitions: columns,
+			movableRows: true,
+			movableColumns: true,
+		});
+		tabulator.on("cellEdited", function(cell) {
+			// TODO allow for different primary key
+			var id = cell.getData().id;
+			var key_index = table.columns.indexOf("id");
+			for (row in data) {
+				if (row[key_index] == id) {
+					var key = table.columns.indexOf(cell.getField());
+					row[key] = cell.getValue();
+					break;
+				}
+			}
+		});
 	}
 
 	function updateTableList() {
 
-		trace(project.defs.tables);
 		var jEnumList = jContent.find(".tableList>ul");
 		jEnumList.empty();
 

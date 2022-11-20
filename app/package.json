@@ -34,7 +34,8 @@
 		"electron": "^21.1.0",
 		"electron-updater": "^4.6.1",
 		"simple-color-picker": "^1.0.5",
-		"sortablejs": "^1.14.0"
+		"sortablejs": "^1.14.0",
+		"tabulator-tables": "^5.4.2"
 	},
 	"devDependencies": {
 		"electron-builder": "^22.14.13"

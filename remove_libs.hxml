@@ -1,0 +1,31 @@
+--cmd haxelib remove ase --always
+
+--next
+--cmd haxelib remove uuid --always
+
+--next
+--cmd haxelib remove format --always
+
+--next
+--cmd haxelib remove castle
+
+--next
+--cmd haxelib remove heaps
+
+--next
+--cmd haxelib remove hxnodejs
+
+--next
+--cmd haxelib remove electron
+
+--next
+--cmd haxelib remove heaps-aseprite
+
+--next
+--cmd haxelib remove deepnightLibs
+
+--next
+--cmd haxelib remove ldtk-haxe-api
+
+--next
+--cmd haxelib remove thx.csv
