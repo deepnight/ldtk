@@ -1325,8 +1325,8 @@ ul.log {
 	background-image: url("../icons/enum.png");
 }
 
-.icon.pokemon {
-	background-image: url("../icons/pokemon.png");
+.icon.table {
+	background-image: url("../icons/table.png");
 }
 
 .icon.exit {
@@ -7208,7 +7208,7 @@ dl.form.fieldInstanceEditor {
 }
 
 
-.window.panel.editPokemonDefs {
+.window.panel.editTableDefs {
 	.content {
 		display: grid;
 		grid-template-rows: min-content min-content auto;
@@ -7224,7 +7224,7 @@ dl.form.fieldInstanceEditor {
 			grid-column: 1/3;
 		}
 
-		.pokemonList {
+		.TableList {
 			grid-column: 1/2;
 			display: grid;
 			grid-template-rows: min-content auto;

@@ -203,7 +203,7 @@ button.yellow {
   background-color: #FFB81C;
 }
 button.yellow:hover {
-  background-color: #FFDF4E;
+  background-color: #E8B90E;
 }
 button.purple {
   background-color: #9976f1;
@@ -251,6 +251,12 @@ button.blue {
 }
 button.blue:hover {
   background-color: #348fd5;
+}
+button.yellow {
+  background-color: #FFB81C;
+}
+button.yellow:hover {
+  background-color: #FFDF4E;
 }
 button.green {
   background-color: #5eab6b;
@@ -1097,8 +1103,8 @@ ul.log li.opChecksumUpdated {
   background-image: url("../icons/enum.png");
 }
 
-.icon.pokemon {
-  background-image: url("../icons/pokemon.png");
+.icon.table {
+  background-image: url("../icons/table.png");
 }
 
 .icon.exit {
@@ -5909,29 +5915,29 @@ dl.form.fieldInstanceEditor div.array button.remove {
   margin-bottom: 10px;
 }
 
-.window.panel.editPokemonDefs .content {
+.window.panel.editTableDefs .content {
   display: grid;
   grid-template-rows: min-content min-content auto;
   grid-template-columns: 250px auto;
   gap: 16px;
   height: 100%;
 }
-.window.panel.editPokemonDefs .content > h2:first-of-type {
+.window.panel.editTableDefs .content > h2:first-of-type {
   grid-column: 1/3;
 }
-.window.panel.editPokemonDefs .content .header {
+.window.panel.editTableDefs .content .header {
   grid-column: 1/3;
 }
-.window.panel.editPokemonDefs .content .pokemonList {
+.window.panel.editTableDefs .content .TableList {
   grid-column: 1/2;
   display: grid;
   grid-template-rows: min-content auto;
   overflow: hidden;
 }
-.window.panel.editPokemonDefs .content .pokemonList ul {
+.window.panel.editTableDefs .content .TableList ul {
   overflow: auto;
 }
-.window.panel.editPokemonDefs .content .pokemonList ul li.missing {
+.window.panel.editTableDefs .content .TableList ul li.missing {
   background-color: #791105;
 }
 
