@@ -20,13 +20,39 @@ class Table {
 
 		var keys:Array<String> = data[0].map(Std.string);
 		data.shift(); // Remove keys from the array
+		
+		for (i => key in keys) {
+			// Check if all of the values in this column can be converted into Int
+			var int:Bool = true;
+			for (row in data) {
+				if (Std.parseInt(row[i]) == null) {
+					int = false;
+					break;
+				}
+			}
+			// If yes, convert
+			if (int) {
+				for (row in data) {
+					row[i] = Std.parseInt(row[i]);
+				}
+			}
 
-		// for (i => key in keys) {
-		// 	map.set(key, new Array<String>());
-		// 	for (row in data){
-		// 		map[key].push(row[i]);
-		// 	}
-		// }
+			// Check if all of the values in this column can be converted into Float
+			var float:Bool = true;
+			for (row in data) {
+				if (Math.isNaN(Std.parseFloat(row[i]))) {
+					float = false;
+					break;
+				}
+			}
+			// If yes, convert
+			if (float) {
+				for (row in data) {
+					row[i] = Std.parseFloat(row[i]);
+				}
+			}
+		}
+
 		project.defs.createTable(table_name, keys, data);
 		return;
 	}
