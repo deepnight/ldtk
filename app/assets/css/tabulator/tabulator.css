@@ -1,10 +1,11 @@
 .tabulator {
     position: relative;
-    border: 1px solid #333;
+    border: 1px solid #545d73;
     background-color: #222;
     font-size: 14px;
     text-align: left;
     overflow: hidden;
+    height: 100%;
     -webkit-transform: translateZ(0);
     -moz-transform: translateZ(0);
     -ms-transform: translateZ(0);
@@ -28,8 +29,8 @@
     position: relative;
     box-sizing: border-box;
     width: 100%;
-    border-bottom: 1px solid #999;
-    background-color: #333;
+    border-bottom: 1px solid #644141;
+    background-color: #e34d00;
     color: #fff;
     font-weight: bold;
     white-space: nowrap;
@@ -38,6 +39,7 @@
     -khtml-user-select: none;
     -webkit-user-select: none;
     -o-user-select: none;
+    box-shadow: 0px -2px 0px rgb(0 0 0 / 30%) inset, 0px 0px 2px rgb(255 255 255 / 22%) inset, 0px 2px 1px rgb(0 0 0 / 30%);
   }
   
   .tabulator .tabulator-header.tabulator-header-hidden {
@@ -1176,7 +1178,8 @@
   }
   
   .tabulator .tabulator-header .tabulator-col {
-    background-color: #333;
+    background-color: #e34d00;
+    box-shadow: 0px -2px 0px rgb(0 0 0 / 30%) inset, 0px 0px 2px rgb(255 255 255 / 22%) inset, 0px 2px 1px rgb(0 0 0 / 30%);
   }
   
   .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-title-editor {

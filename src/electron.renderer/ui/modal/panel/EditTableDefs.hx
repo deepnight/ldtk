@@ -43,15 +43,14 @@ class EditTableDefs extends ui.modal.Panel {
 		curTable = td;
 		updateTableList();
 
-		// TODO FIX THIS
-		var table = project.defs.tables[0];
+		var table = curTable;
 
 		var data = table.data;
 		var columns = table.columns.map(function(x) return {field: x, editor: true});
 
 		var tabulator = new Tabulator("#tableEditor", {
 			importFormat:"array",
-			height:"311px",
+			layout:"fitData",
 			data: data,
 			autoColumns: true,
 			autoColumnsDefinitions: columns,
@@ -72,26 +71,86 @@ class EditTableDefs extends ui.modal.Panel {
 		});
 	}
 
+	function deleteTableDef(td:data.def.TableDef) {
+		new LastChance(L.t._("Table ::name:: deleted", { name:td.name }), project);
+		var old = td;
+		project.defs.removeTableDef(td);
+		selectTable(project.defs.tables[0]);
+		// editor.ge.emit( TilesetDefRemoved(old) );
+	}
+
 	function updateTableList() {
 
-		var jEnumList = jContent.find(".tableList>ul");
-		jEnumList.empty();
+		var jList = jContent.find(".tableList>ul");
+		jList.empty();
 
 		var jLi = new J('<li class="subList"/>');
-		jLi.appendTo(jEnumList);
+		jLi.appendTo(jList);
 		var jSubList = new J('<ul/>');
 		jSubList.appendTo(jLi);
 
-		for(t in project.defs.tables) {
+		for(td in project.defs.tables) {
 			var jLi = new J("<li/>");
 			jLi.appendTo(jSubList);
-			jLi.append('<span class="table">'+t.name+'</span>');
+			jLi.append('<span class="table">'+td.name+'</span>');
+			jLi.data("name",td.name);
 
-			if( t==curTable )
+			if( td==curTable )
 				jLi.addClass("active");
 			jLi.click( function(_) {
-				selectTable(t);
+				selectTable(td);
 			});
+
+			ContextMenu.addTo(jLi, [
+				// {
+				// 	label: L._Copy(),
+				// 	cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
+				// 	enable: ()->!td.isUsingEmbedAtlas(),
+				// },
+				// {
+				// 	label: L._Cut(),
+				// 	cb: ()->{
+				// 		App.ME.clipboard.copyData(CTilesetDef, td.toJson());
+				// 		deleteTilesetDef(td);
+				// 	},
+				// 	enable: ()->!td.isUsingEmbedAtlas(),
+				// },
+				// {
+				// 	label: L._PasteAfter(),
+				// 	cb: ()->{
+				// 		var copy = project.defs.pasteTilesetDef(App.ME.clipboard, td);
+				// 		editor.ge.emit( TilesetDefAdded(copy) );
+				// 		selectTileset(copy);
+				// 	},
+				// 	enable: ()->App.ME.clipboard.is(CTilesetDef),
+				// },
+				// {
+				// 	label: L._Duplicate(),
+				// 	cb: ()-> {
+				// 		var copy = project.defs.duplicateTilesetDef(td);
+				// 		editor.ge.emit( TilesetDefAdded(copy) );
+				// 		selectTileset(copy);
+				// 	},
+				// 	enable: ()->!td.isUsingEmbedAtlas(),
+				// },
+				{
+					label: L._Delete(),
+					cb: deleteTableDef.bind(td),
+				},
+			]);
 		}
+
+		// Make sub list sortable
+		JsTools.makeSortable(jSubList, function(ev) {
+			var jItem = new J(ev.item);
+			var fromIdx = project.defs.getTableIndex( jItem.data("name") );
+			var toIdx = ev.newIndex>ev.oldIndex
+				? jItem.prev().length==0 ? 0 : project.defs.getTableIndex( jItem.prev().data("name") )
+				: jItem.next().length==0 ? project.defs.tables.length-1 : project.defs.getTableIndex( jItem.next().data("name") );
+
+			var moved = project.defs.sortTableDef(fromIdx, toIdx);
+			selectTable(moved);
+			// editor.ge.emit(TableDefSorted);
+		});
 	}
 }

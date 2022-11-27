@@ -87,6 +87,38 @@ class Definitions {
 		tables.push(table);
 	}
 
+	public function removeTableDef(td:data.def.TableDef) {
+		if( !tables.remove(td) )
+			throw "Unknown tabledef";
+
+		_project.tidy();
+	}
+
+	public function getTableIndex(name:String) {
+		var idx = 0;
+		for(td in tables)
+			if( td.name==name )
+				break;
+			else
+				idx++;
+		return idx>=tables.length ? -1 : idx;
+	}
+
+	public function sortTableDef(from:Int, to:Int) : Null<data.def.TableDef> {
+		if( from<0 || from>=tables.length || from==to )
+			return null;
+
+		if( to<0 || to>=tables.length )
+			return null;
+
+		_project.tidy();
+
+		var moved = tables.splice(from,1)[0];
+		tables.insert(to, moved);
+
+		return moved;
+	}
+
 	/**  LAYER DEFS  *****************************************/
 
 	public function hasLayerType(t:ldtk.Json.LayerType) {
