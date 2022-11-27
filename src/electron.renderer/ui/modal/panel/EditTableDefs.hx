@@ -15,6 +15,7 @@ class EditTableDefs extends ui.modal.Panel {
 		// Import
 		jContent.find("button.refresh").click( ev->{
 			updateTableList();
+		updateTableForm();
 		});
 
 		jContent.find("button.import").click( ev->{
@@ -37,11 +38,24 @@ class EditTableDefs extends ui.modal.Panel {
 			});
 		});
 		updateTableList();
+		updateTableForm();
+	}
+
+	function updateTableForm() {
+		var jTabForm = jContent.find("dl.tableForm");
+
+		if( curTable==null ) {
+			jTabForm.hide();
+			return;
+		}
+		jTabForm.show();
+		var i = Input.linkToHtmlInput(curTable.name, jTabForm.find("input[name='name']") );
 	}
 
 	function selectTable (td:data.def.TableDef) {
 		curTable = td;
 		updateTableList();
+		updateTableForm();
 
 		var table = curTable;
 
