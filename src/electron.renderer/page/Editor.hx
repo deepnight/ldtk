@@ -252,6 +252,15 @@ class Editor extends Page {
 				new ui.modal.panel.EditTableDefs();
 		});
 
+		jMainPanel.find("button.editResources").click(function(_) {
+			if (isPaused())
+				return;
+			if (ui.Modal.isOpen(ui.modal.panel.EditResourceDefs))
+				ui.Modal.closeAll();
+			else
+				new ui.modal.panel.EditResourceDefs();
+		});
+
 		jMainPanel.find("button.editEnums").click(function(_) {
 			if (isPaused())
 				return;
