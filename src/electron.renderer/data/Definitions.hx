@@ -45,8 +45,9 @@ class Definitions {
 		for( enumJson in JsonTools.readArray(json.enums) )
 			d.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
-		for( tableJson in JsonTools.readArray(json.tables) )
-			d.tables.push( data.def.TableDef.fromJson(p, tableJson) );
+		if( json.tables!=null )
+			for( tableJson in JsonTools.readArray(json.tables) )
+				d.tables.push( data.def.TableDef.fromJson(p, tableJson) );
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
