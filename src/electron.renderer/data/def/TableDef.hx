@@ -4,10 +4,10 @@ class TableDef {
 	var _project : data.Project;
 
 	@:allow(data.Definitions)
+	public var uid(default,null) : Int;
 	public var name: String;
 	public var columns: Array<String>;
 	public var data: Array<Array<Dynamic>>;
-	// public var uid(default,null) : Int;
 	// public var identifier(default,set) : String;
 	// public var values : Array<data.DataTypes.EnumDefValue> = [];
 	// public var iconTilesetUid : Null<Int>;
@@ -16,8 +16,9 @@ class TableDef {
 	// public var tags : Tags;
 
 	@:allow(data.Definitions)
-	private function new(p:Project, name:String, columns:Array<String>, data:Array<Array<Dynamic>>) {
+	private function new(p:Project, uid:Int, name:String, columns:Array<String>, data:Array<Array<Dynamic>>) {
 		_project = p;
+		this.uid = uid;
 		this.name = name;
 		this.columns = columns;
 		this.data = data;
@@ -28,12 +29,13 @@ class TableDef {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.TableDefJson) {
-		var td = new TableDef(p, json.name, json.columns, json.data);
+		var td = new TableDef(p, json.uid, json.name, json.columns, json.data);
 		return td;
 	}
 
 	public function toJson() : ldtk.Json.TableDefJson {
 		return {
+			uid: uid,
 			name: name,
 			columns: columns,
 			data: data
