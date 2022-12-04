@@ -1,9 +1,15 @@
 package ui.modal.panel;
 
-import tabulator.Tabulator;
-
 using Lambda;
 
+// class Tools {
+// 	function jstree(jq:JQuery):JSTree {
+// 		return js.Syntax.code('{0}.jstree()', jq);
+// 	}
+// }
+// // then
+// using Tools;
+// jquery("#div").jstree();
 class EditResourceDefs extends ui.modal.Panel {
 	var curTable:Null<data.def.TableDef>;
 
@@ -64,27 +70,48 @@ class EditResourceDefs extends ui.modal.Panel {
 		var data = table.data;
 		var columns = table.columns.map(function(x) return {field: x, editor: true});
 
-		var tabulator = new Tabulator("#tableEditor", {
-			importFormat: "array",
-			layout: "fitData",
-			data: data,
-			autoColumns: true,
-			autoColumnsDefinitions: columns,
-			movableRows: true,
-			movableColumns: true,
-		});
-		tabulator.on("cellEdited", function(cell) {
-			// TODO allow for different primary key
-			var id = cell.getData().id;
-			var key_index = table.columns.indexOf("id");
-			for (row in data) {
-				if (row[key_index] == id) {
-					var key = table.columns.indexOf(cell.getField());
-					row[key] = cell.getValue();
-					break;
-				}
+		var treeElement = new js.jquery.JQuery("#treeEditor");
+		trace(treeElement);
+		trace(js.Syntax.code('{0}.jstree({
+		"core" : {
+			"animation" : 0,
+			"themes" : { "stripes" : true },
+			"data" : [
+				{ "text" : "Root node", "children" : [
+						{ "text" : "Child node 1" },
+						{ "text" : "Child node 2" }
+				]}
+			]
+		},
+		"types" : {
+			"#" : {
+			"max_children" : 1,
+			"max_depth" : 4,
+			"valid_children" : ["root"]
+			},
+			"root" : {
+			"icon" : "/static/3.3.12/assets/images/tree_icon.png",
+			"valid_children" : ["default"]
+			},
+			"default" : {
+			"valid_children" : ["default","file"]
+			},
+			"file" : {
+			"icon" : "glyphicon glyphicon-file",
+			"valid_children" : []
 			}
-		});
+		},
+		"plugins" : [
+			"contextmenu", "dnd", "search",
+			"state", "types", "wholerow"
+		]
+	})', treeElement));
+		// trace(treeElement.nextAll(".trace"));
+		// trace(treeElement.jstree());
+
+		// var tabulator = new Jstree("#tableEditor", {
+		// 	importFormat: "array",
+		// });
 	}
 
 	function deleteTableDef(td:data.def.TableDef) {

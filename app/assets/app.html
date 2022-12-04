@@ -1,7 +1,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; img-src * data:">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' blob:; img-src * data:">
 
 	<!-- Fix jQuery conflict -->
 	<script>
@@ -12,7 +12,22 @@
 	</script>
 
 	<!-- Scripts -->
-	<script type="text/javascript" src="js/jquery.min.js"></script> <!-- REMINDER: update version at the end of this file! -->
+	<!-- <script type="text/javascript" src="js/jquery.min.js"></script> <-- REMINDER: update version at the end of this file! -->
+	<!-- <script type="text/javascript" src="js/jstree.min.js"></script> -->
+
+	<!-- Fix jquery/electron issue -->
+	<script type="text/javascript">
+		window.$ = window.jQuery = window.jquery = require('./js/jquery.min.js');
+	
+		// window.$.jstree = window.jQuery.jstree = window.jquery.jstree = require('./js/jstree.js')(window.$);
+		// console.log(typeof window.jQuery.fn.jstree);
+		window.$ = window.jQuery = window.jquery = require('./js/jstree.js');
+		console.log(typeof window.jQuery.fn.jstree);
+		console.log(typeof window.jstree);
+	</script>
+	<script>
+		console.log($("#debug").jstree());
+	</script>
 
 	<!-- Restore module value -->
 	<script>
@@ -25,7 +40,7 @@
 	<link rel="stylesheet" href="css/app.min.css"/>
 	<link rel="stylesheet" href="css/codemirror/codemirror.css"/>
 	<link rel="stylesheet" href="css/codemirror/lucario.css"/>
-	<link rel="stylesheet" href="css/tabulator/tabulator.css"/>
+	<link rel="stylesheet" href="css/jstree/jstree.css"/>
 </head>
 
 
@@ -80,9 +95,5 @@
 		</div>
 	</xml>
 
-	<!-- Fix jquery/electron issue -->
-	<script type="text/javascript">
-		window.$ = window.jQuery = window.jquery = require('./js/jquery.min.js');
-	</script>
 </body>
 </html>

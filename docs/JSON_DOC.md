@@ -193,6 +193,7 @@ Value | Type | Description
 `externalEnums` | Array&nbsp;of&nbsp;[Enum&nbsp;definition](#ldtk-EnumDefJson) | Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file.
 `layers` | Array&nbsp;of&nbsp;[Layer&nbsp;definition](#ldtk-LayerDefJson) | All layer definitions
 `levelFields`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | All custom fields available to all levels.
+`tables` | Array&nbsp;of&nbsp;[Table&nbsp;definition](#ldtk-TableDefJson) | All internal tables
 `tilesets` | Array&nbsp;of&nbsp;[Tileset&nbsp;definition](#ldtk-TilesetDefJson) | All tilesets
 
 <a id="ldtk-LayerDefJson" name="ldtk-LayerDefJson"></a>
@@ -375,3 +376,12 @@ Value | Type | Description
 `color`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Optional color
 `id` | String | Enum value
 `tileId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | The optional ID of the tile
+
+<a id="ldtk-TableDefJson" name="ldtk-TableDefJson"></a>
+## 3.5. Table definition   
+Value | Type | Description
+-- | -- | --
+`columns` | Array&nbsp;of&nbsp;String | The columns of the database
+`data` | Array&nbsp;of&nbsp;Array&nbsp;of&nbsp;Untyped | The actual database
+`name` | String | Name of the database
+`uid` | Int | Unique Int identifier

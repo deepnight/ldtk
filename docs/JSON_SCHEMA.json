@@ -239,6 +239,9 @@
 					"Level": {
 						"$ref": "#/otherTypes/Level"
 					},
+					"TableDef": {
+						"$ref": "#/otherTypes/TableDef"
+					},
 					"EnumDef": {
 						"$ref": "#/otherTypes/EnumDef"
 					},
@@ -559,6 +562,7 @@
 				"externalEnums",
 				"layers",
 				"levelFields",
+				"tables",
 				"tilesets"
 			],
 			"additionalProperties": false,
@@ -612,6 +616,15 @@
 					"description": "Note: external enums are exactly the same as `enums`, except they have a `relPath` to point to an external source file.",
 					"items": {
 						"$ref": "#/otherTypes/EnumDef"
+					},
+					"type": [
+						"array"
+					]
+				},
+				"tables": {
+					"description": "All internal tables",
+					"items": {
+						"$ref": "#/otherTypes/TableDef"
 					},
 					"type": [
 						"array"
@@ -2422,6 +2435,56 @@
 					"description": "Index that represents the \"depth\" of the level in the world. Default is 0, greater means \"above\", lower means \"below\".<br/>  This value is mostly used for display only and is intended to make stacking of levels easier to manage.",
 					"type": [
 						"integer"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TableDef": {
+			"title": "Table definition",
+			"required": [
+				"columns",
+				"data",
+				"name",
+				"uid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"name": {
+					"description": "Name of the database",
+					"type": [
+						"string"
+					]
+				},
+				"uid": {
+					"description": "Unique Int identifier",
+					"type": [
+						"integer"
+					]
+				},
+				"data": {
+					"description": "The actual database",
+					"items": {
+						"items" : {},
+						"type": [
+							"array"
+						]
+					},
+					"type": [
+						"array"
+					]
+				},
+				"columns": {
+					"description": "The columns of the database",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				}
 			},
