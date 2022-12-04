@@ -95,10 +95,10 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function getTableIndex(name:String) {
+	public function getTableIndex(uid:Int) {
 		var idx = 0;
 		for(td in tables)
-			if( td.name==name )
+			if( td.uid==uid )
 				break;
 			else
 				idx++;

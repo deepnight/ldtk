@@ -106,7 +106,7 @@ class EditTableDefs extends ui.modal.Panel {
 			var jLi = new J("<li/>");
 			jLi.appendTo(jSubList);
 			jLi.append('<span class="table">'+td.name+'</span>');
-			jLi.data("name",td.name);
+			jLi.data("uid",td.uid);
 
 			if( td==curTable )
 				jLi.addClass("active");
@@ -153,17 +153,17 @@ class EditTableDefs extends ui.modal.Panel {
 			]);
 		}
 
-		// Make sub list sortable
+		// Make list sortable
 		JsTools.makeSortable(jSubList, function(ev) {
 			var jItem = new J(ev.item);
-			var fromIdx = project.defs.getTableIndex( jItem.data("name") );
+			var fromIdx = project.defs.getTableIndex( jItem.data("uid") );
 			var toIdx = ev.newIndex>ev.oldIndex
-				? jItem.prev().length==0 ? 0 : project.defs.getTableIndex( jItem.prev().data("name") )
-				: jItem.next().length==0 ? project.defs.tables.length-1 : project.defs.getTableIndex( jItem.next().data("name") );
+				? jItem.prev().length==0 ? 0 : project.defs.getTableIndex( jItem.prev().data("uid") )
+				: jItem.next().length==0 ? project.defs.tables.length-1 : project.defs.getTableIndex( jItem.next().data("uid") );
 
 			var moved = project.defs.sortTableDef(fromIdx, toIdx);
 			selectTable(moved);
-			// editor.ge.emit(TableDefSorted);
+			// editor.ge.emit(TilesetDefSorted);
 		});
 	}
 }
