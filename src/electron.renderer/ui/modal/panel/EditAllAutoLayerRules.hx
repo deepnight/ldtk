@@ -576,14 +576,25 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 				enable: ()->App.ME.clipboard.is(CRuleGroup),
 			},
+			// {
+			// 	label: L.t._("Duplicate group"),
+			// 	cb: ()->{
+			// 		var copy = ld.duplicateRuleGroup(project, rg);
+			// 		lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
+			// 		editor.ge.emit( LayerRuleGroupAdded(copy) );
+			// 		for(r in copy.rules)
+			// 			invalidateRuleAndOnesBelow(r);
+			// 	},
+			// },
 			{
-				label: L.t._("Duplicate group"),
+				label: L.t._("Duplicate and remap"),
+				sub: L.t._("Duplicate the group, while remapping IntGrid IDs and tiles"),
 				cb: ()->{
-					var copy = ld.duplicateRuleGroup(project, rg);
-					lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
-					editor.ge.emit( LayerRuleGroupAdded(copy) );
-					for(r in copy.rules)
-						invalidateRuleAndOnesBelow(r);
+					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
+						editor.ge.emit( LayerRuleGroupAdded(copy) );
+						for(r in copy.rules)
+							invalidateRuleAndOnesBelow(r);
+					});
 				},
 			},
 			{

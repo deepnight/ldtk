@@ -3098,7 +3098,7 @@ textarea {
 					text-transform: none;
 					color: $bgLighter;
 					font-size: 9pt;
-					white-space: pre;
+					white-space: pre-wrap;
 					max-width: 300px;
 				}
 				&:disabled {
@@ -8563,3 +8563,88 @@ $patternSize : 32px;
 		}
 	}
 }
+
+
+.window.ruleGroupRemap {
+	.wrapper .content {
+		width: 400px;
+
+		input[type=text] {
+			width: 100%;
+		}
+
+		ul.intGridIds {
+			margin-top: 8px;
+			margin-bottom: 8px;
+
+			li {
+				display: grid;
+				grid-template-columns: auto min-content auto;
+				margin-bottom: 2px;
+				align-items: center;
+
+				.oldId,
+				.newId {
+					min-width: 12em;
+					padding: 8px;
+					border-radius: 3px;
+					text-shadow: 1px 1px 1px black,  -1px -1px 1px black,  0px 2px 3px black;
+				}
+
+				.oldId {
+					opacity: 0.66;
+					cursor: not-allowed;
+				}
+
+				.newId {
+					border: 1px solid white;
+					cursor: pointer;
+					&:hover {
+						border-color: #fc0;
+					}
+
+					&.unchanged {
+						font-style: italic;
+						color: $almostWhite;
+					}
+				}
+
+				.unchanged {
+					color: $almostWhite;
+					font-style: italic;
+					text-shadow: none;
+					background-color: transparent !important;
+					border: 1px dashed $bgLight;
+				}
+			}
+		}
+	}
+}
+
+
+.window.intGridValuePicker {
+	.wrapper .content {
+		width: 15em;
+
+		ul {
+			li {
+				padding: 8px;
+				border: 1px solid $bgDark;
+
+				cursor: pointer;
+				&:hover {
+					border-color: white;
+				}
+
+				&.active {
+					border: 2px solid white;
+					border-left-width: 8px;
+				}
+				&:not(.active) {
+					opacity: 0.8;
+				}
+			}
+		}
+	}
+}
+
