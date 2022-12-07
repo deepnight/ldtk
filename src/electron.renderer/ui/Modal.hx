@@ -225,7 +225,7 @@ class Modal extends dn.Process {
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache=true) {
 		if( className==null )
-			className = tplName;
+			className = StringTools.replace(tplName, ".html", "");
 
 		jModalAndMask.addClass(className);
 		var html = JsTools.getHtmlTemplate(tplName, vars, useCache);
