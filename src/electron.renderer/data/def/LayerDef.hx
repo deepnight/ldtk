@@ -230,7 +230,7 @@ class LayerDef {
 		return max+1;
 	}
 
-	public function addIntGridValue(col:UInt, ?id:String) {
+	public function addIntGridValue(col:dn.Col, ?id:String) {
 		if( !isIntGridValueIdentifierValid(id) )
 			throw "Invalid intGrid value identifier "+id;
 
@@ -270,7 +270,7 @@ class LayerDef {
 		return vd==null ? null : vd.identifier==null ? '$idx' : '${vd.identifier} ($idx)';
 	}
 
-	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
+	public inline function getIntGridValueColor(idx:Int) : Null<dn.Col> {
 		var vd = getIntGridValueDef(idx);
 		return vd==null ? null : vd.color;
 	}
