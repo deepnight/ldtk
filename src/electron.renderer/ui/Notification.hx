@@ -66,7 +66,7 @@ class Notification extends dn.Process {
 
 	public static function copied(?name:String) {
 		if( name!=null )
-			msg('Copied "$name" to clipboard.', 0x0);
+			msg('Copied "${StringTools.replace(name,'"', "")}" to clipboard.', 0x0);
 		else
 			msg("Copied to clipboard.", 0x0);
 	}
