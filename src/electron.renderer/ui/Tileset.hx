@@ -12,6 +12,7 @@ class Tileset {
 	var jAtlas : js.jquery.JQuery;
 	var jCursor : js.jquery.JQuery;
 	var jSelection : js.jquery.JQuery;
+	var jHighlight : js.jquery.JQuery;
 	var jCanvas : js.jquery.JQuery;
 	var jInfos : js.jquery.JQuery;
 
@@ -50,6 +51,9 @@ class Tileset {
 
 		jSelection = new J('<div class="selectionsWrapper"/>');
 		jSelection.prependTo(jAtlas);
+
+		jHighlight = new J('<div class="highlightWrapper"/>');
+		jHighlight.prependTo(jAtlas);
 
 		jCanvas = new J('<canvas/>');
 		jCanvas.attr("width",tilesetDef.pxWid+"px");
@@ -152,10 +156,11 @@ class Tileset {
 	}
 
 	public function setSelectedTileIds(tileIds:Array<Int>) {
-		switch selectMode {
-			case None: throw "unexpected";
-			case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds = tileIds;
-		}
+		// switch selectMode {
+		// 	case None: throw "unexpected";
+		// 	case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds = tileIds;
+		// }
+		_internalSelectedIds = tileIds;
 		renderSelection();
 	}
 
@@ -215,6 +220,43 @@ class Tileset {
 		return clamp ? M.iclamp(v,0,tilesetDef.cHei-1) : v;
 	}
 
+	public function setHighlight(tileIds:Array<Int>) {
+		jHighlight.empty();
+
+		tileIds.sort( (a,b)->Reflect.compare(a,b) );
+
+		// Build horizontal lines groups from isolated tile IDs
+		var lines = [];
+		var i = 0;
+		while(i<tileIds.length) {
+			var len = 1;
+			while( i+len<tileIds.length ) {
+				if( tileIds[i+len-1]==tileIds[i+len]-1 )
+					len++;
+				else
+					break;
+			}
+			lines.push({ from:tileIds[i], to:tileIds[i+len-1] });
+			i+=len;
+		}
+
+		// Create line divs
+		for(line in lines) {
+			var jLine = new J('<div class="line"/>');
+			jLine.appendTo(jHighlight);
+			var fx = tilesetDef.getTileSourceX(line.from);
+			var fy = tilesetDef.getTileSourceY(line.from);
+			var tx = tilesetDef.getTileSourceX(line.to);
+			var ty = tilesetDef.getTileSourceY(line.to);
+			jLine.css({
+				marginLeft: fx,
+				marginTop: fy,
+				width: tx-fx + tilesetDef.tileGridSize,
+				height: ty-fy + tilesetDef.tileGridSize,
+			});
+		}
+	}
+
 	function renderSelection() {
 		jSelection.empty();
 
@@ -251,6 +293,33 @@ class Tileset {
 		}
 		cx = cx/tids.length;
 		cy = cy/tids.length;
+		cx+=0.5;
+		cy+=0.5;
+
+
+		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerWidth()*0.5/zoom;
+		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerHeight()*0.5/zoom;
+		if( instant ) {
+			scrollX = tx;
+			scrollY = ty;
+			tx = ty = null;
+		}
+
+		saveScrollPos();
+	}
+
+	public function focusAround(tileIds:Array<Int>, instant=false) {
+		if( tileIds.length==0 )
+			return;
+
+		var cx = 0.;
+		var cy = 0.;
+		for(tid in tileIds) {
+			cx += tilesetDef.getTileCx(tid);
+			cy += tilesetDef.getTileCy(tid);
+		}
+		cx = cx/tileIds.length;
+		cy = cy/tileIds.length;
 		cx+=0.5;
 		cy+=0.5;
 

@@ -342,6 +342,9 @@ class JsTools {
 	}
 
 	public static function getHtmlTemplate(name:String, ?vars:Dynamic, useCache=true) : Null<String> {
+		#if debug
+		useCache = false;
+		#end
 		if( !useCache || !_fileCache.exists(name) ) {
 			if( _fileCache.exists(name) )
 				_fileCache.remove(name);

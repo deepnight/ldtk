@@ -5,50 +5,65 @@ class RuleGroupRemap extends ui.modal.Dialog {
 	var srcGroup : data.DataTypes.AutoLayerRuleGroup;
 	var groupJson : ldtk.Json.AutoLayerRuleGroupJson;
 
+	var tileset : ui.Tileset;
 	var idRemaps : Map<Int,Int> = new Map();
+	var allTileIds : Array<Int> = [];
+	var tileIdOffset = 0;
 
 	public function new(ld:data.def.LayerDef, rg:data.DataTypes.AutoLayerRuleGroup, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
 		super();
 
 		loadTemplate("ruleGroupRemap.html");
+		canBeClosedManually = false;
 
 		this.ld = ld;
 		this.srcGroup = rg;
 		this.groupJson = ld.toJsonRuleGroup(rg);
-
 		groupJson.name += " copy";
-
-		// lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
-		// editor.ge.emit( LayerRuleGroupAdded(copy) );
-		// for(r in copy.rules)
-		// 	invalidateRuleAndOnesBelow(r);
 
 		var jName = jContent.find("input.name");
 		jName.val(groupJson.name);
 		jName.change( _->groupJson.name = jName.val() );
 
 		// List used IntGrid IDs
-		var n = 0;
 		for(r in srcGroup.rules)
 		for(cx in 0...r.size)
 		for(cy in 0...r.size) {
 			var v = M.iabs( r.get(cx,cy) );
-			if( v!=0 && v!=Const.AUTO_LAYER_ANYTHING ) {
+			if( v!=0 && v!=Const.AUTO_LAYER_ANYTHING )
 				idRemaps.set(v,v);
-				n++;
-			}
 		}
-		if( n==0 )
-			jContent.find(".intGridValues").hide();
 
 		// Create ID remappers
 		var jIdsList = jContent.find(".intGridIds");
 		for(v in idRemaps.keyValueIterator())
 			jIdsList.append( makeIdRemapper(v.key, v.value) );
 
+
+		// Tile picker
+		var td = project.defs.getTilesetDef(ld.tilesetDefUid);
+		tileset = new ui.Tileset(jContent.find(".tileset"), td, PickSingle);
+		var doneTileIds = new Map();
+		allTileIds = [];
+		for(r in srcGroup.rules)
+		for(tid in r.tileIds)
+			if( !doneTileIds.exists(tid) ) {
+				doneTileIds.set(tid,true);
+				allTileIds.push(tid);
+			}
+		allTileIds.sort( (a,b)->Reflect.compare(a,b) );
+		tileset.onSelectAnything = ()->setTileOffset( tileset.getSelectedTileIds()[0] - allTileIds[0] );
+		setTileOffset(0);
+
+		// Confirm & remap!
 		addConfirm(()->{
 			// Create rulegroup copy
 			var copy = ld.pasteRuleGroup( project, data.Clipboard.createTemp(CRuleGroup, groupJson) );
+
+			// Offset all tileIds
+			for(r in copy.rules)
+			for(i in 0...r.tileIds.length)
+				r.tileIds[i]+=tileIdOffset;
 
 			// Remap IntGrid IDs
 			for(r in copy.rules)
@@ -66,6 +81,14 @@ class RuleGroupRemap extends ui.modal.Dialog {
 		addCancel();
 	}
 
+
+
+	function setTileOffset(off:Int) {
+		tileIdOffset = off;
+		var offsetedIds = allTileIds.map( tid->tid+tileIdOffset );
+		tileset.setHighlight(offsetedIds);
+		tileset.focusAround(offsetedIds);
+	}
 
 
 	function makeIntGridId(id:Int, ?className:String, ?nameOverride:String) {

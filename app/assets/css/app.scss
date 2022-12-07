@@ -5654,6 +5654,20 @@ canvas#webgl {
 		box-shadow: 0px 0px 16px $red;;
 	}
 
+	.highlightWrapper {
+		pointer-events: none;
+		position: relative;
+		.line {
+			position: absolute;
+			z-index: 1;
+			min-width: 1px;
+			min-height: 1px;
+			outline: 1px solid white;
+			outline-offset: -1px;
+			border: 1px solid black;
+		}
+	}
+
 	.selectionsWrapper,
 	.cursorsWrapper {
 		pointer-events: none;
@@ -8567,7 +8581,13 @@ $patternSize : 32px;
 
 .window.ruleGroupRemap {
 	.wrapper .content {
-		width: 400px;
+		display: grid;
+		grid-template-columns: 300px 600px;
+		gap: 16px;
+
+		.header {
+			grid-column: 1/3;
+		}
 
 		input[type=text] {
 			width: 100%;
@@ -8585,7 +8605,7 @@ $patternSize : 32px;
 
 				.oldId,
 				.newId {
-					min-width: 12em;
+					min-width: 9em;
 					padding: 8px;
 					border-radius: 3px;
 					text-shadow: 1px 1px 1px black,  -1px -1px 1px black,  0px 2px 3px black;
@@ -8617,6 +8637,12 @@ $patternSize : 32px;
 					border: 1px dashed $bgLight;
 				}
 			}
+		}
+
+		.tileset {
+			max-height: 60vh;
+			border: 1px solid white;
+			outline: 1px solid black;
 		}
 	}
 }
