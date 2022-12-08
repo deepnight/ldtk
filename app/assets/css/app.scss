@@ -5662,9 +5662,10 @@ canvas#webgl {
 			z-index: 1;
 			min-width: 1px;
 			min-height: 1px;
-			outline: 1px solid white;
-			outline-offset: -1px;
+			outline: 2px solid #f0f;
+			outline-offset: -2px;
 			border: 1px solid black;
+			background-color: transparentize($color: #f0f, $amount: 0.8);
 		}
 	}
 
@@ -8583,6 +8584,7 @@ $patternSize : 32px;
 	.wrapper .content {
 		display: grid;
 		grid-template-columns: 300px 600px;
+		grid-template-rows: min-content auto;
 		gap: 16px;
 
 		.header {
@@ -8605,7 +8607,6 @@ $patternSize : 32px;
 
 				.oldId,
 				.newId {
-					min-width: 9em;
 					padding: 8px;
 					border-radius: 3px;
 					text-shadow: 1px 1px 1px black,  -1px -1px 1px black,  0px 2px 3px black;
@@ -8640,7 +8641,7 @@ $patternSize : 32px;
 		}
 
 		.tileset {
-			max-height: 60vh;
+			height: 60vh;
 			border: 1px solid white;
 			outline: 1px solid black;
 		}
