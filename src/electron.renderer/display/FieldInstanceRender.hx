@@ -130,32 +130,32 @@ class FieldInstanceRender {
 		}
 
 		// Align everything and add BGs
-		var maxLabelWidth = 0.;
-		var maxValueWidth = 0.;
-		for(fr in allRenders) {
-			maxLabelWidth = M.fmax(maxLabelWidth, fr.label.outerWidth);
-			maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
-		}
-		for(fr in allRenders) {
-			if( fr.label.numChildren>0 )
-				fr.label.minWidth = Std.int( maxLabelWidth );
+		// var maxLabelWidth = 0.;
+		// var maxValueWidth = 0.;
+		// for(fr in allRenders) {
+		// 	maxLabelWidth = M.fmax(maxLabelWidth, fr.label.outerWidth);
+		// 	maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
+		// }
+		// for(fr in allRenders) {
+		// 	if( fr.label.numChildren>0 )
+		// 		fr.label.minWidth = Std.int( maxLabelWidth );
 
-			fr.value.minWidth = Std.int( maxValueWidth );
-			if( fr.label.numChildren==0 )
-				fr.value.minWidth += Std.int( maxLabelWidth);
-			addBg(fr.value, baseColor, 0.75);
+		// 	fr.value.minWidth = Std.int( maxValueWidth );
+		// 	if( fr.label.numChildren==0 )
+		// 		fr.value.minWidth += Std.int( maxLabelWidth);
+		// 	addBg(fr.value, baseColor, 0.75);
 
-			if( fr.label.numChildren>0 ) {
-				fr.label.minHeight = fr.value.outerHeight;
-				addBg(fr.label, baseColor, 0.88);
-			}
-		}
+		// 	if( fr.label.numChildren>0 ) {
+		// 		fr.label.minHeight = fr.value.outerHeight;
+		// 		addBg(fr.label, baseColor, 0.88);
+		// 	}
+		// }
 	}
 
 
 	static inline function createText(target:h2d.Object) {
 		var tf = new h2d.Text(Assets.getRegularFont(), target);
-		tf.filter = new h2d.filter.Outline(1,0x0, 0.1);
+		tf.filter = new h2d.filter.Outline(1.5, 0x0, 0.1);
 		// tf.smooth = true;
 		return tf;
 	}
@@ -168,10 +168,11 @@ class FieldInstanceRender {
 		var labelFlow = new h2d.Flow();
 		labelFlow.verticalAlign = Middle;
 		labelFlow.horizontalAlign = Right;
-		labelFlow.padding = 6;
+		labelFlow.padding = 1;
+		labelFlow.horizontalAlign = Middle;
 
 		var valueFlow = new h2d.Flow();
-		valueFlow.padding = 6;
+		valueFlow.padding = 1;
 
 		var ei = switch ctx {
 			case EntityCtx(g, ei, ld): ei;
@@ -207,10 +208,10 @@ class FieldInstanceRender {
 				tf.text = fd.identifier;
 
 				// Value
-				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.25)) );
 
 			case ValueOnly:
-				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.8)) );
+				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.25)) );
 
 			case ArrayCountWithLabel:
 				// Label

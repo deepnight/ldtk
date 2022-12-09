@@ -65,7 +65,7 @@ class EntityRender extends dn.Process {
 		switch( ev ) {
 			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
 				layoutInvalidated = true;
-				Editor.ME.cd.setS("entityRenderLimit", 0.06);
+				Editor.ME.cd.setS("entityRenderLimit", 0.03);
 
 			case LayerInstanceSelected:
 				layoutInvalidated = true;
@@ -258,7 +258,7 @@ class EntityRender extends dn.Process {
 		fieldGraphics.clear();
 
 		// Attach fields
-		var color = ei.getSmartColor(true);
+		var color = ei.getSmartColor(false);
 		var ctx : display.FieldInstanceRender.FieldRenderContext = EntityCtx(fieldGraphics, ei, ld);
 		FieldInstanceRender.renderFields(
 			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd,true) ),
