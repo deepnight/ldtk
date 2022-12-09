@@ -2,28 +2,26 @@ package ui.modal.dialog;
 
 class RuleGroupRemap extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
+	var td : data.def.TilesetDef;
 	var srcGroup : data.DataTypes.AutoLayerRuleGroup;
 	var groupJson : ldtk.Json.AutoLayerRuleGroupJson;
 
 	var tileset : ui.Tileset;
 	var idRemaps : Map<Int,Int> = new Map();
 	var allTileIds : Array<Int> = [];
-	var tileIdOffset = 0;
+	var tileOffsetX = 0;
+	var tileOffsetY = 0;
 
 	public function new(ld:data.def.LayerDef, rg:data.DataTypes.AutoLayerRuleGroup, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
 		super();
 
-		loadTemplate("ruleGroupRemap.html");
+		loadTemplate("ruleGroupRemap.html", { name:rg.name });
 		canBeClosedManually = false;
 
 		this.ld = ld;
 		this.srcGroup = rg;
 		this.groupJson = ld.toJsonRuleGroup(rg);
 		groupJson.name += " copy";
-
-		var jName = jContent.find("input.name");
-		jName.val(groupJson.name);
-		jName.change( _->groupJson.name = jName.val() );
 
 		// List used IntGrid IDs
 		for(r in srcGroup.rules)
@@ -41,7 +39,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 
 
 		// Tile picker
-		var td = project.defs.getTilesetDef(ld.tilesetDefUid);
+		td = project.defs.getTilesetDef(ld.tilesetDefUid);
 		tileset = new ui.Tileset(jContent.find(".tileset"), td, PickSingle);
 		var doneTileIds = new Map();
 		allTileIds = [];
@@ -52,8 +50,16 @@ class RuleGroupRemap extends ui.modal.Dialog {
 				allTileIds.push(tid);
 			}
 		allTileIds.sort( (a,b)->Reflect.compare(a,b) );
-		tileset.onSelectAnything = ()->setTileOffset( tileset.getSelectedTileIds()[0] - allTileIds[0] );
-		setTileOffset(0);
+		tileset.onSelectAnything = ()->{
+			var tid = tileset.getSelectedTileIds()[0];
+			var fcx = td.getTileCx( allTileIds[0] );
+			var fcy = td.getTileCy( allTileIds[0] );
+			var tcx = td.getTileCx(tid);
+			var tcy = td.getTileCy(tid);
+			setTileOffset(tcx-fcx, tcy-fcy);
+			// setTileOffset( tileset.getSelectedTileIds()[0] - allTileIds[0] );
+		}
+		setTileOffset(0,0,true);
 
 		// Confirm & remap!
 		addConfirm(()->{
@@ -63,7 +69,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 			// Offset all tileIds
 			for(r in copy.rules)
 			for(i in 0...r.tileIds.length)
-				r.tileIds[i]+=tileIdOffset;
+				r.tileIds[i] += tileOffsetX + tileOffsetY*td.cWid;
 
 			// Remap IntGrid IDs
 			for(r in copy.rules)
@@ -82,12 +88,68 @@ class RuleGroupRemap extends ui.modal.Dialog {
 	}
 
 
+	function getCenterOfGroup(tileIds:Array<Int>) {
+		var sumX = 0.;
+		var sumY = 0.;
+		for(tid in tileIds) {
+			sumX += td.getTileSourceX(tid);
+			sumY += td.getTileSourceY(tid);
+		}
+		return {
+			x: M.round( sumX / tileIds.length ),
+			y: M.round( sumY / tileIds.length ),
+		}
+	}
 
-	function setTileOffset(off:Int) {
-		tileIdOffset = off;
-		var offsetedIds = allTileIds.map( tid->tid+tileIdOffset );
-		tileset.setHighlight(offsetedIds);
-		tileset.focusAround(offsetedIds);
+	function lock() {
+		jWrapper.find("button.confirm").prop("disabled",true);
+	}
+	function unlock() {
+		jWrapper.find("button.confirm").prop("disabled",false);
+	}
+
+
+	function setTileOffset(ox:Int, oy:Int, scrollTo=false) {
+		tileOffsetX = ox;
+		tileOffsetY = oy;
+		trace(tileOffsetX+","+tileOffsetY);
+
+		var valid = true;
+		var offsetedIds = [];
+		for(tid in allTileIds) {
+			var tcx = td.getTileCx(tid) + tileOffsetX;
+			var tcy = td.getTileCy(tid) + tileOffsetY;
+			if( tcx>=0 && tcx<td.cWid && tcy>=0 && tcy<td.cHei )
+				offsetedIds.push(tid+tileOffsetX + tileOffsetY*td.cWid);
+			else
+				valid = false;
+		}
+
+		if( valid )
+			unlock();
+		else
+			lock();
+
+		tileset.clearCursor();
+		tileset.renderAtlas();
+
+		// Render original group
+		if( tileOffsetX!=0 || tileOffsetY!=0 )
+			tileset.renderHighlightedTiles(allTileIds, "#080");
+
+		// Render offseted group
+		tileset.renderHighlightedTiles(offsetedIds, valid?dn.Col.inlineHex("#0f0"):dn.Col.inlineHex("#f00"));
+
+		// Render arrow
+		if( tileOffsetX!=0 || tileOffsetY!=0 ) {
+			var from = getCenterOfGroup(allTileIds);
+			var to = getCenterOfGroup(offsetedIds);
+			tileset.renderArrow(from.x, from.y, to.x, to.y, valid?dn.Col.inlineHex("#fff"):dn.Col.inlineHex("#f00"));
+		}
+
+		// Focus
+		if( scrollTo )
+			tileset.focusAround(offsetedIds, true);
 	}
 
 

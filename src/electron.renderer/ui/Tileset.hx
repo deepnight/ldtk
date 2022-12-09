@@ -12,7 +12,6 @@ class Tileset {
 	var jAtlas : js.jquery.JQuery;
 	var jCursor : js.jquery.JQuery;
 	var jSelection : js.jquery.JQuery;
-	var jHighlight : js.jquery.JQuery;
 	var jCanvas : js.jquery.JQuery;
 	var jInfos : js.jquery.JQuery;
 
@@ -51,9 +50,6 @@ class Tileset {
 
 		jSelection = new J('<div class="selectionsWrapper"/>');
 		jSelection.prependTo(jAtlas);
-
-		jHighlight = new J('<div class="highlightWrapper"/>');
-		jHighlight.prependTo(jAtlas);
 
 		jCanvas = new J('<canvas/>');
 		jCanvas.attr("width",tilesetDef.pxWid+"px");
@@ -94,7 +90,7 @@ class Tileset {
 		SCROLL_MEMORY = new Map();
 	}
 
-	function renderAtlas() {
+	public function renderAtlas() {
 		tilesetDef.drawAtlasToCanvas(jCanvas);
 	}
 
@@ -220,41 +216,56 @@ class Tileset {
 		return clamp ? M.iclamp(v,0,tilesetDef.cHei-1) : v;
 	}
 
-	public function setHighlight(tileIds:Array<Int>) {
-		jHighlight.empty();
-
+	public function renderHighlightedTiles(tileIds:Array<Int>, col:dn.Col) {
 		tileIds.sort( (a,b)->Reflect.compare(a,b) );
+		var tileMap = new Map();
+		for(tid in tileIds)
+			tileMap.set(tid,true);
 
-		// Build horizontal lines groups from isolated tile IDs
-		var lines = [];
-		var i = 0;
-		while(i<tileIds.length) {
-			var len = 1;
-			while( i+len<tileIds.length ) {
-				if( tileIds[i+len-1]==tileIds[i+len]-1 )
-					len++;
-				else
-					break;
-			}
-			lines.push({ from:tileIds[i], to:tileIds[i+len-1] });
-			i+=len;
-		}
 
-		// Create line divs
-		for(line in lines) {
-			var jLine = new J('<div class="line"/>');
-			jLine.appendTo(jHighlight);
-			var fx = tilesetDef.getTileSourceX(line.from);
-			var fy = tilesetDef.getTileSourceY(line.from);
-			var tx = tilesetDef.getTileSourceX(line.to);
-			var ty = tilesetDef.getTileSourceY(line.to);
-			jLine.css({
-				marginLeft: fx,
-				marginTop: fy,
-				width: tx-fx + tilesetDef.tileGridSize,
-				height: ty-fy + tilesetDef.tileGridSize,
-			});
+		var ctx = canvas.getContext2d();
+		var thick = 2;
+		var grid = tilesetDef.tileGridSize;
+		for(tid in tileIds) {
+			var x = tilesetDef.getTileSourceX(tid);
+			var y = tilesetDef.getTileSourceY(tid);
+
+			ctx.fillStyle = col.toCssRgba(0.4);
+			ctx.fillRect(x,y,grid,grid);
+			ctx.fillStyle = col.toHex();
+
+			// Left border
+			if( !tileMap.exists(tid-1) )
+				ctx.fillRect(x-thick, y, thick, grid);
+
+			// Right border
+			if( !tileMap.exists(tid+1) )
+				ctx.fillRect(x+grid, y, thick, grid);
+
+			// Top border
+			if( !tileMap.exists(tid-tilesetDef.cWid) )
+				ctx.fillRect(x, y-thick, grid, thick);
+
+			// Bottom border
+			if( !tileMap.exists(tid+tilesetDef.cWid) )
+				ctx.fillRect(x, y+grid, grid, thick);
 		}
+	}
+
+	public function renderArrow(fx:Int, fy:Int, tx:Int, ty:Int, col:dn.Col) {
+		var ctx = canvas.getContext2d();
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = col.toHex();
+		var a = Math.atan2(ty-fy, tx-fx);
+
+		ctx.beginPath();
+		ctx.moveTo(fx,fy);
+		ctx.lineTo(tx,ty);
+
+		ctx.moveTo(tx+Math.cos(a+M.PIHALF*1.5)*6, ty+Math.sin(a+M.PIHALF*1.5)*6);
+		ctx.lineTo(tx,ty);
+		ctx.lineTo(tx+Math.cos(a-M.PIHALF*1.5)*6, ty+Math.sin(a-M.PIHALF*1.5)*6);
+		ctx.stroke();
 	}
 
 	function renderSelection() {
@@ -394,6 +405,11 @@ class Tileset {
 			jTilesetWrapper.removeAttr("cursor");
 		else if( cursorId!=null && jTilesetWrapper.attr("cursor")!=cursorId )
 			jTilesetWrapper.attr("cursor", cursorId);
+	}
+
+
+	public function clearCursor() {
+		jCursor.hide();
 	}
 
 
