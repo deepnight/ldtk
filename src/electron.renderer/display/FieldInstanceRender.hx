@@ -17,16 +17,17 @@ class FieldInstanceRender {
 
 
 	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
-		var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.92 ) );
-		f.addChildAt(bg, 0);
-		f.getProperties(bg).isAbsolute = true;
-		bg.scaleX = f.outerWidth;
-		bg.scaleY = f.outerHeight+1;
+		// var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.92 ) );
+		// f.addChildAt(bg, 0);
+		// f.getProperties(bg).isAbsolute = true;
+		// bg.scaleX = f.outerWidth;
+		// bg.scaleY = f.outerHeight+1;
 	}
 
 
 	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, style:RefLinkstyle) {
 		// Optional line cutting
+		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 		var a = Math.atan2(ty-fy, tx-fx);
 		final cutDist = 40;
 		switch style {
@@ -36,7 +37,7 @@ class FieldInstanceRender {
 				final cutLine = 2;
 				tx = fx + Math.cos(a)*cutDist;
 				ty = fy + Math.sin(a)*cutDist;
-				g.lineStyle(1, color, 0.5);
+				g.lineStyle(1*zoomScale, color, 0.5);
 				g.moveTo(tx + Math.cos(a-M.PIHALF)*cutLine, ty + Math.sin(a-M.PIHALF)*cutLine);
 				g.lineTo(tx + Math.cos(a+M.PIHALF)*cutLine, ty + Math.sin(a+M.PIHALF)*cutLine);
 
@@ -44,7 +45,7 @@ class FieldInstanceRender {
 				final cutLine = 4;
 				fx = tx - Math.cos(a)*cutDist;
 				fy = ty - Math.sin(a)*cutDist;
-				g.lineStyle(1, color, 1);
+				g.lineStyle(1*zoomScale, color, 1);
 				g.moveTo(fx + Math.cos(a-M.PIHALF)*cutLine, fy + Math.sin(a-M.PIHALF)*cutLine);
 				g.lineTo(fx + Math.cos(a+M.PIHALF)*cutLine, fy + Math.sin(a+M.PIHALF)*cutLine);
 		}
@@ -58,13 +59,13 @@ class FieldInstanceRender {
 		// Draw link
 		var n = 0;
 		var sign = 1;
-		final off = 2.5;
+		final off = 1.5;
 		var x = fx;
 		var y = fy;
 		while( n<count ) {
 			final r = n/(count-1);
 			final startRatio = M.fmin(r/0.05, 1);
-			g.lineStyle(1, color, ( 0.15 + 0.85*(1-r) ) * alpha );
+			g.lineStyle(1*zoomScale, color, ( 0.15 + 0.85*(1-r) ) * alpha );
 			g.moveTo(x,y);
 			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*startRatio;
 			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*startRatio;
@@ -154,12 +155,15 @@ class FieldInstanceRender {
 
 	static inline function createText(target:h2d.Object) {
 		var tf = new h2d.Text(Assets.getRegularFont(), target);
-		tf.smooth = true;
+		tf.filter = new h2d.filter.Outline(1,0x0, 0.1);
+		// tf.smooth = true;
 		return tf;
 	}
 
 	static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
+
+		var zoomScale = 1/Editor.ME.camera.adjustedZoom;
 
 		var labelFlow = new h2d.Flow();
 		labelFlow.verticalAlign = Middle;
@@ -227,7 +231,7 @@ class FieldInstanceRender {
 			case RadiusPx:
 				switch ctx {
 					case EntityCtx(g,_):
-						g.lineStyle(1, baseColor, 0.33);
+						g.lineStyle(2*zoomScale, baseColor, 0.33);
 						g.drawCircle(0,0, fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0));
 
 					case LevelCtx(_):
@@ -236,7 +240,7 @@ class FieldInstanceRender {
 			case RadiusGrid:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						g.lineStyle(1, baseColor, 0.33);
+						g.lineStyle(2*zoomScale, baseColor, 0.33);
 						g.drawCircle(0,0, ( fi.def.type==F_Float ? fi.getFloat(0) : fi.getInt(0) ) * ld.gridSize);
 
 					case LevelCtx(_):
@@ -297,7 +301,7 @@ class FieldInstanceRender {
 							if( fd.editorDisplayMode!=Points )
 								renderSimpleLink(g, baseColor, fx,fy, tx,ty);
 
-							g.lineStyle(1, baseColor, 0.66);
+							g.lineStyle(1*zoomScale, baseColor, 0.66);
 							g.beginFill( C.toBlack(baseColor, 0.6) );
 							final s = 4;
 							g.moveTo(tx, ty-s);
