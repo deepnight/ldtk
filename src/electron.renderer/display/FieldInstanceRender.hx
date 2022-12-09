@@ -65,7 +65,7 @@ class FieldInstanceRender {
 		while( n<count ) {
 			final r = n/(count-1);
 			final startRatio = M.fmin(r/0.05, 1);
-			g.lineStyle(1*zoomScale, color, ( 0.15 + 0.85*(1-r) ) * alpha );
+			g.lineStyle((2-r)*zoomScale, color, ( 0.15 + 0.85*(1-r) ) * alpha );
 			g.moveTo(x,y);
 			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*startRatio;
 			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*startRatio;
