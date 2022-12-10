@@ -12,7 +12,7 @@ class Assets {
 
 	public static function init() {
 		fontPixel = hxd.Res.fonts.pixel_berry_xml.toFont();
-		fontLight_tiny = hxd.Res.fonts.noto_sans_display_semicondensed_semibold_15_xml.toFont();
+		fontLight_tiny = hxd.Res.fonts.noto_sans_display_semicondensed_medium_12_xml.toFont();
 		fontLight_regular = hxd.Res.fonts.noto_sans_display_semicondensed_medium_19_xml.toFont();
 		fontLight_large = hxd.Res.fonts.noto_sans_display_semicondensed_light_30_xml.toFont();
 		fontLight_title = hxd.Res.fonts.noto_sans_display_semicondensed_extralight_90_xml.toFont();
