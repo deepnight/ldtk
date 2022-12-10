@@ -65,7 +65,7 @@ class FieldInstanceRender {
 		while( n<count ) {
 			final r = n/(count-1);
 			final startRatio = M.fmin(r/0.05, 1);
-			g.lineStyle((2-r)*zoomScale, color, ( 0.15 + 0.85*(1-r) ) * alpha );
+			g.lineStyle((2-r)*zoomScale, color, ( 0.3 + 0.7*(1-r) ) * alpha );
 			g.moveTo(x,y);
 			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*startRatio;
 			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*startRatio;
@@ -153,10 +153,10 @@ class FieldInstanceRender {
 	}
 
 
-	static inline function createText(target:h2d.Object) {
+	static inline function createText(target:h2d.Object, col:dn.Col) {
 		var tf = new h2d.Text(Assets.getRegularFont(), target);
-		tf.filter = new h2d.filter.Outline(1.5, 0x0, 0.1);
-		// tf.smooth = true;
+		tf.filter = new h2d.filter.Outline(1, col.toBlack(0.65), 0.1);
+		tf.textColor = col;
 		return tf;
 	}
 
@@ -182,12 +182,10 @@ class FieldInstanceRender {
 		// Value error
 		var err = fi.getFirstErrorInValues(ei);
 		if( err!=null ) {
-			var tf = createText(labelFlow);
-			tf.textColor = baseColor;
+			var tf = createText(labelFlow, baseColor);
 			tf.text = fd.identifier;
 
-			var tf = createText(valueFlow);
-			tf.textColor = 0xff4400;
+			var tf = createText(valueFlow, 0xff4400);
 			tf.text = '<$err>';
 		}
 
@@ -203,8 +201,7 @@ class FieldInstanceRender {
 
 			case NameAndValue:
 				// Label
-				var tf = createText(labelFlow);
-				tf.textColor = baseColor;
+				var tf = createText(labelFlow, baseColor);
 				tf.text = fd.identifier;
 
 				// Value
@@ -215,18 +212,15 @@ class FieldInstanceRender {
 
 			case ArrayCountWithLabel:
 				// Label
-				var tf = createText(labelFlow);
-				tf.textColor = baseColor;
+				var tf = createText(labelFlow, baseColor);
 				tf.text = fd.identifier;
 
 				// Value
-				var tf = createText(valueFlow);
-				tf.textColor = baseColor;
+				var tf = createText(valueFlow, baseColor);
 				tf.text = '${fi.getArrayLength()} value(s)';
 
 			case ArrayCountNoLabel:
-				var tf = createText(valueFlow);
-				tf.textColor = baseColor;
+				var tf = createText(valueFlow, baseColor);
 				tf.text = '${fi.getArrayLength()} value(s)';
 
 			case RadiusPx:
@@ -371,15 +365,13 @@ class FieldInstanceRender {
 
 		// Array opening
 		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = createText(valuesFlow);
-			tf.textColor = textColor;
+			var tf = createText(valuesFlow, textColor);
 			tf.text = "[";
 		}
 
 		// Empty array with "always" display
 		if( fi.def.isArray && fi.getArrayLength()==0 && fi.def.editorAlwaysShow ) {
-			var tf = createText(valuesFlow);
-			tf.textColor = textColor;
+			var tf = createText(valuesFlow, textColor);
 			tf.text = "--empty--";
 		}
 
@@ -403,8 +395,7 @@ class FieldInstanceRender {
 				}
 				else {
 					// Text render
-					var tf = createText(valuesFlow);
-					tf.textColor = textColor;
+					var tf = createText(valuesFlow, textColor);
 					switch ctx {
 						case EntityCtx(g, ei, ld):
 							tf.maxWidth = MAX_TEXT_WIDTH;
@@ -432,16 +423,14 @@ class FieldInstanceRender {
 
 			// Array separator
 			if( showArrayBrackets && fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = createText(valuesFlow);
-				tf.textColor = textColor;
+				var tf = createText(valuesFlow, textColor);
 				tf.text = ",";
 			}
 		}
 
 		// Array closing
 		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = createText(valuesFlow);
-			tf.textColor = textColor;
+			var tf = createText(valuesFlow, textColor);
 			tf.text = "]";
 		}
 
