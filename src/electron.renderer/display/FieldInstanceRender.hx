@@ -155,7 +155,8 @@ class FieldInstanceRender {
 
 	static inline function createText(target:h2d.Object, col:dn.Col) {
 		var tf = new h2d.Text(Assets.getRegularFont(), target);
-		tf.filter = new h2d.filter.Outline(1, col.toBlack(0.65), 0.1);
+		tf.filter = new h2d.filter.Outline(1.5, col.toBlack(0.65), 0.1);
+		col.lightness = 1;
 		tf.textColor = col;
 		return tf;
 	}
@@ -168,11 +169,11 @@ class FieldInstanceRender {
 		var labelFlow = new h2d.Flow();
 		labelFlow.verticalAlign = Middle;
 		labelFlow.horizontalAlign = Right;
-		labelFlow.padding = 1;
+		labelFlow.padding = 0;
 		labelFlow.horizontalAlign = Middle;
 
 		var valueFlow = new h2d.Flow();
-		valueFlow.padding = 1;
+		valueFlow.padding = 0;
 
 		var ei = switch ctx {
 			case EntityCtx(g, ei, ld): ei;
