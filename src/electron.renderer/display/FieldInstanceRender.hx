@@ -123,6 +123,7 @@ class FieldInstanceRender {
 
 			allRenders.push(fr);
 			var line = new h2d.Flow(parent);
+			line.verticalAlign = Middle;
 			line.setScale( settings.v.editorUiScale );
 			if( fr.label.numChildren>0 )
 				line.addChild(fr.label);
@@ -155,13 +156,12 @@ class FieldInstanceRender {
 
 	static inline function createText(target:h2d.Object, col:dn.Col) {
 		var tf = new h2d.Text(Assets.getRegularFont(), target);
-		tf.filter = new h2d.filter.Outline(1.5, col.toBlack(0.65), 0.1);
 		col.lightness = 1;
 		tf.textColor = col;
 		return tf;
 	}
 
-	static function renderField(fi:data.inst.FieldInstance, baseColor:Int, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
+	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
 
 		var zoomScale = 1/Editor.ME.camera.adjustedZoom;
@@ -170,10 +170,11 @@ class FieldInstanceRender {
 		labelFlow.verticalAlign = Middle;
 		labelFlow.horizontalAlign = Right;
 		labelFlow.padding = 0;
-		labelFlow.horizontalAlign = Middle;
+		labelFlow.filter = new h2d.filter.Outline(1.5, baseColor.toBlack(0.75), 0.1);
 
 		var valueFlow = new h2d.Flow();
 		valueFlow.padding = 0;
+		valueFlow.filter = labelFlow.filter;
 
 		var ei = switch ctx {
 			case EntityCtx(g, ei, ld): ei;
@@ -202,8 +203,8 @@ class FieldInstanceRender {
 
 			case NameAndValue:
 				// Label
-				var tf = createText(labelFlow, baseColor);
-				tf.text = fd.identifier;
+				var tf = createText(labelFlow, baseColor.toWhite(0.6));
+				tf.text = fd.identifier+": ";
 
 				// Value
 				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.25)) );
@@ -376,6 +377,8 @@ class FieldInstanceRender {
 			tf.text = "--empty--";
 		}
 
+
+		var iconSize = fi.getArrayLength()<=1 ? 32 : 16;
 		for( idx in 0...fi.getArrayLength() ) {
 			if( fi.def.editorAlwaysShow || !fi.valueIsNull(idx) ) {
 				if( fi.hasIconForDisplay(idx) ) {
@@ -383,13 +386,13 @@ class FieldInstanceRender {
 					var w = new h2d.Flow(valuesFlow);
 					var tile = fi.getIconForDisplay(idx);
 					var bmp = new h2d.Bitmap( tile, w );
-					var s = M.fmin( 32/tile.width, 32/tile.height );
+					var s = M.fmin( iconSize/tile.width, iconSize/tile.height );
 					bmp.setScale(s);
 				}
 				else if( fi.def.type==F_Color ) {
 					// Color disc
 					var g = new h2d.Graphics(valuesFlow);
-					var r = 12;
+					var r = iconSize;
 					g.beginFill( fi.getColorAsInt(idx) );
 					g.lineStyle(1, 0x0, 0.8);
 					g.drawCircle(r,r,r, 16);
