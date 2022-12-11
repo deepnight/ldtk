@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.4",
-	"appBuildId": 464030,
+	"appBuildId": 464101,
 	"nextUid": 164,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -128,7 +128,7 @@
 			"displayOpacity": 1,
 			"inactiveOpacity": 0.72,
 			"hideInList": false,
-			"hideFieldsWhenInactive": false,
+			"hideFieldsWhenInactive": true,
 			"canSelectWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
@@ -156,7 +156,7 @@
 			"displayOpacity": 1,
 			"inactiveOpacity": 0.7,
 			"hideInList": false,
-			"hideFieldsWhenInactive": false,
+			"hideFieldsWhenInactive": true,
 			"canSelectWhenInactive": true,
 			"pxOffsetX": 0,
 			"pxOffsetY": 0,
@@ -682,8 +682,8 @@
 			"resizableY": false,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
-			"fillOpacity": 0.08,
-			"lineOpacity": 0,
+			"fillOpacity": 0.3,
+			"lineOpacity": 0.44,
 			"hollow": false,
 			"color": "#B8DE4F",
 			"renderMode": "Tile",
@@ -969,8 +969,8 @@
 			"identifier": "Enemy",
 			"uid": 37,
 			"tags": ["actor"],
-			"width": 24,
-			"height": 24,
+			"width": 16,
+			"height": 16,
 			"resizableX": true,
 			"resizableY": true,
 			"keepAspectRatio": true,
@@ -1031,10 +1031,10 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Above",
+					"editorDisplayPos": "Center",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
-					"editorTextSuffix": " hp",
+					"editorTextSuffix": " HP",
 					"editorTextPrefix": null,
 					"useForSmartColor": false,
 					"min": 1,
@@ -1176,7 +1176,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
-					"editorDisplayPos": "Above",
+					"editorDisplayPos": "Center",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1214,9 +1214,9 @@
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 99,
-			"tileId": 104,
+			"tileId": 81,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 128, "y": 48, "w": 16, "h": 16, "tilesetUid": 99 },
+			"tileRect": { "tilesetUid": 99, "x": 272, "y": 32, "w": 16, "h": 16 },
 			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
@@ -1294,17 +1294,17 @@
 			"resizableY": true,
 			"keepAspectRatio": false,
 			"tileOpacity": 1,
-			"fillOpacity": 0.08,
+			"fillOpacity": 0,
 			"lineOpacity": 0,
 			"hollow": false,
 			"color": "#A98B70",
 			"renderMode": "Tile",
 			"showName": true,
-			"tilesetId": 126,
-			"tileId": 240,
+			"tilesetId": 99,
+			"tileId": 85,
 			"tileRenderMode": "NineSlice",
-			"tileRect": { "tilesetUid": 126, "x": 0, "y": 192, "w": 16, "h": 16 },
-			"nineSliceBorders": [4,4,4,4],
+			"tileRect": { "tilesetUid": 99, "x": 336, "y": 32, "w": 16, "h": 16 },
+			"nineSliceBorders": [5,5,5,5],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
 			"limitBehavior": "DiscardOldOnes",
@@ -2566,8 +2566,8 @@
 							"__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 },
 							"__smartColor": "#FF0000",
 							"iid": "f80ee803-66b0-11ec-b121-6dcb8a513232",
-							"width": 24,
-							"height": 24,
+							"width": 16,
+							"height": 16,
 							"defUid": 37,
 							"px": [504,304],
 							"fieldInstances": [
@@ -2591,8 +2591,8 @@
 							"__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 },
 							"__smartColor": "#FF0000",
 							"iid": "f80ee804-66b0-11ec-b121-874e33fcffe5",
-							"width": 24,
-							"height": 24,
+							"width": 16,
+							"height": 16,
 							"defUid": 37,
 							"px": [664,336],
 							"fieldInstances": [
@@ -2690,7 +2690,7 @@
 							"__grid": [39,13],
 							"__pivot": [0.5,0.5],
 							"__tags": ["trigger"],
-							"__tile": { "x": 128, "y": 48, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__tile": { "tilesetUid": 99, "x": 272, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#FFFFFF",
 							"iid": "f80ee802-66b0-11ec-b121-7703f3b4b3e4",
 							"width": 16,
@@ -2702,12 +2702,12 @@
 									"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								}, {
 									"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 97, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
@@ -2735,7 +2735,7 @@
 									"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								}, "__type": "EntityRef", "__tile": null, "defUid": 98, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
@@ -2820,7 +2820,7 @@
 							"__grid": [34,18],
 							"__pivot": [0.5,1],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 126, "x": 0, "y": 192, "w": 16, "h": 16 },
+							"__tile": { "tilesetUid": 99, "x": 336, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#A98B70",
 							"iid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 							"width": 9,
@@ -2837,7 +2837,7 @@
 							"__grid": [27,12],
 							"__pivot": [0.5,1],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 126, "x": 0, "y": 192, "w": 16, "h": 16 },
+							"__tile": { "tilesetUid": 99, "x": 336, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#A98B70",
 							"iid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 							"width": 9,
@@ -2854,7 +2854,7 @@
 							"__grid": [22,18],
 							"__pivot": [0.5,1],
 							"__tags": ["triggerable"],
-							"__tile": { "tilesetUid": 126, "x": 0, "y": 192, "w": 16, "h": 16 },
+							"__tile": { "tilesetUid": 99, "x": 336, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#A98B70",
 							"iid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 							"width": 9,
@@ -2899,12 +2899,12 @@
 									"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								}, {
 									"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
@@ -2932,12 +2932,12 @@
 									"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								}, {
 									"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "b2db08e0-5110-11ed-aba8-d57c7abfb5c9"
+									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
