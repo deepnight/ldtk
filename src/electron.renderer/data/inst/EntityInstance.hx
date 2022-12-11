@@ -177,7 +177,7 @@ class EntityInstance {
 			return layerX>=left-overShapePad && layerX<=right+overShapePad && layerY>=top-overShapePad && layerY<=bottom+overShapePad;
 	}
 
-	public function getSmartColor(bright:Bool) {
+	public function getSmartColor(bright:Bool) : dn.Col {
 		var c : Null<Int> = null;
 		for(fd in def.fieldDefs) {
 			c = getFieldInstance(fd,true).getSmartColor();
