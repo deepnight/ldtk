@@ -296,14 +296,15 @@ class EntityRender extends dn.Process {
 
 		// Identifier label
 		if( ei.def.showName ) {
+			var col = ei.getSmartColor(true);
 			var f = new h2d.Flow(above);
 			f.minWidth = above.innerWidth;
 			f.horizontalAlign = Middle;
 			f.padding = 2;
 			var tf = new h2d.Text(Assets.getRegularFont(), f);
-			tf.smooth = true;
+			tf.filter = FieldInstanceRender.createFilter(col);
 			tf.scale(settings.v.editorUiScale);
-			tf.textColor = ei.getSmartColor(true);
+			tf.textColor = col;
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
@@ -344,7 +345,7 @@ class EntityRender extends dn.Process {
 		if( above.visible ) {
 			above.setScale(zoomScale);
 			above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
-			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY - 2 );
+			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY );
 			above.alpha = 1;
 
 			center.setScale(zoomScale);
@@ -354,7 +355,7 @@ class EntityRender extends dn.Process {
 
 			beneath.setScale(zoomScale);
 			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
-			beneath.y = Std.int( ei.height*(1-ed.pivotY) + 1 );
+			beneath.y = Std.int( ei.height*(1-ed.pivotY) );
 			beneath.alpha = 1;
 		}
 	}

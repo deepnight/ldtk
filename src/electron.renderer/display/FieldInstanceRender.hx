@@ -161,6 +161,10 @@ class FieldInstanceRender {
 		return tf;
 	}
 
+	public static inline function createFilter(col:dn.Col) {
+		return new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.1);
+	}
+
 	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
 
@@ -170,7 +174,7 @@ class FieldInstanceRender {
 		labelFlow.verticalAlign = Middle;
 		labelFlow.horizontalAlign = Right;
 		labelFlow.padding = 0;
-		labelFlow.filter = new h2d.filter.Outline(1.5, baseColor.toBlack(0.75), 0.1);
+		labelFlow.filter = createFilter(baseColor);
 
 		var valueFlow = new h2d.Flow();
 		valueFlow.padding = 0;
