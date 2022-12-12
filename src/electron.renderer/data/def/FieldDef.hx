@@ -126,7 +126,10 @@ class FieldDef {
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
-		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, ZigZag);
+		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.editorDisplayMode {
+			case Points, PointStar, PointPath, PointPathLoop: DashedLine;
+			case _: CurvedArrow;
+		});
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
 		o.editorTextPrefix = json.editorTextPrefix;

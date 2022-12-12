@@ -148,6 +148,13 @@ class EntityInstance {
 		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
+	public inline function getWorldRefAttachX(fd:data.def.FieldDef) {
+		return _li.level.worldX + ( fd.editorDisplayMode==RefLinkBetweenCenters ? centerX : x );
+	}
+	public inline function getWorldRefAttachY(fd:data.def.FieldDef) {
+		return _li.level.worldY + ( fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y );
+	}
+
 	final overShapePad = 3;
 	final overEdgePad = 4;
 	public inline function isOver(layerX:Int, layerY:Int) {

@@ -20,25 +20,26 @@ class FieldInstanceRender {
 		var len = M.dist(fx,fy, tx,ty);
 
 		// Slightly offset the reflink end point
-		switch linkStyle {
-			case ZigZag:
-			case DashedLine:
-			case ArrowsLine:
-				if( len>=12 ) {
-					var a = Math.atan2(ty-fy, tx-fx);
-					fx+=Math.cos(a)*4;
-					fy+=Math.sin(a)*4;
-					tx-=Math.cos(a)*6;
-					ty-=Math.sin(a)*6;
-				}
+		if( endingStyle==null || endingStyle==Full )
+			switch linkStyle {
+				case ZigZag:
+				case DashedLine:
+				case ArrowsLine:
+					if( len>=12 ) {
+						var a = Math.atan2(ty-fy, tx-fx);
+						fx+=Math.cos(a)*4;
+						fy+=Math.sin(a)*4;
+						tx-=Math.cos(a)*6;
+						ty-=Math.sin(a)*6;
+					}
 
-			case StraightArrow, CurvedArrow:
-				if( len>=20 ) {
-					var a = Math.atan2(ty-fy, tx-fx);
-					tx-=Math.cos(a)*6;
-					ty-=Math.sin(a)*6;
-				}
-		}
+				case StraightArrow, CurvedArrow:
+					if( len>=20 ) {
+						var a = Math.atan2(ty-fy, tx-fx);
+						tx-=Math.cos(a)*6;
+						ty-=Math.sin(a)*6;
+					}
+			}
 
 		// Render line
 		renderSimpleLink(g, color, fx,fy, tx,ty, linkStyle, endingStyle);
@@ -50,20 +51,16 @@ class FieldInstanceRender {
 		var alpha = 1;
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 		var a = Math.atan2(ty-fy, tx-fx);
-		var len = M.dist(fx,fy, tx,ty);
-		var count = M.fclamp( len/dashLen, 4, 30);
-		dashLen = len/count;
-
 
 		// Optional line cutting
-		final cutDist = 40;
+		final cutDist = M.fmin(60, M.dist(fx,fy, tx,ty));
 		switch endingStyle {
 			case null:
 
 			case Full:
 
 			case CutAtOrigin:
-				final cutLine = 2;
+				final cutLine = 4;
 				tx = fx + Math.cos(a)*cutDist;
 				ty = fy + Math.sin(a)*cutDist;
 				g.lineStyle(1*zoomScale, color, 0.5);
@@ -79,6 +76,10 @@ class FieldInstanceRender {
 				g.lineTo(fx + Math.cos(a+M.PIHALF)*cutLine, fy + Math.sin(a+M.PIHALF)*cutLine);
 		}
 
+		// Other inits
+		var len = M.dist(fx,fy, tx,ty);
+		var count = M.fclamp( len/dashLen, 4, 30);
+		dashLen = len/count;
 
 		// Draw link
 		var n = 0;
@@ -104,7 +105,7 @@ class FieldInstanceRender {
 			case ArrowsLine:
 				var x = fx;
 				var y = fy;
-				var arrowSize = 4;
+				var arrowSize = 6 * zoomScale;
 				while( n<count ) {
 					final r = n/(count-1);
 					final startRatio = M.fmin(r/0.05, 1);
@@ -120,11 +121,11 @@ class FieldInstanceRender {
 			case DashedLine:
 				var x = fx;
 				var y = fy;
-				var arrowSize = 4;
+				var arrowSize = 6*zoomScale;
 				while( n<count ) {
 					final r = n/(count-1);
 					final startRatio = M.fmin(r/0.05, 1);
-					g.lineStyle(2-r, color, ( 0.4 + 0.6*(1-r) ) * alpha );
+					g.lineStyle((4-r*2)*zoomScale, color, ( 0.4 + 0.6*(1-r) ) * alpha );
 					g.moveTo(x,y);
 					g.lineTo( x+Math.cos(a)*dashLen*0.6, y+Math.sin(a)*dashLen*0.6 );
 					x = fx+Math.cos(a)*(n*dashLen);
@@ -155,12 +156,12 @@ class FieldInstanceRender {
 				}
 
 				// Arrow head
-				final size = len<=32 ? 3 : 6;
+				final size = ( len<=32 ? 8 : 12 ) * zoomScale;
 				var headAng = M.PI*0.8;
 				g.lineStyle(0);
 				g.beginFill(color,1);
 				g.moveTo( x+Math.cos(lastAng+headAng)*size, y+Math.sin(lastAng+headAng)*size );
-				g.lineTo( x+Math.cos(lastAng)*2, y+Math.sin(lastAng)*2 );
+				g.lineTo( x+Math.cos(lastAng)*2*zoomScale, y+Math.sin(lastAng)*2*zoomScale );
 				g.lineTo( x+Math.cos(lastAng-headAng)*size, y+Math.sin(lastAng-headAng)*size );
 				g.endFill();
 
@@ -180,12 +181,12 @@ class FieldInstanceRender {
 				}
 
 				// Arrow head
-				final size = len<=32 ? 3 : 6;
+				final size = ( len<=32 ? 3 : 6 ) * zoomScale;
 				var headAng = M.PI*0.8;
 				g.lineStyle(0);
 				g.beginFill(color,1);
 				g.moveTo( x+Math.cos(a+headAng)*size, y+Math.sin(a+headAng)*size );
-				g.lineTo( x+Math.cos(a)*2, y+Math.sin(a)*2 );
+				g.lineTo( x+Math.cos(a)*2*zoomScale, y+Math.sin(a)*2*zoomScale );
 				g.lineTo( x+Math.cos(a-headAng)*size, y+Math.sin(a-headAng)*size );
 				g.endFill();
 		}

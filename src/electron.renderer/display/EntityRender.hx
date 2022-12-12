@@ -284,11 +284,15 @@ class EntityRender extends dn.Process {
 			if( fi==null )
 				continue;
 
-			var col = refEi.getSmartColor(true);
-			var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
-			var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			var col = refEi.getSmartColor(false);
+			var refX = refEi.getWorldRefAttachX(fi.def) - ei.worldX;
+			var refY = refEi.getWorldRefAttachY(fi.def) - ei.worldY;
 			var thisX = ei.getRefAttachX(fi.def) - ei.x;
 			var thisY = ei.getRefAttachY(fi.def) - ei.y;
+			// var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
+			// var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
+			// var thisX = ei.getRefAttachX(fi.def) - ei.x;
+			// var thisY = ei.getRefAttachY(fi.def) - ei.y;
 			FieldInstanceRender.renderRefLink(
 				fieldGraphics, col, refX, refY, thisX, thisY, 1,
 				fi.def.editorLinkStyle,
