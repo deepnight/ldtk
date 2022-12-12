@@ -768,7 +768,7 @@ class WorldRender extends dn.Process {
 		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
+		FieldInstanceRender.createBg(tf, f, l.getSmartColor(false));
 		wl.fieldsRender.identifier = f;
 
 		updateFieldsPos();
@@ -918,11 +918,10 @@ class WorldRender extends dn.Process {
 		if( refreshTexts ) {
 			wl.identifier.removeChildren();
 			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
-			tf.smooth = true;
 			tf.text = l.getDisplayIdentifier();
-			tf.textColor = l.getSmartColor(true);
-			tf.x = 8;
-			tf.smooth = true;
+			tf.textColor = 0xffffff;
+			tf.x = 6;
+			tf.y = -2;
 
 			var error = l.getFirstError();
 			if( error!=NoError ) {
@@ -961,8 +960,8 @@ class WorldRender extends dn.Process {
 		// Position
 		switch curWorld.worldLayout {
 			case Free, GridVania:
-				wl.identifier.x = Std.int( l.worldX );
-				wl.identifier.y = Std.int( l.worldY );
+				wl.identifier.x = Std.int( l.worldX + 2 );
+				wl.identifier.y = Std.int( l.worldY + 2 );
 				wl.identifier.rotation = 0;
 
 			case LinearHorizontal:

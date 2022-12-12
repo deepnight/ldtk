@@ -300,7 +300,6 @@ class EntityRender extends dn.Process {
 			var f = new h2d.Flow(above);
 			f.minWidth = above.innerWidth;
 			f.horizontalAlign = Middle;
-			f.padding = 2;
 			var tf = new h2d.Text(Assets.getRegularFont(), f);
 			tf.filter = FieldInstanceRender.createFilter(col);
 			tf.scale(settings.v.editorUiScale);
@@ -308,7 +307,7 @@ class EntityRender extends dn.Process {
 			tf.text = ed.identifier.substr(0,16);
 			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
 			tf.y = 0;
-			FieldInstanceRender.addBg(f, ei.getSmartColor(true), 0.95);
+			FieldInstanceRender.createBg(tf, f, ei.getSmartColor(false));
 		}
 
 		updateLayout();

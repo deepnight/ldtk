@@ -16,15 +16,6 @@ class FieldInstanceRender {
 	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
 
 
-	public static function addBg(f:h2d.Flow, baseColor:Int, darken=0.5) {
-		// var bg = new h2d.Bitmap( h2d.Tile.fromColor( C.toBlack(baseColor,darken), 1,1, 0.92 ) );
-		// f.addChildAt(bg, 0);
-		// f.getProperties(bg).isAbsolute = true;
-		// bg.scaleX = f.outerWidth;
-		// bg.scaleY = f.outerHeight+1;
-	}
-
-
 	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, style:RefLinkstyle) {
 		// Optional line cutting
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
@@ -52,23 +43,25 @@ class FieldInstanceRender {
 
 		// Init params
 		var len = M.dist(fx,fy, tx,ty);
-		var dashLen = M.fmin(5, len*0.05);
-		var count = M.ceil( len/dashLen );
-		dashLen = len/count;
+		var count = M.fclamp(len/3, 3, 30);
+		var dashLen = len/count;
 
 		// Draw link
 		var n = 0;
 		var sign = 1;
-		final off = 1.5;
+		final zigZagOff = 1.8;
 		var x = fx;
 		var y = fy;
+		final curveOff = 0;
 		while( n<count ) {
 			final r = n/(count-1);
 			final startRatio = M.fmin(r/0.05, 1);
 			g.lineStyle((2-r)*zoomScale, color, ( 0.3 + 0.7*(1-r) ) * alpha );
 			g.moveTo(x,y);
-			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off*(1-r)*startRatio;
-			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off*(1-r)*startRatio;
+			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
+			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
+			x += curveOff * Math.cos(a+M.PIHALF) * Math.sin(r*M.PI);
+			y += curveOff * Math.sin(a+M.PIHALF) * Math.sin(r*M.PI);
 			g.lineTo(x,y);
 			sign = -sign;
 			n++;
@@ -151,6 +144,20 @@ class FieldInstanceRender {
 		// 		addBg(fr.label, baseColor, 0.88);
 		// 	}
 		// }
+	}
+
+
+	public static function createBg(tf:h2d.Text, parent:h2d.Flow, baseColor:dn.Col) {
+		var padX = 2;
+		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 2, 2, parent);
+		bg.color.setColor( baseColor.toBlack(0.75).withAlphaIfMissing() );
+		parent.addChildAt(bg, 0);
+		parent.getProperties(bg).isAbsolute = true;
+		parent.reflow();
+		bg.x = tf.x - padX;
+		bg.y = tf.y+2;
+		bg.width = tf.textWidth + padX*2;
+		bg.height = tf.textHeight;
 	}
 
 
