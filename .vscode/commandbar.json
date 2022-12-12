@@ -21,6 +21,15 @@
 			"skipTerminateQuickPick": false,
 			"priority": -23
 		},
+        {
+			"text": "👀 Watch scss",
+			"color": "pink",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|scss watch",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -23
+		},
 		{
 			"text": "🖥️ Term",
 			"color": "white",
