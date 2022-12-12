@@ -482,6 +482,7 @@ class FieldDefsForm {
 					case CurvedArrow: L.t._("Curved arrow");
 					case StraightArrow: L.t._("Straight arrow");
 					case ArrowsLine: L.t._("Line of arrows");
+					case DashedLine: L.t._("Dashed line");
 				}
 			}
 		);

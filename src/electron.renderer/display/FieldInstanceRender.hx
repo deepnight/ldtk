@@ -22,6 +22,7 @@ class FieldInstanceRender {
 		// Slightly offset the reflink end point
 		switch linkStyle {
 			case ZigZag:
+			case DashedLine:
 			case ArrowsLine:
 				if( len>=12 ) {
 					var a = Math.atan2(ty-fy, tx-fx);
@@ -113,6 +114,27 @@ class FieldInstanceRender {
 					g.moveTo( x+Math.cos(a+M.PI*0.8)*arrowSize, y+Math.sin(a+M.PI*0.8)*arrowSize);
 					g.lineTo( x, y );
 					g.lineTo( x+Math.cos(a-M.PI*0.8)*arrowSize, y+Math.sin(a-M.PI*0.8)*arrowSize);
+					n++;
+				}
+
+			case DashedLine:
+				var x = fx;
+				var y = fy;
+				var arrowSize = 4;
+				while( n<count ) {
+					if( n%2==0 ) {
+						final r = n/(count-1);
+						final startRatio = M.fmin(r/0.05, 1);
+						g.lineStyle(2-r, color, ( 0.4 + 0.6*(1-r) ) * alpha );
+						g.moveTo(x,y);
+						x = fx+Math.cos(a)*(n*dashLen);
+						y = fy+Math.sin(a)*(n*dashLen);
+						g.lineTo(x,y);
+					}
+					else {
+						x = fx+Math.cos(a)*(n*dashLen);
+						y = fy+Math.sin(a)*(n*dashLen);
+					}
 					n++;
 				}
 
