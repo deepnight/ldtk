@@ -53,6 +53,10 @@ class FieldDef {
 		isArray = array;
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
+		editorLinkStyle = switch type {
+			case F_EntityRef: CurvedArrow;
+			case _: StraightArrow;
+		}
 		editorAlwaysShow = false;
 		editorCutLongValues = true;
 		identifier = "NewField"+uid;
@@ -126,9 +130,9 @@ class FieldDef {
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
-		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.editorDisplayMode {
-			case Points, PointStar, PointPath, PointPathLoop: DashedLine;
-			case _: CurvedArrow;
+		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.type {
+			case F_EntityRef: CurvedArrow;
+			case _: StraightArrow;
 		});
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
