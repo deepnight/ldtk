@@ -18,6 +18,7 @@ class FieldDef {
 	public var arrayMaxLength : Null<Int>;
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
+	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
 	public var editorAlwaysShow: Bool;
 	public var editorTextPrefix : Null<String>;
 	public var editorTextSuffix : Null<String>;
@@ -125,6 +126,7 @@ class FieldDef {
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, ZigZag);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
 		o.editorTextPrefix = json.editorTextPrefix;
@@ -161,6 +163,7 @@ class FieldDef {
 			arrayMaxLength: arrayMaxLength,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
+			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
 			editorAlwaysShow: editorAlwaysShow,
 			editorCutLongValues: editorCutLongValues,
 			editorTextSuffix: editorTextSuffix,

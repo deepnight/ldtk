@@ -1,6 +1,6 @@
 package display;
 
-enum RefLinkstyle {
+enum LinkEndingStyle {
 	Full;
 	CutAtOrigin;
 	CutAtTarget;
@@ -16,12 +16,42 @@ class FieldInstanceRender {
 	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
 
 
-	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, style:RefLinkstyle) {
-		// Optional line cutting
+	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, linkStyle:ldtk.Json.FieldLinkStyle, endingStyle:LinkEndingStyle) {
+		var len = M.dist(fx,fy, tx,ty);
+		if( len<=32 && linkStyle==CurvedArrow )
+			linkStyle = StraightArrow;
+
+		// Slightly offset the reflink end point
+		switch linkStyle {
+			case ZigZag:
+			case StraightArrow, CurvedArrow:
+				if( len>=12 ) {
+					var a = Math.atan2(ty-fy, tx-fx);
+					tx-=Math.cos(a)*6;
+					ty-=Math.sin(a)*6;
+				}
+		}
+
+		// Render line
+		renderSimpleLink(g, color, fx,fy, tx,ty, linkStyle, endingStyle);
+	}
+
+
+	static inline function renderSimpleLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, linkStyle:ldtk.Json.FieldLinkStyle, ?endingStyle:LinkEndingStyle) {
+		var dashLen = 4.;
+		var alpha = 1;
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 		var a = Math.atan2(ty-fy, tx-fx);
+		var len = M.dist(fx,fy, tx,ty);
+		var count = M.fclamp( len/dashLen, 4, 30);
+		dashLen = len/count;
+
+
+		// Optional line cutting
 		final cutDist = 40;
-		switch style {
+		switch endingStyle {
+			case null:
+
 			case Full:
 
 			case CutAtOrigin:
@@ -41,57 +71,88 @@ class FieldInstanceRender {
 				g.lineTo(fx + Math.cos(a+M.PIHALF)*cutLine, fy + Math.sin(a+M.PIHALF)*cutLine);
 		}
 
-		// Init params
-		var len = M.dist(fx,fy, tx,ty);
-		var count = M.fclamp(len/3, 3, 30);
-		var dashLen = len/count;
 
 		// Draw link
 		var n = 0;
-		var sign = 1;
-		final zigZagOff = 1.8;
-		var x = fx;
-		var y = fy;
-		final curveOff = 0;
-		while( n<count ) {
-			final r = n/(count-1);
-			final startRatio = M.fmin(r/0.05, 1);
-			g.lineStyle((2-r)*zoomScale, color, ( 0.3 + 0.7*(1-r) ) * alpha );
-			g.moveTo(x,y);
-			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
-			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
-			x += curveOff * Math.cos(a+M.PIHALF) * Math.sin(r*M.PI);
-			y += curveOff * Math.sin(a+M.PIHALF) * Math.sin(r*M.PI);
-			g.lineTo(x,y);
-			sign = -sign;
-			n++;
+		switch linkStyle {
+			case ZigZag:
+				var sign = 1;
+				final zigZagOff = 2.1;
+				var x = fx;
+				var y = fy;
+				final curveOff = 0;
+				while( n<count ) {
+					final r = n/(count-1);
+					final startRatio = M.fmin(r/0.05, 1);
+					g.lineStyle((2-r)*zoomScale, color, ( 0.3 + 0.7*(1-r) ) * alpha );
+					g.moveTo(x,y);
+					x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
+					y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
+					x += curveOff * Math.cos(a+M.PIHALF) * Math.sin(r*M.PI);
+					y += curveOff * Math.sin(a+M.PIHALF) * Math.sin(r*M.PI);
+					g.lineTo(x,y);
+					sign = -sign;
+					n++;
+				}
+				g.lineTo(tx,ty);
+
+			case CurvedArrow:
+				// Arrow line
+				var x = fx;
+				var y = fy;
+				final curveOff = M.fclamp(len/200, 5, 15);
+				var lastAng = 0.;
+				while( n<count ) {
+					final r = n/(count-1);
+					final startRatio = M.fmin(r/0.05, 1);
+					g.lineStyle((1+r*3)*zoomScale, color, ( 0.4 + 0.6*r ) * alpha );
+					g.moveTo(x,y);
+					var lastX = x;
+					var lastY = y;
+					x = fx + Math.cos(a)*(n*dashLen);
+					y = fy + Math.sin(a)*(n*dashLen);
+					x += curveOff * Math.cos(a+M.PIHALF) * Math.sin(r*M.PI);
+					y += curveOff * Math.sin(a+M.PIHALF) * Math.sin(r*M.PI);
+					lastAng = Math.atan2(y-lastY, x-lastX);
+					g.lineTo(x,y);
+					n++;
+				}
+
+				// Arrow head
+				final size = len<=32 ? 3 : 6;
+				var headAng = M.PI*0.8;
+				g.lineStyle(0);
+				g.beginFill(color,1);
+				g.moveTo( x+Math.cos(lastAng+headAng)*size, y+Math.sin(lastAng+headAng)*size );
+				g.lineTo( x+Math.cos(lastAng)*2, y+Math.sin(lastAng)*2 );
+				g.lineTo( x+Math.cos(lastAng-headAng)*size, y+Math.sin(lastAng-headAng)*size );
+				g.endFill();
+
+			case StraightArrow:
+				// Arrow line
+				var x = fx;
+				var y = fy;
+				while( n<count ) {
+					final r = n/(count-1);
+					final startRatio = M.fmin(r/0.05, 1);
+					g.lineStyle((1+r*3)*zoomScale, color, ( 0.4 + 0.6*r ) * alpha );
+					g.moveTo(x,y);
+					x = fx + Math.cos(a)*(n*dashLen);
+					y = fy + Math.sin(a)*(n*dashLen);
+					g.lineTo(x,y);
+					n++;
+				}
+
+				// Arrow head
+				final size = len<=32 ? 3 : 6;
+				var headAng = M.PI*0.8;
+				g.lineStyle(0);
+				g.beginFill(color,1);
+				g.moveTo( x+Math.cos(a+headAng)*size, y+Math.sin(a+headAng)*size );
+				g.lineTo( x+Math.cos(a)*2, y+Math.sin(a)*2 );
+				g.lineTo( x+Math.cos(a-headAng)*size, y+Math.sin(a-headAng)*size );
+				g.endFill();
 		}
-		g.lineTo(tx,ty);
-	}
-
-
-	static inline function renderSimpleLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, dashLen=10.) {
-		var a = Math.atan2(ty-fy, tx-fx);
-		var len = M.dist(fx,fy, tx,ty);
-		var count = M.ceil( len/dashLen );
-		dashLen = len/count;
-
-		var n = 0;
-		var sign = 1;
-		final off = 0.7;
-		var x = fx;
-		var y = fy;
-		while( n<count ) {
-			final r = n/(count-1);
-			g.lineStyle(1, color, 0.4 + 0.6*(1-r));
-			g.moveTo(x,y);
-			x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*off;
-			y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*off;
-			g.lineTo(x,y);
-			sign = -sign;
-			n++;
-		}
-		g.lineTo(tx,ty);
 	}
 
 
@@ -267,7 +328,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, fi.def.editorLinkStyle, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
 					case LevelCtx(l):
@@ -284,7 +345,7 @@ class FieldInstanceRender {
 								continue;
 							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
 							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
-							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
+							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, fi.def.editorLinkStyle, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
 					case LevelCtx(l):
@@ -307,7 +368,7 @@ class FieldInstanceRender {
 							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
 							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
 							if( fd.editorDisplayMode!=Points )
-								renderSimpleLink(g, baseColor, fx,fy, tx,ty);
+								renderSimpleLink(g, baseColor, fx,fy, tx,ty, fi.def.editorLinkStyle);
 
 							g.lineStyle(1*zoomScale, baseColor, 0.66);
 							g.beginFill( C.toBlack(baseColor, 0.6) );
@@ -333,7 +394,7 @@ class FieldInstanceRender {
 
 						// Loop to Entity
 						if( fd.editorDisplayMode==PointPathLoop && fi.getArrayLength()>1 )
-							renderSimpleLink(g, baseColor, fx,fy, startX, startY);
+							renderSimpleLink(g, baseColor, fx,fy, startX, startY, fi.def.editorLinkStyle);
 
 					case LevelCtx(_):
 				}

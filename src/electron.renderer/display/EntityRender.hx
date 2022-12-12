@@ -24,14 +24,13 @@ class EntityRender extends dn.Process {
 	var layoutInvalidated = true;
 
 
-	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, p:h2d.Object) {
+	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, parent:h2d.Object) {
 		super(Editor.ME);
 
-		createRoot(p);
+		createRoot(parent);
 		ei = inst;
 		ld = layerDef;
 
-		fieldGraphics = new h2d.Graphics(root);
 		core = new h2d.Object(root);
 
 		above = new h2d.Flow(root);
@@ -45,6 +44,8 @@ class EntityRender extends dn.Process {
 		beneath = new h2d.Flow(root);
 		beneath.layout = Vertical;
 		beneath.horizontalAlign = Middle;
+
+		fieldGraphics = new h2d.Graphics(root);
 
 		renderAll();
 	}
@@ -290,6 +291,7 @@ class EntityRender extends dn.Process {
 			var thisY = ei.getRefAttachY(fi.def) - ei.y;
 			FieldInstanceRender.renderRefLink(
 				fieldGraphics, col, refX, refY, thisX, thisY, 1,
+				fi.def.editorLinkStyle,
 				ei.isInSameSpaceAs(refEi) ? Full : CutAtTarget
 			);
 		}

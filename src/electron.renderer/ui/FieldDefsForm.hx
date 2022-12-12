@@ -414,6 +414,7 @@ class FieldDefsForm {
 		} );
 
 
+		// Display mode
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayMode]"),
 			ldtk.Json.FieldDisplayMode,
@@ -468,12 +469,28 @@ class FieldDefsForm {
 		);
 		i.onChange = onFieldChange;
 
-		// Nullable
-		var nullableInput = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
-		if( nullableInput!=null ) {
-			nullableInput.onChange = onFieldChange;
-			nullableInput.enable();
+		// Link style
+		var i = new form.input.EnumSelect(
+			jForm.find("select[name=editorLinkStyle]"),
+			ldtk.Json.FieldLinkStyle,
+			function() return curField.editorLinkStyle,
+			function(v) return curField.editorLinkStyle = v,
+
+			function(k) {
+				return switch k {
+					case ZigZag: L.t._("Zig-zag");
+					case CurvedArrow: L.t._("Curved arrow");
+					case StraightArrow: L.t._("Straight arrow");
+				}
+			}
+		);
+		switch curField.editorDisplayMode {
+			case PointStar, PointPath, PointPathLoop, RefLinkBetweenPivots, RefLinkBetweenCenters:
+				i.jInput.show();
+			case _:
+				i.jInput.hide();
 		}
+		i.onChange = onFieldChange;
 
 
 		// Display pos
@@ -489,13 +506,22 @@ class FieldDefsForm {
 		);
 		switch curField.editorDisplayMode {
 			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
-				i.setEnabled(true);
+				i.jInput.show();
 
 			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters:
-				i.setEnabled(false);
+				i.jInput.hide();
 		}
 		i.onChange = onFieldChange;
 
+
+		// Nullable
+		var nullableInput = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
+		if( nullableInput!=null ) {
+			nullableInput.onChange = onFieldChange;
+			nullableInput.enable();
+		}
+
+		// Always show
 		var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jForm.find("input[name=editorAlwaysShow]") );
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );
