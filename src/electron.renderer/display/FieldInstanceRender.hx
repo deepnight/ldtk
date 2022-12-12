@@ -122,19 +122,13 @@ class FieldInstanceRender {
 				var y = fy;
 				var arrowSize = 4;
 				while( n<count ) {
-					if( n%2==0 ) {
-						final r = n/(count-1);
-						final startRatio = M.fmin(r/0.05, 1);
-						g.lineStyle(2-r, color, ( 0.4 + 0.6*(1-r) ) * alpha );
-						g.moveTo(x,y);
-						x = fx+Math.cos(a)*(n*dashLen);
-						y = fy+Math.sin(a)*(n*dashLen);
-						g.lineTo(x,y);
-					}
-					else {
-						x = fx+Math.cos(a)*(n*dashLen);
-						y = fy+Math.sin(a)*(n*dashLen);
-					}
+					final r = n/(count-1);
+					final startRatio = M.fmin(r/0.05, 1);
+					g.lineStyle(2-r, color, ( 0.4 + 0.6*(1-r) ) * alpha );
+					g.moveTo(x,y);
+					g.lineTo( x+Math.cos(a)*dashLen*0.6, y+Math.sin(a)*dashLen*0.6 );
+					x = fx+Math.cos(a)*(n*dashLen);
+					y = fy+Math.sin(a)*(n*dashLen);
 					n++;
 				}
 
