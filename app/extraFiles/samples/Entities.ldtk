@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.1.4",
-	"appBuildId": 464101,
+	"appBuildId": 464128,
 	"nextUid": 164,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -710,6 +710,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": "hp",
@@ -739,6 +740,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -771,6 +773,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -800,6 +803,7 @@
 					"arrayMaxLength": 4,
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": true,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -858,6 +862,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RadiusGrid",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": true,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -887,6 +892,7 @@
 					"arrayMaxLength": 2,
 					"editorDisplayMode": "Hidden",
 					"editorDisplayPos": "Beneath",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -916,6 +922,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Beneath",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -945,6 +952,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Beneath",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": "%",
@@ -1003,6 +1011,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "EntityTile",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1032,6 +1041,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Center",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": " HP",
@@ -1061,6 +1071,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1090,6 +1101,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "PointPath",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "DashedLine",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1148,6 +1160,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1177,6 +1190,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Center",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1210,7 +1224,7 @@
 			"fillOpacity": 0.08,
 			"lineOpacity": 0,
 			"hollow": false,
-			"color": "#FFFFFF",
+			"color": "#FF0000",
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 99,
@@ -1235,6 +1249,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1264,6 +1279,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": "s",
@@ -1322,6 +1338,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1380,6 +1397,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1409,6 +1427,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "EntityTile",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1438,6 +1457,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Beneath",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1459,7 +1479,7 @@
 			]
 		},
 		{
-			"identifier": "TriggerRepeater",
+			"identifier": "Repeater",
 			"uid": 101,
 			"tags": ["triggerable"],
 			"width": 16,
@@ -1496,6 +1516,7 @@
 					"arrayMaxLength": null,
 					"editorDisplayMode": "RefLinkBetweenCenters",
 					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -1524,7 +1545,8 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
-					"editorDisplayPos": "Above",
+					"editorDisplayPos": "Beneath",
+					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorCutLongValues": true,
 					"editorTextSuffix": "s",
@@ -2691,7 +2713,7 @@
 							"__pivot": [0.5,0.5],
 							"__tags": ["trigger"],
 							"__tile": { "tilesetUid": 99, "x": 272, "y": 32, "w": 16, "h": 16 },
-							"__smartColor": "#FFFFFF",
+							"__smartColor": "#FF0000",
 							"iid": "f80ee802-66b0-11ec-b121-7703f3b4b3e4",
 							"width": 16,
 							"height": 16,
@@ -2702,12 +2724,12 @@
 									"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
+									"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
 								}, {
 									"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
+									"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 97, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
@@ -2715,7 +2737,7 @@
 									"id": "V_String",
 									"params": ["f80ee800-66b0-11ec-b121-9b6ebb5b8d6e"]
 								} ] },
-								{ "__identifier": "delay", "__value": 1.2, "__type": "Float", "__tile": null, "defUid": 91, "realEditorValues": [{ "id": "V_Float", "params": [1.2] }] }
+								{ "__identifier": "delay", "__value": 0, "__type": "Float", "__tile": null, "defUid": 91, "realEditorValues": [null] }
 							]
 						},
 						{
@@ -2735,7 +2757,7 @@
 									"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
+									"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
 								}, "__type": "EntityRef", "__tile": null, "defUid": 98, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
@@ -2883,7 +2905,7 @@
 							]
 						},
 						{
-							"__identifier": "TriggerRepeater",
+							"__identifier": "Repeater",
 							"__grid": [17,17],
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
@@ -2899,12 +2921,12 @@
 									"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
+									"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
 								}, {
 									"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
+									"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
@@ -2916,8 +2938,8 @@
 							]
 						},
 						{
-							"__identifier": "TriggerRepeater",
-							"__grid": [32,12],
+							"__identifier": "Repeater",
+							"__grid": [33,13],
 							"__pivot": [0.5,0.5],
 							"__tags": ["triggerable"],
 							"__tile": { "x": 16, "y": 80, "w": 16, "h": 16, "tilesetUid": 99 },
@@ -2926,26 +2948,57 @@
 							"width": 16,
 							"height": 16,
 							"defUid": 101,
-							"px": [520,200],
+							"px": [536,216],
 							"fieldInstances": [
-								{ "__identifier": "targets", "__value": [ {
-									"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
-									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
-								}, {
-									"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
-									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "de4f3810-7820-11ed-816e-77472d382966"
-								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
+								{ "__identifier": "targets", "__value": [
+									{
+										"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
+										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+										"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
+									},
+									{
+										"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
+										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+										"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
+									},
+									{
+										"entityIid": "15991840-7820-11ed-9e31-5d3ab678e30e",
+										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+										"worldIid": "b57503b0-7820-11ed-a0b9-bb55ac41b8da"
+									}
+								], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["f80ec0f0-66b0-11ec-b121-db9b161a9754"]
 								}, {
 									"id": "V_String",
 									"params": ["f80ee801-66b0-11ec-b121-4d74c475d701"]
+								}, {
+									"id": "V_String",
+									"params": ["15991840-7820-11ed-9e31-5d3ab678e30e"]
 								} ] },
 								{ "__identifier": "delay", "__value": 1, "__type": "Float", "__tile": null, "defUid": 103, "realEditorValues": [{ "id": "V_Float", "params": [1] }] }
+							]
+						},
+						{
+							"__identifier": "SpotLight",
+							"__grid": [34,8],
+							"__pivot": [0.5,0],
+							"__tags": ["triggerable"],
+							"__tile": { "x": 0, "y": 112, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#FF7D1A",
+							"iid": "15991840-7820-11ed-9e31-5d3ab678e30e",
+							"width": 16,
+							"height": 16,
+							"defUid": 10,
+							"px": [552,128],
+							"fieldInstances": [
+								{ "__identifier": "radius", "__value": 2.5, "__type": "Float", "__tile": null, "defUid": 45, "realEditorValues": [{ "id": "V_Float", "params": [2.5] }] },
+								{ "__identifier": "colors", "__value": [ "#FF7D1A", "#B20101" ], "__type": "Array<Color>", "__tile": null, "defUid": 26, "realEditorValues": [ { "id": "V_Int", "params": [16743706] }, { "id": "V_Int", "params": [11665665] } ] },
+								{ "__identifier": "flickering", "__value": false, "__type": "Bool", "__tile": null, "defUid": 12, "realEditorValues": [null] },
+								{ "__identifier": "intensity", "__value": 100, "__type": "Int", "__tile": null, "defUid": 92, "realEditorValues": [] }
 							]
 						}
 					]
