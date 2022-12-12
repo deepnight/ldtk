@@ -18,14 +18,21 @@ class FieldInstanceRender {
 
 	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, linkStyle:ldtk.Json.FieldLinkStyle, endingStyle:LinkEndingStyle) {
 		var len = M.dist(fx,fy, tx,ty);
-		if( len<=32 && linkStyle==CurvedArrow )
-			linkStyle = StraightArrow;
 
 		// Slightly offset the reflink end point
 		switch linkStyle {
 			case ZigZag:
-			case StraightArrow, CurvedArrow:
+			case ArrowsLine:
 				if( len>=12 ) {
+					var a = Math.atan2(ty-fy, tx-fx);
+					fx+=Math.cos(a)*4;
+					fy+=Math.sin(a)*4;
+					tx-=Math.cos(a)*6;
+					ty-=Math.sin(a)*6;
+				}
+
+			case StraightArrow, CurvedArrow:
+				if( len>=20 ) {
 					var a = Math.atan2(ty-fy, tx-fx);
 					tx-=Math.cos(a)*6;
 					ty-=Math.sin(a)*6;
@@ -80,7 +87,6 @@ class FieldInstanceRender {
 				final zigZagOff = 2.1;
 				var x = fx;
 				var y = fy;
-				final curveOff = 0;
 				while( n<count ) {
 					final r = n/(count-1);
 					final startRatio = M.fmin(r/0.05, 1);
@@ -88,19 +94,33 @@ class FieldInstanceRender {
 					g.moveTo(x,y);
 					x = fx+Math.cos(a)*(n*dashLen) + Math.cos(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
 					y = fy+Math.sin(a)*(n*dashLen) + Math.sin(a+M.PIHALF)*sign*zigZagOff*(1-r)*startRatio;
-					x += curveOff * Math.cos(a+M.PIHALF) * Math.sin(r*M.PI);
-					y += curveOff * Math.sin(a+M.PIHALF) * Math.sin(r*M.PI);
 					g.lineTo(x,y);
 					sign = -sign;
 					n++;
 				}
 				g.lineTo(tx,ty);
 
+			case ArrowsLine:
+				var x = fx;
+				var y = fy;
+				var arrowSize = 4;
+				while( n<count ) {
+					final r = n/(count-1);
+					final startRatio = M.fmin(r/0.05, 1);
+					g.lineStyle((4-2*r)*zoomScale, color, ( 0.5 + 0.5*(1-r) ) * alpha );
+					x = fx+Math.cos(a)*(n*dashLen);
+					y = fy+Math.sin(a)*(n*dashLen);
+					g.moveTo( x+Math.cos(a+M.PI*0.8)*arrowSize, y+Math.sin(a+M.PI*0.8)*arrowSize);
+					g.lineTo( x, y );
+					g.lineTo( x+Math.cos(a-M.PI*0.8)*arrowSize, y+Math.sin(a-M.PI*0.8)*arrowSize);
+					n++;
+				}
+
 			case CurvedArrow:
 				// Arrow line
 				var x = fx;
 				var y = fy;
-				final curveOff = M.fclamp(len/200, 5, 15);
+				final curveOff = M.fclamp(len/200, 2, 15);
 				var lastAng = 0.;
 				while( n<count ) {
 					final r = n/(count-1);
