@@ -26,3 +26,4 @@ app/assets/js/*.map
 art/export_appElements
 
 tests/_private
+app/assets/css/app.min.css
