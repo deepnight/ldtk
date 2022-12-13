@@ -768,7 +768,7 @@ class WorldRender extends dn.Process {
 		tf.smooth = true;
 		tf.text = l.getDisplayIdentifier();
 		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.createBg(tf, f, l.getSmartColor(false));
+		FieldInstanceRender.createBgText(tf, f, l.getSmartColor(false));
 		wl.fieldsRender.identifier = f;
 
 		updateFieldsPos();

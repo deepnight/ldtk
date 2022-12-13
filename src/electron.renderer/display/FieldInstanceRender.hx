@@ -226,36 +226,47 @@ class FieldInstanceRender {
 			var line = new h2d.Flow(parent);
 			line.verticalAlign = Middle;
 			line.setScale( settings.v.editorUiScale );
-			if( fr.label.numChildren>0 )
+			if( fr.label.numChildren>0 ) {
 				line.addChild(fr.label);
+				line.addSpacing(6);
+				line.paddingBottom = 2;
+			}
+			else
+				line.horizontalAlign = Middle;
 			line.addChild(fr.value);
 		}
 
-		// Align everything and add BGs
-		// var maxLabelWidth = 0.;
-		// var maxValueWidth = 0.;
-		// for(fr in allRenders) {
-		// 	maxLabelWidth = M.fmax(maxLabelWidth, fr.label.outerWidth);
-		// 	maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
-		// }
-		// for(fr in allRenders) {
-		// 	if( fr.label.numChildren>0 )
-		// 		fr.label.minWidth = Std.int( maxLabelWidth );
-
-		// 	fr.value.minWidth = Std.int( maxValueWidth );
-		// 	if( fr.label.numChildren==0 )
-		// 		fr.value.minWidth += Std.int( maxLabelWidth);
-		// 	addBg(fr.value, baseColor, 0.75);
-
-		// 	if( fr.label.numChildren>0 ) {
-		// 		fr.label.minHeight = fr.value.outerHeight;
-		// 		addBg(fr.label, baseColor, 0.88);
-		// 	}
-		// }
+		// Align labels
+		var maxLabelWidth = 0.;
+		var maxValueWidth = 0.;
+		for(fr in allRenders) {
+			maxLabelWidth = M.fmax(maxLabelWidth, fr.label.outerWidth);
+			if( fr.label.numChildren>0 )
+				maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
+		}
+		for(fr in allRenders)
+			if( fr.label.numChildren>0 ) {
+				fr.label.minWidth = Std.int( maxLabelWidth );
+				fr.value.minWidth = Std.int( maxValueWidth );
+			}
 	}
 
 
-	public static function createBg(tf:h2d.Text, parent:h2d.Flow, baseColor:dn.Col) {
+	public static function createBgFlow(flow:h2d.Flow, baseColor:dn.Col) {
+		var padX = 2;
+		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 2, 2, flow);
+		bg.color.setColor( baseColor.toBlack(0.75).withAlphaIfMissing() );
+		flow.addChildAt(bg, 0);
+		flow.getProperties(bg).isAbsolute = true;
+		bg.x = -padX;
+		bg.y = 2;
+		bg.width = flow.innerWidth + padX*2;
+		bg.height = flow.innerHeight;
+	}
+
+
+
+	public static function createBgText(tf:h2d.Text, parent:h2d.Flow, baseColor:dn.Col) {
 		var padX = 2;
 		var bg = new h2d.ScaleGrid( Assets.elements.getTile("fieldBg"), 2, 2, parent);
 		bg.color.setColor( baseColor.toBlack(0.75).withAlphaIfMissing() );
@@ -321,7 +332,7 @@ class FieldInstanceRender {
 			case NameAndValue:
 				// Label
 				var tf = createText(labelFlow, baseColor.toWhite(0.6));
-				tf.text = fd.identifier+": ";
+				tf.text = fd.identifier+" =";
 
 				// Value
 				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.25)) );
@@ -332,7 +343,7 @@ class FieldInstanceRender {
 			case ArrayCountWithLabel:
 				// Label
 				var tf = createText(labelFlow, baseColor);
-				tf.text = fd.identifier;
+				tf.text = fd.identifier+":";
 
 				// Value
 				var tf = createText(valueFlow, baseColor);
@@ -484,8 +495,8 @@ class FieldInstanceRender {
 
 		// Array opening
 		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = createText(valuesFlow, textColor);
-			tf.text = "[";
+			// var tf = createText(valuesFlow, textColor);
+			// tf.text = "[";
 		}
 
 		// Empty array with "always" display
@@ -495,7 +506,7 @@ class FieldInstanceRender {
 		}
 
 
-		var iconSize = ( fi.getArrayLength()<=1 ? 32 : 16 ) * Editor.ME.camera.pixelRatio;
+		var iconSize = ( fi.getArrayLength()<=1 ? 24 : 16 ) * Editor.ME.camera.pixelRatio;
 		for( idx in 0...fi.getArrayLength() ) {
 			if( fi.def.editorAlwaysShow || !fi.valueIsNull(idx) ) {
 				if( fi.hasIconForDisplay(idx) ) {
@@ -544,16 +555,17 @@ class FieldInstanceRender {
 
 			// Array separator
 			if( showArrayBrackets && fi.def.isArray && idx<fi.getArrayLength()-1 ) {
-				var tf = createText(valuesFlow, textColor);
-				tf.text = ",";
+				valuesFlow.addSpacing(2);
+				// var tf = createText(valuesFlow, textColor);
+				// tf.text = ",";
 			}
 		}
 
 		// Array closing
-		if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
-			var tf = createText(valuesFlow, textColor);
-			tf.text = "]";
-		}
+		// if( showArrayBrackets && fi.def.isArray && fi.getArrayLength()>1 ) {
+		// 	var tf = createText(valuesFlow, textColor);
+		// 	tf.text = "]";
+		// }
 
 		return valuesFlow;
 	}
