@@ -1,4 +1,4 @@
-# 1.1.4
+# 1.2.0
 
 ## Entity fields visuals
 
