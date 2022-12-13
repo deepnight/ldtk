@@ -22,7 +22,7 @@ class Assets {
 	}
 
 	public static inline function getRegularFont() {
-		return js.Browser.window.devicePixelRatio<=1 ? fontLight_tiny : fontLight_tiny;
+		return js.Browser.window.devicePixelRatio<=1 ? fontLight_tiny : fontLight_regular;
 	}
 
 	public static inline function getLargeFont() {

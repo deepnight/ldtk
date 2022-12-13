@@ -13,7 +13,14 @@ enum FieldRenderContext {
 
 class FieldInstanceRender {
 	static var MAX_TEXT_WIDTH = 250;
-	static var settings(get,never) : Settings; static inline function get_settings() return App.ME.settings;
+	static var settings(get,never) : Settings;
+		static inline function get_settings() return App.ME.settings;
+
+	static var pixelRatio(get,never) : Float;
+		static inline function get_pixelRatio() return Editor.ME.camera.pixelRatio;
+
+	static var zoomScale(get,never) : Float;
+		static inline function get_zoomScale() return Editor.ME.camera.pixelRatio / Editor.ME.camera.adjustedZoom;
 
 
 	public static inline function renderRefLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, alpha:Float, linkStyle:ldtk.Json.FieldLinkStyle, endingStyle:LinkEndingStyle) {
@@ -49,7 +56,6 @@ class FieldInstanceRender {
 	static inline function renderSimpleLink(g:h2d.Graphics, color:Int, fx:Float, fy:Float, tx:Float, ty:Float, linkStyle:ldtk.Json.FieldLinkStyle, ?endingStyle:LinkEndingStyle) {
 		var dashLen = 4.;
 		var alpha = 1;
-		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 		var a = Math.atan2(ty-fy, tx-fx);
 
 		// Optional line cutting
@@ -78,7 +84,7 @@ class FieldInstanceRender {
 
 		// Other inits
 		var len = M.dist(fx,fy, tx,ty);
-		var count = M.fclamp( len/dashLen, 4, 30);
+		var count = M.fclamp( len/dashLen, 8, 30);
 		dashLen = len/count;
 
 		// Draw link
@@ -103,18 +109,22 @@ class FieldInstanceRender {
 				g.lineTo(tx,ty);
 
 			case ArrowsLine:
+				dashLen = 16 * zoomScale;
+				count = len/dashLen;
+
 				var x = fx;
 				var y = fy;
-				var arrowSize = 6 * zoomScale;
+				var arrowSize = 9 * zoomScale;
+				var arrowAng = M.PI*0.75;
 				while( n<count ) {
 					final r = n/(count-1);
 					final startRatio = M.fmin(r/0.05, 1);
 					g.lineStyle((4-2*r)*zoomScale, color, ( 0.5 + 0.5*(1-r) ) * alpha );
 					x = fx+Math.cos(a)*(n*dashLen);
 					y = fy+Math.sin(a)*(n*dashLen);
-					g.moveTo( x+Math.cos(a+M.PI*0.8)*arrowSize, y+Math.sin(a+M.PI*0.8)*arrowSize);
+					g.moveTo( x+Math.cos(a+arrowAng)*arrowSize, y+Math.sin(a+arrowAng)*arrowSize);
 					g.lineTo( x, y );
-					g.lineTo( x+Math.cos(a-M.PI*0.8)*arrowSize, y+Math.sin(a-M.PI*0.8)*arrowSize);
+					g.lineTo( x+Math.cos(a-arrowAng)*arrowSize, y+Math.sin(a-arrowAng)*arrowSize);
 					n++;
 				}
 
@@ -156,7 +166,7 @@ class FieldInstanceRender {
 				}
 
 				// Arrow head
-				final size = ( len<=32 ? 8 : 12 ) * zoomScale;
+				final size = ( len<=32 ? 10 : 12 ) * zoomScale;
 				var headAng = M.PI*0.8;
 				g.lineStyle(0);
 				g.beginFill(color,1);
@@ -181,7 +191,7 @@ class FieldInstanceRender {
 				}
 
 				// Arrow head
-				final size = ( len<=32 ? 3 : 6 ) * zoomScale;
+				final size = ( len<=32 ? 10 : 12 ) * zoomScale;
 				var headAng = M.PI*0.8;
 				g.lineStyle(0);
 				g.beginFill(color,1);
@@ -272,8 +282,6 @@ class FieldInstanceRender {
 
 	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
 		var fd = fi.def;
-
-		var zoomScale = 1/Editor.ME.camera.adjustedZoom;
 
 		var labelFlow = new h2d.Flow();
 		labelFlow.verticalAlign = Middle;
@@ -487,7 +495,7 @@ class FieldInstanceRender {
 		}
 
 
-		var iconSize = fi.getArrayLength()<=1 ? 32 : 16;
+		var iconSize = ( fi.getArrayLength()<=1 ? 32 : 16 ) * Editor.ME.camera.pixelRatio;
 		for( idx in 0...fi.getArrayLength() ) {
 			if( fi.def.editorAlwaysShow || !fi.valueIsNull(idx) ) {
 				if( fi.hasIconForDisplay(idx) ) {
@@ -501,7 +509,7 @@ class FieldInstanceRender {
 				else if( fi.def.type==F_Color ) {
 					// Color disc
 					var g = new h2d.Graphics(valuesFlow);
-					var r = iconSize;
+					var r = iconSize*0.5;
 					g.beginFill( fi.getColorAsInt(idx) );
 					g.lineStyle(1, 0x0, 0.8);
 					g.drawCircle(r,r,r, 16);
