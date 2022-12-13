@@ -1,6 +1,46 @@
-# 1.1.4
+# 1.2.0 - Entity visuals and Auto-layer rules remapping
 
- - Added some useful new "icons" to the embed icons atlas.
+## Entity fields visuals
+
+The visuals of entity fields have been reworked again to increase clarity and reduce cluttering.
+However, keep in mind it's always better to not display *everything*. The less, the better ;)
+
+![](1.1.4/fields.png)
+
+## Arrows
+You can now customize the design of arrows used in Point or Entity Reference fields.
+
+![](1.1.4/arrows.png)
+
+## Auto-layer rules remapping
+
+**TLDR; This new tool makes the creation of variations of Auto-layer rules very fast.**
+
+For example, if you've created a bunch of rules that use the IntGrid value 1 to paint "Stone walls" tiles, you may duplicate and remap them to use IntGrid value 2 and, say, "Metal walls" tiles.
+
+Right click on **a group of rules** in an Auto-layer to **Duplicate and remap it**.
+This new tool allows you to make a copy of these rules, while doing the following operations:
+ - replace IntGrid values they refer with another ones,
+ - transpose the tiles they produce to another part of the tileset.
+
+![](1.1.4/remap.png)
+
+## Icons
+New useful icons were added to the embed icons atlas, like keys, locks, and various shapes to be used with the 9-slices scaling feature of entities.
+
+![](1.1.4/icons.png)
+
+## Enum tags display
+
+A new option allows to visualize "Enum tags" attached to tiles in the Editor context (thanks to [Keith Clark](https://github.com/deepnight/ldtk/pull/707)). Just press the new "Show/Hide enums" button near the Layers list.
+
+In the following example, all tiles were tagged with a Material enum (stone, grass, metal etc.) and the result can be displayed right in the editor context.
+
+![](1.1.4/enumTags.png)
+
+## Misc
+
+ - You can now manually enter custom values for Entity pivots.
  - Added a new layer option to prevent selections when the layer is not active.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.

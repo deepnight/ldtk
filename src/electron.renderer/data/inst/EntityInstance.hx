@@ -148,6 +148,13 @@ class EntityInstance {
 		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
+	public inline function getWorldRefAttachX(fd:data.def.FieldDef) {
+		return _li.level.worldX + ( fd.editorDisplayMode==RefLinkBetweenCenters ? centerX : x );
+	}
+	public inline function getWorldRefAttachY(fd:data.def.FieldDef) {
+		return _li.level.worldY + ( fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y );
+	}
+
 	final overShapePad = 3;
 	final overEdgePad = 4;
 	public inline function isOver(layerX:Int, layerY:Int) {
@@ -177,7 +184,7 @@ class EntityInstance {
 			return layerX>=left-overShapePad && layerX<=right+overShapePad && layerY>=top-overShapePad && layerY<=bottom+overShapePad;
 	}
 
-	public function getSmartColor(bright:Bool) {
+	public function getSmartColor(bright:Bool) : dn.Col {
 		var c : Null<Int> = null;
 		for(fd in def.fieldDefs) {
 			c = getFieldInstance(fd,true).getSmartColor();

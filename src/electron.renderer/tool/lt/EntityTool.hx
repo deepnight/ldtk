@@ -290,6 +290,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
 						alpha,
+						chainFi.def.editorLinkStyle,
 						Full
 					);
 
@@ -299,6 +300,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
 						getPlacementX(m), getPlacementY(m),
 						alpha,
+						chainFi.def.editorLinkStyle,
 						Full
 					);
 			}

@@ -414,6 +414,7 @@ class FieldDefsForm {
 		} );
 
 
+		// Display mode
 		var i = new form.input.EnumSelect(
 			jForm.find("select[name=editorDisplayMode]"),
 			ldtk.Json.FieldDisplayMode,
@@ -468,12 +469,30 @@ class FieldDefsForm {
 		);
 		i.onChange = onFieldChange;
 
-		// Nullable
-		var nullableInput = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
-		if( nullableInput!=null ) {
-			nullableInput.onChange = onFieldChange;
-			nullableInput.enable();
+		// Link style
+		var i = new form.input.EnumSelect(
+			jForm.find("select[name=editorLinkStyle]"),
+			ldtk.Json.FieldLinkStyle,
+			function() return curField.editorLinkStyle,
+			function(v) return curField.editorLinkStyle = v,
+
+			function(k) {
+				return switch k {
+					case ZigZag: L.t._("Zig-zag");
+					case CurvedArrow: L.t._("Curved arrow");
+					case StraightArrow: L.t._("Straight arrow");
+					case ArrowsLine: L.t._("Line of arrows");
+					case DashedLine: L.t._("Dashed line");
+				}
+			}
+		);
+		switch curField.editorDisplayMode {
+			case PointStar, PointPath, PointPathLoop, RefLinkBetweenPivots, RefLinkBetweenCenters:
+				i.jInput.show();
+			case _:
+				i.jInput.hide();
 		}
+		i.onChange = onFieldChange;
 
 
 		// Display pos
@@ -481,21 +500,29 @@ class FieldDefsForm {
 			jForm.find("select[name=editorDisplayPos]"),
 			ldtk.Json.FieldDisplayPosition,
 			()->curField.editorDisplayPos,
-			(v)->curField.editorDisplayPos = v,
-			(pos)->switch parentType {
-				case FP_Entity: true;
-				case FP_Level: false;
-			}
+			(v)->curField.editorDisplayPos = v
 		);
-		switch curField.editorDisplayMode {
-			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
-				i.setEnabled(true);
-
-			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters:
-				i.setEnabled(false);
-		}
 		i.onChange = onFieldChange;
+		i.setVisibility( isEntityField() && switch curField.editorDisplayMode {
+			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel: true;
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters: false;
+		} );
 
+
+		// Show in World mode (Level field only)
+		var i = Input.linkToHtmlInput( curField.editorShowInWorld, jForm.find("input[name=editorShowInWorld]") );
+		i.onChange = onFieldChange;
+		i.setVisibility( isLevelField() );
+
+
+		// Nullable
+		var nullableInput = Input.linkToHtmlInput( curField.canBeNull, jForm.find("input[name=canBeNull]:visible") );
+		if( nullableInput!=null ) {
+			nullableInput.onChange = onFieldChange;
+			nullableInput.enable();
+		}
+
+		// Always show
 		var i = Input.linkToHtmlInput( curField.editorAlwaysShow, jForm.find("input[name=editorAlwaysShow]") );
 		i.onChange = onFieldChange;
 		i.setEnabled( curField.editorDisplayMode!=Hidden );

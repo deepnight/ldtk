@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.1.4 JSON schema",
+	"title": "LDtk 1.2.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.1.4",
+	"version": "1.2.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -850,6 +850,8 @@
 				"editorCutLongValues",
 				"editorDisplayMode",
 				"editorDisplayPos",
+				"editorLinkStyle",
+				"editorShowInWorld",
 				"symmetricalRef",
 				"useForSmartColor"
 			],
@@ -869,6 +871,12 @@
 				},
 				"useForSmartColor": {
 					"description": "If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.",
+					"type": [
+						"boolean"
+					]
+				},
+				"editorShowInWorld": {
+					"description": "",
 					"type": [
 						"boolean"
 					]
@@ -1034,6 +1042,16 @@
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
 				},
+				"editorLinkStyle": {
+					"description": "Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`",
+					"enum": [
+						"ZigZag",
+						"StraightArrow",
+						"CurvedArrow",
+						"ArrowsLine",
+						"DashedLine"
+					]
+				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
 					"type": [
@@ -1095,7 +1113,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tileRect`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -1388,7 +1406,7 @@
 					]
 				},
 				"levelUid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `levelIid`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `levelIid`",
 					"type": [
 						"integer"
 					]
@@ -2091,7 +2109,7 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tilesetDefUid`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `tilesetDefUid`",
 					"type": [
 						"integer",
 						"null"

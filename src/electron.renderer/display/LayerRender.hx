@@ -85,8 +85,6 @@ class LayerRender {
 			mask.height = li.pxHei;
 		}
 
-		var showEnums = App.ME.settings.v.tileEnumOverlays;
-
 		var renderTarget = mask!=null ? mask : root;
 
 		switch li.def.type {
@@ -94,12 +92,19 @@ class LayerRender {
 			var td = li.getTilesetDef();
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
+				var ed = td.getTagsEnumDef();
+
 				// Auto-layer tiles
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, renderTarget);
 				pixelGrid.x = li.pxTotalOffsetX;
 				pixelGrid.y = li.pxTotalOffsetY;
 
 				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget);
+				var gr = App.ME.settings.v.tileEnumOverlays ? new h2d.Graphics(renderTarget) : null;
+
+				// If we're showing enums, dim the tileset slightly so the overlays stand out.
+				if( App.ME.settings.v.tileEnumOverlays )
+					tg.setDefaultColor(0xcccccc, .5);
 
 				if( li.autoTilesCache==null )
 					li.applyAllAutoLayerRules();
@@ -109,13 +114,6 @@ class LayerRender {
 						var grid = li.def.gridSize;
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
-							// Paint a full pixel behind to avoid flickering revealing background
-							// if( td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
-							// 	pixelGrid.setPixel(
-							// 		Std.int(tileInfos.x/grid),
-							// 		Std.int(tileInfos.y/grid),
-							// 		td.getAverageTileColor(tileInfos.tid)
-							// 	);
 							// Tile
 							tg.addTransform(
 								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
@@ -125,6 +123,22 @@ class LayerRender {
 								0,
 								td.extractTile(tileInfos.srcX, tileInfos.srcY)
 							);
+
+							if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
+								var n = 0;
+								for( ev in ed.values) {
+									if( td.hasTag(ev.id, tileInfos.tid)) {
+										gr.lineStyle(1, ev.color, 1);
+										gr.drawRect(
+											tileInfos.x + li.def.tilePivotX*li.def.gridSize + li.pxTotalOffsetX,
+											tileInfos.y + li.def.tilePivotY*li.def.gridSize + li.pxTotalOffsetY,
+											li.def.gridSize - 1 - n * 2,
+											li.def.gridSize - 1 - n * 2
+										);
+										n++;
+									}
+								}
+							}
 						}
 					}
 				});
@@ -156,13 +170,11 @@ class LayerRender {
 			if( td!=null && td.isAtlasLoaded() ) {
 				var ed = td.getTagsEnumDef();
 				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget );
-				var gr = new h2d.Graphics(renderTarget);
+				var gr = App.ME.settings.v.tileEnumOverlays ? new h2d.Graphics(renderTarget) : null;
 
-				// If we're showing enums, dim the tileset slightly so the overlays 
-				// stand out.
-				if (showEnums) {
+				// If we're showing enums, dim the tileset slightly so the overlays stand out.
+				if( App.ME.settings.v.tileEnumOverlays )
 					tg.setDefaultColor(0xcccccc, .5);
-				}
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
@@ -179,14 +191,14 @@ class LayerRender {
 						var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
 						tg.addTransform(tx, ty, sx, sy, 0, t);
 
-						if (showEnums && ed != null) {
+						if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
 							var n = 0;
 							for( ev in ed.values) {
 								if( td.hasTag(ev.id, tileInf.tileId)) {
 									gr.lineStyle(1, ev.color, 1);
 									gr.drawRect(
-										tx + n + .5,
-										ty + n + .5,
+										(cx + li.def.tilePivotX)*li.def.gridSize + li.pxTotalOffsetX  +  n + .5,
+										(cy + li.def.tilePivotY)*li.def.gridSize + li.pxTotalOffsetY  +  n + .5,
 										li.def.gridSize - 1 - n * 2,
 										li.def.gridSize - 1 - n * 2
 									);
