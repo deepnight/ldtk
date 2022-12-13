@@ -218,8 +218,10 @@ class EntityDef {
 		pivotY = y;
 	}
 
-	inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
-	inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
+	inline function set_pivotX(v) return pivotX = v;
+	inline function set_pivotY(v) return pivotY = v;
+	// inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
+	// inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
 
 
 
