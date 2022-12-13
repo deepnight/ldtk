@@ -209,8 +209,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				var cx = ( coordId % li.cWid );
 				var cy = Std.int( coordId / li.cWid );
 				editor.levelRender.temp.drawRect(
-					cx*li.def.gridSize,
-					cy*li.def.gridSize,
+					cx*li.def.gridSize + li.totalOffsetX,
+					cy*li.def.gridSize + li.totalOffsetY,
 					li.def.gridSize,
 					li.def.gridSize
 				);
