@@ -500,20 +500,19 @@ class FieldDefsForm {
 			jForm.find("select[name=editorDisplayPos]"),
 			ldtk.Json.FieldDisplayPosition,
 			()->curField.editorDisplayPos,
-			(v)->curField.editorDisplayPos = v,
-			(pos)->switch parentType {
-				case FP_Entity: true;
-				case FP_Level: false;
-			}
+			(v)->curField.editorDisplayPos = v
 		);
-		switch curField.editorDisplayMode {
-			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel:
-				i.jInput.show();
-
-			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters:
-				i.jInput.hide();
-		}
 		i.onChange = onFieldChange;
+		i.setVisibility( isEntityField() && switch curField.editorDisplayMode {
+			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel: true;
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters: false;
+		} );
+
+
+		// Show in World mode (Level field only)
+		var i = Input.linkToHtmlInput( curField.editorShowInWorld, jForm.find("input[name=editorShowInWorld]") );
+		i.onChange = onFieldChange;
+		i.setVisibility( isLevelField() );
 
 
 		// Nullable

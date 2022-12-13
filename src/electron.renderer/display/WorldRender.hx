@@ -132,6 +132,7 @@ class WorldRender extends dn.Process {
 				updateCurrentHighlight();
 				updateAxesPos();
 				invalidateCameraBasedRenders();
+				invalidateLevelFields(editor.curLevel);
 
 			case WorldSelected(w):
 				for(wl in worldLevels)

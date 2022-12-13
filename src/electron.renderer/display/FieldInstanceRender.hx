@@ -218,6 +218,10 @@ class FieldInstanceRender {
 
 		// Create individual field renders
 		for(fi in fieldInstances) {
+			// Skip fields not displayed in world mode
+			if( !fi.def.editorShowInWorld && Editor.ME.worldMode )
+				continue;
+			
 			var fr = renderField(fi, baseColor, ctx);
 			if( fr==null || fr.value.numChildren==0 )
 				continue;

@@ -19,6 +19,7 @@ class FieldDef {
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
+	public var editorShowInWorld : Bool;
 	public var editorAlwaysShow: Bool;
 	public var editorTextPrefix : Null<String>;
 	public var editorTextSuffix : Null<String>;
@@ -58,6 +59,7 @@ class FieldDef {
 			case _: StraightArrow;
 		}
 		editorAlwaysShow = false;
+		editorShowInWorld = true;
 		editorCutLongValues = true;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point || type==F_EntityRef && !isArray;
@@ -135,6 +137,7 @@ class FieldDef {
 			case _: StraightArrow;
 		});
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
+		o.editorShowInWorld = JsonTools.readBool(json.editorShowInWorld, true);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
 		o.editorTextPrefix = json.editorTextPrefix;
 		o.editorTextSuffix = json.editorTextSuffix;
@@ -172,6 +175,7 @@ class FieldDef {
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
 			editorAlwaysShow: editorAlwaysShow,
+			editorShowInWorld: editorShowInWorld,
 			editorCutLongValues: editorCutLongValues,
 			editorTextSuffix: editorTextSuffix,
 			editorTextPrefix: editorTextPrefix,
