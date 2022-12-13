@@ -226,6 +226,7 @@ class TileTagger extends ui.Tileset {
 			// Set/unset enum tags
 			for(tid in tileIds)
 				tilesetDef.setTag(tid, curEnumValue, added);
+			Editor.ME.ge.emit( TilesetEnumChanged );
 			refresh();
 		}
 		else {

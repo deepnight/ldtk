@@ -244,6 +244,11 @@ class LevelRender extends dn.Process {
 
 			case TilesetDefSorted:
 
+			case TilesetEnumChanged:
+				if (settings.v.tileEnumOverlays)
+					for( li in editor.curLevel.layerInstances)
+						invalidateLayer(li);
+
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				for(li in editor.curLevel.layerInstances)
 					if( li.def.type==Entities )
@@ -255,8 +260,8 @@ class LevelRender extends dn.Process {
 						invalidateLayer(li);
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
-				for(li in editor.curLevel.layerInstances)
-					if( li.def.type==Entities )
+				for( li in editor.curLevel.layerInstances)
+					if( settings.v.tileEnumOverlays || li.def.type==Entities )
 						invalidateLayer(li);
 
 			case LevelFieldInstanceChanged(l,fi):
