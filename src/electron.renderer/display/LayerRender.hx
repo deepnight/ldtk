@@ -85,8 +85,6 @@ class LayerRender {
 			mask.height = li.pxHei;
 		}
 
-		var showEnums = App.ME.settings.v.tileEnumOverlays;
-
 		var renderTarget = mask!=null ? mask : root;
 
 		switch li.def.type {
@@ -160,9 +158,8 @@ class LayerRender {
 
 				// If we're showing enums, dim the tileset slightly so the overlays
 				// stand out.
-				if (showEnums) {
+				if( App.ME.settings.v.tileEnumOverlays )
 					tg.setDefaultColor(0xcccccc, .5);
-				}
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
@@ -179,7 +176,7 @@ class LayerRender {
 						var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
 						tg.addTransform(tx, ty, sx, sy, 0, t);
 
-						if (showEnums && ed != null) {
+						if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
 							var n = 0;
 							for( ev in ed.values) {
 								if( td.hasTag(ev.id, tileInf.tileId)) {
