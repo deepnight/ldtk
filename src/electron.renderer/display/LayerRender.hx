@@ -85,6 +85,8 @@ class LayerRender {
 			mask.height = li.pxHei;
 		}
 
+		var showEnums = App.ME.settings.v.tileEnumOverlays;
+
 		var renderTarget = mask!=null ? mask : root;
 
 		switch li.def.type {
@@ -148,9 +150,19 @@ class LayerRender {
 
 		case Tiles:
 			// Classic tiles layer
+			var offX = 2;
+			var offY = 2;
 			var td = li.getTilesetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
+				var ed = td.getTagsEnumDef();
 				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget );
+				var gr = new h2d.Graphics(renderTarget);
+
+				// If we're showing enums, dim the tileset slightly so the overlays 
+				// stand out.
+				if (showEnums) {
+					tg.setDefaultColor(0xcccccc, .5);
+				}
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
@@ -163,14 +175,25 @@ class LayerRender {
 						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
 						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
 						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
-						tg.addTransform(
-							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX,
-							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY,
-							sx,
-							sy,
-							0,
-							t
-						);
+						var tx = (cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX;
+						var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
+						tg.addTransform(tx, ty, sx, sy, 0, t);
+
+						if (showEnums && ed != null) {
+							var n = 0;
+							for( ev in ed.values) {
+								if( td.hasTag(ev.id, tileInf.tileId)) {
+									gr.lineStyle(1, ev.color, 1);
+									gr.drawRect(
+										tx + n + .5,
+										ty + n + .5,
+										li.def.gridSize - 1 - n * 2,
+										li.def.gridSize - 1 - n * 2
+									);
+									n++;
+								}
+							}
+						}
 					}
 				}
 			}

@@ -1309,7 +1309,12 @@ class Editor extends Page {
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
-
+		applyEditOption(
+			jEditOptions.find("li.tileEnums"),
+			()->settings.v.tileEnumOverlays,
+			(v)->setTileEnumOverlays(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
 		JsTools.parseComponents(jEditOptions);
 	}
 
@@ -1397,6 +1402,15 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
+	}
+
+	public function setTileEnumOverlays(v:Bool) {
+		settings.v.tileEnumOverlays = v;
+		App.ME.settings.save();
+		levelRender.invalidateAll();
+		selectionTool.clear();
+		N.quick( "Tile enum overlay: "+L.onOff( settings.v.tileEnumOverlays ));
 		updateEditOptions();
 	}
 
@@ -1738,6 +1752,7 @@ class Editor extends Page {
 			case TilesetSelectionSaved(td):
 			case TilesetDefPixelDataCacheRebuilt(td):
 			case TilesetDefSorted:
+			case TilesetEnumChanged:
 			case EntityInstanceAdded(ei): invalidateLevelCache(ei._li.level);
 			case EntityInstanceRemoved(ei): invalidateLevelCache(ei._li.level);
 			case EntityInstanceChanged(ei): invalidateLevelCache(ei._li.level);
@@ -1967,6 +1982,8 @@ class Editor extends Page {
 				project.tidy();
 
 			case TilesetDefAdded(td):
+
+			case TilesetEnumChanged:
 
 			case ProjectSettingsChanged:
 				updateBanners();
