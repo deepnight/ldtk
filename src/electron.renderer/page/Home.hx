@@ -12,7 +12,7 @@ class Home extends Page {
 		var changeLog = Const.getChangeLog();
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
-			appVer: Const.getAppVersion(),
+			appVer: Const.getAppVersion(true),
 			buildDate: dn.MacroTools.getHumanBuildDate(),
 			latestVer: changeLog.latest.version,
 			latestDesc: changeLog.latest.title==null ? L.t._("Release notes") : '"'+changeLog.latest.title+'"',

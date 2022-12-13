@@ -4884,7 +4884,7 @@ canvas#webgl {
 		header {
 			display: grid;
 			align-self: stretch;
-			grid-template-rows: auto min-content;
+			grid-template-columns: min-content min-content;
 
 			padding-top: 48px;
 			padding-bottom: 32px;
@@ -4895,8 +4895,8 @@ canvas#webgl {
 			background-position: bottom center;
 
 			.version {
-				font-size: 14pt;
-				color: $bgLighter;
+				font-size: 96pt;
+				color: $bgMed;
 				text-align: center;
 				margin-top: 8px;
 			}
