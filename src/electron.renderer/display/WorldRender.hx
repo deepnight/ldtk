@@ -921,6 +921,8 @@ class WorldRender extends dn.Process {
 			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
 			tf.text = l.getDisplayIdentifier();
 			tf.textColor = 0xffffff;
+			if( l.useAutoIdentifier )
+				tf.alpha = 0.33;
 			tf.x = 6;
 			tf.y = -2;
 
