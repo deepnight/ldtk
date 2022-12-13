@@ -201,12 +201,7 @@ button {
 	&.active {
 		background-color: $bgLight !important;
 		border-color: $bgLight !important;
-		outline: 1px solid $bgLighter;
-		outline-offset: -2px;
 		box-shadow: none;
-		// .icon {
-			// filter: brightness(0);
-		// }
 	}
 
 	&.strong {
@@ -335,8 +330,7 @@ button {
 		border-radius: 2px;
 		background-color: rgba(0, 0, 0, 0.1);
 		&:hover {
-			border-color: black;
-			background: black;
+			background: rgba(0, 0, 0, 0.5);
 		}
 	}
 
@@ -1634,9 +1628,7 @@ dl.form {
 		}
 
 		a[href] {
-			flex-grow: 0;
 			font-size: 0.8em;
-			margin-left: 8px;
 			align-self: center;
 			white-space: nowrap;
 		}
@@ -1837,7 +1829,7 @@ input[type=number] {
 
 input.slider:not(:disabled) {
 	cursor: ew-resize;
-	flex: 0 0 48px;
+	flex: 1 0 48px;
 	box-sizing: content-box;
 	padding-right: 20px;
 
@@ -3056,7 +3048,7 @@ textarea {
 	outline: 1px dashed $orange !important;
 	outline-offset: -1px;
 	>button.context {
-		background: black !important;
+		background: rgba(0, 0, 0, .5) !important;
 		outline: 1px solid $orange;
 		outline-offset: -1px;
 	}
@@ -3098,14 +3090,10 @@ textarea {
 					text-transform: none;
 					color: $bgLighter;
 					font-size: 9pt;
-					white-space: pre-wrap;
 					max-width: 300px;
 				}
 				&:disabled {
-					color: $bgLight;
-					font-style: italic;
-					background-repeat: repeat;
-					background-image: url("../img/stripesLight.png");
+					display: none;
 				}
 
 				&.crash:not(:hover) {
@@ -3869,6 +3857,7 @@ div.sortHandle {
 	display: inline-block;
 	background: url("../icons/drag.svg") no-repeat;
 	background-position: center center;
+    border-right: 1px solid $bgDark;
 	padding-left: 24px;
 	padding-top: 32px;
 	opacity: 0.3;
@@ -5654,21 +5643,6 @@ canvas#webgl {
 		box-shadow: 0px 0px 16px $red;;
 	}
 
-	.highlightWrapper {
-		pointer-events: none;
-		position: relative;
-		.line {
-			position: absolute;
-			z-index: 1;
-			min-width: 1px;
-			min-height: 1px;
-			outline: 2px solid #f0f;
-			outline-offset: -2px;
-			border: 1px solid black;
-			background-color: transparentize($color: #f0f, $amount: 0.8);
-		}
-	}
-
 	.selectionsWrapper,
 	.cursorsWrapper {
 		pointer-events: none;
@@ -6359,11 +6333,9 @@ dl.form.fieldInstanceEditor {
 
 			>li {
 				display: flex;
-				// display: grid;
-				// gap: 4px;
-				// grid-template-columns: auto min-content;
 				flex-wrap: nowrap;
 				overflow: hidden;
+				height: 33px;
 
 				span:not([class]) {
 					align-self: center;
@@ -7224,11 +7196,9 @@ body.sorting ul.collapsedSortTarget {
 		}
 
 		ul.ruleGroups {
-			padding: 8px;
 			border: 1px solid $bgLight;
 			overflow-y: auto;
 			background-color: $bgDark;
-			box-shadow: 0px 4px 8px black inset;
 
 			>li:last-child {
 				margin-bottom: 30px;
@@ -7260,25 +7230,15 @@ body.sorting ul.collapsedSortTarget {
 				box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4) inset;
 				text-align: center;
 				padding-top: 30px;
-				border: 1px solid $bgLight;
 			}
 
 			>li { // Group
 				position: relative;
 				display: grid;
 				grid-template-columns: 28px auto;
-				border: 1px solid $bgLight;
-				padding: 4px;
-				box-shadow: 0px 2px 4px black;
 				background-color: $bgMed;
 
-				&:not(:first-child) {
-					margin-top: 8px;
-				}
-
-				&:not(:last-child) {
-					margin-bottom: 8px;
-				}
+				margin-bottom: 12px;
 
 				.sortHandle {
 					grid-column: 1/2;
@@ -7292,6 +7252,8 @@ body.sorting ul.collapsedSortTarget {
 
 				>.sortHandle {
 					opacity: 1;
+					border-radius: 0;
+					background-color: $bgLight;
 					&:hover {
 						background-color: $orange !important;
 					}
@@ -7314,6 +7276,9 @@ body.sorting ul.collapsedSortTarget {
 				&.inactive {
 					header {
 						opacity: 0.5;
+						.name:hover .text {
+							color: $almostWhite;
+						}
 					}
 					&:not(.optional) header {
 						background-color: $bgDark;
@@ -7329,6 +7294,13 @@ body.sorting ul.collapsedSortTarget {
 					ul.ruleGroup {
 						opacity: 0.66;
 					}
+					>.sortHandle {
+						background-color: $bgDark;
+
+						&:hover {
+							background-color: $orange !important;
+						}
+					}
 				}
 
 				&.collapsed {
@@ -7339,7 +7311,7 @@ body.sorting ul.collapsedSortTarget {
 					border: 0;
 
 					header .name {
-						cursor: $cur_expand;
+						cursor: pointer;
 					}
 					ul.ruleGroup {
 						display: none;
@@ -7389,7 +7361,7 @@ body.sorting ul.collapsedSortTarget {
 						overflow-x: hidden;
 						white-space: nowrap;
 
-						cursor: $cur_collapse;
+						cursor: pointer;
 
 						.text {
 							overflow: hidden;
@@ -7424,11 +7396,23 @@ body.sorting ul.collapsedSortTarget {
 							font-weight: bold;
 							font-size: 12pt;
 						}
+						&:hover.active{
+							background-color: $bgLighter !important;
+						}
 					}
 
 					button.off {
 						opacity: 0.3;
 						background-color: $red;
+					}
+
+					button.active .icon {
+						width: 100%;
+					}
+
+					.context{
+						border-radius: 0;
+						border-width: 0;
 					}
 				}
 
@@ -8579,103 +8563,20 @@ $patternSize : 32px;
 	}
 }
 
-
-.window.ruleGroupRemap {
-	.wrapper .content {
-		display: grid;
-		grid-template-columns: 300px 600px;
-		grid-template-rows: min-content auto;
-		column-gap: 16px;
-
-		&>h2 {
-			grid-column: 1/3;
-		}
-
-		h3:first-child {
-			margin-top: 0;
-		}
-
-		input[type=text] {
-			width: 100%;
-		}
-
-		ul.intGridIds {
-			margin-top: 8px;
-			margin-bottom: 8px;
-
-			li {
-				display: grid;
-				grid-template-columns: auto min-content auto;
-				margin-bottom: 2px;
-				align-items: center;
-
-				.oldId,
-				.newId {
-					padding: 8px;
-					border-radius: 3px;
-					text-shadow: 1px 1px 1px black,  -1px -1px 1px black,  0px 2px 3px black;
-				}
-
-				.oldId {
-					opacity: 0.66;
-					cursor: not-allowed;
-				}
-
-				.newId {
-					border: 1px solid white;
-					cursor: pointer;
-					&:hover {
-						border-color: #fc0;
-					}
-
-					&.unchanged {
-						font-style: italic;
-						color: $almostWhite;
-					}
-				}
-
-				.unchanged {
-					color: $almostWhite;
-					font-style: italic;
-					text-shadow: none;
-					background-color: transparent !important;
-					border: 1px dashed $bgLight;
-				}
-			}
-		}
-
-		.tileset {
-			height: 60vh;
-			border: 1px solid white;
-			outline: 1px solid black;
-		}
-	}
+// Custom Scrollbar
+::-webkit-scrollbar {
+	width: 10px;
 }
 
-
-.window.intGridValuePicker {
-	.wrapper .content {
-		width: 15em;
-
-		ul {
-			li {
-				padding: 8px;
-				border: 1px solid $bgDark;
-
-				cursor: pointer;
-				&:hover {
-					border-color: white;
-				}
-
-				&.active {
-					border: 2px solid white;
-					border-left-width: 8px;
-				}
-				&:not(.active) {
-					opacity: 0.8;
-				}
-			}
-		}
-	}
+::-webkit-scrollbar-track {
+	background: $bgMed;
+	border-left: 1px solid $bgLight;
 }
 
+::-webkit-scrollbar-thumb {
+	background: $bgLighter;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: $almostWhite;
+}
