@@ -74,6 +74,11 @@ From a command line in the `app` folder, run:
 npm run start
 ```
 
+# Contributing
+
+You can read the general Pull Request guidelines here: 
+https://github.com/deepnight/ldtk/wiki#pull-request-guidelines
+
 # Related tools & licences
 
  - Tileset images: see [README](app/extraFiles/samples/README.md) in samples
