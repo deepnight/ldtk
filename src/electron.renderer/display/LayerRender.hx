@@ -158,7 +158,7 @@ class LayerRender {
 				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget );
 				var gr = new h2d.Graphics(renderTarget);
 
-				// If we're showing enums, dim the tileset slightly so the overlays 
+				// If we're showing enums, dim the tileset slightly so the overlays
 				// stand out.
 				if (showEnums) {
 					tg.setDefaultColor(0xcccccc, .5);
@@ -185,8 +185,8 @@ class LayerRender {
 								if( td.hasTag(ev.id, tileInf.tileId)) {
 									gr.lineStyle(1, ev.color, 1);
 									gr.drawRect(
-										tx + n + .5,
-										ty + n + .5,
+										(cx + li.def.tilePivotX)*li.def.gridSize + li.pxTotalOffsetX  +  n + .5,
+										(cy + li.def.tilePivotY)*li.def.gridSize + li.pxTotalOffsetY  +  n + .5,
 										li.def.gridSize - 1 - n * 2,
 										li.def.gridSize - 1 - n * 2
 									);
