@@ -1,4 +1,4 @@
-# 1.2.0
+# 1.2.0 - Entity visuals and Auto-layer rules remapping
 
 ## Entity fields visuals
 
@@ -40,6 +40,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
 
 ## Misc
 
+ - You can now manually enter custom values for Entity pivots.
  - Added a new layer option to prevent selections when the layer is not active.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.
