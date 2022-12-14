@@ -40,6 +40,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
 
 ## Misc
 
+ - Added nice color suggestions to various color-pickers (eg. int grid values, entities etc.). The palette is "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
  - Hold SHIFT to disable snapping when moving levels around in the world view.
  - You can now manually enter custom values for Entity pivots.
  - Added a new layer option to prevent selections when the layer is not active.

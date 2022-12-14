@@ -83,3 +83,4 @@ npm run start
  - JQuery: https://jquery.com
  - MarkedJS: https://github.com/markedjs/marked
  - SVG icons from https://material.io
+ - Default palette: "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)

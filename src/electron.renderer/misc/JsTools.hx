@@ -649,7 +649,11 @@ class JsTools {
 				.on("click.picker", (ev:js.jquery.Event)->{
 					ev.stopPropagation();
 					ev.preventDefault();
-					new ui.modal.dialog.ColorPicker( jInput.attr("colorTag"), jInput );
+					var colorTag = jInput.attr("colorTag");
+					if( colorTag!=null )
+						new ui.modal.dialog.ColorPicker( colorTag, jInput );
+					else
+						new ui.modal.dialog.ColorPicker( Const.NICE_PALETTE, jInput );
 				});
 		});
 
