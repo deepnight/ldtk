@@ -6,7 +6,7 @@
 		{
 			"text": "⚡ Rdr dbg",
 			"color": "yellow",
-			"commandType":"palette",
+			"commandType": "palette",
 			"command": "workbench.action.tasks.runTask|Electron Renderer debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
@@ -15,11 +15,20 @@
 		{
 			"text": "⚡ Main dbg",
 			"color": "yellow",
-			"commandType":"palette",
+			"commandType": "palette",
 			"command": "workbench.action.tasks.runTask|Electron Main debug",
 			"alignment": "right",
 			"skipTerminateQuickPick": false,
 			"priority": -23
+		},
+		{
+			"text": "👀 Scss watch",
+			"color": "white",
+			"commandType": "palette",
+			"command": "workbench.action.tasks.runTask|scss watch",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -24
 		},
 		{
 			"text": "🖥️ Term",

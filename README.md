@@ -34,6 +34,12 @@ Visit [LDtk.io](https://ldtk.io) to get latest version.
  cd app
  npm i
  ```
+ - To get the scss compiling to css you need to install sass through the commandline
+ ```
+ npm i -g sass
+ ```
+ Once sass is installed you can then run the task `scss watch` in vscode to start it watching for changes
+
 
 ## Compiling *master* branch
 
