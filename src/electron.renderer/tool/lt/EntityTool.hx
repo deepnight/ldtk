@@ -11,6 +11,17 @@ class EntityTool extends tool.LayerTool<Int> {
 			selectValue( project.defs.entities[0].uid );
 	}
 
+	override function onGlobalEvent(ev:GlobalEvent) {
+		super.onGlobalEvent(ev);
+
+		switch ev {
+			case LevelRestoredFromHistory(_), LayerInstancesRestoredFromHistory(_):
+				cancelRefChaining();
+
+			case _:
+		}
+	}
+
 	public static inline function cancelRefChaining() {
 		Editor.ME.levelRender.clearTemp();
 		PREV_CHAINABLE_EI = null;
