@@ -32,6 +32,12 @@ class Tool<T> extends dn.Process {
 		super.onDispose();
 	}
 
+
+	public function getShortName() {
+		var raw = Type.getClassName( Type.getClass(this) );
+		return raw.substr( raw.lastIndexOf(".")+1 );
+	}
+
 	@:keep
 	override function toString():String {
 		return super.toString()
@@ -107,6 +113,7 @@ class Tool<T> extends dn.Process {
 	function customCursor(ev:hxd.Event, m:Coords) {}
 
 	function useFloodfillAt(m:Coords) {
+		LOG.userAction(getShortName()+": Flood fill, mode="+curMode+", in "+curLayerInstance);
 		return false;
 	}
 
@@ -183,6 +190,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	function useOnRectangle(m:Coords, left:Int, right:Int, top:Int, bottom:Int) : Bool {
+		LOG.userAction(getShortName()+": Rectangle, mode="+curMode+", in "+curLayerInstance);
 		return false;
 	}
 
@@ -227,6 +235,7 @@ class Tool<T> extends dn.Process {
 		}
 
 		if( needHistorySaving ) {
+			LOG.userAction(getShortName()+": mode="+curMode+", in "+curLayerInstance);
 			saveToHistory();
 			needHistorySaving = false;
 		}

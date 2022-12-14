@@ -34,7 +34,6 @@ class IntGridTool extends tool.LayerTool<Int> {
 		editor.selectionTool.clear();
 	}
 
-
 	override function customCursor(ev:hxd.Event, m:Coords) {
 		super.customCursor(ev,m);
 

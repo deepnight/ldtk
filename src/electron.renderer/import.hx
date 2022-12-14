@@ -17,4 +17,5 @@ import misc.*;
 import EditorTypes;
 import ui.Notification as N;
 import form.Input;
+import App.LOG as LOG;
 #end

@@ -62,7 +62,7 @@ class Level {
 	}
 
 	@:keep public function toString() {
-		return Type.getClassName( Type.getClass(this) ) + '.$identifier(#$uid)';
+		return Type.getClassName( Type.getClass(this) ) + '#$iid "$identifier"';
 	}
 
 

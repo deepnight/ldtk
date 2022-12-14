@@ -221,12 +221,15 @@ class EntityTool extends tool.LayerTool<Int> {
 						else if( !editor.gifMode )
 							editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
 						ei.tidy(project, curLayerInstance); // Force creation of field instances & update _li
+						LOG.userAction("Added entity "+ei);
 
 						// Try to auto chain previous entity to the new one
 						var chainFi = getEntityChainableFieldInstance(prevEi);
 						if( chainFi!=null ) {
-							if( tryToChainRefTo(prevEi, ei) )
+							if( tryToChainRefTo(prevEi, ei) ) {
+								LOG.userAction("  Created ref "+prevEi+" => "+ei);
 								PREV_CHAINABLE_EI = ei;
+							}
 							else
 								cancelRefChaining();
 						}

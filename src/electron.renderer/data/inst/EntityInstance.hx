@@ -38,7 +38,7 @@ class EntityInstance {
 	}
 
 	@:keep public function toString() {
-		return 'Instance<${def.identifier}>@$x,$y';
+		return 'EntityInst "${def.identifier}" @$x,$y';
 	}
 
 	inline function get_centerX() return M.round( x + (0.5-def.pivotX)*width );

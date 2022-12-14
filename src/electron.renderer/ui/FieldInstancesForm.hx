@@ -463,6 +463,7 @@ class FieldInstancesForm {
 							editor.curLevelTimeline.saveLayerState(sourceEi._li);
 						}
 
+						LOG.userAction('Picked ref $sourceEi => $targetEi in $fi');
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}
@@ -723,6 +724,8 @@ class FieldInstancesForm {
 			case Level(l): editor.ge.emit( LevelFieldInstanceChanged(l,fi) );
 		}
 		onChange();
+
+		LOG.userAction('Changed field: $fi');
 
 		// Re-focus input
 		if( jPrevFocus.length>0 ) {

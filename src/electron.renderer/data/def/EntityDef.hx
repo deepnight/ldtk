@@ -91,9 +91,9 @@ class EntityDef {
 	}
 
 	@:keep public function toString() {
-		return 'EntityDef.$identifier($width x $height)['
+		return 'EntityDef "$identifier",($width x $height) {'
 			+ fieldDefs.map( function(fd) return fd.identifier ).join(",")
-			+ "]";
+			+ "}";
 	}
 
 	public inline function isResizable() return resizableX || resizableY;

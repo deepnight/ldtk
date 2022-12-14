@@ -319,6 +319,8 @@ class LevelTimeline {
 		if( curStateIdx<=0 )
 			return false;
 
+		LOG.userAction("Undo");
+
 		if( hasState(curStateIdx) ) {
 			var b = getState(curStateIdx).bounds;
 			if( b!=null )
@@ -344,6 +346,8 @@ class LevelTimeline {
 
 		if( states.get(curStateIdx+1)==null )
 			return false;
+
+		LOG.userAction("Redo");
 
 		startTimer();
 		curStateIdx++;

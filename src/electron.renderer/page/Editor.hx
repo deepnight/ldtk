@@ -1672,6 +1672,7 @@ class Editor extends Page {
 			case BeforeProjectSaving:
 			case ProjectSaved:
 			case LevelSelected(level):
+				LOG.userAction("Opened level "+level);
 			case LevelSettingsChanged(l): invalidateLevelCache(l);
 			case LevelAdded(l):
 				for(nl in l.getNeighbours())

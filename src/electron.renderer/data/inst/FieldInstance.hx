@@ -23,9 +23,8 @@ class FieldInstance {
 		for(i in 0...getArrayLength())
 			disp.push( getForDisplay(i) );
 		return
-			'Instance<${def.identifier}> = '
+			'FieldInst "${def.identifier}" = '
 			+ disp.join(',')
-			// + getForDisplay()
 			+ ' [ $internalValues ]';
 	}
 
