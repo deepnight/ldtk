@@ -8761,6 +8761,43 @@ $patternSize : 32px;
 			height: 80vh;
 
 			.side {
+				.intGrid {
+					display: grid;
+					grid-template-columns: 32px 32px auto;
+					gap: 4px;
+					padding: 2px;
+					margin-bottom: 8px;
+					white-space: nowrap;
+					border-radius: 3px;
+					cursor: pointer;
+
+					.color,
+					.id,
+					.name {
+						// border: 1px solid $bgLight;
+						padding: 6px;
+					}
+
+					.id {
+						text-align: center;
+					}
+
+					&.empty {
+						grid-template-columns: auto;
+						font-size: 8pt;
+						color: $almostWhite;
+						.color,
+						.id {
+							display: none;
+						}
+					}
+					&:hover {
+						background-color: $orange;
+						* {
+							color: white;
+						}
+					}
+				}
 				.grids {
 					.grid {
 						display: grid;
@@ -8777,7 +8814,7 @@ $patternSize : 32px;
 						}
 					}
 					.cell {
-						border: 1px solid $bgMed;
+						border: 1px solid $bgDark;
 						cursor: pointer;
 						&:hover {
 							border-color: $orange;

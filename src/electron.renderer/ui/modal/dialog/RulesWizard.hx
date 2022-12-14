@@ -21,8 +21,9 @@ class RulesWizard extends ui.modal.Dialog {
 	var td : data.def.TilesetDef;
 	var tileset : ui.Tileset;
 	var jGrids : js.jquery.JQuery;
-	var pendingFragment : Null<WallFragment>;
+	var currentFragment : Null<WallFragment>;
 	var fragments : Map<WallFragment, Array<Int>> = new Map();
+	var intGridValue : Int = -1;
 
 	public function new(ld:data.def.LayerDef, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
 		super();
@@ -59,6 +60,11 @@ class RulesWizard extends ui.modal.Dialog {
 
 		updatePalette();
 
+		var jInt = jContent.find(".intGrid");
+		jInt.click(_->{
+			new ui.modal.dialog.IntGridValuePicker(ld, intGridValue, setIntGridValue);
+		});
+
 		// Confirm
 		addConfirm(()->{
 			onConfirm(null);
@@ -67,11 +73,26 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
+	function setIntGridValue(v:Int) {
+		var jInt = jContent.find(".intGrid");
+		if( v>0 ) {
+			var color = ld.getIntGridValueColor(v);
+			jInt.css("background-color", color.toBlack(0.4).toHex());
+			jInt.css("color", color.toWhite(0.6).toHex());
+			jInt.removeClass("empty");
+			jInt.find(".color").css("background-color", color.toHex());
+			jInt.find(".id").html("#"+v);
+			var vd = ld.getIntGridValueDef(v);
+			jInt.find(".name").html(vd.identifier==null ? "Unnamed" : vd.identifier);
+		}
+	}
+
+
 	function createCell(f:WallFragment) {
 		var jCell = new J('<div class="cell"/>');
 		jCell.attr("name", f.getName());
 		jCell.click( _->{
-			setPending(f);
+			setCurrent(f);
 			if( fragments.exists(f) )
 				tileset.setSelectedTileIds(fragments.get(f));
 			else
@@ -82,11 +103,11 @@ class RulesWizard extends ui.modal.Dialog {
 
 
 	function onSelectTiles(tids:Array<Int>) {
-		if( pendingFragment!=null ) {
+		if( currentFragment!=null ) {
 			if( tids.length==0 )
-				fragments.remove(pendingFragment);
+				fragments.remove(currentFragment);
 			else
-				fragments.set(pendingFragment, tids);
+				fragments.set(currentFragment, tids);
 			updatePalette();
 		}
 	}
@@ -198,11 +219,84 @@ class RulesWizard extends ui.modal.Dialog {
 		return alt!=null ? { f:alt, flipX:flipX, flipY:flipY } : null;
 	}
 
-	function setPending(?f:WallFragment) {
-		pendingFragment = f;
+
+	function setCurrent(?f:WallFragment) {
+		currentFragment = f;
 		jGrids.find(".cell").removeClass("active");
 		if( f!=null )
 			jGrids.find(".cell[name="+f+"]").addClass("active");
+	}
+
+
+	function getRuleMatrixFromFragment(f:WallFragment) {
+		var m = switch f {
+			case Full: [
+				"-o-",
+				"ooo",
+				"-o-",
+			];
+			case Wall_N: [
+				"-x-",
+				"-o-",
+				"---",
+			];
+			case Wall_S: [
+				"---",
+				"-o-",
+				"-x-",
+			];
+			case Wall_W: [
+				"---",
+				"xo-",
+				"---",
+			];
+			case Wall_E: [
+				"---",
+				"-ox",
+				"---",
+			];
+			case ExtCorner_NW: [
+				"-x-",
+				"xoo",
+				"-o-",
+			];
+			case ExtCorner_NE: [
+				"-x-",
+				"oox",
+				"-o-",
+			];
+			case ExtCorner_SW: [
+				"-o-",
+				"xoo",
+				"-x-",
+			];
+			case ExtCorner_SE: [
+				"-o-",
+				"oox",
+				"-x-",
+			];
+			case InCorner_NW: [
+				"xo-",
+				"oo-",
+				"---",
+			];
+			case InCorner_NE: [
+				"-ox",
+				"-oo",
+				"---",
+			];
+			case InCorner_SW: [
+				"---",
+				"oo-",
+				"xo-",
+			];
+			case InCorner_SE: [
+				"---",
+				"-oo",
+				"-ox",
+			];
+		}
+		return m;
 	}
 
 
