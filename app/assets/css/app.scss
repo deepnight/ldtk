@@ -8785,7 +8785,10 @@ $patternSize : 32px;
 					&.empty {
 						grid-template-columns: auto;
 						font-size: 8pt;
-						color: $almostWhite;
+						color: $orangeLight;
+						border: 1px solid $orange;
+						background-color: $darkOrange;
+						box-shadow: 0px 0px 8px $darkOrange;
 						.color,
 						.id {
 							display: none;
