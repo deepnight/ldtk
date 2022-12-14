@@ -45,6 +45,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.
+ - Updated the design of the home.
 
 ## Haxe API
 
