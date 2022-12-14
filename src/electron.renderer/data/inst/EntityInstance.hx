@@ -333,19 +333,26 @@ class EntityInstance {
 
 		// Check own fields for lost symmetricals
 		var i = 0;
+		var needFieldsTidy = false;
 		while( i<fi.getArrayLength() ) {
 			if( fi.valueIsNull(i) )
 				i++;
 			else {
 				var targetEi = fi.getEntityRefInstance(i);
-				if( !targetEi.hasEntityRefTo(this, fd) ) {
-					_project.unregisterReverseIidRef(this, targetEi);
+				if( targetEi==null || !targetEi.hasEntityRefTo(this, fd) ) {
 					fi.removeArrayValue(i);
+					if( targetEi==null )
+						_project.unregisterReverseIidRef(this, targetEi);
+					else
+						needFieldsTidy = true;
 				}
 				else
 					i++;
 			}
 		}
+
+		if( needFieldsTidy )
+			_project.tidyFields();
 
 		// Check entities pointing at me
 		if( allowDeepSearch ) {
