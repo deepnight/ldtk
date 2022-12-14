@@ -62,27 +62,39 @@ class RuleGroupRemap extends ui.modal.Dialog {
 		setTileOffset(0,0,true);
 
 		// Confirm & remap!
-		addConfirm(()->{
-			// Create rulegroup copy
-			var copy = ld.pasteRuleGroup( project, data.Clipboard.createTemp(CRuleGroup, groupJson) );
+		addButton(L.t._("Confirm"), ()->{
+			new InputDialog(
+				L.t._("Name this new group"),
+				groupJson.name,
+				(s:String)->return s.length==0 ? "Please enter a valid name" : null,
+				(s:String)->return s,
+				(s:String)->{
+					// Create rulegroup copy
+					var copy = ld.pasteRuleGroup( project, data.Clipboard.createTemp(CRuleGroup, groupJson), rg );
+					copy.name = s;
 
-			// Offset all tileIds
-			for(r in copy.rules)
-			for(i in 0...r.tileIds.length)
-				r.tileIds[i] += tileOffsetX + tileOffsetY*td.cWid;
+					// Offset all tileIds
+					for(r in copy.rules)
+					for(i in 0...r.tileIds.length)
+						r.tileIds[i] += tileOffsetX + tileOffsetY*td.cWid;
 
-			// Remap IntGrid IDs
-			for(r in copy.rules)
-			for(cx in 0...r.size)
-			for(cy in 0...r.size) {
-				var v = r.get(cx,cy);
-				if( idRemaps.exists(v) )
-					r.set(cx,cy, idRemaps.get(v));
-				else if( idRemaps.exists(-v) )
-					r.set(cx,cy, -idRemaps.get(-v));
-			}
+					// Remap IntGrid IDs
+					for(r in copy.rules)
+					for(cx in 0...r.size)
+					for(cy in 0...r.size) {
+						var v = r.get(cx,cy);
+						if( idRemaps.exists(v) )
+							r.set(cx,cy, idRemaps.get(v));
+						else if( idRemaps.exists(-v) )
+							r.set(cx,cy, -idRemaps.get(-v));
+					}
 
-			onConfirm(copy);
+					onConfirm(copy);
+					close();
+				}
+			);
+
+
 		});
 		addCancel();
 	}
