@@ -1957,6 +1957,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				updateTool();
+				project.tidyFields();
 				project.resetQuickLevelAccesses();
 
 			case LayerInstanceTilesetChanged(li):
