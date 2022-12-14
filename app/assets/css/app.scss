@@ -3139,7 +3139,10 @@ textarea {
 					max-width: 300px;
 				}
 				&:disabled {
-					display: none;
+					color: $bgLight;
+					font-style: italic;
+					background-repeat: repeat;
+					background-image: url("../img/stripesLight.png");
 				}
 
 				&.crash:not(:hover) {
@@ -5690,6 +5693,21 @@ canvas#webgl {
 		border-color: $orange;
 		border-style: solid;
 		box-shadow: 0px 0px 16px $red;;
+	}
+
+	.highlightWrapper {
+		pointer-events: none;
+		position: relative;
+		.line {
+			position: absolute;
+			z-index: 1;
+			min-width: 1px;
+			min-height: 1px;
+			outline: 2px solid #f0f;
+			outline-offset: -2px;
+			border: 1px solid black;
+			background-color: transparentize($color: #f0f, $amount: 0.8);
+		}
 	}
 
 	.selectionsWrapper,
@@ -8628,4 +8646,104 @@ $patternSize : 32px;
 
 ::-webkit-scrollbar-thumb:hover {
 	background: $almostWhite;
+}
+
+
+
+.window.ruleGroupRemap {
+	.wrapper .content {
+		display: grid;
+		grid-template-columns: 300px 600px;
+		grid-template-rows: min-content auto;
+		column-gap: 16px;
+
+		&>h2 {
+			grid-column: 1/3;
+		}
+
+		h3:first-child {
+			margin-top: 0;
+		}
+
+		input[type=text] {
+			width: 100%;
+		}
+
+		ul.intGridIds {
+			margin-top: 8px;
+			margin-bottom: 8px;
+
+			li {
+				display: grid;
+				grid-template-columns: auto min-content auto;
+				margin-bottom: 2px;
+				align-items: center;
+
+				.oldId,
+				.newId {
+					padding: 8px;
+					border-radius: 3px;
+					text-shadow: 1px 1px 1px black,  -1px -1px 1px black,  0px 2px 3px black;
+				}
+
+				.oldId {
+					opacity: 0.66;
+					cursor: not-allowed;
+				}
+
+				.newId {
+					border: 1px solid white;
+					cursor: pointer;
+					&:hover {
+						border-color: #fc0;
+					}
+
+					&.unchanged {
+						font-style: italic;
+						color: $almostWhite;
+					}
+				}
+
+				.unchanged {
+					color: $almostWhite;
+					font-style: italic;
+					text-shadow: none;
+					background-color: transparent !important;
+					border: 1px dashed $bgLight;
+				}
+			}
+		}
+
+		.tileset {
+			height: 60vh;
+			border: 1px solid white;
+			outline: 1px solid black;
+		}
+	}
+}
+
+
+.window.intGridValuePicker {
+	.wrapper .content {
+		width: 15em;
+
+		ul {
+			li {
+				padding: 8px;
+				border: 1px solid $bgDark;
+
+				cursor: pointer;
+				&:hover {
+					border-color: white;
+				}
+				&.active {
+					border: 2px solid white;
+					border-left-width: 8px;
+				}
+				&:not(.active) {
+					opacity: 0.8;
+				}
+			}
+		}
+	}
 }
