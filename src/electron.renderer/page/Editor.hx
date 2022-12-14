@@ -2018,8 +2018,8 @@ class Editor extends Page {
 			tl.manualOnGlobalEvent(e);
 
 		// Propagate to resize tool
-		if( resizeTool!=null )
-			resizeTool.onGlobalEvent(e);
+		if( curTool!=null )
+			curTool.onGlobalEvent(e);
 
 		updateTitle();
 	}

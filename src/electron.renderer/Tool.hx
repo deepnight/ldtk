@@ -40,6 +40,8 @@ class Tool<T> extends dn.Process {
 
 	}
 
+	public function onGlobalEvent(ev:GlobalEvent) {}
+
 	function getSelectionMemoryKey() {
 		return curLayerInstance!=null ? Std.string(curLayerInstance.layerDefUid) : null;
 	}
