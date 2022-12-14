@@ -4873,10 +4873,8 @@ canvas#webgl {
 		header {
 			display: grid;
 			align-self: stretch;
+			align-items: center;
 			grid-template-columns: min-content min-content;
-
-			padding-top: 48px;
-			padding-bottom: 32px;
 
 			background-image: url("../img/homeBg_header.png");
 			background-size: contain;
@@ -4884,10 +4882,15 @@ canvas#webgl {
 			background-position: bottom center;
 
 			.version {
-				font-size: 96pt;
-				color: $bgMed;
+				font-size: 150pt;
+				color: $bgLight;
+				opacity: 0.3;
 				text-align: center;
 				margin-top: 8px;
+			}
+
+			.appLogo {
+				min-height: 160px;
 			}
 
 			.disclaimer {
