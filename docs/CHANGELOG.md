@@ -40,6 +40,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
 
 ## Misc
 
+ - Hold SHIFT to disable snapping when moving levels around in the world view.
  - You can now manually enter custom values for Entity pivots.
  - Added a new layer option to prevent selections when the layer is not active.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
