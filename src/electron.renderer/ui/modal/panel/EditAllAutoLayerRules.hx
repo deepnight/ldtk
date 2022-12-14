@@ -279,19 +279,32 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		editor.levelRender.clearTemp();
 
 		// Add group
-		jContent.find("button.createGroup").click( function(ev) {
-			if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
-				N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
-				return;
-			}
-			App.LOG.general("Added rule group");
+		jContent.find("button.createGroup").click( function(ev:js.jquery.Event) {
+			var m = new ContextMenu( new J(ev.target) );
+			m.add({
+				label: L.t._("Create an empty group"),
+				cb: ()->{
+					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
+						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
+						return;
+					}
+					App.LOG.general("Added rule group");
 
-			var insertIdx = 0;
-			var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
-			editor.ge.emit(LayerRuleGroupAdded(rg));
+					var insertIdx = 0;
+					var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
+					editor.ge.emit(LayerRuleGroupAdded(rg));
 
-			var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
-			onRenameGroup( jGroupHeader, rg );
+					var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
+					onRenameGroup( jGroupHeader, rg );
+				},
+			});
+
+			m.add({
+				label: L.t._("Use wizard"),
+				cb: ()->{
+					new ui.modal.dialog.RulesWizard(ld, (rg)->Notification.debug(rg));
+				},
+			});
 		});
 
 

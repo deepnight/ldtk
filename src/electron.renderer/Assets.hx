@@ -8,6 +8,7 @@ class Assets {
 	public static var fontPixel : h2d.Font;
 
 	public static var elements : dn.heaps.slib.SpriteLib;
+	public static var aseIcons : dn.heaps.slib.SpriteLib;
 	public static var elementsPixels : hxd.Pixels;
 
 	public static function init() {
@@ -19,6 +20,7 @@ class Assets {
 
 		elements = dn.heaps.assets.Aseprite.convertToSLib( Const.FPS, hxd.Res.atlas.appElements.toAseprite() );
 		elementsPixels = elements.tile.getTexture().capturePixels();
+		aseIcons = dn.heaps.assets.Aseprite.convertToSLib( Const.FPS, hxd.Res.atlas.icons.toAseprite() );
 	}
 
 	public static inline function getRegularFont() {
