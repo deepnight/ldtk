@@ -19,7 +19,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron Renderer debug",
 			"type": "hxml",
@@ -38,7 +37,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron Main release",
 			"type": "hxml",
@@ -57,7 +55,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron Main debug",
 			"type": "hxml",
@@ -76,7 +73,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"type": "haxe",
 			"args": "active configuration",
@@ -97,6 +93,12 @@
 				"revealProblems": "onProblem"
 			},
 			"label": "haxe: active configuration"
+		},
+		{
+			"label": "scss watch",
+			"type": "shell",
+			"problemMatcher": "$node-sass",
+			"command": "sass --watch ${workspaceFolder}/app/assets/css/app.scss ${workspaceFolder}/app/assets/css/app.min.css --style compressed",
 		}
 	]
 }
