@@ -297,8 +297,8 @@ pub struct EntityDefinition {
     #[serde(rename = "tags")]
     tags: Vec<String>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    /// Replaced by: `tileRect`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    /// by: `tileRect`
     #[serde(rename = "tileId")]
     tile_id: Option<i64>,
 
@@ -391,6 +391,13 @@ pub struct FieldDefinition {
     /// Possible values: `Above`, `Center`, `Beneath`
     #[serde(rename = "editorDisplayPos")]
     editor_display_pos: EditorDisplayPos,
+
+    /// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+    #[serde(rename = "editorLinkStyle")]
+    editor_link_style: EditorLinkStyle,
+
+    #[serde(rename = "editorShowInWorld")]
+    editor_show_in_world: bool,
 
     #[serde(rename = "editorTextPrefix")]
     editor_text_prefix: Option<String>,
@@ -534,10 +541,14 @@ pub struct LayerDefinition {
     #[serde(rename = "autoSourceLayerDefUid")]
     auto_source_layer_def_uid: Option<i64>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    /// Replaced by: `tilesetDefUid`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    /// by: `tilesetDefUid`
     #[serde(rename = "autoTilesetDefUid")]
     auto_tileset_def_uid: Option<i64>,
+
+    /// Allow editor selections when the layer is not currently active.
+    #[serde(rename = "canSelectWhenInactive")]
+    can_select_when_inactive: bool,
 
     /// Opacity of the layer (0 to 1.0)
     #[serde(rename = "displayOpacity")]
@@ -1357,8 +1368,8 @@ pub struct NeighbourLevel {
     #[serde(rename = "levelIid")]
     level_iid: String,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    /// Replaced by: `levelIid`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    /// by: `levelIid`
     #[serde(rename = "levelUid")]
     level_uid: Option<i64>,
 }
@@ -1477,6 +1488,25 @@ pub enum EditorDisplayPos {
 
     #[serde(rename = "Center")]
     Center,
+}
+
+/// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+#[derive(Serialize, Deserialize)]
+pub enum EditorLinkStyle {
+    #[serde(rename = "ArrowsLine")]
+    ArrowsLine,
+
+    #[serde(rename = "CurvedArrow")]
+    CurvedArrow,
+
+    #[serde(rename = "DashedLine")]
+    DashedLine,
+
+    #[serde(rename = "StraightArrow")]
+    StraightArrow,
+
+    #[serde(rename = "ZigZag")]
+    ZigZag,
 }
 
 #[derive(Serialize, Deserialize)]

@@ -109,6 +109,15 @@ class EditorDisplayPos(Enum):
     CENTER = "Center"
 
 
+class EditorLinkStyle(Enum):
+    """Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`"""
+    ARROWS_LINE = "ArrowsLine"
+    CURVED_ARROW = "CurvedArrow"
+    DASHED_LINE = "DashedLine"
+    STRAIGHT_ARROW = "StraightArrow"
+    ZIG_ZAG = "ZigZag"
+
+
 class TextLanguageMode(Enum):
     LANG_C = "LangC"
     LANG_HAXE = "LangHaxe"
@@ -162,6 +171,9 @@ class FieldDefinition:
     editor_display_mode: EditorDisplayMode
     """Possible values: `Above`, `Center`, `Beneath`"""
     editor_display_pos: EditorDisplayPos
+    """Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`"""
+    editor_link_style: EditorLinkStyle
+    editor_show_in_world: bool
     editor_text_prefix: Optional[str]
     editor_text_suffix: Optional[str]
     """User defined unique identifier"""
@@ -195,7 +207,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -210,6 +222,8 @@ class FieldDefinition:
         self.editor_cut_long_values = editor_cut_long_values
         self.editor_display_mode = editor_display_mode
         self.editor_display_pos = editor_display_pos
+        self.editor_link_style = editor_link_style
+        self.editor_show_in_world = editor_show_in_world
         self.editor_text_prefix = editor_text_prefix
         self.editor_text_suffix = editor_text_suffix
         self.identifier = identifier
@@ -241,6 +255,8 @@ class FieldDefinition:
         editor_cut_long_values = from_bool(obj.get("editorCutLongValues"))
         editor_display_mode = EditorDisplayMode(obj.get("editorDisplayMode"))
         editor_display_pos = EditorDisplayPos(obj.get("editorDisplayPos"))
+        editor_link_style = EditorLinkStyle(obj.get("editorLinkStyle"))
+        editor_show_in_world = from_bool(obj.get("editorShowInWorld"))
         editor_text_prefix = from_union([from_none, from_str], obj.get("editorTextPrefix"))
         editor_text_suffix = from_union([from_none, from_str], obj.get("editorTextSuffix"))
         identifier = from_str(obj.get("identifier"))
@@ -254,7 +270,7 @@ class FieldDefinition:
         field_definition_type = from_str(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
-        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
+        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -272,6 +288,8 @@ class FieldDefinition:
         result["editorCutLongValues"] = from_bool(self.editor_cut_long_values)
         result["editorDisplayMode"] = to_enum(EditorDisplayMode, self.editor_display_mode)
         result["editorDisplayPos"] = to_enum(EditorDisplayPos, self.editor_display_pos)
+        result["editorLinkStyle"] = to_enum(EditorLinkStyle, self.editor_link_style)
+        result["editorShowInWorld"] = from_bool(self.editor_show_in_world)
         result["editorTextPrefix"] = from_union([from_none, from_str], self.editor_text_prefix)
         result["editorTextSuffix"] = from_union([from_none, from_str], self.editor_text_suffix)
         result["identifier"] = from_str(self.identifier)
@@ -409,8 +427,8 @@ class EntityDefinition:
     show_name: bool
     """An array of strings that classifies this entity"""
     tags: List[str]
-    """**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    Replaced by: `tileRect`
+    """**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    by: `tileRect`
     """
     tile_id: Optional[int]
     tile_opacity: float
@@ -826,10 +844,12 @@ class LayerDefinition:
     """Contains all the auto-layer rule definitions."""
     auto_rule_groups: List[AutoLayerRuleGroup]
     auto_source_layer_def_uid: Optional[int]
-    """**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    Replaced by: `tilesetDefUid`
+    """**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    by: `tilesetDefUid`
     """
     auto_tileset_def_uid: Optional[int]
+    """Allow editor selections when the layer is not currently active."""
+    can_select_when_inactive: bool
     """Opacity of the layer (0 to 1.0)"""
     display_opacity: float
     """An array of tags to forbid some Entities in this layer"""
@@ -893,11 +913,12 @@ class LayerDefinition:
     """Unique Int identifier"""
     uid: int
 
-    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], display_opacity: float, excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, uid: int) -> None:
+    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, uid: int) -> None:
         self.type = type
         self.auto_rule_groups = auto_rule_groups
         self.auto_source_layer_def_uid = auto_source_layer_def_uid
         self.auto_tileset_def_uid = auto_tileset_def_uid
+        self.can_select_when_inactive = can_select_when_inactive
         self.display_opacity = display_opacity
         self.excluded_tags = excluded_tags
         self.grid_size = grid_size
@@ -927,6 +948,7 @@ class LayerDefinition:
         auto_rule_groups = from_list(AutoLayerRuleGroup.from_dict, obj.get("autoRuleGroups"))
         auto_source_layer_def_uid = from_union([from_none, from_int], obj.get("autoSourceLayerDefUid"))
         auto_tileset_def_uid = from_union([from_none, from_int], obj.get("autoTilesetDefUid"))
+        can_select_when_inactive = from_bool(obj.get("canSelectWhenInactive"))
         display_opacity = from_float(obj.get("displayOpacity"))
         excluded_tags = from_list(from_str, obj.get("excludedTags"))
         grid_size = from_int(obj.get("gridSize"))
@@ -948,7 +970,7 @@ class LayerDefinition:
         tileset_def_uid = from_union([from_none, from_int], obj.get("tilesetDefUid"))
         layer_definition_type = TypeEnum(obj.get("type"))
         uid = from_int(obj.get("uid"))
-        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, display_opacity, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, uid)
+        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, can_select_when_inactive, display_opacity, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -956,6 +978,7 @@ class LayerDefinition:
         result["autoRuleGroups"] = from_list(lambda x: to_class(AutoLayerRuleGroup, x), self.auto_rule_groups)
         result["autoSourceLayerDefUid"] = from_union([from_none, from_int], self.auto_source_layer_def_uid)
         result["autoTilesetDefUid"] = from_union([from_none, from_int], self.auto_tileset_def_uid)
+        result["canSelectWhenInactive"] = from_bool(self.can_select_when_inactive)
         result["displayOpacity"] = to_float(self.display_opacity)
         result["excludedTags"] = from_list(from_str, self.excluded_tags)
         result["gridSize"] = from_int(self.grid_size)
@@ -1678,8 +1701,8 @@ class NeighbourLevel:
     dir: str
     """Neighbour Instance Identifier"""
     level_iid: str
-    """**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    Replaced by: `levelIid`
+    """**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    by: `levelIid`
     """
     level_uid: Optional[int]
 

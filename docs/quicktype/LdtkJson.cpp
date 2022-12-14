@@ -76,6 +76,11 @@ namespace quicktype {
      */
     enum class EditorDisplayPos : int { ABOVE, BENEATH, CENTER };
 
+    /**
+     * Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+     */
+    enum class EditorLinkStyle : int { ARROWS_LINE, CURVED_ARROW, DASHED_LINE, STRAIGHT_ARROW, ZIG_ZAG };
+
     enum class TextLanguageMode : int { LANG_C, LANG_HAXE, LANG_JS, LANG_JSON, LANG_LOG, LANG_LUA, LANG_MARKDOWN, LANG_PYTHON, LANG_RUBY, LANG_XML };
 
     /**
@@ -102,6 +107,8 @@ namespace quicktype {
         bool editor_cut_long_values;
         EditorDisplayMode editor_display_mode;
         EditorDisplayPos editor_display_pos;
+        EditorLinkStyle editor_link_style;
+        bool editor_show_in_world;
         std::shared_ptr<std::string> editor_text_prefix;
         std::shared_ptr<std::string> editor_text_suffix;
         std::string identifier;
@@ -205,6 +212,17 @@ namespace quicktype {
         const EditorDisplayPos & get_editor_display_pos() const { return editor_display_pos; }
         EditorDisplayPos & get_mutable_editor_display_pos() { return editor_display_pos; }
         void set_editor_display_pos(const EditorDisplayPos & value) { this->editor_display_pos = value; }
+
+        /**
+         * Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+         */
+        const EditorLinkStyle & get_editor_link_style() const { return editor_link_style; }
+        EditorLinkStyle & get_mutable_editor_link_style() { return editor_link_style; }
+        void set_editor_link_style(const EditorLinkStyle & value) { this->editor_link_style = value; }
+
+        const bool & get_editor_show_in_world() const { return editor_show_in_world; }
+        bool & get_mutable_editor_show_in_world() { return editor_show_in_world; }
+        void set_editor_show_in_world(const bool & value) { this->editor_show_in_world = value; }
 
         std::shared_ptr<std::string> get_editor_text_prefix() const { return editor_text_prefix; }
         void set_editor_text_prefix(std::shared_ptr<std::string> value) { this->editor_text_prefix = value; }
@@ -525,8 +543,8 @@ namespace quicktype {
         void set_tags(const std::vector<std::string> & value) { this->tags = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-         * Replaced by: `tileRect`
+         * **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+         * by: `tileRect`
          */
         std::shared_ptr<int64_t> get_tile_id() const { return tile_id; }
         void set_tile_id(std::shared_ptr<int64_t> value) { this->tile_id = value; }
@@ -950,6 +968,7 @@ namespace quicktype {
         std::vector<AutoLayerRuleGroup> auto_rule_groups;
         std::shared_ptr<int64_t> auto_source_layer_def_uid;
         std::shared_ptr<int64_t> auto_tileset_def_uid;
+        bool can_select_when_inactive;
         double display_opacity;
         std::vector<std::string> excluded_tags;
         int64_t grid_size;
@@ -991,11 +1010,18 @@ namespace quicktype {
         void set_auto_source_layer_def_uid(std::shared_ptr<int64_t> value) { this->auto_source_layer_def_uid = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-         * Replaced by: `tilesetDefUid`
+         * **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+         * by: `tilesetDefUid`
          */
         std::shared_ptr<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
         void set_auto_tileset_def_uid(std::shared_ptr<int64_t> value) { this->auto_tileset_def_uid = value; }
+
+        /**
+         * Allow editor selections when the layer is not currently active.
+         */
+        const bool & get_can_select_when_inactive() const { return can_select_when_inactive; }
+        bool & get_mutable_can_select_when_inactive() { return can_select_when_inactive; }
+        void set_can_select_when_inactive(const bool & value) { this->can_select_when_inactive = value; }
 
         /**
          * Opacity of the layer (0 to 1.0)
@@ -2021,8 +2047,8 @@ namespace quicktype {
         void set_level_iid(const std::string & value) { this->level_iid = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-         * Replaced by: `levelIid`
+         * **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+         * by: `levelIid`
          */
         std::shared_ptr<int64_t> get_level_uid() const { return level_uid; }
         void set_level_uid(std::shared_ptr<int64_t> value) { this->level_uid = value; }
@@ -2807,6 +2833,9 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::EditorDisplayPos & x);
     void to_json(json & j, const quicktype::EditorDisplayPos & x);
 
+    void from_json(const json & j, quicktype::EditorLinkStyle & x);
+    void to_json(json & j, const quicktype::EditorLinkStyle & x);
+
     void from_json(const json & j, quicktype::TextLanguageMode & x);
     void to_json(json & j, const quicktype::TextLanguageMode & x);
 
@@ -2864,6 +2893,8 @@ namespace nlohmann {
         x.set_editor_cut_long_values(j.at("editorCutLongValues").get<bool>());
         x.set_editor_display_mode(j.at("editorDisplayMode").get<quicktype::EditorDisplayMode>());
         x.set_editor_display_pos(j.at("editorDisplayPos").get<quicktype::EditorDisplayPos>());
+        x.set_editor_link_style(j.at("editorLinkStyle").get<quicktype::EditorLinkStyle>());
+        x.set_editor_show_in_world(j.at("editorShowInWorld").get<bool>());
         x.set_editor_text_prefix(quicktype::get_optional<std::string>(j, "editorTextPrefix"));
         x.set_editor_text_suffix(quicktype::get_optional<std::string>(j, "editorTextSuffix"));
         x.set_identifier(j.at("identifier").get<std::string>());
@@ -2895,6 +2926,8 @@ namespace nlohmann {
         j["editorCutLongValues"] = x.get_editor_cut_long_values();
         j["editorDisplayMode"] = x.get_editor_display_mode();
         j["editorDisplayPos"] = x.get_editor_display_pos();
+        j["editorLinkStyle"] = x.get_editor_link_style();
+        j["editorShowInWorld"] = x.get_editor_show_in_world();
         j["editorTextPrefix"] = x.get_editor_text_prefix();
         j["editorTextSuffix"] = x.get_editor_text_suffix();
         j["identifier"] = x.get_identifier();
@@ -3110,6 +3143,7 @@ namespace nlohmann {
         x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<quicktype::AutoLayerRuleGroup>>());
         x.set_auto_source_layer_def_uid(quicktype::get_optional<int64_t>(j, "autoSourceLayerDefUid"));
         x.set_auto_tileset_def_uid(quicktype::get_optional<int64_t>(j, "autoTilesetDefUid"));
+        x.set_can_select_when_inactive(j.at("canSelectWhenInactive").get<bool>());
         x.set_display_opacity(j.at("displayOpacity").get<double>());
         x.set_excluded_tags(j.at("excludedTags").get<std::vector<std::string>>());
         x.set_grid_size(j.at("gridSize").get<int64_t>());
@@ -3139,6 +3173,7 @@ namespace nlohmann {
         j["autoRuleGroups"] = x.get_auto_rule_groups();
         j["autoSourceLayerDefUid"] = x.get_auto_source_layer_def_uid();
         j["autoTilesetDefUid"] = x.get_auto_tileset_def_uid();
+        j["canSelectWhenInactive"] = x.get_can_select_when_inactive();
         j["displayOpacity"] = x.get_display_opacity();
         j["excludedTags"] = x.get_excluded_tags();
         j["gridSize"] = x.get_grid_size();
@@ -3689,6 +3724,26 @@ namespace nlohmann {
             case quicktype::EditorDisplayPos::ABOVE: j = "Above"; break;
             case quicktype::EditorDisplayPos::BENEATH: j = "Beneath"; break;
             case quicktype::EditorDisplayPos::CENTER: j = "Center"; break;
+            default: throw "This should not happen";
+        }
+    }
+
+    inline void from_json(const json & j, quicktype::EditorLinkStyle & x) {
+        if (j == "ArrowsLine") x = quicktype::EditorLinkStyle::ARROWS_LINE;
+        else if (j == "CurvedArrow") x = quicktype::EditorLinkStyle::CURVED_ARROW;
+        else if (j == "DashedLine") x = quicktype::EditorLinkStyle::DASHED_LINE;
+        else if (j == "StraightArrow") x = quicktype::EditorLinkStyle::STRAIGHT_ARROW;
+        else if (j == "ZigZag") x = quicktype::EditorLinkStyle::ZIG_ZAG;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::EditorLinkStyle & x) {
+        switch (x) {
+            case quicktype::EditorLinkStyle::ARROWS_LINE: j = "ArrowsLine"; break;
+            case quicktype::EditorLinkStyle::CURVED_ARROW: j = "CurvedArrow"; break;
+            case quicktype::EditorLinkStyle::DASHED_LINE: j = "DashedLine"; break;
+            case quicktype::EditorLinkStyle::STRAIGHT_ARROW: j = "StraightArrow"; break;
+            case quicktype::EditorLinkStyle::ZIG_ZAG: j = "ZigZag"; break;
             default: throw "This should not happen";
         }
     }

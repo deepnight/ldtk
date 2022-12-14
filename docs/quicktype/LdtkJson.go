@@ -93,7 +93,7 @@ type EntityDefinition struct {
 	ResizableY       bool              `json:"resizableY"`      // If TRUE, the entity instances will be resizable vertically
 	ShowName         bool              `json:"showName"`        // Display entity name in editor
 	Tags             []string          `json:"tags"`            // An array of strings that classifies this entity
-	TileID           *int64            `json:"tileId"`          // **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+; Replaced by: `tileRect`
+	TileID           *int64            `json:"tileId"`          // **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced; by: `tileRect`
 	TileOpacity      float64           `json:"tileOpacity"`     
 	TileRect         *TilesetRectangle `json:"tileRect"`        // An object representing a rectangle from an existing Tileset
 	TileRenderMode   TileRenderMode    `json:"tileRenderMode"`  // An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible; values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,; `FullSizeUncropped`, `NineSlice`
@@ -119,6 +119,8 @@ type FieldDefinition struct {
 	EditorCutLongValues bool              `json:"editorCutLongValues"`
 	EditorDisplayMode   EditorDisplayMode `json:"editorDisplayMode"`  // Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,; `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,; `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,; `RefLinkBetweenCenters`
 	EditorDisplayPos    EditorDisplayPos  `json:"editorDisplayPos"`   // Possible values: `Above`, `Center`, `Beneath`
+	EditorLinkStyle     EditorLinkStyle   `json:"editorLinkStyle"`    // Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+	EditorShowInWorld   bool              `json:"editorShowInWorld"`  
 	EditorTextPrefix    *string           `json:"editorTextPrefix"`   
 	EditorTextSuffix    *string           `json:"editorTextSuffix"`   
 	Identifier          string            `json:"identifier"`         // User defined unique identifier
@@ -164,7 +166,8 @@ type LayerDefinition struct {
 	Type                   string                   `json:"__type"`                // Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
 	AutoRuleGroups         []AutoLayerRuleGroup     `json:"autoRuleGroups"`        // Contains all the auto-layer rule definitions.
 	AutoSourceLayerDefUid  *int64                   `json:"autoSourceLayerDefUid"` 
-	AutoTilesetDefUid      *int64                   `json:"autoTilesetDefUid"`     // **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+; Replaced by: `tilesetDefUid`
+	AutoTilesetDefUid      *int64                   `json:"autoTilesetDefUid"`     // **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced; by: `tilesetDefUid`
+	CanSelectWhenInactive  bool                     `json:"canSelectWhenInactive"` // Allow editor selections when the layer is not currently active.
 	DisplayOpacity         float64                  `json:"displayOpacity"`        // Opacity of the layer (0 to 1.0)
 	ExcludedTags           []string                 `json:"excludedTags"`          // An array of tags to forbid some Entities in this layer
 	GridSize               int64                    `json:"gridSize"`              // Width and height of the grid in pixels
@@ -420,7 +423,7 @@ type LevelBackgroundPosition struct {
 type NeighbourLevel struct {
 	Dir      string `json:"dir"`               // A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,; `e`ast).
 	LevelIid string `json:"levelIid"`          // Neighbour Instance Identifier
-	LevelUid *int64 `json:"levelUid,omitempty"`// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+; Replaced by: `levelIid`
+	LevelUid *int64 `json:"levelUid,omitempty"`// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced; by: `levelIid`
 }
 
 // **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented
@@ -473,6 +476,16 @@ const (
 	Above EditorDisplayPos = "Above"
 	Beneath EditorDisplayPos = "Beneath"
 	Center EditorDisplayPos = "Center"
+)
+
+// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+type EditorLinkStyle string
+const (
+	ArrowsLine EditorLinkStyle = "ArrowsLine"
+	CurvedArrow EditorLinkStyle = "CurvedArrow"
+	DashedLine EditorLinkStyle = "DashedLine"
+	StraightArrow EditorLinkStyle = "StraightArrow"
+	ZigZag EditorLinkStyle = "ZigZag"
 )
 
 type TextLanguageMode string
