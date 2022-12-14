@@ -456,6 +456,13 @@ class FieldInstancesForm {
 					vp.onPickValue = (targetEi)->{
 						tool.lt.EntityTool.cancelRefChaining();
 						fi.setEntityRefTo(arrayIdx, sourceEi, targetEi);
+
+						// Save history properly (only if both entities are in the same level)
+						if( sourceEi._li.levelId==targetEi._li.levelId ) {
+							editor.curLevelTimeline.markEntityChange(sourceEi);
+							editor.curLevelTimeline.saveLayerState(sourceEi._li);
+						}
+
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}

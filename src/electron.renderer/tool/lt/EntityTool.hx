@@ -346,7 +346,12 @@ class EntityTool extends tool.LayerTool<Int> {
 			chainFi.addArrayValue();
 		chainFi.setEntityRefTo(chainFi.getArrayLength()-1, sourceEi, targetEi);
 
-		editor.ge.emitAtTheEndOfFrame( EntityInstanceChanged(sourceEi) );
+		// Save history properly (only if both entities are in the same level)
+		if( sourceEi._li.levelId==targetEi._li.levelId ) {
+			editor.curLevelTimeline.markEntityChange(sourceEi);
+			editor.curLevelTimeline.saveLayerState(sourceEi._li);
+		}
+		editor.ge.emit( EntityInstanceChanged(sourceEi) );
 		return chainFi.def.isArray || !chainFi.def.symmetricalRef;
 	}
 
