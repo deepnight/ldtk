@@ -10,8 +10,8 @@ enum WallFragment {
 	@at(4,1) Turn_SE;
 	@at(3,1) Turn_SW;
 
-	@at(4,2) Diagonal_NW_SE;
-	@at(4,3) Diagonal_SW_NE;
+	@at(4,2) Diagonal_SW_NE;
+	@at(4,3) Diagonal_NW_SE;
 	@at(5,2) Corner_NW_to_N;
 	@at(5,0) Corner_NW_to_W;
 	@at(9,0) Corner_NW_to_NW;
@@ -378,9 +378,9 @@ class RulesWizard extends ui.modal.Dialog {
 	function getRuleMatrixFromFragment(f:WallFragment, flipX=false, flipY=false) : Array<String> {
 		var m : Array<String> = switch f {
 			case Full: [
+				"---",
 				"-o-",
-				"ooo",
-				"-o-",
+				"---",
 			];
 			case Single: [
 				"-x-",
@@ -395,15 +395,15 @@ class RulesWizard extends ui.modal.Dialog {
 			];
 
 			case Diagonal_NW_SE: [
-				"xoo",
-				"ooo",
 				"oox",
+				"ooo",
+				"xoo",
 			];
 
 			case Diagonal_SW_NE: [
-				"oox",
-				"ooo",
 				"xoo",
+				"ooo",
+				"oox",
 			];
 
 			case TWall_N: [
@@ -483,8 +483,8 @@ class RulesWizard extends ui.modal.Dialog {
 
 			case ExtCorner_NW: [
 				"-x-",
-				"xoo",
-				"-o-",
+				"xo-",
+				"---",
 			];
 			case ExtCorner_NE: getRuleMatrixFromFragment(ExtCorner_NW, true, false);
 			case ExtCorner_SE: getRuleMatrixFromFragment(ExtCorner_NW, true, true);
