@@ -1,0 +1,21 @@
+;paint.net Palette File
+;Downloaded from Lospec.com/palette-list
+;Palette Name: Sweetie 16
+;Description: Palette created by <a href="http://grafxkid.tumblr.com/palettes" target="_blank">GrafxKid</a>.
+;Colors: 16
+FF1a1c2c
+FF5d275d
+FFb13e53
+FFef7d57
+FFffcd75
+FFa7f070
+FF38b764
+FF257179
+FF29366f
+FF3b5dc9
+FF41a6f6
+FF73eff7
+FFf4f4f4
+FF94b0c2
+FF566c86
+FF333c57

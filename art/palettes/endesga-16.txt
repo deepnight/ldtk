@@ -1,0 +1,21 @@
+;paint.net Palette File
+;Downloaded from Lospec.com/palette-list
+;Palette Name: Endesga 16
+;Description: 
+;Colors: 16
+FFe4a672
+FFb86f50
+FF743f39
+FF3f2832
+FF9e2835
+FFe53b44
+FFfb922b
+FFffe762
+FF63c64d
+FF327345
+FF193d3f
+FF4f6781
+FFafbfd2
+FFffffff
+FF2ce8f4
+FF0484d1
