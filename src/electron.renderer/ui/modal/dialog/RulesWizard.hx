@@ -228,88 +228,48 @@ class RulesWizard extends ui.modal.Dialog {
 		return alt!=null && alt.f==cur;
 	}
 
-	function getSymetricalAlternative(f:WallFragment) {
-		var flipX = false;
-		var flipY = false;
-		var alt : WallFragment = null;
-		switch f {
-			case Full: null;
-			case Single: null;
-			case Horizontal_Mid: null;
-			case Vertical_Mid: null;
-
-			case Horizontal_W: if( fragments.exists(Horizontal_E) ) { alt=Horizontal_E; flipX=true; }
-			case Horizontal_E: if( fragments.exists(Horizontal_W) ) { alt=Horizontal_W; flipX=true; }
-			case Vertical_N: if( fragments.exists(Vertical_S) ) { alt=Vertical_S; flipY=true; }
-			case Vertical_S: if( fragments.exists(Vertical_N) ) { alt=Vertical_N; flipY=true; }
-
-			case Wall_W: if( fragments.exists(Wall_E) ) { alt=Wall_E; flipX=true; }
-			case Wall_E: if( fragments.exists(Wall_W) ) { alt=Wall_W; flipX=true; }
-			case Wall_N: if( fragments.exists(Wall_S) ) { alt=Wall_S; flipY=true; }
-			case Wall_S: if( fragments.exists(Wall_N) ) { alt=Wall_N; flipY=true; }
-
-			case ExtCorner_NW:
-				if( fragments.exists(ExtCorner_NE) ) { alt=ExtCorner_NE; flipX=true; }
-				else if( fragments.exists(ExtCorner_SW) ) { alt=ExtCorner_SW; flipY=true; }
-				else if( fragments.exists(ExtCorner_SE) ) { alt=ExtCorner_SE; flipX=true; flipY=true; }
-
-			case ExtCorner_NE:
-				if( fragments.exists(ExtCorner_NW) ) { alt=ExtCorner_NW; flipX=true; }
-				else if( fragments.exists(ExtCorner_SE) ) { alt=ExtCorner_SE; flipY=true; }
-				else if( fragments.exists(ExtCorner_SW) ) { alt=ExtCorner_SW; flipX=true; flipY=true; }
-
-			case ExtCorner_SW:
-				if( fragments.exists(ExtCorner_SE) ) { alt=ExtCorner_SE; flipX=true; }
-				else if( fragments.exists(ExtCorner_NW) ) { alt=ExtCorner_NW; flipY=true; }
-				else if( fragments.exists(ExtCorner_NE) ) { alt=ExtCorner_NE; flipX=true; flipY=true; }
-
-			case ExtCorner_SE:
-				if( fragments.exists(ExtCorner_SW) ) { alt=ExtCorner_SW; flipX=true; }
-				else if( fragments.exists(ExtCorner_NE) ) { alt=ExtCorner_NE; flipY=true; }
-				else if( fragments.exists(ExtCorner_NW) ) { alt=ExtCorner_NW; flipX=true; flipY=true; }
-
-			case InCorner_NW:
-				if( fragments.exists(InCorner_NE) ) { alt=InCorner_NE; flipX=true; }
-				else if( fragments.exists(InCorner_SW) ) { alt=InCorner_SW; flipY=true; }
-				else if( fragments.exists(InCorner_SE) ) { alt=InCorner_SE; flipX=true; flipY=true; }
-
-			case InCorner_NE:
-				if( fragments.exists(InCorner_NW) ) { alt=InCorner_NW; flipX=true; }
-				else if( fragments.exists(InCorner_SE) ) { alt=InCorner_SE; flipY=true; }
-				else if( fragments.exists(InCorner_SW) ) { alt=InCorner_SW; flipX=true; flipY=true; }
-
-			case InCorner_SW:
-				if( fragments.exists(InCorner_SE) ) { alt=InCorner_SE; flipX=true; }
-				else if( fragments.exists(InCorner_NW) ) { alt=InCorner_NW; flipY=true; }
-				else if( fragments.exists(InCorner_NE) ) { alt=InCorner_NE; flipX=true; flipY=true; }
-
-			case InCorner_SE: null;
-				if( fragments.exists(InCorner_SW) ) { alt=InCorner_SW; flipX=true; }
-				else if( fragments.exists(InCorner_NE) ) { alt=InCorner_NE; flipY=true; }
-				else if( fragments.exists(InCorner_NW) ) { alt=InCorner_NW; flipX=true; flipY=true; }
-
-			case Turn_NW:
-				if( fragments.exists(Turn_NE) ) { alt=Turn_NE; flipX=true; }
-				else if( fragments.exists(Turn_SW) ) { alt=Turn_SW; flipY=true; }
-				else if( fragments.exists(Turn_SE) ) { alt=Turn_SE; flipX=true; flipY=true; }
-
-			case Turn_NE:
-				if( fragments.exists(Turn_NW) ) { alt=Turn_NW; flipX=true; }
-				else if( fragments.exists(Turn_SE) ) { alt=Turn_SE; flipY=true; }
-				else if( fragments.exists(Turn_SW) ) { alt=Turn_SW; flipX=true; flipY=true; }
-
-			case Turn_SE:
-				if( fragments.exists(Turn_SW) ) { alt=Turn_SW; flipX=true; }
-				else if( fragments.exists(Turn_NE) ) { alt=Turn_NE; flipY=true; }
-				else if( fragments.exists(Turn_NW) ) { alt=Turn_NW; flipX=true; flipY=true; }
-
-			case Turn_SW:
-				if( fragments.exists(Turn_SE) ) { alt=Turn_SE; flipX=true; }
-				else if( fragments.exists(Turn_NW) ) { alt=Turn_NW; flipY=true; }
-				else if( fragments.exists(Turn_NE) ) { alt=Turn_NE; flipX=true; flipY=true; }
-
+	function flip(f:WallFragment, flipX:Bool, flipY:Bool) {
+		return switch f {
+			case Full, Single : f;
+			case Wall_N: flipY ? Wall_S : f;
+			case Wall_E: flipX ? Wall_W : f;
+			case Wall_S: flipY ? Wall_N : f;
+			case Wall_W: flipX ? Wall_E : f;
+			case Vertical_N: flipY ? Vertical_S : f;
+			case Vertical_Mid: f;
+			case Vertical_S: flipY ? Vertical_N : f;
+			case Horizontal_W: flipX ? Horizontal_E : f;
+			case Horizontal_Mid: f;
+			case Horizontal_E: flipX ? Horizontal_W : f;
+			case ExtCorner_NW: flipX && flipY ? ExtCorner_SE : flipX ? ExtCorner_NE : flipY ? ExtCorner_SW : f;
+			case ExtCorner_NE: flipX && flipY ? ExtCorner_SW : flipX ? ExtCorner_NW : flipY ? ExtCorner_SE : f;
+			case ExtCorner_SE: flipX && flipY ? ExtCorner_NW : flipX ? ExtCorner_SW : flipY ? ExtCorner_NE : f;
+			case ExtCorner_SW: flipX && flipY ? ExtCorner_NE : flipX ? ExtCorner_SE : flipY ? ExtCorner_NW : f;
+			case InCorner_NW: flipX && flipY ? InCorner_SE : flipX ? InCorner_NE : flipY ? InCorner_SW : f;
+			case InCorner_NE: flipX && flipY ? InCorner_SW : flipX ? InCorner_NW : flipY ? InCorner_SE : f;
+			case InCorner_SE: flipX && flipY ? InCorner_NW : flipX ? InCorner_SW : flipY ? InCorner_NE : f;
+			case InCorner_SW: flipX && flipY ? InCorner_NE : flipX ? InCorner_SE : flipY ? InCorner_NW : f;
+			case Turn_NW: flipX && flipY ? Turn_SE : flipX ? Turn_NE : flipY ? Turn_SW : f;
+			case Turn_NE: flipX && flipY ? Turn_SW : flipX ? Turn_NW : flipY ? Turn_SE : f;
+			case Turn_SE: flipX && flipY ? Turn_NW : flipX ? Turn_SW : flipY ? Turn_NE : f;
+			case Turn_SW: flipX && flipY ? Turn_NE : flipX ? Turn_SE : flipY ? Turn_NW : f;
 		}
-		return alt!=null ? { f:alt, flipX:flipX, flipY:flipY } : null;
+	}
+
+	function getSymetricalAlternative(f:WallFragment) {
+		var sym = flip(f,true,false);
+		if( sym!=f && fragments.exists(sym) )
+			return { f:sym, flipX:true, flipY:false }
+
+		var sym = flip(f,false,true);
+		if( sym!=f && fragments.exists(sym) )
+			return { f:sym, flipX:false, flipY:true }
+
+		var sym = flip(f,true,true);
+		if( sym!=f && fragments.exists(sym) )
+			return { f:sym, flipX:true, flipY:true }
+
+		return null;
 	}
 
 
