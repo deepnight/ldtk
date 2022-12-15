@@ -139,20 +139,34 @@ class Const {
 		0xc28569,
 	];
 
-	public static function suggestDifferentColor(useds:Array<dn.Col>) : dn.Col {
-		var unuseds = [];
+	public static function suggestNiceColor(useds:Array<dn.Col>) : dn.Col {
+		// Look in "Nice palette" for colors distinct from the ones in "useds" palette
+		var pool = [];
 		for(nice in NICE_PALETTE) {
 			var ok = true;
 			for(used in useds)
-				if( nice.getDistanceLab(used)<=0.4 ) {
+				if( nice.getDistanceRgb(used)<0.1 ) {
 					ok = false;
 					break;
 				}
 			if( ok )
-				unuseds.push(nice);
+				pool.push(nice);
 		}
 
-		return unuseds.length==0 ? dn.Col.randomHSL(dn.RandomTools.rnd(0,1), 0.8, 1) : dn.RandomTools.pick(unuseds);
+		if( pool.length==0 ) {
+			// No match in Nice Palette, just build a new random color
+			#if debug ui.Notification.debug("random"); #end
+			return dn.Col.randomHSL(dn.RandomTools.rnd(0,1), dn.RandomTools.rnd(0.6,0.8), dn.RandomTools.rnd(0.7,1));
+		}
+		else {
+			// Prefer colors that are not too bright or dark
+			var dh = new dn.DecisionHelper(pool);
+			for(uc in useds)
+				dh.score( c->c.getDistanceRgb(uc)*0.5 );
+			dh.score( c->c.fastLuminance>=0.4 && c.fastLuminance<=0.75 ? 50 : 0 );
+			dh.score( c->dn.RandomTools.rnd(0,5) );
+			return dh.getBest();
+		}
 	}
 
 	public static var AUTO_LAYER_ANYTHING = 1000001;

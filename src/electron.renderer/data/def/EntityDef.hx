@@ -43,7 +43,7 @@ class EntityDef {
 	public function new(p:Project, uid:Int) {
 		_project = p;
 		this.uid = uid;
-		color = 0x94d9b3;
+		color = Const.suggestNiceColor( _project.defs.entities.map(ed->ed.color) );
 		tileOpacity = 1;
 		fillOpacity = 1;
 		lineOpacity = 1;
