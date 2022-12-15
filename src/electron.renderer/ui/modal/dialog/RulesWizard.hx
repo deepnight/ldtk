@@ -72,7 +72,7 @@ class RulesWizard extends ui.modal.Dialog {
 	var intGridValue : Int = 0;
 	var groupName = "";
 
-	public function new(ld:data.def.LayerDef, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
+	public function new(?baseRg:data.DataTypes.AutoLayerRuleGroup, ld:data.def.LayerDef, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
 		super();
 
 		loadTemplate("rulesWizard.html");
@@ -88,7 +88,6 @@ class RulesWizard extends ui.modal.Dialog {
 
 		jGrid = jContent.find(".grid");
 
-		trace(haxe.rtti.Meta.getFields(WallFragment));
 		for(k in WallFragment.getConstructors()) {
 			var f = WallFragment.createByName(k);
 			var coords = try Reflect.field( haxe.rtti.Meta.getFields(WallFragment), k ).at catch(_) null;
@@ -127,8 +126,59 @@ class RulesWizard extends ui.modal.Dialog {
 		if( ld.countIntGridValues()==1 )
 			onPickIntGridValue( ld.getAllIntGridValues()[0].value );
 
+
+		// Try to match existing group to wizard patterns
+		if( baseRg!=null )
+			importRuleGroup(baseRg);
+
 		updateUI();
 	}
+
+
+	function importRuleGroup(source:data.DataTypes.AutoLayerRuleGroup) {
+		// Build matrixes for all Fragments
+		var wizardMatrixes = new Map();
+		for(k in WallFragment.getConstructors()) {
+			var f = WallFragment.createByName(k);
+			wizardMatrixes.set( f, { f:f, m:getRuleIntMatrix(f) } );
+		}
+
+		// Iterate all group rules
+		for(rd in source.rules) {
+			if( rd.size>3 )
+				continue;
+
+			for(wm in wizardMatrixes) {
+				var matches = true;
+				if( rd.size==1 ) {
+					for(idx in 0...9)
+						if( idx!=4 && wm.m.get(idx)!=0 ) {
+							matches = false;
+							break;
+						}
+						else if( idx==4 && wm.m.get(idx)!=rd.get(0,0) ) {
+							matches = false;
+							break;
+						}
+				}
+				else {
+					for(cy in 0...rd.size)
+					for(cx in 0...rd.size)
+						if( wm.m.get(cx+cy*3)!=rd.get(cx,cy) ) {
+							matches = false;
+							break;
+						}
+				}
+
+				if( matches ) {
+					js.html.Console.log(rd);
+					js.html.Console.log("  matched => "+wm.f);
+					fragments.set(wm.f, rd.tileIds.copy());
+				}
+			}
+		}
+	}
+
 
 	function setName(s:String) {
 		groupName = s;
@@ -161,12 +211,19 @@ class RulesWizard extends ui.modal.Dialog {
 		jCell.css("grid-column", '${cx+1}/${cx+2}');
 		jCell.css("grid-row", '${cy+1}/${cy+2}');
 		jCell.attr("name", f.getName());
-		jCell.click( _->{
+		jCell.mousedown( (ev:js.jquery.Event)->{
 			setCurrent(f);
-			if( fragments.exists(f) )
-				tileset.setSelectedTileIds(fragments.get(f));
-			else
-				tileset.setSelectedTileIds([]);
+			switch ev.button {
+				case 0:
+					if( fragments.exists(f) )
+						tileset.setSelectedTileIds(fragments.get(f));
+					else
+						tileset.setSelectedTileIds([]);
+
+				case 1, 2:
+					fragments.remove(f);
+					updateUI();
+			}
 		});
 		return jCell;
 	}
@@ -206,7 +263,7 @@ class RulesWizard extends ui.modal.Dialog {
 	function updateGrid() {
 		for(elem in jGrid.find(".cell")) {
 			var jCell = new J(elem);
-			jCell.empty();
+			jCell.empty().removeClass("mirror");
 			var f = WallFragment.createByName(jCell.attr("name"));
 			if( fragments.exists(f) ) {
 				// Defined cell
@@ -225,6 +282,7 @@ class RulesWizard extends ui.modal.Dialog {
 					jImg.css("transform", "scaleY(-1)");
 
 				jImg.css("opacity", "0.4");
+				jCell.addClass("mirror");
 				jCell.append(jImg);
 			}
 
@@ -372,6 +430,23 @@ class RulesWizard extends ui.modal.Dialog {
 		jGrid.find(".cell").removeClass("active");
 		if( f!=null )
 			jGrid.find(".cell[name="+f+"]").addClass("active");
+	}
+
+
+	function getRuleIntMatrix(f:WallFragment) {
+		var m = getRuleMatrixFromFragment(f);
+		var out = new Map();
+		var cy = 0;
+		for(line in m) {
+			var cx = 0;
+			for(c in line.split("")) {
+				out.set( cx+cy*3, c=="x" ? -intGridValue : c=="o" ? intGridValue : 0 );
+				cx++;
+			}
+			cy++;
+		}
+
+		return out;
 	}
 
 

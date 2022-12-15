@@ -8826,6 +8826,9 @@ $patternSize : 32px;
 							left: 0;
 							opacity: 0.11;
 						}
+						&.mirror {
+							border: 1px dashed $bgLighter
+						}
 					}
 				}
 			}

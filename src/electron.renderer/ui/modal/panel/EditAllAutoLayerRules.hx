@@ -543,6 +543,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
+				label: L.t._("Use wizard here"), // TODO
+				cb: ()->{
+					new ui.modal.dialog.RulesWizard(rg, ld, (out)->Notification.notImplemented());
+				},
+				sub: L.t._("TODO"),
+			},
+
+			{
 				label: L.t._("Disable OPTIONAL state"),
 				cb: ()->{
 					new ui.modal.dialog.Confirm(
