@@ -123,7 +123,7 @@ class EnumDef {
 		var ev : data.DataTypes.EnumDefValue = {
 			id: v,
 			tileId: null,
-			color: 0x0,
+			color: Const.suggestNiceColor( values.map(ev->ev.color) ),
 		};
 		values.push(ev);
 		return ev;
