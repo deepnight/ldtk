@@ -8756,9 +8756,9 @@ $patternSize : 32px;
 	.wrapper .content {
 		.layout {
 			display: grid;
-			grid-template-columns: 200px 800px;
+			grid-template-columns: min-content 800px;
 			column-gap: 8px;
-			height: 80vh;
+			height: 70vh;
 
 			.side {
 				.intGrid {
@@ -8801,21 +8801,22 @@ $patternSize : 32px;
 						}
 					}
 				}
-				.grids {
-					.grid {
-						display: grid;
-						gap: 1px;
-						&.grid9 {
-							grid-template-columns: repeat(3, min-content);
-							grid-template-rows: repeat(3, min-content);
-						}
-						&.grid4 {
-							display: grid;
-							grid-template-columns: repeat(2, min-content);
-							grid-template-rows: repeat(2, min-content);
-							gap: 1px;
-						}
-					}
+
+				.grid {
+					display: grid;
+					gap: 1px;
+					grid-template-columns: repeat(11, 48px);
+					grid-template-rows: repeat(5, 48px);
+					// &.grid9 {
+					// 	grid-template-columns: repeat(3, min-content);
+					// 	grid-template-rows: repeat(3, min-content);
+					// }
+					// &.grid4 {
+					// 	display: grid;
+					// 	grid-template-columns: repeat(2, min-content);
+					// 	grid-template-rows: repeat(2, min-content);
+					// 	gap: 1px;
+					// }
 					.cell {
 						border: 1px solid $bgDark;
 						cursor: pointer;

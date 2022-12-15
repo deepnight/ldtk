@@ -302,7 +302,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			m.add({
 				label: L.t._("Use wizard"),
 				cb: ()->{
-					new ui.modal.dialog.RulesWizard(ld, (rg)->Notification.debug(rg));
+					new ui.modal.dialog.RulesWizard(ld, (rg)->{
+						editor.ge.emit( LayerRuleGroupAdded(rg) );
+						if( rg.rules.length>0 )
+							invalidateRuleAndOnesBelow(rg.rules[0]);
+					});
 				},
 			});
 		});
