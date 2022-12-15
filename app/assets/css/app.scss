@@ -8807,17 +8807,8 @@ $patternSize : 32px;
 					gap: 1px;
 					grid-template-columns: repeat(11, 48px);
 					grid-template-rows: repeat(5, 48px);
-					// &.grid9 {
-					// 	grid-template-columns: repeat(3, min-content);
-					// 	grid-template-rows: repeat(3, min-content);
-					// }
-					// &.grid4 {
-					// 	display: grid;
-					// 	grid-template-columns: repeat(2, min-content);
-					// 	grid-template-rows: repeat(2, min-content);
-					// 	gap: 1px;
-					// }
 					.cell {
+						position: relative;
 						border: 1px solid $bgDark;
 						cursor: pointer;
 						&:hover {
@@ -8827,6 +8818,13 @@ $patternSize : 32px;
 							border-color: white;
 							outline: 2px solid white;
 							z-index: 2;
+						}
+						img.faded {
+							position: absolute;
+							z-index: 1;
+							top: 0;
+							left: 0;
+							opacity: 0.11;
 						}
 					}
 				}

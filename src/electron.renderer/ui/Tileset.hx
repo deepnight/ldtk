@@ -216,6 +216,10 @@ class Tileset {
 		return clamp ? M.iclamp(v,0,tilesetDef.cHei-1) : v;
 	}
 
+	public inline function get2dContext() {
+		return canvas.getContext2d();
+	}
+
 	public function renderHighlightedTiles(tileIds:Array<Int>, col:dn.Col) {
 		tileIds.sort( (a,b)->Reflect.compare(a,b) );
 		var tileMap = new Map();

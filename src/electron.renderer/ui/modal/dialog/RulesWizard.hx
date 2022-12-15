@@ -1,30 +1,64 @@
 package ui.modal.dialog;
 
 enum WallFragment {
-	Full;
-	Single;
-	Wall_N;
-	Wall_E;
-	Wall_S;
-	Wall_W;
-	Vertical_N;
-	Vertical_Mid;
-	Vertical_S;
-	Horizontal_W;
-	Horizontal_Mid;
-	Horizontal_E;
-	ExtCorner_NW;
-	ExtCorner_NE;
-	ExtCorner_SE;
-	ExtCorner_SW;
-	InCorner_NW;
-	InCorner_NE;
-	InCorner_SE;
-	InCorner_SW;
-	Turn_NW;
-	Turn_NE;
-	Turn_SE;
-	Turn_SW;
+	// WARNING: the order of the enum is used to sort rules accordingly!
+	@at(2,3) Single;
+	@at(2,4) Cross;
+
+	@at(3,0) Turn_NW;
+	@at(4,0) Turn_NE;
+	@at(4,1) Turn_SE;
+	@at(3,1) Turn_SW;
+
+	@at(4,2) Diagonal_NW_SE;
+	@at(4,3) Diagonal_SW_NE;
+	@at(5,2) Corner_NW_to_N;
+	@at(5,0) Corner_NW_to_W;
+	@at(9,0) Corner_NW_to_NW;
+	@at(6,2) Corner_NE_to_N;
+	@at(6,0) Corner_NE_to_E;
+	@at(10,0) Corner_NE_to_NE;
+	@at(6,1) Corner_SE_to_E;
+	@at(6,3) Corner_SE_to_S;
+	@at(10,1) Corner_SE_to_SE;
+	@at(5,3) Corner_SW_to_S;
+	@at(5,1) Corner_SW_to_W;
+	@at(9,1) Corner_SW_to_SW;
+
+	@at(7,3) TCross_N;
+	@at(7,2) TCross_E;
+	@at(8,2) TCross_S;
+	@at(8,3) TCross_W;
+
+	@at(7,0) TWall_W;
+	@at(8,0) TWall_E;
+	@at(7,1) TWall_S;
+	@at(8,1) TWall_N;
+
+	@at(3,2) Vertical_N;
+	@at(3,4) Vertical_S;
+	@at(3,3) Vertical_Mid;
+	@at(4,4) Horizontal_W;
+	@at(6,4) Horizontal_E;
+	@at(5,4) Horizontal_Mid;
+
+
+	@at(0,3) InCorner_NW;
+	@at(1,3) InCorner_NE;
+	@at(1,4) InCorner_SE;
+	@at(0,4) InCorner_SW;
+
+	@at(0,0) ExtCorner_NW;
+	@at(2,0) ExtCorner_NE;
+	@at(2,2) ExtCorner_SE;
+	@at(0,2) ExtCorner_SW;
+
+	@at(1,0) Wall_N;
+	@at(2,1) Wall_E;
+	@at(1,2) Wall_S;
+	@at(0,1) Wall_W;
+
+	@at(1,1) Full;
 }
 
 class RulesWizard extends ui.modal.Dialog {
@@ -54,38 +88,21 @@ class RulesWizard extends ui.modal.Dialog {
 
 		jGrid = jContent.find(".grid");
 
-		createCell(1,1, Full);
-		createCell(0,0, ExtCorner_NW);
-		createCell(2,0, ExtCorner_NE);
-		createCell(0,2, ExtCorner_SW);
-		createCell(2,2, ExtCorner_SE);
-		createCell(1,0, Wall_N);
-		createCell(1,2, Wall_S);
-		createCell(0,1, Wall_W);
-		createCell(2,1, Wall_E);
-		createCell(2,3, Single);
-		createCell(0,3, InCorner_NW);
-		createCell(1,3, InCorner_NE);
-		createCell(0,4, InCorner_SW);
-		createCell(1,4, InCorner_SE);
-		createCell(3,0, Turn_NW);
-		createCell(4,0, Turn_NE);
-		createCell(3,1, Turn_SW);
-		createCell(4,1, Turn_SE);
-		createCell(3,2, Vertical_N);
-		createCell(3,3, Vertical_Mid);
-		createCell(3,4, Vertical_S);
-		createCell(4,4, Horizontal_W);
-		createCell(5,4, Horizontal_Mid);
-		createCell(6,4, Horizontal_E);
+		trace(haxe.rtti.Meta.getFields(WallFragment));
+		for(k in WallFragment.getConstructors()) {
+			var f = WallFragment.createByName(k);
+			var coords = try Reflect.field( haxe.rtti.Meta.getFields(WallFragment), k ).at catch(_) null;
+			if( coords!=null )
+				createCell(coords[0], coords[1], f);
+		}
 
-		updatePalette();
-
+		// IntGrid value picker
 		var jInt = jContent.find(".intGrid");
 		jInt.click(_->{
 			new ui.modal.dialog.IntGridValuePicker(ld, intGridValue, onPickIntGridValue);
 		});
 
+		// Name input
 		jName = jContent.find("input[name=name]");
 		jName.change( _->setName(jName.val()) );
 
@@ -105,6 +122,12 @@ class RulesWizard extends ui.modal.Dialog {
 			close();
 		});
 		addCancel();
+
+		// Pick default intGrid value if there's only one
+		if( ld.countIntGridValues()==1 )
+			onPickIntGridValue( ld.getAllIntGridValues()[0].value );
+
+		updateUI();
 	}
 
 	function setName(s:String) {
@@ -155,12 +178,32 @@ class RulesWizard extends ui.modal.Dialog {
 				fragments.remove(currentFragment);
 			else
 				fragments.set(currentFragment, tids);
-			updatePalette();
+			updateUI();
 		}
 	}
 
 
-	function updatePalette() {
+	function updateUI() {
+		updateGrid();
+		updateTileset();
+	}
+
+
+	function updateTileset() {
+		tileset.renderAtlas();
+		tileset.renderGrid();
+	// 	var ctx = tileset.get2dContext();
+
+	// 	for(e in fragments.keyValueIterator()) {
+	// 		var f = e.key;
+	// 		var tids = e.value;
+	// 		var img = createHtmlImage(getIconId(f));
+	// 		for(tid in tids)
+	// 			ctx.drawImage( img, td.getTileSourceX(tid), td.getTileSourceY(tid), td.tileGridSize, td.tileGridSize );
+	// 	}
+	}
+
+	function updateGrid() {
 		for(elem in jGrid.find(".cell")) {
 			var jCell = new J(elem);
 			jCell.empty();
@@ -184,12 +227,13 @@ class RulesWizard extends ui.modal.Dialog {
 				jImg.css("opacity", "0.4");
 				jCell.append(jImg);
 			}
-			else {
-				// Undefined cell
-				var id = getIconId(f);
-				var jImg = createHtmlImage(id, 48);
-				jCell.append(jImg);
-			}
+
+			// Cell layout
+			var id = getIconId(f);
+			var jImg = createJqueryImage(id, 48);
+			if( !jCell.is(":empty") )
+				jImg.addClass("faded");
+			jCell.append(jImg);
 		}
 	}
 
@@ -198,10 +242,17 @@ class RulesWizard extends ui.modal.Dialog {
 		return switch f {
 			case Full: D.icons.full;
 			case Single: D.icons.single;
+			case Cross: D.icons.cross;
 			case Wall_N: D.icons.wall_n;
 			case Wall_S: D.icons.wall_s;
 			case Wall_W: D.icons.wall_w;
 			case Wall_E: D.icons.wall_e;
+			case Diagonal_NW_SE: D.icons.diagonal_nw_se;
+			case Diagonal_SW_NE: D.icons.diagonal_sw_ne;
+			case TWall_N: D.icons.tWall_n;
+			case TWall_E: D.icons.tWall_e;
+			case TWall_S: D.icons.tWall_s;
+			case TWall_W: D.icons.tWall_w;
 			case Vertical_N: D.icons.vertical_n;
 			case Vertical_Mid: D.icons.vertical_mid;
 			case Vertical_S: D.icons.vertical_s;
@@ -216,10 +267,26 @@ class RulesWizard extends ui.modal.Dialog {
 			case InCorner_NE: D.icons.inCorner_ne;
 			case InCorner_SW: D.icons.inCorner_sw;
 			case InCorner_SE: D.icons.inCorner_se;
+			case TCross_N: D.icons.tcross_n;
+			case TCross_E: D.icons.tcross_e;
+			case TCross_S: D.icons.tcross_s;
+			case TCross_W: D.icons.tcross_w;
+			case Corner_NW_to_NW: D.icons.corner_nw_to_nw;
+			case Corner_NE_to_NE: D.icons.corner_ne_to_ne;
+			case Corner_SW_to_SW: D.icons.corner_sw_to_sw;
+			case Corner_SE_to_SE: D.icons.corner_se_to_se;
 			case Turn_NW: D.icons.turn_nw;
 			case Turn_NE: D.icons.turn_ne;
 			case Turn_SE: D.icons.turn_se;
 			case Turn_SW: D.icons.turn_sw;
+			case Corner_NW_to_N: D.icons.corner_nw_to_n;
+			case Corner_NW_to_W: D.icons.corner_nw_to_w;
+			case Corner_NE_to_N: D.icons.corner_ne_to_n;
+			case Corner_NE_to_E: D.icons.corner_ne_to_e;
+			case Corner_SE_to_E: D.icons.corner_se_to_e;
+			case Corner_SE_to_S: D.icons.corner_se_to_s;
+			case Corner_SW_to_S: D.icons.corner_sw_to_s;
+			case Corner_SW_to_W: D.icons.corner_sw_to_w;
 		}
 	}
 
@@ -230,11 +297,21 @@ class RulesWizard extends ui.modal.Dialog {
 
 	function flip(f:WallFragment, flipX:Bool, flipY:Bool) {
 		return switch f {
-			case Full, Single : f;
+			case Full, Single, Cross : f;
 			case Wall_N: flipY ? Wall_S : f;
 			case Wall_E: flipX ? Wall_W : f;
 			case Wall_S: flipY ? Wall_N : f;
 			case Wall_W: flipX ? Wall_E : f;
+			case Diagonal_NW_SE: flipX || flipY ? Diagonal_SW_NE: f;
+			case Diagonal_SW_NE: flipX || flipY ? Diagonal_NW_SE: f;
+			case TCross_N: flipY ? TCross_S : f;
+			case TCross_S: flipY ? TCross_N : f;
+			case TCross_W: flipX ? TCross_E : f;
+			case TCross_E: flipX ? TCross_W : f;
+			case TWall_N: flipY ? TWall_S : f;
+			case TWall_S: flipY ? TWall_N : f;
+			case TWall_W: flipX ? TWall_E : f;
+			case TWall_E: flipX ? TWall_W : f;
 			case Vertical_N: flipY ? Vertical_S : f;
 			case Vertical_Mid: f;
 			case Vertical_S: flipY ? Vertical_N : f;
@@ -253,6 +330,23 @@ class RulesWizard extends ui.modal.Dialog {
 			case Turn_NE: flipX && flipY ? Turn_SW : flipX ? Turn_NW : flipY ? Turn_SE : f;
 			case Turn_SE: flipX && flipY ? Turn_NW : flipX ? Turn_SW : flipY ? Turn_NE : f;
 			case Turn_SW: flipX && flipY ? Turn_NE : flipX ? Turn_SE : flipY ? Turn_NW : f;
+
+			case Corner_NW_to_N: flipX && flipY ? Corner_SE_to_S : flipX ? Corner_NE_to_N : flipY ? Corner_SW_to_S : f;
+			case Corner_NW_to_W: flipX && flipY ? Corner_SE_to_E : flipX ? Corner_NE_to_E : flipY ? Corner_SW_to_W : f;
+
+			case Corner_NE_to_N: flipX && flipY ? Corner_SW_to_S : flipX ? Corner_NW_to_N : flipY ? Corner_SE_to_S : f;
+			case Corner_NE_to_E: flipX && flipY ? Corner_SW_to_W : flipX ? Corner_NW_to_W : flipY ? Corner_SE_to_E : f;
+
+			case Corner_SW_to_S: flipX && flipY ? Corner_NE_to_N : flipX ? Corner_SE_to_S : flipY ? Corner_NW_to_N : f;
+			case Corner_SW_to_W: flipX && flipY ? Corner_NE_to_E : flipX ? Corner_SE_to_E : flipY ? Corner_NW_to_W : f;
+
+			case Corner_SE_to_E: flipX && flipY ? Corner_NW_to_W : flipX ? Corner_SW_to_W : flipY ? Corner_NE_to_E : f;
+			case Corner_SE_to_S: flipX && flipY ? Corner_NW_to_N : flipX ? Corner_SW_to_S : flipY ? Corner_NE_to_N : f;
+
+			case Corner_NW_to_NW: flipX && flipY ? Corner_SE_to_SE : flipX ? Corner_NE_to_NE : flipY ? Corner_SW_to_SW : f;
+			case Corner_NE_to_NE: flipX && flipY ? Corner_SW_to_SW : flipX ? Corner_NW_to_NW : flipY ? Corner_SE_to_SE : f;
+			case Corner_SW_to_SW: flipX && flipY ? Corner_NE_to_NE : flipX ? Corner_SE_to_SE : flipY ? Corner_NW_to_NW : f;
+			case Corner_SE_to_SE: flipX && flipY ? Corner_NW_to_NW : flipX ? Corner_SW_to_SW : flipY ? Corner_NE_to_NE : f;
 		}
 	}
 
@@ -281,76 +375,6 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
-
-	function createRules() {
-		var rg = ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
-		createRule(rg, Single);
-
-		createRule(rg, Turn_NW);
-		createRule(rg, Turn_NE);
-		createRule(rg, Turn_SE);
-		createRule(rg, Turn_SW);
-
-		createRule(rg, Vertical_N);
-		createRule(rg, Vertical_S);
-		createRule(rg, Vertical_Mid);
-
-		createRule(rg, Horizontal_W);
-		createRule(rg, Horizontal_E);
-		createRule(rg, Horizontal_Mid);
-
-		createRule(rg, InCorner_NW);
-		createRule(rg, InCorner_NE);
-		createRule(rg, InCorner_SE);
-		createRule(rg, InCorner_SW);
-
-		createRule(rg, ExtCorner_NW);
-		createRule(rg, ExtCorner_NE);
-		createRule(rg, ExtCorner_SE);
-		createRule(rg, ExtCorner_SW);
-
-		createRule(rg, Wall_N);
-		createRule(rg, Wall_E);
-		createRule(rg, Wall_S);
-		createRule(rg, Wall_W);
-
-		createRule(rg, Full);
-		return rg;
-	}
-
-	function createRule(rg:data.DataTypes.AutoLayerRuleGroup, f:WallFragment) {
-		if( !fragments.exists(f) )
-			return false;
-
-		var m = getRuleMatrixFromFragment(f);
-		var size = m[0].length;
-		var rd = new data.def.AutoLayerRuleDef(project.generateUniqueId_int(), size);
-		rg.rules.push(rd);
-		for(cy in 0...size)
-		for(cx in 0...size) {
-			var c = m[cy].charAt(cx);
-			rd.set(cx,cy, switch c {
-				case "x": -intGridValue;
-				case "o": intGridValue;
-				case _: 0;
-			});
-		}
-		rd.tileIds = fragments.get(f).copy();
-
-		for(k in WallFragment.getConstructors()) {
-			var e = WallFragment.createByName(k);
-			if( isSymetricalAltFor(f, e) ) {
-				var alt = getSymetricalAlternative(e);
-				if( alt.flipX )
-					rd.flipX = true;
-				if( alt.flipY )
-					rd.flipY = true;
-			}
-		}
-		return true;
-	}
-
-
 	function getRuleMatrixFromFragment(f:WallFragment, flipX=false, flipY=false) : Array<String> {
 		var m : Array<String> = switch f {
 			case Full: [
@@ -364,10 +388,56 @@ class RulesWizard extends ui.modal.Dialog {
 				"-x-",
 			];
 
+			case Cross: [
+				"xox",
+				"ooo",
+				"xox",
+			];
+
+			case Diagonal_NW_SE: [
+				"xoo",
+				"ooo",
+				"oox",
+			];
+
+			case Diagonal_SW_NE: [
+				"oox",
+				"ooo",
+				"xoo",
+			];
+
+			case TWall_N: [
+				"xox",
+				"ooo",
+				"ooo",
+			];
+			case TWall_S: getRuleMatrixFromFragment(TWall_N, false, true);
+
+			case TWall_W: [
+				"xoo",
+				"ooo",
+				"xoo",
+			];
+			case TWall_E: getRuleMatrixFromFragment(TWall_W, true, false);
+
+			case TCross_N: [
+				"xox",
+				"ooo",
+				"-x-",
+			];
+			case TCross_S: getRuleMatrixFromFragment(TCross_N, false, true);
+
+			case TCross_W: [
+				"xo-",
+				"oox",
+				"xo-",
+			];
+			case TCross_E: getRuleMatrixFromFragment(TCross_W, true, false);
+
 			case Vertical_N: [
 				"-x-",
 				"xox",
-				"xox",
+				"---",
 			];
 			case Vertical_Mid: [
 				"---",
@@ -377,9 +447,9 @@ class RulesWizard extends ui.modal.Dialog {
 			case Vertical_S: getRuleMatrixFromFragment(Vertical_N, false, true);
 
 			case Horizontal_W: [
-				"-xx",
-				"xoo",
-				"-xx",
+				"-x-",
+				"xo-",
+				"-x-",
 			];
 			case Horizontal_Mid: [
 				"-x-",
@@ -428,6 +498,33 @@ class RulesWizard extends ui.modal.Dialog {
 			case InCorner_NE: getRuleMatrixFromFragment(InCorner_NW, true, false);
 			case InCorner_SE: getRuleMatrixFromFragment(InCorner_NW, true, true);
 			case InCorner_SW: getRuleMatrixFromFragment(InCorner_NW, false, true);
+
+			case Corner_NW_to_N: [
+				"-ox",
+				"xoo",
+				"-oo",
+			];
+			case Corner_NE_to_N: getRuleMatrixFromFragment(Corner_NW_to_N, true, false);
+			case Corner_SE_to_S: getRuleMatrixFromFragment(Corner_NW_to_N, true, true);
+			case Corner_SW_to_S: getRuleMatrixFromFragment(Corner_NW_to_N, false, true);
+
+			case Corner_NW_to_W: [
+				"-x-",
+				"ooo",
+				"xoo",
+			];
+			case Corner_NE_to_E: getRuleMatrixFromFragment(Corner_NW_to_W, true, false);
+			case Corner_SE_to_E: getRuleMatrixFromFragment(Corner_NW_to_W, true, true);
+			case Corner_SW_to_W: getRuleMatrixFromFragment(Corner_NW_to_W, false, true);
+
+			case Corner_NW_to_NW: [
+				"xox",
+				"ooo",
+				"xoo",
+			];
+			case Corner_NE_to_NE: getRuleMatrixFromFragment(Corner_NW_to_NW, true, false);
+			case Corner_SW_to_SW: getRuleMatrixFromFragment(Corner_NW_to_NW, false, true);
+			case Corner_SE_to_SE: getRuleMatrixFromFragment(Corner_NW_to_NW, true, true);
 		}
 
 		if( flipX ) {
@@ -448,7 +545,7 @@ class RulesWizard extends ui.modal.Dialog {
 
 
 	var _cachedAtlasPixels : Null<hxd.Pixels>;
-	public function createHtmlImage(iconId:String, size=48) : js.jquery.JQuery {
+	public function createHtmlImage(iconId:String) : js.html.Image {
 		if( _cachedAtlasPixels==null )
 			_cachedAtlasPixels = hxd.Res.atlas.icons.toAseprite().toTile().getTexture().capturePixels();
 
@@ -457,8 +554,12 @@ class RulesWizard extends ui.modal.Dialog {
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		img.src = 'data:image/png;base64,$b64';
-		var jImg = new J(img);
+		return img;
+	}
 
+
+	public function createJqueryImage(iconId:String, size=48) : js.jquery.JQuery {
+		var jImg = new J( createHtmlImage(iconId) );
 		jImg.css({
 			width:size+"px",
 			height:size+"px",
@@ -466,6 +567,51 @@ class RulesWizard extends ui.modal.Dialog {
 		});
 
 		return jImg;
+	}
+
+
+
+	function createRule(rg:data.DataTypes.AutoLayerRuleGroup, f:WallFragment) {
+		if( !fragments.exists(f) )
+			return false;
+
+		var m = getRuleMatrixFromFragment(f);
+		var size = m[0].length;
+		var rd = new data.def.AutoLayerRuleDef(project.generateUniqueId_int(), size);
+		rg.rules.push(rd);
+		for(cy in 0...size)
+		for(cx in 0...size) {
+			var c = m[cy].charAt(cx);
+			rd.set(cx,cy, switch c {
+				case "x": -intGridValue;
+				case "o": intGridValue;
+				case _: 0;
+			});
+		}
+		rd.tileIds = fragments.get(f).copy();
+
+		for(k in WallFragment.getConstructors()) {
+			var e = WallFragment.createByName(k);
+			if( isSymetricalAltFor(f, e) && !fragments.exists(e) ) {
+				var alt = getSymetricalAlternative(e);
+				if( alt.flipX )
+					rd.flipX = true;
+				if( alt.flipY )
+					rd.flipY = true;
+			}
+		}
+		return true;
+	}
+
+
+
+	function createRules() {
+		var rg = ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
+
+		for(k in WallFragment.getConstructors())
+			createRule( rg, WallFragment.createByName(k) );
+
+		return rg;
 	}
 
 }
