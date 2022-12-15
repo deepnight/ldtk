@@ -84,3 +84,4 @@ npm run start
  - MarkedJS: https://github.com/markedjs/marked
  - SVG icons from https://material.io
  - Default palette: "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
+ - Default color blind palette: "*Colorblind 16*" by FilipWorks (https://github.com/filipworksdev/colorblind-palette-16)

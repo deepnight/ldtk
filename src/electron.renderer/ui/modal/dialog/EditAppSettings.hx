@@ -96,6 +96,12 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
+		// Color blind
+		var i = Input.linkToHtmlInput(settings.v.colorBlind, jForm.find("#colorBlind"));
+		i.onChange = ()->{
+			onSettingChanged();
+		}
+
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);

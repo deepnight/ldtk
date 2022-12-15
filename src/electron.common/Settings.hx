@@ -13,6 +13,7 @@ typedef AppSettings = {
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
+	var colorBlind : Bool;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -66,6 +67,7 @@ class Settings {
 			useBestGPU: true,
 			startFullScreen: false,
 			autoInstallUpdates: true,
+			colorBlind: false,
 
 			openLastProject: false,
 			lastProject: null,

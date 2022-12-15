@@ -104,7 +104,7 @@ class Const {
 
 	public static var MAX_GRID_SIZE = 1024;
 
-	public static var NICE_PALETTE : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
+	static var NICE_PALETTE : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
 		0xbe4a2f,
 		0xd77643,
 		0xead4aa,
@@ -139,10 +139,33 @@ class Const {
 		0xc28569,
 	];
 
+	static var NICE_PALETTE_COLORBLIND : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
+		0x000000,
+		0x252525,
+		0x676767,
+		0xffffff,
+		0x171723,
+		0x004949,
+		0x009999,
+		0x22cf22,
+		0x490092,
+		0x006ddb,
+		0xb66dff,
+		0xff6db6,
+		0x920000,
+		0x8f4e00,
+		0xdb6d00,
+		0xffdf4d,
+	];
+
+	public static function getNicePalette() {
+		return App.ME.settings.v.colorBlind ? NICE_PALETTE_COLORBLIND : NICE_PALETTE;
+	}
+
 	public static function suggestNiceColor(useds:Array<dn.Col>) : dn.Col {
 		// Look in "Nice palette" for colors distinct from the ones in "useds" palette
 		var pool = [];
-		for(nice in NICE_PALETTE) {
+		for(nice in getNicePalette()) {
 			var ok = true;
 			for(used in useds)
 				if( nice.getDistanceRgb(used)<0.1 ) {
@@ -155,7 +178,6 @@ class Const {
 
 		if( pool.length==0 ) {
 			// No match in Nice Palette, just build a new random color
-			#if debug ui.Notification.debug("random"); #end
 			return dn.Col.randomHSL(dn.RandomTools.rnd(0,1), dn.RandomTools.rnd(0.6,0.8), dn.RandomTools.rnd(0.7,1));
 		}
 		else {

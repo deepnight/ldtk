@@ -427,7 +427,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Add intGrid value button
 				var jAddButton = jValuesList.find("li.add");
 				jAddButton.find("button").off().click( function(ev) {
-					var picker = new ui.modal.dialog.ColorPicker(Const.NICE_PALETTE, Const.suggestNiceColor(cur.getAllIntGridValues().map(iv->iv.color)));
+					var picker = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), Const.suggestNiceColor(cur.getAllIntGridValues().map(iv->iv.color)));
 					picker.onValidate = (c)->{
 						cur.addIntGridValue(c);
 						editor.ge.emit(LayerDefChanged(cur.uid));

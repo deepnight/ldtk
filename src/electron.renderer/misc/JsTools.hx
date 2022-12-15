@@ -653,7 +653,7 @@ class JsTools {
 					if( colorTag!=null )
 						new ui.modal.dialog.ColorPicker( colorTag, jInput );
 					else
-						new ui.modal.dialog.ColorPicker( Const.NICE_PALETTE, jInput );
+						new ui.modal.dialog.ColorPicker( Const.getNicePalette(), jInput );
 				});
 		});
 
