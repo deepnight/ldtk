@@ -35,12 +35,12 @@ enum WallFragment {
 	@at(7,1) TWall_S;
 	@at(8,1) TWall_N;
 
-	@at(3,2) Vertical_N;
-	@at(3,4) Vertical_S;
-	@at(3,3) Vertical_Mid;
 	@at(4,4) Horizontal_W;
 	@at(6,4) Horizontal_E;
 	@at(5,4) Horizontal_Mid;
+	@at(3,2) Vertical_N;
+	@at(3,4) Vertical_S;
+	@at(3,3) Vertical_Mid;
 
 
 	@at(0,3) InCorner_NW;
@@ -64,6 +64,8 @@ enum WallFragment {
 class RulesWizard extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
 	var td : data.def.TilesetDef;
+	var editedGroup : Null<data.DataTypes.AutoLayerRuleGroup>;
+
 	var tileset : ui.Tileset;
 	var jGrid : js.jquery.JQuery;
 	var jName : js.jquery.JQuery;
@@ -72,6 +74,11 @@ class RulesWizard extends ui.modal.Dialog {
 	var intGridValue : Int = 0;
 	var groupName = "";
 
+	var _cachedIntMatrixes : Map<WallFragment, {f:WallFragment, m:Map<Int,Int>}> = new Map();
+
+	var _allFragmentEnums : Array<WallFragment> = [];
+
+
 	public function new(?baseRg:data.DataTypes.AutoLayerRuleGroup, ld:data.def.LayerDef, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
 		super();
 
@@ -79,6 +86,9 @@ class RulesWizard extends ui.modal.Dialog {
 
 		this.ld = ld;
 		td = project.defs.getTilesetDef(ld.tilesetDefUid);
+
+		for( k in WallFragment.getConstructors() )
+			_allFragmentEnums.push( WallFragment.createByName(k) );
 
 		// Tile picker
 		tileset = new ui.Tileset(jContent.find(".tileset"), td, Free);
@@ -127,6 +137,14 @@ class RulesWizard extends ui.modal.Dialog {
 			onPickIntGridValue( ld.getAllIntGridValues()[0].value );
 
 
+		// Build cached Int matrixes for all Fragments
+		_cachedIntMatrixes = new Map();
+		for(k in WallFragment.getConstructors()) {
+			var f = WallFragment.createByName(k);
+			_cachedIntMatrixes.set( f, { f:f, m:getRuleIntMatrix(f) } );
+		}
+
+
 		// Try to match existing group to wizard patterns
 		if( baseRg!=null )
 			importRuleGroup(baseRg);
@@ -136,47 +154,46 @@ class RulesWizard extends ui.modal.Dialog {
 
 
 	function importRuleGroup(source:data.DataTypes.AutoLayerRuleGroup) {
-		// Build matrixes for all Fragments
-		var wizardMatrixes = new Map();
-		for(k in WallFragment.getConstructors()) {
-			var f = WallFragment.createByName(k);
-			wizardMatrixes.set( f, { f:f, m:getRuleIntMatrix(f) } );
-		}
+		editedGroup = source;
 
-		// Iterate all group rules
-		for(rd in source.rules) {
-			if( rd.size>3 )
-				continue;
-
-			for(wm in wizardMatrixes) {
-				var matches = true;
-				if( rd.size==1 ) {
-					for(idx in 0...9)
-						if( idx!=4 && wm.m.get(idx)!=0 ) {
-							matches = false;
-							break;
-						}
-						else if( idx==4 && wm.m.get(idx)!=rd.get(0,0) ) {
-							matches = false;
-							break;
-						}
-				}
-				else {
-					for(cy in 0...rd.size)
-					for(cx in 0...rd.size)
-						if( wm.m.get(cx+cy*3)!=rd.get(cx,cy) ) {
-							matches = false;
-							break;
-						}
-				}
-
-				if( matches ) {
-					js.html.Console.log(rd);
-					js.html.Console.log("  matched => "+wm.f);
-					fragments.set(wm.f, rd.tileIds.copy());
-				}
+		// Iterate all rules from this group, and try to match them with standard Fragments
+		for(rd in source.rules)
+		for(f in _allFragmentEnums)
+			if( matchRuleToFragment(rd,f) ) {
+				js.html.Console.log(rd);
+				js.html.Console.log("  matched => "+f);
+				fragments.set(f, rd.tileIds.copy());
 			}
+	}
+
+
+	function matchRuleToFragment(rd:data.def.AutoLayerRuleDef, f:WallFragment) : Bool {
+		if( rd.size>3 )
+			return null;
+
+		var matrix = getRuleIntMatrix(f);
+		var matches = true;
+		if( rd.size==1 ) {
+			for(idx in 0...9)
+				if( idx!=4 && matrix.get(idx)!=0 ) {
+					matches = false;
+					break;
+				}
+				else if( idx==4 && matrix.get(idx)!=rd.get(0,0) ) {
+					matches = false;
+					break;
+				}
 		}
+		else {
+			for(cy in 0...rd.size)
+			for(cx in 0...rd.size)
+				if( matrix.get(cx+cy*3)!=rd.get(cx,cy) ) {
+					matches = false;
+					break;
+				}
+		}
+
+		return matches;
 	}
 
 
@@ -652,8 +669,11 @@ class RulesWizard extends ui.modal.Dialog {
 
 		var m = getRuleMatrixFromFragment(f);
 		var size = m[0].length;
+
 		var rd = new data.def.AutoLayerRuleDef(project.generateUniqueId_int(), size);
 		rg.rules.push(rd);
+
+		// Fill rule matrix
 		for(cy in 0...size)
 		for(cx in 0...size) {
 			var c = m[cy].charAt(cx);
@@ -665,8 +685,7 @@ class RulesWizard extends ui.modal.Dialog {
 		}
 		rd.tileIds = fragments.get(f).copy();
 
-		for(k in WallFragment.getConstructors()) {
-			var e = WallFragment.createByName(k);
+		for(e in _allFragmentEnums)
 			if( isSymetricalAltFor(f, e) && !fragments.exists(e) ) {
 				var alt = getSymetricalAlternative(e);
 				if( alt.flipX )
@@ -674,17 +693,20 @@ class RulesWizard extends ui.modal.Dialog {
 				if( alt.flipY )
 					rd.flipY = true;
 			}
-		}
+
 		return true;
 	}
 
 
 
 	function createRules() {
-		var rg = ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
+		if( editedGroup!=null )
+			editedGroup.rules = [];
 
-		for(k in WallFragment.getConstructors())
-			createRule( rg, WallFragment.createByName(k) );
+		var rg = editedGroup!=null ? editedGroup : ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
+
+		for(f in _allFragmentEnums)
+			createRule( rg, f );
 
 		return rg;
 	}
