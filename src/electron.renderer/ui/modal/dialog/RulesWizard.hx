@@ -74,8 +74,6 @@ class RulesWizard extends ui.modal.Dialog {
 	var intGridValue : Int = 0;
 	var groupName = "";
 
-	var _cachedIntMatrixes : Map<WallFragment, {f:WallFragment, m:Map<Int,Int>}> = new Map();
-
 	var _allFragmentEnums : Array<WallFragment> = [];
 
 
@@ -137,14 +135,6 @@ class RulesWizard extends ui.modal.Dialog {
 			onPickIntGridValue( ld.getAllIntGridValues()[0].value );
 
 
-		// Build cached Int matrixes for all Fragments
-		_cachedIntMatrixes = new Map();
-		for(k in WallFragment.getConstructors()) {
-			var f = WallFragment.createByName(k);
-			_cachedIntMatrixes.set( f, { f:f, m:getRuleIntMatrix(f) } );
-		}
-
-
 		// Try to match existing group to wizard patterns
 		if( baseRg!=null )
 			importRuleGroup(baseRg);
@@ -153,16 +143,29 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
+	function guessIntGridValue(source:data.DataTypes.AutoLayerRuleGroup) {
+		for(r in source.rules)
+		for(cy in 0...r.size)
+		for(cx in 0...r.size)
+			if( r.get(cx,cy)!=0 && M.fabs(r.get(cx,cy))<Const.AUTO_LAYER_ANYTHING )
+				return M.iabs( r.get(cx,cy) );
+		return 0;
+	}
+
 	function importRuleGroup(source:data.DataTypes.AutoLayerRuleGroup) {
+		intGridValue = guessIntGridValue(source);
+		if( intGridValue==0 )
+			return;
+
 		editedGroup = source;
+		setName(source.name);
 
 		// Iterate all rules from this group, and try to match them with standard Fragments
 		for(rd in source.rules)
 		for(f in _allFragmentEnums)
 			if( matchRuleToFragment(rd,f) ) {
-				js.html.Console.log(rd);
-				js.html.Console.log("  matched => "+f);
 				fragments.set(f, rd.tileIds.copy());
+				break;
 			}
 	}
 
@@ -172,28 +175,21 @@ class RulesWizard extends ui.modal.Dialog {
 			return null;
 
 		var matrix = getRuleIntMatrix(f);
-		var matches = true;
 		if( rd.size==1 ) {
 			for(idx in 0...9)
-				if( idx!=4 && matrix.get(idx)!=0 ) {
-					matches = false;
-					break;
-				}
-				else if( idx==4 && matrix.get(idx)!=rd.get(0,0) ) {
-					matches = false;
-					break;
-				}
+				if( idx!=4 && matrix.get(idx)!=0 )
+					return false;
+				else if( idx==4 && matrix.get(idx)!=rd.get(0,0) )
+					return false;
 		}
 		else {
 			for(cy in 0...rd.size)
 			for(cx in 0...rd.size)
-				if( matrix.get(cx+cy*3)!=rd.get(cx,cy) ) {
-					matches = false;
-					break;
-				}
+				if( matrix.get(cx+cy*3)!=rd.get(cx,cy) )
+					return false;
 		}
 
-		return matches;
+		return true;
 	}
 
 
@@ -208,17 +204,9 @@ class RulesWizard extends ui.modal.Dialog {
 			return;
 
 		intGridValue = v;
-		var jInt = jContent.find(".intGrid");
-		var color = ld.getIntGridValueColor(v);
-		jInt.css("background-color", color.toBlack(0.4).toHex());
-		jInt.css("color", color.toWhite(0.6).toHex());
-		jInt.removeClass("empty");
-		jInt.find(".color").css("background-color", color.toHex());
-		jInt.find(".id").html("#"+v);
 		var vd = ld.getIntGridValueDef(v);
-		jInt.find(".name").html(vd.identifier==null ? "Unnamed" : vd.identifier);
-
 		setName( vd.identifier==null ? "Rules for #"+v : vd.identifier );
+		updateUI();
 	}
 
 
@@ -260,6 +248,21 @@ class RulesWizard extends ui.modal.Dialog {
 	function updateUI() {
 		updateGrid();
 		updateTileset();
+
+		if( intGridValue>0 ) {
+			var color = ld.getIntGridValueColor( intGridValue );
+			var jInt = jContent.find(".intGrid");
+			jInt.css("background-color", color.toBlack(0.4).toHex());
+			jInt.css("color", color.toWhite(0.6).toHex());
+			jInt.removeClass("empty");
+
+			jInt.find(".color").css("background-color", color.toHex());
+
+			jInt.find(".id").html("#"+intGridValue);
+
+			var vd = ld.getIntGridValueDef( intGridValue );
+			jInt.find(".name").html(vd.identifier==null ? "Unnamed" : vd.identifier);
+		}
 	}
 
 
@@ -687,6 +690,15 @@ class RulesWizard extends ui.modal.Dialog {
 		// Update tile IDs
 		rd.tileIds = fragments.get(f).copy();
 
+		// Break on match flag
+		var opaque = true;
+		for(tid in rd.tileIds)
+			if( !td.isTileOpaque(tid) ) {
+				opaque = false;
+				break;
+			}
+		rd.breakOnMatch = opaque;
+
 		// Update flip X/Y flags
 		for(e in _allFragmentEnums)
 			if( isSymetricalAltFor(f, e) && !fragments.exists(e) ) {
@@ -707,7 +719,7 @@ class RulesWizard extends ui.modal.Dialog {
 			editedGroup.rules = [];
 
 		var rg = editedGroup!=null ? editedGroup : ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
-
+		rg.usesWizard = true;
 		for(f in _allFragmentEnums)
 			createRule( rg, f );
 

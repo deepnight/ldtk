@@ -183,6 +183,7 @@ class LayerDef {
 			active: rg.active,
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson() ),
+			usesWizard: rg.usesWizard,
 		}
 	}
 
@@ -197,6 +198,7 @@ class LayerDef {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
 		rg.collapsed = true;
+		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
 		return rg;
 	}
 
@@ -405,6 +407,7 @@ class LayerDef {
 			active: true,
 			collapsed: false,
 			isOptional: false,
+			usesWizard: false,
 			rules: [],
 		}
 		if( index!=null )

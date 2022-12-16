@@ -302,11 +302,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			m.add({
 				label: L.t._("Use wizard"),
 				cb: ()->{
-					new ui.modal.dialog.RulesWizard(ld, (rg)->{
-						editor.ge.emit( LayerRuleGroupAdded(rg) );
-						if( rg.rules.length>0 )
-							invalidateRuleAndOnesBelow(rg.rules[0]);
-					});
+					doUseWizard();
 				},
 			});
 		});
@@ -457,6 +453,18 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
+
+	function doUseWizard(?original:AutoLayerRuleGroup) {
+		new ui.modal.dialog.RulesWizard(original, ld, (rg)->{
+			invalidateRuleGroup(rg);
+			if( original==null )
+				editor.ge.emit( LayerRuleGroupAdded(rg) );
+			else
+				editor.ge.emit( LayerRuleGroupChanged(rg) );
+		});
+	}
+
+
 	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 		jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
@@ -519,15 +527,34 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jToggle.attr("title", (rg.active?"Disable":"Enable")+" this group of rules everywhere");
 
 		// Add rule
-		jGroupHeader.find(".addRule").click( function(ev:js.jquery.Event) {
-			onCreateRule(rg, 0);
-		});
+		var jAdd = jGroupHeader.find(".addRule");
+		if( rg.usesWizard )
+			jAdd.hide();
+		else
+			jAdd.click( function(ev:js.jquery.Event) {
+				onCreateRule(rg, 0);
+			});
+
+		// Edit using wizard
+		var jWizEdit= jGroupHeader.find(".useWizard");
+		if( !rg.usesWizard )
+			jWizEdit.hide();
+		else
+			jWizEdit.click( _->doUseWizard(rg) );
 
 		// Group context menu
 		ContextMenu.addTo(jGroup, jGroupHeader, [
 			{
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
+			},
+
+			{
+				label: L.t._("Edit rules using wizard"),
+				cb: ()->{
+					doUseWizard(rg);
+				},
+				show: ()->rg.usesWizard,
 			},
 
 			{
@@ -540,14 +567,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
 				show: ()->!rg.isOptional,
-			},
-
-			{
-				label: L.t._("Use wizard here"), // TODO
-				cb: ()->{
-					new ui.modal.dialog.RulesWizard(rg, ld, (out)->Notification.notImplemented());
-				},
-				sub: L.t._("TODO"),
 			},
 
 			{
@@ -575,6 +594,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
 				},
+				show: ()->!rg.usesWizard,
 				enable: ()->return App.ME.clipboard.is(CRule),
 			},
 
@@ -601,16 +621,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 				enable: ()->App.ME.clipboard.is(CRuleGroup),
 			},
-			// {
-			// 	label: L.t._("Duplicate group"),
-			// 	cb: ()->{
-			// 		var copy = ld.duplicateRuleGroup(project, rg);
-			// 		lastRule = copy.rules.length>0 ? copy.rules[0] : lastRule;
-			// 		editor.ge.emit( LayerRuleGroupAdded(copy) );
-			// 		for(r in copy.rules)
-			// 			invalidateRuleAndOnesBelow(r);
-			// 	},
-			// },
 			{
 				label: L.t._("Duplicate and remap"),
 				sub: L.t._("Duplicate the group, while remapping IntGrid IDs and tiles"),
@@ -627,6 +637,29 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				cb: deleteRuleGroup.bind(rg, true),
 			},
 		]);
+
+		// Wizard mode explanation
+		if( rg.usesWizard ) {
+			var jLi = new J('<li class="wizardHelp"/>');
+			jLi.appendTo(jGroupList);
+
+			var jEdit = new J('<button>Edit rules</button>');
+			jEdit.click( _->{
+				doUseWizard(rg);
+			});
+			jLi.append(jEdit);
+
+			var jAdv = new J('<a href="#" class="advanced">Switch to advanced mode</a>');
+			jAdv.click( _->{
+				new ui.modal.dialog.Confirm(jAdv, L.t._("In advanced mode, you will be able to edit manually all the rules or add new ones, for more advanced results.\nWARNING: enabling advanced mode will prevent you from using the wizard anymore on this particular group."), ()->{
+					rg.usesWizard = false;
+					editor.ge.emit( LayerRuleGroupChanged(rg) );
+				});
+			});
+			jLi.append(jAdv);
+
+			jLi.append('<div class="help">The rules in this group are managed by the wizard editor.</div>');
+		}
 
 		// Rules
 		var ruleIdx = 0;
@@ -712,6 +745,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jRule.attr("ruleUid", r.uid);
 		jRule.attr("ruleIdx", ruleIdx);
 		jRule.addClass(r.active ? "active" : "inactive");
+		jRule.addClass("rule");
+		if( rg.usesWizard )
+			jRule.addClass("wizard");
 
 		// Insert rule before
 		jRule.find(".insert.before").click( function(_) {
@@ -912,8 +948,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 		]);
 
+		if( rg.usesWizard )
+			jRule.off().find("*").off();
+		else
+			JsTools.parseComponents(jRule);
 
-		JsTools.parseComponents(jRule);
 		return jRule;
 	}
 
