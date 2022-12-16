@@ -30,6 +30,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_):
+				for(li in editor.curLevel.layerInstances)
+					if( li.layerDefUid==this.li.layerDefUid )
+						this.li = li;
 				updateFullPanel();
 
 			case LevelSelected(l):
@@ -652,6 +655,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var jAdv = new J('<a href="#" class="advanced">Switch to advanced mode</a>');
 			jAdv.click( _->{
 				new ui.modal.dialog.Confirm(jAdv, L.t._("In advanced mode, you will be able to edit manually all the rules or add new ones, for more advanced results.\nWARNING: enabling advanced mode will prevent you from using the wizard anymore on this particular group."), ()->{
+					new LastChance(L.t._("Enabled advanced mode on rule group ::name::", {name:rg.name}), project);
 					rg.usesWizard = false;
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
 				});
