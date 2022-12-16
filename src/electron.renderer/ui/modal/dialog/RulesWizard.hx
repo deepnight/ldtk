@@ -683,8 +683,11 @@ class RulesWizard extends ui.modal.Dialog {
 				case _: 0;
 			});
 		}
+
+		// Update tile IDs
 		rd.tileIds = fragments.get(f).copy();
 
+		// Update flip X/Y flags
 		for(e in _allFragmentEnums)
 			if( isSymetricalAltFor(f, e) && !fragments.exists(e) ) {
 				var alt = getSymetricalAlternative(e);
