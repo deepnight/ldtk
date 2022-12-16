@@ -225,7 +225,7 @@ class WorldTool extends dn.Process {
 		clicked = false;
 	}
 
-	inline function getLevelSnapDist() return App.ME.isShiftDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
+	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
