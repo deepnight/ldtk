@@ -1,5 +1,11 @@
 # 1.2.0 - Entity visuals and Auto-layer rules remapping
 
+## Rules assistant
+
+TODO
+
+![](1.1.4/wizard.png)
+
 ## Entity fields visuals
 
 The visuals of entity fields have been reworked again to increase clarity and reduce cluttering.
