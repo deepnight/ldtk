@@ -42,12 +42,6 @@ enum WallFragment {
 	@at(3,4) Vertical_S;
 	@at(3,3) Vertical_Mid;
 
-
-	@at(0,3) InCorner_NW;
-	@at(1,3) InCorner_NE;
-	@at(1,4) InCorner_SE;
-	@at(0,4) InCorner_SW;
-
 	@at(0,0) ExtCorner_NW;
 	@at(2,0) ExtCorner_NE;
 	@at(2,2) ExtCorner_SE;
@@ -57,6 +51,11 @@ enum WallFragment {
 	@at(2,1) Wall_E;
 	@at(1,2) Wall_S;
 	@at(0,1) Wall_W;
+
+	@at(0,3) InCorner_NW;
+	@at(1,3) InCorner_NE;
+	@at(1,4) InCorner_SE;
+	@at(0,4) InCorner_SW;
 
 	@at(1,1) Full;
 }
@@ -692,13 +691,13 @@ class RulesWizard extends ui.modal.Dialog {
 		rd.tileIds = fragments.get(f).copy();
 
 		// Break on match flag
-		var opaque = true;
-		for(tid in rd.tileIds)
-			if( !td.isTileOpaque(tid) ) {
-				opaque = false;
-				break;
-			}
-		rd.breakOnMatch = opaque;
+		// var opaque = true;
+		// for(tid in rd.tileIds)
+		// 	if( !td.isTileOpaque(tid) ) {
+		// 		opaque = false;
+		// 		break;
+		// 	}
+		// rd.breakOnMatch = opaque;
 
 		// Update flip X/Y flags
 		for(e in _allFragmentEnums)
