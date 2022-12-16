@@ -284,6 +284,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Add group
 		jContent.find("button.createGroup").click( function(ev:js.jquery.Event) {
 			var m = new ContextMenu( new J(ev.target) );
+
+			m.add({
+				label: L.t._("Use assistant (recommended)"),
+				cb: ()->{
+					doUseWizard();
+				},
+			});
+
 			m.add({
 				label: L.t._("Create an empty group"),
 				cb: ()->{
@@ -299,13 +307,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 					var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
 					onRenameGroup( jGroupHeader, rg );
-				},
-			});
-
-			m.add({
-				label: L.t._("Use wizard"),
-				cb: ()->{
-					doUseWizard();
 				},
 			});
 		});
@@ -553,7 +554,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
-				label: L.t._("Edit rules using wizard"),
+				label: L.t._("Edit rules using the Assistant"),
 				cb: ()->{
 					doUseWizard(rg);
 				},
@@ -626,7 +627,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 			{
 				label: L.t._("Duplicate and remap"),
-				sub: L.t._("Duplicate the group, while remapping IntGrid IDs and tiles"),
+				sub: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
 				cb: ()->{
 					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
 						editor.ge.emit( LayerRuleGroupAdded(copy) );
@@ -654,7 +655,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			var jAdv = new J('<a href="#" class="advanced">Switch to advanced mode</a>');
 			jAdv.click( _->{
-				new ui.modal.dialog.Confirm(jAdv, L.t._("In advanced mode, you will be able to edit manually all the rules or add new ones, for more advanced results.\nWARNING: enabling advanced mode will prevent you from using the wizard anymore on this particular group."), ()->{
+				new ui.modal.dialog.Confirm(jAdv, L.t._("In advanced mode, you will be able to edit manually all the rules or add new ones, for more advanced results.\nWARNING: enabling advanced mode will prevent you from using the Rule Assistant anymore on this particular group."), ()->{
 					new LastChance(L.t._("Enabled advanced mode on rule group ::name::", {name:rg.name}), project);
 					rg.usesWizard = false;
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
@@ -662,7 +663,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			});
 			jLi.append(jAdv);
 
-			jLi.append('<div class="help">The rules in this group are managed by the wizard editor.</div>');
+			jLi.append('<div class="help">The rules in this group are managed by the Assistant editor.</div>');
 		}
 
 		// Rules

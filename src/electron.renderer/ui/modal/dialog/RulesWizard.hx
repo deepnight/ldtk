@@ -114,7 +114,7 @@ class RulesWizard extends ui.modal.Dialog {
 		jName.change( _->setName(jName.val()) );
 
 		// Confirm
-		addButton(L.t._("Create group of rules"), ()->{
+		addButton(baseRg==null ? L.t._("Create rules") : L.t._("Update rules"), ()->{
 			if( intGridValue==0 ) {
 				Notification.error(L.t._("You need to pick an IntGrid value."));
 				return;
@@ -205,7 +205,8 @@ class RulesWizard extends ui.modal.Dialog {
 
 		intGridValue = v;
 		var vd = ld.getIntGridValueDef(v);
-		setName( vd.identifier==null ? "Rules for #"+v : vd.identifier );
+		if( editedGroup==null )
+			setName( vd.identifier==null ? "Rules for #"+v : vd.identifier );
 		updateUI();
 	}
 
@@ -719,6 +720,7 @@ class RulesWizard extends ui.modal.Dialog {
 			editedGroup.rules = [];
 
 		var rg = editedGroup!=null ? editedGroup : ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
+		rg.name = groupName;
 		rg.usesWizard = true;
 		for(f in _allFragmentEnums)
 			createRule( rg, f );

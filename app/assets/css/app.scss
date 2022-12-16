@@ -7232,6 +7232,9 @@ body.sorting ul.collapsedSortTarget {
 				flex: 1 1 0px;
 				white-space: nowrap;
 				font-size: 9pt;
+				&.seed {
+					flex: 0 1 0px;
+				}
 			}
 
 			label {
@@ -8779,7 +8782,7 @@ $patternSize : 32px;
 			display: grid;
 			grid-template-columns: min-content 800px;
 			column-gap: 8px;
-			height: 70vh;
+			height: 550px;
 
 			.side {
 				.intGrid {
