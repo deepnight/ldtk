@@ -76,6 +76,7 @@ class FieldDef {
 			case F_Bool:
 			case F_Color:
 			case F_Enum(enumDefUid):
+			case F_Table(tableDefUid):
 			case F_Point: editorDisplayMode = PointPath;
 			case F_Path:
 			case F_EntityRef: editorDisplayMode = RefLinkBetweenCenters;
@@ -92,6 +93,7 @@ class FieldDef {
 			case F_Point, F_Path: false;
 			case F_EntityRef: false;
 			case F_Tile: false;
+			case F_Table(tableDefUid): false;
 		};
 	}
 
@@ -197,6 +199,7 @@ class FieldDef {
 			case F_Point: "#7779c9";
 			case F_EntityRef: "#7779c9";
 			case F_Tile: "#99d367";
+			case F_Table(tableDefUid): "#FFB81C";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
@@ -219,6 +222,7 @@ class FieldDef {
 			case F_Path: "File path";
 			case F_EntityRef: "Entity ref";
 			case F_Tile: "Tile";
+			case F_Table(tableDefUid): "Table";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -238,6 +242,7 @@ class FieldDef {
 			case F_Path: "FilePath";
 			case F_EntityRef: "EntityRef";
 			case F_Tile: "Tile";
+			case F_Table(tableDefUid): "Table";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -402,6 +407,11 @@ class FieldDef {
 		return null;
 	}
 
+	public function getTableDefault() : Null<String> {
+		require(F_Table(null));
+		return null;
+	}
+
 	public function restoreDefault() {
 		defaultOverride = null;
 	}
@@ -464,6 +474,9 @@ class FieldDef {
 						arr.push(n);
 				}
 				defaultOverride = V_String(arr.join(","));
+
+			case F_Table(name) :
+				defaultOverride = V_String(rawDef);
 		}
 	}
 
@@ -479,6 +492,7 @@ class FieldDef {
 			case F_Enum(name): getEnumDefault();
 			case F_EntityRef: null;
 			case F_Tile: null;
+			case F_Table(name): getTableDefault();
 		}
 	}
 

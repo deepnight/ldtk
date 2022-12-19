@@ -154,6 +154,7 @@ class FieldInstance {
 				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
 				case F_Tile: return getFilePath(arrayIdx)==def.getDefault();
 				case F_EntityRef: return false;
+				case F_Table(tableDefUid): return false;
 			}
 		}
 	}
@@ -254,6 +255,15 @@ class FieldInstance {
 					else
 						setInternal(arrayIdx, null);
 				}
+
+			case F_Table(name):
+				raw = StringTools.trim(raw);
+				var td = _project.defs.getTableDef(name);
+				setInternal(arrayIdx, null);
+				// if( !ed.hasValue(raw) )
+				// 	setInternal(arrayIdx, null);
+				// else
+				// 	setInternal( arrayIdx, V_String(raw) );
 		}
 	}
 
@@ -330,7 +340,7 @@ class FieldInstance {
 		if( !def.canBeNull && valueIsNull(arrayIdx) )
 			switch def.type {
 				case F_Int, F_Float, F_String, F_Text, F_Bool, F_Color:
-				case F_Enum(_), F_Point, F_Path, F_EntityRef, F_Tile:
+				case F_Enum(_), F_Point, F_Path, F_EntityRef, F_Tile, F_Table(_):
 					return "Value required";
 			}
 
@@ -369,6 +379,7 @@ class FieldInstance {
 							if( !tei.def.tags.hasAnyTagFoundIn(def.allowedRefTags) )
 								return "Invalid ref tags";
 					}
+			case F_Table(tableDefUid):
 		}
 
 		return null;
@@ -403,6 +414,7 @@ class FieldInstance {
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_EntityRef: getEntityRefIid(arrayIdx);
 			case F_Tile: getTileRectStr(arrayIdx);
+			case F_Table(name): getTableValue(arrayIdx);
 		}
 		return v == null;
 	}
@@ -458,6 +470,7 @@ class FieldInstance {
 			case F_Point: getPointStr(arrayIdx);
 			case F_EntityRef: getEntityRefForDisplay(arrayIdx);
 			case F_Tile: getTileRectStr(arrayIdx);
+			case F_Table(name): getTableValue(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -470,6 +483,7 @@ class FieldInstance {
 			case F_String, F_Text, F_Path: return '"$v"';
 			case F_EntityRef: return '@($v)';
 			case F_Tile: return '$v';
+			case F_Table(name): return '$v';
 		}
 	}
 
@@ -507,6 +521,8 @@ class FieldInstance {
 
 			case F_Tile:
 				getTileRectObj(arrayIdx);
+
+			case F_Table(tableDefUid): getTableValue(arrayIdx);
 		}
 	}
 
@@ -545,6 +561,7 @@ class FieldInstance {
 			case F_Path:
 			case F_EntityRef:
 			case F_Tile:
+			case F_Table(enumDefUid):
 		}
 
 		return null;
@@ -754,6 +771,14 @@ class FieldInstance {
 		}
 	}
 
+	public function getTableValue(arrayIdx:Int) : Null<String> {
+		require( F_Table(null) );
+		return isUsingDefault(arrayIdx) ? def.getTableDefault() : switch internalValues[arrayIdx] {
+			case V_String(v): v;
+			case _: throw "unexpected";
+		}
+	}
+
 	public function getPointStr(arrayIdx:Int) : Null<String> {
 		require( F_Point );
 		return isUsingDefault(arrayIdx) ? def.getPointDefault() : switch internalValues[arrayIdx] {
@@ -838,6 +863,7 @@ class FieldInstance {
 						parseValue(i, null);
 						anyChange = true;
 					}
+			case F_Table(tableDefUid):
 		}
 
 		return anyChange;

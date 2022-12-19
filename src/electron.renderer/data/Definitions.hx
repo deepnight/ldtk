@@ -88,6 +88,15 @@ class Definitions {
 		tables.push(table);
 	}
 
+	public function getTableDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TableDef> {
+		for(td in tables)
+			if( td.uid==id || td.name==id )
+				return td;
+
+		return null;
+	}
+
+
 	public function removeTableDef(td:data.def.TableDef) {
 		if( !tables.remove(td) )
 			throw "Unknown tabledef";

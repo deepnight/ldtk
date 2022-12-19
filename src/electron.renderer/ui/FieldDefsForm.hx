@@ -148,7 +148,7 @@ class FieldDefsForm {
 
 		// Type picker
 		var types : Array<ldtk.Json.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_Tile,
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_Tile, F_Table(null)
 		];
 		if( isEntityField() ) {
 			types.push(F_EntityRef);
@@ -681,7 +681,7 @@ class FieldDefsForm {
 						case F_Float: Std.string( curField.fClamp(0) );
 						case F_String, F_Text, F_Path: "";
 						case F_Point: "0"+Const.POINT_SEPARATOR+"0";
-						case F_Bool, F_Color, F_Enum(_): "N/A";
+						case F_Bool, F_Color, F_Enum(_), F_Table(_): "N/A";
 						case F_EntityRef: "N/A";
 						case F_Tile: "N/A";
 					});
@@ -721,6 +721,8 @@ class FieldDefsForm {
 						curField.setDefault(v);
 					onFieldChange();
 				});
+				
+			case F_Table(name):
 
 			case F_Color:
 				var defInput = jForm.find("input[name=cDef]");

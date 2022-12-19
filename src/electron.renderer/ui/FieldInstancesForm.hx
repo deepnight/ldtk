@@ -564,6 +564,7 @@ class FieldInstancesForm {
 						});
 					}
 				}
+			case F_Table(name):
 		}
 
 		// Suffix
@@ -698,6 +699,7 @@ class FieldInstancesForm {
 
 			case F_Point:
 				// Not done here
+			case F_Table(tableDefUid):
 		}
 
 	}
