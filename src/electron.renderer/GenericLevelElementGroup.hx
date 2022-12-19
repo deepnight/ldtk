@@ -743,36 +743,34 @@ class GenericLevelElementGroup {
 					}
 
 				case PointField(li, ei, fi, arrayIdx):
-					if( isCopy )
-						elements[i] = null;
-					else {
-						var pt = fi.getPointGrid(arrayIdx);
-						if( pt!=null ) {
-							// Duplicate
-							if( isCopy ) {
-								fi.addArrayValue();
-								var newIdx = fi.getArrayLength()-1;
-								fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
-								pt = fi.getPointGrid(newIdx);
-								elements[i] = PointField(li,ei,fi,newIdx);
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null ) {
+						// Duplicate (only arrays)
+						if( isCopy && fi.def.isArray ) {
+							fi.addArrayValue();
+							var i = fi.getArrayLength()-1;
+							while( i>arrayIdx ) {
+								fi.parseValue(i, fi.getPointStr(i-1));
+								i--;
 							}
-
-							pt.cx += Std.int( getDeltaX(origin, to) / li.def.scaledGridSize );
-							pt.cy += Std.int( getDeltaY(origin, to) / li.def.scaledGridSize );
-
-							if( li.isValid(pt.cx,pt.cy) )
-								fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-							else {
-								// Out of bounds
-								outOfBoundsRemovals.push(fi.def.identifier);
-								fi.removeArrayValue(arrayIdx);
-								decrementAllFieldArrayIdxAbove(fi, arrayIdx);
-								elements[i] = null;
-							}
-							editor.ge.emit( EntityInstanceChanged(ei) );
-
-							changedLayers.set(li,li);
 						}
+
+						// Move point
+						pt.cx += Std.int( getDeltaX(origin, to) / li.def.scaledGridSize );
+						pt.cy += Std.int( getDeltaY(origin, to) / li.def.scaledGridSize );
+
+						if( li.isValid(pt.cx,pt.cy) )
+							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+						else {
+							// Out of bounds
+							outOfBoundsRemovals.push(fi.def.identifier);
+							fi.removeArrayValue(arrayIdx);
+							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+							elements[i] = null;
+						}
+
+						editor.ge.emit( EntityInstanceChanged(ei) );
+						changedLayers.set(li,li);
 					}
 			}
 		}
