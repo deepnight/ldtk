@@ -594,6 +594,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					m.addCancel();
 				},
 				show: ()->!rg.isOptional,
+				separatorAfter: true,
 			},
 
 			{

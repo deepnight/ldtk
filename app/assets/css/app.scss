@@ -3160,6 +3160,9 @@ textarea {
 					font-weight: bold;
 					color: $orangeLight;
 				}
+				&.separatorAfter {
+					margin-bottom: 8px;
+				}
 			}
 			button+button {
 				border-top: 1px solid $bgMed;
