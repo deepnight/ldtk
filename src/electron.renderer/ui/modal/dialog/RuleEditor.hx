@@ -22,6 +22,8 @@ class RuleEditor extends ui.modal.Dialog {
 			curValue = iv.value;
 			break;
 		}
+		if( curValue==-1 )
+			curValue = Const.AUTO_LAYER_ANYTHING;
 
 		renderAll();
 	}
