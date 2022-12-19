@@ -46,11 +46,13 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
 
 ## Misc
 
+ - You can right click on a group of rules to modify the "out-of-bounds policy" of all its rules in a single batch.
  - Added nicer default colors for various elements (eg. int grid values, entities, enum values etc.). The palette is "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
  - Hold SHIFT to disable snapping when moving levels around in the world view.
  - You can now manually enter custom values for Entity pivots.
  - Added a new layer option to prevent selections when the layer is not active.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
+ - Fixed the Rule editor window when the layer has no IntGrid value.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.
  - Updated the design of the home.
