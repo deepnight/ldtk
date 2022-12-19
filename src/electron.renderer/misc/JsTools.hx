@@ -1115,4 +1115,46 @@ class JsTools {
 		parseComponents(jWrapper);
 		return jWrapper;
 	}
+
+
+
+	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {
+		// Out-of-bounds policy
+		jSelect.empty();
+		var values = [null, 0].concat( ld.getAllIntGridValues().map( iv->iv.value ) );
+		if( curValue<0 )
+			values.insert(0,-1);
+		for(v in values) {
+			var jOpt = new J('<option value="$v"/>');
+			jOpt.appendTo(jSelect);
+			switch v {
+				case null: jOpt.text("This rule should not apply when reading cells outside of layer bounds (default)");
+				case v if(v<0): jOpt.text("-- Pick a value --");
+				case 0: jOpt.text("Empty cells");
+				case _:
+					var iv = ld.getIntGridValueDef(v);
+					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
+					jOpt.css({
+						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+						borderColor: C.intToHex( iv.color ),
+					});
+			}
+		}
+
+		jSelect.change( _->{
+			var v = jSelect.val()=="null" ? null : Std.parseInt(jSelect.val());
+			onChange(v);
+		});
+
+		jSelect.val( curValue==null ? "null" : Std.string(curValue) );
+		if( curValue!=null && curValue>0 ) {
+			var iv = ld.getIntGridValueDef(curValue);
+			jSelect.addClass("hasValue").css({
+				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+				borderColor: C.intToHex( iv.color ),
+			});
+		}
+
+		return jSelect;
+	}
 }

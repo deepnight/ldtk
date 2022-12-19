@@ -563,13 +563,36 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._("Turn into an OPTIONAL group"),
+				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
 				cb: ()->{
 					invalidateRuleGroup(rg);
 					rg.isOptional = true;
 					rg.active = true; // just some cleanup
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
 				},
-				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				show: ()->!rg.isOptional,
+			},
+
+			{
+				label: L.t._('Edit "out-of-bounds" policy for all rules'),
+				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				cb: ()->{
+					var m = new ui.modal.Dialog();
+					m.loadTemplate("outOfBoundsPolicyGlobal.html");
+					var outOfBounds : Null<Int> = -1;
+					JsTools.createOutOfBoundsRulePolicy(m.jContent.find("#outOfBoundsValue"), ld, outOfBounds, (v)->outOfBounds=v);
+					m.addButton(L.t._("Apply to all rules"), ()->{
+						if( outOfBounds<0 )
+							return;
+
+						for(r in rg.rules)
+							r.outOfBoundsValue = outOfBounds;
+						invalidateRuleGroup(rg);
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+						m.close();
+					});
+					m.addCancel();
+				},
 				show: ()->!rg.isOptional,
 			},
 

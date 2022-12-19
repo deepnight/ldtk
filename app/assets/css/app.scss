@@ -8776,6 +8776,16 @@ $patternSize : 32px;
 
 
 
+.window.outOfBoundsPolicyGlobal {
+	.wrapper .content {
+		width: 600px;
+		dl.form {
+			margin-top: 16px;
+			margin-bottom: 0;
+		}
+	}
+}
+
 .window.rulesWizard {
 	.wrapper .content {
 		.layout {
