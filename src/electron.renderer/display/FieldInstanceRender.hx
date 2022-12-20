@@ -382,14 +382,14 @@ class FieldInstanceRender {
 			case RefLinkBetweenCenters:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.centerX - ei.x;
-						var fy = ei.centerY - ei.y;
+						var fx = ei.centerX - ei.x + ei._li.pxTotalOffsetX;
+						var fy = ei.centerY - ei.y + ei._li.pxTotalOffsetY;
 						for(i in 0...fi.getArrayLength()) {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
-							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.centerX + ei._li.level.worldX ) ) + tei._li.pxTotalOffsetX;
+							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.centerY + ei._li.level.worldY ) ) + tei._li.pxTotalOffsetY;
 							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, fi.def.editorLinkStyle, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
@@ -399,14 +399,14 @@ class FieldInstanceRender {
 			case RefLinkBetweenPivots:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.x - ei.x;
-						var fy = ei.y - ei.y;
+						var fx = ei.x - ei.x + ei._li.pxTotalOffsetX;
+						var fy = ei.y - ei.y + ei._li.pxTotalOffsetY;
 						for(i in 0...fi.getArrayLength()) {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) );
-							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) );
+							var tx = M.round( tei.x + tei._li.level.worldX - ( ei.x + ei._li.level.worldX ) ) + tei._li.pxTotalOffsetX;
+							var ty = M.round( tei.y + tei._li.level.worldY - ( ei.y + ei._li.level.worldY ) ) + tei._li.pxTotalOffsetY;
 							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, fi.def.editorLinkStyle, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
@@ -417,8 +417,8 @@ class FieldInstanceRender {
 			case Points, PointStar, PointPath, PointPathLoop:
 				switch ctx {
 					case EntityCtx(g, ei, ld):
-						var fx = ei.getPointOriginX(ld) - ei.x;
-						var fy = ei.getPointOriginY(ld) - ei.y;
+						var fx = ei.getPointOriginX(ld) - ei.x + ei._li.pxTotalOffsetX;
+						var fy = ei.getPointOriginY(ld) - ei.y + ei._li.pxTotalOffsetY;
 						var startX = fx;
 						var startY = fy;
 
@@ -427,8 +427,8 @@ class FieldInstanceRender {
 							if( pt==null )
 								continue;
 
-							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x );
-							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y );
+							var tx = M.round( (pt.cx+0.5)*ld.gridSize - ei.x + ei._li.pxTotalOffsetX );
+							var ty = M.round( (pt.cy+0.5)*ld.gridSize - ei.y + ei._li.pxTotalOffsetY );
 							if( fd.editorDisplayMode!=Points )
 								renderSimpleLink(g, baseColor, fx,fy, tx,ty, fi.def.editorLinkStyle);
 

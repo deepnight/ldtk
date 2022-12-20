@@ -301,8 +301,10 @@ class EntityTool extends tool.LayerTool<Int> {
 				case Entity(li, ei):
 					display.FieldInstanceRender.renderRefLink(
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
-						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
-						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
+						PREV_CHAINABLE_EI.worldX + PREV_CHAINABLE_EI._li.pxTotalOffsetX - curLevel.worldX,
+						PREV_CHAINABLE_EI.worldY + PREV_CHAINABLE_EI._li.pxTotalOffsetY - curLevel.worldY,
+						ei.getRefAttachX(chainFi.def) + ei._li.pxTotalOffsetX,
+						ei.getRefAttachY(chainFi.def) + ei._li.pxTotalOffsetY,
 						alpha,
 						chainFi.def.editorLinkStyle,
 						Full
@@ -311,8 +313,10 @@ class EntityTool extends tool.LayerTool<Int> {
 				case _:
 					display.FieldInstanceRender.renderRefLink(
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
-						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
-						getPlacementX(m), getPlacementY(m),
+						PREV_CHAINABLE_EI.worldX + PREV_CHAINABLE_EI._li.pxTotalOffsetX - curLevel.worldX,
+						PREV_CHAINABLE_EI.worldY + PREV_CHAINABLE_EI._li.pxTotalOffsetY - curLevel.worldY,
+						getPlacementX(m) + curLayerInstance.pxTotalOffsetX,
+						getPlacementY(m) + curLayerInstance.pxTotalOffsetY,
 						alpha,
 						chainFi.def.editorLinkStyle,
 						Full

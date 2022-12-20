@@ -124,6 +124,8 @@ class EntityRender extends dn.Process {
 				switch mode {
 					case Stretch:
 						var bmp = new h2d.Bitmap(t, wrapper);
+						if( ld!=null )
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
@@ -132,6 +134,8 @@ class EntityRender extends dn.Process {
 
 					case FitInside:
 						var bmp = new h2d.Bitmap(t, wrapper);
+						if( ld!=null )
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
@@ -141,12 +145,14 @@ class EntityRender extends dn.Process {
 					case Repeat:
 						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
 						tt.alpha = alpha;
-						tt.x = -w*ed.pivotX;
-						tt.y = -h*ed.pivotY;
+						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
 
 					case Cover:
 						var bmp = new h2d.Bitmap(wrapper);
 						bmp.alpha = alpha;
+						if( ld!=null )
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 
 						var s = M.fmax(w / t.width, h / t.height);
 						final fw = M.fmin(w, t.width*s) / s;
@@ -161,6 +167,8 @@ class EntityRender extends dn.Process {
 
 					case FullSizeCropped:
 						var bmp = new h2d.Bitmap(wrapper);
+						if( ld!=null )
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 						final fw = M.fmin(w, t.width);
 						final fh = M.fmin(h, t.height);
 						bmp.tile = t.sub(
@@ -173,6 +181,9 @@ class EntityRender extends dn.Process {
 
 					case FullSizeUncropped:
 						var bmp = new h2d.Bitmap(t, wrapper);
+						if( ld!=null )
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
+
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
@@ -187,8 +198,8 @@ class EntityRender extends dn.Process {
 						sg.tileCenter = true;
 						sg.width = w;
 						sg.height = h;
-						sg.x = -w*ed.pivotX;
-						sg.y = -h*ed.pivotY;
+						sg.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						sg.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
 
 				}
 			}
@@ -285,14 +296,10 @@ class EntityRender extends dn.Process {
 				continue;
 
 			var col = refEi.getSmartColor(false);
-			var refX = refEi.getWorldRefAttachX(fi.def) - ei.worldX;
-			var refY = refEi.getWorldRefAttachY(fi.def) - ei.worldY;
-			var thisX = ei.getRefAttachX(fi.def) - ei.x;
-			var thisY = ei.getRefAttachY(fi.def) - ei.y;
-			// var refX = ( refEi.getRefAttachX(fi.def) + refEi._li.level.worldX ) - ei.worldX;
-			// var refY = ( refEi.getRefAttachY(fi.def) + refEi._li.level.worldY ) - ei.worldY;
-			// var thisX = ei.getRefAttachX(fi.def) - ei.x;
-			// var thisY = ei.getRefAttachY(fi.def) - ei.y;
+			var refX = refEi.getWorldRefAttachX(fi.def) - ei.worldX + refEi._li.pxTotalOffsetX;
+			var refY = refEi.getWorldRefAttachY(fi.def) - ei.worldY + refEi._li.pxTotalOffsetY;
+			var thisX = ei.getRefAttachX(fi.def) - ei.x + ei._li.pxTotalOffsetX;
+			var thisY = ei.getRefAttachY(fi.def) - ei.y + ei._li.pxTotalOffsetY;
 			FieldInstanceRender.renderRefLink(
 				fieldGraphics, col, refX, refY, thisX, thisY, 1,
 				fi.def.editorLinkStyle,
