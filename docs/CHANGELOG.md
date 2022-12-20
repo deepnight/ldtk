@@ -54,6 +54,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
  - Added a new layer option to prevent selections when the layer is not active.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
  - Added a "reset" button near any entity/level field that isn't using its default value.
+ - Fixed duplicate identifiers when inserting a level in Horizontal/Vertical layouts
  - Fixed a crash when duplicating a point from an Entity.
  - Added support for proper Point duplication for entities that have an Array of Points field.
  - Fixed default multilines values that dropped newline characters.
