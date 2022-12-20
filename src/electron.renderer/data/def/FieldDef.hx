@@ -411,10 +411,20 @@ class FieldDef {
 			: null;
 	}
 
+
 	public function getEnumDefault() : Null<String> {
 		require(F_Enum(null));
-		return null;
+
+		switch defaultOverride {
+			case V_String(v):
+				var ed = getEnumDefinition();
+				return ed==null || ed.getValue(v)==null ? null : ed.getValue(v).id;
+
+			case _:
+				return null;
+		}
 	}
+
 
 	public function restoreDefault() {
 		defaultOverride = null;
@@ -683,6 +693,13 @@ class FieldDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		if( isEnum() && defaultOverride!=null ) {
+			App.LOG.add("tidy", "Lost default enum value in FieldDef "+toString());
+			var v = getEnumDefault();
+			if( v==null )
+				setDefault(null);
+		}
 
 		if( tilesetUid!=null && p.defs.getTilesetDef(tilesetUid)==null ) {
 			App.LOG.add("tidy", "Lost tileset UID in FieldDef "+toString());

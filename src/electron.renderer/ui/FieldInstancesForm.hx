@@ -342,6 +342,20 @@ class FieldInstancesForm {
 						jOpt.attr("selected","selected");
 				}
 
+				if( fi.def.getEnumDefault()!=null ) {
+					var v = fi.def.getEnumDefinition().getValue(fi.def.getEnumDefault());
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value","_default");
+					jOpt.text(v.id+" (default)");
+					jOpt.css({
+						color: C.intToHex( C.toWhite(v.color,0.7) ),
+						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
+					});
+					if( fi.isUsingDefault(arrayIdx) )
+						jOpt.attr("selected","selected");
+				}
+
 				for(v in ed.values) {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
@@ -362,7 +376,10 @@ class FieldInstancesForm {
 
 				jSelect.change( function(ev) {
 					var v = jSelect.val()=="" ? null : jSelect.val();
-					fi.parseValue(arrayIdx, v);
+					if( v=="_default" )
+						fi.parseValue(arrayIdx, null);
+					else
+						fi.parseValue(arrayIdx, v);
 					onFieldChange(fi);
 				});
 				hideInputIfDefault(arrayIdx, jSelect, fi);

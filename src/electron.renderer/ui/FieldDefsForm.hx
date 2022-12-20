@@ -721,28 +721,44 @@ class FieldDefsForm {
 
 			case F_Enum(name):
 				var ed = project.defs.getEnumDef(name);
-				var enumDef = jForm.find("[name=enumDef]");
-				enumDef.find("[value]").remove();
-				if( curField.canBeNull ) {
-					var opt = new J('<option/>');
-					opt.appendTo(enumDef);
-					opt.attr("value","");
-					opt.text("-- null --");
+				var jEnumDefault = jForm.find("[name=enumDef]");
+				jEnumDefault.find("option").remove();
+				jEnumDefault.removeClass("required");
+
+				// Add "no default value"
+				if( !curField.canBeNull ) {
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jEnumDefault);
+					jOpt.attr("value","");
+					jOpt.text("-- No default value --");
+					// jEnumDefault.addClass("required");
 					if( curField.getEnumDefault()==null )
-						opt.attr("selected","selected");
-				}
-				for(v in ed.values) {
-					var opt = new J('<option/>');
-					opt.appendTo(enumDef);
-					opt.attr("value",v.id);
-					opt.text(v.id);
-					if( curField.getEnumDefault()==v.id )
-						opt.attr("selected","selected");
+						jOpt.attr("selected","selected");
 				}
 
-				enumDef.change( function(ev) {
-					var v = enumDef.val();
-					if( v=="" && curField.canBeNull )
+				// Add "null"
+				if( curField.canBeNull ) {
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jEnumDefault);
+					jOpt.attr("value","");
+					jOpt.text("-- null --");
+					if( curField.canBeNull && curField.getEnumDefault()==null )
+						jOpt.attr("selected","selected");
+				}
+
+				// Add all enum values
+				for(v in ed.values) {
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jEnumDefault);
+					jOpt.attr("value",v.id);
+					jOpt.text(v.id);
+					if( curField.getEnumDefault()==v.id )
+						jOpt.attr("selected","selected");
+				}
+
+				jEnumDefault.change( function(ev) {
+					var v = jEnumDefault.val();
+					if( v=="" )
 						curField.setDefault(null);
 					else if( v!="" )
 						curField.setDefault(v);

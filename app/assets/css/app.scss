@@ -6171,6 +6171,9 @@ dl.form.fieldInstanceEditor {
 		input[type=text] {
 			max-width: 100px;
 		}
+		select {
+			min-width: 140px;
+		}
 		span.value {
 			flex: 1 0 auto;
 		}
