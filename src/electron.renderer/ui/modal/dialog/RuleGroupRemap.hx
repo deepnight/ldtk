@@ -124,7 +124,6 @@ class RuleGroupRemap extends ui.modal.Dialog {
 	function setTileOffset(ox:Int, oy:Int, scrollTo=false) {
 		tileOffsetX = ox;
 		tileOffsetY = oy;
-		trace(tileOffsetX+","+tileOffsetY);
 
 		var valid = true;
 		var offsetedIds = [];

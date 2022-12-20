@@ -363,11 +363,8 @@ class World {
 				id = StringTools.replace(id, "%d", Std.string(l.worldDepth) );
 				l.identifier = _project.fixUniqueIdStr(id, id->_project.isLevelIdentifierUnique(id));
 
-				trace(oldIdentifiers.get(l.uid)+" => "+l.identifier);
-				if( oldIdentifiers.get(l.uid)!=l.identifier ) {
+				if( oldIdentifiers.get(l.uid)!=l.identifier )
 					l.invalidateJsonCache();
-					trace("  => invalidated!");
-				}
 			}
 			idx++;
 		}
