@@ -622,7 +622,8 @@
 				"isOptional",
 				"name",
 				"rules",
-				"uid"
+				"uid",
+				"usesWizard"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -633,6 +634,12 @@
 					]
 				},
 				"isOptional": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"usesWizard": {
 					"description": "",
 					"type": [
 						"boolean"
