@@ -330,6 +330,7 @@ class LevelRender extends dn.Process {
 	public function setLayerVisibility(li:data.inst.LayerInstance, v:Bool) {
 		li.visible = v;
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+		editor.curLevelTimeline.saveLayerState(li);
 		if( isLayerVisible(li) )
 			invalidateLayer(li);
 	}
