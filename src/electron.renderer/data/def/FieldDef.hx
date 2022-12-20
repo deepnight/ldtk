@@ -402,7 +402,7 @@ class FieldDef {
 			return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
 	}
 
-	public function getEnumDef() : Null<EnumDef> {
+	public function getEnumDefinition() : Null<EnumDef> {
 		return isEnum()
 			?  _project.defs.getEnumDef(switch type {
 				case F_Enum(enumDefUid): enumDefUid;

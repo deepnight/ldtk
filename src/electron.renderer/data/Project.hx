@@ -593,7 +593,7 @@ class Project {
 					if( !fi.def.isEnum() )
 						continue;
 
-					var ed = fi.def.getEnumDef();
+					var ed = fi.def.getEnumDefinition();
 					if( ed!=null && ed.isExternal() )
 						continue;
 					for(i in 0...fi.getArrayLength())
@@ -606,7 +606,7 @@ class Project {
 					if( !fi.def.isEnum() )
 						continue;
 
-					var ed = fi.def.getEnumDef();
+					var ed = fi.def.getEnumDefinition();
 					if( ed!=null && ed.isExternal() )
 						continue;
 
