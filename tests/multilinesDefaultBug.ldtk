@@ -10,7 +10,7 @@
 	},
 	"jsonVersion": "1.2.0",
 	"appBuildId": 464314,
-	"nextUid": 142,
+	"nextUid": 143,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
@@ -724,7 +724,7 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "text",
+					"identifier": "myText",
 					"__type": "String",
 					"uid": 136,
 					"type": "F_Text",
@@ -732,7 +732,7 @@
 					"canBeNull": true,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "ValueOnly",
+					"editorDisplayMode": "NameAndValue",
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
 					"editorAlwaysShow": true,
@@ -747,7 +747,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": {
 						"id": "V_String",
-						"params": ["a b c "]
+						"params": ["a\nb\nc\n"]
 					},
 					"textLanguageMode": null,
 					"symmetricalRef": false,
@@ -867,7 +867,10 @@
 							"height": 16,
 							"defUid": 125,
 							"px": [88,104],
-							"fieldInstances": [{ "__identifier": "text", "__value": "a\nb\nc\n", "__type": "String", "__tile": null, "defUid": 136, "realEditorValues": [null] }]
+							"fieldInstances": [{ "__identifier": "myText", "__value": " 1 \n  2  \n   3   ", "__type": "String", "__tile": null, "defUid": 136, "realEditorValues": [{
+								"id": "V_String",
+								"params": [" 1 \\n  2  \\n   3   "]
+							}] }]
 						}
 					]
 				},
