@@ -110,7 +110,7 @@ class FieldInstancesForm {
 				});
 			}
 		}
-		else if( fi.def.type==F_Color || fi.def.type==F_Bool || fi.def.type==F_Point && fi.def.canBeNull ) {
+		else if( fi.def.type!=F_Path && ( fi.def.getDefault()!=null || fi.def.canBeNull ) ) {
 			// Require a "Reset to default" link
 			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
@@ -264,9 +264,13 @@ class FieldInstancesForm {
 						(v)->{
 							fi.parseValue(arrayIdx, v);
 							onFieldChange(fi);
+						},
+						()->{
+							onFieldChange(fi);
 						}
 					);
 				});
+				hideInputIfDefault(arrayIdx, jText, fi);
 
 			case F_Point:
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {

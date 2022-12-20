@@ -6168,6 +6168,9 @@ dl.form.fieldInstanceEditor {
 		opacity: 1 !important;
 		padding: 0 !important;
 		flex: 1 0 auto !important;
+		input[type=text] {
+			max-width: 100px;
+		}
 		span.value {
 			flex: 1 0 auto;
 		}
