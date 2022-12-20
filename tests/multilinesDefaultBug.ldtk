@@ -724,69 +724,7 @@
 			"pivotY": 0.5,
 			"fieldDefs": [
 				{
-					"identifier": "single",
-					"__type": "Point",
-					"uid": 126,
-					"type": "F_Point",
-					"isArray": false,
-					"canBeNull": true,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "PointStar",
-					"editorDisplayPos": "Above",
-					"editorLinkStyle": "CurvedArrow",
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				},
-				{
-					"identifier": "multiples",
-					"__type": "Array<Point>",
-					"uid": 129,
-					"type": "F_Point",
-					"isArray": true,
-					"canBeNull": false,
-					"arrayMinLength": null,
-					"arrayMaxLength": null,
-					"editorDisplayMode": "PointPath",
-					"editorDisplayPos": "Above",
-					"editorLinkStyle": "DashedLine",
-					"editorAlwaysShow": false,
-					"editorShowInWorld": true,
-					"editorCutLongValues": true,
-					"editorTextSuffix": null,
-					"editorTextPrefix": null,
-					"useForSmartColor": false,
-					"min": null,
-					"max": null,
-					"regex": null,
-					"acceptFileTypes": null,
-					"defaultOverride": null,
-					"textLanguageMode": null,
-					"symmetricalRef": false,
-					"autoChainRef": true,
-					"allowOutOfLevelRef": true,
-					"allowedRefs": "OnlySame",
-					"allowedRefTags": [],
-					"tilesetUid": null
-				},
-				{
-					"identifier": "Multilines",
+					"identifier": "text",
 					"__type": "String",
 					"uid": 136,
 					"type": "F_Text",
@@ -794,10 +732,10 @@
 					"canBeNull": true,
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
-					"editorDisplayMode": "Hidden",
+					"editorDisplayMode": "ValueOnly",
 					"editorDisplayPos": "Above",
 					"editorLinkStyle": "StraightArrow",
-					"editorAlwaysShow": false,
+					"editorAlwaysShow": true,
 					"editorShowInWorld": true,
 					"editorCutLongValues": true,
 					"editorTextSuffix": null,
@@ -809,7 +747,7 @@
 					"acceptFileTypes": null,
 					"defaultOverride": {
 						"id": "V_String",
-						"params": ["a b c"]
+						"params": ["a b c "]
 					},
 					"textLanguageMode": null,
 					"symmetricalRef": false,
@@ -929,41 +867,7 @@
 							"height": 16,
 							"defUid": 125,
 							"px": [88,104],
-							"fieldInstances": [
-								{ "__identifier": "single", "__value": { "cx": 9, "cy": 4 }, "__type": "Point", "__tile": null, "defUid": 126, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["9,4"]
-								}] },
-								{ "__identifier": "multiples", "__value": [
-									{ "cx": 10, "cy": 6 },
-									{ "cx": 10, "cy": 11 },
-									{ "cx": 5, "cy": 11 },
-									{ "cx": 5, "cy": 9 },
-									{ "cx": 7, "cy": 9 }
-								], "__type": "Array<Point>", "__tile": null, "defUid": 129, "realEditorValues": [
-									{
-										"id": "V_String",
-										"params": ["10,6"]
-									},
-									{
-										"id": "V_String",
-										"params": ["10,11"]
-									},
-									{
-										"id": "V_String",
-										"params": ["5,11"]
-									},
-									{
-										"id": "V_String",
-										"params": ["5,9"]
-									},
-									{
-										"id": "V_String",
-										"params": ["7,9"]
-									}
-								] },
-								{ "__identifier": "Multilines", "__value": "a b c", "__type": "String", "__tile": null, "defUid": 136, "realEditorValues": [null] }
-							]
+							"fieldInstances": [{ "__identifier": "text", "__value": "a\nb\nc\n", "__type": "String", "__tile": null, "defUid": 136, "realEditorValues": [null] }]
 						}
 					]
 				},
