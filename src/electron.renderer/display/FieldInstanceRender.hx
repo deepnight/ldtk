@@ -221,7 +221,7 @@ class FieldInstanceRender {
 			// Skip fields not displayed in world mode
 			if( !fi.def.editorShowInWorld && Editor.ME.worldMode )
 				continue;
-			
+
 			var fr = renderField(fi, baseColor, ctx);
 			if( fr==null || fr.value.numChildren==0 )
 				continue;
@@ -316,8 +316,10 @@ class FieldInstanceRender {
 		// Value error
 		var err = fi.getFirstErrorInValues(ei);
 		if( err!=null ) {
-			var tf = createText(labelFlow, baseColor);
-			tf.text = fd.identifier;
+			if( fi.def.editorDisplayMode!=NameAndValue ) {
+				var tf = createText(labelFlow, baseColor);
+				tf.text = fd.identifier;
+			}
 
 			var tf = createText(valueFlow, 0xff4400);
 			tf.text = '<$err>';
