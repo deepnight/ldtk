@@ -286,7 +286,7 @@ class LevelInstanceForm {
 
 		// Create bg image picker
 		jForm.find("dd.bg .imagePicker").remove();
-		var jImg = JsTools.createImagePicker(level.bgRelPath, (relPath)->{
+		var jImg = JsTools.createImagePicker(project, level.bgRelPath, (relPath)->{
 			var old = level.bgRelPath;
 			if( relPath==null && old!=null ) {
 				// Remove

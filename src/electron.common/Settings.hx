@@ -27,6 +27,7 @@ typedef AppSettings = {
 	var recentDirs : Array<String>;
 
 	var uiStates : Array<{ id:String, val:Int }>;
+	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
 }
 
 enum abstract UiState(String) {
@@ -78,6 +79,7 @@ class Settings {
 			mouseWheelSpeed: 1.0,
 
 			uiStates: [],
+			lastUiDirs: [],
 		}
 
 		// Load
@@ -139,6 +141,38 @@ class Settings {
 			if( s.id==Std.string(id) )
 				return s.val!=0;
 		return false;
+	}
+
+
+	public function storeUiDir(?project:data.Project, uiId:String, path:String) {
+		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
+		path = dn.FilePath.convertToSlashes(path);
+		for(dir in v.lastUiDirs)
+			if( ( projectPath==null || dir.project==projectPath ) && dir.uiId==uiId ) {
+				dir.path = path;
+				save();
+				return;
+			}
+
+		if( project==null )
+			v.lastUiDirs.push({ uiId:uiId, path:path });
+		else
+			v.lastUiDirs.push({ project:projectPath, uiId:Std.string(uiId), path:path });
+		save();
+	}
+
+
+	public function getUiDir(?project:data.Project, uiId:String, ?defaultIfNotSet:String) : Null<String> {
+		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
+
+		if( defaultIfNotSet==null && project!=null )
+			defaultIfNotSet = dn.FilePath.convertToSlashes(project.filePath.directory);
+
+		for(dir in v.lastUiDirs)
+			if( ( projectPath==null || dir.project==projectPath ) && dir.uiId==uiId )
+				return dir.path;
+
+		return defaultIfNotSet;
 	}
 
 	static inline function isRenderer() {

@@ -50,6 +50,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
  - Added nicer default colors for various elements (eg. int grid values, entities, enum values etc.). The palette is "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
  - Hold SHIFT to disable snapping when moving levels around in the world view.
  - You can now manually enter custom values for Entity pivots.
+ - Many Load button in the UI will now remember properly their last folder
  - Added a new layer option to prevent selections when the layer is not active.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
  - Added a "reset" button near any entity/level field that isn't using its default value.

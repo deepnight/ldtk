@@ -444,13 +444,10 @@ class Home extends Page {
 	}
 
 	function onImportOgmo() {
-		var dir = App.ME.getDefaultDialogDir();
-
-		#if debug
-		dir = "C:/projects/LDtk/tests/ogmo"; // HACK remove this hard-coded path
-		#end
+		var dir = settings.getUiDir("ImportOgmo", App.ME.getDefaultDialogDir());
 
 		dn.js.ElectronDialogs.openFile([".ogmo"], dir, function(filePath) {
+			settings.storeUiDir("ImportOgmo", dn.FilePath.extractDirectoryWithoutSlash(filePath,true));
 			var i = new importer.OgmoLoader(filePath);
 			ui.modal.MetaProgress.start("Importing OGMO 3 project...", 3);
 			delayer.addS( ()->{
@@ -498,9 +495,12 @@ class Home extends Page {
 	}
 
 	public function onNew(?openPath:String) {
-		dn.js.ElectronDialogs.saveFileAs(["."+Const.FILE_EXTENSION], openPath!=null ? openPath : App.ME.getDefaultDialogDir(), function(filePath) {
+		if( openPath==null )
+			openPath = settings.getUiDir("NewProject", App.ME.getDefaultDialogDir());
+		dn.js.ElectronDialogs.saveFileAs(["."+Const.FILE_EXTENSION], openPath, function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "ldtk";
+			settings.storeUiDir("NewProject", fp.directory);
 
 			var p = data.Project.createEmpty(fp.full);
 

@@ -1024,7 +1024,7 @@ class JsTools {
 	}
 
 
-	public static function createImagePicker( curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {
+	public static function createImagePicker( project:data.Project, curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {
 		var jWrapper = new J('<div class="imagePicker"/>');
 
 		var fileName = curRelPath==null ? null : dn.FilePath.extractFileWithExt(curRelPath);
@@ -1056,13 +1056,14 @@ class JsTools {
 		jPick.appendTo(jWrapper);
 		jPick.click( (_)->{
 			var project = Editor.ME.project;
-			var path = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(curRelPath, true) );
-			if( path==null )
-				path = project.getProjectDir();
-
+			var defPath = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(curRelPath, true) );
+			if( defPath==null )
+				defPath = project.getProjectDir();
+			var path = App.ME.settings.getUiDir(project, "PickImage", defPath);
 			ui.Tip.clear();
 
 			dn.js.ElectronDialogs.openFile([".png", ".gif", ".jpg", ".jpeg", ".aseprite", ".ase"], path, function(absPath) {
+				App.ME.settings.storeUiDir(project, "PickImage", dn.FilePath.extractDirectoryWithoutSlash(absPath,true));
 				var relPath = project.makeRelativeFilePath(absPath);
 				_pick(relPath);
 			});
