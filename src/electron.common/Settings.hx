@@ -144,6 +144,7 @@ class Settings {
 	}
 
 
+	#if editor
 	public function storeUiDir(?project:data.Project, uiId:String, path:String) {
 		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
 		path = dn.FilePath.convertToSlashes(path);
@@ -160,8 +161,10 @@ class Settings {
 			v.lastUiDirs.push({ project:projectPath, uiId:Std.string(uiId), path:path });
 		save();
 	}
+	#end
 
 
+	#if editor
 	public function getUiDir(?project:data.Project, uiId:String, ?defaultIfNotSet:String) : Null<String> {
 		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
 
@@ -174,6 +177,7 @@ class Settings {
 
 		return defaultIfNotSet;
 	}
+	#end
 
 	static inline function isRenderer() {
 		return electron.main.App==null;
