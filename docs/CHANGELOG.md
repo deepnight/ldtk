@@ -52,6 +52,10 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
  - You can now manually enter custom values for Entity pivots.
  - Added a new layer option to prevent selections when the layer is not active.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
+ - Added a "reset" button near any entity/level field that isn't using its default value.
+ - Fixed a crash when duplicating a point from an Entity.
+ - Added support for proper Point duplication for entities that have an Array of Points field.
+ - Fixed the default tile of an entity when one of its fields is a Tile, but it is not set to override the entity tile itself.
  - Fixed the Rule editor window when the layer has no IntGrid value.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.
