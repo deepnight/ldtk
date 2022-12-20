@@ -9,8 +9,15 @@ class JsonTools {
 			else
 				throw "Enum is null";
 
-		if( e.getParameters().length>0 )
-			return { id:e.getName(), params:e.getParameters() }
+		if( e.getParameters().length>0 ) {
+			var params = e.getParameters();
+			for(i in 0...params.length)
+				switch Type.typeof(params[i]) {
+					case TClass(String): params[i] = escapeString(params[i]);
+					case _:
+				}
+			return { id:e.getName(), params:params }
+		}
 		else
 			return e.getName();
 	}
@@ -64,7 +71,7 @@ class JsonTools {
 							if( M.isValidNumber(v) )
 								params.push(v); // Float
 							else
-								params.push(p);
+								params.push( unescapeString(p) ); // String
 						}
 					}
 					return e.createByName(name, params);
