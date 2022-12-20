@@ -168,6 +168,7 @@ class WorldRender extends dn.Process {
 			case WorldLevelMoved(l,isFinal, prevNeig):
 				updateLayout();
 				updateCurrentHighlight();
+				invalidateAllLevelIdentifiers();
 				refreshWorldLevelRect(l);
 				if( isFinal ) {
 					switch curWorld.worldLayout {
@@ -271,6 +272,7 @@ class WorldRender extends dn.Process {
 			case LevelAdded(l):
 				invalidateLevelRender(l);
 				invalidateLevelFields(l);
+				invalidateAllLevelIdentifiers();
 				updateLayout();
 				renderWorldBounds();
 
