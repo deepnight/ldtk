@@ -72,9 +72,11 @@ class EntityDef {
 		for( fd in fieldDefs )
 			switch fd.type {
 				case F_Tile:
-					var rect = fd.getTileRectDefaultObj();
-					if( rect!=null )
-						return rect;
+					if( fd.editorDisplayMode==EntityTile ) {
+						var rect = fd.getTileRectDefaultObj();
+						if( rect!=null )
+							return rect;
+					}
 
 				case _:
 			}
