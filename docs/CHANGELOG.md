@@ -6,6 +6,14 @@ TODO
 
 ![](1.2.0/wizard.png)
 
+## WASD controls
+
+You can now navigate through your current tool values using WASD keys.
+ - In IntGrid or Entity layers, this will cycle through values,
+ - In Tiles layers, this will navigate in the current tileset. The selection will automatically use any previously "saved selection" to smartly navigate through your predefined group of tiles.
+
+![](1.2.0/wasd.gif)
+
 ## Entity fields visuals
 
 The visuals of entity fields have been reworked again to increase clarity and reduce cluttering.
