@@ -460,6 +460,12 @@ class JsTools {
 		else if ( App.isMac() && keyLabel.toLowerCase()=="ctrl")
 			keyLabel = "⌘";
 
+		keyLabel = switch kid {
+			case K.QWERTY_TILDE: "~";
+			case 222: "²";
+			case _: keyLabel;
+		}
+
 		return new J('<span class="key">$keyLabel</span>');
 	}
 
@@ -489,6 +495,7 @@ class JsTools {
 							case "sub": new J('<span class="key" title="Numeric pad -">-</span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
+							case "~": new J('<span class="key">${ App.ME.isQwerty() ? "~" : "²" }</span>');
 
 							case k.charAt(0) => "(": new J("<span/>").append(k);
 							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
@@ -611,6 +618,7 @@ class JsTools {
 						case "ctrl" : keys.push(K.CTRL);
 						case "shift" : keys.push(K.SHIFT);
 						case "alt" : keys.push(K.ALT);
+						case "~": App.ME.isQwerty() ? keys.push(K.QWERTY_TILDE) : keys.push(222);
 						case _ :
 							var funcReg = ~/[fF]([0-9]+)/;
 							if( k.length==1 ) {

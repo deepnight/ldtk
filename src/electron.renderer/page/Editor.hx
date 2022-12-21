@@ -592,19 +592,17 @@ class Editor extends Page {
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				cd.setS("debugLock",Const.INFINITE);
 				N.msg("Locked.", 0xff7700);
-
-			case K.D if( !worldMode && !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
-				N.debug("Test "+dn.Lib.repeatChar("x",Std.random(20)),"Some subtitle");
 			#end
 
-			case K.S:
+			case K.S if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				if( project.isBackup() )
 					N.error("Cannot save over a backup file.");
-				else if( !hasInputFocus() && App.ME.isCtrlDown() )
+				else {
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
 						onSave();
+				}
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
@@ -616,11 +614,15 @@ class Editor extends Page {
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
-			case K.W if( App.ME.isCtrlDown() ):
+			case K.W if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				onClose();
 
-			case K.W if( !App.ME.hasAnyToggleKeyDown() && !hasInputFocus() ):
+			case K.W if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				setWorldMode( !worldMode );
+
+			case K.QWERTY_QUOTE, K.QWERTY_TILDE:
+				if( !hasInputFocus() )
+					setWorldMode( !worldMode );
 
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
@@ -631,7 +633,7 @@ class Editor extends Page {
 			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
 				setTileStacking( !settings.v.tileStacking );
 
-			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				setSingleLayerMode( !settings.v.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
@@ -725,6 +727,26 @@ class Editor extends Page {
 
 			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
+
+
+			// WASD navigation
+			case K.Z if( !App.ME.isQwerty() && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.W if( App.ME.isQwerty() && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.Q if( !App.ME.isQwerty() && !hasInputFocus() ):
+				onNavigateShortcut(-1, 0, true);
+
+			case K.A if( App.ME.isQwerty() && !hasInputFocus() ):
+				onNavigateShortcut(-1, 0, true);
+
+			case K.S if( !hasInputFocus() ):
+				onNavigateShortcut(0, 1, true);
+
+			case K.D if( !hasInputFocus() ):
+				onNavigateShortcut(1, 0, true);
 		}
 
 		// Propagate to tools
@@ -743,6 +765,35 @@ class Editor extends Page {
 				}
 			}
 		}
+	}
+
+	function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+		if( App.ME.isCtrlDown() )
+			return;
+
+		// if( App.ME.isShiftDown() ) {
+		// 	// Layers navigation
+		// 	if( project.defs.layers.length>0 ) {
+		// 		var lidx = 0;
+		// 		for(ld in project.defs.layers)
+		// 			if( curLayerDef==ld )
+		// 				break;
+		// 			else
+		// 				lidx++;
+		// 		lidx += dy + dx*2;
+		// 		var ld = project.defs.layers[ M.iclamp(lidx, 0, project.defs.layers.length-1) ];
+		// 		selectLayerInstance( curLevel.getLayerInstance(ld) );
+		// 	}
+		// }
+		if( !App.ME.hasAnyToggleKeyDown() ) {
+			// Tool navigation
+			!panTool.onNavigateSelection(dx,dy,pressed)
+			&& ( resizeTool==null || !resizeTool.onNavigateSelection(dx,dy,pressed) )
+			&& !selectionTool.onNavigateSelection(dx,dy,pressed)
+			&& ( specialTool==null || !specialTool.onNavigateSelection(dx,dy,pressed) )
+			&& !curTool.onNavigateSelection(dx,dy,pressed);
+		}
+
 	}
 
 

@@ -23,7 +23,7 @@ class ToolPalette {
 		jContent = new J('<div class="palette"/>');
 	}
 
-	public function focusOnSelection() {
+	public function focusOnSelection(immediate=false) {
 	}
 
 	public final function render() {
@@ -61,6 +61,10 @@ class ToolPalette {
 		return C.intToHex( C.toWhite(c, 0.3) );
 	}
 
+	/** Called when a WASD key is pressed. Should return TRUE to cancel event bubbling. **/
+	public function onNavigateSelection(dx:Int, dy:Int, pressed:Bool) {
+		return false;
+	}
 
 	function doRender() {}
 
@@ -97,7 +101,7 @@ class ToolPalette {
 			var jList = jContent.find(">ul");
 			var curY = jList.scrollTop();
 			if( M.fabs(listTargetY-curY)>=3 )
-				jList.scrollTop( curY + ( listTargetY-curY )*0.25 );
+				jList.scrollTop( curY + ( listTargetY-curY )*0.4 );
 			else {
 				jList.scrollTop(listTargetY);
 				listTargetY = null;

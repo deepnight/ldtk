@@ -4,19 +4,34 @@
 
 TODO
 
-![](1.1.4/wizard.png)
+![](1.2.0/wizard.png)
+
+## WASD controls
+
+You can now navigate through your current tool values using WASD keys.
+ - In IntGrid layers, this will cycle through values,
+ - In Entity layers, `W/S` will cycle through values, while `A/D` will quickly jump between tags
+ - In Tiles layers, this will navigate in the current tileset. The selection will automatically use any previously "saved selection" to smartly navigate through your predefined group of tiles.
+
+Because of this change, the following keyboard shortcuts were modified:
+ - Switch to World mode: `SHIFT+W` or `~` (previously `W`)
+ - Toggle single layer mode: `SHIFT+A` (previously `A`)
+ - Save current tile selection: `SHIFT+S` (previously `S`)
+ - Flip horizontaly currently selected tiles: `X` (previously `X` or `Z`)
+
+![](1.2.0/wasd.gif)
 
 ## Entity fields visuals
 
 The visuals of entity fields have been reworked again to increase clarity and reduce cluttering.
 However, keep in mind it's always better to not display *everything*. The less, the better ;)
 
-![](1.1.4/fields.png)
+![](1.2.0/fields.png)
 
 ## Arrows
 You can now customize the design of arrows used in Point or Entity Reference fields.
 
-![](1.1.4/arrows.png)
+![](1.2.0/arrows.png)
 
 ## Auto-layer rules remapping
 
@@ -29,12 +44,12 @@ This new tool allows you to make a copy of these rules, while doing the followin
  - replace IntGrid values they refer with another ones,
  - transpose the tiles they produce to another part of the tileset.
 
-![](1.1.4/remap.png)
+![](1.2.0/remap.png)
 
 ## Icons
 New useful icons were added to the embed icons atlas, like keys, locks, and various shapes to be used with the 9-slices scaling feature of entities.
 
-![](1.1.4/icons.png)
+![](1.2.0/icons.png)
 
 ## Enum tags display
 
@@ -42,7 +57,7 @@ A new option allows to visualize "Enum tags" attached to tiles in the Editor con
 
 In the following example, all tiles were tagged with a Material enum (stone, grass, metal etc.) and the result can be displayed right in the editor context.
 
-![](1.1.4/enumTags.png)
+![](1.2.0/enumTags.png)
 
 ## Misc
 

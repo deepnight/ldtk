@@ -312,6 +312,11 @@ class Tool<T> extends dn.Process {
 		}
 	}
 
+	/** Called when a WASD key is pressed. Should return TRUE to cancel event bubbling. **/
+	public function onNavigateSelection(dx:Int, dy:Int, pressed:Bool) {
+		return palette!=null && palette.onNavigateSelection(dx,dy,pressed);
+	}
+
 	public function palettePoppedOut() {
 		return palette!=null && palette.isPoppedOut && ui.modal.ToolPalettePopOut.ME!=null;
 	}

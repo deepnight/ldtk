@@ -295,6 +295,7 @@ class Tileset {
 		ty = old.ty;
 	}
 
+
 	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
@@ -686,10 +687,20 @@ class Tileset {
 
 	public function update() {
 		// Focus scrolling animation
+		final spd = M.fmin(1, 0.5 * App.ME.tmod);
 		if( tx!=null ) {
-			var spd = 0.19;
 			scrollX += (tx-scrollX) * spd;
+			if( M.fabs(scrollX-tx)<=1 ) {
+				scrollX = tx;
+				tx = null;
+			}
+		}
+		if( ty!=null ) {
 			scrollY += (ty-scrollY) * spd;
+			if( M.fabs(scrollY-ty)<=1 ) {
+				scrollY = ty;
+				ty = null;
+			}
 		}
 	}
 }
