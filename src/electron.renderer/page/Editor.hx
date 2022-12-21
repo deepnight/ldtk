@@ -617,10 +617,13 @@ class Editor extends Page {
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
-			case K.W if( App.ME.isCtrlDown() ):
+			case K.W if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				onClose();
 
-			case K.W if( !App.ME.hasAnyToggleKeyDown() && !hasInputFocus() ):
+			case K.W if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
+				setWorldMode( !worldMode );
+
+			case K.QWERTY_QUOTE if( !hasInputFocus() ):
 				setWorldMode( !worldMode );
 
 			case K.Q if( App.ME.isCtrlDown() ):

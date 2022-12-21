@@ -401,10 +401,11 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			switch keyId {
 				case K.R :
 					setMode( isRandomMode() ? Stamp : Random );
+					ui.Notification.quick((isRandomMode()?"Stamp":"Random")+" mode");
 					editor.ge.emit(ToolOptionChanged);
 					palette.render();
 
-				case K.S:
+				case K.S if( App.ME.isShiftDown() ):
 					saveSelection();
 
 				case K.L:
@@ -424,7 +425,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 					N.quick("X-flip: "+L.onOff(flipX));
 					customCursor(new hxd.Event(EMove), lastMouse);
 
-				case K.Y, K.Z:
+				case K.Y:
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
 					customCursor(new hxd.Event(EMove), lastMouse);
