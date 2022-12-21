@@ -9,8 +9,15 @@ TODO
 ## WASD controls
 
 You can now navigate through your current tool values using WASD keys.
- - In IntGrid or Entity layers, this will cycle through values,
+ - In IntGrid layers, this will cycle through values,
+ - In Entity layers, `W/S` will cycle through values, while `A/D` will quickly jump between tags
  - In Tiles layers, this will navigate in the current tileset. The selection will automatically use any previously "saved selection" to smartly navigate through your predefined group of tiles.
+
+Because of this change, the following keyboard shortcuts were modified:
+ - Switch to World mode: `SHIFT+W` or `~` (previously `W`)
+ - Toggle single layer mode: `SHIFT+A` (previously `A`)
+ - Save current tile selection: `SHIFT+S` (previously `S`)
+ - Flip horizontaly currently selected tiles: `X` (previously `X` or `Z`)
 
 ![](1.2.0/wasd.gif)
 
