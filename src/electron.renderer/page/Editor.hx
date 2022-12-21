@@ -736,10 +736,10 @@ class Editor extends Page {
 			case K.W if( App.ME.isQwerty() && !hasInputFocus() ):
 				propagateNavigateShortcut(0, -1, true);
 
-			case K.A if( !App.ME.isQwerty() && !hasInputFocus() ):
+			case K.Q if( !App.ME.isQwerty() && !hasInputFocus() ):
 				propagateNavigateShortcut(-1, 0, true);
 
-			case K.Q if( App.ME.isQwerty() && !hasInputFocus() ):
+			case K.A if( App.ME.isQwerty() && !hasInputFocus() ):
 				propagateNavigateShortcut(-1, 0, true);
 
 			case K.S if( !hasInputFocus() ):
