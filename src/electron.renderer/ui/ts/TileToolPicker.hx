@@ -33,8 +33,8 @@ class TileToolPicker extends ui.Tileset {
 		if( selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlDown() ) {
 			// Check if the saved selection isn't already picked
 			var saved = tilesetDef.getSavedSelectionFor( selIds[0] );
-			if( !tool.selectedValueHasAny(saved.ids) ) {
-				// Recall saved selection
+			if( !tool.selectedValuesIdentical(saved.ids) ) {
+				// Recall saved selection entirely
 				selIds = saved.ids.copy();
 				tool.setMode( saved.mode );
 			}
