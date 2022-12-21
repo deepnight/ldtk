@@ -393,8 +393,6 @@ class App extends dn.Process {
 	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
 
 
-	public inline function isQwerty() return false; // TODO
-
 	var _inputFocusCache : Null<Bool> = null;
 	public inline function hasInputFocus() {
 		if( _inputFocusCache==null )

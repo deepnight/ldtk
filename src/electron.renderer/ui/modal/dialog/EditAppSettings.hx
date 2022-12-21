@@ -102,6 +102,22 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
+		// Navigation keys
+		var jNavKeys = jForm.find("#navKeys");
+		jNavKeys.empty();
+		for(k in NavigationKeys.getConstructors()) {
+			var nk = NavigationKeys.createByName(k);
+			var jOpt = new J('<option value="$k"/>');
+			jNavKeys.append(jOpt);
+			jOpt.text(k.toUpperCase());
+			if( k==settings.v.navKeys )
+				jOpt.prop("selected",true);
+		}
+		jNavKeys.change( (_)->{
+			settings.v.navKeys = jNavKeys.val();
+			onSettingChanged();
+		});
+
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);

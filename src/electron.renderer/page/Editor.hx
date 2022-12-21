@@ -729,17 +729,17 @@ class Editor extends Page {
 				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
 
 
-			// WASD navigation
-			case K.Z if( !App.ME.isQwerty() && !hasInputFocus() ):
+			// ZQSD/WASD navigation
+			case K.Z if( App.ME.settings.navKeys==Zqsd && !hasInputFocus() ):
 				onNavigateShortcut(0, -1, true);
 
-			case K.W if( App.ME.isQwerty() && !hasInputFocus() ):
-				onNavigateShortcut(0, -1, true);
-
-			case K.Q if( !App.ME.isQwerty() && !hasInputFocus() ):
+			case K.Q if( App.ME.settings.navKeys==Zqsd && !hasInputFocus() ):
 				onNavigateShortcut(-1, 0, true);
 
-			case K.A if( App.ME.isQwerty() && !hasInputFocus() ):
+			case K.W if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.A if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
 				onNavigateShortcut(-1, 0, true);
 
 			case K.S if( !hasInputFocus() ):

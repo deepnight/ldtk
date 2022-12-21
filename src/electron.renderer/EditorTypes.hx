@@ -218,3 +218,10 @@ typedef CachedIID = {
 	var level: data.Level;
 	var ?ei: data.inst.EntityInstance ;
 }
+
+
+enum NavigationKeys {
+	Arrows;
+	Wasd;
+	Zqsd;
+}

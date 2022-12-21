@@ -1,4 +1,5 @@
 import electron.renderer.IpcRenderer;
+import EditorTypes;
 
 typedef AppSettings = {
 	var lastKnownVersion: Null<String>;
@@ -14,6 +15,7 @@ typedef AppSettings = {
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
 	var colorBlind : Bool;
+	var navKeys : String;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -47,6 +49,8 @@ class Settings {
 	public var v : AppSettings;
 	var ls : dn.data.LocalStorage;
 
+	public var navKeys(get,set) : NavigationKeys;
+
 	public function new() {
 		// Init storage
 		ls = dn.data.LocalStorage.createJsonStorage("settings", Full);
@@ -69,6 +73,7 @@ class Settings {
 			startFullScreen: false,
 			autoInstallUpdates: true,
 			colorBlind: false,
+			navKeys: null,
 
 			openLastProject: false,
 			lastProject: null,
@@ -85,10 +90,36 @@ class Settings {
 		// Load
 		v = ls.readObject(defaults);
 
+		// Try to guess Navigation keys
+		if( v.navKeys==null ) {
+			for(full in js.Browser.navigator.languages) {
+				switch full {
+					case "nl-be": navKeys = Zqsd; break;
+				}
+
+				var short = ( full.indexOf("-")<0 ? full : full.substr(0,full.indexOf("-")) ).toLowerCase();
+				switch short {
+					case "fr": navKeys = Zqsd; break;
+					case "en": navKeys = Wasd; break;
+					case _:
+				}
+			}
+			if( v.navKeys==null )
+				navKeys = Wasd;
+
+		}
+
+
 		if( !hasUiState(ShowProjectColors) )
 			setUiStateBool(ShowProjectColors, true);
 	}
 
+
+	function get_navKeys() return try NavigationKeys.createByName(v.navKeys) catch(_) Wasd;
+	function set_navKeys(k:NavigationKeys) {
+		v.navKeys = k.getName();
+		return k;
+	}
 
 	function getOrCreateUiState(id:UiState) {
 		for(s in v.uiStates)
