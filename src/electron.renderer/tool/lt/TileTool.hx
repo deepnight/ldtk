@@ -401,7 +401,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			switch keyId {
 				case K.R if( !App.ME.hasAnyToggleKeyDown() ):
 					setMode( isRandomMode() ? Stamp : Random );
-					ui.Notification.quick((isRandomMode()?"Stamp":"Random")+" mode");
+					ui.Notification.quick((isRandomMode()?"Random":"Stamp")+" mode");
 					editor.ge.emit(ToolOptionChanged);
 					palette.render();
 
