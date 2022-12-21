@@ -597,14 +597,15 @@ class Editor extends Page {
 				N.debug("Test "+dn.Lib.repeatChar("x",Std.random(20)),"Some subtitle");
 			#end
 
-			case K.S:
+			case K.S if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				if( project.isBackup() )
 					N.error("Cannot save over a backup file.");
-				else if( !hasInputFocus() && App.ME.isCtrlDown() )
+				else {
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
 						onSave();
+				}
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
