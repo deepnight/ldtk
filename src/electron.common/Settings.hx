@@ -1,5 +1,7 @@
 import electron.renderer.IpcRenderer;
+#if editor
 import EditorTypes;
+#end
 
 typedef AppSettings = {
 	var lastKnownVersion: Null<String>;
@@ -49,7 +51,9 @@ class Settings {
 	public var v : AppSettings;
 	var ls : dn.data.LocalStorage;
 
+	#if editor
 	public var navKeys(get,set) : NavigationKeys;
+	#end
 
 	public function new() {
 		// Init storage
@@ -91,6 +95,7 @@ class Settings {
 		v = ls.readObject(defaults);
 
 		// Try to guess Navigation keys
+		#if editor
 		if( v.navKeys==null ) {
 			for(full in js.Browser.navigator.languages) {
 				switch full {
@@ -106,8 +111,8 @@ class Settings {
 			}
 			if( v.navKeys==null )
 				navKeys = Wasd;
-
 		}
+		#end
 
 
 		if( !hasUiState(ShowProjectColors) )
@@ -115,11 +120,13 @@ class Settings {
 	}
 
 
+	#if editor
 	function get_navKeys() return try NavigationKeys.createByName(v.navKeys) catch(_) Wasd;
 	function set_navKeys(k:NavigationKeys) {
 		v.navKeys = k.getName();
 		return k;
 	}
+	#end
 
 	function getOrCreateUiState(id:UiState) {
 		for(s in v.uiStates)
