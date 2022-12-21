@@ -690,6 +690,9 @@ class RulesWizard extends ui.modal.Dialog {
 		// Update tile IDs
 		rd.tileIds = fragments.get(f).copy();
 
+		// Out of bounds policy
+		rd.outOfBoundsValue = intGridValue;
+
 		// Break on match flag
 		// var opaque = true;
 		// for(tid in rd.tileIds)
