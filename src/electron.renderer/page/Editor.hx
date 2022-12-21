@@ -729,6 +729,17 @@ class Editor extends Page {
 
 			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
+
+
+			// WASD navigation
+			case K.Z if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				propagateNavigateShortcut(0, -1, true);
+			case K.Q if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				propagateNavigateShortcut(-1, 0, true);
+			case K.S if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				propagateNavigateShortcut(0, 1, true);
+			case K.D if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+				propagateNavigateShortcut(1, 0, true);
 		}
 
 		// Propagate to tools
@@ -747,6 +758,15 @@ class Editor extends Page {
 				}
 			}
 		}
+	}
+
+	function propagateNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+		!panTool.onNavigateShortcut(dx,dy,pressed)
+		&& ( resizeTool==null || !resizeTool.onNavigateShortcut(dx,dy,pressed) )
+		&& !selectionTool.onNavigateShortcut(dx,dy,pressed)
+		&& ( specialTool==null || !specialTool.onNavigateShortcut(dx,dy,pressed) )
+		&& !curTool.onNavigateShortcut(dx,dy,pressed)
+		&& !worldTool.onNavigateShortcut(dx,dy,pressed);
 	}
 
 

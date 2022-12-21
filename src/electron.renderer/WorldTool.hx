@@ -43,6 +43,11 @@ class WorldTool extends dn.Process {
 	}
 
 
+	public function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+		return false;
+	}
+
+
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
 		// Right click context menu
 		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {

@@ -54,10 +54,10 @@ class TilePalette extends ui.ToolPalette {
 		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
 	}
 
-	override function focusOnSelection() {
+	override function focusOnSelection(immediate=false) {
 		super.focusOnSelection();
 		if( picker!=null )
-			picker.focusOnSelection();
+			picker.focusOnSelection(immediate);
 	}
 
 	override function update() {

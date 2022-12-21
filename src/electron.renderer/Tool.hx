@@ -312,6 +312,11 @@ class Tool<T> extends dn.Process {
 		}
 	}
 
+	/** Called when a WASD key is pressed. Should return TRUE to cancel event bubbling. **/
+	public function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+		return palette!=null && palette.onNavigateShortcut(dx,dy,pressed);
+	}
+
 	public function palettePoppedOut() {
 		return palette!=null && palette.isPoppedOut && ui.modal.ToolPalettePopOut.ME!=null;
 	}
@@ -325,6 +330,7 @@ class Tool<T> extends dn.Process {
 		palette = createToolPalette();
 		if( palette!=null )
 			palette.render();
+		trace("init pal "+palette);
 		initOptionForm();
 	}
 
