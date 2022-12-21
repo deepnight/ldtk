@@ -731,22 +731,22 @@ class Editor extends Page {
 
 			// WASD navigation
 			case K.Z if( !App.ME.isQwerty() && !hasInputFocus() ):
-				propagateNavigateShortcut(0, -1, true);
+				onNavigateShortcut(0, -1, true);
 
 			case K.W if( App.ME.isQwerty() && !hasInputFocus() ):
-				propagateNavigateShortcut(0, -1, true);
+				onNavigateShortcut(0, -1, true);
 
 			case K.Q if( !App.ME.isQwerty() && !hasInputFocus() ):
-				propagateNavigateShortcut(-1, 0, true);
+				onNavigateShortcut(-1, 0, true);
 
 			case K.A if( App.ME.isQwerty() && !hasInputFocus() ):
-				propagateNavigateShortcut(-1, 0, true);
+				onNavigateShortcut(-1, 0, true);
 
 			case K.S if( !hasInputFocus() ):
-				propagateNavigateShortcut(0, 1, true);
+				onNavigateShortcut(0, 1, true);
 
 			case K.D if( !hasInputFocus() ):
-				propagateNavigateShortcut(1, 0, true);
+				onNavigateShortcut(1, 0, true);
 		}
 
 		// Propagate to tools
@@ -767,32 +767,31 @@ class Editor extends Page {
 		}
 	}
 
-	function propagateNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+	function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
 		if( App.ME.isCtrlDown() )
 			return;
 
-		if( App.ME.isShiftDown() ) {
-			// Layers navigation
-			if( project.defs.layers.length>0 ) {
-				var lidx = 0;
-				for(ld in project.defs.layers)
-					if( curLayerDef==ld )
-						break;
-					else
-						lidx++;
-				lidx += dy + dx*2;
-				var ld = project.defs.layers[ M.iclamp(lidx, 0, project.defs.layers.length-1) ];
-				selectLayerInstance( curLevel.getLayerInstance(ld) );
-			}
-		}
-		else if( !App.ME.hasAnyToggleKeyDown() ) {
+		// if( App.ME.isShiftDown() ) {
+		// 	// Layers navigation
+		// 	if( project.defs.layers.length>0 ) {
+		// 		var lidx = 0;
+		// 		for(ld in project.defs.layers)
+		// 			if( curLayerDef==ld )
+		// 				break;
+		// 			else
+		// 				lidx++;
+		// 		lidx += dy + dx*2;
+		// 		var ld = project.defs.layers[ M.iclamp(lidx, 0, project.defs.layers.length-1) ];
+		// 		selectLayerInstance( curLevel.getLayerInstance(ld) );
+		// 	}
+		// }
+		if( !App.ME.hasAnyToggleKeyDown() ) {
 			// Tool navigation
-			!panTool.onNavigateShortcut(dx,dy,pressed)
-			&& ( resizeTool==null || !resizeTool.onNavigateShortcut(dx,dy,pressed) )
-			&& !selectionTool.onNavigateShortcut(dx,dy,pressed)
-			&& ( specialTool==null || !specialTool.onNavigateShortcut(dx,dy,pressed) )
-			&& !curTool.onNavigateShortcut(dx,dy,pressed)
-			&& !worldTool.onNavigateShortcut(dx,dy,pressed);
+			!panTool.onNavigateSelection(dx,dy,pressed)
+			&& ( resizeTool==null || !resizeTool.onNavigateSelection(dx,dy,pressed) )
+			&& !selectionTool.onNavigateSelection(dx,dy,pressed)
+			&& ( specialTool==null || !specialTool.onNavigateSelection(dx,dy,pressed) )
+			&& !curTool.onNavigateSelection(dx,dy,pressed);
 		}
 
 	}

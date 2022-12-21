@@ -54,7 +54,7 @@ class TilePalette extends ui.ToolPalette {
 		opt.append( JsTools.createKeyInLabel("[R]andom mode") );
 	}
 
-	override function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool):Bool {
+	override function onNavigateSelection(dx:Int, dy:Int, pressed:Bool):Bool {
 		if( picker!=null )
 			picker.navigate(dx,dy);
 		return true;

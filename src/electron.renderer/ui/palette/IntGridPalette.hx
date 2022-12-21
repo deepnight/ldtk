@@ -67,7 +67,7 @@ class IntGridPalette extends ui.ToolPalette {
 
 
 
-	override function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool):Bool {
+	override function onNavigateSelection(dx:Int, dy:Int, pressed:Bool):Bool {
 		// Search current selection position
 		var tool : tool.lt.IntGridTool = cast tool;
 		var ld = Editor.ME.curLayerDef;

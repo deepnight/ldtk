@@ -62,7 +62,7 @@ class ToolPalette {
 	}
 
 	/** Called when a WASD key is pressed. Should return TRUE to cancel event bubbling. **/
-	public function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+	public function onNavigateSelection(dx:Int, dy:Int, pressed:Bool) {
 		return false;
 	}
 

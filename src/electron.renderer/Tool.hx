@@ -313,8 +313,8 @@ class Tool<T> extends dn.Process {
 	}
 
 	/** Called when a WASD key is pressed. Should return TRUE to cancel event bubbling. **/
-	public function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
-		return palette!=null && palette.onNavigateShortcut(dx,dy,pressed);
+	public function onNavigateSelection(dx:Int, dy:Int, pressed:Bool) {
+		return palette!=null && palette.onNavigateSelection(dx,dy,pressed);
 	}
 
 	public function palettePoppedOut() {

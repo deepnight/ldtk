@@ -71,7 +71,7 @@ class EntityPalette extends ui.ToolPalette {
 	}
 
 
-	override function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool):Bool {
+	override function onNavigateSelection(dx:Int, dy:Int, pressed:Bool):Bool {
 		// Search current selection position
 		var tool : tool.lt.EntityTool = cast tool;
 		var groupIdx = 0;
