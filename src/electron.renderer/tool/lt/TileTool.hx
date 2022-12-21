@@ -397,9 +397,9 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
 
-		if( !App.ME.hasAnyToggleKeyDown() && !Editor.ME.hasInputFocus() )
+		if( !Editor.ME.hasInputFocus() )
 			switch keyId {
-				case K.R :
+				case K.R if( !App.ME.hasAnyToggleKeyDown() ):
 					setMode( isRandomMode() ? Stamp : Random );
 					ui.Notification.quick((isRandomMode()?"Stamp":"Random")+" mode");
 					editor.ge.emit(ToolOptionChanged);
@@ -408,7 +408,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				case K.S if( App.ME.isShiftDown() ):
 					saveSelection();
 
-				case K.L:
+				case K.L if( !App.ME.hasAnyToggleKeyDown() ):
 					var saved = curTilesetDef.getSavedSelectionFor( getSelectedValue().ids[0] );
 					if( saved!=null && !selectedValuesIdentical(saved.ids) ) {
 						if( saved.ids.length>1 )
@@ -420,12 +420,12 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 						onValuePicking();
 					}
 
-				case K.X:
+				case K.X if( !App.ME.hasAnyToggleKeyDown() ):
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
 					customCursor(new hxd.Event(EMove), lastMouse);
 
-				case K.Y:
+				case K.Y if( !App.ME.hasAnyToggleKeyDown() ):
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
 					customCursor(new hxd.Event(EMove), lastMouse);
