@@ -17,9 +17,9 @@ class TileToolPicker extends ui.Tileset {
 	}
 
 	override function setSelectedTileIds(tileIds:Array<Int>) {
-		super.setSelectedTileIds(tileIds);
 		tool.flipX = tool.flipY = false;
 		tool.selectValue({ mode:tool.getMode(), ids:tileIds });
+		super.setSelectedTileIds(tileIds);
 	}
 
 	override function renderSelection() {
@@ -42,4 +42,87 @@ class TileToolPicker extends ui.Tileset {
 
 		super.modifySelection(selIds, add);
 	}
+
+
+	public function navigate(dx:Int, dy:Int) {
+		var tids = getSelectedTileIds();
+		if( tids.length==0 )
+			tids = [0];
+
+		// Get min/max
+		var minTid = 999999;
+		var maxTid = -1;
+		for(tid in tids) {
+			minTid = M.imin(tid, minTid);
+			maxTid = M.imax(tid, maxTid);
+		}
+
+		// Get current selection bounds
+		var left = tilesetDef.getTileCx(minTid);
+		var right = tilesetDef.getTileCx(maxTid);
+		var top = tilesetDef.getTileCy(minTid);
+		var bottom = tilesetDef.getTileCy(maxTid);
+		var wid = ( right-left+1 );
+		var hei = ( bottom-top+1 );
+
+		// Pick smart target cx/cy
+		var tcx = dx<0 ? left-1 : dx>0 ? right+1 : left;
+		var tcy = dy<0 ? top-1 : dy>0 ? bottom+1 : top;
+		var saved = tilesetDef.getSavedSelectionFor( tilesetDef.getTileId(tcx,tcy) );
+		if( saved!=null ) {
+			tool.setMode(saved.mode);
+			setSelectedTileIds(saved.ids);
+			focusOnSelection();
+			Editor.ME.ge.emit(ToolValueSelected);
+			return;
+		}
+
+		// Navigate by chunks
+		// dx *= wid;
+		// dy *= hei;
+
+		// Loop on borders
+		var looped = false;
+		for(i in 0...tids.length) {
+			if( dx!=0 ) {
+				var cx = tilesetDef.getTileCx(tids[i]);
+				if( cx+dx<0 ) {
+					// Loop left
+					dx = tilesetDef.cWid - tilesetDef.getTileCx(maxTid)-1;
+					looped = true;
+					break;
+				}
+				else if( cx+dx>=tilesetDef.cWid ) {
+					// Loop right
+					dx = -tilesetDef.cWid + ( tilesetDef.getTileCx(maxTid) - tilesetDef.getTileCx(minTid) ) + 1;
+					looped = true;
+					break;
+				}
+			}
+			if( dy!=0 ) {
+				var cy = tilesetDef.getTileCy(tids[i]);
+				if( cy+dy<0 ) {
+					// Loop top
+					dy = tilesetDef.cHei - tilesetDef.getTileCy(maxTid)-1;
+					looped = true;
+					break;
+				}
+				else if( cy+dy>=tilesetDef.cHei ) {
+					// Loop bottom
+					dy = -tilesetDef.cHei + ( tilesetDef.getTileCy(maxTid) - tilesetDef.getTileCy(minTid) ) + 1;
+					looped = true;
+					break;
+				}
+			}
+		}
+
+		// Move selection
+		var offset = dx + dy*tilesetDef.cWid;
+		for(i in 0...tids.length)
+			tids[i]+=offset;
+		setSelectedTileIds(tids);
+		focusOnSelection(looped);
+		Editor.ME.ge.emit(ToolValueSelected);
+	}
+
 }

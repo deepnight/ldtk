@@ -296,67 +296,6 @@ class Tileset {
 	}
 
 
-	public function navigate(dx:Int, dy:Int) {
-		var tids = getSelectedTileIds();
-		if( tids.length==0 )
-			tids = [0];
-
-		// Get min/max
-		var minTid = 999999;
-		var maxTid = -1;
-		for(tid in tids) {
-			minTid = M.imin(tid, minTid);
-			maxTid = M.imax(tid, maxTid);
-		}
-
-		// Navigate by chunks
-		dx *= ( tilesetDef.getTileCx(maxTid) - tilesetDef.getTileCx(minTid) + 1 );
-		dy *= ( tilesetDef.getTileCy(maxTid) - tilesetDef.getTileCy(minTid) + 1 );
-
-		// Loop on borders
-		var looped = false;
-		for(i in 0...tids.length) {
-			if( dx!=0 ) {
-				var cx = tilesetDef.getTileCx(tids[i]);
-				if( cx+dx<0 ) {
-					// Loop left
-					dx = tilesetDef.cWid - tilesetDef.getTileCx(maxTid)-1;
-					looped = true;
-					break;
-				}
-				else if( cx+dx>=tilesetDef.cWid ) {
-					// Loop right
-					dx = -tilesetDef.cWid + ( tilesetDef.getTileCx(maxTid) - tilesetDef.getTileCx(minTid) ) + 1;
-					looped = true;
-					break;
-				}
-			}
-			if( dy!=0 ) {
-				var cy = tilesetDef.getTileCy(tids[i]);
-				if( cy+dy<0 ) {
-					// Loop top
-					dy = tilesetDef.cHei - tilesetDef.getTileCy(maxTid)-1;
-					looped = true;
-					break;
-				}
-				else if( cy+dy>=tilesetDef.cHei ) {
-					// Loop bottom
-					dy = -tilesetDef.cHei + ( tilesetDef.getTileCy(maxTid) - tilesetDef.getTileCy(minTid) ) + 1;
-					looped = true;
-					break;
-				}
-			}
-		}
-
-		// Move selection
-		var offset = dx + dy*tilesetDef.cWid;
-		for(i in 0...tids.length)
-			tids[i]+=offset;
-		setSelectedTileIds(tids);
-		focusOnSelection(looped);
-	}
-
-
 	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
