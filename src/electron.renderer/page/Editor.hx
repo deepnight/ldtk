@@ -620,8 +620,9 @@ class Editor extends Page {
 			case K.W if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				setWorldMode( !worldMode );
 
-			case K.QWERTY_QUOTE if( !hasInputFocus() ):
-				setWorldMode( !worldMode );
+			case K.QWERTY_QUOTE, K.QWERTY_TILDE:
+				if( !hasInputFocus() )
+					setWorldMode( !worldMode );
 
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
@@ -729,10 +730,16 @@ class Editor extends Page {
 
 
 			// WASD navigation
-			case K.Z if( !hasInputFocus() ):
+			case K.Z if( !App.ME.isQwerty() && !hasInputFocus() ):
 				propagateNavigateShortcut(0, -1, true);
 
-			case K.Q if( !hasInputFocus() ):
+			case K.W if( App.ME.isQwerty() && !hasInputFocus() ):
+				propagateNavigateShortcut(0, -1, true);
+
+			case K.A if( !App.ME.isQwerty() && !hasInputFocus() ):
+				propagateNavigateShortcut(-1, 0, true);
+
+			case K.Q if( App.ME.isQwerty() && !hasInputFocus() ):
 				propagateNavigateShortcut(-1, 0, true);
 
 			case K.S if( !hasInputFocus() ):
