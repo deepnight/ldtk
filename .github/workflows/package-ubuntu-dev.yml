@@ -15,18 +15,31 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        haxe: [4.2.0]
+        haxe: [4.2.4]
       fail-fast: true
     runs-on: ubuntu-latest
 
     steps:
+      # Get branch name
+      - name: getBranch
+        shell: bash
+        run: echo "::set-output name=v::${GITHUB_REF#refs/heads/}"
+        id: branch
+
       # Checkout, install haxe and libs
       - uses: actions/checkout@v2
       - uses: krdlab/setup-haxe@v1
         with:
-          haxe-version: 4.2.0
+          haxe-version: ${{ matrix.haxe }}
       - run: haxe -version
-      - run: haxe setup.hxml
+
+      # Install libs
+      - run: haxelib install uuid
+      - run: haxelib git castle https://github.com/ncannasse/castle
+      - run: haxelib git heaps https://github.com/deepnight/heaps.git
+      - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+      - run: haxelib git electron https://github.com/tong/hxelectron.git
+      - run: haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git
 
       # Install haxe API from same branch (if it exists)...
       - name: Install Haxe API from same branch
@@ -40,6 +53,7 @@ jobs:
           haxelib remove ldtk-haxe-api
           haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
+      # Install deepnightLibs
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
       - run: haxelib list
 
