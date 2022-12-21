@@ -65,7 +65,7 @@ class TileToolPicker extends ui.Tileset {
 		var wid = ( right-left+1 );
 		var hei = ( bottom-top+1 );
 
-		// Pick smart target cx/cy
+		// Try to pick a nearby saved selection
 		var tcx = dx<0 ? left-1 : dx>0 ? right+1 : left;
 		var tcy = dy<0 ? top-1 : dy>0 ? bottom+1 : top;
 		var saved = tilesetDef.getSavedSelectionFor( tilesetDef.getTileId(tcx,tcy) );
@@ -77,9 +77,15 @@ class TileToolPicker extends ui.Tileset {
 			return;
 		}
 
-		// Navigate by chunks
-		// dx *= wid;
-		// dy *= hei;
+		var wasOnSaved = tilesetDef.hasSavedSelectionFor(minTid);
+		if( wasOnSaved )
+			tids = [
+				dx<0 ? tilesetDef.getTileId(left,top)
+				: dx>0 ? tilesetDef.getTileId(right,top)
+				: dy<0 ? tilesetDef.getTileId(left,top)
+				: tilesetDef.getTileId(left,bottom)
+			];
+
 
 		// Loop on borders
 		var looped = false;
