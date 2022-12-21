@@ -592,9 +592,6 @@ class Editor extends Page {
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				cd.setS("debugLock",Const.INFINITE);
 				N.msg("Locked.", 0xff7700);
-
-			case K.D if( !worldMode && !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
-				N.debug("Test "+dn.Lib.repeatChar("x",Std.random(20)),"Some subtitle");
 			#end
 
 			case K.S if( !hasInputFocus() && App.ME.isCtrlDown() ):
@@ -732,13 +729,16 @@ class Editor extends Page {
 
 
 			// WASD navigation
-			case K.Z if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.Z if( !hasInputFocus() ):
 				propagateNavigateShortcut(0, -1, true);
-			case K.Q if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+
+			case K.Q if( !hasInputFocus() ):
 				propagateNavigateShortcut(-1, 0, true);
-			case K.S if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+
+			case K.S if( !hasInputFocus() ):
 				propagateNavigateShortcut(0, 1, true);
-			case K.D if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+
+			case K.D if( !hasInputFocus() ):
 				propagateNavigateShortcut(1, 0, true);
 		}
 
@@ -761,12 +761,33 @@ class Editor extends Page {
 	}
 
 	function propagateNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
-		!panTool.onNavigateShortcut(dx,dy,pressed)
-		&& ( resizeTool==null || !resizeTool.onNavigateShortcut(dx,dy,pressed) )
-		&& !selectionTool.onNavigateShortcut(dx,dy,pressed)
-		&& ( specialTool==null || !specialTool.onNavigateShortcut(dx,dy,pressed) )
-		&& !curTool.onNavigateShortcut(dx,dy,pressed)
-		&& !worldTool.onNavigateShortcut(dx,dy,pressed);
+		if( App.ME.isCtrlDown() )
+			return;
+
+		if( App.ME.isShiftDown() ) {
+			// Layers navigation
+			if( project.defs.layers.length>0 ) {
+				var lidx = 0;
+				for(ld in project.defs.layers)
+					if( curLayerDef==ld )
+						break;
+					else
+						lidx++;
+				lidx += dy + dx*2;
+				var ld = project.defs.layers[ M.iclamp(lidx, 0, project.defs.layers.length-1) ];
+				selectLayerInstance( curLevel.getLayerInstance(ld) );
+			}
+		}
+		else if( !App.ME.hasAnyToggleKeyDown() ) {
+			// Tool navigation
+			!panTool.onNavigateShortcut(dx,dy,pressed)
+			&& ( resizeTool==null || !resizeTool.onNavigateShortcut(dx,dy,pressed) )
+			&& !selectionTool.onNavigateShortcut(dx,dy,pressed)
+			&& ( specialTool==null || !specialTool.onNavigateShortcut(dx,dy,pressed) )
+			&& !curTool.onNavigateShortcut(dx,dy,pressed)
+			&& !worldTool.onNavigateShortcut(dx,dy,pressed);
+		}
+
 	}
 
 
