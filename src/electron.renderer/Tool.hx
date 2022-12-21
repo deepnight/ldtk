@@ -330,7 +330,6 @@ class Tool<T> extends dn.Process {
 		palette = createToolPalette();
 		if( palette!=null )
 			palette.render();
-		trace("init pal "+palette);
 		initOptionForm();
 	}
 
