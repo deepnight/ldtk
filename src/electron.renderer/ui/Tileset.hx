@@ -295,6 +295,59 @@ class Tileset {
 		ty = old.ty;
 	}
 
+
+	public function navigate(dx:Int, dy:Int) {
+		var tids = getSelectedTileIds();
+		if( tids.length==0 )
+			tids = [0];
+
+		// Get min/max
+		var minTid = 999999;
+		var maxTid = -1;
+		for(tid in tids) {
+			minTid = M.imin(tid, minTid);
+			maxTid = M.imax(tid, maxTid);
+		}
+
+		// Loop on borders
+		for(i in 0...tids.length) {
+			if( dx!=0 ) {
+				var cx = tilesetDef.getTileCx(tids[i]);
+				if( cx+dx<0 ) {
+					// Loop left
+					dx = tilesetDef.cWid - tilesetDef.getTileCx(maxTid)-1;
+					break;
+				}
+				else if( cx+dx>=tilesetDef.cWid ) {
+					// Loop right
+					dx = -tilesetDef.cWid + ( tilesetDef.getTileCx(maxTid) - tilesetDef.getTileCx(minTid) ) + 1;
+					break;
+				}
+			}
+			if( dy!=0 ) {
+				var cy = tilesetDef.getTileCy(tids[i]);
+				if( cy+dy<0 ) {
+					// Loop top
+					dy = tilesetDef.cHei - tilesetDef.getTileCy(maxTid)-1;
+					break;
+				}
+				else if( cy+dy>=tilesetDef.cHei ) {
+					// Loop bottom
+					dy = -tilesetDef.cHei + ( tilesetDef.getTileCy(maxTid) - tilesetDef.getTileCy(minTid) ) + 1;
+					break;
+				}
+			}
+		}
+
+		// Move selection
+		var offset = dx + dy*tilesetDef.cWid;
+		for(i in 0...tids.length)
+			tids[i]+=offset;
+		setSelectedTileIds(tids);
+		focusOnSelection(true);
+	}
+
+
 	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
@@ -687,7 +740,7 @@ class Tileset {
 	public function update() {
 		// Focus scrolling animation
 		if( tx!=null ) {
-			var spd = 0.19;
+			var spd = 0.3;
 			scrollX += (tx-scrollX) * spd;
 			scrollY += (ty-scrollY) * spd;
 		}
