@@ -4,6 +4,10 @@
 
 The new Assistant makes the creation of standard auto-tiles rules super easy!
 
+Fill the layouts on the left using your own tiles and LDtk will create all the rules accordingly. By default, if you don't have all the orientations drawn, the assistant will automatically just use symmetrical rules to fill the gaps.
+
+And if you forget something or want to make a change, you can simply edit the layout again to update the rules automatically.
+
 ![](1.2.0/rulesWizard.gif)
 
 ## WASD controls
