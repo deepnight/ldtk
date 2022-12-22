@@ -85,7 +85,11 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
  - Updated the design of the home.
 
 ## JSON changes
- - Removed deprecated field `autoTilesetDefUid` from LayerDef: use `tilesetDefUid` instead.
+
+The following fields deprecated in update 1.0.0 were removed from the JSON in 1.2.0:
+
+ - Removed `LayerDef.autoTilesetDefUid` (use `tilesetDefUid` instead).
+ - Removed `EntityDef.tileId` (use `tileRect` instead).
 
 ## Haxe API
 

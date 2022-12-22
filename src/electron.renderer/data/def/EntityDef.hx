@@ -199,7 +199,6 @@ class EntityDef {
 			renderMode: JsonTools.writeEnum(renderMode, false),
 			showName: showName,
 			tilesetId: tilesetId,
-			tileId: tileRect==null ? null : try p.defs.getTilesetDef(tilesetId).getFirstTileIdFromRect(tileRect) catch(_) null,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 			tileRect: tileRect,
 			nineSliceBorders: tileRenderMode==NineSlice ? nineSliceBorders.copy() : [],
