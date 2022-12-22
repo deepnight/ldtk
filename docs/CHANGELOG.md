@@ -84,6 +84,9 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
  - Fixed useless scrollbar in context menus.
  - Updated the design of the home.
 
+## JSON changes
+ - Removed deprecated field `autoTilesetDefUid` from LayerDef: use `tilesetDefUid` instead.
+
 ## Haxe API
 
  - Added definition JSON access to Layers and Entities

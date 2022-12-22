@@ -79,6 +79,7 @@ class LayerDef {
 		if( (cast json).parallaxFactor!=null )
 			json.parallaxFactorX = json.parallaxFactorY = (cast json).parallaxFactor;
 
+		// Support deprecated autoTilesetDefUid
 		if( (cast json).autoTilesetDefUid!=null && json.tilesetDefUid==null )
 			json.tilesetDefUid = (cast json).autoTilesetDefUid;
 
@@ -116,7 +117,6 @@ class LayerDef {
 			}
 		}
 
-		// o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
 
 		// Read auto-layer rules
@@ -166,7 +166,6 @@ class LayerDef {
 				color: JsonTools.writeColor(iv.color),
 			}),
 
-			autoTilesetDefUid: tilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
