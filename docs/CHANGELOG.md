@@ -90,6 +90,7 @@ The following fields deprecated in update 1.0.0 were removed from the JSON in 1.
 
  - Removed `LayerDef.autoTilesetDefUid` (use `tilesetDefUid` instead).
  - Removed `EntityDef.tileId` (use `tileRect` instead).
+ - Removed `NeighbourLevel.levelUid` (use `levelIid` instead).
 
 ## Haxe API
 
