@@ -9,8 +9,8 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464359,
-	"nextUid": 28,
+	"appBuildId": 464361,
+	"nextUid": 30,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
 	"worldGridWidth": 256,
