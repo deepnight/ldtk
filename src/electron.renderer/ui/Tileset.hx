@@ -687,7 +687,7 @@ class Tileset {
 
 	public function update() {
 		// Focus scrolling animation
-		final spd = M.fmin(1, 0.5 * App.ME.tmod);
+		final spd = M.fmin(1, 0.38 * App.ME.tmod);
 		if( tx!=null ) {
 			scrollX += (tx-scrollX) * spd;
 			if( M.fabs(scrollX-tx)<=1 ) {
