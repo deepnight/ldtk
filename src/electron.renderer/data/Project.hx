@@ -40,7 +40,8 @@ class Project {
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
 
-	var quickLevelAccess : Map<Int, Level> = new Map();
+	var quickLevelAccessUid : Map<Int, Level> = new Map();
+	var quickLevelAccessIid : Map<String, Level> = new Map();
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
 	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
@@ -644,7 +645,8 @@ class Project {
 		clearUsedIids();
 		initEntityIidsCache();
 		defs.tidy(this);
-		quickLevelAccess = new Map();
+		quickLevelAccessUid = new Map();
+		quickLevelAccessIid = new Map();
 		for(w in worlds)
 			w.tidy(this);
 		initUsedColors();
@@ -871,21 +873,26 @@ class Project {
 	/**
 		Quick access to a level in any world
 	**/
-	public inline function getLevelAnywhere(uid:Int) : Null<Level> {
-		return quickLevelAccess.get(uid);
+	public inline function getLevelAnywhere(?uid:Int, ?iid:String) : Null<Level> {
+		return uid!=null ? quickLevelAccessUid.get(uid)
+			: iid!=null ? quickLevelAccessIid.get(iid)
+			: null;
 	}
 
 
 	public inline function registerLevelQuickAccess(l:Level) {
-		quickLevelAccess.set(l.uid, l);
+		quickLevelAccessUid.set(l.uid, l);
+		quickLevelAccessIid.set(l.iid, l);
 	}
 
 	public inline function unregisterLevelQuickAccess(l:Level) {
-		quickLevelAccess.remove(l.uid);
+		quickLevelAccessUid.remove(l.uid);
+		quickLevelAccessIid.remove(l.iid);
 	}
 
 	public function resetQuickLevelAccesses() {
-		quickLevelAccess = new Map();
+		quickLevelAccessUid = new Map();
+		quickLevelAccessIid = new Map();
 		for(w in worlds)
 		for(l in w.levels)
 			registerLevelQuickAccess(l);
