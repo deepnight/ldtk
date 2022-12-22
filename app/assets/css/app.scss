@@ -8799,9 +8799,13 @@ $patternSize : 32px;
 	.wrapper .content {
 		.layout {
 			display: grid;
-			grid-template-columns: min-content 800px;
+			min-width: 600px;
+			max-width: 90vw;
+			min-height: 350px;
+			max-height: 72vh;
+			grid-template-columns: min-content auto;
+			grid-template-rows: 100%;
 			column-gap: 8px;
-			height: 550px;
 
 			.side {
 				.intGrid {
@@ -8848,18 +8852,27 @@ $patternSize : 32px;
 				.grid {
 					display: grid;
 					gap: 1px;
-					grid-template-columns: repeat(11, 48px);
-					grid-template-rows: repeat(5, 48px);
+					grid-template-columns: repeat(11, 32px);
+					grid-template-rows: repeat(5, 32px);
+
+					@media( max-width:900px) {
+						grid-template-columns: repeat(11, 16px);
+						grid-template-rows: repeat(5, 16px);
+					}
+
 					.cell {
 						position: relative;
-						border: 1px solid $bgDark;
+						outline: 1px solid $bgDark;
 						cursor: pointer;
+						img {
+							width: 100% !important;
+							height: 100% !important;
+						}
 						&:hover {
-							border-color: $orange;
+							outline-color: $orange;
 						}
 						&.active {
-							border-color: white;
-							outline: 2px solid white;
+							outline: 3px solid white;
 							z-index: 2;
 						}
 						img.faded {
@@ -8870,7 +8883,7 @@ $patternSize : 32px;
 							opacity: 0.11;
 						}
 						&.mirror {
-							border: 1px dashed $bgLighter
+							outline: 1px dashed $bgLighter
 						}
 					}
 				}
@@ -8879,6 +8892,7 @@ $patternSize : 32px;
 			&>.tileset {
 				border: 1px solid $bgLighter;
 			}
+
 		}
 	}
 }
