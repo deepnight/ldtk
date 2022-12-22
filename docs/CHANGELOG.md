@@ -2,9 +2,9 @@
 
 ## Rules assistant
 
-TODO
+The new Assistant makes the creation of standard auto-tiles rules super easy!
 
-![](1.2.0/wizard.png)
+![](1.2.0/rulesWizard.gif)
 
 ## WASD controls
 
