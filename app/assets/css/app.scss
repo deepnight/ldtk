@@ -7579,6 +7579,10 @@ body.sorting ul.collapsedSortTarget {
 							height: 18px;
 							font-weight: bold;
 							opacity: 0.6;
+							.icon {
+								width: 100%;
+								height: 100%;
+							}
 							&:hover {
 								opacity: 1;
 							}
@@ -8005,7 +8009,12 @@ $patternSize : 32px;
 
 	>.wrapper .content {
 		display: grid;
+		max-width: 400px;
 		gap: 8px;
+
+		.help {
+			grid-column: 1/3;
+		}
 
 		.options {
 			border: 1px solid $bgLight;
@@ -8023,6 +8032,17 @@ $patternSize : 32px;
 			color: $bgLight;
 		}
 
+		.reset {
+			grid-column: 2/3;
+			grid-row: 2/3;
+			align-self: center;
+			justify-self: center;
+			font-size: 10pt;
+			&:hover {
+				color: white;
+			}
+		}
+
 		.axis {
 			display: grid;
 			gap: 8px;
@@ -8032,14 +8052,14 @@ $patternSize : 32px;
 
 			&.x {
 				grid-column: 1/2;
-				grid-row: 1/2;
+				grid-row: 2/3;
 				grid-template-columns: repeat(3, min-content);
 				align-items: center;
 				justify-content: center;
 			}
 			&.y {
 				grid-column: 2/3;
-				grid-row: 2/3;
+				grid-row: 3/4;
 				grid-template-rows: repeat(3, min-content);
 				align-content: center;
 				justify-items: center;
@@ -8051,7 +8071,7 @@ $patternSize : 32px;
 		}
 		.preview {
 			grid-column: 1/2;
-			grid-row: 2/3;
+			grid-row: 3/4;
 			display: grid;
 			gap: 2px;
 			min-width: 200px;
@@ -8066,8 +8086,12 @@ $patternSize : 32px;
 				background-repeat: repeat;
 
 				&.active {
-					background-color: $orange;
-					background-image: none;
+					background-color: $helpDark;
+					background-image: url("../icons/active.png");
+					background-repeat: no-repeat;
+					background-position: center;
+					background-size: contain;
+					// background-image: none;
 				}
 			}
 		}
@@ -8808,6 +8832,10 @@ $patternSize : 32px;
 			column-gap: 8px;
 
 			.side {
+				.help {
+					margin-bottom: 8px;
+				}
+
 				.intGrid {
 					display: grid;
 					grid-template-columns: 32px 32px auto;
