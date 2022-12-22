@@ -1,6 +1,6 @@
-# 1.2.0 - Entity visuals and Auto-layer rules remapping
+# 1.2.0 - Auto-layer rules assistant
 
-## Rules assistant
+## Auto-layer rules assistant
 
 The new Assistant makes the creation of standard auto-tiles rules super easy!
 
@@ -67,6 +67,7 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
 
  - You can right click on a group of rules to modify the "out-of-bounds policy" of all its rules in a single batch.
  - Added nicer default colors for various elements (eg. int grid values, entities, enum values etc.). The palette is "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
+ - Added a Color blind option in app settings: for now, this will only affect the colors automatically picked for new Entities, IntGrid values, Enums etc.)
  - Hold SHIFT to disable snapping when moving levels around in the world view.
  - You can now manually enter custom values for Entity pivots.
  - Many Load button in the UI will now remember properly their last folder
