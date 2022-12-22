@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464318,
+	"appBuildId": 464367,
 	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -1392,7 +1392,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1ac98710-7820-11ed-b1de-2b9830b121a0"
+								"worldIid": "1e9dbb40-7820-11ed-9535-a3a171c4a88b"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1414,7 +1414,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1ac98710-7820-11ed-b1de-2b9830b121a0"
+								"worldIid": "1e9dbb40-7820-11ed-9535-a3a171c4a88b"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1436,7 +1436,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1ac98710-7820-11ed-b1de-2b9830b121a0"
+								"worldIid": "1e9dbb40-7820-11ed-9535-a3a171c4a88b"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
