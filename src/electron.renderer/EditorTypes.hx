@@ -17,7 +17,7 @@ enum GlobalEvent {
 	LevelRestoredFromHistory(level:data.Level);
 	LevelJsonCacheInvalidated(level:data.Level);
 
-	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourUids:Null<Array<Int>>);
+	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourIids:Null<Array<String>>);
 	WorldSettingsChanged;
 
 	LayerDefAdded;

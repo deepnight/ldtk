@@ -7,7 +7,7 @@ class WorldTool extends dn.Process {
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var clickedLevel : Null<data.Level>;
-	var initialNeighbours : Null< Array<Int> >;
+	var initialNeighbours : Null< Array<String> >;
 	var levelOriginX : Int;
 	var levelOriginY : Int;
 	var origin : Coords;
@@ -170,7 +170,7 @@ class WorldTool extends dn.Process {
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
 			clickedSameLevel = editor.curLevel==clickedLevel;
-			initialNeighbours = clickedLevel.getNeighboursUids();
+			initialNeighbours = clickedLevel.getNeighboursIids();
 		}
 	}
 
