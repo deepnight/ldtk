@@ -74,17 +74,10 @@ class Level {
 	}
 
 	/**
-		List nearby level (only int UIDs)
-	**/
-	public function getNeighboursUids() : Array<Int> {
-		return getNeighboursJson().map( njson->njson.levelUid );
-	}
-
-	/**
 		List nearby level
 	**/
 	public function getNeighbours() : Array<Level> {
-		return getNeighboursJson().map( njson->_project.getLevelAnywhere(njson.levelUid) );
+		return getNeighboursJson().map( njson->_project.getLevelAnywhere(njson.levelIid) );
 	}
 
 
@@ -106,11 +99,11 @@ class Level {
 						: l.worldX+l.pxWid<=worldX ? "w"
 						: l.worldY+l.pxHei<=worldY ? "n"
 						: "s";
-					return {
+					var nl : ldtk.Json.NeighbourLevel = {
 						levelIid: l.iid,
-						levelUid: l.uid,
 						dir: dir,
 					}
+					return nl;
 				});
 
 			case LinearHorizontal, LinearVertical:
