@@ -164,14 +164,8 @@ class EditLayerDefs extends ui.modal.Panel {
 					case EmptyBakedLayer:
 					case KeepBakedLayer:
 				}
-				// ld.type = Tiles;
-				// ld.tilesetDefUid = ld.autoTilesetDefUid;
-				// ld.autoRuleGroups = [];
-				// ld.autoSourceLayerDefUid = null;
-				// ld.autoTilesetDefUid = null;
 
 				editor.ge.emit( LayerDefAdded );
-				// editor.ge.emit( LayerDefConverted );
 				new LastChance( L.t._("Baked layer ::name::", {name:ld.identifier}), oldProject );
 			}
 		);
