@@ -32,11 +32,10 @@ class Modal extends dn.Process {
 
 		jMask = jModalAndMask.find(".mask");
 		jMask.mousedown( function(ev:js.jquery.Event) {
-			if( canBeClosedManually ) {
-				ev.stopPropagation();
-				onClickMask();
+			ev.stopPropagation();
+			onClickMask();
+			if( canBeClosedManually )
 				close();
-			}
 		} );
 		jMask.hide().fadeIn(100);
 
