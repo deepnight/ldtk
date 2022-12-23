@@ -2102,6 +2102,8 @@ class Editor extends Page {
 		if( curTool!=null )
 			curTool.onGlobalEvent(e);
 
+		selectionTool.onGlobalEvent(e);
+
 		updateTitle();
 	}
 

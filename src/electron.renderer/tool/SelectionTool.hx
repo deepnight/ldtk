@@ -22,6 +22,16 @@ class SelectionTool extends Tool<Int> {
 		group.dispose();
 	}
 
+	override function onGlobalEvent(ev:GlobalEvent) {
+		super.onGlobalEvent(ev);
+		switch ev {
+			case TilesetImageLoaded(_): clear();
+			case LevelRestoredFromHistory(_): clear();
+			case LayerInstancesRestoredFromHistory(_): clear();
+			case _:
+		}
+	}
+
 	override function getDefaultValue() return -1; // Not actually used
 
 	public function selectAllInLayers(level:data.Level, lis:Array<data.inst.LayerInstance>) {
