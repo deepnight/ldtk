@@ -9,7 +9,7 @@
 		"url": "https://ldtk.io"
 	},
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464388,
 	"nextUid": 10,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -32,6 +32,14 @@
 	"backupLimit": 10,
 	"levelNamePattern": "Level_%idx",
 	"tutorialDesc": null,
+	"customCommands": [
+		{ "command": "cmd /c echo Loaded at %time% >> log.txt", "when": "AfterLoad" },
+		{ "command": "cmd /c echo Save started %time% >> log.txt", "when": "BeforeSave" },
+		{ "command": "cmd /c echo Save complete %time% >> log.txt", "when": "AfterSave" },
+		{ "command": "ping google.com", "when": "Manual" },
+		{ "command": "cmd", "when": "Manual" },
+		{ "command": "butler", "when": "Manual" }
+	],
 	"flags": [],
 	"defs": { "layers": [
 		{
@@ -55,7 +63,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 7,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": 7,
@@ -83,7 +90,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 8,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": 8,
