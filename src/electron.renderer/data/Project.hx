@@ -32,6 +32,7 @@ class Project {
 
 	@:allow(ui.modal.panel.EditProject)
 	var imageExportMode : ldtk.Json.ImageExportMode = None;
+	public var exportLevelBg : Bool = true;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 	public var levelNamePattern : String;
@@ -289,6 +290,7 @@ class Project {
 		p.imageExportMode = JsonTools.readEnum( ldtk.Json.ImageExportMode, json.imageExportMode, false, None );
 		if( json.exportPng!=null )
 			p.imageExportMode = json.exportPng==true ? OneImagePerLayer : None;
+		p.exportLevelBg = JsonTools.readBool(json.exportLevelBg, true);
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -544,6 +546,7 @@ class Project {
 			exportTiled: exportTiled,
 			simplifiedExport: simplifiedExport,
 			imageExportMode: JsonTools.writeEnum(imageExportMode, false),
+			exportLevelBg: exportLevelBg,
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,

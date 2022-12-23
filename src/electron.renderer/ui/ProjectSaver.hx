@@ -282,6 +282,17 @@ class ProjectSaver extends dn.Process {
 									case None: // N/A
 
 									case OneImagePerLayer, LayersAndLevels:
+										// Include bg
+										if( project.exportLevelBg ) {
+											var bg = lr.createBgPng(project, level);
+											var fp = dn.FilePath.fromDir(pngDir);
+											fp.fileName = project.simplifiedExport ? "_bg" : level.identifier+"_bg";
+											fp.extension = "png";
+											NT.writeFileBytes(fp.full, bg.bytes);
+											count++;
+										}
+
+										// Layers
 										var mainLayerImages = new Map();
 										for( li in level.layerInstances ) {
 											log('   -> Layer ${li.def.identifier}...');
@@ -312,6 +323,8 @@ class ProjectSaver extends dn.Process {
 										if( project.getImageExportMode()==LayersAndLevels ) {
 											// Rebuild level render
 											var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+											if( project.exportLevelBg )
+												tex.clear(level.getBgColor());
 											var wrapper = new h2d.Object();
 											level.iterateLayerInstancesInRenderOrder( (li)->{
 												var img = mainLayerImages.get(li.layerDefUid);
@@ -336,6 +349,8 @@ class ProjectSaver extends dn.Process {
 
 									case OneImagePerLevel:
 										var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+										if( project.exportLevelBg )
+											tex.clear(level.getBgColor());
 										level.iterateLayerInstancesInRenderOrder((li)->{
 											lr.drawToTexture(tex, project, level, li);
 										});

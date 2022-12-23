@@ -226,6 +226,22 @@ class LayerRender {
 	}
 
 
+
+	public function createBgPng(p:data.Project, l:data.Level) {
+		var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
+		if( l.bgRelPath==null )
+			tex.clear(l.getBgColor());
+		else {
+			// TODO
+		}
+
+		return {
+			tex: tex,
+			bytes: tex.capturePixels().toPNG(),
+		}
+	}
+
+
 	/**
 		Generate all PNGs for a single layer instance (auto-layer IntGrids generate both tiles & pixel images)
 		Note: if `secondarySuffix` is null, then the output image is the "main" render of this layer.
