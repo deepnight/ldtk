@@ -88,6 +88,7 @@ For obvious security reasons, LDtk will always ask you first if you trust the pr
  - Added a "reset" button near any entity/level field that isn't using its default value.
  - Fixed duplicate identifiers when inserting a level in Horizontal/Vertical layouts
  - Fixed a crash when duplicating a point from an Entity.
+ - Duplicating a selection containing Entities no longer ignores the limit counts defined for these entities.
  - Added support for proper Point duplication for entities that have an Array of Points field.
  - Fixed default multilines values that dropped newline characters.
  - Fixed the default tile of an entity when one of its fields is a Tile, but it is not set to override the entity tile itself.
