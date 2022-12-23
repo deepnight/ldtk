@@ -84,6 +84,7 @@ For obvious security reasons, LDtk will always ask you first if you trust the pr
  - You can now manually enter custom values for Entity pivots.
  - Many Load button in the UI will now remember properly their last folder
  - Added a new layer option to prevent selections when the layer is not active.
+ - Fixed entity duplication that broke entity count limits.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
  - Added a "reset" button near any entity/level field that isn't using its default value.
  - Fixed duplicate identifiers when inserting a level in Horizontal/Vertical layouts
@@ -95,6 +96,8 @@ For obvious security reasons, LDtk will always ask you first if you trust the pr
  - Fixed the Rule editor window when the layer has no IntGrid value.
  - Fixed embed icons reloading when the image was resized.
  - Fixed useless scrollbar in context menus.
+ - Fixed Haxe enum importer regex.
+ - Fixed levels BgColor in JSON not updating when changing project default
  - Updated the design of the home.
 
 ## JSON changes
