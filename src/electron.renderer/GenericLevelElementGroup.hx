@@ -600,6 +600,9 @@ class GenericLevelElementGroup {
 	}
 
 
+	/**
+		Move or duplicate the selection
+	**/
 	public function moveSelecteds(origin:Coords, to:Coords, isCopy:Bool) : Array<data.inst.LayerInstance> {
 		if( elements.length==0 )
 			return [];
@@ -653,17 +656,49 @@ class GenericLevelElementGroup {
 
 				case Entity(li, ei):
 					var i = i;
+
+					// Duplicate entity
 					if( isCopy ) {
-						var old = ei;
-						ei = li.duplicateEntityInstance(ei);
-						elements[i] = Entity(li,ei);
+						// Check limits
+						var ed = ei.def;
+						var oldEi = ei;
+						var newEi : data.inst.EntityInstance = null;
+						var all = ei._project.getAllEntitiesFromLimitScope(li, ed, ed.limitScope);
+						switch ed.limitBehavior {
+							case DiscardOldOnes:
+								if( all.length>=ed.maxCount )
+									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+								else
+									newEi = li.duplicateEntityInstance(ei);
 
-						if( editor.resizeTool!=null && editor.resizeTool.isOnEntity(old) )
-							editor.createResizeToolFor( Entity(li,ei) );
+							case PreventAdding:
+								if( all.length>=ed.maxCount )
+									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+								else
+									newEi = li.duplicateEntityInstance(ei);
 
-						if( ui.EntityInstanceEditor.existsFor(old) )
-							ui.EntityInstanceEditor.openFor(ei);
+							case MoveLastOne:
+								if( all.length>=ed.maxCount )
+									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+								else
+									newEi = li.duplicateEntityInstance(ei);
+						}
+
+						// Allow duplication
+						if( newEi!=null ) {
+							elements[i] = Entity(li,newEi);
+
+							if( editor.resizeTool!=null && editor.resizeTool.isOnEntity(oldEi) )
+								editor.createResizeToolFor( Entity(li,newEi) );
+
+							if( ui.EntityInstanceEditor.existsFor(oldEi) )
+								ui.EntityInstanceEditor.openFor(newEi);
+
+							ei = newEi;
+						}
 					}
+
+					// Apply movement
 					ei.x += Std.int( getDeltaX(origin, to) );
 					ei.y += Std.int( getDeltaY(origin, to) );
 					changedLayers.set(li,li);

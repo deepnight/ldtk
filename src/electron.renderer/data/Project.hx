@@ -493,6 +493,32 @@ class Project {
 			registerEntityInstance(ei);
 	}
 
+
+	public function getAllEntitiesFromLimitScope(curLayerInstance:data.inst.LayerInstance, curEntityDef:data.def.EntityDef, scope:ldtk.Json.EntityLimitScope) {
+		var all : Array<data.inst.EntityInstance> = [];
+		switch scope {
+			case PerLayer:
+				for(ei in curLayerInstance.entityInstances)
+					if( ei.defUid==curEntityDef.uid )
+						all.push(ei);
+
+			case PerLevel:
+				for(li in curLayerInstance.level.layerInstances)
+				for(ei in li.entityInstances)
+					if( ei.defUid==curEntityDef.uid )
+						all.push(ei);
+
+			case PerWorld:
+				for(l in curLayerInstance.level._world.levels)
+				for(li in l.layerInstances)
+				for(ei in li.entityInstances)
+					if( ei.defUid==curEntityDef.uid )
+						all.push(ei);
+		}
+		return all;
+	}
+
+
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
 			iid: iid,

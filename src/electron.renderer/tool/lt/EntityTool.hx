@@ -155,32 +155,13 @@ class EntityTool extends tool.LayerTool<Int> {
 						ei = curLayerInstance.createEntityInstance(curEntityDef);
 					else {
 						// Apply count limit
-						var all = [];
-						switch curEntityDef.limitScope {
-							case PerLayer:
-								for(ei in curLayerInstance.entityInstances)
-									if( ei.defUid==curEntityDef.uid )
-										all.push({ ei:ei, li:curLayerInstance });
-
-							case PerLevel:
-								for(li in curLevel.layerInstances)
-								for(ei in li.entityInstances)
-									if( ei.defUid==curEntityDef.uid )
-										all.push({ ei:ei, li:li });
-
-							case PerWorld:
-								for(l in curWorld.levels)
-								for(li in l.layerInstances)
-								for(ei in li.entityInstances)
-									if( ei.defUid==curEntityDef.uid )
-										all.push({ ei:ei, li:li });
-						}
+						var all = project.getAllEntitiesFromLimitScope(curLayerInstance, curEntityDef, curEntityDef.limitScope);
 						switch curEntityDef.limitBehavior {
 							case DiscardOldOnes:
 								while( all.length>=curEntityDef.maxCount ) {
-									var e = all.shift();
-									e.li.removeEntityInstance( e.ei );
-									editor.ge.emit( EntityInstanceRemoved(e.ei) );
+									var otherEi = all.shift();
+									otherEi._li.removeEntityInstance( otherEi );
+									editor.ge.emit( EntityInstanceRemoved(otherEi) );
 								}
 								ei = curLayerInstance.createEntityInstance(curEntityDef);
 
@@ -192,12 +173,12 @@ class EntityTool extends tool.LayerTool<Int> {
 
 							case MoveLastOne:
 								if( all.length>=curEntityDef.maxCount && all.length>0 ) {
-									var e = all.shift();
-									e.li.removeEntityInstance(e.ei);
-									curLayerInstance.entityInstances.push(e.ei);
+									var otherEi = all.pop();
+									otherEi._li.removeEntityInstance(otherEi);
+									curLayerInstance.entityInstances.push(otherEi);
 									editor.levelRender.invalidateLayer(curLayerInstance);
-									editor.ge.emit( EntityInstanceRemoved(e.ei) );
-									ei = e.ei;
+									editor.ge.emit( EntityInstanceRemoved(otherEi) );
+									ei = otherEi;
 								}
 								else
 									ei = curLayerInstance.createEntityInstance(curEntityDef);
