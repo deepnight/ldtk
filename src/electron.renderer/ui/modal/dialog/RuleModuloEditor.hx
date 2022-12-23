@@ -27,7 +27,6 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		// Reset
 		jContent.find(".reset").click( (ev:js.jquery.Event)->{
 			ev.preventDefault();
-			Notification.debug("reset");
 			rule.xModulo = rule.yModulo = 1;
 			rule.xOffset = rule.yOffset = 0;
 			editor.ge.emit(LayerRuleChanged(rule));
