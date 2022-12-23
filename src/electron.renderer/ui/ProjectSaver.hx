@@ -126,23 +126,23 @@ class ProjectSaver extends dn.Process {
 					error( L.t._('I need to create a folder named "::name::", but there is a file with the exact same name there.', {name:f} ) );
 					return;
 				}
-				else if( !NT.fileExists(project.filePath.full) ) {
-					// Saving to a new file, try to write some dummy empty file first, to check if this will work.
-					var ok = try {
-						NT.writeFileString(project.filePath.full, "-");
-						true;
-					}
-					catch(_) false;
-					if( !ok || !NT.fileExists(project.filePath.full) ) {
-						N.error("Couldn't create this project file! Maybe try to check that you have the right to write files here.");
+				else {
+					// Check dir permissions
+					if( !NT.checkPathPermissions(project.filePath.directory, true, true, false) ) {
+						N.error("You don't have system permissions to access this directory!");
 						complete(false);
 						return;
 					}
-					else
-						beginNextState();
-				}
-				else
+
+					// Check overwrite permissions
+					if( NT.fileExists(project.filePath.full) && !NT.checkPathPermissions(project.filePath.full, true, true, false) ) {
+						N.error("You don't have system permissions to read or write a file in this directory!");
+						complete(false);
+						return;
+					}
+
 					beginNextState();
+				}
 
 			case BeforeSavingActions:
 				if( hasEditor() ) {
@@ -202,15 +202,19 @@ class ProjectSaver extends dn.Process {
 					}
 				});
 
+				var failed = false;
 				ops.push({
 					label: "Writing main file...",
 					cb: ()->{
 						log('  Writing ${project.filePath.full}...');
-						NT.writeFileString(project.filePath.full, savingData.projectJson);
+						try NT.writeFileString(project.filePath.full, savingData.projectJson) catch(_) {
+							failed = true;
+							error( L.t._("Could not write the project JSON file here! Maybe the destination is read-only?") );
+						}
 					}
 				});
 
-				new ui.modal.Progress("Saving main file...", ops, ()->beginNextState());
+				new ui.modal.Progress("Saving main file...", ops, ()->if( !failed ) beginNextState());
 
 
 			case SavingExternLevels:
@@ -521,6 +525,10 @@ class ProjectSaver extends dn.Process {
 
 	function complete(success:Bool) {
 		destroy();
+
+		if( !success )
+			ui.modal.MetaProgress.closeCurrent();
+
 		if( onComplete!=null )
 			onComplete(success);
 	}
