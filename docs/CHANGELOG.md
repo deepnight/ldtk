@@ -63,6 +63,16 @@ In the following example, all tiles were tagged with a Material enum (stone, gra
 
 ![](1.2.0/enumTags.png)
 
+## Custom commands
+
+You can now define custom commands to be executed at various moments (when the project is loaded, saved etc.). These commands can be used for whatever your own production pipeline requires. Here are some typical examples:
+
+- After saving, run a script that parses the JSON and extract all the texts for future localization.
+- When pressing CTRL-R, run your game.
+- After saving, parse the project JSON and check if all levels are properly connected, from your game logic perspective.
+
+![](1.2.0/customCommands.png)
+
 ## Misc
 
  - You can right click on a group of rules to modify the "out-of-bounds policy" of all its rules in a single batch.
