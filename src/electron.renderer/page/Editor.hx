@@ -645,6 +645,10 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					setWorldMode( !worldMode );
 
+			case K.W if( settings.navKeys==Zqsd ):
+				if( !hasInputFocus() )
+					setWorldMode( !worldMode );
+
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
 
