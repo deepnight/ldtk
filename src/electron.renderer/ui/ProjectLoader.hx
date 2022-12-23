@@ -173,9 +173,14 @@ class ProjectLoader {
 		}
 		log.add(tag, "Loading complete.");
 
-		onLoad(p);
-		if( log.containsAnyCriticalEntry() )
-			new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
+		// Custom commands
+		ui.modal.dialog.CommandRunner.runMultipleCommands( p, p.getCustomCommmands(AfterLoad), ()->{
+			// Done
+			onLoad(p);
+			if( log.containsAnyCriticalEntry() )
+				new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
+		});
+
 	}
 
 	function error(err:LoadingError) {

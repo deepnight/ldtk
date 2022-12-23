@@ -6623,6 +6623,30 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		dd.customCommands {
+			display: block;
+			ul {
+				li {
+					display: flex;
+					flex-wrap: nowrap;
+					select {
+						flex: 0 1 0px;
+					}
+					input[type=text] {
+						flex-grow: 1;
+						font-size: 8pt;
+						font-family: 'Courier New', Courier, monospace;
+					}
+					button {
+						flex: 0 1 0px;
+						padding-left: 0;
+						padding-right: 0;
+					}
+				}
+				margin-bottom: 4px;
+			}
+		}
+
 		h2 {
 			margin-bottom: 0;
 		}
@@ -8921,6 +8945,33 @@ $patternSize : 32px;
 				border: 1px solid $bgLighter;
 			}
 
+		}
+	}
+}
+
+
+.window.commandRunner {
+	.wrapper .content {
+		max-width: 80vw;
+		.output {
+			padding: 8px;
+			min-width: 500px;
+			min-height: 200px;
+			max-height: 60vh;
+			overflow: auto;
+			background-color: $bgDark;
+			border: 1px solid $bgLight;
+			font-size: 8pt;
+
+			pre {
+				margin: 0;
+				color: $almostWhite;
+				&.sep {
+					padding-top: 8px;
+					margin-bottom: 8px;
+					border-bottom: 1px solid $bgMed
+				}
+			}
 		}
 	}
 }

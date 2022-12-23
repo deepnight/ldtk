@@ -5,6 +5,7 @@ private enum SavingState {
 	InQueue;
 	PreChecks;
 	BeforeSavingActions;
+	BeforeSavingCustomCommands;
 	AutoLayers;
 	Backup;
 	CheckLevelCache;
@@ -14,6 +15,7 @@ private enum SavingState {
 	ExportingTiled;
 	ExportingGMS;
 	WritingSimplifiedFormat;
+	AfterSavingCustomCommands;
 	Done;
 }
 
@@ -149,6 +151,9 @@ class ProjectSaver extends dn.Process {
 				}
 				else
 					beginNextState();
+
+			case BeforeSavingCustomCommands:
+				ui.modal.dialog.CommandRunner.runMultipleCommands( project, project.getCustomCommmands(BeforeSave), beginNextState );
 
 			case AutoLayers:
 				if( hasEditor() ) { // TODO support this without an Editor?
@@ -467,6 +472,9 @@ class ProjectSaver extends dn.Process {
 				}
 
 
+			case AfterSavingCustomCommands:
+				ui.modal.dialog.CommandRunner.runMultipleCommands( project, project.getCustomCommmands(AfterSave), beginNextState );
+
 			case Done:
 				if( useMetaBar )
 					ui.modal.MetaProgress.completeCurrent();
@@ -514,6 +522,8 @@ class ProjectSaver extends dn.Process {
 				if( !ui.modal.Progress.hasAny() )
 					beginNextState();
 
+			case BeforeSavingCustomCommands:
+
 			case AutoLayers:
 
 			case Backup:
@@ -533,6 +543,8 @@ class ProjectSaver extends dn.Process {
 			case ExportingGMS:
 
 			case WritingSimplifiedFormat:
+
+			case AfterSavingCustomCommands:
 
 			case Done:
 		}

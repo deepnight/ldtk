@@ -610,7 +610,28 @@ class Editor extends Page {
 					new ui.modal.dialog.EditAppSettings();
 				}
 
-			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
+			case K.R if( !hasInputFocus() && App.ME.isCtrlDown() ):
+				ui.Modal.closeAll();
+				if( ui.Modal.hasAnyOpen() ) 
+					N.error("Cannot run commands for now");
+				else {
+					var manualCmds = project.customCommands.filter( c->c.when==Manual );
+					if( manualCmds.length==0 )
+						ui.Notification.warning("The project has no custom command. You can add one in the Project Settings panel (press P)");
+					else {
+						var menu = new ui.modal.ContextMenu(getMouse());
+						menu.addTitle(L.t._("Custom project commands"));
+						for( cmd in manualCmds )
+							menu.add({
+								label: L.untranslated(cmd.command),
+								cb: ()->{
+									new ui.modal.dialog.CommandRunner(project, cmd);
+								},
+							});
+					}
+				}
+
+			case K.R if( !hasInputFocus() && App.ME.isShiftDown() && !App.ME.isCtrlDown() ):
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 

@@ -39,6 +39,7 @@ class Project {
 	public var backupLimit = 10;
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
+	public var customCommands : Array<ldtk.Json.CustomCommand> = [];
 
 	var quickLevelAccessUid : Map<Int, Level> = new Map();
 	var quickLevelAccessIid : Map<String, Level> = new Map();
@@ -269,6 +270,12 @@ class Project {
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
+		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:ldtk.Json.CustomCommand)->{
+			return {
+				command: cmdJson.command,
+				when: JsonTools.readEnum(ldtk.Json.CustomCommandTrigger, cmdJson.when, false, Manual),
+			}
+		});
 
 		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
 		if( p.levelNamePattern=="Level_%idx" )
@@ -510,6 +517,10 @@ class Project {
 			backupLimit: backupLimit,
 			levelNamePattern: levelNamePattern,
 			tutorialDesc : JsonTools.escapeString(tutorialDesc),
+			customCommands: customCommands.map(cmd->{
+				command: cmd.command,
+				when: JsonTools.writeEnum(cmd.when, false),
+			}),
 
 			flags: {
 				var all = [];
@@ -1076,5 +1087,9 @@ class Project {
 					run(fi);
 		}
 
+	}
+
+	public function getCustomCommmands(when:ldtk.Json.CustomCommandTrigger) {
+		return customCommands.filter( cmd->cmd.when==when );
 	}
 }

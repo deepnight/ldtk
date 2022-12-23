@@ -123,6 +123,25 @@
 	</dd>
 
 
+	<dt>
+		<label>Custom commands</label>
+		<info>
+			A list of custom commands that will be executed by LDtk in various situations.
+			The working directory for all these commands is the project directory.
+			If multiple commands are to be ran at a given moment (eg. before saving), they will be executed in order of appearance here.
+		</info>
+	</dt>
+	<dd class="customCommands">
+		<ul></ul>
+		<xml id="customCommand">
+			<select class="when"></select>
+			<input type="text" class="command"/>
+			<button class="remove"> <span class="icon delete"></span> </button>
+		</xml>
+		<button class="add"> <span class="icon add"></span> </button>
+	</dd>
+
+
 
 	<dt class="full"> <h3>Workspace settings</h3> </dt>
 
