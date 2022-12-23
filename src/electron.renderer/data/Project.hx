@@ -13,6 +13,7 @@ class Project {
 	var usedColors : Map<String, Map<Int,Int>> = new Map();
 
 	var nextUid = 0;
+	var iid : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
 
@@ -179,6 +180,7 @@ class Project {
 
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
+		p.iid = p.generateUniqueId_UUID();
 		p.filePath.parseFilePath(filePath);
 		p.createWorld(true);
 
@@ -232,6 +234,9 @@ class Project {
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
 		var p = new Project();
+		if( json.iid==null )
+			json.iid = p.generateUniqueId_UUID();
+		p.iid = JsonTools.readString(json.iid);
 		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
@@ -490,6 +495,7 @@ class Project {
 
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
+			iid: iid,
 			jsonVersion: jsonVersion,
 			appBuildId: Const.getAppBuildId(),
 			nextUid: nextUid,
