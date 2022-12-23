@@ -10,7 +10,7 @@
 	},
 	"iid": "a2e6e900-7820-11ed-b6fd-61d0df8fd468",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464389,
+	"appBuildId": 464392,
 	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -28,6 +28,7 @@
 	"exportTiled": false,
 	"simplifiedExport": false,
 	"imageExportMode": "None",
+	"exportLevelBg": true,
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
@@ -1383,7 +1384,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "a2e73720-7820-11ed-b6fd-354bae908068"
+								"worldIid": "807ca480-7820-11ed-9302-17702da7bc4f"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1405,7 +1406,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "a2e73720-7820-11ed-b6fd-354bae908068"
+								"worldIid": "807ca480-7820-11ed-9302-17702da7bc4f"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1427,7 +1428,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "a2e73720-7820-11ed-b6fd-354bae908068"
+								"worldIid": "807ca480-7820-11ed-9302-17702da7bc4f"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
