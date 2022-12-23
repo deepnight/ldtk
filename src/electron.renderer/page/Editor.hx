@@ -619,15 +619,19 @@ class Editor extends Page {
 					if( manualCmds.length==0 )
 						ui.Notification.warning("The project has no custom command. You can add one in the Project Settings panel (press P)");
 					else {
-						var menu = new ui.modal.ContextMenu(getMouse());
-						menu.addTitle(L.t._("Custom project commands"));
-						for( cmd in manualCmds )
-							menu.add({
-								label: L.untranslated(cmd.command),
-								cb: ()->{
-									ui.modal.dialog.CommandRunner.runSingleCommand(project, cmd);
-								},
-							});
+						if( manualCmds.length==1 )
+							ui.modal.dialog.CommandRunner.runSingleCommand(project, manualCmds[0]);
+						else {
+							var menu = new ui.modal.ContextMenu(getMouse());
+							menu.addTitle(L.t._("Custom project commands"));
+							for( cmd in manualCmds )
+								menu.add({
+									label: L.untranslated(cmd.command),
+									cb: ()->{
+										ui.modal.dialog.CommandRunner.runSingleCommand(project, cmd);
+									},
+								});
+						}
 					}
 				}
 
