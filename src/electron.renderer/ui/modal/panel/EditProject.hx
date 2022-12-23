@@ -440,6 +440,12 @@ class EditProject extends ui.modal.Panel {
 
 		// Level bg
 		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForm.find("[name=defaultLevelbgColor]"));
+		i.onChange = ()->{
+			for(w in project.worlds)
+			for(l in w.levels)
+				if( l.isUsingDefaultBgColor() )
+					editor.ge.emit(LevelSettingsChanged(l));
+		}
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Default entity pivot

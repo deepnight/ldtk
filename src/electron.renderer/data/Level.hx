@@ -421,6 +421,10 @@ class Level {
 	}
 
 
+	public inline function isUsingDefaultBgColor() {
+		return bgColor==null;
+	}
+
 	public inline function getBgColor() : UInt {
 		return bgColor!=null ? bgColor : _project.defaultLevelBgColor;
 	}
