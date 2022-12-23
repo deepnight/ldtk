@@ -16,7 +16,7 @@ class HxEnum extends importer.ExternalEnum {
 		fileContent = multilineCommentReg.replace(fileContent,"");
 
 		// Any enum?
-		var enumBlocksReg = ~/^[ \t]*enum[ \t]+([a-z0-9_]+)[ \t]*{/gim;
+		var enumBlocksReg = ~/^\s*enum\s+([a-z0-9_]+)\s*{/gim;
 		if( !enumBlocksReg.match(fileContent) ) {
 			N.error("Couldn't find any simple Enum in this source fileContent.");
 			return [];
