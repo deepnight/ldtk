@@ -300,6 +300,9 @@ class EditProject extends ui.modal.Panel {
 			pngPatternEditor.ofString( project.getImageExportFilePattern() );
 		}
 
+		var i = Input.linkToHtmlInput(project.exportLevelBg, jForm.find("#exportLevelBg"));
+		i.linkEvent(ProjectSettingsChanged);
+
 
 		// Identifier style
 		var i = new form.input.EnumSelect(
