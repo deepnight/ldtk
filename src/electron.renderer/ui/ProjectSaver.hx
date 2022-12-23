@@ -128,14 +128,14 @@ class ProjectSaver extends dn.Process {
 				}
 				else {
 					// Check dir permissions
-					if( !NT.checkPathPermissions(project.filePath.directory, true, true, false) ) {
+					if( !NT.checkPermissions(project.filePath.directory, true, true, false) ) {
 						N.error("You don't have system permissions to access this directory!");
 						complete(false);
 						return;
 					}
 
 					// Check overwrite permissions
-					if( NT.fileExists(project.filePath.full) && !NT.checkPathPermissions(project.filePath.full, true, true, false) ) {
+					if( NT.fileExists(project.filePath.full) && !NT.checkPermissions(project.filePath.full, true, true, false) ) {
 						N.error("You don't have system permissions to read or write a file in this directory!");
 						complete(false);
 						return;
