@@ -338,7 +338,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		else {
 			jSelect.prop("disabled",false);
 			function _tilesetCompatible(td:data.def.TilesetDef) {
-				return td!=null && td.cWid==curTd.cWid && td.cHei==curTd.cHei && td.tileGridSize==curTd.tileGridSize;
+				return td!=null && curTd!=null && td.cWid==curTd.cWid && td.cHei==curTd.cHei && td.tileGridSize==curTd.tileGridSize;
 			}
 			var all = project.defs.tilesets.copy();
 			all.sort( (a,b)->{
