@@ -13,6 +13,9 @@ class CommandRunner extends ui.modal.Dialog {
 
 		jOutput = jContent.find(".output");
 
+
+		var jClose = jContent.find(".close");
+		jClose.click( _->close() );
 		var jKill = jContent.find(".kill");
 
 		if( !settings.isProjectTrusted(p.iid) ) {
@@ -43,7 +46,7 @@ class CommandRunner extends ui.modal.Dialog {
 		}
 		else {
 			// No command
-			jKill.prop("disabled", true);
+			close();
 		}
 	}
 
@@ -51,18 +54,20 @@ class CommandRunner extends ui.modal.Dialog {
 		var needManualClosing = false;
 
 		var jKill = jContent.find(".kill");
-
 		var jClose = jContent.find(".close");
-		jClose.click(_->{
-			close();
-		});
+
+		// Separate command name from args
+		var splitIdx = cmd.command.indexOf(" ");
+		var name = splitIdx<0 ? cmd.command : cmd.command.substr(0,splitIdx);
+		var args = splitIdx<0 ? "" : cmd.command.substr(splitIdx+1);
+		if( name==null || name.length==0 ) {
+			jKill.prop("disabled", true);
+			return;
+		}
 
 		jClose.prop("disabled", true);
 
 		// Create child process
-		var splitIdx = cmd.command.indexOf(" ");
-		var name = splitIdx<0 ? cmd.command : cmd.command.substr(0,splitIdx);
-		var args = splitIdx<0 ? "" : cmd.command.substr(splitIdx+1);
 		print("Executing: "+name+" "+args, White);
 		separator();
 
