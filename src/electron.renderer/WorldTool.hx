@@ -294,7 +294,7 @@ class WorldTool extends dn.Process {
 				if( clickedLevel!=null )
 					editor.selectLevel(clickedLevel);
 
-				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
+				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlDown() ) {
 					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
 					editor.selectLevel(copy);
