@@ -284,11 +284,11 @@ class ProjectSaver extends dn.Process {
 									case OneImagePerLayer, LayersAndLevels:
 										// Include bg
 										if( project.exportLevelBg ) {
-											var bg = lr.createBgPng(project, level);
+											var bytes = lr.createBgPng(project, level);
 											var fp = dn.FilePath.fromDir(pngDir);
 											fp.fileName = project.simplifiedExport ? "_bg" : level.identifier+"_bg";
 											fp.extension = "png";
-											NT.writeFileBytes(fp.full, bg.bytes);
+											NT.writeFileBytes(fp.full, bytes);
 											count++;
 										}
 
@@ -350,7 +350,8 @@ class ProjectSaver extends dn.Process {
 									case OneImagePerLevel:
 										var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
 										if( project.exportLevelBg )
-											tex.clear(level.getBgColor());
+											lr.renderBgToTexture(level, tex);
+
 										level.iterateLayerInstancesInRenderOrder((li)->{
 											lr.drawToTexture(tex, project, level, li);
 										});

@@ -227,18 +227,19 @@ class LayerRender {
 
 
 
-	public function createBgPng(p:data.Project, l:data.Level) {
-		var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
-		if( l.bgRelPath==null )
-			tex.clear(l.getBgColor());
-		else {
-			// TODO
-		}
+	public function renderBgToTexture(l:data.Level, tex:h3d.mat.Texture) {
+		tex.clear( l.getBgColor() );
 
-		return {
-			tex: tex,
-			bytes: tex.capturePixels().toPNG(),
+		if( l.bgRelPath!=null ) {
+			var bmp = l.createBgBitmap();
+			bmp.drawTo(tex);
 		}
+	}
+
+	public function createBgPng(p:data.Project, l:data.Level) : haxe.io.Bytes {
+		var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
+		renderBgToTexture(l, tex);
+		return tex.capturePixels().toPNG();
 	}
 
 
