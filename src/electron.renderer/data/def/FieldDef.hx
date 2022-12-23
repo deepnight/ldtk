@@ -222,7 +222,7 @@ class FieldDef {
 			case F_Path: "File path";
 			case F_EntityRef: "Entity ref";
 			case F_Tile: "Tile";
-			case F_Table(tableDefUid): "Table";
+			case F_Table(tableDefUid): "Table."+_project.defs.getTableDef(tableDefUid).name;
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}

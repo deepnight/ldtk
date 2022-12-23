@@ -124,6 +124,28 @@ class FieldDefsForm {
 					}
 					return;
 
+				case F_Table(null):
+					if( project.defs.tables.length==0 ) {
+						w.close();
+						new ui.modal.dialog.Choice(
+							L.t._("This project contains no Table yet. You first need to create one from the Table panel."),
+							[
+								{ label:L.t._("Open table panel"), cb:()->new ui.modal.panel.EditTableDefs() }
+							]
+						);
+						return;
+					}
+
+					// Table picker
+					var ctx = new ui.modal.ContextMenu(ev);
+					ctx.addTitle(L.t._("Pick an existing table"));
+					for (table in project.defs.tables) {
+						ctx.add({
+							label: L.untranslated(table.name),
+							cb: ()->_create(ev, F_Table(table.uid)),
+						});
+					}
+					return;
 
 				case _:
 			}
