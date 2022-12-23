@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a2e6e900-7820-11ed-b6fd-61d0df8fd468",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "This file can be used to check if an API supports LDtk file format properly. \n\nIt uses most important LDtk features.",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -55,7 +57,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,
@@ -83,7 +84,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": null, "color": "#00FF7A" }],
-			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,
@@ -111,7 +111,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [{ "uid": 27, "name": "Test", "active": true, "isOptional": false, "rules": [
 				{
 					"uid": 28,
@@ -168,7 +167,6 @@
 				{ "value": 2, "identifier": "second", "color": "#00B0FF" },
 				{ "value": 3, "identifier": "third_used_in_autoLayer", "color": "#FF0000" }
 			],
-			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,
@@ -196,7 +194,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#D19E4D" }],
-			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [{ "uid": 4, "name": "walls", "active": true, "isOptional": false, "rules": [
 				{
 					"uid": 8,
@@ -345,7 +342,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": 2,
@@ -370,7 +366,6 @@
 			"renderMode": "Ellipse",
 			"showName": true,
 			"tilesetId": null,
-			"tileId": null,
 			"tileRenderMode": "Stretch",
 			"tileRect": null,
 			"nineSliceBorders": [],
@@ -833,7 +828,6 @@
 			"renderMode": "Rectangle",
 			"showName": false,
 			"tilesetId": null,
-			"tileId": null,
 			"tileRenderMode": "FitInside",
 			"tileRect": null,
 			"nineSliceBorders": [],
@@ -924,7 +918,6 @@
 			"renderMode": "Rectangle",
 			"showName": true,
 			"tilesetId": null,
-			"tileId": null,
 			"tileRenderMode": "Stretch",
 			"tileRect": null,
 			"nineSliceBorders": [],
@@ -1015,7 +1008,6 @@
 			"renderMode": "Ellipse",
 			"showName": true,
 			"tilesetId": null,
-			"tileId": null,
 			"tileRenderMode": "Stretch",
 			"tileRect": null,
 			"nineSliceBorders": [],
@@ -1106,7 +1098,6 @@
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 45,
-			"tileId": 46,
 			"tileRenderMode": "FitInside",
 			"tileRect": { "x": 224, "y": 16, "w": 16, "h": 16, "tilesetUid": 45 },
 			"nineSliceBorders": [],
@@ -1392,7 +1383,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1e9dbb40-7820-11ed-9535-a3a171c4a88b"
+								"worldIid": "a2e73720-7820-11ed-b6fd-354bae908068"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1414,7 +1405,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1e9dbb40-7820-11ed-9535-a3a171c4a88b"
+								"worldIid": "a2e73720-7820-11ed-b6fd-354bae908068"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1436,7 +1427,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "1e9dbb40-7820-11ed-9535-a3a171c4a88b"
+								"worldIid": "a2e73720-7820-11ed-b6fd-354bae908068"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]

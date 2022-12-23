@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a302fc80-7820-11ed-b6fd-0944dd561895",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "This sample demonstrates a typical 2D platformer with auto-rendered walls and various gameplay entities.\nPress [A] to toggle \"Single layer mode\", which helps understanding which layer contains what.\nPress [SHIFT+R] to toggle auto-rendered layers.",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -55,7 +57,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,
@@ -83,7 +84,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [{ "uid": 98, "name": "shadows", "active": true, "isOptional": false, "rules": [
 				{
 					"uid": 100,
@@ -164,7 +164,6 @@
 				{ "value": 2, "identifier": "ladder", "color": "#BBAA96" },
 				{ "value": 3, "identifier": "stone", "color": "#BD9261" }
 			],
-			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [
 				{ "uid": 101, "name": "Inner wall fog", "active": true, "isOptional": false, "rules": [
 					{
@@ -877,7 +876,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 2,
 			"autoRuleGroups": [
 				{ "uid": 82, "name": "Architecture props", "active": true, "isOptional": false, "rules": [
 					{
@@ -1149,7 +1147,6 @@
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 104,
-			"tileId": 480,
 			"tileRenderMode": "FitInside",
 			"tileRect": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
 			"nineSliceBorders": [],
@@ -1209,7 +1206,6 @@
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 104,
-			"tileId": 1130,
 			"tileRenderMode": "FitInside",
 			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 104 },
 			"nineSliceBorders": [],
@@ -1269,7 +1265,6 @@
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 104,
-			"tileId": 6,
 			"tileRenderMode": "Cover",
 			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
 			"nineSliceBorders": [],
@@ -1360,7 +1355,6 @@
 			"renderMode": "Tile",
 			"showName": true,
 			"tilesetId": 104,
-			"tileId": 86,
 			"tileRenderMode": "NineSlice",
 			"tileRect": { "tilesetUid": 104, "x": 352, "y": 32, "w": 16, "h": 16 },
 			"nineSliceBorders": [5,5,5,5],
@@ -3140,7 +3134,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelIid": "a316bd80-66b0-11ec-9cd7-c50cdc9d2cc4", "levelUid": 89, "dir": "n" }, { "levelIid": "a317cef0-66b0-11ec-9cd7-dd2f249c8c8b", "levelUid": 88, "dir": "s" } ]
+			"__neighbours": [ { "levelIid": "a316bd80-66b0-11ec-9cd7-c50cdc9d2cc4", "dir": "n" }, { "levelIid": "a317cef0-66b0-11ec-9cd7-dd2f249c8c8b", "dir": "s" } ]
 		},
 		{
 			"identifier": "Top",
@@ -4494,7 +4488,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade", "levelUid": 0, "dir": "s" }]
+			"__neighbours": [{ "levelIid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade", "dir": "s" }]
 		},
 		{
 			"identifier": "Bottom",
@@ -5208,7 +5202,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [{ "levelIid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade", "levelUid": 0, "dir": "n" }]
+			"__neighbours": [{ "levelIid": "a315ac10-66b0-11ec-9cd7-99f223ad6ade", "dir": "n" }]
 		}
 	],
 	"worlds": []

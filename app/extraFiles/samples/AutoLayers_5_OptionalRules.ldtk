@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a27ed860-7820-11ed-b6fd-7fbe30dcfa27",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 165,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "level_x%gx,y%gy",
 	"tutorialDesc": "This sample shows how to use OPTIONAL rules to create biomes and variations easily.\n\nClick the \"RULES\" button on the left to see all the rule groups. Some groups are BLUE: they are optional which means they are disabled by default, and can be enabled only in specific levels.",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -55,7 +57,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [ { "value": 1, "identifier": "walls", "color": "#A678FF" }, { "value": 2, "identifier": "water", "color": "#005DFF" } ],
-			"autoTilesetDefUid": 18,
 			"autoRuleGroups": [
 				{ "uid": 149, "name": "inner wall fog", "active": true, "isOptional": false, "rules": [
 					{

@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a2d9f0b0-7820-11ed-b6fd-010ddaafa733",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 10,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -55,7 +57,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#000000" }],
-			"autoTilesetDefUid": null,
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,

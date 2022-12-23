@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a2533480-7820-11ed-b6fd-e9108160ae94",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 64,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "This example demonstrates the use of rules to create complex but dynamic mosaics.",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -55,7 +57,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#E0C59E" }],
-			"autoTilesetDefUid": 1,
 			"autoRuleGroups": [
 				{ "uid": 12, "name": "Stamps", "active": true, "isOptional": false, "rules": [
 					{
@@ -280,7 +281,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 38,
 			"autoRuleGroups": [
 				{ "uid": 58, "name": "Drop shadows", "active": true, "isOptional": false, "rules": [
 					{

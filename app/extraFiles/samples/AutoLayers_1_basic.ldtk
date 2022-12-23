@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a22d35f0-7820-11ed-b6fd-213e885f30da",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 108,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "IntGrid layers can paint tiles automatically using simple RULE SETS.\n\n - Press [SHIFT + R] to toggle auto-layer rendering\n - Click on the RULES button on the left to see/edit rules.",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -55,7 +57,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF" }],
-			"autoTilesetDefUid": 9,
 			"autoRuleGroups": [
 				{ "uid": 104, "name": "Plants", "active": true, "isOptional": false, "rules": [
 					{

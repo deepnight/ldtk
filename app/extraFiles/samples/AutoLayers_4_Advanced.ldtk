@@ -8,8 +8,9 @@
 		"appVersion": "1.2.0",
 		"url": "https://ldtk.io"
 	},
+	"iid": "a26276c0-7820-11ed-b6fd-ed05d55c9a75",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464367,
+	"appBuildId": 464389,
 	"nextUid": 104,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -32,6 +33,7 @@
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "Rules can be used to render various biome elements, such as Dirt, Water or Lava.\n\nPress [SHIFT + R] to toggle auto-layers rendering",
+	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
@@ -60,7 +62,6 @@
 				{ "value": 3, "identifier": "ladder", "color": "#CF805E" },
 				{ "value": 4, "identifier": "lava", "color": "#FF0000" }
 			],
-			"autoTilesetDefUid": 9,
 			"autoRuleGroups": [
 				{ "uid": 101, "name": "Wall drop shadows", "active": true, "isOptional": false, "rules": [
 					{
@@ -1139,7 +1140,6 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
-			"autoTilesetDefUid": 9,
 			"autoRuleGroups": [{ "uid": 92, "name": "Stars", "active": true, "isOptional": false, "rules": [
 				{
 					"uid": 93,
