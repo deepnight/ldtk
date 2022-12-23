@@ -32,6 +32,7 @@ typedef AppSettings = {
 
 	var uiStates : Array<{ id:String, val:Int }>;
 	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
+	var projectTrusts : Array<{ iid:String, trusted:Bool }>;
 }
 
 enum abstract UiState(String) {
@@ -89,6 +90,7 @@ class Settings {
 
 			uiStates: [],
 			lastUiDirs: [],
+			projectTrusts: [],
 		}
 
 		// Load
@@ -117,6 +119,47 @@ class Settings {
 
 		if( !hasUiState(ShowProjectColors) )
 			setUiStateBool(ShowProjectColors, true);
+	}
+
+
+	public function setProjectTrust(projectIid:String, trust:Bool) {
+		clearProjectTrust(projectIid);
+		v.projectTrusts.push({
+			iid: projectIid,
+			trusted: trust,
+		});
+		save();
+	}
+
+
+	public function clearProjectTrust(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid ) {
+				v.projectTrusts.remove(tp);
+				break;
+			}
+		save();
+	}
+
+	public function isProjectTrusted(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid && tp.trusted )
+				return true;
+		return false;
+	}
+
+	public function isProjectUntrusted(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid && !tp.trusted )
+				return true;
+		return false;
+	}
+
+	public function wasProjectTrustAsked(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid )
+				return true;
+		return false;
 	}
 
 

@@ -612,7 +612,7 @@ class Editor extends Page {
 
 			case K.R if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				ui.Modal.closeAll();
-				if( ui.Modal.hasAnyOpen() ) 
+				if( ui.Modal.hasAnyOpen() )
 					N.error("Cannot run commands for now");
 				else {
 					var manualCmds = project.customCommands.filter( c->c.when==Manual );
@@ -625,7 +625,7 @@ class Editor extends Page {
 							menu.add({
 								label: L.untranslated(cmd.command),
 								cb: ()->{
-									new ui.modal.dialog.CommandRunner(project, cmd);
+									ui.modal.dialog.CommandRunner.runSingleCommand(project, cmd);
 								},
 							});
 					}

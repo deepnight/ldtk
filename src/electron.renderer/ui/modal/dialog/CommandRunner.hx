@@ -5,52 +5,41 @@ class CommandRunner extends ui.modal.Dialog {
 	var jOutput : js.jquery.JQuery;
 	var onComplete : Null< Void->Void >;
 
-	public function new(p:data.Project, cmd:ldtk.Json.CustomCommand, ?onComplete:Void->Void) {
+	private function new(p:data.Project, cmd:ldtk.Json.CustomCommand, ?onComplete:Void->Void) {
 		super();
 		loadTemplate("commandRunner");
 		canBeClosedManually = false;
 		this.onComplete = onComplete;
 
 		jOutput = jContent.find(".output");
-		var jClose = jContent.find(".close");
-		jClose.click(_->{
-			close();
-		});
 
 		var jKill = jContent.find(".kill");
-		var needManualClosing = false;
 
-		if( cmd.command!="" ) {
-			// Run command
-			jClose.prop("disabled", true);
-			var splitIdx = cmd.command.indexOf(" ");
-			var name = splitIdx<0 ? cmd.command : cmd.command.substr(0,splitIdx);
-			var args = splitIdx<0 ? "" : cmd.command.substr(splitIdx+1);
-			print("Executing: "+name+" "+args, White);
-			separator();
-			var proc = js.node.ChildProcess.spawn(name, [args], { cwd:p.getProjectDir() });
-			proc.stdout.on("data", out->print(out));
-			proc.stderr.on("data", out->print(out, 0xffcc00));
-			proc.on("error", e->print(e, 0xff5555));
-			proc.on("close", (code:Null<Int>)->{
-				separator();
-				jKill.prop("disabled", true);
-				jClose.prop("disabled", false);
-				if( code==null )
-					print("Terminated", White);
-				else
-					print("Terminated with code "+code, White);
+		if( !settings.isProjectTrusted(p.iid) ) {
+			// Trust warning
+			jContent.addClass("untrusted");
+			var jWarn = jContent.find(".untrustedWarning");
+			jWarn.find(".commands.current").text(cmd.command);
+			if( p.customCommands.length<=1 )
+				jWarn.find(".others").hide();
+			else {
+				for(other in p.customCommands)
+					if( other!=cmd )
+						jWarn.find(".others .commands").append(other.command+"\n");
+			}
 
-				N.msg("Command executed: "+cmd.command.substr(0, 20) + (cmd.command.length>20 ? "..." : ""));
-
-				if( !needManualClosing && ( code==null || code==0 ) )
-					close();
+			jWarn.find(".allow").click(_->{
+				settings.setProjectTrust(p.iid, true);
+				jContent.removeClass("untrusted");
+				runCommand(p, cmd);
 			});
-			jKill.click(_->{
-				print("Sent kill signal!", 0xff5555);
-				needManualClosing = true;
-				proc.kill();
+			jWarn.find(".block").click(_->{
+				settings.setProjectTrust(p.iid, false);
+				close();
 			});
+		}
+		else if( cmd.command!="" ) {
+			runCommand(p, cmd);
 		}
 		else {
 			// No command
@@ -58,8 +47,71 @@ class CommandRunner extends ui.modal.Dialog {
 		}
 	}
 
+	function runCommand(p:data.Project, cmd:ldtk.Json.CustomCommand) {
+		var needManualClosing = false;
+
+		var jKill = jContent.find(".kill");
+
+		var jClose = jContent.find(".close");
+		jClose.click(_->{
+			close();
+		});
+
+		jClose.prop("disabled", true);
+
+		// Create child process
+		var splitIdx = cmd.command.indexOf(" ");
+		var name = splitIdx<0 ? cmd.command : cmd.command.substr(0,splitIdx);
+		var args = splitIdx<0 ? "" : cmd.command.substr(splitIdx+1);
+		print("Executing: "+name+" "+args, White);
+		separator();
+
+		var proc = js.node.ChildProcess.spawn(name, [args], { cwd:p.getProjectDir() });
+		proc.stdout.on("data", out->print(out));
+		proc.stderr.on("data", out->print(out, 0xffcc00));
+		proc.on("error", e->print(e, 0xff5555));
+		proc.on("close", (code:Null<Int>)->{
+			separator();
+			jKill.prop("disabled", true);
+			jClose.prop("disabled", false);
+			if( code==null )
+				print("Terminated", White);
+			else
+				print("Terminated with code "+code, White);
+
+			N.msg("Command executed: "+cmd.command.substr(0, 20) + (cmd.command.length>20 ? "..." : ""));
+
+			if( !needManualClosing && ( code==null || code==0 ) )
+				close();
+		});
+
+		// Kill button
+		jKill.click(_->{
+			print("Sent kill signal!", 0xff5555);
+			needManualClosing = true;
+			proc.kill();
+		});
+
+	}
+
+
+	public static function runSingleCommand(p:data.Project, cmd:ldtk.Json.CustomCommand, ?onComplete:Void->Void) {
+		if( App.ME.settings.isProjectUntrusted(p.iid) ) {
+			if( onComplete!=null )
+				onComplete();
+			return;
+		}
+
+		new CommandRunner(p, cmd, onComplete);
+	}
 
 	public static function runMultipleCommands(p:data.Project, cmds:Array<ldtk.Json.CustomCommand>, onComplete:Void->Void) {
+		if( App.ME.settings.isProjectUntrusted(p.iid) ) {
+			if( onComplete!=null )
+				onComplete();
+			return;
+		}
+
 		if( cmds.length>0 ) {
 			var idx = 0;
 			function _run(cmd:ldtk.Json.CustomCommand) {

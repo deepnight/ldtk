@@ -414,6 +414,21 @@ class EditProject extends ui.modal.Panel {
 			editor.ge.emit( ProjectSettingsChanged );
 		});
 
+		// Commands trust
+		if( settings.isProjectTrusted(project.iid) )
+			jCommands.find(".untrusted").hide();
+		else if( settings.isProjectUntrusted(project.iid) )
+			jCommands.find(".trusted").hide();
+		else {
+			jCommands.find(".untrusted").hide();
+			jCommands.find(".trusted").hide();
+		}
+		jCommands.find(".trusted a, .untrusted a").click(_->{
+			settings.clearProjectTrust(project.iid);
+			editor.ge.emit( ProjectSettingsChanged );
+		});
+
+
 		// Level grid size
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);

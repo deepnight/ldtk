@@ -1203,6 +1203,7 @@ ul.log {
 .icon.slide				{ background-image: url("../icons/delete.svg"); }
 .icon.stop				{ background-image: url("../icons/stop.svg"); }
 .icon.tile				{ background-image: url("../icons/tile.png"); }
+.icon.trust				{ background-image: url("../icons/trust.svg"); }
 .icon.tutorial			{ background-image: url("../icons/tutorial.svg"); }
 .icon.update			{ background-image: url("../icons/update.svg"); }
 .icon.visible			{ background-image: url("../icons/visible.png"); }
@@ -6647,6 +6648,26 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
+		.trusted, .untrusted {
+			font-size: 9pt;
+			padding: 8px;
+			margin-bottom: 4px;
+			border: 1px solid $bgLight;
+			border-radius: 3px;
+			a {
+				cursor: pointer;
+				&:hover {
+					color: white;
+				}
+			}
+		}
+		.trusted {
+			border-color: $green;
+		}
+		.untrusted {
+			border-color: $red;
+		}
+
 		h2 {
 			margin-bottom: 0;
 		}
@@ -8953,6 +8974,33 @@ $patternSize : 32px;
 .window.commandRunner {
 	.wrapper .content {
 		max-width: 80vw;
+
+		&.untrusted {
+			width: 500px;
+			max-height: 80vh;
+
+			.untrustedWarning {
+				.commands {
+					white-space: pre-wrap;
+					font-family: 'Courier New', Courier, monospace;
+					background-color: $bgDark;
+					padding: 8px;
+					text-shadow: none;
+					border-radius: 3px;
+				}
+			}
+
+			.trusted {
+				display: none;
+			}
+		}
+
+		&:not(.untrusted) {
+			.untrustedWarning {
+				display: none;
+			}
+		}
+
 		.output {
 			padding: 8px;
 			min-width: 500px;

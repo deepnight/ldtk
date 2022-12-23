@@ -71,6 +71,8 @@ You can now define custom commands to be executed at various moments (when the p
 - When pressing CTRL-R, run your game.
 - After saving, parse the project JSON and check if all levels are properly connected, from your game logic perspective.
 
+For obvious security reasons, LDtk will always ask you first if you trust the project and want to allow commands from it.
+
 ![](1.2.0/customCommands.png)
 
 ## Misc

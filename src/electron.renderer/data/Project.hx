@@ -13,7 +13,7 @@ class Project {
 	var usedColors : Map<String, Map<Int,Int>> = new Map();
 
 	var nextUid = 0;
-	var iid : String;
+	public var iid(default,null) : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
 
