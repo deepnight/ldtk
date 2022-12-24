@@ -666,6 +666,9 @@ pub struct AutoLayerRuleGroup {
 
     #[serde(rename = "uid")]
     uid: i64,
+
+    #[serde(rename = "usesWizard")]
+    uses_wizard: bool,
 }
 
 /// This complex section isn't meant to be used by game devs at all, as these rules are

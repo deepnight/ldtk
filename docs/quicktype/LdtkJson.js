@@ -215,6 +215,7 @@ const typeMap = {
         { json: "name", js: "name", typ: "" },
         { json: "rules", js: "rules", typ: a(r("AutoLayerRuleDefinition")) },
         { json: "uid", js: "uid", typ: 0 },
+        { json: "usesWizard", js: "usesWizard", typ: true },
     ], false),
     "AutoLayerRuleDefinition": o([
         { json: "active", js: "active", typ: true },

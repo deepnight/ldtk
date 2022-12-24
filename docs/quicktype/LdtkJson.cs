@@ -911,6 +911,9 @@ namespace ldtk
 
         [JsonProperty("uid")]
         public long Uid { get; set; }
+
+        [JsonProperty("usesWizard")]
+        public bool UsesWizard { get; set; }
     }
 
     /// <summary>

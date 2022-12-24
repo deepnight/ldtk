@@ -891,6 +891,7 @@ namespace quicktype {
         std::string name;
         std::vector<AutoLayerRuleDefinition> rules;
         int64_t uid;
+        bool uses_wizard;
 
         public:
         const bool & get_active() const { return active; }
@@ -918,6 +919,10 @@ namespace quicktype {
         const int64_t & get_uid() const { return uid; }
         int64_t & get_mutable_uid() { return uid; }
         void set_uid(const int64_t & value) { this->uid = value; }
+
+        const bool & get_uses_wizard() const { return uses_wizard; }
+        bool & get_mutable_uses_wizard() { return uses_wizard; }
+        void set_uses_wizard(const bool & value) { this->uses_wizard = value; }
     };
 
     /**
@@ -3113,6 +3118,7 @@ namespace nlohmann {
         x.set_name(j.at("name").get<std::string>());
         x.set_rules(j.at("rules").get<std::vector<quicktype::AutoLayerRuleDefinition>>());
         x.set_uid(j.at("uid").get<int64_t>());
+        x.set_uses_wizard(j.at("usesWizard").get<bool>());
     }
 
     inline void to_json(json & j, const quicktype::AutoLayerRuleGroup & x) {
@@ -3123,6 +3129,7 @@ namespace nlohmann {
         j["name"] = x.get_name();
         j["rules"] = x.get_rules();
         j["uid"] = x.get_uid();
+        j["usesWizard"] = x.get_uses_wizard();
     }
 
     inline void from_json(const json & j, quicktype::IntGridValueDefinition& x) {

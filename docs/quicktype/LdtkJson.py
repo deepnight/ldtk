@@ -768,14 +768,16 @@ class AutoLayerRuleGroup:
     name: str
     rules: List[AutoLayerRuleDefinition]
     uid: int
+    uses_wizard: bool
 
-    def __init__(self, active: bool, collapsed: Optional[bool], is_optional: bool, name: str, rules: List[AutoLayerRuleDefinition], uid: int) -> None:
+    def __init__(self, active: bool, collapsed: Optional[bool], is_optional: bool, name: str, rules: List[AutoLayerRuleDefinition], uid: int, uses_wizard: bool) -> None:
         self.active = active
         self.collapsed = collapsed
         self.is_optional = is_optional
         self.name = name
         self.rules = rules
         self.uid = uid
+        self.uses_wizard = uses_wizard
 
     @staticmethod
     def from_dict(obj: Any) -> 'AutoLayerRuleGroup':
@@ -786,7 +788,8 @@ class AutoLayerRuleGroup:
         name = from_str(obj.get("name"))
         rules = from_list(AutoLayerRuleDefinition.from_dict, obj.get("rules"))
         uid = from_int(obj.get("uid"))
-        return AutoLayerRuleGroup(active, collapsed, is_optional, name, rules, uid)
+        uses_wizard = from_bool(obj.get("usesWizard"))
+        return AutoLayerRuleGroup(active, collapsed, is_optional, name, rules, uid, uses_wizard)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -796,6 +799,7 @@ class AutoLayerRuleGroup:
         result["name"] = from_str(self.name)
         result["rules"] = from_list(lambda x: to_class(AutoLayerRuleDefinition, x), self.rules)
         result["uid"] = from_int(self.uid)
+        result["usesWizard"] = from_bool(self.uses_wizard)
         return result
 
 

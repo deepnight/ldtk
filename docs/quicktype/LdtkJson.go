@@ -198,6 +198,7 @@ type AutoLayerRuleGroup struct {
 	Name       string                    `json:"name"`      
 	Rules      []AutoLayerRuleDefinition `json:"rules"`     
 	Uid        int64                     `json:"uid"`       
+	UsesWizard bool                      `json:"usesWizard"`
 }
 
 // This complex section isn't meant to be used by game devs at all, as these rules are
