@@ -9,8 +9,10 @@
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
+			"customCommands",
 			"defs",
 			"externalLevels",
+			"iid",
 			"jsonVersion",
 			"levels",
 			"worlds",
@@ -21,6 +23,7 @@
 			"defaultLevelBgColor",
 			"defaultPivotX",
 			"defaultPivotY",
+			"exportLevelBg",
 			"exportTiled",
 			"flags",
 			"identifierStyle",
@@ -48,6 +51,12 @@
 				"type": [
 					"integer",
 					"null"
+				]
+			},
+			"iid": {
+				"description": "Unique project identifier",
+				"type": [
+					"string"
 				]
 			},
 			"defaultLevelBgColor": {
@@ -99,6 +108,15 @@
 				"description": "Default Y pivot (0 to 1) for new entities",
 				"type": [
 					"number"
+				]
+			},
+			"customCommands": {
+				"description": "An array of command lines that can be ran manually by the user",
+				"items": {
+					"$ref": "#/otherTypes/CustomCommand"
+				},
+				"type": [
+					"array"
 				]
 			},
 			"worldGridHeight": {
@@ -196,6 +214,9 @@
 					},
 					"FieldDef": {
 						"$ref": "#/otherTypes/FieldDef"
+					},
+					"CustomCommand": {
+						"$ref": "#/otherTypes/CustomCommand"
 					},
 					"EntityDef": {
 						"$ref": "#/otherTypes/EntityDef"
@@ -312,6 +333,12 @@
 			},
 			"minifyJson": {
 				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
+				"type": [
+					"boolean"
+				]
+			},
+			"exportLevelBg": {
+				"description": "If TRUE, the exported PNGs will include the level background (color or image).",
 				"type": [
 					"boolean"
 				]
@@ -953,6 +980,13 @@
 						"boolean"
 					]
 				},
+				"doc": {
+					"description": "User defined documentation for this field to provide help/tips to level designers about accepted values.",
+					"type": [
+						"string",
+						"null"
+					]
+				},
 				"tilesetUid": {
 					"description": "UID of the tileset used for a Tile",
 					"type": [
@@ -1076,6 +1110,34 @@
 					"type": [
 						"integer",
 						"null"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"CustomCommand": {
+			"title": "ldtk.CustomCommand",
+			"required": [
+				"command",
+				"when"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"when": {
+					"description": "Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`",
+					"enum": [
+						"Manual",
+						"AfterLoad",
+						"BeforeSave",
+						"AfterSave"
+					]
+				},
+				"command": {
+					"description": "",
+					"type": [
+						"string"
 					]
 				}
 			},
@@ -1415,7 +1477,8 @@
 				"levelUid": {
 					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `levelIid`",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"dir": {
