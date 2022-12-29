@@ -112,7 +112,7 @@ class FieldInstancesForm {
 		}
 		else if( fi.def.type!=F_Path && ( fi.def.getDefault()!=null || fi.def.canBeNull ) ) {
 			// Require a "Reset to default" link
-			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
+			var span = input.wrapAll('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
 			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
 			defLink.appendTo(span);
@@ -136,11 +136,15 @@ class FieldInstancesForm {
 		jTarget.addClass( fi.def.type.getName() );
 
 		// Prefix
-		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
-			jTarget.append('<span>${fi.def.editorTextPrefix}</span>');
+		// if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+		// 	jTarget.append('<span class="prefix">${fi.def.editorTextPrefix}</span>');
 
 		switch fi.def.type {
 			case F_Int:
+				// Prefix
+				if( fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="prefix">${fi.def.editorTextPrefix}</span>');
+
 				var jInput = new J("<input/>");
 				jInput.attr("id",domId);
 				jInput.appendTo(jTarget);
@@ -160,9 +164,17 @@ class FieldInstancesForm {
 				i.enableSlider(speed);
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
 
-				hideInputIfDefault(arrayIdx, jInput, fi);
+				// Suffix
+				if( fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="suffix">${fi.def.editorTextSuffix}</span>');
+
+				hideInputIfDefault(arrayIdx, jTarget.children(), fi);
 
 			case F_Float:
+				// Prefix
+				if( fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="prefix">${fi.def.editorTextPrefix}</span>');
+
 				var jInput = new J("<input/>");
 				jInput.attr("id",domId);
 				jInput.appendTo(jTarget);
@@ -182,7 +194,11 @@ class FieldInstancesForm {
 				i.enableSlider(speed);
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
 
-				hideInputIfDefault(arrayIdx, jInput, fi);
+				// Suffix
+				if( fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="suffix">${fi.def.editorTextSuffix}</span>');
+
+				hideInputIfDefault(arrayIdx, jTarget.children(), fi);
 
 			case F_Color:
 				var cHex = fi.getColorAsHexStr(arrayIdx);
@@ -285,8 +301,10 @@ class FieldInstancesForm {
 						markError(jPick);
 						jPick.text( "Point required!" );
 					}
-					else
-						jPick.text( fi.valueIsNull(arrayIdx) ? "--none--" : fi.getPointStr(arrayIdx) );
+					else {
+						jPick.addClass("dark");
+						jPick.text( fi.valueIsNull(arrayIdx) ? "<No point>" : fi.getPointStr(arrayIdx) );
+					}
 					jPick.click( function(_) {
 						if( Editor.ME.isSpecialToolActive(tool.PickPoint) ) {
 							// Cancel
@@ -491,7 +509,7 @@ class FieldInstancesForm {
 				}
 
 				if( fi.valueIsNull(arrayIdx) ) {
-					var jPick = new J('<button>Pick reference</button>');
+					var jPick = new J('<button class="dark">&lt;No reference&gt;</button>');
 					jPick.appendTo(jTarget);
 					jPick.click( _->_pickRef() );
 				}
@@ -595,9 +613,9 @@ class FieldInstancesForm {
 				}
 		}
 
-		// Suffix
-		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
-			jTarget.append('<span>${fi.def.editorTextSuffix}</span>');
+		// // Suffix
+		// if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+		// 	jTarget.append('<span class="suffix">${fi.def.editorTextSuffix}</span>');
 	}
 
 
@@ -814,6 +832,8 @@ class FieldInstancesForm {
 				// Array
 				var jArray = new J('<div class="array"/>');
 				jArray.appendTo(jDd);
+				if( fi.getArrayLength()==0 )
+					jArray.addClass("empty");
 				if( fd.arrayMinLength!=null && fi.getArrayLength()<fd.arrayMinLength
 					|| fd.arrayMaxLength!=null && fi.getArrayLength()>fd.arrayMaxLength ) {
 					var bounds : String =

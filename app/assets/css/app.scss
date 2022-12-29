@@ -6122,6 +6122,7 @@ dl.form.fieldInstanceEditor {
 	padding: 0;
 	border: none;
 	grid-template-columns: 120px auto;
+	column-gap: 2px;
 	>dt {
 		max-width: none;
 	}
@@ -6149,11 +6150,23 @@ dl.form.fieldInstanceEditor {
 	}
 
 	dt:not(.isDefault) {
-		label {
-			background-color: $bgLighter;
-			padding: 4px;
-			border-radius: 4px;
-		}
+		padding: 4px;
+
+		border-radius: 0;
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+
+		background-color: $bgLighter;
+	}
+
+	dd:not(.isDefault) {
+		padding: 2px;
+
+		border-radius: 0;
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+
+		background-color: $bgMed;
 	}
 
 	dd.isDefault:not(:hover) {
@@ -6170,14 +6183,21 @@ dl.form.fieldInstanceEditor {
 		padding: 0 !important;
 		flex: 1 0 auto !important;
 		input[type=text] {
-			max-width: 100px;
+			max-width: 60px;
+			margin-right: 0;
 		}
 		select {
 			min-width: 140px;
 		}
 		span.value {
-			flex: 1 0 auto;
+			flex: 0;
 		}
+	}
+
+	span.prefix,
+	span.suffix {
+		color: $bgLighter;
+		padding: 3px;
 	}
 
 	a.reset {
@@ -6405,6 +6425,17 @@ dl.form.fieldInstanceEditor {
 		border-top-left-radius: 8px;
 		border-bottom-left-radius: 8px;
 
+		&.empty {
+			padding: 2px;
+			li.compact {
+				display: none;
+			}
+		}
+
+		button.add {
+			padding: 0;
+		}
+
 		ul.values {
 			overflow: hidden;
 
@@ -6423,6 +6454,7 @@ dl.form.fieldInstanceEditor {
 
 				.sortHandle {
 					flex: 0 1 0px;
+					background-color: $bgLight;
 				}
 				button {
 					padding: 4px;
