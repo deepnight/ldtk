@@ -801,6 +801,11 @@ class FieldInstancesForm {
 				jDd.addClass("isDefault");
 			}
 
+			// Doc
+			if( fi.def.doc!=null )
+				jDt.append('<info>${fi.def.doc}</info>');
+
+
 			if( !fd.isArray ) {
 				// Single value
 				createFieldInput(domId, fi, 0, jDd);

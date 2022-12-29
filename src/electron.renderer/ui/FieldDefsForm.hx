@@ -658,6 +658,11 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.fixValue = (v)->project.fixUniqueIdStr(v, Free, (id)->isFieldIdentifierUnique(id,curField));
 
+		var i = Input.linkToHtmlInput( curField.doc, jForm.find("input[name=doc]") );
+		i.onChange = onFieldChange;
+		i.allowNull = true;
+		i.fixValue = (v)->v!=null && StringTools.trim(v).length==0 ? null : v;
+
 		// Default value
 		switch curField.type {
 			case F_Path:

@@ -13,6 +13,7 @@ class FieldDef {
 	@:allow(misc.FieldTypeConverter)
 	public var type(default,null) : ldtk.Json.FieldType;
 	public var identifier(default,set) : String;
+	public var doc: Null<String>;
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
@@ -50,6 +51,7 @@ class FieldDef {
 	private function new(p:data.Project, uid:Int, t:ldtk.Json.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
+		doc = null;
 		type = t;
 		isArray = array;
 		editorDisplayMode = Hidden;
@@ -127,6 +129,7 @@ class FieldDef {
 		var type = JsonTools.readEnum(ldtk.Json.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
+		o.doc = json.doc==null ? null : json.doc;
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
@@ -164,6 +167,7 @@ class FieldDef {
 	public function toJson() : ldtk.Json.FieldDefJson {
 		return {
 			identifier: identifier,
+			doc: doc!=null && StringTools.trim(doc).length>0 ? doc : null,
 			__type: getJsonTypeString(),
 			uid: uid,
 			type: JsonTools.writeEnumAsString(type, false),
