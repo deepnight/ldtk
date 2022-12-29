@@ -77,6 +77,7 @@ For obvious security reasons, LDtk will always ask you first if you trust the pr
 
 ## Misc
 
+ - You can add user-defined documentation to any entity or level field.
  - You can right click on a group of rules to modify the "out-of-bounds policy" of all its rules in a single batch.
  - Added nicer default colors for various elements (eg. int grid values, entities, enum values etc.). The palette is "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
  - Added a Color blind option in app settings: for now, this will only affect the colors automatically picked for new Entities, IntGrid values, Enums etc.)
