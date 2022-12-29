@@ -6125,6 +6125,9 @@ dl.form.fieldInstanceEditor {
 	column-gap: 2px;
 	>dt {
 		max-width: none;
+		label {
+			overflow: hidden;
+		}
 	}
 
 	dt.isDefault:not(:hover) {
