@@ -10,7 +10,7 @@
 	},
 	"iid": "a302fc80-7820-11ed-b6fd-0944dd561895",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464392,
+	"appBuildId": 464534,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "Free",
@@ -1159,6 +1159,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "items",
+					"doc": null,
 					"__type": "Array<LocalEnum.Item>",
 					"uid": 51,
 					"type": "F_Enum(49)",
@@ -1218,6 +1219,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "content",
+					"doc": null,
 					"__type": "Array<LocalEnum.Item>",
 					"uid": 53,
 					"type": "F_Enum(49)",
@@ -1277,6 +1279,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "loot",
+					"doc": null,
 					"__type": "Array<LocalEnum.Item>",
 					"uid": 56,
 					"type": "F_Enum(49)",
@@ -1308,6 +1311,7 @@
 				},
 				{
 					"identifier": "patrol",
+					"doc": null,
 					"__type": "Array<Point>",
 					"uid": 55,
 					"type": "F_Point",
@@ -1367,6 +1371,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "locked",
+					"doc": null,
 					"__type": "Bool",
 					"uid": 87,
 					"type": "F_Bool",

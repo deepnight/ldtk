@@ -10,7 +10,7 @@
 	},
 	"iid": "a2e6e900-7820-11ed-b6fd-61d0df8fd468",
 	"jsonVersion": "1.2.0",
-	"appBuildId": 464392,
+	"appBuildId": 464534,
 	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -378,6 +378,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "Integer",
+					"doc": null,
 					"__type": "Int",
 					"uid": 16,
 					"type": "F_Int",
@@ -409,6 +410,7 @@
 				},
 				{
 					"identifier": "Float",
+					"doc": null,
 					"__type": "Float",
 					"uid": 17,
 					"type": "F_Float",
@@ -440,6 +442,7 @@
 				},
 				{
 					"identifier": "Boolean",
+					"doc": null,
 					"__type": "Bool",
 					"uid": 18,
 					"type": "F_Bool",
@@ -471,6 +474,7 @@
 				},
 				{
 					"identifier": "String_singleLine",
+					"doc": null,
 					"__type": "String",
 					"uid": 19,
 					"type": "F_String",
@@ -502,6 +506,7 @@
 				},
 				{
 					"identifier": "String_multiLines",
+					"doc": null,
 					"__type": "Multilines",
 					"uid": 20,
 					"type": "F_Text",
@@ -533,6 +538,7 @@
 				},
 				{
 					"identifier": "Enum",
+					"doc": null,
 					"__type": "LocalEnum.SomeEnum",
 					"uid": 22,
 					"type": "F_Enum(21)",
@@ -564,6 +570,7 @@
 				},
 				{
 					"identifier": "ExternEnum",
+					"doc": null,
 					"__type": "ExternEnum.AnExternEnum",
 					"uid": 49,
 					"type": "F_Enum(48)",
@@ -595,6 +602,7 @@
 				},
 				{
 					"identifier": "Color",
+					"doc": null,
 					"__type": "Color",
 					"uid": 23,
 					"type": "F_Color",
@@ -626,6 +634,7 @@
 				},
 				{
 					"identifier": "Point",
+					"doc": null,
 					"__type": "Point",
 					"uid": 24,
 					"type": "F_Point",
@@ -657,6 +666,7 @@
 				},
 				{
 					"identifier": "FilePath",
+					"doc": null,
 					"__type": "FilePath",
 					"uid": 35,
 					"type": "F_Path",
@@ -688,6 +698,7 @@
 				},
 				{
 					"identifier": "Array_Integer",
+					"doc": null,
 					"__type": "Array<Int>",
 					"uid": 25,
 					"type": "F_Int",
@@ -719,6 +730,7 @@
 				},
 				{
 					"identifier": "Array_Enum",
+					"doc": null,
 					"__type": "Array<LocalEnum.SomeEnum>",
 					"uid": 29,
 					"type": "F_Enum(21)",
@@ -750,6 +762,7 @@
 				},
 				{
 					"identifier": "Array_points",
+					"doc": null,
 					"__type": "Array<Point>",
 					"uid": 30,
 					"type": "F_Point",
@@ -781,6 +794,7 @@
 				},
 				{
 					"identifier": "Array_multilines",
+					"doc": null,
 					"__type": "Array<Multilines>",
 					"uid": 37,
 					"type": "F_Text",
@@ -840,6 +854,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "text",
+					"doc": null,
 					"__type": "Multilines",
 					"uid": 11,
 					"type": "F_Text",
@@ -871,6 +886,7 @@
 				},
 				{
 					"identifier": "color",
+					"doc": null,
 					"__type": "Color",
 					"uid": 12,
 					"type": "F_Color",
@@ -930,6 +946,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "SomeEnum",
+					"doc": null,
 					"__type": "LocalEnum.SomeEnum",
 					"uid": 40,
 					"type": "F_Enum(21)",
@@ -961,6 +978,7 @@
 				},
 				{
 					"identifier": "Integer",
+					"doc": null,
 					"__type": "Int",
 					"uid": 41,
 					"type": "F_Int",
@@ -1020,6 +1038,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "SomeEnum",
+					"doc": null,
 					"__type": "LocalEnum.SomeEnum",
 					"uid": 43,
 					"type": "F_Enum(21)",
@@ -1051,6 +1070,7 @@
 				},
 				{
 					"identifier": "text",
+					"doc": null,
 					"__type": "String",
 					"uid": 44,
 					"type": "F_String",
@@ -1110,6 +1130,7 @@
 			"fieldDefs": [
 				{
 					"identifier": "target",
+					"doc": null,
 					"__type": "EntityRef",
 					"uid": 47,
 					"type": "F_EntityRef",
@@ -1384,7 +1405,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "807ca480-7820-11ed-9302-17702da7bc4f"
+								"worldIid": "84f77580-7820-11ed-9a98-b5ceff439c81"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1406,7 +1427,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "807ca480-7820-11ed-9302-17702da7bc4f"
+								"worldIid": "84f77580-7820-11ed-9a98-b5ceff439c81"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1428,7 +1449,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "807ca480-7820-11ed-9302-17702da7bc4f"
+								"worldIid": "84f77580-7820-11ed-9a98-b5ceff439c81"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
