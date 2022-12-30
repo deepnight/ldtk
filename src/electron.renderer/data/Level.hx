@@ -191,11 +191,17 @@ class Level {
 		var json = toJson(false);
 
 		var simpleJson = {
+			identifier : json.identifier,
+			uniqueIdentifer: json.iid,
+
 			x : json.worldX,
 			y : json.worldY,
 			width : json.pxWid,
 			height : json.pxHei,
-			iid: json.iid,
+			bgColor: json.__bgColor,
+			neighbourLevels: json.__neighbours,
+
+			customFields: {},
 
 			layers : {
 				var out = [];
@@ -214,6 +220,10 @@ class Level {
 
 			entities : {},
 		}
+
+		// Level custom fields
+		for( fi in fieldInstances )
+			Reflect.setField(simpleJson.customFields, fi.def.identifier, fi.toJson().__value);
 
 		// Group entities by identifier
 		var ents = new Map();
