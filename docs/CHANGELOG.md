@@ -84,6 +84,7 @@ For obvious security reasons, LDtk will always ask you first if you trust the pr
  - Hold SHIFT to disable snapping when moving levels around in the world view.
  - You can now manually enter custom values for Entity pivots.
  - Many Load button in the UI will now remember properly their last folder
+ - Added extra info to the Simplified Export JSON file (level custom fields, identifiers etc).
  - Added a new layer option to prevent selections when the layer is not active.
  - Fixed entity duplication that broke entity count limits.
  - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
