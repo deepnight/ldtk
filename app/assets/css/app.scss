@@ -1207,6 +1207,7 @@ ul.log {
 .icon.tutorial			{ background-image: url("../icons/tutorial.svg"); }
 .icon.update			{ background-image: url("../icons/update.svg"); }
 .icon.visible			{ background-image: url("../icons/visible.png"); }
+.icon.warn				{ background-image: url("../icons/warn.svg"); }
 .icon.web				{ background-image: url("../icons/web.svg"); }
 .icon.world				{ background-image: url("../icons/world.svg"); }
 
@@ -3264,6 +3265,14 @@ textarea {
 			button.confirm {
 				flex-grow: 2;
 			}
+		}
+
+		ul.fileList {
+			padding: 8px;
+			background-color: $bgDark;
+			border-radius: 3px;
+			font-family: 'Courier New', Courier, monospace;
+			font-size: 9pt;
 		}
 	}
 
