@@ -262,6 +262,57 @@ class EntityInstanceEditor extends dn.Process {
 		if( UNIT_GRID )
 			i.setUnit(ei._li.def.gridSize);
 
+		// Flip block
+		var jFlips = jPropsForm.find(".flips");
+		var jUnit2 = jFlips.find(".unit");
+		jUnit2.text( UNIT_GRID ? "cells" : "px" );
+		jUnit2.click( _->{
+			UNIT_GRID = !UNIT_GRID;
+			updateInstancePropsForm();
+		});
+
+		// X
+		var i = new form.input.BoolInput(
+			jFlips.find("[name=x]"),
+			()->(ei.flips == 1 || ei.flips == 3),
+			(v)->{
+				switch (ei.flips) {
+					case 0:
+						ei.flips = 1;
+					case 1:
+						ei.flips = 0;
+					case 2:
+						ei.flips = 3;
+					case 3:
+						ei.flips = 2;
+				}
+			}
+		);
+		i.setEnabled( ei.def.resizableX );
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+
+		// Y
+		var i = new form.input.BoolInput(
+			jFlips.find("[name=y]"),
+			()->(ei.flips == 2 || ei.flips == 3),
+			(v)->{
+				switch (ei.flips) {
+					case 0:
+						ei.flips = 2;
+					case 2:
+						ei.flips = 0;
+					case 1:
+						ei.flips = 3;
+					case 3:
+						ei.flips = 1;
+				}
+			}
+		);
+		i.setEnabled( ei.def.resizableY );
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+
 
 		// References to this
 		var refs = project.getEntityInstancesReferingTo(ei);
