@@ -66,18 +66,20 @@ class ProjectSaver extends dn.Process {
 	function error(str:LocaleString, showOptions=true) {
 		var fp = project.filePath.clone();
 
-		var m = new ui.modal.dialog.Message(str);
+		var m = new ui.modal.dialog.Message();
 		m.addClass("error");
 
 		if( showOptions ) {
+			m.addTitle(L.t._("Error during project saving"), true);
+			m.addDiv(str, "warning");
 			m.addParagraph(L.t._("The project was NOT saved properly!"));
 
 			m.removeButtons();
-			m.addButton( L.t._("Retry"), ()->{
+			m.addButton( L.t._("Retry"), "full", ()->{
 				Editor.ME.onSave();
 				m.close();
 			} );
-			m.addButton( L.t._("Save as..."), ()->{
+			m.addButton( L.t._("Save as..."), "full gray", ()->{
 				Editor.ME.onSave(true);
 				m.close();
 			} );
@@ -290,7 +292,7 @@ class ProjectSaver extends dn.Process {
 										if( project.exportLevelBg ) {
 											var bytes = lr.createBgPng(project, level);
 											if( bytes==null ) {
-												error(L.t._("Failed to create background PNG in level ::id::", {id:level.identifier}));
+												error(L.t._('Failed to create background PNG in level "::id::"', {id:level.identifier}));
 												return;
 											}
 											var fp = dn.FilePath.fromDir(pngDir);
@@ -313,7 +315,7 @@ class ProjectSaver extends dn.Process {
 											// Save PNGs
 											for(i in allImages) {
 												if( i.bytes==null ) {
-													error(L.t._("Failed to create PNG in layer ::layerId:: from level ::levelId::", {layerId:li.def.identifier, levelId:level.identifier}));
+													error(L.t._('Failed to create PNG in layer "::layerId::" from level "::levelId::"', {layerId:li.def.identifier, levelId:level.identifier}));
 													return;
 												}
 												if( i.secondarySuffix==null )
