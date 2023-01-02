@@ -21,6 +21,10 @@
 - [ ] Update `Haxelib.json`
 - [ ] Update branch names in `setup.hxml`
 
+## Test
+
+- [ ] Pack a local Setup and test it
+
 ## Prepare GitHub release
 - [ ] Run `npm run publish-github`
 - [ ] Copy *Releases notes* to GitHub ([link](https://github.com/deepnight/ldtk/releases))
