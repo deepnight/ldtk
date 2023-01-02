@@ -649,7 +649,7 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					setWorldMode( !worldMode );
 
-			case K.W if( settings.navKeys==Zqsd ):
+			case K.W if( settings.navKeys!=Wasd ):
 				if( !hasInputFocus() )
 					setWorldMode( !worldMode );
 
@@ -771,10 +771,22 @@ class Editor extends Page {
 			case K.A if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
 				onNavigateShortcut(-1, 0, true);
 
-			case K.S if( !hasInputFocus() ):
+			case K.S if( ( App.ME.settings.navKeys==Wasd || App.ME.settings.navKeys==Zqsd ) && !hasInputFocus() ):
 				onNavigateShortcut(0, 1, true);
 
-			case K.D if( !hasInputFocus() ):
+			case K.D if( ( App.ME.settings.navKeys==Wasd || App.ME.settings.navKeys==Zqsd ) && !hasInputFocus() ):
+				onNavigateShortcut(1, 0, true);
+
+			case K.UP if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.DOWN if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(0, 1, true);
+
+			case K.LEFT if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(-1, 0, true);
+
+			case K.RIGHT if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
 				onNavigateShortcut(1, 0, true);
 		}
 
