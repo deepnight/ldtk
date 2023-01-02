@@ -236,10 +236,10 @@ class LayerRender {
 		}
 	}
 
-	public function createBgPng(p:data.Project, l:data.Level) : haxe.io.Bytes {
+	public function createBgPng(p:data.Project, l:data.Level) : Null<haxe.io.Bytes> {
 		var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
 		renderBgToTexture(l, tex);
-		return tex.capturePixels().toPNG();
+		return try tex.capturePixels().toPNG() catch(_) null;
 	}
 
 
@@ -259,10 +259,10 @@ class LayerRender {
 					wrapper.addChild(root);
 					root.alpha = li.def.displayOpacity; // apply layer alpha
 					wrapper.drawTo(tex);
-					var pixels = tex.capturePixels();
+					var pixels = try tex.capturePixels() catch(_) null;
 					out.push({
 						secondarySuffix: null,
-						bytes: pixels.toPNG(),
+						bytes: pixels==null ? null : pixels.toPNG(),
 						tex: tex,
 					});
 				}
