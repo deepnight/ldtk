@@ -36,6 +36,8 @@ class LayerDef {
 	// IntGrid/AutoLayers
 	public var autoSourceLayerDefUid : Null<Int>;
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
+	public var autoSourceLd(get,never) : Null<LayerDef>;
+		inline function get_autoSourceLd() return type==AutoLayer && autoSourceLayerDefUid!=null ? _project.defs.getLayerDef(autoSourceLayerDefUid) : null;
 
 	// Tiles
 	public var tilePivotX(default,set) : Float = 0;

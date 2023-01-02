@@ -130,8 +130,14 @@ class RulesWizard extends ui.modal.Dialog {
 		addCancel();
 
 		// Pick default intGrid value if there's only one
-		if( ld.countIntGridValues()==1 )
-			onPickIntGridValue( ld.getAllIntGridValues()[0].value );
+		var allValues = switch ld.type {
+			case IntGrid: ld.getAllIntGridValues();
+			case Entities: [];
+			case Tiles: [];
+			case AutoLayer: ld.autoSourceLd!=null ? ld.autoSourceLd.getAllIntGridValues() : [];
+		}
+		if( allValues.length==1 )
+			onPickIntGridValue( allValues[0].value );
 
 
 		// Try to match existing group to wizard patterns
@@ -203,7 +209,7 @@ class RulesWizard extends ui.modal.Dialog {
 			return;
 
 		intGridValue = v;
-		var vd = ld.getIntGridValueDef(v);
+		var vd = ld.type==IntGrid ? ld.getIntGridValueDef(v) : ld.autoSourceLd.getIntGridValueDef(v);
 		if( editedGroup==null )
 			setName( vd.identifier==null ? "Rules for #"+v : vd.identifier );
 		updateUI();
@@ -250,7 +256,7 @@ class RulesWizard extends ui.modal.Dialog {
 		updateTileset();
 
 		if( intGridValue>0 ) {
-			var color = ld.getIntGridValueColor( intGridValue );
+			var color = ld.type==IntGrid ? ld.getIntGridValueColor( intGridValue ) : ld.autoSourceLd.getIntGridValueColor(intGridValue);
 			var jInt = jContent.find(".intGrid");
 			jInt.css("background-color", color.toBlack(0.4).toHex());
 			jInt.css("color", color.toWhite(0.6).toHex());
@@ -260,7 +266,7 @@ class RulesWizard extends ui.modal.Dialog {
 
 			jInt.find(".id").html("#"+intGridValue);
 
-			var vd = ld.getIntGridValueDef( intGridValue );
+			var vd = ld.type==IntGrid ? ld.getIntGridValueDef( intGridValue ) : ld.autoSourceLd.getIntGridValueDef(intGridValue);
 			jInt.find(".name").html(vd.identifier==null ? "Unnamed" : vd.identifier);
 		}
 	}
@@ -269,15 +275,6 @@ class RulesWizard extends ui.modal.Dialog {
 	function updateTileset() {
 		tileset.renderAtlas();
 		tileset.renderGrid();
-	// 	var ctx = tileset.get2dContext();
-
-	// 	for(e in fragments.keyValueIterator()) {
-	// 		var f = e.key;
-	// 		var tids = e.value;
-	// 		var img = createHtmlImage(getIconId(f));
-	// 		for(tid in tids)
-	// 			ctx.drawImage( img, td.getTileSourceX(tid), td.getTileSourceY(tid), td.tileGridSize, td.tileGridSize );
-	// 	}
 	}
 
 	function updateGrid() {
