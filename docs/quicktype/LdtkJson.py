@@ -7,7 +7,7 @@
 #     result = ldtk_json_from_dict(json.loads(json_string))
 
 from enum import Enum
-from typing import Optional, List, Any, Dict, TypeVar, Callable, Type, cast
+from typing import Any, Optional, List, Dict, TypeVar, Type, Callable, cast
 
 
 T = TypeVar("T")
@@ -17,6 +17,11 @@ EnumT = TypeVar("EnumT", bound=Enum)
 def from_str(x: Any) -> str:
     assert isinstance(x, str)
     return x
+
+
+def to_enum(c: Type[EnumT], x: Any) -> EnumT:
+    assert isinstance(x, c)
+    return x.value
 
 
 def from_none(x: Any) -> Any:
@@ -53,11 +58,6 @@ def from_float(x: Any) -> float:
     return float(x)
 
 
-def to_enum(c: Type[EnumT], x: Any) -> EnumT:
-    assert isinstance(x, c)
-    return x.value
-
-
 def to_float(x: Any) -> float:
     assert isinstance(x, float)
     return x
@@ -71,6 +71,37 @@ def to_class(c: Type[T], x: Any) -> dict:
 def from_dict(f: Callable[[Any], T], x: Any) -> Dict[str, T]:
     assert isinstance(x, dict)
     return { k: f(v) for (k, v) in x.items() }
+
+
+class When(Enum):
+    """Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`"""
+    AFTER_LOAD = "AfterLoad"
+    AFTER_SAVE = "AfterSave"
+    BEFORE_SAVE = "BeforeSave"
+    MANUAL = "Manual"
+
+
+class LdtkCustomCommand:
+    command: str
+    """Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`"""
+    when: When
+
+    def __init__(self, command: str, when: When) -> None:
+        self.command = command
+        self.when = when
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'LdtkCustomCommand':
+        assert isinstance(obj, dict)
+        command = from_str(obj.get("command"))
+        when = When(obj.get("when"))
+        return LdtkCustomCommand(command, when)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["command"] = from_str(self.command)
+        result["when"] = to_enum(When, self.when)
+        return result
 
 
 class AllowedRefs(Enum):
@@ -161,6 +192,10 @@ class FieldDefinition:
     can_be_null: bool
     """Default value if selected value is null or invalid."""
     default_override: Any
+    """User defined documentation for this field to provide help/tips to level designers about
+    accepted values.
+    """
+    doc: Optional[str]
     editor_always_show: bool
     editor_cut_long_values: bool
     """Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
@@ -207,7 +242,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -218,6 +253,7 @@ class FieldDefinition:
         self.auto_chain_ref = auto_chain_ref
         self.can_be_null = can_be_null
         self.default_override = default_override
+        self.doc = doc
         self.editor_always_show = editor_always_show
         self.editor_cut_long_values = editor_cut_long_values
         self.editor_display_mode = editor_display_mode
@@ -251,6 +287,7 @@ class FieldDefinition:
         auto_chain_ref = from_bool(obj.get("autoChainRef"))
         can_be_null = from_bool(obj.get("canBeNull"))
         default_override = obj.get("defaultOverride")
+        doc = from_union([from_none, from_str], obj.get("doc"))
         editor_always_show = from_bool(obj.get("editorAlwaysShow"))
         editor_cut_long_values = from_bool(obj.get("editorCutLongValues"))
         editor_display_mode = EditorDisplayMode(obj.get("editorDisplayMode"))
@@ -270,36 +307,49 @@ class FieldDefinition:
         field_definition_type = from_str(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
-        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
+        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["__type"] = from_str(self.type)
-        result["acceptFileTypes"] = from_union([from_none, lambda x: from_list(from_str, x)], self.accept_file_types)
+        if self.accept_file_types is not None:
+            result["acceptFileTypes"] = from_union([from_none, lambda x: from_list(from_str, x)], self.accept_file_types)
         result["allowedRefs"] = to_enum(AllowedRefs, self.allowed_refs)
         result["allowedRefTags"] = from_list(from_str, self.allowed_ref_tags)
         result["allowOutOfLevelRef"] = from_bool(self.allow_out_of_level_ref)
-        result["arrayMaxLength"] = from_union([from_none, from_int], self.array_max_length)
-        result["arrayMinLength"] = from_union([from_none, from_int], self.array_min_length)
+        if self.array_max_length is not None:
+            result["arrayMaxLength"] = from_union([from_none, from_int], self.array_max_length)
+        if self.array_min_length is not None:
+            result["arrayMinLength"] = from_union([from_none, from_int], self.array_min_length)
         result["autoChainRef"] = from_bool(self.auto_chain_ref)
         result["canBeNull"] = from_bool(self.can_be_null)
-        result["defaultOverride"] = self.default_override
+        if self.default_override is not None:
+            result["defaultOverride"] = self.default_override
+        if self.doc is not None:
+            result["doc"] = from_union([from_none, from_str], self.doc)
         result["editorAlwaysShow"] = from_bool(self.editor_always_show)
         result["editorCutLongValues"] = from_bool(self.editor_cut_long_values)
         result["editorDisplayMode"] = to_enum(EditorDisplayMode, self.editor_display_mode)
         result["editorDisplayPos"] = to_enum(EditorDisplayPos, self.editor_display_pos)
         result["editorLinkStyle"] = to_enum(EditorLinkStyle, self.editor_link_style)
         result["editorShowInWorld"] = from_bool(self.editor_show_in_world)
-        result["editorTextPrefix"] = from_union([from_none, from_str], self.editor_text_prefix)
-        result["editorTextSuffix"] = from_union([from_none, from_str], self.editor_text_suffix)
+        if self.editor_text_prefix is not None:
+            result["editorTextPrefix"] = from_union([from_none, from_str], self.editor_text_prefix)
+        if self.editor_text_suffix is not None:
+            result["editorTextSuffix"] = from_union([from_none, from_str], self.editor_text_suffix)
         result["identifier"] = from_str(self.identifier)
         result["isArray"] = from_bool(self.is_array)
-        result["max"] = from_union([from_none, to_float], self.max)
-        result["min"] = from_union([from_none, to_float], self.min)
-        result["regex"] = from_union([from_none, from_str], self.regex)
+        if self.max is not None:
+            result["max"] = from_union([from_none, to_float], self.max)
+        if self.min is not None:
+            result["min"] = from_union([from_none, to_float], self.min)
+        if self.regex is not None:
+            result["regex"] = from_union([from_none, from_str], self.regex)
         result["symmetricalRef"] = from_bool(self.symmetrical_ref)
-        result["textLanguageMode"] = from_union([from_none, lambda x: to_enum(TextLanguageMode, x)], self.text_language_mode)
-        result["tilesetUid"] = from_union([from_none, from_int], self.tileset_uid)
+        if self.text_language_mode is not None:
+            result["textLanguageMode"] = from_union([from_none, lambda x: to_enum(TextLanguageMode, x)], self.text_language_mode)
+        if self.tileset_uid is not None:
+            result["tilesetUid"] = from_union([from_none, from_int], self.tileset_uid)
         result["type"] = from_str(self.field_definition_type)
         result["uid"] = from_int(self.uid)
         result["useForSmartColor"] = from_bool(self.use_for_smart_color)
@@ -526,11 +576,14 @@ class EntityDefinition:
         result["resizableY"] = from_bool(self.resizable_y)
         result["showName"] = from_bool(self.show_name)
         result["tags"] = from_list(from_str, self.tags)
-        result["tileId"] = from_union([from_none, from_int], self.tile_id)
+        if self.tile_id is not None:
+            result["tileId"] = from_union([from_none, from_int], self.tile_id)
         result["tileOpacity"] = to_float(self.tile_opacity)
-        result["tileRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile_rect)
+        if self.tile_rect is not None:
+            result["tileRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile_rect)
         result["tileRenderMode"] = to_enum(TileRenderMode, self.tile_render_mode)
-        result["tilesetId"] = from_union([from_none, from_int], self.tileset_id)
+        if self.tileset_id is not None:
+            result["tilesetId"] = from_union([from_none, from_int], self.tileset_id)
         result["uid"] = from_int(self.uid)
         result["width"] = from_int(self.width)
         return result
@@ -565,10 +618,12 @@ class EnumValueDefinition:
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["__tileSrcRect"] = from_union([from_none, lambda x: from_list(from_int, x)], self.tile_src_rect)
+        if self.tile_src_rect is not None:
+            result["__tileSrcRect"] = from_union([from_none, lambda x: from_list(from_int, x)], self.tile_src_rect)
         result["color"] = from_int(self.color)
         result["id"] = from_str(self.id)
-        result["tileId"] = from_union([from_none, from_int], self.tile_id)
+        if self.tile_id is not None:
+            result["tileId"] = from_union([from_none, from_int], self.tile_id)
         return result
 
 
@@ -610,9 +665,12 @@ class EnumDefinition:
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["externalFileChecksum"] = from_union([from_none, from_str], self.external_file_checksum)
-        result["externalRelPath"] = from_union([from_none, from_str], self.external_rel_path)
-        result["iconTilesetUid"] = from_union([from_none, from_int], self.icon_tileset_uid)
+        if self.external_file_checksum is not None:
+            result["externalFileChecksum"] = from_union([from_none, from_str], self.external_file_checksum)
+        if self.external_rel_path is not None:
+            result["externalRelPath"] = from_union([from_none, from_str], self.external_rel_path)
+        if self.icon_tileset_uid is not None:
+            result["iconTilesetUid"] = from_union([from_none, from_int], self.icon_tileset_uid)
         result["identifier"] = from_str(self.identifier)
         result["tags"] = from_list(from_str, self.tags)
         result["uid"] = from_int(self.uid)
@@ -741,7 +799,8 @@ class AutoLayerRuleDefinition:
         result["checker"] = to_enum(Checker, self.checker)
         result["flipX"] = from_bool(self.flip_x)
         result["flipY"] = from_bool(self.flip_y)
-        result["outOfBoundsValue"] = from_union([from_none, from_int], self.out_of_bounds_value)
+        if self.out_of_bounds_value is not None:
+            result["outOfBoundsValue"] = from_union([from_none, from_int], self.out_of_bounds_value)
         result["pattern"] = from_list(from_int, self.pattern)
         result["perlinActive"] = from_bool(self.perlin_active)
         result["perlinOctaves"] = to_float(self.perlin_octaves)
@@ -794,7 +853,8 @@ class AutoLayerRuleGroup:
     def to_dict(self) -> dict:
         result: dict = {}
         result["active"] = from_bool(self.active)
-        result["collapsed"] = from_union([from_none, from_bool], self.collapsed)
+        if self.collapsed is not None:
+            result["collapsed"] = from_union([from_none, from_bool], self.collapsed)
         result["isOptional"] = from_bool(self.is_optional)
         result["name"] = from_str(self.name)
         result["rules"] = from_list(lambda x: to_class(AutoLayerRuleDefinition, x), self.rules)
@@ -827,7 +887,8 @@ class IntGridValueDefinition:
     def to_dict(self) -> dict:
         result: dict = {}
         result["color"] = from_str(self.color)
-        result["identifier"] = from_union([from_none, from_str], self.identifier)
+        if self.identifier is not None:
+            result["identifier"] = from_union([from_none, from_str], self.identifier)
         result["value"] = from_int(self.value)
         return result
 
@@ -980,8 +1041,10 @@ class LayerDefinition:
         result: dict = {}
         result["__type"] = from_str(self.type)
         result["autoRuleGroups"] = from_list(lambda x: to_class(AutoLayerRuleGroup, x), self.auto_rule_groups)
-        result["autoSourceLayerDefUid"] = from_union([from_none, from_int], self.auto_source_layer_def_uid)
-        result["autoTilesetDefUid"] = from_union([from_none, from_int], self.auto_tileset_def_uid)
+        if self.auto_source_layer_def_uid is not None:
+            result["autoSourceLayerDefUid"] = from_union([from_none, from_int], self.auto_source_layer_def_uid)
+        if self.auto_tileset_def_uid is not None:
+            result["autoTilesetDefUid"] = from_union([from_none, from_int], self.auto_tileset_def_uid)
         result["canSelectWhenInactive"] = from_bool(self.can_select_when_inactive)
         result["displayOpacity"] = to_float(self.display_opacity)
         result["excludedTags"] = from_list(from_str, self.excluded_tags)
@@ -1001,7 +1064,8 @@ class LayerDefinition:
         result["requiredTags"] = from_list(from_str, self.required_tags)
         result["tilePivotX"] = to_float(self.tile_pivot_x)
         result["tilePivotY"] = to_float(self.tile_pivot_y)
-        result["tilesetDefUid"] = from_union([from_none, from_int], self.tileset_def_uid)
+        if self.tileset_def_uid is not None:
+            result["tilesetDefUid"] = from_union([from_none, from_int], self.tileset_def_uid)
         result["type"] = to_enum(TypeEnum, self.layer_definition_type)
         result["uid"] = from_int(self.uid)
         return result
@@ -1149,19 +1213,23 @@ class TilesetDefinition:
         result: dict = {}
         result["__cHei"] = from_int(self.c_hei)
         result["__cWid"] = from_int(self.c_wid)
-        result["cachedPixelData"] = from_union([from_none, lambda x: from_dict(lambda x: x, x)], self.cached_pixel_data)
+        if self.cached_pixel_data is not None:
+            result["cachedPixelData"] = from_union([from_none, lambda x: from_dict(lambda x: x, x)], self.cached_pixel_data)
         result["customData"] = from_list(lambda x: to_class(TileCustomMetadata, x), self.custom_data)
-        result["embedAtlas"] = from_union([from_none, lambda x: to_enum(EmbedAtlas, x)], self.embed_atlas)
+        if self.embed_atlas is not None:
+            result["embedAtlas"] = from_union([from_none, lambda x: to_enum(EmbedAtlas, x)], self.embed_atlas)
         result["enumTags"] = from_list(lambda x: to_class(EnumTagValue, x), self.enum_tags)
         result["identifier"] = from_str(self.identifier)
         result["padding"] = from_int(self.padding)
         result["pxHei"] = from_int(self.px_hei)
         result["pxWid"] = from_int(self.px_wid)
-        result["relPath"] = from_union([from_none, from_str], self.rel_path)
+        if self.rel_path is not None:
+            result["relPath"] = from_union([from_none, from_str], self.rel_path)
         result["savedSelections"] = from_list(lambda x: from_dict(lambda x: x, x), self.saved_selections)
         result["spacing"] = from_int(self.spacing)
         result["tags"] = from_list(from_str, self.tags)
-        result["tagsSourceEnumUid"] = from_union([from_none, from_int], self.tags_source_enum_uid)
+        if self.tags_source_enum_uid is not None:
+            result["tagsSourceEnumUid"] = from_union([from_none, from_int], self.tags_source_enum_uid)
         result["tileGridSize"] = from_int(self.tile_grid_size)
         result["uid"] = from_int(self.uid)
         return result
@@ -1281,7 +1349,8 @@ class FieldInstance:
     def to_dict(self) -> dict:
         result: dict = {}
         result["__identifier"] = from_str(self.identifier)
-        result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
+        if self.tile is not None:
+            result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
         result["__type"] = from_str(self.type)
         result["__value"] = self.value
         result["defUid"] = from_int(self.def_uid)
@@ -1363,7 +1432,8 @@ class EntityInstance:
         result["__pivot"] = from_list(to_float, self.pivot)
         result["__smartColor"] = from_str(self.smart_color)
         result["__tags"] = from_list(from_str, self.tags)
-        result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
+        if self.tile is not None:
+            result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
         result["defUid"] = from_int(self.def_uid)
         result["fieldInstances"] = from_list(lambda x: to_class(FieldInstance, x), self.field_instances)
         result["height"] = from_int(self.height)
@@ -1633,19 +1703,23 @@ class LayerInstance:
         result["__opacity"] = to_float(self.opacity)
         result["__pxTotalOffsetX"] = from_int(self.px_total_offset_x)
         result["__pxTotalOffsetY"] = from_int(self.px_total_offset_y)
-        result["__tilesetDefUid"] = from_union([from_none, from_int], self.tileset_def_uid)
-        result["__tilesetRelPath"] = from_union([from_none, from_str], self.tileset_rel_path)
+        if self.tileset_def_uid is not None:
+            result["__tilesetDefUid"] = from_union([from_none, from_int], self.tileset_def_uid)
+        if self.tileset_rel_path is not None:
+            result["__tilesetRelPath"] = from_union([from_none, from_str], self.tileset_rel_path)
         result["__type"] = from_str(self.type)
         result["autoLayerTiles"] = from_list(lambda x: to_class(TileInstance, x), self.auto_layer_tiles)
         result["entityInstances"] = from_list(lambda x: to_class(EntityInstance, x), self.entity_instances)
         result["gridTiles"] = from_list(lambda x: to_class(TileInstance, x), self.grid_tiles)
         result["iid"] = from_str(self.iid)
-        result["intGrid"] = from_union([from_none, lambda x: from_list(lambda x: to_class(IntGridValueInstance, x), x)], self.int_grid)
+        if self.int_grid is not None:
+            result["intGrid"] = from_union([from_none, lambda x: from_list(lambda x: to_class(IntGridValueInstance, x), x)], self.int_grid)
         result["intGridCsv"] = from_list(from_int, self.int_grid_csv)
         result["layerDefUid"] = from_int(self.layer_def_uid)
         result["levelId"] = from_int(self.level_id)
         result["optionalRules"] = from_list(from_int, self.optional_rules)
-        result["overrideTilesetUid"] = from_union([from_none, from_int], self.override_tileset_uid)
+        if self.override_tileset_uid is not None:
+            result["overrideTilesetUid"] = from_union([from_none, from_int], self.override_tileset_uid)
         result["pxOffsetX"] = from_int(self.px_offset_x)
         result["pxOffsetY"] = from_int(self.px_offset_y)
         result["seed"] = from_int(self.seed)
@@ -1727,7 +1801,8 @@ class NeighbourLevel:
         result: dict = {}
         result["dir"] = from_str(self.dir)
         result["levelIid"] = from_str(self.level_iid)
-        result["levelUid"] = from_union([from_none, from_int], self.level_uid)
+        if self.level_uid is not None:
+            result["levelUid"] = from_union([from_none, from_int], self.level_uid)
         return result
 
 
@@ -1865,19 +1940,25 @@ class Level:
     def to_dict(self) -> dict:
         result: dict = {}
         result["__bgColor"] = from_str(self.bg_color)
-        result["__bgPos"] = from_union([from_none, lambda x: to_class(LevelBackgroundPosition, x)], self.bg_pos)
+        if self.bg_pos is not None:
+            result["__bgPos"] = from_union([from_none, lambda x: to_class(LevelBackgroundPosition, x)], self.bg_pos)
         result["__neighbours"] = from_list(lambda x: to_class(NeighbourLevel, x), self.neighbours)
         result["__smartColor"] = from_str(self.smart_color)
-        result["bgColor"] = from_union([from_none, from_str], self.level_bg_color)
+        if self.level_bg_color is not None:
+            result["bgColor"] = from_union([from_none, from_str], self.level_bg_color)
         result["bgPivotX"] = to_float(self.bg_pivot_x)
         result["bgPivotY"] = to_float(self.bg_pivot_y)
-        result["bgPos"] = from_union([from_none, lambda x: to_enum(BgPos, x)], self.level_bg_pos)
-        result["bgRelPath"] = from_union([from_none, from_str], self.bg_rel_path)
-        result["externalRelPath"] = from_union([from_none, from_str], self.external_rel_path)
+        if self.level_bg_pos is not None:
+            result["bgPos"] = from_union([from_none, lambda x: to_enum(BgPos, x)], self.level_bg_pos)
+        if self.bg_rel_path is not None:
+            result["bgRelPath"] = from_union([from_none, from_str], self.bg_rel_path)
+        if self.external_rel_path is not None:
+            result["externalRelPath"] = from_union([from_none, from_str], self.external_rel_path)
         result["fieldInstances"] = from_list(lambda x: to_class(FieldInstance, x), self.field_instances)
         result["identifier"] = from_str(self.identifier)
         result["iid"] = from_str(self.iid)
-        result["layerInstances"] = from_union([from_none, lambda x: from_list(lambda x: to_class(LayerInstance, x), x)], self.layer_instances)
+        if self.layer_instances is not None:
+            result["layerInstances"] = from_union([from_none, lambda x: from_list(lambda x: to_class(LayerInstance, x), x)], self.layer_instances)
         result["pxHei"] = from_int(self.px_hei)
         result["pxWid"] = from_int(self.px_wid)
         result["uid"] = from_int(self.uid)
@@ -1965,6 +2046,7 @@ class ForcedRefs:
     """
     auto_layer_rule_group: Optional[AutoLayerRuleGroup]
     auto_rule_def: Optional[AutoLayerRuleDefinition]
+    custom_command: Optional[LdtkCustomCommand]
     definitions: Optional[Definitions]
     entity_def: Optional[EntityDefinition]
     entity_instance: Optional[EntityInstance]
@@ -1988,9 +2070,10 @@ class ForcedRefs:
     tileset_rect: Optional[TilesetRectangle]
     world: Optional[World]
 
-    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[FieldInstanceEntityReference], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[FieldInstanceGridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
+    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[FieldInstanceEntityReference], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[FieldInstanceGridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
         self.auto_layer_rule_group = auto_layer_rule_group
         self.auto_rule_def = auto_rule_def
+        self.custom_command = custom_command
         self.definitions = definitions
         self.entity_def = entity_def
         self.entity_instance = entity_instance
@@ -2019,6 +2102,7 @@ class ForcedRefs:
         assert isinstance(obj, dict)
         auto_layer_rule_group = from_union([AutoLayerRuleGroup.from_dict, from_none], obj.get("AutoLayerRuleGroup"))
         auto_rule_def = from_union([AutoLayerRuleDefinition.from_dict, from_none], obj.get("AutoRuleDef"))
+        custom_command = from_union([LdtkCustomCommand.from_dict, from_none], obj.get("CustomCommand"))
         definitions = from_union([Definitions.from_dict, from_none], obj.get("Definitions"))
         entity_def = from_union([EntityDefinition.from_dict, from_none], obj.get("EntityDef"))
         entity_instance = from_union([EntityInstance.from_dict, from_none], obj.get("EntityInstance"))
@@ -2041,34 +2125,60 @@ class ForcedRefs:
         tileset_def = from_union([TilesetDefinition.from_dict, from_none], obj.get("TilesetDef"))
         tileset_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("TilesetRect"))
         world = from_union([World.from_dict, from_none], obj.get("World"))
-        return ForcedRefs(auto_layer_rule_group, auto_rule_def, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
+        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["AutoLayerRuleGroup"] = from_union([lambda x: to_class(AutoLayerRuleGroup, x), from_none], self.auto_layer_rule_group)
-        result["AutoRuleDef"] = from_union([lambda x: to_class(AutoLayerRuleDefinition, x), from_none], self.auto_rule_def)
-        result["Definitions"] = from_union([lambda x: to_class(Definitions, x), from_none], self.definitions)
-        result["EntityDef"] = from_union([lambda x: to_class(EntityDefinition, x), from_none], self.entity_def)
-        result["EntityInstance"] = from_union([lambda x: to_class(EntityInstance, x), from_none], self.entity_instance)
-        result["EntityReferenceInfos"] = from_union([lambda x: to_class(FieldInstanceEntityReference, x), from_none], self.entity_reference_infos)
-        result["EnumDef"] = from_union([lambda x: to_class(EnumDefinition, x), from_none], self.enum_def)
-        result["EnumDefValues"] = from_union([lambda x: to_class(EnumValueDefinition, x), from_none], self.enum_def_values)
-        result["EnumTagValue"] = from_union([lambda x: to_class(EnumTagValue, x), from_none], self.enum_tag_value)
-        result["FieldDef"] = from_union([lambda x: to_class(FieldDefinition, x), from_none], self.field_def)
-        result["FieldInstance"] = from_union([lambda x: to_class(FieldInstance, x), from_none], self.field_instance)
-        result["GridPoint"] = from_union([lambda x: to_class(FieldInstanceGridPoint, x), from_none], self.grid_point)
-        result["IntGridValueDef"] = from_union([lambda x: to_class(IntGridValueDefinition, x), from_none], self.int_grid_value_def)
-        result["IntGridValueInstance"] = from_union([lambda x: to_class(IntGridValueInstance, x), from_none], self.int_grid_value_instance)
-        result["LayerDef"] = from_union([lambda x: to_class(LayerDefinition, x), from_none], self.layer_def)
-        result["LayerInstance"] = from_union([lambda x: to_class(LayerInstance, x), from_none], self.layer_instance)
-        result["Level"] = from_union([lambda x: to_class(Level, x), from_none], self.level)
-        result["LevelBgPosInfos"] = from_union([from_none, lambda x: to_class(LevelBackgroundPosition, x)], self.level_bg_pos_infos)
-        result["NeighbourLevel"] = from_union([lambda x: to_class(NeighbourLevel, x), from_none], self.neighbour_level)
-        result["Tile"] = from_union([lambda x: to_class(TileInstance, x), from_none], self.tile)
-        result["TileCustomMetadata"] = from_union([lambda x: to_class(TileCustomMetadata, x), from_none], self.tile_custom_metadata)
-        result["TilesetDef"] = from_union([lambda x: to_class(TilesetDefinition, x), from_none], self.tileset_def)
-        result["TilesetRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tileset_rect)
-        result["World"] = from_union([lambda x: to_class(World, x), from_none], self.world)
+        if self.auto_layer_rule_group is not None:
+            result["AutoLayerRuleGroup"] = from_union([lambda x: to_class(AutoLayerRuleGroup, x), from_none], self.auto_layer_rule_group)
+        if self.auto_rule_def is not None:
+            result["AutoRuleDef"] = from_union([lambda x: to_class(AutoLayerRuleDefinition, x), from_none], self.auto_rule_def)
+        if self.custom_command is not None:
+            result["CustomCommand"] = from_union([lambda x: to_class(LdtkCustomCommand, x), from_none], self.custom_command)
+        if self.definitions is not None:
+            result["Definitions"] = from_union([lambda x: to_class(Definitions, x), from_none], self.definitions)
+        if self.entity_def is not None:
+            result["EntityDef"] = from_union([lambda x: to_class(EntityDefinition, x), from_none], self.entity_def)
+        if self.entity_instance is not None:
+            result["EntityInstance"] = from_union([lambda x: to_class(EntityInstance, x), from_none], self.entity_instance)
+        if self.entity_reference_infos is not None:
+            result["EntityReferenceInfos"] = from_union([lambda x: to_class(FieldInstanceEntityReference, x), from_none], self.entity_reference_infos)
+        if self.enum_def is not None:
+            result["EnumDef"] = from_union([lambda x: to_class(EnumDefinition, x), from_none], self.enum_def)
+        if self.enum_def_values is not None:
+            result["EnumDefValues"] = from_union([lambda x: to_class(EnumValueDefinition, x), from_none], self.enum_def_values)
+        if self.enum_tag_value is not None:
+            result["EnumTagValue"] = from_union([lambda x: to_class(EnumTagValue, x), from_none], self.enum_tag_value)
+        if self.field_def is not None:
+            result["FieldDef"] = from_union([lambda x: to_class(FieldDefinition, x), from_none], self.field_def)
+        if self.field_instance is not None:
+            result["FieldInstance"] = from_union([lambda x: to_class(FieldInstance, x), from_none], self.field_instance)
+        if self.grid_point is not None:
+            result["GridPoint"] = from_union([lambda x: to_class(FieldInstanceGridPoint, x), from_none], self.grid_point)
+        if self.int_grid_value_def is not None:
+            result["IntGridValueDef"] = from_union([lambda x: to_class(IntGridValueDefinition, x), from_none], self.int_grid_value_def)
+        if self.int_grid_value_instance is not None:
+            result["IntGridValueInstance"] = from_union([lambda x: to_class(IntGridValueInstance, x), from_none], self.int_grid_value_instance)
+        if self.layer_def is not None:
+            result["LayerDef"] = from_union([lambda x: to_class(LayerDefinition, x), from_none], self.layer_def)
+        if self.layer_instance is not None:
+            result["LayerInstance"] = from_union([lambda x: to_class(LayerInstance, x), from_none], self.layer_instance)
+        if self.level is not None:
+            result["Level"] = from_union([lambda x: to_class(Level, x), from_none], self.level)
+        if self.level_bg_pos_infos is not None:
+            result["LevelBgPosInfos"] = from_union([from_none, lambda x: to_class(LevelBackgroundPosition, x)], self.level_bg_pos_infos)
+        if self.neighbour_level is not None:
+            result["NeighbourLevel"] = from_union([lambda x: to_class(NeighbourLevel, x), from_none], self.neighbour_level)
+        if self.tile is not None:
+            result["Tile"] = from_union([lambda x: to_class(TileInstance, x), from_none], self.tile)
+        if self.tile_custom_metadata is not None:
+            result["TileCustomMetadata"] = from_union([lambda x: to_class(TileCustomMetadata, x), from_none], self.tile_custom_metadata)
+        if self.tileset_def is not None:
+            result["TilesetDef"] = from_union([lambda x: to_class(TilesetDefinition, x), from_none], self.tileset_def)
+        if self.tileset_rect is not None:
+            result["TilesetRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tileset_rect)
+        if self.world is not None:
+            result["World"] = from_union([lambda x: to_class(World, x), from_none], self.world)
         return result
 
 
@@ -2117,6 +2227,8 @@ class LdtkJSON:
     backup_on_save: bool
     """Project background color"""
     bg_color: str
+    """An array of command lines that can be ran manually by the user"""
+    custom_commands: List[LdtkCustomCommand]
     """Default grid size for new layers"""
     default_grid_size: int
     """Default background color of levels"""
@@ -2137,6 +2249,8 @@ class LdtkJSON:
     default_pivot_y: float
     """A structure containing all the definitions of this project"""
     defs: Definitions
+    """If TRUE, the exported PNGs will include the level background (color or image)."""
+    export_level_bg: bool
     """**WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
     by: `imageExportMode`
     """
@@ -2158,6 +2272,8 @@ class LdtkJSON:
     values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
     """
     identifier_style: IdentifierStyle
+    """Unique project identifier"""
+    iid: str
     """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
     `OneImagePerLevel`, `LayersAndLevels`
     """
@@ -2218,12 +2334,13 @@ class LdtkJSON:
     """
     worlds: List[World]
 
-    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
+    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, custom_commands: List[LdtkCustomCommand], default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_level_bg: bool, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, iid: str, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
         self.forced_refs = forced_refs
         self.app_build_id = app_build_id
         self.backup_limit = backup_limit
         self.backup_on_save = backup_on_save
         self.bg_color = bg_color
+        self.custom_commands = custom_commands
         self.default_grid_size = default_grid_size
         self.default_level_bg_color = default_level_bg_color
         self.default_level_height = default_level_height
@@ -2231,11 +2348,13 @@ class LdtkJSON:
         self.default_pivot_x = default_pivot_x
         self.default_pivot_y = default_pivot_y
         self.defs = defs
+        self.export_level_bg = export_level_bg
         self.export_png = export_png
         self.export_tiled = export_tiled
         self.external_levels = external_levels
         self.flags = flags
         self.identifier_style = identifier_style
+        self.iid = iid
         self.image_export_mode = image_export_mode
         self.json_version = json_version
         self.level_name_pattern = level_name_pattern
@@ -2258,6 +2377,7 @@ class LdtkJSON:
         backup_limit = from_int(obj.get("backupLimit"))
         backup_on_save = from_bool(obj.get("backupOnSave"))
         bg_color = from_str(obj.get("bgColor"))
+        custom_commands = from_list(LdtkCustomCommand.from_dict, obj.get("customCommands"))
         default_grid_size = from_int(obj.get("defaultGridSize"))
         default_level_bg_color = from_str(obj.get("defaultLevelBgColor"))
         default_level_height = from_union([from_none, from_int], obj.get("defaultLevelHeight"))
@@ -2265,11 +2385,13 @@ class LdtkJSON:
         default_pivot_x = from_float(obj.get("defaultPivotX"))
         default_pivot_y = from_float(obj.get("defaultPivotY"))
         defs = Definitions.from_dict(obj.get("defs"))
+        export_level_bg = from_bool(obj.get("exportLevelBg"))
         export_png = from_union([from_none, from_bool], obj.get("exportPng"))
         export_tiled = from_bool(obj.get("exportTiled"))
         external_levels = from_bool(obj.get("externalLevels"))
         flags = from_list(Flag, obj.get("flags"))
         identifier_style = IdentifierStyle(obj.get("identifierStyle"))
+        iid = from_str(obj.get("iid"))
         image_export_mode = ImageExportMode(obj.get("imageExportMode"))
         json_version = from_str(obj.get("jsonVersion"))
         level_name_pattern = from_str(obj.get("levelNamePattern"))
@@ -2283,39 +2405,51 @@ class LdtkJSON:
         world_grid_width = from_union([from_none, from_int], obj.get("worldGridWidth"))
         world_layout = from_union([from_none, WorldLayout], obj.get("worldLayout"))
         worlds = from_list(World.from_dict, obj.get("worlds"))
-        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, bg_color, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_png, export_tiled, external_levels, flags, identifier_style, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
+        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, bg_color, custom_commands, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_level_bg, export_png, export_tiled, external_levels, flags, identifier_style, iid, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["__FORCED_REFS"] = from_union([lambda x: to_class(ForcedRefs, x), from_none], self.forced_refs)
+        if self.forced_refs is not None:
+            result["__FORCED_REFS"] = from_union([lambda x: to_class(ForcedRefs, x), from_none], self.forced_refs)
         result["appBuildId"] = to_float(self.app_build_id)
         result["backupLimit"] = from_int(self.backup_limit)
         result["backupOnSave"] = from_bool(self.backup_on_save)
         result["bgColor"] = from_str(self.bg_color)
+        result["customCommands"] = from_list(lambda x: to_class(LdtkCustomCommand, x), self.custom_commands)
         result["defaultGridSize"] = from_int(self.default_grid_size)
         result["defaultLevelBgColor"] = from_str(self.default_level_bg_color)
-        result["defaultLevelHeight"] = from_union([from_none, from_int], self.default_level_height)
-        result["defaultLevelWidth"] = from_union([from_none, from_int], self.default_level_width)
+        if self.default_level_height is not None:
+            result["defaultLevelHeight"] = from_union([from_none, from_int], self.default_level_height)
+        if self.default_level_width is not None:
+            result["defaultLevelWidth"] = from_union([from_none, from_int], self.default_level_width)
         result["defaultPivotX"] = to_float(self.default_pivot_x)
         result["defaultPivotY"] = to_float(self.default_pivot_y)
         result["defs"] = to_class(Definitions, self.defs)
-        result["exportPng"] = from_union([from_none, from_bool], self.export_png)
+        result["exportLevelBg"] = from_bool(self.export_level_bg)
+        if self.export_png is not None:
+            result["exportPng"] = from_union([from_none, from_bool], self.export_png)
         result["exportTiled"] = from_bool(self.export_tiled)
         result["externalLevels"] = from_bool(self.external_levels)
         result["flags"] = from_list(lambda x: to_enum(Flag, x), self.flags)
         result["identifierStyle"] = to_enum(IdentifierStyle, self.identifier_style)
+        result["iid"] = from_str(self.iid)
         result["imageExportMode"] = to_enum(ImageExportMode, self.image_export_mode)
         result["jsonVersion"] = from_str(self.json_version)
         result["levelNamePattern"] = from_str(self.level_name_pattern)
         result["levels"] = from_list(lambda x: to_class(Level, x), self.levels)
         result["minifyJson"] = from_bool(self.minify_json)
         result["nextUid"] = from_int(self.next_uid)
-        result["pngFilePattern"] = from_union([from_none, from_str], self.png_file_pattern)
+        if self.png_file_pattern is not None:
+            result["pngFilePattern"] = from_union([from_none, from_str], self.png_file_pattern)
         result["simplifiedExport"] = from_bool(self.simplified_export)
-        result["tutorialDesc"] = from_union([from_none, from_str], self.tutorial_desc)
-        result["worldGridHeight"] = from_union([from_none, from_int], self.world_grid_height)
-        result["worldGridWidth"] = from_union([from_none, from_int], self.world_grid_width)
-        result["worldLayout"] = from_union([from_none, lambda x: to_enum(WorldLayout, x)], self.world_layout)
+        if self.tutorial_desc is not None:
+            result["tutorialDesc"] = from_union([from_none, from_str], self.tutorial_desc)
+        if self.world_grid_height is not None:
+            result["worldGridHeight"] = from_union([from_none, from_int], self.world_grid_height)
+        if self.world_grid_width is not None:
+            result["worldGridWidth"] = from_union([from_none, from_int], self.world_grid_width)
+        if self.world_layout is not None:
+            result["worldLayout"] = from_union([from_none, lambda x: to_enum(WorldLayout, x)], self.world_layout)
         result["worlds"] = from_list(lambda x: to_class(World, x), self.worlds)
         return result
 

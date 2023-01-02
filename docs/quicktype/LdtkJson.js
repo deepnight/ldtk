@@ -156,6 +156,7 @@ const typeMap = {
         { json: "backupLimit", js: "backupLimit", typ: 0 },
         { json: "backupOnSave", js: "backupOnSave", typ: true },
         { json: "bgColor", js: "bgColor", typ: "" },
+        { json: "customCommands", js: "customCommands", typ: a(r("LdtkCustomCommand")) },
         { json: "defaultGridSize", js: "defaultGridSize", typ: 0 },
         { json: "defaultLevelBgColor", js: "defaultLevelBgColor", typ: "" },
         { json: "defaultLevelHeight", js: "defaultLevelHeight", typ: u(undefined, u(0, null)) },
@@ -163,11 +164,13 @@ const typeMap = {
         { json: "defaultPivotX", js: "defaultPivotX", typ: 3.14 },
         { json: "defaultPivotY", js: "defaultPivotY", typ: 3.14 },
         { json: "defs", js: "defs", typ: r("Definitions") },
+        { json: "exportLevelBg", js: "exportLevelBg", typ: true },
         { json: "exportPng", js: "exportPng", typ: u(undefined, u(true, null)) },
         { json: "exportTiled", js: "exportTiled", typ: true },
         { json: "externalLevels", js: "externalLevels", typ: true },
         { json: "flags", js: "flags", typ: a(r("Flag")) },
         { json: "identifierStyle", js: "identifierStyle", typ: r("IdentifierStyle") },
+        { json: "iid", js: "iid", typ: "" },
         { json: "imageExportMode", js: "imageExportMode", typ: r("ImageExportMode") },
         { json: "jsonVersion", js: "jsonVersion", typ: "" },
         { json: "levelNamePattern", js: "levelNamePattern", typ: "" },
@@ -185,6 +188,7 @@ const typeMap = {
     "ForcedRefs": o([
         { json: "AutoLayerRuleGroup", js: "AutoLayerRuleGroup", typ: u(undefined, r("AutoLayerRuleGroup")) },
         { json: "AutoRuleDef", js: "AutoRuleDef", typ: u(undefined, r("AutoLayerRuleDefinition")) },
+        { json: "CustomCommand", js: "CustomCommand", typ: u(undefined, r("LdtkCustomCommand")) },
         { json: "Definitions", js: "Definitions", typ: u(undefined, r("Definitions")) },
         { json: "EntityDef", js: "EntityDef", typ: u(undefined, r("EntityDefinition")) },
         { json: "EntityInstance", js: "EntityInstance", typ: u(undefined, r("EntityInstance")) },
@@ -241,6 +245,10 @@ const typeMap = {
         { json: "yModulo", js: "yModulo", typ: 0 },
         { json: "yOffset", js: "yOffset", typ: 0 },
     ], false),
+    "LdtkCustomCommand": o([
+        { json: "command", js: "command", typ: "" },
+        { json: "when", js: "when", typ: r("When") },
+    ], false),
     "Definitions": o([
         { json: "entities", js: "entities", typ: a(r("EntityDefinition")) },
         { json: "enums", js: "enums", typ: a(r("EnumDefinition")) },
@@ -288,6 +296,7 @@ const typeMap = {
         { json: "autoChainRef", js: "autoChainRef", typ: true },
         { json: "canBeNull", js: "canBeNull", typ: true },
         { json: "defaultOverride", js: "defaultOverride", typ: u(undefined, "any") },
+        { json: "doc", js: "doc", typ: u(undefined, u(null, "")) },
         { json: "editorAlwaysShow", js: "editorAlwaysShow", typ: true },
         { json: "editorCutLongValues", js: "editorCutLongValues", typ: true },
         { json: "editorDisplayMode", js: "editorDisplayMode", typ: r("EditorDisplayMode") },
@@ -490,7 +499,7 @@ const typeMap = {
     "NeighbourLevel": o([
         { json: "dir", js: "dir", typ: "" },
         { json: "levelIid", js: "levelIid", typ: "" },
-        { json: "levelUid", js: "levelUid", typ: u(undefined, 0) },
+        { json: "levelUid", js: "levelUid", typ: u(undefined, u(0, null)) },
     ], false),
     "World": o([
         { json: "defaultLevelHeight", js: "defaultLevelHeight", typ: 0 },
@@ -510,6 +519,12 @@ const typeMap = {
     "TileMode": [
         "Single",
         "Stamp",
+    ],
+    "When": [
+        "AfterLoad",
+        "AfterSave",
+        "BeforeSave",
+        "Manual",
     ],
     "AllowedRefs": [
         "Any",

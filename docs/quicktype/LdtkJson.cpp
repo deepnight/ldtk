@@ -59,6 +59,33 @@ namespace quicktype {
     }
 
     /**
+     * Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
+     */
+    enum class When : int { AFTER_LOAD, AFTER_SAVE, BEFORE_SAVE, MANUAL };
+
+    class LdtkCustomCommand {
+        public:
+        LdtkCustomCommand() = default;
+        virtual ~LdtkCustomCommand() = default;
+
+        private:
+        std::string command;
+        When when;
+
+        public:
+        const std::string & get_command() const { return command; }
+        std::string & get_mutable_command() { return command; }
+        void set_command(const std::string & value) { this->command = value; }
+
+        /**
+         * Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
+         */
+        const When & get_when() const { return when; }
+        When & get_mutable_when() { return when; }
+        void set_when(const When & value) { this->when = value; }
+    };
+
+    /**
      * Possible values: `Any`, `OnlySame`, `OnlyTags`
      */
     enum class AllowedRefs : int { ANY, ONLY_SAME, ONLY_TAGS };
@@ -103,6 +130,7 @@ namespace quicktype {
         bool auto_chain_ref;
         bool can_be_null;
         nlohmann::json default_override;
+        std::shared_ptr<std::string> doc;
         bool editor_always_show;
         bool editor_cut_long_values;
         EditorDisplayMode editor_display_mode;
@@ -187,6 +215,13 @@ namespace quicktype {
         const nlohmann::json & get_default_override() const { return default_override; }
         nlohmann::json & get_mutable_default_override() { return default_override; }
         void set_default_override(const nlohmann::json & value) { this->default_override = value; }
+
+        /**
+         * User defined documentation for this field to provide help/tips to level designers about
+         * accepted values.
+         */
+        std::shared_ptr<std::string> get_doc() const { return doc; }
+        void set_doc(std::shared_ptr<std::string> value) { this->doc = value; }
 
         const bool & get_editor_always_show() const { return editor_always_show; }
         bool & get_mutable_editor_always_show() { return editor_always_show; }
@@ -2353,6 +2388,7 @@ namespace quicktype {
         private:
         std::shared_ptr<AutoLayerRuleGroup> auto_layer_rule_group;
         std::shared_ptr<AutoLayerRuleDefinition> auto_rule_def;
+        std::shared_ptr<LdtkCustomCommand> custom_command;
         std::shared_ptr<Definitions> definitions;
         std::shared_ptr<EntityDefinition> entity_def;
         std::shared_ptr<EntityInstance> entity_instance;
@@ -2382,6 +2418,9 @@ namespace quicktype {
 
         std::shared_ptr<AutoLayerRuleDefinition> get_auto_rule_def() const { return auto_rule_def; }
         void set_auto_rule_def(std::shared_ptr<AutoLayerRuleDefinition> value) { this->auto_rule_def = value; }
+
+        std::shared_ptr<LdtkCustomCommand> get_custom_command() const { return custom_command; }
+        void set_custom_command(std::shared_ptr<LdtkCustomCommand> value) { this->custom_command = value; }
 
         std::shared_ptr<Definitions> get_definitions() const { return definitions; }
         void set_definitions(std::shared_ptr<Definitions> value) { this->definitions = value; }
@@ -2480,6 +2519,7 @@ namespace quicktype {
         int64_t backup_limit;
         bool backup_on_save;
         std::string bg_color;
+        std::vector<LdtkCustomCommand> custom_commands;
         int64_t default_grid_size;
         std::string default_level_bg_color;
         std::shared_ptr<int64_t> default_level_height;
@@ -2487,11 +2527,13 @@ namespace quicktype {
         double default_pivot_x;
         double default_pivot_y;
         Definitions defs;
+        bool export_level_bg;
         std::shared_ptr<bool> export_png;
         bool export_tiled;
         bool external_levels;
         std::vector<Flag> flags;
         IdentifierStyle identifier_style;
+        std::string iid;
         ImageExportMode image_export_mode;
         std::string json_version;
         std::string level_name_pattern;
@@ -2548,6 +2590,13 @@ namespace quicktype {
         void set_bg_color(const std::string & value) { this->bg_color = value; }
 
         /**
+         * An array of command lines that can be ran manually by the user
+         */
+        const std::vector<LdtkCustomCommand> & get_custom_commands() const { return custom_commands; }
+        std::vector<LdtkCustomCommand> & get_mutable_custom_commands() { return custom_commands; }
+        void set_custom_commands(const std::vector<LdtkCustomCommand> & value) { this->custom_commands = value; }
+
+        /**
          * Default grid size for new layers
          */
         const int64_t & get_default_grid_size() const { return default_grid_size; }
@@ -2599,6 +2648,13 @@ namespace quicktype {
         void set_defs(const Definitions & value) { this->defs = value; }
 
         /**
+         * If TRUE, the exported PNGs will include the level background (color or image).
+         */
+        const bool & get_export_level_bg() const { return export_level_bg; }
+        bool & get_mutable_export_level_bg() { return export_level_bg; }
+        void set_export_level_bg(const bool & value) { this->export_level_bg = value; }
+
+        /**
          * **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
          * by: `imageExportMode`
          */
@@ -2637,6 +2693,13 @@ namespace quicktype {
         const IdentifierStyle & get_identifier_style() const { return identifier_style; }
         IdentifierStyle & get_mutable_identifier_style() { return identifier_style; }
         void set_identifier_style(const IdentifierStyle & value) { this->identifier_style = value; }
+
+        /**
+         * Unique project identifier
+         */
+        const std::string & get_iid() const { return iid; }
+        std::string & get_mutable_iid() { return iid; }
+        void set_iid(const std::string & value) { this->iid = value; }
 
         /**
          * "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
@@ -2751,6 +2814,9 @@ namespace quicktype {
 }
 
 namespace nlohmann {
+    void from_json(const json & j, quicktype::LdtkCustomCommand & x);
+    void to_json(json & j, const quicktype::LdtkCustomCommand & x);
+
     void from_json(const json & j, quicktype::FieldDefinition & x);
     void to_json(json & j, const quicktype::FieldDefinition & x);
 
@@ -2829,6 +2895,9 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::LdtkJson & x);
     void to_json(json & j, const quicktype::LdtkJson & x);
 
+    void from_json(const json & j, quicktype::When & x);
+    void to_json(json & j, const quicktype::When & x);
+
     void from_json(const json & j, quicktype::AllowedRefs & x);
     void to_json(json & j, const quicktype::AllowedRefs & x);
 
@@ -2883,6 +2952,17 @@ namespace nlohmann {
     void from_json(const json & j, quicktype::ImageExportMode & x);
     void to_json(json & j, const quicktype::ImageExportMode & x);
 
+    inline void from_json(const json & j, quicktype::LdtkCustomCommand& x) {
+        x.set_command(j.at("command").get<std::string>());
+        x.set_when(j.at("when").get<quicktype::When>());
+    }
+
+    inline void to_json(json & j, const quicktype::LdtkCustomCommand & x) {
+        j = json::object();
+        j["command"] = x.get_command();
+        j["when"] = x.get_when();
+    }
+
     inline void from_json(const json & j, quicktype::FieldDefinition& x) {
         x.set_type(j.at("__type").get<std::string>());
         x.set_accept_file_types(quicktype::get_optional<std::vector<std::string>>(j, "acceptFileTypes"));
@@ -2894,6 +2974,7 @@ namespace nlohmann {
         x.set_auto_chain_ref(j.at("autoChainRef").get<bool>());
         x.set_can_be_null(j.at("canBeNull").get<bool>());
         x.set_default_override(quicktype::get_untyped(j, "defaultOverride"));
+        x.set_doc(quicktype::get_optional<std::string>(j, "doc"));
         x.set_editor_always_show(j.at("editorAlwaysShow").get<bool>());
         x.set_editor_cut_long_values(j.at("editorCutLongValues").get<bool>());
         x.set_editor_display_mode(j.at("editorDisplayMode").get<quicktype::EditorDisplayMode>());
@@ -2927,6 +3008,7 @@ namespace nlohmann {
         j["autoChainRef"] = x.get_auto_chain_ref();
         j["canBeNull"] = x.get_can_be_null();
         j["defaultOverride"] = x.get_default_override();
+        j["doc"] = x.get_doc();
         j["editorAlwaysShow"] = x.get_editor_always_show();
         j["editorCutLongValues"] = x.get_editor_cut_long_values();
         j["editorDisplayMode"] = x.get_editor_display_mode();
@@ -3546,6 +3628,7 @@ namespace nlohmann {
     inline void from_json(const json & j, quicktype::ForcedRefs& x) {
         x.set_auto_layer_rule_group(quicktype::get_optional<quicktype::AutoLayerRuleGroup>(j, "AutoLayerRuleGroup"));
         x.set_auto_rule_def(quicktype::get_optional<quicktype::AutoLayerRuleDefinition>(j, "AutoRuleDef"));
+        x.set_custom_command(quicktype::get_optional<quicktype::LdtkCustomCommand>(j, "CustomCommand"));
         x.set_definitions(quicktype::get_optional<quicktype::Definitions>(j, "Definitions"));
         x.set_entity_def(quicktype::get_optional<quicktype::EntityDefinition>(j, "EntityDef"));
         x.set_entity_instance(quicktype::get_optional<quicktype::EntityInstance>(j, "EntityInstance"));
@@ -3574,6 +3657,7 @@ namespace nlohmann {
         j = json::object();
         j["AutoLayerRuleGroup"] = x.get_auto_layer_rule_group();
         j["AutoRuleDef"] = x.get_auto_rule_def();
+        j["CustomCommand"] = x.get_custom_command();
         j["Definitions"] = x.get_definitions();
         j["EntityDef"] = x.get_entity_def();
         j["EntityInstance"] = x.get_entity_instance();
@@ -3604,6 +3688,7 @@ namespace nlohmann {
         x.set_backup_limit(j.at("backupLimit").get<int64_t>());
         x.set_backup_on_save(j.at("backupOnSave").get<bool>());
         x.set_bg_color(j.at("bgColor").get<std::string>());
+        x.set_custom_commands(j.at("customCommands").get<std::vector<quicktype::LdtkCustomCommand>>());
         x.set_default_grid_size(j.at("defaultGridSize").get<int64_t>());
         x.set_default_level_bg_color(j.at("defaultLevelBgColor").get<std::string>());
         x.set_default_level_height(quicktype::get_optional<int64_t>(j, "defaultLevelHeight"));
@@ -3611,11 +3696,13 @@ namespace nlohmann {
         x.set_default_pivot_x(j.at("defaultPivotX").get<double>());
         x.set_default_pivot_y(j.at("defaultPivotY").get<double>());
         x.set_defs(j.at("defs").get<quicktype::Definitions>());
+        x.set_export_level_bg(j.at("exportLevelBg").get<bool>());
         x.set_export_png(quicktype::get_optional<bool>(j, "exportPng"));
         x.set_export_tiled(j.at("exportTiled").get<bool>());
         x.set_external_levels(j.at("externalLevels").get<bool>());
         x.set_flags(j.at("flags").get<std::vector<quicktype::Flag>>());
         x.set_identifier_style(j.at("identifierStyle").get<quicktype::IdentifierStyle>());
+        x.set_iid(j.at("iid").get<std::string>());
         x.set_image_export_mode(j.at("imageExportMode").get<quicktype::ImageExportMode>());
         x.set_json_version(j.at("jsonVersion").get<std::string>());
         x.set_level_name_pattern(j.at("levelNamePattern").get<std::string>());
@@ -3638,6 +3725,7 @@ namespace nlohmann {
         j["backupLimit"] = x.get_backup_limit();
         j["backupOnSave"] = x.get_backup_on_save();
         j["bgColor"] = x.get_bg_color();
+        j["customCommands"] = x.get_custom_commands();
         j["defaultGridSize"] = x.get_default_grid_size();
         j["defaultLevelBgColor"] = x.get_default_level_bg_color();
         j["defaultLevelHeight"] = x.get_default_level_height();
@@ -3645,11 +3733,13 @@ namespace nlohmann {
         j["defaultPivotX"] = x.get_default_pivot_x();
         j["defaultPivotY"] = x.get_default_pivot_y();
         j["defs"] = x.get_defs();
+        j["exportLevelBg"] = x.get_export_level_bg();
         j["exportPng"] = x.get_export_png();
         j["exportTiled"] = x.get_export_tiled();
         j["externalLevels"] = x.get_external_levels();
         j["flags"] = x.get_flags();
         j["identifierStyle"] = x.get_identifier_style();
+        j["iid"] = x.get_iid();
         j["imageExportMode"] = x.get_image_export_mode();
         j["jsonVersion"] = x.get_json_version();
         j["levelNamePattern"] = x.get_level_name_pattern();
@@ -3663,6 +3753,24 @@ namespace nlohmann {
         j["worldGridWidth"] = x.get_world_grid_width();
         j["worldLayout"] = x.get_world_layout();
         j["worlds"] = x.get_worlds();
+    }
+
+    inline void from_json(const json & j, quicktype::When & x) {
+        if (j == "AfterLoad") x = quicktype::When::AFTER_LOAD;
+        else if (j == "AfterSave") x = quicktype::When::AFTER_SAVE;
+        else if (j == "BeforeSave") x = quicktype::When::BEFORE_SAVE;
+        else if (j == "Manual") x = quicktype::When::MANUAL;
+        else throw "Input JSON does not conform to schema";
+    }
+
+    inline void to_json(json & j, const quicktype::When & x) {
+        switch (x) {
+            case quicktype::When::AFTER_LOAD: j = "AfterLoad"; break;
+            case quicktype::When::AFTER_SAVE: j = "AfterSave"; break;
+            case quicktype::When::BEFORE_SAVE: j = "BeforeSave"; break;
+            case quicktype::When::MANUAL: j = "Manual"; break;
+            default: throw "This should not happen";
+        }
     }
 
     inline void from_json(const json & j, quicktype::AllowedRefs & x) {
