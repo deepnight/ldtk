@@ -301,19 +301,22 @@ class JsTools {
 	}
 
 
-	public static function createPivotEditor( curPivotX:Float, curPivotY:Float, ?inputName:String, ?bgColor:UInt, onPivotChange:(pivotX:Float, pivotY:Float)->Void ) {
-		var pivots = new J("xml#pivotEditor").children().first().clone();
+	public static function createPivotEditor( curPivotX:Float, curPivotY:Float, ?bgColor:dn.Col, allowAdvanced=false, ?width:Int, ?height:Int, onPivotChange:(pivotX:Float, pivotY:Float)->Void ) {
+		var jPivots = new J( getHtmlTemplate("pivotEditor") );
 
-		pivots.find("input[type=radio]").attr("name", inputName==null ? "pivot" : inputName);
+
+		// Init grid
+		var jGrid = jPivots.find(".grid");
+		jGrid.find("input[type=radio]").attr("name", "pivot");
 
 		if( bgColor!=null )
-			pivots.find(".bg").css( "background-color", C.intToHex(bgColor) );
+			jGrid.find(".bg").css( "background-color", C.intToHex(bgColor) );
 		else
-			pivots.find(".bg").hide();
+			jGrid.find(".bg").hide();
 
-		pivots.find("input[type=radio][value='"+curPivotX+" "+curPivotY+"']").prop("checked",true);
+		jGrid.find("input[type=radio][value='"+curPivotX+" "+curPivotY+"']").prop("checked",true);
 
-		pivots.find("input[type=radio]").each( function(idx:Int, elem) {
+		jGrid.find("input[type=radio]").each( function(idx:Int, elem) {
 			var r = new J(elem);
 			r.change( function(ev) {
 				var rawPivots = r.val().split(" ");
@@ -321,7 +324,51 @@ class JsTools {
 			});
 		});
 
-		return pivots;
+		// Advanced link
+		var jAdvLink = jPivots.find("a.show");
+		if( allowAdvanced )
+			jAdvLink.click( (ev:js.jquery.Event)->{
+				ev.preventDefault();
+				jPivots.addClass("showAdvanced");
+			});
+		else
+			jAdvLink.hide();
+
+		// Auto open advanced panel
+		var xr = curPivotX;
+		var yr = curPivotY;
+		if( allowAdvanced && ( xr!=0 && xr!=0.5 && xr!=1 || yr!=0 && yr!=0.5 && yr!=1 ) )
+			jAdvLink.click();
+
+		// Advanced form
+		if( allowAdvanced ) {
+			var jAdvanced = jPivots.find(".advanced .options");
+
+			// X float
+			var i = Input.linkToHtmlInput(xr, jAdvanced.find('[name="customFloatX"]'));
+			i.setBounds(-50,50);
+			i.onValueChange = (v)->onPivotChange(v, yr);
+
+			// Y float
+			var i = Input.linkToHtmlInput(yr, jAdvanced.find('[name="customFloatY"]'));
+			i.setBounds(-50,50);
+			i.onValueChange = (v)->onPivotChange(xr, v);
+
+			var pixelX = M.floor( xr*width );
+			var pixelY = M.floor( yr*height );
+
+			// X pixels
+			var i = Input.linkToHtmlInput(pixelX, jAdvanced.find('[name="customPixelX"]'));
+			i.setBounds(-2048,2048);
+			i.onValueChange = (v)->onPivotChange(v/width, yr);
+
+			// Y pixels
+			var i = Input.linkToHtmlInput(pixelY, jAdvanced.find('[name="customPixelY"]'));
+			i.setBounds(-2048,2048);
+			i.onValueChange = (v)->onPivotChange(xr, v/height);
+		}
+
+		return jPivots;
 	}
 
 	public static function createIcon(id:String) {
@@ -342,6 +389,9 @@ class JsTools {
 	}
 
 	public static function getHtmlTemplate(name:String, ?vars:Dynamic, useCache=true) : Null<String> {
+		#if debug
+		useCache = false;
+		#end
 		if( !useCache || !_fileCache.exists(name) ) {
 			if( _fileCache.exists(name) )
 				_fileCache.remove(name);
@@ -410,6 +460,12 @@ class JsTools {
 		else if ( App.isMac() && keyLabel.toLowerCase()=="ctrl")
 			keyLabel = "⌘";
 
+		keyLabel = switch kid {
+			case K.QWERTY_TILDE: "~";
+			case 222: "²";
+			case _: keyLabel;
+		}
+
 		return new J('<span class="key">$keyLabel</span>');
 	}
 
@@ -439,6 +495,7 @@ class JsTools {
 							case "sub": new J('<span class="key" title="Numeric pad -">-</span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
+							case "~": new J('<span class="key">${ App.ME.settings.navKeys==Zqsd ? "²" : "~" }</span>');
 
 							case k.charAt(0) => "(": new J("<span/>").append(k);
 							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
@@ -561,6 +618,7 @@ class JsTools {
 						case "ctrl" : keys.push(K.CTRL);
 						case "shift" : keys.push(K.SHIFT);
 						case "alt" : keys.push(K.ALT);
+						case "~": App.ME.settings.navKeys==Zqsd ? keys.push(222) : keys.push(K.QWERTY_TILDE);
 						case _ :
 							var funcReg = ~/[fF]([0-9]+)/;
 							if( k.length==1 ) {
@@ -599,7 +657,11 @@ class JsTools {
 				.on("click.picker", (ev:js.jquery.Event)->{
 					ev.stopPropagation();
 					ev.preventDefault();
-					new ui.modal.dialog.ColorPicker( jInput.attr("colorTag"), jInput );
+					var colorTag = jInput.attr("colorTag");
+					if( colorTag!=null )
+						new ui.modal.dialog.ColorPicker( colorTag, jInput );
+					else
+						new ui.modal.dialog.ColorPicker( Const.getNicePalette(), jInput );
 				});
 		});
 
@@ -970,7 +1032,7 @@ class JsTools {
 	}
 
 
-	public static function createImagePicker( curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {
+	public static function createImagePicker( project:data.Project, curRelPath:Null<String>, onSelect:(relPath:Null<String>)->Void ) : js.jquery.JQuery {
 		var jWrapper = new J('<div class="imagePicker"/>');
 
 		var fileName = curRelPath==null ? null : dn.FilePath.extractFileWithExt(curRelPath);
@@ -1002,13 +1064,14 @@ class JsTools {
 		jPick.appendTo(jWrapper);
 		jPick.click( (_)->{
 			var project = Editor.ME.project;
-			var path = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(curRelPath, true) );
-			if( path==null )
-				path = project.getProjectDir();
-
+			var defPath = project.makeAbsoluteFilePath( dn.FilePath.extractDirectoryWithoutSlash(curRelPath, true) );
+			if( defPath==null )
+				defPath = project.getProjectDir();
+			var path = App.ME.settings.getUiDir(project, "PickImage", defPath);
 			ui.Tip.clear();
 
 			dn.js.ElectronDialogs.openFile([".png", ".gif", ".jpg", ".jpeg", ".aseprite", ".ase"], path, function(absPath) {
+				App.ME.settings.storeUiDir(project, "PickImage", dn.FilePath.extractDirectoryWithoutSlash(absPath,true));
 				var relPath = project.makeRelativeFilePath(absPath);
 				_pick(relPath);
 			});
@@ -1060,5 +1123,47 @@ class JsTools {
 
 		parseComponents(jWrapper);
 		return jWrapper;
+	}
+
+
+
+	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {
+		// Out-of-bounds policy
+		jSelect.empty();
+		var values = [null, 0].concat( ld.getAllIntGridValues().map( iv->iv.value ) );
+		if( curValue<0 )
+			values.insert(0,-1);
+		for(v in values) {
+			var jOpt = new J('<option value="$v"/>');
+			jOpt.appendTo(jSelect);
+			switch v {
+				case null: jOpt.text("This rule should not apply when reading cells outside of layer bounds (default)");
+				case v if(v<0): jOpt.text("-- Pick a value --");
+				case 0: jOpt.text("Empty cells");
+				case _:
+					var iv = ld.getIntGridValueDef(v);
+					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
+					jOpt.css({
+						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+						borderColor: C.intToHex( iv.color ),
+					});
+			}
+		}
+
+		jSelect.change( _->{
+			var v = jSelect.val()=="null" ? null : Std.parseInt(jSelect.val());
+			onChange(v);
+		});
+
+		jSelect.val( curValue==null ? "null" : Std.string(curValue) );
+		if( curValue!=null && curValue>0 ) {
+			var iv = ld.getIntGridValueDef(curValue);
+			jSelect.addClass("hasValue").css({
+				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
+				borderColor: C.intToHex( iv.color ),
+			});
+		}
+
+		return jSelect;
 	}
 }

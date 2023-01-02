@@ -9,7 +9,7 @@
 <div id="mainPanel">
 	<div id="mainBar">
 		<div class="buttons panels">
-			<button class="world blue" title="World view" keys="W"><div class="icon world"></div></button>
+			<button class="world blue" title="World view" keys="~"><div class="icon world"></div></button>
 			<button class="editLevelInstance blue" title="Current level settings" keys="C"><div class="icon level"></div></button>
 			<button class="editProject brown" title="Project settings" keys="P"><div class="icon project"></div></button>
 			<button class="editLayers" title="Layers" keys="L"><div class="icon layer"></div></button>
@@ -42,9 +42,14 @@
 		<div class="icon showDetailsOff off"></div>
 	</li>
 
+	<li class="tileEnums" title="**Show/hide enums** Only applies to Tiles layers and Auto-layers. If this option is enabled, you will see enum colours over your tiles." tip="right">
+		<div class="icon enum on"></div>
+		<div class="icon enum off"></div>
+	</li>
+
 	<li class="separator"></li>
 
-	<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="A" tip="right">
+	<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
 		<div class="icon singleLayer"></div>
 	</li>
 
@@ -56,7 +61,6 @@
 	<li class="tileStacking" title="**Tile stacking** Only applies to Tiles layers. If this option is enabled, you will be able to stack multiple tiles in a single grid cell." keys="Shift+T" tip="right">
 		<div class="icon tile"></div>
 	</li>
-
 </ul>
 
 <div id="worldDepths">
@@ -100,23 +104,5 @@
 			<div class="action"></div>
 			<div class="desc">This change cannot be undone, so this is your last chance. Please make sure you really wanted to do that :)</div>
 		</div>
-	</div>
-</xml>
-
-
-<xml id="pivotEditor">
-	<div class="pivotEditor">
-		<div class="bg"></div>
-		<label> <input type="radio" value="0 0"/> </label>
-		<label> <input type="radio" value="0.5 0"/> </label>
-		<label> <input type="radio" value="1 0"/> </label>
-
-		<label> <input type="radio" value="0 0.5"/> </label>
-		<label> <input type="radio" value="0.5 0.5"/> </label>
-		<label> <input type="radio" value="1 0.5"/> </label>
-
-		<label> <input type="radio" value="0 1"/> </label>
-		<label> <input type="radio" value="0.5 1"/> </label>
-		<label> <input type="radio" value="1 1"/> </label>
 	</div>
 </xml>

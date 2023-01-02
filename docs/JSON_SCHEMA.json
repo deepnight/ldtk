@@ -1,16 +1,18 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.1.3 JSON schema",
+	"title": "LDtk 1.2.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.1.3",
+	"version": "1.2.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
+			"customCommands",
 			"defs",
 			"externalLevels",
+			"iid",
 			"jsonVersion",
 			"levels",
 			"worlds",
@@ -21,6 +23,7 @@
 			"defaultLevelBgColor",
 			"defaultPivotX",
 			"defaultPivotY",
+			"exportLevelBg",
 			"exportTiled",
 			"flags",
 			"identifierStyle",
@@ -48,6 +51,12 @@
 				"type": [
 					"integer",
 					"null"
+				]
+			},
+			"iid": {
+				"description": "Unique project identifier",
+				"type": [
+					"string"
 				]
 			},
 			"defaultLevelBgColor": {
@@ -99,6 +108,15 @@
 				"description": "Default Y pivot (0 to 1) for new entities",
 				"type": [
 					"number"
+				]
+			},
+			"customCommands": {
+				"description": "An array of command lines that can be ran manually by the user",
+				"items": {
+					"$ref": "#/otherTypes/CustomCommand"
+				},
+				"type": [
+					"array"
 				]
 			},
 			"worldGridHeight": {
@@ -196,6 +214,9 @@
 					},
 					"FieldDef": {
 						"$ref": "#/otherTypes/FieldDef"
+					},
+					"CustomCommand": {
+						"$ref": "#/otherTypes/CustomCommand"
 					},
 					"EntityDef": {
 						"$ref": "#/otherTypes/EntityDef"
@@ -312,6 +333,12 @@
 			},
 			"minifyJson": {
 				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
+				"type": [
+					"boolean"
+				]
+			},
+			"exportLevelBg": {
+				"description": "If TRUE, the exported PNGs will include the level background (color or image).",
 				"type": [
 					"boolean"
 				]
@@ -850,6 +877,8 @@
 				"editorCutLongValues",
 				"editorDisplayMode",
 				"editorDisplayPos",
+				"editorLinkStyle",
+				"editorShowInWorld",
 				"symmetricalRef",
 				"useForSmartColor"
 			],
@@ -869,6 +898,12 @@
 				},
 				"useForSmartColor": {
 					"description": "If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.",
+					"type": [
+						"boolean"
+					]
+				},
+				"editorShowInWorld": {
+					"description": "",
 					"type": [
 						"boolean"
 					]
@@ -943,6 +978,13 @@
 					"description": "",
 					"type": [
 						"boolean"
+					]
+				},
+				"doc": {
+					"description": "User defined documentation for this field to provide help/tips to level designers about accepted values.",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"tilesetUid": {
@@ -1034,6 +1076,16 @@
 				"defaultOverride": {
 					"description": "Default value if selected value is null or invalid."
 				},
+				"editorLinkStyle": {
+					"description": "Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`",
+					"enum": [
+						"ZigZag",
+						"StraightArrow",
+						"CurvedArrow",
+						"ArrowsLine",
+						"DashedLine"
+					]
+				},
 				"regex": {
 					"description": "Optional regular expression that needs to be matched to accept values. Expected format: `/some_reg_ex/g`, with optional \"i\" flag.",
 					"type": [
@@ -1058,6 +1110,34 @@
 					"type": [
 						"integer",
 						"null"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"CustomCommand": {
+			"title": "ldtk.CustomCommand",
+			"required": [
+				"command",
+				"when"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"when": {
+					"description": "Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`",
+					"enum": [
+						"Manual",
+						"AfterLoad",
+						"BeforeSave",
+						"AfterSave"
+					]
+				},
+				"command": {
+					"description": "",
+					"type": [
+						"string"
 					]
 				}
 			},
@@ -1095,7 +1175,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tileRect`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -1297,7 +1377,8 @@
 				"isOptional",
 				"name",
 				"rules",
-				"uid"
+				"uid",
+				"usesWizard"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1315,6 +1396,12 @@
 					]
 				},
 				"isOptional": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"usesWizard": {
 					"description": "",
 					"type": [
 						"boolean"
@@ -1388,9 +1475,10 @@
 					]
 				},
 				"levelUid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `levelIid`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `levelIid`",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"dir": {
@@ -2014,6 +2102,7 @@
 				"pxOffsetY",
 				"uid",
 				"autoRuleGroups",
+				"canSelectWhenInactive",
 				"excludedTags",
 				"guideGridHei",
 				"guideGridWid",
@@ -2076,6 +2165,12 @@
 						"null"
 					]
 				},
+				"canSelectWhenInactive": {
+					"description": "Allow editor selections when the layer is not currently active.",
+					"type": [
+						"boolean"
+					]
+				},
 				"autoSourceLayerDefUid": {
 					"description": "",
 					"type": [
@@ -2084,7 +2179,7 @@
 					]
 				},
 				"autoTilesetDefUid": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.2.0+  Replaced by: `tilesetDefUid`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced by: `tilesetDefUid`",
 					"type": [
 						"integer",
 						"null"

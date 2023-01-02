@@ -7,7 +7,7 @@ class WorldTool extends dn.Process {
 	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
 	var clickedLevel : Null<data.Level>;
-	var initialNeighbours : Null< Array<Int> >;
+	var initialNeighbours : Null< Array<String> >;
 	var levelOriginX : Int;
 	var levelOriginY : Int;
 	var origin : Coords;
@@ -41,6 +41,7 @@ class WorldTool extends dn.Process {
 		return super.toString()
 			+ ( dragStarted ? " (DRAGGING)" : "" );
 	}
+
 
 
 	public function onMouseDown(ev:hxd.Event, m:Coords) {
@@ -169,7 +170,7 @@ class WorldTool extends dn.Process {
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
 			clickedSameLevel = editor.curLevel==clickedLevel;
-			initialNeighbours = clickedLevel.getNeighboursUids();
+			initialNeighbours = clickedLevel.getNeighboursIids();
 		}
 	}
 
@@ -225,7 +226,7 @@ class WorldTool extends dn.Process {
 		clicked = false;
 	}
 
-	inline function getLevelSnapDist() return project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
+	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
@@ -293,7 +294,7 @@ class WorldTool extends dn.Process {
 				if( clickedLevel!=null )
 					editor.selectLevel(clickedLevel);
 
-				if( clickedLevel!=null && ( App.ME.isAltDown() || App.ME.isCtrlDown() ) ) {
+				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlDown() ) {
 					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
 					editor.selectLevel(copy);

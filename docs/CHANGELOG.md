@@ -1,3 +1,122 @@
+# 1.2.0 - Auto-layer rules assistant
+
+## Auto-layer rules assistant
+
+The new Assistant makes the creation of standard auto-tiles rules super easy!
+
+Fill the layouts on the left using your own tiles and LDtk will create all the rules accordingly. By default, if you don't have all the orientations drawn, the assistant will automatically just use symmetrical rules to fill the gaps.
+
+And if you forget something or want to make a change, you can simply edit the layout again to update the rules automatically.
+
+![](1.2.0/rulesWizard.gif)
+
+## WASD controls
+
+You can now navigate through your current tool values using WASD keys.
+ - In IntGrid layers, this will cycle through values,
+ - In Entity layers, `W/S` will cycle through values, while `A/D` will quickly jump between tags
+ - In Tiles layers, this will navigate in the current tileset. The selection will automatically use any previously "saved selection" to smartly navigate through your predefined group of tiles.
+
+Because of this change, the following keyboard shortcuts were modified:
+ - Switch to World mode: `SHIFT+W` or `~` (previously `W`)
+ - Toggle single layer mode: `SHIFT+A` (previously `A`)
+ - Save current tile selection: `SHIFT+S` (previously `S`)
+ - Flip horizontaly currently selected tiles: `X` (previously `X` or `Z`)
+
+![](1.2.0/wasd.gif)
+
+## Entity fields visuals
+
+The visuals of entity fields have been reworked again to increase clarity and reduce cluttering.
+However, keep in mind it's always better to not display *everything*. The less, the better ;)
+
+![](1.2.0/fields.png)
+
+## Arrows
+You can now customize the design of arrows used in Point or Entity Reference fields.
+
+![](1.2.0/arrows.png)
+
+## Auto-layer rules remapping
+
+**TLDR; This new tool makes the creation of variations of Auto-layer rules very fast.**
+
+For example, if you've created a bunch of rules that use the IntGrid value 1 to paint "Stone walls" tiles, you may duplicate and remap them to use IntGrid value 2 and, say, "Metal walls" tiles.
+
+Right click on **a group of rules** in an Auto-layer to **Duplicate and remap it**.
+This new tool allows you to make a copy of these rules, while doing the following operations:
+ - replace IntGrid values they refer with another ones,
+ - transpose the tiles they produce to another part of the tileset.
+
+![](1.2.0/remap.png)
+
+## Icons
+New useful icons were added to the embed icons atlas, like keys, locks, and various shapes to be used with the 9-slices scaling feature of entities.
+
+![](1.2.0/icons.png)
+
+## Enum tags display
+
+A new option allows to visualize "Enum tags" attached to tiles in the Editor context (thanks to [Keith Clark](https://github.com/deepnight/ldtk/pull/707)). Just press the new "Show/Hide enums" button near the Layers list.
+
+In the following example, all tiles were tagged with a Material enum (stone, grass, metal etc.) and the result can be displayed right in the editor context.
+
+![](1.2.0/enumTags.png)
+
+## Custom commands
+
+You can now define custom commands to be executed at various moments (when the project is loaded, saved etc.). These commands can be used for whatever your own production pipeline requires. Here are some typical examples:
+
+- After saving, run a script that parses the JSON and extract all the texts for future localization.
+- When pressing CTRL-R, run your game.
+- After saving, parse the project JSON and check if all levels are properly connected, from your game logic perspective.
+
+For obvious security reasons, LDtk will always ask you first if you trust the project and want to allow commands from it.
+
+![](1.2.0/customCommands.png)
+
+## Misc
+
+ - You can add user-defined documentation to any entity or level field.
+ - You can right click on a group of rules to modify the "out-of-bounds policy" of all its rules in a single batch.
+ - Added nicer default colors for various elements (eg. int grid values, entities, enum values etc.). The palette is "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
+ - Added a Color blind option in app settings: for now, this will only affect the colors automatically picked for new Entities, IntGrid values, Enums etc.)
+ - Hold SHIFT to disable snapping when moving levels around in the world view.
+ - You can now manually enter custom values for Entity pivots.
+ - Many Load button in the UI will now remember properly their last folder
+ - Added extra info to the Simplified Export JSON file (level custom fields, identifiers etc).
+ - Added a new layer option to prevent selections when the layer is not active.
+ - Fixed entity duplication that broke entity count limits.
+ - Many UI fixes (thanks to [IrishBruse](https://github.com/deepnight/ldtk/pull/770)) to remove unnecessary borders and align things.
+ - Added a "reset" button near any entity/level field that isn't using its default value.
+ - Fixed duplicate identifiers when inserting a level in Horizontal/Vertical layouts
+ - Fixed a crash when duplicating a point from an Entity.
+ - Duplicating a selection containing Entities no longer ignores the limit counts defined for these entities.
+ - Added support for proper Point duplication for entities that have an Array of Points field.
+ - Fixed default multilines values that dropped newline characters.
+ - Fixed the default tile of an entity when one of its fields is a Tile, but it is not set to override the entity tile itself.
+ - Fixed the Rule editor window when the layer has no IntGrid value.
+ - Fixed embed icons reloading when the image was resized.
+ - Fixed useless scrollbar in context menus.
+ - Fixed Haxe enum importer regex.
+ - Fixed levels BgColor in JSON not updating when changing project default
+ - Updated the design of the home.
+
+## JSON changes
+
+The following fields deprecated in update 1.0.0 were removed from the JSON in 1.2.0:
+
+ - Removed `LayerDef.autoTilesetDefUid` (use `tilesetDefUid` instead).
+ - Removed `EntityDef.tileId` (use `tileRect` instead).
+ - Removed `NeighbourLevel.levelUid` (use `levelIid` instead).
+
+## Haxe API
+
+ - Added definition JSON access to Layers and Entities
+ - Removed irrelevant entity arrays in layers that have "required tags" or "forbidden tags".
+ - Fixed an exception with null defs.
+ - Added `pxWid`/`pxHei` to layers
+
 # 1.1.3
 
  - Fixed a crash on Home screen for macOS

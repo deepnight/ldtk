@@ -8,7 +8,7 @@ class TextEditor extends ui.modal.Dialog {
 	public var jTextArea : js.jquery.JQuery;
 	var cm: CodeMirror;
 
-	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, ?onChange:(str:String)->Void) {
+	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, ?onChange:(str:String)->Void, ?onNoChange:Void->Void) {
 		super("textEditor");
 
 		var anyChange = false;
@@ -51,8 +51,12 @@ class TextEditor extends ui.modal.Dialog {
 
 		onCloseCb = ()->{
 			 var out = cm.getValue();
-			 if( anyChange && str!=out && onChange!=null )
-				onChange(out);
+			 if( anyChange && str!=out ) {
+				if( onChange!=null )
+					onChange(out);
+			 }
+			 else if( onNoChange!=null )
+				onNoChange();
 		}
 
 		addClose();

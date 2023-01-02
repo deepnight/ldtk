@@ -592,19 +592,17 @@ class Editor extends Page {
 			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				cd.setS("debugLock",Const.INFINITE);
 				N.msg("Locked.", 0xff7700);
-
-			case K.D if( !worldMode && !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
-				N.debug("Test "+dn.Lib.repeatChar("x",Std.random(20)),"Some subtitle");
 			#end
 
-			case K.S:
+			case K.S if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				if( project.isBackup() )
 					N.error("Cannot save over a backup file.");
-				else if( !hasInputFocus() && App.ME.isCtrlDown() )
+				else {
 					if( App.ME.isShiftDown() )
 						onSave(true);
 					else
 						onSave();
+				}
 
 			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
@@ -612,15 +610,48 @@ class Editor extends Page {
 					new ui.modal.dialog.EditAppSettings();
 				}
 
-			case K.R if( !hasInputFocus() && App.ME.isShiftDown() ):
+			case K.R if( !hasInputFocus() && App.ME.isCtrlDown() ):
+				ui.Modal.closeAll();
+				if( ui.Modal.hasAnyOpen() )
+					N.error("Cannot run commands for now");
+				else {
+					var manualCmds = project.customCommands.filter( c->c.when==Manual );
+					if( manualCmds.length==0 )
+						ui.Notification.warning("The project has no custom command. You can add one in the Project Settings panel (press P)");
+					else {
+						if( manualCmds.length==1 )
+							ui.modal.dialog.CommandRunner.runSingleCommand(project, manualCmds[0]);
+						else {
+							var menu = new ui.modal.ContextMenu(getMouse());
+							menu.addTitle(L.t._("Custom project commands"));
+							for( cmd in manualCmds )
+								menu.add({
+									label: L.untranslated(cmd.command),
+									cb: ()->{
+										ui.modal.dialog.CommandRunner.runSingleCommand(project, cmd);
+									},
+								});
+						}
+					}
+				}
+
+			case K.R if( !hasInputFocus() && App.ME.isShiftDown() && !App.ME.isCtrlDown() ):
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
-			case K.W if( App.ME.isCtrlDown() ):
+			case K.W if( !hasInputFocus() && App.ME.isCtrlDown() ):
 				onClose();
 
-			case K.W if( !App.ME.hasAnyToggleKeyDown() && !hasInputFocus() ):
+			case K.W if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				setWorldMode( !worldMode );
+
+			case K.QWERTY_QUOTE, K.QWERTY_TILDE:
+				if( !hasInputFocus() )
+					setWorldMode( !worldMode );
+
+			case K.W if( settings.navKeys!=Wasd ):
+				if( !hasInputFocus() )
+					setWorldMode( !worldMode );
 
 			case K.Q if( App.ME.isCtrlDown() ):
 				App.ME.exit();
@@ -631,7 +662,7 @@ class Editor extends Page {
 			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
 				setTileStacking( !settings.v.tileStacking );
 
-			case K.A if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
 				setSingleLayerMode( !settings.v.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
@@ -725,6 +756,38 @@ class Editor extends Page {
 
 			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
 				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
+
+
+			// ZQSD/WASD navigation
+			case K.Z if( App.ME.settings.navKeys==Zqsd && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.Q if( App.ME.settings.navKeys==Zqsd && !hasInputFocus() ):
+				onNavigateShortcut(-1, 0, true);
+
+			case K.W if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.A if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
+				onNavigateShortcut(-1, 0, true);
+
+			case K.S if( ( App.ME.settings.navKeys==Wasd || App.ME.settings.navKeys==Zqsd ) && !hasInputFocus() ):
+				onNavigateShortcut(0, 1, true);
+
+			case K.D if( ( App.ME.settings.navKeys==Wasd || App.ME.settings.navKeys==Zqsd ) && !hasInputFocus() ):
+				onNavigateShortcut(1, 0, true);
+
+			case K.UP if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(0, -1, true);
+
+			case K.DOWN if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(0, 1, true);
+
+			case K.LEFT if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(-1, 0, true);
+
+			case K.RIGHT if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+				onNavigateShortcut(1, 0, true);
 		}
 
 		// Propagate to tools
@@ -743,6 +806,35 @@ class Editor extends Page {
 				}
 			}
 		}
+	}
+
+	function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
+		if( App.ME.isCtrlDown() )
+			return;
+
+		// if( App.ME.isShiftDown() ) {
+		// 	// Layers navigation
+		// 	if( project.defs.layers.length>0 ) {
+		// 		var lidx = 0;
+		// 		for(ld in project.defs.layers)
+		// 			if( curLayerDef==ld )
+		// 				break;
+		// 			else
+		// 				lidx++;
+		// 		lidx += dy + dx*2;
+		// 		var ld = project.defs.layers[ M.iclamp(lidx, 0, project.defs.layers.length-1) ];
+		// 		selectLayerInstance( curLevel.getLayerInstance(ld) );
+		// 	}
+		// }
+		if( !App.ME.hasAnyToggleKeyDown() ) {
+			// Tool navigation
+			!panTool.onNavigateSelection(dx,dy,pressed)
+			&& ( resizeTool==null || !resizeTool.onNavigateSelection(dx,dy,pressed) )
+			&& !selectionTool.onNavigateSelection(dx,dy,pressed)
+			&& ( specialTool==null || !specialTool.onNavigateSelection(dx,dy,pressed) )
+			&& !curTool.onNavigateSelection(dx,dy,pressed);
+		}
+
 	}
 
 
@@ -865,6 +957,9 @@ class Editor extends Page {
 			all.reverse();
 			var best = null;
 			for(ld in all) {
+				if( !ld.canSelectWhenInactive && ld!=curLayerDef )
+					continue;
+
 				if( limitToLayerType!=null && ld.type!=limitToLayerType )
 					continue;
 
@@ -1306,7 +1401,12 @@ class Editor extends Page {
 			(v)->setTileStacking(v),
 			()->curLayerDef!=null && curLayerDef.type==Tiles
 		);
-
+		applyEditOption(
+			jEditOptions.find("li.tileEnums"),
+			()->settings.v.tileEnumOverlays,
+			(v)->setTileEnumOverlays(v),
+			()->curLayerDef!=null && curLayerDef.type==Tiles
+		);
 		JsTools.parseComponents(jEditOptions);
 	}
 
@@ -1394,6 +1494,15 @@ class Editor extends Page {
 		App.ME.settings.save();
 		selectionTool.clear();
 		N.quick( "Tile stacking: "+L.onOff( settings.v.tileStacking ));
+		updateEditOptions();
+	}
+
+	public function setTileEnumOverlays(v:Bool) {
+		settings.v.tileEnumOverlays = v;
+		App.ME.settings.save();
+		levelRender.invalidateAll();
+		selectionTool.clear();
+		N.quick( "Tile enum overlay: "+L.onOff( settings.v.tileEnumOverlays ));
 		updateEditOptions();
 	}
 
@@ -1655,6 +1764,7 @@ class Editor extends Page {
 			case BeforeProjectSaving:
 			case ProjectSaved:
 			case LevelSelected(level):
+				LOG.userAction("Opened level "+level);
 			case LevelSettingsChanged(l): invalidateLevelCache(l);
 			case LevelAdded(l):
 				for(nl in l.getNeighbours())
@@ -1671,15 +1781,15 @@ class Editor extends Page {
 			case LevelJsonCacheInvalidated(level):
 			case WorldLevelMoved(level,isFinal, oldNeig):
 				if( isFinal ) {
-					var newNeig = level.getNeighboursUids();
+					var newNeig = level.getNeighboursIids();
 
 					// Invalidate old neighbours
-					for(uid in oldNeig)
-						invalidateLevelCache( project.getLevelAnywhere(uid) );
+					for(iid in oldNeig)
+						invalidateLevelCache( project.getLevelAnywhere(iid) );
 
 					// Invalidate new neighbours
-					for(uid in newNeig)
-						invalidateLevelCache( project.getLevelAnywhere(uid) );
+					for(iid in newNeig)
+						invalidateLevelCache( project.getLevelAnywhere(iid) );
 
 					switch curWorld.worldLayout {
 						case Free, GridVania: invalidateLevelCache(level);
@@ -1735,6 +1845,7 @@ class Editor extends Page {
 			case TilesetSelectionSaved(td):
 			case TilesetDefPixelDataCacheRebuilt(td):
 			case TilesetDefSorted:
+			case TilesetEnumChanged:
 			case EntityInstanceAdded(ei): invalidateLevelCache(ei._li.level);
 			case EntityInstanceRemoved(ei): invalidateLevelCache(ei._li.level);
 			case EntityInstanceChanged(ei): invalidateLevelCache(ei._li.level);
@@ -1939,6 +2050,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 				updateTool();
+				project.tidyFields();
 				project.resetQuickLevelAccesses();
 
 			case LayerInstanceTilesetChanged(li):
@@ -1964,6 +2076,8 @@ class Editor extends Page {
 				project.tidy();
 
 			case TilesetDefAdded(td):
+
+			case TilesetEnumChanged:
 
 			case ProjectSettingsChanged:
 				updateBanners();
@@ -1997,8 +2111,10 @@ class Editor extends Page {
 			tl.manualOnGlobalEvent(e);
 
 		// Propagate to resize tool
-		if( resizeTool!=null )
-			resizeTool.onGlobalEvent(e);
+		if( curTool!=null )
+			curTool.onGlobalEvent(e);
+
+		selectionTool.onGlobalEvent(e);
 
 		updateTitle();
 	}

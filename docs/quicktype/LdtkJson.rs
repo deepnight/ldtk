@@ -47,6 +47,10 @@ pub struct LdtkJson {
     #[serde(rename = "bgColor")]
     bg_color: String,
 
+    /// An array of command lines that can be ran manually by the user
+    #[serde(rename = "customCommands")]
+    custom_commands: Vec<LdtkCustomCommand>,
+
     /// Default grid size for new layers
     #[serde(rename = "defaultGridSize")]
     default_grid_size: i64,
@@ -79,6 +83,10 @@ pub struct LdtkJson {
     #[serde(rename = "defs")]
     defs: Definitions,
 
+    /// If TRUE, the exported PNGs will include the level background (color or image).
+    #[serde(rename = "exportLevelBg")]
+    export_level_bg: bool,
+
     /// **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
     /// by: `imageExportMode`
     #[serde(rename = "exportPng")]
@@ -104,6 +112,10 @@ pub struct LdtkJson {
     /// values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
     #[serde(rename = "identifierStyle")]
     identifier_style: IdentifierStyle,
+
+    /// Unique project identifier
+    #[serde(rename = "iid")]
+    iid: String,
 
     /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
     /// `OneImagePerLevel`, `LayersAndLevels`
@@ -180,6 +192,16 @@ pub struct LdtkJson {
     /// this documentation: https://github.com/deepnight/ldtk/issues/231
     #[serde(rename = "worlds")]
     worlds: Vec<World>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct LdtkCustomCommand {
+    #[serde(rename = "command")]
+    command: String,
+
+    /// Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
+    #[serde(rename = "when")]
+    when: When,
 }
 
 /// If you're writing your own LDtk importer, you should probably just ignore *most* stuff in
@@ -297,8 +319,8 @@ pub struct EntityDefinition {
     #[serde(rename = "tags")]
     tags: Vec<String>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    /// Replaced by: `tileRect`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    /// by: `tileRect`
     #[serde(rename = "tileId")]
     tile_id: Option<i64>,
 
@@ -375,6 +397,11 @@ pub struct FieldDefinition {
     #[serde(rename = "defaultOverride")]
     default_override: Option<serde_json::Value>,
 
+    /// User defined documentation for this field to provide help/tips to level designers about
+    /// accepted values.
+    #[serde(rename = "doc")]
+    doc: Option<String>,
+
     #[serde(rename = "editorAlwaysShow")]
     editor_always_show: bool,
 
@@ -391,6 +418,13 @@ pub struct FieldDefinition {
     /// Possible values: `Above`, `Center`, `Beneath`
     #[serde(rename = "editorDisplayPos")]
     editor_display_pos: EditorDisplayPos,
+
+    /// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+    #[serde(rename = "editorLinkStyle")]
+    editor_link_style: EditorLinkStyle,
+
+    #[serde(rename = "editorShowInWorld")]
+    editor_show_in_world: bool,
 
     #[serde(rename = "editorTextPrefix")]
     editor_text_prefix: Option<String>,
@@ -534,10 +568,14 @@ pub struct LayerDefinition {
     #[serde(rename = "autoSourceLayerDefUid")]
     auto_source_layer_def_uid: Option<i64>,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    /// Replaced by: `tilesetDefUid`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    /// by: `tilesetDefUid`
     #[serde(rename = "autoTilesetDefUid")]
     auto_tileset_def_uid: Option<i64>,
+
+    /// Allow editor selections when the layer is not currently active.
+    #[serde(rename = "canSelectWhenInactive")]
+    can_select_when_inactive: bool,
 
     /// Opacity of the layer (0 to 1.0)
     #[serde(rename = "displayOpacity")]
@@ -655,6 +693,9 @@ pub struct AutoLayerRuleGroup {
 
     #[serde(rename = "uid")]
     uid: i64,
+
+    #[serde(rename = "usesWizard")]
+    uses_wizard: bool,
 }
 
 /// This complex section isn't meant to be used by game devs at all, as these rules are
@@ -871,6 +912,9 @@ pub struct ForcedRefs {
 
     #[serde(rename = "AutoRuleDef")]
     auto_rule_def: Option<AutoLayerRuleDefinition>,
+
+    #[serde(rename = "CustomCommand")]
+    custom_command: Option<LdtkCustomCommand>,
 
     #[serde(rename = "Definitions")]
     definitions: Option<Definitions>,
@@ -1357,8 +1401,8 @@ pub struct NeighbourLevel {
     #[serde(rename = "levelIid")]
     level_iid: String,
 
-    /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-    /// Replaced by: `levelIid`
+    /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+    /// by: `levelIid`
     #[serde(rename = "levelUid")]
     level_uid: Option<i64>,
 }
@@ -1402,6 +1446,22 @@ pub struct World {
     /// space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`
     #[serde(rename = "worldLayout")]
     world_layout: Option<WorldLayout>,
+}
+
+/// Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
+#[derive(Serialize, Deserialize)]
+pub enum When {
+    #[serde(rename = "AfterLoad")]
+    AfterLoad,
+
+    #[serde(rename = "AfterSave")]
+    AfterSave,
+
+    #[serde(rename = "BeforeSave")]
+    BeforeSave,
+
+    #[serde(rename = "Manual")]
+    Manual,
 }
 
 /// Possible values: `Any`, `OnlySame`, `OnlyTags`
@@ -1477,6 +1537,25 @@ pub enum EditorDisplayPos {
 
     #[serde(rename = "Center")]
     Center,
+}
+
+/// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+#[derive(Serialize, Deserialize)]
+pub enum EditorLinkStyle {
+    #[serde(rename = "ArrowsLine")]
+    ArrowsLine,
+
+    #[serde(rename = "CurvedArrow")]
+    CurvedArrow,
+
+    #[serde(rename = "DashedLine")]
+    DashedLine,
+
+    #[serde(rename = "StraightArrow")]
+    StraightArrow,
+
+    #[serde(rename = "ZigZag")]
+    ZigZag,
 }
 
 #[derive(Serialize, Deserialize)]

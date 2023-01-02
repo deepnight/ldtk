@@ -1,4 +1,7 @@
 import electron.renderer.IpcRenderer;
+#if editor
+import EditorTypes;
+#end
 
 typedef AppSettings = {
 	var lastKnownVersion: Null<String>;
@@ -8,10 +11,13 @@ typedef AppSettings = {
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
+	var tileEnumOverlays : Bool;
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
+	var colorBlind : Bool;
+	var navKeys : String;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -25,6 +31,8 @@ typedef AppSettings = {
 	var recentDirs : Array<String>;
 
 	var uiStates : Array<{ id:String, val:Int }>;
+	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
+	var projectTrusts : Array<{ iid:String, trusted:Bool }>;
 }
 
 enum abstract UiState(String) {
@@ -44,6 +52,10 @@ class Settings {
 	public var v : AppSettings;
 	var ls : dn.data.LocalStorage;
 
+	#if editor
+	public var navKeys(get,set) : NavigationKeys;
+	#end
+
 	public function new() {
 		// Init storage
 		ls = dn.data.LocalStorage.createJsonStorage("settings", Full);
@@ -60,10 +72,13 @@ class Settings {
 			singleLayerMode: false,
 			emptySpaceSelection: true,
 			tileStacking: true,
+			tileEnumOverlays : false,
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,
 			autoInstallUpdates: true,
+			colorBlind: false,
+			navKeys: null,
 
 			openLastProject: false,
 			lastProject: null,
@@ -74,15 +89,87 @@ class Settings {
 			mouseWheelSpeed: 1.0,
 
 			uiStates: [],
+			lastUiDirs: [],
+			projectTrusts: [],
 		}
 
 		// Load
 		v = ls.readObject(defaults);
 
+		// Try to guess Navigation keys
+		#if editor
+		if( v.navKeys==null ) {
+			for(full in js.Browser.navigator.languages) {
+				switch full {
+					case "nl-be": navKeys = Zqsd; break;
+				}
+
+				var short = ( full.indexOf("-")<0 ? full : full.substr(0,full.indexOf("-")) ).toLowerCase();
+				switch short {
+					case "fr": navKeys = Zqsd; break;
+					case "en": navKeys = Wasd; break;
+					case _:
+				}
+			}
+			if( v.navKeys==null )
+				navKeys = Wasd;
+		}
+		#end
+
+
 		if( !hasUiState(ShowProjectColors) )
 			setUiStateBool(ShowProjectColors, true);
 	}
 
+
+	public function setProjectTrust(projectIid:String, trust:Bool) {
+		clearProjectTrust(projectIid);
+		v.projectTrusts.push({
+			iid: projectIid,
+			trusted: trust,
+		});
+		save();
+	}
+
+
+	public function clearProjectTrust(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid ) {
+				v.projectTrusts.remove(tp);
+				break;
+			}
+		save();
+	}
+
+	public function isProjectTrusted(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid && tp.trusted )
+				return true;
+		return false;
+	}
+
+	public function isProjectUntrusted(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid && !tp.trusted )
+				return true;
+		return false;
+	}
+
+	public function wasProjectTrustAsked(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid )
+				return true;
+		return false;
+	}
+
+
+	#if editor
+	function get_navKeys() return try NavigationKeys.createByName(v.navKeys) catch(_) Wasd;
+	function set_navKeys(k:NavigationKeys) {
+		v.navKeys = k.getName();
+		return k;
+	}
+	#end
 
 	function getOrCreateUiState(id:UiState) {
 		for(s in v.uiStates)
@@ -136,6 +223,42 @@ class Settings {
 				return s.val!=0;
 		return false;
 	}
+
+
+	#if editor
+	public function storeUiDir(?project:data.Project, uiId:String, path:String) {
+		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
+		path = dn.FilePath.convertToSlashes(path);
+		for(dir in v.lastUiDirs)
+			if( ( projectPath==null || dir.project==projectPath ) && dir.uiId==uiId ) {
+				dir.path = path;
+				save();
+				return;
+			}
+
+		if( project==null )
+			v.lastUiDirs.push({ uiId:uiId, path:path });
+		else
+			v.lastUiDirs.push({ project:projectPath, uiId:Std.string(uiId), path:path });
+		save();
+	}
+	#end
+
+
+	#if editor
+	public function getUiDir(?project:data.Project, uiId:String, ?defaultIfNotSet:String) : Null<String> {
+		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
+
+		if( defaultIfNotSet==null && project!=null )
+			defaultIfNotSet = dn.FilePath.convertToSlashes(project.filePath.directory);
+
+		for(dir in v.lastUiDirs)
+			if( ( projectPath==null || dir.project==projectPath ) && dir.uiId==uiId )
+				return dir.path;
+
+		return defaultIfNotSet;
+	}
+	#end
 
 	static inline function isRenderer() {
 		return electron.main.App==null;

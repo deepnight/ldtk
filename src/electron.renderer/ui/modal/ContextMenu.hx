@@ -10,6 +10,7 @@ typedef ContextAction = {
 	var cb : Void->Void;
 	var ?show : Void->Bool;
 	var ?enable : Void->Bool;
+	var ?separatorAfter: Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -130,9 +131,12 @@ class ContextMenu extends ui.Modal {
 		jButton.click( (_)->{
 			close();
 			a.cb();
-		 });
+		});
 
-		 checkPosition();
-		 return jButton;
+		if( a.separatorAfter )
+			jButton.addClass("separatorAfter");
+
+		checkPosition();
+		return jButton;
 	}
 }

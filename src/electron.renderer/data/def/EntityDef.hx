@@ -43,7 +43,7 @@ class EntityDef {
 	public function new(p:Project, uid:Int) {
 		_project = p;
 		this.uid = uid;
-		color = 0x94d9b3;
+		color = Const.suggestNiceColor( _project.defs.entities.map(ed->ed.color) );
 		tileOpacity = 1;
 		fillOpacity = 1;
 		lineOpacity = 1;
@@ -72,9 +72,11 @@ class EntityDef {
 		for( fd in fieldDefs )
 			switch fd.type {
 				case F_Tile:
-					var rect = fd.getTileRectDefaultObj();
-					if( rect!=null )
-						return rect;
+					if( fd.editorDisplayMode==EntityTile ) {
+						var rect = fd.getTileRectDefaultObj();
+						if( rect!=null )
+							return rect;
+					}
 
 				case _:
 			}
@@ -91,9 +93,9 @@ class EntityDef {
 	}
 
 	@:keep public function toString() {
-		return 'EntityDef.$identifier($width x $height)['
+		return 'EntityDef "$identifier",($width x $height) {'
 			+ fieldDefs.map( function(fd) return fd.identifier ).join(",")
-			+ "]";
+			+ "}";
 	}
 
 	public inline function isResizable() return resizableX || resizableY;
@@ -197,7 +199,6 @@ class EntityDef {
 			renderMode: JsonTools.writeEnum(renderMode, false),
 			showName: showName,
 			tilesetId: tilesetId,
-			tileId: tileRect==null ? null : try p.defs.getTilesetDef(tilesetId).getFirstTileIdFromRect(tileRect) catch(_) null,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 			tileRect: tileRect,
 			nineSliceBorders: tileRenderMode==NineSlice ? nineSliceBorders.copy() : [],
@@ -218,8 +219,10 @@ class EntityDef {
 		pivotY = y;
 	}
 
-	inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
-	inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
+	inline function set_pivotX(v) return pivotX = v;
+	inline function set_pivotY(v) return pivotY = v;
+	// inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
+	// inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
 
 
 

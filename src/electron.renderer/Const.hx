@@ -104,6 +104,93 @@ class Const {
 
 	public static var MAX_GRID_SIZE = 1024;
 
+	static var NICE_PALETTE : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
+		0xbe4a2f,
+		0xd77643,
+		0xead4aa,
+		0xe4a672,
+		0xb86f50,
+		0x733e39,
+		0x3e2731,
+		0xa22633,
+		0xe43b44,
+		0xf77622,
+		0xfeae34,
+		0xfee761,
+		0x63c74d,
+		0x3e8948,
+		0x265c42,
+		0x193c3e,
+		0x124e89,
+		0x0099db,
+		0x2ce8f5,
+		0xffffff,
+		0xc0cbdc,
+		0x8b9bb4,
+		0x5a6988,
+		0x3a4466,
+		0x262b44,
+		0x181425,
+		0xff0044,
+		0x68386c,
+		0xb55088,
+		0xf6757a,
+		0xe8b796,
+		0xc28569,
+	];
+
+	static var NICE_PALETTE_COLORBLIND : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
+		0x000000,
+		0x252525,
+		0x676767,
+		0xffffff,
+		0x171723,
+		0x004949,
+		0x009999,
+		0x22cf22,
+		0x490092,
+		0x006ddb,
+		0xb66dff,
+		0xff6db6,
+		0x920000,
+		0x8f4e00,
+		0xdb6d00,
+		0xffdf4d,
+	];
+
+	public static function getNicePalette() {
+		return App.ME.settings.v.colorBlind ? NICE_PALETTE_COLORBLIND : NICE_PALETTE;
+	}
+
+	public static function suggestNiceColor(useds:Array<dn.Col>) : dn.Col {
+		// Look in "Nice palette" for colors distinct from the ones in "useds" palette
+		var pool = [];
+		for(nice in getNicePalette()) {
+			var ok = true;
+			for(used in useds)
+				if( nice.getDistanceRgb(used)<0.1 ) {
+					ok = false;
+					break;
+				}
+			if( ok )
+				pool.push(nice);
+		}
+
+		if( pool.length==0 ) {
+			// No match in Nice Palette, just build a new random color
+			return dn.Col.randomHSL(dn.RandomTools.rnd(0,1), dn.RandomTools.rnd(0.6,0.8), dn.RandomTools.rnd(0.7,1));
+		}
+		else {
+			// Prefer colors that are not too bright or dark
+			var dh = new dn.DecisionHelper(pool);
+			for(uc in useds)
+				dh.score( c->c.getDistanceRgb(uc)*0.5 );
+			dh.score( c->c.fastLuminance>=0.4 && c.fastLuminance<=0.75 ? 50 : 0 );
+			dh.score( c->dn.RandomTools.rnd(0,5) );
+			return dh.getBest();
+		}
+	}
+
 	public static var AUTO_LAYER_ANYTHING = 1000001;
 	public static var MAX_AUTO_PATTERN_SIZE = 7;
 	#end

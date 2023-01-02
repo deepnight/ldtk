@@ -6,7 +6,7 @@ class ColorPicker extends ui.modal.Dialog {
 	var originalColor : Int;
 	var usedColorsTag : Null<String>;
 
-	public function new(?usedColorsTag:String, ?target:js.jquery.JQuery, ?color:UInt) {
+	public function new(?usedColorsTag:String, ?suggestedColors:Array<dn.Col>, ?target:js.jquery.JQuery, ?color:dn.Col) {
 		super();
 
 		this.usedColorsTag = usedColorsTag;
@@ -51,14 +51,10 @@ class ColorPicker extends ui.modal.Dialog {
 		});
 
 
-		// Recently used colors
 		var jExpand = jContent.find(".recentColors .expand");
 		var jRecents = jContent.find(".recentColors .recents");
-		if( usedColorsTag==null ) {
-			jExpand.hide();
-			jRecents.hide();
-		}
-		else {
+		if( usedColorsTag!=null ) {
+			// Recently used colors
 			var showAll = false;
 			function _updateRecents() {
 				jRecents.empty();
@@ -113,6 +109,23 @@ class ColorPicker extends ui.modal.Dialog {
 				_updateRecents();
 			});
 			_updateRecents();
+		}
+		else if( suggestedColors!=null ) {
+			// Suggested palette
+			jExpand.hide();
+			for( c in suggestedColors ) {
+				var jC = new J('<div class="color"/>');
+				jC.css("background-color", c.toHex());
+				jC.appendTo(jRecents);
+				jC.click((_)->{
+					picker.setColor(c);
+					jInput.val( c.toHex(false) );
+				});
+			}
+		}
+		else {
+			jExpand.hide();
+			jRecents.hide();
 		}
 
 
@@ -177,7 +190,7 @@ class ColorPicker extends ui.modal.Dialog {
 		onValidate( getColor() );
 	}
 
-	public dynamic function onValidate(c:UInt) {}
+	public dynamic function onValidate(c:dn.Col) {}
 	public dynamic function onCancel() {}
 
 	override function onClickMask() {

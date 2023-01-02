@@ -300,6 +300,9 @@ class EditProject extends ui.modal.Panel {
 			pngPatternEditor.ofString( project.getImageExportFilePattern() );
 		}
 
+		var i = Input.linkToHtmlInput(project.exportLevelBg, jForm.find("#exportLevelBg"));
+		i.linkEvent(ProjectSettingsChanged);
+
 
 		// Identifier style
 		var i = new form.input.EnumSelect(
@@ -355,6 +358,80 @@ class EditProject extends ui.modal.Panel {
 		if( project.exportTiled )
 			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/tiled", false) );
 
+
+		// Custom commands
+		var jCommands = jForm.find(".customCommands");
+		jCommands.find("ul").empty();
+		function _createCommandJquery(cmd:ldtk.Json.CustomCommand) {
+			var jCmd = jCommands.find("xml#customCommand").children().clone(false, false).wrapAll("<li/>").parent();
+			jCmd.appendTo( jCommands.find("ul") );
+			Input.linkToHtmlInput(cmd.command, jCmd.find(".command"));
+			new form.input.EnumSelect(
+				jCmd.find("select.when"),
+				ldtk.Json.CustomCommandTrigger,
+				false,
+				()->cmd.when,
+				(v)->cmd.when = v,
+				(v)->switch v {
+					case Manual: App.isMac() ? L.t._("Run manually (CMD-R)") : L.t._("Run manually (CTRL-R)");
+					case AfterLoad: L.t._("Run after loading");
+					case BeforeSave: L.t._("Run before saving");
+					case AfterSave: L.t._("Run after saving");
+				}
+			);
+			var jRem = jCmd.find("button.remove");
+			jRem.click(_->{
+				function _removeCmd() {
+					project.customCommands.remove(cmd);
+					editor.ge.emit(ProjectSettingsChanged);
+				}
+				if( cmd.command=="" )
+					_removeCmd();
+				else
+					new ui.modal.dialog.Confirm(jRem, L.t._("Are you sure?"), ()->{
+						new LastChance(L.t._("Project command removed"), project);
+						_removeCmd();
+					});
+			});
+		}
+		var jAdd = jCommands.find("button.add");
+		jAdd.off().click( _->{
+			var cmd : ldtk.Json.CustomCommand = { command:"", when:Manual }
+			project.customCommands.push(cmd);
+			editor.ge.emit(ProjectSettingsChanged);
+		});
+		for( cmd in project.customCommands )
+			_createCommandJquery(cmd);
+		JsTools.makeSortable(jCommands.find("ul"), (ev:sortablejs.Sortable.SortableDragEvent)->{
+			var from = ev.oldIndex;
+			var to = ev.newIndex;
+
+			if( from<0 || from>=project.customCommands.length || from==to )
+				return;
+
+			if( to<0 || to>=project.customCommands.length )
+				return;
+
+			var moved = project.customCommands.splice(from,1)[0];
+			project.customCommands.insert(to, moved);
+			editor.ge.emit( ProjectSettingsChanged );
+		});
+
+		// Commands trust
+		if( settings.isProjectTrusted(project.iid) )
+			jCommands.find(".untrusted").hide();
+		else if( settings.isProjectUntrusted(project.iid) )
+			jCommands.find(".trusted").hide();
+		else {
+			jCommands.find(".untrusted").hide();
+			jCommands.find(".trusted").hide();
+		}
+		jCommands.find(".trusted a, .untrusted a").click(_->{
+			settings.clearProjectTrust(project.iid);
+			editor.ge.emit( ProjectSettingsChanged );
+		});
+
+
 		// Level grid size
 		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
@@ -366,6 +443,12 @@ class EditProject extends ui.modal.Panel {
 
 		// Level bg
 		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForm.find("[name=defaultLevelbgColor]"));
+		i.onChange = ()->{
+			for(w in project.worlds)
+			for(l in w.levels)
+				if( l.isUsingDefaultBgColor() )
+					editor.ge.emit(LevelSettingsChanged(l));
+		}
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Default entity pivot

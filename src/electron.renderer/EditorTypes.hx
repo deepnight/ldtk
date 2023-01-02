@@ -17,7 +17,7 @@ enum GlobalEvent {
 	LevelRestoredFromHistory(level:data.Level);
 	LevelJsonCacheInvalidated(level:data.Level);
 
-	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourUids:Null<Array<Int>>);
+	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourIids:Null<Array<String>>);
 	WorldSettingsChanged;
 
 	LayerDefAdded;
@@ -57,6 +57,7 @@ enum GlobalEvent {
 	TilesetSelectionSaved(td:data.def.TilesetDef);
 	TilesetDefPixelDataCacheRebuilt(td:data.def.TilesetDef);
 	TilesetDefSorted;
+	TilesetEnumChanged;
 
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
@@ -216,4 +217,11 @@ enum ClipboardType {
 typedef CachedIID = {
 	var level: data.Level;
 	var ?ei: data.inst.EntityInstance ;
+}
+
+
+enum NavigationKeys {
+	Arrows;
+	Wasd;
+	Zqsd;
 }

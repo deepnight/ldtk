@@ -89,8 +89,15 @@
 	<dd class="imageExportMode notSimplified">
 		<div class="locate"></div>
 
-		<select>
-		</select>
+		<select></select>
+	</dd>
+
+	<dt class="imageExportOnly notSimplified">
+		Also export level backgrounds
+		<info>Enable this to export PNGs that will include the level background color or image.</info>
+	</dt>
+	<dd class="imageExportOnly notSimplified">
+		<input type="checkbox" name="exportLevelBg" id="exportLevelBg"/>
 	</dd>
 
 	<dt class="imageExportOnly notSimplified">PNG file names</dt>
@@ -120,6 +127,28 @@
 		<input type="checkbox" id="tiled"/>
 		<div class="locate"></div>
 		<a href="https://ldtk.io/go/tiled">Learn more about Tiled export limitations</a>
+	</dd>
+
+
+	<dt class="full"><h3>User custom commands</h3></dt>
+	<dt>
+		<label>Custom commands</label>
+		<info>
+			A list of custom commands that will be executed by LDtk in various situations.
+			The working directory for all these commands is the project directory.
+			If multiple commands are to be ran at a given moment (eg. before saving), they will be executed in order of appearance here.
+		</info>
+	</dt>
+	<dd class="customCommands">
+		<div class="trusted">This project is allowed to run user commands on your computer. <a>Remove authorization</a></div>
+		<div class="untrusted">This project is NOT allowed to run user commands on your computer. <a>Unblock it</a></div>
+		<ul></ul>
+		<xml id="customCommand">
+			<select class="when"></select>
+			<input type="text" class="command"/>
+			<button class="remove"> <span class="icon delete"></span> </button>
+		</xml>
+		<button class="add"> <span class="icon add"></span> </button>
 	</dd>
 
 

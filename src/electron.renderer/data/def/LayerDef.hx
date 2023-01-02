@@ -17,6 +17,7 @@ class LayerDef {
 	public var inactiveOpacity : Float = 1.0;
 	public var hideInList = false;
 	public var hideFieldsWhenInactive = false;
+	public var canSelectWhenInactive = true;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 	public var parallaxFactorX : Float = 0.;
@@ -35,6 +36,8 @@ class LayerDef {
 	// IntGrid/AutoLayers
 	public var autoSourceLayerDefUid : Null<Int>;
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
+	public var autoSourceLd(get,never) : Null<LayerDef>;
+		inline function get_autoSourceLd() return type==AutoLayer && autoSourceLayerDefUid!=null ? _project.defs.getLayerDef(autoSourceLayerDefUid) : null;
 
 	// Tiles
 	public var tilePivotX(default,set) : Float = 0;
@@ -78,6 +81,7 @@ class LayerDef {
 		if( (cast json).parallaxFactor!=null )
 			json.parallaxFactorX = json.parallaxFactorY = (cast json).parallaxFactor;
 
+		// Support deprecated autoTilesetDefUid
 		if( (cast json).autoTilesetDefUid!=null && json.tilesetDefUid==null )
 			json.tilesetDefUid = (cast json).autoTilesetDefUid;
 
@@ -91,6 +95,7 @@ class LayerDef {
 		// o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.hideFieldsWhenInactive = JsonTools.readBool(json.hideFieldsWhenInactive, true);
+		o.canSelectWhenInactive = JsonTools.readBool(json.canSelectWhenInactive, true);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
@@ -114,7 +119,6 @@ class LayerDef {
 			}
 		}
 
-		// o.autoTilesetDefUid = JsonTools.readNullableInt(json.autoTilesetDefUid);
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
 
 		// Read auto-layer rules
@@ -125,7 +129,8 @@ class LayerDef {
 			// Smart unfold single groups
 			if( o.autoRuleGroups.length==1 )
 				for(rg in o.autoRuleGroups)
-					rg.collapsed = false;
+					if( !rg.usesWizard )
+						rg.collapsed = false;
 		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
@@ -149,6 +154,7 @@ class LayerDef {
 			inactiveOpacity: JsonTools.writeFloat(inactiveOpacity),
 			hideInList: hideInList,
 			hideFieldsWhenInactive: hideFieldsWhenInactive,
+			canSelectWhenInactive: canSelectWhenInactive,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			parallaxFactorX: parallaxFactorX,
@@ -163,7 +169,6 @@ class LayerDef {
 				color: JsonTools.writeColor(iv.color),
 			}),
 
-			autoTilesetDefUid: tilesetDefUid,
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
@@ -180,6 +185,7 @@ class LayerDef {
 			active: rg.active,
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson() ),
+			usesWizard: rg.usesWizard,
 		}
 	}
 
@@ -194,6 +200,7 @@ class LayerDef {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
 		rg.collapsed = true;
+		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
 		return rg;
 	}
 
@@ -227,7 +234,7 @@ class LayerDef {
 		return max+1;
 	}
 
-	public function addIntGridValue(col:UInt, ?id:String) {
+	public function addIntGridValue(col:dn.Col, ?id:String) {
 		if( !isIntGridValueIdentifierValid(id) )
 			throw "Invalid intGrid value identifier "+id;
 
@@ -267,7 +274,7 @@ class LayerDef {
 		return vd==null ? null : vd.identifier==null ? '$idx' : '${vd.identifier} ($idx)';
 	}
 
-	public inline function getIntGridValueColor(idx:Int) : Null<UInt> {
+	public inline function getIntGridValueColor(idx:Int) : Null<dn.Col> {
 		var vd = getIntGridValueDef(idx);
 		return vd==null ? null : vd.color;
 	}
@@ -402,6 +409,7 @@ class LayerDef {
 			active: true,
 			collapsed: false,
 			isOptional: false,
+			usesWizard: false,
 			rules: [],
 		}
 		if( index!=null )

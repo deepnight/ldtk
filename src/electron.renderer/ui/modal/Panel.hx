@@ -7,6 +7,8 @@ class Panel extends ui.Modal {
 
 	public function new() {
 		super();
+
+		LOG.userAction("Opened panel "+this);
 		ui.Modal.closeAll(this);
 
 		editor.selectionTool.clear();
@@ -113,6 +115,8 @@ class Panel extends ui.Modal {
 			jCloseButton.hide();
 
 		jPanelMask.remove();
+
+		LOG.userAction("Closed panel "+this);
 	}
 
 	override function postUpdate() {

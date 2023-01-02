@@ -54,6 +54,7 @@ jobs:
           haxelib remove ldtk-haxe-api
           haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
 
+      # Install deepnightLibs
       - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
       - run: haxelib list
 

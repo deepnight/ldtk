@@ -46,7 +46,10 @@ class ResizeTool extends Tool<Int> {
 		}
 	}
 
-	public function onGlobalEvent(ev:GlobalEvent) {
+
+	override function onGlobalEvent(ev:GlobalEvent) {
+		super.onGlobalEvent(ev);
+		
 		switch ev {
 			case EntityInstanceChanged(ei):
 				if( isOnEntity(ei) )

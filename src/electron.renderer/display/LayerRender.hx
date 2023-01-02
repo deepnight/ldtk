@@ -92,12 +92,19 @@ class LayerRender {
 			var td = li.getTilesetDef();
 
 			if( li.def.isAutoLayer() && renderAutoLayers && td!=null && td.isAtlasLoaded() ) {
+				var ed = td.getTagsEnumDef();
+
 				// Auto-layer tiles
 				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, renderTarget);
 				pixelGrid.x = li.pxTotalOffsetX;
 				pixelGrid.y = li.pxTotalOffsetY;
 
 				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget);
+				var gr = App.ME.settings.v.tileEnumOverlays ? new h2d.Graphics(renderTarget) : null;
+
+				// If we're showing enums, dim the tileset slightly so the overlays stand out.
+				if( App.ME.settings.v.tileEnumOverlays )
+					tg.setDefaultColor(0xcccccc, .5);
 
 				if( li.autoTilesCache==null )
 					li.applyAllAutoLayerRules();
@@ -107,13 +114,6 @@ class LayerRender {
 						var grid = li.def.gridSize;
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
-							// Paint a full pixel behind to avoid flickering revealing background
-							// if( td.isTileOpaque(tileInfos.tid) && tileInfos.x%grid==0 && tileInfos.y%grid==0 )
-							// 	pixelGrid.setPixel(
-							// 		Std.int(tileInfos.x/grid),
-							// 		Std.int(tileInfos.y/grid),
-							// 		td.getAverageTileColor(tileInfos.tid)
-							// 	);
 							// Tile
 							tg.addTransform(
 								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
@@ -123,6 +123,22 @@ class LayerRender {
 								0,
 								td.extractTile(tileInfos.srcX, tileInfos.srcY)
 							);
+
+							if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
+								var n = 0;
+								for( ev in ed.values) {
+									if( td.hasTag(ev.id, tileInfos.tid)) {
+										gr.lineStyle(1, ev.color, 1);
+										gr.drawRect(
+											tileInfos.x + li.def.tilePivotX*li.def.gridSize + li.pxTotalOffsetX,
+											tileInfos.y + li.def.tilePivotY*li.def.gridSize + li.pxTotalOffsetY,
+											li.def.gridSize - 1 - n * 2,
+											li.def.gridSize - 1 - n * 2
+										);
+										n++;
+									}
+								}
+							}
 						}
 					}
 				});
@@ -148,9 +164,17 @@ class LayerRender {
 
 		case Tiles:
 			// Classic tiles layer
+			var offX = 2;
+			var offY = 2;
 			var td = li.getTilesetDef();
 			if( td!=null && td.isAtlasLoaded() ) {
+				var ed = td.getTagsEnumDef();
 				var tg = new h2d.TileGroup( td.getAtlasTile(), renderTarget );
+				var gr = App.ME.settings.v.tileEnumOverlays ? new h2d.Graphics(renderTarget) : null;
+
+				// If we're showing enums, dim the tileset slightly so the overlays stand out.
+				if( App.ME.settings.v.tileEnumOverlays )
+					tg.setDefaultColor(0xcccccc, .5);
 
 				for(cy in 0...li.cHei)
 				for(cx in 0...li.cWid) {
@@ -163,14 +187,25 @@ class LayerRender {
 						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
 						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
 						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
-						tg.addTransform(
-							(cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX,
-							(cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY,
-							sx,
-							sy,
-							0,
-							t
-						);
+						var tx = (cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX;
+						var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
+						tg.addTransform(tx, ty, sx, sy, 0, t);
+
+						if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
+							var n = 0;
+							for( ev in ed.values) {
+								if( td.hasTag(ev.id, tileInf.tileId)) {
+									gr.lineStyle(1, ev.color, 1);
+									gr.drawRect(
+										(cx + li.def.tilePivotX)*li.def.gridSize + li.pxTotalOffsetX  +  n + .5,
+										(cy + li.def.tilePivotY)*li.def.gridSize + li.pxTotalOffsetY  +  n + .5,
+										li.def.gridSize - 1 - n * 2,
+										li.def.gridSize - 1 - n * 2
+									);
+									n++;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -191,6 +226,23 @@ class LayerRender {
 	}
 
 
+
+	public function renderBgToTexture(l:data.Level, tex:h3d.mat.Texture) {
+		tex.clear( l.getBgColor() );
+
+		if( l.bgRelPath!=null ) {
+			var bmp = l.createBgBitmap();
+			bmp.drawTo(tex);
+		}
+	}
+
+	public function createBgPng(p:data.Project, l:data.Level) : Null<haxe.io.Bytes> {
+		var tex = new h3d.mat.Texture(l.pxWid, l.pxHei, [Target]);
+		renderBgToTexture(l, tex);
+		return try tex.capturePixels().toPNG() catch(_) null;
+	}
+
+
 	/**
 		Generate all PNGs for a single layer instance (auto-layer IntGrids generate both tiles & pixel images)
 		Note: if `secondarySuffix` is null, then the output image is the "main" render of this layer.
@@ -207,10 +259,10 @@ class LayerRender {
 					wrapper.addChild(root);
 					root.alpha = li.def.displayOpacity; // apply layer alpha
 					wrapper.drawTo(tex);
-					var pixels = tex.capturePixels();
+					var pixels = try tex.capturePixels() catch(_) null;
 					out.push({
 						secondarySuffix: null,
-						bytes: pixels.toPNG(),
+						bytes: pixels==null ? null : pixels.toPNG(),
 						tex: tex,
 					});
 				}

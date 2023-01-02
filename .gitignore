@@ -20,9 +20,11 @@ app/buildAssets/release-notes.md
 app/assets/main.js
 app/assets/main.js.map
 app/assets/css/app.css
+app/assets/css/app.min.css
 app/assets/js/renderer.js
 app/assets/js/*.map
 
 art/export_appElements
 
 tests/_private
+tests/*.txt

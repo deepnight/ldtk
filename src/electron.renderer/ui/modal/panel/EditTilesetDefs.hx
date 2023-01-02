@@ -145,7 +145,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		if( curTd.isUsingEmbedAtlas() )
 			jForm.find("dd.img").append("<span>This tileset uses an embed atlas image.</span>");
 		else {
-			var jImg = JsTools.createImagePicker(curTd.relPath, (relPath)->{
+			var jImg = JsTools.createImagePicker(project, curTd.relPath, (relPath)->{
 				var oldRelPath = curTd.relPath;
 				if( relPath==null ) {
 					// Remove image

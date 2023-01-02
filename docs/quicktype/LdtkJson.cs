@@ -61,6 +61,12 @@ namespace ldtk
         public string BgColor { get; set; }
 
         /// <summary>
+        /// An array of command lines that can be ran manually by the user
+        /// </summary>
+        [JsonProperty("customCommands")]
+        public LdtkCustomCommand[] CustomCommands { get; set; }
+
+        /// <summary>
         /// Default grid size for new layers
         /// </summary>
         [JsonProperty("defaultGridSize")]
@@ -107,6 +113,12 @@ namespace ldtk
         public Definitions Defs { get; set; }
 
         /// <summary>
+        /// If TRUE, the exported PNGs will include the level background (color or image).
+        /// </summary>
+        [JsonProperty("exportLevelBg")]
+        public bool ExportLevelBg { get; set; }
+
+        /// <summary>
         /// **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
         /// by: `imageExportMode`
         /// </summary>
@@ -141,6 +153,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("identifierStyle")]
         public IdentifierStyle IdentifierStyle { get; set; }
+
+        /// <summary>
+        /// Unique project identifier
+        /// </summary>
+        [JsonProperty("iid")]
+        public string Iid { get; set; }
 
         /// <summary>
         /// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
@@ -243,6 +261,18 @@ namespace ldtk
         /// </summary>
         [JsonProperty("worlds")]
         public World[] Worlds { get; set; }
+    }
+
+    public partial class LdtkCustomCommand
+    {
+        [JsonProperty("command")]
+        public string Command { get; set; }
+
+        /// <summary>
+        /// Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
+        /// </summary>
+        [JsonProperty("when")]
+        public When When { get; set; }
     }
 
     /// <summary>
@@ -407,8 +437,8 @@ namespace ldtk
         public string[] Tags { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-        /// Replaced by: `tileRect`
+        /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+        /// by: `tileRect`
         /// </summary>
         [JsonProperty("tileId")]
         public long? TileId { get; set; }
@@ -512,6 +542,13 @@ namespace ldtk
         [JsonProperty("defaultOverride")]
         public dynamic DefaultOverride { get; set; }
 
+        /// <summary>
+        /// User defined documentation for this field to provide help/tips to level designers about
+        /// accepted values.
+        /// </summary>
+        [JsonProperty("doc")]
+        public string Doc { get; set; }
+
         [JsonProperty("editorAlwaysShow")]
         public bool EditorAlwaysShow { get; set; }
 
@@ -532,6 +569,15 @@ namespace ldtk
         /// </summary>
         [JsonProperty("editorDisplayPos")]
         public EditorDisplayPos EditorDisplayPos { get; set; }
+
+        /// <summary>
+        /// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+        /// </summary>
+        [JsonProperty("editorLinkStyle")]
+        public EditorLinkStyle EditorLinkStyle { get; set; }
+
+        [JsonProperty("editorShowInWorld")]
+        public bool EditorShowInWorld { get; set; }
 
         [JsonProperty("editorTextPrefix")]
         public string EditorTextPrefix { get; set; }
@@ -732,11 +778,17 @@ namespace ldtk
         public long? AutoSourceLayerDefUid { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-        /// Replaced by: `tilesetDefUid`
+        /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+        /// by: `tilesetDefUid`
         /// </summary>
         [JsonProperty("autoTilesetDefUid")]
         public long? AutoTilesetDefUid { get; set; }
+
+        /// <summary>
+        /// Allow editor selections when the layer is not currently active.
+        /// </summary>
+        [JsonProperty("canSelectWhenInactive")]
+        public bool CanSelectWhenInactive { get; set; }
 
         /// <summary>
         /// Opacity of the layer (0 to 1.0)
@@ -896,6 +948,9 @@ namespace ldtk
 
         [JsonProperty("uid")]
         public long Uid { get; set; }
+
+        [JsonProperty("usesWizard")]
+        public bool UsesWizard { get; set; }
     }
 
     /// <summary>
@@ -1198,6 +1253,9 @@ namespace ldtk
 
         [JsonProperty("AutoRuleDef", NullValueHandling = NullValueHandling.Ignore)]
         public AutoLayerRuleDefinition AutoRuleDef { get; set; }
+
+        [JsonProperty("CustomCommand", NullValueHandling = NullValueHandling.Ignore)]
+        public LdtkCustomCommand CustomCommand { get; set; }
 
         [JsonProperty("Definitions", NullValueHandling = NullValueHandling.Ignore)]
         public Definitions Definitions { get; set; }
@@ -1857,10 +1915,10 @@ namespace ldtk
         public string LevelIid { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+
-        /// Replaced by: `levelIid`
+        /// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
+        /// by: `levelIid`
         /// </summary>
-        [JsonProperty("levelUid", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("levelUid")]
         public long? LevelUid { get; set; }
     }
 
@@ -1924,6 +1982,11 @@ namespace ldtk
     }
 
     /// <summary>
+    /// Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
+    /// </summary>
+    public enum When { AfterLoad, AfterSave, BeforeSave, Manual };
+
+    /// <summary>
     /// Possible values: `Any`, `OnlySame`, `OnlyTags`
     /// </summary>
     public enum AllowedRefs { Any, OnlySame, OnlyTags };
@@ -1940,6 +2003,11 @@ namespace ldtk
     /// Possible values: `Above`, `Center`, `Beneath`
     /// </summary>
     public enum EditorDisplayPos { Above, Beneath, Center };
+
+    /// <summary>
+    /// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+    /// </summary>
+    public enum EditorLinkStyle { ArrowsLine, CurvedArrow, DashedLine, StraightArrow, ZigZag };
 
     public enum TextLanguageMode { LangC, LangHaxe, LangJs, LangJson, LangLog, LangLua, LangMarkdown, LangPython, LangRuby, LangXml };
 
@@ -2022,9 +2090,11 @@ namespace ldtk
             {
                 CheckerConverter.Singleton,
                 TileModeConverter.Singleton,
+                WhenConverter.Singleton,
                 AllowedRefsConverter.Singleton,
                 EditorDisplayModeConverter.Singleton,
                 EditorDisplayPosConverter.Singleton,
+                EditorLinkStyleConverter.Singleton,
                 TextLanguageModeConverter.Singleton,
                 LimitBehaviorConverter.Singleton,
                 LimitScopeConverter.Singleton,
@@ -2127,6 +2197,57 @@ namespace ldtk
         }
 
         public static readonly TileModeConverter Singleton = new TileModeConverter();
+    }
+
+    internal class WhenConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(When) || t == typeof(When?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "AfterLoad":
+                    return When.AfterLoad;
+                case "AfterSave":
+                    return When.AfterSave;
+                case "BeforeSave":
+                    return When.BeforeSave;
+                case "Manual":
+                    return When.Manual;
+            }
+            throw new Exception("Cannot unmarshal type When");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (When)untypedValue;
+            switch (value)
+            {
+                case When.AfterLoad:
+                    serializer.Serialize(writer, "AfterLoad");
+                    return;
+                case When.AfterSave:
+                    serializer.Serialize(writer, "AfterSave");
+                    return;
+                case When.BeforeSave:
+                    serializer.Serialize(writer, "BeforeSave");
+                    return;
+                case When.Manual:
+                    serializer.Serialize(writer, "Manual");
+                    return;
+            }
+            throw new Exception("Cannot marshal type When");
+        }
+
+        public static readonly WhenConverter Singleton = new WhenConverter();
     }
 
     internal class AllowedRefsConverter : JsonConverter
@@ -2320,6 +2441,62 @@ namespace ldtk
         }
 
         public static readonly EditorDisplayPosConverter Singleton = new EditorDisplayPosConverter();
+    }
+
+    internal class EditorLinkStyleConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(EditorLinkStyle) || t == typeof(EditorLinkStyle?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            switch (value)
+            {
+                case "ArrowsLine":
+                    return EditorLinkStyle.ArrowsLine;
+                case "CurvedArrow":
+                    return EditorLinkStyle.CurvedArrow;
+                case "DashedLine":
+                    return EditorLinkStyle.DashedLine;
+                case "StraightArrow":
+                    return EditorLinkStyle.StraightArrow;
+                case "ZigZag":
+                    return EditorLinkStyle.ZigZag;
+            }
+            throw new Exception("Cannot unmarshal type EditorLinkStyle");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (EditorLinkStyle)untypedValue;
+            switch (value)
+            {
+                case EditorLinkStyle.ArrowsLine:
+                    serializer.Serialize(writer, "ArrowsLine");
+                    return;
+                case EditorLinkStyle.CurvedArrow:
+                    serializer.Serialize(writer, "CurvedArrow");
+                    return;
+                case EditorLinkStyle.DashedLine:
+                    serializer.Serialize(writer, "DashedLine");
+                    return;
+                case EditorLinkStyle.StraightArrow:
+                    serializer.Serialize(writer, "StraightArrow");
+                    return;
+                case EditorLinkStyle.ZigZag:
+                    serializer.Serialize(writer, "ZigZag");
+                    return;
+            }
+            throw new Exception("Cannot marshal type EditorLinkStyle");
+        }
+
+        public static readonly EditorLinkStyleConverter Singleton = new EditorLinkStyleConverter();
     }
 
     internal class TextLanguageModeConverter : JsonConverter

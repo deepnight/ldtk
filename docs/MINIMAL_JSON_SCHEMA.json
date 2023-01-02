@@ -1,16 +1,18 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.1.3 JSON schema",
+	"title": "LDtk 1.2.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.1.3",
+	"version": "1.2.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
+			"customCommands",
 			"defs",
 			"externalLevels",
+			"iid",
 			"jsonVersion",
 			"levels",
 			"worlds"
@@ -23,6 +25,12 @@
 					"null"
 				]
 			},
+			"iid": {
+				"description": "Unique project identifier",
+				"type": [
+					"string"
+				]
+			},
 			"bgColor": {
 				"description": "Project background color",
 				"type": [
@@ -33,6 +41,15 @@
 				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
 				"items": {
 					"$ref": "#/otherTypes/World"
+				},
+				"type": [
+					"array"
+				]
+			},
+			"customCommands": {
+				"description": "An array of command lines that can be ran manually by the user",
+				"items": {
+					"$ref": "#/otherTypes/CustomCommand"
 				},
 				"type": [
 					"array"
@@ -79,6 +96,9 @@
 					},
 					"FieldDef": {
 						"$ref": "#/otherTypes/FieldDef"
+					},
+					"CustomCommand": {
+						"$ref": "#/otherTypes/CustomCommand"
 					},
 					"EntityDef": {
 						"$ref": "#/otherTypes/EntityDef"
@@ -510,6 +530,34 @@
 				"object"
 			]
 		},
+		"CustomCommand": {
+			"title": "ldtk.CustomCommand",
+			"required": [
+				"command",
+				"when"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"when": {
+					"description": "Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`",
+					"enum": [
+						"Manual",
+						"AfterLoad",
+						"BeforeSave",
+						"AfterSave"
+					]
+				},
+				"command": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"EntityDef": {
 			"title": "Entity definition",
 			"required": [
@@ -622,7 +670,8 @@
 				"isOptional",
 				"name",
 				"rules",
-				"uid"
+				"uid",
+				"usesWizard"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -633,6 +682,12 @@
 					]
 				},
 				"isOptional": {
+					"description": "",
+					"type": [
+						"boolean"
+					]
+				},
+				"usesWizard": {
 					"description": "",
 					"type": [
 						"boolean"

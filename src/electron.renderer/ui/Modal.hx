@@ -32,11 +32,10 @@ class Modal extends dn.Process {
 
 		jMask = jModalAndMask.find(".mask");
 		jMask.mousedown( function(ev:js.jquery.Event) {
-			if( canBeClosedManually ) {
-				ev.stopPropagation();
-				onClickMask();
+			ev.stopPropagation();
+			onClickMask();
+			if( canBeClosedManually )
 				close();
-			}
 		} );
 		jMask.hide().fadeIn(100);
 
@@ -225,7 +224,7 @@ class Modal extends dn.Process {
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache=true) {
 		if( className==null )
-			className = tplName;
+			className = StringTools.replace(tplName, ".html", "");
 
 		jModalAndMask.addClass(className);
 		var html = JsTools.getHtmlTemplate(tplName, vars, useCache);
