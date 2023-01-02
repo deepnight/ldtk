@@ -129,7 +129,8 @@ class LayerDef {
 			// Smart unfold single groups
 			if( o.autoRuleGroups.length==1 )
 				for(rg in o.autoRuleGroups)
-					rg.collapsed = false;
+					if( !rg.usesWizard )
+						rg.collapsed = false;
 		}
 
 		o.tilesetDefUid = JsonTools.readNullableInt(json.tilesetDefUid);
