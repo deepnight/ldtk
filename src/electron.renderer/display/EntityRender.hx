@@ -22,6 +22,7 @@ class EntityRender extends dn.Process {
 	var fieldGraphics : h2d.Graphics;
 
 	var layoutInvalidated = true;
+	var renderInvalidated = true;
 
 
 	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, parent:h2d.Object) {
@@ -64,11 +65,14 @@ class EntityRender extends dn.Process {
 
 	public function onGlobalEvent(ev:GlobalEvent) {
 		switch( ev ) {
-			case ViewportChanged, WorldLevelMoved(_), WorldSettingsChanged:
-				layoutInvalidated = true;
-				Editor.ME.cd.setS("entityRenderLimit", 0.03);
+			case WorldMode(false):
+				renderAll();
 
-			case LayerInstanceSelected:
+			case WorldLevelMoved(_), WorldSettingsChanged, LayerInstanceSelected, LevelSelected(_):
+				renderAll();
+
+			case ViewportChanged:
+				renderInvalidated = true;
 				layoutInvalidated = true;
 
 			case _:
@@ -255,6 +259,7 @@ class EntityRender extends dn.Process {
 
 
 	public function renderAll() {
+		renderInvalidated = false;
 		core.removeChildren();
 		_coreRender = renderCore(ei, ed, ld);
 		core.addChild( _coreRender.wrapper );
@@ -328,9 +333,6 @@ class EntityRender extends dn.Process {
 	public inline function updateLayout() {
 		layoutInvalidated = false;
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
-		// var cam = Editor.ME.camera;
-		// var downScale = M.fclamp( (3-cam.adjustedZoom)*0.3, 0, 0.8 );
-		// var scale = (1-downScale) / cam.adjustedZoom;
 		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
 		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;
 
@@ -373,10 +375,16 @@ class EntityRender extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
-		if( layoutInvalidated && !Editor.ME.cd.has("entityRenderLimit") ) {
-			// Editor.ME.cd.setF("entityRenderLimit", 1);
+
+		if( renderInvalidated && !cd.has("fullRenderLimit") ) {
+			cd.setS("fullRenderLimit", 0.10);
 			renderAll();
-			// updateLayout();
 		}
+
+		if( layoutInvalidated && !cd.has("layoutLimit") ) {
+			cd.setS("layoutLimit", 0.06);
+			updateLayout();
+		}
+
 	}
 }
