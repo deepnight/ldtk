@@ -139,7 +139,6 @@ class ProjectLoader {
 										// Detect external dir dirty renaming
 										var file = dn.FilePath.extractFileWithExt(l.externalRelPath);
 										path = p.makeAbsoluteFilePath( p.getRelExternalFilesDir()+"/"+file );
-										trace(file);
 										fixedLevelPaths.push(file);
 										log.add(tag, "  Need re-saving (reason: external dir was renamed outside of LDtk)");
 										needReSaving = true;
