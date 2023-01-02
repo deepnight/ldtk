@@ -8989,7 +8989,7 @@ $patternSize : 32px;
 							outline-color: $orange;
 						}
 						&.active {
-							outline: 3px solid white;
+							outline: 3px solid white !important;
 							z-index: 2;
 						}
 						img.faded {
