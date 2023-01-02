@@ -34,17 +34,17 @@ class FieldInstanceRender {
 				case ArrowsLine:
 					if( len>=12 ) {
 						var a = Math.atan2(ty-fy, tx-fx);
-						fx+=Math.cos(a)*4;
-						fy+=Math.sin(a)*4;
-						tx-=Math.cos(a)*6;
-						ty-=Math.sin(a)*6;
+						fx+=Math.cos(a)*3;
+						fy+=Math.sin(a)*3;
+						tx-=Math.cos(a)*4;
+						ty-=Math.sin(a)*4;
 					}
 
 				case StraightArrow, CurvedArrow:
 					if( len>=20 ) {
 						var a = Math.atan2(ty-fy, tx-fx);
-						tx-=Math.cos(a)*6;
-						ty-=Math.sin(a)*6;
+						tx-=Math.cos(a)*4;
+						ty-=Math.sin(a)*4;
 					}
 			}
 
@@ -388,8 +388,8 @@ class FieldInstanceRender {
 							var tei = fi.getEntityRefInstance(i);
 							if( tei==null )
 								continue;
-							var tx = M.round( tei.centerX + tei._li.level.worldX - ( ei.centerX + ei._li.level.worldX ) ) + tei._li.pxTotalOffsetX;
-							var ty = M.round( tei.centerY + tei._li.level.worldY - ( ei.centerY + ei._li.level.worldY ) ) + tei._li.pxTotalOffsetY;
+							var tx = M.round( tei.centerX + tei._li.level.worldX + tei._li.pxTotalOffsetX ) - ( ei.x + ei._li.level.worldX );
+							var ty = M.round( tei.centerY + tei._li.level.worldY + tei._li.pxTotalOffsetY ) - ( ei.y + ei._li.level.worldY );
 							renderRefLink(g, baseColor, fx,fy, tx,ty, 1, fi.def.editorLinkStyle, ei.isInSameSpaceAs(tei) ? Full : CutAtOrigin );
 						}
 
