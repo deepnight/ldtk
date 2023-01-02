@@ -42,7 +42,7 @@
 - [ ] Check "next" folder on FTP
 
 ## Publish
-- [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
+- [ ] Submit to LDtk Haxe API HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
 - [ ] Add "x.x.x-rcX" tag to Haxe API repo
 - [ ] Run `npm run publish-itchio`
 - [ ] Upload macOS build to Itch.io ([link](https://itch.io/dashboard))
