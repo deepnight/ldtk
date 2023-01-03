@@ -2885,6 +2885,16 @@ textarea {
 		grid-template-rows: min-content auto;
 		height: 100%;
 
+		.changelogsWrapper {
+			padding: 20px;
+
+			overflow-x: hidden;
+			overflow-y: auto;
+			background-color: $bgDark;
+
+			color: $almostWhite;
+		}
+
 		&.short {
 			min-height: 0;
 			max-height: 450px;
@@ -2967,14 +2977,7 @@ textarea {
 			}
 		}
 
-		.changelog {
-			padding: 20px;
-
-			overflow-y: auto;
-			background-color: $bgDark;
-
-			color: $almostWhite;
-
+		.markdownHtml {
 			img {
 				width: 100%;
 				height: auto;
@@ -3043,11 +3046,59 @@ textarea {
 						margin-top: 8px;
 					}
 				}
+				&:last-child {
+					border: none;
+					padding-bottom: 0;
+					margin-bottom: 0;
+				}
 			}
 		}
 
-		#updateChangelogMd {
-			display: none;
+		.hotfixes {
+			margin-bottom: 16px;
+			.hotfix {
+				padding: 8px;
+				font-size: 9pt;
+				border: 1px solid $bgLight;
+				border-radius: 3px;
+				margin-bottom: 8px;
+				cursor: pointer;
+
+				&:hover {
+					border-color: $orange;
+				}
+
+				.hotfixVersion {
+					font-size: 10pt;
+					color: $orange;
+					font-weight: bold;
+				}
+
+				&:not(.collapsed) {
+					background-color: $bgMed;
+
+					.hotfixVersion {
+						margin-bottom: 8px;
+					}
+					.icon {
+						background-image: url("../icons/expanded.svg");
+					}
+				}
+
+				&.collapsed {
+					>*:not(.hotfixVersion) {
+						display: none;
+					}
+					.icon {
+						background-image: url("../icons/collapsed.svg");
+					}
+				}
+
+				&>ul>li {
+					margin-bottom: 4px;
+					padding-bottom: 4px;
+				}
+			}
 		}
 	}
 }

@@ -1,6 +1,7 @@
 # 1.2.1
 
  - Fixed entity arrows not pointing at their target properly, if the source entity was resizable.
+ - Better display of hotfixes vs major updates in the Release Notes window
 
 # 1.2.0 - Auto-layer rules assistant
 
