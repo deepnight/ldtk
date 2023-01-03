@@ -95,16 +95,15 @@ class Changelog extends ui.modal.Dialog {
 		// Versions list
 		var jOthers = jContent.find(".others");
 		jOthers.click( ev->{
-			var ctx = new ui.modal.ContextMenu(ev);
+			var ctx = new ui.modal.ContextMenu(jOthers);
 			for( c in Const.getChangeLog().entries ) {
 				if( c.version.patch!=0 )
 					continue;
 				ctx.add({
-					label: L.t.untranslated( c.version.full + ( c.title!=null ? " - "+c.title : "" ) ),
+					label: L.t.untranslated( '<strong>${c.version.full}</strong>' + ( c.title!=null ? " - "+c.title : "" ) ),
 					cb: ()->{
 						showVersion(c.version);
 					},
-					className: c.version.patch==0 ? "strong" : null,
 				});
 			}
 		} );
@@ -136,10 +135,16 @@ class Changelog extends ui.modal.Dialog {
 				var md = _makeMarkdown(c.allNoteLines);
 				js.Syntax.code("parseMd({0},{1})", md, id);
 
-				jHotFix.prepend('<div class="hotfixVersion"><span class="icon"></span> Update ${c.version.toString()}</div>');
+				var jVer = new J('<div class="hotfixVersion"/>');
+				jVer.append('<span class="icon"></span>');
+				jVer.append('Patch ${c.version.patch} <em>(${c.version.toString()})</em>');
+				jHotFix.prepend(jVer);
 			}
 
-			jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
+			if( changeLog.version.hasSameMajorAndMinor(Const.getAppVersion(true)) )
+				jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
+			else
+				jHotFixes.find(".hotfix").addClass("collapsed");
 		}
 	}
 

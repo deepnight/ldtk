@@ -1185,6 +1185,7 @@ ul.log {
 .icon.json				{ background-image: url("../icons/json.svg"); }
 .icon.layer				{ background-image: url("../icons/layer.png"); }
 .icon.level				{ background-image: url("../icons/level.svg"); }
+.icon.list				{ background-image: url("../icons/list.svg"); }
 .icon.locate			{ background-image: url("../icons/locate.svg"); }
 .icon.love				{ background-image: url("../icons/love.svg"); }
 .icon.manual			{ background-image: url("../icons/manual.svg"); }
@@ -3058,7 +3059,7 @@ textarea {
 			margin-bottom: 16px;
 			.hotfix {
 				padding: 8px;
-				font-size: 9pt;
+				font-size: 10pt;
 				border: 1px solid $bgLight;
 				border-radius: 3px;
 				margin-bottom: 8px;
@@ -3069,9 +3070,12 @@ textarea {
 				}
 
 				.hotfixVersion {
-					font-size: 10pt;
+					font-size: 11pt;
 					color: $orange;
 					font-weight: bold;
+					em {
+						color: $bgLighter;
+					}
 				}
 
 				&:not(.collapsed) {
@@ -3094,9 +3098,13 @@ textarea {
 					}
 				}
 
-				&>ul>li {
-					margin-bottom: 4px;
-					padding-bottom: 4px;
+				&>ul {
+					list-style: square inside;
+					&>li {
+						padding-left: 8px;
+						margin-bottom: 4px;
+						padding-bottom: 4px;
+					}
 				}
 			}
 		}
@@ -3185,6 +3193,13 @@ textarea {
 				&:hover {
 					background-color: $orange;
 					color: black;
+					text-shadow: none;
+					strong {
+						color: black;
+					}
+				}
+				strong {
+					color: $orangeLight;
 				}
 				.sub {
 					display: block;
