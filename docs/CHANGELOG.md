@@ -2,6 +2,7 @@
 
  - Fixed entity arrows not pointing at their target properly, if the source entity was resizable.
  - Better display of hotfixes vs major updates in the Release Notes window
+ - Fixed position of the window listing all LDtk versions
 
 # 1.2.0 - Auto-layer rules assistant
 
