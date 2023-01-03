@@ -1,3 +1,7 @@
+# 1.2.2
+
+ - Fixed `A` keyboard shortcut for non-WASD keyboards
+
 # 1.2.1
 
  - Fixed entity arrows not pointing at their target properly, if the source entity was resizable.
