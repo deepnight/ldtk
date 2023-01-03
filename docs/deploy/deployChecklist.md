@@ -10,20 +10,20 @@
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Rebuild all LDtk sample maps
-- [ ] Update Haxe API sample maps
+- [ ] Update Haxe API maps
 - [ ] Check JSON doc (changed/added flags etc.)
 - [ ] Run Haxe API tests
 - [ ] Build Haxe API samples
+
+## Test
+
+- [ ] Pack a local Setup and test it
 
 ## Git
 - [ ] Merge LDtk repo to `master`
 - [ ] Merge LDtk Haxe API repo to `master`
 - [ ] Update `Haxelib.json`
 - [ ] Update branch names in `setup.hxml`
-
-## Test
-
-- [ ] Pack a local Setup and test it
 
 ## Prepare GitHub release
 - [ ] Run `npm run publish-github`

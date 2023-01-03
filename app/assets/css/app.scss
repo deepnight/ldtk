@@ -1185,6 +1185,7 @@ ul.log {
 .icon.json				{ background-image: url("../icons/json.svg"); }
 .icon.layer				{ background-image: url("../icons/layer.png"); }
 .icon.level				{ background-image: url("../icons/level.svg"); }
+.icon.list				{ background-image: url("../icons/list.svg"); }
 .icon.locate			{ background-image: url("../icons/locate.svg"); }
 .icon.love				{ background-image: url("../icons/love.svg"); }
 .icon.manual			{ background-image: url("../icons/manual.svg"); }
@@ -2885,6 +2886,16 @@ textarea {
 		grid-template-rows: min-content auto;
 		height: 100%;
 
+		.changelogsWrapper {
+			padding: 20px;
+
+			overflow-x: hidden;
+			overflow-y: auto;
+			background-color: $bgDark;
+
+			color: $almostWhite;
+		}
+
 		&.short {
 			min-height: 0;
 			max-height: 450px;
@@ -2967,14 +2978,73 @@ textarea {
 			}
 		}
 
-		.changelog {
-			padding: 20px;
+		.hotfixes {
+			&:not(:empty) {
+				margin-bottom: 32px;
+			}
 
-			overflow-y: auto;
-			background-color: $bgDark;
+			.hotfix {
+				padding: 8px;
+				font-size: 10pt;
+				border: 1px solid $bgLight;
+				border-radius: 3px;
+				margin-bottom: 16px;
+				cursor: pointer;
 
-			color: $almostWhite;
+				&:hover {
+					border-color: $orange;
+				}
 
+				.hotfixVersion {
+					font-size: 11pt;
+					color: $orange;
+					font-weight: bold;
+					em {
+						color: $bgLighter;
+					}
+				}
+
+				&:not(.collapsed) {
+					background-color: $bgMed;
+
+					.hotfixVersion {
+						margin-bottom: 8px;
+					}
+					.icon {
+						background-image: url("../icons/expanded.svg");
+					}
+				}
+
+				&.collapsed {
+					>*:not(.hotfixVersion) {
+						display: none;
+					}
+					.icon {
+						background-image: url("../icons/collapsed.svg");
+					}
+				}
+
+				&>ul {
+					list-style: square inside;
+					&>li {
+						padding-left: 8px;
+						margin-bottom: 4px;
+						padding-bottom: 4px;
+					}
+				}
+			}
+		}
+		.markdownHtml {
+			h2.version {
+				margin-bottom: 32px;
+				font-size: 25pt;
+				color: $bgLighter;
+				border-bottom: 1px solid $bgLighter;
+				// border: none;
+			}
+			h2+h2 {
+				margin-top: 0 !important;
+			}
 			img {
 				width: 100%;
 				height: auto;
@@ -3043,12 +3113,14 @@ textarea {
 						margin-top: 8px;
 					}
 				}
+				&:last-child {
+					border: none;
+					padding-bottom: 0;
+					margin-bottom: 0;
+				}
 			}
 		}
 
-		#updateChangelogMd {
-			display: none;
-		}
 	}
 }
 
@@ -3134,6 +3206,13 @@ textarea {
 				&:hover {
 					background-color: $orange;
 					color: black;
+					text-shadow: none;
+					strong {
+						color: black;
+					}
+				}
+				strong {
+					color: $orangeLight;
 				}
 				.sub {
 					display: block;

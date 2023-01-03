@@ -1,3 +1,10 @@
+# 1.2.1
+
+ - Fixed entity arrows not pointing at their target properly, if the source entity was resizable.
+ - Better display of hotfixes vs major updates in the Release Notes window
+ - Fixed position of the window listing all LDtk versions
+ - Fixed macOS build
+
 # 1.2.0 - Auto-layer rules assistant
 
 ## Auto-layer rules assistant
@@ -201,7 +208,7 @@ You will get:
 
 # 1.0.0 - Gone gold!
 
-### A few words from the author
+## A few words from the author
 
 **When I started working on LDtk about 1 year ago (which was known as *LEd* back then), I would not have imagined how far and how big this would get.** LDtk was a critical part of my personal game dev plan, because I knew I needed a modern, fast and user-friendly level editor for my future projects.
 
