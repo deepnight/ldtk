@@ -60,9 +60,16 @@ class Changelog extends ui.modal.Dialog {
 		}
 		var rawMd = _makeMarkdown(changeLog.allNoteLines);
 
+		// Detect latest patch version for this major update
+		var latestPatchedVer = changeLog.version;
+		for(c in all.entries)
+			if( c.version.hasSameMajorAndMinor(changeLog.version) )
+				if( latestPatchedVer==null || latestPatchedVer.patch<c.version.patch )
+					latestPatchedVer = c.version;
+
 		// Load page
 		loadTemplate("changelog", {
-			ver: changeLog.version.full,
+			ver: latestPatchedVer.full,
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
 		}, false);
@@ -96,14 +103,13 @@ class Changelog extends ui.modal.Dialog {
 		var jOthers = jContent.find(".others");
 		jOthers.click( ev->{
 			var ctx = new ui.modal.ContextMenu(jOthers);
+			ctx.addTitle(L.t._("LDtk major updates"));
 			for( c in Const.getChangeLog().entries ) {
 				if( c.version.patch!=0 )
 					continue;
 				ctx.add({
-					label: L.t.untranslated( '<strong>${c.version.full}</strong>' + ( c.title!=null ? " - "+c.title : "" ) ),
-					cb: ()->{
-						showVersion(c.version);
-					},
+					label: L.t.untranslated( '<strong>${c.version.major+"."+c.version.minor}</strong>' + ( c.title!=null ? " - "+c.title : "" ) ),
+					cb: ()->showVersion(c.version),
 				});
 			}
 		} );
@@ -120,6 +126,7 @@ class Changelog extends ui.modal.Dialog {
 		// Hot fixes listing
 		if( changeLog.version.patch==0 ) {
 			var jHotFixes = jContent.find(".hotfixes");
+			var count = 0;
 			for(c in all.entries) {
 				if( c.version.major!=changeLog.version.major || c.version.minor!=changeLog.version.minor || c.version.patch==0 )
 					continue;
@@ -139,12 +146,16 @@ class Changelog extends ui.modal.Dialog {
 				jVer.append('<span class="icon"></span>');
 				jVer.append('Patch ${c.version.patch} <em>(${c.version.toString()})</em>');
 				jHotFix.prepend(jVer);
+				count++;
 			}
 
 			if( changeLog.version.hasSameMajorAndMinor(Const.getAppVersion(true)) )
 				jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
 			else
 				jHotFixes.find(".hotfix").addClass("collapsed");
+
+			if( count>0 )
+				jContent.find("#updateChangelogHtml").prepend('<h2 class="version">Changes from ${changeLog.version.full}</h2>');
 		}
 	}
 
