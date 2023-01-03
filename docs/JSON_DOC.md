@@ -1,4 +1,4 @@
-# LDtk Json structure (version 1.2.1)
+# LDtk Json structure (version 1.2.2)
 
 
 <a id="ldtk-CustomCommand" name="ldtk-CustomCommand"></a>
