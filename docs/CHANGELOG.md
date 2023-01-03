@@ -207,7 +207,7 @@ You will get:
 
 # 1.0.0 - Gone gold!
 
-### A few words from the author
+## A few words from the author
 
 **When I started working on LDtk about 1 year ago (which was known as *LEd* back then), I would not have imagined how far and how big this would get.** LDtk was a critical part of my personal game dev plan, because I knew I needed a modern, fast and user-friendly level editor for my future projects.
 
