@@ -1,5 +1,6 @@
 # 1.2.2
 
+ - Re-designed the JSON online documentation to be easier to use (https://ldtk.io/json)
  - Fixed `A` keyboard shortcut for non-WASD keyboards
  - macOS builds are now "universal" like the Windows ones. This means that the official macOS release should now install properly on both Intel and Apple Silicon architectures. The downside is that the installer is now larger than before.
 
