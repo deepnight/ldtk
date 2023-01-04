@@ -1,13 +1,6 @@
 # LDtk Json structure (version 1.2.1)
 
 
-<a id="ldtk-CustomCommand" name="ldtk-CustomCommand"></a>
-## ldtk.CustomCommand  ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg) 
-Value | Type | Description
--- | -- | --
-`command` | String | 
-`when` | Enum | Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
-
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## 1. LDtk Json root   
 This is the root of any Project JSON file. It contains:
@@ -19,7 +12,6 @@ This is the root of any Project JSON file. It contains:
 Value | Type | Description
 -- | -- | --
 `bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
-`customCommands`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Array&nbsp;of&nbsp;[ldtk.CustomCommand](#ldtk-CustomCommand) | An array of command lines that can be ran manually by the user
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
 `externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
 `iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | String | Unique project identifier
@@ -32,6 +24,7 @@ Value | Type | Description
 `appBuildId`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | LDtk application build identifier.<br/>		This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.
 `backupLimit`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
+`customCommands`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array of command lines that can be ran manually by the user<br/> This object contains the following fields:<br/> <ul><li>**`command`** **(String**)</li><li>**`when`** **(Enum**) : *Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`*</li></ul>
 `defaultGridSize`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default grid size for new layers
 `defaultLevelBgColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Default background color of levels
 `defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level height
