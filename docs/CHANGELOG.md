@@ -1,6 +1,7 @@
 # 1.2.2
 
  - Fixed `A` keyboard shortcut for non-WASD keyboards
+ - macOS builds are now "universal" like the Windows ones. This means that the official macOS release should now install properly on both Intel and Apple Silicon architectures. The downside is that the installer is now larger than before.
 
 # 1.2.1
 
