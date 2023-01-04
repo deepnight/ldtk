@@ -1525,7 +1525,7 @@
 					]
 				},
 				"pxOffsetX": {
-					"description": "X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetX`)",
+					"description": "X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX` which contains the total offset value)",
 					"type": [
 						"integer"
 					]
@@ -1657,7 +1657,7 @@
 					]
 				},
 				"pxOffsetY": {
-					"description": "Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetY`)",
+					"description": "Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX` which contains the total offset value)",
 					"type": [
 						"integer"
 					]
