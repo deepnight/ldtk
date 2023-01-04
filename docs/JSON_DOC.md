@@ -326,18 +326,6 @@ Value | Type | Description
 `tilesetUid`<br/><sup class="only">Only *Tile*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | UID of the tileset used for a Tile
 `useForSmartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.
 
-<a id="ldtk-TilesetRect" name="ldtk-TilesetRect"></a>
-## 3.2.2. Tileset rectangle  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
-This object represents a custom sub rectangle in a Tileset image.
-
-Value | Type | Description
--- | -- | --
-`h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Height in pixels
-`tilesetUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | UID of the tileset
-`w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Width in pixels
-`x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | X pixels coordinate of the top-left corner in the Tileset image
-`y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Y pixels coordinate of the top-left corner in the Tileset image
-
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 3.3. Tileset definition   
 The `Tileset` definition is the most important part among project definitions. It contains some extra informations about each integrated tileset. If you only had to parse one definition section, that would be the one.
@@ -361,6 +349,18 @@ Value | Type | Description
 `uid` | Int | Unique Intidentifier
 `cachedPixelData`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/> This object contains the following fields:<br/> <ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
 `savedSelections`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/> This object contains the following fields:<br/> <ul><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Enum**)</li></ul>
+
+<a id="ldtk-TilesetRect" name="ldtk-TilesetRect"></a>
+## 3.3.1. Tileset rectangle  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
+This object represents a custom sub rectangle in a Tileset image.
+
+Value | Type | Description
+-- | -- | --
+`h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Height in pixels
+`tilesetUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | UID of the tileset
+`w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Width in pixels
+`x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | X pixels coordinate of the top-left corner in the Tileset image
+`y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Y pixels coordinate of the top-left corner in the Tileset image
 
 <a id="ldtk-EnumDefJson" name="ldtk-EnumDefJson"></a>
 ## 3.4. Enum definition   
