@@ -1,13 +1,6 @@
 # LDtk Json structure (version 1.2.2)
 
 
-<a id="ldtk-CustomCommand" name="ldtk-CustomCommand"></a>
-## ldtk.CustomCommand  ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg) 
-Value | Type | Description
--- | -- | --
-`command` | String | 
-`when` | Enum | Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
-
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
 ## 1. LDtk Json root   
 This is the root of any Project JSON file. It contains:
@@ -19,7 +12,7 @@ This is the root of any Project JSON file. It contains:
 Value | Type | Description
 -- | -- | --
 `bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
-`customCommands`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Array&nbsp;of&nbsp;[ldtk.CustomCommand](#ldtk-CustomCommand) | An array of command lines that can be ran manually by the user
+`customCommands`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array of command lines that can be ran manually by the user<br/> This object contains the following fields:<br/> <ul><li>**`command`** **(String**)</li><li>**`when`** **(Enum**) : *Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`*</li></ul>
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
 `externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
 `iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | String | Unique project identifier
