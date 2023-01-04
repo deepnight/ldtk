@@ -581,7 +581,7 @@ class DocGenerator {
 				subFields: subFields,
 
 				only: getMeta(fieldXml, "only"),
-				hasVersion: hasMeta(fieldXml,"changed") || hasMeta(fieldXml,"added") || hasMeta(fieldXml,"removed"),
+				hasVersion: hasMeta(fieldXml,"changed") || hasMeta(fieldXml,"added") || hasMeta(fieldXml,"removed") || hasMeta(fieldXml,"deprecation"),
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
@@ -622,7 +622,13 @@ class DocGenerator {
 		if( hasMeta(xml,"changed") ) {
 			var version = getMeta(xml,"changed");
 			badges.push( badge("Changed", version, appVersion.hasSameMajorAndMinor(version) ? "green" : "gray" ) );
+		}
 
+		if( hasMeta(xml,"deprecation") ) {
+			var endVer = getMeta(xml,"deprecation", 1);
+			trace(endVer);
+			if( dn.Version.lowerEq(endVer, appVersion.numbers, true) )
+				badges.push( badge("Removed", endVer, appVersion.hasSameMajorAndMinor(endVer) ? "green" : "gray" ) );
 		}
 
 		return " "+badges.join(" ")+" ";
