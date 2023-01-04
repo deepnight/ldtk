@@ -376,8 +376,8 @@ type LayerInstance struct {
 	LevelID            int64                  `json:"levelId"`           // Reference to the UID of the level containing this layer instance
 	OptionalRules      []int64                `json:"optionalRules"`     // An Array containing the UIDs of optional rules that were enabled in this specific layer; instance.
 	OverrideTilesetUid *int64                 `json:"overrideTilesetUid"`// This layer can use another tileset by overriding the tileset UID here.
-	PxOffsetX          int64                  `json:"pxOffsetX"`         // X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to; the `LayerDef` optional offset, see `__pxTotalOffsetX`)
-	PxOffsetY          int64                  `json:"pxOffsetY"`         // Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to; the `LayerDef` optional offset, see `__pxTotalOffsetY`)
+	PxOffsetX          int64                  `json:"pxOffsetX"`         // X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to; the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`; which contains the total offset value)
+	PxOffsetY          int64                  `json:"pxOffsetY"`         // Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to; the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`; which contains the total offset value)
 	Seed               int64                  `json:"seed"`              // Random seed used for Auto-Layers rendering
 	Visible            bool                   `json:"visible"`           // Layer instance visibility
 }

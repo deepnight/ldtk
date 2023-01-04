@@ -1986,7 +1986,8 @@ namespace quicktype {
 
         /**
          * X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-         * the `LayerDef` optional offset, see `__pxTotalOffsetX`)
+         * the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+         * which contains the total offset value)
          */
         const int64_t & get_px_offset_x() const { return px_offset_x; }
         int64_t & get_mutable_px_offset_x() { return px_offset_x; }
@@ -1994,7 +1995,8 @@ namespace quicktype {
 
         /**
          * Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-         * the `LayerDef` optional offset, see `__pxTotalOffsetY`)
+         * the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+         * which contains the total offset value)
          */
         const int64_t & get_px_offset_y() const { return px_offset_y; }
         int64_t & get_mutable_px_offset_y() { return px_offset_y; }

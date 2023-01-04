@@ -1627,11 +1627,13 @@ class LayerInstance:
     """This layer can use another tileset by overriding the tileset UID here."""
     override_tileset_uid: Optional[int]
     """X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-    the `LayerDef` optional offset, see `__pxTotalOffsetX`)
+    the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+    which contains the total offset value)
     """
     px_offset_x: int
     """Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-    the `LayerDef` optional offset, see `__pxTotalOffsetY`)
+    the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+    which contains the total offset value)
     """
     px_offset_y: int
     """Random seed used for Auto-Layers rendering"""

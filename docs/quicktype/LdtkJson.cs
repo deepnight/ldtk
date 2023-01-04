@@ -1646,14 +1646,16 @@ namespace ldtk
 
         /// <summary>
         /// X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-        /// the `LayerDef` optional offset, see `__pxTotalOffsetX`)
+        /// the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+        /// which contains the total offset value)
         /// </summary>
         [JsonProperty("pxOffsetX")]
         public long PxOffsetX { get; set; }
 
         /// <summary>
         /// Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-        /// the `LayerDef` optional offset, see `__pxTotalOffsetY`)
+        /// the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+        /// which contains the total offset value)
         /// </summary>
         [JsonProperty("pxOffsetY")]
         public long PxOffsetY { get; set; }

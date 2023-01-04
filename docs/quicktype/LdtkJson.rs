@@ -4,11 +4,11 @@
 // extern crate serde_derive;
 // extern crate serde_json;
 //
-// use generated_module::[object Object];
+// use generated_module::LdtkJson;
 //
 // fn main() {
 //     let json = r#"{"answer": 42}"#;
-//     let model: [object Object] = serde_json::from_str(&json).unwrap();
+//     let model: LdtkJson = serde_json::from_str(&json).unwrap();
 // }
 
 extern crate serde_derive;
@@ -1210,12 +1210,14 @@ pub struct LayerInstance {
     override_tileset_uid: Option<i64>,
 
     /// X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-    /// the `LayerDef` optional offset, see `__pxTotalOffsetX`)
+    /// the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+    /// which contains the total offset value)
     #[serde(rename = "pxOffsetX")]
     px_offset_x: i64,
 
     /// Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
-    /// the `LayerDef` optional offset, see `__pxTotalOffsetY`)
+    /// the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
+    /// which contains the total offset value)
     #[serde(rename = "pxOffsetY")]
     px_offset_y: i64,
 
