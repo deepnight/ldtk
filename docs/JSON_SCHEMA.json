@@ -9,7 +9,6 @@
 		"title": "LDtk Json root",
 		"required": [
 			"bgColor",
-			"customCommands",
 			"defs",
 			"externalLevels",
 			"iid",
@@ -19,6 +18,7 @@
 			"appBuildId",
 			"backupLimit",
 			"backupOnSave",
+			"customCommands",
 			"defaultGridSize",
 			"defaultLevelBgColor",
 			"defaultPivotX",
