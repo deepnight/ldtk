@@ -5,15 +5,15 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.2.1",
+		"appVersion": "1.2.2",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a2a4fe00-7820-11ed-b6fd-9b53622ece75",
-	"jsonVersion": "1.2.1",
-	"appBuildId": 464652,
+	"jsonVersion": "1.2.2",
+	"appBuildId": 464700,
 	"nextUid": 173,
 	"identifierStyle": "Capitalize",
-	"worldLayout": "Free",
+	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultLevelWidth": 256,
@@ -39,33 +39,6 @@
 	"defs": { "layers": [
 		{
 			"__type": "Entities",
-			"identifier": "GameEntities",
-			"type": "Entities",
-			"uid": 7,
-			"gridSize": 16,
-			"guideGridWid": 0,
-			"guideGridHei": 0,
-			"displayOpacity": 1,
-			"inactiveOpacity": 0.6,
-			"hideInList": false,
-			"hideFieldsWhenInactive": false,
-			"canSelectWhenInactive": true,
-			"pxOffsetX": 0,
-			"pxOffsetY": 0,
-			"parallaxFactorX": 0,
-			"parallaxFactorY": 0,
-			"parallaxScaling": true,
-			"requiredTags": [],
-			"excludedTags": [ "triggerable", "trigger" ],
-			"intGridValues": [],
-			"autoRuleGroups": [],
-			"autoSourceLayerDefUid": null,
-			"tilesetDefUid": null,
-			"tilePivotX": 0,
-			"tilePivotY": 0
-		},
-		{
-			"__type": "Entities",
 			"identifier": "Triggerables",
 			"type": "Entities",
 			"uid": 104,
@@ -73,7 +46,7 @@
 			"guideGridWid": 0,
 			"guideGridHei": 0,
 			"displayOpacity": 1,
-			"inactiveOpacity": 0.6,
+			"inactiveOpacity": 0.35,
 			"hideInList": false,
 			"hideFieldsWhenInactive": false,
 			"canSelectWhenInactive": true,
@@ -84,6 +57,33 @@
 			"parallaxScaling": true,
 			"requiredTags": [ "triggerable", "trigger" ],
 			"excludedTags": [],
+			"intGridValues": [],
+			"autoRuleGroups": [],
+			"autoSourceLayerDefUid": null,
+			"tilesetDefUid": null,
+			"tilePivotX": 0,
+			"tilePivotY": 0
+		},
+		{
+			"__type": "Entities",
+			"identifier": "GameEntities",
+			"type": "Entities",
+			"uid": 7,
+			"gridSize": 16,
+			"guideGridWid": 0,
+			"guideGridHei": 0,
+			"displayOpacity": 1,
+			"inactiveOpacity": 0.35,
+			"hideInList": false,
+			"hideFieldsWhenInactive": false,
+			"canSelectWhenInactive": true,
+			"pxOffsetX": 0,
+			"pxOffsetY": 0,
+			"parallaxFactorX": 0,
+			"parallaxFactorY": 0,
+			"parallaxScaling": true,
+			"requiredTags": [],
+			"excludedTags": [ "triggerable", "trigger" ],
 			"intGridValues": [],
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
@@ -1456,7 +1456,7 @@
 					"arrayMinLength": null,
 					"arrayMaxLength": null,
 					"editorDisplayMode": "NameAndValue",
-					"editorDisplayPos": "Above",
+					"editorDisplayPos": "Beneath",
 					"editorLinkStyle": "CurvedArrow",
 					"editorAlwaysShow": false,
 					"editorShowInWorld": true,
@@ -1898,8 +1898,8 @@
 			"identifier": "Entities_demo",
 			"iid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
 			"uid": 0,
-			"worldX": 304,
-			"worldY": -64,
+			"worldX": -1,
+			"worldY": -1,
 			"worldDepth": 0,
 			"pxWid": 816,
 			"pxHei": 464,
@@ -1915,292 +1915,6 @@
 			"externalRelPath": null,
 			"fieldInstances": [],
 			"layerInstances": [
-				{
-					"__identifier": "GameEntities",
-					"__type": "Entities",
-					"__cWid": 51,
-					"__cHei": 29,
-					"__gridSize": 16,
-					"__opacity": 1,
-					"__pxTotalOffsetX": 0,
-					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": null,
-					"__tilesetRelPath": null,
-					"iid": "f80e99e0-66b0-11ec-b121-456135fb304a",
-					"levelId": 0,
-					"layerDefUid": 7,
-					"pxOffsetX": 0,
-					"pxOffsetY": 0,
-					"visible": true,
-					"optionalRules": [],
-					"intGridCsv": [],
-					"autoLayerTiles": [],
-					"seed": 3776513,
-					"overrideTilesetUid": null,
-					"gridTiles": [],
-					"entityInstances": [
-						{
-							"__identifier": "Chest",
-							"__grid": [44,24],
-							"__pivot": [0.5,1],
-							"__tags": ["container"],
-							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
-							"__smartColor": "#8A5B38",
-							"iid": "f80e99e1-66b0-11ec-b121-273dce4c0a94",
-							"width": 24,
-							"height": 24,
-							"defUid": 8,
-							"px": [712,400],
-							"fieldInstances": [
-								{ "__identifier": "content", "__value": [ "Sword", "Heavy sword", "Bow" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 21, "realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Sword"]
-								}, {
-									"id": "V_String",
-									"params": ["Heavy sword"]
-								}, {
-									"id": "V_String",
-									"params": ["Bow"]
-								} ] },
-								{ "__identifier": "requireKey", "__value": true, "__type": "Bool", "__tile": null, "defUid": 28, "realEditorValues": [{
-									"id": "V_Bool",
-									"params": [ true ]
-								}] }
-							]
-						},
-						{
-							"__identifier": "Enemy",
-							"__grid": [14,15],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 },
-							"__smartColor": "#FF0000",
-							"iid": "f80ec0f2-66b0-11ec-b121-d96e502df2fb",
-							"width": 32,
-							"height": 32,
-							"defUid": 37,
-							"px": [232,256],
-							"fieldInstances": [
-								{ "__identifier": "type", "__value": "Fighter", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Fighter"]
-								}] },
-								{ "__identifier": "life", "__value": 10, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [{ "id": "V_Int", "params": [10] }] },
-								{ "__identifier": "loots", "__value": [ "Gold", "Healing_potion" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Gold"]
-								}, {
-									"id": "V_String",
-									"params": ["Healing_potion"]
-								} ] },
-								{ "__identifier": "patrol", "__value": [
-									{ "cx": 18, "cy": 15 },
-									{ "cx": 18, "cy": 17 },
-									{ "cx": 23, "cy": 17 },
-									{ "cx": 23, "cy": 16 },
-									{ "cx": 26, "cy": 16 }
-								], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [
-									{
-										"id": "V_String",
-										"params": ["18,15"]
-									},
-									{
-										"id": "V_String",
-										"params": ["18,17"]
-									},
-									{
-										"id": "V_String",
-										"params": ["23,17"]
-									},
-									{
-										"id": "V_String",
-										"params": ["23,16"]
-									},
-									{
-										"id": "V_String",
-										"params": ["26,16"]
-									}
-								] },
-								{ "__identifier": "triggerOnKill", "__value": {
-									"entityIid": "478c88a0-7820-11ed-96e3-cb21df51f96c",
-									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
-									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
-								}, "__type": "EntityRef", "__tile": null, "defUid": 167, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["478c88a0-7820-11ed-96e3-cb21df51f96c"]
-								}] }
-							]
-						},
-						{
-							"__identifier": "Enemy",
-							"__grid": [31,22],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 },
-							"__smartColor": "#FF0000",
-							"iid": "f80ee803-66b0-11ec-b121-6dcb8a513232",
-							"width": 16,
-							"height": 16,
-							"defUid": 37,
-							"px": [504,368],
-							"fieldInstances": [
-								{ "__identifier": "type", "__value": "Worm", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Worm"]
-								}] },
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [null] },
-								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [] },
-								{ "__identifier": "patrol", "__value": [{ "cx": 24, "cy": 22 }], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["24,22"]
-								}] },
-								{ "__identifier": "triggerOnKill", "__value": null, "__type": "EntityRef", "__tile": null, "defUid": 167, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Enemy",
-							"__grid": [42,24],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 },
-							"__smartColor": "#FF0000",
-							"iid": "f80ee804-66b0-11ec-b121-874e33fcffe5",
-							"width": 16,
-							"height": 16,
-							"defUid": 37,
-							"px": [680,400],
-							"fieldInstances": [
-								{ "__identifier": "type", "__value": "Thief", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Thief"]
-								}] },
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [] },
-								{ "__identifier": "loots", "__value": ["Mana_potion"], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Mana_potion"]
-								}] },
-								{ "__identifier": "patrol", "__value": [{ "cx": 35, "cy": 24 }], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["35,24"]
-								}] },
-								{ "__identifier": "triggerOnKill", "__value": null, "__type": "EntityRef", "__tile": null, "defUid": 167, "realEditorValues": [] }
-							]
-						},
-						{
-							"__identifier": "Chest",
-							"__grid": [42,12],
-							"__pivot": [0.5,1],
-							"__tags": ["container"],
-							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
-							"__smartColor": "#8A5B38",
-							"iid": "ada47150-66b0-11ec-b043-2d6dd3346abd",
-							"width": 24,
-							"height": 24,
-							"defUid": 8,
-							"px": [680,208],
-							"fieldInstances": [
-								{ "__identifier": "content", "__value": [ "Bow", "Arrow" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 21, "realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Bow"]
-								}, {
-									"id": "V_String",
-									"params": ["Arrow"]
-								} ] },
-								{ "__identifier": "requireKey", "__value": false, "__type": "Bool", "__tile": null, "defUid": 28, "realEditorValues": [null] }
-							]
-						},
-						{
-							"__identifier": "Teleporter",
-							"__grid": [5,15],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "x": 176, "y": 128, "w": 16, "h": 16 },
-							"__smartColor": "#005DFF",
-							"iid": "623b4880-7820-11ed-96e3-a559e7f13f25",
-							"width": 16,
-							"height": 16,
-							"defUid": 164,
-							"px": [88,256],
-							"fieldInstances": [{ "__identifier": "destination", "__value": {
-								"entityIid": "cec7c540-7820-11ed-a572-9d2143bfff9e",
-								"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
-								"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-								"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 165, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["cec7c540-7820-11ed-a572-9d2143bfff9e"]
-							}] }]
-						},
-						{
-							"__identifier": "Player",
-							"__grid": [2,22],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "x": 80, "y": 240, "w": 16, "h": 16, "tilesetUid": 99 },
-							"__smartColor": "#B8DE4F",
-							"iid": "f80f0f12-66b0-11ec-b121-c7e0ed2499ae",
-							"width": 20,
-							"height": 20,
-							"defUid": 1,
-							"px": [40,368],
-							"fieldInstances": [
-								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 2, "realEditorValues": [] },
-								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "__tile": null, "defUid": 3, "realEditorValues": [] },
-								{ "__identifier": "weapon", "__value": "Trout", "__type": "LocalEnum.ItemType", "__tile": null, "defUid": 29, "realEditorValues": [{
-									"id": "V_String",
-									"params": ["Trout"]
-								}] },
-								{ "__identifier": "bag", "__value": [ "Mana_potion", "Healing_potion" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 19, "realEditorValues": [ {
-									"id": "V_String",
-									"params": ["Mana_potion"]
-								}, {
-									"id": "V_String",
-									"params": ["Healing_potion"]
-								} ] }
-							]
-						},
-						{
-							"__identifier": "Item",
-							"__grid": [35,18],
-							"__pivot": [0.5,1],
-							"__tags": ["container"],
-							"__tile": { "tilesetUid": 99, "x": 336, "y": 112, "w": 16, "h": 16 },
-							"__smartColor": "#FFCC00",
-							"iid": "4a7abfc0-7820-11ed-b300-2595de03b38f",
-							"width": 16,
-							"height": 16,
-							"defUid": 171,
-							"px": [568,304],
-							"fieldInstances": [{ "__identifier": "type", "__value": "Key", "__type": "LocalEnum.ItemType", "__tile": { "tilesetUid": 99, "x": 336, "y": 112, "w": 16, "h": 16 }, "defUid": 172, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["Key"]
-							}] }]
-						},
-						{
-							"__identifier": "Teleporter",
-							"__grid": [8,6],
-							"__pivot": [0.5,1],
-							"__tags": ["actor"],
-							"__tile": { "tilesetUid": 99, "x": 176, "y": 128, "w": 16, "h": 16 },
-							"__smartColor": "#005DFF",
-							"iid": "cec7c540-7820-11ed-a572-9d2143bfff9e",
-							"width": 16,
-							"height": 16,
-							"defUid": 164,
-							"px": [136,112],
-							"fieldInstances": [{ "__identifier": "destination", "__value": {
-								"entityIid": "623b4880-7820-11ed-96e3-a559e7f13f25",
-								"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
-								"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-								"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 165, "realEditorValues": [{
-								"id": "V_String",
-								"params": ["623b4880-7820-11ed-96e3-a559e7f13f25"]
-							}] }]
-						}
-					]
-				},
 				{
 					"__identifier": "Triggerables",
 					"__type": "Entities",
@@ -2242,12 +1956,12 @@
 									"entityIid": "3396d6c0-66b0-11ec-b548-27e4812969a5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								}, {
 									"entityIid": "f80ee800-66b0-11ec-b121-9b6ebb5b8d6e",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 97, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["3396d6c0-66b0-11ec-b548-27e4812969a5"]
@@ -2275,12 +1989,12 @@
 									"entityIid": "34733ef0-66b0-11ec-b043-b1457bc19192",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								}, {
 									"entityIid": "f05f14b0-7820-11ed-b13c-3bd68d5556ee",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 98, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["34733ef0-66b0-11ec-b043-b1457bc19192"]
@@ -2311,7 +2025,7 @@
 									"entityIid": "dd32c940-7820-11ed-b13c-d7bdc343ece3",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								}], "__type": "Array<EntityRef>", "__tile": null, "defUid": 98, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["dd32c940-7820-11ed-b13c-d7bdc343ece3"]
@@ -2447,12 +2161,12 @@
 									"entityIid": "0ac19200-66b0-11ec-b043-21f75c6683af",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								}, {
 									"entityIid": "f80ee805-66b0-11ec-b121-09bc15634dc5",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								} ], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["0ac19200-66b0-11ec-b043-21f75c6683af"]
@@ -2481,19 +2195,19 @@
 										"entityIid": "f80ec0f0-66b0-11ec-b121-db9b161a9754",
 										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-										"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+										"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 									},
 									{
 										"entityIid": "f80ee801-66b0-11ec-b121-4d74c475d701",
 										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-										"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+										"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 									},
 									{
 										"entityIid": "15991840-7820-11ed-9e31-5d3ab678e30e",
 										"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 										"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-										"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+										"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 									}
 								], "__type": "Array<EntityRef>", "__tile": null, "defUid": 102, "realEditorValues": [ {
 									"id": "V_String",
@@ -2595,7 +2309,7 @@
 									"entityIid": "ba7bf4c0-7820-11ed-b300-97eb43836a46",
 									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
 									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-									"worldIid": "a37f9a80-7820-11ed-9be3-2de087d6bc0b"
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
 								}], "__type": "Array<EntityRef>", "__tile": null, "defUid": 98, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["ba7bf4c0-7820-11ed-b300-97eb43836a46"]
@@ -2636,6 +2350,292 @@
 							"defUid": 170,
 							"px": [0,48],
 							"fieldInstances": []
+						}
+					]
+				},
+				{
+					"__identifier": "GameEntities",
+					"__type": "Entities",
+					"__cWid": 51,
+					"__cHei": 29,
+					"__gridSize": 16,
+					"__opacity": 1,
+					"__pxTotalOffsetX": 0,
+					"__pxTotalOffsetY": 0,
+					"__tilesetDefUid": null,
+					"__tilesetRelPath": null,
+					"iid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+					"levelId": 0,
+					"layerDefUid": 7,
+					"pxOffsetX": 0,
+					"pxOffsetY": 0,
+					"visible": true,
+					"optionalRules": [],
+					"intGridCsv": [],
+					"autoLayerTiles": [],
+					"seed": 3776513,
+					"overrideTilesetUid": null,
+					"gridTiles": [],
+					"entityInstances": [
+						{
+							"__identifier": "Chest",
+							"__grid": [44,24],
+							"__pivot": [0.5,1],
+							"__tags": ["container"],
+							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#8A5B38",
+							"iid": "f80e99e1-66b0-11ec-b121-273dce4c0a94",
+							"width": 24,
+							"height": 24,
+							"defUid": 8,
+							"px": [712,400],
+							"fieldInstances": [
+								{ "__identifier": "content", "__value": [ "Sword", "Heavy sword", "Bow" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 21, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Sword"]
+								}, {
+									"id": "V_String",
+									"params": ["Heavy sword"]
+								}, {
+									"id": "V_String",
+									"params": ["Bow"]
+								} ] },
+								{ "__identifier": "requireKey", "__value": true, "__type": "Bool", "__tile": null, "defUid": 28, "realEditorValues": [{
+									"id": "V_Bool",
+									"params": [ true ]
+								}] }
+							]
+						},
+						{
+							"__identifier": "Enemy",
+							"__grid": [14,15],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 },
+							"__smartColor": "#FF0000",
+							"iid": "f80ec0f2-66b0-11ec-b121-d96e502df2fb",
+							"width": 32,
+							"height": 32,
+							"defUid": 37,
+							"px": [232,256],
+							"fieldInstances": [
+								{ "__identifier": "type", "__value": "Fighter", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Fighter"]
+								}] },
+								{ "__identifier": "life", "__value": 10, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [{ "id": "V_Int", "params": [10] }] },
+								{ "__identifier": "loots", "__value": [ "Gold", "Healing_potion" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Gold"]
+								}, {
+									"id": "V_String",
+									"params": ["Healing_potion"]
+								} ] },
+								{ "__identifier": "patrol", "__value": [
+									{ "cx": 18, "cy": 15 },
+									{ "cx": 18, "cy": 17 },
+									{ "cx": 23, "cy": 17 },
+									{ "cx": 23, "cy": 16 },
+									{ "cx": 26, "cy": 16 }
+								], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [
+									{
+										"id": "V_String",
+										"params": ["18,15"]
+									},
+									{
+										"id": "V_String",
+										"params": ["18,17"]
+									},
+									{
+										"id": "V_String",
+										"params": ["23,17"]
+									},
+									{
+										"id": "V_String",
+										"params": ["23,16"]
+									},
+									{
+										"id": "V_String",
+										"params": ["26,16"]
+									}
+								] },
+								{ "__identifier": "triggerOnKill", "__value": {
+									"entityIid": "478c88a0-7820-11ed-96e3-cb21df51f96c",
+									"layerIid": "aba76db0-66b0-11ec-adce-c7e369098433",
+									"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+									"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
+								}, "__type": "EntityRef", "__tile": null, "defUid": 167, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["478c88a0-7820-11ed-96e3-cb21df51f96c"]
+								}] }
+							]
+						},
+						{
+							"__identifier": "Enemy",
+							"__grid": [31,22],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 },
+							"__smartColor": "#FF0000",
+							"iid": "f80ee803-66b0-11ec-b121-6dcb8a513232",
+							"width": 16,
+							"height": 16,
+							"defUid": 37,
+							"px": [504,368],
+							"fieldInstances": [
+								{ "__identifier": "type", "__value": "Worm", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Worm"]
+								}] },
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [null] },
+								{ "__identifier": "loots", "__value": [], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 24, "cy": 22 }], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["24,22"]
+								}] },
+								{ "__identifier": "triggerOnKill", "__value": null, "__type": "EntityRef", "__tile": null, "defUid": 167, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Enemy",
+							"__grid": [42,24],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 },
+							"__smartColor": "#FF0000",
+							"iid": "f80ee804-66b0-11ec-b121-874e33fcffe5",
+							"width": 16,
+							"height": 16,
+							"defUid": 37,
+							"px": [680,400],
+							"fieldInstances": [
+								{ "__identifier": "type", "__value": "Thief", "__type": "LocalEnum.MonsterType", "__tile": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 }, "defUid": 49, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Thief"]
+								}] },
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 40, "realEditorValues": [] },
+								{ "__identifier": "loots", "__value": ["Mana_potion"], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 39, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Mana_potion"]
+								}] },
+								{ "__identifier": "patrol", "__value": [{ "cx": 35, "cy": 24 }], "__type": "Array<Point>", "__tile": null, "defUid": 38, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["35,24"]
+								}] },
+								{ "__identifier": "triggerOnKill", "__value": null, "__type": "EntityRef", "__tile": null, "defUid": 167, "realEditorValues": [] }
+							]
+						},
+						{
+							"__identifier": "Chest",
+							"__grid": [42,12],
+							"__pivot": [0.5,1],
+							"__tags": ["container"],
+							"__tile": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#8A5B38",
+							"iid": "ada47150-66b0-11ec-b043-2d6dd3346abd",
+							"width": 24,
+							"height": 24,
+							"defUid": 8,
+							"px": [680,208],
+							"fieldInstances": [
+								{ "__identifier": "content", "__value": [ "Bow", "Arrow" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 21, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Bow"]
+								}, {
+									"id": "V_String",
+									"params": ["Arrow"]
+								} ] },
+								{ "__identifier": "requireKey", "__value": false, "__type": "Bool", "__tile": null, "defUid": 28, "realEditorValues": [null] }
+							]
+						},
+						{
+							"__identifier": "Teleporter",
+							"__grid": [5,15],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "tilesetUid": 99, "x": 176, "y": 128, "w": 16, "h": 16 },
+							"__smartColor": "#005DFF",
+							"iid": "623b4880-7820-11ed-96e3-a559e7f13f25",
+							"width": 16,
+							"height": 16,
+							"defUid": 164,
+							"px": [88,256],
+							"fieldInstances": [{ "__identifier": "destination", "__value": {
+								"entityIid": "cec7c540-7820-11ed-a572-9d2143bfff9e",
+								"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+								"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+								"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
+							}, "__type": "EntityRef", "__tile": null, "defUid": 165, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["cec7c540-7820-11ed-a572-9d2143bfff9e"]
+							}] }]
+						},
+						{
+							"__identifier": "Player",
+							"__grid": [2,22],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "x": 80, "y": 240, "w": 16, "h": 16, "tilesetUid": 99 },
+							"__smartColor": "#B8DE4F",
+							"iid": "f80f0f12-66b0-11ec-b121-c7e0ed2499ae",
+							"width": 20,
+							"height": 20,
+							"defUid": 1,
+							"px": [40,368],
+							"fieldInstances": [
+								{ "__identifier": "life", "__value": 3, "__type": "Int", "__tile": null, "defUid": 2, "realEditorValues": [] },
+								{ "__identifier": "isAwaken", "__value": true, "__type": "Bool", "__tile": null, "defUid": 3, "realEditorValues": [] },
+								{ "__identifier": "weapon", "__value": "Trout", "__type": "LocalEnum.ItemType", "__tile": null, "defUid": 29, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["Trout"]
+								}] },
+								{ "__identifier": "bag", "__value": [ "Mana_potion", "Healing_potion" ], "__type": "Array<LocalEnum.ItemType>", "__tile": null, "defUid": 19, "realEditorValues": [ {
+									"id": "V_String",
+									"params": ["Mana_potion"]
+								}, {
+									"id": "V_String",
+									"params": ["Healing_potion"]
+								} ] }
+							]
+						},
+						{
+							"__identifier": "Item",
+							"__grid": [35,18],
+							"__pivot": [0.5,1],
+							"__tags": ["container"],
+							"__tile": { "tilesetUid": 99, "x": 336, "y": 112, "w": 16, "h": 16 },
+							"__smartColor": "#FFCC00",
+							"iid": "4a7abfc0-7820-11ed-b300-2595de03b38f",
+							"width": 16,
+							"height": 16,
+							"defUid": 171,
+							"px": [568,304],
+							"fieldInstances": [{ "__identifier": "type", "__value": "Key", "__type": "LocalEnum.ItemType", "__tile": { "tilesetUid": 99, "x": 336, "y": 112, "w": 16, "h": 16 }, "defUid": 172, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["Key"]
+							}] }]
+						},
+						{
+							"__identifier": "Teleporter",
+							"__grid": [8,6],
+							"__pivot": [0.5,1],
+							"__tags": ["actor"],
+							"__tile": { "tilesetUid": 99, "x": 176, "y": 128, "w": 16, "h": 16 },
+							"__smartColor": "#005DFF",
+							"iid": "cec7c540-7820-11ed-a572-9d2143bfff9e",
+							"width": 16,
+							"height": 16,
+							"defUid": 164,
+							"px": [136,112],
+							"fieldInstances": [{ "__identifier": "destination", "__value": {
+								"entityIid": "623b4880-7820-11ed-96e3-a559e7f13f25",
+								"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
+								"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
+								"worldIid": "3d3672f0-7820-11ed-b5f3-4ffac6e8e304"
+							}, "__type": "EntityRef", "__tile": null, "defUid": 165, "realEditorValues": [{
+								"id": "V_String",
+								"params": ["623b4880-7820-11ed-96e3-a559e7f13f25"]
+							}] }]
 						}
 					]
 				},
