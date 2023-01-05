@@ -57,7 +57,6 @@ class Modal extends dn.Process {
 			if( m!=null ) {
 				// Use mouse coords
 				var toLeft = m.pageX>=js.Browser.window.innerWidth*0.6;
-				trace(toLeft+" "+jContent.width());
 				var x = toLeft ? m.pageX-jContent.width() : m.pageX;
 				var y = m.pageY;
 				if( y>=docHei*0.7 ) {
