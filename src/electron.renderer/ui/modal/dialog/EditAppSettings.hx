@@ -102,6 +102,25 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
+		// Fields render
+		var jSelect = jForm.find("#fieldsRender");
+		jSelect.empty();
+		for(k in Settings.FieldsRender.getConstructors()) {
+			var nk = Settings.FieldsRender.createByName(k);
+			var jOpt = new J('<option value="$k"/>');
+			jSelect.append(jOpt);
+			jOpt.text(switch nk {
+				case FR_Outline: L.t._("Outlined texts (default)");
+				case FR_Table: L.t._("Opaque tables");
+			});
+			if( settings.v.fieldsRender==nk )
+				jOpt.prop("selected",true);
+		}
+		jSelect.change( (_)->{
+			settings.v.fieldsRender = Settings.FieldsRender.createByName( jSelect.val() );
+			onSettingChanged();
+		});
+
 		// Navigation keys
 		var jNavKeys = jForm.find("#navKeys");
 		jNavKeys.empty();

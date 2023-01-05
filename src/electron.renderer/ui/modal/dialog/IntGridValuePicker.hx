@@ -4,7 +4,7 @@ class IntGridValuePicker extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
 	var sourceLd : data.def.LayerDef;
 
-	public function new(ld:data.def.LayerDef, current=-1, onConfirm:Int->Void, ?onCancel:Void->Void) {
+	public function new(?jNear:js.jquery.JQuery, ld:data.def.LayerDef, current=0, ?zeroValueLabel:String, onConfirm:Int->Void, ?onCancel:Void->Void) {
 		super();
 
 		this.ld = ld;
@@ -17,33 +17,48 @@ class IntGridValuePicker extends ui.modal.Dialog {
 			close();
 			return;
 		}
-		for(id in sourceLd.getAllIntGridValues()) {
-			var jValue = makeIntGridId(id.value, id.value==current);
-			jValue.click(_->{
-				onConfirm(id.value);
-				close();
-			});
-			jList.append(jValue);
-		}
 
-		addCancel(onCancel);
+		if( zeroValueLabel!=null )
+			jList.append( makeIntGridId(0, current==0, zeroValueLabel, onConfirm) );
+
+		for(id in sourceLd.getAllIntGridValues())
+			jList.append( makeIntGridId(id.value, id.value==current, onConfirm) );
+
+		if( jNear!=null ) {
+			jWrapper.css("minWidth", jNear.outerWidth()+"px");
+			positionNear(jNear);
+			jWrapper.offset({
+				top: jWrapper.offset().top-jNear.outerHeight(),
+				left: jWrapper.offset().left,
+			});
+		}
 	}
 
 
-	function makeIntGridId(id:Int, active:Bool) {
+	function makeIntGridId(value:Int, active:Bool, ?customLabel:String, onConfirm:Int->Void) {
 		var jId = new J('<li/>');
 		if( active )
 			jId.addClass("active");
+		jId.attr("value",Std.string(value));
 
-		if( sourceLd.getIntGridValueDisplayName(id)!=null )
-			jId.append(sourceLd.getIntGridValueDisplayName(id));
+		if( customLabel!=null )
+			jId.append(customLabel);
+		else if( value>0 && sourceLd.getIntGridValueDisplayName(value)!=null )
+			jId.append(sourceLd.getIntGridValueDisplayName(value));
 		else
-			jId.append('#$id');
+			jId.append('#$value');
 
 		if( active )
 			jId.append(" (current)");
 
-		jId.css({ backgroundColor: sourceLd.getIntGridValueColor(id).toHex() });
+		if( value>0 )
+			jId.css({ backgroundColor: sourceLd.getIntGridValueColor(value).toHex() });
+
+		jId.click(_->{
+			onConfirm(value);
+			close();
+		});
+
 		return jId;
 	}
 }

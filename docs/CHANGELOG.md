@@ -1,3 +1,14 @@
+# 1.2.2
+
+ - Added an option to use the old-school "opaque tables" visuals for Entity fields (see in the application settings, `F12` shortcut)
+ - You can now pick an "outer" IntGrid value in the rules assistant. This allows to use the assistant to create transitions tiles between 2 specific IntGrid values (eg. grass/dirt)
+ - Re-designed the [JSON online documentation](https://ldtk.io/json) to be *way* easier to use.
+ - Updated the application settings window
+ - Fixed `A` keyboard shortcut for non-WASD keyboards
+ - Fixed external links in Release Notes window
+ - The color of IntGrid values in the Rules Assistant are now shown in the pattern palette, in the lower-left corner of the window.
+ - macOS builds are now "universal" like the Windows ones. This means that the official macOS release should now install properly on both Intel and Apple Silicon architectures. The downside is that the installer is now larger than before.
+
 # 1.2.1
 
  - Fixed entity arrows not pointing at their target properly, if the source entity was resizable.

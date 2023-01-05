@@ -2680,7 +2680,13 @@ textarea {
 
 .window.editAppSettings {
 	.wrapper .content {
-		width: 600px;
+		width: 940px;
+
+		.columns {
+			display: grid;
+			grid-template-columns: 380px auto;
+			gap: 32px;
+		}
 
 		button.update {
 			display: grid;
@@ -2728,6 +2734,7 @@ textarea {
 
 				button {
 					flex: 0 1 0px;
+					padding: 0 2px;
 				}
 			}
 
@@ -2988,8 +2995,9 @@ textarea {
 				font-size: 10pt;
 				border: 1px solid $bgLight;
 				border-radius: 3px;
-				margin-bottom: 16px;
+				margin-bottom: 8px;
 				cursor: pointer;
+				background-color: $bgMed;
 
 				&:hover {
 					border-color: $orange;
@@ -3005,7 +3013,7 @@ textarea {
 				}
 
 				&:not(.collapsed) {
-					background-color: $bgMed;
+					padding-bottom: 16px;
 
 					.hotfixVersion {
 						margin-bottom: 8px;
@@ -3022,6 +3030,12 @@ textarea {
 					.icon {
 						background-image: url("../icons/collapsed.svg");
 					}
+				}
+
+				&.latest:not(.collapsed) {
+					color: white;
+					border-color: $almostWhite;
+					background-color: $bgLight;
 				}
 
 				&>ul {
@@ -8952,24 +8966,48 @@ $patternSize : 32px;
 
 
 .window.intGridValuePicker {
-	.wrapper .content {
-		width: 15em;
+	.wrapper {
+		padding: 8px;
+		background-color: black;
+		border: none;
+		border-radius: 4px;
 
-		ul {
-			li {
-				padding: 8px;
-				border: 1px solid $bgDark;
+		.content {
 
-				cursor: pointer;
-				&:hover {
-					border-color: white;
+			ul {
+				li {
+					// margin-left: 8px;
+					// margin-right: 8px;
+					padding: 8px;
+					border-radius: 3px;
+					border: 2px solid transparent;
+					text-shadow: 0px 1px 0px black, 0px 0px 3px rgba(0,0,0, 0.5), 0px 0px 2px rgba(0,0,0, 0.5);
+					cursor: pointer;
+
+					&[value="0"] {
+						border: 1px solid $bgLight;
+						background-color: $bgMed;
+					}
+
+					&:hover:not(.active) {
+						border-color: white;
+						opacity: 0.8 !important;
+					}
+					&.active {
+						margin: 0;
+						margin-top: 2px;
+						margin-bottom: 2px;
+						border: 3px solid white;
+						cursor: initial;
+					}
+					&:not(.active) {
+						opacity: 0.66;
+						background-image: url("../img/stripes.png");
+						background-repeat: repeat;
+					}
 				}
-				&.active {
-					border: 2px solid white;
-					border-left-width: 8px;
-				}
-				&:not(.active) {
-					opacity: 0.8;
+				li+li {
+					margin-top: 1px;
 				}
 			}
 		}
@@ -8996,7 +9034,7 @@ $patternSize : 32px;
 			display: grid;
 			min-width: 600px;
 			max-width: 90vw;
-			min-height: 350px;
+			min-height: 570px;
 			max-height: 72vh;
 			grid-template-columns: min-content auto;
 			grid-template-rows: 100%;
@@ -9007,21 +9045,48 @@ $patternSize : 32px;
 					margin-bottom: 8px;
 				}
 
+				label {
+					display: block;
+					color: $almostWhite;
+					margin-bottom: 4px;
+					font-size: 10pt;
+				}
+
+				info {
+					display: inline-block;
+					font-family: inherit;
+					width: 20px;
+					height: 18px;
+					margin: 0;
+					margin-left: 2px;
+					margin-right: 2px;
+					font-size: 11pt;
+					border-width: 2px;
+				}
+
 				.intGrid {
-					display: grid;
-					grid-template-columns: 32px 32px auto;
-					gap: 4px;
-					padding: 2px;
-					margin-bottom: 8px;
-					white-space: nowrap;
-					border-radius: 3px;
+					margin-bottom: 16px;
 					cursor: pointer;
+
+					.wrapper {
+						display: grid;
+						grid-template-columns: 32px 32px auto;
+						gap: 4px;
+						padding: 2px;
+						white-space: nowrap;
+						border-radius: 3px;
+					}
 
 					.color,
 					.id,
-					.name {
+					.name,
+					.noValue {
 						// border: 1px solid $bgLight;
 						padding: 6px;
+					}
+
+					&:not(.empty) .noValue {
+						display: none;
 					}
 
 					.id {
@@ -9031,28 +9096,52 @@ $patternSize : 32px;
 					&.empty {
 						grid-template-columns: auto;
 						font-size: 8pt;
-						color: $orangeLight;
-						border: 1px solid $orange;
-						background-color: $darkOrange;
-						box-shadow: 0px 0px 8px $darkOrange;
+						&.main {
+							color: $orangeLight;
+							border: 1px solid $orange;
+							background-color: $darkRed;
+							box-shadow: 0px 0px 8px $red;
+						}
+						&.other {
+							font-style: italic;
+							color: $almostWhite;
+							border: 1px solid $bgLight;
+							background-color: $bgMed;
+						}
 						.color,
-						.id {
+						.id,
+						.name {
 							display: none;
 						}
 					}
 					&:hover {
-						background-color: $orange;
+						background-color: $orange !important;
+						border-color: white !important;
 						* {
-							color: white;
+							color: black !important;
 						}
 					}
 				}
 
+				.important {
+					position: absolute;
+					z-index: 2;
+					margin-left: -1px;
+					margin-right: -1px;
+					width: calc( 6*32px + 5*1px );
+					height: calc( 5*32px + 4*1px );
+					border: 1px solid $help;
+					border-radius: 3px;
+					pointer-events: none;
+				}
 				.grid {
 					display: grid;
 					gap: 1px;
-					grid-template-columns: repeat(11, 32px);
+					grid-template-columns: repeat(12, 32px);
 					grid-template-rows: repeat(5, 32px);
+					background: url("../img/stripesLight.png") repeat;
+					background-color: black;
+					border: 1px solid $bgLight;
 
 					@media( max-width:900px) {
 						grid-template-columns: repeat(11, 16px);

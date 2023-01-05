@@ -626,7 +626,6 @@ class DocGenerator {
 
 		if( hasMeta(xml,"deprecation") ) {
 			var endVer = getMeta(xml,"deprecation", 1);
-			trace(endVer);
 			if( dn.Version.lowerEq(endVer, appVersion.numbers, true) )
 				badges.push( badge("Removed", endVer, appVersion.hasSameMajorAndMinor(endVer) ? "green" : "gray" ) );
 		}

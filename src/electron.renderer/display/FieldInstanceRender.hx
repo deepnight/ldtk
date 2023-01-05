@@ -11,6 +11,11 @@ enum FieldRenderContext {
 	LevelCtx(l:data.Level);
 }
 
+typedef RenderedField = {
+	var label : h2d.Flow;
+	var value : h2d.Flow;
+}
+
 class FieldInstanceRender {
 	static var MAX_TEXT_WIDTH = 250;
 	static var settings(get,never) : Settings;
@@ -203,12 +208,18 @@ class FieldInstanceRender {
 	}
 
 
-	public static function renderFields(fieldInstances:Array<data.inst.FieldInstance>, baseColor:Int, ctx:FieldRenderContext, parent:h2d.Flow) {
+	public static function renderFields(fieldInstances:Array<data.inst.FieldInstance>, baseColor:dn.Col, ctx:FieldRenderContext, parent:h2d.Flow) {
 		var allRenders = [];
 
 		var ei = switch ctx {
 			case EntityCtx(g, ei, ld): ei;
 			case LevelCtx(l): null;
+		}
+
+		switch settings.v.fieldsRender {
+			case FR_Outline:
+			case FR_Table:
+				parent.verticalSpacing = M.round( 2 * settings.v.editorUiScale );
 		}
 
 		// Detect errors
@@ -227,32 +238,74 @@ class FieldInstanceRender {
 				continue;
 
 			allRenders.push(fr);
-			var line = new h2d.Flow(parent);
-			line.verticalAlign = Middle;
-			line.setScale( settings.v.editorUiScale );
+			var row = new h2d.Flow(parent);
+			row.verticalAlign = Middle;
+			row.setScale( settings.v.editorUiScale );
 			if( fr.label.numChildren>0 ) {
-				line.addChild(fr.label);
-				line.addSpacing(6);
-				line.paddingBottom = 2;
+				row.addChild(fr.label);
+				row.addSpacing(6);
+				row.paddingBottom = 2;
 			}
 			else
-				line.horizontalAlign = Middle;
-			line.addChild(fr.value);
+				row.horizontalAlign = Middle;
+			row.addChild(fr.value);
 		}
+
+		parent.reflow();
+		// parent.debug = true;
 
 		// Align labels
 		var maxLabelWidth = 0.;
 		var maxValueWidth = 0.;
+		var anyLabel = false;
 		for(fr in allRenders) {
 			maxLabelWidth = M.fmax(maxLabelWidth, fr.label.outerWidth);
-			if( fr.label.numChildren>0 )
+
+			// Value width is only included if the value is to be aligned
+			if( settings.v.fieldsRender==FR_Table || fr.label.numChildren>0 )
 				maxValueWidth = M.fmax(maxValueWidth, fr.value.outerWidth);
+
+			if( fr.label.numChildren>0 )
+				anyLabel = true;
 		}
 		for(fr in allRenders)
 			if( fr.label.numChildren>0 ) {
+				// Align label + value
 				fr.label.minWidth = Std.int( maxLabelWidth );
 				fr.value.minWidth = Std.int( maxValueWidth );
 			}
+			else if( anyLabel && settings.v.fieldsRender==FR_Table ) {
+				// Align value only in table view
+				fr.value.paddingLeft = M.round( maxLabelWidth + 2*settings.v.editorUiScale );
+				fr.value.minWidth = Std.int( maxValueWidth );
+			}
+
+
+		switch settings.v.fieldsRender {
+			case FR_Outline:
+
+			case FR_Table:
+				final padX = 4 * settings.v.editorUiScale;
+				final padY = 2 * settings.v.editorUiScale;
+
+				// Labels background
+				if( anyLabel ) {
+					var bg = new h2d.Bitmap( h2d.Tile.fromColor(baseColor.toBlack(0.85)) );
+					parent.addChildAt(bg, 0);
+					parent.getProperties(bg).isAbsolute = true;
+					bg.setPosition(-padX, -padY+1);
+					bg.scaleX = maxLabelWidth*settings.v.editorUiScale + padX*2;
+					bg.scaleY = parent.outerHeight + padY*2;
+				}
+
+				// Fields background
+				var bg = new h2d.Bitmap( h2d.Tile.fromColor(baseColor.toBlack(0.65)) );
+				parent.addChildAt(bg, 0);
+				parent.getProperties(bg).isAbsolute = true;
+				bg.setPosition(-padX + maxLabelWidth*settings.v.editorUiScale, -padY+1);
+				bg.scaleX = parent.outerWidth - maxLabelWidth*settings.v.editorUiScale + padX*2;
+				bg.scaleY = parent.outerHeight + padY*2;
+		}
 	}
 
 
@@ -284,18 +337,22 @@ class FieldInstanceRender {
 	}
 
 
-	static inline function createText(target:h2d.Object, col:dn.Col) {
+	static inline function createText(target:h2d.Flow, col:dn.Col) {
 		var tf = new h2d.Text(Assets.getRegularFont(), target);
 		col.lightness = 1;
 		tf.textColor = col;
+		target.getProperties(tf).offsetY = M.round(-2*settings.v.editorUiScale); // compensate font base line
 		return tf;
 	}
 
-	public static inline function createFilter(col:dn.Col) {
-		return new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.1);
+	public static inline function createFilter(col:dn.Col) : Null<h2d.filter.Filter> {
+		return switch settings.v.fieldsRender {
+			case FR_Outline: new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.1);
+			case FR_Table: null;
+		}
 	}
 
-	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<{ label:h2d.Flow, value:h2d.Flow }> {
+	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<RenderedField> {
 		var fd = fi.def;
 
 		var labelFlow = new h2d.Flow();
@@ -338,7 +395,7 @@ class FieldInstanceRender {
 			case NameAndValue:
 				// Label
 				var tf = createText(labelFlow, baseColor.toWhite(0.6));
-				tf.text = fd.identifier+" =";
+				tf.text = fd.identifier + ( settings.v.fieldsRender==FR_Outline ? " =" : "" );
 
 				// Value
 				valueFlow.addChild( FieldInstanceRender.renderValue(ctx, fi, C.toWhite(baseColor, 0.25)) );
@@ -462,7 +519,10 @@ class FieldInstanceRender {
 				}
 		}
 
-		return { label:labelFlow, value:valueFlow };
+		return {
+			label: labelFlow,
+			value: valueFlow,
+		};
 	}
 
 
