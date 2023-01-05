@@ -2995,8 +2995,9 @@ textarea {
 				font-size: 10pt;
 				border: 1px solid $bgLight;
 				border-radius: 3px;
-				margin-bottom: 16px;
+				margin-bottom: 8px;
 				cursor: pointer;
+				background-color: $bgMed;
 
 				&:hover {
 					border-color: $orange;
@@ -3012,7 +3013,7 @@ textarea {
 				}
 
 				&:not(.collapsed) {
-					background-color: $bgMed;
+					padding-bottom: 16px;
 
 					.hotfixVersion {
 						margin-bottom: 8px;
@@ -3029,6 +3030,12 @@ textarea {
 					.icon {
 						background-image: url("../icons/collapsed.svg");
 					}
+				}
+
+				&.latest:not(.collapsed) {
+					color: white;
+					border-color: $almostWhite;
+					background-color: $bgLight;
 				}
 
 				&>ul {
