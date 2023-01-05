@@ -7,6 +7,10 @@
 </button>
 
 <dl class="form">
+	<dt class="full">
+		<h3>Interface</h3>
+	</dt>
+
 	<dt>
 		<label for="appScale">General UI scale</label>
 		<info>This setting will affect the whole User Interface size.</info>
@@ -44,6 +48,19 @@
 	</dd>
 
 	<dt>
+		<label for="colorBlind">Prefer color-blind colors</label>
+		<info>Enable this option to use color-blind friendly colors by default for newly created entities, enums or intGrid values.</info>
+	</dt>
+	<dd>
+		<input type="checkbox" id="colorBlind" />
+	</dd>
+
+
+	<dt class="full">
+		<h3>General</h3>
+	</dt>
+
+	<dt>
 		<label for="startFullScreen">Start in fullscreen mode</label>
 		<info>
 			Set default "Full screen" state when starting ::app::.
@@ -60,14 +77,6 @@
 	</dt>
 	<dd>
 		<input type="checkbox" id="openLastProject" />
-	</dd>
-
-	<dt>
-		<label for="colorBlind">Color blind mode</label>
-		<info>Enable this option to use color-blind friendly colors by default for newly created entities, enums or intGrid values.</info>
-	</dt>
-	<dd>
-		<input type="checkbox" id="colorBlind" />
 	</dd>
 
 	<dt>
