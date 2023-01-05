@@ -2,45 +2,45 @@ package ui.modal.dialog;
 
 enum WallFragment {
 	// WARNING: the order of the enum is used to sort rules accordingly!
-	@at(2,3) Single;
-	@at(2,4) Cross;
+	@at(3,1) Single;
+	@at(3,2) Cross;
 
-	@at(3,0) Turn_NW;
-	@at(4,0) Turn_NE;
-	@at(4,1) Turn_SE;
-	@at(3,1) Turn_SW;
+	@at(2,3) Turn_NW;
+	@at(3,3) Turn_NE;
+	@at(3,4) Turn_SE;
+	@at(2,4) Turn_SW;
 
-	@at(4,2) Diagonal_SW_NE;
-	@at(4,3) Diagonal_NW_SE;
-	@at(5,2) Corner_NW_to_N;
-	@at(5,0) Corner_NW_to_W;
-	@at(9,0) Corner_NW_to_NW;
-	@at(6,2) Corner_NE_to_N;
-	@at(6,0) Corner_NE_to_E;
-	@at(10,0) Corner_NE_to_NE;
-	@at(6,1) Corner_SE_to_E;
-	@at(6,3) Corner_SE_to_S;
-	@at(10,1) Corner_SE_to_SE;
-	@at(5,3) Corner_SW_to_S;
-	@at(5,1) Corner_SW_to_W;
-	@at(9,1) Corner_SW_to_SW;
+	@at(10,2) Diagonal_SW_NE;
+	@at(10,3) Diagonal_NW_SE;
+	@at(6,2) Corner_NW_to_N;
+	@at(6,0) Corner_NW_to_W;
+	@at(10,0) Corner_NW_to_NW;
+	@at(7,2) Corner_NE_to_N;
+	@at(7,0) Corner_NE_to_E;
+	@at(11,0) Corner_NE_to_NE;
+	@at(7,1) Corner_SE_to_E;
+	@at(7,3) Corner_SE_to_S;
+	@at(11,1) Corner_SE_to_SE;
+	@at(6,3) Corner_SW_to_S;
+	@at(6,1) Corner_SW_to_W;
+	@at(10,1) Corner_SW_to_SW;
 
-	@at(7,3) TCross_N;
-	@at(7,2) TCross_E;
-	@at(8,2) TCross_S;
-	@at(8,3) TCross_W;
+	@at(8,3) TCross_N;
+	@at(8,2) TCross_E;
+	@at(9,2) TCross_S;
+	@at(9,3) TCross_W;
 
-	@at(7,0) TWall_W;
-	@at(8,0) TWall_E;
-	@at(7,1) TWall_S;
-	@at(8,1) TWall_N;
+	@at(8,0) TWall_W;
+	@at(9,0) TWall_E;
+	@at(8,1) TWall_S;
+	@at(9,1) TWall_N;
 
-	@at(4,4) Horizontal_W;
-	@at(6,4) Horizontal_E;
-	@at(5,4) Horizontal_Mid;
-	@at(3,2) Vertical_N;
-	@at(3,4) Vertical_S;
-	@at(3,3) Vertical_Mid;
+	@at(3,0) Horizontal_W;
+	@at(5,0) Horizontal_E;
+	@at(4,0) Horizontal_Mid;
+	@at(4,1) Vertical_N;
+	@at(4,3) Vertical_S;
+	@at(4,2) Vertical_Mid;
 
 	@at(0,0) ExtCorner_NW;
 	@at(2,0) ExtCorner_NE;
@@ -346,7 +346,7 @@ class RulesWizard extends ui.modal.Dialog {
 
 			// Cell layout
 			var id = getIconId(f);
-			var jImg = createJqueryImage(id, 48);
+			var jImg = iconToJqueryImage(id, 48);
 			if( !jCell.is(":empty") )
 				jImg.addClass("faded");
 			jCell.append(jImg);
@@ -678,12 +678,29 @@ class RulesWizard extends ui.modal.Dialog {
 
 
 	var _cachedAtlasPixels : Null<hxd.Pixels>;
-	public function createHtmlImage(iconId:String) : js.html.Image {
+	public function iconToHtmlImage(iconId:String) : js.html.Image {
 		if( _cachedAtlasPixels==null )
 			_cachedAtlasPixels = hxd.Res.atlas.icons.toAseprite().toTile().getTexture().capturePixels();
 
 		var tile = Assets.aseIcons.getTile(iconId);
 		var subPixels = _cachedAtlasPixels.sub(tile.ix, tile.iy, tile.iwidth, tile.iheight);
+
+		// Colorize pixels using IntGrid colors
+		var p : dn.Col = 0;
+		var mainColor = mainValue==0 ? dn.Col.white(true) : ld.getIntGridValueColor(mainValue).withAlpha(1);
+		var otherColor = otherValue==0 ? dn.Col.black(true) : ld.getIntGridValueColor(otherValue).withAlpha(1);
+		mainColor = mainColor.toBlack(0.6);
+		otherColor = otherColor.toBlack(0.6);
+		for(y in 0...subPixels.height)
+		for(x in 0...subPixels.width) {
+			p = subPixels.getPixel(x,y);
+			if( p.rf>0.5 )
+				subPixels.setPixel( x, y, mainColor.toBlack( (1-p.rf) ) );
+			else
+				subPixels.setPixel( x, y, otherColor );
+		}
+
+		// Build HTML image
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		img.src = 'data:image/png;base64,$b64';
@@ -691,8 +708,8 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
-	public function createJqueryImage(iconId:String, size=48) : js.jquery.JQuery {
-		var jImg = new J( createHtmlImage(iconId) );
+	public function iconToJqueryImage(iconId:String, size=48) : js.jquery.JQuery {
+		var jImg = new J( iconToHtmlImage(iconId) );
 		jImg.css({
 			width:size+"px",
 			height:size+"px",

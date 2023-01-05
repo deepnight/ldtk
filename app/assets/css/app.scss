@@ -9120,11 +9120,25 @@ $patternSize : 32px;
 					}
 				}
 
+				.important {
+					position: absolute;
+					z-index: 2;
+					margin-left: -1px;
+					margin-right: -1px;
+					width: calc( 6*32px + 5*1px );
+					height: calc( 5*32px + 4*1px );
+					border: 1px solid $help;
+					border-radius: 3px;
+					pointer-events: none;
+				}
 				.grid {
 					display: grid;
 					gap: 1px;
-					grid-template-columns: repeat(11, 32px);
+					grid-template-columns: repeat(12, 32px);
 					grid-template-rows: repeat(5, 32px);
+					background: url("../img/stripesLight.png") repeat;
+					background-color: black;
+					border: 1px solid $bgLight;
 
 					@media( max-width:900px) {
 						grid-template-columns: repeat(11, 16px);
