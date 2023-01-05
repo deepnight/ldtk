@@ -23,7 +23,7 @@ class EntityRender extends dn.Process {
 	var fieldGraphics : h2d.Graphics;
 
 	var layoutInvalidated = true;
-	var renderInvalidated = true;
+	var fieldsRenderInvalidated = true;
 
 
 	public function new(inst:data.inst.EntityInstance, layerDef:data.def.LayerDef, parent:h2d.Object) {
@@ -73,10 +73,11 @@ class EntityRender extends dn.Process {
 				renderAll();
 
 			case EntityDefChanged:
-				renderInvalidated = true;
+				fieldsRenderInvalidated = true;
 				layoutInvalidated = true;
 
 			case ViewportChanged:
+				fieldsRenderInvalidated = true;
 				layoutInvalidated = true;
 
 			case _:
@@ -263,7 +264,6 @@ class EntityRender extends dn.Process {
 
 
 	public function renderAll() {
-		renderInvalidated = false;
 		core.removeChildren();
 		_coreRender = renderCore(ei, ed, ld);
 		core.addChild( _coreRender.wrapper );
@@ -388,9 +388,10 @@ class EntityRender extends dn.Process {
 	override function postUpdate() {
 		super.postUpdate();
 
-		if( renderInvalidated && !cd.has("fullRenderLimit") ) {
-			cd.setS("fullRenderLimit", 0.10);
-			renderAll();
+		if( fieldsRenderInvalidated && !cd.has("fieldsRenderLimit") ) {
+			cd.setS("fieldsRenderLimit", 0.20);
+			renderFields();
+			fieldsRenderInvalidated = false;
 		}
 
 		if( layoutInvalidated && !cd.has("layoutLimit") ) {
