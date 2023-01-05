@@ -1,7 +1,10 @@
 # 1.2.2
 
- - Re-designed the JSON online documentation to be easier to use (https://ldtk.io/json)
+ - Added an option to use the old-school "opaque tables" visuals for Entity fields (see in the application settings, `F12` shortcut)
+ - Re-designed the [JSON online documentation](https://ldtk.io/json) to be *way* easier to use.
+ - Updated the application settings window
  - Fixed `A` keyboard shortcut for non-WASD keyboards
+ - Fixed external links in Release Notes window
  - macOS builds are now "universal" like the Windows ones. This means that the official macOS release should now install properly on both Intel and Apple Silicon architectures. The downside is that the installer is now larger than before.
 
 # 1.2.1
