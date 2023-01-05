@@ -144,19 +144,20 @@ class Changelog extends ui.modal.Dialog {
 
 				var jVer = new J('<div class="hotfixVersion"/>');
 				jVer.append('<span class="icon"></span>');
-				jVer.append('Patch ${c.version.patch} <em>(${c.version.toString()})</em>');
+				jVer.append('Patch ${c.version.toString()}');
 				jHotFix.prepend(jVer);
 				count++;
 			}
 
-			if( changeLog.version.hasSameMajorAndMinor(Const.getAppVersion(true)) )
-				jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
-			else
-				jHotFixes.find(".hotfix").addClass("collapsed");
+			// Highlight latest
+			if( changeLog.version.hasSameMajorAndMinor( Const.getAppVersion(true) ) )
+				jHotFixes.find(".hotfix:first").addClass("latest");
 
 			if( count>0 )
 				jContent.find("#updateChangelogHtml").prepend('<h2 class="version">Changes from ${changeLog.version.full}</h2>');
 		}
+
+		JsTools.parseComponents(jContent);
 	}
 
 }

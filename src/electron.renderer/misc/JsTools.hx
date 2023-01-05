@@ -574,6 +574,7 @@ class JsTools {
 
 			link.click( function(ev:js.jquery.Event) {
 				ev.preventDefault();
+				ev.stopPropagation();
 				electron.Shell.openExternal(url);
 				N.msg("Opening url...");
 			});
