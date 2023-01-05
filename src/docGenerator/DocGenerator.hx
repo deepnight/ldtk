@@ -514,6 +514,10 @@ class DocGenerator {
 			var descMd = [];
 			if( deprecation!=null ) {
 				if( appVersion.compareEverything(deprecation.removal)<0 ) {
+					/*
+						WARNING!! Changing this text might break the JsonDoc template on the website!
+						Make sure to update the template if needed.
+					*/
 					descMd.push('**WARNING**: this deprecated value will be *removed* completely on version ${deprecation.removal}+');
 
 				}
