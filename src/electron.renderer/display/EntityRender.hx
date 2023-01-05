@@ -16,6 +16,7 @@ class EntityRender extends dn.Process {
 	var _coreRender : Null<CoreRender>;
 
 	// Field wrappers
+	var identifier: Null<h2d.Text>;
 	var above: h2d.Flow;
 	var center: h2d.Flow;
 	var beneath: h2d.Flow;
@@ -71,8 +72,11 @@ class EntityRender extends dn.Process {
 			case WorldLevelMoved(_), WorldSettingsChanged, LayerInstanceSelected, LevelSelected(_):
 				renderAll();
 
-			case ViewportChanged:
+			case EntityDefChanged:
 				renderInvalidated = true;
+				layoutInvalidated = true;
+
+			case ViewportChanged:
 				layoutInvalidated = true;
 
 			case _:
@@ -313,25 +317,23 @@ class EntityRender extends dn.Process {
 		}
 
 		// Identifier label
+		if( ei.def.showName && identifier==null )
+			identifier = new h2d.Text(Assets.getRegularFont(), root);
+		else if( !ei.def.showName && identifier!=null ) {
+			identifier.remove();
+			identifier = null;
+		}
 		if( ei.def.showName ) {
 			var col = ei.getSmartColor(true);
-			var f = new h2d.Flow(above);
-			f.horizontalAlign = Middle;
-			var tf = new h2d.Text(Assets.getRegularFont(), f);
-			tf.filter = FieldInstanceRender.createFilter(col);
-			tf.scale(settings.v.editorUiScale);
-			tf.textColor = col;
-			tf.text = ed.identifier.substr(0,16);
-			tf.x = Std.int( ei.width*0.5 - tf.textWidth*tf.scaleX*0.5 );
-			tf.y = 0;
-			FieldInstanceRender.createBgText(tf, f, ei.getSmartColor(false));
+			identifier.filter = FieldInstanceRender.createFilter(col);
+			identifier.textColor = col;
+			identifier.text = ed.identifier.substr(0,16);
 		}
 
 		updateLayout();
 	}
 
 	public inline function updateLayout() {
-		layoutInvalidated = false;
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
 		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;
@@ -353,12 +355,22 @@ class EntityRender extends dn.Process {
 		}
 
 
+		// Identifier
+		if( identifier!=null ) {
+			identifier.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
+			identifier.setScale(zoomScale);
+			identifier.x = Std.int( -ei.width*ed.pivotX - identifier.textWidth*0.5*identifier.scaleX + ei.width*0.5 );
+			identifier.y = Std.int( -identifier.textHeight*identifier.scaleY - ei.height*ed.pivotY );
+		}
+
 		// Update field wrappers
 		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 		if( above.visible ) {
 			above.setScale(zoomScale);
-			above.x = Std.int( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
+			above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
 			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY );
+			if( identifier!=null )
+				above.y -= identifier.textHeight*identifier.scaleY;
 			above.alpha = 1;
 
 			center.setScale(zoomScale);
@@ -382,8 +394,9 @@ class EntityRender extends dn.Process {
 		}
 
 		if( layoutInvalidated && !cd.has("layoutLimit") ) {
-			cd.setS("layoutLimit", 0.06);
+			cd.setS("layoutLimit", 0.03);
 			updateLayout();
+			layoutInvalidated = false;
 		}
 
 	}

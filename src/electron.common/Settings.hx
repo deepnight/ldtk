@@ -26,6 +26,7 @@ typedef AppSettings = {
 	var editorUiScale : Float;
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
+	var fieldsRender : FieldsRender;
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
@@ -44,6 +45,11 @@ enum AutoWorldModeSwitch {
 	Never;
 	ZoomOutOnly;
 	ZoomInAndOut;
+}
+
+enum FieldsRender {
+	FR_Outline;
+	FR_Table;
 }
 
 
@@ -84,6 +90,7 @@ class Settings {
 			lastProject: null,
 
 			autoWorldModeSwitch: ZoomInAndOut,
+			fieldsRender: FR_Outline,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
