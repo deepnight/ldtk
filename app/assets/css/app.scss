@@ -2680,7 +2680,13 @@ textarea {
 
 .window.editAppSettings {
 	.wrapper .content {
-		width: 600px;
+		width: 940px;
+
+		.columns {
+			display: grid;
+			grid-template-columns: 380px auto;
+			gap: 32px;
+		}
 
 		button.update {
 			display: grid;
@@ -2728,6 +2734,7 @@ textarea {
 
 				button {
 					flex: 0 1 0px;
+					padding: 0 2px;
 				}
 			}
 
