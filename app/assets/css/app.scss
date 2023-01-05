@@ -9050,15 +9050,18 @@ $patternSize : 32px;
 					color: $almostWhite;
 					margin-bottom: 4px;
 					font-size: 10pt;
-					info {
-						display: inline-block;
-						width: 20px;
-						height: 18px;
-						margin: 0;
-						margin-right: 2px;
-						font-size: 11pt;
-						border-width: 2px;
-					}
+				}
+
+				info {
+					display: inline-block;
+					font-family: inherit;
+					width: 20px;
+					height: 18px;
+					margin: 0;
+					margin-left: 2px;
+					margin-right: 2px;
+					font-size: 11pt;
+					border-width: 2px;
 				}
 
 				.intGrid {

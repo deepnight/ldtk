@@ -6,7 +6,7 @@
 		<h3>1. IntGrid values</h3>
 
 		<label>
-			<info>TODO</info>
+			<info>This is the IntGrid value that will be used to paint tiles using automated rules.</info>
 			Main IntGrid value
 		</label>
 		<div class="intGrid main empty">
@@ -19,7 +19,11 @@
 		</div>
 
 		<label>
-			<info>TODO</info>
+			<info>
+				If this "outer value" is not defined, the automated rules will check if the "main value" is near something that is not the "main value".
+				If an "outer value" is defined, the rules will check if the "main value" is near the "outer value".
+				Example: "Grass" as the main value, with "Dirt" as the outer value.
+			</info>
 			Outer IntGrid value
 		</label>
 		<div class="intGrid other empty">
@@ -36,10 +40,12 @@
 		<input type="text" name="name"/>
 
 
-		<h3>3. Auto-rendered tiles</h3>
-		<div class="help">
-			You don't have to fill all the tiles! The important ones in most scenarios are the ones in the green area.
-		</div>
+		<h3>
+			3. Auto-rendered tiles
+			<info>
+				You don't have to fill all the tiles! The important ones in most scenarios are the ones in the green area.
+			</info>
+		</h3>
 		<div class="important"></div>
 		<div class="grid"></div>
 	</div>
