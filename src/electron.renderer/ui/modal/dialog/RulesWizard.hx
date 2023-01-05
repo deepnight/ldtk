@@ -70,8 +70,10 @@ class RulesWizard extends ui.modal.Dialog {
 	var jName : js.jquery.JQuery;
 	var currentFragment : Null<WallFragment>;
 	var fragments : Map<WallFragment, Array<Int>> = new Map();
-	var intGridValue : Int = 0;
 	var groupName = "";
+
+	var mainValue : Int = 0;
+	var otherValue : Int = 0;
 
 	var _allFragmentEnums : Array<WallFragment> = [];
 
@@ -103,9 +105,15 @@ class RulesWizard extends ui.modal.Dialog {
 		}
 
 		// IntGrid value picker
-		var jInt = jContent.find(".intGrid");
+		var jInt = jContent.find(".intGrid.main");
 		jInt.click(_->{
-			new ui.modal.dialog.IntGridValuePicker(ld, intGridValue, onPickIntGridValue);
+			new ui.modal.dialog.IntGridValuePicker(jInt, ld, mainValue, onPickIntGridValue);
+		});
+
+		// Other intGrid value picker
+		var jInt = jContent.find(".intGrid.other");
+		jInt.click(_->{
+			new ui.modal.dialog.IntGridValuePicker(jInt, ld, otherValue, jInt.find(".noValue").text(), onPickOtherValue);
 		});
 
 		// Name input
@@ -114,7 +122,7 @@ class RulesWizard extends ui.modal.Dialog {
 
 		// Confirm
 		addButton(baseRg==null ? L.t._("Create rules") : L.t._("Update rules"), ()->{
-			if( intGridValue==0 ) {
+			if( mainValue==0 ) {
 				Notification.error(L.t._("You need to pick an IntGrid value."));
 				return;
 			}
@@ -148,18 +156,32 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
-	function guessIntGridValue(source:data.DataTypes.AutoLayerRuleGroup) {
+	function guessMainValue(source:data.DataTypes.AutoLayerRuleGroup) {
+		trace(source.rules);
+		for(r in source.rules)
+			if( r.size==1 ) {
+				trace(r);
+				return M.iabs( r.get(0,0) );
+			}
+		return 0;
+	}
+
+
+	function guessOtherValue(source:data.DataTypes.AutoLayerRuleGroup) {
 		for(r in source.rules)
 		for(cy in 0...r.size)
 		for(cx in 0...r.size)
-			if( r.get(cx,cy)!=0 && M.fabs(r.get(cx,cy))<Const.AUTO_LAYER_ANYTHING )
+			if( r.get(cx,cy)!=0 && M.iabs(r.get(cx,cy))!=mainValue && M.iabs(r.get(cx,cy)) < Const.AUTO_LAYER_ANYTHING )
 				return M.iabs( r.get(cx,cy) );
 		return 0;
 	}
 
 	function importRuleGroup(source:data.DataTypes.AutoLayerRuleGroup) {
-		intGridValue = guessIntGridValue(source);
-		if( intGridValue==0 )
+		// Guess intGrid values
+		mainValue = guessMainValue(source);
+		otherValue = guessOtherValue(source);
+		trace(mainValue+"/"+otherValue);
+		if( mainValue==0 )
 			return;
 
 		editedGroup = source;
@@ -208,10 +230,19 @@ class RulesWizard extends ui.modal.Dialog {
 		if( v==0 )
 			return;
 
-		intGridValue = v;
+		mainValue = v;
+		if( mainValue==otherValue )
+			onPickOtherValue(0);
+
 		var vd = ld.type==IntGrid ? ld.getIntGridValueDef(v) : ld.autoSourceLd.getIntGridValueDef(v);
 		if( editedGroup==null )
 			setName( vd.identifier==null ? "Rules for #"+v : vd.identifier );
+		updateUI();
+	}
+
+
+	function onPickOtherValue(v:Int) {
+		otherValue = v;
 		updateUI();
 	}
 
@@ -255,18 +286,28 @@ class RulesWizard extends ui.modal.Dialog {
 		updateGrid();
 		updateTileset();
 
-		if( intGridValue>0 ) {
-			var color = ld.type==IntGrid ? ld.getIntGridValueColor( intGridValue ) : ld.autoSourceLd.getIntGridValueColor(intGridValue);
-			var jInt = jContent.find(".intGrid");
+		updateIntGridValue("main", mainValue);
+		updateIntGridValue("other", otherValue);
+	}
+
+
+	function updateIntGridValue(className:String, value:Int) {
+		var jInt = jContent.find(".intGrid."+className);
+		if( value<=0 ) {
+			jInt.addClass("empty");
+			jInt.removeAttr("style");
+		}
+		else {
+			var color = ld.type==IntGrid ? ld.getIntGridValueColor( value ) : ld.autoSourceLd.getIntGridValueColor(value);
 			jInt.css("background-color", color.toBlack(0.4).toHex());
 			jInt.css("color", color.toWhite(0.6).toHex());
 			jInt.removeClass("empty");
 
 			jInt.find(".color").css("background-color", color.toHex());
 
-			jInt.find(".id").html("#"+intGridValue);
+			jInt.find(".id").html("#"+value);
 
-			var vd = ld.type==IntGrid ? ld.getIntGridValueDef( intGridValue ) : ld.autoSourceLd.getIntGridValueDef(intGridValue);
+			var vd = ld.type==IntGrid ? ld.getIntGridValueDef( value ) : ld.autoSourceLd.getIntGridValueDef(value);
 			jInt.find(".name").html(vd.identifier==null ? "Unnamed" : vd.identifier);
 		}
 	}
@@ -457,7 +498,7 @@ class RulesWizard extends ui.modal.Dialog {
 		for(line in m) {
 			var cx = 0;
 			for(c in line.split("")) {
-				out.set( cx+cy*3, c=="x" ? -intGridValue : c=="o" ? intGridValue : 0 );
+				out.set( cx+cy*3, c=="x" ? getOtherValueForMatrix() : c=="o" ? mainValue : 0 );
 				cx++;
 			}
 			cy++;
@@ -662,6 +703,9 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
+	inline function getOtherValueForMatrix() {
+		return otherValue==0 ? -mainValue : otherValue;
+	}
 
 	function createRule(rg:data.DataTypes.AutoLayerRuleGroup, f:WallFragment) {
 		if( !fragments.exists(f) )
@@ -678,8 +722,8 @@ class RulesWizard extends ui.modal.Dialog {
 		for(cx in 0...size) {
 			var c = m[cy].charAt(cx);
 			rd.set(cx,cy, switch c {
-				case "x": -intGridValue;
-				case "o": intGridValue;
+				case "x": getOtherValueForMatrix();
+				case "o": mainValue;
 				case _: 0;
 			});
 		}
@@ -688,7 +732,7 @@ class RulesWizard extends ui.modal.Dialog {
 		rd.tileIds = fragments.get(f).copy();
 
 		// Out of bounds policy
-		rd.outOfBoundsValue = intGridValue;
+		rd.outOfBoundsValue = mainValue;
 
 		// Break on match flag
 		// var opaque = true;
@@ -708,6 +752,9 @@ class RulesWizard extends ui.modal.Dialog {
 				if( alt.flipY )
 					rd.flipY = true;
 			}
+
+		// Trim & cleanup
+		rd.tidy();
 
 		return true;
 	}
