@@ -670,6 +670,8 @@ class FieldDef {
 			var pos = r.matchedPos();
 			keep.push( r.matched(0) );
 			sub = r.matchedRight();
+			if( sub.length==0 )
+				break;
 		}
 
 		return keep.join("");
