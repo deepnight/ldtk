@@ -158,37 +158,36 @@ class Const {
 		0xffdf4d,
 	];
 
-	public static function getNicePalette() {
+	public static inline function getNicePalette() {
 		return App.ME.settings.v.colorBlind ? NICE_PALETTE_COLORBLIND : NICE_PALETTE;
 	}
 
 	public static function suggestNiceColor(useds:Array<dn.Col>) : dn.Col {
-		// Look in "Nice palette" for colors distinct from the ones in "useds" palette
-		var pool = [];
-		for(nice in getNicePalette()) {
-			var ok = true;
-			for(used in useds)
-				if( nice.getDistanceRgb(used)<0.1 ) {
-					ok = false;
-					break;
-				}
-			if( ok )
-				pool.push(nice);
+		var useCounts = new Map();
+		inline function _incUseCount(c:dn.Col) {
+			if( useCounts.exists(c) )
+				useCounts.set(c, useCounts.get(c)+1);
+			else
+				useCounts.set(c, 1);
 		}
 
-		if( pool.length==0 ) {
-			// No match in Nice Palette, just build a new random color
-			return dn.Col.randomHSL(dn.RandomTools.rnd(0,1), dn.RandomTools.rnd(0.6,0.8), dn.RandomTools.rnd(0.7,1));
-		}
-		else {
-			// Prefer colors that are not too bright or dark
-			var dh = new dn.DecisionHelper(pool);
-			for(uc in useds)
-				dh.score( c->c.getDistanceRgb(uc)*0.5 );
-			dh.score( c->c.fastLuminance>=0.4 && c.fastLuminance<=0.75 ? 50 : 0 );
-			dh.score( c->dn.RandomTools.rnd(0,5) );
-			return dh.getBest();
-		}
+		// Init use counts
+		for(c in useds)
+			_incUseCount(c);
+
+		// Consider nice colors similar to used ones as being "used" as well
+		for(used in useds)
+		for(nice in getNicePalette())
+			if( nice.getDistanceRgb(used)<0.1 )
+				_incUseCount(nice);
+
+		// Lookup unused nice colors
+		for(c in getNicePalette())
+			if( !useCounts.exists(c) )
+				return c;
+
+		// Pick least used nice color
+		return dn.DecisionHelper.optimizedPick( getNicePalette(), (c)->-useCounts.get(c) );
 	}
 
 	public static var AUTO_LAYER_ANYTHING = 1000001;
