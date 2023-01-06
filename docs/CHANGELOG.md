@@ -1,3 +1,8 @@
+# 1.2.3
+
+ - Added a big warning when creating a new project right in the app dir (any user files in the app dir are lost during updates)
+ - Better warning when saving an existing project in the app dir.
+
 # 1.2.2
 
  - Added an option to use the old-school "opaque tables" visuals for Entity fields (see in the application settings, `F12` shortcut)
