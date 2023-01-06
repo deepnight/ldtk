@@ -13,6 +13,7 @@
 
 -D editor
 -D electron
+-D unlimitedProcesses
 
 -main Boot
 # -dce full
