@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.2.2",
+		"appVersion": "1.2.3",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a2e6e900-7820-11ed-b6fd-61d0df8fd468",
-	"jsonVersion": "1.2.2",
-	"appBuildId": 464703,
+	"jsonVersion": "1.2.3",
+	"appBuildId": 464726,
 	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearVertical",
@@ -1405,7 +1405,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "89bff5a0-7820-11ed-84e8-a36c0f116d48"
+								"worldIid": "93399530-7820-11ed-b1d0-09be02ee3e7e"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1427,7 +1427,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "89bff5a0-7820-11ed-84e8-a36c0f116d48"
+								"worldIid": "93399530-7820-11ed-b1d0-09be02ee3e7e"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1449,7 +1449,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "89bff5a0-7820-11ed-84e8-a36c0f116d48"
+								"worldIid": "93399530-7820-11ed-b1d0-09be02ee3e7e"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
