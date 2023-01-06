@@ -659,29 +659,34 @@ class GenericLevelElementGroup {
 
 					// Duplicate entity
 					if( isCopy ) {
-						// Check limits
 						var ed = ei.def;
 						var oldEi = ei;
 						var newEi : data.inst.EntityInstance = null;
-						var all = ei._project.getAllEntitiesFromLimitScope(li, ed, ed.limitScope);
-						switch ed.limitBehavior {
-							case DiscardOldOnes:
-								if( all.length>=ed.maxCount )
-									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
-								else
-									newEi = li.duplicateEntityInstance(ei);
 
-							case PreventAdding:
-								if( all.length>=ed.maxCount )
-									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
-								else
-									newEi = li.duplicateEntityInstance(ei);
+						// Check limits
+						if( ed.maxCount<=0 )
+							newEi = li.duplicateEntityInstance(ei);
+						else {
+							var all = ei._project.getAllEntitiesFromLimitScope(li, ed, ed.limitScope);
+							switch ed.limitBehavior {
+								case DiscardOldOnes:
+									if( all.length>=ed.maxCount )
+										N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+									else
+										newEi = li.duplicateEntityInstance(ei);
 
-							case MoveLastOne:
-								if( all.length>=ed.maxCount )
-									N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
-								else
-									newEi = li.duplicateEntityInstance(ei);
+								case PreventAdding:
+									if( all.length>=ed.maxCount )
+										N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+									else
+										newEi = li.duplicateEntityInstance(ei);
+
+								case MoveLastOne:
+									if( all.length>=ed.maxCount )
+										N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+									else
+										newEi = li.duplicateEntityInstance(ei);
+							}
 						}
 
 						// Allow duplication
