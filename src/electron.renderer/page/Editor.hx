@@ -1579,10 +1579,11 @@ class Editor extends Page {
 		if( !bypasses.exists("sample") && App.ME.isInAppDir(project.filePath.full, true) ) {
 			bypasses.set("sample",true);
 			new ui.modal.dialog.Choice(
-				Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
+				Lang.t._("<strong>WARNING:</strong> you are trying to save a file in the application directory!\n<strong>Any file saved here will be LOST during an app update.</strong>"),
+				// Lang.t._("The file you're trying to save is a ::app:: sample map.\nAny change to it will be lost during automatic updates, so it's NOT recommended to modify it.", { app:Const.APP_NAME }),
 				[
-					{ label:"Save to another file", cb:onSave.bind(true, bypasses, onComplete) },
-					{ label:"Save anyway", className:"gray", cb:onSave.bind(false, bypasses, onComplete) },
+					{ label:"Save somewhere else", cb:onSave.bind(true, bypasses, onComplete) },
+					{ label:"Save anyway (and lose my file during next update)", className:"gray", cb:onSave.bind(false, bypasses, onComplete) },
 				]
 			);
 			return;
