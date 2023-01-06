@@ -5,8 +5,9 @@
 - [ ] Add code signing files to env
 - [ ] Check code signing exp. date: 2025-02-21
 
-## Unit tests
+## Testing
 
+- [ ] Pack a local Setup and test it
 - [ ] Add API unit tests for all new features
 
 ## Preparation & checks
@@ -18,7 +19,6 @@
 - [ ] Check JSON doc (changed/added flags etc.)
 - [ ] Run Haxe API tests
 - [ ] Build Haxe API samples
-- [ ] Pack a local Setup and test it
 
 ## Git
 - [ ] Merge LDtk repo to `master`
