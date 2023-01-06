@@ -502,18 +502,35 @@ class Home extends Page {
 			fp.extension = "ldtk";
 			settings.storeUiDir("NewProject", fp.directory);
 
-			var p = data.Project.createEmpty(fp.full);
+			function _createNew() {
+				var p = data.Project.createEmpty(fp.full);
 
-			var data = ui.ProjectSaver.prepareProjectSavingData(p);
-			new ui.ProjectSaver(this, p, (success)->{
-				if( success ) {
-					N.msg("New project created: "+p.filePath.full);
-					App.ME.loadPage( ()->new Editor(p), true );
-				}
-				else {
-					N.error("Couldn't create this project file!");
-				}
-			});
+				var data = ui.ProjectSaver.prepareProjectSavingData(p);
+				new ui.ProjectSaver(this, p, (success)->{
+					if( success ) {
+						N.msg("New project created: "+p.filePath.full);
+						App.ME.loadPage( ()->new Editor(p), true );
+					}
+					else {
+						N.error("Couldn't create this project file!");
+					}
+				});
+			}
+
+			// Check if file isn't in app dir
+			if( App.ME.isInAppDir(fp.full, true) ) {
+				new ui.modal.dialog.Choice(
+					Lang.t._("<strong>WARNING:</strong> you are trying to create a project in the application directory!\n<strong>Any file saved here will be LOST during next app update.</strong>"),
+					[
+						{ label:"Create somewhere else", cb:onNew.bind(openPath) },
+						{ label:"Ignore that (you will lose your project during next update)", className:"gray", cb:_createNew },
+					]
+				);
+				return;
+			}
+			else
+				_createNew();
+
 		});
 	}
 
