@@ -5,6 +5,10 @@
 - [ ] Add code signing files to env
 - [ ] Check code signing exp. date: 2025-02-21
 
+## Unit tests
+
+- [ ] Add API unit tests for all new features
+
 ## Preparation & checks
 - [ ] Check the issues in the Pending milestone ([pendings](https://github.com/deepnight/ldtk/milestone/28))
 - [ ] Verify planned deprecations
@@ -14,9 +18,6 @@
 - [ ] Check JSON doc (changed/added flags etc.)
 - [ ] Run Haxe API tests
 - [ ] Build Haxe API samples
-
-## Test
-
 - [ ] Pack a local Setup and test it
 
 ## Git
