@@ -672,14 +672,49 @@ class JsTools {
 			var jCollapser = new J(e);
 			var tid = jCollapser.attr("target");
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
-			var uiStateId = jCollapser.attr("id"); // might be null
 
-			// Init with memory
-			if( uiStateId!=null && App.ME.settings.getUiStateBool(cast uiStateId)==true ) {
+			var uiStateId : Null<Settings.UiState> = cast jCollapser.attr("id"); // might be null
+			trace(uiStateId);
+
+			// Init default, if any
+			var customDefault : Null<Bool> = null;
+			if( jCollapser.attr("default")!=null ) {
+				customDefault = switch jCollapser.attr("default").toLowerCase() {
+					case "true", "open", "expand", "1": true;
+					case _: false;
+				}
+				trace("custom default: "+customDefault);
+			}
+			if( uiStateId!=null && !App.ME.settings.hasUiState(uiStateId) ) {
+				trace("init memory");
+				if( customDefault!=null )
+					App.ME.settings.setUiStateBool(uiStateId, customDefault);
+				else
+					App.ME.settings.setUiStateBool(uiStateId, false);
+			}
+
+			if( uiStateId!=null ) {
+				// Init from memory
+				trace("set from memory");
+				if( App.ME.settings.getUiStateBool(uiStateId)==true ) {
+					jTarget.show();
+					jCollapser.addClass("expanded");
+				}
+				else {
+					jTarget.hide();
+					jCollapser.addClass("collapsed");
+
+				}
+			}
+			else if( customDefault==true ) {
+				// Use provided default
+				trace("use custom default");
 				jTarget.show();
 				jCollapser.addClass("expanded");
 			}
 			else {
+				// Closed by default
+				trace("use default");
 				jTarget.hide();
 				jCollapser.addClass("collapsed");
 			}
@@ -692,7 +727,7 @@ class JsTools {
 					jCollapser.removeClass("collapsed");
 					jCollapser.removeClass("expanded");
 					if( uiStateId!=null )
-						App.ME.settings.setUiStateBool(cast uiStateId, !expanded);
+						App.ME.settings.setUiStateBool(uiStateId, !expanded);
 
 					if( expanded ) {
 						jCollapser.addClass("collapsed");

@@ -8676,6 +8676,17 @@ $patternSize : 32px;
 			}
 		}
 
+		dl.form.main {
+			padding-bottom: 0;
+		}
+
+		dl.form.extra {
+			padding: 8px;
+			width: calc( 100% - 16px );
+			outline: 1px solid $bgLight;
+			outline-offset: -1px;
+		}
+
 
 		>h2:first-of-type {
 			grid-column: 1/3;

@@ -186,7 +186,7 @@ class Settings {
 		return v.uiStates[v.uiStates.length-1];
 	}
 
-	function hasUiState(id:UiState) {
+	public function hasUiState(id:UiState) {
 		for(s in v.uiStates)
 			if( s.id==Std.string(id) )
 				return true;
