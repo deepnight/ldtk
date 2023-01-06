@@ -1,5 +1,6 @@
 # 1.2.3
 
+ - Fixed "FixedArray limit reached" crash
  - Fixed the wrong error message when duplicating an entity (ie. "You cannot have more than 0 Entity")
  - Added a big warning when creating a new project right in the app dir (any user files in the app dir are lost during updates)
  - Better warning when saving an existing project in the app dir.
