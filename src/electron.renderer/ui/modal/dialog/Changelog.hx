@@ -150,8 +150,12 @@ class Changelog extends ui.modal.Dialog {
 			}
 
 			// Highlight latest
-			if( changeLog.version.hasSameMajorAndMinor( Const.getAppVersion(true) ) )
+			if( changeLog.version.hasSameMajorAndMinor( Const.getAppVersion(true) ) ) {
 				jHotFixes.find(".hotfix:first").addClass("latest");
+				jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
+			}
+			else
+				jHotFixes.find(".hotfix").addClass("collapsed");
 
 			if( count>0 )
 				jContent.find("#updateChangelogHtml").prepend('<h2 class="version">Changes from ${changeLog.version.full}</h2>');
