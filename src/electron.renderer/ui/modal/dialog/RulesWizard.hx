@@ -325,6 +325,7 @@ class RulesWizard extends ui.modal.Dialog {
 				// Defined cell
 				var jImg = td.createTileHtmlImage(fragments.get(f)[0], 48);
 				jCell.append(jImg);
+				jCell.addClass("defined");
 			}
 			else if( getSymetricalAlternative(f)!=null ) {
 				// Cell is using symetrical alternative
@@ -687,10 +688,10 @@ class RulesWizard extends ui.modal.Dialog {
 		var p : dn.Col = 0;
 		var mainColor = mainValue==0 ? dn.Col.white(true) : ld.getIntGridValueColor(mainValue).withAlpha(1);
 		var otherColor = otherValue==0 ? dn.Col.black(true) : ld.getIntGridValueColor(otherValue).withAlpha(1);
-		mainColor = mainColor.toBlack(0.6);
-		trace(mainColor);
 		mainColor.lightness = M.fmax(mainColor.lightness, 0.5);
-		otherColor = otherColor.toBlack(0.6);
+		mainColor.af = 0.33;
+		otherColor.lightness = M.fmax(otherColor.lightness, 0.5);
+		otherColor.af = 0.33;
 		for(y in 0...subPixels.height)
 		for(x in 0...subPixels.width) {
 			p = subPixels.getPixel(x,y);

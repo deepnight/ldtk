@@ -35,6 +35,10 @@ $cur_locateRef: url("../cursors/locate.svg") 16 16, zoom-out;
 	padding: 0;
 }
 
+@mixin defaultFont() {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 @font-face {
 	font-family: Roboto;
 	src: url("../fonts/RobotoCondensed-Light.ttf");
@@ -51,7 +55,7 @@ body {
 	padding: 0;
 	background: $bgDark;
 	color: white;
-	font-family: "Arial";
+	@include defaultFont();
 	font-size: 11pt;
 }
 
@@ -603,6 +607,7 @@ div.info {
 	align-items: center;
 	box-sizing: border-box;
 	font-size: 14pt;
+	@include defaultFont();
 	width: 32px;
 	height: 32px;
 	margin-left: 4px;
@@ -3395,7 +3400,7 @@ textarea {
 			margin-left: 16px;
 
 			font-size: 7.5pt;
-			font-family: Arial;
+			@include defaultFont();
 			color: black;
 			font-weight: normal;
 			text-decoration: none;
@@ -9080,7 +9085,7 @@ $patternSize : 32px;
 					margin: 0;
 					margin-left: 2px;
 					margin-right: 2px;
-					font-size: 11pt;
+					font-size: 10pt;
 					border-width: 2px;
 				}
 
@@ -9171,7 +9176,12 @@ $patternSize : 32px;
 					.cell {
 						position: relative;
 						outline: 1px solid $bgDark;
+						outline-offset: -1px;
 						cursor: pointer;
+						&:not(:empty) {
+							background-color: black;
+						}
+
 						img {
 							width: 100% !important;
 							height: 100% !important;
@@ -9191,7 +9201,10 @@ $patternSize : 32px;
 							opacity: 0.11;
 						}
 						&.mirror {
-							outline: 1px dashed $bgLighter
+							outline: 1px dashed white
+						}
+						&.defined {
+							outline: 1px solid white
 						}
 					}
 				}
