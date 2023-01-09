@@ -662,9 +662,8 @@ class Editor extends Page {
 			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
 				setTileStacking( !settings.v.tileStacking );
 
-			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() ):
-				if( App.ME.isShiftDown() || App.ME.settings.navKeys!=Wasd )
-					setSingleLayerMode( !settings.v.singleLayerMode );
+			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() && ( App.ME.settings.navKeys!=Wasd || App.ME.isShiftDown() ) ):
+				setSingleLayerMode( !settings.v.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
 				if( settings.v.singleLayerMode )
