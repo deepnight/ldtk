@@ -4,6 +4,7 @@
  - Fixed `A` key when using `WASD` navigation.
  - Fixed opacity inputs (icon, border and fill) in Entity panel.
  - Fixed incorrect main value when editing an existing group using Rules Assistant
+ - Fixed an error with Haxe API when a tileset is not defined in layer definition.
 
 # 1.2.3
 
