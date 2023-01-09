@@ -157,10 +157,8 @@ class RulesWizard extends ui.modal.Dialog {
 
 
 	function guessMainValue(source:data.DataTypes.AutoLayerRuleGroup) {
-		trace(source.rules);
 		for(r in source.rules)
 			if( r.size==1 ) {
-				trace(r);
 				return M.iabs( r.get(0,0) );
 			}
 		return 0;
@@ -180,7 +178,6 @@ class RulesWizard extends ui.modal.Dialog {
 		// Guess intGrid values
 		mainValue = guessMainValue(source);
 		otherValue = guessOtherValue(source);
-		trace(mainValue+"/"+otherValue);
 		if( mainValue==0 )
 			return;
 
