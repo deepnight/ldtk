@@ -9,7 +9,6 @@ json_doc.xml
 backups/
 dump/
 res/.tmp
-.vscode/settings.json
 
 app/*.log
 app/package-lock.json
