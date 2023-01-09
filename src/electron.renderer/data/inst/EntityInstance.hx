@@ -15,6 +15,7 @@ class EntityInstance {
 	public var worldY(get,never) : Int;
 	public var customWidth : Null<Int>;
 	public var customHeight: Null<Int>;
+	public var flips : Int;
 
 	public var width(get,never) : Int;
 		inline function get_width() return customWidth!=null ? customWidth : def.width;
@@ -30,11 +31,12 @@ class EntityInstance {
 	public var bottom(get,never) : Int; inline function get_bottom() return top + height;
 
 
-	public function new(p:Project, li:LayerInstance, entityDefUid:Int, iid:String) {
+	public function new(p:Project, li:LayerInstance, entityDefUid:Int, iid:String, flips:Int = 0) {
 		_project = p;
 		_li = li;
 		defUid = entityDefUid;
 		this.iid = iid;
+		this.flips = flips;
 	}
 
 	@:keep public function toString() {
@@ -68,6 +70,7 @@ class EntityInstance {
 			height: height,
 			defUid: defUid,
 			px: [x,y],
+			f: flips,
 			fieldInstances: {
 				var all = [];
 				for(fd in def.fieldDefs)
@@ -88,6 +91,7 @@ class EntityInstance {
 			layer: _li.def.identifier,
 			x : x,
 			y : y,
+			f: flips,
 			width: width,
 			height: height,
 			color: getSmartColor(false),
@@ -108,6 +112,8 @@ class EntityInstance {
 		var ei = new EntityInstance(project, li, JsonTools.readInt(json.defUid), json.iid);
 		ei.x = JsonTools.readInt( json.px[0], 0 );
 		ei.y = JsonTools.readInt( json.px[1], 0 );
+
+		ei.flips = JsonTools.readInt( json.f, 0 );
 
 		ei.customWidth = JsonTools.readNullableInt( json.width );
 		if( ei.customWidth==ei.def.width )
