@@ -187,7 +187,7 @@ class ProjectLoader {
 			log.add(tag, "Project file was created using an older version of LDtk, re-saving is recommended to upgrade it.");
 			for(w in p.worlds)
 			for(l in w.levels)
-				l.invalidateJsonCache();
+				l.invalidateSavingCache();
 		}
 		log.add(tag, "Loading complete.");
 

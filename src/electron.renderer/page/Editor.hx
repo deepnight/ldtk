@@ -377,7 +377,7 @@ class Editor extends Page {
 		if( !project.isBackup() ) {
 			for(w in project.worlds)
 			for(l in w.levels)
-				if( !l.hasJsonCache() ) {
+				if( !l.hasSavingCache() ) {
 					needSaving = true;
 					break;
 				}
@@ -2132,8 +2132,8 @@ class Editor extends Page {
 			return;
 		}
 
-		if( l.hasJsonCache() ) {
-			l.invalidateJsonCache();
+		if( l.hasSavingCache() ) {
+			l.invalidateSavingCache();
 			ge.emit( LevelJsonCacheInvalidated(l) );
 		}
 	}

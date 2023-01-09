@@ -184,8 +184,8 @@ class ProjectSaver extends dn.Process {
 					ops.push({
 						label: l.identifier,
 						cb: ()->{
-							if( !l.hasJsonCache() )
-								l.rebuildCache();
+							if( !l.hasSavingCache() )
+								l.rebuildSavingCache();
 						}
 					});
 				}
@@ -701,7 +701,7 @@ class ProjectSaver extends dn.Process {
 			for(w in project.worlds)
 			for(l in w.levels) {
 				savingData.externLevels.push({
-					jsonStr: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
+					jsonStr: !l.hasSavingCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 					relPath: l.makeExternalRelPath(idx++),
 					id: l.identifier,
 				});

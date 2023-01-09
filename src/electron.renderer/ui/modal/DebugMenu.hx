@@ -205,7 +205,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 									// Break level caching
 									for(w in p.worlds)
 									for(l in w.levels)
-										l.invalidateJsonCache();
+										l.invalidateSavingCache();
 
 									// Tilesets
 									log.general(" -> Updating tileset data...");

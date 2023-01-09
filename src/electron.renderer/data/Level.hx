@@ -4,7 +4,7 @@ class Level {
 	var _project : Project;
 	public var _world : World;
 
-	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
+	var _savingCache : Null<{ jsonStr:String, jsonObj:ldtk.Json.LevelJson }>;
 
 	@:allow(data.Project, data.World)
 	public var uid(default,null) : Int;
@@ -115,7 +115,7 @@ class Level {
 
 
 	public function toJson(forTimeline=false) : ldtk.Json.LevelJson {
-		if( !forTimeline && hasJsonCache() ) {
+		if( !forTimeline && hasSavingCache() ) {
 			var o = getCacheJsonObject();
 			if( !_project.externalLevels )
 				Reflect.deleteField(o, dn.data.JsonPretty.HEADER_VALUE_NAME);
@@ -181,7 +181,7 @@ class Level {
 
 		// Cache this json
 		if( !forTimeline )
-			setJsonCache(json, false);
+			setSavingCache(json, false);
 
 		return json;
 	}
@@ -290,7 +290,7 @@ class Level {
 
 		// Init cache
 		crawlObjectRec(json); // Because haxe.Json.parse unescapes "\n" chars, we need to re-escape them before caching the JSON object
-		l.setJsonCache(json, true);
+		l.setSavingCache(json, true);
 
 		return l;
 	}
@@ -340,30 +340,30 @@ class Level {
 	}
 
 
-	public inline function hasJsonCache() return _cachedJson!=null;
-	public inline function invalidateJsonCache() _cachedJson = null;
-	public function rebuildCache() {
-		_cachedJson = null;
+	public inline function hasSavingCache() return _savingCache!=null;
+	public inline function invalidateSavingCache() _savingCache = null;
+	public function rebuildSavingCache() {
+		_savingCache = null;
 		toJson();
 	}
 
-	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
-		_cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(_project, json, skipHeader ),
-			json: json,
+	function setSavingCache(jsonObj:ldtk.Json.LevelJson, skipHeader:Bool) {
+		_savingCache = {
+			jsonStr: ui.ProjectSaver.jsonStringify(_project, jsonObj, skipHeader ),
+			jsonObj: jsonObj,
 		}
 	}
 
 	public inline function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
-		return hasJsonCache() ? _cachedJson.json : null;
+		return hasSavingCache() ? _savingCache.jsonObj : null;
 	}
 
 	public inline function getDisplayIdentifier() {
-		return identifier + ( hasJsonCache() ? "" : "*" );
+		return identifier + ( hasSavingCache() ? "" : "*" );
 	}
 
 	public function getCacheJsonString() : Null<String> {
-		return hasJsonCache() ? _cachedJson.str : null;
+		return hasSavingCache() ? _savingCache.jsonStr : null;
 	}
 
 	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {
@@ -572,7 +572,7 @@ class Level {
 			if( layerInstances[i].def==null ) {
 				App.LOG.add("tidy", 'Removed lost layer instance in $this');
 				layerInstances.splice(i,1);
-				invalidateJsonCache();
+				invalidateSavingCache();
 			}
 			else
 				i++;
@@ -592,14 +592,14 @@ class Level {
 						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
 						createLayerInstance(ld);
 					}
-				invalidateJsonCache();
+				invalidateSavingCache();
 				break;
 			}
 
 		// Tidy layer instances
 		for(li in layerInstances)
 			if( li.tidy(_project) )
-				invalidateJsonCache();
+				invalidateSavingCache();
 
 
 		// Remove field instances whose def was removed
@@ -607,7 +607,7 @@ class Level {
 			if( e.value.def==null ) {
 				App.LOG.add("tidy", 'Removed lost fieldInstance in $this');
 				fieldInstances.remove(e.key);
-				invalidateJsonCache();
+				invalidateSavingCache();
 			}
 
 		// Create missing field instances
@@ -616,7 +616,7 @@ class Level {
 
 		for(fi in fieldInstances)
 			if( fi.tidy(_project) )
-				invalidateJsonCache();
+				invalidateSavingCache();
 	}
 
 
@@ -692,7 +692,7 @@ class Level {
 	public function getFieldInstance(fd:data.def.FieldDef, createIfMissing:Bool) : Null<data.inst.FieldInstance> {
 		if( createIfMissing && !fieldInstances.exists(fd.uid) ) {
 			fieldInstances.set( fd.uid, new data.inst.FieldInstance(_project, fd.uid) );
-			invalidateJsonCache();
+			invalidateSavingCache();
 		}
 		return fieldInstances.get(fd.uid);
 	}

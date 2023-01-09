@@ -364,7 +364,7 @@ class World {
 				l.identifier = _project.fixUniqueIdStr(id, id->_project.isLevelIdentifierUnique(id));
 
 				if( oldIdentifiers.get(l.uid)!=l.identifier )
-					l.invalidateJsonCache();
+					l.invalidateSavingCache();
 			}
 			idx++;
 		}
