@@ -16,7 +16,7 @@
 				"type": "pwa-chrome",
 				"runtimeExecutable": "${workspaceFolder}/app/node_modules/electron/dist/electron.exe"
 			},
-			"runtimeArgs" : [
+			"runtimeArgs": [
 				".",
 				"--remote-debugging-port=9222"
 			],

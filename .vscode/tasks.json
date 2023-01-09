@@ -5,6 +5,7 @@
 			"label": "Electron Renderer release",
 			"type": "hxml",
 			"file": "renderer.hxml",
+			"dependsOn": "Electron Main release",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -19,11 +20,11 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron Renderer debug",
 			"type": "hxml",
 			"file": "renderer.debug.hxml",
+			"dependsOn": "Electron Main debug",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -38,7 +39,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron Main release",
 			"type": "hxml",
@@ -57,7 +57,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"label": "Electron Main debug",
 			"type": "hxml",
@@ -76,7 +75,6 @@
 			},
 			"group": "build"
 		},
-
 		{
 			"type": "haxe",
 			"args": "active configuration",
