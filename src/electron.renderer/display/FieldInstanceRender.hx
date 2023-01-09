@@ -359,7 +359,10 @@ class FieldInstanceRender {
 		labelFlow.verticalAlign = Middle;
 		labelFlow.horizontalAlign = Right;
 		labelFlow.padding = 0;
-		labelFlow.filter = createFilter(baseColor);
+		switch ctx {
+			case EntityCtx(g, ei, ld): labelFlow.filter = createFilter(baseColor);
+			case LevelCtx(l):
+		}
 
 		var valueFlow = new h2d.Flow();
 		valueFlow.padding = 0;
