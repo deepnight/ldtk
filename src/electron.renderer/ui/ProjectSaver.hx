@@ -216,6 +216,21 @@ class ProjectSaver extends dn.Process {
 					}
 				});
 
+				ops.push({
+					label: "Writing Binary file...",
+					cb: ()->{
+						if( savingData.bytes==null )
+							return;
+						var fp = project.filePath.clone();
+						fp.extension = "bson";
+						log('  Writing Binary ${fp.full}...');
+						try NT.writeFileBytes(fp.full, savingData.bytes) catch(_) {
+							failed = true;
+							error( L.t._("Could not write the project Binary file here! Maybe the destination is read-only?") );
+						}
+					}
+				});
+
 				new ui.modal.Progress("Saving main file...", ops, ()->if( !failed ) beginNextState());
 
 
@@ -669,24 +684,28 @@ class ProjectSaver extends dn.Process {
 	}
 
 	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
+		var savingData : FileSavingData = {
+			projectJsonStr: "???",
+			externLevels: [],
+		}
+
 		if( !project.externalLevels || forceSingleFile ) {
 			// Full single JSON
-			return {
-				projectJsonStr: jsonStringify( project, project.toJson() ),
-				externLevels: [],
-			}
+			var projectObj = project.toJson();
+			savingData.projectJsonStr = jsonStringify(project, projectObj);
+			savingData.bytes = bson.Bson.encode(projectObj);
 		}
 		else {
 			// Separate level JSONs
 			var idx = 0;
-			var externLevels = [];
 			for(w in project.worlds)
-			for(l in w.levels)
-				externLevels.push({
+			for(l in w.levels) {
+				savingData.externLevels.push({
 					jsonStr: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 					relPath: l.makeExternalRelPath(idx++),
 					id: l.identifier,
 				});
+			}
 
 			// Build project JSON without level data
 			var idx = 0;
@@ -705,12 +724,11 @@ class ProjectSaver extends dn.Process {
 				for(levelJson in trimmedProjectJson.levels)
 					_clearLevelData(levelJson);
 			}
-
-			return {
-				projectJsonStr: jsonStringify( project, trimmedProjectJson ),
-				externLevels: externLevels,
-			}
+			savingData.projectJsonStr = jsonStringify( project, trimmedProjectJson );
+			savingData.bytes = bson.Bson.encode(trimmedProjectJson);
 		}
+
+		return savingData;
 	}
 
 
