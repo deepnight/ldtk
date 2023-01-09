@@ -191,8 +191,8 @@ enum TilePickerDisplayMode {
 }
 
 typedef FileSavingData = {
-	var projectJson: String;
-	var externLevelsJson: Array<{ json:String, relPath:String, id:String }>;
+	var projectJsonStr: String;
+	var externLevels: Array<{ jsonStr:String, relPath:String, id:String }>;
 }
 
 enum LevelError {

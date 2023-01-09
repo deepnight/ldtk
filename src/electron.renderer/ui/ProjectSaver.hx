@@ -209,7 +209,7 @@ class ProjectSaver extends dn.Process {
 					label: "Writing main file...",
 					cb: ()->{
 						log('  Writing ${project.filePath.full}...');
-						try NT.writeFileString(project.filePath.full, savingData.projectJson) catch(_) {
+						try NT.writeFileString(project.filePath.full, savingData.projectJsonStr) catch(_) {
 							failed = true;
 							error( L.t._("Could not write the project JSON file here! Maybe the destination is read-only?") );
 						}
@@ -227,12 +227,12 @@ class ProjectSaver extends dn.Process {
 					initDir(levelDir, Const.LEVEL_EXTENSION);
 
 					var ops = [];
-					for(l in savingData.externLevelsJson) {
+					for(l in savingData.externLevels) {
 						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
 						ops.push({
 							label: "Level "+l.id,
 							cb: ()->{
-								NT.writeFileString(fp.full, l.json);
+								NT.writeFileString(fp.full, l.jsonStr);
 							}
 						});
 					}
@@ -672,8 +672,8 @@ class ProjectSaver extends dn.Process {
 		if( !project.externalLevels || forceSingleFile ) {
 			// Full single JSON
 			return {
-				projectJson: jsonStringify( project, project.toJson() ),
-				externLevelsJson: [],
+				projectJsonStr: jsonStringify( project, project.toJson() ),
+				externLevels: [],
 			}
 		}
 		else {
@@ -683,7 +683,7 @@ class ProjectSaver extends dn.Process {
 			for(w in project.worlds)
 			for(l in w.levels)
 				externLevels.push({
-					json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
+					jsonStr: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 					relPath: l.makeExternalRelPath(idx++),
 					id: l.identifier,
 				});
@@ -707,8 +707,8 @@ class ProjectSaver extends dn.Process {
 			}
 
 			return {
-				projectJson: jsonStringify( project, trimmedProjectJson ),
-				externLevelsJson: externLevels,
+				projectJsonStr: jsonStringify( project, trimmedProjectJson ),
+				externLevels: externLevels,
 			}
 		}
 	}
