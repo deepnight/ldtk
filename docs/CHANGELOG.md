@@ -1,3 +1,9 @@
+# 1.2.4
+
+ - Fixed lags in world view when using the fields render mode "Outlined text".
+ - Fixed `A` key when using `WASD` navigation.
+ - Fixed opacity inputs (icon, border and fill) in Entity panel.
+
 # 1.2.3
 
  - Entity definition properties can now be collapsed to give more room to the custom fields.
