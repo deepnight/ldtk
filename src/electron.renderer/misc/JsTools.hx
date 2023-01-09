@@ -674,7 +674,6 @@ class JsTools {
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
 
 			var uiStateId : Null<Settings.UiState> = cast jCollapser.attr("id"); // might be null
-			trace(uiStateId);
 
 			// Init default, if any
 			var customDefault : Null<Bool> = null;
@@ -683,10 +682,8 @@ class JsTools {
 					case "true", "open", "expand", "1": true;
 					case _: false;
 				}
-				trace("custom default: "+customDefault);
 			}
 			if( uiStateId!=null && !App.ME.settings.hasUiState(uiStateId) ) {
-				trace("init memory");
 				if( customDefault!=null )
 					App.ME.settings.setUiStateBool(uiStateId, customDefault);
 				else
@@ -695,7 +692,6 @@ class JsTools {
 
 			if( uiStateId!=null ) {
 				// Init from memory
-				trace("set from memory");
 				if( App.ME.settings.getUiStateBool(uiStateId)==true ) {
 					jTarget.show();
 					jCollapser.addClass("expanded");
@@ -708,13 +704,11 @@ class JsTools {
 			}
 			else if( customDefault==true ) {
 				// Use provided default
-				trace("use custom default");
 				jTarget.show();
 				jCollapser.addClass("expanded");
 			}
 			else {
 				// Closed by default
-				trace("use default");
 				jTarget.hide();
 				jCollapser.addClass("collapsed");
 			}
