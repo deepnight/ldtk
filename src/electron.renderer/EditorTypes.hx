@@ -225,3 +225,14 @@ enum NavigationKeys {
 	Wasd;
 	Zqsd;
 }
+
+enum AutoWorldModeSwitch {
+	Never;
+	ZoomOutOnly;
+	ZoomInAndOut;
+}
+
+enum FieldsRender {
+	FR_Outline;
+	FR_Table;
+}

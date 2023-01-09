@@ -44,7 +44,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// World mode using mousewheel
 		var i = new form.input.EnumSelect(
 			jForm.find("#autoSwitchOnZoom"),
-			Settings.AutoWorldModeSwitch,
+			AutoWorldModeSwitch,
 			false,
 			()->settings.v.autoWorldModeSwitch,
 			(v)->{
@@ -105,8 +105,8 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Fields render
 		var jSelect = jForm.find("#fieldsRender");
 		jSelect.empty();
-		for(k in Settings.FieldsRender.getConstructors()) {
-			var nk = Settings.FieldsRender.createByName(k);
+		for(k in FieldsRender.getConstructors()) {
+			var nk = FieldsRender.createByName(k);
 			var jOpt = new J('<option value="$k"/>');
 			jSelect.append(jOpt);
 			jOpt.text(switch nk {
@@ -117,7 +117,7 @@ class EditAppSettings extends ui.modal.Dialog {
 				jOpt.prop("selected",true);
 		}
 		jSelect.change( (_)->{
-			settings.v.fieldsRender = Settings.FieldsRender.createByName( jSelect.val() );
+			settings.v.fieldsRender = FieldsRender.createByName( jSelect.val() );
 			onSettingChanged();
 		});
 

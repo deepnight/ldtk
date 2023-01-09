@@ -41,17 +41,6 @@ enum abstract UiState(String) {
 	var HideSamplesOnHome;
 }
 
-enum AutoWorldModeSwitch {
-	Never;
-	ZoomOutOnly;
-	ZoomInAndOut;
-}
-
-enum FieldsRender {
-	FR_Outline;
-	FR_Table;
-}
-
 
 class Settings {
 	var defaults : AppSettings;
