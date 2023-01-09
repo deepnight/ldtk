@@ -157,10 +157,11 @@ class RulesWizard extends ui.modal.Dialog {
 
 
 	function guessMainValue(source:data.DataTypes.AutoLayerRuleGroup) {
-		for(r in source.rules)
-			if( r.size==1 ) {
-				return M.iabs( r.get(0,0) );
-			}
+		for(r in source.rules) {
+			final center = Std.int(r.size*0.5);
+			if( r.get(center,center)>0 )
+				return M.iabs( r.get(center,center) );
+		}
 		return 0;
 	}
 
@@ -687,6 +688,8 @@ class RulesWizard extends ui.modal.Dialog {
 		var mainColor = mainValue==0 ? dn.Col.white(true) : ld.getIntGridValueColor(mainValue).withAlpha(1);
 		var otherColor = otherValue==0 ? dn.Col.black(true) : ld.getIntGridValueColor(otherValue).withAlpha(1);
 		mainColor = mainColor.toBlack(0.6);
+		trace(mainColor);
+		mainColor.lightness = M.fmax(mainColor.lightness, 0.5);
 		otherColor = otherColor.toBlack(0.6);
 		for(y in 0...subPixels.height)
 		for(x in 0...subPixels.width) {

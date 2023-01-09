@@ -3,6 +3,7 @@
  - Fixed lags in world view when using the fields render mode "Outlined text".
  - Fixed `A` key when using `WASD` navigation.
  - Fixed opacity inputs (icon, border and fill) in Entity panel.
+ - Fixed incorrect main value when editing an existing group using Rules Assistant
 
 # 1.2.3
 
