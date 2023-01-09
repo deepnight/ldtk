@@ -347,7 +347,7 @@ class FieldInstanceRender {
 
 	public static inline function createFilter(col:dn.Col) : Null<h2d.filter.Filter> {
 		return switch settings.v.fieldsRender {
-			case FR_Outline: new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.1);
+			case FR_Outline: new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.03);
 			case FR_Table: null;
 		}
 	}
