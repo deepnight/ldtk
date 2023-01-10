@@ -489,7 +489,7 @@ class DocGenerator {
 			list.push( li.join(" ") );
 		}
 
-		return "<ul><li>" + list.join("</li><li>") + "</li></ul>";
+		return "<ul class='subFields'><li>" + list.join("</li><li>") + "</li></ul>";
 	}
 
 
