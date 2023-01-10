@@ -649,7 +649,7 @@ class Editor extends Page {
 				if( !hasInputFocus() )
 					setWorldMode( !worldMode );
 
-			case K.W if( settings.navKeys!=Wasd ):
+			case K.W if( settings.v.navigationKeys!=Wasd ):
 				if( !hasInputFocus() )
 					setWorldMode( !worldMode );
 
@@ -662,7 +662,7 @@ class Editor extends Page {
 			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
 				setTileStacking( !settings.v.tileStacking );
 
-			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() && ( App.ME.settings.navKeys!=Wasd || App.ME.isShiftDown() ) ):
+			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() && ( App.ME.settings.v.navigationKeys!=Wasd || App.ME.isShiftDown() ) ):
 				setSingleLayerMode( !settings.v.singleLayerMode );
 
 			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
@@ -759,34 +759,34 @@ class Editor extends Page {
 
 
 			// ZQSD/WASD navigation
-			case K.Z if( App.ME.settings.navKeys==Zqsd && !hasInputFocus() ):
+			case K.Z if( App.ME.settings.v.navigationKeys==Zqsd && !hasInputFocus() ):
 				onNavigateShortcut(0, -1, true);
 
-			case K.Q if( App.ME.settings.navKeys==Zqsd && !hasInputFocus() ):
+			case K.Q if( App.ME.settings.v.navigationKeys==Zqsd && !hasInputFocus() ):
 				onNavigateShortcut(-1, 0, true);
 
-			case K.W if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
+			case K.W if( App.ME.settings.v.navigationKeys==Wasd && !hasInputFocus() ):
 				onNavigateShortcut(0, -1, true);
 
-			case K.A if( App.ME.settings.navKeys==Wasd && !hasInputFocus() ):
+			case K.A if( App.ME.settings.v.navigationKeys==Wasd && !hasInputFocus() ):
 				onNavigateShortcut(-1, 0, true);
 
-			case K.S if( ( App.ME.settings.navKeys==Wasd || App.ME.settings.navKeys==Zqsd ) && !hasInputFocus() ):
+			case K.S if( ( App.ME.settings.v.navigationKeys==Wasd || App.ME.settings.v.navigationKeys==Zqsd ) && !hasInputFocus() ):
 				onNavigateShortcut(0, 1, true);
 
-			case K.D if( ( App.ME.settings.navKeys==Wasd || App.ME.settings.navKeys==Zqsd ) && !hasInputFocus() ):
+			case K.D if( ( App.ME.settings.v.navigationKeys==Wasd || App.ME.settings.v.navigationKeys==Zqsd ) && !hasInputFocus() ):
 				onNavigateShortcut(1, 0, true);
 
-			case K.UP if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+			case K.UP if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
 				onNavigateShortcut(0, -1, true);
 
-			case K.DOWN if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+			case K.DOWN if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
 				onNavigateShortcut(0, 1, true);
 
-			case K.LEFT if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+			case K.LEFT if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
 				onNavigateShortcut(-1, 0, true);
 
-			case K.RIGHT if( App.ME.settings.navKeys==Arrows && !hasInputFocus() ):
+			case K.RIGHT if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
 				onNavigateShortcut(1, 0, true);
 		}
 

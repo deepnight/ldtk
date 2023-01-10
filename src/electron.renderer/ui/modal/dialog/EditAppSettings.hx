@@ -44,7 +44,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// World mode using mousewheel
 		var i = new form.input.EnumSelect(
 			jForm.find("#autoSwitchOnZoom"),
-			AutoWorldModeSwitch,
+			Settings.AutoWorldModeSwitch,
 			false,
 			()->settings.v.autoWorldModeSwitch,
 			(v)->{
@@ -105,8 +105,8 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Fields render
 		var jSelect = jForm.find("#fieldsRender");
 		jSelect.empty();
-		for(k in FieldsRender.getConstructors()) {
-			var nk = FieldsRender.createByName(k);
+		for(k in Settings.FieldsRender.getConstructors()) {
+			var nk = Settings.FieldsRender.createByName(k);
 			var jOpt = new J('<option value="$k"/>');
 			jSelect.append(jOpt);
 			jOpt.text(switch nk {
@@ -124,16 +124,16 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Navigation keys
 		var jNavKeys = jForm.find("#navKeys");
 		jNavKeys.empty();
-		for(k in NavigationKeys.getConstructors()) {
-			var nk = NavigationKeys.createByName(k);
+		for(k in Settings.NavigationKeys.getConstructors()) {
+			var nk = Settings.NavigationKeys.createByName(k);
 			var jOpt = new J('<option value="$k"/>');
 			jNavKeys.append(jOpt);
 			jOpt.text(k.toUpperCase());
-			if( k==settings.v.navKeys )
+			if( nk==settings.v.navigationKeys )
 				jOpt.prop("selected",true);
 		}
 		jNavKeys.change( (_)->{
-			settings.v.navKeys = jNavKeys.val();
+			settings.v.navigationKeys = Settings.NavigationKeys.createByName( jNavKeys.val() );
 			onSettingChanged();
 		});
 
