@@ -166,7 +166,7 @@ Value | Type | Description
 
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
 ## 2.4.2. Reference to an Entity instance  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
-This object is used in Field Instances to describe an EntityRef value.
+This object describes the "location" of an Entity instance in the project worlds.
 
 Value | Type | Description
 -- | -- | --

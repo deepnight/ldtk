@@ -1789,7 +1789,7 @@
 			]
 		},
 		"EntityReferenceInfos": {
-			"description": "This object is used in Field Instances to describe an EntityRef value.",
+			"description": "This object describes the \"location\" of an Entity instance in the project worlds.",
 			"title": "Reference to an Entity instance",
 			"required": [
 				"entityIid",
