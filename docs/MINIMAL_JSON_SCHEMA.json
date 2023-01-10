@@ -1010,7 +1010,7 @@
 		},
 		"EntityReferenceInfos": {
 			"description": "This object is used in Field Instances to describe an EntityRef value.",
-			"title": "Field instance entity reference",
+			"title": "Reference to an Entity instance",
 			"required": [
 				"entityIid",
 				"layerIid",

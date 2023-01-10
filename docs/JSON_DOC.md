@@ -17,7 +17,7 @@ Value | Type | Description
 `iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | String | Unique project identifier
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>		Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
-`toc`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.4-green.svg)  | Array&nbsp;of&nbsp;Object | All instances of entities that have their `exportToToc` flag enabled are listed in this array.<br/> This object contains the following fields:<br/> <ul><li>**`identifier`** **(String**)</li><li>**`instances`** **(Array of [Field instance entity reference](#ldtk-EntityReferenceInfos)**)</li></ul>
+`toc`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.4-green.svg)  | Array&nbsp;of&nbsp;Object | All instances of entities that have their `exportToToc` flag enabled are listed in this array.<br/> This object contains the following fields:<br/> <ul><li>**`identifier`** **(String**)</li><li>**`instances`** **(Array of [Reference to an Entity instance](#ldtk-EntityReferenceInfos)**)</li></ul>
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: &lt;`null`&gt;, `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
@@ -165,7 +165,7 @@ Value | Type | Description
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
-## 2.4.2. Field instance entity reference  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
+## 2.4.2. Reference to an Entity instance  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
 This object is used in Field Instances to describe an EntityRef value.
 
 Value | Type | Description
