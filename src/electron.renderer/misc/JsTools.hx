@@ -845,8 +845,17 @@ class JsTools {
 		if( path==null )
 			N.error("No file");
 		else {
-			if( !NT.fileExists(path) )
-				N.error("Sorry, but this file couldn't be found.");
+			if( !NT.fileExists(path) ) {
+				if( isFile )
+					path = dn.FilePath.extractDirectoryWithoutSlash(path, true);
+
+				if( !isFile || !NT.fileExists(path) )
+					N.error("Sorry, but this file couldn't be found.");
+				else {
+					N.msg("Locating file...");
+					ET.locate(path, false);
+				}
+			}
 			else {
 				N.msg("Locating file...");
 				ET.locate(path, isFile);
