@@ -12,56 +12,31 @@ on:
 
 jobs:
   build:
-
     strategy:
       matrix:
         os: [windows-latest]
-        haxe: [4.2.4]
+        haxe: [4.2.5]
       fail-fast: true
     runs-on: windows-latest
 
     steps:
-      # Get branch name
-      - name: getBranch
-        shell: bash
-        run: echo "::set-output name=v::${GITHUB_REF#refs/heads/}"
-        id: branch
-
-      # Checkout & install haxe
+      # Checkout & install haxe + node
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14"
       - uses: actions/checkout@v2
       - uses: krdlab/setup-haxe@v1
         with:
           haxe-version: ${{ matrix.haxe }}
+
+      - name: Compile CSS from SCSS files
+        uses: gha-utilities/sass-build@v0.4.11
+        with:
+          source: app/assets/css/app.scss
+          destination: app/assets/css/app.min.css
+
       - run: haxe -version
 
-      # Install libs
-      - run: haxelib install uuid
-      - run: haxelib git castle https://github.com/ncannasse/castle
-      - run: haxelib git heaps https://github.com/deepnight/heaps.git
-      - run: haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
-      - run: haxelib git electron https://github.com/tong/hxelectron.git
-      - run: haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git
-
-      # Install haxe API from same branch (if it exists)...
-      - name: Install Haxe API from same branch
-        id: installApiBranch
-        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
-        continue-on-error: true
-      # ... or from master otherwise
-      - name: Install Haxe API from master
-        if: steps.installApiBranch.outcome == 'failure'
-        run: |
-          haxelib remove ldtk-haxe-api
-          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
-
-      # Install deepnightLibs
-      - run: haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+      - run: haxe setup.hxml
       - run: haxelib list
-
-      # Node/NPM commands
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: cd app && npm install
       - run: cd app && npm run compile
-
