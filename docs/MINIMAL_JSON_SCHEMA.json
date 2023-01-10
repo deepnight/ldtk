@@ -1673,7 +1673,7 @@
 		},
 		"GridPoint": {
 			"description": "This object is just a grid-based coordinate used in Field values.",
-			"title": "Field instance grid point",
+			"title": "Grid point",
 			"required": [
 				"cx",
 				"cy"

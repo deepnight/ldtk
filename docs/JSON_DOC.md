@@ -176,7 +176,7 @@ Value | Type | Description
 `worldIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String | IID of the World containing the refered EntityInstance
 
 <a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
-## 2.4.3. Field instance grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
+## 2.4.3. Grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
 This object is just a grid-based coordinate used in Field values.
 
 Value | Type | Description
