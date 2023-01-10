@@ -13,6 +13,7 @@
 	"appBuildId": 464822,
 	"nextUid": 173,
 	"identifierStyle": "Capitalize",
+	"toc": [],
 	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
@@ -5866,6 +5867,5 @@
 			"__neighbours": []
 		}
 	],
-	"worlds": [],
-	"toc": []
+	"worlds": []
 }
