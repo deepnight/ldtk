@@ -16,12 +16,12 @@
 	"toc": [{
 		"identifier": "EntityFieldsTest",
 		"instances": [ {
-			"worldIid": "15114dc0-7820-11ed-b18d-65cbd6215481",
+			"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c",
 			"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
 			"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 			"entityIid": "a3030e7b-66b0-11ec-9cd7-81a9b1cce297"
 		}, {
-			"worldIid": "15114dc0-7820-11ed-b18d-65cbd6215481",
+			"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c",
 			"levelIid": "a30383a0-66b0-11ec-9cd7-432bb3e3339c",
 			"layerIid": "a303aab0-66b0-11ec-9cd7-a98ef20f25a5",
 			"entityIid": "a303aab1-66b0-11ec-9cd7-d560fe21e017"
@@ -1424,7 +1424,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "15114dc0-7820-11ed-b18d-65cbd6215481"
+								"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1446,7 +1446,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "15114dc0-7820-11ed-b18d-65cbd6215481"
+								"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1468,7 +1468,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "15114dc0-7820-11ed-b18d-65cbd6215481"
+								"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
