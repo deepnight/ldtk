@@ -51,6 +51,7 @@ class Project {
 
 	/** WARNING! This list of "used IIDs" is NOT strictly updated: it's only a "mark" map to avoid IID collisions. **/
 	var usedIids : Map<String,Bool> = new Map();
+	var toc : Map<String, Array<ldtk.Json.TableOfContentInstance>> = new Map();
 
 
 	private function new() {
@@ -318,6 +319,16 @@ class Project {
 			w.worldGridHeight = JsonTools.readInt( json.worldGridHeight, w.defaultLevelHeight );
 		}
 
+		// Table of content
+		p.toc = new Map();
+		var tocEntries : Array<ldtk.Json.TableOfContentEntry> = JsonTools.readArray(json.toc, []);
+		for(te in tocEntries) {
+			p.toc.set(te.identifier, te.instances.map( ti->{
+				worldIid: ti.worldIid,
+				levelIid: ti.levelIid,
+			}));
+		}
+
 		if( dn.Version.lower(json.jsonVersion, "0.6", true) )
 			for(w in p.worlds)
 				w.reorganizeWorld();
@@ -568,6 +579,20 @@ class Project {
 			defs: defs.toJson(this),
 			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
+
+			toc: {
+				var jsonToc : Array<ldtk.Json.TableOfContentEntry> = [];
+				for(e in toc.keyValueIterator())
+					jsonToc.push({
+						identifier: e.key,
+						instances: e.value.map( ti->{
+							worldIid: ti.worldIid,
+							levelIid: ti.levelIid,
+						}),
+					});
+
+				jsonToc;
+			},
 		}
 
 		return json;

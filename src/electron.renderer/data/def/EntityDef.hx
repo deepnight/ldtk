@@ -10,6 +10,7 @@ class EntityDef {
 
 	public var identifier(default,set) : String;
 	public var tags : Tags;
+	public var exportToToc : Bool;
 
 	public var width : Int;
 	public var height : Int;
@@ -61,6 +62,7 @@ class EntityDef {
 		keepAspectRatio = false;
 		hollow = false;
 		tags = new Tags();
+		exportToToc = false;
 	}
 
 	public function isTileDefined() {
@@ -145,6 +147,7 @@ class EntityDef {
 		o.hollow = JsonTools.readBool( json.hollow, false );
 
 		o.tags = Tags.fromJson(json.tags);
+		o.exportToToc = JsonTools.readBool( json.exportToToc, false );
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.tileOpacity = JsonTools.readFloat( json.tileOpacity, 1 );
@@ -184,6 +187,8 @@ class EntityDef {
 			identifier: identifier,
 			uid: uid,
 			tags: tags.toJson(),
+			exportToToc: exportToToc,
+
 			width: width,
 			height: height,
 			resizableX: resizableX,
