@@ -6689,13 +6689,9 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		a.showAdv {
-			cursor: pointer;
-			padding-top: 4px;
-			padding-bottom: 4px;
-			&:hover {
-				color: white;
-			}
+		a[href] {
+			margin-left: 8px;
+			flex-grow: 0;
 		}
 
 		.collapser {
