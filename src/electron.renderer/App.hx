@@ -1,4 +1,7 @@
 import electron.renderer.IpcRenderer;
+#if debug
+import page.CrashReport; // force compilation in debug
+#end
 
 class App extends dn.Process {
 	public static var ME : App;
@@ -830,7 +833,7 @@ class App extends dn.Process {
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());
 				var cam = Editor.ME.camera;
-				debugPre("zoom="+M.pretty(cam.adjustedZoom,1)+" cam="+M.round(cam.width)+"x"+M.round(cam.height)+" pixelratio="+cam.pixelRatio);
+				debugPre("zoom="+M.pretty(cam.adjustedZoom,2)+" cam="+M.round(cam.width)+"x"+M.round(cam.height)+" pixelratio="+cam.pixelRatio);
 				debugPre("  Selection="+Editor.ME.selectionTool.debugContent());
 			}
 

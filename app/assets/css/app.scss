@@ -35,6 +35,10 @@ $cur_locateRef: url("../cursors/locate.svg") 16 16, zoom-out;
 	padding: 0;
 }
 
+@mixin defaultFont() {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 @font-face {
 	font-family: Roboto;
 	src: url("../fonts/RobotoCondensed-Light.ttf");
@@ -51,7 +55,7 @@ body {
 	padding: 0;
 	background: $bgDark;
 	color: white;
-	font-family: "Arial";
+	@include defaultFont();
 	font-size: 11pt;
 }
 
@@ -603,6 +607,7 @@ div.info {
 	align-items: center;
 	box-sizing: border-box;
 	font-size: 14pt;
+	@include defaultFont();
 	width: 32px;
 	height: 32px;
 	margin-left: 4px;
@@ -1882,7 +1887,7 @@ input[type=number] {
 input.slider:not(:disabled) {
 	cursor: ew-resize;
 	flex: 1 0 48px;
-	// box-sizing: content-box;
+	box-sizing: content-box;
 	padding-right: 20px;
 
 	background-image: url("../icons/slide.svg");
@@ -3395,7 +3400,7 @@ textarea {
 			margin-left: 16px;
 
 			font-size: 7.5pt;
-			font-family: Arial;
+			@include defaultFont();
 			color: black;
 			font-weight: normal;
 			text-decoration: none;
@@ -6305,6 +6310,10 @@ dl.form.fieldInstanceEditor {
 		max-width: none;
 	}
 
+	input.slider:not(:disabled) {
+		box-sizing: border-box;
+	}
+
 	span.prefix,
 	span.suffix {
 		color: $bgLighter;
@@ -6658,7 +6667,7 @@ dl.form.fieldInstanceEditor {
 		grid-template-columns: auto;
 		grid-template-rows: repeat(3, min-content);
 		gap: 16px;
-		height: 100%;
+		// height: 100%;
 
 		dl.form>dt {
 			max-width: none;
@@ -6680,26 +6689,24 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		a.showAdv {
-			cursor: pointer;
-			padding-top: 4px;
-			padding-bottom: 4px;
-			&:hover {
-				color: white;
+		a[href] {
+			margin-left: 8px;
+			flex-grow: 0;
+		}
+
+		.collapser {
+			padding-top: 8px;
+			padding-bottom: 8px;
+			&.collapsed {
+				margin-bottom: 16px;
 			}
 		}
 
-		.adv {
-			&:not(.visible) {
-				display: none;
-			}
-			a {
-				cursor: pointer;
-				&:hover {
-					color: white;
-				}
-			}
-
+		.form.advanced {
+			padding: 8px;
+			box-sizing: border-box;
+			margin-top: -16px;
+			border: 1px solid $bgLight;
 			ul.advFlags {
 				padding-bottom: 48px;
 				li {
@@ -9046,10 +9053,8 @@ $patternSize : 32px;
 	.wrapper .content {
 		.layout {
 			display: grid;
-			min-width: 600px;
-			max-width: 90vw;
-			min-height: 570px;
-			max-height: 72vh;
+			width: 90vw;
+			height: 72vh;
 			grid-template-columns: min-content auto;
 			grid-template-rows: 100%;
 			column-gap: 8px;
@@ -9074,7 +9079,7 @@ $patternSize : 32px;
 					margin: 0;
 					margin-left: 2px;
 					margin-right: 2px;
-					font-size: 11pt;
+					font-size: 10pt;
 					border-width: 2px;
 				}
 
@@ -9165,7 +9170,12 @@ $patternSize : 32px;
 					.cell {
 						position: relative;
 						outline: 1px solid $bgDark;
+						outline-offset: -1px;
 						cursor: pointer;
+						&:not(:empty) {
+							background-color: black;
+						}
+
 						img {
 							width: 100% !important;
 							height: 100% !important;
@@ -9185,7 +9195,10 @@ $patternSize : 32px;
 							opacity: 0.11;
 						}
 						&.mirror {
-							outline: 1px dashed $bgLighter
+							outline: 1px dashed white
+						}
+						&.defined {
+							outline: 1px solid white
 						}
 					}
 				}

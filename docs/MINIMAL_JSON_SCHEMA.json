@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.2.3 JSON schema",
+	"title": "LDtk 1.2.4 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -14,6 +14,7 @@
 			"iid",
 			"jsonVersion",
 			"levels",
+			"toc",
 			"worlds"
 		],
 		"properties": {
@@ -40,6 +41,15 @@
 				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
 				"items": {
 					"$ref": "#/otherTypes/World"
+				},
+				"type": [
+					"array"
+				]
+			},
+			"toc": {
+				"description": "All instances of entities that have their `exportToToc` flag enabled are listed in this array.",
+				"items": {
+					"$ref": "#/otherTypes/TableOfContentEntry"
 				},
 				"type": [
 					"array"
@@ -131,6 +141,9 @@
 					},
 					"Level": {
 						"$ref": "#/otherTypes/Level"
+					},
+					"TableOfContentEntry": {
+						"$ref": "#/otherTypes/TableOfContentEntry"
 					},
 					"EnumDef": {
 						"$ref": "#/otherTypes/EnumDef"
@@ -996,8 +1009,8 @@
 			]
 		},
 		"EntityReferenceInfos": {
-			"description": "This object is used in Field Instances to describe an EntityRef value.",
-			"title": "Field instance entity reference",
+			"description": "This object describes the \"location\" of an Entity instance in the project worlds.",
+			"title": "Reference to an Entity instance",
 			"required": [
 				"entityIid",
 				"layerIid",
@@ -1569,6 +1582,34 @@
 				"object"
 			]
 		},
+		"TableOfContentEntry": {
+			"title": "ldtk.TableOfContentEntry",
+			"required": [
+				"identifier",
+				"instances"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"identifier": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				},
+				"instances": {
+					"description": "",
+					"items": {
+						"$ref": "#/otherTypes/EntityReferenceInfos"
+					},
+					"type": [
+						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"EnumDef": {
 			"title": "Enum definition",
 			"required": [
@@ -1632,7 +1673,7 @@
 		},
 		"GridPoint": {
 			"description": "This object is just a grid-based coordinate used in Field values.",
-			"title": "Field instance grid point",
+			"title": "Grid point",
 			"required": [
 				"cx",
 				"cy"

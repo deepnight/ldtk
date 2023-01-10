@@ -465,7 +465,7 @@ class WorldRender extends dn.Process {
 		if( !settings.v.showDetails )
 			return;
 
-		var minZoom = 0.1;
+		var minZoom = 0.2;
 
 		for(wl in worldLevels) {
 			if( wl.fieldsRender==null )

@@ -426,8 +426,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		);
 		i.setEnabled( curEntity.maxCount>0 );
 
-		// Show name
+		// Show identfier
 		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));
+		i.linkEvent(EntityDefChanged);
+
+		// Export to table of content
+		var i = Input.linkToHtmlInput(curEntity.exportToToc, jEntityForm.find("#exportToToc"));
 		i.linkEvent(EntityDefChanged);
 
 		// Pivot

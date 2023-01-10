@@ -532,7 +532,14 @@ class Tileset {
 		return false;
 	}
 
+	function isClosed() {
+		return jWrapper.closest("body").length==0;
+	}
+
 	function modifySelection(selIds:Array<Int>, add:Bool) {
+		if( isClosed() )
+			return;
+		
 		switch selectMode {
 			case None:
 

@@ -214,6 +214,13 @@ namespace ldtk
         public bool SimplifiedExport { get; set; }
 
         /// <summary>
+        /// All the instances of entities that have their `exportToToc` flag enabled are listed this
+        /// array.
+        /// </summary>
+        [JsonProperty("toc")]
+        public LdtkTableOfContentEntry[] Toc { get; set; }
+
+        /// <summary>
         /// This optional description is used by LDtk Samples to show up some informations and
         /// instructions.
         /// </summary>
@@ -332,6 +339,13 @@ namespace ldtk
         /// </summary>
         [JsonProperty("color")]
         public string Color { get; set; }
+
+        /// <summary>
+        /// If enabled, all instances of this entity will be listed in the project "Table of content"
+        /// object.
+        /// </summary>
+        [JsonProperty("exportToToc")]
+        public bool ExportToToc { get; set; }
 
         /// <summary>
         /// Array of field definitions
@@ -1308,6 +1322,9 @@ namespace ldtk
         [JsonProperty("NeighbourLevel", NullValueHandling = NullValueHandling.Ignore)]
         public NeighbourLevel NeighbourLevel { get; set; }
 
+        [JsonProperty("TableOfContentEntry", NullValueHandling = NullValueHandling.Ignore)]
+        public LdtkTableOfContentEntry TableOfContentEntry { get; set; }
+
         [JsonProperty("Tile", NullValueHandling = NullValueHandling.Ignore)]
         public TileInstance Tile { get; set; }
 
@@ -1922,6 +1939,15 @@ namespace ldtk
         /// </summary>
         [JsonProperty("levelUid")]
         public long? LevelUid { get; set; }
+    }
+
+    public partial class LdtkTableOfContentEntry
+    {
+        [JsonProperty("identifier")]
+        public string Identifier { get; set; }
+
+        [JsonProperty("instances")]
+        public FieldInstanceEntityReference[] Instances { get; set; }
     }
 
     /// <summary>

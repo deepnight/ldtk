@@ -199,6 +199,7 @@ const typeMap = {
         { json: "nextUid", js: "nextUid", typ: 0 },
         { json: "pngFilePattern", js: "pngFilePattern", typ: u(undefined, u(null, "")) },
         { json: "simplifiedExport", js: "simplifiedExport", typ: true },
+        { json: "toc", js: "toc", typ: a(r("LdtkTableOfContentEntry")) },
         { json: "tutorialDesc", js: "tutorialDesc", typ: u(undefined, u(null, "")) },
         { json: "worldGridHeight", js: "worldGridHeight", typ: u(undefined, u(0, null)) },
         { json: "worldGridWidth", js: "worldGridWidth", typ: u(undefined, u(0, null)) },
@@ -226,6 +227,7 @@ const typeMap = {
         { json: "Level", js: "Level", typ: u(undefined, r("Level")) },
         { json: "LevelBgPosInfos", js: "LevelBgPosInfos", typ: u(undefined, r("LevelBackgroundPosition")) },
         { json: "NeighbourLevel", js: "NeighbourLevel", typ: u(undefined, r("NeighbourLevel")) },
+        { json: "TableOfContentEntry", js: "TableOfContentEntry", typ: u(undefined, r("LdtkTableOfContentEntry")) },
         { json: "Tile", js: "Tile", typ: u(undefined, r("TileInstance")) },
         { json: "TileCustomMetadata", js: "TileCustomMetadata", typ: u(undefined, r("TileCustomMetadata")) },
         { json: "TilesetDef", js: "TilesetDef", typ: u(undefined, r("TilesetDefinition")) },
@@ -279,6 +281,7 @@ const typeMap = {
     ], false),
     "EntityDefinition": o([
         { json: "color", js: "color", typ: "" },
+        { json: "exportToToc", js: "exportToToc", typ: true },
         { json: "fieldDefs", js: "fieldDefs", typ: a(r("FieldDefinition")) },
         { json: "fillOpacity", js: "fillOpacity", typ: 3.14 },
         { json: "height", js: "height", typ: 0 },
@@ -520,6 +523,10 @@ const typeMap = {
         { json: "dir", js: "dir", typ: "" },
         { json: "levelIid", js: "levelIid", typ: "" },
         { json: "levelUid", js: "levelUid", typ: u(undefined, u(0, null)) },
+    ], false),
+    "LdtkTableOfContentEntry": o([
+        { json: "identifier", js: "identifier", typ: "" },
+        { json: "instances", js: "instances", typ: a(r("FieldInstanceEntityReference")) },
     ], false),
     "World": o([
         { json: "defaultLevelHeight", js: "defaultLevelHeight", typ: 0 },
