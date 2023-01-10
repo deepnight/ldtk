@@ -669,20 +669,24 @@ class ProjectSaver extends dn.Process {
 	}
 
 	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
+		var savingData : FileSavingData = {
+			projectJsonStr: "?",
+			externLevels: [],
+		}
+
+		// Rebuild ToC
+		project.updateTableOfContent();
+
 		if( !project.externalLevels || forceSingleFile ) {
 			// Full single JSON
-			return {
-				projectJsonStr: jsonStringify( project, project.toJson() ),
-				externLevels: [],
-			}
+			savingData.projectJsonStr = jsonStringify( project, project.toJson() );
 		}
 		else {
 			// Separate level JSONs
 			var idx = 0;
-			var externLevels = [];
 			for(w in project.worlds)
 			for(l in w.levels)
-				externLevels.push({
+				savingData.externLevels.push({
 					jsonStr: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 					relPath: l.makeExternalRelPath(idx++),
 					id: l.identifier,
@@ -706,11 +710,10 @@ class ProjectSaver extends dn.Process {
 					_clearLevelData(levelJson);
 			}
 
-			return {
-				projectJsonStr: jsonStringify( project, trimmedProjectJson ),
-				externLevels: externLevels,
-			}
+			savingData.projectJsonStr = jsonStringify( project, trimmedProjectJson );
 		}
+
+		return savingData;
 	}
 
 
