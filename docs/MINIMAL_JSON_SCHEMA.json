@@ -14,6 +14,7 @@
 			"iid",
 			"jsonVersion",
 			"levels",
+			"toc",
 			"worlds"
 		],
 		"properties": {
@@ -40,6 +41,15 @@
 				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
 				"items": {
 					"$ref": "#/otherTypes/World"
+				},
+				"type": [
+					"array"
+				]
+			},
+			"toc": {
+				"description": "All the instances of entities that have their `exportToToc` flag enabled are listed this array.",
+				"items": {
+					"$ref": "#/otherTypes/TableOfContentEntry"
 				},
 				"type": [
 					"array"
@@ -131,6 +141,9 @@
 					},
 					"Level": {
 						"$ref": "#/otherTypes/Level"
+					},
+					"TableOfContentEntry": {
+						"$ref": "#/otherTypes/TableOfContentEntry"
 					},
 					"EnumDef": {
 						"$ref": "#/otherTypes/EnumDef"
@@ -1562,6 +1575,34 @@
 					"description": "Index that represents the \"depth\" of the level in the world. Default is 0, greater means \"above\", lower means \"below\".<br/>  This value is mostly used for display only and is intended to make stacking of levels easier to manage.",
 					"type": [
 						"integer"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TableOfContentEntry": {
+			"title": "ldtk.TableOfContentEntry",
+			"required": [
+				"identifier",
+				"instances"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"identifier": {
+					"description": "",
+					"type": [
+						"string"
+					]
+				},
+				"instances": {
+					"description": "",
+					"items": {
+						"$ref": "#/otherTypes/EntityReferenceInfos"
+					},
+					"type": [
+						"array"
 					]
 				}
 			},
