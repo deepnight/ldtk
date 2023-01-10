@@ -426,7 +426,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		);
 		i.setEnabled( curEntity.maxCount>0 );
 
-		// Show name
+		// Show identfier
 		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));
 		i.linkEvent(EntityDefChanged);
 
