@@ -82,7 +82,7 @@
 				]
 			},
 			"toc": {
-				"description": "All the instances of entities that have their `exportToToc` flag enabled are listed this array.",
+				"description": "All instances of entities that have their `exportToToc` flag enabled are listed in this array.",
 				"items": {
 					"$ref": "#/otherTypes/TableOfContentEntry"
 				},
