@@ -5,6 +5,7 @@
  - Fixed opacity inputs (icon, border and fill) in Entity panel.
  - Fixed incorrect main value when editing an existing group using Rules Assistant
  - Fixed an error with Haxe API when a tileset is not defined in layer definition.
+ - Fixed the auto-layer assitant resize as you pan.
 
 # 1.2.3
 
