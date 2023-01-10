@@ -1,5 +1,8 @@
 # 1.2.4
 
+ - Added a new **Table of content** to the JSON, which lists all instances of any given entity.
+ For example, this is especially useful if you want to have a quick access to the location of all PlayerStart entities in your game without parsing all your levels manually.
+ To enable it, just check the "Add to table of content" option of an Entity definition.
  - Fixed lags in world view when using the fields render mode "Outlined text".
  - Fixed `A` key when using `WASD` navigation.
  - Fixed opacity inputs (icon, border and fill) in Entity panel.
