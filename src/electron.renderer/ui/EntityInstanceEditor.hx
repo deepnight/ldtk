@@ -288,7 +288,7 @@ class EntityInstanceEditor extends dn.Process {
 				}
 			}
 		);
-		i.setEnabled( ei.def.resizableX );
+		i.setEnabled( ei.def.flippableX );
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 
@@ -309,7 +309,7 @@ class EntityInstanceEditor extends dn.Process {
 				}
 			}
 		);
-		i.setEnabled( ei.def.resizableY );
+		i.setEnabled( ei.def.flippableY );
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 

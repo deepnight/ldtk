@@ -29,6 +29,8 @@ class EntityDef {
 
 	public var resizableX : Bool;
 	public var resizableY : Bool;
+	public var flippableX : Bool;
+	public var flippableY : Bool;
 	public var keepAspectRatio : Bool;
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
@@ -58,6 +60,7 @@ class EntityDef {
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
+		flippableX = flippableY = false;
 		keepAspectRatio = false;
 		hollow = false;
 		tags = new Tags();
@@ -140,6 +143,8 @@ class EntityDef {
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.resizableX = JsonTools.readBool( json.resizableX, false );
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
+		o.flippableX = JsonTools.readBool( json.flippableX, false );
+		o.flippableY = JsonTools.readBool( json.flippableY, false );
 		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
 
 		o.hollow = JsonTools.readBool( json.hollow, false );
@@ -188,6 +193,8 @@ class EntityDef {
 			height: height,
 			resizableX: resizableX,
 			resizableY: resizableY,
+			flippableX: flippableX,
+			flippableY: flippableY,
 			keepAspectRatio: keepAspectRatio,
 			tileOpacity: JsonTools.writeFloat(tileOpacity),
 			fillOpacity: JsonTools.writeFloat(fillOpacity),
