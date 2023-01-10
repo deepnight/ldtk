@@ -495,7 +495,7 @@ class JsTools {
 							case "sub": new J('<span class="key" title="Numeric pad -">-</span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
-							case "~": new J('<span class="key">${ App.ME.settings.navKeys==Zqsd ? "²" : "~" }</span>');
+							case "~": new J('<span class="key">${ App.ME.settings.v.navigationKeys==Zqsd ? "²" : "~" }</span>');
 
 							case k.charAt(0) => "(": new J("<span/>").append(k);
 							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
@@ -619,7 +619,7 @@ class JsTools {
 						case "ctrl" : keys.push(K.CTRL);
 						case "shift" : keys.push(K.SHIFT);
 						case "alt" : keys.push(K.ALT);
-						case "~": App.ME.settings.navKeys==Zqsd ? keys.push(222) : keys.push(K.QWERTY_TILDE);
+						case "~": App.ME.settings.v.navigationKeys==Zqsd ? keys.push(222) : keys.push(K.QWERTY_TILDE);
 						case _ :
 							var funcReg = ~/[fF]([0-9]+)/;
 							if( k.length==1 ) {

@@ -219,21 +219,3 @@ typedef CachedIID = {
 	var level: data.Level;
 	var ?ei: data.inst.EntityInstance ;
 }
-
-
-enum NavigationKeys {
-	Arrows;
-	Wasd;
-	Zqsd;
-}
-
-enum AutoWorldModeSwitch {
-	Never;
-	ZoomOutOnly;
-	ZoomInAndOut;
-}
-
-enum FieldsRender {
-	FR_Outline;
-	FR_Table;
-}
