@@ -10,7 +10,7 @@
 	},
 	"iid": "a2d9f0b0-7820-11ed-b6fd-010ddaafa733",
 	"jsonVersion": "1.2.4",
-	"appBuildId": 464816,
+	"appBuildId": 464819,
 	"nextUid": 10,
 	"identifierStyle": "Capitalize",
 	"worldLayout": "LinearHorizontal",
@@ -26,13 +26,14 @@
 	"minifyJson": false,
 	"externalLevels": false,
 	"exportTiled": false,
+	"exportBson": true,
 	"simplifiedExport": false,
 	"imageExportMode": "None",
 	"exportLevelBg": true,
 	"pngFilePattern": null,
 	"backupOnSave": false,
 	"backupLimit": 10,
-	"levelNamePattern": "%world_Level_%idx",
+	"levelNamePattern": "Level_%idx",
 	"tutorialDesc": "In this example, the levels are stored in separate files, in a subfolder. \n\nThis is fully transparent from the editor perspective.",
 	"customCommands": [],
 	"flags": ["UseMultilinesType"],
@@ -67,7 +68,7 @@
 	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "World_Level_0",
+			"identifier": "Level_0",
 			"iid": "a3053150-66b0-11ec-9cd7-c37b76d449dd",
 			"uid": 0,
 			"worldX": -1,
@@ -126,7 +127,7 @@
 			"__neighbours": []
 		},
 		{
-			"identifier": "World_Level_1",
+			"identifier": "Level_1",
 			"iid": "a3184420-66b0-11ec-9cd7-531cbe889139",
 			"uid": 2,
 			"worldX": -1,
@@ -183,7 +184,7 @@
 			"__neighbours": []
 		},
 		{
-			"identifier": "World_Level_2",
+			"identifier": "Level_2",
 			"iid": "a34a0280-66b0-11ec-9cd7-43e058c8f3de",
 			"uid": 3,
 			"worldX": -1,
