@@ -34,6 +34,8 @@ namespace nlohmann {
 namespace quicktype {
     using nlohmann::json;
 
+    #ifndef NLOHMANN_UNTYPED_quicktype_HELPERHELPER
+    #define NLOHMANN_UNTYPED_quicktype_HELPERHELPER
     inline json get_untyped(const json & j, const char * property) {
         if (j.find(property) != j.end()) {
             return j.at(property).get<json>();
@@ -44,7 +46,10 @@ namespace quicktype {
     inline json get_untyped(const json & j, std::string property) {
         return get_untyped(j, property.data());
     }
+    #endif
 
+    #ifndef NLOHMANN_OPTIONAL_quicktype_
+    #define NLOHMANN_OPTIONAL_quicktype_
     template <typename T>
     inline std::shared_ptr<T> get_optional(const json & j, const char * property) {
         if (j.find(property) != j.end()) {
@@ -57,6 +62,7 @@ namespace quicktype {
     inline std::shared_ptr<T> get_optional(const json & j, std::string property) {
         return get_optional<T>(j, property.data());
     }
+    #endif
 
     /**
      * Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
@@ -422,6 +428,7 @@ namespace quicktype {
 
         private:
         std::string color;
+        bool export_to_toc;
         std::vector<FieldDefinition> field_defs;
         double fill_opacity;
         int64_t height;
@@ -455,6 +462,14 @@ namespace quicktype {
         const std::string & get_color() const { return color; }
         std::string & get_mutable_color() { return color; }
         void set_color(const std::string & value) { this->color = value; }
+
+        /**
+         * If enabled, all instances of this entity will be listed in the project "Table of content"
+         * object.
+         */
+        const bool & get_export_to_toc() const { return export_to_toc; }
+        bool & get_mutable_export_to_toc() { return export_to_toc; }
+        void set_export_to_toc(const bool & value) { this->export_to_toc = value; }
 
         /**
          * Array of field definitions
@@ -2295,6 +2310,25 @@ namespace quicktype {
         void set_world_y(const int64_t & value) { this->world_y = value; }
     };
 
+    class LdtkTableOfContentEntry {
+        public:
+        LdtkTableOfContentEntry() = default;
+        virtual ~LdtkTableOfContentEntry() = default;
+
+        private:
+        std::string identifier;
+        std::vector<FieldInstanceEntityReference> instances;
+
+        public:
+        const std::string & get_identifier() const { return identifier; }
+        std::string & get_mutable_identifier() { return identifier; }
+        void set_identifier(const std::string & value) { this->identifier = value; }
+
+        const std::vector<FieldInstanceEntityReference> & get_instances() const { return instances; }
+        std::vector<FieldInstanceEntityReference> & get_mutable_instances() { return instances; }
+        void set_instances(const std::vector<FieldInstanceEntityReference> & value) { this->instances = value; }
+    };
+
     enum class WorldLayout : int { FREE, GRID_VANIA, LINEAR_HORIZONTAL, LINEAR_VERTICAL };
 
     /**
@@ -2408,6 +2442,7 @@ namespace quicktype {
         std::shared_ptr<Level> level;
         std::shared_ptr<LevelBackgroundPosition> level_bg_pos_infos;
         std::shared_ptr<NeighbourLevel> neighbour_level;
+        std::shared_ptr<LdtkTableOfContentEntry> table_of_content_entry;
         std::shared_ptr<TileInstance> tile;
         std::shared_ptr<TileCustomMetadata> tile_custom_metadata;
         std::shared_ptr<TilesetDefinition> tileset_def;
@@ -2474,6 +2509,9 @@ namespace quicktype {
 
         std::shared_ptr<NeighbourLevel> get_neighbour_level() const { return neighbour_level; }
         void set_neighbour_level(std::shared_ptr<NeighbourLevel> value) { this->neighbour_level = value; }
+
+        std::shared_ptr<LdtkTableOfContentEntry> get_table_of_content_entry() const { return table_of_content_entry; }
+        void set_table_of_content_entry(std::shared_ptr<LdtkTableOfContentEntry> value) { this->table_of_content_entry = value; }
 
         std::shared_ptr<TileInstance> get_tile() const { return tile; }
         void set_tile(std::shared_ptr<TileInstance> value) { this->tile = value; }
@@ -2544,6 +2582,7 @@ namespace quicktype {
         int64_t next_uid;
         std::shared_ptr<std::string> png_file_pattern;
         bool simplified_export;
+        std::vector<LdtkTableOfContentEntry> toc;
         std::shared_ptr<std::string> tutorial_desc;
         std::shared_ptr<int64_t> world_grid_height;
         std::shared_ptr<int64_t> world_grid_width;
@@ -2764,6 +2803,14 @@ namespace quicktype {
         void set_simplified_export(const bool & value) { this->simplified_export = value; }
 
         /**
+         * All the instances of entities that have their `exportToToc` flag enabled are listed this
+         * array.
+         */
+        const std::vector<LdtkTableOfContentEntry> & get_toc() const { return toc; }
+        std::vector<LdtkTableOfContentEntry> & get_mutable_toc() { return toc; }
+        void set_toc(const std::vector<LdtkTableOfContentEntry> & value) { this->toc = value; }
+
+        /**
          * This optional description is used by LDtk Samples to show up some informations and
          * instructions.
          */
@@ -2815,190 +2862,193 @@ namespace quicktype {
     };
 }
 
-namespace nlohmann {
-    void from_json(const json & j, quicktype::LdtkCustomCommand & x);
-    void to_json(json & j, const quicktype::LdtkCustomCommand & x);
+namespace quicktype {
+    void from_json(const json & j, LdtkCustomCommand & x);
+    void to_json(json & j, const LdtkCustomCommand & x);
 
-    void from_json(const json & j, quicktype::FieldDefinition & x);
-    void to_json(json & j, const quicktype::FieldDefinition & x);
+    void from_json(const json & j, FieldDefinition & x);
+    void to_json(json & j, const FieldDefinition & x);
 
-    void from_json(const json & j, quicktype::TilesetRectangle & x);
-    void to_json(json & j, const quicktype::TilesetRectangle & x);
+    void from_json(const json & j, TilesetRectangle & x);
+    void to_json(json & j, const TilesetRectangle & x);
 
-    void from_json(const json & j, quicktype::EntityDefinition & x);
-    void to_json(json & j, const quicktype::EntityDefinition & x);
+    void from_json(const json & j, EntityDefinition & x);
+    void to_json(json & j, const EntityDefinition & x);
 
-    void from_json(const json & j, quicktype::EnumValueDefinition & x);
-    void to_json(json & j, const quicktype::EnumValueDefinition & x);
+    void from_json(const json & j, EnumValueDefinition & x);
+    void to_json(json & j, const EnumValueDefinition & x);
 
-    void from_json(const json & j, quicktype::EnumDefinition & x);
-    void to_json(json & j, const quicktype::EnumDefinition & x);
+    void from_json(const json & j, EnumDefinition & x);
+    void to_json(json & j, const EnumDefinition & x);
 
-    void from_json(const json & j, quicktype::AutoLayerRuleDefinition & x);
-    void to_json(json & j, const quicktype::AutoLayerRuleDefinition & x);
+    void from_json(const json & j, AutoLayerRuleDefinition & x);
+    void to_json(json & j, const AutoLayerRuleDefinition & x);
 
-    void from_json(const json & j, quicktype::AutoLayerRuleGroup & x);
-    void to_json(json & j, const quicktype::AutoLayerRuleGroup & x);
+    void from_json(const json & j, AutoLayerRuleGroup & x);
+    void to_json(json & j, const AutoLayerRuleGroup & x);
 
-    void from_json(const json & j, quicktype::IntGridValueDefinition & x);
-    void to_json(json & j, const quicktype::IntGridValueDefinition & x);
+    void from_json(const json & j, IntGridValueDefinition & x);
+    void to_json(json & j, const IntGridValueDefinition & x);
 
-    void from_json(const json & j, quicktype::LayerDefinition & x);
-    void to_json(json & j, const quicktype::LayerDefinition & x);
+    void from_json(const json & j, LayerDefinition & x);
+    void to_json(json & j, const LayerDefinition & x);
 
-    void from_json(const json & j, quicktype::TileCustomMetadata & x);
-    void to_json(json & j, const quicktype::TileCustomMetadata & x);
+    void from_json(const json & j, TileCustomMetadata & x);
+    void to_json(json & j, const TileCustomMetadata & x);
 
-    void from_json(const json & j, quicktype::EnumTagValue & x);
-    void to_json(json & j, const quicktype::EnumTagValue & x);
+    void from_json(const json & j, EnumTagValue & x);
+    void to_json(json & j, const EnumTagValue & x);
 
-    void from_json(const json & j, quicktype::TilesetDefinition & x);
-    void to_json(json & j, const quicktype::TilesetDefinition & x);
+    void from_json(const json & j, TilesetDefinition & x);
+    void to_json(json & j, const TilesetDefinition & x);
 
-    void from_json(const json & j, quicktype::Definitions & x);
-    void to_json(json & j, const quicktype::Definitions & x);
+    void from_json(const json & j, Definitions & x);
+    void to_json(json & j, const Definitions & x);
 
-    void from_json(const json & j, quicktype::FieldInstance & x);
-    void to_json(json & j, const quicktype::FieldInstance & x);
+    void from_json(const json & j, FieldInstance & x);
+    void to_json(json & j, const FieldInstance & x);
 
-    void from_json(const json & j, quicktype::EntityInstance & x);
-    void to_json(json & j, const quicktype::EntityInstance & x);
+    void from_json(const json & j, EntityInstance & x);
+    void to_json(json & j, const EntityInstance & x);
 
-    void from_json(const json & j, quicktype::FieldInstanceEntityReference & x);
-    void to_json(json & j, const quicktype::FieldInstanceEntityReference & x);
+    void from_json(const json & j, FieldInstanceEntityReference & x);
+    void to_json(json & j, const FieldInstanceEntityReference & x);
 
-    void from_json(const json & j, quicktype::FieldInstanceGridPoint & x);
-    void to_json(json & j, const quicktype::FieldInstanceGridPoint & x);
+    void from_json(const json & j, FieldInstanceGridPoint & x);
+    void to_json(json & j, const FieldInstanceGridPoint & x);
 
-    void from_json(const json & j, quicktype::IntGridValueInstance & x);
-    void to_json(json & j, const quicktype::IntGridValueInstance & x);
+    void from_json(const json & j, IntGridValueInstance & x);
+    void to_json(json & j, const IntGridValueInstance & x);
 
-    void from_json(const json & j, quicktype::TileInstance & x);
-    void to_json(json & j, const quicktype::TileInstance & x);
+    void from_json(const json & j, TileInstance & x);
+    void to_json(json & j, const TileInstance & x);
 
-    void from_json(const json & j, quicktype::LayerInstance & x);
-    void to_json(json & j, const quicktype::LayerInstance & x);
+    void from_json(const json & j, LayerInstance & x);
+    void to_json(json & j, const LayerInstance & x);
 
-    void from_json(const json & j, quicktype::LevelBackgroundPosition & x);
-    void to_json(json & j, const quicktype::LevelBackgroundPosition & x);
+    void from_json(const json & j, LevelBackgroundPosition & x);
+    void to_json(json & j, const LevelBackgroundPosition & x);
 
-    void from_json(const json & j, quicktype::NeighbourLevel & x);
-    void to_json(json & j, const quicktype::NeighbourLevel & x);
+    void from_json(const json & j, NeighbourLevel & x);
+    void to_json(json & j, const NeighbourLevel & x);
 
-    void from_json(const json & j, quicktype::Level & x);
-    void to_json(json & j, const quicktype::Level & x);
+    void from_json(const json & j, Level & x);
+    void to_json(json & j, const Level & x);
 
-    void from_json(const json & j, quicktype::World & x);
-    void to_json(json & j, const quicktype::World & x);
+    void from_json(const json & j, LdtkTableOfContentEntry & x);
+    void to_json(json & j, const LdtkTableOfContentEntry & x);
 
-    void from_json(const json & j, quicktype::ForcedRefs & x);
-    void to_json(json & j, const quicktype::ForcedRefs & x);
+    void from_json(const json & j, World & x);
+    void to_json(json & j, const World & x);
 
-    void from_json(const json & j, quicktype::LdtkJson & x);
-    void to_json(json & j, const quicktype::LdtkJson & x);
+    void from_json(const json & j, ForcedRefs & x);
+    void to_json(json & j, const ForcedRefs & x);
 
-    void from_json(const json & j, quicktype::When & x);
-    void to_json(json & j, const quicktype::When & x);
+    void from_json(const json & j, LdtkJson & x);
+    void to_json(json & j, const LdtkJson & x);
 
-    void from_json(const json & j, quicktype::AllowedRefs & x);
-    void to_json(json & j, const quicktype::AllowedRefs & x);
+    void from_json(const json & j, When & x);
+    void to_json(json & j, const When & x);
 
-    void from_json(const json & j, quicktype::EditorDisplayMode & x);
-    void to_json(json & j, const quicktype::EditorDisplayMode & x);
+    void from_json(const json & j, AllowedRefs & x);
+    void to_json(json & j, const AllowedRefs & x);
 
-    void from_json(const json & j, quicktype::EditorDisplayPos & x);
-    void to_json(json & j, const quicktype::EditorDisplayPos & x);
+    void from_json(const json & j, EditorDisplayMode & x);
+    void to_json(json & j, const EditorDisplayMode & x);
 
-    void from_json(const json & j, quicktype::EditorLinkStyle & x);
-    void to_json(json & j, const quicktype::EditorLinkStyle & x);
+    void from_json(const json & j, EditorDisplayPos & x);
+    void to_json(json & j, const EditorDisplayPos & x);
 
-    void from_json(const json & j, quicktype::TextLanguageMode & x);
-    void to_json(json & j, const quicktype::TextLanguageMode & x);
+    void from_json(const json & j, EditorLinkStyle & x);
+    void to_json(json & j, const EditorLinkStyle & x);
 
-    void from_json(const json & j, quicktype::LimitBehavior & x);
-    void to_json(json & j, const quicktype::LimitBehavior & x);
+    void from_json(const json & j, TextLanguageMode & x);
+    void to_json(json & j, const TextLanguageMode & x);
 
-    void from_json(const json & j, quicktype::LimitScope & x);
-    void to_json(json & j, const quicktype::LimitScope & x);
+    void from_json(const json & j, LimitBehavior & x);
+    void to_json(json & j, const LimitBehavior & x);
 
-    void from_json(const json & j, quicktype::RenderMode & x);
-    void to_json(json & j, const quicktype::RenderMode & x);
+    void from_json(const json & j, LimitScope & x);
+    void to_json(json & j, const LimitScope & x);
 
-    void from_json(const json & j, quicktype::TileRenderMode & x);
-    void to_json(json & j, const quicktype::TileRenderMode & x);
+    void from_json(const json & j, RenderMode & x);
+    void to_json(json & j, const RenderMode & x);
 
-    void from_json(const json & j, quicktype::Checker & x);
-    void to_json(json & j, const quicktype::Checker & x);
+    void from_json(const json & j, TileRenderMode & x);
+    void to_json(json & j, const TileRenderMode & x);
 
-    void from_json(const json & j, quicktype::TileMode & x);
-    void to_json(json & j, const quicktype::TileMode & x);
+    void from_json(const json & j, Checker & x);
+    void to_json(json & j, const Checker & x);
 
-    void from_json(const json & j, quicktype::Type & x);
-    void to_json(json & j, const quicktype::Type & x);
+    void from_json(const json & j, TileMode & x);
+    void to_json(json & j, const TileMode & x);
 
-    void from_json(const json & j, quicktype::EmbedAtlas & x);
-    void to_json(json & j, const quicktype::EmbedAtlas & x);
+    void from_json(const json & j, Type & x);
+    void to_json(json & j, const Type & x);
 
-    void from_json(const json & j, quicktype::Flag & x);
-    void to_json(json & j, const quicktype::Flag & x);
+    void from_json(const json & j, EmbedAtlas & x);
+    void to_json(json & j, const EmbedAtlas & x);
 
-    void from_json(const json & j, quicktype::BgPos & x);
-    void to_json(json & j, const quicktype::BgPos & x);
+    void from_json(const json & j, Flag & x);
+    void to_json(json & j, const Flag & x);
 
-    void from_json(const json & j, quicktype::WorldLayout & x);
-    void to_json(json & j, const quicktype::WorldLayout & x);
+    void from_json(const json & j, BgPos & x);
+    void to_json(json & j, const BgPos & x);
 
-    void from_json(const json & j, quicktype::IdentifierStyle & x);
-    void to_json(json & j, const quicktype::IdentifierStyle & x);
+    void from_json(const json & j, WorldLayout & x);
+    void to_json(json & j, const WorldLayout & x);
 
-    void from_json(const json & j, quicktype::ImageExportMode & x);
-    void to_json(json & j, const quicktype::ImageExportMode & x);
+    void from_json(const json & j, IdentifierStyle & x);
+    void to_json(json & j, const IdentifierStyle & x);
 
-    inline void from_json(const json & j, quicktype::LdtkCustomCommand& x) {
+    void from_json(const json & j, ImageExportMode & x);
+    void to_json(json & j, const ImageExportMode & x);
+
+    inline void from_json(const json & j, LdtkCustomCommand& x) {
         x.set_command(j.at("command").get<std::string>());
-        x.set_when(j.at("when").get<quicktype::When>());
+        x.set_when(j.at("when").get<When>());
     }
 
-    inline void to_json(json & j, const quicktype::LdtkCustomCommand & x) {
+    inline void to_json(json & j, const LdtkCustomCommand & x) {
         j = json::object();
         j["command"] = x.get_command();
         j["when"] = x.get_when();
     }
 
-    inline void from_json(const json & j, quicktype::FieldDefinition& x) {
+    inline void from_json(const json & j, FieldDefinition& x) {
         x.set_type(j.at("__type").get<std::string>());
-        x.set_accept_file_types(quicktype::get_optional<std::vector<std::string>>(j, "acceptFileTypes"));
-        x.set_allowed_refs(j.at("allowedRefs").get<quicktype::AllowedRefs>());
+        x.set_accept_file_types(get_optional<std::vector<std::string>>(j, "acceptFileTypes"));
+        x.set_allowed_refs(j.at("allowedRefs").get<AllowedRefs>());
         x.set_allowed_ref_tags(j.at("allowedRefTags").get<std::vector<std::string>>());
         x.set_allow_out_of_level_ref(j.at("allowOutOfLevelRef").get<bool>());
-        x.set_array_max_length(quicktype::get_optional<int64_t>(j, "arrayMaxLength"));
-        x.set_array_min_length(quicktype::get_optional<int64_t>(j, "arrayMinLength"));
+        x.set_array_max_length(get_optional<int64_t>(j, "arrayMaxLength"));
+        x.set_array_min_length(get_optional<int64_t>(j, "arrayMinLength"));
         x.set_auto_chain_ref(j.at("autoChainRef").get<bool>());
         x.set_can_be_null(j.at("canBeNull").get<bool>());
-        x.set_default_override(quicktype::get_untyped(j, "defaultOverride"));
-        x.set_doc(quicktype::get_optional<std::string>(j, "doc"));
+        x.set_default_override(get_untyped(j, "defaultOverride"));
+        x.set_doc(get_optional<std::string>(j, "doc"));
         x.set_editor_always_show(j.at("editorAlwaysShow").get<bool>());
         x.set_editor_cut_long_values(j.at("editorCutLongValues").get<bool>());
-        x.set_editor_display_mode(j.at("editorDisplayMode").get<quicktype::EditorDisplayMode>());
-        x.set_editor_display_pos(j.at("editorDisplayPos").get<quicktype::EditorDisplayPos>());
-        x.set_editor_link_style(j.at("editorLinkStyle").get<quicktype::EditorLinkStyle>());
+        x.set_editor_display_mode(j.at("editorDisplayMode").get<EditorDisplayMode>());
+        x.set_editor_display_pos(j.at("editorDisplayPos").get<EditorDisplayPos>());
+        x.set_editor_link_style(j.at("editorLinkStyle").get<EditorLinkStyle>());
         x.set_editor_show_in_world(j.at("editorShowInWorld").get<bool>());
-        x.set_editor_text_prefix(quicktype::get_optional<std::string>(j, "editorTextPrefix"));
-        x.set_editor_text_suffix(quicktype::get_optional<std::string>(j, "editorTextSuffix"));
+        x.set_editor_text_prefix(get_optional<std::string>(j, "editorTextPrefix"));
+        x.set_editor_text_suffix(get_optional<std::string>(j, "editorTextSuffix"));
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_is_array(j.at("isArray").get<bool>());
-        x.set_max(quicktype::get_optional<double>(j, "max"));
-        x.set_min(quicktype::get_optional<double>(j, "min"));
-        x.set_regex(quicktype::get_optional<std::string>(j, "regex"));
+        x.set_max(get_optional<double>(j, "max"));
+        x.set_min(get_optional<double>(j, "min"));
+        x.set_regex(get_optional<std::string>(j, "regex"));
         x.set_symmetrical_ref(j.at("symmetricalRef").get<bool>());
-        x.set_text_language_mode(quicktype::get_optional<quicktype::TextLanguageMode>(j, "textLanguageMode"));
-        x.set_tileset_uid(quicktype::get_optional<int64_t>(j, "tilesetUid"));
+        x.set_text_language_mode(get_optional<TextLanguageMode>(j, "textLanguageMode"));
+        x.set_tileset_uid(get_optional<int64_t>(j, "tilesetUid"));
         x.set_field_definition_type(j.at("type").get<std::string>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_use_for_smart_color(j.at("useForSmartColor").get<bool>());
     }
 
-    inline void to_json(json & j, const quicktype::FieldDefinition & x) {
+    inline void to_json(json & j, const FieldDefinition & x) {
         j = json::object();
         j["__type"] = x.get_type();
         j["acceptFileTypes"] = x.get_accept_file_types();
@@ -3032,7 +3082,7 @@ namespace nlohmann {
         j["useForSmartColor"] = x.get_use_for_smart_color();
     }
 
-    inline void from_json(const json & j, quicktype::TilesetRectangle& x) {
+    inline void from_json(const json & j, TilesetRectangle& x) {
         x.set_h(j.at("h").get<int64_t>());
         x.set_tileset_uid(j.at("tilesetUid").get<int64_t>());
         x.set_w(j.at("w").get<int64_t>());
@@ -3040,7 +3090,7 @@ namespace nlohmann {
         x.set_y(j.at("y").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::TilesetRectangle & x) {
+    inline void to_json(json & j, const TilesetRectangle & x) {
         j = json::object();
         j["h"] = x.get_h();
         j["tilesetUid"] = x.get_tileset_uid();
@@ -3049,38 +3099,40 @@ namespace nlohmann {
         j["y"] = x.get_y();
     }
 
-    inline void from_json(const json & j, quicktype::EntityDefinition& x) {
+    inline void from_json(const json & j, EntityDefinition& x) {
         x.set_color(j.at("color").get<std::string>());
-        x.set_field_defs(j.at("fieldDefs").get<std::vector<quicktype::FieldDefinition>>());
+        x.set_export_to_toc(j.at("exportToToc").get<bool>());
+        x.set_field_defs(j.at("fieldDefs").get<std::vector<FieldDefinition>>());
         x.set_fill_opacity(j.at("fillOpacity").get<double>());
         x.set_height(j.at("height").get<int64_t>());
         x.set_hollow(j.at("hollow").get<bool>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_keep_aspect_ratio(j.at("keepAspectRatio").get<bool>());
-        x.set_limit_behavior(j.at("limitBehavior").get<quicktype::LimitBehavior>());
-        x.set_limit_scope(j.at("limitScope").get<quicktype::LimitScope>());
+        x.set_limit_behavior(j.at("limitBehavior").get<LimitBehavior>());
+        x.set_limit_scope(j.at("limitScope").get<LimitScope>());
         x.set_line_opacity(j.at("lineOpacity").get<double>());
         x.set_max_count(j.at("maxCount").get<int64_t>());
         x.set_nine_slice_borders(j.at("nineSliceBorders").get<std::vector<int64_t>>());
         x.set_pivot_x(j.at("pivotX").get<double>());
         x.set_pivot_y(j.at("pivotY").get<double>());
-        x.set_render_mode(j.at("renderMode").get<quicktype::RenderMode>());
+        x.set_render_mode(j.at("renderMode").get<RenderMode>());
         x.set_resizable_x(j.at("resizableX").get<bool>());
         x.set_resizable_y(j.at("resizableY").get<bool>());
         x.set_show_name(j.at("showName").get<bool>());
         x.set_tags(j.at("tags").get<std::vector<std::string>>());
-        x.set_tile_id(quicktype::get_optional<int64_t>(j, "tileId"));
+        x.set_tile_id(get_optional<int64_t>(j, "tileId"));
         x.set_tile_opacity(j.at("tileOpacity").get<double>());
-        x.set_tile_rect(quicktype::get_optional<quicktype::TilesetRectangle>(j, "tileRect"));
-        x.set_tile_render_mode(j.at("tileRenderMode").get<quicktype::TileRenderMode>());
-        x.set_tileset_id(quicktype::get_optional<int64_t>(j, "tilesetId"));
+        x.set_tile_rect(get_optional<TilesetRectangle>(j, "tileRect"));
+        x.set_tile_render_mode(j.at("tileRenderMode").get<TileRenderMode>());
+        x.set_tileset_id(get_optional<int64_t>(j, "tilesetId"));
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_width(j.at("width").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::EntityDefinition & x) {
+    inline void to_json(json & j, const EntityDefinition & x) {
         j = json::object();
         j["color"] = x.get_color();
+        j["exportToToc"] = x.get_export_to_toc();
         j["fieldDefs"] = x.get_field_defs();
         j["fillOpacity"] = x.get_fill_opacity();
         j["height"] = x.get_height();
@@ -3108,14 +3160,14 @@ namespace nlohmann {
         j["width"] = x.get_width();
     }
 
-    inline void from_json(const json & j, quicktype::EnumValueDefinition& x) {
-        x.set_tile_src_rect(quicktype::get_optional<std::vector<int64_t>>(j, "__tileSrcRect"));
+    inline void from_json(const json & j, EnumValueDefinition& x) {
+        x.set_tile_src_rect(get_optional<std::vector<int64_t>>(j, "__tileSrcRect"));
         x.set_color(j.at("color").get<int64_t>());
         x.set_id(j.at("id").get<std::string>());
-        x.set_tile_id(quicktype::get_optional<int64_t>(j, "tileId"));
+        x.set_tile_id(get_optional<int64_t>(j, "tileId"));
     }
 
-    inline void to_json(json & j, const quicktype::EnumValueDefinition & x) {
+    inline void to_json(json & j, const EnumValueDefinition & x) {
         j = json::object();
         j["__tileSrcRect"] = x.get_tile_src_rect();
         j["color"] = x.get_color();
@@ -3123,17 +3175,17 @@ namespace nlohmann {
         j["tileId"] = x.get_tile_id();
     }
 
-    inline void from_json(const json & j, quicktype::EnumDefinition& x) {
-        x.set_external_file_checksum(quicktype::get_optional<std::string>(j, "externalFileChecksum"));
-        x.set_external_rel_path(quicktype::get_optional<std::string>(j, "externalRelPath"));
-        x.set_icon_tileset_uid(quicktype::get_optional<int64_t>(j, "iconTilesetUid"));
+    inline void from_json(const json & j, EnumDefinition& x) {
+        x.set_external_file_checksum(get_optional<std::string>(j, "externalFileChecksum"));
+        x.set_external_rel_path(get_optional<std::string>(j, "externalRelPath"));
+        x.set_icon_tileset_uid(get_optional<int64_t>(j, "iconTilesetUid"));
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_tags(j.at("tags").get<std::vector<std::string>>());
         x.set_uid(j.at("uid").get<int64_t>());
-        x.set_values(j.at("values").get<std::vector<quicktype::EnumValueDefinition>>());
+        x.set_values(j.at("values").get<std::vector<EnumValueDefinition>>());
     }
 
-    inline void to_json(json & j, const quicktype::EnumDefinition & x) {
+    inline void to_json(json & j, const EnumDefinition & x) {
         j = json::object();
         j["externalFileChecksum"] = x.get_external_file_checksum();
         j["externalRelPath"] = x.get_external_rel_path();
@@ -3144,14 +3196,14 @@ namespace nlohmann {
         j["values"] = x.get_values();
     }
 
-    inline void from_json(const json & j, quicktype::AutoLayerRuleDefinition& x) {
+    inline void from_json(const json & j, AutoLayerRuleDefinition& x) {
         x.set_active(j.at("active").get<bool>());
         x.set_break_on_match(j.at("breakOnMatch").get<bool>());
         x.set_chance(j.at("chance").get<double>());
-        x.set_checker(j.at("checker").get<quicktype::Checker>());
+        x.set_checker(j.at("checker").get<Checker>());
         x.set_flip_x(j.at("flipX").get<bool>());
         x.set_flip_y(j.at("flipY").get<bool>());
-        x.set_out_of_bounds_value(quicktype::get_optional<int64_t>(j, "outOfBoundsValue"));
+        x.set_out_of_bounds_value(get_optional<int64_t>(j, "outOfBoundsValue"));
         x.set_pattern(j.at("pattern").get<std::vector<int64_t>>());
         x.set_perlin_active(j.at("perlinActive").get<bool>());
         x.set_perlin_octaves(j.at("perlinOctaves").get<double>());
@@ -3161,7 +3213,7 @@ namespace nlohmann {
         x.set_pivot_y(j.at("pivotY").get<double>());
         x.set_size(j.at("size").get<int64_t>());
         x.set_tile_ids(j.at("tileIds").get<std::vector<int64_t>>());
-        x.set_tile_mode(j.at("tileMode").get<quicktype::TileMode>());
+        x.set_tile_mode(j.at("tileMode").get<TileMode>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_x_modulo(j.at("xModulo").get<int64_t>());
         x.set_x_offset(j.at("xOffset").get<int64_t>());
@@ -3169,7 +3221,7 @@ namespace nlohmann {
         x.set_y_offset(j.at("yOffset").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::AutoLayerRuleDefinition & x) {
+    inline void to_json(json & j, const AutoLayerRuleDefinition & x) {
         j = json::object();
         j["active"] = x.get_active();
         j["breakOnMatch"] = x.get_break_on_match();
@@ -3195,17 +3247,17 @@ namespace nlohmann {
         j["yOffset"] = x.get_y_offset();
     }
 
-    inline void from_json(const json & j, quicktype::AutoLayerRuleGroup& x) {
+    inline void from_json(const json & j, AutoLayerRuleGroup& x) {
         x.set_active(j.at("active").get<bool>());
-        x.set_collapsed(quicktype::get_optional<bool>(j, "collapsed"));
+        x.set_collapsed(get_optional<bool>(j, "collapsed"));
         x.set_is_optional(j.at("isOptional").get<bool>());
         x.set_name(j.at("name").get<std::string>());
-        x.set_rules(j.at("rules").get<std::vector<quicktype::AutoLayerRuleDefinition>>());
+        x.set_rules(j.at("rules").get<std::vector<AutoLayerRuleDefinition>>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_uses_wizard(j.at("usesWizard").get<bool>());
     }
 
-    inline void to_json(json & j, const quicktype::AutoLayerRuleGroup & x) {
+    inline void to_json(json & j, const AutoLayerRuleGroup & x) {
         j = json::object();
         j["active"] = x.get_active();
         j["collapsed"] = x.get_collapsed();
@@ -3216,24 +3268,24 @@ namespace nlohmann {
         j["usesWizard"] = x.get_uses_wizard();
     }
 
-    inline void from_json(const json & j, quicktype::IntGridValueDefinition& x) {
+    inline void from_json(const json & j, IntGridValueDefinition& x) {
         x.set_color(j.at("color").get<std::string>());
-        x.set_identifier(quicktype::get_optional<std::string>(j, "identifier"));
+        x.set_identifier(get_optional<std::string>(j, "identifier"));
         x.set_value(j.at("value").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::IntGridValueDefinition & x) {
+    inline void to_json(json & j, const IntGridValueDefinition & x) {
         j = json::object();
         j["color"] = x.get_color();
         j["identifier"] = x.get_identifier();
         j["value"] = x.get_value();
     }
 
-    inline void from_json(const json & j, quicktype::LayerDefinition& x) {
+    inline void from_json(const json & j, LayerDefinition& x) {
         x.set_type(j.at("__type").get<std::string>());
-        x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<quicktype::AutoLayerRuleGroup>>());
-        x.set_auto_source_layer_def_uid(quicktype::get_optional<int64_t>(j, "autoSourceLayerDefUid"));
-        x.set_auto_tileset_def_uid(quicktype::get_optional<int64_t>(j, "autoTilesetDefUid"));
+        x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<AutoLayerRuleGroup>>());
+        x.set_auto_source_layer_def_uid(get_optional<int64_t>(j, "autoSourceLayerDefUid"));
+        x.set_auto_tileset_def_uid(get_optional<int64_t>(j, "autoTilesetDefUid"));
         x.set_can_select_when_inactive(j.at("canSelectWhenInactive").get<bool>());
         x.set_display_opacity(j.at("displayOpacity").get<double>());
         x.set_excluded_tags(j.at("excludedTags").get<std::vector<std::string>>());
@@ -3244,7 +3296,7 @@ namespace nlohmann {
         x.set_hide_in_list(j.at("hideInList").get<bool>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_inactive_opacity(j.at("inactiveOpacity").get<double>());
-        x.set_int_grid_values(j.at("intGridValues").get<std::vector<quicktype::IntGridValueDefinition>>());
+        x.set_int_grid_values(j.at("intGridValues").get<std::vector<IntGridValueDefinition>>());
         x.set_parallax_factor_x(j.at("parallaxFactorX").get<double>());
         x.set_parallax_factor_y(j.at("parallaxFactorY").get<double>());
         x.set_parallax_scaling(j.at("parallaxScaling").get<bool>());
@@ -3253,12 +3305,12 @@ namespace nlohmann {
         x.set_required_tags(j.at("requiredTags").get<std::vector<std::string>>());
         x.set_tile_pivot_x(j.at("tilePivotX").get<double>());
         x.set_tile_pivot_y(j.at("tilePivotY").get<double>());
-        x.set_tileset_def_uid(quicktype::get_optional<int64_t>(j, "tilesetDefUid"));
-        x.set_layer_definition_type(j.at("type").get<quicktype::Type>());
+        x.set_tileset_def_uid(get_optional<int64_t>(j, "tilesetDefUid"));
+        x.set_layer_definition_type(j.at("type").get<Type>());
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::LayerDefinition & x) {
+    inline void to_json(json & j, const LayerDefinition & x) {
         j = json::object();
         j["__type"] = x.get_type();
         j["autoRuleGroups"] = x.get_auto_rule_groups();
@@ -3288,49 +3340,49 @@ namespace nlohmann {
         j["uid"] = x.get_uid();
     }
 
-    inline void from_json(const json & j, quicktype::TileCustomMetadata& x) {
+    inline void from_json(const json & j, TileCustomMetadata& x) {
         x.set_data(j.at("data").get<std::string>());
         x.set_tile_id(j.at("tileId").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::TileCustomMetadata & x) {
+    inline void to_json(json & j, const TileCustomMetadata & x) {
         j = json::object();
         j["data"] = x.get_data();
         j["tileId"] = x.get_tile_id();
     }
 
-    inline void from_json(const json & j, quicktype::EnumTagValue& x) {
+    inline void from_json(const json & j, EnumTagValue& x) {
         x.set_enum_value_id(j.at("enumValueId").get<std::string>());
         x.set_tile_ids(j.at("tileIds").get<std::vector<int64_t>>());
     }
 
-    inline void to_json(json & j, const quicktype::EnumTagValue & x) {
+    inline void to_json(json & j, const EnumTagValue & x) {
         j = json::object();
         j["enumValueId"] = x.get_enum_value_id();
         j["tileIds"] = x.get_tile_ids();
     }
 
-    inline void from_json(const json & j, quicktype::TilesetDefinition& x) {
+    inline void from_json(const json & j, TilesetDefinition& x) {
         x.set_c_hei(j.at("__cHei").get<int64_t>());
         x.set_c_wid(j.at("__cWid").get<int64_t>());
-        x.set_cached_pixel_data(quicktype::get_optional<std::map<std::string, json>>(j, "cachedPixelData"));
-        x.set_custom_data(j.at("customData").get<std::vector<quicktype::TileCustomMetadata>>());
-        x.set_embed_atlas(quicktype::get_optional<quicktype::EmbedAtlas>(j, "embedAtlas"));
-        x.set_enum_tags(j.at("enumTags").get<std::vector<quicktype::EnumTagValue>>());
+        x.set_cached_pixel_data(get_optional<std::map<std::string, nlohmann::json>>(j, "cachedPixelData"));
+        x.set_custom_data(j.at("customData").get<std::vector<TileCustomMetadata>>());
+        x.set_embed_atlas(get_optional<EmbedAtlas>(j, "embedAtlas"));
+        x.set_enum_tags(j.at("enumTags").get<std::vector<EnumTagValue>>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_padding(j.at("padding").get<int64_t>());
         x.set_px_hei(j.at("pxHei").get<int64_t>());
         x.set_px_wid(j.at("pxWid").get<int64_t>());
-        x.set_rel_path(quicktype::get_optional<std::string>(j, "relPath"));
-        x.set_saved_selections(j.at("savedSelections").get<std::vector<std::map<std::string, json>>>());
+        x.set_rel_path(get_optional<std::string>(j, "relPath"));
+        x.set_saved_selections(j.at("savedSelections").get<std::vector<std::map<std::string, nlohmann::json>>>());
         x.set_spacing(j.at("spacing").get<int64_t>());
         x.set_tags(j.at("tags").get<std::vector<std::string>>());
-        x.set_tags_source_enum_uid(quicktype::get_optional<int64_t>(j, "tagsSourceEnumUid"));
+        x.set_tags_source_enum_uid(get_optional<int64_t>(j, "tagsSourceEnumUid"));
         x.set_tile_grid_size(j.at("tileGridSize").get<int64_t>());
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::TilesetDefinition & x) {
+    inline void to_json(json & j, const TilesetDefinition & x) {
         j = json::object();
         j["__cHei"] = x.get_c_hei();
         j["__cWid"] = x.get_c_wid();
@@ -3351,16 +3403,16 @@ namespace nlohmann {
         j["uid"] = x.get_uid();
     }
 
-    inline void from_json(const json & j, quicktype::Definitions& x) {
-        x.set_entities(j.at("entities").get<std::vector<quicktype::EntityDefinition>>());
-        x.set_enums(j.at("enums").get<std::vector<quicktype::EnumDefinition>>());
-        x.set_external_enums(j.at("externalEnums").get<std::vector<quicktype::EnumDefinition>>());
-        x.set_layers(j.at("layers").get<std::vector<quicktype::LayerDefinition>>());
-        x.set_level_fields(j.at("levelFields").get<std::vector<quicktype::FieldDefinition>>());
-        x.set_tilesets(j.at("tilesets").get<std::vector<quicktype::TilesetDefinition>>());
+    inline void from_json(const json & j, Definitions& x) {
+        x.set_entities(j.at("entities").get<std::vector<EntityDefinition>>());
+        x.set_enums(j.at("enums").get<std::vector<EnumDefinition>>());
+        x.set_external_enums(j.at("externalEnums").get<std::vector<EnumDefinition>>());
+        x.set_layers(j.at("layers").get<std::vector<LayerDefinition>>());
+        x.set_level_fields(j.at("levelFields").get<std::vector<FieldDefinition>>());
+        x.set_tilesets(j.at("tilesets").get<std::vector<TilesetDefinition>>());
     }
 
-    inline void to_json(json & j, const quicktype::Definitions & x) {
+    inline void to_json(json & j, const Definitions & x) {
         j = json::object();
         j["entities"] = x.get_entities();
         j["enums"] = x.get_enums();
@@ -3370,16 +3422,16 @@ namespace nlohmann {
         j["tilesets"] = x.get_tilesets();
     }
 
-    inline void from_json(const json & j, quicktype::FieldInstance& x) {
+    inline void from_json(const json & j, FieldInstance& x) {
         x.set_identifier(j.at("__identifier").get<std::string>());
-        x.set_tile(quicktype::get_optional<quicktype::TilesetRectangle>(j, "__tile"));
+        x.set_tile(get_optional<TilesetRectangle>(j, "__tile"));
         x.set_type(j.at("__type").get<std::string>());
-        x.set_value(quicktype::get_untyped(j, "__value"));
+        x.set_value(get_untyped(j, "__value"));
         x.set_def_uid(j.at("defUid").get<int64_t>());
-        x.set_real_editor_values(j.at("realEditorValues").get<std::vector<json>>());
+        x.set_real_editor_values(j.at("realEditorValues").get<std::vector<nlohmann::json>>());
     }
 
-    inline void to_json(json & j, const quicktype::FieldInstance & x) {
+    inline void to_json(json & j, const FieldInstance & x) {
         j = json::object();
         j["__identifier"] = x.get_identifier();
         j["__tile"] = x.get_tile();
@@ -3389,22 +3441,22 @@ namespace nlohmann {
         j["realEditorValues"] = x.get_real_editor_values();
     }
 
-    inline void from_json(const json & j, quicktype::EntityInstance& x) {
+    inline void from_json(const json & j, EntityInstance& x) {
         x.set_grid(j.at("__grid").get<std::vector<int64_t>>());
         x.set_identifier(j.at("__identifier").get<std::string>());
         x.set_pivot(j.at("__pivot").get<std::vector<double>>());
         x.set_smart_color(j.at("__smartColor").get<std::string>());
         x.set_tags(j.at("__tags").get<std::vector<std::string>>());
-        x.set_tile(quicktype::get_optional<quicktype::TilesetRectangle>(j, "__tile"));
+        x.set_tile(get_optional<TilesetRectangle>(j, "__tile"));
         x.set_def_uid(j.at("defUid").get<int64_t>());
-        x.set_field_instances(j.at("fieldInstances").get<std::vector<quicktype::FieldInstance>>());
+        x.set_field_instances(j.at("fieldInstances").get<std::vector<FieldInstance>>());
         x.set_height(j.at("height").get<int64_t>());
         x.set_iid(j.at("iid").get<std::string>());
         x.set_px(j.at("px").get<std::vector<int64_t>>());
         x.set_width(j.at("width").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::EntityInstance & x) {
+    inline void to_json(json & j, const EntityInstance & x) {
         j = json::object();
         j["__grid"] = x.get_grid();
         j["__identifier"] = x.get_identifier();
@@ -3420,14 +3472,14 @@ namespace nlohmann {
         j["width"] = x.get_width();
     }
 
-    inline void from_json(const json & j, quicktype::FieldInstanceEntityReference& x) {
+    inline void from_json(const json & j, FieldInstanceEntityReference& x) {
         x.set_entity_iid(j.at("entityIid").get<std::string>());
         x.set_layer_iid(j.at("layerIid").get<std::string>());
         x.set_level_iid(j.at("levelIid").get<std::string>());
         x.set_world_iid(j.at("worldIid").get<std::string>());
     }
 
-    inline void to_json(json & j, const quicktype::FieldInstanceEntityReference & x) {
+    inline void to_json(json & j, const FieldInstanceEntityReference & x) {
         j = json::object();
         j["entityIid"] = x.get_entity_iid();
         j["layerIid"] = x.get_layer_iid();
@@ -3435,29 +3487,29 @@ namespace nlohmann {
         j["worldIid"] = x.get_world_iid();
     }
 
-    inline void from_json(const json & j, quicktype::FieldInstanceGridPoint& x) {
+    inline void from_json(const json & j, FieldInstanceGridPoint& x) {
         x.set_cx(j.at("cx").get<int64_t>());
         x.set_cy(j.at("cy").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::FieldInstanceGridPoint & x) {
+    inline void to_json(json & j, const FieldInstanceGridPoint & x) {
         j = json::object();
         j["cx"] = x.get_cx();
         j["cy"] = x.get_cy();
     }
 
-    inline void from_json(const json & j, quicktype::IntGridValueInstance& x) {
+    inline void from_json(const json & j, IntGridValueInstance& x) {
         x.set_coord_id(j.at("coordId").get<int64_t>());
         x.set_v(j.at("v").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::IntGridValueInstance & x) {
+    inline void to_json(json & j, const IntGridValueInstance & x) {
         j = json::object();
         j["coordId"] = x.get_coord_id();
         j["v"] = x.get_v();
     }
 
-    inline void from_json(const json & j, quicktype::TileInstance& x) {
+    inline void from_json(const json & j, TileInstance& x) {
         x.set_d(j.at("d").get<std::vector<int64_t>>());
         x.set_f(j.at("f").get<int64_t>());
         x.set_px(j.at("px").get<std::vector<int64_t>>());
@@ -3465,7 +3517,7 @@ namespace nlohmann {
         x.set_t(j.at("t").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::TileInstance & x) {
+    inline void to_json(json & j, const TileInstance & x) {
         j = json::object();
         j["d"] = x.get_d();
         j["f"] = x.get_f();
@@ -3474,7 +3526,7 @@ namespace nlohmann {
         j["t"] = x.get_t();
     }
 
-    inline void from_json(const json & j, quicktype::LayerInstance& x) {
+    inline void from_json(const json & j, LayerInstance& x) {
         x.set_c_hei(j.at("__cHei").get<int64_t>());
         x.set_c_wid(j.at("__cWid").get<int64_t>());
         x.set_grid_size(j.at("__gridSize").get<int64_t>());
@@ -3482,26 +3534,26 @@ namespace nlohmann {
         x.set_opacity(j.at("__opacity").get<double>());
         x.set_px_total_offset_x(j.at("__pxTotalOffsetX").get<int64_t>());
         x.set_px_total_offset_y(j.at("__pxTotalOffsetY").get<int64_t>());
-        x.set_tileset_def_uid(quicktype::get_optional<int64_t>(j, "__tilesetDefUid"));
-        x.set_tileset_rel_path(quicktype::get_optional<std::string>(j, "__tilesetRelPath"));
+        x.set_tileset_def_uid(get_optional<int64_t>(j, "__tilesetDefUid"));
+        x.set_tileset_rel_path(get_optional<std::string>(j, "__tilesetRelPath"));
         x.set_type(j.at("__type").get<std::string>());
-        x.set_auto_layer_tiles(j.at("autoLayerTiles").get<std::vector<quicktype::TileInstance>>());
-        x.set_entity_instances(j.at("entityInstances").get<std::vector<quicktype::EntityInstance>>());
-        x.set_grid_tiles(j.at("gridTiles").get<std::vector<quicktype::TileInstance>>());
+        x.set_auto_layer_tiles(j.at("autoLayerTiles").get<std::vector<TileInstance>>());
+        x.set_entity_instances(j.at("entityInstances").get<std::vector<EntityInstance>>());
+        x.set_grid_tiles(j.at("gridTiles").get<std::vector<TileInstance>>());
         x.set_iid(j.at("iid").get<std::string>());
-        x.set_int_grid(quicktype::get_optional<std::vector<quicktype::IntGridValueInstance>>(j, "intGrid"));
+        x.set_int_grid(get_optional<std::vector<IntGridValueInstance>>(j, "intGrid"));
         x.set_int_grid_csv(j.at("intGridCsv").get<std::vector<int64_t>>());
         x.set_layer_def_uid(j.at("layerDefUid").get<int64_t>());
         x.set_level_id(j.at("levelId").get<int64_t>());
         x.set_optional_rules(j.at("optionalRules").get<std::vector<int64_t>>());
-        x.set_override_tileset_uid(quicktype::get_optional<int64_t>(j, "overrideTilesetUid"));
+        x.set_override_tileset_uid(get_optional<int64_t>(j, "overrideTilesetUid"));
         x.set_px_offset_x(j.at("pxOffsetX").get<int64_t>());
         x.set_px_offset_y(j.at("pxOffsetY").get<int64_t>());
         x.set_seed(j.at("seed").get<int64_t>());
         x.set_visible(j.at("visible").get<bool>());
     }
 
-    inline void to_json(json & j, const quicktype::LayerInstance & x) {
+    inline void to_json(json & j, const LayerInstance & x) {
         j = json::object();
         j["__cHei"] = x.get_c_hei();
         j["__cWid"] = x.get_c_wid();
@@ -3529,47 +3581,47 @@ namespace nlohmann {
         j["visible"] = x.get_visible();
     }
 
-    inline void from_json(const json & j, quicktype::LevelBackgroundPosition& x) {
+    inline void from_json(const json & j, LevelBackgroundPosition& x) {
         x.set_crop_rect(j.at("cropRect").get<std::vector<double>>());
         x.set_scale(j.at("scale").get<std::vector<double>>());
         x.set_top_left_px(j.at("topLeftPx").get<std::vector<int64_t>>());
     }
 
-    inline void to_json(json & j, const quicktype::LevelBackgroundPosition & x) {
+    inline void to_json(json & j, const LevelBackgroundPosition & x) {
         j = json::object();
         j["cropRect"] = x.get_crop_rect();
         j["scale"] = x.get_scale();
         j["topLeftPx"] = x.get_top_left_px();
     }
 
-    inline void from_json(const json & j, quicktype::NeighbourLevel& x) {
+    inline void from_json(const json & j, NeighbourLevel& x) {
         x.set_dir(j.at("dir").get<std::string>());
         x.set_level_iid(j.at("levelIid").get<std::string>());
-        x.set_level_uid(quicktype::get_optional<int64_t>(j, "levelUid"));
+        x.set_level_uid(get_optional<int64_t>(j, "levelUid"));
     }
 
-    inline void to_json(json & j, const quicktype::NeighbourLevel & x) {
+    inline void to_json(json & j, const NeighbourLevel & x) {
         j = json::object();
         j["dir"] = x.get_dir();
         j["levelIid"] = x.get_level_iid();
         j["levelUid"] = x.get_level_uid();
     }
 
-    inline void from_json(const json & j, quicktype::Level& x) {
+    inline void from_json(const json & j, Level& x) {
         x.set_bg_color(j.at("__bgColor").get<std::string>());
-        x.set_bg_pos(quicktype::get_optional<quicktype::LevelBackgroundPosition>(j, "__bgPos"));
-        x.set_neighbours(j.at("__neighbours").get<std::vector<quicktype::NeighbourLevel>>());
+        x.set_bg_pos(get_optional<LevelBackgroundPosition>(j, "__bgPos"));
+        x.set_neighbours(j.at("__neighbours").get<std::vector<NeighbourLevel>>());
         x.set_smart_color(j.at("__smartColor").get<std::string>());
-        x.set_level_bg_color(quicktype::get_optional<std::string>(j, "bgColor"));
+        x.set_level_bg_color(get_optional<std::string>(j, "bgColor"));
         x.set_bg_pivot_x(j.at("bgPivotX").get<double>());
         x.set_bg_pivot_y(j.at("bgPivotY").get<double>());
-        x.set_level_bg_pos(quicktype::get_optional<quicktype::BgPos>(j, "bgPos"));
-        x.set_bg_rel_path(quicktype::get_optional<std::string>(j, "bgRelPath"));
-        x.set_external_rel_path(quicktype::get_optional<std::string>(j, "externalRelPath"));
-        x.set_field_instances(j.at("fieldInstances").get<std::vector<quicktype::FieldInstance>>());
+        x.set_level_bg_pos(get_optional<BgPos>(j, "bgPos"));
+        x.set_bg_rel_path(get_optional<std::string>(j, "bgRelPath"));
+        x.set_external_rel_path(get_optional<std::string>(j, "externalRelPath"));
+        x.set_field_instances(j.at("fieldInstances").get<std::vector<FieldInstance>>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_iid(j.at("iid").get<std::string>());
-        x.set_layer_instances(quicktype::get_optional<std::vector<quicktype::LayerInstance>>(j, "layerInstances"));
+        x.set_layer_instances(get_optional<std::vector<LayerInstance>>(j, "layerInstances"));
         x.set_px_hei(j.at("pxHei").get<int64_t>());
         x.set_px_wid(j.at("pxWid").get<int64_t>());
         x.set_uid(j.at("uid").get<int64_t>());
@@ -3579,7 +3631,7 @@ namespace nlohmann {
         x.set_world_y(j.at("worldY").get<int64_t>());
     }
 
-    inline void to_json(json & j, const quicktype::Level & x) {
+    inline void to_json(json & j, const Level & x) {
         j = json::object();
         j["__bgColor"] = x.get_bg_color();
         j["__bgPos"] = x.get_bg_pos();
@@ -3604,18 +3656,29 @@ namespace nlohmann {
         j["worldY"] = x.get_world_y();
     }
 
-    inline void from_json(const json & j, quicktype::World& x) {
+    inline void from_json(const json & j, LdtkTableOfContentEntry& x) {
+        x.set_identifier(j.at("identifier").get<std::string>());
+        x.set_instances(j.at("instances").get<std::vector<FieldInstanceEntityReference>>());
+    }
+
+    inline void to_json(json & j, const LdtkTableOfContentEntry & x) {
+        j = json::object();
+        j["identifier"] = x.get_identifier();
+        j["instances"] = x.get_instances();
+    }
+
+    inline void from_json(const json & j, World& x) {
         x.set_default_level_height(j.at("defaultLevelHeight").get<int64_t>());
         x.set_default_level_width(j.at("defaultLevelWidth").get<int64_t>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_iid(j.at("iid").get<std::string>());
-        x.set_levels(j.at("levels").get<std::vector<quicktype::Level>>());
+        x.set_levels(j.at("levels").get<std::vector<Level>>());
         x.set_world_grid_height(j.at("worldGridHeight").get<int64_t>());
         x.set_world_grid_width(j.at("worldGridWidth").get<int64_t>());
-        x.set_world_layout(quicktype::get_optional<quicktype::WorldLayout>(j, "worldLayout"));
+        x.set_world_layout(get_optional<WorldLayout>(j, "worldLayout"));
     }
 
-    inline void to_json(json & j, const quicktype::World & x) {
+    inline void to_json(json & j, const World & x) {
         j = json::object();
         j["defaultLevelHeight"] = x.get_default_level_height();
         j["defaultLevelWidth"] = x.get_default_level_width();
@@ -3627,35 +3690,36 @@ namespace nlohmann {
         j["worldLayout"] = x.get_world_layout();
     }
 
-    inline void from_json(const json & j, quicktype::ForcedRefs& x) {
-        x.set_auto_layer_rule_group(quicktype::get_optional<quicktype::AutoLayerRuleGroup>(j, "AutoLayerRuleGroup"));
-        x.set_auto_rule_def(quicktype::get_optional<quicktype::AutoLayerRuleDefinition>(j, "AutoRuleDef"));
-        x.set_custom_command(quicktype::get_optional<quicktype::LdtkCustomCommand>(j, "CustomCommand"));
-        x.set_definitions(quicktype::get_optional<quicktype::Definitions>(j, "Definitions"));
-        x.set_entity_def(quicktype::get_optional<quicktype::EntityDefinition>(j, "EntityDef"));
-        x.set_entity_instance(quicktype::get_optional<quicktype::EntityInstance>(j, "EntityInstance"));
-        x.set_entity_reference_infos(quicktype::get_optional<quicktype::FieldInstanceEntityReference>(j, "EntityReferenceInfos"));
-        x.set_enum_def(quicktype::get_optional<quicktype::EnumDefinition>(j, "EnumDef"));
-        x.set_enum_def_values(quicktype::get_optional<quicktype::EnumValueDefinition>(j, "EnumDefValues"));
-        x.set_enum_tag_value(quicktype::get_optional<quicktype::EnumTagValue>(j, "EnumTagValue"));
-        x.set_field_def(quicktype::get_optional<quicktype::FieldDefinition>(j, "FieldDef"));
-        x.set_field_instance(quicktype::get_optional<quicktype::FieldInstance>(j, "FieldInstance"));
-        x.set_grid_point(quicktype::get_optional<quicktype::FieldInstanceGridPoint>(j, "GridPoint"));
-        x.set_int_grid_value_def(quicktype::get_optional<quicktype::IntGridValueDefinition>(j, "IntGridValueDef"));
-        x.set_int_grid_value_instance(quicktype::get_optional<quicktype::IntGridValueInstance>(j, "IntGridValueInstance"));
-        x.set_layer_def(quicktype::get_optional<quicktype::LayerDefinition>(j, "LayerDef"));
-        x.set_layer_instance(quicktype::get_optional<quicktype::LayerInstance>(j, "LayerInstance"));
-        x.set_level(quicktype::get_optional<quicktype::Level>(j, "Level"));
-        x.set_level_bg_pos_infos(quicktype::get_optional<quicktype::LevelBackgroundPosition>(j, "LevelBgPosInfos"));
-        x.set_neighbour_level(quicktype::get_optional<quicktype::NeighbourLevel>(j, "NeighbourLevel"));
-        x.set_tile(quicktype::get_optional<quicktype::TileInstance>(j, "Tile"));
-        x.set_tile_custom_metadata(quicktype::get_optional<quicktype::TileCustomMetadata>(j, "TileCustomMetadata"));
-        x.set_tileset_def(quicktype::get_optional<quicktype::TilesetDefinition>(j, "TilesetDef"));
-        x.set_tileset_rect(quicktype::get_optional<quicktype::TilesetRectangle>(j, "TilesetRect"));
-        x.set_world(quicktype::get_optional<quicktype::World>(j, "World"));
+    inline void from_json(const json & j, ForcedRefs& x) {
+        x.set_auto_layer_rule_group(get_optional<AutoLayerRuleGroup>(j, "AutoLayerRuleGroup"));
+        x.set_auto_rule_def(get_optional<AutoLayerRuleDefinition>(j, "AutoRuleDef"));
+        x.set_custom_command(get_optional<LdtkCustomCommand>(j, "CustomCommand"));
+        x.set_definitions(get_optional<Definitions>(j, "Definitions"));
+        x.set_entity_def(get_optional<EntityDefinition>(j, "EntityDef"));
+        x.set_entity_instance(get_optional<EntityInstance>(j, "EntityInstance"));
+        x.set_entity_reference_infos(get_optional<FieldInstanceEntityReference>(j, "EntityReferenceInfos"));
+        x.set_enum_def(get_optional<EnumDefinition>(j, "EnumDef"));
+        x.set_enum_def_values(get_optional<EnumValueDefinition>(j, "EnumDefValues"));
+        x.set_enum_tag_value(get_optional<EnumTagValue>(j, "EnumTagValue"));
+        x.set_field_def(get_optional<FieldDefinition>(j, "FieldDef"));
+        x.set_field_instance(get_optional<FieldInstance>(j, "FieldInstance"));
+        x.set_grid_point(get_optional<FieldInstanceGridPoint>(j, "GridPoint"));
+        x.set_int_grid_value_def(get_optional<IntGridValueDefinition>(j, "IntGridValueDef"));
+        x.set_int_grid_value_instance(get_optional<IntGridValueInstance>(j, "IntGridValueInstance"));
+        x.set_layer_def(get_optional<LayerDefinition>(j, "LayerDef"));
+        x.set_layer_instance(get_optional<LayerInstance>(j, "LayerInstance"));
+        x.set_level(get_optional<Level>(j, "Level"));
+        x.set_level_bg_pos_infos(get_optional<LevelBackgroundPosition>(j, "LevelBgPosInfos"));
+        x.set_neighbour_level(get_optional<NeighbourLevel>(j, "NeighbourLevel"));
+        x.set_table_of_content_entry(get_optional<LdtkTableOfContentEntry>(j, "TableOfContentEntry"));
+        x.set_tile(get_optional<TileInstance>(j, "Tile"));
+        x.set_tile_custom_metadata(get_optional<TileCustomMetadata>(j, "TileCustomMetadata"));
+        x.set_tileset_def(get_optional<TilesetDefinition>(j, "TilesetDef"));
+        x.set_tileset_rect(get_optional<TilesetRectangle>(j, "TilesetRect"));
+        x.set_world(get_optional<World>(j, "World"));
     }
 
-    inline void to_json(json & j, const quicktype::ForcedRefs & x) {
+    inline void to_json(json & j, const ForcedRefs & x) {
         j = json::object();
         j["AutoLayerRuleGroup"] = x.get_auto_layer_rule_group();
         j["AutoRuleDef"] = x.get_auto_rule_def();
@@ -3677,6 +3741,7 @@ namespace nlohmann {
         j["Level"] = x.get_level();
         j["LevelBgPosInfos"] = x.get_level_bg_pos_infos();
         j["NeighbourLevel"] = x.get_neighbour_level();
+        j["TableOfContentEntry"] = x.get_table_of_content_entry();
         j["Tile"] = x.get_tile();
         j["TileCustomMetadata"] = x.get_tile_custom_metadata();
         j["TilesetDef"] = x.get_tileset_def();
@@ -3684,43 +3749,44 @@ namespace nlohmann {
         j["World"] = x.get_world();
     }
 
-    inline void from_json(const json & j, quicktype::LdtkJson& x) {
-        x.set_forced_refs(quicktype::get_optional<quicktype::ForcedRefs>(j, "__FORCED_REFS"));
+    inline void from_json(const json & j, LdtkJson& x) {
+        x.set_forced_refs(get_optional<ForcedRefs>(j, "__FORCED_REFS"));
         x.set_app_build_id(j.at("appBuildId").get<double>());
         x.set_backup_limit(j.at("backupLimit").get<int64_t>());
         x.set_backup_on_save(j.at("backupOnSave").get<bool>());
         x.set_bg_color(j.at("bgColor").get<std::string>());
-        x.set_custom_commands(j.at("customCommands").get<std::vector<quicktype::LdtkCustomCommand>>());
+        x.set_custom_commands(j.at("customCommands").get<std::vector<LdtkCustomCommand>>());
         x.set_default_grid_size(j.at("defaultGridSize").get<int64_t>());
         x.set_default_level_bg_color(j.at("defaultLevelBgColor").get<std::string>());
-        x.set_default_level_height(quicktype::get_optional<int64_t>(j, "defaultLevelHeight"));
-        x.set_default_level_width(quicktype::get_optional<int64_t>(j, "defaultLevelWidth"));
+        x.set_default_level_height(get_optional<int64_t>(j, "defaultLevelHeight"));
+        x.set_default_level_width(get_optional<int64_t>(j, "defaultLevelWidth"));
         x.set_default_pivot_x(j.at("defaultPivotX").get<double>());
         x.set_default_pivot_y(j.at("defaultPivotY").get<double>());
-        x.set_defs(j.at("defs").get<quicktype::Definitions>());
+        x.set_defs(j.at("defs").get<Definitions>());
         x.set_export_level_bg(j.at("exportLevelBg").get<bool>());
-        x.set_export_png(quicktype::get_optional<bool>(j, "exportPng"));
+        x.set_export_png(get_optional<bool>(j, "exportPng"));
         x.set_export_tiled(j.at("exportTiled").get<bool>());
         x.set_external_levels(j.at("externalLevels").get<bool>());
-        x.set_flags(j.at("flags").get<std::vector<quicktype::Flag>>());
-        x.set_identifier_style(j.at("identifierStyle").get<quicktype::IdentifierStyle>());
+        x.set_flags(j.at("flags").get<std::vector<Flag>>());
+        x.set_identifier_style(j.at("identifierStyle").get<IdentifierStyle>());
         x.set_iid(j.at("iid").get<std::string>());
-        x.set_image_export_mode(j.at("imageExportMode").get<quicktype::ImageExportMode>());
+        x.set_image_export_mode(j.at("imageExportMode").get<ImageExportMode>());
         x.set_json_version(j.at("jsonVersion").get<std::string>());
         x.set_level_name_pattern(j.at("levelNamePattern").get<std::string>());
-        x.set_levels(j.at("levels").get<std::vector<quicktype::Level>>());
+        x.set_levels(j.at("levels").get<std::vector<Level>>());
         x.set_minify_json(j.at("minifyJson").get<bool>());
         x.set_next_uid(j.at("nextUid").get<int64_t>());
-        x.set_png_file_pattern(quicktype::get_optional<std::string>(j, "pngFilePattern"));
+        x.set_png_file_pattern(get_optional<std::string>(j, "pngFilePattern"));
         x.set_simplified_export(j.at("simplifiedExport").get<bool>());
-        x.set_tutorial_desc(quicktype::get_optional<std::string>(j, "tutorialDesc"));
-        x.set_world_grid_height(quicktype::get_optional<int64_t>(j, "worldGridHeight"));
-        x.set_world_grid_width(quicktype::get_optional<int64_t>(j, "worldGridWidth"));
-        x.set_world_layout(quicktype::get_optional<quicktype::WorldLayout>(j, "worldLayout"));
-        x.set_worlds(j.at("worlds").get<std::vector<quicktype::World>>());
+        x.set_toc(j.at("toc").get<std::vector<LdtkTableOfContentEntry>>());
+        x.set_tutorial_desc(get_optional<std::string>(j, "tutorialDesc"));
+        x.set_world_grid_height(get_optional<int64_t>(j, "worldGridHeight"));
+        x.set_world_grid_width(get_optional<int64_t>(j, "worldGridWidth"));
+        x.set_world_layout(get_optional<WorldLayout>(j, "worldLayout"));
+        x.set_worlds(j.at("worlds").get<std::vector<World>>());
     }
 
-    inline void to_json(json & j, const quicktype::LdtkJson & x) {
+    inline void to_json(json & j, const LdtkJson & x) {
         j = json::object();
         j["__FORCED_REFS"] = x.get_forced_refs();
         j["appBuildId"] = x.get_app_build_id();
@@ -3750,6 +3816,7 @@ namespace nlohmann {
         j["nextUid"] = x.get_next_uid();
         j["pngFilePattern"] = x.get_png_file_pattern();
         j["simplifiedExport"] = x.get_simplified_export();
+        j["toc"] = x.get_toc();
         j["tutorialDesc"] = x.get_tutorial_desc();
         j["worldGridHeight"] = x.get_world_grid_height();
         j["worldGridWidth"] = x.get_world_grid_width();
@@ -3757,368 +3824,368 @@ namespace nlohmann {
         j["worlds"] = x.get_worlds();
     }
 
-    inline void from_json(const json & j, quicktype::When & x) {
-        if (j == "AfterLoad") x = quicktype::When::AFTER_LOAD;
-        else if (j == "AfterSave") x = quicktype::When::AFTER_SAVE;
-        else if (j == "BeforeSave") x = quicktype::When::BEFORE_SAVE;
-        else if (j == "Manual") x = quicktype::When::MANUAL;
+    inline void from_json(const json & j, When & x) {
+        if (j == "AfterLoad") x = When::AFTER_LOAD;
+        else if (j == "AfterSave") x = When::AFTER_SAVE;
+        else if (j == "BeforeSave") x = When::BEFORE_SAVE;
+        else if (j == "Manual") x = When::MANUAL;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::When & x) {
+    inline void to_json(json & j, const When & x) {
         switch (x) {
-            case quicktype::When::AFTER_LOAD: j = "AfterLoad"; break;
-            case quicktype::When::AFTER_SAVE: j = "AfterSave"; break;
-            case quicktype::When::BEFORE_SAVE: j = "BeforeSave"; break;
-            case quicktype::When::MANUAL: j = "Manual"; break;
+            case When::AFTER_LOAD: j = "AfterLoad"; break;
+            case When::AFTER_SAVE: j = "AfterSave"; break;
+            case When::BEFORE_SAVE: j = "BeforeSave"; break;
+            case When::MANUAL: j = "Manual"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::AllowedRefs & x) {
-        if (j == "Any") x = quicktype::AllowedRefs::ANY;
-        else if (j == "OnlySame") x = quicktype::AllowedRefs::ONLY_SAME;
-        else if (j == "OnlyTags") x = quicktype::AllowedRefs::ONLY_TAGS;
+    inline void from_json(const json & j, AllowedRefs & x) {
+        if (j == "Any") x = AllowedRefs::ANY;
+        else if (j == "OnlySame") x = AllowedRefs::ONLY_SAME;
+        else if (j == "OnlyTags") x = AllowedRefs::ONLY_TAGS;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::AllowedRefs & x) {
+    inline void to_json(json & j, const AllowedRefs & x) {
         switch (x) {
-            case quicktype::AllowedRefs::ANY: j = "Any"; break;
-            case quicktype::AllowedRefs::ONLY_SAME: j = "OnlySame"; break;
-            case quicktype::AllowedRefs::ONLY_TAGS: j = "OnlyTags"; break;
+            case AllowedRefs::ANY: j = "Any"; break;
+            case AllowedRefs::ONLY_SAME: j = "OnlySame"; break;
+            case AllowedRefs::ONLY_TAGS: j = "OnlyTags"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::EditorDisplayMode & x) {
-        if (j == "ArrayCountNoLabel") x = quicktype::EditorDisplayMode::ARRAY_COUNT_NO_LABEL;
-        else if (j == "ArrayCountWithLabel") x = quicktype::EditorDisplayMode::ARRAY_COUNT_WITH_LABEL;
-        else if (j == "EntityTile") x = quicktype::EditorDisplayMode::ENTITY_TILE;
-        else if (j == "Hidden") x = quicktype::EditorDisplayMode::HIDDEN;
-        else if (j == "NameAndValue") x = quicktype::EditorDisplayMode::NAME_AND_VALUE;
-        else if (j == "Points") x = quicktype::EditorDisplayMode::POINTS;
-        else if (j == "PointPath") x = quicktype::EditorDisplayMode::POINT_PATH;
-        else if (j == "PointPathLoop") x = quicktype::EditorDisplayMode::POINT_PATH_LOOP;
-        else if (j == "PointStar") x = quicktype::EditorDisplayMode::POINT_STAR;
-        else if (j == "RadiusGrid") x = quicktype::EditorDisplayMode::RADIUS_GRID;
-        else if (j == "RadiusPx") x = quicktype::EditorDisplayMode::RADIUS_PX;
-        else if (j == "RefLinkBetweenCenters") x = quicktype::EditorDisplayMode::REF_LINK_BETWEEN_CENTERS;
-        else if (j == "RefLinkBetweenPivots") x = quicktype::EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS;
-        else if (j == "ValueOnly") x = quicktype::EditorDisplayMode::VALUE_ONLY;
+    inline void from_json(const json & j, EditorDisplayMode & x) {
+        if (j == "ArrayCountNoLabel") x = EditorDisplayMode::ARRAY_COUNT_NO_LABEL;
+        else if (j == "ArrayCountWithLabel") x = EditorDisplayMode::ARRAY_COUNT_WITH_LABEL;
+        else if (j == "EntityTile") x = EditorDisplayMode::ENTITY_TILE;
+        else if (j == "Hidden") x = EditorDisplayMode::HIDDEN;
+        else if (j == "NameAndValue") x = EditorDisplayMode::NAME_AND_VALUE;
+        else if (j == "Points") x = EditorDisplayMode::POINTS;
+        else if (j == "PointPath") x = EditorDisplayMode::POINT_PATH;
+        else if (j == "PointPathLoop") x = EditorDisplayMode::POINT_PATH_LOOP;
+        else if (j == "PointStar") x = EditorDisplayMode::POINT_STAR;
+        else if (j == "RadiusGrid") x = EditorDisplayMode::RADIUS_GRID;
+        else if (j == "RadiusPx") x = EditorDisplayMode::RADIUS_PX;
+        else if (j == "RefLinkBetweenCenters") x = EditorDisplayMode::REF_LINK_BETWEEN_CENTERS;
+        else if (j == "RefLinkBetweenPivots") x = EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS;
+        else if (j == "ValueOnly") x = EditorDisplayMode::VALUE_ONLY;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::EditorDisplayMode & x) {
+    inline void to_json(json & j, const EditorDisplayMode & x) {
         switch (x) {
-            case quicktype::EditorDisplayMode::ARRAY_COUNT_NO_LABEL: j = "ArrayCountNoLabel"; break;
-            case quicktype::EditorDisplayMode::ARRAY_COUNT_WITH_LABEL: j = "ArrayCountWithLabel"; break;
-            case quicktype::EditorDisplayMode::ENTITY_TILE: j = "EntityTile"; break;
-            case quicktype::EditorDisplayMode::HIDDEN: j = "Hidden"; break;
-            case quicktype::EditorDisplayMode::NAME_AND_VALUE: j = "NameAndValue"; break;
-            case quicktype::EditorDisplayMode::POINTS: j = "Points"; break;
-            case quicktype::EditorDisplayMode::POINT_PATH: j = "PointPath"; break;
-            case quicktype::EditorDisplayMode::POINT_PATH_LOOP: j = "PointPathLoop"; break;
-            case quicktype::EditorDisplayMode::POINT_STAR: j = "PointStar"; break;
-            case quicktype::EditorDisplayMode::RADIUS_GRID: j = "RadiusGrid"; break;
-            case quicktype::EditorDisplayMode::RADIUS_PX: j = "RadiusPx"; break;
-            case quicktype::EditorDisplayMode::REF_LINK_BETWEEN_CENTERS: j = "RefLinkBetweenCenters"; break;
-            case quicktype::EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS: j = "RefLinkBetweenPivots"; break;
-            case quicktype::EditorDisplayMode::VALUE_ONLY: j = "ValueOnly"; break;
+            case EditorDisplayMode::ARRAY_COUNT_NO_LABEL: j = "ArrayCountNoLabel"; break;
+            case EditorDisplayMode::ARRAY_COUNT_WITH_LABEL: j = "ArrayCountWithLabel"; break;
+            case EditorDisplayMode::ENTITY_TILE: j = "EntityTile"; break;
+            case EditorDisplayMode::HIDDEN: j = "Hidden"; break;
+            case EditorDisplayMode::NAME_AND_VALUE: j = "NameAndValue"; break;
+            case EditorDisplayMode::POINTS: j = "Points"; break;
+            case EditorDisplayMode::POINT_PATH: j = "PointPath"; break;
+            case EditorDisplayMode::POINT_PATH_LOOP: j = "PointPathLoop"; break;
+            case EditorDisplayMode::POINT_STAR: j = "PointStar"; break;
+            case EditorDisplayMode::RADIUS_GRID: j = "RadiusGrid"; break;
+            case EditorDisplayMode::RADIUS_PX: j = "RadiusPx"; break;
+            case EditorDisplayMode::REF_LINK_BETWEEN_CENTERS: j = "RefLinkBetweenCenters"; break;
+            case EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS: j = "RefLinkBetweenPivots"; break;
+            case EditorDisplayMode::VALUE_ONLY: j = "ValueOnly"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::EditorDisplayPos & x) {
-        if (j == "Above") x = quicktype::EditorDisplayPos::ABOVE;
-        else if (j == "Beneath") x = quicktype::EditorDisplayPos::BENEATH;
-        else if (j == "Center") x = quicktype::EditorDisplayPos::CENTER;
+    inline void from_json(const json & j, EditorDisplayPos & x) {
+        if (j == "Above") x = EditorDisplayPos::ABOVE;
+        else if (j == "Beneath") x = EditorDisplayPos::BENEATH;
+        else if (j == "Center") x = EditorDisplayPos::CENTER;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::EditorDisplayPos & x) {
+    inline void to_json(json & j, const EditorDisplayPos & x) {
         switch (x) {
-            case quicktype::EditorDisplayPos::ABOVE: j = "Above"; break;
-            case quicktype::EditorDisplayPos::BENEATH: j = "Beneath"; break;
-            case quicktype::EditorDisplayPos::CENTER: j = "Center"; break;
+            case EditorDisplayPos::ABOVE: j = "Above"; break;
+            case EditorDisplayPos::BENEATH: j = "Beneath"; break;
+            case EditorDisplayPos::CENTER: j = "Center"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::EditorLinkStyle & x) {
-        if (j == "ArrowsLine") x = quicktype::EditorLinkStyle::ARROWS_LINE;
-        else if (j == "CurvedArrow") x = quicktype::EditorLinkStyle::CURVED_ARROW;
-        else if (j == "DashedLine") x = quicktype::EditorLinkStyle::DASHED_LINE;
-        else if (j == "StraightArrow") x = quicktype::EditorLinkStyle::STRAIGHT_ARROW;
-        else if (j == "ZigZag") x = quicktype::EditorLinkStyle::ZIG_ZAG;
+    inline void from_json(const json & j, EditorLinkStyle & x) {
+        if (j == "ArrowsLine") x = EditorLinkStyle::ARROWS_LINE;
+        else if (j == "CurvedArrow") x = EditorLinkStyle::CURVED_ARROW;
+        else if (j == "DashedLine") x = EditorLinkStyle::DASHED_LINE;
+        else if (j == "StraightArrow") x = EditorLinkStyle::STRAIGHT_ARROW;
+        else if (j == "ZigZag") x = EditorLinkStyle::ZIG_ZAG;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::EditorLinkStyle & x) {
+    inline void to_json(json & j, const EditorLinkStyle & x) {
         switch (x) {
-            case quicktype::EditorLinkStyle::ARROWS_LINE: j = "ArrowsLine"; break;
-            case quicktype::EditorLinkStyle::CURVED_ARROW: j = "CurvedArrow"; break;
-            case quicktype::EditorLinkStyle::DASHED_LINE: j = "DashedLine"; break;
-            case quicktype::EditorLinkStyle::STRAIGHT_ARROW: j = "StraightArrow"; break;
-            case quicktype::EditorLinkStyle::ZIG_ZAG: j = "ZigZag"; break;
+            case EditorLinkStyle::ARROWS_LINE: j = "ArrowsLine"; break;
+            case EditorLinkStyle::CURVED_ARROW: j = "CurvedArrow"; break;
+            case EditorLinkStyle::DASHED_LINE: j = "DashedLine"; break;
+            case EditorLinkStyle::STRAIGHT_ARROW: j = "StraightArrow"; break;
+            case EditorLinkStyle::ZIG_ZAG: j = "ZigZag"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::TextLanguageMode & x) {
-        if (j == "LangC") x = quicktype::TextLanguageMode::LANG_C;
-        else if (j == "LangHaxe") x = quicktype::TextLanguageMode::LANG_HAXE;
-        else if (j == "LangJS") x = quicktype::TextLanguageMode::LANG_JS;
-        else if (j == "LangJson") x = quicktype::TextLanguageMode::LANG_JSON;
-        else if (j == "LangLog") x = quicktype::TextLanguageMode::LANG_LOG;
-        else if (j == "LangLua") x = quicktype::TextLanguageMode::LANG_LUA;
-        else if (j == "LangMarkdown") x = quicktype::TextLanguageMode::LANG_MARKDOWN;
-        else if (j == "LangPython") x = quicktype::TextLanguageMode::LANG_PYTHON;
-        else if (j == "LangRuby") x = quicktype::TextLanguageMode::LANG_RUBY;
-        else if (j == "LangXml") x = quicktype::TextLanguageMode::LANG_XML;
+    inline void from_json(const json & j, TextLanguageMode & x) {
+        if (j == "LangC") x = TextLanguageMode::LANG_C;
+        else if (j == "LangHaxe") x = TextLanguageMode::LANG_HAXE;
+        else if (j == "LangJS") x = TextLanguageMode::LANG_JS;
+        else if (j == "LangJson") x = TextLanguageMode::LANG_JSON;
+        else if (j == "LangLog") x = TextLanguageMode::LANG_LOG;
+        else if (j == "LangLua") x = TextLanguageMode::LANG_LUA;
+        else if (j == "LangMarkdown") x = TextLanguageMode::LANG_MARKDOWN;
+        else if (j == "LangPython") x = TextLanguageMode::LANG_PYTHON;
+        else if (j == "LangRuby") x = TextLanguageMode::LANG_RUBY;
+        else if (j == "LangXml") x = TextLanguageMode::LANG_XML;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::TextLanguageMode & x) {
+    inline void to_json(json & j, const TextLanguageMode & x) {
         switch (x) {
-            case quicktype::TextLanguageMode::LANG_C: j = "LangC"; break;
-            case quicktype::TextLanguageMode::LANG_HAXE: j = "LangHaxe"; break;
-            case quicktype::TextLanguageMode::LANG_JS: j = "LangJS"; break;
-            case quicktype::TextLanguageMode::LANG_JSON: j = "LangJson"; break;
-            case quicktype::TextLanguageMode::LANG_LOG: j = "LangLog"; break;
-            case quicktype::TextLanguageMode::LANG_LUA: j = "LangLua"; break;
-            case quicktype::TextLanguageMode::LANG_MARKDOWN: j = "LangMarkdown"; break;
-            case quicktype::TextLanguageMode::LANG_PYTHON: j = "LangPython"; break;
-            case quicktype::TextLanguageMode::LANG_RUBY: j = "LangRuby"; break;
-            case quicktype::TextLanguageMode::LANG_XML: j = "LangXml"; break;
+            case TextLanguageMode::LANG_C: j = "LangC"; break;
+            case TextLanguageMode::LANG_HAXE: j = "LangHaxe"; break;
+            case TextLanguageMode::LANG_JS: j = "LangJS"; break;
+            case TextLanguageMode::LANG_JSON: j = "LangJson"; break;
+            case TextLanguageMode::LANG_LOG: j = "LangLog"; break;
+            case TextLanguageMode::LANG_LUA: j = "LangLua"; break;
+            case TextLanguageMode::LANG_MARKDOWN: j = "LangMarkdown"; break;
+            case TextLanguageMode::LANG_PYTHON: j = "LangPython"; break;
+            case TextLanguageMode::LANG_RUBY: j = "LangRuby"; break;
+            case TextLanguageMode::LANG_XML: j = "LangXml"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::LimitBehavior & x) {
-        if (j == "DiscardOldOnes") x = quicktype::LimitBehavior::DISCARD_OLD_ONES;
-        else if (j == "MoveLastOne") x = quicktype::LimitBehavior::MOVE_LAST_ONE;
-        else if (j == "PreventAdding") x = quicktype::LimitBehavior::PREVENT_ADDING;
+    inline void from_json(const json & j, LimitBehavior & x) {
+        if (j == "DiscardOldOnes") x = LimitBehavior::DISCARD_OLD_ONES;
+        else if (j == "MoveLastOne") x = LimitBehavior::MOVE_LAST_ONE;
+        else if (j == "PreventAdding") x = LimitBehavior::PREVENT_ADDING;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::LimitBehavior & x) {
+    inline void to_json(json & j, const LimitBehavior & x) {
         switch (x) {
-            case quicktype::LimitBehavior::DISCARD_OLD_ONES: j = "DiscardOldOnes"; break;
-            case quicktype::LimitBehavior::MOVE_LAST_ONE: j = "MoveLastOne"; break;
-            case quicktype::LimitBehavior::PREVENT_ADDING: j = "PreventAdding"; break;
+            case LimitBehavior::DISCARD_OLD_ONES: j = "DiscardOldOnes"; break;
+            case LimitBehavior::MOVE_LAST_ONE: j = "MoveLastOne"; break;
+            case LimitBehavior::PREVENT_ADDING: j = "PreventAdding"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::LimitScope & x) {
-        if (j == "PerLayer") x = quicktype::LimitScope::PER_LAYER;
-        else if (j == "PerLevel") x = quicktype::LimitScope::PER_LEVEL;
-        else if (j == "PerWorld") x = quicktype::LimitScope::PER_WORLD;
+    inline void from_json(const json & j, LimitScope & x) {
+        if (j == "PerLayer") x = LimitScope::PER_LAYER;
+        else if (j == "PerLevel") x = LimitScope::PER_LEVEL;
+        else if (j == "PerWorld") x = LimitScope::PER_WORLD;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::LimitScope & x) {
+    inline void to_json(json & j, const LimitScope & x) {
         switch (x) {
-            case quicktype::LimitScope::PER_LAYER: j = "PerLayer"; break;
-            case quicktype::LimitScope::PER_LEVEL: j = "PerLevel"; break;
-            case quicktype::LimitScope::PER_WORLD: j = "PerWorld"; break;
+            case LimitScope::PER_LAYER: j = "PerLayer"; break;
+            case LimitScope::PER_LEVEL: j = "PerLevel"; break;
+            case LimitScope::PER_WORLD: j = "PerWorld"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::RenderMode & x) {
-        if (j == "Cross") x = quicktype::RenderMode::CROSS;
-        else if (j == "Ellipse") x = quicktype::RenderMode::ELLIPSE;
-        else if (j == "Rectangle") x = quicktype::RenderMode::RECTANGLE;
-        else if (j == "Tile") x = quicktype::RenderMode::TILE;
+    inline void from_json(const json & j, RenderMode & x) {
+        if (j == "Cross") x = RenderMode::CROSS;
+        else if (j == "Ellipse") x = RenderMode::ELLIPSE;
+        else if (j == "Rectangle") x = RenderMode::RECTANGLE;
+        else if (j == "Tile") x = RenderMode::TILE;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::RenderMode & x) {
+    inline void to_json(json & j, const RenderMode & x) {
         switch (x) {
-            case quicktype::RenderMode::CROSS: j = "Cross"; break;
-            case quicktype::RenderMode::ELLIPSE: j = "Ellipse"; break;
-            case quicktype::RenderMode::RECTANGLE: j = "Rectangle"; break;
-            case quicktype::RenderMode::TILE: j = "Tile"; break;
+            case RenderMode::CROSS: j = "Cross"; break;
+            case RenderMode::ELLIPSE: j = "Ellipse"; break;
+            case RenderMode::RECTANGLE: j = "Rectangle"; break;
+            case RenderMode::TILE: j = "Tile"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::TileRenderMode & x) {
-        if (j == "Cover") x = quicktype::TileRenderMode::COVER;
-        else if (j == "FitInside") x = quicktype::TileRenderMode::FIT_INSIDE;
-        else if (j == "FullSizeCropped") x = quicktype::TileRenderMode::FULL_SIZE_CROPPED;
-        else if (j == "FullSizeUncropped") x = quicktype::TileRenderMode::FULL_SIZE_UNCROPPED;
-        else if (j == "NineSlice") x = quicktype::TileRenderMode::NINE_SLICE;
-        else if (j == "Repeat") x = quicktype::TileRenderMode::REPEAT;
-        else if (j == "Stretch") x = quicktype::TileRenderMode::STRETCH;
+    inline void from_json(const json & j, TileRenderMode & x) {
+        if (j == "Cover") x = TileRenderMode::COVER;
+        else if (j == "FitInside") x = TileRenderMode::FIT_INSIDE;
+        else if (j == "FullSizeCropped") x = TileRenderMode::FULL_SIZE_CROPPED;
+        else if (j == "FullSizeUncropped") x = TileRenderMode::FULL_SIZE_UNCROPPED;
+        else if (j == "NineSlice") x = TileRenderMode::NINE_SLICE;
+        else if (j == "Repeat") x = TileRenderMode::REPEAT;
+        else if (j == "Stretch") x = TileRenderMode::STRETCH;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::TileRenderMode & x) {
+    inline void to_json(json & j, const TileRenderMode & x) {
         switch (x) {
-            case quicktype::TileRenderMode::COVER: j = "Cover"; break;
-            case quicktype::TileRenderMode::FIT_INSIDE: j = "FitInside"; break;
-            case quicktype::TileRenderMode::FULL_SIZE_CROPPED: j = "FullSizeCropped"; break;
-            case quicktype::TileRenderMode::FULL_SIZE_UNCROPPED: j = "FullSizeUncropped"; break;
-            case quicktype::TileRenderMode::NINE_SLICE: j = "NineSlice"; break;
-            case quicktype::TileRenderMode::REPEAT: j = "Repeat"; break;
-            case quicktype::TileRenderMode::STRETCH: j = "Stretch"; break;
+            case TileRenderMode::COVER: j = "Cover"; break;
+            case TileRenderMode::FIT_INSIDE: j = "FitInside"; break;
+            case TileRenderMode::FULL_SIZE_CROPPED: j = "FullSizeCropped"; break;
+            case TileRenderMode::FULL_SIZE_UNCROPPED: j = "FullSizeUncropped"; break;
+            case TileRenderMode::NINE_SLICE: j = "NineSlice"; break;
+            case TileRenderMode::REPEAT: j = "Repeat"; break;
+            case TileRenderMode::STRETCH: j = "Stretch"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::Checker & x) {
-        if (j == "Horizontal") x = quicktype::Checker::HORIZONTAL;
-        else if (j == "None") x = quicktype::Checker::NONE;
-        else if (j == "Vertical") x = quicktype::Checker::VERTICAL;
+    inline void from_json(const json & j, Checker & x) {
+        if (j == "Horizontal") x = Checker::HORIZONTAL;
+        else if (j == "None") x = Checker::NONE;
+        else if (j == "Vertical") x = Checker::VERTICAL;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::Checker & x) {
+    inline void to_json(json & j, const Checker & x) {
         switch (x) {
-            case quicktype::Checker::HORIZONTAL: j = "Horizontal"; break;
-            case quicktype::Checker::NONE: j = "None"; break;
-            case quicktype::Checker::VERTICAL: j = "Vertical"; break;
+            case Checker::HORIZONTAL: j = "Horizontal"; break;
+            case Checker::NONE: j = "None"; break;
+            case Checker::VERTICAL: j = "Vertical"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::TileMode & x) {
-        if (j == "Single") x = quicktype::TileMode::SINGLE;
-        else if (j == "Stamp") x = quicktype::TileMode::STAMP;
+    inline void from_json(const json & j, TileMode & x) {
+        if (j == "Single") x = TileMode::SINGLE;
+        else if (j == "Stamp") x = TileMode::STAMP;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::TileMode & x) {
+    inline void to_json(json & j, const TileMode & x) {
         switch (x) {
-            case quicktype::TileMode::SINGLE: j = "Single"; break;
-            case quicktype::TileMode::STAMP: j = "Stamp"; break;
+            case TileMode::SINGLE: j = "Single"; break;
+            case TileMode::STAMP: j = "Stamp"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::Type & x) {
-        if (j == "AutoLayer") x = quicktype::Type::AUTO_LAYER;
-        else if (j == "Entities") x = quicktype::Type::ENTITIES;
-        else if (j == "IntGrid") x = quicktype::Type::INT_GRID;
-        else if (j == "Tiles") x = quicktype::Type::TILES;
+    inline void from_json(const json & j, Type & x) {
+        if (j == "AutoLayer") x = Type::AUTO_LAYER;
+        else if (j == "Entities") x = Type::ENTITIES;
+        else if (j == "IntGrid") x = Type::INT_GRID;
+        else if (j == "Tiles") x = Type::TILES;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::Type & x) {
+    inline void to_json(json & j, const Type & x) {
         switch (x) {
-            case quicktype::Type::AUTO_LAYER: j = "AutoLayer"; break;
-            case quicktype::Type::ENTITIES: j = "Entities"; break;
-            case quicktype::Type::INT_GRID: j = "IntGrid"; break;
-            case quicktype::Type::TILES: j = "Tiles"; break;
+            case Type::AUTO_LAYER: j = "AutoLayer"; break;
+            case Type::ENTITIES: j = "Entities"; break;
+            case Type::INT_GRID: j = "IntGrid"; break;
+            case Type::TILES: j = "Tiles"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::EmbedAtlas & x) {
-        if (j == "LdtkIcons") x = quicktype::EmbedAtlas::LDTK_ICONS;
+    inline void from_json(const json & j, EmbedAtlas & x) {
+        if (j == "LdtkIcons") x = EmbedAtlas::LDTK_ICONS;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::EmbedAtlas & x) {
+    inline void to_json(json & j, const EmbedAtlas & x) {
         switch (x) {
-            case quicktype::EmbedAtlas::LDTK_ICONS: j = "LdtkIcons"; break;
+            case EmbedAtlas::LDTK_ICONS: j = "LdtkIcons"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::Flag & x) {
-        if (j == "DiscardPreCsvIntGrid") x = quicktype::Flag::DISCARD_PRE_CSV_INT_GRID;
-        else if (j == "ExportPreCsvIntGridFormat") x = quicktype::Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT;
-        else if (j == "IgnoreBackupSuggest") x = quicktype::Flag::IGNORE_BACKUP_SUGGEST;
-        else if (j == "MultiWorlds") x = quicktype::Flag::MULTI_WORLDS;
-        else if (j == "PrependIndexToLevelFileNames") x = quicktype::Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES;
-        else if (j == "UseMultilinesType") x = quicktype::Flag::USE_MULTILINES_TYPE;
+    inline void from_json(const json & j, Flag & x) {
+        if (j == "DiscardPreCsvIntGrid") x = Flag::DISCARD_PRE_CSV_INT_GRID;
+        else if (j == "ExportPreCsvIntGridFormat") x = Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT;
+        else if (j == "IgnoreBackupSuggest") x = Flag::IGNORE_BACKUP_SUGGEST;
+        else if (j == "MultiWorlds") x = Flag::MULTI_WORLDS;
+        else if (j == "PrependIndexToLevelFileNames") x = Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES;
+        else if (j == "UseMultilinesType") x = Flag::USE_MULTILINES_TYPE;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::Flag & x) {
+    inline void to_json(json & j, const Flag & x) {
         switch (x) {
-            case quicktype::Flag::DISCARD_PRE_CSV_INT_GRID: j = "DiscardPreCsvIntGrid"; break;
-            case quicktype::Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT: j = "ExportPreCsvIntGridFormat"; break;
-            case quicktype::Flag::IGNORE_BACKUP_SUGGEST: j = "IgnoreBackupSuggest"; break;
-            case quicktype::Flag::MULTI_WORLDS: j = "MultiWorlds"; break;
-            case quicktype::Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES: j = "PrependIndexToLevelFileNames"; break;
-            case quicktype::Flag::USE_MULTILINES_TYPE: j = "UseMultilinesType"; break;
+            case Flag::DISCARD_PRE_CSV_INT_GRID: j = "DiscardPreCsvIntGrid"; break;
+            case Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT: j = "ExportPreCsvIntGridFormat"; break;
+            case Flag::IGNORE_BACKUP_SUGGEST: j = "IgnoreBackupSuggest"; break;
+            case Flag::MULTI_WORLDS: j = "MultiWorlds"; break;
+            case Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES: j = "PrependIndexToLevelFileNames"; break;
+            case Flag::USE_MULTILINES_TYPE: j = "UseMultilinesType"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::BgPos & x) {
-        if (j == "Contain") x = quicktype::BgPos::CONTAIN;
-        else if (j == "Cover") x = quicktype::BgPos::COVER;
-        else if (j == "CoverDirty") x = quicktype::BgPos::COVER_DIRTY;
-        else if (j == "Unscaled") x = quicktype::BgPos::UNSCALED;
+    inline void from_json(const json & j, BgPos & x) {
+        if (j == "Contain") x = BgPos::CONTAIN;
+        else if (j == "Cover") x = BgPos::COVER;
+        else if (j == "CoverDirty") x = BgPos::COVER_DIRTY;
+        else if (j == "Unscaled") x = BgPos::UNSCALED;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::BgPos & x) {
+    inline void to_json(json & j, const BgPos & x) {
         switch (x) {
-            case quicktype::BgPos::CONTAIN: j = "Contain"; break;
-            case quicktype::BgPos::COVER: j = "Cover"; break;
-            case quicktype::BgPos::COVER_DIRTY: j = "CoverDirty"; break;
-            case quicktype::BgPos::UNSCALED: j = "Unscaled"; break;
+            case BgPos::CONTAIN: j = "Contain"; break;
+            case BgPos::COVER: j = "Cover"; break;
+            case BgPos::COVER_DIRTY: j = "CoverDirty"; break;
+            case BgPos::UNSCALED: j = "Unscaled"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::WorldLayout & x) {
-        if (j == "Free") x = quicktype::WorldLayout::FREE;
-        else if (j == "GridVania") x = quicktype::WorldLayout::GRID_VANIA;
-        else if (j == "LinearHorizontal") x = quicktype::WorldLayout::LINEAR_HORIZONTAL;
-        else if (j == "LinearVertical") x = quicktype::WorldLayout::LINEAR_VERTICAL;
+    inline void from_json(const json & j, WorldLayout & x) {
+        if (j == "Free") x = WorldLayout::FREE;
+        else if (j == "GridVania") x = WorldLayout::GRID_VANIA;
+        else if (j == "LinearHorizontal") x = WorldLayout::LINEAR_HORIZONTAL;
+        else if (j == "LinearVertical") x = WorldLayout::LINEAR_VERTICAL;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::WorldLayout & x) {
+    inline void to_json(json & j, const WorldLayout & x) {
         switch (x) {
-            case quicktype::WorldLayout::FREE: j = "Free"; break;
-            case quicktype::WorldLayout::GRID_VANIA: j = "GridVania"; break;
-            case quicktype::WorldLayout::LINEAR_HORIZONTAL: j = "LinearHorizontal"; break;
-            case quicktype::WorldLayout::LINEAR_VERTICAL: j = "LinearVertical"; break;
+            case WorldLayout::FREE: j = "Free"; break;
+            case WorldLayout::GRID_VANIA: j = "GridVania"; break;
+            case WorldLayout::LINEAR_HORIZONTAL: j = "LinearHorizontal"; break;
+            case WorldLayout::LINEAR_VERTICAL: j = "LinearVertical"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::IdentifierStyle & x) {
-        if (j == "Capitalize") x = quicktype::IdentifierStyle::CAPITALIZE;
-        else if (j == "Free") x = quicktype::IdentifierStyle::FREE;
-        else if (j == "Lowercase") x = quicktype::IdentifierStyle::LOWERCASE;
-        else if (j == "Uppercase") x = quicktype::IdentifierStyle::UPPERCASE;
+    inline void from_json(const json & j, IdentifierStyle & x) {
+        if (j == "Capitalize") x = IdentifierStyle::CAPITALIZE;
+        else if (j == "Free") x = IdentifierStyle::FREE;
+        else if (j == "Lowercase") x = IdentifierStyle::LOWERCASE;
+        else if (j == "Uppercase") x = IdentifierStyle::UPPERCASE;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::IdentifierStyle & x) {
+    inline void to_json(json & j, const IdentifierStyle & x) {
         switch (x) {
-            case quicktype::IdentifierStyle::CAPITALIZE: j = "Capitalize"; break;
-            case quicktype::IdentifierStyle::FREE: j = "Free"; break;
-            case quicktype::IdentifierStyle::LOWERCASE: j = "Lowercase"; break;
-            case quicktype::IdentifierStyle::UPPERCASE: j = "Uppercase"; break;
+            case IdentifierStyle::CAPITALIZE: j = "Capitalize"; break;
+            case IdentifierStyle::FREE: j = "Free"; break;
+            case IdentifierStyle::LOWERCASE: j = "Lowercase"; break;
+            case IdentifierStyle::UPPERCASE: j = "Uppercase"; break;
             default: throw "This should not happen";
         }
     }
 
-    inline void from_json(const json & j, quicktype::ImageExportMode & x) {
-        if (j == "LayersAndLevels") x = quicktype::ImageExportMode::LAYERS_AND_LEVELS;
-        else if (j == "None") x = quicktype::ImageExportMode::NONE;
-        else if (j == "OneImagePerLayer") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER;
-        else if (j == "OneImagePerLevel") x = quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL;
+    inline void from_json(const json & j, ImageExportMode & x) {
+        if (j == "LayersAndLevels") x = ImageExportMode::LAYERS_AND_LEVELS;
+        else if (j == "None") x = ImageExportMode::NONE;
+        else if (j == "OneImagePerLayer") x = ImageExportMode::ONE_IMAGE_PER_LAYER;
+        else if (j == "OneImagePerLevel") x = ImageExportMode::ONE_IMAGE_PER_LEVEL;
         else throw "Input JSON does not conform to schema";
     }
 
-    inline void to_json(json & j, const quicktype::ImageExportMode & x) {
+    inline void to_json(json & j, const ImageExportMode & x) {
         switch (x) {
-            case quicktype::ImageExportMode::LAYERS_AND_LEVELS: j = "LayersAndLevels"; break;
-            case quicktype::ImageExportMode::NONE: j = "None"; break;
-            case quicktype::ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
-            case quicktype::ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
+            case ImageExportMode::LAYERS_AND_LEVELS: j = "LayersAndLevels"; break;
+            case ImageExportMode::NONE: j = "None"; break;
+            case ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
+            case ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
             default: throw "This should not happen";
         }
     }

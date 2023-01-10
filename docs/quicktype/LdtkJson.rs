@@ -154,6 +154,11 @@ pub struct LdtkJson {
     #[serde(rename = "simplifiedExport")]
     simplified_export: bool,
 
+    /// All the instances of entities that have their `exportToToc` flag enabled are listed this
+    /// array.
+    #[serde(rename = "toc")]
+    toc: Vec<LdtkTableOfContentEntry>,
+
     /// This optional description is used by LDtk Samples to show up some informations and
     /// instructions.
     #[serde(rename = "tutorialDesc")]
@@ -245,6 +250,11 @@ pub struct EntityDefinition {
     /// Base entity color
     #[serde(rename = "color")]
     color: String,
+
+    /// If enabled, all instances of this entity will be listed in the project "Table of content"
+    /// object.
+    #[serde(rename = "exportToToc")]
+    export_to_toc: bool,
 
     /// Array of field definitions
     #[serde(rename = "fieldDefs")]
@@ -967,6 +977,9 @@ pub struct ForcedRefs {
     #[serde(rename = "NeighbourLevel")]
     neighbour_level: Option<NeighbourLevel>,
 
+    #[serde(rename = "TableOfContentEntry")]
+    table_of_content_entry: Option<LdtkTableOfContentEntry>,
+
     #[serde(rename = "Tile")]
     tile: Option<TileInstance>,
 
@@ -1407,6 +1420,15 @@ pub struct NeighbourLevel {
     /// by: `levelIid`
     #[serde(rename = "levelUid")]
     level_uid: Option<i64>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct LdtkTableOfContentEntry {
+    #[serde(rename = "identifier")]
+    identifier: String,
+
+    #[serde(rename = "instances")]
+    instances: Vec<FieldInstanceEntityReference>,
 }
 
 /// **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented

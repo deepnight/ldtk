@@ -1,13 +1,5 @@
-# To use this code, make sure you
-#
-#     import json
-#
-# and then, to convert JSON from a string, do
-#
-#     result = ldtk_json_from_dict(json.loads(json_string))
-
 from enum import Enum
-from typing import Any, Optional, List, Dict, TypeVar, Type, Callable, cast
+from typing import Any, List, Optional, Dict, TypeVar, Type, Callable, cast
 
 
 T = TypeVar("T")
@@ -437,6 +429,10 @@ class TileRenderMode(Enum):
 class EntityDefinition:
     """Base entity color"""
     color: str
+    """If enabled, all instances of this entity will be listed in the project "Table of content"
+    object.
+    """
+    export_to_toc: bool
     """Array of field definitions"""
     field_defs: List[FieldDefinition]
     fill_opacity: float
@@ -496,8 +492,9 @@ class EntityDefinition:
     """Pixel width"""
     width: int
 
-    def __init__(self, color: str, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
+    def __init__(self, color: str, export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
         self.color = color
+        self.export_to_toc = export_to_toc
         self.field_defs = field_defs
         self.fill_opacity = fill_opacity
         self.height = height
@@ -528,6 +525,7 @@ class EntityDefinition:
     def from_dict(obj: Any) -> 'EntityDefinition':
         assert isinstance(obj, dict)
         color = from_str(obj.get("color"))
+        export_to_toc = from_bool(obj.get("exportToToc"))
         field_defs = from_list(FieldDefinition.from_dict, obj.get("fieldDefs"))
         fill_opacity = from_float(obj.get("fillOpacity"))
         height = from_int(obj.get("height"))
@@ -553,11 +551,12 @@ class EntityDefinition:
         tileset_id = from_union([from_none, from_int], obj.get("tilesetId"))
         uid = from_int(obj.get("uid"))
         width = from_int(obj.get("width"))
-        return EntityDefinition(color, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, width)
+        return EntityDefinition(color, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["color"] = from_str(self.color)
+        result["exportToToc"] = from_bool(self.export_to_toc)
         result["fieldDefs"] = from_list(lambda x: to_class(FieldDefinition, x), self.field_defs)
         result["fillOpacity"] = to_float(self.fill_opacity)
         result["height"] = from_int(self.height)
@@ -1971,6 +1970,28 @@ class Level:
         return result
 
 
+class LdtkTableOfContentEntry:
+    identifier: str
+    instances: List[FieldInstanceEntityReference]
+
+    def __init__(self, identifier: str, instances: List[FieldInstanceEntityReference]) -> None:
+        self.identifier = identifier
+        self.instances = instances
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'LdtkTableOfContentEntry':
+        assert isinstance(obj, dict)
+        identifier = from_str(obj.get("identifier"))
+        instances = from_list(FieldInstanceEntityReference.from_dict, obj.get("instances"))
+        return LdtkTableOfContentEntry(identifier, instances)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["identifier"] = from_str(self.identifier)
+        result["instances"] = from_list(lambda x: to_class(FieldInstanceEntityReference, x), self.instances)
+        return result
+
+
 class WorldLayout(Enum):
     FREE = "Free"
     GRID_VANIA = "GridVania"
@@ -2066,13 +2087,14 @@ class ForcedRefs:
     level: Optional[Level]
     level_bg_pos_infos: Optional[LevelBackgroundPosition]
     neighbour_level: Optional[NeighbourLevel]
+    table_of_content_entry: Optional[LdtkTableOfContentEntry]
     tile: Optional[TileInstance]
     tile_custom_metadata: Optional[TileCustomMetadata]
     tileset_def: Optional[TilesetDefinition]
     tileset_rect: Optional[TilesetRectangle]
     world: Optional[World]
 
-    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[FieldInstanceEntityReference], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[FieldInstanceGridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
+    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[FieldInstanceEntityReference], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[FieldInstanceGridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], table_of_content_entry: Optional[LdtkTableOfContentEntry], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
         self.auto_layer_rule_group = auto_layer_rule_group
         self.auto_rule_def = auto_rule_def
         self.custom_command = custom_command
@@ -2093,6 +2115,7 @@ class ForcedRefs:
         self.level = level
         self.level_bg_pos_infos = level_bg_pos_infos
         self.neighbour_level = neighbour_level
+        self.table_of_content_entry = table_of_content_entry
         self.tile = tile
         self.tile_custom_metadata = tile_custom_metadata
         self.tileset_def = tileset_def
@@ -2122,12 +2145,13 @@ class ForcedRefs:
         level = from_union([Level.from_dict, from_none], obj.get("Level"))
         level_bg_pos_infos = from_union([from_none, LevelBackgroundPosition.from_dict], obj.get("LevelBgPosInfos"))
         neighbour_level = from_union([NeighbourLevel.from_dict, from_none], obj.get("NeighbourLevel"))
+        table_of_content_entry = from_union([LdtkTableOfContentEntry.from_dict, from_none], obj.get("TableOfContentEntry"))
         tile = from_union([TileInstance.from_dict, from_none], obj.get("Tile"))
         tile_custom_metadata = from_union([TileCustomMetadata.from_dict, from_none], obj.get("TileCustomMetadata"))
         tileset_def = from_union([TilesetDefinition.from_dict, from_none], obj.get("TilesetDef"))
         tileset_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("TilesetRect"))
         world = from_union([World.from_dict, from_none], obj.get("World"))
-        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
+        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, table_of_content_entry, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -2171,6 +2195,8 @@ class ForcedRefs:
             result["LevelBgPosInfos"] = from_union([from_none, lambda x: to_class(LevelBackgroundPosition, x)], self.level_bg_pos_infos)
         if self.neighbour_level is not None:
             result["NeighbourLevel"] = from_union([lambda x: to_class(NeighbourLevel, x), from_none], self.neighbour_level)
+        if self.table_of_content_entry is not None:
+            result["TableOfContentEntry"] = from_union([lambda x: to_class(LdtkTableOfContentEntry, x), from_none], self.table_of_content_entry)
         if self.tile is not None:
             result["Tile"] = from_union([lambda x: to_class(TileInstance, x), from_none], self.tile)
         if self.tile_custom_metadata is not None:
@@ -2301,6 +2327,10 @@ class LdtkJSON:
     integration.
     """
     simplified_export: bool
+    """All the instances of entities that have their `exportToToc` flag enabled are listed this
+    array.
+    """
+    toc: List[LdtkTableOfContentEntry]
     """This optional description is used by LDtk Samples to show up some informations and
     instructions.
     """
@@ -2336,7 +2366,7 @@ class LdtkJSON:
     """
     worlds: List[World]
 
-    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, custom_commands: List[LdtkCustomCommand], default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_level_bg: bool, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, iid: str, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
+    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, bg_color: str, custom_commands: List[LdtkCustomCommand], default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, export_level_bg: bool, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, iid: str, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, toc: List[LdtkTableOfContentEntry], tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
         self.forced_refs = forced_refs
         self.app_build_id = app_build_id
         self.backup_limit = backup_limit
@@ -2365,6 +2395,7 @@ class LdtkJSON:
         self.next_uid = next_uid
         self.png_file_pattern = png_file_pattern
         self.simplified_export = simplified_export
+        self.toc = toc
         self.tutorial_desc = tutorial_desc
         self.world_grid_height = world_grid_height
         self.world_grid_width = world_grid_width
@@ -2402,12 +2433,13 @@ class LdtkJSON:
         next_uid = from_int(obj.get("nextUid"))
         png_file_pattern = from_union([from_none, from_str], obj.get("pngFilePattern"))
         simplified_export = from_bool(obj.get("simplifiedExport"))
+        toc = from_list(LdtkTableOfContentEntry.from_dict, obj.get("toc"))
         tutorial_desc = from_union([from_none, from_str], obj.get("tutorialDesc"))
         world_grid_height = from_union([from_none, from_int], obj.get("worldGridHeight"))
         world_grid_width = from_union([from_none, from_int], obj.get("worldGridWidth"))
         world_layout = from_union([from_none, WorldLayout], obj.get("worldLayout"))
         worlds = from_list(World.from_dict, obj.get("worlds"))
-        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, bg_color, custom_commands, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_level_bg, export_png, export_tiled, external_levels, flags, identifier_style, iid, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
+        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, bg_color, custom_commands, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, export_level_bg, export_png, export_tiled, external_levels, flags, identifier_style, iid, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, toc, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -2444,6 +2476,7 @@ class LdtkJSON:
         if self.png_file_pattern is not None:
             result["pngFilePattern"] = from_union([from_none, from_str], self.png_file_pattern)
         result["simplifiedExport"] = from_bool(self.simplified_export)
+        result["toc"] = from_list(lambda x: to_class(LdtkTableOfContentEntry, x), self.toc)
         if self.tutorial_desc is not None:
             result["tutorialDesc"] = from_union([from_none, from_str], self.tutorial_desc)
         if self.world_grid_height is not None:
