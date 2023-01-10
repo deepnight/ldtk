@@ -9057,10 +9057,8 @@ $patternSize : 32px;
 	.wrapper .content {
 		.layout {
 			display: grid;
-			min-width: 600px;
-			max-width: 90vw;
-			min-height: 570px;
-			max-height: 72vh;
+			width: 90vw;
+			height: 72vh;
 			grid-template-columns: min-content auto;
 			grid-template-rows: 100%;
 			column-gap: 8px;
