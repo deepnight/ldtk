@@ -1,4 +1,7 @@
 import electron.renderer.IpcRenderer;
+#if debug
+import page.CrashReport; // force compilation in debug
+#end
 
 class App extends dn.Process {
 	public static var ME : App;
