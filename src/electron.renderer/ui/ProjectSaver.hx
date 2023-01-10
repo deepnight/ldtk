@@ -11,6 +11,7 @@ private enum SavingState {
 	CheckLevelCache;
 	SavingMainFile;
 	SavingExternLevels;
+	SavingBson;
 	WritingImages;
 	ExportingTiled;
 	ExportingGMS;
@@ -216,21 +217,6 @@ class ProjectSaver extends dn.Process {
 					}
 				});
 
-				ops.push({
-					label: "Writing Binary file...",
-					cb: ()->{
-						if( savingData.bytes==null )
-							return;
-						var fp = project.filePath.clone();
-						fp.extension = "bson";
-						log('  Writing Binary ${fp.full}...');
-						try NT.writeFileBytes(fp.full, savingData.bytes) catch(_) {
-							failed = true;
-							error( L.t._("Could not write the project Binary file here! Maybe the destination is read-only?") );
-						}
-					}
-				});
-
 				new ui.modal.Progress("Saving main file...", ops, ()->if( !failed ) beginNextState());
 
 
@@ -261,6 +247,30 @@ class ProjectSaver extends dn.Process {
 					beginNextState();
 				}
 
+
+			case SavingBson:
+				if( !project.exportBson ) {
+					// Remove previous BSON file
+					NT.removeFile( project.getBsonFilePath().full );
+					beginNextState();
+				}
+				else {
+					var ops = [];
+					ops.push({
+						label: "Writing main BSON file...",
+						cb: ()->{
+							if( savingData.bsonBytes==null )
+								return;
+							var fp = project.getBsonFilePath();
+							log('  Writing Binary ${fp.full}...');
+							try NT.writeFileBytes(fp.full, savingData.bsonBytes) catch(_) {
+								// failed = true;
+								error( L.t._("Could not write the project Binary file here! Maybe the destination is read-only?") );
+							}
+						}
+					});
+					new ui.modal.Progress(Lang.t._("Saving BSON files"), ops, ()->beginNextState());
+				}
 
 			case WritingImages:
 				var baseDir = project.simplifiedExport
@@ -583,6 +593,8 @@ class ProjectSaver extends dn.Process {
 
 			case SavingExternLevels:
 
+			case SavingBson:
+
 			case WritingImages:
 				if( !ui.modal.Progress.hasAny() )
 					beginNextState();
@@ -693,7 +705,8 @@ class ProjectSaver extends dn.Process {
 			// Full single JSON
 			var projectObj = project.toJson();
 			savingData.projectJsonStr = jsonStringify(project, projectObj);
-			savingData.bytes = bson.Bson.encode(projectObj);
+			if( project.exportBson )
+				savingData.bsonBytes = bson.Bson.encode(projectObj);
 		}
 		else {
 			// Separate level JSONs
@@ -725,7 +738,8 @@ class ProjectSaver extends dn.Process {
 					_clearLevelData(levelJson);
 			}
 			savingData.projectJsonStr = jsonStringify( project, trimmedProjectJson );
-			savingData.bytes = bson.Bson.encode(trimmedProjectJson);
+			if( project.exportBson )
+				savingData.bsonBytes = bson.Bson.encode(trimmedProjectJson);
 		}
 
 		return savingData;

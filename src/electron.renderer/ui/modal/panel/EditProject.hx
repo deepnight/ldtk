@@ -343,6 +343,16 @@ class EditProject extends ui.modal.Panel {
 			case Lowercase, Free: jStyleWarning.show();
 		}
 
+		// BSON export
+		var i = Input.linkToHtmlInput( project.exportBson, jForms.find("#bson") );
+		i.linkEvent(ProjectSettingsChanged);
+		var jLocate = jForms.find("#bson").siblings(".locate").empty();
+		if( project.exportBson ) {
+			var fp = project.getBsonFilePath();
+			jLocate.append( JsTools.makeLocateLink(fp.full, true) );
+		}
+
+
 		// Tiled export
 		var i = Input.linkToHtmlInput( project.exportTiled, jForms.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);

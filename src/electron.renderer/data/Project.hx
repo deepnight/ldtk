@@ -28,6 +28,7 @@ class Project {
 	public var minifyJson = false;
 	public var externalLevels = false;
 	public var exportTiled = false;
+	public var exportBson = false;
 	public var simplifiedExport = false;
 
 	@:allow(ui.modal.panel.EditProject)
@@ -76,6 +77,12 @@ class Project {
 
 	public function getRelExternalFilesDir() {
 		return filePath.fileName;
+	}
+
+	public function getBsonFilePath() {
+		var fp = filePath.clone();
+		fp.extension = "bson";
+		return fp;
 	}
 
 	public function getDefaultImageExportFilePattern() {
@@ -271,6 +278,7 @@ class Project {
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
+		p.exportBson = JsonTools.readBool( json.exportBson, false );
 		p.simplifiedExport = JsonTools.readBool( json.simplifiedExport, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
@@ -544,6 +552,7 @@ class Project {
 			minifyJson: minifyJson,
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
+			exportBson: exportBson,
 			simplifiedExport: simplifiedExport,
 			imageExportMode: JsonTools.writeEnum(imageExportMode, false),
 			exportLevelBg: exportLevelBg,
