@@ -297,7 +297,10 @@ class DocGenerator {
 					var cell = f.descMd;
 
 					if( f.subFields.length>0 ) {
-						cell.push("This object contains the following fields:");
+						if( isArray(f.type) )
+							cell.push("This array contains objects with the following fields:");
+						else
+							cell.push("This object contains the following fields:");
 						cell.push( getSubFieldsHtml( f.subFields ) );
 					}
 					tableCols.push( cell.join("<br/> ") );
@@ -801,6 +804,15 @@ class DocGenerator {
 			}
 			else
 				Unknown;
+	}
+
+
+	static function isArray(t:FieldType) {
+		return switch t {
+			case Nullable(f): isArray(f);
+			case Arr(t): true;
+			case _: false;
+		}
 	}
 
 	/**
