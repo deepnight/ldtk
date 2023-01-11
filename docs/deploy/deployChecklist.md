@@ -62,5 +62,5 @@
 - [ ] Announce on Reddit (major releases only)
 
 ## Archives
+- [ ] Archive installer to FTP
 - [ ] Archive docs to the `docs/archives/x.x.x/` folder
-- [ ] Archive previous installer to Google Drive
