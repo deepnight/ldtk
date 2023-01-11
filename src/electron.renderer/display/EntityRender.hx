@@ -95,11 +95,11 @@ class EntityRender extends dn.Process {
 		if( ed==null )
 			ed = ei.def;
 
+		var flipX = (ei!=null && M.hasBit(ei.flips,0));
+		var flipY = (ei!=null && M.hasBit(ei.flips,1));
 
 		var w = ei!=null ? ei.width : ed.width;
 		var h = ei!=null ? ei.height : ed.height;
-		var axisX = (ei!=null && (ei.flips==1 || ei.flips==3)) ? -1 : 1;
-		var axisY = (ei!=null && (ei.flips==2 || ei.flips==3)) ? -1 : 1;
 		var color = ei!=null ? ei.getSmartColor(false) : ed.color;
 
 		var wrapper = new h2d.Object();
@@ -131,17 +131,19 @@ class EntityRender extends dn.Process {
 				// Texture
 				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
 				var t = td.getTileRect(rect);
+				if (flipX) t.flipX();
+				if (flipY) t.flipY();
 				var alpha = ed.tileOpacity;
 				switch mode {
 					case Stretch:
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
-							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY); // + (offX*bmp.tile.width) + (offY*bmp.tile.height)
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
-						bmp.scaleX = w / bmp.tile.width * axisX;
-						bmp.scaleY = h / bmp.tile.height * axisY;
+						bmp.scaleX = w / bmp.tile.width;
+						bmp.scaleY = h / bmp.tile.height;
 
 					case FitInside:
 						var bmp = new h2d.Bitmap(t, wrapper);
@@ -152,15 +154,12 @@ class EntityRender extends dn.Process {
 
 						var s = M.fmin(w / bmp.tile.width, h / bmp.tile.height);
 						bmp.setScale(s);
-						bmp.scaleX *= axisX;
-						bmp.scaleY *= axisY;
 
 					case Repeat:
 						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
 						tt.alpha = alpha;
 						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
 						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
-						// TODO: axis flips are gonna be messy here :(
 
 					case Cover:
 						var bmp = new h2d.Bitmap(wrapper);
@@ -178,8 +177,6 @@ class EntityRender extends dn.Process {
 						);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.setScale(s);
-						bmp.scaleX *= axisX;
-						bmp.scaleY *= axisY;
 
 					case FullSizeCropped:
 						var bmp = new h2d.Bitmap(wrapper);
@@ -194,8 +191,6 @@ class EntityRender extends dn.Process {
 						);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
-						bmp.scaleX *= axisX;
-						bmp.scaleY *= axisY;
 
 					case FullSizeUncropped:
 						var bmp = new h2d.Bitmap(t, wrapper);
@@ -204,8 +199,6 @@ class EntityRender extends dn.Process {
 
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
-						bmp.scaleX *= axisX;
-						bmp.scaleY *= axisY;
 
 					case NineSlice:
 						var sg = new h2d.ScaleGrid(
@@ -220,7 +213,6 @@ class EntityRender extends dn.Process {
 						sg.height = h;
 						sg.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
 						sg.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
-						// TODO: I don't think h2d supports flipping nineslice renders. Do we even want to cause that?
 				}
 			}
 		}

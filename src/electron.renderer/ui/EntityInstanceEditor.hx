@@ -274,18 +274,9 @@ class EntityInstanceEditor extends dn.Process {
 		// X
 		var i = new form.input.BoolInput(
 			jFlips.find("[name=x]"),
-			()->(ei.flips == 1 || ei.flips == 3),
+			()->(M.hasBit(ei.flips,0)),
 			(v)->{
-				switch (ei.flips) {
-					case 0:
-						ei.flips = 1;
-					case 1:
-						ei.flips = 0;
-					case 2:
-						ei.flips = 3;
-					case 3:
-						ei.flips = 2;
-				}
+				ei.flips = M.makeBitsFromBools(!M.hasBit(ei.flips, 0), M.hasBit(ei.flips, 1));
 			}
 		);
 		i.setEnabled( ei.def.flippableX );
@@ -295,18 +286,9 @@ class EntityInstanceEditor extends dn.Process {
 		// Y
 		var i = new form.input.BoolInput(
 			jFlips.find("[name=y]"),
-			()->(ei.flips == 2 || ei.flips == 3),
+			()->(M.hasBit(ei.flips,1)),
 			(v)->{
-				switch (ei.flips) {
-					case 0:
-						ei.flips = 2;
-					case 2:
-						ei.flips = 0;
-					case 1:
-						ei.flips = 3;
-					case 3:
-						ei.flips = 1;
-				}
+				ei.flips = M.makeBitsFromBools(M.hasBit(ei.flips, 0), !M.hasBit(ei.flips, 1));
 			}
 		);
 		i.setEnabled( ei.def.flippableY );
