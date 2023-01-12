@@ -1,3 +1,8 @@
+# 1.2.5
+
+ - Fixed escaping of user docs strings in JSON
+ - Fixed a crash with specific level background images
+
 # 1.2.4
 
  - Added a new **Table of content** to the JSON, which lists all instances of any given entity.
