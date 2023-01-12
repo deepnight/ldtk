@@ -101,7 +101,7 @@ type LdtkJSON struct {
 	// If TRUE, a very simplified will be generated on saving, for quicker & easier engine                                
 	// integration.                                                                                                       
 	SimplifiedExport                                                                            bool                      `json:"simplifiedExport"`
-	// All the instances of entities that have their `exportToToc` flag enabled are listed this                           
+	// All instances of entities that have their `exportToToc` flag enabled are listed in this                            
 	// array.                                                                                                             
 	Toc                                                                                         []LdtkTableOfContentEntry `json:"toc"`
 	// This optional description is used by LDtk Samples to show up some informations and                                 
@@ -168,6 +168,8 @@ type Definitions struct {
 type EntityDefinition struct {
 	// Base entity color                                                                                          
 	Color                                                                                       string            `json:"color"`
+	// User defined documentation for this element to provide help/tips to level designers.                       
+	Doc                                                                                         *string           `json:"doc"`
 	// If enabled, all instances of this entity will be listed in the project "Table of content"                  
 	// object.                                                                                                    
 	ExportToToc                                                                                 bool              `json:"exportToToc"`
@@ -352,6 +354,8 @@ type LayerDefinition struct {
 	CanSelectWhenInactive                                                                        bool                     `json:"canSelectWhenInactive"`
 	// Opacity of the layer (0 to 1.0)                                                                                    
 	DisplayOpacity                                                                               float64                  `json:"displayOpacity"`
+	// User defined documentation for this element to provide help/tips to level designers.                               
+	Doc                                                                                          *string                  `json:"doc"`
 	// An array of tags to forbid some Entities in this layer                                                             
 	ExcludedTags                                                                                 []string                 `json:"excludedTags"`
 	// Width and height of the grid in pixels                                                                             
@@ -532,32 +536,32 @@ type EnumTagValue struct {
 // all types, to make sure QuickType finds them and integrate all of them. Otherwise,
 // Quicktype will drop types that are not explicitely used.
 type ForcedRefs struct {
-	AutoLayerRuleGroup   *AutoLayerRuleGroup           `json:"AutoLayerRuleGroup,omitempty"`
-	AutoRuleDef          *AutoLayerRuleDefinition      `json:"AutoRuleDef,omitempty"`
-	CustomCommand        *LdtkCustomCommand            `json:"CustomCommand,omitempty"`
-	Definitions          *Definitions                  `json:"Definitions,omitempty"`
-	EntityDef            *EntityDefinition             `json:"EntityDef,omitempty"`
-	EntityInstance       *EntityInstance               `json:"EntityInstance,omitempty"`
-	EntityReferenceInfos *FieldInstanceEntityReference `json:"EntityReferenceInfos,omitempty"`
-	EnumDef              *EnumDefinition               `json:"EnumDef,omitempty"`
-	EnumDefValues        *EnumValueDefinition          `json:"EnumDefValues,omitempty"`
-	EnumTagValue         *EnumTagValue                 `json:"EnumTagValue,omitempty"`
-	FieldDef             *FieldDefinition              `json:"FieldDef,omitempty"`
-	FieldInstance        *FieldInstance                `json:"FieldInstance,omitempty"`
-	GridPoint            *FieldInstanceGridPoint       `json:"GridPoint,omitempty"`
-	IntGridValueDef      *IntGridValueDefinition       `json:"IntGridValueDef,omitempty"`
-	IntGridValueInstance *IntGridValueInstance         `json:"IntGridValueInstance,omitempty"`
-	LayerDef             *LayerDefinition              `json:"LayerDef,omitempty"`
-	LayerInstance        *LayerInstance                `json:"LayerInstance,omitempty"`
-	Level                *Level                        `json:"Level,omitempty"`
-	LevelBgPosInfos      *LevelBackgroundPosition      `json:"LevelBgPosInfos,omitempty"`
-	NeighbourLevel       *NeighbourLevel               `json:"NeighbourLevel,omitempty"`
-	TableOfContentEntry  *LdtkTableOfContentEntry      `json:"TableOfContentEntry,omitempty"`
-	Tile                 *TileInstance                 `json:"Tile,omitempty"`
-	TileCustomMetadata   *TileCustomMetadata           `json:"TileCustomMetadata,omitempty"`
-	TilesetDef           *TilesetDefinition            `json:"TilesetDef,omitempty"`
-	TilesetRect          *TilesetRectangle             `json:"TilesetRect,omitempty"`
-	World                *World                        `json:"World,omitempty"`
+	AutoLayerRuleGroup   *AutoLayerRuleGroup          `json:"AutoLayerRuleGroup,omitempty"`
+	AutoRuleDef          *AutoLayerRuleDefinition     `json:"AutoRuleDef,omitempty"`
+	CustomCommand        *LdtkCustomCommand           `json:"CustomCommand,omitempty"`
+	Definitions          *Definitions                 `json:"Definitions,omitempty"`
+	EntityDef            *EntityDefinition            `json:"EntityDef,omitempty"`
+	EntityInstance       *EntityInstance              `json:"EntityInstance,omitempty"`
+	EntityReferenceInfos *ReferenceToAnEntityInstance `json:"EntityReferenceInfos,omitempty"`
+	EnumDef              *EnumDefinition              `json:"EnumDef,omitempty"`
+	EnumDefValues        *EnumValueDefinition         `json:"EnumDefValues,omitempty"`
+	EnumTagValue         *EnumTagValue                `json:"EnumTagValue,omitempty"`
+	FieldDef             *FieldDefinition             `json:"FieldDef,omitempty"`
+	FieldInstance        *FieldInstance               `json:"FieldInstance,omitempty"`
+	GridPoint            *GridPoint                   `json:"GridPoint,omitempty"`
+	IntGridValueDef      *IntGridValueDefinition      `json:"IntGridValueDef,omitempty"`
+	IntGridValueInstance *IntGridValueInstance        `json:"IntGridValueInstance,omitempty"`
+	LayerDef             *LayerDefinition             `json:"LayerDef,omitempty"`
+	LayerInstance        *LayerInstance               `json:"LayerInstance,omitempty"`
+	Level                *Level                       `json:"Level,omitempty"`
+	LevelBgPosInfos      *LevelBackgroundPosition     `json:"LevelBgPosInfos,omitempty"`
+	NeighbourLevel       *NeighbourLevel              `json:"NeighbourLevel,omitempty"`
+	TableOfContentEntry  *LdtkTableOfContentEntry     `json:"TableOfContentEntry,omitempty"`
+	Tile                 *TileInstance                `json:"Tile,omitempty"`
+	TileCustomMetadata   *TileCustomMetadata          `json:"TileCustomMetadata,omitempty"`
+	TilesetDef           *TilesetDefinition           `json:"TilesetDef,omitempty"`
+	TilesetRect          *TilesetRectangle            `json:"TilesetRect,omitempty"`
+	World                *World                       `json:"World,omitempty"`
 }
 
 type EntityInstance struct {
@@ -618,8 +622,8 @@ type FieldInstance struct {
 	RealEditorValues                                                                            []interface{}     `json:"realEditorValues"`
 }
 
-// This object is used in Field Instances to describe an EntityRef value.
-type FieldInstanceEntityReference struct {
+// This object describes the "location" of an Entity instance in the project worlds.
+type ReferenceToAnEntityInstance struct {
 	// IID of the refered EntityInstance                                    
 	EntityIid                                                        string `json:"entityIid"`
 	// IID of the LayerInstance containing the refered EntityInstance       
@@ -631,7 +635,7 @@ type FieldInstanceEntityReference struct {
 }
 
 // This object is just a grid-based coordinate used in Field values.
-type FieldInstanceGridPoint struct {
+type GridPoint struct {
 	// X grid-based coordinate      
 	Cx                        int64 `json:"cx"`
 	// Y grid-based coordinate      
@@ -823,8 +827,8 @@ type NeighbourLevel struct {
 }
 
 type LdtkTableOfContentEntry struct {
-	Identifier string                         `json:"identifier"`
-	Instances  []FieldInstanceEntityReference `json:"instances"`
+	Identifier string                        `json:"identifier"`
+	Instances  []ReferenceToAnEntityInstance `json:"instances"`
 }
 
 // **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented

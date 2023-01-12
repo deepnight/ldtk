@@ -1,3 +1,15 @@
+# 1.2.5
+
+ - Added custom user documentation for Entities and Layers
+ - Entity width and height no longer work as minimal values for resizable entities
+ - Updated mouse cursor for entity resizing handles
+ - Removed some useless tooltips in Rules panel
+ - Fixed a crash when adding a value to an array of Int in an Entity
+ - Fixed escaping of user docs strings in JSON
+ - Fixed a crash with specific level background images
+ - Fixed isolated "collapser" in Entity panel
+ - Removed the help block at the top of all panels to make more room for content.
+
 # 1.2.4
 
  - Added a new **Table of content** to the JSON, which lists all instances of any given entity.

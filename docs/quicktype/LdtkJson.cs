@@ -214,7 +214,7 @@ namespace ldtk
         public bool SimplifiedExport { get; set; }
 
         /// <summary>
-        /// All the instances of entities that have their `exportToToc` flag enabled are listed this
+        /// All instances of entities that have their `exportToToc` flag enabled are listed in this
         /// array.
         /// </summary>
         [JsonProperty("toc")]
@@ -339,6 +339,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("color")]
         public string Color { get; set; }
+
+        /// <summary>
+        /// User defined documentation for this element to provide help/tips to level designers.
+        /// </summary>
+        [JsonProperty("doc")]
+        public string Doc { get; set; }
 
         /// <summary>
         /// If enabled, all instances of this entity will be listed in the project "Table of content"
@@ -811,6 +817,12 @@ namespace ldtk
         public double DisplayOpacity { get; set; }
 
         /// <summary>
+        /// User defined documentation for this element to provide help/tips to level designers.
+        /// </summary>
+        [JsonProperty("doc")]
+        public string Doc { get; set; }
+
+        /// <summary>
         /// An array of tags to forbid some Entities in this layer
         /// </summary>
         [JsonProperty("excludedTags")]
@@ -1281,7 +1293,7 @@ namespace ldtk
         public EntityInstance EntityInstance { get; set; }
 
         [JsonProperty("EntityReferenceInfos", NullValueHandling = NullValueHandling.Ignore)]
-        public FieldInstanceEntityReference EntityReferenceInfos { get; set; }
+        public ReferenceToAnEntityInstance EntityReferenceInfos { get; set; }
 
         [JsonProperty("EnumDef", NullValueHandling = NullValueHandling.Ignore)]
         public EnumDefinition EnumDef { get; set; }
@@ -1299,7 +1311,7 @@ namespace ldtk
         public FieldInstance FieldInstance { get; set; }
 
         [JsonProperty("GridPoint", NullValueHandling = NullValueHandling.Ignore)]
-        public FieldInstanceGridPoint GridPoint { get; set; }
+        public GridPoint GridPoint { get; set; }
 
         [JsonProperty("IntGridValueDef", NullValueHandling = NullValueHandling.Ignore)]
         public IntGridValueDefinition IntGridValueDef { get; set; }
@@ -1472,9 +1484,9 @@ namespace ldtk
     }
 
     /// <summary>
-    /// This object is used in Field Instances to describe an EntityRef value.
+    /// This object describes the "location" of an Entity instance in the project worlds.
     /// </summary>
-    public partial class FieldInstanceEntityReference
+    public partial class ReferenceToAnEntityInstance
     {
         /// <summary>
         /// IID of the refered EntityInstance
@@ -1504,7 +1516,7 @@ namespace ldtk
     /// <summary>
     /// This object is just a grid-based coordinate used in Field values.
     /// </summary>
-    public partial class FieldInstanceGridPoint
+    public partial class GridPoint
     {
         /// <summary>
         /// X grid-based coordinate
@@ -1947,7 +1959,7 @@ namespace ldtk
         public string Identifier { get; set; }
 
         [JsonProperty("instances")]
-        public FieldInstanceEntityReference[] Instances { get; set; }
+        public ReferenceToAnEntityInstance[] Instances { get; set; }
     }
 
     /// <summary>

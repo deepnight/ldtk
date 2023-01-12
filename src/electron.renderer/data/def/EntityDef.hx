@@ -11,6 +11,7 @@ class EntityDef {
 	public var identifier(default,set) : String;
 	public var tags : Tags;
 	public var exportToToc : Bool;
+	public var doc: Null<String>;
 
 	public var width : Int;
 	public var height : Int;
@@ -143,6 +144,7 @@ class EntityDef {
 		o.resizableX = JsonTools.readBool( json.resizableX, false );
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
 		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
+		o.doc = JsonTools.unescapeString( json.doc );
 
 		o.hollow = JsonTools.readBool( json.hollow, false );
 
@@ -188,6 +190,7 @@ class EntityDef {
 			uid: uid,
 			tags: tags.toJson(),
 			exportToToc: exportToToc,
+			doc: JsonTools.escapeNullableString(doc),
 
 			width: width,
 			height: height,

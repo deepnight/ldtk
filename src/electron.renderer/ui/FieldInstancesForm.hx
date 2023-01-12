@@ -40,29 +40,31 @@ class FieldInstancesForm {
 	public inline function isDestroyed() return jWrapper==null || jWrapper.parents("body").length==0;
 
 
-	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:data.inst.FieldInstance, isRequired=false) {
-		input.off(".def").removeClass("usingDefault");
+	function hideInputIfDefault(arrayIdx:Int, jElements:js.jquery.JQuery, fi:data.inst.FieldInstance, isRequired=false) {
+		// NOTE: jElements can be a single DOM element, or multiple ones (eg. an Int value with prefix/suffix)
+
+		jElements.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
-			if( input.is("button") ) {
+			if( jElements.is("button") ) {
 				// Button input
 				if( fi.def.type!=F_Point || fi.def.canBeNull )
-					input.addClass("gray usingDefault");
+					jElements.addClass("gray usingDefault");
 			}
-			else if( input.is("[type=color]") ) {
+			else if( jElements.is("[type=color]") ) {
 				// Color input
-				input.addClass("usingDefault");
-				input.text("default");
+				jElements.addClass("usingDefault");
+				jElements.text("default");
 			}
-			else if( input.is(".colorWrapper") ) {
+			else if( jElements.is(".colorWrapper") ) {
 				// Wrapped color input
-				input.addClass("usingDefault");
+				jElements.addClass("usingDefault");
 			}
-			else if( !input.is("select") ) {
+			else if( !jElements.is("select") ) {
 				// General INPUT
 				var jRep = new J('<a class="usingDefault" href="#"/>');
 
-				if( input.is("[type=checkbox]") ) {
+				if( jElements.is("[type=checkbox]") ) {
 					var chk = new J('<input type="checkbox"/>');
 					chk.prop("checked", fi.getBool(arrayIdx));
 					jRep.append( chk.wrap('<span class="value"/>').parent() );
@@ -77,44 +79,45 @@ class FieldInstancesForm {
 					jRep.append('<span class="label">Default</span>');
 
 				jRep.on("click.def", function(ev) {
+					trace("click def");
 					ev.preventDefault();
 					jRep.remove();
-					if( input.is("[type=checkbox]") ) {
-						input.prop("checked", !fi.getBool(arrayIdx));
-						input.change();
+					if( jElements.is("[type=checkbox]") ) {
+						jElements.prop("checked", !fi.getBool(arrayIdx));
+						jElements.change();
 					}
-					if( input.is(":read-only") )
-						input.click();
+					if( jElements.is("[readonly],[disabled]") )
+						jElements.click();
 					else
-						input.show().focus();
+						jElements.show().focus();
 				});
-				jRep.insertBefore(input);
-				input.hide();
+				jRep.insertBefore( jElements.first() );
+				jElements.hide();
 
 				if( isRequired )
 					markError(jRep);
 
-				input.on("blur.def", function(ev) {
+				jElements.on("blur.def", function(ev) {
 					jRep.remove();
-					hideInputIfDefault(arrayIdx, input, fi, isRequired);
+					hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
 				});
 			}
-			else if( input.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
+			else if( jElements.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
 				// SELECT case
-				input.addClass("usingDefault");
-				input.on("click.def", function(ev) {
-					input.removeClass("usingDefault");
+				jElements.addClass("usingDefault");
+				jElements.on("click.def", function(ev) {
+					jElements.removeClass("usingDefault");
 				});
-				input.on("blur.def", function(ev) {
-					hideInputIfDefault(arrayIdx, input, fi, isRequired);
+				jElements.on("blur.def", function(ev) {
+					hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
 				});
 			}
 		}
 		else if( fi.def.type!=F_Path && ( fi.def.getDefault()!=null || fi.def.canBeNull ) ) {
 			// Require a "Reset to default" link
-			var span = input.wrapAll('<span class="inputWithDefaultOption"/>').parent();
+			var span = jElements.wrapAll('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
-			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
+			var defLink = new J('<button class="transparent reset"> <span class="icon reset"></span> </button>');
 			defLink.appendTo(span);
 			defLink.on("click.def", function(ev) {
 				fi.parseValue(arrayIdx, null);
@@ -319,7 +322,7 @@ class FieldInstancesForm {
 					});
 
 					if( fi.def.canBeNull && !fi.valueIsNull(arrayIdx) ) {
-						var jRem = new J('<button class="dark removePoint">x</button>');
+						var jRem = new J('<button class="transparent removePoint">x</button>');
 						jRem.appendTo(jTarget);
 						jRem.click( (_)->{
 							fi.parseValue(arrayIdx,null);
@@ -509,7 +512,7 @@ class FieldInstancesForm {
 				}
 
 				if( fi.valueIsNull(arrayIdx) ) {
-					var jPick = new J('<button class="dark">&lt;No reference&gt;</button>');
+					var jPick = new J('<button class="red missingRef">Missing reference</button>');
 					jPick.appendTo(jTarget);
 					jPick.click( _->_pickRef() );
 				}
@@ -862,13 +865,15 @@ class FieldInstancesForm {
 						var li = new J('<li/>');
 						li.appendTo(jArrayInputs);
 
-						if( sortable )
-							li.append('<div class="sortHandle"/>');
+						// if( sortable ) {
+							// jArrayInputs.addClass("customHandle");
+							// li.append('<div class="sortHandle"/>');
+						// }
 
 						createFieldInput(domId, fi, i, li);
 
 						// Remove array entry
-						var jRemove = new J('<button class="remove dark"> <span class="icon delete"/> </button>');
+						var jRemove = new J('<button class="remove transparent"> <span class="icon delete"/> </button>');
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {

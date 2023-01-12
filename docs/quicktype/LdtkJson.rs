@@ -154,7 +154,7 @@ pub struct LdtkJson {
     #[serde(rename = "simplifiedExport")]
     simplified_export: bool,
 
-    /// All the instances of entities that have their `exportToToc` flag enabled are listed this
+    /// All instances of entities that have their `exportToToc` flag enabled are listed in this
     /// array.
     #[serde(rename = "toc")]
     toc: Vec<LdtkTableOfContentEntry>,
@@ -250,6 +250,10 @@ pub struct EntityDefinition {
     /// Base entity color
     #[serde(rename = "color")]
     color: String,
+
+    /// User defined documentation for this element to provide help/tips to level designers.
+    #[serde(rename = "doc")]
+    doc: Option<String>,
 
     /// If enabled, all instances of this entity will be listed in the project "Table of content"
     /// object.
@@ -590,6 +594,10 @@ pub struct LayerDefinition {
     /// Opacity of the layer (0 to 1.0)
     #[serde(rename = "displayOpacity")]
     display_opacity: f64,
+
+    /// User defined documentation for this element to provide help/tips to level designers.
+    #[serde(rename = "doc")]
+    doc: Option<String>,
 
     /// An array of tags to forbid some Entities in this layer
     #[serde(rename = "excludedTags")]
@@ -936,7 +944,7 @@ pub struct ForcedRefs {
     entity_instance: Option<EntityInstance>,
 
     #[serde(rename = "EntityReferenceInfos")]
-    entity_reference_infos: Option<FieldInstanceEntityReference>,
+    entity_reference_infos: Option<ReferenceToAnEntityInstance>,
 
     #[serde(rename = "EnumDef")]
     enum_def: Option<EnumDefinition>,
@@ -954,7 +962,7 @@ pub struct ForcedRefs {
     field_instance: Option<FieldInstance>,
 
     #[serde(rename = "GridPoint")]
-    grid_point: Option<FieldInstanceGridPoint>,
+    grid_point: Option<GridPoint>,
 
     #[serde(rename = "IntGridValueDef")]
     int_grid_value_def: Option<IntGridValueDefinition>,
@@ -1090,9 +1098,9 @@ pub struct FieldInstance {
     real_editor_values: Vec<Option<serde_json::Value>>,
 }
 
-/// This object is used in Field Instances to describe an EntityRef value.
+/// This object describes the "location" of an Entity instance in the project worlds.
 #[derive(Serialize, Deserialize)]
-pub struct FieldInstanceEntityReference {
+pub struct ReferenceToAnEntityInstance {
     /// IID of the refered EntityInstance
     #[serde(rename = "entityIid")]
     entity_iid: String,
@@ -1112,7 +1120,7 @@ pub struct FieldInstanceEntityReference {
 
 /// This object is just a grid-based coordinate used in Field values.
 #[derive(Serialize, Deserialize)]
-pub struct FieldInstanceGridPoint {
+pub struct GridPoint {
     /// X grid-based coordinate
     #[serde(rename = "cx")]
     cx: i64,
@@ -1428,7 +1436,7 @@ pub struct LdtkTableOfContentEntry {
     identifier: String,
 
     #[serde(rename = "instances")]
-    instances: Vec<FieldInstanceEntityReference>,
+    instances: Vec<ReferenceToAnEntityInstance>,
 }
 
 /// **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented

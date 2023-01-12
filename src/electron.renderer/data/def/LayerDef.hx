@@ -9,6 +9,8 @@ class LayerDef {
 	public var uid(default,null) : Int;
 	public var type : ldtk.Json.LayerType;
 	public var identifier(default,set) : String;
+	public var doc: Null<String>;
+
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var scaledGridSize(get,never) : Float; inline function get_scaledGridSize() return gridSize*getScale();
 	public var guideGridWid : Int = 0;
@@ -87,6 +89,7 @@ class LayerDef {
 
 		var o = new LayerDef( p, JsonTools.readInt(json.uid), JsonTools.readEnum(ldtk.Json.LayerType, json.type, false));
 		o.identifier = JsonTools.readString(json.identifier, "Layer"+o.uid);
+		o.doc = JsonTools.unescapeString(json.doc);
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
 		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
@@ -147,6 +150,8 @@ class LayerDef {
 			identifier: identifier,
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,
+			doc: JsonTools.escapeNullableString(doc),
+
 			gridSize: gridSize,
 			guideGridWid: guideGridWid,
 			guideGridHei: guideGridHei,

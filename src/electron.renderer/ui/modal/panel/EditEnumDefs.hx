@@ -371,9 +371,11 @@ class EditEnumDefs extends ui.modal.Panel {
 
 		if( curEnum==null ) {
 			jFormWrapper.hide();
+			jContent.find(".none").show();
 			return;
 		}
 		jFormWrapper.show();
+		jContent.find(".none").hide();
 		jFormWrapper.find("input").not("xml input").removeAttr("readonly");
 
 		if( curEnum.isExternal() )

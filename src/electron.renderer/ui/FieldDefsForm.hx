@@ -661,7 +661,6 @@ class FieldDefsForm {
 		var i = Input.linkToHtmlInput( curField.doc, jForm.find("input[name=doc]") );
 		i.onChange = onFieldChange;
 		i.allowNull = true;
-		i.fixValue = (v)->v!=null && StringTools.trim(v).length==0 ? null : v;
 
 		// Default value
 		switch curField.type {
