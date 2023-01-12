@@ -5,23 +5,23 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.2.4",
+		"appVersion": "1.2.5",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a2e6e900-7820-11ed-b6fd-61d0df8fd468",
-	"jsonVersion": "1.2.4",
-	"appBuildId": 464822,
+	"jsonVersion": "1.2.5",
+	"appBuildId": 464869,
 	"nextUid": 50,
 	"identifierStyle": "Capitalize",
 	"toc": [{
 		"identifier": "EntityFieldsTest",
 		"instances": [ {
-			"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c",
+			"worldIid": "aa8de040-7820-11ed-bcdb-ef47aaa9c1a1",
 			"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
 			"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 			"entityIid": "a3030e7b-66b0-11ec-9cd7-81a9b1cce297"
 		}, {
-			"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c",
+			"worldIid": "aa8de040-7820-11ed-bcdb-ef47aaa9c1a1",
 			"levelIid": "a30383a0-66b0-11ec-9cd7-432bb3e3339c",
 			"layerIid": "a303aab0-66b0-11ec-9cd7-a98ef20f25a5",
 			"entityIid": "a303aab1-66b0-11ec-9cd7-d560fe21e017"
@@ -56,6 +56,7 @@
 			"identifier": "Entities",
 			"type": "Entities",
 			"uid": 13,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -83,6 +84,7 @@
 			"identifier": "IntGrid_8px_grid",
 			"type": "IntGrid",
 			"uid": 34,
+			"doc": null,
 			"gridSize": 8,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -110,6 +112,7 @@
 			"identifier": "PureAutoLayer",
 			"type": "AutoLayer",
 			"uid": 26,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -162,6 +165,7 @@
 			"identifier": "IntGrid_without_rules",
 			"type": "IntGrid",
 			"uid": 1,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -193,6 +197,7 @@
 			"identifier": "IntGrid_with_rules",
 			"type": "IntGrid",
 			"uid": 3,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -341,6 +346,7 @@
 			"identifier": "Tiles",
 			"type": "Tiles",
 			"uid": 14,
+			"doc": null,
 			"gridSize": 16,
 			"guideGridWid": 0,
 			"guideGridHei": 0,
@@ -369,6 +375,7 @@
 			"uid": 15,
 			"tags": [],
 			"exportToToc": true,
+			"doc": null,
 			"width": 32,
 			"height": 32,
 			"resizableX": false,
@@ -846,6 +853,7 @@
 			"uid": 10,
 			"tags": [],
 			"exportToToc": false,
+			"doc": null,
 			"width": 32,
 			"height": 16,
 			"resizableX": true,
@@ -939,6 +947,7 @@
 			"uid": 39,
 			"tags": ["region"],
 			"exportToToc": false,
+			"doc": null,
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -1032,6 +1041,7 @@
 			"uid": 42,
 			"tags": ["region"],
 			"exportToToc": false,
+			"doc": null,
 			"width": 16,
 			"height": 16,
 			"resizableX": true,
@@ -1125,6 +1135,7 @@
 			"uid": 46,
 			"tags": [],
 			"exportToToc": false,
+			"doc": null,
 			"width": 16,
 			"height": 16,
 			"resizableX": false,
@@ -1424,7 +1435,7 @@
 								"entityIid": "d0e23330-66b0-11ec-895f-e701a663b232",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c"
+								"worldIid": "aa8de040-7820-11ed-bcdb-ef47aaa9c1a1"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d0e23330-66b0-11ec-895f-e701a663b232"]
@@ -1446,7 +1457,7 @@
 								"entityIid": "d1f3a330-66b0-11ec-895f-87022e90e72f",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c"
+								"worldIid": "aa8de040-7820-11ed-bcdb-ef47aaa9c1a1"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d1f3a330-66b0-11ec-895f-87022e90e72f"]
@@ -1468,7 +1479,7 @@
 								"entityIid": "d08b1280-66b0-11ec-895f-aff95798ac90",
 								"layerIid": "a3030e77-66b0-11ec-9cd7-0b0cf743a68c",
 								"levelIid": "a3030e70-66b0-11ec-9cd7-3fe74f53b9c3",
-								"worldIid": "22a2f790-7820-11ed-b18d-0b29513f8b7c"
+								"worldIid": "aa8de040-7820-11ed-bcdb-ef47aaa9c1a1"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["d08b1280-66b0-11ec-895f-aff95798ac90"]
