@@ -264,12 +264,6 @@ class EntityInstanceEditor extends dn.Process {
 
 		// Flip block
 		var jFlips = jPropsForm.find(".flips");
-		var jUnit2 = jFlips.find(".unit");
-		jUnit2.text( UNIT_GRID ? "cells" : "px" );
-		jUnit2.click( _->{
-			UNIT_GRID = !UNIT_GRID;
-			updateInstancePropsForm();
-		});
 
 		// X
 		var i = new form.input.BoolInput(
