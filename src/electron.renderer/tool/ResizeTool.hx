@@ -176,6 +176,21 @@ class ResizeTool extends Tool<Int> {
 			startUsing(ev, m);
 	}
 
+	override function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
+		super.onMouseMoveCursor(ev, m);
+
+		if( ev.cancel )
+			return;
+
+		var p = getOveredHandle(m);
+		switch p {
+			case null:
+			case _:
+				editor.cursor.set(Resize(p));
+				ev.cancel = true;
+		}
+	}
+
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev, m);
 
