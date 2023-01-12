@@ -49,7 +49,7 @@ class ResizeTool extends Tool<Int> {
 
 	override function onGlobalEvent(ev:GlobalEvent) {
 		super.onGlobalEvent(ev);
-		
+
 		switch ev {
 			case EntityInstanceChanged(ei):
 				if( isOnEntity(ei) )
@@ -246,11 +246,11 @@ class ResizeTool extends Tool<Int> {
 					}
 
 
-					ei.customWidth = newWid;
-					if( ei.customWidth<=ei.def.width ) ei.customWidth = null;
+					ei.customWidth = M.imax( 1, newWid );
+					if( ei.customWidth==ei.def.width ) ei.customWidth = null;
 
-					ei.customHeight = newHei;
-					if( ei.customHeight<=ei.def.height ) ei.customHeight = null;
+					ei.customHeight = M.imax( 1, newHei );
+					if( ei.customHeight==ei.def.height ) ei.customHeight = null;
 
 					switch draggedHandle {
 						case Left, TopLeft, BottomLeft: if( ei.def.pivotX==0 ) ei.x -= ( ei.width - oldW );
