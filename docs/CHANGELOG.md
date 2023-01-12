@@ -1,3 +1,7 @@
+# 1.2.6
+
+ - Fixed the size of Reset buttons in custom field forms
+
 # 1.2.5
 
  - Added custom user documentation for Entities and Layers
