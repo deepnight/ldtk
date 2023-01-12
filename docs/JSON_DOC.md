@@ -1,4 +1,4 @@
-# LDtk Json structure (version 1.2.4)
+# LDtk Json structure (version 1.2.5)
 
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
@@ -206,6 +206,7 @@ Value | Type | Description
 `__type` | String | Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)
 `autoSourceLayerDefUid`<br/><sup class="only">Only *Auto-layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
+`doc`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.5-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined documentation for this element to provide help/tips to level designers.
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | User defined unique identifier
 `intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *User defined unique identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
@@ -264,6 +265,7 @@ Value | Type | Description
 Value | Type | Description
 -- | -- | --
 `color` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Base entity color
+`doc`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.5-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined documentation for this element to provide help/tips to level designers.
 `height` | Int | Pixel height
 `identifier` | String | User defined unique identifier
 `nineSliceBorders`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Int | An array of 4 dimensions for the up/right/down/left borders (in this order) when using 9-slice mode for `tileRenderMode`.<br/>		If the tileRenderMode is not NineSlice, then this array is empty.<br/>		See: https://en.wikipedia.org/wiki/9-slice_scaling
