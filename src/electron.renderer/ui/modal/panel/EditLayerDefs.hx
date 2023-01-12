@@ -219,9 +219,12 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.find(".tmp").remove();
 
 		if( cur==null ) {
+			jContent.find(".none").show();
 			jForm.hide();
 			return;
 		}
+		jContent.find(".none").hide();
+
 
 		// Lost layer
 		if( project.defs.getLayerDef(cur.uid)==null ) {

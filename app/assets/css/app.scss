@@ -471,11 +471,14 @@ button {
 }
 
 .help:not(.icon):not(button) {
+	min-height: 2.5em;
+	padding: 10px;
+	padding-left: 60px;
+
 	color: $help;
 	font-family: Roboto;
 	font-size: 1.1em;
-	padding: 10px;
-	padding-left: 60px;
+
 	border: 1px dashed $help;
 	border-radius: 6px;
 	background-image: url("../icons/helpBg.svg");
@@ -6637,10 +6640,14 @@ dl.form.fieldInstanceEditor {
 		width: 960px;
 		height: 100%;
 		justify-content: stretch;
-		gap: 16px;
+		column-gap: 16px;
 
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content auto;
 		grid-template-columns: 250px auto;
+
+		.help {
+			height: fit-content;
+		}
 
 		.path {
 			flex: 1 0 100%;
@@ -6835,10 +6842,14 @@ dl.form.fieldInstanceEditor {
 .window.panel.editEnumDefs {
 	.content {
 		display: grid;
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content auto;
 		grid-template-columns: 250px auto;
-		gap: 16px;
+		column-gap: 16px;
 		height: 100%;
+
+		.help {
+			height: fit-content;
+		}
 
 		>h2:first-of-type {
 			grid-column: 1/3;
@@ -8578,11 +8589,16 @@ $patternSize : 32px;
 	}
 
 	.content {
-		grid-template-rows: min-content min-content min-content auto;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 300px auto;
 
+		.help {
+			grid-row: 2/4;
+			height: fit-content;
+		}
+
 		.mainList {
-			grid-row: 3/5;
+			grid-row: 2/4;
 			span.name {
 				display: grid;
 				grid-template-columns: repeat(2,min-content);
@@ -8598,7 +8614,7 @@ $patternSize : 32px;
 			}
 		}
 		dl.form {
-			grid-row: 3/4;
+			grid-row: 2/3;
 			dt {
 				max-width: none;
 				white-space: nowrap;
@@ -8651,7 +8667,7 @@ $patternSize : 32px;
 
 		}
 		.pickerWrapper {
-			grid-row: 4/5;
+			grid-row: 3/4;
 		}
 
 		.tilesDemo canvas {
