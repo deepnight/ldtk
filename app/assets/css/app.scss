@@ -6010,9 +6010,26 @@ canvas#webgl {
 		font-style: italic;
 	}
 
+	.doc {
+		padding: 8px 8px;
+		margin-bottom: 8px;
+		color: $help;
+		background-color: $helpDarker;
+		border-radius: 3px;
+		border: 1px solid $helpMed;
+
+		p {
+			font-size: 10pt;
+			margin: 0;
+			&+p {
+				margin-top: 4px;
+			}
+		}
+	}
+
 	dl.extraInfos {
 		width: auto;
-		margin-bottom: 24px;
+		margin-bottom: 8px;
 		padding: 8px;
 		padding-bottom: 0;
 		border: 1px solid $bgLighter;

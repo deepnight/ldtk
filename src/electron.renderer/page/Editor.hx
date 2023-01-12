@@ -2276,6 +2276,12 @@ class Editor extends Page {
 			if( ld.hideInList )
 				jLayer.addClass("hiddenFromList");
 
+			if( ld.doc!=null ) {
+				jLayer.attr("tip", "right");
+				ui.Tip.attach(jLayer, ld.doc);
+
+			}
+
 			jLayer.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
 
 			// Icon

@@ -291,6 +291,14 @@ class EntityInstanceEditor extends dn.Process {
 			return;
 		}
 
+		if( ei.def.doc!=null ) {
+			jWrapper.find(".hasDoc").show();
+			jWrapper.find(".doc").html( "<p>" + ei.def.doc.split("\n").join("</p><p>") + "</p>" );
+		}
+		else {
+			jWrapper.find(".hasDoc").hide();
+		}
+
 		updateInstancePropsForm();
 		updateCustomFields();
 		JsTools.parseComponents(jWindow);
