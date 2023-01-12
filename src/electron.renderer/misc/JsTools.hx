@@ -542,7 +542,7 @@ class JsTools {
 					var extra = jThis.text();
 					jThis.data(
 						"str",
-						L.t._("User defined documentation for this element to provide help/tips to level designers.")
+						L.t._("User defined documentation that will appear near this element to provide help and tips to the level designers.")
 						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
 					);
 				}
