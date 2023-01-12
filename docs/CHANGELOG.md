@@ -1,5 +1,6 @@
 # 1.2.5
 
+ - Added custom user documentation for Entities and Layers
  - Fixed escaping of user docs strings in JSON
  - Fixed a crash with specific level background images
  - Fixed isolated "collapser" in Entity panel
