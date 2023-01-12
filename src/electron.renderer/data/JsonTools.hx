@@ -265,6 +265,10 @@ class JsonTools {
 		return s;
 	}
 
+	public static inline function escapeNullableString(s:Null<String>) : Null<String> {
+		return s==null || StringTools.trim(s).length==0 ? null : escapeString(s);
+	}
+
 	public static inline function unescapeString(s:String) {
 		if( s==null )
 			return null;
