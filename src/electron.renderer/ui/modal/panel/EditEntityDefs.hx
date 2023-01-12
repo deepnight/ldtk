@@ -162,6 +162,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		var jAll = jEntityForm.add( jPreview );
+		var jAll = jEntityForm.add( jContent.find(".collapser") );
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
