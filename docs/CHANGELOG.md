@@ -3,6 +3,7 @@
  - Added custom user documentation for Entities and Layers
  - Entity width and height no longer work as minimal values for resizable entities
  - Updated mouse cursor for entity resizing handles
+ - Fixed a crash when adding a value to an array of Int in an Entity
  - Fixed escaping of user docs strings in JSON
  - Fixed a crash with specific level background images
  - Fixed isolated "collapser" in Entity panel
