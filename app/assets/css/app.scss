@@ -1236,29 +1236,38 @@ ul.log {
 
 .collapser {
 	color: $bgLighter;
-	font-size: 0.8em;
+	font-size: 10pt;
 	min-height: 0.8em;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 	padding-left: 24px;
 	background-repeat: no-repeat;
 	background-position: left center;
-
-	&:hover {
-		color: $orange;
-	}
 
 	&.expanded {
 		cursor: $cur_collapse;
 		color: white;
 		background-color: $bgLight;
 		background-image: url("../icons/expanded.svg");
+		&:hover {
+			color: black;
+			background-color: $orange;
+			border-color: $orange;
+		}
 	}
 	&.collapsed {
 		cursor: $cur_expand;
 		background-color: $bgMed;
+		border: 1px solid $bgLight;
 		background-image: url("../icons/collapsed.svg");
 		margin-bottom: 8px;
+		border-radius: 3px;
+
+		&:hover {
+			color: black;
+			background-color: $orange;
+			border-color: $orange;
+		}
 	}
 }
 
@@ -5998,10 +6007,6 @@ canvas#webgl {
 		font-style: italic;
 	}
 
-	.collapser#extraEntityInfos.expanded {
-		background-color: $bgLight;
-	}
-
 	dl.extraInfos {
 		width: auto;
 		margin-bottom: 24px;
@@ -6695,8 +6700,6 @@ dl.form.fieldInstanceEditor {
 		}
 
 		.collapser {
-			padding-top: 8px;
-			padding-bottom: 8px;
 			&.collapsed {
 				margin-bottom: 16px;
 			}
@@ -8673,8 +8676,8 @@ $patternSize : 32px;
 		display: grid;
 		height: 100%;
 		justify-content: stretch;
-		gap: 16px;
-		grid-template-rows: min-content min-content auto;
+		column-gap: 16px;
+		grid-template-rows: min-content auto;
 		grid-template-columns: 250px auto;
 		&.noHelp {
 			grid-template-rows: min-content auto;
@@ -8726,7 +8729,6 @@ $patternSize : 32px;
 			grid-template-rows: min-content auto;
 			.entityForm {
 				margin-bottom: 16px;
-				border-bottom: 1px solid $bgLight;
 			}
 		}
 
