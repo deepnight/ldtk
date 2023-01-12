@@ -608,13 +608,6 @@
 						}
 					]
 				},
-				"doc": {
-					"description": "User defined documentation for this element to provide help/tips to level designers.",
-					"type": [
-						"string",
-						"null"
-					]
-				},
 				"tileRenderMode": {
 					"description": "An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`, `FullSizeUncropped`, `NineSlice`",
 					"enum": [
@@ -1343,13 +1336,6 @@
 					"description": "Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)",
 					"type": [
 						"string"
-					]
-				},
-				"doc": {
-					"description": "User defined documentation for this element to provide help/tips to level designers.",
-					"type": [
-						"string",
-						"null"
 					]
 				},
 				"tilesetDefUid": {
