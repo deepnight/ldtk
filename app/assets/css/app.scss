@@ -324,6 +324,7 @@ button {
 	&.transparent {
 		box-shadow: none;
 		background-color: transparent;
+		border-radius: 3px;
 		&:hover {
 			background-color: $orange;
 		}
@@ -1206,6 +1207,7 @@ ul.log {
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
+.icon.reset				{ background-image: url("../icons/reset.svg"); }
 .icon.rule				{ background-image: url("../icons/rule.svg"); }
 .icon.search			{ background-image: url("../icons/search.svg"); }
 .icon.settings			{ background-image: url("../icons/settings.svg"); }
@@ -6345,25 +6347,6 @@ dl.form.fieldInstanceEditor {
 		padding: 3px;
 	}
 
-	a.reset {
-		flex: 0 0 auto;
-		align-self: center;
-		margin-left: 10px;
-		font-size: 0.75em;
-		text-decoration: underline;
-		color: $orange;
-		white-space: nowrap;
-		padding: 2px 4px;
-		border-radius: 3px;
-		cursor: pointer;
-
-		&:hover {
-			text-decoration: none;
-			color: black;
-			background-color: $orange;
-		}
-	}
-
 	span.usingDefault {
 		flex: 0 0 0px;
 		align-self: center;
@@ -6535,9 +6518,11 @@ dl.form.fieldInstanceEditor {
 	}
 
 	span.point {
-		color: $bgLighter;
 		padding: 4px;
-		font-style: italic;
+		align-self: center;
+		font-family: 'Courier New', Courier, monospace;
+		color: $almostWhite;
+		font-size: 10pt;
 		border-radius: 6px;
 		background-color: $bgMed;
 	}
@@ -6590,6 +6575,10 @@ dl.form.fieldInstanceEditor {
 				overflow: hidden;
 				height: 33px;
 
+				&.F_Point {
+					height: auto;
+				}
+
 				span:not([class]) {
 					align-self: center;
 					padding-left: 2px;
@@ -6602,14 +6591,24 @@ dl.form.fieldInstanceEditor {
 					background-color: $bgLight;
 				}
 				button {
-					padding: 4px;
+					flex: 0;
+					align-self: center;
+					padding: 4px 1px;
 					.icon {
-						width: 13px;
-						height: 13px;
+						width: 20px;
+						height: 20px;
 					}
+				}
+				button.reset {
+					margin-left: 10px;
 				}
 				button.remove {
 					flex: 0 1 16px;
+				}
+				button.missingRef {
+					padding: 4px;
+					font-size: 9pt;
+					white-space: nowrap;
 				}
 
 				select {
