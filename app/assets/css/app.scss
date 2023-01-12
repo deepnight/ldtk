@@ -6517,6 +6517,17 @@ dl.form.fieldInstanceEditor {
 		box-shadow: 0px 0px 32px $red;
 	}
 
+	button.reset {
+		margin-left: 10px;
+		flex: 0;
+		align-self: center;
+		padding: 4px 1px;
+		.icon {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
 	span.point {
 		padding: 4px;
 		align-self: center;
@@ -6598,9 +6609,6 @@ dl.form.fieldInstanceEditor {
 						width: 20px;
 						height: 20px;
 					}
-				}
-				button.reset {
-					margin-left: 10px;
 				}
 				button.remove {
 					flex: 0 1 16px;
