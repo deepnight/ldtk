@@ -2,6 +2,8 @@
 
  - Fixed escaping of user docs strings in JSON
  - Fixed a crash with specific level background images
+ - Fixed isolated "collapser" in Entity panel
+ - Removed the help block at the top of all panels to make more room for content.
 
 # 1.2.4
 
