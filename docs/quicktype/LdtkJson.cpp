@@ -428,6 +428,7 @@ namespace quicktype {
 
         private:
         std::string color;
+        std::shared_ptr<std::string> doc;
         bool export_to_toc;
         std::vector<FieldDefinition> field_defs;
         double fill_opacity;
@@ -462,6 +463,12 @@ namespace quicktype {
         const std::string & get_color() const { return color; }
         std::string & get_mutable_color() { return color; }
         void set_color(const std::string & value) { this->color = value; }
+
+        /**
+         * User defined documentation for this element to provide help/tips to level designers.
+         */
+        std::shared_ptr<std::string> get_doc() const { return doc; }
+        void set_doc(std::shared_ptr<std::string> value) { this->doc = value; }
 
         /**
          * If enabled, all instances of this entity will be listed in the project "Table of content"
@@ -1025,6 +1032,7 @@ namespace quicktype {
         std::shared_ptr<int64_t> auto_tileset_def_uid;
         bool can_select_when_inactive;
         double display_opacity;
+        std::shared_ptr<std::string> doc;
         std::vector<std::string> excluded_tags;
         int64_t grid_size;
         int64_t guide_grid_hei;
@@ -1084,6 +1092,12 @@ namespace quicktype {
         const double & get_display_opacity() const { return display_opacity; }
         double & get_mutable_display_opacity() { return display_opacity; }
         void set_display_opacity(const double & value) { this->display_opacity = value; }
+
+        /**
+         * User defined documentation for this element to provide help/tips to level designers.
+         */
+        std::shared_ptr<std::string> get_doc() const { return doc; }
+        void set_doc(std::shared_ptr<std::string> value) { this->doc = value; }
 
         /**
          * An array of tags to forbid some Entities in this layer
@@ -1674,12 +1688,12 @@ namespace quicktype {
     };
 
     /**
-     * This object is used in Field Instances to describe an EntityRef value.
+     * This object describes the "location" of an Entity instance in the project worlds.
      */
-    class FieldInstanceEntityReference {
+    class ReferenceToAnEntityInstance {
         public:
-        FieldInstanceEntityReference() = default;
-        virtual ~FieldInstanceEntityReference() = default;
+        ReferenceToAnEntityInstance() = default;
+        virtual ~ReferenceToAnEntityInstance() = default;
 
         private:
         std::string entity_iid;
@@ -1720,10 +1734,10 @@ namespace quicktype {
     /**
      * This object is just a grid-based coordinate used in Field values.
      */
-    class FieldInstanceGridPoint {
+    class GridPoint {
         public:
-        FieldInstanceGridPoint() = default;
-        virtual ~FieldInstanceGridPoint() = default;
+        GridPoint() = default;
+        virtual ~GridPoint() = default;
 
         private:
         int64_t cx;
@@ -2317,16 +2331,16 @@ namespace quicktype {
 
         private:
         std::string identifier;
-        std::vector<FieldInstanceEntityReference> instances;
+        std::vector<ReferenceToAnEntityInstance> instances;
 
         public:
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
         void set_identifier(const std::string & value) { this->identifier = value; }
 
-        const std::vector<FieldInstanceEntityReference> & get_instances() const { return instances; }
-        std::vector<FieldInstanceEntityReference> & get_mutable_instances() { return instances; }
-        void set_instances(const std::vector<FieldInstanceEntityReference> & value) { this->instances = value; }
+        const std::vector<ReferenceToAnEntityInstance> & get_instances() const { return instances; }
+        std::vector<ReferenceToAnEntityInstance> & get_mutable_instances() { return instances; }
+        void set_instances(const std::vector<ReferenceToAnEntityInstance> & value) { this->instances = value; }
     };
 
     enum class WorldLayout : int { FREE, GRID_VANIA, LINEAR_HORIZONTAL, LINEAR_VERTICAL };
@@ -2428,13 +2442,13 @@ namespace quicktype {
         std::shared_ptr<Definitions> definitions;
         std::shared_ptr<EntityDefinition> entity_def;
         std::shared_ptr<EntityInstance> entity_instance;
-        std::shared_ptr<FieldInstanceEntityReference> entity_reference_infos;
+        std::shared_ptr<ReferenceToAnEntityInstance> entity_reference_infos;
         std::shared_ptr<EnumDefinition> enum_def;
         std::shared_ptr<EnumValueDefinition> enum_def_values;
         std::shared_ptr<EnumTagValue> enum_tag_value;
         std::shared_ptr<FieldDefinition> field_def;
         std::shared_ptr<FieldInstance> field_instance;
-        std::shared_ptr<FieldInstanceGridPoint> grid_point;
+        std::shared_ptr<GridPoint> grid_point;
         std::shared_ptr<IntGridValueDefinition> int_grid_value_def;
         std::shared_ptr<IntGridValueInstance> int_grid_value_instance;
         std::shared_ptr<LayerDefinition> layer_def;
@@ -2468,8 +2482,8 @@ namespace quicktype {
         std::shared_ptr<EntityInstance> get_entity_instance() const { return entity_instance; }
         void set_entity_instance(std::shared_ptr<EntityInstance> value) { this->entity_instance = value; }
 
-        std::shared_ptr<FieldInstanceEntityReference> get_entity_reference_infos() const { return entity_reference_infos; }
-        void set_entity_reference_infos(std::shared_ptr<FieldInstanceEntityReference> value) { this->entity_reference_infos = value; }
+        std::shared_ptr<ReferenceToAnEntityInstance> get_entity_reference_infos() const { return entity_reference_infos; }
+        void set_entity_reference_infos(std::shared_ptr<ReferenceToAnEntityInstance> value) { this->entity_reference_infos = value; }
 
         std::shared_ptr<EnumDefinition> get_enum_def() const { return enum_def; }
         void set_enum_def(std::shared_ptr<EnumDefinition> value) { this->enum_def = value; }
@@ -2486,8 +2500,8 @@ namespace quicktype {
         std::shared_ptr<FieldInstance> get_field_instance() const { return field_instance; }
         void set_field_instance(std::shared_ptr<FieldInstance> value) { this->field_instance = value; }
 
-        std::shared_ptr<FieldInstanceGridPoint> get_grid_point() const { return grid_point; }
-        void set_grid_point(std::shared_ptr<FieldInstanceGridPoint> value) { this->grid_point = value; }
+        std::shared_ptr<GridPoint> get_grid_point() const { return grid_point; }
+        void set_grid_point(std::shared_ptr<GridPoint> value) { this->grid_point = value; }
 
         std::shared_ptr<IntGridValueDefinition> get_int_grid_value_def() const { return int_grid_value_def; }
         void set_int_grid_value_def(std::shared_ptr<IntGridValueDefinition> value) { this->int_grid_value_def = value; }
@@ -2803,7 +2817,7 @@ namespace quicktype {
         void set_simplified_export(const bool & value) { this->simplified_export = value; }
 
         /**
-         * All the instances of entities that have their `exportToToc` flag enabled are listed this
+         * All instances of entities that have their `exportToToc` flag enabled are listed in this
          * array.
          */
         const std::vector<LdtkTableOfContentEntry> & get_toc() const { return toc; }
@@ -2911,11 +2925,11 @@ namespace quicktype {
     void from_json(const json & j, EntityInstance & x);
     void to_json(json & j, const EntityInstance & x);
 
-    void from_json(const json & j, FieldInstanceEntityReference & x);
-    void to_json(json & j, const FieldInstanceEntityReference & x);
+    void from_json(const json & j, ReferenceToAnEntityInstance & x);
+    void to_json(json & j, const ReferenceToAnEntityInstance & x);
 
-    void from_json(const json & j, FieldInstanceGridPoint & x);
-    void to_json(json & j, const FieldInstanceGridPoint & x);
+    void from_json(const json & j, GridPoint & x);
+    void to_json(json & j, const GridPoint & x);
 
     void from_json(const json & j, IntGridValueInstance & x);
     void to_json(json & j, const IntGridValueInstance & x);
@@ -3101,6 +3115,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, EntityDefinition& x) {
         x.set_color(j.at("color").get<std::string>());
+        x.set_doc(get_optional<std::string>(j, "doc"));
         x.set_export_to_toc(j.at("exportToToc").get<bool>());
         x.set_field_defs(j.at("fieldDefs").get<std::vector<FieldDefinition>>());
         x.set_fill_opacity(j.at("fillOpacity").get<double>());
@@ -3132,6 +3147,7 @@ namespace quicktype {
     inline void to_json(json & j, const EntityDefinition & x) {
         j = json::object();
         j["color"] = x.get_color();
+        j["doc"] = x.get_doc();
         j["exportToToc"] = x.get_export_to_toc();
         j["fieldDefs"] = x.get_field_defs();
         j["fillOpacity"] = x.get_fill_opacity();
@@ -3288,6 +3304,7 @@ namespace quicktype {
         x.set_auto_tileset_def_uid(get_optional<int64_t>(j, "autoTilesetDefUid"));
         x.set_can_select_when_inactive(j.at("canSelectWhenInactive").get<bool>());
         x.set_display_opacity(j.at("displayOpacity").get<double>());
+        x.set_doc(get_optional<std::string>(j, "doc"));
         x.set_excluded_tags(j.at("excludedTags").get<std::vector<std::string>>());
         x.set_grid_size(j.at("gridSize").get<int64_t>());
         x.set_guide_grid_hei(j.at("guideGridHei").get<int64_t>());
@@ -3318,6 +3335,7 @@ namespace quicktype {
         j["autoTilesetDefUid"] = x.get_auto_tileset_def_uid();
         j["canSelectWhenInactive"] = x.get_can_select_when_inactive();
         j["displayOpacity"] = x.get_display_opacity();
+        j["doc"] = x.get_doc();
         j["excludedTags"] = x.get_excluded_tags();
         j["gridSize"] = x.get_grid_size();
         j["guideGridHei"] = x.get_guide_grid_hei();
@@ -3472,14 +3490,14 @@ namespace quicktype {
         j["width"] = x.get_width();
     }
 
-    inline void from_json(const json & j, FieldInstanceEntityReference& x) {
+    inline void from_json(const json & j, ReferenceToAnEntityInstance& x) {
         x.set_entity_iid(j.at("entityIid").get<std::string>());
         x.set_layer_iid(j.at("layerIid").get<std::string>());
         x.set_level_iid(j.at("levelIid").get<std::string>());
         x.set_world_iid(j.at("worldIid").get<std::string>());
     }
 
-    inline void to_json(json & j, const FieldInstanceEntityReference & x) {
+    inline void to_json(json & j, const ReferenceToAnEntityInstance & x) {
         j = json::object();
         j["entityIid"] = x.get_entity_iid();
         j["layerIid"] = x.get_layer_iid();
@@ -3487,12 +3505,12 @@ namespace quicktype {
         j["worldIid"] = x.get_world_iid();
     }
 
-    inline void from_json(const json & j, FieldInstanceGridPoint& x) {
+    inline void from_json(const json & j, GridPoint& x) {
         x.set_cx(j.at("cx").get<int64_t>());
         x.set_cy(j.at("cy").get<int64_t>());
     }
 
-    inline void to_json(json & j, const FieldInstanceGridPoint & x) {
+    inline void to_json(json & j, const GridPoint & x) {
         j = json::object();
         j["cx"] = x.get_cx();
         j["cy"] = x.get_cy();
@@ -3658,7 +3676,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, LdtkTableOfContentEntry& x) {
         x.set_identifier(j.at("identifier").get<std::string>());
-        x.set_instances(j.at("instances").get<std::vector<FieldInstanceEntityReference>>());
+        x.set_instances(j.at("instances").get<std::vector<ReferenceToAnEntityInstance>>());
     }
 
     inline void to_json(json & j, const LdtkTableOfContentEntry & x) {
@@ -3697,13 +3715,13 @@ namespace quicktype {
         x.set_definitions(get_optional<Definitions>(j, "Definitions"));
         x.set_entity_def(get_optional<EntityDefinition>(j, "EntityDef"));
         x.set_entity_instance(get_optional<EntityInstance>(j, "EntityInstance"));
-        x.set_entity_reference_infos(get_optional<FieldInstanceEntityReference>(j, "EntityReferenceInfos"));
+        x.set_entity_reference_infos(get_optional<ReferenceToAnEntityInstance>(j, "EntityReferenceInfos"));
         x.set_enum_def(get_optional<EnumDefinition>(j, "EnumDef"));
         x.set_enum_def_values(get_optional<EnumValueDefinition>(j, "EnumDefValues"));
         x.set_enum_tag_value(get_optional<EnumTagValue>(j, "EnumTagValue"));
         x.set_field_def(get_optional<FieldDefinition>(j, "FieldDef"));
         x.set_field_instance(get_optional<FieldInstance>(j, "FieldInstance"));
-        x.set_grid_point(get_optional<FieldInstanceGridPoint>(j, "GridPoint"));
+        x.set_grid_point(get_optional<GridPoint>(j, "GridPoint"));
         x.set_int_grid_value_def(get_optional<IntGridValueDefinition>(j, "IntGridValueDef"));
         x.set_int_grid_value_instance(get_optional<IntGridValueInstance>(j, "IntGridValueInstance"));
         x.set_layer_def(get_optional<LayerDefinition>(j, "LayerDef"));

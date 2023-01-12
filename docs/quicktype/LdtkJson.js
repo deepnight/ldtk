@@ -213,13 +213,13 @@ const typeMap = {
         { json: "Definitions", js: "Definitions", typ: u(undefined, r("Definitions")) },
         { json: "EntityDef", js: "EntityDef", typ: u(undefined, r("EntityDefinition")) },
         { json: "EntityInstance", js: "EntityInstance", typ: u(undefined, r("EntityInstance")) },
-        { json: "EntityReferenceInfos", js: "EntityReferenceInfos", typ: u(undefined, r("FieldInstanceEntityReference")) },
+        { json: "EntityReferenceInfos", js: "EntityReferenceInfos", typ: u(undefined, r("ReferenceToAnEntityInstance")) },
         { json: "EnumDef", js: "EnumDef", typ: u(undefined, r("EnumDefinition")) },
         { json: "EnumDefValues", js: "EnumDefValues", typ: u(undefined, r("EnumValueDefinition")) },
         { json: "EnumTagValue", js: "EnumTagValue", typ: u(undefined, r("EnumTagValue")) },
         { json: "FieldDef", js: "FieldDef", typ: u(undefined, r("FieldDefinition")) },
         { json: "FieldInstance", js: "FieldInstance", typ: u(undefined, r("FieldInstance")) },
-        { json: "GridPoint", js: "GridPoint", typ: u(undefined, r("FieldInstanceGridPoint")) },
+        { json: "GridPoint", js: "GridPoint", typ: u(undefined, r("GridPoint")) },
         { json: "IntGridValueDef", js: "IntGridValueDef", typ: u(undefined, r("IntGridValueDefinition")) },
         { json: "IntGridValueInstance", js: "IntGridValueInstance", typ: u(undefined, r("IntGridValueInstance")) },
         { json: "LayerDef", js: "LayerDef", typ: u(undefined, r("LayerDefinition")) },
@@ -281,6 +281,7 @@ const typeMap = {
     ], false),
     "EntityDefinition": o([
         { json: "color", js: "color", typ: "" },
+        { json: "doc", js: "doc", typ: u(undefined, u(null, "")) },
         { json: "exportToToc", js: "exportToToc", typ: true },
         { json: "fieldDefs", js: "fieldDefs", typ: a(r("FieldDefinition")) },
         { json: "fillOpacity", js: "fillOpacity", typ: 3.14 },
@@ -369,6 +370,7 @@ const typeMap = {
         { json: "autoTilesetDefUid", js: "autoTilesetDefUid", typ: u(undefined, u(0, null)) },
         { json: "canSelectWhenInactive", js: "canSelectWhenInactive", typ: true },
         { json: "displayOpacity", js: "displayOpacity", typ: 3.14 },
+        { json: "doc", js: "doc", typ: u(undefined, u(null, "")) },
         { json: "excludedTags", js: "excludedTags", typ: a("") },
         { json: "gridSize", js: "gridSize", typ: 0 },
         { json: "guideGridHei", js: "guideGridHei", typ: 0 },
@@ -444,13 +446,13 @@ const typeMap = {
         { json: "defUid", js: "defUid", typ: 0 },
         { json: "realEditorValues", js: "realEditorValues", typ: a("any") },
     ], false),
-    "FieldInstanceEntityReference": o([
+    "ReferenceToAnEntityInstance": o([
         { json: "entityIid", js: "entityIid", typ: "" },
         { json: "layerIid", js: "layerIid", typ: "" },
         { json: "levelIid", js: "levelIid", typ: "" },
         { json: "worldIid", js: "worldIid", typ: "" },
     ], false),
-    "FieldInstanceGridPoint": o([
+    "GridPoint": o([
         { json: "cx", js: "cx", typ: 0 },
         { json: "cy", js: "cy", typ: 0 },
     ], false),
@@ -526,7 +528,7 @@ const typeMap = {
     ], false),
     "LdtkTableOfContentEntry": o([
         { json: "identifier", js: "identifier", typ: "" },
-        { json: "instances", js: "instances", typ: a(r("FieldInstanceEntityReference")) },
+        { json: "instances", js: "instances", typ: a(r("ReferenceToAnEntityInstance")) },
     ], false),
     "World": o([
         { json: "defaultLevelHeight", js: "defaultLevelHeight", typ: 0 },
