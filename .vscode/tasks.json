@@ -5,6 +5,7 @@
 			"label": "Electron Renderer release",
 			"type": "hxml",
 			"file": "renderer.hxml",
+			"dependsOn": "Electron Main release",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",
@@ -24,6 +25,7 @@
 			"label": "Electron Renderer debug",
 			"type": "hxml",
 			"file": "renderer.debug.hxml",
+			"dependsOn": "Electron Main debug",
 			"problemMatcher": [
 				"$haxe-absolute",
 				"$haxe",

@@ -4,36 +4,42 @@ on:
   push:
     branches:
       - master
+      - dev**
   pull_request:
     branches:
       - master
+      - dev**
 
 jobs:
   build:
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        haxe: [4.2.4]
-      fail-fast: true
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout, install haxe and libs
-      - uses: actions/checkout@v2
+      # Setup deps
+      - uses: actions/checkout@v3
       - uses: krdlab/setup-haxe@v1
         with:
-          haxe-version: ${{ matrix.haxe }}
-      - run: haxe -version
-      - run: haxe setup.hxml
+          haxe-version: ${{ vars.HAXE_VERSION }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ vars.NODE_VERSION }}
+
+      # Compile scss
+      - run: npm install -g sass
+
+      - name: Compile SCSS
+        run: sass app/assets/css/app.scss app/assets/css/app.min.css -s compressed
+
+      - run: haxe --run Setup
+
       - run: haxelib list
 
       # Node/NPM commands
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '14'
-      - run: cd app && npm install
-      - run: cd app && npm run pack-linux-x86
+      - run: npm install
+        working-directory: app
+
+      - run: npm run pack-linux-x86
+        working-directory: app
 
       # Upload
       - uses: actions/upload-artifact@v2
