@@ -1,10 +1,4 @@
 <h2> <div class="icon entity"></div> Project entities </h2>
-<div class="header">
-	<div class="help">
-		ENTITIES are generic data that can be placed in your levels, such as the Player start position or Items to pick up. Each entity can have various custom editable properties as defined below.
-	</div>
-	<!-- <div class="warning noEntLayer">You need to create at least one ENTITY LAYER in order to insert entities in your levels.</div> -->
-</div>
 
 
 <div class="entityList">
@@ -17,6 +11,9 @@
 </div>
 
 <div class="rightColumn">
+	<div class="help none">
+		ENTITIES are generic data that can be placed in your levels, such as the Player start position or Items to pick up. Each entity can have various custom editable properties as defined below.
+	</div>
 
 	<div class="entityForm">
 		<div class="previewWrapper">
@@ -46,6 +43,14 @@
 
 
 		<dl class="form extra">
+			<dt>
+				<label for="entityDoc">Documentation</label>
+				<info class="userDoc"></info>
+			</dt>
+			<dd>
+				<input type="text" name="entityDoc" id="entityDoc"/>
+			</dd>
+
 			<dt>
 				<label>Tags</label>
 				<div class="info">

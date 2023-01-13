@@ -129,7 +129,7 @@ class FieldDef {
 		var type = JsonTools.readEnum(ldtk.Json.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
-		o.doc = json.doc==null ? null : json.doc;
+		o.doc = JsonTools.unescapeString( json.doc );
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
@@ -167,7 +167,7 @@ class FieldDef {
 	public function toJson() : ldtk.Json.FieldDefJson {
 		return {
 			identifier: identifier,
-			doc: doc!=null && StringTools.trim(doc).length>0 ? doc : null,
+			doc: JsonTools.escapeNullableString(doc),
 			__type: getJsonTypeString(),
 			uid: uid,
 			type: JsonTools.writeEnumAsString(type, false),

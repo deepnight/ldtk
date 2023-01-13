@@ -162,6 +162,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		var jAll = jEntityForm.add( jPreview );
+		var jAll = jEntityForm.add( jContent.find(".collapser") );
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
@@ -173,10 +174,15 @@ class EditEntityDefs extends ui.modal.Panel {
 		jContent.find(".none").hide();
 
 
-		// Name
+		// Identifier
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
+
+		// Doc
+		var i = Input.linkToHtmlInput( curEntity.doc, jEntityForm.find("input[name=entityDoc]") );
+		i.linkEvent(EntityDefChanged);
+		i.allowNull = true;
 
 		// Hollow (ie. click through)
 		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input[name=hollow]") );

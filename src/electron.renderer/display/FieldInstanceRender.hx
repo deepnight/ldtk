@@ -619,6 +619,10 @@ class FieldInstanceRender {
 						else
 							tf.text = v;
 					}
+
+					// Comma separator
+					if( fi.def.isArray && idx<fi.getArrayLength()-1 )
+						tf.text+=",";
 				}
 			}
 

@@ -349,19 +349,21 @@ class LevelInstanceForm {
 		// Bg pivot
 		var jPivot = jForm.find(".pos>.pivot");
 		jPivot.empty();
-		if( level.bgRelPath!=null ) {
+		if( level.hasBgImage() ) {
 			var imgInf = level.getBgTileInfos();
-			jPivot.append( JsTools.createPivotEditor(
-				level.bgPivotX, level.bgPivotY,
-				true,
-				Std.int( imgInf.tw ),
-				Std.int( imgInf.th ),
-				(x,y)->{
-					level.bgPivotX = x;
-					level.bgPivotY = y;
-					onFieldChange();
-				}
-			));
+			if( imgInf!=null ) {
+				jPivot.append( JsTools.createPivotEditor(
+					level.bgPivotX, level.bgPivotY,
+					true,
+					Std.int( imgInf.tw ),
+					Std.int( imgInf.th ),
+					(x,y)->{
+						level.bgPivotX = x;
+						level.bgPivotY = y;
+						onFieldChange();
+					}
+				));
+			}
 		}
 
 

@@ -538,6 +538,14 @@ class JsTools {
 						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
 					);
 				}
+				else if( jThis.hasClass("userDoc") ) {
+					var extra = jThis.text();
+					jThis.data(
+						"str",
+						L.t._("User defined documentation that will appear near this element to provide help and tips to the level designers.")
+						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
+					);
+				}
 				else
 					jThis.data("str", jThis.text());
 				jThis.empty();
