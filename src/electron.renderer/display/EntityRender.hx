@@ -131,8 +131,8 @@ class EntityRender extends dn.Process {
 				// Texture
 				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
 				var t = td.getTileRect(rect);
-				if (flipX) t.flipX();
-				if (flipY) t.flipY();
+				t.xFlip = flipX;
+				t.yFlip = flipY;
 				var alpha = ed.tileOpacity;
 				switch mode {
 					case Stretch:
@@ -157,6 +157,7 @@ class EntityRender extends dn.Process {
 
 					case Repeat:
 						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
+
 						tt.alpha = alpha;
 						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
 						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
@@ -175,6 +176,8 @@ class EntityRender extends dn.Process {
 							t.height*ed.pivotY - fh*ed.pivotY,
 							fw,fh
 						);
+						bmp.tile.xFlip = t.xFlip;
+						bmp.tile.yFlip = t.yFlip;
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.setScale(s);
 
@@ -189,6 +192,8 @@ class EntityRender extends dn.Process {
 							t.height*ed.pivotY - fh*ed.pivotY,
 							fw, fh
 						);
+						bmp.tile.xFlip = t.xFlip;
+						bmp.tile.yFlip = t.yFlip;
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
