@@ -34,7 +34,7 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"levelNamePattern": "%world_Level_%idx",
-	"tutorialDesc": "This sample demonstrates a typical 2D platformer with auto-rendered walls and various gameplay entities.\nPress [A] to toggle \"Single layer mode\", which helps understanding which layer contains what.\nPress [SHIFT+R] to toggle auto-rendered layers.",
+	"tutorialDesc": "This sample demonstrates a typical 2D platformer with auto-rendered walls and various gameplay entities.\nPress [Shift+A] to toggle \"Single layer mode\", which helps understanding which layer contains what.\nPress [SHIFT+R] to toggle auto-rendered layers.",
 	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
