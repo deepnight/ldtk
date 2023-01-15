@@ -50,6 +50,12 @@ class EditTableDefs extends ui.modal.Panel {
 		}
 		jTabForm.show();
 		var i = Input.linkToHtmlInput(curTable.name, jTabForm.find("input[name='name']") );
+
+		var jSel = jContent.find("#primaryKey");
+		for (column in curTable.columns) {
+			jSel.append('<option>'+ column +'</option>');
+		}
+		var i = Input.linkToHtmlInput(curTable.primaryKey, jTabForm.find("select[name='primaryKey']") );
 	}
 
 	function selectTable (td:data.def.TableDef) {

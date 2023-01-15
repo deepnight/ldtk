@@ -6,6 +6,7 @@ class TableDef {
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;
 	public var name: String;
+	public var primaryKey: Null<String>;
 	public var columns: Array<String>;
 	public var data: Array<Array<Dynamic>>;
 	// public var identifier(default,set) : String;
@@ -16,10 +17,11 @@ class TableDef {
 	// public var tags : Tags;
 
 	@:allow(data.Definitions)
-	private function new(p:Project, uid:Int, name:String, columns:Array<String>, data:Array<Array<Dynamic>>) {
+	private function new(p:Project, uid:Int, name:String, primaryKey:Null<String>, columns:Array<String>, data:Array<Array<Dynamic>>) {
 		_project = p;
 		this.uid = uid;
 		this.name = name;
+		this.primaryKey = primaryKey;
 		this.columns = columns;
 		this.data = data;
 	}
@@ -29,7 +31,7 @@ class TableDef {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.TableDefJson) {
-		var td = new TableDef(p, json.uid, json.name, json.columns, json.data);
+		var td = new TableDef(p, json.uid, json.name, json.primaryKey, json.columns, json.data);
 		return td;
 	}
 
@@ -37,6 +39,7 @@ class TableDef {
 		return {
 			uid: uid,
 			name: name,
+			primaryKey: primaryKey,
 			columns: columns,
 			data: data
 		}
