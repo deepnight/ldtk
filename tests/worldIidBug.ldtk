@@ -10,7 +10,7 @@
 	},
 	"iid": "61ca1e30-7820-11ed-954c-67161954aa38",
 	"jsonVersion": "1.2.6",
-	"appBuildId": 465059,
+	"appBuildId": 465061,
 	"nextUid": 7,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -220,7 +220,7 @@
 								"entityIid": "e81feb40-7820-11ed-96fd-2dd9305efd67",
 								"layerIid": "b1218cc0-7820-11ed-bed4-31747e38b136",
 								"levelIid": "61ca1e32-7820-11ed-954c-47255b689478",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["e81feb40-7820-11ed-96fd-2dd9305efd67"]
@@ -242,7 +242,7 @@
 								"entityIid": "e849ba60-7820-11ed-96fd-af18fb023f55",
 								"layerIid": "b1218cc0-7820-11ed-bed4-31747e38b136",
 								"levelIid": "61ca1e32-7820-11ed-954c-47255b689478",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["e849ba60-7820-11ed-96fd-af18fb023f55"]
@@ -264,7 +264,7 @@
 								"entityIid": "e8ede9a0-7820-11ed-96fd-75ef4498a377",
 								"layerIid": "b1218cc0-7820-11ed-bed4-31747e38b136",
 								"levelIid": "61ca1e32-7820-11ed-954c-47255b689478",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["e8ede9a0-7820-11ed-96fd-75ef4498a377"]
@@ -286,7 +286,7 @@
 								"entityIid": "e9457f80-7820-11ed-96fd-6b13a76be237",
 								"layerIid": "b1218cc0-7820-11ed-bed4-31747e38b136",
 								"levelIid": "61ca1e32-7820-11ed-954c-47255b689478",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["e9457f80-7820-11ed-96fd-6b13a76be237"]
@@ -406,7 +406,7 @@
 								"entityIid": "bbe23c40-7820-11ed-bed4-1fa25b2bdd38",
 								"layerIid": "b121b3d0-7820-11ed-bed4-5f942d2a9d86",
 								"levelIid": "99bcc7c0-7820-11ed-bed4-ab73488b3ff2",
-								"worldIid": "988a3b30-7820-11ed-bed4-11d62e540cb6"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["bbe23c40-7820-11ed-bed4-1fa25b2bdd38"]
@@ -512,7 +512,7 @@
 								"entityIid": "b2b747f0-7820-11ed-bed4-43da30af3adc",
 								"layerIid": "b121b3d0-7820-11ed-bed4-5f942d2a9d86",
 								"levelIid": "99bcc7c0-7820-11ed-bed4-ab73488b3ff2",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["b2b747f0-7820-11ed-bed4-43da30af3adc"]
@@ -534,7 +534,7 @@
 								"entityIid": "b2e22880-7820-11ed-bed4-27936ad9f026",
 								"layerIid": "b121b3d0-7820-11ed-bed4-5f942d2a9d86",
 								"levelIid": "99bcc7c0-7820-11ed-bed4-ab73488b3ff2",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["b2e22880-7820-11ed-bed4-27936ad9f026"]
@@ -556,7 +556,7 @@
 								"entityIid": "e60c9ba0-7820-11ed-96fd-8b29c07c1af5",
 								"layerIid": "b121b3d0-7820-11ed-bed4-5f942d2a9d86",
 								"levelIid": "99bcc7c0-7820-11ed-bed4-ab73488b3ff2",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["e60c9ba0-7820-11ed-96fd-8b29c07c1af5"]
@@ -578,7 +578,7 @@
 								"entityIid": "b28eb150-7820-11ed-bed4-2b7c2af69a26",
 								"layerIid": "b121b3d0-7820-11ed-bed4-5f942d2a9d86",
 								"levelIid": "99bcc7c0-7820-11ed-bed4-ab73488b3ff2",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["b28eb150-7820-11ed-bed4-2b7c2af69a26"]
@@ -600,7 +600,7 @@
 								"entityIid": "e7387170-7820-11ed-96fd-bb7404ef74c8",
 								"layerIid": "b1218cc0-7820-11ed-bed4-31747e38b136",
 								"levelIid": "61ca1e32-7820-11ed-954c-47255b689478",
-								"worldIid": "e2495210-7820-11ed-96fd-19fdb7f84354"
+								"worldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 							}, "__type": "EntityRef", "__tile": null, "defUid": 5, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["e7387170-7820-11ed-96fd-bb7404ef74c8"]
@@ -646,5 +646,6 @@
 			"__neighbours": []
 		}
 	],
-	"worlds": []
+	"worlds": [],
+	"dummyWorldIid": "e67574f0-7820-11ed-9859-33094ae66dcc"
 }
