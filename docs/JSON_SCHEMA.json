@@ -24,6 +24,7 @@
 			"defaultLevelBgColor",
 			"defaultPivotX",
 			"defaultPivotY",
+			"dummyWorldIid",
 			"exportLevelBg",
 			"exportTiled",
 			"flags",
@@ -118,6 +119,12 @@
 				"description": "Default Y pivot (0 to 1) for new entities",
 				"type": [
 					"number"
+				]
+			},
+			"dummyWorldIid": {
+				"description": "If the project isn't in MultiWorlds mode, this is the IID of the internal \"dummy\" World.",
+				"type": [
+					"string"
 				]
 			},
 			"customCommands": {
