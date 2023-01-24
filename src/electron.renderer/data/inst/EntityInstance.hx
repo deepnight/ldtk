@@ -25,9 +25,9 @@ class EntityInstance {
 
 	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
-	public var left(get,never) : Int; inline function get_left() return M.round( x - width*getAdjustedPivotX() );
+	public var left(get,never) : Int; inline function get_left() return M.round( x - width*def.pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + width;
-	public var top(get,never) : Int; inline function get_top() return M.round( y - height*getAdjustedPivotY() );
+	public var top(get,never) : Int; inline function get_top() return M.round( y - height*def.pivotY );
 	public var bottom(get,never) : Int; inline function get_bottom() return top + height;
 
 
@@ -43,8 +43,8 @@ class EntityInstance {
 		return 'EntityInst "${def.identifier}" @$x,$y';
 	}
 
-	inline function get_centerX() return M.round( x + (0.5-getAdjustedPivotX())*width );
-	inline function get_centerY() return M.round( y + (0.5-getAdjustedPivotY())*height );
+	inline function get_centerX() return M.round( x + (0.5-def.pivotX)*width );
+	inline function get_centerY() return M.round( y + (0.5-def.pivotY)*height );
 
 	inline function get_worldX() return Std.int( x + _li.level.worldX );
 	inline function get_worldY() return Std.int( y + _li.level.worldY );
@@ -131,20 +131,12 @@ class EntityInstance {
 		return ei;
 	}
 
-	public inline function getAdjustedPivotX() {
-		return M.hasBit(flips, 0) ? 1 - def.pivotX : def.pivotX;
-	}
-
-	public inline function getAdjustedPivotY() {
-		return M.hasBit(flips, 1) ? 1 - def.pivotY : def.pivotY;
-	}
-
 	public inline function getCx(ld:data.def.LayerDef) {
-		return Std.int( ( x + (getAdjustedPivotX()==1 ? -1 : 0) ) / ld.gridSize );
+		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
 	public inline function getCy(ld:data.def.LayerDef) {
-		return Std.int( ( y + (getAdjustedPivotY()==1 ? -1 : 0) ) / ld.gridSize );
+		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
 	public inline function getPointOriginX(ld:data.def.LayerDef) {
