@@ -495,7 +495,7 @@ class JsTools {
 							case "sub": new J('<span class="key" title="Numeric pad -">-</span>');
 
 							case "+", "-", "to", "/", "or", '"', "'", "on": new J('<span class="misc">$k</span>');
-							case "~": new J('<span class="key">${ App.ME.settings.navKeys==Zqsd ? "²" : "~" }</span>');
+							case "~": new J('<span class="key">${ App.ME.settings.v.navigationKeys==Zqsd ? "²" : "~" }</span>');
 
 							case k.charAt(0) => "(": new J("<span/>").append(k);
 							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
@@ -535,6 +535,14 @@ class JsTools {
 					jThis.data(
 						"str",
 						L.t._("An identifier should be UNIQUE (in this context) and can only contain LETTERS, NUMBERS or UNDERSCORES (ie. \"_\").")
+						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
+					);
+				}
+				else if( jThis.hasClass("userDoc") ) {
+					var extra = jThis.text();
+					jThis.data(
+						"str",
+						L.t._("User defined documentation that will appear near this element to provide help and tips to the level designers.")
 						+ (extra==null || extra.length==0 ? "" : "\n"+extra )
 					);
 				}
@@ -619,7 +627,7 @@ class JsTools {
 						case "ctrl" : keys.push(K.CTRL);
 						case "shift" : keys.push(K.SHIFT);
 						case "alt" : keys.push(K.ALT);
-						case "~": App.ME.settings.navKeys==Zqsd ? keys.push(222) : keys.push(K.QWERTY_TILDE);
+						case "~": App.ME.settings.v.navigationKeys==Zqsd ? keys.push(222) : keys.push(K.QWERTY_TILDE);
 						case _ :
 							var funcReg = ~/[fF]([0-9]+)/;
 							if( k.length==1 ) {
@@ -674,7 +682,6 @@ class JsTools {
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
 
 			var uiStateId : Null<Settings.UiState> = cast jCollapser.attr("id"); // might be null
-			trace(uiStateId);
 
 			// Init default, if any
 			var customDefault : Null<Bool> = null;
@@ -683,10 +690,8 @@ class JsTools {
 					case "true", "open", "expand", "1": true;
 					case _: false;
 				}
-				trace("custom default: "+customDefault);
 			}
 			if( uiStateId!=null && !App.ME.settings.hasUiState(uiStateId) ) {
-				trace("init memory");
 				if( customDefault!=null )
 					App.ME.settings.setUiStateBool(uiStateId, customDefault);
 				else
@@ -695,7 +700,6 @@ class JsTools {
 
 			if( uiStateId!=null ) {
 				// Init from memory
-				trace("set from memory");
 				if( App.ME.settings.getUiStateBool(uiStateId)==true ) {
 					jTarget.show();
 					jCollapser.addClass("expanded");
@@ -708,13 +712,11 @@ class JsTools {
 			}
 			else if( customDefault==true ) {
 				// Use provided default
-				trace("use custom default");
 				jTarget.show();
 				jCollapser.addClass("expanded");
 			}
 			else {
 				// Closed by default
-				trace("use default");
 				jTarget.hide();
 				jCollapser.addClass("collapsed");
 			}
@@ -851,8 +853,17 @@ class JsTools {
 		if( path==null )
 			N.error("No file");
 		else {
-			if( !NT.fileExists(path) )
-				N.error("Sorry, but this file couldn't be found.");
+			if( !NT.fileExists(path) ) {
+				if( isFile )
+					path = dn.FilePath.extractDirectoryWithoutSlash(path, true);
+
+				if( !isFile || !NT.fileExists(path) )
+					N.error("Sorry, but this file couldn't be found.");
+				else {
+					N.msg("Locating file...");
+					ET.locate(path, false);
+				}
+			}
 			else {
 				N.msg("Locating file...");
 				ET.locate(path, isFile);

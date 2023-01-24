@@ -35,6 +35,10 @@ $cur_locateRef: url("../cursors/locate.svg") 16 16, zoom-out;
 	padding: 0;
 }
 
+@mixin defaultFont() {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
 @font-face {
 	font-family: Roboto;
 	src: url("../fonts/RobotoCondensed-Light.ttf");
@@ -51,7 +55,7 @@ body {
 	padding: 0;
 	background: $bgDark;
 	color: white;
-	font-family: "Arial";
+	@include defaultFont();
 	font-size: 11pt;
 }
 
@@ -320,6 +324,7 @@ button {
 	&.transparent {
 		box-shadow: none;
 		background-color: transparent;
+		border-radius: 3px;
 		&:hover {
 			background-color: $orange;
 		}
@@ -467,11 +472,14 @@ button {
 }
 
 .help:not(.icon):not(button) {
+	min-height: 2.5em;
+	padding: 10px;
+	padding-left: 60px;
+
 	color: $help;
 	font-family: Roboto;
 	font-size: 1.1em;
-	padding: 10px;
-	padding-left: 60px;
+
 	border: 1px dashed $help;
 	border-radius: 6px;
 	background-image: url("../icons/helpBg.svg");
@@ -603,6 +611,7 @@ div.info {
 	align-items: center;
 	box-sizing: border-box;
 	font-size: 14pt;
+	@include defaultFont();
 	width: 32px;
 	height: 32px;
 	margin-left: 4px;
@@ -1198,6 +1207,7 @@ ul.log {
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
+.icon.reset				{ background-image: url("../icons/reset.svg"); }
 .icon.rule				{ background-image: url("../icons/rule.svg"); }
 .icon.search			{ background-image: url("../icons/search.svg"); }
 .icon.settings			{ background-image: url("../icons/settings.svg"); }
@@ -1231,29 +1241,38 @@ ul.log {
 
 .collapser {
 	color: $bgLighter;
-	font-size: 0.8em;
+	font-size: 10pt;
 	min-height: 0.8em;
-	padding-top: 2px;
-	padding-bottom: 2px;
+	padding-top: 4px;
+	padding-bottom: 4px;
 	padding-left: 24px;
 	background-repeat: no-repeat;
 	background-position: left center;
-
-	&:hover {
-		color: $orange;
-	}
 
 	&.expanded {
 		cursor: $cur_collapse;
 		color: white;
 		background-color: $bgLight;
 		background-image: url("../icons/expanded.svg");
+		&:hover {
+			color: black;
+			background-color: $orange;
+			border-color: $orange;
+		}
 	}
 	&.collapsed {
 		cursor: $cur_expand;
 		background-color: $bgMed;
+		border: 1px solid $bgLight;
 		background-image: url("../icons/collapsed.svg");
 		margin-bottom: 8px;
+		border-radius: 3px;
+
+		&:hover {
+			color: black;
+			background-color: $orange;
+			border-color: $orange;
+		}
 	}
 }
 
@@ -1882,7 +1901,7 @@ input[type=number] {
 input.slider:not(:disabled) {
 	cursor: ew-resize;
 	flex: 1 0 48px;
-	// box-sizing: content-box;
+	box-sizing: content-box;
 	padding-right: 20px;
 
 	background-image: url("../icons/slide.svg");
@@ -3395,7 +3414,7 @@ textarea {
 			margin-left: 16px;
 
 			font-size: 7.5pt;
-			font-family: Arial;
+			@include defaultFont();
 			color: black;
 			font-weight: normal;
 			text-decoration: none;
@@ -5993,13 +6012,26 @@ canvas#webgl {
 		font-style: italic;
 	}
 
-	.collapser#extraEntityInfos.expanded {
-		background-color: $bgLight;
+	.doc {
+		padding: 8px 8px;
+		margin-bottom: 8px;
+		color: $help;
+		background-color: $helpDarker;
+		border-radius: 3px;
+		border: 1px solid $helpMed;
+
+		p {
+			font-size: 10pt;
+			margin: 0;
+			&+p {
+				margin-top: 4px;
+			}
+		}
 	}
 
 	dl.extraInfos {
 		width: auto;
-		margin-bottom: 24px;
+		margin-bottom: 8px;
 		padding: 8px;
 		padding-bottom: 0;
 		border: 1px solid $bgLighter;
@@ -6305,29 +6337,14 @@ dl.form.fieldInstanceEditor {
 		max-width: none;
 	}
 
+	input.slider:not(:disabled) {
+		box-sizing: border-box;
+	}
+
 	span.prefix,
 	span.suffix {
 		color: $bgLighter;
 		padding: 3px;
-	}
-
-	a.reset {
-		flex: 0 0 auto;
-		align-self: center;
-		margin-left: 10px;
-		font-size: 0.75em;
-		text-decoration: underline;
-		color: $orange;
-		white-space: nowrap;
-		padding: 2px 4px;
-		border-radius: 3px;
-		cursor: pointer;
-
-		&:hover {
-			text-decoration: none;
-			color: black;
-			background-color: $orange;
-		}
 	}
 
 	span.usingDefault {
@@ -6501,9 +6518,11 @@ dl.form.fieldInstanceEditor {
 	}
 
 	span.point {
-		color: $bgLighter;
 		padding: 4px;
-		font-style: italic;
+		align-self: center;
+		font-family: 'Courier New', Courier, monospace;
+		color: $almostWhite;
+		font-size: 10pt;
 		border-radius: 6px;
 		background-color: $bgMed;
 	}
@@ -6556,6 +6575,10 @@ dl.form.fieldInstanceEditor {
 				overflow: hidden;
 				height: 33px;
 
+				&.F_Point {
+					height: auto;
+				}
+
 				span:not([class]) {
 					align-self: center;
 					padding-left: 2px;
@@ -6568,14 +6591,24 @@ dl.form.fieldInstanceEditor {
 					background-color: $bgLight;
 				}
 				button {
-					padding: 4px;
+					flex: 0;
+					align-self: center;
+					padding: 4px 1px;
 					.icon {
-						width: 13px;
-						height: 13px;
+						width: 20px;
+						height: 20px;
 					}
+				}
+				button.reset {
+					margin-left: 10px;
 				}
 				button.remove {
 					flex: 0 1 16px;
+				}
+				button.missingRef {
+					padding: 4px;
+					font-size: 9pt;
+					white-space: nowrap;
 				}
 
 				select {
@@ -6623,10 +6656,14 @@ dl.form.fieldInstanceEditor {
 		width: 960px;
 		height: 100%;
 		justify-content: stretch;
-		gap: 16px;
+		column-gap: 16px;
 
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content auto;
 		grid-template-columns: 250px auto;
+
+		.help {
+			height: fit-content;
+		}
 
 		.path {
 			flex: 1 0 100%;
@@ -6658,7 +6695,7 @@ dl.form.fieldInstanceEditor {
 		grid-template-columns: auto;
 		grid-template-rows: repeat(3, min-content);
 		gap: 16px;
-		height: 100%;
+		// height: 100%;
 
 		dl.form>dt {
 			max-width: none;
@@ -6680,26 +6717,22 @@ dl.form.fieldInstanceEditor {
 			}
 		}
 
-		a.showAdv {
-			cursor: pointer;
-			padding-top: 4px;
-			padding-bottom: 4px;
-			&:hover {
-				color: white;
+		a[href] {
+			margin-left: 8px;
+			flex-grow: 0;
+		}
+
+		.collapser {
+			&.collapsed {
+				margin-bottom: 16px;
 			}
 		}
 
-		.adv {
-			&:not(.visible) {
-				display: none;
-			}
-			a {
-				cursor: pointer;
-				&:hover {
-					color: white;
-				}
-			}
-
+		.form.advanced {
+			padding: 8px;
+			box-sizing: border-box;
+			margin-top: -16px;
+			border: 1px solid $bgLight;
 			ul.advFlags {
 				padding-bottom: 48px;
 				li {
@@ -6825,10 +6858,14 @@ dl.form.fieldInstanceEditor {
 .window.panel.editEnumDefs {
 	.content {
 		display: grid;
-		grid-template-rows: min-content min-content auto;
+		grid-template-rows: min-content auto;
 		grid-template-columns: 250px auto;
-		gap: 16px;
+		column-gap: 16px;
 		height: 100%;
+
+		.help {
+			height: fit-content;
+		}
 
 		>h2:first-of-type {
 			grid-column: 1/3;
@@ -8568,11 +8605,16 @@ $patternSize : 32px;
 	}
 
 	.content {
-		grid-template-rows: min-content min-content min-content auto;
+		grid-template-rows: min-content min-content auto;
 		grid-template-columns: 300px auto;
 
+		.help {
+			grid-row: 2/4;
+			height: fit-content;
+		}
+
 		.mainList {
-			grid-row: 3/5;
+			grid-row: 2/4;
 			span.name {
 				display: grid;
 				grid-template-columns: repeat(2,min-content);
@@ -8588,7 +8630,7 @@ $patternSize : 32px;
 			}
 		}
 		dl.form {
-			grid-row: 3/4;
+			grid-row: 2/3;
 			dt {
 				max-width: none;
 				white-space: nowrap;
@@ -8641,7 +8683,7 @@ $patternSize : 32px;
 
 		}
 		.pickerWrapper {
-			grid-row: 4/5;
+			grid-row: 3/4;
 		}
 
 		.tilesDemo canvas {
@@ -8666,8 +8708,8 @@ $patternSize : 32px;
 		display: grid;
 		height: 100%;
 		justify-content: stretch;
-		gap: 16px;
-		grid-template-rows: min-content min-content auto;
+		column-gap: 16px;
+		grid-template-rows: min-content auto;
 		grid-template-columns: 250px auto;
 		&.noHelp {
 			grid-template-rows: min-content auto;
@@ -8719,7 +8761,6 @@ $patternSize : 32px;
 			grid-template-rows: min-content auto;
 			.entityForm {
 				margin-bottom: 16px;
-				border-bottom: 1px solid $bgLight;
 			}
 		}
 
@@ -9046,10 +9087,8 @@ $patternSize : 32px;
 	.wrapper .content {
 		.layout {
 			display: grid;
-			min-width: 600px;
-			max-width: 90vw;
-			min-height: 570px;
-			max-height: 72vh;
+			width: 90vw;
+			height: 72vh;
 			grid-template-columns: min-content auto;
 			grid-template-rows: 100%;
 			column-gap: 8px;
@@ -9074,7 +9113,7 @@ $patternSize : 32px;
 					margin: 0;
 					margin-left: 2px;
 					margin-right: 2px;
-					font-size: 11pt;
+					font-size: 10pt;
 					border-width: 2px;
 				}
 
@@ -9165,7 +9204,12 @@ $patternSize : 32px;
 					.cell {
 						position: relative;
 						outline: 1px solid $bgDark;
+						outline-offset: -1px;
 						cursor: pointer;
+						&:not(:empty) {
+							background-color: black;
+						}
+
 						img {
 							width: 100% !important;
 							height: 100% !important;
@@ -9185,7 +9229,10 @@ $patternSize : 32px;
 							opacity: 0.11;
 						}
 						&.mirror {
-							outline: 1px dashed $bgLighter
+							outline: 1px dashed white
+						}
+						&.defined {
+							outline: 1px solid white
 						}
 					}
 				}

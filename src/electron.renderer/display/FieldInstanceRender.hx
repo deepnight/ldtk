@@ -347,7 +347,7 @@ class FieldInstanceRender {
 
 	public static inline function createFilter(col:dn.Col) : Null<h2d.filter.Filter> {
 		return switch settings.v.fieldsRender {
-			case FR_Outline: new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.1);
+			case FR_Outline: new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.03);
 			case FR_Table: null;
 		}
 	}
@@ -359,7 +359,10 @@ class FieldInstanceRender {
 		labelFlow.verticalAlign = Middle;
 		labelFlow.horizontalAlign = Right;
 		labelFlow.padding = 0;
-		labelFlow.filter = createFilter(baseColor);
+		switch ctx {
+			case EntityCtx(g, ei, ld): labelFlow.filter = createFilter(baseColor);
+			case LevelCtx(l):
+		}
 
 		var valueFlow = new h2d.Flow();
 		valueFlow.padding = 0;
@@ -616,6 +619,10 @@ class FieldInstanceRender {
 						else
 							tf.text = v;
 					}
+
+					// Comma separator
+					if( fi.def.isArray && idx<fi.getArrayLength()-1 )
+						tf.text+=",";
 				}
 			}
 

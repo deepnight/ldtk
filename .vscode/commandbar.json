@@ -38,7 +38,7 @@
 			"priority": -31
 		},
 		{
-			"text": "📘 Dox",
+			"text": "📘 Docs",
 			"color": "#8a96ff",
 			"command": "haxe doc.hxml",
 			"alignment": "right",

@@ -219,9 +219,12 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.find(".tmp").remove();
 
 		if( cur==null ) {
+			jContent.find(".none").show();
 			jForm.hide();
 			return;
 		}
+		jContent.find(".none").hide();
+
 
 		// Lost layer
 		if( project.defs.getLayerDef(cur.uid)==null ) {
@@ -244,11 +247,17 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
 
-		// Fields
+		// Identifier
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
 		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
+		// Doc
+		var i = Input.linkToHtmlInput( cur.doc, jForm.find("input[name='layerDoc']") );
+		i.allowNull = true;
+		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
+
+		// Grid
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));

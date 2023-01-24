@@ -117,23 +117,23 @@ class EditAppSettings extends ui.modal.Dialog {
 				jOpt.prop("selected",true);
 		}
 		jSelect.change( (_)->{
-			settings.v.fieldsRender = Settings.FieldsRender.createByName( jSelect.val() );
+			settings.v.fieldsRender = FieldsRender.createByName( jSelect.val() );
 			onSettingChanged();
 		});
 
 		// Navigation keys
 		var jNavKeys = jForm.find("#navKeys");
 		jNavKeys.empty();
-		for(k in NavigationKeys.getConstructors()) {
-			var nk = NavigationKeys.createByName(k);
+		for(k in Settings.NavigationKeys.getConstructors()) {
+			var nk = Settings.NavigationKeys.createByName(k);
 			var jOpt = new J('<option value="$k"/>');
 			jNavKeys.append(jOpt);
 			jOpt.text(k.toUpperCase());
-			if( k==settings.v.navKeys )
+			if( nk==settings.v.navigationKeys )
 				jOpt.prop("selected",true);
 		}
 		jNavKeys.change( (_)->{
-			settings.v.navKeys = jNavKeys.val();
+			settings.v.navigationKeys = Settings.NavigationKeys.createByName( jNavKeys.val() );
 			onSettingChanged();
 		});
 

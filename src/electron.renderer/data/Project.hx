@@ -52,6 +52,7 @@ class Project {
 	/** WARNING! This list of "used IIDs" is NOT strictly updated: it's only a "mark" map to avoid IID collisions. **/
 	var usedIids : Map<String,Bool> = new Map();
 
+	var cachedToc : Array<ldtk.Json.TableOfContentEntry> = [];
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -521,6 +522,37 @@ class Project {
 	}
 
 
+	public function updateTableOfContent() {
+		cachedToc = [];
+		for(ed in defs.entities)
+			if( ed.exportToToc ) {
+				var tocEntry : ldtk.Json.TableOfContentEntry = {
+					identifier: ed.identifier,
+					instances: [],
+				}
+				cachedToc.push(tocEntry);
+				for(w in worlds)
+				for(l in w.levels)
+				for(li in l.layerInstances) {
+					if( li.def.type!=Entities )
+						continue;
+
+					for(ei in li.entityInstances) {
+						if( ei.defUid!=ed.uid )
+							continue;
+
+						tocEntry.instances.push({
+							worldIid: w.iid,
+							levelIid: l.iid,
+							layerIid: li.iid,
+							entityIid: ei.iid,
+						});
+					}
+				}
+			}
+	}
+
+
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
 			iid: iid,
@@ -528,6 +560,8 @@ class Project {
 			appBuildId: Const.getAppBuildId(),
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
+
+			toc: cachedToc,
 
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worlds[0].worldLayout, false),
 			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
@@ -568,6 +602,20 @@ class Project {
 			defs: defs.toJson(this),
 			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
+
+			// toc: {
+			// 	var jsonToc : Array<ldtk.Json.TableOfContentEntry> = [];
+			// 	for(e in toc.keyValueIterator())
+			// 		jsonToc.push({
+			// 			identifier: e.key,
+			// 			instances: e.value.map( ti->{
+			// 				worldIid: ti.worldIid,
+			// 				levelIid: ti.levelIid,
+			// 			}),
+			// 		});
+
+			// 	jsonToc;
+			// },
 		}
 
 		return json;

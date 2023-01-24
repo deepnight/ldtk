@@ -17,7 +17,7 @@ typedef AppSettings = {
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
 	var colorBlind : Bool;
-	var navKeys : String;
+	var navigationKeys : NavigationKeys;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -41,6 +41,14 @@ enum abstract UiState(String) {
 	var HideSamplesOnHome;
 }
 
+/* Notes: Settings related enums are stored in this file instead of EditorTypes to avoid Main compilation to reach unwanted classes, by importing EditorTypes. */
+
+enum NavigationKeys {
+	Arrows;
+	Wasd;
+	Zqsd;
+}
+
 enum AutoWorldModeSwitch {
 	Never;
 	ZoomOutOnly;
@@ -57,10 +65,6 @@ class Settings {
 	var defaults : AppSettings;
 	public var v : AppSettings;
 	var ls : dn.data.LocalStorage;
-
-	#if editor
-	public var navKeys(get,set) : NavigationKeys;
-	#end
 
 	public function new() {
 		// Init storage
@@ -84,7 +88,7 @@ class Settings {
 			startFullScreen: false,
 			autoInstallUpdates: true,
 			colorBlind: false,
-			navKeys: null,
+			navigationKeys: null,
 
 			openLastProject: false,
 			lastProject: null,
@@ -101,25 +105,35 @@ class Settings {
 		}
 
 		// Load
-		v = ls.readObject(defaults);
+		v = ls.readObject(defaults, (obj)->{
+			#if editor
+			// Migrate old NavKeys string value
+			if( obj.navKeys!=null ) {
+				var e = try NavigationKeys.createByName( obj.navKeys ) catch(_) null;
+				if( e!=null )
+					obj.navigationKeys = e;
+			}
+			#end
+		});
 
 		// Try to guess Navigation keys
 		#if editor
-		if( v.navKeys==null ) {
+
+		if( v.navigationKeys==null ) {
 			for(full in js.Browser.navigator.languages) {
 				switch full {
-					case "nl-be": navKeys = Zqsd; break;
+					case "nl-be": v.navigationKeys = Zqsd; break;
 				}
 
 				var short = ( full.indexOf("-")<0 ? full : full.substr(0,full.indexOf("-")) ).toLowerCase();
 				switch short {
-					case "fr": navKeys = Zqsd; break;
-					case "en": navKeys = Wasd; break;
+					case "fr": v.navigationKeys = Zqsd; break;
+					case "en": v.navigationKeys = Wasd; break;
 					case _:
 				}
 			}
-			if( v.navKeys==null )
-				navKeys = Wasd;
+			if( v.navigationKeys==null )
+				v.navigationKeys = Wasd;
 		}
 		#end
 
@@ -169,14 +183,6 @@ class Settings {
 		return false;
 	}
 
-
-	#if editor
-	function get_navKeys() return try NavigationKeys.createByName(v.navKeys) catch(_) Wasd;
-	function set_navKeys(k:NavigationKeys) {
-		v.navKeys = k.getName();
-		return k;
-	}
-	#end
 
 	function getOrCreateUiState(id:UiState) {
 		for(s in v.uiStates)

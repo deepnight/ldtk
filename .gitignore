@@ -5,6 +5,7 @@ json_doc.xml
 *.crash.ldtk
 *.map
 *.zip
+*.bson
 
 backups/
 dump/

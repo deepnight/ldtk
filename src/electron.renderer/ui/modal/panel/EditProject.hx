@@ -185,19 +185,19 @@ class EditProject extends ui.modal.Panel {
 
 	function updateProjectForm() {
 		ui.Tip.clear();
-		var jForm = jContent.find("dl.form:first");
-		jForm.off().find("*").off();
+		var jForms = jContent.find("dl.form");
+		jForms.off().find("*").off();
 
 		// Simplified format adjustments
 		if( project.simplifiedExport )
-			jForm.find(".notSimplified").hide();
+			jForms.find(".notSimplified").hide();
 		else
-			jForm.find(".notSimplified").show();
+			jForms.find(".notSimplified").show();
 
 		// File extension
 		var ext = project.filePath.extension;
 		var usesAppDefault = ext==Const.FILE_EXTENSION;
-		var i = Input.linkToHtmlInput( usesAppDefault, jForm.find("[name=useAppExtension]") );
+		var i = Input.linkToHtmlInput( usesAppDefault, jForms.find("[name=useAppExtension]") );
 		i.onValueChange = (v)->{
 			var old = project.filePath.full;
 			var fp = project.filePath.clone();
@@ -213,12 +213,12 @@ class EditProject extends ui.modal.Panel {
 		}
 
 		// Backups
-		var i = Input.linkToHtmlInput( project.backupOnSave, jForm.find("#backup") );
+		var i = Input.linkToHtmlInput( project.backupOnSave, jForms.find("#backup") );
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = i.jInput.siblings(".locate").empty();
 		if( project.backupOnSave )
 			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/backups", false) );
-		var jCount = jForm.find("#backupCount");
+		var jCount = jForms.find("#backupCount");
 		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
 		if( project.backupOnSave ) {
 			jCount.show();
@@ -230,11 +230,11 @@ class EditProject extends ui.modal.Panel {
 			jCount.hide();
 			jCount.siblings("span").hide();
 		}
-		jForm.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
+		jForms.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
 
 
 		// Json minifiying
-		var i = Input.linkToHtmlInput( project.minifyJson, jForm.find("[name=minify]") );
+		var i = Input.linkToHtmlInput( project.minifyJson, jForms.find("[name=minify]") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onChange = ()->{
 			editor.invalidateAllLevelsCache;
@@ -242,14 +242,14 @@ class EditProject extends ui.modal.Panel {
 		}
 
 		// Simplified format
-		var i = Input.linkToHtmlInput( project.simplifiedExport, jForm.find("[name=simplifiedExport]") );
+		var i = Input.linkToHtmlInput( project.simplifiedExport, jForms.find("[name=simplifiedExport]") );
 		i.onChange = ()->{
 			editor.invalidateAllLevelsCache();
 			editor.ge.emit(ProjectSettingsChanged);
 			if( project.simplifiedExport )
 				recommendSaving();
 		}
-		var jLocate = jForm.find(".simplifiedExport .locate").empty();
+		var jLocate = jForms.find(".simplifiedExport .locate").empty();
 		if( project.simplifiedExport )
 			jLocate.append(
 				NT.fileExists( project.getAbsExternalFilesDir() )
@@ -258,18 +258,18 @@ class EditProject extends ui.modal.Panel {
 			);
 
 		// External level files
-		var i = Input.linkToHtmlInput( project.externalLevels, jForm.find("#externalLevels") );
+		var i = Input.linkToHtmlInput( project.externalLevels, jForms.find("#externalLevels") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = (v)->{
 			editor.invalidateAllLevelsCache();
 			recommendSaving();
 		}
-		var jLocate = jForm.find("#externalLevels").siblings(".locate").empty();
+		var jLocate = jForms.find("#externalLevels").siblings(".locate").empty();
 		if( project.externalLevels )
 			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir(), false) );
 
 		// Image export
-		var jImgExport = jForm.find(".imageExportMode");
+		var jImgExport = jForms.find(".imageExportMode");
 		var jSelect = jImgExport.find("select");
 		var i = new form.input.EnumSelect(
 			jSelect,
@@ -283,30 +283,30 @@ class EditProject extends ui.modal.Panel {
 			},
 			(v)->switch v {
 				case None: L.t._("Don't export any image");
-				case OneImagePerLayer: L.t._("Export one PNG for each individual layer, in each level");
-				case OneImagePerLevel: L.t._("Export a single PNG per level (all layers are merged down)");
-				case LayersAndLevels: L.t._("Export images for both layers and levels");
+				case OneImagePerLayer: L.t._("One PNG per layer");
+				case OneImagePerLevel: L.t._("One PNG per level (layers are merged down)");
+				case LayersAndLevels: L.t._("One PNG per layer and one per level.");
 			}
 		);
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = jImgExport.find(".locate").empty();
 		pngPatternEditor.jEditor.hide();
-		jForm.find(".imageExportOnly").hide();
+		jForms.find(".imageExportOnly").hide();
 		if( project.imageExportMode!=None && !project.simplifiedExport ) {
-			jForm.find(".imageExportOnly").show();
+			jForms.find(".imageExportOnly").show();
 			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/png", false) );
 
 			pngPatternEditor.jEditor.show();
 			pngPatternEditor.ofString( project.getImageExportFilePattern() );
 		}
 
-		var i = Input.linkToHtmlInput(project.exportLevelBg, jForm.find("#exportLevelBg"));
+		var i = Input.linkToHtmlInput(project.exportLevelBg, jForms.find("#exportLevelBg"));
 		i.linkEvent(ProjectSettingsChanged);
 
 
 		// Identifier style
 		var i = new form.input.EnumSelect(
-			jForm.find("#identifierStyle"),
+			jForms.find("#identifierStyle"),
 			ldtk.Json.IdentifierStyle,
 			false,
 			()->return project.identifierStyle,
@@ -337,14 +337,14 @@ class EditProject extends ui.modal.Panel {
 					L.t._("WARNING!\nPlease make sure the game engine or importer you're using supports this kind of LDtk identifier!\nAre you sure?");
 			}
 		}
-		var jStyleWarning = jForm.find("#styleWarning");
+		var jStyleWarning = jForms.find("#styleWarning");
 		switch project.identifierStyle {
 			case Capitalize, Uppercase: jStyleWarning.hide();
 			case Lowercase, Free: jStyleWarning.show();
 		}
 
 		// Tiled export
-		var i = Input.linkToHtmlInput( project.exportTiled, jForm.find("#tiled") );
+		var i = Input.linkToHtmlInput( project.exportTiled, jForms.find("#tiled") );
 		i.linkEvent(ProjectSettingsChanged);
 		i.onValueChange = function(v) {
 			if( v ) {
@@ -354,13 +354,13 @@ class EditProject extends ui.modal.Panel {
 				);
 			}
 		}
-		var jLocate = jForm.find("#tiled").siblings(".locate").empty();
+		var jLocate = jForms.find("#tiled").siblings(".locate").empty();
 		if( project.exportTiled )
 			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/tiled", false) );
 
 
 		// Custom commands
-		var jCommands = jForm.find(".customCommands");
+		var jCommands = jForms.find(".customCommands");
 		jCommands.find("ul").empty();
 		function _createCommandJquery(cmd:ldtk.Json.CustomCommand) {
 			var jCmd = jCommands.find("xml#customCommand").children().clone(false, false).wrapAll("<li/>").parent();
@@ -433,16 +433,16 @@ class EditProject extends ui.modal.Panel {
 
 
 		// Level grid size
-		var i = Input.linkToHtmlInput( project.defaultGridSize, jForm.find("[name=defaultGridSize]") );
+		var i = Input.linkToHtmlInput( project.defaultGridSize, jForms.find("[name=defaultGridSize]") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Workspace bg
-		var i = Input.linkToHtmlInput( project.bgColor, jForm.find("[name=bgColor]"));
+		var i = Input.linkToHtmlInput( project.bgColor, jForms.find("[name=bgColor]"));
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Level bg
-		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForm.find("[name=defaultLevelbgColor]"));
+		var i = Input.linkToHtmlInput( project.defaultLevelBgColor, jForms.find("[name=defaultLevelbgColor]"));
 		i.onChange = ()->{
 			for(w in project.worlds)
 			for(l in w.levels)
@@ -452,7 +452,7 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 
 		// Default entity pivot
-		var pivot = jForm.find(".pivot");
+		var pivot = jForms.find(".pivot");
 		pivot.empty();
 		pivot.append( JsTools.createPivotEditor(
 			project.defaultPivotX, project.defaultPivotY,
@@ -468,18 +468,19 @@ class EditProject extends ui.modal.Panel {
 		levelNamePatternEditor.ofString(project.levelNamePattern);
 
 		// Advanced options
-		var jAdvanceds = jForm.find(".adv");
+		var jAdvanceds = jForms.filter(".advanced");
 		if( showAdvanced ) {
-			jForm.find("a.showAdv").hide();
-			jAdvanceds.addClass("visible");
+			jContent.find(".collapser.collapsed").click();
+			// jForms.find("a.showAdv").hide();
+			// jAdvanceds.addClass("visible");
 		}
 		else {
-			jForm.find("a.showAdv").show().click(ev->{
-				jAdvanceds.addClass("visible");
-				showAdvanced = true;
-				jWrapper.scrollTop( jWrapper.innerHeight() );
-				ev.getThis().hide();
-			});
+			// jForms.find("a.showAdv").show().click(ev->{
+			// 	jAdvanceds.addClass("visible");
+			// 	showAdvanced = true;
+			// 	jWrapper.scrollTop( jWrapper.innerHeight() );
+			// 	ev.getThis().hide();
+			// });
 		}
 		var jAdvancedFlags = jAdvanceds.find("ul.advFlags");
 		jAdvancedFlags.empty();
@@ -531,7 +532,7 @@ class EditProject extends ui.modal.Panel {
 
 		// Sample description
 		var i = new form.input.StringInput(
-			jForm.find("[name=tutorialDesc]"),
+			jForms.find("[name=tutorialDesc]"),
 			()->project.tutorialDesc,
 			(v)->{
 				v = dn.Lib.trimEmptyLines(v);
@@ -542,7 +543,7 @@ class EditProject extends ui.modal.Panel {
 			}
 		);
 
-		JsTools.parseComponents(jForm);
+		JsTools.parseComponents(jForms);
 		checkBackup();
 	}
 }

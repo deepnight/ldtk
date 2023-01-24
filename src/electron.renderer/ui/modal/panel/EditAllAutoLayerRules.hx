@@ -527,8 +527,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 		if( rg.isOptional )
 			jToggle.attr("title", (li.isRuleGroupActiveHere(rg)?"Disable":"Enable")+" this group of rules in this level");
-		else
-			jToggle.attr("title", (rg.active?"Disable":"Enable")+" this group of rules everywhere");
+		// else
+		// 	jToggle.attr("title", (rg.active?"Disable":"Enable")+" this group of rules everywhere");
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");

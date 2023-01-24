@@ -25,13 +25,13 @@ class ContextMenu extends ui.Modal {
 		ME = this;
 
 		if( openEvent!=null || jNear!=null ) {
-			var jEventTarget = jNear!=null ? jNear : new J(openEvent.currentTarget);
+			var jEventTarget = jNear!=null ? jNear : new J(openEvent.target);
 			jAttachTarget = jEventTarget;
 			if( jAttachTarget.is("button.context") )
 				jAttachTarget = jAttachTarget.parent();
 			jAttachTarget.addClass("contextMenuOpen");
 
-			if( jEventTarget.is("button.context") || jNear!=null )
+			if( jEventTarget.is("button") || jEventTarget.parent().is("button") || jNear!=null )
 				placer = ()->positionNear(jEventTarget);
 			else if( openEvent!=null )
 				placer = ()->positionNear( new Coords(openEvent.pageX, openEvent.pageY) );

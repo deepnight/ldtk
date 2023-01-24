@@ -38,28 +38,33 @@ class EntityPalette extends ui.ToolPalette {
 			var jSubList = jLi.find("ul");
 
 			for(ed in group.all) {
-				var e = new J("<li/>");
-				e.appendTo(jSubList);
-				e.attr("data-defUid", ed.uid);
-				e.attr("data-y", Std.string(y));
-				e.addClass("entity");
-				e.css( "border-color", C.intToHex(ed.color) );
+				var jLi = new J("<li/>");
+				jLi.appendTo(jSubList);
+				jLi.attr("data-defUid", ed.uid);
+				jLi.attr("data-y", Std.string(y));
+				jLi.addClass("entity");
+				jLi.css( "border-color", C.intToHex(ed.color) );
+
+				if( ed.doc!=null ) {
+					jLi.attr("tip", "right");
+					Tip.attach(jLi, ed.doc);
+				}
 
 				// State
 				if( ed==tool.curEntityDef ) {
-					e.addClass("active");
-					e.css( "background-color", makeBgActiveColor(ed.color) );
+					jLi.addClass("active");
+					jLi.css( "background-color", makeBgActiveColor(ed.color) );
 				}
 				else {
-					e.css( "background-color", makeBgInactiveColor(ed.color) );
-					e.css( "color", makeTextInactiveColor(ed.color) );
+					jLi.css( "background-color", makeBgInactiveColor(ed.color) );
+					jLi.css( "color", makeTextInactiveColor(ed.color) );
 				}
 
 				// Preview and label
-				e.append( JsTools.createEntityPreview(Editor.ME.project, ed) );
-				e.append(ed.identifier);
+				jLi.append( JsTools.createEntityPreview(Editor.ME.project, ed) );
+				jLi.append(ed.identifier);
 
-				e.click( function(_) {
+				jLi.click( function(_) {
 					tool.selectValue(ed.uid);
 					render();
 				});
