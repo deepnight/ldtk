@@ -138,7 +138,7 @@ class EntityRender extends dn.Process {
 					case Stretch:
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
-							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY); // + (offX*bmp.tile.width) + (offY*bmp.tile.height)
+							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
 						bmp.alpha = alpha;
 
