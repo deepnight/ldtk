@@ -23,7 +23,6 @@
 
 --next
 --cmd haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
---cmd haxelib git ldtk-haxe-api https://github.com/Lojemiru/ldtk-haxe-api.git EntityFlips --always
 
 --next
 --cmd haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
