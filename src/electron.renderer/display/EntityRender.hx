@@ -156,6 +156,9 @@ class EntityRender extends dn.Process {
 						bmp.setScale(s);
 
 					case Repeat:
+						// Invert flips to prevent broken rendering.
+						t.xFlip = false;
+						t.yFlip = false;
 						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
 
 						tt.alpha = alpha;
