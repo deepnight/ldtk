@@ -95,18 +95,22 @@ class EntityRender extends dn.Process {
 		if( ed==null )
 			ed = ei.def;
 
-		var flipX = (ei!=null && M.hasBit(ei.flips,0));
-		var flipY = (ei!=null && M.hasBit(ei.flips,1));
+
 
 		var w = ei!=null ? ei.width : ed.width;
 		var h = ei!=null ? ei.height : ed.height;
 		var color = ei!=null ? ei.getSmartColor(false) : ed.color;
 
+		var flipX = (ei!=null && M.hasBit(ei.flips,0));
+		var flipY = (ei!=null && M.hasBit(ei.flips,1));
+		var pivotX = ei!=null ? ei.getAdjustedPivotX() : ed.pivotX;
+		var pivotY = ei!=null ? ei.getAdjustedPivotY() : ed.pivotY;
+
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
-		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
+		g.x = Std.int( -w*pivotX + (ld!=null ? ld.pxOffsetX : 0));
+		g.y = Std.int( -h*pivotY + (ld!=null ? ld.pxOffsetY : 0));
 
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 
@@ -139,7 +143,7 @@ class EntityRender extends dn.Process {
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 						bmp.scaleX = w / bmp.tile.width;
@@ -149,7 +153,7 @@ class EntityRender extends dn.Process {
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 						var s = M.fmin(w / bmp.tile.width, h / bmp.tile.height);
@@ -162,8 +166,8 @@ class EntityRender extends dn.Process {
 						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
 
 						tt.alpha = alpha;
-						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
-						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
+						tt.x = -w*pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						tt.y = -h*pivotY + (ld==null ? 0 : ld.pxOffsetY);
 
 					case Cover:
 						var bmp = new h2d.Bitmap(wrapper);
@@ -175,13 +179,13 @@ class EntityRender extends dn.Process {
 						final fw = M.fmin(w, t.width*s) / s;
 						final fh = M.fmin(h, t.height*s) / s;
 						bmp.tile = t.sub(
-							t.width*ed.pivotX - fw*ed.pivotX,
-							t.height*ed.pivotY - fh*ed.pivotY,
+							t.width*pivotX - fw*pivotX,
+							t.height*pivotY - fh*pivotY,
 							fw,fh
 						);
 						bmp.tile.xFlip = t.xFlip;
 						bmp.tile.yFlip = t.yFlip;
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.setScale(s);
 
 					case FullSizeCropped:
@@ -191,13 +195,13 @@ class EntityRender extends dn.Process {
 						final fw = M.fmin(w, t.width);
 						final fh = M.fmin(h, t.height);
 						bmp.tile = t.sub(
-							t.width*ed.pivotX - fw*ed.pivotX,
-							t.height*ed.pivotY - fh*ed.pivotY,
+							t.width*pivotX - fw*pivotX,
+							t.height*pivotY - fh*pivotY,
 							fw, fh
 						);
 						bmp.tile.xFlip = t.xFlip;
 						bmp.tile.yFlip = t.yFlip;
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 					case FullSizeUncropped:
@@ -205,7 +209,7 @@ class EntityRender extends dn.Process {
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 					case NineSlice:
@@ -219,8 +223,8 @@ class EntityRender extends dn.Process {
 						sg.tileCenter = true;
 						sg.width = w;
 						sg.height = h;
-						sg.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
-						sg.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
+						sg.x = -w*pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						sg.y = -h*pivotY + (ld==null ? 0 : ld.pxOffsetY);
 				}
 			}
 		}
