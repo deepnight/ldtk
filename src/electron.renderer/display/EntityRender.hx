@@ -267,8 +267,8 @@ class EntityRender extends dn.Process {
 		// Pivot
 
 		// Adjust pivot rendering position based on our flip statuses.
-		var pivotX = (flipX ? ((w - 1) / w) - ed.pivotX : ed.pivotX);
-		var pivotY = (flipY ? ((h - 1) / h) - ed.pivotY : ed.pivotY);
+		var pivotX = ((ed.flipAroundPivot && flipX) ? ((w - 1) / w) - ed.pivotX : ed.pivotX);
+		var pivotY = ((ed.flipAroundPivot && flipY) ? ((h - 1) / h) - ed.pivotY : ed.pivotY);
 
 		g.lineStyle(0);
 		// Draw pivot background.

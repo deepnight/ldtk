@@ -216,6 +216,9 @@ class EditEntityDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( curEntity.flippableY, jEntityForm.find("input#flippableY") );
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
 
+		var i = Input.linkToHtmlInput( curEntity.flipAroundPivot, jEntityForm.find("input#flipAroundPivot") );
+		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+
 		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );
 		i.setBounds(1,2048);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);

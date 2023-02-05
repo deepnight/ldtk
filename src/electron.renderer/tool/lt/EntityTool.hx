@@ -76,14 +76,16 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 	function getPlacementX(m:Coords) {
+		var pivot = flipX ? curEntityDef.getFlippedPivotX() : curEntityDef.pivotX;
 		return snapToGrid()
-			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerInstance.def.gridSize )
+			? M.round( ( m.cx + pivot ) * curLayerInstance.def.gridSize )
 			: m.levelX;
 	}
 
 	function getPlacementY(m:Coords) {
+		var pivot = flipY ? curEntityDef.getFlippedPivotY() : curEntityDef.pivotY;
 		return snapToGrid()
-			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize)
+			? M.round( ( m.cy + pivot ) * curLayerInstance.def.gridSize)
 			: m.levelY;
 	}
 
@@ -428,11 +430,15 @@ class EntityTool extends tool.LayerTool<Int> {
 					flipX = !flipX;
 					N.quick("X-flip: "+L.onOff(flipX));
 					customCursor(new hxd.Event(EMove), lastMouse);
+					// Simulate mouse movement to recenter entity render.
+					editor.cursor.onMouseMove(lastMouse);
 
 				case K.Y if ( curEntityDef!=null && curEntityDef.flippableY && !App.ME.hasAnyToggleKeyDown() ):
 					flipY = !flipY;
 					N.quick("Y-flip: "+L.onOff(flipY));
 					customCursor(new hxd.Event(EMove), lastMouse);
+					// Simulate mouse movement to recenter entity render.
+					editor.cursor.onMouseMove(lastMouse);
 			}
 	}
 }

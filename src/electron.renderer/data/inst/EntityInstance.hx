@@ -132,11 +132,11 @@ class EntityInstance {
 	}
 
 	public inline function getAdjustedPivotX() {
-		return M.hasBit(flips, 0) ? 1 - def.pivotX : def.pivotX;
+		return (def.flipAroundPivot && M.hasBit(flips, 0)) ? ((width - 1) / width) - def.pivotX : def.pivotX;
 	}
 
 	public inline function getAdjustedPivotY() {
-		return M.hasBit(flips, 1) ? 1 - def.pivotY : def.pivotY;
+		return (def.flipAroundPivot && M.hasBit(flips, 1)) ? ((height - 1) / height) - def.pivotY : def.pivotY;
 	}
 
 	public inline function getCx(ld:data.def.LayerDef) {
