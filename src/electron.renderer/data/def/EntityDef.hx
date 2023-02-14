@@ -97,11 +97,11 @@ class EntityDef {
 	}
 
 	public inline function getFlippedPivotX() {
-		return ((width - 1) / width) - pivotX;
+		return flipAroundPivot ? ((width - 1) / width) - pivotX : pivotX;
 	}
 
 	public inline function getFlippedPivotY() {
-		return ((height - 1) / height) - pivotY;
+		return flipAroundPivot ? ((height - 1) / height) - pivotY : pivotY;
 	}
 
 	function set_identifier(id:String) {
