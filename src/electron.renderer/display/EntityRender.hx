@@ -376,33 +376,35 @@ class EntityRender extends dn.Process {
 			fieldGraphics.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 		}
 
+		var pivX = M.hasBit(ei.flips, 0) ? ed.getFlippedPivotX() : ed.pivotX;
+		var pivY = M.hasBit(ei.flips, 1) ? ed.getFlippedPivotY() : ed.pivotY;
 
 		// Identifier
 		if( identifier!=null ) {
 			identifier.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 			identifier.setScale(zoomScale);
-			identifier.x = Std.int( -ei.width*ed.pivotX - identifier.textWidth*0.5*identifier.scaleX + ei.width*0.5 );
-			identifier.y = Std.int( -identifier.textHeight*identifier.scaleY - ei.height*ed.pivotY );
+			identifier.x = Std.int( -ei.width*pivX - identifier.textWidth*0.5*identifier.scaleX + ei.width*0.5 );
+			identifier.y = Std.int( -identifier.textHeight*identifier.scaleY - ei.height*pivY );
 		}
 
 		// Update field wrappers
 		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 		if( above.visible ) {
 			above.setScale(zoomScale);
-			above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
-			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY );
+			above.x = M.round( -ei.width*pivX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
+			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*pivY );
 			if( identifier!=null )
 				above.y -= identifier.textHeight*identifier.scaleY;
 			above.alpha = 1;
 
 			center.setScale(zoomScale);
-			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
-			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
+			center.x = Std.int( -ei.width*pivX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
+			center.y = Std.int( -ei.height*pivY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
 			center.alpha = 1;
 
 			beneath.setScale(zoomScale);
-			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
-			beneath.y = Std.int( ei.height*(1-ed.pivotY) );
+			beneath.x = Std.int( -ei.width*pivX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
+			beneath.y = Std.int( ei.height*(1-pivY) );
 			beneath.alpha = 1;
 		}
 	}
