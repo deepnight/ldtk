@@ -257,13 +257,11 @@ class FieldInstance {
 				}
 
 			case F_Table(name):
-				raw = StringTools.trim(raw);
-				var td = _project.defs.getTableDef(name);
-				setInternal(arrayIdx, null);
-				// if( !ed.hasValue(raw) )
-				// 	setInternal(arrayIdx, null);
-				// else
-				// 	setInternal( arrayIdx, V_String(raw) );
+				var int = Std.parseInt(raw);
+				if(raw == null)
+					setInternal(arrayIdx, null);
+				else
+					setInternal( arrayIdx, V_Int(int) );
 		}
 	}
 
@@ -771,10 +769,10 @@ class FieldInstance {
 		}
 	}
 
-	public function getTableValue(arrayIdx:Int) : Null<String> {
+	public function getTableValue(arrayIdx:Int) : Null<Int> {
 		require( F_Table(null) );
 		return isUsingDefault(arrayIdx) ? def.getTableDefault() : switch internalValues[arrayIdx] {
-			case V_String(v): v;
+			case V_Int(v): v;
 			case _: throw "unexpected";
 		}
 	}

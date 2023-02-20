@@ -407,7 +407,7 @@ class FieldDef {
 		return null;
 	}
 
-	public function getTableDefault() : Null<String> {
+	public function getTableDefault() : Null<Int> {
 		require(F_Table(null));
 		return null;
 	}
@@ -476,7 +476,8 @@ class FieldDef {
 				defaultOverride = V_String(arr.join(","));
 
 			case F_Table(name) :
-				defaultOverride = V_String(rawDef);
+				var def = Std.parseInt(rawDef);
+				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Int( iClamp(def) );
 		}
 	}
 

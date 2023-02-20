@@ -564,7 +564,51 @@ class FieldInstancesForm {
 						});
 					}
 				}
+
 			case F_Table(name):
+				var td = Editor.ME.project.defs.getTableDef(name);
+				var jSelect = new J("<select/>");
+				jSelect.appendTo(jTarget);
+
+				// Null value
+				if( fi.def.canBeNull || fi.getTableValue(arrayIdx)==null ) {
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value","");
+					if( fi.def.canBeNull )
+						jOpt.text("-- null --");
+					else {
+						// SELECT shouldn't be null
+						markError(jSelect);
+						jOpt.text("[ Value required ]");
+						jSelect.click( function(ev) {
+							jSelect.removeAttr("error").removeClass("required");
+							jSelect.blur( function(ev) renderForm() );
+						});
+					}
+					if( fi.getTableValue(arrayIdx)==null )
+						jOpt.attr("selected","selected");
+				}
+
+				var pki = td.columns.indexOf(td.primaryKey);
+				for(i in 0...td.data.length) {
+					var row = td.data[i];
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value", i);
+					jOpt.text(row[pki]);
+
+					if( fi.getTableValue(arrayIdx)==i && !fi.isUsingDefault(arrayIdx) ) {
+						jOpt.attr("selected","selected");
+					}
+				}
+
+				jSelect.change( function(ev) {
+					var v = jSelect.val()=="" ? null : jSelect.val();
+					fi.parseValue(arrayIdx, v);
+					onFieldChange(fi);
+				});
+				// hideInputIfDefault(arrayIdx, jSelect, fi);
 		}
 
 		// Suffix
