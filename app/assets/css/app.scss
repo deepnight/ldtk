@@ -7252,12 +7252,15 @@ dl.form.fieldInstanceEditor {
 				}
 			}
 		}
+		div#tableEditor {
+			overflow: hidden;	
+		}
 	}
 }
 
 .tableDefsForm {
 	width: 100%;
-	height: 100vh;
+	height: 100%;
 	overflow: hidden;
 	display: grid;
 	gap: 8px;
@@ -7273,7 +7276,7 @@ dl.form.fieldInstanceEditor {
 	}
 
 	ul.rowList {
-		overflow: hidden;
+		overflow: auto;
 		margin: 0;
 		grid-row: 2/3;
 
@@ -7285,7 +7288,7 @@ dl.form.fieldInstanceEditor {
 	}
 
 	dl.form {
-		overflow: hidden;
+		overflow: auto;
 		grid-column: 2/3;
 		grid-row: 2/3;
 
