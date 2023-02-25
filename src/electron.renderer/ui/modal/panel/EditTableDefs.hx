@@ -12,6 +12,12 @@ class EditTableDefs extends ui.modal.Panel {
 		linkToButton("button.editTables");
 		loadTemplate("editTableDefs");
 
+		// Create a new table
+		jContent.find("button.createTable").click( function(ev) {
+			var td = project.defs.createTable("New Table", ["Key"], [["Row"]]);
+			editor.ge.emit(TableDefAdded(td));
+		});
+
 		// Import
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
@@ -40,9 +46,10 @@ class EditTableDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case TableDefAdded(_):
+			case TableDefAdded(td):
 				updateTableList();
 				updateTableForm();
+				selectTable(td);
 
 			case _:
 		}
