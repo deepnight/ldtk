@@ -66,7 +66,7 @@ class EditTableDefs extends ui.modal.Panel {
 		var table = curTable;
 
 		var data = table.data;
-		var columns = table.columns.map(function(x) return {title: x, field: x, editor: true, headerFilter: true});
+		var columns = table.columns.map(function(x) return {title: x, field: x, editor: true});
 
 		var tabulator = new Tabulator("#tableEditor", {
 			importFormat:"array",
