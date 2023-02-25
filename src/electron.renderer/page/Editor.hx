@@ -1640,6 +1640,7 @@ class Editor extends Page {
 				case TilesetDefPixelDataCacheRebuilt(td):
 					extra = td.uid;
 				case TilesetDefSorted:
+				case TableDefAdded(td):
 				case EntityInstanceAdded(ei):
 					extra = ei.defUid;
 				case EntityInstanceRemoved(ei):
@@ -1791,6 +1792,7 @@ class Editor extends Page {
 			case TilesetSelectionSaved(td):
 			case TilesetDefPixelDataCacheRebuilt(td):
 			case TilesetDefSorted:
+			case TableDefAdded(td):
 			case EntityInstanceAdded(ei):
 				invalidateLevelCache(ei._li.level);
 			case EntityInstanceRemoved(ei):
@@ -2031,6 +2033,8 @@ class Editor extends Page {
 				project.tidy();
 
 			case TilesetDefAdded(td):
+			
+			case TableDefAdded(td):
 
 			case ProjectSettingsChanged:
 				updateBanners();

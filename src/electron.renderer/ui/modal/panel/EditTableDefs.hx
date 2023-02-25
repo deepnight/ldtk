@@ -13,11 +13,6 @@ class EditTableDefs extends ui.modal.Panel {
 		loadTemplate("editTableDefs");
 
 		// Import
-		jContent.find("button.refresh").click( ev->{
-			updateTableList();
-		updateTableForm();
-		});
-
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({
@@ -29,7 +24,8 @@ class EditTableDefs extends ui.modal.Panel {
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "csv":
 								var i = new importer.Table();
-								i.load( project.makeRelativeFilePath(absPath) );
+								var td = i.load( project.makeRelativeFilePath(absPath) );
+								editor.ge.emit(TableDefAdded(td));
 							case _:
 								N.error('The file must have the ".csv" extension.');
 						}
@@ -39,6 +35,17 @@ class EditTableDefs extends ui.modal.Panel {
 		});
 		updateTableList();
 		updateTableForm();
+	}
+
+	override function onGlobalEvent(e:GlobalEvent) {
+		super.onGlobalEvent(e);
+		switch e {
+			case TableDefAdded(_):
+				updateTableList();
+				updateTableForm();
+
+			case _:
+		}
 	}
 
 	function updateTableForm() {
@@ -77,7 +84,6 @@ class EditTableDefs extends ui.modal.Panel {
 			movableColumns: true,
 		});
 		tabulator.on("cellEdited", function(cell) {
-			// TODO allow for different primary key
 			var id = cell.getData().id;
 			var key_index = table.columns.indexOf("id");
 			for (row in data) {

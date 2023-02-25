@@ -86,6 +86,7 @@ class Definitions {
 	public function createTable(name:String, columns:Array<String>, data:Array<Array<Dynamic>>) {
 		var table = new data.def.TableDef(_project, _project.generateUniqueId_int(), name, columns[0], columns, data);
 		tables.push(table);
+		return table;
 	}
 
 	public function getTableDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TableDef> {
