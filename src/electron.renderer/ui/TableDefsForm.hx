@@ -80,6 +80,7 @@ class TableDefsForm {
 		for (i => column in td.columns) {
 			jForm.append('<dt><label for=$column>$column</label></dt><dd></dd>');
 			var jInput = new J('<input id=$column>');
+			jInput.attr("type", "text");
 
 			Input.linkToHtmlInput(curRow[i], jInput);
 			jInput.appendTo(jForm.find("dd").last());

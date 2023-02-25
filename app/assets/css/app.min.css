@@ -5938,6 +5938,7 @@ dl.form.fieldInstanceEditor div.array button.remove {
   height: fit-content;
   grid-column: 2;
   grid-row: 3;
+  border-bottom: 1px solid #545d73;
 }
 .window.panel.editTableDefs .content .TableList {
   grid-column: 1;
