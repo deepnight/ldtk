@@ -74,6 +74,7 @@ class EditTableDefs extends ui.modal.Panel {
 		}
 		var i = Input.linkToHtmlInput(curTable.primaryKey, jTabForm.find("select[name='primaryKey']") );
 		var i = Input.linkToHtmlInput(tableView, jTabForm.find("input[id='tableView']") );
+		i.linkEvent(TableDefChanged(curTable));
 	}
 
 	function selectTable (td:data.def.TableDef) {
