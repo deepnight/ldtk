@@ -1,5 +1,6 @@
 package ui;
 
+import h3d.anim.Skin.Joint;
 import data.def.FieldDef;
 import data.inst.FieldInstance;
 
@@ -590,17 +591,16 @@ class FieldInstancesForm {
 						jOpt.attr("selected","selected");
 				}
 
-				var pki = td.columns.indexOf(td.primaryKey);
-				for(i in 0...td.data.length) {
-					var row = td.data[i];
+				for (i => item in td.getPrimaryRow()) {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value", i);
-					jOpt.text(row[pki]);
+					jOpt.text(item);
 
 					if( fi.getTableValue(arrayIdx)==i && !fi.isUsingDefault(arrayIdx) ) {
 						jOpt.attr("selected","selected");
 					}
+
 				}
 
 				jSelect.change( function(ev) {

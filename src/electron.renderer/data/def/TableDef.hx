@@ -44,4 +44,14 @@ class TableDef {
 			data: data
 		}
 	}
+	
+	public function getPrimaryRow() {
+		var pki = this.columns.indexOf(this.primaryKey);
+		var data = [];
+		for(i in 0...this.data.length) {
+			var row = this.data[i];
+			data.push(row[pki]);
+		}
+		return data;
+	}
 }

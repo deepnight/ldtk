@@ -4,6 +4,8 @@ import tabulator.Tabulator;
 using Lambda;
 class EditTableDefs extends ui.modal.Panel {
 	var curTable : Null<data.def.TableDef>;
+	var tableView = false;
+	var tabulator : Tabulator;	
 
 	public function new() {
 		super();
@@ -46,10 +48,11 @@ class EditTableDefs extends ui.modal.Panel {
 	override function onGlobalEvent(e:GlobalEvent) {
 		super.onGlobalEvent(e);
 		switch e {
-			case TableDefAdded(td):
-				updateTableList();
-				updateTableForm();
+			case TableDefAdded(td), TableDefChanged(td):
 				selectTable(td);
+
+			case TableDefRemoved(td):
+				selectTable(project.defs.tables[0]);
 
 			case _:
 		}
@@ -70,6 +73,7 @@ class EditTableDefs extends ui.modal.Panel {
 			jSel.append('<option>'+ column +'</option>');
 		}
 		var i = Input.linkToHtmlInput(curTable.primaryKey, jTabForm.find("select[name='primaryKey']") );
+		var i = Input.linkToHtmlInput(tableView, jTabForm.find("input[id='tableView']") );
 	}
 
 	function selectTable (td:data.def.TableDef) {
@@ -78,37 +82,45 @@ class EditTableDefs extends ui.modal.Panel {
 		updateTableForm();
 
 		var table = curTable;
+		var jTabEditor = jContent.find("#tableEditor");
+		jTabEditor.empty();
 
-		var data = table.data;
-		var columns = table.columns.map(function(x) return {title: x, field: x, editor: true});
+		if (tableView) {
+			var data = table.data;
+			var columns = table.columns.map(function(x) return {title: x, field: x, editor: true});
 
-		var tabulator = new Tabulator("#tableEditor", {
-			importFormat:"array",
-			layout:"fitData",
-			data: data,
-			columns: columns,
-			movableRows: true,
-			movableColumns: true,
-		});
-		tabulator.on("cellEdited", function(cell) {
-			var id = cell.getData().id;
-			var key_index = table.columns.indexOf("id");
-			for (row in data) {
-				if (row[key_index] == id) {
-					var key = table.columns.indexOf(cell.getField());
-					row[key] = cell.getValue();
-					break;
+			jContent.find("#tableEditor").append("<div id=tabulator></div>");
+			tabulator = new Tabulator("#tabulator", {
+				importFormat:"array",
+				layout:"fitData",
+				data: data,
+				columns: columns,
+				movableRows: true,
+				movableColumns: true,
+			});
+			tabulator.on("cellEdited", function(cell) {
+				// TODO Implement changing primary keys here aswell
+				var id = cell.getData().id;
+				var key_index = table.columns.indexOf("id");
+				for (row in data) {
+					if (row[key_index] == id) {
+						var key = table.columns.indexOf(cell.getField());
+						row[key] = cell.getValue();
+						break;
+					}
 				}
-			}
-		});
+			});
+		} else {
+			var tableDefsForm = new ui.TableDefsForm(curTable);
+			jTabEditor.append(tableDefsForm.jWrapper);
+		}
 	}
 
 	function deleteTableDef(td:data.def.TableDef) {
 		new LastChance(L.t._("Table ::name:: deleted", { name:td.name }), project);
 		var old = td;
 		project.defs.removeTableDef(td);
-		selectTable(project.defs.tables[0]);
-		// editor.ge.emit( TilesetDefRemoved(old) );
+		editor.ge.emit( TableDefRemoved(old) );
 	}
 
 	function updateTableList() {

@@ -59,6 +59,8 @@ enum GlobalEvent {
 	TilesetDefSorted;
 	
 	TableDefAdded(td:data.def.TableDef);
+	TableDefRemoved(td:data.def.TableDef);
+	TableDefChanged(td:data.def.TableDef);
 
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);

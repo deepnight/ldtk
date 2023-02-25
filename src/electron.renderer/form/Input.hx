@@ -286,6 +286,15 @@ class Input<T> {
 			// 	}
 
 
+			case TDynamic(t):
+				return macro {
+					new form.input.StringInput(
+						$formInput,
+						function() return $variable,
+						function(v) $variable = v
+					);
+				}
+
 			case TAbstract(t, params):
 				switch t.toString() {
 					case "Int", "UInt":
