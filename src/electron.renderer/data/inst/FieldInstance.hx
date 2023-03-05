@@ -23,9 +23,8 @@ class FieldInstance {
 		for(i in 0...getArrayLength())
 			disp.push( getForDisplay(i) );
 		return
-			'Instance<${def.identifier}> = '
+			'FieldInst "${def.identifier}" = '
 			+ disp.join(',')
-			// + getForDisplay()
 			+ ' [ $internalValues ]';
 	}
 
@@ -550,7 +549,7 @@ class FieldInstance {
 			case F_Enum(enumDefUid):
 				for(i in 0...getArrayLength())
 					if( !valueIsNull(i) ) {
-						var ev = def.getEnumDef().getValue( getEnumValue(i) );
+						var ev = def.getEnumDefinition().getValue( getEnumValue(i) );
 						if( ev!=null )
 							return ev.color;
 					}

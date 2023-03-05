@@ -327,10 +327,13 @@ class World {
 
 
 	public function applyAutoLevelIdentifiers() {
+		var oldIdentifiers = new Map();
 		var uniq = 0;
 		for(l in levels)
-			if( l.useAutoIdentifier )
+			if( l.useAutoIdentifier ) {
+				oldIdentifiers.set(l.uid, l.identifier);
 				l.identifier = "#"+(uniq++);
+			}
 
 		var idx = 0;
 		var b = getWorldBounds();
@@ -359,6 +362,9 @@ class World {
 				}) );
 				id = StringTools.replace(id, "%d", Std.string(l.worldDepth) );
 				l.identifier = _project.fixUniqueIdStr(id, id->_project.isLevelIdentifierUnique(id));
+
+				if( oldIdentifiers.get(l.uid)!=l.identifier )
+					l.invalidateJsonCache();
 			}
 			idx++;
 		}

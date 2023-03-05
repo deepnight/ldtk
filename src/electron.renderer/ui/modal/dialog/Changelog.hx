@@ -16,16 +16,24 @@ class Changelog extends ui.modal.Dialog {
 
 	public function showVersion(?version:dn.Version) {
 		var all = Const.getChangeLog();
-		var changeLog = all.latest;
-
-		// Pick specific version
-		if( version!=null ) {
+		var changeLog : dn.Changelog.ChangelogEntry = null;
+		if( version==null ) {
+			// Auto-select last major version
+			for(c in all.entries)
+				if( c.version.patch==0 ) {
+					changeLog = c;
+					break;
+				}
+		}
+		else {
+			// Pick specific version
 			for( c in all.entries )
 				if( c.version.isEqual(version) ) {
 					changeLog = c;
 					break;
 				}
 		}
+
 
 		// More compact window for short changelogs
 		jContent.removeClass("short");
@@ -42,17 +50,28 @@ class Changelog extends ui.modal.Dialog {
 		}
 
 		// Prepare markdown
-		var rawMd = changeLog.allNoteLines.join("\n");
 		var imgReg = ~/!\[]\((.*?)\)/gim;
 		var imgUrl = "![](file:///"+JsTools.getAssetsDir()+"/changelogImg/$1)";
-		imgUrl = StringTools.replace(imgUrl, " ", "%20");
-		rawMd = imgReg.replace(rawMd, imgUrl);
+		function _makeMarkdown(lines:Array<String>) {
+			var md = lines.join("\n");
+			imgUrl = StringTools.replace(imgUrl, " ", "%20");
+			md = imgReg.replace(md, imgUrl);
+			return md;
+		}
+		var rawMd = _makeMarkdown(changeLog.allNoteLines);
 
+		// Detect latest patch version for this major update
+		var latestPatchedVer = changeLog.version;
+		for(c in all.entries)
+			if( c.version.hasSameMajorAndMinor(changeLog.version) )
+				if( latestPatchedVer==null || latestPatchedVer.patch<c.version.patch )
+					latestPatchedVer = c.version;
+
+		// Load page
 		loadTemplate("changelog", {
-			ver: changeLog.version.full,
+			ver: latestPatchedVer.full,
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
-			md: rawMd,
 		}, false);
 
 		// Optional link to previous noteworthy version
@@ -77,26 +96,72 @@ class Changelog extends ui.modal.Dialog {
 		if( changeLog.version.full.length>=8)
 			jContent.find("header .version").addClass("long");
 
-		jContent.find(".close")
-			.click( (_)->close() );
+		// Close button
+		jContent.find(".close").click( (_)->close() );
 
+		// Versions list
 		var jOthers = jContent.find(".others");
 		jOthers.click( ev->{
-			var ctx = new ui.modal.ContextMenu(ev);
-			for( c in Const.getChangeLog().entries )
+			var ctx = new ui.modal.ContextMenu(jOthers);
+			ctx.addTitle(L.t._("LDtk major updates"));
+			for( c in Const.getChangeLog().entries ) {
+				if( c.version.patch!=0 )
+					continue;
 				ctx.add({
-					label: L.t.untranslated( c.version.full + ( c.title!=null ? " - "+c.title : "" ) ),
-					cb: ()->{
-						showVersion(c.version);
-					},
-					className: c.version.patch==0 ? "strong" : null,
+					label: L.t.untranslated( '<strong>${c.version.major+"."+c.version.minor}</strong>' + ( c.title!=null ? " - "+c.title : "" ) ),
+					cb: ()->showVersion(c.version),
 				});
+			}
 		} );
 
+		// New update banner
 		if( isNewUpdate )
 			jOthers.hide();
 		else
 			jContent.find(".newUpdate").hide();
+
+		// Call Marked parser for main changelog
+		js.Syntax.code("parseMd({0}, {1})", rawMd, "updateChangelogHtml");
+
+		// Hot fixes listing
+		if( changeLog.version.patch==0 ) {
+			var jHotFixes = jContent.find(".hotfixes");
+			var count = 0;
+			for(c in all.entries) {
+				if( c.version.major!=changeLog.version.major || c.version.minor!=changeLog.version.minor || c.version.patch==0 )
+					continue;
+				var jHotFix = new J('<div class="hotfix markdownHtml"/>');
+				var id = c.version.toString();
+				jHotFix.appendTo(jHotFixes);
+				jHotFix.attr("id", id);
+				jHotFix.click(_->{
+					jHotFix.toggleClass("collapsed");
+				});
+
+				// Call Marked parser
+				var md = _makeMarkdown(c.allNoteLines);
+				js.Syntax.code("parseMd({0},{1})", md, id);
+
+				var jVer = new J('<div class="hotfixVersion"/>');
+				jVer.append('<span class="icon"></span>');
+				jVer.append('Patch ${c.version.toString()}');
+				jHotFix.prepend(jVer);
+				count++;
+			}
+
+			// Highlight latest
+			if( changeLog.version.hasSameMajorAndMinor( Const.getAppVersion(true) ) ) {
+				jHotFixes.find(".hotfix:first").addClass("latest");
+				jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
+			}
+			else
+				jHotFixes.find(".hotfix").addClass("collapsed");
+
+			if( count>0 )
+				jContent.find("#updateChangelogHtml").prepend('<h2 class="version">Changes from ${changeLog.version.full}</h2>');
+		}
+
+		JsTools.parseComponents(jContent);
 	}
 
 }

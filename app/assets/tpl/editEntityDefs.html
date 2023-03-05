@@ -1,10 +1,4 @@
 <h2> <div class="icon entity"></div> Project entities </h2>
-<div class="header">
-	<div class="help">
-		ENTITIES are generic data that can be placed in your levels, such as the Player start position or Items to pick up. Each entity can have various custom editable properties as defined below.
-	</div>
-	<!-- <div class="warning noEntLayer">You need to create at least one ENTITY LAYER in order to insert entities in your levels.</div> -->
-</div>
 
 
 <div class="entityList">
@@ -17,23 +11,44 @@
 </div>
 
 <div class="rightColumn">
+	<div class="help none">
+		ENTITIES are generic data that can be placed in your levels, such as the Player start position or Items to pick up. Each entity can have various custom editable properties as defined below.
+	</div>
 
 	<div class="entityForm">
 		<div class="previewWrapper">
 			<div class="label"></div>
 		</div>
 
-		<dl class="form">
+		<dl class="form main">
 			<dt>
 				<label for="eName">Entity identifier</label>
 				<div class="info identifier"></div>
 			</dt>
 			<dd>
 				<input type="text" name="name" id="eName"/>
-				<label for="showIdentifier"">
-					<input type="checkbox" name="showIdentifier" id="showIdentifier" title="If enabled, the identifier will be displayed above entities in the editor view."/>
-					Show above
+				<label for="showIdentifier" title="If enabled, the identifier will be displayed above entities in the editor view.">
+					<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
+					Show identifier
 				</label>
+				<label for="exportToToc" tip="bottom" title="If enabled, all instances of this entity will be listed in a table of content in the root of the project JSON file.\nFor example, this is especially useful if you want to have a quick access to the location of all PlayerStart entities in your game without parsing all your levels manually.\nBE CAREFUL: don't put every entities in the table of content as this will just result in a bloated project JSON.">
+					<input type="checkbox" name="exportToToc" id="exportToToc"/>
+					Add to JSON Table of content
+				</label>
+			</dd>
+		</dl>
+
+
+		<div class="collapser" default="open" id="extraEntityDetails">Extra entity details</div>
+
+
+		<dl class="form extra">
+			<dt>
+				<label for="entityDoc">Documentation</label>
+				<info class="userDoc"></info>
+			</dt>
+			<dd>
+				<input type="text" name="entityDoc" id="entityDoc"/>
 			</dd>
 
 			<dt>

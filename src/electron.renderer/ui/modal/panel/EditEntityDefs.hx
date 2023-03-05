@@ -162,6 +162,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityForm.find("*").off(); // cleanup event listeners
 
 		var jAll = jEntityForm.add( jPreview );
+		var jAll = jEntityForm.add( jContent.find(".collapser") );
 		if( curEntity==null ) {
 			jAll.css("visibility","hidden");
 			jContent.find(".none").show();
@@ -173,10 +174,15 @@ class EditEntityDefs extends ui.modal.Panel {
 		jContent.find(".none").hide();
 
 
-		// Name
+		// Identifier
 		var i = Input.linkToHtmlInput(curEntity.identifier, jEntityForm.find("input[name='name']") );
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isEntityIdentifierUnique(id, curEntity));
 		i.linkEvent(EntityDefChanged);
+
+		// Doc
+		var i = Input.linkToHtmlInput( curEntity.doc, jEntityForm.find("input[name=entityDoc]") );
+		i.linkEvent(EntityDefChanged);
+		i.allowNull = true;
 
 		// Hollow (ie. click through)
 		var i = Input.linkToHtmlInput(curEntity.hollow, jEntityForm.find("input[name=hollow]") );
@@ -340,18 +346,36 @@ class EditEntityDefs extends ui.modal.Panel {
 			if( curEntity.nineSliceBorders.length!=4 )
 				curEntity.nineSliceBorders = [2,2,2,2];
 
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[0], jEntityForm.find("[name=nineSliceUp]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[1], jEntityForm.find("[name=nineSliceRight]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[2], jEntityForm.find("[name=nineSliceDown]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
-			var i = Input.linkToHtmlInput(curEntity.nineSliceBorders[3], jEntityForm.find("[name=nineSliceLeft]"));
-			i.linkEvent(EntityDefChanged);
-			i.setBounds(1, null);
+			function createNineSliceInput(idx:Int, htmlName:String) {
+				var i = new form.input.IntInput(
+					jEntityForm.find("[name="+htmlName+"]"),
+					()->curEntity.nineSliceBorders[idx],
+					(v)->{
+						if( v==null )
+							if( idx==0 )
+								v = 1;
+							else
+								v = curEntity.nineSliceBorders[0];
+
+						if( idx==0 ) {
+							// Auto set other borders
+							final arr = curEntity.nineSliceBorders;
+							if( arr[1]==arr[0] && arr[2]==arr[0] && arr[3]==arr[0] )
+								for(i in 1...4)
+									arr[i] = v;
+						}
+
+						curEntity.nineSliceBorders[idx] = v;
+						editor.ge.emit(EntityDefChanged);
+					}
+				);
+				i.setBounds(1,null);
+				i.allowNull = true;
+			}
+			createNineSliceInput(0, "nineSliceUp");
+			createNineSliceInput(1, "nineSliceRight");
+			createNineSliceInput(2, "nineSliceDown");
+			createNineSliceInput(3, "nineSliceLeft");
 		}
 
 		// Tile rect picker
@@ -408,18 +432,27 @@ class EditEntityDefs extends ui.modal.Panel {
 		);
 		i.setEnabled( curEntity.maxCount>0 );
 
-		// Show name
+		// Show identfier
 		var i = Input.linkToHtmlInput(curEntity.showName, jEntityForm.find("#showIdentifier"));
+		i.linkEvent(EntityDefChanged);
+
+		// Export to table of content
+		var i = Input.linkToHtmlInput(curEntity.exportToToc, jEntityForm.find("#exportToToc"));
 		i.linkEvent(EntityDefChanged);
 
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
 		jPivots.empty();
-		var p = JsTools.createPivotEditor(curEntity.pivotX, curEntity.pivotY, curEntity.color, function(x,y) {
-			curEntity.pivotX = x;
-			curEntity.pivotY = y;
-			editor.ge.emit(EntityDefChanged);
-		});
+		var p = JsTools.createPivotEditor(
+			curEntity.pivotX, curEntity.pivotY,
+			curEntity.color,
+			true, curEntity.width, curEntity.height,
+			function(x,y) {
+				curEntity.pivotX = x;
+				curEntity.pivotY = y;
+				editor.ge.emit(EntityDefChanged);
+			}
+		);
 		jPivots.append(p);
 
 		checkBackup();

@@ -600,6 +600,9 @@ class GenericLevelElementGroup {
 	}
 
 
+	/**
+		Move or duplicate the selection
+	**/
 	public function moveSelecteds(origin:Coords, to:Coords, isCopy:Bool) : Array<data.inst.LayerInstance> {
 		if( elements.length==0 )
 			return [];
@@ -653,17 +656,54 @@ class GenericLevelElementGroup {
 
 				case Entity(li, ei):
 					var i = i;
+
+					// Duplicate entity
 					if( isCopy ) {
-						var old = ei;
-						ei = li.duplicateEntityInstance(ei);
-						elements[i] = Entity(li,ei);
+						var ed = ei.def;
+						var oldEi = ei;
+						var newEi : data.inst.EntityInstance = null;
 
-						if( editor.resizeTool!=null && editor.resizeTool.isOnEntity(old) )
-							editor.createResizeToolFor( Entity(li,ei) );
+						// Check limits
+						if( ed.maxCount<=0 )
+							newEi = li.duplicateEntityInstance(ei);
+						else {
+							var all = ei._project.getAllEntitiesFromLimitScope(li, ed, ed.limitScope);
+							switch ed.limitBehavior {
+								case DiscardOldOnes:
+									if( all.length>=ed.maxCount )
+										N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+									else
+										newEi = li.duplicateEntityInstance(ei);
 
-						if( ui.EntityInstanceEditor.existsFor(old) )
-							ui.EntityInstanceEditor.openFor(ei);
+								case PreventAdding:
+									if( all.length>=ed.maxCount )
+										N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+									else
+										newEi = li.duplicateEntityInstance(ei);
+
+								case MoveLastOne:
+									if( all.length>=ed.maxCount )
+										N.error(L.t._("You cannot have more than ::n:: ::name::.", { n:ed.maxCount, name:ed.identifier }));
+									else
+										newEi = li.duplicateEntityInstance(ei);
+							}
+						}
+
+						// Allow duplication
+						if( newEi!=null ) {
+							elements[i] = Entity(li,newEi);
+
+							if( editor.resizeTool!=null && editor.resizeTool.isOnEntity(oldEi) )
+								editor.createResizeToolFor( Entity(li,newEi) );
+
+							if( ui.EntityInstanceEditor.existsFor(oldEi) )
+								ui.EntityInstanceEditor.openFor(newEi);
+
+							ei = newEi;
+						}
 					}
+
+					// Apply movement
 					ei.x += Std.int( getDeltaX(origin, to) );
 					ei.y += Std.int( getDeltaY(origin, to) );
 					changedLayers.set(li,li);
@@ -743,36 +783,34 @@ class GenericLevelElementGroup {
 					}
 
 				case PointField(li, ei, fi, arrayIdx):
-					if( isCopy )
-						elements[i] = null;
-					else {
-						var pt = fi.getPointGrid(arrayIdx);
-						if( pt!=null ) {
-							// Duplicate
-							if( isCopy ) {
-								fi.addArrayValue();
-								var newIdx = fi.getArrayLength()-1;
-								fi.parseValue( newIdx, fi.getPointStr(arrayIdx) );
-								pt = fi.getPointGrid(newIdx);
-								elements[i] = PointField(li,ei,fi,newIdx);
+					var pt = fi.getPointGrid(arrayIdx);
+					if( pt!=null ) {
+						// Duplicate (only arrays)
+						if( isCopy && fi.def.isArray ) {
+							fi.addArrayValue();
+							var i = fi.getArrayLength()-1;
+							while( i>arrayIdx ) {
+								fi.parseValue(i, fi.getPointStr(i-1));
+								i--;
 							}
-
-							pt.cx += Std.int( getDeltaX(origin, to) / li.def.scaledGridSize );
-							pt.cy += Std.int( getDeltaY(origin, to) / li.def.scaledGridSize );
-
-							if( li.isValid(pt.cx,pt.cy) )
-								fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
-							else {
-								// Out of bounds
-								outOfBoundsRemovals.push(fi.def.identifier);
-								fi.removeArrayValue(arrayIdx);
-								decrementAllFieldArrayIdxAbove(fi, arrayIdx);
-								elements[i] = null;
-							}
-							editor.ge.emit( EntityInstanceChanged(ei) );
-
-							changedLayers.set(li,li);
 						}
+
+						// Move point
+						pt.cx += Std.int( getDeltaX(origin, to) / li.def.scaledGridSize );
+						pt.cy += Std.int( getDeltaY(origin, to) / li.def.scaledGridSize );
+
+						if( li.isValid(pt.cx,pt.cy) )
+							fi.parseValue(arrayIdx, pt.cx+Const.POINT_SEPARATOR+pt.cy);
+						else {
+							// Out of bounds
+							outOfBoundsRemovals.push(fi.def.identifier);
+							fi.removeArrayValue(arrayIdx);
+							decrementAllFieldArrayIdxAbove(fi, arrayIdx);
+							elements[i] = null;
+						}
+
+						editor.ge.emit( EntityInstanceChanged(ei) );
+						changedLayers.set(li,li);
 					}
 			}
 		}

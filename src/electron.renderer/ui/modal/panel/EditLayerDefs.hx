@@ -164,14 +164,8 @@ class EditLayerDefs extends ui.modal.Panel {
 					case EmptyBakedLayer:
 					case KeepBakedLayer:
 				}
-				// ld.type = Tiles;
-				// ld.tilesetDefUid = ld.autoTilesetDefUid;
-				// ld.autoRuleGroups = [];
-				// ld.autoSourceLayerDefUid = null;
-				// ld.autoTilesetDefUid = null;
 
 				editor.ge.emit( LayerDefAdded );
-				// editor.ge.emit( LayerDefConverted );
 				new LastChance( L.t._("Baked layer ::name::", {name:ld.identifier}), oldProject );
 			}
 		);
@@ -225,9 +219,12 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.find(".tmp").remove();
 
 		if( cur==null ) {
+			jContent.find(".none").show();
 			jForm.hide();
 			return;
 		}
+		jContent.find(".none").hide();
+
 
 		// Lost layer
 		if( project.defs.getLayerDef(cur.uid)==null ) {
@@ -250,11 +247,17 @@ class EditLayerDefs extends ui.modal.Panel {
 		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
 
-		// Fields
+		// Identifier
 		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
 		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
+		// Doc
+		var i = Input.linkToHtmlInput( cur.doc, jForm.find("input[name='layerDoc']") );
+		i.allowNull = true;
+		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
+
+		// Grid
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
@@ -284,6 +287,9 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.hideInList, jForm.find("input[name='hideInList']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
+		var i = Input.linkToHtmlInput( cur.canSelectWhenInactive, jForm.find("input[name='canSelectWhenInactive']") );
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+
 		var i = Input.linkToHtmlInput( cur.hideFieldsWhenInactive, jForm.find("input[name='hideFieldsWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
@@ -293,8 +299,6 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		// HACK Parallax settings disabled (too many bugs)
-		/*
 		var equal = cur.parallaxFactorX==cur.parallaxFactorY;
 		var i = Input.linkToHtmlInput( cur.parallaxFactorX, jForm.find("input[name='parallaxFactorX']") );
 		i.setBounds(-1,1);
@@ -330,7 +334,6 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
-		*/
 
 
 		// Edit rules
@@ -427,9 +430,12 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Add intGrid value button
 				var jAddButton = jValuesList.find("li.add");
 				jAddButton.find("button").off().click( function(ev) {
-					cur.addIntGridValue(0xff0000);
-					editor.ge.emit(LayerDefChanged(cur.uid));
-					updateForm();
+					var picker = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), Const.suggestNiceColor(cur.getAllIntGridValues().map(iv->iv.color)));
+					picker.onValidate = (c)->{
+						cur.addIntGridValue(c);
+						editor.ge.emit(LayerDefChanged(cur.uid));
+						updateForm();
+					}
 				});
 
 				// Existing values

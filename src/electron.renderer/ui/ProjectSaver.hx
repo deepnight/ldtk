@@ -5,6 +5,7 @@ private enum SavingState {
 	InQueue;
 	PreChecks;
 	BeforeSavingActions;
+	BeforeSavingCustomCommands;
 	AutoLayers;
 	Backup;
 	CheckLevelCache;
@@ -14,6 +15,7 @@ private enum SavingState {
 	ExportingTiled;
 	ExportingGMS;
 	WritingSimplifiedFormat;
+	AfterSavingCustomCommands;
 	Done;
 }
 
@@ -64,18 +66,20 @@ class ProjectSaver extends dn.Process {
 	function error(str:LocaleString, showOptions=true) {
 		var fp = project.filePath.clone();
 
-		var m = new ui.modal.dialog.Message(str);
+		var m = new ui.modal.dialog.Message();
 		m.addClass("error");
 
 		if( showOptions ) {
+			m.addTitle(L.t._("Error during project saving"), true);
+			m.addDiv(str, "warning");
 			m.addParagraph(L.t._("The project was NOT saved properly!"));
 
 			m.removeButtons();
-			m.addButton( L.t._("Retry"), ()->{
+			m.addButton( L.t._("Retry"), "full", ()->{
 				Editor.ME.onSave();
 				m.close();
 			} );
-			m.addButton( L.t._("Save as..."), ()->{
+			m.addButton( L.t._("Save as..."), "full gray", ()->{
 				Editor.ME.onSave(true);
 				m.close();
 			} );
@@ -124,23 +128,23 @@ class ProjectSaver extends dn.Process {
 					error( L.t._('I need to create a folder named "::name::", but there is a file with the exact same name there.', {name:f} ) );
 					return;
 				}
-				else if( !NT.fileExists(project.filePath.full) ) {
-					// Saving to a new file, try to write some dummy empty file first, to check if this will work.
-					var ok = try {
-						NT.writeFileString(project.filePath.full, "-");
-						true;
-					}
-					catch(_) false;
-					if( !ok || !NT.fileExists(project.filePath.full) ) {
-						N.error("Couldn't create this project file! Maybe try to check that you have the right to write files here.");
+				else {
+					// Check dir permissions
+					if( !NT.checkPermissions(project.filePath.directory, true, true, false) ) {
+						N.error("You don't have system permissions to access this directory!");
 						complete(false);
 						return;
 					}
-					else
-						beginNextState();
-				}
-				else
+
+					// Check overwrite permissions
+					if( NT.fileExists(project.filePath.full) && !NT.checkPermissions(project.filePath.full, true, true, false) ) {
+						N.error("You don't have system permissions to read or write a file in this directory!");
+						complete(false);
+						return;
+					}
+
 					beginNextState();
+				}
 
 			case BeforeSavingActions:
 				if( hasEditor() ) {
@@ -149,6 +153,9 @@ class ProjectSaver extends dn.Process {
 				}
 				else
 					beginNextState();
+
+			case BeforeSavingCustomCommands:
+				ui.modal.dialog.CommandRunner.runMultipleCommands( project, project.getCustomCommmands(BeforeSave), beginNextState );
 
 			case AutoLayers:
 				if( hasEditor() ) { // TODO support this without an Editor?
@@ -197,15 +204,19 @@ class ProjectSaver extends dn.Process {
 					}
 				});
 
+				var failed = false;
 				ops.push({
 					label: "Writing main file...",
 					cb: ()->{
 						log('  Writing ${project.filePath.full}...');
-						NT.writeFileString(project.filePath.full, savingData.projectJson);
+						try NT.writeFileString(project.filePath.full, savingData.projectJsonStr) catch(_) {
+							failed = true;
+							error( L.t._("Could not write the project JSON file here! Maybe the destination is read-only?") );
+						}
 					}
 				});
 
-				new ui.modal.Progress("Saving main file...", ops, ()->beginNextState());
+				new ui.modal.Progress("Saving main file...", ops, ()->if( !failed ) beginNextState());
 
 
 			case SavingExternLevels:
@@ -216,12 +227,12 @@ class ProjectSaver extends dn.Process {
 					initDir(levelDir, Const.LEVEL_EXTENSION);
 
 					var ops = [];
-					for(l in savingData.externLevelsJson) {
+					for(l in savingData.externLevels) {
 						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
 						ops.push({
 							label: "Level "+l.id,
 							cb: ()->{
-								NT.writeFileString(fp.full, l.json);
+								NT.writeFileString(fp.full, l.jsonStr);
 							}
 						});
 					}
@@ -277,6 +288,21 @@ class ProjectSaver extends dn.Process {
 									case None: // N/A
 
 									case OneImagePerLayer, LayersAndLevels:
+										// Include bg
+										if( project.exportLevelBg ) {
+											var bytes = lr.createBgPng(project, level);
+											if( bytes==null ) {
+												error(L.t._('Failed to create background PNG in level "::id::"', {id:level.identifier}));
+												return;
+											}
+											var fp = dn.FilePath.fromDir(pngDir);
+											fp.fileName = project.simplifiedExport ? "_bg" : level.identifier+"_bg";
+											fp.extension = "png";
+											NT.writeFileBytes(fp.full, bytes);
+											count++;
+										}
+
+										// Layers
 										var mainLayerImages = new Map();
 										for( li in level.layerInstances ) {
 											log('   -> Layer ${li.def.identifier}...');
@@ -288,6 +314,10 @@ class ProjectSaver extends dn.Process {
 
 											// Save PNGs
 											for(i in allImages) {
+												if( i.bytes==null ) {
+													error(L.t._('Failed to create PNG in layer "::layerId::" from level "::levelId::"', {layerId:li.def.identifier, levelId:level.identifier}));
+													return;
+												}
 												if( i.secondarySuffix==null )
 													mainLayerImages.set(li.layerDefUid, i);
 												var fp = dn.FilePath.fromDir(pngDir);
@@ -307,6 +337,8 @@ class ProjectSaver extends dn.Process {
 										if( project.getImageExportMode()==LayersAndLevels ) {
 											// Rebuild level render
 											var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+											if( project.exportLevelBg )
+												tex.clear(level.getBgColor());
 											var wrapper = new h2d.Object();
 											level.iterateLayerInstancesInRenderOrder( (li)->{
 												var img = mainLayerImages.get(li.layerDefUid);
@@ -331,6 +363,9 @@ class ProjectSaver extends dn.Process {
 
 									case OneImagePerLevel:
 										var tex = new h3d.mat.Texture(level.pxWid, level.pxHei, [Target]);
+										if( project.exportLevelBg )
+											lr.renderBgToTexture(level, tex);
+
 										level.iterateLayerInstancesInRenderOrder((li)->{
 											lr.drawToTexture(tex, project, level, li);
 										});
@@ -467,6 +502,9 @@ class ProjectSaver extends dn.Process {
 				}
 
 
+			case AfterSavingCustomCommands:
+				ui.modal.dialog.CommandRunner.runMultipleCommands( project, project.getCustomCommmands(AfterSave), beginNextState );
+
 			case Done:
 				if( useMetaBar )
 					ui.modal.MetaProgress.completeCurrent();
@@ -497,6 +535,10 @@ class ProjectSaver extends dn.Process {
 
 	function complete(success:Bool) {
 		destroy();
+
+		if( !success )
+			ui.modal.MetaProgress.closeCurrent();
+
 		if( onComplete!=null )
 			onComplete(success);
 	}
@@ -513,6 +555,8 @@ class ProjectSaver extends dn.Process {
 			case BeforeSavingActions:
 				if( !ui.modal.Progress.hasAny() )
 					beginNextState();
+
+			case BeforeSavingCustomCommands:
 
 			case AutoLayers:
 
@@ -533,6 +577,8 @@ class ProjectSaver extends dn.Process {
 			case ExportingGMS:
 
 			case WritingSimplifiedFormat:
+
+			case AfterSavingCustomCommands:
 
 			case Done:
 		}
@@ -623,21 +669,25 @@ class ProjectSaver extends dn.Process {
 	}
 
 	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
+		var savingData : FileSavingData = {
+			projectJsonStr: "?",
+			externLevels: [],
+		}
+
+		// Rebuild ToC
+		project.updateTableOfContent();
+
 		if( !project.externalLevels || forceSingleFile ) {
 			// Full single JSON
-			return {
-				projectJson: jsonStringify( project, project.toJson() ),
-				externLevelsJson: [],
-			}
+			savingData.projectJsonStr = jsonStringify( project, project.toJson() );
 		}
 		else {
 			// Separate level JSONs
 			var idx = 0;
-			var externLevels = [];
 			for(w in project.worlds)
 			for(l in w.levels)
-				externLevels.push({
-					json: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
+				savingData.externLevels.push({
+					jsonStr: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 					relPath: l.makeExternalRelPath(idx++),
 					id: l.identifier,
 				});
@@ -660,11 +710,10 @@ class ProjectSaver extends dn.Process {
 					_clearLevelData(levelJson);
 			}
 
-			return {
-				projectJson: jsonStringify( project, trimmedProjectJson ),
-				externLevelsJson: externLevels,
-			}
+			savingData.projectJsonStr = jsonStringify( project, trimmedProjectJson );
 		}
+
+		return savingData;
 	}
 
 

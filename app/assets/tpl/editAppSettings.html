@@ -6,103 +6,157 @@
 	<em>Install ::updateVer::</em>
 </button>
 
-<dl class="form">
-	<dt>
-		<label for="appScale">General UI scale</label>
-		<info>This setting will affect the whole User Interface size.</info>
-	</dt>
-	<dd>
-		<select id="appScale"></select>
-	</dd>
+<div class="columns">
 
-	<dt>
-		<label for="fontScale">Level UI scale</label>
-		<info>This setting will only affect the size of texts and icons in the EDITOR VIEW (including entities custom fields and level custom fields).</info>
-	</dt>
-	<dd>
-		<select id="fontScale"></select>
-	</dd>
+	<div class="left">
+		<dl class="form">
 
-	<dt>
-		<label for="mouseWheelSpeed">Mouse wheel speed</label>
-		<info>This setting affects the zoom in/out speed when using the mouse wheel.</info>
-	</dt>
-	<dd>
-		<input type="text" id="mouseWheelSpeed"/>
-		<span>%</span>
-	</dd>
+			<dt class="full">
+				<h3>General</h3>
+			</dt>
 
-	<dt>
-		<label for="autoSwitchOnZoom">World view with mouse wheel</label>
-		<info>
-			This setting allows to automatically switch to the World view when zooming out from a level.
-			You can then zoom back in to any level to select it.
-		</info>
-	</dt>
-	<dd>
-		<select id="autoSwitchOnZoom"></select>
-	</dd>
-
-	<dt>
-		<label for="startFullScreen">Start in fullscreen mode</label>
-		<info>
-			Set default "Full screen" state when starting ::app::.
-			You may also toggle fullscreen mode at any time using the F11 key.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" id="startFullScreen" />
-	</dd>
-
-	<dt>
-		<label for="openLastProject">Re-open last project</label>
-		<info>If enabled, ::app:: will automatically re-open your last project and select the last level you were in.</info>
-	</dt>
-	<dd>
-		<input type="checkbox" id="openLastProject" />
-	</dd>
+			<dt>
+				<label for="openLastProject">Re-open last project</label>
+				<info>If enabled, ::app:: will automatically re-open your last project and select the last level you were in.</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="openLastProject" />
+			</dd>
 
 
-	<dt class="full">
-		<h3>Advanced options</h3>
-	</dt>
+			<dt class="full">
+				<h3>Visuals</h3>
+			</dt>
 
-	<dt>
-		<label for="gpu">Try to use best GPU</label>
-		<info>
-			When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances.
-			This might use extra battery life.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" id="gpu"/>
-		<span>(Recommended)</span>
-	</dd>
+			<dt>
+				<label for="appScale">General UI scale</label>
+				<info>This setting will affect the whole User Interface size.</info>
+			</dt>
+			<dd>
+				<select id="appScale"></select>
+			</dd>
 
-	<dt>
-		<label for="gpu">Auto update</label>
-		<info>
-			When enabled, ::app:: will download and install new updates fully automatically.
-			This is strongly RECOMMENDED as many updates contain important bug fixes and new features.
-			But in some case, like when using an outdated importer for your game engine, you may also prefer to stick to a specific ::app:: version.
-		</info>
-	</dt>
-	<dd>
-		<input type="checkbox" id="autoUpdate"/>
-		<span>(Recommended)</span>
-		<span class="unsupported">Only supported on Windows.</span>
-	</dd>
+			<dt>
+				<label for="fontScale">Level UI scale</label>
+				<info>This setting will only affect the size of texts and icons in the EDITOR VIEW (including entities custom fields and level custom fields).</info>
+			</dt>
+			<dd>
+				<select id="fontScale"></select>
+			</dd>
 
-	<dt>
-		<label>Log file</label>
-		<info>
-			The LOG file is only useful when reporting bugs. You can attach it to an e-mail or when you create an issue on GitHub site.
-			It doesn't contain any sensitive or personal information, except used file paths.
-		</info>
-	</dt>
-	<dd class="log">
-		<span class="logPath"></span>
-		<button class="viewLog gray" > <span class="icon edit"></span></button>
-		<button class="locateLog gray" > <span class="icon locate"></span></button>
-	</dd>
-</dl>
+			<dt>
+				<label for="fieldsRender">Entity fields aspect</label>
+				<info>This option controls the visual aspect of custom entity fields in the editor.</info>
+			</dt>
+			<dd>
+				<select id="fieldsRender"></select>
+			</dd>
+
+			<dt>
+				<label for="startFullScreen">Start in fullscreen mode</label>
+				<info>
+					Set default "Full screen" state when starting ::app::.
+					You may also toggle fullscreen mode at any time using the F11 key.
+				</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="startFullScreen" />
+			</dd>
+
+			<dt>
+				<label for="colorBlind">Prefer color-blind colors</label>
+				<info>Enable this option to use color-blind friendly colors by default for newly created entities, enums or intGrid values.</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="colorBlind" />
+			</dd>
+
+
+		</dl>
+	</div>
+
+
+
+	<div class="right">
+		<dl class="form">
+
+			<dt class="full">
+				<h3>Controls</h3>
+			</dt>
+
+			<dt>
+				<label for="mouseWheelSpeed">Mouse wheel speed</label>
+				<info>This setting affects the zoom in/out speed when using the mouse wheel.</info>
+			</dt>
+			<dd>
+				<input type="text" id="mouseWheelSpeed"/>
+				<span>%</span>
+			</dd>
+
+			<dt>
+				<label for="autoSwitchOnZoom">World view with mouse wheel</label>
+				<info>
+					This setting allows to automatically switch to the World view when zooming out from a level.
+					You can then zoom back in to any level to select it.
+				</info>
+			</dt>
+			<dd>
+				<select id="autoSwitchOnZoom"></select>
+			</dd>
+
+			<dt>
+				<label for="navKeys">Navigation keys layout</label>
+				<info>Navigation keys are used to navigate through the palette of values in a layer. For example, in a Tiles layer, you can navigate through the different tiles using these keys.</info>
+			</dt>
+			<dd>
+				<select id="navKeys"></select>
+			</dd>
+
+
+			<dt class="full">
+				<h3>Advanced options</h3>
+			</dt>
+
+			<dt>
+				<label for="gpu">Try to use best GPU</label>
+				<info>
+					When enabled, ::app:: will always try to use the best GPU available on your system, resulting in better performances.
+					This might use extra battery life.
+				</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="gpu"/>
+				<span>(Recommended)</span>
+			</dd>
+
+			<dt>
+				<label for="gpu">Auto update</label>
+				<info>
+					When enabled, ::app:: will download and install new updates fully automatically.
+					This is strongly RECOMMENDED as many updates contain important bug fixes and new features.
+					But in some case, like when using an outdated importer for your game engine, you may also prefer to stick to a specific ::app:: version.
+				</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="autoUpdate"/>
+				<span>(Recommended)</span>
+				<span class="unsupported">Only supported on Windows.</span>
+			</dd>
+
+			<dt>
+				<label>Log file</label>
+				<info>
+					The LOG file is only useful when reporting bugs. You can attach it to an e-mail or when you create an issue on GitHub site.
+					It doesn't contain any sensitive or personal information, except used file paths.
+				</info>
+			</dt>
+			<dd class="log">
+				<span class="logPath"></span>
+				<button class="viewLog gray" > <span class="icon edit"></span></button>
+				<button class="locateLog gray" > <span class="icon locate"></span></button>
+			</dd>
+		</dl>
+	</div>
+
+</div>
+

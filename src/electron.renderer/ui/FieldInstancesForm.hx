@@ -41,29 +41,31 @@ class FieldInstancesForm {
 	public inline function isDestroyed() return jWrapper==null || jWrapper.parents("body").length==0;
 
 
-	function hideInputIfDefault(arrayIdx:Int, input:js.jquery.JQuery, fi:data.inst.FieldInstance, isRequired=false) {
-		input.off(".def").removeClass("usingDefault");
+	function hideInputIfDefault(arrayIdx:Int, jElements:js.jquery.JQuery, fi:data.inst.FieldInstance, isRequired=false) {
+		// NOTE: jElements can be a single DOM element, or multiple ones (eg. an Int value with prefix/suffix)
+
+		jElements.off(".def").removeClass("usingDefault");
 
 		if( fi.isUsingDefault(arrayIdx) ) {
-			if( input.is("button") ) {
+			if( jElements.is("button") ) {
 				// Button input
 				if( fi.def.type!=F_Point || fi.def.canBeNull )
-					input.addClass("gray usingDefault");
+					jElements.addClass("gray usingDefault");
 			}
-			else if( input.is("[type=color]") ) {
+			else if( jElements.is("[type=color]") ) {
 				// Color input
-				input.addClass("usingDefault");
-				input.text("default");
+				jElements.addClass("usingDefault");
+				jElements.text("default");
 			}
-			else if( input.is(".colorWrapper") ) {
+			else if( jElements.is(".colorWrapper") ) {
 				// Wrapped color input
-				input.addClass("usingDefault");
+				jElements.addClass("usingDefault");
 			}
-			else if( !input.is("select") ) {
+			else if( !jElements.is("select") ) {
 				// General INPUT
 				var jRep = new J('<a class="usingDefault" href="#"/>');
 
-				if( input.is("[type=checkbox]") ) {
+				if( jElements.is("[type=checkbox]") ) {
 					var chk = new J('<input type="checkbox"/>');
 					chk.prop("checked", fi.getBool(arrayIdx));
 					jRep.append( chk.wrap('<span class="value"/>').parent() );
@@ -78,44 +80,45 @@ class FieldInstancesForm {
 					jRep.append('<span class="label">Default</span>');
 
 				jRep.on("click.def", function(ev) {
+					trace("click def");
 					ev.preventDefault();
 					jRep.remove();
-					if( input.is("[type=checkbox]") ) {
-						input.prop("checked", !fi.getBool(arrayIdx));
-						input.change();
+					if( jElements.is("[type=checkbox]") ) {
+						jElements.prop("checked", !fi.getBool(arrayIdx));
+						jElements.change();
 					}
-					if( input.is(":read-only") )
-						input.click();
+					if( jElements.is("[readonly],[disabled]") )
+						jElements.click();
 					else
-						input.show().focus();
+						jElements.show().focus();
 				});
-				jRep.insertBefore(input);
-				input.hide();
+				jRep.insertBefore( jElements.first() );
+				jElements.hide();
 
 				if( isRequired )
 					markError(jRep);
 
-				input.on("blur.def", function(ev) {
+				jElements.on("blur.def", function(ev) {
 					jRep.remove();
-					hideInputIfDefault(arrayIdx, input, fi, isRequired);
+					hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
 				});
 			}
-			else if( input.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
+			else if( jElements.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
 				// SELECT case
-				input.addClass("usingDefault");
-				input.on("click.def", function(ev) {
-					input.removeClass("usingDefault");
+				jElements.addClass("usingDefault");
+				jElements.on("click.def", function(ev) {
+					jElements.removeClass("usingDefault");
 				});
-				input.on("blur.def", function(ev) {
-					hideInputIfDefault(arrayIdx, input, fi, isRequired);
+				jElements.on("blur.def", function(ev) {
+					hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
 				});
 			}
 		}
-		else if( fi.def.type==F_Color || fi.def.type==F_Bool || fi.def.type==F_Point && fi.def.canBeNull ) {
+		else if( fi.def.type!=F_Path && ( fi.def.getDefault()!=null || fi.def.canBeNull ) ) {
 			// Require a "Reset to default" link
-			var span = input.wrap('<span class="inputWithDefaultOption"/>').parent();
+			var span = jElements.wrapAll('<span class="inputWithDefaultOption"/>').parent();
 			span.find("input").wrap('<span class="value"/>');
-			var defLink = new J('<a class="reset" href="#">[ Reset ]</a>');
+			var defLink = new J('<button class="transparent reset"> <span class="icon reset"></span> </button>');
 			defLink.appendTo(span);
 			defLink.on("click.def", function(ev) {
 				fi.parseValue(arrayIdx, null);
@@ -137,11 +140,15 @@ class FieldInstancesForm {
 		jTarget.addClass( fi.def.type.getName() );
 
 		// Prefix
-		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
-			jTarget.append('<span>${fi.def.editorTextPrefix}</span>');
+		// if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+		// 	jTarget.append('<span class="prefix">${fi.def.editorTextPrefix}</span>');
 
 		switch fi.def.type {
 			case F_Int:
+				// Prefix
+				if( fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="prefix">${fi.def.editorTextPrefix}</span>');
+
 				var jInput = new J("<input/>");
 				jInput.attr("id",domId);
 				jInput.appendTo(jTarget);
@@ -161,9 +168,17 @@ class FieldInstancesForm {
 				i.enableSlider(speed);
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
 
-				hideInputIfDefault(arrayIdx, jInput, fi);
+				// Suffix
+				if( fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="suffix">${fi.def.editorTextSuffix}</span>');
+
+				hideInputIfDefault(arrayIdx, jTarget.children(), fi);
 
 			case F_Float:
+				// Prefix
+				if( fi.def.editorTextPrefix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="prefix">${fi.def.editorTextPrefix}</span>');
+
 				var jInput = new J("<input/>");
 				jInput.attr("id",domId);
 				jInput.appendTo(jTarget);
@@ -183,7 +198,11 @@ class FieldInstancesForm {
 				i.enableSlider(speed);
 				i.setPlaceholder( fi.def.getDefault()==null ? "(null)" : fi.def.getDefault() );
 
-				hideInputIfDefault(arrayIdx, jInput, fi);
+				// Suffix
+				if( fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+					jTarget.append('<span class="suffix">${fi.def.editorTextSuffix}</span>');
+
+				hideInputIfDefault(arrayIdx, jTarget.children(), fi);
 
 			case F_Color:
 				var cHex = fi.getColorAsHexStr(arrayIdx);
@@ -265,9 +284,13 @@ class FieldInstancesForm {
 						(v)->{
 							fi.parseValue(arrayIdx, v);
 							onFieldChange(fi);
+						},
+						()->{
+							onFieldChange(fi);
 						}
 					);
 				});
+				hideInputIfDefault(arrayIdx, jText, fi);
 
 			case F_Point:
 				if( fi.valueIsNull(arrayIdx) && !fi.def.canBeNull || !fi.def.isArray ) {
@@ -282,8 +305,10 @@ class FieldInstancesForm {
 						markError(jPick);
 						jPick.text( "Point required!" );
 					}
-					else
-						jPick.text( fi.valueIsNull(arrayIdx) ? "--none--" : fi.getPointStr(arrayIdx) );
+					else {
+						jPick.addClass("dark");
+						jPick.text( fi.valueIsNull(arrayIdx) ? "<No point>" : fi.getPointStr(arrayIdx) );
+					}
 					jPick.click( function(_) {
 						if( Editor.ME.isSpecialToolActive(tool.PickPoint) ) {
 							// Cancel
@@ -298,7 +323,7 @@ class FieldInstancesForm {
 					});
 
 					if( fi.def.canBeNull && !fi.valueIsNull(arrayIdx) ) {
-						var jRem = new J('<button class="dark removePoint">x</button>');
+						var jRem = new J('<button class="transparent removePoint">x</button>');
 						jRem.appendTo(jTarget);
 						jRem.click( (_)->{
 							fi.parseValue(arrayIdx,null);
@@ -339,6 +364,20 @@ class FieldInstancesForm {
 						jOpt.attr("selected","selected");
 				}
 
+				if( fi.def.getEnumDefault()!=null ) {
+					var v = fi.def.getEnumDefinition().getValue(fi.def.getEnumDefault());
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					jOpt.attr("value","_default");
+					jOpt.text(v.id+" (default)");
+					jOpt.css({
+						color: C.intToHex( C.toWhite(v.color,0.7) ),
+						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
+					});
+					if( fi.isUsingDefault(arrayIdx) )
+						jOpt.attr("selected","selected");
+				}
+
 				for(v in ed.values) {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
@@ -359,7 +398,10 @@ class FieldInstancesForm {
 
 				jSelect.change( function(ev) {
 					var v = jSelect.val()=="" ? null : jSelect.val();
-					fi.parseValue(arrayIdx, v);
+					if( v=="_default" )
+						fi.parseValue(arrayIdx, null);
+					else
+						fi.parseValue(arrayIdx, v);
 					onFieldChange(fi);
 				});
 				hideInputIfDefault(arrayIdx, jSelect, fi);
@@ -457,13 +499,21 @@ class FieldInstancesForm {
 					vp.onPickValue = (targetEi)->{
 						tool.lt.EntityTool.cancelRefChaining();
 						fi.setEntityRefTo(arrayIdx, sourceEi, targetEi);
+
+						// Save history properly (only if both entities are in the same level)
+						if( sourceEi._li.levelId==targetEi._li.levelId ) {
+							editor.curLevelTimeline.markEntityChange(sourceEi);
+							editor.curLevelTimeline.saveLayerState(sourceEi._li);
+						}
+
+						LOG.userAction('Picked ref $sourceEi => $targetEi in $fi');
 						editor.ge.emit( EntityInstanceChanged(sourceEi) );
 						editor.ge.emit( EntityInstanceChanged(targetEi) ); // also trigger event for the target ei
 					}
 				}
 
 				if( fi.valueIsNull(arrayIdx) ) {
-					var jPick = new J('<button>Pick reference</button>');
+					var jPick = new J('<button class="red missingRef">Missing reference</button>');
 					jPick.appendTo(jTarget);
 					jPick.click( _->_pickRef() );
 				}
@@ -611,9 +661,9 @@ class FieldInstancesForm {
 				// hideInputIfDefault(arrayIdx, jSelect, fi);
 		}
 
-		// Suffix
-		if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
-			jTarget.append('<span>${fi.def.editorTextSuffix}</span>');
+		// // Suffix
+		// if( ( fi.def.type==F_Int || fi.def.type==F_Float ) && fi.def.editorTextSuffix!=null && !fi.isUsingDefault(arrayIdx) )
+		// 	jTarget.append('<span class="suffix">${fi.def.editorTextSuffix}</span>');
 	}
 
 
@@ -763,6 +813,8 @@ class FieldInstancesForm {
 		}
 		onChange();
 
+		LOG.userAction('Changed field: $fi');
+
 		// Re-focus input
 		if( jPrevFocus.length>0 ) {
 			if( jPrevFocus.attr("id")!=null )
@@ -816,6 +868,11 @@ class FieldInstancesForm {
 				jDd.addClass("isDefault");
 			}
 
+			// Doc
+			if( fi.def.doc!=null )
+				jDt.append('<info>${fi.def.doc}</info>');
+
+
 			if( !fd.isArray ) {
 				// Single value
 				createFieldInput(domId, fi, 0, jDd);
@@ -824,6 +881,8 @@ class FieldInstancesForm {
 				// Array
 				var jArray = new J('<div class="array"/>');
 				jArray.appendTo(jDd);
+				if( fi.getArrayLength()==0 )
+					jArray.addClass("empty");
 				if( fd.arrayMinLength!=null && fi.getArrayLength()<fd.arrayMinLength
 					|| fd.arrayMaxLength!=null && fi.getArrayLength()>fd.arrayMaxLength ) {
 					var bounds : String =
@@ -852,13 +911,15 @@ class FieldInstancesForm {
 						var li = new J('<li/>');
 						li.appendTo(jArrayInputs);
 
-						if( sortable )
-							li.append('<div class="sortHandle"/>');
+						// if( sortable ) {
+							// jArrayInputs.addClass("customHandle");
+							// li.append('<div class="sortHandle"/>');
+						// }
 
 						createFieldInput(domId, fi, i, li);
 
 						// Remove array entry
-						var jRemove = new J('<button class="remove dark"> <span class="icon delete"/> </button>');
+						var jRemove = new J('<button class="remove transparent"> <span class="icon delete"/> </button>');
 						jRemove.appendTo(li);
 						var idx = i;
 						jRemove.click( function(_) {

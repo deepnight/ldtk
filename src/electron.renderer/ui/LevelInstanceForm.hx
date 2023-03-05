@@ -231,7 +231,7 @@ class LevelInstanceForm {
 		});
 
 		// Coords
-		var oldNeighbours = level.getNeighboursUids();
+		var oldNeighbours = level.getNeighboursIids();
 		var i = Input.linkToHtmlInput( level.worldX, jForm.find("#worldX"));
 		i.onChange = ()->{
 			onFieldChange();
@@ -286,7 +286,7 @@ class LevelInstanceForm {
 
 		// Create bg image picker
 		jForm.find("dd.bg .imagePicker").remove();
-		var jImg = JsTools.createImagePicker(level.bgRelPath, (relPath)->{
+		var jImg = JsTools.createImagePicker(project, level.bgRelPath, (relPath)->{
 			var old = level.bgRelPath;
 			if( relPath==null && old!=null ) {
 				// Remove
@@ -349,12 +349,22 @@ class LevelInstanceForm {
 		// Bg pivot
 		var jPivot = jForm.find(".pos>.pivot");
 		jPivot.empty();
-		if( level.bgRelPath!=null )
-			jPivot.append( JsTools.createPivotEditor(level.bgPivotX, level.bgPivotY, (x,y)->{
-				level.bgPivotX = x;
-				level.bgPivotY = y;
-				onFieldChange();
-			}) );
+		if( level.hasBgImage() ) {
+			var imgInf = level.getBgTileInfos();
+			if( imgInf!=null ) {
+				jPivot.append( JsTools.createPivotEditor(
+					level.bgPivotX, level.bgPivotY,
+					true,
+					Std.int( imgInf.tw ),
+					Std.int( imgInf.th ),
+					(x,y)->{
+						level.bgPivotX = x;
+						level.bgPivotY = y;
+						onFieldChange();
+					}
+				));
+			}
+		}
 
 
 		JsTools.parseComponents(jForm);

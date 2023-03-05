@@ -10,6 +10,8 @@ class EntityDef {
 
 	public var identifier(default,set) : String;
 	public var tags : Tags;
+	public var exportToToc : Bool;
+	public var doc: Null<String>;
 
 	public var width : Int;
 	public var height : Int;
@@ -43,7 +45,7 @@ class EntityDef {
 	public function new(p:Project, uid:Int) {
 		_project = p;
 		this.uid = uid;
-		color = 0x94d9b3;
+		color = Const.suggestNiceColor( _project.defs.entities.map(ed->ed.color) );
 		tileOpacity = 1;
 		fillOpacity = 1;
 		lineOpacity = 1;
@@ -61,6 +63,7 @@ class EntityDef {
 		keepAspectRatio = false;
 		hollow = false;
 		tags = new Tags();
+		exportToToc = false;
 	}
 
 	public function isTileDefined() {
@@ -72,9 +75,11 @@ class EntityDef {
 		for( fd in fieldDefs )
 			switch fd.type {
 				case F_Tile:
-					var rect = fd.getTileRectDefaultObj();
-					if( rect!=null )
-						return rect;
+					if( fd.editorDisplayMode==EntityTile ) {
+						var rect = fd.getTileRectDefaultObj();
+						if( rect!=null )
+							return rect;
+					}
 
 				case _:
 			}
@@ -91,9 +96,9 @@ class EntityDef {
 	}
 
 	@:keep public function toString() {
-		return 'EntityDef.$identifier($width x $height)['
+		return 'EntityDef "$identifier",($width x $height) {'
 			+ fieldDefs.map( function(fd) return fd.identifier ).join(",")
-			+ "]";
+			+ "}";
 	}
 
 	public inline function isResizable() return resizableX || resizableY;
@@ -139,10 +144,12 @@ class EntityDef {
 		o.resizableX = JsonTools.readBool( json.resizableX, false );
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
 		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
+		o.doc = JsonTools.unescapeString( json.doc );
 
 		o.hollow = JsonTools.readBool( json.hollow, false );
 
 		o.tags = Tags.fromJson(json.tags);
+		o.exportToToc = JsonTools.readBool( json.exportToToc, false );
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.tileOpacity = JsonTools.readFloat( json.tileOpacity, 1 );
@@ -182,6 +189,9 @@ class EntityDef {
 			identifier: identifier,
 			uid: uid,
 			tags: tags.toJson(),
+			exportToToc: exportToToc,
+			doc: JsonTools.escapeNullableString(doc),
+
 			width: width,
 			height: height,
 			resizableX: resizableX,
@@ -197,7 +207,6 @@ class EntityDef {
 			renderMode: JsonTools.writeEnum(renderMode, false),
 			showName: showName,
 			tilesetId: tilesetId,
-			tileId: tileRect==null ? null : try p.defs.getTilesetDef(tilesetId).getFirstTileIdFromRect(tileRect) catch(_) null,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
 			tileRect: tileRect,
 			nineSliceBorders: tileRenderMode==NineSlice ? nineSliceBorders.copy() : [],
@@ -218,8 +227,10 @@ class EntityDef {
 		pivotY = y;
 	}
 
-	inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
-	inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
+	inline function set_pivotX(v) return pivotX = v;
+	inline function set_pivotY(v) return pivotY = v;
+	// inline function set_pivotX(v) return pivotX = dn.M.fclamp(v, 0, 1);
+	// inline function set_pivotY(v) return pivotY = dn.M.fclamp(v, 0, 1);
 
 
 

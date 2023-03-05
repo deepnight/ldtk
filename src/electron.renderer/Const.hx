@@ -104,6 +104,92 @@ class Const {
 
 	public static var MAX_GRID_SIZE = 1024;
 
+	static var NICE_PALETTE : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
+		0xbe4a2f,
+		0xd77643,
+		0xead4aa,
+		0xe4a672,
+		0xb86f50,
+		0x733e39,
+		0x3e2731,
+		0xa22633,
+		0xe43b44,
+		0xf77622,
+		0xfeae34,
+		0xfee761,
+		0x63c74d,
+		0x3e8948,
+		0x265c42,
+		0x193c3e,
+		0x124e89,
+		0x0099db,
+		0x2ce8f5,
+		0xffffff,
+		0xc0cbdc,
+		0x8b9bb4,
+		0x5a6988,
+		0x3a4466,
+		0x262b44,
+		0x181425,
+		0xff0044,
+		0x68386c,
+		0xb55088,
+		0xf6757a,
+		0xe8b796,
+		0xc28569,
+	];
+
+	static var NICE_PALETTE_COLORBLIND : Array<dn.Col> = [ // Credits: Endesga32 by Endesga (https://lospec.com/palette-list/endesga-32)
+		0x000000,
+		0x252525,
+		0x676767,
+		0xffffff,
+		0x171723,
+		0x004949,
+		0x009999,
+		0x22cf22,
+		0x490092,
+		0x006ddb,
+		0xb66dff,
+		0xff6db6,
+		0x920000,
+		0x8f4e00,
+		0xdb6d00,
+		0xffdf4d,
+	];
+
+	public static inline function getNicePalette() {
+		return App.ME.settings.v.colorBlind ? NICE_PALETTE_COLORBLIND : NICE_PALETTE;
+	}
+
+	public static function suggestNiceColor(useds:Array<dn.Col>) : dn.Col {
+		var useCounts = new Map();
+		inline function _incUseCount(c:dn.Col) {
+			if( useCounts.exists(c) )
+				useCounts.set(c, useCounts.get(c)+1);
+			else
+				useCounts.set(c, 1);
+		}
+
+		// Init use counts
+		for(c in useds)
+			_incUseCount(c);
+
+		// Consider nice colors similar to used ones as being "used" as well
+		for(used in useds)
+		for(nice in getNicePalette())
+			if( nice.getDistanceRgb(used)<0.1 )
+				_incUseCount(nice);
+
+		// Lookup unused nice colors
+		for(c in getNicePalette())
+			if( !useCounts.exists(c) )
+				return c;
+
+		// Pick least used nice color
+		return dn.DecisionHelper.optimizedPick( getNicePalette(), (c)->-useCounts.get(c) );
+	}
+
 	public static var AUTO_LAYER_ANYTHING = 1000001;
 	public static var MAX_AUTO_PATTERN_SIZE = 7;
 	#end

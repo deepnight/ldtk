@@ -96,6 +96,47 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		}
 
+		// Color blind
+		var i = Input.linkToHtmlInput(settings.v.colorBlind, jForm.find("#colorBlind"));
+		i.onChange = ()->{
+			onSettingChanged();
+		}
+
+		// Fields render
+		var jSelect = jForm.find("#fieldsRender");
+		jSelect.empty();
+		for(k in Settings.FieldsRender.getConstructors()) {
+			var nk = Settings.FieldsRender.createByName(k);
+			var jOpt = new J('<option value="$k"/>');
+			jSelect.append(jOpt);
+			jOpt.text(switch nk {
+				case FR_Outline: L.t._("Outlined texts (default)");
+				case FR_Table: L.t._("Opaque tables");
+			});
+			if( settings.v.fieldsRender==nk )
+				jOpt.prop("selected",true);
+		}
+		jSelect.change( (_)->{
+			settings.v.fieldsRender = FieldsRender.createByName( jSelect.val() );
+			onSettingChanged();
+		});
+
+		// Navigation keys
+		var jNavKeys = jForm.find("#navKeys");
+		jNavKeys.empty();
+		for(k in Settings.NavigationKeys.getConstructors()) {
+			var nk = Settings.NavigationKeys.createByName(k);
+			var jOpt = new J('<option value="$k"/>');
+			jNavKeys.append(jOpt);
+			jOpt.text(k.toUpperCase());
+			if( nk==settings.v.navigationKeys )
+				jOpt.prop("selected",true);
+		}
+		jNavKeys.change( (_)->{
+			settings.v.navigationKeys = Settings.NavigationKeys.createByName( jNavKeys.val() );
+			onSettingChanged();
+		});
+
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);
@@ -109,7 +150,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// App scaling
 		var jScale = jForm.find("#appScale");
 		jScale.empty();
-		for(s in [0.5, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]) {
+		for(s in [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]) {
 			var jOpt = new J('<option value="$s"/>');
 			jScale.append(jOpt);
 			jOpt.text('${Std.int(s*100)}%');
@@ -127,7 +168,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Font scaling
 		var jScale = jForm.find("#fontScale");
 		jScale.empty();
-		for(s in [0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4]) {
+		for(s in [0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5]) {
 			var jOpt = new J('<option value="$s"/>');
 			jScale.append(jOpt);
 			jOpt.text('${Std.int(s*100)}%');

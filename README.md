@@ -8,8 +8,8 @@ Links: [Official website](https://ldtk.io/) | [Haxe API (on GitHub)](https://git
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/deepnight/ldtk?color=%23dca&label=%E2%AD%90)](https://github.com/deepnight/ldtk)
 [![GitHub All Releases](https://img.shields.io/github/downloads/deepnight/ldtk/total?color=%2389b&label=Downloads)](https://github.com/deepnight/ldtk/releases/latest)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk/test-windows?label=LDtk%20build)](https://github.com/deepnight/ldtk/actions/workflows/test-windows.yml)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/deepnight/ldtk-haxe-api/Unit%20tests?label=Haxe%20API%20tests)](https://github.com/deepnight/ldtk-haxe-api/actions/workflows/unitTests.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/deepnight/ldtk/test-windows.yml?label=LDtk%20build)](https://github.com/deepnight/ldtk/actions/workflows/test-windows.yml)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/deepnight/ldtk-haxe-api/unitTests.yml?label=Unit%20tests)](https://github.com/deepnight/ldtk-haxe-api/actions/workflows/unitTests.yml)
 
 # Getting LDtk latest version
 
@@ -74,6 +74,11 @@ From a command line in the `app` folder, run:
 npm run start
 ```
 
+# Contributing
+
+You can read the general Pull Request guidelines here:
+https://github.com/deepnight/ldtk/wiki#pull-request-guidelines
+
 # Related tools & licences
 
  - Tileset images: see [README](app/extraFiles/samples/README.md) in samples
@@ -83,3 +88,5 @@ npm run start
  - JQuery: https://jquery.com
  - MarkedJS: https://github.com/markedjs/marked
  - SVG icons from https://material.io
+ - Default palette: "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
+ - Default color blind palette: "*Colorblind 16*" by FilipWorks (https://github.com/filipworksdev/colorblind-palette-16)

@@ -25,7 +25,7 @@ class Rulers extends dn.Process {
 	var dragOrigin : Null<Coords>;
 	var dragStarted = false;
 	var resizePreview : h2d.Graphics;
-	var oldNeighbours : Null< Array<Int> >;
+	var oldNeighbours : Null< Array<String> >;
 
 	public function new() {
 		super(editor);
@@ -181,8 +181,7 @@ class Rulers extends dn.Process {
 
 		if( draggedPos!=null ) {
 			ev.cancel = true;
-			oldNeighbours = curLevel.getNeighboursUids();
-			// editor.curTool.stopUsing(m);
+			oldNeighbours = curLevel.getNeighboursIids();
 		}
 	}
 

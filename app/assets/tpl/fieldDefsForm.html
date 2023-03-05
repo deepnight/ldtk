@@ -27,6 +27,15 @@
 	</dd>
 
 
+	<dt>
+		<label for="doc">Documentation</label>
+		<info class="userDoc"></info>
+	</dt>
+	<dd>
+		<input type="text" name="doc" id="doc"/>
+	</dd>
+
+
 	<dt class="F_Int F_Float F_String">
 		<label for="fDef">Default value</label>
 		<info>This is the default number value for this field, unless overridden with something else.</info>
@@ -42,6 +51,16 @@
 	</dt>
 	<dd>
 		<div class="multiLines" id="fDefMultiLines"></div>
+	</dd>
+
+
+
+	<dt class="F_Enum">
+		<label for="enumDef">Default value</label>
+		<info>This is the default enum value for this field, unless modified manually.</info>
+	</dt>
+	<dd>
+		<select id="enumDef" name="enumDef"></select>
 	</dd>
 
 
@@ -90,7 +109,8 @@
 		<label for="regex">Regex check</label>
 		<info>
 			You can enter a Regular Expression here to check the values entered for this field.
-			Any character that doesn't match the RegEx will be discarded (WARNING: existing values in your levels will NOT be affected by a change here)
+			Any character that doesn't match the RegEx will be discarded.
+			WARNING: existing values in your levels will NOT be affected by any change here!
 		</info>
 	</dt>
 	<dd>
@@ -109,7 +129,7 @@
 	</dd>
 
 
-	<dt class="F_Int F_Float F_String F_Text">
+	<dt class="F_Enum F_Int F_Float F_String F_Text">
 		<label for="canBeNull" class="Array">Can contain nulls</label>
 		<label for="canBeNull" class="NotArray">Can be null</label>
 
@@ -128,7 +148,7 @@
 	</dd>
 
 
-	<dt class="F_Enum F_Path F_Point F_EntityRef F_Tile">
+	<dt class="F_Path F_Point F_EntityRef F_Tile">
 		<label for="canBeNull" class="Array">Can contain nulls</label>
 		<label for="canBeNull" class="NotArray">Is optional</label>
 
@@ -212,6 +232,12 @@
 	<dd class="displayMode">
 		<select name="editorDisplayMode" id="editorDisplayMode"></select>
 		<select name="editorDisplayPos" id="editorDisplayPos"></select>
+		<select name="editorLinkStyle" id="editorLinkStyle"></select>
+		<label for="editorShowInWorld">
+			<input type="checkbox" name="editorShowInWorld" id="editorShowInWorld" title="TODO"/>
+			Show in world view
+		</label>
+
 	</dd>
 
 

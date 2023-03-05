@@ -248,6 +248,11 @@ class LevelRender extends dn.Process {
 			case TableDefRemoved(td):
 			case TableDefChanged(td):
 
+			case TilesetEnumChanged:
+				if (settings.v.tileEnumOverlays)
+					for( li in editor.curLevel.layerInstances)
+						invalidateLayer(li);
+
 			case EntityDefRemoved, EntityDefChanged, EntityDefSorted:
 				for(li in editor.curLevel.layerInstances)
 					if( li.def.type==Entities )
@@ -259,8 +264,8 @@ class LevelRender extends dn.Process {
 						invalidateLayer(li);
 
 			case EnumDefRemoved, EnumDefChanged, EnumDefValueRemoved:
-				for(li in editor.curLevel.layerInstances)
-					if( li.def.type==Entities )
+				for( li in editor.curLevel.layerInstances)
+					if( settings.v.tileEnumOverlays || li.def.type==Entities )
 						invalidateLayer(li);
 
 			case LevelFieldInstanceChanged(l,fi):
@@ -329,6 +334,7 @@ class LevelRender extends dn.Process {
 	public function setLayerVisibility(li:data.inst.LayerInstance, v:Bool) {
 		li.visible = v;
 		editor.ge.emit( LayerInstanceVisiblityChanged(li) );
+		editor.curLevelTimeline.saveLayerState(li);
 		if( isLayerVisible(li) )
 			invalidateLayer(li);
 	}

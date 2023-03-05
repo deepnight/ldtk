@@ -90,7 +90,7 @@ class Tileset {
 		SCROLL_MEMORY = new Map();
 	}
 
-	function renderAtlas() {
+	public function renderAtlas() {
 		tilesetDef.drawAtlasToCanvas(jCanvas);
 	}
 
@@ -152,10 +152,11 @@ class Tileset {
 	}
 
 	public function setSelectedTileIds(tileIds:Array<Int>) {
-		switch selectMode {
-			case None: throw "unexpected";
-			case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds = tileIds;
-		}
+		// switch selectMode {
+		// 	case None: throw "unexpected";
+		// 	case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds = tileIds;
+		// }
+		_internalSelectedIds = tileIds;
 		renderSelection();
 	}
 
@@ -215,6 +216,62 @@ class Tileset {
 		return clamp ? M.iclamp(v,0,tilesetDef.cHei-1) : v;
 	}
 
+	public inline function get2dContext() {
+		return canvas.getContext2d();
+	}
+
+	public function renderHighlightedTiles(tileIds:Array<Int>, col:dn.Col) {
+		tileIds.sort( (a,b)->Reflect.compare(a,b) );
+		var tileMap = new Map();
+		for(tid in tileIds)
+			tileMap.set(tid,true);
+
+
+		var ctx = canvas.getContext2d();
+		var thick = 2;
+		var grid = tilesetDef.tileGridSize;
+		for(tid in tileIds) {
+			var x = tilesetDef.getTileSourceX(tid);
+			var y = tilesetDef.getTileSourceY(tid);
+
+			ctx.fillStyle = col.toCssRgba(0.4);
+			ctx.fillRect(x,y,grid,grid);
+			ctx.fillStyle = col.toHex();
+
+			// Left border
+			if( !tileMap.exists(tid-1) )
+				ctx.fillRect(x-thick, y, thick, grid);
+
+			// Right border
+			if( !tileMap.exists(tid+1) )
+				ctx.fillRect(x+grid, y, thick, grid);
+
+			// Top border
+			if( !tileMap.exists(tid-tilesetDef.cWid) )
+				ctx.fillRect(x, y-thick, grid, thick);
+
+			// Bottom border
+			if( !tileMap.exists(tid+tilesetDef.cWid) )
+				ctx.fillRect(x, y+grid, grid, thick);
+		}
+	}
+
+	public function renderArrow(fx:Int, fy:Int, tx:Int, ty:Int, col:dn.Col) {
+		var ctx = canvas.getContext2d();
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = col.toHex();
+		var a = Math.atan2(ty-fy, tx-fx);
+
+		ctx.beginPath();
+		ctx.moveTo(fx,fy);
+		ctx.lineTo(tx,ty);
+
+		ctx.moveTo(tx+Math.cos(a+M.PIHALF*1.5)*6, ty+Math.sin(a+M.PIHALF*1.5)*6);
+		ctx.lineTo(tx,ty);
+		ctx.lineTo(tx+Math.cos(a-M.PIHALF*1.5)*6, ty+Math.sin(a-M.PIHALF*1.5)*6);
+		ctx.stroke();
+	}
+
 	function renderSelection() {
 		jSelection.empty();
 
@@ -238,6 +295,7 @@ class Tileset {
 		ty = old.ty;
 	}
 
+
 	public function focusOnSelection(instant=false) {
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
@@ -251,6 +309,33 @@ class Tileset {
 		}
 		cx = cx/tids.length;
 		cy = cy/tids.length;
+		cx+=0.5;
+		cy+=0.5;
+
+
+		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerWidth()*0.5/zoom;
+		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerHeight()*0.5/zoom;
+		if( instant ) {
+			scrollX = tx;
+			scrollY = ty;
+			tx = ty = null;
+		}
+
+		saveScrollPos();
+	}
+
+	public function focusAround(tileIds:Array<Int>, instant=false) {
+		if( tileIds.length==0 )
+			return;
+
+		var cx = 0.;
+		var cy = 0.;
+		for(tid in tileIds) {
+			cx += tilesetDef.getTileCx(tid);
+			cy += tilesetDef.getTileCy(tid);
+		}
+		cx = cx/tileIds.length;
+		cy = cy/tileIds.length;
 		cx+=0.5;
 		cy+=0.5;
 
@@ -325,6 +410,11 @@ class Tileset {
 			jTilesetWrapper.removeAttr("cursor");
 		else if( cursorId!=null && jTilesetWrapper.attr("cursor")!=cursorId )
 			jTilesetWrapper.attr("cursor", cursorId);
+	}
+
+
+	public function clearCursor() {
+		jCursor.hide();
 	}
 
 
@@ -442,7 +532,14 @@ class Tileset {
 		return false;
 	}
 
+	function isClosed() {
+		return jWrapper.closest("body").length==0;
+	}
+
 	function modifySelection(selIds:Array<Int>, add:Bool) {
+		if( isClosed() )
+			return;
+		
 		switch selectMode {
 			case None:
 
@@ -597,10 +694,20 @@ class Tileset {
 
 	public function update() {
 		// Focus scrolling animation
+		final spd = M.fmin(1, 0.38 * App.ME.tmod);
 		if( tx!=null ) {
-			var spd = 0.19;
 			scrollX += (tx-scrollX) * spd;
+			if( M.fabs(scrollX-tx)<=1 ) {
+				scrollX = tx;
+				tx = null;
+			}
+		}
+		if( ty!=null ) {
 			scrollY += (ty-scrollY) * spd;
+			if( M.fabs(scrollY-ty)<=1 ) {
+				scrollY = ty;
+				ty = null;
+			}
 		}
 	}
 }

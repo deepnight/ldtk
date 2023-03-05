@@ -1,8 +1,8 @@
 <h2><span class="icon rule"></span>  Rules: ::layer::</h2>
 
 <header>
-	<button class="createGroup">+ group</button>
-	<button class="seed" title="Change the random seed of the current layer">Randomize</button>
+	<button class="createGroup"><span class="icon add"></span> group</button>
+	<button class="seed small" title="Change the random seed of the current layer. This will only affect rules that have random variations.">Randomize</button>
 	<label keys="R" title="Show/hide the render of all auto-layers. You can also press SHIFT-R at any time to toggle this option.">
 		<input type="checkbox" name="renderRules"/>
 		Render
@@ -23,9 +23,9 @@
 			<div class="text"></div>
 		</div>
 		<input type="text" class="name"/>
-		<!-- <span class="optional" title="This group of rules is marked as 'OPTIONAL'. That means it's DISABLED by default, and it can be manually enabled separately in each level instance.">Opt.</span> -->
 		<button class="active transparent"> <span class="icon"></span> </button>
-		<button class="addRule" title="Add a new rule in this group">+</button>
+		<button class="useWizard">EDIT</button>
+		<button class="addRule"><span class="icon add"></span></button>
 	</header>
 
 	<ul class="ruleGroup"></ul>
@@ -37,11 +37,11 @@
 	<div class="preview"></div>
 
 	<div class="options">
-		<div class="random">
+		<div class="random" title="Random probability for this rule to happen">
 			<input type="text" name="random"/>
 			<span>%</span>
 		</div>
-		<div class="modulo"></div>
+		<div class="modulo" title="Edit modulo values"></div>
 
 		<a class="active" title="Enable/disable this rule"> <span class="icon"></span> </a>
 		<a class="break" title="**Stop on match** If this rule is applied in a grid cell, it will prevent all following rules to apply too"> <span class="icon stop"></span> </a>
@@ -53,7 +53,7 @@
 	</div>
 
 	<!-- <button class="delete dark">🗑️</button> -->
-	<button class="insert before">+</button>
-	<button class="insert after">+</button>
+	<button class="insert before" title="Create new rule before"><span class="icon add"></span></button>
+	<button class="insert after" title="Create new rule after"><span class="icon add"></span></button>
 </xml>
 

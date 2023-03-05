@@ -223,6 +223,23 @@ class Input<T> {
 		jInput.prop("disabled", !v);
 	}
 
+	public function setVisibility(v:Bool) {
+		if( v )
+			jInput.show();
+		else
+			jInput.hide();
+
+		// Related label
+		if( jInput.attr("id")!=null ) {
+			var jForm = jInput.closest(".form, form");
+			var jLabel = jForm.find('label[for="'+jInput.attr('id')+'"]');
+			if( v )
+				jLabel.show();
+			else
+				jLabel.hide();
+		}
+	}
+
 	public function enable() {
 		jInput.prop("disabled",false);
 	}

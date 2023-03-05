@@ -1,4 +1,7 @@
 import electron.renderer.IpcRenderer;
+#if editor
+import EditorTypes;
+#end
 
 typedef AppSettings = {
 	var lastKnownVersion: Null<String>;
@@ -8,10 +11,13 @@ typedef AppSettings = {
 	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
+	var tileEnumOverlays : Bool;
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
+	var colorBlind : Bool;
+	var navigationKeys : NavigationKeys;
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
@@ -20,11 +26,14 @@ typedef AppSettings = {
 	var editorUiScale : Float;
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
+	var fieldsRender : FieldsRender;
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
 
 	var uiStates : Array<{ id:String, val:Int }>;
+	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
+	var projectTrusts : Array<{ iid:String, trusted:Bool }>;
 }
 
 enum abstract UiState(String) {
@@ -32,10 +41,23 @@ enum abstract UiState(String) {
 	var HideSamplesOnHome;
 }
 
+/* Notes: Settings related enums are stored in this file instead of EditorTypes to avoid Main compilation to reach unwanted classes, by importing EditorTypes. */
+
+enum NavigationKeys {
+	Arrows;
+	Wasd;
+	Zqsd;
+}
+
 enum AutoWorldModeSwitch {
 	Never;
 	ZoomOutOnly;
 	ZoomInAndOut;
+}
+
+enum FieldsRender {
+	FR_Outline;
+	FR_Table;
 }
 
 
@@ -60,27 +82,105 @@ class Settings {
 			singleLayerMode: false,
 			emptySpaceSelection: true,
 			tileStacking: true,
+			tileEnumOverlays : false,
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,
 			autoInstallUpdates: true,
+			colorBlind: false,
+			navigationKeys: null,
 
 			openLastProject: false,
 			lastProject: null,
 
 			autoWorldModeSwitch: ZoomInAndOut,
+			fieldsRender: FR_Outline,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
 
 			uiStates: [],
+			lastUiDirs: [],
+			projectTrusts: [],
 		}
 
 		// Load
-		v = ls.readObject(defaults);
+		v = ls.readObject(defaults, (obj)->{
+			#if editor
+			// Migrate old NavKeys string value
+			if( obj.navKeys!=null ) {
+				var e = try NavigationKeys.createByName( obj.navKeys ) catch(_) null;
+				if( e!=null )
+					obj.navigationKeys = e;
+			}
+			#end
+		});
+
+		// Try to guess Navigation keys
+		#if editor
+
+		if( v.navigationKeys==null ) {
+			for(full in js.Browser.navigator.languages) {
+				switch full {
+					case "nl-be": v.navigationKeys = Zqsd; break;
+				}
+
+				var short = ( full.indexOf("-")<0 ? full : full.substr(0,full.indexOf("-")) ).toLowerCase();
+				switch short {
+					case "fr": v.navigationKeys = Zqsd; break;
+					case "en": v.navigationKeys = Wasd; break;
+					case _:
+				}
+			}
+			if( v.navigationKeys==null )
+				v.navigationKeys = Wasd;
+		}
+		#end
+
 
 		if( !hasUiState(ShowProjectColors) )
 			setUiStateBool(ShowProjectColors, true);
+	}
+
+
+	public function setProjectTrust(projectIid:String, trust:Bool) {
+		clearProjectTrust(projectIid);
+		v.projectTrusts.push({
+			iid: projectIid,
+			trusted: trust,
+		});
+		save();
+	}
+
+
+	public function clearProjectTrust(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid ) {
+				v.projectTrusts.remove(tp);
+				break;
+			}
+		save();
+	}
+
+	public function isProjectTrusted(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid && tp.trusted )
+				return true;
+		return false;
+	}
+
+	public function isProjectUntrusted(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid && !tp.trusted )
+				return true;
+		return false;
+	}
+
+	public function wasProjectTrustAsked(projectIid:String) {
+		for(tp in v.projectTrusts)
+			if( tp.iid==projectIid )
+				return true;
+		return false;
 	}
 
 
@@ -92,7 +192,7 @@ class Settings {
 		return v.uiStates[v.uiStates.length-1];
 	}
 
-	function hasUiState(id:UiState) {
+	public function hasUiState(id:UiState) {
 		for(s in v.uiStates)
 			if( s.id==Std.string(id) )
 				return true;
@@ -136,6 +236,42 @@ class Settings {
 				return s.val!=0;
 		return false;
 	}
+
+
+	#if editor
+	public function storeUiDir(?project:data.Project, uiId:String, path:String) {
+		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
+		path = dn.FilePath.convertToSlashes(path);
+		for(dir in v.lastUiDirs)
+			if( ( projectPath==null || dir.project==projectPath ) && dir.uiId==uiId ) {
+				dir.path = path;
+				save();
+				return;
+			}
+
+		if( project==null )
+			v.lastUiDirs.push({ uiId:uiId, path:path });
+		else
+			v.lastUiDirs.push({ project:projectPath, uiId:Std.string(uiId), path:path });
+		save();
+	}
+	#end
+
+
+	#if editor
+	public function getUiDir(?project:data.Project, uiId:String, ?defaultIfNotSet:String) : Null<String> {
+		var projectPath = project==null ? null : dn.FilePath.convertToSlashes(project.filePath.full);
+
+		if( defaultIfNotSet==null && project!=null )
+			defaultIfNotSet = dn.FilePath.convertToSlashes(project.filePath.directory);
+
+		for(dir in v.lastUiDirs)
+			if( ( projectPath==null || dir.project==projectPath ) && dir.uiId==uiId )
+				return dir.path;
+
+		return defaultIfNotSet;
+	}
+	#end
 
 	static inline function isRenderer() {
 		return electron.main.App==null;

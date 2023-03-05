@@ -11,7 +11,8 @@
 </div>
 
 <dl class="form projectForm">
-	<dt class="full"> <h3>Project file settings</h3> </dt>
+
+	<dt class="full"> <h3>Extra files</h3> </dt>
 
 	<dt>
 		<label for="minify">Super simple export ❤</label>
@@ -41,6 +42,48 @@
 		<input type="checkbox" id="externalLevels"/>
 		<div class="locate"></div>
 	</dd>
+
+	<dt class="notSimplified">
+		<label for="png">Export as PNG</label>
+		<info>This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</info>
+	</dt>
+	<dd class="imageExportMode notSimplified">
+		<div class="locate"></div>
+
+		<select></select>
+	</dd>
+
+	<dt class="imageExportOnly notSimplified">
+		Also export level backgrounds
+		<info>Enable this to export PNGs that will include the level background color or image.</info>
+	</dt>
+	<dd class="imageExportOnly notSimplified">
+		<input type="checkbox" name="exportLevelBg" id="exportLevelBg"/>
+	</dd>
+
+	<dt class="imageExportOnly notSimplified">PNG file names</dt>
+	<dd class="imageExportOnly notSimplified">
+		<div class="pngPatternEditor"></div>
+	</dd>
+
+	<dt>
+		<label for="tiled">Export Tiled TMX</label>
+		<info>
+			Enable this to create Tiled TMX files (one per level) in a sub folder, every time you save your project.
+			Warning: this Tiled export is made for quick integration with game frameworks that don't support LDtk yet, but it comes with some limitations!
+			See the link for more info.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" id="tiled"/>
+		<div class="locate"></div>
+		<a href="https://ldtk.io/go/tiled">Learn more about Tiled export limitations</a>
+	</dd>
+
+
+
+
+	<dt class="full"> <h3>Project settings</h3> </dt>
 
 	<dt>
 		<label for="useAppExtension">Use .::ext:: extension</label>
@@ -82,23 +125,6 @@
 		<input type="checkbox" name="minify" id="minify"/>
 	</dd>
 
-	<dt class="notSimplified">
-		<label for="png">Export as PNG</label>
-		<info>This option allows you to export 'flattened' PNG screenshots of the levels in addition to the JSON data, every time you save the project.</info>
-	</dt>
-	<dd class="imageExportMode notSimplified">
-		<div class="locate"></div>
-
-		<select>
-		</select>
-	</dd>
-
-	<dt class="imageExportOnly notSimplified">PNG file names</dt>
-	<dd class="imageExportOnly notSimplified">
-		<div class="pngPatternEditor"></div>
-	</dd>
-
-
 	<dt>
 		<label for="png">Identifers format convention</label>
 		<info>This option allows to customize the constraints on "identifiers" format. It's recommended to keep the default "First letter uppercased" format, unless you know what you're doing.</info>
@@ -108,18 +134,27 @@
 	</dd>
 
 
+
+
+	<dt class="full"><h3>User custom commands</h3></dt>
 	<dt>
-		<label for="tiled">Export Tiled TMX</label>
+		<label>Custom commands</label>
 		<info>
-			Enable this to create Tiled TMX files (one per level) in a sub folder, every time you save your project.
-			Warning: this Tiled export is made for quick integration with game frameworks that don't support LDtk yet, but it comes with some limitations!
-			See the link for more info.
+			A list of custom commands that will be executed by LDtk in various situations.
+			The working directory for all these commands is the project directory.
+			If multiple commands are to be ran at a given moment (eg. before saving), they will be executed in order of appearance here.
 		</info>
 	</dt>
-	<dd>
-		<input type="checkbox" id="tiled"/>
-		<div class="locate"></div>
-		<a href="https://ldtk.io/go/tiled">Learn more about Tiled export limitations</a>
+	<dd class="customCommands">
+		<div class="trusted">This project is allowed to run user commands on your computer. <a>Remove authorization</a></div>
+		<div class="untrusted">This project is NOT allowed to run user commands on your computer. <a>Unblock it</a></div>
+		<ul></ul>
+		<xml id="customCommand">
+			<select class="when"></select>
+			<input type="text" class="command"/>
+			<button class="remove"> <span class="icon delete"></span> </button>
+		</xml>
+		<button class="add"> <span class="icon add"></span> </button>
 	</dd>
 
 
@@ -174,32 +209,31 @@
 		<div class="pivot"></div>
 	</dd>
 
+</dl>
 
+
+<div class="collapser">Advanced project settings</div>
+
+<dl class="form advanced">
 
 	<dt class="full">
-		<a class="showAdv">[ Show advanced settings ]</a>
-	</dt>
-
-	<dt class="full adv"> <h3>Advanced export settings</h3> </dt>
-
-	<dt class="full adv">
 		<div class="help">
 			Advanced options are not recommended for most users as they might break compatibility with older game APIs. Please make sure you know what you're doing before using any of them!
 		</div>
 	</dt>
 
-	<dt class="full adv">
+	<dt class="full">
 		<ul class="advFlags"></ul>
 	</dt>
 
-	<dt class="sample adv">
+	<dt class="sample">
 		Tutorial description
 		<info>
 			This optional description is displayed in a permanent banner on top of LDtk while this project is open.
 			It is mainly used in LDtk sample maps to provide extra explanations of provided examples.
 		</info>
 	</dt>
-	<dd class="sample adv">
+	<dd class="sample">
 		<textarea name="tutorialDesc"></textarea>
 	</dd>
 

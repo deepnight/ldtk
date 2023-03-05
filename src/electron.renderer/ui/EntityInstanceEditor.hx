@@ -243,7 +243,7 @@ class EntityInstanceEditor extends dn.Process {
 			(v)->ei.customWidth = v
 		);
 		i.setEnabled( ei.def.resizableX );
-		i.setBounds(ei.def.width, null);
+		i.setBounds(1, null);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 		if( UNIT_GRID )
@@ -256,7 +256,7 @@ class EntityInstanceEditor extends dn.Process {
 			(v)->ei.customHeight = v
 		);
 		i.setEnabled( ei.def.resizableY );
-		i.setBounds(ei.def.height, null);
+		i.setBounds(1, null);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 		if( UNIT_GRID )
@@ -289,6 +289,14 @@ class EntityInstanceEditor extends dn.Process {
 		if( ei==null || ei.def==null ) {
 			destroy();
 			return;
+		}
+
+		if( ei.def.doc!=null ) {
+			jWrapper.find(".hasDoc").show();
+			jWrapper.find(".doc").html( "<p>" + ei.def.doc.split("\n").join("</p><p>") + "</p>" );
+		}
+		else {
+			jWrapper.find(".hasDoc").hide();
 		}
 
 		updateInstancePropsForm();

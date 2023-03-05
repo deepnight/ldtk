@@ -22,12 +22,25 @@ class SelectionTool extends Tool<Int> {
 		group.dispose();
 	}
 
+	override function onGlobalEvent(ev:GlobalEvent) {
+		super.onGlobalEvent(ev);
+		switch ev {
+			case TilesetImageLoaded(_): clear();
+			case LevelRestoredFromHistory(_): clear();
+			case LayerInstancesRestoredFromHistory(_): clear();
+			case _:
+		}
+	}
+
 	override function getDefaultValue() return -1; // Not actually used
 
 	public function selectAllInLayers(level:data.Level, lis:Array<data.inst.LayerInstance>) {
 		clear();
 
-		for(li in lis)
+		for(li in lis) {
+			if( !li.def.canSelectWhenInactive && li!=editor.curLayerInstance )
+				continue;
+
 			switch li.def.type {
 				case IntGrid, Tiles:
 					for(cy in 0...li.cHei)
@@ -49,6 +62,7 @@ class SelectionTool extends Tool<Int> {
 
 				case AutoLayer:
 			}
+		}
 
 		if( settings.v.emptySpaceSelection && !group.isEmpty() )
 			group.addSelectionRect(0, level.pxWid, 0, level.pxHei);
@@ -412,6 +426,9 @@ class SelectionTool extends Tool<Int> {
 			var all : Array<GenericLevelElement> = [];
 			function _addRectFromLayer(li:data.inst.LayerInstance) {
 				if( !editor.levelRender.isLayerVisible(li) )
+					return;
+
+				if( !li.def.canSelectWhenInactive && editor.curLayerInstance!=li )
 					return;
 
 				var cLeft = Std.int( (leftPx-li.pxParallaxX) / li.def.scaledGridSize );

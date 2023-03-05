@@ -3,12 +3,6 @@
 	Project layers
 </h2>
 
-<div class="header">
-	<div class="help">
-		Each LEVEL in your project has LAYERS, as defined below. The layers content can be of various types, including Image Tiles or Integer values.
-	</div>
-</div>
-
 <div class="mainList">
 	<div class="buttons">
 		<button class="create"> <span class="icon add"></span> </button>
@@ -16,6 +10,9 @@
 	<ul class="niceList"></ul>
 </div>
 
+<div class="help none">
+	Each LEVEL in your project has LAYERS, as defined below. The layers content can be of various types, including Image Tiles or Integer values.
+</div>
 
 <dl class="form">
 	<dt>
@@ -35,6 +32,15 @@
 	</dt>
 	<dd>
 		<input type="text" name="name" id="lName"/>
+	</dd>
+
+
+	<dt>
+		<label for="layerDoc">Documentation</label>
+		<info class="userDoc"></info>
+	</dt>
+	<dd>
+		<input type="text" name="layerDoc" id="layerDoc"/>
 	</dd>
 
 
@@ -100,7 +106,7 @@
 	</dd>
 
 
-	<!-- <dt>
+	<dt>
 		<label for="parallaxFactor">Parallax</label>
 		<info>
 			These parallax factors are applied to the layer (coordinates and scale) to make it move "slower" or "faster" than the camera, creating a fake 3D depth effect.
@@ -120,7 +126,7 @@
 			<input type="checkbox" id="parallaxScaling" title="If checked, the layer will also be scaled up/down accodingly with the parallax factor."/>
 			Scale ?
 		</label>
-	</dd> -->
+	</dd>
 
 
 	<dt>
@@ -139,6 +145,18 @@
 		<input type="text" name="inactiveOpacity" class="small" id="opacity"/>
 		<span>%</span>
 	</dd>
+
+	<dt>
+		<label for="canSelectWhenInactive">Allow selections when inactive</label>
+		<info>
+			If enabled, it will be possible to pick an element (ie. ALT+left click) or create a selection including this layer, even if it is not the active one.
+			If disabled, you will need to be working in this layer to select anything from it.
+		</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="canSelectWhenInactive" class="small" id="canSelectWhenInactive"/>
+	</dd>
+
 
 	<dt class="Entities">
 		<label for="hideFieldsWhenInactive">Hide entity fields when inactive</label>

@@ -1,4 +1,4 @@
-# LDtk Json structure (version 1.1.3)
+# LDtk Json structure (version 1.2.5)
 
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
@@ -14,8 +14,10 @@ Value | Type | Description
 `bgColor` | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Project background color
 `defs` | [Definitions](#ldtk-DefinitionsJson) | A structure containing all the definitions of this project
 `externalLevels`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, one file will be saved for the project (incl. all its definitions) and one file in a sub-folder for each level.
+`iid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | String | Unique project identifier
 `jsonVersion` | String | File format version
 `levels` | Array&nbsp;of&nbsp;[Level](#ldtk-LevelJson) | All levels. The order of this array is only relevant in `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).<br/>		Otherwise, you should refer to the `worldX`,`worldY` coordinates of each Level.
+`toc`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.4-green.svg)  | Array&nbsp;of&nbsp;Object | All instances of entities that have their `exportToToc` flag enabled are listed in this array.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`identifier`** **(String**)</li><li>**`instances`** **(Array of [Reference to an Entity instance](#ldtk-EntityReferenceInfos)**)</li></ul>
 `worldGridHeight`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Height of the world grid in pixels.
 `worldGridWidth`<br/><sup class="only">Only *'GridVania' layouts*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Width of the world grid in pixels.
 `worldLayout`<br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		An enum that describes how levels are organized in this project (ie. linearly or in a 2D space).<br/> Possible values: &lt;`null`&gt;, `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`
@@ -23,12 +25,14 @@ Value | Type | Description
 `appBuildId`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | LDtk application build identifier.<br/>		This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.
 `backupLimit`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
+`customCommands`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Array&nbsp;of&nbsp;Object | An array of command lines that can be ran manually by the user<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`command`** **(String**)</li><li>**`when`** **(Enum**) : *Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`*</li></ul>
 `defaultGridSize`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default grid size for new layers
 `defaultLevelBgColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Default background color of levels
 `defaultLevelHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level height
 `defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level width
 `defaultPivotX`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default Y pivot (0 to 1) for new entities
+`exportLevelBg`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Bool | If TRUE, the exported PNGs will include the level background (color or image).
 `exportTiled`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
 `flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
 `identifierStyle`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Enum | Naming convention for Identifiers (first-letter uppercase, full uppercase etc.)<br/> Possible values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
@@ -37,9 +41,9 @@ Value | Type | Description
 `minifyJson`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)
 `nextUid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Next Unique integer ID available
 `pngFilePattern`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.2-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | File naming pattern for exported PNGs
-`simplifiedExport`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.0-green.svg)  | Bool | If TRUE, a very simplified will be generated on saving, for quicker & easier engine integration.
+`simplifiedExport`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.0-gray.svg)  | Bool | If TRUE, a very simplified will be generated on saving, for quicker & easier engine integration.
 `tutorialDesc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This optional description is used by LDtk Samples to show up some informations and instructions.
-~~`exportPng`~~<br/><sup class="internal">*Only used by editor*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Bool&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 0.9.3<br/> <br/> Replaced by: `imageExportMode`
+~~`exportPng`~~<br/><sup class="internal">*Only used by editor*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_0.9.3-gray.svg)  | Bool&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 0.9.3<br/> <br/> Replaced by: `imageExportMode`
 
 <a id="ldtk-WorldJson" name="ldtk-WorldJson"></a>
 ## 1.1. World  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
@@ -70,8 +74,8 @@ A `ldtkl` file is just a JSON file containing exactly what is described below.
 Value | Type | Description
 -- | -- | --
 `__bgColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Background color of the level (same as `bgColor`, except the default value is automatically used here if its value is `null`)
-`__bgPos`<br/><sup class="only">Only *If background image exists*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | Position informations of the background image, if there is one.<br/> This object contains the following fields:<br/> <ul><li>**`cropRect`** **(Array of Float**) : *An array of 4 float values describing the cropped sub-rectangle of the displayed background image. This cropping happens when original is larger than the level bounds. Array format: `[ cropX, cropY, cropWidth, cropHeight ]`*</li><li>**`scale`** **(Array of Float**) : *An array containing the `[scaleX,scaleY]` values of the **cropped** background image, depending on `bgPos` option.*</li><li>**`topLeftPx`** **(Array of Int**) : *An array containing the `[x,y]` pixel coordinates of the top-left corner of the **cropped** background image, depending on `bgPos` option.*</li></ul>
-`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map.<br/>		Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, this array is always empty.<br/> This object contains the following fields:<br/> <ul><li>**`dir`** **(String**) : *A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).*</li><li>**`levelIid`** **(String**)  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  : *Neighbour Instance Identifier*</li><li>**`levelUid`** **(Int**) : ***WARNING**: this deprecated value will be *removed* completely on version 1.2.0+* ** *Replaced by: `levelIid`*</li></ul>
+`__bgPos`<br/><sup class="only">Only *If background image exists*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | Position informations of the background image, if there is one.<br/> This object contains the following fields:<br/> <ul class='subFields'><li>**`cropRect`** **(Array of Float**) : *An array of 4 float values describing the cropped sub-rectangle of the displayed background image. This cropping happens when original is larger than the level bounds. Array format: `[ cropX, cropY, cropWidth, cropHeight ]`*</li><li>**`scale`** **(Array of Float**) : *An array containing the `[scaleX,scaleY]` values of the **cropped** background image, depending on `bgPos` option.*</li><li>**`topLeftPx`** **(Array of Int**) : *An array containing the `[x,y]` pixel coordinates of the top-left corner of the **cropped** background image, depending on `bgPos` option.*</li></ul>
+`__neighbours`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array listing all other levels touching this one on the world map.<br/>		Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, this array is always empty.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`dir`** **(String**) : *A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).*</li><li>**`levelIid`** **(String**)  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  : *Neighbour Instance Identifier*</li><li>**`levelUid`** **(Int *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Removed_1.2.0-green.svg)  : ***WARNING**: this deprecated value is no longer exported since version 1.2.0* ** *Replaced by: `levelIid`*</li></ul>
 `bgRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | The *optional* relative path to the level background image.
 `externalRelPath`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | This value is not null if the project option "*Save levels separately*" is enabled. In this case, this **relative** path points to the level Json file.
 `fieldInstances`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array containing this level custom field values.
@@ -113,12 +117,12 @@ Value | Type | Description
 `layerDefUid` | Int | Reference the Layer definition UID
 `levelId` | Int | Reference to the UID of the level containing this layer instance
 `overrideTilesetUid`<br/><sup class="only">Only *Tile layers*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | This layer can use another tileset by overriding the tileset UID here.
-`pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetX`)
-`pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, see `__pxTotalOffsetY`)
+`pxOffsetX`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX` which contains the total offset value)
+`pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Int | Y offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX` which contains the total offset value)
 `visible`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | Layer instance visibility
 `optionalRules`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Int | An Array containing the UIDs of optional rules that were enabled in this specific layer instance.
 `seed`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Int | Random seed used for Auto-Layers rendering
-~~`intGrid`~~<br/><sup class="only">Only *IntGrid layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Array&nbsp;of&nbsp;Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.0.0<br/> <br/> Replaced by: `intGridCsv`
+~~`intGrid`~~<br/><sup class="only">Only *IntGrid layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.0.0<br/> <br/> Replaced by: `intGridCsv`
 
 <a id="ldtk-Tile" name="ldtk-Tile"></a>
 ## 2.2. Tile instance  ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) 
@@ -161,8 +165,8 @@ Value | Type | Description
 `realEditorValues`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Editor internal raw values
 
 <a id="ldtk-EntityReferenceInfos" name="ldtk-EntityReferenceInfos"></a>
-## 2.4.2. Field instance entity reference  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
-This object is used in Field Instances to describe an EntityRef value.
+## 2.4.2. Reference to an Entity instance  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
+This object describes the "location" of an Entity instance in the project worlds.
 
 Value | Type | Description
 -- | -- | --
@@ -172,7 +176,7 @@ Value | Type | Description
 `worldIid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String | IID of the World containing the refered EntityInstance
 
 <a id="ldtk-GridPoint" name="ldtk-GridPoint"></a>
-## 2.4.3. Field instance grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
+## 2.4.3. Grid point  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
 This object is just a grid-based coordinate used in Field values.
 
 Value | Type | Description
@@ -205,7 +209,7 @@ Value | Type | Description
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | User defined unique identifier
-`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This object contains the following fields:<br/> <ul><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *User defined unique identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
+`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *User defined unique identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
 `parallaxFactorX`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.
 `parallaxFactorY`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.
 `parallaxScaling`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | If true (default), a layer with a parallax factor will also be scaled up/down accordingly.
@@ -213,7 +217,9 @@ Value | Type | Description
 `pxOffsetY`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.5.0-gray.svg)  | Int | Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)
 `tilesetDefUid`<br/><sup class="only">Only *Tile layers, Auto-layers*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Reference to the default Tileset UID being used by this layer definition.<br/>		**WARNING**: some layer *instances* might use a different tileset. So most of the time, you should probably use the `__tilesetDefUid` value found in layer instances.<br/>		Note: since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.
 `uid` | Int | Unique Int identifier
-`autoRuleGroups`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/> This object contains the following fields:<br/> <ul><li>**`active`** **(Bool**)</li><li>~~collapsed~~ **(Bool**)    *This field was removed in 1.0.0 and should no longer be used.*</li><li>**`isOptional`** **(Bool**)  ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg) </li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#ldtk-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li></ul>
+`autoRuleGroups`<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Object | Contains all the auto-layer rule definitions.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`active`** **(Bool**)</li><li>~~collapsed~~ **(Bool**)    *This field was removed in 1.0.0 and should no longer be used.*</li><li>**`isOptional`** **(Bool**)  ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg) </li><li>**`name`** **(String**)</li><li>**`rules`** **(Array of [Auto-layer rule definition](#ldtk-AutoRuleDef)**)</li><li>**`uid`** **(Int**)</li><li>**`usesWizard`** **(Bool**)  ![Generic badge](https://img.shields.io/badge/Added_1.1.4-gray.svg) </li></ul>
+`canSelectWhenInactive`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.4-gray.svg)  | Bool | Allow editor selections when the layer is not currently active.
+`doc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.5-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined documentation for this element to provide help/tips to level designers.
 `excludedTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of tags to forbid some Entities in this layer
 `guideGridHei`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Height of the optional "guide" grid in pixels
 `guideGridWid`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Width of the optional "guide" grid in pixels
@@ -224,7 +230,7 @@ Value | Type | Description
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Type of the layer as Haxe Enum<br/> Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`
-~~`autoTilesetDefUid`~~<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+<br/> <br/> Replaced by: `tilesetDefUid`
+~~`autoTilesetDefUid`~~<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_1.2.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.2.0<br/> <br/> Replaced by: `tilesetDefUid`
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
 ## 3.1.1. Auto-layer rule definition   
@@ -270,6 +276,8 @@ Value | Type | Description
 `tilesetId` | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Tileset ID used for optional tile display
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
+`doc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.5-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined documentation for this element to provide help/tips to level designers.
+`exportToToc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.4-green.svg)  | Bool | If enabled, all instances of this entity will be listed in the project "Table of content" object.
 `fieldDefs`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions
 `fillOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Float | 
 `hollow`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
@@ -284,7 +292,7 @@ Value | Type | Description
 `showName`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Bool | Display entity name in editor
 `tags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of strings that classifies this entity
 `tileOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | 
-~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.2.0+<br/> <br/> Replaced by: `tileRect`
+~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_1.2.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.2.0<br/> <br/> Replaced by: `tileRect`
 
 <a id="ldtk-FieldDefJson" name="ldtk-FieldDefJson"></a>
 ## 3.2.1. Field definition  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg) 
@@ -298,6 +306,7 @@ Value | Type | Description
 `arrayMinLength`<br/><sup class="only">Only *Array*</sup><br/><sup class="internal">*Only used by editor*</sup> | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Array min length
 `canBeNull`<br/><sup class="internal">*Only used by editor*</sup> | Bool | TRUE if the value can be null. For arrays, TRUE means it can contain null values (exception: array of Points can't have null values).
 `defaultOverride`<br/><sup class="internal">*Only used by editor*</sup> | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default value if selected value is null or invalid.
+`doc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined documentation for this field to provide help/tips to level designers about accepted values.
 `identifier`<br/><sup class="internal">*Only used by editor*</sup> | String | User defined unique identifier
 `isArray`<br/><sup class="internal">*Only used by editor*</sup> | Bool | TRUE if the value is an array of multiple values
 `max`<br/><sup class="only">Only *Int, Float*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max limit for value, if applicable
@@ -313,24 +322,14 @@ Value | Type | Description
 `editorCutLongValues`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`
 `editorDisplayPos`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
+`editorLinkStyle`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.4-gray.svg)  | Enum | Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
+`editorShowInWorld`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.4-gray.svg)  | Bool | 
 `editorTextPrefix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `editorTextSuffix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `symmetricalRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | 
 `textLanguageMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.9.3-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`, `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
 `tilesetUid`<br/><sup class="only">Only *Tile*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | UID of the tileset used for a Tile
 `useForSmartColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.
-
-<a id="ldtk-TilesetRect" name="ldtk-TilesetRect"></a>
-## 3.2.2. Tileset rectangle  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
-This object represents a custom sub rectangle in a Tileset image.
-
-Value | Type | Description
--- | -- | --
-`h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Height in pixels
-`tilesetUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | UID of the tileset
-`w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Width in pixels
-`x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | X pixels coordinate of the top-left corner in the Tileset image
-`y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Y pixels coordinate of the top-left corner in the Tileset image
 
 <a id="ldtk-TilesetDefJson" name="ldtk-TilesetDefJson"></a>
 ## 3.3. Tileset definition   
@@ -340,9 +339,9 @@ Value | Type | Description
 -- | -- | --
 `__cHei`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Grid-based height
 `__cWid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Grid-based width
-`customData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array of custom tile metadata<br/> This object contains the following fields:<br/> <ul><li>**`data`** **(String**)</li><li>**`tileId`** **(Int**)</li></ul>
+`customData`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array of custom tile metadata<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`data`** **(String**)</li><li>**`tileId`** **(Int**)</li></ul>
 `embedAtlas`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Enum&nbsp;*(can&nbsp;be&nbsp;`null`)* | If this value is set, then it means that this atlas uses an internal LDtk atlas image instead of a loaded one.<br/> Possible values: &lt;`null`&gt;, `LdtkIcons`
-`enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This object contains the following fields:<br/> <ul><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
+`enumTags`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Array&nbsp;of&nbsp;Object | Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1 element per Enum value, which contains an array of all Tile IDs that are tagged with it.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`enumValueId`** **(String**)</li><li>**`tileIds`** **(Array of Int**)</li></ul>
 `identifier` | String | User defined unique identifier
 `padding` | Int | Distance in pixels from image borders
 `pxHei` | Int | Image height in pixels
@@ -353,8 +352,20 @@ Value | Type | Description
 `tagsSourceEnumUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional Enum definition UID used for this tileset meta-data
 `tileGridSize` | Int | 
 `uid` | Int | Unique Intidentifier
-`cachedPixelData`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/> This object contains the following fields:<br/> <ul><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
-`savedSelections`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/> This object contains the following fields:<br/> <ul><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Enum**)</li></ul>
+`cachedPixelData`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | Object&nbsp;*(can&nbsp;be&nbsp;`null`)* | The following data is used internally for various optimizations. It's always synced with source image changes.<br/> This object contains the following fields:<br/> <ul class='subFields'><li>**`averageColors`** **(String *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  : *Average color codes for each tileset tile (ARGB format)*</li><li>**`opaqueTiles`** **(String**)  ![Generic badge](https://img.shields.io/badge/Changed_0.6.0-gray.svg)  : *An array of 0/1 bytes, encoded in Base64, that tells if a specific TileID is fully opaque (1) or not (0)*</li></ul>
+`savedSelections`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Object | Array of group of tiles selections, only meant to be used in the editor<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`ids`** **(Array of Int**)</li><li>**`mode`** **(Enum**)</li></ul>
+
+<a id="ldtk-TilesetRect" name="ldtk-TilesetRect"></a>
+## 3.3.1. Tileset rectangle  ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg) 
+This object represents a custom sub rectangle in a Tileset image.
+
+Value | Type | Description
+-- | -- | --
+`h`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Height in pixels
+`tilesetUid`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | UID of the tileset
+`w`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Width in pixels
+`x`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | X pixels coordinate of the top-left corner in the Tileset image
+`y`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Int | Y pixels coordinate of the top-left corner in the Tileset image
 
 <a id="ldtk-EnumDefJson" name="ldtk-EnumDefJson"></a>
 ## 3.4. Enum definition   

@@ -95,6 +95,12 @@ class AutoLayerRuleDef {
 		return isValid(cx,cy) ? pattern[ coordId(cx,cy) ] = v : 0;
 	}
 
+	public inline function fill(v:Int) {
+		for(cx in 0...size)
+		for(cy in 0...size)
+			set(cx,cy,v);
+	}
+
 	function initPattern() {
 		pattern = [];
 		for(i in 0...size*size)

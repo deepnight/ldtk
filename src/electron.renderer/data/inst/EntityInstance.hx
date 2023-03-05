@@ -38,7 +38,7 @@ class EntityInstance {
 	}
 
 	@:keep public function toString() {
-		return 'Instance<${def.identifier}>@$x,$y';
+		return 'EntityInst "${def.identifier}" @$x,$y';
 	}
 
 	inline function get_centerX() return M.round( x + (0.5-def.pivotX)*width );
@@ -148,6 +148,13 @@ class EntityInstance {
 		return fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y;
 	}
 
+	public inline function getWorldRefAttachX(fd:data.def.FieldDef) {
+		return _li.level.worldX + ( fd.editorDisplayMode==RefLinkBetweenCenters ? centerX : x );
+	}
+	public inline function getWorldRefAttachY(fd:data.def.FieldDef) {
+		return _li.level.worldY + ( fd.editorDisplayMode==RefLinkBetweenCenters ? centerY : y );
+	}
+
 	final overShapePad = 3;
 	final overEdgePad = 4;
 	public inline function isOver(layerX:Int, layerY:Int) {
@@ -177,7 +184,7 @@ class EntityInstance {
 			return layerX>=left-overShapePad && layerX<=right+overShapePad && layerY>=top-overShapePad && layerY<=bottom+overShapePad;
 	}
 
-	public function getSmartColor(bright:Bool) {
+	public function getSmartColor(bright:Bool) : dn.Col {
 		var c : Null<Int> = null;
 		for(fd in def.fieldDefs) {
 			c = getFieldInstance(fd,true).getSmartColor();
@@ -326,19 +333,26 @@ class EntityInstance {
 
 		// Check own fields for lost symmetricals
 		var i = 0;
+		var needFieldsTidy = false;
 		while( i<fi.getArrayLength() ) {
 			if( fi.valueIsNull(i) )
 				i++;
 			else {
 				var targetEi = fi.getEntityRefInstance(i);
-				if( !targetEi.hasEntityRefTo(this, fd) ) {
-					_project.unregisterReverseIidRef(this, targetEi);
+				if( targetEi==null || !targetEi.hasEntityRefTo(this, fd) ) {
 					fi.removeArrayValue(i);
+					if( targetEi==null )
+						_project.unregisterReverseIidRef(this, targetEi);
+					else
+						needFieldsTidy = true;
 				}
 				else
 					i++;
 			}
 		}
+
+		if( needFieldsTidy )
+			_project.tidyFields();
 
 		// Check entities pointing at me
 		if( allowDeepSearch ) {

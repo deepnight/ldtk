@@ -12,7 +12,7 @@ class Home extends Page {
 		var changeLog = Const.getChangeLog();
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
-			appVer: Const.getAppVersion(),
+			appVer: Const.getAppVersion(true),
 			buildDate: dn.MacroTools.getHumanBuildDate(),
 			latestVer: changeLog.latest.version,
 			latestDesc: changeLog.latest.title==null ? L.t._("Release notes") : '"'+changeLog.latest.title+'"',
@@ -444,13 +444,10 @@ class Home extends Page {
 	}
 
 	function onImportOgmo() {
-		var dir = App.ME.getDefaultDialogDir();
-
-		#if debug
-		dir = "C:/projects/LDtk/tests/ogmo"; // HACK remove this hard-coded path
-		#end
+		var dir = settings.getUiDir("ImportOgmo", App.ME.getDefaultDialogDir());
 
 		dn.js.ElectronDialogs.openFile([".ogmo"], dir, function(filePath) {
+			settings.storeUiDir("ImportOgmo", dn.FilePath.extractDirectoryWithoutSlash(filePath,true));
 			var i = new importer.OgmoLoader(filePath);
 			ui.modal.MetaProgress.start("Importing OGMO 3 project...", 3);
 			delayer.addS( ()->{
@@ -498,22 +495,42 @@ class Home extends Page {
 	}
 
 	public function onNew(?openPath:String) {
-		dn.js.ElectronDialogs.saveFileAs(["."+Const.FILE_EXTENSION], openPath!=null ? openPath : App.ME.getDefaultDialogDir(), function(filePath) {
+		if( openPath==null )
+			openPath = settings.getUiDir("NewProject", App.ME.getDefaultDialogDir());
+		dn.js.ElectronDialogs.saveFileAs(["."+Const.FILE_EXTENSION], openPath, function(filePath) {
 			var fp = dn.FilePath.fromFile(filePath);
 			fp.extension = "ldtk";
+			settings.storeUiDir("NewProject", fp.directory);
 
-			var p = data.Project.createEmpty(fp.full);
+			function _createNew() {
+				var p = data.Project.createEmpty(fp.full);
 
-			var data = ui.ProjectSaver.prepareProjectSavingData(p);
-			new ui.ProjectSaver(this, p, (success)->{
-				if( success ) {
-					N.msg("New project created: "+p.filePath.full);
-					App.ME.loadPage( ()->new Editor(p), true );
-				}
-				else {
-					N.error("Couldn't create this project file!");
-				}
-			});
+				var data = ui.ProjectSaver.prepareProjectSavingData(p);
+				new ui.ProjectSaver(this, p, (success)->{
+					if( success ) {
+						N.msg("New project created: "+p.filePath.full);
+						App.ME.loadPage( ()->new Editor(p), true );
+					}
+					else {
+						N.error("Couldn't create this project file!");
+					}
+				});
+			}
+
+			// Check if file isn't in app dir
+			if( App.ME.isInAppDir(fp.full, true) ) {
+				new ui.modal.dialog.Choice(
+					Lang.t._("<strong>WARNING:</strong> you are trying to create a project in the application directory!\n<strong>Any file saved here will be LOST during next app update.</strong>"),
+					[
+						{ label:"Create somewhere else", cb:onNew.bind(openPath) },
+						{ label:"Ignore that (you will lose your project during next update)", className:"gray", cb:_createNew },
+					]
+				);
+				return;
+			}
+			else
+				_createNew();
+
 		});
 	}
 

@@ -32,11 +32,10 @@ class Modal extends dn.Process {
 
 		jMask = jModalAndMask.find(".mask");
 		jMask.mousedown( function(ev:js.jquery.Event) {
-			if( canBeClosedManually ) {
-				ev.stopPropagation();
-				onClickMask();
+			ev.stopPropagation();
+			onClickMask();
+			if( canBeClosedManually )
 				close();
-			}
 		} );
 		jMask.hide().fadeIn(100);
 
@@ -57,7 +56,8 @@ class Modal extends dn.Process {
 
 			if( m!=null ) {
 				// Use mouse coords
-				var x = m.pageX;
+				var toLeft = m.pageX>=js.Browser.window.innerWidth*0.6;
+				var x = toLeft ? m.pageX-jContent.width() : m.pageX;
 				var y = m.pageY;
 				if( y>=docHei*0.7 ) {
 					// Above coords
@@ -127,9 +127,11 @@ class Modal extends dn.Process {
 
 	public static function closeAll(?except:Modal) {
 		var any = false;
-		for(w in ALL)
-			if( !w.isClosing() && ( except==null || w!=except ) && w.canBeClosedManually ) {
-				w.close();
+
+		var w = ALL.length;
+		while (--w >= 0)
+			if ( !ALL[w].isClosing() && ( except==null || ALL[w]!=except ) && ALL[w].canBeClosedManually ) {
+				ALL[w].close();
 				any = true;
 			}
 		return any;
@@ -225,7 +227,7 @@ class Modal extends dn.Process {
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache=true) {
 		if( className==null )
-			className = tplName;
+			className = StringTools.replace(tplName, ".html", "");
 
 		jModalAndMask.addClass(className);
 		var html = JsTools.getHtmlTemplate(tplName, vars, useCache);

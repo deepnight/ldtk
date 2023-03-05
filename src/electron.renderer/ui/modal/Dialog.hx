@@ -45,8 +45,18 @@ class Dialog extends ui.Modal {
 			jContent.append(t);
 	}
 
-	public function addParagraph(str:dn.data.GetText.LocaleString) {
-		jContent.append('<p>$str</p>');
+	public function addParagraph(str:dn.data.GetText.LocaleString, ?className:String) {
+		var jElem = new J('<p>$str</p>');
+		if( className!=null )
+			jElem.addClass(className);
+		jContent.append(jElem);
+	}
+
+	public function addDiv(str:dn.data.GetText.LocaleString, ?className:String) {
+		var jElem = new J('<div>$str</div>');
+		if( className!=null )
+			jElem.addClass(className);
+		jContent.append(jElem);
 	}
 
 

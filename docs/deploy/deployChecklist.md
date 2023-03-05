@@ -5,12 +5,17 @@
 - [ ] Add code signing files to env
 - [ ] Check code signing exp. date: 2025-02-21
 
+## Testing
+
+- [ ] Pack a local Setup and test it
+- [ ] Add API unit tests for all new features
+
 ## Preparation & checks
 - [ ] Check the issues in the Pending milestone ([pendings](https://github.com/deepnight/ldtk/milestone/28))
 - [ ] Verify planned deprecations
 - [ ] Fill changelog
 - [ ] Rebuild all LDtk sample maps
-- [ ] Update Haxe API sample maps
+- [ ] Update Haxe API maps
 - [ ] Check JSON doc (changed/added flags etc.)
 - [ ] Run Haxe API tests
 - [ ] Build Haxe API samples
@@ -38,7 +43,7 @@
 - [ ] Check "next" folder on FTP
 
 ## Publish
-- [ ] Upload HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
+- [ ] Submit to LDtk Haxe API HaxeLib ([check](https://lib.haxe.org/p/ldtk-haxe-api/))
 - [ ] Add "x.x.x-rcX" tag to Haxe API repo
 - [ ] Run `npm run publish-itchio`
 - [ ] Upload macOS build to Itch.io ([link](https://itch.io/dashboard))
@@ -57,5 +62,5 @@
 - [ ] Announce on Reddit (major releases only)
 
 ## Archives
+- [ ] Archive installer to FTP
 - [ ] Archive docs to the `docs/archives/x.x.x/` folder
-- [ ] Archive previous installer to Google Drive

@@ -17,8 +17,21 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		this.layerDef = layerDef;
 		this.rule = rule;
 
+		renderForm();
+	}
 
+	function renderForm() {
+		jContent.find("*").off();
 		loadTemplate("ruleModuloEditor");
+
+		// Reset
+		jContent.find(".reset").click( (ev:js.jquery.Event)->{
+			ev.preventDefault();
+			rule.xModulo = rule.yModulo = 1;
+			rule.xOffset = rule.yOffset = 0;
+			editor.ge.emit(LayerRuleChanged(rule));
+			renderForm();
+		});
 
 		// X modulo
 		var i = Input.linkToHtmlInput( rule.xModulo, jContent.find("#xModulo"));

@@ -22,6 +22,8 @@ class RuleEditor extends ui.modal.Dialog {
 			curValue = iv.value;
 			break;
 		}
+		if( curValue==-1 )
+			curValue = Const.AUTO_LAYER_ANYTHING;
 
 		renderAll();
 	}
@@ -209,39 +211,11 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Out-of-bounds policy
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");
-		jOutOfBounds.empty();
-		var values = [null, 0].concat( sourceDef.getAllIntGridValues().map( iv->iv.value ) );
-		for(v in values) {
-			var jOpt = new J('<option value="$v"/>');
-			jOpt.appendTo(jOutOfBounds);
-			switch v {
-				case null: jOpt.text("This rule should not apply when reading cells outside of layer bounds (default)");
-				case 0: jOpt.text("Empty cells");
-				case _:
-					var iv = sourceDef.getIntGridValueDef(v);
-					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
-					jOpt.css({
-						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
-						borderColor: C.intToHex( iv.color ),
-					});
-			}
-		}
-		jOutOfBounds.click(_->Tip.clear());
-		jOutOfBounds.change( _->{
-			var v = jOutOfBounds.val()=="null" ? null : Std.parseInt(jOutOfBounds.val());
+		JsTools.createOutOfBoundsRulePolicy(jOutOfBounds, sourceDef, rule.outOfBoundsValue, (v)->{
 			rule.outOfBoundsValue = v;
 			editor.ge.emit( LayerRuleChanged(rule) );
 			renderAll();
 		});
-		jOutOfBounds.val( rule.outOfBoundsValue==null ? "null" : Std.string(rule.outOfBoundsValue) );
-		if( rule.outOfBoundsValue!=null && rule.outOfBoundsValue>0 ) {
-			var iv = sourceDef.getIntGridValueDef(rule.outOfBoundsValue);
-			jOutOfBounds.addClass("hasValue").css({
-				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
-				borderColor: C.intToHex( iv.color ),
-			});
-		}
-		jOutOfBounds.removeClass("disableTip");
 
 		// Finalize
 		updateValuePicker();

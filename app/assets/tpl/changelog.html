@@ -7,23 +7,24 @@
 
 	<div class="cornerButtons">
 		<button class="close"> <span class="icon close"/> </button>
-		<button class="others" title="Show other versions"> <span class="icon search"/> </button>
+		<button class="others" title="All updates"> <span class="icon list"/> </button>
 	</div>
 </header>
 
 <div class="newUpdate"> <span>New update</span> </div>
 
-<div class="changelog" id="updateChangelogHtml"></div>
-<div id="updateChangelogMd">::md::</div>
+<div class="changelogsWrapper">
+	<div class="hotfixes"></div>
+	<div class="markdownHtml" id="updateChangelogHtml"></div>
+</div>
 
 
 <!-- Parse markdowns -->
 <script type="text/javascript" src="js/marked.min.js"></script>
 <script type="text/javascript">
-	var rawMd = document.getElementById("updateChangelogMd").textContent;
-	document.getElementById("updateChangelogMd").remove();
-	document.getElementById("updateChangelogHtml").innerHTML =
-		marked(rawMd);
+	function parseMd(rawMarkdown, outputId) {
+		document.getElementById(outputId).innerHTML = marked(rawMarkdown);
+	}
 </script>
 
 <xml id="previousUpdate">

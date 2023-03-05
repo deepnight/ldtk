@@ -17,7 +17,7 @@ enum GlobalEvent {
 	LevelRestoredFromHistory(level:data.Level);
 	LevelJsonCacheInvalidated(level:data.Level);
 
-	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourUids:Null<Array<Int>>);
+	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourIids:Null<Array<String>>);
 	WorldSettingsChanged;
 
 	LayerDefAdded;
@@ -57,6 +57,7 @@ enum GlobalEvent {
 	TilesetSelectionSaved(td:data.def.TilesetDef);
 	TilesetDefPixelDataCacheRebuilt(td:data.def.TilesetDef);
 	TilesetDefSorted;
+	TilesetEnumChanged;
 	
 	TableDefAdded(td:data.def.TableDef);
 	TableDefRemoved(td:data.def.TableDef);
@@ -194,8 +195,8 @@ enum TilePickerDisplayMode {
 }
 
 typedef FileSavingData = {
-	var projectJson: String;
-	var externLevelsJson: Array<{ json:String, relPath:String, id:String }>;
+	var projectJsonStr: String;
+	var externLevels: Array<{ jsonStr:String, relPath:String, id:String }>;
 }
 
 enum LevelError {

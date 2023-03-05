@@ -2,6 +2,7 @@ package ui;
 
 enum LoadingError {
 	ProjectNotFound;
+	ExternalDirMissing(relPath:String);
 	FileRead(err:String);
 	JsonParse(err:String);
 	ProjectInit(err:String);
@@ -16,6 +17,7 @@ class ProjectLoader {
 	var onLoad : data.Project -> Void;
 	var onError : LoadingError->Void;
 	var needReSaving = false;
+	var fixedLevelPaths : Array<String> = [];
 
 	public function new(filePath:String, onLoad, onError) {
 		log = new dn.Log();
@@ -108,6 +110,13 @@ class ProjectLoader {
 			label: "Loading levels...",
 			cb: ()->{
 				if( p.externalLevels ) {
+					var extPath = p.makeAbsoluteFilePath( p.getRelExternalFilesDir() );
+					if( !NT.fileExists(extPath) ) {
+						log.error("The external level dir is missing");
+						error( ExternalDirMissing(extPath) );
+						return;
+					}
+
 					// Load external level files
 					function _failedLevel(w:data.World, idx:Int, err:String) {
 						log.error(err);
@@ -127,20 +136,29 @@ class ProjectLoader {
 									log.add(tag, "  "+l.externalRelPath+"...");
 									var path = p.makeAbsoluteFilePath(l.externalRelPath, false);
 									if( !NT.fileExists(path) ) {
-										_failedLevel(w, curIdx, "Level file not found "+l.externalRelPath);
+										// Detect external dir dirty renaming
+										var file = dn.FilePath.extractFileWithExt(l.externalRelPath);
+										path = p.makeAbsoluteFilePath( p.getRelExternalFilesDir()+"/"+file );
+										fixedLevelPaths.push(file);
+										log.add(tag, "  Need re-saving (reason: external dir was renamed outside of LDtk)");
+										needReSaving = true;
 									}
-									else {
-										// Parse level
-										try {
 
-											var raw = NT.readFileString(path);
-											var lJson = haxe.Json.parse(raw);
-											var l = data.Level.fromJson(p, w, lJson, true);
-											w.levels[curIdx] = l;
-										}
-										catch(e:Dynamic) {
-											_failedLevel(w, curIdx, "Error while parsing level file "+l.externalRelPath);
-										}
+									if( !NT.fileExists(path) ) {
+										_failedLevel(w, curIdx, "Level file not found "+path);
+										return;
+									}
+
+									// Parse level
+									try {
+
+										var raw = NT.readFileString(path);
+										var lJson = haxe.Json.parse(raw);
+										var l = data.Level.fromJson(p, w, lJson, true);
+										w.levels[curIdx] = l;
+									}
+									catch(e:Dynamic) {
+										_failedLevel(w, curIdx, "Error while parsing level file "+l.externalRelPath);
 									}
 								}
 							});
@@ -173,9 +191,24 @@ class ProjectLoader {
 		}
 		log.add(tag, "Loading complete.");
 
-		onLoad(p);
-		if( log.containsAnyCriticalEntry() )
-			new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
+		// Custom commands
+		ui.modal.dialog.CommandRunner.runMultipleCommands( p, p.getCustomCommmands(AfterLoad), ()->{
+			// Done
+			onLoad(p);
+
+			// Error log
+			if( log.containsAnyCriticalEntry() )
+				new ui.modal.dialog.LogPrint(log, L.t._("Project errors"));
+
+			// Fixed external level paths
+			if( fixedLevelPaths.length>0 ) {
+				new ui.modal.dialog.Message(
+					L.t._("Loading successful, but the following level paths were fixed automatically.\nIt seems like you renamed your LDtk project externally: this is defintely NOT recommended, and you should ALWAYS use the \"Save As\" or \"Rename\" buttons from the Project panel (P shortcut).\nAnyway, it seems like everything is fine. Hopefully. Don't do that again, please.\n ::paths::", { paths:"<ul class='fileList'><li>"+fixedLevelPaths.join("</li><li>")+"</li></ul>" }),
+					"warn"
+				);
+			}
+		});
+
 	}
 
 	function error(err:LoadingError) {
@@ -184,6 +217,7 @@ class ProjectLoader {
 
 		log.error( switch err {
 			case ProjectNotFound: "Project file not found";
+			case ExternalDirMissing(relPath): 'External directory "$relPath" is missing';
 			case FileRead(err): err;
 			case JsonParse(err): err;
 			case ProjectInit(err): err;
@@ -194,6 +228,9 @@ class ProjectLoader {
 		switch err {
 			case ProjectNotFound:
 				N.error("Project file not found");
+
+			case ExternalDirMissing(relPath):
+				new ui.modal.dialog.Message( L.t._("Directory \"::dir::\" not found!\nThe levels should be saved separately in this directory, but it's now missing. Did you rename the project manually, or forgot to copy it?", { dir:relPath }) );
 
 			case UnsupportedWinNetDrive:
 				new ui.modal.dialog.Message( L._UnsupportedWinNetDir() );

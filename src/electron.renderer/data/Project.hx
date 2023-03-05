@@ -13,6 +13,7 @@ class Project {
 	var usedColors : Map<String, Map<Int,Int>> = new Map();
 
 	var nextUid = 0;
+	public var iid(default,null) : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
 
@@ -31,6 +32,7 @@ class Project {
 
 	@:allow(ui.modal.panel.EditProject)
 	var imageExportMode : ldtk.Json.ImageExportMode = None;
+	public var exportLevelBg : Bool = true;
 	public var pngFilePattern : Null<String>;
 	var flags: Map<ldtk.Json.ProjectFlag, Bool>;
 	public var levelNamePattern : String;
@@ -39,8 +41,10 @@ class Project {
 	public var backupLimit = 10;
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
+	public var customCommands : Array<ldtk.Json.CustomCommand> = [];
 
-	var quickLevelAccess : Map<Int, Level> = new Map();
+	var quickLevelAccessUid : Map<Int, Level> = new Map();
+	var quickLevelAccessIid : Map<String, Level> = new Map();
 	var imageCache : Map<String, data.DataTypes.CachedImage> = new Map();
 	var entityIidsCache : Map<String, data.inst.EntityInstance> = new Map();
 	var reverseIidRefsCache : Map<String, Map<String,Bool>> = new Map(); // In this map, key is "target IID" and value contains a map of "origin IIDs"
@@ -48,6 +52,7 @@ class Project {
 	/** WARNING! This list of "used IIDs" is NOT strictly updated: it's only a "mark" map to avoid IID collisions. **/
 	var usedIids : Map<String,Bool> = new Map();
 
+	var cachedToc : Array<ldtk.Json.TableOfContentEntry> = [];
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
@@ -177,6 +182,7 @@ class Project {
 
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
+		p.iid = p.generateUniqueId_UUID();
 		p.filePath.parseFilePath(filePath);
 		p.createWorld(true);
 
@@ -230,6 +236,9 @@ class Project {
 
 	public static function fromJson(filePath:String, json:ldtk.Json.ProjectJson) {
 		var p = new Project();
+		if( json.iid==null )
+			json.iid = p.generateUniqueId_UUID();
+		p.iid = JsonTools.readString(json.iid);
 		p.filePath.parseFilePath(filePath);
 		p.jsonVersion = JsonTools.readString(json.jsonVersion, Const.getJsonVersion());
 		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
@@ -268,6 +277,12 @@ class Project {
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
 		p.pngFilePattern = json.pngFilePattern;
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
+		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:ldtk.Json.CustomCommand)->{
+			return {
+				command: cmdJson.command,
+				when: JsonTools.readEnum(ldtk.Json.CustomCommandTrigger, cmdJson.when, false, Manual),
+			}
+		});
 
 		p.levelNamePattern = JsonTools.readString(json.levelNamePattern, Project.DEFAULT_LEVEL_NAME_PATTERN );
 		if( p.levelNamePattern=="Level_%idx" )
@@ -276,6 +291,7 @@ class Project {
 		p.imageExportMode = JsonTools.readEnum( ldtk.Json.ImageExportMode, json.imageExportMode, false, None );
 		if( json.exportPng!=null )
 			p.imageExportMode = json.exportPng==true ? OneImagePerLayer : None;
+		p.exportLevelBg = JsonTools.readBool(json.exportLevelBg, true);
 
 		p.defs = Definitions.fromJson(p, json.defs);
 
@@ -480,12 +496,72 @@ class Project {
 			registerEntityInstance(ei);
 	}
 
+
+	public function getAllEntitiesFromLimitScope(curLayerInstance:data.inst.LayerInstance, curEntityDef:data.def.EntityDef, scope:ldtk.Json.EntityLimitScope) {
+		var all : Array<data.inst.EntityInstance> = [];
+		switch scope {
+			case PerLayer:
+				for(ei in curLayerInstance.entityInstances)
+					if( ei.defUid==curEntityDef.uid )
+						all.push(ei);
+
+			case PerLevel:
+				for(li in curLayerInstance.level.layerInstances)
+				for(ei in li.entityInstances)
+					if( ei.defUid==curEntityDef.uid )
+						all.push(ei);
+
+			case PerWorld:
+				for(l in curLayerInstance.level._world.levels)
+				for(li in l.layerInstances)
+				for(ei in li.entityInstances)
+					if( ei.defUid==curEntityDef.uid )
+						all.push(ei);
+		}
+		return all;
+	}
+
+
+	public function updateTableOfContent() {
+		cachedToc = [];
+		for(ed in defs.entities)
+			if( ed.exportToToc ) {
+				var tocEntry : ldtk.Json.TableOfContentEntry = {
+					identifier: ed.identifier,
+					instances: [],
+				}
+				cachedToc.push(tocEntry);
+				for(w in worlds)
+				for(l in w.levels)
+				for(li in l.layerInstances) {
+					if( li.def.type!=Entities )
+						continue;
+
+					for(ei in li.entityInstances) {
+						if( ei.defUid!=ed.uid )
+							continue;
+
+						tocEntry.instances.push({
+							worldIid: w.iid,
+							levelIid: l.iid,
+							layerIid: li.iid,
+							entityIid: ei.iid,
+						});
+					}
+				}
+			}
+	}
+
+
 	public function toJson() : ldtk.Json.ProjectJson {
 		var json : ldtk.Json.ProjectJson = {
+			iid: iid,
 			jsonVersion: jsonVersion,
 			appBuildId: Const.getAppBuildId(),
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
+
+			toc: cachedToc,
 
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worlds[0].worldLayout, false),
 			worldGridWidth: hasFlag(MultiWorlds) ? null : worlds[0].worldGridWidth,
@@ -504,11 +580,16 @@ class Project {
 			exportTiled: exportTiled,
 			simplifiedExport: simplifiedExport,
 			imageExportMode: JsonTools.writeEnum(imageExportMode, false),
+			exportLevelBg: exportLevelBg,
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
 			levelNamePattern: levelNamePattern,
 			tutorialDesc : JsonTools.escapeString(tutorialDesc),
+			customCommands: customCommands.map(cmd->{
+				command: cmd.command,
+				when: JsonTools.writeEnum(cmd.when, false),
+			}),
 
 			flags: {
 				var all = [];
@@ -521,6 +602,20 @@ class Project {
 			defs: defs.toJson(this),
 			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
+
+			// toc: {
+			// 	var jsonToc : Array<ldtk.Json.TableOfContentEntry> = [];
+			// 	for(e in toc.keyValueIterator())
+			// 		jsonToc.push({
+			// 			identifier: e.key,
+			// 			instances: e.value.map( ti->{
+			// 				worldIid: ti.worldIid,
+			// 				levelIid: ti.levelIid,
+			// 			}),
+			// 		});
+
+			// 	jsonToc;
+			// },
 		}
 
 		return json;
@@ -593,7 +688,7 @@ class Project {
 					if( !fi.def.isEnum() )
 						continue;
 
-					var ed = fi.def.getEnumDef();
+					var ed = fi.def.getEnumDefinition();
 					if( ed!=null && ed.isExternal() )
 						continue;
 					for(i in 0...fi.getArrayLength())
@@ -606,7 +701,7 @@ class Project {
 					if( !fi.def.isEnum() )
 						continue;
 
-					var ed = fi.def.getEnumDef();
+					var ed = fi.def.getEnumDefinition();
 					if( ed!=null && ed.isExternal() )
 						continue;
 
@@ -644,7 +739,8 @@ class Project {
 		clearUsedIids();
 		initEntityIidsCache();
 		defs.tidy(this);
-		quickLevelAccess = new Map();
+		quickLevelAccessUid = new Map();
+		quickLevelAccessIid = new Map();
 		for(w in worlds)
 			w.tidy(this);
 		initUsedColors();
@@ -871,21 +967,26 @@ class Project {
 	/**
 		Quick access to a level in any world
 	**/
-	public inline function getLevelAnywhere(uid:Int) : Null<Level> {
-		return quickLevelAccess.get(uid);
+	public inline function getLevelAnywhere(?uid:Int, ?iid:String) : Null<Level> {
+		return uid!=null ? quickLevelAccessUid.get(uid)
+			: iid!=null ? quickLevelAccessIid.get(iid)
+			: null;
 	}
 
 
 	public inline function registerLevelQuickAccess(l:Level) {
-		quickLevelAccess.set(l.uid, l);
+		quickLevelAccessUid.set(l.uid, l);
+		quickLevelAccessIid.set(l.iid, l);
 	}
 
 	public inline function unregisterLevelQuickAccess(l:Level) {
-		quickLevelAccess.remove(l.uid);
+		quickLevelAccessUid.remove(l.uid);
+		quickLevelAccessIid.remove(l.iid);
 	}
 
 	public function resetQuickLevelAccesses() {
-		quickLevelAccess = new Map();
+		quickLevelAccessUid = new Map();
+		quickLevelAccessIid = new Map();
 		for(w in worlds)
 		for(l in w.levels)
 			registerLevelQuickAccess(l);
@@ -1069,5 +1170,9 @@ class Project {
 					run(fi);
 		}
 
+	}
+
+	public function getCustomCommmands(when:ldtk.Json.CustomCommandTrigger) {
+		return customCommands.filter( cmd->cmd.when==when );
 	}
 }

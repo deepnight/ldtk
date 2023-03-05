@@ -24,8 +24,10 @@ class EditEnumDefs extends ui.modal.Panel {
 				label: L.t._("Text file"),
 				sub: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
 				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".txt"], project.getProjectDir(), function(absPath:String) {
+					var path = settings.getUiDir(project, "ImportEnumText", project.getProjectDir());
+					dn.js.ElectronDialogs.openFile([".txt"], path, function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
+						settings.storeUiDir(project, "ImportEnumText", dn.FilePath.extractDirectoryWithoutSlash(absPath, true));
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "txt":
 								var i = new importer.enu.TextFileEnum();
@@ -42,8 +44,10 @@ class EditEnumDefs extends ui.modal.Panel {
 				label: L.t._("JSON"),
 				sub: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
 				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".json"], project.getProjectDir(), function(absPath:String) {
+					var path = settings.getUiDir(project, "ImportEnumText", project.getProjectDir());
+					dn.js.ElectronDialogs.openFile([".json"], path, function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
+						settings.storeUiDir(project, "ImportEnumText", dn.FilePath.extractDirectoryWithoutSlash(absPath, true));
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "json":
 								var i = new importer.enu.JsonEnum();
@@ -59,8 +63,10 @@ class EditEnumDefs extends ui.modal.Panel {
 			ctx.add({
 				label:L.t._("Haxe source code"),
 				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".hx"], project.getProjectDir(), function(absPath:String) {
+					var path = settings.getUiDir(project, "ImportEnumHaxe", project.getProjectDir());
+					dn.js.ElectronDialogs.openFile([".hx"], path, function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
+						settings.storeUiDir(project, "ImportEnumHaxe", dn.FilePath.extractDirectoryWithoutSlash(absPath, true));
 						if( dn.FilePath.extractExtension(absPath,true) != "hx" )
 							N.error("The file must have the HX extension.");
 						else {
@@ -74,8 +80,10 @@ class EditEnumDefs extends ui.modal.Panel {
 			ctx.add({
 				label:L.t._("CastleDB"),
 				cb: ()->{
-					dn.js.ElectronDialogs.openFile([".cdb"], project.getProjectDir(), function(absPath:String) {
+					var path = settings.getUiDir(project, "ImportEnumCdb", project.getProjectDir());
+					dn.js.ElectronDialogs.openFile([".cdb"], path, function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
+						settings.storeUiDir(project, "ImportEnumCdb", dn.FilePath.extractDirectoryWithoutSlash(absPath, true));
 						if( dn.FilePath.extractExtension(absPath,true) != "cdb" )
 							N.error("The file must have the CDB extension.");
 						else {
@@ -363,9 +371,11 @@ class EditEnumDefs extends ui.modal.Panel {
 
 		if( curEnum==null ) {
 			jFormWrapper.hide();
+			jContent.find(".none").show();
 			return;
 		}
 		jFormWrapper.show();
+		jContent.find(".none").hide();
 		jFormWrapper.find("input").not("xml input").removeAttr("readonly");
 
 		if( curEnum.isExternal() )

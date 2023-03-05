@@ -49,9 +49,9 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 		for( ei in li.entityInstances )
 			if( isValidPick(ei) ) {
 				g.lineStyle(1, 0xffcc00);
-				g.drawCircle(ei.centerX, ei.centerY, M.imax(ei.width, ei.height)*0.5 + 8);
+				g.drawCircle(ei.centerX+ei._li.pxTotalOffsetX, ei.centerY+ei._li.pxTotalOffsetY, M.imax(ei.width, ei.height)*0.5 + 8);
 				g.lineStyle(1, 0xffcc00, 0.33);
-				g.drawCircle(ei.centerX, ei.centerY, M.imax(ei.width, ei.height)*0.5 + 12);
+				g.drawCircle(ei.centerX+ei._li.pxTotalOffsetX, ei.centerY+ei._li.pxTotalOffsetY, M.imax(ei.width, ei.height)*0.5 + 12);
 				n++;
 			}
 

@@ -13,11 +13,14 @@ class FieldDef {
 	@:allow(misc.FieldTypeConverter)
 	public var type(default,null) : ldtk.Json.FieldType;
 	public var identifier(default,set) : String;
+	public var doc: Null<String>;
 	public var canBeNull : Bool;
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
+	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
+	public var editorShowInWorld : Bool;
 	public var editorAlwaysShow: Bool;
 	public var editorTextPrefix : Null<String>;
 	public var editorTextSuffix : Null<String>;
@@ -48,11 +51,17 @@ class FieldDef {
 	private function new(p:data.Project, uid:Int, t:ldtk.Json.FieldType, array:Bool) {
 		_project = p;
 		this.uid = uid;
+		doc = null;
 		type = t;
 		isArray = array;
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
+		editorLinkStyle = switch type {
+			case F_EntityRef: CurvedArrow;
+			case _: StraightArrow;
+		}
 		editorAlwaysShow = false;
+		editorShowInWorld = true;
 		editorCutLongValues = true;
 		identifier = "NewField"+uid;
 		canBeNull = type==F_String || type==F_Text || type==F_Path || type==F_Point || type==F_EntityRef && !isArray;
@@ -122,12 +131,18 @@ class FieldDef {
 		var type = JsonTools.readEnum(ldtk.Json.FieldType, json.type, false);
 		var o = new FieldDef( p, JsonTools.readInt(json.uid), type, JsonTools.readBool(json.isArray, false) );
 		o.identifier = JsonTools.readString(json.identifier);
+		o.doc = JsonTools.unescapeString( json.doc );
 		o.canBeNull = JsonTools.readBool(json.canBeNull);
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
+		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.type {
+			case F_EntityRef: CurvedArrow;
+			case _: StraightArrow;
+		});
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
+		o.editorShowInWorld = JsonTools.readBool(json.editorShowInWorld, true);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
 		o.editorTextPrefix = json.editorTextPrefix;
 		o.editorTextSuffix = json.editorTextSuffix;
@@ -154,6 +169,7 @@ class FieldDef {
 	public function toJson() : ldtk.Json.FieldDefJson {
 		return {
 			identifier: identifier,
+			doc: JsonTools.escapeNullableString(doc),
 			__type: getJsonTypeString(),
 			uid: uid,
 			type: JsonTools.writeEnumAsString(type, false),
@@ -163,7 +179,9 @@ class FieldDef {
 			arrayMaxLength: arrayMaxLength,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
+			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
 			editorAlwaysShow: editorAlwaysShow,
+			editorShowInWorld: editorShowInWorld,
 			editorCutLongValues: editorCutLongValues,
 			editorTextSuffix: editorTextSuffix,
 			editorTextPrefix: editorTextPrefix,
@@ -393,7 +411,7 @@ class FieldDef {
 			return type.getIndex() == ldtk.Json.FieldType.F_Enum(null).getIndex();
 	}
 
-	public function getEnumDef() : Null<EnumDef> {
+	public function getEnumDefinition() : Null<EnumDef> {
 		return isEnum()
 			?  _project.defs.getEnumDef(switch type {
 				case F_Enum(enumDefUid): enumDefUid;
@@ -402,9 +420,18 @@ class FieldDef {
 			: null;
 	}
 
+
 	public function getEnumDefault() : Null<String> {
 		require(F_Enum(null));
-		return null;
+
+		switch defaultOverride {
+			case V_String(v):
+				var ed = getEnumDefinition();
+				return ed==null || ed.getValue(v)==null ? null : ed.getValue(v).id;
+
+			case _:
+				return null;
+		}
 	}
 
 	public function getTableDefault() : Null<Int> {
@@ -657,6 +684,8 @@ class FieldDef {
 			var pos = r.matchedPos();
 			keep.push( r.matched(0) );
 			sub = r.matchedRight();
+			if( sub.length==0 )
+				break;
 		}
 
 		return keep.join("");
@@ -684,6 +713,13 @@ class FieldDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		if( isEnum() && defaultOverride!=null ) {
+			App.LOG.add("tidy", "Lost default enum value in FieldDef "+toString());
+			var v = getEnumDefault();
+			if( v==null )
+				setDefault(null);
+		}
 
 		if( tilesetUid!=null && p.defs.getTilesetDef(tilesetUid)==null ) {
 			App.LOG.add("tidy", "Lost tileset UID in FieldDef "+toString());

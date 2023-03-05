@@ -10,6 +10,7 @@ typedef ContextAction = {
 	var cb : Void->Void;
 	var ?show : Void->Bool;
 	var ?enable : Void->Bool;
+	var ?separatorAfter: Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -24,27 +25,30 @@ class ContextMenu extends ui.Modal {
 		ME = this;
 
 		if( openEvent!=null || jNear!=null ) {
-			var jEventTarget = jNear!=null ? jNear : new J(openEvent.currentTarget);
+			var jEventTarget = jNear!=null ? jNear : new J(openEvent.target);
 			jAttachTarget = jEventTarget;
 			if( jAttachTarget.is("button.context") )
 				jAttachTarget = jAttachTarget.parent();
 			jAttachTarget.addClass("contextMenuOpen");
 
-			if( jEventTarget.is("button.context") || jNear!=null )
-				positionNear(jEventTarget);
+			if( jEventTarget.is("button") || jEventTarget.parent().is("button") || jNear!=null )
+				placer = ()->positionNear(jEventTarget);
 			else if( openEvent!=null )
-				positionNear( new Coords(openEvent.pageX, openEvent.pageY) );
+				placer = ()->positionNear( new Coords(openEvent.pageX, openEvent.pageY) );
 
 		}
 		else {
 			jAttachTarget = new J("");
 			if( m!=null )
-				positionNear(m);
+				placer = ()->positionNear(m);
 		}
 
 		setTransparentMask();
 		addClass("contextMenu");
+		placer();
 	}
+
+	dynamic function placer() {}
 
 	public static inline function isOpen() return ME!=null && !ME.destroyed;
 
@@ -94,7 +98,15 @@ class ContextMenu extends ui.Modal {
 	}
 
 
+	override function onResize() {
+		super.onResize();
+		checkPosition();
+	}
+
+
 	function checkPosition() {
+		placer();
+
 		var pad = 16;
 		var docHei = App.ME.jDoc.innerHeight();
 
@@ -117,7 +129,7 @@ class ContextMenu extends ui.Modal {
 		if( a.show!=null && !a.show() )
 			return jButton;
 		jButton.appendTo(jContent);
-		jButton.text(a.label);
+		jButton.html(a.label);
 		if( a.sub!=null && a.sub!=a.label )
 			jButton.append('<span class="sub">${a.sub}</span>');
 
@@ -130,9 +142,12 @@ class ContextMenu extends ui.Modal {
 		jButton.click( (_)->{
 			close();
 			a.cb();
-		 });
+		});
 
-		 checkPosition();
-		 return jButton;
+		if( a.separatorAfter )
+			jButton.addClass("separatorAfter");
+
+		checkPosition();
+		return jButton;
 	}
 }

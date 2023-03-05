@@ -297,7 +297,10 @@ class DocGenerator {
 					var cell = f.descMd;
 
 					if( f.subFields.length>0 ) {
-						cell.push("This object contains the following fields:");
+						if( isArray(f.type) )
+							cell.push("This array contains objects with the following fields:");
+						else
+							cell.push("This object contains the following fields:");
 						cell.push( getSubFieldsHtml( f.subFields ) );
 					}
 					tableCols.push( cell.join("<br/> ") );
@@ -486,7 +489,7 @@ class DocGenerator {
 			list.push( li.join(" ") );
 		}
 
-		return "<ul><li>" + list.join("</li><li>") + "</li></ul>";
+		return "<ul class='subFields'><li>" + list.join("</li><li>") + "</li></ul>";
 	}
 
 
@@ -514,6 +517,10 @@ class DocGenerator {
 			var descMd = [];
 			if( deprecation!=null ) {
 				if( appVersion.compareEverything(deprecation.removal)<0 ) {
+					/*
+						WARNING!! Changing this text might break the JsonDoc template on the website!
+						Make sure to update the template if needed.
+					*/
 					descMd.push('**WARNING**: this deprecated value will be *removed* completely on version ${deprecation.removal}+');
 
 				}
@@ -581,7 +588,7 @@ class DocGenerator {
 				subFields: subFields,
 
 				only: getMeta(fieldXml, "only"),
-				hasVersion: hasMeta(fieldXml,"changed") || hasMeta(fieldXml,"added") || hasMeta(fieldXml,"removed"),
+				hasVersion: hasMeta(fieldXml,"changed") || hasMeta(fieldXml,"added") || hasMeta(fieldXml,"removed") || hasMeta(fieldXml,"deprecation"),
 				descMd: descMd,
 				isColor: hasMeta(fieldXml, "color"),
 				isInternal: hasMeta(fieldXml, "internal"),
@@ -622,7 +629,12 @@ class DocGenerator {
 		if( hasMeta(xml,"changed") ) {
 			var version = getMeta(xml,"changed");
 			badges.push( badge("Changed", version, appVersion.hasSameMajorAndMinor(version) ? "green" : "gray" ) );
+		}
 
+		if( hasMeta(xml,"deprecation") ) {
+			var endVer = getMeta(xml,"deprecation", 1);
+			if( dn.Version.lowerEq(endVer, appVersion.numbers, true) )
+				badges.push( badge("Removed", endVer, appVersion.hasSameMajorAndMinor(endVer) ? "green" : "gray" ) );
 		}
 
 		return " "+badges.join(" ")+" ";
@@ -792,6 +804,15 @@ class DocGenerator {
 			}
 			else
 				Unknown;
+	}
+
+
+	static function isArray(t:FieldType) {
+		return switch t {
+			case Nullable(f): isArray(f);
+			case Arr(t): true;
+			case _: false;
+		}
 	}
 
 	/**

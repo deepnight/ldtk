@@ -11,6 +11,17 @@ class EntityTool extends tool.LayerTool<Int> {
 			selectValue( project.defs.entities[0].uid );
 	}
 
+	override function onGlobalEvent(ev:GlobalEvent) {
+		super.onGlobalEvent(ev);
+
+		switch ev {
+			case LevelRestoredFromHistory(_), LayerInstancesRestoredFromHistory(_):
+				cancelRefChaining();
+
+			case _:
+		}
+	}
+
 	public static inline function cancelRefChaining() {
 		Editor.ME.levelRender.clearTemp();
 		PREV_CHAINABLE_EI = null;
@@ -144,32 +155,13 @@ class EntityTool extends tool.LayerTool<Int> {
 						ei = curLayerInstance.createEntityInstance(curEntityDef);
 					else {
 						// Apply count limit
-						var all = [];
-						switch curEntityDef.limitScope {
-							case PerLayer:
-								for(ei in curLayerInstance.entityInstances)
-									if( ei.defUid==curEntityDef.uid )
-										all.push({ ei:ei, li:curLayerInstance });
-
-							case PerLevel:
-								for(li in curLevel.layerInstances)
-								for(ei in li.entityInstances)
-									if( ei.defUid==curEntityDef.uid )
-										all.push({ ei:ei, li:li });
-
-							case PerWorld:
-								for(l in curWorld.levels)
-								for(li in l.layerInstances)
-								for(ei in li.entityInstances)
-									if( ei.defUid==curEntityDef.uid )
-										all.push({ ei:ei, li:li });
-						}
+						var all = project.getAllEntitiesFromLimitScope(curLayerInstance, curEntityDef, curEntityDef.limitScope);
 						switch curEntityDef.limitBehavior {
 							case DiscardOldOnes:
 								while( all.length>=curEntityDef.maxCount ) {
-									var e = all.shift();
-									e.li.removeEntityInstance( e.ei );
-									editor.ge.emit( EntityInstanceRemoved(e.ei) );
+									var otherEi = all.shift();
+									otherEi._li.removeEntityInstance( otherEi );
+									editor.ge.emit( EntityInstanceRemoved(otherEi) );
 								}
 								ei = curLayerInstance.createEntityInstance(curEntityDef);
 
@@ -181,12 +173,12 @@ class EntityTool extends tool.LayerTool<Int> {
 
 							case MoveLastOne:
 								if( all.length>=curEntityDef.maxCount && all.length>0 ) {
-									var e = all.shift();
-									e.li.removeEntityInstance(e.ei);
-									curLayerInstance.entityInstances.push(e.ei);
+									var otherEi = all.pop();
+									otherEi._li.removeEntityInstance(otherEi);
+									curLayerInstance.entityInstances.push(otherEi);
 									editor.levelRender.invalidateLayer(curLayerInstance);
-									editor.ge.emit( EntityInstanceRemoved(e.ei) );
-									ei = e.ei;
+									editor.ge.emit( EntityInstanceRemoved(otherEi) );
+									ei = otherEi;
 								}
 								else
 									ei = curLayerInstance.createEntityInstance(curEntityDef);
@@ -210,12 +202,15 @@ class EntityTool extends tool.LayerTool<Int> {
 						else if( !editor.gifMode )
 							editor.selectionTool.selectAndStartUsing( ev, m, Entity(curLayerInstance,ei) );
 						ei.tidy(project, curLayerInstance); // Force creation of field instances & update _li
+						LOG.userAction("Added entity "+ei);
 
 						// Try to auto chain previous entity to the new one
 						var chainFi = getEntityChainableFieldInstance(prevEi);
 						if( chainFi!=null ) {
-							if( tryToChainRefTo(prevEi, ei) )
+							if( tryToChainRefTo(prevEi, ei) ) {
+								LOG.userAction("  Created ref "+prevEi+" => "+ei);
 								PREV_CHAINABLE_EI = ei;
+							}
 							else
 								cancelRefChaining();
 						}
@@ -287,18 +282,24 @@ class EntityTool extends tool.LayerTool<Int> {
 				case Entity(li, ei):
 					display.FieldInstanceRender.renderRefLink(
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
-						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
-						ei.getRefAttachX(chainFi.def), ei.getRefAttachY(chainFi.def),
+						PREV_CHAINABLE_EI.worldX + PREV_CHAINABLE_EI._li.pxTotalOffsetX - curLevel.worldX,
+						PREV_CHAINABLE_EI.worldY + PREV_CHAINABLE_EI._li.pxTotalOffsetY - curLevel.worldY,
+						ei.getRefAttachX(chainFi.def) + ei._li.pxTotalOffsetX,
+						ei.getRefAttachY(chainFi.def) + ei._li.pxTotalOffsetY,
 						alpha,
+						chainFi.def.editorLinkStyle,
 						Full
 					);
 
 				case _:
 					display.FieldInstanceRender.renderRefLink(
 						editor.levelRender.temp, PREV_CHAINABLE_EI.getSmartColor(true),
-						PREV_CHAINABLE_EI.worldX-curLevel.worldX, PREV_CHAINABLE_EI.worldY-curLevel.worldY,
-						getPlacementX(m), getPlacementY(m),
+						PREV_CHAINABLE_EI.worldX + PREV_CHAINABLE_EI._li.pxTotalOffsetX - curLevel.worldX,
+						PREV_CHAINABLE_EI.worldY + PREV_CHAINABLE_EI._li.pxTotalOffsetY - curLevel.worldY,
+						getPlacementX(m) + curLayerInstance.pxTotalOffsetX,
+						getPlacementY(m) + curLayerInstance.pxTotalOffsetY,
 						alpha,
+						chainFi.def.editorLinkStyle,
 						Full
 					);
 			}
@@ -344,7 +345,12 @@ class EntityTool extends tool.LayerTool<Int> {
 			chainFi.addArrayValue();
 		chainFi.setEntityRefTo(chainFi.getArrayLength()-1, sourceEi, targetEi);
 
-		editor.ge.emitAtTheEndOfFrame( EntityInstanceChanged(sourceEi) );
+		// Save history properly (only if both entities are in the same level)
+		if( sourceEi._li.levelId==targetEi._li.levelId ) {
+			editor.curLevelTimeline.markEntityChange(sourceEi);
+			editor.curLevelTimeline.saveLayerState(sourceEi._li);
+		}
+		editor.ge.emit( EntityInstanceChanged(sourceEi) );
 		return chainFi.def.isArray || !chainFi.def.symmetricalRef;
 	}
 

@@ -8,6 +8,7 @@ json_doc.xml
 *.crash.ldtk
 *.map
 *.zip
+*.bson
 
 backups/
 dump/
@@ -31,3 +32,4 @@ app/database.sqlite
 art/export_appElements
 
 tests/_private
+tests/*.txt

@@ -48,7 +48,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 	public static function tryToCreateLevelAt(project:data.Project, world:data.World, m:Coords) {
 		var b = getLevelInsertBounds(project, world, m);
 		if( b!=null ) {
-			var l = switch world.worldLayout {
+			var l : data.Level = switch world.worldLayout {
 				case Free, GridVania:
 					var l = world.createLevel();
 					l.worldX = M.round(b.x);

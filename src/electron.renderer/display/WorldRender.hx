@@ -15,10 +15,7 @@ typedef WorldLevelRender = {
 	var identifierInvalidated: Bool;
 	var boundsInvalidated: Bool;
 
-	var fieldsRender: Null<{
-		customFields: h2d.Flow,
-		identifier: h2d.Flow,
-	}>;
+	var fieldsRender: h2d.Flow;
 }
 
 class WorldRender extends dn.Process {
@@ -28,6 +25,8 @@ class WorldRender extends dn.Process {
 	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 	public var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 
+	var fieldsPadding(get,never) : Int;
+		inline function get_fieldsPadding() return Std.int( Rulers.PADDING*3 );
 
 	var worldBgColor(get,never) : UInt;
 		inline function get_worldBgColor() return C.interpolateInt(project.bgColor, 0x8187bd, 0.85);
@@ -128,10 +127,10 @@ class WorldRender extends dn.Process {
 
 				renderGrids();
 				updateLayout();
-				updateFieldsPos();
 				updateCurrentHighlight();
 				updateAxesPos();
 				invalidateCameraBasedRenders();
+				invalidateLevelFields(editor.curLevel);
 
 			case WorldSelected(w):
 				for(wl in worldLevels)
@@ -167,6 +166,7 @@ class WorldRender extends dn.Process {
 			case WorldLevelMoved(l,isFinal, prevNeig):
 				updateLayout();
 				updateCurrentHighlight();
+				invalidateAllLevelIdentifiers();
 				refreshWorldLevelRect(l);
 				if( isFinal ) {
 					switch curWorld.worldLayout {
@@ -270,6 +270,7 @@ class WorldRender extends dn.Process {
 			case LevelAdded(l):
 				invalidateLevelRender(l);
 				invalidateLevelFields(l);
+				invalidateAllLevelIdentifiers();
 				updateLayout();
 				renderWorldBounds();
 
@@ -388,7 +389,7 @@ class WorldRender extends dn.Process {
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				outline : new h2d.Graphics(),
-				identifier : new h2d.ScaleGrid(Assets.elements.getTile("fieldBg"), 2, 2),
+				identifier : new h2d.ScaleGrid(Assets.elements.getTile(D.elements.fieldBg), 2, 2),
 
 				boundsInvalidated: true,
 				renderInvalidated: true,
@@ -464,54 +465,52 @@ class WorldRender extends dn.Process {
 		if( !settings.v.showDetails )
 			return;
 
-		var minZoom = 0.1;
-		var padding = Std.int( Rulers.PADDING*3 );
+		var minZoom = 0.2;
 
 		for(wl in worldLevels) {
 			if( wl.fieldsRender==null )
 				continue;
 
 			var l = project.getLevelAnywhere(wl.uid);
-			var fr = wl.fieldsRender;
 			if( !camera.isOnScreenLevel(l, 256) || l.worldDepth!=editor.curWorldDepth ) {
-				fr.customFields.visible = false;
-				fr.identifier.visible = false;
+				wl.fieldsRender.visible = false;
 				continue;
 			}
-			fr.customFields.visible = editor.worldMode || editor.curLevel==l;
-			fr.identifier.visible = !editor.worldMode && camera.adjustedZoom>=minZoom;
+			wl.fieldsRender.visible = editor.worldMode || editor.curLevel==l;
 			if( editor.worldMode ) {
-				fr.customFields.alpha = getAlphaFromZoom(minZoom);
-				if( fr.customFields.alpha<=0 )
-					fr.customFields.visible = false;
+				wl.fieldsRender.alpha = getAlphaFromZoom(minZoom);
+				if( wl.fieldsRender.alpha<=0 )
+					wl.fieldsRender.visible = false;
 			}
 
-			if( !fr.customFields.visible )
+			if( !wl.fieldsRender.visible )
 				continue;
 
 			// Custom fields
 			if( editor.worldMode ) {
 				switch curWorld.worldLayout {
 					case Free, GridVania:
-						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
-						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
-						fr.customFields.y = Std.int( l.worldY + l.pxHei - fr.customFields.outerHeight*fr.customFields.scaleY );
+						wl.fieldsRender.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/wl.fieldsRender.outerWidth, l.pxHei/wl.fieldsRender.outerHeight) ) );
+						wl.fieldsRender.x = Std.int( l.worldCenterX - wl.fieldsRender.outerWidth*0.5*wl.fieldsRender.scaleX );
+						wl.fieldsRender.y = Std.int( l.worldY + l.pxHei - wl.fieldsRender.outerHeight*wl.fieldsRender.scaleY );
 
 					case LinearHorizontal:
-						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/fr.customFields.outerWidth ) );
-						fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
-						fr.customFields.y = Std.int( l.worldY + l.pxHei + 32 );
+						wl.fieldsRender.setScale( M.fmin(1/camera.adjustedZoom, l.pxWid/wl.fieldsRender.outerWidth ) );
+						wl.fieldsRender.x = Std.int( l.worldCenterX - wl.fieldsRender.outerWidth*0.5*wl.fieldsRender.scaleX );
+						wl.fieldsRender.y = Std.int( l.worldY + l.pxHei + 32 );
 
 					case LinearVertical:
-						fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, l.pxHei/fr.customFields.outerHeight ) );
-						fr.customFields.x = Std.int( l.worldX + l.worldX+l.pxWid+32 );
-						fr.customFields.y = Std.int( l.worldCenterY - fr.customFields.outerHeight*0.5*fr.customFields.scaleY );
+						wl.fieldsRender.setScale( M.fmin(1/camera.adjustedZoom, l.pxHei/wl.fieldsRender.outerHeight ) );
+						wl.fieldsRender.x = Std.int( l.worldX + l.worldX+l.pxWid+32 );
+						wl.fieldsRender.y = Std.int( l.worldCenterY - wl.fieldsRender.outerHeight*0.5*wl.fieldsRender.scaleY );
 				}
 			}
 			else {
-				fr.customFields.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/fr.customFields.outerWidth, l.pxHei/fr.customFields.outerHeight) ) );
-				fr.customFields.x = Std.int( l.worldCenterX - fr.customFields.outerWidth*0.5*fr.customFields.scaleX );
-				fr.customFields.y = Std.int( l.worldY - padding - fr.customFields.outerHeight*fr.customFields.scaleY );
+				wl.fieldsRender.setScale( M.fmin(1/camera.adjustedZoom, M.fmin( l.pxWid/wl.fieldsRender.outerWidth, l.pxHei/wl.fieldsRender.outerHeight) ) );
+				wl.fieldsRender.x = Std.int( l.worldCenterX - wl.fieldsRender.outerWidth*0.5*wl.fieldsRender.scaleX );
+				wl.fieldsRender.y = Std.int( l.worldY - fieldsPadding - wl.fieldsRender.outerHeight*wl.fieldsRender.scaleY );
+				if( wl.identifier!=null && wl.identifier.visible )
+					wl.fieldsRender.y -= wl.identifier.height * wl.identifier.scaleY + 3*settings.v.editorUiScale;
 			}
 		}
 	}
@@ -706,6 +705,7 @@ class WorldRender extends dn.Process {
 		}
 
 		updateAllLevelIdentifiers(false);
+		updateFieldsPos();
 	}
 
 
@@ -716,10 +716,8 @@ class WorldRender extends dn.Process {
 			wl.outline.remove();
 			wl.bgWrapper.remove();
 			wl.identifier.remove();
-			if( wl.fieldsRender!=null ) {
-				wl.fieldsRender.customFields.remove();
-				wl.fieldsRender.identifier.remove();
-			}
+			if( wl.fieldsRender!=null )
+				wl.fieldsRender.remove();
 			worldLevels.remove(uid);
 		}
 	}
@@ -740,36 +738,20 @@ class WorldRender extends dn.Process {
 		var wl = getWorldLevel(l);
 		if( wl.fieldsRender==null )
 			wl.fieldsRender = {
-				customFields: {
-					var f = new h2d.Flow(fieldsWrapper);
-					f.layout = Vertical;
-					f;
-				},
-				identifier: null,
+				var f = new h2d.Flow(fieldsWrapper);
+				f.layout = Vertical;
+				f;
 			}
-		wl.fieldsRender.customFields.removeChildren();
-		if( wl.fieldsRender.identifier!=null )
-			wl.fieldsRender.identifier.remove();
+		else
+			wl.fieldsRender.removeChildren();
 
 		// Attach custom fields
 		FieldInstanceRender.renderFields(
 			project.defs.levelFields.map( fd->l.getFieldInstance(fd,true) ),
 			l.getSmartColor(true),
 			LevelCtx(l),
-			wl.fieldsRender.customFields
+			wl.fieldsRender
 		);
-
-		// Init level identifier
-		var f = new h2d.Flow(wl.fieldsRender.customFields);
-		f.minWidth = f.maxWidth = wl.fieldsRender.customFields.outerWidth;
-		f.horizontalAlign = Middle;
-		f.padding = 6;
-		var tf = new h2d.Text(Assets.getLargeFont(), f);
-		tf.smooth = true;
-		tf.text = l.getDisplayIdentifier();
-		tf.textColor = l.getSmartColor(true);
-		FieldInstanceRender.addBg(f, l.getSmartColor(false), 0.6);
-		wl.fieldsRender.identifier = f;
 
 		updateFieldsPos();
 	}
@@ -918,11 +900,12 @@ class WorldRender extends dn.Process {
 		if( refreshTexts ) {
 			wl.identifier.removeChildren();
 			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
-			tf.smooth = true;
 			tf.text = l.getDisplayIdentifier();
-			tf.textColor = l.getSmartColor(true);
-			tf.x = 8;
-			tf.smooth = true;
+			tf.textColor = 0xffffff;
+			if( l.useAutoIdentifier )
+				tf.alpha = 0.33;
+			tf.x = 6;
+			tf.y = -2;
 
 			var error = l.getFirstError();
 			if( error!=NoError ) {
@@ -941,13 +924,14 @@ class WorldRender extends dn.Process {
 		}
 
 		// Visibility
-		wl.identifier.visible = camera.adjustedZoom>=camera.getMinZoom() && ( l!=editor.curLevel || editor.worldMode ) && settings.v.showDetails;
+		wl.identifier.visible = camera.adjustedZoom>=camera.getMinZoom() && settings.v.showDetails;
 		if( l.worldDepth!=editor.curWorldDepth )
 			wl.identifier.visible = false;
+
 		if( !wl.identifier.visible )
 			return;
 
-		wl.identifier.alpha = getAlphaFromZoom( camera.getMinZoom()*0.8 );
+		wl.identifier.alpha = l!=editor.curLevel || editor.worldMode ? getAlphaFromZoom( camera.getMinZoom()*0.8 ) : 1;
 
 		// Scaling
 		switch curWorld.worldLayout {
@@ -959,22 +943,30 @@ class WorldRender extends dn.Process {
 		}
 
 		// Position
-		switch curWorld.worldLayout {
-			case Free, GridVania:
-				wl.identifier.x = Std.int( l.worldX );
-				wl.identifier.y = Std.int( l.worldY );
-				wl.identifier.rotation = 0;
+		wl.identifier.smooth = false;
+		wl.identifier.rotation = 0;
+		if( editor.worldMode ) {
+			// Near level in world mode
+			switch curWorld.worldLayout {
+				case Free, GridVania:
+					wl.identifier.x = Std.int( l.worldX + 2 );
+					wl.identifier.y = Std.int( l.worldY + 2 );
 
-			case LinearHorizontal:
-				wl.identifier.x = Std.int( l.worldX + l.pxWid*0.3 );
-				wl.identifier.y = Std.int( l.worldY - wl.identifier.height*wl.identifier.scaleY );
-				wl.identifier.smooth = true;
-				wl.identifier.rotation = -0.4;
+				case LinearHorizontal:
+					wl.identifier.x = Std.int( l.worldX + l.pxWid*0.3 );
+					wl.identifier.y = Std.int( l.worldY - wl.identifier.height*wl.identifier.scaleY );
+					wl.identifier.smooth = true;
+					wl.identifier.rotation = -0.4;
 
-			case LinearVertical:
-				wl.identifier.x = Std.int( l.worldX - wl.identifier.width*wl.identifier.scaleX - 30 );
-				wl.identifier.y = Std.int( l.worldY + l.pxHei*0.5 - wl.identifier.height*wl.identifier.scaleY*0.5 );
-				wl.identifier.rotation = 0;
+				case LinearVertical:
+					wl.identifier.x = Std.int( l.worldX - wl.identifier.width*wl.identifier.scaleX - 30 );
+					wl.identifier.y = Std.int( l.worldY + l.pxHei*0.5 - wl.identifier.height*wl.identifier.scaleY*0.5 );
+			}
+		}
+		else {
+			// Above level when not in world mode
+			wl.identifier.x = Std.int( l.worldX + l.pxWid*0.5 - wl.identifier.width*wl.identifier.scaleX*0.5 );
+			wl.identifier.y = Std.int( l.worldY - wl.identifier.height*wl.identifier.scaleY - fieldsPadding );
 		}
 
 		// Color
