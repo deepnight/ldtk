@@ -1802,85 +1802,52 @@ div.entityRef {
 	border-radius: 3px;
 }
 
-
 .pivotEditor {
-	width: calc(3*18px);
-	position: relative;
 	display: grid;
 	grid-template-columns: min-content auto;
 	gap: 8px;
 	align-items: center;
 
-	.bg {
-		position: absolute;
-		margin-top: calc(33.33% / 2);
-		margin-left: calc(33.33% / 2);
-		width: 66.66%;
-		height: 66.66%;
-		border: 1px dashed white;
-		z-index: -1;
-	}
+	.grid {
+		// width: calc( 3*18px );
+		position: relative;
+		display: grid;
+		align-items: stretch;
+		justify-items: stretch;
+		grid-template-columns: repeat(3, 18px);
+		grid-template-rows: repeat(3, 18px);
 
-	label {
-		.grid {
-			// width: calc( 3*18px );
-			position: relative;
-			display: grid;
-			align-items: stretch;
-			justify-items: stretch;
-			grid-template-columns: repeat(3, 18px);
-			grid-template-rows: repeat(3, 18px);
-
-			.bg {
-				position: absolute;
-				margin-top: calc( 33.33% / 2 );
-				margin-left: calc( 33.33% / 2 );
-				width: 66.66%;
-				height: 66.66%;
-				border: 1px dashed white;
-				z-index: -1;
-			}
-
-			label {
-				display: grid;
-				align-items: center;
-				justify-items: center;
-				cursor: pointer;
-			}
-			label:hover {
-				outline: 1px dotted $orange;
-				outline-offset: -1px;
-			}
-			label input[type=radio] {
-				width: 70%;
-				height: 70%;
-				opacity: 0.5;
-				cursor: pointer;
-			}
-			label input[type=radio]:checked {
-				width: 100%;
-				height: 100%;
-				opacity: 1;
-			}
+		.bg {
+			position: absolute;
+			margin-top: calc( 33.33% / 2 );
+			margin-left: calc( 33.33% / 2 );
+			width: 66.66%;
+			height: 66.66%;
+			border: 1px dashed white;
+			z-index: -1;
 		}
-	}
 
-	label:hover {
-		outline: 1px dotted $orange;
-		outline-offset: -1px;
-	}
-
-	label input[type=radio] {
-		width: 70%;
-		height: 70%;
-		opacity: 0.5;
-		cursor: pointer;
-	}
-
-	label input[type=radio]:checked {
-		width: 100%;
-		height: 100%;
-		opacity: 1;
+		label {
+			display: grid;
+			align-items: center;
+			justify-items: center;
+			cursor: pointer;
+		}
+		label:hover {
+			outline: 1px dotted $orange;
+			outline-offset: -1px;
+		}
+		label input[type=radio] {
+			width: 70%;
+			height: 70%;
+			opacity: 0.5;
+			cursor: pointer;
+		}
+		label input[type=radio]:checked {
+			width: 100%;
+			height: 100%;
+			opacity: 1;
+		}
 	}
 
 	&.showAdvanced .advanced {

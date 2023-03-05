@@ -1875,6 +1875,9 @@ class Editor extends Page {
 			case EnumDefChanged: invalidateAllLevelsCache();
 			case EnumDefSorted:
 			case EnumDefValueRemoved: invalidateAllLevelsCache();
+			case TableDefAdded(td):
+			case TableDefRemoved(td):
+			case TableDefChanged(td):
 			case ExternalEnumsLoaded(anyCriticalChange):
 			case ToolValueSelected:
 			case ToolOptionChanged:
@@ -2089,6 +2092,10 @@ class Editor extends Page {
 			case TilesetDefAdded(td):
 
 			case TilesetEnumChanged:
+			
+			case TableDefAdded(td):
+			case TableDefRemoved(td):
+			case TableDefChanged(td):
 
 			case ProjectSettingsChanged:
 				updateBanners();
