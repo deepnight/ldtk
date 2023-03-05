@@ -45,7 +45,7 @@ jobs:
       # Install haxe API from same branch (if it exists)...
       - name: Install Haxe API from same branch
         id: installApiBranch
-        run: haxelib git ldtk-haxe-api https://github.com/Lojemiru/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
+        run: haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git ${{ steps.branch.outputs.v }} --always
         continue-on-error: true
       # ... or from master otherwise
       - name: Install Haxe API from master
