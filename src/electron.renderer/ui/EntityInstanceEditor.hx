@@ -262,6 +262,33 @@ class EntityInstanceEditor extends dn.Process {
 		if( UNIT_GRID )
 			i.setUnit(ei._li.def.gridSize);
 
+		// Flip block
+		var jFlips = jPropsForm.find(".flips");
+
+		// X
+		var i = new form.input.BoolInput(
+			jFlips.find("[name=x]"),
+			()->(M.hasBit(ei.flips,0)),
+			(v)->{
+				ei.flips = M.makeBitsFromBools(!M.hasBit(ei.flips, 0), M.hasBit(ei.flips, 1));
+			}
+		);
+		i.setEnabled( ei.def.flippableX );
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+
+		// Y
+		var i = new form.input.BoolInput(
+			jFlips.find("[name=y]"),
+			()->(M.hasBit(ei.flips,1)),
+			(v)->{
+				ei.flips = M.makeBitsFromBools(M.hasBit(ei.flips, 0), !M.hasBit(ei.flips, 1));
+			}
+		);
+		i.setEnabled( ei.def.flippableY );
+		i.linkEvent( EntityInstanceChanged(ei) );
+		i.onChange = ()->onEntityFieldChanged();
+
 
 		// References to this
 		var refs = project.getEntityInstancesReferingTo(ei);

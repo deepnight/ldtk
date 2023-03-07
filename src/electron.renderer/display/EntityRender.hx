@@ -96,15 +96,21 @@ class EntityRender extends dn.Process {
 			ed = ei.def;
 
 
+
 		var w = ei!=null ? ei.width : ed.width;
 		var h = ei!=null ? ei.height : ed.height;
 		var color = ei!=null ? ei.getSmartColor(false) : ed.color;
 
+		var flipX = (ei!=null && M.hasBit(ei.flips,0));
+		var flipY = (ei!=null && M.hasBit(ei.flips,1));
+		var pivotX = ei!=null ? ei.getAdjustedPivotX() : ed.pivotX;
+		var pivotY = ei!=null ? ei.getAdjustedPivotY() : ed.pivotY;
+
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
-		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
+		g.x = Std.int( -w*pivotX + (ld!=null ? ld.pxOffsetX : 0));
+		g.y = Std.int( -h*pivotY + (ld!=null ? ld.pxOffsetY : 0));
 
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 
@@ -129,13 +135,15 @@ class EntityRender extends dn.Process {
 				// Texture
 				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
 				var t = td.getTileRect(rect);
+				t.xFlip = flipX;
+				t.yFlip = flipY;
 				var alpha = ed.tileOpacity;
 				switch mode {
 					case Stretch:
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 						bmp.scaleX = w / bmp.tile.width;
@@ -145,17 +153,21 @@ class EntityRender extends dn.Process {
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 						var s = M.fmin(w / bmp.tile.width, h / bmp.tile.height);
 						bmp.setScale(s);
 
 					case Repeat:
+						// Invert flips to prevent broken rendering.
+						t.xFlip = false;
+						t.yFlip = false;
 						var tt = new dn.heaps.TiledTexture(w, h, t, wrapper);
+
 						tt.alpha = alpha;
-						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
-						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
+						tt.x = -w*pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						tt.y = -h*pivotY + (ld==null ? 0 : ld.pxOffsetY);
 
 					case Cover:
 						var bmp = new h2d.Bitmap(wrapper);
@@ -167,11 +179,13 @@ class EntityRender extends dn.Process {
 						final fw = M.fmin(w, t.width*s) / s;
 						final fh = M.fmin(h, t.height*s) / s;
 						bmp.tile = t.sub(
-							t.width*ed.pivotX - fw*ed.pivotX,
-							t.height*ed.pivotY - fh*ed.pivotY,
+							t.width*pivotX - fw*pivotX,
+							t.height*pivotY - fh*pivotY,
 							fw,fh
 						);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.xFlip = t.xFlip;
+						bmp.tile.yFlip = t.yFlip;
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.setScale(s);
 
 					case FullSizeCropped:
@@ -181,11 +195,13 @@ class EntityRender extends dn.Process {
 						final fw = M.fmin(w, t.width);
 						final fh = M.fmin(h, t.height);
 						bmp.tile = t.sub(
-							t.width*ed.pivotX - fw*ed.pivotX,
-							t.height*ed.pivotY - fh*ed.pivotY,
+							t.width*pivotX - fw*pivotX,
+							t.height*pivotY - fh*pivotY,
 							fw, fh
 						);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.xFlip = t.xFlip;
+						bmp.tile.yFlip = t.yFlip;
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 					case FullSizeUncropped:
@@ -193,7 +209,7 @@ class EntityRender extends dn.Process {
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 					case NineSlice:
@@ -207,9 +223,8 @@ class EntityRender extends dn.Process {
 						sg.tileCenter = true;
 						sg.width = w;
 						sg.height = h;
-						sg.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
-						sg.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
-
+						sg.x = -w*pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						sg.y = -h*pivotY + (ld==null ? 0 : ld.pxOffsetY);
 				}
 			}
 		}
@@ -250,11 +265,18 @@ class EntityRender extends dn.Process {
 			}
 
 		// Pivot
+
+		// Adjust pivot rendering position based on our flip statuses.
+		var pivotX = ((ed.flipAroundPivot && flipX) ? ((w - 1) / w) - ed.pivotX : ed.pivotX);
+		var pivotY = ((ed.flipAroundPivot && flipY) ? ((h - 1) / h) - ed.pivotY : ed.pivotY);
+
 		g.lineStyle(0);
+		// Draw pivot background.
 		g.beginFill(0x0, 0.4);
-		g.drawRect(w*ed.pivotX-1, h*ed.pivotY-1, 3,3);
+		g.drawRect(w*pivotX-1, h*pivotY-1, 3,3);
+		// Draw pivot foreground.
 		g.beginFill(color, 1);
-		g.drawRect(w*ed.pivotX, h*ed.pivotY, 1,1);
+		g.drawRect(w*pivotX, h*pivotY, 1,1);
 
 		return {
 			wrapper: wrapper,
@@ -354,33 +376,35 @@ class EntityRender extends dn.Process {
 			fieldGraphics.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 		}
 
+		var pivX = M.hasBit(ei.flips, 0) ? ed.getFlippedPivotX() : ed.pivotX;
+		var pivY = M.hasBit(ei.flips, 1) ? ed.getFlippedPivotY() : ed.pivotY;
 
 		// Identifier
 		if( identifier!=null ) {
 			identifier.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 			identifier.setScale(zoomScale);
-			identifier.x = Std.int( -ei.width*ed.pivotX - identifier.textWidth*0.5*identifier.scaleX + ei.width*0.5 );
-			identifier.y = Std.int( -identifier.textHeight*identifier.scaleY - ei.height*ed.pivotY );
+			identifier.x = Std.int( -ei.width*pivX - identifier.textWidth*0.5*identifier.scaleX + ei.width*0.5 );
+			identifier.y = Std.int( -identifier.textHeight*identifier.scaleY - ei.height*pivY );
 		}
 
 		// Update field wrappers
 		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
 		if( above.visible ) {
 			above.setScale(zoomScale);
-			above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
-			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY );
+			above.x = M.round( -ei.width*pivX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
+			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*pivY );
 			if( identifier!=null )
 				above.y -= identifier.textHeight*identifier.scaleY;
 			above.alpha = 1;
 
 			center.setScale(zoomScale);
-			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
-			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
+			center.x = Std.int( -ei.width*pivX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
+			center.y = Std.int( -ei.height*pivY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
 			center.alpha = 1;
 
 			beneath.setScale(zoomScale);
-			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
-			beneath.y = Std.int( ei.height*(1-ed.pivotY) );
+			beneath.x = Std.int( -ei.width*pivX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
+			beneath.y = Std.int( ei.height*(1-pivY) );
 			beneath.alpha = 1;
 		}
 	}

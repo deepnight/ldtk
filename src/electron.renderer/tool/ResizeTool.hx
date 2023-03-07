@@ -268,14 +268,14 @@ class ResizeTool extends Tool<Int> {
 					if( ei.customHeight==ei.def.height ) ei.customHeight = null;
 
 					switch draggedHandle {
-						case Left, TopLeft, BottomLeft: if( ei.def.pivotX==0 ) ei.x -= ( ei.width - oldW );
-						case Right, TopRight, BottomRight: if( ei.def.pivotX==1 ) ei.x += ( ei.width - oldW );
+						case Left, TopLeft, BottomLeft: if( ei.getAdjustedPivotX()==0 ) ei.x -= ( ei.width - oldW );
+						case Right, TopRight, BottomRight: if( ei.getAdjustedPivotX()==1 ) ei.x += ( ei.width - oldW );
 						case _:
 					}
 
 					switch draggedHandle {
-						case Top, TopLeft, TopRight: if( ei.def.pivotY==0 ) ei.y -= ( ei.height - oldH );
-						case Bottom, BottomLeft, BottomRight: if( ei.def.pivotY==1 ) ei.y += ( ei.height - oldH );
+						case Top, TopLeft, TopRight: if( ei.getAdjustedPivotY()==0 ) ei.y -= ( ei.height - oldH );
+						case Bottom, BottomLeft, BottomRight: if( ei.getAdjustedPivotY()==1 ) ei.y += ( ei.height - oldH );
 						case _:
 					}
 

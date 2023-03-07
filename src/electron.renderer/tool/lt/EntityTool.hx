@@ -4,6 +4,9 @@ class EntityTool extends tool.LayerTool<Int> {
 	public var curEntityDef(get,never) : Null<data.def.EntityDef>;
 	static var PREV_CHAINABLE_EI: Null<data.inst.EntityInstance>;
 
+	public var flipX = false;
+	public var flipY = false;
+
 	public function new() {
 		super();
 
@@ -41,7 +44,14 @@ class EntityTool extends tool.LayerTool<Int> {
 	inline function get_curEntityDef() return project.defs.getEntityDef( getSelectedValue() );
 
 	override function selectValue(v:Int) {
+		var lastEntityDef = curEntityDef;
 		super.selectValue(v);
+
+		// Clear flip values ONLY if we have changed entity defs.
+		if ( lastEntityDef!=curEntityDef ) {
+			flipX = false;
+			flipY = false;
+		}
 	}
 
 	override function canEdit():Bool {
@@ -66,14 +76,16 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 	function getPlacementX(m:Coords) {
+		var pivot = flipX ? curEntityDef.getFlippedPivotX() : curEntityDef.pivotX;
 		return snapToGrid()
-			? M.round( ( m.cx + curEntityDef.pivotX ) * curLayerInstance.def.gridSize )
+			? M.round( ( m.cx + pivot ) * curLayerInstance.def.gridSize )
 			: m.levelX;
 	}
 
 	function getPlacementY(m:Coords) {
+		var pivot = flipY ? curEntityDef.getFlippedPivotY() : curEntityDef.pivotY;
 		return snapToGrid()
-			? M.round( ( m.cy + curEntityDef.pivotY ) * curLayerInstance.def.gridSize)
+			? M.round( ( m.cy + pivot ) * curLayerInstance.def.gridSize)
 			: m.levelY;
 	}
 
@@ -113,7 +125,9 @@ class EntityTool extends tool.LayerTool<Int> {
 					// editor.cursor.overrideNativeCursor("grab");
 
 				case _:
-					editor.cursor.set( Entity(curLayerInstance, curEntityDef, getPlacementX(m), getPlacementY(m), false) );
+					// Create dummy EntityInstance so that we can draw it with transforms for flips.
+					var dummyEi = new data.inst.EntityInstance(project, null, curEntityDef.uid, "", M.makeBitsFromBools(flipX, flipY));
+					editor.cursor.set( Entity(curLayerInstance, curEntityDef, dummyEi, getPlacementX(m), getPlacementY(m), false) );
 			}
 			ev.cancel = true;
 			updateChainRefPreview(m);
@@ -192,6 +206,7 @@ class EntityTool extends tool.LayerTool<Int> {
 						// Finalize entity
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
+						ei.flips = M.makeBitsFromBools(flipX, flipY);
 						onEditAnything();
 						stopUsing(m);
 						if( ei.def.isResizable() ) {
@@ -404,5 +419,26 @@ class EntityTool extends tool.LayerTool<Int> {
 		// Check if chainable entity lost
 		if( PREV_CHAINABLE_EI!=null && PREV_CHAINABLE_EI._li!=null && !PREV_CHAINABLE_EI._li.containsEntity(PREV_CHAINABLE_EI) )
 			cancelRefChaining();
+	}
+
+	override function onKeyPress(keyId:Int) {
+		super.onKeyPress(keyId);
+
+		if ( !Editor.ME.hasInputFocus() )
+			switch keyId {
+				case K.X if ( curEntityDef!=null && curEntityDef.flippableX && !App.ME.hasAnyToggleKeyDown() ):
+					flipX = !flipX;
+					N.quick("X-flip: "+L.onOff(flipX));
+					customCursor(new hxd.Event(EMove), lastMouse);
+					// Simulate mouse movement to recenter entity render.
+					editor.cursor.onMouseMove(lastMouse);
+
+				case K.Y if ( curEntityDef!=null && curEntityDef.flippableY && !App.ME.hasAnyToggleKeyDown() ):
+					flipY = !flipY;
+					N.quick("Y-flip: "+L.onOff(flipY));
+					customCursor(new hxd.Event(EMove), lastMouse);
+					// Simulate mouse movement to recenter entity render.
+					editor.cursor.onMouseMove(lastMouse);
+			}
 	}
 }

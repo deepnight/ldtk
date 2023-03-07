@@ -397,8 +397,8 @@ class LevelRender extends dn.Process {
 	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:Int, spd=1.0) : Bleep {
 		return bleepLayerRectPx(
 			ei._li,
-			Std.int( (ei.x-ei.width*ei.def.pivotX) * ei._li.def.getScale() ),
-			Std.int( (ei.y-ei.height*ei.def.pivotY) * ei._li.def.getScale() ),
+			Std.int( (ei.x-ei.width*ei.getAdjustedPivotX()) * ei._li.def.getScale() ),
+			Std.int( (ei.y-ei.height*ei.getAdjustedPivotY()) * ei._li.def.getScale() ),
 			ei.width,
 			ei.height,
 			overrideColor!=null ? overrideColor : ei.getSmartColor(true),
