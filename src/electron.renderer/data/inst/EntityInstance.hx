@@ -15,6 +15,7 @@ class EntityInstance {
 	public var worldY(get,never) : Int;
 	public var customWidth : Null<Int>;
 	public var customHeight: Null<Int>;
+	public var flips : Int;
 
 	public var width(get,never) : Int;
 		inline function get_width() return customWidth!=null ? customWidth : def.width;
@@ -24,25 +25,26 @@ class EntityInstance {
 
 	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
-	public var left(get,never) : Int; inline function get_left() return M.round( x - width*def.pivotX );
+	public var left(get,never) : Int; inline function get_left() return M.round( x - width*getAdjustedPivotX() );
 	public var right(get,never) : Int; inline function get_right() return left + width;
-	public var top(get,never) : Int; inline function get_top() return M.round( y - height*def.pivotY );
+	public var top(get,never) : Int; inline function get_top() return M.round( y - height*getAdjustedPivotY() );
 	public var bottom(get,never) : Int; inline function get_bottom() return top + height;
 
 
-	public function new(p:Project, li:LayerInstance, entityDefUid:Int, iid:String) {
+	public function new(p:Project, li:LayerInstance, entityDefUid:Int, iid:String, flips:Int = 0) {
 		_project = p;
 		_li = li;
 		defUid = entityDefUid;
 		this.iid = iid;
+		this.flips = flips;
 	}
 
 	@:keep public function toString() {
 		return 'EntityInst "${def.identifier}" @$x,$y';
 	}
 
-	inline function get_centerX() return M.round( x + (0.5-def.pivotX)*width );
-	inline function get_centerY() return M.round( y + (0.5-def.pivotY)*height );
+	inline function get_centerX() return M.round( x + (0.5-getAdjustedPivotX())*width );
+	inline function get_centerY() return M.round( y + (0.5-getAdjustedPivotY())*height );
 
 	inline function get_worldX() return Std.int( x + _li.level.worldX );
 	inline function get_worldY() return Std.int( y + _li.level.worldY );
@@ -68,6 +70,7 @@ class EntityInstance {
 			height: height,
 			defUid: defUid,
 			px: [x,y],
+			f: flips,
 			fieldInstances: {
 				var all = [];
 				for(fd in def.fieldDefs)
@@ -88,6 +91,7 @@ class EntityInstance {
 			layer: _li.def.identifier,
 			x : x,
 			y : y,
+			f: flips,
 			width: width,
 			height: height,
 			color: getSmartColor(false),
@@ -109,6 +113,8 @@ class EntityInstance {
 		ei.x = JsonTools.readInt( json.px[0], 0 );
 		ei.y = JsonTools.readInt( json.px[1], 0 );
 
+		ei.flips = JsonTools.readInt( json.f, 0 );
+
 		ei.customWidth = JsonTools.readNullableInt( json.width );
 		if( ei.customWidth==ei.def.width )
 			ei.customWidth = null;
@@ -125,12 +131,20 @@ class EntityInstance {
 		return ei;
 	}
 
+	public inline function getAdjustedPivotX() {
+		return (def.flipAroundPivot && M.hasBit(flips, 0)) ? ((width - 1) / width) - def.pivotX : def.pivotX;
+	}
+
+	public inline function getAdjustedPivotY() {
+		return (def.flipAroundPivot && M.hasBit(flips, 1)) ? ((height - 1) / height) - def.pivotY : def.pivotY;
+	}
+
 	public inline function getCx(ld:data.def.LayerDef) {
-		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
+		return Std.int( ( x + (getAdjustedPivotX()==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
 	public inline function getCy(ld:data.def.LayerDef) {
-		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
+		return Std.int( ( y + (getAdjustedPivotY()==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
 	public inline function getPointOriginX(ld:data.def.LayerDef) {
