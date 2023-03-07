@@ -394,7 +394,7 @@ class Level {
 				sx = pxWid / baseTileWid;
 				sy = pxHei/ baseTileHei;
 
-			case Tile:
+			case Repeat:
 				// Do nothing, tiling shenanigans are handled in createBgTiledTexture.
 		}
 
@@ -423,7 +423,7 @@ class Level {
 		var t = h2d.Tile.fromTexture( bgInf.imgData.tex );
 		t = t.sub(bgInf.tx, bgInf.ty, bgInf.tw, bgInf.th);
 
-		var tile = (bgPos == ldtk.Json.BgImagePos.Tile);
+		var tile = (bgPos == ldtk.Json.BgImagePos.Repeat);
 
 		var w = tile ? pxWid : Std.int(bgInf.tw);
 		var h = tile ? pxHei : Std.int(bgInf.th);
