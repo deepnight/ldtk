@@ -1,3 +1,8 @@
+# 1.2.6
+
+ - Fixed the size of Reset buttons in custom field forms
+ - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
+
 # 1.2.5
 
  - Added custom user documentation for Entities and Layers

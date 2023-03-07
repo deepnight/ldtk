@@ -1,4 +1,4 @@
-# LDtk Json structure (version 1.2.5)
+# LDtk Json structure (version 1.2.6)
 
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
@@ -32,6 +32,7 @@ Value | Type | Description
 `defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level width
 `defaultPivotX`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default Y pivot (0 to 1) for new entities
+`dummyWorldIid`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-green.svg)  | String | If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World.
 `exportLevelBg`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-green.svg)  | Bool | If TRUE, the exported PNGs will include the level background (color or image).
 `exportTiled`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
 `flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
