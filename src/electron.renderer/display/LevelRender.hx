@@ -19,7 +19,7 @@ class LevelRender extends dn.Process {
 	var layerRenders : Map<Int, LayerRender> = new Map();
 
 	var bgColor : h2d.Bitmap;
-	var bgImage : h2d.Bitmap;
+	var bgImage : dn.heaps.TiledTexture;
 	var bounds : h2d.Graphics;
 	var boundsGlow : h2d.Graphics;
 	var grid : h2d.Graphics;
@@ -42,7 +42,8 @@ class LevelRender extends dn.Process {
 		bgColor = new h2d.Bitmap();
 		root.add(bgColor, Const.DP_BG);
 
-		bgImage = new h2d.Bitmap();
+		//bgImage = new h2d.Bitmap();
+		bgImage = new dn.heaps.TiledTexture(1, 1);
 		root.add(bgImage, Const.DP_BG);
 
 		bounds = new h2d.Graphics();
@@ -424,15 +425,16 @@ class LevelRender extends dn.Process {
 		bgColor.scaleX = editor.curLevel.pxWid;
 		bgColor.scaleY = editor.curLevel.pxHei;
 
-		var bmp = level.createBgBitmap();
-		if( bmp!=null ) {
-			bgImage.tile = bmp.tile;
-			bgImage.setPosition( bmp.x, bmp.y );
-			bgImage.scaleX = bmp.scaleX;
-			bgImage.scaleY = bmp.scaleY;
+		var tt = level.createBgTiledTexture();
+		if( tt!=null ) {
+			bgImage.tile = tt.tile;
+			bgImage.setPosition( tt.x, tt.y );
+			bgImage.scaleX = tt.scaleX;
+			bgImage.scaleY = tt.scaleY;
 			bgImage.visible = true;
 			bgImage.alpha = settings.v.singleLayerMode ? 0.2 : 1;
 			bgImage.filter = settings.v.singleLayerMode ? getSingleLayerModeFilter() : null;
+			bgImage.resize(tt.width, tt.height);
 		}
 		else {
 			bgImage.tile = null;

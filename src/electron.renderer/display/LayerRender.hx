@@ -231,7 +231,7 @@ class LayerRender {
 		tex.clear( l.getBgColor() );
 
 		if( l.bgRelPath!=null ) {
-			var bmp = l.createBgBitmap();
+			var bmp = l.createBgTiledTexture();
 			bmp.drawTo(tex);
 		}
 	}

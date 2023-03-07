@@ -152,7 +152,7 @@ class EntityRender extends dn.Process {
 						bmp.setScale(s);
 
 					case Repeat:
-						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
+						var tt = new dn.heaps.TiledTexture(w, h, t, wrapper);
 						tt.alpha = alpha;
 						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
 						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);

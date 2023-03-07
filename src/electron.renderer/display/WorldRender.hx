@@ -60,7 +60,7 @@ class WorldRender extends dn.Process {
 		worldBg = {
 			wrapper : w,
 			col: new h2d.Bitmap(w),
-			tex: new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1, w),
+			tex: new dn.heaps.TiledTexture(1, 1, Assets.elements.getTile("largeStripes"), w),
 		}
 		worldBg.col.colorAdd = new h3d.Vector(0,0,0,0);
 		worldBg.tex.alpha = 0.5;
@@ -773,7 +773,7 @@ class WorldRender extends dn.Process {
 		col.scaleY = l.pxHei;
 
 		// Bg image
-		l.createBgBitmap(wl.bgWrapper);
+		l.createBgTiledTexture(wl.bgWrapper);
 
 		// Per-coord limit
 		var doneCoords = new Map();
