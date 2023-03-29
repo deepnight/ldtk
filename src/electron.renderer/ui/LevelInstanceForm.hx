@@ -13,7 +13,7 @@ class LevelInstanceForm {
 		jWrapper = new J('<div class="levelInstanceForm"/>');
 
 		level = editor.curLevel;
-		var raw = JsTools.getHtmlTemplate("levelInstanceForm");
+		var raw = JsTools.getHtmlTemplate("levelInstanceForm", { id:level.identifier });
 		jWrapper.html(raw);
 
 		// Turn collapsers into title
@@ -24,57 +24,6 @@ class LevelInstanceForm {
 				jCollapser.replaceWith('<h2>${jCollapser.text()}</h2>');
 			});
 		}
-
-
-		// Create button
-		jWrapper.find("button.create").click( (_)->{
-			var vp = new ui.vp.LevelSpotPicker();
-		});
-
-		// Delete button
-		jWrapper.find("button.delete").click( (_)->{
-			if( curWorld.levels.length<=1 ) {
-				N.error(L.t._("You can't delete the last level."));
-				return;
-			}
-
-			new ui.modal.dialog.Confirm(
-				Lang.t._("Are you sure you want to delete this level?"),
-				true,
-				()->{
-					var closest = curWorld.getClosestLevelFrom(level);
-					new LastChance( L.t._('Level ::id:: removed', {id:level.identifier}), project);
-					var deleted = level;
-					editor.selectLevel( closest );
-					for(nl in deleted.getNeighbours())
-						editor.invalidateLevelCache(nl);
-					curWorld.removeLevel(deleted);
-					editor.ge.emit( LevelRemoved(deleted) );
-					editor.setWorldMode(true);
-				}
-			);
-		});
-
-		// Duplicate button
-		jWrapper.find("button.duplicate").click( (_)->{
-			var copy = curWorld.duplicateLevel(level);
-			editor.selectLevel(copy);
-			switch curWorld.worldLayout {
-				case Free, GridVania:
-					copy.worldX += project.defaultGridSize*4;
-					copy.worldY += project.defaultGridSize*4;
-
-				case LinearHorizontal:
-				case LinearVertical:
-			}
-			editor.ge.emit( LevelAdded(copy) );
-			editor.invalidateLevelCache(copy);
-		});
-
-		// World panel
-		jWrapper.find("button.worldSettings").click( (_)->{
-			new ui.modal.panel.WorldPanel();
-		});
 
 		// World panel "edit" shortcut
 		jWrapper.find(".editFields").click( (_)->{
@@ -189,8 +138,12 @@ class LevelInstanceForm {
 		var jForm = jWrapper.find("dl#levelProps");
 		jForm.find("*").off();
 
-		if( level==null )
+		if( level==null ) {
+			jWrapper.find(".curLevelId").text("???");
 			return;
+		}
+
+		jWrapper.find(".curLevelId").text(level.identifier);
 
 		// IID
 		jForm.find("#iid").val(level.iid);

@@ -10,6 +10,59 @@ class WorldPanel extends ui.modal.Panel {
 		jMask.hide();
 		loadTemplate("worldPanel");
 
+
+		// Create button
+		jWrapper.find("button.create").click( (_)->{
+			var vp = new ui.vp.LevelSpotPicker();
+		});
+
+		// Delete button
+		jWrapper.find("button.delete").click( (_)->{
+			if( curWorld.levels.length<=1 ) {
+				N.error(L.t._("You can't delete the last level."));
+				return;
+			}
+
+			new ui.modal.dialog.Confirm(
+				Lang.t._("Are you sure you want to delete this level?"),
+				true,
+				()->{
+					var level = editor.curLevel;
+					var closest = curWorld.getClosestLevelFrom(level);
+					new LastChance( L.t._('Level ::id:: removed', {id:level.identifier}), project);
+					var deleted = level;
+					editor.selectLevel( closest );
+					for(nl in deleted.getNeighbours())
+						editor.invalidateLevelCache(nl);
+					curWorld.removeLevel(deleted);
+					editor.ge.emit( LevelRemoved(deleted) );
+					editor.setWorldMode(true);
+				}
+			);
+		});
+
+		// Duplicate button
+		jWrapper.find("button.duplicate").click( (_)->{
+			new ui.modal.dialog.Confirm(
+				Lang.t._("Create a copy of the current level?"),
+				()->{
+					var copy = curWorld.duplicateLevel(editor.curLevel);
+					editor.selectLevel(copy);
+					editor.camera.fit();
+					switch curWorld.worldLayout {
+						case Free, GridVania:
+							copy.worldX += project.defaultGridSize*4;
+							copy.worldY += project.defaultGridSize*4;
+
+						case LinearHorizontal:
+						case LinearVertical:
+					}
+					editor.ge.emit( LevelAdded(copy) );
+					editor.invalidateLevelCache(copy);
+				}
+			);
+		});
+
 		// Current level instance form
 		levelInstanceForm = new ui.LevelInstanceForm(true);
 		jContent.find(".currentLevelInstance").append( levelInstanceForm.jWrapper );
