@@ -797,6 +797,24 @@ class FieldInstancesForm {
 			var jDt = new J("<dt/>");
 			jDt.appendTo(jWrapper);
 
+			// Context menu
+			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+				{
+					label: L.t._("Edit field definition"),
+					cb: ()->{
+						switch relatedInstance {
+							case Entity(ei):
+								var p = new ui.modal.panel.EditEntityDefs(ei.def);
+								p.fieldsForm.selectField(fd);
+							case Level(l):
+								var p = new ui.modal.panel.EditLevelFieldDefs();
+								p.selectField(fd);
+						}
+					},
+				}
+			];
+			ui.modal.ContextMenu.addTo(jDt, false, actions);
+
 			var jDd = new J("<dd/>");
 			jDd.attr("defUid", fd.uid);
 			jDd.appendTo(jWrapper);

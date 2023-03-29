@@ -19,6 +19,9 @@ class EditLevelFieldDefs extends ui.modal.Panel {
 			new LevelInstancePanel();
 	}
 
+	public function selectField(fd:data.def.FieldDef) {
+		fieldForm.selectField(fd);
+	}
 
 	override function onGlobalEvent(ge:GlobalEvent) {
 		super.onGlobalEvent(ge);

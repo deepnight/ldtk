@@ -169,8 +169,8 @@ class FieldDefsForm {
 	}
 
 
-	function selectField(f:FieldDef) {
-		curField = f;
+	public function selectField(fd:FieldDef) {
+		curField = fd;
 		updateList();
 		updateForm();
 	}

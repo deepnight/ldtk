@@ -10,7 +10,7 @@ class EditEntityDefs extends ui.modal.Panel {
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
 	var curEntity : Null<data.def.EntityDef>;
-	var fieldsForm : FieldDefsForm;
+	public var fieldsForm : FieldDefsForm;
 
 
 	public function new(?editDef:data.def.EntityDef) {
