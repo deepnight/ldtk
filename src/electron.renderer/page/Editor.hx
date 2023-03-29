@@ -2340,6 +2340,25 @@ class Editor extends Page {
 					invalidateLevelCache(curLevel);
 				}
 			});
+
+			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+				{
+					label: L.t._("Show/hide in list"),
+					cb: ()->{
+						selectLayerInstance(li);
+						ld.hideInList = !ld.hideInList;
+						ge.emit(LayerDefChanged(ld.uid));
+					},
+				},
+				{
+					label: L.t._("Edit layer settings"),
+					cb: ()->{
+						selectLayerInstance(li);
+						new ui.modal.panel.EditLayerDefs();
+					},
+				}
+			];
+			ui.modal.ContextMenu.addTo(jLayer, false, actions);
 		}
 
 		updateLayerVisibilities();
