@@ -1,6 +1,9 @@
 # 1.2.6
 
  - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
+ - Added a context menu to layers list in the main panel
+ - Added a context menu on all custom fields to edit their definition
+ - Added "colored flags" icons to the embedded atlas
  - Sections of the World panel can now be collapsed (world settings, current level properties and level custom fields).
  - Fixed the size of Reset buttons in custom field forms
  - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
