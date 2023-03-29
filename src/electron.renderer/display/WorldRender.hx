@@ -744,8 +744,6 @@ class WorldRender extends dn.Process {
 				f.layout = Vertical;
 				f;
 			}
-		else
-			wl.fieldsRender.removeChildren();
 
 		// Attach custom fields
 		FieldInstanceRender.renderFields(

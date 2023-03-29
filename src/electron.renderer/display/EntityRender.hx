@@ -273,9 +273,6 @@ class EntityRender extends dn.Process {
 
 
 	public function renderFields() {
-		above.removeChildren();
-		center.removeChildren();
-		beneath.removeChildren();
 		fieldGraphics.clear();
 
 		// Attach fields
@@ -364,24 +361,34 @@ class EntityRender extends dn.Process {
 		}
 
 		// Update field wrappers
-		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
-		if( above.visible ) {
-			above.setScale(zoomScale);
-			above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
-			above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY );
-			if( identifier!=null )
-				above.y -= identifier.textHeight*identifier.scaleY;
-			above.alpha = 1;
+		var showFields = fullVis || !ei._li.def.hideFieldsWhenInactive;
+		if( showFields ) {
+			above.visible = showFields && above.numChildren>0;
+			trace(above.numChildren);
+			if( above.visible ) {
+				above.setScale(zoomScale);
+				above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
+				above.y = Std.int( -above.outerHeight*above.scaleY - ei.height*ed.pivotY );
+				if( identifier!=null )
+					above.y -= identifier.textHeight*identifier.scaleY;
+				above.alpha = 1;
+			}
 
-			center.setScale(zoomScale);
-			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
-			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
-			center.alpha = 1;
+			center.visible = showFields && center.numChildren>0;
+			if( center.visible ) {
+				center.setScale(zoomScale);
+				center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
+				center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
+				center.alpha = 1;
+			}
 
-			beneath.setScale(zoomScale);
-			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
-			beneath.y = Std.int( ei.height*(1-ed.pivotY) );
-			beneath.alpha = 1;
+			beneath.visible = showFields && beneath.numChildren>0;
+			if( beneath.visible ) {
+				beneath.setScale(zoomScale);
+				beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
+				beneath.y = Std.int( ei.height*(1-ed.pivotY) );
+				beneath.alpha = 1;
+			}
 		}
 	}
 

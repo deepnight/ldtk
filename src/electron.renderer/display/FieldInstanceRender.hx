@@ -210,6 +210,7 @@ class FieldInstanceRender {
 
 	public static function renderFields(fieldInstances:Array<data.inst.FieldInstance>, baseColor:dn.Col, ctx:FieldRenderContext, parent:h2d.Flow) {
 		var allRenders = [];
+		parent.removeChildren();
 
 		var ei = switch ctx {
 			case EntityCtx(g, ei, ld): ei;
@@ -252,7 +253,6 @@ class FieldInstanceRender {
 		}
 
 		parent.reflow();
-		// parent.debug = true;
 
 		// Align labels
 		var maxLabelWidth = 0.;
@@ -299,12 +299,14 @@ class FieldInstanceRender {
 				}
 
 				// Fields background
-				var bg = new h2d.Bitmap( h2d.Tile.fromColor(baseColor.toBlack(0.65)) );
-				parent.addChildAt(bg, 0);
-				parent.getProperties(bg).isAbsolute = true;
-				bg.setPosition(-padX + maxLabelWidth*settings.v.editorUiScale, -padY+1);
-				bg.scaleX = parent.outerWidth - maxLabelWidth*settings.v.editorUiScale + padX*2;
-				bg.scaleY = parent.outerHeight + padY*2;
+				if( parent.numChildren>0 ) {
+					var bg = new h2d.Bitmap( h2d.Tile.fromColor(baseColor.toBlack(0.65)) );
+					parent.addChildAt(bg, 0);
+					parent.getProperties(bg).isAbsolute = true;
+					bg.setPosition(-padX + maxLabelWidth*settings.v.editorUiScale, -padY+1);
+					bg.scaleX = parent.outerWidth - maxLabelWidth*settings.v.editorUiScale + padX*2;
+					bg.scaleY = parent.outerHeight + padY*2;
+				}
 		}
 	}
 
