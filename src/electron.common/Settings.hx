@@ -68,7 +68,7 @@ class Settings {
 
 	public function new() {
 		// Init storage
-		ls = dn.data.LocalStorage.createJsonStorage("settings", Full);
+		ls = dn.data.LocalStorage.getJsonStorage("settings", Full);
 		ls.setStorageFileDir( getDir() );
 
 		// Init defaults

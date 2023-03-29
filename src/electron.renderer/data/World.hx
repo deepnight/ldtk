@@ -304,7 +304,7 @@ class World {
 
 	public function getClosestLevelFrom(level:data.Level) : Null<data.Level> {
 		var dh = new dn.DecisionHelper(levels);
-		dh.removeValue(level);
+		dh.discardValue(level);
 		dh.score( (l)->-level.getBoundsDist(l) );
 		return dh.getBest();
 	}
