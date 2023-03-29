@@ -147,9 +147,7 @@ class WorldPanel extends ui.modal.Panel {
 		var jSelect = jContent.find(".worldBar select");
 		jSelect.off();
 		jSelect.empty();
-		trace("cur="+curWorld.iid);
 		for(w in project.worlds) {
-			trace(w.iid);
 			var jOpt = new J('<option/>');
 			jSelect.append(jOpt);
 			jOpt.attr("value",w.iid);

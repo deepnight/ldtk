@@ -364,7 +364,6 @@ class EntityRender extends dn.Process {
 		var showFields = fullVis || !ei._li.def.hideFieldsWhenInactive;
 		if( showFields ) {
 			above.visible = showFields && above.numChildren>0;
-			trace(above.numChildren);
 			if( above.visible ) {
 				above.setScale(zoomScale);
 				above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );

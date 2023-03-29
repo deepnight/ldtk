@@ -79,7 +79,6 @@ class FieldInstancesForm {
 					jRep.append('<span class="label">Default</span>');
 
 				jRep.on("click.def", function(ev) {
-					trace("click def");
 					ev.preventDefault();
 					jRep.remove();
 					if( jElements.is("[type=checkbox]") ) {

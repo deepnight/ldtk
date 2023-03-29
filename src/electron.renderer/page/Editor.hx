@@ -333,7 +333,6 @@ class Editor extends Page {
 
 
 		curWorldIid = project.worlds[0].iid;
-		trace("curworld:"+curWorldIid);
 		curLevelId = project.worlds[0].levels[0].uid;
 		curLayerDefUid = -1;
 
