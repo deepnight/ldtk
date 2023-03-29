@@ -3,7 +3,7 @@
 	<button class="delete red small" title="Delete current level"> <span class="icon delete"></span> </button>
 </div>
 
-
+<div class="collapser" default="open" id="levelPanel_level" default="open">Level properties</div>
 <dl class="form" id="levelProps">
 	<dt>
 		<label for="identifier">IID</label>
@@ -78,10 +78,8 @@
 	</dd>
 </dl>
 
-<!-- Custom level fields -->
-<h2>
-	Custom fields
-	<a class="editFields">Edit fields</a>
-</h2>
-
-<div id="levelCustomFields"></div>
+<div class="collapser" default="open" id="levelPanel_fields" default="open">Custom fields</div>
+<div class="wrapper">
+	<div id="levelCustomFields"></div>
+	<button class="editFields">Edit custom fields</button>
+</div>

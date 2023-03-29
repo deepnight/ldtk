@@ -9,12 +9,22 @@ class LevelInstanceForm {
 	var level: data.Level;
 	var fieldsForm : FieldInstancesForm;
 
-	public function new() {
+	public function new(useCollapsers:Bool) {
 		jWrapper = new J('<div class="levelInstanceForm"/>');
 
 		level = editor.curLevel;
 		var raw = JsTools.getHtmlTemplate("levelInstanceForm");
 		jWrapper.html(raw);
+
+		// Turn collapsers into title
+		if( !useCollapsers ) {
+			var jCollapsers = jWrapper.find(".collapser");
+			jCollapsers.each( (i,e)->{
+				var jCollapser = new J(e);
+				jCollapser.replaceWith('<h2>${jCollapser.text()}</h2>');
+			});
+		}
+
 
 		// Create button
 		jWrapper.find("button.create").click( (_)->{
@@ -367,11 +377,12 @@ class LevelInstanceForm {
 		}
 
 
-		JsTools.parseComponents(jForm);
+		JsTools.parseComponents(jWrapper);
 	}
 
 
 	function updateFieldsForm() {
 		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd, true) );
+		JsTools.parseComponents(jWrapper);
 	}
 }
