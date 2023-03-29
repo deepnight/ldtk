@@ -1240,29 +1240,42 @@ ul.log {
 .icon.red	{ filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6); }
 
 .collapser {
-	color: $bgLighter;
-	font-size: 10pt;
 	min-height: 0.8em;
 	padding-top: 4px;
 	padding-bottom: 4px;
 	padding-left: 24px;
+
+	color: $orange;
+	font-family: Roboto;
+	font-size: 13pt;
+	text-transform: uppercase;
+
 	background-repeat: no-repeat;
 	background-position: left center;
 
 	&.expanded {
 		cursor: $cur_collapse;
-		color: white;
-		background-color: $bgLight;
+		color: black;
+		background-color: $bgLighter;
 		background-image: url("../icons/expanded.svg");
+
+		&+*:not(:empty) {
+			margin-bottom: 8px;
+		}
+
 		&:hover {
 			color: black;
 			background-color: $orange;
 			border-color: $orange;
+
+			&+*:not(:empty) {
+				border-color: $orange;
+			}
 		}
 	}
 	&.collapsed {
 		cursor: $cur_expand;
-		background-color: $bgMed;
+		background-color: $bgLight;
 		border: 1px solid $bgLight;
 		background-image: url("../icons/collapsed.svg");
 		margin-bottom: 8px;
@@ -1274,7 +1287,15 @@ ul.log {
 			border-color: $orange;
 		}
 	}
+
+	&+*:not(:empty) {
+		// width: calc(100% - 16px);
+		box-sizing: border-box;
+		padding: 8px;
+		border: 1px solid $bgLight;
+	}
 }
+
 
 
 div.entityRef {
@@ -7127,8 +7148,6 @@ body.sorting ul.collapsedSortTarget {
 }
 
 .window.panel.worldPanel {
-	width: auto;
-
 	.wrapper {
 		padding: 0;
 		box-shadow: none;
@@ -7142,7 +7161,7 @@ body.sorting ul.collapsedSortTarget {
 	}
 
 	.content {
-		width: 330px;
+		width: 400px;
 		height: 100%;
 		display: grid;
 		grid-template-rows: min-content auto;
@@ -7164,8 +7183,6 @@ body.sorting ul.collapsedSortTarget {
 		}
 
 		.worldSettings {
-			margin-bottom: 32px;
-
 			.buttons {
 				margin-bottom: 16px;
 				button:not(.running) span.running {
@@ -7234,21 +7251,6 @@ body.sorting ul.collapsedSortTarget {
 		width: 650px;
 		height: 100%;
 
-		a.editFields {
-			display: inline-block;
-			margin-left: 8px;
-			padding: 2px 4px;
-			font-size: 9pt;
-			color: black;
-			background-color: $orange;
-			border-radius: 3px;
-			cursor: pointer;
-			vertical-align: middle;
-			&:hover {
-				background-color: white;
-			}
-		}
-
 		dl#levelForm {
 			grid-template-columns: 110px auto;
 			dt {
@@ -7304,31 +7306,13 @@ body.sorting ul.collapsedSortTarget {
 
 	.buttons {
 		flex-wrap: nowrap;
-		padding-bottom: 16px;
-		margin-bottom: 16px;
-		border-bottom: 1px dashed $bgLight;
+		margin-bottom: 32px;
 
 		button.delete {
 			flex: 0 1 0px;
 		}
 		button {
 			white-space: nowrap;
-		}
-	}
-
-
-	a.editFields {
-		display: inline-block;
-		margin-left: 8px;
-		padding: 2px 4px;
-		font-size: 9pt;
-		color: black;
-		background-color: $orange;
-		border-radius: 3px;
-		cursor: pointer;
-		vertical-align: middle;
-		&:hover {
-			background-color: white;
 		}
 	}
 
