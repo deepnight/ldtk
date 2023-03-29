@@ -184,6 +184,7 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.iid = p.generateUniqueId_UUID();
+		p.dummyWorldIid = p.generateUniqueId_UUID();
 		p.filePath.parseFilePath(filePath);
 		p.createWorld(true);
 
@@ -933,6 +934,9 @@ class Project {
 	/**  WORLDS  **************************************/
 
 	public function createWorld(alsoCreateLevel:Bool) : World {
+		if( worlds.length>0 )
+			setFlag(MultiWorlds,true); // make sure it's enabled
+
 		var worldIid = hasFlag(MultiWorlds) ? generateUniqueId_UUID() : dummyWorldIid;
 		var w = new data.World(this, worldIid, "World");
 		w.identifier = fixUniqueIdStr( w.identifier, (id)->isWorldIdentifierUnique(id,w) );
@@ -940,9 +944,6 @@ class Project {
 
 		if( alsoCreateLevel )
 			w.createLevel();
-
-		if( worlds.length>1 )
-			setFlag(MultiWorlds,true); // make sure it's enabled
 
 		return w;
 	}
