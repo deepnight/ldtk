@@ -6354,6 +6354,10 @@ dl.form.fieldInstanceEditor {
 			flex: 1 1 auto;
 		}
 	}
+
+	dd.F_Bool span.value {
+		flex: 0 1 0px;
+	}
 	dd.F_String span.inputWithDefaultOption input[type=text] {
 		max-width: none;
 	}
