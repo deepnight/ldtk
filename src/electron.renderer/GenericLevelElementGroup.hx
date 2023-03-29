@@ -477,7 +477,8 @@ class GenericLevelElementGroup {
 							case RefLinkBetweenCenters: continue;
 							case RefLinkBetweenPivots: continue;
 							case Points: continue;
-							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, RadiusPx, RadiusGrid: continue;
+							case EntityTile, LevelTile: continue;
+							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, RadiusPx, RadiusGrid: continue;
 						}
 
 						// Links to Entity own field points

@@ -438,6 +438,7 @@ class FieldInstanceRender {
 				}
 
 			case EntityTile:
+			case LevelTile:
 
 			case RefLinkBetweenCenters:
 				switch ctx {
@@ -503,7 +504,9 @@ class FieldInstanceRender {
 							g.endFill();
 
 							switch fd.editorDisplayMode {
-								case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
+								case Hidden, ValueOnly, NameAndValue, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
+								case EntityTile:
+								case LevelTile:
 								case Points, PointStar:
 								case RefLinkBetweenCenters:
 								case RefLinkBetweenPivots:

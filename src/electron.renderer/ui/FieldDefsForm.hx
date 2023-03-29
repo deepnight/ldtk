@@ -436,6 +436,7 @@ class FieldDefsForm {
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
 					case EntityTile: L.t._("Replace entity tile");
+					case LevelTile: L.t._("Replace level render in world view");
 					case ArrayCountWithLabel: L.t._("Show array length with label");
 					case ArrayCountNoLabel: L.t._("Show array length only");
 					case RefLinkBetweenCenters: L.t._("Reference link (using center coord)");
@@ -452,6 +453,9 @@ class FieldDefsForm {
 
 					case EntityTile:
 						isEntityField() && ( curField.isEnum() || curField.type==F_Tile );
+
+					case LevelTile:
+						isLevelField() && ( curField.isEnum() || curField.type==F_Tile );
 
 					case RefLinkBetweenCenters, RefLinkBetweenPivots:
 						curField.type==F_EntityRef;
@@ -505,7 +509,7 @@ class FieldDefsForm {
 		i.onChange = onFieldChange;
 		i.setVisibility( isEntityField() && switch curField.editorDisplayMode {
 			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel: true;
-			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters: false;
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, LevelTile, EntityTile, RefLinkBetweenPivots, RefLinkBetweenCenters: false;
 		} );
 
 

@@ -194,6 +194,8 @@ class WorldRender extends dn.Process {
 			case EntityFieldInstanceChanged(ei,fi):
 
 			case LevelFieldInstanceChanged(l,fi):
+				if( fi.def.type==F_Tile )
+					invalidateLevelRender(l);
 				invalidateLevelFields(l);
 
 			case FieldDefRemoved(fd):
@@ -786,7 +788,7 @@ class WorldRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
-		// Render layers
+		// Default layers renders
 		for( li in l.layerInstances ) {
 			if( li.def.type==Entities )
 				continue;
@@ -852,6 +854,13 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
+		}
+
+		// Custom tile render override
+		var t = l.getTileFromFields();
+		if( t!=null ) {
+			var bmp = new h2d.Bitmap(t, wl.render);
+			bmp.setScale( dn.heaps.Scaler.bestFit_f(t.width,t.height, l.pxWid,l.pxHei) );
 		}
 
 		updateLevelBounds(l);

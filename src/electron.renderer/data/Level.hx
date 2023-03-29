@@ -716,6 +716,24 @@ class Level {
 		return _adjust( getBgColor() );
 	}
 
+
+	public function getTileFromFields() : Null<h2d.Tile> {
+		for(fd in _project.defs.levelFields) {
+			if( fd.editorDisplayMode!=LevelTile )
+				continue;
+
+			var fi = getFieldInstance(fd,false);
+			if( fi==null )
+				continue;
+
+			var r = fi.getTileRectObj(0);
+			if( r!=null )
+				return _project.defs.getTilesetDef(r.tilesetUid).getTileRect(r);
+		}
+
+		return null;
+	}
+
 	public function hasAnyFieldDisplayedAt(pos:ldtk.Json.FieldDisplayPosition) {
 		for(fi in fieldInstances)
 			if( fi.def.editorAlwaysShow || !fi.isUsingDefault(0) ) {
@@ -726,6 +744,7 @@ class Level {
 
 					case Hidden:
 					case EntityTile:
+					case LevelTile:
 					case Points:
 					case PointStar:
 					case PointPath, PointPathLoop:

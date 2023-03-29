@@ -673,7 +673,7 @@ class FieldInstancesForm {
 		// Connect to last point of existing path
 		if( fi.def.isArray )
 			switch fi.def.editorDisplayMode {
-				case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
+				case Hidden, ValueOnly, NameAndValue, LevelTile, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 				case Points, PointStar:
 				case RefLinkBetweenCenters:
 				case RefLinkBetweenPivots:
@@ -694,7 +694,7 @@ class FieldInstancesForm {
 
 				// Connect to previous point in path mode
 				switch fi.def.editorDisplayMode {
-					case Hidden, ValueOnly, NameAndValue, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
+					case Hidden, ValueOnly, NameAndValue, LevelTile, EntityTile, RadiusPx, RadiusGrid, ArrayCountNoLabel, ArrayCountWithLabel:
 					case Points, PointStar:
 					case RefLinkBetweenPivots:
 					case RefLinkBetweenCenters:
