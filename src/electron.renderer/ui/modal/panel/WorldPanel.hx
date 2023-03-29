@@ -10,6 +10,9 @@ class WorldPanel extends ui.modal.Panel {
 		jMask.hide();
 		loadTemplate("worldPanel");
 
+		if( !project.hasFlag(MultiWorlds) )
+			jWrapper.find(".worldBar").hide();
+
 		// Create world button
 		jWrapper.find(".worldBar button.create").click( (_)->{
 			var w = project.createWorld(true);
