@@ -451,7 +451,7 @@ class FieldDefsForm {
 					case ArrayCountNoLabel, ArrayCountWithLabel: curField.isArray;
 
 					case EntityTile:
-						curField.isEnum() && isEntityField() || curField.type==F_Tile;
+						isEntityField() && ( curField.isEnum() || curField.type==F_Tile );
 
 					case RefLinkBetweenCenters, RefLinkBetweenPivots:
 						curField.type==F_EntityRef;
