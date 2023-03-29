@@ -135,7 +135,9 @@ class Editor extends Page {
 			);
 		}
 
-		if( loadLevelIndex!=null ) { // TODO restore world and level on opening
+		if( loadLevelIndex!=null ) {
+			// TODO restore world and level on opening (this arg is only useful when starting LDtk from explorer)
+
 			// Auto-load provided level index
 			// if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
 			// 	selectLevel( project.levels[loadLevelIndex] );
@@ -148,7 +150,9 @@ class Editor extends Page {
 			// Auto load last level UID
 			var l = project.getLevelAnywhere( settings.v.lastProject.levelUid );
 			if( l!=null ) {
+				selectWorld(l._world);
 				selectLevel(l);
+				setWorldMode(false);
 				camera.fit(true);
 			}
 		}
