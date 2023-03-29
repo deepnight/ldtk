@@ -124,6 +124,9 @@ class WorldPanel extends ui.modal.Panel {
 			case WorldSelected(_):
 				updateWorldForm();
 
+			case WorldCreated(_), WorldRemoved(_):
+				updateWorldForm();
+
 			case ProjectSelected:
 				updateWorldForm();
 

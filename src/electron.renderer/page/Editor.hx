@@ -1890,6 +1890,7 @@ class Editor extends Page {
 			case ViewportChanged:
 			case LayerInstanceSelected:
 			case LevelSelected(_):
+			case WorldSelected(_):
 			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
 			case ToolValueSelected:
