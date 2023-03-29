@@ -676,7 +676,7 @@ class JsTools {
 
 
 		// Collapser
-		jCtx.find(".collapser").each( (idx,e)->{
+		jCtx.find(".collapser:visible").each( (idx,e)->{
 			var jCollapser = new J(e);
 			var tid = jCollapser.attr("target");
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
