@@ -333,6 +333,7 @@ class Editor extends Page {
 
 
 		curWorldIid = project.worlds[0].iid;
+		trace("curworld:"+curWorldIid);
 		curLevelId = project.worlds[0].levels[0].uid;
 		curLayerDefUid = -1;
 
@@ -1869,6 +1870,8 @@ class Editor extends Page {
 			case ToolValueSelected:
 			case ToolOptionChanged:
 			case WorldSelected(w):
+			case WorldCreated(w):
+			case WorldRemoved(w):
 			case WorldMode(active):
 			case WorldDepthSelected(worldDepth):
 			case GridChanged(active):
@@ -2105,6 +2108,9 @@ class Editor extends Page {
 
 			case WorldSelected(w):
 				// NOTE: a LevelSelected event always happens right after this one
+
+			case WorldCreated(w):
+			case WorldRemoved(w):
 		}
 
 		// Propagate to all LevelTimelines

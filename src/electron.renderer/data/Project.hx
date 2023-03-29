@@ -947,6 +947,14 @@ class Project {
 		return w;
 	}
 
+	public function removeWorld(world:World) {
+		for(l in world.levels.copy())
+			world.removeLevel(l);
+
+		worlds.remove(world);
+		tidy();
+	}
+
 	public function isWorldIdentifierUnique(id:String, ?exclude:World) {
 		id = cleanupIdentifier(id, identifierStyle);
 		for(w in worlds)

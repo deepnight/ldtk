@@ -10,14 +10,44 @@ class WorldPanel extends ui.modal.Panel {
 		jMask.hide();
 		loadTemplate("worldPanel");
 
+		// Create world button
+		jWrapper.find(".worldBar button.create").click( (_)->{
+			var w = project.createWorld(true);
+			editor.selectWorld(w,true);
+			Notification.success(L.t._("New world created"));
+			editor.setWorldMode(true);
+			editor.ge.emit( WorldCreated(w) );
+		});
 
-		// Create button
-		jWrapper.find("button.create").click( (_)->{
+		// Delete world button
+		jWrapper.find(".worldBar button.delete").click( (_)->{
+			if( project.worlds.length<=1 ) {
+				N.error(L.t._("You can't delete the last world."));
+				return;
+			}
+
+			new ui.modal.dialog.Confirm(
+				Lang.t._("Are you sure you want to delete this world?"),
+				true,
+				()->{
+					new LastChance( L.t._('World ::id:: removed', {id:curWorld.identifier}), project);
+					var deleted = curWorld;
+					editor.selectWorld(project.worlds[0]);
+					project.removeWorld(deleted);
+					editor.ge.emit( WorldRemoved(deleted) );
+					editor.setWorldMode(true);
+				}
+			);
+		});
+
+
+		// Create level button
+		jWrapper.find(".levelBar button.create").click( (_)->{
 			var vp = new ui.vp.LevelSpotPicker();
 		});
 
-		// Delete button
-		jWrapper.find("button.delete").click( (_)->{
+		// Delete level button
+		jWrapper.find(".levelBar button.delete").click( (_)->{
 			if( curWorld.levels.length<=1 ) {
 				N.error(L.t._("You can't delete the last level."));
 				return;
@@ -41,8 +71,8 @@ class WorldPanel extends ui.modal.Panel {
 			);
 		});
 
-		// Duplicate button
-		jWrapper.find("button.duplicate").click( (_)->{
+		// Duplicate level button
+		jWrapper.find(".levelBar button.duplicate").click( (_)->{
 			new ui.modal.dialog.Confirm(
 				Lang.t._("Create a copy of the current level?"),
 				()->{
@@ -88,6 +118,9 @@ class WorldPanel extends ui.modal.Panel {
 			case WorldSettingsChanged:
 				updateWorldForm();
 
+			case WorldSelected(_):
+				updateWorldForm();
+
 			case ProjectSelected:
 				updateWorldForm();
 
@@ -106,6 +139,32 @@ class WorldPanel extends ui.modal.Panel {
 		for(k in ldtk.Json.WorldLayout.getConstructors())
 			jForm.removeClass("layout-"+k);
 		jForm.addClass("layout-"+curWorld.worldLayout.getName());
+
+		// List all worlds
+		var jSelect = jContent.find(".worldBar select");
+		jSelect.off();
+		jSelect.empty();
+		trace("cur="+curWorld.iid);
+		for(w in project.worlds) {
+			trace(w.iid);
+			var jOpt = new J('<option/>');
+			jSelect.append(jOpt);
+			jOpt.attr("value",w.iid);
+			jOpt.text(w.identifier);
+		}
+		jSelect.val(curWorld.iid);
+		jSelect.change( (_)->{
+			var iid = jSelect.val();
+			var w = project.getWorldIid(iid);
+			editor.selectWorld(w);
+		});
+
+		// World ID
+		var i = Input.linkToHtmlInput(curWorld.identifier, jForm.find("#worldId"));
+		i.fixValue = (v)->project.fixUniqueIdStr( v, (id)->project.isWorldIdentifierUnique(id,curWorld) );
+		i.linkEvent(WorldSettingsChanged);
+		if( !project.hasFlag(MultiWorlds) )
+			i.disable();
 
 		// World layout
 		var old = curWorld.worldLayout;

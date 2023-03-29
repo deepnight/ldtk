@@ -93,6 +93,8 @@ class LevelRender extends dn.Process {
 				}
 
 			case WorldSelected(w):
+			case WorldCreated(w):
+			case WorldRemoved(w):
 
 			case WorldDepthSelected(worldDepth):
 

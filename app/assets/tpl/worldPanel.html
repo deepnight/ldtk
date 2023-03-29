@@ -4,7 +4,13 @@
 </h2>
 
 <div class="scroller">
-	<div class="buttons">
+	<div class="worldBar buttons">
+		<select></select>
+		<button class="create small" title="Create a new world"> <span class="icon add"></span> </button>
+		<button class="delete red small" title="Delete current world"> <span class="icon delete"></span> </button>
+	</div>
+
+	<div class="levelBar buttons">
 		<button class="create"> <span class="icon add"></span> Create a new level</button>
 		<button class="duplicate small" title="Duplicate current level"> <span class="icon copy"></span> </button>
 		<button class="delete red small" title="Delete current level"> <span class="icon delete"></span> </button>
@@ -14,6 +20,13 @@
 	<div class="worldSettings">
 		<div class="collapser" default="open" id="worldPanel_world" default="open">World settings</div>
 		<dl class="form">
+			<dt>
+				<label for="worldId">World identifier</label>
+				<info class="identifier"></info>
+			</dt>
+			<dd>
+				<input type="text" id="worldId"/>
+			</dd>
 			<dt>
 				<label for="color">World layout</label>
 				<info>

@@ -269,7 +269,7 @@ button {
 	&.red {
 		background-color: $darkRed;
 		&:hover {
-			background-color: $red;
+			background-color: #9d1202;
 		}
 	}
 
@@ -7172,6 +7172,18 @@ body.sorting ul.collapsedSortTarget {
 
 		h2:first-of-type {
 			margin: 0;
+		}
+
+		.worldBar {
+			border-radius: 0;
+			margin-bottom: 8px;
+			select {
+				flex: 1 0 auto;
+			}
+		}
+
+		.levelBar {
+			margin-bottom: 16px;
 		}
 
 		.worldSettings,

@@ -19,6 +19,8 @@ enum GlobalEvent {
 
 	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourIids:Null<Array<String>>);
 	WorldSettingsChanged;
+	WorldCreated(w:data.World);
+	WorldRemoved(w:data.World);
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
