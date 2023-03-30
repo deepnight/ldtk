@@ -293,6 +293,9 @@ class World {
 
 
 	public function getShortName(maxLen=6) {
+		if( identifier.length<=maxLen )
+			return identifier;
+		
 		var short = "";
 		var skipSpace = false;
 		var picksAfterCaps = 2;
