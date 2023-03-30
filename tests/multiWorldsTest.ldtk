@@ -11,7 +11,7 @@
 	"iid": "635afa60-c640-11ed-8902-fd0851d43267",
 	"jsonVersion": "1.2.6",
 	"appBuildId": 466711,
-	"nextUid": 26,
+	"nextUid": 30,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": null,
@@ -194,7 +194,7 @@
 	"worlds": [
 		{ "iid": "771850a0-66b0-11ec-b305-afed56219d98", "identifier": "Horizontal", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearHorizontal", "levels": [
 			{
-				"identifier": "First_world_Level_0",
+				"identifier": "Horizontal_Level_0",
 				"iid": "02e582c0-66b0-11ec-95f2-5f20538a0ecc",
 				"uid": 0,
 				"worldX": -1,
@@ -370,7 +370,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "First_world_Level_1",
+				"identifier": "Horizontal_Level_1",
 				"iid": "0f2187a1-66b0-11ec-95f2-4b019549917e",
 				"uid": 2,
 				"worldX": -1,
@@ -504,7 +504,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "First_world_Level_2",
+				"identifier": "Horizontal_Level_2",
 				"iid": "1b2f9eb0-66b0-11ec-95f2-21be880eff86",
 				"uid": 3,
 				"worldX": -1,
@@ -587,7 +587,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "First_world_Level_3",
+				"identifier": "Horizontal_Level_3",
 				"iid": "22bff5d0-66b0-11ec-95f2-3588778f1e70",
 				"uid": 4,
 				"worldX": -1,
@@ -670,7 +670,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "First_world_Level_4",
+				"identifier": "Horizontal_Level_4",
 				"iid": "54fa63a0-66b0-11ec-95f2-bf7405efce4c",
 				"uid": 5,
 				"worldX": -1,
@@ -755,7 +755,7 @@
 		] },
 		{ "iid": "ae188e70-66b0-11ec-918b-f71efeefb8f8", "identifier": "Vertical", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "LinearVertical", "levels": [
 			{
-				"identifier": "Second_world_Level_0",
+				"identifier": "Vertical_Level_0",
 				"iid": "ae188e71-66b0-11ec-918b-35b60d50f00b",
 				"uid": 13,
 				"worldX": -1,
@@ -889,7 +889,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "Second_world_Level_1",
+				"identifier": "Vertical_Level_1",
 				"iid": "c2217e40-66b0-11ec-918b-891613a010b7",
 				"uid": 14,
 				"worldX": -1,
@@ -990,7 +990,7 @@
 				"__neighbours": []
 			},
 			{
-				"identifier": "Second_world_Level_2",
+				"identifier": "Vertical_Level_2",
 				"iid": "17151fa0-66b0-11ec-918b-919f05f8b82e",
 				"uid": 16,
 				"worldX": -1,
@@ -1075,7 +1075,7 @@
 		] },
 		{ "iid": "dd1cf730-66b0-11ec-9aaf-076088cd0424", "identifier": "Free2D", "defaultLevelWidth": 256, "defaultLevelHeight": 256, "worldGridWidth": 256, "worldGridHeight": 256, "worldLayout": "GridVania", "levels": [
 			{
-				"identifier": "Third_world_Level_0",
+				"identifier": "Free2D_Level_0",
 				"iid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6",
 				"uid": 17,
 				"worldX": 1024,
@@ -1191,7 +1191,7 @@
 				"__neighbours": [ { "levelIid": "e3f96ad0-66b0-11ec-9d70-cb8b3d84de6f", "dir": "e" }, { "levelIid": "e4a2ca30-66b0-11ec-9d70-71ef45ec5a41", "dir": "e" }, { "levelIid": "e6a15950-66b0-11ec-9d70-57c417810a80", "dir": "s" }, { "levelIid": "ebf44390-66b0-11ec-9d70-630f3718f2b4", "dir": "w" } ]
 			},
 			{
-				"identifier": "Third_world_Level_1",
+				"identifier": "Free2D_Level_1",
 				"iid": "e3f96ad0-66b0-11ec-9d70-cb8b3d84de6f",
 				"uid": 18,
 				"worldX": 1280,
@@ -1281,7 +1281,7 @@
 				"__neighbours": [ { "levelIid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6", "dir": "w" }, { "levelIid": "e4a2ca30-66b0-11ec-9d70-71ef45ec5a41", "dir": "s" } ]
 			},
 			{
-				"identifier": "Third_world_Level_2",
+				"identifier": "Free2D_Level_2",
 				"iid": "e4a2ca30-66b0-11ec-9d70-71ef45ec5a41",
 				"uid": 19,
 				"worldX": 1280,
@@ -1386,7 +1386,7 @@
 				"__neighbours": [ { "levelIid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6", "dir": "w" }, { "levelIid": "e3f96ad0-66b0-11ec-9d70-cb8b3d84de6f", "dir": "n" }, { "levelIid": "e6a15950-66b0-11ec-9d70-57c417810a80", "dir": "w" } ]
 			},
 			{
-				"identifier": "Third_world_Level_3",
+				"identifier": "Free2D_Level_3",
 				"iid": "e6a15950-66b0-11ec-9d70-57c417810a80",
 				"uid": 20,
 				"worldX": 768,
@@ -1476,7 +1476,7 @@
 				"__neighbours": [ { "levelIid": "dd1d1e40-66b0-11ec-9aaf-f75395dc05f6", "dir": "n" }, { "levelIid": "e4a2ca30-66b0-11ec-9d70-71ef45ec5a41", "dir": "e" }, { "levelIid": "ebf44390-66b0-11ec-9d70-630f3718f2b4", "dir": "n" } ]
 			},
 			{
-				"identifier": "Third_world_Level_4",
+				"identifier": "Free2D_Level_4",
 				"iid": "ebf44390-66b0-11ec-9d70-630f3718f2b4",
 				"uid": 21,
 				"worldX": 512,
