@@ -18,8 +18,17 @@
 
 
 	<div class="worldSettings">
-		<div class="collapser" default="open" id="worldPanel_world" default="open">World settings</div>
+		<div class="collapser" default="open" id="worldPanel_world" default="open">World settings: "<span class="curWorldId"></span>"</div>
 		<dl class="form">
+			<dt>
+				<label for="worldIid">IID</label>
+				<info>The IID (stands for Instance IDentifier) is a unique string identifier associated with this World.</info>
+			</dt>
+			<dd>
+				<input type="text" id="worldIid" readonly="readonly"/>
+				<button class="small gray copyWorldIid"> <span class="icon copy"></span> </button>
+			</dd>
+
 			<dt>
 				<label for="worldId">World identifier</label>
 				<info class="identifier"></info>

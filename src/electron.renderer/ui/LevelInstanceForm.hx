@@ -146,8 +146,8 @@ class LevelInstanceForm {
 		jWrapper.find(".curLevelId").text(level.identifier);
 
 		// IID
-		jForm.find("#iid").val(level.iid);
-		jForm.find(".copyIid").click(_->{
+		jForm.find("#leveliid").val(level.iid);
+		jForm.find(".copyLevelIid").click(_->{
 			App.ME.clipboard.copyStr(level.iid);
 			N.copied();
 		});

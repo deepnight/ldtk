@@ -139,12 +139,20 @@ class WorldPanel extends ui.modal.Panel {
 
 
 	function updateWorldForm() {
+		jContent.find(".curWorldId").text(curWorld.identifier);
+
 		var jForm = jContent.find(".worldSettings dl.form");
 		jForm.find("*").off();
 
 		for(k in ldtk.Json.WorldLayout.getConstructors())
 			jForm.removeClass("layout-"+k);
 		jForm.addClass("layout-"+curWorld.worldLayout.getName());
+
+		jForm.find("#worldIid").val(curWorld.iid);
+		jForm.find(".copyWorldIid").click(_->{
+			App.ME.clipboard.copyStr(curWorld.iid);
+			N.copied();
+		});
 
 		// List all worlds
 		var jSelect = jContent.find(".worldBar select");

@@ -1253,6 +1253,12 @@ ul.log {
 	background-repeat: no-repeat;
 	background-position: left center;
 
+	&>span {
+		text-transform: none;
+		font-weight: bold;
+		color: white;
+	}
+
 	&.expanded {
 		cursor: $cur_collapse;
 		color: black;
@@ -1273,12 +1279,13 @@ ul.log {
 			}
 		}
 	}
+
 	&.collapsed {
 		cursor: $cur_expand;
 		background-color: $bgLight;
 		border: 1px solid $bgLight;
 		background-image: url("../icons/collapsed.svg");
-		margin-bottom: 8px;
+		margin-bottom: 2px;
 		border-radius: 3px;
 
 		&:hover {
@@ -7330,11 +7337,6 @@ body.sorting ul.collapsedSortTarget {
 		button {
 			white-space: nowrap;
 		}
-	}
-
-	.curLevelId {
-		text-transform: none;
-		font-weight: bold;
 	}
 
 	dl#levelProps {
