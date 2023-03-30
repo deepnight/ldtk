@@ -4662,6 +4662,49 @@ canvas#webgl {
 		}
 	}
 
+	#worldList {
+		position: absolute;
+		z-index: 2;
+		top: 4px;
+		margin-left: 4px;;
+		left: calc( $mainPanelNormalWid ); // redefined in list update
+
+		ul {
+			display: grid;
+			padding: 2px;
+			grid-auto-flow: column;
+			grid-auto-columns: min-content;
+			gap: 2px;
+			border-radius: 3px;
+			background-color: $bgDark;
+
+			li {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 40px;
+				height: 24px;
+				color: $orange;
+				font-size: 9pt;
+				font-weight: bold;
+				font-family: Roboto;
+				overflow: hidden;
+				cursor: pointer;
+				border: 1px solid $bgLight;
+				border-radius: 3px;
+				&.active {
+					color: black;
+					background-color: $orange;
+				}
+
+				&:not(.active):hover {
+					color: white;
+					border-color: white;
+				}
+			}
+		}
+	}
+
 	#worldDepths {
 		position: absolute;
 		z-index: 2;

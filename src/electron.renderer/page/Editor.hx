@@ -1351,6 +1351,33 @@ class Editor extends Page {
 		selectionTool.select([ Entity(curLayerInstance, tei) ]);
 	}
 
+	function updateWorldList() {
+		var jWorldList = jPage.find("#worldList");
+		if( project.worlds.length<=1 ) {
+			jWorldList.hide();
+			return;
+		}
+
+		jWorldList.show();
+		var w = jMainPanel.width();
+		jWorldList.css("left", w+"px");
+
+
+		var jList = jWorldList.find("ul");
+		jList.empty();
+		for(w in project.worlds) {
+			var w = w;
+			var jWorld = new J('<li/>');
+			jWorld.appendTo(jList);
+			jWorld.text(w.getShortName());
+			jWorld.click(_->{
+				selectWorld(w);
+			});
+			if( w==curWorld )
+				jWorld.addClass("active");
+		}
+	}
+
 
 	function updateWorldDepthsUI() {
 		var min = curWorld.getLowestLevelDepth();
@@ -1531,6 +1558,7 @@ class Editor extends Page {
 
 		updateCanvasSize();
 		updateAppBg();
+		updateWorldList();
 		if( !init )
 			N.quick("Compact UI: "+L.onOff(settings.v.compactMode));
 	}
@@ -2037,8 +2065,6 @@ class Editor extends Page {
 
 			case WorldLevelMoved(l, isFinal, _):
 
-			case WorldSettingsChanged:
-
 			case LevelSelected(l):
 				updateWorldDepthsUI();
 				updateLayerList();
@@ -2110,11 +2136,18 @@ class Editor extends Page {
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				updateTool();
 
-			case WorldSelected(w):
+			case WorldSettingsChanged:
+				updateWorldList();
+
+			case WorldSelected(_):
+				updateWorldList();
 				// NOTE: a LevelSelected event always happens right after this one
 
-			case WorldCreated(w):
-			case WorldRemoved(w):
+			case WorldCreated(_):
+				updateWorldList();
+
+			case WorldRemoved(_):
+				updateWorldList();
 		}
 
 		// Propagate to all LevelTimelines

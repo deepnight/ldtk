@@ -292,6 +292,48 @@ class World {
 	}
 
 
+	public function getShortName(maxLen=6) {
+		var short = "";
+		var skipSpace = false;
+		var picksAfterCaps = 2;
+		var picks = picksAfterCaps;
+		var lastPick = 0;
+		for(i in 0...identifier.length) {
+			var c = identifier.charCodeAt(i);
+			if( c>="A".code && c<="Z".code || c>="0".code && c<="9".code )
+				picks = picksAfterCaps;
+
+			if( c=="_".code ) {
+				picks = picksAfterCaps;
+				skipSpace = true;
+			}
+
+			if( !skipSpace && picks>0 ) {
+				picks--;
+				short+=identifier.charAt(i);
+				lastPick = i;
+			}
+
+			if( skipSpace && picks>0 && c!="_".code ) {
+				picks--;
+				skipSpace = false;
+				short+=identifier.charAt(i).toUpperCase();
+				lastPick = i;
+			}
+			if( short.length>=maxLen )
+				return short;
+		}
+
+		// Fill in with more characters if too short
+		lastPick++;
+		while( lastPick<identifier.length && short.length<maxLen ) {
+			short+=identifier.charAt(lastPick);
+			lastPick++;
+		}
+		return short;
+	}
+
+
 	public function getLevelIndex(?l:Level, ?uid:Int) : Int {
 		var i = 0;
 		for(ol in levels)
