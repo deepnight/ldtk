@@ -970,12 +970,13 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`",
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`",
 					"enum": [
 						"Hidden",
 						"ValueOnly",
 						"NameAndValue",
 						"EntityTile",
+						"LevelTile",
 						"Points",
 						"PointStar",
 						"PointPath",
