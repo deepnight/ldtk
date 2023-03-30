@@ -203,6 +203,8 @@ class WorldRender extends dn.Process {
 
 			case FieldDefChanged(fd):
 				invalidateAllLevelFields();
+				if( fd.type==F_Tile && project.defs.isLevelField(fd) )
+					invalidateAllLevelRenders();
 
 			case FieldDefSorted:
 				invalidateAllLevelFields();

@@ -470,6 +470,14 @@ class Definitions {
 	}
 
 
+	public function isLevelField(fd:data.def.FieldDef) {
+		for(lfd in levelFields)
+			if( lfd.uid==fd.uid )
+				return true;
+		return false;
+	}
+
+
 
 	/**  TILESET DEFS  *****************************************/
 
