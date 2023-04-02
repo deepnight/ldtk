@@ -456,7 +456,7 @@ class WorldRender extends dn.Process {
 		if( title.visible ) {
 			var b = curWorld.getWorldBounds();
 			var w = b.right-b.left;
-			var t = project.filePath.fileName;
+			var t = project.hasFlag(MultiWorlds) ? curWorld.identifier : project.filePath.fileName;
 			title.textColor = C.toWhite(project.bgColor, 0.3);
 			title.text = t;
 			title.setScale( camera.adjustedZoom * M.fmin(8, (w/title.textWidth) * 2) );
