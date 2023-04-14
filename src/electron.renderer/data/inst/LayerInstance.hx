@@ -705,16 +705,22 @@ class LayerInstance {
 		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
 		var td = getTilesetDef();
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
-		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
-			return {
-				x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
-				y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
-				srcX: td.getTileSourceX(tid),
-				srcY: td.getTileSourceY(tid),
-				tid: tid,
-				flips: flips,
-			}
-		} ) );
+
+		if( !autoTilesCache.get(r.uid).exists( coordId(cx,cy) ) )
+			autoTilesCache.get(r.uid).set( coordId(cx,cy), [] );
+
+		autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
+			tileIds.map( (tid)->{
+				return {
+					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
+					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
+					srcX: td.getTileSourceX(tid),
+					srcY: td.getTileSourceY(tid),
+					tid: tid,
+					flips: flips,
+				}
+			} )
+		));
 	}
 
 	inline function runAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
@@ -741,24 +747,25 @@ class LayerInstance {
 
 
 			// Apply rule
+			var matched = false;
 			if( r.matches(this, source, cx,cy) ) {
 				addRuleTilesAt(r, cx,cy, 0);
-				return true;
+				matched = true;
 			}
-			else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
+			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, source, cx,cy, -1) ) {
 				addRuleTilesAt(r, cx,cy, 1);
-				return true;
+				matched = true;
 			}
-			else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
+			if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 2);
-				return true;
+				matched = true;
 			}
-			else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
+			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 3);
-				return true;
+				matched = true;
 			}
-			else
-				return false;
+
+			return matched;
 		}
 	}
 

@@ -7,6 +7,9 @@
  - Sections of the World panel can now be collapsed (world settings, current level properties and level custom fields).
  - Fixed the size of Reset buttons in custom field forms
  - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
+ - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
+ - Fixed a very old rules bug that prevented Symetric rules to not re-apply in the same grid cell, if it applied there previously.
+
 
 # 1.2.5
 
