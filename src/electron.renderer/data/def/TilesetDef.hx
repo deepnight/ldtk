@@ -903,6 +903,22 @@ class TilesetDef {
 	}
 
 
+	public function getTileHtmlImg(tileId:Int) : Null<js.html.Image> {
+		if( !isAtlasLoaded() )
+			return null;
+
+		if( !isTileInBounds(tileId) )
+			return null; // out of bounds
+
+		var imgData = getOrLoadTilesetImage();
+		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
+		var img = new js.html.Image(subPixels.width, subPixels.height);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		img.src = 'data:image/png;base64,$b64';
+		return img;
+	}
+
+
 	// public function drawTileRectTo2dContext(ctx:js.html.CanvasRenderingContext2D, rect:CustomTileRect, toX=0, toY=0, scaleX=1.0, scaleY=1.0) {
 	// 	if( !isAtlasLoaded() )
 	// 		return;

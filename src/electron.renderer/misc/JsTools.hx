@@ -743,6 +743,49 @@ class JsTools {
 					}
 				});
 		});
+
+		// Advanced Selects
+		jCtx.find("select.adv").each( (idx,e)->{
+			var jOldSelect = new J(e);
+			jOldSelect.next(".advancedSelect").remove();
+			jOldSelect.css("outline","1px solid red");
+			jOldSelect.hide();
+
+			// Create advanced select & options
+			var jSelect = new J('<div class="advancedSelect"/>');
+			jSelect.insertAfter(jOldSelect);
+			for(elem in jOldSelect.children("option")) {
+				var jOldOpt = new J(elem);
+				var jOpt = new J('<div class="option"/>');
+				jSelect.append(jOpt);
+				jOpt.attr("value", jOldOpt.attr("value"));
+				jOpt.text( jOldOpt.text() );
+
+				// Background color
+				if( jOldOpt.is("[color]") ) {
+					var c = dn.Col.parseHex( jOldOpt.attr("color") );
+					jOpt.css("background-color", c.toCssRgba(0.3));
+				}
+
+				// Selected value
+				if( jOldSelect.val()==jOldOpt.attr("value") )
+					jOpt.addClass("current");
+
+				// Icon
+				if( jOldOpt.attr("tileId")!=null ) {
+					var td = Editor.ME.project.defs.getTilesetDef( Std.parseInt( jOldOpt.attr("tdUid") ) );
+					var img = td.getTileHtmlImg( Std.parseInt(jOldOpt.attr("tileId")) );
+					jOpt.prepend(img);
+				}
+			}
+
+			// Open select
+			jSelect.click(_->{
+				new ui.modal.dialog.SelectPicker(jSelect, v->{
+					jOldSelect.val(v).change();
+				});
+			});
+		});
 	}
 
 

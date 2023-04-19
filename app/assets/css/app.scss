@@ -1899,6 +1899,101 @@ select {
 	}
 }
 
+
+.advancedSelect {
+	flex: 1 1 0;
+	overflow: hidden;
+	align-self: center;
+	padding-right: 17px;
+
+	color: $almostWhite;
+	font-size: 9.5pt;
+
+	background-image: url("../icons/expanded.svg");
+	background-repeat: no-repeat;
+	background-position: right -3px center;
+
+	border: 1px solid $bgLight;
+	border-radius: 3px;
+	cursor: pointer;
+
+	&:hover {
+		border-color: $orange;
+		color: $orange;
+	}
+
+	.option {
+		padding: 2px 4px;
+
+		white-space: nowrap;
+		overflow: hidden;
+		background-color: $bgDark;
+		border-radius: 3px;
+
+		img {
+			width: auto;
+			height: 24px;
+			margin-right: 8px;
+		}
+
+		&:not(.current) {
+			display: none;
+		}
+	}
+}
+
+
+.window.dialog.selectPicker {
+	.wrapper {
+		padding: 0;
+		border-radius: 3px;
+		background-color: $bgDark;
+
+		.content {
+
+			input.search {
+				width: 100%;
+			}
+
+			.values {
+				display: grid;
+				grid-template-columns: repeat(1, 1fr);
+
+				.value {
+					padding: 4px;
+					border: 1px solid $bgMed;
+					cursor: pointer;
+					text-align: center;
+					display: grid;
+					grid-template-columns: min-content auto;
+					align-items: center;
+
+					img {
+						display: block;
+						width: 32px;
+						height: auto;
+						image-rendering: pixelated;
+					}
+
+					&:hover {
+						color: $orange;
+						border-color: $orange;
+					}
+
+					&.focus {
+						border-color: $orange;
+						background-color: $orange !important;
+						color: black;
+						box-shadow: 0px 0px 8px $darkRed;
+					}
+				}
+			}
+		}
+
+	}
+}
+
+
 input[type=text],
 input[type=number] {
 	display: block;

@@ -339,7 +339,7 @@ class FieldInstancesForm {
 
 			case F_Enum(name):
 				var ed = Editor.ME.project.defs.getEnumDef(name);
-				var jSelect = new J("<select/>");
+				var jSelect = new J('<select class="adv"/>');
 				jSelect.appendTo(jTarget);
 
 				// Null value
@@ -376,10 +376,14 @@ class FieldInstancesForm {
 						jOpt.attr("selected","selected");
 				}
 
+				// var td = project.defs.getTilesetDef(ed.iconTilesetUid);
 				for(v in ed.values) {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value",v.id);
+					jOpt.attr("color", C.intToHex(v.color));
+					jOpt.attr("tileId", v.tileId);
+					jOpt.attr("tdUid", ed.iconTilesetUid);
 					jOpt.text(v.id);
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
