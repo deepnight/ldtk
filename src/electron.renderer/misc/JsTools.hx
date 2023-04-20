@@ -1046,12 +1046,15 @@ class JsTools {
 	public static function createTileRectPicker(
 		tilesetId: Null<Int>,
 		cur: Null<ldtk.Json.TilesetRect>,
+		active=true,
 		onPick: (Null<ldtk.Json.TilesetRect>)->Void
 	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
-			jTileCanvas.addClass("active");
+			if( active )
+				jTileCanvas.addClass("active");
+
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
 			if( cur==null ) {
@@ -1069,19 +1072,20 @@ class JsTools {
 			}
 
 			// Open picker
-			jTileCanvas.click( function(ev) {
-				var m = new ui.Modal();
-				m.addClass("singleTilePicker");
+			if( active )
+				jTileCanvas.click( function(ev) {
+					var m = new ui.Modal();
+					m.addClass("singleTilePicker");
 
-				var tp = new ui.Tileset(m.jContent, td, RectOnly);
-				tp.useSavedSelections = false;
-				tp.setSelectedRect(cur);
-				tp.onSelectAnything = ()->{
-					onPick( tp.getSelectedRect() );
-					m.close();
-				}
-				tp.focusOnSelection(true);
-			});
+					var tp = new ui.Tileset(m.jContent, td, RectOnly);
+					tp.useSavedSelections = false;
+					tp.setSelectedRect(cur);
+					tp.onSelectAnything = ()->{
+						onPick( tp.getSelectedRect() );
+						m.close();
+					}
+					tp.focusOnSelection(true);
+				});
 		}
 		else {
 			// Invalid tileset

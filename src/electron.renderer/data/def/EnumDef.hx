@@ -23,6 +23,20 @@ class EnumDef {
 
 	public inline function isExternal() return externalRelPath!=null;
 
+	public inline function getExternalExtension() {
+		if( !isExternal() )
+			return null;
+		var ext = dn.FilePath.extractExtension(externalRelPath);
+		return ext==null ? null : ext.toLowerCase();
+	}
+
+	public function allowValueCustomization() {
+		return !isExternal() || switch getExternalExtension() {
+			case "cdb": false;
+			case _: true;
+		}
+	}
+
 	function set_identifier(v:String) {
 		if( !isExternal() )
 			v = Project.cleanupIdentifier(v, _project.identifierStyle);
@@ -49,7 +63,7 @@ class EnumDef {
 
 			// Convert old tile ID
 			var oldTileId = JsonTools.readNullableInt(v.tileId);
-			if( oldTileId!=null && v.tileRect==null ) {
+			if( oldTileId!=null && oldTileId>=0 && v.tileRect==null ) {
 				var td = p.defs.getTilesetDef(ed.iconTilesetUid);
 				v.tileRect = {
 					x: td.getTileSourceX(oldTileId),
@@ -84,7 +98,7 @@ class EnumDef {
 			values: values.map( function(v) return { // breaks memory refs
 				id: v.id,
 				tileRect: v.tileRect,
-				tileId: 0,
+				tileId: -1,
 				color: v.color,
 				__tileSrcRect: v.tileRect==null ? null : [
 					v.tileRect.x,

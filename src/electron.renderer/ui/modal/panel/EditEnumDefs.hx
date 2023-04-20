@@ -410,7 +410,7 @@ class EditEnumDefs extends ui.modal.Panel {
 		jDefForm.find("#tags").empty().append(ted.jEditor);
 
 		// Tilesets
-		JsTools.createTilesetSelect(
+		var jSelect = JsTools.createTilesetSelect(
 			project,
 			jDefForm.find("select#icons"),
 			curEnum.iconTilesetUid,
@@ -434,6 +434,10 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			}
 		);
+		if( !curEnum.allowValueCustomization() )
+			jSelect.attr("disabled","true");
+		else
+			jSelect.removeAttr("disabled");
 
 		// Values
 		var jValuesList = jFormWrapper.find("ul.enumValues");
@@ -471,11 +475,16 @@ class EditEnumDefs extends ui.modal.Panel {
 				editor.ge.emit(EnumDefChanged);
 			});
 			jColor.val( C.intToHex(eValue.color) );
+			if( !curEnum.allowValueCustomization() )
+				jColor.attr("disabled","true");
+			else
+				jColor.removeAttr("disabled");
 
 			// Tile preview
 			var jPicker = JsTools.createTileRectPicker(
 				curEnum.iconTilesetUid,
 				eValue.tileRect,
+				curEnum.allowValueCustomization(),
 				(r)->{
 					if( r==null )
 						return;
@@ -485,19 +494,6 @@ class EditEnumDefs extends ui.modal.Panel {
 				}
 			);
 			jPicker.appendTo( li.find(".pickerWrapper") );
-
-			// var jPicker = JsTools.createTilePicker(
-			// 	curEnum.iconTilesetUid,
-			// 	PickAndClose,
-			// 	eValue.tileId==null ? [] : [eValue.tileId],
-			// 	(tileIds)->{
-			// 		eValue.tileId = tileIds[0];
-			// 		eValue.color = -1;
-			// 		curEnum.tidy(project);
-			// 		editor.ge.emit(EnumDefChanged);
-			// 	}
-			// );
-			// jPicker.appendTo( li.find(".pickerWrapper") );
 
 			// Remove value button
 			var jDelete = li.find(".delete");
@@ -543,8 +539,10 @@ class EditEnumDefs extends ui.modal.Panel {
 			JsTools.focusScrollableList( jFormWrapper.find("ul.enumValues"), jElem);
 		});
 
-		if( curEnum.isExternal() )
+		if( curEnum.isExternal() ) {
 			jFormWrapper.find("input").not("xml input").attr("readonly", "readonly");
+			jFormWrapper.find("select").not("xml select").attr("readonly", "readonly");
+		}
 
 		// Make fields list sortable
 		if( !curEnum.isExternal() )

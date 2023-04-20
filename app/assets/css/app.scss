@@ -1844,7 +1844,7 @@ select {
 	}
 
 	&:disabled {
-		color: $bgMed;
+		color: $bgLighter;
 		border-color: $bgMed;
 		background-color: $bgDark;
 		cursor: not-allowed;
@@ -7187,7 +7187,12 @@ dl.form.fieldInstanceEditor {
 							width: auto;
 							height: 32px;
 							border: 1px solid $orange;
-							&:hover {
+							&:disabled {
+								border-color: transparent;
+								background-image: url("../img/stripes.png");
+								cursor: not-allowed;
+							}
+							&:hover:not(:disabled) {
 								border-color: white;
 							}
 						}
