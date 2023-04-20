@@ -329,13 +329,11 @@ class LevelInstanceForm {
 			}
 		}
 
-
 		JsTools.parseComponents(jWrapper);
 	}
 
 
 	function updateFieldsForm() {
 		fieldsForm.use( Level(level), project.defs.levelFields, (fd)->level.getFieldInstance(fd, true) );
-		JsTools.parseComponents(jWrapper);
 	}
 }
