@@ -295,7 +295,7 @@ class Project {
 			p.imageExportMode = json.exportPng==true ? OneImagePerLayer : None;
 		p.exportLevelBg = JsonTools.readBool(json.exportLevelBg, true);
 
-		p.defs = Definitions.fromJson(p, json.defs);
+		Definitions.fromJson(p, json.defs);
 
 		var invalidateLevelCache = false;
 		if( json.dummyWorldIid==null ) {
