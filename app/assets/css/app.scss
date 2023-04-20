@@ -1932,11 +1932,26 @@ select {
 
 		img {
 			width: auto;
-			height: 24px;
+			height: 32px;
 			margin-right: 8px;
+			image-rendering: pixelated;
 		}
 
-		&:not(.current) {
+		.array & img {
+			height: 24px;
+		}
+
+		.placeholder {
+			display: inline-block;
+			width: 24px;
+			height: 24px;
+			margin-right: 8px;
+			vertical-align: middle;
+			background-image: url("../img/stripes.png");
+			border: 1px solid $bgLight;
+		}
+
+		&:not(.selected) {
 			display: none;
 		}
 	}
@@ -1948,8 +1963,12 @@ select {
 		padding: 0;
 		border-radius: 3px;
 		background-color: $bgDark;
+		overflow: hidden;
+		height: fit-content;
 
 		.content {
+			display: grid;
+			grid-template-rows: min-content min-content;
 
 			input.search {
 				width: 100%;
@@ -1958,15 +1977,21 @@ select {
 			.values {
 				display: grid;
 				grid-template-columns: repeat(1, 1fr);
+				max-height: 80vh;
+				overflow-y: auto;
 
 				.value {
+					display: grid;
+					gap: 8px;
+					grid-template-columns: min-content auto;
 					padding: 4px;
+					align-items: center;
 					border: 1px solid $bgMed;
 					cursor: pointer;
-					text-align: center;
-					display: grid;
-					grid-template-columns: min-content auto;
-					align-items: center;
+
+					* {
+						pointer-events: none;
+					}
 
 					img {
 						display: block;
@@ -1975,9 +2000,19 @@ select {
 						image-rendering: pixelated;
 					}
 
-					&:hover {
-						color: $orange;
-						border-color: $orange;
+					&.null {
+						background-image: url("../img/stripes.png");
+						background-color: $bgLight;
+						.placeholder {
+							visibility: hidden;
+						}
+					}
+
+					.placeholder {
+						width: 32px;
+						height: 32px;
+						background-image: url("../img/stripes.png");
+						border: 1px solid $bgLight;
 					}
 
 					&.focus {

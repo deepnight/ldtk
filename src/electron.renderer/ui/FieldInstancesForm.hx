@@ -368,6 +368,8 @@ class FieldInstancesForm {
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value","_default");
 					jOpt.text(v.id+" (default)");
+					jOpt.attr("tileId", v.tileId);
+					jOpt.attr("tdUid", ed.iconTilesetUid);
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
 						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
@@ -376,7 +378,6 @@ class FieldInstancesForm {
 						jOpt.attr("selected","selected");
 				}
 
-				// var td = project.defs.getTilesetDef(ed.iconTilesetUid);
 				for(v in ed.values) {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);

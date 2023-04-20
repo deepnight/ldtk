@@ -769,7 +769,7 @@ class JsTools {
 
 				// Selected value
 				if( jOldSelect.val()==jOldOpt.attr("value") )
-					jOpt.addClass("current");
+					jOpt.addClass("selected");
 
 				// Icon
 				if( jOldOpt.attr("tileId")!=null ) {
@@ -777,6 +777,8 @@ class JsTools {
 					var img = td.getTileHtmlImg( Std.parseInt(jOldOpt.attr("tileId")) );
 					jOpt.prepend(img);
 				}
+				else
+					jOpt.prepend('<div class="placeholder"></div>');
 			}
 
 			// Open select
