@@ -13,9 +13,12 @@ class SelectPicker extends ui.modal.Dialog {
 
 		this.jSelect = jSelect;
 		addClass("selectPicker");
+		setTransparentMask();
 
 		jValues = new J('<div class="values"/>');
 		jValues.appendTo(jContent);
+		if( jSelect.find("img, .placeholder").length>0 )
+			jValues.addClass("hasImg");
 
 		var selectedValue = jSelect.find(".option.selected").attr("value");
 

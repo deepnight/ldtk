@@ -745,15 +745,15 @@ class JsTools {
 		});
 
 		// Advanced Selects
-		jCtx.find("select.adv").each( (idx,e)->{
+		jCtx.find(".advancedSelect").remove();
+		jCtx.find("select.advanced:visible").each( (idx,e)->{
 			var jOldSelect = new J(e);
-			jOldSelect.next(".advancedSelect").remove();
-			jOldSelect.css("outline","1px solid red");
-			jOldSelect.hide();
+
+			var td = try Editor.ME.project.defs.getTilesetDef( Std.parseInt( jOldSelect.attr("tdUid") ) ) catch(_) null;
 
 			// Create advanced select & options
 			var jSelect = new J('<div class="advancedSelect"/>');
-			jSelect.insertAfter(jOldSelect);
+			jSelect.insertBefore(jOldSelect);
 			for(elem in jOldSelect.children("option")) {
 				var jOldOpt = new J(elem);
 				var jOpt = new J('<div class="option"/>');
@@ -772,13 +772,13 @@ class JsTools {
 					jOpt.addClass("selected");
 
 				// Icon
-				if( jOldOpt.attr("tileId")!=null ) {
-					var td = Editor.ME.project.defs.getTilesetDef( Std.parseInt( jOldOpt.attr("tdUid") ) );
-					var img = td.getTileHtmlImg( Std.parseInt(jOldOpt.attr("tileId")) );
-					jOpt.prepend(img);
-				}
-				else
-					jOpt.prepend('<div class="placeholder"></div>');
+				if( td!=null )
+					if( jOldOpt.attr("tileId")!=null ) {
+						var img = td.getTileHtmlImg( Std.parseInt(jOldOpt.attr("tileId")) );
+						jOpt.prepend(img);
+					}
+					else
+						jOpt.prepend('<div class="placeholder"></div>');
 			}
 
 			// Open select

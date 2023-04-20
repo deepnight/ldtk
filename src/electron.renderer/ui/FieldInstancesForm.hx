@@ -339,8 +339,9 @@ class FieldInstancesForm {
 
 			case F_Enum(name):
 				var ed = Editor.ME.project.defs.getEnumDef(name);
-				var jSelect = new J('<select class="adv"/>');
+				var jSelect = new J('<select class="advanced"/>');
 				jSelect.appendTo(jTarget);
+				jSelect.attr("tdUid", ed.iconTilesetUid);
 
 				// Null value
 				if( fi.def.canBeNull || fi.getEnumValue(arrayIdx)==null ) {
@@ -369,7 +370,6 @@ class FieldInstancesForm {
 					jOpt.attr("value","_default");
 					jOpt.text(v.id+" (default)");
 					jOpt.attr("tileId", v.tileId);
-					jOpt.attr("tdUid", ed.iconTilesetUid);
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
 						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
@@ -384,7 +384,6 @@ class FieldInstancesForm {
 					jOpt.attr("value",v.id);
 					jOpt.attr("color", C.intToHex(v.color));
 					jOpt.attr("tileId", v.tileId);
-					jOpt.attr("tdUid", ed.iconTilesetUid);
 					jOpt.text(v.id);
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
@@ -936,6 +935,7 @@ class FieldInstancesForm {
 			}
 		}
 
+		N.debug("parsed form");
 		JsTools.parseComponents(jWrapper);
 	}
 }

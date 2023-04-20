@@ -732,6 +732,9 @@ class FieldDefsForm {
 				var jEnumDefault = jForm.find("[name=enumDef]");
 				jEnumDefault.find("option").remove();
 				jEnumDefault.removeClass("required");
+				jEnumDefault.addClass("advanced");
+				if( ed.iconTilesetUid!=null )
+					jEnumDefault.attr("tdUid", ed.iconTilesetUid);
 
 				// Add "no default value"
 				if( !curField.canBeNull ) {
@@ -759,6 +762,7 @@ class FieldDefsForm {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jEnumDefault);
 					jOpt.attr("value",v.id);
+					jOpt.attr("tileId",v.tileId);
 					jOpt.text(v.id);
 					if( curField.getEnumDefault()==v.id )
 						jOpt.attr("selected","selected");

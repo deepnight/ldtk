@@ -1899,6 +1899,9 @@ select {
 	}
 }
 
+.advancedSelect+select {
+	display: none !important;
+}
 
 .advancedSelect {
 	flex: 1 1 0;
@@ -1925,6 +1928,7 @@ select {
 	.option {
 		padding: 2px 4px;
 
+		line-height: 24px;
 		white-space: nowrap;
 		overflow: hidden;
 		background-color: $bgDark;
@@ -1965,6 +1969,8 @@ select {
 		background-color: $bgDark;
 		overflow: hidden;
 		height: fit-content;
+		padding: 1px;
+		border: 1px solid $bgLighter;
 
 		.content {
 			display: grid;
@@ -1975,19 +1981,26 @@ select {
 			}
 
 			.values {
-				display: grid;
-				grid-template-columns: repeat(1, 1fr);
 				max-height: 80vh;
 				overflow-y: auto;
+				background-color: $bgLight;
+
+				&.hasImg .value {
+					grid-template-columns: min-content auto;
+				}
 
 				.value {
 					display: grid;
+					grid-template-columns: auto;
 					gap: 8px;
-					grid-template-columns: min-content auto;
 					padding: 4px;
+					border: 1px solid transparent;
 					align-items: center;
-					border: 1px solid $bgMed;
 					cursor: pointer;
+
+					&+.value {
+						border-top: 1px solid $bgLighter;
+					}
 
 					* {
 						pointer-events: none;
@@ -2016,10 +2029,9 @@ select {
 					}
 
 					&.focus {
-						border-color: $orange;
+						border-color: $orangeLight;
 						background-color: $orange !important;
 						color: black;
-						box-shadow: 0px 0px 8px $darkRed;
 					}
 				}
 			}
