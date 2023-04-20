@@ -419,7 +419,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				// Check if a LastChance is needed
 				if( curEnum.iconTilesetUid!=null )
 					for( v in curEnum.values )
-						if( v.tileId!=null ) {
+						if( v.tileRect!=null ) {
 							new LastChance(Lang.t._("Enum icons changed"), project);
 							break;
 						}
@@ -473,18 +473,31 @@ class EditEnumDefs extends ui.modal.Panel {
 			jColor.val( C.intToHex(eValue.color) );
 
 			// Tile preview
-			var jPicker = JsTools.createTilePicker(
+			var jPicker = JsTools.createTileRectPicker(
 				curEnum.iconTilesetUid,
-				PickAndClose,
-				eValue.tileId==null ? [] : [eValue.tileId],
-				(tileIds)->{
-					eValue.tileId = tileIds[0];
-					eValue.color = -1;
+				eValue.tileRect,
+				(r)->{
+					if( r==null )
+						return;
+					eValue.tileRect = r;
 					curEnum.tidy(project);
 					editor.ge.emit(EnumDefChanged);
 				}
 			);
 			jPicker.appendTo( li.find(".pickerWrapper") );
+
+			// var jPicker = JsTools.createTilePicker(
+			// 	curEnum.iconTilesetUid,
+			// 	PickAndClose,
+			// 	eValue.tileId==null ? [] : [eValue.tileId],
+			// 	(tileIds)->{
+			// 		eValue.tileId = tileIds[0];
+			// 		eValue.color = -1;
+			// 		curEnum.tidy(project);
+			// 		editor.ge.emit(EnumDefChanged);
+			// 	}
+			// );
+			// jPicker.appendTo( li.find(".pickerWrapper") );
 
 			// Remove value button
 			var jDelete = li.find(".delete");

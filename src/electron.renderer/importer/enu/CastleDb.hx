@@ -22,6 +22,8 @@ private typedef CastleDbTile = {
 	var size : Int;
 	var x : Int;
 	var y : Int;
+	var width : Null<Int>;
+	var height : Null<Int>;
 }
 
 
@@ -121,8 +123,8 @@ class CastleDb extends importer.ExternalEnum {
 							tilesetUid: cdbTd.uid,
 							x: tile.x*tile.size,
 							y: tile.y*tile.size,
-							w: tile.size,
-							h: tile.size,
+							w: tile.size * (tile.width!=null ? tile.width : 1),
+							h: tile.size * (tile.height!=null ? tile.height : 1),
 						}
 						js.html.Console.log(e+" "+tileRect);
 					}

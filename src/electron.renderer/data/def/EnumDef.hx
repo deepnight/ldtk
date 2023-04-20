@@ -62,7 +62,6 @@ class EnumDef {
 
 			var value : data.DataTypes.EnumDefValue = {
 				id: v.id,
-				tileId: v.tileId,
 				tileRect: v.tileRect==null ? null : {
 					x: v.tileRect.x,
 					y: v.tileRect.y,
@@ -85,19 +84,14 @@ class EnumDef {
 			values: values.map( function(v) return { // breaks memory refs
 				id: v.id,
 				tileRect: v.tileRect,
-				tileId: v.tileId,
+				tileId: 0,
 				color: v.color,
-				__tileSrcRect: v.tileId==null ? null : {
-					var td = p.defs.getTilesetDef(iconTilesetUid);
-					if( td==null )
-						null;
-					else [
-						td.getTileSourceX(v.tileId),
-						td.getTileSourceY(v.tileId),
-						td.tileGridSize,
-						td.tileGridSize,
-					];
-				}
+				__tileSrcRect: v.tileRect==null ? null : [
+					v.tileRect.x,
+					v.tileRect.y,
+					v.tileRect.w,
+					v.tileRect.h,
+				],
 			} ),
 			iconTilesetUid: iconTilesetUid,
 			externalRelPath: JsonTools.writePath(externalRelPath),
@@ -146,7 +140,6 @@ class EnumDef {
 		var ev : data.DataTypes.EnumDefValue = {
 			id: v,
 			tileRect: null,
-			tileId: null,
 			color: Const.suggestNiceColor( values.map(ev->ev.color) ),
 		};
 		values.push(ev);
@@ -163,16 +156,22 @@ class EnumDef {
 		throw "EnumDef value not found";
 	}
 
-	public function setValueTileId(id:String, tid:Int) {
+	public function setValueTile(id:String, tileRect:ldtk.Json.TilesetRect) {
 		if( !hasValue(id) || iconTilesetUid==null )
 			return;
 
-		getValue(id).tileId = tid;
+		getValue(id).tileRect = {
+			tilesetUid: tileRect.tilesetUid,
+			x: tileRect.x,
+			y: tileRect.y,
+			w: tileRect.w,
+			h: tileRect.h,
+		}
 	}
 
 	public function clearAllTileIds() {
 		for(ev in values)
-			ev.tileId = null;
+			ev.tileRect = null;
 	}
 
 	public function renameValue(from:String, to:String) {
@@ -222,18 +221,5 @@ class EnumDef {
 			iconTilesetUid = null;
 			clearAllTileIds();
 		}
-
-		// Fix value colors
-		for(ev in values)
-			if( ev.color==-1 ) {
-				var td = p.defs.getTilesetDef(iconTilesetUid);
-				if( td!=null && td.hasValidPixelData() ) {
-					App.LOG.add("tidy", "Init enum value color: "+identifier+"."+ev.id);
-					ev.color = ev.tileId!=null
-						? C.removeAlpha( td.getAverageTileColor(ev.tileId) )
-						: 0x0;
-				}
-			}
-
 	}
 }

@@ -369,7 +369,7 @@ class FieldInstancesForm {
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value","_default");
 					jOpt.text(v.id+" (default)");
-					jOpt.attr("tileId", v.tileId);
+					// jOpt.attr("tileId", v.tileId); // TODO tile
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
 						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
@@ -383,7 +383,7 @@ class FieldInstancesForm {
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value",v.id);
 					jOpt.attr("color", C.intToHex(v.color));
-					jOpt.attr("tileId", v.tileId);
+					// jOpt.attr("tileId", v.tileId); // TODO tile
 					jOpt.text(v.id);
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),

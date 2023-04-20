@@ -333,10 +333,10 @@ class TilesetDef {
 		}
 
 		// Enum tiles remapping
-		for(ed in _project.defs.enums)
-			if( ed.iconTilesetUid==uid )
-				for(v in ed.values)
-					v.tileId = remapTileId(oldCwid, v.tileId);
+		// for(ed in _project.defs.enums)
+		// 	if( ed.iconTilesetUid==uid )
+		// 		for(v in ed.values)
+		// 			v.tileId = remapTileId(oldCwid, v.tileId);
 
 		// Entity tiles remapping
 		// for( ed in _project.defs.entities )
@@ -807,6 +807,28 @@ class TilesetDef {
 			&& getTileSourceX(tid)>=0 && getTileSourceX(tid)+tileGridSize-1 < pxWid
 			&& getTileSourceY(tid)>=0 && getTileSourceY(tid)+tileGridSize-1 < pxHei;
 	}
+
+
+	public function createCanvasFromTileId(tileId:Int, canvasSize:Int) : js.jquery.JQuery {
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.attr("width",tileGridSize);
+		jCanvas.attr("height",tileGridSize);
+		jCanvas.css("width", canvasSize+"px");
+		jCanvas.css("height", canvasSize+"px");
+		drawTileToCanvas(jCanvas, tileId);
+		return jCanvas;
+	}
+
+	public function createCanvasFromTileRect(tileRect:ldtk.Json.TilesetRect, canvasSize:Int) : js.jquery.JQuery {
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.attr("width",tileGridSize);
+		jCanvas.attr("height",tileGridSize);
+		jCanvas.css("width", canvasSize+"px");
+		jCanvas.css("height", canvasSize+"px");
+		drawTileRectToCanvas(jCanvas, tileRect);
+		return jCanvas;
+	}
+
 
 	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =

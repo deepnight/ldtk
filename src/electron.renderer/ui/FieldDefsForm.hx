@@ -762,7 +762,7 @@ class FieldDefsForm {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jEnumDefault);
 					jOpt.attr("value",v.id);
-					jOpt.attr("tileId",v.tileId);
+					// jOpt.attr("tileId",v.tileId); // TODO tile
 					jOpt.text(v.id);
 					if( curField.getEnumDefault()==v.id )
 						jOpt.attr("selected","selected");
