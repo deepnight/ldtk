@@ -93,11 +93,6 @@ class ExternalEnum {
 				}
 			}
 
-			// Sanitize enum IDs and value IDs
-			for(pe in parseds) {
-
-			}
-
 			// Try to import/sync
 			var checksum = haxe.crypto.Md5.encode(fileContent);
 			importToProject(relPath, checksum, parseds);
