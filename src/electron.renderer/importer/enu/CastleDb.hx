@@ -9,15 +9,11 @@ private typedef CastleDbJson = {
 			var typeStr : String;
 			var name : String;
 		}>;
-		var lines : Array<{
-			var constId: String;
-			var values: Array<{
-				var value : Dynamic;
-				var valueName : String;
-				var isInteger : Bool;
-				var doc : String;
-			}>;
-		}>;
+		var props : {
+			var hasGroup : Bool;
+			var displayIcon : Null<String>;
+		}
+		var lines : Array<Dynamic>;
 	}>;
 }
 
@@ -39,6 +35,7 @@ class CastleDb extends importer.ExternalEnum {
 			// Check columns first and look for Unique IDs
 			var idColumn : Null<String> = null;
 			var colorColumn : Null<String> = null;
+			var tileColumn : Null<String> = null;
 			for(col in sheet.columns) {
 				switch col.typeStr {
 					case "0": // unique identifier
@@ -50,6 +47,8 @@ class CastleDb extends importer.ExternalEnum {
 
 					case _:
 				}
+				if( sheet.props.displayIcon==col.name )
+					tileColumn = col.name;
 			}
 
 			if( idColumn==null )
@@ -61,6 +60,40 @@ class CastleDb extends importer.ExternalEnum {
 				values: [],
 			}
 			parseds.push(enu);
+
+			// Lookup or create icons tileset
+			if( tileColumn!=null ) {
+				var project = Editor.ME.project;
+				for(line in sheet.lines) {
+					var t = Reflect.field(line, tileColumn);
+					if( t==null || t.file==null )
+						continue;
+					var rawIconPath = Std.string(t.file);
+					var cdbIconPath = dn.FilePath.fromFile(sourceFp.directory + sourceFp.slash() + rawIconPath);
+					js.html.Console.log(cdbIconPath.full);
+					var cdbTd : data.def.TilesetDef = null;
+					for(td in project.defs.tilesets) {
+						if( td.isUsingEmbedAtlas() )
+							continue;
+						var tdFp = dn.FilePath.fromFile(td.relPath);
+						if( tdFp.full==cdbIconPath.full ) {
+							// Found existing tileset def
+							cdbTd = td;
+							break;
+						}
+					}
+					// Create a new tileset def
+					if( cdbTd==null ) {
+						cdbTd = project.defs.createTilesetDef();
+						cdbTd.importAtlasImage(cdbIconPath.full);
+						var rawId = sourceFp.fileWithExt+"_"+cdbIconPath.fileWithExt;
+						cdbTd.identifier = project.fixUniqueIdStr(rawId, (id)->project.defs.isTilesetIdentifierUnique(id,cdbTd));
+						cdbTd.tags.set("CastleDB");
+					}
+
+					break;
+				}
+			}
 
 			var uniq = new Map();
 			for(line in sheet.lines) {

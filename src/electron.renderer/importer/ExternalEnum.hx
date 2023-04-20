@@ -1,6 +1,7 @@
 package importer;
 
 class ExternalEnum {
+	var sourceFp : dn.FilePath;
 
 	public static function sync(relPath:String) {
 		var ext = dn.FilePath.extractExtension(relPath,true);
@@ -37,6 +38,7 @@ class ExternalEnum {
 		else
 			App.LOG.add("import", 'Importing external enums (new file): $relPath');
 
+		sourceFp = dn.FilePath.fromFile(relPath);
 		var project = Editor.ME.project;
 		var absPath = project.makeAbsoluteFilePath(relPath);
 		var fileContent = NT.readFileString(absPath);
