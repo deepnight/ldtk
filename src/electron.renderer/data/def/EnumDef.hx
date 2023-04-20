@@ -40,18 +40,40 @@ class EnumDef {
 	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.EnumDefJson) {
 		var ed = new EnumDef(p, JsonTools.readInt(json.uid), json.identifier, json.externalRelPath);
 
-		for(v in JsonTools.readArray(json.values)) {
-			ed.values.push({
-				id: v.id,
-				tileId: JsonTools.readNullableInt(v.tileId),
-				color: v.color==null ? (v.tileId!=null ? -1 : 0) : v.color, // -1 means "to be set later based on tile"
-			});
-		}
-
 		ed.iconTilesetUid = JsonTools.readNullableInt(json.iconTilesetUid);
 		ed.externalFileChecksum = json.externalFileChecksum;
-
 		ed.tags = Tags.fromJson(json.tags);
+
+		for(v in JsonTools.readArray(json.values)) {
+			var v : ldtk.Json.EnumDefValues = v;
+
+			// Convert old tile ID
+			var oldTileId = JsonTools.readNullableInt(v.tileId);
+			if( oldTileId!=null && v.tileRect==null ) {
+				var td = p.defs.getTilesetDef(ed.iconTilesetUid);
+				v.tileRect = {
+					x: td.getTileSourceX(oldTileId),
+					y: td.getTileSourceY(oldTileId),
+					w: td.tileGridSize,
+					h: td.tileGridSize,
+					tilesetUid: td.uid,
+				}
+			}
+
+			var value : data.DataTypes.EnumDefValue = {
+				id: v.id,
+				tileId: v.tileId,
+				tileRect: v.tileRect==null ? null : {
+					x: v.tileRect.x,
+					y: v.tileRect.y,
+					w: v.tileRect.w,
+					h: v.tileRect.h,
+					tilesetUid: v.tileRect.tilesetUid,
+				},
+				color: v.color==null ? (v.tileId!=null ? -1 : 0) : v.color, // -1 means "to be set later based on tile"
+			}
+			ed.values.push(value);
+		}
 
 		return ed;
 	}
@@ -62,6 +84,7 @@ class EnumDef {
 			uid: uid,
 			values: values.map( function(v) return { // breaks memory refs
 				id: v.id,
+				tileRect: v.tileRect,
 				tileId: v.tileId,
 				color: v.color,
 				__tileSrcRect: v.tileId==null ? null : {
@@ -122,6 +145,7 @@ class EnumDef {
 
 		var ev : data.DataTypes.EnumDefValue = {
 			id: v,
+			tileRect: null,
 			tileId: null,
 			color: Const.suggestNiceColor( values.map(ev->ev.color) ),
 		};

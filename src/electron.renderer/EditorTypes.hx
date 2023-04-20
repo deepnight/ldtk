@@ -140,12 +140,13 @@ enum RectHandlePos {
 
 typedef ParsedExternalEnumData = {
 	var color: Null<Int>;
+	var tileRect: Null<ldtk.Json.TilesetRect>;
 }
 typedef ParsedExternalEnum = {
 	var enumId : String;
+	var tilesetUid : Null<Int>;
 	var values : Array<{
 		var valueId: String;
-		var tileRect : Null<ldtk.Json.TilesetRect>;
 		var data : ParsedExternalEnumData;
 	}>;
 }
@@ -158,6 +159,7 @@ enum EnumSyncChange {
 
 typedef EnumSyncDiff = {
 	var enumId: String;
+	var newTilesetUid: Null<Int>;
 	var ?warning: Bool;
 	var change: Null<EnumSyncChange>;
 	var valueDiffs: Map<String, EnumValueSyncDiff>;

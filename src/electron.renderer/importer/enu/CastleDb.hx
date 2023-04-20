@@ -64,6 +64,7 @@ class CastleDb extends importer.ExternalEnum {
 			// Has a Unique Identifier column
 			var enu : ParsedExternalEnum = {
 				enumId: sheet.name,
+				tilesetUid: null,
 				values: [],
 			}
 			parseds.push(enu);
@@ -89,6 +90,7 @@ class CastleDb extends importer.ExternalEnum {
 							break;
 						}
 					}
+
 					// Create a new tileset def
 					if( cdbTd==null ) {
 						cdbTd = project.defs.createTilesetDef();
@@ -97,6 +99,8 @@ class CastleDb extends importer.ExternalEnum {
 						cdbTd.identifier = project.fixUniqueIdStr(rawId, (id)->project.defs.isTilesetIdentifierUnique(id,cdbTd));
 						cdbTd.tags.set("CastleDB");
 					}
+
+					enu.tilesetUid = cdbTd.uid;
 
 					break;
 				}
@@ -124,12 +128,12 @@ class CastleDb extends importer.ExternalEnum {
 					}
 					enu.values.push({
 						valueId: e,
-						tileRect: tileRect,
 						data: {
 							color: colorColumn==null ? null : {
 								var color : Int = Reflect.field(line, colorColumn);
 								color;
-							}
+							},
+							tileRect: tileRect,
 						},
 					});
 				}

@@ -171,6 +171,7 @@ class ExternalEnum {
 			if( !diff.exists(enumId) )
 				diff.set(enumId, {
 					enumId: enumId,
+					newTilesetUid: null,
 					change: null,
 					valueDiffs: new Map(),
 				});
@@ -184,6 +185,7 @@ class ExternalEnum {
 					valueId: valueId,
 					data: {
 						color: null,
+						tileRect: null,
 					},
 					change: null, // not meant to be null in the end
 				});
@@ -194,7 +196,9 @@ class ExternalEnum {
 		if( isNew ) {
 			// Brand new source file, everything is new
 			for(pe in parseds) {
-				_getEnumDiff(pe.enumId).change = Added;
+				var eDiff = _getEnumDiff(pe.enumId);
+				eDiff.change = Added;
+				eDiff.newTilesetUid = pe.tilesetUid;
 				for(v in pe.values) {
 					var ec = _getValueDiff(pe.enumId, v.valueId);
 					ec.change = Added;
@@ -209,7 +213,9 @@ class ExternalEnum {
 				var existing = project.defs.getEnumDef(pe.enumId);
 				if( existing==null ) {
 					// New enum
-					_getEnumDiff(pe.enumId).change = Added;
+					var eDiff = _getEnumDiff(pe.enumId);
+					eDiff.change = Added;
+					eDiff.newTilesetUid = pe.tilesetUid;
 					for(v in pe.values) {
 						var ec = _getValueDiff(pe.enumId, v.valueId);
 						ec.change = Added;
@@ -217,6 +223,10 @@ class ExternalEnum {
 					}
 				}
 				else {
+					// Changed tileset UID
+					if( existing.iconTilesetUid!=pe.tilesetUid )
+						_getEnumDiff(pe.enumId).newTilesetUid = pe.tilesetUid;
+
 					// New values
 					for(v in pe.values)
 						if( !existing.hasValue(v.valueId) ) {
@@ -387,6 +397,39 @@ class ExternalEnum {
 					ev.color = pv.data.color;
 					anyChange = true;
 				}
+
+				// Lost tile
+				if( pv.data.tileRect==null && ev.tileRect!=null ) {
+					ev.tileRect = null;
+					anyChange = true;
+				}
+
+				// New tile
+				if( pv.data.tileRect!=null && ev.tileRect==null ) {
+					ev.tileRect = {
+						tilesetUid: pv.data.tileRect.tilesetUid,
+						x: pv.data.tileRect.x,
+						y: pv.data.tileRect.y,
+						w: pv.data.tileRect.w,
+						h: pv.data.tileRect.h,
+					}
+					anyChange = true;
+				}
+
+				if( pv.data.tileRect!=null && ev.tileRect!=null ) {
+					var oldT = ev.tileRect;
+					var newT = pv.data.tileRect;
+					if( oldT.x!=newT.x || oldT.y!=newT.y || oldT.w!=newT.w || oldT.h!=newT.h || oldT.tilesetUid!=newT.tilesetUid ) {
+						ev.tileRect = {
+							tilesetUid: pv.data.tileRect.tilesetUid,
+							x: pv.data.tileRect.x,
+							y: pv.data.tileRect.y,
+							w: pv.data.tileRect.w,
+							h: pv.data.tileRect.h,
+						}
+						anyChange = true;
+					}
+				}
 			}
 		}
 
@@ -408,7 +451,6 @@ class ExternalEnum {
 		var unsortedEnums = new Map();
 		for(eDiff in diff) {
 			switch eDiff.change {
-
 				case null:
 					// Value changes
 					var ed = project.defs.getEnumDef(eDiff.enumId);
@@ -418,6 +460,8 @@ class ExternalEnum {
 								var ev = ed.addValue(vDiff.valueId);
 								if( vDiff.data.color!=null )
 									ev.color = vDiff.data.color;
+								if( vDiff.data.tileRect!=null )
+									ev.tileRect = vDiff.data.tileRect;
 								unsortedEnums.set(ed.identifier, true);
 
 							case Removed: // Lost value
@@ -435,6 +479,8 @@ class ExternalEnum {
 						var ev = ed.addValue(v.valueId);
 						if( v.data.color!=null )
 							ev.color = v.data.color;
+						if( v.data.tileRect!=null )
+							ev.tileRect = v.data.tileRect;
 					}
 					unsortedEnums.set(ed.identifier, true);
 
@@ -445,6 +491,13 @@ class ExternalEnum {
 				case Renamed(to): // Renamed enum
 					var ed = project.defs.getEnumDef(eDiff.enumId);
 					ed.identifier = to;
+			}
+
+			// Update misc enumDef props
+			var ed = project.defs.getEnumDef(eDiff.enumId);
+			if( ed!=null ) {
+				if( eDiff.newTilesetUid!=null )
+					ed.iconTilesetUid = eDiff.newTilesetUid;
 			}
 		}
 
