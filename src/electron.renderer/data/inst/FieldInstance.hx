@@ -698,10 +698,11 @@ class FieldInstance {
 	}
 
 
-	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {
+	public function getSmartTile(forLevel=false) : Null<ldtk.Json.TilesetRect> {
+		var requiredMode : ldtk.Json.FieldDisplayMode = forLevel ? LevelTile : EntityTile;
 		switch def.type {
 			case F_Enum(enumDefUid):
-				if( valueIsNull(0) || def.editorDisplayMode!=EntityTile )
+				if( valueIsNull(0) || def.editorDisplayMode!=requiredMode )
 					return null;
 
 				var ed = _project.defs.getEnumDef(enumDefUid);
@@ -727,7 +728,7 @@ class FieldInstance {
 
 
 			case F_Tile:
-				if( def.editorDisplayMode==EntityTile && !valueIsNull(0) )
+				if( def.editorDisplayMode==requiredMode && !valueIsNull(0) )
 					return getTileRectObj(0);
 				else
 					return null;

@@ -857,7 +857,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Custom tile render override
-		var t = l.getTileFromFields();
+		var t = l.getWorldTileFromFields();
 		if( t!=null ) {
 			var bmp = new h2d.Bitmap(t, wl.render);
 			bmp.setScale( dn.heaps.Scaler.bestFit_f(t.width,t.height, l.pxWid,l.pxHei) );

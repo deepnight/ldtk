@@ -717,7 +717,7 @@ class Level {
 	}
 
 
-	public function getTileFromFields() : Null<h2d.Tile> {
+	public function getWorldTileFromFields() : Null<h2d.Tile> {
 		for(fd in _project.defs.levelFields) {
 			if( fd.editorDisplayMode!=LevelTile )
 				continue;
@@ -726,7 +726,7 @@ class Level {
 			if( fi==null )
 				continue;
 
-			var r = fi.getTileRectObj(0);
+			var r = fi.getSmartTile(true);
 			if( r!=null )
 				return _project.defs.getTilesetDef(r.tilesetUid).getTileRect(r);
 		}
