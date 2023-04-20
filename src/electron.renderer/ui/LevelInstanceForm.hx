@@ -9,8 +9,9 @@ class LevelInstanceForm {
 	var level: data.Level;
 	var fieldsForm : FieldInstancesForm;
 
-	public function new(useCollapsers:Bool) {
+	public function new(jTarget:js.jquery.JQuery, useCollapsers:Bool) {
 		jWrapper = new J('<div class="levelInstanceForm"/>');
+		jWrapper.appendTo(jTarget);
 
 		level = editor.curLevel;
 		var raw = JsTools.getHtmlTemplate("levelInstanceForm", { id:level.identifier });

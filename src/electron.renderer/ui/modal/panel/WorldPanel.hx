@@ -97,8 +97,7 @@ class WorldPanel extends ui.modal.Panel {
 		});
 
 		// Current level instance form
-		levelInstanceForm = new ui.LevelInstanceForm(true);
-		jContent.find(".currentLevelInstance").append( levelInstanceForm.jWrapper );
+		levelInstanceForm = new ui.LevelInstanceForm(jContent.find(".currentLevelInstance"), true);
 		levelInstanceForm.useLevel(editor.curLevel);
 
 		updateWorldForm();
