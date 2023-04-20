@@ -369,7 +369,8 @@ class FieldInstancesForm {
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value","_default");
 					jOpt.text(v.id+" (default)");
-					// jOpt.attr("tileId", v.tileId); // TODO tile
+					if( v.tileRect!=null )
+						jOpt.attr("tile", haxe.Json.stringify(v.tileRect));
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
 						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
@@ -383,7 +384,8 @@ class FieldInstancesForm {
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value",v.id);
 					jOpt.attr("color", C.intToHex(v.color));
-					// jOpt.attr("tileId", v.tileId); // TODO tile
+					if( v.tileRect!=null )
+						jOpt.attr("tile", haxe.Json.stringify(v.tileRect));
 					jOpt.text(v.id);
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),

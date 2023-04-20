@@ -742,8 +742,6 @@ class JsTools {
 		jCtx.find("select.advanced:visible").each( (idx,e)->{
 			var jOldSelect = new J(e);
 
-			var td = try Editor.ME.project.defs.getTilesetDef( Std.parseInt( jOldSelect.attr("tdUid") ) ) catch(_) null;
-
 			// Create advanced select & options
 			var jSelect = new J('<div class="advancedSelect"/>');
 			jSelect.insertBefore(jOldSelect);
@@ -765,13 +763,14 @@ class JsTools {
 					jOpt.addClass("selected");
 
 				// Icon
-				if( td!=null )
-					if( jOldOpt.attr("tileId")!=null ) {
-						var img = td.getTileHtmlImg( Std.parseInt(jOldOpt.attr("tileId")) );
+				if( jOldOpt.attr("tile")!=null ) {
+					var r : ldtk.Json.TilesetRect = haxe.Json.parse(jOldOpt.attr("tile"));
+					var td = try Editor.ME.project.defs.getTilesetDef(r.tilesetUid) catch(_) null;
+					if( td!=null ) {
+						var img = td.getTileHtmlImg(r);
 						jOpt.prepend(img);
 					}
-					else
-						jOpt.prepend('<div class="placeholder"></div>');
+				}
 			}
 
 			// Open select

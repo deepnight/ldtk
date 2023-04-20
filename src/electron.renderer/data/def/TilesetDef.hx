@@ -925,15 +925,15 @@ class TilesetDef {
 	}
 
 
-	public function getTileHtmlImg(tileId:Int) : Null<js.html.Image> {
+	public function getTileHtmlImg(tileRect:ldtk.Json.TilesetRect) : Null<js.html.Image> {
 		if( !isAtlasLoaded() )
 			return null;
 
-		if( !isTileInBounds(tileId) )
+		if( !isTileRectInBounds(tileRect) )
 			return null; // out of bounds
 
 		var imgData = getOrLoadTilesetImage();
-		var subPixels = imgData.pixels.sub(getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize);
+		var subPixels = imgData.pixels.sub(tileRect.x, tileRect.y, tileRect.w, tileRect.h);
 		var img = new js.html.Image(subPixels.width, subPixels.height);
 		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 		img.src = 'data:image/png;base64,$b64';
