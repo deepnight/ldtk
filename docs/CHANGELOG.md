@@ -1,6 +1,10 @@
-# 1.2.6
+# 1.3.0 - Multi-worlds preview
 
 ## Experimental Multi-worlds support!
+
+The new multi-worlds feature is now available as a preview.
+
+**To use it in your projects, you will need to make sure that your importer is up-to-date and supports it.**
 
 TODO
 
