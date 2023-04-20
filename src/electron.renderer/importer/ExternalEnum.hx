@@ -72,7 +72,6 @@ class ExternalEnum {
 		var parseds = parse(fileContent);
 
 		if( parseds.length>0 ) {
-
 			// Sanitize enum IDs and value IDs
 			for(pe in parseds) {
 				pe.enumId = data.Project.cleanupIdentifier(pe.enumId, project.identifierStyle);
@@ -336,6 +335,7 @@ class ExternalEnum {
 				App.LOG.add("import", 'Updated sync diff: ${_printDiff(diff)}');
 				new ui.LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), Editor.ME.project );
 				applyDiff(diff, relSourcePath);
+				preserveEnumValuesOrder(parseds);
 				Editor.ME.invalidateAllLevelsCache();
 				copyParsedValuesData(parseds);
 				project.tidy();
@@ -350,6 +350,7 @@ class ExternalEnum {
 				// Simple case: sync operations don't affect any existing project instance
 				App.LOG.add("import", 'Sync automatically applied.');
 				applyDiff(diff, relSourcePath);
+				preserveEnumValuesOrder(parseds);
 				updateChecksums(relSourcePath, checksum);
 				if( valuesDataChanged )
 					Editor.ME.invalidateAllLevelsCache();
@@ -362,6 +363,21 @@ class ExternalEnum {
 				N.msg( fileName, L.t._("Enums are already up-to-date.") );
 				updateChecksums(relSourcePath, checksum);
 				Editor.ME.ge.emit( ExternalEnumsLoaded(false) );
+			}
+		}
+	}
+
+
+
+	function preserveEnumValuesOrder(parseds:Array<ParsedExternalEnum>) {
+		for(pe in parseds) {
+			var ed = Editor.ME.project.defs.getEnumDef(pe.enumId);
+			var i = 0;
+			for(pev in pe.values) {
+				var fromIdx = ed.getValueIndex(pev.valueId);
+				var v = ed.values.splice(fromIdx,1)[0];
+				ed.values.insert(i, v);
+				i++;
 			}
 		}
 	}
@@ -452,7 +468,6 @@ class ExternalEnum {
 	function applyDiff(diff:Map<String,EnumSyncDiff>, relSourcePath:String) {
 		var project = Editor.ME.project;
 
-		var unsortedEnums = new Map();
 		for(eDiff in diff) {
 			switch eDiff.change {
 				case null:
@@ -466,14 +481,12 @@ class ExternalEnum {
 									ev.color = vDiff.data.color;
 								if( vDiff.data.tileRect!=null )
 									ev.tileRect = vDiff.data.tileRect;
-								unsortedEnums.set(ed.identifier, true);
 
 							case Removed: // Lost value
 								ed.removeValue(vDiff.valueId);
 
 							case Renamed(to): // Renamed value
 								ed.renameValue(vDiff.valueId, to);
-								unsortedEnums.set(ed.identifier, true);
 						}
 
 				case Added: // New enum
@@ -486,7 +499,6 @@ class ExternalEnum {
 						if( v.data.tileRect!=null )
 							ev.tileRect = v.data.tileRect;
 					}
-					unsortedEnums.set(ed.identifier, true);
 
 				case Removed: // Lost enum
 					var ed = project.defs.getEnumDef(eDiff.enumId);
@@ -504,11 +516,6 @@ class ExternalEnum {
 					ed.iconTilesetUid = eDiff.newTilesetUid;
 			}
 		}
-
-		// Re-sort modified enums
-		for(ed in project.defs.externalEnums)
-			if( unsortedEnums.exists(ed.identifier) )
-				ed.alphaSortValues();
 	}
 
 }
