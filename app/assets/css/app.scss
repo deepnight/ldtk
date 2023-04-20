@@ -7344,7 +7344,7 @@ body.sorting ul.collapsedSortTarget {
 }
 
 .window.panel.worldPanel {
-	.wrapper {
+	&>.wrapper {
 		padding: 0;
 		box-shadow: none;
 		background-color: $bgDark;
