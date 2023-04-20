@@ -2,16 +2,36 @@
 
 ## Experimental Multi-worlds support!
 
+![](1.3.0/multiWorlds.png)
+
 The new multi-worlds feature is now available as a preview.
 
-**To use it in your projects, you will need to make sure that your importer is up-to-date and supports it.**
+Multi-worlds allow you to have multiple distinct worlds in the same LDtk project.
 
-TODO
+Each world can have its own set of levels using a specific layout. However, they all share the same definitions (layers, entities, enums etc).
+
+**IMPORTANT: to use this feature in your projects, you will need to make sure that your importer is up-to-date and fully supports it.** Multi-worlds projects cannot be imported using older loaders.
+
+To enable this experimental support, open your Project settings (`P` shortcut), scroll down to the advanced options and enable Multi-worlds there. **PLEASE BACKUP YOUR PROJECTS BEFORE TRYING IT!**
+
+When enabled, various new buttons will be available in the UI, like in the World panel (`W` shortcut).
+
+![](1.3.0/multiWorldsOption.png)
+
+## Better drop-down UI component
+
+![](1.3.0/advancedSelect.png)
+
+The new DropDown UI component supports:
+
+ - quick searching
+ - icons
+ - colors
 
 ## Other changes
 
- - New DropDown UI component (supports quick searching, icons and colors)
- - Added support for CastleDB icons
+ - Added support for CastleDB icons import.
+ - Enum tiles can now be any rectangle from the tileset.
  - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
  - Added a context menu to layers list in the main panel
  - Added a context menu on all custom fields to edit their definition
