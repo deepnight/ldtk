@@ -935,7 +935,6 @@ class FieldInstancesForm {
 			}
 		}
 
-		N.debug("parsed form");
 		JsTools.parseComponents(jWrapper);
 	}
 }
