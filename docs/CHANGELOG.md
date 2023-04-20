@@ -1,5 +1,13 @@
 # 1.2.6
 
+## Experimental Multi-worlds support!
+
+TODO
+
+## Other changes
+
+ - New DropDown UI component (supports quick searching, icons and colors)
+ - Added support for CastleDB icons
  - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
  - Added a context menu to layers list in the main panel
  - Added a context menu on all custom fields to edit their definition
