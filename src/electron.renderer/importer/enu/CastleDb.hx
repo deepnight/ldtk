@@ -17,6 +17,13 @@ private typedef CastleDbJson = {
 	}>;
 }
 
+private typedef CastleDbTile = {
+	var file : String;
+	var size : Int;
+	var x : Int;
+	var y : Int;
+}
+
 
 class CastleDb extends importer.ExternalEnum {
 	public function new() {
@@ -62,6 +69,7 @@ class CastleDb extends importer.ExternalEnum {
 			parseds.push(enu);
 
 			// Lookup or create icons tileset
+			var cdbTd : data.def.TilesetDef = null;
 			if( tileColumn!=null ) {
 				var project = Editor.ME.project;
 				for(line in sheet.lines) {
@@ -71,7 +79,6 @@ class CastleDb extends importer.ExternalEnum {
 					var rawIconPath = Std.string(t.file);
 					var cdbIconPath = dn.FilePath.fromFile(sourceFp.directory + sourceFp.slash() + rawIconPath);
 					js.html.Console.log(cdbIconPath.full);
-					var cdbTd : data.def.TilesetDef = null;
 					for(td in project.defs.tilesets) {
 						if( td.isUsingEmbedAtlas() )
 							continue;
@@ -103,8 +110,21 @@ class CastleDb extends importer.ExternalEnum {
 
 				if( !uniq.exists(e) ) {
 					uniq.set(e,true);
+					var tileRect : ldtk.Json.TilesetRect = null;
+					var tile : CastleDbTile = Reflect.field(line, tileColumn);
+					if( tile!=null && tile.file!=null ) {
+						tileRect = {
+							tilesetUid: cdbTd.uid,
+							x: tile.x*tile.size,
+							y: tile.y*tile.size,
+							w: tile.size,
+							h: tile.size,
+						}
+						js.html.Console.log(e+" "+tileRect);
+					}
 					enu.values.push({
 						valueId: e,
+						tileRect: tileRect,
 						data: {
 							color: colorColumn==null ? null : {
 								var color : Int = Reflect.field(line, colorColumn);

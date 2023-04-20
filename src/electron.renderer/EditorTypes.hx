@@ -145,6 +145,7 @@ typedef ParsedExternalEnum = {
 	var enumId : String;
 	var values : Array<{
 		var valueId: String;
+		var tileRect : Null<ldtk.Json.TilesetRect>;
 		var data : ParsedExternalEnumData;
 	}>;
 }

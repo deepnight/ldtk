@@ -25,6 +25,7 @@ class TextFileEnum extends importer.ExternalEnum {
 			for(v in values)
 				parsed.values.push({
 					valueId: v,
+					tileRect: null,
 					data: { color:null },
 				});
 			parseds.push(parsed);
