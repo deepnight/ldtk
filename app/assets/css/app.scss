@@ -2014,10 +2014,11 @@ select {
 					}
 
 					&.null {
+						grid-template-columns: auto;
 						background-image: url("../img/stripes.png");
 						background-color: $bgLight;
 						.placeholder {
-							visibility: hidden;
+							display: none;
 						}
 					}
 
