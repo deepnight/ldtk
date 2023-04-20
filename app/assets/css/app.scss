@@ -837,7 +837,6 @@ canvas.tile {
 
 	&:not(.active) {
 		cursor: not-allowed;
-		opacity: 0.4;
 		&:hover {
 			border-color: $red;
 		}
