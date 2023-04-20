@@ -66,22 +66,22 @@ class EnumDef {
 			if( oldTileId!=null && oldTileId>=0 && v.tileRect==null ) {
 				var td = p.defs.getTilesetDef(ed.iconTilesetUid);
 				v.tileRect = {
+					tilesetUid: td.uid,
 					x: td.getTileSourceX(oldTileId),
 					y: td.getTileSourceY(oldTileId),
 					w: td.tileGridSize,
 					h: td.tileGridSize,
-					tilesetUid: td.uid,
 				}
 			}
 
 			var value : data.DataTypes.EnumDefValue = {
 				id: v.id,
 				tileRect: v.tileRect==null ? null : {
+					tilesetUid: v.tileRect.tilesetUid,
 					x: v.tileRect.x,
 					y: v.tileRect.y,
 					w: v.tileRect.w,
 					h: v.tileRect.h,
-					tilesetUid: v.tileRect.tilesetUid,
 				},
 				color: v.color==null ? (v.tileId!=null ? -1 : 0) : v.color, // -1 means "to be set later based on tile"
 			}
