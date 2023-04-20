@@ -702,6 +702,7 @@ class JsTools {
 				// Init from memory
 				if( App.ME.settings.getUiStateBool(uiStateId)==true ) {
 					jTarget.show();
+					parseComponents(jTarget);
 					jCollapser.addClass("expanded");
 				}
 				else {
@@ -713,6 +714,7 @@ class JsTools {
 			else if( customDefault==true ) {
 				// Use provided default
 				jTarget.show();
+				parseComponents(jTarget);
 				jCollapser.addClass("expanded");
 			}
 			else {
@@ -739,6 +741,7 @@ class JsTools {
 						jCollapser.addClass("expanded");
 						jTarget.slideDown(30, ()->dn.Process.resizeAll(false));
 						jTarget.show();
+						parseComponents(jTarget);
 						dn.Process.resizeAll(false);
 					}
 				});
