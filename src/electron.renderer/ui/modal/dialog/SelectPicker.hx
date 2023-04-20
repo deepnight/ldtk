@@ -117,6 +117,7 @@ class SelectPicker extends ui.modal.Dialog {
 			if( !jFocus.is(":visible") )
 				jFocus = jAllValues.filter(":visible").first();
 			onFocusChange();
+			onResize();
 		});
 
 		onFocusChange();
@@ -143,7 +144,7 @@ class SelectPicker extends ui.modal.Dialog {
 		var x = off.left;
 		var y = off.top;
 		x = M.fmin(x, winWid-jWrapper.outerWidth()-8);
-		y = M.fmin(y, winHei-jWrapper.outerHeight()-8);
+		y = M.fclamp(y, 8, winHei-jWrapper.outerHeight()-8);
 		jWrapper.offset({ left: x, top: y });
 		jWrapper.css("min-width", jSelect.outerWidth());
 	}
