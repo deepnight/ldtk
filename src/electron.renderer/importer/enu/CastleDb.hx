@@ -81,7 +81,6 @@ class CastleDb extends importer.ExternalEnum {
 						continue;
 					var rawIconPath = Std.string(t.file);
 					var cdbIconPath = dn.FilePath.fromFile(sourceFp.directory + sourceFp.slash() + rawIconPath);
-					js.html.Console.log(cdbIconPath.full);
 					for(td in project.defs.tilesets) {
 						if( td.isUsingEmbedAtlas() )
 							continue;
@@ -126,7 +125,6 @@ class CastleDb extends importer.ExternalEnum {
 							w: tile.size * (tile.width!=null ? tile.width : 1),
 							h: tile.size * (tile.height!=null ? tile.height : 1),
 						}
-						js.html.Console.log(e+" "+tileRect);
 					}
 					enu.values.push({
 						valueId: e,
