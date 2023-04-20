@@ -30,6 +30,8 @@ private typedef CastleDbTile = {
 class CastleDb extends importer.ExternalEnum {
 	public function new() {
 		super();
+		supportsColors = true;
+		supportsIcons = true;
 	}
 
 	override function parse(fileContent:String) {

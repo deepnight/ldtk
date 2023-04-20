@@ -2,6 +2,8 @@ package importer;
 
 class ExternalEnum {
 	var sourceFp : dn.FilePath;
+	var supportsIcons = false;
+	var supportsColors = false;
 
 	public static function sync(relPath:String) {
 		var ext = dn.FilePath.extractExtension(relPath,true);
@@ -171,7 +173,7 @@ class ExternalEnum {
 			if( !diff.exists(enumId) )
 				diff.set(enumId, {
 					enumId: enumId,
-					newTilesetUid: null,
+					newTilesetUid: -1,
 					change: null,
 					valueDiffs: new Map(),
 				});
@@ -224,7 +226,7 @@ class ExternalEnum {
 				}
 				else {
 					// Changed tileset UID
-					if( existing.iconTilesetUid!=pe.tilesetUid )
+					if( supportsIcons && existing.iconTilesetUid!=pe.tilesetUid )
 						_getEnumDiff(pe.enumId).newTilesetUid = pe.tilesetUid;
 
 					// New values
@@ -393,33 +395,20 @@ class ExternalEnum {
 					continue;
 
 				// Update value color
-				if( pv.data.color!=null && pv.data.color!=ev.color ) {
+				if( supportsColors && pv.data.color!=ev.color ) {
 					ev.color = pv.data.color;
 					anyChange = true;
 				}
 
-				// Lost tile
-				if( pv.data.tileRect==null && ev.tileRect!=null ) {
-					ev.tileRect = null;
-					anyChange = true;
-				}
-
-				// New tile
-				if( pv.data.tileRect!=null && ev.tileRect==null ) {
-					ev.tileRect = {
-						tilesetUid: pv.data.tileRect.tilesetUid,
-						x: pv.data.tileRect.x,
-						y: pv.data.tileRect.y,
-						w: pv.data.tileRect.w,
-						h: pv.data.tileRect.h,
+				if( supportsIcons ) {
+					// Lost tile
+					if( pv.data.tileRect==null && ev.tileRect!=null ) {
+						ev.tileRect = null;
+						anyChange = true;
 					}
-					anyChange = true;
-				}
 
-				if( pv.data.tileRect!=null && ev.tileRect!=null ) {
-					var oldT = ev.tileRect;
-					var newT = pv.data.tileRect;
-					if( oldT.x!=newT.x || oldT.y!=newT.y || oldT.w!=newT.w || oldT.h!=newT.h || oldT.tilesetUid!=newT.tilesetUid ) {
+					// New tile
+					if( pv.data.tileRect!=null && ev.tileRect==null ) {
 						ev.tileRect = {
 							tilesetUid: pv.data.tileRect.tilesetUid,
 							x: pv.data.tileRect.x,
@@ -428,6 +417,21 @@ class ExternalEnum {
 							h: pv.data.tileRect.h,
 						}
 						anyChange = true;
+					}
+
+					if( pv.data.tileRect!=null && ev.tileRect!=null ) {
+						var oldT = ev.tileRect;
+						var newT = pv.data.tileRect;
+						if( oldT.x!=newT.x || oldT.y!=newT.y || oldT.w!=newT.w || oldT.h!=newT.h || oldT.tilesetUid!=newT.tilesetUid ) {
+							ev.tileRect = {
+								tilesetUid: pv.data.tileRect.tilesetUid,
+								x: pv.data.tileRect.x,
+								y: pv.data.tileRect.y,
+								w: pv.data.tileRect.w,
+								h: pv.data.tileRect.h,
+							}
+							anyChange = true;
+						}
 					}
 				}
 			}
@@ -496,7 +500,7 @@ class ExternalEnum {
 			// Update misc enumDef props
 			var ed = project.defs.getEnumDef(eDiff.enumId);
 			if( ed!=null ) {
-				if( eDiff.newTilesetUid!=null )
+				if( eDiff.newTilesetUid!=-1 )
 					ed.iconTilesetUid = eDiff.newTilesetUid;
 			}
 		}
