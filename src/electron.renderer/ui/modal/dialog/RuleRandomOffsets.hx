@@ -19,22 +19,22 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 		jContent.find("*").off();
 
 		// X
-		var i = Input.linkToHtmlInput(rule.randomXOffset, jContent.find("#xOffset"));
+		var i = Input.linkToHtmlInput(rule.tileRandomXOffset, jContent.find("#xOffset"));
 		i.setBounds(0, 256);
 		i.onChange = onChange;
 
 		i.jInput.siblings(".reset").click(_->{
-			rule.randomXOffset = 0;
+			rule.tileRandomXOffset = 0;
 			onChange();
 		});
 
 		// Y
-		var i = Input.linkToHtmlInput(rule.randomYOffset, jContent.find("#yOffset"));
+		var i = Input.linkToHtmlInput(rule.tileRandomYOffset, jContent.find("#yOffset"));
 		i.setBounds(0, 256);
 		i.onChange = onChange;
 
 		i.jInput.siblings(".reset").click(_->{
-			rule.randomYOffset = 0;
+			rule.tileRandomYOffset = 0;
 			onChange();
 		});
 	}

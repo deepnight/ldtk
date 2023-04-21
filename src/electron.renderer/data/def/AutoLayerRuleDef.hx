@@ -22,8 +22,8 @@ class AutoLayerRuleDef {
 	public var yModulo = 1;
 	public var xOffset = 0;
 	public var yOffset = 0;
-	public var randomXOffset = 0;
-	public var randomYOffset = 0;
+	public var tileRandomXOffset = 0;
+	public var tileRandomYOffset = 0;
 	public var checker : ldtk.Json.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
@@ -43,7 +43,7 @@ class AutoLayerRuleDef {
 	}
 
 	public inline function hasAnyPositionOffset() {
-		return randomXOffset!=0 || randomYOffset!=0;
+		return tileRandomXOffset!=0 || tileRandomYOffset!=0;
 	}
 
 	inline function isValidSize(size:Int) {
@@ -134,8 +134,8 @@ class AutoLayerRuleDef {
 			yModulo: yModulo,
 			xOffset: xOffset,
 			yOffset: yOffset,
-			randomXOffset: randomXOffset,
-			randomYOffset: randomYOffset,
+			tileRandomXOffset: tileRandomXOffset,
+			tileRandomYOffset: tileRandomYOffset,
 			checker: JsonTools.writeEnum(checker, false),
 			tileMode: JsonTools.writeEnum(tileMode, false),
 			pivotX: JsonTools.writeFloat(pivotX),
@@ -167,8 +167,8 @@ class AutoLayerRuleDef {
 		r.yModulo = JsonTools.readInt(json.yModulo, 1);
 		r.xOffset = JsonTools.readInt(json.xOffset, 0);
 		r.yOffset = JsonTools.readInt(json.yOffset, 0);
-		r.randomXOffset = JsonTools.readInt(json.randomXOffset, 0);
-		r.randomYOffset = JsonTools.readInt(json.randomYOffset, 0);
+		r.tileRandomXOffset = JsonTools.readInt(json.tileRandomXOffset, 0);
+		r.tileRandomYOffset = JsonTools.readInt(json.tileRandomYOffset, 0);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
@@ -337,11 +337,11 @@ class AutoLayerRuleDef {
 	}
 
 	public function getRandomXOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return randomXOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed, cx,cy, randomXOffset*2 ) - randomXOffset;
+		return tileRandomXOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed, cx,cy, tileRandomXOffset*2 ) - tileRandomXOffset;
 	}
 
 	public function getRandomYOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return randomYOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed+1, cx,cy, randomYOffset*2 ) - randomYOffset;
+		return tileRandomYOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed+1, cx,cy, tileRandomYOffset*2 ) - tileRandomYOffset;
 	}
 
 	#end

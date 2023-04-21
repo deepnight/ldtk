@@ -8467,9 +8467,13 @@ $patternSize : 32px;
 }
 
 .window.dialog.perlinSettings {
-	.content {
+	.wrapper {
 		width: 300px;
 		dl.form {
+			dt {
+				min-width: none;
+				white-space: nowrap;
+			}
 			dd {
 				align-items: stretch;
 			}
@@ -8489,7 +8493,7 @@ $patternSize : 32px;
 
 .window.dialog.ruleRandomOffsets {
 	.wrapper {
-		width: 300px;
+		width: 350px;
 		dl.form {
 			dt {
 				min-width: none;
