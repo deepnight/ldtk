@@ -17,8 +17,7 @@ class RulePerlinSettings extends ui.modal.Dialog {
 		preview = new h2d.Graphics();
 		editor.levelRender.root.add(preview, Const.DP_UI);
 
-		addClose();
-		loadTemplate("perlinSettings");
+		loadTemplate("rulePerlinSettings");
 		setTransparentMask();
 
 		var i = Input.linkToHtmlInput(r.perlinSeed, jContent.find("#perlinSeed"));
