@@ -288,6 +288,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			m.add({
 				label: L.t._("Use assistant (recommended)"),
 				cb: ()->{
+					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
+						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
+						return;
+					}
 					doUseWizard();
 				},
 			});
