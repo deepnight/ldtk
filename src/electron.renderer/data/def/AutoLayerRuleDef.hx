@@ -348,16 +348,20 @@ class AutoLayerRuleDef {
 		return tileIds[ dn.M.randSeedCoords( uid+seed, cx,cy, tileIds.length ) ];
 	}
 
-	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileRandomXMin==0 && tileRandomXMax==0
-			? tileXOffset
-			: tileXOffset + dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin;
+	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
+		return ( M.hasBit(flips,0)?-1:1 ) * ( tileXOffset + (
+			tileRandomXMin==0 && tileRandomXMax==0
+				? 0
+				: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin
+		));
 	}
 
-	public function getYOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileRandomYMin==0 && tileRandomYMax==0
-			? tileYOffset
-			: tileYOffset + dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomYMax-tileRandomYMin+1) ) + tileRandomYMin;
+	public function getYOffsetForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
+		return ( M.hasBit(flips,1)?-1:1 ) * ( tileYOffset + (
+			tileRandomYMin==0 && tileRandomYMax==0
+				? 0
+				: dn.M.randSeedCoords( uid+seed+1, cx,cy, (tileRandomYMax-tileRandomYMin+1) ) + tileRandomYMin
+		));
 	}
 
 	#end
