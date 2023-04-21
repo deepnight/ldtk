@@ -744,6 +744,10 @@ class JsTools {
 
 			// Create advanced select & options
 			var jSelect = new J('<div class="advancedSelect"/>');
+			var classes = try (~/\s/).split( jOldSelect.attr("class") ) catch(_) [];
+			for(c in classes)
+				if( c!="advanced" )
+					jSelect.addClass(c);
 			jSelect.insertBefore(jOldSelect);
 			jSelect.append('<span class="expand icon expanded"></span>');
 			var hasImages = jOldSelect.find("[tile]").length>0;
