@@ -1,6 +1,8 @@
 package ui.modal.dialog;
 
 class SelectPicker extends ui.modal.Dialog {
+	static var MAX_COLUMNS = 6;
+
 	var jSelect : js.jquery.JQuery;
 	var jFocus : js.jquery.JQuery;
 	var jValues : js.jquery.JQuery;
@@ -13,7 +15,6 @@ class SelectPicker extends ui.modal.Dialog {
 		super();
 
 		this.uiStateId = uiStateId;
-		cd.setS("ignoreMouse", 0.1);
 
 		this.jSelect = jSelect;
 		addClass("selectPicker");
@@ -35,6 +36,11 @@ class SelectPicker extends ui.modal.Dialog {
 			jValue.appendTo(jValues);
 			jValue.text(jOpt.text());
 			jValue.attr("search", jOpt.text().toLowerCase());
+			if( jOpt.hasClass("selected") ) {
+				jValue.addClass("selected");
+				jFocus = jValue;
+			}
+
 			if( jOpt.is("[style]") )
 				jValue.css("background-color", jOpt.css("background-color"));
 
@@ -46,9 +52,6 @@ class SelectPicker extends ui.modal.Dialog {
 				close();
 			});
 
-			if( jOpt.attr("value")==selectedValue )
-				jFocus = jValue;
-
 			var jImg = jOpt.find("img:first, .placeholder");
 			jValue.prepend( jImg.clone(false,false) );
 		}
@@ -58,8 +61,6 @@ class SelectPicker extends ui.modal.Dialog {
 			jFocus = jAllValues.first();
 
 		jAllValues.mouseover( (ev:js.jquery.Event)->{
-			if( cd.has("ignoreMouse") )
-				return;
 			jFocus = new J(ev.target);
 			onFocusChange(false);
 		});
@@ -164,18 +165,11 @@ class SelectPicker extends ui.modal.Dialog {
 					cb: _setGridAndSave.bind(1),
 				});
 				ctx.addTitle(L.t._("Grid view"));
-				ctx.add({
-					label: L.untranslated('<span class="icon gridView"></span> 2 columns'),
-					cb: _setGridAndSave.bind(2),
-				});
-				ctx.add({
-					label: L.untranslated('<span class="icon gridView"></span> 3 columns'),
-					cb: _setGridAndSave.bind(3),
-				});
-				ctx.add({
-					label: L.untranslated('<span class="icon gridView"></span> 4 columns'),
-					cb: _setGridAndSave.bind(4),
-				});
+				for(c in 2...MAX_COLUMNS+1)
+					ctx.add({
+						label: L.untranslated('<span class="icon gridView"></span> $c columns'),
+						cb: _setGridAndSave.bind(c),
+					});
 			});
 			if( uiStateId!=null && settings.hasUiState(uiStateId, project) )
 				setGrid( settings.getUiStateInt(uiStateId, project) );
@@ -183,17 +177,19 @@ class SelectPicker extends ui.modal.Dialog {
 		}
 
 		onFocusChange();
-		emitResizeAtEndOfFrame();
+		emitResizeNow();
 	}
 
+	override function openAnim() {
+		// nope
+	}
 
 	function setGrid(cols:Int) {
 		jValues.removeClass("grid");
-		final max = 5;
-		for(i in 2...max+1)
+		for(i in 2...MAX_COLUMNS+1)
 			jValues.removeClass("grid-"+i);
 
-		gridColumns = M.iclamp(cols,1,max);
+		gridColumns = M.iclamp(cols,1,MAX_COLUMNS);
 		if( gridColumns>1 ) {
 			jValues.addClass("grid");
 			jValues.addClass("grid-"+gridColumns);

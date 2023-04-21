@@ -1996,15 +1996,11 @@ select {
 				background-color: $bgLight;
 				&.grid {
 					display: grid;
-					&.grid-2 {
-						grid-template-columns: repeat(2, 1fr);
-					}
-					&.grid-3 {
-						grid-template-columns: repeat(3, 1fr);
-					}
-					&.grid-4 {
-						grid-template-columns: repeat(4, 1fr);
-					}
+					&.grid-2 { grid-template-columns: repeat(2, 1fr); }
+					&.grid-3 { grid-template-columns: repeat(3, 1fr); }
+					&.grid-4 { grid-template-columns: repeat(4, 1fr); }
+					&.grid-5 { grid-template-columns: repeat(5, 1fr); }
+					&.grid-6 { grid-template-columns: repeat(6, 1fr); }
 
 					&.hasImg .value {
 						display: grid;
@@ -2015,6 +2011,13 @@ select {
 						font-size: 8pt;
 						border-top: 1px solid $bgDark;
 						border-left: 1px solid $bgDark;
+						img {
+							width: 48px;
+						}
+						.placeholder {
+							width: 48px;
+							height: 48px;
+						}
 					}
 				}
 
@@ -2061,6 +2064,13 @@ select {
 						height: 32px;
 						background-image: url("../img/stripes.png");
 						border: 1px solid $bgLight;
+					}
+
+					&.selected {
+						outline: 3px dashed white !important;
+						outline-offset: -4px !important;
+						// background-color: $almostWhite !important;
+						// color: black;
 					}
 
 					&.focus {
