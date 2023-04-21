@@ -513,7 +513,7 @@ class JsTools {
 	}
 
 
-	public static function parseComponents(jCtx:js.jquery.JQuery) {
+	public static function parseComponents(jCtx:js.jquery.JQuery) : Void {
 		// Info bubbles: (i) and (!)
 		jCtx.find(".info, info, warning").each( function(idx, e) {
 			var jThis = new J(e);
