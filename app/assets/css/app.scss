@@ -8466,9 +8466,9 @@ $patternSize : 32px;
 	}
 }
 
-.window.dialog.perlinSettings {
+.window.dialog.rulePerlinSettings {
 	.wrapper {
-		width: 300px;
+		width: 350px;
 		dl.form {
 			dt {
 				min-width: none;
@@ -8476,6 +8476,7 @@ $patternSize : 32px;
 			}
 			dd {
 				align-items: stretch;
+				flex-wrap: nowrap;
 			}
 			label {
 				flex: 0 0 50px;
