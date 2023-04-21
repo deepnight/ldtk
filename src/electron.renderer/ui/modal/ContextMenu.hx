@@ -48,6 +48,10 @@ class ContextMenu extends ui.Modal {
 		placer();
 	}
 
+	public function enableNoWrap() {
+		jContent.addClass("noWrap");
+	}
+
 	dynamic function placer() {}
 
 	public static inline function isOpen() return ME!=null && !ME.destroyed;

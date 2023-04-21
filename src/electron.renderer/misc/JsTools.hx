@@ -775,7 +775,8 @@ class JsTools {
 
 			// Open select
 			jSelect.click(_->{
-				new ui.modal.dialog.SelectPicker(jSelect, v->{
+				var uiStateId : Null<Settings.UiState> = cast jOldSelect.attr("id");
+				new ui.modal.dialog.SelectPicker(jSelect, uiStateId, v->{
 					jOldSelect.val(v).change();
 				});
 			});

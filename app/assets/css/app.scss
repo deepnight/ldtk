@@ -1185,6 +1185,7 @@ ul.log {
 .icon.ghost				{ background-image: url("../icons/ghost.svg"); }
 .icon.gridOff			{ background-image: url("../icons/gridOff.svg"); }
 .icon.gridOn			{ background-image: url("../icons/gridOn.svg"); }
+.icon.gridView			{ background-image: url("../icons/gridView.svg"); }
 .icon.help				{ background-image: url("../icons/help.svg"); }
 .icon.hidden			{ background-image: url("../icons/hidden.png"); }
 .icon.history			{ background-image: url("../icons/history.svg"); }
@@ -1194,6 +1195,7 @@ ul.log {
 .icon.layer				{ background-image: url("../icons/layer.png"); }
 .icon.level				{ background-image: url("../icons/level.svg"); }
 .icon.list				{ background-image: url("../icons/list.svg"); }
+.icon.listView			{ background-image: url("../icons/listView.svg"); }
 .icon.locate			{ background-image: url("../icons/locate.svg"); }
 .icon.love				{ background-image: url("../icons/love.svg"); }
 .icon.manual			{ background-image: url("../icons/manual.svg"); }
@@ -1975,6 +1977,14 @@ select {
 			display: grid;
 			grid-template-rows: min-content min-content;
 
+			.header {
+				display: grid;
+				grid-template-columns: auto min-content;
+				button {
+					padding: 4px;
+				}
+			}
+
 			input.search {
 				width: 100%;
 			}
@@ -1983,6 +1993,28 @@ select {
 				max-height: 80vh;
 				overflow-y: auto;
 				background-color: $bgLight;
+				&.grid {
+					display: grid;
+					&.grid-2 {
+						grid-template-columns: repeat(2, 1fr);
+					}
+					&.grid-3 {
+						grid-template-columns: repeat(3, 1fr);
+					}
+					&.grid-4 {
+						grid-template-columns: repeat(4, 1fr);
+					}
+
+					&.hasImg .value {
+						display: grid;
+						grid-template-columns: auto;
+						grid-template-rows: min-content min-content;
+						gap: 2px;
+						justify-items: center;
+						font-size: 8pt;
+						border: none;
+					}
+				}
 
 				&.hasImg .value {
 					grid-template-columns: min-content auto;
@@ -1996,6 +2028,7 @@ select {
 					border: 1px solid transparent;
 					align-items: center;
 					cursor: pointer;
+					white-space: nowrap;
 
 					&+.value {
 						border-top: 1px solid $bgLighter;
@@ -3396,6 +3429,10 @@ textarea {
 				color: white;
 				font-weight: bold;
 				background-color: $bgMed;
+			}
+
+			&.noWrap button {
+				white-space: nowrap;
 			}
 
 			button {

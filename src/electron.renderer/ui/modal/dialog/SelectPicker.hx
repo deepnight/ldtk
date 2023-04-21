@@ -5,10 +5,14 @@ class SelectPicker extends ui.modal.Dialog {
 	var jFocus : js.jquery.JQuery;
 	var jValues : js.jquery.JQuery;
 	var jAllValues : js.jquery.JQuery;
+	var gridColumns = 1;
+	var uiStateId : Null<Settings.UiState>;
 
-	public function new(jSelect:js.jquery.JQuery, onPick:Dynamic->Void) {
+
+	public function new(jSelect:js.jquery.JQuery, uiStateId:Null<Settings.UiState>, onPick:Dynamic->Void) {
 		super();
 
+		this.uiStateId = uiStateId;
 		cd.setS("ignoreMouse", 0.1);
 
 		this.jSelect = jSelect;
@@ -17,8 +21,11 @@ class SelectPicker extends ui.modal.Dialog {
 
 		jValues = new J('<div class="values"/>');
 		jValues.appendTo(jContent);
-		if( jSelect.find("img, .placeholder").length>0 )
+		var hasImages = false;
+		if( jSelect.find("img, .placeholder").length>0 ) {
+			hasImages = true;
 			jValues.addClass("hasImg");
+		}
 
 		var selectedValue = jSelect.find(".option.selected").attr("value");
 
@@ -57,39 +64,46 @@ class SelectPicker extends ui.modal.Dialog {
 			onFocusChange(false);
 		});
 
+		// Header
+		var jHeader = new J('<div class="header"/>');
+		jHeader.prependTo(jContent);
+
 		// Search
 		var jSearch = new J('<input type="text" placeholder="Search" class="search"/>');
-		jSearch.prependTo(jContent);
+		jSearch.appendTo(jHeader);
 		jSearch.focus();
 		jSearch.blur( _->jSearch.focus() );
 
 		// Search shortcut keys
 		jSearch.keydown( (ev:js.jquery.Event)->{
 			var jOld = jFocus;
-			final page = 10;
 			switch ev.key {
+				case "ArrowLeft":
+					if( gridColumns>1 ) {
+						moveFocus(-1, false);
+						ev.preventDefault();
+					}
+
+				case "ArrowRight":
+					if( gridColumns>1 ) {
+						moveFocus(1, false);
+						ev.preventDefault();
+					}
+
 				case "ArrowUp":
-					jFocus = jFocus.prevAll(":visible").first();
+					moveFocus(-gridColumns);
 					ev.preventDefault();
 
 				case "ArrowDown":
-					jFocus = jFocus.nextAll(":visible").first();
+					moveFocus(gridColumns);
 					ev.preventDefault();
 
 				case "PageUp":
-					var jAll = jFocus.prevAll(":visible");
-					if( jAll.length>=page )
-						jFocus = new J( jAll.get(page-1) );
-					else
-						jFocus = jAll.first();
+					moveFocus(-gridColumns*3);
 					ev.preventDefault();
 
 				case "PageDown":
-					var jAll = jFocus.nextAll(":visible");
-					if( jAll.length>=page )
-						jFocus = new J( jAll.get(page-1) );
-					else
-						jFocus = jAll.last();
+					moveFocus(gridColumns*3);
 					ev.preventDefault();
 
 				case "Enter": jFocus.click();
@@ -117,13 +131,90 @@ class SelectPicker extends ui.modal.Dialog {
 			if( !jFocus.is(":visible") )
 				jFocus = jAllValues.filter(":visible").first();
 			onFocusChange();
-			onResize();
+			emitResizeAtEndOfFrame();
 		});
 
+		// Grid view button
+		if( hasImages ) {
+			var jGrid = new J('<button class="transparent"> <span class="icon"></span> </button>');
+			jGrid.appendTo(jHeader);
+			function _updateGridButton() {
+				var jIcon = jGrid.find(".icon");
+				jIcon.removeClass().addClass("icon");
+				switch gridColumns {
+					case 1: jIcon.addClass("listView");
+					case _: jIcon.addClass("gridView");
+				}
+			}
+			jGrid.click(_->{
+				function _setGridAndSave(g) {
+					setGrid(g);
+					_updateGridButton();
+					onFocusChange();
+					emitResizeAtEndOfFrame();
+					if( gridColumns<=1 )
+						settings.deleteUiState(uiStateId, project);
+					else
+						settings.setUiStateInt(uiStateId, gridColumns, project);
+				}
+				var ctx = new ContextMenu(jGrid);
+				ctx.enableNoWrap();
+				ctx.add({
+					label: L.untranslated('<span class="icon listView"></span> List view'),
+					cb: _setGridAndSave.bind(1),
+				});
+				ctx.addTitle(L.t._("Grid view"));
+				ctx.add({
+					label: L.untranslated('<span class="icon gridView"></span> 2 columns'),
+					cb: _setGridAndSave.bind(2),
+				});
+				ctx.add({
+					label: L.untranslated('<span class="icon gridView"></span> 3 columns'),
+					cb: _setGridAndSave.bind(3),
+				});
+				ctx.add({
+					label: L.untranslated('<span class="icon gridView"></span> 4 columns'),
+					cb: _setGridAndSave.bind(4),
+				});
+			});
+			if( uiStateId!=null && settings.hasUiState(uiStateId, project) )
+				setGrid( settings.getUiStateInt(uiStateId, project) );
+			_updateGridButton();
+		}
+
 		onFocusChange();
-		onResize();
+		emitResizeAtEndOfFrame();
 	}
 
+
+	function setGrid(cols:Int) {
+		jValues.removeClass("grid");
+		final max = 5;
+		for(i in 2...max+1)
+			jValues.removeClass("grid-"+i);
+
+		gridColumns = M.iclamp(cols,1,max);
+		if( gridColumns>1 ) {
+			jValues.addClass("grid");
+			jValues.addClass("grid-"+gridColumns);
+		}
+	}
+
+	function moveFocus(delta:Int, allowRowChange=true) {
+		if( delta==0 )
+			return;
+
+		var jOld = jFocus;
+
+		var jAll : js.jquery.JQuery = delta<0 ? jFocus.prevAll(":visible") : jFocus.nextAll(":visible");
+		if( jAll.length>=delta )
+			jFocus = new J( jAll.get(M.iabs(delta)-1) );
+		else
+			jFocus = delta<0 ? jAll.first() : jAll.last();
+
+		if( !allowRowChange && jOld.offset().top!=jFocus.offset().top )
+			jFocus = jOld;
+	}
 
 	function onFocusChange(autoScroll=true) {
 		jAllValues.removeClass("focus");
