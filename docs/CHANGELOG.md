@@ -24,9 +24,10 @@ When enabled, various new buttons will be available in the UI, like in the World
 
 The new DropDown UI component supports:
 
- - quick searching
- - icons
- - colors
+ - Quick searching
+ - List or Grid view
+ - Icons
+ - Colors
 
 ## Other changes
 
