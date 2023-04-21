@@ -702,7 +702,7 @@ class LayerInstance {
 	}
 
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
-		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
+		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed, cx,cy) ] : r.tileIds;
 		var td = getTilesetDef();
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 
@@ -712,8 +712,8 @@ class LayerInstance {
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
 			tileIds.map( (tid)->{
 				return {
-					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
-					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
+					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getRandomXOffsetForCoord(seed,cx,cy),
+					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getRandomYOffsetForCoord(seed,cx,cy),
 					srcX: td.getTileSourceX(tid),
 					srcY: td.getTileSourceY(tid),
 					tid: tid,
@@ -814,7 +814,7 @@ class LayerInstance {
 						// Break on match is ON
 						coordLocks.set( coordId(x,y), true ); // mark cell as locked
 					}
-					else {
+					else if( !r.hasAnyPositionOffset() ) {
 						// Check for opaque tiles
 						for( t in autoTilesCache.get(r.uid).get( coordId(x,y) ) )
 							if( td.isTileOpaque(t.tid) ) {

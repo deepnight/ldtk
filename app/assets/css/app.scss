@@ -8091,7 +8091,7 @@ body.sorting ul.collapsedSortTarget {
 
 						.options {
 							display: grid;
-							grid-template-columns: repeat(6, 22px);
+							grid-template-columns: repeat(6, 1fr);
 							gap: 2px;
 
 							&>* {
@@ -8104,13 +8104,14 @@ body.sorting ul.collapsedSortTarget {
 							}
 
 							.random {
-								grid-column: 1/5;
+								grid-column: 1/4;
 								display: flex;
 								flex-wrap: nowrap;
 								align-items: center;
 
 								input[name="random"] {
-									width: 40px;
+									width: 100%;
+									flex: 1 1 0;
 									font-size: 9pt;
 									padding-top: 1px;
 									padding-bottom: 1px;
@@ -8481,6 +8482,31 @@ $patternSize : 32px;
 			button {
 				padding-top: 0;
 				padding-bottom: 0;
+			}
+		}
+	}
+}
+
+.window.dialog.ruleRandomOffsets {
+	.wrapper {
+		width: 300px;
+		dl.form {
+			dt {
+				min-width: none;
+				white-space: nowrap;
+			}
+			dd {
+				align-items: stretch;
+			}
+			label {
+				flex: 0 0 50px;
+			}
+			input#perlinSeed {
+				flex: 1 0 80px;
+			}
+			button.reset {
+				flex: 0;
+				padding: 2px;
 			}
 		}
 	}

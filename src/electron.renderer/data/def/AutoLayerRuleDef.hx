@@ -22,6 +22,8 @@ class AutoLayerRuleDef {
 	public var yModulo = 1;
 	public var xOffset = 0;
 	public var yOffset = 0;
+	public var randomXOffset = 0;
+	public var randomYOffset = 0;
 	public var checker : ldtk.Json.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
@@ -38,6 +40,10 @@ class AutoLayerRuleDef {
 		this.size = size;
 		perlinSeed = Std.random(9999999);
 		initPattern();
+	}
+
+	public inline function hasAnyPositionOffset() {
+		return randomXOffset!=0 || randomYOffset!=0;
 	}
 
 	inline function isValidSize(size:Int) {
@@ -128,6 +134,8 @@ class AutoLayerRuleDef {
 			yModulo: yModulo,
 			xOffset: xOffset,
 			yOffset: yOffset,
+			randomXOffset: randomXOffset,
+			randomYOffset: randomYOffset,
 			checker: JsonTools.writeEnum(checker, false),
 			tileMode: JsonTools.writeEnum(tileMode, false),
 			pivotX: JsonTools.writeFloat(pivotX),
@@ -159,6 +167,8 @@ class AutoLayerRuleDef {
 		r.yModulo = JsonTools.readInt(json.yModulo, 1);
 		r.xOffset = JsonTools.readInt(json.xOffset, 0);
 		r.yOffset = JsonTools.readInt(json.yOffset, 0);
+		r.randomXOffset = JsonTools.readInt(json.randomXOffset, 0);
+		r.randomYOffset = JsonTools.readInt(json.randomYOffset, 0);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
@@ -323,7 +333,15 @@ class AutoLayerRuleDef {
 	}
 
 	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileIds[ dn.M.randSeedCoords( seed, cx,cy, tileIds.length ) ];
+		return tileIds[ dn.M.randSeedCoords( uid+seed, cx,cy, tileIds.length ) ];
+	}
+
+	public function getRandomXOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
+		return randomXOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed, cx,cy, randomXOffset*2 ) - randomXOffset;
+	}
+
+	public function getRandomYOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
+		return randomYOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed+1, cx,cy, randomYOffset*2 ) - randomYOffset;
 	}
 
 	#end

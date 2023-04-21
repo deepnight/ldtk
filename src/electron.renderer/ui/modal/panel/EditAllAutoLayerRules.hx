@@ -829,6 +829,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		else if( r.chance<=0 )
 			i.jInput.addClass("off");
 
+		// Random offsets
+		var jFlag = jRule.find("a.randomOffset");
+		jFlag.addClass( r.hasAnyPositionOffset() ? "on" : "off" );
+		jFlag.mousedown( function(ev:js.jquery.Event) {
+			ev.preventDefault();
+			var w = new ui.modal.dialog.RuleRandomOffsets(jFlag, r);
+			w.onSettingsChange = (r)->invalidateRuleAndOnesBelow(r);
+		});
+
 		// Modulos
 		var jModulo = jRule.find(".modulo");
 		jModulo.text('${r.xModulo}-${r.yModulo}');
