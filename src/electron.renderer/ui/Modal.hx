@@ -153,6 +153,10 @@ class Modal extends dn.Process {
 		return false;
 	}
 
+	function isLast() {
+		return ALL[ALL.length-1]==this;
+	}
+
 	public static function closeLatest() {
 		if( !hasAnyOpen() )
 			return false;

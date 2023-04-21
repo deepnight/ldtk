@@ -40,6 +40,9 @@ class SelectPicker extends ui.modal.Dialog {
 				jValue.addClass("selected");
 				jFocus = jValue;
 			}
+			if( hasImages )
+				jValue.addClass("hasImg");
+
 
 			if( jOpt.is("[style]") )
 				jValue.css("background-color", jOpt.css("background-color"));
@@ -77,6 +80,9 @@ class SelectPicker extends ui.modal.Dialog {
 
 		// Search shortcut keys
 		jSearch.keydown( (ev:js.jquery.Event)->{
+			if( !isLast() )
+				return;
+			
 			var jOld = jFocus;
 			switch ev.key {
 				case "ArrowLeft":

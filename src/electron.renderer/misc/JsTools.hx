@@ -745,6 +745,7 @@ class JsTools {
 			// Create advanced select & options
 			var jSelect = new J('<div class="advancedSelect"/>');
 			jSelect.insertBefore(jOldSelect);
+			jSelect.append('<span class="expand icon expanded"></span>');
 			for(elem in jOldSelect.children("option")) {
 				var jOldOpt = new J(elem);
 				var jOpt = new J('<div class="option"/>');

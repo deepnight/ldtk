@@ -1908,18 +1908,28 @@ select {
 	flex: 1 1 0;
 	overflow: hidden;
 	align-self: center;
-	padding-right: 17px;
+	position: relative;
+	// padding-right: 17px;
 
 	color: $almostWhite;
 	font-size: 9.5pt;
 
-	background-image: url("../icons/expanded.svg");
-	background-repeat: no-repeat;
-	background-position: right -3px center;
+	// background-image: url("../icons/expanded.svg");
+	// background-repeat: no-repeat;
+	// background-position: right -3px center;
 
 	border: 1px solid $bgLight;
 	border-radius: 3px;
 	cursor: pointer;
+
+	.expand {
+		position: absolute;
+		right: 0;
+		top: 0;
+		height: 100%;
+		pointer-events: none;
+		background-color: transparentize($color: $bgDark, $amount: 0.33);
+	}
 
 	&:hover {
 		border-color: $orange;
@@ -2067,10 +2077,12 @@ select {
 					}
 
 					&.selected {
-						outline: 3px dashed white !important;
-						outline-offset: -4px !important;
-						// background-color: $almostWhite !important;
-						// color: black;
+						outline: 1px dashed white !important;
+						outline-offset: -2px !important;
+						&.hasImg {
+							outline: 3px dashed white !important;
+							outline-offset: -4px !important;
+						}
 					}
 
 					&.focus {
