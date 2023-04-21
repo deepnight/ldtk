@@ -22,8 +22,10 @@ class AutoLayerRuleDef {
 	public var yModulo = 1;
 	public var xOffset = 0;
 	public var yOffset = 0;
-	public var tileRandomXOffset = 0;
-	public var tileRandomYOffset = 0;
+	public var tileRandomXMin = 0;
+	public var tileRandomXMax = 0;
+	public var tileRandomYMin = 0;
+	public var tileRandomYMax = 0;
 	public var checker : ldtk.Json.AutoLayerRuleCheckerMode = None;
 
 	var perlinActive = false;
@@ -43,7 +45,7 @@ class AutoLayerRuleDef {
 	}
 
 	public inline function hasAnyPositionOffset() {
-		return tileRandomXOffset!=0 || tileRandomYOffset!=0;
+		return tileRandomXMin!=0 || tileRandomXMax!=0 || tileRandomYMin!=0 || tileRandomYMax!=0;
 	}
 
 	inline function isValidSize(size:Int) {
@@ -134,8 +136,10 @@ class AutoLayerRuleDef {
 			yModulo: yModulo,
 			xOffset: xOffset,
 			yOffset: yOffset,
-			tileRandomXOffset: tileRandomXOffset,
-			tileRandomYOffset: tileRandomYOffset,
+			tileRandomXMin: tileRandomXMin,
+			tileRandomXMax: tileRandomXMax,
+			tileRandomYMin: tileRandomYMin,
+			tileRandomYMax: tileRandomYMax,
 			checker: JsonTools.writeEnum(checker, false),
 			tileMode: JsonTools.writeEnum(tileMode, false),
 			pivotX: JsonTools.writeFloat(pivotX),
@@ -167,8 +171,10 @@ class AutoLayerRuleDef {
 		r.yModulo = JsonTools.readInt(json.yModulo, 1);
 		r.xOffset = JsonTools.readInt(json.xOffset, 0);
 		r.yOffset = JsonTools.readInt(json.yOffset, 0);
-		r.tileRandomXOffset = JsonTools.readInt(json.tileRandomXOffset, 0);
-		r.tileRandomYOffset = JsonTools.readInt(json.tileRandomYOffset, 0);
+		r.tileRandomXMin = JsonTools.readInt(json.tileRandomXMin, 0);
+		r.tileRandomXMax = JsonTools.readInt(json.tileRandomXMax, 0);
+		r.tileRandomYMin = JsonTools.readInt(json.tileRandomYMin, 0);
+		r.tileRandomYMax = JsonTools.readInt(json.tileRandomYMax, 0);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
@@ -337,11 +343,15 @@ class AutoLayerRuleDef {
 	}
 
 	public function getRandomXOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileRandomXOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed, cx,cy, tileRandomXOffset*2 ) - tileRandomXOffset;
+		return tileRandomXMin==0 && tileRandomXMax==0
+			? 0
+			: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin;
 	}
 
 	public function getRandomYOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileRandomYOffset==0 ? 0 : dn.M.randSeedCoords( uid+seed+1, cx,cy, tileRandomYOffset*2 ) - tileRandomYOffset;
+		return tileRandomYMin==0 && tileRandomYMax==0
+			? 0
+			: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomYMax-tileRandomYMin+1) ) + tileRandomYMin;
 	}
 
 	#end

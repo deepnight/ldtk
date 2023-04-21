@@ -1200,6 +1200,7 @@ ul.log {
 .icon.love				{ background-image: url("../icons/love.svg"); }
 .icon.manual			{ background-image: url("../icons/manual.svg"); }
 .icon.new				{ background-image: url("../icons/new.svg"); }
+.icon.offset			{ background-image: url("../icons/offset.svg"); }
 .icon.open				{ background-image: url("../icons/open.svg"); }
 .icon.partial			{ background-image: url("../icons/partial.png"); }
 .icon.paste				{ background-image: url("../icons/paste.svg"); }
@@ -8103,6 +8104,11 @@ body.sorting ul.collapsedSortTarget {
 								}
 							}
 
+							.icon {
+								width: 18px;
+								height: 18px;
+							}
+
 							.random {
 								grid-column: 1/4;
 								display: flex;
@@ -8116,6 +8122,7 @@ body.sorting ul.collapsedSortTarget {
 									padding-top: 1px;
 									padding-bottom: 1px;
 									background-color: $bgMed;
+									background-image: none !important;
 									&:focus, &.editing {
 										background-color: $bgDark;
 									}
@@ -8471,7 +8478,7 @@ $patternSize : 32px;
 		width: 350px;
 		dl.form {
 			dt {
-				min-width: none;
+				min-width: 0;
 				white-space: nowrap;
 			}
 			dd {
@@ -8494,20 +8501,22 @@ $patternSize : 32px;
 
 .window.dialog.ruleRandomOffsets {
 	.wrapper {
-		width: 350px;
+		width: 450px;
 		dl.form {
 			dt {
-				min-width: none;
+				min-width: 0;
+				padding-right: 1em;
 				white-space: nowrap;
 			}
 			dd {
+				flex-wrap: nowrap;
 				align-items: stretch;
 			}
 			label {
-				flex: 0 0 50px;
+				flex: 1 1 0px;
 			}
-			input#perlinSeed {
-				flex: 1 0 80px;
+			input[type=text] {
+				flex: 1 1 40px;
 			}
 			button.reset {
 				flex: 0;

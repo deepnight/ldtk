@@ -19,24 +19,48 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 		jContent.find("*").off();
 
 		// X
-		var i = Input.linkToHtmlInput(rule.tileRandomXOffset, jContent.find("#xOffset"));
-		i.setBounds(0, 256);
+		var i = Input.linkToHtmlInput(rule.tileRandomXMin, jContent.find("#xMin"));
+		i.fixValue = (v)->return M.imin(v, rule.tileRandomXMax);
+		i.setBounds(-256, 256);
 		i.enableSlider(0.66);
+		i.setEmptyValue(0);
+		i.setPlaceholder(0);
+		i.onChange = onChange;
+
+		var i = Input.linkToHtmlInput(rule.tileRandomXMax, jContent.find("#xMax"));
+		i.fixValue = (v)->return M.imax(v, rule.tileRandomXMin);
+		i.setBounds(-256, 256);
+		i.enableSlider(0.66);
+		i.setEmptyValue(0);
+		i.setPlaceholder(0);
 		i.onChange = onChange;
 
 		i.jInput.siblings(".reset").click(_->{
-			rule.tileRandomXOffset = 0;
+			rule.tileRandomXMin = 0;
+			rule.tileRandomXMax = 0;
 			onChange();
 		});
 
 		// Y
-		var i = Input.linkToHtmlInput(rule.tileRandomYOffset, jContent.find("#yOffset"));
-		i.setBounds(0, 256);
-		i.onChange = onChange;
+		var i = Input.linkToHtmlInput(rule.tileRandomYMin, jContent.find("#yMin"));
+		i.fixValue = (v)->return M.imin(v, rule.tileRandomYMax);
+		i.setBounds(-256, 256);
 		i.enableSlider(0.66);
+		i.setEmptyValue(0);
+		i.setPlaceholder(0);
+		i.onChange = onChange;
+
+		var i = Input.linkToHtmlInput(rule.tileRandomYMax, jContent.find("#yMax"));
+		i.fixValue = (v)->return M.imax(v, rule.tileRandomYMin);
+		i.setBounds(-256, 256);
+		i.enableSlider(0.66);
+		i.setEmptyValue(0);
+		i.setPlaceholder(0);
+		i.onChange = onChange;
 
 		i.jInput.siblings(".reset").click(_->{
-			rule.tileRandomYOffset = 0;
+			rule.tileRandomYMin = 0;
+			rule.tileRandomYMax = 0;
 			onChange();
 		});
 	}
