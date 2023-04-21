@@ -21,6 +21,7 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 		// X
 		var i = Input.linkToHtmlInput(rule.tileRandomXOffset, jContent.find("#xOffset"));
 		i.setBounds(0, 256);
+		i.enableSlider(0.66);
 		i.onChange = onChange;
 
 		i.jInput.siblings(".reset").click(_->{
@@ -32,6 +33,7 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 		var i = Input.linkToHtmlInput(rule.tileRandomYOffset, jContent.find("#yOffset"));
 		i.setBounds(0, 256);
 		i.onChange = onChange;
+		i.enableSlider(0.66);
 
 		i.jInput.siblings(".reset").click(_->{
 			rule.tileRandomYOffset = 0;
