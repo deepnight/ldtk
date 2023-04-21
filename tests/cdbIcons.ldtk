@@ -10,11 +10,11 @@
 	},
 	"iid": "1cf29550-c640-11ed-8b0e-c1d5a47d5743",
 	"jsonVersion": "1.3.0",
-	"appBuildId": 467242,
+	"appBuildId": 467243,
 	"nextUid": 36,
 	"identifierStyle": "Capitalize",
 	"toc": [],
-	"worldLayout": "Free",
+	"worldLayout": "LinearHorizontal",
 	"worldGridWidth": 256,
 	"worldGridHeight": 256,
 	"defaultLevelWidth": 256,
@@ -281,19 +281,19 @@
 		}
 	], "enums": [], "externalEnums": [
 		{ "identifier": "ConstDb", "uid": 12, "values": [
-			{ "id": "Global", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Audio", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Player", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Score", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "UI", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "ArenaMode", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Alert", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "MobAgainstEnvironment", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "RangedMobs", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Explosions", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Dodge", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Traps", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Breach", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null }
+			{ "id": "Global", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Audio", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Player", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Score", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "UI", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "ArenaMode", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Alert", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "MobAgainstEnvironment", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "RangedMobs", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Explosions", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Dodge", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Traps", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Breach", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "../../ld51-tenjutsu-plus/res/data.cdb", "externalFileChecksum": "7f56b5d5798ec67fb5ff95bafc3285d6", "tags": [] },
 		{ "identifier": "ItemInfo", "uid": 13, "values": [
 			{ "id": "CoinSmall", "tileRect": { "tilesetUid": 32, "x": 0, "y": 0, "w": 16, "h": 16 }, "tileId": -1, "color": 16763904, "__tileSrcRect": [0,0,16,16] },
@@ -334,35 +334,35 @@
 			{ "id": "Wave", "tileRect": { "tilesetUid": 32, "x": 112, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": 2697629, "__tileSrcRect": [112,80,16,16] }
 		], "iconTilesetUid": 32, "externalRelPath": "../../ld51-tenjutsu-plus/res/data.cdb", "externalFileChecksum": "7f56b5d5798ec67fb5ff95bafc3285d6", "tags": [] },
 		{ "identifier": "ItemPerk", "uid": 14, "values": [
-			{ "id": "DamageA", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "DamageB", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "DamageC", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "DamageD", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "RangeA", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "RangeB", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "RangeC", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "AmmoA", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null }
+			{ "id": "DamageA", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "DamageB", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "DamageC", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "DamageD", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "RangeA", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "RangeB", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "RangeC", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "AmmoA", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null }
 		], "iconTilesetUid": null, "externalRelPath": "../../ld51-tenjutsu-plus/res/data.cdb", "externalFileChecksum": "7f56b5d5798ec67fb5ff95bafc3285d6", "tags": [] },
 		{ "identifier": "ItemTag", "uid": 15, "values": [
-			{ "id": "NoDamage", "tileRect": { "tilesetUid": 32, "x": 80, "y": 0, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [80,0,16,16] },
-			{ "id": "HasRange", "tileRect": { "tilesetUid": 32, "x": 64, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [64,80,16,16] },
-			{ "id": "AmmoUnits", "tileRect": { "tilesetUid": 32, "x": 48, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [48,80,16,16] }
+			{ "id": "NoDamage", "tileRect": { "tilesetUid": 32, "x": 80, "y": 0, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [80,0,16,16] },
+			{ "id": "HasRange", "tileRect": { "tilesetUid": 32, "x": 64, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [64,80,16,16] },
+			{ "id": "AmmoUnits", "tileRect": { "tilesetUid": 32, "x": 48, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [48,80,16,16] }
 		], "iconTilesetUid": 32, "externalRelPath": "../../ld51-tenjutsu-plus/res/data.cdb", "externalFileChecksum": "7f56b5d5798ec67fb5ff95bafc3285d6", "tags": [] },
 		{ "identifier": "MobInfo", "uid": 16, "values": [
-			{ "id": "Trash", "tileRect": { "tilesetUid": 33, "x": 144, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [144,80,16,16] },
-			{ "id": "Tornado", "tileRect": { "tilesetUid": 33, "x": 0, "y": 160, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [0,160,16,16] },
-			{ "id": "Pistol", "tileRect": { "tilesetUid": 33, "x": 16, "y": 560, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [16,560,16,16] },
-			{ "id": "Grenader", "tileRect": { "tilesetUid": 33, "x": 192, "y": 544, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [192,544,16,16] },
-			{ "id": "BulletWall", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Jumper", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "DpsTest", "tileRect": { "tilesetUid": 33, "x": 208, "y": 16, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [208,16,16,16] },
-			{ "id": "Fast", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Chainsaw", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "Shovel", "tileRect": { "tilesetUid": 33, "x": 144, "y": 928, "w": 16, "h": 16 }, "tileId": -1, "color": null, "__tileSrcRect": [144,928,16,16] },
-			{ "id": "Bomber", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "MachineGun", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "SmallZombie", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null },
-			{ "id": "FatZombie", "tileRect": null, "tileId": -1, "color": null, "__tileSrcRect": null }
+			{ "id": "Trash", "tileRect": { "tilesetUid": 33, "x": 144, "y": 80, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [144,80,16,16] },
+			{ "id": "Tornado", "tileRect": { "tilesetUid": 33, "x": 0, "y": 160, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [0,160,16,16] },
+			{ "id": "Pistol", "tileRect": { "tilesetUid": 33, "x": 16, "y": 560, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [16,560,16,16] },
+			{ "id": "Grenader", "tileRect": { "tilesetUid": 33, "x": 192, "y": 544, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [192,544,16,16] },
+			{ "id": "BulletWall", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Jumper", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "DpsTest", "tileRect": { "tilesetUid": 33, "x": 208, "y": 16, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [208,16,16,16] },
+			{ "id": "Fast", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Chainsaw", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "Shovel", "tileRect": { "tilesetUid": 33, "x": 144, "y": 928, "w": 16, "h": 16 }, "tileId": -1, "color": -1, "__tileSrcRect": [144,928,16,16] },
+			{ "id": "Bomber", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "MachineGun", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "SmallZombie", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null },
+			{ "id": "FatZombie", "tileRect": null, "tileId": -1, "color": -1, "__tileSrcRect": null }
 		], "iconTilesetUid": 33, "externalRelPath": "../../ld51-tenjutsu-plus/res/data.cdb", "externalFileChecksum": "7f56b5d5798ec67fb5ff95bafc3285d6", "tags": [] },
 		{ "identifier": "Rarity", "uid": 17, "values": [
 			{ "id": "Common", "tileRect": { "tilesetUid": 32, "x": 64, "y": 0, "w": 16, "h": 16 }, "tileId": -1, "color": 458496, "__tileSrcRect": [64,0,16,16] },
@@ -390,8 +390,8 @@
 			"identifier": "Level_0",
 			"iid": "1cf29552-c640-11ed-8b0e-cb06b2d5aeb8",
 			"uid": 0,
-			"worldX": 0,
-			"worldY": 0,
+			"worldX": -1,
+			"worldY": -1,
 			"worldDepth": 0,
 			"pxWid": 256,
 			"pxHei": 256,
@@ -433,7 +433,7 @@
 					"entityInstances": [
 						{
 							"__identifier": "Entity",
-							"__grid": [7,7],
+							"__grid": [2,4],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": { "tilesetUid": 32, "x": 48, "y": 0, "w": 16, "h": 16 },
@@ -442,7 +442,7 @@
 							"width": 32,
 							"height": 32,
 							"defUid": 23,
-							"px": [112,112],
+							"px": [32,64],
 							"fieldInstances": [
 								{ "__identifier": "item", "__value": "GemB", "__type": "ExternEnum.ItemInfo", "__tile": { "tilesetUid": 32, "x": 48, "y": 0, "w": 16, "h": 16 }, "defUid": 24, "realEditorValues": [{
 									"id": "V_String",
