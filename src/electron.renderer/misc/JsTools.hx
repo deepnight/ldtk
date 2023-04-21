@@ -746,6 +746,7 @@ class JsTools {
 			var jSelect = new J('<div class="advancedSelect"/>');
 			jSelect.insertBefore(jOldSelect);
 			jSelect.append('<span class="expand icon expanded"></span>');
+			var hasImages = jOldSelect.find("[tile]").length>0;
 			for(elem in jOldSelect.children("option")) {
 				var jOldOpt = new J(elem);
 				var jOpt = new J('<div class="option"/>');
@@ -772,6 +773,8 @@ class JsTools {
 						jOpt.prepend(img);
 					}
 				}
+				else if( hasImages )
+					jOpt.prepend('<div class="placeholder"></div>');
 			}
 
 			// Open select
