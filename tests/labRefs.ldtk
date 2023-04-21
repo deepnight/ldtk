@@ -11,7 +11,7 @@
 	"iid": "632f6660-c640-11ed-ac88-8b7d413097bd",
 	"jsonVersion": "1.3.0",
 	"appBuildId": 467243,
-	"nextUid": 46,
+	"nextUid": 48,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": null,
@@ -225,6 +225,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -287,6 +288,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -349,6 +351,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -411,6 +414,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -473,6 +477,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": ["triggerable"],
 					"tilesetUid": null
 				}
@@ -535,6 +540,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": ["triggerable"],
 					"tilesetUid": null
 				},
@@ -567,6 +573,7 @@
 					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -629,6 +636,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": ["triggerable"],
 					"tilesetUid": null
 				}
@@ -720,6 +728,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": ["MobData"],
 					"tilesetUid": null
 				}
@@ -782,6 +791,7 @@
 					"autoChainRef": true,
 					"allowOutOfLevelRef": false,
 					"allowedRefs": "OnlyTags",
+					"allowedRefsEntityUid": null,
 					"allowedRefTags": ["MobData"],
 					"tilesetUid": null
 				},
@@ -814,6 +824,70 @@
 					"autoChainRef": false,
 					"allowOutOfLevelRef": true,
 					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
+				}
+			]
+		},
+		{
+			"identifier": "LightButton",
+			"uid": 46,
+			"tags": ["gameObjects"],
+			"exportToToc": false,
+			"doc": null,
+			"width": 16,
+			"height": 16,
+			"resizableX": false,
+			"resizableY": false,
+			"keepAspectRatio": false,
+			"tileOpacity": 1,
+			"fillOpacity": 0.08,
+			"lineOpacity": 0,
+			"hollow": false,
+			"color": "#FEE761",
+			"renderMode": "Tile",
+			"showName": true,
+			"tilesetId": 17,
+			"tileRenderMode": "FitInside",
+			"tileRect": { "tilesetUid": 17, "x": 64, "y": 80, "w": 16, "h": 16 },
+			"nineSliceBorders": [],
+			"maxCount": 0,
+			"limitScope": "PerLevel",
+			"limitBehavior": "MoveLastOne",
+			"pivotX": 0,
+			"pivotY": 0,
+			"fieldDefs": [
+				{
+					"identifier": "target",
+					"doc": null,
+					"__type": "EntityRef",
+					"uid": 47,
+					"type": "F_EntityRef",
+					"isArray": false,
+					"canBeNull": false,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "RefLinkBetweenCenters",
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "CurvedArrow",
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySpecificEntity",
+					"allowedRefsEntityUid": 13,
 					"allowedRefTags": [],
 					"tilesetUid": null
 				}
@@ -1208,6 +1282,28 @@
 								}, "__type": "EntityRef", "__tile": null, "defUid": 7, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["071e7f50-66b0-11ec-bb2d-971255f399c0"]
+								}] }]
+							},
+							{
+								"__identifier": "LightButton",
+								"__grid": [18,17],
+								"__pivot": [0,0],
+								"__tags": ["gameObjects"],
+								"__tile": { "tilesetUid": 17, "x": 64, "y": 80, "w": 16, "h": 16 },
+								"__smartColor": "#FEE761",
+								"iid": "bcdb38a0-c640-11ed-b6e8-6b9b75bd04d4",
+								"width": 16,
+								"height": 16,
+								"defUid": 46,
+								"px": [288,272],
+								"fieldInstances": [{ "__identifier": "target", "__value": {
+									"entityIid": "395513a0-66b0-11ec-ba8a-29f4cb38abe3",
+									"layerIid": "0f070c30-66b0-11ec-8917-0548426d19e2",
+									"levelIid": "ee57e400-66b0-11ec-8917-7d1d935ce7e5",
+									"worldIid": "fb4f4600-66b0-11ec-bb2d-6fd64b0cacd8"
+								}, "__type": "EntityRef", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["395513a0-66b0-11ec-ba8a-29f4cb38abe3"]
 								}] }]
 							}
 						]
