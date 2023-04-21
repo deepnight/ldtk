@@ -219,16 +219,37 @@ class EditProject extends ui.modal.Panel {
 		if( project.backupOnSave )
 			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/backups", false) );
 		var jCount = jForms.find("#backupCount");
+		var jPath = jForms.find(".backupRelPath");
 		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
 		if( project.backupOnSave ) {
 			jCount.show();
+			jPath.show();
 			jCount.siblings("span").show();
 			var i = Input.linkToHtmlInput( project.backupLimit, jCount );
 			i.setBounds(3, 50);
+			i.linkEvent(ProjectSettingsChanged);
+
+			jPath.find(".cur").text( project.backupRelPath==null ? "[Default dir]" : project.backupRelPath );
+			jPath.find(".pick").click(_->{
+				var openDir = project.getAbsBackupDir();
+				if( !NT.fileExists(openDir) )
+					openDir = project.filePath.full;
+
+				dn.js.ElectronDialogs.openDir(openDir, (path)->{
+					var fp = dn.FilePath.fromDir(path);
+					project.backupRelPath = fp.full;
+					editor.ge.emit(ProjectSettingsChanged);
+				});
+			});
+			jPath.find(".reset").click(_->{
+				project.backupRelPath = null;
+				editor.ge.emit(ProjectSettingsChanged);
+			});
 		}
 		else {
 			jCount.hide();
 			jCount.siblings("span").hide();
+			jPath.hide();
 		}
 		jForms.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
 

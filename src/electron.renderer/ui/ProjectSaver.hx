@@ -596,7 +596,7 @@ class ProjectSaver extends dn.Process {
 
 		var subProjectDir = p.getAbsExternalFilesDir();
 		var sourceDir = dn.FilePath.fromDir( p.filePath.directoryWithSlash );
-		var backupDir = dn.FilePath.fromDir( subProjectDir + "/" + Const.BACKUP_DIR + "/" + makeBackupDirName() );
+		var backupDir = dn.FilePath.fromDir( p.getAbsBackupDir() + "/" + makeBackupDirName() );
 		log('Backing up $sourceDir to $backupDir...');
 
 		// List potential external levels

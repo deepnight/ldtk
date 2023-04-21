@@ -40,6 +40,7 @@ class Project {
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
+	public var backupRelPath : Null<String>;
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
 	public var customCommands : Array<ldtk.Json.CustomCommand> = [];
@@ -74,6 +75,10 @@ class Project {
 
 	public function getAbsExternalFilesDir() {
 		return filePath.directoryWithSlash + filePath.fileName;
+	}
+
+	public function getAbsBackupDir() {
+		return getAbsExternalFilesDir() + "/" + ( backupRelPath==null ? Const.BACKUP_DIR : backupRelPath );
 	}
 
 	public function getRelExternalFilesDir() {
@@ -277,6 +282,7 @@ class Project {
 		p.simplifiedExport = JsonTools.readBool( json.simplifiedExport, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
+		p.backupRelPath = json.backupRelPath;
 		p.pngFilePattern = json.pngFilePattern;
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
 		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:ldtk.Json.CustomCommand)->{
@@ -608,6 +614,7 @@ class Project {
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
+			backupRelPath: backupRelPath,
 			levelNamePattern: levelNamePattern,
 			tutorialDesc : JsonTools.escapeString(tutorialDesc),
 			customCommands: customCommands.map(cmd->{

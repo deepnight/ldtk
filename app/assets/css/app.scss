@@ -7132,6 +7132,23 @@ dl.form.fieldInstanceEditor {
 			border-color: $red;
 		}
 
+		.backupRelPath {
+			display: flex;
+			flex-wrap: nowrap;
+			align-items: center;
+			padding: 2px 4px;
+			border: 1px solid $bgLight;
+			.cur {
+				flex: 1 0 0;
+				font-size: 8pt;
+				color: $bgLighter;
+			}
+			button {
+				flex: 0 1 0;
+				padding: 2px;
+			}
+		}
+
 		h2 {
 			margin-bottom: 0;
 		}
