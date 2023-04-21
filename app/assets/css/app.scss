@@ -1976,6 +1976,7 @@ select {
 		.content {
 			display: grid;
 			grid-template-rows: min-content min-content;
+			gap: 1px;
 
 			.header {
 				display: grid;
@@ -2012,7 +2013,8 @@ select {
 						gap: 2px;
 						justify-items: center;
 						font-size: 8pt;
-						border: none;
+						border-top: 1px solid $bgDark;
+						border-left: 1px solid $bgDark;
 					}
 				}
 
@@ -2062,7 +2064,8 @@ select {
 					}
 
 					&.focus {
-						border-color: $orangeLight;
+						outline: 1px solid $orangeLight;
+						outline-offset: -2px;
 						background-color: $orange !important;
 						color: black;
 					}
