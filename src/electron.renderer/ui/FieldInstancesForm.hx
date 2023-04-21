@@ -337,9 +337,9 @@ class FieldInstancesForm {
 				}
 
 
-			case F_Enum(name):
-				var ed = Editor.ME.project.defs.getEnumDef(name);
-				var jSelect = new J('<select class="advanced" id="fieldInstance_${fi.defUid}"/>');
+			case F_Enum(defUid):
+				var ed = Editor.ME.project.defs.getEnumDef(defUid);
+				var jSelect = new J('<select class="advanced" id="fieldInstance_${defUid}"/>');
 				jSelect.appendTo(jTarget);
 				jSelect.attr("tdUid", ed.iconTilesetUid);
 
