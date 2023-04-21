@@ -237,7 +237,7 @@ class EditProject extends ui.modal.Panel {
 
 				dn.js.ElectronDialogs.openDir(openDir, (path)->{
 					var fp = dn.FilePath.fromDir(path);
-					project.backupRelPath = fp.full;
+					project.backupRelPath = fp.full; // BUG should be relative!
 					editor.ge.emit(ProjectSettingsChanged);
 				});
 			});
