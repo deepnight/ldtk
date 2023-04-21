@@ -40,6 +40,9 @@ class CommandRunner extends ui.modal.Dialog {
 				settings.setProjectTrust(p.iid, false);
 				close();
 			});
+			jWarn.find(".cancel").click(_->{
+				close();
+			});
 		}
 		else if( cmd.command!="" ) {
 			runCommand(p, cmd);
