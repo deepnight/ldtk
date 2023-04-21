@@ -542,7 +542,7 @@ class FieldInstancesForm {
 
 					jRef.mouseenter( _->{
 						// Mouse over a ref
-						if( fi.valueIsNull(arrayIdx) )
+						if( fi.valueIsNull(arrayIdx) || ui.ValuePicker.exists() )
 							return;
 
 						if( tei==null )
@@ -556,7 +556,8 @@ class FieldInstancesForm {
 						}
 					});
 					jRef.mouseleave( _->{
-						editor.levelRender.clearTemp();
+						if( !ui.ValuePicker.exists() )
+							editor.levelRender.clearTemp();
 					});
 
 
