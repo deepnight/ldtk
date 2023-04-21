@@ -109,6 +109,10 @@ class Modal extends dn.Process {
 		jModalAndMask.addClass(cname);
 	}
 
+	public function removeClass(cname:String) {
+		jModalAndMask.removeClass(cname);
+	}
+
 	override function onDispose() {
 		super.onDispose();
 
