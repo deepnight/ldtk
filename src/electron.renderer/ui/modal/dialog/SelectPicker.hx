@@ -4,6 +4,7 @@ class SelectPicker extends ui.modal.Dialog {
 	static var MAX_COLUMNS = 6;
 
 	var jSelect : js.jquery.JQuery;
+	var jSearch : js.jquery.JQuery;
 	var jFocus : js.jquery.JQuery;
 	var jValues : js.jquery.JQuery;
 	var jAllValues : js.jquery.JQuery;
@@ -73,16 +74,19 @@ class SelectPicker extends ui.modal.Dialog {
 		jHeader.prependTo(jContent);
 
 		// Search
-		var jSearch = new J('<input type="text" placeholder="Search" class="search"/>');
+		jSearch = new J('<input type="text" placeholder="Search" class="search"/>');
 		jSearch.appendTo(jHeader);
 		jSearch.focus();
-		jSearch.blur( _->jSearch.focus() );
+		jSearch.blur( _->{
+			if( isLast() )
+				jSearch.focus();
+		});
 
 		// Search shortcut keys
 		jSearch.keydown( (ev:js.jquery.Event)->{
 			if( !isLast() )
 				return;
-			
+
 			var jOld = jFocus;
 			switch ev.key {
 				case "ArrowLeft":
@@ -184,6 +188,17 @@ class SelectPicker extends ui.modal.Dialog {
 
 		onFocusChange();
 		emitResizeNow();
+	}
+
+	override function onAnotherModalOpen() {
+		super.onAnotherModalOpen();
+		jSearch.blur();
+	}
+
+	override function onAnotherModalClose() {
+		super.onAnotherModalClose();
+		if( isLast() )
+			jSearch.focus();
 	}
 
 	override function openAnim() {

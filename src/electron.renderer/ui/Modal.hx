@@ -43,9 +43,15 @@ class Modal extends dn.Process {
 			editor.ge.addGlobalListener(onGlobalEvent);
 
 		positionNear();
+
+		for(e in ALL)
+			if( e!=this && !e.isClosing() )
+				e.onAnotherModalOpen();
 	}
 
 	function onClickMask() {}
+	function onAnotherModalOpen() {}
+	function onAnotherModalClose() {}
 
 	public function positionNear(?target:js.jquery.JQuery, ?m:Coords) {
 		if( target==null && m==null )
@@ -125,8 +131,14 @@ class Modal extends dn.Process {
 		jMask = null;
 		jContent = null;
 
-		if( !hasAnyOpen() )
+		if( hasAnyOpen() ) {
+			for(e in ALL)
+				if( !e.isClosing() )
+					e.onAnotherModalClose();
+		}
+		else
 			App.ME.jBody.removeClass("hasModal");
+
 	}
 
 	public static function closeAll(?except:Modal) {
@@ -163,7 +175,7 @@ class Modal extends dn.Process {
 
 		var i = ALL.length-1;
 		while( i>=0 )
-			if( ALL[i].destroyed )
+			if( ALL[i].isClosing() )
 				i--;
 			else if( !ALL[i].canBeClosedManually )
 				return false;
