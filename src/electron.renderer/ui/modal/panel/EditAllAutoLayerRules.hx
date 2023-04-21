@@ -849,6 +849,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jFlag = jRule.find("a.break");
 		jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 		jFlag.click( function(ev:js.jquery.Event) {
+			if( r.hasAnyPositionOffset() ) {
+				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
+				return;
+			}
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);
 			r.breakOnMatch = !r.breakOnMatch;

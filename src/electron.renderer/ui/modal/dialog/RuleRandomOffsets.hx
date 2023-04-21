@@ -100,6 +100,8 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 	}
 
 	function onChange() {
+		if( rule.hasAnyPositionOffset() )
+			rule.breakOnMatch = false;
 		editor.ge.emit( LayerRuleChanged(rule) );
 		onSettingsChange(rule);
 		updateForm();
