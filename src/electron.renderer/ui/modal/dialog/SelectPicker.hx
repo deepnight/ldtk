@@ -136,7 +136,7 @@ class SelectPicker extends ui.modal.Dialog {
 		});
 
 		// Grid view button
-		if( hasImages ) {
+		if( hasImages && uiStateId!=null ) {
 			var jGrid = new J('<button class="transparent"> <span class="icon"></span> </button>');
 			jGrid.appendTo(jHeader);
 			function _updateGridButton() {
