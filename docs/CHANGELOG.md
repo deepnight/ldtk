@@ -34,6 +34,7 @@ The new DropDown UI component supports:
  - Added support for CastleDB icons import.
  - Enum tiles can now be any rectangle from the tileset.
  - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
+ - Added "Specific entity type" constraint for Entity References
  - Added a context menu to layers list in the main panel
  - Added a context menu on all custom fields to edit their definition
  - Added "colored flags" icons to the embedded atlas
@@ -42,6 +43,7 @@ The new DropDown UI component supports:
  - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
  - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
  - Fixed a very old rules bug that prevented Symetric rules to not re-apply in the same grid cell, if it applied there previously.
+ - Fixed a crash when opening wizard on an improperly defined auto-layer
 
 
 # 1.2.5
