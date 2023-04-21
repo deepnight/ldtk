@@ -47,7 +47,7 @@ class AutoLayerRuleDef {
 	}
 
 	public inline function hasAnyPositionOffset() {
-		return tileRandomXMin!=0 || tileRandomXMax!=0 || tileRandomYMin!=0 || tileRandomYMax!=0;
+		return tileRandomXMin!=0 || tileRandomXMax!=0 || tileRandomYMin!=0 || tileRandomYMax!=0 || tileXOffset!=0 || tileYOffset!=0;
 	}
 
 	inline function isValidSize(size:Int) {
