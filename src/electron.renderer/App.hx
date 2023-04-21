@@ -81,8 +81,8 @@ class App extends dn.Process {
 		IpcRenderer.on("settingsApplied", ()->updateBodyClasses());
 
 		var win = js.Browser.window;
-		win.onblur = onAppBlur;
-		win.onfocus = onAppFocus;
+		win.onblur = onWindowBlur;
+		win.onfocus = onWindowFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
 		#if debug
@@ -520,7 +520,10 @@ class App extends dn.Process {
 		lastKnownMouse.pageY = e.pageY;
 	}
 
-	function onAppFocus(ev:js.html.Event) {
+	function onWindowFocus(ev:js.html.Event) {
+		if( ev.target!=js.Browser.window )
+			return;
+
 		focused = true;
 		jsKeyDowns = new Map();
 		heapsKeyDowns = new Map();
@@ -531,7 +534,10 @@ class App extends dn.Process {
 		clipboard.readSystemClipboard();
 	}
 
-	function onAppBlur(ev:js.html.Event) {
+	function onWindowBlur(ev:js.html.Event) {
+		if( !focused || ev.target!=js.Browser.window )
+			return;
+
 		focused = false;
 		overCanvas = false;
 		jsKeyDowns = new Map();
@@ -805,10 +811,10 @@ class App extends dn.Process {
 		// FPS limit while app isn't focused
 		if( haxe.Timer.stamp()<=requestedCpuEndTime ) // Has recent request
 			hxd.System.fpsLimit = -1;
-		else if( !focused && !ui.modal.Progress.hasAny() && !ui.modal.MetaProgress.exists() ) // App is blurred
-			hxd.System.fpsLimit = 2;
 		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() ) // progress is running
 			hxd.System.fpsLimit = -1;
+		else if( !focused ) // App is blurred
+			hxd.System.fpsLimit = 2;
 		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
 			hxd.System.fpsLimit = 10;
 		else
