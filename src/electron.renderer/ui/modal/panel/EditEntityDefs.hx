@@ -66,7 +66,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm( FP_Entity );
+		fieldsForm = new ui.FieldDefsForm( FP_Entity(null) );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
 
@@ -461,9 +461,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function updateFieldsForm() {
 		if( curEntity!=null )
-			fieldsForm.useFields(curEntity.identifier, curEntity.fieldDefs);
+			fieldsForm.useFields(FP_Entity(curEntity), curEntity.fieldDefs);
 		else {
-			fieldsForm.useFields("Entity", []);
+			fieldsForm.useFields(FP_Entity(null), []);
 			fieldsForm.hide();
 		}
 		checkBackup();

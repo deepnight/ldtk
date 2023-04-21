@@ -362,7 +362,11 @@ class FieldInstance {
 						case Any:
 						case OnlySame:
 							if( thisEi!=null && thisEi.def.identifier!=tei.def.identifier )
-								return "Invalid ref type "+def.identifier+" vs "+tei.def.identifier;
+								return "Invalid ref type "+tei.def.identifier;
+
+						case OnlySpecificEntity:
+							if( tei.def.uid!=def.allowedRefsEntityUid )
+								return "Invalid ref type "+tei.def.identifier;
 
 						case OnlyTags:
 							if( !tei.def.tags.hasAnyTagFoundIn(def.allowedRefTags) )

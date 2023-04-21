@@ -3,8 +3,8 @@ package ui;
 import data.def.FieldDef;
 
 enum FieldParentType {
-	FP_Entity;
-	FP_Level;
+	FP_Entity(ed:data.def.EntityDef);
+	FP_Level(level:data.Level);
 }
 
 class FieldDefsForm {
@@ -12,7 +12,6 @@ class FieldDefsForm {
 	var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 	var curWorld(get,never) : data.World; inline function get_curWorld() return Editor.ME.curWorld;
 
-	var parentName : Null<String>;
 	var parentType : FieldParentType;
 	public var jWrapper : js.jquery.JQuery;
 	var jList(get,never) : js.jquery.JQuery; inline function get_jList() return jWrapper.find("ul.fieldList");
@@ -27,8 +26,8 @@ class FieldDefsForm {
 
 		jWrapper = new J('<div class="fieldDefsForm"/>');
 		jWrapper.html( JsTools.getHtmlTemplate("fieldDefsForm", { parentType: switch parentType {
-			case FP_Entity: "Entity";
-			case FP_Level: "Level";
+			case FP_Entity(_): "Entity";
+			case FP_Level(_): "Level";
 		}}) );
 
 		// Create single field
@@ -49,23 +48,41 @@ class FieldDefsForm {
 
 
 	inline function getParentName() {
-		return parentName!=null ? parentName : switch parentType {
-			case FP_Entity: "Entity";
-			case FP_Level: "Level";
+		return switch parentType {
+			case FP_Entity(ed): ed!=null ? ed.identifier : "Unknown entity";
+			case FP_Level(l): l!=null ? l.identifier : "Unknown level";
 		}
 	}
 
 
-	inline function isLevelField() return parentType==FP_Level;
-	inline function isEntityField() return parentType==FP_Entity;
+	inline function isLevelField() {
+		return getLevelParent()!=null;
+	}
+	inline function isEntityField() {
+		return getEntityParent()!=null;
+	}
+
+	function getEntityParent() {
+		return switch parentType {
+			case FP_Entity(ed): ed;
+			case FP_Level(level): null;
+		}
+	}
+
+	function getLevelParent() {
+		return switch parentType {
+			case FP_Entity(ed): null;
+			case FP_Level(level): level;
+		}
+	}
 
 	public function hide() {
 		jWrapper.css({ visibility: "hidden" });
 	}
 
 
-	public function useFields(parentName:String, fields:Array<FieldDef>) {
-		this.parentName = parentName;
+	public function useFields(parent:FieldParentType, fields:Array<FieldDef>) {
+		parentType = parent;
 		jWrapper.css({ visibility: "visible" });
 		fieldDefs = fields;
 
@@ -313,12 +330,12 @@ class FieldDefsForm {
 
 	function onAnyChange() {
 		switch parentType {
-			case FP_Entity:
+			case FP_Entity(_):
 				for( w in project.worlds )
 				for( l in w.levels )
 					editor.invalidateLevelCache(l);
 
-			case FP_Level:
+			case FP_Level(_):
 				for( w in project.worlds )
 				for( l in w.levels )
 					editor.invalidateLevelCache(l);
@@ -622,6 +639,8 @@ class FieldDefsForm {
 						curField.symmetricalRef = false; // not compatible
 
 					case OnlySame:
+					case OnlySpecificEntity:
+						curField.allowedRefsEntityUid = getEntityParent().uid;
 				}
 				curField.allowedRefs = v;
 				onFieldChange();
@@ -630,11 +649,35 @@ class FieldDefsForm {
 				case Any: L.t._("Any entity");
 				case OnlyTags: L.t._("Any entity with one of the specified tags");
 				case OnlySame: L.t._("Only another '::name::'s", { name:getParentName() });
-				// case Custom: L.t._("Only selected entities");
+				case OnlySpecificEntity: L.t._("Only a specific Entity");
 			}
 		);
 
-		jForm.find(".allowedRefTags").empty();
+		// Specific entity for refs
+		var jSelect = jForm.find("[name=allowedRefsEntity]");
+		jSelect.off().empty();
+		if( curField.allowedRefs==OnlySpecificEntity ) {
+			jSelect.show();
+			for(ed in project.defs.entities) {
+				var jOpt = new J('<option value="${ed.uid}"></option>');
+				jOpt.appendTo(jSelect);
+				jOpt.text(ed.identifier);
+				var r = ed.getDefaultTile();
+				if( r!=null )
+					jOpt.attr("tile", haxe.Json.stringify(r));
+			}
+			jSelect.val( Std.string(curField.allowedRefsEntityUid) );
+			jSelect.change(_->{
+				var uid = Std.parseInt( jSelect.val() );
+				curField.allowedRefsEntityUid = uid;
+				onFieldChange();
+			});
+		}
+		else
+			jSelect.hide();
+
+		// Specific tag for refs
+		jForm.find(".allowedRefTags").empty().hide();
 		if( curField.allowedRefs==OnlyTags ) {
 			var tagEditor = new TagEditor(
 				curField.allowedRefTags,
@@ -642,7 +685,7 @@ class FieldDefsForm {
 				()->project.defs.getAllTagsFrom(project.defs.entities, ed->ed.tags),
 				false
 			);
-			jForm.find(".allowedRefTags").append( tagEditor.jEditor );
+			jForm.find(".allowedRefTags").show().append( tagEditor.jEditor );
 		}
 
 		var i = Input.linkToHtmlInput( curField.allowOutOfLevelRef, jForm.find("input[name=allowOutOfLevelRef]") );

@@ -43,6 +43,7 @@ class FieldDef {
 	public var autoChainRef : Bool;
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
+	public var allowedRefsEntityUid : Null<Int>;
 	public var allowedRefTags : Tags;
 	public var tilesetUid : Null<Int>;
 
@@ -153,6 +154,7 @@ class FieldDef {
 		o.autoChainRef = JsonTools.readBool(json.autoChainRef, true);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
+		o.allowedRefsEntityUid = JsonTools.readNullableInt(json.allowedRefsEntityUid);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
 		o.tilesetUid = JsonTools.readNullableInt(json.tilesetUid);
 
@@ -194,6 +196,7 @@ class FieldDef {
 			autoChainRef: autoChainRef,
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
+			allowedRefsEntityUid: allowedRefsEntityUid,
 			allowedRefTags: allowedRefTags.toJson(),
 			tilesetUid: tilesetUid,
 		}
@@ -573,6 +576,7 @@ class FieldDef {
 			case Any: true;
 			case OnlySame: sourceEi.defUid==targetEd.uid;
 			case OnlyTags: targetEd.tags.hasAnyTagFoundIn(allowedRefTags);
+			case OnlySpecificEntity: targetEd.uid==allowedRefsEntityUid;
 		}
 	}
 
