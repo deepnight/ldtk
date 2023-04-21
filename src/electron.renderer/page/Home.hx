@@ -59,6 +59,7 @@ class Home extends Page {
 				app: Const.APP_NAME,
 				itchUrl: Const.ITCH_IO_BUY_URL,
 				gitHubSponsorUrl: Const.GITHUB_SPONSOR_URL,
+				steamUrl: Const.STEAM_URL,
 			});
 			w.jContent.find("[data-link]").click((ev:js.jquery.Event)->{
 				var jButton = ev.getThis();
