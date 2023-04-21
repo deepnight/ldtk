@@ -105,7 +105,7 @@ class SelectionTool extends Tool<Int> {
 								var tileInf = li.getTopMostGridTile(cx,cy);
 
 								var t = editor.curTool.as(tool.lt.TileTool);
-								if( t!=null ) {
+								if( t!=null && t.curTilesetDef!=null ) {
 									var savedTileSel = t.curTilesetDef.getSavedSelectionFor(tileInf.tileId);
 									if( savedTileSel!=null && !t.selectedValueHasAny(savedTileSel.ids) )
 										t.selectValue({
