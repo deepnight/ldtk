@@ -18,7 +18,28 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 	function updateForm() {
 		jContent.find("*").off();
 
+		jContent.find(".resetAll").click(_->{
+			rule.tileXOffset = 0;
+			rule.tileYOffset = 0;
+			rule.tileRandomXMin = rule.tileRandomXMax = 0;
+			rule.tileRandomYMin = rule.tileRandomYMax = 0;
+			onChange();
+		});
+
 		// X
+		var i = Input.linkToHtmlInput(rule.tileXOffset, jContent.find("#xOffset"));
+		i.setBounds(-256, 256);
+		i.enableSlider(0.66);
+		i.setEmptyValue(0);
+		i.setPlaceholder(0);
+		i.onChange = onChange;
+
+		i.jInput.siblings(".reset").click(_->{
+			rule.tileXOffset = 0;
+			onChange();
+		});
+
+		// X random
 		var i = Input.linkToHtmlInput(rule.tileRandomXMin, jContent.find("#xMin"));
 		i.fixValue = (v)->return M.imin(v, rule.tileRandomXMax);
 		i.setBounds(-256, 256);
@@ -42,6 +63,19 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 		});
 
 		// Y
+		var i = Input.linkToHtmlInput(rule.tileYOffset, jContent.find("#yOffset"));
+		i.setBounds(-256, 256);
+		i.enableSlider(0.66);
+		i.setEmptyValue(0);
+		i.setPlaceholder(0);
+		i.onChange = onChange;
+
+		i.jInput.siblings(".reset").click(_->{
+			rule.tileYOffset = 0;
+			onChange();
+		});
+
+		// Y random
 		var i = Input.linkToHtmlInput(rule.tileRandomYMin, jContent.find("#yMin"));
 		i.fixValue = (v)->return M.imin(v, rule.tileRandomYMax);
 		i.setBounds(-256, 256);

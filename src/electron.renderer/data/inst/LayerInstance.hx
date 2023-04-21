@@ -712,8 +712,8 @@ class LayerInstance {
 		autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
 			tileIds.map( (tid)->{
 				return {
-					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getRandomXOffsetForCoord(seed,cx,cy),
-					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getRandomYOffsetForCoord(seed,cx,cy),
+					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getXOffsetForCoord(seed,cx,cy),
+					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getYOffsetForCoord(seed,cx,cy),
 					srcX: td.getTileSourceX(tid),
 					srcY: td.getTileSourceY(tid),
 					tid: tid,
@@ -752,14 +752,17 @@ class LayerInstance {
 				addRuleTilesAt(r, cx,cy, 0);
 				matched = true;
 			}
+
 			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, source, cx,cy, -1) ) {
 				addRuleTilesAt(r, cx,cy, 1);
 				matched = true;
 			}
+
 			if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 2);
 				matched = true;
 			}
+
 			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 3);
 				matched = true;

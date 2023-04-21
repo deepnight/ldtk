@@ -22,6 +22,8 @@ class AutoLayerRuleDef {
 	public var yModulo = 1;
 	public var xOffset = 0;
 	public var yOffset = 0;
+	public var tileXOffset = 0;
+	public var tileYOffset = 0;
 	public var tileRandomXMin = 0;
 	public var tileRandomXMax = 0;
 	public var tileRandomYMin = 0;
@@ -136,6 +138,8 @@ class AutoLayerRuleDef {
 			yModulo: yModulo,
 			xOffset: xOffset,
 			yOffset: yOffset,
+			tileXOffset: tileXOffset,
+			tileYOffset: tileYOffset,
 			tileRandomXMin: tileRandomXMin,
 			tileRandomXMax: tileRandomXMax,
 			tileRandomYMin: tileRandomYMin,
@@ -171,6 +175,8 @@ class AutoLayerRuleDef {
 		r.yModulo = JsonTools.readInt(json.yModulo, 1);
 		r.xOffset = JsonTools.readInt(json.xOffset, 0);
 		r.yOffset = JsonTools.readInt(json.yOffset, 0);
+		r.tileXOffset = JsonTools.readInt(json.tileXOffset, 0);
+		r.tileYOffset = JsonTools.readInt(json.tileYOffset, 0);
 		r.tileRandomXMin = JsonTools.readInt(json.tileRandomXMin, 0);
 		r.tileRandomXMax = JsonTools.readInt(json.tileRandomXMax, 0);
 		r.tileRandomYMin = JsonTools.readInt(json.tileRandomYMin, 0);
@@ -342,16 +348,16 @@ class AutoLayerRuleDef {
 		return tileIds[ dn.M.randSeedCoords( uid+seed, cx,cy, tileIds.length ) ];
 	}
 
-	public function getRandomXOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
+	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
 		return tileRandomXMin==0 && tileRandomXMax==0
-			? 0
-			: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin;
+			? tileXOffset
+			: tileXOffset + dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin;
 	}
 
-	public function getRandomYOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
+	public function getYOffsetForCoord(seed:Int, cx:Int,cy:Int) : Int {
 		return tileRandomYMin==0 && tileRandomYMax==0
-			? 0
-			: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomYMax-tileRandomYMin+1) ) + tileRandomYMin;
+			? tileYOffset
+			: tileYOffset + dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomYMax-tileRandomYMin+1) ) + tileRandomYMin;
 	}
 
 	#end
