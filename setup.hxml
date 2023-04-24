@@ -7,7 +7,7 @@
 --cmd haxelib install format --always
 
 --next
---cmd haxelib git castle https://github.com/deepnight/castle --always
+--cmd haxelib git castle https://github.com/ncannasse/castle.git --always
 
 --next
 --cmd haxelib git heaps https://github.com/deepnight/heaps.git --always
