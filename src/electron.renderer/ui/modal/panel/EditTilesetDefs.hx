@@ -286,9 +286,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 		for( group in tagGroups) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed"/>');
+				var jSep = new J('<li class="title fixed collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jList);
+				jSep.attr("id", project.iid+"_tileset_tag_"+group.tag);
+				jSep.attr("default", "open");
 
 				// Rename
 				if( group.tag!=null ) {
@@ -374,6 +376,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			});
 		}
 
+		JsTools.parseComponents(jList);
 		checkBackup();
 	}
 }

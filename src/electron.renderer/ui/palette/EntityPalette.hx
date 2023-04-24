@@ -27,9 +27,11 @@ class EntityPalette extends ui.ToolPalette {
 		for(group in allTagGroups) {
 			// Tag header
 			if( allTagGroups.length>1 && group.all.length>0 ) {
-				var jTag = new J('<li class="title"/>');
+				var jTag = new J('<li class="title collapser"/>');
 				jTag.appendTo(jList);
 				jTag.text( group.tag==null ? L._Untagged() : group.tag );
+				jTag.attr("id", project.iid+"_entityPalette_tag_"+group.tag);
+				jTag.attr("default", "open");
 			}
 
 			var jLi = new J('<li class="subList"> <ul/> </li>');
@@ -73,6 +75,8 @@ class EntityPalette extends ui.ToolPalette {
 
 			groupIdx++;
 		}
+
+		JsTools.parseComponents(jList);
 	}
 
 

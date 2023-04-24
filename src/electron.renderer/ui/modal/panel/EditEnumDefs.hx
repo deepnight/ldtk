@@ -190,9 +190,11 @@ class EditEnumDefs extends ui.modal.Panel {
 		for( group in tagGroups) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed"/>');
+				var jSep = new J('<li class="title fixed collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEnumList);
+				jSep.attr("id", project.iid+"_enum_tag_"+group.tag);
+				jSep.attr("default", "open");
 
 				// Rename
 				if( group.tag!=null ) {
@@ -279,29 +281,31 @@ class EditEnumDefs extends ui.modal.Panel {
 			var fullPath = project.makeAbsoluteFilePath(group.key);
 
 			// Source name
-			var e = new J("<li/>");
-			e.addClass("title fixed");
-			e.appendTo(jEnumList);
+			var jSep = new J("<li/>");
+			jSep.appendTo(jEnumList);
+			jSep.addClass("title fixed collapser");
 			var name = dn.FilePath.fromFile(group.key).fileWithExt;
-			e.html('<span>$name</span>');
+			jSep.html('<span>$name</span>');
+			jSep.attr("id", project.iid+"_entity_tag_"+name);
+			jSep.attr("default", "open");
 
 			// Check file
 			var fileExists = NT.fileExists(fullPath);
 			if( !fileExists ) {
-				e.addClass("missing");
-				e.append('<div class="error">File not found!</div>');
+				jSep.addClass("missing");
+				jSep.append('<div class="error">File not found!</div>');
 			}
 			else {
 				var checksum = haxe.crypto.Md5.encode( NT.readFileString(fullPath) );
 				for( ed in group.value )
 					if( ed.externalFileChecksum!=checksum ) {
-						e.append('<div class="error">File was modified, please use sync.</div>');
+						jSep.append('<div class="error">File was modified, please use sync.</div>');
 						break;
 					}
 			}
 
 			var links = new J('<div class="links"/>');
-			links.appendTo(e);
+			links.appendTo(jSep);
 
 			// Sync button
 			var jSync = new J('<a> <span class="icon refresh"/> </a>');
@@ -327,22 +331,26 @@ class EditEnumDefs extends ui.modal.Panel {
 				Tip.attach(jDelete, Lang.t._("Remove this external Enum source"));
 			}
 
+			var jSubList = new J('<li class="subList"> <ul></ul> </li>');
+			jSubList.appendTo(jEnumList);
+			jSubList = jSubList.children("ul");
+
 			// Values
 			for(ed in group.value) {
-				var e = new J("<li/>");
-				e.addClass("fixed");
+				var jLi = new J("<li/>");
+				jLi.appendTo(jSubList);
+				jLi.addClass("fixed");
 				if( !fileExists )
-					e.addClass("missing");
-				e.appendTo(jEnumList);
+					jLi.addClass("missing");
 				if( ed==curEnum )
-					e.addClass("active");
-				e.append('<span class="name">'+ed.identifier+'</span>');
-				e.click( function(_) {
+					jLi.addClass("active");
+				jLi.append('<span class="name">'+ed.identifier+'</span>');
+				jLi.click( _->{
 					selectEnum(ed);
 				});
 
 
-				ContextMenu.addTo(e, [
+				ContextMenu.addTo(jLi, [
 					{
 						label: L.t._("Remove extern source"),
 						cb: deleteEnumDef.bind(ed,true),
@@ -358,6 +366,7 @@ class EditEnumDefs extends ui.modal.Panel {
 		// 	editor.ge.emit(EnumDefSorted);
 		// });
 
+		JsTools.parseComponents(jEnumList);
 		checkBackup();
 	}
 
