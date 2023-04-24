@@ -241,7 +241,7 @@ class FieldInstanceRender {
 			allRenders.push(fr);
 			var row = new h2d.Flow(parent);
 			row.verticalAlign = Middle;
-			row.setScale( settings.v.editorUiScale );
+			row.setScale( settings.v.editorUiScale*fi.def.editorDisplayScale );
 			if( fr.label.numChildren>0 ) {
 				row.addChild(fr.label);
 				row.addSpacing(6);

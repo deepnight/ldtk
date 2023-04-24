@@ -18,6 +18,7 @@ class FieldDef {
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
+	public var editorDisplayScale : Float;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
 	public var editorShowInWorld : Bool;
@@ -135,6 +136,7 @@ class FieldDef {
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayScale = JsonTools.readFloat(json.editorDisplayScale, 1);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.type {
 			case F_EntityRef: CurvedArrow;
@@ -178,6 +180,7 @@ class FieldDef {
 			arrayMinLength: arrayMinLength,
 			arrayMaxLength: arrayMaxLength,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
+			editorDisplayScale: JsonTools.writeFloat(editorDisplayScale),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
 			editorAlwaysShow: editorAlwaysShow,

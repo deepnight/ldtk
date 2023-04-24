@@ -530,6 +530,18 @@ class FieldDefsForm {
 		} );
 
 
+		// Display scale
+		var i = Input.linkToHtmlInput(curField.editorDisplayScale, jForm.find("#editorDisplayScale"));
+		i.enablePercentageMode();
+		i.nullReplacement = 1;
+		i.setBounds(0.1, null);
+		i.onChange = onFieldChange;
+		i.setVisibility( switch curField.editorDisplayMode {
+			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel: true;
+			case LevelTile, EntityTile: false;
+			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, RefLinkBetweenPivots, RefLinkBetweenCenters: false;
+		});
+
 		// Show in World mode (Level field only)
 		var i = Input.linkToHtmlInput( curField.editorShowInWorld, jForm.find("input[name=editorShowInWorld]") );
 		i.onChange = onFieldChange;
