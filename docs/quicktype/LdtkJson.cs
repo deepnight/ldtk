@@ -55,6 +55,12 @@ namespace ldtk
         public bool BackupOnSave { get; set; }
 
         /// <summary>
+        /// Target relative path to store backup files
+        /// </summary>
+        [JsonProperty("backupRelPath")]
+        public string BackupRelPath { get; set; }
+
+        /// <summary>
         /// Project background color
         /// </summary>
         [JsonProperty("bgColor")]
@@ -111,6 +117,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("defs")]
         public Definitions Defs { get; set; }
+
+        /// <summary>
+        /// If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World.
+        /// </summary>
+        [JsonProperty("dummyWorldIid")]
+        public string DummyWorldIid { get; set; }
 
         /// <summary>
         /// If TRUE, the exported PNGs will include the level background (color or image).
@@ -523,10 +535,13 @@ namespace ldtk
         public string[] AcceptFileTypes { get; set; }
 
         /// <summary>
-        /// Possible values: `Any`, `OnlySame`, `OnlyTags`
+        /// Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
         /// </summary>
         [JsonProperty("allowedRefs")]
         public AllowedRefs AllowedRefs { get; set; }
+
+        [JsonProperty("allowedRefsEntityUid")]
+        public long? AllowedRefsEntityUid { get; set; }
 
         [JsonProperty("allowedRefTags")]
         public string[] AllowedRefTags { get; set; }
@@ -576,8 +591,8 @@ namespace ldtk
         public bool EditorCutLongValues { get; set; }
 
         /// <summary>
-        /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-        /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+        /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
+        /// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
         /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
         /// `RefLinkBetweenCenters`
         /// </summary>
@@ -755,8 +770,8 @@ namespace ldtk
     public partial class EnumValueDefinition
     {
         /// <summary>
-        /// An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,
-        /// height ]`
+        /// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
+        /// Replaced by: `tileRect`
         /// </summary>
         [JsonProperty("__tileSrcRect")]
         public long[] TileSrcRect { get; set; }
@@ -774,10 +789,17 @@ namespace ldtk
         public string Id { get; set; }
 
         /// <summary>
-        /// The optional ID of the tile
+        /// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
+        /// Replaced by: `tileRect`
         /// </summary>
         [JsonProperty("tileId")]
         public long? TileId { get; set; }
+
+        /// <summary>
+        /// Optional tileset rectangle to represents this value
+        /// </summary>
+        [JsonProperty("tileRect")]
+        public TilesetRectangle TileRect { get; set; }
     }
 
     public partial class LayerDefinition
@@ -1081,6 +1103,42 @@ namespace ldtk
         public TileMode TileMode { get; set; }
 
         /// <summary>
+        /// Max random offset for X tile pos
+        /// </summary>
+        [JsonProperty("tileRandomXMax")]
+        public long TileRandomXMax { get; set; }
+
+        /// <summary>
+        /// Min random offset for X tile pos
+        /// </summary>
+        [JsonProperty("tileRandomXMin")]
+        public long TileRandomXMin { get; set; }
+
+        /// <summary>
+        /// Max random offset for Y tile pos
+        /// </summary>
+        [JsonProperty("tileRandomYMax")]
+        public long TileRandomYMax { get; set; }
+
+        /// <summary>
+        /// Min random offset for Y tile pos
+        /// </summary>
+        [JsonProperty("tileRandomYMin")]
+        public long TileRandomYMin { get; set; }
+
+        /// <summary>
+        /// Tile X offset
+        /// </summary>
+        [JsonProperty("tileXOffset")]
+        public long TileXOffset { get; set; }
+
+        /// <summary>
+        /// Tile Y offset
+        /// </summary>
+        [JsonProperty("tileYOffset")]
+        public long TileYOffset { get; set; }
+
+        /// <summary>
         /// Unique Int identifier
         /// </summary>
         [JsonProperty("uid")]
@@ -1156,7 +1214,7 @@ namespace ldtk
         /// source image changes.
         /// </summary>
         [JsonProperty("cachedPixelData")]
-        public System.Collections.Generic.Dictionary<string, dynamic> CachedPixelData { get; set; }
+        public Dictionary<string, dynamic> CachedPixelData { get; set; }
 
         /// <summary>
         /// An array of custom tile metadata
@@ -1213,7 +1271,7 @@ namespace ldtk
         /// Array of group of tiles selections, only meant to be used in the editor
         /// </summary>
         [JsonProperty("savedSelections")]
-        public System.Collections.Generic.Dictionary<string, dynamic>[] SavedSelections { get; set; }
+        public Dictionary<string, dynamic>[] SavedSelections { get; set; }
 
         /// <summary>
         /// Space in pixels between all tiles
@@ -2027,17 +2085,17 @@ namespace ldtk
     public enum When { AfterLoad, AfterSave, BeforeSave, Manual };
 
     /// <summary>
-    /// Possible values: `Any`, `OnlySame`, `OnlyTags`
+    /// Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
     /// </summary>
-    public enum AllowedRefs { Any, OnlySame, OnlyTags };
+    public enum AllowedRefs { Any, OnlySame, OnlySpecificEntity, OnlyTags };
 
     /// <summary>
-    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-    /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
+    /// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
     /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
     /// `RefLinkBetweenCenters`
     /// </summary>
-    public enum EditorDisplayMode { ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, Hidden, NameAndValue, PointPath, PointPathLoop, PointStar, Points, RadiusGrid, RadiusPx, RefLinkBetweenCenters, RefLinkBetweenPivots, ValueOnly };
+    public enum EditorDisplayMode { ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, Hidden, LevelTile, NameAndValue, PointPath, PointPathLoop, PointStar, Points, RadiusGrid, RadiusPx, RefLinkBetweenCenters, RefLinkBetweenPivots, ValueOnly };
 
     /// <summary>
     /// Possible values: `Above`, `Center`, `Beneath`
@@ -2304,6 +2362,8 @@ namespace ldtk
                     return AllowedRefs.Any;
                 case "OnlySame":
                     return AllowedRefs.OnlySame;
+                case "OnlySpecificEntity":
+                    return AllowedRefs.OnlySpecificEntity;
                 case "OnlyTags":
                     return AllowedRefs.OnlyTags;
             }
@@ -2325,6 +2385,9 @@ namespace ldtk
                     return;
                 case AllowedRefs.OnlySame:
                     serializer.Serialize(writer, "OnlySame");
+                    return;
+                case AllowedRefs.OnlySpecificEntity:
+                    serializer.Serialize(writer, "OnlySpecificEntity");
                     return;
                 case AllowedRefs.OnlyTags:
                     serializer.Serialize(writer, "OnlyTags");
@@ -2354,6 +2417,8 @@ namespace ldtk
                     return EditorDisplayMode.EntityTile;
                 case "Hidden":
                     return EditorDisplayMode.Hidden;
+                case "LevelTile":
+                    return EditorDisplayMode.LevelTile;
                 case "NameAndValue":
                     return EditorDisplayMode.NameAndValue;
                 case "PointPath":
@@ -2399,6 +2464,9 @@ namespace ldtk
                     return;
                 case EditorDisplayMode.Hidden:
                     serializer.Serialize(writer, "Hidden");
+                    return;
+                case EditorDisplayMode.LevelTile:
+                    serializer.Serialize(writer, "LevelTile");
                     return;
                 case EditorDisplayMode.NameAndValue:
                     serializer.Serialize(writer, "NameAndValue");

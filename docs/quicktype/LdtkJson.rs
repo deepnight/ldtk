@@ -11,7 +11,7 @@
 //     let model: LdtkJson = serde_json::from_str(&json).unwrap();
 // }
 
-extern crate serde_derive;
+use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
 /// This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
@@ -42,6 +42,10 @@ pub struct LdtkJson {
     /// If TRUE, an extra copy of the project will be created in a sub folder, when saving.
     #[serde(rename = "backupOnSave")]
     backup_on_save: bool,
+
+    /// Target relative path to store backup files
+    #[serde(rename = "backupRelPath")]
+    backup_rel_path: Option<String>,
 
     /// Project background color
     #[serde(rename = "bgColor")]
@@ -82,6 +86,10 @@ pub struct LdtkJson {
     /// A structure containing all the definitions of this project
     #[serde(rename = "defs")]
     defs: Definitions,
+
+    /// If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World.
+    #[serde(rename = "dummyWorldIid")]
+    dummy_world_iid: String,
 
     /// If TRUE, the exported PNGs will include the level background (color or image).
     #[serde(rename = "exportLevelBg")]
@@ -381,9 +389,12 @@ pub struct FieldDefinition {
     #[serde(rename = "acceptFileTypes")]
     accept_file_types: Option<Vec<String>>,
 
-    /// Possible values: `Any`, `OnlySame`, `OnlyTags`
+    /// Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
     #[serde(rename = "allowedRefs")]
     allowed_refs: AllowedRefs,
+
+    #[serde(rename = "allowedRefsEntityUid")]
+    allowed_refs_entity_uid: Option<i64>,
 
     #[serde(rename = "allowedRefTags")]
     allowed_ref_tags: Vec<String>,
@@ -422,8 +433,8 @@ pub struct FieldDefinition {
     #[serde(rename = "editorCutLongValues")]
     editor_cut_long_values: bool,
 
-    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-    /// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+    /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
+    /// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
     /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
     /// `RefLinkBetweenCenters`
     #[serde(rename = "editorDisplayMode")]
@@ -551,8 +562,8 @@ pub struct EnumDefinition {
 
 #[derive(Serialize, Deserialize)]
 pub struct EnumValueDefinition {
-    /// An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,
-    /// height ]`
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
+    /// Replaced by: `tileRect`
     #[serde(rename = "__tileSrcRect")]
     tile_src_rect: Option<Vec<i64>>,
 
@@ -564,9 +575,14 @@ pub struct EnumValueDefinition {
     #[serde(rename = "id")]
     id: String,
 
-    /// The optional ID of the tile
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
+    /// Replaced by: `tileRect`
     #[serde(rename = "tileId")]
     tile_id: Option<i64>,
+
+    /// Optional tileset rectangle to represents this value
+    #[serde(rename = "tileRect")]
+    tile_rect: Option<TilesetRectangle>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -786,6 +802,30 @@ pub struct AutoLayerRuleDefinition {
     /// Defines how tileIds array is used Possible values: `Single`, `Stamp`
     #[serde(rename = "tileMode")]
     tile_mode: TileMode,
+
+    /// Max random offset for X tile pos
+    #[serde(rename = "tileRandomXMax")]
+    tile_random_x_max: i64,
+
+    /// Min random offset for X tile pos
+    #[serde(rename = "tileRandomXMin")]
+    tile_random_x_min: i64,
+
+    /// Max random offset for Y tile pos
+    #[serde(rename = "tileRandomYMax")]
+    tile_random_y_max: i64,
+
+    /// Min random offset for Y tile pos
+    #[serde(rename = "tileRandomYMin")]
+    tile_random_y_min: i64,
+
+    /// Tile X offset
+    #[serde(rename = "tileXOffset")]
+    tile_x_offset: i64,
+
+    /// Tile Y offset
+    #[serde(rename = "tileYOffset")]
+    tile_y_offset: i64,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
@@ -1496,7 +1536,7 @@ pub enum When {
     Manual,
 }
 
-/// Possible values: `Any`, `OnlySame`, `OnlyTags`
+/// Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
 #[derive(Serialize, Deserialize)]
 pub enum AllowedRefs {
     #[serde(rename = "Any")]
@@ -1505,12 +1545,15 @@ pub enum AllowedRefs {
     #[serde(rename = "OnlySame")]
     OnlySame,
 
+    #[serde(rename = "OnlySpecificEntity")]
+    OnlySpecificEntity,
+
     #[serde(rename = "OnlyTags")]
     OnlyTags,
 }
 
-/// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-/// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+/// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
+/// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
 /// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
 /// `RefLinkBetweenCenters`
 #[derive(Serialize, Deserialize)]
@@ -1526,6 +1569,9 @@ pub enum EditorDisplayMode {
 
     #[serde(rename = "Hidden")]
     Hidden,
+
+    #[serde(rename = "LevelTile")]
+    LevelTile,
 
     #[serde(rename = "NameAndValue")]
     NameAndValue,

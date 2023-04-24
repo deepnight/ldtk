@@ -38,6 +38,8 @@ type LdtkJSON struct {
 	BackupLimit                                                                                 int64                     `json:"backupLimit"`
 	// If TRUE, an extra copy of the project will be created in a sub folder, when saving.                                
 	BackupOnSave                                                                                bool                      `json:"backupOnSave"`
+	// Target relative path to store backup files                                                                         
+	BackupRelPath                                                                               *string                   `json:"backupRelPath"`
 	// Project background color                                                                                           
 	BgColor                                                                                     string                    `json:"bgColor"`
 	// An array of command lines that can be ran manually by the user                                                     
@@ -60,6 +62,8 @@ type LdtkJSON struct {
 	DefaultPivotY                                                                               float64                   `json:"defaultPivotY"`
 	// A structure containing all the definitions of this project                                                         
 	Defs                                                                                        Definitions               `json:"defs"`
+	// If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World.                           
+	DummyWorldIid                                                                               string                    `json:"dummyWorldIid"`
 	// If TRUE, the exported PNGs will include the level background (color or image).                                     
 	ExportLevelBg                                                                               bool                      `json:"exportLevelBg"`
 	// **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced                             
@@ -240,8 +244,9 @@ type FieldDefinition struct {
 	// Optional list of accepted file extensions for FilePath value type. Includes the dot:                      
 	// `.ext`                                                                                                    
 	AcceptFileTypes                                                                            []string          `json:"acceptFileTypes"`
-	// Possible values: `Any`, `OnlySame`, `OnlyTags`                                                            
+	// Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`                                      
 	AllowedRefs                                                                                AllowedRefs       `json:"allowedRefs"`
+	AllowedRefsEntityUid                                                                       *int64            `json:"allowedRefsEntityUid"`
 	AllowedRefTags                                                                             []string          `json:"allowedRefTags"`
 	AllowOutOfLevelRef                                                                         bool              `json:"allowOutOfLevelRef"`
 	// Array max length                                                                                          
@@ -259,8 +264,8 @@ type FieldDefinition struct {
 	Doc                                                                                        *string           `json:"doc"`
 	EditorAlwaysShow                                                                           bool              `json:"editorAlwaysShow"`
 	EditorCutLongValues                                                                        bool              `json:"editorCutLongValues"`
-	// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,                           
-	// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,                                      
+	// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,                        
+	// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,                            
 	// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,                                       
 	// `RefLinkBetweenCenters`                                                                                   
 	EditorDisplayMode                                                                          EditorDisplayMode `json:"editorDisplayMode"`
@@ -330,15 +335,18 @@ type EnumDefinition struct {
 }
 
 type EnumValueDefinition struct {
-	// An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width,        
-	// height ]`                                                                                     
-	TileSrcRect                                                                              []int64 `json:"__tileSrcRect"`
-	// Optional color                                                                                
-	Color                                                                                    int64   `json:"color"`
-	// Enum value                                                                                    
-	ID                                                                                       string  `json:"id"`
-	// The optional ID of the tile                                                                   
-	TileID                                                                                   *int64  `json:"tileId"`
+	// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+                  
+	// Replaced by: `tileRect`                                                                            
+	TileSrcRect                                                                         []int64           `json:"__tileSrcRect"`
+	// Optional color                                                                                     
+	Color                                                                               int64             `json:"color"`
+	// Enum value                                                                                         
+	ID                                                                                  string            `json:"id"`
+	// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+                  
+	// Replaced by: `tileRect`                                                                            
+	TileID                                                                              *int64            `json:"tileId"`
+	// Optional tileset rectangle to represents this value                                                
+	TileRect                                                                            *TilesetRectangle `json:"tileRect"`
 }
 
 type LayerDefinition struct {
@@ -456,6 +464,18 @@ type AutoLayerRuleDefinition struct {
 	TileIDS                                                                                      []int64  `json:"tileIds"`
 	// Defines how tileIds array is used Possible values: `Single`, `Stamp`                               
 	TileMode                                                                                     TileMode `json:"tileMode"`
+	// Max random offset for X tile pos                                                                   
+	TileRandomXMax                                                                               int64    `json:"tileRandomXMax"`
+	// Min random offset for X tile pos                                                                   
+	TileRandomXMin                                                                               int64    `json:"tileRandomXMin"`
+	// Max random offset for Y tile pos                                                                   
+	TileRandomYMax                                                                               int64    `json:"tileRandomYMax"`
+	// Min random offset for Y tile pos                                                                   
+	TileRandomYMin                                                                               int64    `json:"tileRandomYMin"`
+	// Tile X offset                                                                                      
+	TileXOffset                                                                                  int64    `json:"tileXOffset"`
+	// Tile Y offset                                                                                      
+	TileYOffset                                                                                  int64    `json:"tileYOffset"`
 	// Unique Int identifier                                                                              
 	Uid                                                                                          int64    `json:"uid"`
 	// X cell coord modulo                                                                                
@@ -865,16 +885,17 @@ const (
 	Manual When = "Manual"
 )
 
-// Possible values: `Any`, `OnlySame`, `OnlyTags`
+// Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
 type AllowedRefs string
 const (
 	Any AllowedRefs = "Any"
 	OnlySame AllowedRefs = "OnlySame"
+	OnlySpecificEntity AllowedRefs = "OnlySpecificEntity"
 	OnlyTags AllowedRefs = "OnlyTags"
 )
 
-// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`,
-// `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
+// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
+// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
 // `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
 // `RefLinkBetweenCenters`
 type EditorDisplayMode string
@@ -883,6 +904,7 @@ const (
 	ArrayCountWithLabel EditorDisplayMode = "ArrayCountWithLabel"
 	EntityTile EditorDisplayMode = "EntityTile"
 	Hidden EditorDisplayMode = "Hidden"
+	LevelTile EditorDisplayMode = "LevelTile"
 	NameAndValue EditorDisplayMode = "NameAndValue"
 	PointPath EditorDisplayMode = "PointPath"
 	PointPathLoop EditorDisplayMode = "PointPathLoop"
