@@ -601,12 +601,12 @@ class JsTools {
 		// Auto tool-tips
 		jCtx.find("[title]:not([noTip]), [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
-			var tipStr = jThis.attr("data-title");
-			if( tipStr==null ) {
-				tipStr =  jThis.attr("title");
+			if( jThis.attr("title")!=null ) {
+				var str =  jThis.attr("title");
 				jThis.removeAttr("title");
-				jThis.attr("data-title", tipStr);
+				jThis.attr("data-title", str);
 			}
+			var tipStr = jThis.attr("data-title");
 
 			// Parse key shortcut
 			var keys = [];
@@ -920,7 +920,7 @@ class JsTools {
 	public static function makeLocateLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
-		a.find(".icon").addClass( isFile ? "locate" : "folder" );
+		a.find(".icon").addClass("locate");
 		a.click( function(ev) {
 			ev.preventDefault();
 			ev.stopPropagation();
