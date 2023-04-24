@@ -74,12 +74,15 @@ class EntityRender extends dn.Process {
 				renderAll();
 
 			case EntityDefChanged:
+				coreInvalidated = true;
 				fieldsRenderInvalidated = true;
 				layoutInvalidated = true;
 
-			case ViewportChanged:
-				coreInvalidated = true;
-				fieldsRenderInvalidated = true;
+			case ViewportChanged(zoomChanged):
+				if( zoomChanged ) {
+					coreInvalidated = true;
+					fieldsRenderInvalidated = true;
+				}
 				layoutInvalidated = true;
 
 			case _:
@@ -273,6 +276,9 @@ class EntityRender extends dn.Process {
 
 
 	public function renderAll() {
+		coreInvalidated = false;
+		layoutInvalidated = false;
+		fieldsRenderInvalidated = false;
 		updateCore();
 		renderFields();
 	}
@@ -345,9 +351,7 @@ class EntityRender extends dn.Process {
 		root.y = ei.y;
 
 		final fullVis = ei._li==Editor.ME.curLayerInstance;
-
-		if( _coreRender!=null )
-			_coreRender.wrapper.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
+		core.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 
 		// Graphics
 		if( !fullVis && ei._li.def.hideFieldsWhenInactive )
@@ -413,7 +417,9 @@ class EntityRender extends dn.Process {
 		if( coreInvalidated && !cd.has("coreLimit") ) {
 			cd.setS("coreLimit", 0.15);
 			updateCore();
+			updateLayout(); // for core alpha
 			coreInvalidated = false;
+			layoutInvalidated = false;
 		}
 
 	}
