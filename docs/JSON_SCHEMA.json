@@ -362,6 +362,13 @@
 				"type": [
 					"boolean"
 				]
+			},
+			"backupRelPath": {
+				"description": "Target relative path to store backup files",
+				"type": [
+					"string",
+					"null"
+				]
 			}
 		},
 		"type": [
@@ -720,6 +727,12 @@
 				"size",
 				"tileIds",
 				"tileMode",
+				"tileRandomXMax",
+				"tileRandomXMin",
+				"tileRandomYMax",
+				"tileRandomYMin",
+				"tileXOffset",
+				"tileYOffset",
 				"uid",
 				"xModulo",
 				"xOffset",
@@ -770,6 +783,12 @@
 						"array"
 					]
 				},
+				"tileRandomXMin": {
+					"description": "Min random offset for X tile pos",
+					"type": [
+						"integer"
+					]
+				},
 				"checker": {
 					"description": "Checker mode Possible values: `None`, `Horizontal`, `Vertical`",
 					"enum": [
@@ -793,6 +812,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"tileXOffset": {
+					"description": "Tile X offset",
+					"type": [
+						"integer"
 					]
 				},
 				"xModulo": {
@@ -819,6 +844,12 @@
 						"boolean"
 					]
 				},
+				"tileYOffset": {
+					"description": "Tile Y offset",
+					"type": [
+						"integer"
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
@@ -837,6 +868,18 @@
 						"integer"
 					]
 				},
+				"tileRandomYMax": {
+					"description": "Max random offset for Y tile pos",
+					"type": [
+						"integer"
+					]
+				},
+				"tileRandomYMin": {
+					"description": "Min random offset for Y tile pos",
+					"type": [
+						"integer"
+					]
+				},
 				"tileMode": {
 					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
 					"enum": [
@@ -848,6 +891,12 @@
 					"description": "If TRUE, allow rule to be matched by flipping its pattern vertically",
 					"type": [
 						"boolean"
+					]
+				},
+				"tileRandomXMax": {
+					"description": "Max random offset for X tile pos",
+					"type": [
+						"integer"
 					]
 				},
 				"pivotY": {
@@ -929,11 +978,12 @@
 					]
 				},
 				"allowedRefs": {
-					"description": "Possible values: `Any`, `OnlySame`, `OnlyTags`",
+					"description": "Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`",
 					"enum": [
 						"Any",
 						"OnlySame",
-						"OnlyTags"
+						"OnlyTags",
+						"OnlySpecificEntity"
 					]
 				},
 				"editorAlwaysShow": {
@@ -1005,6 +1055,13 @@
 					"description": "User defined documentation for this field to provide help/tips to level designers about accepted values.",
 					"type": [
 						"string",
+						"null"
+					]
+				},
+				"allowedRefsEntityUid": {
+					"description": "",
+					"type": [
+						"integer",
 						"null"
 					]
 				},
