@@ -45,6 +45,13 @@ You can now customize the location of your backups.
 Please note that, to restore a backup, you should use LDtk and not copy files by yourself manually from your File Explorer / Finder.
 
 
+## Collapsable tags
+
+![](1.3.0/collapsableTag.png)
+
+Tags are not behaving like "folders" and can now be open/closed accordingly in UI.
+
+
 ## Other changes
 
  - Added "Display scale" option to all custom fields
