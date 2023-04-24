@@ -6,6 +6,7 @@ class FloatInput extends form.Input<Float> {
 	var displayAsPct : Bool;
 	var valueStep = -1.;
 	public var allowNull = false;
+	public var nullReplacement : Null<Float> = null;
 
 	public function new(j:js.jquery.JQuery, rawGetter:Void->Float, rawSetter:Float->Void) {
 		super(j, rawGetter, rawSetter);
@@ -76,8 +77,12 @@ class FloatInput extends form.Input<Float> {
 			return null;
 
 		var v = Std.parseFloat( jInput.val() );
-		if( Math.isNaN(v) || !Math.isFinite(v) || v==null )
-			v = 0;
+		if( Math.isNaN(v) || !Math.isFinite(v) || v==null ) {
+			if( !allowNull && nullReplacement!=null )
+				v = nullReplacement * ( displayAsPct ? 100 : 1);
+			else
+				v = 0;
+		}
 
 		return M.fclamp( v, min * (displayAsPct?100:1), max * (displayAsPct?100:1) );
 	}
