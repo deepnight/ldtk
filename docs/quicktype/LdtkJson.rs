@@ -192,17 +192,15 @@ pub struct LdtkJson {
     #[serde(rename = "worldLayout")]
     world_layout: Option<WorldLayout>,
 
-    /// This array is not used yet in current LDtk version (so, for now, it's always
-    /// empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a
-    /// single project, each containing multiple Levels.<br/><br/>What will change when "Multiple
-    /// worlds" support will be added to LDtk:<br/><br/> - in current version, a LDtk project
-    /// file can only contain a single world with multiple levels in it. In this case, levels and
-    /// world layout related settings are stored in the root of the JSON.<br/> - after the
-    /// "Multiple worlds" update, there will be a `worlds` array in root, each world containing
-    /// levels and layout settings. Basically, it's pretty much only about moving the `levels`
-    /// array to the `worlds` array, along with world layout related values (eg. `worldGridWidth`
-    /// etc).<br/><br/>If you want to start supporting this future update easily, please refer to
-    /// this documentation: https://github.com/deepnight/ldtk/issues/231
+    /// This array will be empty, unless you enable the Multi-Worlds in the project advanced
+    /// settings.<br/><br/> - in current version, a LDtk project file can only contain a single
+    /// world with multiple levels in it. In this case, levels and world layout related settings
+    /// are stored in the root of the JSON.<br/> - with "Multi-worlds" enabled, there will be a
+    /// `worlds` array in root, each world containing levels and layout settings. Basically, it's
+    /// pretty much only about moving the `levels` array to the `worlds` array, along with world
+    /// layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start
+    /// supporting this future update easily, please refer to this documentation:
+    /// https://github.com/deepnight/ldtk/issues/231
     #[serde(rename = "worlds")]
     worlds: Vec<World>,
 }
@@ -1479,9 +1477,9 @@ pub struct LdtkTableOfContentEntry {
     instances: Vec<ReferenceToAnEntityInstance>,
 }
 
-/// **IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented
-/// here as a preview of a planned feature.  A World contains multiple levels, and it has its
-/// own layout settings.
+/// **IMPORTANT**: this type is available as a preview. You can rely on it to update your
+/// importers, for when it will be officially available.  A World contains multiple levels,
+/// and it has its own layout settings.
 #[derive(Serialize, Deserialize)]
 pub struct World {
     /// Default new level height

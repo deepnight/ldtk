@@ -18,6 +18,13 @@ When enabled, various new buttons will be available in the UI, like in the World
 
 ![](1.3.0/multiWorldsOption.png)
 
+## Rule tiles X and Y offsets
+
+![](1.3.0/ruleTilesOffsets.png)
+
+You can now offset the resulting tile(s) of any rules, either using fixed X/Y values, or using random ranges for more variety.
+This will make much easier creation of organic elements like vegetation, dirt etc.
+
 ## Better drop-down UI component
 
 ![](1.3.0/advancedSelect.png)
