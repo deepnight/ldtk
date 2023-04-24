@@ -5,6 +5,8 @@ import hxd.Key;
 class Home extends Page {
 	public static var ME : Home;
 
+	var pendingBackupChecks : Array<{ projectFp:dn.FilePath, jTarget:js.jquery.JQuery }> = [];
+
 	public function new() {
 		super();
 
@@ -238,49 +240,11 @@ class Home extends Page {
 				if( isBackupFile )
 					li.addClass("crash");
 
-				// Backups button
-				if( ui.ProjectSaver.hasBackupFiles(filePath) ) {
-					var all = ui.ProjectSaver.listBackupFiles(filePath);
-					if( all.length>0 ) {
-						var jBackups = new J('<button class="backups gray"/>');
-						jBackups.appendTo(li);
-						jBackups.append('<span class="icon history"/>');
-						jBackups.click( (ev:js.jquery.Event)->{
-							ev.stopPropagation();
-							// List all backup files
-							var ctx = new ui.modal.ContextMenu(ev);
-							var crashBackups = [];
-							for( b in all ) {
-								if( b.crash )
-									crashBackups.push(b.backup);
-
-								ctx.add({
-									label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
-									className: b.crash ? "crash" : null,
-									sub: Lang.date(b.date),
-									cb: ()->App.ME.loadProject(b.backup.full)
-								});
-							}
-
-							if( crashBackups.length>0 )
-								ctx.add({
-									label: L.t._("Delete all crash recovery files"),
-									className: "warning",
-									cb: ()->{
-										new ui.modal.dialog.Confirm(
-											L.t._("Delete all crash recovery files project ::name::?", { name: fp.fileName}),
-											true,
-											()->{
-												for(fp in crashBackups)
-													NT.removeFile(fp.full);
-												updateRecents();
-											}
-										);
-									}
-								});
-						});
-					}
-				}
+				// Backups button (async)
+				var jBackupWrapper = new J('<div class="backupWrapper"></div>');
+				jBackupWrapper.appendTo(li);
+				jBackupWrapper.append('<div class="icon loading"></div>');
+				pendingBackupChecks.push({ projectFp:fp.clone(), jTarget:jBackupWrapper });
 
 				var act : ui.modal.ContextMenu.ContextActions = [
 					{
@@ -563,4 +527,71 @@ class Home extends Page {
 		}
 	}
 
+
+	override function update() {
+		super.update();
+
+		// Async lookup of backup dirs
+		if( pendingBackupChecks.length>0 && !cd.hasSetS("asyncBackupCheck", 0.15) ) {
+			var pb = pendingBackupChecks.shift();
+			pb.jTarget.empty();
+
+			// Parse project JSON
+			var json : ldtk.Json.ProjectJson = try {
+				var raw = NT.readFileString(pb.projectFp.full);
+				haxe.Json.parse(raw);
+			} catch(_) null;
+
+			if( json!=null ) {
+				// Check if backup files exist there
+				var backupPath = pb.projectFp.directoryWithSlash + ( json.backupRelPath==null ? pb.projectFp.fileName+"/"+Const.BACKUP_DIR : json.backupRelPath );
+				var all = ui.ProjectSaver.listBackupFiles(json.iid, backupPath);
+				trace(pb.projectFp);
+				trace(" "+backupPath);
+				if( all.length>0 ) {
+					var jBackups = new J('<button class="backups gray"/>');
+					jBackups.appendTo(pb.jTarget);
+					jBackups.append('<span class="icon history"/>');
+					jBackups.click( (ev:js.jquery.Event)->{
+						ev.stopPropagation();
+						// List all backup files
+						var ctx = new ui.modal.ContextMenu(ev);
+						var crashBackups = [];
+						for( b in all ) {
+							if( b.crash )
+								crashBackups.push(b.backup);
+
+							ctx.add({
+								label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
+								className: b.crash ? "crash" : null,
+								sub: Lang.date(b.date),
+								cb: ()->App.ME.loadProject(b.backup.full, (p:data.Project)->{
+									p.backupOriginalFile = pb.projectFp.clone();
+								}),
+							});
+						}
+
+						if( crashBackups.length>0 )
+							ctx.add({
+								label: L.t._("Delete all crash recovery files"),
+								className: "warning",
+								cb: ()->{
+									new ui.modal.dialog.Confirm(
+										L.t._("Delete all crash recovery files project ::name::?", { name: pb.projectFp.fileName}),
+										true,
+										()->{
+											for(fp in crashBackups)
+												NT.removeFile(fp.full);
+											updateRecents();
+										}
+									);
+								}
+							});
+					});
+				}
+			}
+
+
+		}
+	}
 }

@@ -10,6 +10,7 @@ class Project {
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
+	public var backupOriginalFile : Null<dn.FilePath>; // This represents the path to the original Project from this backup (not stored in JSON)
 	var usedColors : Map<String, Map<Int,Int>> = new Map();
 
 	var nextUid = 0;
@@ -85,6 +86,14 @@ class Project {
 			fp.useSlashes();
 			return fp.directory;
 		}
+	}
+
+	public function getBackupId() {
+		return iid;
+	}
+
+	public function makeBackupDirName(?suffix:String) {
+		return getBackupId()+"_" + DateTools.format(Date.now(), "%Y-%m-%d_%H-%M-%S") + ( suffix==null?"":"_"+suffix );
 	}
 
 	public function getRelExternalFilesDir() {
@@ -824,7 +833,7 @@ class Project {
 		Append required ".."s if the current project is a backup
 	**/
 	public inline function fixRelativePath(relPath:Null<String>) : Null<String> {
-		return relPath==null ? null : isBackup() ? "../../../"+relPath : relPath;
+		return relPath==null ? null : isBackup() && backupOriginalFile!=null ? backupOriginalFile.directoryWithSlash + relPath : relPath;
 	}
 
 

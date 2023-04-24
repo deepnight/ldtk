@@ -92,9 +92,8 @@ class CrashReport extends Page {
 			if( unsavedProject!=null ) {
 				try {
 					// Build file name & path
-					var dir = dn.FilePath.fromDir( unsavedProject.getAbsExternalFilesDir() );
-					dir.appendDirectory(Const.BACKUP_DIR);
-					dir.appendDirectory(ui.ProjectSaver.makeBackupDirName("crash"));
+					var dir = dn.FilePath.fromDir(unsavedProject.getAbsBackupDir());
+					dir.appendDirectory(unsavedProject.makeBackupDirName("crash"));
 					NT.createDirs(dir.full);
 
 					// Save main file

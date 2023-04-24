@@ -1237,6 +1237,8 @@ ul.log {
 .icon.mouseWheel		{ background-image: url("../icons/mouseWheel.png"); image-rendering: pixelated; }
 .icon.mouseMiddle		{ background-image: url("../icons/mouseMiddle.png"); image-rendering: pixelated; }
 
+.icon.loading			{ background-image: url("../img/gif/loading.gif"); opacity: 0.5; }
+
 .black		{ filter: brightness(0); }
 .orange		{ filter: brightness(0.6) sepia(1) hue-rotate(0.25rad) saturate(10); }
 .icon.red	{ filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6); }
@@ -5587,11 +5589,20 @@ canvas#webgl {
 						}
 					}
 
-					button.backups {
+					.backupWrapper {
 						grid-column: 2/3;
 						grid-row: 1/3;
-						padding: 0 2px;
 						align-self: stretch;
+						button.backups {
+							padding: 0 2px;
+							height: 100%;
+						}
+						.loading {
+							padding: 3px;
+							border-radius: 6px;
+							background-color: $bgLight;
+							opacity: 0.3;
+						}
 					}
 
 					button.context {
@@ -7132,21 +7143,14 @@ dl.form.fieldInstanceEditor {
 			border-color: $red;
 		}
 
-		.backupRelPath {
-			display: flex;
-			flex-wrap: nowrap;
-			align-items: center;
-			padding: 2px 4px;
-			border: 1px solid $bgLight;
-			.cur {
-				flex: 1 0 0;
-				font-size: 8pt;
-				color: $bgLighter;
-			}
-			button {
-				flex: 0 1 0;
-				padding: 2px;
-			}
+		.curBackupPath {
+			flex: 1 1 0;
+		}
+
+		.resetBackupPath {
+			flex: 0 1 0;
+			padding-left: 2px;
+			padding-right: 2px;
 		}
 
 		h2 {

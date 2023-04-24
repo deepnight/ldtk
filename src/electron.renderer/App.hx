@@ -707,18 +707,18 @@ class App extends dn.Process {
 		}
 	}
 
-	public function loadProject(filePath:String, ?levelIndex:Int, ?onComplete:Bool->Void) : Void {
+	public function loadProject(filePath:String, ?levelIndex:Int, ?onComplete:(p:Null<data.Project>)->Void) : Void {
 		new ui.ProjectLoader(
 			filePath,
 			(p)->{
 				if( onComplete!=null )
-					onComplete(true);
+					onComplete(p);
 				loadPage( ()->new page.Editor(p, levelIndex), true );
 			},
 			(err)->{
 				// Failed
 				if( onComplete!=null )
-					onComplete(false);
+					onComplete(null);
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
 				if( err==ProjectNotFound )
 					unregisterRecentProject(filePath);

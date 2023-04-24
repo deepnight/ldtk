@@ -217,39 +217,54 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = i.jInput.siblings(".locate").empty();
 		if( project.backupOnSave )
-			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/backups", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsBackupDir(), false) );
 		var jCount = jForms.find("#backupCount");
-		var jPath = jForms.find(".backupRelPath");
+		var jBackupPath = jForms.find(".curBackupPath");
+		var jResetBackup = jForms.find(".resetBackupPath");
 		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
 		if( project.backupOnSave ) {
+			jBackupPath.show();
+
 			jCount.show();
-			jPath.show();
 			jCount.siblings("span").show();
 			var i = Input.linkToHtmlInput( project.backupLimit, jCount );
 			i.setBounds(3, 50);
 			i.linkEvent(ProjectSettingsChanged);
 
-			jPath.find(".cur").text( project.backupRelPath==null ? "[Default dir]" : project.backupRelPath );
-			jPath.find(".pick").click(_->{
-				var openDir = project.getAbsBackupDir();
-				if( !NT.fileExists(openDir) )
-					openDir = project.filePath.full;
+			jBackupPath.text( project.backupRelPath==null ? "[Default dir]" : "[Custom dir]" );
+			if( project.backupRelPath==null )
+				jBackupPath.removeAttr("title");
+			else
+				jBackupPath.attr("title", project.backupRelPath);
 
-				dn.js.ElectronDialogs.openDir(openDir, (path)->{
-					var fp = dn.FilePath.fromDir(path);
-					project.backupRelPath = fp.full; // BUG should be relative!
+			jBackupPath.click(_->{
+				var absPath = project.getAbsBackupDir();
+				if( !NT.fileExists(absPath) )
+					absPath = project.filePath.full;
+
+				dn.js.ElectronDialogs.openDir(absPath, (dirPath)->{
+					var fp = dn.FilePath.fromDir(dirPath);
+					fp.useSlashes();
+					fp.makeRelativeTo(project.filePath.directory);
+					project.backupRelPath = fp.full;
 					editor.ge.emit(ProjectSettingsChanged);
 				});
 			});
-			jPath.find(".reset").click(_->{
-				project.backupRelPath = null;
-				editor.ge.emit(ProjectSettingsChanged);
-			});
+			jResetBackup.find(".reset");
+			if( project.backupRelPath==null )
+				jResetBackup.hide();
+			else
+				jResetBackup.show().click( (ev:js.jquery.Event)->{
+					ev.preventDefault();
+					project.backupRelPath = null;
+					editor.ge.emit(ProjectSettingsChanged);
+				});
 		}
 		else {
 			jCount.hide();
 			jCount.siblings("span").hide();
-			jPath.hide();
+			jBackupPath.hide();
+			jResetBackup.hide();
 		}
 		jForms.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
 

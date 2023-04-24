@@ -274,13 +274,29 @@ class Editor extends Page {
 			var jBackup = new J('<div class="backupHeader"/>');
 			var jDesc = new J('<div class="desc"/>');
 			jDesc.appendTo(jBackup);
-			jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
+
+			if( project.backupOriginalFile!=null )
+				jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
+			else
+				jDesc.append("<p>The images are not displayed properly because the location of the original project represented by this backup is unknown.</p>");
+
 			var inf = ui.ProjectSaver.extractBackupInfosFromFileName(project.filePath.full);
 			if( inf!=null )
 				jDesc.append("<p>"+inf.date+"</p>");
+
+			var jButtons = new J('<div class="actions"></div>');
+			jButtons.appendTo(jBackup);
+
 			var jRestore = new J('<button>Restore this backup</button>');
+			jRestore.appendTo(jButtons);
 			jRestore.click( _->onBackupRestore() );
-			jRestore.appendTo(jBackup);
+
+			if( project.backupOriginalFile==null ) {
+				jRestore.prop("disabled",true);
+				var jRelink = new J('<button class="gray">Locate the original project</button>');
+				jRelink.prependTo(jButtons);
+				jRelink.click( _->onBackupRelink() );
+			}
 			setPermanentNotification("backup", jBackup);
 		}
 		else
@@ -303,7 +319,7 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
+		var all = ui.ProjectSaver.listBackupFiles(project.getBackupId(), project.getAbsBackupDir());
 
 		updateBanners();
 
@@ -465,14 +481,16 @@ class Editor extends Page {
 
 		switch result {
 			case FileNotFound:
-				changed = true;
-				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
-					var newRelPath = project.makeRelativeFilePath(newAbsPath);
-					td.importAtlasImage( newRelPath );
-					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
-					ge.emit( TilesetImageLoaded(td, false) );
-					levelRender.invalidateAll();
-				});
+				if( !project.isBackup() ) {
+					changed = true;
+					new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
+						var newRelPath = project.makeRelativeFilePath(newAbsPath);
+						td.importAtlasImage( newRelPath );
+						td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+						ge.emit( TilesetImageLoaded(td, false) );
+						levelRender.invalidateAll();
+					});
+				}
 
 			case LoadingFailed(_):
 				new ui.modal.dialog.Retry(msg, ()->reloadTileset(td, isInitialLoading));
@@ -1657,39 +1675,78 @@ class Editor extends Page {
 		});
 	}
 
-	function onBackupRestore() {
-		new ui.modal.dialog.Confirm(
-			L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
-			()->{
-				var original = ui.ProjectSaver.makeOriginalPathFromBackup(project.filePath.full);
-				if( original.full==null || !NT.fileExists(original.full) ) {
-					// Project not found
-					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
+
+	function onBackupRelink() {
+		dn.js.ElectronDialogs.openFile(project.filePath.directory, (f)->{
+			try {
+				var raw = NT.readFileString(f);
+				var json : ldtk.Json.ProjectJson = haxe.Json.parse(raw);
+				if( json.iid!=project.iid ) {
+					new ui.modal.dialog.Warning(L.t._("The select project doesn't match this backup."));
+					return;
 				}
-				else {
-					App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-					var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
-
-					// Save upon original
-					App.LOG.fileOp('Backup original: ${original.full}...');
-					project.filePath = original.clone();
-					setPermanentNotification("backup");
-					for(w in project.worlds)
-					for(l in w.levels)
-						invalidateLevelCache(l);
-					onSave();
-					selectProject(project);
-
-					if( worldMode )
-						setWorldMode(false);
-					ui.Modal.closeAll();
-
-					// Delete crash backup
-					if( crashBackupDir!=null )
-						NT.removeDir(crashBackupDir);
-				}
+				project.backupOriginalFile = dn.FilePath.fromFile(f);
+				selectProject(project);
 			}
-		);
+		});
+	}
+
+	function onBackupRestore() {
+		function _restore(targetProjectFp:dn.FilePath) {
+			if( !NT.fileExists(targetProjectFp.full) ) {
+				// Project not found
+				new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
+			}
+			else {
+				App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
+				var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
+
+				// Save upon original
+				App.LOG.fileOp('Backup original: ${targetProjectFp.full}...');
+				project.filePath = targetProjectFp.clone();
+				setPermanentNotification("backup");
+				for(w in project.worlds)
+				for(l in w.levels)
+					invalidateLevelCache(l);
+				onSave();
+				selectProject(project);
+
+				if( worldMode )
+					setWorldMode(false);
+				ui.Modal.closeAll();
+
+				// Delete crash backup
+				if( crashBackupDir!=null )
+					NT.removeDir(crashBackupDir);
+			}
+		}
+
+
+		if( project.backupOriginalFile==null ) {
+			// Unknown original project
+			new ui.modal.dialog.Choice(
+				L.t._("Please locate the original project represented by this backup."),
+				[{
+					label: "Locate original project",
+					cb: ()->{
+						dn.js.ElectronDialogs.openFile(project.filePath.directory, (f)->{
+							project.backupOriginalFile = dn.FilePath.fromFile(f);
+							onBackupRestore();
+						});
+					},
+				}]
+			);
+		}
+		else {
+			// Known original project
+			new ui.modal.dialog.Confirm(
+				L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
+				()->{
+					_restore(project.backupOriginalFile);
+				}
+			);
+		}
+
 	}
 
 	inline function shouldLogEvent(e:GlobalEvent) {
