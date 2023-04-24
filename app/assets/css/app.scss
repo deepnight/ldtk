@@ -902,14 +902,6 @@ ul.niceList {
 		background-color: $bgMed;
 		cursor: pointer;
 
-		// .sub {
-		// 	display: block;
-		// 	width: 100%;
-		// 	text-align: right;
-		// 	font-size: 0.7em;
-		// 	opacity: 0.5;
-		// }
-
 		&.subList {
 			display: grid;
 			grid-template-columns: auto;
@@ -942,7 +934,12 @@ ul.niceList {
 		grid-template-columns: auto min-content;
 		align-items: center;
 
-		padding: 4px;
+		padding-top: 4px;
+		padding-bottom: 4px;
+		padding-right: 4px;
+		&:not(.collapser) {
+			padding-left: 4px;
+		}
 		margin-top: 2px;
 
 		color: $orange;
