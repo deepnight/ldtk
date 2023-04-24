@@ -77,8 +77,14 @@ class Project {
 		return filePath.directoryWithSlash + filePath.fileName;
 	}
 
-	public function getAbsBackupDir() {
-		return getAbsExternalFilesDir() + "/" + ( backupRelPath==null ? Const.BACKUP_DIR : backupRelPath );
+	public function getAbsBackupDir() : String{
+		if( backupRelPath==null )
+			return getAbsExternalFilesDir() + filePath.slash() + Const.BACKUP_DIR;
+		else {
+			var fp = dn.FilePath.fromDir( filePath.directoryWithSlash + backupRelPath );
+			fp.useSlashes();
+			return fp.directory;
+		}
 	}
 
 	public function getRelExternalFilesDir() {
