@@ -25,7 +25,7 @@ Value | Type | Description
 `appBuildId`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | LDtk application build identifier.<br/>		This is only used to identify the LDtk version that generated this particular project file, which can be useful for specific bug fixing. Note that the build identifier is just the date of the release, so it's not unique to each user (one single global ID per LDtk public release), and as a result, completely anonymous.
 `backupLimit`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Int | Number of backup files to keep, if the `backupOnSave` is TRUE
 `backupOnSave`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.7.0-gray.svg)  | Bool | If TRUE, an extra copy of the project will be created in a sub folder, when saving.
-`backupRelPath`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Target relative path to store backup files
+`backupRelPath`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | Target relative path to store backup files
 `customCommands`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array of command lines that can be ran manually by the user<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`command`** **(String**)</li><li>**`when`** **(Enum**) : *Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`*</li></ul>
 `defaultGridSize`<br/><sup class="internal">*Only used by editor*</sup> | Int | Default grid size for new layers
 `defaultLevelBgColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.6.0-gray.svg)  | String<br/><small class="color"> *Hex color "#rrggbb"* </small> | Default background color of levels
@@ -33,7 +33,7 @@ Value | Type | Description
 `defaultLevelWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update. It will then be `null`. You can enable the Multi-worlds advanced project option to enable the change immediately.<br/><br/>		Default new level width
 `defaultPivotX`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default X pivot (0 to 1) for new entities
 `defaultPivotY`<br/><sup class="internal">*Only used by editor*</sup> | Float | Default Y pivot (0 to 1) for new entities
-`dummyWorldIid`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | String | If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World.
+`dummyWorldIid`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | String | If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World.
 `exportLevelBg`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.0-gray.svg)  | Bool | If TRUE, the exported PNGs will include the level background (color or image).
 `exportTiled`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file (default is FALSE)
 `flags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;Enum | An array containing various advanced flags (ie. options or other states).<br/> Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
@@ -256,12 +256,12 @@ Value | Type | Description
 `size`<br/><sup class="internal">*Only used by editor*</sup> | Int | Pattern width & height. Should only be 1,3,5 or 7.
 `tileIds`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Int | Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
 `tileMode`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Defines how tileIds array is used<br/> Possible values: `Single`, `Stamp`
-`tileRandomXMax`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int | Max random offset for X tile pos
-`tileRandomXMin`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int | Min random offset for X tile pos
-`tileRandomYMax`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int | Max random offset for Y tile pos
-`tileRandomYMin`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int | Min random offset for Y tile pos
-`tileXOffset`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int | Tile X offset
-`tileYOffset`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int | Tile Y offset
+`tileRandomXMax`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int | Max random offset for X tile pos
+`tileRandomXMin`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int | Min random offset for X tile pos
+`tileRandomYMax`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int | Max random offset for Y tile pos
+`tileRandomYMin`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int | Min random offset for Y tile pos
+`tileXOffset`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int | Tile X offset
+`tileYOffset`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int | Tile Y offset
 `uid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Unique Int identifier
 `xModulo`<br/><sup class="internal">*Only used by editor*</sup> | Int | X cell coord modulo
 `xOffset`<br/><sup class="internal">*Only used by editor*</sup> | Int | X cell start offset
@@ -324,12 +324,13 @@ Value | Type | Description
 `allowOutOfLevelRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | 
 `allowedRefTags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;String | 
 `allowedRefs`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Enum | Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
-`allowedRefsEntityUid`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
+`allowedRefsEntityUid`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
 `autoChainRef`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | 
 `editorAlwaysShow`<br/><sup class="internal">*Only used by editor*</sup> | Bool | 
 `editorCutLongValues`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | 
 `editorDisplayMode`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Enum | Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`
 `editorDisplayPos`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Possible values: `Above`, `Center`, `Beneath`
+`editorDisplayScale`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.3.0-green.svg)  | Float | 
 `editorLinkStyle`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.4-gray.svg)  | Enum | Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
 `editorShowInWorld`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.1.4-gray.svg)  | Bool | 
 `editorTextPrefix`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | 
@@ -393,6 +394,6 @@ Value | Type | Description
 -- | -- | --
 `color`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int | Optional color
 `id` | String | Enum value
-`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.6-gray.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional tileset rectangle to represents this value
+`tileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-green.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional tileset rectangle to represents this value
 ~~`tileId`~~<br/><sup class="deprecated">*DEPRECATED!*</sup><br/>   | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+<br/> <br/> Replaced by: `tileRect`
 ~~`__tileSrcRect`~~<br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg)  | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+<br/> <br/> Replaced by: `tileRect`

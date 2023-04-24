@@ -946,6 +946,7 @@
 				"editorCutLongValues",
 				"editorDisplayMode",
 				"editorDisplayPos",
+				"editorDisplayScale",
 				"editorLinkStyle",
 				"editorShowInWorld",
 				"symmetricalRef",
@@ -963,6 +964,12 @@
 					"type": [
 						"array",
 						"null"
+					]
+				},
+				"editorDisplayScale": {
+					"description": "",
+					"type": [
+						"number"
 					]
 				},
 				"useForSmartColor": {
