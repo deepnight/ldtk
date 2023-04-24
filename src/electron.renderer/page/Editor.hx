@@ -1302,7 +1302,7 @@ class Editor extends Page {
 
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
-		ge.emit( ViewportChanged );
+		ge.emit( ViewportChanged(true) );
 		saveLastProjectInfos();
 
 		ui.Tip.clear();
@@ -1751,7 +1751,7 @@ class Editor extends Page {
 
 	inline function shouldLogEvent(e:GlobalEvent) {
 		return switch(e) {
-			case ViewportChanged: false;
+			case ViewportChanged(_): false;
 			case WorldLevelMoved(_): false;
 			// case LayerInstanceChangedGlobally(_): false;
 			case WorldMode(_): false;
@@ -1769,7 +1769,7 @@ class Editor extends Page {
 			switch e {
 				case AppSettingsChanged:
 				case WorldMode(active):
-				case ViewportChanged:
+				case ViewportChanged(_):
 				case ProjectSelected:
 				case ProjectSettingsChanged:
 				case BeforeProjectSaving:
@@ -1847,7 +1847,7 @@ class Editor extends Page {
 		// Level cache invalidation
 		switch e {
 			case LastChanceEnded:
-			case ViewportChanged:
+			case ViewportChanged(_):
 			case AppSettingsChanged:
 			case ProjectSelected:
 			case ProjectSettingsChanged:
@@ -1972,7 +1972,7 @@ class Editor extends Page {
 			case WorldMode(_):
 			case WorldDepthSelected(_):
 			case AppSettingsChanged:
-			case ViewportChanged:
+			case ViewportChanged(_):
 			case LayerInstanceSelected:
 			case LevelSelected(_):
 			case WorldSelected(_):
@@ -2008,7 +2008,7 @@ class Editor extends Page {
 			case WorldDepthSelected(worldDepth):
 				updateWorldDepthsUI();
 
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
@@ -2266,7 +2266,7 @@ class Editor extends Page {
 			bg.scaleX = camera.width;
 			bg.scaleY = camera.height;
 		}
-		ge.emit(ViewportChanged);
+		ge.emit( ViewportChanged(true) );
 		dn.Process.resizeAll();
 	}
 

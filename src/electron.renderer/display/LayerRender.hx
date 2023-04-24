@@ -33,7 +33,7 @@ class LayerRender {
 			er.onGlobalEvent(ev);
 
 		switch( ev ) {
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 				updateParallax();
 
 			case LayerDefChanged(defUid):

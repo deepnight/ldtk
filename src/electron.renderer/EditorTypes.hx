@@ -1,6 +1,6 @@
 
 enum GlobalEvent {
-	ViewportChanged;
+	ViewportChanged(zoomChanged:Bool);
 	AppSettingsChanged;
 	LastChanceEnded;
 

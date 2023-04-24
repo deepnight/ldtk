@@ -137,11 +137,12 @@ class WorldRender extends dn.Process {
 					removeWorldLevel(wl.uid);
 				invalidateAll();
 
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
-				renderGrids();
+				if( zoomChanged )
+					renderGrids();
 				updateBgColor();
 				updateAxesPos();
 				updateAllLevelIdentifiers(false);
@@ -149,7 +150,8 @@ class WorldRender extends dn.Process {
 				updateFieldsPos();
 				invalidateCameraBasedRenders();
 				for(l in curWorld.levels) {
-					getWorldLevel(l).boundsInvalidated = true;
+					if( zoomChanged )
+						getWorldLevel(l).boundsInvalidated = true;
 					updateLevelVisibility(l);
 				}
 

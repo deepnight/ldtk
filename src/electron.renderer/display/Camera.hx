@@ -117,7 +117,7 @@ class Camera extends dn.Process {
 
 			case LevelSelected(level):
 
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 
 			case ProjectSelected:
 				fit(true);
@@ -188,14 +188,14 @@ class Camera extends dn.Process {
 
 	inline function set_worldX(v) {
 		if( worldX!=v )
-			editor.ge.emitAtTheEndOfFrame( ViewportChanged );
+			editor.ge.emitAtTheEndOfFrame( ViewportChanged(false) );
 		worldX = v;
 		return worldX;
 	}
 
 	inline function set_worldY(v) {
 		if( worldY!=v )
-			editor.ge.emitAtTheEndOfFrame( ViewportChanged );
+			editor.ge.emitAtTheEndOfFrame( ViewportChanged(false) );
 		worldY = v;
 		return worldY;
 	}
@@ -272,7 +272,7 @@ class Camera extends dn.Process {
 	public function setZoom(v) {
 		cancelAutoZoom();
 		rawZoom = M.fclamp(v, getMinZoom(), MAX_ZOOM);
-		editor.ge.emitAtTheEndOfFrame(ViewportChanged);
+		editor.ge.emitAtTheEndOfFrame( ViewportChanged(true) );
 	}
 
 	inline function snapZoomValue(z:Float) {
@@ -290,7 +290,7 @@ class Camera extends dn.Process {
 		rawZoom += delta;
 		rawZoom = M.fclamp(rawZoom, getMinZoom(), MAX_ZOOM);
 
-		editor.ge.emit(ViewportChanged);
+		editor.ge.emit( ViewportChanged(true) );
 
 		var newCoord = Coords.fromLevelCoords(zoomFocusX, zoomFocusY);
 		worldX += newCoord.worldXf - old.worldXf;

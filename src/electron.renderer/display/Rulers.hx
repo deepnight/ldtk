@@ -69,7 +69,7 @@ class Rulers extends dn.Process {
 			case LevelSelected(l):
 				invalidate();
 
-			case ViewportChanged, WorldLevelMoved(_):
+			case ViewportChanged(_), WorldLevelMoved(_):
 				root.x = levelRender.root.x;
 				root.y = levelRender.root.y;
 				root.setScale( levelRender.root.scaleX );
