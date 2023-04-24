@@ -546,8 +546,6 @@ class Home extends Page {
 				// Check if backup files exist there
 				var backupPath = pb.projectFp.directoryWithSlash + ( json.backupRelPath==null ? pb.projectFp.fileName+"/"+Const.BACKUP_DIR : json.backupRelPath );
 				var all = ui.ProjectSaver.listBackupFiles(json.iid, backupPath);
-				trace(pb.projectFp);
-				trace(" "+backupPath);
 				if( all.length>0 ) {
 					var jBackups = new J('<button class="backups gray"/>');
 					jBackups.appendTo(pb.jTarget);
