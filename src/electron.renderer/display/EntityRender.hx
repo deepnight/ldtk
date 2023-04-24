@@ -22,6 +22,7 @@ class EntityRender extends dn.Process {
 	var beneath: h2d.Flow;
 	var fieldGraphics : h2d.Graphics;
 
+	var coreInvalidated = true;
 	var layoutInvalidated = true;
 	var fieldsRenderInvalidated = true;
 
@@ -77,11 +78,19 @@ class EntityRender extends dn.Process {
 				layoutInvalidated = true;
 
 			case ViewportChanged:
+				coreInvalidated = true;
 				fieldsRenderInvalidated = true;
 				layoutInvalidated = true;
 
 			case _:
 		}
+	}
+
+
+	function updateCore() {
+		core.removeChildren();
+		_coreRender = renderCore(ei, ed, ld);
+		core.addChild( _coreRender.wrapper );
 	}
 
 
@@ -264,10 +273,7 @@ class EntityRender extends dn.Process {
 
 
 	public function renderAll() {
-		core.removeChildren();
-		_coreRender = renderCore(ei, ed, ld);
-		core.addChild( _coreRender.wrapper );
-
+		updateCore();
 		renderFields();
 	}
 
@@ -402,6 +408,12 @@ class EntityRender extends dn.Process {
 			cd.setS("layoutLimit", 0.03);
 			updateLayout();
 			layoutInvalidated = false;
+		}
+
+		if( coreInvalidated && !cd.has("coreLimit") ) {
+			cd.setS("coreLimit", 0.15);
+			updateCore();
+			coreInvalidated = false;
 		}
 
 	}
