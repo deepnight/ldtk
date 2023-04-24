@@ -603,6 +603,9 @@ namespace ldtk
         [JsonProperty("editorDisplayPos")]
         public EditorDisplayPos EditorDisplayPos { get; set; }
 
+        [JsonProperty("editorDisplayScale")]
+        public double EditorDisplayScale { get; set; }
+
         /// <summary>
         /// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
         /// </summary>

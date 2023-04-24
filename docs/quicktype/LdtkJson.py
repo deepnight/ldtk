@@ -201,6 +201,7 @@ class FieldDefinition:
     editor_display_mode: EditorDisplayMode
     """Possible values: `Above`, `Center`, `Beneath`"""
     editor_display_pos: EditorDisplayPos
+    editor_display_scale: float
     """Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`"""
     editor_link_style: EditorLinkStyle
     editor_show_in_world: bool
@@ -237,7 +238,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_refs_entity_uid: Optional[int], allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_refs_entity_uid: Optional[int], allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_display_scale: float, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -254,6 +255,7 @@ class FieldDefinition:
         self.editor_cut_long_values = editor_cut_long_values
         self.editor_display_mode = editor_display_mode
         self.editor_display_pos = editor_display_pos
+        self.editor_display_scale = editor_display_scale
         self.editor_link_style = editor_link_style
         self.editor_show_in_world = editor_show_in_world
         self.editor_text_prefix = editor_text_prefix
@@ -289,6 +291,7 @@ class FieldDefinition:
         editor_cut_long_values = from_bool(obj.get("editorCutLongValues"))
         editor_display_mode = EditorDisplayMode(obj.get("editorDisplayMode"))
         editor_display_pos = EditorDisplayPos(obj.get("editorDisplayPos"))
+        editor_display_scale = from_float(obj.get("editorDisplayScale"))
         editor_link_style = EditorLinkStyle(obj.get("editorLinkStyle"))
         editor_show_in_world = from_bool(obj.get("editorShowInWorld"))
         editor_text_prefix = from_union([from_none, from_str], obj.get("editorTextPrefix"))
@@ -304,7 +307,7 @@ class FieldDefinition:
         field_definition_type = from_str(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
-        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_refs_entity_uid, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
+        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_refs_entity_uid, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_display_scale, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -330,6 +333,7 @@ class FieldDefinition:
         result["editorCutLongValues"] = from_bool(self.editor_cut_long_values)
         result["editorDisplayMode"] = to_enum(EditorDisplayMode, self.editor_display_mode)
         result["editorDisplayPos"] = to_enum(EditorDisplayPos, self.editor_display_pos)
+        result["editorDisplayScale"] = to_float(self.editor_display_scale)
         result["editorLinkStyle"] = to_enum(EditorLinkStyle, self.editor_link_style)
         result["editorShowInWorld"] = from_bool(self.editor_show_in_world)
         if self.editor_text_prefix is not None:

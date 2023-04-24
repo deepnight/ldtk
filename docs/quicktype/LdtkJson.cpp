@@ -167,6 +167,7 @@ namespace quicktype {
         bool editor_cut_long_values;
         EditorDisplayMode editor_display_mode;
         EditorDisplayPos editor_display_pos;
+        double editor_display_scale;
         EditorLinkStyle editor_link_style;
         bool editor_show_in_world;
         boost::optional<std::string> editor_text_prefix;
@@ -282,6 +283,10 @@ namespace quicktype {
         const EditorDisplayPos & get_editor_display_pos() const { return editor_display_pos; }
         EditorDisplayPos & get_mutable_editor_display_pos() { return editor_display_pos; }
         void set_editor_display_pos(const EditorDisplayPos & value) { this->editor_display_pos = value; }
+
+        const double & get_editor_display_scale() const { return editor_display_scale; }
+        double & get_mutable_editor_display_scale() { return editor_display_scale; }
+        void set_editor_display_scale(const double & value) { this->editor_display_scale = value; }
 
         /**
          * Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
@@ -3144,6 +3149,7 @@ namespace quicktype {
         x.set_editor_cut_long_values(j.at("editorCutLongValues").get<bool>());
         x.set_editor_display_mode(j.at("editorDisplayMode").get<EditorDisplayMode>());
         x.set_editor_display_pos(j.at("editorDisplayPos").get<EditorDisplayPos>());
+        x.set_editor_display_scale(j.at("editorDisplayScale").get<double>());
         x.set_editor_link_style(j.at("editorLinkStyle").get<EditorLinkStyle>());
         x.set_editor_show_in_world(j.at("editorShowInWorld").get<bool>());
         x.set_editor_text_prefix(get_stack_optional<std::string>(j, "editorTextPrefix"));
@@ -3179,6 +3185,7 @@ namespace quicktype {
         j["editorCutLongValues"] = x.get_editor_cut_long_values();
         j["editorDisplayMode"] = x.get_editor_display_mode();
         j["editorDisplayPos"] = x.get_editor_display_pos();
+        j["editorDisplayScale"] = x.get_editor_display_scale();
         j["editorLinkStyle"] = x.get_editor_link_style();
         j["editorShowInWorld"] = x.get_editor_show_in_world();
         j["editorTextPrefix"] = x.get_editor_text_prefix();

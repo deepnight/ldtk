@@ -269,6 +269,7 @@ type FieldDefinition struct {
 	EditorDisplayMode                                                                          EditorDisplayMode `json:"editorDisplayMode"`
 	// Possible values: `Above`, `Center`, `Beneath`                                                             
 	EditorDisplayPos                                                                           EditorDisplayPos  `json:"editorDisplayPos"`
+	EditorDisplayScale                                                                         float64           `json:"editorDisplayScale"`
 	// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`                     
 	EditorLinkStyle                                                                            EditorLinkStyle   `json:"editorLinkStyle"`
 	EditorShowInWorld                                                                          bool              `json:"editorShowInWorld"`

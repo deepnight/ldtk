@@ -442,6 +442,9 @@ pub struct FieldDefinition {
     #[serde(rename = "editorDisplayPos")]
     editor_display_pos: EditorDisplayPos,
 
+    #[serde(rename = "editorDisplayScale")]
+    editor_display_scale: f64,
+
     /// Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
     #[serde(rename = "editorLinkStyle")]
     editor_link_style: EditorLinkStyle,

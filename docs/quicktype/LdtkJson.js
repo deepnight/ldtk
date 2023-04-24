@@ -334,6 +334,7 @@ const typeMap = {
         { json: "editorCutLongValues", js: "editorCutLongValues", typ: true },
         { json: "editorDisplayMode", js: "editorDisplayMode", typ: r("EditorDisplayMode") },
         { json: "editorDisplayPos", js: "editorDisplayPos", typ: r("EditorDisplayPos") },
+        { json: "editorDisplayScale", js: "editorDisplayScale", typ: 3.14 },
         { json: "editorLinkStyle", js: "editorLinkStyle", typ: r("EditorLinkStyle") },
         { json: "editorShowInWorld", js: "editorShowInWorld", typ: true },
         { json: "editorTextPrefix", js: "editorTextPrefix", typ: u(undefined, u(null, "")) },
