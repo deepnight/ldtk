@@ -22,6 +22,7 @@ class FloatInput extends form.Input<Float> {
 
 	public function enablePercentageMode(slider=true) {
 		displayAsPct = true;
+		jInput.addClass("percentage");
 		writeValueToInput();
 		if( slider )
 			enableSlider( displayAsPct ? 100 : 1 );

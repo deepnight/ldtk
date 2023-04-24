@@ -2152,6 +2152,17 @@ input.slider:not(:disabled) {
 	}
 }
 
+input[type=text].percentage {
+	flex: 0 0 32px;
+	box-sizing: content-box;
+	padding-right: 20px;
+
+	background-image: url("../icons/percent.svg");
+	background-size: 10pt;
+	background-repeat: no-repeat;
+	background-position: right 4px center;
+}
+
 input[type=checkbox] {
 	width: 24px;
 	height: 24px;
@@ -6453,6 +6464,10 @@ canvas#webgl {
 		overflow: auto;
 		grid-column: 2/3;
 		grid-row: 1/3;
+
+		h3 {
+			margin: 0;
+		}
 
 		input.type {
 			font-family: 'Courier New', Courier, monospace;
