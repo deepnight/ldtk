@@ -20,7 +20,7 @@ When enabled, various new buttons will be available in the UI, like in the World
 
 ## Rule tiles X and Y offsets
 
-![](1.3.0/ruleTilesOffsets.png)
+![](1.3.0/ruleTilesOffsets2.png)
 
 You can now offset the resulting tile(s) of any rules, either using fixed X/Y values, or using random ranges for more variety.
 This will make much easier creation of organic elements like vegetation, dirt etc.
@@ -36,8 +36,18 @@ The new DropDown UI component supports:
  - Icons
  - Colors
 
+## Customizable backup directory
+
+![](1.3.0/backupDir.png)
+
+You can now customize the location of your backups.
+
+Please note that, to restore a backup, you should use LDtk and not copy files by yourself manually from your File Explorer / Finder.
+
+
 ## Other changes
 
+ - Added "Display scale" option to all custom fields
  - Added support for CastleDB icons import.
  - Enum tiles can now be any rectangle from the tileset.
  - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
@@ -47,6 +57,7 @@ The new DropDown UI component supports:
  - Added "colored flags" icons to the embedded atlas
  - Sections of the World panel can now be collapsed (world settings, current level properties and level custom fields).
  - Fixed the size of Reset buttons in custom field forms
+ - Fixed entity render update when zooming in/out
  - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
  - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
  - Fixed a very old rules bug that prevented Symetric rules to not re-apply in the same grid cell, if it applied there previously.
