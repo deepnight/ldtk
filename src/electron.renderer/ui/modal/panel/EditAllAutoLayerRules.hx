@@ -389,6 +389,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Error in layer settings
 		if( !ld.autoLayerRulesCanBeUsed() ) {
+			jContent.find("button:not(.close), input").prop("disabled","true");
 			var jError = new J('<li> <div class="warning"/> </li>');
 			jError.appendTo(jRuleGroupList);
 			jError.find("div").append( L.t._("The current layer settings prevent its rules to work.") );
@@ -404,6 +405,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 			return;
 		}
+
+		jContent.find("button:not(.close), input").removeProp("disabled");
 
 
 		// List context menu
