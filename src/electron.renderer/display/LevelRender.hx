@@ -42,7 +42,6 @@ class LevelRender extends dn.Process {
 		bgColor = new h2d.Bitmap();
 		root.add(bgColor, Const.DP_BG);
 
-		//bgImage = new h2d.Bitmap();
 		bgImage = new dn.heaps.TiledTexture(1, 1);
 		root.add(bgImage, Const.DP_BG);
 
@@ -433,6 +432,8 @@ class LevelRender extends dn.Process {
 			bgImage.setPosition( tt.x, tt.y );
 			bgImage.scaleX = tt.scaleX;
 			bgImage.scaleY = tt.scaleY;
+			bgImage.initialOffsetX = tt.initialOffsetX;
+			bgImage.initialOffsetY = tt.initialOffsetY;
 			bgImage.visible = true;
 			bgImage.alpha = settings.v.singleLayerMode ? 0.2 : 1;
 			bgImage.filter = settings.v.singleLayerMode ? getSingleLayerModeFilter() : null;

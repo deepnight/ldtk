@@ -429,10 +429,16 @@ class Level {
 		var h = tile ? pxHei : Std.int(bgInf.th);
 
 		var tt = new dn.heaps.TiledTexture(w, h, t, p);
-		tt.x = bgInf.dispX;
-		tt.y = bgInf.dispY;
 		tt.scaleX = bgInf.sx;
 		tt.scaleY = bgInf.sy;
+		if( tile ) {
+			tt.initialOffsetX = M.round(w*bgPivotX - t.width*bgPivotX);
+			tt.initialOffsetY = M.round(h*bgPivotY - t.height*bgPivotY);
+		}
+		else {
+			tt.x = bgInf.dispX;
+			tt.y = bgInf.dispY;
+		}
 
 		return tt;
 	}
