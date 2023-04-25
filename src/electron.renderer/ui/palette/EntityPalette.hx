@@ -5,6 +5,7 @@ class EntityPalette extends ui.ToolPalette {
 
 	public function new(t) {
 		super(t);
+		jContent.addClass("entities");
 	}
 
 	override function doRender() {

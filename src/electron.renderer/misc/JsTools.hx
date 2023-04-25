@@ -1224,6 +1224,30 @@ class JsTools {
 	}
 
 
+	public static function createQuickSearch(jList:js.jquery.JQuery) {
+		var jSearch = new J('<input type="text" class="quickSearch"/>');
+		jSearch.attr("placeholder", "Search...");
+		// jSearch.keydown( (ev:js.jquery.Event)->{
+		// });
+		jSearch.on("input", (ev:js.jquery.Event)->{
+			var search = StringTools.trim( jSearch.val().toLowerCase() );
+			jList.find("li:not(.collapser, .subList)").each( (i,e)->{
+				var jLi = new J(e);
+				var cur = StringTools.trim( jLi.text().toLowerCase() );
+				jLi.removeClass("searchMatched searchDiscarded");
+				if( search.length<=0 )
+					return;
+
+				if( cur.indexOf(search)>=0 )
+					jLi.addClass("searchMatched");
+				else
+					jLi.addClass("searchDiscarded");
+			});
+		});
+
+		return jSearch;
+	}
+
 
 	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {
 		// Out-of-bounds policy
