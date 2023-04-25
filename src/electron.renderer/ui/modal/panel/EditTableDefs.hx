@@ -1,10 +1,9 @@
 package ui.modal.panel;
 import tabulator.Tabulator;
 
-using Lambda;
 class EditTableDefs extends ui.modal.Panel {
-	var curTable : Null<data.def.TableDef>;
-	var tableView = false;
+	var curSheet : Null<cdb.Sheet>;
+	var tabulatorView = true;
 	var tabulator : Tabulator;	
 
 	public function new() {
@@ -16,8 +15,8 @@ class EditTableDefs extends ui.modal.Panel {
 
 		// Create a new table
 		jContent.find("button.createTable").click( function(ev) {
-			var td = project.defs.createTable("New Table", ["Key"], [["Row"]]);
-			editor.ge.emit(TableDefAdded(td));
+			// var td = project.defs.createTable("New Table", ["Key"], [["Row"]]);
+			// editor.ge.emit(TableDefAdded(td));
 		});
 
 		// Import
@@ -46,51 +45,51 @@ class EditTableDefs extends ui.modal.Panel {
 	}
 
 	override function onGlobalEvent(e:GlobalEvent) {
-		super.onGlobalEvent(e);
-		switch e {
-			case TableDefAdded(td), TableDefChanged(td):
-				selectTable(td);
+		// super.onGlobalEvent(e);
+		// switch e {
+		// 	case TableDefAdded(td), TableDefChanged(td):
+		// 		selectTable(td);
 
-			case TableDefRemoved(td):
-				selectTable(project.defs.tables[0]);
+		// 	case TableDefRemoved(td):
+		// 		selectTable(project.defs.tables[0]);
 
-			case _:
-		}
+		// 	case _:
+		// }
 	}
 
 	function updateTableForm() {
 		var jTabForm = jContent.find("dl.tableForm");
 
-		if( curTable==null ) {
+		if( curSheet==null ) {
 			jTabForm.hide();
 			return;
 		}
 		jTabForm.show();
-		var i = Input.linkToHtmlInput(curTable.name, jTabForm.find("input[name='name']") );
-		i.linkEvent(TableDefChanged(curTable));
+		// Input.linkToHtmlInput(curSheet.name, jTabForm.find("input[name='name']") );
+		// i.linkEvent(TableDefChanged(curTable));
 
-		var jSel = jContent.find("#primaryKey");
-		for (column in curTable.columns) {
-			jSel.append('<option>'+ column +'</option>');
-		}
-		var i = Input.linkToHtmlInput(curTable.primaryKey, jTabForm.find("select[name='primaryKey']") );
-		i.linkEvent(TableDefChanged(curTable));
-		var i = Input.linkToHtmlInput(tableView, jTabForm.find("input[id='tableView']") );
-		i.linkEvent(TableDefChanged(curTable));
+		// var jSel = jContent.find("#primaryKey");
+		// for (column in curTable.columns) {
+		// 	jSel.append('<option>'+ column +'</option>');
+		// }
+		// var i = Input.linkToHtmlInput(curTable.primaryKey, jTabForm.find("select[name='primaryKey']") );
+		// i.linkEvent(TableDefChanged(curTable));
+		// var i = Input.linkToHtmlInput(tableView, jTabForm.find("input[id='tableView']") );
+		// i.linkEvent(TableDefChanged(curTable));
 	}
 
-	function selectTable (td:data.def.TableDef) {
-		curTable = td;
+	function selectTable (sheet:cdb.Sheet) {
+		trace(sheet);
+		curSheet = sheet;
 		updateTableList();
 		updateTableForm();
 
-		var table = curTable;
 		var jTabEditor = jContent.find("#tableEditor");
 		jTabEditor.empty();
 
-		if (tableView) {
-			var data = table.data;
-			var columns = table.columns.map(function(x) return {title: x, field: x, editor: true});
+		if (tabulatorView) {
+			var data = sheet.lines;
+			var columns = sheet.columns.map(function(x) return {title: x.name, field: x.name, editor: true});
 
 			jContent.find("#tableEditor").append("<div id=tabulator></div>");
 			tabulator = new Tabulator("#tabulator", {
@@ -101,29 +100,29 @@ class EditTableDefs extends ui.modal.Panel {
 				movableRows: true,
 				movableColumns: true,
 			});
-			tabulator.on("cellEdited", function(cell) {
-				// TODO Implement changing primary keys here aswell
-				var id = cell.getData().id;
-				var key_index = table.columns.indexOf("id");
-				for (row in data) {
-					if (row[key_index] == id) {
-						var key = table.columns.indexOf(cell.getField());
-						row[key] = cell.getValue();
-						break;
-					}
-				}
-			});
+			// tabulator.on("cellEdited", function(cell) {
+			// 	// TODO Implement changing primary keys here aswell
+			// 	var id = cell.getData().id;
+			// 	var key_index = table.columns.indexOf("id");
+			// 	for (row in data) {
+			// 		if (row[key_index] == id) {
+			// 			var key = table.columns.indexOf(cell.getField());
+			// 			row[key] = cell.getValue();
+			// 			break;
+			// 		}
+			// 	}
+			// });
 		} else {
-			var tableDefsForm = new ui.TableDefsForm(curTable);
-			jTabEditor.append(tableDefsForm.jWrapper);
+			// var tableDefsForm = new ui.TableDefsForm(curTable);
+			// jTabEditor.append(tableDefsForm.jWrapper);
 		}
 	}
 
-	function deleteTableDef(td:data.def.TableDef) {
-		new LastChance(L.t._("Table ::name:: deleted", { name:td.name }), project);
-		var old = td;
-		project.defs.removeTableDef(td);
-		editor.ge.emit( TableDefRemoved(old) );
+	function deleteSheet(sheet:cdb.Sheet) {
+		new LastChance(L.t._("Table ::name:: deleted", { name:sheet.name }), project);
+		// var old = td;
+		// project.defs.removeTableDef(td);
+		// editor.ge.emit( TableDefRemoved(old) );
 	}
 
 	function updateTableList() {
@@ -136,16 +135,16 @@ class EditTableDefs extends ui.modal.Panel {
 		var jSubList = new J('<ul/>');
 		jSubList.appendTo(jLi);
 
-		for(td in project.defs.tables) {
+		for (sheet in project.db.sheets) {
 			var jLi = new J("<li/>");
 			jLi.appendTo(jSubList);
-			jLi.append('<span class="table">'+td.name+'</span>');
-			jLi.data("uid",td.uid);
+			jLi.append('<span class="table">'+sheet.name+'</span>');
+			// jLi.data("uid",td.uid);
 
-			if( td==curTable )
+			if( sheet==curSheet )
 				jLi.addClass("active");
 			jLi.click( function(_) {
-				selectTable(td);
+				selectTable(sheet);
 			});
 
 			ContextMenu.addTo(jLi, [
@@ -182,21 +181,21 @@ class EditTableDefs extends ui.modal.Panel {
 				// },
 				{
 					label: L._Delete(),
-					cb: deleteTableDef.bind(td),
+					cb: deleteSheet.bind(sheet),
 				},
 			]);
 		}
 
 		// Make list sortable
 		JsTools.makeSortable(jSubList, function(ev) {
-			var jItem = new J(ev.item);
-			var fromIdx = project.defs.getTableIndex( jItem.data("uid") );
-			var toIdx = ev.newIndex>ev.oldIndex
-				? jItem.prev().length==0 ? 0 : project.defs.getTableIndex( jItem.prev().data("uid") )
-				: jItem.next().length==0 ? project.defs.tables.length-1 : project.defs.getTableIndex( jItem.next().data("uid") );
+			// var jItem = new J(ev.item);
+			// var fromIdx = project.defs.getTableIndex( jItem.data("uid") );
+			// var toIdx = ev.newIndex>ev.oldIndex
+			// 	? jItem.prev().length==0 ? 0 : project.defs.getTableIndex( jItem.prev().data("uid") )
+			// 	: jItem.next().length==0 ? project.defs.tables.length-1 : project.defs.getTableIndex( jItem.next().data("uid") );
 
-			var moved = project.defs.sortTableDef(fromIdx, toIdx);
-			selectTable(moved);
+			// var moved = project.defs.sortTableDef(fromIdx, toIdx);
+			// selectTable(moved);
 			// editor.ge.emit(TilesetDefSorted);
 		});
 	}

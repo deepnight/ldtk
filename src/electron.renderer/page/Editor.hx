@@ -30,7 +30,6 @@ class Editor extends Page {
 	public var project : data.Project;
 	public var curWorldIid : String;
 	public var curLevelId : Int;
-	public var db : cdb.Database;
 	var curLayerDefUid : Int;
 
 	// Tools
@@ -88,8 +87,8 @@ class Editor extends Page {
 
 		watcher = new misc.FileWatcher();
 
-		db = new cdb.Database();
-		loadCastleDB(db, p);
+		p.db = new cdb.Database();
+		loadCastleDB(p.db, p);
 
 		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();

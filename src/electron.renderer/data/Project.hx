@@ -16,6 +16,7 @@ class Project {
 	public var iid(default,null) : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
+	public var db : cdb.Database;
 
 	public var jsonVersion : String;
 	public var appBuildId : Float;
