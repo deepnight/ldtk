@@ -432,8 +432,8 @@ class Level {
 		tt.scaleX = bgInf.sx;
 		tt.scaleY = bgInf.sy;
 		if( tile ) {
-			tt.initialOffsetX = M.round( pxWid*bgPivotX - t.width*bgPivotX );
-			tt.initialOffsetY = M.round( pxHei*bgPivotY - t.height*bgPivotY );
+			tt.alignPivotX = bgPivotX;
+			tt.alignPivotY = bgPivotY;
 		}
 		else {
 			tt.x = bgInf.dispX;

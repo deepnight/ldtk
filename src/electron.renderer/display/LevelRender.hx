@@ -432,8 +432,8 @@ class LevelRender extends dn.Process {
 			bgImage.setPosition( tt.x, tt.y );
 			bgImage.scaleX = tt.scaleX;
 			bgImage.scaleY = tt.scaleY;
-			bgImage.initialOffsetX = tt.initialOffsetX;
-			bgImage.initialOffsetY = tt.initialOffsetY;
+			bgImage.alignPivotX = tt.alignPivotX;
+			bgImage.alignPivotY = tt.alignPivotY;
 			bgImage.visible = true;
 			bgImage.alpha = settings.v.singleLayerMode ? 0.2 : 1;
 			bgImage.filter = settings.v.singleLayerMode ? getSingleLayerModeFilter() : null;
