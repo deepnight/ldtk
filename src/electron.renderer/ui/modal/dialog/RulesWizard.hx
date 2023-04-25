@@ -753,13 +753,13 @@ class RulesWizard extends ui.modal.Dialog {
 		rd.outOfBoundsValue = mainValue;
 
 		// Break on match flag
-		// var opaque = true;
-		// for(tid in rd.tileIds)
-		// 	if( !td.isTileOpaque(tid) ) {
-		// 		opaque = false;
-		// 		break;
-		// 	}
-		// rd.breakOnMatch = opaque;
+		var opaque = true;
+		for(tid in rd.tileIds)
+			if( !td.isTileOpaque(tid) ) {
+				opaque = false;
+				break;
+			}
+		rd.breakOnMatch = opaque;
 
 		// Update flip X/Y flags
 		for(e in _allFragmentEnums)
