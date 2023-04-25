@@ -79,7 +79,6 @@ class EditTableDefs extends ui.modal.Panel {
 	}
 
 	function selectTable (sheet:cdb.Sheet) {
-		trace(sheet);
 		curSheet = sheet;
 		updateTableList();
 		updateTableForm();
@@ -88,8 +87,8 @@ class EditTableDefs extends ui.modal.Panel {
 		jTabEditor.empty();
 
 		if (tabulatorView) {
-			var data = sheet.lines;
-			var columns = sheet.columns.map(function(x) return {title: x.name, field: x.name, editor: true});
+			var data = createData(project, sheet);
+			var columns = createColumns(sheet.columns);
 
 			jContent.find("#tableEditor").append("<div id=tabulator></div>");
 			tabulator = new Tabulator("#tabulator", {
