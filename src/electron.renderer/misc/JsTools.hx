@@ -1029,6 +1029,7 @@ class JsTools {
 
 				var tp = new ui.Tileset(m.jContent, td, selectMode);
 				tp.setSelectedTileIds(tileIds);
+				tp.onClickOutOfBounds = m.close;
 				if( selectMode==PickAndClose )
 					tp.onSelectAnything = ()->{
 						onPick([ tp.getSelectedTileIds()[0] ]);
