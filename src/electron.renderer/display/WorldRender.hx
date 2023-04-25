@@ -777,7 +777,7 @@ class WorldRender extends dn.Process {
 		col.scaleY = l.pxHei;
 
 		// Bg image
-		l.createBgBitmap(wl.bgWrapper);
+		l.createBgTiledTexture(wl.bgWrapper);
 
 		// Per-coord limit
 		var doneCoords = new Map();

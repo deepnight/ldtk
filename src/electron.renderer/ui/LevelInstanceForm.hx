@@ -301,6 +301,7 @@ class LevelInstanceForm {
 					case Contain: Lang.t._("Fit inside (keep aspect ratio)");
 					case Cover: Lang.t._("Cover level (keep aspect ratio)");
 					case CoverDirty: Lang.t._("Cover (dirty scaling)");
+					case Repeat: Lang.t._("Repeat");
 				});
 			}
 			jSelect.val( level.bgPos.getName() );
