@@ -62,6 +62,7 @@ Just press `TAB` to switch between **normal** and **compact** UI modes. The rewo
 
 ## Other changes
 
+ - Added "Repeat" option for level background images (thanks to [Lojemiru pull request](https://github.com/deepnight/ldtk/pull/853))
  - Added "Display scale" option to all custom fields
  - Added support for CastleDB icons import.
  - Enum tiles can now be any rectangle from the tileset.
