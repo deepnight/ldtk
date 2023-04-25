@@ -7218,6 +7218,10 @@ dl.form.fieldInstanceEditor {
 			overflow: hidden;
 			ul {
 				overflow: auto;
+				li .name {
+					overflow-x: hidden;
+					width: 100%;
+				}
 				li.missing {
 					background-color: $darkRed;
 				}
@@ -7353,6 +7357,10 @@ dl.form.fieldInstanceEditor {
 	.mainList {
 		ul li {
 			grid-template-columns: min-content auto min-content;
+			.name {
+				width: 100%;
+				overflow-x: hidden;
+			}
 
 			&.hidden {
 				&:not(.active) {
@@ -9101,7 +9109,8 @@ $patternSize : 32px;
 				li:not(.subList):not(.title) {
 					grid-template-columns: min-content auto min-content;
 					.name {
-						overflow: hidden;
+						overflow-x: hidden;
+						width: 100%;
 					}
 				}
 			}
