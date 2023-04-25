@@ -30,6 +30,7 @@ class Editor extends Page {
 	public var project : data.Project;
 	public var curWorldIid : String;
 	public var curLevelId : Int;
+	public var db : cdb.Database;
 	var curLayerDefUid : Int;
 
 	// Tools
@@ -87,6 +88,9 @@ class Editor extends Page {
 
 		watcher = new misc.FileWatcher();
 
+		db = new cdb.Database();
+		loadCastleDB(db, p);
+
 		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();
 		camera = new display.Camera();
@@ -100,9 +104,11 @@ class Editor extends Page {
 		cursor = new ui.Cursor();
 		root.add(cursor.root, Const.DP_UI);
 
+
 		showCanvas();
 		initUI();
 		updateCanvasSize();
+
 
 		settings.v.showDetails = true;
 
@@ -160,6 +166,14 @@ class Editor extends Page {
 
 	public static inline function exists() {
 		return ME!=null && !ME.destroyed;
+	}
+
+	function loadCastleDB(database:cdb.Database, project:data.Project) {
+        var dbPath = project.getAbsExternalFilesDir() + "/castle.cdb";
+		if (NT.fileExists(dbPath)) {
+			var json = NT.readFileString(dbPath);
+			database.load(json);
+		}
 	}
 
 	function initUI() {
