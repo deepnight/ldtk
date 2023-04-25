@@ -313,7 +313,6 @@ class RulesWizard extends ui.modal.Dialog {
 
 	function updateTileset() {
 		tileset.renderAtlas();
-		tileset.renderGrid();
 	}
 
 	function updateGrid() {

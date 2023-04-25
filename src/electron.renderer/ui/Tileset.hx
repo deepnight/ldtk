@@ -118,7 +118,7 @@ class Tileset {
 
 			// Outline color
 			var c = tilesetDef.getAverageTileColor(tileId);
-			var a = C.getA(c)>0 ? 1 : 0;
+			var a = C.getA(c)>0 ? 0.5 : 0;
 			ctx.strokeStyle =
 				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
 
@@ -539,7 +539,7 @@ class Tileset {
 	function modifySelection(selIds:Array<Int>, add:Bool) {
 		if( isClosed() )
 			return;
-		
+
 		switch selectMode {
 			case None:
 
