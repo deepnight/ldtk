@@ -5,6 +5,7 @@ import dn.data.GetText.LocaleString;
 typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {
 	var label : LocaleString;
+	var ?icon : String;
 	var ?sub : Null<LocaleString>;
 	var ?className : String;
 	var cb : Void->Void;
@@ -133,7 +134,11 @@ class ContextMenu extends ui.Modal {
 		if( a.show!=null && !a.show() )
 			return jButton;
 		jButton.appendTo(jContent);
-		jButton.html(a.label);
+		if( a.icon!=null )
+			jButton.prepend('<span class="icon ${a.icon}"></span> ${a.label}');
+		else
+			jButton.html(a.label);
+
 		if( a.sub!=null && a.sub!=a.label )
 			jButton.append('<span class="sub">${a.sub}</span>');
 

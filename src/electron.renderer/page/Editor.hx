@@ -2396,12 +2396,12 @@ class Editor extends Page {
 			});
 
 			// Rules button
-			var rules = jLayer.find(".rules");
+			var jRules = jLayer.find(".rules");
 			if( li.def.isAutoLayer() )
-				rules.show();
+				jRules.show();
 			else
-				rules.hide();
-			rules.click( function(ev:js.jquery.Event) {
+				jRules.hide();
+			jRules.click( function(ev:js.jquery.Event) {
 				if( ui.Modal.closeAll() )
 					return;
 				ev.preventDefault();
@@ -2411,12 +2411,12 @@ class Editor extends Page {
 			});
 
 			// Visibility button
-			var vis = jLayer.find(".vis");
-			vis.mouseover( (_)->{
+			var jVis = jLayer.find(".vis");
+			jVis.mouseover( (_)->{
 				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
 			});
-			vis.mousedown( (ev:js.jquery.Event)->{
+			jVis.mousedown( (ev:js.jquery.Event)->{
 				if( App.ME.isShiftDown() ) {
 					// Keep only this one
 					var anyChange = !levelRender.isLayerVisible(li);
@@ -2443,15 +2443,27 @@ class Editor extends Page {
 
 			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
 				{
-					label: L.t._("Show/hide in list"),
-					cb: ()->{
-						selectLayerInstance(li);
-						ld.hideInList = !ld.hideInList;
-						ge.emit(LayerDefChanged(ld.uid));
-					},
+					label: L.t._("Toggle visibility"),
+					icon: "visible",
+					cb: ()->jVis.mousedown(),
 				},
 				{
+					label: L.t._("Edit rules"),
+					icon: "rule",
+					cb: ()->jRules.click(),
+					show: ()->li.def.isAutoLayer(),
+				},
+				// {
+				// 	label: L.t._("Show/hide in list"),
+				// 	cb: ()->{
+				// 		selectLayerInstance(li);
+				// 		ld.hideInList = !ld.hideInList;
+				// 		ge.emit(LayerDefChanged(ld.uid));
+				// 	},
+				// },
+				{
 					label: L.t._("Edit layer settings"),
+					icon: "edit",
 					cb: ()->{
 						selectLayerInstance(li);
 						new ui.modal.panel.EditLayerDefs();

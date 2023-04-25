@@ -18,7 +18,7 @@ $helpDark: #3c6148;
 $helpDarker: #273f2f;
 $editingOptionsY: 46px;
 $mainPanelNormalWid: 300px;
-$mainPanelCompactWid: 130px;
+$mainPanelCompactWid: 80px;
 $backupBg: #6594ff;
 $tagMed: #a17250;
 $tagLight: #c5926d;
@@ -3493,6 +3493,12 @@ textarea {
 				strong {
 					color: $orangeLight;
 				}
+				.icon {
+					opacity: 0.5;
+					width: 1.2em;
+					height: 1.2em;
+					margin-right: 0.5em;
+				}
 				.sub {
 					display: block;
 					margin-top: 2px;
@@ -5037,7 +5043,7 @@ canvas#webgl {
 	&.compactPanel {
 
 		.notCompact {
-			display: none;
+			display: none !important;
 		}
 
 		.onlyCompact{
@@ -5051,25 +5057,34 @@ canvas#webgl {
 			#mainBar {
 				.buttons {
 					display: grid;
-					grid-template-columns: repeat(5, 20%);
-					grid-template-rows: repeat(2, 30px);
+					grid-template-columns: repeat(3, 1fr);
+					grid-template-rows: repeat(4, min-content);
+					border-radius: 0;
 					button {
 						z-index: 1; // fix box-shadow depth
 						margin: 0px;
+						box-shadow: none !important;
 					}
 					button.showHelp {
-						grid-row: 1/2;
-						grid-column: 3/4;
+						grid-column: 1/4;
+						grid-row: 4/5;
 						z-index: 0;
+						padding-top: 2px;
+						padding-bottom: 2px;
 					}
 					button.settings {
-						grid-row: 1/2;
-						grid-column: 4/5;
+						grid-column: 3/4;
+						grid-row: 3/4;
+						z-index: 0;
+					}
+					button.editProject {
+						grid-column: 3/4;
+						grid-row: 2/3;
 						z-index: 0;
 					}
 					button.close {
+						grid-column: 3/4;
 						grid-row: 1/2;
-						grid-column: 5/6;
 						z-index: 0;
 					}
 					.icon {
@@ -5085,25 +5100,8 @@ canvas#webgl {
 
 			ul#layers li {
 				grid-template-columns: min-content auto min-content;
-				.layerIcon,
-				.index {
-					display: none;
-				}
 				.name {
 					font-size: 8pt;
-				}
-				.actions {
-					.vis {
-						font-size: 8pt;
-					}
-					a {
-						padding: 2px;
-						font-size: 7pt;
-						text-transform: none;
-						&:hover .icon {
-							filter: brightness(0);
-						}
-					}
 				}
 			}
 

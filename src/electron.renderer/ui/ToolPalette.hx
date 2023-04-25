@@ -54,7 +54,7 @@ class ToolPalette {
 	}
 
 	function makeBgInactiveColor(c:Int) : String {
-		return C.intToHex( C.interpolateInt( c, 0x313843, 0.92 ) );
+		return C.intToHex( C.interpolateInt( c, 0x313843, 0.72 ) );
 	}
 
 	function makeTextInactiveColor(c:Int) : String {

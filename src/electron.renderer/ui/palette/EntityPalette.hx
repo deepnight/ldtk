@@ -46,6 +46,7 @@ class EntityPalette extends ui.ToolPalette {
 				jLi.attr("data-y", Std.string(y));
 				jLi.addClass("entity");
 				jLi.css( "border-color", C.intToHex(ed.color) );
+				jLi.css("background-color", dn.Col.fromInt(ed.color).toCssRgba(0.4));
 
 				if( ed.doc!=null ) {
 					jLi.attr("tip", "right");
@@ -63,13 +64,24 @@ class EntityPalette extends ui.ToolPalette {
 				}
 
 				// Preview and label
-				jLi.append( JsTools.createEntityPreview(Editor.ME.project, ed) );
+				var jPreview = JsTools.createEntityPreview(Editor.ME.project, ed);
+				jPreview.addClass("notCompact");
+				jLi.append(jPreview);
 				jLi.append(ed.identifier);
 
 				jLi.click( function(_) {
 					tool.selectValue(ed.uid);
 					render();
 				});
+
+				var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+					{
+						 label: L.t._("Edit entity definition"),
+						 cb: ()->new ui.modal.panel.EditEntityDefs(ed),
+					},
+				];
+				ui.modal.ContextMenu.addTo(jLi, false, actions);
+
 				y++;
 			}
 
