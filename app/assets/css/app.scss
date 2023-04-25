@@ -1448,24 +1448,33 @@ div.entityRef {
 		}
 
 		label {
+			position: relative;
 			display: grid;
 			align-items: center;
 			justify-items: center;
 			cursor: pointer;
+			border-radius: 16px;
 		}
-		label:hover {
-			outline: 1px dotted $orange;
-			outline-offset: -1px;
+		label:hover input:not(:checked) {
+			background-color: $bgLighter;
+			border-color: $orange;
 		}
 		label input[type=radio] {
-			width: 70%;
-			height: 70%;
-			opacity: 0.5;
+			width: 13px;
+			height: 13px;
+			margin: 0;
+			border-radius: 16px;
+			appearance: none;
+			border: 1px solid $bgLighter;
+			background-color: $bgLight;
 			cursor: pointer;
 		}
 		label input[type=radio]:checked {
 			width: 100%;
 			height: 100%;
+			background-color: $orange;
+			border: 1px solid $orangeLight;
+			box-shadow: 0px 0px 8px $darkOrange;
 			opacity: 1;
 		}
 	}
