@@ -754,6 +754,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function updateRule(r:data.def.AutoLayerRuleDef) {
+		if( isClosing() )
+			return;
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
