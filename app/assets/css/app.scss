@@ -5101,13 +5101,19 @@ canvas#webgl {
 			ul#layers li {
 				grid-template-columns: min-content auto min-content;
 				.name {
-					font-size: 8pt;
+					padding: 5px 0px;
+					font-family: Roboto;
+					font-size: 10pt;
+					font-weight: bold;
 				}
 			}
 
 			ul.niceList li {
-				padding: 4px 2px;
+				padding: 4px 2px !important;
 				gap: 4px;
+				&.collapser {
+					background-image: none;
+				}
 			}
 
 			h2#levelName {
@@ -5120,7 +5126,7 @@ canvas#webgl {
 			.niceList li,
 			.intGridValues li {
 				font-size: 9.5pt;
-				border-left-width: 2px;
+				border-left-width: 1px;
 			}
 		}
 
