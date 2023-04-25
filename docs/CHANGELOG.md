@@ -52,6 +52,14 @@ Please note that, to restore a backup, you should use LDtk and not copy files by
 Tags are not behaving like "folders" and can now be open/closed accordingly in UI.
 
 
+
+## Better compact mode
+
+![](1.3.0/compactMode.png)
+
+Just press `TAB` to switch between **normal** and **compact** UI modes. The reworked compact mode is now even more... well.. compact.
+
+
 ## Other changes
 
  - Added "Display scale" option to all custom fields
