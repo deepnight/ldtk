@@ -131,10 +131,10 @@ class SelectPicker extends ui.modal.Dialog {
 
 		// Search entered
 		jSearch.on( "input", _->{
-			var s = StringTools.trim( Std.string( jSearch.val() ).toLowerCase() );
+			var rawSearch = JsTools.cleanUpSearchString(jSearch.val());
 			jAllValues.each( (i,e)->{
 				var jValue = new J(e);
-				if( s.length==0 || jValue.attr("search").indexOf(s)>=0 )
+				if( rawSearch.length==0 || JsTools.searchStringMatches(rawSearch, jValue.attr("search")) )
 					jValue.show();
 				else
 					jValue.hide();

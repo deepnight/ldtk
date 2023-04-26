@@ -1224,32 +1224,90 @@ class JsTools {
 	}
 
 
+	public static inline function cleanUpSearchString(v:String) {
+		return v==null ? "" : StringTools.trim( v.toLowerCase() );
+	}
+
+	public static function searchStringMatches(searchQuery:String, target:String) {
+		searchQuery = cleanUpSearchString(searchQuery);
+		target = cleanUpSearchString(target);
+		var si = 0;
+		var ti = 0;
+		trace(searchQuery+" VS "+target);
+		while( si<searchQuery.length ) {
+			if( searchQuery.charCodeAt(si)==target.charCodeAt(ti)) {
+				si++;
+				ti++;
+			}
+			else {
+				ti++;
+				if( ti>=target.length )
+					return false;
+			}
+		}
+		return true;
+	}
+
 	public static function createQuickSearch(jList:js.jquery.JQuery) {
 		var jWrapper = new J('<div class="quickSearch"></div>');
+
 		var jClear = new J('<span class="icon clear"></span>');
 		jClear.appendTo(jWrapper);
+		jClear.hide();
+
 		var jSearch = new J('<input type="text" class="quickSearch"/>');
 		jSearch.appendTo(jWrapper);
 		jSearch.attr("placeholder", "Search...");
-		// jSearch.keydown( (ev:js.jquery.Event)->{
-		// });
-		jSearch.on("input", (ev:js.jquery.Event)->{
-			var search = StringTools.trim( jSearch.val().toLowerCase() );
-			jList.find("li:not(.collapser, .subList)").each( (i,e)->{
-				var jLi = new J(e);
-				var cur = StringTools.trim( jLi.text().toLowerCase() );
-				jLi.removeClass("searchMatched searchDiscarded");
-				if( search.length<=0 )
-					return;
 
-				if( cur.indexOf(search)>=0 )
+		// Apply search filter
+		function _runSearch(?valOverride:String) {
+			if( valOverride!=null )
+				jSearch.val(valOverride);
+
+			// Show/hide matches
+			jList.find("li:not(.subList)").each( (i,e)->{
+				var jLi = new J(e);
+				var jSubListParent = jLi.closest(".subList");
+				var rawSearch = cleanUpSearchString( jSearch.val() );
+
+				// Reset
+				jLi.removeClass("searchMatched searchDiscarded");
+				jSubListParent.removeClass("searchDiscarded");
+				if( rawSearch.length<=0 ) {
+					jClear.hide();
+					return;
+				}
+				jClear.show();
+
+				// Always hide collapsers
+				if( jLi.hasClass("collapser") ) {
+					jLi.addClass("searchDiscarded");
+					return;
+				}
+
+				// Show/hide elements
+				if( searchStringMatches(jSearch.val(), jLi.text()) )
 					jLi.addClass("searchMatched");
 				else
 					jLi.addClass("searchDiscarded");
+
+				// Check for empty sub lists
+				if( jSubListParent.length>0 && jSubListParent.has("li:visible").length==0 )
+					jSubListParent.addClass("searchDiscarded");
 			});
+		}
+
+		jSearch.keydown( (ev:js.jquery.Event)->{
+			switch ev.key {
+				case "Escape": _runSearch("");
+				case _:
+			}
 		});
 
-		return jSearch;
+		jSearch.on("input", _->_runSearch());
+		jClear.click( _->_runSearch(""));
+
+		return jWrapper;
 	}
 
 

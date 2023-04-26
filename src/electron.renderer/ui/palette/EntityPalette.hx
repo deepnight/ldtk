@@ -16,6 +16,8 @@ class EntityPalette extends ui.ToolPalette {
 		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);
 
+		JsTools.createQuickSearch(jList).prependTo(jContent);
+
 		var ld = Editor.ME.curLayerDef;
 		allTagGroups = project.defs.groupUsingTags(
 			project.defs.entities,
