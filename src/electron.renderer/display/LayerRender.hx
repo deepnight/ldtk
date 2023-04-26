@@ -33,7 +33,7 @@ class LayerRender {
 			er.onGlobalEvent(ev);
 
 		switch( ev ) {
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 				updateParallax();
 
 			case LayerDefChanged(defUid):
@@ -231,7 +231,7 @@ class LayerRender {
 		tex.clear( l.getBgColor() );
 
 		if( l.bgRelPath!=null ) {
-			var bmp = l.createBgBitmap();
+			var bmp = l.createBgTiledTexture();
 			bmp.drawTo(tex);
 		}
 	}

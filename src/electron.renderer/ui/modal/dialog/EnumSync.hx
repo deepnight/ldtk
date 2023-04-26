@@ -12,40 +12,6 @@ class EnumSync extends ui.modal.Dialog {
 		loadTemplate("sync");
 		jContent.find("h2 .file").text( fileName );
 
-		// Warning
-		// jContent.find(".warning").hide();
-		// for(op in ops)
-		// 	switch op.type {
-		// 		case AddEnum(_):
-		// 		case AddValue(val):
-		// 		case DateUpdated:
-		// 		case Special:
-		// 		case RemoveEnum(used), RemoveValue(_,used):
-		// 			if( used )
-		// 				jContent.find(".warning").show();
-		// 	}
-
-		// Hide safe notice
-		// if( jContent.find(".warning").is(":visible") )
-		// 	jContent.find(".safe").hide();
-
-		// Group ops by enums
-		// var enumIds = [];
-		// var changedEnums = new Map();
-		// var renameEnums = [];
-		// for(op in ops) {
-		// 	switch op.type {
-		// 		case AddEnum(values): renameEnums.push(op.enumId);
-		// 		case _:
-		// 	}
-
-		// 	if( !changedEnums.exists(op.enumId) ) {
-		// 		changedEnums.set(op.enumId, true);
-		// 		enumIds.push(op.enumId);
-		// 	}
-		// }
-
-
 		// List possible "enum renaming" targets
 		var enumRenameTargets = [];
 		for(eDiff in diff)

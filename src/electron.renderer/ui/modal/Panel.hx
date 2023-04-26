@@ -65,11 +65,21 @@ class Panel extends ui.Modal {
 	override function onResize() {
 		super.onResize();
 		var jBar = editor.jMainPanel.find("#mainBar");
-		var y = jBar.offset().top + jBar.outerHeight() - 6;
-		jWrapper.css({
-			top: y+"px",
-			height: 'calc( 100vh - ${y}px )',
-		});
+		if( settings.v.compactMode ) {
+			jWrapper.css({
+				top: "0px",
+				left: jBar.outerWidth()+"px",
+				height: '100vh',
+			});
+		}
+		else {
+			var y = jBar.offset().top + jBar.outerHeight() - 6;
+			jWrapper.css({
+				top: y+"px",
+				left: "0px",
+				height: 'calc( 100vh - ${y}px )',
+			});
+		}
 	}
 
 	function insertCloseButton() {

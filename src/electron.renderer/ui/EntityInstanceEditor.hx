@@ -116,7 +116,7 @@ class EntityInstanceEditor extends dn.Process {
 			case LayerInstanceSelected:
 				closeExisting();
 
-			case ViewportChanged :
+			case ViewportChanged(zoomChanged) :
 				renderLink();
 
 			case LevelSelected(level):

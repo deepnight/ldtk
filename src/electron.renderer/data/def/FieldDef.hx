@@ -18,6 +18,7 @@ class FieldDef {
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
+	public var editorDisplayScale : Float;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
 	public var editorShowInWorld : Bool;
@@ -43,6 +44,7 @@ class FieldDef {
 	public var autoChainRef : Bool;
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
+	public var allowedRefsEntityUid : Null<Int>;
 	public var allowedRefTags : Tags;
 	public var tilesetUid : Null<Int>;
 
@@ -134,6 +136,7 @@ class FieldDef {
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayScale = JsonTools.readFloat(json.editorDisplayScale, 1);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.type {
 			case F_EntityRef: CurvedArrow;
@@ -153,6 +156,7 @@ class FieldDef {
 		o.autoChainRef = JsonTools.readBool(json.autoChainRef, true);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
+		o.allowedRefsEntityUid = JsonTools.readNullableInt(json.allowedRefsEntityUid);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
 		o.tilesetUid = JsonTools.readNullableInt(json.tilesetUid);
 
@@ -176,6 +180,7 @@ class FieldDef {
 			arrayMinLength: arrayMinLength,
 			arrayMaxLength: arrayMaxLength,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
+			editorDisplayScale: JsonTools.writeFloat(editorDisplayScale),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
 			editorAlwaysShow: editorAlwaysShow,
@@ -194,6 +199,7 @@ class FieldDef {
 			autoChainRef: autoChainRef,
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
+			allowedRefsEntityUid: allowedRefsEntityUid,
 			allowedRefTags: allowedRefTags.toJson(),
 			tilesetUid: tilesetUid,
 		}
@@ -573,6 +579,7 @@ class FieldDef {
 			case Any: true;
 			case OnlySame: sourceEi.defUid==targetEd.uid;
 			case OnlyTags: targetEd.tags.hasAnyTagFoundIn(allowedRefTags);
+			case OnlySpecificEntity: targetEd.uid==allowedRefsEntityUid;
 		}
 	}
 

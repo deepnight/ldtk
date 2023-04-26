@@ -29,29 +29,27 @@ class Definitions {
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.DefinitionsJson) {
-		var d = new Definitions(p);
+		p.defs = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( data.def.LayerDef.fromJson(p, p.jsonVersion, layerJson) );
+			p.defs.layers.push( data.def.LayerDef.fromJson(p, p.jsonVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
-			d.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
+			p.defs.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
+			p.defs.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
-			d.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
+			p.defs.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
-				d.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
+				p.defs.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
-				d.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
-
-		return d;
+				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
 	}
 
 	public function tidy(p:Project) {
@@ -467,6 +465,14 @@ class Definitions {
 				return efd;
 
 		return null;
+	}
+
+
+	public function isLevelField(fd:data.def.FieldDef) {
+		for(lfd in levelFields)
+			if( lfd.uid==fd.uid )
+				return true;
+		return false;
 	}
 
 

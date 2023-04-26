@@ -258,13 +258,14 @@ class GenericLevelElementGroup {
 
 							case Tiles:
 								var td = li.getTilesetDef();
-								for( t in li.getGridTileStack(cx,cy) ) {
-									var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
-									bmp.x = li.pxParallaxX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.scaledGridSize - bounds.left;
-									bmp.y = li.pxParallaxY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.scaledGridSize - bounds.top;
-									bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
-									bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
-								}
+								if( td!=null && td.isAtlasLoaded() )
+									for( t in li.getGridTileStack(cx,cy) ) {
+										var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
+										bmp.x = li.pxParallaxX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.scaledGridSize - bounds.left;
+										bmp.y = li.pxParallaxY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.scaledGridSize - bounds.top;
+										bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
+										bmp.scaleY = M.hasBit(t.flips, 1) ? -1 : 1;
+									}
 
 							case Entities:
 							case AutoLayer:
@@ -477,7 +478,8 @@ class GenericLevelElementGroup {
 							case RefLinkBetweenCenters: continue;
 							case RefLinkBetweenPivots: continue;
 							case Points: continue;
-							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, EntityTile, RadiusPx, RadiusGrid: continue;
+							case EntityTile, LevelTile: continue;
+							case Hidden, ValueOnly, NameAndValue, ArrayCountNoLabel, ArrayCountWithLabel, RadiusPx, RadiusGrid: continue;
 						}
 
 						// Links to Entity own field points

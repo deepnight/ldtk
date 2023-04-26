@@ -209,16 +209,6 @@ class JsTools {
 		return icon;
 	}
 
-	public static function createTile(td:data.def.TilesetDef, tileId:Int, size:Int) {
-		var jCanvas = new J('<canvas></canvas>');
-		jCanvas.attr("width",td.tileGridSize);
-		jCanvas.attr("height",td.tileGridSize);
-		jCanvas.css("width", size+"px");
-		jCanvas.css("height", size+"px");
-		td.drawTileToCanvas(jCanvas, tileId);
-		return jCanvas;
-	}
-
 
 	public static function createEntityPreview(project:data.Project, ed:data.def.EntityDef, sizePx=24) {
 		var jWrapper = new J('<div class="entityPreview icon"></div>');
@@ -523,7 +513,7 @@ class JsTools {
 	}
 
 
-	public static function parseComponents(jCtx:js.jquery.JQuery) {
+	public static function parseComponents(jCtx:js.jquery.JQuery) : Void {
 		// Info bubbles: (i) and (!)
 		jCtx.find(".info, info, warning").each( function(idx, e) {
 			var jThis = new J(e);
@@ -611,12 +601,12 @@ class JsTools {
 		// Auto tool-tips
 		jCtx.find("[title]:not([noTip]), [data-title]").each( function(idx,e) {
 			var jThis = new J(e);
-			var tipStr = jThis.attr("data-title");
-			if( tipStr==null ) {
-				tipStr =  jThis.attr("title");
+			if( jThis.attr("title")!=null ) {
+				var str =  jThis.attr("title");
 				jThis.removeAttr("title");
-				jThis.attr("data-title", tipStr);
+				jThis.attr("data-title", str);
 			}
+			var tipStr = jThis.attr("data-title");
 
 			// Parse key shortcut
 			var keys = [];
@@ -676,7 +666,7 @@ class JsTools {
 
 
 		// Collapser
-		jCtx.find(".collapser").each( (idx,e)->{
+		jCtx.find(".collapser:visible").each( (idx,e)->{
 			var jCollapser = new J(e);
 			var tid = jCollapser.attr("target");
 			var jTarget = tid!=null ? App.ME.jBody.find("#"+tid) : jCollapser.next();
@@ -702,6 +692,7 @@ class JsTools {
 				// Init from memory
 				if( App.ME.settings.getUiStateBool(uiStateId)==true ) {
 					jTarget.show();
+					parseComponents(jTarget);
 					jCollapser.addClass("expanded");
 				}
 				else {
@@ -713,6 +704,7 @@ class JsTools {
 			else if( customDefault==true ) {
 				// Use provided default
 				jTarget.show();
+				parseComponents(jTarget);
 				jCollapser.addClass("expanded");
 			}
 			else {
@@ -739,9 +731,63 @@ class JsTools {
 						jCollapser.addClass("expanded");
 						jTarget.slideDown(30, ()->dn.Process.resizeAll(false));
 						jTarget.show();
+						parseComponents(jTarget);
 						dn.Process.resizeAll(false);
 					}
 				});
+		});
+
+		// Advanced Selects
+		jCtx.find(".advancedSelect").remove();
+		jCtx.find("select.advanced:visible").each( (idx,e)->{
+			var jOldSelect = new J(e);
+
+			// Create advanced select & options
+			var jSelect = new J('<div class="advancedSelect"/>');
+			var classes = try (~/\s/).split( jOldSelect.attr("class") ) catch(_) [];
+			for(c in classes)
+				if( c!="advanced" )
+					jSelect.addClass(c);
+			jSelect.insertBefore(jOldSelect);
+			jSelect.append('<span class="expand icon expanded"></span>');
+			var hasImages = jOldSelect.find("[tile]").length>0;
+			for(elem in jOldSelect.children("option")) {
+				var jOldOpt = new J(elem);
+				var jOpt = new J('<div class="option"/>');
+				jSelect.append(jOpt);
+				jOpt.attr("value", jOldOpt.attr("value"));
+				jOpt.text( jOldOpt.text() );
+
+				// Background color
+				if( jOldOpt.is("[color]") ) {
+					var c = dn.Col.parseHex( jOldOpt.attr("color") );
+					jOpt.css("background-color", c.toCssRgba(0.3));
+				}
+
+				// Selected value
+				if( jOldSelect.val()==jOldOpt.attr("value") )
+					jOpt.addClass("selected");
+
+				// Icon
+				if( jOldOpt.attr("tile")!=null ) {
+					var r : ldtk.Json.TilesetRect = haxe.Json.parse(jOldOpt.attr("tile"));
+					var td = try Editor.ME.project.defs.getTilesetDef(r.tilesetUid) catch(_) null;
+					if( td!=null ) {
+						var img = td.getTileHtmlImg(r);
+						jOpt.prepend(img);
+					}
+				}
+				else if( hasImages )
+					jOpt.prepend('<div class="placeholder"></div>');
+			}
+
+			// Open select
+			jSelect.click(_->{
+				var uiStateId : Null<Settings.UiState> = cast jOldSelect.attr("id");
+				new ui.modal.dialog.SelectPicker(jSelect, uiStateId, v->{
+					jOldSelect.val(v).change();
+				});
+			});
 		});
 	}
 
@@ -874,7 +920,7 @@ class JsTools {
 	public static function makeLocateLink(filePath:Null<String>, isFile:Bool) {
 		var a = new J('<a class="exploreTo"/>');
 		a.append('<span class="icon"/>');
-		a.find(".icon").addClass( isFile ? "locate" : "folder" );
+		a.find(".icon").addClass("locate");
 		a.click( function(ev) {
 			ev.preventDefault();
 			ev.stopPropagation();
@@ -983,6 +1029,7 @@ class JsTools {
 
 				var tp = new ui.Tileset(m.jContent, td, selectMode);
 				tp.setSelectedTileIds(tileIds);
+				tp.onClickOutOfBounds = m.close;
 				if( selectMode==PickAndClose )
 					tp.onSelectAnything = ()->{
 						onPick([ tp.getSelectedTileIds()[0] ]);
@@ -1008,12 +1055,15 @@ class JsTools {
 	public static function createTileRectPicker(
 		tilesetId: Null<Int>,
 		cur: Null<ldtk.Json.TilesetRect>,
+		active=true,
 		onPick: (Null<ldtk.Json.TilesetRect>)->Void
 	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
-			jTileCanvas.addClass("active");
+			if( active )
+				jTileCanvas.addClass("active");
+
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
 
 			if( cur==null ) {
@@ -1031,19 +1081,20 @@ class JsTools {
 			}
 
 			// Open picker
-			jTileCanvas.click( function(ev) {
-				var m = new ui.Modal();
-				m.addClass("singleTilePicker");
+			if( active )
+				jTileCanvas.click( function(ev) {
+					var m = new ui.Modal();
+					m.addClass("singleTilePicker");
 
-				var tp = new ui.Tileset(m.jContent, td, RectOnly);
-				tp.useSavedSelections = false;
-				tp.setSelectedRect(cur);
-				tp.onSelectAnything = ()->{
-					onPick( tp.getSelectedRect() );
-					m.close();
-				}
-				tp.focusOnSelection(true);
-			});
+					var tp = new ui.Tileset(m.jContent, td, RectOnly);
+					tp.useSavedSelections = false;
+					tp.setSelectedRect(cur);
+					tp.onSelectAnything = ()->{
+						onPick( tp.getSelectedRect() );
+						m.close();
+					}
+					tp.focusOnSelection(true);
+				});
 		}
 		else {
 			// Invalid tileset
@@ -1172,6 +1223,34 @@ class JsTools {
 		return jWrapper;
 	}
 
+
+	public static inline function cleanUpSearchString(v:String) {
+		return v==null ? "" : StringTools.trim( v.toLowerCase() );
+	}
+
+
+	public static function searchStringMatches(searchQuery:String, target:String, softMatching=true) {
+		searchQuery = cleanUpSearchString(searchQuery);
+		target = cleanUpSearchString(target);
+		if( softMatching ) {
+			var si = 0;
+			var ti = 0;
+			while( si<searchQuery.length ) {
+				if( searchQuery.charCodeAt(si)==target.charCodeAt(ti)) {
+					si++;
+					ti++;
+				}
+				else {
+					ti++;
+					if( ti>=target.length )
+						return false;
+				}
+			}
+			return true;
+		}
+		else
+			return target.indexOf(searchQuery)>=0;
+	}
 
 
 	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {

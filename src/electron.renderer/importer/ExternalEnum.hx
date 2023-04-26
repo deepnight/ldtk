@@ -1,6 +1,9 @@
 package importer;
 
 class ExternalEnum {
+	var sourceFp : dn.FilePath;
+	var supportsIcons = false;
+	var supportsColors = false;
 
 	public static function sync(relPath:String) {
 		var ext = dn.FilePath.extractExtension(relPath,true);
@@ -37,6 +40,7 @@ class ExternalEnum {
 		else
 			App.LOG.add("import", 'Importing external enums (new file): $relPath');
 
+		sourceFp = dn.FilePath.fromFile(relPath);
 		var project = Editor.ME.project;
 		var absPath = project.makeAbsoluteFilePath(relPath);
 		var fileContent = NT.readFileString(absPath);
@@ -68,7 +72,6 @@ class ExternalEnum {
 		var parseds = parse(fileContent);
 
 		if( parseds.length>0 ) {
-
 			// Sanitize enum IDs and value IDs
 			for(pe in parseds) {
 				pe.enumId = data.Project.cleanupIdentifier(pe.enumId, project.identifierStyle);
@@ -89,11 +92,6 @@ class ExternalEnum {
 					N.error("Import failed: the file contains the Enum \""+pe.enumId+"\" which is already used in this project.");
 					return;
 				}
-			}
-
-			// Sanitize enum IDs and value IDs
-			for(pe in parseds) {
-
 			}
 
 			// Try to import/sync
@@ -174,6 +172,7 @@ class ExternalEnum {
 			if( !diff.exists(enumId) )
 				diff.set(enumId, {
 					enumId: enumId,
+					newTilesetUid: -1,
 					change: null,
 					valueDiffs: new Map(),
 				});
@@ -187,6 +186,7 @@ class ExternalEnum {
 					valueId: valueId,
 					data: {
 						color: null,
+						tileRect: null,
 					},
 					change: null, // not meant to be null in the end
 				});
@@ -197,7 +197,9 @@ class ExternalEnum {
 		if( isNew ) {
 			// Brand new source file, everything is new
 			for(pe in parseds) {
-				_getEnumDiff(pe.enumId).change = Added;
+				var eDiff = _getEnumDiff(pe.enumId);
+				eDiff.change = Added;
+				eDiff.newTilesetUid = pe.tilesetUid;
 				for(v in pe.values) {
 					var ec = _getValueDiff(pe.enumId, v.valueId);
 					ec.change = Added;
@@ -212,7 +214,9 @@ class ExternalEnum {
 				var existing = project.defs.getEnumDef(pe.enumId);
 				if( existing==null ) {
 					// New enum
-					_getEnumDiff(pe.enumId).change = Added;
+					var eDiff = _getEnumDiff(pe.enumId);
+					eDiff.change = Added;
+					eDiff.newTilesetUid = pe.tilesetUid;
 					for(v in pe.values) {
 						var ec = _getValueDiff(pe.enumId, v.valueId);
 						ec.change = Added;
@@ -220,6 +224,10 @@ class ExternalEnum {
 					}
 				}
 				else {
+					// Changed tileset UID
+					if( supportsIcons && existing.iconTilesetUid!=pe.tilesetUid )
+						_getEnumDiff(pe.enumId).newTilesetUid = pe.tilesetUid;
+
 					// New values
 					for(v in pe.values)
 						if( !existing.hasValue(v.valueId) ) {
@@ -327,6 +335,7 @@ class ExternalEnum {
 				App.LOG.add("import", 'Updated sync diff: ${_printDiff(diff)}');
 				new ui.LastChance( Lang.t._("External file \"::name::\" synced", { name:fileName }), Editor.ME.project );
 				applyDiff(diff, relSourcePath);
+				preserveEnumValuesOrder(parseds);
 				Editor.ME.invalidateAllLevelsCache();
 				copyParsedValuesData(parseds);
 				project.tidy();
@@ -341,6 +350,7 @@ class ExternalEnum {
 				// Simple case: sync operations don't affect any existing project instance
 				App.LOG.add("import", 'Sync automatically applied.');
 				applyDiff(diff, relSourcePath);
+				preserveEnumValuesOrder(parseds);
 				updateChecksums(relSourcePath, checksum);
 				if( valuesDataChanged )
 					Editor.ME.invalidateAllLevelsCache();
@@ -353,6 +363,21 @@ class ExternalEnum {
 				N.msg( fileName, L.t._("Enums are already up-to-date.") );
 				updateChecksums(relSourcePath, checksum);
 				Editor.ME.ge.emit( ExternalEnumsLoaded(false) );
+			}
+		}
+	}
+
+
+
+	function preserveEnumValuesOrder(parseds:Array<ParsedExternalEnum>) {
+		for(pe in parseds) {
+			var ed = Editor.ME.project.defs.getEnumDef(pe.enumId);
+			var i = 0;
+			for(pev in pe.values) {
+				var fromIdx = ed.getValueIndex(pev.valueId);
+				var v = ed.values.splice(fromIdx,1)[0];
+				ed.values.insert(i, v);
+				i++;
 			}
 		}
 	}
@@ -386,9 +411,44 @@ class ExternalEnum {
 					continue;
 
 				// Update value color
-				if( pv.data.color!=null && pv.data.color!=ev.color ) {
+				if( supportsColors && pv.data.color!=ev.color ) {
 					ev.color = pv.data.color;
 					anyChange = true;
+				}
+
+				if( supportsIcons ) {
+					// Lost tile
+					if( pv.data.tileRect==null && ev.tileRect!=null ) {
+						ev.tileRect = null;
+						anyChange = true;
+					}
+
+					// New tile
+					if( pv.data.tileRect!=null && ev.tileRect==null ) {
+						ev.tileRect = {
+							tilesetUid: pv.data.tileRect.tilesetUid,
+							x: pv.data.tileRect.x,
+							y: pv.data.tileRect.y,
+							w: pv.data.tileRect.w,
+							h: pv.data.tileRect.h,
+						}
+						anyChange = true;
+					}
+
+					if( pv.data.tileRect!=null && ev.tileRect!=null ) {
+						var oldT = ev.tileRect;
+						var newT = pv.data.tileRect;
+						if( oldT.x!=newT.x || oldT.y!=newT.y || oldT.w!=newT.w || oldT.h!=newT.h || oldT.tilesetUid!=newT.tilesetUid ) {
+							ev.tileRect = {
+								tilesetUid: pv.data.tileRect.tilesetUid,
+								x: pv.data.tileRect.x,
+								y: pv.data.tileRect.y,
+								w: pv.data.tileRect.w,
+								h: pv.data.tileRect.h,
+							}
+							anyChange = true;
+						}
+					}
 				}
 			}
 		}
@@ -408,10 +468,8 @@ class ExternalEnum {
 	function applyDiff(diff:Map<String,EnumSyncDiff>, relSourcePath:String) {
 		var project = Editor.ME.project;
 
-		var unsortedEnums = new Map();
 		for(eDiff in diff) {
 			switch eDiff.change {
-
 				case null:
 					// Value changes
 					var ed = project.defs.getEnumDef(eDiff.enumId);
@@ -421,14 +479,14 @@ class ExternalEnum {
 								var ev = ed.addValue(vDiff.valueId);
 								if( vDiff.data.color!=null )
 									ev.color = vDiff.data.color;
-								unsortedEnums.set(ed.identifier, true);
+								if( vDiff.data.tileRect!=null )
+									ev.tileRect = vDiff.data.tileRect;
 
 							case Removed: // Lost value
 								ed.removeValue(vDiff.valueId);
 
 							case Renamed(to): // Renamed value
 								ed.renameValue(vDiff.valueId, to);
-								unsortedEnums.set(ed.identifier, true);
 						}
 
 				case Added: // New enum
@@ -438,8 +496,9 @@ class ExternalEnum {
 						var ev = ed.addValue(v.valueId);
 						if( v.data.color!=null )
 							ev.color = v.data.color;
+						if( v.data.tileRect!=null )
+							ev.tileRect = v.data.tileRect;
 					}
-					unsortedEnums.set(ed.identifier, true);
 
 				case Removed: // Lost enum
 					var ed = project.defs.getEnumDef(eDiff.enumId);
@@ -449,12 +508,14 @@ class ExternalEnum {
 					var ed = project.defs.getEnumDef(eDiff.enumId);
 					ed.identifier = to;
 			}
-		}
 
-		// Re-sort modified enums
-		for(ed in project.defs.externalEnums)
-			if( unsortedEnums.exists(ed.identifier) )
-				ed.alphaSortValues();
+			// Update misc enumDef props
+			var ed = project.defs.getEnumDef(eDiff.enumId);
+			if( ed!=null ) {
+				if( eDiff.newTilesetUid!=-1 )
+					ed.iconTilesetUid = eDiff.newTilesetUid;
+			}
+		}
 	}
 
 }

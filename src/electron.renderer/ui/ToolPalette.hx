@@ -26,6 +26,12 @@ class ToolPalette {
 	public function focusOnSelection(immediate=false) {
 	}
 
+	public function onShow() {
+		focusOnSelection(true);
+	}
+
+	public function onHide() {}
+
 	public final function render() {
 		jContent.off().empty();
 
@@ -54,7 +60,7 @@ class ToolPalette {
 	}
 
 	function makeBgInactiveColor(c:Int) : String {
-		return C.intToHex( C.interpolateInt( c, 0x313843, 0.92 ) );
+		return C.intToHex( C.interpolateInt( c, 0x313843, 0.72 ) );
 	}
 
 	function makeTextInactiveColor(c:Int) : String {

@@ -9,6 +9,7 @@ class EnumSelect<T:EnumValue> extends form.Input<T> {
 
 		super(j, getter, setter);
 
+		jInput.addClass("advanced");
 		enumRef = e;
 
 		jInput.empty();

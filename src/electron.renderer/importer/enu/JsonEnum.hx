@@ -25,9 +25,10 @@ class JsonEnum extends importer.ExternalEnum {
 						case TClass(String):
 							parseds.push({
 								enumId: k,
+								tilesetUid: null,
 								values: arr.map( v->{
 									valueId: v,
-									data: { color:null },
+									data: { color:null, tileRect:null },
 								}),
 							});
 
@@ -40,7 +41,8 @@ class JsonEnum extends importer.ExternalEnum {
 					var values = parseValuesFromString(rawValues);
 					var parsedEnum : ParsedExternalEnum = {
 						enumId: k,
-						values: values.map( v->{ valueId:v, data:{ color:null } }),
+						tilesetUid: null,
+						values: values.map( v->{ valueId:v, data:{ color:null, tileRect:null } }),
 					}
 					parseds.push( parsedEnum );
 

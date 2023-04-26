@@ -60,7 +60,7 @@ class WorldRender extends dn.Process {
 		worldBg = {
 			wrapper : w,
 			col: new h2d.Bitmap(w),
-			tex: new dn.heaps.TiledTexture(Assets.elements.getTile("largeStripes"), 1, 1, w),
+			tex: new dn.heaps.TiledTexture(1, 1, Assets.elements.getTile("largeStripes"), w),
 		}
 		worldBg.col.colorAdd = new h3d.Vector(0,0,0,0);
 		worldBg.tex.alpha = 0.5;
@@ -137,11 +137,12 @@ class WorldRender extends dn.Process {
 					removeWorldLevel(wl.uid);
 				invalidateAll();
 
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 				root.setScale( camera.adjustedZoom );
 				root.x = M.round( camera.width*0.5 - camera.worldX * camera.adjustedZoom );
 				root.y = M.round( camera.height*0.5 - camera.worldY * camera.adjustedZoom );
-				renderGrids();
+				if( zoomChanged )
+					renderGrids();
 				updateBgColor();
 				updateAxesPos();
 				updateAllLevelIdentifiers(false);
@@ -149,7 +150,8 @@ class WorldRender extends dn.Process {
 				updateFieldsPos();
 				invalidateCameraBasedRenders();
 				for(l in curWorld.levels) {
-					getWorldLevel(l).boundsInvalidated = true;
+					if( zoomChanged )
+						getWorldLevel(l).boundsInvalidated = true;
 					updateLevelVisibility(l);
 				}
 
@@ -194,6 +196,8 @@ class WorldRender extends dn.Process {
 			case EntityFieldInstanceChanged(ei,fi):
 
 			case LevelFieldInstanceChanged(l,fi):
+				if( fi.def.type==F_Tile )
+					invalidateLevelRender(l);
 				invalidateLevelFields(l);
 
 			case FieldDefRemoved(fd):
@@ -201,6 +205,8 @@ class WorldRender extends dn.Process {
 
 			case FieldDefChanged(fd):
 				invalidateAllLevelFields();
+				if( fd.type==F_Tile && project.defs.isLevelField(fd) )
+					invalidateAllLevelRenders();
 
 			case FieldDefSorted:
 				invalidateAllLevelFields();
@@ -452,7 +458,7 @@ class WorldRender extends dn.Process {
 		if( title.visible ) {
 			var b = curWorld.getWorldBounds();
 			var w = b.right-b.left;
-			var t = project.filePath.fileName;
+			var t = project.hasFlag(MultiWorlds) ? curWorld.identifier : project.filePath.fileName;
 			title.textColor = C.toWhite(project.bgColor, 0.3);
 			title.text = t;
 			title.setScale( camera.adjustedZoom * M.fmin(8, (w/title.textWidth) * 2) );
@@ -742,8 +748,6 @@ class WorldRender extends dn.Process {
 				f.layout = Vertical;
 				f;
 			}
-		else
-			wl.fieldsRender.removeChildren();
 
 		// Attach custom fields
 		FieldInstanceRender.renderFields(
@@ -773,7 +777,7 @@ class WorldRender extends dn.Process {
 		col.scaleY = l.pxHei;
 
 		// Bg image
-		l.createBgBitmap(wl.bgWrapper);
+		l.createBgTiledTexture(wl.bgWrapper);
 
 		// Per-coord limit
 		var doneCoords = new Map();
@@ -786,7 +790,7 @@ class WorldRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
-		// Render layers
+		// Default layers renders
 		for( li in l.layerInstances ) {
 			if( li.def.type==Entities )
 				continue;
@@ -852,6 +856,13 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
+		}
+
+		// Custom tile render override
+		var t = l.getWorldTileFromFields();
+		if( t!=null ) {
+			var bmp = new h2d.Bitmap(t, wl.render);
+			bmp.setScale( dn.heaps.Scaler.bestFit_f(t.width,t.height, l.pxWid,l.pxHei) );
 		}
 
 		updateLevelBounds(l);

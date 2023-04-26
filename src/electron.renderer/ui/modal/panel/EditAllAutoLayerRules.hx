@@ -288,6 +288,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			m.add({
 				label: L.t._("Use assistant (recommended)"),
 				cb: ()->{
+					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
+						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
+						return;
+					}
 					doUseWizard();
 				},
 			});
@@ -385,6 +389,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Error in layer settings
 		if( !ld.autoLayerRulesCanBeUsed() ) {
+			jContent.find("button:not(.close), input").prop("disabled","true");
 			var jError = new J('<li> <div class="warning"/> </li>');
 			jError.appendTo(jRuleGroupList);
 			jError.find("div").append( L.t._("The current layer settings prevent its rules to work.") );
@@ -400,6 +405,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 			return;
 		}
+
+		jContent.find("button:not(.close), input").removeProp("disabled");
 
 
 		// List context menu
@@ -750,6 +757,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function updateRule(r:data.def.AutoLayerRuleDef) {
+		if( isClosing() )
+			return;
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
@@ -825,6 +834,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		else if( r.chance<=0 )
 			i.jInput.addClass("off");
 
+		// Random offsets
+		var jFlag = jRule.find("a.randomOffset");
+		jFlag.addClass( r.hasAnyPositionOffset() ? "on" : "off" );
+		jFlag.mousedown( function(ev:js.jquery.Event) {
+			ev.preventDefault();
+			var w = new ui.modal.dialog.RuleRandomOffsets(jFlag, r);
+			w.onSettingsChange = (r)->invalidateRuleAndOnesBelow(r);
+		});
+
 		// Modulos
 		var jModulo = jRule.find(".modulo");
 		jModulo.text('${r.xModulo}-${r.yModulo}');
@@ -836,6 +854,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jFlag = jRule.find("a.break");
 		jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 		jFlag.click( function(ev:js.jquery.Event) {
+			if( r.hasAnyPositionOffset() ) {
+				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
+				return;
+			}
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);
 			r.breakOnMatch = !r.breakOnMatch;

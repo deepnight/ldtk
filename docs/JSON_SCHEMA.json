@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.2.5 JSON schema",
+	"title": "LDtk 1.3.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.2.5",
+	"version": "1.3.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -24,6 +24,7 @@
 			"defaultLevelBgColor",
 			"defaultPivotX",
 			"defaultPivotY",
+			"dummyWorldIid",
 			"exportLevelBg",
 			"exportTiled",
 			"flags",
@@ -73,7 +74,7 @@
 				]
 			},
 			"worlds": {
-				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
+				"description": "This array will be empty, unless you enable the Multi-Worlds in the project advanced settings.<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - with \"Multi-worlds\" enabled, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
 				"items": {
 					"$ref": "#/otherTypes/World"
 				},
@@ -118,6 +119,12 @@
 				"description": "Default Y pivot (0 to 1) for new entities",
 				"type": [
 					"number"
+				]
+			},
+			"dummyWorldIid": {
+				"description": "If the project isn't in MultiWorlds mode, this is the IID of the internal \"dummy\" World.",
+				"type": [
+					"string"
 				]
 			},
 			"customCommands": {
@@ -354,6 +361,13 @@
 				"description": "If TRUE, the exported PNGs will include the level background (color or image).",
 				"type": [
 					"boolean"
+				]
+			},
+			"backupRelPath": {
+				"description": "Target relative path to store backup files",
+				"type": [
+					"string",
+					"null"
 				]
 			}
 		},
@@ -713,6 +727,12 @@
 				"size",
 				"tileIds",
 				"tileMode",
+				"tileRandomXMax",
+				"tileRandomXMin",
+				"tileRandomYMax",
+				"tileRandomYMin",
+				"tileXOffset",
+				"tileYOffset",
 				"uid",
 				"xModulo",
 				"xOffset",
@@ -763,6 +783,12 @@
 						"array"
 					]
 				},
+				"tileRandomXMin": {
+					"description": "Min random offset for X tile pos",
+					"type": [
+						"integer"
+					]
+				},
 				"checker": {
 					"description": "Checker mode Possible values: `None`, `Horizontal`, `Vertical`",
 					"enum": [
@@ -786,6 +812,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"tileXOffset": {
+					"description": "Tile X offset",
+					"type": [
+						"integer"
 					]
 				},
 				"xModulo": {
@@ -812,6 +844,12 @@
 						"boolean"
 					]
 				},
+				"tileYOffset": {
+					"description": "Tile Y offset",
+					"type": [
+						"integer"
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
@@ -830,6 +868,18 @@
 						"integer"
 					]
 				},
+				"tileRandomYMax": {
+					"description": "Max random offset for Y tile pos",
+					"type": [
+						"integer"
+					]
+				},
+				"tileRandomYMin": {
+					"description": "Min random offset for Y tile pos",
+					"type": [
+						"integer"
+					]
+				},
 				"tileMode": {
 					"description": "Defines how tileIds array is used Possible values: `Single`, `Stamp`",
 					"enum": [
@@ -841,6 +891,12 @@
 					"description": "If TRUE, allow rule to be matched by flipping its pattern vertically",
 					"type": [
 						"boolean"
+					]
+				},
+				"tileRandomXMax": {
+					"description": "Max random offset for X tile pos",
+					"type": [
+						"integer"
 					]
 				},
 				"pivotY": {
@@ -890,6 +946,7 @@
 				"editorCutLongValues",
 				"editorDisplayMode",
 				"editorDisplayPos",
+				"editorDisplayScale",
 				"editorLinkStyle",
 				"editorShowInWorld",
 				"symmetricalRef",
@@ -909,6 +966,12 @@
 						"null"
 					]
 				},
+				"editorDisplayScale": {
+					"description": "",
+					"type": [
+						"number"
+					]
+				},
 				"useForSmartColor": {
 					"description": "If TRUE, the color associated with this field will override the Entity or Level default color in the editor UI. For Enum fields, this would be the color associated to their values.",
 					"type": [
@@ -922,11 +985,12 @@
 					]
 				},
 				"allowedRefs": {
-					"description": "Possible values: `Any`, `OnlySame`, `OnlyTags`",
+					"description": "Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`",
 					"enum": [
 						"Any",
 						"OnlySame",
-						"OnlyTags"
+						"OnlyTags",
+						"OnlySpecificEntity"
 					]
 				},
 				"editorAlwaysShow": {
@@ -963,12 +1027,13 @@
 					]
 				},
 				"editorDisplayMode": {
-					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`",
+					"description": "Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`, `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`, `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`, `RefLinkBetweenCenters`",
 					"enum": [
 						"Hidden",
 						"ValueOnly",
 						"NameAndValue",
 						"EntityTile",
+						"LevelTile",
 						"Points",
 						"PointStar",
 						"PointPath",
@@ -997,6 +1062,13 @@
 					"description": "User defined documentation for this field to provide help/tips to level designers about accepted values.",
 					"type": [
 						"string",
+						"null"
+					]
+				},
+				"allowedRefsEntityUid": {
+					"description": "",
+					"type": [
+						"integer",
 						"null"
 					]
 				},
@@ -1721,7 +1793,7 @@
 			]
 		},
 		"World": {
-			"description": "**IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented here as a preview of a planned feature.  A World contains multiple levels, and it has its own layout settings.",
+			"description": "**IMPORTANT**: this type is available as a preview. You can rely on it to update your importers, for when it will be officially available.  A World contains multiple levels, and it has its own layout settings.",
 			"title": "World",
 			"required": [
 				"identifier",
@@ -2017,7 +2089,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "The optional ID of the tile",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.4.0+  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -2029,6 +2101,19 @@
 						"integer"
 					]
 				},
+				"tileRect": {
+					"description": "Optional tileset rectangle to represents this value",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"id": {
 					"description": "Enum value",
 					"type": [
@@ -2036,7 +2121,7 @@
 					]
 				},
 				"__tileSrcRect": {
-					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.4.0+  Replaced by: `tileRect`",
 					"items": {
 						"type": [
 							"integer"
@@ -2451,12 +2536,13 @@
 					]
 				},
 				"bgPos": {
-					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`, `Contain`, `Cover`, `CoverDirty`",
+					"description": "An enum defining the way the background image (if any) is positioned on the level. See `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`, `Contain`, `Cover`, `CoverDirty`, `Repeat`",
 					"enum": [
 						"Unscaled",
 						"Contain",
 						"Cover",
 						"CoverDirty",
+						"Repeat",
 						null
 					]
 				},

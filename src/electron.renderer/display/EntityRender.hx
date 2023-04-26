@@ -22,6 +22,7 @@ class EntityRender extends dn.Process {
 	var beneath: h2d.Flow;
 	var fieldGraphics : h2d.Graphics;
 
+	var coreInvalidated = true;
 	var layoutInvalidated = true;
 	var fieldsRenderInvalidated = true;
 
@@ -73,15 +74,26 @@ class EntityRender extends dn.Process {
 				renderAll();
 
 			case EntityDefChanged:
+				coreInvalidated = true;
 				fieldsRenderInvalidated = true;
 				layoutInvalidated = true;
 
-			case ViewportChanged:
-				fieldsRenderInvalidated = true;
+			case ViewportChanged(zoomChanged):
+				if( zoomChanged ) {
+					coreInvalidated = true;
+					fieldsRenderInvalidated = true;
+				}
 				layoutInvalidated = true;
 
 			case _:
 		}
+	}
+
+
+	function updateCore() {
+		core.removeChildren();
+		_coreRender = renderCore(ei, ed, ld);
+		core.addChild( _coreRender.wrapper );
 	}
 
 
@@ -152,7 +164,7 @@ class EntityRender extends dn.Process {
 						bmp.setScale(s);
 
 					case Repeat:
-						var tt = new dn.heaps.TiledTexture(t, w,h, wrapper);
+						var tt = new dn.heaps.TiledTexture(w,h, t, wrapper);
 						tt.alpha = alpha;
 						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
 						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
@@ -264,18 +276,15 @@ class EntityRender extends dn.Process {
 
 
 	public function renderAll() {
-		core.removeChildren();
-		_coreRender = renderCore(ei, ed, ld);
-		core.addChild( _coreRender.wrapper );
-
+		coreInvalidated = false;
+		layoutInvalidated = false;
+		fieldsRenderInvalidated = false;
+		updateCore();
 		renderFields();
 	}
 
 
 	public function renderFields() {
-		above.removeChildren();
-		center.removeChildren();
-		beneath.removeChildren();
 		fieldGraphics.clear();
 
 		// Attach fields
@@ -342,9 +351,7 @@ class EntityRender extends dn.Process {
 		root.y = ei.y;
 
 		final fullVis = ei._li==Editor.ME.curLayerInstance;
-
-		if( _coreRender!=null )
-			_coreRender.wrapper.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
+		core.alpha = fullVis ? 1 : ei._li.def.inactiveOpacity;
 
 		// Graphics
 		if( !fullVis && ei._li.def.hideFieldsWhenInactive )
@@ -364,7 +371,8 @@ class EntityRender extends dn.Process {
 		}
 
 		// Update field wrappers
-		above.visible = center.visible = beneath.visible = fullVis || !ei._li.def.hideFieldsWhenInactive;
+		var showFields = fullVis || !ei._li.def.hideFieldsWhenInactive;
+		above.visible = showFields && above.numChildren>0;
 		if( above.visible ) {
 			above.setScale(zoomScale);
 			above.x = M.round( -ei.width*ed.pivotX - above.outerWidth*0.5*above.scaleX + ei.width*0.5 );
@@ -372,12 +380,18 @@ class EntityRender extends dn.Process {
 			if( identifier!=null )
 				above.y -= identifier.textHeight*identifier.scaleY;
 			above.alpha = 1;
+		}
 
+		center.visible = showFields && center.numChildren>0;
+		if( center.visible ) {
 			center.setScale(zoomScale);
 			center.x = Std.int( -ei.width*ed.pivotX - center.outerWidth*0.5*center.scaleX + ei.width*0.5 );
 			center.y = Std.int( -ei.height*ed.pivotY - center.outerHeight*0.5*center.scaleY + ei.height*0.5);
 			center.alpha = 1;
+		}
 
+		beneath.visible = showFields && beneath.numChildren>0;
+		if( beneath.visible ) {
 			beneath.setScale(zoomScale);
 			beneath.x = Std.int( -ei.width*ed.pivotX - beneath.outerWidth*0.5*beneath.scaleX + ei.width*0.5 );
 			beneath.y = Std.int( ei.height*(1-ed.pivotY) );
@@ -397,6 +411,14 @@ class EntityRender extends dn.Process {
 		if( layoutInvalidated && !cd.has("layoutLimit") ) {
 			cd.setS("layoutLimit", 0.03);
 			updateLayout();
+			layoutInvalidated = false;
+		}
+
+		if( coreInvalidated && !cd.has("coreLimit") ) {
+			cd.setS("coreLimit", 0.15);
+			updateCore();
+			updateLayout(); // for core alpha
+			coreInvalidated = false;
 			layoutInvalidated = false;
 		}
 

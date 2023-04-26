@@ -118,7 +118,7 @@ class Tileset {
 
 			// Outline color
 			var c = tilesetDef.getAverageTileColor(tileId);
-			var a = C.getA(c)>0 ? 1 : 0;
+			var a = C.getA(c)>0 ? 0.5 : 0;
 			ctx.strokeStyle =
 				C.intToHexRGBA( C.toWhite( C.replaceAlphaF( tilesetDef.getAverageTileColor(tileId), a ), 0.2 ) );
 
@@ -165,6 +165,7 @@ class Tileset {
 	}
 
 	public dynamic function onSelectAnything() {}
+	public dynamic function onClickOutOfBounds() {}
 
 	function loadScrollPos() {
 		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
@@ -420,7 +421,7 @@ class Tileset {
 
 	var _lastRect = null;
 	function updateCursor(pageX:Float, pageY:Float, force=false) {
-		if( selectMode==None || isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver ) {
+		if( selectMode==None || isScrolling() || App.ME.isKeyDown(K.SPACE) || !mouseOver || !inTilesetBounds(pageX,pageY,1) ) {
 			jCursor.hide();
 			setCursorCss("pan");
 			return;
@@ -433,6 +434,7 @@ class Tileset {
 		}
 
 		var r = getCursorRect(pageX, pageY);
+		jCursor.show();
 
 		// Avoid re-render if it's the same rect
 		if( !force && _lastRect!=null && r.cx==_lastRect.cx && r.cy==_lastRect.cy && r.wid==_lastRect.wid && r.hei==_lastRect.hei )
@@ -440,7 +442,6 @@ class Tileset {
 
 		var tileId = tilesetDef.getTileId(r.cx,r.cy);
 		jCursor.empty();
-		jCursor.show();
 
 		// Infos
 		jInfos.empty().text("#"+tileId);
@@ -539,7 +540,7 @@ class Tileset {
 	function modifySelection(selIds:Array<Int>, add:Bool) {
 		if( isClosed() )
 			return;
-		
+
 		switch selectMode {
 			case None:
 
@@ -615,6 +616,12 @@ class Tileset {
 		}
 	}
 
+	function inTilesetBounds(pageX:Float, pageY:Float, pad=0) {
+		var cx = pageToCx(pageX, false);
+		var cy = pageToCy(pageY, false);
+		return cx>=-pad && cx<tilesetDef.cWid+pad && cy>=-pad && cy<tilesetDef.cHei+pad;
+	}
+
 	function onPickerMouseDown(ev:js.jquery.Event) {
 		// Block context menu
 		// if( ev.button==2 )
@@ -622,6 +629,10 @@ class Tileset {
 		// 		ev.preventDefault();
 		// 		jDoc.off(".pickerCtxCatcher");
 		// 	});
+		if( ev.button==0 && !inTilesetBounds(ev.pageX, ev.pageY, 1) ) {
+			onClickOutOfBounds();
+			return;
+		}
 
 		var tid = tilesetDef.getTileId( pageToCx(ev.pageX), pageToCy(ev.pageY) );
 		if( onMouseDownCustom(ev,tid) )

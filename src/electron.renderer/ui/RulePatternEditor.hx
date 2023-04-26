@@ -112,7 +112,7 @@ class RulePatternEditor {
 				if( previewMode ) {
 					var td = Editor.ME.curLayerInstance.getTilesetDef();
 					if( td!=null ) {
-						var jTile = JsTools.createTile(td, rule.tileIds[0], 32);
+						var jTile = td.createCanvasFromTileId(rule.tileIds[0], 32);
 						jCell.append(jTile);
 						jCell.addClass("tilePreview");
 						if( rule.tileIds.length>1 )

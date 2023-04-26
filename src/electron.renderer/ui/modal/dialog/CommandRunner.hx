@@ -40,6 +40,9 @@ class CommandRunner extends ui.modal.Dialog {
 				settings.setProjectTrust(p.iid, false);
 				close();
 			});
+			jWarn.find(".cancel").click(_->{
+				close();
+			});
 		}
 		else if( cmd.command!="" ) {
 			runCommand(p, cmd);
@@ -56,10 +59,10 @@ class CommandRunner extends ui.modal.Dialog {
 		var jKill = jContent.find(".kill");
 		var jClose = jContent.find(".close");
 
-		// Separate command name from args
-		var splitIdx = cmd.command.indexOf(" ");
-		var name = splitIdx<0 ? cmd.command : cmd.command.substr(0,splitIdx);
-		var args = splitIdx<0 ? "" : cmd.command.substr(splitIdx+1);
+		var args = parseCommandToArray(cmd.command);
+
+		var name = args.shift();
+
 		if( name==null || name.length==0 ) {
 			jKill.prop("disabled", true);
 			return;
@@ -68,10 +71,10 @@ class CommandRunner extends ui.modal.Dialog {
 		jClose.prop("disabled", true);
 
 		// Create child process
-		print("Executing: "+name+" "+args, White);
+		print("Executing: " + cmd.command, White);
 		separator();
 
-		var proc = js.node.ChildProcess.spawn(name, [args], { cwd:p.getProjectDir() });
+		var proc = js.node.ChildProcess.spawn(name, args, {cwd: p.getProjectDir()});
 		proc.stdout.on("data", out->print(out));
 		proc.stderr.on("data", out->print(out, 0xffcc00));
 		proc.on("error", e->print(e, 0xff5555));
@@ -96,9 +99,75 @@ class CommandRunner extends ui.modal.Dialog {
 			needManualClosing = true;
 			proc.kill();
 		});
-
 	}
 
+	private static function parseCommandToArray(argString:String) {
+		var args = new Array<String>();
+
+		var inQuotes = false;
+		var escaped = false;
+		var lastCharWasSpace = true;
+		var arg = '';
+
+		for (i in 0...argString.length) {
+			var c = argString.charAt(i);
+
+			if (c == ' ' && !inQuotes) {
+				if (!lastCharWasSpace) {
+					args.push(arg);
+					arg = '';
+				}
+				lastCharWasSpace = true;
+				continue;
+			} else {
+				lastCharWasSpace = false;
+			}
+
+			if (c == '"') {
+				if (!escaped) {
+					inQuotes = !inQuotes;
+				} else {
+					if (escaped && c != '"') {
+						arg += '\\';
+					}
+
+					arg += c;
+					escaped = false;
+				}
+				continue;
+			}
+
+			if (c == "\\" && escaped) {
+				if (escaped && c != '"') {
+					arg += '\\';
+				}
+
+				arg += c;
+				escaped = false;
+				continue;
+			}
+
+			if (c == "\\" && inQuotes) {
+				escaped = true;
+				continue;
+			}
+
+			if (escaped && c != '"') {
+				arg += '\\';
+			}
+
+			arg += c;
+			escaped = false;
+
+			lastCharWasSpace = false;
+		}
+
+		if (!lastCharWasSpace) {
+			args.push(StringTools.trim(arg));
+		}
+
+		return args;
+	}
 
 	public static function runSingleCommand(p:data.Project, cmd:ldtk.Json.CustomCommand, ?onComplete:Void->Void) {
 		if( App.ME.settings.isProjectUntrusted(p.iid) ) {

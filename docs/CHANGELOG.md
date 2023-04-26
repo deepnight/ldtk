@@ -1,3 +1,98 @@
+# 1.3.0 - Multi-worlds preview
+
+## Experimental Multi-worlds support!
+![](1.3.0/multiWorlds.png)
+
+The new multi-worlds feature is now available as a preview.
+
+Multi-worlds allow you to have multiple distinct worlds in the same LDtk project.
+
+Each world can have its own set of levels using a specific layout. However, they all share the same definitions (layers, entities, enums etc).
+
+**IMPORTANT: to use this feature in your projects, you will need to make sure that your importer is up-to-date and fully supports it.** Multi-worlds projects cannot be imported using older loaders.
+
+To enable this experimental support, open your Project settings (`P` shortcut), scroll down to the advanced options and enable Multi-worlds there. **PLEASE BACKUP YOUR PROJECTS BEFORE TRYING IT!**
+
+When enabled, various new buttons will be available in the UI, like in the World panel (`W` shortcut).
+
+![](1.3.0/multiWorldsOption.png)
+
+## Rule tiles X and Y offsets
+
+![](1.3.0/ruleTilesOffsets2.png)
+
+You can now offset the resulting tile(s) of any rules, either using fixed X/Y values, or using random ranges for more variety.
+This will make much easier creation of organic elements like vegetation, dirt etc.
+
+## Better drop-down UI component
+![](1.3.0/advancedSelect.png)
+
+The new DropDown UI component supports:
+
+ - Quick searching
+ - List or Grid view
+ - Icons
+ - Colors
+
+## Customizable backup directory
+![](1.3.0/backupDir.png)
+
+You can now customize the location of your backups.
+
+Please note that, to restore a backup, you should use LDtk and not copy files by yourself manually from your File Explorer / Finder.
+
+## Collapsable tags
+![](1.3.0/collapsableTag.png)
+
+Tags are not behaving like "folders" and can now be open/closed accordingly in UI.
+
+
+## Lists quick search
+![](1.3.0/filter.png)
+
+You can quick search most lists from the interface:
+
+ - recent files on the Home screen,
+ - entities, enums, layers, etc.
+
+
+## Customizable recent files colors
+![](1.3.0/homeColors.png)
+
+You can now customize colors for all your recent projects on your Home screen.
+
+
+
+## Better compact mode
+![](1.3.0/compactMode.png)
+
+Just press `TAB` to switch between **normal** and **compact** UI modes. The reworked compact mode is now even more... well.. compact.
+
+
+## Other changes
+
+ - Added "Repeat" option for level background images (thanks to [Lojemiru pull request](https://github.com/deepnight/ldtk/pull/853))
+ - Added "Display scale" option to all custom fields
+ - Added support for CastleDB icons import.
+ - Enum tiles can now be any rectangle from the tileset.
+ - Added quick search to Home
+ - Added colors to entities in the list from the Entity panel
+ - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
+ - Added "Specific entity type" constraint for Entity References
+ - Added a context menu to layers list in the main panel
+ - Added a context menu on all custom fields to edit their definition
+ - Added "colored flags" icons to the embedded atlas
+ - Better pivot editor design
+ - Sections of the World panel can now be collapsed (world settings, current level properties and level custom fields).
+ - Fixed the size of Reset buttons in custom field forms
+ - Fixed entity render update when zooming in/out
+ - Fixed the "World IID" values that changed randomly in the JSON, if the project isn't in Multi-Worlds mode.
+ - Fixed a crash when switching to world mode during a rule edit
+ - Fixed a very old rules bug that prevented Symetric rules to not re-apply in the same grid cell, if it applied there previously.
+ - Fixed a crash when opening wizard on an improperly defined auto-layer
+ - Fixed crash when moving a deleted tile
+
+
 # 1.2.5
 
  - Added custom user documentation for Entities and Layers

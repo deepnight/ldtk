@@ -40,6 +40,9 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 				if( !active )
 					cancel();
 
+			case LevelSelected(_), WorldSelected(_):
+				cancel();
+
 			case _:
 		}
 	}
