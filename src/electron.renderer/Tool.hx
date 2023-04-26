@@ -287,6 +287,16 @@ class Tool<T> extends dn.Process {
 
 	function onBeforeToolActivation() {}
 
+	override function pause() {
+		super.pause();
+		onToolDeactivation();
+	}
+
+	public final function onToolDeactivation() {
+		if( palette!=null )
+			palette.onHide();
+	}
+
 	public final function onToolActivation() {
 		onBeforeToolActivation();
 
@@ -297,6 +307,7 @@ class Tool<T> extends dn.Process {
 			// Show palette
 			palette.jContent.appendTo( jPalette );
 			palette.render();
+			palette.onShow();
 		}
 		initOptionForm();
 	}
