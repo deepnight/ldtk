@@ -2,6 +2,8 @@ package ui.palette;
 
 class EntityPalette extends ui.ToolPalette {
 	var allTagGroups: Array<{ tag:Null<String>, all:Array<data.def.EntityDef> }>;
+	var searchMemory : Null<String>;
+	var search : QuickSearch;
 
 	public function new(t) {
 		super(t);
@@ -16,7 +18,8 @@ class EntityPalette extends ui.ToolPalette {
 		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);
 
-		JsTools.createQuickSearch(jList).prependTo(jContent);
+		search = new ui.QuickSearch(jList);
+		search.jWrapper.prependTo(jContent);
 
 		var ld = Editor.ME.curLayerDef;
 		allTagGroups = project.defs.groupUsingTags(
@@ -92,6 +95,15 @@ class EntityPalette extends ui.ToolPalette {
 		}
 
 		JsTools.parseComponents(jList);
+
+		if( searchMemory!=null )
+			search.run(searchMemory);
+		search.onSearch = (s)->searchMemory = s;
+	}
+
+	override function onHide() {
+		super.onHide();
+		search.clear();
 	}
 
 

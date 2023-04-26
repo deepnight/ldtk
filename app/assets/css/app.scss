@@ -9140,7 +9140,7 @@ $patternSize : 32px;
 
 		>.entityList {
 			display: grid;
-			grid-template-rows: min-content auto;
+			grid-template-rows: min-content min-content auto;
 			overflow: hidden;
 			>ul {
 				overflow: auto;

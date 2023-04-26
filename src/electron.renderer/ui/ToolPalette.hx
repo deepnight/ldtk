@@ -26,6 +26,12 @@ class ToolPalette {
 	public function focusOnSelection(immediate=false) {
 	}
 
+	public function onShow() {
+		focusOnSelection(true);
+	}
+
+	public function onHide() {}
+
 	public final function render() {
 		jContent.off().empty();
 

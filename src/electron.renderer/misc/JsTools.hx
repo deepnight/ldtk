@@ -1249,69 +1249,6 @@ class JsTools {
 	}
 
 
-	public static function createQuickSearch(jList:js.jquery.JQuery) {
-		var jWrapper = new J('<div class="quickSearch"></div>');
-
-		var jClear = new J('<span class="icon clear"></span>');
-		jClear.appendTo(jWrapper);
-		jClear.hide();
-
-		var jSearch = new J('<input type="text" class="quickSearch"/>');
-		jSearch.appendTo(jWrapper);
-		jSearch.attr("placeholder", "Search...");
-
-		// Apply search filter
-		function _runSearch(?valOverride:String) {
-			if( valOverride!=null )
-				jSearch.val(valOverride);
-
-			// Show/hide matches
-			jList.find("li:not(.subList)").each( (i,e)->{
-				var jLi = new J(e);
-				var jSubListParent = jLi.closest(".subList");
-				var rawSearch = cleanUpSearchString( jSearch.val() );
-
-				// Reset
-				jLi.removeClass("searchMatched searchDiscarded");
-				jSubListParent.removeClass("searchDiscarded");
-				if( rawSearch.length<=0 ) {
-					jClear.hide();
-					return;
-				}
-				jClear.show();
-
-				// Always hide collapsers
-				if( jLi.hasClass("collapser") ) {
-					jLi.addClass("searchDiscarded");
-					return;
-				}
-
-				// Show/hide elements
-				if( searchStringMatches(jSearch.val(), jLi.text()) )
-					jLi.addClass("searchMatched");
-				else
-					jLi.addClass("searchDiscarded");
-
-				// Check for empty sub lists
-				if( jSubListParent.length>0 && jSubListParent.has("li:visible").length==0 )
-					jSubListParent.addClass("searchDiscarded");
-			});
-		}
-
-		jSearch.keydown( (ev:js.jquery.Event)->{
-			switch ev.key {
-				case "Escape": _runSearch("");
-				case _:
-			}
-		});
-
-		jSearch.on("input", _->_runSearch());
-		jClear.click( _->_runSearch(""));
-
-		return jWrapper;
-	}
-
-
 	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {
 		// Out-of-bounds policy
 		jSelect.empty();
