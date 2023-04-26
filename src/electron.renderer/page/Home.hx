@@ -216,36 +216,35 @@ class Home extends Page {
 		while( i>=0 ) {
 			var filePath = recents[i];
 			var isBackupFile = filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>=0;
-			var li = new J('<li/>');
+			var jLi = new J('<li/>');
 
 			try {
 				var fp = dn.FilePath.fromFile(filePath);
-				var col = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+				var col : dn.Col = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
 				if( App.ME.isInAppDir(filePath,true) )
-					li.addClass("sample");
+					jLi.addClass("sample");
+				jLi.css("background-color", col.toCssRgba(0.2));
 
 				var jName = new J('<span class="fileName">${fp.fileName}</span>');
-				jName.appendTo(li);
-				jName.css("color", C.intToHex( C.toWhite(col, 0.7) ));
+				jName.appendTo(jLi);
+				jName.css("color", col.toWhite(0.7).toHex());
 
-				var jDir = JsTools.makePath(trimmedPaths[i], C.toWhite(col, 0.3));
-				// var jDir = new J('<span class="dir">${trimmedPaths[i]}</span>');
-				jDir.appendTo(li);
-				// jDir.css("color", C.intToHex( C.toWhite(col, 0.3) ));
+				var jDir = JsTools.makePath(trimmedPaths[i], col.toWhite(0.3));
+				jDir.appendTo(jLi);
 
-				li.click( function(ev) {
+				jLi.click( function(ev) {
 					App.ME.loadProject(filePath);
 				});
 
 				if( !NT.fileExists(filePath) )
-					li.addClass("missing");
+					jLi.addClass("missing");
 
 				if( isBackupFile )
-					li.addClass("crash");
+					jLi.addClass("crash");
 
 				// Backups button (async)
 				var jBackupWrapper = new J('<div class="backupWrapper"></div>');
-				jBackupWrapper.appendTo(li);
+				jBackupWrapper.appendTo(jLi);
 				jBackupWrapper.append('<div class="icon loading"></div>');
 				pendingBackupChecks.push({ projectFp:fp.clone(), jTarget:jBackupWrapper });
 
@@ -283,15 +282,15 @@ class Home extends Page {
 						}
 					},
 				];
-				ui.modal.ContextMenu.addTo(li, act );
+				ui.modal.ContextMenu.addTo(jLi, act );
 
 
-				li.appendTo(jRecentFiles);
+				jLi.appendTo(jRecentFiles);
 			}
 
 			catch( e:Dynamic ) {
 				App.LOG.error("Problem with recent file: "+filePath);
-				li.remove();
+				jLi.remove();
 			}
 
 
@@ -325,19 +324,20 @@ class Home extends Page {
 			jRecentDirs.append('<li class="title">Recent folders</li>');
 		C.initUniqueColors(12, uniqueColorMix);
 		for(fp in dirs) {
-			var li = new J('<li/>');
+			var jLi = new J('<li/>');
 			try {
 
 				if( !NT.fileExists(fp.directory) )
-					li.addClass("missing");
+					jLi.addClass("missing");
 
 				if( App.ME.isInAppDir(fp.full,true) )
-					li.addClass("sample");
+					jLi.addClass("sample");
 
 				var shortFp = dn.FilePath.fromDir( fp.directory.substr(trim) );
-				var col = C.toWhite( C.pickUniqueColorFor( shortFp.getDirectoryArray()[0] ), 0.3 );
-				li.append( JsTools.makePath( shortFp.full, col ) );
-				li.click( (_)->{
+				var col : dn.Col = C.toWhite( C.pickUniqueColorFor( shortFp.getDirectoryArray()[0] ), 0.3 );
+				jLi.css("background-color", col.toCssRgba(0.2));
+				jLi.append( JsTools.makePath( shortFp.full, col ) );
+				jLi.click( (_)->{
 					if( NT.fileExists(fp.directory) )
 						onLoad(fp.directory);
 					else {
@@ -354,7 +354,7 @@ class Home extends Page {
 					}
 				});
 
-				ui.modal.ContextMenu.addTo(li, [
+				ui.modal.ContextMenu.addTo(jLi, [
 					{
 						label: L.t._("Locate folder"),
 						cb: JsTools.locateFile.bind(fp.directory, false),
@@ -379,12 +379,12 @@ class Home extends Page {
 					},
 				]);
 
-				li.appendTo(jRecentDirs);
+				jLi.appendTo(jRecentDirs);
 
 			}
 			catch(e:Dynamic) {
 				App.LOG.error("Problem with recent dir: "+fp.full);
-				li.remove();
+				jLi.remove();
 			}
 		}
 
