@@ -90,6 +90,7 @@ Just press `TAB` to switch between **normal** and **compact** UI modes. The rewo
  - Fixed a crash when switching to world mode during a rule edit
  - Fixed a very old rules bug that prevented Symetric rules to not re-apply in the same grid cell, if it applied there previously.
  - Fixed a crash when opening wizard on an improperly defined auto-layer
+ - Fixed crash when moving a deleted tile
 
 
 # 1.2.5
