@@ -530,6 +530,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var jEnt = new J('<li class="iconLeft"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
+				jEnt.css("background-color", dn.Col.fromInt(ed.color).toCssRgba(0.2));
 
 				// HTML entity display preview
 				var preview = JsTools.createEntityPreview(editor.project, ed);
