@@ -1225,7 +1225,11 @@ class JsTools {
 
 
 	public static function createQuickSearch(jList:js.jquery.JQuery) {
+		var jWrapper = new J('<div class="quickSearch"></div>');
+		var jClear = new J('<span class="icon clear"></span>');
+		jClear.appendTo(jWrapper);
 		var jSearch = new J('<input type="text" class="quickSearch"/>');
+		jSearch.appendTo(jWrapper);
 		jSearch.attr("placeholder", "Search...");
 		// jSearch.keydown( (ev:js.jquery.Event)->{
 		// });
