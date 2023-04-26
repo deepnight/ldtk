@@ -88,6 +88,9 @@ class Home extends Page {
 			settings.save();
 		}
 
+		// Quick search
+		new ui.QuickSearch(false, jPage.find(".recentFiles, .recentDirs"), jPage.find(".search"));
+
 		// Samples
 		var path = JsTools.getSamplesDir();
 		App.LOG.debug("samplesDir="+path);

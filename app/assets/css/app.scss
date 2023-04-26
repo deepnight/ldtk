@@ -5474,10 +5474,14 @@ canvas#webgl {
 		.files {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
-			grid-template-rows: min-content auto;
+			grid-template-rows: min-content min-content auto;
 			gap: 8px;
 			height: 100%;
 			overflow: hidden;
+
+			.search {
+				grid-column: 1/3;
+			}
 
 			&.hasSamples {
 				grid-template-rows: min-content min-content auto;

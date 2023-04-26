@@ -5,9 +5,12 @@ class QuickSearch {
 	var jSearch : js.jquery.JQuery;
 	var jList : js.jquery.JQuery;
 	var jClear : js.jquery.JQuery;
+	var softMatching : Bool;
 
 
-	public function new(jList:js.jquery.JQuery, ?jTarget:js.jquery.JQuery) {
+	public function new(softMatching=true, jList:js.jquery.JQuery, ?jTarget:js.jquery.JQuery) {
+		this.softMatching = softMatching;
+		
 		jWrapper = new J('<div class="quickSearch"></div>');
 		if( jTarget!=null )
 			jWrapper.appendTo(jTarget);
@@ -64,7 +67,7 @@ class QuickSearch {
 			}
 
 			// Show/hide elements
-			if( JsTools.searchStringMatches(jSearch.val(), jLi.text()) ) {
+			if( JsTools.searchStringMatches(jSearch.val(), jLi.text(), softMatching) ) {
 				jLi.addClass("searchMatched");
 				jSubListParent.addClass("searchMatched");
 			}

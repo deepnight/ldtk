@@ -1229,23 +1229,27 @@ class JsTools {
 	}
 
 
-	public static function searchStringMatches(searchQuery:String, target:String) {
+	public static function searchStringMatches(searchQuery:String, target:String, softMatching=true) {
 		searchQuery = cleanUpSearchString(searchQuery);
 		target = cleanUpSearchString(target);
-		var si = 0;
-		var ti = 0;
-		while( si<searchQuery.length ) {
-			if( searchQuery.charCodeAt(si)==target.charCodeAt(ti)) {
-				si++;
-				ti++;
+		if( softMatching ) {
+			var si = 0;
+			var ti = 0;
+			while( si<searchQuery.length ) {
+				if( searchQuery.charCodeAt(si)==target.charCodeAt(ti)) {
+					si++;
+					ti++;
+				}
+				else {
+					ti++;
+					if( ti>=target.length )
+						return false;
+				}
 			}
-			else {
-				ti++;
-				if( ti>=target.length )
-					return false;
-			}
+			return true;
 		}
-		return true;
+		else
+			return target.indexOf(searchQuery)>=0;
 	}
 
 
