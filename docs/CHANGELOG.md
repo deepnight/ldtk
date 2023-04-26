@@ -50,7 +50,10 @@ Tags are not behaving like "folders" and can now be open/closed accordingly in U
 ## Lists quick search
 ![](1.3.0/filter.png)
 
-Various lists can now be filtered using a text search. Very useful if you have many entities or enums in your project.
+You can quick search most lists from the interface:
+
+ - recent files on the Home screen,
+ - entities, enums, layers, etc.
 
 
 ## Customizable recent files colors
@@ -72,6 +75,8 @@ Just press `TAB` to switch between **normal** and **compact** UI modes. The rewo
  - Added "Display scale" option to all custom fields
  - Added support for CastleDB icons import.
  - Enum tiles can now be any rectangle from the tileset.
+ - Added quick search to Home
+ - Added colors to entities in the list from the Entity panel
  - If you have a "Tile" custom field in your level, you may now use it as a replacement for the rendering of the level in the world view.
  - Added "Specific entity type" constraint for Entity References
  - Added a context menu to layers list in the main panel
