@@ -10,7 +10,7 @@
 	},
 	"iid": "a3619740-7820-11ed-b6fd-4b64aa0352a1",
 	"jsonVersion": "1.3.0",
-	"appBuildId": 467337,
+	"appBuildId": 467367,
 	"nextUid": 125,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -1338,11 +1338,11 @@
 							"defUid": 116,
 							"px": [152,240],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Root", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Root", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Root"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -1358,11 +1358,11 @@
 							"defUid": 116,
 							"px": [120,112],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Clover", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Clover", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Clover"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -1377,12 +1377,12 @@
 							"height": 16,
 							"defUid": 123,
 							"px": [128,352],
-							"fieldInstances": [{ "__identifier": "link", "__value": {
+							"fieldInstances": [{ "__identifier": "link", "__type": "EntityRef", "__value": {
 								"entityIid": "33bf7c00-8dc0-11ec-a525-05f96cc4b971",
 								"layerIid": "490f5450-66b0-11ec-8fc6-dd62cc585254",
 								"levelIid": "720af480-66b0-11ec-895f-a114f0383ca2",
 								"worldIid": "ca0e9bf0-c640-11ed-ad34-5d947c1a0a9f"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 124, "realEditorValues": [{
+							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["33bf7c00-8dc0-11ec-a525-05f96cc4b971"]
 							}] }]
@@ -2384,11 +2384,11 @@
 							"defUid": 116,
 							"px": [440,224],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Water_shroom", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Water_shroom", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Water_shroom"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -2404,11 +2404,11 @@
 							"defUid": 116,
 							"px": [376,224],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Water_shroom", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Water_shroom", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Water_shroom"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						}
 					]
@@ -3624,11 +3624,11 @@
 							"defUid": 116,
 							"px": [152,224],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Clover", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Clover", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Clover"]
 								}] },
-								{ "__identifier": "count", "__value": 2, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
+								{ "__identifier": "count", "__type": "Int", "__value": 2, "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							]
 						},
 						{
@@ -3644,11 +3644,11 @@
 							"defUid": 116,
 							"px": [328,176],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Root", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Root", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Root"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -3663,12 +3663,12 @@
 							"height": 16,
 							"defUid": 123,
 							"px": [200,224],
-							"fieldInstances": [{ "__identifier": "link", "__value": {
+							"fieldInstances": [{ "__identifier": "link", "__type": "EntityRef", "__value": {
 								"entityIid": "796d2950-8dc0-11ec-a525-75b5a5ce20f8",
 								"layerIid": "490f7b60-66b0-11ec-8fc6-e5aee3385325",
 								"levelIid": "b7a1be70-66b0-11ec-895f-f7a843c40618",
 								"worldIid": "ca0e9bf0-c640-11ed-ad34-5d947c1a0a9f"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 124, "realEditorValues": [{
+							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["796d2950-8dc0-11ec-a525-75b5a5ce20f8"]
 							}] }]
@@ -4885,11 +4885,11 @@
 							"defUid": 116,
 							"px": [168,80],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Rose", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 176, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Rose", "__tile": { "tilesetUid": 117, "x": 176, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Rose"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -4904,12 +4904,12 @@
 							"height": 16,
 							"defUid": 123,
 							"px": [88,64],
-							"fieldInstances": [{ "__identifier": "link", "__value": {
+							"fieldInstances": [{ "__identifier": "link", "__type": "EntityRef", "__value": {
 								"entityIid": "58a45ea0-8dc0-11ec-a525-2786470df187",
 								"layerIid": "490edf21-66b0-11ec-8fc6-f39ef63338fa",
 								"levelIid": "a35a7d40-66b0-11ec-9cd7-b57d32c8e175",
 								"worldIid": "ca0e9bf0-c640-11ed-ad34-5d947c1a0a9f"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 124, "realEditorValues": [{
+							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["58a45ea0-8dc0-11ec-a525-2786470df187"]
 							}] }]
@@ -5622,11 +5622,11 @@
 							"defUid": 116,
 							"px": [216,96],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Clover", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Clover", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Clover"]
 								}] },
-								{ "__identifier": "count", "__value": 2, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
+								{ "__identifier": "count", "__type": "Int", "__value": 2, "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							]
 						}
 					]
@@ -6800,11 +6800,11 @@
 							"defUid": 116,
 							"px": [72,240],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Fruit", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Fruit", "__tile": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Fruit"]
 								}] },
-								{ "__identifier": "count", "__value": 2, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
+								{ "__identifier": "count", "__type": "Int", "__value": 2, "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
 							]
 						},
 						{
@@ -6819,12 +6819,12 @@
 							"height": 16,
 							"defUid": 123,
 							"px": [280,112],
-							"fieldInstances": [{ "__identifier": "link", "__value": {
+							"fieldInstances": [{ "__identifier": "link", "__type": "EntityRef", "__value": {
 								"entityIid": "5c9ee4d0-8dc0-11ec-a525-4ddce479fcbc",
 								"layerIid": "490eb811-66b0-11ec-8fc6-9b9a3bead751",
 								"levelIid": "a359b9f0-66b0-11ec-9cd7-25dfb937d033",
 								"worldIid": "ca0e9bf0-c640-11ed-ad34-5d947c1a0a9f"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 124, "realEditorValues": [{
+							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["5c9ee4d0-8dc0-11ec-a525-4ddce479fcbc"]
 							}] }]
@@ -7749,11 +7749,11 @@
 							"defUid": 116,
 							"px": [184,256],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Water_shroom", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Water_shroom", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Water_shroom"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						}
 					]
@@ -8530,11 +8530,11 @@
 							"defUid": 116,
 							"px": [168,160],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Water_shroom", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Water_shroom", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Water_shroom"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						}
 					]
@@ -9475,11 +9475,11 @@
 							"defUid": 116,
 							"px": [88,128],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Golden", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Golden", "__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Golden"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [null] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [null] }
 							]
 						},
 						{
@@ -9495,11 +9495,11 @@
 							"defUid": 116,
 							"px": [152,128],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Golden", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Golden", "__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Golden"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [null] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [null] }
 							]
 						},
 						{
@@ -9515,11 +9515,11 @@
 							"defUid": 116,
 							"px": [56,112],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Golden", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Golden", "__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Golden"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [null] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [null] }
 							]
 						}
 					]
@@ -10044,11 +10044,11 @@
 							"defUid": 116,
 							"px": [376,192],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Root", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Root", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Root"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						}
 					]
@@ -11725,11 +11725,11 @@
 							"defUid": 116,
 							"px": [296,224],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Water_shroom", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Water_shroom", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Water_shroom"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -11745,11 +11745,11 @@
 							"defUid": 116,
 							"px": [120,128],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Water_shroom", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Water_shroom", "__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Water_shroom"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -11764,12 +11764,12 @@
 							"height": 16,
 							"defUid": 123,
 							"px": [112,208],
-							"fieldInstances": [{ "__identifier": "link", "__value": {
+							"fieldInstances": [{ "__identifier": "link", "__type": "EntityRef", "__value": {
 								"entityIid": "2a789b40-8dc0-11ec-a525-a942e9459e5c",
 								"layerIid": "490e69f0-66b0-11ec-8fc6-99491c0ace0c",
 								"levelIid": "a3591db0-66b0-11ec-9cd7-43878cf4d0ab",
 								"worldIid": "ca0e9bf0-c640-11ed-ad34-5d947c1a0a9f"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 124, "realEditorValues": [{
+							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["2a789b40-8dc0-11ec-a525-a942e9459e5c"]
 							}] }]
@@ -13625,11 +13625,11 @@
 							"defUid": 116,
 							"px": [264,208],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Fruit", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Fruit", "__tile": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Fruit"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13645,11 +13645,11 @@
 							"defUid": 116,
 							"px": [456,192],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Root", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Root", "__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Root"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13665,11 +13665,11 @@
 							"defUid": 116,
 							"px": [24,176],
 							"fieldInstances": [
-								{ "__identifier": "plantType", "__value": "Clover", "__type": "LocalEnum.Plants", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
+								{ "__identifier": "plantType", "__type": "LocalEnum.Plants", "__value": "Clover", "__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "defUid": 121, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Clover"]
 								}] },
-								{ "__identifier": "count", "__value": 1, "__type": "Int", "__tile": null, "defUid": 122, "realEditorValues": [] }
+								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
 							]
 						},
 						{
@@ -13684,12 +13684,12 @@
 							"height": 16,
 							"defUid": 123,
 							"px": [72,240],
-							"fieldInstances": [{ "__identifier": "link", "__value": {
+							"fieldInstances": [{ "__identifier": "link", "__type": "EntityRef", "__value": {
 								"entityIid": "7e1072a0-8dc0-11ec-a525-4d0952d12de1",
 								"layerIid": "490eb810-66b0-11ec-8fc6-39dd599e975c",
 								"levelIid": "a35992e0-66b0-11ec-9cd7-8b2ebd1b98e2",
 								"worldIid": "ca0e9bf0-c640-11ed-ad34-5d947c1a0a9f"
-							}, "__type": "EntityRef", "__tile": null, "defUid": 124, "realEditorValues": [{
+							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["7e1072a0-8dc0-11ec-a525-4d0952d12de1"]
 							}] }]
