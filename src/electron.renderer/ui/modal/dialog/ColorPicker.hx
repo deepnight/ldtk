@@ -185,8 +185,10 @@ class ColorPicker extends ui.modal.Dialog {
 		if( jTargetInput!=null )
 			jTargetInput.val( picker.getHexString() ).change();
 
-		project.unregisterColor( usedColorsTag, originalColor );
-		project.registerUsedColor( usedColorsTag, getColor() );
+		if( usedColorsTag!=null ) {
+			project.unregisterColor( usedColorsTag, originalColor );
+			project.registerUsedColor( usedColorsTag, getColor() );
+		}
 		onValidate( getColor() );
 	}
 
