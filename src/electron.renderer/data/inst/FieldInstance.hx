@@ -61,8 +61,8 @@ class FieldInstance {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
-			__value: def.isArray ? [ for(i in 0...getArrayLength()) getJsonValue(i) ] : getJsonValue(0),
 			__type: def.getJsonTypeString(),
+			__value: def.isArray ? [ for(i in 0...getArrayLength()) getJsonValue(i) ] : getJsonValue(0),
 			__tile: getSmartTile(),
 
 			defUid: defUid,
