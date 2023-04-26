@@ -1,7 +1,6 @@
 # 1.3.0 - Multi-worlds preview
 
 ## Experimental Multi-worlds support!
-
 ![](1.3.0/multiWorlds.png)
 
 The new multi-worlds feature is now available as a preview.
@@ -26,7 +25,6 @@ You can now offset the resulting tile(s) of any rules, either using fixed X/Y va
 This will make much easier creation of organic elements like vegetation, dirt etc.
 
 ## Better drop-down UI component
-
 ![](1.3.0/advancedSelect.png)
 
 The new DropDown UI component supports:
@@ -37,32 +35,32 @@ The new DropDown UI component supports:
  - Colors
 
 ## Customizable backup directory
-
 ![](1.3.0/backupDir.png)
 
 You can now customize the location of your backups.
 
 Please note that, to restore a backup, you should use LDtk and not copy files by yourself manually from your File Explorer / Finder.
 
-
 ## Collapsable tags
-
 ![](1.3.0/collapsableTag.png)
 
 Tags are not behaving like "folders" and can now be open/closed accordingly in UI.
 
 
-
 ## Lists quick search
-
 ![](1.3.0/filter.png)
 
 Various lists can now be filtered using a text search. Very useful if you have many entities or enums in your project.
 
 
+## Customizable recent files colors
+![](1.3.0/homeColors.png)
+
+You can now customize colors for all your recent projects on your Home screen.
+
+
 
 ## Better compact mode
-
 ![](1.3.0/compactMode.png)
 
 Just press `TAB` to switch between **normal** and **compact** UI modes. The reworked compact mode is now even more... well.. compact.
