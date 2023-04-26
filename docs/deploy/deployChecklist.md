@@ -1,5 +1,5 @@
 ## Tools
-- [ ] Define a `GH_TOKEN` env var  ([link](https://github.com/settings/tokens))
+- [ ] Define a `GH_TOKEN` env var  ([link](https://github.com/settings/tokens), all repo, Actions+Contents)
 - [ ] Install "**Itch.io Butler**" ([download](https://itchio.itch.io/butler)) & login (`butler login`, [doc](https://itch.io/docs/butler/))
 - [ ] Add butler to env `PATH`
 - [ ] Add code signing files to env
