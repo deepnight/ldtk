@@ -30,6 +30,7 @@ typedef AppSettings = {
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
+	var recentDirColors : Array<{ path:String, col:String }>;
 
 	var uiStates : Array<{ id:String, val:Int }>;
 	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
@@ -76,6 +77,7 @@ class Settings {
 			lastKnownVersion: null,
 			recentProjects: [],
 			recentDirs: null,
+			recentDirColors: [],
 
 			compactMode: false,
 			grid: true,

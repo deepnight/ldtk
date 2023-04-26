@@ -1190,6 +1190,7 @@ ul.log {
 .icon.checker			{ background-image: url("../icons/checker.svg"); }
 .icon.clear				{ background-image: url("../icons/clear.svg"); }
 .icon.close				{ background-image: url("../icons/close.png"); }
+.icon.color				{ background-image: url("../icons/color.svg"); }
 .icon.collapsed			{ background-image: url("../icons/collapsed.svg"); }
 .icon.community			{ background-image: url("../icons/community.svg"); }
 .icon.contextMenu		{ background-image: url("../icons/contextMenu.svg"); }
@@ -3540,10 +3541,10 @@ textarea {
 					color: $orangeLight;
 				}
 				.icon {
-					opacity: 0.5;
-					width: 1.2em;
-					height: 1.2em;
-					margin-right: 0.5em;
+					opacity: 0.7;
+					width: 18px;
+					height: 18px;
+					margin-right: 3px;
 				}
 				.sub {
 					display: block;
@@ -3574,6 +3575,9 @@ textarea {
 				&.strong {
 					font-weight: bold;
 					color: $orangeLight;
+				}
+				&.separatorBefore {
+					margin-top: 8px;
 				}
 				&.separatorAfter {
 					margin-bottom: 8px;

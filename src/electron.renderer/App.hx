@@ -653,11 +653,6 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentProject(path:String) {
-		// #if !debug
-		// if( isInAppDir(path,true) )
-		// 	return false;
-		// #end
-
 		// No backup files
 		if( ui.ProjectSaver.extractBackupInfosFromFileName(path) != null )
 			return false;
@@ -685,6 +680,42 @@ class App extends dn.Process {
 				settings.v.recentProjects[i] = newPath;
 		settings.save();
 	}
+
+
+	public function hasForcedDirColor(dir:String) {
+		for(dc in settings.v.recentDirColors)
+			if( dc.path==dir )
+				return true;
+		return false;
+	}
+
+	public function getRecentDirColor(dir:String) : dn.Col {
+		for(dc in settings.v.recentDirColors)
+			if( dc.path==dir )
+				return dn.Col.parseHex(dc.col);
+
+		var csum = 0;
+		for(c in dir.split(""))
+			csum+=c.charCodeAt(0);
+		var pal = Const.getNicePalette().filter( c->c.fastLuminance>=0.4 );
+		var col = pal[csum%pal.length];
+		return col;
+	}
+
+
+	public function forceDirColor(dir:String, ?c:dn.Col) {
+		var i = 0;
+		while( i < settings.v.recentDirColors.length )
+			if( settings.v.recentDirColors[i].path==dir )
+				settings.v.recentDirColors.splice(i,1);
+			else
+				i++;
+		if( c!=null ) {
+			settings.v.recentDirColors.push({ path: dir, col:c.toHex() });
+			settings.save();
+		}
+	}
+
 
 	public function clearRecentProjects() {
 		settings.v.recentProjects = [];
