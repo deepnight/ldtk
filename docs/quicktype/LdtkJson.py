@@ -1830,6 +1830,7 @@ class BgPos(Enum):
     CONTAIN = "Contain"
     COVER = "Cover"
     COVER_DIRTY = "CoverDirty"
+    REPEAT = "Repeat"
     UNSCALED = "Unscaled"
 
 
@@ -1903,7 +1904,7 @@ class Level:
     bg_pivot_y: float
     """An enum defining the way the background image (if any) is positioned on the level. See
     `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
-    `Contain`, `Cover`, `CoverDirty`
+    `Contain`, `Cover`, `CoverDirty`, `Repeat`
     """
     level_bg_pos: Optional[BgPos]
     """The *optional* relative path to the level background image."""

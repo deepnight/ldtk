@@ -778,7 +778,7 @@ type Level struct {
 	BgPivotY                                                                                    float64                  `json:"bgPivotY"`
 	// An enum defining the way the background image (if any) is positioned on the level. See                            
 	// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,                               
-	// `Contain`, `Cover`, `CoverDirty`                                                                                  
+	// `Contain`, `Cover`, `CoverDirty`, `Repeat`                                                                        
 	LevelBgPos                                                                                  *BgPos                   `json:"bgPos"`
 	// The *optional* relative path to the level background image.                                                       
 	BgRelPath                                                                                   *string                  `json:"bgRelPath"`
@@ -983,9 +983,9 @@ const (
 	FullSizeCropped TileRenderMode = "FullSizeCropped"
 	FullSizeUncropped TileRenderMode = "FullSizeUncropped"
 	NineSlice TileRenderMode = "NineSlice"
-	Repeat TileRenderMode = "Repeat"
 	Stretch TileRenderMode = "Stretch"
 	TileRenderModeCover TileRenderMode = "Cover"
+	TileRenderModeRepeat TileRenderMode = "Repeat"
 )
 
 // Checker mode Possible values: `None`, `Horizontal`, `Vertical`
@@ -1031,6 +1031,7 @@ const (
 type BgPos string
 const (
 	BgPosCover BgPos = "Cover"
+	BgPosRepeat BgPos = "Repeat"
 	Contain BgPos = "Contain"
 	CoverDirty BgPos = "CoverDirty"
 	Unscaled BgPos = "Unscaled"

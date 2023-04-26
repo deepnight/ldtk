@@ -1863,7 +1863,7 @@ namespace ldtk
         /// <summary>
         /// An enum defining the way the background image (if any) is positioned on the level. See
         /// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
-        /// `Contain`, `Cover`, `CoverDirty`
+        /// `Contain`, `Cover`, `CoverDirty`, `Repeat`
         /// </summary>
         [JsonProperty("bgPos")]
         public BgPos? LevelBgPos { get; set; }
@@ -2153,7 +2153,7 @@ namespace ldtk
 
     public enum Flag { DiscardPreCsvIntGrid, ExportPreCsvIntGridFormat, IgnoreBackupSuggest, MultiWorlds, PrependIndexToLevelFileNames, UseMultilinesType };
 
-    public enum BgPos { Contain, Cover, CoverDirty, Unscaled };
+    public enum BgPos { Contain, Cover, CoverDirty, Repeat, Unscaled };
 
     public enum WorldLayout { Free, GridVania, LinearHorizontal, LinearVertical };
 
@@ -2999,6 +2999,8 @@ namespace ldtk
                     return BgPos.Cover;
                 case "CoverDirty":
                     return BgPos.CoverDirty;
+                case "Repeat":
+                    return BgPos.Repeat;
                 case "Unscaled":
                     return BgPos.Unscaled;
             }
@@ -3023,6 +3025,9 @@ namespace ldtk
                     return;
                 case BgPos.CoverDirty:
                     serializer.Serialize(writer, "CoverDirty");
+                    return;
+                case BgPos.Repeat:
+                    serializer.Serialize(writer, "Repeat");
                     return;
                 case BgPos.Unscaled:
                     serializer.Serialize(writer, "Unscaled");

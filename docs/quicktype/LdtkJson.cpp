@@ -2176,7 +2176,7 @@ namespace quicktype {
         void set_top_left_px(const std::vector<int64_t> & value) { this->top_left_px = value; }
     };
 
-    enum class BgPos : int { CONTAIN, COVER, COVER_DIRTY, UNSCALED };
+    enum class BgPos : int { CONTAIN, COVER, COVER_DIRTY, REPEAT, UNSCALED };
 
     /**
      * Nearby level info
@@ -2309,7 +2309,7 @@ namespace quicktype {
         /**
          * An enum defining the way the background image (if any) is positioned on the level. See
          * `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
-         * `Contain`, `Cover`, `CoverDirty`
+         * `Contain`, `Cover`, `CoverDirty`, `Repeat`
          */
         boost::optional<BgPos> get_level_bg_pos() const { return level_bg_pos; }
         void set_level_bg_pos(boost::optional<BgPos> value) { this->level_bg_pos = value; }
@@ -4269,6 +4269,7 @@ namespace quicktype {
         if (j == "Contain") x = BgPos::CONTAIN;
         else if (j == "Cover") x = BgPos::COVER;
         else if (j == "CoverDirty") x = BgPos::COVER_DIRTY;
+        else if (j == "Repeat") x = BgPos::REPEAT;
         else if (j == "Unscaled") x = BgPos::UNSCALED;
         else { throw std::runtime_error("Input JSON does not conform to schema!"); }
     }
@@ -4278,6 +4279,7 @@ namespace quicktype {
             case BgPos::CONTAIN: j = "Contain"; break;
             case BgPos::COVER: j = "Cover"; break;
             case BgPos::COVER_DIRTY: j = "CoverDirty"; break;
+            case BgPos::REPEAT: j = "Repeat"; break;
             case BgPos::UNSCALED: j = "Unscaled"; break;
             default: throw std::runtime_error("This should not happen");
         }

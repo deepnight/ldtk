@@ -1365,7 +1365,7 @@ pub struct Level {
 
     /// An enum defining the way the background image (if any) is positioned on the level. See
     /// `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
-    /// `Contain`, `Cover`, `CoverDirty`
+    /// `Contain`, `Cover`, `CoverDirty`, `Repeat`
     #[serde(rename = "bgPos")]
     level_bg_pos: Option<BgPos>,
 
@@ -1817,6 +1817,9 @@ pub enum BgPos {
 
     #[serde(rename = "CoverDirty")]
     CoverDirty,
+
+    #[serde(rename = "Repeat")]
+    Repeat,
 
     #[serde(rename = "Unscaled")]
     Unscaled,

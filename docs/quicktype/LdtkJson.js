@@ -651,6 +651,7 @@ const typeMap = {
         "Contain",
         "Cover",
         "CoverDirty",
+        "Repeat",
         "Unscaled",
     ],
     "WorldLayout": [
