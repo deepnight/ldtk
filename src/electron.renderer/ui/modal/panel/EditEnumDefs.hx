@@ -2,6 +2,7 @@ package ui.modal.panel;
 
 class EditEnumDefs extends ui.modal.Panel {
 	var curEnum : Null<data.def.EnumDef>;
+	var search : QuickSearch;
 
 	public function new() {
 		super();
@@ -95,6 +96,10 @@ class EditEnumDefs extends ui.modal.Panel {
 			});
 
 		});
+
+		// Create quick search
+		search = new ui.QuickSearch( jContent.find(".enumList ul") );
+		search.jWrapper.appendTo( jContent.find(".search") );
 
 		// Default enum selection
 		if( project.defs.enums.length>0 )
@@ -368,6 +373,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 		JsTools.parseComponents(jEnumList);
 		checkBackup();
+		search.run();
 	}
 
 

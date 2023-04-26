@@ -42,16 +42,15 @@ class QuickSearch {
 		if( searchOverride!=null )
 			jSearch.val(searchOverride);
 
+		jList.find(".searchMatched, .searchDiscarded").removeClass("searchMatched searchDiscarded");
+
 		// Show/hide matches
 		var rawSearch = Std.string(jSearch.val());
-		trace("run search: "+rawSearch);
 		jList.find("li:not(.subList)").each( (i,e)->{
 			var jLi = new J(e);
 			var jSubListParent = jLi.closest(".subList");
 
 			// Reset
-			jLi.removeClass("searchMatched searchDiscarded");
-			jSubListParent.removeClass("searchDiscarded");
 			if( rawSearch.length<=0 ) {
 				jClear.hide();
 				return;
@@ -65,8 +64,10 @@ class QuickSearch {
 			}
 
 			// Show/hide elements
-			if( JsTools.searchStringMatches(jSearch.val(), jLi.text()) )
+			if( JsTools.searchStringMatches(jSearch.val(), jLi.text()) ) {
 				jLi.addClass("searchMatched");
+				jSubListParent.addClass("searchMatched");
+			}
 			else
 				jLi.addClass("searchDiscarded");
 

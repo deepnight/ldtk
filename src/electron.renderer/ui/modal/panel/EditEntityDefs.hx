@@ -11,6 +11,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	var curEntity : Null<data.def.EntityDef>;
 	public var fieldsForm : FieldDefsForm;
+	var search : QuickSearch;
 
 
 	public function new(?editDef:data.def.EntityDef) {
@@ -69,6 +70,9 @@ class EditEntityDefs extends ui.modal.Panel {
 		fieldsForm = new ui.FieldDefsForm( FP_Entity(null) );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
+		// Create quick search
+		search = new ui.QuickSearch( jContent.find(".entityList ul") );
+		search.jWrapper.appendTo( jContent.find(".search") );
 
 		// Select same entity as current client selection
 		if( editDef!=null )
@@ -592,6 +596,7 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		JsTools.parseComponents(jEntityList);
 		checkBackup();
+		search.run();
 	}
 
 

@@ -10,6 +10,7 @@ class EditLayerDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
 	public var cur : Null<data.def.LayerDef>;
+	var search : QuickSearch;
 
 	public function new() {
 		super();
@@ -55,6 +56,10 @@ class EditLayerDefs extends ui.modal.Panel {
 			}
 
 		});
+
+		// Create quick search
+		search = new ui.QuickSearch( jContent.find(".mainList ul") );
+		search.jWrapper.appendTo( jContent.find(".search") );
 
 		select(editor.curLayerDef);
 	}
@@ -729,5 +734,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit(LayerDefSorted);
 		});
 		checkBackup();
+		search.run();
 	}
 }
