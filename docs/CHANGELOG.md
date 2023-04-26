@@ -53,6 +53,14 @@ Tags are not behaving like "folders" and can now be open/closed accordingly in U
 
 
 
+## Lists quick search
+
+![](1.3.0/filter.png)
+
+Various lists can now be filtered using a text search. Very useful if you have many entities or enums in your project.
+
+
+
 ## Better compact mode
 
 ![](1.3.0/compactMode.png)
@@ -71,6 +79,7 @@ Just press `TAB` to switch between **normal** and **compact** UI modes. The rewo
  - Added a context menu to layers list in the main panel
  - Added a context menu on all custom fields to edit their definition
  - Added "colored flags" icons to the embedded atlas
+ - Better pivot editor design
  - Sections of the World panel can now be collapsed (world settings, current level properties and level custom fields).
  - Fixed the size of Reset buttons in custom field forms
  - Fixed entity render update when zooming in/out
