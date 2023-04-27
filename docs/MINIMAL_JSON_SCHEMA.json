@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.3.0 JSON schema",
+	"title": "LDtk 1.3.1 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.3.0",
+	"version": "1.3.1",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -1245,6 +1245,7 @@
 			"description": "This structure represents a single tile from a given Tileset.",
 			"title": "Tile instance",
 			"required": [
+				"a",
 				"f",
 				"px",
 				"src",
@@ -1267,6 +1268,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"a": {
+					"description": "Alpha/opacity of the tile (0-1, defaults to 1)",
+					"type": [
+						"number"
 					]
 				},
 				"f": {
