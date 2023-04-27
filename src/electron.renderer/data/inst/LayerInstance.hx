@@ -165,7 +165,7 @@ class LayerInstance {
 									f: tileInfos.flips,
 									t: tileInfos.tid,
 									d: [r.uid,allTiles.key],
-									a: 1.,
+									a: r.alpha,
 								});
 							}
 					});
@@ -721,7 +721,7 @@ class LayerInstance {
 					srcY: td.getTileSourceY(tid),
 					tid: tid,
 					flips: flips,
-					a: r.alpha, 
+					a: r.alpha,
 				}
 			} )
 		));
@@ -821,7 +821,7 @@ class LayerInstance {
 						// Break on match is ON
 						coordLocks.set( coordId(x,y), true ); // mark cell as locked
 					}
-					else if( !r.hasAnyPositionOffset() ) {
+					else if( !r.hasAnyPositionOffset() && r.alpha>=1 ) {
 						// Check for opaque tiles
 						for( t in autoTilesCache.get(r.uid).get( coordId(x,y) ) )
 							if( td.isTileOpaque(t.tid) ) {
