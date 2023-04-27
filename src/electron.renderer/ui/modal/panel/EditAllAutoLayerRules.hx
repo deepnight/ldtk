@@ -834,6 +834,24 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		else if( r.chance<=0 )
 			i.jInput.addClass("off");
 
+		// Alpha
+		var old = r.alpha;
+		var i = Input.linkToHtmlInput( r.alpha, jRule.find("[name=alpha]"));
+		i.linkEvent( LayerRuleChanged(r) );
+		// i.enablePercentageMode();
+		i.setBounds(0.01,1);
+		i.enableSlider(0.5);
+		i.setValueStep(0.01);
+		i.setPrecision(2);
+		i.onValueChange = (v)->{
+			if( v<1 )
+				r.breakOnMatch = false;
+			if( v/100!=old )
+				invalidateRuleAndOnesBelow(r);
+		}
+		if( r.alpha>=1 )
+			i.jInput.addClass("max");
+
 		// Random offsets
 		var jFlag = jRule.find("a.randomOffset");
 		jFlag.addClass( r.hasAnyPositionOffset() ? "on" : "off" );
@@ -856,6 +874,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jFlag.click( function(ev:js.jquery.Event) {
 			if( r.hasAnyPositionOffset() ) {
 				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
+				return;
+			}
+			if( r.alpha<1 ) {
+				N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
 				return;
 			}
 			ev.preventDefault();

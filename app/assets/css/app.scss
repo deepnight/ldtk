@@ -8203,7 +8203,7 @@ body.sorting ul.collapsedSortTarget {
 
 						.options {
 							display: grid;
-							grid-template-columns: repeat(6, 1fr);
+							grid-template-columns: repeat(7, 1fr);
 							gap: 2px;
 
 							&>* {
@@ -8221,7 +8221,7 @@ body.sorting ul.collapsedSortTarget {
 							}
 
 							.random {
-								grid-column: 1/4;
+								grid-column: 1/span 3;
 								display: flex;
 								flex-wrap: nowrap;
 								align-items: center;
@@ -8234,9 +8234,6 @@ body.sorting ul.collapsedSortTarget {
 									padding-bottom: 1px;
 									background-color: $bgMed;
 									background-image: none !important;
-									&:focus, &.editing {
-										background-color: $bgDark;
-									}
 									&.max {
 										color: $bgLight;
 									}
@@ -8252,10 +8249,24 @@ body.sorting ul.collapsedSortTarget {
 								}
 							}
 
+							input[type=text] {
+								&:focus, &.editing {
+									background-color: $bgDark;
+								}
+							}
+
+							input.alpha {
+								grid-column: 4/7;
+								font-size: 8pt;
+								&.max {
+									color: $bgLight;
+								}
+							}
+
 							.modulo {
 								display: grid;
 								align-items: center;
-								grid-column: 5/7;
+								// grid-column: 7/8;
 								font-size: 9pt;
 								text-align: center;
 								white-space: nowrap;
