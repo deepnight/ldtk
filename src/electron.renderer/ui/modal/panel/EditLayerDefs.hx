@@ -700,12 +700,11 @@ class EditLayerDefs extends ui.modal.Panel {
 			jLi.append( JsTools.createLayerTypeIcon2(ld.type) );
 			if( ld.uiColor!=null ) {
 				if( cur==ld ) {
-					jLi.css("background-color", ld.uiColor.toHex());
-					jLi.css("color", ld.uiColor.autoContrast.toHex());
+					jLi.css("background-color", ld.uiColor.toWhite(0.25).toHex());
 				}
 				else {
-					jLi.css("color", ld.uiColor.toHex());
-					jLi.css("background-color", ld.uiColor.toBlack(0.75).toHex());
+					jLi.css("color", ld.uiColor.toWhite(0.3).toHex());
+					jLi.css("background-color", ld.uiColor.toCssRgba(0.3));
 				}
 			}
 
