@@ -10,7 +10,7 @@
 	},
 	"iid": "a2533480-7820-11ed-b6fd-e9108160ae94",
 	"jsonVersion": "1.3.0",
-	"appBuildId": 467337,
+	"appBuildId": 467367,
 	"nextUid": 121,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -1592,7 +1592,7 @@
 			"__cHei": 14,
 			"identifier": "Inca_extended_front_by_Kronbits",
 			"uid": 1,
-			"relPath": "atlas/Inca_extended_front_by_Kronbits.png",
+			"relPath": "../atlas/Inca_extended_front_by_Kronbits.png",
 			"embedAtlas": null,
 			"pxWid": 320,
 			"pxHei": 224,
@@ -1606,7 +1606,7 @@
 			"savedSelections": [],
 			"cachedPixelData": {
 				"opaqueTiles": "1111111111111111100011111111111111001000111111111111110010001111111111111100100011111111110000000000111111111111110000001111111111110000000011111111111110000000111111111100000000001111111111000000000011111011000000000000111111000000000000001111000000000000000011110000000000000000",
-				"averageColors": "f965f964fa65f965f854f854fa65f964fa64f964fa64fa64fa64f964f954f964f954000000000000f854f854f854f854f954f854f854f844f954f854f954fa64fa64f95400000000f954000000000000f965f964f965f964f965f954f965f954fa65f965fa54fa64fa64f95400000000f854000000000000f744f744f854f844f854f854f634f533f644f633f954f954f954f85476343634f844000000000000f954f954f964f854f964f954f964f854f964f85430001000384488547a647a658a64000000000000f854f754f964f964f954f854f954f854f854f854f397f497f497f397b965b9650000000000000000f855f854f965f964f965f964f965f964f965f964f498f4981397239739dc4bed3cee000000000000f854f854f744f854f954f954f854f965f964f954f498f498f4980000000000000000000000000000f854f854f854f854f954f964f954f965f854f9540000000000000000000000000000000000000000f854f854f964f855f854f854f954f854f854f964506650663066406625d624d623d711c700000000f965f854f744f854f6435633f387f4980000000021b731b811b721b821b700000000000000000000f854f643f643f754f754f85400000000000000001196119611861186117611860000000000000000fa65f965f954f7447643000000000000000000000000000000000000000000000000000000000000f965f965f954f7440000000000000000000000000000000000000000000000000000000000000000"
+				"averageColors": "f965f964fa65f965f854f854fa65f964fa64f964fa64fa64fa64f964f954f964f954063400001634f854f854f854f854f954f854f854f844f954f854f954fa64fa64f95400000000f95400000a751a75f965f964f965f964f965f954f965f954fa65f965fa54fa64fa64f95400000000f854000000000000f744f744f854f844f854f854f634f533f644f633f954f954f954f85476343634f844000000000000f954f954f964f854f964f954f964f854f964f85430001000384488547a647a658a64000000000000f854f754f964f964f954f854f954f854f854f854f397f497f497f397b965b9650000000000000000f855f854f965f964f965f964f965f964f965f964f498f4981397239739dc4bed3cee000000000000f854f854f744f854f954f954f854f965f964f954f498f498f4980000000000000000000000000000f854f854f854f854f954f964f954f965f854f9540000000000000000000000000000000000000000f854f854f964f855f854f854f954f854f854f964506650663066406625d624d623d711c700000000f965f854f744f854f6435633f387f4980000000021b731b811b721b821b700000000000000000000f854f643f643f754f754f85400000000000000001196119611861186117611860000000000000000fa65f965f954f7447643000000000000000000000000000000000000000000000000000000000000f965f965f954f7440000000000000000000000000000000000000000000000000000000000000000"
 			}
 		},
 		{
@@ -1614,7 +1614,7 @@
 			"__cHei": 14,
 			"identifier": "Inca_back2_by_Kronbits",
 			"uid": 38,
-			"relPath": "../app/extraFiles/samples/atlas/Inca_back2_by_Kronbits.png",
+			"relPath": "../atlas/Inca_back2_by_Kronbits.png",
 			"embedAtlas": null,
 			"pxWid": 160,
 			"pxHei": 224,
@@ -1627,8 +1627,8 @@
 			"customData": [],
 			"savedSelections": [],
 			"cachedPixelData": {
-				"opaqueTiles": "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110011111111001111111111111111111111",
-				"averageColors": "f234f233f234f234f234f234f344f344f234f234f233f233f233f233f234f234f244f244f233f223f244f244f244f244f244f244f244f244f344f344f234f233f234f234f234f234f223f223f233f233f344f344f234f244f244f244f234f244f244f244f234f234f244f244f244f244f244f244f234f234f234f234f234f234f244f244f234f234f234f244f233f233f233f244f244f244f234f234f234f234f233f234f234f234f244f244f244f234f234f234f233f234f234f234f234f234f234f234f234f244f233f234f233f234f233f12271224122f234f234f233f233f223f234f234f23431221122f234f234f234f244f244f233f234f234f234f234f234f234f233f244f244f233f234f234f234f234f234f234"
+				"opaqueTiles": "11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",
+				"averageColors": "f234f233f234f234f234f234f344f344f234f234f233f233f233f233f234f234f244f244f233f223f244f244f244f244f244f244f244f244f344f344f234f233f234f234f234f234f223f223f233f233f344f344f234f244f244f244f234f244f244f244f234f234f244f244f244f244f244f244f234f234f234f234f234f234f244f244f234f234f234f244f233f233f233f244f244f244f234f234f234f234f233f234f234f234f244f244f244f234f234f234f233f234f234f234f234f234f234f234f234f244f233f234f233f234f233f234f234f234f234f234f233f233f223f234f234f234f234f234f234f234f234f244f244f233f234f234f234f234f234f234f233f244f244f233f234f234f234f234f234f234"
 			}
 		},
 		{
@@ -1728,7 +1728,7 @@
 							"height": 24,
 							"defUid": 88,
 							"px": [376,272],
-							"fieldInstances": [{ "__identifier": "Weapon", "__value": "Bow", "__type": "LocalEnum.Weapons", "__tile": null, "defUid": 91, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Weapon", "__type": "LocalEnum.Weapons", "__value": "Bow", "__tile": null, "defUid": 91, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Bow"]
 							}] }]
@@ -1745,7 +1745,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [280,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gold", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gold", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
 							}] }]
@@ -1762,7 +1762,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [200,256],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Plants", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 16, "y": 288, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Plants", "__tile": { "tilesetUid": 89, "x": 16, "y": 288, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Plants"]
 							}] }]
@@ -1779,7 +1779,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [552,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -1796,7 +1796,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [584,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -1814,7 +1814,7 @@
 							"defUid": 95,
 							"px": [464,272],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": [ { "cx": 30, "cy": 12 }, { "cx": 39, "cy": 12 }, { "cx": 39, "cy": 17 } ], "__type": "Array<Point>", "__tile": null, "defUid": 96, "realEditorValues": [ {
+								{ "__identifier": "path", "__type": "Array<Point>", "__value": [ { "cx": 30, "cy": 12 }, { "cx": 39, "cy": 12 }, { "cx": 39, "cy": 17 } ], "__tile": null, "defUid": 96, "realEditorValues": [ {
 									"id": "V_String",
 									"params": ["30,12"]
 								}, {
@@ -1824,8 +1824,8 @@
 									"id": "V_String",
 									"params": ["39,17"]
 								} ] },
-								{ "__identifier": "alwaysMoving", "__value": false, "__type": "Bool", "__tile": null, "defUid": 97, "realEditorValues": [null] },
-								{ "__identifier": "speed", "__value": 50, "__type": "Int", "__tile": null, "defUid": 98, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+								{ "__identifier": "alwaysMoving", "__type": "Bool", "__value": false, "__tile": null, "defUid": 97, "realEditorValues": [null] },
+								{ "__identifier": "speed", "__type": "Int", "__value": 50, "__tile": null, "defUid": 98, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							]
 						},
 						{
@@ -1840,7 +1840,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [600,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Craft_Powder", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 16, "y": 256, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Craft_Powder", "__tile": { "tilesetUid": 89, "x": 16, "y": 256, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Craft_Powder"]
 							}] }]
@@ -1857,7 +1857,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [520,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gold", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gold", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
 							}] }]
@@ -1874,7 +1874,7 @@
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
-					"__tilesetRelPath": "atlas/Inca_extended_front_by_Kronbits.png",
+					"__tilesetRelPath": "../atlas/Inca_extended_front_by_Kronbits.png",
 					"iid": "a2b00c73-66b0-11ec-9cd7-03fe4549158d",
 					"levelId": 0,
 					"layerDefUid": 2,
@@ -6796,7 +6796,7 @@
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 38,
-					"__tilesetRelPath": "../app/extraFiles/samples/atlas/Inca_back2_by_Kronbits.png",
+					"__tilesetRelPath": "../atlas/Inca_back2_by_Kronbits.png",
 					"iid": "a2b00c74-66b0-11ec-9cd7-b32406881167",
 					"levelId": 0,
 					"layerDefUid": 37,
@@ -7268,7 +7268,7 @@
 							"height": 24,
 							"defUid": 88,
 							"px": [344,336],
-							"fieldInstances": [{ "__identifier": "Weapon", "__value": "Bow", "__type": "LocalEnum.Weapons", "__tile": null, "defUid": 91, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Weapon", "__type": "LocalEnum.Weapons", "__value": "Bow", "__tile": null, "defUid": 91, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Bow"]
 							}] }]
@@ -7285,7 +7285,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [696,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -7302,7 +7302,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [728,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -7319,7 +7319,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [600,336],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -7336,7 +7336,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [792,224],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Key", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 336, "y": 112, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Key", "__tile": { "tilesetUid": 89, "x": 336, "y": 112, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Key"]
 							}] }]
@@ -7354,12 +7354,12 @@
 							"defUid": 95,
 							"px": [416,256],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": [{ "cx": 37, "cy": 16 }], "__type": "Array<Point>", "__tile": null, "defUid": 96, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Array<Point>", "__value": [{ "cx": 37, "cy": 16 }], "__tile": null, "defUid": 96, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["37,16"]
 								}] },
-								{ "__identifier": "alwaysMoving", "__value": false, "__type": "Bool", "__tile": null, "defUid": 97, "realEditorValues": [] },
-								{ "__identifier": "speed", "__value": 32, "__type": "Int", "__tile": null, "defUid": 98, "realEditorValues": [] }
+								{ "__identifier": "alwaysMoving", "__type": "Bool", "__value": false, "__tile": null, "defUid": 97, "realEditorValues": [] },
+								{ "__identifier": "speed", "__type": "Int", "__value": 32, "__tile": null, "defUid": 98, "realEditorValues": [] }
 							]
 						},
 						{
@@ -7374,7 +7374,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [360,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gold", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gold", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
 							}] }]
@@ -7391,7 +7391,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [664,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -7408,7 +7408,7 @@
 							"height": 32,
 							"defUid": 117,
 							"px": [392,240],
-							"fieldInstances": [{ "__identifier": "icon", "__value": { "tilesetUid": 89, "x": 336, "y": 128, "w": 16, "h": 16 }, "__type": "Tile", "__tile": null, "defUid": 118, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "icon", "__type": "Tile", "__value": { "tilesetUid": 89, "x": 336, "y": 128, "w": 16, "h": 16 }, "__tile": null, "defUid": 118, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Item",
@@ -7422,7 +7422,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [344,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gold", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gold", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
 							}] }]
@@ -7439,7 +7439,7 @@
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
-					"__tilesetRelPath": "atlas/Inca_extended_front_by_Kronbits.png",
+					"__tilesetRelPath": "../atlas/Inca_extended_front_by_Kronbits.png",
 					"iid": "bd65ea02-c640-11ed-93c4-a1ca0dd7b429",
 					"levelId": 102,
 					"layerDefUid": 2,
@@ -14231,7 +14231,7 @@
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 38,
-					"__tilesetRelPath": "../app/extraFiles/samples/atlas/Inca_back2_by_Kronbits.png",
+					"__tilesetRelPath": "../atlas/Inca_back2_by_Kronbits.png",
 					"iid": "bd65ea03-c640-11ed-93c4-2184eea23455",
 					"levelId": 102,
 					"layerDefUid": 37,
@@ -14762,15 +14762,15 @@
 							"defUid": 95,
 							"px": [432,256],
 							"fieldInstances": [
-								{ "__identifier": "path", "__value": [{ "cx": 36, "cy": 16 }], "__type": "Array<Point>", "__tile": null, "defUid": 96, "realEditorValues": [{
+								{ "__identifier": "path", "__type": "Array<Point>", "__value": [{ "cx": 36, "cy": 16 }], "__tile": null, "defUid": 96, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["36,16"]
 								}] },
-								{ "__identifier": "alwaysMoving", "__value": true, "__type": "Bool", "__tile": null, "defUid": 97, "realEditorValues": [{
+								{ "__identifier": "alwaysMoving", "__type": "Bool", "__value": true, "__tile": null, "defUid": 97, "realEditorValues": [{
 									"id": "V_Bool",
 									"params": [ true ]
 								}] },
-								{ "__identifier": "speed", "__value": 50, "__type": "Int", "__tile": null, "defUid": 98, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
+								{ "__identifier": "speed", "__type": "Int", "__value": 50, "__tile": null, "defUid": 98, "realEditorValues": [{ "id": "V_Int", "params": [50] }] }
 							]
 						},
 						{
@@ -14785,7 +14785,7 @@
 							"height": 24,
 							"defUid": 88,
 							"px": [344,352],
-							"fieldInstances": [{ "__identifier": "Weapon", "__value": "Bow", "__type": "LocalEnum.Weapons", "__tile": null, "defUid": 91, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Weapon", "__type": "LocalEnum.Weapons", "__value": "Bow", "__tile": null, "defUid": 91, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Bow"]
 							}] }]
@@ -14802,7 +14802,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [632,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -14819,7 +14819,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [680,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -14836,7 +14836,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [728,368],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -14853,7 +14853,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [792,240],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Key", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 336, "y": 112, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Key", "__tile": { "tilesetUid": 89, "x": 336, "y": 112, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Key"]
 							}] }]
@@ -14870,7 +14870,7 @@
 							"height": 32,
 							"defUid": 117,
 							"px": [392,256],
-							"fieldInstances": [{ "__identifier": "icon", "__value": { "tilesetUid": 89, "x": 336, "y": 128, "w": 16, "h": 16 }, "__type": "Tile", "__tile": null, "defUid": 118, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "icon", "__type": "Tile", "__value": { "tilesetUid": 89, "x": 336, "y": 128, "w": 16, "h": 16 }, "__tile": null, "defUid": 118, "realEditorValues": [] }]
 						},
 						{
 							"__identifier": "Item",
@@ -14884,7 +14884,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [344,256],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gem", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gem", "__tile": { "tilesetUid": 89, "x": 96, "y": 976, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gem"]
 							}] }]
@@ -14901,7 +14901,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [360,256],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gold", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gold", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
 							}] }]
@@ -14918,7 +14918,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [328,256],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Gold", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Gold", "__tile": { "tilesetUid": 89, "x": 240, "y": 352, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
 							}] }]
@@ -14935,7 +14935,7 @@
 							"height": 20,
 							"defUid": 93,
 							"px": [312,256],
-							"fieldInstances": [{ "__identifier": "Items", "__value": "Craft_Powder", "__type": "LocalEnum.Items", "__tile": { "tilesetUid": 89, "x": 16, "y": 256, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "Items", "__type": "LocalEnum.Items", "__value": "Craft_Powder", "__tile": { "tilesetUid": 89, "x": 16, "y": 256, "w": 16, "h": 16 }, "defUid": 94, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Craft_Powder"]
 							}] }]
@@ -14952,7 +14952,7 @@
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 1,
-					"__tilesetRelPath": "atlas/Inca_extended_front_by_Kronbits.png",
+					"__tilesetRelPath": "../atlas/Inca_extended_front_by_Kronbits.png",
 					"iid": "6fdc95a4-c640-11ed-93c4-614a031618e2",
 					"levelId": 120,
 					"layerDefUid": 2,
@@ -21698,7 +21698,7 @@
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
 					"__tilesetDefUid": 38,
-					"__tilesetRelPath": "../app/extraFiles/samples/atlas/Inca_back2_by_Kronbits.png",
+					"__tilesetRelPath": "../atlas/Inca_back2_by_Kronbits.png",
 					"iid": "6fdc95a5-c640-11ed-93c4-b560cfb706c8",
 					"levelId": 120,
 					"layerDefUid": 37,
