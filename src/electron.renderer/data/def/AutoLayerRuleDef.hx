@@ -11,7 +11,7 @@ class AutoLayerRuleDef {
 	public var breakOnMatch = true;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
-	public var alpha : Float;
+	public var alpha = 1.;
 	public var outOfBoundsValue : Null<Int>;
 	public var flipX = false;
 	public var flipY = false;
