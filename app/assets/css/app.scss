@@ -1849,9 +1849,21 @@ dl.form {
 		}
 
 		input[type=color] {
+			flex: 0 1 64px;
 			height: 32px;
 			cursor: pointer;
 			padding: 0;
+			&.null {
+				background-image: url("../img/stripes.png");
+				background-color: gray;
+				appearance: none;
+				border-width: 1px;
+				border-color: transparent;
+				opacity: 0.3;
+				&:hover {
+					opacity: 1;
+				}
+			}
 		}
 		input[type=color]:hover {
 			outline: 1px solid $orange;
