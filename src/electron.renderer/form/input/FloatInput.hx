@@ -34,8 +34,9 @@ class FloatInput extends form.Input<Float> {
 		displayAsPct = true;
 		jInput.addClass("percentage");
 		writeValueToInput();
+		setValueStep(0.01);
 		if( slider )
-			enableSlider( displayAsPct ? 100 : 1 );
+			enableSlider( displayAsPct ? 50 : 1 );
 	}
 
 	static var zerosReg = ~/([\-0-9]+\.[0-9]*?)0{3,}/g;
