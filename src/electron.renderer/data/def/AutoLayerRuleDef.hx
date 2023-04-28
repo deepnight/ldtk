@@ -341,6 +341,18 @@ class AutoLayerRuleDef {
 			anyFix = true;
 		}
 
+		if( xModulo==1 && checker==Horizontal ) {
+			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
+			checker = yModulo>1 ? Vertical : None;
+			anyFix = true;
+		}
+
+		if( yModulo==1 && checker==Vertical ) {
+			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
+			checker = xModulo>1 ? Horizontal : None;
+			anyFix = true;
+		}
+
 		if( trim() )
 			anyFix = true;
 

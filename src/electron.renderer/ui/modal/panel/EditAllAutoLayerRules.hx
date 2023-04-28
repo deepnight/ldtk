@@ -833,7 +833,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
 		i.linkEvent( LayerRuleChanged(r) );
 		i.enablePercentageMode();
-		i.setBounds(0,1);
+		i.setBounds(0.01, 1);
 		i.onValueChange = (v)->{
 			if( v/100<old )
 				invalidateRuleAndOnesBelow(r);
@@ -940,42 +940,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				r.setPerlin( !r.hasPerlin() );
 				if( r.hasPerlin() )
 					invalidateRuleAndOnesBelow(r);
-				editor.ge.emit( LayerRuleChanged(r) );
-			}
-		});
-
-		// Checker
-		var jFlag = jRule.find("a.checker");
-		jFlag.addClass( r.checker!=None ? "on" : "off" );
-		jFlag.mousedown( function(ev:js.jquery.Event) {
-			if( r.xModulo==1 && r.yModulo==1 ) {
-				N.error("Checker mode needs X or Y modulo greater than 1.");
-				return;
-			}
-			ev.preventDefault();
-			if( ev.button==2 ) {
-				// Pick vertical/horizontal checker
-				var m = new Dialog(jFlag);
-				for(k in [ldtk.Json.AutoLayerRuleCheckerMode.Horizontal, ldtk.Json.AutoLayerRuleCheckerMode.Vertical]) {
-					var name = k.getName();
-					var jRadio = new J('<input name="mode" type="radio" value="$name" id="$name"/>');
-					jRadio.change( function(ev:js.jquery.Event) {
-						r.checker = k;
-						invalidateRuleAndOnesBelow(r);
-						editor.ge.emit( LayerRuleChanged(r) );
-					});
-					m.jContent.append(jRadio);
-					m.jContent.append('<label for="$name">$name</label>');
-				}
-
-				if( r.checker==None )
-					r.checker = r.xModulo==1 ? Vertical : Horizontal;
-				m.jContent.find("[name=mode][value="+r.checker.getName()+"]").click();
-			}
-			else {
-				// Just toggle it
-				r.checker = r.checker==None ? ( r.xModulo==1 ? Vertical : Horizontal ) : None;
-				invalidateRuleAndOnesBelow(r);
 				editor.ge.emit( LayerRuleChanged(r) );
 			}
 		});

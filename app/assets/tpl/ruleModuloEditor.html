@@ -1,13 +1,15 @@
-<!-- <div class="options">
-	<label title="**Checker mode** Offset rule check every rows/columns. RIGHT CLICK to adjust.">
-		<input type="radio" name="checker" value=""/>
-		No
-		<input type="radio" name="checker" value=""/>
-		Checker mode
-	</label>
-</div> -->
-
 <div class="help">Modulo values will allow you to limit this rule to every X columns or every Y rows. For example, if X modulo is 3, then the rule will only apply every 3 columns. If the X offset is 1, then the column counting will be offseted by 1.</div>
+
+<dl class="form">
+	<dt>
+		<label>Checkboard mode</label>
+		<info>Enabling this will alternate the resulting tiles like a checkboard.</info>
+	</dt>
+	<dd>
+		<select class="checker"></select>
+	</dd>
+</dl>
+
 
 <div class="axis x">
 	<label for="xModulo" title="X modulo: only apply the rule every X columns"> X modulo <input type="text" id="xModulo"/> </label>

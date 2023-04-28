@@ -1183,6 +1183,7 @@ ul.log {
 .icon.down				{ background-image: url("../icons/arrow_down.svg"); }
 
 .icon.active			{ background-image: url("../icons/active.png"); }
+.icon.alpha				{ background-image: url("../icons/alpha.svg"); }
 .icon.appUpdate			{ background-image: url("../icons/appUpdate.svg"); }
 .icon.add				{ background-image: url("../icons/add.svg"); }
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
@@ -1240,6 +1241,7 @@ ul.log {
 .icon.pick				{ background-image: url("../icons/pick.svg"); }
 .icon.prohibited		{ background-image: url("../icons/prohibited.svg"); }
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
+.icon.random			{ background-image: url("../icons/random.svg"); }
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
 .icon.rename			{ background-image: url("../icons/rename.svg"); }
@@ -2136,6 +2138,13 @@ select {
 						height: 32px;
 						background-image: url("../img/stripes.png");
 						border: 1px solid $bgLight;
+					}
+
+					&.disabled {
+						color: $bgLight;
+						font-style: italic;
+						pointer-events: none;
+						background-color: $bgMed;
 					}
 
 					&.selected {
@@ -8232,85 +8241,54 @@ body.sorting ul.collapsedSortTarget {
 								height: 18px;
 							}
 
-							.random {
-								grid-column: 1/span 3;
-								display: flex;
-								flex-wrap: nowrap;
-								align-items: center;
+							input[type=text] {
+								padding-left: 24px;
+								font-size: 9pt;
+								background-repeat: no-repeat;
+								background-position: 3px center;
+								background-size: 18px;
 
-								input[name="random"] {
-									width: 100%;
-									flex: 1 1 0;
-									font-size: 9pt;
-									padding-top: 1px;
-									padding-bottom: 1px;
-									background-color: $bgMed;
-									background-image: none !important;
-									&.max {
-										color: $bgLight;
-									}
+								&.max:not(:focus, .editing) {
+									opacity: 0.25;
+								}
+
+								&:focus,
+								&.editing {
+									background-color: $bgDark;
+								}
+
+								&[name="random"] {
+									grid-column: span 3;
+									background-image: url("../icons/random.svg");
 									&.off {
 										color: $red;
 									}
 								}
 
-								span {
-									font-size: 8pt;
-									color: $bgLighter;
-									padding-right: 8px;
-								}
-							}
-
-							input[type=text] {
-								&:focus, &.editing {
-									background-color: $bgDark;
-								}
-							}
-
-							input.alpha {
-								grid-column: 4/7;
-								font-size: 8pt;
-								&.max {
-									color: $bgLight;
+								&[name="alpha"] {
+									grid-column: span 3;
+									background-image: url("../icons/alpha.svg");
 								}
 							}
 
 							.modulo {
 								display: grid;
+								grid-column: span 2;
 								align-items: center;
-								// grid-column: 7/8;
 								font-size: 9pt;
 								text-align: center;
 								white-space: nowrap;
 								cursor: pointer;
 
 								&.default {
-									color: $bgLighter;
+									opacity: 0.4;
+									color: $red;
+									background-color: $darkRed;
 								}
 
 								&:hover {
 									color: $bgDark;
 									background-color: $orange;
-								}
-							}
-
-							input[name=xModulo] {
-								grid-column: 5/6;
-							}
-							input[name=yModulo] {
-								grid-column: 6/7;
-							}
-							input[name=xModulo],
-							input[name=yModulo] {
-								// width: 20px;
-								font-size: 9pt;
-								text-align: center;
-								color: $help;
-								&:not(.default) {
-									border: 1px solid $green;
-								}
-								&.default {
-									color: $bgLighter;
 								}
 							}
 
@@ -8663,12 +8641,6 @@ $patternSize : 32px;
 
 .window.dialog.ruleModuloEditor {
 
-	// >.wrapper {
-		// padding: $gutter;
-		// justify-self: left;
-		// margin-left: 80px;
-	// }
-
 	>.wrapper .content {
 		display: grid;
 		max-width: 400px;
@@ -8676,6 +8648,17 @@ $patternSize : 32px;
 
 		.help {
 			grid-column: 1/3;
+		}
+		.form {
+			margin-top: 8px;
+			padding-top: 8px;
+			border-top: 1px solid $bgLight;
+			grid-column: 1 / span 2;
+			grid-row: 4 / span 1;
+			dt {
+				white-space: nowrap;
+				max-width: none;
+			}
 		}
 
 		.options {

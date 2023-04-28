@@ -22,6 +22,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 
 	function renderForm() {
 		jContent.find("*").off();
+		jContent.find(".advancedSelect").remove();
 		loadTemplate("ruleModuloEditor");
 
 		// Reset
@@ -29,6 +30,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 			ev.preventDefault();
 			rule.xModulo = rule.yModulo = 1;
 			rule.xOffset = rule.yOffset = 0;
+			rule.checker = None;
 			editor.ge.emit(LayerRuleChanged(rule));
 			renderForm();
 		});
@@ -70,6 +72,29 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		i.enableSlider(sliderSpeed);
 		i.addAutoClass("default", (v)->v==1);
 
+		var i = new form.input.EnumSelect(
+			jContent.find("select.checker"),
+			ldtk.Json.AutoLayerRuleCheckerMode,
+			false,
+			()->rule.checker,
+			(v)->{
+				rule.checker = v;
+				editor.ge.emit(LayerRuleChanged(rule));
+				renderForm();
+			},
+			(v)->switch v {
+				case None: L.t._("Off");
+				case Horizontal: L.t._("Horizontally");
+				case Vertical: L.t._("Vertically");
+			},
+			(v)->switch v {
+				case None: true;
+				case Horizontal: rule.xModulo>1;
+				case Vertical: rule.yModulo>1;
+			},
+			true
+		);
+
 		JsTools.parseComponents(jContent);
 		renderPreview();
 	}
@@ -79,7 +104,8 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		switch e {
 			case LayerRuleChanged(r):
 				if( r==rule )
-					renderPreview();
+					// renderPreview();
+					renderForm();
 
 			case _:
 		}
