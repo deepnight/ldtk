@@ -758,6 +758,9 @@ class JsTools {
 				jOpt.attr("value", jOldOpt.attr("value"));
 				jOpt.text( jOldOpt.text() );
 
+				if( jOldOpt.prop("disabled")==true )
+					jOpt.addClass("disabled");
+
 				// Background color
 				if( jOldOpt.is("[color]") ) {
 					var c = dn.Col.parseHex( jOldOpt.attr("color") );
