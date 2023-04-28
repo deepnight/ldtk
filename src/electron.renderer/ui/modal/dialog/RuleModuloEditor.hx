@@ -33,10 +33,13 @@ class RuleModuloEditor extends ui.modal.Dialog {
 			renderForm();
 		});
 
+		var sliderSpeed = 0.33;
+
 		// X modulo
 		var i = Input.linkToHtmlInput( rule.xModulo, jContent.find("#xModulo"));
 		i.onValueChange = (v)->rule.tidy();
 		i.linkEvent( LayerRuleChanged(rule) );
+		i.enableSlider(sliderSpeed);
 		i.setBounds(1,40);
 		if( rule.xModulo==1 )
 			i.jInput.addClass("default");
@@ -48,12 +51,14 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		i.onValueChange = (v)->rule.tidy();
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(1,40);
+		i.enableSlider(sliderSpeed);
 		i.addAutoClass("default", (v)->v==1);
 
 		// X offset
 		final bounds = 4096;
 		var i = Input.linkToHtmlInput( rule.xOffset, jContent.find("#xOffset"));
 		i.setBounds(-bounds, bounds);
+		i.enableSlider(sliderSpeed);
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.fixValue = (v)->v = v % rule.xModulo;
 		i.addAutoClass("default", (v)->v==1);
@@ -62,6 +67,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		var i = Input.linkToHtmlInput( rule.yOffset, jContent.find("#yOffset"));
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(-bounds, bounds);
+		i.enableSlider(sliderSpeed);
 		i.addAutoClass("default", (v)->v==1);
 
 		JsTools.parseComponents(jContent);
