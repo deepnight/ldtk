@@ -554,7 +554,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jWizEdit.click( _->doUseWizard(rg) );
 
 		// Group context menu
-		ContextMenu.addTo(jGroup, jGroupHeader, [
+		var actions : ui.modal.ContextMenu.ContextActions = [
 			{
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
@@ -619,8 +619,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					);
 				},
 				show: ()->rg.isOptional,
+				separatorAfter: true,
 			},
-
 			{
 				label: L._PasteAfter("rule"),
 				cb: ()->{
@@ -657,6 +657,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				enable: ()->App.ME.clipboard.is(CRuleGroup),
 			},
 			{
+				label: L._Duplicate(),
+				cb: ()->{
+					var copy = ld.duplicateRuleGroup(project, rg);
+					editor.ge.emit( LayerRuleGroupAdded(copy) );
+					invalidateRuleGroup(copy);
+				},
+			},
+			{
 				label: L.t._("Duplicate and remap"),
 				sub: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
 				cb: ()->{
@@ -671,7 +679,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L._Delete(L.t._("Group")),
 				cb: deleteRuleGroup.bind(rg, true),
 			},
-		]);
+		];
+		ContextMenu.addTo(jGroup, jGroupHeader, actions);
 
 		// Wizard mode explanation
 		if( rg.usesWizard ) {
