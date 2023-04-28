@@ -2284,6 +2284,13 @@
 						"integer"
 					]
 				},
+				"uiColor": {
+					"description": "User defined color for the UI",
+					"type": [
+						"string",
+						"null"
+					]
+				},
 				"doc": {
 					"description": "User defined documentation for this element to provide help/tips to level designers.",
 					"type": [
