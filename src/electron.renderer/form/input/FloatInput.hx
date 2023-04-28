@@ -7,7 +7,7 @@ class FloatInput extends form.Input<Float> {
 	var valueStep = -1.;
 	public var allowNull = false;
 	public var nullReplacement : Null<Float> = null;
-	var precision = 2;
+	var precision = 4;
 
 	public function new(j:js.jquery.JQuery, rawGetter:Void->Float, rawSetter:Float->Void) {
 		super(j, rawGetter, rawSetter);
@@ -20,7 +20,7 @@ class FloatInput extends form.Input<Float> {
 	}
 
 	override function cleanInputString(v:Float) {
-		return v==null || precision<0 ? super.cleanInputString(v) : M.prettyPad(v,precision);
+		return v==null || precision<0 ? super.cleanInputString(v) : M.truncateStr(v,precision);
 	}
 
 	public function setValueStep(step:Float) {
