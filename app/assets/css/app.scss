@@ -923,10 +923,11 @@ ul.niceList {
 		grid-template-columns: auto min-content;
 		gap: 0px 8px;
 		padding: 8px;
+		margin-bottom: 1px;
 
 		font-size: 12pt;
 
-		border-bottom: 1px solid $bgDark;
+		// border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
 		cursor: pointer;
 
@@ -943,8 +944,8 @@ ul.niceList {
 		}
 
 		&:not(.active):hover {
-			outline: 1px solid #586279;
-			outline-offset: -1px;
+			outline: 1px solid transparentize($color: white, $amount: 0.35);
+			outline-offset: -2px;
 		}
 
 		button.context {
@@ -1044,7 +1045,13 @@ ul.niceList {
 	li.active {
 		background-color: $orange;
 		color: black;
-		box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+		&:not(.customColor) {
+			box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+		}
+		&.customColor {
+			outline: 1px solid white;
+			outline-offset: -2px;
+		}
 	}
 
 	li.subList.searchMatched {
@@ -4729,12 +4736,9 @@ canvas#webgl {
 					align-items: center;
 					min-width: 1.2em;
 					text-align: center;
-					color: $bgLighter;
+					opacity: 0.5;
 					font-weight: bold;
 					font-size: 8pt;
-				}
-				&.active .shortcut {
-					color: $darkOrange;
 				}
 
 				.layerIcon {

@@ -1295,4 +1295,24 @@ class JsTools {
 
 		return jSelect;
 	}
+
+
+	public static function applyListCustomColor(jLi:js.jquery.JQuery, col:dn.Col, isActive:Bool) {
+		if( col==null ) {
+			jLi.removeClass("customColor");
+			return;
+		}
+
+		if( isActive ) {
+			jLi.css("background-color", col.toHex());
+			jLi.css("color", col.getAutoContrastCustom(0.5).toHex());
+			jLi.css("box-shadow", "-4px 0 0 white inset");
+		}
+		else {
+			jLi.css("background-color", col.toCssRgba(0.5));
+			jLi.css("color", col.toWhite(0.3).toHex());
+			jLi.css("box-shadow", "-4px 0 0 "+col.toHex()+" inset");
+		}
+		jLi.addClass("customColor");
+	}
 }
