@@ -1,5 +1,6 @@
 # 1.3.1
 
+ - **Added customizable UI color of layers**
  - **Added custom alpha per auto-layer rule: this alpha will affect the opacity of the resulting tile.**
  - Added sliders to all inputs in the rule Modulo window
  - Added sliders to inputs in the rule Perlin window
