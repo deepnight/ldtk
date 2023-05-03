@@ -7,6 +7,7 @@
  - Re-organized all buttons near the tileset in the editor side bar.
  - Added sliders to all inputs in the rule Modulo window
  - Added sliders to inputs in the rule Perlin window
+ - Added an option to disable the "grayed out" effect on the LDtk window when it is not focused.
  - Re-organized auto-layer rules options
  - Moved Checker mode from auto-layer rules to the Modulo window
  - Fixed a display bug with Float custom fields

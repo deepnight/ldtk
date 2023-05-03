@@ -17,6 +17,7 @@ typedef AppSettings = {
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
 	var colorBlind : Bool;
+	var blurMask : Bool;
 	var navigationKeys : NavigationKeys;
 
 	var openLastProject : Bool;
@@ -90,6 +91,7 @@ class Settings {
 			startFullScreen: false,
 			autoInstallUpdates: true,
 			colorBlind: false,
+			blurMask: true,
 			navigationKeys: null,
 
 			openLastProject: false,

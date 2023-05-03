@@ -2341,6 +2341,10 @@ class Editor extends Page {
 		var jCtrap = App.ME.jBody.find("#clicktrap");
 		jCtrap.show();
 		jCtrap.off().click( _->delayer.addF(disableClicktrap,1) );
+		if( settings.v.blurMask )
+			jCtrap.removeClass("transparent");
+		else
+			jCtrap.addClass("transparent");
 	}
 
 	function disableClicktrap() {

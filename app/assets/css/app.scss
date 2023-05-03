@@ -4547,9 +4547,11 @@ canvas#webgl {
 	width: 100vw;
 	height: 100vh;
 	z-index: 9999;
-	background-color: transparentize($color: $bgDark, $amount: 0.6);
-	background-image: url("../img/stripesLight.png");
-	background-repeat: repeat;
+	&:not(.transparent) {
+		background-color: transparentize($color: $bgDark, $amount: 0.6);
+		background-image: url("../img/stripesLight.png");
+		background-repeat: repeat;
+	}
 }
 
 #page.editor {
