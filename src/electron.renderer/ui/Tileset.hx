@@ -27,6 +27,15 @@ class Tileset {
 	var mouseOver = false;
 	public var useSavedSelections = true;
 
+	public var displayWid(get,never) : Float;
+		inline function get_displayWid() return tilesetDef.pxWid*zoom;
+
+	public var displayHei(get,never) : Float;
+		inline function get_displayHei() return tilesetDef.pxHei*zoom;
+
+	public var right(get,never) : Float;
+		inline function get_right() return scrollX+tilesetDef.pxWid*zoom;
+
 	var selectMode : TilesetSelectionMode;
 	var _internalSelectedIds : Array<Int> = [];
 
@@ -77,6 +86,28 @@ class Tileset {
 		setSelectionMode(selectMode); // force class update
 		loadScrollPos();
 		renderSelection();
+	}
+
+	inline function fitsHorizontally() {
+		return displayWid<=jTilesetWrapper.outerWidth();
+	}
+
+	inline function fitsVertically() {
+		return displayHei<=jTilesetWrapper.outerHeight();
+	}
+
+	public function checkFit() {
+		if( fitsHorizontally() )
+			if( tx==null )
+				scrollX = 0;
+			else
+				tx = 0;
+
+		if( fitsVertically() )
+			if( ty==null )
+				scrollY = 0;
+			else
+				ty = 0;
 	}
 
 	public function setSelectionMode(m:TilesetSelectionMode) {
@@ -316,6 +347,7 @@ class Tileset {
 
 		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerWidth()*0.5/zoom;
 		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerHeight()*0.5/zoom;
+
 		if( instant ) {
 			scrollX = tx;
 			scrollY = ty;
@@ -704,6 +736,8 @@ class Tileset {
 	}
 
 	public function update() {
+		App.ME.debugPre(Std.int(scrollX)+" "+Std.int(right), true);
+
 		// Focus scrolling animation
 		final spd = M.fmin(1, 0.38 * App.ME.tmod);
 		if( tx!=null ) {

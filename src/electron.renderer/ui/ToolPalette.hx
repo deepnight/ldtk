@@ -6,7 +6,6 @@ class ToolPalette {
 
 	public var jContent : js.jquery.JQuery;
 	var tool : Tool<Dynamic>;
-	var canPopOut = false;
 	@:allow(Tool)
 	var isPoppedOut = false;
 
@@ -39,7 +38,7 @@ class ToolPalette {
 
 		// Pop-out
 		jContent.mouseover( function(ev) {
-			if( canPopOut && !isPoppedOut && !Editor.ME.curTool.isRunning() )
+			if( needToPopOut() && !isPoppedOut && !Editor.ME.curTool.isRunning() )
 				popOut();
 		});
 
@@ -73,6 +72,10 @@ class ToolPalette {
 	}
 
 	function doRender() {}
+
+	function needToPopOut() {
+		return false;
+	}
 
 	function popOut() {
 		isPoppedOut = true;
