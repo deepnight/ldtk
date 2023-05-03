@@ -79,8 +79,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		);
 		var oldUid = ld.uid;
 		project.defs.removeLayerDef(ld);
-		select(project.defs.layers[0]);
 		editor.ge.emit( LayerDefRemoved(oldUid) );
+		select(project.defs.layers[0]);
 	}
 
 
