@@ -11,6 +11,7 @@
  - Fixed a display bug with Float custom fields
  - Added "duplicate group" action to rule groups context menu
  - Fixed popped-out tile palette not closing quickly enough
+ - Fixed missing intGrid values in mass out-of-bounds policy editor
 
 
 # 1.3.0 - Multi-worlds preview

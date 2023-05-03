@@ -1259,7 +1259,9 @@ class JsTools {
 	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {
 		// Out-of-bounds policy
 		jSelect.empty();
-		var values = [null, 0].concat( ld.getAllIntGridValues().map( iv->iv.value ) );
+
+		var sourceLd = ld.autoSourceLd==null ? ld : ld.autoSourceLd;
+		var values = [null, 0].concat( sourceLd.getAllIntGridValues().map( iv->iv.value ) );
 		if( curValue<0 )
 			values.insert(0,-1);
 		for(v in values) {
@@ -1270,7 +1272,7 @@ class JsTools {
 				case v if(v<0): jOpt.text("-- Pick a value --");
 				case 0: jOpt.text("Empty cells");
 				case _:
-					var iv = ld.getIntGridValueDef(v);
+					var iv = sourceLd.getIntGridValueDef(v);
 					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
 					jOpt.css({
 						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
@@ -1286,7 +1288,7 @@ class JsTools {
 
 		jSelect.val( curValue==null ? "null" : Std.string(curValue) );
 		if( curValue!=null && curValue>0 ) {
-			var iv = ld.getIntGridValueDef(curValue);
+			var iv = sourceLd.getIntGridValueDef(curValue);
 			jSelect.addClass("hasValue").css({
 				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
 				borderColor: C.intToHex( iv.color ),
