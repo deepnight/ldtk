@@ -10,7 +10,7 @@ class TilePalette extends ui.ToolPalette {
 	}
 
 	override function needToPopOut():Bool {
-		return super.needToPopOut() || picker!=null && picker.right>jContent.outerWidth();
+		return true;
 	}
 
 	override function doRender() {
