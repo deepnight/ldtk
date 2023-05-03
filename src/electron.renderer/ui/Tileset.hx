@@ -773,8 +773,6 @@ class Tileset {
 	}
 
 	public function update() {
-		App.ME.debugPre(Std.int(scrollX)+" "+Std.int(right), true);
-
 		// Focus scrolling animation
 		final spd = M.fmin(1, 0.38 * App.ME.tmod);
 		if( tx!=null ) {
