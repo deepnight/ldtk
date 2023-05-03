@@ -690,7 +690,7 @@ class Tileset {
 		if( ev.button==2 && selectMode==RectOnly )
 			setSelectedTileIds([]);
 
-		if( viewLocked )
+		if( ev.button==1 && viewLocked )
 			return;
 
 		// Start dragging
