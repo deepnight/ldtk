@@ -791,8 +791,9 @@ class WorldRender extends dn.Process {
 		}
 
 		// Default layers renders
+		var alphaThreshold = 0.6;
 		for( li in l.layerInstances ) {
-			if( li.def.type==Entities )
+			if( li.def.type==Entities || !li.def.renderInWorldView )
 				continue;
 
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
@@ -805,7 +806,7 @@ class WorldRender extends dn.Process {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					pixelGrid.x = li.pxTotalOffsetX;
 					pixelGrid.y = li.pxTotalOffsetY;
-					var c = 0x0;
+					var c : dn.Col = 0x0;
 					var cx = 0;
 					var cy = 0;
 					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
@@ -816,9 +817,10 @@ class WorldRender extends dn.Process {
 								cy = Std.int( tileInfos.y / li.def.gridSize );
 								if( !isCoordDone(li,cx,cy) ) {
 									c = td.getAverageTileColor(tileInfos.tid);
-									// if( C.getA(c)>=1 )
+									if( c.af>=alphaThreshold ) {
 										markCoordAsDone(li,cx,cy);
-									pixelGrid.setPixel24(cx,cy, c);
+										pixelGrid.setPixel24(cx,cy, c);
+									}
 								}
 							}
 						}
@@ -845,14 +847,15 @@ class WorldRender extends dn.Process {
 					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
 					pixelGrid.x = li.pxTotalOffsetX;
 					pixelGrid.y = li.pxTotalOffsetY;
-					var c = 0x0;
+					var c : dn.Col = 0x0;
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid)
 						if( !isCoordDone(li,cx,cy) && li.hasAnyGridTile(cx,cy) ) {
 							c = td.getAverageTileColor( li.getTopMostGridTile(cx,cy).tileId );
-							if( C.getA(c)>=1 )
+							if( c.af>=alphaThreshold ) {
 								markCoordAsDone(li, cx,cy);
-							pixelGrid.setPixel24(cx,cy, c);
+								pixelGrid.setPixel(cx,cy, c.withoutAlpha());
+							}
 						}
 				}
 			}

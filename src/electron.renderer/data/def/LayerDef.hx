@@ -21,6 +21,7 @@ class LayerDef {
 	public var hideInList = false;
 	public var hideFieldsWhenInactive = false;
 	public var canSelectWhenInactive = true;
+	public var renderInWorldView = true;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 	public var parallaxFactorX : Float = 0.;
@@ -101,6 +102,7 @@ class LayerDef {
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.hideFieldsWhenInactive = JsonTools.readBool(json.hideFieldsWhenInactive, true);
 		o.canSelectWhenInactive = JsonTools.readBool(json.canSelectWhenInactive, true);
+		o.renderInWorldView = JsonTools.readBool(json.renderInWorldView, true);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
@@ -163,6 +165,7 @@ class LayerDef {
 			hideInList: hideInList,
 			hideFieldsWhenInactive: hideFieldsWhenInactive,
 			canSelectWhenInactive: canSelectWhenInactive,
+			renderInWorldView: renderInWorldView,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			parallaxFactorX: parallaxFactorX,
