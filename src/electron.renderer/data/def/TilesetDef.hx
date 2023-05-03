@@ -397,7 +397,7 @@ class TilesetDef {
 			return getTileId(oldCx, oldCy);
 	}
 
-	public inline function getAverageTileColor(tid:Int) {
+	public inline function getAverageTileColor(tid:Int) : dn.Col {
 		return averageColorsCache!=null && averageColorsCache.exists(tid) ? averageColorsCache.get(tid) : 0x888888;
 	}
 
