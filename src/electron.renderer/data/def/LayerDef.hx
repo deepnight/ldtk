@@ -153,7 +153,7 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,
 			doc: JsonTools.escapeNullableString(doc),
-			uiColor: uiColor.toHex(),
+			uiColor: uiColor==null ? null : uiColor.toHex(),
 
 			gridSize: gridSize,
 			guideGridWid: guideGridWid,
