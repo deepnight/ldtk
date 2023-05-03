@@ -53,6 +53,8 @@ class ToolPalettePopOut extends ui.Modal {
 				// Over modal or dragging
 				leavingElapsedDist = 0;
 			}
+			else if( ev.pageY<modalY1 && ev.pageX<editor.jMainPanel.outerWidth() )
+				close();
 			else {
 				// Out of modal: try to determine if the cursor is moving away from the modal bounds
 				// 1 2

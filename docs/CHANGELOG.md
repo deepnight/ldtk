@@ -8,6 +8,7 @@
  - Moved Checker mode from auto-layer rules to the Modulo window
  - Fixed a display bug with Float custom fields
  - Added "duplicate group" action to rule groups context menu
+ - Fixed popped-out tile palette not closing quickly enough
 
 
 # 1.3.0 - Multi-worlds preview
