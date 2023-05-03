@@ -247,6 +247,7 @@ const typeMap = {
     ], false),
     "AutoLayerRuleDefinition": o([
         { json: "active", js: "active", typ: true },
+        { json: "alpha", js: "alpha", typ: 3.14 },
         { json: "breakOnMatch", js: "breakOnMatch", typ: true },
         { json: "chance", js: "chance", typ: 3.14 },
         { json: "checker", js: "checker", typ: r("Checker") },
@@ -396,11 +397,13 @@ const typeMap = {
         { json: "parallaxScaling", js: "parallaxScaling", typ: true },
         { json: "pxOffsetX", js: "pxOffsetX", typ: 0 },
         { json: "pxOffsetY", js: "pxOffsetY", typ: 0 },
+        { json: "renderInWorldView", js: "renderInWorldView", typ: true },
         { json: "requiredTags", js: "requiredTags", typ: a("") },
         { json: "tilePivotX", js: "tilePivotX", typ: 3.14 },
         { json: "tilePivotY", js: "tilePivotY", typ: 3.14 },
         { json: "tilesetDefUid", js: "tilesetDefUid", typ: u(undefined, u(0, null)) },
         { json: "type", js: "type", typ: r("Type") },
+        { json: "uiColor", js: "uiColor", typ: u(undefined, u(null, "")) },
         { json: "uid", js: "uid", typ: 0 },
     ], false),
     "IntGridValueDefinition": o([
@@ -498,6 +501,7 @@ const typeMap = {
         { json: "visible", js: "visible", typ: true },
     ], false),
     "TileInstance": o([
+        { json: "a", js: "a", typ: 3.14 },
         { json: "d", js: "d", typ: a(0) },
         { json: "f", js: "f", typ: 0 },
         { json: "px", js: "px", typ: a(0) },

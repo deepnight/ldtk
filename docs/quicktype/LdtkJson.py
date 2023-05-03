@@ -722,6 +722,7 @@ class AutoLayerRuleDefinition:
     """
     """If FALSE, the rule effect isn't applied, and no tiles are generated."""
     active: bool
+    alpha: float
     """When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
     (TRUE by default).
     """
@@ -776,8 +777,9 @@ class AutoLayerRuleDefinition:
     """Y cell start offset"""
     y_offset: int
 
-    def __init__(self, active: bool, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: List[int], tile_mode: TileMode, tile_random_x_max: int, tile_random_x_min: int, tile_random_y_max: int, tile_random_y_min: int, tile_x_offset: int, tile_y_offset: int, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
+    def __init__(self, active: bool, alpha: float, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: List[int], tile_mode: TileMode, tile_random_x_max: int, tile_random_x_min: int, tile_random_y_max: int, tile_random_y_min: int, tile_x_offset: int, tile_y_offset: int, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
         self.active = active
+        self.alpha = alpha
         self.break_on_match = break_on_match
         self.chance = chance
         self.checker = checker
@@ -810,6 +812,7 @@ class AutoLayerRuleDefinition:
     def from_dict(obj: Any) -> 'AutoLayerRuleDefinition':
         assert isinstance(obj, dict)
         active = from_bool(obj.get("active"))
+        alpha = from_float(obj.get("alpha"))
         break_on_match = from_bool(obj.get("breakOnMatch"))
         chance = from_float(obj.get("chance"))
         checker = Checker(obj.get("checker"))
@@ -837,11 +840,12 @@ class AutoLayerRuleDefinition:
         x_offset = from_int(obj.get("xOffset"))
         y_modulo = from_int(obj.get("yModulo"))
         y_offset = from_int(obj.get("yOffset"))
-        return AutoLayerRuleDefinition(active, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, tile_random_x_max, tile_random_x_min, tile_random_y_max, tile_random_y_min, tile_x_offset, tile_y_offset, uid, x_modulo, x_offset, y_modulo, y_offset)
+        return AutoLayerRuleDefinition(active, alpha, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, tile_random_x_max, tile_random_x_min, tile_random_y_max, tile_random_y_min, tile_x_offset, tile_y_offset, uid, x_modulo, x_offset, y_modulo, y_offset)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["active"] = from_bool(self.active)
+        result["alpha"] = to_float(self.alpha)
         result["breakOnMatch"] = from_bool(self.break_on_match)
         result["chance"] = to_float(self.chance)
         result["checker"] = to_enum(Checker, self.checker)
@@ -1011,6 +1015,10 @@ class LayerDefinition:
     optional offset)
     """
     px_offset_y: int
+    """If TRUE, the content of this layer will be used when rendering levels in a simplified way
+    for the world view
+    """
+    render_in_world_view: bool
     """An array of tags to filter Entities that can be added to this layer"""
     required_tags: List[str]
     """If the tiles are smaller or larger than the layer grid, the pivot value will be used to
@@ -1031,10 +1039,12 @@ class LayerDefinition:
     `AutoLayer`
     """
     layer_definition_type: TypeEnum
+    """User defined color for the UI"""
+    ui_color: Optional[str]
     """Unique Int identifier"""
     uid: int
 
-    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, uid: int) -> None:
+    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, render_in_world_view: bool, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, ui_color: Optional[str], uid: int) -> None:
         self.type = type
         self.auto_rule_groups = auto_rule_groups
         self.auto_source_layer_def_uid = auto_source_layer_def_uid
@@ -1056,11 +1066,13 @@ class LayerDefinition:
         self.parallax_scaling = parallax_scaling
         self.px_offset_x = px_offset_x
         self.px_offset_y = px_offset_y
+        self.render_in_world_view = render_in_world_view
         self.required_tags = required_tags
         self.tile_pivot_x = tile_pivot_x
         self.tile_pivot_y = tile_pivot_y
         self.tileset_def_uid = tileset_def_uid
         self.layer_definition_type = layer_definition_type
+        self.ui_color = ui_color
         self.uid = uid
 
     @staticmethod
@@ -1087,13 +1099,15 @@ class LayerDefinition:
         parallax_scaling = from_bool(obj.get("parallaxScaling"))
         px_offset_x = from_int(obj.get("pxOffsetX"))
         px_offset_y = from_int(obj.get("pxOffsetY"))
+        render_in_world_view = from_bool(obj.get("renderInWorldView"))
         required_tags = from_list(from_str, obj.get("requiredTags"))
         tile_pivot_x = from_float(obj.get("tilePivotX"))
         tile_pivot_y = from_float(obj.get("tilePivotY"))
         tileset_def_uid = from_union([from_none, from_int], obj.get("tilesetDefUid"))
         layer_definition_type = TypeEnum(obj.get("type"))
+        ui_color = from_union([from_none, from_str], obj.get("uiColor"))
         uid = from_int(obj.get("uid"))
-        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, can_select_when_inactive, display_opacity, doc, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, uid)
+        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, can_select_when_inactive, display_opacity, doc, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, render_in_world_view, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, ui_color, uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1121,12 +1135,15 @@ class LayerDefinition:
         result["parallaxScaling"] = from_bool(self.parallax_scaling)
         result["pxOffsetX"] = from_int(self.px_offset_x)
         result["pxOffsetY"] = from_int(self.px_offset_y)
+        result["renderInWorldView"] = from_bool(self.render_in_world_view)
         result["requiredTags"] = from_list(from_str, self.required_tags)
         result["tilePivotX"] = to_float(self.tile_pivot_x)
         result["tilePivotY"] = to_float(self.tile_pivot_y)
         if self.tileset_def_uid is not None:
             result["tilesetDefUid"] = from_union([from_none, from_int], self.tileset_def_uid)
         result["type"] = to_enum(TypeEnum, self.layer_definition_type)
+        if self.ui_color is not None:
+            result["uiColor"] = from_union([from_none, from_str], self.ui_color)
         result["uid"] = from_int(self.uid)
         return result
 
@@ -1590,6 +1607,8 @@ class IntGridValueInstance:
 
 class TileInstance:
     """This structure represents a single tile from a given Tileset."""
+    """Alpha/opacity of the tile (0-1, defaults to 1)"""
+    a: float
     """Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>
     For tile-layer tiles: `[coordId]`.
     """
@@ -1608,7 +1627,8 @@ class TileInstance:
     """The *Tile ID* in the corresponding tileset."""
     t: int
 
-    def __init__(self, d: List[int], f: int, px: List[int], src: List[int], t: int) -> None:
+    def __init__(self, a: float, d: List[int], f: int, px: List[int], src: List[int], t: int) -> None:
+        self.a = a
         self.d = d
         self.f = f
         self.px = px
@@ -1618,15 +1638,17 @@ class TileInstance:
     @staticmethod
     def from_dict(obj: Any) -> 'TileInstance':
         assert isinstance(obj, dict)
+        a = from_float(obj.get("a"))
         d = from_list(from_int, obj.get("d"))
         f = from_int(obj.get("f"))
         px = from_list(from_int, obj.get("px"))
         src = from_list(from_int, obj.get("src"))
         t = from_int(obj.get("t"))
-        return TileInstance(d, f, px, src, t)
+        return TileInstance(a, d, f, px, src, t)
 
     def to_dict(self) -> dict:
         result: dict = {}
+        result["a"] = to_float(self.a)
         result["d"] = from_list(from_int, self.d)
         result["f"] = from_int(self.f)
         result["px"] = from_list(from_int, self.px)
