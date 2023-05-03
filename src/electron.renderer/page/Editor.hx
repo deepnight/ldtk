@@ -2341,6 +2341,10 @@ class Editor extends Page {
 		var jCtrap = App.ME.jBody.find("#clicktrap");
 		jCtrap.show();
 		jCtrap.off().click( _->delayer.addF(disableClicktrap,1) );
+		if( settings.v.blurMask )
+			jCtrap.removeClass("transparent");
+		else
+			jCtrap.addClass("transparent");
 	}
 
 	function disableClicktrap() {
@@ -2366,37 +2370,38 @@ class Editor extends Page {
 			if( ld.hideInList && !active )
 				continue;
 
-			var jLayer = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-			jLayerList.append(jLayer);
-			jLayer.attr("uid",ld.uid);
+			var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			jLayerList.append(jLi);
+			jLi.attr("uid",ld.uid);
+			JsTools.applyListCustomColor(jLi, li.def.uiColor, active);
 
 			if( active )
-				jLayer.addClass("active");
+				jLi.addClass("active");
 
 			if( ld.hideInList )
-				jLayer.addClass("hiddenFromList");
+				jLi.addClass("hiddenFromList");
 
 			if( ld.doc!=null ) {
-				jLayer.attr("tip", "right");
-				ui.Tip.attach(jLayer, ld.doc);
+				jLi.attr("tip", "right");
+				ui.Tip.attach(jLi, ld.doc);
 
 			}
 
-			jLayer.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
+			jLi.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
 
 			// Icon
-			var jIcon = jLayer.find(">.layerIcon");
+			var jIcon = jLi.find(">.layerIcon");
 			jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
 
 			// Name
-			var name = jLayer.find(".name");
+			var name = jLi.find(".name");
 			name.text(li.def.identifier);
-			jLayer.click( function(_) {
+			jLi.click( function(_) {
 				selectLayerInstance(li);
 			});
 
 			// Rules button
-			var jRules = jLayer.find(".rules");
+			var jRules = jLi.find(".rules");
 			if( li.def.isAutoLayer() )
 				jRules.show();
 			else
@@ -2411,7 +2416,7 @@ class Editor extends Page {
 			});
 
 			// Visibility button
-			var jVis = jLayer.find(".vis");
+			var jVis = jLi.find(".vis");
 			jVis.mouseover( (_)->{
 				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
@@ -2470,7 +2475,7 @@ class Editor extends Page {
 					},
 				}
 			];
-			ui.modal.ContextMenu.addTo(jLayer, false, actions);
+			ui.modal.ContextMenu.addTo(jLi, false, actions);
 		}
 
 		updateLayerVisibilities();

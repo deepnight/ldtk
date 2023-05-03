@@ -10,6 +10,7 @@ class LayerDef {
 	public var type : ldtk.Json.LayerType;
 	public var identifier(default,set) : String;
 	public var doc: Null<String>;
+	public var uiColor: Null<dn.Col>;
 
 	public var gridSize : Int = Project.DEFAULT_GRID_SIZE;
 	public var scaledGridSize(get,never) : Float; inline function get_scaledGridSize() return gridSize*getScale();
@@ -20,6 +21,7 @@ class LayerDef {
 	public var hideInList = false;
 	public var hideFieldsWhenInactive = false;
 	public var canSelectWhenInactive = true;
+	public var renderInWorldView = true;
 	public var pxOffsetX : Int = 0;
 	public var pxOffsetY : Int = 0;
 	public var parallaxFactorX : Float = 0.;
@@ -95,10 +97,12 @@ class LayerDef {
 		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 		o.inactiveOpacity = JsonTools.readFloat(json.inactiveOpacity, 1);
+		o.uiColor = JsonTools.readColor(json.uiColor, true);
 		// o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.hideFieldsWhenInactive = JsonTools.readBool(json.hideFieldsWhenInactive, true);
 		o.canSelectWhenInactive = JsonTools.readBool(json.canSelectWhenInactive, true);
+		o.renderInWorldView = JsonTools.readBool(json.renderInWorldView, true);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		o.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
 		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
@@ -151,6 +155,7 @@ class LayerDef {
 			type: JsonTools.writeEnum(type, false),
 			uid: uid,
 			doc: JsonTools.escapeNullableString(doc),
+			uiColor: uiColor==null ? null : uiColor.toHex(),
 
 			gridSize: gridSize,
 			guideGridWid: guideGridWid,
@@ -160,6 +165,7 @@ class LayerDef {
 			hideInList: hideInList,
 			hideFieldsWhenInactive: hideFieldsWhenInactive,
 			canSelectWhenInactive: canSelectWhenInactive,
+			renderInWorldView: renderInWorldView,
 			pxOffsetX: pxOffsetX,
 			pxOffsetY: pxOffsetY,
 			parallaxFactorX: parallaxFactorX,

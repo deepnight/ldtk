@@ -30,11 +30,13 @@ class RulePerlinSettings extends ui.modal.Dialog {
 
 		var i = Input.linkToHtmlInput(r.perlinScale, jContent.find("#perlinScale"));
 		i.enablePercentageMode();
+		i.enableSlider(50);
 		i.setBounds(0.01, 0.99);
 		i.onChange = onChange.bind(r);
 
 		var i = Input.linkToHtmlInput(r.perlinOctaves, jContent.find("#perlinOctaves"));
 		i.setBounds(1, 4);
+		i.enableSlider(0.2);
 		i.onChange = onChange.bind(r);
 
 		positionNear(target);

@@ -809,6 +809,7 @@ namespace quicktype {
 
         private:
         bool active;
+        double alpha;
         bool break_on_match;
         double chance;
         Checker checker;
@@ -844,6 +845,10 @@ namespace quicktype {
         const bool & get_active() const { return active; }
         bool & get_mutable_active() { return active; }
         void set_active(const bool & value) { this->active = value; }
+
+        const double & get_alpha() const { return alpha; }
+        double & get_mutable_alpha() { return alpha; }
+        void set_alpha(const double & value) { this->alpha = value; }
 
         /**
          * When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
@@ -1137,11 +1142,13 @@ namespace quicktype {
         bool parallax_scaling;
         int64_t px_offset_x;
         int64_t px_offset_y;
+        bool render_in_world_view;
         std::vector<std::string> required_tags;
         double tile_pivot_x;
         double tile_pivot_y;
         boost::optional<int64_t> tileset_def_uid;
         Type layer_definition_type;
+        boost::optional<std::string> ui_color;
         int64_t uid;
 
         public:
@@ -1291,6 +1298,14 @@ namespace quicktype {
         void set_px_offset_y(const int64_t & value) { this->px_offset_y = value; }
 
         /**
+         * If TRUE, the content of this layer will be used when rendering levels in a simplified way
+         * for the world view
+         */
+        const bool & get_render_in_world_view() const { return render_in_world_view; }
+        bool & get_mutable_render_in_world_view() { return render_in_world_view; }
+        void set_render_in_world_view(const bool & value) { this->render_in_world_view = value; }
+
+        /**
          * An array of tags to filter Entities that can be added to this layer
          */
         const std::vector<std::string> & get_required_tags() const { return required_tags; }
@@ -1329,6 +1344,12 @@ namespace quicktype {
         const Type & get_layer_definition_type() const { return layer_definition_type; }
         Type & get_mutable_layer_definition_type() { return layer_definition_type; }
         void set_layer_definition_type(const Type & value) { this->layer_definition_type = value; }
+
+        /**
+         * User defined color for the UI
+         */
+        boost::optional<std::string> get_ui_color() const { return ui_color; }
+        void set_ui_color(boost::optional<std::string> value) { this->ui_color = value; }
 
         /**
          * Unique Int identifier
@@ -1886,6 +1907,7 @@ namespace quicktype {
         virtual ~TileInstance() = default;
 
         private:
+        double a;
         std::vector<int64_t> d;
         int64_t f;
         std::vector<int64_t> px;
@@ -1893,6 +1915,13 @@ namespace quicktype {
         int64_t t;
 
         public:
+        /**
+         * Alpha/opacity of the tile (0-1, defaults to 1)
+         */
+        const double & get_a() const { return a; }
+        double & get_mutable_a() { return a; }
+        void set_a(const double & value) { this->a = value; }
+
         /**
          * Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>
          * For tile-layer tiles: `[coordId]`.
@@ -3323,6 +3352,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, AutoLayerRuleDefinition& x) {
         x.set_active(j.at("active").get<bool>());
+        x.set_alpha(j.at("alpha").get<double>());
         x.set_break_on_match(j.at("breakOnMatch").get<bool>());
         x.set_chance(j.at("chance").get<double>());
         x.set_checker(j.at("checker").get<Checker>());
@@ -3355,6 +3385,7 @@ namespace quicktype {
     inline void to_json(json & j, const AutoLayerRuleDefinition & x) {
         j = json::object();
         j["active"] = x.get_active();
+        j["alpha"] = x.get_alpha();
         j["breakOnMatch"] = x.get_break_on_match();
         j["chance"] = x.get_chance();
         j["checker"] = x.get_checker();
@@ -3440,11 +3471,13 @@ namespace quicktype {
         x.set_parallax_scaling(j.at("parallaxScaling").get<bool>());
         x.set_px_offset_x(j.at("pxOffsetX").get<int64_t>());
         x.set_px_offset_y(j.at("pxOffsetY").get<int64_t>());
+        x.set_render_in_world_view(j.at("renderInWorldView").get<bool>());
         x.set_required_tags(j.at("requiredTags").get<std::vector<std::string>>());
         x.set_tile_pivot_x(j.at("tilePivotX").get<double>());
         x.set_tile_pivot_y(j.at("tilePivotY").get<double>());
         x.set_tileset_def_uid(get_stack_optional<int64_t>(j, "tilesetDefUid"));
         x.set_layer_definition_type(j.at("type").get<Type>());
+        x.set_ui_color(get_stack_optional<std::string>(j, "uiColor"));
         x.set_uid(j.at("uid").get<int64_t>());
     }
 
@@ -3471,11 +3504,13 @@ namespace quicktype {
         j["parallaxScaling"] = x.get_parallax_scaling();
         j["pxOffsetX"] = x.get_px_offset_x();
         j["pxOffsetY"] = x.get_px_offset_y();
+        j["renderInWorldView"] = x.get_render_in_world_view();
         j["requiredTags"] = x.get_required_tags();
         j["tilePivotX"] = x.get_tile_pivot_x();
         j["tilePivotY"] = x.get_tile_pivot_y();
         j["tilesetDefUid"] = x.get_tileset_def_uid();
         j["type"] = x.get_layer_definition_type();
+        j["uiColor"] = x.get_ui_color();
         j["uid"] = x.get_uid();
     }
 
@@ -3649,6 +3684,7 @@ namespace quicktype {
     }
 
     inline void from_json(const json & j, TileInstance& x) {
+        x.set_a(j.at("a").get<double>());
         x.set_d(j.at("d").get<std::vector<int64_t>>());
         x.set_f(j.at("f").get<int64_t>());
         x.set_px(j.at("px").get<std::vector<int64_t>>());
@@ -3658,6 +3694,7 @@ namespace quicktype {
 
     inline void to_json(json & j, const TileInstance & x) {
         j = json::object();
+        j["a"] = x.get_a();
         j["d"] = x.get_d();
         j["f"] = x.get_f();
         j["px"] = x.get_px();

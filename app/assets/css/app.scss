@@ -299,6 +299,25 @@ button {
 		}
 	}
 
+	&.toggle {
+		background-color: $bgDark;
+		box-shadow: none;
+		border-radius: 2px;
+		&.on {
+			box-shadow: 0 0 8px $green inset;
+			outline: 1px solid $green;
+		}
+		&:not(.on) {
+			// box-shadow: 0 0 16px $red inset;
+			outline: 1px solid $bgLight;
+			// background-color: $darkRed;
+			.icon {
+				opacity: 0.5;
+				// filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6);
+			}
+		}
+	}
+
 	&.blue {
 		background-color: #2a73ab;
 		&:hover {
@@ -923,10 +942,11 @@ ul.niceList {
 		grid-template-columns: auto min-content;
 		gap: 0px 8px;
 		padding: 8px;
+		margin-bottom: 1px;
 
 		font-size: 12pt;
 
-		border-bottom: 1px solid $bgDark;
+		// border-bottom: 1px solid $bgDark;
 		background-color: $bgMed;
 		cursor: pointer;
 
@@ -943,8 +963,8 @@ ul.niceList {
 		}
 
 		&:not(.active):hover {
-			outline: 1px solid #586279;
-			outline-offset: -1px;
+			outline: 1px solid transparentize($color: white, $amount: 0.35);
+			outline-offset: -2px;
 		}
 
 		button.context {
@@ -1044,7 +1064,13 @@ ul.niceList {
 	li.active {
 		background-color: $orange;
 		color: black;
-		box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+		&:not(.customColor) {
+			box-shadow: 0px 0px 2px #ffffcc inset, 0px 0px 4px #aa0000;
+		}
+		&.customColor {
+			outline: 1px solid white;
+			outline-offset: -2px;
+		}
 	}
 
 	li.subList.searchMatched {
@@ -1183,6 +1209,7 @@ ul.log {
 .icon.down				{ background-image: url("../icons/arrow_down.svg"); }
 
 .icon.active			{ background-image: url("../icons/active.png"); }
+.icon.alpha				{ background-image: url("../icons/alpha.svg"); }
 .icon.appUpdate			{ background-image: url("../icons/appUpdate.svg"); }
 .icon.add				{ background-image: url("../icons/add.svg"); }
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
@@ -1209,6 +1236,7 @@ ul.log {
 .icon.enum				{ background-image: url("../icons/enum.png"); }
 .icon.exit				{ background-image: url("../icons/exit.svg"); }
 .icon.expanded			{ background-image: url("../icons/expanded.svg"); }
+.icon.fit				{ background-image: url("../icons/fit.svg"); }
 .icon.flatten			{ background-image: url("../icons/flatten.svg"); }
 .icon.folder			{ background-image: url("../icons/folder.svg"); }
 .icon.folderOpen		{ background-image: url("../icons/folderOpen.svg"); }
@@ -1240,6 +1268,7 @@ ul.log {
 .icon.pick				{ background-image: url("../icons/pick.svg"); }
 .icon.prohibited		{ background-image: url("../icons/prohibited.svg"); }
 .icon.project			{ background-image: url("../icons/projectSettings.png"); }
+.icon.random			{ background-image: url("../icons/random.svg"); }
 .icon.recall			{ background-image: url("../icons/recall.svg"); }
 .icon.refresh			{ background-image: url("../icons/refresh.svg"); }
 .icon.rename			{ background-image: url("../icons/rename.svg"); }
@@ -1849,9 +1878,21 @@ dl.form {
 		}
 
 		input[type=color] {
+			flex: 0 1 64px;
 			height: 32px;
 			cursor: pointer;
 			padding: 0;
+			&.null {
+				background-image: url("../img/stripes.png");
+				background-color: gray;
+				appearance: none;
+				border-width: 1px;
+				border-color: transparent;
+				opacity: 0.3;
+				&:hover {
+					opacity: 1;
+				}
+			}
 		}
 		input[type=color]:hover {
 			outline: 1px solid $orange;
@@ -2124,6 +2165,13 @@ select {
 						height: 32px;
 						background-image: url("../img/stripes.png");
 						border: 1px solid $bgLight;
+					}
+
+					&.disabled {
+						color: $bgLight;
+						font-style: italic;
+						pointer-events: none;
+						background-color: $bgMed;
 					}
 
 					&.selected {
@@ -4499,9 +4547,11 @@ canvas#webgl {
 	width: 100vw;
 	height: 100vh;
 	z-index: 9999;
-	background-color: transparentize($color: $bgDark, $amount: 0.6);
-	background-image: url("../img/stripesLight.png");
-	background-repeat: repeat;
+	&:not(.transparent) {
+		background-color: transparentize($color: $bgDark, $amount: 0.6);
+		background-image: url("../img/stripesLight.png");
+		background-repeat: repeat;
+	}
 }
 
 #page.editor {
@@ -4708,12 +4758,9 @@ canvas#webgl {
 					align-items: center;
 					min-width: 1.2em;
 					text-align: center;
-					color: $bgLighter;
+					opacity: 0.5;
 					font-weight: bold;
 					font-size: 8pt;
-				}
-				&.active .shortcut {
-					color: $darkOrange;
 				}
 
 				.layerIcon {
@@ -4828,12 +4875,34 @@ canvas#webgl {
 			}
 		}
 
-		#toolOptions {
-			select {
-				width: 100%;
-				option.bad {
-					color: $bgLight;
+		.optionsWrapper {
+			display: flex;
+			flex-wrap: nowrap;
+
+			#toolOptions {
+				display: flex;
+				flex: 1;
+				select {
+					flex: 1 1 100%;
+					width: 100%;
+					option.bad {
+						color: $bgLight;
+					}
 				}
+			}
+
+			#paletteOptions {
+				flex: 0;
+				display: flex;
+				flex-wrap: nowrap;
+
+				&:not(:empty) {
+					margin-left: 8px;
+				}
+			}
+
+			button {
+				padding: 2px 4px;
 			}
 		}
 
@@ -5142,6 +5211,10 @@ canvas#webgl {
 						height: 1.3em;
 					}
 				}
+			}
+
+			.optionsWrapper {
+				display: block;
 			}
 
 			#guide {
@@ -8203,7 +8276,7 @@ body.sorting ul.collapsedSortTarget {
 
 						.options {
 							display: grid;
-							grid-template-columns: repeat(6, 1fr);
+							grid-template-columns: repeat(7, 1fr);
 							gap: 2px;
 
 							&>* {
@@ -8220,74 +8293,54 @@ body.sorting ul.collapsedSortTarget {
 								height: 18px;
 							}
 
-							.random {
-								grid-column: 1/4;
-								display: flex;
-								flex-wrap: nowrap;
-								align-items: center;
+							input[type=text] {
+								padding-left: 24px;
+								font-size: 9pt;
+								background-repeat: no-repeat;
+								background-position: 3px center;
+								background-size: 18px;
 
-								input[name="random"] {
-									width: 100%;
-									flex: 1 1 0;
-									font-size: 9pt;
-									padding-top: 1px;
-									padding-bottom: 1px;
-									background-color: $bgMed;
-									background-image: none !important;
-									&:focus, &.editing {
-										background-color: $bgDark;
-									}
-									&.max {
-										color: $bgLight;
-									}
+								&.max:not(:focus, .editing) {
+									opacity: 0.25;
+								}
+
+								&:focus,
+								&.editing {
+									background-color: $bgDark;
+								}
+
+								&[name="random"] {
+									grid-column: span 3;
+									background-image: url("../icons/random.svg");
 									&.off {
 										color: $red;
 									}
 								}
 
-								span {
-									font-size: 8pt;
-									color: $bgLighter;
-									padding-right: 8px;
+								&[name="alpha"] {
+									grid-column: span 3;
+									background-image: url("../icons/alpha.svg");
 								}
 							}
 
 							.modulo {
 								display: grid;
+								grid-column: span 2;
 								align-items: center;
-								grid-column: 5/7;
 								font-size: 9pt;
 								text-align: center;
 								white-space: nowrap;
 								cursor: pointer;
 
 								&.default {
-									color: $bgLighter;
+									opacity: 0.4;
+									color: $red;
+									background-color: $darkRed;
 								}
 
 								&:hover {
 									color: $bgDark;
 									background-color: $orange;
-								}
-							}
-
-							input[name=xModulo] {
-								grid-column: 5/6;
-							}
-							input[name=yModulo] {
-								grid-column: 6/7;
-							}
-							input[name=xModulo],
-							input[name=yModulo] {
-								// width: 20px;
-								font-size: 9pt;
-								text-align: center;
-								color: $help;
-								&:not(.default) {
-									border: 1px solid $green;
-								}
-								&.default {
-									color: $bgLighter;
 								}
 							}
 
@@ -8640,12 +8693,6 @@ $patternSize : 32px;
 
 .window.dialog.ruleModuloEditor {
 
-	// >.wrapper {
-		// padding: $gutter;
-		// justify-self: left;
-		// margin-left: 80px;
-	// }
-
 	>.wrapper .content {
 		display: grid;
 		max-width: 400px;
@@ -8653,6 +8700,17 @@ $patternSize : 32px;
 
 		.help {
 			grid-column: 1/3;
+		}
+		.form {
+			margin-top: 8px;
+			padding-top: 8px;
+			border-top: 1px solid $bgLight;
+			grid-column: 1 / span 2;
+			grid-row: 4 / span 1;
+			dt {
+				white-space: nowrap;
+				max-width: none;
+			}
 		}
 
 		.options {

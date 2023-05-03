@@ -1,3 +1,21 @@
+# 1.3.1
+
+ - **Added customizable UI color of layers**
+ - **Added custom alpha per auto-layer rule: this alpha will affect the opacity of the resulting tile.**
+ - **Added an option to fit current tileset in the editor side bar.**
+ - **New "top-down" example map**
+ - Re-organized all buttons near the tileset in the editor side bar.
+ - Added sliders to all inputs in the rule Modulo window
+ - Added sliders to inputs in the rule Perlin window
+ - Added an option to disable the "grayed out" effect on the LDtk window when it is not focused.
+ - Re-organized auto-layer rules options
+ - Moved Checker mode from auto-layer rules to the Modulo window
+ - Fixed a display bug with Float custom fields
+ - Added "duplicate group" action to rule groups context menu
+ - Fixed popped-out tile palette not closing quickly enough
+ - Fixed missing intGrid values in mass out-of-bounds policy editor
+
+
 # 1.3.0 - Multi-worlds preview
 
 ## Experimental Multi-worlds support!

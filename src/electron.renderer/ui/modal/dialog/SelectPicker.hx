@@ -41,6 +41,10 @@ class SelectPicker extends ui.modal.Dialog {
 				jValue.addClass("selected");
 				jFocus = jValue;
 			}
+
+			if( jOpt.hasClass("disabled") )
+				jValue.addClass("disabled");
+
 			if( hasImages )
 				jValue.addClass("hasImg");
 

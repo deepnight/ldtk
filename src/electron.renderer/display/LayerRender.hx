@@ -112,15 +112,18 @@ class LayerRender {
 				li.def.iterateActiveRulesInDisplayOrder( li, (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						var grid = li.def.gridSize;
+						var colorVect = new h3d.Vector(1,1,1,1);
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 							// Tile
-							tg.addTransform(
+							colorVect.a = tileInfos.a;
+							@:privateAccess tg.content.addTransform(
 								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
 								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
 								dn.M.hasBit(tileInfos.flips,0)?-1:1,
 								dn.M.hasBit(tileInfos.flips,1)?-1:1,
 								0,
+								colorVect,
 								td.extractTile(tileInfos.srcX, tileInfos.srcY)
 							);
 
@@ -232,7 +235,8 @@ class LayerRender {
 
 		if( l.bgRelPath!=null ) {
 			var bmp = l.createBgTiledTexture();
-			bmp.drawTo(tex);
+			if( bmp!=null )
+				bmp.drawTo(tex);
 		}
 	}
 

@@ -396,6 +396,9 @@ type LayerDefinition struct {
 	// Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`                           
 	// optional offset)                                                                                                   
 	PxOffsetY                                                                                    int64                    `json:"pxOffsetY"`
+	// If TRUE, the content of this layer will be used when rendering levels in a simplified way                          
+	// for the world view                                                                                                 
+	RenderInWorldView                                                                            bool                     `json:"renderInWorldView"`
 	// An array of tags to filter Entities that can be added to this layer                                                
 	RequiredTags                                                                                 []string                 `json:"requiredTags"`
 	// If the tiles are smaller or larger than the layer grid, the pivot value will be used to                            
@@ -412,6 +415,8 @@ type LayerDefinition struct {
 	// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,                                    
 	// `AutoLayer`                                                                                                        
 	LayerDefinitionType                                                                          Type                     `json:"type"`
+	// User defined color for the UI                                                                                      
+	UIColor                                                                                      *string                  `json:"uiColor"`
 	// Unique Int identifier                                                                                              
 	Uid                                                                                          int64                    `json:"uid"`
 }
@@ -433,6 +438,7 @@ type AutoLayerRuleGroup struct {
 type AutoLayerRuleDefinition struct {
 	// If FALSE, the rule effect isn't applied, and no tiles are generated.                               
 	Active                                                                                       bool     `json:"active"`
+	Alpha                                                                                        float64  `json:"alpha"`
 	// When TRUE, the rule will prevent other rules to be applied in the same cell if it matches          
 	// (TRUE by default).                                                                                 
 	BreakOnMatch                                                                                 bool     `json:"breakOnMatch"`
@@ -732,6 +738,8 @@ type LayerInstance struct {
 
 // This structure represents a single tile from a given Tileset.
 type TileInstance struct {
+	// Alpha/opacity of the tile (0-1, defaults to 1)                                                 
+	A                                                                                         float64 `json:"a"`
 	// Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>        
 	// For tile-layer tiles: `[coordId]`.                                                             
 	D                                                                                         []int64 `json:"d"`

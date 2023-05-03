@@ -677,6 +677,11 @@ pub struct LayerDefinition {
     #[serde(rename = "pxOffsetY")]
     px_offset_y: i64,
 
+    /// If TRUE, the content of this layer will be used when rendering levels in a simplified way
+    /// for the world view
+    #[serde(rename = "renderInWorldView")]
+    render_in_world_view: bool,
+
     /// An array of tags to filter Entities that can be added to this layer
     #[serde(rename = "requiredTags")]
     required_tags: Vec<String>,
@@ -702,6 +707,10 @@ pub struct LayerDefinition {
     /// `AutoLayer`
     #[serde(rename = "type")]
     purple_type: Type,
+
+    /// User defined color for the UI
+    #[serde(rename = "uiColor")]
+    ui_color: Option<String>,
 
     /// Unique Int identifier
     #[serde(rename = "uid")]
@@ -741,6 +750,9 @@ pub struct AutoLayerRuleDefinition {
     /// If FALSE, the rule effect isn't applied, and no tiles are generated.
     #[serde(rename = "active")]
     active: bool,
+
+    #[serde(rename = "alpha")]
+    alpha: f64,
 
     /// When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
     /// (TRUE by default).
@@ -1295,6 +1307,10 @@ pub struct LayerInstance {
 /// This structure represents a single tile from a given Tileset.
 #[derive(Serialize, Deserialize)]
 pub struct TileInstance {
+    /// Alpha/opacity of the tile (0-1, defaults to 1)
+    #[serde(rename = "a")]
+    a: f64,
+
     /// Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>
     /// For tile-layer tiles: `[coordId]`.
     #[serde(rename = "d")]

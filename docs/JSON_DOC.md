@@ -1,4 +1,4 @@
-# LDtk Json structure (version 1.3.0)
+# LDtk Json structure (version 1.3.1)
 
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
@@ -132,6 +132,7 @@ This structure represents a single tile from a given Tileset.
 
 Value | Type | Description
 -- | -- | --
+`a`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.1-green.svg)  | Float | Alpha/opacity of the tile (0-1, defaults to 1)
 `f` | Int | "Flip bits", a 2-bits integer to represent the mirror transformations of the tile.<br/>		 - Bit 0 = X flip<br/>		 - Bit 1 = Y flip<br/>		 Examples: f=0 (no flip), f=1 (X flip only), f=2 (Y flip only), f=3 (both flips)
 `px`<br/> ![Generic badge](https://img.shields.io/badge/Changed_0.5.0-gray.svg)  | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **layer** (`[x,y]` format). Don't forget optional layer offsets, if they exist!
 `src` | Array&nbsp;of&nbsp;Int | Pixel coordinates of the tile in the **tileset** (`[x,y]` format)
@@ -227,10 +228,12 @@ Value | Type | Description
 `hideFieldsWhenInactive`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | 
 `hideInList`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | Hide the layer from the list on the side of the editor view.
 `inactiveOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | Alpha of this layer when it is not the active one.
+`renderInWorldView`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.1-green.svg)  | Bool | If TRUE, the content of this layer will be used when rendering levels in a simplified way for the world view
 `requiredTags`<br/><sup class="only">Only *Entity layer*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Array&nbsp;of&nbsp;String | An array of tags to filter Entities that can be added to this layer
 `tilePivotX`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Type of the layer as Haxe Enum<br/> Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`
+`uiColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.1-green.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined color for the UI
 ~~`autoTilesetDefUid`~~<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_1.2.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.2.0<br/> <br/> Replaced by: `tilesetDefUid`
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
@@ -240,6 +243,7 @@ This complex section isn't meant to be used by game devs at all, as these rules 
 Value | Type | Description
 -- | -- | --
 `active`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If FALSE, the rule effect isn't applied, and no tiles are generated.
+`alpha`<br/><sup class="internal">*Only used by editor*</sup> | Float | 
 `breakOnMatch`<br/><sup class="internal">*Only used by editor*</sup> | Bool | When TRUE, the rule will prevent other rules to be applied in the same cell if it matches (TRUE by default).
 `chance`<br/><sup class="internal">*Only used by editor*</sup> | Float | Chances for this rule to be applied (0 to 1)
 `checker`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Checker mode<br/> Possible values: `None`, `Horizontal`, `Vertical`

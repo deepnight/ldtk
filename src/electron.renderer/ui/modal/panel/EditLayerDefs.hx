@@ -79,8 +79,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		);
 		var oldUid = ld.uid;
 		project.defs.removeLayerDef(ld);
-		select(project.defs.layers[0]);
 		editor.ge.emit( LayerDefRemoved(oldUid) );
+		select(project.defs.layers[0]);
 	}
 
 
@@ -262,6 +262,24 @@ class EditLayerDefs extends ui.modal.Panel {
 		i.allowNull = true;
 		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
+		// UI color
+		var jCol = jForm.find("#uiColor");
+		jCol.removeClass("null");
+		if( cur.uiColor!=null )
+			jCol.val(cur.uiColor.toHex());
+		else {
+			jCol.val("black");
+			jCol.addClass("null");
+		}
+		jCol.change(_->{
+			cur.uiColor = dn.Col.parseHex( jCol.val() );
+			editor.ge.emit( LayerDefChanged(cur.uid) );
+		});
+		jForm.find(".resetUiColor").click(_->{
+			cur.uiColor = null;
+			editor.ge.emit( LayerDefChanged(cur.uid) );
+		}).css("display", cur.uiColor==null ? "none" : "block");
+
 		// Grid
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
@@ -294,6 +312,12 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		var i = Input.linkToHtmlInput( cur.canSelectWhenInactive, jForm.find("input[name='canSelectWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+
+		var i = Input.linkToHtmlInput( cur.renderInWorldView, jForm.find("input[name='renderInWorldView']") );
+		i.onChange = ()->{
+			editor.worldRender.invalidateAll();
+			editor.ge.emit(LayerDefChanged(cur.uid));
+		}
 
 		var i = Input.linkToHtmlInput( cur.hideFieldsWhenInactive, jForm.find("input[name='hideFieldsWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
@@ -672,20 +696,21 @@ class EditLayerDefs extends ui.modal.Panel {
 		]);
 
 		for(ld in project.defs.layers) {
-			var e = new J("<li/>");
-			jList.append(e);
+			var jLi = new J("<li/>");
+			jLi.appendTo(jList);
 
 			if( ld.hideInList )
-				e.addClass("hidden");
-			e.addClass( Std.string(ld.type) );
+				jLi.addClass("hidden");
+			jLi.addClass( Std.string(ld.type) );
 
-			e.append( JsTools.createLayerTypeIcon2(ld.type) );
+			jLi.append( JsTools.createLayerTypeIcon2(ld.type) );
+			JsTools.applyListCustomColor(jLi, ld.uiColor, cur==ld);
 
-			e.append('<span class="name">'+ld.identifier+'</span>');
+			jLi.append('<span class="name">'+ld.identifier+'</span>');
 			if( cur==ld )
-				e.addClass("active");
+				jLi.addClass("active");
 
-			ContextMenu.addTo(e, [
+			ContextMenu.addTo(jLi, [
 				{
 					label: L._Copy(),
 					cb: ()->{
@@ -724,7 +749,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				}
 			]);
 
-			e.click( function(_) select(ld) );
+			jLi.click( _->select(ld) );
 		}
 
 		// Make layer list sortable

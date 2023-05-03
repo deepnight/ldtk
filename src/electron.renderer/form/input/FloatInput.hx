@@ -7,10 +7,20 @@ class FloatInput extends form.Input<Float> {
 	var valueStep = -1.;
 	public var allowNull = false;
 	public var nullReplacement : Null<Float> = null;
+	var precision = 4;
 
 	public function new(j:js.jquery.JQuery, rawGetter:Void->Float, rawSetter:Float->Void) {
 		super(j, rawGetter, rawSetter);
 		displayAsPct = false;
+	}
+
+	public function setPrecision(?p:Int) {
+		precision = p==null ? -1 : M.iclamp(p,0,10);
+		writeValueToInput();
+	}
+
+	override function cleanInputString(v:Float) {
+		return v==null || precision<0 ? super.cleanInputString(v) : M.truncateStr(v,precision);
 	}
 
 	public function setValueStep(step:Float) {
@@ -24,8 +34,9 @@ class FloatInput extends form.Input<Float> {
 		displayAsPct = true;
 		jInput.addClass("percentage");
 		writeValueToInput();
+		setValueStep(0.01);
 		if( slider )
-			enableSlider( displayAsPct ? 100 : 1 );
+			enableSlider( displayAsPct ? 50 : 1 );
 	}
 
 	static var zerosReg = ~/([\-0-9]+\.[0-9]*?)0{3,}/g;

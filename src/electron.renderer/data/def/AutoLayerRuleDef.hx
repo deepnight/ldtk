@@ -11,6 +11,7 @@ class AutoLayerRuleDef {
 	public var breakOnMatch = true;
 	public var size(default,null): Int;
 	var pattern : Array<Int> = [];
+	public var alpha = 1.;
 	public var outOfBoundsValue : Null<Int>;
 	public var flipX = false;
 	public var flipY = false;
@@ -129,6 +130,7 @@ class AutoLayerRuleDef {
 			active: active,
 			size: size,
 			tileIds: tileIds.copy(),
+			alpha: alpha,
 			chance: JsonTools.writeFloat(chance),
 			breakOnMatch: breakOnMatch,
 			pattern: pattern.copy(), // WARNING: could leak to undo/redo leaks if (one day) pattern contained objects
@@ -164,6 +166,7 @@ class AutoLayerRuleDef {
 		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false); // default to FALSE to avoid breaking old maps
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
+		r.alpha = JsonTools.readFloat(json.alpha, 1);
 		r.outOfBoundsValue = JsonTools.readNullableInt(json.outOfBoundsValue);
 		r.flipX = JsonTools.readBool(json.flipX, false);
 		r.flipY = JsonTools.readBool(json.flipY, false);
@@ -335,6 +338,18 @@ class AutoLayerRuleDef {
 		if( xModulo==1 && yModulo==1 && checker!=None ) {
 			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
 			checker = None;
+			anyFix = true;
+		}
+
+		if( xModulo==1 && checker==Horizontal ) {
+			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
+			checker = yModulo>1 ? Vertical : None;
+			anyFix = true;
+		}
+
+		if( yModulo==1 && checker==Vertical ) {
+			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
+			checker = xModulo>1 ? Horizontal : None;
 			anyFix = true;
 		}
 

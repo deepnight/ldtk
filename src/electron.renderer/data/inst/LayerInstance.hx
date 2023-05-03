@@ -51,7 +51,7 @@ class LayerInstance {
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
 				// WARNING: x/y don't contain layerDef.pxOffsetX/Y (to avoid the need of a global update when changing these values). They are added in the JSON though.
-				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
+				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int, a:Float }>
 			>
 		> > = null;
 
@@ -165,6 +165,7 @@ class LayerInstance {
 									f: tileInfos.flips,
 									t: tileInfos.tid,
 									d: [r.uid,allTiles.key],
+									a: r.alpha,
 								});
 							}
 					});
@@ -191,6 +192,7 @@ class LayerInstance {
 							f: tileInf.flips,
 							t: tileInf.tileId,
 							d: [ e.key ],
+							a: 1,
 						});
 					}
 				arr;
@@ -345,6 +347,7 @@ class LayerInstance {
 						srcY: at.src[1],
 						flips: at.f,
 						tid: at.t,
+						a: at.a,
 					});
 				}
 			}
@@ -718,6 +721,7 @@ class LayerInstance {
 					srcY: td.getTileSourceY(tid),
 					tid: tid,
 					flips: flips,
+					a: r.alpha,
 				}
 			} )
 		));
@@ -817,7 +821,7 @@ class LayerInstance {
 						// Break on match is ON
 						coordLocks.set( coordId(x,y), true ); // mark cell as locked
 					}
-					else if( !r.hasAnyPositionOffset() ) {
+					else if( !r.hasAnyPositionOffset() && r.alpha>=1 ) {
 						// Check for opaque tiles
 						for( t in autoTilesCache.get(r.uid).get( coordId(x,y) ) )
 							if( td.isTileOpaque(t.tid) ) {

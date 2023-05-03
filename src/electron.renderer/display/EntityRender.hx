@@ -70,6 +70,10 @@ class EntityRender extends dn.Process {
 			case WorldMode(false):
 				renderAll();
 
+			case LayerDefRemoved(defUid):
+				if( ld.uid==defUid )
+					destroy();
+
 			case WorldLevelMoved(_), WorldSettingsChanged, LayerInstanceSelected, LevelSelected(_):
 				renderAll();
 
@@ -285,6 +289,7 @@ class EntityRender extends dn.Process {
 
 
 	public function renderFields() {
+
 		fieldGraphics.clear();
 
 		// Attach fields
@@ -342,7 +347,7 @@ class EntityRender extends dn.Process {
 		updateLayout();
 	}
 
-	public inline function updateLayout() {
+	public function updateLayout() {
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 		final maxFieldsWid = ei.width*1.5 * settings.v.editorUiScale;
 		final maxFieldsHei = ei.height*1.5 * settings.v.editorUiScale;

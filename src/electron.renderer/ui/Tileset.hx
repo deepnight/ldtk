@@ -26,6 +26,16 @@ class Tileset {
 	var ty : Null<Float>;
 	var mouseOver = false;
 	public var useSavedSelections = true;
+	var viewLocked : Bool;
+
+	public var displayWid(get,never) : Float;
+		inline function get_displayWid() return tilesetDef.pxWid*zoom;
+
+	public var displayHei(get,never) : Float;
+		inline function get_displayHei() return tilesetDef.pxHei*zoom;
+
+	public var right(get,never) : Float;
+		inline function get_right() return scrollX+tilesetDef.pxWid*zoom;
 
 	var selectMode : TilesetSelectionMode;
 	var _internalSelectedIds : Array<Int> = [];
@@ -34,6 +44,13 @@ class Tileset {
 	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
 		tilesetDef = td;
 		selectMode = mode;
+
+		// Init viewLocked flag
+		var stateId : Settings.UiState = cast "tilesetFit_"+td.uid;
+		if( !App.ME.settings.hasUiState(stateId, Editor.ME.project) )
+			viewLocked = false;
+		else
+			viewLocked = App.ME.settings.getUiStateBool(stateId, Editor.ME.project);
 
 		// Create picker elements
 		jWrapper = new J('<div class="tileset"/>');
@@ -77,6 +94,40 @@ class Tileset {
 		setSelectionMode(selectMode); // force class update
 		loadScrollPos();
 		renderSelection();
+		if( viewLocked )
+			fitView();
+	}
+
+	public inline function isViewLocked() return viewLocked;
+	public inline function setViewLocked(v:Bool) {
+		viewLocked = v;
+		var stateId : Settings.UiState = cast "tilesetFit_"+tilesetDef.uid;
+		if( viewLocked ) {
+			App.ME.settings.setUiStateBool(stateId, viewLocked, Editor.ME.project);
+			fitView();
+		}
+		else
+			App.ME.settings.deleteUiState(stateId, Editor.ME.project);
+	}
+
+
+	public inline function fitsHorizontally() {
+		return displayWid<=jTilesetWrapper.outerWidth();
+	}
+
+	public inline function fitsVertically() {
+		return displayHei<=jTilesetWrapper.outerHeight();
+	}
+
+	public function fitView() {
+		zoom = M.fmin(
+			jTilesetWrapper.outerWidth() / tilesetDef.pxWid,
+			jTilesetWrapper.outerHeight() / tilesetDef.pxHei
+		);
+		scrollX = 0;
+		tx = null;
+		scrollY = 0;
+		ty = null;
 	}
 
 	public function setSelectionMode(m:TilesetSelectionMode) {
@@ -168,15 +219,19 @@ class Tileset {
 	public dynamic function onClickOutOfBounds() {}
 
 	function loadScrollPos() {
-		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
-		if( mem!=null ) {
-			tx = ty = null;
-			scrollX = mem.x;
-			scrollY = mem.y;
-			zoom = mem.zoom;
+		if( viewLocked )
+			fitView();
+		else {
+			var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
+			if( mem!=null ) {
+				tx = ty = null;
+				scrollX = mem.x;
+				scrollY = mem.y;
+				zoom = mem.zoom;
+			}
+			else
+				resetScroll();
 		}
-		else
-			resetScroll();
 	}
 
 	function saveScrollPos() {
@@ -298,6 +353,9 @@ class Tileset {
 
 
 	public function focusOnSelection(instant=false) {
+		if( viewLocked )
+			return;
+
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
 			return;
@@ -315,7 +373,8 @@ class Tileset {
 
 
 		tx = tilesetDef.padding + cx*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerWidth()*0.5/zoom;
-		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerHeight()*0.5/zoom;
+		ty = tilesetDef.padding + cy*(tilesetDef.tileGridSize+tilesetDef.spacing) - jTilesetWrapper.outerHeight()*0.25/zoom;
+
 		if( instant ) {
 			scrollX = tx;
 			scrollY = ty;
@@ -326,6 +385,9 @@ class Tileset {
 	}
 
 	public function focusAround(tileIds:Array<Int>, instant=false) {
+		if( viewLocked )
+			return;
+
 		if( tileIds.length==0 )
 			return;
 
@@ -600,8 +662,12 @@ class Tileset {
 
 
 	function onPickerMouseWheel(ev:js.html.WheelEvent) {
+
 		if( ev.deltaY!=0 ) {
 			ev.preventDefault();
+			if( viewLocked )
+				return;
+
 			var oldLocalX = pageToLocalX(ev.pageX);
 			var oldLocalY = pageToLocalY(ev.pageY);
 
@@ -629,7 +695,7 @@ class Tileset {
 		// 		ev.preventDefault();
 		// 		jDoc.off(".pickerCtxCatcher");
 		// 	});
-		if( ev.button==0 && !inTilesetBounds(ev.pageX, ev.pageY, 1) ) {
+		if( ev.button==0 && !inTilesetBounds(ev.pageX, ev.pageY) ) {
 			onClickOutOfBounds();
 			return;
 		}
@@ -643,6 +709,9 @@ class Tileset {
 
 		if( ev.button==2 && selectMode==RectOnly )
 			setSelectedTileIds([]);
+
+		if( ev.button==1 && viewLocked )
+			return;
 
 		// Start dragging
 		dragStart = {
@@ -704,6 +773,8 @@ class Tileset {
 	}
 
 	public function update() {
+		App.ME.debugPre(Std.int(scrollX)+" "+Std.int(right), true);
+
 		// Focus scrolling animation
 		final spd = M.fmin(1, 0.38 * App.ME.tmod);
 		if( tx!=null ) {

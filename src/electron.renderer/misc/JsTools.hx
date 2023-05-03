@@ -758,6 +758,9 @@ class JsTools {
 				jOpt.attr("value", jOldOpt.attr("value"));
 				jOpt.text( jOldOpt.text() );
 
+				if( jOldOpt.prop("disabled")==true )
+					jOpt.addClass("disabled");
+
 				// Background color
 				if( jOldOpt.is("[color]") ) {
 					var c = dn.Col.parseHex( jOldOpt.attr("color") );
@@ -1256,7 +1259,9 @@ class JsTools {
 	public static function createOutOfBoundsRulePolicy(jSelect:js.jquery.JQuery, ld:data.def.LayerDef, curValue:Null<Int>, onChange:Int->Void) {
 		// Out-of-bounds policy
 		jSelect.empty();
-		var values = [null, 0].concat( ld.getAllIntGridValues().map( iv->iv.value ) );
+
+		var sourceLd = ld.autoSourceLd==null ? ld : ld.autoSourceLd;
+		var values = [null, 0].concat( sourceLd.getAllIntGridValues().map( iv->iv.value ) );
 		if( curValue<0 )
 			values.insert(0,-1);
 		for(v in values) {
@@ -1267,7 +1272,7 @@ class JsTools {
 				case v if(v<0): jOpt.text("-- Pick a value --");
 				case 0: jOpt.text("Empty cells");
 				case _:
-					var iv = ld.getIntGridValueDef(v);
+					var iv = sourceLd.getIntGridValueDef(v);
 					jOpt.text( Std.string(v) + (iv.identifier!=null ? ' - ${iv.identifier}' : "") );
 					jOpt.css({
 						backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
@@ -1283,7 +1288,7 @@ class JsTools {
 
 		jSelect.val( curValue==null ? "null" : Std.string(curValue) );
 		if( curValue!=null && curValue>0 ) {
-			var iv = ld.getIntGridValueDef(curValue);
+			var iv = sourceLd.getIntGridValueDef(curValue);
 			jSelect.addClass("hasValue").css({
 				backgroundColor: C.intToHex( C.toBlack(iv.color, 0.4) ),
 				borderColor: C.intToHex( iv.color ),
@@ -1291,5 +1296,25 @@ class JsTools {
 		}
 
 		return jSelect;
+	}
+
+
+	public static function applyListCustomColor(jLi:js.jquery.JQuery, col:dn.Col, isActive:Bool) {
+		if( col==null ) {
+			jLi.removeClass("customColor");
+			return;
+		}
+
+		if( isActive ) {
+			jLi.css("background-color", col.toHex());
+			jLi.css("color", col.getAutoContrastCustom(0.5).toHex());
+			jLi.css("box-shadow", "-4px 0 0 white inset");
+		}
+		else {
+			jLi.css("background-color", col.toCssRgba(0.5));
+			jLi.css("color", col.toWhite(0.3).toHex());
+			jLi.css("box-shadow", "-4px 0 0 "+col.toHex()+" inset");
+		}
+		jLi.addClass("customColor");
 	}
 }
