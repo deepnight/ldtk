@@ -2,6 +2,8 @@
 
  - **Added customizable UI color of layers**
  - **Added custom alpha per auto-layer rule: this alpha will affect the opacity of the resulting tile.**
+ - **Added an option to fit current tileset in the editor side bar.**
+ - Re-organized all buttons near the tileset in the editor side bar.
  - Added sliders to all inputs in the rule Modulo window
  - Added sliders to inputs in the rule Perlin window
  - Re-organized auto-layer rules options
