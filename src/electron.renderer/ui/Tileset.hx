@@ -26,7 +26,7 @@ class Tileset {
 	var ty : Null<Float>;
 	var mouseOver = false;
 	public var useSavedSelections = true;
-	public var viewLocked = true;
+	var viewLocked : Bool;
 
 	public var displayWid(get,never) : Float;
 		inline function get_displayWid() return tilesetDef.pxWid*zoom;
@@ -44,6 +44,13 @@ class Tileset {
 	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
 		tilesetDef = td;
 		selectMode = mode;
+
+		// Init viewLocked flag
+		var stateId : Settings.UiState = cast "tilesetFit_"+td.uid;
+		if( !App.ME.settings.hasUiState(stateId, Editor.ME.project) )
+			viewLocked = false;
+		else
+			viewLocked = App.ME.settings.getUiStateBool(stateId, Editor.ME.project);
 
 		// Create picker elements
 		jWrapper = new J('<div class="tileset"/>');
@@ -90,6 +97,19 @@ class Tileset {
 		if( viewLocked )
 			fitView();
 	}
+
+	public inline function isViewLocked() return viewLocked;
+	public inline function setViewLocked(v:Bool) {
+		viewLocked = v;
+		var stateId : Settings.UiState = cast "tilesetFit_"+tilesetDef.uid;
+		if( viewLocked ) {
+			App.ME.settings.setUiStateBool(stateId, viewLocked, Editor.ME.project);
+			fitView();
+		}
+		else
+			App.ME.settings.deleteUiState(stateId, Editor.ME.project);
+	}
+
 
 	public inline function fitsHorizontally() {
 		return displayWid<=jTilesetWrapper.outerWidth();

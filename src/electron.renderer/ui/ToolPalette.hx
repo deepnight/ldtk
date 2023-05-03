@@ -3,6 +3,7 @@ package ui;
 class ToolPalette {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	public var jPaletteOptions : js.jquery.JQuery;
 
 	public var jContent : js.jquery.JQuery;
 	var tool : Tool<Dynamic>;
@@ -19,6 +20,8 @@ class ToolPalette {
 
 	public function new(t:Tool<Dynamic>) {
 		tool = t;
+		jPaletteOptions = editor.jMainPanel.find("#paletteOptions");
+		jPaletteOptions.empty();
 		jContent = new J('<div class="palette"/>');
 	}
 

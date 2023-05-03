@@ -299,6 +299,25 @@ button {
 		}
 	}
 
+	&.toggle {
+		background-color: $bgDark;
+		box-shadow: none;
+		border-radius: 2px;
+		&.on {
+			box-shadow: 0 0 8px $green inset;
+			outline: 1px solid $green;
+		}
+		&:not(.on) {
+			// box-shadow: 0 0 16px $red inset;
+			outline: 1px solid $bgLight;
+			// background-color: $darkRed;
+			.icon {
+				opacity: 0.5;
+				// filter: brightness(0.4) sepia(1) hue-rotate(-0.4rad) saturate(6);
+			}
+		}
+	}
+
 	&.blue {
 		background-color: #2a73ab;
 		&:hover {
@@ -1217,6 +1236,7 @@ ul.log {
 .icon.enum				{ background-image: url("../icons/enum.png"); }
 .icon.exit				{ background-image: url("../icons/exit.svg"); }
 .icon.expanded			{ background-image: url("../icons/expanded.svg"); }
+.icon.fit				{ background-image: url("../icons/fit.svg"); }
 .icon.flatten			{ background-image: url("../icons/flatten.svg"); }
 .icon.folder			{ background-image: url("../icons/folder.svg"); }
 .icon.folderOpen		{ background-image: url("../icons/folderOpen.svg"); }
@@ -4853,12 +4873,34 @@ canvas#webgl {
 			}
 		}
 
-		#toolOptions {
-			select {
-				width: 100%;
-				option.bad {
-					color: $bgLight;
+		.optionsWrapper {
+			display: flex;
+			flex-wrap: nowrap;
+
+			#toolOptions {
+				display: flex;
+				flex: 1;
+				select {
+					flex: 1 1 100%;
+					width: 100%;
+					option.bad {
+						color: $bgLight;
+					}
 				}
+			}
+
+			#paletteOptions {
+				flex: 0;
+				display: flex;
+				flex-wrap: nowrap;
+
+				&:not(:empty) {
+					margin-left: 8px;
+				}
+			}
+
+			button {
+				padding: 2px 4px;
 			}
 		}
 
@@ -5167,6 +5209,10 @@ canvas#webgl {
 						height: 1.3em;
 					}
 				}
+			}
+
+			.optionsWrapper {
+				display: block;
 			}
 
 			#guide {
