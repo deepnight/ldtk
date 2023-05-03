@@ -347,7 +347,7 @@ class LayerInstance {
 						srcY: at.src[1],
 						flips: at.f,
 						tid: at.t,
-						a: at.a,
+						a: at.a==null ? 1 : at.a,
 					});
 				}
 			}

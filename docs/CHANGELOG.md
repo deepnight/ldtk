@@ -1,3 +1,7 @@
+# 1.3.2
+
+ - Fixed invisible auto-layer tiles when loading pre-1.3.1 projects
+
 # 1.3.1
 
  - **Added customizable UI color of layers**
