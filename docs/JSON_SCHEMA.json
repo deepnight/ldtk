@@ -2235,6 +2235,7 @@
 				"hideFieldsWhenInactive",
 				"hideInList",
 				"inactiveOpacity",
+				"renderInWorldView",
 				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
@@ -2327,6 +2328,12 @@
 				},
 				"parallaxScaling": {
 					"description": "If true (default), a layer with a parallax factor will also be scaled up/down accordingly.",
+					"type": [
+						"boolean"
+					]
+				},
+				"renderInWorldView": {
+					"description": "If TRUE, the content of this layer will be used when rendering levels in a simplified way for the world view",
 					"type": [
 						"boolean"
 					]
