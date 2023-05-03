@@ -88,11 +88,11 @@ class Tileset {
 		renderSelection();
 	}
 
-	inline function fitsHorizontally() {
+	public inline function fitsHorizontally() {
 		return displayWid<=jTilesetWrapper.outerWidth();
 	}
 
-	inline function fitsVertically() {
+	public inline function fitsVertically() {
 		return displayHei<=jTilesetWrapper.outerHeight();
 	}
 
