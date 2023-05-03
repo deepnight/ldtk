@@ -26,6 +26,7 @@ class Tileset {
 	var ty : Null<Float>;
 	var mouseOver = false;
 	public var useSavedSelections = true;
+	public var viewLocked = true;
 
 	public var displayWid(get,never) : Float;
 		inline function get_displayWid() return tilesetDef.pxWid*zoom;
@@ -86,6 +87,8 @@ class Tileset {
 		setSelectionMode(selectMode); // force class update
 		loadScrollPos();
 		renderSelection();
+		if( viewLocked )
+			fitView();
 	}
 
 	public inline function fitsHorizontally() {
@@ -96,18 +99,15 @@ class Tileset {
 		return displayHei<=jTilesetWrapper.outerHeight();
 	}
 
-	public function checkFit() {
-		if( fitsHorizontally() )
-			if( tx==null )
-				scrollX = 0;
-			else
-				tx = 0;
-
-		if( fitsVertically() )
-			if( ty==null )
-				scrollY = 0;
-			else
-				ty = 0;
+	public function fitView() {
+		zoom = M.fmin(
+			jTilesetWrapper.outerWidth() / tilesetDef.pxWid,
+			jTilesetWrapper.outerHeight() / tilesetDef.pxHei
+		);
+		scrollX = 0;
+		tx = null;
+		scrollY = 0;
+		ty = null;
 	}
 
 	public function setSelectionMode(m:TilesetSelectionMode) {
@@ -199,15 +199,19 @@ class Tileset {
 	public dynamic function onClickOutOfBounds() {}
 
 	function loadScrollPos() {
-		var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
-		if( mem!=null ) {
-			tx = ty = null;
-			scrollX = mem.x;
-			scrollY = mem.y;
-			zoom = mem.zoom;
+		if( viewLocked )
+			fitView();
+		else {
+			var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
+			if( mem!=null ) {
+				tx = ty = null;
+				scrollX = mem.x;
+				scrollY = mem.y;
+				zoom = mem.zoom;
+			}
+			else
+				resetScroll();
 		}
-		else
-			resetScroll();
 	}
 
 	function saveScrollPos() {
@@ -329,6 +333,9 @@ class Tileset {
 
 
 	public function focusOnSelection(instant=false) {
+		if( viewLocked )
+			return;
+
 		var tids = getSelectedTileIds();
 		if( tids.length==0 )
 			return;
@@ -358,6 +365,9 @@ class Tileset {
 	}
 
 	public function focusAround(tileIds:Array<Int>, instant=false) {
+		if( viewLocked )
+			return;
+
 		if( tileIds.length==0 )
 			return;
 
@@ -632,8 +642,12 @@ class Tileset {
 
 
 	function onPickerMouseWheel(ev:js.html.WheelEvent) {
+
 		if( ev.deltaY!=0 ) {
 			ev.preventDefault();
+			if( viewLocked )
+				return;
+
 			var oldLocalX = pageToLocalX(ev.pageX);
 			var oldLocalY = pageToLocalY(ev.pageY);
 
@@ -675,6 +689,9 @@ class Tileset {
 
 		if( ev.button==2 && selectMode==RectOnly )
 			setSelectedTileIds([]);
+
+		if( viewLocked )
+			return;
 
 		// Start dragging
 		dragStart = {
