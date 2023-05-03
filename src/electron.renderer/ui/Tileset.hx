@@ -695,7 +695,7 @@ class Tileset {
 		// 		ev.preventDefault();
 		// 		jDoc.off(".pickerCtxCatcher");
 		// 	});
-		if( ev.button==0 && !inTilesetBounds(ev.pageX, ev.pageY, 1) ) {
+		if( ev.button==0 && !inTilesetBounds(ev.pageX, ev.pageY) ) {
 			onClickOutOfBounds();
 			return;
 		}
