@@ -73,7 +73,7 @@ Please note that, to restore a backup, you should use LDtk and not copy files by
 ## Collapsable tags
 ![](1.3.0/collapsableTag.png)
 
-Tags are not behaving like "folders" and can now be open/closed accordingly in UI.
+Tags are now behaving like "folders" and can be collapsed/opened accordingly in UI.
 
 
 ## Lists quick search

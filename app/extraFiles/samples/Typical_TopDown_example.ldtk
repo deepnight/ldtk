@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.2",
+		"appVersion": "1.3.3",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a3386460-7820-11ed-b6fd-157a63b4d02d",
-	"jsonVersion": "1.3.2",
-	"appBuildId": 467535,
+	"jsonVersion": "1.3.3",
+	"appBuildId": 467559,
 	"nextUid": 158,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -43,7 +43,7 @@
 	"backupLimit": 10,
 	"backupRelPath": null,
 	"levelNamePattern": "%world_Level_%idx",
-	"tutorialDesc": "This example uses a combination of Auto-Layers with a vertical offset of -16px on the \"Wall_tops\" layer. This trick allows rendering of a \"top-down\" level with a minimal amount of tiles (and work).\n\nPress [A] to toggle \"Single Layer Mode\", and see what each layer really contains.\n\nPress [SHIFT + R] to toggle rendering of rules based layers.",
+	"tutorialDesc": "This example uses a combination of Auto-Layers with a vertical offset of -16px on the \"Wall_tops\" layer. This trick allows rendering of a \"top-down\" level with a minimal amount of tiles (and work).\n\nPress [SHIFT + A] to toggle \"Single Layer Mode\", and see what each layer really contains.\n\nPress [SHIFT + R] to toggle rendering of rules based layers.",
 	"customCommands": [],
 	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
