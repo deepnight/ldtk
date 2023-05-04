@@ -1,3 +1,7 @@
+# 1.3.3
+
+ - When using the "Single layer mode", the others layers are now faded away a bit more.
+
 # 1.3.2
 
  - Fixed invisible auto-layer tiles when loading pre-1.3.1 projects

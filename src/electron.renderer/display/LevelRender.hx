@@ -606,7 +606,7 @@ class LevelRender extends dn.Process {
 			return;
 
 		lr.root.visible = isLayerVisible(li);
-		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.1 );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
 		if( li!=editor.curLayerInstance )
 			lr.root.alpha *= li.def.inactiveOpacity;
@@ -614,8 +614,8 @@ class LevelRender extends dn.Process {
 
 	function getSingleLayerModeFilter() : h2d.filter.Filter {
 		return new h2d.filter.Group([
-			C.getColorizeFilterH2d(0x8c99c1, 0.9),
-			new h2d.filter.Blur(2),
+			C.getColorizeFilterH2d(0x8c99c1, 1),
+			new h2d.filter.Blur(8),
 		]);
 	}
 
