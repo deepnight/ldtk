@@ -239,7 +239,10 @@ class Tileset {
 	}
 
 	function set_zoom(v) {
-		zoom = M.fclamp(v, 0.5, 6);
+		if( viewLocked )
+			zoom = v;
+		else
+			zoom = M.fclamp(v, 0.5, 6);
 		jAtlas.css("zoom",zoom);
 		saveScrollPos();
 		return zoom;

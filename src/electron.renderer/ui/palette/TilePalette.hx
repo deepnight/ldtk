@@ -13,10 +13,9 @@ class TilePalette extends ui.ToolPalette {
 		return super.needToPopOut() || picker!=null && !picker.isViewLocked();
 	}
 
+
 	override function doRender() {
 		super.doRender();
-
-		jPaletteOptions.empty();
 
 		var tool : tool.lt.TileTool = cast tool;
 		if( tool.curTilesetDef==null ) {
@@ -32,6 +31,15 @@ class TilePalette extends ui.ToolPalette {
 		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool);
 		if( old!=null )
 			picker.useOldTilesetPos(old);
+		picker.onSelectAnything = ()->updateOptions();
+
+		updateOptions();
+	}
+
+
+	function updateOptions() {
+		var tool : tool.lt.TileTool = cast tool;
+		jPaletteOptions.empty();
 
 		// Random mode
 		var jRandom = new J('<button class="toggle"> <span class="icon random"></span> </button>');
@@ -66,6 +74,7 @@ class TilePalette extends ui.ToolPalette {
 			render();
 		});
 	}
+
 
 	override function onNavigateSelection(dx:Int, dy:Int, pressed:Bool):Bool {
 		if( picker!=null )
