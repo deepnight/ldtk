@@ -1,6 +1,8 @@
 # 1.3.3
 
  - When using the "Single layer mode", the others layers are now faded away a bit more.
+ - Hiding details (`CTRL-H`) now also hides the grid
+ - Fixed visibility icon in layer list when hiding details
 
 # 1.3.2
 
