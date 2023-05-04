@@ -35,7 +35,11 @@ class WorldPanel extends ui.modal.Panel {
 				()->{
 					new LastChance( L.t._('World ::id:: removed', {id:curWorld.identifier}), project);
 					var deleted = curWorld;
-					editor.selectWorld(project.worlds[0]);
+					for( other in project.worlds )
+						if( other!=curWorld ) {
+							editor.selectWorld(other);
+							break;
+						}
 					project.removeWorld(deleted);
 					editor.ge.emit( WorldRemoved(deleted) );
 					editor.setWorldMode(true);
