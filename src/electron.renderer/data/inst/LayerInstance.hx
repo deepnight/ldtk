@@ -709,6 +709,15 @@ class LayerInstance {
 					autoTilesCache = null;
 
 			case Entities:
+				var ratio = newGrid/oldGrid;
+				for(ei in entityInstances) {
+					ei.x = M.floor( ratio * ei.x );
+					ei.y = M.floor( ratio * ei.y );
+					if( ei.customWidth!=null )
+						ei.customWidth = M.floor( ratio * ei.customWidth );
+					if( ei.customHeight!=null )
+						ei.customHeight = M.floor( ratio * ei.customHeight );
+				}
 
 			case Tiles:
 				var newGridTiles = new Map();
