@@ -282,6 +282,19 @@ class TilesetDef {
 	function remapAllTileIdsAfterResize(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
 		App.LOG.warning('Tileset remapping...');
 
+		inline function _remapTileId(oldCwid:Int, oldTileCoordId:Null<Int>) : Null<Int> {
+			if( oldTileCoordId==null )
+				return null;
+
+			var oldCy = Std.int( oldTileCoordId / oldCwid );
+			var oldCx = oldTileCoordId - oldCwid*oldCy;
+			if( oldCx>=cWid || oldCy>=cHei )
+				return null;
+			else
+				return getTileId(oldCx, oldCy);
+		}
+
+
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
 
@@ -306,7 +319,7 @@ class TilesetDef {
 				var i = 0;
 				while( i < li.gridTiles.get(coordId).length ) {
 					var tileInf = li.gridTiles.get(coordId)[i];
-					var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
+					var remappedTileId = _remapTileId( oldCwid, tileInf.tileId );
 					if( remappedTileId==null )
 						li.gridTiles.get(coordId).splice(i,1);
 					else {
@@ -322,7 +335,7 @@ class TilesetDef {
 		for(sel in savedSelections) {
 			var i = 0;
 			while( i<sel.ids.length ) {
-				var remap = remapTileId(oldCwid, sel.ids[i]);
+				var remap = _remapTileId(oldCwid, sel.ids[i]);
 				if( remap==null )
 					sel.ids.splice(i,1);
 				else {
@@ -338,14 +351,14 @@ class TilesetDef {
 				for(rg in ld.autoRuleGroups)
 				for(r in rg.rules)
 				for(i in 0...r.tileIds.length)
-					r.tileIds[i] = remapTileId(oldCwid, r.tileIds[i]);
+					r.tileIds[i] = _remapTileId(oldCwid, r.tileIds[i]);
 			}
 
 		// Enum tags remapping
 		for(enumTag in enumTags.keys()) {
 			var remap = new Map();
 			for( t in enumTags.get(enumTag).keyValueIterator() ) {
-				var newTileId = remapTileId(oldCwid, t.key);
+				var newTileId = _remapTileId(oldCwid, t.key);
 				if( newTileId!=null )
 					remap.set(newTileId, t.value);
 			}
@@ -355,7 +368,7 @@ class TilesetDef {
 		// Custom tile data remapping
 		var remap = new Map();
 		for(cd in customData.keyValueIterator()) {
-			var newTileId = remapTileId(oldCwid, cd.key);
+			var newTileId = _remapTileId(oldCwid, cd.key);
 			if( newTileId!=null )
 				remap.set(newTileId, cd.value);
 		}
@@ -372,19 +385,6 @@ class TilesetDef {
 		}
 	}
 
-
-
-	inline function remapTileId(oldCwid:Int, oldTileCoordId:Null<Int>) : Null<Int> {
-		if( oldTileCoordId==null )
-			return null;
-
-		var oldCy = Std.int( oldTileCoordId / oldCwid );
-		var oldCx = oldTileCoordId - oldCwid*oldCy;
-		if( oldCx>=cWid || oldCy>=cHei )
-			return null;
-		else
-			return getTileId(oldCx, oldCy);
-	}
 
 	public inline function getAverageTileColor(tid:Int) : dn.Col {
 		return averageColorsCache!=null && averageColorsCache.exists(tid) ? averageColorsCache.get(tid) : 0x888888;
