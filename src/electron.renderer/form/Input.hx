@@ -186,7 +186,7 @@ class Input<T> {
 			return;
 		}
 
-		onBeforeSetter();
+		onBeforeSetter(newValue);
 		setter(newValue);
 		writeValueToInput();
 		lastValidValue = getter();
@@ -201,7 +201,7 @@ class Input<T> {
 		linkedEvents.set(eid,true);
 	}
 
-	public dynamic function onBeforeSetter() {}
+	public dynamic function onBeforeSetter(v:T) {}
 	public dynamic function fixValue(v:T) : T { return v; }
 	public dynamic function onChange() {}
 	public dynamic function onValueChange(v:T) {}

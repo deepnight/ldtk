@@ -198,7 +198,7 @@ class WorldPanel extends ui.modal.Panel {
 
 		if( project.countAllLevels() > 2 )
 			e.customConfirm = (oldV,newV)->L.t._("Changing this will change ALL the level positions! Please make sure you know what you're doing :)");
-		e.onBeforeSetter = ()->{
+		e.onBeforeSetter = _->{
 			new LastChance(L.t._("World layout changed"), editor.project);
 		}
 		e.onValueChange = (l)->{
