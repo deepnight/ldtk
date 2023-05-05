@@ -28,7 +28,7 @@ class TilePalette extends ui.ToolPalette {
 
 		// Picker
 		var old = picker;
-		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool);
+		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool, true);
 		if( old!=null )
 			picker.useOldTilesetPos(old);
 		picker.onSelectAnything = ()->updateOptions();
