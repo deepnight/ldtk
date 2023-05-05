@@ -3682,7 +3682,7 @@ textarea {
 	}
 
 	&.message .wrapper {
-		max-width: 400px;
+		max-width: 500px;
 		p {
 			margin: 0;
 		}
@@ -3695,6 +3695,7 @@ textarea {
 		gap: 16px;
 		grid-template-columns: min-content auto;
 		align-items: stretch;
+		overflow: hidden;
 
 		.iconWrapper {
 			padding: 16px;
