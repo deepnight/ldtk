@@ -10,7 +10,7 @@ class TilePalette extends ui.ToolPalette {
 	}
 
 	override function needToPopOut():Bool {
-		return super.needToPopOut() || picker!=null && !picker.isViewLocked();
+		return super.needToPopOut() || picker!=null && !picker.isViewFitted();
 	}
 
 
@@ -65,12 +65,12 @@ class TilePalette extends ui.ToolPalette {
 		var jFit = new J('<button class="toggle"> <span class="icon fit"></span> </button>');
 		jFit.appendTo(jPaletteOptions);
 		Tip.attach(jFit, "Fit tileset view in the interface panel");
-		if( picker.isViewLocked() )
+		if( picker.isViewFitted() )
 			jFit.addClass("on");
 		jFit.click(_->{
 			if( picker==null )
 				return;
-			picker.setViewLocked(!picker.isViewLocked());
+			picker.setViewFit(!picker.isViewFitted());
 			render();
 		});
 	}
