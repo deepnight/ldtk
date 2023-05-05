@@ -4,6 +4,7 @@
  - Hiding details (`CTRL-H`) now also hides the grid
  - Fixed visibility icon in layer list when hiding details
  - Fixed various minor bugs in the new tool options from the left panel.
+ - Renaming a project will now also rename sibling `.meta` files (Unity) accordingly.
 
 # 1.3.2
 
