@@ -271,7 +271,7 @@ class TilesetDef {
 
 			if( oldRelPath!=null || isUsingEmbedAtlas() && oldPxWid>0 ) {
 				// Try to update previous image
-				return remapAllTileIds(oldPxWid, oldPxHei);
+				return remapAllTileIdsAfterResize(oldPxWid, oldPxHei);
 			}
 			else
 				return Ok;
@@ -279,7 +279,7 @@ class TilesetDef {
 	}
 
 
-	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
+	function remapAllTileIdsAfterResize(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
 		App.LOG.warning('Tileset remapping...');
 
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
@@ -331,17 +331,6 @@ class TilesetDef {
 				}
 			}
 		}
-
-		// Enum tiles remapping
-		// for(ed in _project.defs.enums)
-		// 	if( ed.iconTilesetUid==uid )
-		// 		for(v in ed.values)
-		// 			v.tileId = remapTileId(oldCwid, v.tileId);
-
-		// Entity tiles remapping
-		// for( ed in _project.defs.entities )
-		// 	if( ed.tilesetId==uid && ed.tileId!=null )
-		// 		ed.tileId = remapTileId(oldCwid, ed.tileId);
 
 		// Auto-layer tiles remapping
 		for(ld in _project.defs.layers)
