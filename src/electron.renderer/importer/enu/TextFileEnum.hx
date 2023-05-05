@@ -17,6 +17,7 @@ class TextFileEnum extends importer.ExternalEnum {
 
 			var parsed : ParsedExternalEnum = {
 				enumId: StringTools.trim( line.split(":")[0] ),
+				tilesetUid: null,
 				values: [],
 			}
 
@@ -25,7 +26,7 @@ class TextFileEnum extends importer.ExternalEnum {
 			for(v in values)
 				parsed.values.push({
 					valueId: v,
-					data: { color:null },
+					data: { color:null, tileRect:null },
 				});
 			parseds.push(parsed);
 		}

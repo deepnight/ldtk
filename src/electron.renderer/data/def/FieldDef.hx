@@ -18,6 +18,7 @@ class FieldDef {
 	public var arrayMinLength : Null<Int>;
 	public var arrayMaxLength : Null<Int>;
 	public var editorDisplayMode : ldtk.Json.FieldDisplayMode;
+	public var editorDisplayScale : Float;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
 	public var editorShowInWorld : Bool;
@@ -43,6 +44,7 @@ class FieldDef {
 	public var autoChainRef : Bool;
 	public var allowOutOfLevelRef : Bool;
 	public var allowedRefs : ldtk.Json.EntityReferenceTarget;
+	public var allowedRefsEntityUid : Null<Int>;
 	public var allowedRefTags : Tags;
 	public var tilesetUid : Null<Int>;
 
@@ -85,7 +87,6 @@ class FieldDef {
 			case F_Bool:
 			case F_Color:
 			case F_Enum(enumDefUid):
-			case F_Table(tableDefUid):
 			case F_Point: editorDisplayMode = PointPath;
 			case F_Path:
 			case F_EntityRef: editorDisplayMode = RefLinkBetweenCenters;
@@ -102,7 +103,6 @@ class FieldDef {
 			case F_Point, F_Path: false;
 			case F_EntityRef: false;
 			case F_Tile: false;
-			case F_Table(tableDefUid): false;
 		};
 	}
 
@@ -136,6 +136,7 @@ class FieldDef {
 		o.arrayMinLength = JsonTools.readNullableInt(json.arrayMinLength);
 		o.arrayMaxLength = JsonTools.readNullableInt(json.arrayMaxLength);
 		o.editorDisplayMode = JsonTools.readEnum(ldtk.Json.FieldDisplayMode, json.editorDisplayMode, false, Hidden);
+		o.editorDisplayScale = JsonTools.readFloat(json.editorDisplayScale, 1);
 		o.editorDisplayPos = JsonTools.readEnum(ldtk.Json.FieldDisplayPosition, json.editorDisplayPos, false, Above);
 		o.editorLinkStyle = JsonTools.readEnum(ldtk.Json.FieldLinkStyle, json.editorLinkStyle, false, switch o.type {
 			case F_EntityRef: CurvedArrow;
@@ -155,6 +156,7 @@ class FieldDef {
 		o.autoChainRef = JsonTools.readBool(json.autoChainRef, true);
 		o.allowOutOfLevelRef = JsonTools.readBool(json.allowOutOfLevelRef, true);
 		o.allowedRefs = JsonTools.readEnum(ldtk.Json.EntityReferenceTarget, json.allowedRefs, false, OnlySame);
+		o.allowedRefsEntityUid = JsonTools.readNullableInt(json.allowedRefsEntityUid);
 		o.allowedRefTags = Tags.fromJson(json.allowedRefTags);
 		o.tilesetUid = JsonTools.readNullableInt(json.tilesetUid);
 
@@ -178,6 +180,7 @@ class FieldDef {
 			arrayMinLength: arrayMinLength,
 			arrayMaxLength: arrayMaxLength,
 			editorDisplayMode: JsonTools.writeEnum(editorDisplayMode, false),
+			editorDisplayScale: JsonTools.writeFloat(editorDisplayScale),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
 			editorAlwaysShow: editorAlwaysShow,
@@ -196,6 +199,7 @@ class FieldDef {
 			autoChainRef: autoChainRef,
 			allowOutOfLevelRef: allowOutOfLevelRef,
 			allowedRefs: JsonTools.writeEnum(allowedRefs, false),
+			allowedRefsEntityUid: allowedRefsEntityUid,
 			allowedRefTags: allowedRefTags.toJson(),
 			tilesetUid: tilesetUid,
 		}
@@ -217,7 +221,6 @@ class FieldDef {
 			case F_Point: "#7779c9";
 			case F_EntityRef: "#7779c9";
 			case F_Tile: "#99d367";
-			case F_Table(tableDefUid): "#FFB81C";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
@@ -240,7 +243,6 @@ class FieldDef {
 			case F_Path: "File path";
 			case F_EntityRef: "Entity ref";
 			case F_Tile: "Tile";
-			case F_Table(tableDefUid): "Table."+_project.defs.getTableDef(tableDefUid).name;
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -260,7 +262,6 @@ class FieldDef {
 			case F_Path: "FilePath";
 			case F_EntityRef: "EntityRef";
 			case F_Tile: "Tile";
-			case F_Table(tableDefUid): "Table";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -434,11 +435,6 @@ class FieldDef {
 		}
 	}
 
-	public function getTableDefault() : Null<Int> {
-		require(F_Table(null));
-		return null;
-	}
-
 	public function restoreDefault() {
 		defaultOverride = null;
 	}
@@ -502,9 +498,6 @@ class FieldDef {
 				}
 				defaultOverride = V_String(arr.join(","));
 
-			case F_Table(name) :
-				var def = Std.parseInt(rawDef);
-				defaultOverride = !dn.M.isValidNumber(def) ? null : V_Int( iClamp(def) );
 		}
 	}
 
@@ -520,7 +513,6 @@ class FieldDef {
 			case F_Enum(name): getEnumDefault();
 			case F_EntityRef: null;
 			case F_Tile: null;
-			case F_Table(name): getTableDefault();
 		}
 	}
 
@@ -587,6 +579,7 @@ class FieldDef {
 			case Any: true;
 			case OnlySame: sourceEi.defUid==targetEd.uid;
 			case OnlyTags: targetEd.tags.hasAnyTagFoundIn(allowedRefTags);
+			case OnlySpecificEntity: targetEd.uid==allowedRefsEntityUid;
 		}
 	}
 

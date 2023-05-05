@@ -70,6 +70,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
 		paintedCells = new Map();
 		super.startUsing(ev,m,extraParam);
+		editor.selectionTool.clear();
 	}
 
 	inline function markAsPainted(cx,cy) paintedCells.set( curLayerInstance.coordId(cx,cy), true );
@@ -342,8 +343,8 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		return new ui.palette.TilePalette(this);
 	}
 
-	override function initOptionForm() {
-		super.initOptionForm();
+	override function initToolOptions() {
+		super.initToolOptions();
 
 		if( project.defs.tilesets.length==0 )
 			return;
@@ -382,7 +383,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			}
 			var isBad = jTilesets.find(":selected").hasClass("bad");
 			if( isBad )
-				new ui.modal.dialog.Confirm(jTilesets, L.t._("Warning: using this tileset in this layer will mess any existing tiles here."), true, _apply.bind(true), initOptionForm);
+				new ui.modal.dialog.Confirm(jTilesets, L.t._("Warning: using this tileset in this layer will mess any existing tiles here."), true, _apply.bind(true), initToolOptions);
 			else
 				_apply(false);
 		});

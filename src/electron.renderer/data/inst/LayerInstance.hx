@@ -51,7 +51,7 @@ class LayerInstance {
 		Null< Map<Int, // RuleUID
 			Map<Int, // CoordID
 				// WARNING: x/y don't contain layerDef.pxOffsetX/Y (to avoid the need of a global update when changing these values). They are added in the JSON though.
-				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int }>
+				Array<{ x:Int, y:Int, flips:Int, srcX:Int, srcY:Int, tid:Int, a:Float }>
 			>
 		> > = null;
 
@@ -165,6 +165,7 @@ class LayerInstance {
 									f: tileInfos.flips,
 									t: tileInfos.tid,
 									d: [r.uid,allTiles.key],
+									a: r.alpha,
 								});
 							}
 					});
@@ -191,6 +192,7 @@ class LayerInstance {
 							f: tileInf.flips,
 							t: tileInf.tileId,
 							d: [ e.key ],
+							a: 1,
 						});
 					}
 				arr;
@@ -345,6 +347,7 @@ class LayerInstance {
 						srcY: at.src[1],
 						flips: at.f,
 						tid: at.t,
+						a: at.a==null ? 1 : at.a,
 					});
 				}
 			}
@@ -702,19 +705,26 @@ class LayerInstance {
 	}
 
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
-		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed+r.uid, cx,cy) ] : r.tileIds;
+		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed, cx,cy) ] : r.tileIds;
 		var td = getTilesetDef();
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
-		autoTilesCache.get(r.uid).set( coordId(cx,cy), tileIds.map( (tid)->{
-			return {
-				x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ),
-				y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ),
-				srcX: td.getTileSourceX(tid),
-				srcY: td.getTileSourceY(tid),
-				tid: tid,
-				flips: flips,
-			}
-		} ) );
+
+		if( !autoTilesCache.get(r.uid).exists( coordId(cx,cy) ) )
+			autoTilesCache.get(r.uid).set( coordId(cx,cy), [] );
+
+		autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
+			tileIds.map( (tid)->{
+				return {
+					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getXOffsetForCoord(seed,cx,cy, flips),
+					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getYOffsetForCoord(seed,cx,cy, flips),
+					srcX: td.getTileSourceX(tid),
+					srcY: td.getTileSourceY(tid),
+					tid: tid,
+					flips: flips,
+					a: r.alpha,
+				}
+			} )
+		));
 	}
 
 	inline function runAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
@@ -741,24 +751,28 @@ class LayerInstance {
 
 
 			// Apply rule
+			var matched = false;
 			if( r.matches(this, source, cx,cy) ) {
 				addRuleTilesAt(r, cx,cy, 0);
-				return true;
+				matched = true;
 			}
-			else if( r.flipX && r.matches(this, source, cx,cy, -1) ) {
+
+			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, source, cx,cy, -1) ) {
 				addRuleTilesAt(r, cx,cy, 1);
-				return true;
+				matched = true;
 			}
-			else if( r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
+
+			if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 2);
-				return true;
+				matched = true;
 			}
-			else if( r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
+
+			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
 				addRuleTilesAt(r, cx,cy, 3);
-				return true;
+				matched = true;
 			}
-			else
-				return false;
+
+			return matched;
 		}
 	}
 
@@ -807,7 +821,7 @@ class LayerInstance {
 						// Break on match is ON
 						coordLocks.set( coordId(x,y), true ); // mark cell as locked
 					}
-					else {
+					else if( !r.hasAnyPositionOffset() && r.alpha>=1 ) {
 						// Check for opaque tiles
 						for( t in autoTilesCache.get(r.uid).get( coordId(x,y) ) )
 							if( td.isTileOpaque(t.tid) ) {

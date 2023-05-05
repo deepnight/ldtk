@@ -3,10 +3,10 @@ package ui;
 class ToolPalette {
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
+	public var jPaletteOptions : js.jquery.JQuery;
 
 	public var jContent : js.jquery.JQuery;
 	var tool : Tool<Dynamic>;
-	var canPopOut = false;
 	@:allow(Tool)
 	var isPoppedOut = false;
 
@@ -20,11 +20,19 @@ class ToolPalette {
 
 	public function new(t:Tool<Dynamic>) {
 		tool = t;
+		jPaletteOptions = editor.jMainPanel.find("#paletteOptions");
+		jPaletteOptions.empty();
 		jContent = new J('<div class="palette"/>');
 	}
 
 	public function focusOnSelection(immediate=false) {
 	}
+
+	public function onShow() {
+		focusOnSelection(true);
+	}
+
+	public function onHide() {}
 
 	public final function render() {
 		jContent.off().empty();
@@ -33,7 +41,7 @@ class ToolPalette {
 
 		// Pop-out
 		jContent.mouseover( function(ev) {
-			if( canPopOut && !isPoppedOut && !Editor.ME.curTool.isRunning() )
+			if( needToPopOut() && !isPoppedOut && !Editor.ME.curTool.isRunning() )
 				popOut();
 		});
 
@@ -54,7 +62,7 @@ class ToolPalette {
 	}
 
 	function makeBgInactiveColor(c:Int) : String {
-		return C.intToHex( C.interpolateInt( c, 0x313843, 0.92 ) );
+		return C.intToHex( C.interpolateInt( c, 0x313843, 0.72 ) );
 	}
 
 	function makeTextInactiveColor(c:Int) : String {
@@ -67,6 +75,10 @@ class ToolPalette {
 	}
 
 	function doRender() {}
+
+	function needToPopOut() {
+		return false;
+	}
 
 	function popOut() {
 		isPoppedOut = true;

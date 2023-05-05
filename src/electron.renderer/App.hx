@@ -81,8 +81,8 @@ class App extends dn.Process {
 		IpcRenderer.on("settingsApplied", ()->updateBodyClasses());
 
 		var win = js.Browser.window;
-		win.onblur = onAppBlur;
-		win.onfocus = onAppFocus;
+		win.onblur = onWindowBlur;
+		win.onfocus = onWindowFocus;
 		win.onresize = onAppResize;
 		win.onmousemove = onAppMouseMove;
 		#if debug
@@ -520,7 +520,10 @@ class App extends dn.Process {
 		lastKnownMouse.pageY = e.pageY;
 	}
 
-	function onAppFocus(ev:js.html.Event) {
+	function onWindowFocus(ev:js.html.Event) {
+		if( ev.target!=js.Browser.window )
+			return;
+
 		focused = true;
 		jsKeyDowns = new Map();
 		heapsKeyDowns = new Map();
@@ -531,7 +534,10 @@ class App extends dn.Process {
 		clipboard.readSystemClipboard();
 	}
 
-	function onAppBlur(ev:js.html.Event) {
+	function onWindowBlur(ev:js.html.Event) {
+		if( !focused || ev.target!=js.Browser.window )
+			return;
+
 		focused = false;
 		overCanvas = false;
 		jsKeyDowns = new Map();
@@ -647,11 +653,6 @@ class App extends dn.Process {
 	}
 
 	public function registerRecentProject(path:String) {
-		// #if !debug
-		// if( isInAppDir(path,true) )
-		// 	return false;
-		// #end
-
 		// No backup files
 		if( ui.ProjectSaver.extractBackupInfosFromFileName(path) != null )
 			return false;
@@ -680,6 +681,42 @@ class App extends dn.Process {
 		settings.save();
 	}
 
+
+	public function hasForcedDirColor(dir:String) {
+		for(dc in settings.v.recentDirColors)
+			if( dc.path==dir )
+				return true;
+		return false;
+	}
+
+	public function getRecentDirColor(dir:String) : dn.Col {
+		for(dc in settings.v.recentDirColors)
+			if( dc.path==dir )
+				return dn.Col.parseHex(dc.col);
+
+		var csum = 0;
+		for(c in dir.split(""))
+			csum+=c.charCodeAt(0);
+		var pal = Const.getNicePalette().filter( c->c.fastLuminance>=0.4 );
+		var col = pal[csum%pal.length];
+		return col;
+	}
+
+
+	public function forceDirColor(dir:String, ?c:dn.Col) {
+		var i = 0;
+		while( i < settings.v.recentDirColors.length )
+			if( settings.v.recentDirColors[i].path==dir )
+				settings.v.recentDirColors.splice(i,1);
+			else
+				i++;
+		if( c!=null ) {
+			settings.v.recentDirColors.push({ path: dir, col:c.toHex() });
+			settings.save();
+		}
+	}
+
+
 	public function clearRecentProjects() {
 		settings.v.recentProjects = [];
 		settings.save();
@@ -701,18 +738,18 @@ class App extends dn.Process {
 		}
 	}
 
-	public function loadProject(filePath:String, ?levelIndex:Int, ?onComplete:Bool->Void) : Void {
+	public function loadProject(filePath:String, ?levelIndex:Int, ?onComplete:(p:Null<data.Project>)->Void) : Void {
 		new ui.ProjectLoader(
 			filePath,
 			(p)->{
 				if( onComplete!=null )
-					onComplete(true);
+					onComplete(p);
 				loadPage( ()->new page.Editor(p, levelIndex), true );
 			},
 			(err)->{
 				// Failed
 				if( onComplete!=null )
-					onComplete(false);
+					onComplete(null);
 				LOG.error("Failed to load project: "+filePath+" levelIdx="+levelIndex);
 				if( err==ProjectNotFound )
 					unregisterRecentProject(filePath);
@@ -805,10 +842,10 @@ class App extends dn.Process {
 		// FPS limit while app isn't focused
 		if( haxe.Timer.stamp()<=requestedCpuEndTime ) // Has recent request
 			hxd.System.fpsLimit = -1;
-		else if( !focused && !ui.modal.Progress.hasAny() && !ui.modal.MetaProgress.exists() ) // App is blurred
-			hxd.System.fpsLimit = 2;
 		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() ) // progress is running
 			hxd.System.fpsLimit = -1;
+		else if( !focused ) // App is blurred
+			hxd.System.fpsLimit = 2;
 		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
 			hxd.System.fpsLimit = 10;
 		else

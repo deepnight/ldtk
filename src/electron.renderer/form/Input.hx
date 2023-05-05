@@ -211,11 +211,11 @@ class Input<T> {
 	}
 
 	function writeValueToInput() {
-		var v = getter();
-		if( v==null )
-			jInput.val("");
-		else
-			jInput.val( Std.string( getter() ) );
+		jInput.val( cleanInputString( getter() ) );
+	}
+
+	function cleanInputString(v:T) : String {
+		return v==null ? "" : Std.string(v);
 	}
 
 

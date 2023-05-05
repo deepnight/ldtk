@@ -1,6 +1,6 @@
 
 enum GlobalEvent {
-	ViewportChanged;
+	ViewportChanged(zoomChanged:Bool);
 	AppSettingsChanged;
 	LastChanceEnded;
 
@@ -19,6 +19,8 @@ enum GlobalEvent {
 
 	WorldLevelMoved(level:data.Level, isFinal:Bool, prevNeighbourIids:Null<Array<String>>);
 	WorldSettingsChanged;
+	WorldCreated(w:data.World);
+	WorldRemoved(w:data.World);
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
@@ -59,10 +61,6 @@ enum GlobalEvent {
 	TilesetDefSorted;
 	TilesetEnumChanged;
 	
-	TableDefAdded(td:data.def.TableDef);
-	TableDefRemoved(td:data.def.TableDef);
-	TableDefChanged(td:data.def.TableDef);
-
 	EntityInstanceAdded(ei:data.inst.EntityInstance);
 	EntityInstanceRemoved(ei:data.inst.EntityInstance);
 	EntityInstanceChanged(ei:data.inst.EntityInstance);
@@ -142,9 +140,11 @@ enum RectHandlePos {
 
 typedef ParsedExternalEnumData = {
 	var color: Null<Int>;
+	var tileRect: Null<ldtk.Json.TilesetRect>;
 }
 typedef ParsedExternalEnum = {
 	var enumId : String;
+	var tilesetUid : Null<Int>;
 	var values : Array<{
 		var valueId: String;
 		var data : ParsedExternalEnumData;
@@ -159,6 +159,7 @@ enum EnumSyncChange {
 
 typedef EnumSyncDiff = {
 	var enumId: String;
+	var newTilesetUid: Null<Int>;
 	var ?warning: Bool;
 	var change: Null<EnumSyncChange>;
 	var valueDiffs: Map<String, EnumValueSyncDiff>;

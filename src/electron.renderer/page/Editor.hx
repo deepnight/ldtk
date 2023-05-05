@@ -140,7 +140,9 @@ class Editor extends Page {
 			);
 		}
 
-		if( loadLevelIndex!=null ) { // TODO restore world and level on opening
+		if( loadLevelIndex!=null ) {
+			// TODO restore world and level on opening (this arg is only useful when starting LDtk from explorer)
+
 			// Auto-load provided level index
 			// if( loadLevelIndex>=0 && loadLevelIndex<project.levels.length ) {
 			// 	selectLevel( project.levels[loadLevelIndex] );
@@ -153,7 +155,9 @@ class Editor extends Page {
 			// Auto load last level UID
 			var l = project.getLevelAnywhere( settings.v.lastProject.levelUid );
 			if( l!=null ) {
+				selectWorld(l._world);
 				selectLevel(l);
+				setWorldMode(false);
 				camera.fit(true);
 			}
 		}
@@ -293,13 +297,29 @@ class Editor extends Page {
 			var jBackup = new J('<div class="backupHeader"/>');
 			var jDesc = new J('<div class="desc"/>');
 			jDesc.appendTo(jBackup);
-			jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
+
+			if( project.backupOriginalFile!=null )
+				jDesc.append("<p>This file is a BACKUP: you cannot edit or modify to it in any way. You may only restore it to replace the original project.</p>");
+			else
+				jDesc.append("<p>The images are not displayed properly because the location of the original project represented by this backup is unknown.</p>");
+
 			var inf = ui.ProjectSaver.extractBackupInfosFromFileName(project.filePath.full);
 			if( inf!=null )
 				jDesc.append("<p>"+inf.date+"</p>");
+
+			var jButtons = new J('<div class="actions"></div>');
+			jButtons.appendTo(jBackup);
+
 			var jRestore = new J('<button>Restore this backup</button>');
+			jRestore.appendTo(jButtons);
 			jRestore.click( _->onBackupRestore() );
-			jRestore.appendTo(jBackup);
+
+			if( project.backupOriginalFile==null ) {
+				jRestore.prop("disabled",true);
+				var jRelink = new J('<button class="gray">Locate the original project</button>');
+				jRelink.prependTo(jButtons);
+				jRelink.click( _->onBackupRelink() );
+			}
 			setPermanentNotification("backup", jBackup);
 		}
 		else
@@ -322,7 +342,7 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		var all = ui.ProjectSaver.listBackupFiles(project.filePath.full);
+		var all = ui.ProjectSaver.listBackupFiles(project.getBackupId(), project.getAbsBackupDir());
 
 		updateBanners();
 
@@ -484,14 +504,16 @@ class Editor extends Page {
 
 		switch result {
 			case FileNotFound:
-				changed = true;
-				new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
-					var newRelPath = project.makeRelativeFilePath(newAbsPath);
-					td.importAtlasImage( newRelPath );
-					td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
-					ge.emit( TilesetImageLoaded(td, false) );
-					levelRender.invalidateAll();
-				});
+				if( !project.isBackup() ) {
+					changed = true;
+					new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
+						var newRelPath = project.makeRelativeFilePath(newAbsPath);
+						td.importAtlasImage( newRelPath );
+						td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+						ge.emit( TilesetImageLoaded(td, false) );
+						levelRender.invalidateAll();
+					});
+				}
 
 			case LoadingFailed(_):
 				new ui.modal.dialog.Retry(msg, ()->reloadTileset(td, isInitialLoading));
@@ -1303,7 +1325,7 @@ class Editor extends Page {
 
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
-		ge.emit( ViewportChanged );
+		ge.emit( ViewportChanged(true) );
 		saveLastProjectInfos();
 
 		ui.Tip.clear();
@@ -1368,6 +1390,33 @@ class Editor extends Page {
 		camera.scrollTo(tei.worldX, tei.worldY);
 		levelRender.bleepEntity(tei);
 		selectionTool.select([ Entity(curLayerInstance, tei) ]);
+	}
+
+	function updateWorldList() {
+		var jWorldList = jPage.find("#worldList");
+		if( project.worlds.length<=1 ) {
+			jWorldList.hide();
+			return;
+		}
+
+		jWorldList.show();
+		var w = jMainPanel.width();
+		jWorldList.css("left", w+"px");
+
+
+		var jList = jWorldList.find("ul");
+		jList.empty();
+		for(w in project.worlds) {
+			var w = w;
+			var jWorld = new J('<li/>');
+			jWorld.appendTo(jList);
+			jWorld.text(w.getShortName());
+			jWorld.click(_->{
+				selectWorld(w);
+			});
+			if( w==curWorld )
+				jWorld.addClass("active");
+		}
 	}
 
 
@@ -1550,6 +1599,7 @@ class Editor extends Page {
 
 		updateCanvasSize();
 		updateAppBg();
+		updateWorldList();
 		if( !init )
 			N.quick("Compact UI: "+L.onOff(settings.v.compactMode));
 	}
@@ -1648,44 +1698,83 @@ class Editor extends Page {
 		});
 	}
 
-	function onBackupRestore() {
-		new ui.modal.dialog.Confirm(
-			L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
-			()->{
-				var original = ui.ProjectSaver.makeOriginalPathFromBackup(project.filePath.full);
-				if( original.full==null || !NT.fileExists(original.full) ) {
-					// Project not found
-					new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
+
+	function onBackupRelink() {
+		dn.js.ElectronDialogs.openFile(project.filePath.directory, (f)->{
+			try {
+				var raw = NT.readFileString(f);
+				var json : ldtk.Json.ProjectJson = haxe.Json.parse(raw);
+				if( json.iid!=project.iid ) {
+					new ui.modal.dialog.Warning(L.t._("The select project doesn't match this backup."));
+					return;
 				}
-				else {
-					App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
-					var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
-
-					// Save upon original
-					App.LOG.fileOp('Backup original: ${original.full}...');
-					project.filePath = original.clone();
-					setPermanentNotification("backup");
-					for(w in project.worlds)
-					for(l in w.levels)
-						invalidateLevelCache(l);
-					onSave();
-					selectProject(project);
-
-					if( worldMode )
-						setWorldMode(false);
-					ui.Modal.closeAll();
-
-					// Delete crash backup
-					if( crashBackupDir!=null )
-						NT.removeDir(crashBackupDir);
-				}
+				project.backupOriginalFile = dn.FilePath.fromFile(f);
+				selectProject(project);
 			}
-		);
+		});
+	}
+
+	function onBackupRestore() {
+		function _restore(targetProjectFp:dn.FilePath) {
+			if( !NT.fileExists(targetProjectFp.full) ) {
+				// Project not found
+				new ui.modal.dialog.Message(L.t._("Sorry, but I can't restore this backup: I can't locate the original project file."));
+			}
+			else {
+				App.LOG.fileOp('Restoring backup: ${project.filePath.full}...');
+				var crashBackupDir = ui.ProjectSaver.isCrashFile(project.filePath.full) ? project.filePath.directory: null;
+
+				// Save upon original
+				App.LOG.fileOp('Backup original: ${targetProjectFp.full}...');
+				project.filePath = targetProjectFp.clone();
+				setPermanentNotification("backup");
+				for(w in project.worlds)
+				for(l in w.levels)
+					invalidateLevelCache(l);
+				onSave();
+				selectProject(project);
+
+				if( worldMode )
+					setWorldMode(false);
+				ui.Modal.closeAll();
+
+				// Delete crash backup
+				if( crashBackupDir!=null )
+					NT.removeDir(crashBackupDir);
+			}
+		}
+
+
+		if( project.backupOriginalFile==null ) {
+			// Unknown original project
+			new ui.modal.dialog.Choice(
+				L.t._("Please locate the original project represented by this backup."),
+				[{
+					label: "Locate original project",
+					cb: ()->{
+						dn.js.ElectronDialogs.openFile(project.filePath.directory, (f)->{
+							project.backupOriginalFile = dn.FilePath.fromFile(f);
+							onBackupRestore();
+						});
+					},
+				}]
+			);
+		}
+		else {
+			// Known original project
+			new ui.modal.dialog.Confirm(
+				L.t._("WARNING: restoring this backup will REPLACE the original project file with this version.\nAre you sure?"),
+				()->{
+					_restore(project.backupOriginalFile);
+				}
+			);
+		}
+
 	}
 
 	inline function shouldLogEvent(e:GlobalEvent) {
 		return switch(e) {
-			case ViewportChanged: false;
+			case ViewportChanged(_): false;
 			case WorldLevelMoved(_): false;
 			// case LayerInstanceChangedGlobally(_): false;
 			case WorldMode(_): false;
@@ -1703,7 +1792,7 @@ class Editor extends Page {
 			switch e {
 				case AppSettingsChanged:
 				case WorldMode(active):
-				case ViewportChanged:
+				case ViewportChanged(_):
 				case ProjectSelected:
 				case ProjectSettingsChanged:
 				case BeforeProjectSaving:
@@ -1781,7 +1870,7 @@ class Editor extends Page {
 		// Level cache invalidation
 		switch e {
 			case LastChanceEnded:
-			case ViewportChanged:
+			case ViewportChanged(_):
 			case AppSettingsChanged:
 			case ProjectSelected:
 			case ProjectSettingsChanged:
@@ -1888,13 +1977,12 @@ class Editor extends Page {
 			case EnumDefChanged: invalidateAllLevelsCache();
 			case EnumDefSorted:
 			case EnumDefValueRemoved: invalidateAllLevelsCache();
-			case TableDefAdded(td):
-			case TableDefRemoved(td):
-			case TableDefChanged(td):
 			case ExternalEnumsLoaded(anyCriticalChange):
 			case ToolValueSelected:
 			case ToolOptionChanged:
 			case WorldSelected(w):
+			case WorldCreated(w):
+			case WorldRemoved(w):
 			case WorldMode(active):
 			case WorldDepthSelected(worldDepth):
 			case GridChanged(active):
@@ -1907,9 +1995,10 @@ class Editor extends Page {
 			case WorldMode(_):
 			case WorldDepthSelected(_):
 			case AppSettingsChanged:
-			case ViewportChanged:
+			case ViewportChanged(_):
 			case LayerInstanceSelected:
 			case LevelSelected(_):
+			case WorldSelected(_):
 			case AutoLayerRenderingChanged:
 			case ToolOptionChanged:
 			case ToolValueSelected:
@@ -1942,7 +2031,7 @@ class Editor extends Page {
 			case WorldDepthSelected(worldDepth):
 				updateWorldDepthsUI();
 
-			case ViewportChanged:
+			case ViewportChanged(zoomChanged):
 
 			case EnumDefAdded, EnumDefRemoved, EnumDefChanged, EnumDefSorted, EnumDefValueRemoved:
 
@@ -2056,8 +2145,6 @@ class Editor extends Page {
 
 			case WorldLevelMoved(l, isFinal, _):
 
-			case WorldSettingsChanged:
-
 			case LevelSelected(l):
 				updateWorldDepthsUI();
 				updateLayerList();
@@ -2106,10 +2193,6 @@ class Editor extends Page {
 
 			case TilesetEnumChanged:
 			
-			case TableDefAdded(td):
-			case TableDefRemoved(td):
-			case TableDefChanged(td):
-
 			case ProjectSettingsChanged:
 				updateBanners();
 				updateAppBg();
@@ -2133,8 +2216,18 @@ class Editor extends Page {
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				updateTool();
 
-			case WorldSelected(w):
+			case WorldSettingsChanged:
+				updateWorldList();
+
+			case WorldSelected(_):
+				updateWorldList();
 				// NOTE: a LevelSelected event always happens right after this one
+
+			case WorldCreated(_):
+				updateWorldList();
+
+			case WorldRemoved(_):
+				updateWorldList();
 		}
 
 		// Propagate to all LevelTimelines
@@ -2196,7 +2289,7 @@ class Editor extends Page {
 			bg.scaleX = camera.width;
 			bg.scaleY = camera.height;
 		}
-		ge.emit(ViewportChanged);
+		ge.emit( ViewportChanged(true) );
 		dn.Process.resizeAll();
 	}
 
@@ -2271,6 +2364,10 @@ class Editor extends Page {
 		var jCtrap = App.ME.jBody.find("#clicktrap");
 		jCtrap.show();
 		jCtrap.off().click( _->delayer.addF(disableClicktrap,1) );
+		if( settings.v.blurMask )
+			jCtrap.removeClass("transparent");
+		else
+			jCtrap.addClass("transparent");
 	}
 
 	function disableClicktrap() {
@@ -2296,42 +2393,43 @@ class Editor extends Page {
 			if( ld.hideInList && !active )
 				continue;
 
-			var jLayer = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-			jLayerList.append(jLayer);
-			jLayer.attr("uid",ld.uid);
+			var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			jLayerList.append(jLi);
+			jLi.attr("uid",ld.uid);
+			JsTools.applyListCustomColor(jLi, li.def.uiColor, active);
 
 			if( active )
-				jLayer.addClass("active");
+				jLi.addClass("active");
 
 			if( ld.hideInList )
-				jLayer.addClass("hiddenFromList");
+				jLi.addClass("hiddenFromList");
 
 			if( ld.doc!=null ) {
-				jLayer.attr("tip", "right");
-				ui.Tip.attach(jLayer, ld.doc);
+				jLi.attr("tip", "right");
+				ui.Tip.attach(jLi, ld.doc);
 
 			}
 
-			jLayer.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
+			jLi.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
 
 			// Icon
-			var jIcon = jLayer.find(">.layerIcon");
+			var jIcon = jLi.find(">.layerIcon");
 			jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
 
 			// Name
-			var name = jLayer.find(".name");
+			var name = jLi.find(".name");
 			name.text(li.def.identifier);
-			jLayer.click( function(_) {
+			jLi.click( function(_) {
 				selectLayerInstance(li);
 			});
 
 			// Rules button
-			var rules = jLayer.find(".rules");
+			var jRules = jLi.find(".rules");
 			if( li.def.isAutoLayer() )
-				rules.show();
+				jRules.show();
 			else
-				rules.hide();
-			rules.click( function(ev:js.jquery.Event) {
+				jRules.hide();
+			jRules.click( function(ev:js.jquery.Event) {
 				if( ui.Modal.closeAll() )
 					return;
 				ev.preventDefault();
@@ -2341,12 +2439,12 @@ class Editor extends Page {
 			});
 
 			// Visibility button
-			var vis = jLayer.find(".vis");
-			vis.mouseover( (_)->{
+			var jVis = jLi.find(".vis");
+			jVis.mouseover( (_)->{
 				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
 			});
-			vis.mousedown( (ev:js.jquery.Event)->{
+			jVis.mousedown( (ev:js.jquery.Event)->{
 				if( App.ME.isShiftDown() ) {
 					// Keep only this one
 					var anyChange = !levelRender.isLayerVisible(li);
@@ -2370,6 +2468,37 @@ class Editor extends Page {
 					invalidateLevelCache(curLevel);
 				}
 			});
+
+			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+				{
+					label: L.t._("Toggle visibility"),
+					icon: "visible",
+					cb: ()->jVis.mousedown(),
+				},
+				{
+					label: L.t._("Edit rules"),
+					icon: "rule",
+					cb: ()->jRules.click(),
+					show: ()->li.def.isAutoLayer(),
+				},
+				// {
+				// 	label: L.t._("Show/hide in list"),
+				// 	cb: ()->{
+				// 		selectLayerInstance(li);
+				// 		ld.hideInList = !ld.hideInList;
+				// 		ge.emit(LayerDefChanged(ld.uid));
+				// 	},
+				// },
+				{
+					label: L.t._("Edit layer settings"),
+					icon: "edit",
+					cb: ()->{
+						selectLayerInstance(li);
+						new ui.modal.panel.EditLayerDefs();
+					},
+				}
+			];
+			ui.modal.ContextMenu.addTo(jLi, false, actions);
 		}
 
 		updateLayerVisibilities();

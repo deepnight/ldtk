@@ -185,7 +185,6 @@ class OgmoLoader {
 
 							case F_Tile:
 
-							case F_Table(tableDefUid):
 						}
 
 					}
@@ -406,7 +405,6 @@ class OgmoLoader {
 
 											case F_Tile:
 											case F_EntityRef:
-											case F_Table(tableDefUid):
 										}
 
 										if( fi.isEqualToDefault(0) )

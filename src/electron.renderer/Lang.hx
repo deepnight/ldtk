@@ -61,7 +61,6 @@ class Lang {
 			case F_Path: t._("File path");
 			case F_EntityRef: t._("Entity ref");
 			case F_Tile: t._("Tile");
-			case F_Table(name): t._("Table");
 		}
 	}
 
@@ -78,7 +77,6 @@ class Lang {
 			case F_Path: t._("*.*");
 			case F_EntityRef: t._("Ent");
 			case F_Tile: t._("Tile");
-			case F_Table(name): t._("Tbl");
 		}
 	}
 

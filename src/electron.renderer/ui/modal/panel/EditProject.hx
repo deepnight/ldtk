@@ -217,18 +217,54 @@ class EditProject extends ui.modal.Panel {
 		i.linkEvent(ProjectSettingsChanged);
 		var jLocate = i.jInput.siblings(".locate").empty();
 		if( project.backupOnSave )
-			jLocate.append( JsTools.makeLocateLink(project.getAbsExternalFilesDir()+"/backups", false) );
+			jLocate.append( JsTools.makeLocateLink(project.getAbsBackupDir(), false) );
 		var jCount = jForms.find("#backupCount");
+		var jBackupPath = jForms.find(".curBackupPath");
+		var jResetBackup = jForms.find(".resetBackupPath");
 		jCount.val( Std.string(Const.DEFAULT_BACKUP_LIMIT) );
 		if( project.backupOnSave ) {
+			jBackupPath.show();
+
 			jCount.show();
 			jCount.siblings("span").show();
 			var i = Input.linkToHtmlInput( project.backupLimit, jCount );
 			i.setBounds(3, 50);
+			i.linkEvent(ProjectSettingsChanged);
+
+			jBackupPath.text( project.backupRelPath==null ? "[Default dir]" : "[Custom dir]" );
+			if( project.backupRelPath==null )
+				jBackupPath.removeAttr("title");
+			else
+				jBackupPath.attr("title", project.backupRelPath);
+
+			jBackupPath.click(_->{
+				var absPath = project.getAbsBackupDir();
+				if( !NT.fileExists(absPath) )
+					absPath = project.filePath.full;
+
+				dn.js.ElectronDialogs.openDir(absPath, (dirPath)->{
+					var fp = dn.FilePath.fromDir(dirPath);
+					fp.useSlashes();
+					fp.makeRelativeTo(project.filePath.directory);
+					project.backupRelPath = fp.full;
+					editor.ge.emit(ProjectSettingsChanged);
+				});
+			});
+			jResetBackup.find(".reset");
+			if( project.backupRelPath==null )
+				jResetBackup.hide();
+			else
+				jResetBackup.show().click( (ev:js.jquery.Event)->{
+					ev.preventDefault();
+					project.backupRelPath = null;
+					editor.ge.emit(ProjectSettingsChanged);
+				});
 		}
 		else {
 			jCount.hide();
 			jCount.siblings("span").hide();
+			jBackupPath.hide();
+			jResetBackup.hide();
 		}
 		jForms.find(".backupRecommend").css("visibility", project.recommendsBackup() ? "visible" : "hidden");
 

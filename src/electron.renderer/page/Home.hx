@@ -5,6 +5,8 @@ import hxd.Key;
 class Home extends Page {
 	public static var ME : Home;
 
+	var pendingBackupChecks : Array<{ projectFp:dn.FilePath, jTarget:js.jquery.JQuery }> = [];
+
 	public function new() {
 		super();
 
@@ -59,6 +61,7 @@ class Home extends Page {
 				app: Const.APP_NAME,
 				itchUrl: Const.ITCH_IO_BUY_URL,
 				gitHubSponsorUrl: Const.GITHUB_SPONSOR_URL,
+				steamUrl: Const.STEAM_URL,
 			});
 			w.jContent.find("[data-link]").click((ev:js.jquery.Event)->{
 				var jButton = ev.getThis();
@@ -84,6 +87,9 @@ class Home extends Page {
 			settings.v.lastProject = null;
 			settings.save();
 		}
+
+		// Quick search
+		new ui.QuickSearch(false, jPage.find(".recentFiles, .recentDirs"), jPage.find(".search"));
 
 		// Samples
 		var path = JsTools.getSamplesDir();
@@ -118,7 +124,7 @@ class Home extends Page {
 
 	function updateRecents() : Void {
 		ui.Tip.clear();
-		var uniqueColorMix = 0x6066d3;
+		pendingBackupChecks = [];
 
 		// Clean up invalid paths
 		settings.v.recentProjects = settings.v.recentProjects.filter( (p)->{
@@ -154,51 +160,6 @@ class Home extends Page {
 		}
 
 
-
-		// Trim common path parts
-		var trimmedPaths = recents.copy();
-
-		// List drive letters
-		var driveLetters = new Map();
-		for(path in trimmedPaths ) {
-			var d = dn.FilePath.fromFile(path).getDriveLetter();
-			driveLetters.set(d,d);
-		}
-
-		// Trim paths beginnings, grouped by drive
-		var splitPaths = trimmedPaths.map( function(p) return dn.FilePath.fromFile(p).getDirectoryAndFileArray() );
-		for(d in driveLetters) {
-			// List path indexes in original array
-			var sameDriveIndexes = [];
-			for(i in 0...trimmedPaths.length)
-				if( dn.FilePath.fromFile( trimmedPaths[i] ).getDriveLetter() == d )
-					sameDriveIndexes.push(i);
-
-			// Trim while beginning is the same
-			var trimMore = true;
-			var trim = 0;
-			while( trimMore ) {
-				var firstIdx = sameDriveIndexes[0];
-				for( idx in sameDriveIndexes )
-					if( trim>=splitPaths[idx].length-2 || splitPaths[idx][trim] != splitPaths[firstIdx][trim] ) {
-						trimMore = false;
-						break;
-					}
-				if( trimMore )
-					trim++;
-			}
-
-			// Apply trimming to array
-			while( trim>0 ) {
-				for( idx in sameDriveIndexes )
-					splitPaths[idx].shift();
-				trim--;
-			}
-		}
-		trimmedPaths = splitPaths.map( arr->arr.join("/") );
-
-
-
 		// List files
 		var jRecentFiles = jPage.find("ul.recentFiles");
 		jRecentFiles.empty();
@@ -206,89 +167,74 @@ class Home extends Page {
 			jRecentFiles.append('<li class="title">Recent projects</li>');
 
 		var i = recents.length-1;
-		C.initUniqueColors(12, uniqueColorMix);
 		while( i>=0 ) {
 			var filePath = recents[i];
 			var isBackupFile = filePath.indexOf( Const.BACKUP_NAME_SUFFIX )>=0;
-			var li = new J('<li/>');
+			var jLi = new J('<li/>');
 
 			try {
 				var fp = dn.FilePath.fromFile(filePath);
-				var col = C.pickUniqueColorFor( dn.FilePath.fromDir(trimmedPaths[i]).getDirectoryArray()[0] );
+				var col = App.ME.getRecentDirColor(fp.directory);
 				if( App.ME.isInAppDir(filePath,true) )
-					li.addClass("sample");
+					jLi.addClass("sample");
+				if( App.ME.hasForcedDirColor(fp.directory) )
+					jLi.css("background-color", col.toCssRgba(0.4));
+				// jLi.css("background-color", col.toCssRgba(App.ME.hasForcedDirColor(fp.directory) ? 0.4 : 0.1));
 
 				var jName = new J('<span class="fileName">${fp.fileName}</span>');
-				jName.appendTo(li);
-				jName.css("color", C.intToHex( C.toWhite(col, 0.7) ));
+				jName.appendTo(jLi);
+				jName.css("color", col.toWhite(0.4).toHex());
 
-				var jDir = JsTools.makePath(trimmedPaths[i], C.toWhite(col, 0.3));
-				// var jDir = new J('<span class="dir">${trimmedPaths[i]}</span>');
-				jDir.appendTo(li);
-				// jDir.css("color", C.intToHex( C.toWhite(col, 0.3) ));
+				var jDir = JsTools.makePath(fp.full, col.toWhite(0.6));
+				jDir.appendTo(jLi);
 
-				li.click( function(ev) {
+				jLi.click( function(ev) {
 					App.ME.loadProject(filePath);
 				});
 
 				if( !NT.fileExists(filePath) )
-					li.addClass("missing");
+					jLi.addClass("missing");
 
 				if( isBackupFile )
-					li.addClass("crash");
+					jLi.addClass("crash");
 
-				// Backups button
-				if( ui.ProjectSaver.hasBackupFiles(filePath) ) {
-					var all = ui.ProjectSaver.listBackupFiles(filePath);
-					if( all.length>0 ) {
-						var jBackups = new J('<button class="backups gray"/>');
-						jBackups.appendTo(li);
-						jBackups.append('<span class="icon history"/>');
-						jBackups.click( (ev:js.jquery.Event)->{
-							ev.stopPropagation();
-							// List all backup files
-							var ctx = new ui.modal.ContextMenu(ev);
-							var crashBackups = [];
-							for( b in all ) {
-								if( b.crash )
-									crashBackups.push(b.backup);
-
-								ctx.add({
-									label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
-									className: b.crash ? "crash" : null,
-									sub: Lang.date(b.date),
-									cb: ()->App.ME.loadProject(b.backup.full)
-								});
-							}
-
-							if( crashBackups.length>0 )
-								ctx.add({
-									label: L.t._("Delete all crash recovery files"),
-									className: "warning",
-									cb: ()->{
-										new ui.modal.dialog.Confirm(
-											L.t._("Delete all crash recovery files project ::name::?", { name: fp.fileName}),
-											true,
-											()->{
-												for(fp in crashBackups)
-													NT.removeFile(fp.full);
-												updateRecents();
-											}
-										);
-									}
-								});
-						});
-					}
-				}
+				// Backups button (async)
+				var jBackupWrapper = new J('<div class="backupWrapper"></div>');
+				jBackupWrapper.appendTo(jLi);
+				jBackupWrapper.append('<div class="icon loading"></div>');
+				pendingBackupChecks.push({ projectFp:fp.clone(), jTarget:jBackupWrapper });
 
 				var act : ui.modal.ContextMenu.ContextActions = [
 					{
 						label: L.t._("Load from this folder"),
+						icon: "open",
 						cb: onLoad.bind( dn.FilePath.fromFile(filePath).directory ),
 					},
 					{
 						label: L.t._("Locate file"),
+						icon: "locate",
 						cb: JsTools.locateFile.bind(filePath, true),
+					},
+					{
+						label: L.t._("Assign custom color"),
+						icon: "color",
+						cb: ()->{
+							var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), col);
+							cp.onValidate = (c)->{
+								App.ME.forceDirColor(fp.directory, c);
+								updateRecents();
+							}
+						},
+						separatorBefore: true,
+					},
+					{
+						label: L.t._("Reset assigned color"),
+						icon: "color",
+						show: ()->App.ME.hasForcedDirColor(fp.directory),
+						cb: ()->{
+							App.ME.forceDirColor(fp.directory);
+							updateRecents();
+						},
 					},
 					{
 						label: L.t._("Remove from history"),
@@ -296,7 +242,8 @@ class Home extends Page {
 						cb: ()->{
 							App.ME.unregisterRecentProject(filePath);
 							updateRecents();
-						}
+						},
+						separatorBefore: true,
 					},
 					{
 						label: L._Delete(L.t._("Backup file")),
@@ -315,15 +262,14 @@ class Home extends Page {
 						}
 					},
 				];
-				ui.modal.ContextMenu.addTo(li, act );
+				ui.modal.ContextMenu.addTo(jLi, act );
 
-
-				li.appendTo(jRecentFiles);
+				jLi.appendTo(jRecentFiles);
 			}
 
 			catch( e:Dynamic ) {
 				App.LOG.error("Problem with recent file: "+filePath);
-				li.remove();
+				jLi.remove();
 			}
 
 
@@ -334,42 +280,27 @@ class Home extends Page {
 		// Trim common parts in dirs
 		var dirs = settings.v.recentDirs.map( dir->dn.FilePath.fromDir(dir) );
 		dirs.reverse();
-		var trim = 0;
-		var same = true;
-		while( same && dirs.length>1 ) {
-			for(i in 1...dirs.length) {
-				if( dirs[0].full.charAt(trim) != dirs[i].full.charAt(trim) ) {
-					same = false;
-					break;
-				}
-			}
-			if( same )
-				trim++;
-		}
-		if( dirs.length==1 && dirs[0].directory!=null )
-			trim = dirs[0].full.lastIndexOf( dirs[0].slash() )+1;
-
 
 		// List dirs
 		var jRecentDirs = jPage.find("ul.recentDirs");
 		jRecentDirs.empty();
 		if( dirs.length>0 )
 			jRecentDirs.append('<li class="title">Recent folders</li>');
-		C.initUniqueColors(12, uniqueColorMix);
 		for(fp in dirs) {
-			var li = new J('<li/>');
+			var jLi = new J('<li/>');
 			try {
 
 				if( !NT.fileExists(fp.directory) )
-					li.addClass("missing");
+					jLi.addClass("missing");
 
 				if( App.ME.isInAppDir(fp.full,true) )
-					li.addClass("sample");
+					jLi.addClass("sample");
 
-				var shortFp = dn.FilePath.fromDir( fp.directory.substr(trim) );
-				var col = C.toWhite( C.pickUniqueColorFor( shortFp.getDirectoryArray()[0] ), 0.3 );
-				li.append( JsTools.makePath( shortFp.full, col ) );
-				li.click( (_)->{
+				var shortFp = dn.FilePath.fromDir( fp.directory );
+				var col = App.ME.getRecentDirColor(fp.directory);
+				jLi.css("background-color", col.toCssRgba(App.ME.hasForcedDirColor(fp.directory) ? 0.4 : 0.1));
+				jLi.append( JsTools.makePath( shortFp.full, col.toWhite(0.6) ) );
+				jLi.click( (_)->{
 					if( NT.fileExists(fp.directory) )
 						onLoad(fp.directory);
 					else {
@@ -386,21 +317,45 @@ class Home extends Page {
 					}
 				});
 
-				ui.modal.ContextMenu.addTo(li, [
+				var actions : ui.modal.ContextMenu.ContextActions = [
+					{
+						label: L.t._("New project in this folder"),
+						icon: "new",
+						cb: onNew.bind(fp.directory),
+					},
 					{
 						label: L.t._("Locate folder"),
+						icon: "locate",
 						cb: JsTools.locateFile.bind(fp.directory, false),
 					},
 					{
-						label: L.t._("New project in this folder"),
-						cb: onNew.bind(fp.directory),
+						label: L.t._("Assign custom color"),
+						icon: "color",
+						cb: ()->{
+							var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), col);
+							cp.onValidate = (c)->{
+								App.ME.forceDirColor(fp.directory, c);
+								updateRecents();
+							}
+						},
+						separatorBefore: true,
+					},
+					{
+						label: L.t._("Reset assigned color"),
+						icon: "color",
+						show: ()->App.ME.hasForcedDirColor(fp.directory),
+						cb: ()->{
+							App.ME.forceDirColor(fp.directory);
+							updateRecents();
+						},
 					},
 					{
 						label: L.t._("Remove from history"),
 						cb: ()->{
 							App.ME.unregisterRecentDir(fp.directory);
 							updateRecents();
-						}
+						},
+						separatorBefore: true,
 					},
 					{
 						label: L.t._("Clear all folder history"),
@@ -409,14 +364,15 @@ class Home extends Page {
 							updateRecents();
 						}
 					},
-				]);
+				];
+				ui.modal.ContextMenu.addTo(jLi, actions);
 
-				li.appendTo(jRecentDirs);
+				jLi.appendTo(jRecentDirs);
 
 			}
 			catch(e:Dynamic) {
 				App.LOG.error("Problem with recent dir: "+fp.full);
-				li.remove();
+				jLi.remove();
 			}
 		}
 
@@ -562,4 +518,69 @@ class Home extends Page {
 		}
 	}
 
+
+	override function update() {
+		super.update();
+
+		// Async lookup of backup dirs
+		if( pendingBackupChecks.length>0 && !cd.hasSetS("asyncBackupCheck", 0.15) ) {
+			var pb = pendingBackupChecks.shift();
+			pb.jTarget.empty();
+
+			// Parse project JSON
+			var json : ldtk.Json.ProjectJson = try {
+				var raw = NT.readFileString(pb.projectFp.full);
+				haxe.Json.parse(raw);
+			} catch(_) null;
+
+			if( json!=null ) {
+				// Check if backup files exist there
+				var backupPath = pb.projectFp.directoryWithSlash + ( json.backupRelPath==null ? pb.projectFp.fileName+"/"+Const.BACKUP_DIR : json.backupRelPath );
+				var all = ui.ProjectSaver.listBackupFiles(json.iid, backupPath);
+				if( all.length>0 ) {
+					var jBackups = new J('<button class="backups gray"/>');
+					jBackups.appendTo(pb.jTarget);
+					jBackups.append('<span class="icon history"/>');
+					jBackups.click( (ev:js.jquery.Event)->{
+						ev.stopPropagation();
+						// List all backup files
+						var ctx = new ui.modal.ContextMenu(ev);
+						var crashBackups = [];
+						for( b in all ) {
+							if( b.crash )
+								crashBackups.push(b.backup);
+
+							ctx.add({
+								label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
+								className: b.crash ? "crash" : null,
+								sub: Lang.date(b.date),
+								cb: ()->App.ME.loadProject(b.backup.full, (p:data.Project)->{
+									p.backupOriginalFile = pb.projectFp.clone();
+								}),
+							});
+						}
+
+						if( crashBackups.length>0 )
+							ctx.add({
+								label: L.t._("Delete all crash recovery files"),
+								className: "warning",
+								cb: ()->{
+									new ui.modal.dialog.Confirm(
+										L.t._("Delete all crash recovery files project ::name::?", { name: pb.projectFp.fileName}),
+										true,
+										()->{
+											for(fp in crashBackups)
+												NT.removeFile(fp.full);
+											updateRecents();
+										}
+									);
+								}
+							});
+					});
+				}
+			}
+
+
+		}
+	}
 }

@@ -393,6 +393,9 @@ class Level {
 			case CoverDirty:
 				sx = pxWid / baseTileWid;
 				sy = pxHei/ baseTileHei;
+
+			case Repeat:
+				// Do nothing, tiling shenanigans are handled in createBgTiledTexture.
 		}
 
 		// Crop tile
@@ -412,8 +415,7 @@ class Level {
 		}
 	}
 
-
-	public function createBgBitmap(?p:h2d.Object) : Null<h2d.Bitmap> {
+	public function createBgTiledTexture(?p:h2d.Object) : Null<dn.heaps.TiledTexture> {
 		var bgInf = getBgTileInfos();
 		if( bgInf==null )
 			return null;
@@ -421,13 +423,24 @@ class Level {
 		var t = h2d.Tile.fromTexture( bgInf.imgData.tex );
 		t = t.sub(bgInf.tx, bgInf.ty, bgInf.tw, bgInf.th);
 
-		var bmp = new h2d.Bitmap(t,p);
-		bmp.x = bgInf.dispX;
-		bmp.y = bgInf.dispY;
-		bmp.scaleX = bgInf.sx;
-		bmp.scaleY = bgInf.sy;
+		var tile = (bgPos == ldtk.Json.BgImagePos.Repeat);
 
-		return bmp;
+		var w = tile ? pxWid : Std.int(bgInf.tw);
+		var h = tile ? pxHei : Std.int(bgInf.th);
+
+		var tt = new dn.heaps.TiledTexture(w, h, t, p);
+		tt.scaleX = bgInf.sx;
+		tt.scaleY = bgInf.sy;
+		if( tile ) {
+			tt.alignPivotX = bgPivotX;
+			tt.alignPivotY = bgPivotY;
+		}
+		else {
+			tt.x = bgInf.dispX;
+			tt.y = bgInf.dispY;
+		}
+
+		return tt;
 	}
 
 
@@ -716,6 +729,24 @@ class Level {
 		return _adjust( getBgColor() );
 	}
 
+
+	public function getWorldTileFromFields() : Null<h2d.Tile> {
+		for(fd in _project.defs.levelFields) {
+			if( fd.editorDisplayMode!=LevelTile )
+				continue;
+
+			var fi = getFieldInstance(fd,false);
+			if( fi==null )
+				continue;
+
+			var r = fi.getSmartTile(true);
+			if( r!=null )
+				return _project.defs.getTilesetDef(r.tilesetUid).getTileRect(r);
+		}
+
+		return null;
+	}
+
 	public function hasAnyFieldDisplayedAt(pos:ldtk.Json.FieldDisplayPosition) {
 		for(fi in fieldInstances)
 			if( fi.def.editorAlwaysShow || !fi.isUsingDefault(0) ) {
@@ -726,6 +757,7 @@ class Level {
 
 					case Hidden:
 					case EntityTile:
+					case LevelTile:
 					case Points:
 					case PointStar:
 					case PointPath, PointPathLoop:

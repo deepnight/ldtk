@@ -28,7 +28,7 @@ class Cursor {
 		var tf = new h2d.Text(Assets.getRegularFont(), f);
 		label = { f:f, tf:tf }
 
-		editor.ge.addSpecificListener(ViewportChanged, onViewportChange);
+		editor.ge.addSpecificListener(ViewportChanged(null), onViewportChange);
 		onViewportChange();
 	}
 

@@ -14,6 +14,12 @@ class EntityRefPicker extends ui.ValuePicker<data.inst.EntityInstance> {
 			case Any: "any entity";
 			case OnlyTags: "any entity with tag "+"TODO";
 			case OnlySame: "another "+sourceEi.def.identifier;
+			case OnlySpecificEntity:
+				var ed = project.defs.getEntityDef(fd.allowedRefsEntityUid);
+				if( ed==null )
+					"UNKNOWN ENTITY";
+				else
+					"any "+ed.identifier+" entity";
 		}
 		var location = fd.allowOutOfLevelRef ? "in any level" : "in this level";
 		setInstructions("Pick "+targetName+" "+location);

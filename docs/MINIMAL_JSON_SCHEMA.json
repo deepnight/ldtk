@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.2.5 JSON schema",
+	"title": "LDtk 1.3.2 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.2.5",
+	"version": "1.3.2",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -38,7 +38,7 @@
 				]
 			},
 			"worlds": {
-				"description": "This array is not used yet in current LDtk version (so, for now, it's always empty).<br/><br/>In a later update, it will be possible to have multiple Worlds in a single project, each containing multiple Levels.<br/><br/>What will change when \"Multiple worlds\" support will be added to LDtk:<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - after the \"Multiple worlds\" update, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
+				"description": "This array will be empty, unless you enable the Multi-Worlds in the project advanced settings.<br/><br/> - in current version, a LDtk project file can only contain a single world with multiple levels in it. In this case, levels and world layout related settings are stored in the root of the JSON.<br/> - with \"Multi-worlds\" enabled, there will be a `worlds` array in root, each world containing levels and layout settings. Basically, it's pretty much only about moving the `levels` array to the `worlds` array, along with world layout related values (eg. `worldGridWidth` etc).<br/><br/>If you want to start supporting this future update easily, please refer to this documentation: https://github.com/deepnight/ldtk/issues/231",
 				"items": {
 					"$ref": "#/otherTypes/World"
 				},
@@ -960,7 +960,7 @@
 			]
 		},
 		"World": {
-			"description": "**IMPORTANT**: this type is not used *yet* in current LDtk version. It's only presented here as a preview of a planned feature.  A World contains multiple levels, and it has its own layout settings.",
+			"description": "**IMPORTANT**: this type is available as a preview. You can rely on it to update your importers, for when it will be officially available.  A World contains multiple levels, and it has its own layout settings.",
 			"title": "World",
 			"required": [
 				"identifier",
@@ -1224,35 +1224,29 @@
 			],
 			"additionalProperties": false,
 			"properties": {
-				"tileId": {
-					"description": "The optional ID of the tile",
-					"type": [
-						"integer",
-						"null"
-					]
-				},
 				"color": {
 					"description": "Optional color",
 					"type": [
 						"integer"
 					]
 				},
+				"tileRect": {
+					"description": "Optional tileset rectangle to represents this value",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"id": {
 					"description": "Enum value",
 					"type": [
 						"string"
-					]
-				},
-				"__tileSrcRect": {
-					"description": "An array of 4 Int values that refers to the tile in the tileset image: `[ x, y, width, height ]`",
-					"items": {
-						"type": [
-							"integer"
-						]
-					},
-					"type": [
-						"array",
-						"null"
 					]
 				}
 			},
@@ -1264,6 +1258,7 @@
 			"description": "This structure represents a single tile from a given Tileset.",
 			"title": "Tile instance",
 			"required": [
+				"a",
 				"f",
 				"px",
 				"src",
@@ -1286,6 +1281,12 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"a": {
+					"description": "Alpha/opacity of the tile (0-1, defaults to 1)",
+					"type": [
+						"number"
 					]
 				},
 				"f": {

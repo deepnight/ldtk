@@ -32,4 +32,5 @@ app/database.sqlite
 art/export_appElements
 
 tests/_private
+tests/_backups
 tests/*.txt

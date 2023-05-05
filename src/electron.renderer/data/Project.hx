@@ -10,6 +10,7 @@ class Project {
 	static var EMBED_CACHED_IMAGE_PREFIX = "embed#";
 
 	public var filePath : dn.FilePath; // not stored in JSON
+	public var backupOriginalFile : Null<dn.FilePath>; // This represents the path to the original Project from this backup (not stored in JSON)
 	var usedColors : Map<String, Map<Int,Int>> = new Map();
 
 	var nextUid = 0;
@@ -17,6 +18,7 @@ class Project {
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
 	public var db : cdb.Database;
+	var dummyWorldIid : String;
 
 	public var jsonVersion : String;
 	public var appBuildId : Float;
@@ -40,6 +42,7 @@ class Project {
 
 	public var backupOnSave = false;
 	public var backupLimit = 10;
+	public var backupRelPath : Null<String>;
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
 	public var customCommands : Array<ldtk.Json.CustomCommand> = [];
@@ -74,6 +77,24 @@ class Project {
 
 	public function getAbsExternalFilesDir() {
 		return filePath.directoryWithSlash + filePath.fileName;
+	}
+
+	public function getAbsBackupDir() : String{
+		if( backupRelPath==null )
+			return getAbsExternalFilesDir() + filePath.slash() + Const.BACKUP_DIR;
+		else {
+			var fp = dn.FilePath.fromDir( filePath.directoryWithSlash + backupRelPath );
+			fp.useSlashes();
+			return fp.directory;
+		}
+	}
+
+	public function getBackupId() {
+		return iid;
+	}
+
+	public function makeBackupDirName(?suffix:String) {
+		return getBackupId()+"_" + DateTools.format(Date.now(), "%Y-%m-%d_%H-%M-%S") + ( suffix==null?"":"_"+suffix );
 	}
 
 	public function getRelExternalFilesDir() {
@@ -184,6 +205,7 @@ class Project {
 	public static function createEmpty(filePath:String) {
 		var p = new Project();
 		p.iid = p.generateUniqueId_UUID();
+		p.dummyWorldIid = p.generateUniqueId_UUID();
 		p.filePath.parseFilePath(filePath);
 		p.createWorld(true);
 
@@ -276,6 +298,7 @@ class Project {
 		p.simplifiedExport = JsonTools.readBool( json.simplifiedExport, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
 		p.backupLimit = JsonTools.readInt( json.backupLimit, Const.DEFAULT_BACKUP_LIMIT );
+		p.backupRelPath = json.backupRelPath;
 		p.pngFilePattern = json.pngFilePattern;
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
 		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:ldtk.Json.CustomCommand)->{
@@ -294,7 +317,14 @@ class Project {
 			p.imageExportMode = json.exportPng==true ? OneImagePerLayer : None;
 		p.exportLevelBg = JsonTools.readBool(json.exportLevelBg, true);
 
-		p.defs = Definitions.fromJson(p, json.defs);
+		Definitions.fromJson(p, json.defs);
+
+		var invalidateLevelCache = false;
+		if( json.dummyWorldIid==null ) {
+			json.dummyWorldIid = p.generateUniqueId_UUID();
+			invalidateLevelCache = true;
+		}
+		p.dummyWorldIid = json.dummyWorldIid;
 
 		if( p.hasFlag(MultiWorlds) ) {
 			// Read normal worlds array
@@ -327,6 +357,12 @@ class Project {
 		if( Version.lower(json.jsonVersion, "0.10", true) )
 			p.setFlag(PrependIndexToLevelFileNames, true);
 
+		// Fix dummy world IID
+		if( invalidateLevelCache )
+			for(w in p.worlds)
+			for(l in w.levels)
+				l.invalidateJsonCache();
+
 		p.jsonVersion = Const.getJsonVersion(); // always uses latest version
 		return p;
 	}
@@ -347,11 +383,20 @@ class Project {
 	}
 
 	public inline function setFlag(f:ldtk.Json.ProjectFlag, v:Bool) {
-		if( f!=null )
+		if( f!=null ) {
+			var old = hasFlag(f);
+
 			if( v )
 				flags.set(f,true);
 			else
 				flags.remove(f);
+
+			if( old!=hasFlag(f) )
+				onFlagChange(f, hasFlag(f));
+		}
+	}
+
+	function onFlagChange(f:ldtk.Json.ProjectFlag, active:Bool) {
 	}
 
 	public inline function registerUsedColor(tag:String, c:Null<Int>) {
@@ -585,6 +630,7 @@ class Project {
 			pngFilePattern: pngFilePattern,
 			backupOnSave: backupOnSave,
 			backupLimit: backupLimit,
+			backupRelPath: backupRelPath,
 			levelNamePattern: levelNamePattern,
 			tutorialDesc : JsonTools.escapeString(tutorialDesc),
 			customCommands: customCommands.map(cmd->{
@@ -603,6 +649,7 @@ class Project {
 			defs: defs.toJson(this),
 			levels: hasFlag(MultiWorlds) ? [] : worlds[0].levels.map( (l)->l.toJson() ),
 			worlds: hasFlag(MultiWorlds) ? worlds.map( (w)->w.toJson() ) : [],
+			dummyWorldIid: dummyWorldIid,
 
 			// toc: {
 			// 	var jsonToc : Array<ldtk.Json.TableOfContentEntry> = [];
@@ -787,7 +834,7 @@ class Project {
 		Append required ".."s if the current project is a backup
 	**/
 	public inline function fixRelativePath(relPath:Null<String>) : Null<String> {
-		return relPath==null ? null : isBackup() ? "../../../"+relPath : relPath;
+		return relPath==null ? null : isBackup() && backupOriginalFile!=null ? backupOriginalFile.directoryWithSlash + relPath : relPath;
 	}
 
 
@@ -910,17 +957,26 @@ class Project {
 	/**  WORLDS  **************************************/
 
 	public function createWorld(alsoCreateLevel:Bool) : World {
-		var w = new data.World(this, generateUniqueId_UUID(), "World");
+		if( worlds.length>0 )
+			setFlag(MultiWorlds,true); // make sure it's enabled
+
+		var worldIid = hasFlag(MultiWorlds) ? generateUniqueId_UUID() : dummyWorldIid;
+		var w = new data.World(this, worldIid, "World");
 		w.identifier = fixUniqueIdStr( w.identifier, (id)->isWorldIdentifierUnique(id,w) );
 		worlds.push(w);
 
 		if( alsoCreateLevel )
 			w.createLevel();
 
-		if( worlds.length>1 )
-			setFlag(MultiWorlds,true); // make sure it's enabled
-
 		return w;
+	}
+
+	public function removeWorld(world:World) {
+		for(l in world.levels.copy())
+			world.removeLevel(l);
+
+		worlds.remove(world);
+		tidy();
 	}
 
 	public function isWorldIdentifierUnique(id:String, ?exclude:World) {

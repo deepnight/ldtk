@@ -333,10 +333,10 @@ class TilesetDef {
 		}
 
 		// Enum tiles remapping
-		for(ed in _project.defs.enums)
-			if( ed.iconTilesetUid==uid )
-				for(v in ed.values)
-					v.tileId = remapTileId(oldCwid, v.tileId);
+		// for(ed in _project.defs.enums)
+		// 	if( ed.iconTilesetUid==uid )
+		// 		for(v in ed.values)
+		// 			v.tileId = remapTileId(oldCwid, v.tileId);
 
 		// Entity tiles remapping
 		// for( ed in _project.defs.entities )
@@ -397,7 +397,7 @@ class TilesetDef {
 			return getTileId(oldCx, oldCy);
 	}
 
-	public inline function getAverageTileColor(tid:Int) {
+	public inline function getAverageTileColor(tid:Int) : dn.Col {
 		return averageColorsCache!=null && averageColorsCache.exists(tid) ? averageColorsCache.get(tid) : 0x888888;
 	}
 
@@ -808,6 +808,28 @@ class TilesetDef {
 			&& getTileSourceY(tid)>=0 && getTileSourceY(tid)+tileGridSize-1 < pxHei;
 	}
 
+
+	public function createCanvasFromTileId(tileId:Int, canvasSize:Int) : js.jquery.JQuery {
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.attr("width",tileGridSize);
+		jCanvas.attr("height",tileGridSize);
+		jCanvas.css("width", canvasSize+"px");
+		jCanvas.css("height", canvasSize+"px");
+		drawTileToCanvas(jCanvas, tileId);
+		return jCanvas;
+	}
+
+	public function createCanvasFromTileRect(tileRect:ldtk.Json.TilesetRect, canvasSize:Int) : js.jquery.JQuery {
+		var jCanvas = new J('<canvas></canvas>');
+		jCanvas.attr("width",tileGridSize);
+		jCanvas.attr("height",tileGridSize);
+		jCanvas.css("width", canvasSize+"px");
+		jCanvas.css("height", canvasSize+"px");
+		drawTileRectToCanvas(jCanvas, tileRect);
+		return jCanvas;
+	}
+
+
 	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =
 			if( isAtlasLoaded() && isTileInBounds(tid) ) {
@@ -900,6 +922,22 @@ class TilesetDef {
 		img.onload = function() {
 			ctx.drawImage(img, toX, toY, subPixels.width*scaleX, subPixels.height*scaleY);
 		}
+	}
+
+
+	public function getTileHtmlImg(tileRect:ldtk.Json.TilesetRect) : Null<js.html.Image> {
+		if( !isAtlasLoaded() )
+			return null;
+
+		if( !isTileRectInBounds(tileRect) )
+			return null; // out of bounds
+
+		var imgData = getOrLoadTilesetImage();
+		var subPixels = imgData.pixels.sub(tileRect.x, tileRect.y, tileRect.w, tileRect.h);
+		var img = new js.html.Image(subPixels.width, subPixels.height);
+		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+		img.src = 'data:image/png;base64,$b64';
+		return img;
 	}
 
 

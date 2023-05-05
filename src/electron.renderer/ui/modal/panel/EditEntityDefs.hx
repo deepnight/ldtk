@@ -10,7 +10,8 @@ class EditEntityDefs extends ui.modal.Panel {
 	var jPreview(get,never) : js.jquery.JQuery; inline function get_jPreview() return jContent.find(".previewWrapper");
 
 	var curEntity : Null<data.def.EntityDef>;
-	var fieldsForm : FieldDefsForm;
+	public var fieldsForm : FieldDefsForm;
+	var search : QuickSearch;
 
 
 	public function new(?editDef:data.def.EntityDef) {
@@ -66,9 +67,12 @@ class EditEntityDefs extends ui.modal.Panel {
 		});
 
 		// Create fields editor
-		fieldsForm = new ui.FieldDefsForm( FP_Entity );
+		fieldsForm = new ui.FieldDefsForm( FP_Entity(null) );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
 
+		// Create quick search
+		search = new ui.QuickSearch( jContent.find(".entityList ul") );
+		search.jWrapper.appendTo( jContent.find(".search") );
 
 		// Select same entity as current client selection
 		if( editDef!=null )
@@ -461,9 +465,9 @@ class EditEntityDefs extends ui.modal.Panel {
 
 	function updateFieldsForm() {
 		if( curEntity!=null )
-			fieldsForm.useFields(curEntity.identifier, curEntity.fieldDefs);
+			fieldsForm.useFields(FP_Entity(curEntity), curEntity.fieldDefs);
 		else {
-			fieldsForm.useFields("Entity", []);
+			fieldsForm.useFields(FP_Entity(null), []);
 			fieldsForm.hide();
 		}
 		checkBackup();
@@ -491,8 +495,10 @@ class EditEntityDefs extends ui.modal.Panel {
 		for( group in tagGroups ) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed"/>');
+				var jSep = new J('<li class="title fixed collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
+				jSep.attr("id", project.iid+"_entity_tag_"+group.tag);
+				jSep.attr("default", "open");
 				jSep.appendTo(jEntityList);
 
 				// Rename
@@ -524,6 +530,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var jEnt = new J('<li class="iconLeft"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
+				jEnt.css("background-color", dn.Col.fromInt(ed.color).toCssRgba(0.2));
 
 				// HTML entity display preview
 				var preview = JsTools.createEntityPreview(editor.project, ed);
@@ -588,7 +595,9 @@ class EditEntityDefs extends ui.modal.Panel {
 			});
 		}
 
+		JsTools.parseComponents(jEntityList);
 		checkBackup();
+		search.run();
 	}
 
 

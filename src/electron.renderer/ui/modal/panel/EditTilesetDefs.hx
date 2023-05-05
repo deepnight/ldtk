@@ -4,6 +4,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
 	var jForm : js.jquery.JQuery;
 	public var curTd : Null<data.def.TilesetDef>;
+	var search : QuickSearch;
 
 
 	public function new(?selectedDef:data.def.TilesetDef) {
@@ -22,6 +23,10 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jForm.find("input").first().focus().select();
 			jForm.find(".imagePicker .pick").click();
 		});
+
+		// Create quick search
+		search = new ui.QuickSearch( jList );
+		search.jWrapper.appendTo( jContent.find(".search") );
 
 		selectTileset(selectedDef!=null ? selectedDef : project.defs.tilesets[0]);
 	}
@@ -286,9 +291,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 		for( group in tagGroups) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed"/>');
+				var jSep = new J('<li class="title fixed collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jList);
+				jSep.attr("id", project.iid+"_tileset_tag_"+group.tag);
+				jSep.attr("default", "open");
 
 				// Rename
 				if( group.tag!=null ) {
@@ -374,6 +381,8 @@ class EditTilesetDefs extends ui.modal.Panel {
 			});
 		}
 
+		JsTools.parseComponents(jList);
 		checkBackup();
+		search.run();
 	}
 }

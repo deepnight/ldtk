@@ -7,6 +7,7 @@
 	<div class="buttons">
 		<button class="create"> <span class="icon add"></span> </button>
 	</div>
+	<div class="search"></div>
 	<ul class="niceList"></ul>
 </div>
 
@@ -41,6 +42,16 @@
 	</dt>
 	<dd>
 		<input type="text" name="layerDoc" id="layerDoc"/>
+	</dd>
+
+
+	<dt>
+		<label for="uiColor">Interface color</label>
+		<info>This color will be used in all lists where the layer appears.</info>
+	</dt>
+	<dd>
+		<input type="color" name="uiColor" id="uiColor"/>
+		<button class="transparent resetUiColor small"> <span class="icon reset"></span> </button>
 	</dd>
 
 
@@ -155,6 +166,16 @@
 	</dt>
 	<dd>
 		<input type="checkbox" name="canSelectWhenInactive" class="small" id="canSelectWhenInactive"/>
+	</dd>
+
+	<dt class="IntGrid AutoLayer Tiles">
+		<label for="renderInWorldView">Show in world view</label>
+		<info>
+			If enabled, the content of this layer will be used when rendering levels in a simplified way for the world view.
+		</info>
+	</dt>
+	<dd class="IntGrid AutoLayer Tiles">
+		<input type="checkbox" name="renderInWorldView" class="small" id="renderInWorldView"/>
 	</dd>
 
 

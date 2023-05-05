@@ -98,9 +98,11 @@ class EditAppSettings extends ui.modal.Dialog {
 
 		// Color blind
 		var i = Input.linkToHtmlInput(settings.v.colorBlind, jForm.find("#colorBlind"));
-		i.onChange = ()->{
-			onSettingChanged();
-		}
+		i.onChange = ()->onSettingChanged();
+
+		// Blur mask
+		var i = Input.linkToHtmlInput(settings.v.blurMask, jForm.find("#blurMask"));
+		i.onChange = ()->onSettingChanged();
 
 		// Fields render
 		var jSelect = jForm.find("#fieldsRender");

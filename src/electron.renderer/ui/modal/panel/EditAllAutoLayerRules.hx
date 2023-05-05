@@ -288,6 +288,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			m.add({
 				label: L.t._("Use assistant (recommended)"),
 				cb: ()->{
+					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
+						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
+						return;
+					}
 					doUseWizard();
 				},
 			});
@@ -385,6 +389,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Error in layer settings
 		if( !ld.autoLayerRulesCanBeUsed() ) {
+			jContent.find("button:not(.close), input").prop("disabled","true");
 			var jError = new J('<li> <div class="warning"/> </li>');
 			jError.appendTo(jRuleGroupList);
 			jError.find("div").append( L.t._("The current layer settings prevent its rules to work.") );
@@ -400,6 +405,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}
 			return;
 		}
+
+		jContent.find("button:not(.close), input").removeProp("disabled");
 
 
 		// List context menu
@@ -547,7 +554,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jWizEdit.click( _->doUseWizard(rg) );
 
 		// Group context menu
-		ContextMenu.addTo(jGroup, jGroupHeader, [
+		var actions : ui.modal.ContextMenu.ContextActions = [
 			{
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
@@ -612,8 +619,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					);
 				},
 				show: ()->rg.isOptional,
+				separatorAfter: true,
 			},
-
 			{
 				label: L._PasteAfter("rule"),
 				cb: ()->{
@@ -650,6 +657,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				enable: ()->App.ME.clipboard.is(CRuleGroup),
 			},
 			{
+				label: L._Duplicate(),
+				cb: ()->{
+					var copy = ld.duplicateRuleGroup(project, rg);
+					editor.ge.emit( LayerRuleGroupAdded(copy) );
+					invalidateRuleGroup(copy);
+				},
+			},
+			{
 				label: L.t._("Duplicate and remap"),
 				sub: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
 				cb: ()->{
@@ -664,7 +679,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L._Delete(L.t._("Group")),
 				cb: deleteRuleGroup.bind(rg, true),
 			},
-		]);
+		];
+		ContextMenu.addTo(jGroup, jGroupHeader, actions);
 
 		// Wizard mode explanation
 		if( rg.usesWizard ) {
@@ -750,6 +766,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function updateRule(r:data.def.AutoLayerRuleDef) {
+		if( isClosing() )
+			return;
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
@@ -815,7 +833,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( r.chance, jRule.find("[name=random]"));
 		i.linkEvent( LayerRuleChanged(r) );
 		i.enablePercentageMode();
-		i.setBounds(0,1);
+		i.setBounds(0.01, 1);
 		i.onValueChange = (v)->{
 			if( v/100<old )
 				invalidateRuleAndOnesBelow(r);
@@ -824,6 +842,33 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			i.jInput.addClass("max");
 		else if( r.chance<=0 )
 			i.jInput.addClass("off");
+
+		// Alpha
+		var old = r.alpha;
+		var i = Input.linkToHtmlInput( r.alpha, jRule.find("[name=alpha]"));
+		i.linkEvent( LayerRuleChanged(r) );
+		// i.enablePercentageMode();
+		i.setBounds(0.01,1);
+		i.enableSlider(0.5);
+		i.setValueStep(0.01);
+		i.setPrecision(2);
+		i.onValueChange = (v)->{
+			if( v<1 )
+				r.breakOnMatch = false;
+			if( v/100!=old )
+				invalidateRuleAndOnesBelow(r);
+		}
+		if( r.alpha>=1 )
+			i.jInput.addClass("max");
+
+		// Random offsets
+		var jFlag = jRule.find("a.randomOffset");
+		jFlag.addClass( r.hasAnyPositionOffset() ? "on" : "off" );
+		jFlag.mousedown( function(ev:js.jquery.Event) {
+			ev.preventDefault();
+			var w = new ui.modal.dialog.RuleRandomOffsets(jFlag, r);
+			w.onSettingsChange = (r)->invalidateRuleAndOnesBelow(r);
+		});
 
 		// Modulos
 		var jModulo = jRule.find(".modulo");
@@ -836,6 +881,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jFlag = jRule.find("a.break");
 		jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 		jFlag.click( function(ev:js.jquery.Event) {
+			if( r.hasAnyPositionOffset() ) {
+				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
+				return;
+			}
+			if( r.alpha<1 ) {
+				N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
+				return;
+			}
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);
 			r.breakOnMatch = !r.breakOnMatch;
@@ -887,42 +940,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				r.setPerlin( !r.hasPerlin() );
 				if( r.hasPerlin() )
 					invalidateRuleAndOnesBelow(r);
-				editor.ge.emit( LayerRuleChanged(r) );
-			}
-		});
-
-		// Checker
-		var jFlag = jRule.find("a.checker");
-		jFlag.addClass( r.checker!=None ? "on" : "off" );
-		jFlag.mousedown( function(ev:js.jquery.Event) {
-			if( r.xModulo==1 && r.yModulo==1 ) {
-				N.error("Checker mode needs X or Y modulo greater than 1.");
-				return;
-			}
-			ev.preventDefault();
-			if( ev.button==2 ) {
-				// Pick vertical/horizontal checker
-				var m = new Dialog(jFlag);
-				for(k in [ldtk.Json.AutoLayerRuleCheckerMode.Horizontal, ldtk.Json.AutoLayerRuleCheckerMode.Vertical]) {
-					var name = k.getName();
-					var jRadio = new J('<input name="mode" type="radio" value="$name" id="$name"/>');
-					jRadio.change( function(ev:js.jquery.Event) {
-						r.checker = k;
-						invalidateRuleAndOnesBelow(r);
-						editor.ge.emit( LayerRuleChanged(r) );
-					});
-					m.jContent.append(jRadio);
-					m.jContent.append('<label for="$name">$name</label>');
-				}
-
-				if( r.checker==None )
-					r.checker = r.xModulo==1 ? Vertical : Horizontal;
-				m.jContent.find("[name=mode][value="+r.checker.getName()+"]").click();
-			}
-			else {
-				// Just toggle it
-				r.checker = r.checker==None ? ( r.xModulo==1 ? Vertical : Horizontal ) : None;
-				invalidateRuleAndOnesBelow(r);
 				editor.ge.emit( LayerRuleChanged(r) );
 			}
 		});

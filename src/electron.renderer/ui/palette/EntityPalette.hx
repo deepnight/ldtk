@@ -2,9 +2,12 @@ package ui.palette;
 
 class EntityPalette extends ui.ToolPalette {
 	var allTagGroups: Array<{ tag:Null<String>, all:Array<data.def.EntityDef> }>;
+	var searchMemory : Null<String>;
+	var search : QuickSearch;
 
 	public function new(t) {
 		super(t);
+		jContent.addClass("entities");
 	}
 
 	override function doRender() {
@@ -14,6 +17,9 @@ class EntityPalette extends ui.ToolPalette {
 
 		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);
+
+		search = new ui.QuickSearch(jList);
+		search.jWrapper.prependTo(jContent);
 
 		var ld = Editor.ME.curLayerDef;
 		allTagGroups = project.defs.groupUsingTags(
@@ -27,9 +33,11 @@ class EntityPalette extends ui.ToolPalette {
 		for(group in allTagGroups) {
 			// Tag header
 			if( allTagGroups.length>1 && group.all.length>0 ) {
-				var jTag = new J('<li class="title"/>');
+				var jTag = new J('<li class="title collapser"/>');
 				jTag.appendTo(jList);
 				jTag.text( group.tag==null ? L._Untagged() : group.tag );
+				jTag.attr("id", project.iid+"_entityPalette_tag_"+group.tag);
+				jTag.attr("default", "open");
 			}
 
 			var jLi = new J('<li class="subList"> <ul/> </li>');
@@ -44,6 +52,7 @@ class EntityPalette extends ui.ToolPalette {
 				jLi.attr("data-y", Std.string(y));
 				jLi.addClass("entity");
 				jLi.css( "border-color", C.intToHex(ed.color) );
+				jLi.css("background-color", dn.Col.fromInt(ed.color).toCssRgba(0.4));
 
 				if( ed.doc!=null ) {
 					jLi.attr("tip", "right");
@@ -61,18 +70,40 @@ class EntityPalette extends ui.ToolPalette {
 				}
 
 				// Preview and label
-				jLi.append( JsTools.createEntityPreview(Editor.ME.project, ed) );
+				var jPreview = JsTools.createEntityPreview(Editor.ME.project, ed);
+				jPreview.addClass("notCompact");
+				jLi.append(jPreview);
 				jLi.append(ed.identifier);
 
 				jLi.click( function(_) {
 					tool.selectValue(ed.uid);
 					render();
 				});
+
+				var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+					{
+						 label: L.t._("Edit entity definition"),
+						 cb: ()->new ui.modal.panel.EditEntityDefs(ed),
+					},
+				];
+				ui.modal.ContextMenu.addTo(jLi, false, actions);
+
 				y++;
 			}
 
 			groupIdx++;
 		}
+
+		JsTools.parseComponents(jList);
+
+		if( searchMemory!=null )
+			search.run(searchMemory);
+		search.onSearch = (s)->searchMemory = s;
+	}
+
+	override function onHide() {
+		super.onHide();
+		search.clear();
 	}
 
 

@@ -17,6 +17,7 @@ typedef AppSettings = {
 	var startFullScreen: Bool;
 	var autoInstallUpdates : Bool;
 	var colorBlind : Bool;
+	var blurMask : Bool;
 	var navigationKeys : NavigationKeys;
 
 	var openLastProject : Bool;
@@ -30,6 +31,7 @@ typedef AppSettings = {
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
+	var recentDirColors : Array<{ path:String, col:String }>;
 
 	var uiStates : Array<{ id:String, val:Int }>;
 	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
@@ -76,6 +78,7 @@ class Settings {
 			lastKnownVersion: null,
 			recentProjects: [],
 			recentDirs: null,
+			recentDirColors: [],
 
 			compactMode: false,
 			grid: true,
@@ -88,6 +91,7 @@ class Settings {
 			startFullScreen: false,
 			autoInstallUpdates: true,
 			colorBlind: false,
+			blurMask: true,
 			navigationKeys: null,
 
 			openLastProject: false,
@@ -137,9 +141,7 @@ class Settings {
 		}
 		#end
 
-
-		if( !hasUiState(ShowProjectColors) )
-			setUiStateBool(ShowProjectColors, true);
+		initDefaultGlobalUiState(ShowProjectColors, 1);
 	}
 
 
@@ -176,6 +178,19 @@ class Settings {
 		return false;
 	}
 
+
+	function initDefaultGlobalUiState(id:UiState, defValue:Int) {
+		for(s in v.uiStates)
+			if( s.id==Std.string(id) )
+				return false;
+		v.uiStates.push({
+			id: Std.string(id),
+			val: defValue,
+		});
+		return true;
+	}
+
+	#if editor
 	public function wasProjectTrustAsked(projectIid:String) {
 		for(tp in v.projectTrusts)
 			if( tp.iid==projectIid )
@@ -184,58 +199,67 @@ class Settings {
 	}
 
 
-	function getOrCreateUiState(id:UiState) {
+	function getOrCreateUiState(id:UiState, ?forProject:data.Project) {
+		var idStr = makeProjectUiStateId(id, forProject);
 		for(s in v.uiStates)
-			if( s.id==Std.string(id) )
+			if( s.id == idStr )
 				return s;
-		v.uiStates.push({ id:Std.string(id), val:0 });
+		v.uiStates.push({ id:idStr, val:0 });
 		return v.uiStates[v.uiStates.length-1];
 	}
 
-	public function hasUiState(id:UiState) {
+	inline function makeProjectUiStateId(id:UiState, forProject:Null<data.Project>) : String {
+		return forProject==null
+			? Std.string(id)
+			: forProject.iid+"_"+Std.string(id);
+	}
+
+	public function hasUiState(id:UiState, ?forProject:data.Project) {
 		for(s in v.uiStates)
-			if( s.id==Std.string(id) )
+			if( s.id==makeProjectUiStateId(id,forProject) )
 				return true;
 		return false;
 	}
 
-	function deleteUiState(id:UiState) {
+	public function deleteUiState(id:UiState, ?forProject:data.Project) {
 		var i = 0;
 		while( i<v.uiStates.length )
-			if( v.uiStates[i].id==Std.string(id) )
+			if( v.uiStates[i].id == makeProjectUiStateId(id,forProject) )
 				v.uiStates.splice(i,1);
 			else
 				i++;
-	}
-
-	public inline function setUiStateInt(id:UiState, v:Int) {
-		getOrCreateUiState(id).val = v;
 		save();
 	}
 
-	public inline function setUiStateBool(id:UiState, v:Bool) {
-		setUiStateInt(id, v==true ? 1 : 0);
+	public inline function setUiStateInt(id:UiState, v:Int, ?forProject:data.Project) {
+		getOrCreateUiState(id,forProject).val = v;
 		save();
 	}
 
-	public inline function toggleUiStateBool(id:UiState) {
-		setUiStateBool(id, !getUiStateBool(id));
+	public inline function setUiStateBool(id:UiState, v:Bool, ?forProject:data.Project) {
+		setUiStateInt(id, v==true ? 1 : 0, forProject);
 		save();
 	}
 
-	public function getUiStateInt(id:UiState) : Int {
+	public inline function toggleUiStateBool(id:UiState, ?forProject:data.Project) {
+		setUiStateBool(id, !getUiStateBool(id,forProject), forProject);
+		save();
+	}
+
+	public function getUiStateInt(id:UiState, ?forProject:data.Project) : Int {
 		for(s in v.uiStates)
-			if( s.id==Std.string(id) )
+			if( s.id == makeProjectUiStateId(id,forProject) )
 				return s.val;
 		return 0;
 	}
 
-	public function getUiStateBool(id:UiState) : Bool {
+	public function getUiStateBool(id:UiState, ?forProject:data.Project) : Bool {
 		for(s in v.uiStates)
-			if( s.id==Std.string(id) )
+			if( s.id == makeProjectUiStateId(id,forProject) )
 				return s.val!=0;
 		return false;
 	}
+	#end
 
 
 	#if editor

@@ -32,7 +32,7 @@ enum TileEditMode {
 
 typedef EnumDefValue = {
 	var id : String;
-	var tileId : Null<Int>;
+	var tileRect : Null<ldtk.Json.TilesetRect>;
 	var color: Int;
 }
 

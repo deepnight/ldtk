@@ -31,8 +31,7 @@ class EditTableDefs extends ui.modal.Panel {
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "csv":
 								var i = new importer.Table();
-								var td = i.load( project.makeRelativeFilePath(absPath) );
-								editor.ge.emit(TableDefAdded(td));
+								i.load( project.makeRelativeFilePath(absPath) );
 							case _:
 								N.error('The file must have the ".csv" extension.');
 						}

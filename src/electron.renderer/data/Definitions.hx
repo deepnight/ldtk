@@ -11,7 +11,6 @@ class Definitions {
 	public var enums: Array<data.def.EnumDef> = [];
 	public var externalEnums: Array<data.def.EnumDef> = [];
 	public var levelFields: Array<data.def.FieldDef> = [];
-	public var tables: Array<data.def.TableDef> = [];
 
 
 	public function new(project:Project) {
@@ -26,38 +25,31 @@ class Definitions {
 			enums: enums.map( ed->ed.toJson(p) ),
 			externalEnums: externalEnums.map( ed->ed.toJson(p) ),
 			levelFields: levelFields.map( fd->fd.toJson() ),
-			tables: tables.map( td->td.toJson() ),
 		}
 	}
 
 	public static function fromJson(p:Project, json:ldtk.Json.DefinitionsJson) {
-		var d = new Definitions(p);
+		p.defs = new Definitions(p);
 
 		for( layerJson in JsonTools.readArray(json.layers) )
-			d.layers.push( data.def.LayerDef.fromJson(p, p.jsonVersion, layerJson) );
+			p.defs.layers.push( data.def.LayerDef.fromJson(p, p.jsonVersion, layerJson) );
 
 		for( entityJson in JsonTools.readArray(json.entities) )
-			d.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
+			p.defs.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
-			d.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
+			p.defs.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
 
 		for( enumJson in JsonTools.readArray(json.enums) )
-			d.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
-
-		if( json.tables!=null )
-			for( tableJson in JsonTools.readArray(json.tables) )
-				d.tables.push( data.def.TableDef.fromJson(p, tableJson) );
+			p.defs.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
-				d.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
+				p.defs.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
 
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
-				d.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
-
-		return d;
+				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
 	}
 
 	public function tidy(p:Project) {
@@ -80,54 +72,6 @@ class Definitions {
 
 		for(fd in levelFields)
 			fd.tidy(p);
-	}
-
-	/**  TABLE DEFS  *****************************************/
-	public function createTable(name:String, columns:Array<String>, data:Array<Array<Dynamic>>) {
-		var table = new data.def.TableDef(_project, _project.generateUniqueId_int(), name, columns[0], columns, data);
-		tables.push(table);
-		return table;
-	}
-
-	public function getTableDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TableDef> {
-		for(td in tables)
-			if( td.uid==id || td.name==id )
-				return td;
-
-		return null;
-	}
-
-
-	public function removeTableDef(td:data.def.TableDef) {
-		if( !tables.remove(td) )
-			throw "Unknown tabledef";
-
-		_project.tidy();
-	}
-
-	public function getTableIndex(uid:Int) {
-		var idx = 0;
-		for(td in tables)
-			if( td.uid==uid )
-				break;
-			else
-				idx++;
-		return idx>=tables.length ? -1 : idx;
-	}
-
-	public function sortTableDef(from:Int, to:Int) : Null<data.def.TableDef> {
-		if( from<0 || from>=tables.length || from==to )
-			return null;
-
-		if( to<0 || to>=tables.length )
-			return null;
-
-		_project.tidy();
-
-		var moved = tables.splice(from,1)[0];
-		tables.insert(to, moved);
-
-		return moved;
 	}
 
 	/**  LAYER DEFS  *****************************************/
@@ -521,6 +465,14 @@ class Definitions {
 				return efd;
 
 		return null;
+	}
+
+
+	public function isLevelField(fd:data.def.FieldDef) {
+		for(lfd in levelFields)
+			if( lfd.uid==fd.uid )
+				return true;
+		return false;
 	}
 
 

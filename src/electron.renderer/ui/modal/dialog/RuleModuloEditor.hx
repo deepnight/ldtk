@@ -22,6 +22,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 
 	function renderForm() {
 		jContent.find("*").off();
+		jContent.find(".advancedSelect").remove();
 		loadTemplate("ruleModuloEditor");
 
 		// Reset
@@ -29,14 +30,18 @@ class RuleModuloEditor extends ui.modal.Dialog {
 			ev.preventDefault();
 			rule.xModulo = rule.yModulo = 1;
 			rule.xOffset = rule.yOffset = 0;
+			rule.checker = None;
 			editor.ge.emit(LayerRuleChanged(rule));
 			renderForm();
 		});
+
+		var sliderSpeed = 0.33;
 
 		// X modulo
 		var i = Input.linkToHtmlInput( rule.xModulo, jContent.find("#xModulo"));
 		i.onValueChange = (v)->rule.tidy();
 		i.linkEvent( LayerRuleChanged(rule) );
+		i.enableSlider(sliderSpeed);
 		i.setBounds(1,40);
 		if( rule.xModulo==1 )
 			i.jInput.addClass("default");
@@ -48,12 +53,14 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		i.onValueChange = (v)->rule.tidy();
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(1,40);
+		i.enableSlider(sliderSpeed);
 		i.addAutoClass("default", (v)->v==1);
 
 		// X offset
 		final bounds = 4096;
 		var i = Input.linkToHtmlInput( rule.xOffset, jContent.find("#xOffset"));
 		i.setBounds(-bounds, bounds);
+		i.enableSlider(sliderSpeed);
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.fixValue = (v)->v = v % rule.xModulo;
 		i.addAutoClass("default", (v)->v==1);
@@ -62,7 +69,31 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		var i = Input.linkToHtmlInput( rule.yOffset, jContent.find("#yOffset"));
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(-bounds, bounds);
+		i.enableSlider(sliderSpeed);
 		i.addAutoClass("default", (v)->v==1);
+
+		var i = new form.input.EnumSelect(
+			jContent.find("select.checker"),
+			ldtk.Json.AutoLayerRuleCheckerMode,
+			false,
+			()->rule.checker,
+			(v)->{
+				rule.checker = v;
+				editor.ge.emit(LayerRuleChanged(rule));
+				renderForm();
+			},
+			(v)->switch v {
+				case None: L.t._("Off");
+				case Horizontal: L.t._("Horizontally");
+				case Vertical: L.t._("Vertically");
+			},
+			(v)->switch v {
+				case None: true;
+				case Horizontal: rule.xModulo>1;
+				case Vertical: rule.yModulo>1;
+			},
+			true
+		);
 
 		JsTools.parseComponents(jContent);
 		renderPreview();
@@ -73,7 +104,8 @@ class RuleModuloEditor extends ui.modal.Dialog {
 		switch e {
 			case LayerRuleChanged(r):
 				if( r==rule )
-					renderPreview();
+					// renderPreview();
+					renderForm();
 
 			case _:
 		}

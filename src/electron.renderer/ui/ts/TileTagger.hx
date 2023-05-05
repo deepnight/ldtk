@@ -35,10 +35,10 @@ class TileTagger extends ui.Tileset {
 
 			for(ev in ed.values) {
 				var jVal = new J('<li value="${ev.id}">${ev.id}</li>');
-				if( ev.tileId!=null ) {
+				if( ev.tileRect!=null ) {
 					var iconTd = Editor.ME.project.defs.getTilesetDef(ed.iconTilesetUid);
 					if( iconTd!=null )
-						jVal.prepend( JsTools.createTile(iconTd, ev.tileId, 16) );
+						jVal.prepend( iconTd.createCanvasFromTileRect(ev.tileRect, 16) );
 				}
 				jVal.appendTo(jValues);
 				jVal.css({
@@ -118,10 +118,10 @@ class TileTagger extends ui.Tileset {
 			if( tilesetDef.tagsSourceEnumUid!=null ) {
 				for(ev in ed.values)
 					if( tilesetDef.hasTag(ev.id, tileId) && ( curEnumValue==null || curEnumValue==ev.id ) ) {
-						if( ev.tileId!=null && iconTd!=null ) {
+						if( ev.tileRect!=null && iconTd!=null ) {
 							// Render icon tile
 							var s = tilesetDef.tileGridSize / iconTd.tileGridSize;
-							iconTd.drawTileTo2dContext(ctx, ev.tileId, x-n*offX, y-n*offY, s,s);
+							iconTd.drawTileRectTo2dContext(ctx, ev.tileRect, x-n*offX, y-n*offY, s,s);
 						}
 						// else {
 							// Contrast outline

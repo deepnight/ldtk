@@ -53,7 +53,7 @@ class Table {
 			}
 		}
 
-		var td = project.defs.createTable(table_name, keys, data);
-		return td;
+		// var td = project.defs.createTable(table_name, keys, data);
+		// return td;
 	}
 }
