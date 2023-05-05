@@ -283,7 +283,28 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Grid
 		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
-		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+		i.onBeforeSetter = (newGrid)->{
+			new LastChance(L.t._("Layer grid changed"), project);
+
+			for(w in project.worlds)
+			for(l in w.levels)
+			for(li in l.layerInstances) {
+				if( li.layerDefUid==cur.uid )
+					li.remapToGridSize(cur.gridSize, newGrid);
+
+				if( li.def.autoSourceLayerDefUid==cur.uid )
+					li.remapToGridSize(cur.gridSize, newGrid);
+			}
+		}
+		i.onChange = ()->{
+			editor.ge.emit( LayerDefChanged(cur.uid) );
+
+			for(ld in project.defs.layers)
+				if( ld.autoSourceLayerDefUid==cur.uid ) {
+					ld.gridSize = cur.gridSize;
+					editor.ge.emit( LayerDefChanged(ld.uid) );
+				}
+		}
 
 		var i = Input.linkToHtmlInput( cur.guideGridWid, jForm.find("input[name='guideGridWid']") );
 		i.setBounds(0,Const.MAX_GRID_SIZE);
