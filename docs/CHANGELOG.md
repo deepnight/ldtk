@@ -6,6 +6,7 @@
  - Fixed visibility icon in layer list when hiding details
  - Fixed various minor bugs in the new tool options from the left panel.
  - Renaming a project will now also rename sibling `.meta` files (Unity) accordingly.
+ - Fixed message dialog size
 
 # 1.3.2
 
