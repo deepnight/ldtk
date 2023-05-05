@@ -193,8 +193,28 @@ class EditTilesetDefs extends ui.modal.Panel {
 		i.onChange = editor.ge.emit.bind( TilesetDefChanged(curTd) );
 
 		var i = Input.linkToHtmlInput( curTd.tileGridSize, jForm.find("input[name=tilesetGridSize]") );
-		i.linkEvent( TilesetDefChanged(curTd) );
 		i.setBounds(2, curTd.getMaxTileGridSize());
+		var oldGrid = curTd.tileGridSize;
+		i.onChange = ()->{
+			new LastChance(L.t._("Tileset grid changed"), project);
+
+			var result = curTd.remapAllTileIdsAfterGridChange(oldGrid);
+			editor.ge.emit(TilesetDefChanged(curTd));
+
+			switch result {
+				case Ok:
+					N.msg("No change");
+
+				case RemapLoss:
+					new ui.modal.dialog.Warning(L.t._("The new grid size is larger than the previous one.\nSome tiles may have been lost in the remapping process."));
+
+				case RemapSuccessful:
+					new ui.modal.dialog.Message(L.t._("All tiles were successfully remapped."));
+
+				case _:
+					N.error("Unknown remapping result: "+result);
+			}
+		}
 
 		var i = Input.linkToHtmlInput( curTd.spacing, jForm.find("input[name=spacing]") );
 		i.linkEvent( TilesetDefChanged(curTd) );

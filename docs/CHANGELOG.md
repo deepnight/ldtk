@@ -1,5 +1,6 @@
 # 1.3.3
 
+ - **If you change the "grid size" of a layer or tileset, LDtk will now try to remap all existing data to this new grid size (if that's possible).**
  - When using the "Single layer mode", the others layers are now faded away a bit more.
  - Hiding details (`CTRL-H`) now also hides the grid
  - Fixed visibility icon in layer list when hiding details
