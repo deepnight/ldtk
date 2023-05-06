@@ -1085,7 +1085,7 @@ class JsTools {
 
 			// Open picker
 			if( active )
-				jTileCanvas.click( function(ev) {
+				jTileCanvas.click( _->{
 					var m = new ui.Modal();
 					m.addClass("singleTilePicker");
 
