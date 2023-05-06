@@ -116,7 +116,7 @@ class JsonTools {
 		}
 	}
 
-	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt, allowNull=false) : Null<UInt> {
+	public static function readColor(v:Dynamic, ?defaultIfMissing:dn.Col, allowNull=false) : Null<dn.Col> {
 		if( v==null && defaultIfMissing!=null )
 			return defaultIfMissing;
 

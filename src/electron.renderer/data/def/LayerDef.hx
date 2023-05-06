@@ -35,7 +35,7 @@ class LayerDef {
 
 	// IntGrid
 	@:allow(importer)
-	var intGridValues : Array<IntGridValueDef> = [];
+	var intGridValues : Array<IntGridValueDefEditor> = [];
 
 	// IntGrid/AutoLayers
 	public var autoSourceLayerDefUid : Null<Int>;
@@ -114,13 +114,14 @@ class LayerDef {
 
 		o.intGridValues = [];
 		if( o.type==IntGrid ) {
-			var all : Array<IntGridValueDef> = JsonTools.readArray(json.intGridValues);
+			var all : Array<IntGridValueDefEditor> = JsonTools.readArray(json.intGridValues);
 			var fixedIdx = 1; // fix old projects missing intgrid "value" field
 			for( v in all ) {
 				o.intGridValues.push({
 					value: M.isValidNumber(v.value) ? v.value : fixedIdx,
 					identifier: v.identifier,
 					color: JsonTools.readColor(v.color),
+					tile: JsonTools.readTileRect(v.tile, true),
 				});
 				fixedIdx++;
 			}
@@ -178,6 +179,7 @@ class LayerDef {
 				value: iv.value,
 				identifier: iv.identifier,
 				color: JsonTools.writeColor(iv.color),
+				tile: JsonTools.writeTileRect(iv.tile),
 			}),
 
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -220,7 +222,7 @@ class LayerDef {
 	}
 
 
-	public function sortIntGridValueDef(from:Int, to:Int) : Null<IntGridValueDef> {
+	public function sortIntGridValueDef(from:Int, to:Int) : Null<IntGridValueDefEditor> {
 		if( type!=IntGrid )
 			return null;
 
@@ -253,6 +255,7 @@ class LayerDef {
 			value: getNextIntGridValue(),
 			color: col,
 			identifier: id,
+			tile: null,
 		});
 	}
 
@@ -260,8 +263,8 @@ class LayerDef {
 		return getIntGridValueDef(v)!=null;
 	}
 
-	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDef> {
-		var out : Null<IntGridValueDef> = null;
+	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDefEditor> {
+		var out : Null<IntGridValueDefEditor> = null;
 		for(v in intGridValues)
 			if( v.value==value ) {
 				out = v;
