@@ -159,7 +159,7 @@ class EntityDef {
 		o.showName = JsonTools.readBool(json.showName, true);
 		o.tilesetId = JsonTools.readNullableInt(json.tilesetId);
 		o._oldTileId = JsonTools.readNullableInt(json.tileId);
-		o.tileRect = JsonTools.readTileRect(json.tilesetId, json.tileRect, true);
+		o.tileRect = JsonTools.readTileRect(json.tileRect, true);
 		if( o.tileRect!=null && o.tileRect.tilesetUid==null )
 			o.tileRect.tilesetUid = o.tilesetId;
 
@@ -208,7 +208,7 @@ class EntityDef {
 			showName: showName,
 			tilesetId: tilesetId,
 			tileRenderMode: JsonTools.writeEnum(tileRenderMode, false),
-			tileRect: tileRect,
+			tileRect: JsonTools.writeTileRect(tileRect),
 			nineSliceBorders: tileRenderMode==NineSlice ? nineSliceBorders.copy() : [],
 
 			maxCount: maxCount,

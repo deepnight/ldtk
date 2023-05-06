@@ -76,13 +76,7 @@ class EnumDef {
 
 			var value : data.DataTypes.EnumDefValue = {
 				id: v.id,
-				tileRect: v.tileRect==null ? null : {
-					tilesetUid: v.tileRect.tilesetUid,
-					x: v.tileRect.x,
-					y: v.tileRect.y,
-					w: v.tileRect.w,
-					h: v.tileRect.h,
-				},
+				tileRect: JsonTools.writeTileRect(v.tileRect),
 				color: v.color==null ? (v.tileId!=null ? -1 : 0) : v.color, // -1 means "to be set later based on tile"
 			}
 			ed.values.push(value);
@@ -97,7 +91,7 @@ class EnumDef {
 			uid: uid,
 			values: values.map( function(v) return { // breaks memory refs
 				id: v.id,
-				tileRect: v.tileRect,
+				tileRect: JsonTools.writeTileRect(v.tileRect),
 				tileId: -1,
 				color: v.color,
 				__tileSrcRect: v.tileRect==null ? null : [
