@@ -91,8 +91,6 @@ class EditTableDefs extends ui.modal.Panel {
 
 			jContent.find("#tableEditor").append("<div id=tabulator></div>");
 			tabulator = new Tabulator("#tabulator", {
-				importFormat:"array",
-				layout:"fitData",
 				data: data,
 				columns: columns,
 				movableRows: true,
