@@ -11,6 +11,7 @@ private enum SavingState {
 	CheckLevelCache;
 	SavingMainFile;
 	SavingExternLevels;
+	SavingCastle;
 	WritingImages;
 	ExportingTiled;
 	ExportingGMS;
@@ -246,6 +247,12 @@ class ProjectSaver extends dn.Process {
 					beginNextState();
 				}
 
+			case SavingCastle:
+				logState();
+				var data = project.db.save();
+				trace("saving castle");
+				NT.writeFileString(project.getAbsExternalFilesDir() + "/castle.cdb", data);
+				beginNextState();
 
 			case WritingImages:
 				var baseDir = project.simplifiedExport
@@ -567,6 +574,8 @@ class ProjectSaver extends dn.Process {
 			case SavingMainFile:
 
 			case SavingExternLevels:
+
+			case SavingCastle:
 
 			case WritingImages:
 				if( !ui.modal.Progress.hasAny() )
