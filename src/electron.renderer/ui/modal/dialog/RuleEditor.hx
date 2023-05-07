@@ -127,9 +127,6 @@ class RuleEditor extends ui.modal.Dialog {
 
 			jVal.css("background-color", C.intToHex(v.color));
 			jVal.append( JsTools.createIntGridValue(project,v) );
-			// jVal.append('<span class="intGridValue"> <span class="index">${v.value}</span> </span>');
-			// if( v.tile!=null )
-			// 	jVal.find(".intGridValue").prepend( project.resolveTileRectAsHtmlImg(v.tile) );
 			jVal.append('<span class="name">${v.identifier!=null ? v.identifier : ""}</span>');
 			jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
 

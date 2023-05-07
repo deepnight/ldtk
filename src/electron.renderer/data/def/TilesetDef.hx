@@ -861,13 +861,13 @@ class TilesetDef {
 			else
 				new J( new js.html.Image() );
 
-		if( imgWid!=null ) {
+		if( imgWid!=null )
 			jImg.css({
 				width:imgWid+"px",
 				height:(imgHei!=null?imgHei:imgWid)+"px",
 				imageRendering: "pixelated",
 			});
-		}
+
 		return jImg;
 	}
 
