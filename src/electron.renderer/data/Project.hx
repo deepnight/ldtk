@@ -1238,9 +1238,14 @@ class Project {
 			return null;
 
 		var td = defs.getTilesetDef(r.tilesetUid);
-		if( td==null )
+		return td!=null ? td.createCanvasFromTileRect(r, sizePx) : null;
+	}
+
+	public function resolveTileRectAsHtmlImg(r:ldtk.Json.TilesetRect, sizePx=32) : Null<js.jquery.JQuery> {
+		if( r==null )
 			return null;
 
-		return td.createCanvasFromTileRect(r, sizePx);
+		var td = defs.getTilesetDef(r.tilesetUid);
+		return td!=null ? td.createTileHtmlImageFromRect(r, sizePx) : null;
 	}
 }

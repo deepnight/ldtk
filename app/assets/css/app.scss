@@ -6214,7 +6214,7 @@ canvas#webgl {
 				&.hasIcon .index {
 					text-shadow: 0 0 2px black, 0 0 2px black, 0 1px 1px black;
 				}
-				canvas {
+				img {
 					position: absolute;
 					top: 0;
 					left: 0;
@@ -8528,7 +8528,7 @@ $patternSize : 32px;
 		}
 		.cell.center {
 			opacity: 1;
-			canvas.tilePreview {
+			canvas {
 				box-sizing: border-box;
 				padding: 2px;
 
@@ -8662,14 +8662,14 @@ $patternSize : 32px;
 			border-radius: 4px;
 		}
 
-		canvas.tilePreview {
+		canvas {
 			pointer-events: none;
 			position: absolute;
 			z-index: 2;
 			image-rendering: pixelated;
 		}
 
-		canvas.icon {
+		.valueIcon {
 			pointer-events: none;
 			position: absolute;
 			z-index: 0;

@@ -322,14 +322,14 @@ class RulesWizard extends ui.modal.Dialog {
 			var f = WallFragment.createByName(jCell.attr("name"));
 			if( fragments.exists(f) ) {
 				// Defined cell
-				var jImg = td.createTileHtmlImage(fragments.get(f)[0], 48);
+				var jImg = td.createTileHtmlImageFromTileId(fragments.get(f)[0], 48);
 				jCell.append(jImg);
 				jCell.addClass("defined");
 			}
 			else if( getSymetricalAlternative(f)!=null ) {
 				// Cell is using symetrical alternative
 				var alt = getSymetricalAlternative(f);
-				var jImg = td.createTileHtmlImage(fragments.get(alt.f)[0], 48);
+				var jImg = td.createTileHtmlImageFromTileId(fragments.get(alt.f)[0], 48);
 				if( alt.flipX && alt.flipY )
 					jImg.css("transform", "scaleX(-1) scaleY(-1)");
 				else if( alt.flipX )

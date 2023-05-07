@@ -42,7 +42,7 @@ class IntGridPalette extends ui.ToolPalette {
 			});
 			if( intGridVal.tile!=null ) {
 				jVal.addClass("hasIcon");
-				jVal.append( project.resolveTileRectAsCanvas(intGridVal.tile) );
+				jVal.append( project.resolveTileRectAsHtmlImg(intGridVal.tile) );
 			}
 
 			// Label

@@ -114,7 +114,6 @@ class RulePatternEditor {
 					if( td!=null ) {
 						var jTile = td.createCanvasFromTileId(rule.tileIds[0], 32);
 						jCell.append(jTile);
-						jCell.addClass("tilePreview");
 						if( rule.tileIds.length>1 )
 							jTile.addClass("multi");
 					}
@@ -136,7 +135,7 @@ class RulePatternEditor {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
 							var iv = sourceDef.getIntGridValueDef(intGridVal);
 							if( iv.tile!=null )
-								jCell.prepend( sourceDef._project.resolveTileRectAsCanvas(iv.tile).addClass("icon") );
+								jCell.prepend( sourceDef._project.resolveTileRectAsHtmlImg(iv.tile).addClass("valueIcon") );
 							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
 						else
@@ -156,7 +155,7 @@ class RulePatternEditor {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
 							var iv = sourceDef.getIntGridValueDef(intGridVal);
 							if( iv.tile!=null )
-								jCell.prepend( sourceDef._project.resolveTileRectAsCanvas(iv.tile).addClass("icon") );
+								jCell.prepend( sourceDef._project.resolveTileRectAsHtmlImg(iv.tile).addClass("valueIcon") );
 							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
 						else

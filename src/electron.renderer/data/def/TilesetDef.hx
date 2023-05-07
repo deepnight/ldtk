@@ -824,7 +824,7 @@ class TilesetDef {
 	}
 
 
-	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
+	public function createTileHtmlImageFromTileId(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =
 			if( isAtlasLoaded() && isTileInBounds(tid) ) {
 				var imgData = getOrLoadTilesetImage();
@@ -837,14 +837,37 @@ class TilesetDef {
 			else
 				new J( new js.html.Image() );
 
-			if( imgWid!=null ) {
-				jImg.css({
-					width:imgWid+"px",
-					height:(imgHei!=null?imgHei:imgWid)+"px",
-					imageRendering: "pixelated",
-				});
-			}
+		if( imgWid!=null ) {
+			jImg.css({
+				width:imgWid+"px",
+				height:(imgHei!=null?imgHei:imgWid)+"px",
+				imageRendering: "pixelated",
+			});
+		}
+		return jImg;
+	}
 
+
+	public function createTileHtmlImageFromRect(r:ldtk.Json.TilesetRect, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
+		var jImg =
+			if( isAtlasLoaded() && isTileRectInBounds(r) ) {
+				var imgData = getOrLoadTilesetImage();
+				var subPixels = imgData.pixels.sub(r.x, r.y, r.w, r.h);
+				var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+				var img = new js.html.Image(subPixels.width, subPixels.height);
+				img.src = 'data:image/png;base64,$b64';
+				new J(img);
+			}
+			else
+				new J( new js.html.Image() );
+
+		if( imgWid!=null ) {
+			jImg.css({
+				width:imgWid+"px",
+				height:(imgHei!=null?imgHei:imgWid)+"px",
+				imageRendering: "pixelated",
+			});
+		}
 		return jImg;
 	}
 
