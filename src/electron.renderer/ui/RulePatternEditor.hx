@@ -121,7 +121,7 @@ class RulePatternEditor {
 				}
 			}
 
-			// Cell color
+			// Cell value (color + tile)
 			if( !isCenter || !previewMode ) {
 				var ruleValue = rule.get(cx,cy);
 				if( ruleValue!=0 ) {
@@ -134,6 +134,9 @@ class RulePatternEditor {
 						}
 						else if( sourceDef.hasIntGridValue(intGridVal) ) {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
+							var iv = sourceDef.getIntGridValueDef(intGridVal);
+							if( iv.tile!=null )
+								jCell.prepend( sourceDef._project.resolveTileRectAsCanvas(iv.tile).addClass("icon") );
 							addExplain(jCell, 'This cell should contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
 						else
@@ -151,6 +154,9 @@ class RulePatternEditor {
 						}
 						else if( sourceDef.hasIntGridValue(intGridVal) ) {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
+							var iv = sourceDef.getIntGridValueDef(intGridVal);
+							if( iv.tile!=null )
+								jCell.prepend( sourceDef._project.resolveTileRectAsCanvas(iv.tile).addClass("icon") );
 							addExplain(jCell, 'This cell should NOT contain "${sourceDef.getIntGridValueDisplayName(intGridVal)}" to match.');
 						}
 						else

@@ -3,7 +3,7 @@ package data.def;
 import data.DataTypes;
 
 class LayerDef {
-	var _project : Project;
+	public var _project : Project;
 
 	@:allow(data.Definitions)
 	public var uid(default,null) : Int;

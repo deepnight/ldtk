@@ -8528,7 +8528,7 @@ $patternSize : 32px;
 		}
 		.cell.center {
 			opacity: 1;
-			canvas {
+			canvas.tilePreview {
 				box-sizing: border-box;
 				padding: 2px;
 
@@ -8662,10 +8662,17 @@ $patternSize : 32px;
 			border-radius: 4px;
 		}
 
-		canvas {
+		canvas.tilePreview {
 			pointer-events: none;
 			position: absolute;
 			z-index: 2;
+			image-rendering: pixelated;
+		}
+
+		canvas.icon {
+			pointer-events: none;
+			position: absolute;
+			z-index: 0;
 			image-rendering: pixelated;
 		}
 	}
