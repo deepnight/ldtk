@@ -55,7 +55,7 @@ class JsTools {
 	/**
 		Create a Tileset <select/>
 	**/
-	public static function createTilesetSelect(project:data.Project, ?jSelect:js.jquery.JQuery, curUid:Null<Int>, allowNull=false, onPick:Null<Int>->Void) {
+	public static function createTilesetSelect(project:data.Project, ?jSelect:js.jquery.JQuery, curUid:Null<Int>, allowNull=false, ?nullLabel:String, onPick:Null<Int>->Void) {
 		// Init select
 		if( jSelect!=null ) {
 			if( !jSelect.is("select") )
@@ -68,8 +68,10 @@ class JsTools {
 		jSelect.removeClass("noValue");
 
 		// Null value
+		if( nullLabel==null )
+			nullLabel = "Select a tileset";
 		if( allowNull || curUid==null ) {
-			var jOpt = new J('<option value="-1">-- Select a tileset --</option>');
+			var jOpt = new J('<option value="-1">-- $nullLabel --</option>');
 			jOpt.appendTo(jSelect);
 		}
 
@@ -1082,21 +1084,28 @@ class JsTools {
 				jTileCanvas.css("height", cur.h * scale );
 				td.drawTileRectToCanvas(jTileCanvas, cur);
 			}
+			ui.Tip.attach(jTileCanvas, "Use LEFT click to pick a tile or RIGHT click to remove it.");
 
 			// Open picker
 			if( active )
-				jTileCanvas.click( (ev:js.jquery.Event)->{
-					var m = new ui.Modal();
-					m.addClass("singleTilePicker");
+				jTileCanvas.mousedown( (ev:js.jquery.Event)->{
+					switch ev.button {
+						case 0:
+							var m = new ui.Modal();
+							m.addClass("singleTilePicker");
 
-					var tp = new ui.Tileset(m.jContent, td, RectOnly);
-					tp.useSavedSelections = false;
-					tp.setSelectedRect(cur);
-					tp.onSelectAnything = ()->{
-						onPick( tp.getSelectedRect() );
-						m.close();
+							var tp = new ui.Tileset(m.jContent, td, RectOnly);
+							tp.useSavedSelections = false;
+							tp.setSelectedRect(cur);
+							tp.onSelectAnything = ()->{
+								onPick( tp.getSelectedRect() );
+								m.close();
+							}
+							tp.focusOnSelection(true);
+
+						case _:
+							onPick(null);
 					}
-					tp.focusOnSelection(true);
 				});
 		}
 		else {

@@ -451,7 +451,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 				// Icons tileset
 				var jSelect = jForm.find(".valuesIconsTileset");
-				JsTools.createTilesetSelect(project, jSelect, intGridValuesIconsTdUid, true, (tilesetDefUid)->{
+				JsTools.createTilesetSelect(project, jSelect, intGridValuesIconsTdUid, true, "No icon", (tilesetDefUid)->{
 					for(iv in cur.getAllIntGridValues())
 						iv.tile = null;
 
@@ -637,6 +637,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					jForm.find("select[name=tilesets]"),
 					cur.tilesetDefUid,
 					true,
+					"No auto-layer rendering",
 					(uid)->{
 						if( uid==null )
 							cur.tilesetDefUid = null;
