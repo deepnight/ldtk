@@ -1707,6 +1707,19 @@
 			],
 			"additionalProperties": false,
 			"properties": {
+				"tile": {
+					"description": "",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"color": {
 					"description": "",
 					"type": [
