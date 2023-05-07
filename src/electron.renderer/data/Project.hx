@@ -1231,4 +1231,16 @@ class Project {
 	public function getCustomCommmands(when:ldtk.Json.CustomCommandTrigger) {
 		return customCommands.filter( cmd->cmd.when==when );
 	}
+
+
+	public function resolveTileRectAsCanvas(r:ldtk.Json.TilesetRect, sizePx=32) : Null<js.jquery.JQuery> {
+		if( r==null )
+			return null;
+
+		var td = defs.getTilesetDef(r.tilesetUid);
+		if( td==null )
+			return null;
+
+		return td.createCanvasFromTileRect(r, sizePx);
+	}
 }

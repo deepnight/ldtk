@@ -6194,10 +6194,32 @@ canvas#webgl {
 
 		&.intGridValues {
 			.intGridValue {
-				min-width: 1.5em;
+				position: relative;
+				width: 32px;
+				height: 32px;
 				text-align: center;
 				border: 1px solid white;
 				border-radius: 3px;
+				overflow: hidden;
+
+				.index,
+				canvas {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100% !important;
+					height: 100% !important;
+				}
+				.index {
+					z-index: 1;
+				}
+				&.hasIcon .index {
+					text-shadow: 0 0 2px black, 0 0 2px black, 0 1px 1px black;
+				}
+				canvas {
+					object-fit: cover;
+					object-position: center;
+				}
 			}
 		}
 	}
