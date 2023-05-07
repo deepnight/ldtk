@@ -1,8 +1,10 @@
 # 1.3.3
 
+ - **Added custom UI icons for IntGrid layer values.**
  - **If you change the "grid size" of a Layer or a Tileset, LDtk will now try to remap all existing data to this new grid size (if that's possible).**
  - When using the "Single layer mode", the others layers are now faded away a bit more.
  - Hiding details (`CTRL-H`) now also hides the grid
+ - Added quick search for IntGrid palettes in the left sidebar.
  - Fixed visibility icon in layer list when hiding details
  - Fixed various minor bugs in the new tool options from the left panel.
  - Renaming a project will now also rename sibling `.meta` files (Unity) accordingly.
