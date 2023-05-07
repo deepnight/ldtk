@@ -10,7 +10,7 @@
 	},
 	"iid": "a243f240-7820-11ed-b6fd-f550906acdc3",
 	"jsonVersion": "1.3.3",
-	"appBuildId": 467575,
+	"appBuildId": 467630,
 	"nextUid": 40,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -62,7 +62,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF" }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 } }],
 			"autoRuleGroups": [
 				{ "uid": 12, "name": "Stamp", "active": true, "isOptional": false, "rules": [
 					{

@@ -10,7 +10,7 @@
 	},
 	"iid": "a302fc80-7820-11ed-b6fd-0944dd561895",
 	"jsonVersion": "1.3.3",
-	"appBuildId": 467628,
+	"appBuildId": 467630,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -186,8 +186,8 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [
-				{ "value": 1, "identifier": "dirt", "color": "#733E39", "tile": { "tilesetUid": 2, "x": 256, "y": 272, "w": 16, "h": 16 } },
-				{ "value": 3, "identifier": "stone", "color": "#EAD4AA", "tile": { "tilesetUid": 2, "x": 96, "y": 0, "w": 16, "h": 16 } },
+				{ "value": 1, "identifier": "dirt", "color": "#733E39", "tile": { "tilesetUid": 2, "x": 160, "y": 192, "w": 16, "h": 16 } },
+				{ "value": 3, "identifier": "stone", "color": "#EAD4AA", "tile": { "tilesetUid": 2, "x": 224, "y": 96, "w": 16, "h": 16 } },
 				{ "value": 2, "identifier": "ladder", "color": "#0099DB", "tile": { "tilesetUid": 2, "x": 96, "y": 144, "w": 16, "h": 16 } }
 			],
 			"autoRuleGroups": [
