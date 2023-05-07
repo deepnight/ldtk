@@ -452,8 +452,6 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Icons tileset
 				var jSelect = jForm.find(".valuesIconsTileset");
 				JsTools.createTilesetSelect(project, jSelect, intGridValuesIconsTdUid, true, (tilesetDefUid)->{
-					N.debug(tilesetDefUid);
-
 					for(iv in cur.getAllIntGridValues())
 						iv.tile = null;
 
