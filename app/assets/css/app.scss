@@ -9055,20 +9055,19 @@ $patternSize : 32px;
 						}
 
 						&:hover {
-							outline: 1px solid white;
-							outline-offset: -1px;
+							outline: 1px dashed white;
 						}
 
 						&.active {
-							// border-color: white !important;
 							outline: 2px solid white;
-							outline-offset: -2px;
-							// box-shadow: 0px 0px 8px $red;
 							.value {
 								color: $bgDark;
 								background-color: white;
 								box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
 							}
+						}
+						&:not(.active) {
+							opacity: 0.75;
 						}
 					}
 					li.any {
