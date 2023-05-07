@@ -559,6 +559,13 @@ class Definitions {
 		_project.tidy();
 	}
 
+	public function getTilesetDefFrom(relPath:String) : Null<data.def.TilesetDef> {
+		for(td in tilesets)
+			if(td.relPath == relPath)
+				return td;
+		return null;
+	}
+
 	public function getTilesetDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TilesetDef> {
 		for(td in tilesets)
 			if( td.uid==id || td.identifier==id )

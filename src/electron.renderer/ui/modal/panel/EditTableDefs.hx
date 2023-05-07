@@ -1,4 +1,5 @@
 package ui.modal.panel;
+import misc.Tabulator.createTabulator;
 import cdb.Data.ColumnType;
 import haxe.DynamicAccess;
 import tabulator.Tabulator;
