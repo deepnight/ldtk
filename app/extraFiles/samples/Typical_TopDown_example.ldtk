@@ -10,7 +10,7 @@
 	},
 	"iid": "a3386460-7820-11ed-b6fd-157a63b4d02d",
 	"jsonVersion": "1.3.3",
-	"appBuildId": 467630,
+	"appBuildId": 467631,
 	"nextUid": 160,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -1241,7 +1241,7 @@
 							"__grid": [10,10],
 							"__pivot": [0.5,0.5],
 							"__tags": ["actor"],
-							"__tile": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
+							"__tile": { "tilesetUid": 104, "x": 0, "y": 240, "w": 16, "h": 16 },
 							"__smartColor": "#03CB7C",
 							"iid": "9faf4260-c640-11ed-8430-2b1c51694f4d",
 							"width": 16,
