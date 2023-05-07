@@ -6101,6 +6101,10 @@ canvas#webgl {
 		grid-template-rows: min-content auto fit-content(24px);
 	}
 
+	&.intGrid {
+		grid-template-rows: min-content auto fit-content(24px);
+	}
+
 	&.invalid {
 		background: url("../img/stripes.png");
 		.warning {

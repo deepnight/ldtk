@@ -1,8 +1,12 @@
 package ui.palette;
 
 class IntGridPalette extends ui.ToolPalette {
+	var searchMemory : Null<String>;
+	var search : QuickSearch;
+
 	public function new(t) {
 		super(t);
+		jContent.addClass("intGrid");
 	}
 
 	override function doRender() {
@@ -10,6 +14,9 @@ class IntGridPalette extends ui.ToolPalette {
 
 		jList = new J('<ul class="intGridValues niceList"/>');
 		jList.appendTo(jContent);
+
+		search = new ui.QuickSearch(jList);
+		search.jWrapper.prependTo(jContent);
 
 		var y = 0;
 		for( intGridVal in tool.curLayerInstance.def.getAllIntGridValues() ) {
@@ -46,7 +53,18 @@ class IntGridPalette extends ui.ToolPalette {
 				render();
 			});
 		}
+
+		if( searchMemory!=null )
+			search.run(searchMemory);
+		search.onSearch = (s)->searchMemory = s;
 	}
+
+
+	override function onHide() {
+		super.onHide();
+		search.clear();
+	}
+
 
 	override function focusOnSelection(immediate=false) {
 		super.focusOnSelection();
