@@ -21,13 +21,9 @@ extern class CellComponent {
 }
 
 function createTabulator(element:EitherType<String, js.html.Element>, columns:Array<cdb.Data.Column>, lines:Array<Dynamic>, sheet:cdb.Sheet, project:data.Project) {
-	var data = createData(project, sheet, lines);
-	var columns = createColumns(columns);
-
-	// TODO having multiple tabulators with the same id is bad practise
 	var tabulator = new Tabulator(element, {
-		data: data,
-		columns: columns,
+		data: createData(lines, columns, project),
+		columns: createColumns(columns),
 		movableRows: true,
 		movableColumns: true,
 	});
@@ -52,12 +48,11 @@ function createTabulator(element:EitherType<String, js.html.Element>, columns:Ar
 	// 		case _:
 	// 			// We dont need to handle clicks on all types
 			
-	
+
 		// }
 	// });
 }
 function createColumns(columns:Array<cdb.Data.Column>) {
-	// trace(columns);
 	var cols = [];
 	for (column in columns) {
 		var col:DynamicAccess<Dynamic> = {};
@@ -78,7 +73,7 @@ function createColumns(columns:Array<cdb.Data.Column>) {
 	}
 	return cols;
 }
-function createData(project:data.Project, sheet:cdb.Sheet, original_lines:Array<Dynamic>) {
+function createData(original_lines:Array<Dynamic>, columns:Array<Column>, project:data.Project) {
 	// TODO
 	// This has got to be the stupidest way to clone an array
 	var s = new haxe.Serializer();
@@ -87,7 +82,7 @@ function createData(project:data.Project, sheet:cdb.Sheet, original_lines:Array<
 	var lines:Array<Dynamic> = us.unserialize();
 
 	var columnTypes:DynamicAccess<ColumnType> = {}
-	for (col in sheet.columns) {
+	for (col in columns) {
 		columnTypes.set(col.name, col.type);
 	}
 
