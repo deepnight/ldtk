@@ -1,4 +1,6 @@
 package ui.modal.panel;
+import cdb.Data.ColumnType;
+import haxe.DynamicAccess;
 import tabulator.Tabulator;
 
 class EditTableDefs extends ui.modal.Panel {
@@ -86,16 +88,7 @@ class EditTableDefs extends ui.modal.Panel {
 		jTabEditor.empty();
 
 		if (tabulatorView) {
-			var data = createData(project, sheet);
-			var columns = createColumns(sheet.columns);
-
-			jContent.find("#tableEditor").append("<div id=tabulator></div>");
-			tabulator = new Tabulator("#tabulator", {
-				data: data,
-				columns: columns,
-				movableRows: true,
-				movableColumns: true,
-			});
+			createTabulator("#tableEditor", curSheet.columns, curSheet.lines, curSheet, project);
 			// tabulator.on("cellEdited", function(cell) {
 			// 	// TODO Implement changing primary keys here aswell
 			// 	var id = cell.getData().id;

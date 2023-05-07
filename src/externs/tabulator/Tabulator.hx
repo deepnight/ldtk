@@ -1,13 +1,16 @@
 // Source: https://www.npmjs.com/package/tabulator-tables
 package tabulator;
+import js.html.Element;
+import haxe.extern.EitherType;
+import js.jquery.JQuery;
 import haxe.DynamicAccess;
 import cdb.Data;
 
 @:jsRequire("tabulator-tables")
 extern class Tabulator {
-	function new(element:String, options:Dynamic);
+	function new(element:EitherType<String, js.html.Element>, options:Dynamic);
 
-	public function on(eventName:String, cb:(args:Dynamic) -> Void):Void;
+	public function on(eventName:String, cb:(e:Dynamic, cell:Dynamic) -> Void):Void;
 }
 
 @:jsRequire("tabulator-tables")
@@ -17,8 +20,44 @@ extern class CellComponent {
 	public function getData():Dynamic;
 }
 
+function createTabulator(element:EitherType<String, js.html.Element>, columns:Array<cdb.Data.Column>, lines:Array<Dynamic>, sheet:cdb.Sheet, project:data.Project) {
+	var data = createData(project, sheet, lines);
+	var columns = createColumns(columns);
+
+	// TODO having multiple tabulators with the same id is bad practise
+	var tabulator = new Tabulator(element, {
+		data: data,
+		columns: columns,
+		movableRows: true,
+		movableColumns: true,
+	});
+	// tabulator.on("cellClick", function(e, cell) {
+	// 	var columnTypes:DynamicAccess<ColumnType> = {};
+	// 	for (col in sheet.columns) {
+	// 		columnTypes.set(col.name, col.type);
+	// 	}
+	// 	var colType = columnTypes.get(cell.getField());
+
+	// 	switch colType {
+	// 		case TList:
+	// 			var row:JQuery = cell.getRow().getElement();
+
+	// 			var ele = js.Browser.document.createElement("div");
+	// 			ele.id = "contara";
+	// 			row.append(ele);
+
+	// 			var ref = sheet.getSub(sheet.columns[5]);
+	// 			trace(ref.name);
+	// 			createTabulator("#contara", ref.columns, ref.lines, ref, project);
+	// 		case _:
+	// 			// We dont need to handle clicks on all types
+			
+	
+		// }
+	// });
+}
 function createColumns(columns:Array<cdb.Data.Column>) {
-	trace(columns);
+	// trace(columns);
 	var cols = [];
 	for (column in columns) {
 		var col:DynamicAccess<Dynamic> = {};
@@ -39,11 +78,11 @@ function createColumns(columns:Array<cdb.Data.Column>) {
 	}
 	return cols;
 }
-function createData(project:data.Project, sheet:cdb.Sheet) {
+function createData(project:data.Project, sheet:cdb.Sheet, original_lines:Array<Dynamic>) {
 	// TODO
 	// This has got to be the stupidest way to clone an array
 	var s = new haxe.Serializer();
-	s.serialize(sheet.lines);
+	s.serialize(original_lines);
 	var us = new haxe.Unserializer(s.toString());
 	var lines:Array<Dynamic> = us.unserialize();
 
