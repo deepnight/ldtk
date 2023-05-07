@@ -969,6 +969,7 @@ class JsTools {
 		tilesetId: Null<Int>,
 		selectMode: TilesetSelectionMode=Free,
 		tileIds: Array<Int>,
+		useSavedSelections=true,
 		onPick: (tileIds:Array<Int>)->Void
 	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
@@ -1033,6 +1034,7 @@ class JsTools {
 				m.addClass("singleTilePicker");
 
 				var tp = new ui.Tileset(m.jContent, td, selectMode);
+				tp.useSavedSelections = useSavedSelections;
 				tp.setSelectedTileIds(tileIds);
 				tp.onClickOutOfBounds = m.close;
 				if( selectMode==PickAndClose )

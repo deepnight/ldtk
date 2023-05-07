@@ -86,6 +86,7 @@ class RuleEditor extends ui.modal.Dialog {
 			Editor.ME.curLayerInstance.getTilesetUid(),
 			rule.tileMode==Single?Free:RectOnly,
 			rule.tileIds,
+			false,
 			function(tids) {
 				rule.tileIds = tids.copy();
 				editor.ge.emit( LayerRuleChanged(rule) );
