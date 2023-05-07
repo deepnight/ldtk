@@ -33,7 +33,7 @@
  - Fixed missing intGrid values in mass out-of-bounds policy editor
 
 
-# 1.3.0 - Multi-worlds preview
+# 1.3.0 - Multi-worlds and Quality of life
 
 ## Experimental Multi-worlds support!
 ![](1.3.0/multiWorlds.png)
