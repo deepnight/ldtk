@@ -10,7 +10,7 @@
 	},
 	"iid": "a302fc80-7820-11ed-b6fd-0944dd561895",
 	"jsonVersion": "1.3.3",
-	"appBuildId": 467575,
+	"appBuildId": 467624,
 	"nextUid": 105,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -186,9 +186,9 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [
-				{ "value": 1, "identifier": "dirt", "color": "#93573E" },
-				{ "value": 2, "identifier": "ladder", "color": "#BBAA96" },
-				{ "value": 3, "identifier": "stone", "color": "#BD9261" }
+				{ "value": 1, "identifier": "dirt", "color": "#733E39", "tile": { "tilesetUid": 2, "x": 256, "y": 272, "w": 16, "h": 16 } },
+				{ "value": 3, "identifier": "stone", "color": "#EAD4AA", "tile": { "tilesetUid": 2, "x": 256, "y": 96, "w": 16, "h": 16 } },
+				{ "value": 2, "identifier": "ladder", "color": "#0099DB", "tile": { "tilesetUid": 2, "x": 96, "y": 144, "w": 16, "h": 16 } }
 			],
 			"autoRuleGroups": [
 				{ "uid": 101, "name": "Inner wall fog", "active": true, "isOptional": false, "rules": [
@@ -1445,7 +1445,7 @@
 			"showName": true,
 			"tilesetId": 104,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 0, "y": 240, "w": 16, "h": 16, "tilesetUid": 104 },
+			"tileRect": { "tilesetUid": 104, "x": 0, "y": 240, "w": 16, "h": 16 },
 			"nineSliceBorders": [],
 			"maxCount": 1,
 			"limitScope": "PerWorld",
@@ -1509,7 +1509,7 @@
 			"showName": true,
 			"tilesetId": 104,
 			"tileRenderMode": "FitInside",
-			"tileRect": { "x": 160, "y": 560, "w": 16, "h": 16, "tilesetUid": 104 },
+			"tileRect": { "tilesetUid": 104, "x": 160, "y": 560, "w": 16, "h": 16 },
 			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",
@@ -1573,7 +1573,7 @@
 			"showName": true,
 			"tilesetId": 104,
 			"tileRenderMode": "Cover",
-			"tileRect": { "x": 96, "y": 0, "w": 16, "h": 16, "tilesetUid": 104 },
+			"tileRect": { "tilesetUid": 104, "x": 96, "y": 0, "w": 16, "h": 16 },
 			"nineSliceBorders": [],
 			"maxCount": 0,
 			"limitScope": "PerLevel",

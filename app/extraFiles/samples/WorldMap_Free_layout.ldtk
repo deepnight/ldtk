@@ -10,7 +10,7 @@
 	},
 	"iid": "a3619740-7820-11ed-b6fd-4b64aa0352a1",
 	"jsonVersion": "1.3.3",
-	"appBuildId": 467575,
+	"appBuildId": 467625,
 	"nextUid": 125,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -92,7 +92,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [ { "value": 1, "identifier": "walls", "color": "#B1824C" }, { "value": 2, "identifier": "water", "color": "#7297E5" } ],
+			"intGridValues": [ { "value": 1, "identifier": "walls", "color": "#B1824C", "tile": { "tilesetUid": 73, "x": 16, "y": 96, "w": 16, "h": 16 } }, { "value": 2, "identifier": "water", "color": "#7297E5", "tile": { "tilesetUid": 73, "x": 16, "y": 224, "w": 16, "h": 16 } } ],
 			"autoRuleGroups": [
 				{ "uid": 107, "name": "Wall inner shadows", "active": true, "isOptional": false, "rules": [
 					{
