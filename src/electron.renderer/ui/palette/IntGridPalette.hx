@@ -32,18 +32,8 @@ class IntGridPalette extends ui.ToolPalette {
 			}
 
 			// Value
-			var jVal = new J('<div class="intGridValue"></div>');
+			var jVal = JsTools.createIntGridValue(project, intGridVal);
 			jVal.appendTo(jLi);
-			jVal.append('<span class="index">${intGridVal.value}</span>');
-			jVal.css({
-				color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
-				borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
-				backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
-			});
-			if( intGridVal.tile!=null ) {
-				jVal.addClass("hasIcon");
-				jVal.append( project.resolveTileRectAsHtmlImg(intGridVal.tile) );
-			}
 
 			// Label
 			if( intGridVal.identifier!=null )

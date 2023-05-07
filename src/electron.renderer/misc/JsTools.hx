@@ -1085,7 +1085,7 @@ class JsTools {
 
 			// Open picker
 			if( active )
-				jTileCanvas.click( _->{
+				jTileCanvas.click( (ev:js.jquery.Event)->{
 					var m = new ui.Modal();
 					m.addClass("singleTilePicker");
 
@@ -1253,6 +1253,34 @@ class JsTools {
 		}
 		else
 			return target.indexOf(searchQuery)>=0;
+	}
+
+
+	public static function createIntGridValue(project:data.Project, ?iv:data.DataTypes.IntGridValueDefEditor, ?rawIv:ldtk.Json.IntGridValueDef) : js.jquery.JQuery {
+		if( iv==null )
+			iv = {
+				identifier: rawIv.identifier,
+				value: rawIv.value,
+				color: dn.Col.parseHex(rawIv.color),
+				tile: rawIv.tile,
+			}
+
+		var jVal = new J('<div class="intGridValue"></div>');
+		jVal.append('<span class="index">${iv.value}</span>');
+		jVal.css({
+			color: C.intToHex( iv.color.toWhite(0.5) ),
+			borderColor: C.intToHex( iv.color.toWhite(0.2) ),
+			backgroundColor: C.intToHex( iv.color.toBlack(0.5) ),
+		});
+		if( iv.tile!=null ) {
+			jVal.addClass("hasIcon");
+			jVal.append( project.resolveTileRectAsHtmlImg(iv.tile) );
+			jVal.find(".index").css({
+				color: iv.color.getAutoContrastCustom(0.4).toHex(),
+				backgroundColor: iv.color.toHex(),
+			});
+		}
+		return jVal;
 	}
 
 

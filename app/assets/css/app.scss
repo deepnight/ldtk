@@ -6191,40 +6191,49 @@ canvas#webgl {
 			// 	0px 0px 2px black inset,
 			// 	0px 0px 2px black inset;
 		}
+	}
+}
 
-		&.intGridValues {
-			.intGridValue {
-				position: relative;
-				width: 32px;
-				height: 32px;
-				border: 1px solid white;
-				border-radius: 3px;
-				overflow: hidden;
 
-				.index {
-					position: absolute;
-					z-index: 1;
-					width: 100%;
-					height: 100%;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					line-height: initial;
-				}
-				&.hasIcon .index {
-					text-shadow: 0 0 2px black, 0 0 2px black, 0 1px 1px black;
-				}
-				img {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100% !important;
-					height: 100% !important;
-					object-fit: cover;
-					object-position: center;
-				}
-			}
-		}
+.intGridValue {
+	position: relative;
+	width: 32px;
+	height: 32px;
+	border: 1px solid white;
+	border-radius: 2px;
+	overflow: hidden;
+
+	.index {
+		position: absolute;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		line-height: initial;
+	}
+
+	&:not(.hasIcon) .index {
+		width: 100%;
+		height: 100%;
+	}
+	&.hasIcon .index {
+		top: 0;
+		left: 0;
+		font-size: 8.5pt;
+		padding: 1px 2px;
+		border-bottom-right-radius: 3px;
+		// text-shadow: 0 0 2px black, 0 0 2px black, 0 -1px 1px black, 0 1px 1px black;
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover;
+		object-position: center;
 	}
 }
 
