@@ -20,6 +20,7 @@
  - **Added customizable UI color of layers**
  - **Added custom alpha per auto-layer rule: this alpha will affect the opacity of the resulting tile.**
  - **Added an option to fit current tileset in the editor side bar.**
+ - **Added custom min/max size limits to entities when then are resizables.**
  - **New "top-down" example map**
  - Re-organized all buttons near the tileset in the editor side bar.
  - Added sliders to all inputs in the rule Modulo window
@@ -31,6 +32,7 @@
  - Added "duplicate group" action to rule groups context menu
  - Fixed popped-out tile palette not closing quickly enough
  - Fixed missing intGrid values in mass out-of-bounds policy editor
+ - Updated old sample maps
 
 
 # 1.3.0 - Multi-worlds and Quality of life
