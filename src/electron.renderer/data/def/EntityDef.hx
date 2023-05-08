@@ -31,6 +31,10 @@ class EntityDef {
 
 	public var resizableX : Bool;
 	public var resizableY : Bool;
+	public var minWidth : Null<Int>;
+	public var maxWidth : Null<Int>;
+	public var minHeight : Null<Int>;
+	public var maxHeight : Null<Int>;
 	public var keepAspectRatio : Bool;
 	public var pivotX(default,set) : Float;
 	public var pivotY(default,set) : Float;
@@ -143,6 +147,10 @@ class EntityDef {
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.resizableX = JsonTools.readBool( json.resizableX, false );
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
+		o.minWidth = JsonTools.readNullableInt( json.minWidth );
+		o.maxWidth = JsonTools.readNullableInt( json.maxWidth );
+		o.minHeight = JsonTools.readNullableInt( json.minHeight );
+		o.maxHeight = JsonTools.readNullableInt( json.maxHeight );
 		o.keepAspectRatio = JsonTools.readBool( json.keepAspectRatio, false );
 		o.doc = JsonTools.unescapeString( json.doc );
 
@@ -196,6 +204,10 @@ class EntityDef {
 			height: height,
 			resizableX: resizableX,
 			resizableY: resizableY,
+			minWidth: minWidth,
+			maxWidth: maxWidth,
+			minHeight: minHeight,
+			maxHeight: maxHeight,
 			keepAspectRatio: keepAspectRatio,
 			tileOpacity: JsonTools.writeFloat(tileOpacity),
 			fillOpacity: JsonTools.writeFloat(fillOpacity),

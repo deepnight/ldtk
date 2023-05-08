@@ -280,27 +280,16 @@ class Input<T> {
 					i;
 				}
 
-			// case TEnum(eRef,params):
-			// 	var type = eRef.get();
-			// 	var fullPath = type.module.length==0 ? type.name : type.module+"."+type.name;
-			// 	var packExpr : Expr = {
-			// 		expr: EConst( CIdent(type.module) ),
-			// 		// expr: EConst( CIdent(type.pack.join(".")) ),
-			// 		pos: variable.pos,
-			// 	}
-			// 	var enumExpr : Expr = {
-			// 		expr: EField( packExpr, type.name ),
-			// 		pos: variable.pos,
-			// 	}
-
-			// 	return macro {
-			// 		new form.input.EnumSelect(
-			// 			$formInput,
-			// 			$enumExpr,
-			// 			function() return cast $variable,
-			// 			function(v) $variable = cast v
-			// 		);
-			// 	}
+			case TAbstract(_.toString()=>"Null", [ TAbstract(_.toString()=>"Int", params) ]) :
+				return macro {
+					var i = new form.input.IntInput(
+						$formInput,
+						function() return $variable,
+						function(v) $variable = v
+					);
+					i.allowNull = true;
+					i;
+				}
 
 
 			case TAbstract(t, params):

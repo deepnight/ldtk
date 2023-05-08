@@ -9253,6 +9253,24 @@ $patternSize : 32px;
 			width: calc( 100% - 16px );
 			outline: 1px solid $bgLight;
 			outline-offset: -1px;
+
+			.minMax {
+				margin-left: 16px;
+				display: flex;
+				align-items: center;
+				span {
+					flex: 0 1 0;
+					opacity: 0.6;
+					padding: 0 3px;
+					&.sep {
+						margin-left: 16px;
+					}
+				}
+				input {
+					flex: 1 1 32px;
+					width: 0;
+				}
+			}
 		}
 
 
