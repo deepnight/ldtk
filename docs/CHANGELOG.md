@@ -1,6 +1,7 @@
 # 1.3.3
 
  - **Added custom UI icons for IntGrid layer values.**
+ - **Added custom min/max size limits to entities when then are resizables.**
  - **If you change the "grid size" of a Layer or a Tileset, LDtk will now try to remap all existing data to this new grid size (if that's possible).**
  - When using the "Single layer mode", the others layers are now faded away a bit more.
  - Hiding details (`CTRL-H`) now also hides the grid
@@ -9,6 +10,7 @@
  - Fixed various minor bugs in the new tool options from the left panel.
  - Renaming a project will now also rename sibling `.meta` files (Unity) accordingly.
  - Fixed message dialog size
+ - Updated old sample maps
 
 # 1.3.2
 
@@ -20,7 +22,6 @@
  - **Added customizable UI color of layers**
  - **Added custom alpha per auto-layer rule: this alpha will affect the opacity of the resulting tile.**
  - **Added an option to fit current tileset in the editor side bar.**
- - **Added custom min/max size limits to entities when then are resizables.**
  - **New "top-down" example map**
  - Re-organized all buttons near the tileset in the editor side bar.
  - Added sliders to all inputs in the rule Modulo window
@@ -32,7 +33,6 @@
  - Added "duplicate group" action to rule groups context menu
  - Fixed popped-out tile palette not closing quickly enough
  - Fixed missing intGrid values in mass out-of-bounds policy editor
- - Updated old sample maps
 
 
 # 1.3.0 - Multi-worlds and Quality of life
