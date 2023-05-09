@@ -114,11 +114,14 @@ class Input<T> {
 				jInput.removeClass(ac.className);
 	}
 
-	public function enableSlider(speed=1.0) {
+	public function enableSlider(speed=1.0, showIcon=true) {
 		if( getSlideDisplayValue(0)==null )
 			throw "Slider is not supported for this Input type";
 
 		jInput.addClass("slider");
+		if( !showIcon )
+			jInput.addClass("hideSliderIcon");
+
 		var startX = -1.;
 		var threshold = 3;
 

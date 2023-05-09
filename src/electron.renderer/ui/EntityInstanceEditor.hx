@@ -194,6 +194,7 @@ class EntityInstanceEditor extends dn.Process {
 
 	function updateInstancePropsForm() {
 		jPropsForm.find("*").off();
+		ui.Tip.clear();
 
 		// Form header
 		jPropsForm.find("header .edit").click( function(ev) {
@@ -224,7 +225,7 @@ class EntityInstanceEditor extends dn.Process {
 		// X
 		var i = Input.linkToHtmlInput(ei.x, jCoords.find("[name=x]"));
 		i.setBounds(0, editor.curLevel.pxWid);
-		i.enableSlider(sliderSpeed);
+		i.enableSlider(sliderSpeed, false);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 		if( UNIT_GRID )
@@ -233,7 +234,7 @@ class EntityInstanceEditor extends dn.Process {
 		// Y
 		var i = Input.linkToHtmlInput(ei.y, jCoords.find("[name=y]"));
 		i.setBounds(0, editor.curLevel.pxHei);
-		i.enableSlider(sliderSpeed);
+		i.enableSlider(sliderSpeed, false);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
 		if( UNIT_GRID )
@@ -246,7 +247,7 @@ class EntityInstanceEditor extends dn.Process {
 			(v)->ei.customWidth = v
 		);
 		i.setEnabled( ei.def.resizableX );
-		i.enableSlider(sliderSpeed);
+		i.enableSlider(sliderSpeed, false);
 		i.setBounds(ei.def.minWidth==null ? 1 : ei.def.minWidth, ei.def.maxWidth);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();
@@ -260,7 +261,7 @@ class EntityInstanceEditor extends dn.Process {
 			(v)->ei.customHeight = v
 		);
 		i.setEnabled( ei.def.resizableY );
-		i.enableSlider(sliderSpeed);
+		i.enableSlider(sliderSpeed, false);
 		i.setBounds(ei.def.minHeight==null ? 1 : ei.def.minHeight, ei.def.maxHeight);
 		i.linkEvent( EntityInstanceChanged(ei) );
 		i.onChange = ()->onEntityFieldChanged();

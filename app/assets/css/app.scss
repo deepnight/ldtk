@@ -2228,11 +2228,14 @@ input.slider:not(:disabled) {
 	cursor: ew-resize;
 	flex: 1 0 48px;
 	box-sizing: content-box;
-	padding-right: 20px;
 
-	background-image: url("../icons/slide.svg");
-	background-repeat: no-repeat;
-	background-position: right 4px center;
+	&:not(.hideSliderIcon) {
+		padding-right: 20px;
+
+		background-image: url("../icons/slide.svg");
+		background-repeat: no-repeat;
+		background-position: right 4px center;
+	}
 
 	&:hover {
 		outline: 1px solid $orange;

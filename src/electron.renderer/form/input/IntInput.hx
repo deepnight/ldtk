@@ -28,8 +28,8 @@ class IntInput extends form.Input<Int> {
 		return Std.string(v);
 	}
 
-	override public function enableSlider(speed:Float = 1.0) {
-		super.enableSlider(speed*11);
+	override public function enableSlider(speed:Float = 1.0, showIcon=true) {
+		super.enableSlider(speed*11, showIcon);
 	}
 
 	public function setBounds(min:Null<Float>, max:Null<Float>) {
