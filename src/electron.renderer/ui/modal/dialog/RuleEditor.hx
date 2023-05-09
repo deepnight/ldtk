@@ -17,11 +17,32 @@ class RuleEditor extends ui.modal.Dialog {
 		this.rule = rule;
 		sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef( layerDef.autoSourceLayerDefUid );
 
+		// Smart pick current IntGrid value
 		curValue = -1;
-		for(iv in layerDef.getAllIntGridValues()) {
-			curValue = iv.value;
-			break;
+		var counts = new Map();
+		var best = -1;
+		for(cy in 0...rule.size)
+		for(cx in 0...rule.size) {
+			var v = M.iabs( rule.get(cx,cy) );
+			if( v==0 || v==Const.AUTO_LAYER_ANYTHING )
+				continue;
+
+			if( !counts.exists(v) )
+				counts.set(v,1);
+			else
+				counts.set(v,counts.get(v)+1);
+
+			if( best<0 || counts.get(best)<counts.get(v) )
+				best = v;
 		}
+		curValue = best;
+
+		// Default current value
+		if( curValue<0 )
+			for(iv in layerDef.getAllIntGridValues()) {
+				curValue = iv.value;
+				break;
+			}
 		if( curValue==-1 )
 			curValue = Const.AUTO_LAYER_ANYTHING;
 
