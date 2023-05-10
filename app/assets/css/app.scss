@@ -9856,6 +9856,13 @@ $patternSize : 32px;
 						}
 					}
 				}
+
+				dl.form {
+					dt {
+						max-width: none;
+						white-space: nowrap;
+					}
+				}
 			}
 
 			&>.tileset {

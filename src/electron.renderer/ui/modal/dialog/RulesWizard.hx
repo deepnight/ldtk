@@ -74,6 +74,7 @@ class RulesWizard extends ui.modal.Dialog {
 
 	var mainValue : Int = 0;
 	var otherValue : Int = 0;
+	var breakOnMatch = true;
 
 	var _allFragmentEnums : Array<WallFragment> = [];
 
@@ -185,13 +186,20 @@ class RulesWizard extends ui.modal.Dialog {
 		editedGroup = source;
 		setName(source.name);
 
-		// Iterate all rules from this group, and try to match them with standard Fragments
-		for(rd in source.rules)
-		for(f in _allFragmentEnums)
-			if( matchRuleToFragment(rd,f) ) {
-				fragments.set(f, rd.tileIds.copy());
-				break;
-			}
+		var i = 0;
+		for(rd in source.rules) {
+			// Guess break on match setting
+			if( i==0 )
+				breakOnMatch = rd.breakOnMatch;
+
+			// Iterate all rules from this group, and try to match them with standard Fragments
+			for(f in _allFragmentEnums)
+				if( matchRuleToFragment(rd,f) ) {
+					fragments.set(f, rd.tileIds.copy());
+					break;
+				}
+			i++;
+		}
 	}
 
 
@@ -286,6 +294,22 @@ class RulesWizard extends ui.modal.Dialog {
 
 		updateIntGridValue("main", mainValue);
 		updateIntGridValue("other", otherValue);
+
+		updateOptionsForm();
+	}
+
+	function updateOptionsForm() {
+		var jForm = jContent.find("dl.form");
+		jForm.find("*").off();
+
+		var i = Input.linkToHtmlInput(breakOnMatch, jForm.find("[name=breakOnMatch]"));
+		i.invert();
+		i.onValueChange = (v)->{
+			breakOnMatch = v;
+			updateUI();
+		}
+
+		JsTools.parseComponents(jForm);
 	}
 
 
@@ -752,13 +776,13 @@ class RulesWizard extends ui.modal.Dialog {
 		rd.outOfBoundsValue = mainValue;
 
 		// Break on match flag
-		var opaque = true;
-		for(tid in rd.tileIds)
-			if( !td.isTileOpaque(tid) ) {
-				opaque = false;
-				break;
-			}
-		rd.breakOnMatch = opaque;
+		// var opaque = true;
+		// for(tid in rd.tileIds)
+		// 	if( !td.isTileOpaque(tid) ) {
+		// 		opaque = false;
+		// 		break;
+		// 	}
+		rd.breakOnMatch = breakOnMatch;
 
 		// Update flip X/Y flags
 		for(e in _allFragmentEnums)
