@@ -1,3 +1,7 @@
+# 1.3.4
+
+ - Fixed empty list of values in Rule Editor window, in pure auto-layers
+
 # 1.3.3
 
  - **Added custom UI icons for IntGrid layer values.**
