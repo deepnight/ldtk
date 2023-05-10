@@ -3,6 +3,7 @@
  - **Added custom UI icons for IntGrid layer values.**
  - **Added custom min/max size limits to entities when then are resizables.**
  - **If you change the "grid size" of a Layer or a Tileset, LDtk will now try to remap all existing data to this new grid size (if that's possible).**
+ - Added an option to allow/disallow tiles stacking in the Rules Assistant window.
  - Added multi-columns view to auto-layer rule editor.
  - When using the "Single layer mode", the others layers are now faded away a bit more.
  - Hiding details (`CTRL-H`) now also hides the grid
