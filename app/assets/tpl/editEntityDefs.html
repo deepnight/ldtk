@@ -66,26 +66,38 @@
 
 			<dt>
 				<label for="width">Size</label>
-				<div class="info">Minimal width and height in pixels of this entity.</div>
+				<div class="info">Default width and height (in pixels) of this entity.</div>
 			</dt>
 			<dd>
 				<input type="text" name="width" class="small" id="width"/>
 				<span>x</span>
 				<input type="text" name="height" class="small"/>
+
+				<div class="minMax">
+					<span>Min:</span>
+					<input type="text" name="minWidth" class="small"/>
+					<span>x</span>
+					<input type="text" name="minHeight" class="small"/>
+
+					<span class="sep">Max:</span>
+					<input type="text" name="maxWidth" class="small"/>
+					<span>x</span>
+					<input type="text" name="maxHeight" class="small"/>
+				</div>
 			</dd>
 			<dd>
 				<span>Resizable:</span>
-				<label for="resizableX">
+				<label for="resizableX" tip="bottom">
 					<input type="checkbox" id="resizableX" title="If checked, the entity instances will be horizontally resizable. In this case, the width above will define the a minimum size."/>
 					Width
 				</label>
 
-				<label for="resizableY">
+				<label for="resizableY" tip="bottom">
 					<input type="checkbox" id="resizableY" title="If checked, the entity instances will be vertically resizable. In this case, the height above will define the a minimum size."/>
 					Height
 				</label>
 
-				<label for="keepAspectRatio">
+				<label for="keepAspectRatio" tip="bottom">
 					<input type="checkbox" id="keepAspectRatio" title="If checked, the entity instance size will use the same aspect ratio as the size above."/>
 					Keep aspect ratio
 				</label>

@@ -3,11 +3,11 @@ package ui.ts;
 class TileToolPicker extends ui.Tileset {
 	var tool : tool.lt.TileTool;
 
-	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, tool:tool.lt.TileTool) {
+	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, tool:tool.lt.TileTool, saveUiState=false) {
 		this.tool = tool;
 		_internalSelectedIds = tool.getSelectedValue().ids;
 
-		super(jParent, td, Free);
+		super(jParent, td, Free, saveUiState);
 	}
 
 	override function getSelectedTileIds():Array<Int> {

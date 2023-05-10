@@ -474,6 +474,10 @@ namespace quicktype {
         LimitScope limit_scope;
         double line_opacity;
         int64_t max_count;
+        boost::optional<int64_t> max_height;
+        boost::optional<int64_t> max_width;
+        boost::optional<int64_t> min_height;
+        boost::optional<int64_t> min_width;
         std::vector<int64_t> nine_slice_borders;
         double pivot_x;
         double pivot_y;
@@ -574,6 +578,30 @@ namespace quicktype {
         const int64_t & get_max_count() const { return max_count; }
         int64_t & get_mutable_max_count() { return max_count; }
         void set_max_count(const int64_t & value) { this->max_count = value; }
+
+        /**
+         * Max pixel height (only applies if the entity is resizable on Y)
+         */
+        boost::optional<int64_t> get_max_height() const { return max_height; }
+        void set_max_height(boost::optional<int64_t> value) { this->max_height = value; }
+
+        /**
+         * Max pixel width (only applies if the entity is resizable on X)
+         */
+        boost::optional<int64_t> get_max_width() const { return max_width; }
+        void set_max_width(boost::optional<int64_t> value) { this->max_width = value; }
+
+        /**
+         * Min pixel height (only applies if the entity is resizable on Y)
+         */
+        boost::optional<int64_t> get_min_height() const { return min_height; }
+        void set_min_height(boost::optional<int64_t> value) { this->min_height = value; }
+
+        /**
+         * Min pixel width (only applies if the entity is resizable on X)
+         */
+        boost::optional<int64_t> get_min_width() const { return min_width; }
+        void set_min_width(boost::optional<int64_t> value) { this->min_width = value; }
 
         /**
          * An array of 4 dimensions for the up/right/down/left borders (in this order) when using
@@ -1088,6 +1116,7 @@ namespace quicktype {
         private:
         std::string color;
         boost::optional<std::string> identifier;
+        boost::optional<TilesetRectangle> tile;
         int64_t value;
 
         public:
@@ -1100,6 +1129,9 @@ namespace quicktype {
          */
         boost::optional<std::string> get_identifier() const { return identifier; }
         void set_identifier(boost::optional<std::string> value) { this->identifier = value; }
+
+        boost::optional<TilesetRectangle> get_tile() const { return tile; }
+        void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
 
         /**
          * The IntGrid value itself
@@ -3263,6 +3295,10 @@ namespace quicktype {
         x.set_limit_scope(j.at("limitScope").get<LimitScope>());
         x.set_line_opacity(j.at("lineOpacity").get<double>());
         x.set_max_count(j.at("maxCount").get<int64_t>());
+        x.set_max_height(get_stack_optional<int64_t>(j, "maxHeight"));
+        x.set_max_width(get_stack_optional<int64_t>(j, "maxWidth"));
+        x.set_min_height(get_stack_optional<int64_t>(j, "minHeight"));
+        x.set_min_width(get_stack_optional<int64_t>(j, "minWidth"));
         x.set_nine_slice_borders(j.at("nineSliceBorders").get<std::vector<int64_t>>());
         x.set_pivot_x(j.at("pivotX").get<double>());
         x.set_pivot_y(j.at("pivotY").get<double>());
@@ -3295,6 +3331,10 @@ namespace quicktype {
         j["limitScope"] = x.get_limit_scope();
         j["lineOpacity"] = x.get_line_opacity();
         j["maxCount"] = x.get_max_count();
+        j["maxHeight"] = x.get_max_height();
+        j["maxWidth"] = x.get_max_width();
+        j["minHeight"] = x.get_min_height();
+        j["minWidth"] = x.get_min_width();
         j["nineSliceBorders"] = x.get_nine_slice_borders();
         j["pivotX"] = x.get_pivot_x();
         j["pivotY"] = x.get_pivot_y();
@@ -3439,6 +3479,7 @@ namespace quicktype {
     inline void from_json(const json & j, IntGridValueDefinition& x) {
         x.set_color(j.at("color").get<std::string>());
         x.set_identifier(get_stack_optional<std::string>(j, "identifier"));
+        x.set_tile(get_stack_optional<TilesetRectangle>(j, "tile"));
         x.set_value(j.at("value").get<int64_t>());
     }
 
@@ -3446,6 +3487,7 @@ namespace quicktype {
         j = json::object();
         j["color"] = x.get_color();
         j["identifier"] = x.get_identifier();
+        j["tile"] = x.get_tile();
         j["value"] = x.get_value();
     }
 

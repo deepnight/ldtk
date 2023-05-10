@@ -55,7 +55,7 @@ class JsTools {
 	/**
 		Create a Tileset <select/>
 	**/
-	public static function createTilesetSelect(project:data.Project, ?jSelect:js.jquery.JQuery, curUid:Null<Int>, allowNull=false, onPick:Null<Int>->Void) {
+	public static function createTilesetSelect(project:data.Project, ?jSelect:js.jquery.JQuery, curUid:Null<Int>, allowNull=false, ?nullLabel:String, onPick:Null<Int>->Void) {
 		// Init select
 		if( jSelect!=null ) {
 			if( !jSelect.is("select") )
@@ -68,8 +68,10 @@ class JsTools {
 		jSelect.removeClass("noValue");
 
 		// Null value
+		if( nullLabel==null )
+			nullLabel = "Select a tileset";
 		if( allowNull || curUid==null ) {
-			var jOpt = new J('<option value="-1">-- Select a tileset --</option>');
+			var jOpt = new J('<option value="-1">-- $nullLabel --</option>');
 			jOpt.appendTo(jSelect);
 		}
 
@@ -967,6 +969,7 @@ class JsTools {
 		tilesetId: Null<Int>,
 		selectMode: TilesetSelectionMode=Free,
 		tileIds: Array<Int>,
+		useSavedSelections=true,
 		onPick: (tileIds:Array<Int>)->Void
 	) {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
@@ -1031,6 +1034,7 @@ class JsTools {
 				m.addClass("singleTilePicker");
 
 				var tp = new ui.Tileset(m.jContent, td, selectMode);
+				tp.useSavedSelections = useSavedSelections;
 				tp.setSelectedTileIds(tileIds);
 				tp.onClickOutOfBounds = m.close;
 				if( selectMode==PickAndClose )
@@ -1082,21 +1086,28 @@ class JsTools {
 				jTileCanvas.css("height", cur.h * scale );
 				td.drawTileRectToCanvas(jTileCanvas, cur);
 			}
+			ui.Tip.attach(jTileCanvas, "Use LEFT click to pick a tile or RIGHT click to remove it.");
 
 			// Open picker
 			if( active )
-				jTileCanvas.click( function(ev) {
-					var m = new ui.Modal();
-					m.addClass("singleTilePicker");
+				jTileCanvas.mousedown( (ev:js.jquery.Event)->{
+					switch ev.button {
+						case 0:
+							var m = new ui.Modal();
+							m.addClass("singleTilePicker");
 
-					var tp = new ui.Tileset(m.jContent, td, RectOnly);
-					tp.useSavedSelections = false;
-					tp.setSelectedRect(cur);
-					tp.onSelectAnything = ()->{
-						onPick( tp.getSelectedRect() );
-						m.close();
+							var tp = new ui.Tileset(m.jContent, td, RectOnly);
+							tp.useSavedSelections = false;
+							tp.setSelectedRect(cur);
+							tp.onSelectAnything = ()->{
+								onPick( tp.getSelectedRect() );
+								m.close();
+							}
+							tp.focusOnSelection(true);
+
+						case _:
+							onPick(null);
 					}
-					tp.focusOnSelection(true);
 				});
 		}
 		else {
@@ -1253,6 +1264,34 @@ class JsTools {
 		}
 		else
 			return target.indexOf(searchQuery)>=0;
+	}
+
+
+	public static function createIntGridValue(project:data.Project, ?iv:data.DataTypes.IntGridValueDefEditor, ?rawIv:ldtk.Json.IntGridValueDef) : js.jquery.JQuery {
+		if( iv==null )
+			iv = {
+				identifier: rawIv.identifier,
+				value: rawIv.value,
+				color: dn.Col.parseHex(rawIv.color),
+				tile: rawIv.tile,
+			}
+
+		var jVal = new J('<div class="intGridValue"></div>');
+		jVal.append('<span class="index">${iv.value}</span>');
+		jVal.css({
+			color: C.intToHex( iv.color.toWhite(0.5) ),
+			borderColor: C.intToHex( iv.color.toWhite(0.2) ),
+			backgroundColor: C.intToHex( iv.color.toBlack(0.5) ),
+		});
+		if( iv.tile!=null ) {
+			jVal.addClass("hasIcon");
+			jVal.append( project.resolveTileRectAsHtmlImg(iv.tile) );
+			jVal.find(".index").css({
+				color: iv.color.getAutoContrastCustom(0.4).toHex(),
+				backgroundColor: iv.color.toHex(),
+			});
+		}
+		return jVal;
 	}
 
 

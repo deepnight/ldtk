@@ -1,4 +1,4 @@
-# LDtk Json structure (version 1.3.2)
+# LDtk Json structure (version 1.3.3)
 
 
 <a id="ldtk-ProjectJson" name="ldtk-ProjectJson"></a>
@@ -211,7 +211,7 @@ Value | Type | Description
 `displayOpacity` | Float | Opacity of the layer (0 to 1.0)
 `gridSize` | Int | Width and height of the grid in pixels
 `identifier` | String | User defined unique identifier
-`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *User defined unique identifier*</li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
+`intGridValues`<br/><sup class="only">Only *IntGrid layer*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;Object | An array that defines extra optional info for each IntGrid value.<br/>		WARNING: the array order is not related to actual IntGrid values! As user can re-order IntGrid values freely, you may value "2" before value "1" in this array.<br/> This array contains objects with the following fields:<br/> <ul class='subFields'><li>**`color`** **(String**) <small class="color"> *Hex color "#rrggbb"* </small></li><li>**`identifier`** **(String *(can be `null`)***) : *User defined unique identifier*</li><li>**`tile`** **([Tileset rectangle](#ldtk-TilesetRect) *(can be `null`)***)  ![Generic badge](https://img.shields.io/badge/Added_1.3.3-green.svg) </li><li>**`value`** **(Int**)  ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  : *The IntGrid value itself*</li></ul>
 `parallaxFactorX`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.
 `parallaxFactorY`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Float | Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.
 `parallaxScaling`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Bool | If true (default), a layer with a parallax factor will also be scaled up/down accordingly.
@@ -297,6 +297,10 @@ Value | Type | Description
 `limitScope`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Enum | If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level".<br/> Possible values: `PerLayer`, `PerLevel`, `PerWorld`
 `lineOpacity`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Float | 
 `maxCount`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Changed_0.8.0-gray.svg)  | Int | Max instances count
+`maxHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.3-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max pixel height (only applies if the entity is resizable on Y)
+`maxWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.3-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Max pixel width (only applies if the entity is resizable on X)
+`minHeight`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.3-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min pixel height (only applies if the entity is resizable on Y)
+`minWidth`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.3-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Min pixel width (only applies if the entity is resizable on X)
 `renderMode`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`
 `resizableX`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable horizontally
 `resizableY`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Bool | If TRUE, the entity instances will be resizable vertically

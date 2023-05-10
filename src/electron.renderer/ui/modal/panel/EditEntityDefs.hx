@@ -207,16 +207,60 @@ class EditEntityDefs extends ui.modal.Panel {
 
 		// Resizable
 		var i = Input.linkToHtmlInput( curEntity.resizableX, jEntityForm.find("input#resizableX") );
-		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		i.onValueChange = (v)->if( !v ) {
+			curEntity.minWidth = null;
+			curEntity.maxWidth = null;
+		}
+		i.linkEvent(EntityDefChanged);
 		var i = Input.linkToHtmlInput( curEntity.resizableY, jEntityForm.find("input#resizableY") );
-		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		i.linkEvent(EntityDefChanged);
+		i.onValueChange = (v)->if( !v ) {
+			curEntity.minHeight = null;
+			curEntity.maxHeight = null;
+		}
 		var i = Input.linkToHtmlInput( curEntity.keepAspectRatio, jEntityForm.find("input#keepAspectRatio") );
-		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+		i.linkEvent(EntityDefChanged);
 		i.setEnabled( curEntity.resizableX && curEntity.resizableY );
 
 		var i = Input.linkToHtmlInput( curEntity.height, jEntityForm.find("input[name='height']") );
 		i.setBounds(1,2048);
 		i.onChange = editor.ge.emit.bind(EntityDefChanged);
+
+		// Min/max for resizables
+		var jMinMax = jEntityForm.find(".minMax");
+		if( curEntity.isResizable() ) {
+			jMinMax.show();
+			// Min width
+			var i = Input.linkToHtmlInput( curEntity.minWidth, jMinMax.find("input[name=minWidth]") );
+			i.setEnabled(curEntity.resizableX);
+			i.setPlaceholder(curEntity.resizableX ? "None" : "");
+			i.setBounds(0, curEntity.maxWidth);
+			i.fixValue = (v)->return v<=0 ? null : v;
+			i.linkEvent(EntityDefChanged);
+			// Min height
+			var i = Input.linkToHtmlInput( curEntity.minHeight, jMinMax.find("input[name=minHeight]") );
+			i.setEnabled(curEntity.resizableY);
+			i.setPlaceholder(curEntity.resizableY ? "None" : "");
+			i.setBounds(0, curEntity.maxHeight);
+			i.fixValue = (v)->return v<=0 ? null : v;
+			i.linkEvent(EntityDefChanged);
+			// Max width
+			var i = Input.linkToHtmlInput( curEntity.maxWidth, jMinMax.find("input[name=maxWidth]") );
+			i.setEnabled(curEntity.resizableX);
+			i.setPlaceholder(curEntity.resizableX ? "None" : "");
+			i.setBounds(curEntity.minWidth, null);
+			i.fixValue = (v)->return v<=0 ? null : v;
+			i.linkEvent(EntityDefChanged);
+			// Max height
+			var i = Input.linkToHtmlInput( curEntity.maxHeight, jMinMax.find("input[name=maxHeight]") );
+			i.setEnabled(curEntity.resizableY);
+			i.setPlaceholder(curEntity.resizableY ? "None" : "");
+			i.setBounds(curEntity.minHeight, null);
+			i.fixValue = (v)->return v<=0 ? null : v;
+			i.linkEvent(EntityDefChanged);
+		}
+		else
+			jMinMax.hide();
 
 		// Display renderMode form fields based on current mode
 		var jRenderModeBlock = jEntityForm.find("dd.renderMode");

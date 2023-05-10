@@ -301,6 +301,7 @@ class Tool<T> extends dn.Process {
 		onBeforeToolActivation();
 
 		resume();
+		initToolOptions();
 
 		jPalette.empty();
 		if( palette!=null ) {
@@ -309,7 +310,6 @@ class Tool<T> extends dn.Process {
 			palette.render();
 			palette.onShow();
 		}
-		initToolOptions();
 	}
 
 	function createToolPalette() : Null<ui.ToolPalette> {
@@ -346,6 +346,7 @@ class Tool<T> extends dn.Process {
 
 	function initToolOptions() {
 		jOptions.empty();
+		editor.jMainPanel.find("#paletteOptions").empty();
 	}
 
 

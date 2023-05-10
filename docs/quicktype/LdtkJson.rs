@@ -305,6 +305,22 @@ pub struct EntityDefinition {
     #[serde(rename = "maxCount")]
     max_count: i64,
 
+    /// Max pixel height (only applies if the entity is resizable on Y)
+    #[serde(rename = "maxHeight")]
+    max_height: Option<i64>,
+
+    /// Max pixel width (only applies if the entity is resizable on X)
+    #[serde(rename = "maxWidth")]
+    max_width: Option<i64>,
+
+    /// Min pixel height (only applies if the entity is resizable on Y)
+    #[serde(rename = "minHeight")]
+    min_height: Option<i64>,
+
+    /// Min pixel width (only applies if the entity is resizable on X)
+    #[serde(rename = "minWidth")]
+    min_width: Option<i64>,
+
     /// An array of 4 dimensions for the up/right/down/left borders (in this order) when using
     /// 9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then
     /// this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling
@@ -870,6 +886,9 @@ pub struct IntGridValueDefinition {
     /// User defined unique identifier
     #[serde(rename = "identifier")]
     identifier: Option<String>,
+
+    #[serde(rename = "tile")]
+    tile: Option<TilesetRectangle>,
 
     /// The IntGrid value itself
     #[serde(rename = "value")]

@@ -248,7 +248,7 @@ class TileTagger extends ui.Tileset {
 						refresh();
 					}
 				);
-				te.jHeader.append( tilesetDef.createTileHtmlImage(tid, 64) );
+				te.jHeader.append( tilesetDef.createTileHtmlImageFromTileId(tid, 64) );
 			}
 			else {
 				// Remove

@@ -689,6 +689,52 @@ class LayerInstance {
 		return hasAnyGridTile(cx,cy) ? gridTiles.get(coordId(cx,cy))[ gridTiles.get(coordId(cx,cy)).length-1 ] : null;
 	}
 
+
+	public function remapToGridSize(oldGrid:Int, newGrid:Int) {
+		var newCWid = M.ceil( pxWid/newGrid );
+		var newCHei = M.ceil( pxHei/newGrid );
+		inline function _newCoordId(cx,cy) {
+			return cx+cy*newCWid;
+		}
+
+		switch def.type {
+			case IntGrid:
+				var newIntGrid = new Map();
+				for(cy in 0...cHei)
+				for(cx in 0...cWid)
+					if( hasIntGrid(cx,cy) && cx<newCWid && cy<newCHei )
+						newIntGrid.set( _newCoordId(cx,cy), getIntGrid(cx,cy));
+				intGrid = newIntGrid;
+				if( def.isAutoLayer() )
+					autoTilesCache = null;
+
+			case Entities:
+				var ratio = newGrid/oldGrid;
+				for(ei in entityInstances) {
+					ei.x = M.floor( ratio * ei.x );
+					ei.y = M.floor( ratio * ei.y );
+					if( ei.customWidth!=null )
+						ei.customWidth = M.floor( ratio * ei.customWidth );
+					if( ei.customHeight!=null )
+						ei.customHeight = M.floor( ratio * ei.customHeight );
+				}
+
+			case Tiles:
+				var newGridTiles = new Map();
+				for(cy in 0...cHei)
+				for(cx in 0...cWid)
+					if( hasAnyGridTile(cx,cy) && cx<newCWid && cy<newCHei ) {
+						var stack = getGridTileStack(cx,cy).copy();
+						newGridTiles.set( _newCoordId(cx,cy), stack );
+					}
+				gridTiles = newGridTiles;
+
+			case AutoLayer:
+				autoTilesCache = null;
+		}
+	}
+
+
 	public function hasSpecificGridTile(cx:Int, cy:Int, tileId:Int, ?flips:Null<Int>) {
 		if( !hasAnyGridTile(cx,cy) )
 			return false;

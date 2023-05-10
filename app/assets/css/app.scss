@@ -2228,11 +2228,14 @@ input.slider:not(:disabled) {
 	cursor: ew-resize;
 	flex: 1 0 48px;
 	box-sizing: content-box;
-	padding-right: 20px;
 
-	background-image: url("../icons/slide.svg");
-	background-repeat: no-repeat;
-	background-position: right 4px center;
+	&:not(.hideSliderIcon) {
+		padding-right: 20px;
+
+		background-image: url("../icons/slide.svg");
+		background-repeat: no-repeat;
+		background-position: right 4px center;
+	}
 
 	&:hover {
 		outline: 1px solid $orange;
@@ -3682,7 +3685,7 @@ textarea {
 	}
 
 	&.message .wrapper {
-		max-width: 400px;
+		max-width: 500px;
 		p {
 			margin: 0;
 		}
@@ -3695,6 +3698,7 @@ textarea {
 		gap: 16px;
 		grid-template-columns: min-content auto;
 		align-items: stretch;
+		overflow: hidden;
 
 		.iconWrapper {
 			padding: 16px;
@@ -6100,6 +6104,10 @@ canvas#webgl {
 		grid-template-rows: min-content auto fit-content(24px);
 	}
 
+	&.intGrid {
+		grid-template-rows: min-content auto fit-content(24px);
+	}
+
 	&.invalid {
 		background: url("../img/stripes.png");
 		.warning {
@@ -6190,15 +6198,49 @@ canvas#webgl {
 			// 	0px 0px 2px black inset,
 			// 	0px 0px 2px black inset;
 		}
+	}
+}
 
-		&.intGridValues {
-			.intGridValue {
-				min-width: 1.5em;
-				text-align: center;
-				border: 1px solid white;
-				border-radius: 3px;
-			}
-		}
+
+.intGridValue {
+	position: relative;
+	width: 32px;
+	height: 32px;
+	border: 1px solid white;
+	border-radius: 2px;
+	overflow: hidden;
+
+	.index {
+		position: absolute;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		line-height: initial;
+	}
+
+	&:not(.hasIcon) .index {
+		width: 100%;
+		height: 100%;
+	}
+	&.hasIcon .index {
+		top: 0;
+		left: 0;
+		font-size: 8.5pt;
+		padding: 1px 2px;
+		border-bottom-right-radius: 3px;
+		// text-shadow: 0 0 2px black, 0 0 2px black, 0 -1px 1px black, 0 1px 1px black;
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover;
+		object-position: center;
 	}
 }
 
@@ -7525,7 +7567,7 @@ dl.form.fieldInstanceEditor {
 		li.value {
 			display: grid;
 			align-items: center;
-			grid-template-columns: min-content 2em auto 64px min-content;
+			grid-template-columns: min-content 2em 32px auto 64px min-content;
 			gap: 4px;
 
 			input[type=color] {
@@ -7548,6 +7590,14 @@ dl.form.fieldInstanceEditor {
 				font-size: 1.3em;
 				border: 1px solid white;
 				border-radius: 3px;
+			}
+
+			span.tile {
+				align-self: stretch;
+				&:empty {
+					background-image: url("../img/stripes.png");
+					background-repeat: repeat;
+				}
 			}
 
 			button.remove {
@@ -8634,6 +8684,13 @@ $patternSize : 32px;
 			z-index: 2;
 			image-rendering: pixelated;
 		}
+
+		.valueIcon {
+			pointer-events: none;
+			position: absolute;
+			z-index: 0;
+			image-rendering: pixelated;
+		}
 	}
 }
 
@@ -8948,8 +9005,9 @@ $patternSize : 32px;
 
 		.pattern {
 			display: grid;
-			grid-template-columns: 200px auto;
+			grid-template-columns: 300px auto;
 			gap: $gutter;
+
 
 			.editor{
 				display: grid;
@@ -8969,11 +9027,82 @@ $patternSize : 32px;
 			}
 
 			.values {
-				max-height: 300px;
+				position: relative;
+				max-height: 400px;
 				overflow-y: auto;
+				padding-right: 32px;
+
+				button.displayMode {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: auto;
+					padding: 3px 1px;
+				}
 
 				ul {
 					display: grid;
+
+					&.col-2,
+					&.col-3,
+					&.col-4,
+					&.col-5 {
+						gap: 2px;
+						li {
+							padding: 0;
+							grid-template-columns: auto;
+							justify-items: center;
+							overflow: hidden;
+							border: none;
+
+							.intGridValue {
+								width: 100%;
+								border: none;
+							}
+
+							.name {
+								padding: 3px 0;
+								font-weight: normal;
+								overflow: hidden;
+							}
+
+							&.any {
+								align-items: center;
+								.value {
+									display: none;
+								}
+							}
+
+						}
+					}
+
+					&.col-2 {
+						grid-template-columns: repeat(2, 1fr);
+						li .intGridValue {
+							height: 70px;
+						}
+					}
+
+					&.col-3 {
+						grid-template-columns: repeat(3, 1fr);
+						li .intGridValue {
+							height: 60px;
+						}
+					}
+
+					&.col-4 {
+						grid-template-columns: repeat(4, 1fr);
+						li .intGridValue {
+							height: 50px;
+						}
+					}
+
+					&.col-5 {
+						grid-template-columns: repeat(5, 1fr);
+						li .intGridValue {
+							height: 50px;
+						}
+					}
 
 					li {
 						display: grid;
@@ -9001,20 +9130,19 @@ $patternSize : 32px;
 						}
 
 						&:hover {
-							outline: 1px solid white;
-							outline-offset: -1px;
+							outline: 1px dashed white;
 						}
 
 						&.active {
-							// border-color: white !important;
 							outline: 2px solid white;
-							outline-offset: -2px;
-							// box-shadow: 0px 0px 8px $red;
 							.value {
 								color: $bgDark;
 								background-color: white;
 								box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
 							}
+						}
+						&:not(.active) {
+							filter: brightness(0.5);
 						}
 					}
 					li.any {
@@ -9200,6 +9328,24 @@ $patternSize : 32px;
 			width: calc( 100% - 16px );
 			outline: 1px solid $bgLight;
 			outline-offset: -1px;
+
+			.minMax {
+				margin-left: 16px;
+				display: flex;
+				align-items: center;
+				span {
+					flex: 0 1 0;
+					opacity: 0.6;
+					padding: 0 3px;
+					&.sep {
+						margin-left: 16px;
+					}
+				}
+				input {
+					flex: 1 1 32px;
+					width: 0;
+				}
+			}
 		}
 
 
@@ -9708,6 +9854,14 @@ $patternSize : 32px;
 						&.defined {
 							outline: 1px solid white
 						}
+					}
+				}
+
+				dl.form {
+					dt {
+						max-width: none;
+						white-space: nowrap;
+						align-items: center;
 					}
 				}
 			}

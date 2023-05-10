@@ -26,7 +26,9 @@ class Tileset {
 	var ty : Null<Float>;
 	var mouseOver = false;
 	public var useSavedSelections = true;
-	var viewLocked : Bool;
+
+	var saveUiState : Bool;
+	var viewFitted : Bool;
 
 	public var displayWid(get,never) : Float;
 		inline function get_displayWid() return tilesetDef.pxWid*zoom;
@@ -41,16 +43,16 @@ class Tileset {
 	var _internalSelectedIds : Array<Int> = [];
 
 
-	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None) {
+	public function new(jParent:js.jquery.JQuery, td:data.def.TilesetDef, mode:TilesetSelectionMode=None, saveUiState=false) {
 		tilesetDef = td;
 		selectMode = mode;
 
-		// Init viewLocked flag
-		var stateId : Settings.UiState = cast "tilesetFit_"+td.uid;
-		if( !App.ME.settings.hasUiState(stateId, Editor.ME.project) )
-			viewLocked = false;
+		// Init viewFitted flag
+		this.saveUiState = saveUiState;
+		if( !saveUiState || !App.ME.settings.hasUiState(getUiStateId("fit"), Editor.ME.project) )
+			viewFitted = false;
 		else
-			viewLocked = App.ME.settings.getUiStateBool(stateId, Editor.ME.project);
+			viewFitted = App.ME.settings.getUiStateBool(getUiStateId("fit"), Editor.ME.project);
 
 		// Create picker elements
 		jWrapper = new J('<div class="tileset"/>');
@@ -94,20 +96,25 @@ class Tileset {
 		setSelectionMode(selectMode); // force class update
 		loadScrollPos();
 		renderSelection();
-		if( viewLocked )
+		if( viewFitted )
 			fitView();
 	}
 
-	public inline function isViewLocked() return viewLocked;
-	public inline function setViewLocked(v:Bool) {
-		viewLocked = v;
-		var stateId : Settings.UiState = cast "tilesetFit_"+tilesetDef.uid;
-		if( viewLocked ) {
-			App.ME.settings.setUiStateBool(stateId, viewLocked, Editor.ME.project);
+
+	inline function getUiStateId(subId:String) : Settings.UiState {
+		return cast "tileset_"+tilesetDef.uid+"_"+subId;
+	}
+
+	public inline function isViewFitted() return viewFitted;
+	public inline function setViewFit(v:Bool) {
+		viewFitted = v;
+		if( viewFitted ) {
+			if( saveUiState )
+				App.ME.settings.setUiStateBool(getUiStateId("fit"), viewFitted, Editor.ME.project);
 			fitView();
 		}
-		else
-			App.ME.settings.deleteUiState(stateId, Editor.ME.project);
+		else if( saveUiState )
+			App.ME.settings.deleteUiState(getUiStateId("fit"), Editor.ME.project);
 	}
 
 
@@ -219,7 +226,7 @@ class Tileset {
 	public dynamic function onClickOutOfBounds() {}
 
 	function loadScrollPos() {
-		if( viewLocked )
+		if( viewFitted )
 			fitView();
 		else {
 			var mem = SCROLL_MEMORY.get(tilesetDef.relPath);
@@ -239,7 +246,10 @@ class Tileset {
 	}
 
 	function set_zoom(v) {
-		zoom = M.fclamp(v, 0.5, 6);
+		if( viewFitted )
+			zoom = v;
+		else
+			zoom = M.fclamp(v, 0.5, 6);
 		jAtlas.css("zoom",zoom);
 		saveScrollPos();
 		return zoom;
@@ -353,7 +363,7 @@ class Tileset {
 
 
 	public function focusOnSelection(instant=false) {
-		if( viewLocked )
+		if( viewFitted )
 			return;
 
 		var tids = getSelectedTileIds();
@@ -385,7 +395,7 @@ class Tileset {
 	}
 
 	public function focusAround(tileIds:Array<Int>, instant=false) {
-		if( viewLocked )
+		if( viewFitted )
 			return;
 
 		if( tileIds.length==0 )
@@ -665,7 +675,7 @@ class Tileset {
 
 		if( ev.deltaY!=0 ) {
 			ev.preventDefault();
-			if( viewLocked )
+			if( viewFitted )
 				return;
 
 			var oldLocalX = pageToLocalX(ev.pageX);
@@ -710,7 +720,7 @@ class Tileset {
 		if( ev.button==2 && selectMode==RectOnly )
 			setSelectedTileIds([]);
 
-		if( ev.button==1 && viewLocked )
+		if( ev.button==1 && viewFitted )
 			return;
 
 		// Start dragging

@@ -17,11 +17,32 @@ class RuleEditor extends ui.modal.Dialog {
 		this.rule = rule;
 		sourceDef = layerDef.type==IntGrid ? layerDef : project.defs.getLayerDef( layerDef.autoSourceLayerDefUid );
 
+		// Smart pick current IntGrid value
 		curValue = -1;
-		for(iv in layerDef.getAllIntGridValues()) {
-			curValue = iv.value;
-			break;
+		var counts = new Map();
+		var best = -1;
+		for(cy in 0...rule.size)
+		for(cx in 0...rule.size) {
+			var v = M.iabs( rule.get(cx,cy) );
+			if( v==0 || v==Const.AUTO_LAYER_ANYTHING )
+				continue;
+
+			if( !counts.exists(v) )
+				counts.set(v,1);
+			else
+				counts.set(v,counts.get(v)+1);
+
+			if( best<0 || counts.get(best)<counts.get(v) )
+				best = v;
 		}
+		curValue = best;
+
+		// Default current value
+		if( curValue<0 )
+			for(iv in layerDef.getAllIntGridValues()) {
+				curValue = iv.value;
+				break;
+			}
 		if( curValue==-1 )
 			curValue = Const.AUTO_LAYER_ANYTHING;
 
@@ -86,6 +107,7 @@ class RuleEditor extends ui.modal.Dialog {
 			Editor.ME.curLayerInstance.getTilesetUid(),
 			rule.tileMode==Single?Free:RectOnly,
 			rule.tileIds,
+			false,
 			function(tids) {
 				rule.tileIds = tids.copy();
 				editor.ge.emit( LayerRuleChanged(rule) );
@@ -114,19 +136,44 @@ class RuleEditor extends ui.modal.Dialog {
 	function updateValuePicker() {
 		var jValues = jContent.find(">.pattern .values ul").empty();
 
-		var allValues = sourceDef.getAllIntGridValues();
-		if( allValues.length>8 )
-			jContent.addClass("manyValues");
-		else
-			jContent.removeClass("manyValues");
+		// Values view mode
+		var stateId = settings.makeStateId(RuleValuesColumns, layerDef.uid);
+		var columns = settings.getUiStateInt(stateId, project, 1);
+		JsTools.removeClassReg(jValues, ~/col-[0-9]+/g);
+		jValues.addClass("col-"+columns);
+
+		// View select
+		var jMode = jContent.find(".displayMode");
+		jMode.off();
+		jMode.off().click(_->{
+			var m = new ContextMenu(jMode);
+			m.add({
+				label:L.t._("List"),
+				icon: "listView",
+				cb: ()->{
+					settings.deleteUiState(stateId, project);
+					updateValuePicker();
+				}
+			});
+			for(n in [2,3,4,5]) {
+				m.add({
+					label:L.t._("::n:: columns", {n:n}),
+					icon: "gridView",
+					cb: ()->{
+						settings.setUiStateInt(stateId, n, project);
+						updateValuePicker();
+					}
+				});
+			}
+		});
 
 		// Values picker
-		for(v in allValues) {
+		for(v in layerDef.getAllIntGridValues()) {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 
 			jVal.css("background-color", C.intToHex(v.color));
-			jVal.append('<span class="value">${v.value}</span>');
+			jVal.append( JsTools.createIntGridValue(project,v) );
 			jVal.append('<span class="name">${v.identifier!=null ? v.identifier : ""}</span>');
 			jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
 
@@ -146,7 +193,8 @@ class RuleEditor extends ui.modal.Dialog {
 		jVal.appendTo(jValues);
 		jVal.addClass("any");
 		jVal.append('<span class="value"></span>');
-		jVal.append('<span class="name">Anything/Nothing</span>');
+		var label = columns>1 ? "Any" : "Anything/nothing";
+		jVal.append('<span class="name">$label</span>');
 		if( curValue==Const.AUTO_LAYER_ANYTHING )
 			jVal.addClass("active");
 		jVal.click( function(ev) {

@@ -7,10 +7,11 @@ package data;
 		- do not rename Typedef fields or change their type
 */
 
-typedef IntGridValueDef = {
+typedef IntGridValueDefEditor = {
 	var value : Int;
 	var identifier : Null<String>;
-	var color : UInt;
+	var color : dn.Col;
+	var tile : Null<ldtk.Json.TilesetRect>;
 }
 
 enum ValueWrapper {

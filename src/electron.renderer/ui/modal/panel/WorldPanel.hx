@@ -35,7 +35,11 @@ class WorldPanel extends ui.modal.Panel {
 				()->{
 					new LastChance( L.t._('World ::id:: removed', {id:curWorld.identifier}), project);
 					var deleted = curWorld;
-					editor.selectWorld(project.worlds[0]);
+					for( other in project.worlds )
+						if( other!=curWorld ) {
+							editor.selectWorld(other);
+							break;
+						}
 					project.removeWorld(deleted);
 					editor.ge.emit( WorldRemoved(deleted) );
 					editor.setWorldMode(true);
@@ -194,7 +198,7 @@ class WorldPanel extends ui.modal.Panel {
 
 		if( project.countAllLevels() > 2 )
 			e.customConfirm = (oldV,newV)->L.t._("Changing this will change ALL the level positions! Please make sure you know what you're doing :)");
-		e.onBeforeSetter = ()->{
+		e.onBeforeSetter = _->{
 			new LastChance(L.t._("World layout changed"), editor.project);
 		}
 		e.onValueChange = (l)->{

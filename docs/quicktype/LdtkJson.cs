@@ -417,6 +417,30 @@ namespace ldtk
         public long MaxCount { get; set; }
 
         /// <summary>
+        /// Max pixel height (only applies if the entity is resizable on Y)
+        /// </summary>
+        [JsonProperty("maxHeight")]
+        public long? MaxHeight { get; set; }
+
+        /// <summary>
+        /// Max pixel width (only applies if the entity is resizable on X)
+        /// </summary>
+        [JsonProperty("maxWidth")]
+        public long? MaxWidth { get; set; }
+
+        /// <summary>
+        /// Min pixel height (only applies if the entity is resizable on Y)
+        /// </summary>
+        [JsonProperty("minHeight")]
+        public long? MinHeight { get; set; }
+
+        /// <summary>
+        /// Min pixel width (only applies if the entity is resizable on X)
+        /// </summary>
+        [JsonProperty("minWidth")]
+        public long? MinWidth { get; set; }
+
+        /// <summary>
         /// An array of 4 dimensions for the up/right/down/left borders (in this order) when using
         /// 9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then
         /// this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling
@@ -1199,6 +1223,9 @@ namespace ldtk
         /// </summary>
         [JsonProperty("identifier")]
         public string Identifier { get; set; }
+
+        [JsonProperty("tile")]
+        public TilesetRectangle Tile { get; set; }
 
         /// <summary>
         /// The IntGrid value itself
