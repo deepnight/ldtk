@@ -41,6 +41,7 @@ typedef AppSettings = {
 enum abstract UiState(String) {
 	var ShowProjectColors;
 	var HideSamplesOnHome;
+	var RuleValuesColumns;
 }
 
 /* Notes: Settings related enums are stored in this file instead of EditorTypes to avoid Main compilation to reach unwanted classes, by importing EditorTypes. */
@@ -246,11 +247,15 @@ class Settings {
 		save();
 	}
 
-	public function getUiStateInt(id:UiState, ?forProject:data.Project) : Int {
+	public inline function makeStateId(baseId:UiState, extra:Dynamic) : UiState {
+		return cast baseId+"_"+Std.string(extra);
+	}
+
+	public function getUiStateInt(id:UiState, ?forProject:data.Project, def=0) : Int {
 		for(s in v.uiStates)
 			if( s.id == makeProjectUiStateId(id,forProject) )
 				return s.val;
-		return 0;
+		return def;
 	}
 
 	public function getUiStateBool(id:UiState, ?forProject:data.Project) : Bool {

@@ -136,14 +136,39 @@ class RuleEditor extends ui.modal.Dialog {
 	function updateValuePicker() {
 		var jValues = jContent.find(">.pattern .values ul").empty();
 
-		var allValues = sourceDef.getAllIntGridValues();
-		if( allValues.length>8 )
-			jContent.addClass("manyValues");
-		else
-			jContent.removeClass("manyValues");
+		// Values view mode
+		var stateId = settings.makeStateId(RuleValuesColumns, layerDef.uid);
+		var columns = settings.getUiStateInt(stateId, project, 1);
+		JsTools.removeClassReg(jValues, ~/col-[0-9]+/g);
+		jValues.addClass("col-"+columns);
+
+		// View select
+		var jMode = jContent.find(".displayMode");
+		jMode.off();
+		jMode.off().click(_->{
+			var m = new ContextMenu(jMode);
+			m.add({
+				label:L.t._("List"),
+				icon: "listView",
+				cb: ()->{
+					settings.deleteUiState(stateId, project);
+					updateValuePicker();
+				}
+			});
+			for(n in [2,3,4,5]) {
+				m.add({
+					label:L.t._("::n:: columns", {n:n}),
+					icon: "gridView",
+					cb: ()->{
+						settings.setUiStateInt(stateId, n, project);
+						updateValuePicker();
+					}
+				});
+			}
+		});
 
 		// Values picker
-		for(v in allValues) {
+		for(v in layerDef.getAllIntGridValues()) {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 
@@ -168,7 +193,8 @@ class RuleEditor extends ui.modal.Dialog {
 		jVal.appendTo(jValues);
 		jVal.addClass("any");
 		jVal.append('<span class="value"></span>');
-		jVal.append('<span class="name">Anything/Nothing</span>');
+		var label = columns>1 ? "Any" : "Anything/nothing";
+		jVal.append('<span class="name">$label</span>');
 		if( curValue==Const.AUTO_LAYER_ANYTHING )
 			jVal.addClass("active");
 		jVal.click( function(ev) {

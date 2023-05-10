@@ -9005,8 +9005,9 @@ $patternSize : 32px;
 
 		.pattern {
 			display: grid;
-			grid-template-columns: 200px auto;
+			grid-template-columns: 300px auto;
 			gap: $gutter;
+
 
 			.editor{
 				display: grid;
@@ -9026,11 +9027,82 @@ $patternSize : 32px;
 			}
 
 			.values {
-				max-height: 300px;
+				position: relative;
+				max-height: 400px;
 				overflow-y: auto;
+				padding-right: 32px;
+
+				button.displayMode {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: auto;
+					padding: 3px 1px;
+				}
 
 				ul {
 					display: grid;
+
+					&.col-2,
+					&.col-3,
+					&.col-4,
+					&.col-5 {
+						gap: 2px;
+						li {
+							padding: 0;
+							grid-template-columns: auto;
+							justify-items: center;
+							overflow: hidden;
+							border: none;
+
+							.intGridValue {
+								width: 100%;
+								border: none;
+							}
+
+							.name {
+								padding: 3px 0;
+								font-weight: normal;
+								overflow: hidden;
+							}
+
+							&.any {
+								align-items: center;
+								.value {
+									display: none;
+								}
+							}
+
+						}
+					}
+
+					&.col-2 {
+						grid-template-columns: repeat(2, 1fr);
+						li .intGridValue {
+							height: 70px;
+						}
+					}
+
+					&.col-3 {
+						grid-template-columns: repeat(3, 1fr);
+						li .intGridValue {
+							height: 60px;
+						}
+					}
+
+					&.col-4 {
+						grid-template-columns: repeat(4, 1fr);
+						li .intGridValue {
+							height: 50px;
+						}
+					}
+
+					&.col-5 {
+						grid-template-columns: repeat(5, 1fr);
+						li .intGridValue {
+							height: 50px;
+						}
+					}
 
 					li {
 						display: grid;
@@ -9070,7 +9142,7 @@ $patternSize : 32px;
 							}
 						}
 						&:not(.active) {
-							opacity: 0.75;
+							filter: brightness(0.5);
 						}
 					}
 					li.any {
