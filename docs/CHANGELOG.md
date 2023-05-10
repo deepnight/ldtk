@@ -1,6 +1,7 @@
 # 1.3.4
 
  - Fixed empty list of values in Rule Editor window, in pure auto-layers
+ - Fixed rules randomization of flipped tiles
 
 # 1.3.3
 

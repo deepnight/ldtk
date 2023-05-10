@@ -359,15 +359,15 @@ class AutoLayerRuleDef {
 		return anyFix;
 	}
 
-	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileIds[ dn.M.randSeedCoords( uid+seed, cx,cy, tileIds.length ) ];
+	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
+		return tileIds[ dn.M.randSeedCoords( uid+seed+flips, cx,cy, tileIds.length ) ];
 	}
 
 	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
 		return ( M.hasBit(flips,0)?-1:1 ) * ( tileXOffset + (
 			tileRandomXMin==0 && tileRandomXMax==0
 				? 0
-				: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin
+				: dn.M.randSeedCoords( uid+seed+flips, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin
 		));
 	}
 
