@@ -302,6 +302,10 @@ const typeMap = {
         { json: "limitScope", js: "limitScope", typ: r("LimitScope") },
         { json: "lineOpacity", js: "lineOpacity", typ: 3.14 },
         { json: "maxCount", js: "maxCount", typ: 0 },
+        { json: "maxHeight", js: "maxHeight", typ: u(undefined, u(0, null)) },
+        { json: "maxWidth", js: "maxWidth", typ: u(undefined, u(0, null)) },
+        { json: "minHeight", js: "minHeight", typ: u(undefined, u(0, null)) },
+        { json: "minWidth", js: "minWidth", typ: u(undefined, u(0, null)) },
         { json: "nineSliceBorders", js: "nineSliceBorders", typ: a(0) },
         { json: "pivotX", js: "pivotX", typ: 3.14 },
         { json: "pivotY", js: "pivotY", typ: 3.14 },
@@ -409,6 +413,7 @@ const typeMap = {
     "IntGridValueDefinition": o([
         { json: "color", js: "color", typ: "" },
         { json: "identifier", js: "identifier", typ: u(undefined, u(null, "")) },
+        { json: "tile", js: "tile", typ: u(undefined, u(r("TilesetRectangle"), null)) },
         { json: "value", js: "value", typ: 0 },
     ], false),
     "TilesetDefinition": o([

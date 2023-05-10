@@ -194,6 +194,14 @@ type EntityDefinition struct {
 	LineOpacity                                                                                 float64           `json:"lineOpacity"`
 	// Max instances count                                                                                        
 	MaxCount                                                                                    int64             `json:"maxCount"`
+	// Max pixel height (only applies if the entity is resizable on Y)                                            
+	MaxHeight                                                                                   *int64            `json:"maxHeight"`
+	// Max pixel width (only applies if the entity is resizable on X)                                             
+	MaxWidth                                                                                    *int64            `json:"maxWidth"`
+	// Min pixel height (only applies if the entity is resizable on Y)                                            
+	MinHeight                                                                                   *int64            `json:"minHeight"`
+	// Min pixel width (only applies if the entity is resizable on X)                                             
+	MinWidth                                                                                    *int64            `json:"minWidth"`
 	// An array of 4 dimensions for the up/right/down/left borders (in this order) when using                     
 	// 9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then                      
 	// this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling                              
@@ -495,11 +503,12 @@ type AutoLayerRuleDefinition struct {
 
 // IntGrid value definition
 type IntGridValueDefinition struct {
-	Color                            string  `json:"color"`
-	// User defined unique identifier        
-	Identifier                       *string `json:"identifier"`
-	// The IntGrid value itself              
-	Value                            int64   `json:"value"`
+	Color                            string            `json:"color"`
+	// User defined unique identifier                  
+	Identifier                       *string           `json:"identifier"`
+	Tile                             *TilesetRectangle `json:"tile"`
+	// The IntGrid value itself                        
+	Value                            int64             `json:"value"`
 }
 
 // The `Tileset` definition is the most important part among project definitions. It
