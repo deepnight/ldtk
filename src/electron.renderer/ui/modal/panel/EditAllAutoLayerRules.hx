@@ -959,13 +959,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L._Copy("Rule"),
 				cb: ()->{
-					App.ME.clipboard.copyData(CRule, r.toJson());
+					App.ME.clipboard.copyData(CRule, r.toJson(ld));
 				},
 			},
 			{
 				label: L._Cut("Rule"),
 				cb: ()->{
-					App.ME.clipboard.copyData(CRule, r.toJson());
+					App.ME.clipboard.copyData(CRule, r.toJson(ld));
 					deleteRule(rg,r);
 				},
 			},

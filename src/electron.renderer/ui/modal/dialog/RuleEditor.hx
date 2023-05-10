@@ -74,7 +74,7 @@ class RuleEditor extends ui.modal.Dialog {
 				rg.rules.remove(rule);
 			editor.ge.emit( LayerRuleRemoved(rule) );
 		}
-		else if( rule.tidy() )
+		else if( rule.tidy(layerDef) )
 			editor.ge.emit( LayerRuleChanged(rule) );
 	}
 

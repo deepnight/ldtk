@@ -122,8 +122,8 @@ class AutoLayerRuleDef {
 		return 'Rule#$uid(${size}x$size)';
 	}
 
-	public function toJson() : ldtk.Json.AutoRuleDef {
-		tidy();
+	public function toJson(ld:LayerDef) : ldtk.Json.AutoRuleDef {
+		tidy(ld);
 
 		return {
 			uid: uid,
@@ -320,7 +320,7 @@ class AutoLayerRuleDef {
 		return true;
 	}
 
-	public function tidy() {
+	public function tidy(ld:LayerDef) {
 		var anyFix = false;
 
 		if( flipX && isSymetricX() ) {
@@ -351,6 +351,12 @@ class AutoLayerRuleDef {
 			App.LOG.add("tidy", 'Fixed checker mode of Rule#$uid');
 			checker = xModulo>1 ? Horizontal : None;
 			anyFix = true;
+		}
+
+		var sourceLd = ld.autoSourceLd!=null ? ld.autoSourceLd : ld;
+		if( outOfBoundsValue!=null && !sourceLd.hasIntGridValue(outOfBoundsValue) ) {
+			App.LOG.add("tidy", 'Fixed lost outOfBoundsValue: $outOfBoundsValue');
+			outOfBoundsValue = null;
 		}
 
 		if( trim() )

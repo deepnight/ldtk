@@ -795,7 +795,7 @@ class RulesWizard extends ui.modal.Dialog {
 			}
 
 		// Trim & cleanup
-		rd.tidy();
+		rd.tidy(ld);
 
 		return true;
 	}
