@@ -206,17 +206,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			return;
 
 		if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
+			var curTd = li.getTilesetDef();
 			editor.levelRender.temp.lineStyle(1, 0xff00ff, 1);
 			editor.levelRender.temp.beginFill(0x5a36a7, 0.6);
-			for( coordId in li.autoTilesCache.get(r.uid).keys() ) {
-				var cx = ( coordId % li.cWid );
-				var cy = Std.int( coordId / li.cWid );
-				editor.levelRender.temp.drawRect(
-					cx*li.def.gridSize + li.pxTotalOffsetX,
-					cy*li.def.gridSize + li.pxTotalOffsetY,
-					li.def.gridSize,
-					li.def.gridSize
-				);
+			for( ruleTiles in li.autoTilesCache.get(r.uid) ) {
+				for(t in ruleTiles) {
+					editor.levelRender.temp.drawRect(
+						t.x,
+						t.y,
+						li.def.gridSize,
+						li.def.gridSize
+					);
+				}
+
+				// var cx = ( coordId % li.cWid );
+				// var cy = Std.int( coordId / li.cWid );
 			}
 		}
 	}
