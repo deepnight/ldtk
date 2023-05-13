@@ -52,6 +52,35 @@ class JsTools {
 	}
 
 
+	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:T, allValues:Array<T>, ?def:T, ?printer:T->String, onSelect:T->Void) {
+		if( jSelect==null )
+			jSelect = new J('<select/>');
+		else
+			jSelect.empty().off();
+
+		var i = 0;
+		for(v in allValues) {
+			var jOpt = new J('<option value="$i"/>');
+			jSelect.append(jOpt);
+			jOpt.text(printer!=null ? printer(v) : Std.string(v));
+
+			if( def!=null && v==def )
+				jOpt.append(" "+L.t._("(default)"));
+
+			if( v==cur )
+				jOpt.prop("selected",true);
+
+			i++;
+		}
+		jSelect.change( (_)->{
+			var i = Std.parseInt( jSelect.val() );
+			onSelect(allValues[i]);
+		});
+
+		return jSelect;
+	}
+
+
 	/**
 		Create a Tileset <select/>
 	**/

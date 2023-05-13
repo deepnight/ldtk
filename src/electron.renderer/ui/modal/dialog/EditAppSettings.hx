@@ -86,6 +86,19 @@ class EditAppSettings extends ui.modal.Dialog {
 			App.ME.updateBodyClasses();
 		}
 
+		// Single layer mode intensity
+		JsTools.createValuesSelect(
+			jForm.find("#singleLayerModeIntensity"),
+			settings.v.singleLayerModeIntensity,
+			[0, 0.25, 0.5, 0.75, 1],
+			1,
+			(v)->Std.string(v*100)+"%",
+			(v)->{
+				settings.v.singleLayerModeIntensity = v;
+				onSettingChanged();
+			}
+		);
+
 		// Load last project
 		var i = Input.linkToHtmlInput(settings.v.openLastProject, jForm.find("#openLastProject"));
 		i.onValueChange = (v)->{
@@ -142,8 +155,6 @@ class EditAppSettings extends ui.modal.Dialog {
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);
-		i.setValueStep(0.25);
-		i.enableSlider();
 		i.enablePercentageMode();
 		i.onChange = ()->{
 			onSettingChanged();

@@ -8,7 +8,6 @@ typedef AppSettings = {
 
 	var compactMode : Bool;
 	var grid : Bool;
-	var singleLayerMode : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
 	var tileEnumOverlays : Bool;
@@ -22,6 +21,9 @@ typedef AppSettings = {
 
 	var openLastProject : Bool;
 	var lastProject : Null<{ filePath:String, levelUid:Int }>;
+
+	var singleLayerMode : Bool;
+	var singleLayerModeIntensity : Float;
 
 	var appUiScale : Float;
 	var editorUiScale : Float;
@@ -83,7 +85,7 @@ class Settings {
 
 			compactMode: false,
 			grid: true,
-			singleLayerMode: false,
+
 			emptySpaceSelection: true,
 			tileStacking: true,
 			tileEnumOverlays : false,
@@ -94,6 +96,9 @@ class Settings {
 			colorBlind: false,
 			blurMask: true,
 			navigationKeys: null,
+
+			singleLayerMode: false,
+			singleLayerModeIntensity: 0.75,
 
 			openLastProject: false,
 			lastProject: null,
