@@ -20,6 +20,8 @@
 			"backupLimit",
 			"backupOnSave",
 			"customCommands",
+			"defaultEntityHeight",
+			"defaultEntityWidth",
 			"defaultGridSize",
 			"defaultLevelBgColor",
 			"defaultPivotX",
@@ -38,6 +40,12 @@
 		"properties": {
 			"backupLimit": {
 				"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
+				"type": [
+					"integer"
+				]
+			},
+			"defaultEntityWidth": {
+				"description": "Default width for new entities",
 				"type": [
 					"integer"
 				]
@@ -317,6 +325,12 @@
 				"description": "File format version",
 				"type": [
 					"string"
+				]
+			},
+			"defaultEntityHeight": {
+				"description": "Default height for new entities",
+				"type": [
+					"integer"
 				]
 			},
 			"defaultPivotX": {
@@ -1051,6 +1065,13 @@
 						"ArrayCountNoLabel",
 						"RefLinkBetweenPivots",
 						"RefLinkBetweenCenters"
+					]
+				},
+				"editorDisplayColor": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"canBeNull": {
