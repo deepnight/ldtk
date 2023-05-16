@@ -58,6 +58,7 @@ class FieldDef {
 		isArray = array;
 		editorDisplayMode = Hidden;
 		editorDisplayPos = Above;
+		editorDisplayScale = 1;
 		editorLinkStyle = switch type {
 			case F_EntityRef: CurvedArrow;
 			case _: StraightArrow;
@@ -706,6 +707,11 @@ class FieldDef {
 
 	public function tidy(p:data.Project) {
 		_project = p;
+
+		if( editorDisplayScale==0 ) {
+			App.LOG.add("tidy", "Fixed 0-scale in FieldDef "+toString());
+			editorDisplayScale = 1;
+		}
 
 		if( isEnum() && defaultOverride!=null ) {
 			App.LOG.add("tidy", "Lost default enum value in FieldDef "+toString());
