@@ -87,11 +87,19 @@ class EditAppSettings extends ui.modal.Dialog {
 		}
 
 		// Single layer mode intensity
+		var allValues = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
+		if( !allValues.contains(settings.v.singleLayerModeIntensity) ) {
+			for(v in allValues)
+				if( v>=settings.v.singleLayerModeIntensity) {
+					settings.v.singleLayerModeIntensity = v;
+					break;
+				}
+		}
 		JsTools.createValuesSelect(
 			jForm.find("#singleLayerModeIntensity"),
 			settings.v.singleLayerModeIntensity,
-			[0, 0.25, 0.5, 0.75, 1],
-			1,
+			allValues,
+			0.9,
 			(v)->Std.string(v*100)+"%",
 			(v)->{
 				settings.v.singleLayerModeIntensity = v;

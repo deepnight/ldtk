@@ -58,6 +58,10 @@ class JsTools {
 		else
 			jSelect.empty().off();
 
+		// Ensure cur is part of allValues
+		if( !allValues.contains(cur) )
+			cur = def;
+
 		var i = 0;
 		for(v in allValues) {
 			var jOpt = new J('<option value="$i"/>');
