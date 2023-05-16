@@ -21,6 +21,7 @@ class FieldDef {
 	public var editorDisplayScale : Float;
 	public var editorDisplayPos : ldtk.Json.FieldDisplayPosition;
 	public var editorLinkStyle : ldtk.Json.FieldLinkStyle;
+	public var editorDisplayColor : Null<dn.Col>;
 	public var editorShowInWorld : Bool;
 	public var editorAlwaysShow: Bool;
 	public var editorTextPrefix : Null<String>;
@@ -143,6 +144,7 @@ class FieldDef {
 			case F_EntityRef: CurvedArrow;
 			case _: StraightArrow;
 		});
+		o.editorDisplayColor = JsonTools.readColor(json.editorDisplayColor, true);
 		o.editorAlwaysShow = JsonTools.readBool(json.editorAlwaysShow, false);
 		o.editorShowInWorld = JsonTools.readBool(json.editorShowInWorld, true);
 		o.editorCutLongValues = JsonTools.readBool(json.editorCutLongValues, true);
@@ -184,6 +186,7 @@ class FieldDef {
 			editorDisplayScale: JsonTools.writeFloat(editorDisplayScale),
 			editorDisplayPos: JsonTools.writeEnum(editorDisplayPos, false),
 			editorLinkStyle: JsonTools.writeEnum(editorLinkStyle, false),
+			editorDisplayColor: JsonTools.writeColor(editorDisplayColor, true),
 			editorAlwaysShow: editorAlwaysShow,
 			editorShowInWorld: editorShowInWorld,
 			editorCutLongValues: editorCutLongValues,

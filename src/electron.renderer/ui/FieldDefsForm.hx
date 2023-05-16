@@ -542,6 +542,18 @@ class FieldDefsForm {
 			case Hidden, Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, RefLinkBetweenPivots, RefLinkBetweenCenters: false;
 		});
 
+		// Display color
+		var jColor = jForm.find("#editorDisplayColor");
+		JsTools.createColorButton(jColor, curField.editorDisplayColor, true, (c)->{
+			curField.editorDisplayColor = c;
+			onFieldChange();
+		});
+		switch curField.editorDisplayMode {
+			case ValueOnly, NameAndValue, ArrayCountWithLabel, ArrayCountNoLabel,
+				Points, PointStar, PointPath, PointPathLoop, RadiusPx, RadiusGrid, RefLinkBetweenPivots, RefLinkBetweenCenters: jColor.show();
+			case Hidden, LevelTile, EntityTile: jColor.hide();
+		}
+
 		// Show in World mode (Level field only)
 		var i = Input.linkToHtmlInput( curField.editorShowInWorld, jForm.find("input[name=editorShowInWorld]") );
 		i.onChange = onFieldChange;

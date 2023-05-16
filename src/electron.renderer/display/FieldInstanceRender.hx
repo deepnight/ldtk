@@ -356,6 +356,8 @@ class FieldInstanceRender {
 
 	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<RenderedField> {
 		var fd = fi.def;
+		if( fd.editorDisplayColor!=null )
+			baseColor = fd.editorDisplayColor;
 
 		var labelFlow = new h2d.Flow();
 		labelFlow.verticalAlign = Middle;
