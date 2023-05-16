@@ -714,10 +714,11 @@ class FieldDef {
 		}
 
 		if( isEnum() && defaultOverride!=null ) {
-			App.LOG.add("tidy", "Lost default enum value in FieldDef "+toString());
 			var v = getEnumDefault();
-			if( v==null )
+			if( v==null ) {
+				App.LOG.add("tidy", "Lost default enum value in FieldDef "+toString());
 				setDefault(null);
+			}
 		}
 
 		if( tilesetUid!=null && p.defs.getTilesetDef(tilesetUid)==null ) {
