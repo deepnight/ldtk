@@ -114,9 +114,9 @@ function imageFormatter(cell, formatterParams, onRendered) {
         (tile) -> {
             var obj:DynamicAccess<Dynamic> = {};
             obj.set("file", td.relPath);
-            obj.set("size", td.tileGridSize);
-            obj.set("x", tile.x / td.tileGridSize);
-            obj.set("y", tile.y / td.tileGridSize);
+            obj.set("size", size);
+            obj.set("x", tile.x / size);
+            obj.set("y", tile.y / size);
             cell.setValue(obj);
 		}
 	);
