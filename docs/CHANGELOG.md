@@ -2,6 +2,7 @@
 
  - Added a new app setting to adjust the "single-layer mode" intensity.
  - Added customizable default entity width/height (in Project settings)
+ - Entity min width and min height now default to width and height respectively.
  - Fixed newly created custom fields that have a display scale of 0%
  - Fixed empty list of values in Rule Editor window, in pure auto-layers
  - Fixed rules randomization of flipped tiles
