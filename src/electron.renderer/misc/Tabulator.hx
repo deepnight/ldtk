@@ -100,20 +100,26 @@ function imageFormatter(cell, formatterParams, onRendered) {
 	
 	// Tile preview
     // LDTK uses pixels for the grid, Castle uses how many'th tile it is
-    var size = td.tileGridSize;
+	var exists = td != null ? true : false;
+
+	var uid = exists ? td.uid : null;
+	var size = exists ? td.tileGridSize : null;
+	var relPath = exists ? td.relPath : null;
+	var tilesetRect = exists ? {
+		tilesetUid: uid,
+		h: size,
+		w: size,
+		y: values.y * size,
+		x: values.x * size
+	} : null;
+
 	var jPicker = JsTools.createTileRectPicker(
-		td.uid,
-        {
-            tilesetUid: td.uid,
-            h: size,
-            w: size,
-            y: values.y * size,
-            x: values.x * size
-        },
-        true,
+		uid,
+        tilesetRect,
+        exists,
         (tile) -> {
             var obj:DynamicAccess<Dynamic> = {};
-            obj.set("file", td.relPath);
+            obj.set("file", relPath);
             obj.set("size", size);
             obj.set("x", tile.x / size);
             obj.set("y", tile.y / size);
