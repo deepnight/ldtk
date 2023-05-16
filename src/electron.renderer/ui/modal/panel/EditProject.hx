@@ -485,6 +485,16 @@ class EditProject extends ui.modal.Panel {
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.linkEvent(ProjectSettingsChanged);
 
+
+		// Default entity size
+		var i = Input.linkToHtmlInput( project.defaultEntityWidth, jForms.find("[name=defaultEntityWidth]") );
+		i.setBounds(1,Const.MAX_GRID_SIZE);
+		i.linkEvent(ProjectSettingsChanged);
+
+		var i = Input.linkToHtmlInput( project.defaultEntityHeight, jForms.find("[name=defaultEntityHeight]") );
+		i.setBounds(1,Const.MAX_GRID_SIZE);
+		i.linkEvent(ProjectSettingsChanged);
+
 		// Workspace bg
 		var i = Input.linkToHtmlInput( project.bgColor, jForms.find("[name=bgColor]"));
 		i.linkEvent(ProjectSettingsChanged);

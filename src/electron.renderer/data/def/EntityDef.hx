@@ -54,7 +54,8 @@ class EntityDef {
 		fillOpacity = 1;
 		lineOpacity = 1;
 		renderMode = Rectangle;
-		width = height = 16;
+		width = p.defaultEntityWidth;
+		height = p.defaultEntityHeight;
 		maxCount = 0;
 		showName = true;
 		limitBehavior = MoveLastOne;
