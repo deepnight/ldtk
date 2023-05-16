@@ -1898,6 +1898,52 @@ dl.form {
 			outline: 1px solid $orange;
 		}
 
+		.colorButton {
+			display: grid;
+			grid-template-columns: auto min-content;
+			height: 32px;
+			min-width: 64px;
+			flex: 0 1 64px;
+			cursor: pointer;
+
+			box-sizing: border-box;
+			border: 4px solid $bgDark;
+			outline: 1px solid $bgLighter;
+			outline-offset: -2px;
+
+			.curColor {
+				position: relative;
+				.icon {
+					position: absolute;
+					width: 100%;
+					height: 85%;
+					opacity: 0.75;
+					pointer-events: none;
+				}
+				&:not(.null) .icon {
+					display: none;
+				}
+
+				&.null {
+					background-color: $bgMed;
+					background-image: url("../img/stripes.png");
+				}
+			}
+
+
+			.reset {
+				padding: 0;
+				margin: 0;
+				.icon {
+					height: 85%;
+				}
+			}
+
+			&:hover {
+				outline: 1px solid $orange;
+			}
+		}
+
 		> span {
 			margin: 3px;
 			flex: 0 0 8px;
