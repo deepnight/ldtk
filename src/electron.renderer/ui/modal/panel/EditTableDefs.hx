@@ -125,7 +125,7 @@ class EditTableDefs extends ui.modal.Panel {
 		var jSubList = new J('<ul/>');
 		jSubList.appendTo(jLi);
 
-		for (sheet in project.db.sheets) {
+		for (sheet in project.db.sheets.filter((x) -> !x.props.hide)) {
 			var jLi = new J("<li/>");
 			jLi.appendTo(jSubList);
 			jLi.append('<span class="table">'+sheet.name+'</span>');
