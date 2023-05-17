@@ -1371,7 +1371,7 @@ class JsTools {
 	}
 
 
-	public static function createColorButton(?jTarget:js.jquery.JQuery, cur:dn.Col, ?usedColorsTag:String, ?defaultCol:dn.Col, allowNull=false, onPick:Null<dn.Col>->Void) {
+	public static function createColorButton(?jTarget:js.jquery.JQuery, curCol:dn.Col, ?usedColorsTag:String, ?defCol:dn.Col, allowNull=false, onPick:Null<dn.Col>->Void) {
 		var jColor = jTarget==null ? new J('<span></span>') : jTarget;
 		jColor.empty().off();
 		if( !jColor.hasClass("colorButton") )
@@ -1383,31 +1383,34 @@ class JsTools {
 		jCur.append('<span class="icon color"></span>');
 
 		inline function _applyColor(c:dn.Col) {
-			if( c==null )
+			if( c==null ) {
 				jCur.addClass("null");
+				if( defCol!=null )
+					jCur.css("background-color", defCol.toHex());
+			}
 			else
 				jCur.css("background-color", c.toHex());
 		}
-		_applyColor(cur);
+		_applyColor(curCol);
 
 		// Reset button
-		if( defaultCol!=null || allowNull && cur!=null ) {
+		if( curCol!=defCol && curCol!=null && ( defCol!=null || allowNull && curCol!=null ) ) {
 			var jReset = new J('<button class="transparent reset"></button>');
 			jReset.appendTo(jColor);
 			jReset.append('<span class="icon reset"></span>');
 			jReset.click(_->{
-				cur = defaultCol;
-				_applyColor(cur);
-				onPick(cur);
+				curCol = allowNull ? null : defCol;
+				_applyColor(curCol);
+				onPick(curCol);
 			});
 		}
 
 		jCur.click(_->{
-			var cp = new ui.modal.dialog.ColorPicker(usedColorsTag, Const.getNicePalette(), jColor, cur);
+			var cp = new ui.modal.dialog.ColorPicker(usedColorsTag, Const.getNicePalette(), jColor, curCol);
 			cp.onValidate = (c)->{
-				cur = c;
-				_applyColor(cur);
-				onPick(cur);
+				curCol = c;
+				_applyColor(curCol);
+				onPick(curCol);
 			}
 		});
 		return jColor;

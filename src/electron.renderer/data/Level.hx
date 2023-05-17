@@ -711,7 +711,7 @@ class Level {
 	}
 
 
-	public function getSmartColor(bright:Bool) {
+	public function getSmartColor(bright:Bool) : dn.Col {
 		inline function _adjust(c:Int) {
 			return bright ? dn.legacy.Color.toWhite(c, 0.45) : c;
 		}

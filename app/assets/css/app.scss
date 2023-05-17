@@ -1912,14 +1912,14 @@ dl.form {
 			outline-offset: -2px;
 
 			.curColor {
-				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
 				.icon {
-					position: absolute;
-					width: 100%;
-					height: 85%;
-					opacity: 0.75;
-					pointer-events: none;
+					opacity: 0.5;
 				}
+
 				&:not(.null) .icon {
 					display: none;
 				}

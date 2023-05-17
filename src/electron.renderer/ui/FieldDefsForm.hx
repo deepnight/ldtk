@@ -352,6 +352,14 @@ class FieldDefsForm {
 	}
 
 
+	function getSmartColor() : dn.Col {
+		return switch parentType {
+			case FP_Entity(ed): ed.color;
+			case FP_Level(level): level.getSmartColor(true);
+		}
+	}
+
+
 	function updateForm() {
 		ui.Tip.clear();
 		jForm.find("*").off(); // cleanup events
@@ -544,7 +552,7 @@ class FieldDefsForm {
 
 		// Display color
 		var jColor = jForm.find("#editorDisplayColor");
-		JsTools.createColorButton(jColor, curField.editorDisplayColor, true, (c)->{
+		JsTools.createColorButton(jColor, curField.editorDisplayColor, getSmartColor(), true, (c)->{
 			curField.editorDisplayColor = c;
 			onFieldChange();
 		});
