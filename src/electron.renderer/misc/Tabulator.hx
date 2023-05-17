@@ -1,5 +1,6 @@
 package misc;
 
+import cdb.Sheet;
 import misc.JsTools;
 import js.html.Element;
 import haxe.extern.EitherType;
@@ -8,14 +9,16 @@ import haxe.DynamicAccess;
 import cdb.Data;
 import tabulator.Tabulator;
 
-function createTabulator(element:EitherType<String, js.html.Element>, columns:Array<cdb.Data.Column>, lines:Array<Dynamic>, sheet:cdb.Sheet, project:data.Project) {
+function createTabulator(element:EitherType<String, js.html.Element>, columns:Array<cdb.Data.Column>, lines:Array<Dynamic>, sheet:Sheet) {
 	var tabulator = new Tabulator(element, {
 		// data: createData(lines, columns, project),
 		data: lines,
-		columns: createColumns(columns),
+		columns: createColumns(columns, sheet),
 		movableRows: true,
 		movableColumns: true,
 	});
+	tabulator.sheet = sheet;
+	return tabulator;
 	// tabulator.on("cellClick", function(e, cell) {
 	// 	var columnTypes:DynamicAccess<ColumnType> = {};
 	// 	for (col in sheet.columns) {
@@ -41,7 +44,7 @@ function createTabulator(element:EitherType<String, js.html.Element>, columns:Ar
 		// }
 	// });
 }
-function createColumns(columns:Array<cdb.Data.Column>) {
+function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 	var cols = [];
 	for (column in columns) {
 		var col:DynamicAccess<Dynamic> = {};
@@ -56,6 +59,10 @@ function createColumns(columns:Array<cdb.Data.Column>) {
 			case TBool:
 				col.set("editor", "tickCross");
 				col.set("formatter", "tickCross");
+			case TList:
+				col.set("formatter", listFormatter);
+				col.set("formatterParams", {});
+				col.set("cellClick", listClick);
 			case _:
 				// TODO editors
 		}
@@ -93,7 +100,56 @@ function createColumns(columns:Array<cdb.Data.Column>) {
 // 	return lines;
 // }
 
-function imageFormatter(cell, formatterParams, onRendered) {
+
+function listClick(e, cell:CellComponent) {
+	var tabulator:tabulator.Tabulator = cell.getTable();
+	var sheet:Sheet = tabulator.sheet;
+	var cellElement = cell.getElement();
+	var subSheet = sheet.base.getSheet(sheet.name + "@" + cell.getField());
+
+	var holder = js.Browser.document.createElement("div");
+	holder.classList.add("subHolder");
+	var table = js.Browser.document.createElement("div");
+
+	// Close the old subTabulator if one exists and return if we're trying to open the same one
+	// TODO This looks ugly but im too tired to find a better way rn
+	// TODO Opening the same TList from another row just closes it aswell
+	if (tabulator.sub != null) {
+		if (tabulator.sub.sheet.name == subSheet.name) {
+			removeSubTabulator(tabulator);
+			return;
+		}
+		removeSubTabulator(tabulator);
+	}
+
+	var subTabulator = createTabulator(table, subSheet.columns, cell.getValue(), subSheet);
+	
+	holder.style.boxSizing = "border-box";
+	holder.style.padding = "10px 30px 10px 10px";
+	holder.style.borderTop = "1px solid #333";
+	holder.style.borderBottom = "1px solid #333";
+
+	table.style.border = "3px solid #333";
+	table.style.height = "fit-content";
+	table.style.width = "fit-content";
+
+	holder.appendChild(table);
+	cellElement.closest(".tabulator-row").append(holder);
+	
+	tabulator.sub = subTabulator;
+}
+
+function listFormatter(cell:CellComponent, formatterParams, onRendered) {
+	var values:DynamicAccess<Dynamic> = cell.getValue()[0];
+	return Std.string(values.keys());
+}
+
+function removeSubTabulator(tabulator:Tabulator) {
+	tabulator.sub.element.closest(".subHolder").remove();
+	tabulator.sub = null;
+}
+
+function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
 	var content = js.Browser.document.createElement("span");
 	var values = cell.getValue();
     var td = Editor.ME.project.defs.getTilesetDefFrom(values.file);

@@ -89,7 +89,7 @@ class EditTableDefs extends ui.modal.Panel {
 		jTabEditor.empty();
 
 		if (tabulatorView) {
-			createTabulator("#tableEditor", curSheet.columns, curSheet.lines, curSheet, project);
+			createTabulator("#tableEditor", curSheet.columns, curSheet.lines, curSheet);
 			// tabulator.on("cellEdited", function(cell) {
 			// 	// TODO Implement changing primary keys here aswell
 			// 	var id = cell.getData().id;
