@@ -51,7 +51,7 @@ function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 		col.set("title", column.name);
 		col.set("field", column.name);
 		switch column.type {
-			case TId, TString: 
+			case TId, TString, TInt: 
 				col.set("editor", "input");
 			case TImage, TTilePos:
 				col.set("formatter", imageFormatter);
@@ -61,7 +61,7 @@ function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 				col.set("formatter", "tickCross");
 			case TList:
 				col.set("formatter", listFormatter);
-				col.set("formatterParams", {});
+				col.set("formatterParams", {sheet: sheet});
 				col.set("cellClick", listClick);
 			case _:
 				// TODO editors
@@ -140,8 +140,9 @@ function listClick(e, cell:CellComponent) {
 }
 
 function listFormatter(cell:CellComponent, formatterParams, onRendered) {
-	var values:DynamicAccess<Dynamic> = cell.getValue()[0];
-	return Std.string(values.keys());
+	var sheet:Sheet = formatterParams.sheet;
+	var sub = sheet.base.getSheet(sheet.name + "@" + cell.getField());
+	return Std.string([for (x in sub.columns) x.name]);
 }
 
 function removeSubTabulator(tabulator:Tabulator) {
