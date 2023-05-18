@@ -16,6 +16,9 @@ function createTabulator(element:EitherType<String, js.html.Element>, columns:Ar
 		columns: createColumns(columns, sheet),
 		movableRows: true,
 		movableColumns: true,
+		columnDefaults: {
+			maxWidth:300,
+		},
 	});
 	tabulator.sheet = sheet;
 	return tabulator;
@@ -142,7 +145,9 @@ function listClick(e, cell:CellComponent) {
 function listFormatter(cell:CellComponent, formatterParams, onRendered) {
 	var sheet:Sheet = formatterParams.sheet;
 	var sub = sheet.base.getSheet(sheet.name + "@" + cell.getField());
-	return Std.string([for (x in sub.columns) x.name]);
+	var str = Std.string([for (x in sub.columns) x.name]);
+	return str;
+	
 }
 
 function removeSubTabulator(tabulator:Tabulator) {
