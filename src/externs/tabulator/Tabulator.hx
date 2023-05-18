@@ -7,10 +7,12 @@ import haxe.extern.EitherType;
 extern class Tabulator {
 	function new(element:EitherType<String, js.html.Element>, options:Dynamic);
 	public var sub:Null<Tabulator>;
+	public var parentCell:Null<CellComponent>;
 	public var sheet:cdb.Sheet;
 	public var element:Element;
 
 	public function on(eventName:String, cb:(e:Dynamic, cell:Dynamic) -> Void):Void;
+	public function getData():Dynamic;
 	public function destroy():Void;
 }
 
@@ -18,13 +20,19 @@ extern class Tabulator {
 extern class CellComponent {
 	public function getValue():Dynamic;
 	public function getField():Dynamic;
-	public function getTable():Dynamic;
+	public function getTable():Tabulator;
+	public function getRow():RowComponent;
 	public function getElement():Element;
 	public function getData():Dynamic;
 	public function setValue(value:Dynamic):Void;
 	public function getParentColumn():ColumnComponent;
 }
 
+
+@:jsRequire("tabulator-tables")
+extern class RowComponent {
+	public function getIndex():Int;
+}
 
 @:jsRequire("tabulator-tables")
 extern class ColumnComponent {

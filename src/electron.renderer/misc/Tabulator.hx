@@ -113,14 +113,13 @@ function listClick(e, cell:CellComponent) {
 
 	// Close the old subTabulator if one exists and return if we're trying to open the same one
 	// TODO This looks ugly but im too tired to find a better way rn
-	// TODO Opening the same TList from another row just closes it aswell
 	if (tabulator.sub != null) {
-		if (tabulator.sub.sheet.name == subSheet.name) {
+		if (tabulator.sub.parentCell == cell) {
 			removeSubTabulator(tabulator);
 			return;
 		}
 		removeSubTabulator(tabulator);
-	}
+	} 
 
 	var subTabulator = createTabulator(table, subSheet.columns, cell.getValue(), subSheet);
 	
@@ -137,6 +136,7 @@ function listClick(e, cell:CellComponent) {
 	cellElement.closest(".tabulator-row").append(holder);
 	
 	tabulator.sub = subTabulator;
+	tabulator.sub.parentCell = cell;
 }
 
 function listFormatter(cell:CellComponent, formatterParams, onRendered) {
