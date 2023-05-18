@@ -1,12 +1,11 @@
 package misc;
 
+import ui.modal.ContextMenu;
 import cdb.Sheet;
 import misc.JsTools;
 import js.html.Element;
 import haxe.extern.EitherType;
-import js.jquery.JQuery;
 import haxe.DynamicAccess;
-import cdb.Data;
 import tabulator.Tabulator;
 
 function createTabulator(element:EitherType<String, js.html.Element>, columns:Array<cdb.Data.Column>, lines:Array<Dynamic>, sheet:Sheet) {
@@ -19,6 +18,29 @@ function createTabulator(element:EitherType<String, js.html.Element>, columns:Ar
 		columnDefaults: {
 			maxWidth:300,
 		},
+	});
+	tabulator.on("renderComplete", (e, cell) -> {
+		for (column in sheet.columns) {
+			var el = new J(tabulator.element).find('div.tabulator-col[tabulator-field="'+column.name+'"]');
+			ContextMenu.addTo(new J(el), false, [
+				// {
+				// 	label: L._Duplicate(),
+				// 	cb: ()-> {
+				// 		var copy = project.defs.duplicateTilesetDef(td);
+				// 		editor.ge.emit( TilesetDefAdded(copy) );
+				// 		selectTileset(copy);
+				// 	},
+				// 	enable: ()->!td.isUsingEmbedAtlas(),
+				// },
+				{
+					label: L._Delete(),
+					cb: () -> {
+						sheet.deleteColumn(column.name);
+						tabulator.deleteColumn(column.name);
+					}
+				},
+			]);
+		}
 	});
 	tabulator.sheet = sheet;
 	return tabulator;
@@ -145,7 +167,7 @@ function listClick(e, cell:CellComponent) {
 function listFormatter(cell:CellComponent, formatterParams, onRendered) {
 	var sheet:Sheet = formatterParams.sheet;
 	var sub = sheet.base.getSheet(sheet.name + "@" + cell.getField());
-	var str = Std.string([for (x in sub.columns) x.name]);
+	var str = "[" + Std.string([for (x in sub.columns) x.name]) + "]";
 	return str;
 	
 }

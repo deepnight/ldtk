@@ -13,7 +13,9 @@ extern class Tabulator {
 
 	public function on(eventName:String, cb:(e:Dynamic, cell:Dynamic) -> Void):Void;
 	public function getData():Dynamic;
+	public function redraw(full:Bool):Void;
 	public function destroy():Void;
+	public function deleteColumn(name:String):Void;
 }
 
 @:jsRequire("tabulator-tables")
