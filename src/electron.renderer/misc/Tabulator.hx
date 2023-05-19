@@ -10,7 +10,6 @@ import tabulator.Tabulator;
 
 function createTabulator(element:EitherType<String, js.html.Element>, columns:Array<cdb.Data.Column>, lines:Array<Dynamic>, sheet:Sheet) {
 	var tabulator = new Tabulator(element, {
-		// data: createData(lines, columns, project),
 		data: lines,
 		columns: createColumns(columns, sheet),
 		movableRows: true,
@@ -22,7 +21,7 @@ function createTabulator(element:EitherType<String, js.html.Element>, columns:Ar
 	tabulator.on("renderComplete", (e, cell) -> {
 		for (column in sheet.columns) {
 			var el = new J(tabulator.element).find('div.tabulator-col[tabulator-field="'+column.name+'"]');
-			ContextMenu.addTo(new J(el), false, [
+			ContextMenu.addTo(el, false, [
 				// {
 				// 	label: L._Duplicate(),
 				// 	cb: ()-> {
@@ -44,31 +43,8 @@ function createTabulator(element:EitherType<String, js.html.Element>, columns:Ar
 	});
 	tabulator.sheet = sheet;
 	return tabulator;
-	// tabulator.on("cellClick", function(e, cell) {
-	// 	var columnTypes:DynamicAccess<ColumnType> = {};
-	// 	for (col in sheet.columns) {
-	// 		columnTypes.set(col.name, col.type);
-	// 	}
-	// 	var colType = columnTypes.get(cell.getField());
-
-	// 	switch colType {
-	// 		case TList:
-	// 			var row:JQuery = cell.getRow().getElement();
-
-	// 			var ele = js.Browser.document.createElement("div");
-	// 			ele.id = "contara";
-	// 			row.append(ele);
-
-	// 			var ref = sheet.getSub(sheet.columns[5]);
-	// 			trace(ref.name);
-	// 			createTabulator("#contara", ref.columns, ref.lines, ref, project);
-	// 		case _:
-	// 			// We dont need to handle clicks on all types
-			
-	
-		// }
-	// });
 }
+
 function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 	var cols = [];
 	for (column in columns) {
@@ -169,7 +145,6 @@ function listFormatter(cell:CellComponent, formatterParams, onRendered) {
 	var sub = sheet.base.getSheet(sheet.name + "@" + cell.getField());
 	var str = "[" + Std.string([for (x in sub.columns) x.name]) + "]";
 	return str;
-	
 }
 
 function removeSubTabulator(tabulator:Tabulator) {
@@ -212,5 +187,4 @@ function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
 	);
 	jPicker.appendTo(content);
 	return content;
-	
 }
