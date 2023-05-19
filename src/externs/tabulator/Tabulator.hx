@@ -38,4 +38,6 @@ extern class RowComponent {
 
 @:jsRequire("tabulator-tables")
 extern class ColumnComponent {
+	public function getCells():Array<CellComponent>;
+	public function getValue():Dynamic;
 }

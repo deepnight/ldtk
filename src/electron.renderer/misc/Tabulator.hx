@@ -56,7 +56,9 @@ function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 				col.set("editor", "input");
 			case TImage, TTilePos:
 				col.set("formatter", imageFormatter);
-				col.set("formatterParams", {});
+				var line:DynamicAccess<Dynamic> = sheet.lines[0];
+				col.set("headerFilterParams", {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(column.name).file)});
+				col.set("headerFilter", imageHeaderFilter);
 			case TBool:
 				col.set("editor", "tickCross");
 				col.set("formatter", "tickCross");
@@ -152,6 +154,34 @@ function removeSubTabulator(tabulator:Tabulator) {
 	tabulator.sub = null;
 }
 
+function imageHeaderFilter(cell, onRendered, success, cancel, headerFilterParams) {
+	// TODO For some reason you cant re-select the original tileset if you change it without reloading tabulator
+	var content = new J("<select/>");
+    var curTd = headerFilterParams.curTileset;
+	var uid = curTd != null ? curTd.uid : null;
+
+	JsTools.createTilesetSelect(
+		Editor.ME.project,
+		content,
+		uid,
+		false,
+		(tileUid) -> {
+			var td = Editor.ME.project.defs.getTilesetDef(tileUid);
+			var cells:Array<CellComponent> = cell.getColumn().getCells();
+			for (cell in cells) {
+				var obj:DynamicAccess<Dynamic> = {};
+				obj.set("file", td.relPath);
+				obj.set("size", td.tileGridSize);
+				obj.set("x", cell.getValue().x);
+				obj.set("y", cell.getValue().y);
+				cell.setValue(obj);
+			}
+		}
+	);
+	// We need to return the HTML element itself, not a JQuery object
+	return content.get(0);
+}
+
 function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
 	var content = js.Browser.document.createElement("span");
 	var values = cell.getValue();
@@ -159,6 +189,7 @@ function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
 	
 	// Tile preview
     // LDTK uses pixels for the grid, Castle uses how many'th tile it is
+	// TODO test createTilePicker()
 	var exists = td != null ? true : false;
 
 	var uid = exists ? td.uid : null;
