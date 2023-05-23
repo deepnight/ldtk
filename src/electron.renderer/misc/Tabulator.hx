@@ -1,5 +1,7 @@
 package misc;
 
+import haxe.Json;
+import ui.modal.dialog.TextEditor;
 import ui.modal.ContextMenu;
 import cdb.Sheet;
 import misc.JsTools;
@@ -66,6 +68,10 @@ function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 				col.set("formatter", listFormatter);
 				col.set("formatterParams", {sheet: sheet});
 				col.set("cellClick", listClick);
+			case TDynamic:
+				col.set("formatter", dynamicFormatter);
+				col.set("formatterParams", {sheet: sheet});
+				col.set("cellClick", dynamicClick);
 			case _:
 				// TODO editors
 		}
@@ -103,6 +109,18 @@ function createColumns(columns:Array<cdb.Data.Column>, sheet:Sheet) {
 // 	return lines;
 // }
 
+function dynamicFormatter(cell:CellComponent, formatterParams, onRendered) {
+	var sheet:Sheet = formatterParams.sheet;
+	return sheet.base.valToString(TDynamic, cell.getValue());
+}
+function dynamicClick(e, cell:CellComponent) {
+	var str = Json.stringify(cell.getValue(), null, "\t");
+	var te = new TextEditor(str, cell.getField(), null, LangJson,
+	(value) -> {
+		// TODO Handle JSON parsing errors
+		cell.setValue(Json.parse(value));
+	});
+}
 
 function listClick(e, cell:CellComponent) {
 	var tabulator:tabulator.Tabulator = cell.getTable();
