@@ -915,7 +915,7 @@ class WorldRender extends dn.Process {
 			wl.identifier.removeChildren();
 			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
 			tf.text = l.getDisplayIdentifier();
-			tf.textColor = 0xffffff;
+			tf.textColor = l.getSmartColor(false).toWhite(0.5);
 			if( l.useAutoIdentifier )
 				tf.alpha = 0.33;
 			tf.x = 6;
@@ -984,7 +984,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Color
-		wl.identifier.color.setColor( C.addAlphaF( C.toBlack( l.getSmartColor(false), 0.6 ) ) );
+		wl.identifier.color.setColor( l.getSmartColor(false).toBlack(0.3).withAlpha(1) );
 	}
 
 
