@@ -85,11 +85,9 @@ class Tabulator {
 					col.set("formatter", "tickCross");
 				case TList:
 					col.set("formatter", listFormatter);
-					col.set("formatterParams", {sheet: sheet});
 					col.set("cellClick", listClick);
 				case TDynamic:
 					col.set("formatter", dynamicFormatter);
-					col.set("formatterParams", {sheet: sheet});
 					col.set("cellClick", dynamicClick);
 				case _:
 					// TODO editors
@@ -100,7 +98,6 @@ class Tabulator {
 	}
 
 	function dynamicFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var sheet:Sheet = formatterParams.sheet;
 		return sheet.base.valToString(TDynamic, cell.getValue());
 	}
 
@@ -109,8 +106,8 @@ class Tabulator {
 		var te = new TextEditor(str, cell.getField(), null, LangJson,
 		(value) -> {
 			// TODO Handle JSON parsing errors
-			// TODO Could also use sheet.base.parseDynamic() when i change this file to a class
-			cell.setValue(Json.parse(value));
+			var val = sheet.base.parseDynamic(value);
+			cell.setValue(val);
 		});
 	}
 
@@ -123,7 +120,6 @@ class Tabulator {
 		var table = js.Browser.document.createElement("div");
 
 		// Close the old subTabulator if one exists and return if we're trying to open the same one
-		// TODO This looks ugly but im too tired to find a better way rn
 		if (sub != null) {
 			if (sub.parentCell == cell) {
 				removeSubTabulator();
@@ -151,7 +147,6 @@ class Tabulator {
 	}
 
 	function listFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var sheet:Sheet = formatterParams.sheet;
 		var sub = sheet.base.getSheet(sheet.name + "@" + cell.getField());
 		var str = "[" + Std.string([for (x in sub.columns) x.name]) + "]";
 		return str;
@@ -191,33 +186,34 @@ class Tabulator {
 	}
 
 	function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var content = js.Browser.document.createElement("span");
+		var content = new J("<span/>");
 		var values = cell.getValue();
 		var td = Editor.ME.project.defs.getTilesetDefFrom(values.file);
 		
+		if (td == null) {
+			var jPicker = JsTools.createTileRectPicker(null, null, false, (x) -> {});
+			jPicker.appendTo(content);
+			return content;
+		}
 		// Tile preview
 		// LDTK uses pixels for the grid, Castle uses how many'th tile it is
 		// TODO test createTilePicker()
-		var exists = td != null ? true : false;
-
-		var uid = exists ? td.uid : null;
-		var size = exists ? td.tileGridSize : null;
-		var relPath = exists ? td.relPath : null;
-		var tilesetRect = exists ? {
-			tilesetUid: uid,
+		var size = td.tileGridSize;
+		var tilesetRect =  {
+			tilesetUid: td.uid,
 			h: size,
 			w: size,
 			y: values.y * size,
-			x: values.x * size
-		} : null;
+			x: values.x * size,
+		};
 
 		var jPicker = JsTools.createTileRectPicker(
-			uid,
+			td.uid,
 			tilesetRect,
-			exists,
+			true,
 			(tile) -> {
 				var obj:DynamicAccess<Dynamic> = {};
-				obj.set("file", relPath);
+				obj.set("file", td.relPath);
 				obj.set("size", size);
 				obj.set("x", tile.x / size);
 				obj.set("y", tile.y / size);
