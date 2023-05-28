@@ -32,6 +32,7 @@ extern class CellComponent {
 @:jsRequire("tabulator-tables")
 extern class RowComponent {
 	public function getIndex():Int;
+	public function getPosition():Int;
 }
 
 @:jsRequire("tabulator-tables")

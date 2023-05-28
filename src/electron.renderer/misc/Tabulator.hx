@@ -1,5 +1,6 @@
 package misc;
 
+import cdb.Data.ColumnType;
 import cdb.Data.Column;
 import js.jquery.JQuery;
 import haxe.Json;
@@ -16,6 +17,7 @@ class Tabulator {
 	public var element:JQuery;
 	public var sheet:Sheet;
 	public var columns:Array<Column>;
+	public var columnTypes:Map<String, ColumnType>;
 	public var lines:Array<Dynamic>;
 	public var tabulator:Null<tabulator.Tabulator>;
 
@@ -25,6 +27,7 @@ class Tabulator {
 	public function new(element:EitherType<String, js.html.Element>, sheet:Sheet) {
 		this.element = new J(element);
 		this.columns = sheet.columns;
+		this.columnTypes = [for (x in columns) x.name => x.type];
 		this.lines = sheet.getLines();
 		this.sheet = sheet;
 		createTabulator();
@@ -72,7 +75,8 @@ class Tabulator {
 			var col:DynamicAccess<Dynamic> = {};
 			col.set("title", column.name);
 			col.set("field", column.name);
-			switch column.type {
+			var t = column.type;
+			switch t {
 				case TId, TString, TInt: 
 					col.set("editor", "input");
 				case TImage, TTilePos:
@@ -89,12 +93,42 @@ class Tabulator {
 				case TDynamic:
 					col.set("formatter", dynamicFormatter);
 					col.set("cellClick", dynamicClick);
+				case TRef(t):
+					col.set("formatter", refFormatter);
 				case _:
 					// TODO editors
 			}
 			cols.push(col);
 		}
 		return cols;
+	}
+
+	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
+		var value:Null<String> = cell.getValue();
+		var type = columnTypes.get(cell.getField());
+		var content = new J("<span/>");
+		if (value == null) return content.get(0);
+
+		// Index contains reference data I think
+		var s = sheet.base.getSheet(sheet.base.typeStr(type));
+		var i = s.index.get(value);
+
+		// Ref Image
+		var td = Editor.ME.project.defs.getTilesetDefFrom(i.ico.file);
+		var size = td.tileGridSize;
+		var tilesetRect =  {
+			tilesetUid: td.uid,
+			h: size,
+			w: size,
+			y: i.ico.y * size,
+			x: i.ico.x * size,
+		};
+		content.append(JsTools.createTileRectPicker(td.uid, tilesetRect, false, (e) -> {}));
+		
+		// Ref Name
+		content.append(StringTools.htmlEscape(i.disp));
+
+		return content.get(0);
 	}
 
 	function dynamicFormatter(cell:CellComponent, formatterParams, onRendered) {
