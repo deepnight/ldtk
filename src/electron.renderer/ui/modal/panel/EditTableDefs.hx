@@ -40,6 +40,10 @@ class EditTableDefs extends ui.modal.Panel {
 				},
 			});
 		});
+		if (project.db.sheets.length > 0) {
+			selectTable(project.db.sheets[0]);
+			return;
+		}
 		updateTableList();
 		updateTableForm();
 	}
