@@ -193,7 +193,7 @@ class Tabulator {
 		if (td == null) {
 			var jPicker = JsTools.createTileRectPicker(null, null, false, (x) -> {});
 			jPicker.appendTo(content);
-			return content;
+			return content.get(0);
 		}
 		// Tile preview
 		// LDTK uses pixels for the grid, Castle uses how many'th tile it is
@@ -221,6 +221,6 @@ class Tabulator {
 			}
 		);
 		jPicker.appendTo(content);
-		return content;
+		return content.get(0);
 	}
 }
