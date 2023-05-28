@@ -87,7 +87,7 @@ class EditTableDefs extends ui.modal.Panel {
 		jTabEditor.empty();
 
 		if (tabulatorView) {
-			var tabulator = new Tabulator("#tableEditor", curSheet.columns, curSheet.lines, curSheet);
+			var tabulator = new Tabulator("#tableEditor", curSheet);
 		} else {
 			// var tableDefsForm = new ui.TableDefsForm(curTable);
 			// jTabEditor.append(tableDefsForm.jWrapper);

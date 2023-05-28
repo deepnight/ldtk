@@ -22,10 +22,10 @@ class Tabulator {
 	public var sub:Null<Tabulator>;
 	public var parentCell:Null<CellComponent>;
 	
-	public function new(element:EitherType<String, js.html.Element>, columns:Array<Column>, lines:Array<Dynamic>, sheet:Sheet) {
+	public function new(element:EitherType<String, js.html.Element>, sheet:Sheet) {
 		this.element = new J(element);
-		this.columns = columns;
-		this.lines = lines;
+		this.columns = sheet.columns;
+		this.lines = sheet.getLines();
 		this.sheet = sheet;
 		createTabulator();
 	}
@@ -132,7 +132,7 @@ class Tabulator {
 			removeSubTabulator();
 		} 
 
-		var subTabulator = new Tabulator(table, subSheet.columns, cell.getValue(), subSheet);
+		var subTabulator = new Tabulator(table, subSheet);
 		
 		holder.style.boxSizing = "border-box";
 		holder.style.padding = "10px 30px 10px 10px";
