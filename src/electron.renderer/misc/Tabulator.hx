@@ -93,6 +93,8 @@ class Tabulator {
 				case TDynamic:
 					col.set("formatter", dynamicFormatter);
 					col.set("cellClick", dynamicClick);
+				case TTileLayer:
+					col.set("formatter", tileLayerFormatter);
 				case TRef(t):
 					col.set("formatter", refFormatter);
 				case _:
@@ -101,6 +103,10 @@ class Tabulator {
 			cols.push(col);
 		}
 		return cols;
+	}
+
+	function tileLayerFormatter(cell:CellComponent, formatterParams, onRendered) {
+		return "#DATA";
 	}
 
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
