@@ -11,6 +11,7 @@ extern class Tabulator {
 
 	public function on(eventName:String, cb:(e:Event, cell:Dynamic) -> Void):Void;
 	public function getData():Dynamic;
+	public function addRow(data:Dynamic):Void;
 	public function redraw(full:Bool):Void;
 	public function destroy():Void;
 	public function deleteColumn(name:String):Void;

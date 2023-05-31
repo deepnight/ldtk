@@ -46,7 +46,16 @@ class Tabulator {
 				maxWidth:300,
 			},
 		});
+		(js.Browser.window:Dynamic).tabulator = tabulator; // TODO remove this when debugging isnt needed
 		tabulator.on("renderComplete", (e, cell) -> {
+			// tableholder is all of tabulator except the column headers
+			var holder = new J(tabulator.element.querySelector(".tabulator-tableholder"));
+			ContextMenu.addTo(holder, false, [
+				{
+					label: new LocaleString("Add row"),
+					cb: createRow
+				}
+			]);
 			for (column in sheet.columns) {
 				var el = new J(tabulator.element).find('div.tabulator-col[tabulator-field="'+column.name+'"]');
 				ContextMenu.addTo(el, false, [
@@ -70,6 +79,15 @@ class Tabulator {
 			}
 		});
 		return tabulator;
+	}
+
+	function createRow() {
+		var line:DynamicAccess<Dynamic> = {};
+		for (c in columns) {
+			line.set(c.name, sheet.base.getDefault(c, false, sheet));
+		}
+		lines.push(line);
+		tabulator.addRow(line);
 	}
 
 	function createColumns(columns:Array<Column>) {
@@ -225,13 +243,6 @@ class Tabulator {
 		var content = new J("<span/>");
 		var values:TilePos = cell.getValue();
 		var jPicker = tilePosToTileRectPicker(values, cell, true);
-		
-		if (jPicker == null) {
-			var jPicker = JsTools.createTileRectPicker(null, null, false, (x) -> {});
-			jPicker.appendTo(content);
-			return content.get(0);
-		}
-
 		jPicker.appendTo(content);
 		return content.get(0);
 	}
@@ -239,8 +250,9 @@ class Tabulator {
 	// Create a tile image (and possibly a picker) from a CastleDB TImage object
 	// Provide a cellComponent and set editable to true to allow editing
 	function tilePosToTileRectPicker(tilePos:TilePos, ?cell:CellComponent, ?editable = true) {
+		if (tilePos == null) return JsTools.createTileRectPicker(null, null, false, (x) -> {});
 		var td = Editor.ME.project.defs.getTilesetDefFrom(tilePos.file);
-		if (td == null) return null;
+		if (td == null) return JsTools.createTileRectPicker(null, null, false, (x) -> {});
 		var jPicker = JsTools.createTileRectPicker(
 			td.uid,
 			tilePosToTilesetRect(tilePos, td),
