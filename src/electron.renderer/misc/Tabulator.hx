@@ -73,33 +73,34 @@ class Tabulator {
 	}
 
 	function createColumns(columns:Array<Column>) {
-		var cols = [];
+		var cols:Array<ColumnDefinition> = [{formatter: "rownum"}];
 		for (column in columns) {
-			var col:DynamicAccess<Dynamic> = {};
-			col.set("title", column.name);
-			col.set("field", column.name);
+			var col:ColumnDefinition = {};
+			col.title = column.name;
+			col.field =  column.name;
+			col.hozAlign = "center";
 			var t = column.type;
 			switch t {
 				case TId, TString, TInt: 
-					col.set("editor", "input");
+					col.editor = "input";
 				case TImage, TTilePos:
-					col.set("formatter", imageFormatter);
+					col.formatter =  imageFormatter;
 					var line:DynamicAccess<Dynamic> = sheet.lines[0];
-					col.set("headerFilterParams", {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(column.name).file)});
-					col.set("headerFilter", imageHeaderFilter);
+					col.headerFilterParams = {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(column.name).file)};
+					col.headerFilter =  imageHeaderFilter;
 				case TBool:
-					col.set("editor", "tickCross");
-					col.set("formatter", "tickCross");
+					col.editor = "tickCross";
+					col.formatter = "tickCross";
 				case TList:
-					col.set("formatter", listFormatter);
-					col.set("cellClick", listClick);
+					col.formatter = listFormatter;
+					col.cellClick = listClick;
 				case TDynamic:
-					col.set("formatter", dynamicFormatter);
-					col.set("cellClick", dynamicClick);
+					col.formatter = dynamicFormatter;
+					col.cellClick = dynamicClick;
 				case TTileLayer:
-					col.set("formatter", tileLayerFormatter);
+					col.formatter = tileLayerFormatter;
 				case TRef(t):
-					col.set("formatter", refFormatter);
+					col.formatter = refFormatter;
 				case _:
 					// TODO editors
 			}

@@ -33,10 +33,21 @@ extern class CellComponent {
 extern class RowComponent {
 	public function getIndex():Int;
 	public function getPosition():Int;
+	public function getElement():Element;
 }
 
 @:jsRequire("tabulator-tables")
 extern class ColumnComponent {
 	public function getCells():Array<CellComponent>;
 	public function getValue():Dynamic;
+}
+typedef ColumnDefinition = {
+	var ?title : String;
+	var ?field : String;
+	var ?formatter : Dynamic;
+	var ?hozAlign : String;
+	var ?editor : Dynamic;
+	var ?headerFilter : Dynamic;
+	var ?headerFilterParams : Dynamic;
+	var ?cellClick : Dynamic;
 }
