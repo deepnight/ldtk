@@ -82,6 +82,7 @@ class Tabulator {
 	}
 
 	function createRow() {
+		// TODO getDefault doesnt actually return values that work. Maybe the fix should be done to the actual functions
 		var line:DynamicAccess<Dynamic> = {};
 		for (c in columns) {
 			line.set(c.name, sheet.base.getDefault(c, false, sheet));
@@ -264,6 +265,7 @@ class Tabulator {
 
 	// LDTK uses pixels for the grimaimage CasPPooes how many'th tile it is
 	function tilePosToTilesetRect(tilePos:TilePos, td:TilesetDef):TilesetRect {
+		if (tilePos == null || td == null) return null;
 		var size = td.tileGridSize;
 		var tilesetRect =  {
 			tilesetUid: td.uid,
@@ -279,10 +281,12 @@ class Tabulator {
 	function saveTilesetRect(cell:CellComponent, tile:TilesetRect, td:TilesetDef) {
 		var obj:DynamicAccess<Dynamic> = {};
 		var size = td.tileGridSize;
+		var x = tile == null ? 0 : tile.x;
+		var y = tile == null ? 0 : tile.y;
 		obj.set("file", td.relPath);
 		obj.set("size", size);
-		obj.set("x", tile.x / size);
-		obj.set("y", tile.y / size);
+		obj.set("x", x / size);
+		obj.set("y", y / size);
 		cell.setValue(obj);
 	}
 }
