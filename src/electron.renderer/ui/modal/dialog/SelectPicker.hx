@@ -55,6 +55,9 @@ class SelectPicker extends ui.modal.Dialog {
 			if( !jOpt.is("[value") || jOpt.attr("value").length==0 )
 				jValue.addClass("null");
 
+			if( jOpt.hasClass("default") )
+				jValue.addClass("default");
+
 			jValue.click( _->{
 				onPick( jOpt.attr("value") );
 				close();

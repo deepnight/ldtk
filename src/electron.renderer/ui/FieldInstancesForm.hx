@@ -368,6 +368,7 @@ class FieldInstancesForm {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value","_default");
+					jOpt.addClass("default");
 					jOpt.text(v.id+" (default)");
 					if( v.tileRect!=null )
 						jOpt.attr("tile", haxe.Json.stringify(v.tileRect));

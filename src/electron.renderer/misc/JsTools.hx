@@ -792,6 +792,8 @@ class JsTools {
 				jSelect.append(jOpt);
 				jOpt.attr("value", jOldOpt.attr("value"));
 				jOpt.text( jOldOpt.text() );
+				if( jOldOpt.hasClass("default") )
+					jOpt.addClass("default");
 
 				if( jOldOpt.prop("disabled")==true )
 					jOpt.addClass("disabled");
