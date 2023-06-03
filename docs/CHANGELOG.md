@@ -1,5 +1,6 @@
 # 1.3.4
 
+ - You use the mouse middle click to reset any custom field input to its default value
  - Added customizable entity fields colors (each entity field can have its own custom color)
  - Added a new app setting to adjust the "single-layer mode" intensity.
  - Added customizable default entity width/height (in Project settings)
