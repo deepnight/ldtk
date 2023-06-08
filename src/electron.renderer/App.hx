@@ -554,7 +554,6 @@ class App extends dn.Process {
 	}
 
 
-
 	public inline function requestCpu(full=true) {
 		requestedCpuEndTime = haxe.Timer.stamp()+2;
 	}
@@ -866,6 +865,7 @@ class App extends dn.Process {
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');
 			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(M.round(100*hxd.System.fpsLimit/60))}%');
+			debugPre('ElectronThrottling=${dn.js.ElectronTools.isThrottlingEnabled()}');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());

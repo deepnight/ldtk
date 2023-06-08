@@ -4,6 +4,7 @@
  - Added customizable entity fields colors (each entity field can have its own custom color)
  - Added a new app setting to adjust the "single-layer mode" intensity.
  - Added customizable default entity width/height (in Project settings)
+ - LDtk now properly finishes its "long" tasks while minimized (eg. loading, saving, updating auto-layer rules etc.)
  - Entity min width and min height now default to width and height respectively.
  - Better color display for level names in world view
  - Better default display in the new Select modal
