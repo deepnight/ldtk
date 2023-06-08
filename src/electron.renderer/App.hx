@@ -847,9 +847,9 @@ class App extends dn.Process {
 		else if( !focused ) // App is blurred
 			hxd.System.fpsLimit = 2;
 		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
-			hxd.System.fpsLimit = 10;
+			hxd.System.fpsLimit = Std.int(Const.FPS*0.2);
 		else
-			hxd.System.fpsLimit = 30;
+			hxd.System.fpsLimit = Std.int(Const.FPS*0.5);
 
 
 		// Process profiling
