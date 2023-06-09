@@ -1,10 +1,10 @@
 # 1.3.4
 
- - You use the mouse middle click to reset any custom field input to its default value
+ - You can now use the mouse MIDDLE button to reset any custom field input to its default value.
  - Added customizable entity fields colors (each entity field can have its own custom color)
  - Added a new app setting to adjust the "single-layer mode" intensity.
  - Added customizable default entity width/height (in Project settings)
- - LDtk now properly finishes its "long" tasks while minimized (eg. loading, saving, updating auto-layer rules etc.)
+ - LDtk will now properly finish its "long tasks" while the app is minimized (eg. loading, saving, updating auto-layer rules etc.)
  - Entity min width and min height now default to width and height respectively.
  - Better color display for level names in world view
  - Better default display in the new Select modal
