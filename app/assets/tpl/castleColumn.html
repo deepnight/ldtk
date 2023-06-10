@@ -1,0 +1,39 @@
+<h2><span class="icon table"></span> Create a column</h2>
+
+<table>
+    <tr>
+        <td class="first">Column name</td>
+        <td><input type="text" name="name"/></td>
+    </tr>
+    <tr>
+        <td>Column type<td>
+        <select name="type">
+        <option value="id">Unique Identifier</option>
+        <option value="string">Text</option>
+        <option value="bool">Boolean</option>
+        <option value="int">Integer</option>
+        <option value="float">Float</option>
+        <option value="enum">Enumeration</option>
+        <option value="flags">Flags</option>
+        <option value="ref">Reference</option>
+        <option value="list">List</option>
+        <option value="properties">Properties</option>
+        <option value="color">Color</option>
+        <option value="file">File</option>
+        <option value="image">Image</option>
+        <option value="tilepos">Tile</option>
+        <option value="dynamic">Dynamic</option>
+        <option value="layer">Data Layer</option>
+        <option value="tilelayer">Tile Layer</option>
+        <option value="custom">Custom Type</option>
+        </select>
+    </tr>
+    <tr>
+        <td>Required</td>
+        <td><input type="checkbox" name="required"/></td>
+    </tr>
+</table>
+<div class="buttons">
+	<button class="confirm">Create</button>
+	<button class="cancel">Close</button>
+</div>

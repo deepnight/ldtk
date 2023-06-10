@@ -69,6 +69,10 @@ class Tabulator {
 					// 	enable: ()->!td.isUsingEmbedAtlas(),
 					// },
 					{
+						label: new LocaleString("Add column"),
+						cb: () -> createColumn()
+					},
+					{
 						label: L._Delete(),
 						cb: () -> {
 							sheet.deleteColumn(column.name);
@@ -89,6 +93,9 @@ class Tabulator {
 		}
 		lines.push(line);
 		tabulator.addRow(line);
+	}
+	function createColumn() {
+		new ui.modal.dialog.CastleColumn(sheet);
 	}
 
 	function createColumns(columns:Array<Column>) {
