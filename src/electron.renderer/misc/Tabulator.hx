@@ -73,6 +73,10 @@ class Tabulator {
 						cb: () -> createColumn()
 					},
 					{
+						label: new LocaleString("Edit column"),
+						cb: () -> new ui.modal.dialog.CastleColumn(sheet, column)
+					},
+					{
 						label: L._Delete(),
 						cb: () -> {
 							sheet.deleteColumn(column.name);
