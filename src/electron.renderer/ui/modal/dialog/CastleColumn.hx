@@ -73,16 +73,6 @@ class CastleColumn extends ui.modal.Dialog {
 		jContent.find("input[name=required]").prop("checked", !column.opt);
 	}
 
-	function createColumn() {
-		var c = getColumn();
-		var result = sheet.addColumn(c);
-		if (result != null) {
-			Notification.error(result);
-		}  else {
-			Notification.success("Column created succesfully");
-			close();
-		}
-	}
 	function getColumn() {
 		var name = jContent.find("input[name=name]").val();
 		var type = getType(jContent.find("select[name=type]").val());
