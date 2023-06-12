@@ -71,7 +71,9 @@ class Tabulator {
 					// },
 					{
 						label: new LocaleString("Add column"),
-						cb: () -> new ui.modal.dialog.CastleColumn(sheet)
+						cb: () -> new ui.modal.dialog.CastleColumn(sheet, (c)-> {
+							tabulator.addColumn(createColumnDef(c));
+						})
 					},
 					{
 						label: new LocaleString("Edit column"),
