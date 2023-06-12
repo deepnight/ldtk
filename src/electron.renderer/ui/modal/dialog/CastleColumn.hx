@@ -31,8 +31,8 @@ class CastleColumn extends ui.modal.Dialog {
 				}  else {
 					Notification.success("Column created succesfully");
 					close();
+					onConfirm(c);
 				}
-				onConfirm(c);
 			});
 		} else {
 			editColumn(column);
@@ -44,8 +44,8 @@ class CastleColumn extends ui.modal.Dialog {
 				}  else {
 					Notification.success("Column edited succesfully");
 					close();
+					onConfirm(newColumn);
 				}
-				onConfirm(newColumn);
 			});
 		}
 	}
@@ -97,6 +97,7 @@ class CastleColumn extends ui.modal.Dialog {
 	}
 
 	function getType(type:String) {
+		// TODO implement all types
 		var type:ColumnType = switch(type) {
 			case "id": TId;
 			case "int": TInt;
