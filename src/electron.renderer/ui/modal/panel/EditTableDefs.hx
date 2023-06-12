@@ -87,6 +87,15 @@ class EditTableDefs extends ui.modal.Panel {
 		updateTableList();
 		updateTableForm();
 
+		var i = jContent.find("input[name=name]");
+		i.off();
+		i.val(sheet.name);
+		i.on("blur", (e)->{
+			sheet.rename(i.val());
+			Notification.success("Table renamed");
+			updateTableList();
+		});
+
 		var jTabEditor = jContent.find("#tableEditor");
 		jTabEditor.empty();
 
