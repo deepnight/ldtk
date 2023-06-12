@@ -44,6 +44,10 @@ type LdtkJSON struct {
 	BgColor                                                                                     string                    `json:"bgColor"`
 	// An array of command lines that can be ran manually by the user                                                     
 	CustomCommands                                                                              []LdtkCustomCommand       `json:"customCommands"`
+	// Default height for new entities                                                                                    
+	DefaultEntityHeight                                                                         int64                     `json:"defaultEntityHeight"`
+	// Default width for new entities                                                                                     
+	DefaultEntityWidth                                                                          int64                     `json:"defaultEntityWidth"`
 	// Default grid size for new layers                                                                                   
 	DefaultGridSize                                                                             int64                     `json:"defaultGridSize"`
 	// Default background color of levels                                                                                 
@@ -270,6 +274,7 @@ type FieldDefinition struct {
 	Doc                                                                                        *string           `json:"doc"`
 	EditorAlwaysShow                                                                           bool              `json:"editorAlwaysShow"`
 	EditorCutLongValues                                                                        bool              `json:"editorCutLongValues"`
+	EditorDisplayColor                                                                         *string           `json:"editorDisplayColor"`
 	// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,                        
 	// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,                            
 	// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,                                       
