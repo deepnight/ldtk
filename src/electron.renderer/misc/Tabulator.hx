@@ -37,9 +37,10 @@ class Tabulator {
 	}
 
 	function createTabulator() {
+		var cols = [({formatter: "rownum"}:ColumnDefinition)].concat([for (c in columns) createColumnDef(c)]);
 		tabulator = new tabulator.Tabulator(element.get(0), {
 			data: lines,
-			columns: createColumns(columns),
+			columns: cols,
 			movableRows: true,
 			movableColumns: true,
 			columnDefaults: {
@@ -75,8 +76,7 @@ class Tabulator {
 					{
 						label: new LocaleString("Edit column"),
 						cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
-							// The first column is the rownumber. So we get the [1]
-							tabulator.updateColumnDefinition(column.name, createColumns([c])[1]);
+							tabulator.updateColumnDefinition(c.name, createColumnDef(c));
 						})
 					},
 					{
@@ -102,41 +102,37 @@ class Tabulator {
 		tabulator.addRow(line);
 	}
 
-	function createColumns(columns:Array<Column>) {
-		var cols:Array<ColumnDefinition> = [{formatter: "rownum"}];
-		for (column in columns) {
-			var col:ColumnDefinition = {};
-			col.title = column.name;
-			col.field =  column.name;
-			col.hozAlign = "center";
-			var t = column.type;
-			switch t {
-				case TId, TString, TInt: 
-					col.editor = "input";
-				case TImage, TTilePos:
-					col.formatter =  imageFormatter;
-					var line:DynamicAccess<Dynamic> = sheet.lines[0];
-					col.headerFilterParams = {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(column.name).file)};
-					col.headerFilter =  imageHeaderFilter;
-				case TBool:
-					col.editor = "tickCross";
-					col.formatter = "tickCross";
-				case TList:
-					col.formatter = listFormatter;
-					col.cellClick = listClick;
-				case TDynamic:
-					col.formatter = dynamicFormatter;
-					col.cellClick = dynamicClick;
-				case TTileLayer:
-					col.formatter = tileLayerFormatter;
-				case TRef(t):
-					col.formatter = refFormatter;
-				case _:
-					// TODO editors
-			}
-			cols.push(col);
+	function createColumnDef(c:Column) {
+		var def:ColumnDefinition = {};
+		def.title = c.name;
+		def.field =  c.name;
+		def.hozAlign = "center";
+		var t = c.type;
+		switch t {
+			case TId, TString, TInt: 
+				def.editor = "input";
+			case TImage, TTilePos:
+				def.formatter =  imageFormatter;
+				var line:DynamicAccess<Dynamic> = sheet.lines[0];
+				def.headerFilterParams = {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(c.name).file)};
+				def.headerFilter =  imageHeaderFilter;
+			case TBool:
+				def.editor = "tickCross";
+				def.formatter = "tickCross";
+			case TList:
+				def.formatter = listFormatter;
+				def.cellClick = listClick;
+			case TDynamic:
+				def.formatter = dynamicFormatter;
+				def.cellClick = dynamicClick;
+			case TTileLayer:
+				def.formatter = tileLayerFormatter;
+			case TRef(t):
+				def.formatter = refFormatter;
+			case _:
+				// TODO editors
 		}
-		return cols;
+		return def;
 	}
 
 	function tileLayerFormatter(cell:CellComponent, formatterParams, onRendered) {
