@@ -115,8 +115,6 @@ class Tabulator {
 				def.editor = "input";
 			case TImage, TTilePos:
 				def.formatter =  imageFormatter;
-				var line:DynamicAccess<Dynamic> = sheet.lines[0];
-				def.headerFilterParams = {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(c.name).file)};
 				def.headerFilter =  imageHeaderFilter;
 			case TBool:
 				def.editor = "tickCross";
