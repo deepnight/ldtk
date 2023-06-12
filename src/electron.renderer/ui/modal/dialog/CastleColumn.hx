@@ -1,5 +1,7 @@
 package ui.modal.dialog;
 
+import js.jquery.JQuery;
+import js.html.Option;
 import cdb.Sheet;
 import cdb.Data;
 
@@ -7,6 +9,9 @@ class CastleColumn extends ui.modal.Dialog {
 	var onConfirm : Null<Column->Void>;
 	var sheet : Sheet;
 	var column : Null<Column>;
+	var jExtra : JQuery;
+	var jExtraName : JQuery;
+	var jExtraValue : JQuery;
 
 	public function new(sheet:cdb.Sheet, ?column:Column, ?onConfirm:Column->Void) {
 		super();
@@ -15,11 +20,31 @@ class CastleColumn extends ui.modal.Dialog {
 		this.column = column;
 		loadTemplate("castleColumn");
 
+		var jSelect = jContent.find("select[name=type]");
+		jExtra = jContent.find("#extra-holder");
+		jExtraName = jExtra.children().first();
+		jExtraValue = jExtra.children().last();
 		var jConfirm = jContent.find(".confirm");
 		var jCancel = jContent.find(".cancel");
 
 		jCancel.click( _-> {
 			close();
+		});
+
+		jSelect.on("change", (e) -> {
+			switch (jSelect.val()) {
+				case "ref":
+					jExtra.show();
+					jExtraValue.empty();
+					jExtraName.html("Sheet");
+					var select = new J("<select/>");
+					for (s in sheet.base.sheets.filter(s -> !s.props.hide)) {
+						select.append(new Option(s.name, s.name));
+					}
+					var x = select.appendTo(jExtraValue);
+				case _:
+					var x = jExtra.hide();
+			}
 		});
 
 		if (column == null) {
@@ -123,13 +148,8 @@ class CastleColumn extends ui.modal.Dialog {
 				// }
 				// TFlags([for( f in vals ) StringTools.trim(f)]);
 			case "ref":
-				TImage;
-				// var s = base.sheets[Std.parseInt(v.sheet)];
-				// if( s == null ) {
-				// 	error("Sheet not found");
-				// 	return null;
-				// }
-				// TRef(s.name);
+				var s = jExtraValue.find("select").val();
+				return TRef(s);
 			case "image":
 				TImage;
 			case "list":
