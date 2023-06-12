@@ -14,6 +14,7 @@ extern class Tabulator {
 	public function addRow(data:Dynamic):Void;
 	public function redraw(full:Bool):Void;
 	public function destroy():Void;
+	public function updateColumnDefinition(name:String, data:Dynamic):Void;
 	public function deleteColumn(name:String):Void;
 }
 

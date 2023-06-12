@@ -70,11 +70,14 @@ class Tabulator {
 					// },
 					{
 						label: new LocaleString("Add column"),
-						cb: () -> createColumn()
+						cb: () -> new ui.modal.dialog.CastleColumn(sheet)
 					},
 					{
 						label: new LocaleString("Edit column"),
-						cb: () -> new ui.modal.dialog.CastleColumn(sheet, column)
+						cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
+							// The first column is the rownumber. So we get the [1]
+							tabulator.updateColumnDefinition(column.name, createColumns([c])[1]);
+						})
 					},
 					{
 						label: L._Delete(),
@@ -97,9 +100,6 @@ class Tabulator {
 		}
 		lines.push(line);
 		tabulator.addRow(line);
-	}
-	function createColumn() {
-		new ui.modal.dialog.CastleColumn(sheet);
 	}
 
 	function createColumns(columns:Array<Column>) {

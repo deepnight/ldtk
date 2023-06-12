@@ -4,11 +4,11 @@ import cdb.Sheet;
 import cdb.Data;
 
 class CastleColumn extends ui.modal.Dialog {
-	var onConfirm : Null<Void->Void>;
+	var onConfirm : Null<Column->Void>;
 	var sheet : Sheet;
 	var column : Null<Column>;
 
-	public function new(sheet:cdb.Sheet, ?column:Column, ?onConfirm:Void->Void) {
+	public function new(sheet:cdb.Sheet, ?column:Column, ?onConfirm:Column->Void) {
 		super();
 		this.onConfirm = onConfirm;
 		this.sheet = sheet;
@@ -32,6 +32,7 @@ class CastleColumn extends ui.modal.Dialog {
 					Notification.success("Column created succesfully");
 					close();
 				}
+				onConfirm(c);
 			});
 		} else {
 			editColumn(column);
@@ -44,6 +45,7 @@ class CastleColumn extends ui.modal.Dialog {
 					Notification.success("Column edited succesfully");
 					close();
 				}
+				onConfirm(newColumn);
 			});
 		}
 	}
