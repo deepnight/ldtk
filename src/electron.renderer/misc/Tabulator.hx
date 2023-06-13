@@ -1,5 +1,6 @@
 package misc;
 
+import js.html.Option;
 import data.def.TilesetDef;
 import ldtk.Json.TilesetRect;
 import cdb.Types.TilePos;
@@ -142,24 +143,31 @@ class Tabulator {
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var value:Null<String> = cell.getValue();
 		var type = columnTypes.get(cell.getField());
-		var content = new J("<span/>");
-		if (value == null) return content.get(0);
+		var content = new J("<select class='advanced'/>");
 
-		// Index contains reference data I think
-		var s = sheet.base.getSheet(sheet.base.typeStr(type));
-		var i = s.index.get(value);
+		var refSheet = sheet.base.getSheet(sheet.base.typeStr(type));
+		var idCol = refSheet.idCol.name;
+		var nameCol = refSheet.props.displayColumn != null ? refSheet.props.displayColumn : idCol;
+		var iconCol = refSheet.props.displayIcon;
+		var empty = new Option("-- Select a line --", true);
+		content.append(empty);
+		for (line in refSheet.lines) {
+			var line:DynamicAccess<Dynamic> = line;
+			var name = line.get(nameCol);
+			var selected = value == line.get(idCol);
+			if (selected) empty.selected = false;
+			var opt = new Option(name, name, false, selected);
 
-		if (i == null) {
-			content.val("#REF");
-			return content.get(0);
+			if (iconCol != null) {
+				var i:TilePos = line.get(iconCol);
+				var td = Editor.ME.project.defs.getTilesetDefFrom(i.file);
+				opt.setAttribute("tile", Json.stringify(tilePosToTilesetRect(i, td)));
+			}
+			content.append(opt);
 		}
-		// Ref Image
-		if (i.ico != null) {
-			var jPicker = tilePosToTileRectPicker(i.ico, cell, true);
-			content.append(jPicker);
-		}
-		// Ref Name
-		content.append(StringTools.htmlEscape(i.disp));
+		onRendered(() -> {
+			misc.JsTools.parseComponents(new J(cell.getElement()));
+		});
 		return content.get(0);
 	}
 
