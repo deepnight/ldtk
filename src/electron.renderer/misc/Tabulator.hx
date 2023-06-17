@@ -165,6 +165,10 @@ class Tabulator {
 			}
 			content.append(opt);
 		}
+		content.on("change", (e) -> {
+			var val = content.val();
+			cell.setValue(val);
+		});
 		onRendered(() -> {
 			misc.JsTools.parseComponents(new J(cell.getElement()));
 		});
