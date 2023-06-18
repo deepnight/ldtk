@@ -1,6 +1,6 @@
 // Source: https://www.npmjs.com/package/tabulator-tables
 package tabulator;
-import js.html.Event;
+import js.jquery.Event;
 import js.html.Element;
 import haxe.extern.EitherType;
 
@@ -9,7 +9,7 @@ extern class Tabulator {
 	function new(element:EitherType<String, js.html.Element>, options:Dynamic);
 	public var element:Element;
 
-	public function on(eventName:String, cb:(e:Event, cell:Dynamic) -> Void):Void;
+	public function on(eventName:String, cb:(e:Event, component:Dynamic) -> Void):Void;
 	public function getData():Dynamic;
 	public function getColumns():Array<ColumnComponent>;
 	public function addRow(data:Dynamic):Void;
@@ -45,6 +45,7 @@ extern class RowComponent {
 extern class ColumnComponent {
 	public function getCells():Array<CellComponent>;
 	public function getValue():Dynamic;
+	public function getField():String;
 }
 typedef ColumnDefinition = {
 	var ?title : String;

@@ -49,64 +49,56 @@ class Tabulator {
 			},
 		});
 		(js.Browser.window:Dynamic).tabulator = tabulator; // TODO remove this when debugging isnt needed
-		tabulator.on("renderComplete", (e, cell) -> {
-			// tableholder is all of tabulator except the column headers
-			for (col in tabulator.getColumns()) {
-				for (c in col.getCells()) {
-					var el = new J(c.getElement());
-					el.contextmenu((e) -> {
-						var ctx = new ContextMenu(e);
-						ctx.add({
-							label: new LocaleString("Add row"),
-							cb: createRow
-						});
-						ctx.add({
-							label: new LocaleString("Delete row"),
-							// getPosition starts indexing at 1
-							cb: () -> {
-								var row = c.getRow();
-								sheet.deleteLine.bind(row.getPosition()-1);
-								row.delete();
-							}
-						});
-					});
+		tabulator.on("cellContext", (e, cell:CellComponent) -> {
+			var ctx = new ContextMenu(e);
+			ctx.add({
+				label: new LocaleString("Add row"),
+				cb: createRow
+			});
+			ctx.add({
+				label: new LocaleString("Delete row"),
+				// getPosition starts indexing at 1
+				cb: () -> {
+					var row = cell.getRow();
+					sheet.deleteLine.bind(row.getPosition()-1);
+					row.delete();
 				}
-			}
-			for (column in sheet.columns) {
-				var el = new J(tabulator.element).find('div.tabulator-col[tabulator-field="'+column.name+'"]');
-				ContextMenu.addTo(el, false, [
-					// {
-					// 	label: L._Duplicate(),
-					// 	cb: ()-> {
-					// 		var copy = project.defs.duplicateTilesetDef(td);
-					// 		editor.ge.emit( TilesetDefAdded(copy) );
-					// 		selectTileset(copy);
-					// 	},
-					// 	enable: ()->!td.isUsingEmbedAtlas(),
-					// },
-					{
-						label: new LocaleString("Add column"),
-						cb: () -> new ui.modal.dialog.CastleColumn(sheet, (c)-> {
-							tabulator.addColumn(createColumnDef(c));
-						})
-					},
-					{
-						label: new LocaleString("Edit column"),
-						cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
-							tabulator.updateColumnDefinition(c.name, createColumnDef(c));
-						})
-					},
-					{
-						label: L._Delete(),
-						cb: () -> {
-							sheet.deleteColumn(column.name);
-							tabulator.deleteColumn(column.name);
-						}
-					},
-				]);
-			}
+			});
+
+		});
+		tabulator.on("headerContext", (e, columnComponent:ColumnComponent) -> {
+			var column = getColumn(columnComponent);
+			var ctx = new ContextMenu(e);
+			ctx.add({
+				label: new LocaleString("Add column"),
+				cb: () -> new ui.modal.dialog.CastleColumn(sheet, (c)-> {
+					tabulator.addColumn(createColumnDef(c));
+				})
+			});
+			ctx.add({
+				label: new LocaleString("Edit column"),
+				cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
+					tabulator.updateColumnDefinition(c.name, createColumnDef(c));
+				})
+			});
+			ctx.add({
+				label: L._Delete(),
+				cb: () -> {
+					sheet.deleteColumn(column.name);
+					tabulator.deleteColumn(column.name);
+				}
+			});
 		});
 		return tabulator;
+	}
+
+	function getColumn(column:ColumnComponent){
+		for (col in sheet.columns) {
+			if (column.getField() == col.name) {
+				return col;
+			}
+		}
+		return null;
 	}
 
 	function createRow() {
