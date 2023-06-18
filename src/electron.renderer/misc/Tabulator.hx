@@ -51,13 +51,27 @@ class Tabulator {
 		(js.Browser.window:Dynamic).tabulator = tabulator; // TODO remove this when debugging isnt needed
 		tabulator.on("renderComplete", (e, cell) -> {
 			// tableholder is all of tabulator except the column headers
-			var holder = new J(tabulator.element.querySelector(".tabulator-tableholder"));
-			ContextMenu.addTo(holder, false, [
-				{
-					label: new LocaleString("Add row"),
-					cb: createRow
+			for (col in tabulator.getColumns()) {
+				for (c in col.getCells()) {
+					var el = new J(c.getElement());
+					el.contextmenu((e) -> {
+						var ctx = new ContextMenu(e);
+						ctx.add({
+							label: new LocaleString("Add row"),
+							cb: createRow
+						});
+						ctx.add({
+							label: new LocaleString("Delete row"),
+							// getPosition starts indexing at 1
+							cb: () -> {
+								var row = c.getRow();
+								sheet.deleteLine.bind(row.getPosition()-1);
+								row.delete();
+							}
+						});
+					});
 				}
-			]);
+			}
 			for (column in sheet.columns) {
 				var el = new J(tabulator.element).find('div.tabulator-col[tabulator-field="'+column.name+'"]');
 				ContextMenu.addTo(el, false, [

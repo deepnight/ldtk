@@ -11,6 +11,7 @@ extern class Tabulator {
 
 	public function on(eventName:String, cb:(e:Event, cell:Dynamic) -> Void):Void;
 	public function getData():Dynamic;
+	public function getColumns():Array<ColumnComponent>;
 	public function addRow(data:Dynamic):Void;
 	public function addColumn(definition:ColumnDefinition):Void;
 	public function redraw(full:Bool):Void;
@@ -37,6 +38,7 @@ extern class RowComponent {
 	public function getIndex():Int;
 	public function getPosition():Int;
 	public function getElement():Element;
+	public function delete():Void;
 }
 
 @:jsRequire("tabulator-tables")
