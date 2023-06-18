@@ -92,6 +92,13 @@ class Tabulator {
 				}
 			});
 		});
+		tabulator.on("rowMoved", (row:RowComponent) -> {
+			var data = row.getData();
+			var fromIndex = lines.indexOf(data);
+			var toIndex = row.getPosition() - 1;
+			lines.splice(fromIndex, 1); // Remove the original item
+			lines.insert(toIndex, data); // Add the same data to the new position
+		});
 		return tabulator;
 	}
 

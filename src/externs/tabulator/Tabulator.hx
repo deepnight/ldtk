@@ -9,7 +9,8 @@ extern class Tabulator {
 	function new(element:EitherType<String, js.html.Element>, options:Dynamic);
 	public var element:Element;
 
-	public function on(eventName:String, cb:(e:Event, component:Dynamic) -> Void):Void;
+	overload public function on(eventName:String, cb:(e:Event, component:Dynamic) -> Void):Void;
+	overload public function on(eventName:String, cb:(component:Dynamic) -> Void):Void;
 	public function getData():Dynamic;
 	public function getColumns():Array<ColumnComponent>;
 	public function addRow(data:Dynamic, addToTop:Bool, ?row:RowComponent):Void;
@@ -36,6 +37,7 @@ extern class CellComponent {
 @:jsRequire("tabulator-tables")
 extern class RowComponent {
 	public function getIndex():Int;
+	public function getData():Dynamic;
 	public function getPosition():Int;
 	public function getElement():Element;
 	public function delete():Void;
