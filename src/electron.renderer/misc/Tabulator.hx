@@ -117,6 +117,9 @@ class Tabulator {
 			case TImage, TTilePos:
 				def.formatter =  imageFormatter;
 				def.headerFilter =  imageHeaderFilter;
+				// TODO What if the first line doesnt have an image? I need to make this more flexible
+				var line:DynamicAccess<Dynamic> = sheet.lines[0];
+				def.headerFilterParams = {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(c.name).file)};
 			case TBool:
 				def.editor = "tickCross";
 				def.formatter = "tickCross";
