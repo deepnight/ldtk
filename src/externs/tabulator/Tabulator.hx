@@ -12,7 +12,7 @@ extern class Tabulator {
 	public function on(eventName:String, cb:(e:Event, component:Dynamic) -> Void):Void;
 	public function getData():Dynamic;
 	public function getColumns():Array<ColumnComponent>;
-	public function addRow(data:Dynamic):Void;
+	public function addRow(data:Dynamic, addToTop:Bool, ?row:RowComponent):Void;
 	public function addColumn(definition:ColumnDefinition):Void;
 	public function redraw(full:Bool):Void;
 	public function destroy():Void;

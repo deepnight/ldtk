@@ -51,15 +51,18 @@ class Tabulator {
 		(js.Browser.window:Dynamic).tabulator = tabulator; // TODO remove this when debugging isnt needed
 		tabulator.on("cellContext", (e, cell:CellComponent) -> {
 			var ctx = new ContextMenu(e);
+			var row = cell.getRow();
 			ctx.add({
-				label: new LocaleString("Add row"),
-				cb: createRow
+				label: new LocaleString("Add row before"),
+				cb: createRow.bind(row, true)
+			});
+			ctx.add({
+				label: new LocaleString("Add row after"),
+				cb: createRow.bind(row, false)
 			});
 			ctx.add({
 				label: new LocaleString("Delete row"),
-				// getPosition starts indexing at 1
 				cb: () -> {
-					var row = cell.getRow();
 					sheet.deleteLine.bind(row.getPosition()-1);
 					row.delete();
 				}
@@ -101,14 +104,21 @@ class Tabulator {
 		return null;
 	}
 
-	function createRow() {
+	// Add a row before or after specified RowComponent
+	function createRow(?row:RowComponent, before=false) {
 		// TODO getDefault doesnt actually return values that work. Maybe the fix should be done to the actual functions
 		var line:DynamicAccess<Dynamic> = {};
 		for (c in columns) {
 			line.set(c.name, sheet.base.getDefault(c, false, sheet));
 		}
-		lines.push(line);
-		tabulator.addRow(line);
+		if (row == null) {
+			lines.push(line);
+			tabulator.addRow(line, before);
+		} else {
+			var castleIndex = before ? row.getPosition()-1 : row.getPosition();
+			lines.insert(castleIndex, line);
+			tabulator.addRow(line, before, row);
+		}
 	}
 
 	function createColumnDef(c:Column) {
