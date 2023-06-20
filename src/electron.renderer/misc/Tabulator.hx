@@ -135,8 +135,10 @@ class Tabulator {
 		def.hozAlign = "center";
 		var t = c.type;
 		switch t {
-			case TId, TString, TInt: 
+			case TId, TString:
 				def.editor = "input";
+			case TInt, TFloat:
+				def.editor = "number";
 			case TImage, TTilePos:
 				def.formatter =  imageFormatter;
 				def.headerFilter =  imageHeaderFilter;
