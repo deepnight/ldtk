@@ -141,10 +141,6 @@ class Tabulator {
 				def.editor = "number";
 			case TImage, TTilePos:
 				def.formatter =  imageFormatter;
-				def.headerFilter =  imageHeaderFilter;
-				// TODO What if the first line doesnt have an image? I need to make this more flexible
-				var line:DynamicAccess<Dynamic> = sheet.lines[0];
-				def.headerFilterParams = {curTileset: Editor.ME.project.defs.getTilesetDefFrom(line.get(c.name).file)};
 			case TBool:
 				def.editor = "tickCross";
 				def.formatter = "tickCross";
@@ -263,35 +259,26 @@ class Tabulator {
 		sub = null;
 	}
 
-	function imageHeaderFilter(cell, onRendered, success, cancel, headerFilterParams) {
-		// TODO For some reason you cant re-select the original tileset if you change it without reloading tabulator
-		var content = new J("<select/>");
-		var curTd = headerFilterParams.curTileset;
-		var uid = curTd != null ? curTd.uid : null;
-
-		JsTools.createTilesetSelect(
-			Editor.ME.project,
-			content,
-			uid,
-			false,
-			(tileUid) -> {
-				var td = Editor.ME.project.defs.getTilesetDef(tileUid);
-				var cells:Array<CellComponent> = cell.getColumn().getCells();
-				for (cell in cells) {
-					var values:TilePos = cell.getValue();
-					saveTilesetRect(cell, tilePosToTilesetRect(values, td), td);
-				}
-			}
-		);
-		// We need to return the HTML element itself, not a JQuery object
-		return content.get(0);
-	}
-
 	function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var content = new J("<span/>");
 		var values:TilePos = cell.getValue();
-		var jPicker = tilePosToTileRectPicker(values, cell, true);
-		jPicker.appendTo(content);
+		if (values != null && values.file != null) {
+			var jPicker = tilePosToTileRectPicker(values, cell, true);
+			jPicker.appendTo(content);
+		} else {
+			var select = new J("<select/>");
+			JsTools.createTilesetSelect(
+				Editor.ME.project,
+				select,
+				null,
+				false,
+				(uid) -> {
+					var td = Editor.ME.project.defs.getTilesetDef(uid);
+					saveTilesetRect(cell, tilePosToTilesetRect(values, td), td);
+				}
+			);
+			select.appendTo(content);
+		}
 		return content.get(0);
 	}
 

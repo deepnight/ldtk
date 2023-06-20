@@ -42,20 +42,6 @@ class CastleColumn extends ui.modal.Dialog {
 						select.append(new Option(s.name, s.name));
 					}
 					var x = select.appendTo(jExtraValue);
-				case "image":
-					jExtra.show();
-					jExtraValue.empty();
-					jExtraName.html("Tileset");
-					var uid = null;
-					var select = new J("<select/>");
-					JsTools.createTilesetSelect(
-						Editor.ME.project,
-						select,
-						uid,
-						false,
-						(x) -> {}
-					);
-					var x = select.appendTo(jExtraValue);
 				case _:
 					var x = jExtra.hide();
 			}
