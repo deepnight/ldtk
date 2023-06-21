@@ -34,14 +34,7 @@ class CastleColumn extends ui.modal.Dialog {
 		jSelect.on("change", (e) -> {
 			switch (jSelect.val()) {
 				case "ref":
-					jExtra.show();
-					jExtraValue.empty();
-					jExtraName.html("Sheet");
-					var select = new J("<select/>");
-					for (s in sheet.base.sheets.filter(s -> !s.props.hide)) {
-						select.append(new Option(s.name, s.name));
-					}
-					var x = select.appendTo(jExtraValue);
+					createRefSelector();
 				case _:
 					var x = jExtra.hide();
 			}
@@ -92,9 +85,26 @@ class CastleColumn extends ui.modal.Dialog {
 		// 	onCancel();
 	}
 
+	function createRefSelector() {
+		jExtra.show();
+		jExtraValue.empty();
+		jExtraName.html("Sheet");
+		var select = new J("<select/>");
+		var refSheet = null;
+		if (column != null) {
+			refSheet = sheet.base.getSheet(sheet.base.typeStr(column.type));
+		}
+		for (s in sheet.base.sheets.filter(s -> !s.props.hide)) {
+			// If a ref sheet was found with typeStr, and its name matches this sheet
+			var selected = refSheet != null && refSheet.name == s.name ? true : false;
+			select.append(new Option(s.name, s.name, false, selected));
+		}
+		select.appendTo(jExtraValue);
+	}
+
 	function editColumn(c:Column) {
 		jContent.find("input[name=name]").val(c.name);
-		jContent.find("select[name=type]").val(c.type.getName().substr(1).toLowerCase());
+		jContent.find("select[name=type]").val(c.type.getName().substr(1).toLowerCase()).trigger("change");
 		jContent.find("input[name=required]").prop("checked", !column.opt);
 	}
 
