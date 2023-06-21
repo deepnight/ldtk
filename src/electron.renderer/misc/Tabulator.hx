@@ -84,6 +84,16 @@ class Tabulator {
 					tabulator.updateColumnDefinition(c.name, createColumnDef(c));
 				})
 			});
+			if (column.type == TString) {
+				var displayCol = sheet.props.displayColumn;
+				ctx.add({
+					label: new LocaleString("Set as display column"),
+					sub: new LocaleString(displayCol == column.name ? "Enabled" : "Disabled"),
+					cb: () -> {
+						sheet.props.displayColumn = displayCol == column.name ? null : column.name;
+					}
+				});
+			}
 			ctx.add({
 				label: L._Delete(),
 				cb: () -> {
