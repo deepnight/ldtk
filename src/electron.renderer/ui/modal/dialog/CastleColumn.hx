@@ -43,6 +43,7 @@ class CastleColumn extends ui.modal.Dialog {
 		if (column == null) {
 			jConfirm.click( _-> {
 				var c = getColumn();
+				if (c.type.getName() == "TList") sheet.base.createSubSheet(sheet, c);
 				var result = sheet.addColumn(c);
 				if (result != null) {
 					Notification.error(result);

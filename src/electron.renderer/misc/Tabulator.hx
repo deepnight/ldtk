@@ -78,6 +78,9 @@ class Tabulator {
 					tabulator.addColumn(createColumnDef(c));
 				})
 			});
+			// The rest are only for existing columns
+			if (column == null) return;
+
 			ctx.add({
 				label: new LocaleString("Edit column"),
 				cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
