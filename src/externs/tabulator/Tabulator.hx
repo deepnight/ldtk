@@ -11,6 +11,7 @@ extern class Tabulator {
 
 	overload public function on(eventName:String, cb:(e:Event, component:Dynamic) -> Void):Void;
 	overload public function on(eventName:String, cb:(component:Dynamic) -> Void):Void;
+	public function off(eventName:String):Void;
 	public function getData():Dynamic;
 	public function getColumns():Array<ColumnComponent>;
 	public function addRow(data:Dynamic, addToTop:Bool, ?row:RowComponent):Void;

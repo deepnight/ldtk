@@ -28,11 +28,13 @@ class Tabulator {
 	public var sub:Null<Tabulator>;
 	public var parentCell:Null<CellComponent>;
 	
-	public function new(element:EitherType<String, js.html.Element>, sheet:Sheet) {
+	public function new(element:EitherType<String, js.html.Element>, sheet:Sheet, ?parentCell:CellComponent) {
 		this.element = new J(element);
+		this.parentCell = parentCell;
 		this.columns = sheet.columns;
 		this.columnTypes = [for (x in columns) x.name => x.type];
-		this.lines = sheet.getLines();
+		this.lines = parentCell == null ? sheet.getLines() : parentCell.getValue();
+		if (this.lines == null) this.lines = [];
 		this.sheet = sheet;
 		createTabulator();
 	}
@@ -79,30 +81,34 @@ class Tabulator {
 				})
 			});
 			// The rest are only for existing columns
-			if (column == null) return;
-
-			ctx.add({
-				label: new LocaleString("Edit column"),
-				cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
-					tabulator.updateColumnDefinition(c.name, createColumnDef(c));
-				})
-			});
-			if (column.type == TString) {
-				var displayCol = sheet.props.displayColumn;
+			if (column != null) {
 				ctx.add({
-					label: new LocaleString("Set as display column"),
-					sub: new LocaleString(displayCol == column.name ? "Enabled" : "Disabled"),
+					label: new LocaleString("Edit column"),
+					cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
+						tabulator.updateColumnDefinition(c.name, createColumnDef(c));
+					})
+				});
+				if (column.type == TString) {
+					var displayCol = sheet.props.displayColumn;
+					ctx.add({
+						label: new LocaleString("Set as display column"),
+						sub: new LocaleString(displayCol == column.name ? "Enabled" : "Disabled"),
+						cb: () -> {
+							sheet.props.displayColumn = displayCol == column.name ? null : column.name;
+						}
+					});
+				}
+				ctx.add({
+					label: L._Delete(),
 					cb: () -> {
-						sheet.props.displayColumn = displayCol == column.name ? null : column.name;
+						sheet.deleteColumn(column.name);
+						tabulator.deleteColumn(column.name);
 					}
 				});
 			}
 			ctx.add({
-				label: L._Delete(),
-				cb: () -> {
-					sheet.deleteColumn(column.name);
-					tabulator.deleteColumn(column.name);
-				}
+				label: new LocaleString("Add row"),
+				cb: () -> createRow()
 			});
 		});
 		tabulator.on("rowMoved", (row:RowComponent) -> {
@@ -112,6 +118,15 @@ class Tabulator {
 			lines.splice(fromIndex, 1); // Remove the original item
 			lines.insert(toIndex, data); // Add the same data to the new position
 		});
+
+		if (parentCell != null) {
+			// All the formatters write to this.lines, but we don't really want that for Sub Tabulators
+			// Just clear sheet.lines and copy table data to where it needs to be
+			tabulator.on("dataChanged", (c) -> {
+				sheet.lines.splice(0, sheet.lines.length);
+				parentCell.setValue(tabulator.getData());
+			});
+		}
 		return tabulator;
 	}
 
@@ -127,16 +142,12 @@ class Tabulator {
 	// Add a row before or after specified RowComponent
 	function createRow(?row:RowComponent, before=false) {
 		// TODO getDefault doesnt actually return values that work. Maybe the fix should be done to the actual functions
-		var line:DynamicAccess<Dynamic> = {};
-		for (c in columns) {
-			line.set(c.name, sheet.base.getDefault(c, false, sheet));
-		}
 		if (row == null) {
-			lines.push(line);
+			var line = sheet.newLine();
 			tabulator.addRow(line, before);
 		} else {
 			var castleIndex = before ? row.getPosition()-1 : row.getPosition();
-			lines.insert(castleIndex, line);
+			var line = sheet.newLine(castleIndex);
 			tabulator.addRow(line, before, row);
 		}
 	}
@@ -243,7 +254,7 @@ class Tabulator {
 			removeSubTabulator();
 		} 
 
-		var subTabulator = new Tabulator(table, subSheet);
+		var subTabulator = new Tabulator(table, subSheet, cell);
 		
 		holder.style.boxSizing = "border-box";
 		holder.style.padding = "10px 30px 10px 10px";
@@ -258,7 +269,6 @@ class Tabulator {
 		cellElement.closest(".tabulator-row").append(holder);
 		
 		sub = subTabulator;
-		sub.parentCell = cell;
 	}
 
 	function listFormatter(cell:CellComponent, formatterParams, onRendered) {
@@ -268,6 +278,7 @@ class Tabulator {
 	}
 
 	function removeSubTabulator() {
+		sub.tabulator.destroy();
 		sub.element.closest(".subHolder").remove();
 		sub = null;
 	}
