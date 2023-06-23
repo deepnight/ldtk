@@ -5,7 +5,7 @@ import haxe.DynamicAccess;
 class EditTableDefs extends ui.modal.Panel {
 	var curSheet : Null<cdb.Sheet>;
 	var tabulatorView = true;
-	var tabulator : Tabulator;	
+	var tabulator : Null<Tabulator>;	
 
 	public function new() {
 		super();
@@ -97,10 +97,11 @@ class EditTableDefs extends ui.modal.Panel {
 		});
 
 		var jTabEditor = jContent.find("#tableEditor");
+		if (tabulator != null) tabulator.tabulator.destroy();
 		jTabEditor.empty();
 
 		if (tabulatorView) {
-			var tabulator = new Tabulator("#tableEditor", curSheet);
+			tabulator = new Tabulator("#tableEditor", curSheet);
 		} else {
 			// var tableDefsForm = new ui.TableDefsForm(curTable);
 			// jTabEditor.append(tableDefsForm.jWrapper);
