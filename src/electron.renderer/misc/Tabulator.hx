@@ -284,41 +284,25 @@ class Tabulator {
 	}
 
 	function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var content = new J("<span/>");
+		var tileRectPicker = new J("<span/>");
+		var tilesetSelect = new J("<span/>");
 		var values:TilePos = cell.getValue();
-		if (values != null && values.file != null) {
-			var jPicker = tilePosToTileRectPicker(values, cell, true);
-			jPicker.appendTo(content);
-		} else {
-			var select = new J("<select/>");
-			JsTools.createTilesetSelect(
-				Editor.ME.project,
-				select,
-				null,
-				false,
-				(uid) -> {
-					var td = Editor.ME.project.defs.getTilesetDef(uid);
-					saveTilesetRect(cell, tilePosToTilesetRect(values, td), td);
-				}
-			);
-			select.appendTo(content);
-		}
-		return content.get(0);
-	}
-
-	// Create a tile image (and possibly a picker) from a CastleDB TImage object
-	// Provide a cellComponent and set editable to true to allow editing
-	function tilePosToTileRectPicker(tilePos:TilePos, ?cell:CellComponent, ?editable = true) {
-		if (tilePos == null) return JsTools.createTileRectPicker(null, null, false, (x) -> {});
-		var td = Editor.ME.project.defs.getTilesetDefFrom(tilePos.file);
-		if (td == null) return JsTools.createTileRectPicker(null, null, false, (x) -> {});
+		var select = JsTools.createTilesetSelect(Editor.ME.project, null, null, false, (uid) -> {
+			var td = Editor.ME.project.defs.getTilesetDef(uid);
+			saveTilesetRect(cell, tilePosToTilesetRect(values, td), td);
+		});
+		select.appendTo(tilesetSelect);
+		if (values == null || (values != null && values.file == null)) return tilesetSelect.get(0); 
+		var td = Editor.ME.project.defs.getTilesetDefFrom(values.file);
+		if (td == null ) return tilesetSelect.get(0); 
 		var jPicker = JsTools.createTileRectPicker(
 			td.uid,
-			tilePosToTilesetRect(tilePos, td),
-			editable,
-			cell == null ? (x) -> {} : (tile) -> saveTilesetRect(cell, tile, td)
+			tilePosToTilesetRect(values, td),
+			true,
+			(tile) -> saveTilesetRect(cell, tile, td)
 		);
-		return jPicker;
+		jPicker.appendTo(tileRectPicker);
+		return tileRectPicker.get(0);
 	}
 
 	// LDTK uses pixels for the grimaimage CasPPooes how many'th tile it is
@@ -337,10 +321,19 @@ class Tabulator {
 
 	// Save the tilesetPicker value to CastleDB
 	function saveTilesetRect(cell:CellComponent, tile:TilesetRect, td:TilesetDef) {
+		var values:TilePos = cell.getValue();
 		var obj:DynamicAccess<Dynamic> = {};
 		var size = td.tileGridSize;
-		var x = tile == null ? 0 : tile.x;
-		var y = tile == null ? 0 : tile.y;
+		var x;
+		var y;
+		// Reset the position if the tileset changed. They might be different sizes
+		if (values != null && values.file != td.relPath) {
+			x = 0;
+			y = 0;
+		} else {
+			x = tile == null ? 0 : tile.x;
+			y = tile == null ? 0 : tile.y;
+		}
 		obj.set("file", td.relPath);
 		obj.set("size", size);
 		obj.set("x", x / size);
