@@ -271,7 +271,7 @@ class TilesetDef {
 
 			if( oldRelPath!=null || isUsingEmbedAtlas() && oldPxWid>0 ) {
 				// Try to update previous image
-				return remapAllTileIds(oldPxWid, oldPxHei);
+				return remapAllTileIdsAfterResize(oldPxWid, oldPxHei);
 			}
 			else
 				return Ok;
@@ -279,19 +279,39 @@ class TilesetDef {
 	}
 
 
-	function remapAllTileIds(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
-		App.LOG.warning('Tileset remapping...');
-
+	function remapAllTileIdsAfterResize(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
+		App.LOG.warning('Tileset remapping (image size changed)...');
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
 
+		// Use padding to trim
 		if( padding>0 && oldPxWid>pxWid && oldPxHei>pxHei && dn.M.iabs(oldPxWid-pxWid)<=padding*2 && dn.M.iabs(oldPxHei-pxHei)<=padding*2 && pxWid%2==0 && pxHei%2==0 ) {
 			App.LOG.general(' > padding trim');
 			padding -= Std.int( dn.M.imin( oldPxWid-pxWid, oldPxHei-pxHei ) / 2 );
 			return TrimmedPadding;
 		}
 
-		var oldCwid = dn.M.ceil( oldPxWid / tileGridSize );
+		return remapAllTileIds( dn.M.ceil( oldPxWid/tileGridSize ) );
+	}
+
+
+	public function remapAllTileIdsAfterGridChange(oldGrid:Int) : EditorTypes.ImageLoadingResult {
+		return remapAllTileIds( dn.M.ceil( (pxWid-padding*2)/(oldGrid+spacing) ) );
+	}
+
+
+	function remapAllTileIds(oldCwid:Int) : EditorTypes.ImageLoadingResult {
+		App.LOG.warning('Tileset remapping (oldCwid=$oldCwid)...');
+
+		inline function _remapTileId(oldTileCoordId:Null<Int>) : Null<Int> {
+			var tileCy = Std.int(oldTileCoordId/oldCwid);
+			var tileCx = oldTileCoordId - tileCy*oldCwid;
+			if( tileCx>=cWid || tileCy>=cHei )
+				return null;
+			else
+				return tileCx + tileCy*cWid;
+		}
+
 
 		// Tiles layers remapping
 		for(w in _project.worlds)
@@ -302,16 +322,14 @@ class TilesetDef {
 
 			App.LOG.general(' > level ${l.identifier} layer ${li.def.identifier}');
 
-			for( coordId in li.gridTiles.keys() ) {
+			for(tileStack in li.gridTiles) {
 				var i = 0;
-				while( i < li.gridTiles.get(coordId).length ) {
-					var tileInf = li.gridTiles.get(coordId)[i];
-					var remappedTileId = remapTileId( oldCwid, tileInf.tileId );
-					if( remappedTileId==null )
-						li.gridTiles.get(coordId).splice(i,1);
+				while( i<tileStack.length ) {
+					var r = _remapTileId(tileStack[i].tileId);
+					if( r==null )
+						tileStack.splice(i,1);
 					else {
-						App.LOG.general(' > ${tileInf.tileId} => $remappedTileId');
-						tileInf.tileId = remappedTileId;
+						tileStack[i].tileId = r;
 						i++;
 					}
 				}
@@ -322,26 +340,15 @@ class TilesetDef {
 		for(sel in savedSelections) {
 			var i = 0;
 			while( i<sel.ids.length ) {
-				var remap = remapTileId(oldCwid, sel.ids[i]);
-				if( remap==null )
+				var r = _remapTileId(sel.ids[i]);
+				if( r==null )
 					sel.ids.splice(i,1);
 				else {
-					sel.ids[i] = remap;
+					sel.ids[i] = r;
 					i++;
 				}
 			}
 		}
-
-		// Enum tiles remapping
-		// for(ed in _project.defs.enums)
-		// 	if( ed.iconTilesetUid==uid )
-		// 		for(v in ed.values)
-		// 			v.tileId = remapTileId(oldCwid, v.tileId);
-
-		// Entity tiles remapping
-		// for( ed in _project.defs.entities )
-		// 	if( ed.tilesetId==uid && ed.tileId!=null )
-		// 		ed.tileId = remapTileId(oldCwid, ed.tileId);
 
 		// Auto-layer tiles remapping
 		for(ld in _project.defs.layers)
@@ -349,31 +356,31 @@ class TilesetDef {
 				for(rg in ld.autoRuleGroups)
 				for(r in rg.rules)
 				for(i in 0...r.tileIds.length)
-					r.tileIds[i] = remapTileId(oldCwid, r.tileIds[i]);
+					r.tileIds[i] = _remapTileId(r.tileIds[i]);
 			}
 
 		// Enum tags remapping
 		for(enumTag in enumTags.keys()) {
-			var remap = new Map();
+			var newMap = new Map();
 			for( t in enumTags.get(enumTag).keyValueIterator() ) {
-				var newTileId = remapTileId(oldCwid, t.key);
+				var newTileId = _remapTileId(t.key);
 				if( newTileId!=null )
-					remap.set(newTileId, t.value);
+					newMap.set(newTileId, t.value);
 			}
-			enumTags.set(enumTag, remap);
+			enumTags.set(enumTag, newMap);
 		}
 
-		// Custom tile data remapping
-		var remap = new Map();
+		// Custom tile-data remapping
+		var newCustomData = new Map();
 		for(cd in customData.keyValueIterator()) {
-			var newTileId = remapTileId(oldCwid, cd.key);
+			var newTileId = _remapTileId(cd.key);
 			if( newTileId!=null )
-				remap.set(newTileId, cd.value);
+				newCustomData.set(newTileId, cd.value);
 		}
-		customData = remap;
+		customData = newCustomData;
 
 		// Results
-		if( pxWid<oldPxWid || pxHei<oldPxHei ) {
+		if( cWid < oldCwid ) {
 			App.LOG.general(' > loss');
 			return RemapLoss;
 		}
@@ -383,19 +390,6 @@ class TilesetDef {
 		}
 	}
 
-
-
-	inline function remapTileId(oldCwid:Int, oldTileCoordId:Null<Int>) : Null<Int> {
-		if( oldTileCoordId==null )
-			return null;
-
-		var oldCy = Std.int( oldTileCoordId / oldCwid );
-		var oldCx = oldTileCoordId - oldCwid*oldCy;
-		if( oldCx>=cWid || oldCy>=cHei )
-			return null;
-		else
-			return getTileId(oldCx, oldCy);
-	}
 
 	public inline function getAverageTileColor(tid:Int) : dn.Col {
 		return averageColorsCache!=null && averageColorsCache.exists(tid) ? averageColorsCache.get(tid) : 0x888888;
@@ -830,7 +824,7 @@ class TilesetDef {
 	}
 
 
-	public function createTileHtmlImage(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
+	public function createTileHtmlImageFromTileId(tid:Int, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =
 			if( isAtlasLoaded() && isTileInBounds(tid) ) {
 				var imgData = getOrLoadTilesetImage();
@@ -843,13 +837,36 @@ class TilesetDef {
 			else
 				new J( new js.html.Image() );
 
-			if( imgWid!=null ) {
-				jImg.css({
-					width:imgWid+"px",
-					height:(imgHei!=null?imgHei:imgWid)+"px",
-					imageRendering: "pixelated",
-				});
+		if( imgWid!=null ) {
+			jImg.css({
+				width:imgWid+"px",
+				height:(imgHei!=null?imgHei:imgWid)+"px",
+				imageRendering: "pixelated",
+			});
+		}
+		return jImg;
+	}
+
+
+	public function createTileHtmlImageFromRect(r:ldtk.Json.TilesetRect, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
+		var jImg =
+			if( isAtlasLoaded() && isTileRectInBounds(r) ) {
+				var imgData = getOrLoadTilesetImage();
+				var subPixels = imgData.pixels.sub(r.x, r.y, r.w, r.h);
+				var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+				var img = new js.html.Image(subPixels.width, subPixels.height);
+				img.src = 'data:image/png;base64,$b64';
+				new J(img);
 			}
+			else
+				new J( new js.html.Image() );
+
+		if( imgWid!=null )
+			jImg.css({
+				width:imgWid+"px",
+				height:(imgHei!=null?imgHei:imgWid)+"px",
+				imageRendering: "pixelated",
+			});
 
 		return jImg;
 	}

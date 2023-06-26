@@ -261,9 +261,13 @@ class ResizeTool extends Tool<Int> {
 					}
 
 
+					if( ei.def.minWidth!=null ) newWid = M.imax(ei.def.minWidth, newWid);
+					if( ei.def.maxWidth!=null ) newWid = M.imin(ei.def.maxWidth, newWid);
 					ei.customWidth = M.imax( 1, newWid );
 					if( ei.customWidth==ei.def.width ) ei.customWidth = null;
 
+					if( ei.def.minHeight!=null ) newHei = M.imax(ei.def.minHeight, newHei);
+					if( ei.def.maxHeight!=null ) newHei = M.imin(ei.def.maxHeight, newHei);
 					ei.customHeight = M.imax( 1, newHei );
 					if( ei.customHeight==ei.def.height ) ei.customHeight = null;
 

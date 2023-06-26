@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.3.2 JSON schema",
+	"title": "LDtk 1.3.3 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.3.2",
+	"version": "1.3.3",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -1300,6 +1300,13 @@
 						"null"
 					]
 				},
+				"maxHeight": {
+					"description": "Max pixel height (only applies if the entity is resizable on Y)",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"limitScope": {
 					"description": "If TRUE, the maxCount is a \"per world\" limit, if FALSE, it's a \"per level\". Possible values: `PerLayer`, `PerLevel`, `PerWorld`",
 					"enum": [
@@ -1326,6 +1333,13 @@
 						"boolean"
 					]
 				},
+				"minHeight": {
+					"description": "Min pixel height (only applies if the entity is resizable on Y)",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"keepAspectRatio": {
 					"description": "Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height will keep the same aspect ratio as the definition.",
 					"type": [
@@ -1336,6 +1350,13 @@
 					"description": "Base entity color",
 					"type": [
 						"string"
+					]
+				},
+				"minWidth": {
+					"description": "Min pixel width (only applies if the entity is resizable on X)",
+					"type": [
+						"integer",
+						"null"
 					]
 				},
 				"tileRect": {
@@ -1420,6 +1441,13 @@
 					"description": "",
 					"type": [
 						"number"
+					]
+				},
+				"maxWidth": {
+					"description": "Max pixel width (only applies if the entity is resizable on X)",
+					"type": [
+						"integer",
+						"null"
 					]
 				},
 				"resizableY": {
@@ -2857,6 +2885,19 @@
 			],
 			"additionalProperties": false,
 			"properties": {
+				"tile": {
+					"description": "",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"color": {
 					"description": "",
 					"type": [

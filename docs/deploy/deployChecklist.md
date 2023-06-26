@@ -30,9 +30,9 @@
 ## Prepare GitHub release
 - [ ] Run `npm run publish-github`
 - [ ] Copy *Releases notes* to GitHub ([link](https://github.com/deepnight/ldtk/releases))
-- [ ] Build macOS and Linux distribs
-- [ ] Attach macOS to GitHub Release
-- [ ] Attach Linux to GitHub Release
+- [ ] Build macOS and Linux distribs ([link](https://github.com/deepnight/ldtk/actions))
+- [ ] Attach macOS to [GitHub Release]([link](https://github.com/deepnight/ldtk/releases))
+- [ ] Attach Linux to [GitHub Release]([link](https://github.com/deepnight/ldtk/releases))
 
 ## Docs
 - [ ] Upload *Changelog*, *Changelog images*, *JSON doc*, *JSON schema* to FTP
@@ -47,7 +47,7 @@
 - [ ] Run `npm run publish-itchio`
 - [ ] Upload macOS build to Itch.io ([link](https://itch.io/dashboard))
 - [ ] Upload Linux build to Itch.io
-- [ ] Add a devlog post on Itch.io
+- [ ] Add a devlog post on Itch.io ([link](https://deepnight.itch.io/ldtk))
 - [ ] *[Optional]* Update Itch.io page
 
 ## Release

@@ -1,6 +1,6 @@
 {
 	"name": "ldtk",
-	"version": "1.3.2",
+	"version": "1.3.3",
 	"main": "assets/main.js",
 	"productName": "LDtk",
 	"author": "Sebastien Benard",
@@ -21,7 +21,7 @@
 		"qt-cs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cs --namespace ldtk --any-type dynamic",
 		"qt-js": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.js",
 		"qt-py": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.py",
-		"qt-rs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.rs",
+		"qt-rs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.rs --derive-clone --derive-debug --visibility public",
 		"qt-go": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.go",
 		"qt-cpp": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cpp"
 	},

@@ -2447,9 +2447,9 @@ class Editor extends Page {
 			jVis.mousedown( (ev:js.jquery.Event)->{
 				if( App.ME.isShiftDown() ) {
 					// Keep only this one
-					var anyChange = !levelRender.isLayerVisible(li);
+					var anyChange = !levelRender.isLayerVisible(li,true);
 					for(oli in curLevel.layerInstances)
-						if( oli!=li && levelRender.isLayerVisible(oli) ) {
+						if( oli!=li && levelRender.isLayerVisible(oli,true) ) {
 							anyChange = true;
 							levelRender.setLayerVisibility(oli, false);
 						}
@@ -2463,7 +2463,7 @@ class Editor extends Page {
 				}
 				else {
 					// Toggle this one
-					heldVisibilitySet = !levelRender.isLayerVisible(li);
+					heldVisibilitySet = !levelRender.isLayerVisible(li,true);
 					levelRender.setLayerVisibility(li, heldVisibilitySet);
 					invalidateLevelCache(curLevel);
 				}
@@ -2511,7 +2511,7 @@ class Editor extends Page {
 			if( li==null )
 				return;
 
-			if( levelRender.isLayerVisible(li) )
+			if( levelRender.isLayerVisible(li,true) )
 				jLayer.removeClass("hidden");
 			else
 				jLayer.addClass("hidden");

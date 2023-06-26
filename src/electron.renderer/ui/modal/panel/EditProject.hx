@@ -70,7 +70,7 @@ class EditProject extends ui.modal.Panel {
 					try {
 						// Rename project file
 						App.LOG.fileOp('  Renaming project file...');
-						var oldProjectPath = project.filePath.full;
+						var oldProjectFp = project.filePath.clone();
 						var oldExtDir = project.getAbsExternalFilesDir();
 						project.filePath.fileName = fileName;
 
@@ -80,14 +80,26 @@ class EditProject extends ui.modal.Panel {
 							NT.renameFile(oldExtDir, project.getAbsExternalFilesDir());
 						}
 
+						// Rename sibling files
+						for(ext in ["meta"]) {
+							var siblingFp = oldProjectFp.clone();
+							siblingFp.extension += "."+ext;
+							if( NT.fileExists(siblingFp.full) ) {
+								App.LOG.fileOp('  Renaming sibiling file: ${siblingFp.fileWithExt}...');
+								var newFp = oldProjectFp.clone();
+								newFp.fileWithExt = project.filePath.fileWithExt+"."+ext;
+								NT.renameFile(siblingFp.full, newFp.full);
+							}
+						}
+
 						// Re-save project
 						editor.invalidateAllLevelsCache();
 						App.LOG.fileOp('  Saving project...');
 						new ui.ProjectSaver(this, project, (success)->{
 							// Remove old project file
 							App.LOG.fileOp('  Deleting old project file...');
-							NT.removeFile(oldProjectPath);
-							App.ME.unregisterRecentProject(oldProjectPath);
+							NT.removeFile(oldProjectFp.full);
+							App.ME.unregisterRecentProject(oldProjectFp.full);
 
 							// Success!
 							N.success("Renamed project!");

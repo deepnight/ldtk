@@ -93,20 +93,30 @@ class JsonTools {
 		}
 	}
 
-	public static function readTileRect(tilesetUid:Int, r:ldtk.Json.TilesetRect, allowNull:Bool) : ldtk.Json.TilesetRect {
+	public static function readTileRect(r:ldtk.Json.TilesetRect, allowNull:Bool) : ldtk.Json.TilesetRect {
 		if( r==null ) {
 			if( allowNull )
 				return null;
 			else
 				throw "Missing TileRect";
 		}
-		else if( !M.isValidNumber(r.x) || !M.isValidNumber(r.y) || !M.isValidNumber(r.w) || !M.isValidNumber(r.h) )
+		else if( !M.isValidNumber(r.tilesetUid) || !M.isValidNumber(r.x) || !M.isValidNumber(r.y) || !M.isValidNumber(r.w) || !M.isValidNumber(r.h) )
 			throw "TileRect contains an invalid value: "+r;
 		else
 			return r;
 	}
 
-	public static function readColor(v:Dynamic, ?defaultIfMissing:UInt, allowNull=false) : Null<UInt> {
+	public static function writeTileRect(r:Null<ldtk.Json.TilesetRect>) : Null<ldtk.Json.TilesetRect> {
+		return r==null ? null : {
+			tilesetUid: r.tilesetUid,
+			x: r.x,
+			y: r.y,
+			w: r.w,
+			h: r.h,
+		}
+	}
+
+	public static function readColor(v:Dynamic, ?defaultIfMissing:dn.Col, allowNull=false) : Null<dn.Col> {
 		if( v==null && defaultIfMissing!=null )
 			return defaultIfMissing;
 

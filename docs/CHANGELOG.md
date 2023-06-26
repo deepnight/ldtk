@@ -1,3 +1,19 @@
+# 1.3.3
+
+ - **Added custom UI icons for IntGrid layer values.**
+ - **Added custom min/max size limits to entities when then are resizables.**
+ - **If you change the "grid size" of a Layer or a Tileset, LDtk will now try to remap all existing data to this new grid size (if that's possible).**
+ - Added an option to allow/disallow tiles stacking in the Rules Assistant window.
+ - Added multi-columns view to auto-layer rule editor.
+ - When using the "Single layer mode", the others layers are now faded away a bit more.
+ - Hiding details (`CTRL-H`) now also hides the grid
+ - Added quick search for IntGrid palettes in the left sidebar.
+ - Fixed visibility icon in layer list when hiding details
+ - Fixed various minor bugs in the new tool options from the left panel.
+ - Renaming a project will now also rename sibling `.meta` files (Unity) accordingly.
+ - Fixed message dialog size
+ - Updated old sample maps
+
 # 1.3.2
 
  - Fixed invisible auto-layer tiles when loading pre-1.3.1 projects
@@ -21,7 +37,7 @@
  - Fixed missing intGrid values in mass out-of-bounds policy editor
 
 
-# 1.3.0 - Multi-worlds preview
+# 1.3.0 - Multi-worlds and Quality of life
 
 ## Experimental Multi-worlds support!
 ![](1.3.0/multiWorlds.png)
@@ -67,7 +83,7 @@ Please note that, to restore a backup, you should use LDtk and not copy files by
 ## Collapsable tags
 ![](1.3.0/collapsableTag.png)
 
-Tags are not behaving like "folders" and can now be open/closed accordingly in UI.
+Tags are now behaving like "folders" and can be collapsed/opened accordingly in UI.
 
 
 ## Lists quick search

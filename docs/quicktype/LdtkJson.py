@@ -467,6 +467,14 @@ class EntityDefinition:
     line_opacity: float
     """Max instances count"""
     max_count: int
+    """Max pixel height (only applies if the entity is resizable on Y)"""
+    max_height: Optional[int]
+    """Max pixel width (only applies if the entity is resizable on X)"""
+    max_width: Optional[int]
+    """Min pixel height (only applies if the entity is resizable on Y)"""
+    min_height: Optional[int]
+    """Min pixel width (only applies if the entity is resizable on X)"""
+    min_width: Optional[int]
     """An array of 4 dimensions for the up/right/down/left borders (in this order) when using
     9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then
     this array is empty.<br/>  See: https://en.wikipedia.org/wiki/9-slice_scaling
@@ -505,7 +513,7 @@ class EntityDefinition:
     """Pixel width"""
     width: int
 
-    def __init__(self, color: str, doc: Optional[str], export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
+    def __init__(self, color: str, doc: Optional[str], export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, max_height: Optional[int], max_width: Optional[int], min_height: Optional[int], min_width: Optional[int], nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
         self.color = color
         self.doc = doc
         self.export_to_toc = export_to_toc
@@ -519,6 +527,10 @@ class EntityDefinition:
         self.limit_scope = limit_scope
         self.line_opacity = line_opacity
         self.max_count = max_count
+        self.max_height = max_height
+        self.max_width = max_width
+        self.min_height = min_height
+        self.min_width = min_width
         self.nine_slice_borders = nine_slice_borders
         self.pivot_x = pivot_x
         self.pivot_y = pivot_y
@@ -551,6 +563,10 @@ class EntityDefinition:
         limit_scope = LimitScope(obj.get("limitScope"))
         line_opacity = from_float(obj.get("lineOpacity"))
         max_count = from_int(obj.get("maxCount"))
+        max_height = from_union([from_none, from_int], obj.get("maxHeight"))
+        max_width = from_union([from_none, from_int], obj.get("maxWidth"))
+        min_height = from_union([from_none, from_int], obj.get("minHeight"))
+        min_width = from_union([from_none, from_int], obj.get("minWidth"))
         nine_slice_borders = from_list(from_int, obj.get("nineSliceBorders"))
         pivot_x = from_float(obj.get("pivotX"))
         pivot_y = from_float(obj.get("pivotY"))
@@ -566,7 +582,7 @@ class EntityDefinition:
         tileset_id = from_union([from_none, from_int], obj.get("tilesetId"))
         uid = from_int(obj.get("uid"))
         width = from_int(obj.get("width"))
-        return EntityDefinition(color, doc, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, width)
+        return EntityDefinition(color, doc, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, max_height, max_width, min_height, min_width, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -584,6 +600,14 @@ class EntityDefinition:
         result["limitScope"] = to_enum(LimitScope, self.limit_scope)
         result["lineOpacity"] = to_float(self.line_opacity)
         result["maxCount"] = from_int(self.max_count)
+        if self.max_height is not None:
+            result["maxHeight"] = from_union([from_none, from_int], self.max_height)
+        if self.max_width is not None:
+            result["maxWidth"] = from_union([from_none, from_int], self.max_width)
+        if self.min_height is not None:
+            result["minHeight"] = from_union([from_none, from_int], self.min_height)
+        if self.min_width is not None:
+            result["minWidth"] = from_union([from_none, from_int], self.min_width)
         result["nineSliceBorders"] = from_list(from_int, self.nine_slice_borders)
         result["pivotX"] = to_float(self.pivot_x)
         result["pivotY"] = to_float(self.pivot_y)
@@ -926,12 +950,14 @@ class IntGridValueDefinition:
     color: str
     """User defined unique identifier"""
     identifier: Optional[str]
+    tile: Optional[TilesetRectangle]
     """The IntGrid value itself"""
     value: int
 
-    def __init__(self, color: str, identifier: Optional[str], value: int) -> None:
+    def __init__(self, color: str, identifier: Optional[str], tile: Optional[TilesetRectangle], value: int) -> None:
         self.color = color
         self.identifier = identifier
+        self.tile = tile
         self.value = value
 
     @staticmethod
@@ -939,14 +965,17 @@ class IntGridValueDefinition:
         assert isinstance(obj, dict)
         color = from_str(obj.get("color"))
         identifier = from_union([from_none, from_str], obj.get("identifier"))
+        tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("tile"))
         value = from_int(obj.get("value"))
-        return IntGridValueDefinition(color, identifier, value)
+        return IntGridValueDefinition(color, identifier, tile, value)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["color"] = from_str(self.color)
         if self.identifier is not None:
             result["identifier"] = from_union([from_none, from_str], self.identifier)
+        if self.tile is not None:
+            result["tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
         result["value"] = from_int(self.value)
         return result
 

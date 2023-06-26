@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.2",
+		"appVersion": "1.3.3",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a27ed860-7820-11ed-b6fd-7fbe30dcfa27",
-	"jsonVersion": "1.3.2",
-	"appBuildId": 467535,
+	"jsonVersion": "1.3.3",
+	"appBuildId": 467696,
 	"nextUid": 167,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -62,7 +62,7 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [ { "value": 1, "identifier": "walls", "color": "#3E8948" }, { "value": 2, "identifier": "water", "color": "#005DFF" } ],
+			"intGridValues": [ { "value": 1, "identifier": "walls", "color": "#B86F50", "tile": { "tilesetUid": 18, "x": 0, "y": 120, "w": 8, "h": 8 } }, { "value": 2, "identifier": "water", "color": "#0099DB", "tile": { "tilesetUid": 18, "x": 0, "y": 80, "w": 8, "h": 8 } } ],
 			"autoRuleGroups": [
 				{ "uid": 149, "name": "inner wall fog", "active": true, "isOptional": false, "rules": [
 					{

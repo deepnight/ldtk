@@ -10,13 +10,12 @@ class TilePalette extends ui.ToolPalette {
 	}
 
 	override function needToPopOut():Bool {
-		return super.needToPopOut() || picker!=null && !picker.isViewLocked();
+		return super.needToPopOut() || picker!=null && !picker.isViewFitted();
 	}
+
 
 	override function doRender() {
 		super.doRender();
-
-		jPaletteOptions.empty();
 
 		var tool : tool.lt.TileTool = cast tool;
 		if( tool.curTilesetDef==null ) {
@@ -29,9 +28,18 @@ class TilePalette extends ui.ToolPalette {
 
 		// Picker
 		var old = picker;
-		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool);
+		picker = new ui.ts.TileToolPicker(jContent, tool.curTilesetDef, tool, true);
 		if( old!=null )
 			picker.useOldTilesetPos(old);
+		picker.onSelectAnything = ()->updateOptions();
+
+		updateOptions();
+	}
+
+
+	function updateOptions() {
+		var tool : tool.lt.TileTool = cast tool;
+		jPaletteOptions.empty();
 
 		// Random mode
 		var jRandom = new J('<button class="toggle"> <span class="icon random"></span> </button>');
@@ -57,15 +65,16 @@ class TilePalette extends ui.ToolPalette {
 		var jFit = new J('<button class="toggle"> <span class="icon fit"></span> </button>');
 		jFit.appendTo(jPaletteOptions);
 		Tip.attach(jFit, "Fit tileset view in the interface panel");
-		if( picker.isViewLocked() )
+		if( picker.isViewFitted() )
 			jFit.addClass("on");
 		jFit.click(_->{
 			if( picker==null )
 				return;
-			picker.setViewLocked(!picker.isViewLocked());
+			picker.setViewFit(!picker.isViewFitted());
 			render();
 		});
 	}
+
 
 	override function onNavigateSelection(dx:Int, dy:Int, pressed:Bool):Bool {
 		if( picker!=null )

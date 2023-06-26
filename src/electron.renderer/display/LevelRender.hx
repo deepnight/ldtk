@@ -103,6 +103,7 @@ class LevelRender extends dn.Process {
 
 			case ShowDetailsChanged(active):
 				applyAllLayersVisibility();
+				applyGridVisibility();
 
 			case ViewportChanged(_), WorldLevelMoved(_), WorldSettingsChanged:
 				root.setScale( camera.adjustedZoom );
@@ -308,10 +309,10 @@ class LevelRender extends dn.Process {
 		return autoLayerRendering;
 	}
 
-	public inline function isLayerVisible(li:data.inst.LayerInstance) {
+	public inline function isLayerVisible(li:data.inst.LayerInstance, ignoreUserSettings=false) {
 		if( li==null || !li.visible )
 			return false;
-		else if( !settings.v.showDetails )
+		else if( !ignoreUserSettings && !settings.v.showDetails )
 			return switch li.def.type {
 				case IntGrid: li.def.isAutoLayer();
 				case Entities: false;
@@ -461,7 +462,7 @@ class LevelRender extends dn.Process {
 	}
 
 	inline function applyGridVisibility() {
-		grid.visible = settings.v.grid && !editor.worldMode && editor.curLayerInstance!=null;
+		grid.visible = settings.v.grid && settings.v.showDetails && !editor.worldMode && editor.curLayerInstance!=null;
 	}
 
 	inline function updateGridPos() {
@@ -606,7 +607,7 @@ class LevelRender extends dn.Process {
 			return;
 
 		lr.root.visible = isLayerVisible(li);
-		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.2 );
+		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.05 );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
 		if( li!=editor.curLayerInstance )
 			lr.root.alpha *= li.def.inactiveOpacity;
@@ -614,8 +615,8 @@ class LevelRender extends dn.Process {
 
 	function getSingleLayerModeFilter() : h2d.filter.Filter {
 		return new h2d.filter.Group([
-			C.getColorizeFilterH2d(0x8c99c1, 0.9),
-			new h2d.filter.Blur(2),
+			C.getColorizeFilterH2d(0x8c99c1, 1),
+			new h2d.filter.Blur(8),
 		]);
 	}
 

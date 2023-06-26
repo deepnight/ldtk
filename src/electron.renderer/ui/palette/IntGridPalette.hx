@@ -1,8 +1,12 @@
 package ui.palette;
 
 class IntGridPalette extends ui.ToolPalette {
+	var searchMemory : Null<String>;
+	var search : QuickSearch;
+
 	public function new(t) {
 		super(t);
+		jContent.addClass("intGrid");
 	}
 
 	override function doRender() {
@@ -11,47 +15,56 @@ class IntGridPalette extends ui.ToolPalette {
 		jList = new J('<ul class="intGridValues niceList"/>');
 		jList.appendTo(jContent);
 
+		search = new ui.QuickSearch(jList);
+		search.jWrapper.prependTo(jContent);
+
 		var y = 0;
 		for( intGridVal in tool.curLayerInstance.def.getAllIntGridValues() ) {
-			var e = new J("<li/>");
-			e.attr("data-id", intGridVal.value);
-			e.attr("data-y", Std.string(y++));
-			e.appendTo(jList);
-			e.addClass("color");
+			var jLi = new J("<li/>");
+			jLi.appendTo(jList);
+			jLi.attr("data-id", intGridVal.value);
+			jLi.attr("data-y", Std.string(y++));
+			jLi.addClass("color");
 
-			e.css( "border-color", C.intToHex(intGridVal.color) );
+			jLi.css( "border-color", C.intToHex(intGridVal.color) );
 
 			// State
 			if( intGridVal.value==tool.getSelectedValue() ) {
-				e.addClass("active");
-				e.css( "background-color", makeBgActiveColor(intGridVal.color) );
+				jLi.addClass("active");
+				jLi.css( "background-color", makeBgActiveColor(intGridVal.color) );
 			}
 			else {
-				e.css( "background-color", makeBgInactiveColor(intGridVal.color) );
-				e.css( "color", makeTextInactiveColor(intGridVal.color) );
+				jLi.css( "background-color", makeBgInactiveColor(intGridVal.color) );
+				jLi.css( "color", makeTextInactiveColor(intGridVal.color) );
 			}
 
 			// Value
-			var jVal = new J('<div class="intGridValue">${intGridVal.value}</div>');
-			e.append(jVal);
-			jVal.css({
-				color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
-				borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
-				backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
-			});
+			var jVal = JsTools.createIntGridValue(project, intGridVal);
+			jVal.appendTo(jLi);
 
 			// Label
 			if( intGridVal.identifier!=null )
-				e.append(intGridVal.identifier);
+				jLi.append(intGridVal.identifier);
 
 			var curValue = intGridVal.value;
-			e.click( function(_) {
+			jLi.click( function(_) {
 				if( Editor.ME.isPaused() ) return;
 				tool.selectValue(curValue);
 				render();
 			});
 		}
+
+		if( searchMemory!=null )
+			search.run(searchMemory);
+		search.onSearch = (s)->searchMemory = s;
 	}
+
+
+	override function onHide() {
+		super.onHide();
+		search.clear();
+	}
+
 
 	override function focusOnSelection(immediate=false) {
 		super.focusOnSelection();
