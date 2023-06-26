@@ -1,5 +1,6 @@
 // Source: https://www.npmjs.com/package/tabulator-tables
 package tabulator;
+import js.jquery.Promise;
 import js.jquery.Event;
 import js.html.Element;
 import haxe.extern.EitherType;
@@ -13,6 +14,10 @@ extern class Tabulator {
 	overload public function on(eventName:String, cb:(component:Dynamic) -> Void):Void;
 	public function off(eventName:String):Void;
 	public function getData():Dynamic;
+	public function setData(data:Dynamic):Void;
+	public function setColumns(columns:Dynamic):Void;
+	@:native("import")
+	public function _import(importFormat:Dynamic, accept:String):Promise;
 	public function getColumns():Array<ColumnComponent>;
 	public function addRow(data:Dynamic, addToTop:Bool, ?row:RowComponent):Void;
 	public function addColumn(definition:ColumnDefinition):Void;

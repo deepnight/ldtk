@@ -16,6 +16,7 @@ import js.html.Element;
 import haxe.extern.EitherType;
 import haxe.DynamicAccess;
 import tabulator.Tabulator;
+import thx.csv.Csv;
 
 class Tabulator {
 	public var element:JQuery;
@@ -130,6 +131,42 @@ class Tabulator {
 		return tabulator;
 	}
 
+	public static function importSheet(type:String, absPath:String) {
+		var fileContent = NT.readFileString(absPath);
+		var table_name = absPath.split("/").pop();
+		var data:Array<Array<Dynamic>> = Csv.decode(fileContent);
+		var keys:Array<String> = data[0].map(Std.string);
+		data.shift(); // Remove keys from the array
+
+		var columns = [];
+		for (key in keys) {
+			var col:Column = {
+				name: key,
+				type: TString,
+				typeStr: null
+			}
+			// columns.push(createColumnDef(col));
+			columns.push(col);
+		}
+		var rows = [];
+		for (row in data) {
+			var obj:DynamicAccess<String> = {};
+			for (i => val in row) {
+				if (i > keys.length) continue; // TODO Is this the desired behaviour to handle extra values on rows?
+				obj.set(keys[i], val);
+			}
+			rows.push(obj);
+		}
+		var s = Editor.ME.project.db.createSheet(table_name);
+		for (c in columns) {
+			s.addColumn(c);
+		}
+		for (l in rows) {
+			s.lines.push(l);
+		}
+		return s;
+	}
+
 	function getColumn(column:ColumnComponent){
 		for (col in sheet.columns) {
 			if (column.getField() == col.name) {
@@ -152,7 +189,7 @@ class Tabulator {
 		}
 	}
 
-	function createColumnDef(c:Column) {
+	public function createColumnDef(c:Column) {
 		var def:ColumnDefinition = {};
 		def.title = c.name;
 		def.field =  c.name;

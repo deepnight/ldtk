@@ -16,6 +16,10 @@ class EditTableDefs extends ui.modal.Panel {
 
 		// Create a new table
 		jContent.find("button.createTable").click( function(ev) {
+			project.db.createSheet("asdf");
+			updateTableList();
+			updateTableForm();
+			trace("creatign a ntew sheet");
 			// var td = project.defs.createTable("New Table", ["Key"], [["Row"]]);
 			// editor.ge.emit(TableDefAdded(td));
 		});
@@ -24,15 +28,15 @@ class EditTableDefs extends ui.modal.Panel {
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({
-				label: L.t._("CSV - Ulix Dexflow"),
-				sub: L.t._('Expected format:\n - One entry per line\n - Fields separated by column'),
+				label: L.t._("CSV - Import Sheet"),
+				sub: L.t._('Expected format:\n - One entry per line\n - Fields separated by commas'),
 				cb: ()->{
 					dn.js.ElectronDialogs.openFile([".csv"], project.getProjectDir(), function(absPath:String) {
 						absPath = StringTools.replace(absPath,"\\","/");
 						switch dn.FilePath.extractExtension(absPath,true) {
 							case "csv":
-								var i = new importer.Table();
-								i.load( project.makeRelativeFilePath(absPath) );
+								var s = misc.Tabulator.importSheet("TODO", absPath);
+								selectTable(s);
 							case _:
 								N.error('The file must have the ".csv" extension.');
 						}
