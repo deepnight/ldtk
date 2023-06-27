@@ -1,5 +1,6 @@
 package misc;
 
+import h3d.anim.Skin.Joint;
 import js.html.Option;
 import data.def.TilesetDef;
 import ldtk.Json.TilesetRect;
@@ -89,15 +90,24 @@ class Tabulator {
 						tabulator.updateColumnDefinition(c.name, createColumnDef(c));
 					})
 				});
-				if (column.type == TString) {
-					var displayCol = sheet.props.displayColumn;
-					ctx.add({
-						label: new LocaleString("Set as display column"),
-						sub: new LocaleString(displayCol == column.name ? "Enabled" : "Disabled"),
-						cb: () -> {
-							sheet.props.displayColumn = displayCol == column.name ? null : column.name;
-						}
-					});
+				switch column.type {
+					case TString:
+						var displayCol = sheet.props.displayColumn;
+						ctx.add({
+							label: new LocaleString("Set as display column"),
+							sub: new LocaleString(displayCol == column.name ? "Enabled" : "Disabled"),
+							cb: () -> {
+								sheet.props.displayColumn = displayCol == column.name ? null : column.name;
+							}
+						});
+					case TTileLayer, TTilePos, TImage:
+						// var select = JsTools.createTilesetSelect(Editor.ME.project, null, null, null, null, null);
+						// select.addClass("advanced");
+						// ctx.add({
+						// 	label: new LocaleString("Bulk tileset update"),
+						// 	cb: () -> new ui.modal.dialog.SelectPicker(select, null, (x) -> trace(x)) 
+						// });
+					case _:
 				}
 				ctx.add({
 					label: L._Delete(),
@@ -128,6 +138,11 @@ class Tabulator {
 				parentCell.setValue(tabulator.getData());
 			});
 		}
+
+		tabulator.on("tableBuilt",(e) -> {
+			tabulator.redraw(false);
+		});
+
 		return tabulator;
 	}
 
