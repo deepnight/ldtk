@@ -502,6 +502,8 @@
 				"__pivot",
 				"__smartColor",
 				"__tags",
+				"__worldX",
+				"__worldY",
 				"defUid",
 				"fieldInstances",
 				"height",
@@ -551,6 +553,18 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"__worldX": {
+					"description": "X world coordinate in pixels",
+					"type": [
+						"integer"
+					]
+				},
+				"__worldY": {
+					"description": "Y world coordinate in pixels",
+					"type": [
+						"integer"
 					]
 				},
 				"__smartColor": {
