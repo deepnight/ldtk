@@ -48,6 +48,7 @@ class Tabulator {
 			columns: cols,
 			movableRows: true,
 			movableColumns: true,
+			layout: "fitDataTable",
 			columnDefaults: {
 				maxWidth:300,
 			},
@@ -67,7 +68,7 @@ class Tabulator {
 			ctx.add({
 				label: new LocaleString("Delete row"),
 				cb: () -> {
-					sheet.deleteLine.bind(row.getPosition()-1);
+					sheet.deleteLine(row.getPosition()-1);
 					row.delete();
 				}
 			});
