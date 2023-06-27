@@ -62,6 +62,8 @@ class EntityInstance {
 			__tags: def.tags.toArray(),
 			__tile: getSmartTile(),
 			__smartColor: C.intToHex( getSmartColor(false) ),
+			__worldX: x + li.level.worldX,
+			__worldY: y + li.level.worldY,
 
 			iid: iid,
 			width: width,
