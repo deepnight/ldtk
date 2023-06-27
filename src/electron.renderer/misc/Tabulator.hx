@@ -241,7 +241,7 @@ class Tabulator {
 			var name = line.get(nameCol);
 			var selected = value == line.get(idCol);
 			if (selected) empty.selected = false;
-			var opt = new Option(name, name, false, selected);
+			var opt = new Option(name, line.get(idCol), false, selected);
 
 			if (iconCol != null) {
 				var i:TilePos = line.get(iconCol);
