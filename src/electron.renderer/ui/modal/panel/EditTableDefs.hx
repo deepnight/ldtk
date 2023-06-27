@@ -114,9 +114,10 @@ class EditTableDefs extends ui.modal.Panel {
 
 	function deleteSheet(sheet:cdb.Sheet) {
 		new LastChance(L.t._("Table ::name:: deleted", { name:sheet.name }), project);
-		// var old = td;
-		// project.defs.removeTableDef(td);
-		// editor.ge.emit( TableDefRemoved(old) );
+		sheet.base.deleteSheet(sheet);
+		if (project.db.sheets.length > 0) {
+			selectTable(project.db.sheets[0]);
+		}
 	}
 
 	function updateTableList() {
