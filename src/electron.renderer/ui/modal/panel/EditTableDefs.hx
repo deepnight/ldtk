@@ -16,11 +16,14 @@ class EditTableDefs extends ui.modal.Panel {
 
 		// Create a new table
 		jContent.find("button.createTable").click( function(ev) {
-			project.db.createSheet("asdf");
+			var getName = (i) -> i == 0 ? "Sheet" : 'Sheet${i+1}';
+			var i = 0;
+			while (project.db.getSheet(getName(i)) != null) {
+				i ++;
+			}
+			project.db.createSheet(getName(i));
 			updateTableList();
 			updateTableForm();
-			trace("creatign a ntew sheet");
-			// var td = project.defs.createTable("New Table", ["Key"], [["Row"]]);
 			// editor.ge.emit(TableDefAdded(td));
 		});
 
