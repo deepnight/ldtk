@@ -127,9 +127,14 @@ class Tabulator {
 		tabulator.on("rowMoved", (row:RowComponent) -> {
 			var data = row.getData();
 			var fromIndex = lines.indexOf(data);
-			var toIndex = row.getPosition() - 1;
-			lines.splice(fromIndex, 1); // Remove the original item
-			lines.insert(toIndex, data); // Add the same data to the new position
+			var toIndex = row.getPosition() - 1; // getPosition index starts at 1
+			moveLine(data, fromIndex, toIndex);
+		});
+		tabulator.on("columnMoved", (column:ColumnComponent) -> {
+			var c = getColumn(column);
+			var fromIndex = sheet.columns.indexOf(c);
+			var toIndex = tabulator.getColumns().indexOf(column) - 1; // The -1 is because of the "rownum" column
+			moveColumn(c, fromIndex, toIndex);
 		});
 
 		if (parentCell != null) {
@@ -146,6 +151,16 @@ class Tabulator {
 		});
 
 		return tabulator;
+	}
+
+	function moveLine(line:Dynamic, fromIndex:Int, toIndex:Int) {
+		lines.splice(fromIndex, 1); // Remove the original item
+		lines.insert(toIndex, line); // Add the same data to the new position
+	}
+
+	function moveColumn(c:Column, fromIndex:Int, toIndex:Int) {
+		sheet.columns.splice(fromIndex, 1); // Remove the original item
+		sheet.columns.insert(toIndex, c); // Add the same data to the new position
 	}
 
 	public static function importSheet(type:String, absPath:String) {
