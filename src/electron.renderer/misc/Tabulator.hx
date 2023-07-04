@@ -46,6 +46,7 @@ class Tabulator {
 		tabulator = new tabulator.Tabulator(element.get(0), {
 			data: lines,
 			columns: cols,
+			layout: "fitDataTable",
 			movableRows: true,
 			movableColumns: true,
 			height: "max-content",

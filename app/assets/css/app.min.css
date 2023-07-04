@@ -6647,7 +6647,9 @@ dl.form.fieldInstanceEditor div.array button.remove {
   grid-template-columns: 250px auto;
   gap: 16px;
   height: 100%;
-  width: 1620px;
+  max-width: 1620px;
+  min-width: 600px;
+  width: max-content;
 }
 .window.panel.editTableDefs .content > h2:first-of-type {
   grid-column: 1/3;
