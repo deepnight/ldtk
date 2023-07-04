@@ -48,7 +48,7 @@ class Tabulator {
 			columns: cols,
 			movableRows: true,
 			movableColumns: true,
-			layout: "fitDataTable",
+			height: "max-content",
 			columnDefaults: {
 				maxWidth:300,
 			},
