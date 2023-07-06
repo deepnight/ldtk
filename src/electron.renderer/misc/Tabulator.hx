@@ -50,6 +50,7 @@ class Tabulator {
 			movableRows: true,
 			movableColumns: true,
 			height: "max-content",
+			autoResize: false, // Not ideal, but fixes a TRef related crash 
 			columnDefaults: {
 				maxWidth:300,
 			},
@@ -146,9 +147,9 @@ class Tabulator {
 			});
 		}
 
-		tabulator.on("tableBuilt",(e) -> {
-			tabulator.redraw(false);
-		});
+		// tabulator.on("tableBuilt",(e) -> {
+		// 	tabulator.redraw(false);
+		// });
 
 		return tabulator;
 	}
