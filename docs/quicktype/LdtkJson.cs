@@ -1511,6 +1511,18 @@ namespace ldtk
         public TilesetRectangle Tile { get; set; }
 
         /// <summary>
+        /// X world coordinate in pixels
+        /// </summary>
+        [JsonProperty("__worldX")]
+        public long WorldX { get; set; }
+
+        /// <summary>
+        /// Y world coordinate in pixels
+        /// </summary>
+        [JsonProperty("__worldY")]
+        public long WorldY { get; set; }
+
+        /// <summary>
         /// Reference of the **Entity definition** UID
         /// </summary>
         [JsonProperty("defUid")]

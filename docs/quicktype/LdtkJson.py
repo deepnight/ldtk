@@ -1486,6 +1486,10 @@ class EntityInstance:
     tile, or some tile provided by a field value, like an Enum).
     """
     tile: Optional[TilesetRectangle]
+    """X world coordinate in pixels"""
+    world_x: int
+    """Y world coordinate in pixels"""
+    world_y: int
     """Reference of the **Entity definition** UID"""
     def_uid: int
     """An array of all custom fields and their values."""
@@ -1505,13 +1509,15 @@ class EntityInstance:
     """
     width: int
 
-    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
+    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], world_x: int, world_y: int, def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
         self.grid = grid
         self.identifier = identifier
         self.pivot = pivot
         self.smart_color = smart_color
         self.tags = tags
         self.tile = tile
+        self.world_x = world_x
+        self.world_y = world_y
         self.def_uid = def_uid
         self.field_instances = field_instances
         self.height = height
@@ -1528,13 +1534,15 @@ class EntityInstance:
         smart_color = from_str(obj.get("__smartColor"))
         tags = from_list(from_str, obj.get("__tags"))
         tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("__tile"))
+        world_x = from_int(obj.get("__worldX"))
+        world_y = from_int(obj.get("__worldY"))
         def_uid = from_int(obj.get("defUid"))
         field_instances = from_list(FieldInstance.from_dict, obj.get("fieldInstances"))
         height = from_int(obj.get("height"))
         iid = from_str(obj.get("iid"))
         px = from_list(from_int, obj.get("px"))
         width = from_int(obj.get("width"))
-        return EntityInstance(grid, identifier, pivot, smart_color, tags, tile, def_uid, field_instances, height, iid, px, width)
+        return EntityInstance(grid, identifier, pivot, smart_color, tags, tile, world_x, world_y, def_uid, field_instances, height, iid, px, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1545,6 +1553,8 @@ class EntityInstance:
         result["__tags"] = from_list(from_str, self.tags)
         if self.tile is not None:
             result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
+        result["__worldX"] = from_int(self.world_x)
+        result["__worldY"] = from_int(self.world_y)
         result["defUid"] = from_int(self.def_uid)
         result["fieldInstances"] = from_list(lambda x: to_class(FieldInstance, x), self.field_instances)
         result["height"] = from_int(self.height)

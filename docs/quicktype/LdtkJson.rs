@@ -1159,6 +1159,14 @@ pub struct EntityInstance {
     #[serde(rename = "__tile")]
     tile: Option<TilesetRectangle>,
 
+    /// X world coordinate in pixels
+    #[serde(rename = "__worldX")]
+    world_x: i64,
+
+    /// Y world coordinate in pixels
+    #[serde(rename = "__worldY")]
+    world_y: i64,
+
     /// Reference of the **Entity definition** UID
     def_uid: i64,
 

@@ -453,6 +453,8 @@ const typeMap = {
         { json: "__smartColor", js: "__smartColor", typ: "" },
         { json: "__tags", js: "__tags", typ: a("") },
         { json: "__tile", js: "__tile", typ: u(undefined, u(r("TilesetRectangle"), null)) },
+        { json: "__worldX", js: "__worldX", typ: 0 },
+        { json: "__worldY", js: "__worldY", typ: 0 },
         { json: "defUid", js: "defUid", typ: 0 },
         { json: "fieldInstances", js: "fieldInstances", typ: a(r("FieldInstance")) },
         { json: "height", js: "height", typ: 0 },
