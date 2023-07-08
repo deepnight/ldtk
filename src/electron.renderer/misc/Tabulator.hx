@@ -1,6 +1,6 @@
 package misc;
 
-import h3d.anim.Skin.Joint;
+import haxe.Timer;
 import js.html.Option;
 import data.def.TilesetDef;
 import ldtk.Json.TilesetRect;
@@ -209,16 +209,25 @@ class Tabulator {
 		return null;
 	}
 
+	function animateComponent(component:Dynamic, direction:String) {
+		var el = component.getElement();
+		el.classList.add('grow-$direction');
+		Timer.delay(() -> {
+			el.classList.remove('grow-$direction');
+		}, 200);
+	}
+
+
 	// Add a row before or after specified RowComponent
 	function createRow(?row:RowComponent, before=false) {
 		// TODO getDefault doesnt actually return values that work. Maybe the fix should be done to the actual functions
 		if (row == null) {
 			var line = sheet.newLine();
-			tabulator.addRow(line, before);
+			tabulator.addRow(line, before).then(r -> animateComponent(r, "top"));
 		} else {
 			var castleIndex = before ? row.getPosition()-1 : row.getPosition();
 			var line = sheet.newLine(castleIndex);
-			tabulator.addRow(line, before, row);
+			tabulator.addRow(line, before, row).then(r -> animateComponent(r, "top"));
 		}
 	}
 

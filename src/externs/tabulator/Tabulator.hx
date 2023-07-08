@@ -19,8 +19,8 @@ extern class Tabulator {
 	@:native("import")
 	public function _import(importFormat:Dynamic, accept:String):Promise;
 	public function getColumns():Array<ColumnComponent>;
-	public function addRow(data:Dynamic, addToTop:Bool, ?row:RowComponent):Void;
-	public function addColumn(definition:ColumnDefinition):Void;
+	public function addRow(data:Dynamic, addToTop:Bool, ?row:RowComponent):Promise;
+	public function addColumn(definition:ColumnDefinition):Promise;
 	public function redraw(full:Bool):Void;
 	public function destroy():Void;
 	public function updateColumnDefinition(name:String, data:Dynamic):Void;

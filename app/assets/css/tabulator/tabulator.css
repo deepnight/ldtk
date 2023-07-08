@@ -1,3 +1,19 @@
+/* Custom animations. Everything else under this block are from stock Tabulator */
+@keyframes grow-top{
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+.grow-top {
+		animation: grow-top 0.2s cubic-bezier(.96,2.03,0,.19);
+    float: top;
+}
+
 .tabulator {
     position: relative;
     border: 1px solid #545d73;
