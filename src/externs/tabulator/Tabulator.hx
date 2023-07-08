@@ -25,6 +25,8 @@ extern class Tabulator {
 	public function destroy():Void;
 	public function updateColumnDefinition(name:String, data:Dynamic):Void;
 	public function deleteColumn(name:String):Void;
+	public function undo():Void;
+	public function redo():Void;
 }
 
 @:jsRequire("tabulator-tables")

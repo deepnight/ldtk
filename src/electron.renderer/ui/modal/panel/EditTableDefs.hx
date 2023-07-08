@@ -27,7 +27,18 @@ class EditTableDefs extends ui.modal.Panel {
 			// editor.ge.emit(TableDefAdded(td));
 		});
 
+		// History
+		jContent.find("button.undo").click( ev->{
+			if (tabulator == null) return;
+			tabulator.tabulator.undo();
+		});
+		jContent.find("button.redo").click( ev->{
+			if (tabulator == null) return;
+			tabulator.tabulator.redo();
+		});
+
 		// Import
+
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
 			ctx.add({

@@ -6680,7 +6680,10 @@ dl.form.fieldInstanceEditor div.array button.remove {
   border-bottom: 1px solid #545d73;
 }
 .window.panel.editTableDefs .content .rightColumn div#tableEditor {
-  grid-row: 2;
+  grid-row: 3;
+}
+.window.panel.editTableDefs .content .rightColumn .historyButtons {
+  padding: 3px;
 }
 
 .tableDefsForm {
