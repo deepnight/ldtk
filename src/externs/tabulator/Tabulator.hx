@@ -37,6 +37,7 @@ extern class CellComponent {
 	public function getRow():RowComponent;
 	public function getElement():Element;
 	public function getData():Dynamic;
+	public function getColumn():ColumnComponent;
 	public function setValue(value:Dynamic):Void;
 	public function getParentColumn():ColumnComponent;
 }

@@ -60,6 +60,7 @@ class Tabulator {
 		tabulator.on("cellContext", (e, cell:CellComponent) -> {
 			var ctx = new ContextMenu(e);
 			var row = cell.getRow();
+			var column = getColumn(cell.getColumn());
 			ctx.add({
 				label: new LocaleString("Add row before"),
 				cb: createRow.bind(row, true)
@@ -75,7 +76,16 @@ class Tabulator {
 					row.delete();
 				}
 			});
-
+			switch column.type {
+				case TTileLayer, TTilePos, TImage:
+					ctx.add({
+						label: new LocaleString("Change tileset"),
+						cb: () -> {
+							cell.setValue(null);
+						}
+					});
+				case _:
+			}
 		});
 		tabulator.on("headerContext", (e, columnComponent:ColumnComponent) -> {
 			var column = getColumn(columnComponent);
