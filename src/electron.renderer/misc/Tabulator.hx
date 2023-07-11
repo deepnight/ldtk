@@ -288,8 +288,10 @@ class Tabulator {
 
 			if (iconCol != null) {
 				var i:TilePos = line.get(iconCol);
-				var td = Editor.ME.project.defs.getTilesetDefFrom(i.file);
-				opt.setAttribute("tile", Json.stringify(tilePosToTilesetRect(i, td)));
+				if (i != null && i.file != null) {
+					var td = Editor.ME.project.defs.getTilesetDefFrom(i.file);
+					opt.setAttribute("tile", Json.stringify(tilePosToTilesetRect(i, td)));
+				}
 			}
 			content.append(opt);
 		}
@@ -369,55 +371,60 @@ class Tabulator {
 		var values:TilePos = cell.getValue();
 		var select = JsTools.createTilesetSelect(Editor.ME.project, null, null, false, (uid) -> {
 			var td = Editor.ME.project.defs.getTilesetDef(uid);
-			saveTilesetRect(cell, tilePosToTilesetRect(values, td), td);
+			var tp = createTilePos(td);
+			cell.setValue(tp);
 		});
 		select.appendTo(tilesetSelect);
 		if (values == null || (values != null && values.file == null)) return tilesetSelect.get(0); 
 		var td = Editor.ME.project.defs.getTilesetDefFrom(values.file);
 		if (td == null ) return tilesetSelect.get(0); 
-		var jPicker = JsTools.createTileRectPicker(
+		var jPicker = JsTools.createTilePicker(
 			td.uid,
-			tilePosToTilesetRect(values, td),
+			RectOnly,
+			td.getTileIdsFromRect(tilePosToTilesetRect(values, td)),
 			true,
-			(tile) -> saveTilesetRect(cell, tile, td)
+			(tileIds) -> {
+				var tilesetRect = td.getTileRectFromTileIds(tileIds);
+				cell.setValue(tilesetRectToTilePos(tilesetRect, td));
+			}
 		);
 		jPicker.appendTo(tileRectPicker);
 		return tileRectPicker.get(0);
 	}
 
-	// LDTK uses pixels for the grimaimage CasPPooes how many'th tile it is
+	// LDTK uses pixels for the grid and Castle how many'th tile it is
 	function tilePosToTilesetRect(tilePos:TilePos, td:TilesetDef):TilesetRect {
-		if (tilePos == null || td == null) return null;
-		var size = td.tileGridSize;
-		var tilesetRect =  {
+		var hei = tilePos.height != null ? tilePos.height : 1;
+		var wid = tilePos.width != null ? tilePos.width : 1;
+		var tilesetRect:TilesetRect = {
 			tilesetUid: td.uid,
-			h: size,
-			w: size,
-			y: tilePos.y * size,
-			x: tilePos.x * size,
+			h: hei * td.tileGridSize,
+			w: wid * td.tileGridSize,
+			y: tilePos.y,
+			x: tilePos.x,
 		};
 		return tilesetRect;
 	}
-
-	// Save the tilesetPicker value to CastleDB
-	function saveTilesetRect(cell:CellComponent, tile:TilesetRect, td:TilesetDef) {
-		var values:TilePos = cell.getValue();
-		var obj:DynamicAccess<Dynamic> = {};
-		var size = td.tileGridSize;
-		var x;
-		var y;
-		// Reset the position if the tileset changed. They might be different sizes
-		if (values != null && values.file != td.relPath) {
-			x = 0;
-			y = 0;
-		} else {
-			x = tile == null ? 0 : tile.x;
-			y = tile == null ? 0 : tile.y;
+	function tilesetRectToTilePos(tilesetRect:TilesetRect, td:TilesetDef) {
+		var tilePos:TilePos = {
+			file: td.relPath,
+			size: td.tileGridSize,
+			height: Std.int(tilesetRect.h / td.tileGridSize),
+			width: Std.int(tilesetRect.w / td.tileGridSize),
+			y: tilesetRect.y,
+			x: tilesetRect.x,
 		}
-		obj.set("file", td.relPath);
-		obj.set("size", size);
-		obj.set("x", x / size);
-		obj.set("y", y / size);
-		cell.setValue(obj);
+		return tilePos;
+	}
+	function createTilePos(td:TilesetDef) {
+		var tilePos:TilePos = {
+			file: td.relPath,
+			size: td.tileGridSize,
+			height: null,
+			width: null,
+			y: 0,
+			x: 0,
+		};
+		return tilePos;
 	}
 }
