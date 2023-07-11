@@ -1,5 +1,6 @@
 package ui.modal.dialog;
 
+import format.abc.Data.ABCData;
 import js.jquery.JQuery;
 import js.html.Option;
 import cdb.Sheet;
@@ -35,6 +36,8 @@ class CastleColumn extends ui.modal.Dialog {
 			switch (jSelect.val()) {
 				case "ref":
 					createRefSelector();
+				case "enum":
+					createEnumValues();
 				case _:
 					var x = jExtra.hide();
 			}
@@ -85,10 +88,18 @@ class CastleColumn extends ui.modal.Dialog {
 		// 	onCancel();
 	}
 
+	function createEnumValues() {
+		prepareExtras("Possible values");
+		var input = new J("<input type='text'/>");
+		input.attr("placeholder", "value1,value2,value3...");
+		input.appendTo(jExtraValue);
+		if (column != null) {
+			input.val(column.type.getParameters()[0].join(","));
+		}
+	}
+
 	function createRefSelector() {
-		jExtra.show();
-		jExtraValue.empty();
-		jExtraName.html("Sheet");
+		prepareExtras("Sheet");
 		var select = new J("<select/>");
 		var refSheet = null;
 		if (column != null) {
@@ -100,6 +111,11 @@ class CastleColumn extends ui.modal.Dialog {
 			select.append(new Option(s.name, s.name, false, selected));
 		}
 		select.appendTo(jExtraValue);
+	}
+	function prepareExtras(name:String) {
+		jExtra.show();
+		jExtraValue.empty();
+		jExtraName.html(name);
 	}
 
 	function editColumn(c:Column) {
@@ -140,7 +156,8 @@ class CastleColumn extends ui.modal.Dialog {
 				// 	error("Missing value list");
 				// 	return null;
 				// }
-				// TEnum([for( f in vals ) StringTools.trim(f)]);
+				var values:String = jExtraValue.find("input").val();
+				return TEnum([for( f in values.split(",") ) StringTools.trim(f)]);
 			case "flags":
 				TImage;
 				// var vals = StringTools.trim(v.values).split("\n");

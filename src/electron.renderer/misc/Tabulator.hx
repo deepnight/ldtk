@@ -268,10 +268,33 @@ class Tabulator {
 				def.formatter = tileLayerFormatter;
 			case TRef(t):
 				def.formatter = refFormatter;
+			case TEnum(v):
+				def.formatter = enumFormatter;
 			case _:
 				// TODO editors
 		}
 		return def;
+	}
+
+	function enumFormatter(cell:CellComponent, formatterParams, onRendered) {
+		var value = cell.getValue();
+		var column = getColumn(cell.getColumn());
+		var options:Array<String> = column.type.getParameters()[0];
+		var content = new J("<select/>");
+		if (column.opt) {
+			var empty = new Option("-- Select an enum --", true);
+			content.append(empty);
+		}
+		for (option in options) {
+			var selected = value == options.indexOf(option);
+			var opt = new Option(option, option, false, selected);
+			content.append(opt);
+		}
+		content.on("change", (e) -> {
+			var val = content.val();
+			cell.setValue(options.indexOf(val));
+		});
+		return content.get(0);
 	}
 
 	function tileLayerFormatter(cell:CellComponent, formatterParams, onRendered) {
