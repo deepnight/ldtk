@@ -304,19 +304,21 @@ class Tabulator {
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var value:Null<String> = cell.getValue();
 		var type = columnTypes.get(cell.getField());
+		var column = getColumn(cell.getColumn());
 		var content = new J("<select class='advanced'/>");
 
 		var refSheet = sheet.base.getSheet(sheet.base.typeStr(type));
 		var idCol = refSheet.idCol.name;
 		var nameCol = refSheet.props.displayColumn != null ? refSheet.props.displayColumn : idCol;
 		var iconCol = refSheet.props.displayIcon;
-		var empty = new Option("-- Select a line --", true);
-		content.append(empty);
+		if (column.opt) {
+			var empty = new Option("-- Select a line --", true);
+			content.append(empty);
+		}
 		for (line in refSheet.lines) {
 			var line:DynamicAccess<Dynamic> = line;
 			var name = line.get(nameCol);
 			var selected = value == line.get(idCol);
-			if (selected) empty.selected = false;
 			var opt = new Option(name, line.get(idCol), false, selected);
 
 			if (iconCol != null) {
