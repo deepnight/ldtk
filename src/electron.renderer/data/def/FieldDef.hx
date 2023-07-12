@@ -87,6 +87,7 @@ class FieldDef {
 			case F_Bool:
 			case F_Color:
 			case F_Enum(enumDefUid):
+			case F_Sheet(sheetName):
 			case F_Point: editorDisplayMode = PointPath;
 			case F_Path:
 			case F_EntityRef: editorDisplayMode = RefLinkBetweenCenters;
@@ -103,6 +104,7 @@ class FieldDef {
 			case F_Point, F_Path: false;
 			case F_EntityRef: false;
 			case F_Tile: false;
+			case F_Sheet(sheetName): false;
 		};
 	}
 
@@ -221,6 +223,7 @@ class FieldDef {
 			case F_Point: "#7779c9";
 			case F_EntityRef: "#7779c9";
 			case F_Tile: "#99d367";
+			case F_Sheet(sheetName): "#FFB81C";
 		}
 		if( luminosity<1 )
 			return C.intToHex( C.setLuminosityInt( C.hexToInt(c), luminosity ) );
@@ -243,6 +246,7 @@ class FieldDef {
 			case F_Path: "File path";
 			case F_EntityRef: "Entity ref";
 			case F_Tile: "Tile";
+			case F_Sheet(sheetName): "Sheet";
 		}
 		return includeArray && isArray ? 'Array<$desc>' : desc;
 	}
@@ -262,6 +266,7 @@ class FieldDef {
 			case F_Path: "FilePath";
 			case F_EntityRef: "EntityRef";
 			case F_Tile: "Tile";
+			case F_Sheet(sheetName): "Sheet";
 		}
 		return isArray ? 'Array<$desc>' : desc;
 	}
@@ -434,6 +439,17 @@ class FieldDef {
 				return null;
 		}
 	}
+	public function getSheetDefault() : Null<String> {
+		require(F_Sheet(null));
+
+		switch defaultOverride {
+			case V_String(v):
+				return _project.database.sheets.length > 0 ? _project.database.sheets[0].name : null;
+			case _:
+				return null;
+		}
+		
+	}
 
 	public function restoreDefault() {
 		defaultOverride = null;
@@ -498,6 +514,9 @@ class FieldDef {
 				}
 				defaultOverride = V_String(arr.join(","));
 
+			case F_Sheet(sheetName):
+				defaultOverride = V_String(rawDef);
+
 		}
 	}
 
@@ -513,6 +532,7 @@ class FieldDef {
 			case F_Enum(name): getEnumDefault();
 			case F_EntityRef: null;
 			case F_Tile: null;
+			case F_Sheet(sheetName): getSheetDefault();
 		}
 	}
 

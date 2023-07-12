@@ -103,6 +103,27 @@ class FieldDefsForm {
 
 		function _create(ev:js.jquery.Event, type:ldtk.Json.FieldType) {
 			switch type {
+				case F_Sheet(null):
+					if (project.database.sheets.length == 0) {
+						w.close();
+						new ui.modal.dialog.Choice(
+							L.t._("This project contains no Sheets yet. You first need to create one from the Sheet panel."),
+							[
+								{ label:L.t._("Open sheet panel"), cb:()->new ui.modal.panel.EditTableDefs() }
+							]
+						);
+						return;
+					}
+					var ctx = new ui.modal.ContextMenu(ev);
+					ctx.addTitle(L.t._("Pick an existing sheet"));
+					for (sheet in project.database.sheets.filter((x) -> !x.props.hide)) {
+						ctx.add({
+							label: L.untranslated(sheet.name),
+							cb: ()->_create(ev, F_Sheet(sheet.name)),
+						});
+					}
+					return;
+
 				case F_Enum(null):
 					if( project.defs.enums.length==0 && project.defs.externalEnums.length==0 ) {
 						w.close();
@@ -148,6 +169,7 @@ class FieldDefsForm {
 			var fd = new FieldDef(project, project.generateUniqueId_int(), type, isArray);
 			var baseName = switch type {
 				case F_Enum(enumDefUid): project.defs.getEnumDef(enumDefUid).identifier;
+				case F_Sheet(sheetName): project.database.getSheet(sheetName).name;
 				case _: L.getFieldType(type);
 			}
 			if( isArray )
@@ -164,7 +186,7 @@ class FieldDefsForm {
 
 		// Type picker
 		var types : Array<ldtk.Json.FieldType> = [
-			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_Tile
+			F_Int, F_Float, F_Bool, F_String, F_Text, F_Color, F_Enum(null), F_Path, F_Tile, F_Sheet(null)
 		];
 		if( isEntityField() ) {
 			types.push(F_EntityRef);
@@ -773,6 +795,7 @@ class FieldDefsForm {
 						case F_Bool, F_Color, F_Enum(_): "N/A";
 						case F_EntityRef: "N/A";
 						case F_Tile: "N/A";
+						case F_Sheet(_): "N/A";
 					});
 
 				defInput.change( function(ev) {
@@ -848,6 +871,7 @@ class FieldDefsForm {
 					curField.setDefault( Std.string(checked) );
 					onFieldChange();
 				});
+			case F_Sheet(sheetName):
 		}
 
 		// Cut long values

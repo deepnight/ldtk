@@ -153,6 +153,7 @@ class FieldInstance {
 				case F_Path: return getFilePath(arrayIdx)==def.getDefault();
 				case F_Tile: return getFilePath(arrayIdx)==def.getDefault();
 				case F_EntityRef: return false;
+				case F_Sheet(sheetName): return false; // Sheets don't support default values
 			}
 		}
 	}
@@ -253,6 +254,15 @@ class FieldInstance {
 					else
 						setInternal(arrayIdx, null);
 				}
+			
+			case F_Sheet(sheetName):
+				raw = StringTools.trim(raw);
+				if (_project.database.getSheet(sheetName) != null) {
+					setInternal(arrayIdx, V_String(raw));
+				} else {
+					setInternal(arrayIdx, null);
+				}
+
 
 		}
 	}
@@ -330,7 +340,7 @@ class FieldInstance {
 		if( !def.canBeNull && valueIsNull(arrayIdx) )
 			switch def.type {
 				case F_Int, F_Float, F_String, F_Text, F_Bool, F_Color:
-				case F_Enum(_), F_Point, F_Path, F_EntityRef, F_Tile:
+				case F_Enum(_), F_Point, F_Path, F_EntityRef, F_Tile, F_Sheet(_):
 					return "Value required";
 			}
 
@@ -344,6 +354,7 @@ class FieldInstance {
 			case F_Color:
 			case F_Point:
 			case F_Enum(enumDefUid):
+			case F_Sheet(sheetName):
 			case F_Path:
 				if( !valueIsNull(arrayIdx) ) {
 					var absPath = _project.makeAbsoluteFilePath( getFilePath(arrayIdx) );
@@ -407,6 +418,7 @@ class FieldInstance {
 			case F_Enum(name): getEnumValue(arrayIdx);
 			case F_EntityRef: getEntityRefIid(arrayIdx);
 			case F_Tile: getTileRectStr(arrayIdx);
+			case F_Sheet(sheetName): getSheetValue(arrayIdx);
 		}
 		return v == null;
 	}
@@ -462,6 +474,7 @@ class FieldInstance {
 			case F_Point: getPointStr(arrayIdx);
 			case F_EntityRef: getEntityRefForDisplay(arrayIdx);
 			case F_Tile: getTileRectStr(arrayIdx);
+			case F_Sheet(sheetName): getSheetValue(arrayIdx);
 		}
 		if( v==null )
 			return "null";
@@ -474,6 +487,7 @@ class FieldInstance {
 			case F_String, F_Text, F_Path: return '"$v"';
 			case F_EntityRef: return '@($v)';
 			case F_Tile: return '$v';
+			case F_Sheet(sheetName): return '$v';
 		}
 	}
 
@@ -511,6 +525,8 @@ class FieldInstance {
 
 			case F_Tile:
 				getTileRectObj(arrayIdx);
+
+			case F_Sheet(sheetName): getSheetValue(arrayIdx);
 
 		}
 	}
@@ -550,6 +566,7 @@ class FieldInstance {
 			case F_Path:
 			case F_EntityRef:
 			case F_Tile:
+			case F_Sheet(sheetName):
 		}
 
 		return null;
@@ -744,6 +761,16 @@ class FieldInstance {
 	}
 
 
+	public function getSheetValue(arrayIdx:Int) : Null<String> {
+		require( F_Sheet(null) );
+		trace(def.getSheetDefault());
+		trace(internalValues);
+		return isUsingDefault(arrayIdx) ? def.getSheetDefault() : switch internalValues[arrayIdx] {
+			case V_String(v): v;
+			case _: throw "unexpected";
+		}
+	}
+
 	public function getEnumValue(arrayIdx:Int) : Null<String> {
 		require( F_Enum(null) );
 		return isUsingDefault(arrayIdx) ? def.getEnumDefault() : switch internalValues[arrayIdx] {
@@ -836,6 +863,7 @@ class FieldInstance {
 						parseValue(i, null);
 						anyChange = true;
 					}
+			case F_Sheet(sheetName):
 		}
 
 		return anyChange;
