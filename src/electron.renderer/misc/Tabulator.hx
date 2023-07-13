@@ -283,7 +283,7 @@ class Tabulator {
 		var value = cell.getValue();
 		var column = getColumn(cell.getColumn());
 		var options:Array<String> = column.type.getParameters()[0];
-		var content = new J("<select/>");
+		var content = new J("<select class='advanced'/>");
 		if (column.opt) {
 			var empty = new Option("-- Select an enum --", true);
 			content.append(empty);
@@ -296,6 +296,9 @@ class Tabulator {
 		content.on("change", (e) -> {
 			var val = content.val();
 			cell.setValue(options.indexOf(val));
+		});
+		onRendered(() -> {
+			misc.JsTools.parseComponents(new J(cell.getElement()));
 		});
 		return content.get(0);
 	}
