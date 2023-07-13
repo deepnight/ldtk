@@ -763,8 +763,6 @@ class FieldInstance {
 
 	public function getSheetValue(arrayIdx:Int) : Null<String> {
 		require( F_Sheet(null) );
-		trace(def.getSheetDefault());
-		trace(internalValues);
 		return isUsingDefault(arrayIdx) ? def.getSheetDefault() : switch internalValues[arrayIdx] {
 			case V_String(v): v;
 			case _: throw "unexpected";
