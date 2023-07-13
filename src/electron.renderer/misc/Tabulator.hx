@@ -1,5 +1,6 @@
 package misc;
 
+import h3d.anim.Skin.Joint;
 import haxe.Timer;
 import js.html.Option;
 import data.def.TilesetDef;
@@ -273,10 +274,26 @@ class Tabulator {
 				def.formatter = refFormatter;
 			case TEnum(v):
 				def.formatter = enumFormatter;
+			case TColor:
+				def.formatter = colorformatter;
 			case _:
 				// TODO editors
 		}
 		return def;
+	}
+
+	function colorformatter(cell:CellComponent, formatterParams, onRendered) {
+		var value = cell.getValue();
+		var jColor = new J("<input type='color'/>");
+		jColor.val(C.intToHex(value));
+		jColor.change( ev->{
+			cell.setValue(C.hexToInt(jColor.val()));
+		});
+
+		onRendered(() -> {
+			misc.JsTools.parseComponents(new J(cell.getElement()));
+		});
+		return jColor.get(0);
 	}
 
 	function enumFormatter(cell:CellComponent, formatterParams, onRendered) {
