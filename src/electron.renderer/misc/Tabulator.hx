@@ -50,7 +50,7 @@ class Tabulator {
 			layout: "fitDataTable",
 			movableRows: true,
 			movableColumns: true,
-			height: "100%",
+			maxHeight: "100%",
 			history: true,
 			progressiveRender: true,
 			autoResize: false, // Not ideal, but fixes a TRef related crash
