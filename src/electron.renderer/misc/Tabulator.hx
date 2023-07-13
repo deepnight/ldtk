@@ -52,7 +52,6 @@ class Tabulator {
 			movableColumns: true,
 			height: "100%",
 			history: true,
-			progressiveRender: true,
 			autoResize: false, // Not ideal, but fixes a TRef related crash
 			columnDefaults: {
 				maxWidth: 300,
