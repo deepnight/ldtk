@@ -17,7 +17,7 @@ class Project {
 	public var iid(default,null) : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
-	public var database : cdb.Database;
+	public var database : Null<cdb.Database>;
 	var dummyWorldIid : String;
 
 	public var jsonVersion : String;
@@ -610,7 +610,7 @@ class Project {
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
-			database: database.save(),
+			database: database == null ? null : database.save(),
 
 			toc: cachedToc,
 
