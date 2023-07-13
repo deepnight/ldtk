@@ -17,7 +17,7 @@ class Project {
 	public var iid(default,null) : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
-	public var database : cdb.Database;
+	public var database : Null<cdb.Database>;
 	var dummyWorldIid : String;
 
 	public var jsonVersion : String;
@@ -269,7 +269,10 @@ class Project {
 		p.identifierStyle = JsonTools.readEnum(ldtk.Json.IdentifierStyle, json.identifierStyle, false, Capitalize);
 
 		p.database = new cdb.Database();
-		p.database.load(JsonTools.readString(json.database));
+		if (json.database != null) {
+			// var dbString = JsonTools.readString(json.database);
+			p.database.load(JsonTools.readString(json.database));
+		}
 
 		// Advanced flags
 		if( (cast json).advancedOptionFlags!=null )
@@ -610,7 +613,7 @@ class Project {
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
-			database: database.save(),
+			database: database == null ? null : database.save(),
 
 			toc: cachedToc,
 

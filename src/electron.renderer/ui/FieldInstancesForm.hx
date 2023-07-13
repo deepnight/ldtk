@@ -101,16 +101,22 @@ class FieldInstancesForm {
 					jRep.remove();
 					hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
 				});
-			}
-			else if( jElements.is("select") && ( fi.getEnumValue(arrayIdx)!=null || fi.def.canBeNull ) ) {
-				// SELECT case
-				jElements.addClass("usingDefault");
-				jElements.on("click.def", function(ev) {
-					jElements.removeClass("usingDefault");
-				});
-				jElements.on("blur.def", function(ev) {
-					hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
-				});
+			} else if ( jElements.is("select")) {
+				var notNullOrAllowed = switch fi.def.type {
+					case F_Enum(_): fi.getEnumValue(arrayIdx) != null || fi.def.canBeNull;
+					case F_Sheet(_): fi.getSheetValue(arrayIdx) != null || fi.def.canBeNull;
+					case _: false;
+				}
+				if(notNullOrAllowed) {
+					// SELECT case
+					jElements.addClass("usingDefault");
+					jElements.on("click.def", function(ev) {
+						jElements.removeClass("usingDefault");
+					});
+					jElements.on("blur.def", function(ev) {
+						hideInputIfDefault(arrayIdx, jElements, fi, isRequired);
+					});
+				}
 			}
 		}
 		else if( fi.def.type!=F_Path && ( fi.def.getDefault()!=null || fi.def.canBeNull ) ) {
@@ -627,21 +633,48 @@ class FieldInstancesForm {
 				var jSelect = new J('<select class="advanced"/>');
 				var displayCol = sheet.props.displayColumn ?? sheet.idCol.name;
 				jSelect.appendTo(jTarget);
+
+				var firstOpt:js.html.Option;
+				if( fi.def.canBeNull || fi.getSheetValue(arrayIdx)==null ) {
+					if (fi.def.canBeNull) {
+						firstOpt = new js.html.Option("-- null --", "", true);
+						jSelect.append(firstOpt);
+					} else {
+						// SELECT shouldn't be null
+						firstOpt = new js.html.Option("[ Value required ]", "", true);
+						jSelect.append(firstOpt);
+						markError(jSelect);
+						jSelect.click( function(ev) {
+							jSelect.removeAttr("error").removeClass("required");
+							jSelect.blur( function(ev) renderForm() );
+						});
+					}
+				}
+
 				for (line in sheet.lines) {
-					var jOpt = new J('<option/>');
-					jOpt.appendTo(jSelect);
 					var value = Reflect.field(line, displayCol);
-					jOpt.attr("value", value);
-					jOpt.text(value);
+
+					var selected = fi.getSheetValue(arrayIdx) == value;
+					var jOpt = new js.html.Option(value, value, false, selected);
 					if (sheet.props.displayIcon != null) {
 						var tp:cdb.Types.TilePos = Reflect.field(line, sheet.props.displayIcon);
 						if (tp != null && tp.file != null) {
 							var td = Editor.ME.project.defs.getTilesetDefFrom(tp.file);
-							jOpt.attr("tile", haxe.Json.stringify(misc.Tabulator.tilePosToTilesetRect(tp, td)));
+							jOpt.setAttribute("tile", haxe.Json.stringify(misc.Tabulator.tilePosToTilesetRect(tp, td)));
 						}
 					}
-
+					jSelect.append(jOpt);
 				}
+
+				jSelect.change( function(ev) {
+					var v = jSelect.val()=="" ? null : jSelect.val();
+					if( v=="_default" )
+						fi.parseValue(arrayIdx, null);
+					else
+						fi.parseValue(arrayIdx, v);
+					onFieldChange(fi);
+				});
+				hideInputIfDefault(arrayIdx, jSelect, fi);
 
 
 		}

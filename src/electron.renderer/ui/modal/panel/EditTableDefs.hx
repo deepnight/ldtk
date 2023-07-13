@@ -75,6 +75,8 @@ class EditTableDefs extends ui.modal.Panel {
 				},
 			});
 		});
+		if (project.database == null) return;
+
 		if (project.database.sheets.length > 0) {
 			selectTable(project.database.sheets[0]);
 			return;
