@@ -613,7 +613,7 @@ class Project {
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
-			database: database == null ? null : database.save(),
+			database: database == null ? null : haxe.Json.parse(database.save()),
 
 			toc: cachedToc,
 
