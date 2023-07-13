@@ -29,34 +29,36 @@ class Tabulator {
 
 	public var sub:Null<Tabulator>;
 	public var parentCell:Null<CellComponent>;
-	
+
 	public function new(element:EitherType<String, js.html.Element>, sheet:Sheet, ?parentCell:CellComponent) {
 		this.element = new J(element);
 		this.parentCell = parentCell;
 		this.columns = sheet.columns;
 		this.columnTypes = [for (x in columns) x.name => x.type];
 		this.lines = parentCell == null ? sheet.getLines() : parentCell.getValue();
-		if (this.lines == null) this.lines = [];
+		if (this.lines == null)
+			this.lines = [];
 		this.sheet = sheet;
 		createTabulator();
 	}
 
 	function createTabulator() {
-		var cols = [({formatter: "rownum"}:ColumnDefinition)].concat([for (c in columns) createColumnDef(c)]);
+		var cols = [({formatter: "rownum"} : ColumnDefinition)].concat([for (c in columns) createColumnDef(c)]);
 		tabulator = new tabulator.Tabulator(element.get(0), {
 			data: lines,
 			columns: cols,
 			layout: "fitDataTable",
 			movableRows: true,
 			movableColumns: true,
-			height: "max-content",
+			height: "100%",
 			history: true,
-			autoResize: false, // Not ideal, but fixes a TRef related crash 
+			progressiveRender: true,
+			autoResize: false, // Not ideal, but fixes a TRef related crash
 			columnDefaults: {
-				maxWidth:300,
+				maxWidth: 300,
 			},
 		});
-		(js.Browser.window:Dynamic).tabulator = tabulator; // TODO remove this when debugging isnt needed
+		(js.Browser.window : Dynamic).tabulator = tabulator; // TODO remove this when debugging isnt needed
 		tabulator.on("cellContext", (e, cell:CellComponent) -> {
 			var ctx = new ContextMenu(e);
 			var row = cell.getRow();
@@ -72,7 +74,7 @@ class Tabulator {
 			ctx.add({
 				label: new LocaleString("Delete row"),
 				cb: () -> {
-					sheet.deleteLine(row.getPosition()-1);
+					sheet.deleteLine(row.getPosition() - 1);
 					row.delete();
 				}
 			});
@@ -92,7 +94,7 @@ class Tabulator {
 			var ctx = new ContextMenu(e);
 			ctx.add({
 				label: new LocaleString("Add column"),
-				cb: () -> new ui.modal.dialog.CastleColumn(sheet, (c)-> {
+				cb: () -> new ui.modal.dialog.CastleColumn(sheet, (c) -> {
 					tabulator.addColumn(createColumnDef(c));
 				})
 			});
@@ -100,7 +102,7 @@ class Tabulator {
 			if (column != null) {
 				ctx.add({
 					label: new LocaleString("Edit column"),
-					cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c)->{
+					cb: () -> new ui.modal.dialog.CastleColumn(sheet, column, (c) -> {
 						tabulator.updateColumnDefinition(c.name, createColumnDef(c));
 					})
 				});
@@ -115,12 +117,12 @@ class Tabulator {
 							}
 						});
 					case TTileLayer, TTilePos, TImage:
-						// var select = JsTools.createTilesetSelect(Editor.ME.project, null, null, null, null, null);
-						// select.addClass("advanced");
-						// ctx.add({
-						// 	label: new LocaleString("Bulk tileset update"),
-						// 	cb: () -> new ui.modal.dialog.SelectPicker(select, null, (x) -> trace(x)) 
-						// });
+					// var select = JsTools.createTilesetSelect(Editor.ME.project, null, null, null, null, null);
+					// select.addClass("advanced");
+					// ctx.add({
+					// 	label: new LocaleString("Bulk tileset update"),
+					// 	cb: () -> new ui.modal.dialog.SelectPicker(select, null, (x) -> trace(x))
+					// });
 					case _:
 				}
 				ctx.add({
@@ -196,7 +198,8 @@ class Tabulator {
 		for (row in data) {
 			var obj:DynamicAccess<String> = {};
 			for (i => val in row) {
-				if (i > keys.length) continue; // TODO Is this the desired behaviour to handle extra values on rows?
+				if (i > keys.length)
+					continue; // TODO Is this the desired behaviour to handle extra values on rows?
 				obj.set(keys[i], val);
 			}
 			rows.push(obj);
@@ -211,7 +214,7 @@ class Tabulator {
 		return s;
 	}
 
-	function getColumn(column:ColumnComponent){
+	function getColumn(column:ColumnComponent) {
 		for (col in sheet.columns) {
 			if (column.getField() == col.name) {
 				return col;
@@ -228,15 +231,14 @@ class Tabulator {
 		}, 200);
 	}
 
-
 	// Add a row before or after specified RowComponent
-	function createRow(?row:RowComponent, before=false) {
+	function createRow(?row:RowComponent, before = false) {
 		// TODO getDefault doesnt actually return values that work. Maybe the fix should be done to the actual functions
 		if (row == null) {
 			var line = sheet.newLine();
 			tabulator.addRow(line, before).then(r -> animateComponent(r, "top"));
 		} else {
-			var castleIndex = before ? row.getPosition()-1 : row.getPosition();
+			var castleIndex = before ? row.getPosition() - 1 : row.getPosition();
 			var line = sheet.newLine(castleIndex);
 			tabulator.addRow(line, before, row).then(r -> animateComponent(r, "top"));
 		}
@@ -245,7 +247,7 @@ class Tabulator {
 	public function createColumnDef(c:Column) {
 		var def:ColumnDefinition = {};
 		def.title = c.name;
-		def.field =  c.name;
+		def.field = c.name;
 		def.hozAlign = "center";
 		var t = c.type;
 		switch t {
@@ -254,7 +256,7 @@ class Tabulator {
 			case TInt, TFloat:
 				def.editor = "number";
 			case TImage, TTilePos:
-				def.formatter =  imageFormatter;
+				def.formatter = imageFormatter;
 			case TBool:
 				def.editor = "tickCross";
 				def.formatter = "tickCross";
@@ -346,8 +348,7 @@ class Tabulator {
 
 	function dynamicClick(e, cell:CellComponent) {
 		var str = Json.stringify(cell.getValue(), null, "\t");
-		var te = new TextEditor(str, cell.getField(), null, LangJson,
-		(value) -> {
+		var te = new TextEditor(str, cell.getField(), null, LangJson, (value) -> {
 			// TODO Handle JSON parsing errors
 			var val = sheet.base.parseDynamic(value);
 			cell.setValue(val);
@@ -369,10 +370,10 @@ class Tabulator {
 				return;
 			}
 			removeSubTabulator();
-		} 
+		}
 
 		var subTabulator = new Tabulator(table, subSheet, cell);
-		
+
 		holder.style.boxSizing = "border-box";
 		holder.style.padding = "10px 30px 10px 10px";
 		holder.style.borderTop = "1px solid #333";
@@ -384,7 +385,7 @@ class Tabulator {
 
 		holder.appendChild(table);
 		cellElement.closest(".tabulator-row").append(holder);
-		
+
 		sub = subTabulator;
 	}
 
@@ -410,19 +411,15 @@ class Tabulator {
 			cell.setValue(tp);
 		});
 		select.appendTo(tilesetSelect);
-		if (values == null || (values != null && values.file == null)) return tilesetSelect.get(0); 
+		if (values == null || (values != null && values.file == null))
+			return tilesetSelect.get(0);
 		var td = Editor.ME.project.defs.getTilesetDefFrom(values.file);
-		if (td == null ) return tilesetSelect.get(0); 
-		var jPicker = JsTools.createTilePicker(
-			td.uid,
-			RectOnly,
-			td.getTileIdsFromRect(tilePosToTilesetRect(values, td)),
-			true,
-			(tileIds) -> {
-				var tilesetRect = td.getTileRectFromTileIds(tileIds);
-				cell.setValue(tilesetRectToTilePos(tilesetRect, td));
-			}
-		);
+		if (td == null)
+			return tilesetSelect.get(0);
+		var jPicker = JsTools.createTilePicker(td.uid, RectOnly, td.getTileIdsFromRect(tilePosToTilesetRect(values, td)), true, (tileIds) -> {
+			var tilesetRect = td.getTileRectFromTileIds(tileIds);
+			cell.setValue(tilesetRectToTilePos(tilesetRect, td));
+		});
 		jPicker.appendTo(tileRectPicker);
 		return tileRectPicker.get(0);
 	}
@@ -440,6 +437,7 @@ class Tabulator {
 		};
 		return tilesetRect;
 	}
+
 	function tilesetRectToTilePos(tilesetRect:TilesetRect, td:TilesetDef) {
 		var tilePos:TilePos = {
 			file: td.relPath,
@@ -451,6 +449,7 @@ class Tabulator {
 		}
 		return tilePos;
 	}
+
 	function createTilePos(td:TilesetDef) {
 		var tilePos:TilePos = {
 			file: td.relPath,
