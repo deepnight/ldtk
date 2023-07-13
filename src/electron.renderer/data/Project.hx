@@ -270,8 +270,7 @@ class Project {
 
 		p.database = new cdb.Database();
 		if (json.database != null) {
-			// var dbString = JsonTools.readString(json.database);
-			p.database.load(JsonTools.readString(json.database));
+			p.database.load(haxe.Json.stringify(json.database));
 		}
 
 		// Advanced flags
