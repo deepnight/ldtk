@@ -621,6 +621,28 @@ class FieldInstancesForm {
 						});
 					}
 				}
+				
+			case F_Sheet(sheetName):
+				var sheet = project.database.getSheet(sheetName);
+				var jSelect = new J('<select class="advanced"/>');
+				var displayCol = sheet.props.displayColumn ?? sheet.idCol.name;
+				jSelect.appendTo(jTarget);
+				for (line in sheet.lines) {
+					var jOpt = new J('<option/>');
+					jOpt.appendTo(jSelect);
+					var value = Reflect.field(line, displayCol);
+					jOpt.attr("value", value);
+					jOpt.text(value);
+					if (sheet.props.displayIcon != null) {
+						var tp:cdb.Types.TilePos = Reflect.field(line, sheet.props.displayIcon);
+						if (tp != null && tp.file != null) {
+							var td = Editor.ME.project.defs.getTilesetDefFrom(tp.file);
+							jOpt.attr("tile", haxe.Json.stringify(misc.Tabulator.tilePosToTilesetRect(tp, td)));
+						}
+					}
+
+				}
+
 
 		}
 
@@ -756,6 +778,8 @@ class FieldInstancesForm {
 
 			case F_Point:
 				// Not done here
+			
+			case F_Sheet(sheetName):
 		}
 
 	}

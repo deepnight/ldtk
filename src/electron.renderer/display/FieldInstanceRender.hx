@@ -555,6 +555,7 @@ class FieldInstanceRender {
 				case F_Path: multiLinesArray = true;
 				case F_EntityRef: multiLinesArray = true; showArrayBrackets = false;
 				case F_Tile:
+				case F_Sheet(sheetName):
 			}
 			if( multiLinesArray ) {
 				valuesFlow.multiline = true;

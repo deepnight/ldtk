@@ -17,7 +17,7 @@ class Project {
 	public var iid(default,null) : String;
 	public var defs : Definitions;
 	public var worlds : Array<World> = [];
-	public var db : cdb.Database;
+	public var database : cdb.Database;
 	var dummyWorldIid : String;
 
 	public var jsonVersion : String;
@@ -267,6 +267,9 @@ class Project {
 		p.appBuildId = JsonTools.readFloat(json.appBuildId, -1);
 		p.nextUid = JsonTools.readInt( json.nextUid, 0 );
 		p.identifierStyle = JsonTools.readEnum(ldtk.Json.IdentifierStyle, json.identifierStyle, false, Capitalize);
+
+		p.database = new cdb.Database();
+		p.database.load(JsonTools.readString(json.database));
 
 		// Advanced flags
 		if( (cast json).advancedOptionFlags!=null )
@@ -607,6 +610,8 @@ class Project {
 			nextUid: nextUid,
 			identifierStyle: JsonTools.writeEnum(identifierStyle, false),
 
+			database: database.save(),
+
 			toc: cachedToc,
 
 			worldLayout: hasFlag(MultiWorlds) ? null : JsonTools.writeEnum(worlds[0].worldLayout, false),
@@ -672,7 +677,6 @@ class Project {
 	public function clone() : data.Project {
 		return fromJson( filePath.full, toJson() );
 	}
-
 
 	/**
 		Check all FieldInstances and remove any existing references to `targetEi` EntityInstance

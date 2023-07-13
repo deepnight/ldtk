@@ -184,6 +184,8 @@ class OgmoLoader {
 							case F_EntityRef:
 
 							case F_Tile:
+							
+							case F_Sheet(sheetName):
 
 						}
 
@@ -405,6 +407,7 @@ class OgmoLoader {
 
 											case F_Tile:
 											case F_EntityRef:
+											case F_Sheet(sheetName):
 										}
 
 										if( fi.isEqualToDefault(0) )

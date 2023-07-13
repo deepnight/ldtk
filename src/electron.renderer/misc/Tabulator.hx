@@ -204,7 +204,7 @@ class Tabulator {
 			}
 			rows.push(obj);
 		}
-		var s = Editor.ME.project.db.createSheet(table_name);
+		var s = Editor.ME.project.database.createSheet(table_name);
 		for (c in columns) {
 			s.addColumn(c);
 		}
@@ -425,7 +425,7 @@ class Tabulator {
 	}
 
 	// LDTK uses pixels for the grid and Castle how many'th tile it is
-	function tilePosToTilesetRect(tilePos:TilePos, td:TilesetDef):TilesetRect {
+	public static function tilePosToTilesetRect(tilePos:TilePos, td:TilesetDef):TilesetRect {
 		var hei = tilePos.height != null ? tilePos.height : 1;
 		var wid = tilePos.width != null ? tilePos.width : 1;
 		var tilesetRect:TilesetRect = {

@@ -87,9 +87,6 @@ class Editor extends Page {
 
 		watcher = new misc.FileWatcher();
 
-		p.db = new cdb.Database();
-		loadCastleDB(p.db, p);
-
 		worldRender = new display.WorldRender();
 		levelRender = new display.LevelRender();
 		camera = new display.Camera();
@@ -169,14 +166,6 @@ class Editor extends Page {
 
 	public static inline function exists() {
 		return ME!=null && !ME.destroyed;
-	}
-
-	function loadCastleDB(database:cdb.Database, project:data.Project) {
-        var dbPath = project.getAbsExternalFilesDir() + "/castle.cdb";
-		if (NT.fileExists(dbPath)) {
-			var json = NT.readFileString(dbPath);
-			database.load(json);
-		}
 	}
 
 	function initUI() {
