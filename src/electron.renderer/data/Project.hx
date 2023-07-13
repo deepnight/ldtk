@@ -269,7 +269,10 @@ class Project {
 		p.identifierStyle = JsonTools.readEnum(ldtk.Json.IdentifierStyle, json.identifierStyle, false, Capitalize);
 
 		p.database = new cdb.Database();
-		p.database.load(JsonTools.readString(json.database));
+		if (json.database != null) {
+			// var dbString = JsonTools.readString(json.database);
+			p.database.load(JsonTools.readString(json.database));
+		}
 
 		// Advanced flags
 		if( (cast json).advancedOptionFlags!=null )
