@@ -110,19 +110,21 @@ class Tabulator {
 					case TString:
 						var displayCol = sheet.props.displayColumn;
 						ctx.add({
-							label: new LocaleString("Set as display column"),
+							label: new LocaleString("Set as display name"),
 							sub: new LocaleString(displayCol == column.name ? "Enabled" : "Disabled"),
 							cb: () -> {
 								sheet.props.displayColumn = displayCol == column.name ? null : column.name;
 							}
 						});
 					case TTileLayer, TTilePos, TImage:
-					// var select = JsTools.createTilesetSelect(Editor.ME.project, null, null, null, null, null);
-					// select.addClass("advanced");
-					// ctx.add({
-					// 	label: new LocaleString("Bulk tileset update"),
-					// 	cb: () -> new ui.modal.dialog.SelectPicker(select, null, (x) -> trace(x))
-					// });
+						var displayIcon = sheet.props.displayIcon;
+						ctx.add({
+							label: new LocaleString("Set as display icon"),
+							sub: new LocaleString(displayIcon == column.name ? "Enabled" : "Disabled"),
+							cb: () -> {
+								sheet.props.displayIcon = displayIcon == column.name ? null : column.name;
+							}
+						});
 					case _:
 				}
 				ctx.add({
