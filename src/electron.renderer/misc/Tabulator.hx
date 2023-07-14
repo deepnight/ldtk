@@ -235,7 +235,6 @@ class Tabulator {
 
 	// Add a row before or after specified RowComponent
 	function createRow(?row:RowComponent, before = false) {
-		// TODO getDefault doesnt actually return values that work. Maybe the fix should be done to the actual functions
 		if (row == null) {
 			var line = sheet.newLine();
 			tabulator.addRow(line, before).then(r -> animateComponent(r, "top"));
@@ -270,6 +269,8 @@ class Tabulator {
 				def.cellClick = dynamicClick;
 			case TTileLayer:
 				def.formatter = tileLayerFormatter;
+			case TColor:
+				def.formatter = colorformatter;
 			case TRef(sheetName):
 				var refSheet = sheet.base.getSheet(sheetName);
 				var idCol = refSheet.idCol.name;
@@ -309,8 +310,6 @@ class Tabulator {
 				def.formatter = enumFormatter;
 				def.formatterParams = {select: jSelect};
 
-			case TColor:
-				def.formatter = colorformatter;
 			case _:
 				// TODO editors
 		}
@@ -332,7 +331,7 @@ class Tabulator {
 	}
 
 	function enumFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var value:String = cell.getValue();
+		var value = cell.getValue() ?? "";
 		var select:JQuery = formatterParams.select.clone();
 		select.val(value);
 		select.on("change", (e) -> {
@@ -347,7 +346,7 @@ class Tabulator {
 	}
 
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var value:Null<String> = cell.getValue();
+		var value = cell.getValue() ?? "";
 		var select:JQuery = formatterParams.select.clone();
 		select.val(value);
 		select.on("change", (e) -> {
