@@ -163,7 +163,7 @@ class Tabulator {
 		}
 
 		// tabulator.on("tableBuilt",(e) -> {
-		// 	tabulator.redraw(false);
+			// tabulator.redraw(false);
 		// });
 
 		return tabulator;
@@ -257,8 +257,8 @@ class Tabulator {
 				def.editor = "input";
 			case TInt, TFloat:
 				def.editor = "number";
-			case TImage, TTilePos:
-				def.formatter = imageFormatter;
+			case TTilePos:
+				def.formatter = tilePosFormatter;
 			case TBool:
 				def.editor = "tickCross";
 				def.formatter = "tickCross";
@@ -270,10 +270,45 @@ class Tabulator {
 				def.cellClick = dynamicClick;
 			case TTileLayer:
 				def.formatter = tileLayerFormatter;
-			case TRef(t):
+			case TRef(sheetName):
+				var refSheet = sheet.base.getSheet(sheetName);
+				var idCol = refSheet.idCol.name;
+				var nameCol = refSheet.props.displayColumn ?? idCol;
+				var iconCol = refSheet.props.displayIcon;
+
+				var jSelect = new J("<select class='advanced'/>");
+				if (c.opt) {
+					jSelect.append(new Option("-- Null --", "", true, true));
+				}
+				for (line in refSheet.lines) {
+					var line:DynamicAccess<Dynamic> = line;
+					var jOpt = new Option(line.get(nameCol), line.get(idCol));
+					jSelect.append(jOpt);
+					if (iconCol != null) {
+						var i:TilePos = line.get(iconCol);
+						if (i != null && i.file != null) {
+							var td = Editor.ME.project.defs.getTilesetDefFrom(i.file);
+							jOpt.setAttribute("tile", Json.stringify(tilePosToTilesetRect(i, td)));
+						}
+					}
+				}
+				
 				def.formatter = refFormatter;
-			case TEnum(v):
+				def.formatterParams = {select: jSelect};
+
+			case TEnum(options):
+				var jSelect = new J("<select class='advanced'/>");
+				if (c.opt) {
+					jSelect.append(new Option("-- Null --", "", true, true));
+				}
+				for (option in options) {
+					var jOpt = new Option(option, option);
+					jSelect.append(jOpt);
+				}
+
 				def.formatter = enumFormatter;
+				def.formatterParams = {select: jSelect};
+
 			case TColor:
 				def.formatter = colorformatter;
 			case _:
@@ -297,27 +332,14 @@ class Tabulator {
 	}
 
 	function enumFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var value = cell.getValue();
-		var column = getColumn(cell.getColumn());
-		var options:Array<String> = column.type.getParameters()[0];
-		var content = new J("<select class='advanced'/>");
-		if (column.opt) {
-			var empty = new Option("-- Select an enum --", true);
-			content.append(empty);
-		}
-		for (option in options) {
-			var selected = value == options.indexOf(option);
-			var opt = new Option(option, option, false, selected);
-			content.append(opt);
-		}
-		content.on("change", (e) -> {
-			var val = content.val();
-			cell.setValue(options.indexOf(val));
+		var value:String = cell.getValue();
+		var select:JQuery = formatterParams.select.clone();
+		select.val(value);
+		select.on("change", (e) -> {
+			cell.setValue(select.val());
 		});
-		onRendered(() -> {
-			misc.JsTools.parseComponents(new J(cell.getElement()));
-		});
-		return content.get(0);
+		return select.get(0);
+
 	}
 
 	function tileLayerFormatter(cell:CellComponent, formatterParams, onRendered) {
@@ -326,41 +348,12 @@ class Tabulator {
 
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var value:Null<String> = cell.getValue();
-		var type = columnTypes.get(cell.getField());
-		var column = getColumn(cell.getColumn());
-		var content = new J("<select class='advanced'/>");
-
-		var refSheet = sheet.base.getSheet(sheet.base.typeStr(type));
-		var idCol = refSheet.idCol.name;
-		var nameCol = refSheet.props.displayColumn != null ? refSheet.props.displayColumn : idCol;
-		var iconCol = refSheet.props.displayIcon;
-		if (column.opt) {
-			var empty = new Option("-- Select a line --", true);
-			content.append(empty);
-		}
-		for (line in refSheet.lines) {
-			var line:DynamicAccess<Dynamic> = line;
-			var name = line.get(nameCol);
-			var selected = value == line.get(idCol);
-			var opt = new Option(name, line.get(idCol), false, selected);
-
-			if (iconCol != null) {
-				var i:TilePos = line.get(iconCol);
-				if (i != null && i.file != null) {
-					var td = Editor.ME.project.defs.getTilesetDefFrom(i.file);
-					opt.setAttribute("tile", Json.stringify(tilePosToTilesetRect(i, td)));
-				}
-			}
-			content.append(opt);
-		}
-		content.on("change", (e) -> {
-			var val = content.val();
-			cell.setValue(val);
+		var select:JQuery = formatterParams.select.clone();
+		select.val(value);
+		select.on("change", (e) -> {
+			cell.setValue(select.val());
 		});
-		onRendered(() -> {
-			// misc.JsTools.parseComponents(new J(cell.getElement()));
-		});
-		return content.get(0);
+		return select.get(0);
 	}
 
 	function dynamicFormatter(cell:CellComponent, formatterParams, onRendered) {
@@ -422,7 +415,7 @@ class Tabulator {
 		sub = null;
 	}
 
-	function imageFormatter(cell:CellComponent, formatterParams, onRendered) {
+	function tilePosFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var tileRectPicker = new J("<span/>");
 		var tilesetSelect = new J("<span/>");
 		var values:TilePos = cell.getValue();

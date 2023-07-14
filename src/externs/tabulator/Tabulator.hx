@@ -62,6 +62,7 @@ typedef ColumnDefinition = {
 	var ?title : String;
 	var ?field : String;
 	var ?formatter : Dynamic;
+	var ?formatterParams : Dynamic;
 	var ?hozAlign : String;
 	var ?editor : Dynamic;
 	var ?headerFilter : Dynamic;
