@@ -358,7 +358,7 @@ class Tabulator {
 			cell.setValue(val);
 		});
 		onRendered(() -> {
-			misc.JsTools.parseComponents(new J(cell.getElement()));
+			// misc.JsTools.parseComponents(new J(cell.getElement()));
 		});
 		return content.get(0);
 	}
