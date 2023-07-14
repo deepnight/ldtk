@@ -295,7 +295,7 @@ class Tabulator {
 				}
 				
 				def.formatter = refFormatter;
-				def.formatterParams = {select: jSelect};
+				def.formatterParams = {select: jSelect[0].outerHTML};
 
 			case TEnum(options):
 				var jSelect = new J("<select class='advanced'/>");
@@ -308,7 +308,7 @@ class Tabulator {
 				}
 
 				def.formatter = enumFormatter;
-				def.formatterParams = {select: jSelect};
+				def.formatterParams = {select: jSelect[0].outerHTML};
 
 			case _:
 				// TODO editors
@@ -332,7 +332,7 @@ class Tabulator {
 
 	function enumFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var value = cell.getValue() ?? "";
-		var select:JQuery = formatterParams.select.clone();
+		var select:JQuery = new J(formatterParams.select);
 		select.val(value);
 		select.on("change", (e) -> {
 			cell.setValue(select.val());
@@ -347,7 +347,7 @@ class Tabulator {
 
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var value = cell.getValue() ?? "";
-		var select:JQuery = formatterParams.select.clone();
+		var select:JQuery = new J(formatterParams.select);
 		select.val(value);
 		select.on("change", (e) -> {
 			cell.setValue(select.val());
