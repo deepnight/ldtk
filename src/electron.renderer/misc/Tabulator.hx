@@ -277,25 +277,36 @@ class Tabulator {
 				var nameCol = refSheet.props.displayColumn ?? idCol;
 				var iconCol = refSheet.props.displayIcon;
 
-				var jSelect = new J("<select class='advanced'/>");
-				if (c.opt) {
-					jSelect.append(new Option("-- Null --", "", true, true));
-				}
+				var values = [];
+				var images = {};
 				for (line in refSheet.lines) {
-					var line:DynamicAccess<Dynamic> = line;
-					var jOpt = new Option(line.get(nameCol), line.get(idCol));
-					jSelect.append(jOpt);
-					if (iconCol != null) {
-						var i:TilePos = line.get(iconCol);
-						if (i != null && i.file != null) {
-							var td = Editor.ME.project.defs.getTilesetDefFrom(i.file);
-							jOpt.setAttribute("tile", Json.stringify(tilePosToTilesetRect(i, td)));
-						}
-					}
+					var id = Reflect.field(line, idCol);
+					var image = iconCol != null ? tilePosToHtmlImg(Reflect.field(line, iconCol))[0].outerHTML : null;
+					Reflect.setField(images, id, image);
+					values.push({
+						label: Reflect.field(line, nameCol),
+						value: id,
+						line: line,
+						image: image
+					});
 				}
-				
 				def.formatter = refFormatter;
-				def.formatterParams = {select: jSelect[0].outerHTML};
+				def.formatterParams = {images: images}
+				def.editor = "list";
+				def.editorParams = {
+					values: values,
+					itemFormatter: (label, value, item, element) -> {
+						var content = new J("<span>");
+						if (item.image != null) {
+							content.append(new J(item.image));
+						}
+						content.append(label);
+						return content[0].outerHTML;
+					},
+					autocomplete: true,
+					listOnEmpty: true,
+					allowEmpty: c.opt
+				}
 
 			case TEnum(options):
 				var jSelect = new J("<select class='advanced'/>");
@@ -346,13 +357,12 @@ class Tabulator {
 	}
 
 	function refFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var value = cell.getValue() ?? "";
-		var select:JQuery = new J(formatterParams.select);
-		select.val(value);
-		select.on("change", (e) -> {
-			cell.setValue(select.val());
-		});
-		return select.get(0);
+		var content = new J("<span>");
+		var value = cell.getValue();
+		var images = formatterParams.images;
+		content.append(new J(Reflect.field(images, value)));
+		content.append(cell.getValue() ?? "");
+		return content.get(0);
 	}
 
 	function dynamicFormatter(cell:CellComponent, formatterParams, onRendered) {
@@ -445,8 +455,8 @@ class Tabulator {
 			tilesetUid: td.uid,
 			h: hei * td.tileGridSize,
 			w: wid * td.tileGridSize,
-			y: tilePos.y,
-			x: tilePos.x,
+			y: tilePos.y * td.tileGridSize,
+			x: tilePos.x * td.tileGridSize,
 		};
 		return tilesetRect;
 	}
@@ -457,8 +467,8 @@ class Tabulator {
 			size: td.tileGridSize,
 			height: Std.int(tilesetRect.h / td.tileGridSize),
 			width: Std.int(tilesetRect.w / td.tileGridSize),
-			y: tilesetRect.y,
-			x: tilesetRect.x,
+			y: Std.int(tilesetRect.y / td.tileGridSize),
+			x: Std.int(tilesetRect.x / td.tileGridSize),
 		}
 		return tilePos;
 	}
@@ -473,5 +483,14 @@ class Tabulator {
 			x: 0,
 		};
 		return tilePos;
+	}
+	function tilePosToHtmlImg(tilePos:TilePos) {
+		if (tilePos.file == null)
+			return null;
+		var td = Editor.ME.project.defs.getTilesetDefFrom(tilePos.file);
+		if (td == null)
+			return null;
+		var img = td.createTileHtmlImageFromRect(tilePosToTilesetRect(tilePos, td));
+		return img;
 	}
 }

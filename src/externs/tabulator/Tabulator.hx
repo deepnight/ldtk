@@ -65,6 +65,7 @@ typedef ColumnDefinition = {
 	var ?formatterParams : Dynamic;
 	var ?hozAlign : String;
 	var ?editor : Dynamic;
+	var ?editorParams : Dynamic;
 	var ?headerFilter : Dynamic;
 	var ?headerFilterParams : Dynamic;
 	var ?cellClick : Dynamic;
