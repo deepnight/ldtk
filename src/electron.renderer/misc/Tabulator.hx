@@ -270,7 +270,7 @@ class Tabulator {
 			case TTileLayer:
 				def.formatter = tileLayerFormatter;
 			case TColor:
-				def.formatter = colorformatter;
+				def.formatter = colorFormatter;
 			case TRef(sheetName):
 				var refSheet = sheet.base.getSheet(sheetName);
 				var idCol = refSheet.idCol.name;
@@ -309,17 +309,17 @@ class Tabulator {
 				}
 
 			case TEnum(options):
-				var jSelect = new J("<select class='advanced'/>");
-				if (c.opt) {
-					jSelect.append(new Option("-- Null --", "", true, true));
-				}
-				for (option in options) {
-					var jOpt = new Option(option, option);
-					jSelect.append(jOpt);
-				}
-
-				def.formatter = enumFormatter;
-				def.formatterParams = {select: jSelect[0].outerHTML};
+				def.editor = "list";
+				def.editorParams = {
+					values: [for (i => v in options) {
+						label: v,
+						value: i
+					}],
+					autocomplete: true,
+					allowEmpty: c.opt,
+					listOnEmpty: true
+				};
+				def.formatter = (c:CellComponent) -> return options[c.getValue()];
 
 			case _:
 				// TODO editors
@@ -327,7 +327,7 @@ class Tabulator {
 		return def;
 	}
 
-	function colorformatter(cell:CellComponent, formatterParams, onRendered) {
+	function colorFormatter(cell:CellComponent, formatterParams, onRendered) {
 		var value = cell.getValue();
 		var jColor = new J("<input type='color'/>");
 		jColor.val(C.intToHex(value));
@@ -339,17 +339,6 @@ class Tabulator {
 			misc.JsTools.parseComponents(new J(cell.getElement()));
 		});
 		return jColor.get(0);
-	}
-
-	function enumFormatter(cell:CellComponent, formatterParams, onRendered) {
-		var value = cell.getValue() ?? "";
-		var select:JQuery = new J(formatterParams.select);
-		select.val(value);
-		select.on("change", (e) -> {
-			cell.setValue(select.val());
-		});
-		return select.get(0);
-
 	}
 
 	function tileLayerFormatter(cell:CellComponent, formatterParams, onRendered) {
