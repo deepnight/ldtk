@@ -1,3 +1,3 @@
 main.hxml
-
 -debug
+ -D no-deprecation-warnings
