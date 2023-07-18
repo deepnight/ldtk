@@ -1,6 +1,8 @@
 // Source: https://www.npmjs.com/package/codemirror
 package codemirror;
 
+import js.lib.Object;
+
 @:enum
 abstract ExecCommand(String) {
 	var GoLineStart = "goLineStart";
@@ -23,6 +25,8 @@ extern class CodeMirror {
 		https://codemirror.net/doc/manual.html#commands
 	**/
 	public function execCommand(name:ExecCommand):Void;
+
+	public static function autoShowComplete(cm:Dynamic, event:Dynamic):Void;
 }
 
 typedef CodeMirrorConfig = {

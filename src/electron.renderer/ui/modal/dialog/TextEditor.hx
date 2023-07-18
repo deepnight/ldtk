@@ -30,7 +30,7 @@ class TextEditor extends ui.modal.Dialog {
 		jTextArea.val(str);
 
 		// Autocompletion
-		js.node.Require.require('codemirror/addon/hint/show-hint.js');
+		js.node.Require.require('./js/show-hint.js');
 		js.node.Require.require('codemirror/addon/hint/anyword-hint.js');
 		js.node.Require.require('codemirror/mode/javascript/javascript.js');
 
@@ -42,9 +42,10 @@ class TextEditor extends ui.modal.Dialog {
 			lineWrapping: true,
 			readOnly: readOnly,
 			autofocus: true,
-			extraKeys: {"F2": "autocomplete"},
+			extraKeys: {"Tab": "autoresolve"},
 		});
 		cm.on("change", (ev) -> anyChange = true);
+		cm.on("inputRead", (ev) -> CodeMirror.autoShowComplete(cm, ev));
 
 		// Load extra addons
 		if (mode == LangXml) {
