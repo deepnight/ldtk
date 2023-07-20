@@ -7,7 +7,7 @@ class TextEditor extends ui.modal.Dialog {
 	public var jHeader:js.jquery.JQuery;
 	public var jTextArea:js.jquery.JQuery;
 
-	var cm:CodeMirror;
+	// var cm:CodeMirror;
 
 	public function new(str:String, title:String, ?desc:String, ?mode:ldtk.Json.TextLanguageMode, ?onChange:(str:String) -> Void, ?onNoChange:Void->Void) {
 		super("textEditor");
@@ -29,35 +29,58 @@ class TextEditor extends ui.modal.Dialog {
 		jTextArea.appendTo(jContent);
 		jTextArea.val(str);
 
+		var textarea = jTextArea.get(0);
+
+		var view = new EditorView({
+			doc: jTextArea.val(),
+			extensions: [basicSetup,],
+		});
+
+		textarea.parentNode.insertBefore(view.dom, textarea);
+		textarea.style.display = "none";
+
+		var ele = jTextArea.parent().find('.cm-editor');
+
+		ele.attr("autofocus");
+		// textarea.focus();
+
+		// if (jTextArea.form) {
+		// 	jTextArea.form.addEventListener("submit", () -> {
+		// 		jTextArea.value = view.state.doc.ToString();
+		// 	});
+		// }
+
+		trace(view);
+		anyChange = true;
 		// Autocompletion
-		js.node.Require.require('./js/show-hint.js');
-		js.node.Require.require('codemirror/addon/hint/anyword-hint.js');
-		js.node.Require.require('codemirror/mode/javascript/javascript.js');
+		// js.node.Require.require('./js/show-hint.js');
+		// js.node.Require.require('codemirror/addon/hint/anyword-hint.js');
+		// js.node.Require.require('codemirror/mode/javascript/javascript.js');
 
 		// Init Codemirror
-		cm = CodeMirror.fromTextArea(cast jTextArea.get(0), {
-			mode: requireMode(mode),
-			theme: "lucario",
-			lineNumbers: true,
-			lineWrapping: true,
-			readOnly: readOnly,
-			autofocus: true,
-			extraKeys: {"Tab": "autoresolve"},
-		});
-		cm.on("change", (ev) -> anyChange = true);
-		cm.on("inputRead", (ev) -> CodeMirror.autoShowComplete(cm, ev));
+		// cm = CodeMirror.fromTextArea(cast jTextArea.get(0), {
+		// 	// mode: requireMode(mode),
+		// 	theme: "lucario",
+		// 	lineNumbers: true,
+		// 	lineWrapping: true,
+		// 	readOnly: readOnly,
+		// 	autofocus: true,
+		// 	extraKeys: {"Tab": "autoresolve"},
+		// });
+		// cm.on("change", (ev) -> anyChange = true);
+		// cm.on("inputRead", (ev) -> CodeMirror.autoShowComplete(cm, ev));
 
-		// Load extra addons
-		if (mode == LangXml) {
-			js.node.Require.require('codemirror/addon/edit/closetag.js');
-			cm.setOption("autoCloseTags", true);
-		} else {
-			js.node.Require.require('codemirror/addon/edit/closebrackets.js');
-			cm.setOption("autoCloseBrackets", true);
-		}
+		// // Load extra addons
+		// if (mode == LangXml) {
+		// 	js.node.Require.require('codemirror/addon/edit/closetag.js');
+		// 	cm.setOption("autoCloseTags", true);
+		// } else {
+		// 	js.node.Require.require('codemirror/addon/edit/closebrackets.js');
+		// 	cm.setOption("autoCloseBrackets", true);
+		// }
 
 		onCloseCb = () -> {
-			var out = cm.getValue();
+			var out = view.state.doc.toString();
 			if (anyChange && str != out) {
 				if (onChange != null)
 					onChange(out);
@@ -67,16 +90,14 @@ class TextEditor extends ui.modal.Dialog {
 
 		addClose();
 
-		if (!readOnly)
-			addIconButton("delete", "red small delete", () -> {
-				cm.setValue("");
-				close();
-			});
+		// if (!readOnly)
+		// 	addIconButton("delete", "red small delete", () -> {
+		// 		cm.setValue("");
+		// 		close();
+		// 	});
 	}
 
-	public function scrollToEnd() {
-		cm.execCommand(GoDocEnd);
-	}
+	public function scrollToEnd() {}
 
 	inline function requireMode(mode:ldtk.Json.TextLanguageMode):Dynamic {
 		// Get mode addon name
