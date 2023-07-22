@@ -35,6 +35,10 @@ extern class EditorView {
 }
 
 var basicSetup = Reflect.field(js.Lib.require("codemirror"), "basicSetup");
+var python = Reflect.field(js.Lib.require("@codemirror/lang-python"), "python");
+var indentWithTab = Reflect.field(js.Lib.require("@codemirror/commands"), "indentWithTab");
+var keymap = Reflect.field(js.Lib.require("@codemirror/view"), "keymap");
+var oneDark = Reflect.field(js.Lib.require("@codemirror/theme-one-dark"), "oneDark");
 
 // extern dynamic basicSetup;
 // @jsrequire("@codemirror/view", "EditorState")

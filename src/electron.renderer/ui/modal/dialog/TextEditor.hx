@@ -33,15 +33,15 @@ class TextEditor extends ui.modal.Dialog {
 
 		var view = new EditorView({
 			doc: jTextArea.val(),
-			extensions: [basicSetup,],
+			extensions: [basicSetup, keymap.of([indentWithTab]), oneDark, python()],
 		});
 
 		textarea.parentNode.insertBefore(view.dom, textarea);
 		textarea.style.display = "none";
 
-		var ele = jTextArea.parent().find('.cm-editor');
+		// var ele = jTextArea.parent().find('.cm-editor');
 
-		ele.attr("autofocus");
+		// ele.focus();
 		// textarea.focus();
 
 		// if (jTextArea.form) {
@@ -50,7 +50,7 @@ class TextEditor extends ui.modal.Dialog {
 		// 	});
 		// }
 
-		trace(view);
+		// trace(view);
 		anyChange = true;
 		// Autocompletion
 		// js.node.Require.require('./js/show-hint.js');

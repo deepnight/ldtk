@@ -1,3 +1,22 @@
+
+/* CODEMIRROR6 */
+
+.cm-gutter {
+  background-color: #2e333f
+}
+
+/* .cm-tooltip{
+  background-color: #1e2229
+}
+
+.cm-tooltip-autocomplete {
+  background-color: #1e2229
+}
+
+.cm-tooltip-below {
+  background-color: #1e2229
+} */
+
 /* BASICS */
 
 .CodeMirror {
