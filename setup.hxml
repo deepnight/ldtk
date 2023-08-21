@@ -16,7 +16,7 @@
 --cmd haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git --always
 
 --next
---cmd haxelib git electron https://github.com/tong/hxelectron.git --always
+--cmd haxelib git electron https://github.com/deepnight/hxelectron.git --always
 
 --next
 --cmd haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git --always
