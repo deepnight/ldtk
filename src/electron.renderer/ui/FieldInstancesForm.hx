@@ -368,6 +368,7 @@ class FieldInstancesForm {
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value","_default");
+					jOpt.addClass("default");
 					jOpt.text(v.id+" (default)");
 					if( v.tileRect!=null )
 						jOpt.attr("tile", haxe.Json.stringify(v.tileRect));
@@ -411,17 +412,21 @@ class FieldInstancesForm {
 				hideInputIfDefault(arrayIdx, jSelect, fi);
 
 			case F_Bool:
-				var input = new J("<input/>");
-				input.attr("id",domId);
-				input.appendTo(jTarget);
-				input.attr("type","checkbox");
-				input.prop("checked",fi.getBool(arrayIdx));
-				input.change( function(ev) {
-					fi.parseValue( arrayIdx, Std.string( input.prop("checked") ) );
-					onFieldChange(fi);
-				});
+				var jCheck = new J("<input/>");
+				jCheck.attr("type","checkbox");
+				jCheck.attr("id",domId);
+				jCheck.appendTo(jTarget);
 
-				hideInputIfDefault(arrayIdx, input, fi);
+				var b = new form.input.BoolInput(
+					jCheck,
+					()->fi.getBool(arrayIdx),
+					(v)->{
+						fi.parseValue( arrayIdx, Std.string(v) );
+						onFieldChange(fi);
+					}
+				);
+
+				hideInputIfDefault(arrayIdx, jCheck, fi);
 
 			case F_Path:
 				var isRequired = fi.valueIsNull(arrayIdx) && !fi.def.canBeNull;

@@ -484,7 +484,7 @@ class WorldRender extends dn.Process {
 			}
 			wl.fieldsRender.visible = editor.worldMode || editor.curLevel==l;
 			if( editor.worldMode ) {
-				wl.fieldsRender.alpha = getAlphaFromZoom(minZoom);
+				wl.fieldsRender.alpha = getAlphaFromZoom(minZoom*0.5);
 				if( wl.fieldsRender.alpha<=0 )
 					wl.fieldsRender.visible = false;
 			}
@@ -884,25 +884,22 @@ class WorldRender extends dn.Process {
 			if( !settings.v.showDetails )
 				return;
 
-			var thick = 1*camera.pixelRatio / camera.adjustedZoom;
-			var c = l==editor.curLevel ? 0xffffff :  C.toWhite(l.getBgColor(),0.7);
+			var thick = (l==editor.curLevel?3:2)*camera.pixelRatio / camera.adjustedZoom;
+			var c : dn.Col = l.getSmartColor(false);
 
 			var error = l.getFirstError();
 			if( error!=NoError ) {
 				thick*=4;
 				c = 0xff0000;
 			}
-			wl.outline.beginFill(c);
-			wl.outline.drawRect(0, 0, l.pxWid, thick); // top
 
+			var pad = 1;
 			wl.outline.beginFill(c);
-			wl.outline.drawRect(0, l.pxHei-thick, l.pxWid, thick); // bottom
-
-			wl.outline.beginFill(c);
-			wl.outline.drawRect(0, 0, thick, l.pxHei); // left
-
-			wl.outline.beginFill(c);
-			wl.outline.drawRect(l.pxWid-thick, 0, thick, l.pxHei); // right
+			wl.outline.drawRect(pad, pad, l.pxWid-pad*2, thick); // top
+			wl.outline.drawRect(pad, l.pxHei-thick-pad, l.pxWid-pad*2, thick); // bottom
+			wl.outline.drawRect(pad, pad, thick, l.pxHei-pad*2); // left
+			wl.outline.drawRect(l.pxWid-thick-pad, pad, thick, l.pxHei-pad*2); // right
+			wl.outline.endFill();
 		}
 	}
 
@@ -915,9 +912,7 @@ class WorldRender extends dn.Process {
 			wl.identifier.removeChildren();
 			var tf = new h2d.Text(Assets.getRegularFont(), wl.identifier);
 			tf.text = l.getDisplayIdentifier();
-			tf.textColor = 0xffffff;
-			if( l.useAutoIdentifier )
-				tf.alpha = 0.33;
+			tf.textColor = l.getSmartColor(false).toWhite(0.5);
 			tf.x = 6;
 			tf.y = -2;
 
@@ -984,7 +979,7 @@ class WorldRender extends dn.Process {
 		}
 
 		// Color
-		wl.identifier.color.setColor( C.addAlphaF( C.toBlack( l.getSmartColor(false), 0.6 ) ) );
+		wl.identifier.color.setColor( l.getSmartColor(false).toBlack(0.3).withAlpha(l.useAutoIdentifier ? 0.4 : 1) );
 	}
 
 

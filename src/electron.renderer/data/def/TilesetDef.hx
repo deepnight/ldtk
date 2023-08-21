@@ -508,6 +508,17 @@ class TilesetDef {
 	}
 
 
+	public inline function getTileRectFromTileId(tid:Int) : Null<ldtk.Json.TilesetRect> { // Warning: not good for real-time!
+		return {
+			x: getTileSourceX(tid),
+			y: getTileSourceY(tid),
+			w: tileGridSize,
+			h: tileGridSize,
+			tilesetUid: uid,
+		}
+	}
+
+
 	public function getTileIdsFromRect(r:ldtk.Json.TilesetRect) : Array<Int> {
 		if( r==null )
 			return [];

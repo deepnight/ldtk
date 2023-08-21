@@ -43,10 +43,18 @@ class Input<T> {
 			if( ev.key=="Enter" )
 				onEnterKey();
 		});
+		jInput.on("mousedown.input", function(ev:js.jquery.Event) {
+			if( ev.button==1 )
+				resetToDefault();
+		});
 	}
 
 	function onEnterKey() {
 		jInput.blur();
+	}
+
+	dynamic function resetToDefault() {
+		setter(null);
 	}
 
 	function checkGuide() {
@@ -128,6 +136,9 @@ class Input<T> {
 		jInput
 			.off(".slider")
 			.on("mousedown.slider", function(ev:js.jquery.Event) {
+				if( ev.button!=0 )
+					return;
+
 				startX = ev.pageX;
 				ev.preventDefault();
 
@@ -135,6 +146,9 @@ class Input<T> {
 				App.ME.jDoc
 					.off(".slider")
 					.on("mousemove.slider", function(ev) {
+						if( ev.button!=0 )
+							return;
+
 						var delta = startX<0 ? 0 : ev.pageX-startX;
 						if( M.fabs(delta)>=threshold ) {
 							var v = getSlideDisplayValue( startVal + delta*0.008*speed );
@@ -144,6 +158,9 @@ class Input<T> {
 						}
 					})
 					.on("mouseup.slider", function(ev) {
+						if( ev.button!=0 )
+							return;
+
 						App.ME.jDoc.off(".slider");
 						jInput.removeClass("editing");
 

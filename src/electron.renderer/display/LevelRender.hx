@@ -436,7 +436,7 @@ class LevelRender extends dn.Process {
 			bgImage.alignPivotX = tt.alignPivotX;
 			bgImage.alignPivotY = tt.alignPivotY;
 			bgImage.visible = true;
-			bgImage.alpha = settings.v.singleLayerMode ? 0.2 : 1;
+			bgImage.alpha = settings.v.singleLayerMode ? getSingleLayerModeAlpha() : 1;
 			bgImage.filter = settings.v.singleLayerMode ? getSingleLayerModeFilter() : null;
 			bgImage.resize(tt.width, tt.height);
 		}
@@ -607,17 +607,21 @@ class LevelRender extends dn.Process {
 			return;
 
 		lr.root.visible = isLayerVisible(li);
-		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : 0.05 );
+		lr.root.alpha = li.def.displayOpacity * ( !settings.v.singleLayerMode || li==editor.curLayerInstance ? 1 : getSingleLayerModeAlpha() );
 		lr.root.filter = !settings.v.singleLayerMode || li==editor.curLayerInstance ? null : getSingleLayerModeFilter();
 		if( li!=editor.curLayerInstance )
 			lr.root.alpha *= li.def.inactiveOpacity;
 	}
 
-	function getSingleLayerModeFilter() : h2d.filter.Filter {
+	inline function getSingleLayerModeFilter() : h2d.filter.Filter {
 		return new h2d.filter.Group([
-			C.getColorizeFilterH2d(0x8c99c1, 1),
-			new h2d.filter.Blur(8),
+			C.getColorizeFilterH2d(0x8c99c1, settings.v.singleLayerModeIntensity),
+			new h2d.filter.Blur( M.nextPow2(M.round(8*settings.v.singleLayerModeIntensity)) ),
 		]);
+	}
+
+	inline function getSingleLayerModeAlpha() {
+		return 0.8 - 0.75*settings.v.singleLayerModeIntensity;
 	}
 
 

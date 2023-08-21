@@ -211,12 +211,18 @@ class EditEntityDefs extends ui.modal.Panel {
 			curEntity.minWidth = null;
 			curEntity.maxWidth = null;
 		}
+		else {
+			curEntity.minWidth = curEntity.width;
+		}
 		i.linkEvent(EntityDefChanged);
 		var i = Input.linkToHtmlInput( curEntity.resizableY, jEntityForm.find("input#resizableY") );
 		i.linkEvent(EntityDefChanged);
 		i.onValueChange = (v)->if( !v ) {
 			curEntity.minHeight = null;
 			curEntity.maxHeight = null;
+		}
+		else {
+			curEntity.minHeight = curEntity.height;
 		}
 		var i = Input.linkToHtmlInput( curEntity.keepAspectRatio, jEntityForm.find("input#keepAspectRatio") );
 		i.linkEvent(EntityDefChanged);

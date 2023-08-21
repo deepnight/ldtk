@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.3.3 JSON schema",
+	"title": "LDtk 1.3.4 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.3.3",
+	"version": "1.3.4",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -20,6 +20,8 @@
 			"backupLimit",
 			"backupOnSave",
 			"customCommands",
+			"defaultEntityHeight",
+			"defaultEntityWidth",
 			"defaultGridSize",
 			"defaultLevelBgColor",
 			"defaultPivotX",
@@ -38,6 +40,12 @@
 		"properties": {
 			"backupLimit": {
 				"description": "Number of backup files to keep, if the `backupOnSave` is TRUE",
+				"type": [
+					"integer"
+				]
+			},
+			"defaultEntityWidth": {
+				"description": "Default width for new entities",
 				"type": [
 					"integer"
 				]
@@ -319,6 +327,12 @@
 					"string"
 				]
 			},
+			"defaultEntityHeight": {
+				"description": "Default height for new entities",
+				"type": [
+					"integer"
+				]
+			},
 			"defaultPivotX": {
 				"description": "Default X pivot (0 to 1) for new entities",
 				"type": [
@@ -488,6 +502,8 @@
 				"__pivot",
 				"__smartColor",
 				"__tags",
+				"__worldX",
+				"__worldY",
 				"defUid",
 				"fieldInstances",
 				"height",
@@ -537,6 +553,18 @@
 					},
 					"type": [
 						"array"
+					]
+				},
+				"__worldX": {
+					"description": "X world coordinate in pixels",
+					"type": [
+						"integer"
+					]
+				},
+				"__worldY": {
+					"description": "Y world coordinate in pixels",
+					"type": [
+						"integer"
 					]
 				},
 				"__smartColor": {
@@ -1051,6 +1079,13 @@
 						"ArrayCountNoLabel",
 						"RefLinkBetweenPivots",
 						"RefLinkBetweenCenters"
+					]
+				},
+				"editorDisplayColor": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"canBeNull": {

@@ -114,8 +114,8 @@ class Level {
 	}
 
 
-	public function toJson(forTimeline=false) : ldtk.Json.LevelJson {
-		if( !forTimeline && hasJsonCache() ) {
+	public function toJson(ignoreCache=false) : ldtk.Json.LevelJson {
+		if( !ignoreCache && hasJsonCache() ) {
 			var o = getCacheJsonObject();
 			if( !_project.externalLevels )
 				Reflect.deleteField(o, dn.data.JsonPretty.HEADER_VALUE_NAME);
@@ -176,11 +176,11 @@ class Level {
 				all;
 			},
 			layerInstances: layerInstances.map( li->li.toJson() ),
-			__neighbours: forTimeline ? [] : getNeighboursJson(),
+			__neighbours: ignoreCache ? [] : getNeighboursJson(),
 		}
 
 		// Cache this json
-		if( !forTimeline )
+		if( !ignoreCache )
 			setJsonCache(json, false);
 
 		return json;
@@ -711,7 +711,7 @@ class Level {
 	}
 
 
-	public function getSmartColor(bright:Bool) {
+	public function getSmartColor(bright:Bool) : dn.Col {
 		inline function _adjust(c:Int) {
 			return bright ? dn.legacy.Color.toWhite(c, 0.45) : c;
 		}

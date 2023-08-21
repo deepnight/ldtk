@@ -39,7 +39,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Default current value
 		if( curValue<0 )
-			for(iv in layerDef.getAllIntGridValues()) {
+			for(iv in sourceDef.getAllIntGridValues()) {
 				curValue = iv.value;
 				break;
 			}
@@ -74,7 +74,7 @@ class RuleEditor extends ui.modal.Dialog {
 				rg.rules.remove(rule);
 			editor.ge.emit( LayerRuleRemoved(rule) );
 		}
-		else if( rule.tidy() )
+		else if( rule.tidy(layerDef) )
 			editor.ge.emit( LayerRuleChanged(rule) );
 	}
 
@@ -168,7 +168,7 @@ class RuleEditor extends ui.modal.Dialog {
 		});
 
 		// Values picker
-		for(v in layerDef.getAllIntGridValues()) {
+		for(v in sourceDef.getAllIntGridValues()) {
 			var jVal = new J('<li/>');
 			jVal.appendTo(jValues);
 

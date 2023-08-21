@@ -73,6 +73,18 @@ namespace ldtk
         public LdtkCustomCommand[] CustomCommands { get; set; }
 
         /// <summary>
+        /// Default height for new entities
+        /// </summary>
+        [JsonProperty("defaultEntityHeight")]
+        public long DefaultEntityHeight { get; set; }
+
+        /// <summary>
+        /// Default width for new entities
+        /// </summary>
+        [JsonProperty("defaultEntityWidth")]
+        public long DefaultEntityWidth { get; set; }
+
+        /// <summary>
         /// Default grid size for new layers
         /// </summary>
         [JsonProperty("defaultGridSize")]
@@ -611,6 +623,9 @@ namespace ldtk
 
         [JsonProperty("editorCutLongValues")]
         public bool EditorCutLongValues { get; set; }
+
+        [JsonProperty("editorDisplayColor")]
+        public string EditorDisplayColor { get; set; }
 
         /// <summary>
         /// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
@@ -1494,6 +1509,18 @@ namespace ldtk
         /// </summary>
         [JsonProperty("__tile")]
         public TilesetRectangle Tile { get; set; }
+
+        /// <summary>
+        /// X world coordinate in pixels
+        /// </summary>
+        [JsonProperty("__worldX")]
+        public long WorldX { get; set; }
+
+        /// <summary>
+        /// Y world coordinate in pixels
+        /// </summary>
+        [JsonProperty("__worldY")]
+        public long WorldY { get; set; }
 
         /// <summary>
         /// Reference of the **Entity definition** UID

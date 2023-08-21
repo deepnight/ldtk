@@ -349,13 +349,15 @@ class FieldInstanceRender {
 
 	public static inline function createFilter(col:dn.Col) : Null<h2d.filter.Filter> {
 		return switch settings.v.fieldsRender {
-			case FR_Outline: new h2d.filter.Outline(1.5, col.toBlack(0.75), 0.03);
+			case FR_Outline: new h2d.filter.Outline(1, col.toBlack(0.66), 0.6);
 			case FR_Table: null;
 		}
 	}
 
 	static function renderField(fi:data.inst.FieldInstance, baseColor:dn.Col, ctx:FieldRenderContext) : Null<RenderedField> {
 		var fd = fi.def;
+		if( fd.editorDisplayColor!=null )
+			baseColor = fd.editorDisplayColor;
 
 		var labelFlow = new h2d.Flow();
 		labelFlow.verticalAlign = Middle;
@@ -363,7 +365,7 @@ class FieldInstanceRender {
 		labelFlow.padding = 0;
 		switch ctx {
 			case EntityCtx(g, ei, ld): labelFlow.filter = createFilter(baseColor);
-			case LevelCtx(l):
+			case LevelCtx(l): labelFlow.filter = createFilter(baseColor);
 		}
 
 		var valueFlow = new h2d.Flow();
@@ -399,7 +401,7 @@ class FieldInstanceRender {
 
 			case NameAndValue:
 				// Label
-				var tf = createText(labelFlow, baseColor.toWhite(0.6));
+				var tf = createText(labelFlow, baseColor.toWhite(0.3));
 				tf.text = fd.identifier + ( settings.v.fieldsRender==FR_Outline ? " =" : "" );
 
 				// Value

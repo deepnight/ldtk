@@ -136,7 +136,7 @@ class World {
 	}
 
 	public function duplicateLevel(l:data.Level) {
-		var copy : data.Level = Level.fromJson( _project, this, l.toJson(), false );
+		var copy : data.Level = Level.fromJson( _project, this, l.toJson(true), false );
 
 		// Remap IDs
 		copy.iid = _project.generateUniqueId_UUID();
@@ -295,7 +295,7 @@ class World {
 	public function getShortName(maxLen=6) {
 		if( identifier.length<=maxLen )
 			return identifier;
-		
+
 		var short = "";
 		var skipSpace = false;
 		var picksAfterCaps = 2;

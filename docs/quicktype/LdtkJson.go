@@ -44,6 +44,10 @@ type LdtkJSON struct {
 	BgColor                                                                                     string                    `json:"bgColor"`
 	// An array of command lines that can be ran manually by the user                                                     
 	CustomCommands                                                                              []LdtkCustomCommand       `json:"customCommands"`
+	// Default height for new entities                                                                                    
+	DefaultEntityHeight                                                                         int64                     `json:"defaultEntityHeight"`
+	// Default width for new entities                                                                                     
+	DefaultEntityWidth                                                                          int64                     `json:"defaultEntityWidth"`
 	// Default grid size for new layers                                                                                   
 	DefaultGridSize                                                                             int64                     `json:"defaultGridSize"`
 	// Default background color of levels                                                                                 
@@ -270,6 +274,7 @@ type FieldDefinition struct {
 	Doc                                                                                        *string           `json:"doc"`
 	EditorAlwaysShow                                                                           bool              `json:"editorAlwaysShow"`
 	EditorCutLongValues                                                                        bool              `json:"editorCutLongValues"`
+	EditorDisplayColor                                                                         *string           `json:"editorDisplayColor"`
 	// Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,                        
 	// `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,                            
 	// `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,                                       
@@ -613,6 +618,10 @@ type EntityInstance struct {
 	// Optional TilesetRect used to display this entity (it could either be the default Entity                  
 	// tile, or some tile provided by a field value, like an Enum).                                             
 	Tile                                                                                      *TilesetRectangle `json:"__tile"`
+	// X world coordinate in pixels                                                                             
+	WorldX                                                                                    int64             `json:"__worldX"`
+	// Y world coordinate in pixels                                                                             
+	WorldY                                                                                    int64             `json:"__worldY"`
 	// Reference of the **Entity definition** UID                                                               
 	DefUid                                                                                    int64             `json:"defUid"`
 	// An array of all custom fields and their values.                                                          
@@ -894,20 +903,22 @@ type World struct {
 
 // Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`
 type When string
+
 const (
-	AfterLoad When = "AfterLoad"
-	AfterSave When = "AfterSave"
+	AfterLoad  When = "AfterLoad"
+	AfterSave  When = "AfterSave"
 	BeforeSave When = "BeforeSave"
-	Manual When = "Manual"
+	Manual     When = "Manual"
 )
 
 // Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
 type AllowedRefs string
+
 const (
-	Any AllowedRefs = "Any"
-	OnlySame AllowedRefs = "OnlySame"
+	Any                AllowedRefs = "Any"
+	OnlySame           AllowedRefs = "OnlySame"
 	OnlySpecificEntity AllowedRefs = "OnlySpecificEntity"
-	OnlyTags AllowedRefs = "OnlyTags"
+	OnlyTags           AllowedRefs = "OnlyTags"
 )
 
 // Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
@@ -915,67 +926,73 @@ const (
 // `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
 // `RefLinkBetweenCenters`
 type EditorDisplayMode string
+
 const (
-	ArrayCountNoLabel EditorDisplayMode = "ArrayCountNoLabel"
-	ArrayCountWithLabel EditorDisplayMode = "ArrayCountWithLabel"
-	EntityTile EditorDisplayMode = "EntityTile"
-	Hidden EditorDisplayMode = "Hidden"
-	LevelTile EditorDisplayMode = "LevelTile"
-	NameAndValue EditorDisplayMode = "NameAndValue"
-	PointPath EditorDisplayMode = "PointPath"
-	PointPathLoop EditorDisplayMode = "PointPathLoop"
-	PointStar EditorDisplayMode = "PointStar"
-	Points EditorDisplayMode = "Points"
-	RadiusGrid EditorDisplayMode = "RadiusGrid"
-	RadiusPx EditorDisplayMode = "RadiusPx"
+	ArrayCountNoLabel     EditorDisplayMode = "ArrayCountNoLabel"
+	ArrayCountWithLabel   EditorDisplayMode = "ArrayCountWithLabel"
+	EntityTile            EditorDisplayMode = "EntityTile"
+	Hidden                EditorDisplayMode = "Hidden"
+	LevelTile             EditorDisplayMode = "LevelTile"
+	NameAndValue          EditorDisplayMode = "NameAndValue"
+	PointPath             EditorDisplayMode = "PointPath"
+	PointPathLoop         EditorDisplayMode = "PointPathLoop"
+	PointStar             EditorDisplayMode = "PointStar"
+	Points                EditorDisplayMode = "Points"
+	RadiusGrid            EditorDisplayMode = "RadiusGrid"
+	RadiusPx              EditorDisplayMode = "RadiusPx"
 	RefLinkBetweenCenters EditorDisplayMode = "RefLinkBetweenCenters"
-	RefLinkBetweenPivots EditorDisplayMode = "RefLinkBetweenPivots"
-	ValueOnly EditorDisplayMode = "ValueOnly"
+	RefLinkBetweenPivots  EditorDisplayMode = "RefLinkBetweenPivots"
+	ValueOnly             EditorDisplayMode = "ValueOnly"
 )
 
 // Possible values: `Above`, `Center`, `Beneath`
 type EditorDisplayPos string
+
 const (
-	Above EditorDisplayPos = "Above"
+	Above   EditorDisplayPos = "Above"
 	Beneath EditorDisplayPos = "Beneath"
-	Center EditorDisplayPos = "Center"
+	Center  EditorDisplayPos = "Center"
 )
 
 // Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`
 type EditorLinkStyle string
+
 const (
-	ArrowsLine EditorLinkStyle = "ArrowsLine"
-	CurvedArrow EditorLinkStyle = "CurvedArrow"
-	DashedLine EditorLinkStyle = "DashedLine"
+	ArrowsLine    EditorLinkStyle = "ArrowsLine"
+	CurvedArrow   EditorLinkStyle = "CurvedArrow"
+	DashedLine    EditorLinkStyle = "DashedLine"
 	StraightArrow EditorLinkStyle = "StraightArrow"
-	ZigZag EditorLinkStyle = "ZigZag"
+	ZigZag        EditorLinkStyle = "ZigZag"
 )
 
 type TextLanguageMode string
+
 const (
-	LangC TextLanguageMode = "LangC"
-	LangHaxe TextLanguageMode = "LangHaxe"
-	LangJS TextLanguageMode = "LangJS"
-	LangJSON TextLanguageMode = "LangJson"
-	LangLog TextLanguageMode = "LangLog"
-	LangLua TextLanguageMode = "LangLua"
+	LangC        TextLanguageMode = "LangC"
+	LangHaxe     TextLanguageMode = "LangHaxe"
+	LangJS       TextLanguageMode = "LangJS"
+	LangJSON     TextLanguageMode = "LangJson"
+	LangLog      TextLanguageMode = "LangLog"
+	LangLua      TextLanguageMode = "LangLua"
 	LangMarkdown TextLanguageMode = "LangMarkdown"
-	LangPython TextLanguageMode = "LangPython"
-	LangRuby TextLanguageMode = "LangRuby"
-	LangXML TextLanguageMode = "LangXml"
+	LangPython   TextLanguageMode = "LangPython"
+	LangRuby     TextLanguageMode = "LangRuby"
+	LangXML      TextLanguageMode = "LangXml"
 )
 
 // Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`
 type LimitBehavior string
+
 const (
 	DiscardOldOnes LimitBehavior = "DiscardOldOnes"
-	MoveLastOne LimitBehavior = "MoveLastOne"
-	PreventAdding LimitBehavior = "PreventAdding"
+	MoveLastOne    LimitBehavior = "MoveLastOne"
+	PreventAdding  LimitBehavior = "PreventAdding"
 )
 
 // If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level". Possible
 // values: `PerLayer`, `PerLevel`, `PerWorld`
 type LimitScope string
+
 const (
 	PerLayer LimitScope = "PerLayer"
 	PerLevel LimitScope = "PerLevel"
@@ -984,100 +1001,111 @@ const (
 
 // Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`
 type RenderMode string
+
 const (
-	Cross RenderMode = "Cross"
-	Ellipse RenderMode = "Ellipse"
+	Cross     RenderMode = "Cross"
+	Ellipse   RenderMode = "Ellipse"
 	Rectangle RenderMode = "Rectangle"
-	Tile RenderMode = "Tile"
+	Tile      RenderMode = "Tile"
 )
 
 // An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
 // values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
 // `FullSizeUncropped`, `NineSlice`
 type TileRenderMode string
+
 const (
-	FitInside TileRenderMode = "FitInside"
-	FullSizeCropped TileRenderMode = "FullSizeCropped"
-	FullSizeUncropped TileRenderMode = "FullSizeUncropped"
-	NineSlice TileRenderMode = "NineSlice"
-	Stretch TileRenderMode = "Stretch"
-	TileRenderModeCover TileRenderMode = "Cover"
+	FitInside            TileRenderMode = "FitInside"
+	FullSizeCropped      TileRenderMode = "FullSizeCropped"
+	FullSizeUncropped    TileRenderMode = "FullSizeUncropped"
+	NineSlice            TileRenderMode = "NineSlice"
+	Stretch              TileRenderMode = "Stretch"
+	TileRenderModeCover  TileRenderMode = "Cover"
 	TileRenderModeRepeat TileRenderMode = "Repeat"
 )
 
 // Checker mode Possible values: `None`, `Horizontal`, `Vertical`
 type Checker string
+
 const (
 	CheckerNone Checker = "None"
-	Horizontal Checker = "Horizontal"
-	Vertical Checker = "Vertical"
+	Horizontal  Checker = "Horizontal"
+	Vertical    Checker = "Vertical"
 )
 
 // Defines how tileIds array is used Possible values: `Single`, `Stamp`
 type TileMode string
+
 const (
 	Single TileMode = "Single"
-	Stamp TileMode = "Stamp"
+	Stamp  TileMode = "Stamp"
 )
 
 // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
 // `AutoLayer`
 type Type string
+
 const (
 	AutoLayer Type = "AutoLayer"
-	Entities Type = "Entities"
-	IntGrid Type = "IntGrid"
-	Tiles Type = "Tiles"
+	Entities  Type = "Entities"
+	IntGrid   Type = "IntGrid"
+	Tiles     Type = "Tiles"
 )
 
 type EmbedAtlas string
+
 const (
 	LdtkIcons EmbedAtlas = "LdtkIcons"
 )
 
 type Flag string
+
 const (
-	DiscardPreCSVIntGrid Flag = "DiscardPreCsvIntGrid"
-	ExportPreCSVIntGridFormat Flag = "ExportPreCsvIntGridFormat"
-	IgnoreBackupSuggest Flag = "IgnoreBackupSuggest"
-	MultiWorlds Flag = "MultiWorlds"
+	DiscardPreCSVIntGrid         Flag = "DiscardPreCsvIntGrid"
+	ExportPreCSVIntGridFormat    Flag = "ExportPreCsvIntGridFormat"
+	IgnoreBackupSuggest          Flag = "IgnoreBackupSuggest"
+	MultiWorlds                  Flag = "MultiWorlds"
 	PrependIndexToLevelFileNames Flag = "PrependIndexToLevelFileNames"
-	UseMultilinesType Flag = "UseMultilinesType"
+	UseMultilinesType            Flag = "UseMultilinesType"
 )
 
 type BgPos string
+
 const (
-	BgPosCover BgPos = "Cover"
+	BgPosCover  BgPos = "Cover"
 	BgPosRepeat BgPos = "Repeat"
-	Contain BgPos = "Contain"
-	CoverDirty BgPos = "CoverDirty"
-	Unscaled BgPos = "Unscaled"
+	Contain     BgPos = "Contain"
+	CoverDirty  BgPos = "CoverDirty"
+	Unscaled    BgPos = "Unscaled"
 )
 
 type WorldLayout string
+
 const (
-	GridVania WorldLayout = "GridVania"
+	GridVania        WorldLayout = "GridVania"
 	LinearHorizontal WorldLayout = "LinearHorizontal"
-	LinearVertical WorldLayout = "LinearVertical"
-	WorldLayoutFree WorldLayout = "Free"
+	LinearVertical   WorldLayout = "LinearVertical"
+	WorldLayoutFree  WorldLayout = "Free"
 )
 
 // Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
 // values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`
 type IdentifierStyle string
+
 const (
-	Capitalize IdentifierStyle = "Capitalize"
+	Capitalize          IdentifierStyle = "Capitalize"
 	IdentifierStyleFree IdentifierStyle = "Free"
-	Lowercase IdentifierStyle = "Lowercase"
-	Uppercase IdentifierStyle = "Uppercase"
+	Lowercase           IdentifierStyle = "Lowercase"
+	Uppercase           IdentifierStyle = "Uppercase"
 )
 
 // "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
 // `OneImagePerLevel`, `LayersAndLevels`
 type ImageExportMode string
+
 const (
 	ImageExportModeNone ImageExportMode = "None"
-	LayersAndLevels ImageExportMode = "LayersAndLevels"
-	OneImagePerLayer ImageExportMode = "OneImagePerLayer"
-	OneImagePerLevel ImageExportMode = "OneImagePerLevel"
+	LayersAndLevels     ImageExportMode = "LayersAndLevels"
+	OneImagePerLayer    ImageExportMode = "OneImagePerLayer"
+	OneImagePerLevel    ImageExportMode = "OneImagePerLevel"
 )

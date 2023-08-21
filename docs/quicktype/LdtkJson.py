@@ -193,6 +193,7 @@ class FieldDefinition:
     doc: Optional[str]
     editor_always_show: bool
     editor_cut_long_values: bool
+    editor_display_color: Optional[str]
     """Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
     `Points`, `PointStar`, `PointPath`, `PointPathLoop`, `RadiusPx`, `RadiusGrid`,
     `ArrayCountWithLabel`, `ArrayCountNoLabel`, `RefLinkBetweenPivots`,
@@ -238,7 +239,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_refs_entity_uid: Optional[int], allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_display_scale: float, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_refs_entity_uid: Optional[int], allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_color: Optional[str], editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_display_scale: float, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -253,6 +254,7 @@ class FieldDefinition:
         self.doc = doc
         self.editor_always_show = editor_always_show
         self.editor_cut_long_values = editor_cut_long_values
+        self.editor_display_color = editor_display_color
         self.editor_display_mode = editor_display_mode
         self.editor_display_pos = editor_display_pos
         self.editor_display_scale = editor_display_scale
@@ -289,6 +291,7 @@ class FieldDefinition:
         doc = from_union([from_none, from_str], obj.get("doc"))
         editor_always_show = from_bool(obj.get("editorAlwaysShow"))
         editor_cut_long_values = from_bool(obj.get("editorCutLongValues"))
+        editor_display_color = from_union([from_none, from_str], obj.get("editorDisplayColor"))
         editor_display_mode = EditorDisplayMode(obj.get("editorDisplayMode"))
         editor_display_pos = EditorDisplayPos(obj.get("editorDisplayPos"))
         editor_display_scale = from_float(obj.get("editorDisplayScale"))
@@ -307,7 +310,7 @@ class FieldDefinition:
         field_definition_type = from_str(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
-        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_refs_entity_uid, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_mode, editor_display_pos, editor_display_scale, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
+        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_refs_entity_uid, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_color, editor_display_mode, editor_display_pos, editor_display_scale, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -331,6 +334,8 @@ class FieldDefinition:
             result["doc"] = from_union([from_none, from_str], self.doc)
         result["editorAlwaysShow"] = from_bool(self.editor_always_show)
         result["editorCutLongValues"] = from_bool(self.editor_cut_long_values)
+        if self.editor_display_color is not None:
+            result["editorDisplayColor"] = from_union([from_none, from_str], self.editor_display_color)
         result["editorDisplayMode"] = to_enum(EditorDisplayMode, self.editor_display_mode)
         result["editorDisplayPos"] = to_enum(EditorDisplayPos, self.editor_display_pos)
         result["editorDisplayScale"] = to_float(self.editor_display_scale)
@@ -1481,6 +1486,10 @@ class EntityInstance:
     tile, or some tile provided by a field value, like an Enum).
     """
     tile: Optional[TilesetRectangle]
+    """X world coordinate in pixels"""
+    world_x: int
+    """Y world coordinate in pixels"""
+    world_y: int
     """Reference of the **Entity definition** UID"""
     def_uid: int
     """An array of all custom fields and their values."""
@@ -1500,13 +1509,15 @@ class EntityInstance:
     """
     width: int
 
-    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
+    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], world_x: int, world_y: int, def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
         self.grid = grid
         self.identifier = identifier
         self.pivot = pivot
         self.smart_color = smart_color
         self.tags = tags
         self.tile = tile
+        self.world_x = world_x
+        self.world_y = world_y
         self.def_uid = def_uid
         self.field_instances = field_instances
         self.height = height
@@ -1523,13 +1534,15 @@ class EntityInstance:
         smart_color = from_str(obj.get("__smartColor"))
         tags = from_list(from_str, obj.get("__tags"))
         tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("__tile"))
+        world_x = from_int(obj.get("__worldX"))
+        world_y = from_int(obj.get("__worldY"))
         def_uid = from_int(obj.get("defUid"))
         field_instances = from_list(FieldInstance.from_dict, obj.get("fieldInstances"))
         height = from_int(obj.get("height"))
         iid = from_str(obj.get("iid"))
         px = from_list(from_int, obj.get("px"))
         width = from_int(obj.get("width"))
-        return EntityInstance(grid, identifier, pivot, smart_color, tags, tile, def_uid, field_instances, height, iid, px, width)
+        return EntityInstance(grid, identifier, pivot, smart_color, tags, tile, world_x, world_y, def_uid, field_instances, height, iid, px, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1540,6 +1553,8 @@ class EntityInstance:
         result["__tags"] = from_list(from_str, self.tags)
         if self.tile is not None:
             result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
+        result["__worldX"] = from_int(self.world_x)
+        result["__worldY"] = from_int(self.world_y)
         result["defUid"] = from_int(self.def_uid)
         result["fieldInstances"] = from_list(lambda x: to_class(FieldInstance, x), self.field_instances)
         result["height"] = from_int(self.height)
@@ -2372,6 +2387,10 @@ class LdtkJSON:
     bg_color: str
     """An array of command lines that can be ran manually by the user"""
     custom_commands: List[LdtkCustomCommand]
+    """Default height for new entities"""
+    default_entity_height: int
+    """Default width for new entities"""
+    default_entity_width: int
     """Default grid size for new layers"""
     default_grid_size: int
     """Default background color of levels"""
@@ -2481,7 +2500,7 @@ class LdtkJSON:
     """
     worlds: List[World]
 
-    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, backup_rel_path: Optional[str], bg_color: str, custom_commands: List[LdtkCustomCommand], default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, dummy_world_iid: str, export_level_bg: bool, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, iid: str, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, toc: List[LdtkTableOfContentEntry], tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
+    def __init__(self, forced_refs: Optional[ForcedRefs], app_build_id: float, backup_limit: int, backup_on_save: bool, backup_rel_path: Optional[str], bg_color: str, custom_commands: List[LdtkCustomCommand], default_entity_height: int, default_entity_width: int, default_grid_size: int, default_level_bg_color: str, default_level_height: Optional[int], default_level_width: Optional[int], default_pivot_x: float, default_pivot_y: float, defs: Definitions, dummy_world_iid: str, export_level_bg: bool, export_png: Optional[bool], export_tiled: bool, external_levels: bool, flags: List[Flag], identifier_style: IdentifierStyle, iid: str, image_export_mode: ImageExportMode, json_version: str, level_name_pattern: str, levels: List[Level], minify_json: bool, next_uid: int, png_file_pattern: Optional[str], simplified_export: bool, toc: List[LdtkTableOfContentEntry], tutorial_desc: Optional[str], world_grid_height: Optional[int], world_grid_width: Optional[int], world_layout: Optional[WorldLayout], worlds: List[World]) -> None:
         self.forced_refs = forced_refs
         self.app_build_id = app_build_id
         self.backup_limit = backup_limit
@@ -2489,6 +2508,8 @@ class LdtkJSON:
         self.backup_rel_path = backup_rel_path
         self.bg_color = bg_color
         self.custom_commands = custom_commands
+        self.default_entity_height = default_entity_height
+        self.default_entity_width = default_entity_width
         self.default_grid_size = default_grid_size
         self.default_level_bg_color = default_level_bg_color
         self.default_level_height = default_level_height
@@ -2529,6 +2550,8 @@ class LdtkJSON:
         backup_rel_path = from_union([from_none, from_str], obj.get("backupRelPath"))
         bg_color = from_str(obj.get("bgColor"))
         custom_commands = from_list(LdtkCustomCommand.from_dict, obj.get("customCommands"))
+        default_entity_height = from_int(obj.get("defaultEntityHeight"))
+        default_entity_width = from_int(obj.get("defaultEntityWidth"))
         default_grid_size = from_int(obj.get("defaultGridSize"))
         default_level_bg_color = from_str(obj.get("defaultLevelBgColor"))
         default_level_height = from_union([from_none, from_int], obj.get("defaultLevelHeight"))
@@ -2558,7 +2581,7 @@ class LdtkJSON:
         world_grid_width = from_union([from_none, from_int], obj.get("worldGridWidth"))
         world_layout = from_union([from_none, WorldLayout], obj.get("worldLayout"))
         worlds = from_list(World.from_dict, obj.get("worlds"))
-        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, backup_rel_path, bg_color, custom_commands, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, dummy_world_iid, export_level_bg, export_png, export_tiled, external_levels, flags, identifier_style, iid, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, toc, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
+        return LdtkJSON(forced_refs, app_build_id, backup_limit, backup_on_save, backup_rel_path, bg_color, custom_commands, default_entity_height, default_entity_width, default_grid_size, default_level_bg_color, default_level_height, default_level_width, default_pivot_x, default_pivot_y, defs, dummy_world_iid, export_level_bg, export_png, export_tiled, external_levels, flags, identifier_style, iid, image_export_mode, json_version, level_name_pattern, levels, minify_json, next_uid, png_file_pattern, simplified_export, toc, tutorial_desc, world_grid_height, world_grid_width, world_layout, worlds)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -2571,6 +2594,8 @@ class LdtkJSON:
             result["backupRelPath"] = from_union([from_none, from_str], self.backup_rel_path)
         result["bgColor"] = from_str(self.bg_color)
         result["customCommands"] = from_list(lambda x: to_class(LdtkCustomCommand, x), self.custom_commands)
+        result["defaultEntityHeight"] = from_int(self.default_entity_height)
+        result["defaultEntityWidth"] = from_int(self.default_entity_width)
         result["defaultGridSize"] = from_int(self.default_grid_size)
         result["defaultLevelBgColor"] = from_str(self.default_level_bg_color)
         if self.default_level_height is not None:

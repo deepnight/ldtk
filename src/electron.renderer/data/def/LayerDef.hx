@@ -197,7 +197,7 @@ class LayerDef {
 			name: rg.name,
 			active: rg.active,
 			isOptional: rg.isOptional,
-			rules: rg.rules.map( function(r) return r.toJson() ),
+			rules: rg.rules.map( function(r) return r.toJson(this) ),
 			usesWizard: rg.usesWizard,
 		}
 	}
@@ -434,7 +434,7 @@ class LayerDef {
 	}
 
 	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
-		return pasteRule( p, rg, Clipboard.createTemp(CRule,r.toJson()), r );
+		return pasteRule( p, rg, Clipboard.createTemp(CRule,r.toJson(this)), r );
 	}
 
 	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroup, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {

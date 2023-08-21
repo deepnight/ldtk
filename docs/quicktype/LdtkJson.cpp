@@ -165,6 +165,7 @@ namespace quicktype {
         boost::optional<std::string> doc;
         bool editor_always_show;
         bool editor_cut_long_values;
+        boost::optional<std::string> editor_display_color;
         EditorDisplayMode editor_display_mode;
         EditorDisplayPos editor_display_pos;
         double editor_display_scale;
@@ -266,6 +267,9 @@ namespace quicktype {
         const bool & get_editor_cut_long_values() const { return editor_cut_long_values; }
         bool & get_mutable_editor_cut_long_values() { return editor_cut_long_values; }
         void set_editor_cut_long_values(const bool & value) { this->editor_cut_long_values = value; }
+
+        boost::optional<std::string> get_editor_display_color() const { return editor_display_color; }
+        void set_editor_display_color(boost::optional<std::string> value) { this->editor_display_color = value; }
 
         /**
          * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
@@ -1733,6 +1737,8 @@ namespace quicktype {
         std::string smart_color;
         std::vector<std::string> tags;
         boost::optional<TilesetRectangle> tile;
+        int64_t world_x;
+        int64_t world_y;
         int64_t def_uid;
         std::vector<FieldInstance> field_instances;
         int64_t height;
@@ -1783,6 +1789,20 @@ namespace quicktype {
          */
         boost::optional<TilesetRectangle> get_tile() const { return tile; }
         void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
+
+        /**
+         * X world coordinate in pixels
+         */
+        const int64_t & get_world_x() const { return world_x; }
+        int64_t & get_mutable_world_x() { return world_x; }
+        void set_world_x(const int64_t & value) { this->world_x = value; }
+
+        /**
+         * Y world coordinate in pixels
+         */
+        const int64_t & get_world_y() const { return world_y; }
+        int64_t & get_mutable_world_y() { return world_y; }
+        void set_world_y(const int64_t & value) { this->world_y = value; }
 
         /**
          * Reference of the **Entity definition** UID
@@ -2726,6 +2746,8 @@ namespace quicktype {
         boost::optional<std::string> backup_rel_path;
         std::string bg_color;
         std::vector<LdtkCustomCommand> custom_commands;
+        int64_t default_entity_height;
+        int64_t default_entity_width;
         int64_t default_grid_size;
         std::string default_level_bg_color;
         boost::optional<int64_t> default_level_height;
@@ -2809,6 +2831,20 @@ namespace quicktype {
         const std::vector<LdtkCustomCommand> & get_custom_commands() const { return custom_commands; }
         std::vector<LdtkCustomCommand> & get_mutable_custom_commands() { return custom_commands; }
         void set_custom_commands(const std::vector<LdtkCustomCommand> & value) { this->custom_commands = value; }
+
+        /**
+         * Default height for new entities
+         */
+        const int64_t & get_default_entity_height() const { return default_entity_height; }
+        int64_t & get_mutable_default_entity_height() { return default_entity_height; }
+        void set_default_entity_height(const int64_t & value) { this->default_entity_height = value; }
+
+        /**
+         * Default width for new entities
+         */
+        const int64_t & get_default_entity_width() const { return default_entity_width; }
+        int64_t & get_mutable_default_entity_width() { return default_entity_width; }
+        void set_default_entity_width(const int64_t & value) { this->default_entity_width = value; }
 
         /**
          * Default grid size for new layers
@@ -3208,6 +3244,7 @@ namespace quicktype {
         x.set_doc(get_stack_optional<std::string>(j, "doc"));
         x.set_editor_always_show(j.at("editorAlwaysShow").get<bool>());
         x.set_editor_cut_long_values(j.at("editorCutLongValues").get<bool>());
+        x.set_editor_display_color(get_stack_optional<std::string>(j, "editorDisplayColor"));
         x.set_editor_display_mode(j.at("editorDisplayMode").get<EditorDisplayMode>());
         x.set_editor_display_pos(j.at("editorDisplayPos").get<EditorDisplayPos>());
         x.set_editor_display_scale(j.at("editorDisplayScale").get<double>());
@@ -3244,6 +3281,7 @@ namespace quicktype {
         j["doc"] = x.get_doc();
         j["editorAlwaysShow"] = x.get_editor_always_show();
         j["editorCutLongValues"] = x.get_editor_cut_long_values();
+        j["editorDisplayColor"] = x.get_editor_display_color();
         j["editorDisplayMode"] = x.get_editor_display_mode();
         j["editorDisplayPos"] = x.get_editor_display_pos();
         j["editorDisplayScale"] = x.get_editor_display_scale();
@@ -3664,6 +3702,8 @@ namespace quicktype {
         x.set_smart_color(j.at("__smartColor").get<std::string>());
         x.set_tags(j.at("__tags").get<std::vector<std::string>>());
         x.set_tile(get_stack_optional<TilesetRectangle>(j, "__tile"));
+        x.set_world_x(j.at("__worldX").get<int64_t>());
+        x.set_world_y(j.at("__worldY").get<int64_t>());
         x.set_def_uid(j.at("defUid").get<int64_t>());
         x.set_field_instances(j.at("fieldInstances").get<std::vector<FieldInstance>>());
         x.set_height(j.at("height").get<int64_t>());
@@ -3680,6 +3720,8 @@ namespace quicktype {
         j["__smartColor"] = x.get_smart_color();
         j["__tags"] = x.get_tags();
         j["__tile"] = x.get_tile();
+        j["__worldX"] = x.get_world_x();
+        j["__worldY"] = x.get_world_y();
         j["defUid"] = x.get_def_uid();
         j["fieldInstances"] = x.get_field_instances();
         j["height"] = x.get_height();
@@ -3975,6 +4017,8 @@ namespace quicktype {
         x.set_backup_rel_path(get_stack_optional<std::string>(j, "backupRelPath"));
         x.set_bg_color(j.at("bgColor").get<std::string>());
         x.set_custom_commands(j.at("customCommands").get<std::vector<LdtkCustomCommand>>());
+        x.set_default_entity_height(j.at("defaultEntityHeight").get<int64_t>());
+        x.set_default_entity_width(j.at("defaultEntityWidth").get<int64_t>());
         x.set_default_grid_size(j.at("defaultGridSize").get<int64_t>());
         x.set_default_level_bg_color(j.at("defaultLevelBgColor").get<std::string>());
         x.set_default_level_height(get_stack_optional<int64_t>(j, "defaultLevelHeight"));
@@ -4015,6 +4059,8 @@ namespace quicktype {
         j["backupRelPath"] = x.get_backup_rel_path();
         j["bgColor"] = x.get_bg_color();
         j["customCommands"] = x.get_custom_commands();
+        j["defaultEntityHeight"] = x.get_default_entity_height();
+        j["defaultEntityWidth"] = x.get_default_entity_width();
         j["defaultGridSize"] = x.get_default_grid_size();
         j["defaultLevelBgColor"] = x.get_default_level_bg_color();
         j["defaultLevelHeight"] = x.get_default_level_height();

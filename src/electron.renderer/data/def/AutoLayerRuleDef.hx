@@ -122,8 +122,8 @@ class AutoLayerRuleDef {
 		return 'Rule#$uid(${size}x$size)';
 	}
 
-	public function toJson() : ldtk.Json.AutoRuleDef {
-		tidy();
+	public function toJson(ld:LayerDef) : ldtk.Json.AutoRuleDef {
+		tidy(ld);
 
 		return {
 			uid: uid,
@@ -320,7 +320,7 @@ class AutoLayerRuleDef {
 		return true;
 	}
 
-	public function tidy() {
+	public function tidy(ld:LayerDef) {
 		var anyFix = false;
 
 		if( flipX && isSymetricX() ) {
@@ -353,21 +353,27 @@ class AutoLayerRuleDef {
 			anyFix = true;
 		}
 
+		var sourceLd = ld.autoSourceLd!=null ? ld.autoSourceLd : ld;
+		if( outOfBoundsValue!=null && !sourceLd.hasIntGridValue(outOfBoundsValue) ) {
+			App.LOG.add("tidy", 'Fixed lost outOfBoundsValue: $outOfBoundsValue');
+			outOfBoundsValue = null;
+		}
+
 		if( trim() )
 			anyFix = true;
 
 		return anyFix;
 	}
 
-	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int) : Int {
-		return tileIds[ dn.M.randSeedCoords( uid+seed, cx,cy, tileIds.length ) ];
+	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
+		return tileIds[ dn.M.randSeedCoords( uid+seed+flips, cx,cy, tileIds.length ) ];
 	}
 
 	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
 		return ( M.hasBit(flips,0)?-1:1 ) * ( tileXOffset + (
 			tileRandomXMin==0 && tileRandomXMax==0
 				? 0
-				: dn.M.randSeedCoords( uid+seed, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin
+				: dn.M.randSeedCoords( uid+seed+flips, cx,cy, (tileRandomXMax-tileRandomXMin+1) ) + tileRandomXMin
 		));
 	}
 

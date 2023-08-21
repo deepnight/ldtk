@@ -24,6 +24,8 @@ class Project {
 	public var defaultPivotX : Float;
 	public var defaultPivotY : Float;
 	public var defaultGridSize : Int;
+	public var defaultEntityWidth : Int;
+	public var defaultEntityHeight : Int;
 	public var bgColor : UInt;
 	public var defaultLevelBgColor : UInt;
 
@@ -288,6 +290,8 @@ class Project {
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
 		p.defaultGridSize = JsonTools.readInt( json.defaultGridSize, Project.DEFAULT_GRID_SIZE );
+		p.defaultEntityWidth = JsonTools.readInt( json.defaultEntityWidth, Project.DEFAULT_GRID_SIZE );
+		p.defaultEntityHeight = JsonTools.readInt( json.defaultEntityHeight, Project.DEFAULT_GRID_SIZE );
 		p.bgColor = JsonTools.readColor( json.bgColor, DEFAULT_WORKSPACE_BG );
 		p.defaultLevelBgColor = JsonTools.readColor( json.defaultLevelBgColor, p.bgColor );
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
@@ -617,6 +621,8 @@ class Project {
 			defaultPivotX: JsonTools.writeFloat( defaultPivotX ),
 			defaultPivotY: JsonTools.writeFloat( defaultPivotY ),
 			defaultGridSize: defaultGridSize,
+			defaultEntityWidth: defaultEntityWidth,
+			defaultEntityHeight: defaultEntityHeight,
 			bgColor: JsonTools.writeColor(bgColor),
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 

@@ -39,7 +39,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 
 		// X modulo
 		var i = Input.linkToHtmlInput( rule.xModulo, jContent.find("#xModulo"));
-		i.onValueChange = (v)->rule.tidy();
+		i.onValueChange = (v)->rule.tidy(layerDef);
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.enableSlider(sliderSpeed);
 		i.setBounds(1,40);
@@ -50,7 +50,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 
 		// Y modulo
 		var i = Input.linkToHtmlInput( rule.yModulo, jContent.find("#yModulo"));
-		i.onValueChange = (v)->rule.tidy();
+		i.onValueChange = (v)->rule.tidy(layerDef);
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.setBounds(1,40);
 		i.enableSlider(sliderSpeed);

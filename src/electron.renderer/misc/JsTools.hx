@@ -52,6 +52,39 @@ class JsTools {
 	}
 
 
+	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:T, allValues:Array<T>, ?def:T, ?printer:T->String, onSelect:T->Void) {
+		if( jSelect==null )
+			jSelect = new J('<select/>');
+		else
+			jSelect.empty().off();
+
+		// Ensure cur is part of allValues
+		if( !allValues.contains(cur) )
+			cur = def;
+
+		var i = 0;
+		for(v in allValues) {
+			var jOpt = new J('<option value="$i"/>');
+			jSelect.append(jOpt);
+			jOpt.text(printer!=null ? printer(v) : Std.string(v));
+
+			if( def!=null && v==def )
+				jOpt.append(" "+L.t._("(default)"));
+
+			if( v==cur )
+				jOpt.prop("selected",true);
+
+			i++;
+		}
+		jSelect.change( (_)->{
+			var i = Std.parseInt( jSelect.val() );
+			onSelect(allValues[i]);
+		});
+
+		return jSelect;
+	}
+
+
 	/**
 		Create a Tileset <select/>
 	**/
@@ -759,6 +792,8 @@ class JsTools {
 				jSelect.append(jOpt);
 				jOpt.attr("value", jOldOpt.attr("value"));
 				jOpt.text( jOldOpt.text() );
+				if( jOldOpt.hasClass("default") )
+					jOpt.addClass("default");
 
 				if( jOldOpt.prop("disabled")==true )
 					jOpt.addClass("disabled");
@@ -1337,6 +1372,51 @@ class JsTools {
 		return jSelect;
 	}
 
+
+	public static function createColorButton(?jTarget:js.jquery.JQuery, curCol:dn.Col, ?usedColorsTag:String, ?defCol:dn.Col, allowNull=false, onPick:Null<dn.Col>->Void) {
+		var jColor = jTarget==null ? new J('<span></span>') : jTarget;
+		jColor.empty().off();
+		if( !jColor.hasClass("colorButton") )
+			jColor.addClass("colorButton");
+
+		// Current color
+		var jCur = new J('<span class="curColor"></span>');
+		jCur.appendTo(jColor);
+		jCur.append('<span class="icon color"></span>');
+
+		inline function _applyColor(c:dn.Col) {
+			if( c==null ) {
+				jCur.addClass("null");
+				if( defCol!=null )
+					jCur.css("background-color", defCol.toHex());
+			}
+			else
+				jCur.css("background-color", c.toHex());
+		}
+		_applyColor(curCol);
+
+		// Reset button
+		if( curCol!=defCol && curCol!=null && ( defCol!=null || allowNull && curCol!=null ) ) {
+			var jReset = new J('<button class="transparent reset"></button>');
+			jReset.appendTo(jColor);
+			jReset.append('<span class="icon reset"></span>');
+			jReset.click(_->{
+				curCol = allowNull ? null : defCol;
+				_applyColor(curCol);
+				onPick(curCol);
+			});
+		}
+
+		jCur.click(_->{
+			var cp = new ui.modal.dialog.ColorPicker(usedColorsTag, Const.getNicePalette(), jColor, curCol);
+			cp.onValidate = (c)->{
+				curCol = c;
+				_applyColor(curCol);
+				onPick(curCol);
+			}
+		});
+		return jColor;
+	}
 
 	public static function applyListCustomColor(jLi:js.jquery.JQuery, col:dn.Col, isActive:Bool) {
 		if( col==null ) {

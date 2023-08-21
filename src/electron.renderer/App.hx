@@ -554,7 +554,6 @@ class App extends dn.Process {
 	}
 
 
-
 	public inline function requestCpu(full=true) {
 		requestedCpuEndTime = haxe.Timer.stamp()+2;
 	}
@@ -847,9 +846,9 @@ class App extends dn.Process {
 		else if( !focused ) // App is blurred
 			hxd.System.fpsLimit = 2;
 		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
-			hxd.System.fpsLimit = 10;
+			hxd.System.fpsLimit = Std.int(Const.FPS*0.2);
 		else
-			hxd.System.fpsLimit = 30;
+			hxd.System.fpsLimit = Std.int(Const.FPS*0.5);
 
 
 		// Process profiling
@@ -866,6 +865,7 @@ class App extends dn.Process {
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');
 			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(M.round(100*hxd.System.fpsLimit/60))}%');
+			debugPre('ElectronThrottling=${dn.js.ElectronTools.isThrottlingEnabled()}');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
 			if( Editor.ME!=null ) {
 				debugPre("mouse="+Editor.ME.getMouse());

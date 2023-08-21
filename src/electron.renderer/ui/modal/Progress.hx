@@ -147,6 +147,7 @@ class Progress extends ui.Modal {
 					state = InitFrame;
 
 			case InitFrame:
+				dn.js.ElectronTools.disableThrottling();
 				App.LOG.general('Progress started: : "$title", ${curOps.length} operation(s)');
 				log.def("Started...");
 				state = Running;
@@ -188,6 +189,7 @@ class Progress extends ui.Modal {
 			case Completed:
 				if( onComplete!=null )
 					onComplete();
+				dn.js.ElectronTools.enableThrottling();
 				destroy();
 		}
 

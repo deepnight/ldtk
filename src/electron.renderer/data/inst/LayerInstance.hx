@@ -751,7 +751,7 @@ class LayerInstance {
 	}
 
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
-		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed, cx,cy) ] : r.tileIds;
+		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed, cx,cy, flips) ] : r.tileIds;
 		var td = getTilesetDef();
 		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
 
