@@ -226,6 +226,15 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
+	function onPickGroupColor(rg:AutoLayerRuleGroup) {
+		var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), rg.color, true);
+		cp.onValidate = (c)->{
+			rg.color = c;
+			updateRuleGroup(rg);
+		}
+	}
+
+
 	function onRenameGroup(jGroupHeader:js.jquery.JQuery, rg:AutoLayerRuleGroup) {
 		jGroupHeader.find("div.name").hide();
 		var jInput = jGroupHeader.find("input.name");
@@ -484,6 +493,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 		jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
 
+		if( rg.color!=null ) {
+			jGroup.find(".sortHandle, header").css("background-color", rg.color.toCssRgba(0.7));
+		}
 
 		var jGroupList = jGroup.find(">ul");
 		jGroupList.attr("groupUid", rg.uid);
@@ -562,6 +574,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
+			},
+
+			{
+				label: L.t._("Set group color"),
+				cb: ()->onPickGroupColor(rg),
 			},
 
 			{

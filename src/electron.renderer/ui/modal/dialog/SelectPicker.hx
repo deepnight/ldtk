@@ -1,7 +1,7 @@
 package ui.modal.dialog;
 
 class SelectPicker extends ui.modal.Dialog {
-	static var MAX_COLUMNS = 6;
+	static var MAX_COLUMNS = 10;
 
 	var jSelect : js.jquery.JQuery;
 	var jSearch : js.jquery.JQuery;

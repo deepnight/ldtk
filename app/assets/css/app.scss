@@ -2148,6 +2148,10 @@ select {
 					&.grid-4 { grid-template-columns: repeat(4, 1fr); }
 					&.grid-5 { grid-template-columns: repeat(5, 1fr); }
 					&.grid-6 { grid-template-columns: repeat(6, 1fr); }
+					&.grid-7 { grid-template-columns: repeat(7, 1fr); }
+					&.grid-8 { grid-template-columns: repeat(8, 1fr); }
+					&.grid-9 { grid-template-columns: repeat(9, 1fr); }
+					&.grid-10 { grid-template-columns: repeat(10, 1fr); }
 
 					&.hasImg .value {
 						display: grid;
@@ -4211,7 +4215,9 @@ textarea {
 			}
 			.input {
 				display: grid;
-				grid-template-columns: auto min-content min-content;
+				grid-template-columns: auto;
+				grid-auto-flow: column;
+				grid-auto-columns: min-content;
 				position: relative;
 				span {
 					display: flex;

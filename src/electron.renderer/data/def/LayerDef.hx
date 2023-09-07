@@ -195,6 +195,7 @@ class LayerDef {
 		return {
 			uid: rg.uid,
 			name: rg.name,
+			color: rg.color!=null ? rg.color.toHex() : null,
 			active: rg.active,
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
@@ -207,6 +208,7 @@ class LayerDef {
 			JsonTools.readInt(ruleGroupJson.uid,-1),
 			JsonTools.readString(ruleGroupJson.name, "default")
 		);
+		rg.color = JsonTools.readColor(ruleGroupJson.color, true);
 		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
 		rg.isOptional = JsonTools.readBool( ruleGroupJson.isOptional, false );
 		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
@@ -420,6 +422,7 @@ class LayerDef {
 		var rg : AutoLayerRuleGroup = {
 			uid: uid,
 			name: name,
+			color: null,
 			active: true,
 			collapsed: false,
 			isOptional: false,
