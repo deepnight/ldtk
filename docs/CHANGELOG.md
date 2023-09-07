@@ -1,3 +1,8 @@
+# 1.3.5
+
+ - Added customizable rule groups colors
+ - Increased the max number of columns in Select components
+
 # 1.3.4
 
  - You can now use the mouse MIDDLE button to reset any custom field input to its default value.
