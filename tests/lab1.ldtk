@@ -10,7 +10,7 @@
 	},
 	"iid": "a8275ce0-3b70-11ee-bfe6-6f0719601127",
 	"jsonVersion": "1.3.5",
-	"appBuildId": 470583,
+	"appBuildId": 470584,
 	"nextUid": 131,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -160,7 +160,7 @@
 				{ "value": 3, "identifier": "water", "color": "#0051FF", "tile": null }
 			],
 			"autoRuleGroups": [
-				{ "uid": 94, "name": "walls fog", "active": true, "isOptional": false, "rules": [
+				{ "uid": 94, "name": "walls fog", "color": "#733E39", "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 95,
 						"active": true,
@@ -193,7 +193,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 42, "name": "water", "active": true, "isOptional": false, "rules": [
+				{ "uid": 42, "name": "water", "color": "#0099DB", "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 104,
 						"active": true,
@@ -350,7 +350,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 24, "name": "ladders", "active": true, "isOptional": false, "rules": [
+				{ "uid": 24, "name": "ladders", "color": "#C28569", "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 90,
 						"active": true,
@@ -445,7 +445,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 20, "name": "details", "active": true, "isOptional": false, "rules": [
+				{ "uid": 20, "name": "details", "color": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 86,
 						"active": true,
@@ -633,7 +633,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 82, "name": "wall shadows", "active": true, "isOptional": false, "rules": [
+				{ "uid": 82, "name": "wall shadows", "color": "#181425", "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 85,
 						"active": true,
@@ -728,7 +728,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 10, "name": "walls", "active": true, "isOptional": false, "rules": [
+				{ "uid": 10, "name": "walls", "color": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 112,
 						"active": true,
@@ -947,7 +947,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 15, "name": "bg", "active": true, "isOptional": false, "rules": [
+				{ "uid": 15, "name": "bg", "color": "#3A4466", "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 36,
 						"active": true,
@@ -3989,7 +3989,7 @@
 							"px": [304,80],
 							"fieldInstances": [{ "__identifier": "text", "__type": "String", "__value": "Hello world \nMultilines", "__tile": null, "defUid": 116, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["Hello world \\nMultilines"]
+								"params": ["Hello world \nMultilines"]
 							}] }]
 						}
 					]
