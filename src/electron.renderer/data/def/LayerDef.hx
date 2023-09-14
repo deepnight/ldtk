@@ -249,16 +249,19 @@ class LayerDef {
 		return max+1;
 	}
 
-	public function addIntGridValue(col:dn.Col, ?id:String) {
+	public function addIntGridValue(col:dn.Col, ?id:String) : Int {
 		if( !isIntGridValueIdentifierValid(id) )
 			throw "Invalid intGrid value identifier "+id;
 
+		var iv = getNextIntGridValue();
 		intGridValues.push({
-			value: getNextIntGridValue(),
+			value: iv,
 			color: col,
 			identifier: id,
 			tile: null,
 		});
+
+		return iv;
 	}
 
 	public inline function hasIntGridValue(v:Int) {

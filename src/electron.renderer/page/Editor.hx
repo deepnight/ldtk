@@ -1893,6 +1893,7 @@ class Editor extends Page {
 			case LayerDefChanged(defUid): invalidateAllLevelsCache();
 			case LayerDefSorted: invalidateAllLevelsCache();
 			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValueAdded(defUid,value):
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				if( used ) {
 					invalidateAllLevelsCache();
@@ -2190,7 +2191,10 @@ class Editor extends Page {
 			case LayerDefIntGridValuesSorted(defUid):
 				updateTool();
 
-			case LayerDefIntGridValueRemoved(defUid,value,used):
+			case LayerDefIntGridValueAdded(_):
+				updateTool();
+
+			case LayerDefIntGridValueRemoved(_):
 				updateTool();
 
 			case WorldSettingsChanged:
