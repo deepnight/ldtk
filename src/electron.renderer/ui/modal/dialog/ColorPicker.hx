@@ -13,6 +13,9 @@ class ColorPicker extends ui.modal.Dialog {
 		this.usedColorsTag = usedColorsTag;
 		loadTemplate("colorPicker");
 
+		if( jTarget!=null && jTarget.is("input") )
+			jTargetInput = jTarget;
+
 		var jPreview = jContent.find(".preview");
 
 		// Manual text input
@@ -161,10 +164,6 @@ class ColorPicker extends ui.modal.Dialog {
 		jPreview.css({ backgroundColor:picker.getHexString() });
 
 		JsTools.parseComponents(jContent);
-
-		// Position
-		if( jTarget!=null && jTarget.is("input") )
-			jTargetInput = jTarget;
 	}
 
 	function updatePaste() {
