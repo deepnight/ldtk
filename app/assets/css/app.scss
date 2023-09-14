@@ -1258,6 +1258,8 @@ ul.log {
 .icon.list				{ background-image: url("../icons/list.svg"); }
 .icon.listView			{ background-image: url("../icons/listView.svg"); }
 .icon.locate			{ background-image: url("../icons/locate.svg"); }
+.icon.link				{ background-image: url("../icons/link.svg"); }
+.icon.lock				{ background-image: url("../icons/lock.svg"); }
 .icon.love				{ background-image: url("../icons/love.svg"); }
 .icon.manual			{ background-image: url("../icons/manual.svg"); }
 .icon.new				{ background-image: url("../icons/new.svg"); }
@@ -1286,6 +1288,8 @@ ul.log {
 .icon.tile				{ background-image: url("../icons/tile.png"); }
 .icon.trust				{ background-image: url("../icons/trust.svg"); }
 .icon.tutorial			{ background-image: url("../icons/tutorial.svg"); }
+.icon.unlink			{ background-image: url("../icons/unlink.svg"); }
+.icon.unlock			{ background-image: url("../icons/unlock.svg"); }
 .icon.update			{ background-image: url("../icons/update.svg"); }
 .icon.visible			{ background-image: url("../icons/visible.png"); }
 .icon.warn				{ background-image: url("../icons/warn.svg"); }
@@ -8796,7 +8800,7 @@ $patternSize : 32px;
 
 .window.dialog.ruleRandomOffsets {
 	.wrapper {
-		width: 450px;
+		width: 500px;
 		dl.form {
 			dt {
 				min-width: 0;
@@ -8812,6 +8816,15 @@ $patternSize : 32px;
 			}
 			input[type=text] {
 				flex: 1 1 40px;
+			}
+			button.link {
+				padding: 2px;
+				.unlink {
+					opacity: 0.35;
+				}
+				&:hover {
+					background-color: $bgLight;
+				}
 			}
 			button.reset {
 				flex: 0;
