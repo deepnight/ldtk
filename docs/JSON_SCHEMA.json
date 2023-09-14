@@ -1564,6 +1564,13 @@
 						"null"
 					]
 				},
+				"color": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
+					]
+				},
 				"isOptional": {
 					"description": "",
 					"type": [
