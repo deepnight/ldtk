@@ -34,15 +34,15 @@ class ContextMenu extends ui.Modal {
 			jAttachTarget.addClass("contextMenuOpen");
 
 			if( jEventTarget.is("button") || jEventTarget.parent().is("button") || jNear!=null )
-				placer = ()->positionNear(jEventTarget);
+				placer = ()->setAnchor( MA_JQuery(jEventTarget) );
 			else if( openEvent!=null )
-				placer = ()->positionNear( new Coords(openEvent.pageX, openEvent.pageY) );
+				placer = ()->setAnchor( MA_Coords(new Coords(openEvent.pageX, openEvent.pageY)) );
 
 		}
 		else {
 			jAttachTarget = new J("");
 			if( m!=null )
-				placer = ()->positionNear(m);
+				placer = ()->setAnchor( MA_Coords(m) );
 		}
 
 		setTransparentMask();

@@ -7,17 +7,11 @@ class ColorPicker extends ui.modal.Dialog {
 	var usedColorsTag : Null<String>;
 	var nullable = false;
 
-	public function new(?usedColorsTag:String, ?suggestedColors:Array<dn.Col>, ?target:js.jquery.JQuery, ?color:dn.Col, allowNull=false) {
-		super();
+	public function new(?usedColorsTag:String, ?suggestedColors:Array<dn.Col>, ?jTarget:js.jquery.JQuery, ?color:dn.Col, allowNull=false) {
+		super(jTarget);
 
 		this.usedColorsTag = usedColorsTag;
 		loadTemplate("colorPicker");
-
-		if( target!=null ) {
-			positionNear(target);
-			if( target.is("input") )
-				jTargetInput = target;
-		}
 
 		var jPreview = jContent.find(".preview");
 
@@ -167,6 +161,10 @@ class ColorPicker extends ui.modal.Dialog {
 		jPreview.css({ backgroundColor:picker.getHexString() });
 
 		JsTools.parseComponents(jContent);
+
+		// Position
+		if( jTarget!=null && jTarget.is("input") )
+			jTargetInput = jTarget;
 	}
 
 	function updatePaste() {

@@ -392,7 +392,7 @@ class Home extends Page {
 	function onImport(ev:js.jquery.Event) {
 		var ctx = new ui.modal.ContextMenu(ev);
 		ctx.addTitle( L.t._("Import a project from another app") );
-		ctx.positionNear( new J(ev.target) );
+		ctx.setAnchor( MA_JQuery(new J(ev.target)) );
 		ctx.add({
 			label: L.t._("Ogmo 3 project"),
 			cb: ()->onImportOgmo(),

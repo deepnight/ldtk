@@ -3,7 +3,7 @@ package ui.modal.dialog;
 class RuleRandomOffsets extends ui.modal.Dialog {
 	var rule : data.def.AutoLayerRuleDef;
 
-	public function new(?target:js.jquery.JQuery, r:data.def.AutoLayerRuleDef) {
+	public function new(?jTarget:js.jquery.JQuery, r:data.def.AutoLayerRuleDef) {
 		super();
 
 		rule = r;
@@ -12,7 +12,7 @@ class RuleRandomOffsets extends ui.modal.Dialog {
 		setTransparentMask();
 
 		updateForm();
-		positionNear(target);
+		setAnchor( MA_JQuery(jTarget) );
 	}
 
 	function updateForm() {

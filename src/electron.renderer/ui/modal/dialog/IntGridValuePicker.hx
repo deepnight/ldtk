@@ -26,7 +26,7 @@ class IntGridValuePicker extends ui.modal.Dialog {
 
 		if( jNear!=null ) {
 			jWrapper.css("minWidth", jNear.outerWidth()+"px");
-			positionNear(jNear);
+			setAnchor( MA_JQuery(jNear) );
 			jWrapper.offset({
 				top: jWrapper.offset().top-jNear.outerHeight(),
 				left: jWrapper.offset().left,

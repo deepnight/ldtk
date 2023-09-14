@@ -3,7 +3,7 @@ package ui.modal;
 class Dialog extends ui.Modal {
 	var jButtons: js.jquery.JQuery;
 
-	public function new(?target:js.jquery.JQuery, ?className:String) {
+	public function new(?jTarget:js.jquery.JQuery, ?className:String) {
 		super();
 
 		jModalAndMask.addClass("dialog");
@@ -19,11 +19,14 @@ class Dialog extends ui.Modal {
 		openAnim();
 
 		// Position near attach target
-		positionNear(target);
+		if( jTarget!=null )
+			setAnchor( MA_JQuery(jTarget) );
+		else
+			setAnchor( MA_Centered );
 	}
 
 	function openAnim() {
-		jWrapper.hide().slideDown(60);
+		jWrapper.hide().slideDown(60, applyAnchor);
 	}
 
 	public static function closeAll() {

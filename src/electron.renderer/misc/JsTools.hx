@@ -1231,7 +1231,7 @@ class JsTools {
 			jRecall.appendTo(jWrapper);
 			jRecall.click( (ev:js.jquery.Event)->{
 				var ctx = new ui.modal.ContextMenu();
-				ctx.positionNear(jRecall);
+				ctx.setAnchor( MA_JQuery(jRecall) );
 				for( img in allImages )
 					ctx.add({
 						label: L.untranslated(img.fileName),

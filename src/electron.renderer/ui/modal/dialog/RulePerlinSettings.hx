@@ -5,7 +5,7 @@ class RulePerlinSettings extends ui.modal.Dialog {
 	var preview : h2d.Graphics;
 	var rule : data.def.AutoLayerRuleDef;
 
-	public function new(?target:js.jquery.JQuery, r:data.def.AutoLayerRuleDef) {
+	public function new(?jTarget:js.jquery.JQuery, r:data.def.AutoLayerRuleDef) {
 		super();
 
 		rule = r;
@@ -39,7 +39,7 @@ class RulePerlinSettings extends ui.modal.Dialog {
 		i.enableSlider(0.2);
 		i.onChange = onChange.bind(r);
 
-		positionNear(target);
+		setAnchor( MA_JQuery(jTarget) );
 		updatePreview();
 	}
 

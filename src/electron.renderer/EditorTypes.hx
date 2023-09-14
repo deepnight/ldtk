@@ -223,3 +223,11 @@ typedef CachedIID = {
 	var level: data.Level;
 	var ?ei: data.inst.EntityInstance ;
 }
+
+
+enum ModalAnchor {
+	MA_Free;
+	MA_Centered;
+	MA_JQuery(je:js.jquery.JQuery);
+	MA_Coords(m:Coords);
+}
