@@ -1,7 +1,9 @@
 # 1.3.5
 
  - Added customizable rule groups colors
+ - Added a "symetric link" option to Auto-Layer rules offsets
  - Increased the max number of columns in Select components
+ - Fixed out-of-screen color picker window
 
 # 1.3.4
 
