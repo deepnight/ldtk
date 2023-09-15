@@ -7674,7 +7674,6 @@ dl.form.fieldInstanceEditor {
 				display: grid;
 				padding: 2px;
 				padding-top: 0;
-				margin-bottom: 8px;
 				align-items: center;
 				grid-template-columns: auto;
 				grid-auto-flow: column;
@@ -7715,10 +7714,10 @@ dl.form.fieldInstanceEditor {
 
 			ul.intGridValuesGroup {
 				margin-bottom: 10px;
-				min-height: 8px;
 
 				&:empty {
-					background-image: url("../img/stripes.png");
+					margin: 0;
+					min-height: 20px;
 					border: none;
 				}
 
