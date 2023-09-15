@@ -314,6 +314,21 @@ class LayerDef {
 		return iv;
 	}
 
+
+	public function addIntGridGroup() : ldtk.Json.IntGridValueGroupDef {
+		var uniqUid = 1;
+		for(g in intGridValuesGroups)
+			uniqUid = M.imax(uniqUid, g.uid+1);
+
+		var g : ldtk.Json.IntGridValueGroupDef = {
+			uid: uniqUid,
+			name: null,
+		}
+		intGridValuesGroups.push(g);
+		return g;
+	}
+
+
 	public inline function hasIntGridValue(v:Int) {
 		return getIntGridValueDef(v)!=null;
 	}
@@ -354,6 +369,20 @@ class LayerDef {
 				intGridValues.splice(i,1);
 				return true;
 			}
+		return false;
+	}
+
+	public function removeIntGridGroup(groupUid:Int) : Bool {
+		for(iv in intGridValues)
+			if( iv.groupUid==groupUid )
+				return false;
+
+		for(g in intGridValuesGroups)
+			if( g.uid==groupUid ) {
+				intGridValuesGroups.remove(g);
+				return true;
+			}
+
 		return false;
 	}
 

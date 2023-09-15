@@ -7634,6 +7634,14 @@ dl.form.fieldInstanceEditor {
 	}
 
 	dd.intGridValues {
+		display: block !important;
+
+		.buttons {
+			display: grid;
+			grid-template-columns: auto 25%;
+			gap: 2px;
+		}
+
 		ul.intGridValuesGroups {
 			flex: 1 0 100%;
 			margin-bottom: 8px;
@@ -7648,25 +7656,65 @@ dl.form.fieldInstanceEditor {
 			&>li {
 				padding: 2px 8px;
 				border-left: 2px solid $bgLighter;
-				border-radius: 8px;
+				border-top: 1px solid $bgLight;
+				border-bottom: 1px solid $bgLight;
+				border-top-left-radius: 8px;
+				border-bottom-left-radius: 8px;
 				background-color: $bgDark;
 			}
 
 			&>li.none {
 				padding-left: 8px;
+				.header button {
+					display: none;
+				}
 			}
 
-			.groupHeader {
-				padding: 4px;
+			.header {
+				display: grid;
+				padding: 2px;
+				padding-top: 0;
 				margin-bottom: 8px;
-				color: white;
-				font-weight: bold;
+				align-items: center;
+				grid-template-columns: auto;
+				grid-auto-flow: column;
+				grid-auto-columns: min-content;
+
+				.name {
+					padding: 4px;
+					margin-right: 8px;
+					&.editable {
+						color: white;
+						font-weight: bold;
+						cursor: text;
+
+						&:hover {
+							color: $orangeLight;
+							background-color: $bgDark;
+							outline: 1px dashed $bgLighter;
+						}
+					}
+					&:not(.editable) {
+						color: $bgLighter;
+						font-style: italic;
+					}
+				}
+
+				button {
+					padding: 1px;
+					opacity: 0.7;
+					.icon {
+						width: 1.4em;
+						height: 1.4em;
+					}
+					&:hover {
+						opacity: 1;
+					}
+				}
 			}
 
 			ul.intGridValuesGroup {
 				margin-bottom: 10px;
-				padding: 2px;
-				border: 1px solid $bgLight;
 				min-height: 8px;
 
 				&:empty {
@@ -7677,6 +7725,11 @@ dl.form.fieldInstanceEditor {
 				&.none .groupHeader {
 					font-style: italic;
 					color: $almostWhite;
+				}
+
+				li:hover {
+					background-color: $bgLight;
+					outline: 1px solid $bgLighter;
 				}
 			}
 

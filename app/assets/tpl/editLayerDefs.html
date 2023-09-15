@@ -205,8 +205,19 @@
 		<info>The list of all Integer values that could be painted in this IntGrid layer.</info>
 	</dt>
 	<dd class="IntGrid intGridValues">
+		<div class="buttons">
+			<button class="gray addValue" title="Create an IntGrid value"> <span class="icon add"></span> </button>
+			<button class="gray addGroup" title="Create a group of IntGrid values"> <span class="icon folder"></span> </button>
+		</div>
 		<ul class="intGridValuesGroups"></ul>
-		<button class="gray addValue"> <span class="icon add"></span> </button>
+
+		<xml id="intGridValuesGroup">
+			<div class="header">
+				<span class="name"></span>
+				<button class="transparent delete" title="Delete this group and ALL its values"> <span class="icon delete red"></span> </button>
+			</div>
+			<ul class="intGridValuesGroup"></ul>
+		</xml>
 
 		<xml id="intGridValue">
 			<div class="sortHandle"></div>

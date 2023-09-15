@@ -464,38 +464,75 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 
 
-				var jAllGroups = jForm.find("ul.intGridValuesGroups");
+				var jIntGridValuesWrapper = jForm.find("dd.intGridValues");
+				var jAllGroups = jIntGridValuesWrapper.find("ul.intGridValuesGroups");
 				jAllGroups.empty();
 
 				// Add intGrid value button
-				var jIntValuesButtons = jAllGroups.siblings("button");
-				jIntValuesButtons.filter(".addValue").off().click( function(ev) {
+				jIntGridValuesWrapper.find(".addValue").off().click( _->{
 					var col = Const.suggestNiceColor( cur.getAllIntGridValues().map(iv->iv.color) );
 					var iv = cur.addIntGridValue(col);
 					editor.ge.emit( LayerDefIntGridValueAdded(cur.uid,iv) );
 				});
 
+				// Add intGrid group button
+				jIntGridValuesWrapper.find(".addGroup").off().click( _->{
+					cur.addIntGridGroup();
+					editor.ge.emit( LayerDefChanged(cur.uid) );
+				});
+
 				// Grouped intGrid values
 				var groupedValues = cur.getGroupedIntGridValues();
 				for(g in groupedValues) {
-					var jGroupWrapper = new J('<li/>');
+					var jGroupWrapper = jForm.find("xml#intGridValuesGroup").clone().children().wrapAll("<li/>").parent();
 					jGroupWrapper.appendTo(jAllGroups);
 
 					// Group header
-					var jGroupHeader = new J('<div class="fixed groupHeader"></div>');
-					jGroupHeader.appendTo(jGroupWrapper);
+					var jGroupHeader = jGroupWrapper.find(".header");
+					var jName = jGroupHeader.find(".name");
 					switch g.groupUid {
 						case 0 :
-							jGroupWrapper.addClass("none fixed");
-							jGroupHeader.append('<span class="name">No group</span>');
+							jGroupWrapper.addClass("fixed none");
+							jName.text('Ungrouped');
 
 						case _ :
-							var name = g.groupInf.name!=null ? g.groupInf.name+" (#"+g.groupUid+")" : "#"+g.groupUid;
-							jGroupHeader.append('<span class="name">$name</span>');
+							// Editable group name
+							var name = g.groupInf.name!=null ? g.groupInf.name+" (#"+g.groupUid+")" : "Group #"+g.groupUid;
+							jName.addClass("editable");
+							jName.text(name);
+							jName.click(_->{
+								var jInput = new J('<input type="text"/>');
+								jName.replaceWith(jInput);
+								jInput.focus();
+								if( g.groupInf.name!=null )
+									jInput.val(g.groupInf.name);
+
+								jInput.blur(_->{
+									var name = StringTools.trim( data.JsonTools.escapeString(jInput.val()) );
+									g.groupInf.name = name.length>0 ? name : null;
+									editor.ge.emit( LayerDefChanged(cur.uid) );
+								});
+
+								jInput.keydown((ev:js.jquery.Event)->{
+									switch ev.key {
+										case "Enter": jInput.blur();
+										case _:
+									}
+								});
+							});
+
+							// Delete group
+							jGroupHeader.find(".delete").click(_->{
+								if( g.all.length>0 )
+									N.error( L.t._("You cannot delete a non-empty group.") );
+								else {
+									cur.removeIntGridGroup(g.groupUid);
+									editor.ge.emit( LayerDefChanged(cur.uid) );
+								}
+							});
 					}
 
-					var jGroup = new J('<ul class="intGridValuesGroup"></ul>');
-					jGroup.appendTo(jGroupWrapper);
+					var jGroup = jGroupWrapper.find(".intGridValuesGroup");
 					jGroup.attr("groupUid", Std.string(g.groupUid));
 
 					// IntGrid values
