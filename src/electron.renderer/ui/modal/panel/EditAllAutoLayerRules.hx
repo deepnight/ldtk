@@ -445,10 +445,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Make groups sortable
-		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
+		JsTools.makeSortable(jRuleGroupList, "allGroups", function(ev) {
 			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
 			editor.ge.emit(LayerRuleGroupSorted);
-		});
+		}, { disableAnim:true });
 
 		checkBackup();
 	}
@@ -756,7 +756,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// Make individual rules sortable
-		JsTools.makeSortable(jGroupList, jContent.find("ul.ruleGroups"), "allRules", false, function(ev) {
+		JsTools.makeSortable(jGroupList, jContent.find("ul.ruleGroups"), "allRules", function(ev) {
 			var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
 			if( fromUid!=rg.uid )
 				return; // Prevent double "onSort" call (one for From, one for To)
@@ -775,11 +775,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
 
 			editor.ge.emit(LayerRuleSorted);
-		});
+		}, { disableAnim:true });
 
 		// Turn the fake UL in collapsed groups into a sorting drop-target
 		if( rg.collapsed )
-			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
+			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", function(_) {}, { disableAnim:true } );
 
 		JsTools.parseComponents(jGroup);
 		return jGroup;

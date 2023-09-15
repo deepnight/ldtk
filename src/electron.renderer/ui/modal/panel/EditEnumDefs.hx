@@ -195,7 +195,7 @@ class EditEnumDefs extends ui.modal.Panel {
 		for( group in tagGroups) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed collapser"/>');
+				var jSep = new J('<li class="title collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jEnumList);
 				jSep.attr("id", project.iid+"_enum_tag_"+group.tag);
@@ -213,13 +213,13 @@ class EditEnumDefs extends ui.modal.Panel {
 				}
 			}
 
-			var jLi = new J('<li class="subList"/>');
+			var jLi = new J('<li class="subList draggable"/>');
 			jLi.appendTo(jEnumList);
 			var jSubList = new J('<ul/>');
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {
-				var jLi = new J("<li/>");
+				var jLi = new J('<li class="draggable"/>');
 				jLi.appendTo(jSubList);
 				jLi.data("uid", ed.uid);
 				if( ed==curEnum )
@@ -277,7 +277,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				var moved = project.defs.sortEnumDef(fromIdx, toIdx);
 				selectEnum(moved);
 				editor.ge.emit(EnumDefSorted);
-			});
+			}, { onlyDraggables:true });
 
 		}
 
@@ -288,7 +288,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			// Source name
 			var jSep = new J("<li/>");
 			jSep.appendTo(jEnumList);
-			jSep.addClass("title fixed collapser");
+			jSep.addClass("title collapser");
 			var name = dn.FilePath.fromFile(group.key).fileWithExt;
 			jSep.html('<span>$name</span>');
 			jSep.attr("id", project.iid+"_entity_tag_"+name);
@@ -344,7 +344,6 @@ class EditEnumDefs extends ui.modal.Panel {
 			for(ed in group.value) {
 				var jLi = new J("<li/>");
 				jLi.appendTo(jSubList);
-				jLi.addClass("fixed");
 				if( !fileExists )
 					jLi.addClass("missing");
 				if( ed==curEnum )

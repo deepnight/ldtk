@@ -545,7 +545,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		for( group in tagGroups ) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed collapser"/>');
+				var jSep = new J('<li class="title collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.attr("id", project.iid+"_entity_tag_"+group.tag);
 				jSep.attr("default", "open");
@@ -577,7 +577,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {
-				var jEnt = new J('<li class="iconLeft"/>');
+				var jEnt = new J('<li class="iconLeft draggable"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
 				jEnt.css("background-color", dn.Col.fromInt(ed.color).toCssRgba(0.2));
@@ -642,7 +642,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var moved = project.defs.sortEntityDef(fromIdx, toIdx);
 				selectEntity(moved);
 				editor.ge.emit(EntityDefSorted);
-			});
+			}, { onlyDraggables:true });
 		}
 
 		JsTools.parseComponents(jEntityList);

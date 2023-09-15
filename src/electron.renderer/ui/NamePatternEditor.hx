@@ -347,14 +347,14 @@ class NamePatternEditor {
 				jBlock.addClass("last");
 			switch b {
 				case Empty:
-					jBlock.addClass("str empty fixed");
+					jBlock.addClass("str empty");
 
 				case Str(v):
-					jBlock.addClass("str");
+					jBlock.addClass("str draggable");
 					jBlock.append(v);
 
 				case Var(v):
-					jBlock.addClass("var");
+					jBlock.addClass("var draggable");
 					for(s in stocks)
 						if( s.k==v ) {
 							jBlock.append(s.name);
@@ -384,6 +384,6 @@ class NamePatternEditor {
 			blocks.insert(ev.newIndex, moved);
 			onChange( toString() );
 			renderAll();
-		});
+		}, { onlyDraggables:true });
 	}
 }

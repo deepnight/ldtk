@@ -5,7 +5,8 @@ import sortablejs.Sortable;
 import js.node.Fs;
 
 typedef InternalSortableOptions = {
-	var onlySelector: String;
+	var ?onlyDraggables: Bool;
+	var ?disableAnim: Bool;
 }
 
 class JsTools {
@@ -14,7 +15,10 @@ class JsTools {
 		Use SortableJS to make some list sortable
 		See: https://github.com/SortableJS/Sortable
 	**/
-	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void, ?extraOptions:InternalSortableOptions) {
+	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, onSort:(event:SortableDragEvent)->Void, ?extraOptions:InternalSortableOptions) {
+		if( extraOptions==null )
+			extraOptions = {}
+
 		if( jSortable.length!=1 )
 			throw "Used sortable on a set of "+jSortable.length+" element(s)";
 
@@ -42,8 +46,7 @@ class JsTools {
 			scroll: jScrollRoot!=null ? jScrollRoot.get(0) : jSortable.get(0),
 			scrollSpeed: 40,
 			scrollSensitivity: 140,
-			filter: ".fixed",
-			animation: anim ? 100 : 0,
+			animation: extraOptions.disableAnim==true ? 0 : 100,
 		}
 
 		// Custom handle
@@ -53,9 +56,9 @@ class JsTools {
 		}
 
 		// Extra options
-		if( extraOptions!=null ) {
-			if( extraOptions.onlySelector!=null )
-				options.draggable = extraOptions.onlySelector;
+		if( extraOptions.onlyDraggables==true ) {
+			jSortable.addClass("onlyDraggables");
+			options.draggable = ".draggable";
 		}
 
 		Sortable.create( jSortable.get(0), options);

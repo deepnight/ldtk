@@ -2482,7 +2482,7 @@ textarea {
 
 		.block {
 			flex: 0 1 0px;
-			padding: 3px;
+			padding: 3px 2px;
 			min-height: 1ch;
 
 			font-size: 9pt;
@@ -2515,15 +2515,16 @@ textarea {
 				}
 			}
 			&.empty {
-				min-width: 0.4ch;
+				padding: 0;
+				min-width: 0.2ch;
 				&:hover {
 					min-width: 1ch;
 					border-style: dashed;
 					background-color: $bgLight;
 				}
-			}
-			&.empty.last {
-				min-width: 2ch;
+				&.last {
+					min-width: 2ch;
+				}
 			}
 
 			&:hover {
@@ -2560,7 +2561,7 @@ textarea {
 			white-space: nowrap;
 		}
 
-		&.sorting .fixed {
+		&.sorting .block:not(.draggable) {
 			display: none;
 		}
 	}
@@ -4428,13 +4429,20 @@ textarea {
 	z-index: 97;
 }
 
-ul.sortable:not(.customHandle)>li:not(.fixed) {
-	background-image: url("../icons/dragAlpha.svg");
-	background-repeat: no-repeat;
-	background-position: left center;
-	padding-left: 32px !important;
-	&.dragging {
-		cursor: ns-resize;
+ul.sortable:not(.customHandle) {
+	&:not(.onlyDraggables)>li,
+	&.onlyDraggables>li.draggable {
+		background-image: url("../icons/dragAlpha.svg");
+		background-repeat: no-repeat;
+		background-position: left center;
+		padding-left: 32px !important;
+
+		&.dragging {
+			cursor: ns-resize;
+		}
+	}
+	&.onlyDraggables>li:not(.draggable) {
+		padding-left: 32px !important;
 	}
 }
 
@@ -7650,7 +7658,7 @@ dl.form.fieldInstanceEditor {
 			}
 
 			li+li {
-				margin-top: 8px;
+				margin-top: 4px;
 			}
 
 			&>li {
@@ -7713,8 +7721,6 @@ dl.form.fieldInstanceEditor {
 			}
 
 			ul.intGridValuesGroup {
-				margin-bottom: 10px;
-
 				&:empty {
 					margin: 0;
 					min-height: 20px;

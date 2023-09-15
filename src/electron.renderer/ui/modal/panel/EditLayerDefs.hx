@@ -492,6 +492,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 					// Group header
 					var jGroupHeader = jGroupWrapper.find(".header");
+					if( groupedValues.length==1 )
+						jGroupHeader.hide();
 					var jName = jGroupHeader.find(".name");
 					switch g.groupUid {
 						case 0 :
@@ -525,10 +527,23 @@ class EditLayerDefs extends ui.modal.Panel {
 							});
 
 							// Delete group
-							jGroupHeader.find(".delete").click(_->{
-								if( g.all.length>0 )
-									N.error( L.t._("You cannot delete a non-empty group.") );
+							jGroupHeader.find("button.delete").click((ev:js.jquery.Event)->{
+								if( g.all.length>0 ) {
+									// Move all values back to "ungrouped"
+									new ui.modal.dialog.Confirm(
+										new J(ev.target),
+										L.t._("Deleting this group will move all its values back to \"ungrouped\". Confirm?"),
+										true,
+										()->{
+											for(iv in g.all)
+												iv.groupUid = 0;
+											cur.removeIntGridGroup(g.groupUid);
+											editor.ge.emitAtTheEndOfFrame( LayerDefChanged(cur.uid) );
+										}
+									);
+								}
 								else {
+									// Empty group
 									cur.removeIntGridGroup(g.groupUid);
 									editor.ge.emit( LayerDefChanged(cur.uid) );
 								}
@@ -628,16 +643,15 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 				// Make intGrid groups sortable
-				JsTools.makeSortable(
-					jAllGroups,
-					(ev:sortablejs.Sortable.SortableDragEvent)->{
-						var moved = cur.sortIntGridValueGroupDef(ev.oldIndex-1, ev.newIndex-1);
-						editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
-					},
-					(options:sortablejs.Sortable.SortableOptions)->{
-						options.draggable = ".draggable";
-					}
-				);
+				if( groupedValues.length>1 )
+					JsTools.makeSortable(
+						jAllGroups,
+						(ev:sortablejs.Sortable.SortableDragEvent)->{
+							var moved = cur.sortIntGridValueGroupDef(ev.oldIndex-1, ev.newIndex-1);
+							editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
+						},
+						{ onlyDraggables: true }
+					);
 
 				initAutoTilesetSelect();
 
