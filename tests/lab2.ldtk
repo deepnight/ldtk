@@ -68,7 +68,7 @@
 				{ "value": 1, "identifier": "tiles", "color": "#0099DB", "tile": { "tilesetUid": 6, "x": 352, "y": 32, "w": 16, "h": 16 }, "groupUid": 0 },
 				{ "value": 2, "identifier": "stripes", "color": "#FFFFFF", "tile": { "tilesetUid": 6, "x": 384, "y": 0, "w": 16, "h": 16 }, "groupUid": 0 }
 			],
-			"intGridValuesGroups": [],
+			"intGridValuesGroups": [{ "uid": 1, "identifier": null }],
 			"autoRuleGroups": [
 				{ "uid": 16, "name": "tiles", "color": null, "active": true, "isOptional": false, "rules": [
 					{
