@@ -58,7 +58,6 @@ class Modal extends dn.Process {
 
 
 	public function setAnchor(a:ModalAnchor, applyNow=false) {
-		trace(a);
 		this.anchor = a;
 		if( applyNow )
 			applyAnchor();
