@@ -10,7 +10,7 @@ class JsTools {
 		Use SortableJS to make some list sortable
 		See: https://github.com/SortableJS/Sortable
 	**/
-	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
+	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void, ?optionsCustomizer:SortableOptions->Void) {
 		if( jSortable.length!=1 )
 			throw "Used sortable on a set of "+jSortable.length+" element(s)";
 
@@ -41,6 +41,9 @@ class JsTools {
 			filter: ".fixed",
 			animation: anim ? 100 : 0,
 		}
+
+		if( optionsCustomizer!=null )
+			optionsCustomizer(settings);
 
 		// Custom handle
 		if( jSortable.children().children(".sortHandle").length>0 ) {
