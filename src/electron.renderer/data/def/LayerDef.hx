@@ -122,6 +122,7 @@ class LayerDef {
 					identifier: v.identifier,
 					color: JsonTools.readColor(v.color),
 					tile: JsonTools.readTileRect(v.tile, true),
+					groupId: JsonTools.readInt(v.groupId, 0),
 				});
 				fixedIdx++;
 			}
@@ -180,6 +181,7 @@ class LayerDef {
 				identifier: iv.identifier,
 				color: JsonTools.writeColor(iv.color),
 				tile: JsonTools.writeTileRect(iv.tile),
+				groupId: iv.groupId,
 			}),
 
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -259,6 +261,7 @@ class LayerDef {
 			color: col,
 			identifier: id,
 			tile: null,
+			groupId: 0,
 		});
 
 		return iv;
