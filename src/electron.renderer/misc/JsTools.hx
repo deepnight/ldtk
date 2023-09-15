@@ -1309,7 +1309,7 @@ class JsTools {
 				value: rawIv.value,
 				color: dn.Col.parseHex(rawIv.color),
 				tile: rawIv.tile,
-				groupId: 0,
+				groupUid: 0,
 			}
 
 		var jVal = new J('<div class="intGridValue"></div>');

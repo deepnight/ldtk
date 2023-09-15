@@ -464,93 +464,132 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 
 
-				var jValuesList = jForm.find("ul.intGridValues");
-				jValuesList.find("li.value").remove();
+				var jAllGroups = jForm.find("ul.intGridValuesGroups");
+				jAllGroups.empty();
 
 				// Add intGrid value button
-				var jAddButton = jValuesList.find("li.add");
-				jAddButton.find("button").off().click( function(ev) {
+				var jIntValuesButtons = jAllGroups.siblings("button");
+				jIntValuesButtons.filter(".addValue").off().click( function(ev) {
 					var col = Const.suggestNiceColor( cur.getAllIntGridValues().map(iv->iv.color) );
 					var iv = cur.addIntGridValue(col);
 					editor.ge.emit( LayerDefIntGridValueAdded(cur.uid,iv) );
 				});
 
-				// Existing values
-				for( intGridVal in cur.getAllIntGridValues() ) {
-					var jValue = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
-					jValue.addClass("value");
-					jValue.insertBefore(jAddButton);
-					jValue.find(".id")
-						.html( Std.string(intGridVal.value) )
-						.css({
-							color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
-							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
-							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+				// Grouped intGrid values
+				var groupedValues = cur.getGroupedIntGridValues();
+				for(g in groupedValues) {
+					var jGroupWrapper = new J('<li/>');
+					jGroupWrapper.appendTo(jAllGroups);
+
+					// Group header
+					var jGroupHeader = new J('<div class="fixed groupHeader"></div>');
+					jGroupHeader.appendTo(jGroupWrapper);
+					switch g.groupUid {
+						case 0 :
+							jGroupWrapper.addClass("none fixed");
+							jGroupHeader.append('<span class="name">No group</span>');
+
+						case _ :
+							var name = g.groupInf.name!=null ? g.groupInf.name+" (#"+g.groupUid+")" : "#"+g.groupUid;
+							jGroupHeader.append('<span class="name">$name</span>');
+					}
+
+					var jGroup = new J('<ul class="intGridValuesGroup"></ul>');
+					jGroup.appendTo(jGroupWrapper);
+					jGroup.attr("groupUid", Std.string(g.groupUid));
+
+					// IntGrid values
+					for( intGridVal in g.all ) {
+						var jValue = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
+						jValue.attr("valueId", Std.string(intGridVal.value));
+						jValue.addClass("value");
+						jValue.appendTo(jGroup);
+						jValue.find(".id")
+							.html( Std.string(intGridVal.value) )
+							.css({
+								color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
+								borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
+								backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+							});
+
+						// Tile
+						var jTile = jValue.find(".tile");
+						if( intGridValuesIconsTdUid!=null )
+							jTile.append( JsTools.createTileRectPicker(intGridValuesIconsTdUid, intGridVal.tile, true, (r)->{
+								intGridVal.tile = r;
+								editor.ge.emit( LayerDefChanged(cur.uid) );
+							}));
+
+						// Edit value identifier
+						var i = new form.input.StringInput(
+							jValue.find("input.name"),
+							function() return intGridVal.identifier,
+							function(v) {
+								if( v!=null && StringTools.trim(v).length==0 )
+									v = null;
+								intGridVal.identifier = data.Project.cleanupIdentifier(v, Free);
+							}
+						);
+						i.validityCheck = cur.isIntGridValueIdentifierValid;
+						i.validityError = N.invalidIdentifier;
+						i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
+						i.jInput.css({
+							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
 						});
 
-					// Tile
-					var jTile = jValue.find(".tile");
-					if( intGridValuesIconsTdUid!=null )
-						jTile.append( JsTools.createTileRectPicker(intGridValuesIconsTdUid, intGridVal.tile, true, (r)->{
-							intGridVal.tile = r;
-							editor.ge.emit( LayerDefChanged(cur.uid) );
-						}));
+						// Edit color
+						var col = jValue.find("input[type=color]");
+						col.val( C.intToHex(intGridVal.color) );
+						col.change( function(ev) {
+							cur.getIntGridValueDef(intGridVal.value).color = C.hexToInt( col.val() );
+							editor.ge.emit(LayerDefChanged(cur.uid));
+							updateForm();
+						});
 
-					// Edit value identifier
-					var i = new form.input.StringInput(
-						jValue.find("input.name"),
-						function() return intGridVal.identifier,
-						function(v) {
-							if( v!=null && StringTools.trim(v).length==0 )
-								v = null;
-							intGridVal.identifier = data.Project.cleanupIdentifier(v, Free);
-						}
-					);
-					i.validityCheck = cur.isIntGridValueIdentifierValid;
-					i.validityError = N.invalidIdentifier;
-					i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
-					i.jInput.css({
-						backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.7) ),
-					});
+						// Remove
+						jValue.find("button.remove").click( function(ev:js.jquery.Event) {
+							var jThis = ev.getThis();
+							var isUsed = project.isIntGridValueUsed(cur, intGridVal.value);
+							function run() {
+								if( isUsed )
+									new LastChance(L.t._("IntGrid value removed"), project);
+								cur.removeIntGridValue(intGridVal.value);
+								project.tidy();
+								editor.ge.emit( LayerDefIntGridValueRemoved(cur.uid, intGridVal.value, isUsed) );
+							}
+							if( isUsed ) {
+								new ui.modal.dialog.Confirm(
+									jThis,
+									L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
+									true,
+									run
+								);
+								return;
+							}
+							else
+								run();
+						});
+					}
 
-					// Edit color
-					var col = jValue.find("input[type=color]");
-					col.val( C.intToHex(intGridVal.color) );
-					col.change( function(ev) {
-						cur.getIntGridValueDef(intGridVal.value).color = C.hexToInt( col.val() );
-						editor.ge.emit(LayerDefChanged(cur.uid));
-						updateForm();
-					});
+					// Make intGrid values sortable
+					JsTools.makeSortable(jGroup, "allIntGroups", (ev:sortablejs.Sortable.SortableDragEvent)->{
+						var fromGroupUid = Std.parseInt( ev.from.getAttribute("groupUid") );
+						var toGroupUid = Std.parseInt( ev.to.getAttribute("groupUid") );
+						var valueId = Std.parseInt( ev.item.getAttribute("valueId") );
+						var iv = cur.getIntGridValueDef(valueId);
 
-					// Remove
-					jValue.find("button.remove").click( function(ev:js.jquery.Event) {
-						var jThis = ev.getThis();
-						var isUsed = project.isIntGridValueUsed(cur, intGridVal.value);
-						function run() {
-							if( isUsed )
-								new LastChance(L.t._("IntGrid value removed"), project);
-							cur.removeIntGridValue(intGridVal.value);
-							project.tidy();
-							editor.ge.emit( LayerDefIntGridValueRemoved(cur.uid, intGridVal.value, isUsed) );
-						}
-						if( isUsed ) {
-							new ui.modal.dialog.Confirm(
-								jThis,
-								L.t._("This value is used in some levels: removing it will also remove the value from all these levels. Are you sure?"),
-								true,
-								run
-							);
-							return;
-						}
-						else
-							run();
+						if( iv.groupUid!=fromGroupUid )
+							return; // Prevent double "onSort" call (one for From, one for To)
+
+						var moved = cur.sortIntGridValueDef(valueId, fromGroupUid, toGroupUid, ev.oldIndex, ev.newIndex);
+						editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
 					});
 				}
 
 
-				// Make intGrid valueslist sortable
-				JsTools.makeSortable(jValuesList, function(ev) {
-					var moved = cur.sortIntGridValueDef(ev.oldIndex, ev.newIndex);
+				// Make intGrid groups sortable
+				JsTools.makeSortable(jAllGroups, (ev:sortablejs.Sortable.SortableDragEvent)->{
+					var moved = cur.sortIntGridValueGroupDef(ev.oldIndex-1, ev.newIndex-1);
 					editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
 				});
 

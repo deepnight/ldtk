@@ -4428,7 +4428,7 @@ textarea {
 	z-index: 97;
 }
 
-ul.sortable:not(.customHandle) li:not(.fixed) {
+ul.sortable:not(.customHandle)>li:not(.fixed) {
 	background-image: url("../icons/dragAlpha.svg");
 	background-repeat: no-repeat;
 	background-position: left center;
@@ -7633,65 +7633,95 @@ dl.form.fieldInstanceEditor {
 		margin-left: 2px;
 	}
 
-	ul.intGridValues {
-		li {
-			position: relative;
-		}
-
-		li+li {
-			margin-top: 8px;
-		}
-
-		li.value {
-			display: grid;
-			align-items: center;
-			grid-template-columns: min-content 2em 32px auto 64px min-content;
-			gap: 4px;
-
-			input[type=color] {
-				width: 100%;
-				height: 100%;
+	dd.intGridValues {
+		ul.intGridValuesGroups {
+			flex: 1 0 100%;
+			margin-bottom: 8px;
+			li {
+				position: relative;
 			}
 
-			input.name {
-				text-align: center;
-				font-style: italic;
+			li+li {
+				margin-top: 8px;
 			}
 
-			span.id {
-				display: grid;
-				min-width: 1.5em;
-				min-height: 1.5em;
-				align-content: center;
-				text-align: center;
+			&>li {
+				padding: 2px 8px;
+				border-left: 2px solid $bgLighter;
+				border-radius: 8px;
+				background-color: $bgDark;
+			}
+
+			&>li.none {
+				padding-left: 8px;
+			}
+
+			.groupHeader {
+				padding: 4px;
+				margin-bottom: 8px;
+				color: white;
 				font-weight: bold;
-				font-size: 1.3em;
-				border: 1px solid white;
-				border-radius: 3px;
 			}
 
-			span.tile {
-				align-self: stretch;
+			ul.intGridValuesGroup {
+				margin-bottom: 10px;
+				padding: 2px;
+				border: 1px solid $bgLight;
+				min-height: 8px;
+
 				&:empty {
 					background-image: url("../img/stripes.png");
-					background-repeat: repeat;
+					border: none;
+				}
+
+				&.none .groupHeader {
+					font-style: italic;
+					color: $almostWhite;
 				}
 			}
 
-			button.remove {
-				align-self: stretch;
-				padding: 0;
-				width: 28px;
-			}
-		}
+			li.value {
+				display: grid;
+				align-items: center;
+				grid-template-columns: min-content 2em 32px auto 64px min-content;
+				gap: 4px;
 
-		li.add button {
-			padding: 0px;
-			text-align: center;
-			font-weight: bold;
-			font-size: 200%;
-			text-decoration: none;
-			color: white;
+				input[type=color] {
+					width: 100%;
+					height: 100%;
+				}
+
+				input.name {
+					text-align: center;
+					font-style: italic;
+				}
+
+				span.id {
+					display: grid;
+					min-width: 1.5em;
+					min-height: 1.5em;
+					align-content: center;
+					text-align: center;
+					font-weight: bold;
+					font-size: 1.3em;
+					border: 1px solid white;
+					border-radius: 3px;
+				}
+
+				span.tile {
+					align-self: stretch;
+					&:empty {
+						background-image: url("../img/stripes.png");
+						background-repeat: repeat;
+					}
+				}
+
+				button.remove {
+					align-self: stretch;
+					padding: 0;
+					width: 28px;
+				}
+			}
 		}
 	}
 
