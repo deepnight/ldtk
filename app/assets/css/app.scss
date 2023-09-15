@@ -7642,9 +7642,8 @@ dl.form.fieldInstanceEditor {
 	}
 
 	dd.intGridValues {
-		display: block !important;
-
 		.buttons {
+			flex: 1 0 100%;
 			display: grid;
 			grid-template-columns: auto 25%;
 			gap: 2px;
