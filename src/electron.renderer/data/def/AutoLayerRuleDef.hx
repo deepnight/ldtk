@@ -281,7 +281,6 @@ class AutoLayerRuleDef {
 			return false;
 
 		// Rule check
-		// var isOutOfBounds = false;
 		var value : Null<Int> = 0;
 		var radius = Std.int( size/2 );
 		for(px in 0...size)
@@ -290,15 +289,12 @@ class AutoLayerRuleDef {
 			if( pattern[coordId]==0 )
 				continue;
 
-			// isOutOfBounds = !source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) );
 			value = source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
 				? source.getIntGrid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
 				: outOfBoundsValue;
 
 			if( value==null )
 				return false;
-			// if( !source.isValid(cx+dirX*(px-radius), cy+dirY*(py-radius)) )
-			// 	return false;
 
 			if( dn.M.iabs( pattern[coordId] ) == Const.AUTO_LAYER_ANYTHING ) {
 				// "Anything" checks
