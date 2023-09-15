@@ -487,12 +487,15 @@ class EditLayerDefs extends ui.modal.Panel {
 					var jGroupWrapper = jForm.find("xml#intGridValuesGroup").clone().children().wrapAll("<li/>").parent();
 					jGroupWrapper.appendTo(jAllGroups);
 
+					if( g.groupUid!=0 )
+						jGroupWrapper.addClass("draggable");
+
 					// Group header
 					var jGroupHeader = jGroupWrapper.find(".header");
 					var jName = jGroupHeader.find(".name");
 					switch g.groupUid {
 						case 0 :
-							jGroupWrapper.addClass("fixed none");
+							jGroupWrapper.addClass("none");
 							jName.text('Ungrouped');
 
 						case _ :
@@ -625,10 +628,16 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 				// Make intGrid groups sortable
-				JsTools.makeSortable(jAllGroups, (ev:sortablejs.Sortable.SortableDragEvent)->{
-					var moved = cur.sortIntGridValueGroupDef(ev.oldIndex-1, ev.newIndex-1);
-					editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
-				});
+				JsTools.makeSortable(
+					jAllGroups,
+					(ev:sortablejs.Sortable.SortableDragEvent)->{
+						var moved = cur.sortIntGridValueGroupDef(ev.oldIndex-1, ev.newIndex-1);
+						editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
+					},
+					(options:sortablejs.Sortable.SortableOptions)->{
+						options.draggable = ".draggable";
+					}
+				);
 
 				initAutoTilesetSelect();
 
@@ -846,7 +855,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 		// Make layer list sortable
-		JsTools.makeSortable(jList, function(ev) {
+		JsTools.makeSortable(jList, (ev)->{
 			var moved = project.defs.sortLayerDef(ev.oldIndex, ev.newIndex);
 			select(moved);
 			editor.ge.emit(LayerDefSorted);
