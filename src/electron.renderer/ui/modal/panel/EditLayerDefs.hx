@@ -509,7 +509,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 								jInput.blur(_->{
 									var identifier = data.Project.cleanupIdentifier(jInput.val(), Free);
-									g.groupInf.identifier = identifier.length>0 ? identifier: null;
+									g.groupInf.identifier = identifier;
 									editor.ge.emit( LayerDefChanged(cur.uid) );
 								});
 
