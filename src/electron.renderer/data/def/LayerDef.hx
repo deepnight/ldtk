@@ -134,7 +134,7 @@ class LayerDef {
 				json.intGridValuesGroups = [];
 			o.intGridValuesGroups = json.intGridValuesGroups.map(g->{
 				uid: g.uid,
-				name: g.name,
+				identifier: g.identifier,
 			});
 		}
 
@@ -196,7 +196,7 @@ class LayerDef {
 
 			intGridValuesGroups: intGridValuesGroups.map(g->{
 				uid: g.uid,
-				name: g.name,
+				identifier: g.identifier,
 			}),
 
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -322,7 +322,7 @@ class LayerDef {
 
 		var g : ldtk.Json.IntGridValueGroupDef = {
 			uid: uniqUid,
-			name: null,
+			identifier: null,
 		}
 		intGridValuesGroups.push(g);
 		return g;

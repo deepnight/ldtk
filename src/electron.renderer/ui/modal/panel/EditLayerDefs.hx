@@ -497,19 +497,19 @@ class EditLayerDefs extends ui.modal.Panel {
 
 						case _ :
 							// Editable group name
-							var name = g.groupInf.name!=null ? g.groupInf.name+" (#"+g.groupUid+")" : "Group #"+g.groupUid;
+							var name = g.groupInf.identifier!=null ? g.groupInf.identifier : "Group #"+g.groupUid;
 							jName.addClass("editable");
 							jName.text(name);
 							jName.click(_->{
 								var jInput = new J('<input type="text"/>');
 								jName.replaceWith(jInput);
 								jInput.focus();
-								if( g.groupInf.name!=null )
-									jInput.val(g.groupInf.name);
+								if( g.groupInf.identifier!=null )
+									jInput.val(g.groupInf.identifier);
 
 								jInput.blur(_->{
-									var name = StringTools.trim( data.JsonTools.escapeString(jInput.val()) );
-									g.groupInf.name = name.length>0 ? name : null;
+									var identifier = data.Project.cleanupIdentifier(jInput.val(), Free);
+									g.groupInf.identifier = identifier.length>0 ? identifier: null;
 									editor.ge.emit( LayerDefChanged(cur.uid) );
 								});
 
