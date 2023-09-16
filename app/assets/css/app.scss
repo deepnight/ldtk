@@ -7642,16 +7642,21 @@ dl.form.fieldInstanceEditor {
 	}
 
 	dd.intGridValues {
+		padding: 10px;
+		background-color: $bgDark;
+		border-radius: 3px;
+
 		.buttons {
 			flex: 1 0 100%;
 			display: grid;
 			grid-template-columns: auto 25%;
 			gap: 2px;
+			border-radius: 2px;
 		}
 
 		ul.intGridValuesGroups {
 			flex: 1 0 100%;
-			margin-bottom: 8px;
+			// margin-bottom: 8px;
 			li {
 				position: relative;
 			}
@@ -7661,13 +7666,11 @@ dl.form.fieldInstanceEditor {
 			}
 
 			&>li {
-				padding: 2px 8px;
-				border-left: 2px solid $bgLighter;
-				border-top: 1px solid $bgLight;
-				border-bottom: 1px solid $bgLight;
-				border-top-left-radius: 8px;
-				border-bottom-left-radius: 8px;
-				background-color: $bgDark;
+				padding: 8px 2px;
+				// border: 1px solid $bgLight;
+				border-left: 3px solid $bgLighter;
+				border-radius: 2px;
+				background-color: $bgMed
 			}
 
 			&>li.none {
@@ -7722,8 +7725,10 @@ dl.form.fieldInstanceEditor {
 			ul.intGridValuesGroup {
 				&:empty {
 					margin: 0;
+					margin-right: 16px;
 					min-height: 20px;
 					border: none;
+					background-image: url("../img/stripes.png");
 				}
 
 				&.none .groupHeader {
@@ -7740,7 +7745,7 @@ dl.form.fieldInstanceEditor {
 			li.value {
 				display: grid;
 				align-items: center;
-				grid-template-columns: min-content 2em 32px auto 64px min-content;
+				grid-template-columns: min-content 32px 64px 32px auto min-content;
 				gap: 4px;
 
 				input[type=color] {
