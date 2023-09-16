@@ -502,13 +502,15 @@ class EditLayerDefs extends ui.modal.Panel {
 
 						case _ :
 							// Editable group name
-							var name = g.groupInf.identifier!=null ? g.groupInf.identifier : "Group #"+g.groupUid;
+							var defaultName = "Group #"+g.groupUid;
+							var name = g.groupInf.identifier!=null ? g.groupInf.identifier : defaultName;
 							jName.addClass("editable");
 							jName.text(name);
 							jName.click(_->{
 								var jInput = new J('<input type="text"/>');
 								jName.replaceWith(jInput);
 								jInput.focus();
+								jInput.attr("placeholder",defaultName);
 								if( g.groupInf.identifier!=null )
 									jInput.val(g.groupInf.identifier);
 
