@@ -203,6 +203,18 @@ class RuleEditor extends ui.modal.Dialog {
 			updateValuePicker();
 		});
 
+
+		// Value groups
+		var jGroups = jContent.find(">.pattern .groups ul").empty();
+		// JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
+		// jGroups.addClass("col-"+columns);
+		for(g in sourceDef.getGroupedIntGridValues()) {
+			trace(g);
+			if( g.groupUid<=0 )
+				jGroups.append('<li>Ungrouped</li>');
+			else
+				jGroups.append('<li>${g.groupInf.identifier}</li>');
+		}
 	}
 
 	function renderAll() {

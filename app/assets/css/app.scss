@@ -9089,7 +9089,8 @@ $patternSize : 32px;
 		.outOfBounds,
 		.tileSettings,
 		.pattern .editor,
-		.pattern .values {
+		.pattern .values,
+		.pattern .groups {
 			width: 100%;
 			height: 100%;
 			padding: 16px;
@@ -9194,6 +9195,7 @@ $patternSize : 32px;
 			.editor{
 				display: grid;
 				grid-template-rows: min-content auto;
+				grid-row: 1/3;
 				gap: 4px;
 
 				select {
@@ -9208,19 +9210,11 @@ $patternSize : 32px;
 				}
 			}
 
-			.values {
+			.values,
+			.groups {
 				position: relative;
 				max-height: 400px;
 				overflow-y: auto;
-				padding-right: 32px;
-
-				button.displayMode {
-					position: absolute;
-					top: 0;
-					right: 0;
-					width: auto;
-					padding: 3px 1px;
-				}
 
 				ul {
 					display: grid;
@@ -9334,7 +9328,22 @@ $patternSize : 32px;
 					}
 
 				}
+			}
 
+			.values {
+				padding-right: 32px;
+				button.displayMode {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: auto;
+					padding: 3px 1px;
+				}
+			}
+
+			.groups {
+				grid-column: 1/2;
+				grid-row: 2/3;
 			}
 		}
 
