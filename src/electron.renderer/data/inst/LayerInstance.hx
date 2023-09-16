@@ -773,7 +773,7 @@ class LayerInstance {
 		));
 	}
 
-	inline function runAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+	function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
 		if( !def.autoLayerRulesCanBeUsed() )
 			return false;
 		else {
@@ -907,7 +907,7 @@ class LayerInstance {
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
 			for(x in left...right+1)
 			for(y in top...bottom+1)
-				runAutoLayerRuleAt(source, r, x,y);
+				applyAutoLayerRuleAt(source, r, x,y);
 		});
 
 		// Discard using break-on-match flag
@@ -940,7 +940,7 @@ class LayerInstance {
 
 		for(cx in 0...cWid)
 		for(cy in 0...cHei)
-			runAutoLayerRuleAt(source, r, cx,cy);
+			applyAutoLayerRuleAt(source, r, cx,cy);
 
 		if( applyBreakOnMatch )
 			applyBreakOnMatchesEverywhere();
