@@ -250,20 +250,17 @@ class LayerDef {
 
 		var groupedValues = getGroupedIntGridValues();
 		var moved = getIntGridValueDef(valueId);
-		trace(moved.identifier+"(#"+moved.value+"), group:"+fromGroupUid+"=>"+toGroupUid+", index: "+fromGroupIdx+"=>"+toGroupIdx);
 
 		// Order values
 		var toGroup = groupedValues.filter( g->g.groupUid==toGroupUid )[0];
 		if( toGroup.all.length>0 ) {
 			if( toGroupIdx>=toGroup.all.length || fromGroupUid==toGroupUid && toGroupIdx>fromGroupIdx ) {
 				var insertAfter = toGroup.all[toGroup.all.length-1];
-				trace("insert after "+insertAfter);
 				intGridValues.splice( intGridValues.indexOf(moved), 1 );
 				intGridValues.insert( intGridValues.indexOf(insertAfter)+1, moved );
 			}
 			else {
 				var insertBefore = toGroup.all[toGroupIdx];
-				trace("insert before "+insertBefore);
 				intGridValues.splice( intGridValues.indexOf(moved), 1 );
 				intGridValues.insert( intGridValues.indexOf(insertBefore), moved );
 			}
@@ -276,7 +273,6 @@ class LayerDef {
 	}
 
 	public function sortIntGridValueGroupDef(from:Int, to:Int) : Null<ldtk.Json.IntGridValueGroupDef> {
-		trace('$from => $to');
 		if( from<0 || from>=intGridValuesGroups.length || from==to )
 			return null;
 
