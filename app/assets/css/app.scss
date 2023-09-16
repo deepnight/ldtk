@@ -8689,6 +8689,10 @@ $patternSize : 32px;
 		grid-template-columns: repeat(7,auto);
 	}
 
+	&.size-9 {
+		grid-template-columns: repeat(9,auto);
+	}
+
 	&.preview {
 		gap: 1px;
 		border: 1px solid $bgLight;
@@ -8704,6 +8708,9 @@ $patternSize : 32px;
 		}
 		&.size-7 .cell {
 			zoom: 0.2;
+		}
+		&.size-9 .cell {
+			zoom: 0.15;
 		}
 
 		.cell {
@@ -8745,6 +8752,11 @@ $patternSize : 32px;
 			margin-top: -50%;
 		}
 		&.size-7 .cell.center canvas {
+			zoom: 3;
+			margin-left: -75%;
+			margin-top: -75%;
+		}
+		&.size-9 .cell.center canvas {
 			zoom: 3;
 			margin-left: -75%;
 			margin-top: -75%;

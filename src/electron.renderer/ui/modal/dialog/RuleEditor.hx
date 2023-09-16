@@ -257,8 +257,6 @@ class RuleEditor extends ui.modal.Dialog {
 		var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
 		for(size in sizes) {
 			var jOpt = new J('<option value="$size">${size}x$size</option>');
-			// if( size>=7 )
-			// 	jOpt.append(" (WARNING: might slow-down app)");
 			jOpt.appendTo(jSizes);
 		}
 		jSizes.change( function(_) {
