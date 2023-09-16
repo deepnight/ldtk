@@ -7667,18 +7667,21 @@ dl.form.fieldInstanceEditor {
 
 			&>li {
 				padding: 8px 2px;
-				// border: 1px solid $bgLight;
 				border-left: 3px solid $bgLighter;
 				border-radius: 2px;
-				background-color: $bgMed
-			}
-
-			&>li.none {
-				padding-left: 8px;
-				.header button {
-					display: none;
+				background-color: $bgMed;
+				&:not(.none):hover {
+					border-color: white;
+				}
+				&.none {
+					border-left: none;
+					padding-left: 8px;
+					.header button {
+						display: none;
+					}
 				}
 			}
+
 
 			.header {
 				display: grid;
@@ -7699,7 +7702,7 @@ dl.form.fieldInstanceEditor {
 
 						&:hover {
 							color: $orangeLight;
-							background-color: $bgDark;
+							// background-color: $bgDark;
 							outline: 1px dashed $bgLighter;
 						}
 					}
