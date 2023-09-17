@@ -209,7 +209,6 @@ class RuleEditor extends ui.modal.Dialog {
 		// JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
 		// jGroups.addClass("col-"+columns);
 		for(g in sourceDef.getGroupedIntGridValues()) {
-			trace(g);
 			if( g.groupUid<=0 )
 				jGroups.append('<li>Ungrouped</li>');
 			else
