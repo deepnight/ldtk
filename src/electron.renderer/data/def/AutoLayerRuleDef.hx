@@ -282,6 +282,7 @@ class AutoLayerRuleDef {
 
 		// Rule check
 		var value : Null<Int> = 0;
+		var valueInf : Null<data.DataTypes.IntGridValueDefEditor> = null;
 		var radius = Std.int( size/2 );
 		for(px in 0...size)
 		for(py in 0...size) {
@@ -302,6 +303,15 @@ class AutoLayerRuleDef {
 					return false;
 
 				if( pattern[coordId]<0 && value!=0 )
+					return false;
+			}
+			else if( dn.M.iabs( pattern[coordId] ) > 999 ) {
+				// Group checks
+				valueInf = source.def.getIntGridValueDef(value);
+				if( pattern[coordId]>0 && ( valueInf==null || valueInf.groupUid != Std.int(pattern[coordId]/1000)-1 ) )
+					return false;
+
+				if( pattern[coordId]<0 && ( valueInf==null || valueInf.groupUid == Std.int(-pattern[coordId]/1000)-1 ) )
 					return false;
 			}
 			else {
