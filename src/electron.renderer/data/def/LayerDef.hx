@@ -385,15 +385,23 @@ class LayerDef {
 	public inline function getAllIntGridValues() return intGridValues;
 
 	public function getGroupedIntGridValues() {
-		var groups : Array<{ groupUid:Int, groupInf:Null<ldtk.Json.IntGridValueGroupDef>, all:Array<IntGridValueDefEditor> }> = [];
+		var groups : Array<{
+			groupUid: Int,
+			displayName: String,
+			groupInf:Null<ldtk.Json.IntGridValueGroupDef>,
+			all:Array<IntGridValueDefEditor>
+		}> = [];
+
 		groups.push({
 			groupUid: 0,
+			displayName: "Ungrouped",
 			groupInf: null,
 			all: intGridValues.filter( iv->iv.groupUid==0 ),
 		});
 		for(g in intGridValuesGroups) {
 			groups.push({
 				groupUid: g.uid,
+				displayName: g.identifier==null ? 'Group ${g.uid}' : g.identifier,
 				groupInf: g,
 				all: intGridValues.filter( iv->iv.groupUid==g.uid ),
 			});
