@@ -134,7 +134,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 
 	function updateValuePicker() {
-		var jValues = jContent.find(">.pattern .values ul").empty();
+		var jValues = jContent.find(">.pattern .values>ul").empty();
 
 		// Values view mode
 		var stateId = settings.makeStateId(RuleValuesColumns, layerDef.uid);
@@ -168,24 +168,37 @@ class RuleEditor extends ui.modal.Dialog {
 		});
 
 		// Values picker
-		for(v in sourceDef.getAllIntGridValues()) {
-			var jVal = new J('<li/>');
-			jVal.appendTo(jValues);
-
-			jVal.css("background-color", C.intToHex(v.color));
-			jVal.append( JsTools.createIntGridValue(project,v) );
-			jVal.append('<span class="name">${v.identifier!=null ? v.identifier : ""}</span>');
-			jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
-
-			if( v.value==curValue )
-				jVal.addClass("active");
-
-			var id = v.value;
-			jVal.click( function(ev) {
-				curValue = id;
-				editor.ge.emit( LayerRuleChanged(rule) );
+		for(g in sourceDef.getGroupedIntGridValues()) {
+			trace(g.displayName);
+			var jHeader = new J('<li class="title"/>');
+			jHeader.appendTo(jValues);
+			jHeader.append('<span class="name">${g.displayName}</span>');
+			jHeader.click(_->{
+				curValue = (g.groupUid+1)*1000;
 				updateValuePicker();
 			});
+
+			var jSubList = new J('<li class="subList"><ul></ul></li>');
+			jSubList.appendTo(jValues);
+			jSubList = jSubList.find("ul");
+
+			for(v in g.all) {
+				var jVal = new J('<li/>');
+				jVal.appendTo(jSubList);
+				jVal.css("background-color", C.intToHex(v.color));
+				jVal.append( JsTools.createIntGridValue(project, v, false) );
+				jVal.append('<span class="name">${v.identifier!=null ? v.identifier : Std.string(v.value)}</span>');
+				jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
+
+				if( v.value==curValue )
+					jVal.addClass("active");
+
+				var id = v.value;
+				jVal.click( function(ev) {
+					curValue = id;
+					updateValuePicker();
+				});
+			}
 		}
 
 		// "Anything" value
@@ -205,15 +218,11 @@ class RuleEditor extends ui.modal.Dialog {
 
 
 		// Value groups
-		var jGroups = jContent.find(">.pattern .groups ul").empty();
-		// JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
-		// jGroups.addClass("col-"+columns);
-		for(g in sourceDef.getGroupedIntGridValues()) {
-			if( g.groupUid<=0 )
-				jGroups.append('<li>Ungrouped</li>');
-			else
-				jGroups.append('<li>${g.groupInf.identifier}</li>');
-		}
+		// var jGroups = jContent.find(">.pattern .groups ul").empty();
+		// // JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
+		// // jGroups.addClass("col-"+columns);
+		// for(g in sourceDef.getGroupedIntGridValues())
+		// 	jGroups.append('<li>${g.displayName}</li>');
 	}
 
 	function renderAll() {
