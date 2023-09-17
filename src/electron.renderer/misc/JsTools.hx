@@ -1315,7 +1315,7 @@ class JsTools {
 	}
 
 
-	public static function createIntGridValue(project:data.Project, ?iv:data.DataTypes.IntGridValueDefEditor, ?rawIv:ldtk.Json.IntGridValueDef) : js.jquery.JQuery {
+	public static function createIntGridValue(project:data.Project, ?iv:data.DataTypes.IntGridValueDefEditor, ?rawIv:ldtk.Json.IntGridValueDef, showInt=true) : js.jquery.JQuery {
 		if( iv==null )
 			iv = {
 				identifier: rawIv.identifier,
@@ -1326,7 +1326,9 @@ class JsTools {
 			}
 
 		var jVal = new J('<div class="intGridValue"></div>');
-		jVal.append('<span class="index">${iv.value}</span>');
+		if( showInt )
+			jVal.append('<span class="index">${iv.value}</span>');
+
 		jVal.css({
 			color: C.intToHex( iv.color.toWhite(0.5) ),
 			borderColor: C.intToHex( iv.color.toWhite(0.2) ),
@@ -1335,10 +1337,11 @@ class JsTools {
 		if( iv.tile!=null ) {
 			jVal.addClass("hasIcon");
 			jVal.append( project.resolveTileRectAsHtmlImg(iv.tile) );
-			jVal.find(".index").css({
-				color: iv.color.getAutoContrastCustom(0.4).toHex(),
-				backgroundColor: iv.color.toHex(),
-			});
+			if( showInt )
+				jVal.find(".index").css({
+					color: iv.color.getAutoContrastCustom(0.4).toHex(),
+					backgroundColor: iv.color.toHex(),
+				});
 		}
 		return jVal;
 	}
