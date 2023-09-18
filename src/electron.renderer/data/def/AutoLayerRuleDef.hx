@@ -311,7 +311,7 @@ class AutoLayerRuleDef {
 				if( pattern[coordId]>0 && ( valueInf==null || valueInf.groupUid != Std.int(pattern[coordId]/1000)-1 ) )
 					return false;
 
-				if( pattern[coordId]<0 && ( valueInf==null || valueInf.groupUid == Std.int(-pattern[coordId]/1000)-1 ) )
+				if( pattern[coordId]<0 && ( valueInf!=null && valueInf.groupUid == Std.int(-pattern[coordId]/1000)-1 ) )
 					return false;
 			}
 			else {
