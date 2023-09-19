@@ -9105,8 +9105,7 @@ $patternSize : 32px;
 		.outOfBounds,
 		.tileSettings,
 		.pattern .editor,
-		.pattern .values,
-		.pattern .groups {
+		.pattern .valuePalette {
 			width: 100%;
 			height: 100%;
 			padding: 16px;
@@ -9126,7 +9125,7 @@ $patternSize : 32px;
 		.explain {
 			display: grid;
 			align-items: center;
-			max-width: calc(400px + 8px);
+			width: 580px;
 			min-height: calc( 4em + 16px * 2 );
 			font-size: 10pt;
 			text-align: left;
@@ -9210,10 +9209,9 @@ $patternSize : 32px;
 			gap: $gutter;
 
 
-			.editor{
+			.editor {
 				display: grid;
 				grid-template-rows: min-content auto;
-				grid-row: 1/3;
 				gap: 4px;
 
 				select {
@@ -9228,21 +9226,79 @@ $patternSize : 32px;
 				}
 			}
 
-			.values,
-			.groups {
+			.valuePalette {
 				position: relative;
 				max-height: 400px;
 				overflow-y: auto;
+				padding-right: 32px;
 
-				ul {
-					display: grid;
+				button.displayMode {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: auto;
+					padding: 3px 1px;
+				}
+
+				ul.groups {
+
+					li.title {
+						padding: 3px 4px;
+						border-top-left-radius: 2px;
+						border-top-right-radius: 2px;
+						cursor: pointer;
+
+						white-space: nowrap;
+						overflow: hidden;
+
+						&:not(.active) {
+							color: $bgLighter;
+							.icon {
+								opacity: 0.4;
+							}
+						}
+
+						.icon {
+							margin-right: 3px;
+						}
+					}
+
+					li.title:not(.active):hover+li.subList {
+						outline: 1px dashed white;
+					}
+
+					li.title.active {
+						color: white;
+						font-weight: bold;
+
+						+li.subList {
+							outline: 2px solid white;
+							background-color: $bgMed;
+							outline-offset: -2px;
+							li.value {
+								filter: none;
+							}
+						}
+					}
+
+					&.col-1 {
+						li.value {
+							display: grid;
+							grid-template-columns: 32px auto;
+							.name {
+								padding: 8px;
+							}
+							+li {
+								margin-top: 1px;
+							}
+						}
+					}
 
 					&.col-2,
 					&.col-3,
 					&.col-4,
 					&.col-5 {
-						gap: 2px;
-						li {
+						ul.groupValues>li {
 							padding: 0;
 							grid-template-columns: auto;
 							justify-items: center;
@@ -9255,8 +9311,11 @@ $patternSize : 32px;
 							}
 
 							.name {
+								display: block;
 								padding: 3px 0;
+								font-size: 8.5pt;
 								font-weight: normal;
+								text-align: center;
 								overflow: hidden;
 							}
 
@@ -9270,99 +9329,85 @@ $patternSize : 32px;
 						}
 					}
 
-					&.col-2 {
+					&.col-2 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(2, 1fr);
 						li .intGridValue {
-							height: 70px;
+							height: 80px;
 						}
 					}
 
-					&.col-3 {
+					&.col-3 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(3, 1fr);
 						li .intGridValue {
 							height: 60px;
 						}
 					}
 
-					&.col-4 {
+					&.col-4 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(4, 1fr);
 						li .intGridValue {
 							height: 50px;
 						}
 					}
 
-					&.col-5 {
+					&.col-5 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(5, 1fr);
 						li .intGridValue {
 							height: 50px;
 						}
 					}
 
-					li {
-						display: grid;
-						grid-template-columns: 32px auto;
-						font-weight: bold;
-						cursor: pointer;
-						border-radius: 3px;
-						border-top: 1px solid transparentize($color: white, $amount: 0.7);
-
-						&+li {
-							margin-top: 1px;
+					li.subList {
+						margin-bottom: 8px;
+						padding: 8px;
+						>ul {
+							gap: 2px;
 						}
+						li.value {
+							cursor: pointer;
 
-						.value {
-							padding: 8px 4px;
-							font-size: 11pt;
-							text-align: center;
-							color: white;
-							background-color: transparentize($color: black, $amount: 0.9);
-						}
+							&:hover {
+								outline: 1px dashed white;
+							}
 
-						.name {
-							padding: 8px;
-							font-size: 9pt;
-						}
-
-						&:hover {
-							outline: 1px dashed white;
-						}
-
-						&.active {
-							outline: 2px solid white;
-							.value {
-								color: $bgDark;
-								background-color: white;
-								box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
+							&.active {
+								outline: 2px solid white;
+								outline-offset: -1px;
+								.value {
+									color: $bgDark;
+									background-color: white;
+									box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
+								}
+							}
+							&:not(.active) {
+								filter: brightness(0.5);
 							}
 						}
-						&:not(.active) {
-							filter: brightness(0.5);
-						}
 					}
+
 					li.any {
+						padding: 8px;
 						font-style: italic;
 						background-image: url("../img/any.png");
 						border-color: $bgDark;
+						cursor: pointer;
+
+						&:not(.active):hover {
+							outline: 1px dashed white;
+						}
+						&.active {
+							outline: 2px solid white;
+							outline-offset: -2px;
+						}
 					}
 
 				}
 			}
 
-			.values {
-				padding-right: 32px;
-				button.displayMode {
-					position: absolute;
-					top: 0;
-					right: 0;
-					width: auto;
-					padding: 3px 1px;
-				}
-			}
-
-			.groups {
-				grid-column: 1/2;
-				grid-row: 2/3;
-			}
 		}
 
 

@@ -414,6 +414,10 @@ class LayerDef {
 		return Std.int(ruleValue/1000)-1;
 	}
 
+	public inline function hasIntGridGroups() {
+		return intGridValuesGroups.length>0;
+	}
+
 	public function getGroupedIntGridValues() {
 		var groups : Array<{
 			groupUid: Int,
