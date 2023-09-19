@@ -249,6 +249,9 @@
 					"AutoLayerRuleGroup": {
 						"$ref": "#/otherTypes/AutoLayerRuleGroup"
 					},
+					"IntGridValueGroupDef": {
+						"$ref": "#/otherTypes/IntGridValueGroupDef"
+					},
 					"IntGridValueInstance": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
@@ -1609,6 +1612,39 @@
 				"object"
 			]
 		},
+		"IntGridValueGroupDef": {
+			"description": "IntGrid value group definition",
+			"title": "IntGrid value group definition",
+			"required": [
+				"uid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"color": {
+					"description": "User defined color",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				"uid": {
+					"description": "Group unique ID",
+					"type": [
+						"integer"
+					]
+				},
+				"identifier": {
+					"description": "User defined string identifier",
+					"type": [
+						"string",
+						"null"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
 		"IntGridValueInstance": {
 			"description": "IntGrid value instance",
 			"title": "IntGrid value instance",
@@ -2291,6 +2327,7 @@
 				"gridSize",
 				"identifier",
 				"intGridValues",
+				"intGridValuesGroups",
 				"parallaxFactorX",
 				"parallaxFactorY",
 				"parallaxScaling",
@@ -2406,6 +2443,15 @@
 					"description": "If TRUE, the content of this layer will be used when rendering levels in a simplified way for the world view",
 					"type": [
 						"boolean"
+					]
+				},
+				"intGridValuesGroups": {
+					"description": "Group informations for IntGrid values",
+					"items": {
+						"$ref": "#/otherTypes/IntGridValueGroupDef"
+					},
+					"type": [
+						"array"
 					]
 				},
 				"inactiveOpacity": {
@@ -2869,6 +2915,7 @@
 			"title": "IntGrid value definition",
 			"required": [
 				"color",
+				"groupUid",
 				"value"
 			],
 			"additionalProperties": false,
@@ -2901,6 +2948,12 @@
 				},
 				"value": {
 					"description": "The IntGrid value itself",
+					"type": [
+						"integer"
+					]
+				},
+				"groupUid": {
+					"description": "Parent group identifier (0 if none)",
 					"type": [
 						"integer"
 					]
