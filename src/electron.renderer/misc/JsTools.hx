@@ -4,20 +4,28 @@ import sortablejs.*;
 import sortablejs.Sortable;
 import js.node.Fs;
 
+typedef InternalSortableOptions = {
+	var ?onlyDraggables: Bool;
+	var ?disableAnim: Bool;
+}
+
 class JsTools {
 
 	/**
 		Use SortableJS to make some list sortable
 		See: https://github.com/SortableJS/Sortable
 	**/
-	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, anim=true, onSort:(event:SortableDragEvent)->Void) {
+	public static function makeSortable(jSortable:js.jquery.JQuery, ?jScrollRoot:js.jquery.JQuery, ?group:String, onSort:(event:SortableDragEvent)->Void, ?extraOptions:InternalSortableOptions) {
+		if( extraOptions==null )
+			extraOptions = {}
+
 		if( jSortable.length!=1 )
 			throw "Used sortable on a set of "+jSortable.length+" element(s)";
 
 		jSortable.addClass("sortable");
 
 		// Base settings
-		var settings : SortableOptions = {
+		var options : SortableOptions = {
 			onStart: function(ev) {
 				App.ME.jBody.addClass("sorting");
 				jSortable.addClass("sorting");
@@ -38,17 +46,22 @@ class JsTools {
 			scroll: jScrollRoot!=null ? jScrollRoot.get(0) : jSortable.get(0),
 			scrollSpeed: 40,
 			scrollSensitivity: 140,
-			filter: ".fixed",
-			animation: anim ? 100 : 0,
+			animation: extraOptions.disableAnim==true ? 0 : 100,
 		}
 
 		// Custom handle
 		if( jSortable.children().children(".sortHandle").length>0 ) {
-			settings.handle = ".sortHandle";
+			options.handle = ".sortHandle";
 			jSortable.addClass("customHandle");
 		}
 
-		Sortable.create( jSortable.get(0), settings);
+		// Extra options
+		if( extraOptions.onlyDraggables==true ) {
+			jSortable.addClass("onlyDraggables");
+			options.draggable = ".draggable";
+		}
+
+		Sortable.create( jSortable.get(0), options);
 	}
 
 
@@ -1302,17 +1315,20 @@ class JsTools {
 	}
 
 
-	public static function createIntGridValue(project:data.Project, ?iv:data.DataTypes.IntGridValueDefEditor, ?rawIv:ldtk.Json.IntGridValueDef) : js.jquery.JQuery {
+	public static function createIntGridValue(project:data.Project, ?iv:data.DataTypes.IntGridValueDefEditor, ?rawIv:ldtk.Json.IntGridValueDef, showInt=true) : js.jquery.JQuery {
 		if( iv==null )
 			iv = {
 				identifier: rawIv.identifier,
 				value: rawIv.value,
 				color: dn.Col.parseHex(rawIv.color),
 				tile: rawIv.tile,
+				groupUid: 0,
 			}
 
 		var jVal = new J('<div class="intGridValue"></div>');
-		jVal.append('<span class="index">${iv.value}</span>');
+		if( showInt )
+			jVal.append('<span class="index">${iv.value}</span>');
+
 		jVal.css({
 			color: C.intToHex( iv.color.toWhite(0.5) ),
 			borderColor: C.intToHex( iv.color.toWhite(0.2) ),
@@ -1321,10 +1337,11 @@ class JsTools {
 		if( iv.tile!=null ) {
 			jVal.addClass("hasIcon");
 			jVal.append( project.resolveTileRectAsHtmlImg(iv.tile) );
-			jVal.find(".index").css({
-				color: iv.color.getAutoContrastCustom(0.4).toHex(),
-				backgroundColor: iv.color.toHex(),
-			});
+			if( showInt )
+				jVal.find(".index").css({
+					color: iv.color.getAutoContrastCustom(0.4).toHex(),
+					backgroundColor: iv.color.toHex(),
+				});
 		}
 		return jVal;
 	}

@@ -2482,7 +2482,7 @@ textarea {
 
 		.block {
 			flex: 0 1 0px;
-			padding: 3px;
+			padding: 3px 2px;
 			min-height: 1ch;
 
 			font-size: 9pt;
@@ -2515,15 +2515,16 @@ textarea {
 				}
 			}
 			&.empty {
-				min-width: 0.4ch;
+				padding: 0;
+				min-width: 0.2ch;
 				&:hover {
 					min-width: 1ch;
 					border-style: dashed;
 					background-color: $bgLight;
 				}
-			}
-			&.empty.last {
-				min-width: 2ch;
+				&.last {
+					min-width: 2ch;
+				}
 			}
 
 			&:hover {
@@ -2560,7 +2561,7 @@ textarea {
 			white-space: nowrap;
 		}
 
-		&.sorting .fixed {
+		&.sorting .block:not(.draggable) {
 			display: none;
 		}
 	}
@@ -4428,13 +4429,20 @@ textarea {
 	z-index: 97;
 }
 
-ul.sortable:not(.customHandle) li:not(.fixed) {
-	background-image: url("../icons/dragAlpha.svg");
-	background-repeat: no-repeat;
-	background-position: left center;
-	padding-left: 32px !important;
-	&.dragging {
-		cursor: ns-resize;
+ul.sortable:not(.customHandle) {
+	&:not(.onlyDraggables)>li,
+	&.onlyDraggables>li.draggable {
+		background-image: url("../icons/dragAlpha.svg");
+		background-repeat: no-repeat;
+		background-position: left center;
+		padding-left: 32px !important;
+
+		&.dragging {
+			cursor: ns-resize;
+		}
+	}
+	&.onlyDraggables>li:not(.draggable) {
+		padding-left: 32px !important;
 	}
 }
 
@@ -7633,65 +7641,146 @@ dl.form.fieldInstanceEditor {
 		margin-left: 2px;
 	}
 
-	ul.intGridValues {
-		li {
-			position: relative;
-		}
+	dd.intGridValues {
+		padding: 10px;
+		background-color: $bgDark;
+		border-radius: 3px;
 
-		li+li {
-			margin-top: 8px;
-		}
-
-		li.value {
+		.buttons {
+			flex: 1 0 100%;
 			display: grid;
-			align-items: center;
-			grid-template-columns: min-content 2em 32px auto 64px min-content;
-			gap: 4px;
+			grid-template-columns: auto 25%;
+			gap: 2px;
+			border-radius: 2px;
+		}
 
-			input[type=color] {
-				width: 100%;
-				height: 100%;
+		ul.intGridValuesGroups {
+			flex: 1 0 100%;
+			// margin-bottom: 8px;
+			li {
+				position: relative;
 			}
 
-			input.name {
-				text-align: center;
-				font-style: italic;
+			li+li {
+				margin-top: 4px;
 			}
 
-			span.id {
-				display: grid;
-				min-width: 1.5em;
-				min-height: 1.5em;
-				align-content: center;
-				text-align: center;
-				font-weight: bold;
-				font-size: 1.3em;
-				border: 1px solid white;
-				border-radius: 3px;
-			}
-
-			span.tile {
-				align-self: stretch;
-				&:empty {
-					background-image: url("../img/stripes.png");
-					background-repeat: repeat;
+			&>li {
+				padding: 8px 2px;
+				border-left: 3px solid $bgLighter;
+				border-radius: 2px;
+				background-color: $bgMed;
+				background-position: 4px 16px;
+				&:not(.none):hover {
+					border-color: white;
+				}
+				&.none {
+					border-left: none;
+					padding-left: 8px;
+					.header button {
+						display: none;
+					}
 				}
 			}
 
-			button.remove {
-				align-self: stretch;
-				padding: 0;
-				width: 28px;
-			}
-		}
 
-		li.add button {
-			padding: 0px;
-			text-align: center;
-			font-weight: bold;
-			font-size: 200%;
-			text-decoration: none;
-			color: white;
+			.header {
+				display: grid;
+				padding: 2px;
+				padding-top: 0;
+				align-items: center;
+				grid-template-columns: min-content auto;
+				grid-auto-flow: column;
+				grid-auto-columns: min-content;
+
+				.name {
+					padding: 4px;
+					margin-right: 8px;
+					&.editable {
+						color: white;
+						font-weight: bold;
+						cursor: text;
+
+						&:hover {
+							color: $orangeLight;
+							// background-color: $bgDark;
+							outline: 1px dashed $bgLighter;
+						}
+					}
+					&:not(.editable) {
+						color: $bgLighter;
+						font-style: italic;
+					}
+				}
+
+				.groupIcon {
+					width: 1.5em;
+					height: 1.5em;
+				}
+			}
+
+			ul.intGridValuesGroup {
+				&:empty {
+					margin: 0;
+					margin-right: 16px;
+					min-height: 20px;
+					border: none;
+					background-image: url("../img/stripes.png");
+				}
+
+				&.none .groupHeader {
+					font-style: italic;
+					color: $almostWhite;
+				}
+
+				li:hover {
+					background-color: $bgLight;
+					outline: 1px solid $bgLighter;
+				}
+			}
+
+			li.value {
+				display: grid;
+				align-items: center;
+				grid-template-columns: min-content 32px 64px 32px auto min-content;
+				gap: 4px;
+
+				input[type=color] {
+					width: 100%;
+					height: 100%;
+				}
+
+				input.name {
+					text-align: center;
+					font-style: italic;
+				}
+
+				span.id {
+					display: grid;
+					min-width: 1.5em;
+					min-height: 1.5em;
+					align-content: center;
+					text-align: center;
+					font-weight: bold;
+					font-size: 1.3em;
+					border: 1px solid white;
+					border-radius: 3px;
+				}
+
+				span.tile {
+					align-self: stretch;
+					&:empty {
+						background-image: url("../img/stripes.png");
+						background-repeat: repeat;
+					}
+				}
+
+				button.remove {
+					align-self: stretch;
+					padding: 0;
+					width: 28px;
+				}
+			}
 		}
 	}
 
@@ -8594,6 +8683,10 @@ $patternSize : 32px;
 		grid-template-columns: repeat(7,auto);
 	}
 
+	&.size-9 {
+		grid-template-columns: repeat(9,auto);
+	}
+
 	&.preview {
 		gap: 1px;
 		border: 1px solid $bgLight;
@@ -8609,6 +8702,9 @@ $patternSize : 32px;
 		}
 		&.size-7 .cell {
 			zoom: 0.2;
+		}
+		&.size-9 .cell {
+			zoom: 0.15;
 		}
 
 		.cell {
@@ -8626,7 +8722,8 @@ $patternSize : 32px;
 				box-sizing: border-box;
 				padding: 2px;
 
-				background-color: black;
+				background-color: gray;
+				background-image: url("../img/stripes.png");
 				border: 1px solid white;
 				border-radius: 3px;
 				box-shadow: 0px 2px 4px black;
@@ -8650,6 +8747,11 @@ $patternSize : 32px;
 			margin-top: -50%;
 		}
 		&.size-7 .cell.center canvas {
+			zoom: 3;
+			margin-left: -75%;
+			margin-top: -75%;
+		}
+		&.size-9 .cell.center canvas {
 			zoom: 3;
 			margin-left: -75%;
 			margin-top: -75%;
@@ -8716,6 +8818,15 @@ $patternSize : 32px;
 			}
 		}
 
+		&.group {
+			background-image: url("../icons/folderClose.svg");
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: 65%;
+			outline: 1px solid white;
+			outline-offset: -2px;
+		}
+
 		.cellIcon {
 			width: $patternSize;
 			height: $patternSize;
@@ -8730,7 +8841,7 @@ $patternSize : 32px;
 
 			&.cross {
 				background-image: url("../icons/cross.png");
-				background-size: 50%;
+				background-size: 65%;
 			}
 
 			&.nothing {
@@ -8994,7 +9105,7 @@ $patternSize : 32px;
 		.outOfBounds,
 		.tileSettings,
 		.pattern .editor,
-		.pattern .values {
+		.pattern .valuePalette {
 			width: 100%;
 			height: 100%;
 			padding: 16px;
@@ -9014,7 +9125,7 @@ $patternSize : 32px;
 		.explain {
 			display: grid;
 			align-items: center;
-			max-width: calc(400px + 8px);
+			width: 580px;
 			min-height: calc( 4em + 16px * 2 );
 			font-size: 10pt;
 			text-align: left;
@@ -9074,6 +9185,8 @@ $patternSize : 32px;
 					cursor: pointer;
 					width: 24px !important;
 					height: 24px !important;
+					background-color: gray;
+					background-image: url("../img/stripes.png");
 
 					&:hover {
 						border-color: white;
@@ -9096,7 +9209,7 @@ $patternSize : 32px;
 			gap: $gutter;
 
 
-			.editor{
+			.editor {
 				display: grid;
 				grid-template-rows: min-content auto;
 				gap: 4px;
@@ -9113,7 +9226,7 @@ $patternSize : 32px;
 				}
 			}
 
-			.values {
+			.valuePalette {
 				position: relative;
 				max-height: 400px;
 				overflow-y: auto;
@@ -9127,15 +9240,65 @@ $patternSize : 32px;
 					padding: 3px 1px;
 				}
 
-				ul {
-					display: grid;
+				ul.groups {
+
+					li.title {
+						padding: 3px 4px;
+						border-top-left-radius: 2px;
+						border-top-right-radius: 2px;
+						cursor: pointer;
+
+						white-space: nowrap;
+						overflow: hidden;
+
+						&:not(.active) {
+							color: $bgLighter;
+							.icon {
+								opacity: 0.4;
+							}
+						}
+
+						.icon {
+							margin-right: 3px;
+						}
+					}
+
+					li.title:not(.active):hover+li.subList {
+						outline: 1px dashed white;
+					}
+
+					li.title.active {
+						color: white;
+						font-weight: bold;
+
+						+li.subList {
+							outline: 2px solid white;
+							background-color: $bgMed;
+							outline-offset: -2px;
+							li.value {
+								filter: none;
+							}
+						}
+					}
+
+					&.col-1 {
+						li.value {
+							display: grid;
+							grid-template-columns: 32px auto;
+							.name {
+								padding: 8px;
+							}
+							+li {
+								margin-top: 1px;
+							}
+						}
+					}
 
 					&.col-2,
 					&.col-3,
 					&.col-4,
 					&.col-5 {
-						gap: 2px;
-						li {
+						ul.groupValues>li {
 							padding: 0;
 							grid-template-columns: auto;
 							justify-items: center;
@@ -9148,8 +9311,11 @@ $patternSize : 32px;
 							}
 
 							.name {
+								display: block;
 								padding: 3px 0;
+								font-size: 8.5pt;
 								font-weight: normal;
+								text-align: center;
 								overflow: hidden;
 							}
 
@@ -9163,84 +9329,85 @@ $patternSize : 32px;
 						}
 					}
 
-					&.col-2 {
+					&.col-2 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(2, 1fr);
 						li .intGridValue {
-							height: 70px;
+							height: 80px;
 						}
 					}
 
-					&.col-3 {
+					&.col-3 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(3, 1fr);
 						li .intGridValue {
 							height: 60px;
 						}
 					}
 
-					&.col-4 {
+					&.col-4 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(4, 1fr);
 						li .intGridValue {
 							height: 50px;
 						}
 					}
 
-					&.col-5 {
+					&.col-5 ul.groupValues {
+						display: grid;
 						grid-template-columns: repeat(5, 1fr);
 						li .intGridValue {
 							height: 50px;
 						}
 					}
 
-					li {
-						display: grid;
-						grid-template-columns: 32px auto;
-						font-weight: bold;
-						cursor: pointer;
-						border-radius: 3px;
-						border-top: 1px solid transparentize($color: white, $amount: 0.7);
-
-						&+li {
-							margin-top: 1px;
+					li.subList {
+						margin-bottom: 8px;
+						padding: 8px;
+						>ul {
+							gap: 2px;
 						}
+						li.value {
+							cursor: pointer;
 
-						.value {
-							padding: 8px 4px;
-							font-size: 11pt;
-							text-align: center;
-							color: white;
-							background-color: transparentize($color: black, $amount: 0.9);
-						}
+							&:hover {
+								outline: 1px dashed white;
+							}
 
-						.name {
-							padding: 8px;
-							font-size: 9pt;
-						}
-
-						&:hover {
-							outline: 1px dashed white;
-						}
-
-						&.active {
-							outline: 2px solid white;
-							.value {
-								color: $bgDark;
-								background-color: white;
-								box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
+							&.active {
+								outline: 2px solid white;
+								outline-offset: -1px;
+								.value {
+									color: $bgDark;
+									background-color: white;
+									box-shadow: 0px 4px 8px transparentize($color: black, $amount: 0.6);
+								}
+							}
+							&:not(.active) {
+								filter: brightness(0.5);
 							}
 						}
-						&:not(.active) {
-							filter: brightness(0.5);
-						}
 					}
+
 					li.any {
+						padding: 8px;
 						font-style: italic;
 						background-image: url("../img/any.png");
 						border-color: $bgDark;
+						cursor: pointer;
+
+						&:not(.active):hover {
+							outline: 1px dashed white;
+						}
+						&.active {
+							outline: 2px solid white;
+							outline-offset: -2px;
+						}
 					}
 
 				}
-
 			}
+
 		}
 
 

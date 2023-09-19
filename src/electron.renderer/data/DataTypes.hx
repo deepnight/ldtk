@@ -12,6 +12,7 @@ typedef IntGridValueDefEditor = {
 	var identifier : Null<String>;
 	var color : dn.Col;
 	var tile : Null<ldtk.Json.TilesetRect>;
+	var groupUid : Int;
 }
 
 enum ValueWrapper {

@@ -306,7 +306,7 @@ class FieldDefsForm {
 		}
 
 		// Make fields list sortable
-		JsTools.makeSortable(jList, false, function(ev) {
+		JsTools.makeSortable(jList, function(ev) {
 			var from = ev.oldIndex;
 			var to = ev.newIndex;
 
@@ -322,7 +322,7 @@ class FieldDefsForm {
 			selectField(moved);
 			editor.ge.emit( FieldDefSorted );
 			onAnyChange();
-		});
+		}, { disableAnim:true });
 
 		JsTools.parseComponents(jList);
 	}

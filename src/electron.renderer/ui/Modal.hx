@@ -58,7 +58,6 @@ class Modal extends dn.Process {
 
 
 	public function setAnchor(a:ModalAnchor, applyNow=false) {
-		trace(a);
 		this.anchor = a;
 		if( applyNow )
 			applyAnchor();
@@ -170,9 +169,6 @@ class Modal extends dn.Process {
 			editor.ge.removeListener(onGlobalEvent);
 
 		jModalAndMask.remove();
-		jModalAndMask = null;
-		jMask = null;
-		jContent = null;
 
 		if( hasAnyOpen() ) {
 			for(e in ALL)

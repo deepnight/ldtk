@@ -192,7 +192,7 @@ class Const {
 	}
 
 	public static var AUTO_LAYER_ANYTHING = 1000001;
-	public static var MAX_AUTO_PATTERN_SIZE = 7;
+	public static var MAX_AUTO_PATTERN_SIZE = 9;
 	#end
 
 

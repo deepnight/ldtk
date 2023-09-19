@@ -311,7 +311,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		for( group in tagGroups) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed collapser"/>');
+				var jSep = new J('<li class="title collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.appendTo(jList);
 				jSep.attr("id", project.iid+"_tileset_tag_"+group.tag);
@@ -335,7 +335,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jSubList.appendTo(jLi);
 
 			for(td in group.all) {
-				var jLi = new J("<li/>");
+				var jLi = new J('<li class="draggable"/>');
 				jSubList.append(jLi);
 
 				jLi.append('<span class="name">'+td.identifier+'</span>');
@@ -398,7 +398,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 				var moved = project.defs.sortTilesetDef(fromIdx, toIdx);
 				selectTileset(moved);
 				editor.ge.emit(TilesetDefSorted);
-			});
+			}, { onlyDraggables:true });
 		}
 
 		JsTools.parseComponents(jList);

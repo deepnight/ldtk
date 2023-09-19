@@ -36,6 +36,7 @@ class LayerDef {
 	// IntGrid
 	@:allow(importer)
 	var intGridValues : Array<IntGridValueDefEditor> = [];
+	var intGridValuesGroups : Array<ldtk.Json.IntGridValueGroupDef> = [];
 
 	// IntGrid/AutoLayers
 	public var autoSourceLayerDefUid : Null<Int>;
@@ -113,18 +114,29 @@ class LayerDef {
 		o.excludedTags = Tags.fromJson(json.excludedTags);
 
 		o.intGridValues = [];
+		o.intGridValuesGroups = [];
 		if( o.type==IntGrid ) {
-			var all : Array<IntGridValueDefEditor> = JsonTools.readArray(json.intGridValues);
+			// IntGrid values
+			var allValues : Array<IntGridValueDefEditor> = JsonTools.readArray(json.intGridValues);
 			var fixedIdx = 1; // fix old projects missing intgrid "value" field
-			for( v in all ) {
+			for( v in allValues ) {
 				o.intGridValues.push({
 					value: M.isValidNumber(v.value) ? v.value : fixedIdx,
 					identifier: v.identifier,
 					color: JsonTools.readColor(v.color),
 					tile: JsonTools.readTileRect(v.tile, true),
+					groupUid: JsonTools.readInt(v.groupUid, 0),
 				});
 				fixedIdx++;
 			}
+			// Groups
+			if( json.intGridValuesGroups==null )
+				json.intGridValuesGroups = [];
+			o.intGridValuesGroups = json.intGridValuesGroups.map(g->{
+				uid: g.uid,
+				identifier: g.identifier,
+				color: g.color,
+			});
 		}
 
 		o.autoSourceLayerDefUid = JsonTools.readNullableInt(json.autoSourceLayerDefUid);
@@ -180,6 +192,13 @@ class LayerDef {
 				identifier: iv.identifier,
 				color: JsonTools.writeColor(iv.color),
 				tile: JsonTools.writeTileRect(iv.tile),
+				groupUid: iv.groupUid,
+			}),
+
+			intGridValuesGroups: intGridValuesGroups.map(g->{
+				uid: g.uid,
+				identifier: g.identifier,
+				color: g.color,
 			}),
 
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -224,18 +243,46 @@ class LayerDef {
 	}
 
 
-	public function sortIntGridValueDef(from:Int, to:Int) : Null<IntGridValueDefEditor> {
+	public function sortIntGridValueDef(valueId:Int, fromGroupUid:Int, toGroupUid:Int, fromGroupIdx:Int, toGroupIdx:Int) : Null<IntGridValueDefEditor> {
 		if( type!=IntGrid )
 			return null;
 
-		if( from<0 || from>=intGridValues.length || from==to )
+		if( !hasIntGridValue(valueId) || fromGroupUid==toGroupUid && fromGroupIdx==toGroupIdx )
 			return null;
 
-		if( to<0 || to>=intGridValues.length )
+		var groupedValues = getGroupedIntGridValues();
+		var moved = getIntGridValueDef(valueId);
+
+		// Order values
+		var toGroup = groupedValues.filter( g->g.groupUid==toGroupUid )[0];
+		if( toGroup.all.length>0 ) {
+			if( toGroupIdx>=toGroup.all.length || fromGroupUid==toGroupUid && toGroupIdx>fromGroupIdx ) {
+				var insertAfter = toGroup.all[toGroup.all.length-1];
+				intGridValues.splice( intGridValues.indexOf(moved), 1 );
+				intGridValues.insert( intGridValues.indexOf(insertAfter)+1, moved );
+			}
+			else {
+				var insertBefore = toGroup.all[toGroupIdx];
+				intGridValues.splice( intGridValues.indexOf(moved), 1 );
+				intGridValues.insert( intGridValues.indexOf(insertBefore), moved );
+			}
+		}
+
+		// Change group
+		moved.groupUid = toGroupUid;
+
+		return moved;
+	}
+
+	public function sortIntGridValueGroupDef(from:Int, to:Int) : Null<ldtk.Json.IntGridValueGroupDef> {
+		if( from<0 || from>=intGridValuesGroups.length || from==to )
 			return null;
 
-		var moved = intGridValues.splice(from,1)[0];
-		intGridValues.insert(to, moved);
+		if( to<0 || to>=intGridValuesGroups.length )
+			return null;
+
+		var moved = intGridValuesGroups.splice(from,1)[0];
+		intGridValuesGroups.insert(to, moved);
 
 		return moved;
 	}
@@ -259,10 +306,27 @@ class LayerDef {
 			color: col,
 			identifier: id,
 			tile: null,
+			groupUid: 0,
 		});
 
 		return iv;
 	}
+
+
+	public function addIntGridGroup() : ldtk.Json.IntGridValueGroupDef {
+		var uniqUid = 1;
+		for(g in intGridValuesGroups)
+			uniqUid = M.imax(uniqUid, g.uid+1);
+
+		var g : ldtk.Json.IntGridValueGroupDef = {
+			uid: uniqUid,
+			identifier: null,
+			color: null,
+		}
+		intGridValuesGroups.push(g);
+		return g;
+	}
+
 
 	public inline function hasIntGridValue(v:Int) {
 		return getIntGridValueDef(v)!=null;
@@ -307,7 +371,81 @@ class LayerDef {
 		return false;
 	}
 
+	public function removeIntGridGroup(groupUid:Int) : Bool {
+		for(iv in intGridValues)
+			if( iv.groupUid==groupUid )
+				return false;
+
+		for(g in intGridValuesGroups)
+			if( g.uid==groupUid ) {
+				intGridValuesGroups.remove(g);
+				return true;
+			}
+
+		return false;
+	}
+
 	public inline function getAllIntGridValues() return intGridValues;
+
+	public function getIntGridGroup(groupUid:Int, returnUngrouped=true) {
+		for(g in intGridValuesGroups)
+			if( g.uid==groupUid )
+				return {
+					groupUid: g.uid,
+					displayName: g.identifier==null ? 'Group ${g.uid}' : g.identifier,
+					color: g.color==null ? null : dn.Col.parseHex(g.color),
+					groupInf: g,
+					all: intGridValues.filter( iv->iv.groupUid==g.uid ),
+				}
+
+		if( returnUngrouped )
+			return {
+				groupUid: 0,
+				displayName: "Ungrouped",
+				color: null,
+				groupInf: null,
+				all: intGridValues.filter( iv->iv.groupUid==0 ),
+			}
+		else
+			return null;
+	}
+
+	public inline function resolveIntGridGroupUidFromRuleValue(ruleValue:Int) {
+		return Std.int(ruleValue/1000)-1;
+	}
+
+	public inline function hasIntGridGroups() {
+		return intGridValuesGroups.length>0;
+	}
+
+	public function getGroupedIntGridValues() {
+		var groups : Array<{
+			groupUid: Int,
+			displayName: String,
+			color: Null<dn.Col>,
+			groupInf:Null<ldtk.Json.IntGridValueGroupDef>,
+			all:Array<IntGridValueDefEditor>
+		}> = [];
+
+		groups.push({
+			groupUid: 0,
+			displayName: "Ungrouped",
+			color: null,
+			groupInf: null,
+			all: intGridValues.filter( iv->iv.groupUid==0 ),
+		});
+		for(g in intGridValuesGroups) {
+			groups.push({
+				groupUid: g.uid,
+				displayName: g.identifier==null ? 'Group ${g.uid}' : g.identifier,
+				color: g.color==null ? null : dn.Col.parseHex(g.color),
+				groupInf: g,
+				all: intGridValues.filter( iv->iv.groupUid==g.uid ),
+			});
+		}
+		return groups;
+	}
+
 	public inline function countIntGridValues() return intGridValues.length;
 
 	public function isIntGridValueIdentifierValid(id:Null<String>) {
