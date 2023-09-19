@@ -387,7 +387,7 @@ class LayerDef {
 
 	public inline function getAllIntGridValues() return intGridValues;
 
-	public function getIntGridGroup(groupUid:Int) {
+	public function getIntGridGroup(groupUid:Int, returnUngrouped=true) {
 		for(g in intGridValuesGroups)
 			if( g.uid==groupUid )
 				return {
@@ -398,13 +398,20 @@ class LayerDef {
 					all: intGridValues.filter( iv->iv.groupUid==g.uid ),
 				}
 
-		return {
-			groupUid: 0,
-			displayName: "Ungrouped",
-			color: null,
-			groupInf: null,
-			all: intGridValues.filter( iv->iv.groupUid==0 ),
-		}
+		if( returnUngrouped )
+			return {
+				groupUid: 0,
+				displayName: "Ungrouped",
+				color: null,
+				groupInf: null,
+				all: intGridValues.filter( iv->iv.groupUid==0 ),
+			}
+		else
+			return null;
+	}
+
+	public inline function resolveIntGridGroupUidFromRuleValue(ruleValue:Int) {
+		return Std.int(ruleValue/1000)-1;
 	}
 
 	public function getGroupedIntGridValues() {

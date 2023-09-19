@@ -263,7 +263,13 @@ class AutoLayerRuleDef {
 		for(px in 0...size)
 		for(py in 0...size) {
 			v = dn.M.iabs( pattern[px+py*size] );
-			if( v!=0 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridValue(v) )
+			if( v==0 )
+				continue;
+
+			if( v<=999 && !ld.hasIntGridValue(v) )
+				return true;
+
+			if( v>999 && v!=Const.AUTO_LAYER_ANYTHING && ld.getIntGridGroup( ld.resolveIntGridGroupUidFromRuleValue(v), false )==null )
 				return true;
 		}
 
