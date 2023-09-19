@@ -7670,6 +7670,7 @@ dl.form.fieldInstanceEditor {
 				border-left: 3px solid $bgLighter;
 				border-radius: 2px;
 				background-color: $bgMed;
+				background-position: 4px 16px;
 				&:not(.none):hover {
 					border-color: white;
 				}
@@ -7688,7 +7689,7 @@ dl.form.fieldInstanceEditor {
 				padding: 2px;
 				padding-top: 0;
 				align-items: center;
-				grid-template-columns: auto;
+				grid-template-columns: min-content auto;
 				grid-auto-flow: column;
 				grid-auto-columns: min-content;
 
@@ -7712,16 +7713,9 @@ dl.form.fieldInstanceEditor {
 					}
 				}
 
-				button {
-					padding: 1px;
-					opacity: 0.7;
-					.icon {
-						width: 1.4em;
-						height: 1.4em;
-					}
-					&:hover {
-						opacity: 1;
-					}
+				.groupIcon {
+					width: 1.5em;
+					height: 1.5em;
 				}
 			}
 
@@ -8823,6 +8817,15 @@ $patternSize : 32px;
 			}
 		}
 
+		&.group {
+			background-image: url("../icons/folderClose.svg");
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: 65%;
+			outline: 1px solid white;
+			outline-offset: -2px;
+		}
+
 		.cellIcon {
 			width: $patternSize;
 			height: $patternSize;
@@ -8837,7 +8840,7 @@ $patternSize : 32px;
 
 			&.cross {
 				background-image: url("../icons/cross.png");
-				background-size: 50%;
+				background-size: 65%;
 			}
 
 			&.nothing {
