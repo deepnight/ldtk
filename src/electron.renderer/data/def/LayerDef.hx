@@ -135,6 +135,7 @@ class LayerDef {
 			o.intGridValuesGroups = json.intGridValuesGroups.map(g->{
 				uid: g.uid,
 				identifier: g.identifier,
+				color: g.color,
 			});
 		}
 
@@ -197,6 +198,7 @@ class LayerDef {
 			intGridValuesGroups: intGridValuesGroups.map(g->{
 				uid: g.uid,
 				identifier: g.identifier,
+				color: g.color,
 			}),
 
 			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
@@ -319,6 +321,7 @@ class LayerDef {
 		var g : ldtk.Json.IntGridValueGroupDef = {
 			uid: uniqUid,
 			identifier: null,
+			color: null,
 		}
 		intGridValuesGroups.push(g);
 		return g;
@@ -384,10 +387,31 @@ class LayerDef {
 
 	public inline function getAllIntGridValues() return intGridValues;
 
+	public function getIntGridGroup(groupUid:Int) {
+		for(g in intGridValuesGroups)
+			if( g.uid==groupUid )
+				return {
+					groupUid: g.uid,
+					displayName: g.identifier==null ? 'Group ${g.uid}' : g.identifier,
+					color: g.color==null ? null : dn.Col.parseHex(g.color),
+					groupInf: g,
+					all: intGridValues.filter( iv->iv.groupUid==g.uid ),
+				}
+
+		return {
+			groupUid: 0,
+			displayName: "Ungrouped",
+			color: null,
+			groupInf: null,
+			all: intGridValues.filter( iv->iv.groupUid==0 ),
+		}
+	}
+
 	public function getGroupedIntGridValues() {
 		var groups : Array<{
 			groupUid: Int,
 			displayName: String,
+			color: Null<dn.Col>,
 			groupInf:Null<ldtk.Json.IntGridValueGroupDef>,
 			all:Array<IntGridValueDefEditor>
 		}> = [];
@@ -395,6 +419,7 @@ class LayerDef {
 		groups.push({
 			groupUid: 0,
 			displayName: "Ungrouped",
+			color: null,
 			groupInf: null,
 			all: intGridValues.filter( iv->iv.groupUid==0 ),
 		});
@@ -402,6 +427,7 @@ class LayerDef {
 			groups.push({
 				groupUid: g.uid,
 				displayName: g.identifier==null ? 'Group ${g.uid}' : g.identifier,
+				color: g.color==null ? null : dn.Col.parseHex(g.color),
 				groupInf: g,
 				all: intGridValues.filter( iv->iv.groupUid==g.uid ),
 			});

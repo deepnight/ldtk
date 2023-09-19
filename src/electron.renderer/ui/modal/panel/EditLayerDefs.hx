@@ -487,6 +487,9 @@ class EditLayerDefs extends ui.modal.Panel {
 					var jGroupWrapper = jForm.find("xml#intGridValuesGroup").clone().children().wrapAll("<li/>").parent();
 					jGroupWrapper.appendTo(jAllGroups);
 
+					if( g.color!=null )
+						jGroupWrapper.css('background-color', g.color.toCssRgba(0.7));
+
 					if( g.groupUid!=0 )
 						jGroupWrapper.addClass("draggable");
 
@@ -494,6 +497,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					var jGroupHeader = jGroupWrapper.find(".header");
 					if( groupedValues.length==1 )
 						jGroupHeader.hide();
+					var jIcon = jGroupHeader.find(".groupIcon");
 					var jName = jGroupHeader.find(".name");
 					switch g.groupUid {
 						case 0 :
@@ -506,7 +510,9 @@ class EditLayerDefs extends ui.modal.Panel {
 							jName.text(g.displayName);
 							jName.click(_->{
 								var jInput = new J('<input type="text"/>');
-								jName.replaceWith(jInput);
+								jInput.insertAfter(jName);
+								jName.hide();
+								// jName.replaceWith(jInput);
 								jInput.focus();
 								if( g.groupInf.identifier==null )
 									jInput.attr("placeholder", g.displayName);
@@ -514,7 +520,13 @@ class EditLayerDefs extends ui.modal.Panel {
 								if( g.groupInf.identifier!=null )
 									jInput.val(g.groupInf.identifier);
 
+								var original = jInput.val();
 								jInput.blur(_->{
+									if( jInput.val()==original ) {
+										jName.show();
+										jInput.remove();
+										return;
+									}
 									var identifier = data.Project.cleanupIdentifier(jInput.val(), Free);
 									g.groupInf.identifier = identifier;
 									editor.ge.emit( LayerDefChanged(cur.uid) );
@@ -528,28 +540,51 @@ class EditLayerDefs extends ui.modal.Panel {
 								});
 							});
 
-							// Delete group
-							jGroupHeader.find("button.delete").click((ev:js.jquery.Event)->{
-								if( g.all.length>0 ) {
-									// Move all values back to "ungrouped"
-									new ui.modal.dialog.Confirm(
-										new J(ev.target),
-										L.t._("Deleting this group will move all its values back to \"ungrouped\". Confirm?"),
-										true,
-										()->{
-											for(iv in g.all)
-												iv.groupUid = 0;
-											cur.removeIntGridGroup(g.groupUid);
-											editor.ge.emitAtTheEndOfFrame( LayerDefChanged(cur.uid) );
+							var act : Array<ui.modal.ContextMenu.ContextAction> = [
+								{ // Delete group
+									label: L._Delete(L.t._("group")),
+									enable: ()->g.groupUid>0,
+									cb: ()->{
+										if( g.all.length>0 ) {
+											// Move all values back to "ungrouped"
+											new ui.modal.dialog.Confirm(
+												L.t._("Deleting this group will move all its values back to \"UNGROUPED\". Confirm?"),
+												true,
+												()->{
+													for(iv in g.all)
+														iv.groupUid = 0;
+													cur.removeIntGridGroup(g.groupUid);
+													editor.ge.emitAtTheEndOfFrame( LayerDefChanged(cur.uid) );
+												}
+											);
 										}
-									);
-								}
-								else {
-									// Empty group
-									cur.removeIntGridGroup(g.groupUid);
-									editor.ge.emit( LayerDefChanged(cur.uid) );
-								}
-							});
+										else {
+											// Empty group
+											cur.removeIntGridGroup(g.groupUid);
+											editor.ge.emit( LayerDefChanged(cur.uid) );
+										}
+									}
+								},
+								{ // Custom color
+									label: L.t._("Set group color"),
+									cb: ()->{
+										var cp = new ui.modal.dialog.ColorPicker( Const.getNicePalette(), g.color, true );
+										cp.onValidate = (c)->{
+											g.groupInf.color = c.toHex();
+											editor.ge.emit( LayerDefChanged(cur.uid) );
+										}
+									},
+								},
+								{ // Remove custom color
+									label: L.t._("Remove group color"),
+									show: ()->g.color!=null,
+									cb: ()->{
+										g.groupInf.color = null;
+										editor.ge.emit( LayerDefChanged(cur.uid) );
+									},
+								},
+							];
+							ContextMenu.addTo(jGroupHeader, act);
 					}
 
 					var jGroup = jGroupWrapper.find(".intGridValuesGroup");
