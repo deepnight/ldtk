@@ -8722,7 +8722,8 @@ $patternSize : 32px;
 				box-sizing: border-box;
 				padding: 2px;
 
-				background-color: black;
+				background-color: gray;
+				background-image: url("../img/stripes.png");
 				border: 1px solid white;
 				border-radius: 3px;
 				box-shadow: 0px 2px 4px black;
@@ -9185,6 +9186,8 @@ $patternSize : 32px;
 					cursor: pointer;
 					width: 24px !important;
 					height: 24px !important;
+					background-color: gray;
+					background-image: url("../img/stripes.png");
 
 					&:hover {
 						border-color: white;

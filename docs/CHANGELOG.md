@@ -4,6 +4,7 @@
  - Added a "symetric link" option to Auto-Layer rules offsets
  - Increased the max number of columns in Select components
  - Fixed out-of-screen color picker window
+ - Added background behind transparent rule tiles
 
 # 1.3.4
 
