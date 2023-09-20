@@ -1,10 +1,20 @@
 # 1.3.5
 
+## Groups of Int Grid values
+![](1.3.5/intGridGroups.png)
+
+You can now create custom groups for your Int Grid layers values, allowing more advanced rules based on these groups.
+For example, this would allow to render plants only over values from a "Walls" group, and not over values from a "Water" group.
+
+## Other changes
+
  - Added customizable rule groups colors
  - Added a "symetric link" option to Auto-Layer rules offsets
  - Increased the max number of columns in Select components
  - Fixed out-of-screen color picker window
  - Added background behind transparent rule tiles
+ - Added more integrated icons: check marks, circles, buttons, cogs, etc.
+ - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
 
 # 1.3.4
 
