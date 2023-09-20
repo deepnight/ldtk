@@ -1,10 +1,15 @@
 # 1.4.0 - Int grid value groups
 
+## Grid view in tool palettes
+![](1.4.0/paletteGridView.png)
+
+Entity and Int Grid tool palettes can now be displayed in grid modes, for a much more compact experience.
+
 ## Groups of Int Grid values
 ![](1.4.0/intGridGroups.png)
 
-You can now create custom groups for your Int Grid layers values, allowing more advanced rules based on these groups.
-For example, this would allow to render plants only over values from a "Walls" group, and not over values from a "Water" group.
+You can now create custom groups for your Int Grid values, allowing much more advanced rules based on these groups.
+For example, you may render "vegetation" tiles only over values from a "Solid Walls" group, and not over values from a "Water" group.
 
 ## Other changes
 
@@ -16,6 +21,9 @@ For example, this would allow to render plants only over values from a "Walls" g
  - Added background behind transparent rule tiles
  - Added more integrated icons: check marks, circles, buttons, cogs, etc.
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
+ - Reworked start screen design
+ - Many bug fixes
+
 
 # 1.3.4
 
