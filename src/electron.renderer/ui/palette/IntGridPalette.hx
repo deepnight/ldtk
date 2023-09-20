@@ -62,7 +62,7 @@ class IntGridPalette extends ui.ToolPalette {
 				var jTitle = new J('<li class="title collapser"/>');
 				jTitle.appendTo(jList);
 				jTitle.text(g.displayName);
-				jTitle.attr("id", project.iid+"_intGridPalette_group_"+g.groupUid);
+				jTitle.attr("id", project.iid+"_intGridPalette_"+tool.curLayerInstance.layerDefUid+"_group_"+g.groupUid);
 				jTitle.attr("default", "open");
 			}
 
@@ -96,7 +96,7 @@ class IntGridPalette extends ui.ToolPalette {
 
 				// Label
 				if( intGridVal.identifier!=null )
-					jLi.append(intGridVal.identifier);
+					jLi.append('<span class="name">${intGridVal.identifier}</span>');
 
 				var curValue = intGridVal.value;
 				jLi.click( function(_) {
