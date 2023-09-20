@@ -8,6 +8,7 @@ For example, this would allow to render plants only over values from a "Walls" g
 
 ## Other changes
 
+ - Added "grid views" to Entity and Int Grid side bars
  - Added customizable rule groups colors
  - Added a "symetric link" option to Auto-Layer rules offsets
  - Increased the max number of columns in Select components
