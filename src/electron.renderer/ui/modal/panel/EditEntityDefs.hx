@@ -173,7 +173,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			return;
 		}
 
-		JsTools.parseComponents(jEntityForm);
 		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
 
@@ -541,6 +540,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jPivots.append(p);
 
 		checkBackup();
+		JsTools.parseComponents(jEntityForm);
 	}
 
 
