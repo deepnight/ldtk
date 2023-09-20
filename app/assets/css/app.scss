@@ -5520,11 +5520,51 @@ canvas#webgl {
 			background-position: bottom center;
 
 			.version {
-				font-size: 150pt;
-				color: $bgLight;
-				opacity: 0.3;
+				display: grid;
+				width: 500px;
+				grid-auto-flow: column;
+				grid-auto-columns: min-content;
 				text-align: center;
 				margin-top: 8px;
+				white-space: nowrap;
+				font-size: 0;
+
+				* {
+					display: inline-block;
+					// letter-spacing: -0.15em;
+					font-size: 132px;
+				}
+
+				strong {
+					padding-left: 8px;
+					padding-right: 16px;
+					color: $bgDark;
+					font-weight: bold;
+					text-shadow: 0px 0px 32px transparentize($orange, 0.7);
+					background-color: $orange;
+					border-radius: 4px;
+				}
+
+				em {
+					display: none;
+				}
+
+				&.patchRelease {
+					strong {
+						border-top-right-radius: 0;
+						border-bottom-right-radius: 0;
+					}
+					em {
+						display: inline-block;
+						padding-right: 16px;
+						color: $bgLighter;
+						font-style: normal;
+						border-radius: 4px;
+						border-top-left-radius: 0;
+						border-bottom-left-radius: 0;
+						background-color: $bgMed;
+					}
+				}
 			}
 
 			.appLogo {

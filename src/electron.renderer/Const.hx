@@ -12,6 +12,10 @@ class Const {
 			].join("-");
 	}
 
+	public static function getAppVersionObj() {
+		return new dn.Version(APP_VERSION);
+	}
+
 	public static function getAppBuildId() : Float {
 		return Std.int(  dn.MacroTools.getBuildTimeStampSeconds() / (60*60)  );
 	}

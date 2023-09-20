@@ -12,9 +12,12 @@ class Home extends Page {
 
 		ME = this;
 		var changeLog = Const.getChangeLog();
+		var ver = Const.getAppVersionObj();
 		loadPageTemplate("home", {
 			app: Const.APP_NAME,
-			appVer: Const.getAppVersion(true),
+			majorVer: ver.major,
+			minorVer: ver.minor,
+			patchVer: ver.patch,
 			buildDate: dn.MacroTools.getHumanBuildDate(),
 			latestVer: changeLog.latest.version,
 			latestDesc: changeLog.latest.title==null ? L.t._("Release notes") : '"'+changeLog.latest.title+'"',
@@ -27,6 +30,10 @@ class Home extends Page {
 			email: Const.getContactEmail(),
 		});
 		App.ME.setWindowTitle();
+
+		// Hide patch version if zero
+		if( ver.patch!=0 )
+			jPage.find("header .version").addClass("patchRelease");
 
 		jPage.find(".changelogs code").each( function(idx,e) {
 			var jCode = new J(e);
