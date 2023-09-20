@@ -448,6 +448,37 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 
+		// UI override tile
+		JsTools.createTilesetSelect(
+			project,
+			jEntityForm.find(".uiTileset"),
+			curEntity.uiTileRect!=null ? curEntity.uiTileRect.tilesetUid : null,
+			true,
+			"Use default editor visual",
+			(uid)->{
+				if( uid!=null )
+					curEntity.uiTileRect = { tilesetUid: uid, x: 0, y: 0, w: 0, h:0, }
+				else
+					curEntity.uiTileRect = null;
+				editor.ge.emit(EntityDefChanged);
+			}
+		);
+		var jUiTilePickerWrapper = jEntityForm.find(".uiTilePicker").empty();
+		if( curEntity.uiTileRect!=null ) {
+			var jPicker = JsTools.createTileRectPicker(
+				curEntity.uiTileRect.tilesetUid,
+				curEntity.uiTileRect.w>0 ? curEntity.uiTileRect : null,
+				(rect)->{
+					if( rect!=null ) {
+						curEntity.uiTileRect = rect;
+						editor.ge.emit(EntityDefChanged);
+					}
+				}
+			);
+			jUiTilePickerWrapper.append( jPicker );
+		}
+
+
 		// Max count
 		var i = Input.linkToHtmlInput(curEntity.maxCount, jEntityForm.find("input#maxCount") );
 		i.setBounds(0,1024);
