@@ -23,10 +23,7 @@ class IntGridPalette extends ui.ToolPalette {
 		var groupIdx = 0;
 		var y = 0;
 		for(g in groups) {
-			if( g.all.length==0 )
-				continue;
-			
-			if( groups.length>1 ) {
+			if( g.all.length>0 && groups.length>1 ) {
 				var jTitle = new J('<li class="title collapser"/>');
 				jTitle.appendTo(jList);
 				jTitle.text(g.displayName);
@@ -109,32 +106,70 @@ class IntGridPalette extends ui.ToolPalette {
 		// Search current selection position
 		var tool : tool.lt.IntGridTool = cast tool;
 		var ld = Editor.ME.curLayerDef;
+		var groupIdx = 0;
 		var selY = 0;
-		var allValues = ld.getAllIntGridValues();
-		for(iv in allValues)
-			if( iv.value==tool.getSelectedValue() )
+		var groups = ld.getGroupedIntGridValues();
+		var found = false;
+		for(g in groups) {
+			for(iv in g.all)
+				if( iv.value==tool.getSelectedValue() ) {
+					found = true;
+					break;
+				}
+				else
+					selY++;
+
+			if( found )
 				break;
 			else
-				selY++;
-
-		if( dy!=0 )
-			selY+=dy;
-		else if( dx!=0 )
-			selY+=dx*2;
-
-		if( selY<0 ) {
-			// First
-			jList.find("li[data-y]:first").click();
+				groupIdx++;
 		}
-		else if( selY>=allValues.length ) {
-			// Last
-			jList.find("li[data-y]:last").click();
-		}
-		else {
+
+
+		if( dy!=0 ) {
 			// Prev/next item
+			selY+=dy;
 			jContent.find('[data-y=$selY]').click();
+			focusOnSelection(true);
 		}
-		focusOnSelection(true);
+		else if( dx!=0 ) {
+			// Prev/next group
+			if( dx<0 && !jContent.find("li.active").is('[data-groupIdx=$groupIdx] li:first') ) {
+				jContent.find('[data-groupIdx=$groupIdx] li:first').click();
+				focusOnSelection(true);
+				return true;
+			}
+			else if( dx>0 && groupIdx==groups.length-1 ) {
+				jContent.find('[data-groupIdx=$groupIdx] li:last').click();
+				focusOnSelection(true);
+				return true;
+			}
+			else {
+				groupIdx+=dx;
+				jContent.find('[data-groupIdx=$groupIdx] li:first').click();
+				focusOnSelection(true);
+				return true;
+			}
+		}
+
+		// if( dy!=0 )
+		// 	selY+=dy;
+		// else if( dx!=0 )
+		// 	selY+=dx*2;
+
+		// if( selY<0 ) {
+		// 	// First
+		// 	jList.find("li[data-y]:first").click();
+		// }
+		// else if( selY>=allValues.length ) {
+		// 	// Last
+		// 	jList.find("li[data-y]:last").click();
+		// }
+		// else {
+		// 	// Prev/next item
+		// 	jContent.find('[data-y=$selY]').click();
+		// }
+		// focusOnSelection(true);
 		return true;
 	}
 
