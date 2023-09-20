@@ -57,7 +57,7 @@ class Modal extends dn.Process {
 	function onAnotherModalClose() {}
 
 
-	public function setAnchor(a:ModalAnchor, applyNow=false) {
+	public function setAnchor(a:ModalAnchor, applyNow=true) {
 		this.anchor = a;
 		if( applyNow )
 			applyAnchor();
