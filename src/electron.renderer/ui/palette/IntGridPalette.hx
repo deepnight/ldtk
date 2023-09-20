@@ -18,45 +18,70 @@ class IntGridPalette extends ui.ToolPalette {
 		search = new ui.QuickSearch(jList);
 		search.jWrapper.prependTo(jContent);
 
+		var groups = tool.curLayerInstance.def.getGroupedIntGridValues();
+
+		var groupIdx = 0;
 		var y = 0;
-		for( intGridVal in tool.curLayerInstance.def.getAllIntGridValues() ) {
-			var jLi = new J("<li/>");
+		for(g in groups) {
+			if( g.all.length==0 )
+				continue;
+			
+			if( groups.length>1 ) {
+				var jTitle = new J('<li class="title collapser"/>');
+				jTitle.appendTo(jList);
+				jTitle.text(g.displayName);
+				jTitle.attr("id", project.iid+"_intGridPalette_group_"+g.groupUid);
+				jTitle.attr("default", "open");
+			}
+
+			var jLi = new J('<li class="subList"> <ul/> </li>');
+			jLi.attr("data-groupIdx", Std.string(groupIdx));
 			jLi.appendTo(jList);
-			jLi.attr("data-id", intGridVal.value);
-			jLi.attr("data-y", Std.string(y++));
-			jLi.addClass("color");
+			var jSubList = jLi.find("ul");
 
-			jLi.css( "border-color", C.intToHex(intGridVal.color) );
+			for( intGridVal in g.all ) {
+				var jLi = new J("<li/>");
+				jLi.appendTo(jSubList);
+				jLi.attr("data-id", intGridVal.value);
+				jLi.attr("data-y", Std.string(y++));
+				jLi.addClass("color");
 
-			// State
-			if( intGridVal.value==tool.getSelectedValue() ) {
-				jLi.addClass("active");
-				jLi.css( "background-color", makeBgActiveColor(intGridVal.color) );
+				jLi.css( "border-color", C.intToHex(intGridVal.color) );
+
+				// State
+				if( intGridVal.value==tool.getSelectedValue() ) {
+					jLi.addClass("active");
+					jLi.css( "background-color", makeBgActiveColor(intGridVal.color) );
+				}
+				else {
+					jLi.css( "background-color", makeBgInactiveColor(intGridVal.color) );
+					jLi.css( "color", makeTextInactiveColor(intGridVal.color) );
+				}
+
+				// Value
+				var jVal = JsTools.createIntGridValue(project, intGridVal);
+				jVal.appendTo(jLi);
+
+				// Label
+				if( intGridVal.identifier!=null )
+					jLi.append(intGridVal.identifier);
+
+				var curValue = intGridVal.value;
+				jLi.click( function(_) {
+					if( Editor.ME.isPaused() ) return;
+					tool.selectValue(curValue);
+					render();
+				});
 			}
-			else {
-				jLi.css( "background-color", makeBgInactiveColor(intGridVal.color) );
-				jLi.css( "color", makeTextInactiveColor(intGridVal.color) );
-			}
 
-			// Value
-			var jVal = JsTools.createIntGridValue(project, intGridVal);
-			jVal.appendTo(jLi);
-
-			// Label
-			if( intGridVal.identifier!=null )
-				jLi.append(intGridVal.identifier);
-
-			var curValue = intGridVal.value;
-			jLi.click( function(_) {
-				if( Editor.ME.isPaused() ) return;
-				tool.selectValue(curValue);
-				render();
-			});
+			groupIdx++;
 		}
 
 		if( searchMemory!=null )
 			search.run(searchMemory);
 		search.onSearch = (s)->searchMemory = s;
+
+		JsTools.parseComponents(jList);
 	}
 
 
