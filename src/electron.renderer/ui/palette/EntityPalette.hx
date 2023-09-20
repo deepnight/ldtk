@@ -13,13 +13,49 @@ class EntityPalette extends ui.ToolPalette {
 	override function doRender() {
 		super.doRender();
 
+		jContent.empty();
+
 		var tool : tool.lt.EntityTool = cast tool;
 
 		jList = new J('<ul class="niceList"/>');
 		jList.appendTo(jContent);
 
+		var jTopBar = new J('<div class="bar"/>');
+		jTopBar.prependTo(jContent);
+
 		search = new ui.QuickSearch(jList);
-		search.jWrapper.prependTo(jContent);
+		search.jWrapper.appendTo(jTopBar);
+
+
+		// View select
+		var stateId = App.ME.settings.makeStateId(EntityPaletteColumns, editor.curLayerDef.uid);
+		var columns = App.ME.settings.getUiStateInt(stateId, project, 1);
+		JsTools.removeClassReg(jList, ~/col-[0-9]+/g);
+		jList.addClass("col-"+columns);
+		var jMode = new J('<button class="transparent displayMode"> <span class="icon gridView"></span> </button>');
+		jMode.appendTo(jTopBar);
+		jMode.off().click(_->{
+			var m = new ui.modal.ContextMenu(jMode);
+			m.add({
+				label:L.t._("List"),
+				icon: "listView",
+				cb: ()->{
+					App.ME.settings.deleteUiState(stateId, project);
+					doRender();
+				}
+			});
+			for(n in [2,3,4,5]) {
+				m.add({
+					label:L.t._("::n:: columns", {n:n}),
+					icon: "gridView",
+					cb: ()->{
+						App.ME.settings.setUiStateInt(stateId, n, project);
+						doRender();
+					}
+				});
+			}
+		});
+
 
 		var ld = Editor.ME.curLayerDef;
 		allTagGroups = project.defs.groupUsingTags(
@@ -36,7 +72,7 @@ class EntityPalette extends ui.ToolPalette {
 				var jTag = new J('<li class="title collapser"/>');
 				jTag.appendTo(jList);
 				jTag.text( group.tag==null ? L._Untagged() : group.tag );
-				jTag.attr("id", project.iid+"_entityPalette_tag_"+group.tag);
+				jTag.attr("id", project.iid+"_entityPalette_"+ld.uid+"_tag_"+group.tag);
 				jTag.attr("default", "open");
 			}
 
@@ -73,7 +109,7 @@ class EntityPalette extends ui.ToolPalette {
 				var jPreview = JsTools.createEntityPreview(Editor.ME.project, ed);
 				jPreview.addClass("notCompact");
 				jLi.append(jPreview);
-				jLi.append(ed.identifier);
+				jLi.append('<span class="name">${ed.identifier}</span>');
 
 				jLi.click( function(_) {
 					tool.selectValue(ed.uid);

@@ -6187,10 +6187,7 @@ canvas#webgl {
 	background-color: $bgDark;
 	image-rendering: pixelated;
 
-	&.entities {
-		grid-template-rows: min-content auto fit-content(24px);
-	}
-
+	&.entities,
 	&.intGrid {
 		grid-template-rows: min-content auto fit-content(24px);
 
@@ -6216,29 +6213,58 @@ canvas#webgl {
 					font-size: 8pt;
 					line-height: 1.2em;
 					border: none;
-					.intGridValue {
-						width: 100%;
-						min-height: 64px;
-						border: none;
-						img {
-							object-fit: contain;
-						}
+
+					.name {
+						overflow: hidden;
 					}
 				}
 
 			}
-			&.col-2 .sublist ul {
-				grid-template-columns: repeat(2,1fr);
-				li .intGridValue { min-height: 96px; }
-			}
+			&.col-2 .sublist ul { grid-template-columns: repeat(2,1fr); }
 			&.col-3 .sublist ul { grid-template-columns: repeat(3,1fr); }
 			&.col-4 .sublist ul { grid-template-columns: repeat(4,1fr); }
-			&.col-5 .sublist ul {
-				grid-template-columns: repeat(5,1fr);
-				li .intGridValue { min-height: 48px; }
-			}
+			&.col-5 .sublist ul { grid-template-columns: repeat(5,1fr); }
 		}
 	}
+
+	&.intGrid ul.niceList {
+		&:not(.col-1) .subList ul li {
+			.intGridValue {
+				width: 100%;
+				min-height: 64px;
+				border: none;
+				img {
+					object-fit: contain;
+				}
+			}
+		}
+
+		&.col-2 .sublist ul {
+			li .intGridValue { min-height: 96px; }
+		}
+
+		&.col-5 .sublist ul {
+			li .intGridValue { min-height: 48px; }
+		}
+	}
+
+
+	&.entities ul.niceList {
+		&:not(.col-1) .subList ul li {
+			.entityPreview  {
+				margin: 0;
+				zoom: 2;
+				padding: 0;
+			}
+		}
+		&.col-2 .subList ul li .entityPreview  {
+			zoom: 4;
+		}
+		&.col-3 .subList ul li .entityPreview  {
+			zoom: 3;
+		}
+	}
+
 
 	&.invalid {
 		background: url("../img/stripes.png");
