@@ -1133,47 +1133,51 @@ class JsTools {
 		var jTileCanvas = new J('<canvas class="tile"></canvas>');
 
 		if( tilesetId!=null ) {
-			if( active )
-				jTileCanvas.addClass("active");
-
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
-
-			if( cur==null ) {
-				// No tile selected
+			if( td==null )
 				jTileCanvas.addClass("empty");
-			}
 			else {
-				// Tile rect
-				jTileCanvas.attr("width", cur.w);
-				jTileCanvas.attr("height", cur.h);
-				var scale = 35 / M.fmax(cur.w, cur.h);
-				jTileCanvas.css("width", cur.w * scale );
-				jTileCanvas.css("height", cur.h * scale );
-				td.drawTileRectToCanvas(jTileCanvas, cur);
+				if( active )
+					jTileCanvas.addClass("active");
+
+				if( cur==null ) {
+					// No tile selected
+					jTileCanvas.addClass("empty");
+				}
+				else {
+					// Tile rect
+					jTileCanvas.attr("width", cur.w);
+					jTileCanvas.attr("height", cur.h);
+					var scale = 35 / M.fmax(cur.w, cur.h);
+					jTileCanvas.css("width", cur.w * scale );
+					jTileCanvas.css("height", cur.h * scale );
+					td.drawTileRectToCanvas(jTileCanvas, cur);
+				}
+				ui.Tip.attach(jTileCanvas, "Use LEFT click to pick a tile or RIGHT click to remove it.");
+
+				// Open picker
+				if( active )
+					jTileCanvas.mousedown( (ev:js.jquery.Event)->{
+						switch ev.button {
+							case 0:
+								var m = new ui.Modal();
+								m.addClass("singleTilePicker");
+
+								var tp = new ui.Tileset(m.jContent, td, RectOnly);
+								tp.useSavedSelections = false;
+								tp.setSelectedRect(cur);
+								tp.onSelectAnything = ()->{
+									onPick( tp.getSelectedRect() );
+									m.close();
+								}
+								tp.focusOnSelection(true);
+
+							case _:
+								onPick(null);
+						}
+					});
 			}
-			ui.Tip.attach(jTileCanvas, "Use LEFT click to pick a tile or RIGHT click to remove it.");
 
-			// Open picker
-			if( active )
-				jTileCanvas.mousedown( (ev:js.jquery.Event)->{
-					switch ev.button {
-						case 0:
-							var m = new ui.Modal();
-							m.addClass("singleTilePicker");
-
-							var tp = new ui.Tileset(m.jContent, td, RectOnly);
-							tp.useSavedSelections = false;
-							tp.setSelectedRect(cur);
-							tp.onSelectAnything = ()->{
-								onPick( tp.getSelectedRect() );
-								m.close();
-							}
-							tp.focusOnSelection(true);
-
-						case _:
-							onPick(null);
-					}
-				});
 		}
 		else {
 			// Invalid tileset
