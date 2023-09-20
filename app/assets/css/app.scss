@@ -963,7 +963,7 @@ ul.niceList {
 		}
 
 		&:not(.active):hover {
-			outline: 1px solid transparentize($color: white, $amount: 0.35);
+			outline: 2px solid transparentize($color: white, $amount: 0.35);
 			outline-offset: -2px;
 		}
 
@@ -4997,7 +4997,8 @@ canvas#webgl {
 		}
 
 		#mainPaletteWrapper {
-			overflow: auto;
+			overflow-x: hidden;
+			overflow-y: auto;
 			position: relative;
 
 			&:empty {
@@ -6192,6 +6193,51 @@ canvas#webgl {
 
 	&.intGrid {
 		grid-template-rows: min-content auto fit-content(24px);
+
+		.bar {
+			display: grid;
+			gap: 4px;
+			grid-template-columns: auto min-content;
+			button {
+				padding: 2px 6px;
+			}
+		}
+
+		ul.niceList {
+			&:not(.col-1) .subList ul {
+				display: grid;
+
+				li {
+					display: grid;
+					grid-template: none;
+					grid-template-rows: auto min-content;
+					justify-items: center;
+					padding: 2px;
+					font-size: 8pt;
+					line-height: 1.2em;
+					border: none;
+					.intGridValue {
+						width: 100%;
+						min-height: 64px;
+						border: none;
+						img {
+							object-fit: contain;
+						}
+					}
+				}
+
+			}
+			&.col-2 .sublist ul {
+				grid-template-columns: repeat(2,1fr);
+				li .intGridValue { min-height: 96px; }
+			}
+			&.col-3 .sublist ul { grid-template-columns: repeat(3,1fr); }
+			&.col-4 .sublist ul { grid-template-columns: repeat(4,1fr); }
+			&.col-5 .sublist ul {
+				grid-template-columns: repeat(5,1fr);
+				li .intGridValue { min-height: 48px; }
+			}
+		}
 	}
 
 	&.invalid {
@@ -6325,7 +6371,7 @@ canvas#webgl {
 		left: 0;
 		width: 100% !important;
 		height: 100% !important;
-		object-fit: cover;
+		object-fit: contain;
 		object-position: center;
 	}
 }

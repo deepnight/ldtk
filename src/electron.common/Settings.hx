@@ -44,6 +44,7 @@ enum abstract UiState(String) {
 	var ShowProjectColors;
 	var HideSamplesOnHome;
 	var RuleValuesColumns;
+	var IntGridPaletteColumns;
 }
 
 /* Notes: Settings related enums are stored in this file instead of EditorTypes to avoid Main compilation to reach unwanted classes, by importing EditorTypes. */

@@ -12,11 +12,46 @@ class IntGridPalette extends ui.ToolPalette {
 	override function doRender() {
 		super.doRender();
 
+		jContent.empty();
+
 		jList = new J('<ul class="intGridValues niceList"/>');
 		jList.appendTo(jContent);
 
+		var jTopBar = new J('<div class="bar"/>');
+		jTopBar.prependTo(jContent);
+
 		search = new ui.QuickSearch(jList);
-		search.jWrapper.prependTo(jContent);
+		search.jWrapper.appendTo(jTopBar);
+
+
+		// View select
+		var stateId = App.ME.settings.makeStateId(IntGridPaletteColumns, editor.curLayerDef.uid);
+		var columns = App.ME.settings.getUiStateInt(stateId, project, 1);
+		JsTools.removeClassReg(jList, ~/col-[0-9]+/g);
+		jList.addClass("col-"+columns);
+		var jMode = new J('<button class="transparent displayMode"> <span class="icon gridView"></span> </button>');
+		jMode.appendTo(jTopBar);
+		jMode.off().click(_->{
+			var m = new ui.modal.ContextMenu(jMode);
+			m.add({
+				label:L.t._("List"),
+				icon: "listView",
+				cb: ()->{
+					App.ME.settings.deleteUiState(stateId, project);
+					doRender();
+				}
+			});
+			for(n in [2,3,4,5]) {
+				m.add({
+					label:L.t._("::n:: columns", {n:n}),
+					icon: "gridView",
+					cb: ()->{
+						App.ME.settings.setUiStateInt(stateId, n, project);
+						doRender();
+					}
+				});
+			}
+		});
 
 		var groups = tool.curLayerInstance.def.getGroupedIntGridValues();
 
@@ -56,7 +91,7 @@ class IntGridPalette extends ui.ToolPalette {
 				}
 
 				// Value
-				var jVal = JsTools.createIntGridValue(project, intGridVal);
+				var jVal = JsTools.createIntGridValue(project, intGridVal, false);
 				jVal.appendTo(jLi);
 
 				// Label
