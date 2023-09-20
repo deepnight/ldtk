@@ -1,7 +1,7 @@
 # 1.4.0 - Int grid value groups
 
 ## Groups of Int Grid values
-![](1.3.5/intGridGroups.png)
+![](1.4.0/intGridGroups.png)
 
 You can now create custom groups for your Int Grid layers values, allowing more advanced rules based on these groups.
 For example, this would allow to render plants only over values from a "Walls" group, and not over values from a "Water" group.
