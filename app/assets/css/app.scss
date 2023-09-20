@@ -3245,14 +3245,15 @@ textarea {
 }
 
 
-.window.buy {
+.window.support {
 	.mask {
-		background-color: transparentize($color: black, $amount: 0.2);
+		background-color: transparentize($color: $bgLight, $amount: 0.2);
 	}
 
 	.wrapper {
 		border-radius: 8px;
 		box-shadow: 0px 0px 48px black;
+		background-color: $bgDark;
 	}
 
 	.wrapper .content {
@@ -3271,17 +3272,17 @@ textarea {
 
 			margin: -20px;
 			margin-bottom: 16px;
-			padding: 8px;
+			padding: 32px 64px;
 
-			background-color: $bgDark;
-			background-image: url(../img/githubBanner.png);
-			background-position: center;
-			background-size: cover;
-			min-height: 300px;
+			background-color: black;
 
-			.icon {
-				width: 100px;
-				height: 100px;
+			.bgWrapper {
+				width: 100%;
+				background-image: url(../img/deepnight.png);
+				background-position: center;
+				background-size: contain;
+				background-repeat: no-repeat;
+				min-height: 300px;
 			}
 		}
 

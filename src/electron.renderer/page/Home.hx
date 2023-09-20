@@ -62,9 +62,10 @@ class Home extends Page {
 		if( !settings.getUiStateBool(HideSamplesOnHome) )
 			showSamples(false);
 
-		jPage.find(".buy").click( (ev)->{
+		jPage.find(".support").click( (ev)->{
 			var w = new ui.Modal();
-			w.loadTemplate("buy", {
+			w.setAnchor(MA_Centered);
+			w.loadTemplate("support", {
 				app: Const.APP_NAME,
 				itchUrl: Const.ITCH_IO_BUY_URL,
 				gitHubSponsorUrl: Const.GITHUB_SPONSOR_URL,
