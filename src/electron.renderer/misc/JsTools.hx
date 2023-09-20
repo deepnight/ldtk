@@ -576,6 +576,9 @@ class JsTools {
 
 
 	public static function parseComponents(jCtx:js.jquery.JQuery) : Void {
+		// Disable img dragging
+		jCtx.find("img").attr("draggable","false");
+
 		// Info bubbles: (i) and (!)
 		jCtx.find(".info, info, warning").each( function(idx, e) {
 			var jThis = new J(e);
