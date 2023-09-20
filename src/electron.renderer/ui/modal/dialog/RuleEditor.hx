@@ -144,7 +144,6 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// View select
 		var jMode = jContent.find(".displayMode");
-		jMode.off();
 		jMode.off().click(_->{
 			var m = new ContextMenu(jMode);
 			m.add({
