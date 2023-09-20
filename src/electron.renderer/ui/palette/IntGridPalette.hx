@@ -99,8 +99,9 @@ class IntGridPalette extends ui.ToolPalette {
 					jLi.append('<span class="name">${intGridVal.identifier}</span>');
 
 				var curValue = intGridVal.value;
-				jLi.click( function(_) {
-					if( Editor.ME.isPaused() ) return;
+				jLi.mousedown( function(_) {
+					if( Editor.ME.isPaused() )
+						return;
 					tool.selectValue(curValue);
 					render();
 				});
@@ -164,47 +165,29 @@ class IntGridPalette extends ui.ToolPalette {
 		if( dy!=0 ) {
 			// Prev/next item
 			selY+=dy;
-			jContent.find('[data-y=$selY]').click();
+			jContent.find('[data-y=$selY]').mousedown();
 			focusOnSelection(true);
 		}
 		else if( dx!=0 ) {
 			// Prev/next group
 			if( dx<0 && !jContent.find("li.active").is('[data-groupIdx=$groupIdx] li:first') ) {
-				jContent.find('[data-groupIdx=$groupIdx] li:first').click();
+				jContent.find('[data-groupIdx=$groupIdx] li:first').mousedown();
 				focusOnSelection(true);
 				return true;
 			}
 			else if( dx>0 && groupIdx==groups.length-1 ) {
-				jContent.find('[data-groupIdx=$groupIdx] li:last').click();
+				jContent.find('[data-groupIdx=$groupIdx] li:last').mousedown();
 				focusOnSelection(true);
 				return true;
 			}
 			else {
 				groupIdx+=dx;
-				jContent.find('[data-groupIdx=$groupIdx] li:first').click();
+				jContent.find('[data-groupIdx=$groupIdx] li:first').mousedown();
 				focusOnSelection(true);
 				return true;
 			}
 		}
 
-		// if( dy!=0 )
-		// 	selY+=dy;
-		// else if( dx!=0 )
-		// 	selY+=dx*2;
-
-		// if( selY<0 ) {
-		// 	// First
-		// 	jList.find("li[data-y]:first").click();
-		// }
-		// else if( selY>=allValues.length ) {
-		// 	// Last
-		// 	jList.find("li[data-y]:last").click();
-		// }
-		// else {
-		// 	// Prev/next item
-		// 	jContent.find('[data-y=$selY]').click();
-		// }
-		// focusOnSelection(true);
 		return true;
 	}
 

@@ -111,7 +111,9 @@ class EntityPalette extends ui.ToolPalette {
 				jLi.append(jPreview);
 				jLi.append('<span class="name">${ed.identifier}</span>');
 
-				jLi.click( function(_) {
+				jLi.mousedown( function(_) {
+					if( Editor.ME.isPaused() )
+						return;
 					tool.selectValue(ed.uid);
 					render();
 				});
@@ -167,24 +169,24 @@ class EntityPalette extends ui.ToolPalette {
 		if( dy!=0 ) {
 			// Prev/next item
 			selY+=dy;
-			jContent.find('[data-y=$selY]').click();
+			jContent.find('[data-y=$selY]').mousedown();
 			focusOnSelection(true);
 		}
 		else if( dx!=0 ) {
 			// Prev/next tag group
 			if( dx<0 && !jContent.find("li.active").is('[data-groupIdx=$groupIdx] li:first') ) {
-				jContent.find('[data-groupIdx=$groupIdx] li:first').click();
+				jContent.find('[data-groupIdx=$groupIdx] li:first').mousedown();
 				focusOnSelection(true);
 				return true;
 			}
 			else if( dx>0 && groupIdx==allTagGroups.length-1 ) {
-				jContent.find('[data-groupIdx=$groupIdx] li:last').click();
+				jContent.find('[data-groupIdx=$groupIdx] li:last').mousedown();
 				focusOnSelection(true);
 				return true;
 			}
 			else {
 				groupIdx+=dx;
-				jContent.find('[data-groupIdx=$groupIdx] li:first').click();
+				jContent.find('[data-groupIdx=$groupIdx] li:first').mousedown();
 				focusOnSelection(true);
 				return true;
 			}
