@@ -5319,6 +5319,7 @@ canvas#webgl {
 		#permanentNotifications {
 			width: 100vw;
 			left: 0;
+			z-index: 0;
 		}
 
 		&:not(.revealed) {
