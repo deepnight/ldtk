@@ -5316,6 +5316,11 @@ canvas#webgl {
 	}
 
 	&.zenMode {
+		#permanentNotifications {
+			width: 100vw;
+			left: 0;
+		}
+
 		&:not(.revealed) {
 			#zenModeRevealer {
 				display: block;
