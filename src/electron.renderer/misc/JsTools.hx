@@ -263,19 +263,21 @@ class JsTools {
 		jWrapper.css("width", sizePx+"px");
 		jWrapper.css("height", sizePx+"px");
 
-		var tileRect = ed.uiTileRect!=null && ed.uiTileRect.w>0 ? ed.uiTileRect
-			: ed.renderMode==Tile && ed.tileRect!=null ? ed.tileRect
-			: null;
-
-		if( tileRect!=null ) {
+		if( ed.uiTileRect!=null && ed.uiTileRect.w>0 ) {
+			// Alt custom UI tile
+			var td = project.defs.getTilesetDef(ed.uiTileRect.tilesetUid);
+			var jImg = td.createTileHtmlImageFromRect(ed.uiTileRect);
+			jWrapper.append(jImg);
+		}
+		else if( ed.renderMode==Tile && ed.tileRect!=null ) {
 			// Tile
-			var td = project.defs.getTilesetDef(tileRect.tilesetUid);
-			var jImg = td.createTileHtmlImageFromRect(tileRect);
+			var td = project.defs.getTilesetDef(ed.tileRect.tilesetUid);
+			var jImg = td.createTileHtmlImageFromRect(ed.tileRect);
 			jWrapper.append(jImg);
 			jImg.css("opacity", ed.tileOpacity);
 			if( ed.lineOpacity>0 ) {
 				jWrapper.addClass("hasBg");
-				jWrapper.css("outline", "2px solid "+new dn.Col(ed.color).toCssRgba(ed.lineOpacity));
+				jWrapper.css("outline", "1px solid "+new dn.Col(ed.color).toCssRgba(ed.lineOpacity));
 			}
 			if( ed.fillOpacity>0 ) {
 				jWrapper.addClass("hasBg");
@@ -294,11 +296,11 @@ class JsTools {
 
 			var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
 			var ctx = cnv.getContext2d();
-			var pad = M.round( sizePx*0.1 );
+			var pad = M.round( sizePx*0.1*superScale );
 
 			ctx.fillStyle = new dn.Col(ed.color).toCssRgba(ed.fillOpacity);
 			ctx.strokeStyle = new dn.Col(ed.color).toCssRgba(ed.lineOpacity);
-			ctx.lineWidth = 2;
+			ctx.lineWidth = 2/superScale;
 
 			switch ed.renderMode {
 				case Rectangle:
@@ -316,7 +318,7 @@ class JsTools {
 					ctx.stroke();
 
 				case Cross:
-					ctx.lineWidth = 4;
+					ctx.lineWidth = 3;
 					ctx.moveTo(0,0);
 					ctx.lineTo(wid, hei);
 					ctx.moveTo(0,hei);

@@ -1483,7 +1483,7 @@ div.entityRef {
 	height: auto;
 	overflow: hidden;
 	object-fit: cover;
-	outline-offset: -2px;
+	outline-offset: -1px;
 
 	canvas {
 		width: 100%;
@@ -1492,7 +1492,8 @@ div.entityRef {
 	}
 
 	&.hasBg {
-		padding: 2px;
+		padding: 1px;
+		box-sizing: border-box;
 	}
 	img {
 		width: 100%;
@@ -6299,7 +6300,6 @@ canvas#webgl {
 			.entityPreview  {
 				margin: 0;
 				zoom: 2;
-				padding: 0;
 			}
 		}
 		&.col-2 .subList ul li .entityPreview  {
