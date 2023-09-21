@@ -1,15 +1,22 @@
 # 1.4.0 - Int grid value groups
 
-## Grid view in tool palettes
-![](1.4.0/paletteGridView.png)
-
-Entity and Int Grid tool palettes can now be displayed in grid modes, for a much more compact experience.
-
 ## Groups of Int Grid values
 ![](1.4.0/intGridGroups.png)
 
 You can now create custom groups for your Int Grid values, allowing much more advanced rules based on these groups.
 For example, you may render "vegetation" tiles only over values from a "Solid Walls" group, and not over values from a "Water" group.
+
+## Zen mode
+![](1.4.0/zenMode.png)
+
+The old (and confusing) "Compact mode" has been replaced by a new "Zen mode". Simply hit `TAB` to toggle it.
+
+In zen mode, the left interface automatically disappears to leave much more editing space. You can briefly show the interface again by moving your mouse cursor to the window left edge.
+
+## Grid view in tool palettes
+![](1.4.0/paletteGridView.png)
+
+Entity and Int Grid tool palettes can now be displayed in grid modes, for a much more compact experience.
 
 ## Other changes
 
