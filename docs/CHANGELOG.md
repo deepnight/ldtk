@@ -1,4 +1,4 @@
-# 1.4.0 - Int grid value groups
+# 1.4.0 - Groups of Int Grid values
 
 ## Groups of Int Grid values
 ![](1.4.0/intGridGroups.png)
@@ -28,6 +28,7 @@ Entity and Int Grid tool palettes can now be displayed in grid modes, for a much
  - Added more integrated icons: check marks, circles, buttons, cogs, etc.
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
  - Reworked start screen design
+ - Updated some sample maps
  - Many bug fixes
 
 
