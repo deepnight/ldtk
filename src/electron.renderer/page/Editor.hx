@@ -1614,10 +1614,16 @@ class Editor extends Page {
 			App.ME.jPage.addClass("revealed");
 			jCanvas.on("mouseover.zenMode", _->{
 				cd.setS("pendingZenModeReHide", Const.INFINITE);
-				cd.setS("zenModeReHideLock", 0.35);
+				cd.setS("zenModeReHideLock", 1, true);
+			});
+			jCanvas.on("mousemove.zenMode", (ev:js.jquery.Event)->{
+				final t = 0.2;
+				if( cd.getS("zenModeReHideLock")>t && ev.pageX > jMainPanel.outerWidth() + 200 )
+					cd.setS("zenModeReHideLock", t, true);
 			});
 			jCanvas.on("mouseleave.zenMode", _->{
 				cd.unset("pendingZenModeReHide");
+				cd.unset("zenModeReHideLock");
 			});
 		}
 		else {
