@@ -20,7 +20,6 @@ Entity and Int Grid tool palettes can now be displayed in grid modes, for a much
 
 ## Other changes
 
- - Added "grid views" to Entity and Int Grid side bars
  - Added customizable rule groups colors
  - Added a "symetric link" option to Auto-Layer rules offsets
  - Increased the max number of columns in Select components
