@@ -1479,16 +1479,25 @@ div.entityRef {
 
 
 .icon.entityPreview {
-	display: grid;
-	justify-items: center;
-	align-items: center;
-
 	width: auto;
 	height: auto;
 	overflow: hidden;
-	padding: 2px;
-	background-color: $bgMed;
-	border-radius: 3px;
+	object-fit: cover;
+	outline-offset: -2px;
+
+	canvas {
+		width: 100%;
+		height: 100%;
+		image-rendering: auto;
+	}
+
+	&.hasBg {
+		padding: 2px;
+	}
+	img {
+		width: 100%;
+		height: 100%;
+	}
 }
 
 

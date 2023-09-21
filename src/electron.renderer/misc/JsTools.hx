@@ -263,90 +263,136 @@ class JsTools {
 		jWrapper.css("width", sizePx+"px");
 		jWrapper.css("height", sizePx+"px");
 
-		var scale = sizePx / M.fmax(ed.width, ed.height);
-
-		var jCanvas = new J('<canvas></canvas>');
-		jCanvas.appendTo(jWrapper);
-		jCanvas.attr("width", ed.width*scale);
-		jCanvas.attr("height", ed.height*scale);
-
-		var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
-		var ctx = cnv.getContext2d();
-
-		if( ed.uiTileRect!=null && ed.uiTileRect.w>0 ) {
-			// Custom override UI tile
-			var td = project.defs.getTilesetDef(ed.uiTileRect.tilesetUid);
-			ctx.fillStyle = C.intToHex(ed.color)+"88";
-			ctx.beginPath();
-			ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
-			ctx.fill();
-			var s = M.fmin(scale * ed.width/td.tileGridSize, scale * ed.height/td.tileGridSize);
-			td.drawTileRectToCanvas(jCanvas, ed.uiTileRect, 0,0, s,s);
+		var tileRect = ed.uiTileRect!=null && ed.uiTileRect.w>0 ? ed.uiTileRect
+			: ed.renderMode==Tile && ed.tileRect!=null ? ed.tileRect
+			: null;
+			
+		if( tileRect!=null ) {
+			// Tile
+			var td = project.defs.getTilesetDef(tileRect.tilesetUid);
+			var jImg = td.createTileHtmlImageFromRect(tileRect);
+			jWrapper.append(jImg);
+			jImg.css("opacity", ed.tileOpacity);
+			if( ed.lineOpacity>0 ) {
+				jWrapper.addClass("hasBg");
+				jWrapper.css("outline", "2px solid "+new dn.Col(ed.color).toCssRgba(ed.lineOpacity));
+			}
+			if( ed.fillOpacity>0 ) {
+				jWrapper.addClass("hasBg");
+				jWrapper.css("background-color", new dn.Col(ed.color).toCssRgba(ed.fillOpacity));
+			}
 		}
 		else {
-			// Default editor visual
+			// Shape
+			var superScale = 3;
+			var wid = ed.width*superScale;
+			var hei = ed.height*superScale;
+			var jCanvas = new J('<canvas></canvas>');
+			jCanvas.appendTo(jWrapper);
+			jCanvas.attr("width", wid);
+			jCanvas.attr("height", hei);
+
+			var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
+			var ctx = cnv.getContext2d();
+			var pad = M.round( sizePx*0.1 );
+
+			ctx.fillStyle = new dn.Col(ed.color).toCssRgba(ed.fillOpacity);
+			ctx.strokeStyle = new dn.Col(ed.color).toCssRgba(ed.lineOpacity);
+			ctx.lineWidth = 3;
+
 			switch ed.renderMode {
 				case Rectangle:
-					ctx.fillStyle = C.intToHex(ed.color);
-					ctx.fillRect(0, 0, ed.width*scale, ed.height*scale);
-
-				case Cross:
-					ctx.strokeStyle = C.intToHex(ed.color);
-					ctx.lineWidth = 5 * js.Browser.window.devicePixelRatio;
-					ctx.moveTo(0,0);
-					ctx.lineTo(ed.width*scale, ed.height*scale);
-					ctx.moveTo(0,ed.height*scale);
-					ctx.lineTo(ed.width*scale, 0);
-					ctx.stroke();
+					ctx.fillRect(pad, pad, wid-pad*2, hei-pad*2);
+					ctx.strokeRect(pad, pad, wid-pad*2, hei-pad*2);
 
 				case Ellipse:
-					ctx.fillStyle = C.intToHex(ed.color);
 					ctx.beginPath();
 					ctx.ellipse(
-						ed.width*0.5*scale, ed.height*0.5*scale,
-						ed.width*0.5*scale, ed.height*0.5*scale,
+						wid*0.5, hei*0.5,
+						wid*0.5-pad, hei*0.5-pad,
 						0, 0, M.PI*2
 					);
 					ctx.fill();
+					ctx.stroke();
 
-				case Tile:
-					ctx.fillStyle = C.intToHex(ed.color)+"66";
-					ctx.beginPath();
-					ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
-					ctx.fill();
+				case Cross:
+					ctx.moveTo(0,0);
+					ctx.lineTo(wid, hei);
+					ctx.moveTo(0,hei);
+					ctx.lineTo(wid, 0);
+					ctx.stroke();
 
-					if( ed.isTileDefined() ) {
-						var td = project.defs.getTilesetDef(ed.tilesetId);
-						var x = 0;
-						var y = 0;
-						var scaleX = 1.;
-						var scaleY = 1.;
-						switch ed.tileRenderMode {
-							case Stretch:
-								scaleX = scale * ed.width / td.tileGridSize;
-								scaleY = scale * ed.height / td.tileGridSize;
-
-							case FitInside:
-								var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
-								scaleX = s;
-								scaleY = s;
-
-							case Cover, Repeat:
-								var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
-								scaleX = s;
-								scaleY = s;
-
-							case FullSizeCropped:
-							case FullSizeUncropped:
-
-							case NineSlice:
-								scaleX = scale * ed.width / td.tileGridSize; // TODO
-								scaleY = scale * ed.height / td.tileGridSize;
-						}
-						td.drawTileRectToCanvas(jCanvas, ed.tileRect, x,y, scaleX, scaleY);
-					}
+				case Tile: // N/A
 			}
 		}
+
+		// var scale = sizePx / M.fmax(ed.width, ed.height);
+
+		// var jCanvas = new J('<canvas></canvas>');
+		// jCanvas.appendTo(jWrapper);
+		// jCanvas.attr("width", ed.width*scale);
+		// jCanvas.attr("height", ed.height*scale);
+
+		// var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
+		// var ctx = cnv.getContext2d();
+
+		// if( ed.uiTileRect!=null && ed.uiTileRect.w>0 ) {
+		// 	// Custom override UI tile
+		// 	var td = project.defs.getTilesetDef(ed.uiTileRect.tilesetUid);
+		// 	ctx.fillStyle = C.intToHex(ed.color)+"88";
+		// 	ctx.beginPath();
+		// 	ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
+		// 	ctx.fill();
+		// 	var s = M.fmin(scale * ed.width/td.tileGridSize, scale * ed.height/td.tileGridSize);
+		// 	td.drawTileRectToCanvas(jCanvas, ed.uiTileRect, 0,0, s,s);
+		// }
+		// else {
+		// 	// Default editor visual
+		// 	switch ed.renderMode {
+		// 		case Rectangle:
+
+		// 		case Cross:
+
+		// 		case Ellipse:
+
+		// 		case Tile:
+		// 			ctx.fillStyle = C.intToHex(ed.color)+"66";
+		// 			ctx.beginPath();
+		// 			ctx.rect(0, 0, Std.int(ed.width*scale), Std.int(ed.height*scale));
+		// 			ctx.fill();
+
+		// 			if( ed.isTileDefined() ) {
+		// 				var td = project.defs.getTilesetDef(ed.tilesetId);
+		// 				var x = 0;
+		// 				var y = 0;
+		// 				var scaleX = 1.;
+		// 				var scaleY = 1.;
+		// 				switch ed.tileRenderMode {
+		// 					case Stretch:
+		// 						scaleX = scale * ed.width / td.tileGridSize;
+		// 						scaleY = scale * ed.height / td.tileGridSize;
+
+		// 					case FitInside:
+		// 						var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
+		// 						scaleX = s;
+		// 						scaleY = s;
+
+		// 					case Cover, Repeat:
+		// 						var s = M.fmin(scale * ed.width / td.tileGridSize, scale * ed.height / td.tileGridSize);
+		// 						scaleX = s;
+		// 						scaleY = s;
+
+		// 					case FullSizeCropped:
+		// 					case FullSizeUncropped:
+
+		// 					case NineSlice:
+		// 						scaleX = scale * ed.width / td.tileGridSize; // TODO
+		// 						scaleY = scale * ed.height / td.tileGridSize;
+		// 				}
+		// 				td.drawTileRectToCanvas(jCanvas, ed.tileRect, x,y, scaleX, scaleY);
+		// 			}
+		// 	}
+		// }
 
 
 		return jWrapper;

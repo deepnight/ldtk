@@ -20,6 +20,7 @@ Entity and Int Grid tool palettes can now be displayed in grid modes, for a much
 
 ## Other changes
 
+ - Much nicer Entity preview in panels and interfaces
  - Added customizable rule groups colors
  - Added a "symetric link" option to Auto-Layer rules offsets
  - Increased the max number of columns in Select components
@@ -28,6 +29,7 @@ Entity and Int Grid tool palettes can now be displayed in grid modes, for a much
  - Added more integrated icons: check marks, circles, buttons, cogs, etc.
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
  - Reworked start screen design
+ - Changed `CMD-H` shortcut on macOs to `SHIFT-H`
  - Updated some sample maps
  - Many bug fixes
 
