@@ -3026,10 +3026,6 @@ textarea {
 		width: calc( 100vw - #{ $mainPanelNormalWid } );
 		left: $mainPanelNormalWid;
 	}
-	@at-root .compactPanel .window.panel .mask {
-		width: calc( 100vw - #{ $mainPanelCompactWid } );
-		left: $mainPanelCompactWid;
-	}
 
 	button.close {
 		width: auto;
@@ -3050,9 +3046,6 @@ textarea {
 		&:hover {
 			background-color: white;
 		}
-	}
-	@at-root .compactPanel .window.panel>button.close {
-		top: 65px;
 	}
 
 	&>.wrapper {
@@ -5247,115 +5240,47 @@ canvas#webgl {
 		}
 	}
 
-	&:not(.compactPanel) .onlyCompact {
-		display: none;
+
+	&:not(.zenMode) {
+		#zenModeRevealer {
+			display: none;
+		}
 	}
 
-	&.compactPanel {
-
-		.notCompact {
-			display: none !important;
-		}
-
-		.onlyCompact{
-			display: block;
-		}
-
-		#mainPanel {
-			width: $mainPanelCompactWid;
-			grid-template-rows: min-content 200px min-content auto;
-
-			#mainBar {
-				.buttons {
-					display: grid;
-					grid-template-columns: repeat(3, 1fr);
-					grid-template-rows: repeat(4, min-content);
-					border-radius: 0;
-					button {
-						z-index: 1; // fix box-shadow depth
-						margin: 0px;
-						box-shadow: none !important;
-					}
-					button.showHelp {
-						grid-column: 1/4;
-						grid-row: 4/5;
-						z-index: 0;
-						padding-top: 2px;
-						padding-bottom: 2px;
-					}
-					button.settings {
-						grid-column: 3/4;
-						grid-row: 3/4;
-						z-index: 0;
-					}
-					button.editProject {
-						grid-column: 3/4;
-						grid-row: 2/3;
-						z-index: 0;
-					}
-					button.close {
-						grid-column: 3/4;
-						grid-row: 1/2;
-						z-index: 0;
-					}
-					.icon {
-						width: 1.3em;
-						height: 1.3em;
-					}
-				}
-			}
-
-			.optionsWrapper {
+	&.zenMode {
+		&:not(.revealed) {
+			#zenModeRevealer {
 				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 1;
+				width: 16px;
+				height: 100vh;
+				background-image: url("../img/stripes.png");
+				background-color: transparentize($color: white, $amount: 0.9);
+				border-right: 1px solid white;
+				cursor: e-resize;
 			}
 
-			#guide {
+			#mainPanel,
+			ul#editingOptions {
 				display: none;
 			}
 
-			ul#layers li {
-				grid-template-columns: min-content auto min-content;
-				.name {
-					padding: 5px 0px;
-					font-family: Roboto;
-					font-size: 10pt;
-					font-weight: bold;
-				}
+			.panelMask {
+				display: none;
 			}
 
-			ul.niceList li {
-				padding: 4px 2px !important;
-				gap: 4px;
-				&.collapser {
-					background-image: none;
-				}
-			}
-
-			h2#levelName {
-				font-size: 1.1em;
+			.panel.worldPanel {
+				display: none;
 			}
 		}
 
-
-		#mainPaletteWrapper {
-			.niceList li,
-			.intGridValues li {
-				font-size: 9.5pt;
-				border-left-width: 1px;
-			}
-		}
-
-		#permanentNotifications {
-			left: $mainPanelCompactWid;
-			width: calc( 100vw - #{ $mainPanelCompactWid } );
-		}
-
-		ul#editingOptions {
-			left: $mainPanelCompactWid;
-			top: 74px;
-			.icon {
-				width: 18px;
-				height: 18px;
+		&.revealed.worldMode {
+			#mainPanel,
+			ul#editingOptions {
+				display: none;
 			}
 		}
 	}

@@ -54,6 +54,7 @@ class Editor extends Page {
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
 	public var gifMode = false;
+	var zenModeRevealed = false;
 
 
 	@:allow(LevelTimeline)
@@ -158,7 +159,7 @@ class Editor extends Page {
 		}
 
 		saveLastProjectInfos();
-		setCompactMode( settings.v.compactMode, true );
+		setZenMode( settings.v.zenMode, false );
 		dn.Process.resizeAll();
 	}
 
@@ -601,8 +602,8 @@ class Editor extends Page {
 					selectionTool.clear();
 
 			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() && !hasInputFocus() && !ui.EntityInstanceEditor.isOpen() )
-					setCompactMode( !settings.v.compactMode );
+				if( ( !ui.Modal.hasAnyOpen() || worldMode ) && !hasInputFocus() && !ui.EntityInstanceEditor.isOpen() )
+					setZenMode( !settings.v.zenMode );
 
 			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
 				curLevelTimeline.undo();
@@ -1491,13 +1492,16 @@ class Editor extends Page {
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
+			jPage.addClass("worldMode");
 			cursor.set(None);
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
 			new ui.modal.panel.WorldPanel();
 		}
-		else
+		else {
+			jPage.removeClass("worldMode");
 			updateLayerList();
+		}
 
 		// Offset editing options & world layers
 		var jFloatingOptions = jPage.find("#editingOptions, #worldDepths");
@@ -1564,21 +1568,56 @@ class Editor extends Page {
 		updateEditOptions();
 	}
 
-	public function setCompactMode(v:Bool, init=false) {
-		settings.v.compactMode = v;
-		if( !init )
+	public function setZenMode(v:Bool, saveSetting=true) {
+		settings.v.zenMode = v;
+		if( saveSetting )
 			App.ME.settings.save();
 
-		if( settings.v.compactMode )
-			App.ME.jPage.addClass("compactPanel");
+		var jRevealer = jPage.find("#zenModeRevealer");
+		jRevealer.off();
+		App.ME.jCanvas.off(".zenMode");
+		setZenModeReveal(false);
+
+		if( settings.v.zenMode ) {
+			App.ME.jPage.addClass("zenMode");
+			jRevealer.mouseover( _->{
+				setZenModeReveal(true);
+			});
+		}
 		else
-			App.ME.jPage.removeClass("compactPanel");
+			App.ME.jPage.removeClass("zenMode");
+
+
 
 		updateCanvasSize();
 		updateAppBg();
 		updateWorldList();
-		if( !init )
-			N.quick("Compact UI: "+L.onOff(settings.v.compactMode));
+		if( saveSetting )
+			N.quick("Zen mode: "+L.onOff(settings.v.zenMode));
+	}
+
+
+	function setZenModeReveal(reveal:Bool) {
+		zenModeRevealed = reveal;
+		var jCanvas = App.ME.jCanvas;
+		jCanvas.off(".zenMode");
+
+		cd.unset("pendingZenModeReHide");
+		cd.unset("zenModeReHideLock");
+
+		if( reveal ) {
+			App.ME.jPage.addClass("revealed");
+			jCanvas.on("mouseover.zenMode", _->{
+				cd.setS("pendingZenModeReHide", Const.INFINITE);
+				cd.setS("zenModeReHideLock", 0.35);
+			});
+			jCanvas.on("mouseleave.zenMode", _->{
+				cd.unset("pendingZenModeReHide");
+			});
+		}
+		else {
+			App.ME.jPage.removeClass("revealed");
+		}
 	}
 
 
@@ -2251,8 +2290,16 @@ class Editor extends Page {
 	function updateCanvasSize() {
 		var panelWid = jMainPanel.outerWidth();
 		App.ME.jCanvas.show();
-		App.ME.jCanvas.css("left", panelWid+"px");
-		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
+		if( settings.v.zenMode )
+			App.ME.jCanvas.css({
+				left: "0",
+				width: "100vw",
+			});
+		else
+			App.ME.jCanvas.css({
+				left: panelWid+"px",
+				width: "calc( 100vw - "+panelWid+"px )",
+			});
 		camera.invalidateCache();
 	}
 
@@ -2336,6 +2383,8 @@ class Editor extends Page {
 		super.onAppBlur();
 		onMouseUp();
 		heldVisibilitySet = null;
+
+		setZenModeReveal(false);
 
 		if( !ET.isDevToolsOpened() )
 			enableClicktrap();
@@ -2570,5 +2619,9 @@ class Editor extends Page {
 			invalidatedMouseCoords = false;
 			updateMouseCoordsBlock( getMouse() );
 		}
+
+		// Auto re-hide panel in zen mode
+		if( settings.v.zenMode && cd.has("pendingZenModeReHide") && !cd.has("zenModeReHideLock") )
+			setZenModeReveal(false);
 	}
 }

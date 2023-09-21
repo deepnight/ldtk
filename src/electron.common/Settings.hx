@@ -6,7 +6,7 @@ import EditorTypes;
 typedef AppSettings = {
 	var lastKnownVersion: Null<String>;
 
-	var compactMode : Bool;
+	var zenMode : Bool;
 	var grid : Bool;
 	var emptySpaceSelection : Bool;
 	var tileStacking : Bool;
@@ -85,7 +85,7 @@ class Settings {
 			recentDirs: null,
 			recentDirColors: [],
 
-			compactMode: false,
+			zenMode: false,
 			grid: true,
 
 			emptySpaceSelection: true,
