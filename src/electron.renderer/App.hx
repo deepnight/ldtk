@@ -253,7 +253,6 @@ class App extends dn.Process {
 			}
 
 		}
-		trace(keyBindings);
 	}
 
 
