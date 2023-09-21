@@ -1295,6 +1295,7 @@ ul.log {
 .icon.warn				{ background-image: url("../icons/warn.svg"); }
 .icon.web				{ background-image: url("../icons/web.svg"); }
 .icon.world				{ background-image: url("../icons/world.svg"); }
+.icon.zen				{ background-image: url("../icons/zen.svg"); }
 
 .icon.up				{ background-image: url("../icons/up.svg"); }
 .icon.down				{ background-image: url("../icons/down.svg"); }
@@ -5014,7 +5015,7 @@ canvas#webgl {
 
 
 
-	ul#editingOptions {
+	#editingOptions {
 		position: absolute;
 		z-index: 1;
 		top: $editingOptionsY;
@@ -5029,62 +5030,104 @@ canvas#webgl {
 		border-top-left-radius: 0px;
 		border-bottom-left-radius: 0px;
 
-		li {
-			align-items: center;
-			border: 1px solid $bgLight;
-			border-radius: 3px;
-			padding: 4px;
-			cursor: pointer;
-
-			&.separator {
-				padding: 0;
-				cursor: default;
-				border: none;
-				height: 16px;
+		.title {
+			padding: 2px 0;
+			font-size: 8pt;
+			text-align: center;
+			&.editing {
+				color: $green;
 			}
-
-			.icon {
-				width: 24px;
-				height: 24px;
+			&.visuals {
+				color: #6594ff;
 			}
+		}
+		ul+.title {
+			margin-top: 8px;
+		}
 
-			&.active {
-				border-color: $green;
-				background-color: $helpDark;
-				box-shadow: 0px 0px 4px $help, 0px 0px 16px $green inset;
-				.off {
-					display: none;
+		ul {
+			li {
+				align-items: center;
+				border: 1px solid $bgLight;
+				border-radius: 3px;
+				padding: 4px;
+				cursor: pointer;
+				&+li {
+					margin-top: 1px;
 				}
-			}
 
-			&:hover {
-				border-color: white;
-			}
-
-			&:not(.active) {
-				.on {
-					display: none;
+				&.separator {
+					padding: 0;
+					cursor: default;
+					border: none;
+					height: 16px;
 				}
+
 				.icon {
+					width: 24px;
+					height: 24px;
+				}
+
+				&.active {
+					.off {
+						display: none;
+					}
+				}
+
+				&:not(.active) {
 					opacity: 0.66;
+					.on {
+						display: none;
+					}
+					.icon {
+						opacity: 0.35;
+					}
 				}
 
-				&.warnOff {
-					border-color: $orange;
-					background-color: $darkRed;
-					// box-shadow: 0px 0px 24px $red;
-					box-shadow: 0px 0px 16px $red, 0px 0px 16px $red inset;
+				&:hover {
+					border-color: white;
+				}
+
+				&.unsupported {
+					cursor: not-allowed;
+					border-color: transparent;
+					background-image: url("../img/stripes.png");
+					box-shadow: none;
+
+					.icon {
+						opacity: 0.2;
+					}
 				}
 			}
 
-			&.unsupported {
-				cursor: not-allowed;
-				border-color: transparent;
-				background-image: url("../img/stripes.png");
-				box-shadow: none;
+			&.editing li {
+				&.active {
+					border-color: $green;
+					background-color: $helpDark;
+					box-shadow: 0px 0px 4px $help, 0px 0px 16px $green inset;
+				}
+				&:not(.active) {
+					border-color: $helpMed;
+					background-color: $helpDarker;
+					.icon {
+						filter: brightness(1) sepia(1) hue-rotate(0.15rad) saturate(10);
+					}
+				}
+			}
 
-				.icon {
-					opacity: 0.2;
+			&.visuals li {
+				&.active {
+					border-color: #8dd3ff;
+					background-color: #6594ff;
+					box-shadow: 0px 0px 4px #6594ff, 0px 0px 16px #8dd3ff inset;
+				}
+				&:not(.active) {
+					border-color: #6594ff;
+					background-color: #1e366f;
+					.icon {
+						opacity: 0.6;
+						filter: brightness(0.7) sepia(1) hue-rotate(3.5rad) saturate(30)
+					}
 				}
 			}
 		}
@@ -5264,7 +5307,7 @@ canvas#webgl {
 			}
 
 			#mainPanel,
-			ul#editingOptions {
+			#editingOptions {
 				display: none;
 			}
 
@@ -5279,7 +5322,7 @@ canvas#webgl {
 
 		&.revealed.worldMode {
 			#mainPanel,
-			ul#editingOptions {
+			#editingOptions {
 				display: none;
 			}
 		}

@@ -1440,6 +1440,10 @@ class Editor extends Page {
 				.off();
 
 		// Update all
+		applyEditOption( jEditOptions.find("li.zen"), ()->settings.v.zenMode, (v)->{
+			setZenMode(v);
+			setZenModeReveal(true);
+		});
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
 		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
 
@@ -1592,6 +1596,7 @@ class Editor extends Page {
 		updateCanvasSize();
 		updateAppBg();
 		updateWorldList();
+		updateEditOptions();
 		if( saveSetting )
 			N.quick("Zen mode: "+L.onOff(settings.v.zenMode));
 	}

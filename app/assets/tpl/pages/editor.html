@@ -34,38 +34,50 @@
 </div>
 
 
-<ul id="editingOptions">
+<div id="editingOptions">
 
-	<li class="grid warnOff" title="**Grid** Show the layer grid. In supported layer types, hidding the grid will also allow free positionning of elements." keys="G" tip="right">
-		<div class="icon gridOn on"></div>
-		<div class="icon gridOff off"></div>
-	</li>
+	<div class="title visuals">Visuals</div>
+	<ul class="visuals">
+		<li class="zen" title="**Zen mode** This mode automatically hides the left panel to give more editing space." keys="TAB" tip="right">
+			<div class="icon zen on"></div>
+			<div class="icon zen off"></div>
+		</li>
 
-	<li class="showDetails warnOff" title="**Show/hide details** When enabled, shows all elements in layers (tiles, entities, intGrid etc.), or only tiles otherwise." keys="CTRL+H" tip="right">
-		<div class="icon showDetailsOn on"></div>
-		<div class="icon showDetailsOff off"></div>
-	</li>
+		<li class="grid" title="**Grid** Show the layer grid. In supported layer types, hidding the grid will also allow free positionning of elements." keys="G" tip="right">
+			<div class="icon gridOn on"></div>
+			<div class="icon gridOff off"></div>
+		</li>
 
-	<li class="tileEnums" title="**Show/hide enum tags** When enabled, shows a color overlay on tiles that have an Enum tag attached to them (see the Tilesets panel to tag tiles using Enums).\nOnly applies to Tiles layers and Auto-layers." tip="right">
-		<div class="icon enum on"></div>
-		<div class="icon enum off"></div>
-	</li>
 
-	<li class="separator"></li>
+		<li class="showDetails" title="**Show/hide details** When enabled, shows all elements in layers (tiles, entities, intGrid etc.), or only tiles otherwise." keys="CTRL+H" tip="right">
+			<div class="icon showDetailsOn on"></div>
+			<div class="icon showDetailsOff off"></div>
+		</li>
 
-	<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
-		<div class="icon singleLayer"></div>
-	</li>
+		<li class="tileEnums" title="**Show/hide enum tags** When enabled, shows a color overlay on tiles that have an Enum tag attached to them (see the Tilesets panel to tag tiles using Enums).\nOnly applies to Tiles layers and Auto-layers." tip="right">
+			<div class="icon enum on"></div>
+			<div class="icon enum off"></div>
+		</li>
+	</ul>
 
-	<li class="emptySpaceSelection" title="**Select empty spaces** If this option is enabled when you select a level area with ALT+SHIFT+click, the selection will also include EMPTY grid cells." keys="Shift+E" tip="right">
-		<div class="icon emptySpaceOn on"></div>
-		<div class="icon emptySpaceOff off"></div>
-	</li>
+	<div class="title editing">Misc</div>
+	<ul class="editing">
+		<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
+			<div class="icon singleLayer"></div>
+		</li>
 
-	<li class="tileStacking" title="**Tile stacking** Only applies to Tiles layers. If this option is enabled, you will be able to stack multiple tiles in a single grid cell." keys="Shift+T" tip="right">
-		<div class="icon tile"></div>
-	</li>
-</ul>
+		<li class="emptySpaceSelection" title="**Select empty spaces** If this option is enabled when you select a level area with ALT+SHIFT+click, the selection will also include EMPTY grid cells." keys="Shift+E" tip="right">
+			<div class="icon emptySpaceOn on"></div>
+			<div class="icon emptySpaceOff off"></div>
+		</li>
+
+		<li class="tileStacking" title="**Tile stacking** Only applies to Tiles layers. If this option is enabled, you will be able to stack multiple tiles in a single grid cell." keys="Shift+T" tip="right">
+			<div class="icon tile"></div>
+		</li>
+	</ul>
+
+</div>
+
 
 <div id="worldList">
 	<ul></ul>
