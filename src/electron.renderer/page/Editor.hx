@@ -556,6 +556,14 @@ class Editor extends Page {
 			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
 				continue;
 
+			switch b.os {
+				case null:
+				case "win": if( !App.isWindows() ) continue;
+				case "linux": if( !App.isLinux() ) continue;
+				case "mac": if( !App.isMac() ) continue;
+				case _:
+			}
+
 			executeAppCommand(b.command);
 		}
 

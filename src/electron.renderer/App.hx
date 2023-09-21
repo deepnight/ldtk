@@ -189,7 +189,7 @@ class App extends dn.Process {
 
 		// Parse AppCommands meta
 		var meta = haxe.rtti.Meta.getFields(AppCommand);
-		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\])/gi;
+		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\])/gi;
 		for(k in AppCommand.getConstructors()) {
 			var cmd = AppCommand.createByName(k);
 			var cmdMeta : Dynamic = Reflect.field(meta, k);
@@ -226,10 +226,18 @@ class App extends dn.Process {
 				}
 
 				var navKeys : Null<Settings.NavigationKeys> =
-					rawCombo.indexOf("wasd")>=0 ? Settings.NavigationKeys.Wasd
-					: rawCombo.indexOf("zqsd")>=0 ? Settings.NavigationKeys.Zqsd
-					: rawCombo.indexOf("arrows")>=0 ? Settings.NavigationKeys.Arrows
+					rawCombo.indexOf("[wasd]")>=0 ? Settings.NavigationKeys.Wasd
+					: rawCombo.indexOf("[zqsd]")>=0 ? Settings.NavigationKeys.Zqsd
+					: rawCombo.indexOf("[arrows]")>=0 ? Settings.NavigationKeys.Arrows
 					: null;
+
+
+				var os : Null<String> =
+					rawCombo.indexOf("[win]")>=0 ? "win"
+					: rawCombo.indexOf("[linux]")>=0 ? "linux"
+					: rawCombo.indexOf("[mac]")>=0 ? "mac"
+					: null;
+
 
 				keyBindings.push({
 					keyCode: keyCode,
@@ -238,6 +246,7 @@ class App extends dn.Process {
 					shift: rawCombo.indexOf("shift")>=0,
 					alt: rawCombo.indexOf("alt")>=0,
 					navKeys: navKeys,
+					os: os,
 					allowInInputs: Reflect.hasField(cmdMeta, "input"),
 					command: cmd,
 				});

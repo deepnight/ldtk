@@ -240,7 +240,9 @@ typedef KeyBinding = {
 	var ctrl : Bool;
 	var shift : Bool;
 	var alt : Bool;
+
 	var navKeys : Null<Settings.NavigationKeys>;
+	var os : Null<String>;
 
 	var allowInInputs : Bool;
 
@@ -283,6 +285,6 @@ enum AppCommand {
 	@k("shift e") C_ToggleSelectEmptySpaces;
 	@k("shift t") C_ToggleTileStacking;
 	@k("shift a, [zqsd] a, [arrows] a") C_ToggleSingleLayerMode;
-	@k("ctrl h") C_ToggleDetails;
+	@k("[win] ctrl h, [linux] ctrl h, [mac] shift h") C_ToggleDetails;
 	@k("g") C_ToggleGrid;
 }
