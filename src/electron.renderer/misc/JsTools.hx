@@ -266,7 +266,7 @@ class JsTools {
 		var tileRect = ed.uiTileRect!=null && ed.uiTileRect.w>0 ? ed.uiTileRect
 			: ed.renderMode==Tile && ed.tileRect!=null ? ed.tileRect
 			: null;
-			
+
 		if( tileRect!=null ) {
 			// Tile
 			var td = project.defs.getTilesetDef(tileRect.tilesetUid);
@@ -298,7 +298,7 @@ class JsTools {
 
 			ctx.fillStyle = new dn.Col(ed.color).toCssRgba(ed.fillOpacity);
 			ctx.strokeStyle = new dn.Col(ed.color).toCssRgba(ed.lineOpacity);
-			ctx.lineWidth = 3;
+			ctx.lineWidth = 2;
 
 			switch ed.renderMode {
 				case Rectangle:
@@ -316,6 +316,7 @@ class JsTools {
 					ctx.stroke();
 
 				case Cross:
+					ctx.lineWidth = 4;
 					ctx.moveTo(0,0);
 					ctx.lineTo(wid, hei);
 					ctx.moveTo(0,hei);
