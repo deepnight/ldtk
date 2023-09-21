@@ -32,6 +32,8 @@ class App extends dn.Process {
 	var requestedCpuEndTime = 0.;
 	public var pendingUpdate : Null<{ ver:String, github:Bool }>;
 
+	public var keyBindings : Array<KeyBinding> = [];
+
 	public function new() {
 		super();
 
@@ -178,6 +180,71 @@ class App extends dn.Process {
 		IpcRenderer.invoke("appReady");
 		updateBodyClasses();
 		LOG.flushOnAdd = false;
+		initKeyBindings();
+	}
+
+
+	function initKeyBindings() {
+		keyBindings = [];
+
+		// Parse AppCommands meta
+		var meta = haxe.rtti.Meta.getFields(AppCommand);
+		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\])/gi;
+		for(k in AppCommand.getConstructors()) {
+			var cmd = AppCommand.createByName(k);
+			var cmdMeta : Dynamic = Reflect.field(meta, k);
+			var rawCombos : String = try cmdMeta.k[0] catch(_) null;
+			if( rawCombos==null )
+				continue;
+
+			rawCombos = rawCombos.toLowerCase();
+			for(rawCombo in rawCombos.split(",")) {
+
+				var rawKey = keyNameReg.replace(rawCombo, "");
+				var keyCode = switch rawKey {
+					case "escape": K.ESCAPE;
+					case "tab": K.TAB;
+					case "pagedown": K.PGDOWN;
+					case "pageup": K.PGUP;
+					case "up": K.UP;
+					case "down": K.DOWN;
+					case "left": K.LEFT;
+					case "right": K.RIGHT;
+					case "²": K.QWERTY_TILDE;
+					case "`": K.QWERTY_QUOTE;
+
+					case _:
+						var fnReg = ~/f([0-9]|1[0-2])$/gi;
+						if( rawKey.length==1 && rawKey>="a" && rawKey<="z" )
+							K.A + ( rawKey.charCodeAt(0) - "a".code )
+						else if( rawKey.length==1 && rawKey>="0" && rawKey<="9" )
+							K.NUMBER_0 + ( rawKey.charCodeAt(0) - "0".code )
+						else if( fnReg.match(rawKey) )
+							K.F1 + Std.parseInt( fnReg.matched(1) ) - 1;
+						else
+							throw "Unknown key "+rawKey;
+				}
+
+				var navKeys : Null<Settings.NavigationKeys> =
+					rawCombo.indexOf("wasd")>=0 ? Settings.NavigationKeys.Wasd
+					: rawCombo.indexOf("zqsd")>=0 ? Settings.NavigationKeys.Zqsd
+					: rawCombo.indexOf("arrows")>=0 ? Settings.NavigationKeys.Arrows
+					: null;
+
+				keyBindings.push({
+					keyCode: keyCode,
+					jsKey: rawKey,
+					ctrl: rawCombo.indexOf("ctrl")>=0,
+					shift: rawCombo.indexOf("shift")>=0,
+					alt: rawCombo.indexOf("alt")>=0,
+					navKeys: navKeys,
+					allowInInputs: Reflect.hasField(cmdMeta, "input"),
+					command: cmd,
+				});
+			}
+
+		}
+		trace(keyBindings);
 	}
 
 
