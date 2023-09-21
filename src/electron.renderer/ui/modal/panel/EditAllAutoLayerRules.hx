@@ -212,8 +212,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			for( ruleTiles in li.autoTilesCache.get(r.uid) ) {
 				for(t in ruleTiles) {
 					editor.levelRender.temp.drawRect(
-						t.x,
-						t.y,
+						t.x+li.pxTotalOffsetX,
+						t.y+li.pxTotalOffsetY,
 						li.def.gridSize,
 						li.def.gridSize
 					);
