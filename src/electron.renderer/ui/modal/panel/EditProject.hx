@@ -32,86 +32,12 @@ class EditProject extends ui.modal.Panel {
 		if( project.isBackup() )
 			jSave.text(L.t._("Restore this backup"));
 
-		var jSaveAs = jContent.find("button.saveAs").click( function(ev) {
-			editor.executeAppCommand(C_SaveProjectAs);
-		});
+		var jSaveAs = jContent.find("button.saveAs").click( _->editor.executeAppCommand(C_SaveProjectAs) );
 		if( project.isBackup() )
 			jSaveAs.hide();
 
 
-		var jRename = jContent.find("button.rename").click( function(ev) {
-			new ui.modal.dialog.InputDialog(
-				L.t._("Enter the new project file name :"),
-				project.filePath.fileName,
-				project.filePath.extWithDot,
-				(str)->{
-					if( str==null || str.length==0 )
-						return L.t._("Invalid file name");
-
-					var clean = dn.FilePath.cleanUp(str, true);
-					if( clean.length==0 )
-						return L.t._("Invalid file name");
-
-					if( project.filePath.fileName==str )
-						return L.t._("Enter a new project file name.");
-
-					var newPath = project.filePath.directoryWithSlash + str + project.filePath.extWithDot;
-					if( NT.fileExists(newPath) )
-						return L.t._("This file name is already in use.");
-
-					return null;
-				},
-				(str)->{
-					return dn.FilePath.cleanUpFileName(str);
-				},
-				(fileName)->{
-					// Rename project
-					App.LOG.fileOp('Renaming project: ${project.filePath.fileName} -> $fileName');
-					try {
-						// Rename project file
-						App.LOG.fileOp('  Renaming project file...');
-						var oldProjectFp = project.filePath.clone();
-						var oldExtDir = project.getAbsExternalFilesDir();
-						project.filePath.fileName = fileName;
-
-						// Rename sub dir
-						if( NT.fileExists(oldExtDir) ) {
-							App.LOG.fileOp('  Renaming project sub dir...');
-							NT.renameFile(oldExtDir, project.getAbsExternalFilesDir());
-						}
-
-						// Rename sibling files
-						for(ext in ["meta"]) {
-							var siblingFp = oldProjectFp.clone();
-							siblingFp.extension += "."+ext;
-							if( NT.fileExists(siblingFp.full) ) {
-								App.LOG.fileOp('  Renaming sibiling file: ${siblingFp.fileWithExt}...');
-								var newFp = oldProjectFp.clone();
-								newFp.fileWithExt = project.filePath.fileWithExt+"."+ext;
-								NT.renameFile(siblingFp.full, newFp.full);
-							}
-						}
-
-						// Re-save project
-						editor.invalidateAllLevelsCache();
-						App.LOG.fileOp('  Saving project...');
-						new ui.ProjectSaver(this, project, (success)->{
-							// Remove old project file
-							App.LOG.fileOp('  Deleting old project file...');
-							NT.removeFile(oldProjectFp.full);
-							App.ME.unregisterRecentProject(oldProjectFp.full);
-
-							// Success!
-							N.success("Renamed project!");
-							editor.needSaving = false;
-							editor.updateTitle();
-							App.ME.registerRecentProject(editor.project.filePath.full);
-							App.LOG.fileOp('  Done.');
-						});
-					}
-				}
-			);
-		});
+		var jRename = jContent.find("button.rename").click( _->editor.executeAppCommand(C_RenameProject) );
 		if( project.isBackup() )
 			jRename.hide();
 
