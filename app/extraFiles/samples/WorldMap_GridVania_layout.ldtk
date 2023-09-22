@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.5",
+		"appVersion": "1.4.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a39fb1b0-7820-11ed-b6fd-87f9a01f3d6b",
-	"jsonVersion": "1.3.5",
-	"appBuildId": 470894,
+	"jsonVersion": "1.4.0",
+	"appBuildId": 470936,
 	"nextUid": 146,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -105,7 +105,7 @@
 			"excludedTags": [],
 			"intGridValues": [],
 			"intGridValuesGroups": [],
-			"autoRuleGroups": [{ "uid": 25, "name": "Shadows", "color": "#181425", "active": true, "isOptional": false, "rules": [
+			"autoRuleGroups": [{ "uid": 25, "name": "Shadows", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 				{
 					"uid": 137,
 					"active": true,
@@ -265,7 +265,7 @@
 			],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 109, "name": "Plants", "color": "#3E8948", "active": true, "isOptional": false, "rules": [
+				{ "uid": 109, "name": "Plants", "color": "#3E8948", "icon": { "tilesetUid": 6, "x": 0, "y": 96, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 110,
 						"active": true,
@@ -329,7 +329,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 7, "name": "Walls edges", "color": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 7, "name": "Walls edges", "color": null, "icon": { "tilesetUid": 6, "x": 256, "y": 96, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 78,
 						"active": true,
@@ -517,7 +517,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 125, "name": "Walls inner deep ", "color": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 125, "name": "Walls inner deep ", "color": null, "icon": { "tilesetUid": 6, "x": 96, "y": 96, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 126,
 						"active": true,
@@ -581,7 +581,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 124, "name": "Walls inner", "color": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 124, "name": "Walls inner", "color": null, "icon": { "tilesetUid": 6, "x": 192, "y": 16, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 101,
 						"active": true,
@@ -676,7 +676,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 20, "name": "Water", "color": "#0099DB", "active": true, "isOptional": false, "rules": [
+				{ "uid": 20, "name": "Water", "color": "#0099DB", "icon": { "tilesetUid": 6, "x": 320, "y": 160, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 21,
 						"active": true,
@@ -772,7 +772,7 @@
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 111, "name": "Bg leaves", "color": "#265C42", "active": true, "isOptional": false, "rules": [
+				{ "uid": 111, "name": "Bg leaves", "color": "#265C42", "icon": { "tilesetUid": 6, "x": 160, "y": 256, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 115,
 						"active": true,
@@ -898,7 +898,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 104, "name": "Bg walls", "color": "#68386C", "active": true, "isOptional": false, "rules": [
+				{ "uid": 104, "name": "Bg walls", "color": "#68386C", "icon": { "tilesetUid": 6, "x": 288, "y": 272, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 105,
 						"active": true,
