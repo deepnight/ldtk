@@ -619,7 +619,6 @@ class Editor extends Page {
 
 		switch cmd {
 			case C_Back:
-				trace("back");
 				if( hasInputFocus() ) {
 					// BUG jquery crashes on "Blur" if element is removed in the process
 					// see: https://github.com/jquery/jquery/issues/4417
