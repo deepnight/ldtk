@@ -89,18 +89,14 @@ class EnumDef {
 		return {
 			identifier: identifier,
 			uid: uid,
-			values: values.map( function(v) return { // breaks memory refs
-				id: v.id,
-				tileRect: JsonTools.writeTileRect(v.tileRect),
-				tileId: -1,
-				color: v.color,
-				__tileSrcRect: v.tileRect==null ? null : [
-					v.tileRect.x,
-					v.tileRect.y,
-					v.tileRect.w,
-					v.tileRect.h,
-				],
-			} ),
+			values: values.map( function(v) {
+				var out : ldtk.Json.EnumDefValues = { // breaks memory refs
+					id: v.id,
+					tileRect: JsonTools.writeTileRect(v.tileRect),
+					color: v.color,
+				}
+				return out;
+			}),
 			iconTilesetUid: iconTilesetUid,
 			externalRelPath: JsonTools.writePath(externalRelPath),
 			externalFileChecksum: externalFileChecksum,
