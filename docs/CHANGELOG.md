@@ -35,6 +35,7 @@ LDtk is all about being enjoyable to use, so this update includes many quality-o
 ## Other changes
 
  - Fixed out-of-screen color picker window
+ - Fixed backslashes in custom project commands that broke the JSON file parsing
  - Added more integrated icons: check marks, circles, buttons, cogs, etc.
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
  - Reworked start screen design
