@@ -1397,15 +1397,15 @@
 			}
 		}
 	], "enums": [{ "identifier": "SomeEnum", "uid": 21, "values": [
-		{ "id": "A", "tileRect": { "tilesetUid": 45, "x": 0, "y": 304, "w": 16, "h": 16 }, "tileId": -1, "color": 10049084, "__tileSrcRect": [0,304,16,16] },
-		{ "id": "B", "tileRect": { "tilesetUid": 45, "x": 0, "y": 320, "w": 16, "h": 16 }, "tileId": -1, "color": 14332236, "__tileSrcRect": [0,320,16,16] },
-		{ "id": "C", "tileRect": { "tilesetUid": 45, "x": 128, "y": 320, "w": 16, "h": 16 }, "tileId": -1, "color": 9921830, "__tileSrcRect": [128,320,16,16] },
-		{ "id": "D", "tileRect": { "tilesetUid": 45, "x": 176, "y": 336, "w": 16, "h": 16 }, "tileId": -1, "color": 11570799, "__tileSrcRect": [176,336,16,16] }
+		{ "id": "A", "tileRect": { "tilesetUid": 45, "x": 0, "y": 304, "w": 16, "h": 16 }, "color": 10049084 },
+		{ "id": "B", "tileRect": { "tilesetUid": 45, "x": 0, "y": 320, "w": 16, "h": 16 }, "color": 14332236 },
+		{ "id": "C", "tileRect": { "tilesetUid": 45, "x": 128, "y": 320, "w": 16, "h": 16 }, "color": 9921830 },
+		{ "id": "D", "tileRect": { "tilesetUid": 45, "x": 176, "y": 336, "w": 16, "h": 16 }, "color": 11570799 }
 	], "iconTilesetUid": 45, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [{ "identifier": "AnExternEnum", "uid": 48, "values": [
-		{ "id": "Value1", "tileRect": { "tilesetUid": 45, "x": 48, "y": 144, "w": 16, "h": 16 }, "tileId": -1, "color": 13408597, "__tileSrcRect": [48,144,16,16] },
-		{ "id": "Value2", "tileRect": { "tilesetUid": 45, "x": 240, "y": 144, "w": 16, "h": 16 }, "tileId": -1, "color": 4495667, "__tileSrcRect": [240,144,16,16] },
-		{ "id": "Value3", "tileRect": { "tilesetUid": 45, "x": 448, "y": 144, "w": 16, "h": 16 }, "tileId": -1, "color": 5592456, "__tileSrcRect": [448,144,16,16] },
-		{ "id": "Value4", "tileRect": { "tilesetUid": 45, "x": 384, "y": 144, "w": 16, "h": 16 }, "tileId": -1, "color": 8939059, "__tileSrcRect": [384,144,16,16] }
+		{ "id": "Value1", "tileRect": { "tilesetUid": 45, "x": 48, "y": 144, "w": 16, "h": 16 }, "color": 13408597 },
+		{ "id": "Value2", "tileRect": { "tilesetUid": 45, "x": 240, "y": 144, "w": 16, "h": 16 }, "color": 4495667 },
+		{ "id": "Value3", "tileRect": { "tilesetUid": 45, "x": 448, "y": 144, "w": 16, "h": 16 }, "color": 5592456 },
+		{ "id": "Value4", "tileRect": { "tilesetUid": 45, "x": 384, "y": 144, "w": 16, "h": 16 }, "color": 8939059 }
 	], "iconTilesetUid": 45, "externalRelPath": "externEnums.txt", "externalFileChecksum": "a9f1cf418e8ee3d8801c0dea9d79d87b", "tags": [] }], "levelFields": [] },
 	"levels": [
 		{

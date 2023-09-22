@@ -1537,25 +1537,25 @@
 		}
 	], "enums": [
 		{ "identifier": "ItemType", "uid": 74, "values": [
-			{ "id": "Meat", "tileRect": { "tilesetUid": 133, "x": 48, "y": 320, "w": 16, "h": 16 }, "tileId": -1, "color": 12015952, "__tileSrcRect": [48,320,16,16] },
-			{ "id": "Gold", "tileRect": { "tilesetUid": 133, "x": 240, "y": 352, "w": 16, "h": 16 }, "tileId": -1, "color": 11307334, "__tileSrcRect": [240,352,16,16] },
-			{ "id": "GoldNuggets", "tileRect": { "tilesetUid": 133, "x": 80, "y": 960, "w": 16, "h": 16 }, "tileId": -1, "color": 12294485, "__tileSrcRect": [80,960,16,16] },
-			{ "id": "Gem", "tileRect": { "tilesetUid": 133, "x": 96, "y": 976, "w": 16, "h": 16 }, "tileId": -1, "color": 6849988, "__tileSrcRect": [96,976,16,16] },
-			{ "id": "Green_gem", "tileRect": { "tilesetUid": 133, "x": 32, "y": 992, "w": 16, "h": 16 }, "tileId": -1, "color": 5874551, "__tileSrcRect": [32,992,16,16] },
-			{ "id": "Healing_potion", "tileRect": { "tilesetUid": 133, "x": 80, "y": 272, "w": 16, "h": 16 }, "tileId": -1, "color": 10964028, "__tileSrcRect": [80,272,16,16] },
-			{ "id": "Spell", "tileRect": { "tilesetUid": 133, "x": 16, "y": 224, "w": 16, "h": 16 }, "tileId": -1, "color": 13536015, "__tileSrcRect": [16,224,16,16] },
-			{ "id": "Armor", "tileRect": { "tilesetUid": 133, "x": 0, "y": 640, "w": 16, "h": 16 }, "tileId": -1, "color": 8018775, "__tileSrcRect": [0,640,16,16] },
-			{ "id": "Bow", "tileRect": { "tilesetUid": 133, "x": 96, "y": 528, "w": 16, "h": 16 }, "tileId": -1, "color": 9138014, "__tileSrcRect": [96,528,16,16] },
-			{ "id": "Ammo", "tileRect": { "tilesetUid": 133, "x": 112, "y": 544, "w": 16, "h": 16 }, "tileId": -1, "color": 8739931, "__tileSrcRect": [112,544,16,16] },
-			{ "id": "Fire_blade", "tileRect": { "tilesetUid": 133, "x": 208, "y": 432, "w": 16, "h": 16 }, "tileId": -1, "color": 13601098, "__tileSrcRect": [208,432,16,16] },
-			{ "id": "Vorpal_blade", "tileRect": { "tilesetUid": 133, "x": 240, "y": 432, "w": 16, "h": 16 }, "tileId": -1, "color": 9331886, "__tileSrcRect": [240,432,16,16] }
+			{ "id": "Meat", "tileRect": { "tilesetUid": 133, "x": 48, "y": 320, "w": 16, "h": 16 }, "color": 12015952 },
+			{ "id": "Gold", "tileRect": { "tilesetUid": 133, "x": 240, "y": 352, "w": 16, "h": 16 }, "color": 11307334 },
+			{ "id": "GoldNuggets", "tileRect": { "tilesetUid": 133, "x": 80, "y": 960, "w": 16, "h": 16 }, "color": 12294485 },
+			{ "id": "Gem", "tileRect": { "tilesetUid": 133, "x": 96, "y": 976, "w": 16, "h": 16 }, "color": 6849988 },
+			{ "id": "Green_gem", "tileRect": { "tilesetUid": 133, "x": 32, "y": 992, "w": 16, "h": 16 }, "color": 5874551 },
+			{ "id": "Healing_potion", "tileRect": { "tilesetUid": 133, "x": 80, "y": 272, "w": 16, "h": 16 }, "color": 10964028 },
+			{ "id": "Spell", "tileRect": { "tilesetUid": 133, "x": 16, "y": 224, "w": 16, "h": 16 }, "color": 13536015 },
+			{ "id": "Armor", "tileRect": { "tilesetUid": 133, "x": 0, "y": 640, "w": 16, "h": 16 }, "color": 8018775 },
+			{ "id": "Bow", "tileRect": { "tilesetUid": 133, "x": 96, "y": 528, "w": 16, "h": 16 }, "color": 9138014 },
+			{ "id": "Ammo", "tileRect": { "tilesetUid": 133, "x": 112, "y": 544, "w": 16, "h": 16 }, "color": 8739931 },
+			{ "id": "Fire_blade", "tileRect": { "tilesetUid": 133, "x": 208, "y": 432, "w": 16, "h": 16 }, "color": 13601098 },
+			{ "id": "Vorpal_blade", "tileRect": { "tilesetUid": 133, "x": 240, "y": 432, "w": 16, "h": 16 }, "color": 9331886 }
 		], "iconTilesetUid": 133, "externalRelPath": null, "externalFileChecksum": null, "tags": [] },
 		{ "identifier": "RoomType", "uid": 98, "values": [
-			{ "id": "Entrance", "tileRect": { "tilesetUid": 133, "x": 0, "y": 32, "w": 16, "h": 16 }, "tileId": -1, "color": 6539085, "__tileSrcRect": [0,32,16,16] },
-			{ "id": "Exit", "tileRect": { "tilesetUid": 133, "x": 48, "y": 240, "w": 16, "h": 16 }, "tileId": -1, "color": 11882632, "__tileSrcRect": [48,240,16,16] },
-			{ "id": "Shop", "tileRect": { "tilesetUid": 133, "x": 176, "y": 0, "w": 16, "h": 16 }, "tileId": -1, "color": 16690740, "__tileSrcRect": [176,0,16,16] },
-			{ "id": "Boss", "tileRect": { "tilesetUid": 133, "x": 96, "y": 0, "w": 16, "h": 16 }, "tileId": -1, "color": 14957380, "__tileSrcRect": [96,0,16,16] },
-			{ "id": "Save", "tileRect": { "tilesetUid": 133, "x": 80, "y": 32, "w": 16, "h": 16 }, "tileId": -1, "color": 39387, "__tileSrcRect": [80,32,16,16] }
+			{ "id": "Entrance", "tileRect": { "tilesetUid": 133, "x": 0, "y": 32, "w": 16, "h": 16 }, "color": 6539085 },
+			{ "id": "Exit", "tileRect": { "tilesetUid": 133, "x": 48, "y": 240, "w": 16, "h": 16 }, "color": 11882632 },
+			{ "id": "Shop", "tileRect": { "tilesetUid": 133, "x": 176, "y": 0, "w": 16, "h": 16 }, "color": 16690740 },
+			{ "id": "Boss", "tileRect": { "tilesetUid": 133, "x": 96, "y": 0, "w": 16, "h": 16 }, "color": 14957380 },
+			{ "id": "Save", "tileRect": { "tilesetUid": 133, "x": 80, "y": 32, "w": 16, "h": 16 }, "color": 39387 }
 		], "iconTilesetUid": 133, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }
 	], "externalEnums": [], "levelFields": [
 		{

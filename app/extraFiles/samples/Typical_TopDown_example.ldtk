@@ -1186,14 +1186,14 @@
 			}
 		}
 	], "enums": [{ "identifier": "Item", "uid": 66, "values": [
-		{ "id": "Wood", "tileRect": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 }, "tileId": -1, "color": 11171669, "__tileSrcRect": [192,944,16,16] },
-		{ "id": "Metal", "tileRect": { "tilesetUid": 104, "x": 224, "y": 960, "w": 16, "h": 16 }, "tileId": -1, "color": 7833736, "__tileSrcRect": [224,960,16,16] },
-		{ "id": "Food", "tileRect": { "tilesetUid": 104, "x": 16, "y": 320, "w": 16, "h": 16 }, "tileId": -1, "color": 12953206, "__tileSrcRect": [16,320,16,16] },
-		{ "id": "Health", "tileRect": { "tilesetUid": 104, "x": 80, "y": 272, "w": 16, "h": 16 }, "tileId": -1, "color": 10964028, "__tileSrcRect": [80,272,16,16] },
-		{ "id": "Rifle", "tileRect": { "tilesetUid": 104, "x": 96, "y": 560, "w": 16, "h": 16 }, "tileId": -1, "color": 3359829, "__tileSrcRect": [96,560,16,16] },
-		{ "id": "KeyA", "tileRect": { "tilesetUid": 104, "x": 272, "y": 112, "w": 16, "h": 16 }, "tileId": -1, "color": 10066329, "__tileSrcRect": [272,112,16,16] },
-		{ "id": "KeyB", "tileRect": { "tilesetUid": 104, "x": 288, "y": 112, "w": 16, "h": 16 }, "tileId": -1, "color": 8939059, "__tileSrcRect": [288,112,16,16] },
-		{ "id": "Gold", "tileRect": { "tilesetUid": 104, "x": 0, "y": 416, "w": 16, "h": 16 }, "tileId": -1, "color": 15389866, "__tileSrcRect": [0,416,16,16] }
+		{ "id": "Wood", "tileRect": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 }, "color": 11171669 },
+		{ "id": "Metal", "tileRect": { "tilesetUid": 104, "x": 224, "y": 960, "w": 16, "h": 16 }, "color": 7833736 },
+		{ "id": "Food", "tileRect": { "tilesetUid": 104, "x": 16, "y": 320, "w": 16, "h": 16 }, "color": 12953206 },
+		{ "id": "Health", "tileRect": { "tilesetUid": 104, "x": 80, "y": 272, "w": 16, "h": 16 }, "color": 10964028 },
+		{ "id": "Rifle", "tileRect": { "tilesetUid": 104, "x": 96, "y": 560, "w": 16, "h": 16 }, "color": 3359829 },
+		{ "id": "KeyA", "tileRect": { "tilesetUid": 104, "x": 272, "y": 112, "w": 16, "h": 16 }, "color": 10066329 },
+		{ "id": "KeyB", "tileRect": { "tilesetUid": 104, "x": 288, "y": 112, "w": 16, "h": 16 }, "color": 8939059 },
+		{ "id": "Gold", "tileRect": { "tilesetUid": 104, "x": 0, "y": 416, "w": 16, "h": 16 }, "color": 15389866 }
 	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{

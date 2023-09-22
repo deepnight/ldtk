@@ -1329,12 +1329,12 @@
 			}
 		}
 	], "enums": [{ "identifier": "Plants", "uid": 120, "values": [
-		{ "id": "Clover", "tileRect": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "tileId": -1, "color": 4561204, "__tileSrcRect": [240,288,16,16] },
-		{ "id": "Golden", "tileRect": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "tileId": -1, "color": 13278289, "__tileSrcRect": [48,288,16,16] },
-		{ "id": "Fruit", "tileRect": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 }, "tileId": -1, "color": 9345445, "__tileSrcRect": [48,304,16,16] },
-		{ "id": "Rose", "tileRect": { "tilesetUid": 117, "x": 176, "y": 288, "w": 16, "h": 16 }, "tileId": -1, "color": 9326891, "__tileSrcRect": [176,288,16,16] },
-		{ "id": "Root", "tileRect": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "tileId": -1, "color": 10184273, "__tileSrcRect": [0,336,16,16] },
-		{ "id": "Water_shroom", "tileRect": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "tileId": -1, "color": 6059166, "__tileSrcRect": [32,336,16,16] }
+		{ "id": "Clover", "tileRect": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 }, "color": 4561204 },
+		{ "id": "Golden", "tileRect": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 }, "color": 13278289 },
+		{ "id": "Fruit", "tileRect": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 }, "color": 9345445 },
+		{ "id": "Rose", "tileRect": { "tilesetUid": 117, "x": 176, "y": 288, "w": 16, "h": 16 }, "color": 9326891 },
+		{ "id": "Root", "tileRect": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 }, "color": 10184273 },
+		{ "id": "Water_shroom", "tileRect": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 }, "color": 6059166 }
 	], "iconTilesetUid": 117, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{

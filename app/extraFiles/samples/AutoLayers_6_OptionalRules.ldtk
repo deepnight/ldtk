@@ -2116,12 +2116,12 @@
 			}
 		}
 	], "enums": [{ "identifier": "Tiles_tags", "uid": 37, "values": [
-		{ "id": "Water", "tileRect": null, "tileId": -1, "color": 26367, "__tileSrcRect": null },
-		{ "id": "Lava", "tileRect": null, "tileId": -1, "color": 16711680, "__tileSrcRect": null },
-		{ "id": "Grass_surface", "tileRect": null, "tileId": -1, "color": 4288785, "__tileSrcRect": null },
-		{ "id": "Wood_surface", "tileRect": null, "tileId": -1, "color": 8470314, "__tileSrcRect": null },
-		{ "id": "Dirt_surface", "tileRect": null, "tileId": -1, "color": 12753004, "__tileSrcRect": null },
-		{ "id": "Stone_surface", "tileRect": null, "tileId": -1, "color": 8685190, "__tileSrcRect": null }
+		{ "id": "Water", "tileRect": null, "color": 26367 },
+		{ "id": "Lava", "tileRect": null, "color": 16711680 },
+		{ "id": "Grass_surface", "tileRect": null, "color": 4288785 },
+		{ "id": "Wood_surface", "tileRect": null, "color": 8470314 },
+		{ "id": "Dirt_surface", "tileRect": null, "color": 12753004 },
+		{ "id": "Stone_surface", "tileRect": null, "color": 8685190 }
 	], "iconTilesetUid": null, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{

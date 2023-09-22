@@ -1927,28 +1927,28 @@
 		}
 	], "enums": [
 		{ "identifier": "ItemType", "uid": 5, "values": [
-			{ "id": "Gold", "tileRect": { "tilesetUid": 99, "x": 240, "y": 352, "w": 16, "h": 16 }, "tileId": -1, "color": 11307334, "__tileSrcRect": [240,352,16,16] },
-			{ "id": "Trout", "tileRect": { "tilesetUid": 99, "x": 80, "y": 864, "w": 16, "h": 16 }, "tileId": -1, "color": 10395800, "__tileSrcRect": [80,864,16,16] },
-			{ "id": "Sword", "tileRect": { "tilesetUid": 99, "x": 16, "y": 432, "w": 16, "h": 16 }, "tileId": -1, "color": 8691125, "__tileSrcRect": [16,432,16,16] },
-			{ "id": "Heavy_sword", "tileRect": { "tilesetUid": 99, "x": 80, "y": 432, "w": 16, "h": 16 }, "tileId": -1, "color": 8627400, "__tileSrcRect": [80,432,16,16] },
-			{ "id": "Bow", "tileRect": { "tilesetUid": 99, "x": 80, "y": 528, "w": 16, "h": 16 }, "tileId": -1, "color": 9994601, "__tileSrcRect": [80,528,16,16] },
-			{ "id": "Arrow", "tileRect": { "tilesetUid": 99, "x": 192, "y": 528, "w": 16, "h": 16 }, "tileId": -1, "color": 9469292, "__tileSrcRect": [192,528,16,16] },
-			{ "id": "Staff", "tileRect": { "tilesetUid": 99, "x": 112, "y": 480, "w": 16, "h": 16 }, "tileId": -1, "color": 10839883, "__tileSrcRect": [112,480,16,16] },
-			{ "id": "Magic_ring", "tileRect": { "tilesetUid": 99, "x": 48, "y": 800, "w": 16, "h": 16 }, "tileId": -1, "color": 10645569, "__tileSrcRect": [48,800,16,16] },
-			{ "id": "Healing_potion", "tileRect": { "tilesetUid": 99, "x": 80, "y": 272, "w": 16, "h": 16 }, "tileId": -1, "color": 10964028, "__tileSrcRect": [80,272,16,16] },
-			{ "id": "Mana_potion", "tileRect": { "tilesetUid": 99, "x": 144, "y": 272, "w": 16, "h": 16 }, "tileId": -1, "color": 8224922, "__tileSrcRect": [144,272,16,16] },
-			{ "id": "Key", "tileRect": { "tilesetUid": 99, "x": 336, "y": 112, "w": 16, "h": 16 }, "tileId": -1, "color": 14334773, "__tileSrcRect": [336,112,16,16] }
+			{ "id": "Gold", "tileRect": { "tilesetUid": 99, "x": 240, "y": 352, "w": 16, "h": 16 }, "color": 11307334 },
+			{ "id": "Trout", "tileRect": { "tilesetUid": 99, "x": 80, "y": 864, "w": 16, "h": 16 }, "color": 10395800 },
+			{ "id": "Sword", "tileRect": { "tilesetUid": 99, "x": 16, "y": 432, "w": 16, "h": 16 }, "color": 8691125 },
+			{ "id": "Heavy_sword", "tileRect": { "tilesetUid": 99, "x": 80, "y": 432, "w": 16, "h": 16 }, "color": 8627400 },
+			{ "id": "Bow", "tileRect": { "tilesetUid": 99, "x": 80, "y": 528, "w": 16, "h": 16 }, "color": 9994601 },
+			{ "id": "Arrow", "tileRect": { "tilesetUid": 99, "x": 192, "y": 528, "w": 16, "h": 16 }, "color": 9469292 },
+			{ "id": "Staff", "tileRect": { "tilesetUid": 99, "x": 112, "y": 480, "w": 16, "h": 16 }, "color": 10839883 },
+			{ "id": "Magic_ring", "tileRect": { "tilesetUid": 99, "x": 48, "y": 800, "w": 16, "h": 16 }, "color": 10645569 },
+			{ "id": "Healing_potion", "tileRect": { "tilesetUid": 99, "x": 80, "y": 272, "w": 16, "h": 16 }, "color": 10964028 },
+			{ "id": "Mana_potion", "tileRect": { "tilesetUid": 99, "x": 144, "y": 272, "w": 16, "h": 16 }, "color": 8224922 },
+			{ "id": "Key", "tileRect": { "tilesetUid": 99, "x": 336, "y": 112, "w": 16, "h": 16 }, "color": 14334773 }
 		], "iconTilesetUid": 99, "externalRelPath": null, "externalFileChecksum": null, "tags": ["actor"] },
 		{ "identifier": "MonsterType", "uid": 48, "values": [
-			{ "id": "Fighter", "tileRect": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 }, "tileId": -1, "color": 10075084, "__tileSrcRect": [112,448,16,16] },
-			{ "id": "Thief", "tileRect": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 }, "tileId": -1, "color": 10066363, "__tileSrcRect": [0,448,16,16] },
-			{ "id": "Worm", "tileRect": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 }, "tileId": -1, "color": 11171720, "__tileSrcRect": [80,896,16,16] },
-			{ "id": "Beholder", "tileRect": { "tilesetUid": 99, "x": 48, "y": 208, "w": 16, "h": 16 }, "tileId": -1, "color": 11189179, "__tileSrcRect": [48,208,16,16] }
+			{ "id": "Fighter", "tileRect": { "tilesetUid": 99, "x": 112, "y": 448, "w": 16, "h": 16 }, "color": 10075084 },
+			{ "id": "Thief", "tileRect": { "tilesetUid": 99, "x": 0, "y": 448, "w": 16, "h": 16 }, "color": 10066363 },
+			{ "id": "Worm", "tileRect": { "tilesetUid": 99, "x": 80, "y": 896, "w": 16, "h": 16 }, "color": 11171720 },
+			{ "id": "Beholder", "tileRect": { "tilesetUid": 99, "x": 48, "y": 208, "w": 16, "h": 16 }, "color": 11189179 }
 		], "iconTilesetUid": 99, "externalRelPath": null, "externalFileChecksum": null, "tags": ["actor"] },
 		{ "identifier": "TriggerCondition", "uid": 84, "values": [
-			{ "id": "OnPlayerEnter", "tileRect": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 }, "tileId": -1, "color": 10458705, "__tileSrcRect": [48,240,16,16] },
-			{ "id": "OnPlayerAttack", "tileRect": { "tilesetUid": 99, "x": 80, "y": 240, "w": 16, "h": 16 }, "tileId": -1, "color": 11036746, "__tileSrcRect": [80,240,16,16] },
-			{ "id": "OnMobEnter", "tileRect": { "tilesetUid": 99, "x": 96, "y": 224, "w": 16, "h": 16 }, "tileId": -1, "color": 7823786, "__tileSrcRect": [96,224,16,16] }
+			{ "id": "OnPlayerEnter", "tileRect": { "tilesetUid": 99, "x": 48, "y": 240, "w": 16, "h": 16 }, "color": 10458705 },
+			{ "id": "OnPlayerAttack", "tileRect": { "tilesetUid": 99, "x": 80, "y": 240, "w": 16, "h": 16 }, "color": 11036746 },
+			{ "id": "OnMobEnter", "tileRect": { "tilesetUid": 99, "x": 96, "y": 224, "w": 16, "h": 16 }, "color": 7823786 }
 		], "iconTilesetUid": 99, "externalRelPath": null, "externalFileChecksum": null, "tags": ["blueprint"] }
 	], "externalEnums": [], "levelFields": [] },
 	"levels": [

@@ -1810,12 +1810,12 @@
 			}
 		}
 	], "enums": [{ "identifier": "Item", "uid": 49, "values": [
-		{ "id": "Knife", "tileRect": { "tilesetUid": 104, "x": 0, "y": 448, "w": 16, "h": 16 }, "tileId": -1, "color": 9608629, "__tileSrcRect": [0,448,16,16] },
-		{ "id": "Healing_Plant", "tileRect": { "tilesetUid": 104, "x": 16, "y": 288, "w": 16, "h": 16 }, "tileId": -1, "color": 4625973, "__tileSrcRect": [16,288,16,16] },
-		{ "id": "Meat", "tileRect": { "tilesetUid": 104, "x": 48, "y": 320, "w": 16, "h": 16 }, "tileId": -1, "color": 12015952, "__tileSrcRect": [48,320,16,16] },
-		{ "id": "Boots", "tileRect": { "tilesetUid": 104, "x": 32, "y": 752, "w": 16, "h": 16 }, "tileId": -1, "color": 9067593, "__tileSrcRect": [32,752,16,16] },
-		{ "id": "Water", "tileRect": { "tilesetUid": 104, "x": 0, "y": 272, "w": 16, "h": 16 }, "tileId": -1, "color": 9399401, "__tileSrcRect": [0,272,16,16] },
-		{ "id": "Gem", "tileRect": { "tilesetUid": 104, "x": 176, "y": 976, "w": 16, "h": 16 }, "tileId": -1, "color": 11173944, "__tileSrcRect": [176,976,16,16] }
+		{ "id": "Knife", "tileRect": { "tilesetUid": 104, "x": 0, "y": 448, "w": 16, "h": 16 }, "color": 9608629 },
+		{ "id": "Healing_Plant", "tileRect": { "tilesetUid": 104, "x": 16, "y": 288, "w": 16, "h": 16 }, "color": 4625973 },
+		{ "id": "Meat", "tileRect": { "tilesetUid": 104, "x": 48, "y": 320, "w": 16, "h": 16 }, "color": 12015952 },
+		{ "id": "Boots", "tileRect": { "tilesetUid": 104, "x": 32, "y": 752, "w": 16, "h": 16 }, "color": 9067593 },
+		{ "id": "Water", "tileRect": { "tilesetUid": 104, "x": 0, "y": 272, "w": 16, "h": 16 }, "color": 9399401 },
+		{ "id": "Gem", "tileRect": { "tilesetUid": 104, "x": 176, "y": 976, "w": 16, "h": 16 }, "color": 11173944 }
 	], "iconTilesetUid": 104, "externalRelPath": null, "externalFileChecksum": null, "tags": [] }], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
