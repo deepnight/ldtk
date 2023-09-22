@@ -306,7 +306,7 @@ class Project {
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
 		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:ldtk.Json.CustomCommand)->{
 			return {
-				command: cmdJson.command,
+				command: JsonTools.unescapeString(cmdJson.command),
 				when: JsonTools.readEnum(ldtk.Json.CustomCommandTrigger, cmdJson.when, false, Manual),
 			}
 		});
@@ -639,7 +639,7 @@ class Project {
 			levelNamePattern: levelNamePattern,
 			tutorialDesc : JsonTools.escapeString(tutorialDesc),
 			customCommands: customCommands.map(cmd->{
-				command: cmd.command,
+				command: JsonTools.escapeString(cmd.command),
 				when: JsonTools.writeEnum(cmd.when, false),
 			}),
 
