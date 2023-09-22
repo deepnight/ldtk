@@ -1593,6 +1593,19 @@
 						"boolean"
 					]
 				},
+				"icon": {
+					"description": "",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"usesWizard": {
 					"description": "",
 					"type": [
