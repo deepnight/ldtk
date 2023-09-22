@@ -1,6 +1,6 @@
-# 1.4.0 - Groups of Int Grid values
+# 1.4.0 - Int-Grid groups
 
-## Groups of Int Grid values
+## Int-Grid groups
 ![](1.4.0/intGridGroups.png)
 
 You can now create custom groups for your Int Grid values, allowing much more advanced rules based on these groups.
