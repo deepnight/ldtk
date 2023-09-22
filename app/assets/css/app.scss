@@ -3365,13 +3365,17 @@ textarea {
 			.version {
 				display: grid;
 				align-items: center;
+				grid-template-columns: min-content min-content;
 				padding: 16px;
-				font-weight: bold;
 				font-size: 50pt;
 				line-height: 55pt;
 				color: $bgDark;
 				background-color: $orange;
 				white-space: nowrap;
+
+				em {
+					font-style: normal;
+				}
 
 				&.long {
 					font-size: 35pt;

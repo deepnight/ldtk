@@ -69,7 +69,8 @@ class Changelog extends ui.modal.Dialog {
 
 		// Load page
 		loadTemplate("changelog", {
-			ver: latestPatchedVer.full,
+			mainVer: latestPatchedVer.major+"."+latestPatchedVer.minor,
+			patchVer: latestPatchedVer.patch>0 ? "."+latestPatchedVer.patch : "",
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
 		}, false);
