@@ -534,7 +534,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
 			.find(".text").text(rg.name).parent()
-			.find(".collapserIcon").removeClass().addClass("icon").addClass(rg.collapsed ? "collapsed" : "expanded");
+			.find(".collapserIcon").removeClass().addClass("collapserIcon").addClass(rg.collapsed ? "collapsed" : "expanded");
 
 		if( rg.collapsed ) {
 			jGroup.addClass("collapsed");
@@ -797,7 +797,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				allActive = false;
 		}
 
-		jGroupHeader.find(".ruleActive .collapserIcon")
+		jGroupHeader.find(".ruleActive .icon")
 			.addClass( rg.isOptional
 				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
 				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
