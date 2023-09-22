@@ -258,7 +258,7 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(project:data.Project, ed:data.def.EntityDef, sizePx=24) {
+	public static function createEntityPreview(project:data.Project, ed:data.def.EntityDef, sizePx=32) {
 		var jWrapper = new J('<div class="entityPreview icon"></div>');
 		jWrapper.css("width", sizePx+"px");
 		jWrapper.css("height", sizePx+"px");
