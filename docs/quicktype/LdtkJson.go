@@ -238,6 +238,8 @@ type EntityDefinition struct {
 	TilesetID                                                                                   *int64            `json:"tilesetId"`
 	// Unique Int identifier                                                                                      
 	Uid                                                                                         int64             `json:"uid"`
+	// This tile overrides the one defined in `tileRect` in the UI                                                
+	UITileRect                                                                                  *TilesetRectangle `json:"uiTileRect"`
 	// Pixel width                                                                                                
 	Width                                                                                       int64             `json:"width"`
 }
@@ -347,97 +349,101 @@ type EnumDefinition struct {
 }
 
 type EnumValueDefinition struct {
-	// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+                  
-	// Replaced by: `tileRect`                                                                            
-	TileSrcRect                                                                         []int64           `json:"__tileSrcRect"`
-	// Optional color                                                                                     
-	Color                                                                               int64             `json:"color"`
-	// Enum value                                                                                         
-	ID                                                                                  string            `json:"id"`
-	// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+                  
-	// Replaced by: `tileRect`                                                                            
-	TileID                                                                              *int64            `json:"tileId"`
-	// Optional tileset rectangle to represents this value                                                
-	TileRect                                                                            *TilesetRectangle `json:"tileRect"`
+	// **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced                  
+	// by: `tileRect`                                                                                          
+	TileSrcRect                                                                              []int64           `json:"__tileSrcRect"`
+	// Optional color                                                                                          
+	Color                                                                                    int64             `json:"color"`
+	// Enum value                                                                                              
+	ID                                                                                       string            `json:"id"`
+	// **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced                  
+	// by: `tileRect`                                                                                          
+	TileID                                                                                   *int64            `json:"tileId"`
+	// Optional tileset rectangle to represents this value                                                     
+	TileRect                                                                                 *TilesetRectangle `json:"tileRect"`
 }
 
 type LayerDefinition struct {
-	// Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)                                                        
-	Type                                                                                         string                   `json:"__type"`
-	// Contains all the auto-layer rule definitions.                                                                      
-	AutoRuleGroups                                                                               []AutoLayerRuleGroup     `json:"autoRuleGroups"`
-	AutoSourceLayerDefUid                                                                        *int64                   `json:"autoSourceLayerDefUid"`
-	// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced                             
-	// by: `tilesetDefUid`                                                                                                
-	AutoTilesetDefUid                                                                            *int64                   `json:"autoTilesetDefUid"`
-	// Allow editor selections when the layer is not currently active.                                                    
-	CanSelectWhenInactive                                                                        bool                     `json:"canSelectWhenInactive"`
-	// Opacity of the layer (0 to 1.0)                                                                                    
-	DisplayOpacity                                                                               float64                  `json:"displayOpacity"`
-	// User defined documentation for this element to provide help/tips to level designers.                               
-	Doc                                                                                          *string                  `json:"doc"`
-	// An array of tags to forbid some Entities in this layer                                                             
-	ExcludedTags                                                                                 []string                 `json:"excludedTags"`
-	// Width and height of the grid in pixels                                                                             
-	GridSize                                                                                     int64                    `json:"gridSize"`
-	// Height of the optional "guide" grid in pixels                                                                      
-	GuideGridHei                                                                                 int64                    `json:"guideGridHei"`
-	// Width of the optional "guide" grid in pixels                                                                       
-	GuideGridWid                                                                                 int64                    `json:"guideGridWid"`
-	HideFieldsWhenInactive                                                                       bool                     `json:"hideFieldsWhenInactive"`
-	// Hide the layer from the list on the side of the editor view.                                                       
-	HideInList                                                                                   bool                     `json:"hideInList"`
-	// User defined unique identifier                                                                                     
-	Identifier                                                                                   string                   `json:"identifier"`
-	// Alpha of this layer when it is not the active one.                                                                 
-	InactiveOpacity                                                                              float64                  `json:"inactiveOpacity"`
-	// An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the                               
-	// array order is not related to actual IntGrid values! As user can re-order IntGrid values                           
-	// freely, you may value "2" before value "1" in this array.                                                          
-	IntGridValues                                                                                []IntGridValueDefinition `json:"intGridValues"`
-	// Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling                               
-	// speed of this layer, creating a fake 3D (parallax) effect.                                                         
-	ParallaxFactorX                                                                              float64                  `json:"parallaxFactorX"`
-	// Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed                           
-	// of this layer, creating a fake 3D (parallax) effect.                                                               
-	ParallaxFactorY                                                                              float64                  `json:"parallaxFactorY"`
-	// If true (default), a layer with a parallax factor will also be scaled up/down accordingly.                         
-	ParallaxScaling                                                                              bool                     `json:"parallaxScaling"`
-	// X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`                           
-	// optional offset)                                                                                                   
-	PxOffsetX                                                                                    int64                    `json:"pxOffsetX"`
-	// Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`                           
-	// optional offset)                                                                                                   
-	PxOffsetY                                                                                    int64                    `json:"pxOffsetY"`
-	// If TRUE, the content of this layer will be used when rendering levels in a simplified way                          
-	// for the world view                                                                                                 
-	RenderInWorldView                                                                            bool                     `json:"renderInWorldView"`
-	// An array of tags to filter Entities that can be added to this layer                                                
-	RequiredTags                                                                                 []string                 `json:"requiredTags"`
-	// If the tiles are smaller or larger than the layer grid, the pivot value will be used to                            
-	// position the tile relatively its grid cell.                                                                        
-	TilePivotX                                                                                   float64                  `json:"tilePivotX"`
-	// If the tiles are smaller or larger than the layer grid, the pivot value will be used to                            
-	// position the tile relatively its grid cell.                                                                        
-	TilePivotY                                                                                   float64                  `json:"tilePivotY"`
-	// Reference to the default Tileset UID being used by this layer definition.<br/>                                     
-	// **WARNING**: some layer *instances* might use a different tileset. So most of the time,                            
-	// you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:                          
-	// since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.                           
-	TilesetDefUid                                                                                *int64                   `json:"tilesetDefUid"`
-	// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,                                    
-	// `AutoLayer`                                                                                                        
-	LayerDefinitionType                                                                          Type                     `json:"type"`
-	// User defined color for the UI                                                                                      
-	UIColor                                                                                      *string                  `json:"uiColor"`
-	// Unique Int identifier                                                                                              
-	Uid                                                                                          int64                    `json:"uid"`
+	// Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)                                                             
+	Type                                                                                         string                        `json:"__type"`
+	// Contains all the auto-layer rule definitions.                                                                           
+	AutoRuleGroups                                                                               []AutoLayerRuleGroup          `json:"autoRuleGroups"`
+	AutoSourceLayerDefUid                                                                        *int64                        `json:"autoSourceLayerDefUid"`
+	// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced                                  
+	// by: `tilesetDefUid`                                                                                                     
+	AutoTilesetDefUid                                                                            *int64                        `json:"autoTilesetDefUid"`
+	// Allow editor selections when the layer is not currently active.                                                         
+	CanSelectWhenInactive                                                                        bool                          `json:"canSelectWhenInactive"`
+	// Opacity of the layer (0 to 1.0)                                                                                         
+	DisplayOpacity                                                                               float64                       `json:"displayOpacity"`
+	// User defined documentation for this element to provide help/tips to level designers.                                    
+	Doc                                                                                          *string                       `json:"doc"`
+	// An array of tags to forbid some Entities in this layer                                                                  
+	ExcludedTags                                                                                 []string                      `json:"excludedTags"`
+	// Width and height of the grid in pixels                                                                                  
+	GridSize                                                                                     int64                         `json:"gridSize"`
+	// Height of the optional "guide" grid in pixels                                                                           
+	GuideGridHei                                                                                 int64                         `json:"guideGridHei"`
+	// Width of the optional "guide" grid in pixels                                                                            
+	GuideGridWid                                                                                 int64                         `json:"guideGridWid"`
+	HideFieldsWhenInactive                                                                       bool                          `json:"hideFieldsWhenInactive"`
+	// Hide the layer from the list on the side of the editor view.                                                            
+	HideInList                                                                                   bool                          `json:"hideInList"`
+	// User defined unique identifier                                                                                          
+	Identifier                                                                                   string                        `json:"identifier"`
+	// Alpha of this layer when it is not the active one.                                                                      
+	InactiveOpacity                                                                              float64                       `json:"inactiveOpacity"`
+	// An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the                                    
+	// array order is not related to actual IntGrid values! As user can re-order IntGrid values                                
+	// freely, you may value "2" before value "1" in this array.                                                               
+	IntGridValues                                                                                []IntGridValueDefinition      `json:"intGridValues"`
+	// Group informations for IntGrid values                                                                                   
+	IntGridValuesGroups                                                                          []IntGridValueGroupDefinition `json:"intGridValuesGroups"`
+	// Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling                                    
+	// speed of this layer, creating a fake 3D (parallax) effect.                                                              
+	ParallaxFactorX                                                                              float64                       `json:"parallaxFactorX"`
+	// Parallax vertical factor (from -1 to 1, defaults to 0) which affects the scrolling speed                                
+	// of this layer, creating a fake 3D (parallax) effect.                                                                    
+	ParallaxFactorY                                                                              float64                       `json:"parallaxFactorY"`
+	// If true (default), a layer with a parallax factor will also be scaled up/down accordingly.                              
+	ParallaxScaling                                                                              bool                          `json:"parallaxScaling"`
+	// X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`                                
+	// optional offset)                                                                                                        
+	PxOffsetX                                                                                    int64                         `json:"pxOffsetX"`
+	// Y offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`                                
+	// optional offset)                                                                                                        
+	PxOffsetY                                                                                    int64                         `json:"pxOffsetY"`
+	// If TRUE, the content of this layer will be used when rendering levels in a simplified way                               
+	// for the world view                                                                                                      
+	RenderInWorldView                                                                            bool                          `json:"renderInWorldView"`
+	// An array of tags to filter Entities that can be added to this layer                                                     
+	RequiredTags                                                                                 []string                      `json:"requiredTags"`
+	// If the tiles are smaller or larger than the layer grid, the pivot value will be used to                                 
+	// position the tile relatively its grid cell.                                                                             
+	TilePivotX                                                                                   float64                       `json:"tilePivotX"`
+	// If the tiles are smaller or larger than the layer grid, the pivot value will be used to                                 
+	// position the tile relatively its grid cell.                                                                             
+	TilePivotY                                                                                   float64                       `json:"tilePivotY"`
+	// Reference to the default Tileset UID being used by this layer definition.<br/>                                          
+	// **WARNING**: some layer *instances* might use a different tileset. So most of the time,                                 
+	// you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:                               
+	// since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.                                
+	TilesetDefUid                                                                                *int64                        `json:"tilesetDefUid"`
+	// Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,                                         
+	// `AutoLayer`                                                                                                             
+	LayerDefinitionType                                                                          Type                          `json:"type"`
+	// User defined color for the UI                                                                                           
+	UIColor                                                                                      *string                       `json:"uiColor"`
+	// Unique Int identifier                                                                                                   
+	Uid                                                                                          int64                         `json:"uid"`
 }
 
 type AutoLayerRuleGroup struct {
 	Active                                                            bool                      `json:"active"`
 	// *This field was removed in 1.0.0 and should no longer be used.*                          
 	Collapsed                                                         *bool                     `json:"collapsed"`
+	Color                                                             *string                   `json:"color"`
+	Icon                                                              *TilesetRectangle         `json:"icon"`
 	IsOptional                                                        bool                      `json:"isOptional"`
 	Name                                                              string                    `json:"name"`
 	Rules                                                             []AutoLayerRuleDefinition `json:"rules"`
@@ -508,12 +514,24 @@ type AutoLayerRuleDefinition struct {
 
 // IntGrid value definition
 type IntGridValueDefinition struct {
-	Color                            string            `json:"color"`
-	// User defined unique identifier                  
-	Identifier                       *string           `json:"identifier"`
-	Tile                             *TilesetRectangle `json:"tile"`
-	// The IntGrid value itself                        
-	Value                            int64             `json:"value"`
+	Color                                 string            `json:"color"`
+	// Parent group identifier (0 if none)                  
+	GroupUid                              int64             `json:"groupUid"`
+	// User defined unique identifier                       
+	Identifier                            *string           `json:"identifier"`
+	Tile                                  *TilesetRectangle `json:"tile"`
+	// The IntGrid value itself                             
+	Value                                 int64             `json:"value"`
+}
+
+// IntGrid value group definition
+type IntGridValueGroupDefinition struct {
+	// User defined color                    
+	Color                            *string `json:"color"`
+	// User defined string identifier        
+	Identifier                       *string `json:"identifier"`
+	// Group unique ID                       
+	Uid                              int64   `json:"uid"`
 }
 
 // The `Tileset` definition is the most important part among project definitions. It
@@ -589,6 +607,7 @@ type ForcedRefs struct {
 	FieldInstance        *FieldInstance               `json:"FieldInstance,omitempty"`
 	GridPoint            *GridPoint                   `json:"GridPoint,omitempty"`
 	IntGridValueDef      *IntGridValueDefinition      `json:"IntGridValueDef,omitempty"`
+	IntGridValueGroupDef *IntGridValueGroupDefinition `json:"IntGridValueGroupDef,omitempty"`
 	IntGridValueInstance *IntGridValueInstance        `json:"IntGridValueInstance,omitempty"`
 	LayerDef             *LayerDefinition             `json:"LayerDef,omitempty"`
 	LayerInstance        *LayerInstance               `json:"LayerInstance,omitempty"`
@@ -788,9 +807,10 @@ type Level struct {
 	BgColor                                                                                     string                   `json:"__bgColor"`
 	// Position informations of the background image, if there is one.                                                   
 	BgPos                                                                                       *LevelBackgroundPosition `json:"__bgPos"`
-	// An array listing all other levels touching this one on the world map.<br/>  Only relevant                         
-	// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For                            
-	// Horizontal and Vertical layouts, this array is always empty.                                                      
+	// An array listing all other levels touching this one on the world map. Since 1.3.5, this                           
+	// includes levels that overlap in the same world layer, or in nearby world layers.<br/>                             
+	// Only relevant for world layouts where level spatial positioning is manual (ie. GridVania,                         
+	// Free). For Horizontal and Vertical layouts, this array is always empty.                                           
 	Neighbours                                                                                  []NeighbourLevel         `json:"__neighbours"`
 	// The "guessed" color for this level in the editor, decided using either the background                             
 	// color or an existing custom field.                                                                                
@@ -861,14 +881,16 @@ type LevelBackgroundPosition struct {
 
 // Nearby level info
 type NeighbourLevel struct {
-	// A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,        
-	// `e`ast).                                                                                     
-	Dir                                                                                      string `json:"dir"`
-	// Neighbour Instance Identifier                                                                
-	LevelIid                                                                                 string `json:"levelIid"`
-	// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced       
-	// by: `levelIid`                                                                               
-	LevelUid                                                                                 *int64 `json:"levelUid"`
+	// A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,          
+	// `e`ast).<br/>  Since 1.3.5, this character value can also be `<` (neighbour depth is           
+	// lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world       
+	// depth).                                                                                        
+	Dir                                                                                        string `json:"dir"`
+	// Neighbour Instance Identifier                                                                  
+	LevelIid                                                                                   string `json:"levelIid"`
+	// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced         
+	// by: `levelIid`                                                                                 
+	LevelUid                                                                                   *int64 `json:"levelUid"`
 }
 
 type LdtkTableOfContentEntry struct {

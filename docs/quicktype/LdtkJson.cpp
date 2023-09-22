@@ -496,6 +496,7 @@ namespace quicktype {
         TileRenderMode tile_render_mode;
         boost::optional<int64_t> tileset_id;
         int64_t uid;
+        boost::optional<TilesetRectangle> ui_tile_rect;
         int64_t width;
 
         public:
@@ -705,6 +706,12 @@ namespace quicktype {
         void set_uid(const int64_t & value) { this->uid = value; }
 
         /**
+         * This tile overrides the one defined in `tileRect` in the UI
+         */
+        boost::optional<TilesetRectangle> get_ui_tile_rect() const { return ui_tile_rect; }
+        void set_ui_tile_rect(boost::optional<TilesetRectangle> value) { this->ui_tile_rect = value; }
+
+        /**
          * Pixel width
          */
         const int64_t & get_width() const { return width; }
@@ -726,8 +733,8 @@ namespace quicktype {
 
         public:
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
-         * Replaced by: `tileRect`
+         * **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
+         * by: `tileRect`
          */
         boost::optional<std::vector<int64_t>> get_tile_src_rect() const { return tile_src_rect; }
         void set_tile_src_rect(boost::optional<std::vector<int64_t>> value) { this->tile_src_rect = value; }
@@ -747,8 +754,8 @@ namespace quicktype {
         void set_id(const std::string & value) { this->id = value; }
 
         /**
-         * **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
-         * Replaced by: `tileRect`
+         * **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
+         * by: `tileRect`
          */
         boost::optional<int64_t> get_tile_id() const { return tile_id; }
         void set_tile_id(boost::optional<int64_t> value) { this->tile_id = value; }
@@ -1071,6 +1078,8 @@ namespace quicktype {
         private:
         bool active;
         boost::optional<bool> collapsed;
+        boost::optional<std::string> color;
+        boost::optional<TilesetRectangle> icon;
         bool is_optional;
         std::string name;
         std::vector<AutoLayerRuleDefinition> rules;
@@ -1087,6 +1096,12 @@ namespace quicktype {
          */
         boost::optional<bool> get_collapsed() const { return collapsed; }
         void set_collapsed(boost::optional<bool> value) { this->collapsed = value; }
+
+        boost::optional<std::string> get_color() const { return color; }
+        void set_color(boost::optional<std::string> value) { this->color = value; }
+
+        boost::optional<TilesetRectangle> get_icon() const { return icon; }
+        void set_icon(boost::optional<TilesetRectangle> value) { this->icon = value; }
 
         const bool & get_is_optional() const { return is_optional; }
         bool & get_mutable_is_optional() { return is_optional; }
@@ -1119,6 +1134,7 @@ namespace quicktype {
 
         private:
         std::string color;
+        int64_t group_uid;
         boost::optional<std::string> identifier;
         boost::optional<TilesetRectangle> tile;
         int64_t value;
@@ -1127,6 +1143,13 @@ namespace quicktype {
         const std::string & get_color() const { return color; }
         std::string & get_mutable_color() { return color; }
         void set_color(const std::string & value) { this->color = value; }
+
+        /**
+         * Parent group identifier (0 if none)
+         */
+        const int64_t & get_group_uid() const { return group_uid; }
+        int64_t & get_mutable_group_uid() { return group_uid; }
+        void set_group_uid(const int64_t & value) { this->group_uid = value; }
 
         /**
          * User defined unique identifier
@@ -1143,6 +1166,40 @@ namespace quicktype {
         const int64_t & get_value() const { return value; }
         int64_t & get_mutable_value() { return value; }
         void set_value(const int64_t & value) { this->value = value; }
+    };
+
+    /**
+     * IntGrid value group definition
+     */
+    class IntGridValueGroupDefinition {
+        public:
+        IntGridValueGroupDefinition() = default;
+        virtual ~IntGridValueGroupDefinition() = default;
+
+        private:
+        boost::optional<std::string> color;
+        boost::optional<std::string> identifier;
+        int64_t uid;
+
+        public:
+        /**
+         * User defined color
+         */
+        boost::optional<std::string> get_color() const { return color; }
+        void set_color(boost::optional<std::string> value) { this->color = value; }
+
+        /**
+         * User defined string identifier
+         */
+        boost::optional<std::string> get_identifier() const { return identifier; }
+        void set_identifier(boost::optional<std::string> value) { this->identifier = value; }
+
+        /**
+         * Group unique ID
+         */
+        const int64_t & get_uid() const { return uid; }
+        int64_t & get_mutable_uid() { return uid; }
+        void set_uid(const int64_t & value) { this->uid = value; }
     };
 
     /**
@@ -1173,6 +1230,7 @@ namespace quicktype {
         std::string identifier;
         double inactive_opacity;
         std::vector<IntGridValueDefinition> int_grid_values;
+        std::vector<IntGridValueGroupDefinition> int_grid_values_groups;
         double parallax_factor_x;
         double parallax_factor_y;
         bool parallax_scaling;
@@ -1293,6 +1351,13 @@ namespace quicktype {
         const std::vector<IntGridValueDefinition> & get_int_grid_values() const { return int_grid_values; }
         std::vector<IntGridValueDefinition> & get_mutable_int_grid_values() { return int_grid_values; }
         void set_int_grid_values(const std::vector<IntGridValueDefinition> & value) { this->int_grid_values = value; }
+
+        /**
+         * Group informations for IntGrid values
+         */
+        const std::vector<IntGridValueGroupDefinition> & get_int_grid_values_groups() const { return int_grid_values_groups; }
+        std::vector<IntGridValueGroupDefinition> & get_mutable_int_grid_values_groups() { return int_grid_values_groups; }
+        void set_int_grid_values_groups(const std::vector<IntGridValueGroupDefinition> & value) { this->int_grid_values_groups = value; }
 
         /**
          * Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
@@ -2275,7 +2340,9 @@ namespace quicktype {
         public:
         /**
          * A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,
-         * `e`ast).
+         * `e`ast).<br/>  Since 1.3.5, this character value can also be `<` (neighbour depth is
+         * lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world
+         * depth).
          */
         const std::string & get_dir() const { return dir; }
         std::string & get_mutable_dir() { return dir; }
@@ -2350,9 +2417,10 @@ namespace quicktype {
         void set_bg_pos(boost::optional<LevelBackgroundPosition> value) { this->bg_pos = value; }
 
         /**
-         * An array listing all other levels touching this one on the world map.<br/>  Only relevant
-         * for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
-         * Horizontal and Vertical layouts, this array is always empty.
+         * An array listing all other levels touching this one on the world map. Since 1.3.5, this
+         * includes levels that overlap in the same world layer, or in nearby world layers.<br/>
+         * Only relevant for world layouts where level spatial positioning is manual (ie. GridVania,
+         * Free). For Horizontal and Vertical layouts, this array is always empty.
          */
         const std::vector<NeighbourLevel> & get_neighbours() const { return neighbours; }
         std::vector<NeighbourLevel> & get_mutable_neighbours() { return neighbours; }
@@ -2621,6 +2689,7 @@ namespace quicktype {
         boost::optional<FieldInstance> field_instance;
         boost::optional<GridPoint> grid_point;
         boost::optional<IntGridValueDefinition> int_grid_value_def;
+        boost::optional<IntGridValueGroupDefinition> int_grid_value_group_def;
         boost::optional<IntGridValueInstance> int_grid_value_instance;
         boost::optional<LayerDefinition> layer_def;
         boost::optional<LayerInstance> layer_instance;
@@ -2676,6 +2745,9 @@ namespace quicktype {
 
         boost::optional<IntGridValueDefinition> get_int_grid_value_def() const { return int_grid_value_def; }
         void set_int_grid_value_def(boost::optional<IntGridValueDefinition> value) { this->int_grid_value_def = value; }
+
+        boost::optional<IntGridValueGroupDefinition> get_int_grid_value_group_def() const { return int_grid_value_group_def; }
+        void set_int_grid_value_group_def(boost::optional<IntGridValueGroupDefinition> value) { this->int_grid_value_group_def = value; }
 
         boost::optional<IntGridValueInstance> get_int_grid_value_instance() const { return int_grid_value_instance; }
         void set_int_grid_value_instance(boost::optional<IntGridValueInstance> value) { this->int_grid_value_instance = value; }
@@ -3104,6 +3176,9 @@ namespace quicktype {
     void from_json(const json & j, IntGridValueDefinition & x);
     void to_json(json & j, const IntGridValueDefinition & x);
 
+    void from_json(const json & j, IntGridValueGroupDefinition & x);
+    void to_json(json & j, const IntGridValueGroupDefinition & x);
+
     void from_json(const json & j, LayerDefinition & x);
     void to_json(json & j, const LayerDefinition & x);
 
@@ -3351,6 +3426,7 @@ namespace quicktype {
         x.set_tile_render_mode(j.at("tileRenderMode").get<TileRenderMode>());
         x.set_tileset_id(get_stack_optional<int64_t>(j, "tilesetId"));
         x.set_uid(j.at("uid").get<int64_t>());
+        x.set_ui_tile_rect(get_stack_optional<TilesetRectangle>(j, "uiTileRect"));
         x.set_width(j.at("width").get<int64_t>());
     }
 
@@ -3387,6 +3463,7 @@ namespace quicktype {
         j["tileRenderMode"] = x.get_tile_render_mode();
         j["tilesetId"] = x.get_tileset_id();
         j["uid"] = x.get_uid();
+        j["uiTileRect"] = x.get_ui_tile_rect();
         j["width"] = x.get_width();
     }
 
@@ -3496,6 +3573,8 @@ namespace quicktype {
     inline void from_json(const json & j, AutoLayerRuleGroup& x) {
         x.set_active(j.at("active").get<bool>());
         x.set_collapsed(get_stack_optional<bool>(j, "collapsed"));
+        x.set_color(get_stack_optional<std::string>(j, "color"));
+        x.set_icon(get_stack_optional<TilesetRectangle>(j, "icon"));
         x.set_is_optional(j.at("isOptional").get<bool>());
         x.set_name(j.at("name").get<std::string>());
         x.set_rules(j.at("rules").get<std::vector<AutoLayerRuleDefinition>>());
@@ -3507,6 +3586,8 @@ namespace quicktype {
         j = json::object();
         j["active"] = x.get_active();
         j["collapsed"] = x.get_collapsed();
+        j["color"] = x.get_color();
+        j["icon"] = x.get_icon();
         j["isOptional"] = x.get_is_optional();
         j["name"] = x.get_name();
         j["rules"] = x.get_rules();
@@ -3516,6 +3597,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, IntGridValueDefinition& x) {
         x.set_color(j.at("color").get<std::string>());
+        x.set_group_uid(j.at("groupUid").get<int64_t>());
         x.set_identifier(get_stack_optional<std::string>(j, "identifier"));
         x.set_tile(get_stack_optional<TilesetRectangle>(j, "tile"));
         x.set_value(j.at("value").get<int64_t>());
@@ -3524,9 +3606,23 @@ namespace quicktype {
     inline void to_json(json & j, const IntGridValueDefinition & x) {
         j = json::object();
         j["color"] = x.get_color();
+        j["groupUid"] = x.get_group_uid();
         j["identifier"] = x.get_identifier();
         j["tile"] = x.get_tile();
         j["value"] = x.get_value();
+    }
+
+    inline void from_json(const json & j, IntGridValueGroupDefinition& x) {
+        x.set_color(get_stack_optional<std::string>(j, "color"));
+        x.set_identifier(get_stack_optional<std::string>(j, "identifier"));
+        x.set_uid(j.at("uid").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const IntGridValueGroupDefinition & x) {
+        j = json::object();
+        j["color"] = x.get_color();
+        j["identifier"] = x.get_identifier();
+        j["uid"] = x.get_uid();
     }
 
     inline void from_json(const json & j, LayerDefinition& x) {
@@ -3546,6 +3642,7 @@ namespace quicktype {
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_inactive_opacity(j.at("inactiveOpacity").get<double>());
         x.set_int_grid_values(j.at("intGridValues").get<std::vector<IntGridValueDefinition>>());
+        x.set_int_grid_values_groups(j.at("intGridValuesGroups").get<std::vector<IntGridValueGroupDefinition>>());
         x.set_parallax_factor_x(j.at("parallaxFactorX").get<double>());
         x.set_parallax_factor_y(j.at("parallaxFactorY").get<double>());
         x.set_parallax_scaling(j.at("parallaxScaling").get<bool>());
@@ -3579,6 +3676,7 @@ namespace quicktype {
         j["identifier"] = x.get_identifier();
         j["inactiveOpacity"] = x.get_inactive_opacity();
         j["intGridValues"] = x.get_int_grid_values();
+        j["intGridValuesGroups"] = x.get_int_grid_values_groups();
         j["parallaxFactorX"] = x.get_parallax_factor_x();
         j["parallaxFactorY"] = x.get_parallax_factor_y();
         j["parallaxScaling"] = x.get_parallax_scaling();
@@ -3965,6 +4063,7 @@ namespace quicktype {
         x.set_field_instance(get_stack_optional<FieldInstance>(j, "FieldInstance"));
         x.set_grid_point(get_stack_optional<GridPoint>(j, "GridPoint"));
         x.set_int_grid_value_def(get_stack_optional<IntGridValueDefinition>(j, "IntGridValueDef"));
+        x.set_int_grid_value_group_def(get_stack_optional<IntGridValueGroupDefinition>(j, "IntGridValueGroupDef"));
         x.set_int_grid_value_instance(get_stack_optional<IntGridValueInstance>(j, "IntGridValueInstance"));
         x.set_layer_def(get_stack_optional<LayerDefinition>(j, "LayerDef"));
         x.set_layer_instance(get_stack_optional<LayerInstance>(j, "LayerInstance"));
@@ -3995,6 +4094,7 @@ namespace quicktype {
         j["FieldInstance"] = x.get_field_instance();
         j["GridPoint"] = x.get_grid_point();
         j["IntGridValueDef"] = x.get_int_grid_value_def();
+        j["IntGridValueGroupDef"] = x.get_int_grid_value_group_def();
         j["IntGridValueInstance"] = x.get_int_grid_value_instance();
         j["LayerDef"] = x.get_layer_def();
         j["LayerInstance"] = x.get_layer_instance();
