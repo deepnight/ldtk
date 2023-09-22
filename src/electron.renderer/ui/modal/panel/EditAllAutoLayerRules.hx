@@ -212,8 +212,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			for( ruleTiles in li.autoTilesCache.get(r.uid) ) {
 				for(t in ruleTiles) {
 					editor.levelRender.temp.drawRect(
-						t.x,
-						t.y,
+						t.x+li.pxTotalOffsetX,
+						t.y+li.pxTotalOffsetY,
 						li.def.gridSize,
 						li.def.gridSize
 					);
@@ -222,6 +222,37 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				// var cx = ( coordId % li.cWid );
 				// var cy = Std.int( coordId / li.cWid );
 			}
+		}
+	}
+
+
+	function onPickGroupColor(rg:AutoLayerRuleGroup) {
+		var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), rg.color, true);
+		cp.onValidate = (c)->{
+			rg.color = c;
+			updateRuleGroup(rg);
+		}
+	}
+
+
+
+	function onPickGroupIcon(rg:AutoLayerRuleGroup) {
+		var td = li.getTilesetDef();
+		if( td==null )
+			N.error("Invalid layer tileset");
+		else {
+			var m = new ui.Modal();
+			m.addClass("singleTilePicker");
+
+			var tp = new ui.Tileset(m.jContent, td, RectOnly);
+			tp.useSavedSelections = false;
+			tp.setSelectedRect(rg.icon);
+			tp.onSelectAnything = ()->{
+				rg.icon = tp.getSelectedRect();
+				m.close();
+				editor.ge.emit( LayerRuleGroupChanged(rg) );
+			}
+			tp.focusOnSelection(true);
 		}
 	}
 
@@ -291,6 +322,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			m.add({
 				label: L.t._("Use assistant (recommended)"),
+				icon: "wizard",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -302,6 +334,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			m.add({
 				label: L.t._("Create an empty group"),
+				icon: "folder",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -436,10 +469,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Make groups sortable
-		JsTools.makeSortable(jRuleGroupList, "allGroups", false, function(ev) {
+		JsTools.makeSortable(jRuleGroupList, "allGroups", function(ev) {
 			project.defs.sortLayerAutoGroup(ld, ev.oldIndex, ev.newIndex);
 			editor.ge.emit(LayerRuleGroupSorted);
-		});
+		}, { disableAnim:true });
 
 		checkBackup();
 	}
@@ -484,6 +517,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 		jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
 
+		if( rg.color!=null ) {
+			jGroup.find(".sortHandle, header").css("background-color", rg.color.toCssRgba(0.7));
+		}
 
 		var jGroupList = jGroup.find(">ul");
 		jGroupList.attr("groupUid", rg.uid);
@@ -498,7 +534,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
 			.find(".text").text(rg.name).parent()
-			.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "collapsed" : "expanded");
+			.find(".collapserIcon").removeClass().addClass("collapserIcon").addClass(rg.collapsed ? "collapsed" : "expanded");
 
 		if( rg.collapsed ) {
 			jGroup.addClass("collapsed");
@@ -506,6 +542,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jDropTarget.attr("groupIdx",groupIdx);
 			jDropTarget.attr("groupUid",rg.uid);
 			jGroup.append(jDropTarget);
+		}
+		if( rg.icon!=null ) {
+			var td = li.getTilesetDef();
+			if( td!=null ) {
+				var jImg = td.createTileHtmlImageFromRect(rg.icon, 32);
+				jName.find(".customIcon").append(jImg);
+			}
 		}
 
 		// Show cells affected by this whole group
@@ -524,7 +567,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		var jToggle = jGroupHeader.find(".active");
+		var jToggle = jGroupHeader.find(".ruleActive");
 		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
@@ -538,8 +581,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 		if( rg.isOptional )
 			jToggle.attr("title", (li.isRuleGroupActiveHere(rg)?"Disable":"Enable")+" this group of rules in this level");
-		// else
-		// 	jToggle.attr("title", (rg.active?"Disable":"Enable")+" this group of rules everywhere");
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");
@@ -565,28 +606,32 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
-				label: L.t._("Edit rules using the Assistant"),
-				cb: ()->{
-					doUseWizard(rg);
-				},
-				show: ()->rg.usesWizard,
+				label: L.t._("Assign group color"),
+				icon: "color",
+				cb: ()->onPickGroupColor(rg),
 			},
 
 			{
-				label: L.t._("Turn into an OPTIONAL group"),
-				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				label: L.t._("Assign group icon"),
+				icon: "pickIcon",
+				cb: ()->onPickGroupIcon(rg),
+			},
+
+			{
+				label: L.t._("Remove group icon"),
+				icon: "deleteIcon",
+				show: ()->rg.icon!=null,
 				cb: ()->{
-					invalidateRuleGroup(rg);
-					rg.isOptional = true;
-					rg.active = true; // just some cleanup
+					rg.icon = null;
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
 				},
-				show: ()->!rg.isOptional,
 			},
 
 			{
 				label: L.t._('Edit "out-of-bounds" policy for all rules'),
 				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				icon: "outOfBounds",
+				separatorBefore: true,
 				cb: ()->{
 					var m = new ui.modal.Dialog();
 					m.loadTemplate("outOfBoundsPolicyGlobal.html");
@@ -605,7 +650,28 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					m.addCancel();
 				},
 				show: ()->!rg.isOptional,
-				separatorAfter: true,
+			},
+
+			{
+				label: L.t._("Edit rules using the Assistant"),
+				icon: "wizard",
+				cb: ()->{
+					doUseWizard(rg);
+				},
+				show: ()->rg.usesWizard,
+			},
+
+			{
+				label: L.t._("Turn into an OPTIONAL group"),
+				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				icon: "optional",
+				cb: ()->{
+					invalidateRuleGroup(rg);
+					rg.isOptional = true;
+					rg.active = true; // just some cleanup
+					editor.ge.emit( LayerRuleGroupChanged(rg) );
+				},
+				show: ()->!rg.isOptional,
 			},
 
 			{
@@ -623,10 +689,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					);
 				},
 				show: ()->rg.isOptional,
-				separatorAfter: true,
 			},
 			{
 				label: L._PasteAfter("rule"),
+				separatorBefore: true,
 				cb: ()->{
 					var copy = ld.pasteRule(project, rg, App.ME.clipboard);
 					lastRule = copy;
@@ -731,7 +797,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				allActive = false;
 		}
 
-		jGroupHeader.find(".active .icon")
+		jGroupHeader.find(".ruleActive .icon")
 			.addClass( rg.isOptional
 				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
 				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
@@ -739,7 +805,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// Make individual rules sortable
-		JsTools.makeSortable(jGroupList, jContent.find("ul.ruleGroups"), "allRules", false, function(ev) {
+		JsTools.makeSortable(jGroupList, jContent.find("ul.ruleGroups"), "allRules", function(ev) {
 			var fromUid = Std.parseInt( ev.from.getAttribute("groupUid") );
 			if( fromUid!=rg.uid )
 				return; // Prevent double "onSort" call (one for From, one for To)
@@ -758,11 +824,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				invalidateRuleAndOnesBelow( ld.getRule(ruleUid) );
 
 			editor.ge.emit(LayerRuleSorted);
-		});
+		}, { disableAnim:true });
 
 		// Turn the fake UL in collapsed groups into a sorting drop-target
 		if( rg.collapsed )
-			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", false, function(_) {} );
+			JsTools.makeSortable( jGroup.find(".collapsedSortTarget"), "allRules", function(_) {}, { disableAnim:true } );
 
 		JsTools.parseComponents(jGroup);
 		return jGroup;
@@ -949,7 +1015,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Enable/disable rule
-		var jActive = jRule.find("a.active");
+		var jActive = jRule.find("a.ruleActive");
 		jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 		jActive.click( function(ev:js.jquery.Event) {
 			ev.preventDefault();

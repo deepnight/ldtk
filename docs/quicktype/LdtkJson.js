@@ -225,6 +225,7 @@ const typeMap = {
         { json: "FieldInstance", js: "FieldInstance", typ: u(undefined, r("FieldInstance")) },
         { json: "GridPoint", js: "GridPoint", typ: u(undefined, r("GridPoint")) },
         { json: "IntGridValueDef", js: "IntGridValueDef", typ: u(undefined, r("IntGridValueDefinition")) },
+        { json: "IntGridValueGroupDef", js: "IntGridValueGroupDef", typ: u(undefined, r("IntGridValueGroupDefinition")) },
         { json: "IntGridValueInstance", js: "IntGridValueInstance", typ: u(undefined, r("IntGridValueInstance")) },
         { json: "LayerDef", js: "LayerDef", typ: u(undefined, r("LayerDefinition")) },
         { json: "LayerInstance", js: "LayerInstance", typ: u(undefined, r("LayerInstance")) },
@@ -241,11 +242,20 @@ const typeMap = {
     "AutoLayerRuleGroup": o([
         { json: "active", js: "active", typ: true },
         { json: "collapsed", js: "collapsed", typ: u(undefined, u(true, null)) },
+        { json: "color", js: "color", typ: u(undefined, u(null, "")) },
+        { json: "icon", js: "icon", typ: u(undefined, u(r("TilesetRectangle"), null)) },
         { json: "isOptional", js: "isOptional", typ: true },
         { json: "name", js: "name", typ: "" },
         { json: "rules", js: "rules", typ: a(r("AutoLayerRuleDefinition")) },
         { json: "uid", js: "uid", typ: 0 },
         { json: "usesWizard", js: "usesWizard", typ: true },
+    ], false),
+    "TilesetRectangle": o([
+        { json: "h", js: "h", typ: 0 },
+        { json: "tilesetUid", js: "tilesetUid", typ: 0 },
+        { json: "w", js: "w", typ: 0 },
+        { json: "x", js: "x", typ: 0 },
+        { json: "y", js: "y", typ: 0 },
     ], false),
     "AutoLayerRuleDefinition": o([
         { json: "active", js: "active", typ: true },
@@ -322,6 +332,7 @@ const typeMap = {
         { json: "tileRenderMode", js: "tileRenderMode", typ: r("TileRenderMode") },
         { json: "tilesetId", js: "tilesetId", typ: u(undefined, u(0, null)) },
         { json: "uid", js: "uid", typ: 0 },
+        { json: "uiTileRect", js: "uiTileRect", typ: u(undefined, u(r("TilesetRectangle"), null)) },
         { json: "width", js: "width", typ: 0 },
     ], false),
     "FieldDefinition": o([
@@ -359,13 +370,6 @@ const typeMap = {
         { json: "uid", js: "uid", typ: 0 },
         { json: "useForSmartColor", js: "useForSmartColor", typ: true },
     ], false),
-    "TilesetRectangle": o([
-        { json: "h", js: "h", typ: 0 },
-        { json: "tilesetUid", js: "tilesetUid", typ: 0 },
-        { json: "w", js: "w", typ: 0 },
-        { json: "x", js: "x", typ: 0 },
-        { json: "y", js: "y", typ: 0 },
-    ], false),
     "EnumDefinition": o([
         { json: "externalFileChecksum", js: "externalFileChecksum", typ: u(undefined, u(null, "")) },
         { json: "externalRelPath", js: "externalRelPath", typ: u(undefined, u(null, "")) },
@@ -399,6 +403,7 @@ const typeMap = {
         { json: "identifier", js: "identifier", typ: "" },
         { json: "inactiveOpacity", js: "inactiveOpacity", typ: 3.14 },
         { json: "intGridValues", js: "intGridValues", typ: a(r("IntGridValueDefinition")) },
+        { json: "intGridValuesGroups", js: "intGridValuesGroups", typ: a(r("IntGridValueGroupDefinition")) },
         { json: "parallaxFactorX", js: "parallaxFactorX", typ: 3.14 },
         { json: "parallaxFactorY", js: "parallaxFactorY", typ: 3.14 },
         { json: "parallaxScaling", js: "parallaxScaling", typ: true },
@@ -415,9 +420,15 @@ const typeMap = {
     ], false),
     "IntGridValueDefinition": o([
         { json: "color", js: "color", typ: "" },
+        { json: "groupUid", js: "groupUid", typ: 0 },
         { json: "identifier", js: "identifier", typ: u(undefined, u(null, "")) },
         { json: "tile", js: "tile", typ: u(undefined, u(r("TilesetRectangle"), null)) },
         { json: "value", js: "value", typ: 0 },
+    ], false),
+    "IntGridValueGroupDefinition": o([
+        { json: "color", js: "color", typ: u(undefined, u(null, "")) },
+        { json: "identifier", js: "identifier", typ: u(undefined, u(null, "")) },
+        { json: "uid", js: "uid", typ: 0 },
     ], false),
     "TilesetDefinition": o([
         { json: "__cHei", js: "__cHei", typ: 0 },

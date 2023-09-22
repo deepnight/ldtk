@@ -515,10 +515,12 @@ class EntityDefinition:
     tileset_id: Optional[int]
     """Unique Int identifier"""
     uid: int
+    """This tile overrides the one defined in `tileRect` in the UI"""
+    ui_tile_rect: Optional[TilesetRectangle]
     """Pixel width"""
     width: int
 
-    def __init__(self, color: str, doc: Optional[str], export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, max_height: Optional[int], max_width: Optional[int], min_height: Optional[int], min_width: Optional[int], nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, width: int) -> None:
+    def __init__(self, color: str, doc: Optional[str], export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, max_height: Optional[int], max_width: Optional[int], min_height: Optional[int], min_width: Optional[int], nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, ui_tile_rect: Optional[TilesetRectangle], width: int) -> None:
         self.color = color
         self.doc = doc
         self.export_to_toc = export_to_toc
@@ -550,6 +552,7 @@ class EntityDefinition:
         self.tile_render_mode = tile_render_mode
         self.tileset_id = tileset_id
         self.uid = uid
+        self.ui_tile_rect = ui_tile_rect
         self.width = width
 
     @staticmethod
@@ -586,8 +589,9 @@ class EntityDefinition:
         tile_render_mode = TileRenderMode(obj.get("tileRenderMode"))
         tileset_id = from_union([from_none, from_int], obj.get("tilesetId"))
         uid = from_int(obj.get("uid"))
+        ui_tile_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("uiTileRect"))
         width = from_int(obj.get("width"))
-        return EntityDefinition(color, doc, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, max_height, max_width, min_height, min_width, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, width)
+        return EntityDefinition(color, doc, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, max_height, max_width, min_height, min_width, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, ui_tile_rect, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -630,21 +634,23 @@ class EntityDefinition:
         if self.tileset_id is not None:
             result["tilesetId"] = from_union([from_none, from_int], self.tileset_id)
         result["uid"] = from_int(self.uid)
+        if self.ui_tile_rect is not None:
+            result["uiTileRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.ui_tile_rect)
         result["width"] = from_int(self.width)
         return result
 
 
 class EnumValueDefinition:
-    """**WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
-    Replaced by: `tileRect`
+    """**WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
+    by: `tileRect`
     """
     tile_src_rect: Optional[List[int]]
     """Optional color"""
     color: int
     """Enum value"""
     id: str
-    """**WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
-    Replaced by: `tileRect`
+    """**WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
+    by: `tileRect`
     """
     tile_id: Optional[int]
     """Optional tileset rectangle to represents this value"""
@@ -910,15 +916,19 @@ class AutoLayerRuleGroup:
     active: bool
     """*This field was removed in 1.0.0 and should no longer be used.*"""
     collapsed: Optional[bool]
+    color: Optional[str]
+    icon: Optional[TilesetRectangle]
     is_optional: bool
     name: str
     rules: List[AutoLayerRuleDefinition]
     uid: int
     uses_wizard: bool
 
-    def __init__(self, active: bool, collapsed: Optional[bool], is_optional: bool, name: str, rules: List[AutoLayerRuleDefinition], uid: int, uses_wizard: bool) -> None:
+    def __init__(self, active: bool, collapsed: Optional[bool], color: Optional[str], icon: Optional[TilesetRectangle], is_optional: bool, name: str, rules: List[AutoLayerRuleDefinition], uid: int, uses_wizard: bool) -> None:
         self.active = active
         self.collapsed = collapsed
+        self.color = color
+        self.icon = icon
         self.is_optional = is_optional
         self.name = name
         self.rules = rules
@@ -930,18 +940,24 @@ class AutoLayerRuleGroup:
         assert isinstance(obj, dict)
         active = from_bool(obj.get("active"))
         collapsed = from_union([from_none, from_bool], obj.get("collapsed"))
+        color = from_union([from_none, from_str], obj.get("color"))
+        icon = from_union([from_none, TilesetRectangle.from_dict], obj.get("icon"))
         is_optional = from_bool(obj.get("isOptional"))
         name = from_str(obj.get("name"))
         rules = from_list(AutoLayerRuleDefinition.from_dict, obj.get("rules"))
         uid = from_int(obj.get("uid"))
         uses_wizard = from_bool(obj.get("usesWizard"))
-        return AutoLayerRuleGroup(active, collapsed, is_optional, name, rules, uid, uses_wizard)
+        return AutoLayerRuleGroup(active, collapsed, color, icon, is_optional, name, rules, uid, uses_wizard)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["active"] = from_bool(self.active)
         if self.collapsed is not None:
             result["collapsed"] = from_union([from_none, from_bool], self.collapsed)
+        if self.color is not None:
+            result["color"] = from_union([from_none, from_str], self.color)
+        if self.icon is not None:
+            result["icon"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.icon)
         result["isOptional"] = from_bool(self.is_optional)
         result["name"] = from_str(self.name)
         result["rules"] = from_list(lambda x: to_class(AutoLayerRuleDefinition, x), self.rules)
@@ -953,14 +969,17 @@ class AutoLayerRuleGroup:
 class IntGridValueDefinition:
     """IntGrid value definition"""
     color: str
+    """Parent group identifier (0 if none)"""
+    group_uid: int
     """User defined unique identifier"""
     identifier: Optional[str]
     tile: Optional[TilesetRectangle]
     """The IntGrid value itself"""
     value: int
 
-    def __init__(self, color: str, identifier: Optional[str], tile: Optional[TilesetRectangle], value: int) -> None:
+    def __init__(self, color: str, group_uid: int, identifier: Optional[str], tile: Optional[TilesetRectangle], value: int) -> None:
         self.color = color
+        self.group_uid = group_uid
         self.identifier = identifier
         self.tile = tile
         self.value = value
@@ -969,19 +988,53 @@ class IntGridValueDefinition:
     def from_dict(obj: Any) -> 'IntGridValueDefinition':
         assert isinstance(obj, dict)
         color = from_str(obj.get("color"))
+        group_uid = from_int(obj.get("groupUid"))
         identifier = from_union([from_none, from_str], obj.get("identifier"))
         tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("tile"))
         value = from_int(obj.get("value"))
-        return IntGridValueDefinition(color, identifier, tile, value)
+        return IntGridValueDefinition(color, group_uid, identifier, tile, value)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["color"] = from_str(self.color)
+        result["groupUid"] = from_int(self.group_uid)
         if self.identifier is not None:
             result["identifier"] = from_union([from_none, from_str], self.identifier)
         if self.tile is not None:
             result["tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
         result["value"] = from_int(self.value)
+        return result
+
+
+class IntGridValueGroupDefinition:
+    """IntGrid value group definition"""
+    """User defined color"""
+    color: Optional[str]
+    """User defined string identifier"""
+    identifier: Optional[str]
+    """Group unique ID"""
+    uid: int
+
+    def __init__(self, color: Optional[str], identifier: Optional[str], uid: int) -> None:
+        self.color = color
+        self.identifier = identifier
+        self.uid = uid
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'IntGridValueGroupDefinition':
+        assert isinstance(obj, dict)
+        color = from_union([from_none, from_str], obj.get("color"))
+        identifier = from_union([from_none, from_str], obj.get("identifier"))
+        uid = from_int(obj.get("uid"))
+        return IntGridValueGroupDefinition(color, identifier, uid)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        if self.color is not None:
+            result["color"] = from_union([from_none, from_str], self.color)
+        if self.identifier is not None:
+            result["identifier"] = from_union([from_none, from_str], self.identifier)
+        result["uid"] = from_int(self.uid)
         return result
 
 
@@ -1031,6 +1084,8 @@ class LayerDefinition:
     freely, you may value "2" before value "1" in this array.
     """
     int_grid_values: List[IntGridValueDefinition]
+    """Group informations for IntGrid values"""
+    int_grid_values_groups: List[IntGridValueGroupDefinition]
     """Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
     speed of this layer, creating a fake 3D (parallax) effect.
     """
@@ -1078,7 +1133,7 @@ class LayerDefinition:
     """Unique Int identifier"""
     uid: int
 
-    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, render_in_world_view: bool, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, ui_color: Optional[str], uid: int) -> None:
+    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], int_grid_values_groups: List[IntGridValueGroupDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, render_in_world_view: bool, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, ui_color: Optional[str], uid: int) -> None:
         self.type = type
         self.auto_rule_groups = auto_rule_groups
         self.auto_source_layer_def_uid = auto_source_layer_def_uid
@@ -1095,6 +1150,7 @@ class LayerDefinition:
         self.identifier = identifier
         self.inactive_opacity = inactive_opacity
         self.int_grid_values = int_grid_values
+        self.int_grid_values_groups = int_grid_values_groups
         self.parallax_factor_x = parallax_factor_x
         self.parallax_factor_y = parallax_factor_y
         self.parallax_scaling = parallax_scaling
@@ -1128,6 +1184,7 @@ class LayerDefinition:
         identifier = from_str(obj.get("identifier"))
         inactive_opacity = from_float(obj.get("inactiveOpacity"))
         int_grid_values = from_list(IntGridValueDefinition.from_dict, obj.get("intGridValues"))
+        int_grid_values_groups = from_list(IntGridValueGroupDefinition.from_dict, obj.get("intGridValuesGroups"))
         parallax_factor_x = from_float(obj.get("parallaxFactorX"))
         parallax_factor_y = from_float(obj.get("parallaxFactorY"))
         parallax_scaling = from_bool(obj.get("parallaxScaling"))
@@ -1141,7 +1198,7 @@ class LayerDefinition:
         layer_definition_type = TypeEnum(obj.get("type"))
         ui_color = from_union([from_none, from_str], obj.get("uiColor"))
         uid = from_int(obj.get("uid"))
-        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, can_select_when_inactive, display_opacity, doc, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, render_in_world_view, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, ui_color, uid)
+        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, can_select_when_inactive, display_opacity, doc, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, int_grid_values_groups, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, render_in_world_view, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, ui_color, uid)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1164,6 +1221,7 @@ class LayerDefinition:
         result["identifier"] = from_str(self.identifier)
         result["inactiveOpacity"] = to_float(self.inactive_opacity)
         result["intGridValues"] = from_list(lambda x: to_class(IntGridValueDefinition, x), self.int_grid_values)
+        result["intGridValuesGroups"] = from_list(lambda x: to_class(IntGridValueGroupDefinition, x), self.int_grid_values_groups)
         result["parallaxFactorX"] = to_float(self.parallax_factor_x)
         result["parallaxFactorY"] = to_float(self.parallax_factor_y)
         result["parallaxScaling"] = from_bool(self.parallax_scaling)
@@ -1903,7 +1961,9 @@ class BgPos(Enum):
 class NeighbourLevel:
     """Nearby level info"""
     """A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,
-    `e`ast).
+    `e`ast).<br/>  Since 1.3.5, this character value can also be `<` (neighbour depth is
+    lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world
+    depth).
     """
     dir: str
     """Neighbour Instance Identifier"""
@@ -1951,9 +2011,10 @@ class Level:
     bg_color: str
     """Position informations of the background image, if there is one."""
     bg_pos: Optional[LevelBackgroundPosition]
-    """An array listing all other levels touching this one on the world map.<br/>  Only relevant
-    for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
-    Horizontal and Vertical layouts, this array is always empty.
+    """An array listing all other levels touching this one on the world map. Since 1.3.5, this
+    includes levels that overlap in the same world layer, or in nearby world layers.<br/>
+    Only relevant for world layouts where level spatial positioning is manual (ie. GridVania,
+    Free). For Horizontal and Vertical layouts, this array is always empty.
     """
     neighbours: List[NeighbourLevel]
     """The "guessed" color for this level in the editor, decided using either the background
@@ -2209,6 +2270,7 @@ class ForcedRefs:
     field_instance: Optional[FieldInstance]
     grid_point: Optional[GridPoint]
     int_grid_value_def: Optional[IntGridValueDefinition]
+    int_grid_value_group_def: Optional[IntGridValueGroupDefinition]
     int_grid_value_instance: Optional[IntGridValueInstance]
     layer_def: Optional[LayerDefinition]
     layer_instance: Optional[LayerInstance]
@@ -2222,7 +2284,7 @@ class ForcedRefs:
     tileset_rect: Optional[TilesetRectangle]
     world: Optional[World]
 
-    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[ReferenceToAnEntityInstance], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[GridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], table_of_content_entry: Optional[LdtkTableOfContentEntry], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
+    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[ReferenceToAnEntityInstance], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[GridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_group_def: Optional[IntGridValueGroupDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], table_of_content_entry: Optional[LdtkTableOfContentEntry], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
         self.auto_layer_rule_group = auto_layer_rule_group
         self.auto_rule_def = auto_rule_def
         self.custom_command = custom_command
@@ -2237,6 +2299,7 @@ class ForcedRefs:
         self.field_instance = field_instance
         self.grid_point = grid_point
         self.int_grid_value_def = int_grid_value_def
+        self.int_grid_value_group_def = int_grid_value_group_def
         self.int_grid_value_instance = int_grid_value_instance
         self.layer_def = layer_def
         self.layer_instance = layer_instance
@@ -2267,6 +2330,7 @@ class ForcedRefs:
         field_instance = from_union([FieldInstance.from_dict, from_none], obj.get("FieldInstance"))
         grid_point = from_union([GridPoint.from_dict, from_none], obj.get("GridPoint"))
         int_grid_value_def = from_union([IntGridValueDefinition.from_dict, from_none], obj.get("IntGridValueDef"))
+        int_grid_value_group_def = from_union([IntGridValueGroupDefinition.from_dict, from_none], obj.get("IntGridValueGroupDef"))
         int_grid_value_instance = from_union([IntGridValueInstance.from_dict, from_none], obj.get("IntGridValueInstance"))
         layer_def = from_union([LayerDefinition.from_dict, from_none], obj.get("LayerDef"))
         layer_instance = from_union([LayerInstance.from_dict, from_none], obj.get("LayerInstance"))
@@ -2279,7 +2343,7 @@ class ForcedRefs:
         tileset_def = from_union([TilesetDefinition.from_dict, from_none], obj.get("TilesetDef"))
         tileset_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("TilesetRect"))
         world = from_union([World.from_dict, from_none], obj.get("World"))
-        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, table_of_content_entry, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
+        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_group_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, table_of_content_entry, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -2311,6 +2375,8 @@ class ForcedRefs:
             result["GridPoint"] = from_union([lambda x: to_class(GridPoint, x), from_none], self.grid_point)
         if self.int_grid_value_def is not None:
             result["IntGridValueDef"] = from_union([lambda x: to_class(IntGridValueDefinition, x), from_none], self.int_grid_value_def)
+        if self.int_grid_value_group_def is not None:
+            result["IntGridValueGroupDef"] = from_union([lambda x: to_class(IntGridValueGroupDefinition, x), from_none], self.int_grid_value_group_def)
         if self.int_grid_value_instance is not None:
             result["IntGridValueInstance"] = from_union([lambda x: to_class(IntGridValueInstance, x), from_none], self.int_grid_value_instance)
         if self.layer_def is not None:

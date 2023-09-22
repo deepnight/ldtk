@@ -186,6 +186,8 @@ class LevelRender extends dn.Process {
 
 			case LayerDefIntGridValuesSorted(defUid):
 
+			case LayerDefIntGridValueAdded(defUid,value):
+
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				if( used )
 					invalidateLayer(defUid);

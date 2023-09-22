@@ -133,18 +133,17 @@ class RuleEditor extends ui.modal.Dialog {
 
 
 
-	function updateValuePicker() {
-		var jValues = jContent.find(">.pattern .values ul").empty();
+	function updateValuePalette() {
+		var jValuePalette = jContent.find(">.pattern .valuePalette>ul").empty();
 
 		// Values view mode
 		var stateId = settings.makeStateId(RuleValuesColumns, layerDef.uid);
 		var columns = settings.getUiStateInt(stateId, project, 1);
-		JsTools.removeClassReg(jValues, ~/col-[0-9]+/g);
-		jValues.addClass("col-"+columns);
+		JsTools.removeClassReg(jValuePalette, ~/col-[0-9]+/g);
+		jValuePalette.addClass("col-"+columns);
 
 		// View select
 		var jMode = jContent.find(".displayMode");
-		jMode.off();
 		jMode.off().click(_->{
 			var m = new ContextMenu(jMode);
 			m.add({
@@ -152,7 +151,7 @@ class RuleEditor extends ui.modal.Dialog {
 				icon: "listView",
 				cb: ()->{
 					settings.deleteUiState(stateId, project);
-					updateValuePicker();
+					updateValuePalette();
 				}
 			});
 			for(n in [2,3,4,5]) {
@@ -161,48 +160,83 @@ class RuleEditor extends ui.modal.Dialog {
 					icon: "gridView",
 					cb: ()->{
 						settings.setUiStateInt(stateId, n, project);
-						updateValuePicker();
+						updateValuePalette();
 					}
 				});
 			}
 		});
 
-		// Values picker
-		for(v in sourceDef.getAllIntGridValues()) {
-			var jVal = new J('<li/>');
-			jVal.appendTo(jValues);
+		// Groups
+		for(g in sourceDef.getGroupedIntGridValues()) {
+			var groupValue = (g.groupUid+1)*1000;
 
-			jVal.css("background-color", C.intToHex(v.color));
-			jVal.append( JsTools.createIntGridValue(project,v) );
-			jVal.append('<span class="name">${v.identifier!=null ? v.identifier : ""}</span>');
-			jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
+			var jHeader = new J('<li class="title"/>');
+			jHeader.append('<span class="icon folderClose"/>');
+			if( sourceDef.hasIntGridGroups() ) {
+				jHeader.appendTo(jValuePalette);
+				jHeader.append('<span class="name">${g.displayName}</span>');
 
-			if( v.value==curValue )
-				jVal.addClass("active");
+				jHeader.click(_->{
+					curValue = groupValue;
+					updateValuePalette();
+				});
+			}
 
-			var id = v.value;
-			jVal.click( function(ev) {
-				curValue = id;
-				editor.ge.emit( LayerRuleChanged(rule) );
-				updateValuePicker();
-			});
+			var jSubList = new J('<li class="subList"> <ul class="groupValues"></ul> </li>');
+			jSubList.appendTo(jValuePalette);
+
+			if( g.color!=null ) {
+				var alpha = curValue==groupValue ? 1 : 0.4;
+				jHeader.css("background-color", g.color.toCssRgba(0.8*alpha));
+				jSubList.css("background-color", g.color.toCssRgba(0.5*alpha));
+			}
+
+			if( curValue==groupValue )
+				jHeader.add(jSubList).addClass("active");
+
+			// Individual values
+			jSubList = jSubList.find("ul");
+			for(v in g.all) {
+				var jVal = new J('<li class="value"/>');
+				jVal.appendTo(jSubList);
+				jVal.css("background-color", C.intToHex(v.color));
+				jVal.append( JsTools.createIntGridValue(project, v, false) );
+				jVal.append('<span class="name">${v.identifier!=null ? v.identifier : Std.string(v.value)}</span>');
+				jVal.find(".name").css("color", C.intToHex( C.autoContrast(v.color) ) );
+
+				if( curValue==v.value )
+					jVal.addClass("active");
+
+				var id = v.value;
+				jVal.click( function(ev) {
+					curValue = id;
+					updateValuePalette();
+				});
+			}
 		}
 
 		// "Anything" value
 		var jVal = new J('<li/>');
-		jVal.appendTo(jValues);
+		jVal.appendTo(jValuePalette);
 		jVal.addClass("any");
 		jVal.append('<span class="value"></span>');
-		var label = columns>1 ? "Any" : "Anything/nothing";
+		var label = '"Any value" / "No value"';
 		jVal.append('<span class="name">$label</span>');
 		if( curValue==Const.AUTO_LAYER_ANYTHING )
 			jVal.addClass("active");
 		jVal.click( function(ev) {
 			curValue = Const.AUTO_LAYER_ANYTHING;
 			editor.ge.emit( LayerRuleChanged(rule) );
-			updateValuePicker();
+			updateValuePalette();
 		});
 
+
+		// Value groups
+		// var jGroups = jContent.find(">.pattern .groups ul").empty();
+		// // JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
+		// // jGroups.addClass("col-"+columns);
+		// for(g in sourceDef.getGroupedIntGridValues())
+		// 	jGroups.append('<li>${g.displayName}</li>');
 	}
 
 	function renderAll() {
@@ -245,8 +279,6 @@ class RuleEditor extends ui.modal.Dialog {
 		var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
 		for(size in sizes) {
 			var jOpt = new J('<option value="$size">${size}x$size</option>');
-			// if( size>=7 )
-			// 	jOpt.append(" (WARNING: might slow-down app)");
 			jOpt.appendTo(jSizes);
 		}
 		jSizes.change( function(_) {
@@ -266,7 +298,7 @@ class RuleEditor extends ui.modal.Dialog {
 		});
 
 		// Finalize
-		updateValuePicker();
+		updateValuePalette();
 		if( guidedMode )
 			enableGuidedMode();
 

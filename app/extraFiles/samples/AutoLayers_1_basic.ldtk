@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.3",
+		"appVersion": "1.4.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a22d35f0-7820-11ed-b6fd-213e885f30da",
-	"jsonVersion": "1.3.3",
-	"appBuildId": 467696,
+	"jsonVersion": "1.4.0",
+	"appBuildId": 470941,
 	"nextUid": 108,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -22,6 +22,8 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 8,
+	"defaultEntityWidth": 16,
+	"defaultEntityHeight": 16,
 	"bgColor": "#4A5066",
 	"defaultLevelBgColor": "#1E2027",
 	"minifyJson": false,
@@ -62,9 +64,10 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF", "tile": { "tilesetUid": 9, "x": 64, "y": 56, "w": 8, "h": 8 } }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF", "tile": { "tilesetUid": 9, "x": 64, "y": 56, "w": 8, "h": 8 }, "groupUid": 0 }],
+			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 104, "name": "Plants", "active": true, "isOptional": false, "rules": [
+				{ "uid": 104, "name": "Plants", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 99,
 						"active": true,
@@ -97,7 +100,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 85, "name": "Dirt", "active": true, "isOptional": false, "rules": [
+				{ "uid": 85, "name": "Dirt", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 95,
 						"active": true,

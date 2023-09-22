@@ -539,6 +539,12 @@ namespace ldtk
         public long Uid { get; set; }
 
         /// <summary>
+        /// This tile overrides the one defined in `tileRect` in the UI
+        /// </summary>
+        [JsonProperty("uiTileRect")]
+        public TilesetRectangle UiTileRect { get; set; }
+
+        /// <summary>
         /// Pixel width
         /// </summary>
         [JsonProperty("width")]
@@ -810,8 +816,8 @@ namespace ldtk
     public partial class EnumValueDefinition
     {
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
-        /// Replaced by: `tileRect`
+        /// **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
+        /// by: `tileRect`
         /// </summary>
         [JsonProperty("__tileSrcRect")]
         public long[] TileSrcRect { get; set; }
@@ -829,8 +835,8 @@ namespace ldtk
         public string Id { get; set; }
 
         /// <summary>
-        /// **WARNING**: this deprecated value will be *removed* completely on version 1.4.0+
-        /// Replaced by: `tileRect`
+        /// **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
+        /// by: `tileRect`
         /// </summary>
         [JsonProperty("tileId")]
         public long? TileId { get; set; }
@@ -938,6 +944,12 @@ namespace ldtk
         public IntGridValueDefinition[] IntGridValues { get; set; }
 
         /// <summary>
+        /// Group informations for IntGrid values
+        /// </summary>
+        [JsonProperty("intGridValuesGroups")]
+        public IntGridValueGroupDefinition[] IntGridValuesGroups { get; set; }
+
+        /// <summary>
         /// Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
         /// speed of this layer, creating a fake 3D (parallax) effect.
         /// </summary>
@@ -1037,6 +1049,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("collapsed")]
         public bool? Collapsed { get; set; }
+
+        [JsonProperty("color")]
+        public string Color { get; set; }
+
+        [JsonProperty("icon")]
+        public TilesetRectangle Icon { get; set; }
 
         [JsonProperty("isOptional")]
         public bool IsOptional { get; set; }
@@ -1234,6 +1252,12 @@ namespace ldtk
         public string Color { get; set; }
 
         /// <summary>
+        /// Parent group identifier (0 if none)
+        /// </summary>
+        [JsonProperty("groupUid")]
+        public long GroupUid { get; set; }
+
+        /// <summary>
         /// User defined unique identifier
         /// </summary>
         [JsonProperty("identifier")]
@@ -1247,6 +1271,30 @@ namespace ldtk
         /// </summary>
         [JsonProperty("value")]
         public long Value { get; set; }
+    }
+
+    /// <summary>
+    /// IntGrid value group definition
+    /// </summary>
+    public partial class IntGridValueGroupDefinition
+    {
+        /// <summary>
+        /// User defined color
+        /// </summary>
+        [JsonProperty("color")]
+        public string Color { get; set; }
+
+        /// <summary>
+        /// User defined string identifier
+        /// </summary>
+        [JsonProperty("identifier")]
+        public string Identifier { get; set; }
+
+        /// <summary>
+        /// Group unique ID
+        /// </summary>
+        [JsonProperty("uid")]
+        public long Uid { get; set; }
     }
 
     /// <summary>
@@ -1432,6 +1480,9 @@ namespace ldtk
 
         [JsonProperty("IntGridValueDef", NullValueHandling = NullValueHandling.Ignore)]
         public IntGridValueDefinition IntGridValueDef { get; set; }
+
+        [JsonProperty("IntGridValueGroupDef", NullValueHandling = NullValueHandling.Ignore)]
+        public IntGridValueGroupDefinition IntGridValueGroupDef { get; set; }
 
         [JsonProperty("IntGridValueInstance", NullValueHandling = NullValueHandling.Ignore)]
         public IntGridValueInstance IntGridValueInstance { get; set; }
@@ -1903,9 +1954,10 @@ namespace ldtk
         public LevelBackgroundPosition BgPos { get; set; }
 
         /// <summary>
-        /// An array listing all other levels touching this one on the world map.<br/>  Only relevant
-        /// for world layouts where level spatial positioning is manual (ie. GridVania, Free). For
-        /// Horizontal and Vertical layouts, this array is always empty.
+        /// An array listing all other levels touching this one on the world map. Since 1.3.5, this
+        /// includes levels that overlap in the same world layer, or in nearby world layers.<br/>
+        /// Only relevant for world layouts where level spatial positioning is manual (ie. GridVania,
+        /// Free). For Horizontal and Vertical layouts, this array is always empty.
         /// </summary>
         [JsonProperty("__neighbours")]
         public NeighbourLevel[] Neighbours { get; set; }
@@ -2069,7 +2121,9 @@ namespace ldtk
     {
         /// <summary>
         /// A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,
-        /// `e`ast).
+        /// `e`ast).<br/>  Since 1.3.5, this character value can also be `<` (neighbour depth is
+        /// lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world
+        /// depth).
         /// </summary>
         [JsonProperty("dir")]
         public string Dir { get; set; }

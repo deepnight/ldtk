@@ -173,7 +173,6 @@ class EditEntityDefs extends ui.modal.Panel {
 			return;
 		}
 
-		JsTools.parseComponents(jEntityForm);
 		jAll.css("visibility","visible");
 		jContent.find(".none").hide();
 
@@ -448,6 +447,37 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 
 
+		// UI override tile
+		JsTools.createTilesetSelect(
+			project,
+			jEntityForm.find(".uiTileset"),
+			curEntity.uiTileRect!=null ? curEntity.uiTileRect.tilesetUid : null,
+			true,
+			"Use default editor visual",
+			(uid)->{
+				if( uid!=null )
+					curEntity.uiTileRect = { tilesetUid: uid, x: 0, y: 0, w: 0, h:0, }
+				else
+					curEntity.uiTileRect = null;
+				editor.ge.emit(EntityDefChanged);
+			}
+		);
+		var jUiTilePickerWrapper = jEntityForm.find(".uiTilePicker").empty();
+		if( curEntity.uiTileRect!=null ) {
+			var jPicker = JsTools.createTileRectPicker(
+				curEntity.uiTileRect.tilesetUid,
+				curEntity.uiTileRect.w>0 ? curEntity.uiTileRect : null,
+				(rect)->{
+					if( rect!=null ) {
+						curEntity.uiTileRect = rect;
+						editor.ge.emit(EntityDefChanged);
+					}
+				}
+			);
+			jUiTilePickerWrapper.append( jPicker );
+		}
+
+
 		// Max count
 		var i = Input.linkToHtmlInput(curEntity.maxCount, jEntityForm.find("input#maxCount") );
 		i.setBounds(0,1024);
@@ -510,6 +540,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jPivots.append(p);
 
 		checkBackup();
+		JsTools.parseComponents(jEntityForm);
 	}
 
 
@@ -545,7 +576,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		for( group in tagGroups ) {
 			// Tag name
 			if( tagGroups.length>1 ) {
-				var jSep = new J('<li class="title fixed collapser"/>');
+				var jSep = new J('<li class="title collapser"/>');
 				jSep.text( group.tag==null ? L._Untagged() : group.tag );
 				jSep.attr("id", project.iid+"_entity_tag_"+group.tag);
 				jSep.attr("default", "open");
@@ -577,7 +608,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {
-				var jEnt = new J('<li class="iconLeft"/>');
+				var jEnt = new J('<li class="iconLeft draggable"/>');
 				jEnt.appendTo(jSubList);
 				jEnt.attr("uid", ed.uid);
 				jEnt.css("background-color", dn.Col.fromInt(ed.color).toCssRgba(0.2));
@@ -642,7 +673,7 @@ class EditEntityDefs extends ui.modal.Panel {
 				var moved = project.defs.sortEntityDef(fromIdx, toIdx);
 				selectEntity(moved);
 				editor.ge.emit(EntityDefSorted);
-			});
+			}, { onlyDraggables:true });
 		}
 
 		JsTools.parseComponents(jEntityList);

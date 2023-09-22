@@ -69,7 +69,8 @@ class Changelog extends ui.modal.Dialog {
 
 		// Load page
 		loadTemplate("changelog", {
-			ver: latestPatchedVer.full,
+			mainVer: latestPatchedVer.major+"."+latestPatchedVer.minor,
+			patchVer: latestPatchedVer.patch>0 ? "."+latestPatchedVer.patch : "",
 			app: Const.APP_NAME,
 			title: changeLog.title==null ? "" : '&ldquo;&nbsp;'+changeLog.title+'&nbsp;&rdquo;',
 		}, false);
@@ -122,6 +123,16 @@ class Changelog extends ui.modal.Dialog {
 
 		// Call Marked parser for main changelog
 		js.Syntax.code("parseMd({0}, {1})", rawMd, "updateChangelogHtml");
+
+
+		// Images animations
+		var jImgs = jContent.find("p img");
+		jImgs.each( (idx,e)->{
+			var jImg = new J(e);
+			jImg.unwrap().wrap('<div class="imgWrapper"></div>');
+			var jShadow = new J('<div class="shadow"/>').insertAfter(jImg);
+		});
+
 
 		// Hot fixes listing
 		if( changeLog.version.patch==0 ) {

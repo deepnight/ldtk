@@ -54,6 +54,7 @@ class Editor extends Page {
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
 	public var gifMode = false;
+	var zenModeRevealed = false;
 
 
 	@:allow(LevelTimeline)
@@ -158,7 +159,7 @@ class Editor extends Page {
 		}
 
 		saveLastProjectInfos();
-		setCompactMode( settings.v.compactMode, true );
+		setZenMode( settings.v.zenMode, false );
 		dn.Process.resizeAll();
 	}
 
@@ -172,56 +173,31 @@ class Editor extends Page {
 
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.EditProject();
+			executeAppCommand(C_OpenProjectPanel);
 		});
 
 		jMainPanel.find("button.world").click( function(_) {
-			if( isPaused() ) return;
-			setWorldMode(!worldMode);
+			executeAppCommand(C_ToggleWorldMode);
 		});
 
 		jMainPanel.find("button.editLevelInstance").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.LevelInstancePanel) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.LevelInstancePanel();
+			executeAppCommand(C_OpenLevelPanel);
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.EditLayerDefs();
+			executeAppCommand(C_OpenLayerPanel);
 		});
 
 		jMainPanel.find("button.editEntities").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.EditEntityDefs();
+			executeAppCommand(C_OpenEntityPanel);
 		});
 
 		jMainPanel.find("button.editTilesets").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.EditTilesetDefs();
+			executeAppCommand(C_OpenTilesetPanel);
 		});
 
 		jMainPanel.find("button.editEnums").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.EditEnumDefs) )
-				ui.Modal.closeAll();
-			else
-				new ui.modal.panel.EditEnumDefs();
+			executeAppCommand(C_OpenEnumPanel);
 		});
 
 
@@ -229,19 +205,11 @@ class Editor extends Page {
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
-			if( isPaused() ) return;
-			if( ui.Modal.isOpen(ui.modal.panel.Help) )
-				ui.Modal.closeAll();
-			else
-				onHelp();
+			executeAppCommand(C_ShowHelp);
 		});
 
 		jMainPanel.find("button.settings").click( function(_) {
-			if( isPaused() ) return;
-			if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
-				ui.Modal.closeAll();
-				new ui.modal.dialog.EditAppSettings();
-			}
+			executeAppCommand(C_AppSettings);
 		});
 
 
@@ -569,18 +537,88 @@ class Editor extends Page {
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
-		if( cd.has("debugLock") ) {
-			#if debug
-			if( keyCode==K.L && App.ME.isCtrlDown() && App.ME.isShiftDown() ) {
-				cd.unset("debugLock");
-				N.msg("Unlocked", 0x77ff00);
-			}
+		for(b in App.ME.keyBindings) {
+			if( b.keyCode!=keyCode )
+				continue;
+
+			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
+				continue;
+
+			if( b.ctrl && !App.ME.isCtrlDown() || !b.ctrl && App.ME.isCtrlDown() )
+				continue;
+
+			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
+				continue;
+
+			if( !b.allowInInputs && hasInputFocus() )
+				continue;
+
+			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
+				continue;
+
+			#if( !debug )
+			if( b.debug )
+				continue;
 			#end
-			return;
+
+			switch b.os {
+				case null:
+				case "win": if( !App.isWindows() ) continue;
+				case "linux": if( !App.isLinux() ) continue;
+				case "mac": if( !App.isMac() ) continue;
+				case _:
+			}
+
+			executeAppCommand(b.command);
 		}
 
 		switch keyCode {
-			case K.ESCAPE:
+			// Select layers (numbers 1-9-0)
+			case k if( k>=48 && k<=57 && !hasInputFocus() ):
+				var idx = k==48 ? 9 : k-49;
+				if( idx < curLevel.layerInstances.length )
+					selectLayerInstance( curLevel.layerInstances[idx] );
+
+			// Select layers (F1-F10)
+			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
+				var idx = k-K.F1;
+				var i = 0;
+				for(l in curLevel.layerInstances)
+					if( !l.def.hideInList ) {
+						if( i==idx ) {
+							selectLayerInstance(l);
+							break;
+						}
+						i++;
+					}
+		}
+
+
+		// Propagate to tools
+		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
+			worldTool.onKeyPress(keyCode);
+			panTool.onKeyPress(keyCode);
+			if( resizeTool!=null )
+				resizeTool.onKeyPress(keyCode);
+
+			if( !worldMode ) {
+				if( isSpecialToolActive() )
+					specialTool.onKeyPress(keyCode);
+				else {
+					selectionTool.onKeyPress(keyCode);
+					curTool.onKeyPress(keyCode);
+				}
+			}
+		}
+	}
+
+
+	public function executeAppCommand(cmd:AppCommand) {
+		if( isPaused() )
+			return;
+
+		switch cmd {
+			case C_Back:
 				if( hasInputFocus() ) {
 					// BUG jquery crashes on "Blur" if element is removed in the process
 					// see: https://github.com/jquery/jquery/issues/4417
@@ -600,39 +638,107 @@ class Editor extends Page {
 				else if( selectionTool.any() )
 					selectionTool.clear();
 
-			case K.TAB:
-				if( !ui.Modal.hasAnyOpen() && !hasInputFocus() && !ui.EntityInstanceEditor.isOpen() )
-					setCompactMode( !settings.v.compactMode );
+			case C_ZenMode:
+				if( ( !ui.Modal.hasAnyOpen() || worldMode ) && !hasInputFocus() )
+					setZenMode( !settings.v.zenMode );
 
-			case K.Z if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				curLevelTimeline.undo();
-
-			case K.Y if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() && App.ME.isCtrlDown() ):
-				curLevelTimeline.redo();
-
-			#if debug
-			case K.L if( !worldMode && !hasInputFocus() && App.ME.isCtrlDown() && App.ME.isShiftDown() ):
-				cd.setS("debugLock",Const.INFINITE);
-				N.msg("Locked.", 0xff7700);
-			#end
-
-			case K.S if( !hasInputFocus() && App.ME.isCtrlDown() ):
+			case C_SaveProject:
 				if( project.isBackup() )
 					N.error("Cannot save over a backup file.");
-				else {
-					if( App.ME.isShiftDown() )
-						onSave(true);
-					else
-						onSave();
-				}
+				else
+					onSave();
 
-			case K.F12 if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+			case C_SaveProjectAs:
+				onSave(true);
+
+			case C_RenameProject:
+				new ui.modal.dialog.InputDialog(
+					L.t._("Enter the new project file name :"),
+					project.filePath.fileName,
+					project.filePath.extWithDot,
+					(str)->{
+						if( str==null || str.length==0 )
+							return L.t._("Invalid file name");
+
+						var clean = dn.FilePath.cleanUp(str, true);
+						if( clean.length==0 )
+							return L.t._("Invalid file name");
+
+						if( project.filePath.fileName==str )
+							return L.t._("Enter a new project file name.");
+
+						var newPath = project.filePath.directoryWithSlash + str + project.filePath.extWithDot;
+						if( NT.fileExists(newPath) )
+							return L.t._("This file name is already in use.");
+
+						return null;
+					},
+					(str)->{
+						return dn.FilePath.cleanUpFileName(str);
+					},
+					(fileName)->{
+						// Rename project
+						App.LOG.fileOp('Renaming project: ${project.filePath.fileName} -> $fileName');
+						try {
+							// Rename project file
+							App.LOG.fileOp('  Renaming project file...');
+							var oldProjectFp = project.filePath.clone();
+							var oldExtDir = project.getAbsExternalFilesDir();
+							project.filePath.fileName = fileName;
+
+							// Rename sub dir
+							if( NT.fileExists(oldExtDir) ) {
+								App.LOG.fileOp('  Renaming project sub dir...');
+								NT.renameFile(oldExtDir, project.getAbsExternalFilesDir());
+							}
+
+							// Rename sibling files
+							for(ext in ["meta"]) {
+								var siblingFp = oldProjectFp.clone();
+								siblingFp.extension += "."+ext;
+								if( NT.fileExists(siblingFp.full) ) {
+									App.LOG.fileOp('  Renaming sibiling file: ${siblingFp.fileWithExt}...');
+									var newFp = oldProjectFp.clone();
+									newFp.fileWithExt = project.filePath.fileWithExt+"."+ext;
+									NT.renameFile(siblingFp.full, newFp.full);
+								}
+							}
+
+							// Re-save project
+							invalidateAllLevelsCache();
+							App.LOG.fileOp('  Saving project...');
+							new ui.ProjectSaver(this, project, (success)->{
+								// Remove old project file
+								App.LOG.fileOp('  Deleting old project file...');
+								NT.removeFile(oldProjectFp.full);
+								App.ME.unregisterRecentProject(oldProjectFp.full);
+
+								// Success!
+								N.success("Renamed project!");
+								needSaving = false;
+								updateTitle();
+								App.ME.registerRecentProject(project.filePath.full);
+								App.LOG.fileOp('  Done.');
+							});
+						}
+					}
+				);
+
+			case C_Undo:
+				if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() )
+					curLevelTimeline.undo();
+
+			case C_Redo:
+				if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() )
+					curLevelTimeline.redo();
+
+			case C_AppSettings:
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
 					ui.Modal.closeAll();
 					new ui.modal.dialog.EditAppSettings();
 				}
 
-			case K.R if( !hasInputFocus() && App.ME.isCtrlDown() ):
+			case C_RunCommand:
 				ui.Modal.closeAll();
 				if( ui.Modal.hasAnyOpen() )
 					N.error("Cannot run commands for now");
@@ -657,197 +763,150 @@ class Editor extends Page {
 					}
 				}
 
-			case K.R if( !hasInputFocus() && App.ME.isShiftDown() && !App.ME.isCtrlDown() ):
+			case C_ToggleAutoLayerRender:
 				var state = levelRender.toggleAutoLayerRendering();
 				N.quick( "Auto-layers rendering: "+L.onOff(state));
 
-			case K.W if( !hasInputFocus() && App.ME.isCtrlDown() ):
+			case C_CloseProject:
 				onClose();
 
-			case K.W if( !hasInputFocus() && !App.ME.isCtrlDown() && App.ME.isShiftDown() ):
+			case C_ToggleWorldMode:
 				setWorldMode( !worldMode );
 
-			case K.QWERTY_QUOTE, K.QWERTY_TILDE:
-				if( !hasInputFocus() )
-					setWorldMode( !worldMode );
-
-			case K.W if( settings.v.navigationKeys!=Wasd ):
-				if( !hasInputFocus() )
-					setWorldMode( !worldMode );
-
-			case K.Q if( App.ME.isCtrlDown() ):
+			case C_ExitApp:
 				App.ME.exit();
 
-			case K.E if( !hasInputFocus() && App.ME.isShiftDown() ):
+			case C_ToggleSelectEmptySpaces:
 				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 
-			case K.T if( !hasInputFocus() && App.ME.isShiftDown() ):
+			case C_ToggleTileStacking:
 				setTileStacking( !settings.v.tileStacking );
 
-			case K.A if( !hasInputFocus() && !App.ME.isCtrlDown() && ( App.ME.settings.v.navigationKeys!=Wasd || App.ME.isShiftDown() ) ):
+			case C_ToggleSingleLayerMode:
 				setSingleLayerMode( !settings.v.singleLayerMode );
 
-			case K.A if( !hasInputFocus() && App.ME.isCtrlDown() && !App.ME.isShiftDown() && !worldMode ):
-				if( settings.v.singleLayerMode )
-					selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
-				else
-					selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
-
-				if( !selectionTool.isEmpty() ) {
+			case C_SelectAll:
+				if( !worldMode ) {
 					if( settings.v.singleLayerMode )
-						N.quick( L.t._("Selected all in layer") );
+						selectionTool.selectAllInLayers(curLevel, [curLayerInstance]);
 					else
-						N.quick( L.t._("Selected all") );
-				}
-				else
-					N.error("Nothing to select");
+						selectionTool.selectAllInLayers(curLevel, curLevel.layerInstances);
 
-			case K.G if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
+					if( !selectionTool.isEmpty() ) {
+						if( settings.v.singleLayerMode )
+							N.quick( L.t._("Selected all in layer") );
+						else
+							N.quick( L.t._("Selected all") );
+					}
+					else
+						N.error("Nothing to select");
+				}
+
+			case C_ToggleGrid:
 				setGrid( !settings.v.grid );
 
-			case K.H if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				onHelp();
+			case C_ShowHelp:
+				if( ui.Modal.isOpen( ui.modal.panel.Help ) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.Help();
 
-			case K.H if( !hasInputFocus() && App.ME.isCtrlDown() ):
+			case C_ToggleDetails:
 				setShowDetails( !settings.v.showDetails );
 
-			case K.PGDOWN if( !hasInputFocus() ):
+			case C_GotoPreviousWorldLayer:
 				if( !worldMode )
 					setWorldMode(true);
-				else if( !App.ME.hasAnyToggleKeyDown() ) {
+				else {
 					// Change active depth
 					if( curWorldDepth > curWorld.getLowestLevelDepth() )
 						selectWorldDepth(curWorldDepth-1);
 				}
-				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
+
+			case C_GotoNextWorldLayer:
+				if( !worldMode )
+					setWorldMode(true);
+				else {
+					// Change active depth
+					if( curWorldDepth < curWorld.getHighestLevelDepth() )
+						selectWorldDepth(curWorldDepth+1);
+				}
+
+			case C_MoveLevelToPreviousWorldLayer:
+				if( !worldMode )
+					setWorldMode(true);
+				else {
 					// Move current level closer
 					curWorld.moveLevelToDepthCloser(curLevel);
 					ge.emit( LevelSettingsChanged(curLevel) );
 					selectWorldDepth(curLevel.worldDepth);
 				}
 
-			case K.PGUP if( !hasInputFocus() ):
+			case C_MoveLevelToNextWorldLayer:
 				if( !worldMode )
 					setWorldMode(true);
-				else if( !App.ME.hasAnyToggleKeyDown() ) {
-					// Change active depth
-					if( curWorldDepth < curWorld.getHighestLevelDepth() )
-						selectWorldDepth(curWorldDepth+1);
-				}
-				else if( App.ME.isCtrlDown() || App.ME.isShiftDown() ) {
+				else {
 					// Move current level further
 					curWorld.moveLevelToDepthFurther(curLevel);
 					ge.emit( LevelSettingsChanged(curLevel) );
 					selectWorldDepth(curLevel.worldDepth);
 				}
 
+			case C_OpenProjectPanel:
+				if( ui.Modal.isOpen(ui.modal.panel.EditProject) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.EditProject();
 
-			case k if( k>=48 && k<=57 && !hasInputFocus() ):
-				var idx = k==48 ? 9 : k-49;
-				if( idx < curLevel.layerInstances.length )
-					selectLayerInstance( curLevel.layerInstances[idx] );
+			case C_OpenLayerPanel:
+				if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.EditLayerDefs();
 
-			// Select layers (F1-F10)
-			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
-				var idx = k-K.F1;
-				var i = 0;
-				for(l in curLevel.layerInstances)
-					if( !l.def.hideInList ) {
-						if( i==idx ) {
-							selectLayerInstance(l);
-							break;
-						}
-						i++;
-					}
+			case C_OpenEntityPanel:
+				if( ui.Modal.isOpen(ui.modal.panel.EditEntityDefs) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.EditEntityDefs();
 
+			case C_OpenEnumPanel:
+				if( ui.Modal.isOpen(ui.modal.panel.EditEnumDefs) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.EditEnumDefs();
 
-			case K.P if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				jMainPanel.find("#mainBar .buttons button.editProject").click();
+			case C_OpenTilesetPanel:
+				if( ui.Modal.isOpen(ui.modal.panel.EditTilesetDefs) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.EditTilesetDefs();
 
-			case K.L if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				jMainPanel.find("#mainBar .buttons button.editLayers").click();
+			case C_OpenLevelPanel:
+				if( ui.Modal.isOpen(ui.modal.panel.LevelInstancePanel) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.LevelInstancePanel();
 
-			case K.E if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				jMainPanel.find("#mainBar .buttons button.editEntities").click();
-
-			case K.U if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				jMainPanel.find("#mainBar .buttons button.editEnums").click();
-
-			case K.T if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				jMainPanel.find("#mainBar .buttons button.editTilesets").click();
-
-			case K.C if( !hasInputFocus() && !App.ME.hasAnyToggleKeyDown() ):
-				jMainPanel.find("#mainBar .buttons button.editLevelInstance").click();
-
-
-			// ZQSD/WASD navigation
-			case K.Z if( App.ME.settings.v.navigationKeys==Zqsd && !hasInputFocus() ):
+			case C_NavUp:
 				onNavigateShortcut(0, -1, true);
 
-			case K.Q if( App.ME.settings.v.navigationKeys==Zqsd && !hasInputFocus() ):
-				onNavigateShortcut(-1, 0, true);
-
-			case K.W if( App.ME.settings.v.navigationKeys==Wasd && !hasInputFocus() ):
-				onNavigateShortcut(0, -1, true);
-
-			case K.A if( App.ME.settings.v.navigationKeys==Wasd && !hasInputFocus() ):
-				onNavigateShortcut(-1, 0, true);
-
-			case K.S if( ( App.ME.settings.v.navigationKeys==Wasd || App.ME.settings.v.navigationKeys==Zqsd ) && !hasInputFocus() ):
+			case C_NavDown:
 				onNavigateShortcut(0, 1, true);
 
-			case K.D if( ( App.ME.settings.v.navigationKeys==Wasd || App.ME.settings.v.navigationKeys==Zqsd ) && !hasInputFocus() ):
-				onNavigateShortcut(1, 0, true);
-
-			case K.UP if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
-				onNavigateShortcut(0, -1, true);
-
-			case K.DOWN if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
-				onNavigateShortcut(0, 1, true);
-
-			case K.LEFT if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
+			case C_NavLeft:
 				onNavigateShortcut(-1, 0, true);
 
-			case K.RIGHT if( App.ME.settings.v.navigationKeys==Arrows && !hasInputFocus() ):
+			case C_NavRight:
 				onNavigateShortcut(1, 0, true);
-		}
-
-		// Propagate to tools
-		if( !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
-			worldTool.onKeyPress(keyCode);
-			panTool.onKeyPress(keyCode);
-			if( resizeTool!=null )
-				resizeTool.onKeyPress(keyCode);
-
-			if( !worldMode ) {
-				if( isSpecialToolActive() )
-					specialTool.onKeyPress(keyCode);
-				else {
-					selectionTool.onKeyPress(keyCode);
-					curTool.onKeyPress(keyCode);
-				}
-			}
 		}
 	}
+
 
 	function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
 		if( App.ME.isCtrlDown() )
 			return;
 
-		// if( App.ME.isShiftDown() ) {
-		// 	// Layers navigation
-		// 	if( project.defs.layers.length>0 ) {
-		// 		var lidx = 0;
-		// 		for(ld in project.defs.layers)
-		// 			if( curLayerDef==ld )
-		// 				break;
-		// 			else
-		// 				lidx++;
-		// 		lidx += dy + dx*2;
-		// 		var ld = project.defs.layers[ M.iclamp(lidx, 0, project.defs.layers.length-1) ];
-		// 		selectLayerInstance( curLevel.getLayerInstance(ld) );
-		// 	}
-		// }
 		if( !App.ME.hasAnyToggleKeyDown() ) {
 			// Tool navigation
 			!panTool.onNavigateSelection(dx,dy,pressed)
@@ -1439,6 +1498,10 @@ class Editor extends Page {
 				.off();
 
 		// Update all
+		applyEditOption( jEditOptions.find("li.zen"), ()->settings.v.zenMode, (v)->{
+			setZenMode(v);
+			setZenModeReveal(true);
+		});
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
 		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
 
@@ -1491,13 +1554,16 @@ class Editor extends Page {
 		worldMode = v;
 		ge.emit( WorldMode(worldMode) );
 		if( worldMode ) {
+			jPage.addClass("worldMode");
 			cursor.set(None);
 			N.quick(L.t._("World view"), new J('<span class="icon world"/>'));
 			ui.Modal.closeAll();
 			new ui.modal.panel.WorldPanel();
 		}
-		else
+		else {
+			jPage.removeClass("worldMode");
 			updateLayerList();
+		}
 
 		// Offset editing options & world layers
 		var jFloatingOptions = jPage.find("#editingOptions, #worldDepths");
@@ -1564,32 +1630,69 @@ class Editor extends Page {
 		updateEditOptions();
 	}
 
-	public function setCompactMode(v:Bool, init=false) {
-		settings.v.compactMode = v;
-		if( !init )
+	public function setZenMode(v:Bool, saveSetting=true) {
+		settings.v.zenMode = v;
+		if( saveSetting )
 			App.ME.settings.save();
 
-		if( settings.v.compactMode )
-			App.ME.jPage.addClass("compactPanel");
+		var jRevealer = jPage.find("#zenModeRevealer");
+		jRevealer.off();
+		App.ME.jCanvas.off(".zenMode");
+		setZenModeReveal(false);
+
+		if( settings.v.zenMode ) {
+			App.ME.jPage.addClass("zenMode");
+			jRevealer.mouseover( _->{
+				setZenModeReveal(true);
+			});
+		}
 		else
-			App.ME.jPage.removeClass("compactPanel");
+			App.ME.jPage.removeClass("zenMode");
+
+
 
 		updateCanvasSize();
 		updateAppBg();
 		updateWorldList();
-		if( !init )
-			N.quick("Compact UI: "+L.onOff(settings.v.compactMode));
+		updateEditOptions();
+		if( saveSetting )
+			N.quick("Zen mode: "+L.onOff(settings.v.zenMode));
 	}
 
 
+	function setZenModeReveal(reveal:Bool) {
+		zenModeRevealed = reveal;
+		var jCanvas = App.ME.jCanvas;
+		jCanvas.off(".zenMode");
 
-	function onHelp() {
-		new ui.modal.panel.Help();
+		cd.unset("pendingZenModeReHide");
+		cd.unset("zenModeReHideLock");
+
+		if( reveal ) {
+			App.ME.jPage.addClass("revealed");
+			jCanvas.on("mouseover.zenMode", _->{
+				cd.setS("pendingZenModeReHide", Const.INFINITE);
+				cd.setS("zenModeReHideLock", 1, true);
+			});
+			jCanvas.on("mousemove.zenMode", (ev:js.jquery.Event)->{
+				final t = 0.2;
+				if( cd.getS("zenModeReHideLock")>t && ev.pageX > jMainPanel.outerWidth() + 200 )
+					cd.setS("zenModeReHideLock", t, true);
+			});
+			jCanvas.on("mouseleave.zenMode", _->{
+				cd.unset("pendingZenModeReHide");
+				cd.unset("zenModeReHideLock");
+			});
+		}
+		else {
+			App.ME.jPage.removeClass("revealed");
+		}
 	}
+
+
 
 	public function isLocked() {
-		return App.ME.isLocked()
-			#if debug || cd.has("debugLock") #end;
+		return App.ME.isLocked();
 	}
 
 	public function onClose(?bt:js.jquery.JQuery) {
@@ -1893,6 +1996,7 @@ class Editor extends Page {
 			case LayerDefChanged(defUid): invalidateAllLevelsCache();
 			case LayerDefSorted: invalidateAllLevelsCache();
 			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValueAdded(defUid,value):
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				if( used ) {
 					invalidateAllLevelsCache();
@@ -2190,7 +2294,10 @@ class Editor extends Page {
 			case LayerDefIntGridValuesSorted(defUid):
 				updateTool();
 
-			case LayerDefIntGridValueRemoved(defUid,value,used):
+			case LayerDefIntGridValueAdded(_):
+				updateTool();
+
+			case LayerDefIntGridValueRemoved(_):
 				updateTool();
 
 			case WorldSettingsChanged:
@@ -2247,8 +2354,16 @@ class Editor extends Page {
 	function updateCanvasSize() {
 		var panelWid = jMainPanel.outerWidth();
 		App.ME.jCanvas.show();
-		App.ME.jCanvas.css("left", panelWid+"px");
-		App.ME.jCanvas.css("width", "calc( 100vw - "+panelWid+"px )");
+		if( settings.v.zenMode )
+			App.ME.jCanvas.css({
+				left: "0",
+				width: "100vw",
+			});
+		else
+			App.ME.jCanvas.css({
+				left: panelWid+"px",
+				width: "calc( 100vw - "+panelWid+"px )",
+			});
 		camera.invalidateCache();
 	}
 
@@ -2332,6 +2447,8 @@ class Editor extends Page {
 		super.onAppBlur();
 		onMouseUp();
 		heldVisibilitySet = null;
+
+		setZenModeReveal(false);
 
 		if( !ET.isDevToolsOpened() )
 			enableClicktrap();
@@ -2471,7 +2588,7 @@ class Editor extends Page {
 					icon: "edit",
 					cb: ()->{
 						selectLayerInstance(li);
-						new ui.modal.panel.EditLayerDefs();
+						executeAppCommand(C_OpenLayerPanel);
 					},
 				}
 			];
@@ -2566,5 +2683,9 @@ class Editor extends Page {
 			invalidatedMouseCoords = false;
 			updateMouseCoordsBlock( getMouse() );
 		}
+
+		// Auto re-hide panel in zen mode
+		if( settings.v.zenMode && cd.has("pendingZenModeReHide") && !cd.has("zenModeReHideLock") )
+			setZenModeReveal(false);
 	}
 }

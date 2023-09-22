@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.3",
+		"appVersion": "1.4.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a243f240-7820-11ed-b6fd-f550906acdc3",
-	"jsonVersion": "1.3.3",
-	"appBuildId": 467696,
+	"jsonVersion": "1.4.0",
+	"appBuildId": 470941,
 	"nextUid": 40,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -22,6 +22,8 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
+	"defaultEntityWidth": 16,
+	"defaultEntityHeight": 16,
 	"bgColor": "#222225",
 	"defaultLevelBgColor": "#222225",
 	"minifyJson": false,
@@ -62,9 +64,10 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 } }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#FFFFFF", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 }, "groupUid": 0 }],
+			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 12, "name": "Stamp", "active": true, "isOptional": false, "rules": [
+				{ "uid": 12, "name": "Stamp", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 13,
 						"active": true,
@@ -97,7 +100,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 10, "name": "Wall base", "active": true, "isOptional": false, "rules": [
+				{ "uid": 10, "name": "Wall base", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 11,
 						"active": true,

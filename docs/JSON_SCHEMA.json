@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.3.4 JSON schema",
+	"title": "LDtk 1.4.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.3.4",
+	"version": "1.4.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -248,6 +248,9 @@
 					},
 					"AutoLayerRuleGroup": {
 						"$ref": "#/otherTypes/AutoLayerRuleGroup"
+					},
+					"IntGridValueGroupDef": {
+						"$ref": "#/otherTypes/IntGridValueGroupDef"
 					},
 					"IntGridValueInstance": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
@@ -1453,6 +1456,19 @@
 						"boolean"
 					]
 				},
+				"uiTileRect": {
+					"description": "This tile overrides the one defined in `tileRect` in the UI",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
+					]
+				},
 				"uid": {
 					"description": "Unique Int identifier",
 					"type": [
@@ -1564,10 +1580,30 @@
 						"null"
 					]
 				},
+				"color": {
+					"description": "",
+					"type": [
+						"string",
+						"null"
+					]
+				},
 				"isOptional": {
 					"description": "",
 					"type": [
 						"boolean"
+					]
+				},
+				"icon": {
+					"description": "",
+					"oneOf": [
+						{
+							"type": [
+								"null"
+							]
+						},
+						{
+							"$ref": "#/otherTypes/TilesetRect"
+						}
 					]
 				},
 				"usesWizard": {
@@ -1595,6 +1631,39 @@
 					},
 					"type": [
 						"array"
+					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"IntGridValueGroupDef": {
+			"description": "IntGrid value group definition",
+			"title": "IntGrid value group definition",
+			"required": [
+				"uid"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"color": {
+					"description": "User defined color",
+					"type": [
+						"string",
+						"null"
+					]
+				},
+				"uid": {
+					"description": "Group unique ID",
+					"type": [
+						"integer"
+					]
+				},
+				"identifier": {
+					"description": "User defined string identifier",
+					"type": [
+						"string",
+						"null"
 					]
 				}
 			},
@@ -1651,7 +1720,7 @@
 					]
 				},
 				"dir": {
-					"description": "A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).",
+					"description": "A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).<br/>  Since 1.4.0, this character value can also be `<` (neighbour depth is lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world depth).",
 					"type": [
 						"string"
 					]
@@ -2159,7 +2228,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"tileId": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.4.0+  Replaced by: `tileRect`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced by: `tileRect`",
 					"type": [
 						"integer",
 						"null"
@@ -2191,7 +2260,7 @@
 					]
 				},
 				"__tileSrcRect": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.4.0+  Replaced by: `tileRect`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced by: `tileRect`",
 					"items": {
 						"type": [
 							"integer"
@@ -2284,6 +2353,7 @@
 				"gridSize",
 				"identifier",
 				"intGridValues",
+				"intGridValuesGroups",
 				"parallaxFactorX",
 				"parallaxFactorY",
 				"parallaxScaling",
@@ -2399,6 +2469,15 @@
 					"description": "If TRUE, the content of this layer will be used when rendering levels in a simplified way for the world view",
 					"type": [
 						"boolean"
+					]
+				},
+				"intGridValuesGroups": {
+					"description": "Group informations for IntGrid values",
+					"items": {
+						"$ref": "#/otherTypes/IntGridValueGroupDef"
+					},
+					"type": [
+						"array"
 					]
 				},
 				"inactiveOpacity": {
@@ -2580,7 +2659,7 @@
 			"additionalProperties": false,
 			"properties": {
 				"__neighbours": {
-					"description": "An array listing all other levels touching this one on the world map.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, this array is always empty.",
+					"description": "An array listing all other levels touching this one on the world map. Since 1.4.0, this includes levels that overlap in the same world layer, or in nearby world layers.<br/>  Only relevant for world layouts where level spatial positioning is manual (ie. GridVania, Free). For Horizontal and Vertical layouts, this array is always empty.",
 					"items": {
 						"$ref": "#/otherTypes/NeighbourLevel"
 					},
@@ -2862,6 +2941,7 @@
 			"title": "IntGrid value definition",
 			"required": [
 				"color",
+				"groupUid",
 				"value"
 			],
 			"additionalProperties": false,
@@ -2894,6 +2974,12 @@
 				},
 				"value": {
 					"description": "The IntGrid value itself",
+					"type": [
+						"integer"
+					]
+				},
+				"groupUid": {
+					"description": "Parent group identifier (0 if none)",
 					"type": [
 						"integer"
 					]

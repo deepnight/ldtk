@@ -11,7 +11,7 @@ class RuleModuloEditor extends ui.modal.Dialog {
 	public function new(jFrom:js.jquery.JQuery, layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleModuloEditor");
 
-		positionNear(jFrom);
+		setAnchor( MA_JQuery(jFrom) );
 		setTransparentMask();
 
 		this.layerDef = layerDef;

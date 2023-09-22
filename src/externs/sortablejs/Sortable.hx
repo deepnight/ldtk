@@ -49,6 +49,9 @@ typedef SortableOptions = {
 	/** Selector for excluded elements, separated with comma **/
 	var ?filter: String;
 
+	/** Selector for included elements, separated with comma **/
+	var ?draggable: String;
+
 	/** Sorting group name for nested lists **/
 	var ?group: String;
 

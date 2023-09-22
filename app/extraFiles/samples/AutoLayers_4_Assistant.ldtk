@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.3",
+		"appVersion": "1.4.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a2533480-7820-11ed-b6fd-e9108160ae94",
-	"jsonVersion": "1.3.3",
-	"appBuildId": 467696,
+	"jsonVersion": "1.4.0",
+	"appBuildId": 470941,
 	"nextUid": 531,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -22,6 +22,8 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
+	"defaultEntityWidth": 16,
+	"defaultEntityHeight": 16,
 	"bgColor": "#222225",
 	"defaultLevelBgColor": "#222225",
 	"minifyJson": false,
@@ -62,9 +64,10 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#B86F50", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 } }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#B86F50", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 }, "groupUid": 0 }],
+			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 491, "name": "Inner walls corners fix", "active": true, "isOptional": false, "rules": [
+				{ "uid": 491, "name": "Inner walls corners fix", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 492,
 						"active": true,
@@ -128,7 +131,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 64, "name": "Walls (using the Assistant)", "active": true, "isOptional": false, "rules": [
+				{ "uid": 64, "name": "Walls (using the Assistant)", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 518,
 						"active": true,
@@ -728,7 +731,7 @@
 						{ "px": [320,208], "src": [192,32], "f": 0, "t": 52, "d": [530,319], "a": 1 },
 						{ "px": [336,208], "src": [192,16], "f": 0, "t": 32, "d": [530,320], "a": 1 },
 						{ "px": [352,208], "src": [192,16], "f": 0, "t": 32, "d": [530,321], "a": 1 },
-						{ "px": [16,32], "src": [160,32], "f": 1, "t": 50, "d": [529,47], "a": 1 },
+						{ "px": [16,32], "src": [160,16], "f": 1, "t": 30, "d": [529,47], "a": 1 },
 						{ "px": [192,32], "src": [160,16], "f": 0, "t": 30, "d": [529,58], "a": 1 },
 						{ "px": [192,48], "src": [160,32], "f": 0, "t": 50, "d": [529,81], "a": 1 },
 						{ "px": [0,64], "src": [160,16], "f": 1, "t": 30, "d": [529,92], "a": 1 },
@@ -739,16 +742,16 @@
 						{ "px": [352,80], "src": [160,16], "f": 0, "t": 30, "d": [529,137], "a": 1 },
 						{ "px": [64,96], "src": [160,32], "f": 1, "t": 50, "d": [529,142], "a": 1 },
 						{ "px": [352,96], "src": [160,16], "f": 0, "t": 30, "d": [529,160], "a": 1 },
-						{ "px": [16,112], "src": [160,32], "f": 1, "t": 50, "d": [529,162], "a": 1 },
+						{ "px": [16,112], "src": [160,16], "f": 1, "t": 30, "d": [529,162], "a": 1 },
 						{ "px": [48,112], "src": [160,32], "f": 0, "t": 50, "d": [529,164], "a": 1 },
 						{ "px": [352,112], "src": [160,16], "f": 0, "t": 30, "d": [529,183], "a": 1 },
-						{ "px": [48,128], "src": [160,16], "f": 1, "t": 30, "d": [529,187], "a": 1 },
+						{ "px": [48,128], "src": [160,32], "f": 1, "t": 50, "d": [529,187], "a": 1 },
 						{ "px": [352,128], "src": [160,16], "f": 0, "t": 30, "d": [529,206], "a": 1 },
-						{ "px": [48,144], "src": [160,32], "f": 1, "t": 50, "d": [529,210], "a": 1 },
+						{ "px": [48,144], "src": [160,16], "f": 1, "t": 30, "d": [529,210], "a": 1 },
 						{ "px": [352,144], "src": [160,32], "f": 0, "t": 50, "d": [529,229], "a": 1 },
-						{ "px": [48,160], "src": [160,32], "f": 1, "t": 50, "d": [529,233], "a": 1 },
+						{ "px": [48,160], "src": [160,16], "f": 1, "t": 30, "d": [529,233], "a": 1 },
 						{ "px": [352,160], "src": [160,32], "f": 0, "t": 50, "d": [529,252], "a": 1 },
-						{ "px": [48,176], "src": [160,16], "f": 1, "t": 30, "d": [529,256], "a": 1 },
+						{ "px": [48,176], "src": [160,32], "f": 1, "t": 50, "d": [529,256], "a": 1 },
 						{ "px": [160,176], "src": [160,16], "f": 0, "t": 30, "d": [529,263], "a": 1 },
 						{ "px": [48,0], "src": [176,48], "f": 0, "t": 71, "d": [528,3], "a": 1 },
 						{ "px": [64,0], "src": [176,48], "f": 0, "t": 71, "d": [528,4], "a": 1 },

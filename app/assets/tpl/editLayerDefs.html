@@ -204,19 +204,27 @@
 		<label>Grid values</label>
 		<info>The list of all Integer values that could be painted in this IntGrid layer.</info>
 	</dt>
-	<dd class="IntGrid">
-		<ul class="intGridValues">
-			<li class="add">
-				<button type="button" class="gray">+</button>
-			</li>
-		</ul>
+	<dd class="IntGrid intGridValues">
+		<div class="buttons">
+			<button class="gray addValue" title="Create an IntGrid value"> <span class="icon add"></span> </button>
+			<button class="gray addGroup" title="Create a group of IntGrid values"> <span class="icon folder"></span> </button>
+		</div>
+		<ul class="intGridValuesGroups"></ul>
+
+		<xml id="intGridValuesGroup">
+			<div class="header">
+				<span class="icon folderClose groupIcon"></span>
+				<span class="name"></span>
+			</div>
+			<ul class="intGridValuesGroup"></ul>
+		</xml>
 
 		<xml id="intGridValue">
 			<div class="sortHandle"></div>
 			<span class="id">?</span>
+			<input type="color" value="#ffffff"/>
 			<span class="tile"></span>
 			<input type="text" class="name" placeholder="Optional value identifier"/>
-			<input type="color" value="#ffffff"/>
 			<button class="red remove"><span class="icon delete"></span></button>
 		</xml>
 	</dd>

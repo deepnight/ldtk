@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.3.3",
+		"appVersion": "1.4.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a2533480-7820-11ed-b6fd-e9108160ae94",
-	"jsonVersion": "1.3.3",
-	"appBuildId": 467696,
+	"jsonVersion": "1.4.0",
+	"appBuildId": 470941,
 	"nextUid": 64,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -22,6 +22,8 @@
 	"defaultPivotX": 0,
 	"defaultPivotY": 0,
 	"defaultGridSize": 16,
+	"defaultEntityWidth": 16,
+	"defaultEntityHeight": 16,
 	"bgColor": "#222225",
 	"defaultLevelBgColor": "#222225",
 	"minifyJson": false,
@@ -62,9 +64,10 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
-			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#E0C59E", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 } }],
+			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#E0C59E", "tile": { "tilesetUid": 1, "x": 0, "y": 112, "w": 16, "h": 16 }, "groupUid": 0 }],
+			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 12, "name": "Stamps", "active": true, "isOptional": false, "rules": [
+				{ "uid": 12, "name": "Stamps", "color": null, "icon": { "tilesetUid": 1, "x": 128, "y": 0, "w": 48, "h": 48 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 36,
 						"active": true,
@@ -159,7 +162,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 10, "name": "Walls base", "active": true, "isOptional": false, "rules": [
+				{ "uid": 10, "name": "Walls base", "color": null, "icon": { "tilesetUid": 1, "x": 96, "y": 112, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 15,
 						"active": true,
@@ -346,8 +349,9 @@
 			"requiredTags": [],
 			"excludedTags": [],
 			"intGridValues": [],
+			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 58, "name": "Drop shadows", "active": true, "isOptional": false, "rules": [
+				{ "uid": 58, "name": "Drop shadows", "color": null, "icon": { "tilesetUid": 38, "x": 112, "y": 160, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 61,
 						"active": true,
@@ -473,7 +477,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 57, "name": "Columns", "active": true, "isOptional": false, "rules": [
+				{ "uid": 57, "name": "Columns", "color": null, "icon": { "tilesetUid": 38, "x": 0, "y": 192, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 43,
 						"active": true,
@@ -568,7 +572,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 39, "name": "Bg", "active": true, "isOptional": false, "rules": [
+				{ "uid": 39, "name": "Bg", "color": null, "icon": { "tilesetUid": 38, "x": 0, "y": 112, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 40,
 						"active": true,
