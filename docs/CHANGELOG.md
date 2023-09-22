@@ -18,20 +18,27 @@ In zen mode, the left interface automatically disappears to leave much more edit
 
 Entity and Int Grid tool palettes can now be displayed in grid modes, for a much more compact experience.
 
+## Quality of life
+![](1.4.0/ruleGroupsColors.png)
+
+LDtk is all about being enjoyable to use, so this update includes many quality-of-life oriented changes:
+
+ - You can now assign individual colors to group of Auto-layer rules.
+ - Entity previews in the UI panels were reworked to look nicer and less pixelated.
+ - Increased the max number of columns in Select components
+ - Added a gray background behind transparent rule tiles
+
+
 ## Other changes
 
- - Much nicer Entity preview in panels and interfaces
- - Added customizable rule groups colors
- - Added a "symetric link" option to Auto-Layer rules offsets
- - Increased the max number of columns in Select components
  - Fixed out-of-screen color picker window
- - Added background behind transparent rule tiles
  - Added more integrated icons: check marks, circles, buttons, cogs, etc.
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
  - Reworked start screen design
  - Changed `CMD-H` shortcut on macOs to `SHIFT-H`
  - Updated some sample maps
  - Many bug fixes
+
 
 
 # 1.3.4
