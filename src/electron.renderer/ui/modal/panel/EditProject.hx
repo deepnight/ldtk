@@ -25,7 +25,7 @@ class EditProject extends ui.modal.Panel {
 		showAdvanced = project.hasAnyFlag(allAdvancedOptions);
 
 		var jSave = jContent.find("button.save").click( function(ev) {
-			editor.onSave();
+			editor.executeAppCommand(C_SaveProject);
 			if( project.isBackup() )
 				close();
 		});
@@ -33,7 +33,7 @@ class EditProject extends ui.modal.Panel {
 			jSave.text(L.t._("Restore this backup"));
 
 		var jSaveAs = jContent.find("button.saveAs").click( function(ev) {
-			editor.onSave(true);
+			editor.executeAppCommand(C_SaveProjectAs);
 		});
 		if( project.isBackup() )
 			jSaveAs.hide();
