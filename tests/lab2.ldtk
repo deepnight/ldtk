@@ -104,7 +104,7 @@
 			],
 			"intGridValuesGroups": [ { "uid": 1, "identifier": "walls", "color": "#B86F50" }, { "uid": 2, "identifier": "liquids", "color": "#124E89" } ],
 			"autoRuleGroups": [
-				{ "uid": 99, "name": "plants", "color": "#63C74D", "active": true, "isOptional": false, "rules": [
+				{ "uid": 99, "name": "plants", "color": "#63C74D", "icon": { "tilesetUid": 66, "x": 96, "y": 64, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 100,
 						"active": true,
@@ -199,7 +199,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 74, "name": "red bricks", "color": "#E43B44", "active": true, "isOptional": false, "rules": [
+				{ "uid": 74, "name": "red bricks", "color": "#E43B44", "icon": { "tilesetUid": 66, "x": 48, "y": 0, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 81,
 						"active": true,
@@ -356,7 +356,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 109, "name": "gray bricks", "color": "#8B9BB4", "active": true, "isOptional": false, "rules": [
+				{ "uid": 109, "name": "gray bricks", "color": "#8B9BB4", "icon": { "tilesetUid": 66, "x": 256, "y": 0, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 113,
 						"active": true,
@@ -513,7 +513,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 87, "name": "dirt", "color": "#B86F50", "active": true, "isOptional": false, "rules": [
+				{ "uid": 87, "name": "dirt", "color": "#B86F50", "icon": { "tilesetUid": 66, "x": 0, "y": 96, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 96,
 						"active": true,
@@ -732,7 +732,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 67, "name": "water", "color": "#0099DB", "active": true, "isOptional": false, "rules": [
+				{ "uid": 67, "name": "water", "color": "#0099DB", "icon": { "tilesetUid": 66, "x": 16, "y": 224, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 69,
 						"active": true,
@@ -827,7 +827,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 77, "name": "shadows", "color": "#262B44", "active": true, "isOptional": false, "rules": [
+				{ "uid": 77, "name": "shadows", "color": "#262B44", "icon": { "tilesetUid": 66, "x": 272, "y": 176, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 86,
 						"active": true,
@@ -922,7 +922,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 71, "name": "bg", "color": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 71, "name": "bg", "color": null, "icon": { "tilesetUid": 66, "x": 48, "y": 192, "w": 16, "h": 16 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 73,
 						"active": true,
