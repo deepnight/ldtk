@@ -42,6 +42,7 @@ typedef AutoLayerRuleGroup = {
 	var uid : Int;
 	var name : String;
 	var color: Null<dn.Col>;
+	var icon: Null<ldtk.Json.TilesetRect>;
 	var active : Bool;
 	var collapsed : Bool;
 	var rules : Array<data.def.AutoLayerRuleDef>;

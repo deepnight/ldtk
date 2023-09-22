@@ -215,6 +215,7 @@ class LayerDef {
 			uid: rg.uid,
 			name: rg.name,
 			color: rg.color!=null ? rg.color.toHex() : null,
+			icon: JsonTools.writeTileRect(rg.icon),
 			active: rg.active,
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
@@ -230,6 +231,7 @@ class LayerDef {
 		rg.color = JsonTools.readColor(ruleGroupJson.color, true);
 		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
 		rg.isOptional = JsonTools.readBool( ruleGroupJson.isOptional, false );
+		rg.icon = JsonTools.readTileRect( ruleGroupJson.icon, true );
 		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
 			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
 		});
@@ -564,6 +566,7 @@ class LayerDef {
 			uid: uid,
 			name: name,
 			color: null,
+			icon: null,
 			active: true,
 			collapsed: false,
 			isOptional: false,

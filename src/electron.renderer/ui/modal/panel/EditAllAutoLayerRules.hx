@@ -235,6 +235,28 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
+
+	function onPickGroupIcon(rg:AutoLayerRuleGroup) {
+		var td = li.getTilesetDef();
+		if( td==null )
+			N.error("Invalid layer tileset");
+		else {
+			var m = new ui.Modal();
+			m.addClass("singleTilePicker");
+
+			var tp = new ui.Tileset(m.jContent, td, RectOnly);
+			tp.useSavedSelections = false;
+			tp.setSelectedRect(rg.icon);
+			tp.onSelectAnything = ()->{
+				rg.icon = tp.getSelectedRect();
+				m.close();
+				editor.ge.emit( LayerRuleGroupChanged(rg) );
+			}
+			tp.focusOnSelection(true);
+		}
+	}
+
+
 	function onRenameGroup(jGroupHeader:js.jquery.JQuery, rg:AutoLayerRuleGroup) {
 		jGroupHeader.find("div.name").hide();
 		var jInput = jGroupHeader.find("input.name");
@@ -300,6 +322,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			m.add({
 				label: L.t._("Use assistant (recommended)"),
+				icon: "wizard",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -311,6 +334,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			m.add({
 				label: L.t._("Create an empty group"),
+				icon: "folder",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -510,7 +534,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
 			.find(".text").text(rg.name).parent()
-			.find(".icon").removeClass().addClass("icon").addClass(rg.collapsed ? "collapsed" : "expanded");
+			.find(".collapserIcon").removeClass().addClass("icon").addClass(rg.collapsed ? "collapsed" : "expanded");
 
 		if( rg.collapsed ) {
 			jGroup.addClass("collapsed");
@@ -518,6 +542,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jDropTarget.attr("groupIdx",groupIdx);
 			jDropTarget.attr("groupUid",rg.uid);
 			jGroup.append(jDropTarget);
+		}
+		if( rg.icon!=null ) {
+			var td = li.getTilesetDef();
+			if( td!=null ) {
+				var jImg = td.createTileHtmlImageFromRect(rg.icon, 32);
+				jName.find(".customIcon").append(jImg);
+			}
 		}
 
 		// Show cells affected by this whole group
@@ -581,7 +612,49 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
+				label: L.t._("Assign group icon"),
+				icon: "pickIcon",
+				cb: ()->onPickGroupIcon(rg),
+			},
+
+			{
+				label: L.t._("Remove group icon"),
+				icon: "deleteIcon",
+				show: ()->rg.icon!=null,
+				cb: ()->{
+					rg.icon = null;
+					editor.ge.emit( LayerRuleGroupChanged(rg) );
+				},
+			},
+
+			{
+				label: L.t._('Edit "out-of-bounds" policy for all rules'),
+				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				icon: "outOfBounds",
+				separatorBefore: true,
+				cb: ()->{
+					var m = new ui.modal.Dialog();
+					m.loadTemplate("outOfBoundsPolicyGlobal.html");
+					var outOfBounds : Null<Int> = -1;
+					JsTools.createOutOfBoundsRulePolicy(m.jContent.find("#outOfBoundsValue"), ld, outOfBounds, (v)->outOfBounds=v);
+					m.addButton(L.t._("Apply to all rules"), ()->{
+						if( outOfBounds<0 )
+							return;
+
+						for(r in rg.rules)
+							r.outOfBoundsValue = outOfBounds;
+						invalidateRuleGroup(rg);
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+						m.close();
+					});
+					m.addCancel();
+				},
+				show: ()->!rg.isOptional,
+			},
+
+			{
 				label: L.t._("Edit rules using the Assistant"),
+				icon: "wizard",
 				cb: ()->{
 					doUseWizard(rg);
 				},
@@ -602,31 +675,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
-				label: L.t._('Edit "out-of-bounds" policy for all rules'),
-				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-				icon: "outOfBounds",
-				cb: ()->{
-					var m = new ui.modal.Dialog();
-					m.loadTemplate("outOfBoundsPolicyGlobal.html");
-					var outOfBounds : Null<Int> = -1;
-					JsTools.createOutOfBoundsRulePolicy(m.jContent.find("#outOfBoundsValue"), ld, outOfBounds, (v)->outOfBounds=v);
-					m.addButton(L.t._("Apply to all rules"), ()->{
-						if( outOfBounds<0 )
-							return;
-
-						for(r in rg.rules)
-							r.outOfBoundsValue = outOfBounds;
-						invalidateRuleGroup(rg);
-						editor.ge.emit( LayerRuleGroupChanged(rg) );
-						m.close();
-					});
-					m.addCancel();
-				},
-				show: ()->!rg.isOptional,
-				separatorAfter: true,
-			},
-
-			{
 				label: L.t._("Disable OPTIONAL state"),
 				cb: ()->{
 					new ui.modal.dialog.Confirm(
@@ -641,10 +689,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					);
 				},
 				show: ()->rg.isOptional,
-				separatorAfter: true,
 			},
 			{
 				label: L._PasteAfter("rule"),
+				separatorBefore: true,
 				cb: ()->{
 					var copy = ld.pasteRule(project, rg, App.ME.clipboard);
 					lastRule = copy;
@@ -749,7 +797,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				allActive = false;
 		}
 
-		jGroupHeader.find(".ruleActive .icon")
+		jGroupHeader.find(".ruleActive .collapserIcon")
 			.addClass( rg.isOptional
 				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
 				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"

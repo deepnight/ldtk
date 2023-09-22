@@ -1224,6 +1224,7 @@ ul.log {
 .icon.contextMenuOpen	{ background-image: url("../icons/contextMenuOpen.svg"); }
 .icon.copy				{ background-image: url("../icons/copy.svg"); }
 .icon.delete			{ background-image: url("../icons/delete.svg"); }
+.icon.deleteIcon		{ background-image: url("../icons/deleteIcon.svg"); }
 .icon.embed				{ background-image: url("../icons/embed.svg"); }
 .icon.discord			{ background-image: url("../icons/discord.svg"); }
 .icon.download			{ background-image: url("../icons/download.svg"); }
@@ -1250,6 +1251,7 @@ ul.log {
 .icon.help				{ background-image: url("../icons/help.svg"); }
 .icon.hidden			{ background-image: url("../icons/hidden.png"); }
 .icon.history			{ background-image: url("../icons/history.svg"); }
+.icon.pickIcon			{ background-image: url("../icons/pickIcon.svg"); }
 .icon.inactive			{ background-image: url("../icons/inactive.png"); }
 .icon.intGrid			{ background-image: url("../icons/intGrid.png"); }
 .icon.json				{ background-image: url("../icons/json.svg"); }
@@ -1296,6 +1298,7 @@ ul.log {
 .icon.visible			{ background-image: url("../icons/visible.png"); }
 .icon.warn				{ background-image: url("../icons/warn.svg"); }
 .icon.web				{ background-image: url("../icons/web.svg"); }
+.icon.wizard			{ background-image: url("../icons/wizard.svg"); }
 .icon.world				{ background-image: url("../icons/world.svg"); }
 .icon.zen				{ background-image: url("../icons/zen.svg"); }
 
@@ -8432,14 +8435,15 @@ body.sorting ul.collapsedSortTarget {
 					grid-auto-columns: min-content;
 					align-items: stretch;
 					width: 100%;
-					height: 32px;
+					height: 34px;
 					background-color: $bgLight;
 
 					div.name {
 						display: grid;
-						grid-template-columns: 20px auto;
+						grid-template-columns: 20px min-content auto;
 						align-content: center;
-						gap: 4px;
+						align-items: center;
+						gap: 6px;
 						width: 100%;
 						height: 100%;
 
@@ -8449,6 +8453,13 @@ body.sorting ul.collapsedSortTarget {
 						white-space: nowrap;
 
 						cursor: pointer;
+
+						.customIcon {
+							margin-top: 1px;
+							margin-bottom: 1px;
+							box-shadow: 0px 0px 4px black;
+							background-color: transparentize($color: black, $amount: 0.6);
+						}
 
 						.text {
 							overflow: hidden;
