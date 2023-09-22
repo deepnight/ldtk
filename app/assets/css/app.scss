@@ -1265,6 +1265,8 @@ ul.log {
 .icon.new				{ background-image: url("../icons/new.svg"); }
 .icon.offset			{ background-image: url("../icons/offset.svg"); }
 .icon.open				{ background-image: url("../icons/open.svg"); }
+.icon.optional			{ background-image: url("../icons/optional.svg"); }
+.icon.outOfBounds		{ background-image: url("../icons/outOfBounds.svg"); }
 .icon.partial			{ background-image: url("../icons/partial.png"); }
 .icon.paste				{ background-image: url("../icons/paste.svg"); }
 .icon.pick				{ background-image: url("../icons/pick.svg"); }
@@ -8481,19 +8483,20 @@ body.sorting ul.collapsedSortTarget {
 							font-weight: bold;
 							font-size: 12pt;
 						}
-						&:hover.active{
-							background-color: $bgLighter !important;
+						&.ruleActive:hover{
+							background-color: transparentize($color: white, $amount: 0.66) !important;
+						}
+
+						&.off {
+							opacity: 0.3;
+							background-color: $red;
+						}
+
+						&.ruleActive .icon {
+							width: 100%;
 						}
 					}
 
-					button.off {
-						opacity: 0.3;
-						background-color: $red;
-					}
-
-					button.active .icon {
-						width: 100%;
-					}
 
 					.context{
 						border-radius: 0;
@@ -8502,7 +8505,7 @@ body.sorting ul.collapsedSortTarget {
 				}
 
 				&:not(.optional) header .name:hover {
-					background-color: $bgLighter;
+					background-color: transparentize($color: white, $amount: 0.8) !important;
 				}
 
 				&.optional header .name:hover {

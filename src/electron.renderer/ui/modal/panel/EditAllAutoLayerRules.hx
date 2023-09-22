@@ -536,7 +536,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		var jToggle = jGroupHeader.find(".active");
+		var jToggle = jGroupHeader.find(".ruleActive");
 		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
@@ -550,8 +550,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 		if( rg.isOptional )
 			jToggle.attr("title", (li.isRuleGroupActiveHere(rg)?"Disable":"Enable")+" this group of rules in this level");
-		// else
-		// 	jToggle.attr("title", (rg.active?"Disable":"Enable")+" this group of rules everywhere");
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");
@@ -577,7 +575,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
-				label: L.t._("Set group color"),
+				label: L.t._("Assign group color"),
+				icon: "color",
 				cb: ()->onPickGroupColor(rg),
 			},
 
@@ -592,6 +591,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L.t._("Turn into an OPTIONAL group"),
 				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				icon: "optional",
 				cb: ()->{
 					invalidateRuleGroup(rg);
 					rg.isOptional = true;
@@ -604,6 +604,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L.t._('Edit "out-of-bounds" policy for all rules'),
 				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				icon: "outOfBounds",
 				cb: ()->{
 					var m = new ui.modal.Dialog();
 					m.loadTemplate("outOfBoundsPolicyGlobal.html");
@@ -748,7 +749,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				allActive = false;
 		}
 
-		jGroupHeader.find(".active .icon")
+		jGroupHeader.find(".ruleActive .icon")
 			.addClass( rg.isOptional
 				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
 				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
@@ -966,7 +967,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Enable/disable rule
-		var jActive = jRule.find("a.active");
+		var jActive = jRule.find("a.ruleActive");
 		jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 		jActive.click( function(ev:js.jquery.Event) {
 			ev.preventDefault();
