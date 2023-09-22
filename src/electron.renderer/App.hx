@@ -189,7 +189,7 @@ class App extends dn.Process {
 
 		// Parse AppCommands meta
 		var meta = haxe.rtti.Meta.getFields(AppCommand);
-		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\])/gi;
+		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
 		for(k in AppCommand.getConstructors()) {
 			var cmd = AppCommand.createByName(k);
 			var cmdMeta : Dynamic = Reflect.field(meta, k);
@@ -247,6 +247,7 @@ class App extends dn.Process {
 					alt: rawCombo.indexOf("alt")>=0,
 					navKeys: navKeys,
 					os: os,
+					debug: rawCombo.indexOf("[debug]")>=0,
 					allowInInputs: Reflect.hasField(cmdMeta, "input"),
 					command: cmd,
 				});

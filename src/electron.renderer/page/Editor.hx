@@ -556,6 +556,11 @@ class Editor extends Page {
 			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
 				continue;
 
+			#if( !debug )
+			if( b.debug )
+				continue;
+			#end
+
 			switch b.os {
 				case null:
 				case "win": if( !App.isWindows() ) continue;

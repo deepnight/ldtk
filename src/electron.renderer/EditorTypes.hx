@@ -243,6 +243,7 @@ typedef KeyBinding = {
 
 	var navKeys : Null<Settings.NavigationKeys>;
 	var os : Null<String>;
+	var debug: Bool;
 
 	var allowInInputs : Bool;
 
@@ -263,7 +264,7 @@ enum AppCommand {
 	@k("tab") C_ZenMode;
 	@k("h") C_ShowHelp;
 	@k("shift w, ², `, [zqsd] w, [arrows] w") C_ToggleWorldMode;
-	@k("ctrl r") @input C_RunCommand;
+	@k("ctrl r, [debug] ctrl shift r") @input C_RunCommand;
 	@k("ctrl q") @input C_ExitApp;
 	@k("pagedown") C_GotoPreviousWorldLayer;
 	@k("pageup") C_GotoNextWorldLayer;
