@@ -13,10 +13,10 @@
 --cmd haxelib git heaps https://github.com/deepnight/heaps.git --always
 
 --next
---cmd haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git --always
+--cmd haxelib git electron https://github.com/deepnight/hxelectron.git --always
 
 --next
---cmd haxelib git electron https://github.com/deepnight/hxelectron.git --always
+--cmd haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git --always
 
 --next
 --cmd haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git --always
@@ -25,4 +25,4 @@
 --cmd haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
 
 --next
---cmd haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+--cmd haxelib git ldtk-haxe-api https://github.com/lojemiru/ldtk-haxe-api.git --always
