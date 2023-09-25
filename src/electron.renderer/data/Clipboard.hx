@@ -1,7 +1,7 @@
 package data;
 
 class Clipboard {
-	static var SIGNATURE = Const.APP_NAME+" "+Const.getAppVersion(true)+" clipboard";
+	static var SIGNATURE = Const.APP_NAME+" "+Const.getAppVersionStr(true)+" clipboard";
 	static var SYS_SEP = "\n----\n";
 
 	public var name(get,never) : Null<String>;

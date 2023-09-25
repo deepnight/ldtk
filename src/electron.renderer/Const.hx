@@ -2,7 +2,7 @@ class Const {
 #if !macro
 	static var RAW_APP_VERSION : String = MacroTools.getAppVersion();
 
-	public static function getAppVersion(short=false) : String {
+	public static function getAppVersionStr(short=false) : String {
 		if( short )
 			return RAW_APP_VERSION;
 		else
@@ -34,8 +34,8 @@ class Const {
 		return js.Node.process.versions.get("electron");
 	}
 
-	public static function getJsonVersion() {
-		return getAppVersion(true);
+	public static function getJsonVersion() : String {
+		return getAppVersionStr(true);
 	}
 
 	public static final APP_NAME = "LDtk";
@@ -77,7 +77,7 @@ class Const {
 		doc: JSON_DOC_URL,
 		schema: JSON_SCHEMA_URL,
 		appAuthor: "Sebastien 'deepnight' Benard",
-		appVersion: getAppVersion(true),
+		appVersion: getAppVersionStr(true),
 		url: HOME_URL,
 	}
 
