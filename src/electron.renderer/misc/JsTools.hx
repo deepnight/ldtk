@@ -287,16 +287,18 @@ class JsTools {
 		else {
 			// Shape
 			var superScale = 3;
-			var wid = ed.width*superScale;
-			var hei = ed.height*superScale;
+			var scaledSizePx = sizePx * superScale;
+			var padPct = 0.05;
+			var pad = M.round( scaledSizePx*padPct );
+			var shapeWid = scaledSizePx * (1-padPct*2) * ( ed.width>ed.height ? 1 : ed.width/ed.height );
+			var shapeHei = scaledSizePx * (1-padPct*2) * ( ed.height>ed.width ? 1 : ed.height/ed.width );
 			var jCanvas = new J('<canvas></canvas>');
 			jCanvas.appendTo(jWrapper);
-			jCanvas.attr("width", wid);
-			jCanvas.attr("height", hei);
+			jCanvas.attr("width", scaledSizePx);
+			jCanvas.attr("height", scaledSizePx);
 
 			var cnv = Std.downcast( jCanvas.get(0), js.html.CanvasElement );
 			var ctx = cnv.getContext2d();
-			var pad = M.round( sizePx*0.1*superScale );
 
 			ctx.fillStyle = new dn.Col(ed.color).toCssRgba(ed.fillOpacity);
 			ctx.strokeStyle = new dn.Col(ed.color).toCssRgba(ed.lineOpacity);
@@ -304,14 +306,14 @@ class JsTools {
 
 			switch ed.renderMode {
 				case Rectangle:
-					ctx.fillRect(pad, pad, wid-pad*2, hei-pad*2);
-					ctx.strokeRect(pad, pad, wid-pad*2, hei-pad*2);
+					ctx.fillRect(scaledSizePx*0.5-shapeWid*0.5, scaledSizePx*0.5-shapeHei*0.5, shapeWid, shapeHei);
+					ctx.strokeRect(scaledSizePx*0.5-shapeWid*0.5, scaledSizePx*0.5-shapeHei*0.5, shapeWid, shapeHei);
 
 				case Ellipse:
 					ctx.beginPath();
 					ctx.ellipse(
-						wid*0.5, hei*0.5,
-						wid*0.5-pad, hei*0.5-pad,
+						scaledSizePx*0.5, scaledSizePx*0.5,
+						shapeWid*0.5, shapeHei*0.5,
 						0, 0, M.PI*2
 					);
 					ctx.fill();
@@ -319,10 +321,10 @@ class JsTools {
 
 				case Cross:
 					ctx.lineWidth = 3;
-					ctx.moveTo(0,0);
-					ctx.lineTo(wid, hei);
-					ctx.moveTo(0,hei);
-					ctx.lineTo(wid, 0);
+					ctx.moveTo(scaledSizePx*0.5-shapeWid*0.5, scaledSizePx*0.5-shapeHei*0.5);
+					ctx.lineTo(scaledSizePx*0.5+shapeWid*0.5, scaledSizePx*0.5+shapeHei*0.5);
+					ctx.moveTo(scaledSizePx*0.5+shapeWid*0.5, scaledSizePx*0.5-shapeHei*0.5);
+					ctx.lineTo(scaledSizePx*0.5-shapeWid*0.5, scaledSizePx*0.5+shapeHei*0.5);
 					ctx.stroke();
 
 				case Tile: // N/A
