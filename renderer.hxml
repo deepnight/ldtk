@@ -19,6 +19,6 @@
 # -dce full
 -js app/assets/js/renderer.js
 
---macro Const.dumpBuildVersionToFile()
---macro Const.buildLatestReleaseNotes()
+--macro MacroTools.dumpBuildVersionToFile()
+--macro MacroTools.buildLatestReleaseNotes()
 --macro Assets.enableXmlFonts()
