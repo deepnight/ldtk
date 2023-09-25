@@ -100,9 +100,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 	override function useFloodfillAt(m:Coords):Bool {
 		var topTile = curLayerInstance.getTopMostGridTile(m.cx, m.cy);
 		var initialTileId : Null<Int> = topTile!=null ? topTile.tileId : null;
-
-		// if( initialTileId==getSelectedValue().ids[0] && curMode==Add )
-		// 	return false;
+		var flips = M.makeBitsFromBools(flipX, flipY);
 
 		return _floodFillImpl(
 			m,
@@ -120,7 +118,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 
 							case Random:
 								var id = v.ids[ Std.random(v.ids.length) ];
-								curLayerInstance.addGridTile( cx,cy, id, settings.v.tileStacking && !curTilesetDef.isTileOpaque(id) );
+								curLayerInstance.addGridTile( cx,cy, id, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(id) );
 						}
 
 					case Remove:
@@ -174,6 +172,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 
 	function drawSelectionInRectangle(cx:Int, cy:Int, wid:Int, hei:Int, ?onlyCoordsMask:Map<Int,Bool>) {
 		var anyChange = false;
+		var flips = M.makeBitsFromBools(flipX, flipY);
 		var sel = getSelectedValue();
 		var selMap = new Map();
 
@@ -210,7 +209,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 
 			if( onlyCoordsMask==null || onlyCoordsMask.exists(curLayerInstance.coordId(x,y)) )
 			if( curLayerInstance.isValid(x,y) && selMap.exists(tid) ) {
-				curLayerInstance.addGridTile(x,y, tid, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
+				curLayerInstance.addGridTile(x,y, tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
 				editor.curLevelTimeline.markGridChange(curLayerInstance, x, y);
 				anyChange = true;
 			}
@@ -228,7 +227,6 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		if( isRandomMode() ) {
 			// Single random tile
 			var tid = sel.ids[Std.random(sel.ids.length)];
-			// if( li.isValid(cx,cy) && ( li.getGridTileId(cx,cy)!=tid || li.getGridTileFlips(cx,cy)!=flips ) ) {
 			if( li.isValid(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
 				li.addGridTile(cx,cy, tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
 				if( settings.v.tileStacking )
@@ -257,7 +255,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				var tcx = cx + ( flipX ? right-tdCx : tdCx-left ) * gridDiffScale;
 				var tcy = cy + ( flipY ? bottom-tdCy : tdCy-top ) * gridDiffScale;
 				if( li.isValid(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy	) ) {
-					li.addGridTile(tcx,tcy,tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
+					li.addGridTile(tcx,tcy, tid, flips, settings.v.tileStacking && !curTilesetDef.isTileOpaque(tid));
 					if( settings.v.tileStacking )
 						markAsPainted(tcx,tcy);
 					editor.curLevelTimeline.markGridChange(li, tcx, tcy);
