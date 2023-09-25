@@ -1,6 +1,7 @@
 # 1.4.1
 
  - Fixed the "Enable/disable rule" button
+ - Fixed typo in "Entities" sample map
  - Fixed the "New update" banner depth in changelog
 
 # 1.4.0 - Int-Grid groups
