@@ -1,19 +1,19 @@
 class Const {
-	static var APP_VERSION : String = #if macro getPackageVersion() #else getPackageVersionMacro() #end;
+	static var RAW_APP_VERSION : String = #if macro getPackageVersion() #else getPackageVersionMacro() #end;
 
 	public static function getAppVersion(short=false) {
 		if( short )
-			return APP_VERSION;
+			return RAW_APP_VERSION;
 		else
 			return [
-				APP_VERSION,
+				RAW_APP_VERSION,
 				#if debug "debug", #end
 				getArch(),
 			].join("-");
 	}
 
 	public static function getAppVersionObj() {
-		return new dn.Version(APP_VERSION);
+		return new dn.Version(RAW_APP_VERSION);
 	}
 
 	public static function getAppBuildId() : Float {
