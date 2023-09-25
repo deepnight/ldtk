@@ -53,7 +53,6 @@ class ElectronMain {
 	}
 
 
-
 	static function createAppWindow() {
 		function _fileNotFound(file:String) {
 			electron.main.Dialog.showErrorBox("File not found", '"$file" was not found in app assets!');
@@ -64,13 +63,19 @@ class ElectronMain {
 		#if !debug
 		var splash = new electron.main.BrowserWindow({
 			width: 600,
-			height: 400,
+			height: 200,
 			alwaysOnTop: true,
 			transparent: true,
 			frame: false,
 		});
 
-		splash.loadFile('assets/splash.html')
+		var ver = new dn.Version( MacroTools.getAppVersion() );
+
+		splash
+			.loadFile('assets/splash.html', { query:{
+				mainVersion : ver.major+"."+ver.minor,
+				patchVersion : ver.patch>0 ? "."+ver.patch : "",
+			}})
 			.then( (_)->{}, (_)->_fileNotFound("splash.html") );
 
 		#end

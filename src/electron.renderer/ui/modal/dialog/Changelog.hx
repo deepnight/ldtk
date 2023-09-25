@@ -161,7 +161,7 @@ class Changelog extends ui.modal.Dialog {
 			}
 
 			// Highlight latest
-			if( changeLog.version.hasSameMajorAndMinor( Const.getAppVersion(true) ) ) {
+			if( changeLog.version.hasSameMajorAndMinor( Const.getAppVersionStr(true) ) ) {
 				jHotFixes.find(".hotfix:first").addClass("latest");
 				jHotFixes.find(".hotfix:not(:first)").addClass("collapsed");
 			}

@@ -567,7 +567,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		var jToggle = jGroupHeader.find(".ruleActive");
+		var jToggle = jGroupHeader.find(".groupActive");
 		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
@@ -797,7 +797,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				allActive = false;
 		}
 
-		jGroupHeader.find(".ruleActive .icon")
+		jGroupHeader.find(".groupActive .icon")
 			.addClass( rg.isOptional
 				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
 				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
@@ -1015,7 +1015,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Enable/disable rule
-		var jActive = jRule.find("a.ruleActive");
+		var jActive = jRule.find("a.active");
 		jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
 		jActive.click( function(ev:js.jquery.Event) {
 			ev.preventDefault();

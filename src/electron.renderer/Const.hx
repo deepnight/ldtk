@@ -1,19 +1,20 @@
 class Const {
-	static var APP_VERSION : String = #if macro getPackageVersion() #else getPackageVersionMacro() #end;
+#if !macro
+	static var RAW_APP_VERSION : String = MacroTools.getAppVersion();
 
-	public static function getAppVersion(short=false) {
+	public static function getAppVersionStr(short=false) : String {
 		if( short )
-			return APP_VERSION;
+			return RAW_APP_VERSION;
 		else
 			return [
-				APP_VERSION,
+				RAW_APP_VERSION,
 				#if debug "debug", #end
 				getArch(),
 			].join("-");
 	}
 
-	public static function getAppVersionObj() {
-		return new dn.Version(APP_VERSION);
+	public static function getAppVersionObj() : dn.Version {
+		return new dn.Version(RAW_APP_VERSION);
 	}
 
 	public static function getAppBuildId() : Float {
@@ -21,28 +22,20 @@ class Const {
 	}
 
 	public static function getArch() {
-		#if macro
-		return "";
-		#else
 		return switch js.Node.process.arch {
 			case "x64": "64bits";
 			case "x32": "32bits";
 			case "ia32": "32bits";
 			case _: "";
 		}
-		#end
 	}
 
 	public static function getElectronVersion() {
-		#if macro
-		return "";
-		#else
 		return js.Node.process.versions.get("electron");
-		#end
 	}
 
-	public static function getJsonVersion() {
-		return getAppVersion(true);
+	public static function getJsonVersion() : String {
+		return getAppVersionStr(true);
 	}
 
 	public static final APP_NAME = "LDtk";
@@ -78,21 +71,20 @@ class Const {
 	}
 
 
-	#if !macro
 	public static var JSON_HEADER = {
 		fileType: Const.APP_NAME+" Project JSON",
 		app: Const.APP_NAME,
 		doc: JSON_DOC_URL,
 		schema: JSON_SCHEMA_URL,
 		appAuthor: "Sebastien 'deepnight' Benard",
-		appVersion: getAppVersion(true),
+		appVersion: getAppVersionStr(true),
 		url: HOME_URL,
 	}
 
-	public static var APP_CHANGELOG_MD = getAppChangelogMarkdown();
+	public static var APP_CHANGELOG_MD : String = MacroTools.getAppChangelogMarkdown();
 	public static function getChangeLog() return new dn.Changelog(APP_CHANGELOG_MD);
 
-	public static var JSON_FORMAT_MD = getJsonFormatMarkdown();
+	public static var JSON_FORMAT_MD : String = MacroTools.getJsonFormatMarkdown();
 
 	public static var FPS = 60;
 	public static var SCALE = 1.0;
@@ -197,54 +189,6 @@ class Const {
 
 	public static var AUTO_LAYER_ANYTHING = 1000001;
 	public static var MAX_AUTO_PATTERN_SIZE = 9;
-	#end
 
-
-	#if macro
-	public static function dumpBuildVersionToFile() {
-		var v = getAppVersion();
-		sys.io.File.saveContent("lastBuildVersion.txt", v);
-	}
-	#end
-
-	static function getPackageVersion() : String {
-		var raw = sys.io.File.getContent("app/package.json");
-		var json = haxe.Json.parse(raw);
-		return json.version;
-	}
-
-	static macro function getPackageVersionMacro() {
-		haxe.macro.Context.registerModuleDependency("Const","app/package.json");
-		return macro $v{ getPackageVersion() };
-	}
-
-	static macro function getAppChangelogMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","docs/CHANGELOG.md");
-		return macro $v{ sys.io.File.getContent("docs/CHANGELOG.md") };
-	}
-
-	static macro function getJsonFormatMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","docs/JSON_DOC.md");
-		return macro $v{ sys.io.File.getContent("docs/JSON_DOC.md") };
-	}
-
-	static macro function buildLatestReleaseNotes() {
-		// App latest changelog
-		var raw = sys.io.File.getContent("docs/CHANGELOG.md");
-		var appCL = new dn.Changelog(raw);
-		var relNotes = [
-			"# " + appCL.latest.version.full + ( appCL.latest.title!=null ? " -- *"+appCL.latest.title+"*" : "" ),
-		].concat( appCL.latest.allNoteLines );
-
-		// Save file
-		if( !sys.FileSystem.exists("./app/buildAssets") )
-			sys.FileSystem.createDirectory("./app/buildAssets");
-		var relNotesPath = "./app/buildAssets/release-notes.md";
-		var out = relNotes.join("\n");
-		out = StringTools.replace(out, "![](", "![](https://ldtk.io/files/changelogImg/");
-		try sys.io.File.saveContent(relNotesPath, out)
-			catch(e:Dynamic) haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
-
-		return macro {}
-	}
+#end
 }

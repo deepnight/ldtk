@@ -12,7 +12,7 @@ class Help extends ui.modal.Panel {
 			docsUrl: Const.DOCUMENTATION_URL,
 			jsonUrl: Const.JSON_DOC_URL,
 			app: Const.APP_NAME,
-			ver: Const.getAppVersion(),
+			ver: Const.getAppVersionStr(),
 		});
 
 		jContent.find(".changelog").click( _->{

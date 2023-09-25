@@ -1,3 +1,11 @@
+# 1.4.1
+
+ - Fixed tiles painting ignoring the "Mirror X/Y" setting when using rectangle painting and flood filling
+ - Fixed the "Enable/disable rule" button
+ - Fixed typo in "Entities" sample map
+ - Fixed the "New update" banner depth in changelog
+ - Updated app splash screen
+
 # 1.4.0 - Int-Grid groups
 
 ## Int-Grid groups

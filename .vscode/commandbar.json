@@ -22,6 +22,15 @@
 			"priority": -23
 		},
 		{
+			"text": "⚡ Main rel",
+			"color": "yellow",
+			"commandType":"palette",
+			"command": "workbench.action.tasks.runTask|Electron Main release",
+			"alignment": "right",
+			"skipTerminateQuickPick": false,
+			"priority": -24
+		},
+		{
 			"text": "🖥️ Term",
 			"color": "white",
 			"command": "start /d app cmd",

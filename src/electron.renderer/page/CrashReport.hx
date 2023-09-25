@@ -56,7 +56,7 @@ class CrashReport extends Page {
 					"",
 					"Stack:",
 					"```",
-					"LDtk version: "+Const.getAppVersion(),
+					"LDtk version: "+Const.getAppVersionStr(),
 					error.message,
 					error.name,
 					error.stack,
