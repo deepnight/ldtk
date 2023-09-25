@@ -1,3 +1,7 @@
+# 1.4.1
+
+ - Fixed the "New update" banner depth in changelog
+
 # 1.4.0 - Int-Grid groups
 
 ## Int-Grid groups
