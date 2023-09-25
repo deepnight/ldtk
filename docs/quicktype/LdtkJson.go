@@ -807,7 +807,7 @@ type Level struct {
 	BgColor                                                                                     string                   `json:"__bgColor"`
 	// Position informations of the background image, if there is one.                                                   
 	BgPos                                                                                       *LevelBackgroundPosition `json:"__bgPos"`
-	// An array listing all other levels touching this one on the world map. Since 1.3.5, this                           
+	// An array listing all other levels touching this one on the world map. Since 1.4.0, this                           
 	// includes levels that overlap in the same world layer, or in nearby world layers.<br/>                             
 	// Only relevant for world layouts where level spatial positioning is manual (ie. GridVania,                         
 	// Free). For Horizontal and Vertical layouts, this array is always empty.                                           
@@ -882,7 +882,7 @@ type LevelBackgroundPosition struct {
 // Nearby level info
 type NeighbourLevel struct {
 	// A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est,          
-	// `e`ast).<br/>  Since 1.3.5, this character value can also be `<` (neighbour depth is           
+	// `e`ast).<br/>  Since 1.4.0, this character value can also be `<` (neighbour depth is           
 	// lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world       
 	// depth).                                                                                        
 	Dir                                                                                        string `json:"dir"`
