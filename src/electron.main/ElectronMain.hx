@@ -63,7 +63,7 @@ class ElectronMain {
 		#if !debug
 		var splash = new electron.main.BrowserWindow({
 			width: 600,
-			height: 300,
+			height: 200,
 			alwaysOnTop: true,
 			transparent: true,
 			frame: false,
@@ -77,8 +77,6 @@ class ElectronMain {
 				patchVersion : ver.patch>0 ? "."+ver.patch : "",
 			}})
 			.then( (_)->{}, (_)->_fileNotFound("splash.html") );
-
-		return; // HACK
 
 		#end
 
