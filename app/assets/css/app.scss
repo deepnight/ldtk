@@ -6304,7 +6304,9 @@ canvas#webgl {
 		&:not(.col-1) .subList ul li {
 			.entityPreview  {
 				margin: 0;
-				zoom: 2;
+				// zoom: 2;
+				width: 100% !important;
+				height: auto !important;
 			}
 		}
 		&.col-2 .subList ul li .entityPreview  {

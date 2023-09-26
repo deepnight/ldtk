@@ -1,3 +1,8 @@
+# 1.4.2
+
+ - Fixed entity preview size in left panel
+
+
 # 1.4.1
 
  - Fixed a crash with Entities rendered as ellipses
@@ -6,6 +11,7 @@
  - Fixed typo in "Entities" sample map
  - Fixed the "New update" banner depth in changelog
  - Updated app splash screen
+
 
 # 1.4.0 - Int-Grid groups
 
