@@ -89,6 +89,11 @@ class RuleGroupRemap extends ui.modal.Dialog {
 							r.set(cx,cy, -idRemaps.get(-v));
 					}
 
+					// Out-of-bounds value
+					for(r in copy.rules)
+						if( r.outOfBoundsValue!=null && idRemaps.exists(r.outOfBoundsValue) )
+							r.outOfBoundsValue = idRemaps.get(r.outOfBoundsValue);
+
 					onConfirm(copy);
 					close();
 				}
