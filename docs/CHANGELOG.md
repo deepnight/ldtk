@@ -1,6 +1,7 @@
 # 1.4.2
 
  - Fixed entity preview size in left panel
+ - Fixed IntGrid icons size when the left panel uses the 5-columns mode
 
 
 # 1.4.1

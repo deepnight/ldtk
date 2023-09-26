@@ -6286,6 +6286,7 @@ canvas#webgl {
 		&:not(.col-1) .subList ul li {
 			.intGridValue {
 				width: 100%;
+				height: auto;
 				min-height: 64px;
 				border: none;
 				img {
@@ -6296,7 +6297,7 @@ canvas#webgl {
 
 		&.col-2 .sublist ul li .intGridValue { min-height: 128px; }
 		&.col-3 .sublist ul li .intGridValue { min-height: 96px; }
-		&.col-5 .sublist ul li .intGridValue { min-height: 28px; }
+		&.col-5 .sublist ul li .intGridValue { min-height: 50px; }
 	}
 
 
