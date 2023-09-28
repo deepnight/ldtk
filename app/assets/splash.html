@@ -22,7 +22,7 @@
 		}
 
 
-		.wrapper {
+		.windowWrapper {
 			display: grid;
 			align-items: center;
 			justify-content: center;
@@ -30,49 +30,71 @@
 			height: 100%;
 		}
 
-		.splash {
+		.splashWrapper {
 			display: grid;
-			grid-template-columns: 300px min-content;
+			grid-template-rows: min-content min-content;
+			/* grid-template-columns: min-content min-content; */
 			box-sizing: border-box;
-			border-radius: 8px;
 			overflow: hidden;
-			box-shadow: 0px 4px 8px rgba(0,0,0, 0.3),
-				0px 0px 32px rgba(0,0,0, 0.4);
+			row-gap: 13px;
+			padding: 26px;
+
+			border-radius: 8px;
+			border-top: 1px solid #545d7330;
+			box-shadow: 0px 0px 16px #232a3880 inset,
+				0px 4px 8px rgba(0,0,0, 0.4),
+				0px 0px 32px rgba(0,0,0, 0.3);
+
+			background: #14171bd3;
 		}
 
-		.splash .logo {
-			padding: 16px;
-			background: #1e2229d3;
-			border-top: 1px solid #545d7352;
-			box-shadow: 0px 0px 32px #2c3546a4 inset;
-		}
-
-		.splash .logo img {
-			width: 100%;
-		}
-
-		.splash .version {
+		.logo {
 			display: grid;
 			grid-template-columns: min-content min-content;
-			justify-content: center;
+			position: relative;
+			gap: 26px;
 
-			color: #1e2229;
-			white-space: nowrap;
-			font-size: 110px;
-			line-height: 1em;
-			letter-spacing: -3px;
-			padding-left: 8px;
-			padding-right: 16px;
-
-			background: #fc0;
 		}
 
-		.splash .version #mainVersion,
-		.splash .version #patchVersion {
+		.logo img.ldtkIcon {
+			width: auto;
+			height: 120px;
+		}
+
+		.logo img.ldtkText {
+			width: auto;
+			height: 128px;
+			margin-top: -6px;
+		}
+
+		.version {
+			display: grid;
+			grid-template-columns: auto min-content min-content;
+			/* justify-content: flex-end; */
+
+			color: #737f9d;
+			white-space: nowrap;
+			font-size: 22pt;
+			line-height: 1em;
+			/* letter-spacing: -0.07em; */
+			/* padding: 4px; */
+			/* padding-left: 8px; */
+			/* padding-right: 16px; */
+
+			/* background: #1e2229; */
+			border-radius: 4px;
+		}
+
+		.version .filler {
+			background-color: #252a33;
+			margin-right: 6px;
+		}
+		.version #mainVersion,
+		.version #patchVersion {
 			display: flex;
 			align-items: center;
 		}
-		.splash .version #mainVersion {
+		.version #mainVersion {
 			font-weight: bold;
 		}
 	</style>
@@ -80,14 +102,16 @@
 
 
 <body>
-	<div class="wrapper">
-		<div class="splash">
+	<div class="windowWrapper">
+		<div class="splashWrapper">
 
 			<div class="logo">
-				<img src="img/LDtk-simple.svg"/>
+				<img class="ldtkIcon" src="appIcon.png"/>
+				<img class="ldtkText" src="img/LDtk-simple.svg"/>
 			</div>
 
 			<div class="version">
+				<div class="filler"></div>
 				<span id="mainVersion">???</span>
 				<span id="patchVersion">???</span>
 			</div>
