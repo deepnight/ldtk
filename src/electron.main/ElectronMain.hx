@@ -67,8 +67,8 @@ class ElectronMain {
 		#else
 
 			splash = new electron.main.BrowserWindow({
-				width: 600,
-				height: 400,
+				width: 300,
+				height: 300,
 				alwaysOnTop: true,
 				transparent: true,
 				frame: false,
