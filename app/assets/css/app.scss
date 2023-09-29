@@ -387,6 +387,15 @@ button {
 	}
 }
 
+.appIcon {
+	width: 100px;
+	height: 100px;
+	background-image: url("../appIcon.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: center;
+	image-rendering: -webkit-optimize-contrast;
+}
 
 
 
@@ -5532,14 +5541,25 @@ canvas#webgl {
 
 		header {
 			display: grid;
+			grid-template-columns: min-content min-content auto min-content;
+			gap: 16px;
 			align-self: stretch;
 			align-items: center;
-			grid-template-columns: min-content min-content;
 
 			background-image: url("../img/homeBg_header.png");
 			background-size: contain;
 			background-repeat: no-repeat;
 			background-position: bottom center;
+
+			.appIcon {
+				width: 140px;
+				height: 140px;
+			}
+
+			.appLogo {
+				min-height: 128px;
+				background-position: left center;
+			}
 
 			.version {
 				display: grid;
@@ -5551,12 +5571,12 @@ canvas#webgl {
 				margin-top: 8px;
 
 				white-space: nowrap;
-				color: $bgDark;
-				font-size: 128px;
+				color: $bgLight;
+				font-size: 140px;
 				font-family: Roboto;
 				letter-spacing: -0.06em;
 
-				background-color: $orange;
+				// background-color: $orange;
 				border-radius: 4px;
 
 				* {
@@ -5564,9 +5584,8 @@ canvas#webgl {
 				}
 
 				strong {
-					color: $bgDark;
 					font-weight: bold;
-					text-shadow: 0px 0px 32px transparentize($orange, 0.7);
+					// text-shadow: 0px 0px 32px transparentize($orange, 0.7);
 				}
 
 				em {
@@ -5580,10 +5599,6 @@ canvas#webgl {
 						font-style: normal;
 					}
 				}
-			}
-
-			.appLogo {
-				min-height: 160px;
 			}
 
 			.disclaimer {

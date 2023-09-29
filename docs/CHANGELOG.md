@@ -1,5 +1,6 @@
 # 1.4.2
 
+ - Updated app logo!
  - Fixed entity preview size in left panel
  - Fixed IntGrid icons size when the left panel uses the 5-columns mode
  - Rules remapping now also updates out-of-bounds policy value
@@ -15,7 +16,7 @@
  - Updated app splash screen
 
 
-# 1.4.0 - Int-Grid groups
+# 1.4.0 - Int-Grid groups and new app logo
 
 ## Int-Grid groups
 ![](1.4.0/intGridGroups.png)

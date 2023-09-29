@@ -82,8 +82,7 @@ class ElectronMain {
 					patchVersion : ver.patch>0 ? "."+ver.patch : "",
 				}})
 				.then(
-					// _->createMainWindow(),
-					_->{}, // HACK
+					_->createMainWindow(),
 					_->fileNotFound("splash.html")
 				);
 
@@ -122,7 +121,7 @@ class ElectronMain {
 		#if debug
 			// Show immediately
 			mainWindow.maximize();
-			p.then( (_)->{}, (_)->_fileNotFound("app.html") );
+			p.then( (_)->{}, (_)->fileNotFound("app.html") );
 		#else
 			// Wait for loading before showing up
 			p.then( (_)->{
