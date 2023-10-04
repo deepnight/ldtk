@@ -366,7 +366,7 @@ class AutoLayerRuleDef {
 		}
 
 		var sourceLd = ld.autoSourceLd!=null ? ld.autoSourceLd : ld;
-		if( outOfBoundsValue!=null && !sourceLd.hasIntGridValue(outOfBoundsValue) ) {
+		if( outOfBoundsValue!=null && outOfBoundsValue!=0 && !sourceLd.hasIntGridValue(outOfBoundsValue) ) {
 			App.LOG.add("tidy", 'Fixed lost outOfBoundsValue: $outOfBoundsValue');
 			outOfBoundsValue = null;
 		}
