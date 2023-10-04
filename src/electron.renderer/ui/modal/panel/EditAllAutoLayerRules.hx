@@ -955,10 +955,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
 				return;
 			}
-			if( r.alpha<1 ) {
-				N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
-				return;
-			}
+			// if( r.alpha<1 ) {
+			// 	N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
+			// 	return;
+			// }
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);
 			r.breakOnMatch = !r.breakOnMatch;

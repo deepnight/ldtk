@@ -4,6 +4,7 @@
  - Fixed entity preview size in left panel
  - Fixed IntGrid icons size when the left panel uses the 5-columns mode
  - Rules remapping now also updates out-of-bounds policy value
+ - Allowed break-on-match on rules with some transparency
  - Fixed unsupported "Empty cell" value in rules out-of-bounds policy
 
 
