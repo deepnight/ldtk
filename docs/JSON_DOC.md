@@ -263,12 +263,12 @@ Value | Type | Description
 `pivotX`<br/><sup class="only">Only *'Stamp' tile mode*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | X pivot of a tile stamp (0-1)
 `pivotY`<br/><sup class="only">Only *'Stamp' tile mode*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | Y pivot of a tile stamp (0-1)
 `size`<br/><sup class="internal">*Only used by editor*</sup> | Int | Pattern width & height. Should only be 1,3,5 or 7.
-`tileIds`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Int | Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
 `tileMode`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Defines how tileIds array is used<br/> Possible values: `Single`, `Stamp`
 `tileRandomXMax`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-gray.svg)  | Int | Max random offset for X tile pos
 `tileRandomXMin`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-gray.svg)  | Int | Min random offset for X tile pos
 `tileRandomYMax`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-gray.svg)  | Int | Max random offset for Y tile pos
 `tileRandomYMin`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-gray.svg)  | Int | Min random offset for Y tile pos
+`tileRectsIds`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Array&nbsp;of&nbsp;Int | Array containing all the possible tile IDs rectangles (picked randomly).
 `tileXOffset`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-gray.svg)  | Int | Tile X offset
 `tileYOffset`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.0-gray.svg)  | Int | Tile Y offset
 `uid`<br/><sup class="internal">*Only used by editor*</sup> | Int | Unique Int identifier
@@ -276,6 +276,7 @@ Value | Type | Description
 `xOffset`<br/><sup class="internal">*Only used by editor*</sup> | Int | X cell start offset
 `yModulo`<br/><sup class="internal">*Only used by editor*</sup> | Int | Y cell coord modulo
 `yOffset`<br/><sup class="internal">*Only used by editor*</sup> | Int | Y cell start offset
+~~`tileIds`~~<br/><sup class="internal">*Only used by editor*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/>   | Array&nbsp;of&nbsp;Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value will be *removed* completely on version 1.6.0+<br/> <br/> Replaced by: `tileRectsIds`
 
 <a id="ldtk-EntityDefJson" name="ldtk-EntityDefJson"></a>
 ## 3.2. Entity definition   

@@ -757,12 +757,12 @@
 				"pivotX",
 				"pivotY",
 				"size",
-				"tileIds",
 				"tileMode",
 				"tileRandomXMax",
 				"tileRandomXMin",
 				"tileRandomYMax",
 				"tileRandomYMin",
+				"tileRectsIds",
 				"tileXOffset",
 				"tileYOffset",
 				"uid",
@@ -789,6 +789,22 @@
 					"description": "If TRUE, enable Perlin filtering to only apply rule on specific random area",
 					"type": [
 						"boolean"
+					]
+				},
+				"tileRectsIds": {
+					"description": "Array containing all the possible tile IDs rectangles (picked randomly).",
+					"items": {
+						"items": {
+							"type": [
+								"integer"
+							]
+						},
+						"type": [
+							"array"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"perlinScale": {
@@ -836,14 +852,15 @@
 					]
 				},
 				"tileIds": {
-					"description": "Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.",
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.6.0+  Replaced by: `tileRectsIds`",
 					"items": {
 						"type": [
 							"integer"
 						]
 					},
 					"type": [
-						"array"
+						"array",
+						"null"
 					]
 				},
 				"alpha": {
