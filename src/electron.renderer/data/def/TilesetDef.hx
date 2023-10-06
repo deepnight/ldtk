@@ -355,8 +355,9 @@ class TilesetDef {
 			if( ld.isAutoLayer() && ld.tilesetDefUid==uid ) {
 				for(rg in ld.autoRuleGroups)
 				for(r in rg.rules)
-				for(i in 0...r.tileIds.length)
-					r.tileIds[i] = _remapTileId(r.tileIds[i]);
+				for(rectIds in r.tileRectsIds)
+				for(i in 0...rectIds.length)
+					rectIds[i] = _remapTileId( rectIds[i] );
 			}
 
 		// Enum tags remapping

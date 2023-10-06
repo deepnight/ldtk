@@ -92,10 +92,10 @@ class RulePatternEditor {
 						jStampPreview.appendTo(jCell);
 						var previewWid = 32;
 						var previewHei = 32;
-						if( rule.tileIds.length>1 ) {
+						if( rule.tileRectsIds.length>0 && rule.tileRectsIds[0].length>1 ) {
 							var td = Editor.ME.curLayerInstance.getTilesetDef();
 							if( td!=null ) {
-								var bounds = td.getTileGroupBounds(rule.tileIds);
+								var bounds = td.getTileGroupBounds(rule.tileRectsIds[0]);
 								if( bounds.wid>1 )
 									previewWid = Std.int( previewWid * 1.9 );
 								if( bounds.hei>1 )
@@ -112,9 +112,9 @@ class RulePatternEditor {
 				if( previewMode ) {
 					var td = Editor.ME.curLayerInstance.getTilesetDef();
 					if( td!=null ) {
-						var jTile = td.createCanvasFromTileId(rule.tileIds[0], 32);
+						var jTile = td.createCanvasFromTileId(rule.tileRectsIds.length>0 ? rule.tileRectsIds[0][0] : null, 32);
 						jCell.append(jTile);
-						if( rule.tileIds.length>1 )
+						if( rule.tileRectsIds.length>1 )
 							jTile.addClass("multi");
 					}
 				}

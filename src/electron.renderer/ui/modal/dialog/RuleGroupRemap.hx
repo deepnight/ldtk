@@ -44,7 +44,8 @@ class RuleGroupRemap extends ui.modal.Dialog {
 		var doneTileIds = new Map();
 		allTileIds = [];
 		for(r in srcGroup.rules)
-		for(tid in r.tileIds)
+		for(rectIds in r.tileRectsIds)
+		for(tid in rectIds)
 			if( !doneTileIds.exists(tid) ) {
 				doneTileIds.set(tid,true);
 				allTileIds.push(tid);
@@ -75,8 +76,9 @@ class RuleGroupRemap extends ui.modal.Dialog {
 
 					// Offset all tileIds
 					for(r in copy.rules)
-					for(i in 0...r.tileIds.length)
-						r.tileIds[i] += tileOffsetX + tileOffsetY*td.cWid;
+					for(rectIds in r.tileRectsIds)
+					for(i in 0...rectIds.length)
+						rectIds[i] += tileOffsetX + tileOffsetY*td.cWid;
 
 					// Remap IntGrid IDs
 					for(r in copy.rules)

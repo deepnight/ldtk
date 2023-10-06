@@ -98,18 +98,25 @@ class RuleEditor extends ui.modal.Dialog {
 		);
 		i.linkEvent( LayerRuleChanged(rule) );
 		i.onChange = function() {
-			rule.tileIds = [];
+			rule.tileRectsIds = [];
 			updateTileSettings();
 		}
 
 		// Tile(s)
+		var pickerTids = rule.tileRectsIds.length==0 ? [] : switch rule.tileMode {
+			case Single: rule.tileRectsIds.map( tids->tids[0] );
+			case Stamp: rule.tileRectsIds[0]; // HACK index 0
+		}
 		var jTilePicker = JsTools.createTilePicker(
 			Editor.ME.curLayerInstance.getTilesetUid(),
 			rule.tileMode==Single?Free:RectOnly,
-			rule.tileIds,
+			pickerTids,
 			false,
 			function(tids) {
-				rule.tileIds = tids.copy();
+				switch rule.tileMode {
+					case Single: rule.tileRectsIds = tids.map( tid->[tid] );
+					case Stamp: rule.tileRectsIds[0] = tids.copy(); // HACK index 0
+				}
 				editor.ge.emit( LayerRuleChanged(rule) );
 				updateTileSettings();
 			}

@@ -195,7 +195,7 @@ class RulesWizard extends ui.modal.Dialog {
 			// Iterate all rules from this group, and try to match them with standard Fragments
 			for(f in _allFragmentEnums)
 				if( matchRuleToFragment(rd,f) ) {
-					fragments.set(f, rd.tileIds.copy());
+					fragments.set(f, rd.tileRectsIds[0].copy());
 					break;
 				}
 			i++;
@@ -770,7 +770,7 @@ class RulesWizard extends ui.modal.Dialog {
 		}
 
 		// Update tile IDs
-		rd.tileIds = fragments.get(f).copy();
+		rd.tileRectsIds = fragments.get(f).map( tid->[tid] );
 
 		// Out of bounds policy
 		rd.outOfBoundsValue = mainValue;

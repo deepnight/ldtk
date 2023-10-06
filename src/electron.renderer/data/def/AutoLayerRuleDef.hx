@@ -6,7 +6,7 @@ class AutoLayerRuleDef {
 	@:allow(data.def.LayerDef, data.Definitions)
 	public var uid(default,null) : Int;
 
-	public var tileIds : Array<Int> = [];
+	public var tileRectsIds : Array< Array<Int> > = [];
 	public var chance : Float = 1.0;
 	public var breakOnMatch = true;
 	public var size(default,null): Int;
@@ -129,7 +129,7 @@ class AutoLayerRuleDef {
 			uid: uid,
 			active: active,
 			size: size,
-			tileIds: tileIds.copy(),
+			tileRectsIds: tileRectsIds.copy(),
 			alpha: alpha,
 			chance: JsonTools.writeFloat(chance),
 			breakOnMatch: breakOnMatch,
@@ -160,9 +160,22 @@ class AutoLayerRuleDef {
 	}
 
 	public static function fromJson(jsonVersion:String, json:ldtk.Json.AutoRuleDef) {
+		// Update JSON for tileRectsIds
+		if( json.tileIds!=null ) {
+			json.tileRectsIds = [];
+			var mode = JsonTools.readEnum(ldtk.Json.AutoLayerRuleTileMode, json.tileMode, false, Single);
+			switch mode {
+				case Single:
+					json.tileRectsIds = json.tileIds.map( tid->[tid] );
+
+				case Stamp:
+					json.tileRectsIds = [ json.tileIds ];
+			}
+		}
+
 		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
-		r.tileIds = json.tileIds;
+		r.tileRectsIds = json.tileRectsIds.copy();
 		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false); // default to FALSE to avoid breaking old maps
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
@@ -252,7 +265,7 @@ class AutoLayerRuleDef {
 			if( v!=0 )
 				return false;
 
-		return tileIds.length==0;
+		return tileRectsIds.length==0;
 	}
 
 	public function isUsingUnknownIntGridValues(ld:LayerDef) {
@@ -277,7 +290,7 @@ class AutoLayerRuleDef {
 	}
 
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
-		if( tileIds.length==0 )
+		if( tileRectsIds.length==0 )
 			return false;
 
 		if( chance<=0 || chance<1 && dn.M.randSeedCoords(li.seed+uid, cx,cy, 100) >= chance*100 )
@@ -377,8 +390,11 @@ class AutoLayerRuleDef {
 		return anyFix;
 	}
 
-	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
-		return tileIds[ dn.M.randSeedCoords( uid+seed+flips, cx,cy, tileIds.length ) ];
+	public function getRandomTileRectIdsForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Array<Int> {
+		if( tileRectsIds.length==0 )
+			return [];
+		else
+			return tileRectsIds[ dn.M.randSeedCoords( uid+seed+flips, cx,cy, tileRectsIds.length ) ];
 	}
 
 	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
