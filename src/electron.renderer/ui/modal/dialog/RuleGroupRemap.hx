@@ -40,7 +40,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 
 		// Tile picker
 		td = project.defs.getTilesetDef(ld.tilesetDefUid);
-		tileset = new ui.Tileset(jContent.find(".tileset"), td, PickSingle);
+		tileset = new ui.Tileset(jContent.find(".tileset"), td, OneTile);
 		var doneTileIds = new Map();
 		allTileIds = [];
 		for(r in srcGroup.rules)

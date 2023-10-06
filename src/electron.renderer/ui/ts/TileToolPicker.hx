@@ -7,7 +7,7 @@ class TileToolPicker extends ui.Tileset {
 		this.tool = tool;
 		_internalSelectedIds = tool.getSelectedValue().ids;
 
-		super(jParent, td, Free, saveUiState);
+		super(jParent, td, MultipleIndividuals, saveUiState);
 	}
 
 	override function getSelectedTileIds():Array<Int> {

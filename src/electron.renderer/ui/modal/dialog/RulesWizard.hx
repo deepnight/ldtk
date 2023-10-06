@@ -91,7 +91,7 @@ class RulesWizard extends ui.modal.Dialog {
 			_allFragmentEnums.push( WallFragment.createByName(k) );
 
 		// Tile picker
-		tileset = new ui.Tileset(jContent.find(".tileset"), td, Free);
+		tileset = new ui.Tileset(jContent.find(".tileset"), td, MultipleIndividuals);
 		tileset.onSelectAnything = ()->{
 			onSelectTiles( tileset.getSelectedTileIds() );
 		}

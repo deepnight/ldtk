@@ -9323,7 +9323,9 @@ $patternSize : 32px;
 			grid-template-columns: 8em auto min-content;
 
 			.tileRects {
+				display: grid;
 				margin-left: $gutter;
+
 				.allTiles {
 					display: flex;
 					flex-wrap: wrap;

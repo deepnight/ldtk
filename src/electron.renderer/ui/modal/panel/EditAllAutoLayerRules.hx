@@ -244,7 +244,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var m = new ui.Modal();
 			m.addClass("singleTilePicker");
 
-			var tp = new ui.Tileset(m.jContent, td, RectOnly);
+			var tp = new ui.Tileset(m.jContent, td, TileRectAndClose);
 			tp.useSavedSelections = false;
 			tp.setSelectedRect(rg.icon);
 			tp.onSelectAnything = ()->{

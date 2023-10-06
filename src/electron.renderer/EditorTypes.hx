@@ -185,10 +185,11 @@ enum ImageLoadingResult {
 
 enum TilesetSelectionMode {
 	None;
-	PickAndClose;
-	PickSingle;
-	Free;
-	RectOnly;
+	MultipleIndividuals;
+	OneTile;
+	OneTileAndClose;
+	TileRect;
+	TileRectAndClose;
 }
 
 enum TilePickerDisplayMode {

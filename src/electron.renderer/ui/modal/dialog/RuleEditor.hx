@@ -92,8 +92,8 @@ class RuleEditor extends ui.modal.Dialog {
 			()->rule.tileMode,
 			(v)->rule.tileMode = v,
 			(v)->switch v {
-				case Single: Lang.t._("Random tiles");
-				case Stamp: Lang.t._("Rectangle of tiles");
+				case Single: Lang.t._("Individual tiles");
+				case Stamp: Lang.t._("Rectangles of tiles");
 			}
 		);
 		i.linkEvent( LayerRuleChanged(rule) );
@@ -111,7 +111,7 @@ class RuleEditor extends ui.modal.Dialog {
 			}
 			JsTools.openTilePickerModal(
 				Editor.ME.curLayerInstance.getTilesetUid(),
-				rule.tileMode==Single?Free:RectOnly,
+				rule.tileMode==Single ? MultipleIndividuals : TileRectAndClose,
 				pickerTids,
 				false,
 				function(tids) {
@@ -192,6 +192,8 @@ class RuleEditor extends ui.modal.Dialog {
 				});
 				jTileOptions.append(jPivot);
 		}
+
+		JsTools.parseComponents(jTilesSettings);
 	}
 
 

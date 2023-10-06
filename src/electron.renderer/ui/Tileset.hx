@@ -195,17 +195,18 @@ class Tileset {
 	public function getSelectedRect() : Null<ldtk.Json.TilesetRect> {
 		return switch selectMode {
 			case None: null;
-			case PickAndClose: null;
-			case PickSingle: null;
-			case Free: null;
-			case RectOnly: tilesetDef.getTileRectFromTileIds( getSelectedTileIds() );
+			case OneTile, OneTileAndClose: null;
+			case MultipleIndividuals: null;
+			case TileRect, TileRectAndClose: tilesetDef.getTileRectFromTileIds( getSelectedTileIds() );
 		}
 	}
 
 	public function getSelectedTileIds() {
 		return switch selectMode {
 			case None: [];
-			case PickAndClose, Free, RectOnly, PickSingle: _internalSelectedIds;
+			case MultipleIndividuals: _internalSelectedIds;
+			case OneTile, OneTileAndClose: _internalSelectedIds;
+			case TileRect, TileRectAndClose: _internalSelectedIds;
 		}
 	}
 
@@ -342,11 +343,11 @@ class Tileset {
 		jSelection.empty();
 
 		switch selectMode {
-			case Free, PickAndClose:
+			case MultipleIndividuals:
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Random, ids:getSelectedTileIds() },"selection") );
 
-			case RectOnly, PickSingle:
+			case OneTile, OneTileAndClose, TileRect, TileRectAndClose:
 				if( getSelectedTileIds().length>0 )
 					jSelection.append( createCursor({ mode:Stamp, ids:getSelectedTileIds() },"selection") );
 
@@ -470,10 +471,12 @@ class Tileset {
 
 	function isRectangleOnly() : Bool {
 		return switch selectMode {
-			// case ToolPicker: false;
 			case None: false;
-			case Free: false;
-			case PickAndClose, RectOnly, PickSingle: true;
+			case MultipleIndividuals: false;
+			case OneTile: true;
+			case OneTileAndClose: true;
+			case TileRect: true;
+			case TileRectAndClose: true;
 		}
 	}
 
@@ -520,7 +523,7 @@ class Tileset {
 
 		var defaultClass = dragStart==null ? "mouseOver" : null;
 
-		if( selectMode==PickAndClose ) {
+		if( selectMode==OneTileAndClose ) {
 			var c = createCursor({ mode:Stamp, ids:[tileId] }, defaultClass, r.wid, r.hei);
 			c.appendTo(jCursor);
 		}
@@ -595,7 +598,7 @@ class Tileset {
 	}
 
 	function isSelected(tcx,tcy) {
-		if( selectMode==PickAndClose )
+		if( selectMode==OneTileAndClose )
 			return false;
 
 		for( id in getSelectedTileIds() )
@@ -616,10 +619,10 @@ class Tileset {
 		switch selectMode {
 			case None:
 
-			case PickAndClose:
+			case OneTileAndClose, TileRectAndClose:
 				setSelectedTileIds(selIds);
 
-			case Free, RectOnly, PickSingle:
+			case MultipleIndividuals, OneTile, TileRect:
 				if( add ) {
 					if( isRectangleOnly() || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
 						// Replace active selection with this one
@@ -699,12 +702,6 @@ class Tileset {
 	}
 
 	function onPickerMouseDown(ev:js.jquery.Event) {
-		// Block context menu
-		// if( ev.button==2 )
-		// 	jDoc.on("contextmenu.pickerCtxCatcher", function(ev) {
-		// 		ev.preventDefault();
-		// 		jDoc.off(".pickerCtxCatcher");
-		// 	});
 		if( ev.button==0 && !inTilesetBounds(ev.pageX, ev.pageY) ) {
 			onClickOutOfBounds();
 			return;
@@ -714,10 +711,10 @@ class Tileset {
 		if( onMouseDownCustom(ev,tid) )
 			return;
 
-		if( ev.button==2 && selectMode==PickAndClose )
+		if( ev.button==2 && selectMode==OneTileAndClose )
 			return;
 
-		if( ev.button==2 && selectMode==RectOnly )
+		if( ev.button==2 && ( selectMode==TileRect || selectMode==TileRectAndClose ) )
 			setSelectedTileIds([]);
 
 		if( ev.button==1 && viewFitted )
@@ -763,7 +760,7 @@ class Tileset {
 		var cx = pageToCx(pageX);
 		var cy = pageToCy(pageY);
 
-		if( dragStart==null || selectMode==PickAndClose || selectMode==PickSingle )
+		if( dragStart==null || selectMode==OneTile || selectMode==OneTileAndClose )
 			return {
 				cx: cx,
 				cy: cy,

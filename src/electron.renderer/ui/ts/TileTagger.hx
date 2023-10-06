@@ -74,11 +74,11 @@ class TileTagger extends ui.Tileset {
 		curEnumValue = id;
 
 		if( id!=null ) {
-			setSelectionMode(RectOnly);
+			setSelectionMode(TileRect);
 			jValues.find('[value=$id]').addClass("active");
 		}
 		else {
-			setSelectionMode(PickSingle);
+			setSelectionMode(OneTile);
 			jValues.find('[value=none]').addClass("active");
 		}
 
