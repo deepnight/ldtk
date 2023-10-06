@@ -1,6 +1,16 @@
-# 1.4.2
+# 1.5.0
 
- - Updated app logo!
+## Random rectangle of tiles for auto-layer rules
+![](1.4.2/randomTileRects.png)
+
+TODO
+
+## LDtk logo
+
+TODO: Updated app logo!
+
+## Other changes
+
  - Fixed entity preview size in left panel
  - Fixed IntGrid icons size when the left panel uses the 5-columns mode
  - Rules remapping now also updates out-of-bounds policy value
