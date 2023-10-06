@@ -103,25 +103,81 @@ class RuleEditor extends ui.modal.Dialog {
 		}
 
 		// Tile(s)
-		var pickerTids = rule.tileRectsIds.length==0 ? [] : switch rule.tileMode {
-			case Single: rule.tileRectsIds.map( tids->tids[0] );
-			case Stamp: rule.tileRectsIds[0]; // HACK index 0
-		}
-		var jTilePicker = JsTools.createTilePicker(
-			Editor.ME.curLayerInstance.getTilesetUid(),
-			rule.tileMode==Single?Free:RectOnly,
-			pickerTids,
-			false,
-			function(tids) {
-				switch rule.tileMode {
-					case Single: rule.tileRectsIds = tids.map( tid->[tid] );
-					case Stamp: rule.tileRectsIds[0] = tids.copy(); // HACK index 0
-				}
-				editor.ge.emit( LayerRuleChanged(rule) );
-				updateTileSettings();
+		var jTileRects = jTilesSettings.find(">.tileRects").empty();
+		function _pickTiles(rectIdx:Int) {
+			var pickerTids = rectIdx<0 || rule.tileRectsIds.length==0 ? [] : switch rule.tileMode {
+				case Single: rule.tileRectsIds.map( tids->tids[0] );
+				case Stamp: rule.tileRectsIds[rectIdx];
 			}
-		);
-		jTilesSettings.find(">.picker").empty().append( jTilePicker );
+			JsTools.openTilePickerModal(
+				Editor.ME.curLayerInstance.getTilesetUid(),
+				rule.tileMode==Single?Free:RectOnly,
+				pickerTids,
+				false,
+				function(tids) {
+					if( tids.length>0 ) {
+						switch rule.tileMode {
+							case Single:
+								rule.tileRectsIds = tids.map( tid->[tid] );
+
+							case Stamp:
+								if( rectIdx<0 )
+									rule.tileRectsIds.push( tids.copy() );
+								else
+									rule.tileRectsIds[rectIdx] = tids.copy();
+						}
+					}
+					editor.ge.emit( LayerRuleChanged(rule) );
+					updateTileSettings();
+				}
+			);
+		}
+		var jAllTiles = new J('<div class="allTiles"/>');
+		jAllTiles.appendTo(jTileRects);
+		var td = project.defs.getTilesetDef(layerDef.tilesetDefUid);
+		if( td==null )
+			jAllTiles.append('<div class="error">Invalid tileset</div>');
+		else {
+			switch rule.tileMode {
+				case Single:
+					for(rectIds in rule.tileRectsIds)
+						jAllTiles.append( td.createTileHtmlImageFromTileId(rectIds[0]) );
+					jAllTiles.addClass("clickable");
+					jAllTiles.click( _->_pickTiles(0) );
+
+				case Stamp:
+					var rectIdx = 0;
+					for(rectIds in rule.tileRectsIds) {
+						var rect = td.getTileRectFromTileIds(rectIds);
+						var jImg = td.createTileHtmlImageFromRect(rect);
+						jImg.addClass("clickable");
+						var i = rectIdx;
+						jImg.mousedown( (ev:js.jquery.Event)->{
+							switch ev.button {
+								case 0:
+									_pickTiles(i);
+
+								case 1,2:
+									rule.tileRectsIds.splice(i,1);
+									editor.ge.emit( LayerRuleChanged(rule) );
+									updateTileSettings();
+							}
+						});
+						jAllTiles.append( jImg );
+						rectIdx++;
+					}
+					if( rule.tileRectsIds.length>0 ) {
+						var jAdd = new J('<button> <span class="icon add"></span> </button>');
+						jAdd.appendTo(jAllTiles);
+						jAdd.click( _->_pickTiles(-1) );
+					}
+					else {
+						jAllTiles.addClass("clickable");
+						jAllTiles.click( _->_pickTiles(0) );
+					}
+			}
+		}
+
 
 		// Pivot (optional)
 		var jTileOptions = jTilesSettings.find(">.options").empty();

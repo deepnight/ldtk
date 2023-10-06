@@ -9320,10 +9320,61 @@ $patternSize : 32px;
 		.tileSettings {
 			display: grid;
 			justify-items: stretch;
-			grid-template-columns: auto min-content min-content;
+			grid-template-columns: 8em auto min-content;
 
-			.picker {
+			.tileRects {
 				margin-left: $gutter;
+				.allTiles {
+					display: flex;
+					flex-wrap: wrap;
+					// gap: 2px;
+					padding: 3px 2px;
+					border-radius: 3px;
+					min-height: 32px;
+					max-width: 350px;
+					box-shadow: 0 0 8px black inset;
+
+					img {
+						border: 1px solid $bgLighter;
+						border-radius: 2px;
+						width: auto;
+						min-height: 48px;
+						image-rendering: pixelated;
+					}
+
+					img.clickable {
+						cursor: pointer;
+						&:hover {
+							border-color: $orange;
+						}
+					}
+
+					button {
+						width: fit-content;
+						padding-top: 0;
+						padding-bottom: 0;
+						.icon {
+							width: 1.3em;
+							height: 1.3em;
+						}
+					}
+
+
+					&.clickable {
+						cursor: pointer;
+
+						&:empty {
+							background-image: url("../img/stripes.png");
+							outline: 1px solid $darkOrange;
+						}
+						&:hover {
+							outline: 1px solid $orange;
+							img {
+								border-color: white;
+							}
+						}
+					}
+				}
 				canvas {
 					image-rendering: pixelated;
 					zoom: 2;

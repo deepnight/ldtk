@@ -1174,6 +1174,41 @@ class JsTools {
 	}
 
 
+	public static function openTilePickerModal(
+		tilesetId: Null<Int>,
+		selectMode: TilesetSelectionMode=Free,
+		tileIds: Array<Int>,
+		useSavedSelections=true,
+		onPick: (tileIds:Array<Int>)->Void
+	) {
+		var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
+		if( td==null ) {
+			N.error("No valid tileset");
+			return false;
+		}
+
+		var m = new ui.Modal();
+		m.addClass("singleTilePicker");
+
+		var tp = new ui.Tileset(m.jContent, td, selectMode);
+		tp.useSavedSelections = useSavedSelections;
+		tp.setSelectedTileIds(tileIds);
+		tp.onClickOutOfBounds = m.close;
+		if( selectMode==PickAndClose )
+			tp.onSelectAnything = ()->{
+				onPick([ tp.getSelectedTileIds()[0] ]);
+				m.close();
+			}
+		else
+			m.onCloseCb = function() {
+				onPick( tp.getSelectedTileIds() );
+			}
+		tp.focusOnSelection(true);
+
+		return true;
+	}
+
+
 
 	public static function createTileRectPicker(
 		tilesetId: Null<Int>,
