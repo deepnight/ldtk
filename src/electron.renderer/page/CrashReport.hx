@@ -120,6 +120,12 @@ class CrashReport extends Page {
 			else
 				jBackup.hide();
 
+			// Try to disable last project auto-reload
+			try {
+				settings.v.lastProject = null;
+				settings.save();
+			}
+			catch(_) {}
 		}
 		catch(e:Dynamic) {
 			jError.html( "Double error: "+Std.string(e) + "\n" + error.stack  );

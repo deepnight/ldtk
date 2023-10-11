@@ -25,6 +25,7 @@ TODO: Updated app logo!
  - Fixed the "Enable/disable rule" button
  - Fixed typo in "Entities" sample map
  - Fixed the "New update" banner depth in changelog
+ - If the app crashes, LDtk won't try to reload the last project, but instead will go the Home screen (preventing crash loops)
  - Updated app splash screen
 
 
