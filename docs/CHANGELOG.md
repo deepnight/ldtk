@@ -7,7 +7,7 @@
 The application has a new logo! Hope you will like it :)
 
 
-## Random rectangle of tiles for auto-layer rules
+## Random rectangles of tiles for auto-layer rules
 ![](1.5.0/randomTileRects.png)
 
 When creating an auto-layer rule, you may now render a rectangle of tiles picked randomly among a group of many others. For example, this makes possible the creation of random variations among trees, or other large details.
@@ -21,7 +21,7 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
 
  - world pixel coordinates,
  - pixel width and height,
- - any custom field whose "Export to ToC" is enabled.
+ - for each custom fields, if the new "Export to ToC" option is enabled, the corresponding value will also be added to the table of content.
 
 
 ## Other changes
