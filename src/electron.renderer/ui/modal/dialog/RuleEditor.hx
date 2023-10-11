@@ -151,6 +151,7 @@ class RuleEditor extends ui.modal.Dialog {
 						var rect = td.getTileRectFromTileIds(rectIds);
 						var jImg = td.createTileHtmlImageFromRect(rect);
 						jImg.addClass("clickable");
+						Tip.attach(jImg, "Left click to change\nRight click to remove");
 						var i = rectIdx;
 						jImg.mousedown( (ev:js.jquery.Event)->{
 							switch ev.button {
