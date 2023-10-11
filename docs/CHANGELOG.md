@@ -13,7 +13,11 @@ TODO: Updated app logo!
 
 TODO screenshot
 
-When enabling the "table-of-content" export option of an Entity, you will now get extra bits of informations in the `toc` JSON field.
+When enabling the "table-of-content" export option of an Entity, you will now get extra bits of informations in the `toc` JSON field:
+
+ - world pixel coordinates,
+ - pixel width and height,
+ - any custom field whose "Export to ToC" is enabled.
 
 
 ## Other changes

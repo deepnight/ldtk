@@ -6914,6 +6914,8 @@ canvas#webgl {
 		}
 
 		*[class*="F_"],
+		*[class="onlyEntity"],
+		*[class="onlyLevel"],
 		*[class="NotArray"],
 		*[class="Array"] {
 			display: none;
@@ -6925,6 +6927,8 @@ canvas#webgl {
 
 		&.type-Array .Array,
 		&.type-NotArray .NotArray,
+		&.type-level .onlyLevel,
+		&.type-entity .onlyEntity,
 		&.type-F_Int .F_int,
 		&.type-F_Float .F_Float,
 		&.type-F_Bool .F_Bool,
@@ -6950,7 +6954,6 @@ canvas#webgl {
 
 		&.type-F_Path .F_Path.file-select {
 			display: initial;
-
 		}
 	}
 }

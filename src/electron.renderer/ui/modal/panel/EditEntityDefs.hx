@@ -523,6 +523,13 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Export to table of content
 		var i = Input.linkToHtmlInput(curEntity.exportToToc, jEntityForm.find("#exportToToc"));
 		i.linkEvent(EntityDefChanged);
+		i.onChange = ()->{
+			for(fd in curEntity.fieldDefs)
+				if( fd.exportToToc ) {
+					fd.exportToToc = false;
+					editor.ge.emit(FieldDefChanged(fd));
+				}
+		}
 
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");

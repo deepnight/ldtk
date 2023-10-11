@@ -96,6 +96,8 @@ class FieldDefsForm {
 				}
 		if( !found )
 			selectField( fieldDefs[0] );
+
+		updateForm();
 	}
 
 	function onCreateField(anchor:js.jquery.JQuery, isArray:Bool) {
@@ -375,6 +377,10 @@ class FieldDefsForm {
 		for(k in Type.getEnumConstructs(ldtk.Json.FieldType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+curField.type.getName());
+		if( isLevelField() )
+			jForm.addClass("type-level");
+		else
+			jForm.addClass("type-entity");
 
 		if( curField.isArray ) {
 			jForm.addClass("type-Array");
@@ -878,6 +884,11 @@ class FieldDefsForm {
 		// Use for smart color
 		var i = Input.linkToHtmlInput( curField.useForSmartColor, jForm.find("input#useForSmartColor") );
 		i.onChange = onFieldChange;
+
+		// TOC export
+		var i = Input.linkToHtmlInput( curField.exportToToc, jForm.find("input#exportToToc") );
+		i.onChange = onFieldChange;
+		i.setEnabled( isEntityField() && getEntityParent().exportToToc );
 
 		// Array size constraints
 		if( curField.isArray ) {

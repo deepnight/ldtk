@@ -57,12 +57,18 @@ class FieldInstance {
 		return fi;
 	}
 
+	public function getFullJsonValue() : Dynamic {
+		return def.isArray
+			? [ for(i in 0...getArrayLength()) getJsonValue(i) ]
+			: getJsonValue(0);
+	}
+
 	public function toJson() : ldtk.Json.FieldInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__type: def.getJsonTypeString(),
-			__value: def.isArray ? [ for(i in 0...getArrayLength()) getJsonValue(i) ] : getJsonValue(0),
+			__value: getFullJsonValue(),
 			__tile: getSmartTile(),
 
 			defUid: defUid,

@@ -593,22 +593,31 @@ class Project {
 						if( ei.defUid!=ed.uid )
 							continue;
 
-						var ref : ldtk.Json.EntityReferenceInfos = {
+						var refInfo : ldtk.Json.EntityReferenceInfos = {
 							worldIid: w.iid,
 							levelIid: l.iid,
 							layerIid: li.iid,
 							entityIid: ei.iid,
 						}
 
+						// Old deprecated data
 						if( hasFlag(ExportOldTableOfContentData) )
-							tocEntry.instances.push(ref); // deprecated data
+							tocEntry.instances.push(refInfo);
 
+						// Entity fields
+						var fields : Dynamic = {};
+						for(fi in ei.fieldInstances)
+							if( fi.def.exportToToc )
+								Reflect.setField(fields, fi.def.identifier, fi.getFullJsonValue());
+
+						// Instance data
 						tocEntry.instancesData.push({
-							refInfo: ref,
+							iids: refInfo,
 							worldX: ei.worldX,
 							worldY: ei.worldY,
 							widPx: ei.width,
 							heiPx: ei.height,
+							fields: fields,
 						});
 					}
 				}
