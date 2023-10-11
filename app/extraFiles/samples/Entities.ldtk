@@ -10,17 +10,12 @@
 	},
 	"iid": "a2a4fe00-7820-11ed-b6fd-9b53622ece75",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 471393,
+	"appBuildId": 471395,
 	"nextUid": 198,
 	"identifierStyle": "Capitalize",
 	"toc": [{
 		"identifier": "PlayerStart",
-		"instances": [{
-			"worldIid": "f310fef0-7820-11ed-9859-6530dfcbabd7",
-			"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
-			"layerIid": "f80e99e0-66b0-11ec-b121-456135fb304a",
-			"entityIid": "f80f0f12-66b0-11ec-b121-c7e0ed2499ae"
-		}],
+		"instances": [],
 		"instancesData": [{ "iids": {
 			"worldIid": "f310fef0-7820-11ed-9859-6530dfcbabd7",
 			"levelIid": "f80e4bc0-66b0-11ec-b121-b327a018109c",
@@ -53,7 +48,7 @@
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": "Entities can be used to represent any gameplay element, such as player, enemies, items etc.\n\nThey can have many kind of customizable properties, including arrays, enums or coordinates.",
 	"customCommands": [],
-	"flags": [ "ExportOldTableOfContentData", "UseMultilinesType" ],
+	"flags": ["UseMultilinesType"],
 	"defs": { "layers": [
 		{
 			"__type": "Entities",

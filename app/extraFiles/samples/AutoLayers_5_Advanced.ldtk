@@ -10,7 +10,7 @@
 	},
 	"iid": "a26276c0-7820-11ed-b6fd-ed05d55c9a75",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 471393,
+	"appBuildId": 471395,
 	"nextUid": 106,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -72,7 +72,7 @@
 			],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
-				{ "uid": 101, "name": "Wall drop shadows", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 101, "name": "Wall drop shadows", "color": null, "icon": { "tilesetUid": 9, "x": 80, "y": 72, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 103,
 						"active": true,
@@ -136,7 +136,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 98, "name": "Wall fog", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 98, "name": "Wall fog", "color": null, "icon": { "tilesetUid": 9, "x": 88, "y": 64, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 100,
 						"active": true,
@@ -200,7 +200,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 74, "name": "Water", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 74, "name": "Water", "color": null, "icon": { "tilesetUid": 9, "x": 8, "y": 80, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 28,
 						"active": true,
@@ -481,7 +481,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 72, "name": "Lava", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 72, "name": "Lava", "color": null, "icon": { "tilesetUid": 9, "x": 32, "y": 80, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 80,
 						"active": true,
@@ -607,7 +607,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 81, "name": "Misc props", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 81, "name": "Misc props", "color": null, "icon": { "tilesetUid": 9, "x": 40, "y": 40, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 85,
 						"active": true,
@@ -711,7 +711,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 73, "name": "Ladders", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 73, "name": "Ladders", "color": null, "icon": { "tilesetUid": 9, "x": 48, "y": 48, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 64,
 						"active": true,
@@ -837,7 +837,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 77, "name": "Thin platforms", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 77, "name": "Thin platforms", "color": null, "icon": { "tilesetUid": 9, "x": 56, "y": 8, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 26,
 						"active": true,
@@ -963,7 +963,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 75, "name": "Vegetation", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 75, "name": "Vegetation", "color": null, "icon": { "tilesetUid": 9, "x": 48, "y": 80, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 32,
 						"active": true,
@@ -1120,7 +1120,7 @@
 						"perlinOctaves": 2
 					}
 				], "usesWizard": false },
-				{ "uid": 76, "name": "Walls", "color": null, "icon": null, "active": true, "isOptional": false, "rules": [
+				{ "uid": 76, "name": "Walls", "color": null, "icon": { "tilesetUid": 9, "x": 0, "y": 8, "w": 8, "h": 8 }, "active": true, "isOptional": false, "rules": [
 					{
 						"uid": 67,
 						"active": true,
