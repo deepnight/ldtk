@@ -286,6 +286,8 @@ class Project {
 					}
 				}
 			}
+		if( dn.Version.lower(json.jsonVersion, "1.5", true) )
+			p.flags.set(ExportOldTableOfContentData, true);
 
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
@@ -578,6 +580,7 @@ class Project {
 				var tocEntry : ldtk.Json.TableOfContentEntry = {
 					identifier: ed.identifier,
 					instances: [],
+					instancesData: [],
 				}
 				cachedToc.push(tocEntry);
 				for(w in worlds)
@@ -590,11 +593,22 @@ class Project {
 						if( ei.defUid!=ed.uid )
 							continue;
 
-						tocEntry.instances.push({
+						var ref : ldtk.Json.EntityReferenceInfos = {
 							worldIid: w.iid,
 							levelIid: l.iid,
 							layerIid: li.iid,
 							entityIid: ei.iid,
+						}
+
+						if( hasFlag(ExportOldTableOfContentData) )
+							tocEntry.instances.push(ref); // deprecated data
+
+						tocEntry.instancesData.push({
+							refInfo: ref,
+							worldX: ei.worldX,
+							worldY: ei.worldY,
+							widPx: ei.width,
+							heiPx: ei.height,
 						});
 					}
 				}

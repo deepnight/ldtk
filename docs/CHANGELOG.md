@@ -9,6 +9,13 @@ TODO
 
 TODO: Updated app logo!
 
+## JSON: extra Table-of-content data
+
+TODO screenshot
+
+When enabling the "table-of-content" export option of an Entity, you will now get extra bits of informations in the `toc` JSON field.
+
+
 ## Other changes
 
  - Fixed entity preview size in left panel

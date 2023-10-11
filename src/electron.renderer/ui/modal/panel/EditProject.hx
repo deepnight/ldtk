@@ -8,6 +8,7 @@ class EditProject extends ui.modal.Panel {
 		ldtk.Json.ProjectFlag.PrependIndexToLevelFileNames,
 		ldtk.Json.ProjectFlag.ExportPreCsvIntGridFormat,
 		ldtk.Json.ProjectFlag.UseMultilinesType,
+		ldtk.Json.ProjectFlag.ExportOldTableOfContentData,
 	];
 
 	var levelNamePatternEditor : NamePatternEditor;
@@ -499,6 +500,10 @@ class EditProject extends ui.modal.Panel {
 				case UseMultilinesType:
 					jLabel.text('Use "Multilines" instead of "String" for fields in JSON');
 					_setDesc( L.t._("If enabled, the JSON value \"__type\" for Field Instances and Field Definitions will be \"Multilines\" instead of \"String\" for all fields of Multilines type.") );
+
+				case ExportOldTableOfContentData:
+					jLabel.text('Export old entity table-of-content data');
+					_setDesc( L.t._("If enabled, the 'toc' field in the project JSON will contain an 'instances' array in addition of the new 'instanceData' array (see JSON online doc for more info).") );
 
 				case _:
 			}
