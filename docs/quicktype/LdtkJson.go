@@ -80,8 +80,9 @@ type LdtkJSON struct {
 	// in a sub-folder for each level.                                                                                    
 	ExternalLevels                                                                              bool                      `json:"externalLevels"`
 	// An array containing various advanced flags (ie. options or other states). Possible                                 
-	// values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,                                
-	// `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`                                                 
+	// values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,                                                     
+	// `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,                                
+	// `MultiWorlds`, `UseMultilinesType`                                                                                 
 	Flags                                                                                       []Flag                    `json:"flags"`
 	// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible                           
 	// values: `Capitalize`, `Uppercase`, `Lowercase`, `Free`                                                             
@@ -290,6 +291,9 @@ type FieldDefinition struct {
 	EditorShowInWorld                                                                          bool              `json:"editorShowInWorld"`
 	EditorTextPrefix                                                                           *string           `json:"editorTextPrefix"`
 	EditorTextSuffix                                                                           *string           `json:"editorTextSuffix"`
+	// If TRUE, the field value will be exported to the `toc` project JSON field. Only applies                   
+	// to Entity fields.                                                                                         
+	ExportToToc                                                                                bool              `json:"exportToToc"`
 	// User defined unique identifier                                                                            
 	Identifier                                                                                 string            `json:"identifier"`
 	// TRUE if the value is an array of multiple values                                                          
@@ -456,60 +460,63 @@ type AutoLayerRuleGroup struct {
 // this part.
 type AutoLayerRuleDefinition struct {
 	// If FALSE, the rule effect isn't applied, and no tiles are generated.                               
-	Active                                                                                       bool     `json:"active"`
-	Alpha                                                                                        float64  `json:"alpha"`
+	Active                                                                                      bool      `json:"active"`
+	Alpha                                                                                       float64   `json:"alpha"`
 	// When TRUE, the rule will prevent other rules to be applied in the same cell if it matches          
 	// (TRUE by default).                                                                                 
-	BreakOnMatch                                                                                 bool     `json:"breakOnMatch"`
+	BreakOnMatch                                                                                bool      `json:"breakOnMatch"`
 	// Chances for this rule to be applied (0 to 1)                                                       
-	Chance                                                                                       float64  `json:"chance"`
+	Chance                                                                                      float64   `json:"chance"`
 	// Checker mode Possible values: `None`, `Horizontal`, `Vertical`                                     
-	Checker                                                                                      Checker  `json:"checker"`
+	Checker                                                                                     Checker   `json:"checker"`
 	// If TRUE, allow rule to be matched by flipping its pattern horizontally                             
-	FlipX                                                                                        bool     `json:"flipX"`
+	FlipX                                                                                       bool      `json:"flipX"`
 	// If TRUE, allow rule to be matched by flipping its pattern vertically                               
-	FlipY                                                                                        bool     `json:"flipY"`
+	FlipY                                                                                       bool      `json:"flipY"`
 	// Default IntGrid value when checking cells outside of level bounds                                  
-	OutOfBoundsValue                                                                             *int64   `json:"outOfBoundsValue"`
+	OutOfBoundsValue                                                                            *int64    `json:"outOfBoundsValue"`
 	// Rule pattern (size x size)                                                                         
-	Pattern                                                                                      []int64  `json:"pattern"`
+	Pattern                                                                                     []int64   `json:"pattern"`
 	// If TRUE, enable Perlin filtering to only apply rule on specific random area                        
-	PerlinActive                                                                                 bool     `json:"perlinActive"`
-	PerlinOctaves                                                                                float64  `json:"perlinOctaves"`
-	PerlinScale                                                                                  float64  `json:"perlinScale"`
-	PerlinSeed                                                                                   float64  `json:"perlinSeed"`
+	PerlinActive                                                                                bool      `json:"perlinActive"`
+	PerlinOctaves                                                                               float64   `json:"perlinOctaves"`
+	PerlinScale                                                                                 float64   `json:"perlinScale"`
+	PerlinSeed                                                                                  float64   `json:"perlinSeed"`
 	// X pivot of a tile stamp (0-1)                                                                      
-	PivotX                                                                                       float64  `json:"pivotX"`
+	PivotX                                                                                      float64   `json:"pivotX"`
 	// Y pivot of a tile stamp (0-1)                                                                      
-	PivotY                                                                                       float64  `json:"pivotY"`
+	PivotY                                                                                      float64   `json:"pivotY"`
 	// Pattern width & height. Should only be 1,3,5 or 7.                                                 
-	Size                                                                                         int64    `json:"size"`
-	// Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.         
-	TileIDS                                                                                      []int64  `json:"tileIds"`
+	Size                                                                                        int64     `json:"size"`
+	// **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced             
+	// by: `tileRectsIds`                                                                                 
+	TileIDS                                                                                     []int64   `json:"tileIds"`
 	// Defines how tileIds array is used Possible values: `Single`, `Stamp`                               
-	TileMode                                                                                     TileMode `json:"tileMode"`
+	TileMode                                                                                    TileMode  `json:"tileMode"`
 	// Max random offset for X tile pos                                                                   
-	TileRandomXMax                                                                               int64    `json:"tileRandomXMax"`
+	TileRandomXMax                                                                              int64     `json:"tileRandomXMax"`
 	// Min random offset for X tile pos                                                                   
-	TileRandomXMin                                                                               int64    `json:"tileRandomXMin"`
+	TileRandomXMin                                                                              int64     `json:"tileRandomXMin"`
 	// Max random offset for Y tile pos                                                                   
-	TileRandomYMax                                                                               int64    `json:"tileRandomYMax"`
+	TileRandomYMax                                                                              int64     `json:"tileRandomYMax"`
 	// Min random offset for Y tile pos                                                                   
-	TileRandomYMin                                                                               int64    `json:"tileRandomYMin"`
+	TileRandomYMin                                                                              int64     `json:"tileRandomYMin"`
+	// Array containing all the possible tile IDs rectangles (picked randomly).                           
+	TileRectsIDS                                                                                [][]int64 `json:"tileRectsIds"`
 	// Tile X offset                                                                                      
-	TileXOffset                                                                                  int64    `json:"tileXOffset"`
+	TileXOffset                                                                                 int64     `json:"tileXOffset"`
 	// Tile Y offset                                                                                      
-	TileYOffset                                                                                  int64    `json:"tileYOffset"`
+	TileYOffset                                                                                 int64     `json:"tileYOffset"`
 	// Unique Int identifier                                                                              
-	Uid                                                                                          int64    `json:"uid"`
+	Uid                                                                                         int64     `json:"uid"`
 	// X cell coord modulo                                                                                
-	XModulo                                                                                      int64    `json:"xModulo"`
+	XModulo                                                                                     int64     `json:"xModulo"`
 	// X cell start offset                                                                                
-	XOffset                                                                                      int64    `json:"xOffset"`
+	XOffset                                                                                     int64     `json:"xOffset"`
 	// Y cell coord modulo                                                                                
-	YModulo                                                                                      int64    `json:"yModulo"`
+	YModulo                                                                                     int64     `json:"yModulo"`
 	// Y cell start offset                                                                                
-	YOffset                                                                                      int64    `json:"yOffset"`
+	YOffset                                                                                     int64     `json:"yOffset"`
 }
 
 // IntGrid value definition
@@ -619,6 +626,7 @@ type ForcedRefs struct {
 	TileCustomMetadata   *TileCustomMetadata          `json:"TileCustomMetadata,omitempty"`
 	TilesetDef           *TilesetDefinition           `json:"TilesetDef,omitempty"`
 	TilesetRect          *TilesetRectangle            `json:"TilesetRect,omitempty"`
+	TocInstanceData      *LdtkTocInstanceData         `json:"TocInstanceData,omitempty"`
 	World                *World                       `json:"World,omitempty"`
 }
 
@@ -685,6 +693,8 @@ type FieldInstance struct {
 }
 
 // This object describes the "location" of an Entity instance in the project worlds.
+//
+// IID information of this instance
 type ReferenceToAnEntityInstance struct {
 	// IID of the refered EntityInstance                                    
 	EntityIid                                                        string `json:"entityIid"`
@@ -894,8 +904,23 @@ type NeighbourLevel struct {
 }
 
 type LdtkTableOfContentEntry struct {
-	Identifier string                        `json:"identifier"`
-	Instances  []ReferenceToAnEntityInstance `json:"instances"`
+	Identifier                                                                          string                        `json:"identifier"`
+	// **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+                              
+	// Replaced by: `instancesData`                                                                                   
+	Instances                                                                           []ReferenceToAnEntityInstance `json:"instances,omitempty"`
+	InstancesData                                                                       []LdtkTocInstanceData         `json:"instancesData"`
+}
+
+type LdtkTocInstanceData struct {
+	// An object containing the values of all entity fields with the `exportToToc` option                            
+	// enabled. This object typing depends on actual field value types.                                              
+	Fields                                                                               []interface{}               `json:"fields"`
+	HeiPx                                                                                int64                       `json:"heiPx"`
+	// IID information of this instance                                                                              
+	Iids                                                                                 ReferenceToAnEntityInstance `json:"iids"`
+	WidPx                                                                                int64                       `json:"widPx"`
+	WorldX                                                                               int64                       `json:"worldX"`
+	WorldY                                                                               int64                       `json:"worldY"`
 }
 
 // **IMPORTANT**: this type is available as a preview. You can rely on it to update your
@@ -1084,6 +1109,7 @@ type Flag string
 
 const (
 	DiscardPreCSVIntGrid         Flag = "DiscardPreCsvIntGrid"
+	ExportOldTableOfContentData  Flag = "ExportOldTableOfContentData"
 	ExportPreCSVIntGridFormat    Flag = "ExportPreCsvIntGridFormat"
 	IgnoreBackupSuggest          Flag = "IgnoreBackupSuggest"
 	MultiWorlds                  Flag = "MultiWorlds"

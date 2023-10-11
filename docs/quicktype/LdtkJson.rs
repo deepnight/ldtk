@@ -100,8 +100,9 @@ pub struct LdtkJson {
     pub external_levels: bool,
 
     /// An array containing various advanced flags (ie. options or other states). Possible
-    /// values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
-    /// `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+    /// values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,
+    /// `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,
+    /// `MultiWorlds`, `UseMultilinesType`
     pub flags: Vec<Flag>,
 
     /// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
@@ -408,6 +409,10 @@ pub struct FieldDefinition {
     pub editor_text_prefix: Option<String>,
 
     pub editor_text_suffix: Option<String>,
+
+    /// If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
+    /// to Entity fields.
+    pub export_to_toc: bool,
 
     /// User defined unique identifier
     pub identifier: String,
@@ -886,8 +891,9 @@ pub struct AutoLayerRuleDefinition {
     /// Pattern width & height. Should only be 1,3,5 or 7.
     pub size: i64,
 
-    /// Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
-    pub tile_ids: Vec<i64>,
+    /// **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
+    /// by: `tileRectsIds`
+    pub tile_ids: Option<Vec<i64>>,
 
     /// Defines how tileIds array is used Possible values: `Single`, `Stamp`
     pub tile_mode: TileMode,
@@ -903,6 +909,9 @@ pub struct AutoLayerRuleDefinition {
 
     /// Min random offset for Y tile pos
     pub tile_random_y_min: i64,
+
+    /// Array containing all the possible tile IDs rectangles (picked randomly).
+    pub tile_rects_ids: Vec<Vec<i64>>,
 
     /// Tile X offset
     pub tile_x_offset: i64,
@@ -1082,6 +1091,9 @@ pub enum Flag {
     #[serde(rename = "DiscardPreCsvIntGrid")]
     DiscardPreCsvIntGrid,
 
+    #[serde(rename = "ExportOldTableOfContentData")]
+    ExportOldTableOfContentData,
+
     #[serde(rename = "ExportPreCsvIntGridFormat")]
     ExportPreCsvIntGridFormat,
 
@@ -1155,6 +1167,8 @@ pub struct ForcedRefs {
     pub tileset_def: Option<TilesetDefinition>,
 
     pub tileset_rect: Option<TilesetRectangle>,
+
+    pub toc_instance_data: Option<LdtkTocInstanceData>,
 
     pub world: Option<World>,
 }
@@ -1256,6 +1270,8 @@ pub struct FieldInstance {
 }
 
 /// This object describes the "location" of an Entity instance in the project worlds.
+///
+/// IID information of this instance
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ReferenceToAnEntityInstance {
@@ -1566,10 +1582,34 @@ pub struct NeighbourLevel {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LdtkTableOfContentEntry {
     pub identifier: String,
 
-    pub instances: Vec<ReferenceToAnEntityInstance>,
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+    /// Replaced by: `instancesData`
+    pub instances: Option<Vec<ReferenceToAnEntityInstance>>,
+
+    pub instances_data: Vec<LdtkTocInstanceData>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LdtkTocInstanceData {
+    /// An object containing the values of all entity fields with the `exportToToc` option
+    /// enabled. This object typing depends on actual field value types.
+    pub fields: Vec<Option<serde_json::Value>>,
+
+    pub hei_px: i64,
+
+    /// IID information of this instance
+    pub iids: ReferenceToAnEntityInstance,
+
+    pub wid_px: i64,
+
+    pub world_x: i64,
+
+    pub world_y: i64,
 }
 
 /// **IMPORTANT**: this type is available as a preview. You can rely on it to update your

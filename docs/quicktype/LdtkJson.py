@@ -208,6 +208,10 @@ class FieldDefinition:
     editor_show_in_world: bool
     editor_text_prefix: Optional[str]
     editor_text_suffix: Optional[str]
+    """If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
+    to Entity fields.
+    """
+    export_to_toc: bool
     """User defined unique identifier"""
     identifier: str
     """TRUE if the value is an array of multiple values"""
@@ -239,7 +243,7 @@ class FieldDefinition:
     """
     use_for_smart_color: bool
 
-    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_refs_entity_uid: Optional[int], allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_color: Optional[str], editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_display_scale: float, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
+    def __init__(self, type: str, accept_file_types: Optional[List[str]], allowed_refs: AllowedRefs, allowed_refs_entity_uid: Optional[int], allowed_ref_tags: List[str], allow_out_of_level_ref: bool, array_max_length: Optional[int], array_min_length: Optional[int], auto_chain_ref: bool, can_be_null: bool, default_override: Any, doc: Optional[str], editor_always_show: bool, editor_cut_long_values: bool, editor_display_color: Optional[str], editor_display_mode: EditorDisplayMode, editor_display_pos: EditorDisplayPos, editor_display_scale: float, editor_link_style: EditorLinkStyle, editor_show_in_world: bool, editor_text_prefix: Optional[str], editor_text_suffix: Optional[str], export_to_toc: bool, identifier: str, is_array: bool, max: Optional[float], min: Optional[float], regex: Optional[str], symmetrical_ref: bool, text_language_mode: Optional[TextLanguageMode], tileset_uid: Optional[int], field_definition_type: str, uid: int, use_for_smart_color: bool) -> None:
         self.type = type
         self.accept_file_types = accept_file_types
         self.allowed_refs = allowed_refs
@@ -262,6 +266,7 @@ class FieldDefinition:
         self.editor_show_in_world = editor_show_in_world
         self.editor_text_prefix = editor_text_prefix
         self.editor_text_suffix = editor_text_suffix
+        self.export_to_toc = export_to_toc
         self.identifier = identifier
         self.is_array = is_array
         self.max = max
@@ -299,6 +304,7 @@ class FieldDefinition:
         editor_show_in_world = from_bool(obj.get("editorShowInWorld"))
         editor_text_prefix = from_union([from_none, from_str], obj.get("editorTextPrefix"))
         editor_text_suffix = from_union([from_none, from_str], obj.get("editorTextSuffix"))
+        export_to_toc = from_bool(obj.get("exportToToc"))
         identifier = from_str(obj.get("identifier"))
         is_array = from_bool(obj.get("isArray"))
         max = from_union([from_none, from_float], obj.get("max"))
@@ -310,7 +316,7 @@ class FieldDefinition:
         field_definition_type = from_str(obj.get("type"))
         uid = from_int(obj.get("uid"))
         use_for_smart_color = from_bool(obj.get("useForSmartColor"))
-        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_refs_entity_uid, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_color, editor_display_mode, editor_display_pos, editor_display_scale, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
+        return FieldDefinition(type, accept_file_types, allowed_refs, allowed_refs_entity_uid, allowed_ref_tags, allow_out_of_level_ref, array_max_length, array_min_length, auto_chain_ref, can_be_null, default_override, doc, editor_always_show, editor_cut_long_values, editor_display_color, editor_display_mode, editor_display_pos, editor_display_scale, editor_link_style, editor_show_in_world, editor_text_prefix, editor_text_suffix, export_to_toc, identifier, is_array, max, min, regex, symmetrical_ref, text_language_mode, tileset_uid, field_definition_type, uid, use_for_smart_color)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -345,6 +351,7 @@ class FieldDefinition:
             result["editorTextPrefix"] = from_union([from_none, from_str], self.editor_text_prefix)
         if self.editor_text_suffix is not None:
             result["editorTextSuffix"] = from_union([from_none, from_str], self.editor_text_suffix)
+        result["exportToToc"] = from_bool(self.export_to_toc)
         result["identifier"] = from_str(self.identifier)
         result["isArray"] = from_bool(self.is_array)
         if self.max is not None:
@@ -785,8 +792,10 @@ class AutoLayerRuleDefinition:
     pivot_y: float
     """Pattern width & height. Should only be 1,3,5 or 7."""
     size: int
-    """Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value."""
-    tile_ids: List[int]
+    """**WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
+    by: `tileRectsIds`
+    """
+    tile_ids: Optional[List[int]]
     """Defines how tileIds array is used Possible values: `Single`, `Stamp`"""
     tile_mode: TileMode
     """Max random offset for X tile pos"""
@@ -797,6 +806,8 @@ class AutoLayerRuleDefinition:
     tile_random_y_max: int
     """Min random offset for Y tile pos"""
     tile_random_y_min: int
+    """Array containing all the possible tile IDs rectangles (picked randomly)."""
+    tile_rects_ids: List[List[int]]
     """Tile X offset"""
     tile_x_offset: int
     """Tile Y offset"""
@@ -812,7 +823,7 @@ class AutoLayerRuleDefinition:
     """Y cell start offset"""
     y_offset: int
 
-    def __init__(self, active: bool, alpha: float, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: List[int], tile_mode: TileMode, tile_random_x_max: int, tile_random_x_min: int, tile_random_y_max: int, tile_random_y_min: int, tile_x_offset: int, tile_y_offset: int, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
+    def __init__(self, active: bool, alpha: float, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: Optional[List[int]], tile_mode: TileMode, tile_random_x_max: int, tile_random_x_min: int, tile_random_y_max: int, tile_random_y_min: int, tile_rects_ids: List[List[int]], tile_x_offset: int, tile_y_offset: int, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
         self.active = active
         self.alpha = alpha
         self.break_on_match = break_on_match
@@ -835,6 +846,7 @@ class AutoLayerRuleDefinition:
         self.tile_random_x_min = tile_random_x_min
         self.tile_random_y_max = tile_random_y_max
         self.tile_random_y_min = tile_random_y_min
+        self.tile_rects_ids = tile_rects_ids
         self.tile_x_offset = tile_x_offset
         self.tile_y_offset = tile_y_offset
         self.uid = uid
@@ -862,12 +874,13 @@ class AutoLayerRuleDefinition:
         pivot_x = from_float(obj.get("pivotX"))
         pivot_y = from_float(obj.get("pivotY"))
         size = from_int(obj.get("size"))
-        tile_ids = from_list(from_int, obj.get("tileIds"))
+        tile_ids = from_union([from_none, lambda x: from_list(from_int, x)], obj.get("tileIds"))
         tile_mode = TileMode(obj.get("tileMode"))
         tile_random_x_max = from_int(obj.get("tileRandomXMax"))
         tile_random_x_min = from_int(obj.get("tileRandomXMin"))
         tile_random_y_max = from_int(obj.get("tileRandomYMax"))
         tile_random_y_min = from_int(obj.get("tileRandomYMin"))
+        tile_rects_ids = from_list(lambda x: from_list(from_int, x), obj.get("tileRectsIds"))
         tile_x_offset = from_int(obj.get("tileXOffset"))
         tile_y_offset = from_int(obj.get("tileYOffset"))
         uid = from_int(obj.get("uid"))
@@ -875,7 +888,7 @@ class AutoLayerRuleDefinition:
         x_offset = from_int(obj.get("xOffset"))
         y_modulo = from_int(obj.get("yModulo"))
         y_offset = from_int(obj.get("yOffset"))
-        return AutoLayerRuleDefinition(active, alpha, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, tile_random_x_max, tile_random_x_min, tile_random_y_max, tile_random_y_min, tile_x_offset, tile_y_offset, uid, x_modulo, x_offset, y_modulo, y_offset)
+        return AutoLayerRuleDefinition(active, alpha, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, tile_random_x_max, tile_random_x_min, tile_random_y_max, tile_random_y_min, tile_rects_ids, tile_x_offset, tile_y_offset, uid, x_modulo, x_offset, y_modulo, y_offset)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -896,12 +909,14 @@ class AutoLayerRuleDefinition:
         result["pivotX"] = to_float(self.pivot_x)
         result["pivotY"] = to_float(self.pivot_y)
         result["size"] = from_int(self.size)
-        result["tileIds"] = from_list(from_int, self.tile_ids)
+        if self.tile_ids is not None:
+            result["tileIds"] = from_union([from_none, lambda x: from_list(from_int, x)], self.tile_ids)
         result["tileMode"] = to_enum(TileMode, self.tile_mode)
         result["tileRandomXMax"] = from_int(self.tile_random_x_max)
         result["tileRandomXMin"] = from_int(self.tile_random_x_min)
         result["tileRandomYMax"] = from_int(self.tile_random_y_max)
         result["tileRandomYMin"] = from_int(self.tile_random_y_min)
+        result["tileRectsIds"] = from_list(lambda x: from_list(from_int, x), self.tile_rects_ids)
         result["tileXOffset"] = from_int(self.tile_x_offset)
         result["tileYOffset"] = from_int(self.tile_y_offset)
         result["uid"] = from_int(self.uid)
@@ -1461,6 +1476,7 @@ class Definitions:
 
 class Flag(Enum):
     DISCARD_PRE_CSV_INT_GRID = "DiscardPreCsvIntGrid"
+    EXPORT_OLD_TABLE_OF_CONTENT_DATA = "ExportOldTableOfContentData"
     EXPORT_PRE_CSV_INT_GRID_FORMAT = "ExportPreCsvIntGridFormat"
     IGNORE_BACKUP_SUGGEST = "IgnoreBackupSuggest"
     MULTI_WORLDS = "MultiWorlds"
@@ -1623,7 +1639,10 @@ class EntityInstance:
 
 
 class ReferenceToAnEntityInstance:
-    """This object describes the "location" of an Entity instance in the project worlds."""
+    """This object describes the "location" of an Entity instance in the project worlds.
+    
+    IID information of this instance
+    """
     """IID of the refered EntityInstance"""
     entity_iid: str
     """IID of the LayerInstance containing the refered EntityInstance"""
@@ -2159,25 +2178,75 @@ class Level:
         return result
 
 
+class LdtkTocInstanceData:
+    """An object containing the values of all entity fields with the `exportToToc` option
+    enabled. This object typing depends on actual field value types.
+    """
+    fields: List[Any]
+    hei_px: int
+    """IID information of this instance"""
+    iids: ReferenceToAnEntityInstance
+    wid_px: int
+    world_x: int
+    world_y: int
+
+    def __init__(self, fields: List[Any], hei_px: int, iids: ReferenceToAnEntityInstance, wid_px: int, world_x: int, world_y: int) -> None:
+        self.fields = fields
+        self.hei_px = hei_px
+        self.iids = iids
+        self.wid_px = wid_px
+        self.world_x = world_x
+        self.world_y = world_y
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'LdtkTocInstanceData':
+        assert isinstance(obj, dict)
+        fields = from_list(lambda x: x, obj.get("fields"))
+        hei_px = from_int(obj.get("heiPx"))
+        iids = ReferenceToAnEntityInstance.from_dict(obj.get("iids"))
+        wid_px = from_int(obj.get("widPx"))
+        world_x = from_int(obj.get("worldX"))
+        world_y = from_int(obj.get("worldY"))
+        return LdtkTocInstanceData(fields, hei_px, iids, wid_px, world_x, world_y)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result["fields"] = from_list(lambda x: x, self.fields)
+        result["heiPx"] = from_int(self.hei_px)
+        result["iids"] = to_class(ReferenceToAnEntityInstance, self.iids)
+        result["widPx"] = from_int(self.wid_px)
+        result["worldX"] = from_int(self.world_x)
+        result["worldY"] = from_int(self.world_y)
+        return result
+
+
 class LdtkTableOfContentEntry:
     identifier: str
-    instances: List[ReferenceToAnEntityInstance]
+    """**WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+    Replaced by: `instancesData`
+    """
+    instances: Optional[List[ReferenceToAnEntityInstance]]
+    instances_data: List[LdtkTocInstanceData]
 
-    def __init__(self, identifier: str, instances: List[ReferenceToAnEntityInstance]) -> None:
+    def __init__(self, identifier: str, instances: Optional[List[ReferenceToAnEntityInstance]], instances_data: List[LdtkTocInstanceData]) -> None:
         self.identifier = identifier
         self.instances = instances
+        self.instances_data = instances_data
 
     @staticmethod
     def from_dict(obj: Any) -> 'LdtkTableOfContentEntry':
         assert isinstance(obj, dict)
         identifier = from_str(obj.get("identifier"))
-        instances = from_list(ReferenceToAnEntityInstance.from_dict, obj.get("instances"))
-        return LdtkTableOfContentEntry(identifier, instances)
+        instances = from_union([lambda x: from_list(ReferenceToAnEntityInstance.from_dict, x), from_none], obj.get("instances"))
+        instances_data = from_list(LdtkTocInstanceData.from_dict, obj.get("instancesData"))
+        return LdtkTableOfContentEntry(identifier, instances, instances_data)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["identifier"] = from_str(self.identifier)
-        result["instances"] = from_list(lambda x: to_class(ReferenceToAnEntityInstance, x), self.instances)
+        if self.instances is not None:
+            result["instances"] = from_union([lambda x: from_list(lambda x: to_class(ReferenceToAnEntityInstance, x), x), from_none], self.instances)
+        result["instancesData"] = from_list(lambda x: to_class(LdtkTocInstanceData, x), self.instances_data)
         return result
 
 
@@ -2282,9 +2351,10 @@ class ForcedRefs:
     tile_custom_metadata: Optional[TileCustomMetadata]
     tileset_def: Optional[TilesetDefinition]
     tileset_rect: Optional[TilesetRectangle]
+    toc_instance_data: Optional[LdtkTocInstanceData]
     world: Optional[World]
 
-    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[ReferenceToAnEntityInstance], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[GridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_group_def: Optional[IntGridValueGroupDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], table_of_content_entry: Optional[LdtkTableOfContentEntry], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], world: Optional[World]) -> None:
+    def __init__(self, auto_layer_rule_group: Optional[AutoLayerRuleGroup], auto_rule_def: Optional[AutoLayerRuleDefinition], custom_command: Optional[LdtkCustomCommand], definitions: Optional[Definitions], entity_def: Optional[EntityDefinition], entity_instance: Optional[EntityInstance], entity_reference_infos: Optional[ReferenceToAnEntityInstance], enum_def: Optional[EnumDefinition], enum_def_values: Optional[EnumValueDefinition], enum_tag_value: Optional[EnumTagValue], field_def: Optional[FieldDefinition], field_instance: Optional[FieldInstance], grid_point: Optional[GridPoint], int_grid_value_def: Optional[IntGridValueDefinition], int_grid_value_group_def: Optional[IntGridValueGroupDefinition], int_grid_value_instance: Optional[IntGridValueInstance], layer_def: Optional[LayerDefinition], layer_instance: Optional[LayerInstance], level: Optional[Level], level_bg_pos_infos: Optional[LevelBackgroundPosition], neighbour_level: Optional[NeighbourLevel], table_of_content_entry: Optional[LdtkTableOfContentEntry], tile: Optional[TileInstance], tile_custom_metadata: Optional[TileCustomMetadata], tileset_def: Optional[TilesetDefinition], tileset_rect: Optional[TilesetRectangle], toc_instance_data: Optional[LdtkTocInstanceData], world: Optional[World]) -> None:
         self.auto_layer_rule_group = auto_layer_rule_group
         self.auto_rule_def = auto_rule_def
         self.custom_command = custom_command
@@ -2311,6 +2381,7 @@ class ForcedRefs:
         self.tile_custom_metadata = tile_custom_metadata
         self.tileset_def = tileset_def
         self.tileset_rect = tileset_rect
+        self.toc_instance_data = toc_instance_data
         self.world = world
 
     @staticmethod
@@ -2342,8 +2413,9 @@ class ForcedRefs:
         tile_custom_metadata = from_union([TileCustomMetadata.from_dict, from_none], obj.get("TileCustomMetadata"))
         tileset_def = from_union([TilesetDefinition.from_dict, from_none], obj.get("TilesetDef"))
         tileset_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("TilesetRect"))
+        toc_instance_data = from_union([LdtkTocInstanceData.from_dict, from_none], obj.get("TocInstanceData"))
         world = from_union([World.from_dict, from_none], obj.get("World"))
-        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_group_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, table_of_content_entry, tile, tile_custom_metadata, tileset_def, tileset_rect, world)
+        return ForcedRefs(auto_layer_rule_group, auto_rule_def, custom_command, definitions, entity_def, entity_instance, entity_reference_infos, enum_def, enum_def_values, enum_tag_value, field_def, field_instance, grid_point, int_grid_value_def, int_grid_value_group_def, int_grid_value_instance, layer_def, layer_instance, level, level_bg_pos_infos, neighbour_level, table_of_content_entry, tile, tile_custom_metadata, tileset_def, tileset_rect, toc_instance_data, world)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -2399,6 +2471,8 @@ class ForcedRefs:
             result["TilesetDef"] = from_union([lambda x: to_class(TilesetDefinition, x), from_none], self.tileset_def)
         if self.tileset_rect is not None:
             result["TilesetRect"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tileset_rect)
+        if self.toc_instance_data is not None:
+            result["TocInstanceData"] = from_union([lambda x: to_class(LdtkTocInstanceData, x), from_none], self.toc_instance_data)
         if self.world is not None:
             result["World"] = from_union([lambda x: to_class(World, x), from_none], self.world)
         return result
@@ -2494,8 +2568,9 @@ class LdtkJSON:
     """
     external_levels: bool
     """An array containing various advanced flags (ie. options or other states). Possible
-    values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
-    `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+    values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,
+    `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,
+    `MultiWorlds`, `UseMultilinesType`
     """
     flags: List[Flag]
     """Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible

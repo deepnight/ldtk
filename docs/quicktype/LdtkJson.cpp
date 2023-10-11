@@ -173,6 +173,7 @@ namespace quicktype {
         bool editor_show_in_world;
         boost::optional<std::string> editor_text_prefix;
         boost::optional<std::string> editor_text_suffix;
+        bool export_to_toc;
         std::string identifier;
         bool is_array;
         boost::optional<double> max;
@@ -308,6 +309,14 @@ namespace quicktype {
 
         boost::optional<std::string> get_editor_text_suffix() const { return editor_text_suffix; }
         void set_editor_text_suffix(boost::optional<std::string> value) { this->editor_text_suffix = value; }
+
+        /**
+         * If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
+         * to Entity fields.
+         */
+        const bool & get_export_to_toc() const { return export_to_toc; }
+        bool & get_mutable_export_to_toc() { return export_to_toc; }
+        void set_export_to_toc(const bool & value) { this->export_to_toc = value; }
 
         /**
          * User defined unique identifier
@@ -863,12 +872,13 @@ namespace quicktype {
         double pivot_x;
         double pivot_y;
         int64_t size;
-        std::vector<int64_t> tile_ids;
+        boost::optional<std::vector<int64_t>> tile_ids;
         TileMode tile_mode;
         int64_t tile_random_x_max;
         int64_t tile_random_x_min;
         int64_t tile_random_y_max;
         int64_t tile_random_y_min;
+        std::vector<std::vector<int64_t>> tile_rects_ids;
         int64_t tile_x_offset;
         int64_t tile_y_offset;
         int64_t uid;
@@ -979,11 +989,11 @@ namespace quicktype {
         void set_size(const int64_t & value) { this->size = value; }
 
         /**
-         * Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+         * **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
+         * by: `tileRectsIds`
          */
-        const std::vector<int64_t> & get_tile_ids() const { return tile_ids; }
-        std::vector<int64_t> & get_mutable_tile_ids() { return tile_ids; }
-        void set_tile_ids(const std::vector<int64_t> & value) { this->tile_ids = value; }
+        boost::optional<std::vector<int64_t>> get_tile_ids() const { return tile_ids; }
+        void set_tile_ids(boost::optional<std::vector<int64_t>> value) { this->tile_ids = value; }
 
         /**
          * Defines how tileIds array is used Possible values: `Single`, `Stamp`
@@ -1019,6 +1029,13 @@ namespace quicktype {
         const int64_t & get_tile_random_y_min() const { return tile_random_y_min; }
         int64_t & get_mutable_tile_random_y_min() { return tile_random_y_min; }
         void set_tile_random_y_min(const int64_t & value) { this->tile_random_y_min = value; }
+
+        /**
+         * Array containing all the possible tile IDs rectangles (picked randomly).
+         */
+        const std::vector<std::vector<int64_t>> & get_tile_rects_ids() const { return tile_rects_ids; }
+        std::vector<std::vector<int64_t>> & get_mutable_tile_rects_ids() { return tile_rects_ids; }
+        void set_tile_rects_ids(const std::vector<std::vector<int64_t>> & value) { this->tile_rects_ids = value; }
 
         /**
          * Tile X offset
@@ -1721,7 +1738,7 @@ namespace quicktype {
         void set_tilesets(const std::vector<TilesetDefinition> & value) { this->tilesets = value; }
     };
 
-    enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, EXPORT_PRE_CSV_INT_GRID_FORMAT, IGNORE_BACKUP_SUGGEST, MULTI_WORLDS, PREPEND_INDEX_TO_LEVEL_FILE_NAMES, USE_MULTILINES_TYPE };
+    enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, EXPORT_OLD_TABLE_OF_CONTENT_DATA, EXPORT_PRE_CSV_INT_GRID_FORMAT, IGNORE_BACKUP_SUGGEST, MULTI_WORLDS, PREPEND_INDEX_TO_LEVEL_FILE_NAMES, USE_MULTILINES_TYPE };
 
     class FieldInstance {
         public:
@@ -1917,6 +1934,8 @@ namespace quicktype {
 
     /**
      * This object describes the "location" of an Entity instance in the project worlds.
+     *
+     * IID information of this instance
      */
     class ReferenceToAnEntityInstance {
         public:
@@ -2563,6 +2582,52 @@ namespace quicktype {
         void set_world_y(const int64_t & value) { this->world_y = value; }
     };
 
+    class LdtkTocInstanceData {
+        public:
+        LdtkTocInstanceData() = default;
+        virtual ~LdtkTocInstanceData() = default;
+
+        private:
+        std::vector<nlohmann::json> fields;
+        int64_t hei_px;
+        ReferenceToAnEntityInstance iids;
+        int64_t wid_px;
+        int64_t world_x;
+        int64_t world_y;
+
+        public:
+        /**
+         * An object containing the values of all entity fields with the `exportToToc` option
+         * enabled. This object typing depends on actual field value types.
+         */
+        const std::vector<nlohmann::json> & get_fields() const { return fields; }
+        std::vector<nlohmann::json> & get_mutable_fields() { return fields; }
+        void set_fields(const std::vector<nlohmann::json> & value) { this->fields = value; }
+
+        const int64_t & get_hei_px() const { return hei_px; }
+        int64_t & get_mutable_hei_px() { return hei_px; }
+        void set_hei_px(const int64_t & value) { this->hei_px = value; }
+
+        /**
+         * IID information of this instance
+         */
+        const ReferenceToAnEntityInstance & get_iids() const { return iids; }
+        ReferenceToAnEntityInstance & get_mutable_iids() { return iids; }
+        void set_iids(const ReferenceToAnEntityInstance & value) { this->iids = value; }
+
+        const int64_t & get_wid_px() const { return wid_px; }
+        int64_t & get_mutable_wid_px() { return wid_px; }
+        void set_wid_px(const int64_t & value) { this->wid_px = value; }
+
+        const int64_t & get_world_x() const { return world_x; }
+        int64_t & get_mutable_world_x() { return world_x; }
+        void set_world_x(const int64_t & value) { this->world_x = value; }
+
+        const int64_t & get_world_y() const { return world_y; }
+        int64_t & get_mutable_world_y() { return world_y; }
+        void set_world_y(const int64_t & value) { this->world_y = value; }
+    };
+
     class LdtkTableOfContentEntry {
         public:
         LdtkTableOfContentEntry() = default;
@@ -2570,16 +2635,24 @@ namespace quicktype {
 
         private:
         std::string identifier;
-        std::vector<ReferenceToAnEntityInstance> instances;
+        boost::optional<std::vector<ReferenceToAnEntityInstance>> instances;
+        std::vector<LdtkTocInstanceData> instances_data;
 
         public:
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
         void set_identifier(const std::string & value) { this->identifier = value; }
 
-        const std::vector<ReferenceToAnEntityInstance> & get_instances() const { return instances; }
-        std::vector<ReferenceToAnEntityInstance> & get_mutable_instances() { return instances; }
-        void set_instances(const std::vector<ReferenceToAnEntityInstance> & value) { this->instances = value; }
+        /**
+         * **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+         * Replaced by: `instancesData`
+         */
+        boost::optional<std::vector<ReferenceToAnEntityInstance>> get_instances() const { return instances; }
+        void set_instances(boost::optional<std::vector<ReferenceToAnEntityInstance>> value) { this->instances = value; }
+
+        const std::vector<LdtkTocInstanceData> & get_instances_data() const { return instances_data; }
+        std::vector<LdtkTocInstanceData> & get_mutable_instances_data() { return instances_data; }
+        void set_instances_data(const std::vector<LdtkTocInstanceData> & value) { this->instances_data = value; }
     };
 
     enum class WorldLayout : int { FREE, GRID_VANIA, LINEAR_HORIZONTAL, LINEAR_VERTICAL };
@@ -2701,6 +2774,7 @@ namespace quicktype {
         boost::optional<TileCustomMetadata> tile_custom_metadata;
         boost::optional<TilesetDefinition> tileset_def;
         boost::optional<TilesetRectangle> tileset_rect;
+        boost::optional<LdtkTocInstanceData> toc_instance_data;
         boost::optional<World> world;
 
         public:
@@ -2781,6 +2855,9 @@ namespace quicktype {
 
         boost::optional<TilesetRectangle> get_tileset_rect() const { return tileset_rect; }
         void set_tileset_rect(boost::optional<TilesetRectangle> value) { this->tileset_rect = value; }
+
+        boost::optional<LdtkTocInstanceData> get_toc_instance_data() const { return toc_instance_data; }
+        void set_toc_instance_data(boost::optional<LdtkTocInstanceData> value) { this->toc_instance_data = value; }
 
         boost::optional<World> get_world() const { return world; }
         void set_world(boost::optional<World> value) { this->world = value; }
@@ -3008,8 +3085,9 @@ namespace quicktype {
 
         /**
          * An array containing various advanced flags (ie. options or other states). Possible
-         * values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
-         * `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+         * values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,
+         * `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,
+         * `MultiWorlds`, `UseMultilinesType`
          */
         const std::vector<Flag> & get_flags() const { return flags; }
         std::vector<Flag> & get_mutable_flags() { return flags; }
@@ -3224,6 +3302,9 @@ namespace quicktype {
     void from_json(const json & j, Level & x);
     void to_json(json & j, const Level & x);
 
+    void from_json(const json & j, LdtkTocInstanceData & x);
+    void to_json(json & j, const LdtkTocInstanceData & x);
+
     void from_json(const json & j, LdtkTableOfContentEntry & x);
     void to_json(json & j, const LdtkTableOfContentEntry & x);
 
@@ -3327,6 +3408,7 @@ namespace quicktype {
         x.set_editor_show_in_world(j.at("editorShowInWorld").get<bool>());
         x.set_editor_text_prefix(get_stack_optional<std::string>(j, "editorTextPrefix"));
         x.set_editor_text_suffix(get_stack_optional<std::string>(j, "editorTextSuffix"));
+        x.set_export_to_toc(j.at("exportToToc").get<bool>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_is_array(j.at("isArray").get<bool>());
         x.set_max(get_stack_optional<double>(j, "max"));
@@ -3364,6 +3446,7 @@ namespace quicktype {
         j["editorShowInWorld"] = x.get_editor_show_in_world();
         j["editorTextPrefix"] = x.get_editor_text_prefix();
         j["editorTextSuffix"] = x.get_editor_text_suffix();
+        j["exportToToc"] = x.get_export_to_toc();
         j["identifier"] = x.get_identifier();
         j["isArray"] = x.get_is_array();
         j["max"] = x.get_max();
@@ -3522,12 +3605,13 @@ namespace quicktype {
         x.set_pivot_x(j.at("pivotX").get<double>());
         x.set_pivot_y(j.at("pivotY").get<double>());
         x.set_size(j.at("size").get<int64_t>());
-        x.set_tile_ids(j.at("tileIds").get<std::vector<int64_t>>());
+        x.set_tile_ids(get_stack_optional<std::vector<int64_t>>(j, "tileIds"));
         x.set_tile_mode(j.at("tileMode").get<TileMode>());
         x.set_tile_random_x_max(j.at("tileRandomXMax").get<int64_t>());
         x.set_tile_random_x_min(j.at("tileRandomXMin").get<int64_t>());
         x.set_tile_random_y_max(j.at("tileRandomYMax").get<int64_t>());
         x.set_tile_random_y_min(j.at("tileRandomYMin").get<int64_t>());
+        x.set_tile_rects_ids(j.at("tileRectsIds").get<std::vector<std::vector<int64_t>>>());
         x.set_tile_x_offset(j.at("tileXOffset").get<int64_t>());
         x.set_tile_y_offset(j.at("tileYOffset").get<int64_t>());
         x.set_uid(j.at("uid").get<int64_t>());
@@ -3561,6 +3645,7 @@ namespace quicktype {
         j["tileRandomXMin"] = x.get_tile_random_x_min();
         j["tileRandomYMax"] = x.get_tile_random_y_max();
         j["tileRandomYMin"] = x.get_tile_random_y_min();
+        j["tileRectsIds"] = x.get_tile_rects_ids();
         j["tileXOffset"] = x.get_tile_x_offset();
         j["tileYOffset"] = x.get_tile_y_offset();
         j["uid"] = x.get_uid();
@@ -4014,15 +4099,36 @@ namespace quicktype {
         j["worldY"] = x.get_world_y();
     }
 
+    inline void from_json(const json & j, LdtkTocInstanceData& x) {
+        x.set_fields(j.at("fields").get<std::vector<nlohmann::json>>());
+        x.set_hei_px(j.at("heiPx").get<int64_t>());
+        x.set_iids(j.at("iids").get<ReferenceToAnEntityInstance>());
+        x.set_wid_px(j.at("widPx").get<int64_t>());
+        x.set_world_x(j.at("worldX").get<int64_t>());
+        x.set_world_y(j.at("worldY").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const LdtkTocInstanceData & x) {
+        j = json::object();
+        j["fields"] = x.get_fields();
+        j["heiPx"] = x.get_hei_px();
+        j["iids"] = x.get_iids();
+        j["widPx"] = x.get_wid_px();
+        j["worldX"] = x.get_world_x();
+        j["worldY"] = x.get_world_y();
+    }
+
     inline void from_json(const json & j, LdtkTableOfContentEntry& x) {
         x.set_identifier(j.at("identifier").get<std::string>());
-        x.set_instances(j.at("instances").get<std::vector<ReferenceToAnEntityInstance>>());
+        x.set_instances(get_stack_optional<std::vector<ReferenceToAnEntityInstance>>(j, "instances"));
+        x.set_instances_data(j.at("instancesData").get<std::vector<LdtkTocInstanceData>>());
     }
 
     inline void to_json(json & j, const LdtkTableOfContentEntry & x) {
         j = json::object();
         j["identifier"] = x.get_identifier();
         j["instances"] = x.get_instances();
+        j["instancesData"] = x.get_instances_data();
     }
 
     inline void from_json(const json & j, World& x) {
@@ -4075,6 +4181,7 @@ namespace quicktype {
         x.set_tile_custom_metadata(get_stack_optional<TileCustomMetadata>(j, "TileCustomMetadata"));
         x.set_tileset_def(get_stack_optional<TilesetDefinition>(j, "TilesetDef"));
         x.set_tileset_rect(get_stack_optional<TilesetRectangle>(j, "TilesetRect"));
+        x.set_toc_instance_data(get_stack_optional<LdtkTocInstanceData>(j, "TocInstanceData"));
         x.set_world(get_stack_optional<World>(j, "World"));
     }
 
@@ -4106,6 +4213,7 @@ namespace quicktype {
         j["TileCustomMetadata"] = x.get_tile_custom_metadata();
         j["TilesetDef"] = x.get_tileset_def();
         j["TilesetRect"] = x.get_tileset_rect();
+        j["TocInstanceData"] = x.get_toc_instance_data();
         j["World"] = x.get_world();
     }
 
@@ -4470,6 +4578,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, Flag & x) {
         if (j == "DiscardPreCsvIntGrid") x = Flag::DISCARD_PRE_CSV_INT_GRID;
+        else if (j == "ExportOldTableOfContentData") x = Flag::EXPORT_OLD_TABLE_OF_CONTENT_DATA;
         else if (j == "ExportPreCsvIntGridFormat") x = Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT;
         else if (j == "IgnoreBackupSuggest") x = Flag::IGNORE_BACKUP_SUGGEST;
         else if (j == "MultiWorlds") x = Flag::MULTI_WORLDS;
@@ -4481,6 +4590,7 @@ namespace quicktype {
     inline void to_json(json & j, const Flag & x) {
         switch (x) {
             case Flag::DISCARD_PRE_CSV_INT_GRID: j = "DiscardPreCsvIntGrid"; break;
+            case Flag::EXPORT_OLD_TABLE_OF_CONTENT_DATA: j = "ExportOldTableOfContentData"; break;
             case Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT: j = "ExportPreCsvIntGridFormat"; break;
             case Flag::IGNORE_BACKUP_SUGGEST: j = "IgnoreBackupSuggest"; break;
             case Flag::MULTI_WORLDS: j = "MultiWorlds"; break;
