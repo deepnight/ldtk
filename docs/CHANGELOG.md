@@ -1,17 +1,21 @@
 # 1.5.0
 
-## Random rectangle of tiles for auto-layer rules
-![](1.4.2/randomTileRects.png)
-
-TODO
-
 ## LDtk logo
 
-TODO: Updated app logo!
+![](1.5.0/logo.png)
+
+The application has a new logo! Hope you will like it :)
+
+
+## Random rectangle of tiles for auto-layer rules
+![](1.5.0/randomTileRects.png)
+
+When creating an auto-layer rule, you may now render a rectangle of tiles picked randomly among a group of many others. For example, this makes possible the creation of random variations among trees, or other large details.
+
 
 ## JSON: extra Table-of-content data
 
-TODO screenshot
+![](1.5.0/tocJson.png)
 
 When enabling the "table-of-content" export option of an Entity, you will now get extra bits of informations in the `toc` JSON field:
 
@@ -28,6 +32,7 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
  - Rules remapping now also updates out-of-bounds policy value
  - Allowed break-on-match on rules with some transparency
  - Fixed unsupported "Empty cell" value in rules out-of-bounds policy
+
 
 
 # 1.4.1
