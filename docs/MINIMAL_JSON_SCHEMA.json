@@ -112,6 +112,9 @@
 					"IntGridValueInstance": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
 					},
+					"TocInstanceData": {
+						"$ref": "#/otherTypes/TocInstanceData"
+					},
 					"NeighbourLevel": {
 						"$ref": "#/otherTypes/NeighbourLevel"
 					},
@@ -825,6 +828,58 @@
 					"type": [
 						"integer"
 					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TocInstanceData": {
+			"title": "ldtk.TocInstanceData",
+			"required": [
+				"fields",
+				"heiPx",
+				"iids",
+				"widPx",
+				"worldX",
+				"worldY"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldX": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"widPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"worldY": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"heiPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"fields": {
+					"description": "An object containing the values of all entity fields with the `exportToToc` option enabled. This object typing depends on actual field value types.",
+					"items" : {},
+					"type": [
+						"array"
+					]
+				},
+				"iids": {
+					"description": "IID information of this instance",
+					"$ref": "#/otherTypes/EntityReferenceInfos"
 				}
 			},
 			"type": [
@@ -1680,7 +1735,7 @@
 			"title": "ldtk.TableOfContentEntry",
 			"required": [
 				"identifier",
-				"instances"
+				"instancesData"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1690,10 +1745,10 @@
 						"string"
 					]
 				},
-				"instances": {
+				"instancesData": {
 					"description": "",
 					"items": {
-						"$ref": "#/otherTypes/EntityReferenceInfos"
+						"$ref": "#/otherTypes/TocInstanceData"
 					},
 					"type": [
 						"array"

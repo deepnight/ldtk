@@ -174,10 +174,11 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
 				"items": {
 					"enum": [
 						"DiscardPreCsvIntGrid",
+						"ExportOldTableOfContentData",
 						"ExportPreCsvIntGridFormat",
 						"IgnoreBackupSuggest",
 						"PrependIndexToLevelFileNames",
@@ -254,6 +255,9 @@
 					},
 					"IntGridValueInstance": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
+					},
+					"TocInstanceData": {
+						"$ref": "#/otherTypes/TocInstanceData"
 					},
 					"NeighbourLevel": {
 						"$ref": "#/otherTypes/NeighbourLevel"
@@ -852,7 +856,7 @@
 					]
 				},
 				"tileIds": {
-					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.6.0+  Replaced by: `tileRectsIds`",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced by: `tileRectsIds`",
 					"items": {
 						"type": [
 							"integer"
@@ -1004,6 +1008,7 @@
 				"editorDisplayScale",
 				"editorLinkStyle",
 				"editorShowInWorld",
+				"exportToToc",
 				"symmetricalRef",
 				"useForSmartColor"
 			],
@@ -1173,6 +1178,12 @@
 				},
 				"isArray": {
 					"description": "TRUE if the value is an array of multiple values",
+					"type": [
+						"boolean"
+					]
+				},
+				"exportToToc": {
+					"description": "If TRUE, the field value will be exported to the `toc` project JSON field. Only applies to Entity fields.",
 					"type": [
 						"boolean"
 					]
@@ -1708,6 +1719,58 @@
 					"type": [
 						"integer"
 					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TocInstanceData": {
+			"title": "ldtk.TocInstanceData",
+			"required": [
+				"fields",
+				"heiPx",
+				"iids",
+				"widPx",
+				"worldX",
+				"worldY"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldX": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"widPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"worldY": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"heiPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"fields": {
+					"description": "An object containing the values of all entity fields with the `exportToToc` option enabled. This object typing depends on actual field value types.",
+					"items" : {},
+					"type": [
+						"array"
+					]
+				},
+				"iids": {
+					"description": "IID information of this instance",
+					"$ref": "#/otherTypes/EntityReferenceInfos"
 				}
 			},
 			"type": [
@@ -2835,7 +2898,7 @@
 			"title": "ldtk.TableOfContentEntry",
 			"required": [
 				"identifier",
-				"instances"
+				"instancesData"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -2845,8 +2908,17 @@
 						"string"
 					]
 				},
-				"instances": {
+				"instancesData": {
 					"description": "",
+					"items": {
+						"$ref": "#/otherTypes/TocInstanceData"
+					},
+					"type": [
+						"array"
+					]
+				},
+				"instances": {
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.7.0+  Replaced by: `instancesData`",
 					"items": {
 						"$ref": "#/otherTypes/EntityReferenceInfos"
 					},
