@@ -22,6 +22,7 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
 
 ## Other changes
 
+ - Moved the "Project" button location before "World" and "Level" buttons in editor.
  - Fixed entity preview size in left panel
  - Fixed IntGrid icons size when the left panel uses the 5-columns mode
  - Rules remapping now also updates out-of-bounds policy value
