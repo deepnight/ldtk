@@ -6,6 +6,8 @@
 
 The application has a new logo! Hope you will like it :)
 
+Please note that the Windows Explorer could take some time before updating the app related icons (in Start Menu, project icons etc.). You may need to either restart the Explorer, or the computer itself, to force the visual update.
+
 
 ## Random rectangles of tiles for auto-layer rules
 ![](1.5.0/randomTileRects.png)
