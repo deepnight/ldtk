@@ -1762,11 +1762,7 @@
 					]
 				},
 				"fields": {
-					"description": "An object containing the values of all entity fields with the `exportToToc` option enabled. This object typing depends on actual field value types.",
-					"items" : {},
-					"type": [
-						"array"
-					]
+					"description": "An object containing the values of all entity fields with the `exportToToc` option enabled. This object typing depends on actual field value types."
 				},
 				"iids": {
 					"description": "IID information of this instance",
