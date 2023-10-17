@@ -1,15 +1,5 @@
 # About
 
-When I set out to create AM2E, I settled on LDtk as my level editor of choice due to the wealth of features and straightforward user interface. I knew that I would have to add some features, but I hoped they would be generic enough that they could be merged into the main project.
-
-Unfortunately, my PRs have mostly been ignored. While I do not enjoy fragmenting open-source software and would much rather just contribute upstream, it's clear that my design goals do not align with deepnight's. As such, I have decided to maintain this fork for use with my game engine, AM2E.
-
-If at any point these design goals realign, I would be glad to see my added features introduced upstream and focus on PRs to the main project instead of maintaining this fork.
-
-# Original README:
-
-# About
-
 ![](https://github.com/deepnight/ldtk/blob/master/app/assets/img/LDtk.svg)
 
 **Level Designer Toolkit** (*LDtk*) is a **modern**, **efficient** and **open-source** 2D level editor with a strong focus on user-friendliness.
