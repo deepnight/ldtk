@@ -51,7 +51,7 @@ class App extends dn.Process {
 		// LOG.printOnAdd = true;
 		#end
 		LOG.add("BOOT","App started");
-		LOG.add("BOOT","Version: "+Const.getAppVersion()+" (build "+Const.getAppBuildId()+")");
+		LOG.add("BOOT","Version: "+Const.getAppVersionStr()+" (build "+Const.getAppBuildId()+")");
 		LOG.add("BOOT","ExePath: "+JsTools.getExeDir());
 		LOG.add("BOOT","Assets: "+JsTools.getAssetsDir());
 		LOG.add("BOOT","ExtraFiles: "+JsTools.getExtraFilesDir());
@@ -337,7 +337,7 @@ class App extends dn.Process {
 				LOG.error("Failed to fetch latest version from GitHub");
 				miniNotif("Couldn't retrieve latest version number from GitHub!", false);
 			}
-			else if( Version.greater(latest.full, Const.getAppVersion(true), false ) ) {
+			else if( Version.greater(latest.full, Const.getAppVersionStr(true), false ) ) {
 				LOG.add("update", "Update available: "+latest);
 				pendingUpdate = { ver:latest.full, github:false }
 
@@ -804,9 +804,9 @@ class App extends dn.Process {
 		curPageProcess.onAppResize();
 
 		// Notify app update
-		if( checkAndNotifyUpdate && settings.v.lastKnownVersion!=Const.getAppVersion() ) {
+		if( checkAndNotifyUpdate && settings.v.lastKnownVersion!=Const.getAppVersionStr() ) {
 			var prev = settings.v.lastKnownVersion;
-			settings.v.lastKnownVersion = Const.getAppVersion();
+			settings.v.lastKnownVersion = Const.getAppVersionStr();
 			App.ME.settings.save();
 
 			new ui.modal.dialog.Changelog(true);
@@ -873,7 +873,7 @@ class App extends dn.Process {
 	}
 
 	public function setWindowTitle(?str:String) {
-		var base = Const.APP_NAME+" "+Const.getAppVersion();
+		var base = Const.APP_NAME+" "+Const.getAppVersionStr();
 		if( str==null )
 			str = base;
 		else
