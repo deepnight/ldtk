@@ -147,20 +147,20 @@ class Tiled extends Exporter {
 			image.set("width", ""+td.pxWid);
 			image.set("height", ""+td.pxHei);
 
-			if (td.hasAnyTileCustomData()) {
-				for (tileId in 0...count) {
+			if ( td.hasAnyTileCustomData() ) {
+				for ( tileId in 0...count ) {
 					var tileData = td.getTileCustomData(tileId);
-					if (tileData != null) {
+					if ( tileData != null ) {
 						var tile = Xml.createElement("tile");
 						tile.set("id", "" + tileId);
 						var properties = Xml.createElement("properties");
 						var dataFields = Json.parse(tileData);
-						for (key in Reflect.fields(dataFields)) {
+						for ( key in Reflect.fields(dataFields) ) {
 							var value = Reflect.field(dataFields, key);
-							if (value is Array) continue;
+							if ( value is Array ) continue;
 							var property = Xml.createElement("property");
 							property.set("name", key);
-							switch (Type.typeof(value)) {
+							switch ( Type.typeof(value) ) {
 								case TBool:
 									property.set("type", "bool");
 								case TInt:
@@ -176,7 +176,7 @@ class Tiled extends Exporter {
 								properties.addChild(property);
 							}
 						}
-						if (properties.firstChild() != null) {
+						if ( properties.firstChild() != null ) {
 							log.add("tileset", '  Adding custom properties for tile: ${tileId}');
 							tile.addChild(properties);
 							tileset.addChild(tile);
