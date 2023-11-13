@@ -101,7 +101,6 @@ class ElectronMain {
 		#if debug
 		enableDebugMenu();
 		#else
-		electron.main.Menu.setApplicationMenu( electron.main.Menu.buildFromTemplate( [] ) ); // macos
 		mainWindow.removeMenu(); // windows
 		#end
 
