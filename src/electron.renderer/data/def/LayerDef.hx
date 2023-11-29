@@ -220,6 +220,7 @@ class LayerDef {
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
 			usesWizard: rg.usesWizard,
+			biomeFieldUid: rg.biomeFieldUid,
 		}
 	}
 
@@ -237,6 +238,7 @@ class LayerDef {
 		});
 		rg.collapsed = true;
 		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
+		rg.biomeFieldUid = JsonTools.readInt( ruleGroupJson.biomeFieldUid, -1 );
 		return rg;
 	}
 
@@ -571,6 +573,7 @@ class LayerDef {
 			collapsed: false,
 			isOptional: false,
 			usesWizard: false,
+			biomeFieldUid: -1,
 			rules: [],
 		}
 		if( index!=null )
