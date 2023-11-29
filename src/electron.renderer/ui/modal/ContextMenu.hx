@@ -26,6 +26,9 @@ class ContextMenu extends ui.Modal {
 			ME.destroy();
 		ME = this;
 
+		setTransparentMask();
+		addClass("contextMenu");
+
 		if( openEvent!=null || jNear!=null ) {
 			var jEventTarget = jNear!=null ? jNear : new J(openEvent.target);
 			jAttachTarget = jEventTarget;
@@ -34,27 +37,20 @@ class ContextMenu extends ui.Modal {
 			jAttachTarget.addClass("contextMenuOpen");
 
 			if( jEventTarget.is("button") || jEventTarget.parent().is("button") || jNear!=null )
-				placer = ()->setAnchor( MA_JQuery(jEventTarget) );
+				setAnchor( MA_JQuery(jEventTarget) );
 			else if( openEvent!=null )
-				placer = ()->setAnchor( MA_Coords(new Coords(openEvent.pageX, openEvent.pageY)) );
-
+				setAnchor( MA_Coords(new Coords(openEvent.pageX, openEvent.pageY)) );
 		}
 		else {
 			jAttachTarget = new J("");
 			if( m!=null )
-				placer = ()->setAnchor( MA_Coords(m) );
+				setAnchor( MA_Coords(m) );
 		}
-
-		setTransparentMask();
-		addClass("contextMenu");
-		placer();
 	}
 
 	public function enableNoWrap() {
 		jContent.addClass("noWrap");
 	}
-
-	dynamic function placer() {}
 
 	public static inline function isOpen() return ME!=null && !ME.destroyed;
 
@@ -104,14 +100,8 @@ class ContextMenu extends ui.Modal {
 	}
 
 
-	override function onResize() {
-		super.onResize();
-		checkPosition();
-	}
-
-
-	function checkPosition() {
-		placer();
+	override function applyAnchor() {
+		super.applyAnchor();
 
 		var pad = 16;
 		var docHei = App.ME.jDoc.innerHeight();
@@ -127,7 +117,7 @@ class ContextMenu extends ui.Modal {
 	public function addTitle(str:LocaleString) {
 		var jTitle = new J('<div class="title">$str</div>');
 		jTitle.appendTo(jContent);
-		checkPosition();
+		applyAnchor();
 	}
 
 	public function add(a:ContextAction) {
@@ -160,7 +150,7 @@ class ContextMenu extends ui.Modal {
 		if( a.separatorAfter )
 			jButton.addClass("separatorAfter");
 
-		checkPosition();
+		applyAnchor();
 		return jButton;
 	}
 }
