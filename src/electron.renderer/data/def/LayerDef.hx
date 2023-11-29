@@ -635,7 +635,7 @@ class LayerDef {
 		var ruleGroupIdx = autoRuleGroups.length-1;
 		while( ruleGroupIdx>=0 ) {
 			// Groups
-			if( li.isRuleGroupActiveHere(autoRuleGroups[ruleGroupIdx]) ) {
+			if( li.isRuleGroupAppliedHere(autoRuleGroups[ruleGroupIdx]) ) {
 				var rg = autoRuleGroups[ruleGroupIdx];
 				var ruleIdx = rg.rules.length-1;
 				while( ruleIdx>=0 ) {
@@ -652,7 +652,7 @@ class LayerDef {
 
 	public inline function iterateActiveRulesInEvalOrder( li:data.inst.LayerInstance, cbEachRule:(r:AutoLayerRuleDef)->Void ) {
 		for(rg in autoRuleGroups)
-			if( li.isRuleGroupActiveHere(rg) )
+			if( li.isRuleGroupAppliedHere(rg) )
 				for(r in rg.rules)
 					if( r.active)
 						cbEachRule(r);

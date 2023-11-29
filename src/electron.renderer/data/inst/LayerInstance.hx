@@ -825,7 +825,7 @@ class LayerInstance {
 
 
 
-	public function isRuleGroupActiveHere(rg:AutoLayerRuleGroup) {
+	public function isRuleGroupAppliedHere(rg:AutoLayerRuleGroup) {
 		if( rg.active && rg.biomeEnumValue!=null ) {
 			var fi = level.getFieldInstanceByUid(def.biomeFieldUid, false);
 			if( fi!=null ) {
@@ -836,6 +836,10 @@ class LayerInstance {
 			}
 		}
 
+		return isRuleGroupEnabled(rg);
+	}
+
+	public inline function isRuleGroupEnabled(rg:AutoLayerRuleGroup) {
 		return rg.active && !rg.isOptional || optionalRules.exists(rg.uid);
 	}
 

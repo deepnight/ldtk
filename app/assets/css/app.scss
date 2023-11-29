@@ -8549,7 +8549,7 @@ body.sorting ul.collapsedSortTarget {
 							font-weight: bold;
 							font-size: 12pt;
 						}
-						&.groupActive:hover{
+						&.groupEnabled:hover{
 							background-color: transparentize($color: white, $amount: 0.66) !important;
 						}
 
@@ -8558,7 +8558,7 @@ body.sorting ul.collapsedSortTarget {
 							background-color: $red;
 						}
 
-						&.groupActive {
+						&.groupEnabled {
 							img {
 								width: 30px !important;
 								height: auto !important;

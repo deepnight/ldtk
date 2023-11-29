@@ -515,7 +515,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
-		jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
+		jGroup.addClass(li.isRuleGroupEnabled(rg) ? "active" : "inactive");
 
 		if( rg.color!=null ) {
 			jGroup.find(".sortHandle, header").css("background-color", rg.color.toCssRgba(0.7));
@@ -556,7 +556,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			if( !editor.levelRender.isAutoLayerRenderingEnabled() )
 				return;
 			editor.levelRender.clearTemp();
-			if( li.isRuleGroupActiveHere(rg) )
+			if( li.isRuleGroupAppliedHere(rg) )
 				for(r in rg.rules)
 					showAffectedCells(r);
 		});
@@ -567,7 +567,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		var jToggle = jGroupHeader.find(".groupActive");
+		var jToggle = jGroupHeader.find(".groupEnabled");
 		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
@@ -580,7 +580,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 		});
 		if( rg.isOptional )
-			jToggle.attr("title", (li.isRuleGroupActiveHere(rg)?"Disable":"Enable")+" this group of rules in this level");
+			jToggle.attr("title", (li.isRuleGroupEnabled(rg)?"Disable":"Enable")+" this group of rules in this level");
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");
@@ -853,10 +853,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Active state icon
-		jGroupHeader.find(".groupActive .icon").addClass(
+		jGroupHeader.find(".groupEnabled .icon").addClass(
 			rg.isOptional
-				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
-				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
+				? li.isRuleGroupEnabled(rg) ? "visible" : "hidden"
+				: li.isRuleGroupEnabled(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
 		);
 
 
