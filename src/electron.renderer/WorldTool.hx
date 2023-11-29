@@ -110,7 +110,7 @@ class WorldTool extends dn.Process {
 					for( w in project.worlds ) {
 						ctx.add({
 							label: L.untranslated(w.identifier),
-							sub: L.untranslated(w.levels.length+" level(s)"),
+							subText: L.untranslated(w.levels.length+" level(s)"),
 							enable: ()->w.iid!=editor.curWorldIid,
 							cb: ()->{
 								editor.selectWorld(w,true);
@@ -125,7 +125,7 @@ class WorldTool extends dn.Process {
 					for( w in project.worlds ) {
 						ctx.add({
 							label: L.untranslated("➔ "+w.identifier),
-							sub: L.untranslated(w.levels.length+" level(s)"),
+							subText: L.untranslated(w.levels.length+" level(s)"),
 							enable: ()->!l.isInWorld(w),
 							cb: ()->{
 								if( l.moveToWorld(w) ) {

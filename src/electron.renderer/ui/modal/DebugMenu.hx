@@ -40,7 +40,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 						editor.selectWorld(w,true);
 					},
 					show: ()->Editor.exists(),
-					sub: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
+					subText: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
 				});
 
 				if( Editor.exists() ) {

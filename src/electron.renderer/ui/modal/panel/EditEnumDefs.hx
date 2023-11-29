@@ -23,7 +23,7 @@ class EditEnumDefs extends ui.modal.Panel {
 			var ctx = new ContextMenu(ev);
 			ctx.add({
 				label: L.t._("Text file"),
-				sub: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
+				subText: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumText", project.getProjectDir());
 					dn.js.ElectronDialogs.openFile([".txt"], path, function(absPath:String) {
@@ -43,7 +43,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			ctx.add({
 				label: L.t._("JSON"),
-				sub: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
+				subText: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumText", project.getProjectDir());
 					dn.js.ElectronDialogs.openFile([".json"], path, function(absPath:String) {

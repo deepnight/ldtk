@@ -561,7 +561,7 @@ class Home extends Page {
 							ctx.add({
 								label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
 								className: b.crash ? "crash" : null,
-								sub: Lang.date(b.date),
+								subText: Lang.date(b.date),
 								cb: ()->App.ME.loadProject(b.backup.full, (p:data.Project)->{
 									p.backupOriginalFile = pb.projectFp.clone();
 								}),

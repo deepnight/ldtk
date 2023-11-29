@@ -6,7 +6,7 @@ typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {
 	var label : LocaleString;
 	var ?icon : String;
-	var ?sub : Null<LocaleString>;
+	var ?subText : Null<LocaleString>;
 	var ?className : String;
 	var cb : Void->Void;
 	var ?show : Void->Bool;
@@ -130,8 +130,8 @@ class ContextMenu extends ui.Modal {
 		else
 			jButton.html(a.label);
 
-		if( a.sub!=null && a.sub!=a.label )
-			jButton.append('<span class="sub">${a.sub}</span>');
+		if( a.subText!=null && a.subText!=a.label )
+			jButton.append('<span class="sub">${a.subText}</span>');
 
 		if( a.enable!=null && !a.enable() )
 			jButton.prop("disabled", true);
