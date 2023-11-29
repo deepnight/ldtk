@@ -8406,13 +8406,13 @@ body.sorting ul.collapsedSortTarget {
 					}
 				}
 
-				&.optional {
-					border-color: #1a7bc3;
+				// &.optional {
+				// 	border-color: #1a7bc3;
 
-					header {
-						background-color: #1a7bc3;
-					}
-				}
+				// 	header {
+				// 		background-color: #1a7bc3;
+				// 	}
+				// }
 
 
 				&.highlight header {
@@ -8431,17 +8431,23 @@ body.sorting ul.collapsedSortTarget {
 							color: $almostWhite;
 						}
 					}
-					&:not(.optional) header {
+					// &:not(.optional) header {
+					// 	background-color: $bgDark !important;
+					// 	// background-image: url("../img/stripes.png");
+					// 	.name {
+					// 		color: $bgLight;
+					// 	}
+					// }
+					header {
 						background-color: $bgDark !important;
-						// background-image: url("../img/stripes.png");
 						.name {
 							color: $bgLight;
 						}
 					}
-					&.optional header {
-						background-color: #0f4973 !important;
-						background-image: url("../img/stripes.png");
-					}
+					// &.optional header {
+					// 	background-color: #0f4973 !important;
+					// 	background-image: url("../img/stripes.png");
+					// }
 					ul.ruleGroup {
 						opacity: 0.66;
 					}
@@ -8557,9 +8563,9 @@ body.sorting ul.collapsedSortTarget {
 						font-size: 8pt;
 						height: 1.3em;
 						border-radius: 3px;
-						border: 1px solid #00f1ff;
-						background-color: #1e94c5;
-						box-shadow: 0px 0px 16px #00f1ff;
+						// border: 1px solid #00f1ff;
+						// background-color: #1e94c5;
+						// box-shadow: 0px 0px 16px #00f1ff;
 						cursor: help;
 					}
 
@@ -8609,9 +8615,9 @@ body.sorting ul.collapsedSortTarget {
 					background-color: transparentize($color: white, $amount: 0.8) !important;
 				}
 
-				&.optional header .name:hover {
-					background-color: #219df9;
-				}
+				// &.optional header .name:hover {
+				// 	background-color: #219df9;
+				// }
 
 
 				ul.ruleGroup {
