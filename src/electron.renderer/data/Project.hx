@@ -1107,6 +1107,10 @@ class Project {
 				case _:
 			}
 
+		for(ld in defs.layers)
+			if( ld.biomeFieldUid!=null && ld.getBiomeEnumDef()==enumDef )
+				return true;
+
 		return false;
 	}
 
@@ -1130,6 +1134,12 @@ class Project {
 					case _:
 				}
 		}
+
+		for(ld in defs.layers)
+			if( ld.biomeFieldUid!=null && ld.getBiomeEnumDef()==enumDef )
+				for( rg in ld.autoRuleGroups )
+					if( rg.biomeEnumValue==val )
+						return true;
 
 		return false;
 	}

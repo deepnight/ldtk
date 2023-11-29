@@ -436,6 +436,7 @@ class LayerInstance {
 					}
 				}
 
+
 			case Entities:
 				var i = 0;
 				var ei = null;
@@ -825,13 +826,12 @@ class LayerInstance {
 
 
 	public function isRuleGroupActiveHere(rg:AutoLayerRuleGroup) {
-		if( rg.biomeEnumValues.length>0 ) {
+		if( rg.active && rg.biomeEnumValue!=null ) {
 			var fi = level.getFieldInstanceByUid(def.biomeFieldUid, false);
 			if( fi!=null ) {
 				for(idx in 0...fi.getArrayLength())
-					for(bid in rg.biomeEnumValues)
-						if( bid==fi.getEnumValue(idx) )
-							return true;
+					if( fi.getEnumValue(idx)==rg.biomeEnumValue )
+						return true;
 				return false;
 			}
 		}

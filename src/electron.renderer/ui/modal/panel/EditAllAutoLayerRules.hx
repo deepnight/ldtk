@@ -569,9 +569,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Enable/disable group
 		var jToggle = jGroupHeader.find(".groupActive");
 		jToggle.click( function(ev:js.jquery.Event) {
-			if( rg.biomeEnumValues.length>0 )
-				return;
-
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
 
@@ -695,21 +692,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						subMenu.push({
 							label: L.untranslated("Any biome"),
 							cb: ()->{
-								rg.biomeEnumValues = [];
+								rg.biomeEnumValue = null;
 								invalidateRuleGroup(rg);
 								editor.ge.emit( LayerRuleGroupChanged(rg) );
 							},
-							selectionTick: rg.biomeEnumValues.length==0 ? true : null,
+							selectionTick: rg.biomeEnumValue==null ? true : null,
 						});
 						for(ev in enumDef.values) {
 							subMenu.push({
 								label: L.untranslated(ev.id),
 								cb: ()->{
-									rg.biomeEnumValues = [ ev.id ];
+									rg.biomeEnumValue = ev.id;
 									invalidateRuleGroup(rg);
 									editor.ge.emit( LayerRuleGroupChanged(rg) );
 								},
-								selectionTick: rg.biomeEnumValues.contains(ev.id) ? true : null,
+								selectionTick: rg.biomeEnumValue==ev.id ? true : null,
 								jHtmlImg: ev.tileRect!=null ? project.resolveTileRectAsHtmlImg(ev.tileRect) : null,
 
 							});
@@ -856,29 +853,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Active state icon
-		var jGroupActive = jGroupHeader.find(".groupActive");
-		if( rg.biomeEnumValues.length>0 ) {
-			// var ed = project.defs.getEnumDef(ld.bui)
-			var fd = project.defs.getFieldDef(ld.biomeFieldUid);
-			trace(fd);
-			if( fd!=null ) {
-				var ed = fd.getEnumDefinition();
-				if( ed!=null ) {
-					var tileRect = ed.getValue(rg.biomeEnumValues[0]).tileRect;
-					if( tileRect!=null )
-						jGroupActive.append( project.resolveTileRectAsHtmlImg(tileRect) );
-				}
-			}
-		}
-		else {
-			var jIcon = new J('<span class="icon"/>');
-			jIcon.appendTo(jGroupActive);
-			jIcon.addClass(
-				rg.isOptional
-					? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
-					: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
-			);
-		}
+		jGroupHeader.find(".groupActive .icon").addClass(
+			rg.isOptional
+				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
+				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
+		);
 
 
 		// Make individual rules sortable

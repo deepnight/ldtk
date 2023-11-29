@@ -224,7 +224,7 @@ class LayerDef {
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
 			usesWizard: rg.usesWizard,
-			biomeEnumValues: rg.biomeEnumValues,
+			biomeEnumValue: rg.biomeEnumValue,
 		}
 	}
 
@@ -242,7 +242,7 @@ class LayerDef {
 		});
 		rg.collapsed = true;
 		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
-		rg.biomeEnumValues = JsonTools.readArray( ruleGroupJson.biomeEnumValues, [] );
+		rg.biomeEnumValue = ruleGroupJson.biomeEnumValue;
 		return rg;
 	}
 
@@ -577,7 +577,7 @@ class LayerDef {
 			collapsed: false,
 			isOptional: false,
 			usesWizard: false,
-			biomeEnumValues: [],
+			biomeEnumValue: null,
 			rules: [],
 		}
 		if( index!=null )
@@ -658,6 +658,21 @@ class LayerDef {
 						cbEachRule(r);
 	}
 
+	public function getBiomeEnumDef() : EnumDef {
+		if( biomeFieldUid==null )
+			return null;
+
+		var fd = _project.defs.getFieldDef(biomeFieldUid);
+		return fd!=null ? fd.getEnumDefinition() : null;
+	}
+
+	public function getBiomeFieldDef() : FieldDef {
+		if( biomeFieldUid==null )
+			return null;
+
+		return _project.defs.getFieldDef(biomeFieldUid);
+	}
+
 	public function tidy(p:data.Project) {
 		_project = p;
 
@@ -670,5 +685,21 @@ class LayerDef {
 		// Lost source intGrid layer
 		if( autoSourceLayerDefUid!=null && p.defs.getLayerDef(autoSourceLayerDefUid)==null )
 			autoSourceLayerDefUid = null;
+
+		// Lost biome field
+		if( biomeFieldUid!=null && getBiomeEnumDef()==null ) {
+			App.LOG.add("tidy", 'Removed lost biome field in $this');
+			biomeFieldUid = null;
+		}
+
+		// Invalid biome values in rule groups
+		if( biomeFieldUid!=null ) {
+			var ed = getBiomeEnumDef();
+			for( rg in autoRuleGroups)
+				if( ed.getValue(rg.biomeEnumValue)==null ) {
+					App.LOG.add("tidy", 'Removed lost biome value ${rg.biomeEnumValue} in $this');
+					rg.biomeEnumValue = null;
+				}
+		}
 	}
 }

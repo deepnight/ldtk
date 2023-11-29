@@ -48,7 +48,7 @@ typedef AutoLayerRuleGroup = {
 	var rules : Array<data.def.AutoLayerRuleDef>;
 	var isOptional : Bool;
 	var usesWizard : Bool;
-	var biomeEnumValues : Array<String>;
+	var biomeEnumValue : Null<String>;
 }
 
 typedef GridTileInfos = {
