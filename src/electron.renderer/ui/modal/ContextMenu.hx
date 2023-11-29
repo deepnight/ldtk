@@ -8,23 +8,24 @@ typedef ContextAction = {
 	var ?icon : String;
 	var ?subText : Null<LocaleString>;
 	var ?className : String;
-	var cb : Void->Void;
+	var ?cb : Void->Void;
 	var ?show : Void->Bool;
 	var ?enable : Void->Bool;
 	var ?separatorBefore: Bool;
 	var ?separatorAfter: Bool;
+	var ?subActions: ContextActions;
 }
 
 class ContextMenu extends ui.Modal {
-	public static var ME : ContextMenu;
+	public static var ALL : Array<ContextMenu> = [];
 	var jAttachTarget : js.jquery.JQuery; // could be empty
 
-	public function new(?m:Coords, ?jNear:js.jquery.JQuery, ?openEvent:js.jquery.Event) {
+	public function new(?m:Coords, ?jNear:js.jquery.JQuery, ?openEvent:js.jquery.Event, isSubMenu=false) {
 		super();
 
-		if( ME!=null && !ME.destroyed )
-			ME.destroy();
-		ME = this;
+		if( !isSubMenu )
+			closeAll();
+		ALL.push(this);
 
 		setTransparentMask();
 		addClass("contextMenu");
@@ -52,19 +53,26 @@ class ContextMenu extends ui.Modal {
 		jContent.addClass("noWrap");
 	}
 
-	public static inline function isOpen() return ME!=null && !ME.destroyed;
+	public static function isOpen() {
+		for(m in ALL)
+			if( !m.destroyed )
+				return true;
+		return false;
+	}
+
+	public static function closeAll() {
+		for(m in ALL)
+			m.destroy();
+	}
 
 	override function onDispose() {
 		super.onDispose();
-		if( ME==this )
-			ME = null;
+		ALL.remove(this);
 	}
 
 	override function onClose() {
 		super.onClose();
 		jAttachTarget.removeClass("contextMenuOpen");
-		if( ME==this )
-			ME = null;
 	}
 
 	public static function addTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:ContextActions) {
@@ -140,8 +148,19 @@ class ContextMenu extends ui.Modal {
 			jButton.addClass(a.className);
 
 		jButton.click( (_)->{
-			close();
-			a.cb();
+			if( a.subActions==null )
+				closeAll();
+			else {
+				addClass("subMenuOpen");
+				var c = new ContextMenu(jButton, true);
+				c.onCloseCb = ()->{
+					removeClass("subMenuOpen");
+				}
+				for(subAction in a.subActions)
+					c.add(subAction);
+			}
+			if( a.cb!=null )
+				a.cb();
 		});
 
 		if( a.separatorBefore )
