@@ -1299,6 +1299,8 @@ ul.log {
 .icon.slide				{ background-image: url("../icons/delete.svg"); }
 .icon.stop				{ background-image: url("../icons/stop.svg"); }
 .icon.tile				{ background-image: url("../icons/tile.png"); }
+.icon.toggleOn			{ background-image: url("../icons/toggleOn.svg"); }
+.icon.toggleOff			{ background-image: url("../icons/toggleOff.svg"); }
 .icon.trust				{ background-image: url("../icons/trust.svg"); }
 .icon.tutorial			{ background-image: url("../icons/tutorial.svg"); }
 .icon.unlink			{ background-image: url("../icons/unlink.svg"); }
@@ -8418,7 +8420,11 @@ body.sorting ul.collapsedSortTarget {
 					background-color: #770077;
 				}
 
-				&.inactive {
+				&.disabled {
+					.sortHandle {
+						opacity: 0.35;
+						background-color: $bgDark !important;
+					}
 					header {
 						opacity: 0.35;
 						.name:hover .text {
@@ -8444,6 +8450,21 @@ body.sorting ul.collapsedSortTarget {
 
 						&:hover {
 							background-color: $orange !important;
+						}
+					}
+				}
+
+				&.notApplied:not(.disabled) {
+					header {
+						.name {
+							font-style: italic;
+							text-decoration: line-through;
+							font-weight: normal;
+							color: #c57373;
+						}
+
+						.biome {
+							filter: blur(2px);
 						}
 					}
 				}
@@ -8485,9 +8506,10 @@ body.sorting ul.collapsedSortTarget {
 
 				header {
 					display: grid;
-					grid-template-columns: auto;
 					grid-auto-flow: column;
+					grid-template-columns: min-content auto;
 					grid-auto-columns: min-content;
+
 					align-items: stretch;
 					width: 100%;
 					height: 34px;
@@ -8495,7 +8517,7 @@ body.sorting ul.collapsedSortTarget {
 
 					div.name {
 						display: grid;
-						grid-template-columns: 20px min-content auto;
+						grid-template-columns: min-content auto;
 						align-content: center;
 						align-items: center;
 						gap: 6px;
@@ -8541,6 +8563,11 @@ body.sorting ul.collapsedSortTarget {
 						cursor: help;
 					}
 
+					.biome {
+						display: flex;
+						align-items: center;
+					}
+
 					button {
 						padding: 3px;
 						margin: 0;
@@ -8549,7 +8576,7 @@ body.sorting ul.collapsedSortTarget {
 							font-weight: bold;
 							font-size: 12pt;
 						}
-						&.groupEnabled:hover{
+						&.groupToggler:hover{
 							background-color: transparentize($color: white, $amount: 0.66) !important;
 						}
 
@@ -8558,13 +8585,15 @@ body.sorting ul.collapsedSortTarget {
 							background-color: $red;
 						}
 
-						&.groupEnabled {
-							img {
-								width: 30px !important;
-								height: auto !important;
-							}
+						&.groupToggler {
 							.icon {
 								width: 30px;
+								&.toggleOn {
+									filter: brightness(0.6) sepia(1) hue-rotate(0.8rad) saturate(2);
+								}
+								&.toggleOff {
+									filter: brightness(0.6) sepia(1) hue-rotate(-0.8rad) saturate(10);
+								}
 							}
 						}
 					}

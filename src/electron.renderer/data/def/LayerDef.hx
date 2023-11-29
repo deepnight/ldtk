@@ -658,19 +658,25 @@ class LayerDef {
 						cbEachRule(r);
 	}
 
+	public function getRuleGroupBiomeEnumValue(rg:AutoLayerRuleGroup) : Null<EnumDefValue> {
+		if( biomeFieldUid==null || rg.biomeEnumValue==null )
+			return null;
+
+		var ed = getBiomeEnumDef();
+		return ed!=null ? ed.getValue(rg.biomeEnumValue) : null;
+	}
+
+	public function getRuleGroupBiomeHtmlImg(rg:AutoLayerRuleGroup, sizePx=32) : Null<js.jquery.JQuery> {
+		var ev = getRuleGroupBiomeEnumValue(rg);
+		return ev!=null ? _project.resolveTileRectAsHtmlImg(ev.tileRect,sizePx) : null;
+	}
+
 	public function getBiomeEnumDef() : EnumDef {
 		if( biomeFieldUid==null )
 			return null;
 
 		var fd = _project.defs.getFieldDef(biomeFieldUid);
 		return fd!=null ? fd.getEnumDefinition() : null;
-	}
-
-	public function getBiomeFieldDef() : FieldDef {
-		if( biomeFieldUid==null )
-			return null;
-
-		return _project.defs.getFieldDef(biomeFieldUid);
 	}
 
 	public function tidy(p:data.Project) {

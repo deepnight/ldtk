@@ -515,7 +515,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
-		jGroup.addClass(li.isRuleGroupEnabled(rg) ? "active" : "inactive");
+		jGroup.addClass(li.isRuleGroupEnabled(rg) ? "enabled" : "disabled");
+		jGroup.addClass(li.isRuleGroupAppliedHere(rg) ? "applied" : "notApplied");
 
 		if( rg.color!=null ) {
 			jGroup.find(".sortHandle, header").css("background-color", rg.color.toCssRgba(0.7));
@@ -533,8 +534,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				rg.collapsed = !rg.collapsed;
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
-			.find(".text").text(rg.name).parent()
-			.find(".collapserIcon").removeClass().addClass("collapserIcon").addClass(rg.collapsed ? "collapsed" : "expanded");
+			.find(".text").text(rg.name);
+			// .parent().find(".collapserIcon").removeClass().addClass("collapserIcon").addClass(rg.collapsed ? "collapsed" : "expanded");
 
 		if( rg.collapsed ) {
 			jGroup.addClass("collapsed");
@@ -567,7 +568,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		var jToggle = jGroupHeader.find(".groupEnabled");
+		var jToggle = jGroupHeader.find(".groupToggler");
 		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
@@ -581,6 +582,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 		if( rg.isOptional )
 			jToggle.attr("title", (li.isRuleGroupEnabled(rg)?"Disable":"Enable")+" this group of rules in this level");
+
+		// Biome
+		var jBiome = jGroupHeader.find(".biome");
+		if( rg.biomeEnumValue!=null ) {
+			var jBiomeImg = ld.getRuleGroupBiomeHtmlImg(rg);
+			if( jBiomeImg!=null )
+				jBiomeImg.appendTo(jBiome);
+		}
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");
@@ -662,7 +671,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._("Assign biome enum"),
-				icon: "optional",
+				// icon: "optional",
+				jHtmlImg: ld.biomeFieldUid!=null && rg.biomeEnumValue!=null ? ld.getRuleGroupBiomeHtmlImg(rg) : null,
 				cb: ()->{},
 				subMenu: ()->{
 					// Biome sub menu
@@ -853,10 +863,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Active state icon
-		jGroupHeader.find(".groupEnabled .icon").addClass(
+		jGroupHeader.find(".groupToggler .icon").addClass(
 			rg.isOptional
 				? li.isRuleGroupEnabled(rg) ? "visible" : "hidden"
-				: li.isRuleGroupEnabled(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
+				: li.isRuleGroupEnabled(rg) ? "toggleOn" : "toggleOff"
 		);
 
 
