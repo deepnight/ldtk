@@ -2026,6 +2026,7 @@ select {
 		cursor: pointer;
 	}
 
+	&.isNull,
 	&.gray {
 		border: 1px dashed $bgLight;
 		padding: 8px;
@@ -3725,11 +3726,26 @@ textarea {
 				strong {
 					color: $orangeLight;
 				}
-				.icon {
+				.icon:not(.selectionTick) {
 					opacity: 0.7;
 					width: 18px;
 					height: 18px;
 					margin-right: 3px;
+				}
+				img {
+					margin-right: 3px;
+				}
+				.icon.selectionTick {
+					width: 24px;
+					height: 24px;
+					margin-left: 3px;
+				}
+				&.selected {
+					background-color: $bgMed;
+					color: white;
+					* {
+						color: white;
+					}
 				}
 				.sub {
 					display: block;
@@ -3780,7 +3796,10 @@ textarea {
 			box-shadow: none;
 		}
 		button:not(.contextMenuOpen) {
-			opacity: 0.3;
+			opacity: 0.2;
+		}
+		button.contextMenuOpen {
+			opacity: 0.5;
 		}
 	}
 
@@ -8401,20 +8420,20 @@ body.sorting ul.collapsedSortTarget {
 
 				&.inactive {
 					header {
-						opacity: 0.5;
+						opacity: 0.35;
 						.name:hover .text {
 							color: $almostWhite;
 						}
 					}
 					&:not(.optional) header {
-						background-color: $bgDark;
-						background-image: url("../img/stripes.png");
+						background-color: $bgDark !important;
+						// background-image: url("../img/stripes.png");
 						.name {
-							color: $bgLighter;
+							color: $bgLight;
 						}
 					}
 					&.optional header {
-						background-color: #0f4973;
+						background-color: #0f4973 !important;
 						background-image: url("../img/stripes.png");
 					}
 					ul.ruleGroup {
@@ -8539,8 +8558,14 @@ body.sorting ul.collapsedSortTarget {
 							background-color: $red;
 						}
 
-						&.groupActive .icon {
-							width: 100%;
+						&.groupActive {
+							img {
+								width: 30px !important;
+								height: auto !important;
+							}
+							.icon {
+								width: 30px;
+							}
 						}
 					}
 

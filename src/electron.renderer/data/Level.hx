@@ -735,6 +735,14 @@ class Level {
 		return fieldInstances.get(fd.uid);
 	}
 
+	public function getFieldInstanceByUid(fdUid:Int, createIfMissing:Bool) : Null<data.inst.FieldInstance> {
+		if( createIfMissing && !fieldInstances.exists(fdUid) ) {
+			fieldInstances.set( fdUid, new data.inst.FieldInstance(_project, fdUid) );
+			invalidateJsonCache();
+		}
+		return fieldInstances.get(fdUid);
+	}
+
 
 	public function getSmartColor(bright:Bool) : dn.Col {
 		inline function _adjust(c:Int) {

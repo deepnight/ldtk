@@ -99,6 +99,7 @@ class EditAppSettings extends ui.modal.Dialog {
 			jForm.find("#singleLayerModeIntensity"),
 			settings.v.singleLayerModeIntensity,
 			allValues,
+			false,
 			0.9,
 			(v)->Std.string(v*100)+"%",
 			(v)->{

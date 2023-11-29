@@ -28,6 +28,7 @@ class LayerDef {
 	public var parallaxFactorY : Float = 0.;
 	public var parallaxScaling : Bool = true;
 	public var tilesetDefUid : Null<Int>;
+	public var biomeFieldUid : Null<Int>;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -109,6 +110,7 @@ class LayerDef {
 		o.parallaxFactorX = JsonTools.readFloat(json.parallaxFactorX, 0);
 		o.parallaxFactorY = JsonTools.readFloat(json.parallaxFactorY, 0);
 		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
+		o.biomeFieldUid = JsonTools.readNullableInt(json.biomeFieldUid);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
@@ -207,6 +209,8 @@ class LayerDef {
 			tilesetDefUid: tilesetDefUid,
 			tilePivotX: tilePivotX,
 			tilePivotY: tilePivotY,
+
+			biomeFieldUid: biomeFieldUid,
 		}
 	}
 
@@ -220,7 +224,7 @@ class LayerDef {
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
 			usesWizard: rg.usesWizard,
-			biomeFieldUid: rg.biomeFieldUid,
+			biomeEnumValues: rg.biomeEnumValues,
 		}
 	}
 
@@ -238,7 +242,7 @@ class LayerDef {
 		});
 		rg.collapsed = true;
 		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
-		rg.biomeFieldUid = JsonTools.readInt( ruleGroupJson.biomeFieldUid, -1 );
+		rg.biomeEnumValues = JsonTools.readArray( ruleGroupJson.biomeEnumValues, [] );
 		return rg;
 	}
 
@@ -573,7 +577,7 @@ class LayerDef {
 			collapsed: false,
 			isOptional: false,
 			usesWizard: false,
-			biomeFieldUid: -1,
+			biomeEnumValues: [],
 			rules: [],
 		}
 		if( index!=null )

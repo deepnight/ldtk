@@ -5,7 +5,8 @@ import dn.data.GetText.LocaleString;
 typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {
 	var label : LocaleString;
-	var ?icon : String;
+	var ?icon : String; // TODO rename iconId
+	var ?jHtmlImg : js.jquery.JQuery;
 	var ?subText : Null<LocaleString>;
 	var ?className : String;
 	var ?cb : Void->Void;
@@ -13,7 +14,8 @@ typedef ContextAction = {
 	var ?enable : Void->Bool;
 	var ?separatorBefore: Bool;
 	var ?separatorAfter: Bool;
-	var ?subActions: ContextActions;
+	var ?subMenu: Void->ContextActions;
+	var ?selectionTick : Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -133,7 +135,11 @@ class ContextMenu extends ui.Modal {
 		if( a.show!=null && !a.show() )
 			return jButton;
 		jButton.appendTo(jContent);
-		if( a.icon!=null )
+		if( a.jHtmlImg!=null ) {
+			jButton.prepend(a.label);
+			jButton.prepend(a.jHtmlImg);
+		}
+		else if( a.icon!=null )
 			jButton.prepend('<span class="icon ${a.icon}"></span> ${a.label}');
 		else
 			jButton.html(a.label);
@@ -148,7 +154,7 @@ class ContextMenu extends ui.Modal {
 			jButton.addClass(a.className);
 
 		jButton.click( (_)->{
-			if( a.subActions==null )
+			if( a.subMenu==null )
 				closeAll();
 			else {
 				addClass("subMenuOpen");
@@ -156,7 +162,7 @@ class ContextMenu extends ui.Modal {
 				c.onCloseCb = ()->{
 					removeClass("subMenuOpen");
 				}
-				for(subAction in a.subActions)
+				for(subAction in a.subMenu())
 					c.add(subAction);
 			}
 			if( a.cb!=null )
@@ -168,6 +174,15 @@ class ContextMenu extends ui.Modal {
 
 		if( a.separatorAfter )
 			jButton.addClass("separatorAfter");
+
+		if( a.selectionTick!=null ) {
+			if( a.selectionTick ) {
+				jButton.addClass("selected");
+				jButton.append('<span class="icon selectionTick active"></span>');
+			}
+			else
+				jButton.append('<span class="icon selectionTick inactive"></span>');
+		}
 
 		applyAnchor();
 		return jButton;

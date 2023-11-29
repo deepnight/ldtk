@@ -421,7 +421,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 		// Layer-type specific inits
-		function initAutoTilesetSelect() {
+		function initAutoLayerSelects() {
+			// Auto-layer tileset
 			JsTools.createTilesetSelect(
 				project,
 				jForm.find("[name=autoTileset]"),
@@ -436,6 +437,31 @@ class EditLayerDefs extends ui.modal.Panel {
 						cur.gridSize = project.defs.getTilesetDef(cur.tilesetDefUid).tileGridSize;
 
 					// TODO cleanup rules with invalid tileIDs
+
+					editor.ge.emit( LayerDefChanged(cur.uid) );
+				}
+			);
+
+			// Biome enum select
+			var enumFieldUids = project.defs.levelFields.filter( f->f.isEnum() ).map( f->f.uid );
+			JsTools.createValuesSelect(
+				jForm.find("[name=biomeField]"),
+				cur.biomeFieldUid,
+				enumFieldUids,
+				true,
+				(uid)->{
+					if( uid==null )
+						return "No biome enum";
+					var fd = project.defs.getFieldDef(uid);
+					return fd.identifier+" ("+fd.getEnumDefinition().identifier+")";
+				},
+				(uid)->{
+					if( cur.autoRuleGroups.length!=0 )
+						new LastChance(Lang.t._("Changed auto-layer biome enum"), project);
+
+					cur.biomeFieldUid = uid;
+
+					// TODO cleanup rules with invalid biome values
 
 					editor.ge.emit( LayerDefChanged(cur.uid) );
 				}
@@ -690,7 +716,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						{ onlyDraggables: true }
 					);
 
-				initAutoTilesetSelect();
+				initAutoLayerSelects();
 
 			case AutoLayer:
 				// Linked layer
@@ -738,7 +764,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				jForm.find("#gridSize").prop("readonly",true);
 
 				// Tileset
-				initAutoTilesetSelect();
+				initAutoLayerSelects();
 				var jSelect = jForm.find("[name=autoTileset]");
 				if( cur.tilesetDefUid==null )
 					jSelect.addClass("required");

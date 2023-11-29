@@ -569,6 +569,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// Enable/disable group
 		var jToggle = jGroupHeader.find(".groupActive");
 		jToggle.click( function(ev:js.jquery.Event) {
+			if( rg.biomeEnumValues.length>0 )
+				return;
+
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
 
@@ -629,7 +632,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._('Edit "out-of-bounds" policy for all rules'),
-				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
 				icon: "outOfBounds",
 				separatorBefore: true,
 				cb: ()->{
@@ -662,8 +664,64 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 
 			{
+				label: L.t._("Assign biome enum"),
+				icon: "optional",
+				cb: ()->{},
+				subMenu: ()->{
+					// Biome sub menu
+					var enumDef : data.def.EnumDef = null;
+					if( ld.biomeFieldUid!=null ) {
+						var fd = project.defs.getFieldDef(ld.biomeFieldUid);
+						if( fd!=null && fd.isEnum() && fd.getEnumDefinition().values.length>0 )
+							enumDef = fd.getEnumDefinition();
+					}
+
+					var subMenu : ui.modal.ContextMenu.ContextActions = [
+						{
+							label: L.untranslated("Missing biome enum"),
+							subText: L.untranslated("Click to select your level biome enum"),
+							cb: editor.executeAppCommand.bind(C_OpenLayerPanel),
+							show: ()->enumDef==null,
+						},
+						{
+							label: L.untranslated("Enum has no value"),
+							subText: L.untranslated("The selected biome Enum has no value."),
+							show: ()->enumDef!=null && enumDef.values.length==0,
+							enable: ()->false
+						},
+					];
+					// Biome enum values
+					if( enumDef!=null ) {
+						subMenu.push({
+							label: L.untranslated("Any biome"),
+							cb: ()->{
+								rg.biomeEnumValues = [];
+								invalidateRuleGroup(rg);
+								editor.ge.emit( LayerRuleGroupChanged(rg) );
+							},
+							selectionTick: rg.biomeEnumValues.length==0 ? true : null,
+						});
+						for(ev in enumDef.values) {
+							subMenu.push({
+								label: L.untranslated(ev.id),
+								cb: ()->{
+									rg.biomeEnumValues = [ ev.id ];
+									invalidateRuleGroup(rg);
+									editor.ge.emit( LayerRuleGroupChanged(rg) );
+								},
+								selectionTick: rg.biomeEnumValues.contains(ev.id) ? true : null,
+								jHtmlImg: ev.tileRect!=null ? project.resolveTileRectAsHtmlImg(ev.tileRect) : null,
+
+							});
+						}
+					}
+					return subMenu;
+				}
+			},
+
+			{
 				label: L.t._("Turn into an OPTIONAL group"),
-				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+				subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
 				icon: "optional",
 				cb: ()->{
 					invalidateRuleGroup(rg);
@@ -736,7 +794,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			},
 			{
 				label: L.t._("Duplicate and remap"),
-				sub: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
+				subText: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
 				cb: ()->{
 					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
 						editor.ge.emit( LayerRuleGroupAdded(copy) );
@@ -797,11 +855,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				allActive = false;
 		}
 
-		jGroupHeader.find(".groupActive .icon")
-			.addClass( rg.isOptional
-				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
-				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
+		// Active state icon
+		var jGroupActive = jGroupHeader.find(".groupActive");
+		if( rg.biomeEnumValues.length>0 ) {
+			// var ed = project.defs.getEnumDef(ld.bui)
+			var fd = project.defs.getFieldDef(ld.biomeFieldUid);
+			trace(fd);
+			if( fd!=null ) {
+				var ed = fd.getEnumDefinition();
+				if( ed!=null ) {
+					var tileRect = ed.getValue(rg.biomeEnumValues[0]).tileRect;
+					if( tileRect!=null )
+						jGroupActive.append( project.resolveTileRectAsHtmlImg(tileRect) );
+				}
+			}
+		}
+		else {
+			var jIcon = new J('<span class="icon"/>');
+			jIcon.appendTo(jGroupActive);
+			jIcon.addClass(
+				rg.isOptional
+					? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
+					: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
 			);
+		}
 
 
 		// Make individual rules sortable

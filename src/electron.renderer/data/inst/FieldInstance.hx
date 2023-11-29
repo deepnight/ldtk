@@ -756,6 +756,16 @@ class FieldInstance {
 		}
 	}
 
+
+	public function getEnumValueTileRect(arrayIdx:Int) : Null<ldtk.Json.TilesetRect> {
+		require( F_Enum(null) );
+		var v = getEnumValue(arrayIdx);
+		if( v==null )
+			return null;
+		else
+			return def.getEnumDefinition().getValue(v).tileRect;
+	}
+
 	public function getPointStr(arrayIdx:Int) : Null<String> {
 		require( F_Point );
 		return isUsingDefault(arrayIdx) ? def.getPointDefault() : switch internalValues[arrayIdx] {

@@ -65,16 +65,31 @@ class JsTools {
 	}
 
 
-	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:T, allValues:Array<T>, ?def:T, ?printer:T->String, onSelect:T->Void) {
+	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:Null<T>, allValues:Array<T>, allowNull:Bool, ?def:T, ?printer:T->String, onSelect:T->Void) {
 		if( jSelect==null )
 			jSelect = new J('<select/>');
-		else
+		else {
 			jSelect.empty().off();
+			jSelect.removeClass("isNull");
+		}
 
 		// Ensure cur is part of allValues
 		if( !allValues.contains(cur) )
 			cur = def;
 
+		// "None" option
+		if( allowNull ) {
+			var jOpt = new J("<option/>");
+			jSelect.prepend(jOpt);
+			jOpt.text( printer==null ? Lang.t._("(none)") : printer(null) );
+			jOpt.attr("value", "");
+			if( cur==null ) {
+				jSelect.addClass("isNull");
+				jOpt.attr("selected","selected");
+			}
+		}
+
+		// Values
 		var i = 0;
 		for(v in allValues) {
 			var jOpt = new J('<option value="$i"/>');
