@@ -58,11 +58,11 @@ class TilesetDef {
 
 	public inline function isUsingEmbedAtlas() return embedAtlas!=null;
 
-	function getOrLoadTilesetImage() {
+	function getOrLoadTilesetImage(x = -1, y = -1, w = -1, h = -1) {
 		if( !hasAtlasPointer() )
 			return null;
 		else
-			return embedAtlas!=null ? _project.getOrLoadEmbedImage(embedAtlas) : _project.getOrLoadImage(relPath);
+			return embedAtlas!=null ? _project.getOrLoadEmbedImage(embedAtlas) : _project.getOrLoadImage(relPath, x, y, w, h);
 	}
 
 	@:allow(data.Project)
@@ -862,9 +862,9 @@ class TilesetDef {
 	public function createTileHtmlImageFromRect(r:ldtk.Json.TilesetRect, ?imgWid:Int, ?imgHei:Int) : js.jquery.JQuery {
 		var jImg =
 			if( isAtlasLoaded() && isTileRectInBounds(r) ) {
-				var imgData = getOrLoadTilesetImage();
-				var subPixels = imgData.pixels.sub(r.x, r.y, r.w, r.h);
-				var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+				var imgData = getOrLoadTilesetImage(r.x, r.y, r.w, r.h);
+				var subPixels = imgData.pixels;				
+				var b64 = imgData.base64;
 				var img = new js.html.Image(subPixels.width, subPixels.height);
 				img.src = 'data:image/png;base64,$b64';
 				new J(img);
