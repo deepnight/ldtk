@@ -610,7 +610,7 @@ class EditLayerDefs extends ui.modal.Panel {
 									},
 								},
 							];
-							ContextMenu.addTo(jGroupHeader, act);
+							ContextMenu.attachTo(jGroupHeader, act);
 					}
 
 					var jGroup = jGroupWrapper.find(".intGridValuesGroup");
@@ -860,7 +860,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		Tip.clear();
 		jList.empty();
 
-		ContextMenu.addTo(jList, false, [
+		ContextMenu.attachTo(jList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -889,7 +889,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			if( cur==ld )
 				jLi.addClass("active");
 
-			ContextMenu.addTo(jLi, [
+			ContextMenu.attachTo(jLi, [
 				{
 					label: L._Copy(),
 					cb: ()->{

@@ -270,7 +270,7 @@ class Home extends Page {
 						}
 					},
 				];
-				ui.modal.ContextMenu.addTo(jLi, act );
+				ui.modal.ContextMenu.attachTo(jLi, act );
 
 				jLi.appendTo(jRecentFiles);
 			}
@@ -373,7 +373,7 @@ class Home extends Page {
 						}
 					},
 				];
-				ui.modal.ContextMenu.addTo(jLi, actions);
+				ui.modal.ContextMenu.attachTo(jLi, actions);
 
 				jLi.appendTo(jRecentDirs);
 

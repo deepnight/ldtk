@@ -202,11 +202,13 @@ class EnumDef {
 					if( ld.getBiomeEnumDef()!=this )
 						continue;
 
-					for( rg in ld.autoRuleGroups )
-						if( rg.biomeEnumValue==from ) {
-							rg.biomeEnumValue = to;
-							App.LOG.add("tidy", "Renamed biome enum value in rule group "+rg.name+" from layer "+ld.identifier);
-						}
+					for( rg in ld.autoRuleGroups ) {
+						for(i in 0...rg.requiredBiomeValues.length)
+							if( rg.requiredBiomeValues[i]==from ) {
+								rg.requiredBiomeValues[i] = to;
+								App.LOG.add("tidy", "Renamed biome enum value in rule group "+rg.name+" from layer "+ld.identifier);
+							}
+					}
 				}
 
 				// Fix tileset meta-data

@@ -295,7 +295,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jList, false, [
+		ContextMenu.attachTo(jList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -348,7 +348,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 				jLi.click( function(_) selectTileset(td) );
 
-				ContextMenu.addTo(jLi, [
+				ContextMenu.attachTo(jLi, [
 					{
 						label: L._Copy(),
 						cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),

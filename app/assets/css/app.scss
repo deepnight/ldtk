@@ -8462,15 +8462,19 @@ body.sorting ul.collapsedSortTarget {
 
 				&.notApplied:not(.disabled) {
 					header {
-						.name {
+						.name:not(input) {
 							font-style: italic;
 							text-decoration: line-through;
 							font-weight: normal;
-							color: #c57373;
+							color: $bgLighter;
+							&:hover {
+								color: white;
+							}
 						}
 
 						.biome {
 							filter: blur(2px);
+							opacity: 0.8;
 						}
 					}
 				}
@@ -8572,6 +8576,17 @@ body.sorting ul.collapsedSortTarget {
 					.biome {
 						display: flex;
 						align-items: center;
+						cursor: pointer;
+
+						img {
+							margin-left: -10px;
+						}
+						img:first-of-type {
+							margin-left: 0;
+						}
+						&:hover{
+							background-color: transparentize($color: white, $amount: 0.6);
+						}
 					}
 
 					button {
@@ -8611,7 +8626,7 @@ body.sorting ul.collapsedSortTarget {
 					}
 				}
 
-				&:not(.optional) header .name:hover {
+				&:not(.optional) header div.name:hover {
 					background-color: transparentize($color: white, $amount: 0.8) !important;
 				}
 

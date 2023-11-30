@@ -824,7 +824,7 @@ class FieldInstancesForm {
 					},
 				}
 			];
-			ui.modal.ContextMenu.addTo(jDt, false, actions);
+			ui.modal.ContextMenu.attachTo(jDt, false, actions);
 
 			var jDd = new J("<dd/>");
 			jDd.attr("defUid", fd.uid);

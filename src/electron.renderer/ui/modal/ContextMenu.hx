@@ -16,6 +16,7 @@ typedef ContextAction = {
 	var ?separatorAfter: Bool;
 	var ?subMenu: Void->ContextActions;
 	var ?selectionTick : Bool;
+	var ?closeAfter : Bool;
 }
 
 class ContextMenu extends ui.Modal {
@@ -51,15 +52,8 @@ class ContextMenu extends ui.Modal {
 		}
 	}
 
-	public function enableNoWrap() {
+	public function disableTextWrapping() {
 		jContent.addClass("noWrap");
-	}
-
-	public static function isOpen() {
-		for(m in ALL)
-			if( !m.destroyed )
-				return true;
-		return false;
 	}
 
 	public static function closeAll() {
@@ -77,7 +71,7 @@ class ContextMenu extends ui.Modal {
 		jAttachTarget.removeClass("contextMenuOpen");
 	}
 
-	public static function addTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:ContextActions) {
+	public static function attachTo(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, actions:ContextActions) {
 		// Cleanup
 		jTarget
 			.off(".context")
@@ -130,11 +124,9 @@ class ContextMenu extends ui.Modal {
 		applyAnchor();
 	}
 
-	public function add(a:ContextAction) {
+	function createButton(a:ContextAction) {
 		var jButton = new J('<button class="transparent"/>');
-		if( a.show!=null && !a.show() )
-			return jButton;
-		jButton.appendTo(jContent);
+
 		if( a.jHtmlImg!=null ) {
 			jButton.prepend(a.label);
 			jButton.prepend(a.jHtmlImg);
@@ -153,22 +145,6 @@ class ContextMenu extends ui.Modal {
 		if( a.className!=null )
 			jButton.addClass(a.className);
 
-		jButton.click( (_)->{
-			if( a.subMenu==null )
-				closeAll();
-			else {
-				addClass("subMenuOpen");
-				var c = new ContextMenu(jButton, true);
-				c.onCloseCb = ()->{
-					removeClass("subMenuOpen");
-				}
-				for(subAction in a.subMenu())
-					c.add(subAction);
-			}
-			if( a.cb!=null )
-				a.cb();
-		});
-
 		if( a.separatorBefore )
 			jButton.addClass("separatorBefore");
 
@@ -184,6 +160,34 @@ class ContextMenu extends ui.Modal {
 				jButton.append('<span class="icon selectionTick inactive"></span>');
 		}
 
+		// Button action
+		jButton.click( (_)->{
+			if( a.subMenu==null && a.closeAfter!=false )
+				closeAll();
+
+			if( a.subMenu!=null ) {
+				addClass("subMenuOpen");
+				var c = new ContextMenu(jButton, true);
+				c.onCloseCb = ()->{
+					removeClass("subMenuOpen");
+				}
+				for(subAction in a.subMenu())
+					c.add(subAction);
+			}
+			if( a.cb!=null )
+				a.cb();
+		});
+
+		return jButton;
+	}
+
+
+	public function add(a:ContextAction) {
+		if( a.show!=null && !a.show() )
+			return new js.jquery.JQuery();
+
+		var jButton = createButton(a);
+		jButton.appendTo(jContent);
 		applyAnchor();
 		return jButton;
 	}

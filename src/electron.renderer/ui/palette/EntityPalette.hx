@@ -124,7 +124,7 @@ class EntityPalette extends ui.ToolPalette {
 						 cb: ()->new ui.modal.panel.EditEntityDefs(ed),
 					},
 				];
-				ui.modal.ContextMenu.addTo(jLi, false, actions);
+				ui.modal.ContextMenu.attachTo(jLi, false, actions);
 
 				y++;
 			}

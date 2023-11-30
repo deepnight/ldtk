@@ -241,7 +241,7 @@ class FieldDefsForm {
 		jList.off().empty();
 
 		// List context menu
-		ui.modal.ContextMenu.addTo(jList, false, [
+		ui.modal.ContextMenu.attachTo(jList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -271,7 +271,7 @@ class FieldDefsForm {
 				color: FieldDef.getTypeColorHex(fd.type, 1.5),
 			});
 
-			ui.modal.ContextMenu.addTo(li, [
+			ui.modal.ContextMenu.attachTo(li, [
 				{
 					label: L._Copy(),
 					cb: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),

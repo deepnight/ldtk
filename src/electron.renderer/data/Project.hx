@@ -1138,8 +1138,9 @@ class Project {
 		for(ld in defs.layers)
 			if( ld.biomeFieldUid!=null && ld.getBiomeEnumDef()==enumDef )
 				for( rg in ld.autoRuleGroups )
-					if( rg.biomeEnumValue==val )
-						return true;
+					for( bid in rg.requiredBiomeValues )
+						if( bid==val )
+							return true;
 
 		return false;
 	}

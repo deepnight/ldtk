@@ -2575,14 +2575,6 @@ class Editor extends Page {
 					cb: ()->jRules.click(),
 					show: ()->li.def.isAutoLayer(),
 				},
-				// {
-				// 	label: L.t._("Show/hide in list"),
-				// 	cb: ()->{
-				// 		selectLayerInstance(li);
-				// 		ld.hideInList = !ld.hideInList;
-				// 		ge.emit(LayerDefChanged(ld.uid));
-				// 	},
-				// },
 				{
 					label: L.t._("Edit layer settings"),
 					icon: "edit",
@@ -2592,7 +2584,7 @@ class Editor extends Page {
 					},
 				}
 			];
-			ui.modal.ContextMenu.addTo(jLi, false, actions);
+			ui.modal.ContextMenu.attachTo(jLi, false, actions);
 		}
 
 		updateLayerVisibilities();

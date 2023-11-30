@@ -826,13 +826,23 @@ class LayerInstance {
 
 
 	public function isRuleGroupAppliedHere(rg:AutoLayerRuleGroup) {
-		if( rg.active && rg.biomeEnumValue!=null ) {
+		if( rg.active && rg.requiredBiomeValues.length>0 ) {
 			var fi = level.getFieldInstanceByUid(def.biomeFieldUid, false);
 			if( fi!=null ) {
-				for(idx in 0...fi.getArrayLength())
-					if( fi.getEnumValue(idx)==rg.biomeEnumValue )
-						return true;
-				return false;
+				var matches = 0;
+				for( bid in rg.requiredBiomeValues ) {
+					for( arrayIdx in 0...fi.getArrayLength() )
+						if( fi.getEnumValue(arrayIdx)==bid ) {
+							matches++;
+							break;
+						}
+				}
+				// for(idx in 0...fi.getArrayLength()) {
+				// 	for( bid in rg.requiredBiomeValues )
+				// 		if( fi.getEnumValue(idx)==bid )
+				// 			return true;
+				// }
+				return matches>=rg.requiredBiomeValues.length;
 			}
 		}
 

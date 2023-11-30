@@ -224,7 +224,7 @@ class LayerDef {
 			isOptional: rg.isOptional,
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
 			usesWizard: rg.usesWizard,
-			biomeEnumValue: rg.biomeEnumValue,
+			requiredBiomeValues: rg.requiredBiomeValues.copy(),
 		}
 	}
 
@@ -242,7 +242,7 @@ class LayerDef {
 		});
 		rg.collapsed = true;
 		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
-		rg.biomeEnumValue = ruleGroupJson.biomeEnumValue;
+		rg.requiredBiomeValues = ruleGroupJson.requiredBiomeValues!=null ? ruleGroupJson.requiredBiomeValues.copy() : [];
 		return rg;
 	}
 
@@ -577,7 +577,7 @@ class LayerDef {
 			collapsed: false,
 			isOptional: false,
 			usesWizard: false,
-			biomeEnumValue: null,
+			requiredBiomeValues: [],
 			rules: [],
 		}
 		if( index!=null )
@@ -658,17 +658,23 @@ class LayerDef {
 						cbEachRule(r);
 	}
 
-	public function getRuleGroupBiomeEnumValue(rg:AutoLayerRuleGroup) : Null<EnumDefValue> {
-		if( biomeFieldUid==null || rg.biomeEnumValue==null )
-			return null;
+	public function getRuleGroupBiomeEnumValues(rg:AutoLayerRuleGroup) : Array<EnumDefValue> {
+		if( biomeFieldUid==null || rg.requiredBiomeValues.length==0 )
+			return [];
 
 		var ed = getBiomeEnumDef();
-		return ed!=null ? ed.getValue(rg.biomeEnumValue) : null;
+		if( ed==null )
+			return [];
+
+		var all = [];
+		for(v in rg.requiredBiomeValues)
+			all.push( ed.getValue(v) );
+		return all;
 	}
 
-	public function getRuleGroupBiomeHtmlImg(rg:AutoLayerRuleGroup, sizePx=32) : Null<js.jquery.JQuery> {
-		var ev = getRuleGroupBiomeEnumValue(rg);
-		return ev!=null ? _project.resolveTileRectAsHtmlImg(ev.tileRect,sizePx) : null;
+	public function getRuleGroupBiomeHtmlImgs(rg:AutoLayerRuleGroup, sizePx=32) : Array<js.jquery.JQuery> {
+		var evs = getRuleGroupBiomeEnumValues(rg);
+		return evs.map( ev->_project.resolveTileRectAsHtmlImg(ev.tileRect,sizePx) );
 	}
 
 	public function getBiomeEnumDef() : EnumDef {
@@ -701,11 +707,16 @@ class LayerDef {
 		// Invalid biome values in rule groups
 		if( biomeFieldUid!=null ) {
 			var ed = getBiomeEnumDef();
-			for( rg in autoRuleGroups)
-				if( ed.getValue(rg.biomeEnumValue)==null ) {
-					App.LOG.add("tidy", 'Removed lost biome value ${rg.biomeEnumValue} in $this');
-					rg.biomeEnumValue = null;
-				}
+			for( rg in autoRuleGroups) {
+				var i = 0;
+				while( i<rg.requiredBiomeValues.length )
+					if( ed.getValue(rg.requiredBiomeValues[i])==null ) {
+						App.LOG.add("tidy", 'Removed lost biome value ${rg.requiredBiomeValues[i]} in $this');
+						rg.requiredBiomeValues.splice(i,1);
+					}
+					else
+						i++;
+			}
 		}
 	}
 }

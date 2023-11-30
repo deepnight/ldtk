@@ -176,7 +176,7 @@ class SelectPicker extends ui.modal.Dialog {
 						settings.setUiStateInt(uiStateId, gridColumns, project);
 				}
 				var ctx = new ContextMenu(jGrid);
-				ctx.enableNoWrap();
+				ctx.disableTextWrapping();
 				ctx.add({
 					label: L.untranslated('<span class="icon listView"></span> List view'),
 					cb: _setGridAndSave.bind(1),

@@ -566,7 +566,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jEntityList, false, [
+		ContextMenu.attachTo(jEntityList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -634,7 +634,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
 				// Menu
-				ContextMenu.addTo(jEnt, [
+				ContextMenu.attachTo(jEnt, [
 					{
 						label: L._Copy(),
 						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),

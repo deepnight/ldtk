@@ -179,7 +179,7 @@ class EditEnumDefs extends ui.modal.Panel {
 		jEnumList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jEnumList, false, [
+		ContextMenu.attachTo(jEnumList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -229,7 +229,7 @@ class EditEnumDefs extends ui.modal.Panel {
 					selectEnum(ed);
 				});
 
-				ContextMenu.addTo(jLi, [
+				ContextMenu.attachTo(jLi, [
 					{
 						label: L._Copy(),
 						cb: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
@@ -354,7 +354,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				});
 
 
-				ContextMenu.addTo(jLi, [
+				ContextMenu.attachTo(jLi, [
 					{
 						label: L.t._("Remove extern source"),
 						cb: deleteEnumDef.bind(ed,true),
