@@ -97,6 +97,16 @@ class LevelInstanceForm {
 				if( isUsingLevel(l) )
 					updateFieldsForm();
 
+				// Biome field changed
+				var anyAutoLayerInvalidated = false;
+				for( ld in project.defs.layers )
+					if( ld.biomeFieldUid==fi.defUid ) {
+						l.getLayerInstance(ld).autoTilesCache = null;
+						anyAutoLayerInvalidated = true;
+					}
+				if( anyAutoLayerInvalidated )
+					editor.ge.emit(AutoLayerRenderingChanged);
+
 			case _:
 		}
 	}
