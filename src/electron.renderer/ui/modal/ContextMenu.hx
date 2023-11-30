@@ -128,60 +128,65 @@ class ContextMenu extends ui.Modal {
 		if( a.show!=null && !a.show() )
 			return new js.jquery.JQuery();
 
-		var jButton = new J('<button class="transparent"/>');
-		jButton.appendTo(jContent);
+		var isButton = a.cb!=null || a.subMenu!=null;
+
+		var jElement = isButton
+			? new J('<button class="transparent"/>')
+			: new J('<div class="title"/>');
+		jElement.appendTo(jContent);
 
 		if( a.jHtmlImg!=null ) {
-			jButton.prepend(a.label);
-			jButton.prepend(a.jHtmlImg);
+			jElement.prepend(a.label);
+			jElement.prepend(a.jHtmlImg);
 		}
 		else if( a.icon!=null )
-			jButton.prepend('<span class="icon ${a.icon}"></span> ${a.label}');
+			jElement.prepend('<span class="icon ${a.icon}"></span> ${a.label}');
 		else
-			jButton.html(a.label);
+			jElement.html(a.label);
 
 		if( a.subText!=null && a.subText!=a.label )
-			jButton.append('<span class="sub">${a.subText}</span>');
+			jElement.append('<span class="sub">${a.subText}</span>');
 
 		if( a.enable!=null && !a.enable() )
-			jButton.prop("disabled", true);
+			jElement.prop("disabled", true);
 
 		if( a.className!=null )
-			jButton.addClass(a.className);
+			jElement.addClass(a.className);
 
 		if( a.separatorBefore )
-			jButton.addClass("separatorBefore");
+			jElement.addClass("separatorBefore");
 
 		if( a.separatorAfter )
-			jButton.addClass("separatorAfter");
+			jElement.addClass("separatorAfter");
 
 		if( a.selectionTick!=null ) {
 			if( a.selectionTick ) {
-				jButton.addClass("selected");
-				jButton.prepend('<span class="icon selectionTick checkboxOn"></span>');
+				jElement.addClass("selected");
+				jElement.prepend('<span class="icon selectionTick checkboxOn"></span>');
 			}
 			else
-				jButton.prepend('<span class="icon selectionTick checkboxOff"></span>');
+				jElement.prepend('<span class="icon selectionTick checkboxOff"></span>');
 		}
 
 		// Button action
-		jButton.click( (_)->{
-			if( a.subMenu==null )
-				closeAll();
-			else {
-				addClass("subMenuOpen");
-				var c = new ContextMenu(jButton, true);
-				c.onCloseCb = ()->removeClass("subMenuOpen");
+		if( isButton )
+			jElement.click( (_)->{
+				if( a.subMenu==null )
+					closeAll();
+				else {
+					addClass("subMenuOpen");
+					var c = new ContextMenu(jElement, true);
+					c.onCloseCb = ()->removeClass("subMenuOpen");
 
-				for(subAction in a.subMenu())
-					c.add(subAction);
-			}
+					for(subAction in a.subMenu())
+						c.add(subAction);
+				}
 
-			if( a.cb!=null )
-				a.cb();
-		});
+				if( a.cb!=null )
+					a.cb();
+			});
 
 		applyAnchor();
-		return jButton;
+		return jElement;
 	}
 }

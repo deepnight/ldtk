@@ -829,20 +829,28 @@ class LayerInstance {
 		if( rg.active && rg.requiredBiomeValues.length>0 ) {
 			var fi = level.getFieldInstanceByUid(def.biomeFieldUid, false);
 			if( fi!=null ) {
-				var matches = 0;
-				for( bid in rg.requiredBiomeValues ) {
-					for( arrayIdx in 0...fi.getArrayLength() )
-						if( fi.getEnumValue(arrayIdx)==bid ) {
-							matches++;
-							break;
+				switch rg.biomeRequirementMode {
+					case 0: // OR
+						for(idx in 0...fi.getArrayLength())
+							for( bid in rg.requiredBiomeValues )
+								if( fi.getEnumValue(idx)==bid )
+									return true;
+						return false;
+
+					case 1: // AND
+						var matches = 0;
+						for( bid in rg.requiredBiomeValues ) {
+							for( arrayIdx in 0...fi.getArrayLength() )
+								if( fi.getEnumValue(arrayIdx)==bid ) {
+									matches++;
+									break;
+								}
 						}
+						return matches>=rg.requiredBiomeValues.length;
+
+					case _:
+						return false;
 				}
-				// for(idx in 0...fi.getArrayLength()) {
-				// 	for( bid in rg.requiredBiomeValues )
-				// 		if( fi.getEnumValue(idx)==bid )
-				// 			return true;
-				// }
-				return matches>=rg.requiredBiomeValues.length;
 			}
 		}
 

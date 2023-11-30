@@ -225,6 +225,7 @@ class LayerDef {
 			rules: rg.rules.map( function(r) return r.toJson(this) ),
 			usesWizard: rg.usesWizard,
 			requiredBiomeValues: rg.requiredBiomeValues.copy(),
+			biomeRequirementMode: rg.biomeRequirementMode,
 		}
 	}
 
@@ -243,6 +244,7 @@ class LayerDef {
 		rg.collapsed = true;
 		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
 		rg.requiredBiomeValues = ruleGroupJson.requiredBiomeValues!=null ? ruleGroupJson.requiredBiomeValues.copy() : [];
+		rg.biomeRequirementMode = JsonTools.readInt( ruleGroupJson.biomeRequirementMode, 0 );
 		return rg;
 	}
 
@@ -578,6 +580,7 @@ class LayerDef {
 			isOptional: false,
 			usesWizard: false,
 			requiredBiomeValues: [],
+			biomeRequirementMode: 0,
 			rules: [],
 		}
 		if( index!=null )
@@ -716,6 +719,10 @@ class LayerDef {
 					}
 					else
 						i++;
+
+				// Reset AND/OR mode
+				if( rg.requiredBiomeValues.length<=1 )
+					rg.biomeRequirementMode = 0;
 			}
 		}
 

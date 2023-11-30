@@ -528,18 +528,21 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		else if( enumDef.values.length==0 )
 			actions.push({
 				label: L.untranslated("Enum "+enumDef.identifier+" has no value"),
-				enable: ()->false
 			});
 
-		// Biome enum values
 		if( enumDef!=null ) {
+			function _onAnyBiomeChange() {
+				invalidateRuleGroup(rg);
+				editor.ge.emit( LayerRuleGroupChanged(rg) );
+				openBiomePicker(rg);
+			}
+
+			// Biome enum values
 			actions.push({
 				label: L.untranslated("Any biome"),
 				cb: ()->{
 					rg.requiredBiomeValues = [];
-					invalidateRuleGroup(rg);
-					editor.ge.emit( LayerRuleGroupChanged(rg) );
-					openBiomePicker(rg);
+					_onAnyBiomeChange();
 				},
 				selectionTick: rg.requiredBiomeValues.length==0 ? true : false,
 			});
@@ -551,15 +554,43 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 							rg.requiredBiomeValues.remove(ev.id);
 						else
 							rg.requiredBiomeValues.push(ev.id);
-						invalidateRuleGroup(rg);
-						editor.ge.emit( LayerRuleGroupChanged(rg) );
-						openBiomePicker(rg);
+						_onAnyBiomeChange();
 					},
 					selectionTick: rg.requiredBiomeValues.contains(ev.id) ? true : false,
 					jHtmlImg: ev.tileRect!=null ? project.resolveTileRectAsHtmlImg(ev.tileRect) : null,
 				});
 			}
+
+
+			// AND/OR modes
+			if( rg.requiredBiomeValues.length>1 ) {
+				actions.push({
+					separatorBefore: true,
+					label: L.t._("Condition type"),
+				});
+
+				actions.push({
+					label: L.t._("OR"),
+					subText: L.t._("At least one the checked values is required."),
+					cb: ()->{
+						rg.biomeRequirementMode = 0;
+						_onAnyBiomeChange();
+					},
+					selectionTick: rg.biomeRequirementMode==0,
+				});
+
+				actions.push({
+					label: L.t._("AND"),
+					subText: L.t._("All checked values are required."),
+					cb: ()->{
+						rg.biomeRequirementMode = 1;
+						_onAnyBiomeChange();
+					},
+					selectionTick: rg.biomeRequirementMode==1,
+				});
+			}
 		}
+
 
 		// Create menu
 		var jTarget = jContent.find("ul.ruleGroups").children('[groupUid=${rg.uid}]').find(".biome");
