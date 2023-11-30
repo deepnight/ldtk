@@ -44,6 +44,7 @@ class LayerDef {
 	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
 	public var autoSourceLd(get,never) : Null<LayerDef>;
 		inline function get_autoSourceLd() return type==AutoLayer && autoSourceLayerDefUid!=null ? _project.defs.getLayerDef(autoSourceLayerDefUid) : null;
+	public var autoTilesKilledByOtherLayerUid: Null<Int>;
 
 	// Tiles
 	public var tilePivotX(default,set) : Float = 0;
@@ -111,6 +112,7 @@ class LayerDef {
 		o.parallaxFactorY = JsonTools.readFloat(json.parallaxFactorY, 0);
 		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
 		o.biomeFieldUid = JsonTools.readNullableInt(json.biomeFieldUid);
+		o.autoTilesKilledByOtherLayerUid = JsonTools.readNullableInt(json.autoTilesKilledByOtherLayerUid);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
@@ -188,6 +190,7 @@ class LayerDef {
 			parallaxScaling: parallaxScaling,
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
+			autoTilesKilledByOtherLayerUid: autoTilesKilledByOtherLayerUid,
 
 			intGridValues: intGridValues.map( function(iv) return {
 				value: iv.value,

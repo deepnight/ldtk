@@ -640,12 +640,25 @@ class LayerInstance {
 			removeSpecificGridTile(cx, cy, tileId, flips);
 			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips });
 		}
+
+		checkAutoLayersKill(cx,cy);
+	}
+
+	function checkAutoLayersKill(cx:Int,cy:Int) {
+		// for(ld in _project.defs.layers)
+		// 	if( ld.autoTilesKilledByOtherLayerUid==layerDefUid ) {
+		// 		N.debug("invalidate at "+cx+","+cy);
+		// 		var li = level.getLayerInstance(ld.uid);
+		// 		li.autoTilesCache = null;
+		// 	}
 	}
 
 
 	public inline function removeAllGridTiles(cx:Int, cy:Int) {
-		if( isValid(cx,cy) )
+		if( isValid(cx,cy) ) {
 			gridTiles.remove( coordId(cx,cy) );
+			checkAutoLayersKill(cx,cy);
+		}
 	}
 
 
@@ -655,6 +668,7 @@ class LayerInstance {
 			for( i in 0...stack.length )
 				if( stack[i].tileId==tileId && stack[i].flips==flips ) {
 					stack.splice(i,1);
+					checkAutoLayersKill(cx,cy);
 					break;
 				}
 		}
@@ -663,14 +677,18 @@ class LayerInstance {
 	public inline function removeTopMostGridTile(cx:Int, cy:Int) {
 		if( hasAnyGridTile(cx,cy) ) {
 			gridTiles.get( coordId(cx,cy) ).pop();
-			if( gridTiles.get( coordId(cx,cy) ).length==0 )
+			if( gridTiles.get( coordId(cx,cy) ).length==0 ) {
 				gridTiles.remove( coordId(cx,cy) );
+				checkAutoLayersKill(cx,cy);
+			}
 		}
 	}
 
 	public inline function removeGridTileAtStackIndex(cx:Int, cy:Int, stackIdx:Int) {
-		if( hasAnyGridTile(cx,cy) && getGridTileStack(cx,cy).length>stackIdx )
+		if( hasAnyGridTile(cx,cy) && getGridTileStack(cx,cy).length>stackIdx ) {
 			gridTiles.get( coordId(cx,cy) ).splice( stackIdx, 1 );
+			checkAutoLayersKill(cx,cy);
+		}
 	}
 
 	public function getHighestGridTileStack(left:Int, top:Int, right:Int, bottom:Int) {
@@ -751,27 +769,36 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
+	function isAutoTileCellAllowed(cx:Int, cy:Int) {
+		if( def.autoTilesKilledByOtherLayerUid==null )
+			return true;
+		else
+			return !level.getLayerInstance(def.autoTilesKilledByOtherLayerUid).hasAnyGridTile(cx,cy);
+	}
+
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
-		var tileRectIds = r.getRandomTileRectIdsForCoord(seed, cx,cy, flips);
-		var td = getTilesetDef();
-		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileRectIds, flips);
+		if( isAutoTileCellAllowed(cx,cy) ) {
+			var tileRectIds = r.getRandomTileRectIdsForCoord(seed, cx,cy, flips);
+			var td = getTilesetDef();
+			var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileRectIds, flips);
 
-		if( !autoTilesCache.get(r.uid).exists( coordId(cx,cy) ) )
-			autoTilesCache.get(r.uid).set( coordId(cx,cy), [] );
+			if( !autoTilesCache.get(r.uid).exists( coordId(cx,cy) ) )
+				autoTilesCache.get(r.uid).set( coordId(cx,cy), [] );
 
-		autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
-			tileRectIds.map( (tid)->{
-				return {
-					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getXOffsetForCoord(seed,cx,cy, flips),
-					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getYOffsetForCoord(seed,cx,cy, flips),
-					srcX: td.getTileSourceX(tid),
-					srcY: td.getTileSourceY(tid),
-					tid: tid,
-					flips: flips,
-					a: r.alpha,
-				}
-			} )
-		));
+			autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
+				tileRectIds.map( (tid)->{
+					return {
+						x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getXOffsetForCoord(seed,cx,cy, flips),
+						y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getYOffsetForCoord(seed,cx,cy, flips),
+						srcX: td.getTileSourceX(tid),
+						srcY: td.getTileSourceY(tid),
+						tid: tid,
+						flips: flips,
+						a: r.alpha,
+					}
+				} )
+			));
+		}
 	}
 
 	function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {

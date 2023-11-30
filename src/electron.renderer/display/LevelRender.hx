@@ -663,6 +663,12 @@ class LevelRender extends dn.Process {
 			for(other in editor.curLevel.layerInstances)
 				if( other.def.type==AutoLayer && other.def.autoSourceLayerDefUid==li.layerDefUid )
 					invalidateLayerArea(other, left, right, top, bottom);
+
+		// Invalidate potentially killed auto-layers
+		if( li.def.type==Tiles )
+			for(other in editor.curLevel.layerInstances)
+				if( other.def.type==AutoLayer && other.def.autoTilesKilledByOtherLayerUid==li.layerDefUid )
+					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
 	public inline function invalidateUiAndBg() {

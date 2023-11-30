@@ -464,6 +464,36 @@ class EditLayerDefs extends ui.modal.Panel {
 					cur.tidy(project);
 				}
 			);
+
+			// Auto-kill tiles
+			var jSelect = jForm.find("select[name=autoKillLayer]");
+			jSelect.empty();
+
+			var opt = new J("<option/>");
+			opt.appendTo(jSelect);
+			opt.attr("value", -1);
+			opt.text("-- Select a Tile layer --");
+
+			var otherLayers = project.defs.layers.filter( function(ld) return ld.type==Tiles );
+			for( ld in otherLayers ) {
+				var opt = new J("<option/>");
+				opt.appendTo(jSelect);
+				opt.attr("value", ld.uid);
+				opt.text(ld.identifier);
+			}
+
+			jSelect.val( cur.autoTilesKilledByOtherLayerUid==null ? -1 : cur.autoTilesKilledByOtherLayerUid );
+
+			jSelect.change( function(ev) {
+				var v = Std.parseInt( jSelect.val() );
+				if( v<0 )
+					cur.autoTilesKilledByOtherLayerUid = null;
+				else {
+					cur.autoTilesKilledByOtherLayerUid = v;
+					// TODO kill immediately
+				}
+				editor.ge.emit(LayerDefChanged(cur.uid));
+			});
 		}
 
 		switch cur.type {
