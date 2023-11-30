@@ -545,8 +545,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					invalidateRuleGroup(rg);
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
 				},
-				closeAfter: false,
 				selectionTick: rg.requiredBiomeValues.length==0 ? true : null,
+				keepOpen: true,
 			});
 			for(ev in enumDef.values) {
 				subMenu.push({
@@ -559,7 +559,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					},
 					selectionTick: rg.requiredBiomeValues.contains(ev.id) ? true : null,
 					jHtmlImg: ev.tileRect!=null ? project.resolveTileRectAsHtmlImg(ev.tileRect) : null,
-					closeAfter: false,
+					keepOpen: true,
 				});
 			}
 		}
@@ -639,21 +639,24 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		// Biome
 		var jBiome = jGroupHeader.find(".biome");
-		if( rg.requiredBiomeValues.length>0 ) {
-			var biomeImgs = ld.getRuleGroupBiomeHtmlImgs(rg,22);
-			if( biomeImgs.length>0 ) {
-				for( jImg in biomeImgs )
-					jImg.appendTo(jBiome);
+		if( ld.biomeFieldUid==null )
+			jBiome.hide();
+		else {
+			if( rg.requiredBiomeValues.length>0 ) {
+				var biomeImgs = ld.getRuleGroupBiomeHtmlImgs(rg,22);
+				if( biomeImgs.length>0 )
+					for( jImg in biomeImgs )
+						jImg.appendTo(jBiome);
 			}
+			else
+				jBiome.append('<span class="empty"/>');
+
 			jBiome.click( (ev)->{
-				var actions = createBiomePickerCtxActions(rg);
 				var ctx = new ContextMenu(ev);
 				for(a in createBiomePickerCtxActions(rg))
 					ctx.add(a);
 			});
 		}
-		else
-			jBiome.hide();
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");

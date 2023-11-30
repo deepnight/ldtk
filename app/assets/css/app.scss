@@ -8576,7 +8576,13 @@ body.sorting ul.collapsedSortTarget {
 					.biome {
 						display: flex;
 						align-items: center;
+						justify-content: center;
 						cursor: pointer;
+						min-width: 24px;
+
+						&:hover{
+							background-color: transparentize($color: white, $amount: 0.6);
+						}
 
 						img {
 							margin-left: -10px;
@@ -8584,8 +8590,13 @@ body.sorting ul.collapsedSortTarget {
 						img:first-of-type {
 							margin-left: 0;
 						}
-						&:hover{
-							background-color: transparentize($color: white, $amount: 0.6);
+
+						.empty {
+							width: 8px;
+							height: 8px;
+							border-radius: 8px;
+							border: 1px solid black;
+							opacity: 0.4;
 						}
 					}
 

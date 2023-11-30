@@ -442,7 +442,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				}
 			);
 
-			// Biome enum select
+			// Biome field select
 			var enumFieldUids = project.defs.levelFields.filter( f->f.isEnum() ).map( f->f.uid );
 			JsTools.createValuesSelect(
 				jForm.find("[name=biomeField]"),
@@ -460,10 +460,8 @@ class EditLayerDefs extends ui.modal.Panel {
 						new LastChance(Lang.t._("Changed auto-layer biome enum"), project);
 
 					cur.biomeFieldUid = uid;
-
-					// TODO cleanup rules with invalid biome values
-
 					editor.ge.emit( LayerDefChanged(cur.uid) );
+					cur.tidy(project);
 				}
 			);
 		}

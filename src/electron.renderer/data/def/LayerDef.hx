@@ -718,5 +718,12 @@ class LayerDef {
 						i++;
 			}
 		}
+
+		if( biomeFieldUid==null )
+			for(rg in autoRuleGroups)
+				if( rg.requiredBiomeValues.length>0 ) {
+					App.LOG.add("tidy", 'Removed biome value from group ${rg.name} in $this');
+					rg.requiredBiomeValues = [];
+				}
 	}
 }
