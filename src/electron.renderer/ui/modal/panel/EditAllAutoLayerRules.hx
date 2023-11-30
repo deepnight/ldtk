@@ -513,64 +513,68 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function createBiomePickerCtxActions(rg:AutoLayerRuleGroup) {
-		// Biome sub menu
-		var enumDef : data.def.EnumDef = null;
-		if( ld.biomeFieldUid!=null ) {
-			var fd = project.defs.getFieldDef(ld.biomeFieldUid);
-			if( fd!=null && fd.isEnum() && fd.getEnumDefinition().values.length>0 )
-				enumDef = fd.getEnumDefinition();
-		}
 
-		var subMenu : ui.modal.ContextMenu.ContextActions = [
-			{
+	function openBiomePicker(rg:AutoLayerRuleGroup) {
+		var enumDef = ld.getBiomeEnumDef();
+		var actions : ui.modal.ContextMenu.ContextActions = [];
+
+		// Error messages
+		if( enumDef==null )
+			actions.push({
 				label: L.untranslated("Missing biome enum"),
 				subText: L.untranslated("Click to select your level biome enum"),
 				cb: editor.executeAppCommand.bind(C_OpenLayerPanel),
-				show: ()->enumDef==null,
-			},
-			{
-				label: L.untranslated("Enum has no value"),
-				subText: L.untranslated("The selected biome Enum has no value."),
-				show: ()->enumDef!=null && enumDef.values.length==0,
+			});
+		else if( enumDef.values.length==0 )
+			actions.push({
+				label: L.untranslated("Enum "+enumDef.identifier+" has no value"),
 				enable: ()->false
-			},
-		];
+			});
+
 		// Biome enum values
 		if( enumDef!=null ) {
-			subMenu.push({
+			actions.push({
 				label: L.untranslated("Any biome"),
 				cb: ()->{
 					rg.requiredBiomeValues = [];
 					invalidateRuleGroup(rg);
 					editor.ge.emit( LayerRuleGroupChanged(rg) );
+					openBiomePicker(rg);
 				},
-				selectionTick: rg.requiredBiomeValues.length==0 ? true : null,
-				keepOpen: true,
+				selectionTick: rg.requiredBiomeValues.length==0 ? true : false,
 			});
 			for(ev in enumDef.values) {
-				subMenu.push({
+				actions.push({
 					label: L.untranslated(ev.id),
-					enable: ()->!rg.requiredBiomeValues.contains(ev.id),
 					cb: ()->{
-						rg.requiredBiomeValues.push(ev.id);
+						if( rg.requiredBiomeValues.contains(ev.id) )
+							rg.requiredBiomeValues.remove(ev.id);
+						else
+							rg.requiredBiomeValues.push(ev.id);
 						invalidateRuleGroup(rg);
 						editor.ge.emit( LayerRuleGroupChanged(rg) );
+						openBiomePicker(rg);
 					},
-					selectionTick: rg.requiredBiomeValues.contains(ev.id) ? true : null,
+					selectionTick: rg.requiredBiomeValues.contains(ev.id) ? true : false,
 					jHtmlImg: ev.tileRect!=null ? project.resolveTileRectAsHtmlImg(ev.tileRect) : null,
-					keepOpen: true,
 				});
 			}
 		}
-		return subMenu;
+
+		// Create menu
+		var jTarget = jContent.find("ul.ruleGroups").children('[groupUid=${rg.uid}]').find(".biome");
+		var ctx = new ContextMenu(jTarget);
+		for(a in actions)
+			ctx.add(a);
 	}
+
 
 
 	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 		jGroup.addClass(li.isRuleGroupEnabled(rg) ? "enabled" : "disabled");
 		jGroup.addClass(li.isRuleGroupAppliedHere(rg) ? "applied" : "notApplied");
+		jGroup.attr("groupUid", rg.uid);
 
 		if( rg.color!=null ) {
 			jGroup.find(".sortHandle, header").css("background-color", rg.color.toCssRgba(0.7));
@@ -652,9 +656,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				jBiome.append('<span class="empty"/>');
 
 			jBiome.click( (ev)->{
-				var ctx = new ContextMenu(ev);
-				for(a in createBiomePickerCtxActions(rg))
-					ctx.add(a);
+				openBiomePicker(rg);
+				// var ctx = new ContextMenu(ev);
+				// for(a in createBiomePickerCtxActions(rg))
+				// 	ctx.add(a);
 			});
 		}
 
@@ -738,8 +743,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._("Assign biome enum"),
-				cb: ()->{},
-				subMenu: ()->createBiomePickerCtxActions(rg),
+				cb: ()->openBiomePicker(rg),
+				// subMenu: ()->createBiomePickerCtxActions(rg),
 			},
 
 			{

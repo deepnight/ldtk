@@ -16,18 +16,11 @@ typedef ContextAction = {
 	var ?separatorAfter: Bool;
 	var ?subMenu: Void->ContextActions;
 	var ?selectionTick : Bool;
-	var ?keepOpen : Bool;
-}
-
-enum ContextMenuElement {
-	CM_Action(a:ContextAction);
-	CM_Title(str:LocaleString);
 }
 
 class ContextMenu extends ui.Modal {
 	public static var ALL : Array<ContextMenu> = [];
 	var jAttachTarget : js.jquery.JQuery; // could be empty
-	var elements : Array<ContextMenuElement> = [];
 
 	public function new(?m:Coords, ?jNear:js.jquery.JQuery, ?openEvent:js.jquery.Event, isSubMenu=false) {
 		super();
@@ -124,27 +117,19 @@ class ContextMenu extends ui.Modal {
 	}
 
 
-	function reAttach() {
-		jContent.empty();
-		var elems = elements.copy();
-		elements = [];
-		for(e in elems)
-			switch e {
-				case CM_Action(a): add(a);
-				case CM_Title(str): addTitle(str);
-			}
-	}
-
-
 	public function addTitle(str:LocaleString) {
-		elements.push( CM_Title(str) );
 		var jTitle = new J('<div class="title">$str</div>');
 		jTitle.appendTo(jContent);
 		applyAnchor();
 	}
 
-	function createButton(a:ContextAction) {
+
+	public function add(a:ContextAction) {
+		if( a.show!=null && !a.show() )
+			return new js.jquery.JQuery();
+
 		var jButton = new J('<button class="transparent"/>');
+		jButton.appendTo(jContent);
 
 		if( a.jHtmlImg!=null ) {
 			jButton.prepend(a.label);
@@ -173,25 +158,17 @@ class ContextMenu extends ui.Modal {
 		if( a.selectionTick!=null ) {
 			if( a.selectionTick ) {
 				jButton.addClass("selected");
-				jButton.append('<span class="icon selectionTick active"></span>');
+				jButton.prepend('<span class="icon selectionTick checkboxOn"></span>');
 			}
 			else
-				jButton.append('<span class="icon selectionTick inactive"></span>');
+				jButton.prepend('<span class="icon selectionTick checkboxOff"></span>');
 		}
 
 		// Button action
 		jButton.click( (_)->{
-			if( a.cb!=null )
-				a.cb();
-
-			if( a.subMenu==null ) {
-				if( a.keepOpen==true )
-					reAttach();
-				else
-					closeAll();
-			}
-
-			if( a.subMenu!=null ) {
+			if( a.subMenu==null )
+				closeAll();
+			else {
 				addClass("subMenuOpen");
 				var c = new ContextMenu(jButton, true);
 				c.onCloseCb = ()->removeClass("subMenuOpen");
@@ -199,20 +176,11 @@ class ContextMenu extends ui.Modal {
 				for(subAction in a.subMenu())
 					c.add(subAction);
 			}
+
+			if( a.cb!=null )
+				a.cb();
 		});
 
-		return jButton;
-	}
-
-
-	public function add(a:ContextAction) {
-		if( a.show!=null && !a.show() )
-			return new js.jquery.JQuery();
-
-		elements.push( CM_Action(a) );
-
-		var jButton = createButton(a);
-		jButton.appendTo(jContent);
 		applyAnchor();
 		return jButton;
 	}

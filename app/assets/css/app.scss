@@ -1224,6 +1224,8 @@ ul.log {
 .icon.autoLayer			{ background-image: url("../icons/autoLayer.png") }
 .icon.bug				{ background-image: url("../icons/bug.svg"); }
 .icon.checker			{ background-image: url("../icons/checker.svg"); }
+.icon.checkboxOn		{ background-image: url("../icons/checkboxOn.svg"); }
+.icon.checkboxOff		{ background-image: url("../icons/checkboxOff.svg"); }
 .icon.clear				{ background-image: url("../icons/clear.svg"); }
 .icon.close				{ background-image: url("../icons/close.png"); }
 .icon.color				{ background-image: url("../icons/color.svg"); }
@@ -3740,7 +3742,13 @@ textarea {
 				.icon.selectionTick {
 					width: 24px;
 					height: 24px;
-					margin-left: 3px;
+					margin-right: 4px;
+					&.checkboxOn {
+						filter: brightness(1) sepia(1) hue-rotate(0.15rad) saturate(10);
+					}
+					&.checkboxOff {
+						opacity: 0.35;
+					}
 				}
 				&.selected {
 					background-color: $bgMed;
