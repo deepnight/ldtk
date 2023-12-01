@@ -1160,44 +1160,31 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Rule context menu
-		ContextMenu.attachTo(jRule, [
-			{
-				label: L._Copy("Rule"),
-				cb: ()->{
-					App.ME.clipboard.copyData(CRule, r.toJson(ld));
-				},
-			},
-			{
-				label: L._Cut("Rule"),
-				cb: ()->{
+		ContextMenu.attachTo_new(jRule, (ctx:ContextMenu)->{
+			ctx.addElement( Ctx_CopyPaster({
+				elementName: "rule",
+				clipType: CRule,
+
+				copy: ()->App.ME.clipboard.copyData(CRule, r.toJson(ld)),
+				cut: ()->{
 					App.ME.clipboard.copyData(CRule, r.toJson(ld));
 					deleteRule(rg,r);
 				},
-			},
-			{
-				label: L._PasteAfter("rule"),
-				cb: ()->{
+				paste: ()->{
 					var copy = ld.pasteRule(project, rg, App.ME.clipboard, r);
 					lastRule = copy;
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
 				},
-				enable: ()->return App.ME.clipboard.is(CRule),
-			},
-			{
-				label: L.t._("Duplicate rule"),
-				cb: ()->{
+				duplicate: ()->{
 					var copy = ld.duplicateRule(project, rg, r);
 					lastRule = copy;
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
 				},
-			},
-			{
-				label: L._Delete(),
-				cb: deleteRule.bind(rg, r),
-			},
-		]);
+				delete: ()->deleteRule(rg, r),
+			}) );
+		});
 
 		if( rg.usesWizard )
 			jRule.off().find("*").off();
