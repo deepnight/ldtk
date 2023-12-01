@@ -688,9 +688,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			jBiome.click( (ev)->{
 				openBiomePicker(rg);
-				// var ctx = new ContextMenu(ev);
-				// for(a in createBiomePickerCtxActions(rg))
-				// 	ctx.add(a);
 			});
 		}
 
@@ -740,6 +737,20 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
 			});
+			ctx.addElement( Ctx_Action({
+				label: L.t._("Duplicate and remap"),
+				subText: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
+				cb: ()->{
+					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
+						editor.ge.emit( LayerRuleGroupAdded(copy) );
+						for(r in copy.rules)
+							invalidateRuleAndOnesBelow(r);
+					});
+				},
+			}));
+
+			ctx.addElement( Ctx_Separator );
+			
 			ctx.addActionElement({
 				label: L.t._("Assign group color"),
 				iconId: "color",
@@ -853,15 +864,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		// 		enable: ()->App.ME.clipboard.is(CRuleGroup),
 		// 	},
 		// 	{
-		// 		label: L.t._("Duplicate and remap"),
-		// 		subText: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
-		// 		cb: ()->{
-		// 			new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
-		// 				editor.ge.emit( LayerRuleGroupAdded(copy) );
-		// 				for(r in copy.rules)
-		// 					invalidateRuleAndOnesBelow(r);
-		// 			});
-		// 		},
 		// 	},
 		// 	{
 		// 		label: L._Delete(L.t._("Group")),
