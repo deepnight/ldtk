@@ -750,7 +750,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			}));
 
 			ctx.addElement( Ctx_Separator );
-			
+
 			ctx.addActionElement({
 				label: L.t._("Assign group color"),
 				iconId: "color",
@@ -1136,8 +1136,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Enable/disable rule
-		var jActive = jRule.find("a.active");
-		jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
+		var jActive = jRule.find("a.ruleToggler");
+		jActive.find(".icon").addClass( r.active ? "toggleOn" : "toggleOff" );
 		jActive.click( function(ev:js.jquery.Event) {
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);

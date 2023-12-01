@@ -8465,41 +8465,31 @@ body.sorting ul.collapsedSortTarget {
 				}
 
 				&.disabled {
-					.sortHandle {
-						opacity: 0.35;
-						background-color: $bgDark !important;
-					}
-					header {
-						opacity: 0.35;
-						.name:hover .text {
-							color: $almostWhite;
-						}
-					}
-					// &:not(.optional) header {
-					// 	background-color: $bgDark !important;
-					// 	// background-image: url("../img/stripes.png");
-					// 	.name {
-					// 		color: $bgLight;
-					// 	}
-					// }
-					header {
-						background-color: $bgDark !important;
-						.name {
-							color: $bgLight;
-						}
-					}
-					// &.optional header {
-					// 	background-color: #0f4973 !important;
-					// 	background-image: url("../img/stripes.png");
-					// }
-					ul.ruleGroup {
-						opacity: 0.66;
-					}
-					>.sortHandle {
-						background-color: $bgDark;
+					opacity: 0.35;
+					background-image: url("../img/stripes.png");
+					background-color: transparentize(#400, 0.3) !important;
 
+					>.sortHandle {
+						opacity: 0.35;
+						background-color: transparent !important;
 						&:hover {
 							background-color: $orange !important;
+						}
+					}
+
+					header,
+					ul.ruleGroup {
+						background: transparent !important;
+					}
+					header {
+						.name {
+							color: $red;
+							font-weight: normal;
+							font-style: italic;
+
+							&:hover .text {
+								color: $almostWhite;
+							}
 						}
 					}
 				}
@@ -8685,10 +8675,6 @@ body.sorting ul.collapsedSortTarget {
 					background-color: transparentize($color: white, $amount: 0.8) !important;
 				}
 
-				// &.optional header .name:hover {
-				// 	background-color: #219df9;
-				// }
-
 
 				ul.ruleGroup {
 					position: relative;
@@ -8732,7 +8718,7 @@ body.sorting ul.collapsedSortTarget {
 						display: grid;
 						box-sizing: border-box;
 						gap: 2px;
-						grid-template-columns: min-content 80px auto repeat(2, min-content);
+						grid-template-columns: min-content min-content 80px auto repeat(2, min-content);
 						align-items: center;
 						padding: 2px;
 
@@ -8751,10 +8737,33 @@ body.sorting ul.collapsedSortTarget {
 						}
 
 						&.inactive {
-							background-image: url("../img/stripes.png");
-							background-color: $darkRed;
+							background-image: url("../img/stripesLight.png");
+							background-color: transparentize($darkRed, 0.5);
+							opacity: 0.6;
 						}
 
+						.ruleToggler {
+							display: flex;
+							height: 100%;
+							align-items: center;
+							justify-content: center;
+
+							&:hover {
+								cursor: pointer;
+								background-color: $bgMed;
+							}
+
+							.icon {
+								width: 21px;
+								height: 21px;
+								&.toggleOn {
+									filter: brightness(0.6) sepia(1) hue-rotate(0.8rad) saturate(2);
+								}
+								&.toggleOff {
+									filter: brightness(0.3) sepia(1) hue-rotate(-0.8rad) saturate(3);
+								}
+							}
+						}
 						button.insert {
 							position: absolute;
 							z-index: 2;
@@ -8836,6 +8845,10 @@ body.sorting ul.collapsedSortTarget {
 								}
 							}
 
+							.randomOffset {
+								grid-column: span 2;
+							}
+
 							.modulo {
 								display: grid;
 								grid-column: span 2;
@@ -8899,10 +8912,6 @@ body.sorting ul.collapsedSortTarget {
 									color: #009dff;
 									border-color: #009dff;
 									text-shadow: 0px 0px 4px #009dff;
-								}
-
-								&.active.on {
-									border-color: $orange;
 								}
 							}
 						}
