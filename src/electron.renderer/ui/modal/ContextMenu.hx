@@ -307,16 +307,16 @@ class ContextMenu extends ui.Modal {
 
 			case Ctx_CopyPaster(settings):
 				jElement = new J('<div class="group"/>');
-				addElement( Ctx_Action({ iconId:"copy", cb:settings.copy, tip:"Copy "+settings.elementName }), jElement );
-				addElement( Ctx_Action({ iconId:"cut", cb:settings.cut, tip:"Cut "+settings.elementName }), jElement );
+				addElement( Ctx_Action({ iconId:"copy", cb:settings.copy, tip:L._Copy(settings.elementName) }), jElement );
+				addElement( Ctx_Action({ iconId:"cut", cb:settings.cut, tip:L._Cut(settings.elementName) }), jElement );
 				addElement( Ctx_Action({
 					iconId: "paste",
 					cb: settings.paste,
 					enable: ()->App.ME.clipboard.is(settings.clipType),
-					tip: "Paster "+settings.elementName+" after",
+					tip: L._PasteAfter(settings.elementName),
 				}), jElement );
-				addElement( Ctx_Action({ label:L.untranslated("x2"), className:"duplicate", cb:settings.duplicate, tip:"Duplicate "+settings.elementName }), jElement );
-				addElement( Ctx_Action({ iconId:"delete", cb:settings.delete, tip:"Delete "+settings.elementName }), jElement );
+				addElement( Ctx_Action({ label:L.untranslated("x2"), className:"duplicate", cb:settings.duplicate, tip:L._Duplicate(settings.elementName) }), jElement );
+				addElement( Ctx_Action({ iconId:"delete", cb:settings.delete, tip:L._Delete(settings.elementName) }), jElement );
 
 			case Ctx_Title(label):
 				jElement = new J('<div class="title"/>');
