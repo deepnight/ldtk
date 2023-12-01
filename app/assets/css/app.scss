@@ -8618,11 +8618,20 @@ body.sorting ul.collapsedSortTarget {
 							background-color: transparentize($color: white, $amount: 0.6);
 						}
 
-						img {
-							margin-left: -10px;
+						&.multiples img {
+							width: 16px !important;
+							height: auto !important;
+							max-height: 16px;
 						}
-						img:first-of-type {
-							margin-left: 0;
+						&:not(.multiples) img {
+							width: 24px !important;
+							height: auto !important;
+							max-height: 24px;
+						}
+
+						.op {
+							color: white;
+							text-shadow: 1px 1px 1px black, -1px -1px 1px black;
 						}
 
 						.empty {

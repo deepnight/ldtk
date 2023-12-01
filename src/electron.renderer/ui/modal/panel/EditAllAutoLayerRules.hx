@@ -678,10 +678,24 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jBiome.hide();
 		else {
 			if( rg.requiredBiomeValues.length>0 ) {
-				var biomeImgs = ld.getRuleGroupBiomeHtmlImgs(rg,22);
-				if( biomeImgs.length>0 )
-					for( jImg in biomeImgs )
-						jImg.appendTo(jBiome);
+				var biomeImgs = ld.getRuleGroupBiomeHtmlImgs(rg);
+				if( biomeImgs.length>0 ) {
+					var first = true;
+					for( jImg in biomeImgs ) {
+						if( !first ) {
+							var op = switch rg.biomeRequirementMode {
+								case 0: "/";
+								case 1: "+";
+								case _: "";
+							}
+							jBiome.append('<span>$op</span>');
+						}
+						jBiome.append(jImg);
+						first = false;
+					}
+					if( biomeImgs.length>1 )
+						jBiome.addClass("multiples");
+				}
 			}
 			else
 				jBiome.append('<span class="empty"/>');
