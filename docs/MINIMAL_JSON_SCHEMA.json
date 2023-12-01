@@ -703,8 +703,10 @@
 			"title": "Auto-layer rule group",
 			"required": [
 				"active",
+				"biomeRequirementMode",
 				"isOptional",
 				"name",
+				"requiredBiomeValues",
 				"rules",
 				"uid",
 				"usesWizard"
@@ -715,6 +717,12 @@
 					"description": "",
 					"type": [
 						"string"
+					]
+				},
+				"biomeRequirementMode": {
+					"description": "",
+					"type": [
+						"integer"
 					]
 				},
 				"color": {
@@ -753,6 +761,17 @@
 					"description": "",
 					"type": [
 						"integer"
+					]
+				},
+				"requiredBiomeValues": {
+					"description": "",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"active": {

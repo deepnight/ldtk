@@ -1587,8 +1587,10 @@
 			"title": "Auto-layer rule group",
 			"required": [
 				"active",
+				"biomeRequirementMode",
 				"isOptional",
 				"name",
+				"requiredBiomeValues",
 				"rules",
 				"uid",
 				"usesWizard"
@@ -1606,6 +1608,12 @@
 					"type": [
 						"boolean",
 						"null"
+					]
+				},
+				"biomeRequirementMode": {
+					"description": "",
+					"type": [
+						"integer"
 					]
 				},
 				"color": {
@@ -1644,6 +1652,17 @@
 					"description": "",
 					"type": [
 						"integer"
+					]
+				},
+				"requiredBiomeValues": {
+					"description": "",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"active": {
@@ -2647,6 +2666,13 @@
 						"number"
 					]
 				},
+				"biomeFieldUid": {
+					"description": "",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"gridSize": {
 					"description": "Width and height of the grid in pixels",
 					"type": [
@@ -2657,6 +2683,13 @@
 					"description": "Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
 					"type": [
 						"number"
+					]
+				},
+				"autoTilesKilledByOtherLayerUid": {
+					"description": "",
+					"type": [
+						"integer",
+						"null"
 					]
 				}
 			},
