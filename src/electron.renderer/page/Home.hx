@@ -215,17 +215,17 @@ class Home extends Page {
 				var act : ui.modal.ContextMenu.ContextActions = [
 					{
 						label: L.t._("Load from this folder"),
-						icon: "open",
+						iconId: "open",
 						cb: onLoad.bind( dn.FilePath.fromFile(filePath).directory ),
 					},
 					{
 						label: L.t._("Locate file"),
-						icon: "locate",
+						iconId: "locate",
 						cb: JsTools.locateFile.bind(filePath, true),
 					},
 					{
 						label: L.t._("Assign custom color"),
-						icon: "color",
+						iconId: "color",
 						cb: ()->{
 							var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), col);
 							cp.onValidate = (c)->{
@@ -237,7 +237,7 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Reset assigned color"),
-						icon: "color",
+						iconId: "color",
 						show: ()->App.ME.hasForcedDirColor(fp.directory),
 						cb: ()->{
 							App.ME.forceDirColor(fp.directory);
@@ -328,17 +328,17 @@ class Home extends Page {
 				var actions : ui.modal.ContextMenu.ContextActions = [
 					{
 						label: L.t._("New project in this folder"),
-						icon: "new",
+						iconId: "new",
 						cb: onNew.bind(fp.directory),
 					},
 					{
 						label: L.t._("Locate folder"),
-						icon: "locate",
+						iconId: "locate",
 						cb: JsTools.locateFile.bind(fp.directory, false),
 					},
 					{
 						label: L.t._("Assign custom color"),
-						icon: "color",
+						iconId: "color",
 						cb: ()->{
 							var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), col);
 							cp.onValidate = (c)->{
@@ -350,7 +350,7 @@ class Home extends Page {
 					},
 					{
 						label: L.t._("Reset assigned color"),
-						icon: "color",
+						iconId: "color",
 						show: ()->App.ME.hasForcedDirColor(fp.directory),
 						cb: ()->{
 							App.ME.forceDirColor(fp.directory);
@@ -401,7 +401,7 @@ class Home extends Page {
 		var ctx = new ui.modal.ContextMenu(ev);
 		ctx.addTitle( L.t._("Import a project from another app") );
 		ctx.setAnchor( MA_JQuery(new J(ev.target)) );
-		ctx.add({
+		ctx.addAction({
 			label: L.t._("Ogmo 3 project"),
 			cb: ()->onImportOgmo(),
 		});
@@ -558,7 +558,7 @@ class Home extends Page {
 							if( b.crash )
 								crashBackups.push(b.backup);
 
-							ctx.add({
+							ctx.addAction({
 								label: ui.ProjectSaver.isCrashFile(b.backup.full) ? Lang.t._("Crash recovery"): Lang.relativeDate(b.date),
 								className: b.crash ? "crash" : null,
 								subText: Lang.date(b.date),
@@ -569,7 +569,7 @@ class Home extends Page {
 						}
 
 						if( crashBackups.length>0 )
-							ctx.add({
+							ctx.addAction({
 								label: L.t._("Delete all crash recovery files"),
 								className: "warning",
 								cb: ()->{

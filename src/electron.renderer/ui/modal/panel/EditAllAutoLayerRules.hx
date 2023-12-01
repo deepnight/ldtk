@@ -320,9 +320,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		jContent.find("button.createGroup").click( function(ev:js.jquery.Event) {
 			var m = new ContextMenu( new J(ev.target) );
 
-			m.add({
+			m.addAction({
 				label: L.t._("Use assistant (recommended)"),
-				icon: "wizard",
+				iconId: "wizard",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -332,9 +332,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 			});
 
-			m.add({
+			m.addAction({
 				label: L.t._("Create an empty group"),
-				icon: "folder",
+				iconId: "folder",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -596,7 +596,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jTarget = jContent.find("ul.ruleGroups").children('[groupUid=${rg.uid}]').find(".biome");
 		var ctx = new ContextMenu(jTarget);
 		for(a in actions)
-			ctx.add(a);
+			ctx.addAction(a);
 	}
 
 
@@ -719,19 +719,19 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._("Assign group color"),
-				icon: "color",
+				iconId: "color",
 				cb: ()->onPickGroupColor(rg),
 			},
 
 			{
 				label: L.t._("Assign group icon"),
-				icon: "pickIcon",
+				iconId: "pickIcon",
 				cb: ()->onPickGroupIcon(rg),
 			},
 
 			{
 				label: L.t._("Remove group icon"),
-				icon: "deleteIcon",
+				iconId: "deleteIcon",
 				show: ()->rg.icon!=null,
 				cb: ()->{
 					rg.icon = null;
@@ -741,7 +741,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._('Edit "out-of-bounds" policy for all rules'),
-				icon: "outOfBounds",
+				iconId: "outOfBounds",
 				separatorBefore: true,
 				cb: ()->{
 					var m = new ui.modal.Dialog();
@@ -765,7 +765,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			{
 				label: L.t._("Edit rules using the Assistant"),
-				icon: "wizard",
+				iconId: "wizard",
 				cb: ()->{
 					doUseWizard(rg);
 				},
@@ -781,7 +781,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			{
 				label: L.t._("Turn into an OPTIONAL group"),
 				subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-				icon: "optional",
+				iconId: "optional",
 				cb: ()->{
 					invalidateRuleGroup(rg);
 					rg.isOptional = true;

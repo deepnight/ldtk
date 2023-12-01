@@ -62,7 +62,7 @@ class TagEditor {
 	function onRecallTag(ev:js.jquery.Event) {
 		var ctx = new ui.modal.ContextMenu(ev);
 		for(v in allValuesGetter())
-			ctx.add({
+			ctx.addAction({
 				label: L.untranslated(v),
 				cb: ()->{
 					tags.set(v);

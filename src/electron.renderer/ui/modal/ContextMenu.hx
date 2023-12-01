@@ -4,17 +4,17 @@ import dn.data.GetText.LocaleString;
 
 typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {
-	var label : LocaleString;
-	var ?icon : String; // TODO rename iconId
+	var ?label : LocaleString;
+	var ?iconId : String;
 	var ?jHtmlImg : js.jquery.JQuery;
 	var ?subText : Null<LocaleString>;
 	var ?className : String;
 	var ?cb : Void->Void;
 	var ?show : Void->Bool;
 	var ?enable : Void->Bool;
-	var ?separatorBefore: Bool;
-	var ?separatorAfter: Bool;
-	var ?subMenu: Void->ContextActions;
+	var ?separatorBefore : Bool;
+	var ?separatorAfter : Bool;
+	var ?subMenu : Void->ContextActions;
 	var ?selectionTick : Bool;
 }
 
@@ -80,7 +80,7 @@ class ContextMenu extends ui.Modal {
 		function _open(event:js.jquery.Event) {
 			var ctx = new ContextMenu(event);
 			for(a in actions)
-				ctx.add(a);
+				ctx.addAction(a);
 		}
 
 		// Menu button
@@ -124,7 +124,7 @@ class ContextMenu extends ui.Modal {
 	}
 
 
-	public function add(a:ContextAction) {
+	public function addAction(a:ContextAction) {
 		if( a.show!=null && !a.show() )
 			return new js.jquery.JQuery();
 
@@ -139,8 +139,8 @@ class ContextMenu extends ui.Modal {
 			jElement.prepend(a.label);
 			jElement.prepend(a.jHtmlImg);
 		}
-		else if( a.icon!=null )
-			jElement.prepend('<span class="icon ${a.icon}"></span> ${a.label}');
+		else if( a.iconId!=null )
+			jElement.prepend('<span class="icon ${a.iconId}"></span> ${a.label}');
 		else
 			jElement.html(a.label);
 
@@ -179,7 +179,7 @@ class ContextMenu extends ui.Modal {
 					c.onCloseCb = ()->removeClass("subMenuOpen");
 
 					for(subAction in a.subMenu())
-						c.add(subAction);
+						c.addAction(subAction);
 				}
 
 				if( a.cb!=null )

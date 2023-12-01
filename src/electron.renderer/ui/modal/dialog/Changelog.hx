@@ -108,7 +108,7 @@ class Changelog extends ui.modal.Dialog {
 			for( c in Const.getChangeLog().entries ) {
 				if( c.version.patch!=0 )
 					continue;
-				ctx.add({
+				ctx.addAction({
 					label: L.t.untranslated( '<strong>${c.version.major+"."+c.version.minor}</strong>' + ( c.title!=null ? " - "+c.title : "" ) ),
 					cb: ()->showVersion(c.version),
 				});

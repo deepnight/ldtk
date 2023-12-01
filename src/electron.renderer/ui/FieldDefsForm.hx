@@ -126,7 +126,7 @@ class FieldDefsForm {
 						if( tagGroups.length>1 )
 							ctx.addTitle( group.tag==null ? L._Untagged() : L.untranslated(group.tag) );
 						for(ed in group.all) {
-							ctx.add({
+							ctx.addAction({
 								label: L.untranslated(ed.identifier),
 								cb: ()->_create(ev, F_Enum(ed.uid)),
 							});
@@ -136,7 +136,7 @@ class FieldDefsForm {
 					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {
 						ctx.addTitle( L.untranslated( dn.FilePath.fromFile(ext.key).fileWithExt ) );
 						for(ed in ext.value)
-							ctx.add({
+							ctx.addAction({
 								label: L.untranslated(ed.identifier),
 								cb: ()->_create(ev, F_Enum(ed.uid)),
 							});

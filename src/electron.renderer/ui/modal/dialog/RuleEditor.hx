@@ -212,18 +212,18 @@ class RuleEditor extends ui.modal.Dialog {
 		var jMode = jContent.find(".displayMode");
 		jMode.off().click(_->{
 			var m = new ContextMenu(jMode);
-			m.add({
+			m.addAction({
 				label:L.t._("List"),
-				icon: "listView",
+				iconId: "listView",
 				cb: ()->{
 					settings.deleteUiState(stateId, project);
 					updateValuePalette();
 				}
 			});
 			for(n in [2,3,4,5]) {
-				m.add({
+				m.addAction({
 					label:L.t._("::n:: columns", {n:n}),
-					icon: "gridView",
+					iconId: "gridView",
 					cb: ()->{
 						settings.setUiStateInt(stateId, n, project);
 						updateValuePalette();

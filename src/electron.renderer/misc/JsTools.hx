@@ -715,7 +715,7 @@ class JsTools {
 
 					case 2:
 						var ctx = new ui.modal.ContextMenu(ev);
-						ctx.add({
+						ctx.addAction({
 							label: L.t._("Copy URL"),
 							cb: ()->{
 								App.ME.clipboard.copyStr(url);
@@ -1375,7 +1375,7 @@ class JsTools {
 				var ctx = new ui.modal.ContextMenu();
 				ctx.setAnchor( MA_JQuery(jRecall) );
 				for( img in allImages )
-					ctx.add({
+					ctx.addAction({
 						label: L.untranslated(img.fileName),
 						cb: ()->_pick(img.relPath)
 					});

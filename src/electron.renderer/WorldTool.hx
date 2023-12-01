@@ -49,7 +49,7 @@ class WorldTool extends dn.Process {
 		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {
 			var ctx = new ui.modal.ContextMenu(m);
 			// Create new level
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("New level"),
 				cb: ()->{
 					if( !ui.vp.LevelSpotPicker.tryToCreateLevelAt(project, curWorld, m) ) {
@@ -65,7 +65,7 @@ class WorldTool extends dn.Process {
 			if( l!=null ) {
 				editor.selectLevel(l);
 				// Duplicate
-				ctx.add({
+				ctx.addAction({
 					label: L.t._("Duplicate"),
 					cb: ()->{
 						var copy = curWorld.duplicateLevel(l);
@@ -83,7 +83,7 @@ class WorldTool extends dn.Process {
 				});
 
 				// Delete
-				ctx.add({
+				ctx.addAction({
 					label: L._Delete(),
 					cb: ()->{
 						if( curWorld.levels.length==1 ) {
@@ -108,7 +108,7 @@ class WorldTool extends dn.Process {
 					// Change active world
 					ctx.addTitle(L.t._("Go to world:"));
 					for( w in project.worlds ) {
-						ctx.add({
+						ctx.addAction({
 							label: L.untranslated(w.identifier),
 							subText: L.untranslated(w.levels.length+" level(s)"),
 							enable: ()->w.iid!=editor.curWorldIid,
@@ -123,7 +123,7 @@ class WorldTool extends dn.Process {
 					// Move level to another world
 					ctx.addTitle(L.t._("Move this level to:"));
 					for( w in project.worlds ) {
-						ctx.add({
+						ctx.addAction({
 							label: L.untranslated("➔ "+w.identifier),
 							subText: L.untranslated(w.levels.length+" level(s)"),
 							enable: ()->!l.isInWorld(w),

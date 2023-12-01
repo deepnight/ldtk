@@ -34,7 +34,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Presets
 		jEntityList.parent().find("button.presets").click( (ev)->{
 			var ctx = new ContextMenu(ev);
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("Rectangle region"),
 				cb: ()->{
 					var ed = _createEntity();
@@ -48,7 +48,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					editor.ge.emit( EntityDefChanged );
 				}
 			});
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("Circle region"),
 				cb: ()->{
 					var ed = _createEntity();

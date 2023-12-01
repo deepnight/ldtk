@@ -325,7 +325,7 @@ class NamePatternEditor {
 		if( ctxAct.length>0 ) {
 			var ctx = new ui.modal.ContextMenu(jNear);
 			for(a in ctxAct)
-				ctx.add(a);
+				ctx.addAction(a);
 		}
 	}
 

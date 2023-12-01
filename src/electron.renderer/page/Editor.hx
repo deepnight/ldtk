@@ -753,7 +753,7 @@ class Editor extends Page {
 							var menu = new ui.modal.ContextMenu(getMouse());
 							menu.addTitle(L.t._("Custom project commands"));
 							for( cmd in manualCmds )
-								menu.add({
+								menu.addAction({
 									label: L.untranslated(cmd.command),
 									cb: ()->{
 										ui.modal.dialog.CommandRunner.runSingleCommand(project, cmd);
@@ -2566,18 +2566,18 @@ class Editor extends Page {
 			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
 				{
 					label: L.t._("Toggle visibility"),
-					icon: "visible",
+					iconId: "visible",
 					cb: ()->jVis.mousedown(),
 				},
 				{
 					label: L.t._("Edit rules"),
-					icon: "rule",
+					iconId: "rule",
 					cb: ()->jRules.click(),
 					show: ()->li.def.isAutoLayer(),
 				},
 				{
 					label: L.t._("Edit layer settings"),
-					icon: "edit",
+					iconId: "edit",
 					cb: ()->{
 						selectLayerInstance(li);
 						executeAppCommand(C_OpenLayerPanel);

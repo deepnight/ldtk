@@ -21,7 +21,7 @@ class EditEnumDefs extends ui.modal.Panel {
 		// Import
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("Text file"),
 				subText: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
 				cb: ()->{
@@ -41,7 +41,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				},
 			});
 
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("JSON"),
 				subText: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
 				cb: ()->{
@@ -61,7 +61,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				},
 			});
 
-			ctx.add({
+			ctx.addAction({
 				label:L.t._("Haxe source code"),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumHaxe", project.getProjectDir());
@@ -78,7 +78,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				}
 			});
 
-			ctx.add({
+			ctx.addAction({
 				label:L.t._("CastleDB"),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumCdb", project.getProjectDir());
