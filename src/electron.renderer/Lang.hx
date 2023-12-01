@@ -8,7 +8,7 @@ class Lang {
 	public static var _Cut = (?v:String) -> v==null ? t._("Cut") : t._("Cut ::e::", {e:v});
 	public static var _Paste = (?v:String) -> v==null ? t._("Paste") : t._("Paste ::e::", {e:v});
 	public static var _PasteAfter = (?v:String) -> v==null ? t._("Paste after") : t._("Paste ::e:: after", {e:v});
-	public static var _Delete = (?v:LocaleString) -> v==null ? t._("Delete") : t._("Delete ::e::", {e:v});
+	public static var _Delete = (?v:String) -> v==null ? t._("Delete") : t._("Delete ::e::", {e:v});
 	public static var _UnsupportedWinNetDir = ()->L.t._("Sorry but LDtk does not support working on a Network Drive yet.\nSo, for your own safety, operations on Network Drives are not permitted for now to avoid errors and potential data loss.");
 
 
