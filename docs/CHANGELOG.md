@@ -8,6 +8,17 @@ The application has a new logo! Hope you will like it :)
 
 Please note that the Windows Explorer could take some time before updating the app related icons (in Start Menu, project icons etc.). You may need to either restart the Explorer, or the computer itself, to force the visual update.
 
+## Biomes
+
+![](1.5.0/biomes.png)
+
+This update brings various features that should make rule-based biomes creation easier!
+
+ 1. Create an Enum with your various biomes (eg. Forest, Desert, Snow etc)
+ 2. Add a custom Level Field that uses this enum.
+ 3. Open the Layers panel, and point your new level field under "Biome Enum".
+ 4. For each group of rules, you may now pick which Enum value should enable this group. For example, you may enable your group that paints snow over your platforms only if the Snow biome is picked for this level.
+
 
 ## Random rectangles of tiles for auto-layer rules
 ![](1.5.0/randomTileRects.png)
