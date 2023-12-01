@@ -917,44 +917,30 @@ class EditLayerDefs extends ui.modal.Panel {
 			if( cur==ld )
 				jLi.addClass("active");
 
-			ContextMenu.attachTo(jLi, [
-				{
-					label: L._Copy(),
-					cb: ()->{
-						App.ME.clipboard.copyData(CLayerDef, ld.toJson());
-					},
-				},
-				{
-					label: L._Cut(),
-					cb: ()->{
+			ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
+				ctx.addElement( Ctx_CopyPaster({
+					elementName: "layer",
+					clipType: CLayerDef,
+					copy: ()->App.ME.clipboard.copyData(CLayerDef, ld.toJson()),
+					cut: ()->{
 						App.ME.clipboard.copyData(CLayerDef, ld.toJson());
 						deleteLayer(ld);
 					},
-				},
-				{
-					label: L._PasteAfter(),
-					cb: ()->{
+					paste: ()->{
 						var copy = project.defs.pasteLayerDef(App.ME.clipboard, ld);
 						if( copy!=null ) {
 							editor.ge.emit(LayerDefAdded);
 							select(copy);
 						}
 					},
-					enable: ()->App.ME.clipboard.is(CLayerDef),
-				},
-				{
-					label: L._Duplicate(),
-					cb: ()->{
+					duplicate: ()->{
 						var copy = project.defs.duplicateLayerDef(ld);
 						editor.ge.emit(LayerDefAdded);
 						select(copy);
 					},
-				},
-				{
-					label: L._Delete(),
-					cb: ()->deleteLayer(ld),
-				}
-			]);
+					delete: ()->deleteLayer(ld),
+				}) );
+			});
 
 			jLi.click( _->select(ld) );
 		}

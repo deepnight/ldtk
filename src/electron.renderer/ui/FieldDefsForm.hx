@@ -271,38 +271,30 @@ class FieldDefsForm {
 				color: FieldDef.getTypeColorHex(fd.type, 1.5),
 			});
 
-			ui.modal.ContextMenu.attachTo(li, [
-				{
-					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
-				},
-				{
-					label: L._Cut(),
-					cb: ()->{
+
+			ui.modal.ContextMenu.attachTo_new(li, (ctx:ui.modal.ContextMenu)->{
+				ctx.addElement( Ctx_CopyPaster({
+					elementName: "field",
+					clipType: CFieldDef,
+					copy: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
+					cut: ()->{
 						App.ME.clipboard.copyData(CFieldDef, fd.toJson());
 						deleteField(fd);
 					},
-				},
-				{
-					label: L._PasteAfter(),
-					cb: ()->{
+					paste: ()->{
 						var copy = pasteFieldDef(App.ME.clipboard, fd);
 						editor.ge.emit(FieldDefAdded(copy));
 						selectField(copy);
 					},
-					enable: ()->App.ME.clipboard.is(CFieldDef),
-				},
-				{
-					label: L._Duplicate(),
-					cb:()->{
+					duplicate: ()->{
 						var copy = duplicateFieldDef(fd);
 						editor.ge.emit( FieldDefAdded(copy) );
 						onAnyChange();
 						selectField(copy);
-					}
-				},
-				{ label: L._Delete(), cb:()->deleteField(fd) },
-			]);
+					},
+					delete: ()->deleteField(fd),
+				}) );
+			});
 
 			li.click( function(_) selectField(fd) );
 		}

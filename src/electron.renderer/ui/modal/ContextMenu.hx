@@ -41,11 +41,11 @@ typedef CtxActionSettings = {
 typedef CtxCopyPasterSettings = {
 	var elementName : String;
 	var clipType : ClipboardType;
-	var copy : Void->Void;
-	var cut : Void->Void;
-	var paste : Void->Void;
-	var duplicate : Void->Void;
-	var delete : Void->Void;
+	var copy : Null< Void->Void >;
+	var cut : Null< Void->Void >;
+	var paste : Null< Void->Void >;
+	var duplicate : Null< Void->Void >;
+	var delete : Null< Void->Void >;
 }
 
 
@@ -307,16 +307,41 @@ class ContextMenu extends ui.Modal {
 
 			case Ctx_CopyPaster(settings):
 				jElement = new J('<div class="group"/>');
-				addElement( Ctx_Action({ iconId:"copy", cb:settings.copy, tip:L._Copy(settings.elementName) }), jElement );
-				addElement( Ctx_Action({ iconId:"cut", cb:settings.cut, tip:L._Cut(settings.elementName) }), jElement );
 				addElement( Ctx_Action({
-					iconId: "paste",
-					cb: settings.paste,
-					enable: ()->App.ME.clipboard.is(settings.clipType),
-					tip: L._PasteAfter(settings.elementName),
+					iconId : "copy",
+					cb : settings.copy,
+					enable: ()->settings.copy!=null,
+					tip : L._Copy(settings.elementName)
 				}), jElement );
-				addElement( Ctx_Action({ label:L.untranslated("x2"), className:"duplicate", cb:settings.duplicate, tip:L._Duplicate(settings.elementName) }), jElement );
-				addElement( Ctx_Action({ iconId:"delete", cb:settings.delete, tip:L._Delete(settings.elementName) }), jElement );
+
+				addElement( Ctx_Action({
+					iconId : "cut",
+					cb : settings.cut,
+					enable: ()->settings.cut!=null,
+					tip : L._Cut(settings.elementName)
+				}), jElement );
+
+				addElement( Ctx_Action({
+					iconId : "paste",
+					cb : settings.paste,
+					enable: ()->settings.paste!=null && App.ME.clipboard.is(settings.clipType),
+					tip : L._PasteAfter(settings.elementName),
+				}), jElement );
+
+				addElement( Ctx_Action({
+					label : L.untranslated("x2"),
+					className : "duplicate",
+					cb : settings.duplicate,
+					enable: ()->settings.duplicate!=null,
+					tip : L._Duplicate(settings.elementName)
+				}), jElement );
+
+				addElement( Ctx_Action({
+					iconId : "delete",
+					cb : settings.delete,
+					enable: ()->settings.delete!=null,
+					tip : L._Delete(settings.elementName)
+				}), jElement );
 
 			case Ctx_Title(label):
 				jElement = new J('<div class="title"/>');

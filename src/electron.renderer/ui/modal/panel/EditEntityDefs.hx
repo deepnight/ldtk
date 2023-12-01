@@ -634,37 +634,28 @@ class EditEntityDefs extends ui.modal.Panel {
 					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
 				// Menu
-				ContextMenu.attachTo(jEnt, [
-					{
-						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
-					},
-					{
-						label: L._Cut(),
-						cb: ()->{
+				ContextMenu.attachTo_new(jEnt, (ctx:ContextMenu)->{
+					ctx.addElement( Ctx_CopyPaster({
+						elementName: "entity",
+						clipType: CEntityDef,
+						copy: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
+						cut: ()->{
 							App.ME.clipboard.copyData(CEntityDef, ed.toJson(project));
 							deleteEntityDef(ed);
 						},
-					},
-					{
-						label: L._PasteAfter(),
-						cb: ()->{
+						paste: ()->{
 							var copy = project.defs.pasteEntityDef(App.ME.clipboard, ed);
 							editor.ge.emit(EntityDefAdded);
 							selectEntity(copy);
 						},
-						enable: ()->App.ME.clipboard.is(CEntityDef),
-					},
-					{
-						label: L._Duplicate(),
-						cb:()->{
+						duplicate: ()->{
 							var copy = project.defs.duplicateEntityDef(ed);
 							editor.ge.emit(EntityDefAdded);
 							selectEntity(copy);
-						}
-					},
-					{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
-				]);
+						},
+						delete: ()->deleteEntityDef(ed),
+					}) );
+				});
 
 				// Click
 				jEnt.click( function(_) selectEntity(ed) );

@@ -348,43 +348,28 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 				jLi.click( function(_) selectTileset(td) );
 
-				ContextMenu.attachTo(jLi, [
-					{
-						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
-						enable: ()->!td.isUsingEmbedAtlas(),
-					},
-					{
-						label: L._Cut(),
-						cb: ()->{
+				ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
+					ctx.addElement( Ctx_CopyPaster({
+						elementName: "tileset",
+						clipType: CTilesetDef,
+						copy: td.isUsingEmbedAtlas() ? null : ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
+						cut: td.isUsingEmbedAtlas() ? null : ()->{
 							App.ME.clipboard.copyData(CTilesetDef, td.toJson());
 							deleteTilesetDef(td);
 						},
-						enable: ()->!td.isUsingEmbedAtlas(),
-					},
-					{
-						label: L._PasteAfter(),
-						cb: ()->{
+						paste: ()->{
 							var copy = project.defs.pasteTilesetDef(App.ME.clipboard, td);
 							editor.ge.emit( TilesetDefAdded(copy) );
 							selectTileset(copy);
 						},
-						enable: ()->App.ME.clipboard.is(CTilesetDef),
-					},
-					{
-						label: L._Duplicate(),
-						cb: ()-> {
+						duplicate: td.isUsingEmbedAtlas() ? null : ()->{
 							var copy = project.defs.duplicateTilesetDef(td);
 							editor.ge.emit( TilesetDefAdded(copy) );
 							selectTileset(copy);
 						},
-						enable: ()->!td.isUsingEmbedAtlas(),
-					},
-					{
-						label: L._Delete(),
-						cb: deleteTilesetDef.bind(td),
-					},
-				]);
+						delete: ()->deleteTilesetDef(td),
+					}) );
+				});
 			}
 
 			// Make list sortable

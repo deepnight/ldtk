@@ -229,40 +229,29 @@ class EditEnumDefs extends ui.modal.Panel {
 					selectEnum(ed);
 				});
 
-				ContextMenu.attachTo(jLi, [
-					{
-						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
-					},
-					{
-						label: L._Cut(),
-						cb: ()->{
+				ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
+					ctx.addElement( Ctx_CopyPaster({
+						elementName: "enum",
+						clipType: CLayerDef,
+
+						copy: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
+						cut: ()->{
 							App.ME.clipboard.copyData(CEnumDef, ed.toJson(project));
 							deleteEnumDef(ed, true);
 						},
-					},
-					{
-						label: L._PasteAfter(),
-						cb: ()->{
+						paste: ()->{
 							var copy = project.defs.pasteEnumDef(App.ME.clipboard, ed);
 							editor.ge.emit(EnumDefAdded);
 							selectEnum(copy);
 						},
-						enable: ()->App.ME.clipboard.is(CEnumDef),
-					},
-					{
-						label: L._Duplicate(),
-						cb: ()->{
+						duplicate: ()->{
 							var copy = project.defs.duplicateEnumDef(ed);
 							editor.ge.emit(EnumDefAdded);
 							selectEnum(copy);
 						},
-					},
-					{
-						label: L._Delete(),
-						cb: deleteEnumDef.bind(ed,true),
-					}
-				]);
+						delete: ()->deleteEnumDef(ed,true),
+					}) );
+				});
 			}
 
 
