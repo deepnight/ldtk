@@ -447,8 +447,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// List context menu
-		ContextMenu.attachTo(jRuleGroupList, false, [
-			{
+		ContextMenu.attachTo_new(jRuleGroupList, false, (ctx:ContextMenu)->{
+			ctx.addActionElement({
 				label: L._Paste("group"),
 				cb: ()->{
 					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
@@ -457,8 +457,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						invalidateRuleAndOnesBelow(r);
 				},
 				enable: ()->return App.ME.clipboard.is(CRuleGroup),
-			}
-		]);
+			});
+		});
 
 		// Rule groups
 		var groupIdx = 0;
@@ -711,38 +711,61 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jWizEdit.click( _->doUseWizard(rg) );
 
 		// Group context menu
-		var actions : ui.modal.ContextMenu.ContextActions = [
-			{
+		ContextMenu.attachTo_new(jGroup, jGroupHeader, (ctx)->{
+			ctx.addElement( Ctx_CopyPaster({
+				elementName: "group",
+				clipType: CRuleGroup,
+				copy: ()->App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg)),
+				cut: ()->{
+					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					deleteRuleGroup(rg, false);
+				},
+				paste: ()->{
+					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
+					editor.ge.emit(LayerRuleGroupAdded(copy));
+					for(r in copy.rules)
+						invalidateRuleAndOnesBelow(r);
+				},
+				duplicate: ()-> {
+					var copy = ld.duplicateRuleGroup(project, rg);
+					editor.ge.emit( LayerRuleGroupAdded(copy) );
+					invalidateRuleGroup(copy);
+				},
+				delete: ()->deleteRuleGroup(rg, true),
+			}) );
+
+			ctx.addElement(Ctx_Separator);
+
+			ctx.addActionElement({
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
-			},
-
-			{
+			});
+			ctx.addActionElement({
 				label: L.t._("Assign group color"),
 				iconId: "color",
 				cb: ()->onPickGroupColor(rg),
-			},
-
-			{
+			});
+			ctx.addActionElement({
 				label: L.t._("Assign group icon"),
-				iconId: "pickIcon",
+				iconId: rg.icon!=null ? null : "pickIcon",
+				jHtmlImg: rg.icon!=null ? project.resolveTileRectAsHtmlImg(rg.icon) : null,
 				cb: ()->onPickGroupIcon(rg),
-			},
+			});
+			if( rg.icon!=null )
+				ctx.addActionElement({
+					label: L.t._("Remove group icon"),
+					iconId: "deleteIcon",
+					cb: ()->{
+						rg.icon = null;
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+					},
+				});
 
-			{
-				label: L.t._("Remove group icon"),
-				iconId: "deleteIcon",
-				show: ()->rg.icon!=null,
-				cb: ()->{
-					rg.icon = null;
-					editor.ge.emit( LayerRuleGroupChanged(rg) );
-				},
-			},
+			ctx.addElement(Ctx_Separator);
 
-			{
+			ctx.addActionElement({
 				label: L.t._('Edit "out-of-bounds" policy for all rules'),
 				iconId: "outOfBounds",
-				separatorBefore: true,
 				cb: ()->{
 					var m = new ui.modal.Dialog();
 					m.loadTemplate("outOfBoundsPolicyGlobal.html");
@@ -760,114 +783,92 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					});
 					m.addCancel();
 				},
-				show: ()->!rg.isOptional,
-			},
+			});
 
-			{
-				label: L.t._("Edit rules using the Assistant"),
-				iconId: "wizard",
-				cb: ()->{
-					doUseWizard(rg);
-				},
-				show: ()->rg.usesWizard,
-			},
+			if( rg.usesWizard )
+				ctx.addActionElement({
+					label: L.t._("Edit rules using the Assistant"),
+					iconId: "wizard",
+					cb: ()->{
+						doUseWizard(rg);
+					},
+				});
 
-			{
+			ctx.addActionElement({
 				label: L.t._("Assign biome enum"),
 				cb: ()->openBiomePicker(rg),
-				// subMenu: ()->createBiomePickerCtxActions(rg),
-			},
+			});
 
-			{
-				label: L.t._("Turn into an OPTIONAL group"),
-				subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-				iconId: "optional",
-				cb: ()->{
-					invalidateRuleGroup(rg);
-					rg.isOptional = true;
-					rg.active = true; // just some cleanup
-					editor.ge.emit( LayerRuleGroupChanged(rg) );
-				},
-				show: ()->!rg.isOptional,
-			},
+			if( rg.isOptional )
+				ctx.addActionElement({
+					label: L.t._("Turn into an OPTIONAL group"),
+					subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+					iconId: "optional",
+					cb: ()->{
+						invalidateRuleGroup(rg);
+						rg.isOptional = true;
+						rg.active = true; // just some cleanup
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+					},
+				});
+			else
+				ctx.addActionElement({
+					label: L.t._("Disable OPTIONAL state"),
+					cb: ()->{
+						new ui.modal.dialog.Confirm(
+							L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
+							true,
+							()->{
+								rg.isOptional = false;
+								invalidateRuleGroup(rg);
+								project.tidy();
+								editor.ge.emit( LayerRuleGroupChanged(rg) );
+							}
+						);
+					},
+				});
+		});
 
-			{
-				label: L.t._("Disable OPTIONAL state"),
-				cb: ()->{
-					new ui.modal.dialog.Confirm(
-						L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
-						true,
-						()->{
-							rg.isOptional = false;
-							invalidateRuleGroup(rg);
-							project.tidy();
-							editor.ge.emit( LayerRuleGroupChanged(rg) );
-						}
-					);
-				},
-				show: ()->rg.isOptional,
-			},
-			{
-				label: L._PasteAfter("rule"),
-				separatorBefore: true,
-				cb: ()->{
-					var copy = ld.pasteRule(project, rg, App.ME.clipboard);
-					lastRule = copy;
-					editor.ge.emit( LayerRuleAdded(copy) );
-					invalidateRuleAndOnesBelow(copy);
-				},
-				show: ()->!rg.usesWizard,
-				enable: ()->return App.ME.clipboard.is(CRule),
-			},
-
-			{
-				label: L._Copy("Group"),
-				cb: ()->{
-					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
-				}
-			},
-			{
-				label: L._Cut("Group"),
-				cb: ()->{
-					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
-					deleteRuleGroup(rg, false);
-				}
-			},
-			{
-				label: L._PasteAfter("group"),
-				cb: ()->{
-					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
-					editor.ge.emit(LayerRuleGroupAdded(copy));
-					for(r in copy.rules)
-						invalidateRuleAndOnesBelow(r);
-				},
-				enable: ()->App.ME.clipboard.is(CRuleGroup),
-			},
-			{
-				label: L._Duplicate(),
-				cb: ()->{
-					var copy = ld.duplicateRuleGroup(project, rg);
-					editor.ge.emit( LayerRuleGroupAdded(copy) );
-					invalidateRuleGroup(copy);
-				},
-			},
-			{
-				label: L.t._("Duplicate and remap"),
-				subText: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
-				cb: ()->{
-					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
-						editor.ge.emit( LayerRuleGroupAdded(copy) );
-						for(r in copy.rules)
-							invalidateRuleAndOnesBelow(r);
-					});
-				},
-			},
-			{
-				label: L._Delete(L.t._("Group")),
-				cb: deleteRuleGroup.bind(rg, true),
-			},
-		];
-		ContextMenu.attachTo(jGroup, jGroupHeader, actions);
+		// var actions : ui.modal.ContextMenu.ContextActions = [
+		// 	{
+		// 		label: L._PasteAfter("rule"),
+		// 		separatorBefore: true,
+		// 		cb: ()->{
+		// 			var copy = ld.pasteRule(project, rg, App.ME.clipboard);
+		// 			lastRule = copy;
+		// 			editor.ge.emit( LayerRuleAdded(copy) );
+		// 			invalidateRuleAndOnesBelow(copy);
+		// 		},
+		// 		show: ()->!rg.usesWizard,
+		// 		enable: ()->return App.ME.clipboard.is(CRule),
+		// 	},
+		// 	{
+		// 		label: L._PasteAfter("group"),
+		// 		cb: ()->{
+		// 			var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
+		// 			editor.ge.emit(LayerRuleGroupAdded(copy));
+		// 			for(r in copy.rules)
+		// 				invalidateRuleAndOnesBelow(r);
+		// 		},
+		// 		enable: ()->App.ME.clipboard.is(CRuleGroup),
+		// 	},
+		// 	{
+		// 		label: L.t._("Duplicate and remap"),
+		// 		subText: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
+		// 		cb: ()->{
+		// 			new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
+		// 				editor.ge.emit( LayerRuleGroupAdded(copy) );
+		// 				for(r in copy.rules)
+		// 					invalidateRuleAndOnesBelow(r);
+		// 			});
+		// 		},
+		// 	},
+		// 	{
+		// 		label: L._Delete(L.t._("Group")),
+		// 		cb: deleteRuleGroup.bind(rg, true),
+		// 	},
+		// ];
+		// ContextMenu.attachTo(jGroup, jGroupHeader, actions);
 
 		// Wizard mode explanation
 		if( rg.usesWizard ) {

@@ -18,6 +18,37 @@ typedef ContextAction = {
 	var ?selectionTick : Bool;
 }
 
+enum CtxElement {
+	Ctx_Action(settings:CtxActionSettings);
+	Ctx_Group(elements:Array<CtxElement>);
+	Ctx_CopyPaster(settings:CtxCopyPasterSettings);
+	Ctx_Title(label:String);
+	Ctx_Separator;
+}
+
+typedef CtxActionSettings = {
+	var ?label : LocaleString;
+	var ?subText : LocaleString;
+	var cb : Void->Void;
+	var ?iconId : String;
+	var ?jHtmlImg : js.jquery.JQuery;
+	var ?className : String;
+	var ?enable : Void->Bool;
+	var ?selectionTick : Bool;
+	var ?tip : String;
+}
+
+typedef CtxCopyPasterSettings = {
+	var elementName : String;
+	var clipType : ClipboardType;
+	var copy : Void->Void;
+	var cut : Void->Void;
+	var paste : Void->Void;
+	var duplicate : Void->Void;
+	var delete : Void->Void;
+}
+
+
 class ContextMenu extends ui.Modal {
 	public static var ALL : Array<ContextMenu> = [];
 	var jAttachTarget : js.jquery.JQuery; // could be empty
@@ -135,14 +166,13 @@ class ContextMenu extends ui.Modal {
 			: new J('<div class="title"/>');
 		jElement.appendTo(jContent);
 
-		if( a.jHtmlImg!=null ) {
-			jElement.prepend(a.label);
-			jElement.prepend(a.jHtmlImg);
-		}
+		if( a.jHtmlImg!=null )
+			jElement.append(a.jHtmlImg);
 		else if( a.iconId!=null )
-			jElement.prepend('<span class="icon ${a.iconId}"></span> ${a.label}');
-		else
-			jElement.html(a.label);
+			jElement.append('<span class="icon ${a.iconId}"></span>');
+
+		if( a.label!=null )
+			jElement.append(a.label);
 
 		if( a.subText!=null && a.subText!=a.label )
 			jElement.append('<span class="sub">${a.subText}</span>');
@@ -188,5 +218,118 @@ class ContextMenu extends ui.Modal {
 
 		applyAnchor();
 		return jElement;
+	}
+
+
+
+	public static function attachTo_new(jTarget:js.jquery.JQuery, showButton=true, ?jButtonContext:js.jquery.JQuery, builder:ContextMenu->Void) {
+		// Open callback
+		function _open(event:js.jquery.Event) {
+			var ctx = new ContextMenu(event);
+			builder(ctx);
+		}
+
+		// Cleanup
+		jTarget
+			.off(".context")
+			.find("button.context").remove();
+
+		// Menu button
+		if( showButton ) {
+			var jButton = new J('<button class="transparent context"/>');
+			jButton.appendTo(jButtonContext==null ? jTarget : jButtonContext);
+			jButton.append('<div class="icon contextMenu"/>');
+			jButton.click( (ev:js.jquery.Event)->{
+				ev.stopPropagation();
+				_open(ev);
+			});
+		}
+
+		// Right click
+		jTarget.on("contextmenu.context", (ev:js.jquery.Event)->{
+			ev.stopPropagation();
+			ev.preventDefault();
+			_open(ev);
+		});
+	}
+
+	public inline function addActionElement(settings:CtxActionSettings) {
+		addElement( Ctx_Action(settings) );
+	}
+
+
+	public function addElement(e:CtxElement, ?jTarget:js.jquery.JQuery) {
+		var jElement : js.jquery.JQuery = null;
+
+		switch e {
+			case Ctx_Action(settings):
+				jElement = new J('<button class="transparent"/>');
+
+				if( settings.jHtmlImg!=null )
+					jElement.append(settings.jHtmlImg);
+				else if( settings.iconId!=null )
+					jElement.append('<span class="icon ${settings.iconId}"></span>');
+
+				if( settings.label!=null )
+					jElement.append(settings.label);
+
+				if( settings.subText!=null && settings.subText!=settings.label )
+					jElement.append('<span class="sub">${settings.subText}</span>');
+
+				if( settings.enable!=null && !settings.enable() )
+					jElement.prop("disabled", true);
+
+				if( settings.className!=null )
+					jElement.addClass(settings.className);
+
+				if( settings.selectionTick!=null ) {
+					if( settings.selectionTick ) {
+						jElement.addClass("selected");
+						jElement.prepend('<span class="icon selectionTick checkboxOn"></span>');
+					}
+					else
+						jElement.prepend('<span class="icon selectionTick checkboxOff"></span>');
+				}
+
+				if( settings.tip!=null )
+					Tip.attach(jElement, settings.tip);
+
+				// Callback
+				jElement.click( (_)->{
+					closeAll();
+					settings.cb();
+				});
+
+			case Ctx_Group(elements):
+				jElement = new J('<div class="group"/>');
+				for(e in elements)
+					addElement(e, jElement);
+
+			case Ctx_CopyPaster(settings):
+				jElement = new J('<div class="group"/>');
+				addElement( Ctx_Action({ iconId:"copy", cb:settings.copy, tip:"Copy "+settings.elementName }), jElement );
+				addElement( Ctx_Action({ iconId:"cut", cb:settings.cut, tip:"Cut "+settings.elementName }), jElement );
+				addElement( Ctx_Action({
+					iconId: "paste",
+					cb: settings.paste,
+					enable: ()->App.ME.clipboard.is(settings.clipType),
+					tip: "Paster "+settings.elementName+" after",
+				}), jElement );
+				addElement( Ctx_Action({ label:L.untranslated("x2"), className:"duplicate", cb:settings.duplicate, tip:"Duplicate "+settings.elementName }), jElement );
+				addElement( Ctx_Action({ iconId:"delete", cb:settings.delete, tip:"Delete "+settings.elementName }), jElement );
+
+			case Ctx_Title(label):
+				jElement = new J('<div class="title"/>');
+				jElement.append(label);
+
+			case Ctx_Separator:
+				jElement = new J('<div class="separator"/>');
+		}
+
+		if( jTarget!=null )
+			jTarget.append(jElement);
+		else
+			jContent.append(jElement);
+		applyAnchor();
 	}
 }
