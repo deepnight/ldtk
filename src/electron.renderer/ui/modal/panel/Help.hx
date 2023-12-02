@@ -14,6 +14,10 @@ class Help extends ui.modal.Panel {
 			app: Const.APP_NAME,
 			ver: Const.getAppVersionStr(),
 		});
+		canBeClosedManually = false;
+		removeMask();
+		setRightAlignment();
+		setAlwaysOnTop();
 
 		jContent.find(".changelog").click( _->{
 			new ui.modal.dialog.Changelog(false);

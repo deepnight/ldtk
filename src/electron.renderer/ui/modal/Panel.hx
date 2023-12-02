@@ -32,6 +32,17 @@ class Panel extends ui.Modal {
 		dn.Process.resizeAll();
 	}
 
+	public function setRightAlignment() {
+		jModalAndMask.addClass("right");
+		jPanelMask.hide();
+	}
+
+	inline function isRightAligned() return jModalAndMask.hasClass("right");
+
+	public function setAlwaysOnTop() {
+		jModalAndMask.addClass("alwaysOnTop");
+	}
+
 	override function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache = true) {
 		super.loadTemplate(tplName, className, vars, useCache);
 		insertCloseButton();
@@ -65,10 +76,12 @@ class Panel extends ui.Modal {
 	override function onResize() {
 		super.onResize();
 		var jBar = editor.jMainPanel.find("#mainBar");
-		var y = settings.v.zenMode ? 0 : jBar.offset().top + jBar.outerHeight() - 6;
+		var y = isRightAligned()
+			? 0
+			: settings.v.zenMode ? 0 : jBar.offset().top + jBar.outerHeight() - 6;
+
 		jWrapper.css({
 			top: y+"px",
-			left: "0px",
 			height: 'calc( 100vh - ${y}px )',
 		});
 	}

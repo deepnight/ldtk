@@ -155,6 +155,10 @@ class Modal extends dn.Process {
 		jMask.addClass("transparent");
 	}
 
+	public function removeMask() {
+		jMask.hide();
+	}
+
 	public function addClass(cname:String) {
 		jModalAndMask.addClass(cname);
 	}
