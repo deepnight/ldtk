@@ -172,7 +172,7 @@ class Editor extends Page {
 		App.ME.jBody.append(jMouseCoords);
 
 		jPage.find("#tutorials").click( _->{
-			N.notImplemented();
+			executeAppCommand(C_ShowHelp);
 		});
 
 		// Edit buttons
