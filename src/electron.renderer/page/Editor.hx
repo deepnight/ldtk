@@ -171,6 +171,10 @@ class Editor extends Page {
 		jMouseCoords = App.ME.jBody.find("xml.mouseCoords").clone().children().first();
 		App.ME.jBody.append(jMouseCoords);
 
+		jPage.find("#tutorials").click( _->{
+			N.notImplemented();
+		});
+
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
 			executeAppCommand(C_OpenProjectPanel);

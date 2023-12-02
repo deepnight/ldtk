@@ -4726,6 +4726,8 @@ canvas#webgl {
 	position: absolute;
 	top: 0;
 	left: 0;
+	width: 100vw;
+	height: 100vh;
 	z-index: 2;
 	&.locked {
 		pointer-events: none;
@@ -4816,6 +4818,21 @@ canvas#webgl {
 		}
 		canvas {
 			cursor: not-allowed !important;
+		}
+	}
+
+	#tutorials {
+		position: absolute;
+		z-index: 99;
+		top: 8px;
+		right: 8px;
+		background-color: $helpMed;
+		border-radius: 4px;
+		padding: 4px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $help;
 		}
 	}
 
