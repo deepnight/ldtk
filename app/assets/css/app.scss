@@ -23,6 +23,11 @@ $backupBg: #6594ff;
 $tagMed: #a17250;
 $tagLight: #c5926d;
 
+$z_window: 100;
+$z_top: 110;
+$z_appTop: 120;
+$z_debug: 200;
+
 // Cursors
 $cur_follow: url("../cursors/followRef.svg") 16 16, zoom-in;
 $cur_expand: cell;
@@ -403,7 +408,7 @@ button {
 
 #miniNotif {
 	position: absolute;
-	z-index: 98;
+	z-index: $z_top;
 	bottom: 15px;
 	left: 0px;
 	display: none;
@@ -437,7 +442,7 @@ button {
 	position: absolute;
 	top: 15px;
 	right: 0;
-	z-index: 99;
+	z-index: $z_appTop;
 	display: grid;
 	grid-template-columns: auto min-content;
 	// box-shadow: 0px 3px 0px #b53d00, 0px 0px 16px $red;
@@ -2625,7 +2630,7 @@ textarea {
 
 .tip {
 	position: absolute;
-	z-index: 99;
+	z-index: $z_top;
 	box-sizing: border-box;
 
 	border-radius: 4px;
@@ -2704,7 +2709,7 @@ textarea {
 
 #notificationList {
 	position: absolute;
-	z-index: 99;
+	z-index: $z_top;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -2777,7 +2782,7 @@ textarea {
 
 .quickNotif {
 	position: absolute;
-	z-index: 99;
+	z-index: $z_top;
 	display: grid;
 	align-items: center;
 	justify-items: center;
@@ -2828,7 +2833,7 @@ textarea {
 
 .lastChance {
 	position: absolute;
-	z-index: 99;
+	z-index: $z_top + 1;
 	top: 40px;
 	right: 0;
 
@@ -2909,7 +2914,7 @@ textarea {
 
 .valuePicker {
 	position: absolute;
-	z-index: 97;
+	z-index: $z_top;
 	display: grid;
 	grid-template-columns: 64px auto 100px;
 	gap: 16px;
@@ -2965,7 +2970,7 @@ textarea {
 	top: 0px;
 	width: 100vw;
 	height: 100vh;
-	z-index: 98;
+	z-index: $z_window;
 
 	.mask {
 		position: absolute;
@@ -3056,6 +3061,19 @@ textarea {
 	.mask {
 		width: calc( 100vw - #{ $mainPanelNormalWid } );
 		left: $mainPanelNormalWid;
+	}
+
+	&.alwaysOnTop {
+		z-index: $z_window + 1;
+	}
+
+	&.right {
+		&>.wrapper {
+			left: initial;
+			right: 0;
+			border-radius: 0;
+			border-top-left-radius: 5px;
+		}
 	}
 
 	button.close {
@@ -4168,19 +4186,6 @@ textarea {
 
 
 
-.helpBar {
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 250px;
-	height: 100vh;
-	box-sizing: border-box;
-	z-index: 99;
-
-	padding: 8px;
-	background-color: $bgDark;
-}
-
 .window.panel.helpPanel {
 	.wrapper .content {
 		display: grid;
@@ -4572,7 +4577,7 @@ textarea {
 	position: absolute;
 	background-color: rgba(0,0,0,0.75);
 	opacity: 0.5;
-	z-index: 97;
+	z-index: $z_window - 1;
 }
 
 ul.sortable:not(.customHandle) {
@@ -4637,7 +4642,7 @@ div.sortHandle {
 #debug {
 	display: none;
 	position: absolute;
-	z-index: 99;
+	z-index: $z_debug;
 	padding: 8px;
 	right: 0px;
 	top: 0px;
@@ -4673,7 +4678,7 @@ div.sortHandle {
 	display: flex;
 	flex-wrap: nowrap;
 	position: absolute;
-	z-index: 99;
+	z-index: $z_top;
 	right: 3px;
 	bottom: 3px;
 	pointer-events: none;
@@ -4706,7 +4711,7 @@ div.sortHandle {
 	position: fixed;
 	top: 0;
 	left: 0;
-	z-index: 999;
+	z-index: $z_appTop+1;
 	width: 100vw;
 	height: 100vh;
 	background-color: $bgDark;
@@ -4741,7 +4746,6 @@ canvas#webgl {
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
 	z-index: 2;
 	&.locked {
 		pointer-events: none;
@@ -4755,7 +4759,7 @@ canvas#webgl {
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	z-index: 9999;
+	z-index: $z_appTop;
 	padding-bottom: 20px;
 	pointer-events: none;
 
@@ -4784,7 +4788,7 @@ canvas#webgl {
 	left: 0;
 	width: 100vw;
 	height: 100vh;
-	z-index: 9999;
+	z-index: $z_appTop+1;
 	&:not(.transparent) {
 		background-color: transparentize($color: $bgDark, $amount: 0.6);
 		background-image: url("../img/stripesLight.png");
@@ -4835,9 +4839,9 @@ canvas#webgl {
 		}
 	}
 
-	#tutorials {
+	#helpButton {
 		position: absolute;
-		z-index: 99;
+		z-index: $z_window;
 		top: 8px;
 		right: 8px;
 		background-color: $helpMed;
@@ -6744,7 +6748,7 @@ canvas#webgl {
 
 
 .window.singleTilePicker {
-	z-index: 99;
+	z-index: $z_top;
 	.wrapper {
 		padding: 0;
 		.content {
@@ -10117,7 +10121,7 @@ $patternSize : 32px;
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	z-index: 99;
+	z-index: $z_debug;
 	pointer-events: none;
 
 	.timeline {
