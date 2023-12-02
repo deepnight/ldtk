@@ -1,0 +1,17 @@
+This guided tour explains how to create and use Biome enums.
+
+<ol>
+	<li>Open the Enums panel</li>
+	<li>Create an Enum which will contain your possible Biome values (eg. Forest, Desert, Snow etc)</li>
+	<li>Open the Level Settings panel</li>
+	<li>Edit the Level custom fields</li>
+	<li>Add an Enum field using your new Biome enum (NOTE: arrays are supported, you may have multiple Biome enums per level)</li>
+	<li>Open the Layers panel</li>
+	<li>Pick the field you created as the layer "Biome enum"</li>
+	<li>Close the Layers panel</li>
+	<li>Open this layer rules</li>
+	<li>
+		You may now assign a Biome condition to each of your layer group of rules.
+		For example, if you have a group of rules that paint snow over your platforms, you can simply add the Snow biome value to this group, and it will only show up if the current level uses the Snow enum value.
+	</li>
+</ol>
