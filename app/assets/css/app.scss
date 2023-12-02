@@ -3051,7 +3051,6 @@ textarea {
 
 .window.panel {
 	// NOTE: wrapper dimensions and position are all set in code
-	width: auto;
 	height: auto;
 
 	.mask {
@@ -4168,11 +4167,25 @@ textarea {
 }
 
 
+
+.helpBar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 250px;
+	height: 100vh;
+	box-sizing: border-box;
+	z-index: 99;
+
+	padding: 8px;
+	background-color: $bgDark;
+}
+
 .window.panel.helpPanel {
 	.wrapper .content {
-		width: auto;
 		display: grid;
 		gap: 16px;
+		width: 300px;
 	}
 
 	h3 {
@@ -4225,65 +4238,66 @@ textarea {
 		display: grid;
 		grid-template-columns: repeat(2, 420px);
 		gap: 16px;
-	}
 
-	dl {
-		display: grid;
-		grid-template-columns: 0.5fr 1fr;
-		align-items: stretch;
-		gap: 1px;
-
-		dt {
-			margin: 0;
-
-			text-align: right;
-			white-space: nowrap;
-
-			.icon {
-				width: 32px;
-				height: 32px;
-			}
-		}
-
-		dd {
+		dl {
 			display: grid;
-			align-items: center;
-			margin: 0;
+			grid-template-columns: 0.5fr 1fr;
+			align-items: stretch;
+			gap: 1px;
 
-			font-family: Roboto;
-		}
-
-		span.misc {
-			margin-left: 3px;
-			margin-right: 3px;
-		}
-
-
-		&.major {
 			dt {
-				padding: 4px;
-				background-color: $bgDark;
-				border-radius: 4px;
+				margin: 0;
+
+				text-align: right;
+				white-space: nowrap;
+
+				.icon {
+					width: 32px;
+					height: 32px;
+				}
 			}
+
 			dd {
-				padding: 4px;
-				background-color: $bgLight;
-				border-radius: 4px;
-				font-size: 12pt;
+				display: grid;
+				align-items: center;
+				margin: 0;
+
+				font-family: Roboto;
 			}
-		}
-		&.minor {
-			dt {
-				padding: 4px;
-				padding-right: 8px;
-				background-color: $bgDark;
-				border-radius: 4px;
+
+			span.misc {
+				margin-left: 3px;
+				margin-right: 3px;
 			}
-			dd {
-				padding-left: 10px;
+
+
+			&.major {
+				dt {
+					padding: 4px;
+					background-color: $bgDark;
+					border-radius: 4px;
+				}
+				dd {
+					padding: 4px;
+					background-color: $bgLight;
+					border-radius: 4px;
+					font-size: 12pt;
+				}
+			}
+			&.minor {
+				dt {
+					padding: 4px;
+					padding-right: 8px;
+					background-color: $bgDark;
+					border-radius: 4px;
+				}
+				dd {
+					padding-left: 10px;
+				}
 			}
 		}
 	}
+
 }
 
 .window.dialog.fieldTypes,

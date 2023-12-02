@@ -810,10 +810,11 @@ class Editor extends Page {
 				setGrid( !settings.v.grid );
 
 			case C_ShowHelp:
-				if( ui.Modal.isOpen( ui.modal.panel.Help ) )
-					ui.Modal.closeAll();
-				else
-					new ui.modal.panel.Help();
+				new ui.Help();
+				// if( ui.Modal.isOpen( ui.modal.panel.Help ) )
+				// 	ui.Modal.closeAll();
+				// else
+				// 	new ui.modal.panel.Help();
 
 			case C_ToggleDetails:
 				setShowDetails( !settings.v.showDetails );
