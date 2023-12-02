@@ -1031,6 +1031,10 @@ class JsTools {
 		return getExtraFilesDir("samples");
 	}
 
+	public static function getTutorialsDir() {
+		return getExtraFilesDir("tutorials");
+	}
+
 	public static function locateFile(path:String, isFile:Bool) {
 		if( path==null )
 			N.error("No file");

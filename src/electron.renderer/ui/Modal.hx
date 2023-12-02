@@ -17,7 +17,7 @@ class Modal extends dn.Process {
 
 	var anchor : ModalAnchor;
 	var anchorInvalidated = true;
-
+	var lastTemplateClass : String;
 
 	public function new() {
 		super(Editor.ME);
@@ -291,14 +291,29 @@ class Modal extends dn.Process {
 	function onKeyPress(keyCode:Int) {}
 
 	public function loadTemplate(tplName:String, ?className:String, ?vars:Dynamic, useCache=true) {
+		// Cleanup
+		unloadTemplate();
+
+		// Class
 		if( className==null )
 			className = StringTools.replace(tplName, ".html", "");
-
+		lastTemplateClass = className;
 		jModalAndMask.addClass(className);
+
+		// Load template
 		var html = JsTools.getHtmlTemplate(tplName, vars, useCache);
-		jContent.empty().off().append( html );
+		jContent.append( html );
 		JsTools.parseComponents(jContent);
 		ui.Tip.clear();
+	}
+
+
+	function unloadTemplate() {
+		if( lastTemplateClass!=null ) {
+			jModalAndMask.removeClass(lastTemplateClass);
+			lastTemplateClass = null;
+		}
+		jContent.empty().off();
 	}
 
 
