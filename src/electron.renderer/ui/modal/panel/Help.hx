@@ -2,6 +2,7 @@ package ui.modal.panel;
 
 class Help extends ui.modal.Panel {
 	var curStep = 0;
+	var jTutorialData : Null<js.jquery.JQuery>;
 
 	public function new() {
 		super();
@@ -72,10 +73,46 @@ class Help extends ui.modal.Panel {
 		}
 	}
 
+
+	function parseTargets(raw:String) {
+		var rawTargets = raw.split("|");
+
+		var defaultDesc = null;
+		for(rawTarget in rawTargets) {
+			var targetType = StringTools.trim( rawTarget.split(":")[0] );
+			var targetInfo = StringTools.trim( rawTarget.split(":")[1] );
+			if( defaultDesc==null )
+				switch targetType {
+					case "panel":
+						var name = switch targetInfo {
+							case "layers": "Layers";
+							case "entities": "Entities";
+							case "enums": "Enums";
+							case "tilesets": "Tilesets";
+							case "project": "Project Settings";
+							case "world": "World";
+							case "level": "Level Settings";
+							case _: "Unknown panel "+targetInfo;
+						}
+						defaultDesc = 'Open the $name panel';
+
+					case "class":
+						defaultDesc = "HTML class";
+
+					case _:
+				}
+		}
+	}
+
+
+
 	function loadTutorial(fp:dn.FilePath) {
-		unloadTemplate();
+		jContent.empty();
+
 		var html = NT.readFileString(fp.full);
-		jContent.html(html);
+		jTutorialData = new J('<div class="tutorialData"/>');
+		jTutorialData.append(html);
+		var jStepList = new J('<ol/>');
 
 		function _cleanup(str:String) : Null<String> {
 			return str==null ? null : StringTools.trim(str);
@@ -85,24 +122,28 @@ class Help extends ui.modal.Panel {
 			return '<div class="error">${str!=null?str:"Error"}</div>';
 		}
 
-		var jSteps = jContent.find("ol>li");
+		// Check requirements
+		var jRequire = jTutorialData.find("require");
+
+		// Grab steps
+		var jSteps = jTutorialData.find("step");
 		var stepIdx = 0;
 		jSteps.each((idx,e)->{
 			var jStep = new J(e);
-			jStep.attr("stepIdx", Std.string(stepIdx));
-			jStep.click(_->gotoMenu()); // HACK
 
-			// Parse step
-			var rawData = jStep.attr("step");
+			// Parse step info
+			var rawData = jStep.attr("target");
 			var targets = rawData.split("|");
+			var desc = StringTools.trim( jStep.text() );
 			var first = true;
+
+			// Parse targets
 			for(target in targets) {
 				var targetType = _cleanup( target.split(":")[0] );
 				var targetInfo = _cleanup( target.split(":")[1] );
-				// jStep.text(targetType+" => "+targetInfo);
 
-				if( first && jStep.text()=="" )
-					jStep.text( switch targetType {
+				if( first && desc=="" )
+					desc = switch targetType {
 						case "panel":
 							var name = switch targetInfo {
 								case "layers": "Layers";
@@ -116,15 +157,33 @@ class Help extends ui.modal.Panel {
 							}
 							'Open the $name panel';
 						case _: _err("Missing text");
-					});
-
+					}
 				first = false;
 			}
 
-			if( jStep.text()=="" )
-				jStep.text("-filler-");
+			// Create tutorial step element
+			var jLi = new J('<li>$desc</li>');
+			jLi.appendTo(jStepList);
+			jLi.attr("stepIdx", Std.string(stepIdx));
+			jLi.attr("target", jStep.attr("target"));
+			// jLi.click(_->gotoMenu()); // HACK
+			trace(jLi);
+			trace(desc);
+
 			stepIdx++;
 		});
+
+
+		// Build page
+		var jTutorialPage = new J('<div class="tutorial"/>');
+		jTutorialPage.appendTo(jContent);
+
+		var jIntro = jTutorialData.find("intro");
+		jTutorialPage.append( jIntro.children().wrapAll('<div class="intro"></div>') );
+		jStepList.appendTo(jTutorialPage);
+
+		jContent.append(jTutorialData);
+		jTutorialData.hide();
 
 		activateStep(0);
 	}

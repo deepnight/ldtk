@@ -4249,6 +4249,25 @@ textarea {
 			}
 		}
 
+		.tutorial {
+			ol {
+				li.active {
+					font-size: 12pt;
+					margin-top: 1em;
+					margin-bottom: 1em;
+					padding: 8px;
+					border: 1px solid white;
+					border-radius: 3px;
+				}
+				li:not(.active) {
+					opacity: 0.2;
+					font-size: 9pt;
+					margin-top: 0.5em;
+					margin-bottom: 0.5em;
+				}
+			}
+		}
+
 		// .videosWrapper {
 		// 	.videos {
 		// 		display: grid;
