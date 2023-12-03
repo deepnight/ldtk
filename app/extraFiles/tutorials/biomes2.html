@@ -1,0 +1,19 @@
+<require>autolayer</require>
+
+<dialog>
+	This guided tour explains how to create and use Biome enums.
+</dialog>
+
+<click t="panel:enums"></click>
+<click t="class:createEnum"> Create an Enum that will represent your biomes. </click>
+<click t="class:createEnumValue"> Add your possible Biome values (eg. Forest, Desert, Snow etc) </click>
+
+<point t="selector:.editEnumDefs input[name=id]"> You may want to rename your new Enum to something more explicit (eg. Biome). </point>
+<click t="panel:level"> When you're happy with your Enum, open the Level Settings panel. </click>
+<click t="class:editFields"> Edit the Level custom fields </click>
+
+<point t="class:createArray"> NOTE: arrays are also supported, you may have multiple Biome enums per level </click>
+<click t="class:createSingle"> Add a new custom level field </click>
+
+<click t="selector:.fieldTypes .F_Enum"> Pick the Biome enum you just created. </click>
+<click t="panel:layers"> When you're done, open the Layers panel. </click>
