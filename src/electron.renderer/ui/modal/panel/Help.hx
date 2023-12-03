@@ -233,8 +233,6 @@ class Help extends ui.modal.Panel {
 
 		// Point targets
 		var targets = parseTargets(jStep.attr("target"));
-		trace(curStep);
-		trace(targets);
 		for(t in targets) {
 			switch t {
 				case T_Unknown:
