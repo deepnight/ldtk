@@ -4250,7 +4250,18 @@ textarea {
 		}
 
 		.tutorial {
+			@at-root .tutorialHighlighter {
+				position: absolute;
+				z-index: $z_appTop;
+				// outline: 6px solid $orange;
+				// border-radius: 8px;
+				// box-shadow: 0px 0px 8px $orange 0px 0px 32px $darkOrange;
+				pointer-events: none;
+			}
+
 			ol {
+				padding-left: 1.25em;
+
 				li.active {
 					font-size: 12pt;
 					margin-top: 1em;

@@ -7,10 +7,17 @@
 <step target="panel:enums"></step>
 
 <step target="class:createEnum">
-	Create an Enum which will contain your possible Biome values (eg. Forest, Desert, Snow etc)
+	Create an Enum that will represent your biomes.
 </step>
 
-<step target="panel:level"></step>
+<step target="class:createEnumValue">
+	Add your possible Biome values (eg. Forest, Desert, Snow etc)
+</step>
+
+<step target="panel:level">
+	You may want to rename your new Enum to something more explicit (eg. Biome).
+	When you're happy with your Enum, open the Level Settings panel.
+</step>
 
 <step target="class:editFields">
 	Edit the Level custom fields
@@ -20,8 +27,12 @@
 	Add a new custom level field (NOTE: arrays are also supported, you may have multiple Biome enums per level)
 </step>
 
-<step target="class:.fieldTypes .enum">
+<step target="selector:.fieldTypes .F_Enum">
 	Pick the Biome enum you just created.
+</step>
+
+<step target="panel:layers">
+	When you're done, open the Layers panel.
 </step>
 
 <!-- <ol>

@@ -175,13 +175,13 @@ class FieldDefsForm {
 		}
 
 		for(type in types) {
-			var b = new J("<button/>");
-			w.jContent.append(b);
-			b.css({
+			var jButton = new J('<button class="${type.getName()}"/>');
+			w.jContent.append(jButton);
+			jButton.css({
 				backgroundColor: FieldDef.getTypeColorHex(type, 0.62),
 			});
-			JsTools.createFieldTypeIcon(type, b);
-			b.click( function(ev) {
+			JsTools.createFieldTypeIcon(type, jButton);
+			jButton.click( function(ev) {
 				_create(ev,type);
 			});
 		}
