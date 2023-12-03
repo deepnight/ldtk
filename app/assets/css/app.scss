@@ -4253,10 +4253,26 @@ textarea {
 			@at-root .tutorialHighlighter {
 				position: absolute;
 				z-index: $z_appTop;
-				// outline: 6px solid $orange;
-				// border-radius: 8px;
-				// box-shadow: 0px 0px 8px $orange 0px 0px 32px $darkOrange;
+				outline: 6px solid $help;
+				border-radius: 4px;
+				box-shadow: 0px 0px 16px $helpMed, 0px 0px 32px $helpDark;
 				pointer-events: none;
+			}
+
+			@at-root .tutorialDesc {
+				position: absolute;
+				z-index: $z_appTop+1;
+				max-width: 300px;
+				padding: 16px;
+				border-radius: 4px;
+
+				color: white;
+				line-height: 1.3em;
+				text-shadow: 0px 1px 2px rgba($color: black, $alpha: 0.8);
+
+				cursor: help;
+				background-color: $helpMed;
+				box-shadow: 0px 0px 16px $helpMed, 0px 0px 32px $helpDark;
 			}
 
 			ol {
