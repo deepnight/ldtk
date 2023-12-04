@@ -26,10 +26,9 @@ class Tutorial extends dn.Process {
 		var html = NT.readFileString(fp.full);
 		var jTutorialData = new J(html);
 
-		// var jStepList = new J('<ol/>');
-
 		// Check requirements
 		var jRequire = jTutorialData.filter("require");
+		// TODO check requirements
 
 		// Read steps
 		var jSteps = jTutorialData.filter("step");
@@ -83,18 +82,6 @@ class Tutorial extends dn.Process {
 
 			stepIdx++;
 		});
-
-
-		// Build page
-		// var jTutorialPage = new J('<div class="tutorial"/>');
-		// jTutorialPage.appendTo(jContent);
-
-		// var jIntro = jTutorialData.find("intro");
-		// jTutorialPage.append( jIntro.children().wrapAll('<div class="intro"></div>') );
-		// jStepList.appendTo(jTutorialPage);
-
-		// jContent.append(jTutorialData);
-		// jTutorialData.hide();
 
 		activateStep(0);
 	}
