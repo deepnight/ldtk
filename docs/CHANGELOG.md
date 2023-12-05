@@ -26,6 +26,10 @@ This update brings various features that should make rule-based biomes creation 
 When creating an auto-layer rule, you may now render a rectangle of tiles picked randomly among a group of many others. For example, this makes possible the creation of random variations among trees, or other large details.
 
 
+## Filtered layers listing
+
+TODO
+
 ## JSON: extra Table-of-content data
 
 ![](1.5.0/tocJson.png)
