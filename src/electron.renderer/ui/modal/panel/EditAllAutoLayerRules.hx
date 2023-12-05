@@ -532,6 +532,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		if( enumDef!=null ) {
 			function _onAnyBiomeChange() {
+				rg.requiredBiomeValues.sort( (a,b)->Reflect.compare(a.toLowerCase(),b.toLowerCase()) );
 				invalidateRuleGroup(rg);
 				editor.ge.emit( LayerRuleGroupChanged(rg) );
 				openBiomePicker(rg);
