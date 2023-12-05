@@ -377,7 +377,7 @@ class Definitions {
 
 		// Add untagged "null" value
 		if( includeNull && anyUntagged )
-			sortedTags.insert(0, null); 
+			sortedTags.insert(0, null);
 
 		return sortedTags;
 	}

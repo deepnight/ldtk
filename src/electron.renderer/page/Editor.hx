@@ -377,9 +377,10 @@ class Editor extends Page {
 		if( project.defs.layers.length<=0 )
 			return false;
 
-		for(li in curLevel.layerInstances)
-			if( !li.def.hideInList ) {
-				selectLayerInstance(li,false);
+		var curTag = getCurLayerFilterTag();
+		for( ld in getVisibleLayerDefsInList() )
+			if( shouldLayerDefVisibleInList(ld,curTag) ) {
+				selectLayerInstance( curLevel.getLayerInstance(ld), false );
 				return true;
 			}
 
@@ -581,16 +582,20 @@ class Editor extends Page {
 
 			// Select layers (F1-F10)
 			case k if( k>=K.F1 && k<=K.F10 && !hasInputFocus() ):
-				var idx = k-K.F1;
+				var keyIdx = k-K.F1;
 				var i = 0;
-				for(l in curLevel.layerInstances)
-					if( !l.def.hideInList ) {
-						if( i==idx ) {
-							selectLayerInstance(l);
-							break;
-						}
-						i++;
+				var curTag = getCurLayerFilterTag();
+				for( ld in getVisibleLayerDefsInList() ) {
+					if( !shouldLayerDefVisibleInList(ld,curTag) )
+						continue;
+
+					if( i==keyIdx ) {
+						selectLayerInstance( curLevel.getLayerInstance(ld) );
+						break;
 					}
+					else
+						i++;
+				}
 		}
 
 
@@ -2473,6 +2478,44 @@ class Editor extends Page {
 	}
 
 
+	function getCurLayerFilterTag() {
+		if( settings.hasUiState(LayerUIFilter,project) ) {
+			var uiFilterTags = project.defs.getAllTagsFrom(project.defs.layers, false, (ld)->ld.uiFilterTags);
+			var tagIdx = settings.getUiStateInt(LayerUIFilter,project);
+			var idx = 0;
+			for(tag in uiFilterTags)
+				if( idx==tagIdx )
+					return tag;
+				else
+					idx++;
+		}
+
+		return null;
+	}
+
+	function shouldLayerDefVisibleInList(ld:data.def.LayerDef, curTag:Null<String>) {
+		var li = curLevel.getLayerInstance(ld);
+		if( ld.hideInList )
+			return false;
+		else if( curTag!=null && !ld.uiFilterTags.has(curTag) )
+			return false;
+		else
+			return true;
+
+	}
+
+	public function getVisibleLayerDefsInList() {
+		var curTag = getCurLayerFilterTag();
+
+		var visibleLayerDefs = [];
+		for(ld in project.defs.layers)
+			if( curLayerInstance!=null && curLayerInstance.layerDefUid==ld.uid || shouldLayerDefVisibleInList(ld,curTag) )
+				visibleLayerDefs.push(ld);
+
+		return visibleLayerDefs;
+	}
+
+
 	var heldVisibilitySet = null;
 	public function updateLayerList() {
 		jLayerList.empty();
@@ -2482,21 +2525,8 @@ class Editor extends Page {
 		if( uiFilterTags.length==0 )
 			settings.deleteUiState(LayerUIFilter, project);
 
-		// Get active tag
-		var curTag = null;
-		if( settings.hasUiState(LayerUIFilter,project) ) {
-			var tagIdx = settings.getUiStateInt(LayerUIFilter,project);
-			var idx = 0;
-			for(tag in uiFilterTags)
-				if( idx==tagIdx ) {
-					curTag = tag;
-					break;
-				}
-				else
-					idx++;
-		}
-
-		// UI filtering
+		// Tag filter select
+		var curTag = getCurLayerFilterTag();
 		if( uiFilterTags.length>0 ) {
 			uiFilterTags.sort( (a,b)->Reflect.compare(a.toLowerCase(),b.toLowerCase()) );
 			var jLi = new J('<li class="filter"/>');
@@ -2518,14 +2548,15 @@ class Editor extends Page {
 			// Tag picked
 			jSelect.change(_->{
 				var tag = jSelect.val();
-				trace(tag);
 				if( tag=="" )
 					settings.deleteUiState(LayerUIFilter, project);
 				else {
 					var tagIdx = Std.parseInt( jSelect.find(":selected").attr("tagIdx") );
-					trace(tagIdx);
 					settings.setUiStateInt(LayerUIFilter, tagIdx, project);
 				}
+				// Fix currently selected layer
+				if( curLayerDef!=null && !shouldLayerDefVisibleInList(curLayerDef,tag) )
+					autoPickFirstValidLayer();
 				updateLayerList();
 			});
 			if( curTag!=null )
@@ -2533,16 +2564,10 @@ class Editor extends Page {
 		}
 
 		// Add layers
-		var idx = 1;
-		for(ld in project.defs.layers) {
+		var shortcutIdx = 1;
+		for(ld in getVisibleLayerDefsInList()) {
 			var li = curLevel.getLayerInstance(ld);
 			var active = li==curLayerInstance;
-			if( ld.hideInList && !active )
-				continue;
-
-
-			if( curTag!=null && !ld.uiFilterTags.has(curTag) )
-				continue;
 
 			var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			jLayerList.append(jLi);
@@ -2560,10 +2585,10 @@ class Editor extends Page {
 			if( ld.doc!=null ) {
 				jLi.attr("tip", "right");
 				ui.Tip.attach(jLi, ld.doc);
-
 			}
 
-			jLi.find(".shortcut").text( idx<=10 ? "F"+(idx++) : "" );
+			if( shouldLayerDefVisibleInList(ld,curTag) )
+				jLi.find(".shortcut").text( shortcutIdx<=10 ? "F"+(shortcutIdx++) : "" );
 
 			// Icon
 			var jIcon = jLi.find(">.layerIcon");
