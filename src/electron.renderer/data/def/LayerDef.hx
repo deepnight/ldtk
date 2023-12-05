@@ -64,6 +64,7 @@ class LayerDef {
 			addIntGridValue(0x0);
 		requiredTags = new Tags();
 		excludedTags = new Tags();
+		uiFilterTags = new Tags();
 	}
 
 	function set_identifier(id:String) {
