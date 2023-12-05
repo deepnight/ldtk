@@ -340,6 +340,14 @@ class EditLayerDefs extends ui.modal.Panel {
 		var i = Input.linkToHtmlInput( cur.canSelectWhenInactive, jForm.find("input[name='canSelectWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
+		// UI tags
+		var ted = new TagEditor(
+			cur.uiFilterTags,
+			()->editor.ge.emit(LayerDefChanged(cur.uid)),
+			()->project.defs.getRecallTags(project.defs.layers, ld->ld.uiFilterTags)
+		);
+		jForm.find("#uiFilterTags").empty().append(ted.jEditor);
+
 		var i = Input.linkToHtmlInput( cur.renderInWorldView, jForm.find("input[name='renderInWorldView']") );
 		i.onChange = ()->{
 			editor.worldRender.invalidateAll();

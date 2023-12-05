@@ -349,7 +349,7 @@ class Definitions {
 	/**
 		Extract and sort all tags being used in the provided array of T
 	**/
-	public function getAllTagsFrom<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
+	public function getAllTagsFrom<T>(all:Array<T>, includeNull=true, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
 		if( filter==null )
 			filter = (_)->return true;
 
@@ -374,8 +374,10 @@ class Definitions {
 		for(t in tagMap)
 			sortedTags.push(t);
 		sortedTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
-		if( anyUntagged )
-			sortedTags.insert(0, null); // untagged category
+
+		// Add untagged "null" value
+		if( includeNull && anyUntagged )
+			sortedTags.insert(0, null); 
 
 		return sortedTags;
 	}

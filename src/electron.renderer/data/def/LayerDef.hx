@@ -29,6 +29,7 @@ class LayerDef {
 	public var parallaxScaling : Bool = true;
 	public var tilesetDefUid : Null<Int>;
 	public var biomeFieldUid : Null<Int>;
+	public var uiFilterTags : Tags;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -113,6 +114,7 @@ class LayerDef {
 		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
 		o.biomeFieldUid = JsonTools.readNullableInt(json.biomeFieldUid);
 		o.autoTilesKilledByOtherLayerUid = JsonTools.readNullableInt(json.autoTilesKilledByOtherLayerUid);
+		o.uiFilterTags = Tags.fromJson(json.uiFilterTags);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
@@ -191,6 +193,7 @@ class LayerDef {
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
 			autoTilesKilledByOtherLayerUid: autoTilesKilledByOtherLayerUid,
+			uiFilterTags: uiFilterTags.toJson(),
 
 			intGridValues: intGridValues.map( function(iv) return {
 				value: iv.value,

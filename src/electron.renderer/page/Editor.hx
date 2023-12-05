@@ -2477,6 +2477,62 @@ class Editor extends Page {
 	public function updateLayerList() {
 		jLayerList.empty();
 
+		// List all tags
+		var uiFilterTags = project.defs.getAllTagsFrom(project.defs.layers, false, (ld)->ld.uiFilterTags);
+		if( uiFilterTags.length==0 )
+			settings.deleteUiState(LayerUIFilter, project);
+
+		// Get active tag
+		var curTag = null;
+		if( settings.hasUiState(LayerUIFilter,project) ) {
+			var tagIdx = settings.getUiStateInt(LayerUIFilter,project);
+			var idx = 0;
+			for(tag in uiFilterTags)
+				if( idx==tagIdx ) {
+					curTag = tag;
+					break;
+				}
+				else
+					idx++;
+		}
+
+		// UI filtering
+		if( uiFilterTags.length>0 ) {
+			uiFilterTags.sort( (a,b)->Reflect.compare(a.toLowerCase(),b.toLowerCase()) );
+			var jLi = new J('<li class="filter"/>');
+			jLi.prependTo(jLayerList);
+
+			// List tags
+			var jSelect = new J('<select/>');
+			jSelect.appendTo(jLi);
+			var jOpt = new J('<option value="">- Show all layers -</option>');
+			jOpt.appendTo(jSelect);
+
+			var tagIdx = 0;
+			for(tag in uiFilterTags) {
+				var jOpt = new J('<option value="$tag" tagIdx="$tagIdx">$tag</option>');
+				jOpt.appendTo(jSelect);
+				tagIdx++;
+			}
+
+			// Tag picked
+			jSelect.change(_->{
+				var tag = jSelect.val();
+				trace(tag);
+				if( tag=="" )
+					settings.deleteUiState(LayerUIFilter, project);
+				else {
+					var tagIdx = Std.parseInt( jSelect.find(":selected").attr("tagIdx") );
+					trace(tagIdx);
+					settings.setUiStateInt(LayerUIFilter, tagIdx, project);
+				}
+				updateLayerList();
+			});
+			if( curTag!=null )
+				jSelect.val(curTag);
+		}
+
+		// Add layers
 		var idx = 1;
 		for(ld in project.defs.layers) {
 			var li = curLevel.getLayerInstance(ld);
@@ -2484,9 +2540,15 @@ class Editor extends Page {
 			if( ld.hideInList && !active )
 				continue;
 
+
+			if( curTag!=null && !ld.uiFilterTags.has(curTag) )
+				continue;
+
 			var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
 			jLayerList.append(jLi);
 			jLi.attr("uid",ld.uid);
+			jLi.attr("tags",ld.uiFilterTags.toArray().join(","));
+			jLi.addClass("layer");
 			JsTools.applyListCustomColor(jLi, li.def.uiColor, active);
 
 			if( active )
@@ -2590,6 +2652,9 @@ class Editor extends Page {
 	function updateLayerVisibilities() {
 		jLayerList.children().each( (idx,e)->{
 			var jLayer = new J(e);
+			if( !jLayer.hasClass("layer") )
+				return;
+
 			var li = curLevel.getLayerInstance( Std.parseInt(jLayer.attr("uid")) );
 			if( li==null )
 				return;

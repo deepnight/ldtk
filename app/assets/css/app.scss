@@ -4952,7 +4952,28 @@ canvas#webgl {
 				border: 1px solid $bgMed;
 			}
 
-			li {
+			li.filter {
+				display: block;
+				padding: 0;
+				select {
+					width: 100%;
+					background-color: $bgDark;
+					font-size: 9pt;
+					color: $bgLight;
+					option {
+						color: white;
+						font-size: 11pt;
+						padding: 8px;
+						background-color: $bgLight;
+					}
+					option:selected {
+						background-color: $orange;
+						color: black;
+					}
+				}
+			}
+
+			li.layer {
 				grid-template-columns: min-content min-content auto min-content;
 				padding: 0;
 				padding-left: 8px;
