@@ -1906,10 +1906,7 @@ class Editor extends Page {
 				case LayerInstanceSelected:
 				case LayerInstanceChangedGlobally(li): extra = li.layerDefUid;
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
-				case LayerInstancesRestoredFromHistory(lis):
-					extra = "";
-					for(li in lis)
-						extra+=li.layerDefUid;
+				case LayerInstancesRestoredFromHistory(lis): extra = lis.map( li->li.def.identifier ).join(",")
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
 				case AutoLayerRenderingChanged(lis): extra = lis.map( li->li.def.identifier ).join(",");
 				case TilesetDefChanged(td): extra = td.uid;
