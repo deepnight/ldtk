@@ -6376,6 +6376,11 @@ canvas#webgl {
 			&.col-3 .sublist ul { grid-template-columns: repeat(3,1fr); }
 			&.col-4 .sublist ul { grid-template-columns: repeat(4,1fr); }
 			&.col-5 .sublist ul { grid-template-columns: repeat(5,1fr); }
+			&.col-6 .sublist ul { grid-template-columns: repeat(6,1fr); }
+			&.col-7 .sublist ul { grid-template-columns: repeat(7,1fr); }
+			&.col-8 .sublist ul { grid-template-columns: repeat(8,1fr); }
+			&.col-9 .sublist ul { grid-template-columns: repeat(9,1fr); }
+			&.col-10 .sublist ul { grid-template-columns: repeat(10,1fr); }
 		}
 	}
 
@@ -6395,6 +6400,11 @@ canvas#webgl {
 		&.col-2 .sublist ul li .intGridValue { min-height: 128px; }
 		&.col-3 .sublist ul li .intGridValue { min-height: 96px; }
 		&.col-5 .sublist ul li .intGridValue { min-height: 50px; }
+		&.col-6 .sublist ul li .intGridValue { min-height: 40px; }
+		&.col-7 .sublist ul li .intGridValue { min-height: 40px; }
+		&.col-8 .sublist ul li .intGridValue { min-height: 30px; }
+		&.col-9 .sublist ul li .intGridValue { min-height: 30px; }
+		&.col-10 .sublist ul li .intGridValue { min-height: 30px; }
 	}
 
 
@@ -9664,7 +9674,12 @@ $patternSize : 32px;
 					&.col-2,
 					&.col-3,
 					&.col-4,
-					&.col-5 {
+					&.col-5,
+					&.col-6,
+					&.col-7,
+					&.col-8,
+					&.col-9,
+					&.col-10 {
 						ul.groupValues>li {
 							padding: 0;
 							grid-template-columns: auto;
