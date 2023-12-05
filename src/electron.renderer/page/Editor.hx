@@ -1911,7 +1911,7 @@ class Editor extends Page {
 					for(li in lis)
 						extra+=li.layerDefUid;
 				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
-				case AutoLayerRenderingChanged:
+				case AutoLayerRenderingChanged(lis): extra = lis.map( li->li.def.identifier ).join(",");
 				case TilesetDefChanged(td): extra = td.uid;
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
@@ -2027,7 +2027,7 @@ class Editor extends Page {
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
 					invalidateLevelCache(li.level);
-			case AutoLayerRenderingChanged:
+			case AutoLayerRenderingChanged(lis):
 			case LayerInstanceTilesetChanged(li): invalidateLevelCache(li.level);
 			case TilesetDefChanged(td): invalidateAllLevelsCache();
 			case TilesetImageLoaded(td, init):
@@ -2080,7 +2080,7 @@ class Editor extends Page {
 			case LayerInstanceSelected:
 			case LevelSelected(_):
 			case WorldSelected(_):
-			case AutoLayerRenderingChanged:
+			case AutoLayerRenderingChanged(lis):
 			case ToolOptionChanged:
 			case ToolValueSelected:
 			case BeforeProjectSaving:
@@ -2164,7 +2164,7 @@ class Editor extends Page {
 				updateLayerList();
 				updateGuide();
 
-			case AutoLayerRenderingChanged:
+			case AutoLayerRenderingChanged(lis):
 
 			case LayerInstanceVisiblityChanged(li):
 				selectionTool.clear();

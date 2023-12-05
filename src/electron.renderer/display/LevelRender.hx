@@ -144,8 +144,8 @@ class LevelRender extends dn.Process {
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
 
-			case AutoLayerRenderingChanged:
-				for(li in editor.curLevel.layerInstances)
+			case AutoLayerRenderingChanged(lis):
+				for(li in lis)
 					if( li.def.isAutoLayer() )
 						invalidateLayer(li);
 
@@ -303,7 +303,7 @@ class LevelRender extends dn.Process {
 
 	public function setAutoLayerRendering(v:Bool) {
 		autoLayerRendering = v;
-		editor.ge.emit( AutoLayerRenderingChanged );
+		editor.ge.emit( AutoLayerRenderingChanged(editor.curLevel.layerInstances) );
 	}
 
 	public inline function toggleAutoLayerRendering() {

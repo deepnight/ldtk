@@ -49,7 +49,7 @@ enum GlobalEvent {
 	LayerInstanceChangedGlobally(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
 	LayerInstancesRestoredFromHistory(lis:Array<data.inst.LayerInstance>);
-	AutoLayerRenderingChanged;
+	AutoLayerRenderingChanged(lis:Array<data.inst.LayerInstance>);
 	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);
 
 	TilesetImageLoaded(td:data.def.TilesetDef, isInitial:Bool);
