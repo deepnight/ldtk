@@ -280,7 +280,7 @@ class TilesetDef {
 
 
 	function remapAllTileIdsAfterResize(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
-		App.LOG.warning('Tileset remapping (image size changed)...');
+		App.LOG.warning('Tileset $identifier remapping (image size changed)...');
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
 
