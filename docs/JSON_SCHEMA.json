@@ -2467,7 +2467,8 @@
 				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
-				"type"
+				"type",
+				"uiFilterTags"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -2481,6 +2482,17 @@
 					"description": "If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.",
 					"type": [
 						"number"
+					]
+				},
+				"uiFilterTags": {
+					"description": "Display tags",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"displayOpacity": {

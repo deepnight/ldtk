@@ -241,6 +241,7 @@ Value | Type | Description
 `tilePivotY`<br/><sup class="only">Only *Tile layers*</sup><br/><sup class="internal">*Only used by editor*</sup> | Float | If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.
 `type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Type of the layer as Haxe Enum<br/> Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`
 `uiColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.1-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined color for the UI
+`uiFilterTags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.4.2-gray.svg)  | Array&nbsp;of&nbsp;String | Display tags
 ~~`autoTilesetDefUid`~~<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_1.2.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.2.0<br/> <br/> Replaced by: `tilesetDefUid`
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>
