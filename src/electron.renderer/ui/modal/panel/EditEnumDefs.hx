@@ -200,17 +200,6 @@ class EditEnumDefs extends ui.modal.Panel {
 				jSep.appendTo(jEnumList);
 				jSep.attr("id", project.iid+"_enum_tag_"+group.tag);
 				jSep.attr("default", "open");
-
-				// Rename
-				if( group.tag!=null ) {
-					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
-					jSep.append(jLinks);
-					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
-						for(ed in project.defs.enums)
-							ed.tags.rename(group.tag, t);
-						editor.ge.emit( EnumDefChanged );
-					});
-				}
 			}
 
 			var jLi = new J('<li class="subList draggable"/>');
@@ -408,7 +397,13 @@ class EditEnumDefs extends ui.modal.Panel {
 		var ted = new TagEditor(
 			curEnum.tags,
 			()->editor.ge.emit(EnumDefChanged),
-			()->project.defs.getRecallTags(project.defs.enums, ed->ed.tags)
+			()->project.defs.getRecallTags(project.defs.enums, ed->ed.tags),
+			()->project.defs.enums.map( enumDef->enumDef.tags ),
+			(oldT,newT)->{
+				for(enumDef in project.defs.enums)
+					enumDef.tags.rename(oldT,newT);
+				editor.ge.emit( EnumDefChanged );
+			}
 		);
 		jDefForm.find("#tags").empty().append(ted.jEditor);
 

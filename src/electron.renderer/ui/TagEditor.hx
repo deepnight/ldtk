@@ -151,25 +151,8 @@ class TagEditor {
 			else
 				jInput.blur();
 		});
-		// jInput.focus( _->{
-		// 	new ui.TypeSuggestion(jInput, allValuesGetter());
-		// });
 		jInput.blur( _->renderAll() );
 		jInput.focus();
-	}
-
-
-	public static function attachRenameAction(jTarget:js.jquery.JQuery, curTag:String, onRename:String->Void) {
-		jTarget.click(_->{
-			new ui.modal.dialog.InputDialog(
-				L.t._("Rename tag:"),
-				curTag,
-				(t)->data.Tags.cleanUpTag(t)==null ? "Invalid tag" : null,
-				(t)->data.Tags.cleanUpTag(t),
-				(t)->onRename(t)
-			);
-		});
-		ui.Tip.attach(jTarget, "Rename this tag everywhere");
 	}
 
 }

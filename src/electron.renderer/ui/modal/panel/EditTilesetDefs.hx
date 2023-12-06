@@ -230,6 +230,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			curTd.tags,
 			()->editor.ge.emit(TilesetDefChanged(curTd)),
 			()->project.defs.getRecallTags(project.defs.tilesets, td->td.tags),
+			()->project.defs.tilesets.map( td->td.tags ),
+			(oldT,newT)->{
+				for(td in project.defs.tilesets)
+					td.tags.rename(oldT,newT);
+				editor.ge.emit( TilesetDefChanged(curTd) );
+			},
 			true
 		);
 		jForm.find("#tags").empty().append(ted.jEditor);
@@ -316,17 +322,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 				jSep.appendTo(jList);
 				jSep.attr("id", project.iid+"_tileset_tag_"+group.tag);
 				jSep.attr("default", "open");
-
-				// Rename
-				if( group.tag!=null ) {
-					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
-					jSep.append(jLinks);
-					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
-						for(td in project.defs.tilesets)
-							td.tags.rename(group.tag, t);
-						editor.ge.emit( TilesetDefChanged(curTd) );
-					});
-				}
 			}
 
 			var jLi = new J('<li class="subList"/>');
