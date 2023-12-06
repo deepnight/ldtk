@@ -1059,8 +1059,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		i.setValueStep(0.01);
 		i.setPrecision(2);
 		i.onValueChange = (v)->{
-			if( v<1 )
-				r.breakOnMatch = false;
+			// if( v<1 )
+			// 	r.breakOnMatch = false;
 			if( v/100!=old )
 				invalidateRuleAndOnesBelow(r);
 		}
@@ -1087,10 +1087,10 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jFlag = jRule.find("a.break");
 		jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 		jFlag.click( function(ev:js.jquery.Event) {
-			if( r.hasAnyPositionOffset() ) {
-				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
-				return;
-			}
+			// if( r.hasAnyPositionOffset() ) {
+			// 	N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
+			// 	return;
+			// }
 			// if( r.alpha<1 ) {
 			// 	N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
 			// 	return;
