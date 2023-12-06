@@ -68,7 +68,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 						show: Editor.exists,
 						cb: ()->{
 							for(td in project.defs.tilesets)
-								td.buildPixelData( editor.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+								td.buildPixelDataAndNotify();
 						}
 					});
 
@@ -211,7 +211,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 									log.general(" -> Updating tileset data...");
 									for(td in p.defs.tilesets) {
 										td.importAtlasImage(td.relPath);
-										td.buildPixelData(()->{}, true);
+										td.buildPixelData(true);
 									}
 
 									// Auto layer rules

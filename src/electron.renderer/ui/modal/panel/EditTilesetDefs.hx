@@ -55,13 +55,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildPixelData();
+					curTd.buildPixelDataAndNotify();
 
 			case TilesetImageLoaded(td, init):
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildPixelData();
+					curTd.buildPixelDataAndNotify();
 
 			case TilesetMetaDataChanged(td):
 				updateTilesetPreview();
@@ -109,10 +109,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 		checkBackup();
 	}
 
-
-	inline function rebuildPixelData() {
-		curTd.buildPixelData( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(curTd)) );
-	}
 
 
 	function updateForm() {

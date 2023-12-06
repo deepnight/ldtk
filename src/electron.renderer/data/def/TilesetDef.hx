@@ -673,7 +673,12 @@ class TilesetDef {
 			&& averageColorsCache!=null;
 	}
 
-	public function buildPixelData(onComplete:Void->Void, sync=false) {
+
+	public function buildPixelDataAndNotify(runImmediately=false) {
+		buildPixelData( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(this)), runImmediately );
+	}
+
+	public function buildPixelData(?onComplete:Void->Void, runImmediately=false) {
 		if( !isAtlasLoaded() )
 			return false;
 
@@ -691,11 +696,14 @@ class TilesetDef {
 				}
 			});
 
-		if( !sync )
-			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', ops, onComplete);
-		else
+		if( runImmediately ) {
 			for(op in ops)
 				op.cb();
+			if( onComplete!=null )
+				onComplete();
+		}
+		else
+			new ui.modal.Progress('Initializing pixel data cache for "${getFileName(true)}"', ops, onComplete);
 
 		return true;
 	}

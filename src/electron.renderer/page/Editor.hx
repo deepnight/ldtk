@@ -448,6 +448,7 @@ class Editor extends Page {
 		var changed = false;
 		var msg = Lang.imageLoadingMessage(td.relPath, result);
 
+		trace(result);
 		switch result {
 			case FileNotFound:
 				if( !project.isBackup() ) {
@@ -455,7 +456,7 @@ class Editor extends Page {
 					new ui.modal.dialog.LostFile( oldRelPath, function(newAbsPath) {
 						var newRelPath = project.makeRelativeFilePath(newAbsPath);
 						td.importAtlasImage( newRelPath );
-						td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+						td.buildPixelDataAndNotify();
 						ge.emit( TilesetImageLoaded(td, false) );
 						levelRender.invalidateAll();
 					});
@@ -486,10 +487,23 @@ class Editor extends Page {
 				return false;
 		}
 
+		// Rebuild auto layers
+		switch result {
+			case RemapLoss, RemapSuccessful:
+				td.buildPixelData(true);
+				for(w in project.worlds)
+				for(l in w.levels)
+				for(li in l.layerInstances)
+					if( li.def.tilesetDefUid==td.uid )
+						li.autoTilesCache = null;
+
+			case _:
+		}
+
 		// Rebuild "opaque tiles" cache
 		if( !td.hasValidPixelData() || !isInitialLoading || result!=Ok ) {
 			changed = true;
-			td.buildPixelData( ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+			td.buildPixelDataAndNotify();
 		}
 
 		ge.emit( TilesetImageLoaded(td, isInitialLoading) );

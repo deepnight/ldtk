@@ -501,7 +501,7 @@ class Definitions {
 			case LdtkIcons: td.tileGridSize = 16;
 		}
 		td.importAtlasImage(td.embedAtlas);
-		td.buildPixelData(()->{}, true);
+		td.buildPixelData(true);
 
 		_project.tidy();
 		return td;
