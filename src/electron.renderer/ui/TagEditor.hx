@@ -3,14 +3,16 @@ package ui;
 class TagEditor {
 	public var jEditor : js.jquery.JQuery;
 	var onChange : Void->Void;
+	var onRename : (oldT:String,newT:String)->Void;
 	var otherTagsGetter : Void->Array<data.Tags>;
 	var tags : data.Tags;
 	var allValuesGetter : Void->Array<String>;
 	var allowEditing : Bool;
 
-	public function new(tags:data.Tags, onChange, allValuesGetter:Void->Array<String>, ?otherTagsGetter:Void->Array<data.Tags>, allowEditing=true) {
+	public function new(tags:data.Tags, onChange, allValuesGetter:Void->Array<String>, ?otherTagsGetter:Void->Array<data.Tags>, ?onRename:(oldT:String,newT:String)->Void, allowEditing=true) {
 		this.tags = tags;
 		this.otherTagsGetter = otherTagsGetter;
+		this.onRename = onRename;
 		this.onChange = onChange;
 		this.allValuesGetter = allValuesGetter;
 		this.allowEditing = allowEditing;
@@ -117,6 +119,8 @@ class TagEditor {
 					if( renameEverywhere && otherTagsGetter!=null ) {
 						for(tags in otherTagsGetter())
 							tags.rename(curValue,newValue);
+						if( onRename!=null )
+							onRename(curValue,newValue);
 					}
 					onChange();
 				}
