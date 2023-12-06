@@ -195,7 +195,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		var ted = new ui.TagEditor(
 			curEntity.tags,
 			()->editor.ge.emit(EntityDefChanged),
-			()->project.defs.getRecallEntityTags([curEntity.tags])
+			()->project.defs.getRecallEntityTags([curEntity.tags]),
+			()->return project.defs.entities.map( ed->ed.tags )
 		);
 		jEntityForm.find("#tags").empty().append(ted.jEditor);
 

@@ -3,12 +3,14 @@ package ui;
 class TagEditor {
 	public var jEditor : js.jquery.JQuery;
 	var onChange : Void->Void;
+	var otherTagsGetter : Void->Array<data.Tags>;
 	var tags : data.Tags;
 	var allValuesGetter : Void->Array<String>;
 	var allowEditing : Bool;
 
-	public function new(tags:data.Tags, onChange, allValuesGetter:Void->Array<String>, allowEditing=true) {
+	public function new(tags:data.Tags, onChange, allValuesGetter:Void->Array<String>, ?otherTagsGetter:Void->Array<data.Tags>, allowEditing=true) {
 		this.tags = tags;
+		this.otherTagsGetter = otherTagsGetter;
 		this.onChange = onChange;
 		this.allValuesGetter = allValuesGetter;
 		this.allowEditing = allowEditing;
@@ -94,7 +96,7 @@ class TagEditor {
 	}
 
 
-	function createInput(?jTarget:js.jquery.JQuery, k="") {
+	function createInput(?jTarget:js.jquery.JQuery, curValue="") {
 		jEditor.find(".empty").remove();
 		var jInput = new J('<input type="text"/>');
 		if( jTarget!=null ) {
@@ -104,14 +106,43 @@ class TagEditor {
 		else
 			jEditor.append(jInput);
 
-		var i = new form.input.StringInput(jInput, ()->k, v->{
-			v = data.Tags.cleanUpTag(v);
-			if( v!=null && v!=k ) {
-				tags.unset(k);
-				if( !tags.has(v) )
-					tags.set(v);
-				jInput.blur();
-				onChange();
+		var i = new form.input.StringInput(jInput, ()->curValue, newValue->{
+			newValue = data.Tags.cleanUpTag(newValue);
+			if( newValue!=null && newValue!=curValue ) {
+				function _do(renameEverywhere=true) {
+					tags.unset(curValue);
+					if( !tags.has(newValue) )
+						tags.set(newValue);
+					jInput.blur();
+					if( renameEverywhere && otherTagsGetter!=null ) {
+						for(tags in otherTagsGetter())
+							tags.rename(curValue,newValue);
+					}
+					onChange();
+				}
+
+				if( curValue!="" && otherTagsGetter!=null ) {
+					var uses = 0;
+					for(tags in otherTagsGetter())
+						if( tags.has(curValue) ) {
+							uses++;
+							if( uses>=2 )
+								break;
+						}
+					if( uses<=1 )
+						_do();
+					else
+						new ui.modal.dialog.Choice(
+							L.t._("This tag is used in other elements!\nDo you want to rename it in ALL other elements as well, or only here?"),
+							[
+								{ label:"Rename everywhere", cb: ()->_do(true) },
+								{ label:"Rename only here", cb: ()->_do(false) },
+							]
+						);
+				}
+				else
+					_do();
+
 			}
 			else
 				jInput.blur();

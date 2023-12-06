@@ -344,7 +344,8 @@ class EditLayerDefs extends ui.modal.Panel {
 		var ted = new TagEditor(
 			cur.uiFilterTags,
 			()->editor.ge.emit(LayerDefChanged(cur.uid)),
-			()->project.defs.getRecallTags(project.defs.layers, ld->ld.uiFilterTags)
+			()->project.defs.getRecallTags(project.defs.layers, ld->ld.uiFilterTags),
+			()->return project.defs.layers.map( ld->ld.uiFilterTags )
 		);
 		jForm.find("#uiFilterTags").empty().append(ted.jEditor);
 
