@@ -556,6 +556,15 @@ class EditLayerDefs extends ui.modal.Panel {
 					if( g.groupUid!=0 )
 						jGroupWrapper.addClass("draggable");
 
+					var jAdd = jGroupWrapper.find(".addGroupValue");
+					jAdd.click(_->{
+						var col = Const.suggestNiceColor( cur.getAllIntGridValues().map(iv->iv.color) );
+						var iv = cur.addIntGridValue(col);
+						var v = cur.getIntGridValueDef(iv);
+						v.groupUid = g.groupUid;
+						editor.ge.emit( LayerDefIntGridValueAdded(cur.uid,iv) );
+					});
+
 					// Group header
 					var jGroupHeader = jGroupWrapper.find(".header");
 					if( groupedValues.length==1 )
