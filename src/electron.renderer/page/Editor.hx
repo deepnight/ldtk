@@ -448,7 +448,6 @@ class Editor extends Page {
 		var changed = false;
 		var msg = Lang.imageLoadingMessage(td.relPath, result);
 
-		trace(result);
 		switch result {
 			case FileNotFound:
 				if( !project.isBackup() ) {
