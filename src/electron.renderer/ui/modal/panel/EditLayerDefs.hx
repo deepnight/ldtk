@@ -8,7 +8,8 @@ enum BakeMethod {
 
 class EditLayerDefs extends ui.modal.Panel {
 	var jList : js.jquery.JQuery;
-	var jForm : js.jquery.JQuery;
+	var jForms : js.jquery.JQuery;
+	var jFormsWrapper : js.jquery.JQuery;
 	public var cur : Null<data.def.LayerDef>;
 	var search : QuickSearch;
 	var intGridValuesIconsTdUid : Null<Int>;
@@ -21,7 +22,8 @@ class EditLayerDefs extends ui.modal.Panel {
 			autoLayersUrl: Const.DOCUMENTATION_URL+"/tutorials/auto-layers",
 		} );
 		jList = jModalAndMask.find(".mainList ul");
-		jForm = jModalAndMask.find("dl.form");
+		jForms = jModalAndMask.find("dl.form");
+		jFormsWrapper = jModalAndMask.find("dl.form");
 		linkToButton("button.editLayers");
 
 		// Create layer
@@ -30,7 +32,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				var ld = project.defs.createLayerDef(type);
 				select(ld);
 				editor.ge.emit(LayerDefAdded);
-				jForm.find("input").first().focus().select();
+				jForms.find("input").first().focus().select();
 			}
 
 			// Type picker
@@ -208,7 +210,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			case LayerDefIntGridValueAdded(defUid,value):
 				updateForm();
-				jForm.find("ul.intGridValues li.value:last .name").focus();
+				jForms.find("ul.intGridValues li.value:last .name").focus();
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				updateForm();
@@ -226,12 +228,12 @@ class EditLayerDefs extends ui.modal.Panel {
 
 	function updateForm() {
 		Tip.clear();
-		jForm.find("*").off(); // cleanup event listeners
-		jForm.find(".tmp").remove();
+		jForms.find("*").off(); // cleanup event listeners
+		jForms.find(".tmp").remove();
 
 		if( cur==null ) {
 			jContent.find(".none").show();
-			jForm.hide();
+			jFormsWrapper.hide();
 			return;
 		}
 		jContent.find(".none").hide();
@@ -244,32 +246,32 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 
 		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
-		jForm.show();
-		jForm.find("#gridSize").prop("readonly",false);
+		jFormsWrapper.show();
+		jForms.find("#gridSize").prop("readonly",false);
 
 		// Set form class
 		for(k in Type.getEnumConstructs(ldtk.Json.LayerType))
-			jForm.removeClass("type-"+k);
-		jForm.removeClass("type-IntGridAutoLayer");
-		jForm.addClass("type-"+cur.type);
+			jForms.removeClass("type-"+k);
+		jForms.removeClass("type-IntGridAutoLayer");
+		jForms.addClass("type-"+cur.type);
 		if( cur.type==IntGrid && cur.isAutoLayer() )
-			jForm.addClass("type-IntGridAutoLayer");
+			jForms.addClass("type-IntGridAutoLayer");
 
-		jForm.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
+		jForms.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
 
 		// Identifier
-		var i = Input.linkToHtmlInput( cur.identifier, jForm.find("input[name='name']") );
+		var i = Input.linkToHtmlInput( cur.identifier, jForms.find("input[name='name']") );
 		i.fixValue = (v)->project.fixUniqueIdStr(v, (id)->project.defs.isLayerNameUnique(id,cur));
 		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
 		// Doc
-		var i = Input.linkToHtmlInput( cur.doc, jForm.find("input[name='layerDoc']") );
+		var i = Input.linkToHtmlInput( cur.doc, jForms.find("input[name='layerDoc']") );
 		i.allowNull = true;
 		i.onChange = editor.ge.emit.bind( LayerDefChanged(cur.uid) );
 
 		// UI color
-		var jCol = jForm.find("#uiColor");
+		var jCol = jForms.find("#uiColor");
 		jCol.removeClass("null");
 		if( cur.uiColor!=null )
 			jCol.val(cur.uiColor.toHex());
@@ -281,13 +283,13 @@ class EditLayerDefs extends ui.modal.Panel {
 			cur.uiColor = dn.Col.parseHex( jCol.val() );
 			editor.ge.emit( LayerDefChanged(cur.uid) );
 		});
-		jForm.find(".resetUiColor").click(_->{
+		jForms.find(".resetUiColor").click(_->{
 			cur.uiColor = null;
 			editor.ge.emit( LayerDefChanged(cur.uid) );
 		}).css("display", cur.uiColor==null ? "none" : "block");
 
 		// Grid
-		var i = Input.linkToHtmlInput( cur.gridSize, jForm.find("input[name='gridSize']") );
+		var i = Input.linkToHtmlInput( cur.gridSize, jForms.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
 		i.onBeforeSetter = (newGrid)->{
 			new LastChance(L.t._("Layer grid changed"), project);
@@ -312,32 +314,32 @@ class EditLayerDefs extends ui.modal.Panel {
 				}
 		}
 
-		var i = Input.linkToHtmlInput( cur.guideGridWid, jForm.find("input[name='guideGridWid']") );
+		var i = Input.linkToHtmlInput( cur.guideGridWid, jForms.find("input[name='guideGridWid']") );
 		i.setBounds(0,Const.MAX_GRID_SIZE);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 		i.fixValue = v->return v<=1 ? 0 : v;
 		i.setEmptyValue(0);
 
-		var i = Input.linkToHtmlInput( cur.guideGridHei, jForm.find("input[name='guideGridHei']") );
+		var i = Input.linkToHtmlInput( cur.guideGridHei, jForms.find("input[name='guideGridHei']") );
 		i.setBounds(0,Const.MAX_GRID_SIZE);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 		i.fixValue = v->return v<=1 ? 0 : v;
 		i.setEmptyValue(0);
 
-		var i = Input.linkToHtmlInput( cur.displayOpacity, jForm.find("input[name='displayOpacity']") );
+		var i = Input.linkToHtmlInput( cur.displayOpacity, jForms.find("input[name='displayOpacity']") );
 		i.enablePercentageMode();
 		i.setBounds(0.1, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		var i = Input.linkToHtmlInput( cur.inactiveOpacity, jForm.find("input[name='inactiveOpacity']") );
+		var i = Input.linkToHtmlInput( cur.inactiveOpacity, jForms.find("input[name='inactiveOpacity']") );
 		i.enablePercentageMode();
 		i.setBounds(0, 1);
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		var i = Input.linkToHtmlInput( cur.hideInList, jForm.find("input[name='hideInList']") );
+		var i = Input.linkToHtmlInput( cur.hideInList, jForms.find("input[name='hideInList']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		var i = Input.linkToHtmlInput( cur.canSelectWhenInactive, jForm.find("input[name='canSelectWhenInactive']") );
+		var i = Input.linkToHtmlInput( cur.canSelectWhenInactive, jForms.find("input[name='canSelectWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		// UI tags
@@ -347,25 +349,25 @@ class EditLayerDefs extends ui.modal.Panel {
 			()->project.defs.getRecallTags(project.defs.layers, ld->ld.uiFilterTags),
 			()->return project.defs.layers.map( ld->ld.uiFilterTags )
 		);
-		jForm.find("#uiFilterTags").empty().append(ted.jEditor);
+		jForms.find("#uiFilterTags").empty().append(ted.jEditor);
 
-		var i = Input.linkToHtmlInput( cur.renderInWorldView, jForm.find("input[name='renderInWorldView']") );
+		var i = Input.linkToHtmlInput( cur.renderInWorldView, jForms.find("input[name='renderInWorldView']") );
 		i.onChange = ()->{
 			editor.worldRender.invalidateAll();
 			editor.ge.emit(LayerDefChanged(cur.uid));
 		}
 
-		var i = Input.linkToHtmlInput( cur.hideFieldsWhenInactive, jForm.find("input[name='hideFieldsWhenInactive']") );
+		var i = Input.linkToHtmlInput( cur.hideFieldsWhenInactive, jForms.find("input[name='hideFieldsWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForm.find("input[name='offsetX']") );
+		var i = Input.linkToHtmlInput( cur.pxOffsetX, jForms.find("input[name='offsetX']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
-		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
+		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForms.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 		var equal = cur.parallaxFactorX==cur.parallaxFactorY;
-		var i = Input.linkToHtmlInput( cur.parallaxFactorX, jForm.find("input[name='parallaxFactorX']") );
+		var i = Input.linkToHtmlInput( cur.parallaxFactorX, jForms.find("input[name='parallaxFactorX']") );
 		i.setBounds(-1,1);
 		i.enablePercentageMode(false);
 		i.onChange = ()->{
@@ -374,7 +376,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit(LayerDefChanged(cur.uid));
 		}
 
-		var i = Input.linkToHtmlInput( cur.parallaxFactorY, jForm.find("input[name='parallaxFactorY']") );
+		var i = Input.linkToHtmlInput( cur.parallaxFactorY, jForms.find("input[name='parallaxFactorY']") );
 		i.setBounds(-1,1);
 		i.enablePercentageMode(false);
 		if( equal )
@@ -390,19 +392,19 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit(LayerDefChanged(cur.uid));
 		}
 
-		var i = Input.linkToHtmlInput( cur.parallaxScaling, jForm.find("input#parallaxScaling") );
+		var i = Input.linkToHtmlInput( cur.parallaxScaling, jForms.find("input#parallaxScaling") );
 		i.onChange = ()->{
 			if( cur.parallaxScaling )
 				cur.parallaxFactorY = cur.parallaxFactorX;
 			editor.ge.emit(LayerDefChanged(cur.uid));
 		}
 
-		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForm.find("input[name='offsetY']") );
+		var i = Input.linkToHtmlInput( cur.pxOffsetY, jForms.find("input[name='offsetY']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid));
 
 
 		// Edit rules
-		var jButton = jForm.find("button.editAutoRules");
+		var jButton = jForms.find("button.editAutoRules");
 		if( cur.autoLayerRulesCanBeUsed() ) {
 			jButton.show();
 
@@ -419,7 +421,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		// Baking
 		if( cur.isAutoLayer() ) {
-			var jButton = jForm.find("button.bake");
+			var jButton = jForms.find("button.bake");
 			jButton.click( (_)->{
 				if( !cur.autoLayerRulesCanBeUsed() )
 					new ui.modal.dialog.Message(L.t._("Errors in current layer settings prevent rules to be applied. It can't be baked now."));
@@ -434,7 +436,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			// Auto-layer tileset
 			JsTools.createTilesetSelect(
 				project,
-				jForm.find("[name=autoTileset]"),
+				jForms.find("[name=autoTileset]"),
 				cur.tilesetDefUid,
 				true,
 				(uid)->{
@@ -454,7 +456,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			// Biome field select
 			var enumFieldUids = project.defs.levelFields.filter( f->f.isEnum() ).map( f->f.uid );
 			JsTools.createValuesSelect(
-				jForm.find("[name=biomeField]"),
+				jForms.find("[name=biomeField]"),
 				cur.biomeFieldUid,
 				enumFieldUids,
 				true,
@@ -475,7 +477,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			);
 
 			// Auto-kill tiles
-			var jSelect = jForm.find("select[name=autoKillLayer]");
+			var jSelect = jForms.find("select[name=autoKillLayer]");
 			jSelect.empty();
 
 			var opt = new J("<option/>");
@@ -517,7 +519,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						}
 
 				// Icons tileset
-				var jSelect = jForm.find(".valuesIconsTileset");
+				var jSelect = jForms.find(".valuesIconsTileset");
 				JsTools.createTilesetSelect(project, jSelect, intGridValuesIconsTdUid, true, "No icon", (tilesetDefUid)->{
 					for(iv in cur.getAllIntGridValues())
 						iv.tile = null;
@@ -527,7 +529,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				});
 
 
-				var jIntGridValuesWrapper = jForm.find("dd.intGridValues");
+				var jIntGridValuesWrapper = jForms.find("dd.intGridValues");
 				var jAllGroups = jIntGridValuesWrapper.find("ul.intGridValuesGroups");
 				jAllGroups.empty();
 
@@ -547,7 +549,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				// Grouped intGrid values
 				var groupedValues = cur.getGroupedIntGridValues();
 				for(g in groupedValues) {
-					var jGroupWrapper = jForm.find("xml#intGridValuesGroup").clone().children().wrapAll("<li/>").parent();
+					var jGroupWrapper = jForms.find("xml#intGridValuesGroup").clone().children().wrapAll("<li/>").parent();
 					jGroupWrapper.appendTo(jAllGroups);
 
 					if( g.color!=null )
@@ -664,7 +666,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 					// IntGrid values
 					for( intGridVal in g.all ) {
-						var jValue = jForm.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
+						var jValue = jForms.find("xml#intGridValue").clone().children().wrapAll("<li/>").parent();
 						jValue.attr("valueId", Std.string(intGridVal.value));
 						jValue.addClass("value");
 						jValue.appendTo(jGroup);
@@ -766,7 +768,7 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			case AutoLayer:
 				// Linked layer
-				var jSelect = jForm.find("select[name=autoLayerSources]");
+				var jSelect = jForms.find("select[name=autoLayerSources]");
 				jSelect.empty();
 
 				var opt = new J("<option/>");
@@ -807,11 +809,11 @@ class EditLayerDefs extends ui.modal.Panel {
 					editor.ge.emit(LayerDefChanged(cur.uid));
 				});
 
-				jForm.find("#gridSize").prop("readonly",true);
+				jForms.find("#gridSize").prop("readonly",true);
 
 				// Tileset
 				initAutoLayerSelects();
-				var jSelect = jForm.find("[name=autoTileset]");
+				var jSelect = jForms.find("[name=autoTileset]");
 				if( cur.tilesetDefUid==null )
 					jSelect.addClass("required");
 
@@ -825,7 +827,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags]),
 					false
 				);
-				jForm.find("#requiredTags").empty().append( ted.jEditor );
+				jForms.find("#requiredTags").empty().append( ted.jEditor );
 
 				var ted = new ui.TagEditor(
 					cur.excludedTags,
@@ -833,17 +835,17 @@ class EditLayerDefs extends ui.modal.Panel {
 					()->project.defs.getRecallEntityTags([cur.requiredTags, cur.excludedTags]),
 					false
 				);
-				jForm.find("#excludedTags").empty().append( ted.jEditor );
+				jForms.find("#excludedTags").empty().append( ted.jEditor );
 
 				// Move entities
-				jForm.find(".moveEntities").click( _->{
+				jForms.find(".moveEntities").click( _->{
 					new ui.modal.dialog.MoveEntitiesBetweenLayers(cur);
 				});
 
 			case Tiles:
 				var jSelect = JsTools.createTilesetSelect(
 					project,
-					jForm.find("select[name=tilesets]"),
+					jForms.find("select[name=tilesets]"),
 					cur.tilesetDefUid,
 					true,
 					"No auto-layer rendering",
@@ -887,7 +889,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				}
 
 
-				var jPivots = jForm.find(".pivot");
+				var jPivots = jForms.find(".pivot");
 				jPivots.empty();
 				var p = JsTools.createPivotEditor(cur.tilePivotX, cur.tilePivotY, 0x0, function(x,y) {
 					cur.tilePivotX = x;
@@ -897,7 +899,7 @@ class EditLayerDefs extends ui.modal.Panel {
 				p.appendTo(jPivots);
 		}
 
-		JsTools.parseComponents(jForm);
+		JsTools.parseComponents(jForms);
 		checkBackup();
 	}
 
