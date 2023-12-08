@@ -848,7 +848,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					jForms.find("select[name=tilesets]"),
 					cur.tilesetDefUid,
 					true,
-					"No auto-layer rendering",
+					"Tileset required",
 					(uid)->{
 						if( uid==null )
 							cur.tilesetDefUid = null;
