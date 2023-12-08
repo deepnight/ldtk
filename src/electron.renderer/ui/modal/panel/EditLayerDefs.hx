@@ -23,7 +23,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		} );
 		jList = jModalAndMask.find(".mainList ul");
 		jForms = jModalAndMask.find("dl.form");
-		jFormsWrapper = jModalAndMask.find("dl.form");
+		jFormsWrapper = jModalAndMask.find(".rightColumn");
 		linkToButton("button.editLayers");
 
 		// Create layer
