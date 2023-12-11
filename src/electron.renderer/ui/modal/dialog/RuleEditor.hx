@@ -209,7 +209,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Values view mode
 		var stateId = settings.makeStateId(RuleValuesColumns, layerDef.uid);
-		var columns = settings.getUiStateInt(stateId, project, 1);
+		var columns = settings.getUiStateInt(stateId, project, 5);
 		JsTools.removeClassReg(jValuePalette, ~/col-[0-9]+/g);
 		jValuePalette.addClass("col-"+columns);
 
