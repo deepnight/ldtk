@@ -12,8 +12,8 @@ class RuleEditor extends ui.modal.Dialog {
 	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleEditor");
 
-		// if( rule.size<Const.MAX_AUTO_PATTERN_SIZE )
-		// 	rule.resize(Const.MAX_AUTO_PATTERN_SIZE);
+		if( rule.size<Const.MAX_AUTO_PATTERN_SIZE )
+			rule.resize(Const.MAX_AUTO_PATTERN_SIZE);
 
 		setTransparentMask();
 		this.layerDef = layerDef;
@@ -70,6 +70,8 @@ class RuleEditor extends ui.modal.Dialog {
 
 
 	override function close() {
+		rule.trim();
+
 		super.close();
 
 		if( rule.isEmpty() ) {
@@ -339,20 +341,20 @@ class RuleEditor extends ui.modal.Dialog {
 
 
 		// Grid size selection
-		var jSizes = jContent.find(">.pattern .editor select").empty();
-		var s = -1;
-		var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
-		for(size in sizes) {
-			var jOpt = new J('<option value="$size">${size}x$size</option>');
-			jOpt.appendTo(jSizes);
-		}
-		jSizes.change( function(_) {
-			var size = Std.parseInt( jSizes.val() );
-			rule.resize(size);
-			editor.ge.emit( LayerRuleChanged(rule) );
-			renderAll();
-		});
-		jSizes.val(rule.size);
+		// var jSizes = jContent.find(">.pattern .editor select").empty();
+		// var s = -1;
+		// var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
+		// for(size in sizes) {
+		// 	var jOpt = new J('<option value="$size">${size}x$size</option>');
+		// 	jOpt.appendTo(jSizes);
+		// }
+		// jSizes.change( function(_) {
+		// 	var size = Std.parseInt( jSizes.val() );
+		// 	rule.resize(size);
+		// 	editor.ge.emit( LayerRuleChanged(rule) );
+		// 	renderAll();
+		// });
+		// jSizes.val(rule.size);
 
 		// Out-of-bounds policy
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");

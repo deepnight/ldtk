@@ -1022,7 +1022,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jPreview.append(pe.jRoot);
 		}
 		jPreview.click( function(ev) {
-			new ui.modal.dialog.RuleEditor(ld, r);
+			var ruleEd = new ui.modal.dialog.RuleEditor(ld, r);
+			ruleEd.onCloseCb = ()->updateRule(r);
 		});
 
 		// Show affect level cells

@@ -240,24 +240,26 @@ class AutoLayerRuleDef {
 	public function trim() {
 		while( size>1 ) {
 			var emptyBorder = true;
+			// Horizontal borders
 			for( cx in 0...size )
 				if( pattern[coordId(cx,0)]!=0 || pattern[coordId(cx,size-1)]!=0 ) {
 					emptyBorder = false;
 					break;
 				}
-			for( cy in 0...size )
-				if( pattern[coordId(0,cy)]!=0 || pattern[coordId(size-1,cy)]!=0 ) {
-					emptyBorder = false;
-					break;
-				}
+
+			// Vertical borders
+			if( emptyBorder )
+				for( cy in 0...size )
+					if( pattern[coordId(0,cy)]!=0 || pattern[coordId(size-1,cy)]!=0 ) {
+						emptyBorder = false;
+						break;
+					}
 
 			if( emptyBorder )
 				resize(size-2);
 			else
-				return false;
+				break;
 		}
-
-		return true;
 	}
 
 	public function isEmpty() {
@@ -348,6 +350,8 @@ class AutoLayerRuleDef {
 	public function tidy(ld:LayerDef) {
 		var anyFix = false;
 
+		trim();
+
 		if( flipX && isSymetricX() ) {
 			App.LOG.add("tidy", 'Fixed X symetry of Rule#$uid');
 			flipX = false;
@@ -383,9 +387,6 @@ class AutoLayerRuleDef {
 			App.LOG.add("tidy", 'Fixed lost outOfBoundsValue: $outOfBoundsValue');
 			outOfBoundsValue = null;
 		}
-
-		if( trim() )
-			anyFix = true;
 
 		return anyFix;
 	}
