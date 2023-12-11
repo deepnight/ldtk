@@ -12,6 +12,9 @@ class RuleEditor extends ui.modal.Dialog {
 	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleEditor");
 
+		// if( rule.size<Const.MAX_AUTO_PATTERN_SIZE )
+		// 	rule.resize(Const.MAX_AUTO_PATTERN_SIZE);
+
 		setTransparentMask();
 		this.layerDef = layerDef;
 		this.rule = rule;
@@ -234,6 +237,9 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Groups
 		for(g in sourceDef.getGroupedIntGridValues()) {
+			if( g.all.length==0 )
+				continue;
+
 			var groupValue = (g.groupUid+1)*1000;
 
 			var jHeader = new J('<li class="title"/>');
@@ -295,15 +301,8 @@ class RuleEditor extends ui.modal.Dialog {
 			editor.ge.emit( LayerRuleChanged(rule) );
 			updateValuePalette();
 		});
-
-
-		// Value groups
-		// var jGroups = jContent.find(">.pattern .groups ul").empty();
-		// // JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
-		// // jGroups.addClass("col-"+columns);
-		// for(g in sourceDef.getGroupedIntGridValues())
-		// 	jGroups.append('<li>${g.displayName}</li>');
 	}
+
 
 	function renderAll() {
 

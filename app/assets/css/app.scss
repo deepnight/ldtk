@@ -9628,7 +9628,6 @@ $patternSize : 32px;
 				position: relative;
 				max-height: 400px;
 				overflow-y: auto;
-				padding-right: 32px;
 
 				button.displayMode {
 					position: absolute;
@@ -9636,11 +9635,17 @@ $patternSize : 32px;
 					right: 0;
 					width: auto;
 					padding: 3px 1px;
+					background-color: $bgDark;
+					&:hover {
+						background-color: $orange;
+					}
 				}
 
 				ul.groups {
 
 					li.title {
+						display: flex;
+						align-items: center;
 						padding: 3px 4px;
 						border-top-left-radius: 2px;
 						border-top-right-radius: 2px;
@@ -9664,12 +9669,16 @@ $patternSize : 32px;
 						}
 					}
 
-					li.title:not(.active):hover+li.subList {
-						outline: 1px dashed white;
+					li.title:not(.active):hover {
+						outline: 1px solid white;
+						&+li.subList {
+							outline: 1px dashed white;
+						}
 					}
 
 					li.title.active {
-						color: white;
+						color: black;
+						background-color: white !important;
 						font-weight: bold;
 
 						+li.subList {
@@ -9695,15 +9704,10 @@ $patternSize : 32px;
 						}
 					}
 
-					&.col-2,
-					&.col-3,
-					&.col-4,
-					&.col-5,
-					&.col-6,
-					&.col-7,
-					&.col-8,
-					&.col-9,
-					&.col-10 {
+					&[class*="col-"] {
+						ul.groupValues {
+							display: grid;
+						}
 						ul.groupValues>li {
 							padding: 0;
 							grid-template-columns: auto;
@@ -9735,16 +9739,15 @@ $patternSize : 32px;
 						}
 					}
 
-					&[class*="col-"] ul.groupValues {
-						display: grid;
-					}
-
-					&.col-5 ul.groupValues,
-					&.col-6 ul.groupValues,
-					&.col-7 ul.groupValues,
-					&.col-8 ul.groupValues,
-					&.col-9 ul.groupValues,
-					&.col-10 ul.groupValues {
+					&.col-5,
+					&.col-6,
+					&.col-7,
+					&.col-8,
+					&.col-9,
+					&.col-10 {
+						>li.title {
+							padding: 2px;
+						}
 						>li.subList {
 							padding: 4px;
 						}
