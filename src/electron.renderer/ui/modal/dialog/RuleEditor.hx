@@ -220,7 +220,7 @@ class RuleEditor extends ui.modal.Dialog {
 					updateValuePalette();
 				}
 			});
-			for(n in [2,3,4,5]) {
+			for(n in [2,3,4,5,6,7,8,9,10]) {
 				m.addAction({
 					label:L.t._("::n:: columns", {n:n}),
 					iconId: "gridView",

@@ -9646,8 +9646,11 @@ $patternSize : 32px;
 						border-top-right-radius: 2px;
 						cursor: pointer;
 
+						font-size: 9pt;
 						white-space: nowrap;
 						overflow: hidden;
+						border-top-left-radius: 3px;
+						border-top-right-radius: 3px;
 
 						&:not(.active) {
 							color: $bgLighter;
@@ -9732,8 +9735,21 @@ $patternSize : 32px;
 						}
 					}
 
-					&.col-2 ul.groupValues {
+					&[class*="col-"] ul.groupValues {
 						display: grid;
+					}
+
+					&.col-5 ul.groupValues,
+					&.col-6 ul.groupValues,
+					&.col-7 ul.groupValues,
+					&.col-8 ul.groupValues,
+					&.col-9 ul.groupValues,
+					&.col-10 ul.groupValues {
+						>li.subList {
+							padding: 4px;
+						}
+					}
+					&.col-2 ul.groupValues {
 						grid-template-columns: repeat(2, 1fr);
 						li .intGridValue {
 							height: 80px;
@@ -9741,27 +9757,43 @@ $patternSize : 32px;
 					}
 
 					&.col-3 ul.groupValues {
-						display: grid;
 						grid-template-columns: repeat(3, 1fr);
-						li .intGridValue {
-							height: 60px;
-						}
+						li .intGridValue { height: 60px; }
 					}
 
 					&.col-4 ul.groupValues {
-						display: grid;
 						grid-template-columns: repeat(4, 1fr);
-						li .intGridValue {
-							height: 50px;
-						}
+						li .intGridValue { height: 50px; }
 					}
 
 					&.col-5 ul.groupValues {
-						display: grid;
 						grid-template-columns: repeat(5, 1fr);
-						li .intGridValue {
-							height: 50px;
-						}
+						li .intGridValue { height: 50px; }
+					}
+
+					&.col-6 ul.groupValues {
+						grid-template-columns: repeat(6, 1fr);
+						li .intGridValue { height: 40px; }
+					}
+
+					&.col-7 ul.groupValues {
+						grid-template-columns: repeat(7, 1fr);
+						li .intGridValue { height: 35px; }
+					}
+
+					&.col-8 ul.groupValues {
+						grid-template-columns: repeat(8, 1fr);
+						li .intGridValue { height: 30px; }
+					}
+
+					&.col-9 ul.groupValues {
+						grid-template-columns: repeat(9, 1fr);
+						li .intGridValue { height: 30px; }
+					}
+
+					&.col-10 ul.groupValues {
+						grid-template-columns: repeat(10, 1fr);
+						li .intGridValue { height: 25px; }
 					}
 
 					li.subList {
