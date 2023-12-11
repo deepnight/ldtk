@@ -9737,67 +9737,67 @@ $patternSize : 32px;
 							}
 
 						}
-					}
-
-					&.col-5,
-					&.col-6,
-					&.col-7,
-					&.col-8,
-					&.col-9,
-					&.col-10 {
-						>li.title {
-							padding: 2px;
+						&.col-5,
+						&.col-6,
+						&.col-7,
+						&.col-8,
+						&.col-9,
+						&.col-10 {
+							>li.title {
+								padding: 2px;
+							}
+							>li.subList {
+								padding: 4px;
+							}
 						}
-						>li.subList {
-							padding: 4px;
+						&.col-2 ul.groupValues {
+							grid-template-columns: repeat(2, 1fr);
+							li .intGridValue {
+								height: 80px;
+							}
+						}
+
+						&.col-3 ul.groupValues {
+							grid-template-columns: repeat(3, 1fr);
+							li .intGridValue { height: 60px; }
+						}
+
+						&.col-4 ul.groupValues {
+							grid-template-columns: repeat(4, 1fr);
+							li .intGridValue { height: 50px; }
+						}
+
+						&.col-5 ul.groupValues {
+							grid-template-columns: repeat(5, 1fr);
+							li .intGridValue { height: 50px; }
+						}
+
+						&.col-6 ul.groupValues {
+							grid-template-columns: repeat(6, 1fr);
+							li .intGridValue { height: 40px; }
+						}
+
+						&.col-7 ul.groupValues {
+							grid-template-columns: repeat(7, 1fr);
+							li .intGridValue { height: 35px; }
+						}
+
+						&.col-8 ul.groupValues {
+							grid-template-columns: repeat(8, 1fr);
+							li .intGridValue { height: 30px; }
+						}
+
+						&.col-9 ul.groupValues {
+							grid-template-columns: repeat(9, 1fr);
+							li .intGridValue { height: 30px; }
+						}
+
+						&.col-10 ul.groupValues {
+							grid-template-columns: repeat(10, 1fr);
+							li .intGridValue { height: 25px; }
 						}
 					}
-					&.col-2 ul.groupValues {
-						grid-template-columns: repeat(2, 1fr);
-						li .intGridValue {
-							height: 80px;
-						}
-					}
 
-					&.col-3 ul.groupValues {
-						grid-template-columns: repeat(3, 1fr);
-						li .intGridValue { height: 60px; }
-					}
-
-					&.col-4 ul.groupValues {
-						grid-template-columns: repeat(4, 1fr);
-						li .intGridValue { height: 50px; }
-					}
-
-					&.col-5 ul.groupValues {
-						grid-template-columns: repeat(5, 1fr);
-						li .intGridValue { height: 50px; }
-					}
-
-					&.col-6 ul.groupValues {
-						grid-template-columns: repeat(6, 1fr);
-						li .intGridValue { height: 40px; }
-					}
-
-					&.col-7 ul.groupValues {
-						grid-template-columns: repeat(7, 1fr);
-						li .intGridValue { height: 35px; }
-					}
-
-					&.col-8 ul.groupValues {
-						grid-template-columns: repeat(8, 1fr);
-						li .intGridValue { height: 30px; }
-					}
-
-					&.col-9 ul.groupValues {
-						grid-template-columns: repeat(9, 1fr);
-						li .intGridValue { height: 30px; }
-					}
-
-					&.col-10 ul.groupValues {
-						grid-template-columns: repeat(10, 1fr);
-						li .intGridValue { height: 25px; }
-					}
 
 					li.subList {
 						margin-bottom: 8px;
@@ -9807,6 +9807,7 @@ $patternSize : 32px;
 						}
 						li.value {
 							cursor: pointer;
+							padding: 1px;
 
 							&:hover {
 								outline: 1px dashed white;
@@ -9822,7 +9823,7 @@ $patternSize : 32px;
 								}
 							}
 							&:not(.active) {
-								filter: brightness(0.5);
+								filter: brightness(0.8);
 							}
 						}
 					}
