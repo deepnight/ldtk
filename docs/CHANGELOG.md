@@ -43,6 +43,9 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
 
 ## Other changes
 
+ - Auto-layer rule size is now automatic, internally ranging from 1x1 up to 9x9. LDtk will optimize rules to smaller internal sizes based on your rule layout.
+ - Added a button to toggle Auto-layer rendering (equivalent of the existing`SHIFT-R` shortcut)
+ - Added expand/collapse sections to the Layers panel.
  - TODO: auto tags-renaming
  - TODO: rule size is now automatic
  - Moved the "Project" button location before "World" and "Level" buttons in editor.
@@ -51,6 +54,8 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
  - Rules remapping now also updates out-of-bounds policy value
  - Allowed break-on-match on rules with some transparency
  - Fixed unsupported "Empty cell" value in rules out-of-bounds policy
+ - Fixed a crash when deleting an Enum used in level custom fields.
+ - Fixed log path partially cut in the Settings window
 
 
 
