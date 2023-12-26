@@ -61,10 +61,11 @@ class Project {
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
-		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = DEFAULT_WORKSPACE_BG;
+		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
+		defaultEntityWidth = defaultEntityHeight = Project.DEFAULT_GRID_SIZE;
 		filePath = new dn.FilePath();
 		flags = new Map();
 		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
