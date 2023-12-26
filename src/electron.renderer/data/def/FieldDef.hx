@@ -80,6 +80,7 @@ class FieldDef {
 		allowOutOfLevelRef = true;
 		allowedRefs = OnlySame;
 		allowedRefTags = new Tags();
+		exportToToc = false;
 
 		// Specific default display modes, depending on type
 		switch type {
