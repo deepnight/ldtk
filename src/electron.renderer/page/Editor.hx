@@ -1521,6 +1521,7 @@ class Editor extends Page {
 			setZenModeReveal(true);
 		});
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
+		applyEditOption( jEditOptions.find("li.autoLayerRender"), ()->levelRender.isAutoLayerRenderingEnabled(), (v)->levelRender.setAutoLayerRendering(v) );
 		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
 
 		applyEditOption( jEditOptions.find("li.singleLayerMode"), ()->settings.v.singleLayerMode, (v)->setSingleLayerMode(v) );
@@ -2180,6 +2181,7 @@ class Editor extends Page {
 				updateGuide();
 
 			case AutoLayerRenderingChanged(lis):
+				updateEditOptions();
 
 			case LayerInstanceVisiblityChanged(li):
 				selectionTool.clear();
