@@ -52,7 +52,7 @@ class Definitions {
 				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
 	}
 
-	public function tidyFieldDefsArray(p:Project, fieldDefs:Array<data.def.FieldDef>, ctx:String) {
+	public static function tidyFieldDefsArray(p:Project, fieldDefs:Array<data.def.FieldDef>, ctx:String) {
 		// Remove Enum-based field defs whose EnumDef is lost
 		var i = 0;
 		while( i<fieldDefs.length ) {
