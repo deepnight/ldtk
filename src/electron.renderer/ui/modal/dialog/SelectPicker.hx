@@ -236,7 +236,7 @@ class SelectPicker extends ui.modal.Dialog {
 		else
 			jFocus = delta<0 ? jAll.first() : jAll.last();
 
-		if( !allowRowChange && jOld.offset().top!=jFocus.offset().top )
+		if( jFocus.length==0 || !allowRowChange && jOld.offset().top!=jFocus.offset().top )
 			jFocus = jOld;
 	}
 
