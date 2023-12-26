@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.4.0",
+		"appVersion": "1.5.0",
 		"url": "https://ldtk.io"
 	},
 	"iid": "9bba3440-7820-11ed-bc60-dd3cf5379687",
-	"jsonVersion": "1.4.0",
-	"appBuildId": 470896,
+	"jsonVersion": "1.5.0",
+	"appBuildId": 473223,
 	"nextUid": 1,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -39,7 +39,7 @@
 	"levelNamePattern": "%world_Level_%idx",
 	"tutorialDesc": null,
 	"customCommands": [],
-	"flags": [],
+	"flags": ["ExportOldTableOfContentData"],
 	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
