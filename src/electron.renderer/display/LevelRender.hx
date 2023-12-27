@@ -4,6 +4,7 @@ typedef Bleep = {
 	var spd : Float;
 	var extraScale : Float;
 	var g : h2d.Graphics;
+	var elapsedRatio : Float;
 	var delayS : Float;
 	var remainCount : Int;
 }
@@ -353,7 +354,7 @@ class LevelRender extends dn.Process {
 	public function bleepLevelRectPx(x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1, spd=1.0) : Bleep {
 		var pad = 5;
 		var g = new h2d.Graphics();
-		rectBleeps.push({ g:g, spd:spd, extraScale:0, remainCount:1, delayS:0 });
+		rectBleeps.push({ g:g, spd:spd, extraScale:0, elapsedRatio:0, remainCount:1, delayS:0 });
 		g.lineStyle(thickness, col);
 		g.drawRect(
 			Std.int(-pad-w*0.5),
@@ -414,7 +415,7 @@ class LevelRender extends dn.Process {
 
 	public inline function bleepPoint(x:Float, y:Float, col:UInt, thickness=2, spd=1.0) : Bleep {
 		var g = new h2d.Graphics();
-		rectBleeps.push({ g:g, spd:spd, extraScale:0, remainCount:1, delayS:0 });
+		rectBleeps.push({ g:g, spd:spd, extraScale:0, elapsedRatio:0, remainCount:1, delayS:0 });
 		g.lineStyle(thickness, col);
 		g.drawCircle( 0,0, 16 );
 		g.setPosition( M.round(x), M.round(y) );
@@ -746,16 +747,17 @@ class LevelRender extends dn.Process {
 				continue;
 			}
 
-			b.g.alpha -= 0.064 * tmod * ( b.spd!=null ? b.spd : 1 );
-			if( b.g.alpha<=0 ) {
+			b.elapsedRatio += 0.064 * tmod * ( b.spd!=null ? b.spd : 1 );
+			b.g.alpha = 1-b.elapsedRatio;
+			if( b.elapsedRatio>=1 ) {
 				b.remainCount--;
 				if( b.remainCount<=0 ) {
 					b.g.remove();
 					rectBleeps.splice(i,1);
 				}
 				else {
-					b.delayS = 0.1;
-					b.g.alpha = 1;
+					b.delayS = 0.03;
+					b.elapsedRatio = 0;
 				}
 			}
 			else

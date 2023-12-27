@@ -97,7 +97,7 @@ class CommandPalette {
 							editor.selectLevel(l, true);
 							var b = editor.levelRender.bleepEntity(ei);
 							b.delayS = 0.2;
-							b.remainCount = 8;
+							b.remainCount = 5;
 						}
 					}
 					allElements.push(searchElem);
