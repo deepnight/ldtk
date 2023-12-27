@@ -557,7 +557,8 @@ class FieldInstancesForm {
 							editor.levelRender.clearTemp();
 							editor.levelRender.temp.lineStyle(2, 0xff00ff);
 							editor.levelRender.temp.drawCircle(tei.centerX, tei.centerY, M.fmax(tei.width,tei.height)*0.5 + 8);
-							editor.levelRender.bleepEntity(tei,0xff00ff);
+							var b = editor.levelRender.bleepEntity(tei,0xff00ff);
+							b.remainCount = 2;
 						}
 					});
 					jRef.mouseleave( _->{

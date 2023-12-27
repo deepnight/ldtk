@@ -95,6 +95,9 @@ class CommandPalette {
 						keywords: [],
 						onPick: ()->{
 							editor.selectLevel(l, true);
+							var b = editor.levelRender.bleepEntity(ei);
+							b.delayS = 0.2;
+							b.remainCount = 8;
 						}
 					}
 					allElements.push(searchElem);

@@ -4,6 +4,8 @@ typedef Bleep = {
 	var spd : Float;
 	var extraScale : Float;
 	var g : h2d.Graphics;
+	var delayS : Float;
+	var remainCount : Int;
 }
 
 class LevelRender extends dn.Process {
@@ -351,7 +353,7 @@ class LevelRender extends dn.Process {
 	public function bleepLevelRectPx(x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1, spd=1.0) : Bleep {
 		var pad = 5;
 		var g = new h2d.Graphics();
-		rectBleeps.push({ g:g, spd:spd, extraScale:0 });
+		rectBleeps.push({ g:g, spd:spd, extraScale:0, remainCount:1, delayS:0 });
 		g.lineStyle(thickness, col);
 		g.drawRect(
 			Std.int(-pad-w*0.5),
@@ -367,7 +369,7 @@ class LevelRender extends dn.Process {
 		return rectBleeps[rectBleeps.length-1];
 	}
 
-	public inline function bleepLayerRectPx(li:data.inst.LayerInstance, x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1, spd=1.0) : Bleep {
+	public function bleepLayerRectPx(li:data.inst.LayerInstance, x:Float, y:Float, w:Float, h:Float, col:UInt, thickness=1, spd=1.0) : Bleep {
 		return bleepLevelRectPx(
 			x+li.pxParallaxX, y+li.pxParallaxY,
 			w*li.def.getScale(), h*li.def.getScale(),
@@ -375,7 +377,7 @@ class LevelRender extends dn.Process {
 		);
 	}
 
-	public inline function bleepLayerRectCase(li:data.inst.LayerInstance, cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) : Bleep {
+	public function bleepLayerRectCase(li:data.inst.LayerInstance, cx:Int, cy:Int, cWid:Int, cHei:Int, col:UInt, thickness=1) : Bleep {
 		return bleepLevelRectPx(
 			cx*li.def.scaledGridSize + li.pxParallaxX, cy*li.def.scaledGridSize + li.pxParallaxY,
 			cWid*li.def.scaledGridSize, cHei*li.def.scaledGridSize,
@@ -383,7 +385,7 @@ class LevelRender extends dn.Process {
 		);
 	}
 
-	public function bleepDebug(li:data.inst.LayerInstance, cx:Int, cy:Int, c=0xffffff) {
+	public function bleepDebug(li:data.inst.LayerInstance, cx:Int, cy:Int, c:dn.Col=0xffffff) {
 		var g = new h2d.Graphics();
 		root.add(g, Const.DP_UI);
 		g.lineStyle(2, c, 1);
@@ -398,7 +400,7 @@ class LevelRender extends dn.Process {
 		});
 	}
 
-	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:Int, spd=1.0) : Bleep {
+	public inline function bleepEntity(ei:data.inst.EntityInstance, ?overrideColor:dn.Col, spd=1.0) : Bleep {
 		return bleepLayerRectPx(
 			ei._li,
 			Std.int( (ei.x-ei.width*ei.def.pivotX) * ei._li.def.getScale() ),
@@ -412,7 +414,7 @@ class LevelRender extends dn.Process {
 
 	public inline function bleepPoint(x:Float, y:Float, col:UInt, thickness=2, spd=1.0) : Bleep {
 		var g = new h2d.Graphics();
-		rectBleeps.push({ g:g, spd:spd, extraScale:0 });
+		rectBleeps.push({ g:g, spd:spd, extraScale:0, remainCount:1, delayS:0 });
 		g.lineStyle(thickness, col);
 		g.drawCircle( 0,0, 16 );
 		g.setPosition( M.round(x), M.round(y) );
@@ -738,14 +740,27 @@ class LevelRender extends dn.Process {
 		var i = 0;
 		while( i<rectBleeps.length ) {
 			var b = rectBleeps[i];
+			if( b.delayS>0 ) {
+				b.delayS -= tmod*1/Const.FPS;
+				i++;
+				continue;
+			}
+
 			b.g.alpha -= 0.064 * tmod * ( b.spd!=null ? b.spd : 1 );
-			b.g.setScale( (b.extraScale + 1.6) - (b.extraScale + 0.6)*(1-b.g.alpha) );
 			if( b.g.alpha<=0 ) {
-				b.g.remove();
-				rectBleeps.splice(i,1);
+				b.remainCount--;
+				if( b.remainCount<=0 ) {
+					b.g.remove();
+					rectBleeps.splice(i,1);
+				}
+				else {
+					b.delayS = 0.1;
+					b.g.alpha = 1;
+				}
 			}
 			else
 				i++;
+			b.g.setScale( (b.extraScale + 1.6) - (b.extraScale + 0.6)*(1-b.g.alpha) );
 		}
 
 		applyInvalidations();
