@@ -8,6 +8,8 @@
 
 
 <dl class="form">
+	<dt class="full"> <h3>General settings</h3> </dt>
+
 	<dt>
 		<label>Type</label>
 		<info>This is the type of data stored in this custom field (number, text etc.)</info>
@@ -41,6 +43,14 @@
 	</dt>
 	<dd>
 		<input type="checkbox" name="exportToToc" id="exportToToc"/>
+	</dd>
+
+	<dt class="onlyEntity F_String F_Enum">
+		<label for="bDef">Searchable</label>
+		<info>If enabled, this field will be searchable throught the app command palette (when pressing CTRL-K).</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="searchable" id="searchable"/>
 	</dd>
 
 

@@ -40,6 +40,7 @@ class FieldDef {
 
 	public var useForSmartColor : Bool;
 	public var exportToToc : Bool;
+	public var searchable : Bool;
 
 	public var textLanguageMode : Null<ldtk.Json.TextLanguageMode>;
 	public var symmetricalRef : Bool;
@@ -81,6 +82,7 @@ class FieldDef {
 		allowedRefs = OnlySame;
 		allowedRefTags = new Tags();
 		exportToToc = false;
+		searchable = false;
 
 		// Specific default display modes, depending on type
 		switch type {
@@ -170,6 +172,7 @@ class FieldDef {
 		o.textLanguageMode = JsonTools.readEnum(ldtk.Json.TextLanguageMode, json.textLanguageMode, true);
 		o.useForSmartColor = JsonTools.readBool(json.useForSmartColor, getDefaultUseForSmartColor(o.type));
 		o.exportToToc = JsonTools.readBool(json.exportToToc, false);
+		o.searchable = JsonTools.readBool(json.searchable, false);
 
 		return o;
 	}
@@ -197,6 +200,7 @@ class FieldDef {
 			editorTextPrefix: editorTextPrefix,
 			useForSmartColor: useForSmartColor,
 			exportToToc: exportToToc,
+			searchable: searchable,
 			min: min==null ? null : JsonTools.writeFloat(min),
 			max: max==null ? null : JsonTools.writeFloat(max),
 			regex: JsonTools.escapeString(regex),
