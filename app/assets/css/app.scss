@@ -5460,42 +5460,54 @@ canvas#webgl {
 		.wrapper {
 			position: absolute;
 			z-index: 1;
-			width: 70vw;
-			margin-left: 15vw;
-			top: 8px;
+			width: 100vw;
 
-			input[type=text] {
-				width: 100%;
-			}
-			.results {
-				box-sizing: border-box;
-				margin-top: 8px;
-				padding-top: 8px;
-				padding-bottom: 8px;
-				background-color: $bgDark;
-				border-radius: 3px;
-				.element {
-					display: flex;
-					padding: 4px 16px;
-					cursor: pointer;
-					gap: 8px;
-					align-items: center;
-
-					&.active {
-						color: black !important;
-						font-weight: bold;
-						background-color: $orange;
-					}
-				}
-
-				.more {
-					position: absolute;
-					pointer-events: none;
+			.content {
+				margin: auto;
+				width: 35em;
+				input[type=text] {
 					width: 100%;
-					left: 0;
-					bottom: 8px;
-					height: 2em;
-					background: linear-gradient(0deg, rgba(30,34,41,1) 0%, rgba(30,34,41,0) 100%);
+				}
+				.results {
+					box-sizing: border-box;
+					margin-top: 8px;
+					padding-top: 8px;
+					padding-bottom: 8px;
+					background-color: $bgDark;
+					border-radius: 3px;
+
+					.element {
+						display: grid;
+						padding: 3px 16px;
+						cursor: pointer;
+						gap: 8px;
+						font-size: 10pt;
+						align-items: center;
+						grid-template-columns: min-content auto min-content;
+
+						.context {
+							font-size: 9pt;
+							opacity: 0.5;
+						}
+
+						&.active {
+							color: black !important;
+							background-color: $orange !important;
+							&.context {
+								font-weight: bold;
+							}
+						}
+					}
+
+					.more {
+						position: absolute;
+						pointer-events: none;
+						width: 100%;
+						left: 0;
+						bottom: 8px;
+						height: 2em;
+						background: linear-gradient(0deg, rgba(30,34,41,1) 0%, rgba(30,34,41,0) 100%);
+					}
 				}
 			}
 		}
@@ -7085,8 +7097,8 @@ canvas#webgl {
 		}
 
 		*[class*="F_"],
-		*[class="onlyEntity"],
-		*[class="onlyLevel"],
+		&.type-level .onlyEntity,
+		&.type-entity .onlyLevel,
 		*[class="NotArray"],
 		*[class="Array"] {
 			display: none;
@@ -7098,8 +7110,6 @@ canvas#webgl {
 
 		&.type-Array .Array,
 		&.type-NotArray .NotArray,
-		&.type-level .onlyLevel,
-		&.type-entity .onlyEntity,
 		&.type-F_Int .F_int,
 		&.type-F_Float .F_Float,
 		&.type-F_Bool .F_Bool,

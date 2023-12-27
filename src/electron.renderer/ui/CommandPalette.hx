@@ -4,8 +4,10 @@ typedef SearchElement = {
 	var id: String;
 	var cat: ElementCategory;
 	var desc: String;
+	var ?ctxDesc: String;
 	var onPick: Void->Void;
-	var ?keywords: String;
+	var ?keywords: Array<String>;
+	var ?cachedKeywords : String;
 }
 
 enum ElementCategory {
@@ -15,6 +17,8 @@ enum ElementCategory {
 }
 
 class CommandPalette {
+	static var MAX_RESULTS = 20;
+
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
 
@@ -26,7 +30,8 @@ class CommandPalette {
 	var jElements(get,never) : js.jquery.JQuery; function get_jElements() return jResults.children(".element");
 	var jCurElement(get,never) : js.jquery.JQuery; function get_jCurElement() return jElements.filter('[uid=$curUid]');
 
-	var cleanReg = ~/[^a-z0-9 _]+/gi;
+	var cleanReg = ~/[^a-z0-9 _]+/g;
+	var spacesReg = ~/(  )+/g;
 	var allElements : Array<SearchElement> = [];
 	var curElements : Array<SearchElement> = [];
 	var curUid : Null<String>;
@@ -54,7 +59,7 @@ class CommandPalette {
 				case _:
 			}
 		});
-		jInput.on("input", _->applySearch() );
+		jInput.on("input", _->updateResults() );
 		jInput.blur( _->jInput.focus() );
 		jInput.focus();
 
@@ -65,6 +70,7 @@ class CommandPalette {
 				id: w.iid,
 				cat: SE_World,
 				desc: w.identifier,
+				keywords: [w.identifier],
 				onPick: ()->editor.selectWorld(w,true),
 			});
 			for(l in w.levels) {
@@ -73,70 +79,119 @@ class CommandPalette {
 					id: l.iid,
 					cat: SE_Level,
 					desc: l.identifier,
+					ctxDesc: w.identifier,
+					keywords: [ w.identifier ],
 					onPick: ()->editor.selectLevel(l, true),
 				});
 
+				// Entities
 				for(li in l.layerInstances)
-				for(e in li.entityInstances) {
-					allElements.push({
-						id: e.iid,
+				for(ei in li.entityInstances) {
+					var searchElem : SearchElement = {
+						id: ei.iid,
 						cat: SE_Entity,
-						desc: e.def.identifier+"#"+e.defUid,
+						desc: ei.def.identifier,
+						ctxDesc: l.identifier,
+						keywords: [],
 						onPick: ()->{
 							editor.selectLevel(l, true);
 						}
-					});
+					}
+					allElements.push(searchElem);
+
+					// Entity fields
+					for(fi in ei.fieldInstances) {
+						if( !fi.def.searchable  )
+							continue;
+						for(i in 0...fi.getArrayLength()) {
+							if( fi.valueIsNull(i) )
+								continue;
+							searchElem.desc += "."+fi.getForDisplay(i);
+							searchElem.keywords.push( fi.getForDisplay(i) );
+						}
+					}
+
 				}
 			}
 		}
 
 		// Init keywords
 		for(e in allElements) {
-			e.keywords = switch e.cat {
+			if( e.keywords==null )
+				e.keywords = [];
+
+			e.keywords.push( switch e.cat {
 				case SE_World: "world";
 				case SE_Level: "level";
 				case SE_Entity: "entity";
-			}
-			e.keywords += " "+e.desc.toLowerCase();
-			e.keywords = cleanupKeywords(e.keywords);
+			});
+			e.keywords.push(e.desc.toLowerCase());
+			e.cachedKeywords = cleanupKeywords( e.keywords.join(" ") );
 		}
 
-		applySearch();
+		updateResults();
 	}
 
 
 	function cleanupKeywords(raw:String) {
-		return raw==null ? "" : cleanReg.replace(raw, " ").toLowerCase();
+		return raw==null
+			? ""
+			: spacesReg.replace( cleanReg.replace(raw.toLowerCase()," "), " " );
 	}
 
 
-	function applySearch() {
+	function keywordsMatch(keywords:String, searches:Array<String>) {
+		var n = 0;
+		for(search in searches)
+			if( keywords.indexOf(search)>=0 )
+				n++;
+
+		return n>=searches.length;
+	}
+
+
+	function updateResults() {
 		curElements = [];
 		var raw = cleanupKeywords( jInput.val() );
+		var searchParts = raw.split(" ");
 
 		// List matches
-		for(e in allElements)
-			if( e.keywords.indexOf(raw)>=0 )
-				curElements.push(e);
+		var i = 0;
+		var tooMany = false;
+		if( raw.length!=0 ) {
+			for(e in allElements)
+				if( keywordsMatch(e.cachedKeywords, searchParts) ) {
+					curElements.push(e);
+					if( i++>=MAX_RESULTS ) {
+						tooMany = true;
+						break;
+					}
+				}
+		}
 
 		// Fill results list
 		jResults.empty();
 		curUid = null;
-		var i = 0;
 		for(e in curElements) {
-			var jElement = new J('<div class="element">${e.desc}</div>');
+			var jElement = new J('<div class="element"></div>');
 			var iconId = switch e.cat {
 				case SE_World: "world";
 				case SE_Level: "level";
 				case SE_Entity: "entity";
 			}
-			jElement.prepend('<span class="icon $iconId"></span>');
-			var col = switch e.cat {
-				case SE_World: "#ad8358";
+			jElement.append('<span class="icon $iconId"></span>');
+			jElement.append('<div class="desc">${e.desc}</div>');
+
+			if( e.ctxDesc!=null )
+				jElement.append('<div class="context">${e.ctxDesc}</div>');
+
+			var col = dn.Col.parseHex(switch e.cat {
+				case SE_World: "#94483b";
 				case SE_Level: "#70a9ff";
 				case SE_Entity: "#ff9900";
-			}
+			});
 			jElement.css("color", col);
+			jElement.css("background-color", col.toCssRgba(0.15));
 			jElement.attr("uid", e.id);
 			jElement.click(_->{
 				close();
@@ -149,12 +204,16 @@ class CommandPalette {
 			jElement.appendTo(jResults);
 			if( curUid==null )
 				setCurrent(e);
-
-			if( i++>=15 ) {
-				jResults.append('<div class="more"></div>');
-				break;
-			}
 		}
+
+		// Too many results
+		if( tooMany )
+			jResults.append('<div class="more"></div>');
+
+		if( curElements.length==0 )
+			jResults.hide();
+		else
+			jResults.show();
 	}
 
 
