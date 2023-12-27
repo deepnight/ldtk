@@ -54,7 +54,11 @@
 			<div class="icon showDetailsOff off"></div>
 		</li>
 
-		<li class="autoLayerRender" title="**Render auto-layers** Enable or disable the rendering of tiles in all Auto-Layers. If disabled, only the underlying IntGrid values will be displayed." tip="right">
+		<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
+			<div class="icon singleLayer"></div>
+		</li>
+
+		<li class="autoLayerRender" title="**Render auto-layers** Enable or disable the rendering of tiles in all Auto-Layers. If disabled, only the underlying IntGrid values will be displayed." keys="SHIFT+R" tip="right">
 			<div class="icon autoLayer on"></div>
 			<div class="icon autoLayer off"></div>
 		</li>
@@ -67,10 +71,6 @@
 
 	<div class="title editing">Editing</div>
 	<ul class="editing">
-		<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
-			<div class="icon singleLayer"></div>
-		</li>
-
 		<li class="emptySpaceSelection" title="**Select empty spaces** If this option is enabled when you select a level area with ALT+SHIFT+click, the selection will also include EMPTY grid cells." keys="Shift+E" tip="right">
 			<div class="icon emptySpaceOn on"></div>
 			<div class="icon emptySpaceOff off"></div>
@@ -101,8 +101,10 @@
 <xml class="commandPalette">
 	<div class="mask"></div>
 	<div class="wrapper">
-		<input type="text" placeholder="Search for anything"/>
-		<div class="results"></div>
+		<div class="content">
+			<input type="text" placeholder="Search for anything"/>
+			<div class="results"></div>
+		</div>
 	</div>
 </xml>
 

@@ -5460,17 +5460,13 @@ canvas#webgl {
 		.wrapper {
 			position: absolute;
 			z-index: 1;
-			width: 100vw;
+			width: 70vw;
+			margin-left: 15vw;
 			top: 8px;
 
-			input[type=text],
-			.results {
-				display: block;
-				width: 70vw;
-				margin: auto;
+			input[type=text] {
+				width: 100%;
 			}
-			// input[type=text] {
-			// }
 			.results {
 				box-sizing: border-box;
 				margin-top: 8px;
@@ -5479,12 +5475,27 @@ canvas#webgl {
 				background-color: $bgDark;
 				border-radius: 3px;
 				.element {
+					display: flex;
 					padding: 4px 16px;
 					cursor: pointer;
-					&:hover {
+					gap: 8px;
+					align-items: center;
+
+					&.active {
+						color: black !important;
+						font-weight: bold;
 						background-color: $orange;
-						color: black;
 					}
+				}
+
+				.more {
+					position: absolute;
+					pointer-events: none;
+					width: 100%;
+					left: 0;
+					bottom: 8px;
+					height: 2em;
+					background: linear-gradient(0deg, rgba(30,34,41,1) 0%, rgba(30,34,41,0) 100%);
 				}
 			}
 		}

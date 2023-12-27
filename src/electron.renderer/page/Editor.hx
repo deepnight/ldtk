@@ -1388,9 +1388,11 @@ class Editor extends Page {
 		ge.emit( ViewportChanged(true) );
 		saveLastProjectInfos();
 
-		if( fitView )
+		if( fitView ) {
+			setWorldMode(false);
 			camera.fit();
-		
+		}
+
 		ui.Tip.clear();
 		LevelTimeline.garbageCollectTimelines();
 	}
