@@ -5442,6 +5442,53 @@ canvas#webgl {
 		}
 	}
 
+	#commandPalette {
+		position: absolute;
+		z-index: 99;
+		top: 0;
+		left: 0;
+
+		.mask {
+			position: absolute;
+			z-index: 0;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-color: transparentize($color: black, $amount: 0.3);
+		}
+		.wrapper {
+			position: absolute;
+			z-index: 1;
+			width: 100vw;
+			top: 8px;
+
+			input[type=text],
+			.results {
+				display: block;
+				width: 70vw;
+				margin: auto;
+			}
+			// input[type=text] {
+			// }
+			.results {
+				box-sizing: border-box;
+				margin-top: 8px;
+				padding-top: 8px;
+				padding-bottom: 8px;
+				background-color: $bgDark;
+				border-radius: 3px;
+				.element {
+					padding: 4px 16px;
+					cursor: pointer;
+					&:hover {
+						background-color: $orange;
+						color: black;
+					}
+				}
+			}
+		}
+	}
 
 	&:not(.zenMode) {
 		#zenModeRevealer {

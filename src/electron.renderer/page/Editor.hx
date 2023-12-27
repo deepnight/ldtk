@@ -669,6 +669,9 @@ class Editor extends Page {
 			case C_SaveProjectAs:
 				onSave(true);
 
+			case C_CommandPalette:
+				new ui.CommandPalette();
+
 			case C_RenameProject:
 				new ui.modal.dialog.InputDialog(
 					L.t._("Enter the new project file name :"),
@@ -1373,7 +1376,10 @@ class Editor extends Page {
 	}
 
 
-	public function selectLevel(l:data.Level) {
+	public function selectLevel(l:data.Level, fitView=false) {
+		if( l._world!=curWorld )
+			selectWorld(l._world);
+
 		if( curLevel!=null )
 			worldRender.invalidateLevelRender(curLevel);
 
@@ -1382,6 +1388,9 @@ class Editor extends Page {
 		ge.emit( ViewportChanged(true) );
 		saveLastProjectInfos();
 
+		if( fitView )
+			camera.fit();
+		
 		ui.Tip.clear();
 		LevelTimeline.garbageCollectTimelines();
 	}

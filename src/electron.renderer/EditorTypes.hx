@@ -290,4 +290,5 @@ enum AppCommand {
 	@k("shift a, [zqsd] a, [arrows] a") C_ToggleSingleLayerMode;
 	@k("[win] ctrl h, [linux] ctrl h, [mac] shift h") C_ToggleDetails;
 	@k("g") C_ToggleGrid;
+	@k("ctrl f, ctrl shift p, ctrl k, ctrl shift k") C_CommandPalette;
 }
