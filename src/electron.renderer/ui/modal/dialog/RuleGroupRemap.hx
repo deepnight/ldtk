@@ -4,7 +4,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
 	var td : data.def.TilesetDef;
 	var srcGroup : data.DataTypes.AutoLayerRuleGroup;
-	var groupJson : ldtk.Json.AutoLayerRuleGroupJson;
+	var copyJson : ldtk.Json.AutoLayerRuleGroupJson;
 
 	var tileset : ui.Tileset;
 	var idRemaps : Map<Int,Int> = new Map();
@@ -20,8 +20,8 @@ class RuleGroupRemap extends ui.modal.Dialog {
 
 		this.ld = ld;
 		this.srcGroup = rg;
-		this.groupJson = ld.toJsonRuleGroup(rg);
-		groupJson.name += " copy";
+		this.copyJson = ld.toJsonRuleGroup(rg);
+		copyJson.name += " copy";
 
 		// List used IntGrid IDs
 		for(r in srcGroup.rules)
@@ -66,22 +66,22 @@ class RuleGroupRemap extends ui.modal.Dialog {
 		addButton(L.t._("Confirm"), ()->{
 			new InputDialog(
 				L.t._("Name this new group"),
-				groupJson.name,
+				copyJson.name,
 				(s:String)->return s.length==0 ? "Please enter a valid name" : null,
 				(s:String)->return s,
 				(s:String)->{
 					// Create rulegroup copy
-					var copy = ld.pasteRuleGroup( project, data.Clipboard.createTemp(CRuleGroup, groupJson), rg );
-					copy.name = s;
+					var copyGroup = ld.pasteRuleGroup( project, data.Clipboard.createTemp(CRuleGroup, copyJson), rg );
+					copyGroup.name = s;
 
 					// Offset all tileIds
-					for(r in copy.rules)
+					for(r in copyGroup.rules)
 					for(rectIds in r.tileRectsIds)
 					for(i in 0...rectIds.length)
 						rectIds[i] += tileOffsetX + tileOffsetY*td.cWid;
 
 					// Remap IntGrid IDs
-					for(r in copy.rules)
+					for(r in copyGroup.rules)
 					for(cx in 0...r.size)
 					for(cy in 0...r.size) {
 						var v = r.get(cx,cy);
@@ -92,11 +92,11 @@ class RuleGroupRemap extends ui.modal.Dialog {
 					}
 
 					// Out-of-bounds value
-					for(r in copy.rules)
+					for(r in copyGroup.rules)
 						if( r.outOfBoundsValue!=null && idRemaps.exists(r.outOfBoundsValue) )
 							r.outOfBoundsValue = idRemaps.get(r.outOfBoundsValue);
 
-					onConfirm(copy);
+					onConfirm(copyGroup);
 					close();
 				}
 			);
@@ -160,9 +160,21 @@ class RuleGroupRemap extends ui.modal.Dialog {
 
 		// Render arrow
 		if( tileOffsetX!=0 || tileOffsetY!=0 ) {
-			var from = getCenterOfGroup(allTileIds);
-			var to = getCenterOfGroup(offsetedIds);
-			tileset.renderArrow(from.x, from.y, to.x, to.y, valid?dn.Col.inlineHex("#fff"):dn.Col.inlineHex("#f00"));
+			var idx = 0;
+			var offX = Std.int(td.tileGridSize*0.5);
+			var offY = offX;
+			for(idx in 0...allTileIds.length) {
+				if( idx>=offsetedIds.length )
+					break;
+				tileset.renderArrow(
+					td.getTileSourceX(allTileIds[idx])+offX, td.getTileSourceY(allTileIds[idx])+offY,
+					td.getTileSourceX(offsetedIds[idx])+offX, td.getTileSourceY(offsetedIds[idx])+offY,
+					valid ? dn.Col.inlineHex("#fff") : dn.Col.inlineHex("#f00")
+				);
+			}
+			// var from = getCenterOfGroup(allTileIds);
+			// var to = getCenterOfGroup(offsetedIds);
+			// tileset.renderArrow(from.x, from.y, to.x, to.y, valid?dn.Col.inlineHex("#fff"):dn.Col.inlineHex("#f00"));
 		}
 
 		// Focus

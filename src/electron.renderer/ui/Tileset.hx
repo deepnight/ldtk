@@ -323,19 +323,28 @@ class Tileset {
 		}
 	}
 
-	public function renderArrow(fx:Int, fy:Int, tx:Int, ty:Int, col:dn.Col) {
+	public function renderArrow(fx:Int, fy:Int, tx:Int, ty:Int, col:dn.Col, thickness=2) {
+		var ang = Math.atan2(ty-fy, tx-fx);
 		var ctx = canvas.getContext2d();
-		ctx.lineWidth = 2;
-		ctx.strokeStyle = col.toHex();
-		var a = Math.atan2(ty-fy, tx-fx);
 
+		// Arrow path
 		ctx.beginPath();
 		ctx.moveTo(fx,fy);
 		ctx.lineTo(tx,ty);
 
-		ctx.moveTo(tx+Math.cos(a+M.PIHALF*1.5)*6, ty+Math.sin(a+M.PIHALF*1.5)*6);
+		ctx.moveTo(tx+Math.cos(ang+M.PIHALF*1.5)*6, ty+Math.sin(ang+M.PIHALF*1.5)*6);
 		ctx.lineTo(tx,ty);
-		ctx.lineTo(tx+Math.cos(a-M.PIHALF*1.5)*6, ty+Math.sin(a-M.PIHALF*1.5)*6);
+		ctx.lineTo(tx+Math.cos(ang-M.PIHALF*1.5)*6, ty+Math.sin(ang-M.PIHALF*1.5)*6);
+
+		// Stroke outline
+		ctx.lineWidth = thickness+1;
+		ctx.lineCap = "round";
+		ctx.strokeStyle = "#000000";
+		ctx.stroke();
+
+		// Stroke arrow
+		ctx.lineWidth = thickness;
+		ctx.strokeStyle = col.toHex();
 		ctx.stroke();
 	}
 
