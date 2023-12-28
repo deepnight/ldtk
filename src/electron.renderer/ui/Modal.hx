@@ -171,6 +171,10 @@ class Modal extends dn.Process {
 			editor.ge.removeListener(onGlobalEvent);
 
 		jModalAndMask.empty().remove();
+		jModalAndMask = null;
+		jMask = null;
+		jWrapper = null;
+		jContent = null;
 
 		if( hasAnyOpen() ) {
 			for(e in ALL)
