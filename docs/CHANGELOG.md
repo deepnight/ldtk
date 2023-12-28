@@ -1,15 +1,25 @@
 # 1.5.0 - New LDtk logo
 
 ## LDtk logo
-
 ![](1.5.0/logo.png)
 
 The application has a new logo! Hope you will like it :)
 
 Please note that the Windows Explorer could take some time before updating the app related icons (in Start Menu, project icons etc.). You may need to either restart the Explorer, or the computer itself, to force the visual update.
 
-## Biomes
+## Global search
+![](1.5.0/search.png)
 
+You can now search for any project element using the `CTRL-F` keyboard shortcut (`CMD-F` on MacOS). The results include:
+
+ - definitions (layers, entities, enums or tilesets),
+ - worlds,
+ - levels,
+ - entity instances.
+
+Optionaly, you may also enable the `searchable` option on supported entity Custom Fields, to filter your entities based on these fields (eg. if you look for a specific item instance or mob type).
+
+## Biomes
 ![](1.5.0/biomes.png)
 
 This update brings various features that should make rule-based biomes creation easier!
@@ -26,12 +36,12 @@ This update brings various features that should make rule-based biomes creation 
 When creating an auto-layer rule, you may now render a rectangle of tiles picked randomly among a group of many others. For example, this makes possible the creation of random variations among trees, or other large details.
 
 
-## Filtered layers listing
+## Custom layers list
+![](1.5.0/customLayersList.png)
 
-TODO
+You can group your layers using tags, and filter your main layers list using these tags.
 
 ## JSON: extra Table-of-content data
-
 ![](1.5.0/tocJson.png)
 
 When enabling the "table-of-content" export option of an Entity, you will now get extra bits of informations in the `toc` JSON field:
