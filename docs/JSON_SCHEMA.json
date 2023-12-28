@@ -1009,6 +1009,7 @@
 				"editorLinkStyle",
 				"editorShowInWorld",
 				"exportToToc",
+				"searchable",
 				"symmetricalRef",
 				"useForSmartColor"
 			],
@@ -1030,6 +1031,12 @@
 					"description": "",
 					"type": [
 						"number"
+					]
+				},
+				"searchable": {
+					"description": "If enabled, this field will be searchable through LDtk command palette",
+					"type": [
+						"boolean"
 					]
 				},
 				"useForSmartColor": {
