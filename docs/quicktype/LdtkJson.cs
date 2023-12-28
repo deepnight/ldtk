@@ -705,6 +705,12 @@ namespace ldtk
         [JsonProperty("regex")]
         public string Regex { get; set; }
 
+        /// <summary>
+        /// If enabled, this field will be searchable through LDtk command palette
+        /// </summary>
+        [JsonProperty("searchable")]
+        public bool Searchable { get; set; }
+
         [JsonProperty("symmetricalRef")]
         public bool SymmetricalRef { get; set; }
 
@@ -880,6 +886,12 @@ namespace ldtk
         [JsonProperty("autoTilesetDefUid")]
         public long? AutoTilesetDefUid { get; set; }
 
+        [JsonProperty("autoTilesKilledByOtherLayerUid")]
+        public long? AutoTilesKilledByOtherLayerUid { get; set; }
+
+        [JsonProperty("biomeFieldUid")]
+        public long? BiomeFieldUid { get; set; }
+
         /// <summary>
         /// Allow editor selections when the layer is not currently active.
         /// </summary>
@@ -1045,12 +1057,21 @@ namespace ldtk
         /// </summary>
         [JsonProperty("uid")]
         public long Uid { get; set; }
+
+        /// <summary>
+        /// Display tags
+        /// </summary>
+        [JsonProperty("uiFilterTags")]
+        public string[] UiFilterTags { get; set; }
     }
 
     public partial class AutoLayerRuleGroup
     {
         [JsonProperty("active")]
         public bool Active { get; set; }
+
+        [JsonProperty("biomeRequirementMode")]
+        public long BiomeRequirementMode { get; set; }
 
         /// <summary>
         /// *This field was removed in 1.0.0 and should no longer be used.*
@@ -1069,6 +1090,9 @@ namespace ldtk
 
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("requiredBiomeValues")]
+        public string[] RequiredBiomeValues { get; set; }
 
         [JsonProperty("rules")]
         public AutoLayerRuleDefinition[] Rules { get; set; }
@@ -2185,7 +2209,7 @@ namespace ldtk
         /// enabled. This object typing depends on actual field value types.
         /// </summary>
         [JsonProperty("fields")]
-        public dynamic[] Fields { get; set; }
+        public dynamic Fields { get; set; }
 
         [JsonProperty("heiPx")]
         public long HeiPx { get; set; }

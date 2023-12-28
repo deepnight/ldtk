@@ -179,6 +179,7 @@ namespace quicktype {
         boost::optional<double> max;
         boost::optional<double> min;
         boost::optional<std::string> regex;
+        bool searchable;
         bool symmetrical_ref;
         boost::optional<TextLanguageMode> text_language_mode;
         boost::optional<int64_t> tileset_uid;
@@ -350,6 +351,13 @@ namespace quicktype {
          */
         boost::optional<std::string> get_regex() const { return regex; }
         void set_regex(boost::optional<std::string> value) { this->regex = value; }
+
+        /**
+         * If enabled, this field will be searchable through LDtk command palette
+         */
+        const bool & get_searchable() const { return searchable; }
+        bool & get_mutable_searchable() { return searchable; }
+        void set_searchable(const bool & value) { this->searchable = value; }
 
         const bool & get_symmetrical_ref() const { return symmetrical_ref; }
         bool & get_mutable_symmetrical_ref() { return symmetrical_ref; }
@@ -1094,11 +1102,13 @@ namespace quicktype {
 
         private:
         bool active;
+        int64_t biome_requirement_mode;
         boost::optional<bool> collapsed;
         boost::optional<std::string> color;
         boost::optional<TilesetRectangle> icon;
         bool is_optional;
         std::string name;
+        std::vector<std::string> required_biome_values;
         std::vector<AutoLayerRuleDefinition> rules;
         int64_t uid;
         bool uses_wizard;
@@ -1107,6 +1117,10 @@ namespace quicktype {
         const bool & get_active() const { return active; }
         bool & get_mutable_active() { return active; }
         void set_active(const bool & value) { this->active = value; }
+
+        const int64_t & get_biome_requirement_mode() const { return biome_requirement_mode; }
+        int64_t & get_mutable_biome_requirement_mode() { return biome_requirement_mode; }
+        void set_biome_requirement_mode(const int64_t & value) { this->biome_requirement_mode = value; }
 
         /**
          * *This field was removed in 1.0.0 and should no longer be used.*
@@ -1127,6 +1141,10 @@ namespace quicktype {
         const std::string & get_name() const { return name; }
         std::string & get_mutable_name() { return name; }
         void set_name(const std::string & value) { this->name = value; }
+
+        const std::vector<std::string> & get_required_biome_values() const { return required_biome_values; }
+        std::vector<std::string> & get_mutable_required_biome_values() { return required_biome_values; }
+        void set_required_biome_values(const std::vector<std::string> & value) { this->required_biome_values = value; }
 
         const std::vector<AutoLayerRuleDefinition> & get_rules() const { return rules; }
         std::vector<AutoLayerRuleDefinition> & get_mutable_rules() { return rules; }
@@ -1235,6 +1253,8 @@ namespace quicktype {
         std::vector<AutoLayerRuleGroup> auto_rule_groups;
         boost::optional<int64_t> auto_source_layer_def_uid;
         boost::optional<int64_t> auto_tileset_def_uid;
+        boost::optional<int64_t> auto_tiles_killed_by_other_layer_uid;
+        boost::optional<int64_t> biome_field_uid;
         bool can_select_when_inactive;
         double display_opacity;
         boost::optional<std::string> doc;
@@ -1261,6 +1281,7 @@ namespace quicktype {
         Type layer_definition_type;
         boost::optional<std::string> ui_color;
         int64_t uid;
+        std::vector<std::string> ui_filter_tags;
 
         public:
         /**
@@ -1286,6 +1307,12 @@ namespace quicktype {
          */
         boost::optional<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
         void set_auto_tileset_def_uid(boost::optional<int64_t> value) { this->auto_tileset_def_uid = value; }
+
+        boost::optional<int64_t> get_auto_tiles_killed_by_other_layer_uid() const { return auto_tiles_killed_by_other_layer_uid; }
+        void set_auto_tiles_killed_by_other_layer_uid(boost::optional<int64_t> value) { this->auto_tiles_killed_by_other_layer_uid = value; }
+
+        boost::optional<int64_t> get_biome_field_uid() const { return biome_field_uid; }
+        void set_biome_field_uid(boost::optional<int64_t> value) { this->biome_field_uid = value; }
 
         /**
          * Allow editor selections when the layer is not currently active.
@@ -1475,6 +1502,13 @@ namespace quicktype {
         const int64_t & get_uid() const { return uid; }
         int64_t & get_mutable_uid() { return uid; }
         void set_uid(const int64_t & value) { this->uid = value; }
+
+        /**
+         * Display tags
+         */
+        const std::vector<std::string> & get_ui_filter_tags() const { return ui_filter_tags; }
+        std::vector<std::string> & get_mutable_ui_filter_tags() { return ui_filter_tags; }
+        void set_ui_filter_tags(const std::vector<std::string> & value) { this->ui_filter_tags = value; }
     };
 
     /**
@@ -2588,7 +2622,7 @@ namespace quicktype {
         virtual ~LdtkTocInstanceData() = default;
 
         private:
-        std::vector<nlohmann::json> fields;
+        nlohmann::json fields;
         int64_t hei_px;
         ReferenceToAnEntityInstance iids;
         int64_t wid_px;
@@ -2600,9 +2634,9 @@ namespace quicktype {
          * An object containing the values of all entity fields with the `exportToToc` option
          * enabled. This object typing depends on actual field value types.
          */
-        const std::vector<nlohmann::json> & get_fields() const { return fields; }
-        std::vector<nlohmann::json> & get_mutable_fields() { return fields; }
-        void set_fields(const std::vector<nlohmann::json> & value) { this->fields = value; }
+        const nlohmann::json & get_fields() const { return fields; }
+        nlohmann::json & get_mutable_fields() { return fields; }
+        void set_fields(const nlohmann::json & value) { this->fields = value; }
 
         const int64_t & get_hei_px() const { return hei_px; }
         int64_t & get_mutable_hei_px() { return hei_px; }
@@ -3414,6 +3448,7 @@ namespace quicktype {
         x.set_max(get_stack_optional<double>(j, "max"));
         x.set_min(get_stack_optional<double>(j, "min"));
         x.set_regex(get_stack_optional<std::string>(j, "regex"));
+        x.set_searchable(j.at("searchable").get<bool>());
         x.set_symmetrical_ref(j.at("symmetricalRef").get<bool>());
         x.set_text_language_mode(get_stack_optional<TextLanguageMode>(j, "textLanguageMode"));
         x.set_tileset_uid(get_stack_optional<int64_t>(j, "tilesetUid"));
@@ -3452,6 +3487,7 @@ namespace quicktype {
         j["max"] = x.get_max();
         j["min"] = x.get_min();
         j["regex"] = x.get_regex();
+        j["searchable"] = x.get_searchable();
         j["symmetricalRef"] = x.get_symmetrical_ref();
         j["textLanguageMode"] = x.get_text_language_mode();
         j["tilesetUid"] = x.get_tileset_uid();
@@ -3657,11 +3693,13 @@ namespace quicktype {
 
     inline void from_json(const json & j, AutoLayerRuleGroup& x) {
         x.set_active(j.at("active").get<bool>());
+        x.set_biome_requirement_mode(j.at("biomeRequirementMode").get<int64_t>());
         x.set_collapsed(get_stack_optional<bool>(j, "collapsed"));
         x.set_color(get_stack_optional<std::string>(j, "color"));
         x.set_icon(get_stack_optional<TilesetRectangle>(j, "icon"));
         x.set_is_optional(j.at("isOptional").get<bool>());
         x.set_name(j.at("name").get<std::string>());
+        x.set_required_biome_values(j.at("requiredBiomeValues").get<std::vector<std::string>>());
         x.set_rules(j.at("rules").get<std::vector<AutoLayerRuleDefinition>>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_uses_wizard(j.at("usesWizard").get<bool>());
@@ -3670,11 +3708,13 @@ namespace quicktype {
     inline void to_json(json & j, const AutoLayerRuleGroup & x) {
         j = json::object();
         j["active"] = x.get_active();
+        j["biomeRequirementMode"] = x.get_biome_requirement_mode();
         j["collapsed"] = x.get_collapsed();
         j["color"] = x.get_color();
         j["icon"] = x.get_icon();
         j["isOptional"] = x.get_is_optional();
         j["name"] = x.get_name();
+        j["requiredBiomeValues"] = x.get_required_biome_values();
         j["rules"] = x.get_rules();
         j["uid"] = x.get_uid();
         j["usesWizard"] = x.get_uses_wizard();
@@ -3715,6 +3755,8 @@ namespace quicktype {
         x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<AutoLayerRuleGroup>>());
         x.set_auto_source_layer_def_uid(get_stack_optional<int64_t>(j, "autoSourceLayerDefUid"));
         x.set_auto_tileset_def_uid(get_stack_optional<int64_t>(j, "autoTilesetDefUid"));
+        x.set_auto_tiles_killed_by_other_layer_uid(get_stack_optional<int64_t>(j, "autoTilesKilledByOtherLayerUid"));
+        x.set_biome_field_uid(get_stack_optional<int64_t>(j, "biomeFieldUid"));
         x.set_can_select_when_inactive(j.at("canSelectWhenInactive").get<bool>());
         x.set_display_opacity(j.at("displayOpacity").get<double>());
         x.set_doc(get_stack_optional<std::string>(j, "doc"));
@@ -3741,6 +3783,7 @@ namespace quicktype {
         x.set_layer_definition_type(j.at("type").get<Type>());
         x.set_ui_color(get_stack_optional<std::string>(j, "uiColor"));
         x.set_uid(j.at("uid").get<int64_t>());
+        x.set_ui_filter_tags(j.at("uiFilterTags").get<std::vector<std::string>>());
     }
 
     inline void to_json(json & j, const LayerDefinition & x) {
@@ -3749,6 +3792,8 @@ namespace quicktype {
         j["autoRuleGroups"] = x.get_auto_rule_groups();
         j["autoSourceLayerDefUid"] = x.get_auto_source_layer_def_uid();
         j["autoTilesetDefUid"] = x.get_auto_tileset_def_uid();
+        j["autoTilesKilledByOtherLayerUid"] = x.get_auto_tiles_killed_by_other_layer_uid();
+        j["biomeFieldUid"] = x.get_biome_field_uid();
         j["canSelectWhenInactive"] = x.get_can_select_when_inactive();
         j["displayOpacity"] = x.get_display_opacity();
         j["doc"] = x.get_doc();
@@ -3775,6 +3820,7 @@ namespace quicktype {
         j["type"] = x.get_layer_definition_type();
         j["uiColor"] = x.get_ui_color();
         j["uid"] = x.get_uid();
+        j["uiFilterTags"] = x.get_ui_filter_tags();
     }
 
     inline void from_json(const json & j, TileCustomMetadata& x) {
@@ -4100,7 +4146,7 @@ namespace quicktype {
     }
 
     inline void from_json(const json & j, LdtkTocInstanceData& x) {
-        x.set_fields(j.at("fields").get<std::vector<nlohmann::json>>());
+        x.set_fields(get_untyped(j, "fields"));
         x.set_hei_px(j.at("heiPx").get<int64_t>());
         x.set_iids(j.at("iids").get<ReferenceToAnEntityInstance>());
         x.set_wid_px(j.at("widPx").get<int64_t>());

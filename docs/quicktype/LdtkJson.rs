@@ -430,6 +430,9 @@ pub struct FieldDefinition {
     /// `/some_reg_ex/g`, with optional "i" flag.
     pub regex: Option<String>,
 
+    /// If enabled, this field will be searchable through LDtk command palette
+    pub searchable: bool,
+
     pub symmetrical_ref: bool,
 
     /// Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
@@ -725,6 +728,10 @@ pub struct LayerDefinition {
     /// by: `tilesetDefUid`
     pub auto_tileset_def_uid: Option<i64>,
 
+    pub auto_tiles_killed_by_other_layer_uid: Option<i64>,
+
+    pub biome_field_uid: Option<i64>,
+
     /// Allow editor selections when the layer is not currently active.
     pub can_select_when_inactive: bool,
 
@@ -815,12 +822,17 @@ pub struct LayerDefinition {
 
     /// Unique Int identifier
     pub uid: i64,
+
+    /// Display tags
+    pub ui_filter_tags: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AutoLayerRuleGroup {
     pub active: bool,
+
+    pub biome_requirement_mode: i64,
 
     /// *This field was removed in 1.0.0 and should no longer be used.*
     pub collapsed: Option<bool>,
@@ -832,6 +844,8 @@ pub struct AutoLayerRuleGroup {
     pub is_optional: bool,
 
     pub name: String,
+
+    pub required_biome_values: Vec<String>,
 
     pub rules: Vec<AutoLayerRuleDefinition>,
 
@@ -1598,7 +1612,7 @@ pub struct LdtkTableOfContentEntry {
 pub struct LdtkTocInstanceData {
     /// An object containing the values of all entity fields with the `exportToToc` option
     /// enabled. This object typing depends on actual field value types.
-    pub fields: Vec<Option<serde_json::Value>>,
+    pub fields: Option<serde_json::Value>,
 
     pub hei_px: i64,
 
