@@ -1346,7 +1346,7 @@ ul.log {
 	background-repeat: no-repeat;
 	background-position: left center;
 
-	&>span {
+	&>span:not(.inlined) {
 		text-transform: none;
 		font-weight: bold;
 		color: white;

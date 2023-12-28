@@ -259,6 +259,8 @@ class EditLayerDefs extends ui.modal.Panel {
 
 		jForms.find("span.typeIcon").empty().append( JsTools.createLayerTypeIconAndName(cur.type) );
 
+		jContent.find("#typeSpecificTitle").text( cur.type.getName() );
+
 
 		// Identifier
 		var i = Input.linkToHtmlInput( cur.identifier, jForms.find("input[name='name']") );
