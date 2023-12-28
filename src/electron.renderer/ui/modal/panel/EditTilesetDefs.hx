@@ -74,7 +74,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 	}
 
-	function selectTileset(td:data.def.TilesetDef) {
+	public function selectTileset(td:data.def.TilesetDef) {
 		curTd = td;
 		updateList();
 		updateForm();

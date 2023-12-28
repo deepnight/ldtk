@@ -149,7 +149,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 	}
 
-	function selectEntity(ed:Null<data.def.EntityDef>) {
+	public function selectEntity(ed:Null<data.def.EntityDef>) {
 		if( ed==null )
 			ed = editor.project.defs.entities[0];
 

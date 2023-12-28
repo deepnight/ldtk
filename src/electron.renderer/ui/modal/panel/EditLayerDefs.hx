@@ -219,7 +219,7 @@ class EditLayerDefs extends ui.modal.Panel {
 		}
 	}
 
-	function select(ld:Null<data.def.LayerDef>) {
+	public function select(ld:Null<data.def.LayerDef>) {
 		cur = ld;
 		intGridValuesIconsTdUid = null;
 		updateForm();

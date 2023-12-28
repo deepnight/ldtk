@@ -5492,13 +5492,27 @@ canvas#webgl {
 							opacity: 0.5;
 						}
 
+						&:not(.active) {
+							&.SE_Definition	{ color: #ffcc00; background-color: transparentize($color: #ffcc00, $amount: 0.85);}
+							&.SE_World		{ color: #94483b; background-color: transparentize($color: #94483b, $amount: 0.85);}
+							&.SE_Level		{ color: #70a9ff; background-color: transparentize($color: #70a9ff, $amount: 0.85);}
+							&.SE_Entity		{ color: #20e2a5; background-color: transparentize($color: #20e2a5, $amount: 0.85);}
+						}
+
 						&.active {
 							color: black !important;
-							background-color: $orange !important;
+
 							&.context {
 								font-weight: bold;
 							}
+
+							&.SE_Definition	{ background-color: #ffcc00; }
+							&.SE_World		{ background-color: #94483b; }
+							&.SE_Level		{ background-color: #70a9ff; }
+							&.SE_Entity		{ background-color: #20e2a5; }
 						}
+
+
 					}
 
 					.more {

@@ -11,6 +11,7 @@ typedef SearchElement = {
 }
 
 enum ElementCategory {
+	SE_Definition;
 	SE_World;
 	SE_Level;
 	SE_Entity;
@@ -64,7 +65,71 @@ class CommandPalette {
 		jInput.blur( _->jInput.focus() );
 		jInput.focus();
 
-		// List all elements
+		initSearchableElements();
+		updateResults();
+	}
+
+
+	function initSearchableElements() {
+		allElements = [];
+
+		// Layer defs
+		for(ld in project.defs.layers)
+			allElements.push({
+				id: "layer_"+ld.identifier,
+				cat: SE_Definition,
+				desc: ld.identifier,
+				ctxDesc: "Definition",
+				keywords: ["layer", ld.identifier],
+				onPick: ()->{
+					var p = new ui.modal.panel.EditLayerDefs();
+					p.select(ld);
+				},
+			});
+
+		// Entity defs
+		for(ed in project.defs.entities)
+			allElements.push({
+				id: "entity_"+ed.identifier,
+				cat: SE_Definition,
+				desc: ed.identifier,
+				ctxDesc: "Definition",
+				keywords: ["entity", ed.identifier],
+				onPick: ()->{
+					var p = new ui.modal.panel.EditEntityDefs();
+					p.selectEntity(ed);
+				},
+			});
+
+		// Enum defs
+		for(ed in project.defs.enums.concat(project.defs.externalEnums))
+			allElements.push({
+				id: "enum_"+ed.identifier,
+				cat: SE_Definition,
+				desc: ed.identifier,
+				ctxDesc: "Definition",
+				keywords: ["enum", ed.identifier],
+				onPick: ()->{
+					var p = new ui.modal.panel.EditEnumDefs();
+					p.selectEnum(ed);
+				},
+			});
+
+		// Tileset defs
+		for(td in project.defs.tilesets)
+			allElements.push({
+				id: "tileset_"+td.identifier,
+				cat: SE_Definition,
+				desc: td.identifier,
+				ctxDesc: "Definition",
+				keywords: ["tileset", td.identifier],
+				onPick: ()->{
+					var p = new ui.modal.panel.EditTilesetDefs();
+					p.selectTileset(td);
+				},
+			});
+
+		// List all instances
 		for(w in project.worlds) {
 			// Worlds
 			allElements.push({
@@ -125,6 +190,7 @@ class CommandPalette {
 				e.keywords = [];
 
 			e.keywords.push( switch e.cat {
+				case SE_Definition: "definition";
 				case SE_World: "world";
 				case SE_Level: "level";
 				case SE_Entity: "entity";
@@ -132,8 +198,6 @@ class CommandPalette {
 			e.keywords.push(e.desc.toLowerCase());
 			e.cachedKeywords = cleanupKeywords( e.keywords.join(" ") );
 		}
-
-		updateResults();
 	}
 
 
@@ -179,6 +243,7 @@ class CommandPalette {
 		for(e in curElements) {
 			var jElement = new J('<div class="element"></div>');
 			var iconId = switch e.cat {
+				case SE_Definition: "project";
 				case SE_World: "world";
 				case SE_Level: "level";
 				case SE_Entity: "entity";
@@ -190,18 +255,9 @@ class CommandPalette {
 			if( e.ctxDesc!=null )
 				jElement.append('<div class="context">${e.ctxDesc}</div>');
 
-			var col = dn.Col.parseHex(switch e.cat {
-				case SE_World: "#94483b";
-				case SE_Level: "#70a9ff";
-				case SE_Entity: "#20e2a5";
-			});
-			jElement.css("color", col);
-			jElement.css("background-color", col.toCssRgba(0.15));
+			jElement.addClass(e.cat.getName());
 			jElement.attr("uid", e.id);
-			jElement.click(_->{
-				close();
-				e.onPick();
-			});
+			jElement.click(_->selectResult(e));
 			jElement.mousemove( _->{
 				if( curUid!=e.id )
 					setCurrent(e);
@@ -219,6 +275,13 @@ class CommandPalette {
 			jResults.hide();
 		else
 			jResults.show();
+	}
+
+
+	function selectResult(e:SearchElement) {
+		close();
+		Modal.closeAll();
+		e.onPick();
 	}
 
 

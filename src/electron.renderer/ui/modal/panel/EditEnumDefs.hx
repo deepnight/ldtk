@@ -168,7 +168,7 @@ class EditEnumDefs extends ui.modal.Panel {
 	}
 
 
-	function selectEnum(ed:data.def.EnumDef) {
+	public function selectEnum(ed:data.def.EnumDef) {
 		curEnum = ed;
 		updateEnumList();
 		updateEnumForm();
