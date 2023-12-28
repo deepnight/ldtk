@@ -105,6 +105,15 @@ class IntGridPalette extends ui.ToolPalette {
 					tool.selectValue(curValue);
 					render();
 				});
+
+				ui.modal.ContextMenu.attachTo_new(jLi, false, (ctx:ui.modal.ContextMenu)->{
+					ctx.addAction({
+						label: L.t._("Edit layer"),
+						cb: ()->{
+							editor.executeAppCommand(C_OpenLayerPanel);
+						},
+					});
+				});
 			}
 
 			groupIdx++;
