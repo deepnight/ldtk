@@ -18,6 +18,7 @@ enum ElementCategory {
 
 class CommandPalette {
 	static var MAX_RESULTS = 20;
+	static var MAX_DESC_LEN = 40;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -183,7 +184,8 @@ class CommandPalette {
 				case SE_Entity: "entity";
 			}
 			jElement.append('<span class="icon $iconId"></span>');
-			jElement.append('<div class="desc">${e.desc}</div>');
+			var desc = e.desc.length>=MAX_DESC_LEN ? e.desc.substr(0,MAX_DESC_LEN-3)+"..." : e.desc;
+			jElement.append('<div class="desc">$desc</div>');
 
 			if( e.ctxDesc!=null )
 				jElement.append('<div class="context">${e.ctxDesc}</div>');
