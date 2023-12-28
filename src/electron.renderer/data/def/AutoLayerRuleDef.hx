@@ -129,7 +129,7 @@ class AutoLayerRuleDef {
 			uid: uid,
 			active: active,
 			size: size,
-			tileRectsIds: tileRectsIds.copy(),
+			tileRectsIds: tileRectsIds.map( arr->arr.copy() ),
 			alpha: alpha,
 			chance: JsonTools.writeFloat(chance),
 			breakOnMatch: breakOnMatch,
