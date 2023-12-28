@@ -54,15 +54,15 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
 ## Other changes
 
  - Auto-layer rule size is now automatic, internally ranging from 1x1 up to 9x9. LDtk will optimize rules to smaller internal sizes based on your rule layout.
+ - When editing a tag somewhere, LDtk will now offer to also rename all other tags accordingly.
+ - Optimized the Rules panel rendering for projects with tons of rules.
  - Added a button to toggle Auto-layer rendering (equivalent of the existing`SHIFT-R` shortcut)
  - Added expand/collapse sections to the Layers panel.
- - TODO: auto tags-renaming
- - TODO: rule size is now automatic
  - Moved the "Project" button location before "World" and "Level" buttons in editor.
  - Fixed entity preview size in left panel
  - Fixed IntGrid icons size when the left panel uses the 5-columns mode
  - Rules remapping now also updates out-of-bounds policy value
- - Allowed break-on-match on rules with some transparency
+ - Allowed break-on-match on rules with transparency or offsets
  - Fixed unsupported "Empty cell" value in rules out-of-bounds policy
  - Fixed a crash when deleting an Enum used in level custom fields.
  - Fixed a crash in Selects when trying to go over the last element using a keyboard shortcut.
