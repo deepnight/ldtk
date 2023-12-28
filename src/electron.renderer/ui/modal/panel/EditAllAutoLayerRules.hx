@@ -880,24 +880,22 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Rules
-		var ruleIdx = 0;
-		var allActive = true;
-		for( r in rg.rules) {
-			// Create rule in DOM
-			var jRule = createRuleBlock(rg, r, ruleIdx++);
-			jGroupList.append(jRule);
+		if( !rg.collapsed ) {
+			var ruleIdx = 0;
+			for( r in rg.rules) {
+				// Create rule in DOM
+				var jRule = createRuleBlock(rg, r, ruleIdx++);
+				jGroupList.append(jRule);
 
-			// Last edited highlight
-			jRule.mousedown( function(ev) {
-				jContent.find("li.last").removeClass("last");
-				jRule.addClass("last");
-				lastRule = r;
-			});
-			if( r==lastRule )
-				jRule.addClass("last");
-
-			if( !r.active )
-				allActive = false;
+				// Last edited highlight
+				jRule.mousedown( function(ev) {
+					jContent.find("li.last").removeClass("last");
+					jRule.addClass("last");
+					lastRule = r;
+				});
+				if( r==lastRule )
+					jRule.addClass("last");
+			}
 		}
 
 		// Active state icon
