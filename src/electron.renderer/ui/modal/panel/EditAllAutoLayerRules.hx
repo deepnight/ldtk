@@ -855,38 +855,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				});
 		});
 
-		// var actions : ui.modal.ContextMenu.ContextActions = [
-		// 	{
-		// 		label: L._PasteAfter("rule"),
-		// 		separatorBefore: true,
-		// 		cb: ()->{
-		// 			var copy = ld.pasteRule(project, rg, App.ME.clipboard);
-		// 			lastRule = copy;
-		// 			editor.ge.emit( LayerRuleAdded(copy) );
-		// 			invalidateRuleAndOnesBelow(copy);
-		// 		},
-		// 		show: ()->!rg.usesWizard,
-		// 		enable: ()->return App.ME.clipboard.is(CRule),
-		// 	},
-		// 	{
-		// 		label: L._PasteAfter("group"),
-		// 		cb: ()->{
-		// 			var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
-		// 			editor.ge.emit(LayerRuleGroupAdded(copy));
-		// 			for(r in copy.rules)
-		// 				invalidateRuleAndOnesBelow(r);
-		// 		},
-		// 		enable: ()->App.ME.clipboard.is(CRuleGroup),
-		// 	},
-		// 	{
-		// 	},
-		// 	{
-		// 		label: L._Delete(L.t._("Group")),
-		// 		cb: deleteRuleGroup.bind(rg, true),
-		// 	},
-		// ];
-		// ContextMenu.attachTo(jGroup, jGroupHeader, actions);
-
 		// Wizard mode explanation
 		if( rg.usesWizard ) {
 			var jLi = new J('<li class="wizardHelp"/>');
