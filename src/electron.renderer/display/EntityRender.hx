@@ -315,7 +315,7 @@ class EntityRender extends dn.Process {
 				continue;
 
 			var fi = refEi.getEntityRefFieldTo(ei,true);
-			if( fi==null )
+			if( fi==null || !fi.def.refLinkIsDisplayed() )
 				continue;
 
 			var col = refEi.getSmartColor(false);

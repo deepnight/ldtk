@@ -580,6 +580,15 @@ class FieldDef {
 	}
 
 
+	public function refLinkIsDisplayed() {
+		return switch editorDisplayMode {
+			case RefLinkBetweenPivots: true;
+			case RefLinkBetweenCenters: true;
+			case _: false;
+		}
+	}
+
+
 	public function acceptsEntityRefTo(sourceEi:data.inst.EntityInstance, targetEd:data.def.EntityDef, targetLevel:Level) {
 		if( type!=F_EntityRef || sourceEi==null || targetEd==null || targetLevel==null )
 			return false;

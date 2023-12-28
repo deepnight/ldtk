@@ -323,7 +323,7 @@ class EntityInstance {
 				return null;
 
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLinkBetweenCenters || fi.def.editorDisplayMode==RefLinkBetweenPivots ) )
+				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.refLinkIsDisplayed() ) )
 					return fi;
 		}
 		return null;
