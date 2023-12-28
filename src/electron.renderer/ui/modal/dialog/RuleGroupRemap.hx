@@ -61,6 +61,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 			// setTileOffset( tileset.getSelectedTileIds()[0] - allTileIds[0] );
 		}
 		setTileOffset(0,0,true);
+		tileset.fitView();
 
 		// Confirm & remap!
 		addButton(L.t._("Confirm"), ()->{
