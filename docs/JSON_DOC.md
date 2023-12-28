@@ -151,8 +151,8 @@ Value | Type | Description
 `__smartColor`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | String | The entity "smart" color, guessed from either Entity definition, or one its field instances.
 `__tags`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.0.0-gray.svg)  | Array&nbsp;of&nbsp;String | Array of tags defined in this Entity definition
 `__tile`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.4.0-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.0.0-gray.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | Optional TilesetRect used to display this entity (it could either be the default Entity tile, or some tile provided by a field value, like an Enum).
-`__worldX`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.4-gray.svg)  | Int | X world coordinate in pixels
-`__worldY`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.4-gray.svg)  | Int | Y world coordinate in pixels
+`__worldX`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.4-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.5.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | X world coordinate in pixels. Only available in GridVania or Free world layouts.
+`__worldY`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.4-gray.svg) ![Generic badge](https://img.shields.io/badge/Changed_1.5.0-green.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Y world coordinate in pixels Only available in GridVania or Free world layouts.
 `defUid` | Int | Reference of the **Entity definition** UID
 `fieldInstances` | Array&nbsp;of&nbsp;[Field&nbsp;instance](#ldtk-FieldInstanceJson) | An array of all custom fields and their values.
 `height`<br/> ![Generic badge](https://img.shields.io/badge/Added_0.8.0-gray.svg)  | Int | Entity height in pixels. For non-resizable entities, it will be the same as Entity definition.

@@ -509,8 +509,6 @@
 				"__pivot",
 				"__smartColor",
 				"__tags",
-				"__worldX",
-				"__worldY",
 				"defUid",
 				"fieldInstances",
 				"height",
@@ -563,15 +561,17 @@
 					]
 				},
 				"__worldX": {
-					"description": "X world coordinate in pixels",
+					"description": "X world coordinate in pixels. Only available in GridVania or Free world layouts.",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"__worldY": {
-					"description": "Y world coordinate in pixels",
+					"description": "Y world coordinate in pixels Only available in GridVania or Free world layouts.",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"__smartColor": {
