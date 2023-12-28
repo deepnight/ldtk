@@ -193,7 +193,7 @@ class CommandPalette {
 			var col = dn.Col.parseHex(switch e.cat {
 				case SE_World: "#94483b";
 				case SE_Level: "#70a9ff";
-				case SE_Entity: "#ff9900";
+				case SE_Entity: "#20e2a5";
 			});
 			jElement.css("color", col);
 			jElement.css("background-color", col.toCssRgba(0.15));
