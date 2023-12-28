@@ -1360,6 +1360,9 @@ class Editor extends Page {
 
 
 	public function selectWorld(w:data.World, showUp=true) {
+		if( worldMode )
+			setWorldMode(false);
+		
 		curWorldIid = w.iid;
 		invalidateCachedLevelErrors();
 

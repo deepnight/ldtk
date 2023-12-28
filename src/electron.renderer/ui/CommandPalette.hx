@@ -280,7 +280,6 @@ class CommandPalette {
 
 	function selectResult(e:SearchElement) {
 		close();
-		Modal.closeAll();
 		e.onPick();
 	}
 
