@@ -316,7 +316,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
-		// Add group
+		// Create group
 		jContent.find("button.createGroup").click( function(ev:js.jquery.Event) {
 			var m = new ContextMenu( new J(ev.target) );
 
