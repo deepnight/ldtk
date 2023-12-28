@@ -991,9 +991,9 @@ ul.niceList {
 		grid-template-columns: auto min-content;
 		align-items: center;
 
-		padding-top: 4px;
-		padding-bottom: 4px;
-		padding-right: 4px;
+		padding-top: 1px;
+		padding-bottom: 1px;
+		padding-right: 1px;
 		&:not(.collapser) {
 			padding-left: 4px;
 		}
@@ -1007,16 +1007,14 @@ ul.niceList {
 
 		.links {
 			display: flex;
-			a+a {
-				margin-left: 1px;
-			}
+			gap: 1px;
 		}
 
 		a {
 			display: flex;
 			justify-items: center;
 			align-items: center;
-			font-size: 1.1em;
+			font-size: 1.3em;
 			padding: 3px;
 			background-color: $bgMed;
 			border-radius: 2px;
@@ -1024,7 +1022,7 @@ ul.niceList {
 			color: white;
 
 			&:hover {
-				background-color: $orange;
+				background-color: black;
 			}
 
 			&.red:not(:hover) {
