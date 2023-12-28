@@ -5447,23 +5447,25 @@ canvas#webgl {
 		z-index: 99;
 		top: 0;
 		left: 0;
+		display: grid;
+		justify-content: center;
+		align-items: flex-start;
+		padding-top: 8px;
+		width: 100vw;
+		height: 100vh;
+		box-sizing: border-box;
 
 		.mask {
 			position: absolute;
 			z-index: 0;
-			top: 0;
-			left: 0;
 			width: 100vw;
 			height: 100vh;
 			background-color: transparentize($color: black, $amount: 0.3);
 		}
 		.wrapper {
-			position: absolute;
 			z-index: 1;
-			width: 100vw;
 
 			.content {
-				margin: auto;
 				width: 35em;
 				input[type=text] {
 					width: 100%;
