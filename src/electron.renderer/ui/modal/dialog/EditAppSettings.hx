@@ -108,6 +108,31 @@ class EditAppSettings extends ui.modal.Dialog {
 			}
 		);
 
+		// Nearby tiles rendering distance
+		var allValues = [0, 1, 2];
+		if( !allValues.contains(settings.v.nearbyTilesRenderingDist) ) {
+			for(v in allValues)
+				if( v>=settings.v.nearbyTilesRenderingDist) {
+					settings.v.nearbyTilesRenderingDist = v;
+					break;
+				}
+		}
+		JsTools.createValuesSelect(
+			jForm.find("#nearbyTilesRenderingDist"),
+			settings.v.nearbyTilesRenderingDist,
+			allValues,
+			false,
+			1,
+			(v)->switch v {
+				case 0: "Disabled";
+				case _: settings.getNearbyTilesRenderingDistPx(v)+" pixels";
+			},
+			(v)->{
+				settings.v.nearbyTilesRenderingDist = v;
+				onSettingChanged();
+			}
+		);
+
 		// Load last project
 		var i = Input.linkToHtmlInput(settings.v.openLastProject, jForm.find("#openLastProject"));
 		i.onValueChange = (v)->{

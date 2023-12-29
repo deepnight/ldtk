@@ -30,7 +30,7 @@ typedef AppSettings = {
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 	var fieldsRender : FieldsRender;
-	var renderNearbyTiles : Bool;
+	var nearbyTilesRenderingDist : Int;
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
@@ -109,7 +109,7 @@ class Settings {
 
 			autoWorldModeSwitch: ZoomInAndOut,
 			fieldsRender: FR_Outline,
-			renderNearbyTiles: true,
+			nearbyTilesRenderingDist: 1,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
@@ -323,6 +323,10 @@ class Settings {
 		return v.appUiScale; // HACK disabled base scaling
 	}
 
+
+	public function getNearbyTilesRenderingDistPx(custDist=-1) {
+		return 64 * ( custDist<0 ? v.nearbyTilesRenderingDist : custDist );
+	}
 
 	public static function getDir() {
 		var path = isRenderer()

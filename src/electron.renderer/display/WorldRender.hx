@@ -132,7 +132,7 @@ class WorldRender extends dn.Process {
 				invalidateCameraBasedRenders();
 				invalidateLevelFields(editor.curLevel);
 
-				if( settings.v.renderNearbyTiles )
+				if( settings.v.nearbyTilesRenderingDist>0 )
 					invalidateNearbyLevels(editor.curLevel);
 
 			case WorldSelected(w):
@@ -233,7 +233,7 @@ class WorldRender extends dn.Process {
 				invalidateLevelFields(l);
 				updateLayout();
 
-				if( settings.v.renderNearbyTiles )
+				if( settings.v.nearbyTilesRenderingDist>0 )
 					invalidateNearbyLevels(l);
 
 			case LevelResized(l):
@@ -681,7 +681,7 @@ class WorldRender extends dn.Process {
 			var dist = editor.curLevel.getBoundsDist(l);
 			wl.outline.alpha = 0.3;
 			wl.outline.visible = camera.isOnScreenLevel(l);
-			wl.render.alpha = settings.v.renderNearbyTiles ? 1 : 0.5;
+			wl.render.alpha = settings.v.nearbyTilesRenderingDist>0 ? 0.8 : 0.5;
 			wl.render.visible = wl.outline.visible && dist<=300;
 		}
 
@@ -875,7 +875,8 @@ class WorldRender extends dn.Process {
 		}
 
 		// Edge tiles render
-		if( settings.v.renderNearbyTiles && !editor.worldMode && l.touches(editor.curLevel) ) {
+		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
+			var edgeDistPx = settings.getNearbyTilesRenderingDistPx();
 			l.iterateLayerInstancesInRenderOrder( (li)->{
 				switch li.def.type {
 					case IntGrid:
@@ -903,7 +904,7 @@ class WorldRender extends dn.Process {
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
 							for( tileInfos in allTiles.value ) {
-								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, 48) )
+								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) )
 									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
 							}
 						}
@@ -913,7 +914,7 @@ class WorldRender extends dn.Process {
 					// Classic tiles
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid) {
-						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, 48) )
+						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, edgeDistPx) )
 						for( tileInf in li.getGridTileStack(cx,cy) )
 							LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
 					}
