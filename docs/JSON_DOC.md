@@ -297,6 +297,7 @@ Value | Type | Description
 `uiTileRect`<br/> ![Generic badge](https://img.shields.io/badge/Added_1.4.0-gray.svg)  | [Tileset&nbsp;rectangle](#ldtk-TilesetRect)&nbsp;*(can&nbsp;be&nbsp;`null`)* | This tile overrides the one defined in `tileRect` in the UI
 `uid` | Int | Unique Int identifier
 `width` | Int | Pixel width
+`allowOutOfBounds`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.5.0-green.svg)  | Bool | If enabled, this entity is allowed to stay outside of the current level bounds
 `doc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.5-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined documentation for this element to provide help/tips to level designers.
 `exportToToc`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.2.4-gray.svg)  | Bool | If enabled, all instances of this entity will be listed in the project "Table of content" object.
 `fieldDefs`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;[Field&nbsp;definition](#ldtk-FieldDefJson) | Array of field definitions

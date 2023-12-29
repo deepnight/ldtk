@@ -1322,6 +1322,7 @@
 				"tileRenderMode",
 				"uid",
 				"width",
+				"allowOutOfBounds",
 				"exportToToc",
 				"fieldDefs",
 				"fillOpacity",
@@ -1385,6 +1386,12 @@
 					"description": "Max instances count",
 					"type": [
 						"integer"
+					]
+				},
+				"allowOutOfBounds": {
+					"description": "If enabled, this entity is allowed to stay outside of the current level bounds",
+					"type": [
+						"boolean"
 					]
 				},
 				"hollow": {
