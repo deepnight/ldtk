@@ -10,7 +10,7 @@
 	},
 	"iid": "a3386460-7820-11ed-b6fd-157a63b4d02d",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473252,
+	"appBuildId": 473302,
 	"nextUid": 170,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -901,6 +901,7 @@
 			"uid": 59,
 			"tags": ["actor"],
 			"exportToToc": true,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1010,6 +1011,7 @@
 			"uid": 63,
 			"tags": ["actor"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 20,
 			"height": 20,
@@ -1082,6 +1084,7 @@
 			"uid": 62,
 			"tags": ["environment"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1154,6 +1157,7 @@
 			"uid": 105,
 			"tags": ["environment"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 10,
 			"height": 10,
@@ -1226,6 +1230,7 @@
 			"uid": 148,
 			"tags": ["environment"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1378,14 +1383,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 416,
-							"__worldY": 112,
 							"iid": "8ac5dda0-c640-11ed-8430-8169bab5952b",
 							"width": 32,
 							"height": 16,
 							"defUid": 62,
 							"px": [160,112],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }],
+							"__worldX": 416,
+							"__worldY": 112
 						},
 						{
 							"__identifier": "Door",
@@ -1394,14 +1399,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 544,
-							"__worldY": 112,
 							"iid": "8d4360c0-c640-11ed-8430-abb21cbec6c0",
 							"width": 32,
 							"height": 16,
 							"defUid": 62,
 							"px": [288,112],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }],
+							"__worldX": 544,
+							"__worldY": 112
 						},
 						{
 							"__identifier": "Player",
@@ -1410,8 +1415,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 0, "y": 240, "w": 16, "h": 16 },
 							"__smartColor": "#03CB7C",
-							"__worldX": 424,
-							"__worldY": 168,
 							"iid": "9faf4260-c640-11ed-8430-2b1c51694f4d",
 							"width": 16,
 							"height": 16,
@@ -1420,7 +1423,9 @@
 							"fieldInstances": [
 								{ "__identifier": "life", "__type": "Int", "__value": 100, "__tile": null, "defUid": 61, "realEditorValues": [] },
 								{ "__identifier": "ammo", "__type": "Int", "__value": 10, "__tile": null, "defUid": 60, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 424,
+							"__worldY": 168
 						},
 						{
 							"__identifier": "Door",
@@ -1429,8 +1434,6 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 368,
-							"__worldY": 144,
 							"iid": "a1e0c860-c640-11ed-8430-e927d6a72261",
 							"width": 16,
 							"height": 48,
@@ -1439,7 +1442,9 @@
 							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": "KeyA", "__tile": null, "defUid": 69, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["KeyA"]
-							}] }]
+							}] }],
+							"__worldX": 368,
+							"__worldY": 144
 						},
 						{
 							"__identifier": "Item",
@@ -1448,8 +1453,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 272, "y": 112, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 552,
-							"__worldY": 56,
 							"iid": "c3c403c0-c640-11ed-8430-cd4fd5179384",
 							"width": 20,
 							"height": 20,
@@ -1458,7 +1461,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "KeyA", "__tile": { "tilesetUid": 104, "x": 272, "y": 112, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["KeyA"]
-							}] }]
+							}] }],
+							"__worldX": 552,
+							"__worldY": 56
 						},
 						{
 							"__identifier": "Item",
@@ -1467,8 +1472,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 80, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 312,
-							"__worldY": 72,
 							"iid": "c75e4180-c640-11ed-8430-ebd1fb662306",
 							"width": 20,
 							"height": 20,
@@ -1477,7 +1480,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "Health", "__tile": { "tilesetUid": 104, "x": 80, "y": 272, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Health"]
-							}] }]
+							}] }],
+							"__worldX": 312,
+							"__worldY": 72
 						},
 						{
 							"__identifier": "Button",
@@ -1486,8 +1491,6 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 272, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#FF0000",
-							"__worldX": 440,
-							"__worldY": 40,
 							"iid": "cb7d3fa0-c640-11ed-8430-97bfc67769ff",
 							"width": 10,
 							"height": 10,
@@ -1501,7 +1504,9 @@
 							}], "__tile": null, "defUid": 106, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["8d4360c0-c640-11ed-8430-abb21cbec6c0"]
-							}] }]
+							}] }],
+							"__worldX": 440,
+							"__worldY": 40
 						},
 						{
 							"__identifier": "Door",
@@ -1510,14 +1515,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 384,
-							"__worldY": 64,
 							"iid": "c8d51610-3b70-11ee-b655-5116b3326bb0",
 							"width": 16,
 							"height": 32,
 							"defUid": 62,
 							"px": [128,64],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }],
+							"__worldX": 384,
+							"__worldY": 64
 						}
 					]
 				},
@@ -2996,14 +3001,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 160,
-							"__worldY": 96,
 							"iid": "9b204460-c640-11ed-8430-dbaaf87f9ec4",
 							"width": 16,
 							"height": 16,
 							"defUid": 62,
 							"px": [160,96],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }],
+							"__worldX": 160,
+							"__worldY": 96
 						},
 						{
 							"__identifier": "Item",
@@ -3012,8 +3017,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 88,
-							"__worldY": 88,
 							"iid": "d60070f0-c640-11ed-8430-1fbe3e7e0e50",
 							"width": 20,
 							"height": 20,
@@ -3022,7 +3025,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "Wood", "__tile": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Wood"]
-							}] }]
+							}] }],
+							"__worldX": 88,
+							"__worldY": 88
 						},
 						{
 							"__identifier": "Item",
@@ -3031,8 +3036,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 136,
-							"__worldY": 104,
 							"iid": "d83181c0-c640-11ed-8430-8ff8bb36b114",
 							"width": 20,
 							"height": 20,
@@ -3041,7 +3044,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "Wood", "__tile": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Wood"]
-							}] }]
+							}] }],
+							"__worldX": 136,
+							"__worldY": 104
 						},
 						{
 							"__identifier": "Item",
@@ -3050,8 +3055,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 72,
-							"__worldY": 136,
 							"iid": "da07c860-c640-11ed-8430-4d5c0daa8a2b",
 							"width": 20,
 							"height": 20,
@@ -3060,7 +3063,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "Wood", "__tile": { "tilesetUid": 104, "x": 192, "y": 944, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Wood"]
-							}] }]
+							}] }],
+							"__worldX": 72,
+							"__worldY": 136
 						},
 						{
 							"__identifier": "Item",
@@ -3069,8 +3074,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 0, "y": 416, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 200,
-							"__worldY": 200,
 							"iid": "5cbf6010-c640-11ed-8430-bdf779e74a2c",
 							"width": 20,
 							"height": 20,
@@ -3079,7 +3082,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "Gold", "__tile": { "tilesetUid": 104, "x": 0, "y": 416, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Gold"]
-							}] }]
+							}] }],
+							"__worldX": 200,
+							"__worldY": 200
 						},
 						{
 							"__identifier": "SecretWall",
@@ -3088,14 +3093,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 320, "y": 256, "w": 16, "h": 16 },
 							"__smartColor": "#B55088",
-							"__worldX": 128,
-							"__worldY": 192,
 							"iid": "778bba10-c640-11ed-8430-45e05816c898",
 							"width": 16,
 							"height": 16,
 							"defUid": 148,
 							"px": [128,192],
-							"fieldInstances": []
+							"fieldInstances": [],
+							"__worldX": 128,
+							"__worldY": 192
 						},
 						{
 							"__identifier": "Button",
@@ -3104,8 +3109,6 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 272, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#FF0000",
-							"__worldX": 88,
-							"__worldY": 168,
 							"iid": "8da3dad0-c640-11ed-8430-b5ffeb3fb035",
 							"width": 10,
 							"height": 10,
@@ -3119,7 +3122,9 @@
 							}], "__tile": null, "defUid": 106, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["778bba10-c640-11ed-8430-45e05816c898"]
-							}] }]
+							}] }],
+							"__worldX": 88,
+							"__worldY": 168
 						},
 						{
 							"__identifier": "Item",
@@ -3128,8 +3133,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 288, "y": 112, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 104,
-							"__worldY": 40,
 							"iid": "32ec4110-c640-11ed-8430-09dce52db41d",
 							"width": 20,
 							"height": 20,
@@ -3138,7 +3141,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "KeyB", "__tile": { "tilesetUid": 104, "x": 288, "y": 112, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["KeyB"]
-							}] }]
+							}] }],
+							"__worldX": 104,
+							"__worldY": 40
 						}
 					]
 				},
@@ -4072,8 +4077,6 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 816,
-							"__worldY": 128,
 							"iid": "f7ff4aa0-c640-11ed-8430-2d514444555c",
 							"width": 16,
 							"height": 32,
@@ -4082,7 +4085,9 @@
 							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": "KeyB", "__tile": null, "defUid": 69, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["KeyB"]
-							}] }]
+							}] }],
+							"__worldX": 816,
+							"__worldY": 128
 						},
 						{
 							"__identifier": "Item",
@@ -4091,8 +4096,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 104, "x": 96, "y": 560, "w": 16, "h": 16 },
 							"__smartColor": "#FF0044",
-							"__worldX": 920,
-							"__worldY": 88,
 							"iid": "13e79bf0-c640-11ed-8430-d534eb2f2a32",
 							"width": 20,
 							"height": 20,
@@ -4101,7 +4104,9 @@
 							"fieldInstances": [{ "__identifier": "type", "__type": "LocalEnum.Item", "__value": "Rifle", "__tile": { "tilesetUid": 104, "x": 96, "y": 560, "w": 16, "h": 16 }, "defUid": 146, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["Rifle"]
-							}] }]
+							}] }],
+							"__worldX": 920,
+							"__worldY": 88
 						},
 						{
 							"__identifier": "Door",
@@ -4110,14 +4115,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 880,
-							"__worldY": 80,
 							"iid": "74febbb0-c640-11ed-8430-99228a1aeb52",
 							"width": 16,
 							"height": 32,
 							"defUid": 62,
 							"px": [112,80],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }],
+							"__worldX": 880,
+							"__worldY": 80
 						},
 						{
 							"__identifier": "Door",
@@ -4126,14 +4131,14 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 256, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#B86F50",
-							"__worldX": 912,
-							"__worldY": 128,
 							"iid": "75bbf130-c640-11ed-8430-4908ff1e52c1",
 							"width": 32,
 							"height": 16,
 							"defUid": 62,
 							"px": [144,128],
-							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }]
+							"fieldInstances": [{ "__identifier": "lockedWith", "__type": "LocalEnum.Item", "__value": null, "__tile": null, "defUid": 69, "realEditorValues": [] }],
+							"__worldX": 912,
+							"__worldY": 128
 						},
 						{
 							"__identifier": "Button",
@@ -4142,8 +4147,6 @@
 							"__tags": ["environment"],
 							"__tile": { "tilesetUid": 104, "x": 272, "y": 32, "w": 16, "h": 16 },
 							"__smartColor": "#FF0000",
-							"__worldX": 888,
-							"__worldY": 152,
 							"iid": "782a5920-c640-11ed-8430-4b5f95407d8a",
 							"width": 10,
 							"height": 10,
@@ -4165,7 +4168,9 @@
 							}, {
 								"id": "V_String",
 								"params": ["75bbf130-c640-11ed-8430-4908ff1e52c1"]
-							} ] }]
+							} ] }],
+							"__worldX": 888,
+							"__worldY": 152
 						}
 					]
 				},
