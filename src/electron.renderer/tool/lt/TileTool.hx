@@ -393,6 +393,24 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		N.msg("Saved selection");
 	}
 
+	override function onAppCommand(cmd:AppCommand) {
+		super.onAppCommand(cmd);
+
+		switch cmd {
+			case C_FlipX:
+				flipX = !flipX;
+				N.quick("X-flip: "+L.onOff(flipX));
+				customCursor(new hxd.Event(EMove), lastMouse);
+
+			case C_FlipY:
+				flipY = !flipY;
+				N.quick("Y-flip: "+L.onOff(flipY));
+				customCursor(new hxd.Event(EMove), lastMouse);
+
+			case _:
+		}
+	}
+
 	override function onKeyPress(keyId:Int) {
 		super.onKeyPress(keyId);
 
@@ -418,16 +436,6 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 						});
 						onValuePicking();
 					}
-
-				case K.X if( !App.ME.hasAnyToggleKeyDown() ):
-					flipX = !flipX;
-					N.quick("X-flip: "+L.onOff(flipX));
-					customCursor(new hxd.Event(EMove), lastMouse);
-
-				case K.Y if( !App.ME.hasAnyToggleKeyDown() ):
-					flipY = !flipY;
-					N.quick("Y-flip: "+L.onOff(flipY));
-					customCursor(new hxd.Event(EMove), lastMouse);
 			}
 	}
 }

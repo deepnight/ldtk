@@ -264,6 +264,7 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function onKeyPress(keyId:Int) {}
+	public function onAppCommand(cmd:AppCommand) {}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )

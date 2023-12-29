@@ -498,10 +498,10 @@ class App extends dn.Process {
 	}
 
 	public static inline function isLinux() return js.node.Os.platform()=="linux";
-	// public static inline function isWindows() return js.node.Os.platform()=="win32";
-	// public static inline function isMac() return js.node.Os.platform()=="darwin";
-	public static inline function isWindows() return false;
-	public static inline function isMac() return true;
+	public static inline function isWindows() return js.node.Os.platform()=="win32";
+	public static inline function isMac() return js.node.Os.platform()=="darwin";
+	// public static inline function isWindows() return false;
+	// public static inline function isMac() return true;
 
 	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
 	public inline function isShiftDown() return isKeyDown(K.SHIFT);
@@ -563,8 +563,9 @@ class App extends dn.Process {
 			if( b.ctrlCmd && !App.ME.isCtrlCmdDown() || !b.ctrlCmd && App.ME.isCtrlCmdDown() )
 				continue;
 
-			if( b.macCtrl && !App.ME.isMacCtrlDown() || !b.macCtrl && App.ME.isMacCtrlDown() )
-				continue;
+			if( isMac() )
+				if( b.macCtrl && !App.ME.isMacCtrlDown() || !b.macCtrl && App.ME.isMacCtrlDown() )
+					continue;
 
 			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
 				continue;
@@ -639,6 +640,8 @@ class App extends dn.Process {
 			case C_ToggleDetails:
 			case C_ToggleGrid:
 			case C_CommandPalette:
+			case C_FlipX:
+			case C_FlipY:
 
 			case C_ExitApp:
 				App.ME.exit();

@@ -604,6 +604,8 @@ class Editor extends Page {
 			case C_HideApp:
 			case C_MinimizeApp:
 			case C_ToggleFullscreen:
+			case C_FlipX:
+			case C_FlipY:
 
 			case C_Back:
 				if( hasInputFocus() ) {
@@ -887,6 +889,9 @@ class Editor extends Page {
 			case C_NavRight:
 				onNavigateShortcut(1, 0, true);
 		}
+
+		if( curTool!=null )
+			curTool.onAppCommand(cmd);
 	}
 
 
