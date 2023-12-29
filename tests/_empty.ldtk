@@ -8,9 +8,9 @@
 		"appVersion": "1.5.0",
 		"url": "https://ldtk.io"
 	},
-	"iid": "9bba3440-7820-11ed-bc60-dd3cf5379687",
+	"iid": "1fae6730-8990-11ee-8d4a-6ded12b73511",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473223,
+	"appBuildId": 473297,
 	"nextUid": 1,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -36,15 +36,15 @@
 	"backupOnSave": false,
 	"backupLimit": 10,
 	"backupRelPath": null,
-	"levelNamePattern": "%world_Level_%idx",
+	"levelNamePattern": "Level_%idx",
 	"tutorialDesc": null,
 	"customCommands": [],
-	"flags": ["ExportOldTableOfContentData"],
+	"flags": [],
 	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
 		{
-			"identifier": "World_Level_0",
-			"iid": "472e4691-66b0-11ec-aa49-8d5f985d2dae",
+			"identifier": "Level_0",
+			"iid": "1fae8e40-8990-11ee-8d4a-1b3a81b0d557",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -67,5 +67,5 @@
 		}
 	],
 	"worlds": [],
-	"dummyWorldIid": "559cd230-c640-11ed-ac88-0dedae0cc2d8"
+	"dummyWorldIid": "1fae6731-8990-11ee-8d4a-e35245775fd3"
 }
