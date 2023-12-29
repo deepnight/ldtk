@@ -210,6 +210,7 @@ class App extends dn.Process {
 					case "down": K.DOWN;
 					case "left": K.LEFT;
 					case "right": K.RIGHT;
+					case "enter": K.ENTER;
 					case "²": K.QWERTY_TILDE;
 					case "`": K.QWERTY_QUOTE;
 
