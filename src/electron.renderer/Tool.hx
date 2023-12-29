@@ -111,8 +111,10 @@ class Tool<T> extends dn.Process {
 		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( checkOutOfBounds() && !rectangle && useAt(m,false) )
+		if( checkOutOfBounds() && !rectangle && useAt(m,false) ) {
+			ev.cancel = true;
 			onEditAnything();
+		}
 	}
 
 
