@@ -173,6 +173,8 @@ type Definitions struct {
 }
 
 type EntityDefinition struct {
+	// If enabled, this entity is allowed to stay outside of the current level bounds                             
+	AllowOutOfBounds                                                                            bool              `json:"allowOutOfBounds"`
 	// Base entity color                                                                                          
 	Color                                                                                       string            `json:"color"`
 	// User defined documentation for this element to provide help/tips to level designers.                       
@@ -653,10 +655,10 @@ type EntityInstance struct {
 	// Optional TilesetRect used to display this entity (it could either be the default Entity                  
 	// tile, or some tile provided by a field value, like an Enum).                                             
 	Tile                                                                                      *TilesetRectangle `json:"__tile,omitempty"`
-	// X world coordinate in pixels                                                                             
-	WorldX                                                                                    int64             `json:"__worldX"`
-	// Y world coordinate in pixels                                                                             
-	WorldY                                                                                    int64             `json:"__worldY"`
+	// X world coordinate in pixels. Only available in GridVania or Free world layouts.                         
+	WorldX                                                                                    *int64            `json:"__worldX,omitempty"`
+	// Y world coordinate in pixels Only available in GridVania or Free world layouts.                          
+	WorldY                                                                                    *int64            `json:"__worldY,omitempty"`
 	// Reference of the **Entity definition** UID                                                               
 	DefUid                                                                                    int64             `json:"defUid"`
 	// An array of all custom fields and their values.                                                          

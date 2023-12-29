@@ -358,6 +358,12 @@ namespace ldtk
     public partial class EntityDefinition
     {
         /// <summary>
+        /// If enabled, this entity is allowed to stay outside of the current level bounds
+        /// </summary>
+        [JsonProperty("allowOutOfBounds")]
+        public bool AllowOutOfBounds { get; set; }
+
+        /// <summary>
         /// Base entity color
         /// </summary>
         [JsonProperty("color")]
@@ -1604,16 +1610,16 @@ namespace ldtk
         public TilesetRectangle Tile { get; set; }
 
         /// <summary>
-        /// X world coordinate in pixels
+        /// X world coordinate in pixels. Only available in GridVania or Free world layouts.
         /// </summary>
         [JsonProperty("__worldX")]
-        public long WorldX { get; set; }
+        public long? WorldX { get; set; }
 
         /// <summary>
-        /// Y world coordinate in pixels
+        /// Y world coordinate in pixels Only available in GridVania or Free world layouts.
         /// </summary>
         [JsonProperty("__worldY")]
-        public long WorldY { get; set; }
+        public long? WorldY { get; set; }
 
         /// <summary>
         /// Reference of the **Entity definition** UID

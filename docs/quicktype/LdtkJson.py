@@ -455,6 +455,8 @@ class TileRenderMode(Enum):
 
 
 class EntityDefinition:
+    allow_out_of_bounds: bool
+    """If enabled, this entity is allowed to stay outside of the current level bounds"""
     color: str
     """Base entity color"""
     doc: Optional[str]
@@ -532,7 +534,8 @@ class EntityDefinition:
     width: int
     """Pixel width"""
 
-    def __init__(self, color: str, doc: Optional[str], export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, max_height: Optional[int], max_width: Optional[int], min_height: Optional[int], min_width: Optional[int], nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, ui_tile_rect: Optional[TilesetRectangle], width: int) -> None:
+    def __init__(self, allow_out_of_bounds: bool, color: str, doc: Optional[str], export_to_toc: bool, field_defs: List[FieldDefinition], fill_opacity: float, height: int, hollow: bool, identifier: str, keep_aspect_ratio: bool, limit_behavior: LimitBehavior, limit_scope: LimitScope, line_opacity: float, max_count: int, max_height: Optional[int], max_width: Optional[int], min_height: Optional[int], min_width: Optional[int], nine_slice_borders: List[int], pivot_x: float, pivot_y: float, render_mode: RenderMode, resizable_x: bool, resizable_y: bool, show_name: bool, tags: List[str], tile_id: Optional[int], tile_opacity: float, tile_rect: Optional[TilesetRectangle], tile_render_mode: TileRenderMode, tileset_id: Optional[int], uid: int, ui_tile_rect: Optional[TilesetRectangle], width: int) -> None:
+        self.allow_out_of_bounds = allow_out_of_bounds
         self.color = color
         self.doc = doc
         self.export_to_toc = export_to_toc
@@ -570,6 +573,7 @@ class EntityDefinition:
     @staticmethod
     def from_dict(obj: Any) -> 'EntityDefinition':
         assert isinstance(obj, dict)
+        allow_out_of_bounds = from_bool(obj.get("allowOutOfBounds"))
         color = from_str(obj.get("color"))
         doc = from_union([from_none, from_str], obj.get("doc"))
         export_to_toc = from_bool(obj.get("exportToToc"))
@@ -603,10 +607,11 @@ class EntityDefinition:
         uid = from_int(obj.get("uid"))
         ui_tile_rect = from_union([from_none, TilesetRectangle.from_dict], obj.get("uiTileRect"))
         width = from_int(obj.get("width"))
-        return EntityDefinition(color, doc, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, max_height, max_width, min_height, min_width, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, ui_tile_rect, width)
+        return EntityDefinition(allow_out_of_bounds, color, doc, export_to_toc, field_defs, fill_opacity, height, hollow, identifier, keep_aspect_ratio, limit_behavior, limit_scope, line_opacity, max_count, max_height, max_width, min_height, min_width, nine_slice_borders, pivot_x, pivot_y, render_mode, resizable_x, resizable_y, show_name, tags, tile_id, tile_opacity, tile_rect, tile_render_mode, tileset_id, uid, ui_tile_rect, width)
 
     def to_dict(self) -> dict:
         result: dict = {}
+        result["allowOutOfBounds"] = from_bool(self.allow_out_of_bounds)
         result["color"] = from_str(self.color)
         if self.doc is not None:
             result["doc"] = from_union([from_none, from_str], self.doc)
@@ -1588,10 +1593,10 @@ class EntityInstance:
     """Optional TilesetRect used to display this entity (it could either be the default Entity
     tile, or some tile provided by a field value, like an Enum).
     """
-    world_x: int
-    """X world coordinate in pixels"""
-    world_y: int
-    """Y world coordinate in pixels"""
+    world_x: Optional[int]
+    """X world coordinate in pixels. Only available in GridVania or Free world layouts."""
+    world_y: Optional[int]
+    """Y world coordinate in pixels Only available in GridVania or Free world layouts."""
     def_uid: int
     """Reference of the **Entity definition** UID"""
     field_instances: List[FieldInstance]
@@ -1611,7 +1616,7 @@ class EntityInstance:
     definition.
     """
 
-    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], world_x: int, world_y: int, def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
+    def __init__(self, grid: List[int], identifier: str, pivot: List[float], smart_color: str, tags: List[str], tile: Optional[TilesetRectangle], world_x: Optional[int], world_y: Optional[int], def_uid: int, field_instances: List[FieldInstance], height: int, iid: str, px: List[int], width: int) -> None:
         self.grid = grid
         self.identifier = identifier
         self.pivot = pivot
@@ -1636,8 +1641,8 @@ class EntityInstance:
         smart_color = from_str(obj.get("__smartColor"))
         tags = from_list(from_str, obj.get("__tags"))
         tile = from_union([from_none, TilesetRectangle.from_dict], obj.get("__tile"))
-        world_x = from_int(obj.get("__worldX"))
-        world_y = from_int(obj.get("__worldY"))
+        world_x = from_union([from_none, from_int], obj.get("__worldX"))
+        world_y = from_union([from_none, from_int], obj.get("__worldY"))
         def_uid = from_int(obj.get("defUid"))
         field_instances = from_list(FieldInstance.from_dict, obj.get("fieldInstances"))
         height = from_int(obj.get("height"))
@@ -1655,8 +1660,10 @@ class EntityInstance:
         result["__tags"] = from_list(from_str, self.tags)
         if self.tile is not None:
             result["__tile"] = from_union([from_none, lambda x: to_class(TilesetRectangle, x)], self.tile)
-        result["__worldX"] = from_int(self.world_x)
-        result["__worldY"] = from_int(self.world_y)
+        if self.world_x is not None:
+            result["__worldX"] = from_union([from_none, from_int], self.world_x)
+        if self.world_y is not None:
+            result["__worldY"] = from_union([from_none, from_int], self.world_y)
         result["defUid"] = from_int(self.def_uid)
         result["fieldInstances"] = from_list(lambda x: to_class(FieldInstance, x), self.field_instances)
         result["height"] = from_int(self.height)

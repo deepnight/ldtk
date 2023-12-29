@@ -482,6 +482,7 @@ namespace quicktype {
         virtual ~EntityDefinition() = default;
 
         private:
+        bool allow_out_of_bounds;
         std::string color;
         boost::optional<std::string> doc;
         bool export_to_toc;
@@ -517,6 +518,13 @@ namespace quicktype {
         int64_t width;
 
         public:
+        /**
+         * If enabled, this entity is allowed to stay outside of the current level bounds
+         */
+        const bool & get_allow_out_of_bounds() const { return allow_out_of_bounds; }
+        bool & get_mutable_allow_out_of_bounds() { return allow_out_of_bounds; }
+        void set_allow_out_of_bounds(const bool & value) { this->allow_out_of_bounds = value; }
+
         /**
          * Base entity color
          */
@@ -1853,8 +1861,8 @@ namespace quicktype {
         std::string smart_color;
         std::vector<std::string> tags;
         boost::optional<TilesetRectangle> tile;
-        int64_t world_x;
-        int64_t world_y;
+        boost::optional<int64_t> world_x;
+        boost::optional<int64_t> world_y;
         int64_t def_uid;
         std::vector<FieldInstance> field_instances;
         int64_t height;
@@ -1907,18 +1915,16 @@ namespace quicktype {
         void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
 
         /**
-         * X world coordinate in pixels
+         * X world coordinate in pixels. Only available in GridVania or Free world layouts.
          */
-        const int64_t & get_world_x() const { return world_x; }
-        int64_t & get_mutable_world_x() { return world_x; }
-        void set_world_x(const int64_t & value) { this->world_x = value; }
+        boost::optional<int64_t> get_world_x() const { return world_x; }
+        void set_world_x(boost::optional<int64_t> value) { this->world_x = value; }
 
         /**
-         * Y world coordinate in pixels
+         * Y world coordinate in pixels Only available in GridVania or Free world layouts.
          */
-        const int64_t & get_world_y() const { return world_y; }
-        int64_t & get_mutable_world_y() { return world_y; }
-        void set_world_y(const int64_t & value) { this->world_y = value; }
+        boost::optional<int64_t> get_world_y() const { return world_y; }
+        void set_world_y(boost::optional<int64_t> value) { this->world_y = value; }
 
         /**
          * Reference of the **Entity definition** UID
@@ -3514,6 +3520,7 @@ namespace quicktype {
     }
 
     inline void from_json(const json & j, EntityDefinition& x) {
+        x.set_allow_out_of_bounds(j.at("allowOutOfBounds").get<bool>());
         x.set_color(j.at("color").get<std::string>());
         x.set_doc(get_stack_optional<std::string>(j, "doc"));
         x.set_export_to_toc(j.at("exportToToc").get<bool>());
@@ -3551,6 +3558,7 @@ namespace quicktype {
 
     inline void to_json(json & j, const EntityDefinition & x) {
         j = json::object();
+        j["allowOutOfBounds"] = x.get_allow_out_of_bounds();
         j["color"] = x.get_color();
         j["doc"] = x.get_doc();
         j["exportToToc"] = x.get_export_to_toc();
@@ -3931,8 +3939,8 @@ namespace quicktype {
         x.set_smart_color(j.at("__smartColor").get<std::string>());
         x.set_tags(j.at("__tags").get<std::vector<std::string>>());
         x.set_tile(get_stack_optional<TilesetRectangle>(j, "__tile"));
-        x.set_world_x(j.at("__worldX").get<int64_t>());
-        x.set_world_y(j.at("__worldY").get<int64_t>());
+        x.set_world_x(get_stack_optional<int64_t>(j, "__worldX"));
+        x.set_world_y(get_stack_optional<int64_t>(j, "__worldY"));
         x.set_def_uid(j.at("defUid").get<int64_t>());
         x.set_field_instances(j.at("fieldInstances").get<std::vector<FieldInstance>>());
         x.set_height(j.at("height").get<int64_t>());

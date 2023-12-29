@@ -305,6 +305,7 @@ const typeMap = {
         { json: "tilesets", js: "tilesets", typ: a(r("TilesetDefinition")) },
     ], false),
     "EntityDefinition": o([
+        { json: "allowOutOfBounds", js: "allowOutOfBounds", typ: true },
         { json: "color", js: "color", typ: "" },
         { json: "doc", js: "doc", typ: u(undefined, u(null, "")) },
         { json: "exportToToc", js: "exportToToc", typ: true },
@@ -473,8 +474,8 @@ const typeMap = {
         { json: "__smartColor", js: "__smartColor", typ: "" },
         { json: "__tags", js: "__tags", typ: a("") },
         { json: "__tile", js: "__tile", typ: u(undefined, u(r("TilesetRectangle"), null)) },
-        { json: "__worldX", js: "__worldX", typ: 0 },
-        { json: "__worldY", js: "__worldY", typ: 0 },
+        { json: "__worldX", js: "__worldX", typ: u(undefined, u(0, null)) },
+        { json: "__worldY", js: "__worldY", typ: u(undefined, u(0, null)) },
         { json: "defUid", js: "defUid", typ: 0 },
         { json: "fieldInstances", js: "fieldInstances", typ: a(r("FieldInstance")) },
         { json: "height", js: "height", typ: 0 },

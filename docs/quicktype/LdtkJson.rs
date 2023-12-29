@@ -235,6 +235,9 @@ pub struct Definitions {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EntityDefinition {
+    /// If enabled, this entity is allowed to stay outside of the current level bounds
+    pub allow_out_of_bounds: bool,
+
     /// Base entity color
     pub color: String,
 
@@ -1216,13 +1219,13 @@ pub struct EntityInstance {
     #[serde(rename = "__tile")]
     pub tile: Option<TilesetRectangle>,
 
-    /// X world coordinate in pixels
+    /// X world coordinate in pixels. Only available in GridVania or Free world layouts.
     #[serde(rename = "__worldX")]
-    pub world_x: i64,
+    pub world_x: Option<i64>,
 
-    /// Y world coordinate in pixels
+    /// Y world coordinate in pixels Only available in GridVania or Free world layouts.
     #[serde(rename = "__worldY")]
-    pub world_y: i64,
+    pub world_y: Option<i64>,
 
     /// Reference of the **Entity definition** UID
     pub def_uid: i64,
