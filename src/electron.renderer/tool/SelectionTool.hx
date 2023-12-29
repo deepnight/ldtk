@@ -221,7 +221,7 @@ class SelectionTool extends Tool<Int> {
 	}
 
 	override function startUsing(ev:hxd.Event, m:Coords, ?extraParam:String) {
-		isCopy = App.ME.isCtrlDown() && App.ME.isAltDown();
+		isCopy = App.ME.isCtrlCmdDown() && App.ME.isAltDown();
 		moveStarted = false;
 		startedOverSelecton = false;
 		editor.clearSpecialTool();

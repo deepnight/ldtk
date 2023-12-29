@@ -230,7 +230,7 @@ class WorldTool extends dn.Process {
 		clicked = false;
 	}
 
-	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
+	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlCmdDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
@@ -298,7 +298,7 @@ class WorldTool extends dn.Process {
 				// if( clickedLevel!=null )
 				// 	editor.selectLevel(clickedLevel);
 
-				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlDown() ) {
+				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlCmdDown() ) {
 					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
 					editor.selectLevel(copy);

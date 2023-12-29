@@ -586,12 +586,12 @@ class Tileset {
 			var r = getCursorRect(ev.pageX, ev.pageY);
 			var addToSelection = dragStart.bt!=2;
 			if( r.wid==1 && r.hei==1 ) {
-				if( App.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+				if( App.ME.isCtrlCmdDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
 				modifySelection([ tilesetDef.getTileId(r.cx,r.cy) ], addToSelection);
 			}
 			else {
-				if( App.ME.isCtrlDown() && isSelected(r.cx, r.cy) )
+				if( App.ME.isCtrlCmdDown() && isSelected(r.cx, r.cy) )
 					addToSelection = false;
 
 				var tileIds = [];
@@ -633,7 +633,7 @@ class Tileset {
 
 			case MultipleIndividuals, OneTile, TileRect:
 				if( add ) {
-					if( isRectangleOnly() || !App.ME.isShiftDown() && !App.ME.isCtrlDown() ) {
+					if( isRectangleOnly() || !App.ME.isShiftDown() && !App.ME.isCtrlCmdDown() ) {
 						// Replace active selection with this one
 						setSelectedTileIds(selIds);
 					}

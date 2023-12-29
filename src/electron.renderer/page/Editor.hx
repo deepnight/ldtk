@@ -891,7 +891,7 @@ class Editor extends Page {
 
 
 	function onNavigateShortcut(dx:Int, dy:Int, pressed:Bool) {
-		if( App.ME.isCtrlDown() )
+		if( App.ME.isCtrlCmdDown() )
 			return;
 
 		if( !App.ME.hasAnyToggleKeyDown() ) {

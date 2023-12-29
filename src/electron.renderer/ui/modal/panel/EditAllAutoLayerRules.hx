@@ -202,7 +202,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function showAffectedCells(r:data.def.AutoLayerRuleDef) {
-		if( App.ME.isCtrlDown() )
+		if( App.ME.isCtrlCmdDown() )
 			return;
 
 		if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {

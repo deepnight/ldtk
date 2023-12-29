@@ -507,7 +507,7 @@ class Home extends Page {
 
 		switch keyCode {
 			case K.W, K.Q:
-				if( App.ME.isCtrlDown() )
+				if( App.ME.isCtrlCmdDown() )
 					App.ME.exit();
 
 			case K.ENTER if( !ui.Modal.hasAnyOpen() ):

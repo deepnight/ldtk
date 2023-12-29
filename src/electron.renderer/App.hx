@@ -466,13 +466,18 @@ class App extends dn.Process {
 
 	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
 	public inline function isShiftDown() return isKeyDown(K.SHIFT);
-	public inline function isCtrlDown() {
+	public inline function isCtrlCmdDown() {
 		return App.isMac()
 			? jsMetaKeyDown || isKeyDown(91) || isKeyDown(93)
 			: isKeyDown(K.CTRL);
 	}
+	public inline function isMacCtrlDown() {
+		return App.isMac()
+			? isKeyDown(K.CTRL)
+			: false;
+	}
 	public inline function isAltDown() return isKeyDown(K.ALT);
-	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
+	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlCmdDown() || isMacCtrlDown() || isAltDown();
 
 
 	var _inputFocusCache : Null<Bool> = null;
@@ -516,7 +521,7 @@ class App extends dn.Process {
 			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
 				continue;
 
-			if( b.ctrl && !App.ME.isCtrlDown() || !b.ctrl && App.ME.isCtrlDown() )
+			if( b.ctrl && !App.ME.isCtrlCmdDown() || !b.ctrl && App.ME.isCtrlCmdDown() )
 				continue;
 
 			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
@@ -548,7 +553,7 @@ class App extends dn.Process {
 		// Misc shortcuts
 		switch keyCode {
 			// Open debug menu
-			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
+			case K.D if( isCtrlCmdDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
 
 			case _:
@@ -1054,7 +1059,8 @@ class App extends dn.Process {
 				+ ( isMouseButtonDown(2) ? "[right] " : "" )
 				+ ( isMouseButtonDown(1) ? "[middle] " : "" )
 				+ " toggles="
-				+ ( isCtrlDown() ? "[ctrl] " : "" )
+				+ ( isCtrlCmdDown() ? "[ctrlCmd] " : "" )
+				+ ( isMacCtrlDown() ? "[macctrl] " : "" )
 				+ ( isShiftDown() ? "[shift] " : "" )
 				+ ( isAltDown() ? "[alt] " : "" )
 			);
