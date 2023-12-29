@@ -224,7 +224,8 @@ class EntityTool extends tool.LayerTool<Int> {
 
 			case Remove:
 				cancelRefChaining();
-				removeAnyEntityOrPointAt(m);
+				if( removeAnyEntityOrPointAt(m) )
+					onEditAnything();
 		}
 	}
 
