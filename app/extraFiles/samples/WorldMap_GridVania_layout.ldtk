@@ -10,7 +10,7 @@
 	},
 	"iid": "a39fb1b0-7820-11ed-b6fd-87f9a01f3d6b",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473265,
+	"appBuildId": 473291,
 	"nextUid": 146,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -1113,6 +1113,7 @@
 			"uid": 72,
 			"tags": ["loot"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 24,
 			"height": 24,
@@ -1259,6 +1260,7 @@
 			"uid": 90,
 			"tags": ["actor"],
 			"exportToToc": true,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 20,
 			"height": 20,
@@ -1368,6 +1370,7 @@
 			"uid": 94,
 			"tags": ["region"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1402,6 +1405,7 @@
 			"uid": 96,
 			"tags": ["region"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1477,6 +1481,7 @@
 			"uid": 130,
 			"tags": ["actor"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 24,
 			"height": 24,
@@ -1549,6 +1554,7 @@
 			"uid": 134,
 			"tags": ["region"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1583,6 +1589,7 @@
 			"uid": 141,
 			"tags": ["region"],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -14934,8 +14941,6 @@
 							"__tags": ["loot"],
 							"__tile": { "tilesetUid": 133, "x": 48, "y": 320, "w": 16, "h": 16 },
 							"__smartColor": "#FFEC8A",
-							"__worldX": 584,
-							"__worldY": 352,
 							"iid": "a36f8be6-66b0-11ec-9cd7-b5a8d5ccc437",
 							"width": 24,
 							"height": 24,
@@ -14948,7 +14953,9 @@
 								}] },
 								{ "__identifier": "price", "__type": "Int", "__value": 5, "__tile": null, "defUid": 93, "realEditorValues": [{ "id": "V_Int", "params": [5] }] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 139, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 584,
+							"__worldY": 352
 						},
 						{
 							"__identifier": "Item",
@@ -14957,8 +14964,6 @@
 							"__tags": ["loot"],
 							"__tile": { "tilesetUid": 133, "x": 0, "y": 640, "w": 16, "h": 16 },
 							"__smartColor": "#FFEC8A",
-							"__worldX": 632,
-							"__worldY": 352,
 							"iid": "a36f8be7-66b0-11ec-9cd7-316971e16d32",
 							"width": 24,
 							"height": 24,
@@ -14971,7 +14976,9 @@
 								}] },
 								{ "__identifier": "price", "__type": "Int", "__value": 100, "__tile": null, "defUid": 93, "realEditorValues": [{ "id": "V_Int", "params": [100] }] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 139, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 632,
+							"__worldY": 352
 						},
 						{
 							"__identifier": "Item",
@@ -14980,8 +14987,6 @@
 							"__tags": ["loot"],
 							"__tile": { "tilesetUid": 133, "x": 240, "y": 432, "w": 16, "h": 16 },
 							"__smartColor": "#FFEC8A",
-							"__worldX": 680,
-							"__worldY": 352,
 							"iid": "a36f8be8-66b0-11ec-9cd7-fd36870bdef5",
 							"width": 24,
 							"height": 24,
@@ -14994,7 +14999,9 @@
 								}] },
 								{ "__identifier": "price", "__type": "Int", "__value": 500, "__tile": null, "defUid": 93, "realEditorValues": [{ "id": "V_Int", "params": [500] }] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 139, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 680,
+							"__worldY": 352
 						},
 						{
 							"__identifier": "Item",
@@ -15003,8 +15010,6 @@
 							"__tags": ["loot"],
 							"__tile": { "tilesetUid": 133, "x": 16, "y": 224, "w": 16, "h": 16 },
 							"__smartColor": "#FFEC8A",
-							"__worldX": 728,
-							"__worldY": 352,
 							"iid": "a36f8be9-66b0-11ec-9cd7-89a0e2fc55f0",
 							"width": 24,
 							"height": 24,
@@ -15017,7 +15022,9 @@
 								}] },
 								{ "__identifier": "price", "__type": "Int", "__value": 250, "__tile": null, "defUid": 93, "realEditorValues": [{ "id": "V_Int", "params": [250] }] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 139, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 728,
+							"__worldY": 352
 						},
 						{
 							"__identifier": "Teleport",
@@ -15026,8 +15033,6 @@
 							"__tags": ["actor"],
 							"__tile": { "tilesetUid": 133, "x": 224, "y": 176, "w": 16, "h": 16 },
 							"__smartColor": "#EC50FF",
-							"__worldX": 728,
-							"__worldY": 464,
 							"iid": "9c20a1d0-66b0-11ec-b893-7dd8e9dfe663",
 							"width": 24,
 							"height": 24,
@@ -15041,7 +15046,9 @@
 							}, "__tile": null, "defUid": 131, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["3bde8fe0-66b0-11ec-a595-515a2ae1dbef"]
-							}] }]
+							}] }],
+							"__worldX": 728,
+							"__worldY": 464
 						}
 					]
 				},
@@ -23903,7 +23910,7 @@
 			]
 		},
 		{
-			"identifier": "Save",
+			"identifier": "SaveRoom",
 			"iid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa",
 			"uid": 52,
 			"worldX": 1024,
@@ -23957,14 +23964,14 @@
 							"__tags": ["region"],
 							"__tile": { "tilesetUid": 133, "x": 336, "y": 272, "w": 16, "h": 16 },
 							"__smartColor": "#FFEB5A",
-							"__worldX": 1136,
-							"__worldY": 352,
 							"iid": "762fb910-7820-11ed-a6f2-95baf210def0",
 							"width": 32,
 							"height": 48,
 							"defUid": 141,
 							"px": [112,96],
-							"fieldInstances": []
+							"fieldInstances": [],
+							"__worldX": 1136,
+							"__worldY": 352
 						}
 					]
 				},
