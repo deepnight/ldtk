@@ -41,6 +41,13 @@ When creating an auto-layer rule, you may now render a rectangle of tiles picked
 
 You can group your layers using tags, and filter your main layers list using these tags.
 
+
+## Rendering of tiles from nearby levels
+![](1.5.0/nearbyTiles.png)
+
+There is a new app setting to render tiles from nearby levels, making map transitions much easier to paint!
+
+
 ## JSON: extra Table-of-content data
 ![](1.5.0/tocJson.png)
 
