@@ -797,6 +797,9 @@ class Editor extends Page {
 			case C_ExitApp:
 				App.ME.exit();
 
+			case C_MinimizeApp:
+				dn.js.ElectronTools.minimize();
+
 			case C_ToggleSelectEmptySpaces:
 				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
 

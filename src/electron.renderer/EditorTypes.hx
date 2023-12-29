@@ -268,6 +268,7 @@ enum AppCommand {
 	@k("shift w, ², `, [zqsd] w, [arrows] w") C_ToggleWorldMode;
 	@k("ctrl r, [debug] ctrl shift r") @input C_RunCommand;
 	@k("ctrl q") @input C_ExitApp;
+	@k("[mac] ctrl M") @input C_MinimizeApp;
 	@k("pagedown") C_GotoPreviousWorldLayer;
 	@k("pageup") C_GotoNextWorldLayer;
 	@k("ctrl pagedown, shift pagedown") C_MoveLevelToPreviousWorldLayer;
