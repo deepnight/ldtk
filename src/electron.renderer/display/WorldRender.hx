@@ -8,6 +8,7 @@ typedef WorldLevelRender = {
 	var bgWrapper: h2d.Object;
 	var outline: h2d.Graphics;
 	var render: h2d.Object;
+	var fadeMask : h2d.Bitmap;
 	var identifier: h2d.ScaleGrid;
 
 	var renderInvalidated: Bool;
@@ -381,6 +382,7 @@ class WorldRender extends dn.Process {
 		var _inc = 0;
 		worldLayer.add(wl.bgWrapper, _inc++);
 		worldLayer.add(wl.render, _inc++);
+		worldLayer.add(wl.fadeMask, _inc++);
 		worldLayer.add(wl.identifier, _inc++);
 		worldLayer.add(wl.outline, _inc++);
 	}
@@ -408,6 +410,7 @@ class WorldRender extends dn.Process {
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				outline : new h2d.Graphics(),
+				fadeMask: new h2d.Bitmap( h2d.Tile.fromColor(l.getBgColor(),1,1, 0.4) ),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile(D.elements.fieldBg), 2, 2),
 
 				boundsInvalidated: true,
@@ -668,20 +671,21 @@ class WorldRender extends dn.Process {
 		if( l.uid==editor.curLevelId && !editor.worldMode ) {
 			// Hide current level in editor mode
 			wl.outline.visible = false;
+			wl.fadeMask.visible = false;
 			wl.render.visible = false;
 		}
 		else if( editor.worldMode ) {
 			// Show everything in world mode
 			wl.bgWrapper.visible = wl.render.visible = wl.outline.visible = camera.isOnScreenLevel(l);
+			wl.fadeMask.visible = false;
 			wl.outline.alpha = 1;
-			wl.render.alpha = 1;
 		}
 		else {
 			// Fade other levels in editor mode
 			var dist = editor.curLevel.getBoundsDist(l);
 			wl.outline.alpha = 0.3;
 			wl.outline.visible = camera.isOnScreenLevel(l);
-			wl.render.alpha = settings.v.nearbyTilesRenderingDist>0 ? 0.8 : 0.5;
+			wl.fadeMask.visible = true;
 			wl.render.visible = wl.outline.visible && dist<=300;
 		}
 
@@ -692,6 +696,7 @@ class WorldRender extends dn.Process {
 				wl.outline.alpha*=0.45;
 				wl.bgWrapper.visible = false;
 				wl.render.visible = false;
+				wl.fadeMask.visible = false;
 				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
 					wl.outline.alpha*=0.3;
 			}
@@ -721,6 +726,9 @@ class WorldRender extends dn.Process {
 			wl.render.setPosition( l.worldX, l.worldY );
 			wl.outline.setPosition( l.worldX, l.worldY );
 			wl.bgWrapper.setPosition( l.worldX, l.worldY );
+			wl.fadeMask.setPosition( l.worldX, l.worldY );
+			wl.fadeMask.scaleX = l.pxWid;
+			wl.fadeMask.scaleY = l.pxHei;
 		}
 
 		updateAllLevelIdentifiers(false);
@@ -733,6 +741,7 @@ class WorldRender extends dn.Process {
 			var wl = worldLevels.get(uid);
 			wl.render.remove();
 			wl.outline.remove();
+			wl.fadeMask.remove();
 			wl.bgWrapper.remove();
 			wl.identifier.remove();
 			if( wl.fieldsRender!=null )
