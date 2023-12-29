@@ -671,7 +671,7 @@ class Level {
 			var ei = null;
 			while( i<li.entityInstances.length ) {
 				ei = li.entityInstances[i];
-				if( !inBounds(ei.x, ei.y) ) {
+				if( !ei.def.allowOutOfBounds && !inBounds(ei.x, ei.y) ) {
 					App.LOG.general('Removed out-of-bounds entity ${ei.def.identifier} in $li');
 					li.entityInstances.splice(i,1);
 					n++;

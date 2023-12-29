@@ -10,6 +10,7 @@ class SelectionTool extends Tool<Int> {
 	public function new() {
 		super();
 
+		canUseOutOfBounds = true;
 		movePreview = new h2d.Graphics();
 		editor.levelRender.root.add(movePreview, Const.DP_UI);
 
@@ -236,14 +237,17 @@ class SelectionTool extends Tool<Int> {
 					new ui.modal.dialog.Message(L.t._("This selection can't be moved around because it contains elements using different grid sizes."));
 					stopUsing(m);
 				}
+				ev.cancel = true;
 			}
 			else {
 				// Start a new selection
 				if( !rectangle ) {
 					var ge = editor.getGenericLevelElementAt(m, settings.v.singleLayerMode);
 					tool.lt.EntityTool.cancelRefChaining();
-					if( ge!=null )
+					if( ge!=null ) {
+						ev.cancel = true;
 						select([ ge ]);
+					}
 					else
 						select();
 				}

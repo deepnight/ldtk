@@ -1006,6 +1006,17 @@ class Editor extends Page {
 		updateTool();
 	}
 
+	function hasEntityInThisLayer(m:Coords) {
+		if( curLayerInstance.def.type!=Entities )
+			return false;
+
+		for(ei in curLayerInstance.entityInstances)
+			if( ei.isOver(m.layerX,m.layerY) )
+				return true;
+
+		return false;
+	}
+
 	public function getGenericLevelElementAt(m:Coords, ?limitToLayerType:ldtk.Json.LayerType, limitToActiveLayer=false) : Null<GenericLevelElement> {
 		var m = m.clone();
 
@@ -1134,17 +1145,17 @@ class Editor extends Page {
 		if( !ev.cancel && !project.isBackup() && !ui.ValuePicker.exists() )
 			rulers.onMouseDown( ev, m );
 
-		if( !ev.cancel )
-			worldTool.onMouseDown(ev, m);
-
 		if( !ev.cancel && !worldMode && !project.isBackup() ) {
-			if( App.ME.isAltDown() || selectionTool.isOveringSelection(m) && ev.button==0 )
+			if( App.ME.isAltDown() || ev.button==0 && selectionTool.isOveringSelection(m) || ev.button==0 && hasEntityInThisLayer(m) )
 				selectionTool.startUsing( ev, m );
 			else if( isSpecialToolActive() )
 				specialTool.startUsing( ev, m )
 			else
 				curTool.startUsing( ev, m );
 		}
+
+		if( !ev.cancel )
+			worldTool.onMouseDown(ev, m);
 
 		if( !ev.cancel && project.isBackup() )
 			N.error("Backup files should not be edited directly");
@@ -1154,7 +1165,6 @@ class Editor extends Page {
 		var m = getMouse();
 
 		panTool.stopUsing(m);
-		worldTool.onMouseUp(m);
 
 		if( ui.ValuePicker.exists() )
 			ui.ValuePicker.ME.onMouseUp(m);
@@ -1169,6 +1179,8 @@ class Editor extends Page {
 			specialTool.stopUsing( m );
 		else if( curTool.isRunning() )
 			curTool.stopUsing( m );
+		else
+			worldTool.onMouseUp(m);
 
 		rulers.onMouseUp( m );
 	}
@@ -1198,7 +1210,7 @@ class Editor extends Page {
 			}
 
 			if( !ev.cancel && !worldMode && !ui.ValuePicker.exists() ) {
-				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() ) {
+				if( App.ME.isAltDown() || selectionTool.isRunning() || selectionTool.isOveringSelection(m) && !curTool.isRunning() || hasEntityInThisLayer(m) ) {
 					selectionTool.onMouseMove(ev,m);
 					selectionTool.onMouseMoveCursor(cursorEvent,m);
 				}
@@ -1217,8 +1229,10 @@ class Editor extends Page {
 				rulers.onMouseMoveCursor(cursorEvent,m);
 			}
 
-			worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
-			worldTool.onMouseMoveCursor(cursorEvent,m);
+			if( !ev.cancel ) {
+				worldTool.onMouseMove(ev,m); // Note: event cancelation is checked inside
+				worldTool.onMouseMoveCursor(cursorEvent,m);
+			}
 
 			if( ui.Modal.isOpen( ui.modal.panel.EditAllAutoLayerRules ) )
 				ui.Modal.getFirst( ui.modal.panel.EditAllAutoLayerRules ).onEditorMouseMove(m);
@@ -1362,7 +1376,7 @@ class Editor extends Page {
 	public function selectWorld(w:data.World, showUp=true) {
 		if( worldMode )
 			setWorldMode(false);
-		
+
 		curWorldIid = w.iid;
 		invalidateCachedLevelErrors();
 

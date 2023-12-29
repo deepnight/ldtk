@@ -171,6 +171,9 @@ class WorldTool extends dn.Process {
 			ev.cancel = true;
 			clickedSameLevel = editor.curLevel==clickedLevel;
 			initialNeighbours = clickedLevel.getNeighboursIids();
+
+			// Pick level
+			editor.selectLevel(clickedLevel);
 		}
 	}
 
@@ -211,12 +214,13 @@ class WorldTool extends dn.Process {
 
 			}
 			else if( !worldMode && getLevelAt(m.worldX, m.worldY)==clickedLevel || origin.getPageDist(m)<=getDragThreshold() ) {
-				// Pick level
-				editor.selectLevel(clickedLevel);
+			// 	// Pick level
+			// 	editor.selectLevel(clickedLevel);
+				// Enter level on "double-click"
 				if( clickedSameLevel )
 					editor.setWorldMode(false);
-				else if( !worldMode )
-					editor.camera.scrollTo(m.worldX, m.worldY);
+			// 	else if( !worldMode )
+			// 		editor.camera.scrollTo(m.worldX, m.worldY);
 			}
 		}
 
@@ -291,8 +295,8 @@ class WorldTool extends dn.Process {
 			if( allow ) {
 				dragStarted = true;
 				ev.cancel = true;
-				if( clickedLevel!=null )
-					editor.selectLevel(clickedLevel);
+				// if( clickedLevel!=null )
+				// 	editor.selectLevel(clickedLevel);
 
 				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlDown() ) {
 					var copy = curWorld.duplicateLevel(clickedLevel);
