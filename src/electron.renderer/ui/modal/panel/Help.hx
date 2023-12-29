@@ -35,7 +35,7 @@ class Help extends ui.modal.Panel {
 			if( rawCmdExpr.match(raw) ) {
 				var cmd = _getAppCommand(rawCmdExpr.matched(1));
 				var kb = App.ME.getFirstRelevantKeyBinding(cmd);
-				jDt.text( kb==null ? '?{$rawCmdExpr.matched(1)}?' : kb.jsDisplayText );
+				jDt.text( kb==null ? '$raw' : kb.jsDisplayText );
 			}
 			var jKeys = JsTools.parseKeysIn( jDt );
 			jDt.empty().append( jKeys );
