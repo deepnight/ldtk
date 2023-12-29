@@ -11,6 +11,7 @@ class EntityDef {
 	public var identifier(default,set) : String;
 	public var tags : Tags;
 	public var exportToToc : Bool;
+	public var allowOutOfBounds : Bool;
 	public var doc: Null<String>;
 
 	public var width : Int;
@@ -70,6 +71,7 @@ class EntityDef {
 		hollow = false;
 		tags = new Tags();
 		exportToToc = false;
+		allowOutOfBounds = false;
 	}
 
 	public function isTileDefined() {
@@ -160,6 +162,7 @@ class EntityDef {
 
 		o.tags = Tags.fromJson(json.tags);
 		o.exportToToc = JsonTools.readBool( json.exportToToc, false );
+		o.allowOutOfBounds = JsonTools.readBool( json.allowOutOfBounds, false );
 
 		o.color = JsonTools.readColor( json.color, 0x0 );
 		o.tileOpacity = JsonTools.readFloat( json.tileOpacity, 1 );
@@ -201,6 +204,7 @@ class EntityDef {
 			uid: uid,
 			tags: tags.toJson(),
 			exportToToc: exportToToc,
+			allowOutOfBounds: allowOutOfBounds,
 			doc: JsonTools.escapeNullableString(doc),
 
 			width: width,

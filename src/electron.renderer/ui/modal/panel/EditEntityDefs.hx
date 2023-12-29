@@ -543,6 +543,10 @@ class EditEntityDefs extends ui.modal.Panel {
 				}
 		}
 
+		// Out-of-bounds policy
+		var i = Input.linkToHtmlInput(curEntity.allowOutOfBounds, jEntityForm.find("#allowOutOfBounds"));
+		i.linkEvent(EntityDefChanged);
+
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
 		jPivots.empty();
