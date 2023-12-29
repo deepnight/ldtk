@@ -766,7 +766,7 @@ div.key {
 		color: transparent;
 		text-shadow: none;
 
-		$keyColor : #77B0FD;
+		$keyColor : #FD4F66;
 		color: scale-color($color: $keyColor, $lightness: 60%);
 		background-color: transparentize( $keyColor, $opacity );
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
@@ -781,6 +781,7 @@ div.key {
 	}
 	&.meta {
 		color: transparent;
+		text-shadow: none;
 		background-image: url("../icons/meta.png");
 		background-repeat: no-repeat;
 		background-position: center;
@@ -799,7 +800,7 @@ div.key {
 		border-bottom-color: transparentize( darken( $keyColor, $darken ), $opacity );
 	}
 	&.alt {
-		$keyColor : #FDBE22;
+		$keyColor : #FD4F66;
 		color: scale-color($color: $keyColor, $lightness: 60%);
 		background-color: transparentize( $keyColor, $opacity );
 		border-color: transparentize( lighten( $keyColor, $lighten ), $opacity );
@@ -4223,6 +4224,10 @@ textarea {
 		display: grid;
 		grid-template-columns: repeat(2, 420px);
 		gap: 16px;
+	}
+
+	.key+.icon {
+		margin-left: 4px;
 	}
 
 	dl {
