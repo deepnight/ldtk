@@ -911,9 +911,9 @@ class WorldRender extends dn.Process {
 				}
 				else if( li.def.type==Tiles ) {
 					// Classic tiles
-					trace(li);
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid) {
+						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, 48) )
 						for( tileInf in li.getGridTileStack(cx,cy) )
 							LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
 					}
