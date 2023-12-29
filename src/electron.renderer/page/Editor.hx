@@ -606,6 +606,9 @@ class Editor extends Page {
 			case C_ToggleFullscreen:
 			case C_FlipX:
 			case C_FlipY:
+			case C_ToggleTileRandomMode:
+			case C_SaveTileSelection:
+			case C_LoadTileSelection:
 
 			case C_Back:
 				if( hasInputFocus() ) {

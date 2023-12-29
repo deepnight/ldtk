@@ -407,35 +407,29 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				N.quick("Y-flip: "+L.onOff(flipY));
 				customCursor(new hxd.Event(EMove), lastMouse);
 
+			case C_ToggleTileRandomMode:
+				setMode( isRandomMode() ? Stamp : Random );
+				ui.Notification.quick((isRandomMode()?"Random":"Stamp")+" mode");
+				editor.ge.emit(ToolOptionChanged);
+				palette.render();
+
+			case C_SaveTileSelection:
+				saveSelection();
+
+			case C_LoadTileSelection:
+				var saved = curTilesetDef.getSavedSelectionFor( getSelectedValue().ids[0] );
+				if( saved!=null && !selectedValuesIdentical(saved.ids) ) {
+					if( saved.ids.length>1 )
+						N.quick( L.t._("Loaded selection of ::n:: tiles", { n:saved.ids.length }) );
+					selectValue({
+						ids: saved.ids.copy(),
+						mode: saved.mode,
+					});
+					onValuePicking();
+				}
+
 			case _:
 		}
 	}
 
-	override function onKeyPress(keyId:Int) {
-		super.onKeyPress(keyId);
-
-		if( !Editor.ME.hasInputFocus() )
-			switch keyId {
-				case K.R if( !App.ME.hasAnyToggleKeyDown() ):
-					setMode( isRandomMode() ? Stamp : Random );
-					ui.Notification.quick((isRandomMode()?"Random":"Stamp")+" mode");
-					editor.ge.emit(ToolOptionChanged);
-					palette.render();
-
-				case K.S if( App.ME.isShiftDown() ):
-					saveSelection();
-
-				case K.L if( !App.ME.hasAnyToggleKeyDown() ):
-					var saved = curTilesetDef.getSavedSelectionFor( getSelectedValue().ids[0] );
-					if( saved!=null && !selectedValuesIdentical(saved.ids) ) {
-						if( saved.ids.length>1 )
-							N.quick( L.t._("Loaded selection of ::n:: tiles", { n:saved.ids.length }) );
-						selectValue({
-							ids: saved.ids.copy(),
-							mode: saved.mode,
-						});
-						onValuePicking();
-					}
-			}
-	}
 }

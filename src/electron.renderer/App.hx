@@ -642,6 +642,9 @@ class App extends dn.Process {
 			case C_CommandPalette:
 			case C_FlipX:
 			case C_FlipY:
+			case C_ToggleTileRandomMode:
+			case C_SaveTileSelection:
+			case C_LoadTileSelection:
 
 			case C_ExitApp:
 				App.ME.exit();
