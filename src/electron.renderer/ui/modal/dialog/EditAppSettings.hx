@@ -109,7 +109,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		);
 
 		// Nearby tiles rendering distance
-		var allValues = [0, 1, 2];
+		var allValues = [0, 1, 1.5, 2];
 		if( !allValues.contains(settings.v.nearbyTilesRenderingDist) ) {
 			for(v in allValues)
 				if( v>=settings.v.nearbyTilesRenderingDist) {

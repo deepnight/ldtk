@@ -818,16 +818,33 @@ class WorldRender extends dn.Process {
 			if( li.def.type==Entities || !li.def.renderInWorldView )
 				continue;
 
-			if( li.def.isAutoLayer() && li.autoTilesCache==null )
+			if( li.def.isAutoLayer() && li.autoTilesCache==null ) {
 				App.LOG.error("missing autoTilesCache in "+li);
+				continue;
+			}
 
-			if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
-				// Auto layer
+			var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+			pixelGrid.x = li.pxTotalOffsetX;
+			pixelGrid.y = li.pxTotalOffsetY;
+
+			if( li.def.type==IntGrid && !li.def.isAutoLayer() ) {
+				// Pure intGrid
+				for(cy in 0...li.cHei)
+				for(cx in 0...li.cWid) {
+					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
+						markCoordAsDone(li, cx,cy);
+						pixelGrid.setPixel(cx,cy, li.getIntGridColorAt(cx,cy) );
+					}
+				}
+			}
+			else {
+				// Tiles base layer (autolayer or tiles)
 				var td = li.getTilesetDef();
-				if( td!=null && td.isAtlasLoaded() ) {
-					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
-					pixelGrid.x = li.pxTotalOffsetX;
-					pixelGrid.y = li.pxTotalOffsetY;
+				if( td==null || !td.isAtlasLoaded() )
+					continue;
+
+				if( li.def.isAutoLayer() ) {
+					// Auto layer
 					var c : dn.Col = 0x0;
 					var cx = 0;
 					var cy = 0;
@@ -848,27 +865,8 @@ class WorldRender extends dn.Process {
 						}
 					});
 				}
-			}
-			else if( li.def.type==IntGrid ) {
-				// Pure intGrid
-				var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
-				pixelGrid.x = li.pxTotalOffsetX;
-				pixelGrid.y = li.pxTotalOffsetY;
-				for(cy in 0...li.cHei)
-				for(cx in 0...li.cWid) {
-					if( !isCoordDone(li,cx,cy) && li.hasAnyGridValue(cx,cy) ) {
-						markCoordAsDone(li, cx,cy);
-						pixelGrid.setPixel(cx,cy, li.getIntGridColorAt(cx,cy) );
-					}
-				}
-			}
-			else if( li.def.type==Tiles ) {
-				// Classic tiles
-				var td = li.getTilesetDef();
-				if( td!=null && td.isAtlasLoaded() ) {
-					var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
-					pixelGrid.x = li.pxTotalOffsetX;
-					pixelGrid.y = li.pxTotalOffsetY;
+				else if( li.def.type==Tiles ) {
+					// Classic tiles
 					var c : dn.Col = 0x0;
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid)
@@ -882,6 +880,7 @@ class WorldRender extends dn.Process {
 				}
 			}
 		}
+
 
 		// Edge tiles render
 		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
@@ -904,18 +903,17 @@ class WorldRender extends dn.Process {
 					return;
 
 				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
-				edgeTg.x = li.pxTotalOffsetX;
-				edgeTg.y = li.pxTotalOffsetY;
+				edgeTg.alpha = li.def.displayOpacity;
+				// NOTE: layer offsets is already included in tiles render methods
 
 				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
 					// Auto layer
 					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
-							for( tileInfos in allTiles.value ) {
+							for( tileInfos in allTiles.value )
 								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) )
 									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
-							}
 						}
 					});
 				}
@@ -924,8 +922,8 @@ class WorldRender extends dn.Process {
 					for(cy in 0...li.cHei)
 					for(cx in 0...li.cWid) {
 						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, edgeDistPx) )
-						for( tileInf in li.getGridTileStack(cx,cy) )
-							LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
+							for( tileInf in li.getGridTileStack(cx,cy) )
+								LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
 					}
 				}
 			} );

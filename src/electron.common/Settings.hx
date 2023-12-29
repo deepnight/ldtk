@@ -30,7 +30,7 @@ typedef AppSettings = {
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 	var fieldsRender : FieldsRender;
-	var nearbyTilesRenderingDist : Int;
+	var nearbyTilesRenderingDist : Float;
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
@@ -324,8 +324,8 @@ class Settings {
 	}
 
 
-	public function getNearbyTilesRenderingDistPx(custDist=-1) {
-		return 64 * ( custDist<0 ? v.nearbyTilesRenderingDist : custDist );
+	public function getNearbyTilesRenderingDistPx(custDist=-1.) : Int {
+		return dn.M.ceil( 64 * ( custDist<0 ? v.nearbyTilesRenderingDist : custDist ) );
 	}
 
 	public static function getDir() {
