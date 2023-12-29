@@ -481,11 +481,15 @@ class Level {
 		return levelX>=0 && levelX<pxWid && levelY>=0 && levelY<pxHei;
 	}
 
-	public inline function inBoundsWorld(worldX:Float, worldY:Float) {
-		return worldX>=this.worldX
-			&& worldX<this.worldX+pxWid
-			&& worldY>=this.worldY
-			&& worldY<this.worldY+pxHei;
+	public inline function inBoundsWorld(worldX:Float, worldY:Float, padPx=0) {
+		return worldX >= this.worldX-padPx
+			&& worldX < this.worldX+pxWid+padPx
+			&& worldY >= this.worldY-padPx
+			&& worldY < this.worldY+pxHei+padPx;
+	}
+
+	public inline function otherLevelCoordInBounds(otherLevel:Level, levelX:Int, levelY:Int, padPx=0) {
+		return inBoundsWorld(otherLevel.worldX+levelX, otherLevel.worldY+levelY, padPx);
 	}
 
 	public function isWorldOver(wx:Int, wy:Int, padding=0) {

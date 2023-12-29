@@ -55,6 +55,31 @@ class LayerRender {
 	}
 
 
+	static var _cachedIdentityVector = new h3d.Vector(1,1,1,1);
+	public static inline function renderAutoTileInfos(li:data.inst.LayerInstance, td:data.def.TilesetDef, tileInfos, tg:h2d.TileGroup) {
+		_cachedIdentityVector.a = tileInfos.a;
+		@:privateAccess tg.content.addTransform(
+			tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
+			tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
+			dn.M.hasBit(tileInfos.flips,0)?-1:1,
+			dn.M.hasBit(tileInfos.flips,1)?-1:1,
+			0,
+			_cachedIdentityVector,
+			td.extractTile(tileInfos.srcX, tileInfos.srcY)
+		);
+	}
+
+
+	public static function renderGridTile(li:data.inst.LayerInstance, td:data.def.TilesetDef, tileInf:data.DataTypes.GridTileInfos, cx:Int, cy:Int, tg:h2d.TileGroup) {
+		var t = td.getTile(tileInf.tileId);
+		t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
+		var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
+		var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
+		var tx = (cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX;
+		var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
+		tg.addTransform(tx, ty, sx, sy, 0, t);
+	}
+
 	public function render(li:data.inst.LayerInstance, renderAutoLayers=true, ?target:h2d.Object) {
 		// Cleanup
 		if( root!=null )
@@ -109,23 +134,14 @@ class LayerRender {
 				if( li.autoTilesCache==null )
 					li.applyAllAutoLayerRules();
 
+				// var colorVect = new h3d.Vector(1,1,1,1);
 				li.def.iterateActiveRulesInDisplayOrder( li, (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						var grid = li.def.gridSize;
-						var colorVect = new h3d.Vector(1,1,1,1);
 						for(coordId in li.autoTilesCache.get( r.uid ).keys())
 						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
 							// Tile
-							colorVect.a = tileInfos.a;
-							@:privateAccess tg.content.addTransform(
-								tileInfos.x + ( ( dn.M.hasBit(tileInfos.flips,0)?1:0 ) + li.def.tilePivotX ) * li.def.gridSize + li.pxTotalOffsetX,
-								tileInfos.y + ( ( dn.M.hasBit(tileInfos.flips,1)?1:0 ) + li.def.tilePivotY ) * li.def.gridSize + li.pxTotalOffsetY,
-								dn.M.hasBit(tileInfos.flips,0)?-1:1,
-								dn.M.hasBit(tileInfos.flips,1)?-1:1,
-								0,
-								colorVect,
-								td.extractTile(tileInfos.srcX, tileInfos.srcY)
-							);
+							renderAutoTileInfos(li, td, tileInfos, tg);
 
 							if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
 								var n = 0;
@@ -186,13 +202,7 @@ class LayerRender {
 
 					for( tileInf in li.getGridTileStack(cx,cy) ) {
 						// Tile
-						var t = td.getTile(tileInf.tileId);
-						t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
-						var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
-						var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;
-						var tx = (cx + li.def.tilePivotX + (sx<0?1:0)) * li.def.gridSize + li.pxTotalOffsetX;
-						var ty = (cy + li.def.tilePivotX + (sy<0?1:0)) * li.def.gridSize + li.pxTotalOffsetY;
-						tg.addTransform(tx, ty, sx, sy, 0, t);
+						renderGridTile(li, td, tileInf, cx,cy, tg);
 
 						if( App.ME.settings.v.tileEnumOverlays && ed!=null ) {
 							var n = 0;

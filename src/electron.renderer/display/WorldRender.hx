@@ -132,6 +132,9 @@ class WorldRender extends dn.Process {
 				invalidateCameraBasedRenders();
 				invalidateLevelFields(editor.curLevel);
 
+				if( settings.v.renderNearbyTiles )
+					invalidateNearbyLevels(editor.curLevel);
+
 			case WorldSelected(w):
 				for(wl in worldLevels)
 					removeWorldLevel(wl.uid);
@@ -230,6 +233,9 @@ class WorldRender extends dn.Process {
 				invalidateLevelFields(l);
 				updateLayout();
 
+				if( settings.v.renderNearbyTiles )
+					invalidateNearbyLevels(l);
+
 			case LevelResized(l):
 				invalidateLevelRender(l);
 				invalidateLevelFields(l);
@@ -318,6 +324,13 @@ class WorldRender extends dn.Process {
 
 	inline function invalidateCameraBasedRenders() {
 		invalidatedCameraBasedRenders = true;
+	}
+
+	public function invalidateNearbyLevels(near:data.Level) {
+		if( near!=null )
+			for(other in curWorld.levels)
+				if( other!=near && other.touches(near) )
+					invalidateLevelRender(other);
 	}
 
 	public inline function invalidateLevelRender(l:data.Level) {
@@ -668,7 +681,7 @@ class WorldRender extends dn.Process {
 			var dist = editor.curLevel.getBoundsDist(l);
 			wl.outline.alpha = 0.3;
 			wl.outline.visible = camera.isOnScreenLevel(l);
-			wl.render.alpha = 0.5;
+			wl.render.alpha = settings.v.renderNearbyTiles ? 1 : 0.5;
 			wl.render.visible = wl.outline.visible && dist<=300;
 		}
 
@@ -790,8 +803,8 @@ class WorldRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
-		// Default layers renders
-		var alphaThreshold = 0.6;
+		// Default simplified renders
+		final alphaThreshold = 0.6;
 		for( li in l.layerInstances ) {
 			if( li.def.type==Entities || !li.def.renderInWorldView )
 				continue;
@@ -859,6 +872,53 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
+		}
+
+		// Edge tiles render
+		if( settings.v.renderNearbyTiles && !editor.worldMode && l.touches(editor.curLevel) ) {
+			l.iterateLayerInstancesInRenderOrder( (li)->{
+				switch li.def.type {
+					case IntGrid:
+						if( !li.def.isAutoLayer() )
+							return;
+
+					case Entities:
+						return;
+
+					case Tiles:
+					case AutoLayer:
+				}
+
+				var td = li.getTilesetDef();
+				if( td==null || !td.isAtlasLoaded() )
+					return;
+
+				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
+				edgeTg.x = li.pxTotalOffsetX;
+				edgeTg.y = li.pxTotalOffsetY;
+
+				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
+					// Auto layer
+					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
+						if( li.autoTilesCache.exists( r.uid ) ) {
+							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
+							for( tileInfos in allTiles.value ) {
+								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, 48) )
+									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
+							}
+						}
+					});
+				}
+				else if( li.def.type==Tiles ) {
+					// Classic tiles
+					trace(li);
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						for( tileInf in li.getGridTileStack(cx,cy) )
+							LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
+					}
+				}
+			} );
 		}
 
 		// Custom tile render override

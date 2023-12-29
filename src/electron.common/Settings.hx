@@ -30,6 +30,7 @@ typedef AppSettings = {
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 	var fieldsRender : FieldsRender;
+	var renderNearbyTiles : Bool;
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
@@ -108,6 +109,7 @@ class Settings {
 
 			autoWorldModeSwitch: ZoomInAndOut,
 			fieldsRender: FR_Outline,
+			renderNearbyTiles: true,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
