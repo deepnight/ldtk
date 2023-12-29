@@ -1007,7 +1007,7 @@ class Editor extends Page {
 	}
 
 	function hasEntityInThisLayer(m:Coords) {
-		if( curLayerInstance.def.type!=Entities )
+		if( curLayerInstance==null || curLayerInstance.def.type!=Entities )
 			return false;
 
 		for(ei in curLayerInstance.entityInstances)
