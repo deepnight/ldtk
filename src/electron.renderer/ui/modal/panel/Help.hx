@@ -21,17 +21,11 @@ class Help extends ui.modal.Panel {
 		});
 
 		// Key icons
-		function _getFirstRelevantBinding(rawCmdId:String) : Null<KeyBinding> {
-			rawCmdId = rawCmdId.toLowerCase();
-			for(kb in App.ME.keyBindings)
-				if( kb.command.getName().toLowerCase().substr(2)==rawCmdId )
-					switch kb.os {
-						case null: return kb;
-						case "win": if( App.isWindows() ) return kb;
-						case "mac": if( App.isMac() ) return kb;
-						case "linux": if( App.isLinux() ) return kb;
-					}
-
+		function _getAppCommand(rawId:String) {
+			rawId = rawId.toLowerCase();
+			for(id in AppCommand.getConstructors())
+				if( id.substr(2).toLowerCase()==rawId )
+					return AppCommand.createByName(id);
 			return null;
 		}
 		jContent.find("dt").each( function(idx, e) {
@@ -39,7 +33,8 @@ class Help extends ui.modal.Panel {
 			var raw = jDt.text();
 			var rawCmdExpr = ~/%([a-z_0-9]+)%/gi;
 			if( rawCmdExpr.match(raw) ) {
-				var kb = _getFirstRelevantBinding(rawCmdExpr.matched(1));
+				var cmd = _getAppCommand(rawCmdExpr.matched(1));
+				var kb = App.ME.getFirstRelevantKeyBinding(cmd);
 				jDt.text( kb==null ? '?{$rawCmdExpr.matched(1)}?' : kb.jsDisplayText );
 			}
 			var jKeys = JsTools.parseKeysIn( jDt );

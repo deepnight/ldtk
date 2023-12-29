@@ -187,9 +187,14 @@ class App extends dn.Process {
 	function initKeyBindings() {
 		keyBindings = [];
 
+		var ctrlReg = ~/\bctrl\b/i;
+		var shiftReg = ~/\bshift\b/i;
+		var altReg = ~/\balt\b/i;
+		var macCtrlReg = ~/\bctrl\b/i;
+
 		// Parse AppCommands meta
 		var meta = haxe.rtti.Meta.getFields(AppCommand);
-		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
+		var keyNameReg = ~/(macctrl|ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
 		for(k in AppCommand.getConstructors()) {
 			var cmd = AppCommand.createByName(k);
 			var cmdMeta : Dynamic = Reflect.field(meta, k);
@@ -244,9 +249,10 @@ class App extends dn.Process {
 					jsDisplayText: rawCombo.indexOf("]")>=0 ? rawCombo.substr(rawCombo.indexOf("]")+1) : rawCombo,
 					keyCode: keyCode,
 					jsKey: rawKey,
-					ctrl: rawCombo.indexOf("ctrl")>=0,
-					shift: rawCombo.indexOf("shift")>=0,
-					alt: rawCombo.indexOf("alt")>=0,
+					ctrlCmd: ctrlReg.match(rawCombo),
+					macCtrl: macCtrlReg.match(rawCombo),
+					shift: shiftReg.match(rawCombo),
+					alt: altReg.match(rawCombo),
 					navKeys: navKeys,
 					os: os,
 					debug: rawCombo.indexOf("[debug]")>=0,
@@ -259,6 +265,37 @@ class App extends dn.Process {
 		}
 	}
 
+	public function getFirstRelevantKeyBinding(cmd:AppCommand) : Null<KeyBinding> {
+		if( cmd==null )
+			return null;
+
+		for(kb in App.ME.keyBindings) {
+			if( kb.command!=cmd )
+				continue;
+
+			// Check OS
+			switch kb.os {
+				case null:
+				case "win": if( !isWindows() ) continue;
+				case "mac": if( !isMac() ) continue;
+				case "linux": if( isLinux() ) continue;
+			}
+
+			// Check NavKeys
+			if( kb.navKeys!=null && settings.v.navigationKeys!=kb.navKeys )
+				continue;
+
+			// Check debug
+			#if !debug
+			if( kb.debug )
+				continue;
+			#end
+
+			return kb;
+		}
+
+		return null;
+	}
 
 	function initAutoUpdater() {
 		// Init
@@ -461,8 +498,10 @@ class App extends dn.Process {
 	}
 
 	public static inline function isLinux() return js.node.Os.platform()=="linux";
-	public static inline function isWindows() return js.node.Os.platform()=="win32";
-	public static inline function isMac() return js.node.Os.platform()=="darwin";
+	// public static inline function isWindows() return js.node.Os.platform()=="win32";
+	// public static inline function isMac() return js.node.Os.platform()=="darwin";
+	public static inline function isWindows() return false;
+	public static inline function isMac() return true;
 
 	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
 	public inline function isShiftDown() return isKeyDown(K.SHIFT);
@@ -521,7 +560,10 @@ class App extends dn.Process {
 			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
 				continue;
 
-			if( b.ctrl && !App.ME.isCtrlCmdDown() || !b.ctrl && App.ME.isCtrlCmdDown() )
+			if( b.ctrlCmd && !App.ME.isCtrlCmdDown() || !b.ctrlCmd && App.ME.isCtrlCmdDown() )
+				continue;
+
+			if( b.macCtrl && !App.ME.isMacCtrlDown() || !b.macCtrl && App.ME.isMacCtrlDown() )
 				continue;
 
 			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )

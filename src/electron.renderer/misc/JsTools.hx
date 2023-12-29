@@ -619,10 +619,15 @@ class JsTools {
 							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
 
 							case _:
-								var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
+								var keyName = switch k {
+									case "macctrl": "ctrl";
+									case _: k.toUpperCase();
+								}
+								var jKey = new J('<span class="key">$keyName</span>');
 								switch k.toLowerCase() {
 									case "shift", "alt" : jKey.addClass( k.toLowerCase() );
-									case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
+									case "macctrl" : jKey.addClass( App.isMac() ? "ctrl" : "??" );
+									case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : "ctrl" );
 									case "delete", "escape": jKey.addClass("special");
 									case _ if(funcKeyReg.match(k)): jKey.addClass("special");
 									case _:
