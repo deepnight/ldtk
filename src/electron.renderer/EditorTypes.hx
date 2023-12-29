@@ -236,6 +236,7 @@ enum ModalAnchor {
 
 
 typedef KeyBinding = {
+	var jsDisplayText : String;
 	var keyCode : Int;
 	var jsKey : String;
 	var ctrl : Bool;

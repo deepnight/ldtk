@@ -21,9 +21,29 @@ class Help extends ui.modal.Panel {
 		});
 
 		// Key icons
+		function _getFirstRelevantBinding(rawCmdId:String) : Null<KeyBinding> {
+			rawCmdId = rawCmdId.toLowerCase();
+			for(kb in App.ME.keyBindings)
+				if( kb.command.getName().toLowerCase().substr(2)==rawCmdId )
+					switch kb.os {
+						case null: return kb;
+						case "win": if( App.isWindows() ) return kb;
+						case "mac": if( App.isMac() ) return kb;
+						case "linux": if( App.isLinux() ) return kb;
+					}
+
+			return null;
+		}
 		jContent.find("dt").each( function(idx, e) {
 			var jDt = new J(e);
-			JsTools.parseKeysIn( jDt );
+			var raw = jDt.text();
+			var rawCmdExpr = ~/%([a-z_0-9]+)%/gi;
+			if( rawCmdExpr.match(raw) ) {
+				var kb = _getFirstRelevantBinding(rawCmdExpr.matched(1));
+				jDt.text( kb==null ? '?{$rawCmdExpr.matched(1)}?' : kb.jsDisplayText );
+			}
+			var jKeys = JsTools.parseKeysIn( jDt );
+			jDt.empty().append( jKeys );
 		});
 
 		// Videos

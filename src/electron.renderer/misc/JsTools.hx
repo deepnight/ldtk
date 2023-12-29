@@ -637,7 +637,7 @@ class JsTools {
 			}
 		});
 
-		jTarget.empty().append( jReplace.contents() );
+		return jReplace.contents();
 	}
 
 

@@ -239,7 +239,8 @@ class App extends dn.Process {
 					: null;
 
 
-				keyBindings.push({
+				var kb : KeyBinding = {
+					jsDisplayText: rawCombo.indexOf("]")>=0 ? rawCombo.substr(rawCombo.indexOf("]")+1) : rawCombo,
 					keyCode: keyCode,
 					jsKey: rawKey,
 					ctrl: rawCombo.indexOf("ctrl")>=0,
@@ -250,7 +251,8 @@ class App extends dn.Process {
 					debug: rawCombo.indexOf("[debug]")>=0,
 					allowInInputs: Reflect.hasField(cmdMeta, "input"),
 					command: cmd,
-				});
+				}
+				keyBindings.push(kb);
 			}
 
 		}
