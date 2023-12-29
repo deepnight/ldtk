@@ -270,6 +270,7 @@ enum AppCommand {
 	@k("ctrl q") @input C_ExitApp;
 	@k("[mac] ctrl M") @input C_MinimizeApp;
 	@k("[mac] ctrl H") @input C_HideApp;
+	@k("[mac] ctrl shift F, [win] f11, ctrl shift f, alt enter") @input C_ToggleFullscreen;
 	@k("pagedown") C_GotoPreviousWorldLayer;
 	@k("pageup") C_GotoNextWorldLayer;
 	@k("ctrl pagedown, shift pagedown") C_MoveLevelToPreviousWorldLayer;

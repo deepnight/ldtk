@@ -110,7 +110,7 @@ class IntGridPalette extends ui.ToolPalette {
 					ctx.addAction({
 						label: L.t._("Edit layer"),
 						cb: ()->{
-							editor.executeAppCommand(C_OpenLayerPanel);
+							App.ME.executeAppCommand(C_OpenLayerPanel);
 						},
 					});
 				});

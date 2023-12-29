@@ -498,29 +498,122 @@ class App extends dn.Process {
 
 
 	function onKeyPress(keyCode:Int) {
+		// Propagate to current page
 		if( hasPage() && !curPageProcess.isPaused() )
 			curPageProcess.onKeyPress(keyCode);
 
+		// Propagate to all modals
 		for(m in ui.Modal.ALL)
 			if( !m.destroyed && !m.isPaused() )
 				m.onKeyPress(keyCode);
 
+		// Check app key bindings
+		for(b in keyBindings) {
+			if( b.keyCode!=keyCode )
+				continue;
+
+			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
+				continue;
+
+			if( b.ctrl && !App.ME.isCtrlDown() || !b.ctrl && App.ME.isCtrlDown() )
+				continue;
+
+			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
+				continue;
+
+			if( !b.allowInInputs && hasInputFocus() )
+				continue;
+
+			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
+				continue;
+
+			#if( !debug )
+			if( b.debug )
+				continue;
+			#end
+
+			switch b.os {
+				case null:
+				case "win": if( !App.isWindows() ) continue;
+				case "linux": if( !App.isLinux() ) continue;
+				case "mac": if( !App.isMac() ) continue;
+				case _:
+			}
+
+			executeAppCommand(b.command);
+		}
+
+
+		// Misc shortcuts
 		switch keyCode {
 			// Open debug menu
 			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
 
-			// Fullscreen
-			case K.F11 if( !hasAnyToggleKeyDown() && !hasInputFocus() ):
+			case _:
+		}
+	}
+
+
+	public function executeAppCommand(cmd:AppCommand) {
+		switch cmd {
+			case C_SaveProject:
+			case C_SaveProjectAs:
+			case C_CloseProject:
+			case C_RenameProject:
+			case C_Back:
+			case C_AppSettings:
+			case C_Undo:
+			case C_Redo:
+			case C_SelectAll:
+			case C_ZenMode:
+			case C_ShowHelp:
+			case C_ToggleWorldMode:
+			case C_RunCommand:
+			case C_GotoPreviousWorldLayer:
+			case C_GotoNextWorldLayer:
+			case C_MoveLevelToPreviousWorldLayer:
+			case C_MoveLevelToNextWorldLayer:
+			case C_OpenProjectPanel:
+			case C_OpenLayerPanel:
+			case C_OpenEntityPanel:
+			case C_OpenEnumPanel:
+			case C_OpenTilesetPanel:
+			case C_OpenLevelPanel:
+			case C_NavUp:
+			case C_NavDown:
+			case C_NavLeft:
+			case C_NavRight:
+			case C_ToggleAutoLayerRender:
+			case C_ToggleSelectEmptySpaces:
+			case C_ToggleTileStacking:
+			case C_ToggleSingleLayerMode:
+			case C_ToggleDetails:
+			case C_ToggleGrid:
+			case C_CommandPalette:
+
+			case C_ExitApp:
+				App.ME.exit();
+
+			case C_HideApp:
+				dn.js.ElectronTools.hideWindow();
+
+			case C_MinimizeApp:
+				dn.js.ElectronTools.minimize();
+
+			case C_ToggleFullscreen:
 				var isFullScreen = ET.isFullScreen();
 				if( !isFullScreen )
 					N.success("Press F11 to leave fullscreen");
 				ET.setFullScreen(!isFullScreen);
 				updateBodyClasses();
-
-			case _:
 		}
+
+		// Propagate to current page
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onAppCommand(cmd);
 	}
+
 
 	public function addMask() {
 		removeMask();

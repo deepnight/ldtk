@@ -173,31 +173,31 @@ class Editor extends Page {
 
 		// Edit buttons
 		jMainPanel.find("button.editProject").click( function(_) {
-			executeAppCommand(C_OpenProjectPanel);
+			App.ME.executeAppCommand(C_OpenProjectPanel);
 		});
 
 		jMainPanel.find("button.world").click( function(_) {
-			executeAppCommand(C_ToggleWorldMode);
+			App.ME.executeAppCommand(C_ToggleWorldMode);
 		});
 
 		jMainPanel.find("button.editLevelInstance").click( function(_) {
-			executeAppCommand(C_OpenLevelPanel);
+			App.ME.executeAppCommand(C_OpenLevelPanel);
 		});
 
 		jMainPanel.find("button.editLayers").click( function(_) {
-			executeAppCommand(C_OpenLayerPanel);
+			App.ME.executeAppCommand(C_OpenLayerPanel);
 		});
 
 		jMainPanel.find("button.editEntities").click( function(_) {
-			executeAppCommand(C_OpenEntityPanel);
+			App.ME.executeAppCommand(C_OpenEntityPanel);
 		});
 
 		jMainPanel.find("button.editTilesets").click( function(_) {
-			executeAppCommand(C_OpenTilesetPanel);
+			App.ME.executeAppCommand(C_OpenTilesetPanel);
 		});
 
 		jMainPanel.find("button.editEnums").click( function(_) {
-			executeAppCommand(C_OpenEnumPanel);
+			App.ME.executeAppCommand(C_OpenEnumPanel);
 		});
 
 
@@ -205,11 +205,11 @@ class Editor extends Page {
 
 
 		jMainPanel.find("button.showHelp").click( function(_) {
-			executeAppCommand(C_ShowHelp);
+			App.ME.executeAppCommand(C_ShowHelp);
 		});
 
 		jMainPanel.find("button.settings").click( function(_) {
-			executeAppCommand(C_AppSettings);
+			App.ME.executeAppCommand(C_AppSettings);
 		});
 
 
@@ -551,41 +551,6 @@ class Editor extends Page {
 	override function onKeyPress(keyCode:Int) {
 		super.onKeyPress(keyCode);
 
-		for(b in App.ME.keyBindings) {
-			if( b.keyCode!=keyCode )
-				continue;
-
-			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
-				continue;
-
-			if( b.ctrl && !App.ME.isCtrlDown() || !b.ctrl && App.ME.isCtrlDown() )
-				continue;
-
-			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
-				continue;
-
-			if( !b.allowInInputs && hasInputFocus() )
-				continue;
-
-			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
-				continue;
-
-			#if( !debug )
-			if( b.debug )
-				continue;
-			#end
-
-			switch b.os {
-				case null:
-				case "win": if( !App.isWindows() ) continue;
-				case "linux": if( !App.isLinux() ) continue;
-				case "mac": if( !App.isMac() ) continue;
-				case _:
-			}
-
-			executeAppCommand(b.command);
-		}
-
 		switch keyCode {
 			// Select layers (numbers 1-9-0)
 			case k if( k>=48 && k<=57 && !hasInputFocus() ):
@@ -631,11 +596,15 @@ class Editor extends Page {
 	}
 
 
-	public function executeAppCommand(cmd:AppCommand) {
-		if( isPaused() )
-			return;
+	override function onAppCommand(cmd:AppCommand) {
+		super.onAppCommand(cmd);
 
 		switch cmd {
+			case C_ExitApp:
+			case C_HideApp:
+			case C_MinimizeApp:
+			case C_ToggleFullscreen:
+
 			case C_Back:
 				if( hasInputFocus() ) {
 					// BUG jquery crashes on "Blur" if element is removed in the process
@@ -793,15 +762,6 @@ class Editor extends Page {
 
 			case C_ToggleWorldMode:
 				setWorldMode( !worldMode );
-
-			case C_ExitApp:
-				App.ME.exit();
-
-			case C_HideApp:
-				dn.js.ElectronTools.hideWindow();
-
-			case C_MinimizeApp:
-				dn.js.ElectronTools.minimize();
 
 			case C_ToggleSelectEmptySpaces:
 				setEmptySpaceSelection( !settings.v.emptySpaceSelection );
@@ -2713,7 +2673,7 @@ class Editor extends Page {
 					iconId: "edit",
 					cb: ()->{
 						selectLayerInstance(li);
-						executeAppCommand(C_OpenLayerPanel);
+						App.ME.executeAppCommand(C_OpenLayerPanel);
 					},
 				}
 			];

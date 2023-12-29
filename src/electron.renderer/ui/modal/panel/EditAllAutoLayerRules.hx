@@ -523,7 +523,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			actions.push({
 				label: L.untranslated("Missing biome enum"),
 				subText: L.untranslated("Click to select your level biome enum"),
-				cb: editor.executeAppCommand.bind(C_OpenLayerPanel),
+				cb: App.ME.executeAppCommand.bind(C_OpenLayerPanel),
 			});
 		else if( enumDef.values.length==0 )
 			actions.push({

@@ -26,19 +26,19 @@ class EditProject extends ui.modal.Panel {
 		showAdvanced = project.hasAnyFlag(allAdvancedOptions);
 
 		var jSave = jContent.find("button.save").click( function(ev) {
-			editor.executeAppCommand(C_SaveProject);
+			App.ME.executeAppCommand(C_SaveProject);
 			if( project.isBackup() )
 				close();
 		});
 		if( project.isBackup() )
 			jSave.text(L.t._("Restore this backup"));
 
-		var jSaveAs = jContent.find("button.saveAs").click( _->editor.executeAppCommand(C_SaveProjectAs) );
+		var jSaveAs = jContent.find("button.saveAs").click( _->App.ME.executeAppCommand(C_SaveProjectAs) );
 		if( project.isBackup() )
 			jSaveAs.hide();
 
 
-		var jRename = jContent.find("button.rename").click( _->editor.executeAppCommand(C_RenameProject) );
+		var jRename = jContent.find("button.rename").click( _->App.ME.executeAppCommand(C_RenameProject) );
 		if( project.isBackup() )
 			jRename.hide();
 
