@@ -194,7 +194,7 @@ class App extends dn.Process {
 
 		// Parse AppCommands meta
 		var meta = haxe.rtti.Meta.getFields(AppCommand);
-		var keyNameReg = ~/(macctrl|ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
+		var specialKeysRemovalReg = ~/(macctrl|ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
 		for(k in AppCommand.getConstructors()) {
 			var cmd = AppCommand.createByName(k);
 			var cmdMeta : Dynamic = Reflect.field(meta, k);
@@ -204,8 +204,7 @@ class App extends dn.Process {
 
 			rawCombos = rawCombos.toLowerCase();
 			for(rawCombo in rawCombos.split(",")) {
-
-				var rawKey = keyNameReg.replace(rawCombo, "");
+				var rawKey = specialKeysRemovalReg.replace(rawCombo, "");
 				var keyCode = switch rawKey {
 					case "escape": K.ESCAPE;
 					case "tab": K.TAB;
@@ -278,7 +277,7 @@ class App extends dn.Process {
 				case null:
 				case "win": if( !isWindows() ) continue;
 				case "mac": if( !isMac() ) continue;
-				case "linux": if( isLinux() ) continue;
+				case "linux": if( !isLinux() ) continue;
 			}
 
 			// Check NavKeys
@@ -497,11 +496,11 @@ class App extends dn.Process {
 		return ui.ProjectSaver.hasAny() || ui.Modal.hasAnyUnclosable();
 	}
 
-	public static inline function isLinux() return js.node.Os.platform()=="linux";
-	public static inline function isWindows() return js.node.Os.platform()=="win32";
-	public static inline function isMac() return js.node.Os.platform()=="darwin";
-	// public static inline function isWindows() return false;
-	// public static inline function isMac() return true;
+	public static function isLinux() return js.node.Os.platform()=="linux";
+	public static function isWindows() return js.node.Os.platform()=="win32";
+	public static function isMac() return js.node.Os.platform()=="darwin";
+	// public static function isWindows() return false;
+	// public static function isMac() return true;
 
 	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
 	public inline function isShiftDown() return isKeyDown(K.SHIFT);
