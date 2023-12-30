@@ -190,7 +190,7 @@ class App extends dn.Process {
 		var ctrlReg = ~/\bctrl\b/i;
 		var shiftReg = ~/\bshift\b/i;
 		var altReg = ~/\balt\b/i;
-		var macCtrlReg = ~/\bctrl\b/i;
+		var macCtrlReg = ~/\bmacctrl\b/i;
 
 		// Parse AppCommands meta
 		var meta = haxe.rtti.Meta.getFields(AppCommand);
@@ -554,28 +554,6 @@ class App extends dn.Process {
 
 		// Check app key bindings
 		for(b in keyBindings) {
-			if( b.keyCode!=keyCode )
-				continue;
-
-			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
-				continue;
-
-			if( b.ctrlCmd && !App.ME.isCtrlCmdDown() || !b.ctrlCmd && App.ME.isCtrlCmdDown() )
-				continue;
-
-			if( isMac() )
-				if( b.macCtrl && !App.ME.isMacCtrlDown() || !b.macCtrl && App.ME.isMacCtrlDown() )
-					continue;
-
-			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
-				continue;
-
-			if( !b.allowInInputs && hasInputFocus() )
-				continue;
-
-			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
-				continue;
-
 			#if( !debug )
 			if( b.debug )
 				continue;
@@ -588,6 +566,27 @@ class App extends dn.Process {
 				case "mac": if( !App.isMac() ) continue;
 				case _:
 			}
+
+			if( b.keyCode!=keyCode )
+				continue;
+
+			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
+				continue;
+
+			if( b.ctrlCmd && !App.ME.isCtrlCmdDown() || !b.ctrlCmd && App.ME.isCtrlCmdDown() )
+				continue;
+
+			if( b.macCtrl && !App.ME.isMacCtrlDown() || !b.macCtrl && App.ME.isMacCtrlDown() )
+				continue;
+
+			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
+				continue;
+
+			if( !b.allowInInputs && hasInputFocus() )
+				continue;
+
+			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
+				continue;
 
 			executeAppCommand(b.command);
 		}
