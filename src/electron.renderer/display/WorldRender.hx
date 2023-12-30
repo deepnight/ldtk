@@ -410,7 +410,7 @@ class WorldRender extends dn.Process {
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
 				outline : new h2d.Graphics(),
-				fadeMask: new h2d.Bitmap( h2d.Tile.fromColor(l.getBgColor(),1,1, 0.4) ),
+				fadeMask: new h2d.Bitmap( h2d.Tile.fromColor(l.getBgColor(),1,1, 0.3) ),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile(D.elements.fieldBg), 2, 2),
 
 				boundsInvalidated: true,
@@ -708,6 +708,10 @@ class WorldRender extends dn.Process {
 				if( M.fabs(l.worldDepth-editor.curWorldDepth)>=2 )
 					wl.bgWrapper.alpha*=0.3;
 			}
+		}
+		else {
+			// Same world depth
+			wl.render.alpha = 1;
 		}
 	}
 
