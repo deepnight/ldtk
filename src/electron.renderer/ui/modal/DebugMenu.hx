@@ -11,7 +11,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 			case null:
 				addTitle(L.t._("Debug menu"));
 
-				#if debug
 				addAction({
 					label: L.untranslated("Toggle debug print"),
 					cb: ()->{
@@ -23,7 +22,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 							App.ME.cd.setS("debugTools", Const.INFINITE);
 					}
 				});
-				#end
 
 				#if debug
 				addAction({

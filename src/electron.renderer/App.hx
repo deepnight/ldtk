@@ -1084,11 +1084,11 @@ class App extends dn.Process {
 		}
 
 		// Debug print
-		#if debug
 		if( cd.has("debugTools") ) {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');
+			debugPre('Detected OS: '+(isWindows()?"Windows":isMac()?"macOs":isLinux()?"Linux":"Unknown ("+js.node.Os.platform()+")"));
 			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(M.round(100*hxd.System.fpsLimit/60))}%');
 			debugPre('ElectronThrottling=${dn.js.ElectronTools.isThrottlingEnabled()}');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
@@ -1123,6 +1123,5 @@ class App extends dn.Process {
 			for( line in dn.Process.rprintAll().split('\n') )
 				debugPre(line);
 		}
-		#end
 	}
 }
