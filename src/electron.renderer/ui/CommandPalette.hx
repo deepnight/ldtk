@@ -18,6 +18,8 @@ enum ElementCategory {
 }
 
 class CommandPalette {
+	static var ME : Null<CommandPalette>;
+
 	static var MAX_RESULTS = 20;
 	static var MAX_DESC_LEN = 40;
 
@@ -39,6 +41,10 @@ class CommandPalette {
 	var curUid : Null<String>;
 
 	public function new() {
+		if( ME!=null )
+			ME.close();
+		ME = this;
+
 		var jXml = App.ME.jPage.find("xml.commandPalette");
 		jCmdPal = jXml.children().clone().wrapAll('<div id="commandPalette"></div>').parent();
 		App.ME.jPage.append(jCmdPal);
@@ -69,6 +75,15 @@ class CommandPalette {
 		updateResults();
 	}
 
+
+	public static function exists() {
+		return ME!=null;
+	}
+
+	public static function callAgain() {
+		if( exists() )
+			ME.jInput.select();
+	}
 
 	function initSearchableElements() {
 		allElements = [];
@@ -315,5 +330,7 @@ class CommandPalette {
 	function close() {
 		jCmdPal.remove();
 		jCmdPal = null;
+		if( ME==this )
+			ME = null;
 	}
 }

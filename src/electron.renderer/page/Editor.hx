@@ -644,7 +644,10 @@ class Editor extends Page {
 				onSave(true);
 
 			case C_CommandPalette:
-				new ui.CommandPalette();
+				if( ui.CommandPalette.exists() )
+					ui.CommandPalette.callAgain();
+				else
+					new ui.CommandPalette();
 
 			case C_RenameProject:
 				new ui.modal.dialog.InputDialog(
