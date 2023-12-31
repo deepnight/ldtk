@@ -264,6 +264,7 @@ class App extends dn.Process {
 		}
 	}
 
+
 	public function getFirstRelevantKeyBinding(cmd:AppCommand) : Null<KeyBinding> {
 		if( cmd==null )
 			return null;
@@ -552,13 +553,13 @@ class App extends dn.Process {
 				m.onKeyPress(keyCode);
 
 		// Check app key bindings
-		for(b in keyBindings) {
+		for(kb in keyBindings) {
 			#if( !debug )
-			if( b.debug )
+			if( kb.debug )
 				continue;
 			#end
 
-			switch b.os {
+			switch kb.os {
 				case null:
 				case "win": if( !App.isWindows() ) continue;
 				case "linux": if( !App.isLinux() ) continue;
@@ -566,30 +567,30 @@ class App extends dn.Process {
 				case _:
 			}
 
-			if( b.keyCode!=keyCode )
+			if( kb.keyCode!=keyCode )
 				continue;
 
-			if( b.shift && !App.ME.isShiftDown() || !b.shift && App.ME.isShiftDown() )
+			if( kb.shift && !App.ME.isShiftDown() || !kb.shift && App.ME.isShiftDown() )
 				continue;
 
-			if( b.ctrlCmd && !App.ME.isCtrlCmdDown() || !b.ctrlCmd && App.ME.isCtrlCmdDown() )
+			if( kb.ctrlCmd && !App.ME.isCtrlCmdDown() || !kb.ctrlCmd && App.ME.isCtrlCmdDown() )
 				continue;
 
-			if( b.macCtrl && !App.ME.isMacCtrlDown() || !b.macCtrl && App.ME.isMacCtrlDown() )
+			if( kb.macCtrl && !App.ME.isMacCtrlDown() || !kb.macCtrl && App.ME.isMacCtrlDown() )
 				continue;
 
-			if( b.alt && !App.ME.isAltDown() || !b.alt && App.ME.isAltDown() )
+			if( kb.alt && !App.ME.isAltDown() || !kb.alt && App.ME.isAltDown() )
 				continue;
 
-			if( !b.allowInInputs && hasInputFocus() )
+			if( !kb.allowInInputs && hasInputFocus() )
 				continue;
 
-			if( b.navKeys!=null && b.navKeys!=settings.v.navigationKeys )
+			if( kb.navKeys!=null && kb.navKeys!=settings.v.navigationKeys )
 				continue;
 
-			executeAppCommand(b.command);
+			executeAppCommand(kb.command);
+			break;
 		}
-
 
 		// Misc shortcuts
 		switch keyCode {
