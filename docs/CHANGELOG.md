@@ -134,7 +134,7 @@ LDtk is all about being enjoyable to use, so this update includes many quality-o
  - Updated some sample maps
  - Many bug fixes
 
- ## JSON format changes
+## JSON format changes
 
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
  - Deprecated values `tileId` and `__tileSrcRect` were removed from *Enum value definitions*
