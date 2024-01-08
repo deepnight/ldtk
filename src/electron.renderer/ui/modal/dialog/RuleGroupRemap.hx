@@ -82,14 +82,16 @@ class RuleGroupRemap extends ui.modal.Dialog {
 						rectIds[i] += tileOffsetX + tileOffsetY*td.cWid;
 
 					// Remap IntGrid IDs
-					for(r in copyGroup.rules)
-					for(cx in 0...r.size)
-					for(cy in 0...r.size) {
-						var v = r.getPattern(cx,cy);
-						if( idRemaps.exists(v) )
-							r.setPattern(cx,cy, idRemaps.get(v));
-						else if( idRemaps.exists(-v) )
-							r.setPattern(cx,cy, -idRemaps.get(-v));
+					for(r in copyGroup.rules) {
+						for(cx in 0...r.size)
+						for(cy in 0...r.size) {
+							var v = r.getPattern(cx,cy);
+							if( idRemaps.exists(v) )
+								r.setPattern(cx,cy, idRemaps.get(v));
+							else if( idRemaps.exists(-v) )
+								r.setPattern(cx,cy, -idRemaps.get(-v));
+						}
+						r.updateUsedValues();
 					}
 
 					// Out-of-bounds value

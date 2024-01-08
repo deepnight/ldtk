@@ -223,6 +223,7 @@ class RulePatternEditor {
 					// Refresh
 					if( v!=rule.getPattern(cx,cy) ) {
 						anyChange = true;
+						rule.updateUsedValues();
 						render();
 					}
 

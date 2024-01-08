@@ -37,6 +37,8 @@ class AutoLayerRuleDef {
 	public var perlinOctaves = 2;
 	var _perlin(get,null) : Null<hxd.Perlin>;
 
+	var explicitlyRequiredValues : Array<Int> = [];
+
 	public function new(uid, size=3) {
 		if( !isValidSize(size) )
 			throw 'Invalid rule size ${size}x$size';
@@ -45,6 +47,13 @@ class AutoLayerRuleDef {
 		this.size = size;
 		perlinSeed = Std.random(9999999);
 		initPattern();
+	}
+
+	public function updateUsedValues() {
+		explicitlyRequiredValues = [];
+		for(v in pattern)
+			if( v>0 && v!=Const.AUTO_LAYER_ANYTHING && !explicitlyRequiredValues.contains(v) )
+				explicitlyRequiredValues.push(v);
 	}
 
 	public inline function hasAnyPositionOffset() {
@@ -102,20 +111,25 @@ class AutoLayerRuleDef {
 	}
 
 	public inline function setPattern(cx,cy,v) {
-		// clearOptim();
-		return isValid(cx,cy) ? pattern[ coordId(cx,cy) ] = v : 0;
+		if( !isValid(cx,cy) )
+			return 0;
+
+		pattern[ coordId(cx,cy) ] = v;
+		return v;
 	}
 
 	public inline function fill(v:Int) {
 		for(cx in 0...size)
 		for(cy in 0...size)
 			setPattern(cx,cy,v);
+		updateUsedValues();
 	}
 
 	function initPattern() {
 		pattern = [];
 		for(i in 0...size*size)
 			pattern[i] = 0;
+		updateUsedValues();
 	}
 
 	@:keep public function toString() {
@@ -202,6 +216,8 @@ class AutoLayerRuleDef {
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
 		r.perlinOctaves = JsonTools.readInt(json.perlinOctaves, 2);
 		r.perlinSeed = JsonTools.readInt(json.perlinSeed, Std.random(9999999));
+
+		r.updateUsedValues();
 
 		return r;
 	}
@@ -290,23 +306,11 @@ class AutoLayerRuleDef {
 		return false;
 	}
 
-	public function isRelevantHere(sourceLi:data.inst.LayerInstance, cx:Int, cy:Int) {
-		var intValue = sourceLi.getIntGrid(cx,cy);
-		var groupUid = sourceLi.def.getIntGridGroupUidFromValue(intValue);
-		var groupRuleValue = sourceLi.def.getRuleValueFromGroupUid(groupUid);
-		var emptyPattern = true;
-		for(rv in pattern)
-			if( rv!=0 ) {
-				if( emptyPattern )
-					emptyPattern = false;
-
-				if( M.iabs(rv)==Const.AUTO_LAYER_ANYTHING || M.iabs(rv)==intValue )
-					return true;
-				else if( groupUid>=0 && ( M.iabs(rv)==groupRuleValue ) )
-					return true;
-			}
-
-		return emptyPattern;
+	public function isRelevantInLayer(sourceLi:data.inst.LayerInstance) {
+		for(v in explicitlyRequiredValues)
+			if( !sourceLi.containsIntGridValue(v) )
+				return false;
+		return true;
 	}
 
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
