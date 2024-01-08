@@ -37,12 +37,12 @@ enum GlobalEvent {
 	LayerRuleSeedChanged;
 	LayerRuleSorted;
 
-	LayerRuleGroupAdded(rg:data.DataTypes.AutoLayerRuleGroup);
-	LayerRuleGroupRemoved(rg:data.DataTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupAdded(rg:data.def.AutoLayerRuleGroupDef);
+	LayerRuleGroupRemoved(rg:data.def.AutoLayerRuleGroupDef);
+	LayerRuleGroupChanged(rg:data.def.AutoLayerRuleGroupDef);
+	LayerRuleGroupChangedActiveState(rg:data.def.AutoLayerRuleGroupDef);
 	LayerRuleGroupSorted;
-	LayerRuleGroupCollapseChanged(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupCollapseChanged(rg:data.def.AutoLayerRuleGroupDef);
 
 	LayerInstanceSelected;
 	LayerInstanceEditedByTool(li:data.inst.LayerInstance);

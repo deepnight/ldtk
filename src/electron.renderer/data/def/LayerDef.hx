@@ -42,7 +42,7 @@ class LayerDef {
 
 	// IntGrid/AutoLayers
 	public var autoSourceLayerDefUid : Null<Int>;
-	public var autoRuleGroups : Array<AutoLayerRuleGroup> = [];
+	public var autoRuleGroups : Array<AutoLayerRuleGroupDef> = [];
 	public var autoSourceLd(get,never) : Null<LayerDef>;
 		inline function get_autoSourceLd() return type==AutoLayer && autoSourceLayerDefUid!=null ? _project.defs.getLayerDef(autoSourceLayerDefUid) : null;
 	public var autoTilesKilledByOtherLayerUid: Null<Int>;
@@ -151,7 +151,7 @@ class LayerDef {
 		// Read auto-layer rules
 		if( json.autoRuleGroups!=null ) {
 			for( ruleGroupJson in json.autoRuleGroups )
-				o.parseJsonRuleGroup(jsonVersion, ruleGroupJson);
+				o.autoRuleGroups.push( AutoLayerRuleGroupDef.fromJson(jsonVersion, ruleGroupJson) );
 
 			// Smart unfold single groups
 			if( o.autoRuleGroups.length==1 )
@@ -210,7 +210,7 @@ class LayerDef {
 				color: g.color,
 			}),
 
-			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( function(rg) return toJsonRuleGroup(rg)) : [],
+			autoRuleGroups: isAutoLayer() ? autoRuleGroups.map( (rg)->return rg.toJson(this) ) : [],
 			autoSourceLayerDefUid: autoSourceLayerDefUid,
 
 			tilesetDefUid: tilesetDefUid,
@@ -219,40 +219,6 @@ class LayerDef {
 
 			biomeFieldUid: biomeFieldUid,
 		}
-	}
-
-	public function toJsonRuleGroup(rg:AutoLayerRuleGroup) : ldtk.Json.AutoLayerRuleGroupJson {
-		return {
-			uid: rg.uid,
-			name: rg.name,
-			color: rg.color!=null ? rg.color.toHex() : null,
-			icon: JsonTools.writeTileRect(rg.icon),
-			active: rg.active,
-			isOptional: rg.isOptional,
-			rules: rg.rules.map( function(r) return r.toJson(this) ),
-			usesWizard: rg.usesWizard,
-			requiredBiomeValues: rg.requiredBiomeValues.copy(),
-			biomeRequirementMode: rg.biomeRequirementMode,
-		}
-	}
-
-	public function parseJsonRuleGroup(jsonVersion:String, ruleGroupJson:ldtk.Json.AutoLayerRuleGroupJson) : AutoLayerRuleGroup {
-		var rg = createRuleGroup(
-			JsonTools.readInt(ruleGroupJson.uid,-1),
-			JsonTools.readString(ruleGroupJson.name, "default")
-		);
-		rg.color = JsonTools.readColor(ruleGroupJson.color, true);
-		rg.active = JsonTools.readBool( ruleGroupJson.active, true );
-		rg.isOptional = JsonTools.readBool( ruleGroupJson.isOptional, false );
-		rg.icon = JsonTools.readTileRect( ruleGroupJson.icon, true );
-		rg.rules = JsonTools.readArray( ruleGroupJson.rules ).map( function(ruleJson) {
-			return AutoLayerRuleDef.fromJson(jsonVersion, ruleJson);
-		});
-		rg.collapsed = true;
-		rg.usesWizard = JsonTools.readBool( ruleGroupJson.usesWizard, false );
-		rg.requiredBiomeValues = ruleGroupJson.requiredBiomeValues!=null ? ruleGroupJson.requiredBiomeValues.copy() : [];
-		rg.biomeRequirementMode = JsonTools.readInt( ruleGroupJson.biomeRequirementMode, 0 );
-		return rg;
 	}
 
 	public inline function getScale() : Float {
@@ -558,7 +524,7 @@ class LayerDef {
 		return null;
 	}
 
-	public function getRuleGroup(rgUid:Int) : Null<AutoLayerRuleGroup> {
+	public function getRuleGroup(rgUid:Int) : Null<AutoLayerRuleGroupDef> {
 		for( rg in autoRuleGroups )
 			if( rg.uid==rgUid )
 				return rg;
@@ -572,7 +538,7 @@ class LayerDef {
 			return requiredTags.isEmpty() || requiredTags.hasAnyTagFoundIn(ei.def.tags);
 	}
 
-	public function getParentRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroup> {
+	public function getParentRuleGroup(r:AutoLayerRuleDef) : Null<AutoLayerRuleGroupDef> {
 		for( rg in autoRuleGroups )
 		for( rr in rg.rules )
 			if( rr.uid==r.uid )
@@ -580,7 +546,7 @@ class LayerDef {
 		return null;
 	}
 
-	public function removeRuleGroup(rg:AutoLayerRuleGroup) {
+	public function removeRuleGroup(rg:AutoLayerRuleGroupDef) {
 		for( g in autoRuleGroups )
 			if( g.uid==rg.uid ) {
 				autoRuleGroups.remove(g);
@@ -589,20 +555,8 @@ class LayerDef {
 		return false;
 	}
 
-	public function createRuleGroup(uid:Int, name:String, ?index:Int) {
-		var rg : AutoLayerRuleGroup = {
-			uid: uid,
-			name: name,
-			color: null,
-			icon: null,
-			active: true,
-			collapsed: false,
-			isOptional: false,
-			usesWizard: false,
-			requiredBiomeValues: [],
-			biomeRequirementMode: 0,
-			rules: [],
-		}
+	public function createEmptyRuleGroup(uid:Int, name:String, ?index:Int) {
+		var rg = new AutoLayerRuleGroupDef(uid, name);
 		if( index!=null )
 			autoRuleGroups.insert(index, rg);
 		else
@@ -610,11 +564,11 @@ class LayerDef {
 		return rg;
 	}
 
-	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroup, r:AutoLayerRuleDef) {
+	public function duplicateRule(p:data.Project, rg:AutoLayerRuleGroupDef, r:AutoLayerRuleDef) {
 		return pasteRule( p, rg, Clipboard.createTemp(CRule,r.toJson(this)), r );
 	}
 
-	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroup, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {
+	public function pasteRule(p:data.Project, rg:AutoLayerRuleGroupDef, c:Clipboard, ?after:AutoLayerRuleDef) : Null<AutoLayerRuleDef> {
 		if( !c.is(CRule) )
 			return null;
 
@@ -630,25 +584,24 @@ class LayerDef {
 		return copy;
 	}
 
-	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroup) {
-		return pasteRuleGroup( p, Clipboard.createTemp(CRuleGroup,toJsonRuleGroup(rg)), rg );
+	public function duplicateRuleGroup(p:data.Project, rg:AutoLayerRuleGroupDef) {
+		return pasteRuleGroup( p, Clipboard.createTemp(CRuleGroup, rg.toJson(this)), rg );
 	}
 
-	public function pasteRuleGroup(p:data.Project, c:Clipboard, ?after:AutoLayerRuleGroup) : Null<AutoLayerRuleGroup> {
+	public function pasteRuleGroup(p:data.Project, c:Clipboard, ?after:AutoLayerRuleGroupDef) : Null<AutoLayerRuleGroupDef> {
 		if( !c.is(CRuleGroup) )
 			return null;
 
 		var json : ldtk.Json.AutoLayerRuleGroupJson = c.getParsedJson();
-		var copy = parseJsonRuleGroup( p.jsonVersion, json );
+		var copy = AutoLayerRuleGroupDef.fromJson(p.jsonVersion, json);
 		copy.uid = p.generateUniqueId_int();
 		for(r in copy.rules)
 			r.uid = p.generateUniqueId_int();
 
-		// Re-insert after given group because parser already pushed copy in the array
-		if( after!=null ) {
-			autoRuleGroups.remove(copy);
+		if( after!=null )
 			autoRuleGroups.insert( dn.Lib.getArrayIndex(after,autoRuleGroups)+1, copy );
-		}
+		else
+			autoRuleGroups.push(copy);
 
 		p.tidy();
 		return copy;
@@ -681,7 +634,7 @@ class LayerDef {
 						cbEachRule(r);
 	}
 
-	public function getRuleGroupBiomeEnumValues(rg:AutoLayerRuleGroup) : Array<EnumDefValue> {
+	public function getRuleGroupBiomeEnumValues(rg:AutoLayerRuleGroupDef) : Array<EnumDefValue> {
 		if( biomeFieldUid==null || rg.requiredBiomeValues.length==0 )
 			return [];
 
@@ -695,7 +648,7 @@ class LayerDef {
 		return all;
 	}
 
-	public function getRuleGroupBiomeHtmlImgs(rg:AutoLayerRuleGroup, sizePx=32) : Array<js.jquery.JQuery> {
+	public function getRuleGroupBiomeHtmlImgs(rg:AutoLayerRuleGroupDef, sizePx=32) : Array<js.jquery.JQuery> {
 		var evs = getRuleGroupBiomeEnumValues(rg);
 		return evs.map( ev->_project.resolveTileRectAsHtmlImg(ev.tileRect,sizePx) );
 	}

@@ -1,6 +1,8 @@
 package ui.modal.panel;
 
 import data.DataTypes;
+import data.def.AutoLayerRuleDef;
+import data.def.AutoLayerRuleGroupDef;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var li : data.inst.LayerInstance;
@@ -105,7 +107,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		invalidatedRules.set(r.uid, r.uid);
 	}
 
-	function invalidateRuleGroup(rg:AutoLayerRuleGroup) {
+	function invalidateRuleGroup(rg:data.def.AutoLayerRuleGroupDef) {
 		if( rg.rules.length>0 )
 			invalidateRuleAndOnesBelow(rg.rules[0]);
 	}
@@ -226,7 +228,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function onPickGroupColor(rg:AutoLayerRuleGroup) {
+	function onPickGroupColor(rg:AutoLayerRuleGroupDef) {
 		var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), rg.color, true);
 		cp.onValidate = (c)->{
 			rg.color = c;
@@ -236,7 +238,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function onPickGroupIcon(rg:AutoLayerRuleGroup) {
+	function onPickGroupIcon(rg:AutoLayerRuleGroupDef) {
 		var td = li.getTilesetDef();
 		if( td==null )
 			N.error("Invalid layer tileset");
@@ -257,7 +259,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function onRenameGroup(jGroupHeader:js.jquery.JQuery, rg:AutoLayerRuleGroup) {
+	function onRenameGroup(jGroupHeader:js.jquery.JQuery, rg:AutoLayerRuleGroupDef) {
 		jGroupHeader.find("div.name").hide();
 		var jInput = jGroupHeader.find("input.name");
 		var old = rg.name;
@@ -293,7 +295,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	// Create new rule
-	function onCreateRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
+	function onCreateRule(rg:data.def.AutoLayerRuleGroupDef, insertIdx:Int) {
 		App.LOG.general("Added rule");
 		var r = new data.def.AutoLayerRuleDef( project.generateUniqueId_int() );
 		rg.rules.insert(insertIdx, r);
@@ -342,7 +344,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					App.LOG.general("Added rule group");
 
 					var insertIdx = 0;
-					var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
+					var rg = ld.createEmptyRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
 					editor.ge.emit(LayerRuleGroupAdded(rg));
 
 					var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
@@ -477,7 +479,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function updateRuleGroup(?rg:AutoLayerRuleGroup, ?r:data.def.AutoLayerRuleDef) {
+	function updateRuleGroup(?rg:AutoLayerRuleGroupDef, ?r:data.def.AutoLayerRuleDef) {
 		if( rg==null && r==null )
 			throw "Need 1 parameter";
 
@@ -501,7 +503,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function doUseWizard(?original:AutoLayerRuleGroup) {
+	function doUseWizard(?original:AutoLayerRuleGroupDef) {
 		new ui.modal.dialog.RulesWizard(original, ld, (rg)->{
 			invalidateRuleGroup(rg);
 			if( original==null )
@@ -513,7 +515,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function openBiomePicker(rg:AutoLayerRuleGroup) {
+	function openBiomePicker(rg:AutoLayerRuleGroupDef) {
 		var enumDef = ld.getBiomeEnumDef();
 		var actions : ui.modal.ContextMenu.ContextActions = [];
 
@@ -601,7 +603,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
+	function createRuleGroupBlock(rg:AutoLayerRuleGroupDef, groupIdx:Int) {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
 		jGroup.addClass(li.isRuleGroupEnabled(rg) ? "enabled" : "disabled");
 		jGroup.addClass(li.isRuleGroupAppliedHere(rg) ? "applied" : "notApplied");
@@ -726,9 +728,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			ctx.addElement( Ctx_CopyPaster({
 				elementName: "group",
 				clipType: CRuleGroup,
-				copy: ()->App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg)),
+				copy: ()->App.ME.clipboard.copyData(CRuleGroup, rg.toJson(li.def)),
 				cut: ()->{
-					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
+					App.ME.clipboard.copyData(CRuleGroup, rg.toJson(li.def));
 					deleteRuleGroup(rg, false);
 				},
 				paste: ()->{
@@ -958,7 +960,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function createRuleBlock(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef, ruleIdx:Int) : js.jquery.JQuery {
+	function createRuleBlock(rg:AutoLayerRuleGroupDef, r:data.def.AutoLayerRuleDef, ruleIdx:Int) : js.jquery.JQuery {
 		var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 		jRule.attr("ruleUid", r.uid);
 		jRule.attr("ruleIdx", ruleIdx);
@@ -1163,7 +1165,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function deleteRuleGroup(rg:AutoLayerRuleGroup, confirm:Bool) {
+	function deleteRuleGroup(rg:AutoLayerRuleGroupDef, confirm:Bool) {
 		function _del() {
 			new LastChance(Lang.t._("Rule group removed"), project);
 			App.LOG.general("Deleted rule group "+rg.name);
@@ -1179,7 +1181,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			_del();
 	}
 
-	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
+	function deleteRule(rg:AutoLayerRuleGroupDef, r:data.def.AutoLayerRuleDef) {
 		App.LOG.general("Deleted rule "+r);
 		invalidateRuleAndOnesBelow(r);
 		rg.rules.remove(r);

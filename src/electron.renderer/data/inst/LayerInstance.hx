@@ -837,7 +837,7 @@ class LayerInstance {
 
 
 
-	public function isRuleGroupAppliedHere(rg:AutoLayerRuleGroup) {
+	public function isRuleGroupAppliedHere(rg:data.def.AutoLayerRuleGroupDef) {
 		if( rg.active && rg.requiredBiomeValues.length>0 ) {
 			var fi = level.getFieldInstanceByUid(def.biomeFieldUid, false);
 			if( fi!=null ) {
@@ -869,17 +869,17 @@ class LayerInstance {
 		return isRuleGroupEnabled(rg);
 	}
 
-	public inline function isRuleGroupEnabled(rg:AutoLayerRuleGroup) {
+	public inline function isRuleGroupEnabled(rg:data.def.AutoLayerRuleGroupDef) {
 		return rg.active && !rg.isOptional || optionalRules.exists(rg.uid);
 	}
 
-	public function enableRuleGroupHere(rg:AutoLayerRuleGroup) {
+	public function enableRuleGroupHere(rg:data.def.AutoLayerRuleGroupDef) {
 		optionalRules.set(rg.uid, true);
 	}
-	public function disableRuleGroupHere(rg:AutoLayerRuleGroup) {
+	public function disableRuleGroupHere(rg:data.def.AutoLayerRuleGroupDef) {
 		optionalRules.remove(rg.uid);
 	}
-	public function toggleRuleGroupHere(rg:AutoLayerRuleGroup) {
+	public function toggleRuleGroupHere(rg:data.def.AutoLayerRuleGroupDef) {
 		if( optionalRules.exists(rg.uid) )
 			disableRuleGroupHere(rg);
 		else

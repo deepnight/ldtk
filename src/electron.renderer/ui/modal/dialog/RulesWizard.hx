@@ -1,5 +1,7 @@
 package ui.modal.dialog;
 
+import data.def.AutoLayerRuleGroupDef;
+
 enum WallFragment {
 	// WARNING: the order of the enum is used to sort rules accordingly!
 	@at(3,1) Single;
@@ -63,7 +65,7 @@ enum WallFragment {
 class RulesWizard extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
 	var td : data.def.TilesetDef;
-	var editedGroup : Null<data.DataTypes.AutoLayerRuleGroup>;
+	var editedGroup : Null<AutoLayerRuleGroupDef>;
 
 	var tileset : ui.Tileset;
 	var jGrid : js.jquery.JQuery;
@@ -79,7 +81,7 @@ class RulesWizard extends ui.modal.Dialog {
 	var _allFragmentEnums : Array<WallFragment> = [];
 
 
-	public function new(?baseRg:data.DataTypes.AutoLayerRuleGroup, ld:data.def.LayerDef, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
+	public function new(?baseRg:AutoLayerRuleGroupDef, ld:data.def.LayerDef, onConfirm:AutoLayerRuleGroupDef->Void) {
 		super();
 
 		loadTemplate("rulesWizard.html");
@@ -157,7 +159,7 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
-	function guessMainValue(source:data.DataTypes.AutoLayerRuleGroup) {
+	function guessMainValue(source:AutoLayerRuleGroupDef) {
 		for(r in source.rules) {
 			final center = Std.int(r.size*0.5);
 			if( r.get(center,center)>0 )
@@ -167,7 +169,7 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
-	function guessOtherValue(source:data.DataTypes.AutoLayerRuleGroup) {
+	function guessOtherValue(source:AutoLayerRuleGroupDef) {
 		for(r in source.rules)
 		for(cy in 0...r.size)
 		for(cx in 0...r.size)
@@ -176,7 +178,7 @@ class RulesWizard extends ui.modal.Dialog {
 		return 0;
 	}
 
-	function importRuleGroup(source:data.DataTypes.AutoLayerRuleGroup) {
+	function importRuleGroup(source:AutoLayerRuleGroupDef) {
 		// Guess intGrid values
 		mainValue = guessMainValue(source);
 		otherValue = guessOtherValue(source);
@@ -748,7 +750,7 @@ class RulesWizard extends ui.modal.Dialog {
 		return otherValue==0 ? -mainValue : otherValue;
 	}
 
-	function createRule(rg:data.DataTypes.AutoLayerRuleGroup, f:WallFragment) {
+	function createRule(rg:AutoLayerRuleGroupDef, f:WallFragment) {
 		if( !fragments.exists(f) )
 			return false;
 
@@ -806,7 +808,7 @@ class RulesWizard extends ui.modal.Dialog {
 		if( editedGroup!=null )
 			editedGroup.rules = [];
 
-		var rg = editedGroup!=null ? editedGroup : ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
+		var rg = editedGroup!=null ? editedGroup : ld.createEmptyRuleGroup(project.generateUniqueId_int(), groupName, 0);
 		rg.name = groupName;
 		rg.usesWizard = true;
 		for(f in _allFragmentEnums)

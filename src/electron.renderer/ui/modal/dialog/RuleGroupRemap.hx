@@ -3,7 +3,7 @@ package ui.modal.dialog;
 class RuleGroupRemap extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
 	var td : data.def.TilesetDef;
-	var srcGroup : data.DataTypes.AutoLayerRuleGroup;
+	var srcGroup : data.def.AutoLayerRuleGroupDef;
 	var copyJson : ldtk.Json.AutoLayerRuleGroupJson;
 
 	var tileset : ui.Tileset;
@@ -12,7 +12,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 	var tileOffsetX = 0;
 	var tileOffsetY = 0;
 
-	public function new(ld:data.def.LayerDef, rg:data.DataTypes.AutoLayerRuleGroup, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
+	public function new(ld:data.def.LayerDef, rg:data.def.AutoLayerRuleGroupDef, onConfirm:data.def.AutoLayerRuleGroupDef->Void) {
 		super();
 
 		loadTemplate("ruleGroupRemap.html", { name:rg.name });
@@ -20,7 +20,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 
 		this.ld = ld;
 		this.srcGroup = rg;
-		this.copyJson = ld.toJsonRuleGroup(rg);
+		this.copyJson = rg.toJson(ld);
 		copyJson.name += " copy";
 
 		// List used IntGrid IDs

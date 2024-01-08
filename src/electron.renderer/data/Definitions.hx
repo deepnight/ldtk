@@ -239,7 +239,7 @@ class Definitions {
 	}
 
 
-	public function sortLayerAutoGroup(ld:data.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<AutoLayerRuleGroup> {
+	public function sortLayerAutoGroup(ld:data.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<data.def.AutoLayerRuleGroupDef> {
 		if( fromGroupIdx<0 || fromGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
