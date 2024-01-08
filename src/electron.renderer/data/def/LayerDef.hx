@@ -404,32 +404,41 @@ class LayerDef {
 
 	public inline function getAllIntGridValues() return intGridValues;
 
-	public function getIntGridGroup(groupUid:Int, returnUngrouped=true) {
+	public function getIntGridGroupUidFromValue(intGridValue:Int) : Int {
+		var iv = getIntGridValueDef(intGridValue);
+		return iv==null ? -1 : iv.groupUid;
+	}
+
+
+	public function getIntGridGroupColor(groupUid:Int) : Null<dn.Col> {
+		var g = getIntGridGroup(groupUid);
+		return g==null || g.color==null ? null : dn.Col.parseHex(g.color);
+	}
+
+	public inline function getIntGridGroupDisplayName(groupUid:Int) : String {
+		var g = getIntGridGroup(groupUid);
+		return g==null ? "Ungrouped" : g.identifier==null ? 'Group ${g.uid}' : g.identifier;
+	}
+
+	public function getIntGridGroup(groupUid:Int) : Null<ldtk.Json.IntGridValueGroupDef> {
 		for(g in intGridValuesGroups)
 			if( g.uid==groupUid )
-				return {
-					groupUid: g.uid,
-					displayName: g.identifier==null ? 'Group ${g.uid}' : g.identifier,
-					color: g.color==null ? null : dn.Col.parseHex(g.color),
-					groupInf: g,
-					all: intGridValues.filter( iv->iv.groupUid==g.uid ),
-				}
-
-		if( returnUngrouped )
-			return {
-				groupUid: 0,
-				displayName: "Ungrouped",
-				color: null,
-				groupInf: null,
-				all: intGridValues.filter( iv->iv.groupUid==0 ),
-			}
-		else
-			return null;
+				return g;
+		return null;
 	}
+
 
 	public inline function resolveIntGridGroupUidFromRuleValue(ruleValue:Int) {
 		return Std.int(ruleValue/1000)-1;
 	}
+
+	public function hasIntGridGroup(groupUid:Int) {
+		for(g in intGridValuesGroups)
+			if( g.uid==groupUid )
+				return true;
+		return false;
+	}
+
 
 	public inline function hasIntGridGroups() {
 		return intGridValuesGroups.length>0;

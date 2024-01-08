@@ -132,13 +132,15 @@ class RulePatternEditor {
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
 						else if( intGridVal>999 ) {
-							var g = sourceDef.getIntGridGroup( Std.int(intGridVal/1000)-1 );
+							var groupUid = sourceDef.resolveIntGridGroupUidFromRuleValue(intGridVal);
+							var color = sourceDef.getIntGridGroupColor(groupUid);
 							jCell.addClass("group");
-							if( g.color!=null ) {
-								jCell.css("background-color", g.color.toCssRgba(0.9));
-								jCell.css("outline-color", g.color.toWhite(0.6).toHex());
+							if( color!=null ) {
+								jCell.css("background-color", color.toCssRgba(0.9));
+								jCell.css("outline-color", color.toWhite(0.6).toHex());
 							}
-							addExplain(jCell, 'This cell should contain any IntGrid value from the group ${g.displayName} to match.');
+							var name = sourceDef.getIntGridGroupDisplayName(groupUid);
+							addExplain(jCell, 'This cell should contain any IntGrid value from the group $name to match.');
 						}
 						else if( sourceDef.hasIntGridValue(intGridVal) ) {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
@@ -161,13 +163,15 @@ class RulePatternEditor {
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
 						}
 						else if( intGridVal>999 ) {
-							var g = sourceDef.getIntGridGroup( Std.int(intGridVal/1000)-1 );
+							var groupUid = sourceDef.resolveIntGridGroupUidFromRuleValue(intGridVal);
+							var color = sourceDef.getIntGridGroupColor(groupUid);
 							jCell.addClass("group");
-							if( g.color!=null ) {
-								jCell.css("background-color", g.color.toCssRgba(0.9));
-								jCell.css("outline-color", g.color.toWhite(0.6).toHex());
+							if( color!=null ) {
+								jCell.css("background-color", color.toCssRgba(0.9));
+								jCell.css("outline-color", color.toWhite(0.6).toHex());
 							}
-							addExplain(jCell, 'This cell should NOT contain any IntGrid value from the group ${g.displayName} to match.');
+							var name = sourceDef.getIntGridGroupDisplayName(groupUid);
+							addExplain(jCell, 'This cell should NOT contain any IntGrid value from the group $name to match.');
 						}
 						else if( sourceDef.hasIntGridValue(intGridVal) ) {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
