@@ -294,15 +294,19 @@ class AutoLayerRuleDef {
 		var intValue = sourceLi.getIntGrid(cx,cy);
 		var groupUid = sourceLi.def.getIntGridGroupUidFromValue(intValue);
 		var groupRuleValue = sourceLi.def.getRuleValueFromGroupUid(groupUid);
+		var emptyPattern = true;
 		for(rv in pattern)
 			if( rv!=0 ) {
+				if( emptyPattern )
+					emptyPattern = false;
+
 				if( M.iabs(rv)==Const.AUTO_LAYER_ANYTHING || M.iabs(rv)==intValue )
 					return true;
 				else if( groupUid>=0 && ( M.iabs(rv)==groupRuleValue ) )
 					return true;
 			}
 
-		return false;
+		return emptyPattern;
 	}
 
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
