@@ -242,7 +242,7 @@ class RuleEditor extends ui.modal.Dialog {
 			if( g.all.length==0 )
 				continue;
 
-			var groupValue = (g.groupUid+1)*1000;
+			var groupValue = sourceDef.getRuleValueFromGroupUid(g.groupUid);
 
 			var jHeader = new J('<li class="title"/>');
 			jHeader.append('<span class="icon folderClose"/>');

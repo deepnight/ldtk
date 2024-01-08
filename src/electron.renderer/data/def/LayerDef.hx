@@ -432,6 +432,10 @@ class LayerDef {
 		return Std.int(ruleValue/1000)-1;
 	}
 
+	public inline function getRuleValueFromGroupUid(groupUid:Int) {
+		return groupUid<0 ? -1 : ( groupUid + 1 ) * 1000;
+	}
+
 	public function hasIntGridGroup(groupUid:Int) {
 		for(g in intGridValuesGroups)
 			if( g.uid==groupUid )

@@ -290,13 +290,15 @@ class AutoLayerRuleDef {
 
 	public function isRelevantHere(li:data.inst.LayerInstance, cx:Int, cy:Int) {
 		var intValue = li.getIntGrid(cx,cy);
-		for(rv in pattern)
-			if( rv!=0 && ( rv==Const.AUTO_LAYER_ANYTHING || rv==intValue ) )
-				return true;
-
 		var groupUid = li.def.getIntGridGroupUidFromValue(intValue);
-
-		// TODO check groups!
+		var groupRuleValue = li.def.getRuleValueFromGroupUid(groupUid);
+		for(rv in pattern)
+			if( rv!=0 ) {
+				if( rv==Const.AUTO_LAYER_ANYTHING || M.iabs(rv)==intValue )
+					return true;
+				else if( groupUid>=0 && ( M.iabs(rv)==groupRuleValue ) )
+					return true;
+			}
 
 		return false;
 	}
