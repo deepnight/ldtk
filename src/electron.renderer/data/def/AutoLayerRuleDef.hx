@@ -278,6 +278,8 @@ class AutoLayerRuleDef {
 			if( v==0 )
 				continue;
 
+			v = M.iabs(v);
+
 			if( v<=999 && !ld.hasIntGridValue(v) )
 				return true;
 
