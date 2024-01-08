@@ -36,7 +36,7 @@ class LayerRender {
 			case ViewportChanged(zoomChanged):
 				updateParallax();
 
-			case LayerDefChanged(defUid):
+			case LayerDefChanged(defUid, contentInvalidated):
 				if( lastLi!=null && lastLi.layerDefUid==defUid )
 					updateParallax();
 

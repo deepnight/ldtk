@@ -24,7 +24,7 @@ enum GlobalEvent {
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
-	LayerDefChanged(defUid:Int);
+	LayerDefChanged(defUid:Int, contentInvalidated:Bool);
 	LayerDefSorted;
 	LayerDefConverted;
 	LayerDefIntGridValueAdded(defUid:Int, valueId:Int);

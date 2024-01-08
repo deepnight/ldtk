@@ -101,7 +101,7 @@ class LevelTimeline {
 			case ProjectSelected: true;
 			case LayerDefAdded: true;
 			case LayerDefRemoved(defUid): true;
-			case LayerDefChanged(defUid): true;
+			case LayerDefChanged(defUid,contentInvalidated): contentInvalidated;
 			case LayerDefConverted: true;
 			case LayerDefIntGridValueRemoved(defUid, valueId, isUsed): true;
 			case TilesetDefRemoved(td): true;

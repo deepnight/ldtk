@@ -180,9 +180,11 @@ class LevelRender extends dn.Process {
 						layersWrapper.add( layerRenders.get(li.layerDefUid).root, depth );
 				}
 
-			case LayerDefChanged(defUid):
-				invalidateLayer(defUid);
-				renderGrid();
+			case LayerDefChanged(defUid,contentInvalidated):
+				if( contentInvalidated ) {
+					invalidateLayer(defUid);
+					renderGrid();
+				}
 
 			case LayerDefConverted:
 				invalidateAll();
