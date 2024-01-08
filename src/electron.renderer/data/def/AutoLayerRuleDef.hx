@@ -97,11 +97,11 @@ class AutoLayerRuleDef {
 		return true;
 	}
 
-	public inline function get(cx,cy) {
+	public inline function getPattern(cx,cy) {
 		return pattern[ coordId(cx,cy) ];
 	}
 
-	public inline function set(cx,cy,v) {
+	public inline function setPattern(cx,cy,v) {
 		// clearOptim();
 		return isValid(cx,cy) ? pattern[ coordId(cx,cy) ] = v : 0;
 	}
@@ -109,7 +109,7 @@ class AutoLayerRuleDef {
 	public inline function fill(v:Int) {
 		for(cx in 0...size)
 		for(cy in 0...size)
-			set(cx,cy,v);
+			setPattern(cx,cy,v);
 	}
 
 	function initPattern() {

@@ -27,7 +27,7 @@ class RuleGroupRemap extends ui.modal.Dialog {
 		for(r in srcGroup.rules)
 		for(cx in 0...r.size)
 		for(cy in 0...r.size) {
-			var v = M.iabs( r.get(cx,cy) );
+			var v = M.iabs( r.getPattern(cx,cy) );
 			if( v!=0 && v!=Const.AUTO_LAYER_ANYTHING )
 				idRemaps.set(v,v);
 		}
@@ -85,11 +85,11 @@ class RuleGroupRemap extends ui.modal.Dialog {
 					for(r in copyGroup.rules)
 					for(cx in 0...r.size)
 					for(cy in 0...r.size) {
-						var v = r.get(cx,cy);
+						var v = r.getPattern(cx,cy);
 						if( idRemaps.exists(v) )
-							r.set(cx,cy, idRemaps.get(v));
+							r.setPattern(cx,cy, idRemaps.get(v));
 						else if( idRemaps.exists(-v) )
-							r.set(cx,cy, -idRemaps.get(-v));
+							r.setPattern(cx,cy, -idRemaps.get(-v));
 					}
 
 					// Out-of-bounds value

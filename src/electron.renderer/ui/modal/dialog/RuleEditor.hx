@@ -26,7 +26,7 @@ class RuleEditor extends ui.modal.Dialog {
 		var best = -1;
 		for(cy in 0...rule.size)
 		for(cx in 0...rule.size) {
-			var v = M.iabs( rule.get(cx,cy) );
+			var v = M.iabs( rule.getPattern(cx,cy) );
 			if( v==0 || v==Const.AUTO_LAYER_ANYTHING )
 				continue;
 

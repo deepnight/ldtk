@@ -162,8 +162,8 @@ class RulesWizard extends ui.modal.Dialog {
 	function guessMainValue(source:AutoLayerRuleGroupDef) {
 		for(r in source.rules) {
 			final center = Std.int(r.size*0.5);
-			if( r.get(center,center)>0 )
-				return M.iabs( r.get(center,center) );
+			if( r.getPattern(center,center)>0 )
+				return M.iabs( r.getPattern(center,center) );
 		}
 		return 0;
 	}
@@ -173,8 +173,8 @@ class RulesWizard extends ui.modal.Dialog {
 		for(r in source.rules)
 		for(cy in 0...r.size)
 		for(cx in 0...r.size)
-			if( r.get(cx,cy)!=0 && M.iabs(r.get(cx,cy))!=mainValue && M.iabs(r.get(cx,cy)) < Const.AUTO_LAYER_ANYTHING )
-				return M.iabs( r.get(cx,cy) );
+			if( r.getPattern(cx,cy)!=0 && M.iabs(r.getPattern(cx,cy))!=mainValue && M.iabs(r.getPattern(cx,cy)) < Const.AUTO_LAYER_ANYTHING )
+				return M.iabs( r.getPattern(cx,cy) );
 		return 0;
 	}
 
@@ -214,13 +214,13 @@ class RulesWizard extends ui.modal.Dialog {
 			for(idx in 0...9)
 				if( idx!=4 && matrix.get(idx)!=0 )
 					return false;
-				else if( idx==4 && matrix.get(idx)!=rd.get(0,0) )
+				else if( idx==4 && matrix.get(idx)!=rd.getPattern(0,0) )
 					return false;
 		}
 		else {
 			for(cy in 0...rd.size)
 			for(cx in 0...rd.size)
-				if( matrix.get(cx+cy*3)!=rd.get(cx,cy) )
+				if( matrix.get(cx+cy*3)!=rd.getPattern(cx,cy) )
 					return false;
 		}
 
@@ -764,7 +764,7 @@ class RulesWizard extends ui.modal.Dialog {
 		for(cy in 0...size)
 		for(cx in 0...size) {
 			var c = m[cy].charAt(cx);
-			rd.set(cx,cy, switch c {
+			rd.setPattern(cx,cy, switch c {
 				case "x": getOtherValueForMatrix();
 				case "o": mainValue;
 				case _: 0;

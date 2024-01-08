@@ -122,7 +122,7 @@ class RulePatternEditor {
 
 			// Cell value (color + tile)
 			if( !isCenter || !previewMode ) {
-				var ruleValue = rule.get(cx,cy);
+				var ruleValue = rule.getPattern(cx,cy);
 				if( ruleValue!=0 ) {
 					var intGridVal = M.iabs(ruleValue);
 					if( ruleValue>0 ) {
@@ -197,31 +197,31 @@ class RulePatternEditor {
 				var anyChange = false;
 				function draw() {
 
-					var v = rule.get(cx,cy);
+					var v = rule.getPattern(cx,cy);
 					switch drawButton {
 						case 0:
 							// Require value
 							if( valueAtStartPoint>=0 )
-								rule.set(cx,cy, getSelectedValue());
+								rule.setPattern(cx,cy, getSelectedValue());
 							else if( v<0 )
-								rule.set(cx,cy, 0);
+								rule.setPattern(cx,cy, 0);
 
 						case 2:
 							// Forbid value
 							if( valueAtStartPoint==0 )
-								rule.set(cx,cy, -getSelectedValue());
+								rule.setPattern(cx,cy, -getSelectedValue());
 							else
-								rule.set(cx,cy, 0);
+								rule.setPattern(cx,cy, 0);
 
 						case 1:
 							// Clear
-							rule.set(cx,cy,0);
+							rule.setPattern(cx,cy,0);
 
 						case _:
 					}
 
 					// Refresh
-					if( v!=rule.get(cx,cy) ) {
+					if( v!=rule.getPattern(cx,cy) ) {
 						anyChange = true;
 						render();
 					}
@@ -229,7 +229,7 @@ class RulePatternEditor {
 				}
 
 				jCell.mousedown( (ev:js.jquery.Event)->{
-					valueAtStartPoint = rule.get(cx,cy);
+					valueAtStartPoint = rule.getPattern(cx,cy);
 					drawButton = ev.button;
 					App.ME.jBody.on("mouseup.rulePattern", (_)->{
 						drawButton = -1;
