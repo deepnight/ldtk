@@ -274,19 +274,29 @@ class AutoLayerRuleDef {
 		if( ld.type!=IntGrid )
 			throw "Invalid layer type";
 
-		var v = 0;
-		for(px in 0...size)
-		for(py in 0...size) {
-			v = dn.M.iabs( pattern[px+py*size] );
+		for(v in pattern) {
 			if( v==0 )
 				continue;
 
 			if( v<=999 && !ld.hasIntGridValue(v) )
 				return true;
 
-			if( v>999 && v!=Const.AUTO_LAYER_ANYTHING && ld.getIntGridGroup( ld.resolveIntGridGroupUidFromRuleValue(v), false )==null )
+			if( v>999 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridGroup( ld.resolveIntGridGroupUidFromRuleValue(v) ) )
 				return true;
 		}
+
+		return false;
+	}
+
+	public function isRelevantHere(li:data.inst.LayerInstance, cx:Int, cy:Int) {
+		var intValue = li.getIntGrid(cx,cy);
+		for(rv in pattern)
+			if( rv!=0 && ( rv==Const.AUTO_LAYER_ANYTHING || rv==intValue ) )
+				return true;
+
+		var groupUid = li.def.getIntGridGroupUidFromValue(intValue);
+
+		// TODO check groups!
 
 		return false;
 	}

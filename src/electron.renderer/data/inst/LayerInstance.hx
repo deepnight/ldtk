@@ -805,6 +805,9 @@ class LayerInstance {
 			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
 				return false;
 
+			// Check if rule could even apply here
+			if( !r.isRelevantHere(source,cx,cy) )
+				return false;
 
 			// Apply rule
 			var matched = false;
