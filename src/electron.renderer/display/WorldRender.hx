@@ -786,7 +786,8 @@ class WorldRender extends dn.Process {
 		updateFieldsPos();
 	}
 
-	function renderLevel(l:data.Level) {
+
+	function renderWorldLevel(l:data.Level) {
 		if( l==null )
 			throw "Unknown level";
 
@@ -818,13 +819,13 @@ class WorldRender extends dn.Process {
 
 		// Default simplified renders
 		final alphaThreshold = 0.6;
-		for( li in l.layerInstances ) {
+		l.iterateLayerInstancesInRenderOrder( (li)->{
 			if( li.def.type==Entities || !li.def.renderInWorldView )
-				continue;
+				return;
 
 			if( li.def.isAutoLayer() && li.autoTilesCache==null ) {
 				App.LOG.error("missing autoTilesCache in "+li);
-				continue;
+				return;
 			}
 
 			var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
@@ -845,7 +846,7 @@ class WorldRender extends dn.Process {
 				// Tiles base layer (autolayer or tiles)
 				var td = li.getTilesetDef();
 				if( td==null || !td.isAtlasLoaded() )
-					continue;
+					return;
 
 				if( li.def.isAutoLayer() ) {
 					// Auto layer
@@ -883,7 +884,7 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
-		}
+		});
 
 
 		// Edge tiles render
@@ -1103,7 +1104,7 @@ class WorldRender extends dn.Process {
 					// Level render
 					if( wl.renderInvalidated && limitRenders-->0 ) {
 						wl.renderInvalidated = false;
-						renderLevel(l);
+						renderWorldLevel(l);
 						updateLayout();
 					}
 
