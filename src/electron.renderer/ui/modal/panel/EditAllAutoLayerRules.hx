@@ -55,7 +55,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				invalidateRuleAndOnesBelow(r);
 				updateRuleGroup(r);
 
-			case LayerRuleRemoved(r): // invalidation is done before removal
+			case LayerRuleRemoved(r,invalidates): // invalidation is done before removal
 				updateAllRuleGroups();
 
 			case LayerRuleGroupRemoved(rg): // invalidation is done before removal
@@ -303,7 +303,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		lastRule = rg.rules[insertIdx];
 		editor.ge.emit( LayerRuleAdded(lastRule) );
-
 
 		var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
 		new ui.modal.dialog.RuleEditor(ld, lastRule );
@@ -1184,7 +1183,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		App.LOG.general("Deleted rule "+r);
 		invalidateRuleAndOnesBelow(r);
 		rg.rules.remove(r);
-		editor.ge.emit( LayerRuleRemoved(r) );
+		editor.ge.emit( LayerRuleRemoved(r,true) );
 	}
 
 

@@ -1918,7 +1918,7 @@ class Editor extends Page {
 				case LayerDefIntGridValueRemoved(defUid, valueId, isUsed): extra = defUid+'($valueId, $isUsed)';
 				case LayerRuleChanged(rule): extra = rule.uid;
 				case LayerRuleAdded(rule): extra = rule.uid;
-				case LayerRuleRemoved(rule): extra = rule.uid;
+				case LayerRuleRemoved(rule,invalidates): extra = rule.uid;
 				case LayerRuleSeedChanged:
 				case LayerRuleSorted:
 				case LayerRuleGroupAdded(rg): extra = rg.uid;
@@ -2030,8 +2030,11 @@ class Editor extends Page {
 				}
 			case LayerDefConverted: invalidateAllLevelsCache();
 			case LayerRuleChanged(rule): invalidateAllLevelsCache();
-			case LayerRuleAdded(rule): invalidateAllLevelsCache();
-			case LayerRuleRemoved(rule): invalidateAllLevelsCache();
+			case LayerRuleAdded(rule):
+			case LayerRuleRemoved(rule,invalidates):
+				if( invalidates )
+					invalidateAllLevelsCache();
+
 			case LayerRuleSeedChanged: invalidateAllLevelsCache();
 			case LayerRuleSorted: invalidateAllLevelsCache();
 			case LayerRuleGroupAdded(rg): if( rg.rules.length>0 ) invalidateAllLevelsCache();
@@ -2216,7 +2219,7 @@ class Editor extends Page {
 
 			case LayerRuleChanged(r):
 			case LayerRuleAdded(r):
-			case LayerRuleRemoved(r):
+			case LayerRuleRemoved(r,invalidates):
 			case LayerRuleSorted:
 			case LayerRuleSeedChanged:
 

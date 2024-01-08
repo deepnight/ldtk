@@ -33,7 +33,7 @@ enum GlobalEvent {
 
 	LayerRuleChanged(rule:data.def.AutoLayerRuleDef);
 	LayerRuleAdded(rule:data.def.AutoLayerRuleDef);
-	LayerRuleRemoved(rule:data.def.AutoLayerRuleDef);
+	LayerRuleRemoved(rule:data.def.AutoLayerRuleDef, invalidates:Bool);
 	LayerRuleSeedChanged;
 	LayerRuleSorted;
 

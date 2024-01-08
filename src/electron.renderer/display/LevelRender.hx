@@ -197,7 +197,9 @@ class LevelRender extends dn.Process {
 				if( used )
 					invalidateLayer(defUid);
 
-			case LayerRuleChanged(r), LayerRuleAdded(r):
+			case LayerRuleAdded(r):
+
+			case LayerRuleChanged(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
 				li.applyAutoLayerRuleToAllLayer(r, true);
 				invalidateLayer(li);
@@ -208,9 +210,11 @@ class LevelRender extends dn.Process {
 			case LayerRuleSorted:
 				invalidateLayer( editor.curLayerInstance );
 
-			case LayerRuleRemoved(r):
-				var li = editor.curLevel.getLayerInstanceFromRule(r);
-				invalidateLayer( li==null ? editor.curLayerInstance : li );
+			case LayerRuleRemoved(r,invalidates):
+				if( invalidates ) {
+					var li = editor.curLevel.getLayerInstanceFromRule(r);
+					invalidateLayer( li==null ? editor.curLayerInstance : li );
+				}
 
 			case LayerRuleGroupAdded(rg):
 				if( rg.rules.length>0 )
