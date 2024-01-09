@@ -14,14 +14,17 @@ class DebugMenu extends ui.modal.ContextMenu {
 				addAction({
 					label: L.untranslated("Toggle debug print"),
 					cb: ()->{
-						if( App.ME.cd.has("debugTools") ) {
-							App.ME.clearDebug();
-							App.ME.cd.unset("debugTools");
-						}
-						else
-							App.ME.cd.setS("debugTools", Const.INFINITE);
+						App.ME.clearDebug();
+						App.ME.toggleDebugFlag(F_MainDebug);
 					}
 				});
+
+				#if debug
+				addAction({
+					label: L.untranslated("Debug flags"),
+					cb: ()->new DebugMenu("debugFlags"),
+				});
+				#end
 
 				#if debug
 				addAction({
@@ -297,6 +300,23 @@ class DebugMenu extends ui.modal.ContextMenu {
 					label: L.untranslated("Open dev tools"),
 					cb: ()->ET.openDevTools()
 				});
+
+
+
+			case "debugFlags":
+				addTitle( L.untranslated("Debug flags") );
+				for(k in DebugFlag.getConstructors()) {
+					var f = DebugFlag.createByName(k);
+					addAction({
+						label: L.untranslated(k),
+						iconId: App.ME.hasDebugFlag(f) ? "active" : "inactive",
+						selectionTick: App.ME.hasDebugFlag(f),
+						cb: ()->{
+							App.ME.toggleDebugFlag(f);
+							new DebugMenu(id);
+						},
+					});
+				}
 
 
 

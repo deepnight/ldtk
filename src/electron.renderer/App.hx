@@ -33,6 +33,7 @@ class App extends dn.Process {
 	public var pendingUpdate : Null<{ ver:String, github:Bool }>;
 
 	public var keyBindings : Array<KeyBinding> = [];
+	var debugFlags : Map<DebugFlag,Bool> = new Map();
 
 	public function new() {
 		super();
@@ -1054,6 +1055,24 @@ class App extends dn.Process {
 		}
 	}
 
+
+	public function setDebugFlag(f:DebugFlag, active=true) {
+		clearDebug();
+		if( active )
+			debugFlags.set(f, true);
+		else
+			debugFlags.remove(f);
+	}
+
+	public function toggleDebugFlag(f:DebugFlag) {
+		setDebugFlag(f, !hasDebugFlag(f));
+	}
+
+	public inline function hasDebugFlag(f:DebugFlag) {
+		return debugFlags.exists(f);
+	}
+	
+
 	override function preUpdate() {
 		super.preUpdate();
 		_inputFocusCache = null;
@@ -1083,7 +1102,7 @@ class App extends dn.Process {
 		}
 
 		// Debug print
-		if( cd.has("debugTools") ) {
+		if( hasDebugFlag(F_MainDebug) ) {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');

@@ -2792,5 +2792,29 @@ class Editor extends Page {
 		// Auto re-hide panel in zen mode
 		if( settings.v.zenMode && cd.has("pendingZenModeReHide") && !cd.has("zenModeReHideLock") )
 			setZenModeReveal(false);
+
+		if( App.ME.hasDebugFlag(F_IntGridUseCounts) ) {
+			App.ME.clearDebug();
+			@:privateAccess
+			for(li in curLevel.layerInstances) {
+				if( li.def.type==IntGrid ) {
+					// Show cached area counts
+					App.ME.debugPre(li.toString());
+					App.ME.debugPre("  "+li.areaIntGridUseCount);
+				}
+				if( li.def.isAutoLayer() ) {
+					// Count relevant rules
+					for(rg in li.def.autoRuleGroups) {
+						var n = 0;
+						for(r in rg.rules)
+							if( r.isRelevantInLayer(li) )
+								n++;
+
+						if( n>0 )
+							App.ME.debugPre("  => "+rg.toString()+": "+n+" rule(s)");
+					}
+				}
+			}
+		}
 	}
 }

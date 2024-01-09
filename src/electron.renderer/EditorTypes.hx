@@ -302,3 +302,9 @@ enum AppCommand {
 	@k("[arrows] s, shift s") C_SaveTileSelection;
 	@k("shift l") C_LoadTileSelection;
 }
+
+
+enum DebugFlag {
+	F_MainDebug;
+	F_IntGridUseCounts;
+}
