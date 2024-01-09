@@ -76,12 +76,15 @@ class RuleEditor extends ui.modal.Dialog {
 		super.close();
 
 		if( rule.isEmpty() ) {
+			// Kill empty
 			for(rg in layerDef.autoRuleGroups)
 				rg.rules.remove(rule);
 			editor.ge.emit( LayerRuleRemoved(rule, false) );
 		}
-		else if( rule.tidy(layerDef) )
+		else {
+			rule.tidy(layerDef);
 			editor.ge.emit( LayerRuleChanged(rule) );
+		}
 	}
 
 
@@ -339,23 +342,6 @@ class RuleEditor extends ui.modal.Dialog {
 			()->editor.ge.emit( LayerRuleChanged(rule) )
 		);
 		jContent.find(">.pattern .editor .grid").empty().append( patternEditor.jRoot );
-
-
-		// Grid size selection
-		// var jSizes = jContent.find(">.pattern .editor select").empty();
-		// var s = -1;
-		// var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
-		// for(size in sizes) {
-		// 	var jOpt = new J('<option value="$size">${size}x$size</option>');
-		// 	jOpt.appendTo(jSizes);
-		// }
-		// jSizes.change( function(_) {
-		// 	var size = Std.parseInt( jSizes.val() );
-		// 	rule.resize(size);
-		// 	editor.ge.emit( LayerRuleChanged(rule) );
-		// 	renderAll();
-		// });
-		// jSizes.val(rule.size);
 
 		// Out-of-bounds policy
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");
