@@ -147,7 +147,6 @@ class Level {
 			return o;
 		}
 
-
 		// World coords are not stored in JSON for automatically organized layouts
 		var jsonWorldX = worldX;
 		var jsonWorldY = worldY;
@@ -342,20 +341,22 @@ class Level {
 
 	/** Crawl an Array recursively and fixes unescaped \n chars **/
 	static function crawlArray(arr:Array<Dynamic>) {
-		for( i in 0...arr.length )
-			switch Type.typeof( arr[i] ) {
+		for( i in 0...arr.length ) {
+			var v : Dynamic = arr[i];
+			switch Type.typeof(v) {
 				case TObject:
-					crawlObjectRec(arr[i]);
+					crawlObjectRec(v);
 
 				case TClass(Array):
-					crawlArray(arr[i]);
+					crawlArray(v);
 
 				case TClass(String):
-					if( arr[i].indexOf("\n")>=0 )
-						arr[i] = StringTools.replace(arr[i], "\n", "\\n");
+					if( v.indexOf("\n")>=0 )
+						arr[i] = StringTools.replace(v, "\n", "\\n");
 
 				case _:
 			}
+		}
 	}
 
 
