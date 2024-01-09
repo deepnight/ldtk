@@ -819,13 +819,13 @@ class WorldRender extends dn.Process {
 
 		// Default simplified renders
 		final alphaThreshold = 0.6;
-		l.iterateLayerInstancesInRenderOrder( (li)->{
+		for(li in l.layerInstances) {
 			if( li.def.type==Entities || !li.def.renderInWorldView )
-				return;
+				continue;
 
 			if( li.def.isAutoLayer() && li.autoTilesCache==null ) {
 				App.LOG.error("missing autoTilesCache in "+li);
-				return;
+				continue;
 			}
 
 			var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
@@ -846,7 +846,7 @@ class WorldRender extends dn.Process {
 				// Tiles base layer (autolayer or tiles)
 				var td = li.getTilesetDef();
 				if( td==null || !td.isAtlasLoaded() )
-					return;
+					continue;
 
 				if( li.def.isAutoLayer() ) {
 					// Auto layer
@@ -884,7 +884,7 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
-		});
+		}
 
 
 		// Edge tiles render
