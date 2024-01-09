@@ -10,7 +10,7 @@
 	},
 	"iid": "a3619740-7820-11ed-b6fd-4b64aa0352a1",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473265,
+	"appBuildId": 473560,
 	"nextUid": 125,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -1203,6 +1203,7 @@
 			"uid": 116,
 			"tags": [],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 20,
 			"height": 20,
@@ -1312,6 +1313,7 @@
 			"uid": 123,
 			"tags": [],
 			"exportToToc": false,
+			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 16,
 			"height": 16,
@@ -1507,8 +1509,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 296,
-							"__worldY": -144,
 							"iid": "bb084530-66b0-11ec-8fc6-c11dfd63d53e",
 							"width": 20,
 							"height": 20,
@@ -1520,7 +1520,9 @@
 									"params": ["Root"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 296,
+							"__worldY": -144
 						},
 						{
 							"__identifier": "Plant",
@@ -1529,8 +1531,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 264,
-							"__worldY": -272,
 							"iid": "003047c0-66b0-11ec-8fc6-71e179b25f67",
 							"width": 20,
 							"height": 20,
@@ -1542,7 +1542,9 @@
 									"params": ["Clover"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 264,
+							"__worldY": -272
 						},
 						{
 							"__identifier": "Door",
@@ -1551,8 +1553,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 336, "y": 208, "w": 16, "h": 16 },
 							"__smartColor": "#FEAE34",
-							"__worldX": 272,
-							"__worldY": -32,
 							"iid": "2a789b40-8dc0-11ec-a525-a942e9459e5c",
 							"width": 16,
 							"height": 16,
@@ -1566,7 +1566,9 @@
 							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["33bf7c00-8dc0-11ec-a525-05f96cc4b971"]
-							}] }]
+							}] }],
+							"__worldX": 272,
+							"__worldY": -32
 						}
 					]
 				},
@@ -2620,8 +2622,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 520,
-							"__worldY": -416,
 							"iid": "c0d54170-66b0-11ec-8fc6-fd3592ec5dfc",
 							"width": 20,
 							"height": 20,
@@ -2633,7 +2633,9 @@
 									"params": ["Water_shroom"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 520,
+							"__worldY": -416
 						},
 						{
 							"__identifier": "Plant",
@@ -2642,8 +2644,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 456,
-							"__worldY": -416,
 							"iid": "d7f84280-66b0-11ec-8fc6-2721b8395e4d",
 							"width": 20,
 							"height": 20,
@@ -2655,7 +2655,9 @@
 									"params": ["Water_shroom"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 456,
+							"__worldY": -416
 						}
 					]
 				},
@@ -3895,8 +3897,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": -72,
-							"__worldY": -160,
 							"iid": "4c636150-66b0-11ec-8fc6-81b4e785f3d6",
 							"width": 20,
 							"height": 20,
@@ -3908,7 +3908,9 @@
 									"params": ["Clover"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 2, "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
-							]
+							],
+							"__worldX": -72,
+							"__worldY": -160
 						},
 						{
 							"__identifier": "Plant",
@@ -3917,8 +3919,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 104,
-							"__worldY": -208,
 							"iid": "b7de7c80-66b0-11ec-8fc6-259fa2c94af6",
 							"width": 20,
 							"height": 20,
@@ -3930,7 +3930,9 @@
 									"params": ["Root"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 104,
+							"__worldY": -208
 						},
 						{
 							"__identifier": "Door",
@@ -3939,8 +3941,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 336, "y": 208, "w": 16, "h": 16 },
 							"__smartColor": "#FEAE34",
-							"__worldX": -24,
-							"__worldY": -160,
 							"iid": "7e1072a0-8dc0-11ec-a525-4d0952d12de1",
 							"width": 16,
 							"height": 16,
@@ -3954,7 +3954,9 @@
 							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["796d2950-8dc0-11ec-a525-75b5a5ce20f8"]
-							}] }]
+							}] }],
+							"__worldX": -24,
+							"__worldY": -160
 						}
 					]
 				},
@@ -5195,8 +5197,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 176, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 568,
-							"__worldY": -304,
 							"iid": "bcef0690-66b0-11ec-8fc6-a50e4075387f",
 							"width": 20,
 							"height": 20,
@@ -5208,7 +5208,9 @@
 									"params": ["Rose"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 568,
+							"__worldY": -304
 						},
 						{
 							"__identifier": "Door",
@@ -5217,8 +5219,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 336, "y": 208, "w": 16, "h": 16 },
 							"__smartColor": "#FEAE34",
-							"__worldX": 488,
-							"__worldY": -320,
 							"iid": "5c9ee4d0-8dc0-11ec-a525-4ddce479fcbc",
 							"width": 16,
 							"height": 16,
@@ -5232,7 +5232,9 @@
 							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["58a45ea0-8dc0-11ec-a525-2786470df187"]
-							}] }]
+							}] }],
+							"__worldX": 488,
+							"__worldY": -320
 						}
 					]
 				},
@@ -5980,8 +5982,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 648,
-							"__worldY": -32,
 							"iid": "392a2820-66b0-11ec-8fc6-3f3e416501f0",
 							"width": 20,
 							"height": 20,
@@ -5993,7 +5993,9 @@
 									"params": ["Clover"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 2, "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
-							]
+							],
+							"__worldX": 648,
+							"__worldY": -32
 						}
 					]
 				},
@@ -7212,8 +7214,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 728,
-							"__worldY": -176,
 							"iid": "f0d74b70-66b0-11ec-8fc6-0114fc134676",
 							"width": 20,
 							"height": 20,
@@ -7225,7 +7225,9 @@
 									"params": ["Fruit"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 2, "__tile": null, "defUid": 122, "realEditorValues": [{ "id": "V_Int", "params": [2] }] }
-							]
+							],
+							"__worldX": 728,
+							"__worldY": -176
 						},
 						{
 							"__identifier": "Door",
@@ -7234,8 +7236,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 336, "y": 208, "w": 16, "h": 16 },
 							"__smartColor": "#FEAE34",
-							"__worldX": 936,
-							"__worldY": -304,
 							"iid": "58a45ea0-8dc0-11ec-a525-2786470df187",
 							"width": 16,
 							"height": 16,
@@ -7249,7 +7249,9 @@
 							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["5c9ee4d0-8dc0-11ec-a525-4ddce479fcbc"]
-							}] }]
+							}] }],
+							"__worldX": 936,
+							"__worldY": -304
 						}
 					]
 				},
@@ -8192,8 +8194,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": -296,
-							"__worldY": -32,
 							"iid": "e3136e10-66b0-11ec-8fc6-1dfe1e43cabd",
 							"width": 20,
 							"height": 20,
@@ -8205,7 +8205,9 @@
 									"params": ["Water_shroom"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": -296,
+							"__worldY": -32
 						}
 					]
 				},
@@ -8996,8 +8998,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 760,
-							"__worldY": 288,
 							"iid": "dc494d20-66b0-11ec-8fc6-5d62b5efd8bd",
 							"width": 20,
 							"height": 20,
@@ -9009,7 +9009,9 @@
 									"params": ["Water_shroom"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 760,
+							"__worldY": 288
 						}
 					]
 				},
@@ -9963,8 +9965,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 408,
-							"__worldY": 256,
 							"iid": "dfdcd420-66b0-11ec-8fc6-d3872b388a2a",
 							"width": 20,
 							"height": 20,
@@ -9976,7 +9976,9 @@
 									"params": ["Golden"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [null] }
-							]
+							],
+							"__worldX": 408,
+							"__worldY": 256
 						},
 						{
 							"__identifier": "Plant",
@@ -9985,8 +9987,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 472,
-							"__worldY": 256,
 							"iid": "340fda10-66b0-11ec-8fc6-ff45663f8d26",
 							"width": 20,
 							"height": 20,
@@ -9998,7 +9998,9 @@
 									"params": ["Golden"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [null] }
-							]
+							],
+							"__worldX": 472,
+							"__worldY": 256
 						},
 						{
 							"__identifier": "Plant",
@@ -10007,8 +10009,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 48, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 376,
-							"__worldY": 240,
 							"iid": "ac192aa0-7820-11ed-b9f3-85d24353256d",
 							"width": 20,
 							"height": 20,
@@ -10020,7 +10020,9 @@
 									"params": ["Golden"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [null] }
-							]
+							],
+							"__worldX": 376,
+							"__worldY": 240
 						}
 					]
 				},
@@ -10551,8 +10553,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 296,
-							"__worldY": -368,
 							"iid": "464c9560-66b0-11ec-8fc6-bb54b59cd6ba",
 							"width": 20,
 							"height": 20,
@@ -10564,7 +10564,9 @@
 									"params": ["Root"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 296,
+							"__worldY": -368
 						}
 					]
 				},
@@ -12271,8 +12273,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 248,
-							"__worldY": 64,
 							"iid": "f50abbf0-66b0-11ec-8fc6-c5d946a7cef2",
 							"width": 20,
 							"height": 20,
@@ -12284,7 +12284,9 @@
 									"params": ["Water_shroom"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 248,
+							"__worldY": 64
 						},
 						{
 							"__identifier": "Plant",
@@ -12293,8 +12295,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 32, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 72,
-							"__worldY": -32,
 							"iid": "f6462220-66b0-11ec-8fc6-6b22bff34df9",
 							"width": 20,
 							"height": 20,
@@ -12306,7 +12306,9 @@
 									"params": ["Water_shroom"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 72,
+							"__worldY": -32
 						},
 						{
 							"__identifier": "Door",
@@ -12315,8 +12317,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 336, "y": 208, "w": 16, "h": 16 },
 							"__smartColor": "#FEAE34",
-							"__worldX": 64,
-							"__worldY": 48,
 							"iid": "33bf7c00-8dc0-11ec-a525-05f96cc4b971",
 							"width": 16,
 							"height": 16,
@@ -12330,7 +12330,9 @@
 							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["2a789b40-8dc0-11ec-a525-a942e9459e5c"]
-							}] }]
+							}] }],
+							"__worldX": 64,
+							"__worldY": 48
 						}
 					]
 				},
@@ -14224,8 +14226,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 48, "y": 304, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 168,
-							"__worldY": 0,
 							"iid": "e883cb60-66b0-11ec-8fc6-b1b7ad86c0ce",
 							"width": 20,
 							"height": 20,
@@ -14237,7 +14237,9 @@
 									"params": ["Fruit"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 168,
+							"__worldY": 0
 						},
 						{
 							"__identifier": "Plant",
@@ -14246,8 +14248,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 0, "y": 336, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": 360,
-							"__worldY": -16,
 							"iid": "ea28c8d0-66b0-11ec-8fc6-77aa2f817608",
 							"width": 20,
 							"height": 20,
@@ -14259,7 +14259,9 @@
 									"params": ["Root"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": 360,
+							"__worldY": -16
 						},
 						{
 							"__identifier": "Plant",
@@ -14268,8 +14270,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 240, "y": 288, "w": 16, "h": 16 },
 							"__smartColor": "#9FFF00",
-							"__worldX": -72,
-							"__worldY": -32,
 							"iid": "ec1f1a90-66b0-11ec-8fc6-a72b61561d5e",
 							"width": 20,
 							"height": 20,
@@ -14281,7 +14281,9 @@
 									"params": ["Clover"]
 								}] },
 								{ "__identifier": "count", "__type": "Int", "__value": 1, "__tile": null, "defUid": 122, "realEditorValues": [] }
-							]
+							],
+							"__worldX": -72,
+							"__worldY": -32
 						},
 						{
 							"__identifier": "Door",
@@ -14290,8 +14292,6 @@
 							"__tags": [],
 							"__tile": { "tilesetUid": 117, "x": 336, "y": 208, "w": 16, "h": 16 },
 							"__smartColor": "#FEAE34",
-							"__worldX": -24,
-							"__worldY": 32,
 							"iid": "796d2950-8dc0-11ec-a525-75b5a5ce20f8",
 							"width": 16,
 							"height": 16,
@@ -14305,7 +14305,9 @@
 							}, "__tile": null, "defUid": 124, "realEditorValues": [{
 								"id": "V_String",
 								"params": ["7e1072a0-8dc0-11ec-a525-4d0952d12de1"]
-							}] }]
+							}] }],
+							"__worldX": -24,
+							"__worldY": 32
 						}
 					]
 				},

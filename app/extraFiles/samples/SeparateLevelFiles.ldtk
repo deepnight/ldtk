@@ -10,7 +10,7 @@
 	},
 	"iid": "a2d9f0b0-7820-11ed-b6fd-010ddaafa733",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 471393,
+	"appBuildId": 473560,
 	"nextUid": 10,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -64,13 +64,16 @@
 			"parallaxScaling": true,
 			"requiredTags": [],
 			"excludedTags": [],
+			"autoTilesKilledByOtherLayerUid": null,
+			"uiFilterTags": [],
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#000000", "tile": null, "groupUid": 0 }],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [],
 			"autoSourceLayerDefUid": null,
 			"tilesetDefUid": null,
 			"tilePivotX": 0,
-			"tilePivotY": 0
+			"tilePivotY": 0,
+			"biomeFieldUid": null
 		}
 	], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
 	"levels": [
