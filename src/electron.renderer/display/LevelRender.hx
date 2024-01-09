@@ -141,7 +141,7 @@ class LevelRender extends dn.Process {
 			case LevelResized(l):
 				for(li in l.layerInstances)
 					if( li.def.isAutoLayer() )
-						li.applyAllAutoLayerRules();
+						li.applyAllRules();
 				invalidateAll();
 
 			case LayerInstanceVisiblityChanged(li):
@@ -201,7 +201,7 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleChanged(r):
 				var li = editor.curLevel.getLayerInstanceFromRule(r);
-				li.applyAutoLayerRuleToAllLayer(r, true);
+				li.applyRuleToFullLayer(r, true);
 				invalidateLayer(li);
 
 			case LayerRuleSeedChanged:
@@ -221,7 +221,7 @@ class LevelRender extends dn.Process {
 					invalidateLayer(editor.curLayerInstance);
 
 			case LayerRuleGroupRemoved(rg):
-				editor.curLayerInstance.applyAllAutoLayerRules();
+				editor.curLayerInstance.applyAllRules();
 				invalidateLayer( editor.curLayerInstance );
 
 			case LayerRuleGroupChanged(rg):
@@ -716,7 +716,7 @@ class LevelRender extends dn.Process {
 				if( layerInvalidations.exists(li.layerDefUid) ) {
 					var inv = layerInvalidations.get(li.layerDefUid);
 					if( li.def.isAutoLayer() && inv.evaluateRules )
-						li.applyAllAutoLayerRulesAt( inv.left, inv.top, inv.right-inv.left+1, inv.bottom-inv.top+1 );
+						li.applyAllRulesAt( inv.left, inv.top, inv.right-inv.left+1, inv.bottom-inv.top+1 );
 					renderLayer(li);
 				}
 		}

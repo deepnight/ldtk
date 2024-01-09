@@ -397,7 +397,7 @@ class Editor extends Page {
 			if( li.def.isAutoLayer() && li.autoTilesCache==null )
 				ops.push({
 					label: l.identifier+"."+li.def.identifier,
-					cb: li.applyAllAutoLayerRules,
+					cb: li.applyAllRules,
 				});
 
 		if( ops.length>0 )

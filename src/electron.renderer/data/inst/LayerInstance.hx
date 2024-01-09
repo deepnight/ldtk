@@ -879,7 +879,7 @@ class LayerInstance {
 		Check & apply given rule at coord.
 		WARNING: autoTiles clear method should always be called before that one!
 	**/
-	inline function applyAutoLayerRuleAt(sourceLi:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+	inline function applyRuleAt(sourceLi:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
 		// Skip rule that requires specific IntGrid values absent from layer
 		if( !r.isRelevantInLayerAt(sourceLi,cx,cy) )
 			return false;
@@ -1015,12 +1015,12 @@ class LayerInstance {
 
 
 	/** Apply all rules to specific cell **/
-	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
+	public function applyAllRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
 		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
 			return;
 
 		if( autoTilesCache==null ) {
-			applyAllAutoLayerRules();
+			applyAllRules();
 			return;
 		}
 
@@ -1044,7 +1044,7 @@ class LayerInstance {
 			clearAutoTilesCacheRect(r, left,top, right-left+1, bottom-top+1);
 			for(x in left...right+1)
 			for(y in top...bottom+1)
-				applyAutoLayerRuleAt(source, r, x,y);
+				applyRuleAt(source, r, x,y);
 		});
 
 		// Discard using break-on-match flag
@@ -1052,16 +1052,16 @@ class LayerInstance {
 	}
 
 	/** Apply all rules to all cells **/
-	public inline function applyAllAutoLayerRules() {
+	public inline function applyAllRules() {
 		if( def.isAutoLayer() ) {
 			autoTilesCache = new Map();
-			applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
+			applyAllRulesAt(0, 0, cWid, cHei);
 			App.LOG.warning("All rules applied in "+toString());
 		}
 	}
 
 	/** Apply the rule to all layer cells **/
-	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef, applyBreakOnMatch:Bool) {
+	public function applyRuleToFullLayer(r:data.def.AutoLayerRuleDef, applyBreakOnMatch:Bool) {
 		if( !def.isAutoLayer() )
 			return;
 
@@ -1080,7 +1080,7 @@ class LayerInstance {
 		if( def.autoLayerRulesCanBeUsed() ) {
 			for(cx in 0...cWid)
 			for(cy in 0...cHei)
-				applyAutoLayerRuleAt(source, r, cx,cy);
+				applyRuleAt(source, r, cx,cy);
 
 			if( applyBreakOnMatch )
 				applyBreakOnMatchesEverywhere();

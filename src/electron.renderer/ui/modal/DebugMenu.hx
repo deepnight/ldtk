@@ -222,7 +222,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 									for(li in l.layerInstances) {
 										if( !li.def.isAutoLayer() )
 											continue;
-										li.applyAllAutoLayerRules();
+										li.applyAllRules();
 									}
 
 									// Final tidying

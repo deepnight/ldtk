@@ -142,7 +142,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				ops.push({
 					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
 					cb: ()->{
-						li.applyAllAutoLayerRules();
+						li.applyAllRules();
 					}
 				});
 				affectedLayers.set(li,l);
@@ -155,7 +155,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						ops.push({
 							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
 							cb: ()->{
-								li.applyAutoLayerRuleToAllLayer(r, false);
+								li.applyRuleToFullLayer(r, false);
 							},
 						});
 						affectedLayers.set(li,l);

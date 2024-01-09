@@ -132,7 +132,7 @@ class LayerRender {
 					tg.setDefaultColor(0xcccccc, .5);
 
 				if( li.autoTilesCache==null )
-					li.applyAllAutoLayerRules();
+					li.applyAllRules();
 
 				// var colorVect = new h3d.Vector(1,1,1,1);
 				li.def.iterateActiveRulesInDisplayOrder( li, (r)-> {
