@@ -8,6 +8,7 @@ class RuleEditor extends ui.modal.Dialog {
 	var sourceDef : data.def.LayerDef;
 	var rule : data.def.AutoLayerRuleDef;
 	var guidedMode = false;
+	var hasAnyChange = false;
 
 	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleEditor");
@@ -83,8 +84,17 @@ class RuleEditor extends ui.modal.Dialog {
 		}
 		else {
 			rule.tidy(layerDef);
-			editor.ge.emit( LayerRuleChanged(rule) );
+			if( hasAnyChange ) {
+				editor.ge.emit( LayerRuleChanged(rule) );
+				N.msg("Rule updated");
+			}
 		}
+	}
+
+
+	function onAnyRuleChange() {
+		hasAnyChange = true;
+		// editor.ge.emit( LayerRuleChanged(rule) );
 	}
 
 
@@ -105,8 +115,8 @@ class RuleEditor extends ui.modal.Dialog {
 				case Stamp: Lang.t._("Rectangles of tiles");
 			}
 		);
-		i.linkEvent( LayerRuleChanged(rule) );
 		i.onChange = function() {
+			onAnyRuleChange();
 			rule.tileRectsIds = [];
 			updateTileSettings();
 		}
@@ -136,8 +146,8 @@ class RuleEditor extends ui.modal.Dialog {
 									rule.tileRectsIds[rectIdx] = tids.copy();
 						}
 					}
-					editor.ge.emit( LayerRuleChanged(rule) );
 					updateTileSettings();
+					onAnyRuleChange();
 				}
 			);
 		}
@@ -169,7 +179,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 								case 1,2:
 									rule.tileRectsIds.splice(i,1);
-									editor.ge.emit( LayerRuleChanged(rule) );
+									onAnyRuleChange();
 									updateTileSettings();
 							}
 						});
@@ -197,7 +207,7 @@ class RuleEditor extends ui.modal.Dialog {
 				var jPivot = JsTools.createPivotEditor(rule.pivotX, rule.pivotY, (xr,yr)->{
 					rule.pivotX = xr;
 					rule.pivotY = yr;
-					editor.ge.emit( LayerRuleChanged(rule) );
+					onAnyRuleChange();
 					renderAll();
 				});
 				jTileOptions.append(jPivot);
@@ -304,7 +314,7 @@ class RuleEditor extends ui.modal.Dialog {
 			jVal.addClass("active");
 		jVal.click( function(ev) {
 			curValue = Const.AUTO_LAYER_ANYTHING;
-			editor.ge.emit( LayerRuleChanged(rule) );
+			onAnyRuleChange();
 			updateValuePalette();
 		});
 	}
@@ -339,7 +349,7 @@ class RuleEditor extends ui.modal.Dialog {
 				}
 			},
 			()->curValue,
-			()->editor.ge.emit( LayerRuleChanged(rule) )
+			()->onAnyRuleChange()
 		);
 		jContent.find(">.pattern .editor .grid").empty().append( patternEditor.jRoot );
 
@@ -347,7 +357,7 @@ class RuleEditor extends ui.modal.Dialog {
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");
 		JsTools.createOutOfBoundsRulePolicy(jOutOfBounds, sourceDef, rule.outOfBoundsValue, (v)->{
 			rule.outOfBoundsValue = v;
-			editor.ge.emit( LayerRuleChanged(rule) );
+			onAnyRuleChange();
 			renderAll();
 		});
 
