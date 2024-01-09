@@ -2554,39 +2554,63 @@ class Editor extends Page {
 		// Tag filter select
 		var curTag = getCurLayerFilterTag();
 		if( uiFilterTags.length>0 ) {
+			function _selectLayerTag(tagIdx=-1) {
+				if( tagIdx<0 )
+					settings.deleteUiState(LayerUIFilter, project);
+				else
+					settings.setUiStateInt(LayerUIFilter, tagIdx, project);
+
+				// Fix currently selected layer
+				if( curLayerDef!=null && !shouldLayerDefVisibleInList(curLayerDef, tagIdx<0 ? null : uiFilterTags[tagIdx]) )
+					autoPickFirstValidLayer();
+				updateLayerList();
+			}
+
 			uiFilterTags.sort( (a,b)->Reflect.compare(a.toLowerCase(),b.toLowerCase()) );
 			var jLi = new J('<li class="filter"/>');
 			jLi.prependTo(jLayerList);
 
-			// List tags
-			var jSelect = new J('<select/>');
-			jSelect.appendTo(jLi);
-			var jOpt = new J('<option value="">- Show all layers -</option>');
-			jOpt.appendTo(jSelect);
-
-			var tagIdx = 0;
-			for(tag in uiFilterTags) {
-				var jOpt = new J('<option value="$tag" tagIdx="$tagIdx">$tag</option>');
+			// List tags (SELECT mode)
+			if( uiFilterTags.length>3 ) {
+				var jSelect = new J('<select/>');
+				jSelect.appendTo(jLi);
+				var jOpt = new J('<option value="">- Show all layers -</option>');
 				jOpt.appendTo(jSelect);
-				tagIdx++;
-			}
 
-			// Tag picked
-			jSelect.change(_->{
-				var tag = jSelect.val();
-				if( tag=="" )
-					settings.deleteUiState(LayerUIFilter, project);
-				else {
-					var tagIdx = Std.parseInt( jSelect.find(":selected").attr("tagIdx") );
-					settings.setUiStateInt(LayerUIFilter, tagIdx, project);
+				var tagIdx = 0;
+				for(tag in uiFilterTags) {
+					var jOpt = new J('<option value="$tag" tagIdx="$tagIdx">$tag</option>');
+					jOpt.appendTo(jSelect);
+					tagIdx++;
 				}
-				// Fix currently selected layer
-				if( curLayerDef!=null && !shouldLayerDefVisibleInList(curLayerDef,tag) )
-					autoPickFirstValidLayer();
-				updateLayerList();
-			});
-			if( curTag!=null )
-				jSelect.val(curTag);
+
+				jSelect.change( _->{
+					var tagIdx = Std.parseInt( jSelect.find(":selected").attr("tagIdx") );
+					_selectLayerTag(tagIdx);
+				});
+
+				// Pick current
+				if( curTag!=null )
+					jSelect.val(curTag);
+
+			}
+			else {
+				var jList = new J('<ul class=""/>');
+				jList.appendTo(jLi);
+
+				var tagIdx = -1;
+				var tagsAndAll = ["All"].concat(uiFilterTags);
+				for(tag in tagsAndAll) {
+					var jTag = new J('<li/>');
+					jTag.text(tag);
+					var idx = tagIdx;
+					jTag.click( _->_selectLayerTag(idx));
+					jTag.appendTo(jList);
+					if( tagIdx<0 && curTag==null || tagIdx>=0 && tag==curTag )
+						jTag.addClass("active");
+					tagIdx++;
+				}
+			}
 		}
 
 		// Add layers

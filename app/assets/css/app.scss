@@ -945,7 +945,7 @@ ul.niceList {
 		content: "No layer";
 	}
 
-	li:not(.title, .subList) {
+	>li:not(.title, .subList) {
 		display: grid;
 		justify-items: left;
 		align-items: center;
@@ -987,7 +987,7 @@ ul.niceList {
 		}
 	}
 
-	li.title {
+	>li.title {
 		display: grid;
 		grid-template-columns: auto min-content;
 		align-items: center;
@@ -1036,7 +1036,7 @@ ul.niceList {
 			}
 		}
 	}
-	li div.error {
+	>li div.error {
 		grid-column: span 2;
 		grid-row: 2;
 		padding: 8px;
@@ -1053,7 +1053,7 @@ ul.niceList {
 		box-shadow: 0px 0px 16px $red;
 	}
 
-	li.iconLeft {
+	>li.iconLeft {
 		grid-template-columns: min-content auto;
 		.icon,
 		.entityPreview {
@@ -1061,7 +1061,7 @@ ul.niceList {
 		}
 	}
 
-	li.iconRight {
+	>li.iconRight {
 		grid-template-columns: auto min-content;
 		.icon,
 		.entityPreview {
@@ -1069,7 +1069,7 @@ ul.niceList {
 		}
 	}
 
-	li.active {
+	>li.active {
 		background-color: $orange;
 		color: black;
 		&:not(.customColor) {
@@ -1081,7 +1081,7 @@ ul.niceList {
 		}
 	}
 
-	li.subList.searchMatched {
+	>li.subList.searchMatched {
 		display: block !important;
 	}
 	.searchDiscarded {
@@ -4960,6 +4960,8 @@ canvas#webgl {
 			li.filter {
 				display: block;
 				padding: 0;
+				cursor: initial;
+
 				select {
 					width: 100%;
 					background-color: $bgDark;
@@ -4975,6 +4977,34 @@ canvas#webgl {
 						background-color: $orange;
 						color: black;
 					}
+				}
+				ul {
+					padding: 1px;
+					display: flex;
+					flex-wrap: wrap;
+					gap: 1px;
+
+					li {
+						flex: 0 0 2em;
+						text-align: center;
+						font-size: 9pt;
+						padding: 4px;
+						cursor: pointer;
+						border-radius: 3px;
+						border: 1px solid $bgLight;
+
+						&.active {
+							color: black;
+							background-color: $orange;
+							border-color: $orange;
+						}
+						&:not(.active):hover {
+							outline: 1px solid $orange;
+						}
+					}
+				}
+				&:hover {
+					outline: none;
 				}
 			}
 
