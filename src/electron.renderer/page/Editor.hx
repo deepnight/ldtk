@@ -1371,6 +1371,9 @@ class Editor extends Page {
 
 
 	public function selectLevel(l:data.Level, fitView=false) {
+		if( curTool.isRunning() )
+			curTool.stopUsing(getMouse());
+
 		if( l._world!=curWorld )
 			selectWorld(l._world);
 
