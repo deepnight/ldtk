@@ -308,7 +308,7 @@ class AutoLayerRuleDef {
 
 	public function isRelevantInLayer(sourceLi:data.inst.LayerInstance) {
 		for(v in explicitlyRequiredValues)
-			if( !sourceLi.containsIntGridValue(v) )
+			if( !sourceLi.containsIntGridValueOrGroup(v) )
 				return false;
 		return true;
 	}

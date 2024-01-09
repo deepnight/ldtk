@@ -93,7 +93,15 @@ class LayerInstance {
 			areaCountMap.set(cid,1);
 		else
 			areaCountMap.set(cid, areaCountMap.get(cid)+1);
+
+		// Also update group
+		if( iv<1000 ) {
+			var groupUid = def.getIntGridGroupUidFromValue(iv);
+			if( groupUid>=0 )
+				increaseAreaIntGridValueCount(def.getRuleValueFromGroupUid(groupUid), cx,cy);
+		}
 	}
+
 
 	inline function decreaseAreaIntGridValueCount(iv:Int, cx:Int, cy:Int) {
 		if( iv!=0 && iv!=null && areaIntGridUseCount.exists(iv) ) {
@@ -105,9 +113,17 @@ class LayerInstance {
 					areaCountMap.remove(cid);
 			}
 		}
+
+		// Also update group
+		if( iv<1000 ) {
+			var groupUid = def.getIntGridGroupUidFromValue(iv);
+			if( groupUid>=0 )
+				decreaseAreaIntGridValueCount(def.getRuleValueFromGroupUid(groupUid), cx,cy);
+		}
 	}
 
-	public function containsIntGridValue(iv:Int) {
+
+	public function containsIntGridValueOrGroup(iv:Int) {
 		if( !areaIntGridUseCount.exists(iv) )
 			return false;
 

@@ -311,8 +311,11 @@ class LayerDef {
 	}
 
 
-	public inline function hasIntGridValue(v:Int) {
-		return getIntGridValueDef(v)!=null;
+	public function hasIntGridValue(v:Int) {
+		for(iv in intGridValues)
+			if( iv.value==v )
+				return true;
+		return false;
 	}
 
 	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDefEditor> {
@@ -371,8 +374,7 @@ class LayerDef {
 	public inline function getAllIntGridValues() return intGridValues;
 
 	public function getIntGridGroupUidFromValue(intGridValue:Int) : Int {
-		var iv = getIntGridValueDef(intGridValue);
-		return iv==null ? -1 : iv.groupUid;
+		return !hasIntGridValue(intGridValue) ? -1 : getIntGridValueDef(intGridValue).groupUid;
 	}
 
 
