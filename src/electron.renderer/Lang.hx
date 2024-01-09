@@ -70,7 +70,7 @@ class Lang {
 			case F_Color: t._("Col");
 			case F_Float: t._("1.0");
 			case F_String: t._("\"Ab\"");
-			case F_Text: t._("\"\\n\\n\"");
+			case F_Text: t._("\"Ab\\n\"");
 			case F_Bool: t._("✔");
 			case F_Point: t._("X::sep::Y", { sep:Const.POINT_SEPARATOR });
 			case F_Enum(name): t._("Enu");
