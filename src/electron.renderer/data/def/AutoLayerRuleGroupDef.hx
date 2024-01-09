@@ -19,6 +19,11 @@ class AutoLayerRuleGroupDef {
 		this.name = name;
 	}
 
+	@:keep
+	public function toString() {
+		return name;
+	}
+
 	public static function fromJson(jsonVersion:String, json:ldtk.Json.AutoLayerRuleGroupJson) : AutoLayerRuleGroupDef {
 		var rg = new AutoLayerRuleGroupDef(
 			JsonTools.readInt(json.uid,-1),
