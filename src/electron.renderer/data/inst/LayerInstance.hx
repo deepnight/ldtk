@@ -123,14 +123,16 @@ class LayerInstance {
 	}
 
 
-	public function containsIntGridValueOrGroup(iv:Int) {
+	public inline function containsIntGridValueOrGroup(iv:Int) {
 		if( !areaIntGridUseCount.exists(iv) )
 			return false;
 
-		for(map in areaIntGridUseCount.get(iv))
-			return true;
-
-		return false;
+		var found = false;
+		for(map in areaIntGridUseCount.get(iv)) {
+			found = true;
+			break;
+		}
+		return found;
 	}
 
 
@@ -859,56 +861,65 @@ class LayerInstance {
 		}
 	}
 
-	function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
-		if( !def.autoLayerRulesCanBeUsed() )
+	function clearAutoTilesCacheRect(r:data.def.AutoLayerRuleDef, cx,cy,wid,hei) {
+		if( !autoTilesCache.exists(r.uid) )
+			autoTilesCache.set( r.uid, [] );
+
+		var m = autoTilesCache.get(r.uid);
+		for(y in cy...cy+hei)
+		for(x in cx...cx+wid)
+			m.remove( coordId(x,y) );
+	}
+
+	function clearAutoTilesCache(r:data.def.AutoLayerRuleDef) {
+		autoTilesCache.set( r.uid, [] );
+	}
+
+	/**
+		Check & apply given rule at coord.
+		WARNING: autoTiles clear method should always be called before that one!
+	**/
+	inline function applyAutoLayerRuleAt(sourceLi:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+		// Skip rule that requires specific IntGrid values absent from layer
+		if( !r.isRelevantInLayerAt(sourceLi,cx,cy) )
 			return false;
-		else {
-			// Init
-			if( !autoTilesCache.exists(r.uid) )
-				autoTilesCache.set( r.uid, [] );
-			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
-			// Skip rule that requires specific IntGrid values absent from layer
-			if( !r.isRelevantInLayer(source) )
-				return false;
+		// Modulos
+		if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
+			return false;
 
-			// Modulos
-			if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
-				return false;
+		if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
+			return false;
 
-			if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
-				return false;
+		if( r.checker!=Horizontal && (cx-r.xOffset) % r.xModulo!=0 )
+			return false;
 
-			if( r.checker!=Horizontal && (cx-r.xOffset) % r.xModulo!=0 )
-				return false;
+		if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
+			return false;
 
-			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
-				return false;
-
-			// Apply rule
-			var matched = false;
-			if( r.matches(this, source, cx,cy) ) {
-				addRuleTilesAt(r, cx,cy, 0);
-				matched = true;
-			}
-
-			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, source, cx,cy, -1) ) {
-				addRuleTilesAt(r, cx,cy, 1);
-				matched = true;
-			}
-
-			if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
-				addRuleTilesAt(r, cx,cy, 2);
-				matched = true;
-			}
-
-			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
-				addRuleTilesAt(r, cx,cy, 3);
-				matched = true;
-			}
-
-			return matched;
+		// Apply rule
+		var matched = false;
+		if( r.matches(this, sourceLi, cx,cy) ) {
+			addRuleTilesAt(r, cx,cy, 0);
+			matched = true;
 		}
+
+		if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, sourceLi, cx,cy, -1) ) {
+			addRuleTilesAt(r, cx,cy, 1);
+			matched = true;
+		}
+
+		if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, sourceLi, cx,cy, 1, -1) ) {
+			addRuleTilesAt(r, cx,cy, 2);
+			matched = true;
+		}
+
+		if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, sourceLi, cx,cy, -1, -1) ) {
+			addRuleTilesAt(r, cx,cy, 3);
+			matched = true;
+		}
+
+		return matched;
 	}
 
 
@@ -1026,10 +1037,11 @@ class LayerInstance {
 		if( source==null )
 			return;
 
-		def.iterateActiveRulesInEvalOrder( this, (r)->{
-			// if( !r.isRelevantInLayer(source) )
-			// 	return;
+		if( !def.autoLayerRulesCanBeUsed() )
+			return;
 
+		def.iterateActiveRulesInEvalOrder( this, (r)->{
+			clearAutoTilesCacheRect(r, left,top, right-left+1, bottom-top+1);
 			for(x in left...right+1)
 			for(y in top...bottom+1)
 				applyAutoLayerRuleAt(source, r, x,y);
@@ -1063,12 +1075,16 @@ class LayerInstance {
 		if( source==null || !r.isRelevantInLayer(source) )
 			return;
 
-		for(cx in 0...cWid)
-		for(cy in 0...cHei)
-			applyAutoLayerRuleAt(source, r, cx,cy);
+		clearAutoTilesCache(r);
 
-		if( applyBreakOnMatch )
-			applyBreakOnMatchesEverywhere();
+		if( def.autoLayerRulesCanBeUsed() ) {
+			for(cx in 0...cWid)
+			for(cy in 0...cHei)
+				applyAutoLayerRuleAt(source, r, cx,cy);
+
+			if( applyBreakOnMatch )
+				applyBreakOnMatchesEverywhere();
+		}
 	}
 
 }

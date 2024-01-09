@@ -313,6 +313,23 @@ class AutoLayerRuleDef {
 		return true;
 	}
 
+	public function isRelevantInLayerAt(sourceLi:data.inst.LayerInstance, cx:Int, cy:Int) {
+		var dist = Std.int(size*0.5);
+		for(v in explicitlyRequiredValues) {
+			if( !sourceLi.containsIntGridValueOrGroup(v) )
+				return false;
+			else if( size==1 && !sourceLi.hasIntGridValueInArea(v,cx,cy) )
+				return false;
+			else if( size>1
+				&& !sourceLi.hasIntGridValueInArea(v,cx-dist,cy-dist)
+				&& !sourceLi.hasIntGridValueInArea(v,cx+dist,cy-dist)
+				&& !sourceLi.hasIntGridValueInArea(v,cx+dist,cy+dist)
+				&& !sourceLi.hasIntGridValueInArea(v,cx-dist,cy+dist) )
+					return false;
+		}
+		return true;
+	}
+
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
 		if( tileRectsIds.length==0 )
 			return false;
