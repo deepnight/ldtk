@@ -41,11 +41,8 @@ class LevelTimeline {
 		states = new haxe.ds.Vector(STATES_COUNT+EXTRA);
 		invalidatedDebug = true;
 		curStateIdx = -1;
-		if( saveState ) {
-			Chrono.quick("save full");
+		if( saveState )
 			saveFullLevelState();
-			Chrono.quick();
-		}
 	}
 
 
