@@ -26,22 +26,26 @@ class LevelTimeline {
 
 	var changeBounds: Null<h2d.col.Bounds>;
 
-	public function new(levelUid:Int, worldIid:String) {
+	public function new(levelUid:Int, worldIid:String, saveFirstState:Bool) {
 		this.levelUid = levelUid;
 		this.worldIid = worldIid;
 
-		clear();
+		clear(saveFirstState);
 	}
 
 
 	/**
 		Reset timeline completely
 	**/
-	public function clear() {
+	public function clear(saveState=true) {
 		states = new haxe.ds.Vector(STATES_COUNT+EXTRA);
 		invalidatedDebug = true;
 		curStateIdx = -1;
-		saveFullLevelState();
+		if( saveState ) {
+			Chrono.quick("save full");
+			saveFullLevelState();
+			Chrono.quick();
+		}
 	}
 
 

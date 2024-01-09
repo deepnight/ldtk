@@ -328,7 +328,7 @@ class Editor extends Page {
 		autoPickFirstValidLayer();
 
 		levelTimelines = new Map();
-		levelTimelines.set( curLevelId, new LevelTimeline(curLevelId, curWorldIid) );
+		levelTimelines.set( curLevelId, new LevelTimeline(curLevelId, curWorldIid, false) ); // save state happens in ProjectSelected event
 
 		// Load tilesets
 		var tilesetChanged = false;
@@ -2265,7 +2265,7 @@ class Editor extends Page {
 				selectionTool.clear();
 				updateTool();
 				if( !levelTimelines.exists(l.uid) )
-					levelTimelines.set(l.uid, new LevelTimeline(l.uid, l._world.iid) );
+					levelTimelines.set(l.uid, new LevelTimeline(l.uid, l._world.iid, true) );
 				selectWorldDepth(l.worldDepth);
 				l.invalidateCachedError();
 
