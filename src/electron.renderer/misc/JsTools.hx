@@ -281,15 +281,19 @@ class JsTools {
 		if( ed.uiTileRect!=null && ed.uiTileRect.w>0 ) {
 			// Alt custom UI tile
 			var td = project.defs.getTilesetDef(ed.uiTileRect.tilesetUid);
-			var jImg = td.createTileHtmlImageFromRect(ed.uiTileRect);
-			jWrapper.append(jImg);
+			if( td!=null ) {
+				var jImg = td.createTileHtmlImageFromRect(ed.uiTileRect);
+				jWrapper.append(jImg);
+			}
 		}
 		else if( ed.renderMode==Tile && ed.tileRect!=null ) {
 			// Tile
 			var td = project.defs.getTilesetDef(ed.tileRect.tilesetUid);
-			var jImg = td.createTileHtmlImageFromRect(ed.tileRect);
-			jWrapper.append(jImg);
-			jImg.css("opacity", ed.tileOpacity);
+			if( td!=null ) {
+				var jImg = td.createTileHtmlImageFromRect(ed.tileRect);
+				jWrapper.append(jImg);
+				jImg.css("opacity", ed.tileOpacity);
+			}
 			if( ed.lineOpacity>0 ) {
 				jWrapper.addClass("hasBg");
 				jWrapper.css("outline", "1px solid "+new dn.Col(ed.color).toCssRgba(ed.lineOpacity));
