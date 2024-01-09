@@ -55,6 +55,8 @@ class LayerInstance {
 			>
 		> > = null;
 
+	var areaIntGridUseCount : Map<Int, Map<Int,Int>> = new Map();
+
 	public var pxWid(get,never) : Int; inline function get_pxWid() return level.pxWid - pxOffsetX;
 	public var pxHei(get,never) : Int; inline function get_pxHei() return level.pxHei - pxOffsetY;
 	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( pxWid / def.gridSize );
@@ -68,6 +70,51 @@ class LayerInstance {
 		this.levelId = levelUid;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
+	}
+
+	inline function areaCoordId(cx:Int,cy:Int) {
+		return Std.int(cx/10) + Std.int(cy/10) * 10000;
+	}
+
+	public inline function hasIntGridValueInArea(iv:Int, cx:Int, cy:Int) {
+		return areaIntGridUseCount.exists(iv) && areaIntGridUseCount.get(iv).get(areaCoordId(cx,cy)) > 0;
+	}
+
+	inline function increaseAreaIntGridValueCount(iv:Int, cx:Int, cy:Int) {
+		if( iv==0 || iv==null )
+			return;
+
+		if( !areaIntGridUseCount.exists(iv) )
+			areaIntGridUseCount.set(iv, new Map());
+
+		var areaCountMap = areaIntGridUseCount.get(iv);
+		final cid = areaCoordId(cx,cy);
+		if( !areaCountMap.exists(cid) )
+			areaCountMap.set(cid,1);
+		else
+			areaCountMap.set(cid, areaCountMap.get(cid)+1);
+	}
+
+	inline function decreaseAreaIntGridValueCount(iv:Int, cx:Int, cy:Int) {
+		if( iv!=0 && iv!=null && areaIntGridUseCount.exists(iv) ) {
+			var areaCountMap = areaIntGridUseCount.get(iv);
+			final cid = areaCoordId(cx,cy);
+			if( areaCountMap.exists(cid) ) {
+				areaCountMap.set(cid, areaCountMap.get(cid)-1);
+				if( areaCountMap.get(cid)<=0 )
+					areaCountMap.remove(cid);
+			}
+		}
+	}
+
+	public function containsIntGridValue(iv:Int) {
+		if( !areaIntGridUseCount.exists(iv) )
+			return false;
+
+		for(map in areaIntGridUseCount.get(iv))
+			return true;
+
+		return false;
 	}
 
 
@@ -278,14 +325,18 @@ class LayerInstance {
 
 		if( json.intGridCsv==null ) {
 			// Read old pre-CSV format
-			for( intGridJson in json.intGrid )
+			for( intGridJson in json.intGrid ) {
 				li.intGrid.set( intGridJson.coordId, intGridJson.v+1 );
+				li.increaseAreaIntGridValueCount( intGridJson.v+1, li.getCx(intGridJson.coordId), li.getCy(intGridJson.coordId) );
+			}
 		}
 		else {
 			// Read CSV format
-			for(i in 0...json.intGridCsv.length)
-				if( json.intGridCsv[i]>=0 )
-					li.intGrid.set(i, json.intGridCsv[i]);
+			for(coordId in 0...json.intGridCsv.length)
+				if( json.intGridCsv[coordId]>=0 ) {
+					li.intGrid.set(coordId, json.intGridCsv[coordId]);
+					li.increaseAreaIntGridValueCount( json.intGridCsv[coordId], li.getCx(coordId), li.getCy(coordId) );
+				}
 		}
 
 		for( gridTilesJson in json.gridTiles ) {
@@ -565,11 +616,18 @@ class LayerInstance {
 
 	public function setIntGrid(cx:Int, cy:Int, v:Int) {
 		requireType(IntGrid);
-		if( isValid(cx,cy) )
-			if( v>=0 )
-				intGrid.set( coordId(cx,cy), v );
+		if( isValid(cx,cy) ) {
+			if( v>=0 ) {
+				var old = intGrid.get(coordId(cx,cy));
+				if( old!=v ) {
+					decreaseAreaIntGridValueCount(old, cx,cy);
+					increaseAreaIntGridValueCount(v, cx, cy);
+					intGrid.set( coordId(cx,cy), v );
+				}
+			}
 			else
 				removeIntGrid(cx,cy);
+		}
 	}
 
 	public inline function hasIntGrid(cx:Int, cy:Int) {
@@ -579,8 +637,10 @@ class LayerInstance {
 
 	public function removeIntGrid(cx:Int, cy:Int) {
 		requireType(IntGrid);
-		if( isValid(cx,cy) )
+		if( isValid(cx,cy) && hasIntGrid(cx,cy) ) {
+			decreaseAreaIntGridValueCount( intGrid.get(coordId(cx,cy)), cx, cy );
 			intGrid.remove( coordId(cx,cy) );
+		}
 	}
 
 
@@ -792,6 +852,10 @@ class LayerInstance {
 				autoTilesCache.set( r.uid, [] );
 			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
 
+			// Skip rule that requires specific IntGrid values absent from layer
+			if( !r.isRelevantInLayer(source) )
+				return false;
+
 			// Modulos
 			if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
 				return false;
@@ -803,10 +867,6 @@ class LayerInstance {
 				return false;
 
 			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
-				return false;
-
-			// Check if rule could even apply here
-			if( !r.isRelevantHere(source,cx,cy) )
 				return false;
 
 			// Apply rule
@@ -949,7 +1009,11 @@ class LayerInstance {
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
 		if( source==null )
 			return;
+
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
+			// if( !r.isRelevantInLayer(source) )
+			// 	return;
+
 			for(x in left...right+1)
 			for(y in top...bottom+1)
 				applyAutoLayerRuleAt(source, r, x,y);
@@ -980,7 +1044,7 @@ class LayerInstance {
 		}
 
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
-		if( source==null )
+		if( source==null || !r.isRelevantInLayer(source) )
 			return;
 
 		for(cx in 0...cWid)

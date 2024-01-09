@@ -71,6 +71,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 	override function close() {
 		rule.trim();
+		rule.updateUsedValues();
 
 		super.close();
 
