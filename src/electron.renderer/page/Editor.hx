@@ -2800,7 +2800,14 @@ class Editor extends Page {
 				if( li.def.type==IntGrid ) {
 					// Show cached area counts
 					App.ME.debugPre(li.toString());
-					App.ME.debugPre("  "+li.areaIntGridUseCount);
+					for(iv in li.def.intGridValues) {
+						var n = 0;
+						if( li.areaIntGridUseCount.exists(iv.value) )
+							for(areaCount in li.areaIntGridUseCount.get(iv.value))
+								n++;
+						if( n>0 )
+							App.ME.debugPre("  #"+iv.value+" => "+n+" area", n<=0 ? dn.Col.midGray() : dn.Col.white());
+					}
 				}
 				if( li.def.isAutoLayer() ) {
 					// Count relevant rules
@@ -2811,7 +2818,7 @@ class Editor extends Page {
 								n++;
 
 						if( n>0 )
-							App.ME.debugPre("  => "+rg.toString()+": "+n+" rule(s)");
+							App.ME.debugPre("  Group "+rg.toString()+": "+n+" rule(s)", "#56b0ff");
 					}
 				}
 			}

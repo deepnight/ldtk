@@ -1003,7 +1003,7 @@ class App extends dn.Process {
 		jLine.appendTo(wrapper);
 	}
 
-	public inline function debugPre(msg:Dynamic, ?color:Int, clear=false) {
+	public inline function debugPre(msg:Dynamic, ?color:dn.Col, clear=false) {
 		debug(msg, color, clear, true);
 	}
 
@@ -1071,7 +1071,7 @@ class App extends dn.Process {
 	public inline function hasDebugFlag(f:DebugFlag) {
 		return debugFlags.exists(f);
 	}
-	
+
 
 	override function preUpdate() {
 		super.preUpdate();
