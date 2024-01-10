@@ -19,6 +19,12 @@ You can now search for any project element using the `CTRL-F` keyboard shortcut 
 
 Optionaly, you may also enable the `searchable` option on supported entity Custom Fields, to filter your entities based on these fields (eg. if you look for a specific item instance or mob type).
 
+## Rules performance boost
+
+This version includes lots of internal optimizations regarding auto-layer rules. Therefore, large projects loading time should be significantly faster, especially if your project had large levels.
+
+Realtime painting on Auto-layers should also be much faster in most scenarios, thanks to these changes.
+
 ## Biomes
 ![](1.5.0/biomes.png)
 
