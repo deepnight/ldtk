@@ -12,9 +12,21 @@ class Definitions {
 	public var externalEnums: Array<data.def.EnumDef> = [];
 	public var levelFields: Array<data.def.FieldDef> = [];
 
+	var fastLayersAccessInt : Map<Int,data.def.LayerDef> = new Map();
+	var fastLayersAccessStr : Map<String,data.def.LayerDef> = new Map();
+
 
 	public function new(project:Project) {
 		this._project = project;
+	}
+
+	public function initFastAccess() {
+		fastLayersAccessInt = new Map();
+		fastLayersAccessStr = new Map();
+		for(ld in layers) {
+			fastLayersAccessInt.set(ld.uid, ld);
+			fastLayersAccessStr.set(ld.identifier, ld);
+		}
 	}
 
 	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
@@ -50,6 +62,31 @@ class Definitions {
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
 				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
+
+		p.defs.initFastAccess();
+	}
+
+	public static function tidyFieldDefsArray(p:Project, fieldDefs:Array<data.def.FieldDef>, ctx:String) {
+		// Remove Enum-based field defs whose EnumDef is lost
+		var i = 0;
+		while( i<fieldDefs.length ) {
+			var fd = fieldDefs[i];
+			switch fd.type {
+				case F_Enum(enumDefUid):
+					if( p.defs.getEnumDef(enumDefUid)==null ) {
+						App.LOG.add("tidy", 'Removed lost enum field of $fd in $ctx');
+						fieldDefs.splice(i,1);
+						continue;
+					}
+
+				case _:
+			}
+			i++;
+		}
+
+		// Call field defs tidy()
+		for(fd in fieldDefs)
+			fd.tidy(p);
 	}
 
 	public function tidy(p:Project) {
@@ -70,8 +107,8 @@ class Definitions {
 		for(td in tilesets)
 			td.tidy(p);
 
-		for(fd in levelFields)
-			fd.tidy(p);
+		tidyFieldDefsArray(p, levelFields, "ProjectDefinitions");
+		initFastAccess();
 	}
 
 	/**  LAYER DEFS  *****************************************/
@@ -90,11 +127,11 @@ class Definitions {
 		return false;
 	}
 
-	public function getLayerDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.LayerDef> {
-		for(ld in layers)
-			if( ld.uid==id || ld.identifier==id )
-				return ld;
-		return null;
+	public inline function getLayerDef(?id:String, ?uid:Int) : Null<data.def.LayerDef> {
+		if( uid!=null )
+			return fastLayersAccessInt.get(uid);
+		else
+			return fastLayersAccessStr.get(id);
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
@@ -217,7 +254,7 @@ class Definitions {
 	}
 
 
-	public function sortLayerAutoGroup(ld:data.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<AutoLayerRuleGroup> {
+	public function sortLayerAutoGroup(ld:data.def.LayerDef, fromGroupIdx:Int, toGroupIdx:Int) : Null<data.def.AutoLayerRuleGroupDef> {
 		if( fromGroupIdx<0 || fromGroupIdx>=ld.autoRuleGroups.length )
 			return null;
 
@@ -349,7 +386,7 @@ class Definitions {
 	/**
 		Extract and sort all tags being used in the provided array of T
 	**/
-	public function getAllTagsFrom<T>(all:Array<T>, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
+	public function getAllTagsFrom<T>(all:Array<T>, includeNull=true, getTags:T->Tags, ?filter:T->Bool) : Array<String> {
 		if( filter==null )
 			filter = (_)->return true;
 
@@ -374,8 +411,10 @@ class Definitions {
 		for(t in tagMap)
 			sortedTags.push(t);
 		sortedTags.sort( (a,b)->Reflect.compare( a.toLowerCase(), b.toLowerCase() ) );
-		if( anyUntagged )
-			sortedTags.insert(0, null); // untagged category
+
+		// Add untagged "null" value
+		if( includeNull && anyUntagged )
+			sortedTags.insert(0, null);
 
 		return sortedTags;
 	}
@@ -499,7 +538,7 @@ class Definitions {
 			case LdtkIcons: td.tileGridSize = 16;
 		}
 		td.importAtlasImage(td.embedAtlas);
-		td.buildPixelData(()->{}, true);
+		td.buildPixelData(true);
 
 		_project.tidy();
 		return td;

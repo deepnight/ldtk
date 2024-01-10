@@ -260,7 +260,7 @@ class GenericLevelElementGroup {
 								var td = li.getTilesetDef();
 								if( td!=null && td.isAtlasLoaded() )
 									for( t in li.getGridTileStack(cx,cy) ) {
-										var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
+										var bmp = new h2d.Bitmap( td.getTileById(t.tileId), ghost );
 										bmp.x = li.pxParallaxX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.scaledGridSize - bounds.left;
 										bmp.y = li.pxParallaxY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.scaledGridSize - bounds.top;
 										bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
@@ -711,7 +711,7 @@ class GenericLevelElementGroup {
 					changedLayers.set(li,li);
 
 					// Out of bounds
-					if( ei.isOutOfLayerBounds() ) {
+					if( !ei.def.allowOutOfBounds && ei.isOutOfLayerBounds() ) {
 						outOfBoundsRemovals.push(ei.def.identifier);
 						li.removeEntityInstance(ei);
 						elements[i] = null;
@@ -817,9 +817,8 @@ class GenericLevelElementGroup {
 			}
 		}
 
-		if( outOfBoundsRemovals.length>0 ) {
+		if( outOfBoundsRemovals.length>0 )
 			N.warning( L.t._("Out-of-bounds entity removed: ::names::", {names:outOfBoundsRemovals.join(", ")}) );
-		}
 
 		// Execute move
 		for(cb in postRemovals) cb();

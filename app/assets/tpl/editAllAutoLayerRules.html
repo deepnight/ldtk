@@ -18,13 +18,13 @@
 <xml id="ruleGroup">
 	<div class="sortHandle"></div>
 	<header>
+		<button class="groupToggler transparent"> <span class="icon"></span> </button>
 		<div class="name">
-			<div class="collapserIcon"></div>
 			<div class="customIcon"></div>
 			<div class="text"></div>
 		</div>
 		<input type="text" class="name"/>
-		<button class="groupActive transparent"> <span class="icon"></span> </button>
+		<div class="biome"></div>
 		<button class="useWizard">EDIT</button>
 		<button class="addRule"><span class="icon add"></span></button>
 	</header>
@@ -35,14 +35,12 @@
 
 <xml id="rule">
 	<div class="sortHandle"></div>
+
+	<a class="ruleToggler" title="Enable/disable this rule"> <span class="icon"></span> </a>
+
 	<div class="preview"></div>
 
 	<div class="options">
-		<a class="active" title="Enable/disable this rule"> <span class="icon"></span> </a>
-		<!-- <div class="random" title="Random probability for this rule to happen">
-			<input type="text" name="random"/>
-			<span>%</span>
-		</div> -->
 		<input type="text" name="random" title="Random probability for this rule to apply"/>
 		<input type="text" name="alpha" title="Opacity of the resulting tile (between 0.0 and 1.0)"/>
 

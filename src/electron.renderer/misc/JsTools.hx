@@ -65,16 +65,31 @@ class JsTools {
 	}
 
 
-	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:T, allValues:Array<T>, ?def:T, ?printer:T->String, onSelect:T->Void) {
+	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:Null<T>, allValues:Array<T>, allowNull:Bool, ?def:T, ?printer:T->String, onSelect:T->Void) {
 		if( jSelect==null )
 			jSelect = new J('<select/>');
-		else
+		else {
 			jSelect.empty().off();
+			jSelect.removeClass("isNull");
+		}
 
 		// Ensure cur is part of allValues
 		if( !allValues.contains(cur) )
 			cur = def;
 
+		// "None" option
+		if( allowNull ) {
+			var jOpt = new J("<option/>");
+			jSelect.prepend(jOpt);
+			jOpt.text( printer==null ? Lang.t._("(none)") : printer(null) );
+			jOpt.attr("value", "");
+			if( cur==null ) {
+				jSelect.addClass("isNull");
+				jOpt.attr("selected","selected");
+			}
+		}
+
+		// Values
 		var i = 0;
 		for(v in allValues) {
 			var jOpt = new J('<option value="$i"/>');
@@ -266,15 +281,19 @@ class JsTools {
 		if( ed.uiTileRect!=null && ed.uiTileRect.w>0 ) {
 			// Alt custom UI tile
 			var td = project.defs.getTilesetDef(ed.uiTileRect.tilesetUid);
-			var jImg = td.createTileHtmlImageFromRect(ed.uiTileRect);
-			jWrapper.append(jImg);
+			if( td!=null ) {
+				var jImg = td.createTileHtmlImageFromRect(ed.uiTileRect);
+				jWrapper.append(jImg);
+			}
 		}
 		else if( ed.renderMode==Tile && ed.tileRect!=null ) {
 			// Tile
 			var td = project.defs.getTilesetDef(ed.tileRect.tilesetUid);
-			var jImg = td.createTileHtmlImageFromRect(ed.tileRect);
-			jWrapper.append(jImg);
-			jImg.css("opacity", ed.tileOpacity);
+			if( td!=null ) {
+				var jImg = td.createTileHtmlImageFromRect(ed.tileRect);
+				jWrapper.append(jImg);
+				jImg.css("opacity", ed.tileOpacity);
+			}
 			if( ed.lineOpacity>0 ) {
 				jWrapper.addClass("hasBg");
 				jWrapper.css("outline", "1px solid "+new dn.Col(ed.color).toCssRgba(ed.lineOpacity));
@@ -604,10 +623,15 @@ class JsTools {
 							case k.charAt(k.length-1) => ")": new J("<span/>").append(k);
 
 							case _:
-								var jKey = new J('<span class="key">${k.toUpperCase()}</span>');
+								var keyName = switch k {
+									case "macctrl": "ctrl";
+									case _: k.toUpperCase();
+								}
+								var jKey = new J('<span class="key">$keyName</span>');
 								switch k.toLowerCase() {
 									case "shift", "alt" : jKey.addClass( k.toLowerCase() );
-									case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : k.toLowerCase() );
+									case "macctrl" : jKey.addClass( App.isMac() ? "ctrl" : "??" );
+									case "ctrl" : jKey.addClass( App.isMac() ? 'meta' : "ctrl" );
 									case "delete", "escape": jKey.addClass("special");
 									case _ if(funcKeyReg.match(k)): jKey.addClass("special");
 									case _:
@@ -622,7 +646,7 @@ class JsTools {
 			}
 		});
 
-		jTarget.empty().append( jReplace.contents() );
+		return jReplace.contents();
 	}
 
 
@@ -700,7 +724,7 @@ class JsTools {
 
 					case 2:
 						var ctx = new ui.modal.ContextMenu(ev);
-						ctx.add({
+						ctx.addAction({
 							label: L.t._("Copy URL"),
 							cb: ()->{
 								App.ME.clipboard.copyStr(url);
@@ -1083,7 +1107,7 @@ class JsTools {
 
 	public static function createTilePicker(
 		tilesetId: Null<Int>,
-		selectMode: TilesetSelectionMode=Free,
+		selectMode: TilesetSelectionMode=MultipleIndividuals,
 		tileIds: Array<Int>,
 		useSavedSelections=true,
 		onPick: (tileIds:Array<Int>)->Void
@@ -1093,18 +1117,24 @@ class JsTools {
 		if( tilesetId!=null ) {
 			jTileCanvas.addClass("active");
 			var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
+			var isRectMode = switch selectMode {
+				case None: false;
+				case MultipleIndividuals: false;
+				case OneTile, OneTileAndClose: false;
+				case TileRect, TileRectAndClose: true;
+			}
 
 			if( tileIds.length==0 ) {
 				// No tile selected
 				jTileCanvas.addClass("empty");
 			}
-			else if( selectMode!=RectOnly ) {
+			else if( !isRectMode ) {
 				// Single/random tiles
 				jTileCanvas.removeClass("empty");
 				jTileCanvas.attr("width", td.tileGridSize);
 				jTileCanvas.attr("height", td.tileGridSize);
 				td.drawTileToCanvas(jTileCanvas, tileIds[0]);
-				if( tileIds.length>1 && selectMode!=RectOnly ) {
+				if( tileIds.length>1 && !isRectMode ) {
 					// Cycling animation among multiple tiles
 					jTileCanvas.addClass("multi");
 					var idx = 0;
@@ -1146,23 +1176,7 @@ class JsTools {
 
 			// Open picker
 			jTileCanvas.click( function(ev) {
-				var m = new ui.Modal();
-				m.addClass("singleTilePicker");
-
-				var tp = new ui.Tileset(m.jContent, td, selectMode);
-				tp.useSavedSelections = useSavedSelections;
-				tp.setSelectedTileIds(tileIds);
-				tp.onClickOutOfBounds = m.close;
-				if( selectMode==PickAndClose )
-					tp.onSelectAnything = ()->{
-						onPick([ tp.getSelectedTileIds()[0] ]);
-						m.close();
-					}
-				else
-					m.onCloseCb = function() {
-						onPick( tp.getSelectedTileIds() );
-					}
-				tp.focusOnSelection(true);
+				openTilePickerModal(td.uid, selectMode, tileIds, false, onPick);
 			});
 		}
 		else {
@@ -1171,6 +1185,64 @@ class JsTools {
 		}
 
 		return jTileCanvas;
+	}
+
+
+	public static function openTilePickerModal(
+		tilesetId: Null<Int>,
+		selectMode: TilesetSelectionMode,
+		tileIds: Array<Int>,
+		useSavedSelections=true,
+		onPick: (tileIds:Array<Int>)->Void
+	) {
+		var td = Editor.ME.project.defs.getTilesetDef(tilesetId);
+		if( td==null ) {
+			N.error("No valid tileset");
+			return false;
+		}
+
+		var m = new ui.Modal();
+		m.addClass("singleTilePicker");
+
+		var tp = new ui.Tileset(m.jContent, td, selectMode);
+		tp.useSavedSelections = useSavedSelections;
+		tp.setSelectedTileIds(tileIds);
+		tp.onClickOutOfBounds = m.close;
+		tp.onSelectAnything = ()->{
+			switch selectMode {
+				case None:
+				case MultipleIndividuals:
+				case OneTile:
+				case TileRect:
+
+				case OneTileAndClose:
+					onPick([ tp.getSelectedTileIds()[0] ]);
+					m.close();
+
+				case TileRectAndClose:
+					onPick( tp.getSelectedTileIds() );
+					m.close();
+			}
+		}
+		m.onCloseCb = function() {
+			switch selectMode {
+				case None:
+				case OneTileAndClose:
+				case TileRectAndClose:
+
+				case OneTile:
+					onPick([ tp.getSelectedTileIds()[0] ]);
+
+				case MultipleIndividuals:
+					onPick( tp.getSelectedTileIds() );
+
+				case TileRect:
+					onPick( tp.getSelectedTileIds() );
+			}
+		}
+		tp.focusOnSelection(true);
+
+		return true;
 	}
 
 
@@ -1211,17 +1283,11 @@ class JsTools {
 					jTileCanvas.mousedown( (ev:js.jquery.Event)->{
 						switch ev.button {
 							case 0:
-								var m = new ui.Modal();
-								m.addClass("singleTilePicker");
-
-								var tp = new ui.Tileset(m.jContent, td, RectOnly);
-								tp.useSavedSelections = false;
-								tp.setSelectedRect(cur);
-								tp.onSelectAnything = ()->{
-									onPick( tp.getSelectedRect() );
-									m.close();
-								}
-								tp.focusOnSelection(true);
+								var tileIds = cur==null ? [] : td.getTileIdsFromRect(cur);
+								openTilePickerModal(td.uid, TileRectAndClose, tileIds, false, (tids)->{
+									var rect = td.getTileRectFromTileIds(tids);
+									onPick(rect);
+								});
 
 							case _:
 								onPick(null);
@@ -1318,7 +1384,7 @@ class JsTools {
 				var ctx = new ui.modal.ContextMenu();
 				ctx.setAnchor( MA_JQuery(jRecall) );
 				for( img in allImages )
-					ctx.add({
+					ctx.addAction({
 						label: L.untranslated(img.fileName),
 						cb: ()->_pick(img.relPath)
 					});

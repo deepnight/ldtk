@@ -1,3 +1,95 @@
+# 1.5.0 - New LDtk logo
+
+## LDtk logo
+![](1.5.0/logo.png)
+
+The application has a new logo! Hope you will like it :)
+
+Please note that the Windows Explorer could take some time before updating the app related icons (in Start Menu, project icons etc.). You may need to either restart the Explorer, or the computer itself, to force the visual update.
+
+## Global search
+![](1.5.0/search.png)
+
+You can now search for any project element using the `CTRL-F` keyboard shortcut (`CMD-F` on MacOS). The results include:
+
+ - definitions (layers, entities, enums or tilesets),
+ - worlds,
+ - levels,
+ - entity instances.
+
+Optionaly, you may also enable the `searchable` option on supported entity Custom Fields, to filter your entities based on these fields (eg. if you look for a specific item instance or mob type).
+
+## Rules are 20x faster
+![](1.5.0/optim.png)
+
+This version includes lots of internal optimizations regarding auto-layer rules. Therefore, large projects loading time should be significantly faster, especially if your project contained large levels.
+
+Realtime painting on Auto-layers should also be much faster in most scenarios, thanks to these changes.
+
+A new layer option called "Asynchronous render" can be used to delay the actual rendering of tiles by a few milliseconds after painting. This can be used in very complex or large levels to keep the painting action smooth.
+
+## Biomes
+![](1.5.0/biomes.png)
+
+This update brings various features that should make rule-based biomes creation easier!
+
+ 1. Create an Enum with your various biomes (eg. Forest, Desert, Snow etc)
+ 2. Add a custom Level Field that uses this enum.
+ 3. Open the Layers panel, and point your new level field under "Biome Enum".
+ 4. For each group of rules, you may now pick which Enum value should enable this group. For example, you may enable your group that paints snow over your platforms only if the Snow biome is picked for this level.
+
+
+## Random rectangles of tiles for auto-layer rules
+![](1.5.0/randomTileRects.png)
+
+When creating an auto-layer rule, you may now render a rectangle of tiles picked randomly among a group of many others. For example, this makes possible the creation of random variations among trees, or other large details.
+
+
+## Custom layers list
+![](1.5.0/customLayersList.png)
+
+You can group your layers using tags, and filter your main layers list using these tags.
+
+
+## Rendering of tiles from nearby levels
+![](1.5.0/nearbyTiles.png)
+
+There is a new app setting to render tiles from nearby levels, making map transitions much easier to paint!
+
+
+## JSON: extra Table-of-content data
+![](1.5.0/tocJson.png)
+
+When enabling the "table-of-content" export option of an Entity, you will now get extra bits of informations in the `toc` JSON field:
+
+ - world pixel coordinates,
+ - pixel width and height,
+ - for each custom fields, if the new "Export to ToC" option is enabled, the corresponding value will also be added to the table of content.
+
+
+## Other changes
+
+ - Auto-layer rule size is now automatic, internally ranging from 1x1 up to 9x9. LDtk will optimize rules to smaller internal sizes based on your rule layout.
+ - When editing a tag somewhere, LDtk will now offer to also rename all other tags accordingly.
+ - Optimized the Rules panel rendering for projects with tons of rules.
+ - FilePath custom fields will now remember their last open folder for later uses.
+ - Added a button to toggle Auto-layer rendering (equivalent of the existing`SHIFT-R` shortcut)
+ - Added expand/collapse sections to the Layers panel.
+ - Moved the "Project" button location before "World" and "Level" buttons in editor.
+ - Fixed entity preview size in left panel
+ - Fixed IntGrid icons size when the left panel uses the 5-columns mode
+ - Rules remapping now also updates out-of-bounds policy value
+ - Allowed break-on-match on rules with transparency or offsets
+ - Fixed unsupported "Empty cell" value in rules out-of-bounds policy
+ - Fixed a crash when deleting an Enum used in level custom fields.
+ - Fixed a crash in Selects when trying to go over the last element using a keyboard shortcut.
+ - Fixed log path partially cut in the Settings window.
+ - Fixed initial null in JSON defaultEntityWidth/Height values.
+ - Labels are now right aligned in UI forms
+ - Removed `__worldX` and `__worldY` from entity JSONs when the world layout is not GridVania or Free.
+
+
+
 # 1.4.1
 
  - Fixed a crash with Entities rendered as ellipses
@@ -5,9 +97,11 @@
  - Fixed the "Enable/disable rule" button
  - Fixed typo in "Entities" sample map
  - Fixed the "New update" banner depth in changelog
+ - If the app crashes, LDtk won't try to reload the last project, but instead will go the Home screen (preventing crash loops)
  - Updated app splash screen
 
-# 1.4.0 - Int-Grid groups
+
+# 1.4.0 - Int-Grid groups and new app logo
 
 ## Int-Grid groups
 ![](1.4.0/intGridGroups.png)
@@ -51,7 +145,7 @@ LDtk is all about being enjoyable to use, so this update includes many quality-o
  - Updated some sample maps
  - Many bug fixes
 
- ## JSON format changes
+## JSON format changes
 
  - The `__neighbours` array in levels JSON now includes overlapping levels (either in the same world layer, or in nearby world layers).
  - Deprecated values `tileId` and `__tileSrcRect` were removed from *Enum value definitions*

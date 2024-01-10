@@ -21,9 +21,9 @@ class EditEnumDefs extends ui.modal.Panel {
 		// Import
 		jContent.find("button.import").click( ev->{
 			var ctx = new ContextMenu(ev);
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("Text file"),
-				sub: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
+				subText: L.t._('Expected format:\n - One enum per line\n - Each line: "MyEnumId : value1, value2, value3"'),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumText", project.getProjectDir());
 					dn.js.ElectronDialogs.openFile([".txt"], path, function(absPath:String) {
@@ -41,9 +41,9 @@ class EditEnumDefs extends ui.modal.Panel {
 				},
 			});
 
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("JSON"),
-				sub: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
+				subText: L.t._('Accepted formats:\n {\n  "MyEnum1": "a,b,c",\n  "MyEnum2": "a b c",\n  "MyEnum3": ["a","b","c"]\n }'),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumText", project.getProjectDir());
 					dn.js.ElectronDialogs.openFile([".json"], path, function(absPath:String) {
@@ -61,7 +61,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				},
 			});
 
-			ctx.add({
+			ctx.addAction({
 				label:L.t._("Haxe source code"),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumHaxe", project.getProjectDir());
@@ -78,7 +78,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				}
 			});
 
-			ctx.add({
+			ctx.addAction({
 				label:L.t._("CastleDB"),
 				cb: ()->{
 					var path = settings.getUiDir(project, "ImportEnumCdb", project.getProjectDir());
@@ -168,7 +168,7 @@ class EditEnumDefs extends ui.modal.Panel {
 	}
 
 
-	function selectEnum(ed:data.def.EnumDef) {
+	public function selectEnum(ed:data.def.EnumDef) {
 		curEnum = ed;
 		updateEnumList();
 		updateEnumForm();
@@ -179,7 +179,7 @@ class EditEnumDefs extends ui.modal.Panel {
 		jEnumList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jEnumList, false, [
+		ContextMenu.attachTo(jEnumList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -200,22 +200,11 @@ class EditEnumDefs extends ui.modal.Panel {
 				jSep.appendTo(jEnumList);
 				jSep.attr("id", project.iid+"_enum_tag_"+group.tag);
 				jSep.attr("default", "open");
-
-				// Rename
-				if( group.tag!=null ) {
-					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
-					jSep.append(jLinks);
-					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
-						for(ed in project.defs.enums)
-							ed.tags.rename(group.tag, t);
-						editor.ge.emit( EnumDefChanged );
-					});
-				}
 			}
 
 			var jLi = new J('<li class="subList draggable"/>');
 			jLi.appendTo(jEnumList);
-			var jSubList = new J('<ul/>');
+			var jSubList = new J('<ul class="niceList compact"/>');
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {
@@ -229,40 +218,29 @@ class EditEnumDefs extends ui.modal.Panel {
 					selectEnum(ed);
 				});
 
-				ContextMenu.addTo(jLi, [
-					{
-						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
-					},
-					{
-						label: L._Cut(),
-						cb: ()->{
+				ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
+					ctx.addElement( Ctx_CopyPaster({
+						elementName: "enum",
+						clipType: CLayerDef,
+
+						copy: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
+						cut: ()->{
 							App.ME.clipboard.copyData(CEnumDef, ed.toJson(project));
 							deleteEnumDef(ed, true);
 						},
-					},
-					{
-						label: L._PasteAfter(),
-						cb: ()->{
+						paste: ()->{
 							var copy = project.defs.pasteEnumDef(App.ME.clipboard, ed);
 							editor.ge.emit(EnumDefAdded);
 							selectEnum(copy);
 						},
-						enable: ()->App.ME.clipboard.is(CEnumDef),
-					},
-					{
-						label: L._Duplicate(),
-						cb: ()->{
+						duplicate: ()->{
 							var copy = project.defs.duplicateEnumDef(ed);
 							editor.ge.emit(EnumDefAdded);
 							selectEnum(copy);
 						},
-					},
-					{
-						label: L._Delete(),
-						cb: deleteEnumDef.bind(ed,true),
-					}
-				]);
+						delete: ()->deleteEnumDef(ed,true),
+					}) );
+				});
 			}
 
 
@@ -336,7 +314,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				Tip.attach(jDelete, Lang.t._("Remove this external Enum source"));
 			}
 
-			var jSubList = new J('<li class="subList"> <ul></ul> </li>');
+			var jSubList = new J('<li class="subList"> <ul class="niceList compact"></ul> </li>');
 			jSubList.appendTo(jEnumList);
 			jSubList = jSubList.children("ul");
 
@@ -354,7 +332,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				});
 
 
-				ContextMenu.addTo(jLi, [
+				ContextMenu.attachTo(jLi, [
 					{
 						label: L.t._("Remove extern source"),
 						cb: deleteEnumDef.bind(ed,true),
@@ -419,7 +397,13 @@ class EditEnumDefs extends ui.modal.Panel {
 		var ted = new TagEditor(
 			curEnum.tags,
 			()->editor.ge.emit(EnumDefChanged),
-			()->project.defs.getRecallTags(project.defs.enums, ed->ed.tags)
+			()->project.defs.getRecallTags(project.defs.enums, ed->ed.tags),
+			()->project.defs.enums.map( enumDef->enumDef.tags ),
+			(oldT,newT)->{
+				for(enumDef in project.defs.enums)
+					enumDef.tags.rename(oldT,newT);
+				editor.ge.emit( EnumDefChanged );
+			}
 		);
 		jDefForm.find("#tags").empty().append(ted.jEditor);
 

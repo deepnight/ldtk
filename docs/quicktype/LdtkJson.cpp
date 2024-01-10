@@ -173,11 +173,13 @@ namespace quicktype {
         bool editor_show_in_world;
         boost::optional<std::string> editor_text_prefix;
         boost::optional<std::string> editor_text_suffix;
+        bool export_to_toc;
         std::string identifier;
         bool is_array;
         boost::optional<double> max;
         boost::optional<double> min;
         boost::optional<std::string> regex;
+        bool searchable;
         bool symmetrical_ref;
         boost::optional<TextLanguageMode> text_language_mode;
         boost::optional<int64_t> tileset_uid;
@@ -310,6 +312,14 @@ namespace quicktype {
         void set_editor_text_suffix(boost::optional<std::string> value) { this->editor_text_suffix = value; }
 
         /**
+         * If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
+         * to Entity fields.
+         */
+        const bool & get_export_to_toc() const { return export_to_toc; }
+        bool & get_mutable_export_to_toc() { return export_to_toc; }
+        void set_export_to_toc(const bool & value) { this->export_to_toc = value; }
+
+        /**
          * User defined unique identifier
          */
         const std::string & get_identifier() const { return identifier; }
@@ -341,6 +351,13 @@ namespace quicktype {
          */
         boost::optional<std::string> get_regex() const { return regex; }
         void set_regex(boost::optional<std::string> value) { this->regex = value; }
+
+        /**
+         * If enabled, this field will be searchable through LDtk command palette
+         */
+        const bool & get_searchable() const { return searchable; }
+        bool & get_mutable_searchable() { return searchable; }
+        void set_searchable(const bool & value) { this->searchable = value; }
 
         const bool & get_symmetrical_ref() const { return symmetrical_ref; }
         bool & get_mutable_symmetrical_ref() { return symmetrical_ref; }
@@ -465,6 +482,7 @@ namespace quicktype {
         virtual ~EntityDefinition() = default;
 
         private:
+        bool allow_out_of_bounds;
         std::string color;
         boost::optional<std::string> doc;
         bool export_to_toc;
@@ -500,6 +518,13 @@ namespace quicktype {
         int64_t width;
 
         public:
+        /**
+         * If enabled, this entity is allowed to stay outside of the current level bounds
+         */
+        const bool & get_allow_out_of_bounds() const { return allow_out_of_bounds; }
+        bool & get_mutable_allow_out_of_bounds() { return allow_out_of_bounds; }
+        void set_allow_out_of_bounds(const bool & value) { this->allow_out_of_bounds = value; }
+
         /**
          * Base entity color
          */
@@ -863,12 +888,13 @@ namespace quicktype {
         double pivot_x;
         double pivot_y;
         int64_t size;
-        std::vector<int64_t> tile_ids;
+        boost::optional<std::vector<int64_t>> tile_ids;
         TileMode tile_mode;
         int64_t tile_random_x_max;
         int64_t tile_random_x_min;
         int64_t tile_random_y_max;
         int64_t tile_random_y_min;
+        std::vector<std::vector<int64_t>> tile_rects_ids;
         int64_t tile_x_offset;
         int64_t tile_y_offset;
         int64_t uid;
@@ -979,11 +1005,11 @@ namespace quicktype {
         void set_size(const int64_t & value) { this->size = value; }
 
         /**
-         * Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+         * **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
+         * by: `tileRectsIds`
          */
-        const std::vector<int64_t> & get_tile_ids() const { return tile_ids; }
-        std::vector<int64_t> & get_mutable_tile_ids() { return tile_ids; }
-        void set_tile_ids(const std::vector<int64_t> & value) { this->tile_ids = value; }
+        boost::optional<std::vector<int64_t>> get_tile_ids() const { return tile_ids; }
+        void set_tile_ids(boost::optional<std::vector<int64_t>> value) { this->tile_ids = value; }
 
         /**
          * Defines how tileIds array is used Possible values: `Single`, `Stamp`
@@ -1019,6 +1045,13 @@ namespace quicktype {
         const int64_t & get_tile_random_y_min() const { return tile_random_y_min; }
         int64_t & get_mutable_tile_random_y_min() { return tile_random_y_min; }
         void set_tile_random_y_min(const int64_t & value) { this->tile_random_y_min = value; }
+
+        /**
+         * Array containing all the possible tile IDs rectangles (picked randomly).
+         */
+        const std::vector<std::vector<int64_t>> & get_tile_rects_ids() const { return tile_rects_ids; }
+        std::vector<std::vector<int64_t>> & get_mutable_tile_rects_ids() { return tile_rects_ids; }
+        void set_tile_rects_ids(const std::vector<std::vector<int64_t>> & value) { this->tile_rects_ids = value; }
 
         /**
          * Tile X offset
@@ -1077,11 +1110,13 @@ namespace quicktype {
 
         private:
         bool active;
+        int64_t biome_requirement_mode;
         boost::optional<bool> collapsed;
         boost::optional<std::string> color;
         boost::optional<TilesetRectangle> icon;
         bool is_optional;
         std::string name;
+        std::vector<std::string> required_biome_values;
         std::vector<AutoLayerRuleDefinition> rules;
         int64_t uid;
         bool uses_wizard;
@@ -1090,6 +1125,10 @@ namespace quicktype {
         const bool & get_active() const { return active; }
         bool & get_mutable_active() { return active; }
         void set_active(const bool & value) { this->active = value; }
+
+        const int64_t & get_biome_requirement_mode() const { return biome_requirement_mode; }
+        int64_t & get_mutable_biome_requirement_mode() { return biome_requirement_mode; }
+        void set_biome_requirement_mode(const int64_t & value) { this->biome_requirement_mode = value; }
 
         /**
          * *This field was removed in 1.0.0 and should no longer be used.*
@@ -1110,6 +1149,10 @@ namespace quicktype {
         const std::string & get_name() const { return name; }
         std::string & get_mutable_name() { return name; }
         void set_name(const std::string & value) { this->name = value; }
+
+        const std::vector<std::string> & get_required_biome_values() const { return required_biome_values; }
+        std::vector<std::string> & get_mutable_required_biome_values() { return required_biome_values; }
+        void set_required_biome_values(const std::vector<std::string> & value) { this->required_biome_values = value; }
 
         const std::vector<AutoLayerRuleDefinition> & get_rules() const { return rules; }
         std::vector<AutoLayerRuleDefinition> & get_mutable_rules() { return rules; }
@@ -1218,6 +1261,8 @@ namespace quicktype {
         std::vector<AutoLayerRuleGroup> auto_rule_groups;
         boost::optional<int64_t> auto_source_layer_def_uid;
         boost::optional<int64_t> auto_tileset_def_uid;
+        boost::optional<int64_t> auto_tiles_killed_by_other_layer_uid;
+        boost::optional<int64_t> biome_field_uid;
         bool can_select_when_inactive;
         double display_opacity;
         boost::optional<std::string> doc;
@@ -1244,6 +1289,8 @@ namespace quicktype {
         Type layer_definition_type;
         boost::optional<std::string> ui_color;
         int64_t uid;
+        std::vector<std::string> ui_filter_tags;
+        bool use_async_render;
 
         public:
         /**
@@ -1269,6 +1316,12 @@ namespace quicktype {
          */
         boost::optional<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
         void set_auto_tileset_def_uid(boost::optional<int64_t> value) { this->auto_tileset_def_uid = value; }
+
+        boost::optional<int64_t> get_auto_tiles_killed_by_other_layer_uid() const { return auto_tiles_killed_by_other_layer_uid; }
+        void set_auto_tiles_killed_by_other_layer_uid(boost::optional<int64_t> value) { this->auto_tiles_killed_by_other_layer_uid = value; }
+
+        boost::optional<int64_t> get_biome_field_uid() const { return biome_field_uid; }
+        void set_biome_field_uid(boost::optional<int64_t> value) { this->biome_field_uid = value; }
 
         /**
          * Allow editor selections when the layer is not currently active.
@@ -1458,6 +1511,17 @@ namespace quicktype {
         const int64_t & get_uid() const { return uid; }
         int64_t & get_mutable_uid() { return uid; }
         void set_uid(const int64_t & value) { this->uid = value; }
+
+        /**
+         * Display tags
+         */
+        const std::vector<std::string> & get_ui_filter_tags() const { return ui_filter_tags; }
+        std::vector<std::string> & get_mutable_ui_filter_tags() { return ui_filter_tags; }
+        void set_ui_filter_tags(const std::vector<std::string> & value) { this->ui_filter_tags = value; }
+
+        const bool & get_use_async_render() const { return use_async_render; }
+        bool & get_mutable_use_async_render() { return use_async_render; }
+        void set_use_async_render(const bool & value) { this->use_async_render = value; }
     };
 
     /**
@@ -1721,7 +1785,7 @@ namespace quicktype {
         void set_tilesets(const std::vector<TilesetDefinition> & value) { this->tilesets = value; }
     };
 
-    enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, EXPORT_PRE_CSV_INT_GRID_FORMAT, IGNORE_BACKUP_SUGGEST, MULTI_WORLDS, PREPEND_INDEX_TO_LEVEL_FILE_NAMES, USE_MULTILINES_TYPE };
+    enum class Flag : int { DISCARD_PRE_CSV_INT_GRID, EXPORT_OLD_TABLE_OF_CONTENT_DATA, EXPORT_PRE_CSV_INT_GRID_FORMAT, IGNORE_BACKUP_SUGGEST, MULTI_WORLDS, PREPEND_INDEX_TO_LEVEL_FILE_NAMES, USE_MULTILINES_TYPE };
 
     class FieldInstance {
         public:
@@ -1802,8 +1866,8 @@ namespace quicktype {
         std::string smart_color;
         std::vector<std::string> tags;
         boost::optional<TilesetRectangle> tile;
-        int64_t world_x;
-        int64_t world_y;
+        boost::optional<int64_t> world_x;
+        boost::optional<int64_t> world_y;
         int64_t def_uid;
         std::vector<FieldInstance> field_instances;
         int64_t height;
@@ -1856,18 +1920,16 @@ namespace quicktype {
         void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
 
         /**
-         * X world coordinate in pixels
+         * X world coordinate in pixels. Only available in GridVania or Free world layouts.
          */
-        const int64_t & get_world_x() const { return world_x; }
-        int64_t & get_mutable_world_x() { return world_x; }
-        void set_world_x(const int64_t & value) { this->world_x = value; }
+        boost::optional<int64_t> get_world_x() const { return world_x; }
+        void set_world_x(boost::optional<int64_t> value) { this->world_x = value; }
 
         /**
-         * Y world coordinate in pixels
+         * Y world coordinate in pixels Only available in GridVania or Free world layouts.
          */
-        const int64_t & get_world_y() const { return world_y; }
-        int64_t & get_mutable_world_y() { return world_y; }
-        void set_world_y(const int64_t & value) { this->world_y = value; }
+        boost::optional<int64_t> get_world_y() const { return world_y; }
+        void set_world_y(boost::optional<int64_t> value) { this->world_y = value; }
 
         /**
          * Reference of the **Entity definition** UID
@@ -1917,6 +1979,8 @@ namespace quicktype {
 
     /**
      * This object describes the "location" of an Entity instance in the project worlds.
+     *
+     * IID information of this instance
      */
     class ReferenceToAnEntityInstance {
         public:
@@ -2563,6 +2627,52 @@ namespace quicktype {
         void set_world_y(const int64_t & value) { this->world_y = value; }
     };
 
+    class LdtkTocInstanceData {
+        public:
+        LdtkTocInstanceData() = default;
+        virtual ~LdtkTocInstanceData() = default;
+
+        private:
+        nlohmann::json fields;
+        int64_t hei_px;
+        ReferenceToAnEntityInstance iids;
+        int64_t wid_px;
+        int64_t world_x;
+        int64_t world_y;
+
+        public:
+        /**
+         * An object containing the values of all entity fields with the `exportToToc` option
+         * enabled. This object typing depends on actual field value types.
+         */
+        const nlohmann::json & get_fields() const { return fields; }
+        nlohmann::json & get_mutable_fields() { return fields; }
+        void set_fields(const nlohmann::json & value) { this->fields = value; }
+
+        const int64_t & get_hei_px() const { return hei_px; }
+        int64_t & get_mutable_hei_px() { return hei_px; }
+        void set_hei_px(const int64_t & value) { this->hei_px = value; }
+
+        /**
+         * IID information of this instance
+         */
+        const ReferenceToAnEntityInstance & get_iids() const { return iids; }
+        ReferenceToAnEntityInstance & get_mutable_iids() { return iids; }
+        void set_iids(const ReferenceToAnEntityInstance & value) { this->iids = value; }
+
+        const int64_t & get_wid_px() const { return wid_px; }
+        int64_t & get_mutable_wid_px() { return wid_px; }
+        void set_wid_px(const int64_t & value) { this->wid_px = value; }
+
+        const int64_t & get_world_x() const { return world_x; }
+        int64_t & get_mutable_world_x() { return world_x; }
+        void set_world_x(const int64_t & value) { this->world_x = value; }
+
+        const int64_t & get_world_y() const { return world_y; }
+        int64_t & get_mutable_world_y() { return world_y; }
+        void set_world_y(const int64_t & value) { this->world_y = value; }
+    };
+
     class LdtkTableOfContentEntry {
         public:
         LdtkTableOfContentEntry() = default;
@@ -2570,16 +2680,24 @@ namespace quicktype {
 
         private:
         std::string identifier;
-        std::vector<ReferenceToAnEntityInstance> instances;
+        boost::optional<std::vector<ReferenceToAnEntityInstance>> instances;
+        std::vector<LdtkTocInstanceData> instances_data;
 
         public:
         const std::string & get_identifier() const { return identifier; }
         std::string & get_mutable_identifier() { return identifier; }
         void set_identifier(const std::string & value) { this->identifier = value; }
 
-        const std::vector<ReferenceToAnEntityInstance> & get_instances() const { return instances; }
-        std::vector<ReferenceToAnEntityInstance> & get_mutable_instances() { return instances; }
-        void set_instances(const std::vector<ReferenceToAnEntityInstance> & value) { this->instances = value; }
+        /**
+         * **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+         * Replaced by: `instancesData`
+         */
+        boost::optional<std::vector<ReferenceToAnEntityInstance>> get_instances() const { return instances; }
+        void set_instances(boost::optional<std::vector<ReferenceToAnEntityInstance>> value) { this->instances = value; }
+
+        const std::vector<LdtkTocInstanceData> & get_instances_data() const { return instances_data; }
+        std::vector<LdtkTocInstanceData> & get_mutable_instances_data() { return instances_data; }
+        void set_instances_data(const std::vector<LdtkTocInstanceData> & value) { this->instances_data = value; }
     };
 
     enum class WorldLayout : int { FREE, GRID_VANIA, LINEAR_HORIZONTAL, LINEAR_VERTICAL };
@@ -2701,6 +2819,7 @@ namespace quicktype {
         boost::optional<TileCustomMetadata> tile_custom_metadata;
         boost::optional<TilesetDefinition> tileset_def;
         boost::optional<TilesetRectangle> tileset_rect;
+        boost::optional<LdtkTocInstanceData> toc_instance_data;
         boost::optional<World> world;
 
         public:
@@ -2781,6 +2900,9 @@ namespace quicktype {
 
         boost::optional<TilesetRectangle> get_tileset_rect() const { return tileset_rect; }
         void set_tileset_rect(boost::optional<TilesetRectangle> value) { this->tileset_rect = value; }
+
+        boost::optional<LdtkTocInstanceData> get_toc_instance_data() const { return toc_instance_data; }
+        void set_toc_instance_data(boost::optional<LdtkTocInstanceData> value) { this->toc_instance_data = value; }
 
         boost::optional<World> get_world() const { return world; }
         void set_world(boost::optional<World> value) { this->world = value; }
@@ -3008,8 +3130,9 @@ namespace quicktype {
 
         /**
          * An array containing various advanced flags (ie. options or other states). Possible
-         * values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
-         * `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+         * values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,
+         * `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,
+         * `MultiWorlds`, `UseMultilinesType`
          */
         const std::vector<Flag> & get_flags() const { return flags; }
         std::vector<Flag> & get_mutable_flags() { return flags; }
@@ -3224,6 +3347,9 @@ namespace quicktype {
     void from_json(const json & j, Level & x);
     void to_json(json & j, const Level & x);
 
+    void from_json(const json & j, LdtkTocInstanceData & x);
+    void to_json(json & j, const LdtkTocInstanceData & x);
+
     void from_json(const json & j, LdtkTableOfContentEntry & x);
     void to_json(json & j, const LdtkTableOfContentEntry & x);
 
@@ -3327,11 +3453,13 @@ namespace quicktype {
         x.set_editor_show_in_world(j.at("editorShowInWorld").get<bool>());
         x.set_editor_text_prefix(get_stack_optional<std::string>(j, "editorTextPrefix"));
         x.set_editor_text_suffix(get_stack_optional<std::string>(j, "editorTextSuffix"));
+        x.set_export_to_toc(j.at("exportToToc").get<bool>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_is_array(j.at("isArray").get<bool>());
         x.set_max(get_stack_optional<double>(j, "max"));
         x.set_min(get_stack_optional<double>(j, "min"));
         x.set_regex(get_stack_optional<std::string>(j, "regex"));
+        x.set_searchable(j.at("searchable").get<bool>());
         x.set_symmetrical_ref(j.at("symmetricalRef").get<bool>());
         x.set_text_language_mode(get_stack_optional<TextLanguageMode>(j, "textLanguageMode"));
         x.set_tileset_uid(get_stack_optional<int64_t>(j, "tilesetUid"));
@@ -3364,11 +3492,13 @@ namespace quicktype {
         j["editorShowInWorld"] = x.get_editor_show_in_world();
         j["editorTextPrefix"] = x.get_editor_text_prefix();
         j["editorTextSuffix"] = x.get_editor_text_suffix();
+        j["exportToToc"] = x.get_export_to_toc();
         j["identifier"] = x.get_identifier();
         j["isArray"] = x.get_is_array();
         j["max"] = x.get_max();
         j["min"] = x.get_min();
         j["regex"] = x.get_regex();
+        j["searchable"] = x.get_searchable();
         j["symmetricalRef"] = x.get_symmetrical_ref();
         j["textLanguageMode"] = x.get_text_language_mode();
         j["tilesetUid"] = x.get_tileset_uid();
@@ -3395,6 +3525,7 @@ namespace quicktype {
     }
 
     inline void from_json(const json & j, EntityDefinition& x) {
+        x.set_allow_out_of_bounds(j.at("allowOutOfBounds").get<bool>());
         x.set_color(j.at("color").get<std::string>());
         x.set_doc(get_stack_optional<std::string>(j, "doc"));
         x.set_export_to_toc(j.at("exportToToc").get<bool>());
@@ -3432,6 +3563,7 @@ namespace quicktype {
 
     inline void to_json(json & j, const EntityDefinition & x) {
         j = json::object();
+        j["allowOutOfBounds"] = x.get_allow_out_of_bounds();
         j["color"] = x.get_color();
         j["doc"] = x.get_doc();
         j["exportToToc"] = x.get_export_to_toc();
@@ -3522,12 +3654,13 @@ namespace quicktype {
         x.set_pivot_x(j.at("pivotX").get<double>());
         x.set_pivot_y(j.at("pivotY").get<double>());
         x.set_size(j.at("size").get<int64_t>());
-        x.set_tile_ids(j.at("tileIds").get<std::vector<int64_t>>());
+        x.set_tile_ids(get_stack_optional<std::vector<int64_t>>(j, "tileIds"));
         x.set_tile_mode(j.at("tileMode").get<TileMode>());
         x.set_tile_random_x_max(j.at("tileRandomXMax").get<int64_t>());
         x.set_tile_random_x_min(j.at("tileRandomXMin").get<int64_t>());
         x.set_tile_random_y_max(j.at("tileRandomYMax").get<int64_t>());
         x.set_tile_random_y_min(j.at("tileRandomYMin").get<int64_t>());
+        x.set_tile_rects_ids(j.at("tileRectsIds").get<std::vector<std::vector<int64_t>>>());
         x.set_tile_x_offset(j.at("tileXOffset").get<int64_t>());
         x.set_tile_y_offset(j.at("tileYOffset").get<int64_t>());
         x.set_uid(j.at("uid").get<int64_t>());
@@ -3561,6 +3694,7 @@ namespace quicktype {
         j["tileRandomXMin"] = x.get_tile_random_x_min();
         j["tileRandomYMax"] = x.get_tile_random_y_max();
         j["tileRandomYMin"] = x.get_tile_random_y_min();
+        j["tileRectsIds"] = x.get_tile_rects_ids();
         j["tileXOffset"] = x.get_tile_x_offset();
         j["tileYOffset"] = x.get_tile_y_offset();
         j["uid"] = x.get_uid();
@@ -3572,11 +3706,13 @@ namespace quicktype {
 
     inline void from_json(const json & j, AutoLayerRuleGroup& x) {
         x.set_active(j.at("active").get<bool>());
+        x.set_biome_requirement_mode(j.at("biomeRequirementMode").get<int64_t>());
         x.set_collapsed(get_stack_optional<bool>(j, "collapsed"));
         x.set_color(get_stack_optional<std::string>(j, "color"));
         x.set_icon(get_stack_optional<TilesetRectangle>(j, "icon"));
         x.set_is_optional(j.at("isOptional").get<bool>());
         x.set_name(j.at("name").get<std::string>());
+        x.set_required_biome_values(j.at("requiredBiomeValues").get<std::vector<std::string>>());
         x.set_rules(j.at("rules").get<std::vector<AutoLayerRuleDefinition>>());
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_uses_wizard(j.at("usesWizard").get<bool>());
@@ -3585,11 +3721,13 @@ namespace quicktype {
     inline void to_json(json & j, const AutoLayerRuleGroup & x) {
         j = json::object();
         j["active"] = x.get_active();
+        j["biomeRequirementMode"] = x.get_biome_requirement_mode();
         j["collapsed"] = x.get_collapsed();
         j["color"] = x.get_color();
         j["icon"] = x.get_icon();
         j["isOptional"] = x.get_is_optional();
         j["name"] = x.get_name();
+        j["requiredBiomeValues"] = x.get_required_biome_values();
         j["rules"] = x.get_rules();
         j["uid"] = x.get_uid();
         j["usesWizard"] = x.get_uses_wizard();
@@ -3630,6 +3768,8 @@ namespace quicktype {
         x.set_auto_rule_groups(j.at("autoRuleGroups").get<std::vector<AutoLayerRuleGroup>>());
         x.set_auto_source_layer_def_uid(get_stack_optional<int64_t>(j, "autoSourceLayerDefUid"));
         x.set_auto_tileset_def_uid(get_stack_optional<int64_t>(j, "autoTilesetDefUid"));
+        x.set_auto_tiles_killed_by_other_layer_uid(get_stack_optional<int64_t>(j, "autoTilesKilledByOtherLayerUid"));
+        x.set_biome_field_uid(get_stack_optional<int64_t>(j, "biomeFieldUid"));
         x.set_can_select_when_inactive(j.at("canSelectWhenInactive").get<bool>());
         x.set_display_opacity(j.at("displayOpacity").get<double>());
         x.set_doc(get_stack_optional<std::string>(j, "doc"));
@@ -3656,6 +3796,8 @@ namespace quicktype {
         x.set_layer_definition_type(j.at("type").get<Type>());
         x.set_ui_color(get_stack_optional<std::string>(j, "uiColor"));
         x.set_uid(j.at("uid").get<int64_t>());
+        x.set_ui_filter_tags(j.at("uiFilterTags").get<std::vector<std::string>>());
+        x.set_use_async_render(j.at("useAsyncRender").get<bool>());
     }
 
     inline void to_json(json & j, const LayerDefinition & x) {
@@ -3664,6 +3806,8 @@ namespace quicktype {
         j["autoRuleGroups"] = x.get_auto_rule_groups();
         j["autoSourceLayerDefUid"] = x.get_auto_source_layer_def_uid();
         j["autoTilesetDefUid"] = x.get_auto_tileset_def_uid();
+        j["autoTilesKilledByOtherLayerUid"] = x.get_auto_tiles_killed_by_other_layer_uid();
+        j["biomeFieldUid"] = x.get_biome_field_uid();
         j["canSelectWhenInactive"] = x.get_can_select_when_inactive();
         j["displayOpacity"] = x.get_display_opacity();
         j["doc"] = x.get_doc();
@@ -3690,6 +3834,8 @@ namespace quicktype {
         j["type"] = x.get_layer_definition_type();
         j["uiColor"] = x.get_ui_color();
         j["uid"] = x.get_uid();
+        j["uiFilterTags"] = x.get_ui_filter_tags();
+        j["useAsyncRender"] = x.get_use_async_render();
     }
 
     inline void from_json(const json & j, TileCustomMetadata& x) {
@@ -3800,8 +3946,8 @@ namespace quicktype {
         x.set_smart_color(j.at("__smartColor").get<std::string>());
         x.set_tags(j.at("__tags").get<std::vector<std::string>>());
         x.set_tile(get_stack_optional<TilesetRectangle>(j, "__tile"));
-        x.set_world_x(j.at("__worldX").get<int64_t>());
-        x.set_world_y(j.at("__worldY").get<int64_t>());
+        x.set_world_x(get_stack_optional<int64_t>(j, "__worldX"));
+        x.set_world_y(get_stack_optional<int64_t>(j, "__worldY"));
         x.set_def_uid(j.at("defUid").get<int64_t>());
         x.set_field_instances(j.at("fieldInstances").get<std::vector<FieldInstance>>());
         x.set_height(j.at("height").get<int64_t>());
@@ -4014,15 +4160,36 @@ namespace quicktype {
         j["worldY"] = x.get_world_y();
     }
 
+    inline void from_json(const json & j, LdtkTocInstanceData& x) {
+        x.set_fields(get_untyped(j, "fields"));
+        x.set_hei_px(j.at("heiPx").get<int64_t>());
+        x.set_iids(j.at("iids").get<ReferenceToAnEntityInstance>());
+        x.set_wid_px(j.at("widPx").get<int64_t>());
+        x.set_world_x(j.at("worldX").get<int64_t>());
+        x.set_world_y(j.at("worldY").get<int64_t>());
+    }
+
+    inline void to_json(json & j, const LdtkTocInstanceData & x) {
+        j = json::object();
+        j["fields"] = x.get_fields();
+        j["heiPx"] = x.get_hei_px();
+        j["iids"] = x.get_iids();
+        j["widPx"] = x.get_wid_px();
+        j["worldX"] = x.get_world_x();
+        j["worldY"] = x.get_world_y();
+    }
+
     inline void from_json(const json & j, LdtkTableOfContentEntry& x) {
         x.set_identifier(j.at("identifier").get<std::string>());
-        x.set_instances(j.at("instances").get<std::vector<ReferenceToAnEntityInstance>>());
+        x.set_instances(get_stack_optional<std::vector<ReferenceToAnEntityInstance>>(j, "instances"));
+        x.set_instances_data(j.at("instancesData").get<std::vector<LdtkTocInstanceData>>());
     }
 
     inline void to_json(json & j, const LdtkTableOfContentEntry & x) {
         j = json::object();
         j["identifier"] = x.get_identifier();
         j["instances"] = x.get_instances();
+        j["instancesData"] = x.get_instances_data();
     }
 
     inline void from_json(const json & j, World& x) {
@@ -4075,6 +4242,7 @@ namespace quicktype {
         x.set_tile_custom_metadata(get_stack_optional<TileCustomMetadata>(j, "TileCustomMetadata"));
         x.set_tileset_def(get_stack_optional<TilesetDefinition>(j, "TilesetDef"));
         x.set_tileset_rect(get_stack_optional<TilesetRectangle>(j, "TilesetRect"));
+        x.set_toc_instance_data(get_stack_optional<LdtkTocInstanceData>(j, "TocInstanceData"));
         x.set_world(get_stack_optional<World>(j, "World"));
     }
 
@@ -4106,6 +4274,7 @@ namespace quicktype {
         j["TileCustomMetadata"] = x.get_tile_custom_metadata();
         j["TilesetDef"] = x.get_tileset_def();
         j["TilesetRect"] = x.get_tileset_rect();
+        j["TocInstanceData"] = x.get_toc_instance_data();
         j["World"] = x.get_world();
     }
 
@@ -4470,6 +4639,7 @@ namespace quicktype {
 
     inline void from_json(const json & j, Flag & x) {
         if (j == "DiscardPreCsvIntGrid") x = Flag::DISCARD_PRE_CSV_INT_GRID;
+        else if (j == "ExportOldTableOfContentData") x = Flag::EXPORT_OLD_TABLE_OF_CONTENT_DATA;
         else if (j == "ExportPreCsvIntGridFormat") x = Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT;
         else if (j == "IgnoreBackupSuggest") x = Flag::IGNORE_BACKUP_SUGGEST;
         else if (j == "MultiWorlds") x = Flag::MULTI_WORLDS;
@@ -4481,6 +4651,7 @@ namespace quicktype {
     inline void to_json(json & j, const Flag & x) {
         switch (x) {
             case Flag::DISCARD_PRE_CSV_INT_GRID: j = "DiscardPreCsvIntGrid"; break;
+            case Flag::EXPORT_OLD_TABLE_OF_CONTENT_DATA: j = "ExportOldTableOfContentData"; break;
             case Flag::EXPORT_PRE_CSV_INT_GRID_FORMAT: j = "ExportPreCsvIntGridFormat"; break;
             case Flag::IGNORE_BACKUP_SUGGEST: j = "IgnoreBackupSuggest"; break;
             case Flag::MULTI_WORLDS: j = "MultiWorlds"; break;

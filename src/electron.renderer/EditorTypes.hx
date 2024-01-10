@@ -24,7 +24,7 @@ enum GlobalEvent {
 
 	LayerDefAdded;
 	LayerDefRemoved(defUid:Int);
-	LayerDefChanged(defUid:Int);
+	LayerDefChanged(defUid:Int, contentInvalidated:Bool);
 	LayerDefSorted;
 	LayerDefConverted;
 	LayerDefIntGridValueAdded(defUid:Int, valueId:Int);
@@ -33,23 +33,23 @@ enum GlobalEvent {
 
 	LayerRuleChanged(rule:data.def.AutoLayerRuleDef);
 	LayerRuleAdded(rule:data.def.AutoLayerRuleDef);
-	LayerRuleRemoved(rule:data.def.AutoLayerRuleDef);
+	LayerRuleRemoved(rule:data.def.AutoLayerRuleDef, invalidates:Bool);
 	LayerRuleSeedChanged;
 	LayerRuleSorted;
 
-	LayerRuleGroupAdded(rg:data.DataTypes.AutoLayerRuleGroup);
-	LayerRuleGroupRemoved(rg:data.DataTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChanged(rg:data.DataTypes.AutoLayerRuleGroup);
-	LayerRuleGroupChangedActiveState(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupAdded(rg:data.def.AutoLayerRuleGroupDef);
+	LayerRuleGroupRemoved(rg:data.def.AutoLayerRuleGroupDef);
+	LayerRuleGroupChanged(rg:data.def.AutoLayerRuleGroupDef);
+	LayerRuleGroupChangedActiveState(rg:data.def.AutoLayerRuleGroupDef);
 	LayerRuleGroupSorted;
-	LayerRuleGroupCollapseChanged(rg:data.DataTypes.AutoLayerRuleGroup);
+	LayerRuleGroupCollapseChanged(rg:data.def.AutoLayerRuleGroupDef);
 
 	LayerInstanceSelected;
 	LayerInstanceEditedByTool(li:data.inst.LayerInstance);
 	LayerInstanceChangedGlobally(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
 	LayerInstancesRestoredFromHistory(lis:Array<data.inst.LayerInstance>);
-	AutoLayerRenderingChanged;
+	AutoLayerRenderingChanged(lis:Array<data.inst.LayerInstance>);
 	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);
 
 	TilesetImageLoaded(td:data.def.TilesetDef, isInitial:Bool);
@@ -185,10 +185,11 @@ enum ImageLoadingResult {
 
 enum TilesetSelectionMode {
 	None;
-	PickAndClose;
-	PickSingle;
-	Free;
-	RectOnly;
+	MultipleIndividuals;
+	OneTile;
+	OneTileAndClose;
+	TileRect;
+	TileRectAndClose;
 }
 
 enum TilePickerDisplayMode {
@@ -235,9 +236,11 @@ enum ModalAnchor {
 
 
 typedef KeyBinding = {
+	var jsDisplayText : String;
 	var keyCode : Int;
 	var jsKey : String;
-	var ctrl : Bool;
+	var ctrlCmd : Bool;
+	var macCtrl : Bool;
 	var shift : Bool;
 	var alt : Bool;
 
@@ -264,8 +267,11 @@ enum AppCommand {
 	@k("tab") C_ZenMode;
 	@k("h") C_ShowHelp;
 	@k("shift w, ², `, [zqsd] w, [arrows] w") C_ToggleWorldMode;
-	@k("ctrl r, [debug] ctrl shift r") @input C_RunCommand;
+	@k("[debug] ctrl shift r, ctrl r") @input C_RunCommand;
 	@k("ctrl q") @input C_ExitApp;
+	@k("[mac] ctrl M") @input C_MinimizeApp;
+	@k("[mac] ctrl H") @input C_HideApp;
+	@k("[mac] ctrl macctrl F, [win] f11, ctrl shift f, [win] alt enter, [mac] ctrl enter") @input C_ToggleFullscreen;
 	@k("pagedown") C_GotoPreviousWorldLayer;
 	@k("pageup") C_GotoNextWorldLayer;
 	@k("ctrl pagedown, shift pagedown") C_MoveLevelToPreviousWorldLayer;
@@ -286,7 +292,19 @@ enum AppCommand {
 	@k("shift r") C_ToggleAutoLayerRender;
 	@k("shift e") C_ToggleSelectEmptySpaces;
 	@k("shift t") C_ToggleTileStacking;
-	@k("shift a, [zqsd] a, [arrows] a") C_ToggleSingleLayerMode;
+	@k("[zqsd] a, [arrows] a, shift a") C_ToggleSingleLayerMode;
 	@k("[win] ctrl h, [linux] ctrl h, [mac] shift h") C_ToggleDetails;
 	@k("g") C_ToggleGrid;
+	@k("ctrl f, ctrl shift p, ctrl k, ctrl shift k") @input C_CommandPalette;
+	@k("x, shift h") C_FlipX;
+	@k("y, shift V") C_FlipY;
+	@k("r") C_ToggleTileRandomMode;
+	@k("[arrows] s, shift s") C_SaveTileSelection;
+	@k("shift l") C_LoadTileSelection;
+}
+
+
+enum DebugFlag {
+	F_MainDebug;
+	F_IntGridUseCounts;
 }

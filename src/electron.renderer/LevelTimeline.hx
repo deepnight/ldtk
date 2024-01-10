@@ -26,22 +26,23 @@ class LevelTimeline {
 
 	var changeBounds: Null<h2d.col.Bounds>;
 
-	public function new(levelUid:Int, worldIid:String) {
+	public function new(levelUid:Int, worldIid:String, saveFirstState:Bool) {
 		this.levelUid = levelUid;
 		this.worldIid = worldIid;
 
-		clear();
+		clear(saveFirstState);
 	}
 
 
 	/**
 		Reset timeline completely
 	**/
-	public function clear() {
+	public function clear(saveState=true) {
 		states = new haxe.ds.Vector(STATES_COUNT+EXTRA);
 		invalidatedDebug = true;
 		curStateIdx = -1;
-		saveFullLevelState();
+		if( saveState )
+			saveFullLevelState();
 	}
 
 
@@ -101,7 +102,7 @@ class LevelTimeline {
 			case ProjectSelected: true;
 			case LayerDefAdded: true;
 			case LayerDefRemoved(defUid): true;
-			case LayerDefChanged(defUid): true;
+			case LayerDefChanged(defUid,contentInvalidated): contentInvalidated;
 			case LayerDefConverted: true;
 			case LayerDefIntGridValueRemoved(defUid, valueId, isUsed): true;
 			case TilesetDefRemoved(td): true;
@@ -158,7 +159,7 @@ class LevelTimeline {
 	**/
 	public function saveLayerState(li:data.inst.LayerInstance) {
 		startTimer();
-		editor.levelRender.applyInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
+		editor.levelRender.updateInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
 		advanceIndex();
 		saveSingleLayerState(li);
 		saveDependentLayers([li]);
@@ -197,7 +198,7 @@ class LevelTimeline {
 	**/
 	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
 		startTimer();
-		editor.levelRender.applyInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
+		editor.levelRender.updateInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
 		advanceIndex();
 		for(li in lis)
 			saveSingleLayerState(li);
@@ -216,7 +217,7 @@ class LevelTimeline {
 			return;
 
 		startTimer();
-		editor.levelRender.applyInvalidations();
+		editor.levelRender.updateInvalidations();
 		advanceIndex();
 
 		checkOrInitState(curStateIdx);

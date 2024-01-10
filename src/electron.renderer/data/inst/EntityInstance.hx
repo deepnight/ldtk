@@ -54,7 +54,7 @@ class EntityInstance {
 		if( customHeight==def.height )
 			customHeight = null;
 
-		return {
+		var json : ldtk.Json.EntityInstanceJson = {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__grid: [ getCx(li.def), getCy(li.def) ],
@@ -62,8 +62,6 @@ class EntityInstance {
 			__tags: def.tags.toArray(),
 			__tile: getSmartTile(),
 			__smartColor: C.intToHex( getSmartColor(false) ),
-			__worldX: x + li.level.worldX,
-			__worldY: y + li.level.worldY,
 
 			iid: iid,
 			width: width,
@@ -77,6 +75,17 @@ class EntityInstance {
 				all;
 			}
 		}
+
+		// World coords
+		switch _li.level._world.worldLayout {
+			case Free, GridVania:
+				json.__worldX = x + li.level.worldX;
+				json.__worldY = y + li.level.worldY;
+
+			case LinearHorizontal, LinearVertical:
+		}
+
+		return json;
 	}
 
 	public function toSimplifiedJson() : Dynamic {
@@ -314,7 +323,7 @@ class EntityInstance {
 				return null;
 
 			for(i in 0...fi.getArrayLength())
-				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.editorDisplayMode==RefLinkBetweenCenters || fi.def.editorDisplayMode==RefLinkBetweenPivots ) )
+				if( fi.getEntityRefIid(i)==targetEi.iid && ( !onlyIfLinkIsDisplayed || fi.def.refLinkIsDisplayed() ) )
 					return fi;
 		}
 		return null;

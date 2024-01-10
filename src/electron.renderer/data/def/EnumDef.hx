@@ -188,7 +188,7 @@ class EnumDef {
 			if( values[i].id==from ) {
 				values[i].id = to;
 
-				// Fix existing fields
+				// Fix existing field instances
 				_project.iterateAllFieldInstances( F_Enum(uid), function(fi) {
 					for(i in 0...fi.getArrayLength())
 						if( fi.getEnumValue(i)==from ) {
@@ -196,6 +196,20 @@ class EnumDef {
 							fi.parseValue(i, to);
 						}
 				});
+
+				// Fix rule biomes
+				for( ld in _project.defs.layers ) {
+					if( ld.getBiomeEnumDef()!=this )
+						continue;
+
+					for( rg in ld.autoRuleGroups ) {
+						for(i in 0...rg.requiredBiomeValues.length)
+							if( rg.requiredBiomeValues[i]==from ) {
+								rg.requiredBiomeValues[i] = to;
+								App.LOG.add("tidy", "Renamed biome enum value in rule group "+rg.name+" from layer "+ld.identifier);
+							}
+					}
+				}
 
 				// Fix tileset meta-data
 				for(td in _project.defs.tilesets)

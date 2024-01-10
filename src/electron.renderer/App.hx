@@ -33,6 +33,7 @@ class App extends dn.Process {
 	public var pendingUpdate : Null<{ ver:String, github:Bool }>;
 
 	public var keyBindings : Array<KeyBinding> = [];
+	var debugFlags : Map<DebugFlag,Bool> = new Map();
 
 	public function new() {
 		super();
@@ -76,6 +77,10 @@ class App extends dn.Process {
 		canvas.addEventListener("webglcontextlost", (_)->onGlContextLoss());
 		clearMiniNotif();
 		clipboard = data.Clipboard.createSystem();
+		Chrono.COLORS_LOW.col = "#15ff00";
+		Chrono.COLORS_LOW.timeThreshold = 0.01;
+		Chrono.COLORS_HIGH.col = "#ff0000";
+		Chrono.COLORS_HIGH.timeThreshold = 0.30;
 
 		// Init window
 		IpcRenderer.on("onWinClose", onWindowCloseButton);
@@ -187,9 +192,14 @@ class App extends dn.Process {
 	function initKeyBindings() {
 		keyBindings = [];
 
+		var ctrlReg = ~/\bctrl\b/i;
+		var shiftReg = ~/\bshift\b/i;
+		var altReg = ~/\balt\b/i;
+		var macCtrlReg = ~/\bmacctrl\b/i;
+
 		// Parse AppCommands meta
 		var meta = haxe.rtti.Meta.getFields(AppCommand);
-		var keyNameReg = ~/(ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
+		var specialKeysRemovalReg = ~/(macctrl|ctrl|shift|alt| |-|\+|\[wasd\]|\[zqsd\]|\[arrows\]|\[win\]|\[linux\]|\[mac\]|\[debug\])/gi;
 		for(k in AppCommand.getConstructors()) {
 			var cmd = AppCommand.createByName(k);
 			var cmdMeta : Dynamic = Reflect.field(meta, k);
@@ -199,8 +209,7 @@ class App extends dn.Process {
 
 			rawCombos = rawCombos.toLowerCase();
 			for(rawCombo in rawCombos.split(",")) {
-
-				var rawKey = keyNameReg.replace(rawCombo, "");
+				var rawKey = specialKeysRemovalReg.replace(rawCombo, "");
 				var keyCode = switch rawKey {
 					case "escape": K.ESCAPE;
 					case "tab": K.TAB;
@@ -210,6 +219,7 @@ class App extends dn.Process {
 					case "down": K.DOWN;
 					case "left": K.LEFT;
 					case "right": K.RIGHT;
+					case "enter": K.ENTER;
 					case "²": K.QWERTY_TILDE;
 					case "`": K.QWERTY_QUOTE;
 
@@ -239,23 +249,58 @@ class App extends dn.Process {
 					: null;
 
 
-				keyBindings.push({
+				var kb : KeyBinding = {
+					jsDisplayText: rawCombo.indexOf("]")>=0 ? rawCombo.substr(rawCombo.indexOf("]")+1) : rawCombo,
 					keyCode: keyCode,
 					jsKey: rawKey,
-					ctrl: rawCombo.indexOf("ctrl")>=0,
-					shift: rawCombo.indexOf("shift")>=0,
-					alt: rawCombo.indexOf("alt")>=0,
+					ctrlCmd: ctrlReg.match(rawCombo),
+					macCtrl: macCtrlReg.match(rawCombo),
+					shift: shiftReg.match(rawCombo),
+					alt: altReg.match(rawCombo),
 					navKeys: navKeys,
 					os: os,
 					debug: rawCombo.indexOf("[debug]")>=0,
 					allowInInputs: Reflect.hasField(cmdMeta, "input"),
 					command: cmd,
-				});
+				}
+				keyBindings.push(kb);
 			}
 
 		}
 	}
 
+
+	public function getFirstRelevantKeyBinding(cmd:AppCommand) : Null<KeyBinding> {
+		if( cmd==null )
+			return null;
+
+		for(kb in App.ME.keyBindings) {
+			if( kb.command!=cmd )
+				continue;
+
+			// Check OS
+			switch kb.os {
+				case null:
+				case "win": if( !isWindows() ) continue;
+				case "mac": if( !isMac() ) continue;
+				case "linux": if( !isLinux() ) continue;
+			}
+
+			// Check NavKeys
+			if( kb.navKeys!=null && settings.v.navigationKeys!=kb.navKeys )
+				continue;
+
+			// Check debug
+			#if !debug
+			if( kb.debug )
+				continue;
+			#end
+
+			return kb;
+		}
+
+		return null;
+	}
 
 	function initAutoUpdater() {
 		// Init
@@ -457,19 +502,26 @@ class App extends dn.Process {
 		return ui.ProjectSaver.hasAny() || ui.Modal.hasAnyUnclosable();
 	}
 
-	public static inline function isLinux() return js.node.Os.platform()=="linux";
-	public static inline function isWindows() return js.node.Os.platform()=="win32";
-	public static inline function isMac() return js.node.Os.platform()=="darwin";
+	public static function isLinux() return js.node.Os.platform()=="linux";
+	public static function isWindows() return js.node.Os.platform()=="win32";
+	public static function isMac() return js.node.Os.platform()=="darwin";
+	// public static function isWindows() return false;
+	// public static function isMac() return true;
 
 	public inline function isKeyDown(keyId:Int) return jsKeyDowns.get(keyId)==true || heapsKeyDowns.get(keyId)==true;
 	public inline function isShiftDown() return isKeyDown(K.SHIFT);
-	public inline function isCtrlDown() {
+	public inline function isCtrlCmdDown() {
 		return App.isMac()
 			? jsMetaKeyDown || isKeyDown(91) || isKeyDown(93)
 			: isKeyDown(K.CTRL);
 	}
+	public inline function isMacCtrlDown() {
+		return App.isMac()
+			? isKeyDown(K.CTRL)
+			: false;
+	}
 	public inline function isAltDown() return isKeyDown(K.ALT);
-	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlDown() || isAltDown();
+	public inline function hasAnyToggleKeyDown() return isShiftDown() || isCtrlCmdDown() || isMacCtrlDown() || isAltDown();
 
 
 	var _inputFocusCache : Null<Bool> = null;
@@ -496,29 +548,130 @@ class App extends dn.Process {
 
 
 	function onKeyPress(keyCode:Int) {
+		// Propagate to current page
 		if( hasPage() && !curPageProcess.isPaused() )
 			curPageProcess.onKeyPress(keyCode);
 
+		// Propagate to all modals
 		for(m in ui.Modal.ALL)
 			if( !m.destroyed && !m.isPaused() )
 				m.onKeyPress(keyCode);
 
+		// Check app key bindings
+		for(kb in keyBindings) {
+			#if( !debug )
+			if( kb.debug )
+				continue;
+			#end
+
+			switch kb.os {
+				case null:
+				case "win": if( !App.isWindows() ) continue;
+				case "linux": if( !App.isLinux() ) continue;
+				case "mac": if( !App.isMac() ) continue;
+				case _:
+			}
+
+			if( kb.keyCode!=keyCode )
+				continue;
+
+			if( kb.shift && !App.ME.isShiftDown() || !kb.shift && App.ME.isShiftDown() )
+				continue;
+
+			if( kb.ctrlCmd && !App.ME.isCtrlCmdDown() || !kb.ctrlCmd && App.ME.isCtrlCmdDown() )
+				continue;
+
+			if( kb.macCtrl && !App.ME.isMacCtrlDown() || !kb.macCtrl && App.ME.isMacCtrlDown() )
+				continue;
+
+			if( kb.alt && !App.ME.isAltDown() || !kb.alt && App.ME.isAltDown() )
+				continue;
+
+			if( !kb.allowInInputs && hasInputFocus() )
+				continue;
+
+			if( kb.navKeys!=null && kb.navKeys!=settings.v.navigationKeys )
+				continue;
+
+			executeAppCommand(kb.command);
+			break;
+		}
+
+		// Misc shortcuts
 		switch keyCode {
 			// Open debug menu
-			case K.D if( isCtrlDown() && isShiftDown() && !hasInputFocus() ):
+			case K.D if( isCtrlCmdDown() && isShiftDown() && !hasInputFocus() ):
 				new ui.modal.DebugMenu();
 
-			// Fullscreen
-			case K.F11 if( !hasAnyToggleKeyDown() && !hasInputFocus() ):
+			case _:
+		}
+	}
+
+
+	public function executeAppCommand(cmd:AppCommand) {
+		switch cmd {
+			case C_SaveProject:
+			case C_SaveProjectAs:
+			case C_CloseProject:
+			case C_RenameProject:
+			case C_Back:
+			case C_AppSettings:
+			case C_Undo:
+			case C_Redo:
+			case C_SelectAll:
+			case C_ZenMode:
+			case C_ShowHelp:
+			case C_ToggleWorldMode:
+			case C_RunCommand:
+			case C_GotoPreviousWorldLayer:
+			case C_GotoNextWorldLayer:
+			case C_MoveLevelToPreviousWorldLayer:
+			case C_MoveLevelToNextWorldLayer:
+			case C_OpenProjectPanel:
+			case C_OpenLayerPanel:
+			case C_OpenEntityPanel:
+			case C_OpenEnumPanel:
+			case C_OpenTilesetPanel:
+			case C_OpenLevelPanel:
+			case C_NavUp:
+			case C_NavDown:
+			case C_NavLeft:
+			case C_NavRight:
+			case C_ToggleAutoLayerRender:
+			case C_ToggleSelectEmptySpaces:
+			case C_ToggleTileStacking:
+			case C_ToggleSingleLayerMode:
+			case C_ToggleDetails:
+			case C_ToggleGrid:
+			case C_CommandPalette:
+			case C_FlipX:
+			case C_FlipY:
+			case C_ToggleTileRandomMode:
+			case C_SaveTileSelection:
+			case C_LoadTileSelection:
+
+			case C_ExitApp:
+				App.ME.exit();
+
+			case C_HideApp:
+				dn.js.ElectronTools.hideWindow();
+
+			case C_MinimizeApp:
+				dn.js.ElectronTools.minimize();
+
+			case C_ToggleFullscreen:
 				var isFullScreen = ET.isFullScreen();
 				if( !isFullScreen )
 					N.success("Press F11 to leave fullscreen");
 				ET.setFullScreen(!isFullScreen);
 				updateBodyClasses();
-
-			case _:
 		}
+
+		// Propagate to current page
+		if( hasPage() && !curPageProcess.isPaused() )
+			curPageProcess.onAppCommand(cmd);
 	}
+
 
 	public function addMask() {
 		removeMask();
@@ -854,7 +1007,7 @@ class App extends dn.Process {
 		jLine.appendTo(wrapper);
 	}
 
-	public inline function debugPre(msg:Dynamic, ?color:Int, clear=false) {
+	public inline function debugPre(msg:Dynamic, ?color:dn.Col, clear=false) {
 		debug(msg, color, clear, true);
 	}
 
@@ -906,6 +1059,24 @@ class App extends dn.Process {
 		}
 	}
 
+
+	public function setDebugFlag(f:DebugFlag, active=true) {
+		clearDebug();
+		if( active )
+			debugFlags.set(f, true);
+		else
+			debugFlags.remove(f);
+	}
+
+	public function toggleDebugFlag(f:DebugFlag) {
+		setDebugFlag(f, !hasDebugFlag(f));
+	}
+
+	public inline function hasDebugFlag(f:DebugFlag) {
+		return debugFlags.exists(f);
+	}
+
+
 	override function preUpdate() {
 		super.preUpdate();
 		_inputFocusCache = null;
@@ -935,11 +1106,11 @@ class App extends dn.Process {
 		}
 
 		// Debug print
-		#if debug
-		if( cd.has("debugTools") ) {
+		if( hasDebugFlag(F_MainDebug) ) {
 			clearDebug();
 			debug("-- Misc ----------------------------------------");
 			debugPre('Electron: ${Const.getElectronVersion()}');
+			debugPre('Detected OS: '+(isWindows()?"Windows":isMac()?"macOs":isLinux()?"Linux":"Unknown ("+js.node.Os.platform()+")"));
 			debugPre('FPS=${hxd.System.fpsLimit<=0 ? "100":Std.string(M.round(100*hxd.System.fpsLimit/60))}%');
 			debugPre('ElectronThrottling=${dn.js.ElectronTools.isThrottlingEnabled()}');
 			debugPre("electronZoom="+M.pretty(ET.getZoom(),2));
@@ -958,7 +1129,8 @@ class App extends dn.Process {
 				+ ( isMouseButtonDown(2) ? "[right] " : "" )
 				+ ( isMouseButtonDown(1) ? "[middle] " : "" )
 				+ " toggles="
-				+ ( isCtrlDown() ? "[ctrl] " : "" )
+				+ ( isCtrlCmdDown() ? "[ctrlCmd] " : "" )
+				+ ( isMacCtrlDown() ? "[macctrl] " : "" )
 				+ ( isShiftDown() ? "[shift] " : "" )
 				+ ( isAltDown() ? "[alt] " : "" )
 			);
@@ -973,6 +1145,5 @@ class App extends dn.Process {
 			for( line in dn.Process.rprintAll().split('\n') )
 				debugPre(line);
 		}
-		#end
 	}
 }

@@ -30,6 +30,7 @@ typedef AppSettings = {
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 	var fieldsRender : FieldsRender;
+	var nearbyTilesRenderingDist : Float;
 
 	var recentProjects : Array<String>;
 	var recentDirs : Array<String>;
@@ -46,6 +47,7 @@ enum abstract UiState(String) {
 	var RuleValuesColumns;
 	var IntGridPaletteColumns;
 	var EntityPaletteColumns;
+	var LayerUIFilter;
 }
 
 /* Notes: Settings related enums are stored in this file instead of EditorTypes to avoid Main compilation to reach unwanted classes, by importing EditorTypes. */
@@ -107,6 +109,7 @@ class Settings {
 
 			autoWorldModeSwitch: ZoomInAndOut,
 			fieldsRender: FR_Outline,
+			nearbyTilesRenderingDist: 1,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
 			mouseWheelSpeed: 1.0,
@@ -320,6 +323,10 @@ class Settings {
 		return v.appUiScale; // HACK disabled base scaling
 	}
 
+
+	public function getNearbyTilesRenderingDistPx(custDist=-1.) : Int {
+		return dn.M.ceil( 64 * ( custDist<0 ? v.nearbyTilesRenderingDist : custDist ) );
+	}
 
 	public static function getDir() {
 		var path = isRenderer()

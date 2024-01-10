@@ -1,5 +1,7 @@
 package ui.modal.dialog;
 
+import data.def.AutoLayerRuleGroupDef;
+
 enum WallFragment {
 	// WARNING: the order of the enum is used to sort rules accordingly!
 	@at(3,1) Single;
@@ -63,7 +65,7 @@ enum WallFragment {
 class RulesWizard extends ui.modal.Dialog {
 	var ld : data.def.LayerDef;
 	var td : data.def.TilesetDef;
-	var editedGroup : Null<data.DataTypes.AutoLayerRuleGroup>;
+	var editedGroup : Null<AutoLayerRuleGroupDef>;
 
 	var tileset : ui.Tileset;
 	var jGrid : js.jquery.JQuery;
@@ -79,7 +81,7 @@ class RulesWizard extends ui.modal.Dialog {
 	var _allFragmentEnums : Array<WallFragment> = [];
 
 
-	public function new(?baseRg:data.DataTypes.AutoLayerRuleGroup, ld:data.def.LayerDef, onConfirm:data.DataTypes.AutoLayerRuleGroup->Void) {
+	public function new(?baseRg:AutoLayerRuleGroupDef, ld:data.def.LayerDef, onConfirm:AutoLayerRuleGroupDef->Void) {
 		super();
 
 		loadTemplate("rulesWizard.html");
@@ -91,7 +93,7 @@ class RulesWizard extends ui.modal.Dialog {
 			_allFragmentEnums.push( WallFragment.createByName(k) );
 
 		// Tile picker
-		tileset = new ui.Tileset(jContent.find(".tileset"), td, Free);
+		tileset = new ui.Tileset(jContent.find(".tileset"), td, MultipleIndividuals);
 		tileset.onSelectAnything = ()->{
 			onSelectTiles( tileset.getSelectedTileIds() );
 		}
@@ -157,26 +159,26 @@ class RulesWizard extends ui.modal.Dialog {
 	}
 
 
-	function guessMainValue(source:data.DataTypes.AutoLayerRuleGroup) {
+	function guessMainValue(source:AutoLayerRuleGroupDef) {
 		for(r in source.rules) {
 			final center = Std.int(r.size*0.5);
-			if( r.get(center,center)>0 )
-				return M.iabs( r.get(center,center) );
+			if( r.getPattern(center,center)>0 )
+				return M.iabs( r.getPattern(center,center) );
 		}
 		return 0;
 	}
 
 
-	function guessOtherValue(source:data.DataTypes.AutoLayerRuleGroup) {
+	function guessOtherValue(source:AutoLayerRuleGroupDef) {
 		for(r in source.rules)
 		for(cy in 0...r.size)
 		for(cx in 0...r.size)
-			if( r.get(cx,cy)!=0 && M.iabs(r.get(cx,cy))!=mainValue && M.iabs(r.get(cx,cy)) < Const.AUTO_LAYER_ANYTHING )
-				return M.iabs( r.get(cx,cy) );
+			if( r.getPattern(cx,cy)!=0 && M.iabs(r.getPattern(cx,cy))!=mainValue && M.iabs(r.getPattern(cx,cy)) < Const.AUTO_LAYER_ANYTHING )
+				return M.iabs( r.getPattern(cx,cy) );
 		return 0;
 	}
 
-	function importRuleGroup(source:data.DataTypes.AutoLayerRuleGroup) {
+	function importRuleGroup(source:AutoLayerRuleGroupDef) {
 		// Guess intGrid values
 		mainValue = guessMainValue(source);
 		otherValue = guessOtherValue(source);
@@ -195,7 +197,7 @@ class RulesWizard extends ui.modal.Dialog {
 			// Iterate all rules from this group, and try to match them with standard Fragments
 			for(f in _allFragmentEnums)
 				if( matchRuleToFragment(rd,f) ) {
-					fragments.set(f, rd.tileIds.copy());
+					fragments.set(f, rd.tileRectsIds[0].copy());
 					break;
 				}
 			i++;
@@ -212,13 +214,13 @@ class RulesWizard extends ui.modal.Dialog {
 			for(idx in 0...9)
 				if( idx!=4 && matrix.get(idx)!=0 )
 					return false;
-				else if( idx==4 && matrix.get(idx)!=rd.get(0,0) )
+				else if( idx==4 && matrix.get(idx)!=rd.getPattern(0,0) )
 					return false;
 		}
 		else {
 			for(cy in 0...rd.size)
 			for(cx in 0...rd.size)
-				if( matrix.get(cx+cy*3)!=rd.get(cx,cy) )
+				if( matrix.get(cx+cy*3)!=rd.getPattern(cx,cy) )
 					return false;
 		}
 
@@ -748,7 +750,7 @@ class RulesWizard extends ui.modal.Dialog {
 		return otherValue==0 ? -mainValue : otherValue;
 	}
 
-	function createRule(rg:data.DataTypes.AutoLayerRuleGroup, f:WallFragment) {
+	function createRule(rg:AutoLayerRuleGroupDef, f:WallFragment) {
 		if( !fragments.exists(f) )
 			return false;
 
@@ -762,7 +764,7 @@ class RulesWizard extends ui.modal.Dialog {
 		for(cy in 0...size)
 		for(cx in 0...size) {
 			var c = m[cy].charAt(cx);
-			rd.set(cx,cy, switch c {
+			rd.setPattern(cx,cy, switch c {
 				case "x": getOtherValueForMatrix();
 				case "o": mainValue;
 				case _: 0;
@@ -770,7 +772,7 @@ class RulesWizard extends ui.modal.Dialog {
 		}
 
 		// Update tile IDs
-		rd.tileIds = fragments.get(f).copy();
+		rd.tileRectsIds = fragments.get(f).map( tid->[tid] );
 
 		// Out of bounds policy
 		rd.outOfBoundsValue = mainValue;
@@ -795,6 +797,7 @@ class RulesWizard extends ui.modal.Dialog {
 			}
 
 		// Trim & cleanup
+		rd.updateUsedValues();
 		rd.tidy(ld);
 
 		return true;
@@ -806,7 +809,7 @@ class RulesWizard extends ui.modal.Dialog {
 		if( editedGroup!=null )
 			editedGroup.rules = [];
 
-		var rg = editedGroup!=null ? editedGroup : ld.createRuleGroup(project.generateUniqueId_int(), groupName, 0);
+		var rg = editedGroup!=null ? editedGroup : ld.createEmptyRuleGroup(project.generateUniqueId_int(), groupName, 0);
 		rg.name = groupName;
 		rg.usesWizard = true;
 		for(f in _allFragmentEnums)

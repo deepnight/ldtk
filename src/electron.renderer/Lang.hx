@@ -3,12 +3,12 @@ import dn.data.GetText;
 class Lang {
 	// Text constants
 	public static var _Untagged = ()->t._("Untagged");
-	public static var _Duplicate = ()->t._("Duplicate");
+	public static var _Duplicate = (?v:String) -> v==null ? t._("Duplicate") : t._("Duplicate ::e::", {e:v});
 	public static var _Copy = (?v:String) -> v==null ? t._("Copy") : t._("Copy ::e::", {e:v});
 	public static var _Cut = (?v:String) -> v==null ? t._("Cut") : t._("Cut ::e::", {e:v});
 	public static var _Paste = (?v:String) -> v==null ? t._("Paste") : t._("Paste ::e::", {e:v});
 	public static var _PasteAfter = (?v:String) -> v==null ? t._("Paste after") : t._("Paste ::e:: after", {e:v});
-	public static var _Delete = (?v:LocaleString) -> v==null ? t._("Delete") : t._("Delete ::e::", {e:v});
+	public static var _Delete = (?v:String) -> v==null ? t._("Delete") : t._("Delete ::e::", {e:v});
 	public static var _UnsupportedWinNetDir = ()->L.t._("Sorry but LDtk does not support working on a Network Drive yet.\nSo, for your own safety, operations on Network Drives are not permitted for now to avoid errors and potential data loss.");
 
 
@@ -70,7 +70,7 @@ class Lang {
 			case F_Color: t._("Col");
 			case F_Float: t._("1.0");
 			case F_String: t._("\"Ab\"");
-			case F_Text: t._("\"\\n\\n\"");
+			case F_Text: t._("\"Ab\\n\"");
 			case F_Bool: t._("✔");
 			case F_Point: t._("X::sep::Y", { sep:Const.POINT_SEPARATOR });
 			case F_Enum(name): t._("Enu");

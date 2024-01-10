@@ -38,18 +38,6 @@ typedef EnumDefValue = {
 	var color: Int;
 }
 
-typedef AutoLayerRuleGroup = {
-	var uid : Int;
-	var name : String;
-	var color: Null<dn.Col>;
-	var icon: Null<ldtk.Json.TilesetRect>;
-	var active : Bool;
-	var collapsed : Bool;
-	var rules : Array<data.def.AutoLayerRuleDef>;
-	var isOptional : Bool;
-	var usesWizard : Bool;
-}
-
 typedef GridTileInfos = {
 	var tileId : Int;
 	var flips : Int;

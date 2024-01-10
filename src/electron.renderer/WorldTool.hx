@@ -49,7 +49,7 @@ class WorldTool extends dn.Process {
 		if( ev.button==1 && ( worldMode || getLevelAt(m.worldX,m.worldY)==null ) && !App.ME.hasAnyToggleKeyDown() && !project.isBackup() ) {
 			var ctx = new ui.modal.ContextMenu(m);
 			// Create new level
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("New level"),
 				cb: ()->{
 					if( !ui.vp.LevelSpotPicker.tryToCreateLevelAt(project, curWorld, m) ) {
@@ -65,7 +65,7 @@ class WorldTool extends dn.Process {
 			if( l!=null ) {
 				editor.selectLevel(l);
 				// Duplicate
-				ctx.add({
+				ctx.addAction({
 					label: L.t._("Duplicate"),
 					cb: ()->{
 						var copy = curWorld.duplicateLevel(l);
@@ -83,7 +83,7 @@ class WorldTool extends dn.Process {
 				});
 
 				// Delete
-				ctx.add({
+				ctx.addAction({
 					label: L._Delete(),
 					cb: ()->{
 						if( curWorld.levels.length==1 ) {
@@ -108,9 +108,9 @@ class WorldTool extends dn.Process {
 					// Change active world
 					ctx.addTitle(L.t._("Go to world:"));
 					for( w in project.worlds ) {
-						ctx.add({
+						ctx.addAction({
 							label: L.untranslated(w.identifier),
-							sub: L.untranslated(w.levels.length+" level(s)"),
+							subText: L.untranslated(w.levels.length+" level(s)"),
 							enable: ()->w.iid!=editor.curWorldIid,
 							cb: ()->{
 								editor.selectWorld(w,true);
@@ -123,9 +123,9 @@ class WorldTool extends dn.Process {
 					// Move level to another world
 					ctx.addTitle(L.t._("Move this level to:"));
 					for( w in project.worlds ) {
-						ctx.add({
+						ctx.addAction({
 							label: L.untranslated("➔ "+w.identifier),
-							sub: L.untranslated(w.levels.length+" level(s)"),
+							subText: L.untranslated(w.levels.length+" level(s)"),
 							enable: ()->!l.isInWorld(w),
 							cb: ()->{
 								if( l.moveToWorld(w) ) {
@@ -171,6 +171,9 @@ class WorldTool extends dn.Process {
 			ev.cancel = true;
 			clickedSameLevel = editor.curLevel==clickedLevel;
 			initialNeighbours = clickedLevel.getNeighboursIids();
+
+			// Pick level
+			editor.selectLevel(clickedLevel);
 		}
 	}
 
@@ -211,12 +214,13 @@ class WorldTool extends dn.Process {
 
 			}
 			else if( !worldMode && getLevelAt(m.worldX, m.worldY)==clickedLevel || origin.getPageDist(m)<=getDragThreshold() ) {
-				// Pick level
-				editor.selectLevel(clickedLevel);
+			// 	// Pick level
+			// 	editor.selectLevel(clickedLevel);
+				// Enter level on "double-click"
 				if( clickedSameLevel )
 					editor.setWorldMode(false);
-				else if( !worldMode )
-					editor.camera.scrollTo(m.worldX, m.worldY);
+			// 	else if( !worldMode )
+			// 		editor.camera.scrollTo(m.worldX, m.worldY);
 			}
 		}
 
@@ -226,7 +230,7 @@ class WorldTool extends dn.Process {
 		clicked = false;
 	}
 
-	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
+	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlCmdDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
 
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
@@ -291,10 +295,10 @@ class WorldTool extends dn.Process {
 			if( allow ) {
 				dragStarted = true;
 				ev.cancel = true;
-				if( clickedLevel!=null )
-					editor.selectLevel(clickedLevel);
+				// if( clickedLevel!=null )
+				// 	editor.selectLevel(clickedLevel);
 
-				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlDown() ) {
+				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlCmdDown() ) {
 					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
 					editor.selectLevel(copy);

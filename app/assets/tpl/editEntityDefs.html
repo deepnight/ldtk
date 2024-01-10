@@ -32,18 +32,28 @@
 					<input type="checkbox" name="showIdentifier" id="showIdentifier"/>
 					Show identifier
 				</label>
-				<label for="exportToToc" tip="bottom" title="If enabled, all instances of this entity will be listed in a table of content in the root of the project JSON file.\nFor example, this is especially useful if you want to have a quick access to the location of all PlayerStart entities in your game without parsing all your levels manually.\nBE CAREFUL: don't put every entities in the table of content as this will just result in a bloated project JSON.">
-					<input type="checkbox" name="exportToToc" id="exportToToc"/>
-					Add to JSON Table of content
-				</label>
 			</dd>
 		</dl>
 
 
-		<div class="collapser" default="open" id="extraEntityDetails">Extra entity details</div>
+		<div class="collapser" default="open" id="extraEntityDetails">Entity settings</div>
 
 
 		<dl class="form extra">
+			<dt>
+				<label for="eName">Misc options</label>
+			</dt>
+			<dd>
+				<label for="exportToToc" tip="bottom" title="If enabled, all instances of this entity will be listed in a table of content in the root of the project JSON file.\nFor example, this is especially useful if you want to have a quick access to the location of all PlayerStart entities in your game without parsing all your levels manually.\nBE CAREFUL: don't put every entities in the table of content as this will just result in a bloated project JSON.">
+					<input type="checkbox" name="exportToToc" id="exportToToc"/>
+					Add to JSON Table-of-content
+				</label>
+				<label for="allowOutOfBounds" tip="bottom" title="If enabled, this entity will be allowed to exist outside of the current level bounds.\nIf disabled, the entity is automatically destroyed if dragged outside of the current level bounds.\nThis has no effect on existing entities.">
+					<input type="checkbox" name="allowOutOfBounds" id="allowOutOfBounds"/>
+					Can be out of level bounds
+				</label>
+			</dd>
+
 			<dt>
 				<label for="entityDoc">Documentation</label>
 				<info class="userDoc"></info>

@@ -393,41 +393,43 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 		N.msg("Saved selection");
 	}
 
-	override function onKeyPress(keyId:Int) {
-		super.onKeyPress(keyId);
+	override function onAppCommand(cmd:AppCommand) {
+		super.onAppCommand(cmd);
 
-		if( !Editor.ME.hasInputFocus() )
-			switch keyId {
-				case K.R if( !App.ME.hasAnyToggleKeyDown() ):
-					setMode( isRandomMode() ? Stamp : Random );
-					ui.Notification.quick((isRandomMode()?"Random":"Stamp")+" mode");
-					editor.ge.emit(ToolOptionChanged);
-					palette.render();
+		switch cmd {
+			case C_FlipX:
+				flipX = !flipX;
+				N.quick("X-flip: "+L.onOff(flipX));
+				customCursor(new hxd.Event(EMove), lastMouse);
 
-				case K.S if( App.ME.isShiftDown() ):
-					saveSelection();
+			case C_FlipY:
+				flipY = !flipY;
+				N.quick("Y-flip: "+L.onOff(flipY));
+				customCursor(new hxd.Event(EMove), lastMouse);
 
-				case K.L if( !App.ME.hasAnyToggleKeyDown() ):
-					var saved = curTilesetDef.getSavedSelectionFor( getSelectedValue().ids[0] );
-					if( saved!=null && !selectedValuesIdentical(saved.ids) ) {
-						if( saved.ids.length>1 )
-							N.quick( L.t._("Loaded selection of ::n:: tiles", { n:saved.ids.length }) );
-						selectValue({
-							ids: saved.ids.copy(),
-							mode: saved.mode,
-						});
-						onValuePicking();
-					}
+			case C_ToggleTileRandomMode:
+				setMode( isRandomMode() ? Stamp : Random );
+				ui.Notification.quick((isRandomMode()?"Random":"Stamp")+" mode");
+				editor.ge.emit(ToolOptionChanged);
+				palette.render();
 
-				case K.X if( !App.ME.hasAnyToggleKeyDown() ):
-					flipX = !flipX;
-					N.quick("X-flip: "+L.onOff(flipX));
-					customCursor(new hxd.Event(EMove), lastMouse);
+			case C_SaveTileSelection:
+				saveSelection();
 
-				case K.Y if( !App.ME.hasAnyToggleKeyDown() ):
-					flipY = !flipY;
-					N.quick("Y-flip: "+L.onOff(flipY));
-					customCursor(new hxd.Event(EMove), lastMouse);
-			}
+			case C_LoadTileSelection:
+				var saved = curTilesetDef.getSavedSelectionFor( getSelectedValue().ids[0] );
+				if( saved!=null && !selectedValuesIdentical(saved.ids) ) {
+					if( saved.ids.length>1 )
+						N.quick( L.t._("Loaded selection of ::n:: tiles", { n:saved.ids.length }) );
+					selectValue({
+						ids: saved.ids.copy(),
+						mode: saved.mode,
+					});
+					onValuePicking();
+				}
+
+			case _:
+		}
 	}
+
 }

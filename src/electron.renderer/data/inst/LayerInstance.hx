@@ -55,6 +55,10 @@ class LayerInstance {
 			>
 		> > = null;
 
+	var areaIntGridUseCount : Map<Int, Map<Int,Int>> = new Map();
+	var layerIntGridUseCount : Map<Int,Int> = new Map();
+	var intGridAreaSize = 10;
+
 	public var pxWid(get,never) : Int; inline function get_pxWid() return level.pxWid - pxOffsetX;
 	public var pxHei(get,never) : Int; inline function get_pxHei() return level.pxHei - pxOffsetY;
 	public var cWid(get,never) : Int; inline function get_cWid() return dn.M.ceil( pxWid / def.gridSize );
@@ -68,6 +72,77 @@ class LayerInstance {
 		this.levelId = levelUid;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
+	}
+
+	inline function areaCoordId(cx:Int,cy:Int) {
+		return Std.int(cx/intGridAreaSize) + Std.int(cy/intGridAreaSize) * 10000;
+	}
+
+	public inline function hasIntGridValueInArea(iv:Int, cx:Int, cy:Int) {
+		return areaIntGridUseCount.exists(iv) && areaIntGridUseCount.get(iv).get(areaCoordId(cx,cy)) > 0;
+	}
+
+	inline function increaseAreaIntGridValueCount(iv:Int, cx:Int, cy:Int) {
+		if( iv==0 || iv==null )
+			return;
+
+		if( !areaIntGridUseCount.exists(iv) )
+			areaIntGridUseCount.set(iv, new Map());
+
+		var areaCountMap = areaIntGridUseCount.get(iv);
+		final cid = areaCoordId(cx,cy);
+		if( !areaCountMap.exists(cid) )
+			areaCountMap.set(cid,1);
+		else
+			areaCountMap.set(cid, areaCountMap.get(cid)+1);
+
+		// Layer counts
+		if( !layerIntGridUseCount.exists(iv) )
+			layerIntGridUseCount.set(iv, 1);
+		else
+			layerIntGridUseCount.set(iv, layerIntGridUseCount.get(iv)+1);
+
+		// Also update group
+		if( iv<1000 ) {
+			var groupUid = def.getIntGridGroupUidFromValue(iv);
+			if( groupUid>=0 )
+				increaseAreaIntGridValueCount(def.getRuleValueFromGroupUid(groupUid), cx,cy);
+		}
+	}
+
+
+	inline function decreaseAreaIntGridValueCount(iv:Int, cx:Int, cy:Int) {
+		if( iv!=0 && iv!=null && areaIntGridUseCount.exists(iv) ) {
+			var areaCountMap = areaIntGridUseCount.get(iv);
+			final cid = areaCoordId(cx,cy);
+			if( areaCountMap.exists(cid) ) {
+				areaCountMap.set(cid, areaCountMap.get(cid)-1);
+
+				// Last one in area
+				if( areaCountMap.get(cid)<=0 )
+					areaCountMap.remove(cid);
+
+				// Layer counts
+				if( layerIntGridUseCount.exists(iv) ) {
+					layerIntGridUseCount.set(iv, layerIntGridUseCount.get(iv)-1);
+					// Last one in layer
+					if( layerIntGridUseCount.get(iv)<=0 )
+						layerIntGridUseCount.remove(iv);
+				}
+			}
+		}
+
+		// Also update group
+		if( iv<1000 ) {
+			var groupUid = def.getIntGridGroupUidFromValue(iv);
+			if( groupUid>=0 )
+				decreaseAreaIntGridValueCount(def.getRuleValueFromGroupUid(groupUid), cx,cy);
+		}
+	}
+
+
+	public inline function containsIntGridValueOrGroup(iv:Int) {
+		return layerIntGridUseCount.exists(iv);
 	}
 
 
@@ -278,14 +353,18 @@ class LayerInstance {
 
 		if( json.intGridCsv==null ) {
 			// Read old pre-CSV format
-			for( intGridJson in json.intGrid )
+			for( intGridJson in json.intGrid ) {
 				li.intGrid.set( intGridJson.coordId, intGridJson.v+1 );
+				li.increaseAreaIntGridValueCount( intGridJson.v+1, li.getCx(intGridJson.coordId), li.getCy(intGridJson.coordId) );
+			}
 		}
 		else {
 			// Read CSV format
-			for(i in 0...json.intGridCsv.length)
-				if( json.intGridCsv[i]>=0 )
-					li.intGrid.set(i, json.intGridCsv[i]);
+			for(coordId in 0...json.intGridCsv.length)
+				if( json.intGridCsv[coordId]>=0 ) {
+					li.intGrid.set(coordId, json.intGridCsv[coordId]);
+					li.increaseAreaIntGridValueCount( json.intGridCsv[coordId], li.getCx(coordId), li.getCy(coordId) );
+				}
 		}
 
 		for( gridTilesJson in json.gridTiles ) {
@@ -319,7 +398,7 @@ class LayerInstance {
 		if( json.autoLayerTiles!=null ) {
 			try {
 				var jsonAutoLayerTiles : Array<ldtk.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
-				li.autoTilesCache = new Map();
+				li.clearAllAutoTilesCache();
 
 				for(at in jsonAutoLayerTiles) {
 					var ruleId = at.d[0];
@@ -431,10 +510,11 @@ class LayerInstance {
 
 					if( !def.autoLayerRulesCanBeUsed() ) {
 						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
-						autoTilesCache = new Map();
+						clearAllAutoTilesCache();
 						anyChange = true;
 					}
 				}
+
 
 			case Entities:
 				var i = 0;
@@ -564,11 +644,18 @@ class LayerInstance {
 
 	public function setIntGrid(cx:Int, cy:Int, v:Int) {
 		requireType(IntGrid);
-		if( isValid(cx,cy) )
-			if( v>=0 )
-				intGrid.set( coordId(cx,cy), v );
+		if( isValid(cx,cy) ) {
+			if( v>=0 ) {
+				var old = intGrid.get(coordId(cx,cy));
+				if( old!=v ) {
+					decreaseAreaIntGridValueCount(old, cx,cy);
+					increaseAreaIntGridValueCount(v, cx, cy);
+					intGrid.set( coordId(cx,cy), v );
+				}
+			}
 			else
 				removeIntGrid(cx,cy);
+		}
 	}
 
 	public inline function hasIntGrid(cx:Int, cy:Int) {
@@ -578,8 +665,10 @@ class LayerInstance {
 
 	public function removeIntGrid(cx:Int, cy:Int) {
 		requireType(IntGrid);
-		if( isValid(cx,cy) )
+		if( isValid(cx,cy) && hasIntGrid(cx,cy) ) {
+			decreaseAreaIntGridValueCount( intGrid.get(coordId(cx,cy)), cx, cy );
 			intGrid.remove( coordId(cx,cy) );
+		}
 	}
 
 
@@ -750,91 +839,148 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
-	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
-		var tileIds = r.tileMode==Single ? [ r.getRandomTileForCoord(seed, cx,cy, flips) ] : r.tileIds;
-		var td = getTilesetDef();
-		var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileIds, flips);
-
-		if( !autoTilesCache.get(r.uid).exists( coordId(cx,cy) ) )
-			autoTilesCache.get(r.uid).set( coordId(cx,cy), [] );
-
-		autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
-			tileIds.map( (tid)->{
-				return {
-					x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getXOffsetForCoord(seed,cx,cy, flips),
-					y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getYOffsetForCoord(seed,cx,cy, flips),
-					srcX: td.getTileSourceX(tid),
-					srcY: td.getTileSourceY(tid),
-					tid: tid,
-					flips: flips,
-					a: r.alpha,
-				}
-			} )
-		));
+	function isAutoTileCellAllowed(cx:Int, cy:Int) {
+		if( def.autoTilesKilledByOtherLayerUid==null )
+			return true;
+		else
+			return !level.getLayerInstance(def.autoTilesKilledByOtherLayerUid).hasAnyGridTile(cx,cy);
 	}
 
-	function applyAutoLayerRuleAt(source:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
-		if( !def.autoLayerRulesCanBeUsed() )
-			return false;
-		else {
-			// Init
-			if( !autoTilesCache.exists(r.uid) )
-				autoTilesCache.set( r.uid, [] );
-			autoTilesCache.get(r.uid).remove( coordId(cx,cy) );
+	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
+		if( isAutoTileCellAllowed(cx,cy) ) {
+			var tileRectIds = r.getRandomTileRectIdsForCoord(seed, cx,cy, flips);
+			var td = getTilesetDef();
+			var stampInfos = r.tileMode==Single ? null : getRuleStampRenderInfos(r, td, tileRectIds, flips);
 
-			// Modulos
-			if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
-				return false;
+			if( !autoTilesCache.get(r.uid).exists( coordId(cx,cy) ) )
+				autoTilesCache.get(r.uid).set( coordId(cx,cy), [] );
 
-			if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
-				return false;
-
-			if( r.checker!=Horizontal && (cx-r.xOffset) % r.xModulo!=0 )
-				return false;
-
-			if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
-				return false;
-
-
-			// Apply rule
-			var matched = false;
-			if( r.matches(this, source, cx,cy) ) {
-				addRuleTilesAt(r, cx,cy, 0);
-				matched = true;
-			}
-
-			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, source, cx,cy, -1) ) {
-				addRuleTilesAt(r, cx,cy, 1);
-				matched = true;
-			}
-
-			if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, source, cx,cy, 1, -1) ) {
-				addRuleTilesAt(r, cx,cy, 2);
-				matched = true;
-			}
-
-			if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, source, cx,cy, -1, -1) ) {
-				addRuleTilesAt(r, cx,cy, 3);
-				matched = true;
-			}
-
-			return matched;
+			autoTilesCache.get(r.uid).set( coordId(cx,cy), autoTilesCache.get(r.uid).get( coordId(cx,cy) ).concat(
+				tileRectIds.map( (tid)->{
+					return {
+						x: cx*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).xOff ) + r.getXOffsetForCoord(seed,cx,cy, flips),
+						y: cy*def.gridSize + (stampInfos==null ? 0 : stampInfos.get(tid).yOff ) + r.getYOffsetForCoord(seed,cx,cy, flips),
+						srcX: td.getTileSourceX(tid),
+						srcY: td.getTileSourceY(tid),
+						tid: tid,
+						flips: flips,
+						a: r.alpha,
+					}
+				} )
+			));
 		}
 	}
 
+	function clearAutoTilesCacheRect(r:data.def.AutoLayerRuleDef, cx,cy,wid,hei) {
+		if( !autoTilesCache.exists(r.uid) )
+			autoTilesCache.set( r.uid, [] );
+
+		var m = autoTilesCache.get(r.uid);
+		for(y in cy...cy+hei)
+		for(x in cx...cx+wid)
+			m.remove( coordId(x,y) );
+	}
+
+	function clearAutoTilesCacheByRule(r:data.def.AutoLayerRuleDef) {
+		autoTilesCache.set( r.uid, [] );
+	}
+
+	function clearAllAutoTilesCache() {
+		autoTilesCache = new Map();
+	}
+
+	/**
+		Check & apply given rule at coord.
+		WARNING: autoTiles clear method should always be called before that one!
+	**/
+	inline function applyRuleAt(sourceLi:LayerInstance, r:data.def.AutoLayerRuleDef, cx:Int, cy:Int) : Bool {
+		// Skip rule that requires specific IntGrid values absent from layer
+		if( !r.isRelevantInLayerAt(sourceLi,cx,cy) )
+			return false;
+
+		// Modulos
+		if( r.checker!=Vertical && (cy-r.yOffset) % r.yModulo!=0 )
+			return false;
+
+		if( r.checker==Vertical && ( cy + ( Std.int(cx/r.xModulo)%2 ) )%r.yModulo!=0 )
+			return false;
+
+		if( r.checker!=Horizontal && (cx-r.xOffset) % r.xModulo!=0 )
+			return false;
+
+		if( r.checker==Horizontal && ( cx + ( Std.int(cy/r.yModulo)%2 ) )%r.xModulo!=0 )
+			return false;
+
+		// Apply rule
+		var matched = false;
+		if( r.matches(this, sourceLi, cx,cy) ) {
+			addRuleTilesAt(r, cx,cy, 0);
+			matched = true;
+		}
+
+		if( ( !matched || !r.breakOnMatch ) && r.flipX && r.matches(this, sourceLi, cx,cy, -1) ) {
+			addRuleTilesAt(r, cx,cy, 1);
+			matched = true;
+		}
+
+		if( ( !matched || !r.breakOnMatch ) && r.flipY && r.matches(this, sourceLi, cx,cy, 1, -1) ) {
+			addRuleTilesAt(r, cx,cy, 2);
+			matched = true;
+		}
+
+		if( ( !matched || !r.breakOnMatch ) && r.flipX && r.flipY && r.matches(this, sourceLi, cx,cy, -1, -1) ) {
+			addRuleTilesAt(r, cx,cy, 3);
+			matched = true;
+		}
+
+		return matched;
+	}
 
 
-	public inline function isRuleGroupActiveHere(rg:AutoLayerRuleGroup) {
+
+	public function isRuleGroupAppliedHere(rg:data.def.AutoLayerRuleGroupDef) {
+		if( rg.active && rg.requiredBiomeValues.length>0 ) {
+			var fi = level.getFieldInstanceByUid(def.biomeFieldUid, false);
+			if( fi!=null ) {
+				switch rg.biomeRequirementMode {
+					case 0: // OR
+						for(idx in 0...fi.getArrayLength())
+							for( bid in rg.requiredBiomeValues )
+								if( fi.getEnumValue(idx)==bid )
+									return true;
+						return false;
+
+					case 1: // AND
+						var matches = 0;
+						for( bid in rg.requiredBiomeValues ) {
+							for( arrayIdx in 0...fi.getArrayLength() )
+								if( fi.getEnumValue(arrayIdx)==bid ) {
+									matches++;
+									break;
+								}
+						}
+						return matches>=rg.requiredBiomeValues.length;
+
+					case _:
+						return false;
+				}
+			}
+		}
+
+		return isRuleGroupEnabled(rg);
+	}
+
+	public inline function isRuleGroupEnabled(rg:data.def.AutoLayerRuleGroupDef) {
 		return rg.active && !rg.isOptional || optionalRules.exists(rg.uid);
 	}
 
-	public function enableRuleGroupHere(rg:AutoLayerRuleGroup) {
+	public function enableRuleGroupHere(rg:data.def.AutoLayerRuleGroupDef) {
 		optionalRules.set(rg.uid, true);
 	}
-	public function disableRuleGroupHere(rg:AutoLayerRuleGroup) {
+	public function disableRuleGroupHere(rg:data.def.AutoLayerRuleGroupDef) {
 		optionalRules.remove(rg.uid);
 	}
-	public function toggleRuleGroupHere(rg:AutoLayerRuleGroup) {
+	public function toggleRuleGroupHere(rg:data.def.AutoLayerRuleGroupDef) {
 		if( optionalRules.exists(rg.uid) )
 			disableRuleGroupHere(rg);
 		else
@@ -883,31 +1029,36 @@ class LayerInstance {
 
 
 	/** Apply all rules to specific cell **/
-	public function applyAllAutoLayerRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
-		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
-			return;
-
-		if( autoTilesCache==null ) {
-			applyAllAutoLayerRules();
+	public function applyAllRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
+		if( !def.autoLayerRulesCanBeUsed() ) {
+			clearAllAutoTilesCache();
 			return;
 		}
 
-		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
+		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		if( source==null ) {
+			clearAllAutoTilesCache();
+			return;
+		}
+
+		if( autoTilesCache==null ) {
+			applyAllRules();
+			return;
+		}
+
 		// Adjust bounds to also redraw nearby cells
+		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
 		var left = dn.M.imax( 0, cx - maxRadius );
 		var right = dn.M.imin( cWid-1, cx + wid-1 + maxRadius );
 		var top = dn.M.imax( 0, cy - maxRadius );
 		var bottom = dn.M.imin( cHei-1, cy + hei-1 + maxRadius );
 
-
 		// Apply rules
-		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
-		if( source==null )
-			return;
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
+			clearAutoTilesCacheRect(r, left,top, right-left+1, bottom-top+1);
 			for(x in left...right+1)
 			for(y in top...bottom+1)
-				applyAutoLayerRuleAt(source, r, x,y);
+				applyRuleAt(source, r, x,y);
 		});
 
 		// Discard using break-on-match flag
@@ -915,16 +1066,16 @@ class LayerInstance {
 	}
 
 	/** Apply all rules to all cells **/
-	public inline function applyAllAutoLayerRules() {
+	public inline function applyAllRules() {
 		if( def.isAutoLayer() ) {
-			autoTilesCache = new Map();
-			applyAllAutoLayerRulesAt(0, 0, cWid, cHei);
+			clearAllAutoTilesCache();
+			applyAllRulesAt(0, 0, cWid, cHei);
 			App.LOG.warning("All rules applied in "+toString());
 		}
 	}
 
 	/** Apply the rule to all layer cells **/
-	public function applyAutoLayerRuleToAllLayer(r:data.def.AutoLayerRuleDef, applyBreakOnMatch:Bool) {
+	public function applyRuleToFullLayer(r:data.def.AutoLayerRuleDef, applyBreakOnMatch:Bool) {
 		if( !def.isAutoLayer() )
 			return;
 
@@ -935,15 +1086,25 @@ class LayerInstance {
 		}
 
 		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
-		if( source==null )
+		if( source==null || !r.isRelevantInLayer(source) )
 			return;
 
-		for(cx in 0...cWid)
-		for(cy in 0...cHei)
-			applyAutoLayerRuleAt(source, r, cx,cy);
+		clearAutoTilesCacheByRule(r);
 
-		if( applyBreakOnMatch )
-			applyBreakOnMatchesEverywhere();
+		if( def.autoLayerRulesCanBeUsed() ) {
+			for( ay in 0...Std.int(cHei/intGridAreaSize)+1 )
+			for( ax in 0...Std.int(cWid/intGridAreaSize)+1 ) {
+				if( !r.isRelevantInLayerAt(source, ax*intGridAreaSize, ay*intGridAreaSize) )
+					continue;
+
+				for(cx in ax*intGridAreaSize...(ax+1)*intGridAreaSize)
+				for(cy in ay*intGridAreaSize...(ay+1)*intGridAreaSize)
+					applyRuleAt(source, r, cx,cy);
+			}
+
+			if( applyBreakOnMatch )
+				applyBreakOnMatchesEverywhere();
+		}
 	}
 
 }

@@ -6,7 +6,7 @@ class AutoLayerRuleDef {
 	@:allow(data.def.LayerDef, data.Definitions)
 	public var uid(default,null) : Int;
 
-	public var tileIds : Array<Int> = [];
+	public var tileRectsIds : Array< Array<Int> > = [];
 	public var chance : Float = 1.0;
 	public var breakOnMatch = true;
 	public var size(default,null): Int;
@@ -37,6 +37,10 @@ class AutoLayerRuleDef {
 	public var perlinOctaves = 2;
 	var _perlin(get,null) : Null<hxd.Perlin>;
 
+	var explicitlyRequiredValues : Array<Int> = [];
+
+	public var radius(get,never) : Int; inline function get_radius() return size<=1 ? 1 : Std.int(size*0.5);
+
 	public function new(uid, size=3) {
 		if( !isValidSize(size) )
 			throw 'Invalid rule size ${size}x$size';
@@ -45,6 +49,13 @@ class AutoLayerRuleDef {
 		this.size = size;
 		perlinSeed = Std.random(9999999);
 		initPattern();
+	}
+
+	public function updateUsedValues() {
+		explicitlyRequiredValues = [];
+		for(v in pattern)
+			if( v>0 && v!=Const.AUTO_LAYER_ANYTHING && !explicitlyRequiredValues.contains(v) )
+				explicitlyRequiredValues.push(v);
 	}
 
 	public inline function hasAnyPositionOffset() {
@@ -97,25 +108,30 @@ class AutoLayerRuleDef {
 		return true;
 	}
 
-	public inline function get(cx,cy) {
+	public inline function getPattern(cx,cy) {
 		return pattern[ coordId(cx,cy) ];
 	}
 
-	public inline function set(cx,cy,v) {
-		// clearOptim();
-		return isValid(cx,cy) ? pattern[ coordId(cx,cy) ] = v : 0;
+	public inline function setPattern(cx,cy,v) {
+		if( !isValid(cx,cy) )
+			return 0;
+
+		pattern[ coordId(cx,cy) ] = v;
+		return v;
 	}
 
 	public inline function fill(v:Int) {
 		for(cx in 0...size)
 		for(cy in 0...size)
-			set(cx,cy,v);
+			setPattern(cx,cy,v);
+		updateUsedValues();
 	}
 
 	function initPattern() {
 		pattern = [];
 		for(i in 0...size*size)
 			pattern[i] = 0;
+		updateUsedValues();
 	}
 
 	@:keep public function toString() {
@@ -129,7 +145,7 @@ class AutoLayerRuleDef {
 			uid: uid,
 			active: active,
 			size: size,
-			tileIds: tileIds.copy(),
+			tileRectsIds: tileRectsIds.map( arr->arr.copy() ),
 			alpha: alpha,
 			chance: JsonTools.writeFloat(chance),
 			breakOnMatch: breakOnMatch,
@@ -160,9 +176,22 @@ class AutoLayerRuleDef {
 	}
 
 	public static function fromJson(jsonVersion:String, json:ldtk.Json.AutoRuleDef) {
+		// Update JSON for tileRectsIds
+		if( json.tileIds!=null ) {
+			json.tileRectsIds = [];
+			var mode = JsonTools.readEnum(ldtk.Json.AutoLayerRuleTileMode, json.tileMode, false, Single);
+			switch mode {
+				case Single:
+					json.tileRectsIds = json.tileIds.map( tid->[tid] );
+
+				case Stamp:
+					json.tileRectsIds = [ json.tileIds ];
+			}
+		}
+
 		var r = new AutoLayerRuleDef( json.uid, json.size );
 		r.active = JsonTools.readBool(json.active, true);
-		r.tileIds = json.tileIds;
+		r.tileRectsIds = json.tileRectsIds.copy();
 		r.breakOnMatch = JsonTools.readBool(json.breakOnMatch, false); // default to FALSE to avoid breaking old maps
 		r.chance = JsonTools.readFloat(json.chance);
 		r.pattern = json.pattern;
@@ -189,6 +218,8 @@ class AutoLayerRuleDef {
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
 		r.perlinOctaves = JsonTools.readInt(json.perlinOctaves, 2);
 		r.perlinSeed = JsonTools.readInt(json.perlinSeed, Std.random(9999999));
+
+		r.updateUsedValues();
 
 		return r;
 	}
@@ -227,24 +258,26 @@ class AutoLayerRuleDef {
 	public function trim() {
 		while( size>1 ) {
 			var emptyBorder = true;
+			// Horizontal borders
 			for( cx in 0...size )
 				if( pattern[coordId(cx,0)]!=0 || pattern[coordId(cx,size-1)]!=0 ) {
 					emptyBorder = false;
 					break;
 				}
-			for( cy in 0...size )
-				if( pattern[coordId(0,cy)]!=0 || pattern[coordId(size-1,cy)]!=0 ) {
-					emptyBorder = false;
-					break;
-				}
+
+			// Vertical borders
+			if( emptyBorder )
+				for( cy in 0...size )
+					if( pattern[coordId(0,cy)]!=0 || pattern[coordId(size-1,cy)]!=0 ) {
+						emptyBorder = false;
+						break;
+					}
 
 			if( emptyBorder )
 				resize(size-2);
 			else
-				return false;
+				break;
 		}
-
-		return true;
 	}
 
 	public function isEmpty() {
@@ -252,32 +285,54 @@ class AutoLayerRuleDef {
 			if( v!=0 )
 				return false;
 
-		return tileIds.length==0;
+		return tileRectsIds.length==0;
 	}
 
 	public function isUsingUnknownIntGridValues(ld:LayerDef) {
 		if( ld.type!=IntGrid )
 			throw "Invalid layer type";
 
-		var v = 0;
-		for(px in 0...size)
-		for(py in 0...size) {
-			v = dn.M.iabs( pattern[px+py*size] );
+		for(v in pattern) {
 			if( v==0 )
 				continue;
+
+			v = M.iabs(v);
 
 			if( v<=999 && !ld.hasIntGridValue(v) )
 				return true;
 
-			if( v>999 && v!=Const.AUTO_LAYER_ANYTHING && ld.getIntGridGroup( ld.resolveIntGridGroupUidFromRuleValue(v), false )==null )
+			if( v>999 && v!=Const.AUTO_LAYER_ANYTHING && !ld.hasIntGridGroup( ld.resolveIntGridGroupUidFromRuleValue(v) ) )
 				return true;
 		}
 
 		return false;
 	}
 
+	public function isRelevantInLayer(sourceLi:data.inst.LayerInstance) {
+		for(v in explicitlyRequiredValues)
+			if( !sourceLi.containsIntGridValueOrGroup(v) )
+				return false;
+		return true;
+	}
+
+	public function isRelevantInLayerAt(sourceLi:data.inst.LayerInstance, cx:Int, cy:Int) {
+		for(v in explicitlyRequiredValues) {
+			if( !sourceLi.containsIntGridValueOrGroup(v) )
+				return false;
+			else if( size==1 && !sourceLi.hasIntGridValueInArea(v,cx,cy) )
+				return false;
+			else if( size>1
+				&& !sourceLi.hasIntGridValueInArea(v,cx-radius,cy-radius)
+				&& !sourceLi.hasIntGridValueInArea(v,cx+radius,cy-radius)
+				&& !sourceLi.hasIntGridValueInArea(v,cx+radius,cy+radius)
+				&& !sourceLi.hasIntGridValueInArea(v,cx-radius,cy+radius) )
+					return false;
+		}
+		return true;
+	}
+
 	public function matches(li:data.inst.LayerInstance, source:data.inst.LayerInstance, cx:Int, cy:Int, dirX=1, dirY=1) {
-		if( tileIds.length==0 )
+		if( tileRectsIds.length==0 )
 			return false;
 
 		if( chance<=0 || chance<1 && dn.M.randSeedCoords(li.seed+uid, cx,cy, 100) >= chance*100 )
@@ -335,6 +390,8 @@ class AutoLayerRuleDef {
 	public function tidy(ld:LayerDef) {
 		var anyFix = false;
 
+		trim();
+
 		if( flipX && isSymetricX() ) {
 			App.LOG.add("tidy", 'Fixed X symetry of Rule#$uid');
 			flipX = false;
@@ -366,19 +423,19 @@ class AutoLayerRuleDef {
 		}
 
 		var sourceLd = ld.autoSourceLd!=null ? ld.autoSourceLd : ld;
-		if( outOfBoundsValue!=null && !sourceLd.hasIntGridValue(outOfBoundsValue) ) {
+		if( outOfBoundsValue!=null && outOfBoundsValue!=0 && !sourceLd.hasIntGridValue(outOfBoundsValue) ) {
 			App.LOG.add("tidy", 'Fixed lost outOfBoundsValue: $outOfBoundsValue');
 			outOfBoundsValue = null;
 		}
 
-		if( trim() )
-			anyFix = true;
-
 		return anyFix;
 	}
 
-	public function getRandomTileForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {
-		return tileIds[ dn.M.randSeedCoords( uid+seed+flips, cx,cy, tileIds.length ) ];
+	public function getRandomTileRectIdsForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Array<Int> {
+		if( tileRectsIds.length==0 )
+			return [];
+		else
+			return tileRectsIds[ dn.M.randSeedCoords( uid+seed+flips, cx,cy, tileRectsIds.length ) ];
 	}
 
 	public function getXOffsetForCoord(seed:Int, cx:Int,cy:Int, flips:Int) : Int {

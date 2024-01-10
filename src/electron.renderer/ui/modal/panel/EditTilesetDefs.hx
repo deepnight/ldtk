@@ -55,13 +55,13 @@ class EditTilesetDefs extends ui.modal.Panel {
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildPixelData();
+					curTd.buildPixelDataAndNotify();
 
 			case TilesetImageLoaded(td, init):
 				updateForm();
 				updateTilesetPreview();
 				if( td==curTd )
-					rebuildPixelData();
+					curTd.buildPixelDataAndNotify();
 
 			case TilesetMetaDataChanged(td):
 				updateTilesetPreview();
@@ -74,7 +74,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		}
 	}
 
-	function selectTileset(td:data.def.TilesetDef) {
+	public function selectTileset(td:data.def.TilesetDef) {
 		curTd = td;
 		updateList();
 		updateForm();
@@ -109,10 +109,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 		checkBackup();
 	}
 
-
-	inline function rebuildPixelData() {
-		curTd.buildPixelData( Editor.ME.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(curTd)) );
-	}
 
 
 	function updateForm() {
@@ -230,6 +226,12 @@ class EditTilesetDefs extends ui.modal.Panel {
 			curTd.tags,
 			()->editor.ge.emit(TilesetDefChanged(curTd)),
 			()->project.defs.getRecallTags(project.defs.tilesets, td->td.tags),
+			()->project.defs.tilesets.map( td->td.tags ),
+			(oldT,newT)->{
+				for(td in project.defs.tilesets)
+					td.tags.rename(oldT,newT);
+				editor.ge.emit( TilesetDefChanged(curTd) );
+			},
 			true
 		);
 		jForm.find("#tags").empty().append(ted.jEditor);
@@ -295,7 +297,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 		jList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jList, false, [
+		ContextMenu.attachTo(jList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -316,22 +318,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 				jSep.appendTo(jList);
 				jSep.attr("id", project.iid+"_tileset_tag_"+group.tag);
 				jSep.attr("default", "open");
-
-				// Rename
-				if( group.tag!=null ) {
-					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
-					jSep.append(jLinks);
-					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
-						for(td in project.defs.tilesets)
-							td.tags.rename(group.tag, t);
-						editor.ge.emit( TilesetDefChanged(curTd) );
-					});
-				}
 			}
 
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jList);
-			var jSubList = new J('<ul/>');
+			var jSubList = new J('<ul class="niceList compact"/>');
 			jSubList.appendTo(jLi);
 
 			for(td in group.all) {
@@ -348,43 +339,28 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 				jLi.click( function(_) selectTileset(td) );
 
-				ContextMenu.addTo(jLi, [
-					{
-						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
-						enable: ()->!td.isUsingEmbedAtlas(),
-					},
-					{
-						label: L._Cut(),
-						cb: ()->{
+				ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
+					ctx.addElement( Ctx_CopyPaster({
+						elementName: "tileset",
+						clipType: CTilesetDef,
+						copy: td.isUsingEmbedAtlas() ? null : ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
+						cut: td.isUsingEmbedAtlas() ? null : ()->{
 							App.ME.clipboard.copyData(CTilesetDef, td.toJson());
 							deleteTilesetDef(td);
 						},
-						enable: ()->!td.isUsingEmbedAtlas(),
-					},
-					{
-						label: L._PasteAfter(),
-						cb: ()->{
+						paste: ()->{
 							var copy = project.defs.pasteTilesetDef(App.ME.clipboard, td);
 							editor.ge.emit( TilesetDefAdded(copy) );
 							selectTileset(copy);
 						},
-						enable: ()->App.ME.clipboard.is(CTilesetDef),
-					},
-					{
-						label: L._Duplicate(),
-						cb: ()-> {
+						duplicate: td.isUsingEmbedAtlas() ? null : ()->{
 							var copy = project.defs.duplicateTilesetDef(td);
 							editor.ge.emit( TilesetDefAdded(copy) );
 							selectTileset(copy);
 						},
-						enable: ()->!td.isUsingEmbedAtlas(),
-					},
-					{
-						label: L._Delete(),
-						cb: deleteTilesetDef.bind(td),
-					},
-				]);
+						delete: ()->deleteTilesetDef(td),
+					}) );
+				});
 			}
 
 			// Make list sortable

@@ -96,6 +96,8 @@ class FieldDefsForm {
 				}
 		if( !found )
 			selectField( fieldDefs[0] );
+
+		updateForm();
 	}
 
 	function onCreateField(anchor:js.jquery.JQuery, isArray:Bool) {
@@ -124,7 +126,7 @@ class FieldDefsForm {
 						if( tagGroups.length>1 )
 							ctx.addTitle( group.tag==null ? L._Untagged() : L.untranslated(group.tag) );
 						for(ed in group.all) {
-							ctx.add({
+							ctx.addAction({
 								label: L.untranslated(ed.identifier),
 								cb: ()->_create(ev, F_Enum(ed.uid)),
 							});
@@ -134,7 +136,7 @@ class FieldDefsForm {
 					for(ext in project.defs.getGroupedExternalEnums().keyValueIterator()) {
 						ctx.addTitle( L.untranslated( dn.FilePath.fromFile(ext.key).fileWithExt ) );
 						for(ed in ext.value)
-							ctx.add({
+							ctx.addAction({
 								label: L.untranslated(ed.identifier),
 								cb: ()->_create(ev, F_Enum(ed.uid)),
 							});
@@ -239,7 +241,7 @@ class FieldDefsForm {
 		jList.off().empty();
 
 		// List context menu
-		ui.modal.ContextMenu.addTo(jList, false, [
+		ui.modal.ContextMenu.attachTo(jList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -269,38 +271,30 @@ class FieldDefsForm {
 				color: FieldDef.getTypeColorHex(fd.type, 1.5),
 			});
 
-			ui.modal.ContextMenu.addTo(li, [
-				{
-					label: L._Copy(),
-					cb: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
-				},
-				{
-					label: L._Cut(),
-					cb: ()->{
+
+			ui.modal.ContextMenu.attachTo_new(li, (ctx:ui.modal.ContextMenu)->{
+				ctx.addElement( Ctx_CopyPaster({
+					elementName: "field",
+					clipType: CFieldDef,
+					copy: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
+					cut: ()->{
 						App.ME.clipboard.copyData(CFieldDef, fd.toJson());
 						deleteField(fd);
 					},
-				},
-				{
-					label: L._PasteAfter(),
-					cb: ()->{
+					paste: ()->{
 						var copy = pasteFieldDef(App.ME.clipboard, fd);
 						editor.ge.emit(FieldDefAdded(copy));
 						selectField(copy);
 					},
-					enable: ()->App.ME.clipboard.is(CFieldDef),
-				},
-				{
-					label: L._Duplicate(),
-					cb:()->{
+					duplicate: ()->{
 						var copy = duplicateFieldDef(fd);
 						editor.ge.emit( FieldDefAdded(copy) );
 						onAnyChange();
 						selectField(copy);
-					}
-				},
-				{ label: L._Delete(), cb:()->deleteField(fd) },
-			]);
+					},
+					delete: ()->deleteField(fd),
+				}) );
+			});
 
 			li.click( function(_) selectField(fd) );
 		}
@@ -375,6 +369,10 @@ class FieldDefsForm {
 		for(k in Type.getEnumConstructs(ldtk.Json.FieldType))
 			jForm.removeClass("type-"+k);
 		jForm.addClass("type-"+curField.type.getName());
+		if( isLevelField() )
+			jForm.addClass("type-level");
+		else
+			jForm.addClass("type-entity");
 
 		if( curField.isArray ) {
 			jForm.addClass("type-Array");
@@ -878,6 +876,16 @@ class FieldDefsForm {
 		// Use for smart color
 		var i = Input.linkToHtmlInput( curField.useForSmartColor, jForm.find("input#useForSmartColor") );
 		i.onChange = onFieldChange;
+
+		// TOC export
+		var i = Input.linkToHtmlInput( curField.exportToToc, jForm.find("input#exportToToc") );
+		i.onChange = onFieldChange;
+		i.setEnabled( isEntityField() && getEntityParent().exportToToc );
+
+		// Searchable
+		var i = Input.linkToHtmlInput( curField.searchable, jForm.find("input#searchable") );
+		i.onChange = onFieldChange;
+		i.setEnabled( isEntityField() );
 
 		// Array size constraints
 		if( curField.isArray ) {

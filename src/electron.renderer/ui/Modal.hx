@@ -66,6 +66,8 @@ class Modal extends dn.Process {
 
 
 	function applyAnchor() {
+		anchorInvalidated = false;
+
 		var docHei = App.ME.jDoc.innerHeight();
 
 		switch anchor {
@@ -168,7 +170,7 @@ class Modal extends dn.Process {
 		if( editor!=null )
 			editor.ge.removeListener(onGlobalEvent);
 
-		jModalAndMask.remove();
+		jModalAndMask.empty().remove();
 
 		if( hasAnyOpen() ) {
 			for(e in ALL)
@@ -304,9 +306,7 @@ class Modal extends dn.Process {
 
 	override function postUpdate() {
 		super.postUpdate();
-		if( anchorInvalidated ) {
-			anchorInvalidated = false;
+		if( anchorInvalidated )
 			applyAnchor();
-		}
 	}
 }

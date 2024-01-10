@@ -11,6 +11,11 @@
 			/* border: 1px solid blue; */
 		}
 
+		* {
+			pointer-events: none;
+			user-select: none;
+		}
+
 		@font-face {
 			font-family: Roboto;
 			src: url("fonts/RobotoCondensed-Light.ttf");
@@ -22,7 +27,7 @@
 		}
 
 
-		.wrapper {
+		.windowWrapper {
 			display: grid;
 			align-items: center;
 			justify-content: center;
@@ -30,49 +35,51 @@
 			height: 100%;
 		}
 
-		.splash {
+		.splashWrapper {
+			position: relative;
 			display: grid;
-			grid-template-columns: 300px min-content;
+			grid-template-rows: min-content min-content;
 			box-sizing: border-box;
-			border-radius: 8px;
 			overflow: hidden;
-			box-shadow: 0px 4px 8px rgba(0,0,0, 0.3),
-				0px 0px 32px rgba(0,0,0, 0.4);
+
+			box-shadow: 0px 0px 16px #232a3880 inset,
+				0px 4px 8px rgba(0,0,0, 0.4),
+				0px 0px 32px rgba(0,0,0, 0.3);
+
+			border-top-right-radius: 24px;
+
+			/* background: #14171b80; */
 		}
 
-		.splash .logo {
-			padding: 16px;
-			background: #1e2229d3;
-			border-top: 1px solid #545d7352;
-			box-shadow: 0px 0px 32px #2c3546a4 inset;
+		img.ldtkIcon {
+			width: auto;
+			height: 200px;
 		}
 
-		.splash .logo img {
-			width: 100%;
-		}
-
-		.splash .version {
+		.version {
 			display: grid;
-			grid-template-columns: min-content min-content;
-			justify-content: center;
+			grid-template-columns: auto min-content min-content;
 
-			color: #1e2229;
+			color: #fc0;
 			white-space: nowrap;
-			font-size: 110px;
+			font-size: 20pt;
 			line-height: 1em;
-			letter-spacing: -3px;
-			padding-left: 8px;
-			padding-right: 16px;
 
-			background: #fc0;
+			background: #14171b;
+			padding: 10px;
+			padding-top: 0;
 		}
 
-		.splash .version #mainVersion,
-		.splash .version #patchVersion {
+		.version .filler {
+			background-color: #252a33;
+			margin-right: 6px;
+		}
+		.version #mainVersion,
+		.version #patchVersion {
 			display: flex;
 			align-items: center;
 		}
-		.splash .version #mainVersion {
+		.version #mainVersion {
 			font-weight: bold;
 		}
 	</style>
@@ -80,20 +87,21 @@
 
 
 <body>
-	<div class="wrapper">
-		<div class="splash">
+	<div class="windowWrapper">
+		<div class="splashWrapper">
 
-			<div class="logo">
-				<img src="img/LDtk-simple.svg"/>
-			</div>
+			<img class="ldtkIcon" src="appIcon.png"/>
 
 			<div class="version">
+				<div class="filler"></div>
 				<span id="mainVersion">???</span>
 				<span id="patchVersion">???</span>
 			</div>
 
 		</div>
 	</div>
+
+
 
 	<script type="text/javascript">
 		// Write version from args

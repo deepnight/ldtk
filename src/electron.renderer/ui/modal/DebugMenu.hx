@@ -11,43 +11,44 @@ class DebugMenu extends ui.modal.ContextMenu {
 			case null:
 				addTitle(L.t._("Debug menu"));
 
-				#if debug
-				add({
+				addAction({
 					label: L.untranslated("Toggle debug print"),
 					cb: ()->{
-						if( App.ME.cd.has("debugTools") ) {
-							App.ME.clearDebug();
-							App.ME.cd.unset("debugTools");
-						}
-						else
-							App.ME.cd.setS("debugTools", Const.INFINITE);
+						App.ME.clearDebug();
+						App.ME.toggleDebugFlag(F_MainDebug);
 					}
+				});
+
+				#if debug
+				addAction({
+					label: L.untranslated("Debug flags"),
+					cb: ()->new DebugMenu("debugFlags"),
 				});
 				#end
 
 				#if debug
-				add({
+				addAction({
 					label: L.untranslated("Toggle timeline debug"),
 					show: ()->Editor.exists(),
 					cb: ()->LevelTimeline.toggleDebug(),
 				});
 				#end
 
-				add({
+				addAction({
 					label: L.untranslated("Create new world"),
 					cb: ()->{
 						var w = project.createWorld(true);
 						editor.selectWorld(w,true);
 					},
 					show: ()->Editor.exists(),
-					sub: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
+					subText: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
 				});
 
 				if( Editor.exists() ) {
 
 					addTitle( L.untranslated("Internal data") );
 
-					add({
+					addAction({
 						label: L.untranslated("Clear levels cache"),
 						show: Editor.exists,
 						cb: ()->{
@@ -57,22 +58,22 @@ class DebugMenu extends ui.modal.ContextMenu {
 						}
 					});
 
-					add({
+					addAction({
 						label: L.untranslated("Invalidate world render"),
 						show: Editor.exists,
 						cb: ()->editor.worldRender.invalidateAll(),
 					});
 
-					add({
+					addAction({
 						label: L.untranslated("Rebuild tilesets pixel cache"),
 						show: Editor.exists,
 						cb: ()->{
 							for(td in project.defs.tilesets)
-								td.buildPixelData( editor.ge.emit.bind(TilesetDefPixelDataCacheRebuilt(td)) );
+								td.buildPixelDataAndNotify();
 						}
 					});
 
-					add({
+					addAction({
 						label: L.untranslated("Rebuild all auto-layers"),
 						show: Editor.exists,
 						cb: ()->{
@@ -88,7 +89,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 						}
 					});
 
-					add({
+					addAction({
 						label: L.untranslated("Show IIDs"),
 						show: ()->Editor.exists(),
 						cb: ()->{
@@ -128,7 +129,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 				addTitle(L.untranslated("Log"));
 
-				add({
+				addAction({
 					label: L.untranslated("Print log"),
 					cb: ()->{
 						App.LOG.printAll();
@@ -136,7 +137,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 					}
 				});
 
-				add({
+				addAction({
 					label: L.untranslated("Flush log to disk"),
 					cb: ()->{
 						App.LOG.flushToFile();
@@ -148,13 +149,13 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 				addTitle(L.untranslated("App"));
 
-				add({
+				addAction({
 					label: L.untranslated("Locate dirs... >"),
 					cb: ()->new DebugMenu("dirs")
 				});
 
 				#if debug
-				add({
+				addAction({
 					label: L.untranslated("Gif mode="+ (Editor.exists() ? ""+editor.gifMode : "?")),
 					show: Editor.exists,
 					cb: ()->{
@@ -175,7 +176,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 
 				#if debug
-				add({
+				addAction({
 					label: L.untranslated("Update sample maps"),
 					cb: ()->{
 						var path = JsTools.getSamplesDir();
@@ -211,7 +212,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 									log.general(" -> Updating tileset data...");
 									for(td in p.defs.tilesets) {
 										td.importAtlasImage(td.relPath);
-										td.buildPixelData(()->{}, true);
+										td.buildPixelData(true);
 									}
 
 									// Auto layer rules
@@ -221,7 +222,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 									for(li in l.layerInstances) {
 										if( !li.def.isAutoLayer() )
 											continue;
-										li.applyAllAutoLayerRules();
+										li.applyAllRules();
 									}
 
 									// Final tidying
@@ -244,7 +245,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 
 
 				#if debug
-				add({
+				addAction({
 					label: L.untranslated("Emulate new update"),
 					cb: ()->{
 						App.ME.settings.v.lastKnownVersion = null;
@@ -253,7 +254,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 					}
 				});
 
-				add({
+				addAction({
 					label: L.untranslated("Process profiling"),
 					cb: ()->{
 						dn.Process.clearProfilingTimes();
@@ -262,7 +263,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 					}
 				});
 
-				add({
+				addAction({
 					label: L.untranslated("Crash app!"),
 					className: "warning",
 					cb: ()->{
@@ -271,7 +272,7 @@ class DebugMenu extends ui.modal.ContextMenu {
 						a.crash = 5;
 					}
 				});
-				add({
+				addAction({
 					label: L.untranslated("Lose WebGL context"),
 					className: "warning",
 					cb: ()->{
@@ -295,27 +296,44 @@ class DebugMenu extends ui.modal.ContextMenu {
 				#end // End of "if debug"
 
 
-				add({
+				addAction({
 					label: L.untranslated("Open dev tools"),
 					cb: ()->ET.openDevTools()
 				});
 
 
 
+			case "debugFlags":
+				addTitle( L.untranslated("Debug flags") );
+				for(k in DebugFlag.getConstructors()) {
+					var f = DebugFlag.createByName(k);
+					addAction({
+						label: L.untranslated(k),
+						iconId: App.ME.hasDebugFlag(f) ? "active" : "inactive",
+						selectionTick: App.ME.hasDebugFlag(f),
+						cb: ()->{
+							App.ME.toggleDebugFlag(f);
+							new DebugMenu(id);
+						},
+					});
+				}
+
+
+
 			case "dirs":
 
 				addTitle( L.untranslated("Locate dir") );
-				add({
+				addAction({
 					label: L.untranslated("LDtk exe"),
 					cb: ()->JsTools.locateFile(JsTools.getExeDir(), false)
 				});
 
-				add({
+				addAction({
 					label: L.untranslated("Settings"),
 					cb: ()->JsTools.locateFile(Settings.getDir(), false)
 				});
 
-				add({
+				addAction({
 					label: L.untranslated("Log file"),
 					cb: ()->JsTools.locateFile(JsTools.getLogPath(), true)
 				});

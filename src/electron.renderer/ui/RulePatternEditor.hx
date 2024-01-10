@@ -92,10 +92,10 @@ class RulePatternEditor {
 						jStampPreview.appendTo(jCell);
 						var previewWid = 32;
 						var previewHei = 32;
-						if( rule.tileIds.length>1 ) {
+						if( rule.tileRectsIds.length>0 && rule.tileRectsIds[0].length>1 ) {
 							var td = Editor.ME.curLayerInstance.getTilesetDef();
 							if( td!=null ) {
-								var bounds = td.getTileGroupBounds(rule.tileIds);
+								var bounds = td.getTileGroupBounds(rule.tileRectsIds[0]);
 								if( bounds.wid>1 )
 									previewWid = Std.int( previewWid * 1.9 );
 								if( bounds.hei>1 )
@@ -112,9 +112,9 @@ class RulePatternEditor {
 				if( previewMode ) {
 					var td = Editor.ME.curLayerInstance.getTilesetDef();
 					if( td!=null ) {
-						var jTile = td.createCanvasFromTileId(rule.tileIds[0], 32);
+						var jTile = td.createCanvasFromTileId(rule.tileRectsIds.length>0 ? rule.tileRectsIds[0][0] : null, 32);
 						jCell.append(jTile);
-						if( rule.tileIds.length>1 )
+						if( rule.tileRectsIds.length>1 )
 							jTile.addClass("multi");
 					}
 				}
@@ -122,7 +122,7 @@ class RulePatternEditor {
 
 			// Cell value (color + tile)
 			if( !isCenter || !previewMode ) {
-				var ruleValue = rule.get(cx,cy);
+				var ruleValue = rule.getPattern(cx,cy);
 				if( ruleValue!=0 ) {
 					var intGridVal = M.iabs(ruleValue);
 					if( ruleValue>0 ) {
@@ -132,13 +132,15 @@ class RulePatternEditor {
 							addExplain(jCell, 'This cell should contain any IntGrid value to match.');
 						}
 						else if( intGridVal>999 ) {
-							var g = sourceDef.getIntGridGroup( Std.int(intGridVal/1000)-1 );
+							var groupUid = sourceDef.resolveIntGridGroupUidFromRuleValue(intGridVal);
+							var color = sourceDef.getIntGridGroupColor(groupUid);
 							jCell.addClass("group");
-							if( g.color!=null ) {
-								jCell.css("background-color", g.color.toCssRgba(0.9));
-								jCell.css("outline-color", g.color.toWhite(0.6).toHex());
+							if( color!=null ) {
+								jCell.css("background-color", color.toCssRgba(0.9));
+								jCell.css("outline-color", color.toWhite(0.6).toHex());
 							}
-							addExplain(jCell, 'This cell should contain any IntGrid value from the group ${g.displayName} to match.');
+							var name = sourceDef.getIntGridGroupDisplayName(groupUid);
+							addExplain(jCell, 'This cell should contain any IntGrid value from the group $name to match.');
 						}
 						else if( sourceDef.hasIntGridValue(intGridVal) ) {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
@@ -161,13 +163,15 @@ class RulePatternEditor {
 							addExplain(jCell, 'This cell should NOT contain any IntGrid value to match.');
 						}
 						else if( intGridVal>999 ) {
-							var g = sourceDef.getIntGridGroup( Std.int(intGridVal/1000)-1 );
+							var groupUid = sourceDef.resolveIntGridGroupUidFromRuleValue(intGridVal);
+							var color = sourceDef.getIntGridGroupColor(groupUid);
 							jCell.addClass("group");
-							if( g.color!=null ) {
-								jCell.css("background-color", g.color.toCssRgba(0.9));
-								jCell.css("outline-color", g.color.toWhite(0.6).toHex());
+							if( color!=null ) {
+								jCell.css("background-color", color.toCssRgba(0.9));
+								jCell.css("outline-color", color.toWhite(0.6).toHex());
 							}
-							addExplain(jCell, 'This cell should NOT contain any IntGrid value from the group ${g.displayName} to match.');
+							var name = sourceDef.getIntGridGroupDisplayName(groupUid);
+							addExplain(jCell, 'This cell should NOT contain any IntGrid value from the group $name to match.');
 						}
 						else if( sourceDef.hasIntGridValue(intGridVal) ) {
 							jCell.css("background-color", C.intToHex( sourceDef.getIntGridValueDef(intGridVal).color ) );
@@ -193,39 +197,40 @@ class RulePatternEditor {
 				var anyChange = false;
 				function draw() {
 
-					var v = rule.get(cx,cy);
+					var v = rule.getPattern(cx,cy);
 					switch drawButton {
 						case 0:
 							// Require value
 							if( valueAtStartPoint>=0 )
-								rule.set(cx,cy, getSelectedValue());
+								rule.setPattern(cx,cy, getSelectedValue());
 							else if( v<0 )
-								rule.set(cx,cy, 0);
+								rule.setPattern(cx,cy, 0);
 
 						case 2:
 							// Forbid value
 							if( valueAtStartPoint==0 )
-								rule.set(cx,cy, -getSelectedValue());
+								rule.setPattern(cx,cy, -getSelectedValue());
 							else
-								rule.set(cx,cy, 0);
+								rule.setPattern(cx,cy, 0);
 
 						case 1:
 							// Clear
-							rule.set(cx,cy,0);
+							rule.setPattern(cx,cy,0);
 
 						case _:
 					}
 
 					// Refresh
-					if( v!=rule.get(cx,cy) ) {
+					if( v!=rule.getPattern(cx,cy) ) {
 						anyChange = true;
+						rule.updateUsedValues();
 						render();
 					}
 
 				}
 
 				jCell.mousedown( (ev:js.jquery.Event)->{
-					valueAtStartPoint = rule.get(cx,cy);
+					valueAtStartPoint = rule.getPattern(cx,cy);
 					drawButton = ev.button;
 					App.ME.jBody.on("mouseup.rulePattern", (_)->{
 						drawButton = -1;

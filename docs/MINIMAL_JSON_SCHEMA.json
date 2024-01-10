@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.4.1 JSON schema",
+	"title": "LDtk 1.5.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -111,6 +111,9 @@
 					},
 					"IntGridValueInstance": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
+					},
+					"TocInstanceData": {
+						"$ref": "#/otherTypes/TocInstanceData"
 					},
 					"NeighbourLevel": {
 						"$ref": "#/otherTypes/NeighbourLevel"
@@ -297,8 +300,6 @@
 				"__pivot",
 				"__smartColor",
 				"__tags",
-				"__worldX",
-				"__worldY",
 				"defUid",
 				"fieldInstances",
 				"height",
@@ -351,15 +352,17 @@
 					]
 				},
 				"__worldX": {
-					"description": "X world coordinate in pixels",
+					"description": "X world coordinate in pixels. Only available in GridVania or Free world layouts.",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"__worldY": {
-					"description": "Y world coordinate in pixels",
+					"description": "Y world coordinate in pixels Only available in GridVania or Free world layouts.",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"__smartColor": {
@@ -700,8 +703,10 @@
 			"title": "Auto-layer rule group",
 			"required": [
 				"active",
+				"biomeRequirementMode",
 				"isOptional",
 				"name",
+				"requiredBiomeValues",
 				"rules",
 				"uid",
 				"usesWizard"
@@ -712,6 +717,12 @@
 					"description": "",
 					"type": [
 						"string"
+					]
+				},
+				"biomeRequirementMode": {
+					"description": "",
+					"type": [
+						"integer"
 					]
 				},
 				"color": {
@@ -750,6 +761,17 @@
 					"description": "",
 					"type": [
 						"integer"
+					]
+				},
+				"requiredBiomeValues": {
+					"description": "",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"active": {
@@ -825,6 +847,54 @@
 					"type": [
 						"integer"
 					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TocInstanceData": {
+			"title": "ldtk.TocInstanceData",
+			"required": [
+				"fields",
+				"heiPx",
+				"iids",
+				"widPx",
+				"worldX",
+				"worldY"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldX": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"widPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"worldY": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"heiPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"fields": {
+					"description": "An object containing the values of all entity fields with the `exportToToc` option enabled. This object typing depends on actual field value types."
+				},
+				"iids": {
+					"description": "IID information of this instance",
+					"$ref": "#/otherTypes/EntityReferenceInfos"
 				}
 			},
 			"type": [
@@ -1680,7 +1750,7 @@
 			"title": "ldtk.TableOfContentEntry",
 			"required": [
 				"identifier",
-				"instances"
+				"instancesData"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -1690,10 +1760,10 @@
 						"string"
 					]
 				},
-				"instances": {
+				"instancesData": {
 					"description": "",
 					"items": {
-						"$ref": "#/otherTypes/EntityReferenceInfos"
+						"$ref": "#/otherTypes/TocInstanceData"
 					},
 					"type": [
 						"array"

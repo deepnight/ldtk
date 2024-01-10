@@ -57,12 +57,18 @@ class FieldInstance {
 		return fi;
 	}
 
+	public function getFullJsonValue() : Dynamic {
+		return def.isArray
+			? [ for(i in 0...getArrayLength()) getJsonValue(i) ]
+			: getJsonValue(0);
+	}
+
 	public function toJson() : ldtk.Json.FieldInstanceJson {
 		return {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__type: def.getJsonTypeString(),
-			__value: def.isArray ? [ for(i in 0...getArrayLength()) getJsonValue(i) ] : getJsonValue(0),
+			__value: getFullJsonValue(),
 			__tile: getSmartTile(),
 
 			defUid: defUid,
@@ -748,6 +754,16 @@ class FieldInstance {
 			case V_String(v): v;
 			case _: throw "unexpected";
 		}
+	}
+
+
+	public function getEnumValueTileRect(arrayIdx:Int) : Null<ldtk.Json.TilesetRect> {
+		require( F_Enum(null) );
+		var v = getEnumValue(arrayIdx);
+		if( v==null )
+			return null;
+		else
+			return def.getEnumDefinition().getValue(v).tileRect;
 	}
 
 	public function getPointStr(arrayIdx:Int) : Null<String> {

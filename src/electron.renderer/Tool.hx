@@ -16,6 +16,7 @@ class Tool<T> extends dn.Process {
 	public var jOptions(get,never) : J; inline function get_jOptions() return editor.jMainPanel.find("#toolOptions");
 
 	var clickingOutsideBounds = false;
+	var canUseOutOfBounds = false;
 	var curMode : Null<ToolEditMode> = null;
 	var origin : Coords;
 	var lastMouse : Null<Coords>;
@@ -30,6 +31,11 @@ class Tool<T> extends dn.Process {
 
 	override function onDispose() {
 		super.onDispose();
+	}
+
+
+	function checkOutOfBounds() {
+		return !clickingOutsideBounds || canUseOutOfBounds;
 	}
 
 
@@ -105,8 +111,10 @@ class Tool<T> extends dn.Process {
 		rectangle = App.ME.isShiftDown();
 		origin = m;
 		lastMouse = m;
-		if( !clickingOutsideBounds && !rectangle && useAt(m,false) )
+		if( checkOutOfBounds() && !rectangle && useAt(m,false) ) {
+			ev.cancel = true;
 			onEditAnything();
+		}
 	}
 
 
@@ -206,7 +214,7 @@ class Tool<T> extends dn.Process {
 	public function stopUsing(m:Coords) {
 		var clickTime = haxe.Timer.stamp() - startTime;
 
-		if( isRunning() && !clickingOutsideBounds ) {
+		if( isRunning() && checkOutOfBounds() ) {
 			var anyChange = false;
 
 			if( rectangle && m.cx==origin.cx && m.cy==origin.cy && clickTime<=0.22 && !App.ME.isAltDown() ) {
@@ -256,14 +264,18 @@ class Tool<T> extends dn.Process {
 	}
 
 	public function onKeyPress(keyId:Int) {}
+	public function onAppCommand(cmd:AppCommand) {}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
 		if( isRunning() && clickingOutsideBounds && curLevel.inBounds(m.levelX,m.levelY) )
 			clickingOutsideBounds = false;
 
 		// Execute the tool
-		if( !clickingOutsideBounds && isRunning() && !rectangle && useAt(m, false) )
+		if( checkOutOfBounds() && isRunning() && !rectangle && useAt(m, false) )
 			onEditAnything();
+
+		if( isRunning() )
+			editor.levelRender.suspendAsyncRender();
 
 		lastMouse = m;
 	}
@@ -272,7 +284,7 @@ class Tool<T> extends dn.Process {
 		if( ev.cancel )
 			return;
 
-		if( isRunning() && clickingOutsideBounds )
+		if( isRunning() && !checkOutOfBounds() )
 			editor.cursor.set(None);
 		else switch curMode {
 			case null, Add, Remove:

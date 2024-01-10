@@ -10,9 +10,9 @@
 <div id="mainPanel">
 	<div id="mainBar">
 		<div class="buttons panels">
+			<button class="editProject brown" title="Project settings" keys="P"><div class="icon project"></div></button>
 			<button class="world blue" title="World view" keys="~"><div class="icon world"></div></button>
 			<button class="editLevelInstance blue" title="Current level settings" keys="C"><div class="icon level"></div></button>
-			<button class="editProject brown" title="Project settings" keys="P"><div class="icon project"></div></button>
 			<button class="editLayers" title="Layers" keys="L"><div class="icon layer"></div></button>
 			<button class="editEntities" title="Entities" keys="E"><div class="icon entity"></div></button>
 			<button class="editEnums" title="Enums" keys="U"><div class="icon enum"></div></button>
@@ -54,6 +54,15 @@
 			<div class="icon showDetailsOff off"></div>
 		</li>
 
+		<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
+			<div class="icon singleLayer"></div>
+		</li>
+
+		<li class="autoLayerRender" title="**Render auto-layers** Enable or disable the rendering of tiles in all Auto-Layers. If disabled, only the underlying IntGrid values will be displayed." keys="SHIFT+R" tip="right">
+			<div class="icon autoLayer on"></div>
+			<div class="icon autoLayer off"></div>
+		</li>
+
 		<li class="tileEnums" title="**Show/hide enum tags** When enabled, shows a color overlay on tiles that have an Enum tag attached to them (see the Tilesets panel to tag tiles using Enums).\nOnly applies to Tiles layers and Auto-layers." tip="right">
 			<div class="icon enum on"></div>
 			<div class="icon enum off"></div>
@@ -62,10 +71,6 @@
 
 	<div class="title editing">Editing</div>
 	<ul class="editing">
-		<li class="singleLayerMode" title="**Single layer mode** Enable this to fade all other layers, and focus on active layer only. NOTE: this will also affect the Selection tool (ALT+click)." keys="Shift+A" tip="right">
-			<div class="icon singleLayer"></div>
-		</li>
-
 		<li class="emptySpaceSelection" title="**Select empty spaces** If this option is enabled when you select a level area with ALT+SHIFT+click, the selection will also include EMPTY grid cells." keys="Shift+E" tip="right">
 			<div class="icon emptySpaceOn on"></div>
 			<div class="icon emptySpaceOff off"></div>
@@ -92,6 +97,16 @@
 	</div>
 	<ul></ul>
 </div>
+
+<xml class="commandPalette">
+	<div class="mask"></div>
+	<div class="wrapper">
+		<div class="content">
+			<input type="text" placeholder="Search for worlds, levels, entities etc."/>
+			<div class="results"></div>
+		</div>
+	</div>
+</xml>
 
 <!-- Element templates -->
 

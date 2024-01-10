@@ -2,6 +2,7 @@
 // Libs
 import js.jquery.JQuery as J;
 import dn.M;
+import dn.Col;
 import dn.Version;
 import dn.Chrono;
 import dn.legacy.Color as C;

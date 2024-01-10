@@ -176,14 +176,14 @@ class SelectPicker extends ui.modal.Dialog {
 						settings.setUiStateInt(uiStateId, gridColumns, project);
 				}
 				var ctx = new ContextMenu(jGrid);
-				ctx.enableNoWrap();
-				ctx.add({
+				ctx.disableTextWrapping();
+				ctx.addAction({
 					label: L.untranslated('<span class="icon listView"></span> List view'),
 					cb: _setGridAndSave.bind(1),
 				});
 				ctx.addTitle(L.t._("Grid view"));
 				for(c in 2...MAX_COLUMNS+1)
-					ctx.add({
+					ctx.addAction({
 						label: L.untranslated('<span class="icon gridView"></span> $c columns'),
 						cb: _setGridAndSave.bind(c),
 					});
@@ -236,7 +236,7 @@ class SelectPicker extends ui.modal.Dialog {
 		else
 			jFocus = delta<0 ? jAll.first() : jAll.last();
 
-		if( !allowRowChange && jOld.offset().top!=jFocus.offset().top )
+		if( jFocus.length==0 || !allowRowChange && jOld.offset().top!=jFocus.offset().top )
 			jFocus = jOld;
 	}
 

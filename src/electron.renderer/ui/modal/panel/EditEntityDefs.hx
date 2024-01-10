@@ -34,7 +34,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Presets
 		jEntityList.parent().find("button.presets").click( (ev)->{
 			var ctx = new ContextMenu(ev);
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("Rectangle region"),
 				cb: ()->{
 					var ed = _createEntity();
@@ -48,7 +48,7 @@ class EditEntityDefs extends ui.modal.Panel {
 					editor.ge.emit( EntityDefChanged );
 				}
 			});
-			ctx.add({
+			ctx.addAction({
 				label: L.t._("Circle region"),
 				cb: ()->{
 					var ed = _createEntity();
@@ -149,7 +149,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		}
 	}
 
-	function selectEntity(ed:Null<data.def.EntityDef>) {
+	public function selectEntity(ed:Null<data.def.EntityDef>) {
 		if( ed==null )
 			ed = editor.project.defs.entities[0];
 
@@ -195,7 +195,19 @@ class EditEntityDefs extends ui.modal.Panel {
 		var ted = new ui.TagEditor(
 			curEntity.tags,
 			()->editor.ge.emit(EntityDefChanged),
-			()->project.defs.getRecallEntityTags([curEntity.tags])
+			()->project.defs.getRecallEntityTags([curEntity.tags]),
+			()->return project.defs.entities.map( ed->ed.tags ),
+			(oldT,newT)->{
+				for(ed in project.defs.entities)
+					for(fd in ed.fieldDefs)
+						fd.allowedRefTags.rename(oldT, newT);
+
+				for(ld in project.defs.layers) {
+					ld.requiredTags.rename(oldT, newT);
+					ld.excludedTags.rename(oldT, newT);
+				}
+				editor.ge.emit( EntityDefChanged );
+			}
 		);
 		jEntityForm.find("#tags").empty().append(ted.jEditor);
 
@@ -523,6 +535,17 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Export to table of content
 		var i = Input.linkToHtmlInput(curEntity.exportToToc, jEntityForm.find("#exportToToc"));
 		i.linkEvent(EntityDefChanged);
+		i.onChange = ()->{
+			for(fd in curEntity.fieldDefs)
+				if( fd.exportToToc ) {
+					fd.exportToToc = false;
+					editor.ge.emit(FieldDefChanged(fd));
+				}
+		}
+
+		// Out-of-bounds policy
+		var i = Input.linkToHtmlInput(curEntity.allowOutOfBounds, jEntityForm.find("#allowOutOfBounds"));
+		i.linkEvent(EntityDefChanged);
 
 		// Pivot
 		var jPivots = jEntityForm.find(".pivot");
@@ -559,7 +582,7 @@ class EditEntityDefs extends ui.modal.Panel {
 		jEntityList.empty();
 
 		// List context menu
-		ContextMenu.addTo(jEntityList, false, [
+		ContextMenu.attachTo(jEntityList, false, [
 			{
 				label: L._Paste(),
 				cb: ()->{
@@ -582,29 +605,12 @@ class EditEntityDefs extends ui.modal.Panel {
 				jSep.attr("default", "open");
 				jSep.appendTo(jEntityList);
 
-				// Rename
-				if( group.tag!=null ) {
-					var jLinks = new J('<div class="links"> <a> <span class="icon edit"></span> </a> </div>');
-					jSep.append(jLinks);
-					TagEditor.attachRenameAction( jLinks.find("a"), group.tag, (t)->{
-						for(ed in project.defs.entities) {
-							ed.tags.rename(group.tag, t);
-							for(fd in ed.fieldDefs)
-								fd.allowedRefTags.rename(group.tag, t);
-						}
-						for(ld in project.defs.layers) {
-							ld.requiredTags.rename(group.tag, t);
-							ld.excludedTags.rename(group.tag, t);
-						}
-						editor.ge.emit( EntityDefChanged );
-					});
-				}
 			}
 
 			// Create sub list
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jEntityList);
-			var jSubList = new J('<ul/>');
+			var jSubList = new J('<ul class="niceList compact"/>');
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {
@@ -627,37 +633,28 @@ class EditEntityDefs extends ui.modal.Panel {
 					jEnt.css( "color", C.intToHex( C.toWhite(ed.color, 0.5) ) );
 
 				// Menu
-				ContextMenu.addTo(jEnt, [
-					{
-						label: L._Copy(),
-						cb: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
-					},
-					{
-						label: L._Cut(),
-						cb: ()->{
+				ContextMenu.attachTo_new(jEnt, (ctx:ContextMenu)->{
+					ctx.addElement( Ctx_CopyPaster({
+						elementName: "entity",
+						clipType: CEntityDef,
+						copy: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
+						cut: ()->{
 							App.ME.clipboard.copyData(CEntityDef, ed.toJson(project));
 							deleteEntityDef(ed);
 						},
-					},
-					{
-						label: L._PasteAfter(),
-						cb: ()->{
+						paste: ()->{
 							var copy = project.defs.pasteEntityDef(App.ME.clipboard, ed);
 							editor.ge.emit(EntityDefAdded);
 							selectEntity(copy);
 						},
-						enable: ()->App.ME.clipboard.is(CEntityDef),
-					},
-					{
-						label: L._Duplicate(),
-						cb:()->{
+						duplicate: ()->{
 							var copy = project.defs.duplicateEntityDef(ed);
 							editor.ge.emit(EntityDefAdded);
 							selectEntity(copy);
-						}
-					},
-					{ label: L._Delete(), cb:deleteEntityDef.bind(ed) },
-				]);
+						},
+						delete: ()->deleteEntityDef(ed),
+					}) );
+				});
 
 				// Click
 				jEnt.click( function(_) selectEntity(ed) );

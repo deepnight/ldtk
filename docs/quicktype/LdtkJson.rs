@@ -100,8 +100,9 @@ pub struct LdtkJson {
     pub external_levels: bool,
 
     /// An array containing various advanced flags (ie. options or other states). Possible
-    /// values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
-    /// `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+    /// values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,
+    /// `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,
+    /// `MultiWorlds`, `UseMultilinesType`
     pub flags: Vec<Flag>,
 
     /// Naming convention for Identifiers (first-letter uppercase, full uppercase etc.) Possible
@@ -234,6 +235,9 @@ pub struct Definitions {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct EntityDefinition {
+    /// If enabled, this entity is allowed to stay outside of the current level bounds
+    pub allow_out_of_bounds: bool,
+
     /// Base entity color
     pub color: String,
 
@@ -409,6 +413,10 @@ pub struct FieldDefinition {
 
     pub editor_text_suffix: Option<String>,
 
+    /// If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
+    /// to Entity fields.
+    pub export_to_toc: bool,
+
     /// User defined unique identifier
     pub identifier: String,
 
@@ -424,6 +432,9 @@ pub struct FieldDefinition {
     /// Optional regular expression that needs to be matched to accept values. Expected format:
     /// `/some_reg_ex/g`, with optional "i" flag.
     pub regex: Option<String>,
+
+    /// If enabled, this field will be searchable through LDtk command palette
+    pub searchable: bool,
 
     pub symmetrical_ref: bool,
 
@@ -720,6 +731,10 @@ pub struct LayerDefinition {
     /// by: `tilesetDefUid`
     pub auto_tileset_def_uid: Option<i64>,
 
+    pub auto_tiles_killed_by_other_layer_uid: Option<i64>,
+
+    pub biome_field_uid: Option<i64>,
+
     /// Allow editor selections when the layer is not currently active.
     pub can_select_when_inactive: bool,
 
@@ -810,12 +825,19 @@ pub struct LayerDefinition {
 
     /// Unique Int identifier
     pub uid: i64,
+
+    /// Display tags
+    pub ui_filter_tags: Vec<String>,
+
+    pub use_async_render: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AutoLayerRuleGroup {
     pub active: bool,
+
+    pub biome_requirement_mode: i64,
 
     /// *This field was removed in 1.0.0 and should no longer be used.*
     pub collapsed: Option<bool>,
@@ -827,6 +849,8 @@ pub struct AutoLayerRuleGroup {
     pub is_optional: bool,
 
     pub name: String,
+
+    pub required_biome_values: Vec<String>,
 
     pub rules: Vec<AutoLayerRuleDefinition>,
 
@@ -886,8 +910,9 @@ pub struct AutoLayerRuleDefinition {
     /// Pattern width & height. Should only be 1,3,5 or 7.
     pub size: i64,
 
-    /// Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
-    pub tile_ids: Vec<i64>,
+    /// **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
+    /// by: `tileRectsIds`
+    pub tile_ids: Option<Vec<i64>>,
 
     /// Defines how tileIds array is used Possible values: `Single`, `Stamp`
     pub tile_mode: TileMode,
@@ -903,6 +928,9 @@ pub struct AutoLayerRuleDefinition {
 
     /// Min random offset for Y tile pos
     pub tile_random_y_min: i64,
+
+    /// Array containing all the possible tile IDs rectangles (picked randomly).
+    pub tile_rects_ids: Vec<Vec<i64>>,
 
     /// Tile X offset
     pub tile_x_offset: i64,
@@ -1082,6 +1110,9 @@ pub enum Flag {
     #[serde(rename = "DiscardPreCsvIntGrid")]
     DiscardPreCsvIntGrid,
 
+    #[serde(rename = "ExportOldTableOfContentData")]
+    ExportOldTableOfContentData,
+
     #[serde(rename = "ExportPreCsvIntGridFormat")]
     ExportPreCsvIntGridFormat,
 
@@ -1156,6 +1187,8 @@ pub struct ForcedRefs {
 
     pub tileset_rect: Option<TilesetRectangle>,
 
+    pub toc_instance_data: Option<LdtkTocInstanceData>,
+
     pub world: Option<World>,
 }
 
@@ -1188,13 +1221,13 @@ pub struct EntityInstance {
     #[serde(rename = "__tile")]
     pub tile: Option<TilesetRectangle>,
 
-    /// X world coordinate in pixels
+    /// X world coordinate in pixels. Only available in GridVania or Free world layouts.
     #[serde(rename = "__worldX")]
-    pub world_x: i64,
+    pub world_x: Option<i64>,
 
-    /// Y world coordinate in pixels
+    /// Y world coordinate in pixels Only available in GridVania or Free world layouts.
     #[serde(rename = "__worldY")]
-    pub world_y: i64,
+    pub world_y: Option<i64>,
 
     /// Reference of the **Entity definition** UID
     pub def_uid: i64,
@@ -1256,6 +1289,8 @@ pub struct FieldInstance {
 }
 
 /// This object describes the "location" of an Entity instance in the project worlds.
+///
+/// IID information of this instance
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ReferenceToAnEntityInstance {
@@ -1566,10 +1601,34 @@ pub struct NeighbourLevel {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LdtkTableOfContentEntry {
     pub identifier: String,
 
-    pub instances: Vec<ReferenceToAnEntityInstance>,
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+    /// Replaced by: `instancesData`
+    pub instances: Option<Vec<ReferenceToAnEntityInstance>>,
+
+    pub instances_data: Vec<LdtkTocInstanceData>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LdtkTocInstanceData {
+    /// An object containing the values of all entity fields with the `exportToToc` option
+    /// enabled. This object typing depends on actual field value types.
+    pub fields: Option<serde_json::Value>,
+
+    pub hei_px: i64,
+
+    /// IID information of this instance
+    pub iids: ReferenceToAnEntityInstance,
+
+    pub wid_px: i64,
+
+    pub world_x: i64,
+
+    pub world_y: i64,
 }
 
 /// **IMPORTANT**: this type is available as a preview. You can rely on it to update your

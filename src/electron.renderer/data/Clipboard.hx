@@ -145,7 +145,7 @@ class Clipboard {
 					'Rule "${json.uid}"';
 
 				case CRuleGroup:
-					var json : data.DataTypes.AutoLayerRuleGroup = jsonObj;
+					var json : data.def.AutoLayerRuleGroupDef = jsonObj;
 					'Rule group "${json.name}"';
 
 				case CLayerDef:

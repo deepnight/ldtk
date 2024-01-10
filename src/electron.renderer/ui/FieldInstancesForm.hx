@@ -451,13 +451,17 @@ class FieldInstancesForm {
 					input.blur();
 				});
 				input.click( ev->{
-					dn.js.ElectronDialogs.openFile(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
+					var uiDirId = "field_"+fi.def.identifier+"_"+fi.def.uid;
+					var defaultDir = App.ME.settings.getUiDir(project, uiDirId, project.getProjectDir());
+					dn.js.ElectronDialogs.openFile(fi.def.acceptFileTypes, defaultDir, function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
 						fp.useSlashes();
 						var relPath = project.makeRelativeFilePath(fp.full);
 						input.val(relPath);
 						fi.parseValue( arrayIdx, relPath );
 						onFieldChange(fi);
+						N.debug(fp.directory);
+						App.ME.settings.storeUiDir(project, uiDirId, fp.directory);
 					});
 					input.blur();
 				});
@@ -557,7 +561,8 @@ class FieldInstancesForm {
 							editor.levelRender.clearTemp();
 							editor.levelRender.temp.lineStyle(2, 0xff00ff);
 							editor.levelRender.temp.drawCircle(tei.centerX, tei.centerY, M.fmax(tei.width,tei.height)*0.5 + 8);
-							editor.levelRender.bleepEntity(tei,0xff00ff);
+							var b = editor.levelRender.bleepEntity(tei,0xff00ff);
+							b.remainCount = 2;
 						}
 					});
 					jRef.mouseleave( _->{
@@ -824,7 +829,7 @@ class FieldInstancesForm {
 					},
 				}
 			];
-			ui.modal.ContextMenu.addTo(jDt, false, actions);
+			ui.modal.ContextMenu.attachTo(jDt, false, actions);
 
 			var jDd = new J("<dd/>");
 			jDd.attr("defUid", fd.uid);

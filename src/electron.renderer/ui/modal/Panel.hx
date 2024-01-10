@@ -95,7 +95,7 @@ class Panel extends ui.Modal {
 		}
 		jLinkedButton = null;
 
-		jPanelMask.remove();
+		jPanelMask.empty().remove();
 		jPanelMask = null;
 	}
 

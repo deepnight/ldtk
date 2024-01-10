@@ -58,7 +58,7 @@ class Tip extends dn.Process {
 				 x = tOff.left + jTarget.innerWidth() - jTip.outerWidth();
 
 			var y = tOff.top + jTarget.outerHeight() + 8;
-			if( jTarget.outerHeight()<=32 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-150 )
+			if( jTarget.outerHeight()<=48 && !forceBelowPos && tOff.top>=40 || y>=js.Browser.window.innerHeight-150 )
 				y = tOff.top - jTip.outerHeight() - 8;
 
 			// Custom tip alignment

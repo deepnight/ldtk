@@ -165,8 +165,9 @@ namespace ldtk
 
         /// <summary>
         /// An array containing various advanced flags (ie. options or other states). Possible
-        /// values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`,
-        /// `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`
+        /// values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`,
+        /// `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`,
+        /// `MultiWorlds`, `UseMultilinesType`
         /// </summary>
         [JsonProperty("flags")]
         public Flag[] Flags { get; set; }
@@ -356,6 +357,12 @@ namespace ldtk
 
     public partial class EntityDefinition
     {
+        /// <summary>
+        /// If enabled, this entity is allowed to stay outside of the current level bounds
+        /// </summary>
+        [JsonProperty("allowOutOfBounds")]
+        public bool AllowOutOfBounds { get; set; }
+
         /// <summary>
         /// Base entity color
         /// </summary>
@@ -667,6 +674,13 @@ namespace ldtk
         public string EditorTextSuffix { get; set; }
 
         /// <summary>
+        /// If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
+        /// to Entity fields.
+        /// </summary>
+        [JsonProperty("exportToToc")]
+        public bool ExportToToc { get; set; }
+
+        /// <summary>
         /// User defined unique identifier
         /// </summary>
         [JsonProperty("identifier")]
@@ -696,6 +710,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("regex")]
         public string Regex { get; set; }
+
+        /// <summary>
+        /// If enabled, this field will be searchable through LDtk command palette
+        /// </summary>
+        [JsonProperty("searchable")]
+        public bool Searchable { get; set; }
 
         [JsonProperty("symmetricalRef")]
         public bool SymmetricalRef { get; set; }
@@ -872,6 +892,12 @@ namespace ldtk
         [JsonProperty("autoTilesetDefUid")]
         public long? AutoTilesetDefUid { get; set; }
 
+        [JsonProperty("autoTilesKilledByOtherLayerUid")]
+        public long? AutoTilesKilledByOtherLayerUid { get; set; }
+
+        [JsonProperty("biomeFieldUid")]
+        public long? BiomeFieldUid { get; set; }
+
         /// <summary>
         /// Allow editor selections when the layer is not currently active.
         /// </summary>
@@ -1037,12 +1063,24 @@ namespace ldtk
         /// </summary>
         [JsonProperty("uid")]
         public long Uid { get; set; }
+
+        /// <summary>
+        /// Display tags
+        /// </summary>
+        [JsonProperty("uiFilterTags")]
+        public string[] UiFilterTags { get; set; }
+
+        [JsonProperty("useAsyncRender")]
+        public bool UseAsyncRender { get; set; }
     }
 
     public partial class AutoLayerRuleGroup
     {
         [JsonProperty("active")]
         public bool Active { get; set; }
+
+        [JsonProperty("biomeRequirementMode")]
+        public long BiomeRequirementMode { get; set; }
 
         /// <summary>
         /// *This field was removed in 1.0.0 and should no longer be used.*
@@ -1061,6 +1099,9 @@ namespace ldtk
 
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("requiredBiomeValues")]
+        public string[] RequiredBiomeValues { get; set; }
 
         [JsonProperty("rules")]
         public AutoLayerRuleDefinition[] Rules { get; set; }
@@ -1165,7 +1206,8 @@ namespace ldtk
         public long Size { get; set; }
 
         /// <summary>
-        /// Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.
+        /// **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
+        /// by: `tileRectsIds`
         /// </summary>
         [JsonProperty("tileIds")]
         public long[] TileIds { get; set; }
@@ -1199,6 +1241,12 @@ namespace ldtk
         /// </summary>
         [JsonProperty("tileRandomYMin")]
         public long TileRandomYMin { get; set; }
+
+        /// <summary>
+        /// Array containing all the possible tile IDs rectangles (picked randomly).
+        /// </summary>
+        [JsonProperty("tileRectsIds")]
+        public long[][] TileRectsIds { get; set; }
 
         /// <summary>
         /// Tile X offset
@@ -1517,6 +1565,9 @@ namespace ldtk
         [JsonProperty("TilesetRect", NullValueHandling = NullValueHandling.Ignore)]
         public TilesetRectangle TilesetRect { get; set; }
 
+        [JsonProperty("TocInstanceData", NullValueHandling = NullValueHandling.Ignore)]
+        public LdtkTocInstanceData TocInstanceData { get; set; }
+
         [JsonProperty("World", NullValueHandling = NullValueHandling.Ignore)]
         public World World { get; set; }
     }
@@ -1562,16 +1613,16 @@ namespace ldtk
         public TilesetRectangle Tile { get; set; }
 
         /// <summary>
-        /// X world coordinate in pixels
+        /// X world coordinate in pixels. Only available in GridVania or Free world layouts.
         /// </summary>
         [JsonProperty("__worldX")]
-        public long WorldX { get; set; }
+        public long? WorldX { get; set; }
 
         /// <summary>
-        /// Y world coordinate in pixels
+        /// Y world coordinate in pixels Only available in GridVania or Free world layouts.
         /// </summary>
         [JsonProperty("__worldY")]
-        public long WorldY { get; set; }
+        public long? WorldY { get; set; }
 
         /// <summary>
         /// Reference of the **Entity definition** UID
@@ -1665,6 +1716,8 @@ namespace ldtk
 
     /// <summary>
     /// This object describes the "location" of an Entity instance in the project worlds.
+    ///
+    /// IID information of this instance
     /// </summary>
     public partial class ReferenceToAnEntityInstance
     {
@@ -2147,8 +2200,43 @@ namespace ldtk
         [JsonProperty("identifier")]
         public string Identifier { get; set; }
 
-        [JsonProperty("instances")]
+        /// <summary>
+        /// **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+        /// Replaced by: `instancesData`
+        /// </summary>
+        [JsonProperty("instances", NullValueHandling = NullValueHandling.Ignore)]
         public ReferenceToAnEntityInstance[] Instances { get; set; }
+
+        [JsonProperty("instancesData")]
+        public LdtkTocInstanceData[] InstancesData { get; set; }
+    }
+
+    public partial class LdtkTocInstanceData
+    {
+        /// <summary>
+        /// An object containing the values of all entity fields with the `exportToToc` option
+        /// enabled. This object typing depends on actual field value types.
+        /// </summary>
+        [JsonProperty("fields")]
+        public dynamic Fields { get; set; }
+
+        [JsonProperty("heiPx")]
+        public long HeiPx { get; set; }
+
+        /// <summary>
+        /// IID information of this instance
+        /// </summary>
+        [JsonProperty("iids")]
+        public ReferenceToAnEntityInstance Iids { get; set; }
+
+        [JsonProperty("widPx")]
+        public long WidPx { get; set; }
+
+        [JsonProperty("worldX")]
+        public long WorldX { get; set; }
+
+        [JsonProperty("worldY")]
+        public long WorldY { get; set; }
     }
 
     /// <summary>
@@ -2281,7 +2369,7 @@ namespace ldtk
 
     public enum EmbedAtlas { LdtkIcons };
 
-    public enum Flag { DiscardPreCsvIntGrid, ExportPreCsvIntGridFormat, IgnoreBackupSuggest, MultiWorlds, PrependIndexToLevelFileNames, UseMultilinesType };
+    public enum Flag { DiscardPreCsvIntGrid, ExportOldTableOfContentData, ExportPreCsvIntGridFormat, IgnoreBackupSuggest, MultiWorlds, PrependIndexToLevelFileNames, UseMultilinesType };
 
     public enum BgPos { Contain, Cover, CoverDirty, Repeat, Unscaled };
 
@@ -3232,6 +3320,8 @@ namespace ldtk
             {
                 case "DiscardPreCsvIntGrid":
                     return Flag.DiscardPreCsvIntGrid;
+                case "ExportOldTableOfContentData":
+                    return Flag.ExportOldTableOfContentData;
                 case "ExportPreCsvIntGridFormat":
                     return Flag.ExportPreCsvIntGridFormat;
                 case "IgnoreBackupSuggest":
@@ -3258,6 +3348,9 @@ namespace ldtk
             {
                 case Flag.DiscardPreCsvIntGrid:
                     serializer.Serialize(writer, "DiscardPreCsvIntGrid");
+                    return;
+                case Flag.ExportOldTableOfContentData:
+                    serializer.Serialize(writer, "ExportOldTableOfContentData");
                     return;
                 case Flag.ExportPreCsvIntGridFormat:
                     serializer.Serialize(writer, "ExportPreCsvIntGridFormat");

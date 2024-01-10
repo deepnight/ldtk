@@ -7,7 +7,7 @@ class TileToolPicker extends ui.Tileset {
 		this.tool = tool;
 		_internalSelectedIds = tool.getSelectedValue().ids;
 
-		super(jParent, td, Free, saveUiState);
+		super(jParent, td, MultipleIndividuals, saveUiState);
 	}
 
 	override function getSelectedTileIds():Array<Int> {
@@ -30,7 +30,7 @@ class TileToolPicker extends ui.Tileset {
 
 	override function modifySelection(selIds:Array<Int>, add:Bool) {
 		// Auto-pick saved selection
-		if( selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlDown() ) {
+		if( selIds.length==1 && tilesetDef.hasSavedSelectionFor(selIds[0]) && !App.ME.isCtrlCmdDown() ) {
 			// Check if the saved selection isn't already picked
 			var saved = tilesetDef.getSavedSelectionFor( selIds[0] );
 			if( !tool.selectedValuesIdentical(saved.ids) ) {

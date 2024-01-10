@@ -8,6 +8,8 @@
 
 
 <dl class="form">
+	<dt class="full"> <h3>General settings</h3> </dt>
+
 	<dt>
 		<label>Type</label>
 		<info>This is the type of data stored in this custom field (number, text etc.)</info>
@@ -34,6 +36,23 @@
 	<dd>
 		<input type="text" name="doc" id="doc"/>
 	</dd>
+
+	<dt class="onlyEntity">
+		<label for="bDef">Export to ToC</label>
+		<info>If the parent Entity has its "Add to JSON Table-of-Content" enabled, you may also export this field value to the JSON.</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="exportToToc" id="exportToToc"/>
+	</dd>
+
+	<dt class="onlyEntity F_String F_Enum F_Text">
+		<label for="bDef">Searchable</label>
+		<info>If enabled, this field will be searchable throught the app command palette (when pressing CTRL-K).</info>
+	</dt>
+	<dd>
+		<input type="checkbox" name="searchable" id="searchable"/>
+	</dd>
+
 
 	<dt class="full"> <h3>Value specifications</h3> </dt>
 

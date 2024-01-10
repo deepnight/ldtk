@@ -1,6 +1,8 @@
 package ui.modal.panel;
 
 import data.DataTypes;
+import data.def.AutoLayerRuleDef;
+import data.def.AutoLayerRuleGroupDef;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var li : data.inst.LayerInstance;
@@ -55,7 +57,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				invalidateRuleAndOnesBelow(r);
 				updateRuleGroup(r);
 
-			case LayerRuleRemoved(r): // invalidation is done before removal
+			case LayerRuleRemoved(r,invalidates): // invalidation is done before removal
 				updateAllRuleGroups();
 
 			case LayerRuleGroupRemoved(rg): // invalidation is done before removal
@@ -105,7 +107,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		invalidatedRules.set(r.uid, r.uid);
 	}
 
-	function invalidateRuleGroup(rg:AutoLayerRuleGroup) {
+	function invalidateRuleGroup(rg:data.def.AutoLayerRuleGroupDef) {
 		if( rg.rules.length>0 )
 			invalidateRuleAndOnesBelow(rg.rules[0]);
 	}
@@ -140,7 +142,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				ops.push({
 					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
 					cb: ()->{
-						li.applyAllAutoLayerRules();
+						li.applyAllRules();
 					}
 				});
 				affectedLayers.set(li,l);
@@ -153,7 +155,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						ops.push({
 							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
 							cb: ()->{
-								li.applyAutoLayerRuleToAllLayer(r, false);
+								li.applyRuleToFullLayer(r, false);
 							},
 						});
 						affectedLayers.set(li,l);
@@ -202,7 +204,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 	function showAffectedCells(r:data.def.AutoLayerRuleDef) {
-		if( App.ME.isCtrlDown() )
+		if( App.ME.isCtrlCmdDown() )
 			return;
 
 		if( li.autoTilesCache!=null && li.autoTilesCache.exists(r.uid) ) {
@@ -226,7 +228,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function onPickGroupColor(rg:AutoLayerRuleGroup) {
+	function onPickGroupColor(rg:AutoLayerRuleGroupDef) {
 		var cp = new ui.modal.dialog.ColorPicker(Const.getNicePalette(), rg.color, true);
 		cp.onValidate = (c)->{
 			rg.color = c;
@@ -236,7 +238,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function onPickGroupIcon(rg:AutoLayerRuleGroup) {
+	function onPickGroupIcon(rg:AutoLayerRuleGroupDef) {
 		var td = li.getTilesetDef();
 		if( td==null )
 			N.error("Invalid layer tileset");
@@ -244,7 +246,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var m = new ui.Modal();
 			m.addClass("singleTilePicker");
 
-			var tp = new ui.Tileset(m.jContent, td, RectOnly);
+			var tp = new ui.Tileset(m.jContent, td, TileRectAndClose);
 			tp.useSavedSelections = false;
 			tp.setSelectedRect(rg.icon);
 			tp.onSelectAnything = ()->{
@@ -257,7 +259,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function onRenameGroup(jGroupHeader:js.jquery.JQuery, rg:AutoLayerRuleGroup) {
+	function onRenameGroup(jGroupHeader:js.jquery.JQuery, rg:AutoLayerRuleGroupDef) {
 		jGroupHeader.find("div.name").hide();
 		var jInput = jGroupHeader.find("input.name");
 		var old = rg.name;
@@ -293,7 +295,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	// Create new rule
-	function onCreateRule(rg:data.DataTypes.AutoLayerRuleGroup, insertIdx:Int) {
+	function onCreateRule(rg:data.def.AutoLayerRuleGroupDef, insertIdx:Int) {
 		App.LOG.general("Added rule");
 		var r = new data.def.AutoLayerRuleDef( project.generateUniqueId_int() );
 		rg.rules.insert(insertIdx, r);
@@ -303,7 +305,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 		lastRule = rg.rules[insertIdx];
 		editor.ge.emit( LayerRuleAdded(lastRule) );
-
 
 		var jNewRule = jContent.find("[ruleUid="+r.uid+"]"); // BUG fix scrollbar position
 		new ui.modal.dialog.RuleEditor(ld, lastRule );
@@ -316,13 +317,13 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		ui.Tip.clear();
 		editor.levelRender.clearTemp();
 
-		// Add group
+		// Create group
 		jContent.find("button.createGroup").click( function(ev:js.jquery.Event) {
 			var m = new ContextMenu( new J(ev.target) );
 
-			m.add({
+			m.addAction({
 				label: L.t._("Use assistant (recommended)"),
-				icon: "wizard",
+				iconId: "wizard",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -332,9 +333,9 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				},
 			});
 
-			m.add({
+			m.addAction({
 				label: L.t._("Create an empty group"),
-				icon: "folder",
+				iconId: "folder",
 				cb: ()->{
 					if( ld.isAutoLayer() && ld.tilesetDefUid==null ) {
 						N.error( Lang.t._("This auto-layer doesn't have a tileset. Please pick one in the LAYERS panel.") );
@@ -343,7 +344,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					App.LOG.general("Added rule group");
 
 					var insertIdx = 0;
-					var rg = ld.createRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
+					var rg = ld.createEmptyRuleGroup(project.generateUniqueId_int(), "New group", insertIdx);
 					editor.ge.emit(LayerRuleGroupAdded(rg));
 
 					var jGroupHeader = jContent.find("ul[groupUid="+rg.uid+"]").siblings("header");
@@ -447,8 +448,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 		// List context menu
-		ContextMenu.addTo(jRuleGroupList, false, [
-			{
+		ContextMenu.attachTo_new(jRuleGroupList, false, (ctx:ContextMenu)->{
+			ctx.addActionElement({
 				label: L._Paste("group"),
 				cb: ()->{
 					var copy = ld.pasteRuleGroup(project, App.ME.clipboard);
@@ -457,8 +458,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						invalidateRuleAndOnesBelow(r);
 				},
 				enable: ()->return App.ME.clipboard.is(CRuleGroup),
-			}
-		]);
+			});
+		});
 
 		// Rule groups
 		var groupIdx = 0;
@@ -478,7 +479,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function updateRuleGroup(?rg:AutoLayerRuleGroup, ?r:data.def.AutoLayerRuleDef) {
+	function updateRuleGroup(?rg:AutoLayerRuleGroupDef, ?r:data.def.AutoLayerRuleDef) {
 		if( rg==null && r==null )
 			throw "Need 1 parameter";
 
@@ -502,7 +503,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function doUseWizard(?original:AutoLayerRuleGroup) {
+	function doUseWizard(?original:AutoLayerRuleGroupDef) {
 		new ui.modal.dialog.RulesWizard(original, ld, (rg)->{
 			invalidateRuleGroup(rg);
 			if( original==null )
@@ -513,9 +514,100 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function createRuleGroupBlock(rg:AutoLayerRuleGroup, groupIdx:Int) {
+
+	function openBiomePicker(rg:AutoLayerRuleGroupDef) {
+		var enumDef = ld.getBiomeEnumDef();
+		var actions : ui.modal.ContextMenu.ContextActions = [];
+
+		// Error messages
+		if( enumDef==null )
+			actions.push({
+				label: L.untranslated("Missing biome enum"),
+				subText: L.untranslated("Click to select your level biome enum"),
+				cb: App.ME.executeAppCommand.bind(C_OpenLayerPanel),
+			});
+		else if( enumDef.values.length==0 )
+			actions.push({
+				label: L.untranslated("Enum "+enumDef.identifier+" has no value"),
+			});
+
+		if( enumDef!=null ) {
+			function _onAnyBiomeChange() {
+				rg.requiredBiomeValues.sort( (a,b)->Reflect.compare(a.toLowerCase(),b.toLowerCase()) );
+				invalidateRuleGroup(rg);
+				editor.ge.emit( LayerRuleGroupChanged(rg) );
+				openBiomePicker(rg);
+			}
+
+			// Biome enum values
+			actions.push({
+				label: L.untranslated("Any biome"),
+				cb: ()->{
+					rg.requiredBiomeValues = [];
+					_onAnyBiomeChange();
+				},
+				selectionTick: rg.requiredBiomeValues.length==0 ? true : false,
+			});
+			for(ev in enumDef.values) {
+				actions.push({
+					label: L.untranslated(ev.id),
+					cb: ()->{
+						if( rg.requiredBiomeValues.contains(ev.id) )
+							rg.requiredBiomeValues.remove(ev.id);
+						else
+							rg.requiredBiomeValues.push(ev.id);
+						_onAnyBiomeChange();
+					},
+					selectionTick: rg.requiredBiomeValues.contains(ev.id) ? true : false,
+					jHtmlImg: ev.tileRect!=null ? project.resolveTileRectAsHtmlImg(ev.tileRect) : null,
+				});
+			}
+
+
+			// AND/OR modes
+			if( rg.requiredBiomeValues.length>1 ) {
+				actions.push({
+					separatorBefore: true,
+					label: L.t._("Condition type"),
+				});
+
+				actions.push({
+					label: L.t._("OR"),
+					subText: L.t._("At least one the checked values is required."),
+					cb: ()->{
+						rg.biomeRequirementMode = 0;
+						_onAnyBiomeChange();
+					},
+					selectionTick: rg.biomeRequirementMode==0,
+				});
+
+				actions.push({
+					label: L.t._("AND"),
+					subText: L.t._("All checked values are required."),
+					cb: ()->{
+						rg.biomeRequirementMode = 1;
+						_onAnyBiomeChange();
+					},
+					selectionTick: rg.biomeRequirementMode==1,
+				});
+			}
+		}
+
+
+		// Create menu
+		var jTarget = jContent.find("ul.ruleGroups").children('[groupUid=${rg.uid}]').find(".biome");
+		var ctx = new ContextMenu(jTarget);
+		for(a in actions)
+			ctx.addAction(a);
+	}
+
+
+
+	function createRuleGroupBlock(rg:AutoLayerRuleGroupDef, groupIdx:Int) {
 		var jGroup = jContent.find("xml#ruleGroup").clone().children().wrapAll('<li/>').parent();
-		jGroup.addClass(li.isRuleGroupActiveHere(rg) ? "active" : "inactive");
+		jGroup.addClass(li.isRuleGroupEnabled(rg) ? "enabled" : "disabled");
+		jGroup.addClass(li.isRuleGroupAppliedHere(rg) ? "applied" : "notApplied");
+		jGroup.attr("groupUid", rg.uid);
 
 		if( rg.color!=null ) {
 			jGroup.find(".sortHandle, header").css("background-color", rg.color.toCssRgba(0.7));
@@ -533,8 +625,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 				rg.collapsed = !rg.collapsed;
 				editor.ge.emit( LayerRuleGroupCollapseChanged(rg) );
 			})
-			.find(".text").text(rg.name).parent()
-			.find(".collapserIcon").removeClass().addClass("collapserIcon").addClass(rg.collapsed ? "collapsed" : "expanded");
+			.find(".text").text(rg.name);
+			// .parent().find(".collapserIcon").removeClass().addClass("collapserIcon").addClass(rg.collapsed ? "collapsed" : "expanded");
 
 		if( rg.collapsed ) {
 			jGroup.addClass("collapsed");
@@ -556,7 +648,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			if( !editor.levelRender.isAutoLayerRenderingEnabled() )
 				return;
 			editor.levelRender.clearTemp();
-			if( li.isRuleGroupActiveHere(rg) )
+			if( li.isRuleGroupAppliedHere(rg) )
 				for(r in rg.rules)
 					showAffectedCells(r);
 		});
@@ -567,7 +659,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jGroup.addClass("optional");
 
 		// Enable/disable group
-		var jToggle = jGroupHeader.find(".groupActive");
+		var jToggle = jGroupHeader.find(".groupToggler");
 		jToggle.click( function(ev:js.jquery.Event) {
 			if( rg.rules.length>0 && !rg.isOptional )
 				invalidateRuleGroup(rg);
@@ -580,7 +672,40 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			editor.ge.emit( LayerRuleGroupChangedActiveState(rg) );
 		});
 		if( rg.isOptional )
-			jToggle.attr("title", (li.isRuleGroupActiveHere(rg)?"Disable":"Enable")+" this group of rules in this level");
+			jToggle.attr("title", (li.isRuleGroupEnabled(rg)?"Disable":"Enable")+" this group of rules in this level");
+
+		// Biome
+		var jBiome = jGroupHeader.find(".biome");
+		if( ld.biomeFieldUid==null )
+			jBiome.hide();
+		else {
+			if( rg.requiredBiomeValues.length>0 ) {
+				var biomeImgs = ld.getRuleGroupBiomeHtmlImgs(rg);
+				if( biomeImgs.length>0 ) {
+					var first = true;
+					for( jImg in biomeImgs ) {
+						if( !first ) {
+							var op = switch rg.biomeRequirementMode {
+								case 0: "/";
+								case 1: "+";
+								case _: "";
+							}
+							jBiome.append('<span>$op</span>');
+						}
+						jBiome.append(jImg);
+						first = false;
+					}
+					if( biomeImgs.length>1 )
+						jBiome.addClass("multiples");
+				}
+			}
+			else
+				jBiome.append('<span class="empty"/>');
+
+			jBiome.click( (ev)->{
+				openBiomePicker(rg);
+			});
+		}
 
 		// Add rule
 		var jAdd = jGroupHeader.find(".addRule");
@@ -599,39 +724,75 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jWizEdit.click( _->doUseWizard(rg) );
 
 		// Group context menu
-		var actions : ui.modal.ContextMenu.ContextActions = [
-			{
+		ContextMenu.attachTo_new(jGroup, jGroupHeader, (ctx)->{
+			ctx.addElement( Ctx_CopyPaster({
+				elementName: "group",
+				clipType: CRuleGroup,
+				copy: ()->App.ME.clipboard.copyData(CRuleGroup, rg.toJson(li.def)),
+				cut: ()->{
+					App.ME.clipboard.copyData(CRuleGroup, rg.toJson(li.def));
+					deleteRuleGroup(rg, false);
+				},
+				paste: ()->{
+					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
+					editor.ge.emit(LayerRuleGroupAdded(copy));
+					for(r in copy.rules)
+						invalidateRuleAndOnesBelow(r);
+				},
+				duplicate: ()-> {
+					var copy = ld.duplicateRuleGroup(project, rg);
+					editor.ge.emit( LayerRuleGroupAdded(copy) );
+					invalidateRuleGroup(copy);
+				},
+				delete: ()->deleteRuleGroup(rg, true),
+			}) );
+
+			ctx.addElement(Ctx_Separator);
+
+			ctx.addActionElement({
 				label: L.t._("Rename"),
 				cb: ()->onRenameGroup(jGroupHeader, rg),
-			},
-
-			{
-				label: L.t._("Assign group color"),
-				icon: "color",
-				cb: ()->onPickGroupColor(rg),
-			},
-
-			{
-				label: L.t._("Assign group icon"),
-				icon: "pickIcon",
-				cb: ()->onPickGroupIcon(rg),
-			},
-
-			{
-				label: L.t._("Remove group icon"),
-				icon: "deleteIcon",
-				show: ()->rg.icon!=null,
+			});
+			ctx.addElement( Ctx_Action({
+				label: L.t._("Duplicate and remap"),
+				subText: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
 				cb: ()->{
-					rg.icon = null;
-					editor.ge.emit( LayerRuleGroupChanged(rg) );
+					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
+						editor.ge.emit( LayerRuleGroupAdded(copy) );
+						for(r in copy.rules)
+							invalidateRuleAndOnesBelow(r);
+					});
 				},
-			},
+			}));
 
-			{
+			ctx.addElement( Ctx_Separator );
+
+			ctx.addActionElement({
+				label: L.t._("Assign group color"),
+				iconId: "color",
+				cb: ()->onPickGroupColor(rg),
+			});
+			ctx.addActionElement({
+				label: L.t._("Assign group icon"),
+				iconId: rg.icon!=null ? null : "pickIcon",
+				jHtmlImg: rg.icon!=null ? project.resolveTileRectAsHtmlImg(rg.icon) : null,
+				cb: ()->onPickGroupIcon(rg),
+			});
+			if( rg.icon!=null )
+				ctx.addActionElement({
+					label: L.t._("Remove group icon"),
+					iconId: "deleteIcon",
+					cb: ()->{
+						rg.icon = null;
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+					},
+				});
+
+			ctx.addElement(Ctx_Separator);
+
+			ctx.addActionElement({
 				label: L.t._('Edit "out-of-bounds" policy for all rules'),
-				// sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-				icon: "outOfBounds",
-				separatorBefore: true,
+				iconId: "outOfBounds",
 				cb: ()->{
 					var m = new ui.modal.Dialog();
 					m.loadTemplate("outOfBoundsPolicyGlobal.html");
@@ -649,108 +810,51 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					});
 					m.addCancel();
 				},
-				show: ()->!rg.isOptional,
-			},
+			});
 
-			{
-				label: L.t._("Edit rules using the Assistant"),
-				icon: "wizard",
-				cb: ()->{
-					doUseWizard(rg);
-				},
-				show: ()->rg.usesWizard,
-			},
+			if( rg.usesWizard )
+				ctx.addActionElement({
+					label: L.t._("Edit rules using the Assistant"),
+					iconId: "wizard",
+					cb: ()->{
+						doUseWizard(rg);
+					},
+				});
 
-			{
-				label: L.t._("Turn into an OPTIONAL group"),
-				sub: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-				icon: "optional",
-				cb: ()->{
-					invalidateRuleGroup(rg);
-					rg.isOptional = true;
-					rg.active = true; // just some cleanup
-					editor.ge.emit( LayerRuleGroupChanged(rg) );
-				},
-				show: ()->!rg.isOptional,
-			},
+			ctx.addActionElement({
+				label: L.t._("Assign biome enum"),
+				cb: ()->openBiomePicker(rg),
+			});
 
-			{
-				label: L.t._("Disable OPTIONAL state"),
-				cb: ()->{
-					new ui.modal.dialog.Confirm(
-						L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
-						true,
-						()->{
-							rg.isOptional = false;
-							invalidateRuleGroup(rg);
-							project.tidy();
-							editor.ge.emit( LayerRuleGroupChanged(rg) );
-						}
-					);
-				},
-				show: ()->rg.isOptional,
-			},
-			{
-				label: L._PasteAfter("rule"),
-				separatorBefore: true,
-				cb: ()->{
-					var copy = ld.pasteRule(project, rg, App.ME.clipboard);
-					lastRule = copy;
-					editor.ge.emit( LayerRuleAdded(copy) );
-					invalidateRuleAndOnesBelow(copy);
-				},
-				show: ()->!rg.usesWizard,
-				enable: ()->return App.ME.clipboard.is(CRule),
-			},
-
-			{
-				label: L._Copy("Group"),
-				cb: ()->{
-					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
-				}
-			},
-			{
-				label: L._Cut("Group"),
-				cb: ()->{
-					App.ME.clipboard.copyData(CRuleGroup, li.def.toJsonRuleGroup(rg));
-					deleteRuleGroup(rg, false);
-				}
-			},
-			{
-				label: L._PasteAfter("group"),
-				cb: ()->{
-					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
-					editor.ge.emit(LayerRuleGroupAdded(copy));
-					for(r in copy.rules)
-						invalidateRuleAndOnesBelow(r);
-				},
-				enable: ()->App.ME.clipboard.is(CRuleGroup),
-			},
-			{
-				label: L._Duplicate(),
-				cb: ()->{
-					var copy = ld.duplicateRuleGroup(project, rg);
-					editor.ge.emit( LayerRuleGroupAdded(copy) );
-					invalidateRuleGroup(copy);
-				},
-			},
-			{
-				label: L.t._("Duplicate and remap"),
-				sub: L.t._("Duplicate the group, and optionally remap IntGrid IDs and tiles"),
-				cb: ()->{
-					new ui.modal.dialog.RuleGroupRemap(ld,rg, (copy)->{
-						editor.ge.emit( LayerRuleGroupAdded(copy) );
-						for(r in copy.rules)
-							invalidateRuleAndOnesBelow(r);
-					});
-				},
-			},
-			{
-				label: L._Delete(L.t._("Group")),
-				cb: deleteRuleGroup.bind(rg, true),
-			},
-		];
-		ContextMenu.addTo(jGroup, jGroupHeader, actions);
+			if( rg.isOptional )
+				ctx.addActionElement({
+					label: L.t._("Turn into an OPTIONAL group"),
+					subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+					iconId: "optional",
+					cb: ()->{
+						invalidateRuleGroup(rg);
+						rg.isOptional = true;
+						rg.active = true; // just some cleanup
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
+					},
+				});
+			else
+				ctx.addActionElement({
+					label: L.t._("Disable OPTIONAL state"),
+					cb: ()->{
+						new ui.modal.dialog.Confirm(
+							L.t._("Warning: by removing the OPTIONAL status of this group, you will lose the on/off state of this group in all levels. The group of rules will become a 'global' one, applied to every levels."),
+							true,
+							()->{
+								rg.isOptional = false;
+								invalidateRuleGroup(rg);
+								project.tidy();
+								editor.ge.emit( LayerRuleGroupChanged(rg) );
+							}
+						);
+					},
+				});
+		});
 
 		// Wizard mode explanation
 		if( rg.usesWizard ) {
@@ -777,31 +881,30 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		}
 
 		// Rules
-		var ruleIdx = 0;
-		var allActive = true;
-		for( r in rg.rules) {
-			// Create rule in DOM
-			var jRule = createRuleBlock(rg, r, ruleIdx++);
-			jGroupList.append(jRule);
+		if( !rg.collapsed ) {
+			var ruleIdx = 0;
+			for( r in rg.rules) {
+				// Create rule in DOM
+				var jRule = createRuleBlock(rg, r, ruleIdx++);
+				jGroupList.append(jRule);
 
-			// Last edited highlight
-			jRule.mousedown( function(ev) {
-				jContent.find("li.last").removeClass("last");
-				jRule.addClass("last");
-				lastRule = r;
-			});
-			if( r==lastRule )
-				jRule.addClass("last");
-
-			if( !r.active )
-				allActive = false;
+				// Last edited highlight
+				jRule.mousedown( function(ev) {
+					jContent.find("li.last").removeClass("last");
+					jRule.addClass("last");
+					lastRule = r;
+				});
+				if( r==lastRule )
+					jRule.addClass("last");
+			}
 		}
 
-		jGroupHeader.find(".groupActive .icon")
-			.addClass( rg.isOptional
-				? li.isRuleGroupActiveHere(rg) ? "visible" : "hidden"
-				: li.isRuleGroupActiveHere(rg) ? ( allActive ? "active" : "partial" ) : "inactive"
-			);
+		// Active state icon
+		jGroupHeader.find(".groupToggler .icon").addClass(
+			rg.isOptional
+				? li.isRuleGroupEnabled(rg) ? "visible" : "hidden"
+				: li.isRuleGroupEnabled(rg) ? "toggleOn" : "toggleOff"
+		);
 
 
 		// Make individual rules sortable
@@ -857,7 +960,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 
-	function createRuleBlock(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef, ruleIdx:Int) : js.jquery.JQuery {
+	function createRuleBlock(rg:AutoLayerRuleGroupDef, r:data.def.AutoLayerRuleDef, ruleIdx:Int) : js.jquery.JQuery {
 		var jRule = jContent.find("xml#rule").clone().children().wrapAll('<li/>').parent();
 		jRule.attr("ruleUid", r.uid);
 		jRule.attr("ruleIdx", ruleIdx);
@@ -886,7 +989,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			jPreview.append(pe.jRoot);
 		}
 		jPreview.click( function(ev) {
-			new ui.modal.dialog.RuleEditor(ld, r);
+			var ruleEd = new ui.modal.dialog.RuleEditor(ld, r);
+			ruleEd.onCloseCb = ()->updateRule(r);
 		});
 
 		// Show affect level cells
@@ -923,8 +1027,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		i.setValueStep(0.01);
 		i.setPrecision(2);
 		i.onValueChange = (v)->{
-			if( v<1 )
-				r.breakOnMatch = false;
+			// if( v<1 )
+			// 	r.breakOnMatch = false;
 			if( v/100!=old )
 				invalidateRuleAndOnesBelow(r);
 		}
@@ -951,14 +1055,14 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var jFlag = jRule.find("a.break");
 		jFlag.addClass( r.breakOnMatch ? "on" : "off" );
 		jFlag.click( function(ev:js.jquery.Event) {
-			if( r.hasAnyPositionOffset() ) {
-				N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
-				return;
-			}
-			if( r.alpha<1 ) {
-				N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
-				return;
-			}
+			// if( r.hasAnyPositionOffset() ) {
+			// 	N.error("This rule has X or Y offsets: they are incompatible with the activation of the Break-on-Match option.");
+			// 	return;
+			// }
+			// if( r.alpha<1 ) {
+			// 	N.error("This rule has a custom opacity: this is incompatible with the activation of the Break-on-Match option.");
+			// 	return;
+			// }
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);
 			r.breakOnMatch = !r.breakOnMatch;
@@ -1015,8 +1119,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Enable/disable rule
-		var jActive = jRule.find("a.active");
-		jActive.find(".icon").addClass( r.active ? "active" : "inactive" );
+		var jActive = jRule.find("a.ruleToggler");
+		jActive.find(".icon").addClass( r.active ? "toggleOn" : "toggleOff" );
 		jActive.click( function(ev:js.jquery.Event) {
 			ev.preventDefault();
 			invalidateRuleAndOnesBelow(r);
@@ -1025,44 +1129,31 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		});
 
 		// Rule context menu
-		ContextMenu.addTo(jRule, [
-			{
-				label: L._Copy("Rule"),
-				cb: ()->{
-					App.ME.clipboard.copyData(CRule, r.toJson(ld));
-				},
-			},
-			{
-				label: L._Cut("Rule"),
-				cb: ()->{
+		ContextMenu.attachTo_new(jRule, (ctx:ContextMenu)->{
+			ctx.addElement( Ctx_CopyPaster({
+				elementName: "rule",
+				clipType: CRule,
+
+				copy: ()->App.ME.clipboard.copyData(CRule, r.toJson(ld)),
+				cut: ()->{
 					App.ME.clipboard.copyData(CRule, r.toJson(ld));
 					deleteRule(rg,r);
 				},
-			},
-			{
-				label: L._PasteAfter("rule"),
-				cb: ()->{
+				paste: ()->{
 					var copy = ld.pasteRule(project, rg, App.ME.clipboard, r);
 					lastRule = copy;
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
 				},
-				enable: ()->return App.ME.clipboard.is(CRule),
-			},
-			{
-				label: L.t._("Duplicate rule"),
-				cb: ()->{
+				duplicate: ()->{
 					var copy = ld.duplicateRule(project, rg, r);
 					lastRule = copy;
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
 				},
-			},
-			{
-				label: L._Delete(),
-				cb: deleteRule.bind(rg, r),
-			},
-		]);
+				delete: ()->deleteRule(rg, r),
+			}) );
+		});
 
 		if( rg.usesWizard )
 			jRule.off().find("*").off();
@@ -1074,7 +1165,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 
 
-	function deleteRuleGroup(rg:AutoLayerRuleGroup, confirm:Bool) {
+	function deleteRuleGroup(rg:AutoLayerRuleGroupDef, confirm:Bool) {
 		function _del() {
 			new LastChance(Lang.t._("Rule group removed"), project);
 			App.LOG.general("Deleted rule group "+rg.name);
@@ -1090,11 +1181,11 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			_del();
 	}
 
-	function deleteRule(rg:AutoLayerRuleGroup, r:data.def.AutoLayerRuleDef) {
+	function deleteRule(rg:AutoLayerRuleGroupDef, r:data.def.AutoLayerRuleDef) {
 		App.LOG.general("Deleted rule "+r);
 		invalidateRuleAndOnesBelow(r);
 		rg.rules.remove(r);
-		editor.ge.emit( LayerRuleRemoved(r) );
+		editor.ge.emit( LayerRuleRemoved(r,true) );
 	}
 
 

@@ -61,10 +61,11 @@ class Project {
 
 	private function new() {
 		jsonVersion = Const.getJsonVersion();
-		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		bgColor = DEFAULT_WORKSPACE_BG;
+		defaultGridSize = Project.DEFAULT_GRID_SIZE;
 		defaultLevelBgColor = DEFAULT_LEVEL_BG;
 		defaultPivotX = defaultPivotY = 0;
+		defaultEntityWidth = defaultEntityHeight = Project.DEFAULT_GRID_SIZE;
 		filePath = new dn.FilePath();
 		flags = new Map();
 		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
@@ -286,6 +287,8 @@ class Project {
 					}
 				}
 			}
+		if( dn.Version.lower(json.jsonVersion, "1.5", true) )
+			p.flags.set(ExportOldTableOfContentData, true);
 
 		p.defaultPivotX = JsonTools.readFloat( json.defaultPivotX, 0 );
 		p.defaultPivotY = JsonTools.readFloat( json.defaultPivotY, 0 );
@@ -578,6 +581,7 @@ class Project {
 				var tocEntry : ldtk.Json.TableOfContentEntry = {
 					identifier: ed.identifier,
 					instances: [],
+					instancesData: [],
 				}
 				cachedToc.push(tocEntry);
 				for(w in worlds)
@@ -590,11 +594,31 @@ class Project {
 						if( ei.defUid!=ed.uid )
 							continue;
 
-						tocEntry.instances.push({
+						var refInfo : ldtk.Json.EntityReferenceInfos = {
 							worldIid: w.iid,
 							levelIid: l.iid,
 							layerIid: li.iid,
 							entityIid: ei.iid,
+						}
+
+						// Old deprecated data
+						if( hasFlag(ExportOldTableOfContentData) )
+							tocEntry.instances.push(refInfo);
+
+						// Entity fields
+						var fields : Dynamic = {};
+						for(fi in ei.fieldInstances)
+							if( fi.def.exportToToc )
+								Reflect.setField(fields, fi.def.identifier, fi.getFullJsonValue());
+
+						// Instance data
+						tocEntry.instancesData.push({
+							iids: refInfo,
+							worldX: ei.worldX,
+							worldY: ei.worldY,
+							widPx: ei.width,
+							heiPx: ei.height,
+							fields: fields,
 						});
 					}
 				}
@@ -1084,6 +1108,10 @@ class Project {
 				case _:
 			}
 
+		for(ld in defs.layers)
+			if( ld.biomeFieldUid!=null && ld.getBiomeEnumDef()==enumDef )
+				return true;
+
 		return false;
 	}
 
@@ -1107,6 +1135,13 @@ class Project {
 					case _:
 				}
 		}
+
+		for(ld in defs.layers)
+			if( ld.biomeFieldUid!=null && ld.getBiomeEnumDef()==enumDef )
+				for( rg in ld.autoRuleGroups )
+					for( bid in rg.requiredBiomeValues )
+						if( bid==val )
+							return true;
 
 		return false;
 	}

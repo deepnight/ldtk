@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.4.1 JSON schema",
+	"title": "LDtk 1.5.0 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -174,10 +174,11 @@
 				]
 			},
 			"flags": {
-				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
+				"description": "An array containing various advanced flags (ie. options or other states). Possible values: `DiscardPreCsvIntGrid`, `ExportOldTableOfContentData`, `ExportPreCsvIntGridFormat`, `IgnoreBackupSuggest`, `PrependIndexToLevelFileNames`, `MultiWorlds`, `UseMultilinesType`",
 				"items": {
 					"enum": [
 						"DiscardPreCsvIntGrid",
+						"ExportOldTableOfContentData",
 						"ExportPreCsvIntGridFormat",
 						"IgnoreBackupSuggest",
 						"PrependIndexToLevelFileNames",
@@ -254,6 +255,9 @@
 					},
 					"IntGridValueInstance": {
 						"$ref": "#/otherTypes/IntGridValueInstance"
+					},
+					"TocInstanceData": {
+						"$ref": "#/otherTypes/TocInstanceData"
 					},
 					"NeighbourLevel": {
 						"$ref": "#/otherTypes/NeighbourLevel"
@@ -505,8 +509,6 @@
 				"__pivot",
 				"__smartColor",
 				"__tags",
-				"__worldX",
-				"__worldY",
 				"defUid",
 				"fieldInstances",
 				"height",
@@ -559,15 +561,17 @@
 					]
 				},
 				"__worldX": {
-					"description": "X world coordinate in pixels",
+					"description": "X world coordinate in pixels. Only available in GridVania or Free world layouts.",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"__worldY": {
-					"description": "Y world coordinate in pixels",
+					"description": "Y world coordinate in pixels Only available in GridVania or Free world layouts.",
 					"type": [
-						"integer"
+						"integer",
+						"null"
 					]
 				},
 				"__smartColor": {
@@ -757,12 +761,12 @@
 				"pivotX",
 				"pivotY",
 				"size",
-				"tileIds",
 				"tileMode",
 				"tileRandomXMax",
 				"tileRandomXMin",
 				"tileRandomYMax",
 				"tileRandomYMin",
+				"tileRectsIds",
 				"tileXOffset",
 				"tileYOffset",
 				"uid",
@@ -789,6 +793,22 @@
 					"description": "If TRUE, enable Perlin filtering to only apply rule on specific random area",
 					"type": [
 						"boolean"
+					]
+				},
+				"tileRectsIds": {
+					"description": "Array containing all the possible tile IDs rectangles (picked randomly).",
+					"items": {
+						"items": {
+							"type": [
+								"integer"
+							]
+						},
+						"type": [
+							"array"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"perlinScale": {
@@ -836,14 +856,15 @@
 					]
 				},
 				"tileIds": {
-					"description": "Array of all the tile IDs. They are used randomly or as stamps, based on `tileMode` value.",
+					"description": "**WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced by: `tileRectsIds`",
 					"items": {
 						"type": [
 							"integer"
 						]
 					},
 					"type": [
-						"array"
+						"array",
+						"null"
 					]
 				},
 				"alpha": {
@@ -987,6 +1008,8 @@
 				"editorDisplayScale",
 				"editorLinkStyle",
 				"editorShowInWorld",
+				"exportToToc",
+				"searchable",
 				"symmetricalRef",
 				"useForSmartColor"
 			],
@@ -1008,6 +1031,12 @@
 					"description": "",
 					"type": [
 						"number"
+					]
+				},
+				"searchable": {
+					"description": "If enabled, this field will be searchable through LDtk command palette",
+					"type": [
+						"boolean"
 					]
 				},
 				"useForSmartColor": {
@@ -1160,6 +1189,12 @@
 						"boolean"
 					]
 				},
+				"exportToToc": {
+					"description": "If TRUE, the field value will be exported to the `toc` project JSON field. Only applies to Entity fields.",
+					"type": [
+						"boolean"
+					]
+				},
 				"editorDisplayPos": {
 					"description": "Possible values: `Above`, `Center`, `Beneath`",
 					"enum": [
@@ -1287,6 +1322,7 @@
 				"tileRenderMode",
 				"uid",
 				"width",
+				"allowOutOfBounds",
 				"exportToToc",
 				"fieldDefs",
 				"fillOpacity",
@@ -1350,6 +1386,12 @@
 					"description": "Max instances count",
 					"type": [
 						"integer"
+					]
+				},
+				"allowOutOfBounds": {
+					"description": "If enabled, this entity is allowed to stay outside of the current level bounds",
+					"type": [
+						"boolean"
 					]
 				},
 				"hollow": {
@@ -1559,8 +1601,10 @@
 			"title": "Auto-layer rule group",
 			"required": [
 				"active",
+				"biomeRequirementMode",
 				"isOptional",
 				"name",
+				"requiredBiomeValues",
 				"rules",
 				"uid",
 				"usesWizard"
@@ -1578,6 +1622,12 @@
 					"type": [
 						"boolean",
 						"null"
+					]
+				},
+				"biomeRequirementMode": {
+					"description": "",
+					"type": [
+						"integer"
 					]
 				},
 				"color": {
@@ -1616,6 +1666,17 @@
 					"description": "",
 					"type": [
 						"integer"
+					]
+				},
+				"requiredBiomeValues": {
+					"description": "",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"active": {
@@ -1691,6 +1752,54 @@
 					"type": [
 						"integer"
 					]
+				}
+			},
+			"type": [
+				"object"
+			]
+		},
+		"TocInstanceData": {
+			"title": "ldtk.TocInstanceData",
+			"required": [
+				"fields",
+				"heiPx",
+				"iids",
+				"widPx",
+				"worldX",
+				"worldY"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"worldX": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"widPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"worldY": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"heiPx": {
+					"description": "",
+					"type": [
+						"integer"
+					]
+				},
+				"fields": {
+					"description": "An object containing the values of all entity fields with the `exportToToc` option enabled. This object typing depends on actual field value types."
+				},
+				"iids": {
+					"description": "IID information of this instance",
+					"$ref": "#/otherTypes/EntityReferenceInfos"
 				}
 			},
 			"type": [
@@ -2372,7 +2481,9 @@
 				"requiredTags",
 				"tilePivotX",
 				"tilePivotY",
-				"type"
+				"type",
+				"uiFilterTags",
+				"useAsyncRender"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -2386,6 +2497,17 @@
 					"description": "If the tiles are smaller or larger than the layer grid, the pivot value will be used to position the tile relatively its grid cell.",
 					"type": [
 						"number"
+					]
+				},
+				"uiFilterTags": {
+					"description": "Display tags",
+					"items": {
+						"type": [
+							"string"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"displayOpacity": {
@@ -2441,6 +2563,12 @@
 				},
 				"canSelectWhenInactive": {
 					"description": "Allow editor selections when the layer is not currently active.",
+					"type": [
+						"boolean"
+					]
+				},
+				"useAsyncRender": {
+					"description": "Asynchronous rendering option for large/complex layers",
 					"type": [
 						"boolean"
 					]
@@ -2571,6 +2699,13 @@
 						"number"
 					]
 				},
+				"biomeFieldUid": {
+					"description": "",
+					"type": [
+						"integer",
+						"null"
+					]
+				},
 				"gridSize": {
 					"description": "Width and height of the grid in pixels",
 					"type": [
@@ -2581,6 +2716,13 @@
 					"description": "Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling speed of this layer, creating a fake 3D (parallax) effect.",
 					"type": [
 						"number"
+					]
+				},
+				"autoTilesKilledByOtherLayerUid": {
+					"description": "",
+					"type": [
+						"integer",
+						"null"
 					]
 				}
 			},
@@ -2818,7 +2960,7 @@
 			"title": "ldtk.TableOfContentEntry",
 			"required": [
 				"identifier",
-				"instances"
+				"instancesData"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -2828,8 +2970,17 @@
 						"string"
 					]
 				},
-				"instances": {
+				"instancesData": {
 					"description": "",
+					"items": {
+						"$ref": "#/otherTypes/TocInstanceData"
+					},
+					"type": [
+						"array"
+					]
+				},
+				"instances": {
+					"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.7.0+  Replaced by: `instancesData`",
 					"items": {
 						"$ref": "#/otherTypes/EntityReferenceInfos"
 					},

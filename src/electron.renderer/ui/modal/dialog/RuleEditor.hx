@@ -8,9 +8,13 @@ class RuleEditor extends ui.modal.Dialog {
 	var sourceDef : data.def.LayerDef;
 	var rule : data.def.AutoLayerRuleDef;
 	var guidedMode = false;
+	var hasAnyChange = false;
 
 	public function new(layerDef:data.def.LayerDef, rule:data.def.AutoLayerRuleDef) {
 		super("ruleEditor");
+
+		if( rule.size<Const.MAX_AUTO_PATTERN_SIZE )
+			rule.resize(Const.MAX_AUTO_PATTERN_SIZE);
 
 		setTransparentMask();
 		this.layerDef = layerDef;
@@ -23,7 +27,7 @@ class RuleEditor extends ui.modal.Dialog {
 		var best = -1;
 		for(cy in 0...rule.size)
 		for(cx in 0...rule.size) {
-			var v = M.iabs( rule.get(cx,cy) );
+			var v = M.iabs( rule.getPattern(cx,cy) );
 			if( v==0 || v==Const.AUTO_LAYER_ANYTHING )
 				continue;
 
@@ -67,15 +71,30 @@ class RuleEditor extends ui.modal.Dialog {
 
 
 	override function close() {
+		rule.trim();
+		rule.updateUsedValues();
+
 		super.close();
 
 		if( rule.isEmpty() ) {
+			// Kill empty
 			for(rg in layerDef.autoRuleGroups)
 				rg.rules.remove(rule);
-			editor.ge.emit( LayerRuleRemoved(rule) );
+			editor.ge.emit( LayerRuleRemoved(rule, false) );
 		}
-		else if( rule.tidy(layerDef) )
-			editor.ge.emit( LayerRuleChanged(rule) );
+		else {
+			rule.tidy(layerDef);
+			if( hasAnyChange ) {
+				editor.ge.emit( LayerRuleChanged(rule) );
+				N.msg("Rule updated");
+			}
+		}
+	}
+
+
+	function onAnyRuleChange() {
+		hasAnyChange = true;
+		// editor.ge.emit( LayerRuleChanged(rule) );
 	}
 
 
@@ -92,29 +111,93 @@ class RuleEditor extends ui.modal.Dialog {
 			()->rule.tileMode,
 			(v)->rule.tileMode = v,
 			(v)->switch v {
-				case Single: Lang.t._("Random tiles");
-				case Stamp: Lang.t._("Rectangle of tiles");
+				case Single: Lang.t._("Individual tiles");
+				case Stamp: Lang.t._("Rectangles of tiles");
 			}
 		);
-		i.linkEvent( LayerRuleChanged(rule) );
 		i.onChange = function() {
-			rule.tileIds = [];
+			onAnyRuleChange();
+			rule.tileRectsIds = [];
 			updateTileSettings();
 		}
 
 		// Tile(s)
-		var jTilePicker = JsTools.createTilePicker(
-			Editor.ME.curLayerInstance.getTilesetUid(),
-			rule.tileMode==Single?Free:RectOnly,
-			rule.tileIds,
-			false,
-			function(tids) {
-				rule.tileIds = tids.copy();
-				editor.ge.emit( LayerRuleChanged(rule) );
-				updateTileSettings();
+		var jTileRects = jTilesSettings.find(">.tileRects").empty();
+		function _pickTiles(rectIdx:Int) {
+			var pickerTids = rectIdx<0 || rule.tileRectsIds.length==0 ? [] : switch rule.tileMode {
+				case Single: rule.tileRectsIds.map( tids->tids[0] );
+				case Stamp: rule.tileRectsIds[rectIdx];
 			}
-		);
-		jTilesSettings.find(">.picker").empty().append( jTilePicker );
+			JsTools.openTilePickerModal(
+				Editor.ME.curLayerInstance.getTilesetUid(),
+				rule.tileMode==Single ? MultipleIndividuals : TileRectAndClose,
+				pickerTids,
+				false,
+				function(tids) {
+					if( tids.length>0 ) {
+						switch rule.tileMode {
+							case Single:
+								rule.tileRectsIds = tids.map( tid->[tid] );
+
+							case Stamp:
+								if( rectIdx<0 )
+									rule.tileRectsIds.push( tids.copy() );
+								else
+									rule.tileRectsIds[rectIdx] = tids.copy();
+						}
+					}
+					updateTileSettings();
+					onAnyRuleChange();
+				}
+			);
+		}
+		var jAllTiles = new J('<div class="allTiles"/>');
+		jAllTiles.appendTo(jTileRects);
+		var td = project.defs.getTilesetDef(layerDef.tilesetDefUid);
+		if( td==null )
+			jAllTiles.append('<div class="error">Invalid tileset</div>');
+		else {
+			switch rule.tileMode {
+				case Single:
+					for(rectIds in rule.tileRectsIds)
+						jAllTiles.append( td.createTileHtmlImageFromTileId(rectIds[0]) );
+					jAllTiles.addClass("clickable");
+					jAllTiles.click( _->_pickTiles(0) );
+
+				case Stamp:
+					var rectIdx = 0;
+					for(rectIds in rule.tileRectsIds) {
+						var rect = td.getTileRectFromTileIds(rectIds);
+						var jImg = td.createTileHtmlImageFromRect(rect);
+						jImg.addClass("clickable");
+						Tip.attach(jImg, "Left click to change\nRight click to remove");
+						var i = rectIdx;
+						jImg.mousedown( (ev:js.jquery.Event)->{
+							switch ev.button {
+								case 0:
+									_pickTiles(i);
+
+								case 1,2:
+									rule.tileRectsIds.splice(i,1);
+									onAnyRuleChange();
+									updateTileSettings();
+							}
+						});
+						jAllTiles.append( jImg );
+						rectIdx++;
+					}
+					if( rule.tileRectsIds.length>0 ) {
+						var jAdd = new J('<button> <span class="icon add"></span> </button>');
+						jAdd.appendTo(jAllTiles);
+						jAdd.click( _->_pickTiles(-1) );
+					}
+					else {
+						jAllTiles.addClass("clickable");
+						jAllTiles.click( _->_pickTiles(0) );
+					}
+			}
+		}
+
 
 		// Pivot (optional)
 		var jTileOptions = jTilesSettings.find(">.options").empty();
@@ -124,11 +207,13 @@ class RuleEditor extends ui.modal.Dialog {
 				var jPivot = JsTools.createPivotEditor(rule.pivotX, rule.pivotY, (xr,yr)->{
 					rule.pivotX = xr;
 					rule.pivotY = yr;
-					editor.ge.emit( LayerRuleChanged(rule) );
+					onAnyRuleChange();
 					renderAll();
 				});
 				jTileOptions.append(jPivot);
 		}
+
+		JsTools.parseComponents(jTilesSettings);
 	}
 
 
@@ -138,7 +223,7 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Values view mode
 		var stateId = settings.makeStateId(RuleValuesColumns, layerDef.uid);
-		var columns = settings.getUiStateInt(stateId, project, 1);
+		var columns = settings.getUiStateInt(stateId, project, 5);
 		JsTools.removeClassReg(jValuePalette, ~/col-[0-9]+/g);
 		jValuePalette.addClass("col-"+columns);
 
@@ -146,18 +231,18 @@ class RuleEditor extends ui.modal.Dialog {
 		var jMode = jContent.find(".displayMode");
 		jMode.off().click(_->{
 			var m = new ContextMenu(jMode);
-			m.add({
+			m.addAction({
 				label:L.t._("List"),
-				icon: "listView",
+				iconId: "listView",
 				cb: ()->{
 					settings.deleteUiState(stateId, project);
 					updateValuePalette();
 				}
 			});
-			for(n in [2,3,4,5]) {
-				m.add({
+			for(n in [2,3,4,5,6,7,8,9,10]) {
+				m.addAction({
 					label:L.t._("::n:: columns", {n:n}),
-					icon: "gridView",
+					iconId: "gridView",
 					cb: ()->{
 						settings.setUiStateInt(stateId, n, project);
 						updateValuePalette();
@@ -168,7 +253,10 @@ class RuleEditor extends ui.modal.Dialog {
 
 		// Groups
 		for(g in sourceDef.getGroupedIntGridValues()) {
-			var groupValue = (g.groupUid+1)*1000;
+			if( g.all.length==0 )
+				continue;
+
+			var groupValue = sourceDef.getRuleValueFromGroupUid(g.groupUid);
 
 			var jHeader = new J('<li class="title"/>');
 			jHeader.append('<span class="icon folderClose"/>');
@@ -226,18 +314,11 @@ class RuleEditor extends ui.modal.Dialog {
 			jVal.addClass("active");
 		jVal.click( function(ev) {
 			curValue = Const.AUTO_LAYER_ANYTHING;
-			editor.ge.emit( LayerRuleChanged(rule) );
+			onAnyRuleChange();
 			updateValuePalette();
 		});
-
-
-		// Value groups
-		// var jGroups = jContent.find(">.pattern .groups ul").empty();
-		// // JsTools.removeClassReg(jGroups, ~/col-[0-9]+/g);
-		// // jGroups.addClass("col-"+columns);
-		// for(g in sourceDef.getGroupedIntGridValues())
-		// 	jGroups.append('<li>${g.displayName}</li>');
 	}
+
 
 	function renderAll() {
 
@@ -268,32 +349,15 @@ class RuleEditor extends ui.modal.Dialog {
 				}
 			},
 			()->curValue,
-			()->editor.ge.emit( LayerRuleChanged(rule) )
+			()->onAnyRuleChange()
 		);
 		jContent.find(">.pattern .editor .grid").empty().append( patternEditor.jRoot );
-
-
-		// Grid size selection
-		var jSizes = jContent.find(">.pattern .editor select").empty();
-		var s = -1;
-		var sizes = [ while( s<Const.MAX_AUTO_PATTERN_SIZE ) s+=2 ];
-		for(size in sizes) {
-			var jOpt = new J('<option value="$size">${size}x$size</option>');
-			jOpt.appendTo(jSizes);
-		}
-		jSizes.change( function(_) {
-			var size = Std.parseInt( jSizes.val() );
-			rule.resize(size);
-			editor.ge.emit( LayerRuleChanged(rule) );
-			renderAll();
-		});
-		jSizes.val(rule.size);
 
 		// Out-of-bounds policy
 		var jOutOfBounds = jContent.find("#outOfBoundsValue");
 		JsTools.createOutOfBoundsRulePolicy(jOutOfBounds, sourceDef, rule.outOfBoundsValue, (v)->{
 			rule.outOfBoundsValue = v;
-			editor.ge.emit( LayerRuleChanged(rule) );
+			onAnyRuleChange();
 			renderAll();
 		});
 

@@ -23,6 +23,7 @@ class Page extends dn.Process {
 	public function onKeyDown(keyCode:Int) {}
 	public function onKeyUp(keyCode:Int) {}
 	public function onKeyPress(keyCode:Int) {}
+	public function onAppCommand(cmd:AppCommand) {}
 
 	public function loadPageTemplate(id:String, ?vars:Dynamic) {
 		var path = App.APP_ASSETS_DIR + 'tpl/pages/$id.html';

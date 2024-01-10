@@ -30,17 +30,14 @@
 			<dt> mouseright </dt>
 			<dd>Erase</dd>
 
-			<dt> mousemiddle or space + mouseleft </dt>
-			<dd>Move the current level view</dd>
+			<dt> mousemiddle or space mouseleft </dt>
+			<dd>Move the view</dd>
 
-			<dt> mouseWheel or space + mouseright </dt>
+			<dt> mouseWheel or space mouseright </dt>
 			<dd>Zoom</dd>
 
 			<dt> add / sub</dt>
 			<dd>Zoom</dd>
-
-			<dt> mouseright or <span class="icon contextMenu"></span></dt>
-			<dd>Open context menu</dd>
 
 			<dt> ESCAPE </dt>
 			<dd>Clear selection, close panel, cancel an action etc.</dd>
@@ -55,34 +52,37 @@
 			<dt> TAB </dt>
 			<dd>Toggle zen mode</dd>
 
-			<dt> CTRL H </dt>
+			<dt> %CommandPalette% </dt>
+			<dd>Search</dd>
+
+			<dt> %ToggleDetails% </dt>
 			<dd>Show/hide visual details</dd>
 
 			<dt> F1 to F10 </dt>
 			<dd>Select layers</dd>
 
-			<dt> F11 </dt>
+			<dt> %toggleFullscreen% </dt>
 			<dd>Toggle fullscreen</dd>
 
-			<dt> F12 </dt>
+			<dt> %AppSettings% </dt>
 			<dd>Open app settings</dd>
 
-			<dt> ctrl S </dt>
+			<dt> %SaveProject% </dt>
 			<dd>Save project</dd>
 
-			<dt> ctrl shift S </dt>
+			<dt> %SaveProjectAs% </dt>
 			<dd>Save project as...</dd>
 
-			<dt> ctrl W </dt>
+			<dt> %CloseProject% </dt>
 			<dd>Close project</dd>
 
-			<dt> ctrl Q </dt>
+			<dt> %ExitApp% </dt>
 			<dd>Quit ::app::</dd>
 
 			<dt> G </dt>
 			<dd>Enable/disable the grid</dd>
 
-			<dt> Shift+A </dt>
+			<dt> %ToggleSingleLayerMode% </dt>
 			<dd>Toggle "Single layer" mode</dd>
 
 			<dt> ctrl A </dt>
@@ -91,18 +91,18 @@
 			<dt> DELETE </dt>
 			<dd>Delete selected elements</dd>
 
-			<dt> ctrl R </dt>
+			<dt> %RunCommand% </dt>
 			<dd>Run a project custom command</dd>
 		</dl>
 
 
 		<h3>Sections</h3>
 		<dl class="minor">
-			<dt> P </dt>  <dd>Open "Project" panel</dd>
-			<dt> L </dt>  <dd>Open "Layers" panel</dd>
-			<dt> E </dt>  <dd>Open "Entities" panel</dd>
-			<dt> U </dt>  <dd>Open "Enumerations" panel</dd>
-			<dt> T </dt>  <dd>Open "Tileset" panel</dd>
+			<dt> %OpenProjectPanel% </dt>  <dd>Open "Project" panel</dd>
+			<dt> %OpenLayerPanel% </dt>  <dd>Open "Layers" panel</dd>
+			<dt> %OpenEntityPanel% </dt>  <dd>Open "Entities" panel</dd>
+			<dt> %OpenEnumPanel% </dt>  <dd>Open "Enumerations" panel</dd>
+			<dt> %OpenTilesetPanel% </dt>  <dd>Open "Tileset" panel</dd>
 		</dl>
 
 	</div>
@@ -113,61 +113,61 @@
 
 		<h3>Editing commands</h3>
 		<dl class="major">
-			<dt> alt + mouseleft </dt>
+			<dt> alt mouseleft </dt>
 			<dd>Select a single element</dd>
 
-			<dt> alt shift + mouseleft </dt>
+			<dt> shift alt mouseleft </dt>
 			<dd>Select all elements in a rectangle area</dd>
 
-			<dt> ctrl alt + mouseleft </dt>
+			<dt> ctrl alt mouseleft </dt>
 			<dd>Duplicate all selected elements</dd>
 
 			<dt> space </dt>
 			<dd>Fit view</dd>
 
-			<dt> shift + mouseleft (held) </dt>
+			<dt> shift mouseleft (held) </dt>
 			<dd>Draw a rectangle.</dd>
 
-			<dt> shift + mouseleft (single click) </dt>
+			<dt> shift mouseleft (single click) </dt>
 			<dd>Flood-fill the current area with the selected value.</dd>
 		</dl>
 
 
 		<h3>Auto-layers</h3>
 		<dl class="minor">
-			<dt> Shift + R </dt>
+			<dt> Shift R </dt>
 			<dd>Toggle auto-layers rendering</dd>
 		</dl>
 
 
 		<h3>Tile layers</h3>
 		<dl class="minor">
-			<dt> Shift+S </dt>
+			<dt> %saveTileSelection% </dt>
 			<dd>Save current tile selection.</dd>
 
-			<dt> L </dt>
+			<dt> %loadTileSelection% </dt>
 			<dd>Reload a saved tile selection from currently selected tile.</dd>
 
-			<dt> R </dt>
+			<dt> %ToggleTileRandomMode% </dt>
 			<dd>Toggle randomization of current tile selection.</dd>
 
-			<dt> X </dt>
+			<dt> %flipX% </dt>
 			<dd>X-mirror current tile(s)</dd>
 
-			<dt> Y </dt>
+			<dt> %flipY% </dt>
 			<dd>Y-mirror current tile(s)</dd>
 		</dl>
 
 
 		<h3>World mode</h3>
 		<dl class="minor">
-			<dt> Shift+W OR ~ </dt>
+			<dt> Shift W OR ~ </dt>
 			<dd>Switch between world/level views</dd>
 
 			<dt> pgup / pgdn </dt>
 			<dd>Change active world layer</dd>
 
-			<dt> ctrl + pgup / pgdn </dt>
+			<dt> ctrl pgup / ctrl pgdn </dt>
 			<dd>Move current level between world layers</dd>
 		</dl>
 
