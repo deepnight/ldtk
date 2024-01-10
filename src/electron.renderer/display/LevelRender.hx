@@ -238,7 +238,7 @@ class LevelRender extends dn.Process {
 			case LayerRuleGroupCollapseChanged(rg):
 
 			case LayerInstanceEditedByTool(li):
-				cd.setS("asyncRenderSuspended",0.5);
+				suspendAsyncRender();
 
 			case LayerInstanceChangedGlobally(li):
 				invalidateLayer(li);
@@ -707,6 +707,10 @@ class LevelRender extends dn.Process {
 			}
 			asyncTmpRender.setPixel(cx,cy, col);
 		}
+	}
+
+	public inline function suspendAsyncRender() {
+		cd.setS("asyncRenderSuspended",0.25);
 	}
 
 	inline function flushAsyncTmpRender() {

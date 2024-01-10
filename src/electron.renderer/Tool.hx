@@ -274,6 +274,9 @@ class Tool<T> extends dn.Process {
 		if( checkOutOfBounds() && isRunning() && !rectangle && useAt(m, false) )
 			onEditAnything();
 
+		if( isRunning() )
+			editor.levelRender.suspendAsyncRender();
+
 		lastMouse = m;
 	}
 
