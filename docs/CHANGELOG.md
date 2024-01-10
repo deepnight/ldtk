@@ -19,11 +19,14 @@ You can now search for any project element using the `CTRL-F` keyboard shortcut 
 
 Optionaly, you may also enable the `searchable` option on supported entity Custom Fields, to filter your entities based on these fields (eg. if you look for a specific item instance or mob type).
 
-## Rules performance boost
+## Rules are 20x faster
+![](1.5.0/optim.png)
 
 This version includes lots of internal optimizations regarding auto-layer rules. Therefore, large projects loading time should be significantly faster, especially if your project had large levels.
 
 Realtime painting on Auto-layers should also be much faster in most scenarios, thanks to these changes.
+
+A new layer option called "Asynchronous render" can be used to delay the actual rendering of tiles by a few milliseconds after painting. This can be used in very complex or large levels to keep the painting action smooth.
 
 ## Biomes
 ![](1.5.0/biomes.png)
