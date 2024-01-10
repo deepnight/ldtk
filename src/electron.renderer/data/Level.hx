@@ -229,7 +229,7 @@ class Level {
 
 			layers : {
 				var out = [];
-				iterateLayerInstancesInRenderOrder( (li)->{
+				iterateLayerInstancesBottomToTop( (li)->{
 					var show = switch li.def.type {
 						case IntGrid: li.def.isAutoLayer();
 						case Entities: false;
@@ -811,11 +811,19 @@ class Level {
 
 	/* RENDERING *******************/
 
-	public function iterateLayerInstancesInRenderOrder( eachLayer:data.inst.LayerInstance->Void ) {
+	public function iterateLayerInstancesBottomToTop( eachLayer:data.inst.LayerInstance->Void ) {
 		var i = _project.defs.layers.length-1;
 		while( i>=0 ) {
 			eachLayer( getLayerInstance(_project.defs.layers[i]) );
 			i--;
+		}
+	}
+
+	public function iterateLayerInstancesTopToBottom( eachLayer:data.inst.LayerInstance->Void ) {
+		var i = 0;
+		while( i<_project.defs.layers.length ) {
+			eachLayer( getLayerInstance(_project.defs.layers[i]) );
+			i++;
 		}
 	}
 }

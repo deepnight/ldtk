@@ -340,7 +340,7 @@ class ProjectSaver extends dn.Process {
 											if( project.exportLevelBg )
 												tex.clear(level.getBgColor());
 											var wrapper = new h2d.Object();
-											level.iterateLayerInstancesInRenderOrder( (li)->{
+											level.iterateLayerInstancesBottomToTop( (li)->{
 												var img = mainLayerImages.get(li.layerDefUid);
 												if( img!=null && img.tex!=null ) {
 													var t = h2d.Tile.fromTexture(img.tex);
@@ -366,7 +366,7 @@ class ProjectSaver extends dn.Process {
 										if( project.exportLevelBg )
 											lr.renderBgToTexture(level, tex);
 
-										level.iterateLayerInstancesInRenderOrder((li)->{
+										level.iterateLayerInstancesBottomToTop((li)->{
 											lr.drawToTexture(tex, project, level, li);
 										});
 										var pngBytes = tex.capturePixels().toPNG();

@@ -819,16 +819,17 @@ class WorldRender extends dn.Process {
 
 		// Default simplified renders
 		final alphaThreshold = 0.6;
-		for(li in l.layerInstances) {
+		l.iterateLayerInstancesTopToBottom( li->{
 			if( li.def.type==Entities || !li.def.renderInWorldView )
-				continue;
+				return;
 
 			if( li.def.isAutoLayer() && li.autoTilesCache==null ) {
 				App.LOG.error("missing autoTilesCache in "+li);
-				continue;
+				return;
 			}
 
-			var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei, wl.render);
+			var pixelGrid = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei);
+			wl.render.addChildAt(pixelGrid,0);
 			pixelGrid.x = li.pxTotalOffsetX;
 			pixelGrid.y = li.pxTotalOffsetY;
 
@@ -846,7 +847,7 @@ class WorldRender extends dn.Process {
 				// Tiles base layer (autolayer or tiles)
 				var td = li.getTilesetDef();
 				if( td==null || !td.isAtlasLoaded() )
-					continue;
+					return;
 
 				if( li.def.isAutoLayer() ) {
 					// Auto layer
@@ -884,13 +885,13 @@ class WorldRender extends dn.Process {
 						}
 				}
 			}
-		}
+		});
 
 
 		// Edge tiles render
 		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
 			var edgeDistPx = settings.getNearbyTilesRenderingDistPx();
-			l.iterateLayerInstancesInRenderOrder( (li)->{
+			l.iterateLayerInstancesBottomToTop( (li)->{
 				switch li.def.type {
 					case IntGrid:
 						if( !li.def.isAutoLayer() )
