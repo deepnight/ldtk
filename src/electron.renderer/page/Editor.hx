@@ -2310,6 +2310,7 @@ class Editor extends Page {
 				updateAppBg();
 
 			case LayerDefChanged(defUid, contentInvalidated):
+				project.defs.initFastAccess();
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				resetTools();
@@ -2820,6 +2821,7 @@ class Editor extends Page {
 		if( settings.v.zenMode && cd.has("pendingZenModeReHide") && !cd.has("zenModeReHideLock") )
 			setZenModeReveal(false);
 
+		// IntGrid use counts debugging
 		if( App.ME.hasDebugFlag(F_IntGridUseCounts) ) {
 			App.ME.clearDebug();
 			@:privateAccess
@@ -2832,8 +2834,9 @@ class Editor extends Page {
 						if( li.areaIntGridUseCount.exists(iv.value) )
 							for(areaCount in li.areaIntGridUseCount.get(iv.value))
 								n++;
+						var nLayer = li.layerIntGridUseCount.get(iv.value);
 						if( n>0 )
-							App.ME.debugPre("  #"+iv.value+" => "+n+" area", n<=0 ? dn.Col.midGray() : dn.Col.white());
+							App.ME.debugPre('  #${iv.value} => $n area (layer count=$nLayer)', n<=0 ? dn.Col.midGray() : dn.Col.white());
 					}
 				}
 				if( li.def.isAutoLayer() ) {

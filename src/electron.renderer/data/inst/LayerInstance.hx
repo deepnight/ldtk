@@ -56,6 +56,8 @@ class LayerInstance {
 		> > = null;
 
 	var areaIntGridUseCount : Map<Int, Map<Int,Int>> = new Map();
+	var layerIntGridUseCount : Map<Int,Int> = new Map();
+	var intGridAreaSize = 10;
 
 	public var pxWid(get,never) : Int; inline function get_pxWid() return level.pxWid - pxOffsetX;
 	public var pxHei(get,never) : Int; inline function get_pxHei() return level.pxHei - pxOffsetY;
@@ -73,7 +75,7 @@ class LayerInstance {
 	}
 
 	inline function areaCoordId(cx:Int,cy:Int) {
-		return Std.int(cx/10) + Std.int(cy/10) * 10000;
+		return Std.int(cx/intGridAreaSize) + Std.int(cy/intGridAreaSize) * 10000;
 	}
 
 	public inline function hasIntGridValueInArea(iv:Int, cx:Int, cy:Int) {
@@ -94,6 +96,12 @@ class LayerInstance {
 		else
 			areaCountMap.set(cid, areaCountMap.get(cid)+1);
 
+		// Layer counts
+		if( !layerIntGridUseCount.exists(iv) )
+			layerIntGridUseCount.set(iv, 1);
+		else
+			layerIntGridUseCount.set(iv, layerIntGridUseCount.get(iv)+1);
+
 		// Also update group
 		if( iv<1000 ) {
 			var groupUid = def.getIntGridGroupUidFromValue(iv);
@@ -109,8 +117,18 @@ class LayerInstance {
 			final cid = areaCoordId(cx,cy);
 			if( areaCountMap.exists(cid) ) {
 				areaCountMap.set(cid, areaCountMap.get(cid)-1);
+
+				// Last one in area
 				if( areaCountMap.get(cid)<=0 )
 					areaCountMap.remove(cid);
+
+				// Layer counts
+				if( layerIntGridUseCount.exists(iv) ) {
+					layerIntGridUseCount.set(iv, layerIntGridUseCount.get(iv)-1);
+					// Last one in layer
+					if( layerIntGridUseCount.get(iv)<=0 )
+						layerIntGridUseCount.remove(iv);
+				}
 			}
 		}
 
@@ -124,15 +142,7 @@ class LayerInstance {
 
 
 	public inline function containsIntGridValueOrGroup(iv:Int) {
-		if( !areaIntGridUseCount.exists(iv) )
-			return false;
-
-		var found = false;
-		for(map in areaIntGridUseCount.get(iv)) {
-			found = true;
-			break;
-		}
-		return found;
+		return layerIntGridUseCount.exists(iv);
 	}
 
 
@@ -1024,8 +1034,8 @@ class LayerInstance {
 			return;
 		}
 
-		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
 		// Adjust bounds to also redraw nearby cells
+		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
 		var left = dn.M.imax( 0, cx - maxRadius );
 		var right = dn.M.imin( cWid-1, cx + wid-1 + maxRadius );
 		var top = dn.M.imax( 0, cy - maxRadius );
@@ -1078,9 +1088,15 @@ class LayerInstance {
 		clearAutoTilesCache(r);
 
 		if( def.autoLayerRulesCanBeUsed() ) {
-			for(cx in 0...cWid)
-			for(cy in 0...cHei)
-				applyRuleAt(source, r, cx,cy);
+			for( ay in 0...Std.int(cHei/intGridAreaSize)+1 )
+			for( ax in 0...Std.int(cWid/intGridAreaSize)+1 ) {
+				if( !r.isRelevantInLayerAt(source, ax*intGridAreaSize, ay*intGridAreaSize) )
+					continue;
+
+				for(cx in ax*intGridAreaSize...(ax+1)*intGridAreaSize)
+				for(cy in ay*intGridAreaSize...(ay+1)*intGridAreaSize)
+					applyRuleAt(source, r, cx,cy);
+			}
 
 			if( applyBreakOnMatch )
 				applyBreakOnMatchesEverywhere();
