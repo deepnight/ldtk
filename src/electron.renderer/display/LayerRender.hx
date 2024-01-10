@@ -134,7 +134,6 @@ class LayerRender {
 				if( li.autoTilesCache==null )
 					li.applyAllRules();
 
-				// var colorVect = new h3d.Vector(1,1,1,1);
 				li.def.iterateActiveRulesInDisplayOrder( li, (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						var grid = li.def.gridSize;
