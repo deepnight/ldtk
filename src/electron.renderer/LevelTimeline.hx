@@ -159,7 +159,7 @@ class LevelTimeline {
 	**/
 	public function saveLayerState(li:data.inst.LayerInstance) {
 		startTimer();
-		editor.levelRender.applyInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
+		editor.levelRender.updateInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
 		advanceIndex();
 		saveSingleLayerState(li);
 		saveDependentLayers([li]);
@@ -198,7 +198,7 @@ class LevelTimeline {
 	**/
 	public function saveLayerStates(lis:Array<data.inst.LayerInstance>) {
 		startTimer();
-		editor.levelRender.applyInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
+		editor.levelRender.updateInvalidations(); // Required to make sure that latest Auto-Layers tiles are stored in the JSON
 		advanceIndex();
 		for(li in lis)
 			saveSingleLayerState(li);
@@ -217,7 +217,7 @@ class LevelTimeline {
 			return;
 
 		startTimer();
-		editor.levelRender.applyInvalidations();
+		editor.levelRender.updateInvalidations();
 		advanceIndex();
 
 		checkOrInitState(curStateIdx);

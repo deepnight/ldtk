@@ -56,9 +56,11 @@ class IntGridTool extends tool.LayerTool<Int> {
 			case null:
 			case Add:
 				curLayerInstance.setIntGrid(cx, cy, getSelectedValue());
+				editor.levelRender.asyncPaint(curLayerInstance, cx,cy, getSelectedColor());
 
 			case Remove:
 				curLayerInstance.removeIntGrid(cx, cy);
+				editor.levelRender.asyncPaint(curLayerInstance, cx,cy, Red);
 		}
 
 		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
@@ -81,9 +83,11 @@ class IntGridTool extends tool.LayerTool<Int> {
 				case null:
 				case Add:
 					curLayerInstance.setIntGrid(cx,cy, getSelectedValue());
+					editor.levelRender.asyncPaint(curLayerInstance, cx,cy, getSelectedColor());
 
 				case Remove:
 					curLayerInstance.removeIntGrid(cx,cy);
+					editor.levelRender.asyncPaint(curLayerInstance, cx,cy, Red);
 			}
 
 			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
@@ -109,9 +113,11 @@ class IntGridTool extends tool.LayerTool<Int> {
 					case null:
 					case Add:
 						curLayerInstance.setIntGrid(cx,cy, v);
+						editor.levelRender.asyncPaint(curLayerInstance, cx,cy, getSelectedColor());
 
 					case Remove:
 						curLayerInstance.removeIntGrid(cx,cy);
+						editor.levelRender.asyncPaint(curLayerInstance, cx,cy, Red);
 				}
 			}
 		);

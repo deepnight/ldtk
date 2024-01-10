@@ -20,6 +20,7 @@ class LevelRender extends dn.Process {
 
 	/** <LayerDefUID, LayerRender> **/
 	var layerRenders : Map<Int, LayerRender> = new Map();
+	var asyncTmpRender : Null<dn.heaps.PixelGrid>;
 
 	var bgColor : h2d.Bitmap;
 	var bgImage : dn.heaps.TiledTexture;
@@ -136,6 +137,7 @@ class LevelRender extends dn.Process {
 				editor.curLevel.invalidateCachedError();
 
 			case LevelSelected(l):
+				flushAsyncTmpRender();
 				invalidateAll();
 
 			case LevelResized(l):
@@ -236,6 +238,7 @@ class LevelRender extends dn.Process {
 			case LayerRuleGroupCollapseChanged(rg):
 
 			case LayerInstanceEditedByTool(li):
+				cd.setS("asyncRenderSuspended",0.5);
 
 			case LayerInstanceChangedGlobally(li):
 				invalidateLayer(li);
@@ -576,6 +579,7 @@ class LevelRender extends dn.Process {
 
 	public function renderAll() {
 		allInvalidated = false;
+		flushAsyncTmpRender();
 
 		clearTemp();
 		renderBounds();
@@ -693,7 +697,31 @@ class LevelRender extends dn.Process {
 	}
 
 
-	public function applyInvalidations() {
+	public inline function asyncPaint(li:data.inst.LayerInstance, cx,cy, col:dn.Col) {
+		if( li.def.useAsyncRender ) {
+			if( asyncTmpRender==null ) {
+				asyncTmpRender = new dn.heaps.PixelGrid(li.def.gridSize, li.cWid, li.cHei);
+				root.add(asyncTmpRender, Const.DP_MAIN);
+				asyncTmpRender.blendMode = Add;
+				asyncTmpRender.alpha = 0.7;
+			}
+			asyncTmpRender.setPixel(cx,cy, col);
+		}
+	}
+
+	inline function flushAsyncTmpRender() {
+		cd.unset("asyncRenderSuspended");
+		if( asyncTmpRender!=null ) {
+			asyncTmpRender.remove();
+			asyncTmpRender = null;
+		}
+	}
+
+	public function updateInvalidations() {
+		// Remove temporary async render
+		if( asyncTmpRender!=null && !cd.has("asyncRenderSuspended") )
+			flushAsyncTmpRender();
+
 		if( allInvalidated ) {
 			// Full
 			renderAll();
@@ -714,6 +742,9 @@ class LevelRender extends dn.Process {
 			// Layers
 			for( li in editor.curLevel.layerInstances )
 				if( layerInvalidations.exists(li.layerDefUid) ) {
+					if( cd.has("asyncRenderSuspended") )
+						if( li.def.useAsyncRender || li.def.autoSourceLayerDefUid!=null && li.def.autoSourceLd.useAsyncRender )
+							continue;
 					var inv = layerInvalidations.get(li.layerDefUid);
 					if( li.def.isAutoLayer() && inv.evaluateRules )
 						li.applyAllRulesAt( inv.left, inv.top, inv.right-inv.left+1, inv.bottom-inv.top+1 );
@@ -771,7 +802,7 @@ class LevelRender extends dn.Process {
 			b.g.setScale( (b.extraScale + 1.6) - (b.extraScale + 0.6)*(1-b.g.alpha) );
 		}
 
-		applyInvalidations();
+		updateInvalidations();
 		applyGridVisibility();
 	}
 

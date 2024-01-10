@@ -359,6 +359,12 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit(LayerDefChanged(cur.uid, false));
 		}
 
+		var i = Input.linkToHtmlInput( cur.useAsyncRender, jForms.find("input[name='useAsyncRender']") );
+		i.onChange = ()->{
+			editor.worldRender.invalidateAll();
+			editor.ge.emit(LayerDefChanged(cur.uid, false));
+		}
+
 		var i = Input.linkToHtmlInput( cur.hideFieldsWhenInactive, jForms.find("input[name='hideFieldsWhenInactive']") );
 		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
 

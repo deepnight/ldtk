@@ -30,6 +30,7 @@ class LayerDef {
 	public var tilesetDefUid : Null<Int>;
 	public var biomeFieldUid : Null<Int>;
 	public var uiFilterTags : Tags;
+	public var useAsyncRender = false;
 
 	// Entities
 	public var requiredTags : Tags;
@@ -116,6 +117,7 @@ class LayerDef {
 		o.biomeFieldUid = JsonTools.readNullableInt(json.biomeFieldUid);
 		o.autoTilesKilledByOtherLayerUid = JsonTools.readNullableInt(json.autoTilesKilledByOtherLayerUid);
 		o.uiFilterTags = Tags.fromJson(json.uiFilterTags);
+		o.useAsyncRender = JsonTools.readBool(json.useAsyncRender, false);
 
 		o.requiredTags = Tags.fromJson(json.requiredTags);
 		o.excludedTags = Tags.fromJson(json.excludedTags);
@@ -195,6 +197,7 @@ class LayerDef {
 			excludedTags: excludedTags.toJson(),
 			autoTilesKilledByOtherLayerUid: autoTilesKilledByOtherLayerUid,
 			uiFilterTags: uiFilterTags.toJson(),
+			useAsyncRender: useAsyncRender,
 
 			intGridValues: intGridValues.map( function(iv) return {
 				value: iv.value,

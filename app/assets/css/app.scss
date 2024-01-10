@@ -1712,10 +1712,6 @@ dl.form {
 		align-items: flex-start;
 		border-radius: 3px;
 
-		// &:hover {
-			// background-color: transparentize($color: black, $amount: 0.8);
-		// }
-
 		>* {
 			flex: 1 1 0px;
 		}
@@ -1742,6 +1738,22 @@ dl.form {
 			}
 			flex: 1 1 0;
 
+		}
+
+		&.checkboxes {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 3px;
+
+			label {
+				display: grid;
+				grid-template-columns: min-content auto;
+				width: 100%;
+				box-sizing: border-box;
+
+				font-size: 9pt;
+				color: $almostWhite;
+			}
 		}
 
 		button {

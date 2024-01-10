@@ -83,6 +83,24 @@
 			<span>px</span>
 		</dd>
 
+
+		<dt>
+			<label for="opacity">Opacity</label>
+			<info>
+				Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).
+				The "inactive" opacity is used when the layer is not being selected.
+			</info>
+		</dt>
+		<dd>
+			<span>Base:</span>
+			<input type="text" name="displayOpacity" class="small" id="opacity"/>
+			<span>%</span>
+
+			<span>Inactive:</span>
+			<input type="text" name="inactiveOpacity" class="small" id="opacity"/>
+			<span>%</span>
+		</dd>
+
 		<dt>
 			<label for="parallaxFactor">Parallax</label>
 			<info>
@@ -108,7 +126,7 @@
 
 
 
-	<div class="collapser" default="open" id="layerPanel_uiForm">UI options</div>
+	<div class="collapser" default="open" id="layerPanel_uiForm">Display options</div>
 	<dl class="form visuals">
 		<dt>
 			<label for="uiColor">Color in layers list</label>
@@ -121,16 +139,29 @@
 
 
 		<dt>
-			<label for="hideInList">Hide in list</label>
-			<info>
-				If enabled, the layer will not be shown in layers list in the editor view.
-				Note: the layer will still be rendered normally in levels and listed in the Layers panel.
-			</info>
+			<label>Visual options</label>
 		</dt>
-		<dd>
-			<input type="checkbox" name="hideInList" class="small" id="hideInList"/>
-		</dd>
+		<dd class="checkboxes">
+			<label for="hideInList" title="If enabled, the layer will not be shown in layers list in the editor view.\nNote: the layer will still be rendered normally in levels and listed in the Layers panel.">
+				<input type="checkbox" name="hideInList" class="small" id="hideInList"/>
+				Hide in list
+			</label>
 
+			<label for="renderInWorldView" title="If enabled, the content of this layer will be used when rendering levels in a simplified way for the world view.">
+				<input type="checkbox" name="renderInWorldView" class="small" id="renderInWorldView"/>
+				Show in world view
+			</label>
+
+			<label for="canSelectWhenInactive" title="If enabled, it will be possible to pick an element (ie. ALT+left click) or create a selection including this layer, even if it is not the active one.\nIf disabled, you will need to be working in this layer to select anything from it.">
+				<input type="checkbox" name="canSelectWhenInactive" class="small" id="canSelectWhenInactive"/>
+				Allow selections when inactive
+			</label>
+
+			<label for="useAsyncRender" title="Actual render of tiles only happens a few milliseconds after painting.\nUse this if your layer is very complex or large, and painting anything in it is getting slow.">
+				<input type="checkbox" name="useAsyncRender" class="small" id="useAsyncRender"/>
+				Asynchronous render
+			</label>
+		</dd>
 
 		<dt>
 			<label for="guideGridWid">Optional "guide" grid</label>
@@ -143,24 +174,6 @@
 			<span>px</span>
 		</dd>
 
-
-		<dt>
-			<label for="opacity">Opacity</label>
-			<info>
-				Opacity of this layer in percentage, from 0 (transparent) to 100 (fully visible).
-				The "inactive" opacity is used when the layer is not being selected.
-			</info>
-		</dt>
-		<dd>
-			<span>Active:</span>
-			<input type="text" name="displayOpacity" class="small" id="opacity"/>
-			<span>%</span>
-
-			<span>Inactive:</span>
-			<input type="text" name="inactiveOpacity" class="small" id="opacity"/>
-			<span>%</span>
-		</dd>
-
 		<dt>
 			<label for="uiFilterTags">UI tags</label>
 			<div class="info">These tags are used to filter elements from your layer list in the main editor panel.</div>
@@ -169,26 +182,6 @@
 			<div id="uiFilterTags"></div>
 		</dd>
 
-		<dt>
-			<label for="canSelectWhenInactive">Allow selections when inactive</label>
-			<info>
-				If enabled, it will be possible to pick an element (ie. ALT+left click) or create a selection including this layer, even if it is not the active one.
-				If disabled, you will need to be working in this layer to select anything from it.
-			</info>
-		</dt>
-		<dd>
-			<input type="checkbox" name="canSelectWhenInactive" class="small" id="canSelectWhenInactive"/>
-		</dd>
-
-		<dt class="IntGrid AutoLayer Tiles">
-			<label for="renderInWorldView">Show in world view</label>
-			<info>
-				If enabled, the content of this layer will be used when rendering levels in a simplified way for the world view.
-			</info>
-		</dt>
-		<dd class="IntGrid AutoLayer Tiles">
-			<input type="checkbox" name="renderInWorldView" class="small" id="renderInWorldView"/>
-		</dd>
 	</dl>
 
 
