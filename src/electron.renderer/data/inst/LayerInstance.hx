@@ -871,7 +871,7 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
-	function isAutoTileCellAllowed(cx:Int, cy:Int) {
+	inline function isAutoTileCellAllowed(cx:Int, cy:Int) {
 		if( def.autoTilesKilledByOtherLayerUid==null )
 			return true;
 		else
