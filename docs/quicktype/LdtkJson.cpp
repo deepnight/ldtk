@@ -1519,6 +1519,9 @@ namespace quicktype {
         std::vector<std::string> & get_mutable_ui_filter_tags() { return ui_filter_tags; }
         void set_ui_filter_tags(const std::vector<std::string> & value) { this->ui_filter_tags = value; }
 
+        /**
+         * Asynchronous rendering option for large/complex layers
+         */
         const bool & get_use_async_render() const { return use_async_render; }
         bool & get_mutable_use_async_render() { return use_async_render; }
         void set_use_async_render(const bool & value) { this->use_async_render = value; }

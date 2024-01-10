@@ -1070,6 +1070,9 @@ namespace ldtk
         [JsonProperty("uiFilterTags")]
         public string[] UiFilterTags { get; set; }
 
+        /// <summary>
+        /// Asynchronous rendering option for large/complex layers
+        /// </summary>
         [JsonProperty("useAsyncRender")]
         public bool UseAsyncRender { get; set; }
     }
