@@ -147,17 +147,17 @@
 				Hide in list
 			</label>
 
-			<label for="renderInWorldView" title="If enabled, the content of this layer will be used when rendering levels in a simplified way for the world view.">
+			<label class="Tiles AutoLayer IntGrid" for="renderInWorldView" title="If enabled, the content of this layer will be used when rendering levels in a simplified way for the world view.">
 				<input type="checkbox" name="renderInWorldView" class="small" id="renderInWorldView"/>
 				Show in world view
 			</label>
 
-			<label for="canSelectWhenInactive" title="If enabled, it will be possible to pick an element (ie. ALT+left click) or create a selection including this layer, even if it is not the active one.\nIf disabled, you will need to be working in this layer to select anything from it.">
+			<label class="Entities Tiles IntGrid" for="canSelectWhenInactive" title="If enabled, it will be possible to pick an element (ie. ALT+left click) or create a selection including this layer, even if it is not the active one.\nIf disabled, you will need to be working in this layer to select anything from it.">
 				<input type="checkbox" name="canSelectWhenInactive" class="small" id="canSelectWhenInactive"/>
 				Allow selections when inactive
 			</label>
 
-			<label for="useAsyncRender" title="Actual render of tiles only happens a few milliseconds after painting.\nUse this if your layer is very complex or large, and painting anything in it is getting slow.">
+			<label class="Tiles AutoLayer IntGrid" for="useAsyncRender" title="Actual render of tiles only happens a few milliseconds after painting.\nUse this if your layer is very complex or large, and painting anything in it is getting too slow.">
 				<input type="checkbox" name="useAsyncRender" class="small" id="useAsyncRender"/>
 				Asynchronous render
 			</label>
