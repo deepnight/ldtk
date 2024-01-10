@@ -451,13 +451,17 @@ class FieldInstancesForm {
 					input.blur();
 				});
 				input.click( ev->{
-					dn.js.ElectronDialogs.openFile(fi.def.acceptFileTypes, project.getProjectDir(), function( absPath ) {
+					var uiDirId = "field_"+fi.def.identifier+"_"+fi.def.uid;
+					var defaultDir = App.ME.settings.getUiDir(project, uiDirId, project.getProjectDir());
+					dn.js.ElectronDialogs.openFile(fi.def.acceptFileTypes, defaultDir, function( absPath ) {
 						var fp = dn.FilePath.fromFile(absPath);
 						fp.useSlashes();
 						var relPath = project.makeRelativeFilePath(fp.full);
 						input.val(relPath);
 						fi.parseValue( arrayIdx, relPath );
 						onFieldChange(fi);
+						N.debug(fp.directory);
+						App.ME.settings.storeUiDir(project, uiDirId, fp.directory);
 					});
 					input.blur();
 				});

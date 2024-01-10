@@ -72,6 +72,7 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
  - Auto-layer rule size is now automatic, internally ranging from 1x1 up to 9x9. LDtk will optimize rules to smaller internal sizes based on your rule layout.
  - When editing a tag somewhere, LDtk will now offer to also rename all other tags accordingly.
  - Optimized the Rules panel rendering for projects with tons of rules.
+ - FilePath custom fields will now remember their last open folder for later uses.
  - Added a button to toggle Auto-layer rendering (equivalent of the existing`SHIFT-R` shortcut)
  - Added expand/collapse sections to the Layers panel.
  - Moved the "Project" button location before "World" and "Level" buttons in editor.
