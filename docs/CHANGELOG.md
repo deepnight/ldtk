@@ -22,7 +22,7 @@ Optionaly, you may also enable the `searchable` option on supported entity Custo
 ## Rules are 20x faster
 ![](1.5.0/optim.png)
 
-This version includes lots of internal optimizations regarding auto-layer rules. Therefore, large projects loading time should be significantly faster, especially if your project had large levels.
+This version includes lots of internal optimizations regarding auto-layer rules. Therefore, large projects loading time should be significantly faster, especially if your project contained large levels.
 
 Realtime painting on Auto-layers should also be much faster in most scenarios, thanks to these changes.
 
