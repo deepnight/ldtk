@@ -744,16 +744,20 @@ class LayerInstance {
 		}
 
 		if( useAsyncRender )
-			asyncPaint(cx,cy,Pink);
+			asyncPaint(cx,cy, def.getGridTileColor(tileId));
 	}
 
 
 	public function removeAllGridTiles(cx:Int, cy:Int, useAsyncRender:Bool) {
-		if( isValid(cx,cy) ) {
+		if( useAsyncRender )
+			asyncErase(cx,cy);
+
+		if( isValid(cx,cy) && hasAnyGridTile(cx,cy) ) {
 			gridTiles.remove( coordId(cx,cy) );
-			if( useAsyncRender )
-				asyncErase(cx,cy);
+			return true;
 		}
+		else
+			return false;
 	}
 
 
@@ -769,15 +773,19 @@ class LayerInstance {
 	}
 
 	public inline function removeTopMostGridTile(cx:Int, cy:Int, useAsyncRender:Bool) {
+		if( useAsyncRender )
+			asyncErase(cx,cy);
+
 		if( hasAnyGridTile(cx,cy) ) {
 			gridTiles.get( coordId(cx,cy) ).pop();
 
 			if( gridTiles.get( coordId(cx,cy) ).length==0 )
 				gridTiles.remove( coordId(cx,cy) );
-		}
 
-		if( useAsyncRender )
-			asyncErase(cx,cy);
+			return true;
+		}
+		else
+			return false;
 	}
 
 	public inline function removeGridTileAtStackIndex(cx:Int, cy:Int, stackIdx:Int) {

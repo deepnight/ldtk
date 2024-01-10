@@ -467,6 +467,10 @@ class LayerDef {
 	inline function set_tilePivotX(v) return tilePivotX = dn.M.fclamp(v, 0, 1);
 	inline function set_tilePivotY(v) return tilePivotY = dn.M.fclamp(v, 0, 1);
 
+	public inline function getGridTileColor(tileId:Int) : dn.Col {
+		return _project.defs.getTilesetDef(tilesetDefUid).getAverageTileColor(tileId);
+	}
+
 
 	public inline function isAutoLayer() {
 		return type==IntGrid && tilesetDefUid!=null || type==AutoLayer;
