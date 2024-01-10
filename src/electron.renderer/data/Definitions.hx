@@ -12,9 +12,21 @@ class Definitions {
 	public var externalEnums: Array<data.def.EnumDef> = [];
 	public var levelFields: Array<data.def.FieldDef> = [];
 
+	var fastLayersAccessInt : Map<Int,data.def.LayerDef> = new Map();
+	var fastLayersAccessStr : Map<String,data.def.LayerDef> = new Map();
+
 
 	public function new(project:Project) {
 		this._project = project;
+	}
+
+	public function initFastAccess() {
+		fastLayersAccessInt = new Map();
+		fastLayersAccessStr = new Map();
+		for(ld in layers) {
+			fastLayersAccessInt.set(ld.uid, ld);
+			fastLayersAccessStr.set(ld.identifier, ld);
+		}
 	}
 
 	public function toJson(p:Project) : ldtk.Json.DefinitionsJson {
@@ -50,6 +62,8 @@ class Definitions {
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
 				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
+
+		p.defs.initFastAccess();
 	}
 
 	public static function tidyFieldDefsArray(p:Project, fieldDefs:Array<data.def.FieldDef>, ctx:String) {
@@ -94,6 +108,7 @@ class Definitions {
 			td.tidy(p);
 
 		tidyFieldDefsArray(p, levelFields, "ProjectDefinitions");
+		initFastAccess();
 	}
 
 	/**  LAYER DEFS  *****************************************/
@@ -112,11 +127,11 @@ class Definitions {
 		return false;
 	}
 
-	public function getLayerDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.LayerDef> {
-		for(ld in layers)
-			if( ld.uid==id || ld.identifier==id )
-				return ld;
-		return null;
+	public inline function getLayerDef(?id:String, ?uid:Int) : Null<data.def.LayerDef> {
+		if( uid!=null )
+			return fastLayersAccessInt.get(uid);
+		else
+			return fastLayersAccessStr.get(id);
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
