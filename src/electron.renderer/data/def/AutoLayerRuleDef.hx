@@ -39,6 +39,8 @@ class AutoLayerRuleDef {
 
 	var explicitlyRequiredValues : Array<Int> = [];
 
+	public var radius(get,never) : Int; inline function get_radius() return size<=1 ? 1 : Std.int(size*0.5);
+
 	public function new(uid, size=3) {
 		if( !isValidSize(size) )
 			throw 'Invalid rule size ${size}x$size';
@@ -314,17 +316,16 @@ class AutoLayerRuleDef {
 	}
 
 	public function isRelevantInLayerAt(sourceLi:data.inst.LayerInstance, cx:Int, cy:Int) {
-		var dist = Std.int(size*0.5);
 		for(v in explicitlyRequiredValues) {
 			if( !sourceLi.containsIntGridValueOrGroup(v) )
 				return false;
 			else if( size==1 && !sourceLi.hasIntGridValueInArea(v,cx,cy) )
 				return false;
 			else if( size>1
-				&& !sourceLi.hasIntGridValueInArea(v,cx-dist,cy-dist)
-				&& !sourceLi.hasIntGridValueInArea(v,cx+dist,cy-dist)
-				&& !sourceLi.hasIntGridValueInArea(v,cx+dist,cy+dist)
-				&& !sourceLi.hasIntGridValueInArea(v,cx-dist,cy+dist) )
+				&& !sourceLi.hasIntGridValueInArea(v,cx-radius,cy-radius)
+				&& !sourceLi.hasIntGridValueInArea(v,cx+radius,cy-radius)
+				&& !sourceLi.hasIntGridValueInArea(v,cx+radius,cy+radius)
+				&& !sourceLi.hasIntGridValueInArea(v,cx-radius,cy+radius) )
 					return false;
 		}
 		return true;
