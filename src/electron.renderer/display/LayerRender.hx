@@ -137,8 +137,8 @@ class LayerRender {
 				li.def.iterateActiveRulesInDisplayOrder( li, (r)-> {
 					if( li.autoTilesCache.exists( r.uid ) ) {
 						var grid = li.def.gridSize;
-						for(coordId in li.autoTilesCache.get( r.uid ).keys())
-						for(tileInfos in li.autoTilesCache.get( r.uid ).get(coordId)) {
+						for(tilesArray in li.autoTilesCache.get( r.uid ))
+						for(tileInfos in tilesArray) {
 							// Tile
 							renderAutoTileInfos(li, td, tileInfos, tg);
 
