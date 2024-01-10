@@ -75,6 +75,7 @@ When enabling the "table-of-content" export option of an Entity, you will now ge
  - Fixed a crash in Selects when trying to go over the last element using a keyboard shortcut.
  - Fixed log path partially cut in the Settings window.
  - Fixed initial null in JSON defaultEntityWidth/Height values.
+ - Labels are now right aligned in UI forms
  - Removed `__worldX` and `__worldY` from entity JSONs when the world layout is not GridVania or Free.
 
 
