@@ -76,7 +76,7 @@ class EntityPalette extends ui.ToolPalette {
 				jTag.attr("default", "open");
 			}
 
-			var jLi = new J('<li class="subList"> <ul/> </li>');
+			var jLi = new J('<li class="subList"> <ul class="niceList"/> </li>');
 			jLi.attr("data-groupIdx", Std.string(groupIdx));
 			jLi.appendTo(jList);
 			var jSubList = jLi.find("ul");
