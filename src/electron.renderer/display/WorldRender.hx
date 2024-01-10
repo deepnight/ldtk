@@ -817,6 +817,57 @@ class WorldRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
+		// Edge tiles render
+		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
+			var edgeDistPx = settings.getNearbyTilesRenderingDistPx();
+			l.iterateLayerInstancesBottomToTop( (li)->{
+				switch li.def.type {
+					case IntGrid:
+						if( !li.def.isAutoLayer() )
+							return;
+
+					case Entities:
+						return;
+
+					case Tiles:
+					case AutoLayer:
+				}
+
+				var td = li.getTilesetDef();
+				if( td==null || !td.isAtlasLoaded() )
+					return;
+
+				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
+				edgeTg.alpha = li.def.displayOpacity;
+				// NOTE: layer offsets is already included in tiles render methods
+
+				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
+					// Auto layer
+					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
+						if( li.autoTilesCache.exists( r.uid ) ) {
+							for( allTiles in li.autoTilesCache.get( r.uid ) )
+							for( tileInfos in allTiles ) {
+								markCoordAsDone(li, Std.int(tileInfos.x/li.def.gridSize), Std.int(tileInfos.y/li.def.gridSize));
+								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) )
+									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
+							}
+						}
+					});
+				}
+				else if( li.def.type==Tiles ) {
+					// Classic tiles
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, edgeDistPx) ) {
+							markCoordAsDone(li,cx,cy);
+							for( tileInf in li.getGridTileStack(cx,cy) )
+								LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
+						}
+					}
+				}
+			} );
+		}
+
 		// Default simplified renders
 		final alphaThreshold = 0.6;
 		l.iterateLayerInstancesTopToBottom( li->{
@@ -833,6 +884,7 @@ class WorldRender extends dn.Process {
 			pixelGrid.x = li.pxTotalOffsetX;
 			pixelGrid.y = li.pxTotalOffsetY;
 
+			// IntGrid/AutoLayer
 			if( li.def.type==IntGrid && !li.def.isAutoLayer() ) {
 				// Pure intGrid
 				for(cy in 0...li.cHei)
@@ -886,54 +938,6 @@ class WorldRender extends dn.Process {
 				}
 			}
 		});
-
-
-		// Edge tiles render
-		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
-			var edgeDistPx = settings.getNearbyTilesRenderingDistPx();
-			l.iterateLayerInstancesBottomToTop( (li)->{
-				switch li.def.type {
-					case IntGrid:
-						if( !li.def.isAutoLayer() )
-							return;
-
-					case Entities:
-						return;
-
-					case Tiles:
-					case AutoLayer:
-				}
-
-				var td = li.getTilesetDef();
-				if( td==null || !td.isAtlasLoaded() )
-					return;
-
-				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
-				edgeTg.alpha = li.def.displayOpacity;
-				// NOTE: layer offsets is already included in tiles render methods
-
-				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
-					// Auto layer
-					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
-						if( li.autoTilesCache.exists( r.uid ) ) {
-							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
-							for( tileInfos in allTiles.value )
-								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) )
-									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
-						}
-					});
-				}
-				else if( li.def.type==Tiles ) {
-					// Classic tiles
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid) {
-						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, edgeDistPx) )
-							for( tileInf in li.getGridTileStack(cx,cy) )
-								LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
-					}
-				}
-			} );
-		}
 
 		// Custom tile render override
 		var t = l.getWorldTileFromFields();
