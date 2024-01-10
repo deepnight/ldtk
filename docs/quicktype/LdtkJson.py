@@ -1169,8 +1169,9 @@ class LayerDefinition:
     """Unique Int identifier"""
     ui_filter_tags: List[str]
     """Display tags"""
+    use_async_render: bool
 
-    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], auto_tiles_killed_by_other_layer_uid: Optional[int], biome_field_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], int_grid_values_groups: List[IntGridValueGroupDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, render_in_world_view: bool, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, ui_color: Optional[str], uid: int, ui_filter_tags: List[str]) -> None:
+    def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], auto_tiles_killed_by_other_layer_uid: Optional[int], biome_field_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], int_grid_values_groups: List[IntGridValueGroupDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, render_in_world_view: bool, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, ui_color: Optional[str], uid: int, ui_filter_tags: List[str], use_async_render: bool) -> None:
         self.type = type
         self.auto_rule_groups = auto_rule_groups
         self.auto_source_layer_def_uid = auto_source_layer_def_uid
@@ -1204,6 +1205,7 @@ class LayerDefinition:
         self.ui_color = ui_color
         self.uid = uid
         self.ui_filter_tags = ui_filter_tags
+        self.use_async_render = use_async_render
 
     @staticmethod
     def from_dict(obj: Any) -> 'LayerDefinition':
@@ -1241,7 +1243,8 @@ class LayerDefinition:
         ui_color = from_union([from_none, from_str], obj.get("uiColor"))
         uid = from_int(obj.get("uid"))
         ui_filter_tags = from_list(from_str, obj.get("uiFilterTags"))
-        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, auto_tiles_killed_by_other_layer_uid, biome_field_uid, can_select_when_inactive, display_opacity, doc, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, int_grid_values_groups, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, render_in_world_view, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, ui_color, uid, ui_filter_tags)
+        use_async_render = from_bool(obj.get("useAsyncRender"))
+        return LayerDefinition(type, auto_rule_groups, auto_source_layer_def_uid, auto_tileset_def_uid, auto_tiles_killed_by_other_layer_uid, biome_field_uid, can_select_when_inactive, display_opacity, doc, excluded_tags, grid_size, guide_grid_hei, guide_grid_wid, hide_fields_when_inactive, hide_in_list, identifier, inactive_opacity, int_grid_values, int_grid_values_groups, parallax_factor_x, parallax_factor_y, parallax_scaling, px_offset_x, px_offset_y, render_in_world_view, required_tags, tile_pivot_x, tile_pivot_y, tileset_def_uid, layer_definition_type, ui_color, uid, ui_filter_tags, use_async_render)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1285,6 +1288,7 @@ class LayerDefinition:
             result["uiColor"] = from_union([from_none, from_str], self.ui_color)
         result["uid"] = from_int(self.uid)
         result["uiFilterTags"] = from_list(from_str, self.ui_filter_tags)
+        result["useAsyncRender"] = from_bool(self.use_async_render)
         return result
 
 

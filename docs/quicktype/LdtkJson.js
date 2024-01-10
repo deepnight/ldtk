@@ -427,6 +427,7 @@ const typeMap = {
         { json: "uiColor", js: "uiColor", typ: u(undefined, u(null, "")) },
         { json: "uid", js: "uid", typ: 0 },
         { json: "uiFilterTags", js: "uiFilterTags", typ: a("") },
+        { json: "useAsyncRender", js: "useAsyncRender", typ: true },
     ], false),
     "IntGridValueDefinition": o([
         { json: "color", js: "color", typ: "" },

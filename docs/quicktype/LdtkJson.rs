@@ -828,6 +828,8 @@ pub struct LayerDefinition {
 
     /// Display tags
     pub ui_filter_tags: Vec<String>,
+
+    pub use_async_render: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

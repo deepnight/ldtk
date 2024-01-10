@@ -1069,6 +1069,9 @@ namespace ldtk
         /// </summary>
         [JsonProperty("uiFilterTags")]
         public string[] UiFilterTags { get; set; }
+
+        [JsonProperty("useAsyncRender")]
+        public bool UseAsyncRender { get; set; }
     }
 
     public partial class AutoLayerRuleGroup

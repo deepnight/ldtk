@@ -448,6 +448,7 @@ type LayerDefinition struct {
 	Uid                                                                                          int64                         `json:"uid"`
 	// Display tags                                                                                                            
 	UIFilterTags                                                                                 []string                      `json:"uiFilterTags"`
+	UseAsyncRender                                                                               bool                          `json:"useAsyncRender"`
 }
 
 type AutoLayerRuleGroup struct {

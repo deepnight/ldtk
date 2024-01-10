@@ -1290,6 +1290,7 @@ namespace quicktype {
         boost::optional<std::string> ui_color;
         int64_t uid;
         std::vector<std::string> ui_filter_tags;
+        bool use_async_render;
 
         public:
         /**
@@ -1517,6 +1518,10 @@ namespace quicktype {
         const std::vector<std::string> & get_ui_filter_tags() const { return ui_filter_tags; }
         std::vector<std::string> & get_mutable_ui_filter_tags() { return ui_filter_tags; }
         void set_ui_filter_tags(const std::vector<std::string> & value) { this->ui_filter_tags = value; }
+
+        const bool & get_use_async_render() const { return use_async_render; }
+        bool & get_mutable_use_async_render() { return use_async_render; }
+        void set_use_async_render(const bool & value) { this->use_async_render = value; }
     };
 
     /**
@@ -3792,6 +3797,7 @@ namespace quicktype {
         x.set_ui_color(get_stack_optional<std::string>(j, "uiColor"));
         x.set_uid(j.at("uid").get<int64_t>());
         x.set_ui_filter_tags(j.at("uiFilterTags").get<std::vector<std::string>>());
+        x.set_use_async_render(j.at("useAsyncRender").get<bool>());
     }
 
     inline void to_json(json & j, const LayerDefinition & x) {
@@ -3829,6 +3835,7 @@ namespace quicktype {
         j["uiColor"] = x.get_ui_color();
         j["uid"] = x.get_uid();
         j["uiFilterTags"] = x.get_ui_filter_tags();
+        j["useAsyncRender"] = x.get_use_async_render();
     }
 
     inline void from_json(const json & j, TileCustomMetadata& x) {
