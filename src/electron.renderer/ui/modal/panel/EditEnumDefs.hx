@@ -204,7 +204,7 @@ class EditEnumDefs extends ui.modal.Panel {
 
 			var jLi = new J('<li class="subList draggable"/>');
 			jLi.appendTo(jEnumList);
-			var jSubList = new J('<ul/>');
+			var jSubList = new J('<ul class="niceList compact"/>');
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {
@@ -314,7 +314,7 @@ class EditEnumDefs extends ui.modal.Panel {
 				Tip.attach(jDelete, Lang.t._("Remove this external Enum source"));
 			}
 
-			var jSubList = new J('<li class="subList"> <ul></ul> </li>');
+			var jSubList = new J('<li class="subList"> <ul class="niceList compact"></ul> </li>');
 			jSubList.appendTo(jEnumList);
 			jSubList = jSubList.children("ul");
 

@@ -916,11 +916,15 @@ ul.niceList {
 	box-sizing: border-box;
 	padding: 4px;
 	margin-top: 4px;
-	min-height: 200px;
-	margin-bottom: 4px;
-	border: 1px solid $bgLight;
+
 	background-color: $bgDark;
 	overflow-x: hidden;
+
+	&:not(ul.niceList ul.niceList) {
+		min-height: 200px;
+		margin-bottom: 4px;
+		border: 1px solid $bgLight;
+	}
 
 	&:first-child {
 		margin-top: 0;
@@ -945,13 +949,17 @@ ul.niceList {
 		content: "No layer";
 	}
 
+	&.compact>li:not(.title, .subList) {
+		padding: 3px 4px;
+	}
+
 	>li:not(.title, .subList) {
 		display: grid;
 		justify-items: left;
 		align-items: center;
 		grid-template-columns: auto min-content;
 		gap: 0px 8px;
-		padding: 8px;
+		padding: 6px 8px;
 		margin-bottom: 1px;
 
 		font-size: 12pt;
@@ -4569,8 +4577,8 @@ ul.sortable:not(.customHandle) {
 	&.onlyDraggables>li.draggable {
 		background-image: url("../icons/dragAlpha.svg");
 		background-repeat: no-repeat;
-		background-position: left center;
-		padding-left: 32px !important;
+		background-position: 4px center;
+		padding-left: 28px !important;
 
 		&.dragging {
 			cursor: ns-resize;

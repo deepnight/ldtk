@@ -610,7 +610,7 @@ class EditEntityDefs extends ui.modal.Panel {
 			// Create sub list
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jEntityList);
-			var jSubList = new J('<ul/>');
+			var jSubList = new J('<ul class="niceList compact"/>');
 			jSubList.appendTo(jLi);
 
 			for(ed in group.all) {

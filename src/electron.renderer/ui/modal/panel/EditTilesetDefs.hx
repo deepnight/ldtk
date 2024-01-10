@@ -322,7 +322,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 
 			var jLi = new J('<li class="subList"/>');
 			jLi.appendTo(jList);
-			var jSubList = new J('<ul/>');
+			var jSubList = new J('<ul class="niceList compact"/>');
 			jSubList.appendTo(jLi);
 
 			for(td in group.all) {
