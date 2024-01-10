@@ -398,7 +398,7 @@ class LayerInstance {
 		if( json.autoLayerTiles!=null ) {
 			try {
 				var jsonAutoLayerTiles : Array<ldtk.Json.Tile> = JsonTools.readArray(json.autoLayerTiles);
-				li.autoTilesCache = new Map();
+				li.clearAllAutoTilesCache();
 
 				for(at in jsonAutoLayerTiles) {
 					var ruleId = at.d[0];
@@ -510,7 +510,7 @@ class LayerInstance {
 
 					if( !def.autoLayerRulesCanBeUsed() ) {
 						App.LOG.add("tidy", 'Removed all autoTilesCache in $this (rules can no longer be applied)');
-						autoTilesCache = new Map();
+						clearAllAutoTilesCache();
 						anyChange = true;
 					}
 				}
@@ -881,8 +881,12 @@ class LayerInstance {
 			m.remove( coordId(x,y) );
 	}
 
-	function clearAutoTilesCache(r:data.def.AutoLayerRuleDef) {
+	function clearAutoTilesCacheByRule(r:data.def.AutoLayerRuleDef) {
 		autoTilesCache.set( r.uid, [] );
+	}
+
+	function clearAllAutoTilesCache() {
+		autoTilesCache = new Map();
 	}
 
 	/**
@@ -1026,8 +1030,16 @@ class LayerInstance {
 
 	/** Apply all rules to specific cell **/
 	public function applyAllRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
-		if( !def.isAutoLayer() || !def.autoLayerRulesCanBeUsed() )
+		if( !def.autoLayerRulesCanBeUsed() ) {
+			clearAllAutoTilesCache();
 			return;
+		}
+
+		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		if( source==null ) {
+			clearAllAutoTilesCache();
+			return;
+		}
 
 		if( autoTilesCache==null ) {
 			applyAllRules();
@@ -1041,15 +1053,7 @@ class LayerInstance {
 		var top = dn.M.imax( 0, cy - maxRadius );
 		var bottom = dn.M.imin( cHei-1, cy + hei-1 + maxRadius );
 
-
 		// Apply rules
-		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
-		if( source==null )
-			return;
-
-		if( !def.autoLayerRulesCanBeUsed() )
-			return;
-
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
 			clearAutoTilesCacheRect(r, left,top, right-left+1, bottom-top+1);
 			for(x in left...right+1)
@@ -1064,7 +1068,7 @@ class LayerInstance {
 	/** Apply all rules to all cells **/
 	public inline function applyAllRules() {
 		if( def.isAutoLayer() ) {
-			autoTilesCache = new Map();
+			clearAllAutoTilesCache();
 			applyAllRulesAt(0, 0, cWid, cHei);
 			App.LOG.warning("All rules applied in "+toString());
 		}
@@ -1085,7 +1089,7 @@ class LayerInstance {
 		if( source==null || !r.isRelevantInLayer(source) )
 			return;
 
-		clearAutoTilesCache(r);
+		clearAutoTilesCacheByRule(r);
 
 		if( def.autoLayerRulesCanBeUsed() ) {
 			for( ay in 0...Std.int(cHei/intGridAreaSize)+1 )
