@@ -242,6 +242,7 @@ Value | Type | Description
 `type`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Type of the layer as Haxe Enum<br/> Possible values: `IntGrid`, `Entities`, `Tiles`, `AutoLayer`
 `uiColor`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.3.1-gray.svg)  | String&nbsp;*(can&nbsp;be&nbsp;`null`)* | User defined color for the UI
 `uiFilterTags`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.5.0-green.svg)  | Array&nbsp;of&nbsp;String | Display tags
+`useAsyncRender`<br/><sup class="only">Only *Tile layers, Auto-layers*</sup><br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.5.0-green.svg)  | Bool | Asynchronous rendering option for large/complex layers
 ~~`autoTilesetDefUid`~~<br/><sup class="only">Only *Auto-layers*</sup><br/><sup class="deprecated">*DEPRECATED!*</sup><br/> ![Generic badge](https://img.shields.io/badge/Removed_1.2.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | **WARNING**: this deprecated value is no longer exported since version 1.2.0<br/> <br/> Replaced by: `tilesetDefUid`
 
 <a id="ldtk-AutoRuleDef" name="ldtk-AutoRuleDef"></a>

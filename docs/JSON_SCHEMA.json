@@ -2482,7 +2482,8 @@
 				"tilePivotX",
 				"tilePivotY",
 				"type",
-				"uiFilterTags"
+				"uiFilterTags",
+				"useAsyncRender"
 			],
 			"additionalProperties": false,
 			"properties": {
@@ -2562,6 +2563,12 @@
 				},
 				"canSelectWhenInactive": {
 					"description": "Allow editor selections when the layer is not currently active.",
+					"type": [
+						"boolean"
+					]
+				},
+				"useAsyncRender": {
+					"description": "Asynchronous rendering option for large/complex layers",
 					"type": [
 						"boolean"
 					]
