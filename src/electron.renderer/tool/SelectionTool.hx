@@ -325,8 +325,8 @@ class SelectionTool extends Tool<Int> {
 					if( li.hasAnyGridValue(cx,cy) ) {
 						editor.curLevelTimeline.markGridChange(li, cx,cy);
 						switch li.def.type {
-							case IntGrid: li.removeIntGrid(cx,cy);
-							case Tiles: li.removeAllGridTiles(cx,cy);
+							case IntGrid: li.removeIntGrid(cx,cy,true);
+							case Tiles: li.removeAllGridTiles(cx,cy,true);
 							case Entities:
 							case AutoLayer:
 						}

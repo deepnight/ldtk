@@ -492,7 +492,7 @@ class LayerInstance {
 					for(cy in 0...cHei)
 					for(cx in 0...cWid)
 						if( hasIntGrid(cx,cy) && !def.hasIntGridValue( getIntGrid(cx,cy) ) ) {
-							removeIntGrid(cx,cy);
+							removeIntGrid(cx,cy,false);
 							if( def.isAutoLayer() )
 								autoTilesCache = null;
 							anyChange = true;
@@ -642,7 +642,7 @@ class LayerInstance {
 		return v==null ? null : v.identifier;
 	}
 
-	public function setIntGrid(cx:Int, cy:Int, v:Int) {
+	public function setIntGrid(cx:Int, cy:Int, v:Int, useAsyncRender:Bool) {
 		requireType(IntGrid);
 		if( isValid(cx,cy) ) {
 			if( v>=0 ) {
@@ -652,9 +652,11 @@ class LayerInstance {
 					increaseAreaIntGridValueCount(v, cx, cy);
 					intGrid.set( coordId(cx,cy), v );
 				}
+				if( useAsyncRender )
+					asyncPaint(cx,cy, def.getIntGridValueColor(v));
 			}
 			else
-				removeIntGrid(cx,cy);
+				removeIntGrid(cx,cy, useAsyncRender);
 		}
 	}
 
@@ -663,12 +665,14 @@ class LayerInstance {
 		return getIntGrid(cx,cy)!=0;
 	}
 
-	public function removeIntGrid(cx:Int, cy:Int) {
+	public function removeIntGrid(cx:Int, cy:Int, useAsyncRender:Bool) {
 		requireType(IntGrid);
 		if( isValid(cx,cy) && hasIntGrid(cx,cy) ) {
 			decreaseAreaIntGridValueCount( intGrid.get(coordId(cx,cy)), cx, cy );
 			intGrid.remove( coordId(cx,cy) );
 		}
+		if( useAsyncRender )
+			asyncErase(cx,cy);
 	}
 
 
@@ -710,15 +714,25 @@ class LayerInstance {
 	}
 
 
+	inline function asyncPaint(cx:Int, cy:Int, col:Col) {
+		if( isValid(cx,cy) && Editor.exists() )
+			Editor.ME.levelRender.asyncPaint(this, cx,cy, col);
+	}
+
+	inline function asyncErase(cx:Int, cy:Int) {
+		if( isValid(cx,cy) && Editor.exists() )
+			Editor.ME.levelRender.asyncErase(this, cx,cy);
+	}
+
 
 	/** TILES *******************/
 
-	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, stack=false) {
+	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, stack:Bool, useAsyncRender=true) {
 		if( !isValid(cx,cy) )
 			return;
 
 		if( tileId==null ) {
-			removeAllGridTiles(cx,cy);
+			removeAllGridTiles(cx,cy, useAsyncRender);
 			return;
 		}
 
@@ -728,12 +742,18 @@ class LayerInstance {
 			removeSpecificGridTile(cx, cy, tileId, flips);
 			gridTiles.get( coordId(cx,cy) ).push({ tileId:tileId, flips:flips });
 		}
+
+		if( useAsyncRender )
+			asyncPaint(cx,cy,Pink);
 	}
 
 
-	public inline function removeAllGridTiles(cx:Int, cy:Int) {
-		if( isValid(cx,cy) )
+	public function removeAllGridTiles(cx:Int, cy:Int, useAsyncRender:Bool) {
+		if( isValid(cx,cy) ) {
 			gridTiles.remove( coordId(cx,cy) );
+			if( useAsyncRender )
+				asyncErase(cx,cy);
+		}
 	}
 
 
@@ -748,12 +768,16 @@ class LayerInstance {
 		}
 	}
 
-	public inline function removeTopMostGridTile(cx:Int, cy:Int) {
+	public inline function removeTopMostGridTile(cx:Int, cy:Int, useAsyncRender:Bool) {
 		if( hasAnyGridTile(cx,cy) ) {
 			gridTiles.get( coordId(cx,cy) ).pop();
+
 			if( gridTiles.get( coordId(cx,cy) ).length==0 )
 				gridTiles.remove( coordId(cx,cy) );
 		}
+
+		if( useAsyncRender )
+			asyncErase(cx,cy);
 	}
 
 	public inline function removeGridTileAtStackIndex(cx:Int, cy:Int, stackIdx:Int) {

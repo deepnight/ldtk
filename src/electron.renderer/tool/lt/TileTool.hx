@@ -122,7 +122,7 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 						}
 
 					case Remove:
-						curLayerInstance.removeAllGridTiles(cx,cy);
+						curLayerInstance.removeAllGridTiles(cx,cy, true);
 
 					case _:
 				}
@@ -158,11 +158,12 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 					if( editor.curLayerInstance.hasAnyGridTile(cx,cy) ) {
 						editor.curLevelTimeline.markGridChange(curLayerInstance, cx, cy);
 						if( settings.v.tileStacking )
-							editor.curLayerInstance.removeTopMostGridTile(cx,cy);
+							editor.curLayerInstance.removeTopMostGridTile(cx,cy, false);
 						else
-							editor.curLayerInstance.removeAllGridTiles(cx,cy);
+							editor.curLayerInstance.removeAllGridTiles(cx,cy,false);
 						anyChange = true;
 					}
+					editor.levelRender.asyncErase(curLayerInstance,cx,cy);
 			}
 		}
 
@@ -276,12 +277,13 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 			if( editor.curLayerInstance.hasAnyGridTile(cx,cy) && !hasAlreadyPaintedAt(cx,cy) ) {
 				if( settings.v.tileStacking ) {
 					markAsPainted(cx,cy);
-					editor.curLayerInstance.removeTopMostGridTile(cx,cy);
+					editor.curLayerInstance.removeTopMostGridTile(cx,cy,false);
 				}
 				else
-					editor.curLayerInstance.removeAllGridTiles(cx,cy);
+					editor.curLayerInstance.removeAllGridTiles(cx,cy,false);
 				anyChange = true;
 			}
+			editor.levelRender.asyncErase(curLayerInstance, cx,cy);
 		}
 		else {
 			// Stamp erasing
@@ -298,10 +300,11 @@ class TileTool extends tool.LayerTool<data.DataTypes.TilesetSelection> {
 				var tcx = cx + ( curTilesetDef.getTileCx(tid) - left ) * gridDiffScale;
 				var tcy = cy + ( curTilesetDef.getTileCy(tid) - top ) * gridDiffScale;
 				if( editor.curLayerInstance.hasAnyGridTile(tcx,tcy) && !hasAlreadyPaintedAt(tcx,tcy) ) {
-					editor.curLayerInstance.removeAllGridTiles(tcx,tcy);
+					editor.curLayerInstance.removeAllGridTiles(tcx,tcy,false);
 					editor.curLevelTimeline.markGridChange(curLayerInstance, tcx, tcy);
 					anyChange = true;
 				}
+				editor.levelRender.asyncErase(curLayerInstance,tcx,tcy);
 			}
 		}
 

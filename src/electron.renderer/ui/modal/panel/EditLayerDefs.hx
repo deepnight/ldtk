@@ -136,7 +136,8 @@ class EditLayerDefs extends ui.modal.Panel {
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,
 									tileInfos.flips,
-									!td.isTileOpaque(tileInfos.tid)
+									!td.isTileOpaque(tileInfos.tid),
+									false
 								);
 							}
 						}

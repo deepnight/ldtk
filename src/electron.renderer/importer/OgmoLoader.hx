@@ -342,9 +342,9 @@ class OgmoLoader {
 									if( !ldtkIntGridIds.get(li.layerDefUid).exists(v) )
 										log.error("Unknown IntGrid value "+v+" in "+li.def.identifier);
 									li.setIntGrid(
-										cx,
-										cy,
-										li.def.getIntGridIndexFromIdentifier(ldtkIntGridIds.get(li.layerDefUid).get(v))
+										cx, cy,
+										li.def.getIntGridIndexFromIdentifier(ldtkIntGridIds.get(li.layerDefUid).get(v)),
+										false
 									);
 								});
 							}
@@ -353,9 +353,9 @@ class OgmoLoader {
 									if( !ldtkIntGridIds.get(li.layerDefUid).exists(v) )
 										log.error("Unknown IntGrid value "+v+" in "+li.def.identifier);
 									li.setIntGrid(
-										cx,
-										cy,
-										li.def.getIntGridIndexFromIdentifier(ldtkIntGridIds.get(li.layerDefUid).get(v))
+										cx, cy,
+										li.def.getIntGridIndexFromIdentifier(ldtkIntGridIds.get(li.layerDefUid).get(v)),
+										false
 									);
 								});
 							}
@@ -443,13 +443,13 @@ class OgmoLoader {
 							if( layerJson.data!=null ) {
 								iterateArray1D( layerJson.data, li.cWid, (cx,cy,v)->{
 									if( v>=0 )
-										li.addGridTile(cx,cy, v, _getFlipBit(cx,cy));
+										li.addGridTile(cx,cy, v, _getFlipBit(cx,cy), false, false);
 								});
 							}
 							else if( layerJson.data2D!=null ) {
 								iterateArray2D( layerJson.data2D, (cx,cy,v)->{
 									if( v>=0 )
-										li.addGridTile(cx,cy, v, _getFlipBit(cx,cy));
+										li.addGridTile(cx,cy, v, _getFlipBit(cx,cy), false, false);
 								});
 							}
 

@@ -709,6 +709,10 @@ class LevelRender extends dn.Process {
 		}
 	}
 
+	public inline function asyncErase(li:data.inst.LayerInstance, cx,cy) {
+		asyncPaint(li,cx,cy,Red);
+	}
+
 	public inline function suspendAsyncRender() {
 		cd.setS("asyncRenderSuspended",0.25);
 	}
