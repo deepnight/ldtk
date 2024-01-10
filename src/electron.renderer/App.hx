@@ -77,6 +77,10 @@ class App extends dn.Process {
 		canvas.addEventListener("webglcontextlost", (_)->onGlContextLoss());
 		clearMiniNotif();
 		clipboard = data.Clipboard.createSystem();
+		Chrono.COLORS_LOW.col = "#15ff00";
+		Chrono.COLORS_LOW.timeThreshold = 0.01;
+		Chrono.COLORS_HIGH.col = "#ff0000";
+		Chrono.COLORS_HIGH.timeThreshold = 0.30;
 
 		// Init window
 		IpcRenderer.on("onWinClose", onWindowCloseButton);
