@@ -12,8 +12,10 @@ class Definitions {
 	public var externalEnums: Array<data.def.EnumDef> = [];
 	public var levelFields: Array<data.def.FieldDef> = [];
 
-	var fastLayersAccessInt : Map<Int,data.def.LayerDef> = new Map();
-	var fastLayersAccessStr : Map<String,data.def.LayerDef> = new Map();
+	var fastLayersAccessInt : Map<Int, data.def.LayerDef> = new Map();
+	var fastLayersAccessStr : Map<String, data.def.LayerDef> = new Map();
+	var fastTilesetsAccessInt : Map<Int, data.def.TilesetDef> = new Map();
+	var fastTilesetsAccessStr : Map<String, data.def.TilesetDef> = new Map();
 
 
 	public function new(project:Project) {
@@ -26,6 +28,13 @@ class Definitions {
 		for(ld in layers) {
 			fastLayersAccessInt.set(ld.uid, ld);
 			fastLayersAccessStr.set(ld.identifier, ld);
+		}
+
+		fastTilesetsAccessInt = new Map();
+		fastTilesetsAccessStr = new Map();
+		for(td in tilesets) {
+			fastTilesetsAccessInt.set(td.uid, td);
+			fastTilesetsAccessStr.set(td.identifier, td);
 		}
 	}
 
@@ -130,8 +139,10 @@ class Definitions {
 	public inline function getLayerDef(?id:String, ?uid:Int) : Null<data.def.LayerDef> {
 		if( uid!=null )
 			return fastLayersAccessInt.get(uid);
-		else
+		else if( id!=null )
 			return fastLayersAccessStr.get(id);
+		else
+			return null;
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
@@ -598,11 +609,13 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function getTilesetDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TilesetDef> {
-		for(td in tilesets)
-			if( td.uid==id || td.identifier==id )
-				return td;
-		return null;
+	public inline function getTilesetDef(?uid:Int, ?id:String) : Null<data.def.TilesetDef> {
+		if( uid!=null )
+			return fastTilesetsAccessInt.get(uid);
+		else if( id!=null )
+			return fastTilesetsAccessStr.get(id);
+		else
+			return null;
 	}
 
 	public function isTilesetIdentifierUnique(id:String, ?exclude:data.def.TilesetDef) {
