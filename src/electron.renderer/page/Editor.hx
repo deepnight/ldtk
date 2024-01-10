@@ -2310,7 +2310,7 @@ class Editor extends Page {
 				updateAppBg();
 
 			case LayerDefChanged(defUid, contentInvalidated):
-				project.defs.initFastAccess();
+				project.defs.initFastAccesses();
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				resetTools();
