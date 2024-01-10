@@ -10,7 +10,7 @@
 	},
 	"iid": "a26276c0-7820-11ed-b6fd-ed05d55c9a75",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473560,
+	"appBuildId": 473583,
 	"nextUid": 106,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -66,6 +66,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [
 				{ "value": 1, "identifier": "walls", "color": "#6C8F1D", "tile": { "tilesetUid": 105, "x": 256, "y": 32, "w": 16, "h": 16 }, "groupUid": 0 },
 				{ "value": 2, "identifier": "water", "color": "#33ADCC", "tile": { "tilesetUid": 105, "x": 64, "y": 144, "w": 16, "h": 16 }, "groupUid": 0 },
@@ -1572,6 +1573,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [

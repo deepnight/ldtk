@@ -10,7 +10,7 @@
 	},
 	"iid": "a3386460-7820-11ed-b6fd-157a63b4d02d",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473560,
+	"appBuildId": 473583,
 	"nextUid": 170,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -80,6 +80,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [],
@@ -114,6 +115,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
@@ -348,6 +350,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [{ "value": 1, "identifier": "walls", "color": "#E4A672", "tile": { "tilesetUid": 104, "x": 208, "y": 960, "w": 16, "h": 16 }, "groupUid": 0 }],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
@@ -798,6 +801,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [],
@@ -832,6 +836,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [

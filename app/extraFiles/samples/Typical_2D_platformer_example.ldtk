@@ -10,7 +10,7 @@
 	},
 	"iid": "a302fc80-7820-11ed-b6fd-0944dd561895",
 	"jsonVersion": "1.5.0",
-	"appBuildId": 473560,
+	"appBuildId": 473583,
 	"nextUid": 106,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -66,6 +66,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [],
@@ -100,6 +101,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
@@ -210,6 +212,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [
 				{ "value": 1, "identifier": "dirt", "color": "#733E39", "tile": { "tilesetUid": 2, "x": 160, "y": 192, "w": 16, "h": 16 }, "groupUid": 0 },
 				{ "value": 3, "identifier": "stone", "color": "#EAD4AA", "tile": { "tilesetUid": 2, "x": 224, "y": 96, "w": 16, "h": 16 }, "groupUid": 0 },
@@ -1164,6 +1167,7 @@
 			"excludedTags": [],
 			"autoTilesKilledByOtherLayerUid": null,
 			"uiFilterTags": [],
+			"useAsyncRender": false,
 			"intGridValues": [],
 			"intGridValuesGroups": [],
 			"autoRuleGroups": [
