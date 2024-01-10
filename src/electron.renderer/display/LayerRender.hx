@@ -65,13 +65,13 @@ class LayerRender {
 			dn.M.hasBit(tileInfos.flips,1)?-1:1,
 			0,
 			_cachedIdentityVector,
-			td.extractTile(tileInfos.srcX, tileInfos.srcY)
+			td.getOptimizedTileAt(tileInfos.srcX, tileInfos.srcY)
 		);
 	}
 
 
-	public static function renderGridTile(li:data.inst.LayerInstance, td:data.def.TilesetDef, tileInf:data.DataTypes.GridTileInfos, cx:Int, cy:Int, tg:h2d.TileGroup) {
-		var t = td.getTile(tileInf.tileId);
+	public static inline function renderGridTile(li:data.inst.LayerInstance, td:data.def.TilesetDef, tileInf:data.DataTypes.GridTileInfos, cx:Int, cy:Int, tg:h2d.TileGroup) {
+		var t = td.getTileById(tileInf.tileId);
 		t.setCenterRatio(li.def.tilePivotX, li.def.tilePivotY);
 		var sx = M.hasBit(tileInf.flips, 0) ? -1 : 1;
 		var sy = M.hasBit(tileInf.flips, 1) ? -1 : 1;

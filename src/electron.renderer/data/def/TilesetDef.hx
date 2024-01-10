@@ -34,6 +34,8 @@ class TilesetDef {
 
 	public var tags : Tags;
 
+	var cachedTiles : Map<Int,h2d.Tile> = new Map();
+
 
 	public function new(p:Project, uid:Int) {
 		_project = p;
@@ -92,6 +94,7 @@ class TilesetDef {
 		if( !keepPath )
 			relPath = null;
 		pxWid = pxHei = 0;
+		clearTileCache();
 		savedSelections = [];
 	}
 
@@ -249,6 +252,7 @@ class TilesetDef {
 			relPath = null;
 			embedAtlas = embedId;
 		}
+		clearTileCache();
 
 		// Load image
 		App.LOG.fileOp('Loading atlas image: ${embedAtlas!=null ? embedAtlas.getName() : relPath}...');
@@ -600,12 +604,34 @@ class TilesetDef {
 		return isAtlasLoaded() ? h2d.Tile.fromTexture( getOrLoadTilesetImage().tex ) : null;
 	}
 
-	public inline function getTile(tileId:Int) : h2d.Tile {
-		if( isAtlasLoaded() )
-			return getAtlasTile().sub( getTileSourceX(tileId), getTileSourceY(tileId), tileGridSize, tileGridSize );
-		else
-			return makeErrorTile(tileGridSize);
+	function clearTileCache() {
+		cachedTiles = new Map();
 	}
+
+	inline function getCachedTile(x:Int, y:Int) {
+		if( !isAtlasLoaded() )
+			return makeErrorTile(tileGridSize);
+		else {
+			var cachedTileId = Std.int(x/tileGridSize) + Std.int(y/tileGridSize) * 100000;
+			if( !cachedTiles.exists(cachedTileId) ) {
+				var t = getAtlasTile().sub( x, y, tileGridSize, tileGridSize );
+				cachedTiles.set(cachedTileId, t);
+			}
+			return cachedTiles.get(cachedTileId);
+		}
+
+	}
+
+
+	public inline function getTileById(tileId:Int) : h2d.Tile {
+		return getCachedTile( getTileSourceX(tileId), getTileSourceY(tileId) );
+	}
+
+	@:allow(display.LayerRender)
+	inline function getOptimizedTileAt(gridTilePxX:Int, gridTilePxY:Int) : h2d.Tile {
+		return getCachedTile(gridTilePxX, gridTilePxY);
+	}
+
 
 	public inline function getTileRect(r:ldtk.Json.TilesetRect) : h2d.Tile {
 		if( isAtlasLoaded() )
@@ -613,14 +639,6 @@ class TilesetDef {
 		else
 			return makeErrorTile(tileGridSize);
 	}
-
-	public inline function extractTile(tileX:Int, tileY:Int) : h2d.Tile {
-		if( isAtlasLoaded() )
-			return getAtlasTile().sub( tileX, tileY, tileGridSize, tileGridSize );
-		else
-			return makeErrorTile(tileGridSize);
-	}
-
 
 	public inline function isTileOpaque(tid:Int) {
 		return opaqueTiles!=null ? opaqueTiles[tid]==true : false;
@@ -1028,5 +1046,7 @@ class TilesetDef {
 					enumTags.remove(k);
 				}
 		}
+
+		clearTileCache();
 	}
 }

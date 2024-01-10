@@ -260,7 +260,7 @@ class GenericLevelElementGroup {
 								var td = li.getTilesetDef();
 								if( td!=null && td.isAtlasLoaded() )
 									for( t in li.getGridTileStack(cx,cy) ) {
-										var bmp = new h2d.Bitmap( td.getTile(t.tileId), ghost );
+										var bmp = new h2d.Bitmap( td.getTileById(t.tileId), ghost );
 										bmp.x = li.pxParallaxX + ( cx + (M.hasBit(t.flips,0)?1:0) ) * li.def.scaledGridSize - bounds.left;
 										bmp.y = li.pxParallaxY + ( cy + (M.hasBit(t.flips,1)?1:0) ) * li.def.scaledGridSize - bounds.top;
 										bmp.scaleX = M.hasBit(t.flips, 0) ? -1 : 1;
