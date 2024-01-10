@@ -21,12 +21,16 @@ class Definitions {
 	var fastEntityAccessInt : Map<Int, data.def.EntityDef> = new Map();
 	var fastEntityAccessStr : Map<String, data.def.EntityDef> = new Map();
 
+	var fastEnumAccessInt : Map<Int, data.def.EnumDef> = new Map();
+	var fastEnumAccessStr : Map<String, data.def.EnumDef> = new Map();
+
 
 	public function new(project:Project) {
 		this._project = project;
 	}
 
 	public function initFastAccesses() {
+		// Layers
 		fastLayerAccessInt = new Map();
 		fastLayerAccessStr = new Map();
 		for(ld in layers) {
@@ -34,6 +38,7 @@ class Definitions {
 			fastLayerAccessStr.set(ld.identifier, ld);
 		}
 
+		// Tilesets
 		fastTilesetAccessInt = new Map();
 		fastTilesetAccessStr = new Map();
 		for(td in tilesets) {
@@ -41,11 +46,24 @@ class Definitions {
 			fastTilesetAccessStr.set(td.identifier, td);
 		}
 
+		// Entities
 		fastEntityAccessInt = new Map();
 		fastEntityAccessStr = new Map();
 		for(ed in entities) {
 			fastEntityAccessInt.set(ed.uid, ed);
 			fastEntityAccessStr.set(ed.identifier, ed);
+		}
+
+		// Enums
+		fastEnumAccessInt = new Map();
+		fastEnumAccessStr = new Map();
+		for(ed in enums) {
+			fastEnumAccessInt.set(ed.uid, ed);
+			fastEnumAccessStr.set(ed.identifier, ed);
+		}
+		for(ed in externalEnums) {
+			fastEnumAccessInt.set(ed.uid, ed);
+			fastEnumAccessStr.set(ed.identifier, ed);
 		}
 	}
 
@@ -734,16 +752,10 @@ class Definitions {
 		return true;
 	}
 
-	public function getEnumDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.EnumDef> {
-		for(ed in enums)
-			if( ed.uid==id || ed.identifier==id )
-				return ed;
-
-		for(ed in externalEnums)
-			if( ed.uid==id || ed.identifier==id )
-				return ed;
-
-		return null;
+	public function getEnumDef(?uid:Int, ?id:String) : Null<data.def.EnumDef> {
+		return uid!=null ? fastEnumAccessInt.get(uid)
+			: id!=null ? fastEnumAccessStr.get(id)
+			: null;
 	}
 
 	public function getInternalEnumIndex(uid:Int) {
