@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.5.0",
+		"appVersion": "1.5.1",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a2a4fe00-7820-11ed-b6fd-9b53622ece75",
-	"jsonVersion": "1.5.0",
-	"appBuildId": 473583,
+	"jsonVersion": "1.5.1",
+	"appBuildId": 473601,
 	"nextUid": 198,
 	"identifierStyle": "Capitalize",
 	"toc": [{
