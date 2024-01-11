@@ -31,6 +31,8 @@ class AutoLayerRuleDef {
 	public var tileRandomYMax = 0;
 	public var checker : ldtk.Json.AutoLayerRuleCheckerMode = None;
 
+	public var invalidated = false;
+
 	var perlinActive = false;
 	public var perlinSeed : Int;
 	public var perlinScale : Float = 0.2;
@@ -168,6 +170,8 @@ class AutoLayerRuleDef {
 			pivotY: JsonTools.writeFloat(pivotY),
 			outOfBoundsValue: outOfBoundsValue,
 
+			invalidated: invalidated,
+
 			perlinActive: perlinActive,
 			perlinSeed: perlinSeed,
 			perlinScale: JsonTools.writeFloat(perlinScale),
@@ -213,6 +217,8 @@ class AutoLayerRuleDef {
 		r.tileRandomXMax = JsonTools.readInt(json.tileRandomXMax, 0);
 		r.tileRandomYMin = JsonTools.readInt(json.tileRandomYMin, 0);
 		r.tileRandomYMax = JsonTools.readInt(json.tileRandomYMax, 0);
+
+		r.invalidated = JsonTools.readBool(json.invalidated, false);
 
 		r.perlinActive = JsonTools.readBool(json.perlinActive, false);
 		r.perlinScale = JsonTools.readFloat(json.perlinScale, 0.2);
