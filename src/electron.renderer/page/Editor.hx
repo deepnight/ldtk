@@ -126,8 +126,7 @@ class Editor extends Page {
 						label:L.t._("No, and I understand the risk."),
 						className: "gray",
 						cb: ()->{
-							project.setFlag(IgnoreBackupSuggest, true);
-							ge.emit(ProjectSettingsChanged);
+							setProjectFlag(IgnoreBackupSuggest, true);
 						},
 					}
 				],
@@ -1439,6 +1438,12 @@ class Editor extends Page {
 	}
 
 
+	public function setProjectFlag(flag:ldtk.Json.ProjectFlag, v:Bool) {
+		project.setFlag(flag, v);
+		ge.emit(ProjectFlagChanged(flag,v));
+	}
+
+
 	public function followEntityRef(tei:data.inst.EntityInstance) {
 		if( !tei._li.level.isInWorld(curWorld) )
 			selectWorld(tei._li.level._world, false);
@@ -1902,6 +1907,7 @@ class Editor extends Page {
 				case ViewportChanged(_):
 				case ProjectSelected:
 				case ProjectSettingsChanged:
+				case ProjectFlagChanged(flag,active): flag+"=>"+active;
 				case BeforeProjectSaving:
 				case ProjectSaved:
 				case LevelSelected(l): extra = l.uid;
@@ -1978,6 +1984,7 @@ class Editor extends Page {
 			case AppSettingsChanged:
 			case ProjectSelected:
 			case ProjectSettingsChanged:
+			case ProjectFlagChanged(flag,active):
 			case BeforeProjectSaving:
 			case ProjectSaved:
 			case LevelSelected(level):
@@ -2309,6 +2316,9 @@ class Editor extends Page {
 				updateBanners();
 				updateAppBg();
 
+			case ProjectFlagChanged(flag,active):
+				N.debug(flag+" => "+active);
+
 			case LayerDefChanged(defUid, contentInvalidated):
 				project.defs.initFastAccesses();
 				if( curLayerDef==null && project.defs.layers.length>0 )
@@ -2325,6 +2335,8 @@ class Editor extends Page {
 
 			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 				updateTool();
+				project.recountIntGridValuesInAllLayerInstances();
+				project.setFlag(RequireAutoLayerRebuild, true);
 
 			case LayerDefIntGridValueAdded(_):
 				updateTool();

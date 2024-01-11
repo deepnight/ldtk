@@ -6,6 +6,7 @@ enum GlobalEvent {
 
 	ProjectSelected;
 	ProjectSettingsChanged;
+	ProjectFlagChanged(flag:ldtk.Json.ProjectFlag, active:Bool);
 	BeforeProjectSaving;
 	ProjectSaved;
 

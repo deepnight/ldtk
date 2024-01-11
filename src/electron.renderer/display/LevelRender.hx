@@ -127,6 +127,8 @@ class LevelRender extends dn.Process {
 			case ProjectSettingsChanged:
 				invalidateUiAndBg();
 
+			case ProjectFlagChanged(flag, active):
+
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
 				editor.curLevel.invalidateCachedError();

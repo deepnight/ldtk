@@ -34,16 +34,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 				});
 				#end
 
-				addAction({
-					label: L.untranslated("Create new world"),
-					cb: ()->{
-						var w = project.createWorld(true);
-						editor.selectWorld(w,true);
-					},
-					show: ()->Editor.exists(),
-					subText: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
-				});
-
 				if( Editor.exists() ) {
 
 					addTitle( L.untranslated("Internal data") );
@@ -200,8 +190,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 									MetaProgress.advance();
 
 									// Flags
-									p.setFlag(PrependIndexToLevelFileNames, false);
-									p.setFlag(UseMultilinesType, true);
+									@:privateAccess p.setFlag(PrependIndexToLevelFileNames, false);
+									@:privateAccess p.setFlag(UseMultilinesType, true);
 
 									// Break level caching
 									for(w in p.worlds)
