@@ -127,6 +127,8 @@ class LevelRender extends dn.Process {
 			case ProjectSettingsChanged:
 				invalidateUiAndBg();
 
+			case ProjectFlagChanged(flag, active):
+
 			case LevelRestoredFromHistory(l):
 				invalidateAll();
 				editor.curLevel.invalidateCachedError();
@@ -191,7 +193,7 @@ class LevelRender extends dn.Process {
 			case LayerDefConverted:
 				invalidateAll();
 
-			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValuesSorted(defUid, groupChanged):
 
 			case LayerDefIntGridValueAdded(defUid,value):
 

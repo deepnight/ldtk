@@ -887,6 +887,9 @@ pub struct AutoLayerRuleDefinition {
     /// If TRUE, allow rule to be matched by flipping its pattern vertically
     pub flip_y: bool,
 
+    /// If TRUE, then the rule should be re-evaluated by the editor at one point
+    pub invalidated: bool,
+
     /// Default IntGrid value when checking cells outside of level bounds
     pub out_of_bounds_value: Option<i64>,
 

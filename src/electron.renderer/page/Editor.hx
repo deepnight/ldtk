@@ -126,8 +126,7 @@ class Editor extends Page {
 						label:L.t._("No, and I understand the risk."),
 						className: "gray",
 						cb: ()->{
-							project.setFlag(IgnoreBackupSuggest, true);
-							ge.emit(ProjectSettingsChanged);
+							setProjectFlag(IgnoreBackupSuggest, true);
 						},
 					}
 				],
@@ -1439,6 +1438,12 @@ class Editor extends Page {
 	}
 
 
+	public function setProjectFlag(flag:ldtk.Json.ProjectFlag, v:Bool) {
+		project.setFlag(flag, v);
+		ge.emit(ProjectFlagChanged(flag,v));
+	}
+
+
 	public function followEntityRef(tei:data.inst.EntityInstance) {
 		if( !tei._li.level.isInWorld(curWorld) )
 			selectWorld(tei._li.level._world, false);
@@ -1569,6 +1574,129 @@ class Editor extends Page {
 			setter( !getter() );
 		});
 	}
+
+
+	function removePendingAction(className:String) {
+		var jPendingActions = jPage.find("#pendingActions");
+		jPendingActions.find('.$className').remove();
+	}
+
+	function addPendingAction(className:String, iconId:String, label:String, desc:String, cb:Void->Void) {
+		removePendingAction(className);
+		var jPendingActions = jPage.find("#pendingActions");
+		var jButton = new J('<button class="$className"/>');
+		jButton.appendTo(jPendingActions);
+		jButton.append('<span class="icon $iconId"/>');
+		jButton.append(label);
+		jButton.click(_->cb());
+		ui.Tip.attach(jButton, desc);
+
+		jButton.slideDown(0.2);
+	}
+
+
+	function addPendingRebuildAutoLayers() {
+		addPendingAction("rebuildAutoLayers", "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
+			for(w in project.worlds)
+			for(l in w.levels)
+			for(li in l.layerInstances)
+				li.autoTilesCache = null;
+
+			checkAutoLayersCache( (_)->{
+				N.success("Done");
+				levelRender.invalidateAll();
+				worldRender.invalidateAll();
+				removePendingAction("rebuildAutoLayers");
+			});
+		});
+	}
+
+
+
+	public function applyInvalidatedRulesInAllLevels() {
+		var ops = [];
+		var affectedLayers : Map<data.inst.LayerInstance,data.Level> = new Map();
+
+		for(ld in project.defs.layers)
+		for(rg in ld.autoRuleGroups)
+		for(r in rg.rules) {
+			if( !r.invalidated )
+				continue;
+
+			for( w in project.worlds )
+			for( l in w.levels ) {
+				var li = l.getLayerInstance(ld);
+
+				r.invalidated = false;
+
+				if( li.autoTilesCache==null ) {
+					// Run all rules
+					ops.push({
+						label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
+						cb: ()->{ li.applyAllRules(); }
+					});
+					affectedLayers.set(li,l);
+				}
+				else {
+					// Apply rule
+					if( !r.isEmpty() ) {
+						ops.push({
+							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+							cb: ()->{ li.applyRuleToFullLayer(r, false); },
+						});
+						affectedLayers.set(li,l);
+					}
+				}
+			}
+		}
+
+		// Apply "break on match" cascading effect in changed layers
+		var affectedLevels : Map<data.Level, Bool> = new Map();
+		for(li in affectedLayers.keys()) {
+			affectedLevels.set( affectedLayers.get(li), true );
+			ops.push({
+				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
+				cb: li.applyBreakOnMatchesEverywhere.bind(),
+			});
+		}
+
+		// Refresh world renders & break caches
+		for(l in affectedLevels.keys())
+			ops.push({
+				label: 'Refreshing world render for ${l.identifier}...',
+				cb: ()->{
+					worldRender.invalidateLevelRender(l);
+					invalidateLevelCache(l);
+				},
+			});
+
+		if( ops.length>0 ) {
+			App.LOG.general("Applying invalidated rules...");
+			new ui.modal.Progress(L.t._("Updating auto layers..."), ops, levelRender.renderAll);
+		}
+	}
+
+
+	// public function invalidateLayerRules(layerDefUid:Int) {
+	// 	// if( active )
+	// 		addPendingAction("layerRules", "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
+	// 			for(w in project.worlds)
+	// 			for(l in w.levels)
+	// 			for(li in l.layerInstances)
+	// 				if( li.layerDefUid==layerDefUid )
+	// 					li.autoTilesCache = null;
+
+	// 			checkAutoLayersCache( (_)->{
+	// 				N.success("Done");
+	// 				levelRender.invalidateAll();
+	// 				worldRender.invalidateAll();
+	// 				// setProjectFlag(RequireAutoLayerRebuild, false);
+	// 			});
+	// 		});
+	// 	// else
+	// 	// 	removePendingAction(flag.getName());
+	// }
+
 
 	public function setWorldMode(v:Bool, usedMouseWheel=false) {
 		if( worldMode==v )
@@ -1902,6 +2030,7 @@ class Editor extends Page {
 				case ViewportChanged(_):
 				case ProjectSelected:
 				case ProjectSettingsChanged:
+				case ProjectFlagChanged(flag,active): flag+"=>"+active;
 				case BeforeProjectSaving:
 				case ProjectSaved:
 				case LevelSelected(l): extra = l.uid;
@@ -1978,6 +2107,7 @@ class Editor extends Page {
 			case AppSettingsChanged:
 			case ProjectSelected:
 			case ProjectSettingsChanged:
+			case ProjectFlagChanged(flag,active):
 			case BeforeProjectSaving:
 			case ProjectSaved:
 			case LevelSelected(level):
@@ -2022,7 +2152,7 @@ class Editor extends Page {
 					invalidateAllLevelsCache();
 
 			case LayerDefSorted: invalidateAllLevelsCache();
-			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 			case LayerDefIntGridValueAdded(defUid,value):
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				if( used ) {
@@ -2234,6 +2364,8 @@ class Editor extends Page {
 			case LayerRuleGroupCollapseChanged(rg):
 
 			case BeforeProjectSaving:
+				applyInvalidatedRulesInAllLevels();
+
 			case ProjectSaved:
 
 			case ProjectSelected:
@@ -2309,6 +2441,8 @@ class Editor extends Page {
 				updateBanners();
 				updateAppBg();
 
+			case ProjectFlagChanged(flag,active):
+
 			case LayerDefChanged(defUid, contentInvalidated):
 				project.defs.initFastAccesses();
 				if( curLayerDef==null && project.defs.layers.length>0 )
@@ -2323,8 +2457,12 @@ class Editor extends Page {
 				updateGuide();
 				updateLayerList();
 
-			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 				updateTool();
+				if( groupChanged ) {
+					project.recountIntGridValuesInAllLayerInstances();
+					addPendingRebuildAutoLayers();
+				}
 
 			case LayerDefIntGridValueAdded(_):
 				updateTool();

@@ -513,8 +513,7 @@ class EditProject extends ui.modal.Panel {
 				()->project.hasFlag(flag),
 				(v)->{
 					editor.invalidateAllLevelsCache();
-					project.setFlag(flag, v);
-					editor.ge.emit(ProjectSettingsChanged);
+					editor.setProjectFlag(flag,v);
 				}
 			);
 		}

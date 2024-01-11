@@ -879,6 +879,7 @@ namespace quicktype {
         Checker checker;
         bool flip_x;
         bool flip_y;
+        bool invalidated;
         boost::optional<int64_t> out_of_bounds_value;
         std::vector<int64_t> pattern;
         bool perlin_active;
@@ -950,6 +951,13 @@ namespace quicktype {
         const bool & get_flip_y() const { return flip_y; }
         bool & get_mutable_flip_y() { return flip_y; }
         void set_flip_y(const bool & value) { this->flip_y = value; }
+
+        /**
+         * If TRUE, then the rule should be re-evaluated by the editor at one point
+         */
+        const bool & get_invalidated() const { return invalidated; }
+        bool & get_mutable_invalidated() { return invalidated; }
+        void set_invalidated(const bool & value) { this->invalidated = value; }
 
         /**
          * Default IntGrid value when checking cells outside of level bounds
@@ -3648,6 +3656,7 @@ namespace quicktype {
         x.set_checker(j.at("checker").get<Checker>());
         x.set_flip_x(j.at("flipX").get<bool>());
         x.set_flip_y(j.at("flipY").get<bool>());
+        x.set_invalidated(j.at("invalidated").get<bool>());
         x.set_out_of_bounds_value(get_stack_optional<int64_t>(j, "outOfBoundsValue"));
         x.set_pattern(j.at("pattern").get<std::vector<int64_t>>());
         x.set_perlin_active(j.at("perlinActive").get<bool>());
@@ -3682,6 +3691,7 @@ namespace quicktype {
         j["checker"] = x.get_checker();
         j["flipX"] = x.get_flip_x();
         j["flipY"] = x.get_flip_y();
+        j["invalidated"] = x.get_invalidated();
         j["outOfBoundsValue"] = x.get_out_of_bounds_value();
         j["pattern"] = x.get_pattern();
         j["perlinActive"] = x.get_perlin_active();

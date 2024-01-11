@@ -787,6 +787,8 @@ class AutoLayerRuleDefinition:
     """If TRUE, allow rule to be matched by flipping its pattern horizontally"""
     flip_y: bool
     """If TRUE, allow rule to be matched by flipping its pattern vertically"""
+    invalidated: bool
+    """If TRUE, then the rule should be re-evaluated by the editor at one point"""
     out_of_bounds_value: Optional[int]
     """Default IntGrid value when checking cells outside of level bounds"""
     pattern: List[int]
@@ -833,7 +835,7 @@ class AutoLayerRuleDefinition:
     y_offset: int
     """Y cell start offset"""
 
-    def __init__(self, active: bool, alpha: float, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: Optional[List[int]], tile_mode: TileMode, tile_random_x_max: int, tile_random_x_min: int, tile_random_y_max: int, tile_random_y_min: int, tile_rects_ids: List[List[int]], tile_x_offset: int, tile_y_offset: int, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
+    def __init__(self, active: bool, alpha: float, break_on_match: bool, chance: float, checker: Checker, flip_x: bool, flip_y: bool, invalidated: bool, out_of_bounds_value: Optional[int], pattern: List[int], perlin_active: bool, perlin_octaves: float, perlin_scale: float, perlin_seed: float, pivot_x: float, pivot_y: float, size: int, tile_ids: Optional[List[int]], tile_mode: TileMode, tile_random_x_max: int, tile_random_x_min: int, tile_random_y_max: int, tile_random_y_min: int, tile_rects_ids: List[List[int]], tile_x_offset: int, tile_y_offset: int, uid: int, x_modulo: int, x_offset: int, y_modulo: int, y_offset: int) -> None:
         self.active = active
         self.alpha = alpha
         self.break_on_match = break_on_match
@@ -841,6 +843,7 @@ class AutoLayerRuleDefinition:
         self.checker = checker
         self.flip_x = flip_x
         self.flip_y = flip_y
+        self.invalidated = invalidated
         self.out_of_bounds_value = out_of_bounds_value
         self.pattern = pattern
         self.perlin_active = perlin_active
@@ -875,6 +878,7 @@ class AutoLayerRuleDefinition:
         checker = Checker(obj.get("checker"))
         flip_x = from_bool(obj.get("flipX"))
         flip_y = from_bool(obj.get("flipY"))
+        invalidated = from_bool(obj.get("invalidated"))
         out_of_bounds_value = from_union([from_none, from_int], obj.get("outOfBoundsValue"))
         pattern = from_list(from_int, obj.get("pattern"))
         perlin_active = from_bool(obj.get("perlinActive"))
@@ -898,7 +902,7 @@ class AutoLayerRuleDefinition:
         x_offset = from_int(obj.get("xOffset"))
         y_modulo = from_int(obj.get("yModulo"))
         y_offset = from_int(obj.get("yOffset"))
-        return AutoLayerRuleDefinition(active, alpha, break_on_match, chance, checker, flip_x, flip_y, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, tile_random_x_max, tile_random_x_min, tile_random_y_max, tile_random_y_min, tile_rects_ids, tile_x_offset, tile_y_offset, uid, x_modulo, x_offset, y_modulo, y_offset)
+        return AutoLayerRuleDefinition(active, alpha, break_on_match, chance, checker, flip_x, flip_y, invalidated, out_of_bounds_value, pattern, perlin_active, perlin_octaves, perlin_scale, perlin_seed, pivot_x, pivot_y, size, tile_ids, tile_mode, tile_random_x_max, tile_random_x_min, tile_random_y_max, tile_random_y_min, tile_rects_ids, tile_x_offset, tile_y_offset, uid, x_modulo, x_offset, y_modulo, y_offset)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -909,6 +913,7 @@ class AutoLayerRuleDefinition:
         result["checker"] = to_enum(Checker, self.checker)
         result["flipX"] = from_bool(self.flip_x)
         result["flipY"] = from_bool(self.flip_y)
+        result["invalidated"] = from_bool(self.invalidated)
         if self.out_of_bounds_value is not None:
             result["outOfBoundsValue"] = from_union([from_none, from_int], self.out_of_bounds_value)
         result["pattern"] = from_list(from_int, self.pattern)

@@ -388,7 +388,8 @@ class Project {
 		return f!=null && flags.exists(f);
 	}
 
-	public inline function setFlag(f:ldtk.Json.ProjectFlag, v:Bool) {
+	@:allow(page.Editor.setProjectFlag)
+	function setFlag(f:ldtk.Json.ProjectFlag, v:Bool) {
 		if( f!=null ) {
 			var old = hasFlag(f);
 
@@ -1288,5 +1289,13 @@ class Project {
 
 		var td = defs.getTilesetDef(r.tilesetUid);
 		return td!=null ? td.createTileHtmlImageFromRect(r, sizePx) : null;
+	}
+
+
+	public function recountIntGridValuesInAllLayerInstances() {
+		for(w in worlds)
+		for(l in w.levels)
+		for(li in l.layerInstances)
+			li.recountAllIntGridValues();
 	}
 }

@@ -34,16 +34,6 @@ class DebugMenu extends ui.modal.ContextMenu {
 				});
 				#end
 
-				addAction({
-					label: L.untranslated("Create new world"),
-					cb: ()->{
-						var w = project.createWorld(true);
-						editor.selectWorld(w,true);
-					},
-					show: ()->Editor.exists(),
-					subText: L.untranslated("Warning: multi-worlds are still experimental, use with care."),
-				});
-
 				if( Editor.exists() ) {
 
 					addTitle( L.untranslated("Internal data") );
@@ -77,15 +67,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 						label: L.untranslated("Rebuild all auto-layers"),
 						show: Editor.exists,
 						cb: ()->{
-							for(w in project.worlds)
-							for(l in w.levels)
-							for(li in l.layerInstances)
-								li.autoTilesCache = null;
-							editor.checkAutoLayersCache( (_)->{
-								N.success("Done");
-								editor.levelRender.invalidateAll();
-								editor.worldRender.invalidateAll();
-							});
+							for(ld in project.defs.layers)
+							for(rg in ld.autoRuleGroups)
+							for(r in rg.rules)
+								r.invalidated = true;
+							editor.applyInvalidatedRulesInAllLevels();
 						}
 					});
 
@@ -200,8 +186,8 @@ class DebugMenu extends ui.modal.ContextMenu {
 									MetaProgress.advance();
 
 									// Flags
-									p.setFlag(PrependIndexToLevelFileNames, false);
-									p.setFlag(UseMultilinesType, true);
+									@:privateAccess p.setFlag(PrependIndexToLevelFileNames, false);
+									@:privateAccess p.setFlag(UseMultilinesType, true);
 
 									// Break level caching
 									for(w in p.worlds)
