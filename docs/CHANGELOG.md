@@ -1,3 +1,8 @@
+# 1.5.2
+
+- Fixed a bug with auto-layers on level edges.
+- Fixed a crash when loading pre-1.0 LDtk projects
+
 # 1.5.1
 
 - Fixed visual feedback when painting tiles in a Tile layer with "Asynchronous render" enabled.
