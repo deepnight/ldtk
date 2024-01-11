@@ -74,7 +74,7 @@ class EntityRender extends dn.Process {
 				if( ld.uid==defUid )
 					destroy();
 
-			case WorldLevelMoved(_), WorldSettingsChanged, LayerInstanceSelected, LevelSelected(_):
+			case WorldLevelMoved(_), WorldSettingsChanged, LayerInstanceSelected(_), LevelSelected(_):
 				renderAll();
 
 			case EntityDefChanged:

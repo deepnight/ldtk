@@ -44,7 +44,7 @@ enum GlobalEvent {
 	LayerRuleGroupSorted;
 	LayerRuleGroupCollapseChanged(rg:data.def.AutoLayerRuleGroupDef);
 
-	LayerInstanceSelected;
+	LayerInstanceSelected(li:data.inst.LayerInstance);
 	LayerInstanceEditedByTool(li:data.inst.LayerInstance);
 	LayerInstanceChangedGlobally(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);

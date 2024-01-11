@@ -157,7 +157,7 @@ class LevelRender extends dn.Process {
 			case LayerInstanceTilesetChanged(cli):
 				invalidateLayer(cli);
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(_):
 				applyAllLayersVisibility();
 				invalidateUiAndBg();
 

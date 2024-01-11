@@ -113,7 +113,7 @@ class EntityInstanceEditor extends dn.Process {
 			case LayerInstancesRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				closeExisting(); // TODO do softer refresh
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(li):
 				closeExisting();
 
 			case ViewportChanged(zoomChanged) :
