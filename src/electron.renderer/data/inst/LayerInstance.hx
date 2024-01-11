@@ -1142,7 +1142,8 @@ class LayerInstance {
 
 				for(cx in ax*intGridAreaSize...(ax+1)*intGridAreaSize)
 				for(cy in ay*intGridAreaSize...(ay+1)*intGridAreaSize)
-					applyRuleAt(source, r, cx,cy);
+					if( isValid(cx,cy) )
+						applyRuleAt(source, r, cx,cy);
 			}
 
 			if( applyBreakOnMatch )
