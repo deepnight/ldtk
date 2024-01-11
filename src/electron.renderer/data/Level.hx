@@ -668,6 +668,8 @@ class Level {
 			li.applyNewBounds(newPxLeft, newPxTop, newPxWid, newPxHei);
 		pxWid = newPxWid;
 		pxHei = newPxHei;
+		for(li in layerInstances)
+			li.recountAllIntGridValues();
 
 		// Remove entities out of bounds
 		var n = 0;

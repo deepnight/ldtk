@@ -82,6 +82,20 @@ class LayerInstance {
 		return areaIntGridUseCount.exists(iv) && areaIntGridUseCount.get(iv).get(areaCoordId(cx,cy)) > 0;
 	}
 
+	public function recountAllIntGridValues() {
+		if( def.type!=IntGrid )
+			return;
+
+		areaIntGridUseCount = new Map();
+		layerIntGridUseCount = new Map();
+
+		for(cy in 0...cHei)
+		for(cx in 0...cWid) {
+			if( hasIntGrid(cx,cy) )
+				increaseAreaIntGridValueCount(getIntGrid(cx,cy), cx, cy);
+		}
+	}
+
 	inline function increaseAreaIntGridValueCount(iv:Int, cx:Int, cy:Int) {
 		if( iv==0 || iv==null )
 			return;
@@ -353,19 +367,16 @@ class LayerInstance {
 
 		if( json.intGridCsv==null ) {
 			// Read old pre-CSV format
-			for( intGridJson in json.intGrid ) {
+			for( intGridJson in json.intGrid )
 				li.intGrid.set( intGridJson.coordId, intGridJson.v+1 );
-				li.increaseAreaIntGridValueCount( intGridJson.v+1, li.getCx(intGridJson.coordId), li.getCy(intGridJson.coordId) );
-			}
 		}
 		else {
 			// Read CSV format
 			for(coordId in 0...json.intGridCsv.length)
-				if( json.intGridCsv[coordId]>=0 ) {
+				if( json.intGridCsv[coordId]>=0 )
 					li.intGrid.set(coordId, json.intGridCsv[coordId]);
-					li.increaseAreaIntGridValueCount( json.intGridCsv[coordId], li.getCx(coordId), li.getCy(coordId) );
-				}
 		}
+		li.recountAllIntGridValues();
 
 		for( gridTilesJson in json.gridTiles ) {
 			if( dn.Version.lower(p.jsonVersion, "0.4", true) || gridTilesJson.d==null )
