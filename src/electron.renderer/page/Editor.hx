@@ -1576,15 +1576,15 @@ class Editor extends Page {
 	}
 
 
-	function removePendingAction(id:String) {
+	function removePendingAction(className:String) {
 		var jPendingActions = jPage.find("#pendingActions");
-		jPendingActions.find('#$id').remove();
+		jPendingActions.find('.$className').remove();
 	}
 
-	function addPendingAction(id:String, iconId:String, label:String, desc:String, cb:Void->Void) {
-		removePendingAction(id);
+	function addPendingAction(className:String, iconId:String, label:String, desc:String, cb:Void->Void) {
+		removePendingAction(className);
 		var jPendingActions = jPage.find("#pendingActions");
-		var jButton = new J('<button id="$id"/>');
+		var jButton = new J('<button class="$className"/>');
 		jButton.appendTo(jPendingActions);
 		jButton.append('<span class="icon $iconId"/>');
 		jButton.append(label);
@@ -1593,6 +1593,43 @@ class Editor extends Page {
 
 		jButton.slideDown(0.2);
 	}
+
+
+	function addPendingRebuildAutoLayers() {
+		addPendingAction("rebuildAutoLayers", "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
+			for(w in project.worlds)
+			for(l in w.levels)
+			for(li in l.layerInstances)
+				li.autoTilesCache = null;
+
+			checkAutoLayersCache( (_)->{
+				N.success("Done");
+				levelRender.invalidateAll();
+				worldRender.invalidateAll();
+				removePendingAction("rebuildAutoLayers");
+			});
+		});
+}
+
+	// public function invalidateLayerRules(layerDefUid:Int) {
+	// 	// if( active )
+	// 		addPendingAction("layerRules", "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
+	// 			for(w in project.worlds)
+	// 			for(l in w.levels)
+	// 			for(li in l.layerInstances)
+	// 				if( li.layerDefUid==layerDefUid )
+	// 					li.autoTilesCache = null;
+
+	// 			checkAutoLayersCache( (_)->{
+	// 				N.success("Done");
+	// 				levelRender.invalidateAll();
+	// 				worldRender.invalidateAll();
+	// 				// setProjectFlag(RequireAutoLayerRebuild, false);
+	// 			});
+	// 		});
+	// 	// else
+	// 	// 	removePendingAction(flag.getName());
+	// }
 
 
 	public function setWorldMode(v:Bool, usedMouseWheel=false) {
@@ -2337,26 +2374,6 @@ class Editor extends Page {
 				updateAppBg();
 
 			case ProjectFlagChanged(flag,active):
-				switch flag {
-					case RequireAutoLayerRebuild:
-						if( active )
-							addPendingAction(flag.getName(), "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
-								for(w in project.worlds)
-								for(l in w.levels)
-								for(li in l.layerInstances)
-									li.autoTilesCache = null;
-
-								checkAutoLayersCache( (_)->{
-									N.success("Done");
-									levelRender.invalidateAll();
-									worldRender.invalidateAll();
-									setProjectFlag(RequireAutoLayerRebuild, false);
-								});
-							});
-						else
-							removePendingAction(flag.getName());
-					case _:
-				}
 
 			case LayerDefChanged(defUid, contentInvalidated):
 				project.defs.initFastAccesses();
@@ -2376,7 +2393,7 @@ class Editor extends Page {
 				updateTool();
 				if( groupChanged ) {
 					project.recountIntGridValuesInAllLayerInstances();
-					setProjectFlag(RequireAutoLayerRebuild, true);
+					addPendingRebuildAutoLayers();
 				}
 
 			case LayerDefIntGridValueAdded(_):
