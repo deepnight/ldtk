@@ -1164,6 +1164,12 @@ namespace ldtk
         public bool FlipY { get; set; }
 
         /// <summary>
+        /// If TRUE, then the rule should be re-evaluated by the editor at one point
+        /// </summary>
+        [JsonProperty("invalidated")]
+        public bool Invalidated { get; set; }
+
+        /// <summary>
         /// Default IntGrid value when checking cells outside of level bounds
         /// </summary>
         [JsonProperty("outOfBoundsValue")]

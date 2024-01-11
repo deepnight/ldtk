@@ -268,6 +268,7 @@ const typeMap = {
         { json: "checker", js: "checker", typ: r("Checker") },
         { json: "flipX", js: "flipX", typ: true },
         { json: "flipY", js: "flipY", typ: true },
+        { json: "invalidated", js: "invalidated", typ: true },
         { json: "outOfBoundsValue", js: "outOfBoundsValue", typ: u(undefined, u(0, null)) },
         { json: "pattern", js: "pattern", typ: a(0) },
         { json: "perlinActive", js: "perlinActive", typ: true },

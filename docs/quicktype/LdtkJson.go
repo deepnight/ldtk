@@ -485,6 +485,8 @@ type AutoLayerRuleDefinition struct {
 	FlipX                                                                                       bool      `json:"flipX"`
 	// If TRUE, allow rule to be matched by flipping its pattern vertically                               
 	FlipY                                                                                       bool      `json:"flipY"`
+	// If TRUE, then the rule should be re-evaluated by the editor at one point                           
+	Invalidated                                                                                 bool      `json:"invalidated"`
 	// Default IntGrid value when checking cells outside of level bounds                                  
 	OutOfBoundsValue                                                                            *int64    `json:"outOfBoundsValue,omitempty"`
 	// Rule pattern (size x size)                                                                         
