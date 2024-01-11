@@ -64,7 +64,7 @@ class WorldRender extends dn.Process {
 			col: new h2d.Bitmap(w),
 			tex: new dn.heaps.TiledTexture(1, 1, Assets.elements.getTile("largeStripes"), w),
 		}
-		worldBg.col.colorAdd = new h3d.Vector(0,0,0,0);
+		worldBg.col.colorAdd = new h3d.Vector(0,0,0);
 		worldBg.tex.alpha = 0.5;
 		editor.root.add(worldBg.wrapper, Const.DP_BG);
 		worldBg.wrapper.alpha = 0;
@@ -462,7 +462,7 @@ class WorldRender extends dn.Process {
 
 	function updateBgColor() {
 		var r = -M.fclamp( 0.9 * 0.04/camera.adjustedZoom, 0, 1);
-		worldBg.col.colorAdd.set(r,r,r,0);
+		worldBg.col.colorAdd.set(r,r,r);
 	}
 
 	function renderWorldBg() {

@@ -55,7 +55,7 @@ class LayerRender {
 	}
 
 
-	static var _cachedIdentityVector = new h3d.Vector(1,1,1,1);
+	static var _cachedIdentityVector = new h3d.Vector4(1,1,1,1);
 	public static inline function renderAutoTileInfos(li:data.inst.LayerInstance, td:data.def.TilesetDef, tileInfos, tg:h2d.TileGroup) {
 		_cachedIdentityVector.a = tileInfos.a;
 		@:privateAccess tg.content.addTransform(
