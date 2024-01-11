@@ -5219,7 +5219,7 @@ canvas#webgl {
 				background-image: url("../img/stripes.png");
 			}
 
-			ul.niceList {
+			&>ul.niceList {
 				height: 100%;
 				box-sizing: border-box;
 			}
@@ -6505,7 +6505,7 @@ canvas#webgl {
 	&.intGrid {
 		grid-template-rows: min-content auto fit-content(24px);
 
-		.bar {
+		>.bar {
 			display: grid;
 			gap: 4px;
 			grid-template-columns: auto min-content;
@@ -6514,7 +6514,7 @@ canvas#webgl {
 			}
 		}
 
-		ul.niceList {
+		>ul.niceList {
 			&:not(.col-1) .subList ul {
 				display: grid;
 
@@ -6546,7 +6546,7 @@ canvas#webgl {
 		}
 	}
 
-	&.intGrid ul.niceList {
+	&.intGrid>ul.niceList {
 		&:not(.col-1) .subList ul li {
 			.intGridValue {
 				width: 100%;
@@ -6570,7 +6570,7 @@ canvas#webgl {
 	}
 
 
-	&.entities ul.niceList {
+	&.entities>ul.niceList {
 		&:not(.col-1) .subList ul li {
 			.entityPreview  {
 				margin: 0;
@@ -6632,7 +6632,7 @@ canvas#webgl {
 	}
 
 
-	ul.niceList {
+	>ul.niceList {
 		margin: 0;
 		padding: 4px;
 		width: 100%;
