@@ -1170,6 +1170,7 @@ class LayerDefinition:
     ui_filter_tags: List[str]
     """Display tags"""
     use_async_render: bool
+    """Asynchronous rendering option for large/complex layers"""
 
     def __init__(self, type: str, auto_rule_groups: List[AutoLayerRuleGroup], auto_source_layer_def_uid: Optional[int], auto_tileset_def_uid: Optional[int], auto_tiles_killed_by_other_layer_uid: Optional[int], biome_field_uid: Optional[int], can_select_when_inactive: bool, display_opacity: float, doc: Optional[str], excluded_tags: List[str], grid_size: int, guide_grid_hei: int, guide_grid_wid: int, hide_fields_when_inactive: bool, hide_in_list: bool, identifier: str, inactive_opacity: float, int_grid_values: List[IntGridValueDefinition], int_grid_values_groups: List[IntGridValueGroupDefinition], parallax_factor_x: float, parallax_factor_y: float, parallax_scaling: bool, px_offset_x: int, px_offset_y: int, render_in_world_view: bool, required_tags: List[str], tile_pivot_x: float, tile_pivot_y: float, tileset_def_uid: Optional[int], layer_definition_type: TypeEnum, ui_color: Optional[str], uid: int, ui_filter_tags: List[str], use_async_render: bool) -> None:
         self.type = type

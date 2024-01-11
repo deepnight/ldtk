@@ -8,6 +8,7 @@ typedef WorldLevelRender = {
 	var bgWrapper: h2d.Object;
 	var outline: h2d.Graphics;
 	var render: h2d.Object;
+	var edgeLayers : Map<Int, h2d.TileGroup>;
 	var fadeMask : h2d.Bitmap;
 	var identifier: h2d.ScaleGrid;
 
@@ -277,6 +278,9 @@ class WorldRender extends dn.Process {
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 
+			case LayerInstanceSelected(curLi):
+				updateEdgeLayersOpacity();
+
 			case TilesetDefPixelDataCacheRebuilt(td):
 				invalidateAllLevelRenders();
 
@@ -409,6 +413,7 @@ class WorldRender extends dn.Process {
 				rect: WorldRect.fromLevel(l),
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
+				edgeLayers: new Map(),
 				outline : new h2d.Graphics(),
 				fadeMask: new h2d.Bitmap( h2d.Tile.fromColor(l.getBgColor(),1,1, 0.3) ),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile(D.elements.fieldBg), 2, 2),
@@ -760,6 +765,7 @@ class WorldRender extends dn.Process {
 		wl.bgWrapper.removeChildren();
 		wl.outline.clear();
 		wl.render.removeChildren();
+		wl.edgeLayers = new Map();
 	}
 
 
@@ -817,6 +823,60 @@ class WorldRender extends dn.Process {
 			return doneCoords.exists(li.def.gridSize) && doneCoords.get(li.def.gridSize).exists( li.coordId(cx,cy) );
 		}
 
+		// Edge tiles render
+		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
+			var edgeDistPx = settings.getNearbyTilesRenderingDistPx();
+			l.iterateLayerInstancesBottomToTop( (li)->{
+				switch li.def.type {
+					case IntGrid:
+						if( !li.def.isAutoLayer() )
+							return;
+
+					case Entities:
+						return;
+
+					case Tiles:
+					case AutoLayer:
+				}
+
+				var td = li.getTilesetDef();
+				if( td==null || !td.isAtlasLoaded() )
+					return;
+
+				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
+				wl.edgeLayers.set(li.layerDefUid, edgeTg);
+				// NOTE: layer offsets is already included in tiles render methods
+
+				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
+					// Auto layer
+					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
+						if( li.autoTilesCache.exists( r.uid ) ) {
+							for( allTiles in li.autoTilesCache.get( r.uid ) )
+							for( tileInfos in allTiles ) {
+								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) ) {
+									markCoordAsDone(li, Std.int(tileInfos.x/li.def.gridSize), Std.int(tileInfos.y/li.def.gridSize));
+									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
+								}
+							}
+						}
+					});
+				}
+				else if( li.def.type==Tiles ) {
+					// Classic tiles
+					for(cy in 0...li.cHei)
+					for(cx in 0...li.cWid) {
+						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, edgeDistPx) ) {
+							markCoordAsDone(li,cx,cy);
+							for( tileInf in li.getGridTileStack(cx,cy) )
+								LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
+						}
+					}
+				}
+			} );
+
+			updateEdgeLayersOpacity();
+		}
+
 		// Default simplified renders
 		final alphaThreshold = 0.6;
 		l.iterateLayerInstancesTopToBottom( li->{
@@ -833,6 +893,7 @@ class WorldRender extends dn.Process {
 			pixelGrid.x = li.pxTotalOffsetX;
 			pixelGrid.y = li.pxTotalOffsetY;
 
+			// IntGrid/AutoLayer
 			if( li.def.type==IntGrid && !li.def.isAutoLayer() ) {
 				// Pure intGrid
 				for(cy in 0...li.cHei)
@@ -887,54 +948,6 @@ class WorldRender extends dn.Process {
 			}
 		});
 
-
-		// Edge tiles render
-		if( settings.v.nearbyTilesRenderingDist>0 && !editor.worldMode && l.touches(editor.curLevel) ) {
-			var edgeDistPx = settings.getNearbyTilesRenderingDistPx();
-			l.iterateLayerInstancesBottomToTop( (li)->{
-				switch li.def.type {
-					case IntGrid:
-						if( !li.def.isAutoLayer() )
-							return;
-
-					case Entities:
-						return;
-
-					case Tiles:
-					case AutoLayer:
-				}
-
-				var td = li.getTilesetDef();
-				if( td==null || !td.isAtlasLoaded() )
-					return;
-
-				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
-				edgeTg.alpha = li.def.displayOpacity;
-				// NOTE: layer offsets is already included in tiles render methods
-
-				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
-					// Auto layer
-					li.def.iterateActiveRulesInDisplayOrder( li, (r)->{
-						if( li.autoTilesCache.exists( r.uid ) ) {
-							for( allTiles in li.autoTilesCache.get( r.uid ).keyValueIterator() )
-							for( tileInfos in allTiles.value )
-								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) )
-									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
-						}
-					});
-				}
-				else if( li.def.type==Tiles ) {
-					// Classic tiles
-					for(cy in 0...li.cHei)
-					for(cx in 0...li.cWid) {
-						if( editor.curLevel.otherLevelCoordInBounds(l, cx*li.def.gridSize, cy*li.def.gridSize, edgeDistPx) )
-							for( tileInf in li.getGridTileStack(cx,cy) )
-								LayerRender.renderGridTile(li, td, tileInf, cx,cy, edgeTg);
-					}
-				}
-			} );
-		}
-
 		// Custom tile render override
 		var t = l.getWorldTileFromFields();
 		if( t!=null ) {
@@ -948,6 +961,21 @@ class WorldRender extends dn.Process {
 		wl.identifier.color.setColor( C.addAlphaF(0x464e79) );
 		wl.identifier.alpha = 0.8;
 		invalidateLevelIdentifier(l);
+	}
+
+
+	function updateEdgeLayersOpacity() {
+		// Update edge layers opacity based on active one
+		for(wl in worldLevels)
+		for(li in editor.curLevel.layerInstances) {
+			if( !wl.edgeLayers.exists(li.layerDefUid) )
+				continue;
+
+			if( li==editor.curLayerInstance )
+				wl.edgeLayers.get(li.layerDefUid).alpha = li.def.displayOpacity;
+			else
+				wl.edgeLayers.get(li.layerDefUid).alpha = li.def.displayOpacity * li.def.inactiveOpacity;
+		}
 	}
 
 

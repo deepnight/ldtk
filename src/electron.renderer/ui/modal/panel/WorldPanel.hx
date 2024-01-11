@@ -17,8 +17,7 @@ class WorldPanel extends ui.modal.Panel {
 		jWrapper.find(".worldBar button.create").click( (_)->{
 			var w = project.createWorld(true);
 			editor.selectWorld(w,true);
-			Notification.success(L.t._("New world created"));
-			editor.setWorldMode(true);
+			Notification.success(L.t._("New world created"), w.identifier);
 			editor.ge.emit( WorldCreated(w) );
 		});
 
@@ -128,7 +127,7 @@ class WorldPanel extends ui.modal.Panel {
 				updateWorldForm();
 
 			case WorldCreated(_), WorldRemoved(_):
-				updateWorldForm();
+				// updateWorldForm();
 
 			case ProjectSelected:
 				updateWorldForm();

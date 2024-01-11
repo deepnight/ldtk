@@ -55,12 +55,10 @@ class IntGridTool extends tool.LayerTool<Int> {
 		switch curMode {
 			case null:
 			case Add:
-				curLayerInstance.setIntGrid(cx, cy, getSelectedValue());
-				editor.levelRender.asyncPaint(curLayerInstance, cx,cy, getSelectedColor());
+				curLayerInstance.setIntGrid(cx, cy, getSelectedValue(), true);
 
 			case Remove:
-				curLayerInstance.removeIntGrid(cx, cy);
-				editor.levelRender.asyncPaint(curLayerInstance, cx,cy, Red);
+				curLayerInstance.removeIntGrid(cx, cy, true);
 		}
 
 		if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
@@ -82,12 +80,10 @@ class IntGridTool extends tool.LayerTool<Int> {
 			switch curMode {
 				case null:
 				case Add:
-					curLayerInstance.setIntGrid(cx,cy, getSelectedValue());
-					editor.levelRender.asyncPaint(curLayerInstance, cx,cy, getSelectedColor());
+					curLayerInstance.setIntGrid(cx,cy, getSelectedValue(), true);
 
 				case Remove:
-					curLayerInstance.removeIntGrid(cx,cy);
-					editor.levelRender.asyncPaint(curLayerInstance, cx,cy, Red);
+					curLayerInstance.removeIntGrid(cx,cy, true);
 			}
 
 			if( old!=curLayerInstance.getIntGrid(cx,cy) ) {
@@ -112,12 +108,10 @@ class IntGridTool extends tool.LayerTool<Int> {
 				switch curMode {
 					case null:
 					case Add:
-						curLayerInstance.setIntGrid(cx,cy, v);
-						editor.levelRender.asyncPaint(curLayerInstance, cx,cy, getSelectedColor());
+						curLayerInstance.setIntGrid(cx,cy, v, true);
 
 					case Remove:
-						curLayerInstance.removeIntGrid(cx,cy);
-						editor.levelRender.asyncPaint(curLayerInstance, cx,cy, Red);
+						curLayerInstance.removeIntGrid(cx,cy, true);
 				}
 			}
 		);

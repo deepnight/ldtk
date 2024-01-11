@@ -1,3 +1,16 @@
+# 1.5.1
+
+- Fixed visual feedback when painting tiles in a Tile layer with "Asynchronous render" enabled.
+- Fixed a crash when creating a new World.
+- Updated macOS icons.
+- Fixed "Kill Tiles" layer option to work as intended with IntGrid layers.
+- Fixed a minor visual bug with neighbour levels rendering.
+- Fixed support for layer opacity settings in neighbour levels rendering.
+- Fixed a render bug when resizing levels.
+- Fixed WorldDepth value in automatic level names pattern.
+- Various minor optimizations.
+- Various UI fixes.
+
 # 1.5.0 - New LDtk logo
 
 ## LDtk logo

@@ -136,7 +136,8 @@ class EditLayerDefs extends ui.modal.Panel {
 									Std.int(tileInfos.y/ld.gridSize),
 									tileInfos.tid,
 									tileInfos.flips,
-									!td.isTileOpaque(tileInfos.tid)
+									!td.isTileOpaque(tileInfos.tid),
+									false
 								);
 							}
 						}
@@ -307,6 +308,11 @@ class EditLayerDefs extends ui.modal.Panel {
 			}
 		}
 		i.onChange = ()->{
+			for(w in project.worlds)
+			for(l in w.levels)
+			for(li in l.layerInstances)
+				li.recountAllIntGridValues();
+			
 			editor.ge.emit( LayerDefChanged(cur.uid, false) );
 
 			for(ld in project.defs.layers)

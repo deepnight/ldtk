@@ -40,7 +40,7 @@ class LastChance extends dn.Process {
 		switch(e) {
 			case ViewportChanged(_):
 			case LevelSelected(l):
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(li):
 			case LayerInstanceVisiblityChanged(li):
 			case ToolValueSelected:
 			case ToolOptionChanged:

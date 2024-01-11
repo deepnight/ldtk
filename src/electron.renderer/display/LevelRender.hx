@@ -157,7 +157,7 @@ class LevelRender extends dn.Process {
 			case LayerInstanceTilesetChanged(cli):
 				invalidateLayer(cli);
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(_):
 				applyAllLayersVisibility();
 				invalidateUiAndBg();
 
@@ -680,7 +680,7 @@ class LevelRender extends dn.Process {
 		// Invalidate potentially killed auto-layers
 		if( li.def.type==Tiles )
 			for(other in editor.curLevel.layerInstances)
-				if( other.def.type==AutoLayer && other.def.autoTilesKilledByOtherLayerUid==li.layerDefUid )
+				if( other.def.isAutoLayer() && other.def.autoTilesKilledByOtherLayerUid==li.layerDefUid )
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
@@ -707,6 +707,10 @@ class LevelRender extends dn.Process {
 			}
 			asyncTmpRender.setPixel(cx,cy, col);
 		}
+	}
+
+	public inline function asyncErase(li:data.inst.LayerInstance, cx,cy) {
+		asyncPaint(li,cx,cy,Red);
 	}
 
 	public inline function suspendAsyncRender() {

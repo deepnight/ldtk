@@ -50,11 +50,11 @@ class EditProject extends ui.modal.Panel {
 			"png",
 			project.getImageExportFilePattern(),
 			[
-				{ k:"world", name:"World name" },
-				{ k:"level_name", name:"Level name" },
-				{ k:"level_idx", name:"Level idx)" },
-				{ k:"layer_name", name:"Layer name" },
-				{ k:"layer_idx", name:"Layer idx" },
+				{ k:"world", displayName:"WorldName" },
+				{ k:"level_name", displayName:"LevelName" },
+				{ k:"level_idx", displayName:"LevelIdx" },
+				{ k:"layer_name", displayName:"LayerName" },
+				{ k:"layer_idx", displayName:"LayerIdx" },
 			],
 			(pat)->{
 				project.pngFilePattern = pat==project.getDefaultImageExportFilePattern() ? null : pat;
@@ -71,14 +71,14 @@ class EditProject extends ui.modal.Panel {
 			"levelId",
 			project.levelNamePattern,
 			[
-				{ k:"world", name:"World ID" },
-				{ k:"idx1", name:"Level_index(1)", desc:"Level index (starting at 1)" },
-				{ k:"idx", name:"Level_index(0)", desc:"Level index (starting at 0)" },
-				{ k:"x", name:"x", desc:"X coordinate of the level" },
-				{ k:"y", name:"y", desc:"Y coordinate of the level" },
-				{ k:"gx", name:"Grid_X", desc:"X grid coordinate of the level" },
-				{ k:"gy", name:"Grid_Y", desc:"Y grid coordinate of the level" },
-				{ k:"depth", name:"World depth", desc:"Level depth in the world" },
+				{ k:"world", displayName:"WorldId" },
+				{ k:"idx1", displayName:"LevelIndex(1)", desc:"Level index (starting at 1)" },
+				{ k:"idx", displayName:"LevelIndex(0)", desc:"Level index (starting at 0)" },
+				{ k:"x", displayName:"LevelX", desc:"X coordinate of the level" },
+				{ k:"y", displayName:"LevelY", desc:"Y coordinate of the level" },
+				{ k:"gx", displayName:"GridX", desc:"X grid coordinate of the level" },
+				{ k:"gy", displayName:"GridY", desc:"Y grid coordinate of the level" },
+				{ k:"depth", displayName:"WorldDepth", desc:"Level depth in the world" },
 			],
 			(pat)->{
 				project.levelNamePattern = pat;

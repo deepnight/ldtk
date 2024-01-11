@@ -638,10 +638,10 @@ class GenericLevelElementGroup {
 						for(cx in li.levelToLayerCx(r.leftPx)...li.levelToLayerCx(r.rightPx+1))
 						for(cy in li.levelToLayerCy(r.topPx)...li.levelToLayerCy(r.bottomPx+1)) {
 							if( li.def.type==IntGrid )
-								postRemovals.push( li.removeIntGrid.bind(cx,cy) );
+								postRemovals.push( li.removeIntGrid.bind(cx,cy,false) );
 
 							if( li.def.type==Tiles )
-								postRemovals.push( li.removeAllGridTiles.bind(cx,cy) );
+								postRemovals.push( li.removeAllGridTiles.bind(cx,cy,false) );
 						}
 					}
 					changedLayers.set(li,li);
@@ -756,8 +756,8 @@ class GenericLevelElementGroup {
 								var tcx = cx + (to.cx-origin.cx)*gridRatio;
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
 								if( !isCopy && li.hasIntGrid(cx,cy) )
-									postRemovals.push( ()-> li.removeIntGrid(cx,cy) );
-								postInserts.push( ()-> li.setIntGrid(tcx, tcy, v) );
+									postRemovals.push( ()-> li.removeIntGrid(cx,cy,false) );
+								postInserts.push( ()-> li.setIntGrid(tcx, tcy, v, false) );
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);
@@ -769,11 +769,11 @@ class GenericLevelElementGroup {
 								var tcy = cy + (to.cy-origin.cy)*gridRatio;
 
 								if( !isCopy && li.hasAnyGridTile(cx,cy) )
-									postRemovals.push( ()-> li.removeAllGridTiles(cx,cy) );
+									postRemovals.push( ()-> li.removeAllGridTiles(cx,cy,false) );
 
 								var stacking = li.getGridTileStack(cx,cy).length>1 || App.ME.settings.v.tileStacking;
 								for( t in li.getGridTileStack(cx,cy) )
-									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips, stacking) );
+									postInserts.push( ()-> li.addGridTile(tcx, tcy, t.tileId, t.flips, stacking, false) );
 
 								elements[i] = li.isValid(tcx,tcy) ? GridCell(li, tcx, tcy) : null; // update selection
 								changedLayers.set(li,li);

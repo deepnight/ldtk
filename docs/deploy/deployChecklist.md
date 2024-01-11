@@ -46,7 +46,7 @@
 ## Publish Itch
 - [ ] Run `npm run publish-itchio`
 - [ ] Upload macOS build to Itch.io ([link](https://itch.io/dashboard))
-- [ ] Upload Linux build to Itch.io
+- [ ] Upload Linux build to Itch.io ([link](https://itch.io/dashboard))
 - [ ] Add a devlog post on Itch.io ([link](https://deepnight.itch.io/ldtk))
 - [ ] *[Optional]* Update Itch.io page
 

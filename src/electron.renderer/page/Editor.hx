@@ -1413,7 +1413,7 @@ class Editor extends Page {
 			N.quick(li.def.identifier, JsTools.createLayerTypeIcon2(li.def.type));
 
 		curLayerDefUid = li.def.uid;
-		ge.emit(LayerInstanceSelected);
+		ge.emit(LayerInstanceSelected(li));
 		clearSpecialTool();
 		ui.Tip.clear();
 
@@ -1930,7 +1930,7 @@ class Editor extends Page {
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
-				case LayerInstanceSelected:
+				case LayerInstanceSelected(li): extra = li.layerDefUid;
 				case LayerInstanceChangedGlobally(li): extra = li.layerDefUid;
 				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
 				case LayerInstancesRestoredFromHistory(lis): extra = lis.map( li->li.def.identifier ).join(",");
@@ -2050,7 +2050,7 @@ class Editor extends Page {
 					invalidateAllLevelsCache();
 			case LayerRuleGroupSorted: invalidateAllLevelsCache();
 			case LayerRuleGroupCollapseChanged(rg):
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(li):
 			case LayerInstanceEditedByTool(li): invalidateLevelCache(li.level);
 			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
 			case LayerInstanceVisiblityChanged(li):
@@ -2107,7 +2107,7 @@ class Editor extends Page {
 			case WorldDepthSelected(_):
 			case AppSettingsChanged:
 			case ViewportChanged(_):
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(_):
 			case LevelSelected(_):
 			case WorldSelected(_):
 			case AutoLayerRenderingChanged(lis):
@@ -2189,7 +2189,7 @@ class Editor extends Page {
 
 			case ShowDetailsChanged(active):
 
-			case LayerInstanceSelected:
+			case LayerInstanceSelected(li):
 				updateTool();
 				updateLayerList();
 				updateGuide();
@@ -2310,7 +2310,7 @@ class Editor extends Page {
 				updateAppBg();
 
 			case LayerDefChanged(defUid, contentInvalidated):
-				project.defs.initFastAccess();
+				project.defs.initFastAccesses();
 				if( curLayerDef==null && project.defs.layers.length>0 )
 					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
 				resetTools();

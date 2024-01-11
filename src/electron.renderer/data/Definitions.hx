@@ -12,20 +12,58 @@ class Definitions {
 	public var externalEnums: Array<data.def.EnumDef> = [];
 	public var levelFields: Array<data.def.FieldDef> = [];
 
-	var fastLayersAccessInt : Map<Int,data.def.LayerDef> = new Map();
-	var fastLayersAccessStr : Map<String,data.def.LayerDef> = new Map();
+	var fastLayerAccessInt : Map<Int, data.def.LayerDef> = new Map();
+	var fastLayerAccessStr : Map<String, data.def.LayerDef> = new Map();
+
+	var fastTilesetAccessInt : Map<Int, data.def.TilesetDef> = new Map();
+	var fastTilesetAccessStr : Map<String, data.def.TilesetDef> = new Map();
+
+	var fastEntityAccessInt : Map<Int, data.def.EntityDef> = new Map();
+	var fastEntityAccessStr : Map<String, data.def.EntityDef> = new Map();
+
+	var fastEnumAccessInt : Map<Int, data.def.EnumDef> = new Map();
+	var fastEnumAccessStr : Map<String, data.def.EnumDef> = new Map();
 
 
 	public function new(project:Project) {
 		this._project = project;
 	}
 
-	public function initFastAccess() {
-		fastLayersAccessInt = new Map();
-		fastLayersAccessStr = new Map();
+	public function initFastAccesses() {
+		// Layers
+		fastLayerAccessInt = new Map();
+		fastLayerAccessStr = new Map();
 		for(ld in layers) {
-			fastLayersAccessInt.set(ld.uid, ld);
-			fastLayersAccessStr.set(ld.identifier, ld);
+			fastLayerAccessInt.set(ld.uid, ld);
+			fastLayerAccessStr.set(ld.identifier, ld);
+		}
+
+		// Tilesets
+		fastTilesetAccessInt = new Map();
+		fastTilesetAccessStr = new Map();
+		for(td in tilesets) {
+			fastTilesetAccessInt.set(td.uid, td);
+			fastTilesetAccessStr.set(td.identifier, td);
+		}
+
+		// Entities
+		fastEntityAccessInt = new Map();
+		fastEntityAccessStr = new Map();
+		for(ed in entities) {
+			fastEntityAccessInt.set(ed.uid, ed);
+			fastEntityAccessStr.set(ed.identifier, ed);
+		}
+
+		// Enums
+		fastEnumAccessInt = new Map();
+		fastEnumAccessStr = new Map();
+		for(ed in enums) {
+			fastEnumAccessInt.set(ed.uid, ed);
+			fastEnumAccessStr.set(ed.identifier, ed);
+		}
+		for(ed in externalEnums) {
+			fastEnumAccessInt.set(ed.uid, ed);
+			fastEnumAccessStr.set(ed.identifier, ed);
 		}
 	}
 
@@ -63,7 +101,7 @@ class Definitions {
 			for(fieldJson in JsonTools.readArray(json.levelFields))
 				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
 
-		p.defs.initFastAccess();
+		p.defs.initFastAccesses();
 	}
 
 	public static function tidyFieldDefsArray(p:Project, fieldDefs:Array<data.def.FieldDef>, ctx:String) {
@@ -108,7 +146,7 @@ class Definitions {
 			td.tidy(p);
 
 		tidyFieldDefsArray(p, levelFields, "ProjectDefinitions");
-		initFastAccess();
+		initFastAccesses();
 	}
 
 	/**  LAYER DEFS  *****************************************/
@@ -128,10 +166,9 @@ class Definitions {
 	}
 
 	public inline function getLayerDef(?id:String, ?uid:Int) : Null<data.def.LayerDef> {
-		if( uid!=null )
-			return fastLayersAccessInt.get(uid);
-		else
-			return fastLayersAccessStr.get(id);
+		return uid!=null ? fastLayerAccessInt.get(uid)
+			: id!=null ? fastLayerAccessStr.get(id)
+			: null;
 	}
 
 	public function createLayerDef(type:ldtk.Json.LayerType, ?id:String) : data.def.LayerDef {
@@ -295,11 +332,10 @@ class Definitions {
 
 	/**  ENTITY DEFS  *****************************************/
 
-	public function getEntityDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.EntityDef> {
-		for(ed in entities)
-			if( ed.uid==id || ed.identifier==id )
-				return ed;
-		return null;
+	public inline function getEntityDef(?uid:Int, ?id:String) : Null<data.def.EntityDef> {
+		return uid!=null ? fastEntityAccessInt.get(uid)
+			: id!=null ? fastEntityAccessStr.get(id)
+			: null;
 	}
 
 	public function createEntityDef() : data.def.EntityDef {
@@ -598,11 +634,10 @@ class Definitions {
 		_project.tidy();
 	}
 
-	public function getTilesetDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.TilesetDef> {
-		for(td in tilesets)
-			if( td.uid==id || td.identifier==id )
-				return td;
-		return null;
+	public inline function getTilesetDef(?uid:Int, ?id:String) : Null<data.def.TilesetDef> {
+		return uid!=null ? fastTilesetAccessInt.get(uid)
+			: id!=null ? fastTilesetAccessStr.get(id)
+			: null;
 	}
 
 	public function isTilesetIdentifierUnique(id:String, ?exclude:data.def.TilesetDef) {
@@ -717,16 +752,10 @@ class Definitions {
 		return true;
 	}
 
-	public function getEnumDef(id:haxe.extern.EitherType<String,Int>) : Null<data.def.EnumDef> {
-		for(ed in enums)
-			if( ed.uid==id || ed.identifier==id )
-				return ed;
-
-		for(ed in externalEnums)
-			if( ed.uid==id || ed.identifier==id )
-				return ed;
-
-		return null;
+	public function getEnumDef(?uid:Int, ?id:String) : Null<data.def.EnumDef> {
+		return uid!=null ? fastEnumAccessInt.get(uid)
+			: id!=null ? fastEnumAccessStr.get(id)
+			: null;
 	}
 
 	public function getInternalEnumIndex(uid:Int) {

@@ -829,6 +829,7 @@ pub struct LayerDefinition {
     /// Display tags
     pub ui_filter_tags: Vec<String>,
 
+    /// Asynchronous rendering option for large/complex layers
     pub use_async_render: bool,
 }
 
