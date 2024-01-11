@@ -150,26 +150,24 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			else {
 				var r = li.def.getRule(ruleUid);
 				if( r!=null && !r.isEmpty() ) { // Could be null for garbaged empty rules
-					if( r!=null ) {
-						// Apply rule
-						ops.push({
-							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-							cb: ()->{
-								li.applyRuleToFullLayer(r, false);
-							},
-						});
-						affectedLayers.set(li,l);
-					}
-					else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
-						// Removed rule
-						ops.push({
-							label: 'Removing rule tiles #$ruleUid from ${l.identifier}',
-							cb: ()->{
-								li.autoTilesCache.remove(ruleUid);
-							}
-						});
-						affectedLayers.set(li,l);
-					}
+					// Apply rule
+					ops.push({
+						label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+						cb: ()->{
+							li.applyRuleToFullLayer(r, false);
+						},
+					});
+					affectedLayers.set(li,l);
+					// else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
+					// 	// Removed rule
+					// 	ops.push({
+					// 		label: 'Removing rule tiles #$ruleUid from ${l.identifier}',
+					// 		cb: ()->{
+					// 			li.autoTilesCache.remove(ruleUid);
+					// 		}
+					// 	});
+					// 	affectedLayers.set(li,l);
+					// }
 				}
 			}
 		}
