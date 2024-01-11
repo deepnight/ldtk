@@ -83,25 +83,28 @@ class Definitions {
 
 		for( layerJson in JsonTools.readArray(json.layers) )
 			p.defs.layers.push( data.def.LayerDef.fromJson(p, p.jsonVersion, layerJson) );
+		p.defs.initFastAccesses();
 
 		for( entityJson in JsonTools.readArray(json.entities) )
 			p.defs.entities.push( data.def.EntityDef.fromJson(p, entityJson) );
+		p.defs.initFastAccesses();
 
 		for( tilesetJson in JsonTools.readArray(json.tilesets) )
 			p.defs.tilesets.push( data.def.TilesetDef.fromJson(p, tilesetJson) );
+		p.defs.initFastAccesses();
 
 		for( enumJson in JsonTools.readArray(json.enums) )
 			p.defs.enums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
+		p.defs.initFastAccesses();
 
 		if( json.externalEnums!=null )
 			for( enumJson in JsonTools.readArray(json.externalEnums) )
 				p.defs.externalEnums.push( data.def.EnumDef.fromJson(p, p.jsonVersion, enumJson) );
+		p.defs.initFastAccesses();
 
 		if( json.levelFields!=null )
 			for(fieldJson in JsonTools.readArray(json.levelFields))
 				p.defs.levelFields.push( data.def.FieldDef.fromJson(p, fieldJson) );
-
-		p.defs.initFastAccesses();
 	}
 
 	public static function tidyFieldDefsArray(p:Project, fieldDefs:Array<data.def.FieldDef>, ctx:String) {
