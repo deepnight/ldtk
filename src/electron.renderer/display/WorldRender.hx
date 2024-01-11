@@ -853,9 +853,10 @@ class WorldRender extends dn.Process {
 						if( li.autoTilesCache.exists( r.uid ) ) {
 							for( allTiles in li.autoTilesCache.get( r.uid ) )
 							for( tileInfos in allTiles ) {
-								markCoordAsDone(li, Std.int(tileInfos.x/li.def.gridSize), Std.int(tileInfos.y/li.def.gridSize));
-								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) )
+								if( editor.curLevel.otherLevelCoordInBounds(l, tileInfos.x, tileInfos.y, edgeDistPx) ) {
+									markCoordAsDone(li, Std.int(tileInfos.x/li.def.gridSize), Std.int(tileInfos.y/li.def.gridSize));
 									LayerRender.renderAutoTileInfos(li, td, tileInfos, edgeTg);
+								}
 							}
 						}
 					});
