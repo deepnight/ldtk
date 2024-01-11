@@ -6,7 +6,6 @@ import data.def.AutoLayerRuleGroupDef;
 
 class EditAllAutoLayerRules extends ui.modal.Panel {
 	var li : data.inst.LayerInstance;
-	var invalidatedRules : Map<Int,Int> = new Map();
 	var lastRule : Null<data.def.AutoLayerRuleDef>;
 
 	public var ld(get,never) : data.def.LayerDef;
@@ -104,7 +103,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	}
 
 	inline function invalidateRule(r:data.def.AutoLayerRuleDef) {
-		invalidatedRules.set(r.uid, r.uid);
+		r.invalidated = true;
 	}
 
 	function invalidateRuleGroup(rg:data.def.AutoLayerRuleGroupDef) {
@@ -130,44 +129,35 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		var affectedLayers : Map<data.inst.LayerInstance,data.Level> = new Map();
 
 		// Apply edited rules to all other levels
-		for(ruleUid in invalidatedRules)
-		for( w in project.worlds )
-		for( l in w.levels )
-		for( li in l.layerInstances ) {
-			if( !li.def.isAutoLayer() )
+		for(rg in ld.autoRuleGroups)
+		for(r in rg.rules) {
+			if( !r.invalidated )
 				continue;
 
-			if( li.autoTilesCache==null ) {
-				// Run all rules
-				ops.push({
-					label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
-					cb: ()->{
-						li.applyAllRules();
-					}
-				});
-				affectedLayers.set(li,l);
-			}
-			else {
-				var r = li.def.getRule(ruleUid);
-				if( r!=null && !r.isEmpty() ) { // Could be null for garbaged empty rules
-					// Apply rule
+			for( w in project.worlds )
+			for( l in w.levels ) {
+				var li = l.getLayerInstance(ld);
+
+				r.invalidated = false;
+
+				if( li.autoTilesCache==null ) {
+					// Run all rules
 					ops.push({
-						label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-						cb: ()->{
-							li.applyRuleToFullLayer(r, false);
-						},
+						label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
+						cb: ()->{ li.applyAllRules(); }
 					});
 					affectedLayers.set(li,l);
-					// else if( r==null && li.autoTilesCache.exists(ruleUid) ) {
-					// 	// Removed rule
-					// 	ops.push({
-					// 		label: 'Removing rule tiles #$ruleUid from ${l.identifier}',
-					// 		cb: ()->{
-					// 			li.autoTilesCache.remove(ruleUid);
-					// 		}
-					// 	});
-					// 	affectedLayers.set(li,l);
-					// }
+				}
+				else {
+					// Apply rule
+					if( !r.isEmpty() ) {
+						var r = r;
+						ops.push({
+							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+							cb: ()->{ li.applyRuleToFullLayer(r, false); },
+						});
+						affectedLayers.set(li,l);
+					}
 				}
 			}
 		}
@@ -196,8 +186,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			App.LOG.general("Applying invalidated rules...");
 			new Progress(L.t._("Updating auto layers..."), ops, editor.levelRender.renderAll);
 		}
-
-		invalidatedRules = new Map();
 	}
 
 
@@ -1214,10 +1202,18 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 	#if debug
 	override function update() {
 		super.update();
+
+		// Debug rules invalidations
 		var all = [];
-		for(ruid in invalidatedRules.keys())
-			all.push(ruid);
-		// App.ME.debug( "invalidatedRules="+all, true);
+		for(rg in ld.autoRuleGroups) {
+			var group = [];
+			for(r in rg.rules)
+				if( r.invalidated )
+					group.push(r);
+			if( group.length>0 )
+				all.push(rg.name+": "+group.length+" rules ["+group.map(r->Std.string(r.uid)).join(",")+"]");
+		}
+		App.ME.debugPre(all.join("\n"), true);
 	}
 	#end
 }
