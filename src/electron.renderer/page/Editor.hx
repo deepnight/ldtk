@@ -1575,6 +1575,26 @@ class Editor extends Page {
 		});
 	}
 
+
+	function removePendingAction(id:String) {
+		var jPendingActions = jPage.find("#pendingActions");
+		jPendingActions.find('#$id').remove();
+	}
+
+	function addPendingAction(id:String, iconId:String, label:String, desc:String, cb:Void->Void) {
+		removePendingAction(id);
+		var jPendingActions = jPage.find("#pendingActions");
+		var jButton = new J('<button id="$id"/>');
+		jButton.appendTo(jPendingActions);
+		jButton.append('<span class="icon $iconId"/>');
+		jButton.append(label);
+		jButton.click(_->cb());
+		ui.Tip.attach(jButton, desc);
+
+		jButton.slideDown(0.2);
+	}
+
+
 	public function setWorldMode(v:Bool, usedMouseWheel=false) {
 		if( worldMode==v )
 			return;
@@ -2317,7 +2337,26 @@ class Editor extends Page {
 				updateAppBg();
 
 			case ProjectFlagChanged(flag,active):
-				N.debug(flag+" => "+active);
+				switch flag {
+					case RequireAutoLayerRebuild:
+						if( active )
+							addPendingAction(flag.getName(), "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
+								for(w in project.worlds)
+								for(l in w.levels)
+								for(li in l.layerInstances)
+									li.autoTilesCache = null;
+
+								checkAutoLayersCache( (_)->{
+									N.success("Done");
+									levelRender.invalidateAll();
+									worldRender.invalidateAll();
+									setProjectFlag(RequireAutoLayerRebuild, false);
+								});
+							});
+						else
+							removePendingAction(flag.getName());
+					case _:
+				}
 
 			case LayerDefChanged(defUid, contentInvalidated):
 				project.defs.initFastAccesses();
@@ -2335,8 +2374,10 @@ class Editor extends Page {
 
 			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 				updateTool();
-				project.recountIntGridValuesInAllLayerInstances();
-				project.setFlag(RequireAutoLayerRebuild, true);
+				if( groupChanged ) {
+					project.recountIntGridValuesInAllLayerInstances();
+					setProjectFlag(RequireAutoLayerRebuild, true);
+				}
 
 			case LayerDefIntGridValueAdded(_):
 				updateTool();

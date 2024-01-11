@@ -4605,6 +4605,7 @@ ul.sortable:not(.customHandle) {
 body.panning {
 	#worldDepths,
 	#editingOptions,
+	#pendingActions,
 	#mainPanel,
 	#permanentNotifications,
 	.entityInstanceEditor {
@@ -5226,6 +5227,62 @@ canvas#webgl {
 		}
 	}
 
+
+	#pendingActions {
+		position: absolute;
+		z-index: 90;
+		top: 0;
+		left: 40vw;
+
+		display: grid;
+		grid-auto-flow: column;
+		grid-auto-columns: min-content;
+		padding: 2px;
+		padding-top: 4px;
+
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
+		background-color: $bgDark;
+
+
+		&:empty {
+			display: none;
+		}
+
+		&:hover {
+			padding-top: 5px;
+		}
+
+		button {
+			margin: 0;
+			padding: 4px 8px;
+			font-size: 9pt;
+			white-space: nowrap;
+			box-shadow: 0px 0px 8px $red, 0px 4px 64px $red;
+
+			.icon {
+				margin-right: 4px;
+			}
+
+			animation: blink-animation 0.5s infinite;
+
+			@at-root #page.hasModal #pendingActions button {
+				animation: none;
+			}
+
+			@keyframes blink-animation {
+				from {
+					filter: brightness(1);
+				}
+				30% {
+					filter: brightness(2);
+				}
+				to {
+					filter: brightness(1);
+				}
+			}
+		}
+	}
 
 
 	#editingOptions {

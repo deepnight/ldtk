@@ -388,7 +388,7 @@ class Project {
 		return f!=null && flags.exists(f);
 	}
 
-	@:allow(page.Editor)
+	@:allow(page.Editor.setProjectFlag)
 	function setFlag(f:ldtk.Json.ProjectFlag, v:Bool) {
 		if( f!=null ) {
 			var old = hasFlag(f);
