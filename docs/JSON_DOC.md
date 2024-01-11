@@ -258,6 +258,7 @@ Value | Type | Description
 `checker`<br/><sup class="internal">*Only used by editor*</sup> | Enum | Checker mode<br/> Possible values: `None`, `Horizontal`, `Vertical`
 `flipX`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, allow rule to be matched by flipping its pattern horizontally
 `flipY`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, allow rule to be matched by flipping its pattern vertically
+`invalidated`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_1.5.2-green.svg)  | Bool | If TRUE, then the rule should be re-evaluated by the editor at one point
 `outOfBoundsValue`<br/><sup class="internal">*Only used by editor*</sup><br/> ![Generic badge](https://img.shields.io/badge/Added_0.9.0-gray.svg)  | Int&nbsp;*(can&nbsp;be&nbsp;`null`)* | Default IntGrid value when checking cells outside of level bounds
 `pattern`<br/><sup class="internal">*Only used by editor*</sup> | Array&nbsp;of&nbsp;Int | Rule pattern (size x size)
 `perlinActive`<br/><sup class="internal">*Only used by editor*</sup> | Bool | If TRUE, enable Perlin filtering to only apply rule on specific random area

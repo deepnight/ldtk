@@ -753,6 +753,7 @@
 				"checker",
 				"flipX",
 				"flipY",
+				"invalidated",
 				"pattern",
 				"perlinActive",
 				"perlinOctaves",
@@ -877,6 +878,12 @@
 					"description": "Tile X offset",
 					"type": [
 						"integer"
+					]
+				},
+				"invalidated": {
+					"description": "If TRUE, then the rule should be re-evaluated by the editor at one point",
+					"type": [
+						"boolean"
 					]
 				},
 				"xModulo": {
