@@ -1609,7 +1609,73 @@ class Editor extends Page {
 				removePendingAction("rebuildAutoLayers");
 			});
 		});
-}
+	}
+
+
+
+	public function applyInvalidatedRulesInAllLevels() {
+		var ops = [];
+		var affectedLayers : Map<data.inst.LayerInstance,data.Level> = new Map();
+
+		for(ld in project.defs.layers)
+		for(rg in ld.autoRuleGroups)
+		for(r in rg.rules) {
+			if( !r.invalidated )
+				continue;
+
+			for( w in project.worlds )
+			for( l in w.levels ) {
+				var li = l.getLayerInstance(ld);
+
+				r.invalidated = false;
+
+				if( li.autoTilesCache==null ) {
+					// Run all rules
+					ops.push({
+						label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
+						cb: ()->{ li.applyAllRules(); }
+					});
+					affectedLayers.set(li,l);
+				}
+				else {
+					// Apply rule
+					if( !r.isEmpty() ) {
+						ops.push({
+							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+							cb: ()->{ li.applyRuleToFullLayer(r, false); },
+						});
+						affectedLayers.set(li,l);
+					}
+				}
+			}
+		}
+
+		// Apply "break on match" cascading effect in changed layers
+		var affectedLevels : Map<data.Level, Bool> = new Map();
+		for(li in affectedLayers.keys()) {
+			affectedLevels.set( affectedLayers.get(li), true );
+			ops.push({
+				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
+				cb: li.applyBreakOnMatchesEverywhere.bind(),
+			});
+		}
+
+		// Refresh world renders & break caches
+		for(l in affectedLevels.keys())
+			ops.push({
+				label: 'Refreshing world render for ${l.identifier}...',
+				cb: ()->{
+					worldRender.invalidateLevelRender(l);
+					invalidateLevelCache(l);
+				},
+			});
+
+		if( ops.length>0 ) {
+			App.LOG.general("Applying invalidated rules...");
+			new ui.modal.Progress(L.t._("Updating auto layers..."), ops, levelRender.renderAll);
+		}
+	}
+
 
 	// public function invalidateLayerRules(layerDefUid:Int) {
 	// 	// if( active )
@@ -2298,6 +2364,8 @@ class Editor extends Page {
 			case LayerRuleGroupCollapseChanged(rg):
 
 			case BeforeProjectSaving:
+				applyInvalidatedRulesInAllLevels();
+
 			case ProjectSaved:
 
 			case ProjectSelected:

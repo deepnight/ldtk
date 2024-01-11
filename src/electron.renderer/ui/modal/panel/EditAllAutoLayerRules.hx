@@ -45,9 +45,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 						this.li = li;
 				updateFullPanel();
 
-			case BeforeProjectSaving:
-				applyInvalidatedRulesInAllLevels();
-
 			case LayerRuleChanged(r):
 				invalidateRuleAndOnesBelow(r);
 				updateRule(r);
@@ -98,8 +95,8 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 	override function onClose() {
 		super.onClose();
-		applyInvalidatedRulesInAllLevels();
 		editor.levelRender.clearTemp();
+		editor.applyInvalidatedRulesInAllLevels();
 	}
 
 	inline function invalidateRule(r:data.def.AutoLayerRuleDef) {
@@ -121,71 +118,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			else if( isAfter )
 				invalidateRule(or);
 		} );
-	}
-
-
-	function applyInvalidatedRulesInAllLevels() {
-		var ops = [];
-		var affectedLayers : Map<data.inst.LayerInstance,data.Level> = new Map();
-
-		// Apply edited rules to all other levels
-		for(rg in ld.autoRuleGroups)
-		for(r in rg.rules) {
-			if( !r.invalidated )
-				continue;
-
-			for( w in project.worlds )
-			for( l in w.levels ) {
-				var li = l.getLayerInstance(ld);
-
-				r.invalidated = false;
-
-				if( li.autoTilesCache==null ) {
-					// Run all rules
-					ops.push({
-						label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
-						cb: ()->{ li.applyAllRules(); }
-					});
-					affectedLayers.set(li,l);
-				}
-				else {
-					// Apply rule
-					if( !r.isEmpty() ) {
-						var r = r;
-						ops.push({
-							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-							cb: ()->{ li.applyRuleToFullLayer(r, false); },
-						});
-						affectedLayers.set(li,l);
-					}
-				}
-			}
-		}
-
-		// Apply "break on match" cascading effect in changed layers
-		var affectedLevels : Map<data.Level, Bool> = new Map();
-		for(li in affectedLayers.keys()) {
-			affectedLevels.set( affectedLayers.get(li), true );
-			ops.push({
-				label: 'Applying break on matches on ${affectedLayers.get(li).identifier}.${li.def.identifier}',
-				cb: li.applyBreakOnMatchesEverywhere.bind(),
-			});
-		}
-
-		// Refresh world renders & break caches
-		for(l in affectedLevels.keys())
-			ops.push({
-				label: 'Refreshing world render for ${l.identifier}...',
-				cb: ()->{
-					editor.worldRender.invalidateLevelRender(l);
-					editor.invalidateLevelCache(l);
-				},
-			});
-
-		if( ops.length>0 ) {
-			App.LOG.general("Applying invalidated rules...");
-			new Progress(L.t._("Updating auto layers..."), ops, editor.levelRender.renderAll);
-		}
 	}
 
 

@@ -67,15 +67,11 @@ class DebugMenu extends ui.modal.ContextMenu {
 						label: L.untranslated("Rebuild all auto-layers"),
 						show: Editor.exists,
 						cb: ()->{
-							for(w in project.worlds)
-							for(l in w.levels)
-							for(li in l.layerInstances)
-								li.autoTilesCache = null;
-							editor.checkAutoLayersCache( (_)->{
-								N.success("Done");
-								editor.levelRender.invalidateAll();
-								editor.worldRender.invalidateAll();
-							});
+							for(ld in project.defs.layers)
+							for(rg in ld.autoRuleGroups)
+							for(r in rg.rules)
+								r.invalidated = true;
+							editor.applyInvalidatedRulesInAllLevels();
 						}
 					});
 
