@@ -2022,7 +2022,7 @@ class Editor extends Page {
 					invalidateAllLevelsCache();
 
 			case LayerDefSorted: invalidateAllLevelsCache();
-			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 			case LayerDefIntGridValueAdded(defUid,value):
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				if( used ) {
@@ -2323,7 +2323,7 @@ class Editor extends Page {
 				updateGuide();
 				updateLayerList();
 
-			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 				updateTool();
 
 			case LayerDefIntGridValueAdded(_):

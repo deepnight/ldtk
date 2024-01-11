@@ -1289,4 +1289,12 @@ class Project {
 		var td = defs.getTilesetDef(r.tilesetUid);
 		return td!=null ? td.createTileHtmlImageFromRect(r, sizePx) : null;
 	}
+
+
+	public function recountIntGridValuesInAllLayerInstances() {
+		for(w in worlds)
+		for(l in w.levels)
+		for(li in l.layerInstances)
+			li.recountAllIntGridValues();
+	}
 }

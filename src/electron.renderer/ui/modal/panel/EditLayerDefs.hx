@@ -206,7 +206,7 @@ class EditLayerDefs extends ui.modal.Panel {
 			case LayerDefSorted:
 				updateList();
 
-			case LayerDefIntGridValuesSorted(defUid):
+			case LayerDefIntGridValuesSorted(defUid,groupChanged):
 				updateForm();
 
 			case LayerDefIntGridValueAdded(defUid,value):
@@ -308,11 +308,8 @@ class EditLayerDefs extends ui.modal.Panel {
 			}
 		}
 		i.onChange = ()->{
-			for(w in project.worlds)
-			for(l in w.levels)
-			for(li in l.layerInstances)
-				li.recountAllIntGridValues();
-			
+			project.recountIntGridValuesInAllLayerInstances();
+
 			editor.ge.emit( LayerDefChanged(cur.uid, false) );
 
 			for(ld in project.defs.layers)
@@ -762,7 +759,7 @@ class EditLayerDefs extends ui.modal.Panel {
 							return; // Prevent double "onSort" call (one for From, one for To)
 
 						var moved = cur.sortIntGridValueDef(valueId, fromGroupUid, toGroupUid, ev.oldIndex, ev.newIndex);
-						editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
+						editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid, moved.groupUid!=fromGroupUid) );
 					});
 				}
 
@@ -773,7 +770,7 @@ class EditLayerDefs extends ui.modal.Panel {
 						jAllGroups,
 						(ev:sortablejs.Sortable.SortableDragEvent)->{
 							var moved = cur.sortIntGridValueGroupDef(ev.oldIndex-1, ev.newIndex-1);
-							editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid) );
+							editor.ge.emit( LayerDefIntGridValuesSorted(cur.uid, false) );
 						},
 						{ onlyDraggables: true }
 					);
