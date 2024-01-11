@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
-        haxe: [4.2.4]
+        haxe: [4.3.3]
       fail-fast: true
     runs-on: windows-latest
 
