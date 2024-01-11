@@ -5,6 +5,9 @@
 - Updated macOS icons.
 - Fixed "Kill Tiles" layer option to work as intended with IntGrid layers.
 - Fixed a minor visual bug with neighbour levels rendering.
+- Fixed support for layer opacity settings in neighbour levels rendering.
+- Fixed a render bug when resizing levels.
+- Fixed WorldDepth value in automatic level names pattern.
 - Various minor optimizations.
 - Various UI fixes.
 
