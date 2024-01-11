@@ -35,8 +35,12 @@ class Lang {
 	}
 
 	public static function untranslated(str:Dynamic) : LocaleString {
-		init();
-		return t.untranslated(str);
+		if( str==null )
+			return null;
+		else {
+			init();
+			return t.untranslated(str);
+		}
 	}
 
 	public static function getLayerType(type:ldtk.Json.LayerType) : LocaleString {
