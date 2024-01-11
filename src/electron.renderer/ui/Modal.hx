@@ -178,7 +178,7 @@ class Modal extends dn.Process {
 					e.onAnotherModalClose();
 		}
 		else
-			App.ME.jBody.removeClass("hasModal");
+			App.ME.jPage.removeClass("hasModal");
 
 	}
 
