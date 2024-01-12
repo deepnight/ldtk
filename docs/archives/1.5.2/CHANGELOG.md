@@ -1,7 +1,8 @@
 # 1.5.2
 
 - Fixed a bug with auto-layers on level edges.
-- Fixed a crash when loading pre-1.0 LDtk projects
+- Fixed a crash when loading pre-1.0 LDtk projects.
+- Fixed neighbour tiles sticking around.
 
 # 1.5.1
 
