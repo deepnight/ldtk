@@ -1588,7 +1588,10 @@ class Editor extends Page {
 		jButton.appendTo(jPendingActions);
 		jButton.append('<span class="icon $iconId"/>');
 		jButton.append(label);
-		jButton.click(_->cb());
+		jButton.click(_->{
+			removePendingAction(className);
+			cb();
+		});
 		ui.Tip.attach(jButton, desc);
 
 		jButton.slideDown(0.2);
@@ -1606,7 +1609,6 @@ class Editor extends Page {
 				N.success("Done");
 				levelRender.invalidateAll();
 				worldRender.invalidateAll();
-				removePendingAction("rebuildAutoLayers");
 			});
 		});
 	}
@@ -1675,27 +1677,6 @@ class Editor extends Page {
 			new ui.modal.Progress(L.t._("Updating auto layers..."), ops, levelRender.renderAll);
 		}
 	}
-
-
-	// public function invalidateLayerRules(layerDefUid:Int) {
-	// 	// if( active )
-	// 		addPendingAction("layerRules", "autoLayer", "Rebuild all auto-layers", "All project auto-layers need to be updated to adapt to your latest changes.", ()->{
-	// 			for(w in project.worlds)
-	// 			for(l in w.levels)
-	// 			for(li in l.layerInstances)
-	// 				if( li.layerDefUid==layerDefUid )
-	// 					li.autoTilesCache = null;
-
-	// 			checkAutoLayersCache( (_)->{
-	// 				N.success("Done");
-	// 				levelRender.invalidateAll();
-	// 				worldRender.invalidateAll();
-	// 				// setProjectFlag(RequireAutoLayerRebuild, false);
-	// 			});
-	// 		});
-	// 	// else
-	// 	// 	removePendingAction(flag.getName());
-	// }
 
 
 	public function setWorldMode(v:Bool, usedMouseWheel=false) {
