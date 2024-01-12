@@ -8,7 +8,7 @@ typedef WorldLevelRender = {
 	var bgWrapper: h2d.Object;
 	var outline: h2d.Graphics;
 	var render: h2d.Object;
-	var edgeLayers : Map<Int, h2d.TileGroup>;
+	var edgeLayers : Null< Map<Int, h2d.TileGroup> >;
 	var fadeMask : h2d.Bitmap;
 	var identifier: h2d.ScaleGrid;
 
@@ -333,9 +333,14 @@ class WorldRender extends dn.Process {
 
 	public function invalidateNearbyLevels(near:data.Level) {
 		if( near!=null )
-			for(other in curWorld.levels)
-				if( other!=near && other.touches(near) )
+			for(other in curWorld.levels) {
+				if( other==near )
+					continue;
+				if( other.touches(near) )
 					invalidateLevelRender(other);
+				else if( getWorldLevel(other).edgeLayers!=null )
+					invalidateLevelRender(other);
+			}
 	}
 
 	public inline function invalidateLevelRender(l:data.Level) {
@@ -413,7 +418,7 @@ class WorldRender extends dn.Process {
 				rect: WorldRect.fromLevel(l),
 				bgWrapper: new h2d.Object(),
 				render : new h2d.Object(),
-				edgeLayers: new Map(),
+				edgeLayers: null,
 				outline : new h2d.Graphics(),
 				fadeMask: new h2d.Bitmap( h2d.Tile.fromColor(l.getBgColor(),1,1, 0.3) ),
 				identifier : new h2d.ScaleGrid(Assets.elements.getTile(D.elements.fieldBg), 2, 2),
@@ -765,7 +770,12 @@ class WorldRender extends dn.Process {
 		wl.bgWrapper.removeChildren();
 		wl.outline.clear();
 		wl.render.removeChildren();
-		wl.edgeLayers = new Map();
+
+		if( wl.edgeLayers!=null ) {
+			for( td in wl.edgeLayers )
+				td.clear();
+			wl.edgeLayers = null;
+		}
 	}
 
 
@@ -844,6 +854,8 @@ class WorldRender extends dn.Process {
 					return;
 
 				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
+				if( wl.edgeLayers==null )
+					wl.edgeLayers = new Map();
 				wl.edgeLayers.set(li.layerDefUid, edgeTg);
 				// NOTE: layer offsets is already included in tiles render methods
 
@@ -968,7 +980,7 @@ class WorldRender extends dn.Process {
 		// Update edge layers opacity based on active one
 		for(wl in worldLevels)
 		for(li in editor.curLevel.layerInstances) {
-			if( !wl.edgeLayers.exists(li.layerDefUid) )
+			if( wl.edgeLayers==null || !wl.edgeLayers.exists(li.layerDefUid) )
 				continue;
 
 			if( li==editor.curLayerInstance )
