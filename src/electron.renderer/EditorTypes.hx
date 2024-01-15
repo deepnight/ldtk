@@ -308,4 +308,5 @@ enum AppCommand {
 enum DebugFlag {
 	F_MainDebug;
 	F_IntGridUseCounts;
+	F_ProjectImgCache;
 }

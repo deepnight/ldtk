@@ -114,12 +114,17 @@ class Level {
 				var nears = _world.levels.filter( (ol)->
 					ol!=this && getBoundsDist(ol)==0
 					&& ol.worldDepth==worldDepth
-					&& !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
-						&& ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY ) )
+					// && !( ( ol.worldX>=worldX+pxWid || ol.worldX+ol.pxWid<=worldX )
+						// && ( ol.worldY>=worldY+pxHei || ol.worldY+ol.pxHei<=worldY ) )
 					&& !dn.Lib.rectangleOverlaps(worldX,worldY,pxWid,pxHei, ol.worldX,ol.worldY,ol.pxWid,ol.pxHei)
 				);
 				nears.map( (l)->{
-					var dir = l.worldX>=worldX+pxWid ? "e"
+					var dir =
+						l.worldX == worldX+pxWid  &&  l.worldY == worldY+pxHei ? "se"
+						: l.worldX+l.pxWid == worldX  &&  l.worldY == worldY+pxHei ? "sw"
+						: l.worldX == worldX+pxWid  &&  l.worldY+l.pxHei == worldY ? "ne"
+						: l.worldX+l.pxWid == worldX  &&  l.worldY+l.pxHei == worldY ? "nw"
+						: l.worldX>=worldX+pxWid ? "e"
 						: l.worldX+l.pxWid<=worldX ? "w"
 						: l.worldY+l.pxHei<=worldY ? "n"
 						: "s";

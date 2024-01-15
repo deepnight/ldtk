@@ -131,6 +131,16 @@ class ContextMenu extends ui.Modal {
 			ev.preventDefault();
 			_open(ev);
 		});
+
+		// Emulated right click on macOS
+		if( App.isMac() )
+			jTarget.on("mousedown.context", (ev:js.jquery.Event)->{
+				if( ev.button==0 && App.ME.isMacCtrlDown() ) {
+					ev.stopPropagation();
+					ev.preventDefault();
+					_open(ev);
+				}
+			});
 	}
 
 

@@ -229,7 +229,7 @@ class Project {
 
 	public function fixUniqueIdStr(baseId:String, ?styleOverride:ldtk.Json.IdentifierStyle, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId, styleOverride==null ? identifierStyle : styleOverride);
-		if( baseId=="_" )
+		if( baseId=="_" || baseId==null )
 			baseId = "Unnamed";
 
 		if( isUnique(baseId) )
@@ -920,6 +920,39 @@ class Project {
 	}
 
 
+	public function getOrLoadEmbedImageSub(id:ldtk.Json.EmbedAtlas, x:Int, y:Int, w:Int, h:Int) : Null<data.DataTypes.CachedImage> {
+		try {
+			var thumbnailPath = id.getName() + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
+			if( !imageCache.exists(thumbnailPath) ) {
+				// Load original image
+				var cachedImg = getOrLoadEmbedImage(id);
+				if( cachedImg==null )
+					return null;
+
+				// Create sub tile cache
+				var subPixels = cachedImg.pixels.sub(x, y, w, h);
+				var pngBytes = subPixels.clone().toPNG();
+				var tex = h3d.mat.Texture.fromPixels(subPixels);
+				var b64 = haxe.crypto.Base64.encode(pngBytes);
+				imageCache.set( thumbnailPath, {
+					fileName: cachedImg.fileName,
+					relPath: cachedImg.relPath,
+					bytes: pngBytes,
+					base64: b64,
+					pixels: subPixels,
+					tex: tex,
+				});
+			}
+
+			return imageCache.get(thumbnailPath);
+		}
+		catch( e:Dynamic ) {
+			App.LOG.error(e);
+			return null;
+		}
+	}
+
+
 	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
 		try {
 			if( !imageCache.exists(relPath) ) {
@@ -947,7 +980,41 @@ class Project {
 					tex: texture,
 				});
 			}
+
 			return imageCache.get(relPath);
+		}
+		catch( e:Dynamic ) {
+			App.LOG.error(e);
+			return null;
+		}
+	}
+
+
+	public function getOrLoadImageSub(relPath:String, x:Int, y:Int, w:Int, h:Int) : Null<data.DataTypes.CachedImage> {
+		try {
+			var thumbnailPath = relPath + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
+			if( !imageCache.exists(thumbnailPath) ) {
+				// Load original image
+				var cachedImg = getOrLoadImage(relPath);
+				if( cachedImg==null )
+					return null;
+
+				// Create sub tile cache
+				var subPixels = cachedImg.pixels.sub(x, y, w, h);
+				var pngBytes = subPixels.clone().toPNG();
+				var tex = h3d.mat.Texture.fromPixels(subPixels);
+				var b64 = haxe.crypto.Base64.encode(pngBytes);
+				imageCache.set( thumbnailPath, {
+					fileName: cachedImg.fileName,
+					relPath: cachedImg.relPath,
+					bytes: pngBytes,
+					base64: b64,
+					pixels: subPixels,
+					tex: tex,
+				});
+			}
+
+			return imageCache.get(thumbnailPath);
 		}
 		catch( e:Dynamic ) {
 			App.LOG.error(e);
@@ -1188,6 +1255,7 @@ class Project {
 		if( id==null )
 			return null;
 
+		id = Std.string(id);
 		id = StringTools.trim(id);
 
 		// Replace any invalid char with "_"

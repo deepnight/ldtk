@@ -353,6 +353,8 @@ class Definitions {
 			id = "Entity"+(idx++);
 		ed.identifier = id;
 
+		_project.tidy();
+
 		return ed;
 	}
 
