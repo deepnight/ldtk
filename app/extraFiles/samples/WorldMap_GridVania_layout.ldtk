@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.5.2",
+		"appVersion": "1.5.3",
 		"url": "https://ldtk.io"
 	},
 	"iid": "a39fb1b0-7820-11ed-b6fd-87f9a01f3d6b",
-	"jsonVersion": "1.5.2",
-	"appBuildId": 473701,
+	"jsonVersion": "1.5.3",
+	"appBuildId": 473702,
 	"nextUid": 152,
 	"identifierStyle": "Capitalize",
 	"toc": [{
@@ -2814,7 +2814,13 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "dir": ">" }, { "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "dir": "s" }, { "levelIid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238", "dir": "w" }, { "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "e" } ]
+			"__neighbours": [
+				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "dir": ">" },
+				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "dir": "s" },
+				{ "levelIid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238", "dir": "w" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "e" },
+				{ "levelIid": "07caf540-66b0-11ec-a595-a55a7e13679d", "dir": "se" }
+			]
 		},
 		{
 			"identifier": "Cross_roads",
@@ -4162,6 +4168,7 @@
 				{ "levelIid": "a367c3b0-66b0-11ec-9cd7-91690c910c97", "dir": "n" },
 				{ "levelIid": "a36a34b0-66b0-11ec-9cd7-09ebc042e238", "dir": "w" },
 				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "dir": "e" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "ne" },
 				{ "levelIid": "07caf540-66b0-11ec-a595-a55a7e13679d", "dir": "e" }
 			]
 		},
@@ -9428,7 +9435,7 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelIid": "9312a0d0-66b0-11ec-a595-a934707bd447", "dir": ">" }, { "levelIid": "a36c5790-66b0-11ec-9cd7-0d08d7991930", "dir": "s" }, { "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "dir": "n" } ]
+			"__neighbours": [ { "levelIid": "9312a0d0-66b0-11ec-a595-a934707bd447", "dir": ">" }, { "levelIid": "a36c5790-66b0-11ec-9cd7-0d08d7991930", "dir": "s" }, { "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "dir": "n" }, { "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "dir": "ne" } ]
 		},
 		{
 			"identifier": "Sewers_trash",
@@ -14469,7 +14476,13 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465", "dir": "e" }, { "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "w" }, { "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "dir": "s" }, { "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "dir": "s" } ]
+			"__neighbours": [
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "dir": "sw" },
+				{ "levelIid": "a371aec0-66b0-11ec-9cd7-6f9e87cc2465", "dir": "e" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "w" },
+				{ "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "dir": "s" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "dir": "s" }
+			]
 		},
 		{
 			"identifier": "Shop",
@@ -19558,6 +19571,7 @@
 			],
 			"__neighbours": [
 				{ "levelIid": "9312a0d0-66b0-11ec-a595-a934707bd447", "dir": ">" },
+				{ "levelIid": "a36b6d30-66b0-11ec-9cd7-8145d2a69a56", "dir": "sw" },
 				{ "levelIid": "a36d41f0-66b0-11ec-9cd7-e962574817d4", "dir": "e" },
 				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "dir": "w" },
 				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "dir": "n" },
@@ -20343,6 +20357,7 @@
 			],
 			"__neighbours": [
 				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "dir": ">" },
+				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "dir": "ne" },
 				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "dir": "w" },
 				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "dir": "s" },
 				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "n" },
@@ -23091,8 +23106,10 @@
 			"__neighbours": [
 				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "dir": ">" },
 				{ "levelIid": "a367c3b0-66b0-11ec-9cd7-91690c910c97", "dir": "w" },
+				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "dir": "sw" },
 				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "dir": "e" },
 				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "dir": "s" },
+				{ "levelIid": "a3730e50-66b0-11ec-9cd7-65c84b0f9baa", "dir": "se" },
 				{ "levelIid": "07caf540-66b0-11ec-a595-a55a7e13679d", "dir": "s" }
 			]
 		},
@@ -23837,7 +23854,13 @@
 					"entityInstances": []
 				}
 			],
-			"__neighbours": [ { "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "dir": "n" }, { "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "dir": "s" }, { "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "dir": "w" }, { "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "dir": "e" } ]
+			"__neighbours": [
+				{ "levelIid": "a36e7a70-66b0-11ec-9cd7-67ffb406aba0", "dir": "n" },
+				{ "levelIid": "a3707640-66b0-11ec-9cd7-59efc6b24075", "dir": "s" },
+				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "dir": "w" },
+				{ "levelIid": "a3727210-66b0-11ec-9cd7-aba0184f5034", "dir": "nw" },
+				{ "levelIid": "a37690c0-66b0-11ec-9cd7-5f87e3c093eb", "dir": "e" }
+			]
 		},
 		{
 			"identifier": "Flooded_rooms",
@@ -30081,6 +30104,7 @@
 			],
 			"__neighbours": [
 				{ "levelIid": "a36f8be0-66b0-11ec-9cd7-a9c628ac47cf", "dir": ">" },
+				{ "levelIid": "a367c3b0-66b0-11ec-9cd7-91690c910c97", "dir": "nw" },
 				{ "levelIid": "a36811d0-66b0-11ec-9cd7-4367627fb745", "dir": "w" },
 				{ "levelIid": "a36fda00-66b0-11ec-9cd7-ffa8f8d0b484", "dir": "s" },
 				{ "levelIid": "a370eb70-66b0-11ec-9cd7-ef1d13410308", "dir": "e" },
