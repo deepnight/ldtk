@@ -229,7 +229,7 @@ class Project {
 
 	public function fixUniqueIdStr(baseId:String, ?styleOverride:ldtk.Json.IdentifierStyle, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId, styleOverride==null ? identifierStyle : styleOverride);
-		if( baseId=="_" )
+		if( baseId=="_" || baseId==null )
 			baseId = "Unnamed";
 
 		if( isUnique(baseId) )
