@@ -920,13 +920,8 @@ class Project {
 	}
 
 
-	public function getOrLoadImage(relPath:String,x = -1, y = -1, w = -1, h = -1) : Null<data.DataTypes.CachedImage> {
+	public function getOrLoadImage(relPath:String, x=-1, y=-1, w=-1, h=-1) : Null<data.DataTypes.CachedImage> {
 		try {
-			var thumbnailPath = "";
-			if(x != -1 && y != -1 && w != -1 && h != -1) {
-				thumbnailPath = relPath + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
-			} 
-
 			if( !imageCache.exists(relPath) ) {
 				// Load it from the disk
 				App.LOG.add("cache", 'Caching image $relPath...');
@@ -951,8 +946,14 @@ class Project {
 					pixels: pixels,
 					tex: texture,
 				});
-				if(thumbnailPath != "") {
-					var subPixels = pixels.sub(x, y, w, h);	
+
+				// Store thumbnail to cache
+				var thumbnailPath = "";
+				if( x!=-1 && y!=-1 && w!=-1 && h!=-1 )
+					thumbnailPath = relPath + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
+
+				if( thumbnailPath!="" ) {
+					var subPixels = pixels.sub(x, y, w, h);
 					var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
 					imageCache.set( thumbnailPath, {
 						fileName: dn.FilePath.extractFileWithExt(relPath),
@@ -965,7 +966,7 @@ class Project {
 					relPath = thumbnailPath;
 				}
 			}
-			
+
 			return imageCache.get(relPath);
 		}
 		catch( e:Dynamic ) {
