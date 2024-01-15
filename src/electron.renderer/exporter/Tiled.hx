@@ -1,5 +1,6 @@
 package exporter;
 
+import haxe.Json;
 import ldtk.Json;
 
 
@@ -145,6 +146,44 @@ class Tiled extends Exporter {
 			image.set("source", relPath);
 			image.set("width", ""+td.pxWid);
 			image.set("height", ""+td.pxHei);
+
+			if ( td.hasAnyTileCustomData() ) {
+				for ( tileId in 0...count ) {
+					var tileData = td.getTileCustomData(tileId);
+					if ( tileData != null ) {
+						var tile = Xml.createElement("tile");
+						tile.set("id", "" + tileId);
+						var properties = Xml.createElement("properties");
+						var dataFields = Json.parse(tileData);
+						for ( key in Reflect.fields(dataFields) ) {
+							var value = Reflect.field(dataFields, key);
+							if ( value is Array ) continue;
+							var property = Xml.createElement("property");
+							property.set("name", key);
+							switch ( Type.typeof(value) ) {
+								case TBool:
+									property.set("type", "bool");
+								case TInt:
+									property.set("type", "int");
+								case TFloat:
+									property.set("type", "float");
+								case TObject:
+									property = null;
+								case _:
+							}
+							if ( property != null ) {
+								property.set("value", ""+value);
+								properties.addChild(property);
+							}
+						}
+						if ( properties.firstChild() != null ) {
+							log.add("tileset", '  Adding custom properties for tile: ${tileId}');
+							tile.addChild(properties);
+							tileset.addChild(tile);
+						}
+					}
+				}
+			}
 
 			tilesetGids.set(td.uid, gid);
 			gid+=count;
