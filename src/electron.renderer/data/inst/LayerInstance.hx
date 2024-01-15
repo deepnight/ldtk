@@ -737,6 +737,10 @@ class LayerInstance {
 
 
 	/** TILES *******************/
+	inline function getGridTileColor(tileId:Int) : dn.Col {
+		var td = _project.defs.getTilesetDef( getTilesetUid() );
+		return td!=null ? td.getAverageTileColor(tileId) : White;
+	}
 
 	public function addGridTile(cx:Int, cy:Int, tileId:Null<Int>, flips=0, stack:Bool, useAsyncRender=true) {
 		if( !isValid(cx,cy) )
@@ -755,7 +759,7 @@ class LayerInstance {
 		}
 
 		if( useAsyncRender )
-			asyncPaint(cx,cy, def.getGridTileColor(tileId));
+			asyncPaint(cx,cy, getGridTileColor(tileId));
 	}
 
 
