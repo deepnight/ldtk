@@ -1188,6 +1188,7 @@ class Project {
 		if( id==null )
 			return null;
 
+		id = Std.string(id);
 		id = StringTools.trim(id);
 
 		// Replace any invalid char with "_"
