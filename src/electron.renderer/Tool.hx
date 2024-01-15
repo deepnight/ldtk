@@ -98,6 +98,8 @@ class Tool<T> extends dn.Process {
 		switch button {
 			case 0:
 				curMode = Add;
+				if( App.ME.isMacCtrlDown() )
+					curMode = Remove;
 
 			case 1:
 				curMode = Remove;
