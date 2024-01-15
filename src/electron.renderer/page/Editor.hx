@@ -2898,6 +2898,52 @@ class Editor extends Page {
 	}
 
 
+	function updateDebug() {
+		// IntGrid use counts debugging
+		if( App.ME.hasDebugFlag(F_IntGridUseCounts) ) {
+			App.ME.clearDebug();
+			@:privateAccess
+			for(li in curLevel.layerInstances) {
+				if( li.def.type==IntGrid ) {
+					// Show cached area counts
+					App.ME.debugPre(li.toString());
+					for(iv in li.def.intGridValues) {
+						var n = 0;
+						if( li.areaIntGridUseCount.exists(iv.value) )
+							for(areaCount in li.areaIntGridUseCount.get(iv.value))
+								n++;
+						var nLayer = li.layerIntGridUseCount.get(iv.value);
+						if( n>0 )
+							App.ME.debugPre('  #${iv.value} => $n area (layer count=$nLayer)', n<=0 ? dn.Col.midGray() : dn.Col.white());
+					}
+				}
+				if( li.def.isAutoLayer() ) {
+					// Count relevant rules
+					for(rg in li.def.autoRuleGroups) {
+						var n = 0;
+						for(r in rg.rules)
+							if( r.isRelevantInLayer(li) )
+								n++;
+
+						if( n>0 )
+							App.ME.debugPre("  Group "+rg.toString()+": "+n+" rule(s)", "#56b0ff");
+					}
+				}
+			}
+		}
+
+		// Project images cache
+		if( App.ME.hasDebugFlag(F_ProjectImgCache) ) {
+			App.ME.clearDebug();
+			@:privateAccess
+			for(c in project.imageCache.keyValueIterator()) {
+				var cache = project.imageCache.get(c.key);
+				App.ME.debugPre('${c.key}: (${cache.pixels.width}x${cache.pixels.height})');
+			}
+		}
+	}
+
+
 	override function postUpdate() {
 		super.postUpdate();
 		ge.onEndOfFrame();
@@ -2940,37 +2986,6 @@ class Editor extends Page {
 		if( settings.v.zenMode && cd.has("pendingZenModeReHide") && !cd.has("zenModeReHideLock") )
 			setZenModeReveal(false);
 
-		// IntGrid use counts debugging
-		if( App.ME.hasDebugFlag(F_IntGridUseCounts) ) {
-			App.ME.clearDebug();
-			@:privateAccess
-			for(li in curLevel.layerInstances) {
-				if( li.def.type==IntGrid ) {
-					// Show cached area counts
-					App.ME.debugPre(li.toString());
-					for(iv in li.def.intGridValues) {
-						var n = 0;
-						if( li.areaIntGridUseCount.exists(iv.value) )
-							for(areaCount in li.areaIntGridUseCount.get(iv.value))
-								n++;
-						var nLayer = li.layerIntGridUseCount.get(iv.value);
-						if( n>0 )
-							App.ME.debugPre('  #${iv.value} => $n area (layer count=$nLayer)', n<=0 ? dn.Col.midGray() : dn.Col.white());
-					}
-				}
-				if( li.def.isAutoLayer() ) {
-					// Count relevant rules
-					for(rg in li.def.autoRuleGroups) {
-						var n = 0;
-						for(r in rg.rules)
-							if( r.isRelevantInLayer(li) )
-								n++;
-
-						if( n>0 )
-							App.ME.debugPre("  Group "+rg.toString()+": "+n+" rule(s)", "#56b0ff");
-					}
-				}
-			}
-		}
+		updateDebug();
 	}
 }
