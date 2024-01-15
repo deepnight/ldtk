@@ -920,7 +920,40 @@ class Project {
 	}
 
 
-	public function getOrLoadImage(relPath:String, x=-1, y=-1, w=-1, h=-1) : Null<data.DataTypes.CachedImage> {
+	public function getOrLoadEmbedImageSub(id:ldtk.Json.EmbedAtlas, x:Int, y:Int, w:Int, h:Int) : Null<data.DataTypes.CachedImage> {
+		try {
+			var thumbnailPath = id.getName() + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
+			if( !imageCache.exists(thumbnailPath) ) {
+				// Load original image
+				var cachedImg = getOrLoadEmbedImage(id);
+				if( cachedImg==null )
+					return null;
+
+				// Create sub tile cache
+				var subPixels = cachedImg.pixels.sub(x, y, w, h);
+				var pngBytes = subPixels.clone().toPNG();
+				var tex = h3d.mat.Texture.fromPixels(subPixels);
+				var b64 = haxe.crypto.Base64.encode(pngBytes);
+				imageCache.set( thumbnailPath, {
+					fileName: cachedImg.fileName,
+					relPath: cachedImg.relPath,
+					bytes: pngBytes,
+					base64: b64,
+					pixels: subPixels,
+					tex: tex,
+				});
+			}
+
+			return imageCache.get(thumbnailPath);
+		}
+		catch( e:Dynamic ) {
+			App.LOG.error(e);
+			return null;
+		}
+	}
+
+
+	public function getOrLoadImage(relPath:String) : Null<data.DataTypes.CachedImage> {
 		try {
 			if( !imageCache.exists(relPath) ) {
 				// Load it from the disk
@@ -946,28 +979,42 @@ class Project {
 					pixels: pixels,
 					tex: texture,
 				});
-
-				// Store thumbnail to cache
-				var thumbnailPath = "";
-				if( x!=-1 && y!=-1 && w!=-1 && h!=-1 )
-					thumbnailPath = relPath + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
-
-				if( thumbnailPath!="" ) {
-					var subPixels = pixels.sub(x, y, w, h);
-					var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
-					imageCache.set( thumbnailPath, {
-						fileName: dn.FilePath.extractFileWithExt(relPath),
-						relPath: thumbnailPath,
-						bytes: null,
-						base64: b64,
-						pixels: subPixels,
-						tex: null,
-					});
-					relPath = thumbnailPath;
-				}
 			}
 
 			return imageCache.get(relPath);
+		}
+		catch( e:Dynamic ) {
+			App.LOG.error(e);
+			return null;
+		}
+	}
+
+
+	public function getOrLoadImageSub(relPath:String, x:Int, y:Int, w:Int, h:Int) : Null<data.DataTypes.CachedImage> {
+		try {
+			var thumbnailPath = relPath + "_" + Std.string(x) + "_" + Std.string(y) + "_" + Std.string(w) + "_" + Std.string(h);
+			if( !imageCache.exists(thumbnailPath) ) {
+				// Load original image
+				var cachedImg = getOrLoadImage(relPath);
+				if( cachedImg==null )
+					return null;
+
+				// Create sub tile cache
+				var subPixels = cachedImg.pixels.sub(x, y, w, h);
+				var pngBytes = subPixels.clone().toPNG();
+				var tex = h3d.mat.Texture.fromPixels(subPixels);
+				var b64 = haxe.crypto.Base64.encode(pngBytes);
+				imageCache.set( thumbnailPath, {
+					fileName: cachedImg.fileName,
+					relPath: cachedImg.relPath,
+					bytes: pngBytes,
+					base64: b64,
+					pixels: subPixels,
+					tex: tex,
+				});
+			}
+
+			return imageCache.get(thumbnailPath);
 		}
 		catch( e:Dynamic ) {
 			App.LOG.error(e);
