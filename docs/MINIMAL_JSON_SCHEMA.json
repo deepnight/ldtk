@@ -1,9 +1,9 @@
 {
 	"description": "This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).",
-	"title": "LDtk 1.5.2 JSON schema",
+	"title": "LDtk 1.5.3 JSON schema",
 	"$schema": "https://json-schema.org/draft-07/schema#",
 	"$ref": "#/LdtkJsonRoot",
-	"version": "1.5.2",
+	"version": "1.5.3",
 	"LdtkJsonRoot": {
 		"description": "This is the root of any Project JSON file. It contains:  - the project settings, - an array of levels, - a group of definitions (that can probably be safely ignored for most users).",
 		"title": "LDtk Json root",
@@ -917,7 +917,7 @@
 					]
 				},
 				"dir": {
-					"description": "A single lowercase character tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).<br/>  Since 1.4.0, this character value can also be `<` (neighbour depth is lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world depth).",
+					"description": "A lowercase string tipping on the level location (`n`orth, `s`outh, `w`est, `e`ast).<br/>  Since 1.4.0, this value can also be `<` (neighbour depth is lower), `>` (neighbour depth is greater) or `o` (levels overlap and share the same world depth).<br/>  Since 1.5.3, this value can also be `nw`,`ne`,`sw` or `se` for levels only touching corners.",
 					"type": [
 						"string"
 					]
