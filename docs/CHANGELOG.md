@@ -1,3 +1,7 @@
+# 1.5.4
+
+- Fixed a crash when updating an external CastleDB file
+
 # 1.5.3
 
 - Fixed a crash when trying to add a newly created Entity
