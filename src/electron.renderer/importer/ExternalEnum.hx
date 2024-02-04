@@ -516,6 +516,8 @@ class ExternalEnum {
 					ed.iconTilesetUid = eDiff.newTilesetUid;
 			}
 		}
+
+		project.tidy();
 	}
 
 }
