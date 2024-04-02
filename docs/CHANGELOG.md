@@ -1,6 +1,7 @@
 # 1.5.4
 
 - Fixed a crash when updating an external CastleDB file
+- Fixed support for Aseprite 1.3.5 files
 
 # 1.5.3
 
