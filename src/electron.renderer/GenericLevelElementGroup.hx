@@ -216,8 +216,8 @@ class GenericLevelElementGroup {
 				case Entity(li, ei):
 					selectRender.beginFill(c, alpha);
 					selectRender.drawRect(
-						li.pxParallaxX + ( ei.x - ei.width * ei.def.pivotX ) * li.def.getScale(),
-						li.pxParallaxY + ( ei.y - ei.height * ei.def.pivotY ) * li.def.getScale(),
+						li.pxParallaxX + ( ei.x - ei.width * ei.getAdjustedPivotX() ) * li.def.getScale(),
+						li.pxParallaxY + ( ei.y - ei.height * ei.getAdjustedPivotY() ) * li.def.getScale(),
 						ei.width * li.def.getScale(),
 						ei.height * li.def.getScale()
 					);
