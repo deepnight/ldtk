@@ -43,6 +43,9 @@ typedef FieldInfos = {
 	var isInternal: Bool;
 	var deprecation: Null<DeprecationInfos>;
 	var removed: Null<dn.Version>;
+
+	var uidRoot: Null<String>;
+	var uidRef: Null<String>;
 }
 
 typedef GlobalType = {
@@ -74,6 +77,7 @@ typedef SchemaType = {
 class DocGenerator {
 	#if( macro || display )
 	static var allGlobalTypes: Array<GlobalType>;
+	static var uidRoots: Map<String, { globalType:GlobalType, field:FieldInfos }>;
 	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
 	static var appVersion = new dn.Version();
@@ -84,6 +88,7 @@ class DocGenerator {
 	public static function run(className:String, xmlPath:String, ?mdPath:String, ?jsonPath:String, ?minimalJsonPath:String, deleteXml=false) {
 		allGlobalTypes = [];
 		allEnums = [];
+		uidRoots = new Map();
 
 		// Read app version from "package.json"
 		haxe.macro.Context.registerModuleDependency("DocGenerator", "app/package.json");
@@ -157,6 +162,17 @@ class DocGenerator {
 			else
 				return Reflect.compare(a.section, b.section);
 		});
+
+		// Find UID roots
+		for(gt in allGlobalTypes) {
+			var allFields = getFieldsInfos(gt.xml.node.a);
+			for(f in allFields)
+				if( f.uidRoot!=null ) {
+					if( uidRoots.exists(f.uidRoot) )
+						throw 'Duplicate UID root: ${f.uidRoot}';
+					uidRoots.set(f.uidRoot, { globalType:gt, field:f });
+				}
+		}
 
 		// Markdown doc output
 		Sys.println("Generating Markdown doc...");
@@ -268,6 +284,14 @@ class DocGenerator {
 
 				if( f.only!=null )
 					cell.push('<sup class="only">Only *${f.only}*</sup>');
+
+				if( f.uidRef!=null ) {
+					var root = uidRoots.get(f.uidRef);
+					if( root==null )
+						throw 'No UID root found for ref ${f.uidRef} in ${f.displayName}';
+					var refUrl = '[${root.globalType.displayName}](#${anchorId(root.globalType.rawName)})';
+					cell.push('<sup class="uidRef">UID ref to $refUrl</sup>');
+				}
 
 				if( f.isInternal || type.onlyInternalFields )
 					cell.push('<sup class="internal">*Only used by editor*</sup>');
@@ -594,6 +618,9 @@ class DocGenerator {
 				isInternal: hasMeta(fieldXml, "internal"),
 				deprecation: deprecation,
 				removed: hasMeta(fieldXml,"removed") ? getMetaVersion(fieldXml,"removed") : null,
+
+				uidRoot: getMeta(fieldXml, "uidRoot"),
+				uidRef: getMeta(fieldXml, "uidRef"),
 			});
 		}
 		allFields.sort( (a,b)->{
