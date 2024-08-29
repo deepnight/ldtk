@@ -1,5 +1,6 @@
 # 1.5.4
 
+- Added a new Project setting to customize the JSON indentation (Full, Compact or Minified)
 - The online JSON documentation now shows references between UID fields.
 - Fixed a crash when updating an external CastleDB file
 - Fixed support for Aseprite 1.3.5 files
