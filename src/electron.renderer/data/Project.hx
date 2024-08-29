@@ -30,6 +30,7 @@ class Project {
 	public var defaultLevelBgColor : UInt;
 
 	public var minifyJson = false;
+	public var jsonStyle : ldtk.Json.JsonStyle = ldtk.Json.JsonStyle.Full;
 	public var externalLevels = false;
 	public var exportTiled = false;
 	public var simplifiedExport = false;
@@ -300,6 +301,7 @@ class Project {
 		p.externalLevels = JsonTools.readBool(json.externalLevels, false);
 
 		p.minifyJson = JsonTools.readBool( json.minifyJson, false );
+		p.jsonStyle = JsonTools.readEnum( ldtk.Json.JsonStyle, json.jsonStyle, false, Compact ); // uses Compact for pre-1.5.4 versions
 		p.exportTiled = JsonTools.readBool( json.exportTiled, false );
 		p.simplifiedExport = JsonTools.readBool( json.simplifiedExport, false );
 		p.backupOnSave = JsonTools.readBool( json.backupOnSave, false );
@@ -652,6 +654,7 @@ class Project {
 			defaultLevelBgColor: JsonTools.writeColor(defaultLevelBgColor),
 
 			minifyJson: minifyJson,
+			jsonStyle: JsonTools.writeEnum(jsonStyle, false),
 			externalLevels: externalLevels,
 			exportTiled: exportTiled,
 			simplifiedExport: simplifiedExport,
