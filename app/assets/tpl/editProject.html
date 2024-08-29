@@ -116,15 +116,14 @@
 	</dd>
 
 	<dt>
-		<label for="minify">Minify JSON</label>
+		<label for="jsonStyle">JSON indent style</label>
 		<info>
-			Enable this to save project JSON file without any "pretty" formatting (ie. white spaces and indentation).
-			This is NOT necessarily recommended if your project is stored on a versioning system (git, svn etc.) because this could cause issues with diffs and merging operations.
-			Only use this option if you really need to reduce the project files size.
+			You can adjust the way the JSON file is formated by LDtk (ie. white spaces and indentation).
+			Only use Minified if you really need to reduce the project files size. This will cause issues with diffs and merging operations.
 		</info>
 	</dt>
 	<dd>
-		<input type="checkbox" name="minify" id="minify"/>
+		<select id="jsonStyle"></select>
 	</dd>
 
 	<dt>
