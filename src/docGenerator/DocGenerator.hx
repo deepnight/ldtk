@@ -78,6 +78,7 @@ class DocGenerator {
 	#if( macro || display )
 	static var allGlobalTypes: Array<GlobalType>;
 	static var uidRoots: Map<String, { globalType:GlobalType, field:FieldInfos }>;
+	static var uidRefs: Map<String, Array<{ globalType:GlobalType, field:FieldInfos }>>;
 	static var allEnums : Map<String, Array<String>>;
 	static var verbose = false;
 	static var appVersion = new dn.Version();
@@ -89,6 +90,7 @@ class DocGenerator {
 		allGlobalTypes = [];
 		allEnums = [];
 		uidRoots = new Map();
+		uidRefs = new Map();
 
 		// Read app version from "package.json"
 		haxe.macro.Context.registerModuleDependency("DocGenerator", "app/package.json");
@@ -172,6 +174,18 @@ class DocGenerator {
 						throw 'Duplicate UID root: ${f.uidRoot}';
 					uidRoots.set(f.uidRoot, { globalType:gt, field:f });
 				}
+		}
+
+		// List all UID refs
+		for(gt in allGlobalTypes) {
+			var allFields = getFieldsInfos(gt.xml.node.a);
+			for(f in allFields) {
+				if( f.uidRef==null )
+					continue;
+				if( !uidRefs.exists(f.uidRef) )
+					uidRefs.set(f.uidRef, []);
+				uidRefs.get(f.uidRef).push( { globalType:gt, field:f } );
+			}
 		}
 
 		// Markdown doc output
@@ -326,6 +340,15 @@ class DocGenerator {
 						else
 							cell.push("This object contains the following fields:");
 						cell.push( getSubFieldsHtml( f.subFields ) );
+					}
+					if( f.uidRoot!=null && uidRefs.exists(f.uidRoot) ) {
+						var allRefLinks = [];
+						// trace(f.displayName);
+						for(ref in uidRefs.get(f.uidRoot)) {
+							var refUrl = '[${ref.field.displayName}](#${anchorId(ref.globalType.rawName)};${ref.field.displayName}) (${ref.globalType.displayName})';
+							allRefLinks.push(refUrl);
+						}
+						cell.push('This UID is refered from:<br/> ↖ ${allRefLinks.join("<br/> ↖ ")}');
 					}
 					tableCols.push( cell.join("<br/> ") );
 				}
