@@ -216,6 +216,9 @@ class EditProject extends ui.modal.Panel {
 			()->project.jsonStyle,
 			(v)->{
 				project.jsonStyle = v;
+				for(w in project.worlds)
+				for(l in w.levels)
+					editor.invalidateLevelCache(l);
 			},
 			(v)->switch v {
 				case Minified: L.t._("MINIFIED (minimal file size, no indentation)");
