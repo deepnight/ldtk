@@ -5,12 +5,12 @@
 		"doc": "https://ldtk.io/json",
 		"schema": "https://ldtk.io/files/JSON_SCHEMA.json",
 		"appAuthor": "Sebastien 'deepnight' Benard",
-		"appVersion": "1.5.3",
+		"appVersion": "1.5.4",
 		"url": "https://ldtk.io"
 	},
-	"iid": "07dbcce0-b0a0-11ee-8dc4-015831f656f8",
-	"jsonVersion": "1.5.3",
-	"appBuildId": 473702,
+	"iid": "42e0f150-4ce0-11ef-b2fe-a152cc58ad2b",
+	"jsonVersion": "1.5.4",
+	"appBuildId": 479150,
 	"nextUid": 1,
 	"identifierStyle": "Capitalize",
 	"toc": [],
@@ -27,6 +27,7 @@
 	"bgColor": "#40465B",
 	"defaultLevelBgColor": "#696A79",
 	"minifyJson": false,
+	"jsonStyle": "Full",
 	"externalLevels": false,
 	"exportTiled": false,
 	"simplifiedExport": false,
@@ -40,11 +41,18 @@
 	"tutorialDesc": null,
 	"customCommands": [],
 	"flags": [],
-	"defs": { "layers": [], "entities": [], "tilesets": [], "enums": [], "externalEnums": [], "levelFields": [] },
+	"defs": {
+		"layers": [],
+		"entities": [],
+		"tilesets": [],
+		"enums": [],
+		"externalEnums": [],
+		"levelFields": []
+	},
 	"levels": [
 		{
 			"identifier": "Level_0",
-			"iid": "07dbf3f0-b0a0-11ee-8dc4-a5486c7b24b3",
+			"iid": "42e0f152-4ce0-11ef-b2fe-cb7894bf50d8",
 			"uid": 0,
 			"worldX": 0,
 			"worldY": 0,
@@ -67,5 +75,5 @@
 		}
 	],
 	"worlds": [],
-	"dummyWorldIid": "07dbcce1-b0a0-11ee-8dc4-a5321c9ba8e2"
+	"dummyWorldIid": "42e0f151-4ce0-11ef-b2fe-4de6ad4e0d5e"
 }
