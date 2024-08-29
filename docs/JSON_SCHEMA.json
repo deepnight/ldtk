@@ -32,8 +32,8 @@
 			"flags",
 			"identifierStyle",
 			"imageExportMode",
+			"jsonStyle",
 			"levelNamePattern",
-			"minifyJson",
 			"nextUid",
 			"simplifiedExport"
 		],
@@ -328,6 +328,14 @@
 					"array"
 				]
 			},
+			"jsonStyle": {
+				"description": "JSON style Possible values: `Minified`, `Compact`, `Full`",
+				"enum": [
+					"Minified",
+					"Compact",
+					"Full"
+				]
+			},
 			"jsonVersion": {
 				"description": "File format version",
 				"type": [
@@ -373,7 +381,7 @@
 				]
 			},
 			"minifyJson": {
-				"description": "If TRUE, the Json is partially minified (no indentation, nor line breaks, default is FALSE)",
+				"description": "**WARNING**: this deprecated value will be *removed* completely on version 1.7.0+  Replaced by: `jsonStyle`",
 				"type": [
 					"boolean"
 				]
