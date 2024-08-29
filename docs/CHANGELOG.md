@@ -1,5 +1,6 @@
 # 1.5.4
 
+- The online JSON documentation now shows references between UID fields.
 - Fixed a crash when updating an external CastleDB file
 - Fixed support for Aseprite 1.3.5 files
 
