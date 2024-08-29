@@ -470,7 +470,7 @@ namespace quicktype {
     };
 
     /**
-     * An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+     * An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
      * values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
      * `FullSizeUncropped`, `NineSlice`
      */
@@ -709,7 +709,7 @@ namespace quicktype {
         void set_tile_rect(boost::optional<TilesetRectangle> value) { this->tile_rect = value; }
 
         /**
-         * An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+         * An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
          * values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
          * `FullSizeUncropped`, `NineSlice`
          */
@@ -4389,7 +4389,7 @@ namespace quicktype {
             case When::AFTER_SAVE: j = "AfterSave"; break;
             case When::BEFORE_SAVE: j = "BeforeSave"; break;
             case When::MANUAL: j = "Manual"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4407,7 +4407,7 @@ namespace quicktype {
             case AllowedRefs::ONLY_SAME: j = "OnlySame"; break;
             case AllowedRefs::ONLY_SPECIFIC_ENTITY: j = "OnlySpecificEntity"; break;
             case AllowedRefs::ONLY_TAGS: j = "OnlyTags"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4447,7 +4447,7 @@ namespace quicktype {
             case EditorDisplayMode::REF_LINK_BETWEEN_CENTERS: j = "RefLinkBetweenCenters"; break;
             case EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS: j = "RefLinkBetweenPivots"; break;
             case EditorDisplayMode::VALUE_ONLY: j = "ValueOnly"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4463,7 +4463,7 @@ namespace quicktype {
             case EditorDisplayPos::ABOVE: j = "Above"; break;
             case EditorDisplayPos::BENEATH: j = "Beneath"; break;
             case EditorDisplayPos::CENTER: j = "Center"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4483,7 +4483,7 @@ namespace quicktype {
             case EditorLinkStyle::DASHED_LINE: j = "DashedLine"; break;
             case EditorLinkStyle::STRAIGHT_ARROW: j = "StraightArrow"; break;
             case EditorLinkStyle::ZIG_ZAG: j = "ZigZag"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4513,7 +4513,7 @@ namespace quicktype {
             case TextLanguageMode::LANG_PYTHON: j = "LangPython"; break;
             case TextLanguageMode::LANG_RUBY: j = "LangRuby"; break;
             case TextLanguageMode::LANG_XML: j = "LangXml"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4529,7 +4529,7 @@ namespace quicktype {
             case LimitBehavior::DISCARD_OLD_ONES: j = "DiscardOldOnes"; break;
             case LimitBehavior::MOVE_LAST_ONE: j = "MoveLastOne"; break;
             case LimitBehavior::PREVENT_ADDING: j = "PreventAdding"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4545,7 +4545,7 @@ namespace quicktype {
             case LimitScope::PER_LAYER: j = "PerLayer"; break;
             case LimitScope::PER_LEVEL: j = "PerLevel"; break;
             case LimitScope::PER_WORLD: j = "PerWorld"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4563,7 +4563,7 @@ namespace quicktype {
             case RenderMode::ELLIPSE: j = "Ellipse"; break;
             case RenderMode::RECTANGLE: j = "Rectangle"; break;
             case RenderMode::TILE: j = "Tile"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4587,7 +4587,7 @@ namespace quicktype {
             case TileRenderMode::NINE_SLICE: j = "NineSlice"; break;
             case TileRenderMode::REPEAT: j = "Repeat"; break;
             case TileRenderMode::STRETCH: j = "Stretch"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4603,7 +4603,7 @@ namespace quicktype {
             case Checker::HORIZONTAL: j = "Horizontal"; break;
             case Checker::NONE: j = "None"; break;
             case Checker::VERTICAL: j = "Vertical"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4617,7 +4617,7 @@ namespace quicktype {
         switch (x) {
             case TileMode::SINGLE: j = "Single"; break;
             case TileMode::STAMP: j = "Stamp"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4635,7 +4635,7 @@ namespace quicktype {
             case Type::ENTITIES: j = "Entities"; break;
             case Type::INT_GRID: j = "IntGrid"; break;
             case Type::TILES: j = "Tiles"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4647,7 +4647,7 @@ namespace quicktype {
     inline void to_json(json & j, const EmbedAtlas & x) {
         switch (x) {
             case EmbedAtlas::LDTK_ICONS: j = "LdtkIcons"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4671,7 +4671,7 @@ namespace quicktype {
             case Flag::MULTI_WORLDS: j = "MultiWorlds"; break;
             case Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES: j = "PrependIndexToLevelFileNames"; break;
             case Flag::USE_MULTILINES_TYPE: j = "UseMultilinesType"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4691,7 +4691,7 @@ namespace quicktype {
             case BgPos::COVER_DIRTY: j = "CoverDirty"; break;
             case BgPos::REPEAT: j = "Repeat"; break;
             case BgPos::UNSCALED: j = "Unscaled"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4709,7 +4709,7 @@ namespace quicktype {
             case WorldLayout::GRID_VANIA: j = "GridVania"; break;
             case WorldLayout::LINEAR_HORIZONTAL: j = "LinearHorizontal"; break;
             case WorldLayout::LINEAR_VERTICAL: j = "LinearVertical"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4727,7 +4727,7 @@ namespace quicktype {
             case IdentifierStyle::FREE: j = "Free"; break;
             case IdentifierStyle::LOWERCASE: j = "Lowercase"; break;
             case IdentifierStyle::UPPERCASE: j = "Uppercase"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4745,7 +4745,7 @@ namespace quicktype {
             case ImageExportMode::NONE: j = "None"; break;
             case ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
             case ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
-            default: throw std::runtime_error("This should not happen");
+            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
         }
     }
 }

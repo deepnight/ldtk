@@ -51,7 +51,7 @@ def from_float(x: Any) -> float:
 
 
 def to_float(x: Any) -> float:
-    assert isinstance(x, float)
+    assert isinstance(x, (int, float))
     return x
 
 
@@ -67,6 +67,7 @@ def from_dict(f: Callable[[Any], T], x: Any) -> Dict[str, T]:
 
 class When(Enum):
     """Possible values: `Manual`, `AfterLoad`, `BeforeSave`, `AfterSave`"""
+
     AFTER_LOAD = "AfterLoad"
     AFTER_SAVE = "AfterSave"
     BEFORE_SAVE = "BeforeSave"
@@ -98,6 +99,7 @@ class LdtkCustomCommand:
 
 class AllowedRefs(Enum):
     """Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`"""
+
     ANY = "Any"
     ONLY_SAME = "OnlySame"
     ONLY_SPECIFIC_ENTITY = "OnlySpecificEntity"
@@ -129,6 +131,7 @@ class EditorDisplayMode(Enum):
 
 class EditorDisplayPos(Enum):
     """Possible values: `Above`, `Center`, `Beneath`"""
+
     ABOVE = "Above"
     BENEATH = "Beneath"
     CENTER = "Center"
@@ -136,6 +139,7 @@ class EditorDisplayPos(Enum):
 
 class EditorLinkStyle(Enum):
     """Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`"""
+
     ARROWS_LINE = "ArrowsLine"
     CURVED_ARROW = "CurvedArrow"
     DASHED_LINE = "DashedLine"
@@ -173,13 +177,16 @@ class FieldDefinition:
     """
     allowed_refs: AllowedRefs
     """Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`"""
+
     allowed_refs_entity_uid: Optional[int]
     allowed_ref_tags: List[str]
     allow_out_of_level_ref: bool
     array_max_length: Optional[int]
     """Array max length"""
+
     array_min_length: Optional[int]
     """Array min length"""
+
     auto_chain_ref: bool
     can_be_null: bool
     """TRUE if the value can be null. For arrays, TRUE means it can contain null values
@@ -187,6 +194,7 @@ class FieldDefinition:
     """
     default_override: Any
     """Default value if selected value is null or invalid."""
+
     doc: Optional[str]
     """User defined documentation for this field to provide help/tips to level designers about
     accepted values.
@@ -202,9 +210,11 @@ class FieldDefinition:
     """
     editor_display_pos: EditorDisplayPos
     """Possible values: `Above`, `Center`, `Beneath`"""
+
     editor_display_scale: float
     editor_link_style: EditorLinkStyle
     """Possible values: `ZigZag`, `StraightArrow`, `CurvedArrow`, `ArrowsLine`, `DashedLine`"""
+
     editor_show_in_world: bool
     editor_text_prefix: Optional[str]
     editor_text_suffix: Optional[str]
@@ -214,18 +224,23 @@ class FieldDefinition:
     """
     identifier: str
     """User defined unique identifier"""
+
     is_array: bool
     """TRUE if the value is an array of multiple values"""
+
     max: Optional[float]
     """Max limit for value, if applicable"""
+
     min: Optional[float]
     """Min limit for value, if applicable"""
+
     regex: Optional[str]
     """Optional regular expression that needs to be matched to accept values. Expected format:
     `/some_reg_ex/g`, with optional "i" flag.
     """
     searchable: bool
     """If enabled, this field will be searchable through LDtk command palette"""
+
     symmetrical_ref: bool
     text_language_mode: Optional[TextLanguageMode]
     """Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
@@ -233,12 +248,14 @@ class FieldDefinition:
     """
     tileset_uid: Optional[int]
     """UID of the tileset used for a Tile"""
+
     field_definition_type: str
     """Internal enum representing the possible field types. Possible values: F_Int, F_Float,
     F_String, F_Text, F_Bool, F_Color, F_Enum(...), F_Point, F_Path, F_EntityRef, F_Tile
     """
     uid: int
     """Unique Int identifier"""
+
     use_for_smart_color: bool
     """If TRUE, the color associated with this field will override the Entity or Level default
     color in the editor UI. For Enum fields, this would be the color associated to their
@@ -378,6 +395,7 @@ class FieldDefinition:
 
 class LimitBehavior(Enum):
     """Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`"""
+
     DISCARD_OLD_ONES = "DiscardOldOnes"
     MOVE_LAST_ONE = "MoveLastOne"
     PREVENT_ADDING = "PreventAdding"
@@ -394,6 +412,7 @@ class LimitScope(Enum):
 
 class RenderMode(Enum):
     """Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`"""
+
     CROSS = "Cross"
     ELLIPSE = "Ellipse"
     RECTANGLE = "Rectangle"
@@ -402,14 +421,19 @@ class RenderMode(Enum):
 
 class TilesetRectangle:
     """This object represents a custom sub rectangle in a Tileset image."""
+
     h: int
     """Height in pixels"""
+
     tileset_uid: int
     """UID of the tileset"""
+
     w: int
     """Width in pixels"""
+
     x: int
     """X pixels coordinate of the top-left corner in the Tileset image"""
+
     y: int
     """Y pixels coordinate of the top-left corner in the Tileset image"""
 
@@ -441,7 +465,7 @@ class TilesetRectangle:
 
 
 class TileRenderMode(Enum):
-    """An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    """An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
     values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
     `FullSizeUncropped`, `NineSlice`
     """
@@ -457,28 +481,35 @@ class TileRenderMode(Enum):
 class EntityDefinition:
     allow_out_of_bounds: bool
     """If enabled, this entity is allowed to stay outside of the current level bounds"""
+
     color: str
     """Base entity color"""
+
     doc: Optional[str]
     """User defined documentation for this element to provide help/tips to level designers."""
+
     export_to_toc: bool
     """If enabled, all instances of this entity will be listed in the project "Table of content"
     object.
     """
     field_defs: List[FieldDefinition]
     """Array of field definitions"""
+
     fill_opacity: float
     height: int
     """Pixel height"""
+
     hollow: bool
     identifier: str
     """User defined unique identifier"""
+
     keep_aspect_ratio: bool
     """Only applies to entities resizable on both X/Y. If TRUE, the entity instance width/height
     will keep the same aspect ratio as the definition.
     """
     limit_behavior: LimitBehavior
     """Possible values: `DiscardOldOnes`, `PreventAdding`, `MoveLastOne`"""
+
     limit_scope: LimitScope
     """If TRUE, the maxCount is a "per world" limit, if FALSE, it's a "per level". Possible
     values: `PerLayer`, `PerLevel`, `PerWorld`
@@ -486,14 +517,19 @@ class EntityDefinition:
     line_opacity: float
     max_count: int
     """Max instances count"""
+
     max_height: Optional[int]
     """Max pixel height (only applies if the entity is resizable on Y)"""
+
     max_width: Optional[int]
     """Max pixel width (only applies if the entity is resizable on X)"""
+
     min_height: Optional[int]
     """Min pixel height (only applies if the entity is resizable on Y)"""
+
     min_width: Optional[int]
     """Min pixel width (only applies if the entity is resizable on X)"""
+
     nine_slice_borders: List[int]
     """An array of 4 dimensions for the up/right/down/left borders (in this order) when using
     9-slice mode for `tileRenderMode`.<br/>  If the tileRenderMode is not NineSlice, then
@@ -501,18 +537,25 @@ class EntityDefinition:
     """
     pivot_x: float
     """Pivot X coordinate (from 0 to 1.0)"""
+
     pivot_y: float
     """Pivot Y coordinate (from 0 to 1.0)"""
+
     render_mode: RenderMode
     """Possible values: `Rectangle`, `Ellipse`, `Tile`, `Cross`"""
+
     resizable_x: bool
     """If TRUE, the entity instances will be resizable horizontally"""
+
     resizable_y: bool
     """If TRUE, the entity instances will be resizable vertically"""
+
     show_name: bool
     """Display entity name in editor"""
+
     tags: List[str]
     """An array of strings that classifies this entity"""
+
     tile_id: Optional[int]
     """**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
     by: `tileRect`
@@ -520,17 +563,21 @@ class EntityDefinition:
     tile_opacity: float
     tile_rect: Optional[TilesetRectangle]
     """An object representing a rectangle from an existing Tileset"""
+
     tile_render_mode: TileRenderMode
-    """An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    """An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
     values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
     `FullSizeUncropped`, `NineSlice`
     """
     tileset_id: Optional[int]
     """Tileset ID used for optional tile display"""
+
     uid: int
     """Unique Int identifier"""
+
     ui_tile_rect: Optional[TilesetRectangle]
     """This tile overrides the one defined in `tileRect` in the UI"""
+
     width: int
     """Pixel width"""
 
@@ -664,8 +711,10 @@ class EnumValueDefinition:
     """
     color: int
     """Optional color"""
+
     id: str
     """Enum value"""
+
     tile_id: Optional[int]
     """**WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
     by: `tileRect`
@@ -707,14 +756,19 @@ class EnumDefinition:
     external_file_checksum: Optional[str]
     external_rel_path: Optional[str]
     """Relative path to the external file providing this Enum"""
+
     icon_tileset_uid: Optional[int]
     """Tileset UID if provided"""
+
     identifier: str
     """User defined unique identifier"""
+
     tags: List[str]
     """An array of user-defined tags to organize the Enums"""
+
     uid: int
     """Unique Int identifier"""
+
     values: List[EnumValueDefinition]
     """All possible enum values, with their optional Tile infos."""
 
@@ -756,6 +810,7 @@ class EnumDefinition:
 
 class Checker(Enum):
     """Checker mode Possible values: `None`, `Horizontal`, `Vertical`"""
+
     HORIZONTAL = "Horizontal"
     NONE = "None"
     VERTICAL = "Vertical"
@@ -763,6 +818,7 @@ class Checker(Enum):
 
 class TileMode(Enum):
     """Defines how tileIds array is used Possible values: `Single`, `Stamp`"""
+
     SINGLE = "Single"
     STAMP = "Stamp"
 
@@ -774,6 +830,7 @@ class AutoLayerRuleDefinition:
     """
     active: bool
     """If FALSE, the rule effect isn't applied, and no tiles are generated."""
+
     alpha: float
     break_on_match: bool
     """When TRUE, the rule will prevent other rules to be applied in the same cell if it matches
@@ -781,57 +838,80 @@ class AutoLayerRuleDefinition:
     """
     chance: float
     """Chances for this rule to be applied (0 to 1)"""
+
     checker: Checker
     """Checker mode Possible values: `None`, `Horizontal`, `Vertical`"""
+
     flip_x: bool
     """If TRUE, allow rule to be matched by flipping its pattern horizontally"""
+
     flip_y: bool
     """If TRUE, allow rule to be matched by flipping its pattern vertically"""
+
     invalidated: bool
     """If TRUE, then the rule should be re-evaluated by the editor at one point"""
+
     out_of_bounds_value: Optional[int]
     """Default IntGrid value when checking cells outside of level bounds"""
+
     pattern: List[int]
     """Rule pattern (size x size)"""
+
     perlin_active: bool
     """If TRUE, enable Perlin filtering to only apply rule on specific random area"""
+
     perlin_octaves: float
     perlin_scale: float
     perlin_seed: float
     pivot_x: float
     """X pivot of a tile stamp (0-1)"""
+
     pivot_y: float
     """Y pivot of a tile stamp (0-1)"""
+
     size: int
     """Pattern width & height. Should only be 1,3,5 or 7."""
+
     tile_ids: Optional[List[int]]
     """**WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
     by: `tileRectsIds`
     """
     tile_mode: TileMode
     """Defines how tileIds array is used Possible values: `Single`, `Stamp`"""
+
     tile_random_x_max: int
     """Max random offset for X tile pos"""
+
     tile_random_x_min: int
     """Min random offset for X tile pos"""
+
     tile_random_y_max: int
     """Max random offset for Y tile pos"""
+
     tile_random_y_min: int
     """Min random offset for Y tile pos"""
+
     tile_rects_ids: List[List[int]]
     """Array containing all the possible tile IDs rectangles (picked randomly)."""
+
     tile_x_offset: int
     """Tile X offset"""
+
     tile_y_offset: int
     """Tile Y offset"""
+
     uid: int
     """Unique Int identifier"""
+
     x_modulo: int
     """X cell coord modulo"""
+
     x_offset: int
     """X cell start offset"""
+
     y_modulo: int
     """Y cell coord modulo"""
+
     y_offset: int
     """Y cell start offset"""
 
@@ -947,6 +1027,7 @@ class AutoLayerRuleGroup:
     biome_requirement_mode: int
     collapsed: Optional[bool]
     """*This field was removed in 1.0.0 and should no longer be used.*"""
+
     color: Optional[str]
     icon: Optional[TilesetRectangle]
     is_optional: bool
@@ -1006,11 +1087,14 @@ class AutoLayerRuleGroup:
 
 class IntGridValueDefinition:
     """IntGrid value definition"""
+
     color: str
     group_uid: int
     """Parent group identifier (0 if none)"""
+
     identifier: Optional[str]
     """User defined unique identifier"""
+
     tile: Optional[TilesetRectangle]
     value: int
     """The IntGrid value itself"""
@@ -1046,10 +1130,13 @@ class IntGridValueDefinition:
 
 class IntGridValueGroupDefinition:
     """IntGrid value group definition"""
+
     color: Optional[str]
     """User defined color"""
+
     identifier: Optional[str]
     """User defined string identifier"""
+
     uid: int
     """Group unique ID"""
 
@@ -1089,8 +1176,10 @@ class TypeEnum(Enum):
 class LayerDefinition:
     type: str
     """Type of the layer (*IntGrid, Entities, Tiles or AutoLayer*)"""
+
     auto_rule_groups: List[AutoLayerRuleGroup]
     """Contains all the auto-layer rule definitions."""
+
     auto_source_layer_def_uid: Optional[int]
     auto_tileset_def_uid: Optional[int]
     """**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
@@ -1100,25 +1189,35 @@ class LayerDefinition:
     biome_field_uid: Optional[int]
     can_select_when_inactive: bool
     """Allow editor selections when the layer is not currently active."""
+
     display_opacity: float
     """Opacity of the layer (0 to 1.0)"""
+
     doc: Optional[str]
     """User defined documentation for this element to provide help/tips to level designers."""
+
     excluded_tags: List[str]
     """An array of tags to forbid some Entities in this layer"""
+
     grid_size: int
     """Width and height of the grid in pixels"""
+
     guide_grid_hei: int
     """Height of the optional "guide" grid in pixels"""
+
     guide_grid_wid: int
     """Width of the optional "guide" grid in pixels"""
+
     hide_fields_when_inactive: bool
     hide_in_list: bool
     """Hide the layer from the list on the side of the editor view."""
+
     identifier: str
     """User defined unique identifier"""
+
     inactive_opacity: float
     """Alpha of this layer when it is not the active one."""
+
     int_grid_values: List[IntGridValueDefinition]
     """An array that defines extra optional info for each IntGrid value.<br/>  WARNING: the
     array order is not related to actual IntGrid values! As user can re-order IntGrid values
@@ -1126,6 +1225,7 @@ class LayerDefinition:
     """
     int_grid_values_groups: List[IntGridValueGroupDefinition]
     """Group informations for IntGrid values"""
+
     parallax_factor_x: float
     """Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
     speed of this layer, creating a fake 3D (parallax) effect.
@@ -1136,6 +1236,7 @@ class LayerDefinition:
     """
     parallax_scaling: bool
     """If true (default), a layer with a parallax factor will also be scaled up/down accordingly."""
+
     px_offset_x: int
     """X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance`
     optional offset)
@@ -1150,6 +1251,7 @@ class LayerDefinition:
     """
     required_tags: List[str]
     """An array of tags to filter Entities that can be added to this layer"""
+
     tile_pivot_x: float
     """If the tiles are smaller or larger than the layer grid, the pivot value will be used to
     position the tile relatively its grid cell.
@@ -1170,10 +1272,13 @@ class LayerDefinition:
     """
     ui_color: Optional[str]
     """User defined color for the UI"""
+
     uid: int
     """Unique Int identifier"""
+
     ui_filter_tags: List[str]
     """Display tags"""
+
     use_async_render: bool
     """Asynchronous rendering option for large/complex layers"""
 
@@ -1300,6 +1405,7 @@ class LayerDefinition:
 
 class TileCustomMetadata:
     """In a tileset definition, user defined meta-data of a tile."""
+
     data: str
     tile_id: int
 
@@ -1327,6 +1433,7 @@ class EmbedAtlas(Enum):
 
 class EnumTagValue:
     """In a tileset definition, enum based tag infos"""
+
     enum_value_id: str
     tile_ids: List[int]
 
@@ -1355,14 +1462,17 @@ class TilesetDefinition:
     """
     c_hei: int
     """Grid-based height"""
+
     c_wid: int
     """Grid-based width"""
+
     cached_pixel_data: Optional[Dict[str, Any]]
     """The following data is used internally for various optimizations. It's always synced with
     source image changes.
     """
     custom_data: List[TileCustomMetadata]
     """An array of custom tile metadata"""
+
     embed_atlas: Optional[EmbedAtlas]
     """If this value is set, then it means that this atlas uses an internal LDtk atlas image
     instead of a loaded one. Possible values: &lt;`null`&gt;, `LdtkIcons`
@@ -1373,24 +1483,32 @@ class TilesetDefinition:
     """
     identifier: str
     """User defined unique identifier"""
+
     padding: int
     """Distance in pixels from image borders"""
+
     px_hei: int
     """Image height in pixels"""
+
     px_wid: int
     """Image width in pixels"""
+
     rel_path: Optional[str]
     """Path to the source file, relative to the current project JSON file<br/>  It can be null
     if no image was provided, or when using an embed atlas.
     """
     saved_selections: List[Dict[str, Any]]
     """Array of group of tiles selections, only meant to be used in the editor"""
+
     spacing: int
     """Space in pixels between all tiles"""
+
     tags: List[str]
     """An array of user-defined tags to organize the Tilesets"""
+
     tags_source_enum_uid: Optional[int]
     """Optional Enum definition UID used for this tileset meta-data"""
+
     tile_grid_size: int
     uid: int
     """Unique Intidentifier"""
@@ -1474,16 +1592,20 @@ class Definitions:
     """
     entities: List[EntityDefinition]
     """All entities definitions, including their custom fields"""
+
     enums: List[EnumDefinition]
     """All internal enums"""
+
     external_enums: List[EnumDefinition]
     """Note: external enums are exactly the same as `enums`, except they have a `relPath` to
     point to an external source file.
     """
     layers: List[LayerDefinition]
     """All layer definitions"""
+
     level_fields: List[FieldDefinition]
     """All custom fields available to all levels."""
+
     tilesets: List[TilesetDefinition]
     """All tilesets"""
 
@@ -1530,6 +1652,7 @@ class Flag(Enum):
 class FieldInstance:
     identifier: str
     """Field definition identifier"""
+
     tile: Optional[TilesetRectangle]
     """Optional TilesetRect used to display this field (this can be the field own Tile, or some
     other Tile guessed from the value, like an Enum).
@@ -1552,6 +1675,7 @@ class FieldInstance:
     """
     def_uid: int
     """Reference of the **Field definition** UID"""
+
     real_editor_values: List[Any]
     """Editor internal raw values"""
 
@@ -1589,34 +1713,43 @@ class FieldInstance:
 class EntityInstance:
     grid: List[int]
     """Grid-based coordinates (`[x,y]` format)"""
+
     identifier: str
     """Entity definition identifier"""
+
     pivot: List[float]
     """Pivot coordinates  (`[x,y]` format, values are from 0 to 1) of the Entity"""
+
     smart_color: str
     """The entity "smart" color, guessed from either Entity definition, or one its field
     instances.
     """
     tags: List[str]
     """Array of tags defined in this Entity definition"""
+
     tile: Optional[TilesetRectangle]
     """Optional TilesetRect used to display this entity (it could either be the default Entity
     tile, or some tile provided by a field value, like an Enum).
     """
     world_x: Optional[int]
     """X world coordinate in pixels. Only available in GridVania or Free world layouts."""
+
     world_y: Optional[int]
     """Y world coordinate in pixels Only available in GridVania or Free world layouts."""
+
     def_uid: int
     """Reference of the **Entity definition** UID"""
+
     field_instances: List[FieldInstance]
     """An array of all custom fields and their values."""
+
     height: int
     """Entity height in pixels. For non-resizable entities, it will be the same as Entity
     definition.
     """
     iid: str
     """Unique instance identifier"""
+
     px: List[int]
     """Pixel coordinates (`[x,y]` format) in current level coordinate space. Don't forget
     optional layer offsets, if they exist!
@@ -1690,10 +1823,13 @@ class ReferenceToAnEntityInstance:
     """
     entity_iid: str
     """IID of the refered EntityInstance"""
+
     layer_iid: str
     """IID of the LayerInstance containing the refered EntityInstance"""
+
     level_iid: str
     """IID of the Level containing the refered EntityInstance"""
+
     world_iid: str
     """IID of the World containing the refered EntityInstance"""
 
@@ -1723,8 +1859,10 @@ class ReferenceToAnEntityInstance:
 
 class GridPoint:
     """This object is just a grid-based coordinate used in Field values."""
+
     cx: int
     """X grid-based coordinate"""
+
     cy: int
     """Y grid-based coordinate"""
 
@@ -1748,8 +1886,10 @@ class GridPoint:
 
 class IntGridValueInstance:
     """IntGrid value instance"""
+
     coord_id: int
     """Coordinate ID in the layer grid"""
+
     v: int
     """IntGrid value"""
 
@@ -1773,8 +1913,10 @@ class IntGridValueInstance:
 
 class TileInstance:
     """This structure represents a single tile from a given Tileset."""
+
     a: float
     """Alpha/opacity of the tile (0-1, defaults to 1)"""
+
     d: List[int]
     """Internal data used by the editor.<br/>  For auto-layer tiles: `[ruleId, coordId]`.<br/>
     For tile-layer tiles: `[coordId]`.
@@ -1790,6 +1932,7 @@ class TileInstance:
     """
     src: List[int]
     """Pixel coordinates of the tile in the **tileset** (`[x,y]` format)"""
+
     t: int
     """The *Tile ID* in the corresponding tileset."""
 
@@ -1826,24 +1969,34 @@ class TileInstance:
 class LayerInstance:
     c_hei: int
     """Grid-based height"""
+
     c_wid: int
     """Grid-based width"""
+
     grid_size: int
     """Grid size"""
+
     identifier: str
     """Layer definition identifier"""
+
     opacity: float
     """Layer opacity as Float [0-1]"""
+
     px_total_offset_x: int
     """Total layer X pixel offset, including both instance and definition offsets."""
+
     px_total_offset_y: int
     """Total layer Y pixel offset, including both instance and definition offsets."""
+
     tileset_def_uid: Optional[int]
     """The definition UID of corresponding Tileset, if any."""
+
     tileset_rel_path: Optional[str]
     """The relative path to corresponding Tileset, if any."""
+
     type: str
     """Layer type (possible values: IntGrid, Entities, Tiles or AutoLayer)"""
+
     auto_layer_tiles: List[TileInstance]
     """An array containing all tiles generated by Auto-layer rules. The array is already sorted
     in display order (ie. 1st tile is beneath 2nd, which is beneath 3rd etc.).<br/><br/>
@@ -1854,6 +2007,7 @@ class LayerInstance:
     grid_tiles: List[TileInstance]
     iid: str
     """Unique layer instance identifier"""
+
     int_grid: Optional[List[IntGridValueInstance]]
     """**WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced
     by: `intGridCsv`
@@ -1866,14 +2020,17 @@ class LayerInstance:
     """
     layer_def_uid: int
     """Reference the Layer definition UID"""
+
     level_id: int
     """Reference to the UID of the level containing this layer instance"""
+
     optional_rules: List[int]
     """An Array containing the UIDs of optional rules that were enabled in this specific layer
     instance.
     """
     override_tileset_uid: Optional[int]
     """This layer can use another tileset by overriding the tileset UID here."""
+
     px_offset_x: int
     """X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
     the `LayerDef` optional offset, so you should probably prefer using `__pxTotalOffsetX`
@@ -1886,6 +2043,7 @@ class LayerInstance:
     """
     seed: int
     """Random seed used for Auto-Layers rendering"""
+
     visible: bool
     """Layer instance visibility"""
 
@@ -1979,6 +2137,7 @@ class LayerInstance:
 
 class LevelBackgroundPosition:
     """Level background image position info"""
+
     crop_rect: List[float]
     """An array of 4 float values describing the cropped sub-rectangle of the displayed
     background image. This cropping happens when original is larger than the level bounds.
@@ -2024,6 +2183,7 @@ class BgPos(Enum):
 
 class NeighbourLevel:
     """Nearby level info"""
+
     dir: str
     """A lowercase string tipping on the level location (`n`orth, `s`outh, `w`est,
     `e`ast).<br/>  Since 1.4.0, this value can also be `<` (neighbour depth is lower), `>`
@@ -2033,6 +2193,7 @@ class NeighbourLevel:
     """
     level_iid: str
     """Neighbour Instance Identifier"""
+
     level_uid: Optional[int]
     """**WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
     by: `levelIid`
@@ -2076,6 +2237,7 @@ class Level:
     """
     bg_pos: Optional[LevelBackgroundPosition]
     """Position informations of the background image, if there is one."""
+
     neighbours: List[NeighbourLevel]
     """An array listing all other levels touching this one on the world map. Since 1.4.0, this
     includes levels that overlap in the same world layer, or in nearby world layers.<br/>
@@ -2092,8 +2254,10 @@ class Level:
     """
     bg_pivot_x: float
     """Background image X pivot (0-1)"""
+
     bg_pivot_y: float
     """Background image Y pivot (0-1)"""
+
     level_bg_pos: Optional[BgPos]
     """An enum defining the way the background image (if any) is positioned on the level. See
     `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
@@ -2101,16 +2265,20 @@ class Level:
     """
     bg_rel_path: Optional[str]
     """The *optional* relative path to the level background image."""
+
     external_rel_path: Optional[str]
     """This value is not null if the project option "*Save levels separately*" is enabled. In
     this case, this **relative** path points to the level Json file.
     """
     field_instances: List[FieldInstance]
     """An array containing this level custom field values."""
+
     identifier: str
     """User defined unique identifier"""
+
     iid: str
     """Unique instance identifier"""
+
     layer_instances: Optional[List[LayerInstance]]
     """An array containing all Layer instances. **IMPORTANT**: if the project option "*Save
     levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
@@ -2118,10 +2286,13 @@ class Level:
     """
     px_hei: int
     """Height of the level in pixels"""
+
     px_wid: int
     """Width of the level in pixels"""
+
     uid: int
     """Unique Int identifier"""
+
     use_auto_identifier: bool
     """If TRUE, the level identifier will always automatically use the naming pattern as defined
     in `Project.levelNamePattern`. Becomes FALSE if the identifier is manually modified by
@@ -2232,6 +2403,7 @@ class LdtkTocInstanceData:
     hei_px: int
     iids: ReferenceToAnEntityInstance
     """IID information of this instance"""
+
     wid_px: int
     world_x: int
     world_y: int
@@ -2310,12 +2482,16 @@ class World:
     """
     default_level_height: int
     """Default new level height"""
+
     default_level_width: int
     """Default new level width"""
+
     identifier: str
     """User defined unique identifier"""
+
     iid: str
     """Unique instance identifer"""
+
     levels: List[Level]
     """All levels from this world. The order of this array is only relevant in
     `LinearHorizontal` and `linearVertical` world layouts (see `worldLayout` value).
@@ -2323,8 +2499,10 @@ class World:
     """
     world_grid_height: int
     """Height of the world grid in pixels."""
+
     world_grid_width: int
     """Width of the world grid in pixels."""
+
     world_layout: Optional[WorldLayout]
     """An enum that describes how levels are organized in this project (ie. linearly or in a 2D
     space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`
@@ -2565,22 +2743,31 @@ class LdtkJSON:
     """
     backup_limit: int
     """Number of backup files to keep, if the `backupOnSave` is TRUE"""
+
     backup_on_save: bool
     """If TRUE, an extra copy of the project will be created in a sub folder, when saving."""
+
     backup_rel_path: Optional[str]
     """Target relative path to store backup files"""
+
     bg_color: str
     """Project background color"""
+
     custom_commands: List[LdtkCustomCommand]
     """An array of command lines that can be ran manually by the user"""
+
     default_entity_height: int
     """Default height for new entities"""
+
     default_entity_width: int
     """Default width for new entities"""
+
     default_grid_size: int
     """Default grid size for new layers"""
+
     default_level_bg_color: str
     """Default background color of levels"""
+
     default_level_height: Optional[int]
     """**WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
     It will then be `null`. You can enable the Multi-worlds advanced project option to enable
@@ -2593,14 +2780,19 @@ class LdtkJSON:
     """
     default_pivot_x: float
     """Default X pivot (0 to 1) for new entities"""
+
     default_pivot_y: float
     """Default Y pivot (0 to 1) for new entities"""
+
     defs: Definitions
     """A structure containing all the definitions of this project"""
+
     dummy_world_iid: str
     """If the project isn't in MultiWorlds mode, this is the IID of the internal "dummy" World."""
+
     export_level_bg: bool
     """If TRUE, the exported PNGs will include the level background (color or image)."""
+
     export_png: Optional[bool]
     """**WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
     by: `imageExportMode`
@@ -2625,14 +2817,17 @@ class LdtkJSON:
     """
     iid: str
     """Unique project identifier"""
+
     image_export_mode: ImageExportMode
     """"Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,
     `OneImagePerLevel`, `LayersAndLevels`
     """
     json_version: str
     """File format version"""
+
     level_name_pattern: str
     """The default naming convention for level identifiers."""
+
     levels: List[Level]
     """All levels. The order of this array is only relevant in `LinearHorizontal` and
     `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should
@@ -2644,8 +2839,10 @@ class LdtkJSON:
     """
     next_uid: int
     """Next Unique integer ID available"""
+
     png_file_pattern: Optional[str]
     """File naming pattern for exported PNGs"""
+
     simplified_export: bool
     """If TRUE, a very simplified will be generated on saving, for quicker & easier engine
     integration.

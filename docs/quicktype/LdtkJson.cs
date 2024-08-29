@@ -526,7 +526,7 @@ namespace ldtk
         public TilesetRectangle TileRect { get; set; }
 
         /// <summary>
-        /// An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+        /// An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
         /// values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
         /// `FullSizeUncropped`, `NineSlice`
         /// </summary>
@@ -2355,7 +2355,7 @@ namespace ldtk
     public enum RenderMode { Cross, Ellipse, Rectangle, Tile };
 
     /// <summary>
-    /// An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    /// An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
     /// values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
     /// `FullSizeUncropped`, `NineSlice`
     /// </summary>

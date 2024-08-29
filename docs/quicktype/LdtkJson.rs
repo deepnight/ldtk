@@ -324,7 +324,7 @@ pub struct EntityDefinition {
     /// An object representing a rectangle from an existing Tileset
     pub tile_rect: Option<TilesetRectangle>,
 
-    /// An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+    /// An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
     /// values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
     /// `FullSizeUncropped`, `NineSlice`
     pub tile_render_mode: TileRenderMode,
@@ -645,7 +645,7 @@ pub struct TilesetRectangle {
     pub y: i64,
 }
 
-/// An enum describing how the the Entity tile is rendered inside the Entity bounds. Possible
+/// An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
 /// values: `Cover`, `FitInside`, `Repeat`, `Stretch`, `FullSizeCropped`,
 /// `FullSizeUncropped`, `NineSlice`
 #[derive(Debug, Clone, Serialize, Deserialize)]
