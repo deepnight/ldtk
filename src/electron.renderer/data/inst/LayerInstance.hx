@@ -686,6 +686,25 @@ class LayerInstance {
 			asyncErase(cx,cy);
 	}
 
+	public function updateIntGridValue(prev:Int, next:Int, useAsyncRender:Bool) {
+		requireType(IntGrid);
+		def.updateIntGridValueDef(prev,next);
+		for(cy in 0...cHei)
+		for(cx in 0...cWid)
+			if ( getIntGrid(cx,cy) == prev )
+				setIntGrid(cx,cy,next,useAsyncRender);
+
+		// We update our own level definition separately because we don't appear in our own autoSourceLayerDefUid.
+		for(rg in def.autoRuleGroups)
+			for(r in rg.rules)
+				r.updateIntGridValueDef(prev, next);
+
+		for(ld in _project.defs.layers)
+			if(ld.autoSourceLayerDefUid == layerDefUid)
+				for(rg in ld.autoRuleGroups)
+					for(r in rg.rules)
+						r.updateIntGridValueDef(prev, next);
+	}
 
 	/** ENTITY INSTANCE *******************/
 
