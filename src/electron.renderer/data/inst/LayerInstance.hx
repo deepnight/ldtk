@@ -704,6 +704,8 @@ class LayerInstance {
 				for(rg in ld.autoRuleGroups)
 					for(r in rg.rules)
 						r.updateIntGridValueDef(prev, next);
+
+		level.invalidateJsonCache();
 	}
 
 	/** ENTITY INSTANCE *******************/
