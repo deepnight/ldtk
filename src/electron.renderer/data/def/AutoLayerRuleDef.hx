@@ -60,6 +60,19 @@ class AutoLayerRuleDef {
 				explicitlyRequiredValues.push(v);
 	}
 
+	public function updateIntGridValueDef(prev:Int,next:Int) {
+		// Use get/setPattern so that the usage counts, etc. are updated.
+		for(cx in 0...size)
+		for(cy in 0...size) {
+			if(getPattern(cx,cy) == prev)
+				setPattern(cx,cy,next);
+			// Negative values are used to store the logical negation of a tile, so we have to update them too.
+			if(getPattern(cx,cy) == -prev)
+				setPattern(cx,cy,-next);
+		}
+		updateUsedValues();
+	}
+
 	public inline function hasAnyPositionOffset() {
 		return tileRandomXMin!=0 || tileRandomXMax!=0 || tileRandomYMin!=0 || tileRandomYMax!=0 || tileXOffset!=0 || tileYOffset!=0;
 	}
