@@ -746,18 +746,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			if( rg.isOptional )
 				ctx.addActionElement({
-					label: L.t._("Turn into an OPTIONAL group"),
-					subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
-					iconId: "optional",
-					cb: ()->{
-						invalidateRuleGroup(rg);
-						rg.isOptional = true;
-						rg.active = true; // just some cleanup
-						editor.ge.emit( LayerRuleGroupChanged(rg) );
-					},
-				});
-			else
-				ctx.addActionElement({
 					label: L.t._("Disable OPTIONAL state"),
 					cb: ()->{
 						new ui.modal.dialog.Confirm(
@@ -770,6 +758,18 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 								editor.ge.emit( LayerRuleGroupChanged(rg) );
 							}
 						);
+					},
+				});
+			else
+				ctx.addActionElement({
+					label: L.t._("Turn into an OPTIONAL group"),
+					subText: L.t._("An optional group is disabled everywhere by default, and can be enabled manually only in some specific levels."),
+					iconId: "optional",
+					cb: ()->{
+						invalidateRuleGroup(rg);
+						rg.isOptional = true;
+						rg.active = true; // just some cleanup
+						editor.ge.emit( LayerRuleGroupChanged(rg) );
 					},
 				});
 		});
