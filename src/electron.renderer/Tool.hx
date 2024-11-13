@@ -1,4 +1,4 @@
-import dn.Bresenham;
+import dn.geom.Bresenham;
 
 class Tool<T> extends dn.Process {
 	static var SELECTION_MEMORY : Map<String, Dynamic> = new Map();
@@ -185,7 +185,7 @@ class Tool<T> extends dn.Process {
 
 	function useAt(m:Coords, isOnStop:Bool) : Bool {
 		var anyChange = false;
-		dn.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
+		dn.geom.Bresenham.iterateThinLine(lastMouse.cx, lastMouse.cy, m.cx, m.cy, function(cx,cy) {
 			anyChange = useAtInterpolatedGrid(cx,cy) || anyChange;
 			if( anyChange )
 				editor.levelRender.invalidateLayerArea(curLayerInstance, cx,cx, cy,cy);
