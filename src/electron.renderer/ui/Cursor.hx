@@ -203,14 +203,14 @@ class Cursor {
 							final ry = ei.height*0.5;
 							g.lineStyle(1, 0xffcc00, 1);
 							g.drawEllipse(
-								(0.5-def.pivotX)*ei.width, (0.5-def.pivotY)*ei.height,
+								(0.5-ei.getAdjustedPivotX())*ei.width, (0.5-ei.getAdjustedPivotY())*ei.height,
 								rx+pad, ry+pad,
 								0, rx<=16 && ry<=16 ? 24 : 0
 							);
 
 						case Rectangle, Tile:
 							g.lineStyle(1, 0xffcc00, 1);
-							renderBeveledRect(g, -def.pivotX*ei.width-pad, -def.pivotY*ei.height-pad, ei.width+pad*2, ei.height+pad*2);
+							renderBeveledRect(g, -ei.getAdjustedPivotX()*ei.width-pad, -ei.getAdjustedPivotY()*ei.height-pad, ei.width+pad*2, ei.height+pad*2);
 					}
 				}
 
