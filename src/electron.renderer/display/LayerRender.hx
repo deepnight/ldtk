@@ -176,7 +176,9 @@ class LayerRender {
 
 		case Entities:
 			// Entity layer
-			for(ei in li.entityInstances)
+
+			// Y-Sorting the array.
+			for(ei in li.entityInstances.sort(function(a, b) return a.y - b.y))
 				entityRenders.push( new EntityRender(ei, li.def, renderTarget) );
 
 
