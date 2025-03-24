@@ -12,17 +12,17 @@ class Editor extends Page {
 	var jDepths : js.jquery.JQuery;
 
 
-	public var curWorld(get,never) : data.World;
+	public var curWorld(get,never) : Null<data.World>;
 		inline function get_curWorld() return project==null ? null : project.getWorldIid(curWorldIid);
 
-	public var curLevel(get,never) : data.Level;
+	public var curLevel(get,never) : Null<data.Level>;
 		inline function get_curLevel() return project==null ? null : project.getLevelAnywhere(curLevelId);
 
-	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
-		inline function get_curLayerDef() return project!=null ? project.defs.getLayerDef(curLayerDefUid) : null;
-
 	public var curLayerInstance(get,never) : Null<data.inst.LayerInstance>;
-		function get_curLayerInstance() return curLayerDef==null ? null : curLevel.getLayerInstance(curLayerDef);
+		inline function get_curLayerInstance() return (curLayerIid==null || curLevel==null) ? null : curLevel.getLayerInstance(curLayerIid);
+
+	public var curLayerDef(get,never) : Null<data.def.LayerDef>;
+		inline function get_curLayerDef() return (project==null || curLayerInstance==null) ? null : project.defs.getLayerDef(curLayerInstance.layerDefUid);
 
 
 	public var ge : GlobalEventDispatcher;
@@ -30,7 +30,7 @@ class Editor extends Page {
 	public var project : data.Project;
 	public var curWorldIid : String;
 	public var curLevelId : Int;
-	var curLayerDefUid : Int;
+	var curLayerIid : Null<String>;
 
 	// Tools
 	public var worldTool : WorldTool;
@@ -38,7 +38,7 @@ class Editor extends Page {
 	public var resizeTool : Null<tool.ResizeTool>;
 	public var curTool(get,never) : tool.LayerTool<Dynamic>;
 	public var selectionTool: tool.SelectionTool;
-	var allLayerTools : Map<Int,tool.LayerTool<Dynamic>> = new Map();
+	var allLayerTools : Map<String,tool.LayerTool<Dynamic>> = new Map();
 	var specialTool : Null< Tool<Dynamic> >; // if not null, will be used instead of default tool
 	var doNothingTool : tool.lt.DoNothing;
 	var invalidatedMouseCoords = true;
@@ -286,8 +286,6 @@ class Editor extends Page {
 		project = p;
 		project.tidy();
 
-		var all = ui.ProjectSaver.listBackupFiles(project.getBackupId(), project.getAbsBackupDir());
-
 		updateBanners();
 
 		// Check external enums
@@ -321,7 +319,7 @@ class Editor extends Page {
 
 		curWorldIid = project.worlds[0].iid;
 		curLevelId = project.worlds[0].levels[0].uid;
-		curLayerDefUid = -1;
+		curLayerIid = null;
 
 		// Pick 1st layer in current level
 		autoPickFirstValidLayer();
@@ -379,8 +377,10 @@ class Editor extends Page {
 		var curTag = getCurLayerFilterTag();
 		for( ld in getVisibleLayerDefsInList() )
 			if( shouldLayerDefVisibleInList(ld,curTag) ) {
-				selectLayerInstance( curLevel.getLayerInstance(ld), false );
-				return true;
+				for( li in curLevel.getLayerInstances(ld) ) {
+					selectLayerInstance( li, false );
+					return true;
+				}
 			}
 
 		return false;
@@ -566,12 +566,18 @@ class Editor extends Page {
 					if( !shouldLayerDefVisibleInList(ld,curTag) )
 						continue;
 
-					if( i==keyIdx ) {
-						selectLayerInstance( curLevel.getLayerInstance(ld) );
-						break;
+					for( li in curLevel.getLayerInstances(ld) ) {
+						if( i==keyIdx ) {
+							selectLayerInstance(li);
+							i++;
+							break;
+						} else {
+							i++;
+						}
 					}
-					else
-						i++;
+
+					if( i>keyIdx )
+						break;
 				}
 		}
 
@@ -920,7 +926,7 @@ class Editor extends Page {
 		if( curLayerDef==null )
 			return doNothingTool;
 
-		if( !allLayerTools.exists(curLayerDef.uid) ) {
+		if( !allLayerTools.exists(curLayerIid) ) {
 			var t : tool.LayerTool<Dynamic> = switch curLayerDef.type {
 				case AutoLayer: new tool.lt.DoNothing();
 				case IntGrid: new tool.lt.IntGridTool();
@@ -928,20 +934,24 @@ class Editor extends Page {
 				case Tiles: new tool.lt.TileTool();
 			}
 			t.initPalette();
-			allLayerTools.set( curLayerInstance.layerDefUid, t );
+			allLayerTools.set( curLayerIid, t );
 		}
 
-		return allLayerTools.get( curLayerDef.uid );
+		return allLayerTools.get( curLayerIid );
 	}
 
-	function deleteLayerTool(layerUid:Int) {
-		if( allLayerTools.exists(layerUid) ) {
-			allLayerTools.get(layerUid).destroy();
-			allLayerTools.remove(layerUid);
-			return true;
+	function deleteLayerTools(layerDefUid:Int) {
+		var wasDeleted = false;
+
+		for( li in curLevel.getLayerInstances(layerDefUid) ) {
+			if( allLayerTools.exists(li.iid) ) {
+				allLayerTools.get(li.iid).destroy();
+				allLayerTools.remove(li.iid);
+				wasDeleted = true;
+			}
 		}
-		else
-			return false;
+
+		return wasDeleted;
 	}
 
 	public function resetTools() {
@@ -1052,12 +1062,14 @@ class Editor extends Page {
 				if( limitToLayerType!=null && ld.type!=limitToLayerType )
 					continue;
 
-				var ge = getElement( curLevel.getLayerInstance(ld) );
-				if( ld==curLayerDef && ge!=null && settings.v.singleLayerMode ) // prioritize active layer
-					return ge;
+				for( li in curLevel.getLayerInstances(ld) ) {
+					var ge = getElement(li);
+					if( ld==curLayerDef && ge!=null && settings.v.singleLayerMode ) // prioritize active layer
+						return ge;
 
-				if( ge!=null )
-					best = ge;
+					if( ge!=null )
+						best = ge;
+				}
 			}
 
 			return best;
@@ -1405,13 +1417,14 @@ class Editor extends Page {
 	}
 
 	public function selectLayerInstance(li:data.inst.LayerInstance, notify=true) {
-		if( curLayerDefUid==li.def.uid )
+		if( curLayerIid==li.iid )
 			return;
 
-		if( notify )
-			N.quick(li.def.identifier, JsTools.createLayerTypeIcon2(li.def.type));
+		if( notify ) {
+			N.quick(li.identifier, JsTools.createLayerTypeIcon2(li.def.type));
+		}
 
-		curLayerDefUid = li.def.uid;
+		curLayerIid = li.iid;
 		ge.emit(LayerInstanceSelected(li));
 		clearSpecialTool();
 		ui.Tip.clear();
@@ -1627,26 +1640,26 @@ class Editor extends Page {
 
 			for( w in project.worlds )
 			for( l in w.levels ) {
-				var li = l.getLayerInstance(ld);
+				for( li in l.getLayerInstances(ld) ) {
+					r.invalidated = false;
 
-				r.invalidated = false;
-
-				if( li.autoTilesCache==null ) {
-					// Run all rules
-					ops.push({
-						label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
-						cb: ()->{ li.applyAllRules(); }
-					});
-					affectedLayers.set(li,l);
-				}
-				else {
-					// Apply rule
-					if( !r.isEmpty() ) {
+					if( li.autoTilesCache==null ) {
+						// Run all rules
 						ops.push({
-							label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
-							cb: ()->{ li.applyRuleToFullLayer(r, false); },
+							label: 'Initializing autoTiles cache in ${l.identifier}.${li.def.identifier}',
+							cb: ()->{ li.applyAllRules(); }
 						});
 						affectedLayers.set(li,l);
+					}
+					else {
+						// Apply rule
+						if( !r.isEmpty() ) {
+							ops.push({
+								label: 'Applying rule #${r.uid} in ${l.identifier}.${li.def.identifier}',
+								cb: ()->{ li.applyRuleToFullLayer(r, false); },
+							});
+							affectedLayers.set(li,l);
+						}
 					}
 				}
 			}
@@ -2040,12 +2053,12 @@ class Editor extends Page {
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
-				case LayerInstanceSelected(li): extra = li.layerDefUid;
-				case LayerInstanceChangedGlobally(li): extra = li.layerDefUid;
-				case LayerInstanceVisiblityChanged(li): extra = li.layerDefUid;
-				case LayerInstancesRestoredFromHistory(lis): extra = lis.map( li->li.def.identifier ).join(",");
-				case LayerInstanceTilesetChanged(li): extra = li.layerDefUid;
-				case AutoLayerRenderingChanged(lis): extra = lis.map( li->li.def.identifier ).join(",");
+				case LayerInstanceSelected(li): extra = li.iid;
+				case LayerInstanceChangedGlobally(li): extra = li.iid;
+				case LayerInstanceVisiblityChanged(li): extra = li.iid;
+				case LayerInstancesRestoredFromHistory(lis): extra = lis.map( li->li.iid ).join(",");
+				case LayerInstanceTilesetChanged(li): extra = li.iid;
+				case AutoLayerRenderingChanged(lis): extra = lis.map( li->li.iid ).join(",");
 				case TilesetDefChanged(td): extra = td.uid;
 				case TilesetDefAdded(td): extra = td.uid;
 				case TilesetDefRemoved(td): extra = td.uid;
@@ -2327,7 +2340,7 @@ class Editor extends Page {
 				updateTool();
 
 			case LayerDefRemoved(uid):
-				deleteLayerTool(uid);
+				deleteLayerTools(uid);
 				updateLayerList();
 				updateTool();
 
@@ -2426,14 +2439,14 @@ class Editor extends Page {
 
 			case LayerDefChanged(defUid, contentInvalidated):
 				project.defs.initFastAccesses();
-				if( curLayerDef==null && project.defs.layers.length>0 )
-					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
+				if( curLayerDef==null && curLevel.layerInstances.length>0 )
+					selectLayerInstance( curLevel.layerInstances[0] );
 				resetTools();
 				updateLayerList();
 
 			case LayerDefSorted:
-				if( curLayerDef==null && project.defs.layers.length>0 )
-					selectLayerInstance( curLevel.getLayerInstance(project.defs.layers[0]) );
+				if( curLayerDef==null && curLevel.layerInstances.length>0 )
+					selectLayerInstance( curLevel.layerInstances[0] );
 				updateTool();
 				updateGuide();
 				updateLayerList();
@@ -2642,15 +2655,13 @@ class Editor extends Page {
 		return null;
 	}
 
-	function shouldLayerDefVisibleInList(ld:data.def.LayerDef, curTag:Null<String>) {
-		var li = curLevel.getLayerInstance(ld);
+	function shouldLayerDefVisibleInList(ld:data.def.LayerDef, curTag:Null<String>) : Bool {
 		if( ld.hideInList )
 			return false;
 		else if( curTag!=null && !ld.uiFilterTags.has(curTag) )
 			return false;
 		else
 			return true;
-
 	}
 
 	public function getVisibleLayerDefsInList() {
@@ -2739,109 +2750,110 @@ class Editor extends Page {
 		// Add layers
 		var shortcutIdx = 1;
 		for(ld in getVisibleLayerDefsInList()) {
-			var li = curLevel.getLayerInstance(ld);
-			var active = li==curLayerInstance;
+			for(li in curLevel.getLayerInstances(ld)) {
+				var active = li==curLayerInstance;
 
-			var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-			jLayerList.append(jLi);
-			jLi.attr("uid",ld.uid);
-			jLi.attr("tags",ld.uiFilterTags.toArray().join(","));
-			jLi.addClass("layer");
-			JsTools.applyListCustomColor(jLi, li.def.uiColor, active);
+				var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+				jLayerList.append(jLi);
+				jLi.attr("iid",li.iid);
+				jLi.attr("tags",ld.uiFilterTags.toArray().join(","));
+				jLi.addClass("layer");
+				JsTools.applyListCustomColor(jLi, li.def.uiColor, active);
 
-			if( active )
-				jLi.addClass("active");
+				if( active )
+					jLi.addClass("active");
 
-			if( ld.hideInList )
-				jLi.addClass("hiddenFromList");
+				if( ld.hideInList )
+					jLi.addClass("hiddenFromList");
 
-			if( ld.doc!=null ) {
-				jLi.attr("tip", "right");
-				ui.Tip.attach(jLi, ld.doc);
-			}
+				if( ld.doc!=null ) {
+					jLi.attr("tip", "right");
+					ui.Tip.attach(jLi, ld.doc);
+				}
 
-			if( shouldLayerDefVisibleInList(ld,curTag) )
-				jLi.find(".shortcut").text( shortcutIdx<=10 ? "F"+(shortcutIdx++) : "" );
+				if( shouldLayerDefVisibleInList(ld,curTag) )
+					jLi.find(".shortcut").text( shortcutIdx<=10 ? "F"+(shortcutIdx++) : "" );
 
-			// Icon
-			var jIcon = jLi.find(">.layerIcon");
-			jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
+				// Icon
+				var jIcon = jLi.find(">.layerIcon");
+				jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
 
-			// Name
-			var name = jLi.find(".name");
-			name.text(li.def.identifier);
-			jLi.click( function(_) {
-				selectLayerInstance(li);
-			});
+				// Name
+				var name = jLi.find(".name");
+				name.text(li.identifier);
+				jLi.click( function(_) {
+					selectLayerInstance(li);
+				});
 
-			// Rules button
-			var jRules = jLi.find(".rules");
-			if( li.def.isAutoLayer() )
-				jRules.show();
-			else
-				jRules.hide();
-			jRules.click( function(ev:js.jquery.Event) {
-				if( ui.Modal.closeAll() )
-					return;
-				ev.preventDefault();
-				ev.stopPropagation();
-				selectLayerInstance(li);
-				new ui.modal.panel.EditAllAutoLayerRules(li);
-			});
+				// Rules button
+				var jRules = jLi.find(".rules");
+				if( li.def.isAutoLayer() )
+					jRules.show();
+				else
+					jRules.hide();
+				jRules.click( function(ev:js.jquery.Event) {
+					if( ui.Modal.closeAll() )
+						return;
+					ev.preventDefault();
+					ev.stopPropagation();
+					selectLayerInstance(li);
+					new ui.modal.panel.EditAllAutoLayerRules(li);
+				});
 
-			// Visibility button
-			var jVis = jLi.find(".vis");
-			jVis.mouseover( (_)->{
-				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
-					levelRender.setLayerVisibility(li, heldVisibilitySet);
-			});
-			jVis.mousedown( (ev:js.jquery.Event)->{
-				if( App.ME.isShiftDown() ) {
-					// Keep only this one
-					var anyChange = !levelRender.isLayerVisible(li,true);
-					for(oli in curLevel.layerInstances)
-						if( oli!=li && levelRender.isLayerVisible(oli,true) ) {
-							anyChange = true;
-							levelRender.setLayerVisibility(oli, false);
-						}
-					if( anyChange )
-						levelRender.setLayerVisibility(li, true);
-					else {
-						// Re-enable all if it's already the case
+				// Visibility button
+				var jVis = jLi.find(".vis");
+				jVis.mouseover( (_)->{
+					if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
+						levelRender.setLayerVisibility(li, heldVisibilitySet);
+				});
+				jVis.mousedown( (ev:js.jquery.Event)->{
+					if( App.ME.isShiftDown() ) {
+						// Keep only this one
+						var anyChange = !levelRender.isLayerVisible(li,true);
 						for(oli in curLevel.layerInstances)
-							levelRender.setLayerVisibility(oli, true);
+							if( oli!=li && levelRender.isLayerVisible(oli,true) ) {
+								anyChange = true;
+								levelRender.setLayerVisibility(oli, false);
+							}
+						if( anyChange )
+							levelRender.setLayerVisibility(li, true);
+						else {
+							// Re-enable all if it's already the case
+							for(oli in curLevel.layerInstances)
+								levelRender.setLayerVisibility(oli, true);
+						}
 					}
-				}
-				else {
-					// Toggle this one
-					heldVisibilitySet = !levelRender.isLayerVisible(li,true);
-					levelRender.setLayerVisibility(li, heldVisibilitySet);
-					invalidateLevelCache(curLevel);
-				}
-			});
+					else {
+						// Toggle this one
+						heldVisibilitySet = !levelRender.isLayerVisible(li,true);
+						levelRender.setLayerVisibility(li, heldVisibilitySet);
+						invalidateLevelCache(curLevel);
+					}
+				});
 
-			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
-				{
-					label: L.t._("Toggle visibility"),
-					iconId: "visible",
-					cb: ()->jVis.mousedown(),
-				},
-				{
-					label: L.t._("Edit rules"),
-					iconId: "rule",
-					cb: ()->jRules.click(),
-					show: ()->li.def.isAutoLayer(),
-				},
-				{
-					label: L.t._("Edit layer settings"),
-					iconId: "edit",
-					cb: ()->{
-						selectLayerInstance(li);
-						App.ME.executeAppCommand(C_OpenLayerPanel);
+				var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+					{
+						label: L.t._("Toggle visibility"),
+						iconId: "visible",
+						cb: ()->jVis.mousedown(),
 					},
-				}
-			];
-			ui.modal.ContextMenu.attachTo(jLi, false, actions);
+					{
+						label: L.t._("Edit rules"),
+						iconId: "rule",
+						cb: ()->jRules.click(),
+						show: ()->li.def.isAutoLayer(),
+					},
+					{
+						label: L.t._("Edit layer settings"),
+						iconId: "edit",
+						cb: ()->{
+							selectLayerInstance(li);
+							App.ME.executeAppCommand(C_OpenLayerPanel);
+						},
+					}
+				];
+				ui.modal.ContextMenu.attachTo(jLi, false, actions);
+			}
 		}
 
 		updateLayerVisibilities();
@@ -2853,7 +2865,7 @@ class Editor extends Page {
 			if( !jLayer.hasClass("layer") )
 				return;
 
-			var li = curLevel.getLayerInstance( Std.parseInt(jLayer.attr("uid")) );
+			var li = curLevel.getLayerInstance( jLayer.attr("iid") );
 			if( li==null )
 				return;
 

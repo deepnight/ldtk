@@ -1,4 +1,5 @@
-package ui.modal.dialog;
+// TODO: restore this (for layer-instances)
+/*package ui.modal.dialog;
 
 class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 	var fromLd : data.def.LayerDef;
@@ -145,4 +146,4 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 		// Cancel
 		jContent.find(".cancel").click( _->close() );
 	}
-}
+}*/

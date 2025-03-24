@@ -15,6 +15,7 @@ class LayerInstance {
 		inline function get_camera() return Editor.ME.camera;
 
 	public var iid : String;
+	public var identifier : String;
 	public var levelId : Int;
 	public var layerDefUid : Int;
 	public var visible = true;
@@ -66,9 +67,10 @@ class LayerInstance {
 
 
 	@:allow(data.Level)
-	private function new(p:Project, levelUid:Int, layerDefUid:Int, layerInstIid:String) {
+	private function new(p:Project, levelUid:Int, layerDefUid:Int, layerInstIid:String, layerInstIdentifier: String) {
 		_project = p;
 		iid = layerInstIid;
+		identifier = layerInstIdentifier;
 		this.levelId = levelUid;
 		this.layerDefUid = layerDefUid;
 		seed = Std.random(9999999);
@@ -161,7 +163,7 @@ class LayerInstance {
 
 
 	@:keep public function toString() {
-		return 'LayerInst#$layerDefUid "${def.identifier}" [${def.type}]';
+		return 'LayerInst "${identifier}" [$layerDefUid, ${def.type}]';
 	}
 
 
@@ -206,7 +208,7 @@ class LayerInstance {
 
 		var json : ldtk.Json.LayerInstanceJson = {
 			// Fields preceded by "__" are only exported to facilitate parsing
-			__identifier: def.identifier,
+			__identifier: identifier,
 			__type: Std.string(def.type),
 			__cWid: cWid,
 			__cHei: cHei,
@@ -359,7 +361,14 @@ class LayerInstance {
 		if( (cast json).iid==null )
 			json.iid = p.generateUniqueId_UUID();
 
-		var li = new data.inst.LayerInstance( p, JsonTools.readInt(json.levelId), JsonTools.readInt(json.layerDefUid), json.iid );
+		var li = new data.inst.LayerInstance(
+			p,
+			JsonTools.readInt(json.levelId),
+			JsonTools.readInt(json.layerDefUid),
+			json.iid,
+			json.__identifier
+		);
+
 		li.seed = JsonTools.readInt(json.seed, Std.random(9999999));
 		li.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
 		li.pxOffsetY = JsonTools.readInt(json.pxOffsetY, 0);
@@ -530,7 +539,6 @@ class LayerInstance {
 			case Entities:
 				var i = 0;
 				var ei = null;
-				var level = this.level;
 				while( i<entityInstances.length ) {
 					ei = entityInstances[i];
 					if( ei.def==null ) {
@@ -886,11 +894,20 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
-	inline function isAutoTileCellAllowed(cx:Int, cy:Int) {
-		if( def.autoTilesKilledByOtherLayerUid==null )
-			return true;
-		else
-			return !level.getLayerInstance(def.autoTilesKilledByOtherLayerUid).hasAnyGridTile(cx,cy);
+	inline function isAutoTileCellAllowed(cx:Int, cy:Int) : Bool {
+		var isAllowed = true;
+
+		if( def.autoTilesKilledByOtherLayerUid!=null ) {
+			// TODO: make def.autoTilesKilledByOtherLayerUid refer to a layer-instance, rather than a layer
+			for( li in level.getLayerInstances(def.autoTilesKilledByOtherLayerUid) ) {
+				if( li.hasAnyGridTile(cx,cy) ) {
+					isAllowed = false;
+					break;
+				}
+			}
+		}
+
+		return isAllowed;
 	}
 
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {
@@ -1082,7 +1099,8 @@ class LayerInstance {
 			return;
 		}
 
-		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		var source = getAutoTileSource();
+
 		if( source==null ) {
 			clearAllAutoTilesCache();
 			return;
@@ -1132,7 +1150,7 @@ class LayerInstance {
 			return;
 		}
 
-		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
+		var source = getAutoTileSource();
 		if( source==null || !r.isRelevantInLayer(source) )
 			return;
 
@@ -1153,6 +1171,21 @@ class LayerInstance {
 			if( applyBreakOnMatch )
 				applyBreakOnMatchesEverywhere();
 		}
+	}
+
+	private inline function getAutoTileSource(): Null<data.inst.LayerInstance> {
+		var source: Null<data.inst.LayerInstance> = null;
+
+		if( def.type==IntGrid ) {
+			source = this;
+		} else if( def.autoSourceLayerDefUid!=null ) {
+			for( li in level.getLayerInstances(def.autoSourceLayerDefUid)) {
+				source = li;
+				break;
+			}
+		}
+
+		return source;
 	}
 
 }

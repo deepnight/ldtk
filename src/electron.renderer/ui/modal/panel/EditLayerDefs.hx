@@ -120,41 +120,6 @@ class EditLayerDefs extends ui.modal.Panel {
 		// Update layer instances
 		var td = project.defs.getTilesetDef(newLd.tilesetDefUid);
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
-		for(w in project.worlds)
-		for(l in w.levels) {
-			var sourceLi = l.getLayerInstance(ld);
-			var newLi = l.getLayerInstance(newLd);
-			ops.push({
-				label: l.identifier,
-				cb: ()->{
-					ld.iterateActiveRulesInDisplayOrder( newLi, (r)->{ // TODO not sure which "li" should be used here
-						if( sourceLi.autoTilesCache.exists( r.uid ) ) {
-							for( allTiles in sourceLi.autoTilesCache.get( r.uid ).keyValueIterator() )
-							for( tileInfos in allTiles.value ) {
-								newLi.addGridTile(
-									Std.int(tileInfos.x/ld.gridSize),
-									Std.int(tileInfos.y/ld.gridSize),
-									tileInfos.tid,
-									tileInfos.flips,
-									!td.isTileOpaque(tileInfos.tid),
-									false
-								);
-							}
-						}
-					});
-					switch method {
-						case null:
-						case DeleteBakedLayer:
-						case EmptyBakedLayer:
-							@:privateAccess sourceLi.intGrid = new Map();
-							sourceLi.autoTilesCache = null;
-						case KeepBakedLayer:
-					}
-
-					editor.ge.emit( LayerInstanceChangedGlobally(newLi) );
-				}
-			});
-		}
 
 		// Execute ops
 		new Progress(
@@ -246,7 +211,11 @@ class EditLayerDefs extends ui.modal.Panel {
 			return;
 		}
 
-		editor.selectLayerInstance( editor.curLevel.getLayerInstance(cur) );
+		for( li in editor.curLevel.getLayerInstances(cur) ) {
+			editor.selectLayerInstance(li);
+			break;
+		}
+
 		jFormsWrapper.show();
 		jForms.find("#gridSize").prop("readonly",false);
 
@@ -421,9 +390,12 @@ class EditLayerDefs extends ui.modal.Panel {
 
 			jButton.click( (_)->{
 				close();
-				var li = editor.curLevel.getLayerInstance(cur);
-				editor.selectLayerInstance(li);
-				new ui.modal.panel.EditAllAutoLayerRules(li);
+
+				for( li in editor.curLevel.getLayerInstances(cur) ) {
+					editor.selectLayerInstance(li);
+					new ui.modal.panel.EditAllAutoLayerRules(li);
+					break;
+				}
 			});
 		}
 		else
@@ -849,9 +821,9 @@ class EditLayerDefs extends ui.modal.Panel {
 				jForms.find("#excludedTags").empty().append( ted.jEditor );
 
 				// Move entities
-				jForms.find(".moveEntities").click( _->{
+				/*jForms.find(".moveEntities").click( _->{
 					new ui.modal.dialog.MoveEntitiesBetweenLayers(cur);
-				});
+				});*/
 
 			case Tiles:
 				var jSelect = JsTools.createTilesetSelect(

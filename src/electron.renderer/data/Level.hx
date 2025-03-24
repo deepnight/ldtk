@@ -242,7 +242,7 @@ class Level {
 						case AutoLayer: true;
 					}
 					if( show )
-						out.push( li.def.identifier+".png" );
+						out.push( li.identifier+".png" );
 				});
 				out;
 			},
@@ -555,28 +555,32 @@ class Level {
 		return false;
 	}
 
-	public function getLayerInstance(?layerDefUid:Int, ?layerDef:data.def.LayerDef) : data.inst.LayerInstance {
+	public function getLayerInstance(iid: String) : Null<data.inst.LayerInstance> {
+		for(li in layerInstances)
+			if( li.iid==iid )
+				return li;
+
+		return null;
+	}
+
+	public function getLayerInstances(?layerDefUid:Int, ?layerDef:data.def.LayerDef) : Array<data.inst.LayerInstance> {
 		if( layerDefUid==null && layerDef==null )
 			throw "Need 1 parameter";
 
 		if( layerDefUid==null )
 			layerDefUid = layerDef.uid;
 
-		for(li in layerInstances)
-			if( li.layerDefUid==layerDefUid )
-				return li;
-
-		throw "Missing layer instance for "+layerDefUid;
+		return layerInstances.filter(li -> li.layerDefUid == layerDefUid);
 	}
 
-	public function getLayerInstanceFromRule(r:data.def.AutoLayerRuleDef) {
+	public function getLayerInstancesFromRule(r:data.def.AutoLayerRuleDef) : Array<data.inst.LayerInstance> {
 		var ld = _project.defs.getLayerDefFromRule(r);
-		return ld!=null ? getLayerInstance(ld) : null;
+		return ld!=null ? getLayerInstances(ld) : [];
 	}
 
 
 	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
-		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID());
+		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID(), ld.identifier);
 		layerInstances.push(li);
 		return li;
 	}
@@ -624,25 +628,6 @@ class Level {
 			}
 			else
 				i++;
-
-		// Create missing layerInstances & check if they're sorted in the same order as defs
-		for(i in 0..._project.defs.layers.length)
-			if( i>=layerInstances.length || layerInstances[i].layerDefUid!=_project.defs.layers[i].uid ) {
-				App.LOG.add("tidy", 'Fixed layer instance array in $this (order mismatch or missing layer instance)');
-				var existing = new Map();
-				for(li in layerInstances)
-					existing.set(li.layerDefUid, li);
-				layerInstances = [];
-				for(ld in _project.defs.layers)
-					if( existing.exists(ld.uid) )
-						layerInstances.push( existing.get(ld.uid) );
-					else {
-						App.LOG.add("tidy", 'Added missing layer instance ${ld.identifier} in $this');
-						createLayerInstance(ld);
-					}
-				invalidateJsonCache();
-				break;
-			}
 
 		// Tidy layer instances
 		for(li in layerInstances)
@@ -819,18 +804,31 @@ class Level {
 	/* RENDERING *******************/
 
 	public function iterateLayerInstancesBottomToTop( eachLayer:data.inst.LayerInstance->Void ) {
-		var i = _project.defs.layers.length-1;
+		var i = layerInstances.length-1;
 		while( i>=0 ) {
-			eachLayer( getLayerInstance(_project.defs.layers[i]) );
+			eachLayer( layerInstances[i] );
 			i--;
 		}
 	}
 
 	public function iterateLayerInstancesTopToBottom( eachLayer:data.inst.LayerInstance->Void ) {
 		var i = 0;
-		while( i<_project.defs.layers.length ) {
-			eachLayer( getLayerInstance(_project.defs.layers[i]) );
+		while( i<layerInstances.length ) {
+			eachLayer( layerInstances[i] );
 			i++;
 		}
 	}
+
+
+	public function getLayerDepth(li:data.inst.LayerInstance) : Int {
+		var i = 0;
+		while( i<layerInstances.length && layerInstances[i]!=li )
+			i++;
+
+		if( i==layerInstances.length )
+			throw "Layer not found";
+
+		return layerInstances.length-1-i;
+	}
+
 }

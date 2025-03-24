@@ -1,6 +1,5 @@
 package ui.modal.panel;
 
-import data.DataTypes;
 import data.def.AutoLayerRuleDef;
 import data.def.AutoLayerRuleGroupDef;
 
@@ -32,7 +31,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_):
 				for(li in editor.curLevel.layerInstances)
-					if( li.layerDefUid==this.li.layerDefUid )
+					if( li.iid==this.li.iid )
 						this.li = li;
 				updateFullPanel();
 
@@ -41,7 +40,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
-					if( li.layerDefUid==this.li.layerDefUid )
+					if( li.iid==this.li.iid )
 						this.li = li;
 				updateFullPanel();
 

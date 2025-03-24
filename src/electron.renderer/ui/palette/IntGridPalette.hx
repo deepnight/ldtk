@@ -62,7 +62,7 @@ class IntGridPalette extends ui.ToolPalette {
 				var jTitle = new J('<li class="title collapser"/>');
 				jTitle.appendTo(jList);
 				jTitle.text(g.displayName);
-				jTitle.attr("id", project.iid+"_intGridPalette_"+tool.curLayerInstance.layerDefUid+"_group_"+g.groupUid);
+				jTitle.attr("id", project.iid+"_intGridPalette_"+tool.curLayerInstance.iid+"_group_"+g.groupUid);
 				jTitle.attr("default", "open");
 			}
 
