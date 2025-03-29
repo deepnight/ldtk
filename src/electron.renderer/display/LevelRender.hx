@@ -152,6 +152,17 @@ class LevelRender extends dn.Process {
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
 
+			case LayerInstancesSorted(l):
+				for( li in l.layerInstances ) {
+					var depth = l.getLayerDepth(li);
+					if( layerRenders.exists(li.layerDefUid) ) {
+						var layerRendersForDef = layerRenders.get(li.layerDefUid);
+						if( layerRendersForDef.exists(li.iid) ) {
+							layersWrapper.add( layerRendersForDef.get(li.iid).root, depth );
+						}
+					}
+				}
+
 			case AutoLayerRenderingChanged(lis):
 				for(li in lis)
 					if( li.def.isAutoLayer() )

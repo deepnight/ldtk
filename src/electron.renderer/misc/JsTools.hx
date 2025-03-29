@@ -64,6 +64,12 @@ class JsTools {
 		Sortable.create( jSortable.get(0), options);
 	}
 
+	public static function resetSortable(jSortable:js.jquery.JQuery) {
+		jSortable.removeClass("sortable");
+		jSortable.removeClass("customHandle");
+		jSortable.removeClass("onlyDraggables");
+	}
+
 
 	public static function createValuesSelect<T>(?jSelect:js.jquery.JQuery, cur:Null<T>, allValues:Array<T>, allowNull:Bool, ?def:T, ?printer:T->String, onSelect:T->Void) {
 		if( jSelect==null )

@@ -375,12 +375,10 @@ class Editor extends Page {
 			return false;
 
 		var curTag = getCurLayerFilterTag();
-		for( ld in getVisibleLayerDefsInList() )
-			if( shouldLayerDefVisibleInList(ld,curTag) ) {
-				for( li in curLevel.getLayerInstances(ld) ) {
-					selectLayerInstance( li, false );
-					return true;
-				}
+		for( li in getVisibleLayerInstancesInList() )
+			if( shouldLayerDefVisibleInList(li.def,curTag) ) {
+				selectLayerInstance( li, false );
+				return true;
 			}
 
 		return false;
@@ -562,18 +560,16 @@ class Editor extends Page {
 				var keyIdx = k-K.F1;
 				var i = 0;
 				var curTag = getCurLayerFilterTag();
-				for( ld in getVisibleLayerDefsInList() ) {
-					if( !shouldLayerDefVisibleInList(ld,curTag) )
+				for( li in getVisibleLayerInstancesInList() ) {
+					if( !shouldLayerDefVisibleInList(li.def,curTag) )
 						continue;
 
-					for( li in curLevel.getLayerInstances(ld) ) {
-						if( i==keyIdx ) {
-							selectLayerInstance(li);
-							i++;
-							break;
-						} else {
-							i++;
-						}
+					if( i==keyIdx ) {
+						selectLayerInstance(li);
+						i++;
+						break;
+					} else {
+						i++;
 					}
 
 					if( i>keyIdx )
@@ -2178,6 +2174,7 @@ class Editor extends Page {
 			case LayerInstanceEditedByTool(li): invalidateLevelCache(li.level);
 			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
 			case LayerInstanceVisiblityChanged(li):
+			case LayerInstancesSorted(l): invalidateLevelCache(l);
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
 					invalidateLevelCache(li.level);
@@ -2406,6 +2403,13 @@ class Editor extends Page {
 				project.resetQuickLevelAccesses();
 
 			case LayerInstanceTilesetChanged(li):
+
+			case LayerInstancesSorted(l):
+				if( curLevel==l && curLayerIid==null && curLevel.layerInstances.length>0 )
+					selectLayerInstance( curLevel.layerInstances[0] );
+				updateTool();
+				updateGuide();
+				updateLayerList();
 
 			case TilesetDefRemoved(_):
 				updateLayerList(); // for rule-based layers
@@ -2664,15 +2668,15 @@ class Editor extends Page {
 			return true;
 	}
 
-	public function getVisibleLayerDefsInList() {
+	public function getVisibleLayerInstancesInList() : Array<data.inst.LayerInstance> {
 		var curTag = getCurLayerFilterTag();
 
-		var visibleLayerDefs = [];
-		for(ld in project.defs.layers)
-			if( curLayerInstance!=null && curLayerInstance.layerDefUid==ld.uid || shouldLayerDefVisibleInList(ld,curTag) )
-				visibleLayerDefs.push(ld);
+		var visibleLayerInstances = [];
+		for(li in curLevel.layerInstances)
+			if( curLayerInstance==li || shouldLayerDefVisibleInList(li.def,curTag) )
+				visibleLayerInstances.push(li);
 
-		return visibleLayerDefs;
+		return visibleLayerInstances;
 	}
 
 
@@ -2701,7 +2705,7 @@ class Editor extends Page {
 			}
 
 			uiFilterTags.sort( (a,b)->Reflect.compare(a.toLowerCase(),b.toLowerCase()) );
-			var jLi = new J('<li class="filter"/>');
+			var jLi = new J('<div class="filter"/>');
 			jLi.prependTo(jLayerList);
 
 			// List tags (SELECT mode)
@@ -2749,111 +2753,129 @@ class Editor extends Page {
 
 		// Add layers
 		var shortcutIdx = 1;
-		for(ld in getVisibleLayerDefsInList()) {
-			for(li in curLevel.getLayerInstances(ld)) {
-				var active = li==curLayerInstance;
+		for(li in getVisibleLayerInstancesInList()) {
+			var ld = li.def;
+			var active = li==curLayerInstance;
 
-				var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
-				jLayerList.append(jLi);
-				jLi.attr("iid",li.iid);
-				jLi.attr("tags",ld.uiFilterTags.toArray().join(","));
-				jLi.addClass("layer");
-				JsTools.applyListCustomColor(jLi, li.def.uiColor, active);
+			var jLi = App.ME.jBody.find("xml.layer").clone().children().wrapAll("<li/>").parent();
+			jLayerList.append(jLi);
+			jLi.attr("iid",li.iid);
+			jLi.attr("tags",ld.uiFilterTags.toArray().join(","));
+			jLi.addClass("layer");
+			JsTools.applyListCustomColor(jLi, ld.uiColor, active);
 
-				if( active )
-					jLi.addClass("active");
+			if ( curTag==null )
+				jLi.addClass("draggable");
 
-				if( ld.hideInList )
-					jLi.addClass("hiddenFromList");
+			if( active )
+				jLi.addClass("active");
 
-				if( ld.doc!=null ) {
-					jLi.attr("tip", "right");
-					ui.Tip.attach(jLi, ld.doc);
-				}
+			if( ld.hideInList )
+				jLi.addClass("hiddenFromList");
 
-				if( shouldLayerDefVisibleInList(ld,curTag) )
-					jLi.find(".shortcut").text( shortcutIdx<=10 ? "F"+(shortcutIdx++) : "" );
-
-				// Icon
-				var jIcon = jLi.find(">.layerIcon");
-				jIcon.append( JsTools.createLayerTypeIcon2(li.def.type) );
-
-				// Name
-				var name = jLi.find(".name");
-				name.text(li.identifier);
-				jLi.click( function(_) {
-					selectLayerInstance(li);
-				});
-
-				// Rules button
-				var jRules = jLi.find(".rules");
-				if( li.def.isAutoLayer() )
-					jRules.show();
-				else
-					jRules.hide();
-				jRules.click( function(ev:js.jquery.Event) {
-					if( ui.Modal.closeAll() )
-						return;
-					ev.preventDefault();
-					ev.stopPropagation();
-					selectLayerInstance(li);
-					new ui.modal.panel.EditAllAutoLayerRules(li);
-				});
-
-				// Visibility button
-				var jVis = jLi.find(".vis");
-				jVis.mouseover( (_)->{
-					if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
-						levelRender.setLayerVisibility(li, heldVisibilitySet);
-				});
-				jVis.mousedown( (ev:js.jquery.Event)->{
-					if( App.ME.isShiftDown() ) {
-						// Keep only this one
-						var anyChange = !levelRender.isLayerVisible(li,true);
-						for(oli in curLevel.layerInstances)
-							if( oli!=li && levelRender.isLayerVisible(oli,true) ) {
-								anyChange = true;
-								levelRender.setLayerVisibility(oli, false);
-							}
-						if( anyChange )
-							levelRender.setLayerVisibility(li, true);
-						else {
-							// Re-enable all if it's already the case
-							for(oli in curLevel.layerInstances)
-								levelRender.setLayerVisibility(oli, true);
-						}
-					}
-					else {
-						// Toggle this one
-						heldVisibilitySet = !levelRender.isLayerVisible(li,true);
-						levelRender.setLayerVisibility(li, heldVisibilitySet);
-						invalidateLevelCache(curLevel);
-					}
-				});
-
-				var actions : Array<ui.modal.ContextMenu.ContextAction> = [
-					{
-						label: L.t._("Toggle visibility"),
-						iconId: "visible",
-						cb: ()->jVis.mousedown(),
-					},
-					{
-						label: L.t._("Edit rules"),
-						iconId: "rule",
-						cb: ()->jRules.click(),
-						show: ()->li.def.isAutoLayer(),
-					},
-					{
-						label: L.t._("Edit layer settings"),
-						iconId: "edit",
-						cb: ()->{
-							selectLayerInstance(li);
-							App.ME.executeAppCommand(C_OpenLayerPanel);
-						},
-					}
-				];
-				ui.modal.ContextMenu.attachTo(jLi, false, actions);
+			if( ld.doc!=null ) {
+				jLi.attr("tip", "right");
+				ui.Tip.attach(jLi, ld.doc);
 			}
+
+			if( shouldLayerDefVisibleInList(ld,curTag) )
+				jLi.find(".shortcut").text( shortcutIdx<=10 ? "F"+(shortcutIdx++) : "" );
+
+			// Icon
+			var jIcon = jLi.find(">.layerIcon");
+			jIcon.append( JsTools.createLayerTypeIcon2(ld.type) );
+
+			// Name
+			var name = jLi.find(".name");
+			name.text(li.identifier);
+			jLi.click( function(_) {
+				selectLayerInstance(li);
+			});
+
+			// Rules button
+			var jRules = jLi.find(".rules");
+			if( ld.isAutoLayer() )
+				jRules.show();
+			else
+				jRules.hide();
+			jRules.click( function(ev:js.jquery.Event) {
+				if( ui.Modal.closeAll() )
+					return;
+				ev.preventDefault();
+				ev.stopPropagation();
+				selectLayerInstance(li);
+				new ui.modal.panel.EditAllAutoLayerRules(li);
+			});
+
+			// Visibility button
+			var jVis = jLi.find(".vis");
+			jVis.mouseover( (_)->{
+				if( App.ME.isMouseButtonDown(0) && heldVisibilitySet!=null )
+					levelRender.setLayerVisibility(li, heldVisibilitySet);
+			});
+			jVis.mousedown( (ev:js.jquery.Event)->{
+				if( App.ME.isShiftDown() ) {
+					// Keep only this one
+					var anyChange = !levelRender.isLayerVisible(li,true);
+					for(oli in curLevel.layerInstances)
+						if( oli!=li && levelRender.isLayerVisible(oli,true) ) {
+							anyChange = true;
+							levelRender.setLayerVisibility(oli, false);
+						}
+					if( anyChange )
+						levelRender.setLayerVisibility(li, true);
+					else {
+						// Re-enable all if it's already the case
+						for(oli in curLevel.layerInstances)
+							levelRender.setLayerVisibility(oli, true);
+					}
+				}
+				else {
+					// Toggle this one
+					heldVisibilitySet = !levelRender.isLayerVisible(li,true);
+					levelRender.setLayerVisibility(li, heldVisibilitySet);
+					invalidateLevelCache(curLevel);
+				}
+			});
+
+			var actions : Array<ui.modal.ContextMenu.ContextAction> = [
+				{
+					label: L.t._("Toggle visibility"),
+					iconId: "visible",
+					cb: ()->jVis.mousedown(),
+				},
+				{
+					label: L.t._("Edit rules"),
+					iconId: "rule",
+					cb: ()->jRules.click(),
+					show: ()->li.def.isAutoLayer(),
+				},
+				{
+					label: L.t._("Edit layer settings"),
+					iconId: "edit",
+					cb: ()->{
+						selectLayerInstance(li);
+						App.ME.executeAppCommand(C_OpenLayerPanel);
+					},
+				}
+			];
+			ui.modal.ContextMenu.attachTo(jLi, false, actions);
+		}
+
+		if ( curTag==null ) {
+			// Make layer list sortable (only when no tags are selected)
+			JsTools.makeSortable(
+				jLayerList,
+				(ev)->{
+					// Offset oldIndex and newIndex by 1, to account for filters (which are in jLayerList as well)
+					curLevel.sortLayerInstances(ev.oldIndex-1, ev.newIndex-1);
+					ge.emit(LayerInstancesSorted(curLevel));
+					curLevelTimeline.saveFullLevelState();
+				},
+				{ onlyDraggables: true }
+			);
+		} else {
+			JsTools.resetSortable(jLayerList);
 		}
 
 		updateLayerVisibilities();

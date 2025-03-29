@@ -579,6 +579,20 @@ class Level {
 	}
 
 
+	public function sortLayerInstances(from:Int, to:Int) {
+		if( from<0 || from>=layerInstances.length || from==to )
+			return;
+
+		if( to<0 || to>=layerInstances.length )
+			return;
+
+		var moved = layerInstances.splice(from,1)[0];
+		layerInstances.insert(to, moved);
+
+		invalidateJsonCache();
+	}
+
+
 	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
 		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID(), ld.identifier);
 		layerInstances.push(li);

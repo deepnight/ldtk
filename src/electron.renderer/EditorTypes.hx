@@ -49,6 +49,7 @@ enum GlobalEvent {
 	LayerInstanceEditedByTool(li:data.inst.LayerInstance);
 	LayerInstanceChangedGlobally(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
+	LayerInstancesSorted(level:data.Level);
 	LayerInstancesRestoredFromHistory(lis:Array<data.inst.LayerInstance>);
 	AutoLayerRenderingChanged(lis:Array<data.inst.LayerInstance>);
 	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);

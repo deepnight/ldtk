@@ -281,6 +281,9 @@ class WorldRender extends dn.Process {
 			case LayerInstanceSelected(curLi):
 				updateEdgeLayersOpacity();
 
+			case LayerInstancesSorted(l):
+				invalidateLevelRender(l);
+
 			case TilesetDefPixelDataCacheRebuilt(td):
 				invalidateAllLevelRenders();
 
