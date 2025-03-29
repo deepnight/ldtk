@@ -2867,8 +2867,11 @@ class Editor extends Page {
 			JsTools.makeSortable(
 				jLayerList,
 				(ev)->{
-					// Offset oldIndex and newIndex by 1, to account for filters (which are in jLayerList as well)
-					curLevel.sortLayerInstances(ev.oldIndex-1, ev.newIndex-1);
+					// Offset oldIndex and newIndex by the first layer,
+					// since other elements may be present in the jLayerList (e.g. the filters).
+					var firstLayerIndex = jLayerList.find(".layer").index();
+
+					curLevel.sortLayerInstances( ev.oldIndex-firstLayerIndex, ev.newIndex-firstLayerIndex );
 					ge.emit(LayerInstancesSorted(curLevel));
 					curLevelTimeline.saveFullLevelState();
 				},
