@@ -578,25 +578,59 @@ class Level {
 		return ld!=null ? getLayerInstances(ld) : [];
 	}
 
-
-	public function sortLayerInstances(from:Int, to:Int) {
+	public function sortLayerInstances(from:Int, to:Int) : Null<data.inst.LayerInstance> {
 		if( from<0 || from>=layerInstances.length || from==to )
-			return;
+			return null;
 
 		if( to<0 || to>=layerInstances.length )
-			return;
+			return null;
 
 		var moved = layerInstances.splice(from,1)[0];
 		layerInstances.insert(to, moved);
 
-		invalidateJsonCache();
+		return moved;
+	}
+
+	public function createLayerInstance(layerDef:data.def.LayerDef, ?id:String) : data.inst.LayerInstance {
+		var identifier = _project.fixUniqueIdStr(id==null ? layerDef.identifier : id, (id)->isLayerNameUnique(id));
+
+		var li = new data.inst.LayerInstance(_project, this.uid, layerDef.uid, _project.generateUniqueId_UUID(), identifier);
+		layerInstances.push(li);
+		return li;
+	}
+
+	public function duplicateLayerInstance(li:data.inst.LayerInstance, ?baseName:String) : Null<data.inst.LayerInstance> {
+		return pasteLayerInstance( Clipboard.createTemp(CLayerInstance, li.toJson()), li, baseName );
+	}
+
+	public function pasteLayerInstance(c:Clipboard, ?after:data.inst.LayerInstance, ?baseName:String) : Null<data.inst.LayerInstance> {
+		if( !c.is(CLayerInstance) )
+			return null;
+
+		var json : ldtk.Json.LayerInstanceJson = c.getParsedJson();
+		var copy = data.inst.LayerInstance.fromJson( _project, json );
+		copy.iid = _project.generateUniqueId_UUID();
+		copy.identifier = _project.fixUniqueIdStr(baseName==null ? json.__identifier : baseName, (id)->isLayerNameUnique(id));
+
+		if( after!=null )
+			layerInstances.insert( dn.Lib.getArrayIndex(after, layerInstances)+1, copy );
+		else
+			layerInstances.push(copy);
+		_project.tidy();
+		return copy;
+	}
+
+	public function removeLayerInstance(li:data.inst.LayerInstance) {
+		layerInstances.remove(li);
 	}
 
 
-	function createLayerInstance(ld:data.def.LayerDef) : data.inst.LayerInstance {
-		var li = new data.inst.LayerInstance(_project, this.uid, ld.uid, _project.generateUniqueId_UUID(), ld.identifier);
-		layerInstances.push(li);
-		return li;
+	public function isLayerNameUnique(id:String, ?exclude:data.inst.LayerInstance) {
+		var id = Project.cleanupIdentifier(id, _project.identifierStyle);
+		for(li in layerInstances)
+			if( li.identifier==id && li!=exclude )
+				return false;
+		return true;
 	}
 
 

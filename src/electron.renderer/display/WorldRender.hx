@@ -278,6 +278,12 @@ class WorldRender extends dn.Process {
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 
+			case LayerInstanceAdded(li):
+				invalidateLevelRender(li.level);
+
+			case LayerInstanceRemoved(li):
+				invalidateLevelRender(li.level);
+
 			case LayerInstanceSelected(curLi):
 				updateEdgeLayersOpacity();
 

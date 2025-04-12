@@ -149,6 +149,19 @@ class LevelRender extends dn.Process {
 						li.applyAllRules();
 				invalidateAll();
 
+			case LayerInstanceAdded(li):
+				// TODO: check if 'LayerInstancesSorted' should be repliacted here
+				invalidateLayer(li);
+
+			case LayerInstanceRemoved(li):
+				if( layerRenders.exists(li.layerDefUid) ) {
+					var lrs = layerRenders.get(li.layerDefUid);
+					if ( lrs.exists(li.iid) ) {
+						lrs.get(li.iid).dispose();
+						lrs.remove(li.iid);
+					}
+				}
+
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
 

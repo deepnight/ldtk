@@ -628,7 +628,8 @@ class App extends dn.Process {
 			case C_MoveLevelToPreviousWorldLayer:
 			case C_MoveLevelToNextWorldLayer:
 			case C_OpenProjectPanel:
-			case C_OpenLayerPanel:
+			case C_OpenLayerInstancePanel:
+			case C_OpenLayerDefPanel:
 			case C_OpenEntityPanel:
 			case C_OpenEnumPanel:
 			case C_OpenTilesetPanel:

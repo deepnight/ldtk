@@ -4553,6 +4553,16 @@ textarea {
 	}
 }
 
+.window.dialog.selectLayerDef {
+	>.wrapper {
+		min-width: 400px;
+
+		.content select {
+			width: 100%;
+		}
+	}
+}
+
 .toolPopOutPlaceholder {
 	width: 100%;
 	height: 100%;
@@ -7676,6 +7686,7 @@ dl.form.fieldInstanceEditor {
 }
 
 .window.panel.editLayerDefs,
+.window.panel.editLayerInstances,
 .window.panel.editTilesetDefs {
 	.content{
 		display: grid;
@@ -8232,6 +8243,85 @@ dl.form.fieldInstanceEditor {
 				}
 			}
 		}
+	}
+
+	dl.form .IntGrid,
+	dl.form .IntGridAutoLayer,
+	dl.form .AutoLayer,
+	dl.form .Tiles,
+	dl.form .Entities {
+		display: none;
+	}
+
+	dl.form.type-IntGrid .IntGrid,
+	dl.form.type-IntGridAutoLayer .IntGridAutoLayer,
+	dl.form.type-AutoLayer .AutoLayer,
+	dl.form.type-Entities .Entities,
+	dl.form.type-Tiles .Tiles {
+		display: grid;
+		&:not(dt, label) {
+			display: flex;
+		}
+	}
+}
+
+
+.window.panel.editLayerInstances .content {
+	dl.form {
+		overflow-x: hidden;
+		padding-right: 4px;
+		overflow-y: auto;
+		grid-template-columns: 160px auto;
+		>dt {
+			max-width: none;
+		}
+
+		.advanced {
+			margin-top: 16px;
+			button {
+				flex: 0 1 auto;
+				min-height: 2.5em;
+			}
+		}
+	}
+	.mainList {
+		grid-template-rows: min-content min-content auto;
+
+		ul li {
+			grid-template-columns: min-content auto min-content;
+			.name {
+				width: 100%;
+				overflow-x: hidden;
+			}
+
+			&.hidden {
+				&:not(.active) {
+					color: $lightRed;
+				}
+				font-style: italic;
+				opacity: 0.8;
+			}
+			.icon {
+				width: 1.8em;
+				height: 1.8em;
+			}
+		}
+	}
+	.mainList ul:empty::before {
+		content: "No layer";
+	}
+	.icon {
+		width: 2.5em;
+		height: 2.5em;
+	}
+
+	span#layerDefName {
+		flex-grow: 1;
+	}
+	button.editLayerDef {
+		flex-grow: 0;
+		white-space: nowrap;
+		margin-left: 2px;
 	}
 
 	dl.form .IntGrid,

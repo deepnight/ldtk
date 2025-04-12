@@ -183,8 +183,12 @@ class Editor extends Page {
 			App.ME.executeAppCommand(C_OpenLevelPanel);
 		});
 
-		jMainPanel.find("button.editLayers").click( function(_) {
-			App.ME.executeAppCommand(C_OpenLayerPanel);
+		jMainPanel.find("button.editLayerInstances").click( function(_) {
+			App.ME.executeAppCommand(C_OpenLayerInstancePanel);
+		});
+
+		jMainPanel.find("button.editLayerDefs").click( function(_) {
+			App.ME.executeAppCommand(C_OpenLayerDefPanel);
 		});
 
 		jMainPanel.find("button.editEntities").click( function(_) {
@@ -854,7 +858,13 @@ class Editor extends Page {
 				else
 					new ui.modal.panel.EditProject();
 
-			case C_OpenLayerPanel:
+			case C_OpenLayerInstancePanel:
+				if( ui.Modal.isOpen(ui.modal.panel.EditLayerInstances) )
+					ui.Modal.closeAll();
+				else
+					new ui.modal.panel.EditLayerInstances();
+
+			case C_OpenLayerDefPanel:
 				if( ui.Modal.isOpen(ui.modal.panel.EditLayerDefs) )
 					ui.Modal.closeAll();
 				else
@@ -936,15 +946,21 @@ class Editor extends Page {
 		return allLayerTools.get( curLayerIid );
 	}
 
+	function deleteLayerTool(layerInstanceIid:String) {
+		if( allLayerTools.exists(layerInstanceIid) ) {
+			allLayerTools.get(layerInstanceIid).destroy();
+			allLayerTools.remove(layerInstanceIid);
+			return true;
+		}
+
+		return false;
+	}
+
 	function deleteLayerTools(layerDefUid:Int) {
 		var wasDeleted = false;
 
 		for( li in curLevel.getLayerInstances(layerDefUid) ) {
-			if( allLayerTools.exists(li.iid) ) {
-				allLayerTools.get(li.iid).destroy();
-				allLayerTools.remove(li.iid);
-				wasDeleted = true;
-			}
+			wasDeleted = deleteLayerTool(li.iid) || wasDeleted;
 		}
 
 		return wasDeleted;
@@ -2049,9 +2065,12 @@ class Editor extends Page {
 				case LayerRuleGroupChangedActiveState(rg): extra = rg.uid;
 				case LayerRuleGroupSorted:
 				case LayerRuleGroupCollapseChanged(rg): extra = rg.uid;
+				case LayerInstanceAdded(li): extra = li.iid;
+				case LayerInstanceRemoved(li): extra = li.iid;
 				case LayerInstanceSelected(li): extra = li.iid;
 				case LayerInstanceChangedGlobally(li): extra = li.iid;
 				case LayerInstanceVisiblityChanged(li): extra = li.iid;
+				case LayerInstancesSorted(l): extra = l.uid;
 				case LayerInstancesRestoredFromHistory(lis): extra = lis.map( li->li.iid ).join(",");
 				case LayerInstanceTilesetChanged(li): extra = li.iid;
 				case AutoLayerRenderingChanged(lis): extra = lis.map( li->li.iid ).join(",");
@@ -2170,6 +2189,8 @@ class Editor extends Page {
 					invalidateAllLevelsCache();
 			case LayerRuleGroupSorted: invalidateAllLevelsCache();
 			case LayerRuleGroupCollapseChanged(rg):
+			case LayerInstanceAdded(li): invalidateLevelCache(li.level);
+			case LayerInstanceRemoved(li): invalidateLevelCache(li.level);
 			case LayerInstanceSelected(li):
 			case LayerInstanceEditedByTool(li): invalidateLevelCache(li.level);
 			case LayerInstanceChangedGlobally(li): invalidateLevelCache(li.level);
@@ -2391,6 +2412,18 @@ class Editor extends Page {
 					levelTimelines.set(l.uid, new LevelTimeline(l.uid, l._world.iid, true) );
 				selectWorldDepth(l.worldDepth);
 				l.invalidateCachedError();
+
+			case LayerInstanceAdded(li):
+				if( curLevel==li.level && curLayerIid==null )
+					selectLayerInstance( li );
+				updateTool();
+				updateGuide();
+				updateLayerList();
+
+			case LayerInstanceRemoved(li):
+				deleteLayerTool(li.iid);
+				updateLayerList();
+				updateTool();
 
 			case LayerInstancesRestoredFromHistory(_), LevelRestoredFromHistory(_):
 				selectionTool.clear();
@@ -2764,9 +2797,6 @@ class Editor extends Page {
 			jLi.addClass("layer");
 			JsTools.applyListCustomColor(jLi, ld.uiColor, active);
 
-			if ( curTag==null )
-				jLi.addClass("draggable");
-
 			if( active )
 				jLi.addClass("active");
 
@@ -2855,30 +2885,19 @@ class Editor extends Page {
 					iconId: "edit",
 					cb: ()->{
 						selectLayerInstance(li);
-						App.ME.executeAppCommand(C_OpenLayerPanel);
+						App.ME.executeAppCommand(C_OpenLayerInstancePanel);
+					},
+				},
+				{
+					label: L.t._("Edit layer definition"),
+					iconId: "settings",
+					cb: ()->{
+						selectLayerInstance(li);
+						App.ME.executeAppCommand(C_OpenLayerDefPanel);
 					},
 				}
 			];
 			ui.modal.ContextMenu.attachTo(jLi, false, actions);
-		}
-
-		if ( curTag==null ) {
-			// Make layer list sortable (only when no tags are selected)
-			JsTools.makeSortable(
-				jLayerList,
-				(ev)->{
-					// Offset oldIndex and newIndex by the first layer,
-					// since other elements may be present in the jLayerList (e.g. the filters).
-					var firstLayerIndex = jLayerList.find(".layer").index();
-
-					curLevel.sortLayerInstances( ev.oldIndex-firstLayerIndex, ev.newIndex-firstLayerIndex );
-					ge.emit(LayerInstancesSorted(curLevel));
-					curLevelTimeline.saveFullLevelState();
-				},
-				{ onlyDraggables: true }
-			);
-		} else {
-			JsTools.resetSortable(jLayerList);
 		}
 
 		updateLayerVisibilities();
