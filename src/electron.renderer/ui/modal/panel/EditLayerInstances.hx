@@ -152,13 +152,15 @@ class EditLayerInstances extends ui.modal.Panel {
 
 		jFormsWrapper.show();
 
-		// Set form class
+		// Set up layer type info
 		for(k in Type.getEnumConstructs(ldtk.Json.LayerType))
-			jForms.removeClass("type-"+k);
-		jForms.removeClass("type-IntGridAutoLayer");
-		jForms.addClass("type-"+cur.def.type);
+			jFormsWrapper.removeClass("type-"+k);
+		jFormsWrapper.removeClass("type-IntGridAutoLayer");
+		jFormsWrapper.addClass("type-"+cur.def.type);
 		if( cur.def.type==IntGrid && cur.def.isAutoLayer() )
-			jForms.addClass("type-IntGridAutoLayer");
+			jFormsWrapper.addClass("type-IntGridAutoLayer");
+
+		jContent.find("#typeSpecificTitle").text( cur.def.type.getName() );
 
 
 		// Definition
@@ -182,6 +184,20 @@ class EditLayerInstances extends ui.modal.Panel {
 		i.onChange = ()->{
 			editor.levelRender.invalidateLayer(cur);
 			editor.ge.emit(LayerInstanceVisiblityChanged(cur));
+		}
+
+
+		// Layer type specific configuration
+		switch (cur.def.type) {
+
+			case Entities:
+				// Move entities
+				jForms.find(".moveEntities").click( _->{
+					new ui.modal.dialog.MoveEntitiesBetweenLayers(cur);
+				});
+
+			default:
+
 		}
 
 

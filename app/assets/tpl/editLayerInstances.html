@@ -16,7 +16,7 @@
 </div>
 
 
-<div class="rightColumn">
+<div class="rightColumn type-IntGrid type-IntGridAutoLayer type-AutoLayer type-Tiles type-Entities">
 
 	<div class="collapser" default="open" id="layerPanel_mainForm">General layer settings</div>
 	<dl class="form main">
@@ -54,16 +54,22 @@
 		</dd>
 	</dl>
 
-	<!--div class="collapser" default="open" id="layerPanel_specificForm"><span class="inlined" id="typeSpecificTitle"></span> settings</div>
-	<dl class="form typeSpecific">
-		<dt class="advanced Entities">
-			<label>Advanced operations</label>
-		</dt>
-		<dd class="advanced Entities">
-			<button class="moveEntities" title="Use this action to quickly move a selection of entity instances from this layer to another one.\nThis is typically useful if, for example, you added an 'Actor' tag to some entities, and you wanted to move all existing Actors to a new 'ActorsOnly' layer.">
-				Move existing entities to another layer
-			</button>
-		</dd>
-	</dl-->
+	<div class="Entities">
+		<div class="collapser" default="open" id="layerPanel_specificForm"><span class="inlined" id="typeSpecificTitle"></span> settings</div>
+		<dl class="form typeSpecific">
+
+			<div class="Entities">
+				<dt class="advanced">
+					<label>Advanced operations</label>
+				</dt>
+				<dd class="advanced">
+					<button class="moveEntities" title="Use this action to quickly move a selection of entity instances from this layer to another one.\nThis is typically useful if, for example, you added an 'Actor' tag to some entities, and you wanted to move all existing Actors to a new 'ActorsOnly' layer.">
+						Move existing entities to another layer
+					</button>
+				</dd>
+			</div>
+
+		</dl>
+	</div>
 
 </div>

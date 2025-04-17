@@ -8324,22 +8324,24 @@ dl.form.fieldInstanceEditor {
 		margin-left: 2px;
 	}
 
-	dl.form .IntGrid,
-	dl.form .IntGridAutoLayer,
-	dl.form .AutoLayer,
-	dl.form .Tiles,
-	dl.form .Entities {
-		display: none;
+
+	.rightColumn {
+		.IntGrid,
+		.IntGridAutoLayer,
+		.AutoLayer,
+		.Tiles,
+		.Entities {
+			display: none;
+		}
 	}
 
-	dl.form.type-IntGrid .IntGrid,
-	dl.form.type-IntGridAutoLayer .IntGridAutoLayer,
-	dl.form.type-AutoLayer .AutoLayer,
-	dl.form.type-Entities .Entities,
-	dl.form.type-Tiles .Tiles {
-		display: grid;
-		&:not(dt, label) {
-			display: flex;
+	.rightColumn {
+		&.type-IntGrid .IntGrid,
+		&.type-IntGridAutoLayer .IntGridAutoLayer,
+		&.type-AutoLayer .AutoLayer,
+		&.type-Tiles .Tiles,
+		&.type-Entities .Entities {
+			display: contents;
 		}
 	}
 }

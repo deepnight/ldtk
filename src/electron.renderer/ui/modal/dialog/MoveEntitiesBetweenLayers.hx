@@ -1,11 +1,8 @@
-// TODO: restore this (for layer-instances)
-/*package ui.modal.dialog;
+package ui.modal.dialog;
 
 class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
-	var fromLd : data.def.LayerDef;
-	public function new(fromLayerDef:data.def.LayerDef) {
+	public function new(fromLi:data.inst.LayerInstance) {
 		super();
-		fromLd = fromLayerDef;
 		loadTemplate("moveEntitiesBetweenLayers");
 
 		var jForm = jContent.find("dl.form");
@@ -53,14 +50,14 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 			jLayerSel.blur();
 		});
 		jLayerSel.find("option:not(:first)");
-		for(ld in project.defs.layers) {
-			var jOpt = new J('<option value="${ld.uid}">${ld.identifier}</option>');
+		for(li in fromLi.level.layerInstances) {
+			var jOpt = new J('<option value="${li.iid}">${li.identifier}</option>');
 			jLayerSel.append(jOpt);
-			if( ld.type!=Entities ) {
+			if( li.def.type!=Entities ) {
 				jOpt.append(" (not an Entities layer)");
 				jOpt.prop("disabled",true);
 			}
-			if( ld.uid==fromLd.uid ) {
+			if( li.iid==fromLi.iid ) {
 				jOpt.append(" (same as origin)");
 				jOpt.prop("disabled",true);
 			}
@@ -69,15 +66,17 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 		// Confirm
 		jConfirm.click( _->{
 			var filter = jTargetSel.val();
-			var targetUid = Std.parseInt( jLayerSel.val() );
+			var targetIid = jLayerSel.val();
 
 			// Check form
-			if( filter=="" || !M.isValidNumber(targetUid) ) {
+			if( filter=="" || targetIid=="" ) {
 				N.error("Please provide requested informations first.");
 				return;
 			}
 
-			var targetLd : data.def.LayerDef = project.defs.getLayerDef(targetUid);
+			var targetLi : data.inst.LayerInstance = fromLi.level.getLayerInstance(targetIid);
+			var targetLd : data.def.LayerDef = targetLi.def;
+
 			var filterType : String = filter.split(".")[0];
 			var filterId : String = filter.split(".")[1];
 
@@ -97,48 +96,38 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 					}
 			}
 
+			// TODO: check if this can be replaced with a simple undo-stack push.
 			new LastChance(L.t._("Moved entities between layers"), project);
 
 			// Move all existing entities
-			var n = 0;
-			for(w in project.worlds)
-			for(l in w.levels)
-			for(fromLi in l.layerInstances) {
-				if( fromLi.layerDefUid!=fromLd.uid)
-					continue;
-
-				var targetLi = l.getLayerInstance(targetLd);
-
-				var movedEis = fromLi.entityInstances.filter( ei->{
-					switch filterType {
-						case "all":
-							( targetLd.excludedTags.isEmpty() || !ei.def.tags.hasAnyTagFoundIn(targetLd.excludedTags) )
-							&& ( targetLd.requiredTags.isEmpty() || ei.def.tags.hasAnyTagFoundIn(targetLd.requiredTags) );
-						case "id": ei.def.identifier==filterId;
-						case "tag": ei.def.tags.has(filterId);
-						case _: false;
-					}
-				});
-
-				for(ei in movedEis) {
-					fromLi.entityInstances.remove(ei);
-					targetLi.entityInstances.push(ei);
-					ei.tidy(project,targetLi); // fix internal ei._li pointer
+			var movedEis = fromLi.entityInstances.filter( ei->{
+				switch filterType {
+					case "all":
+						( targetLd.excludedTags.isEmpty() || !ei.def.tags.hasAnyTagFoundIn(targetLd.excludedTags) )
+						&& ( targetLd.requiredTags.isEmpty() || ei.def.tags.hasAnyTagFoundIn(targetLd.requiredTags) );
+					case "id": ei.def.identifier==filterId;
+					case "tag": ei.def.tags.has(filterId);
+					case _: false;
 				}
-				n+=movedEis.length;
+			});
 
-				if( movedEis.length>0 ) {
-					editor.invalidateLevelCache(l);
-					editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(fromLi) );
-					editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(targetLi) );
-				}
+			for(ei in movedEis) {
+				fromLi.entityInstances.remove(ei);
+				targetLi.entityInstances.push(ei);
+				ei.tidy(project,targetLi); // fix internal ei._li pointer
+			}
+
+			if( movedEis.length>0 ) {
+				editor.invalidateLevelCache(targetLi.level);
+				editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(fromLi) );
+				editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(targetLi) );
 			}
 
 			new Message(
 				L.t._("::n:: entities were moved from ::fromLayer:: to ::toLayer::.",  {
-					n: n,
-					fromLayer: fromLd.identifier,
-					toLayer: targetLd.identifier,
+					n: movedEis.length,
+					fromLayer: fromLi.identifier,
+					toLayer: targetLi.identifier,
 				})
 			);
 		} );
@@ -146,4 +135,4 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 		// Cancel
 		jContent.find(".cancel").click( _->close() );
 	}
-}*/
+}
