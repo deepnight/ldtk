@@ -898,7 +898,6 @@ class LayerInstance {
 		var isAllowed = true;
 
 		if( def.autoTilesKilledByOtherLayerUid!=null ) {
-			// TODO: make def.autoTilesKilledByOtherLayerUid refer to a layer-instance, rather than a layer
 			for( li in level.getLayerInstances(def.autoTilesKilledByOtherLayerUid) ) {
 				if( li.hasAnyGridTile(cx,cy) ) {
 					isAllowed = false;

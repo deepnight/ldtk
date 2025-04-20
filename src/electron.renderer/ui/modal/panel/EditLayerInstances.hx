@@ -46,17 +46,7 @@ class EditLayerInstances extends ui.modal.Panel {
 		jForms.find("input").first().focus().select();
 	}
 
-	function deleteLayer(li:data.inst.LayerInstance, bypassConfirm=false) {
-		// TODO: reintroduce confirmation when deleting a layer-instance (for when it's referenced otherwhere)
-		/*if( !bypassConfirm && project.defs.isLayerSourceOfAnotherOne(ld) ) {
-			new ui.modal.dialog.Confirm(
-				L.t._("Warning! This IntGrid layer is used by another one as SOURCE. Deleting it will also delete all rules in the corresponding auto-layer(s)!\n You may want to change these layers source to another one before..."),
-				true,
-				deleteLayer.bind(li,true)
-			);
-			return;
-		}*/
-
+	function deleteLayer(li:data.inst.LayerInstance) {
 		level.removeLayerInstance(li);
 		editor.ge.emit( LayerInstanceRemoved(li) );
 
