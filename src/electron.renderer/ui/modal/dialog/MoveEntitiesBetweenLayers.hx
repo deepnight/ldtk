@@ -96,9 +96,6 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 					}
 			}
 
-			// TODO: check if this can be replaced with a simple undo-stack push.
-			new LastChance(L.t._("Moved entities between layers"), project);
-
 			// Move all existing entities
 			var movedEis = fromLi.entityInstances.filter( ei->{
 				switch filterType {
@@ -122,6 +119,9 @@ class MoveEntitiesBetweenLayers extends ui.modal.Dialog {
 				editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(fromLi) );
 				editor.ge.emitAtTheEndOfFrame( LayerInstanceChangedGlobally(targetLi) );
 			}
+
+			// Append the level timeline
+			editor.curLevelTimeline.saveFullLevelState();
 
 			new Message(
 				L.t._("::n:: entities were moved from ::fromLayer:: to ::toLayer::.",  {
