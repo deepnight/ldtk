@@ -42,12 +42,11 @@ class LayerDef {
 	var intGridValuesGroups : Array<ldtk.Json.IntGridValueGroupDef> = [];
 
 	// IntGrid/AutoLayers
-	// TODO: make this refer to a layer-instance, rather than a layer-def
+	// TODO: add overrides for autoSourceLayerDefUid and autoTilesKilledByOtherLayerUid in LayerInstance (to filter layer-instances)
 	public var autoSourceLayerDefUid : Null<Int>;
 	public var autoRuleGroups : Array<AutoLayerRuleGroupDef> = [];
 	public var autoSourceLd(get,never) : Null<LayerDef>;
 		inline function get_autoSourceLd() return type==AutoLayer && autoSourceLayerDefUid!=null ? _project.defs.getLayerDef(autoSourceLayerDefUid) : null;
-	// TODO: make this refer to a layer-instance, rather than a layer-def
 	public var autoTilesKilledByOtherLayerUid: Null<Int>;
 
 	// Tiles

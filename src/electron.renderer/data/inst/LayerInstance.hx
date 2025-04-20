@@ -1099,9 +1099,9 @@ class LayerInstance {
 			return;
 		}
 
-		var source = getAutoTileSource();
+		var sources = getAutoTileSources();
 
-		if( source==null ) {
+		if( sources.length==0 ) {
 			clearAllAutoTilesCache();
 			return;
 		}
@@ -1121,6 +1121,7 @@ class LayerInstance {
 		// Apply rules
 		def.iterateActiveRulesInEvalOrder( this, (r)->{
 			clearAutoTilesCacheRect(r, left,top, right-left+1, bottom-top+1);
+			for(source in sources)
 			for(x in left...right+1)
 			for(y in top...bottom+1)
 				applyRuleAt(source, r, x,y);
@@ -1150,13 +1151,17 @@ class LayerInstance {
 			return;
 		}
 
-		var source = getAutoTileSource();
-		if( source==null || !r.isRelevantInLayer(source) )
+		var sources = getAutoTileSources().filter( (source)->{
+			r.isRelevantInLayer(source);
+		});
+
+		if( sources.length==0 )
 			return;
 
 		clearAutoTilesCacheByRule(r);
 
 		if( def.autoLayerRulesCanBeUsed() ) {
+			for( source in sources )
 			for( ay in 0...Std.int(cHei/intGridAreaSize)+1 )
 			for( ax in 0...Std.int(cWid/intGridAreaSize)+1 ) {
 				if( !r.isRelevantInLayerAt(source, ax*intGridAreaSize, ay*intGridAreaSize) )
@@ -1173,19 +1178,14 @@ class LayerInstance {
 		}
 	}
 
-	private inline function getAutoTileSource(): Null<data.inst.LayerInstance> {
-		var source: Null<data.inst.LayerInstance> = null;
-
+	private inline function getAutoTileSources(): Array<data.inst.LayerInstance> {
 		if( def.type==IntGrid ) {
-			source = this;
+			return [ this ];
 		} else if( def.autoSourceLayerDefUid!=null ) {
-			for( li in level.getLayerInstances(def.autoSourceLayerDefUid)) {
-				source = li;
-				break;
-			}
+			return level.getLayerInstances(def.autoSourceLayerDefUid);
+		} else {
+			return [];
 		}
-
-		return source;
 	}
 
 }
