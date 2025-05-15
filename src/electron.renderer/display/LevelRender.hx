@@ -497,6 +497,8 @@ class LevelRender extends dn.Process {
 			return;
 
 		var col = C.getPerceivedLuminosityInt( editor.project.bgColor) >= 0.8 ? 0x0 : 0xffffff;
+		var guideCol = editor.curLayerDef.guideColor != null ? editor.curLayerDef.guideColor : col;
+		var guideOpa = editor.curLayerDef.guideColor != null ? editor.curLayerDef.guideOpacity : 0.33;
 
 		var li = editor.curLayerInstance;
 		var level = editor.curLevel;
@@ -527,7 +529,7 @@ class LevelRender extends dn.Process {
 		// Guide grid (verticals)
 		if( editor.curLayerDef.guideGridWid>1 ) {
 			var size = li.def.guideGridWid;
-			grid.lineStyle(1/camera.adjustedZoom, col, 0.33);
+			grid.lineStyle(1/camera.adjustedZoom, guideCol, guideOpa);
 
 			var cWid = Std.int(editor.curLayerInstance.pxWid/size)+1;
 
@@ -546,7 +548,7 @@ class LevelRender extends dn.Process {
 		// Guide grid (horizontals)
 		if( editor.curLayerDef.guideGridHei>1 ) {
 			var size = li.def.guideGridHei;
-			grid.lineStyle(1/camera.adjustedZoom, col, 0.33);
+			grid.lineStyle(1/camera.adjustedZoom, guideCol, guideOpa);
 
 			var cHei = Std.int(editor.curLayerInstance.pxHei/size)+1;
 

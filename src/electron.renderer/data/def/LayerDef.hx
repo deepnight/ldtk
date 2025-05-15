@@ -16,6 +16,8 @@ class LayerDef {
 	public var scaledGridSize(get,never) : Float; inline function get_scaledGridSize() return gridSize*getScale();
 	public var guideGridWid : Int = 0;
 	public var guideGridHei : Int = 0;
+	public var guideColor : Null<dn.Col>;
+	public var guideOpacity : Float = 0.33;
 	public var displayOpacity : Float = 1.0;
 	public var inactiveOpacity : Float = 1.0;
 	public var hideInList = false;
@@ -101,6 +103,8 @@ class LayerDef {
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
 		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
+		o.guideColor = JsonTools.readColor(json.guideColor, null);
+		o.guideOpacity = JsonTools.readFloat(json.guideOpacity, 0.33);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 		o.inactiveOpacity = JsonTools.readFloat(json.inactiveOpacity, 1);
 		o.uiColor = JsonTools.readColor(json.uiColor, true);
@@ -182,6 +186,8 @@ class LayerDef {
 			gridSize: gridSize,
 			guideGridWid: guideGridWid,
 			guideGridHei: guideGridHei,
+			guideColor: guideColor==null ? null : guideColor.toHex(),
+			guideOpacity: JsonTools.writeFloat(guideOpacity),
 			displayOpacity: JsonTools.writeFloat(displayOpacity),
 			inactiveOpacity: JsonTools.writeFloat(inactiveOpacity),
 			hideInList: hideInList,
