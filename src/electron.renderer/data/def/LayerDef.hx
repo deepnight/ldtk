@@ -103,7 +103,7 @@ class LayerDef {
 		o.gridSize = JsonTools.readInt(json.gridSize, Project.DEFAULT_GRID_SIZE);
 		o.guideGridWid = JsonTools.readInt(json.guideGridWid, 0);
 		o.guideGridHei = JsonTools.readInt(json.guideGridHei, 0);
-		o.guideColor = JsonTools.readColor(json.guideColor, null);
+		o.guideColor = JsonTools.readColor(json.guideColor, true);
 		o.guideOpacity = JsonTools.readFloat(json.guideOpacity, 0.33);
 		o.displayOpacity = JsonTools.readFloat(json.displayOpacity, 1);
 		o.inactiveOpacity = JsonTools.readFloat(json.inactiveOpacity, 1);
