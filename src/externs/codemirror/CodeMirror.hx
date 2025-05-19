@@ -2,8 +2,7 @@
 
 package codemirror;
 
-@:enum
-abstract ExecCommand(String) {
+enum abstract ExecCommand(String) {
 	var GoLineStart = "goLineStart";
 	var GoLineEnd = "goLineEnd";
 	var GoDocStart = "goDocStart";
