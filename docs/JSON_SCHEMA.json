@@ -2489,6 +2489,7 @@
 				"excludedTags",
 				"guideGridHei",
 				"guideGridWid",
+				"guideOpacity",
 				"hideFieldsWhenInactive",
 				"hideInList",
 				"inactiveOpacity",
@@ -2502,6 +2503,12 @@
 			],
 			"additionalProperties": false,
 			"properties": {
+				"guideOpacity": {
+					"description": "Opacity of the optional \"guide\" grid",
+					"type": [
+						"number"
+					]
+				},
 				"pxOffsetX": {
 					"description": "X offset of the layer, in pixels (IMPORTANT: this should be added to the `LayerInstance` optional offset)",
 					"type": [
@@ -2689,6 +2696,13 @@
 					"description": "Width of the optional \"guide\" grid in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"guideColor": {
+					"description": "Color of the optional \"guide\" grid",
+					"type": [
+						"string",
+						"null"
 					]
 				},
 				"requiredTags": {
