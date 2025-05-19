@@ -291,6 +291,53 @@ class EditLayerDefs extends ui.modal.Panel {
 			editor.ge.emit( LayerDefChanged(cur.uid, false) );
 		}).css("display", cur.uiColor==null ? "none" : "block");
 
+		// Guide
+		var i = Input.linkToHtmlInput( cur.guideGridWid, jForms.find("input[name='guideGridWid']") );
+		i.setBounds(0,Const.MAX_GRID_SIZE);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
+		i.fixValue = v->return v<=1 ? 0 : v;
+		i.setEmptyValue(0);
+
+		var i = Input.linkToHtmlInput( cur.guideGridHei, jForms.find("input[name='guideGridHei']") );
+		i.setBounds(0,Const.MAX_GRID_SIZE);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
+		i.fixValue = v->return v<=1 ? 0 : v;
+		i.setEmptyValue(0);
+
+		var jCol = jForms.find("#guideColor");
+		jCol.removeClass("null");
+		if( cur.guideColor!=null )
+			jCol.val(cur.guideColor.toHex());
+		else {
+			jCol.val("black");
+			jCol.addClass("null");
+		}
+		jCol.change(_->{
+			cur.guideColor = dn.Col.parseHex( jCol.val() );
+			editor.ge.emit( LayerDefChanged(cur.uid, false) );
+		});
+
+		jForms.find(".resetguideColor").click(_->{
+			cur.guideColor = null;
+			editor.ge.emit( LayerDefChanged(cur.uid, false) );
+		}).css("display", cur.guideColor==null ? "none" : "block");
+
+		var jButton = jForms.find("#guideOpacity");
+		var jSpans = jButton.siblings("span");
+		if( cur.guideColor!=null ) {
+			jButton.show();
+			jSpans.show();
+		}
+		else{
+			jButton.hide();
+			jSpans.hide();
+		}
+
+		var i = Input.linkToHtmlInput( cur.guideOpacity, jForms.find("#guideOpacity") );
+		i.enablePercentageMode();
+		i.setBounds(0.0, 1);
+		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
+
 		// Grid
 		var i = Input.linkToHtmlInput( cur.gridSize, jForms.find("input[name='gridSize']") );
 		i.setBounds(1,Const.MAX_GRID_SIZE);
@@ -318,18 +365,6 @@ class EditLayerDefs extends ui.modal.Panel {
 					editor.ge.emit( LayerDefChanged(ld.uid, false) );
 				}
 		}
-
-		var i = Input.linkToHtmlInput( cur.guideGridWid, jForms.find("input[name='guideGridWid']") );
-		i.setBounds(0,Const.MAX_GRID_SIZE);
-		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
-		i.fixValue = v->return v<=1 ? 0 : v;
-		i.setEmptyValue(0);
-
-		var i = Input.linkToHtmlInput( cur.guideGridHei, jForms.find("input[name='guideGridHei']") );
-		i.setBounds(0,Const.MAX_GRID_SIZE);
-		i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
-		i.fixValue = v->return v<=1 ? 0 : v;
-		i.setEmptyValue(0);
 
 		var i = Input.linkToHtmlInput( cur.displayOpacity, jForms.find("input[name='displayOpacity']") );
 		i.enablePercentageMode();
