@@ -1,6 +1,5 @@
 package ui.modal.panel;
 
-import data.DataTypes;
 import data.def.AutoLayerRuleDef;
 import data.def.AutoLayerRuleGroupDef;
 
@@ -32,7 +31,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		switch e {
 			case ProjectSettingsChanged, ProjectSelected, LevelSettingsChanged(_):
 				for(li in editor.curLevel.layerInstances)
-					if( li.layerDefUid==this.li.layerDefUid )
+					if( li.iid==this.li.iid )
 						this.li = li;
 				updateFullPanel();
 
@@ -41,7 +40,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 
 			case LayerInstancesRestoredFromHistory(lis):
 				for(li in lis)
-					if( li.layerDefUid==this.li.layerDefUid )
+					if( li.iid==this.li.iid )
 						this.li = li;
 				updateFullPanel();
 
@@ -349,7 +348,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			var jError = new J('<li> <div class="warning"/> </li>');
 			jError.appendTo(jRuleGroupList);
 			jError.find("div").append( L.t._("The current layer settings prevent its rules to work.") );
-			var jButton = new J('<button>Open layer settings</button>');
+			var jButton = new J('<button>Open layer definition</button>');
 			jButton.click( ev->new EditLayerDefs() );
 			jError.find("div").append(jButton);
 
@@ -442,7 +441,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 			actions.push({
 				label: L.untranslated("Missing biome enum"),
 				subText: L.untranslated("Click to select your level biome enum"),
-				cb: App.ME.executeAppCommand.bind(C_OpenLayerPanel),
+				cb: App.ME.executeAppCommand.bind(C_OpenLayerDefPanel),
 			});
 		else if( enumDef.values.length==0 )
 			actions.push({

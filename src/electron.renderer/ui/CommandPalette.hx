@@ -14,6 +14,7 @@ enum ElementCategory {
 	SE_Definition;
 	SE_World;
 	SE_Level;
+	SE_Layer;
 	SE_Entity;
 }
 
@@ -165,36 +166,50 @@ class CommandPalette {
 					onPick: ()->editor.selectLevel(l, true),
 				});
 
-				// Entities
-				for(li in l.layerInstances)
-				for(ei in li.entityInstances) {
-					var searchElem : SearchElement = {
-						id: ei.iid,
-						cat: SE_Entity,
-						desc: ei.def.identifier,
+				// Layers
+				for(li in l.layerInstances) {
+					allElements.push({
+						id: li.iid,
+						cat: SE_Layer,
+						desc: li.identifier,
 						ctxDesc: l.identifier,
 						keywords: [],
 						onPick: ()->{
 							editor.selectLevel(l, true);
-							var b = editor.levelRender.bleepEntity(ei);
-							b.delayS = 0.2;
-							b.remainCount = 5;
-						}
-					}
-					allElements.push(searchElem);
+							editor.selectLayerInstance(li);
+						},
+					});
 
-					// Entity fields
-					for(fi in ei.fieldInstances) {
-						if( !fi.def.searchable  )
-							continue;
-						for(i in 0...fi.getArrayLength()) {
-							if( fi.valueIsNull(i) )
+					// Entities
+					for(ei in li.entityInstances) {
+						var searchElem : SearchElement = {
+							id: ei.iid,
+							cat: SE_Entity,
+							desc: ei.def.identifier,
+							ctxDesc: l.identifier,
+							keywords: [],
+							onPick: ()->{
+								editor.selectLevel(l, true);
+								var b = editor.levelRender.bleepEntity(ei);
+								b.delayS = 0.2;
+								b.remainCount = 5;
+							}
+						}
+						allElements.push(searchElem);
+
+						// Entity fields
+						for(fi in ei.fieldInstances) {
+							if( !fi.def.searchable  )
 								continue;
-							searchElem.desc += "."+fi.getForDisplay(i);
-							searchElem.keywords.push( fi.getForDisplay(i) );
+							for(i in 0...fi.getArrayLength()) {
+								if( fi.valueIsNull(i) )
+									continue;
+								searchElem.desc += "."+fi.getForDisplay(i);
+								searchElem.keywords.push( fi.getForDisplay(i) );
+							}
 						}
-					}
 
+					}
 				}
 			}
 		}
@@ -208,6 +223,7 @@ class CommandPalette {
 				case SE_Definition: "definition";
 				case SE_World: "world";
 				case SE_Level: "level";
+				case SE_Layer: "layer";
 				case SE_Entity: "entity";
 			});
 			e.keywords.push(e.desc.toLowerCase());
@@ -261,6 +277,7 @@ class CommandPalette {
 				case SE_Definition: "project";
 				case SE_World: "world";
 				case SE_Level: "level";
+				case SE_Layer: "layer";
 				case SE_Entity: "entity";
 			}
 			jElement.append('<span class="icon $iconId"></span>');

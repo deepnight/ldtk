@@ -293,11 +293,12 @@ class Tiled extends Exporter {
 		allInst.reverse();
 		for(li in allInst) {
 			if( li.def.gridSize!=tiledGridSize ) {
-				log.error("In level "+level.identifier+": discarded layer "+li.def.identifier+" (incompatible grid size)");
+				log.error("In level "+level.identifier+": discarded layer "+li.identifier+" (incompatible grid size)");
 				continue;
 			}
+
 			var ld = p.defs.layers.filter( (ld)->ld.uid==li.layerDefUid )[0];
-			log.add("layer", "Layer "+ld.identifier+"...");
+			log.add("layer", "Layer "+li.identifier+"...");
 
 
 			switch ld.type {

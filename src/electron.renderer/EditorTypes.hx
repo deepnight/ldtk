@@ -45,10 +45,13 @@ enum GlobalEvent {
 	LayerRuleGroupSorted;
 	LayerRuleGroupCollapseChanged(rg:data.def.AutoLayerRuleGroupDef);
 
+	LayerInstanceAdded(li:data.inst.LayerInstance);
+	LayerInstanceRemoved(li:data.inst.LayerInstance);
 	LayerInstanceSelected(li:data.inst.LayerInstance);
 	LayerInstanceEditedByTool(li:data.inst.LayerInstance);
 	LayerInstanceChangedGlobally(li:data.inst.LayerInstance);
 	LayerInstanceVisiblityChanged(li:data.inst.LayerInstance);
+	LayerInstancesSorted(level:data.Level);
 	LayerInstancesRestoredFromHistory(lis:Array<data.inst.LayerInstance>);
 	AutoLayerRenderingChanged(lis:Array<data.inst.LayerInstance>);
 	LayerInstanceTilesetChanged(li:data.inst.LayerInstance);
@@ -220,6 +223,8 @@ enum ClipboardType {
 
 	CRuleGroup;
 	CRule;
+
+	CLayerInstance;
 }
 
 typedef CachedIID = {
@@ -279,7 +284,8 @@ enum AppCommand {
 	@k("ctrl pageup, shift pageup") C_MoveLevelToNextWorldLayer;
 
 	@k("p") C_OpenProjectPanel;
-	@k("l") C_OpenLayerPanel;
+	@k("l") C_OpenLayerInstancePanel;
+	@k("d") C_OpenLayerDefPanel;
 	@k("e") C_OpenEntityPanel;
 	@k("u") C_OpenEnumPanel;
 	@k("t") C_OpenTilesetPanel;
