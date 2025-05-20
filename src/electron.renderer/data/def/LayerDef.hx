@@ -327,6 +327,13 @@ class LayerDef {
 		return false;
 	}
 
+	public function updateIntGridValueDef(prev:Int, next:Int) {
+		var iv = getIntGridValueDef(prev);
+		if(iv == null)
+			return;
+		iv.value = next;
+	}
+
 	public inline function getIntGridValueDef(value:Int) : Null<IntGridValueDefEditor> {
 		var out : Null<IntGridValueDefEditor> = null;
 		for(v in intGridValues)
@@ -454,6 +461,18 @@ class LayerDef {
 	}
 
 	public inline function countIntGridValues() return intGridValues.length;
+
+	public function isIntGridValueValid(value:Int) : Bool {
+		// Negative values are used to logically invert patterns, so zero and negative values are not allowed.
+		// AutoLayerRuleDef::isUsingUnknownIntGridValues requires the value be less than or equal to 999.
+		if ( value <= 0 || value > 999 )
+			return false;
+
+		for(v in intGridValues)
+			if ( v.value == value )
+				return false;
+		return true;
+	}
 
 	public function isIntGridValueIdentifierValid(id:Null<String>) {
 		if( id==null || id=="" )

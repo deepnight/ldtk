@@ -716,13 +716,26 @@ class EditLayerDefs extends ui.modal.Panel {
 						jValue.attr("valueId", Std.string(intGridVal.value));
 						jValue.addClass("value");
 						jValue.appendTo(jGroup);
-						jValue.find(".id")
-							.html( Std.string(intGridVal.value) )
-							.css({
-								color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
-								borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
-								backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
-							});
+						
+						// Value
+						var i = new form.input.IntInput(
+							jValue.find("input.id"),
+							function() return intGridVal.value,
+							function(value) {
+								if( value != null ) {
+									jValue.attr("valueId", Std.string(value));
+									editor.curLevel.getLayerInstance(cur).updateIntGridValue(intGridVal.value, value, false);
+								}
+							}
+						);
+						i.validityCheck = cur.isIntGridValueValid;
+						i.validityError = N.invalidValue;
+						i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, false));
+						i.jInput.css({
+							color: C.intToHex( C.toWhite(intGridVal.color,0.5) ),
+							borderColor: C.intToHex( C.toWhite(intGridVal.color,0.2) ),
+							backgroundColor: C.intToHex( C.toBlack(intGridVal.color,0.5) ),
+						});
 
 						// Tile
 						var jTile = jValue.find(".tile");
