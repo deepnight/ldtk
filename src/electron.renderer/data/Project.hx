@@ -225,7 +225,10 @@ class Project {
 		return iid;
 	}
 
-	public function generateUniqueId_int() return nextUid++ + Std.int(Date.now().getTime());
+	public function generateUniqueId_int(): Int {
+		var oldDate = new Date(2020, 1, 1, 0, 0, 0); // 2020 date
+		return nextUid++ + Std.int(Date.now().getTime() - oldDate.getTime());
+	}
 
 	public function fixUniqueIdStr(baseId:String, ?styleOverride:ldtk.Json.IdentifierStyle, isUnique:String->Bool) : String {
 		baseId = cleanupIdentifier(baseId, styleOverride==null ? identifierStyle : styleOverride);
