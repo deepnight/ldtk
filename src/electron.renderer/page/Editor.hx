@@ -1353,6 +1353,7 @@ class Editor extends Page {
 		if( worldMode )
 			setWorldMode(false);
 
+		worldTool.clearSelection(); // Clear multi-level selection when switching worlds
 		curWorldIid = w.iid;
 		invalidateCachedLevelErrors();
 
@@ -1685,6 +1686,7 @@ class Editor extends Page {
 
 		App.ME.requestCpu();
 		selectionTool.clear();
+		worldTool.clearSelection(); // Clear multi-level selection
 		curWorld.reorganizeWorld();
 		curLevel.invalidateCachedError();
 		worldMode = v;

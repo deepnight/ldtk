@@ -652,9 +652,10 @@ class WorldRender extends dn.Process {
 		);
 	}
 
-	function updateCurrentHighlight() {
+	public function updateCurrentHighlight() {
 		final l = editor.curLevel;
-		currentHighlight.visible = editor.worldMode && l.worldDepth==editor.curWorldDepth;
+		// Hide yellow highlight if we have a multi-selection
+		currentHighlight.visible = editor.worldMode && l.worldDepth==editor.curWorldDepth && editor.worldTool.selectedLevels.length == 0;
 		if( !currentHighlight.visible )
 			return;
 
