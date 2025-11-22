@@ -1,7 +1,9 @@
 package ui.modal.dialog;
 
+import dn.data.LocaleString;
+
 class Message extends ui.modal.Dialog {
-	public function new(?str:dn.data.GetText.LocaleString, ?iconId:String, ?onClose:Void->Void) {
+	public function new(?str:LocaleString, ?iconId:String, ?onClose:Void->Void) {
 		super("message");
 
 		if( iconId!=null ) {

@@ -1,10 +1,12 @@
 package form.input;
 
+import dn.data.LocaleString;
+
 class EnumSelect<T:EnumValue> extends form.Input<T> {
 	var enumRef : Enum<T>;
 	var allowNull : Bool;
 
-	public function new(j:js.jquery.JQuery, e:Enum<T>, allowNull=false, getter:Void->T, setter:T->Void, ?nameLocalizer:T->dn.data.GetText.LocaleString, ?keepOnly:T->Bool, disableFilteredOuts=false) {
+	public function new(j:js.jquery.JQuery, e:Enum<T>, allowNull=false, getter:Void->T, setter:T->Void, ?nameLocalizer:T->LocaleString, ?keepOnly:T->Bool, disableFilteredOuts=false) {
 		this.allowNull = allowNull;
 
 		super(j, getter, setter);

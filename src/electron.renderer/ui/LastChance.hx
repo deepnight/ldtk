@@ -1,10 +1,12 @@
 package ui;
 
+import dn.data.LocaleString;
+
 class LastChance extends dn.Process {
 	static var CUR : Null<LastChance>;
 	var elem : js.jquery.JQuery;
 
-	public function new(str:dn.data.GetText.LocaleString, project:data.Project) {
+	public function new(str:LocaleString, project:data.Project) {
 		super(Editor.ME);
 
 		LastChance.end();

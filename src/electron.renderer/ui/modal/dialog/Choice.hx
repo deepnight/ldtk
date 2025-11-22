@@ -1,5 +1,7 @@
 package ui.modal.dialog;
 
+import dn.data.LocaleString;
+
 class Choice extends ui.modal.Dialog {
 	public function new(str:LocaleString, choices:Array<{ label:String, cb:Void->Void, ?cond:Void->Bool, ?className:String }>, ?title:LocaleString, canCancel=true, ?onCancel:Void->Void) {
 		super();

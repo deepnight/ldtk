@@ -17,17 +17,20 @@ Visit [LDtk.io](https://ldtk.io) to get latest version.
 
 ## Requirements
 
- - **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build LDtk.
- - **[NPM](https://nodejs.org/en/download/)**: this package manager is used for various install and packaging scripts. It is packaged with NodeJS.
+- **[Haxe compiler](https://haxe.org)**: you need an up-to-date and working Haxe install  to build LDtk.
+- **[NPM](https://nodejs.org/en/download/)**: this package manager is used for various install and packaging scripts. It is packaged with NodeJS.
 
 ## Installing required stuff
 
- - Open a command line **in the `ldtk` root dir**,
- - Install required Haxe libs:
+- Open a command line **in the `ldtk` root dir**,
+- Install required Haxe libs:
+
  ```
  haxe setup.hxml
  ```
- - Install Electron locally and other dependencies through NPM (**IMPORTANT**: you need to be in the `app` dir):
+
+- Install Electron locally and other dependencies through NPM (**IMPORTANT**: you need to be in the `app` dir):
+
  ```
  cd app
  npm i
@@ -56,9 +59,10 @@ This should create `app/assets/js/renderer.js`.
 If you want to try a future version of LDtk, you can checkout branches named `dev-x.y.z` where x.y.z is version number.
 
 **IMPORTANT**:
- - these *dev* branches might be unstables, or even broken. Therefore, it's not recommended to use, unless you plan to add or fix something on LDtk.
- - because *dev* branches might change quickly, you will need to update haxelibs often.
- - you will need to switch the *LDtk haxe API* to the **same** branch as LDtk repo. (adapt the branch name below accordingly):
+
+- these *dev* branches might be unstables, or even broken. Therefore, it's not recommended to use, unless you plan to add or fix something on LDtk.
+- because *dev* branches might change quickly, you will need to update haxelibs often.
+- you will need to switch the *LDtk haxe API* to the **same** branch as LDtk repo. (adapt the branch name below accordingly):
 
 ```
 haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git dev-0.6.0
@@ -75,16 +79,16 @@ npm run start
 # Contributing
 
 You can read the general Pull Request guidelines here:
-https://github.com/deepnight/ldtk/wiki#pull-request-guidelines
+<https://github.com/deepnight/ldtk/wiki#pull-request-guidelines>
 
 # Related tools & licences
 
- - Tileset images: see [README](app/extraFiles/samples/README.md) in samples
- - Haxe: https://haxe.org/
- - Heaps.io: https://heaps.io/
- - Electron: https://www.electronjs.org/
- - JQuery: https://jquery.com
- - MarkedJS: https://github.com/markedjs/marked
- - SVG icons from https://material.io
- - Default palette: "*Endesga32*" by Endesga (https://lospec.com/palette-list/endesga-32)
- - Default color blind palette: "*Colorblind 16*" by FilipWorks (https://github.com/filipworksdev/colorblind-palette-16)
+- Tileset images: see [README](app/extraFiles/samples/README.md) in samples
+- Haxe: <https://haxe.org/>
+- Heaps.io: <https://heaps.io/>
+- Electron: <https://www.electronjs.org/>
+- JQuery: <https://jquery.com>
+- MarkedJS: <https://github.com/markedjs/marked>
+- SVG icons from <https://material.io>
+- Default palette: "*Endesga32*" by Endesga (<https://lospec.com/palette-list/endesga-32>)
+- Default color blind palette: "*Colorblind 16*" by FilipWorks (<https://github.com/filipworksdev/colorblind-palette-16>)

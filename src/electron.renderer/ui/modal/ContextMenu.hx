@@ -1,6 +1,6 @@
 package ui.modal;
 
-import dn.data.GetText.LocaleString;
+import dn.data.LocaleString;
 
 typedef ContextActions = Array<ContextAction>;
 typedef ContextAction = {

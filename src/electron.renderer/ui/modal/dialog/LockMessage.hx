@@ -3,7 +3,7 @@ package ui.modal.dialog;
 class LockMessage extends ui.modal.Dialog {
 	static var ME : LockMessage;
 
-	public function new(str:dn.data.GetText.LocaleString, action:Void->Void) {
+	public function new(str:LocaleString, action:Void->Void) {
 		super("lockMessage");
 
 		ME = this;

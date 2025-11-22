@@ -1,5 +1,7 @@
 package ui.modal.dialog;
 
+import dn.data.LocaleString;
+
 class LogPrint extends ui.modal.Dialog {
 	var log : dn.Log;
 

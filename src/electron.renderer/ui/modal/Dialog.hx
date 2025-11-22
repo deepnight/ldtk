@@ -1,5 +1,7 @@
 package ui.modal;
 
+import dn.data.LocaleString;
+
 class Dialog extends ui.Modal {
 	var jButtons: js.jquery.JQuery;
 
@@ -40,7 +42,7 @@ class Dialog extends ui.Modal {
 	}
 
 
-	public function addTitle(label:dn.data.GetText.LocaleString, atTheBeginning:Bool) {
+	public function addTitle(label:LocaleString, atTheBeginning:Bool) {
 		var t = new J('<h2>$label</h2>');
 		if( atTheBeginning )
 			jContent.prepend(t);
@@ -48,14 +50,14 @@ class Dialog extends ui.Modal {
 			jContent.append(t);
 	}
 
-	public function addParagraph(str:dn.data.GetText.LocaleString, ?className:String) {
+	public function addParagraph(str:LocaleString, ?className:String) {
 		var jElem = new J('<p>$str</p>');
 		if( className!=null )
 			jElem.addClass(className);
 		jContent.append(jElem);
 	}
 
-	public function addDiv(str:dn.data.GetText.LocaleString, ?className:String) {
+	public function addDiv(str:LocaleString, ?className:String) {
 		var jElem = new J('<div>$str</div>');
 		if( className!=null )
 			jElem.addClass(className);

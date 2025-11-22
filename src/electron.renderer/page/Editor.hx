@@ -1,5 +1,7 @@
 package page;
 
+import dn.data.LocaleString;
+
 class Editor extends Page {
 	public static var ME : Editor;
 
@@ -2549,7 +2551,7 @@ class Editor extends Page {
 		var jGuide = new J("#guide");
 		jGuide.empty();
 
-		function _createGuideBlock(?keys:Array<Int>, mouseIconId:Null<String>, label:dn.data.GetText.LocaleString) {
+		function _createGuideBlock(?keys:Array<Int>, mouseIconId:Null<String>, label:LocaleString) {
 			var block = new J('<span/>');
 			block.appendTo(jGuide);
 
