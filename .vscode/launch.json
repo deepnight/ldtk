@@ -5,15 +5,12 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug renderer",
-			"type": "pwa-chrome",
+			"name": "Debug renderer (2026)",
+			"type": "chrome",
 			"request": "launch",
 			"cwd": "${workspaceFolder}/app",
 			"webRoot": "${workspaceFolder}/app",
 			"windows": {
-				"name": "Debug renderer win",
-				"request": "launch",
-				"type": "pwa-chrome",
 				"runtimeExecutable": "${workspaceFolder}/app/node_modules/electron/dist/electron.exe"
 			},
 			"runtimeArgs" : [
@@ -21,6 +18,24 @@
 				"--remote-debugging-port=9222"
 			],
 			"preLaunchTask": "Electron Renderer debug",
-		}
+		},
+		// {
+		// 	"name": "Debug renderer",
+		// 	"type": "pwa-chrome",
+		// 	"request": "launch",
+		// 	"cwd": "${workspaceFolder}/app",
+		// 	"webRoot": "${workspaceFolder}/app",
+		// 	"windows": {
+		// 		"name": "Debug renderer win",
+		// 		"request": "launch",
+		// 		"type": "pwa-chrome",
+		// 		"runtimeExecutable": "${workspaceFolder}/app/node_modules/electron/dist/electron.exe"
+		// 	},
+		// 	"runtimeArgs" : [
+		// 		".",
+		// 		"--remote-debugging-port=9222"
+		// 	],
+		// 	"preLaunchTask": "Electron Renderer debug",
+		// }
 	]
 }
