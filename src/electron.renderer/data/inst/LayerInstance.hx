@@ -890,9 +890,24 @@ class LayerInstance {
 		if( def.layerUidsPreventingAutoTilingHere.length==0 )
 			return true;
 		else {
-			for( defUid in def.layerUidsPreventingAutoTilingHere )
-				if( level.getLayerInstance(defUid).hasAnyGridTile(cx,cy) )
-					return false;
+			for( defUid in def.layerUidsPreventingAutoTilingHere ) {
+				var li = level.getLayerInstance(defUid);
+				switch li.def.type {
+					case IntGrid:
+						if( li.hasIntGrid(cx,cy) )
+							return false;
+
+					case Entities:
+						// N/A
+
+					case Tiles:
+						if( level.getLayerInstance(defUid).hasAnyGridTile(cx,cy) )
+							return false;
+
+					case AutoLayer:
+						// N/A
+				}
+			}
 			return true;
 		}
 	}
