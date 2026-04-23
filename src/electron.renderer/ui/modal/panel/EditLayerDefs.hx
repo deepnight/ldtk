@@ -523,34 +523,72 @@ class EditLayerDefs extends ui.modal.Panel {
 			);
 
 			// Auto-kill tiles
-			var jSelect = jForms.find("select[name=autoKillLayer]");
+			var jSelect = jForms.find("select[name=autoTileBlockingLayerPicker]");
 			jSelect.empty();
 
 			var opt = new J("<option/>");
 			opt.appendTo(jSelect);
 			opt.attr("value", -1);
-			opt.text("-- Select a Tile layer --");
+			opt.text("-- Add a layer --");
 
-			var otherLayers = project.defs.layers.filter( function(ld) return ld.type==Tiles );
-			for( ld in otherLayers ) {
+			for( ld in project.defs.layers ) {
+				if( ld.uid==cur.uid )
+					continue;
+
+				if( ld.type!=Tiles && ld.type!=IntGrid )
+					continue;
+
+				if( cur.layerUidsPreventingAutoTilingHere.contains(ld.uid) )
+					continue;
+
 				var opt = new J("<option/>");
 				opt.appendTo(jSelect);
 				opt.attr("value", ld.uid);
 				opt.text(ld.identifier);
 			}
 
-			jSelect.val( cur.autoTilesKilledByOtherLayerUid==null ? -1 : cur.autoTilesKilledByOtherLayerUid );
-
-			jSelect.change( function(ev) {
+			jSelect.change( ev->{
 				var v = Std.parseInt( jSelect.val() );
 				if( v<0 )
-					cur.autoTilesKilledByOtherLayerUid = null;
-				else {
-					cur.autoTilesKilledByOtherLayerUid = v;
-					// TODO kill immediately
-				}
+					return;
+
+				cur.layerUidsPreventingAutoTilingHere.push(v);
 				editor.ge.emit(LayerDefChanged(cur.uid, true));
 			});
+
+			var jPreventingLayers = jForms.find("#autoTileBlockingLayers");
+			jPreventingLayers.empty();
+			for( defUid in cur.layerUidsPreventingAutoTilingHere ) {
+				var ld = project.defs.getLayerDef(defUid);
+				if( ld==null )
+					continue;
+
+				var jLayer = new J('<div class="layer"/>');
+				jLayer.appendTo(jPreventingLayers);
+
+				JsTools.createLayerTypeIcon2(ld.type).appendTo(jLayer);
+				jLayer.append(ld.identifier);
+
+				var jRemove = new J('<button class="remove"> <span class="icon delete"></span> </button>');
+				jRemove.appendTo(jLayer);
+				jRemove.click( _->{
+					cur.layerUidsPreventingAutoTilingHere.remove(defUid);
+					editor.ge.emit(LayerDefChanged(cur.uid, true));
+				});
+			}
+
+			// jSelect.val( cur.autoTilesKilledByOtherLayerUid==null ? -1 : cur.autoTilesKilledByOtherLayerUid );
+
+			// jSelect.change( function(ev) {
+			// 	var v = Std.parseInt( jSelect.val() );
+			// 	if( v<0 )
+			// 		cur.autoTilesKilledByOtherLayerUid = null;
+			// 	else {
+			// 		cur.autoTilesKilledByOtherLayerUid = v;
+			// 		// TODO kill immediately
+			// 	}
+			// 	editor.ge.emit(LayerDefChanged(cur.uid, true));
+			// });
 		}
 
 		switch cur.type {

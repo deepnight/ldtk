@@ -8234,11 +8234,46 @@ dl.form.fieldInstanceEditor {
 		}
 	}
 
-	dl.form .IntGrid,
-	dl.form .IntGridAutoLayer,
-	dl.form .AutoLayer,
-	dl.form .Tiles,
-	dl.form .Entities {
+	#autoTileBlockingLayers {
+		flex-basis: 100%;
+		margin-top: 8px;
+		padding-left: 8px;
+
+		.layer {
+			display: grid;
+			align-items: center;
+			gap: 8px;
+			grid-template-columns: min-content 14em min-content;
+			width: fit-content;
+
+			border: 1px solid $bgLight;
+			border-radius: 3px;
+			padding: 3px;
+
+			&:hover {
+				border-color: $bgLighter;
+			}
+
+			.icon {
+				width: 1.5em;
+				height: 1.5em;
+			}
+			button {
+				width: 2em;
+				height: 2em;
+				padding: 0;
+			}
+			&+.layer {
+				margin-top: 2px;
+			}
+		}
+	}
+
+	dl.form>.IntGrid,
+	dl.form>.IntGridAutoLayer,
+	dl.form>.AutoLayer,
+	dl.form>.Tiles,
+	dl.form>.Entities {
 		display: none;
 	}
 

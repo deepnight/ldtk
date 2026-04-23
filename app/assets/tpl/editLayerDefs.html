@@ -286,15 +286,6 @@
 		</dd>
 
 
-		<dt class="AutoLayer IntGridAutoLayer">
-			<label>Kill tiles</label>
-			<info>If the selected Tile layer contains any tiles, this auto-layer won't draw anything under them.</info>
-		</dt>
-		<dd class="AutoLayer IntGridAutoLayer">
-			<select name="autoKillLayer"></select>
-		</dd>
-
-
 		<dt class="IntGrid AutoLayer">
 			<label>Biome enum</label>
 			<info>
@@ -304,6 +295,16 @@
 		</dt>
 		<dd class="IntGrid AutoLayer">
 			<select name="biomeField"></select>
+		</dd>
+
+
+		<dt class="AutoLayer IntGridAutoLayer">
+			<label>Prevent auto-tiling here if another layer contains a value</label>
+			<info>If any of the given layers contain something at a particular coordinate, then the auto-layer rules won't apply at that coordinate.</info>
+		</dt>
+		<dd class="AutoLayer IntGridAutoLayer">
+			<select name="autoTileBlockingLayerPicker"></select>
+			<div id="autoTileBlockingLayers"></div>
 		</dd>
 
 
