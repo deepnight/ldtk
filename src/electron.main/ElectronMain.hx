@@ -53,7 +53,8 @@ class ElectronMain {
 	}
 
 	static function fileNotFound(file:String) {
-		electron.main.Dialog.showErrorBox("File not found", '"$file" was not found in app assets!');
+		var cwd = process.cwd();
+		electron.main.Dialog.showErrorBox("File not found", '"$file" was not found in app assets!\nCWD: $cwd');
 		App.quit();
 	}
 
