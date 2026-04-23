@@ -68,6 +68,7 @@ class LayerDef {
 		requiredTags = new Tags();
 		excludedTags = new Tags();
 		uiFilterTags = new Tags();
+		layerUidsPreventingAutoTilingHere = [];
 	}
 
 	function set_identifier(id:String) {
