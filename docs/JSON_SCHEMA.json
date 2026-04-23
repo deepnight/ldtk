@@ -2493,6 +2493,7 @@
 				"hideFieldsWhenInactive",
 				"hideInList",
 				"inactiveOpacity",
+				"layerUidsPreventingAutoTilingHere",
 				"renderInWorldView",
 				"requiredTags",
 				"tilePivotX",
@@ -2560,6 +2561,17 @@
 					"description": "Height of the optional \"guide\" grid in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"layerUidsPreventingAutoTilingHere": {
+					"description": "",
+					"items": {
+						"type": [
+							"integer"
+						]
+					},
+					"type": [
+						"array"
 					]
 				},
 				"uiColor": {
@@ -2748,7 +2760,7 @@
 					]
 				},
 				"autoTilesKilledByOtherLayerUid": {
-					"description": "",
+					"description": "*This field was removed in 1.5.4 and should no longer be used.*",
 					"type": [
 						"integer",
 						"null"
