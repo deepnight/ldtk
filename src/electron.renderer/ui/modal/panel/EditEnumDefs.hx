@@ -221,7 +221,6 @@ class EditEnumDefs extends ui.modal.Panel {
 				ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
 					ctx.addElement( Ctx_CopyPaster({
 						elementName: "enum",
-						clipType: CLayerDef,
 
 						copy: ()->App.ME.clipboard.copyData(CEnumDef, ed.toJson(project)),
 						cut: ()->{
@@ -233,6 +232,7 @@ class EditEnumDefs extends ui.modal.Panel {
 							editor.ge.emit(EnumDefAdded);
 							selectEnum(copy);
 						},
+						pasteAcceptedTypes: [CLayerDef],
 						duplicate: ()->{
 							var copy = project.defs.duplicateEnumDef(ed);
 							editor.ge.emit(EnumDefAdded);

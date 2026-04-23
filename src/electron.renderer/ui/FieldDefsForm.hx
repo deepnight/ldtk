@@ -275,7 +275,6 @@ class FieldDefsForm {
 			ui.modal.ContextMenu.attachTo_new(li, (ctx:ui.modal.ContextMenu)->{
 				ctx.addElement( Ctx_CopyPaster({
 					elementName: "field",
-					clipType: CFieldDef,
 					copy: ()->App.ME.clipboard.copyData(CFieldDef, fd.toJson()),
 					cut: ()->{
 						App.ME.clipboard.copyData(CFieldDef, fd.toJson());
@@ -286,6 +285,7 @@ class FieldDefsForm {
 						editor.ge.emit(FieldDefAdded(copy));
 						selectField(copy);
 					},
+					pasteAcceptedTypes: [CFieldDef],
 					duplicate: ()->{
 						var copy = duplicateFieldDef(fd);
 						editor.ge.emit( FieldDefAdded(copy) );

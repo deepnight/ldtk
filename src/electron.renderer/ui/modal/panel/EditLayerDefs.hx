@@ -1024,7 +1024,6 @@ class EditLayerDefs extends ui.modal.Panel {
 			ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
 				ctx.addElement( Ctx_CopyPaster({
 					elementName: "layer",
-					clipType: CLayerDef,
 					copy: ()->App.ME.clipboard.copyData(CLayerDef, ld.toJson()),
 					cut: ()->{
 						App.ME.clipboard.copyData(CLayerDef, ld.toJson());
@@ -1037,6 +1036,7 @@ class EditLayerDefs extends ui.modal.Panel {
 							select(copy);
 						}
 					},
+					pasteAcceptedTypes: [CLayerDef],
 					duplicate: ()->{
 						var copy = project.defs.duplicateLayerDef(ld);
 						editor.ge.emit(LayerDefAdded);

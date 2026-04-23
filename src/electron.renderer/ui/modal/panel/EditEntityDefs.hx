@@ -636,7 +636,6 @@ class EditEntityDefs extends ui.modal.Panel {
 				ContextMenu.attachTo_new(jEnt, (ctx:ContextMenu)->{
 					ctx.addElement( Ctx_CopyPaster({
 						elementName: "entity",
-						clipType: CEntityDef,
 						copy: ()->App.ME.clipboard.copyData(CEntityDef, ed.toJson(project)),
 						cut: ()->{
 							App.ME.clipboard.copyData(CEntityDef, ed.toJson(project));
@@ -647,6 +646,7 @@ class EditEntityDefs extends ui.modal.Panel {
 							editor.ge.emit(EntityDefAdded);
 							selectEntity(copy);
 						},
+						pasteAcceptedTypes: [CEntityDef],
 						duplicate: ()->{
 							var copy = project.defs.duplicateEntityDef(ed);
 							editor.ge.emit(EntityDefAdded);

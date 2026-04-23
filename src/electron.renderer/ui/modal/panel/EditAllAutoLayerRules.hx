@@ -375,7 +375,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					for(r in copy.rules)
 						invalidateRuleAndOnesBelow(r);
 				},
-				enable: ()->return App.ME.clipboard.is(CRuleGroup),
+				enable: ()->App.ME.clipboard.is(CRuleGroup),
 			});
 		});
 
@@ -645,18 +645,26 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		ContextMenu.attachTo_new(jGroup, jGroupHeader, (ctx)->{
 			ctx.addElement( Ctx_CopyPaster({
 				elementName: "group",
-				clipType: CRuleGroup,
 				copy: ()->App.ME.clipboard.copyData(CRuleGroup, rg.toJson(li.def)),
 				cut: ()->{
 					App.ME.clipboard.copyData(CRuleGroup, rg.toJson(li.def));
 					deleteRuleGroup(rg, false);
 				},
 				paste: ()->{
-					var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
-					editor.ge.emit(LayerRuleGroupAdded(copy));
-					for(r in copy.rules)
-						invalidateRuleAndOnesBelow(r);
+					if( App.ME.clipboard.is(CRule) ) {
+						var copy = ld.pasteRule(project, rg, App.ME.clipboard);
+						lastRule = copy;
+						editor.ge.emit( LayerRuleAdded(copy) );
+						invalidateRuleAndOnesBelow(copy);
+					}
+					else if( App.ME.clipboard.is(CRuleGroup) ) {
+						var copy = ld.pasteRuleGroup(project, App.ME.clipboard, rg);
+						editor.ge.emit(LayerRuleGroupAdded(copy));
+						for(r in copy.rules)
+							invalidateRuleAndOnesBelow(r);
+					}
 				},
+				pasteAcceptedTypes: [CRuleGroup, CRule],
 				duplicate: ()-> {
 					var copy = ld.duplicateRuleGroup(project, rg);
 					editor.ge.emit( LayerRuleGroupAdded(copy) );
@@ -1050,7 +1058,6 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 		ContextMenu.attachTo_new(jRule, (ctx:ContextMenu)->{
 			ctx.addElement( Ctx_CopyPaster({
 				elementName: "rule",
-				clipType: CRule,
 
 				copy: ()->App.ME.clipboard.copyData(CRule, r.toJson(ld)),
 				cut: ()->{
@@ -1063,6 +1070,7 @@ class EditAllAutoLayerRules extends ui.modal.Panel {
 					editor.ge.emit( LayerRuleAdded(copy) );
 					invalidateRuleAndOnesBelow(copy);
 				},
+				pasteAcceptedTypes: [CRule],
 				duplicate: ()->{
 					var copy = ld.duplicateRule(project, rg, r);
 					lastRule = copy;

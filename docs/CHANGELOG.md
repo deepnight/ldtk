@@ -6,6 +6,7 @@
 - The online JSON documentation now shows references between UID fields.
 - Fixed a crash when updating an external CastleDB file
 - Fixed support for Aseprite 1.3.5 files
+- Fixed the pasting of a copied rule inside an empty group
 - CastleDB: fixed support for unique IDs in lists (note: nested lists in lists are not supported yet)
 
 # 1.5.3

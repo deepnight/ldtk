@@ -342,7 +342,6 @@ class EditTilesetDefs extends ui.modal.Panel {
 				ContextMenu.attachTo_new(jLi, (ctx:ContextMenu)->{
 					ctx.addElement( Ctx_CopyPaster({
 						elementName: "tileset",
-						clipType: CTilesetDef,
 						copy: td.isUsingEmbedAtlas() ? null : ()->App.ME.clipboard.copyData(CTilesetDef, td.toJson()),
 						cut: td.isUsingEmbedAtlas() ? null : ()->{
 							App.ME.clipboard.copyData(CTilesetDef, td.toJson());
@@ -353,6 +352,7 @@ class EditTilesetDefs extends ui.modal.Panel {
 							editor.ge.emit( TilesetDefAdded(copy) );
 							selectTileset(copy);
 						},
+						pasteAcceptedTypes: [CTilesetDef],
 						duplicate: td.isUsingEmbedAtlas() ? null : ()->{
 							var copy = project.defs.duplicateTilesetDef(td);
 							editor.ge.emit( TilesetDefAdded(copy) );

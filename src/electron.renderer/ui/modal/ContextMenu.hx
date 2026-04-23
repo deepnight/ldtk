@@ -38,10 +38,10 @@ typedef CtxActionSettings = {
 
 typedef CtxCopyPasterSettings = {
 	var elementName : String;
-	var clipType : ClipboardType;
 	var copy : Null< Void->Void >;
 	var cut : Null< Void->Void >;
 	var paste : Null< Void->Void >;
+	var pasteAcceptedTypes : Array<ClipboardType>;
 	var duplicate : Null< Void->Void >;
 	var delete : Null< Void->Void >;
 }
@@ -332,7 +332,16 @@ class ContextMenu extends ui.Modal {
 				addElement( Ctx_Action({
 					iconId : "paste",
 					cb : settings.paste,
-					enable: ()->settings.paste!=null && App.ME.clipboard.is(settings.clipType),
+					enable: ()->{
+						if( settings.paste==null )
+							return false;
+
+						for( type in settings.pasteAcceptedTypes )
+							if( App.ME.clipboard.is(type) )
+								return true;
+
+						return false;
+					},
 					tip : L._PasteAfter(settings.elementName),
 				}), jElement );
 
