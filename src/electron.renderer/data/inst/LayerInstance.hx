@@ -886,11 +886,15 @@ class LayerInstance {
 		return isValid(cx,cy) && gridTiles.exists( coordId(cx,cy) ) && gridTiles.get(coordId(cx,cy)).length>0;
 	}
 
-	inline function isAutoTileCellAllowed(cx:Int, cy:Int) {
-		if( def.autoTilesKilledByOtherLayerUid==null )
+	function isAutoTileCellAllowed(cx:Int, cy:Int) {
+		if( def.layerUidsPreventingAutoTilingHere.length==0 )
 			return true;
-		else
-			return !level.getLayerInstance(def.autoTilesKilledByOtherLayerUid).hasAnyGridTile(cx,cy);
+		else {
+			for( defUid in def.layerUidsPreventingAutoTilingHere )
+				if( level.getLayerInstance(defUid).hasAnyGridTile(cx,cy) )
+					return false;
+			return true;
+		}
 	}
 
 	inline function addRuleTilesAt(r:data.def.AutoLayerRuleDef, cx:Int, cy:Int, flips:Int) {

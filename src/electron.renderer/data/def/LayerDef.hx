@@ -48,7 +48,7 @@ class LayerDef {
 	public var autoRuleGroups : Array<AutoLayerRuleGroupDef> = [];
 	public var autoSourceLd(get,never) : Null<LayerDef>;
 		inline function get_autoSourceLd() return type==AutoLayer && autoSourceLayerDefUid!=null ? _project.defs.getLayerDef(autoSourceLayerDefUid) : null;
-	public var autoTilesKilledByOtherLayerUid: Null<Int>;
+	public var layerUidsPreventingAutoTilingHere: Array<Int>;
 
 	// Tiles
 	public var tilePivotX(default,set) : Float = 0;
@@ -82,6 +82,11 @@ class LayerDef {
 	public static function fromJson(p:Project, jsonVersion:String, json:ldtk.Json.LayerDefJson) {
 		if( (cast json).tilesetDefId!=null )
 			json.tilesetDefUid = (cast json).tilesetDefId;
+
+		if( json.layerUidsPreventingAutoTilingHere==null ) {
+			var otherUid = JsonTools.readNullableInt(json.autoTilesKilledByOtherLayerUid);
+			json.layerUidsPreventingAutoTilingHere = otherUid==null ? [] : [otherUid];
+		}
 
 		if( json.inactiveOpacity==null ) {
 			if( (cast json).fadeInactive==true )
@@ -119,7 +124,7 @@ class LayerDef {
 		o.parallaxFactorY = JsonTools.readFloat(json.parallaxFactorY, 0);
 		o.parallaxScaling = JsonTools.readBool(json.parallaxScaling, true);
 		o.biomeFieldUid = JsonTools.readNullableInt(json.biomeFieldUid);
-		o.autoTilesKilledByOtherLayerUid = JsonTools.readNullableInt(json.autoTilesKilledByOtherLayerUid);
+		o.layerUidsPreventingAutoTilingHere = JsonTools.readArray(json.layerUidsPreventingAutoTilingHere);
 		o.uiFilterTags = Tags.fromJson(json.uiFilterTags);
 		o.useAsyncRender = JsonTools.readBool(json.useAsyncRender, false);
 
@@ -201,7 +206,7 @@ class LayerDef {
 			parallaxScaling: parallaxScaling,
 			requiredTags: requiredTags.toJson(),
 			excludedTags: excludedTags.toJson(),
-			autoTilesKilledByOtherLayerUid: autoTilesKilledByOtherLayerUid,
+			layerUidsPreventingAutoTilingHere: layerUidsPreventingAutoTilingHere.copy(),
 			uiFilterTags: uiFilterTags.toJson(),
 			useAsyncRender: useAsyncRender,
 

@@ -681,10 +681,15 @@ class LevelRender extends dn.Process {
 				if( other.def.type==AutoLayer && other.def.autoSourceLayerDefUid==li.layerDefUid )
 					invalidateLayerArea(other, left, right, top, bottom);
 
-		// Invalidate potentially killed auto-layers
+		// Potentially invalidate some auto-layers
 		if( li.def.type==Tiles )
 			for(other in editor.curLevel.layerInstances)
-				if( other.def.isAutoLayer() && other.def.autoTilesKilledByOtherLayerUid==li.layerDefUid )
+				if( other.def.isAutoLayer() && other.def.layerUidsPreventingAutoTilingHere.contains( li.layerDefUid ) )
+					invalidateLayerArea(other, left, right, top, bottom);
+
+		if( li.def.type==IntGrid )
+			for(other in editor.curLevel.layerInstances)
+				if( other.def.isAutoLayer() && other.def.layerUidsPreventingAutoTilingHere.contains( li.layerDefUid ) )
 					invalidateLayerArea(other, left, right, top, bottom);
 	}
 
