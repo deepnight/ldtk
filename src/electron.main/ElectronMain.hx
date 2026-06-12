@@ -26,6 +26,10 @@ class ElectronMain {
 			if( electron.main.BrowserWindow.getAllWindows().length == 0 )
 				showSplashWindow();
 		});
+		App.on('did-become-active', function() {
+			mainWindow.show();
+			mainWindow.maximize();
+		});
 
 		initIpcBindings();
 	}
