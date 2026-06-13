@@ -27,8 +27,10 @@ class ElectronMain {
 				showSplashWindow();
 		});
 		App.on('did-become-active', function() {
-			mainWindow.show();
-			mainWindow.maximize();
+			if( mainWindow != null && !mainWindow.isDestroyed() ) {
+				mainWindow.show();
+				mainWindow.maximize();
+			}
 		});
 
 		initIpcBindings();
