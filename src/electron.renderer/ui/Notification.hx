@@ -92,6 +92,10 @@ class Notification extends dn.Process {
 		}
 	}
 
+	public static function invalidValue(value:Int) {
+		error( Lang.t._("The value \"::value::\" isn't valid, or isn't unique.", { value:value }) );
+	}
+
 	public static function invalidIdentifier(id:String) {
 		error( Lang.t._("The identifier \"::id::\" isn't valid, or isn't unique.", { id:id }) );
 	}
