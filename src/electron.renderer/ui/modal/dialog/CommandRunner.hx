@@ -5,7 +5,7 @@ class CommandRunner extends ui.modal.Dialog {
 	var jOutput : js.jquery.JQuery;
 	var onComplete : Null< Void->Void >;
 
-	private function new(p:data.Project, cmd:ldtk.Json.CustomCommand, ?onComplete:Void->Void) {
+	private function new(p:data.Project, cmd:data.DataTypes.CustomCommand, ?onComplete:Void->Void) {
 		super();
 		loadTemplate("commandRunner");
 		canBeClosedManually = false;
@@ -53,7 +53,7 @@ class CommandRunner extends ui.modal.Dialog {
 		}
 	}
 
-	function runCommand(p:data.Project, cmd:ldtk.Json.CustomCommand) {
+	function runCommand(p:data.Project, cmd:data.DataTypes.CustomCommand) {
 		var needManualClosing = false;
 
 		var jKill = jContent.find(".kill");
@@ -169,7 +169,7 @@ class CommandRunner extends ui.modal.Dialog {
 		return args;
 	}
 
-	public static function runSingleCommand(p:data.Project, cmd:ldtk.Json.CustomCommand, ?onComplete:Void->Void) {
+	public static function runSingleCommand(p:data.Project, cmd:data.DataTypes.CustomCommand, ?onComplete:Void->Void) {
 		if( App.ME.settings.isProjectUntrusted(p.iid) ) {
 			if( onComplete!=null )
 				onComplete();
@@ -179,7 +179,7 @@ class CommandRunner extends ui.modal.Dialog {
 		new CommandRunner(p, cmd, onComplete);
 	}
 
-	public static function runMultipleCommands(p:data.Project, cmds:Array<ldtk.Json.CustomCommand>, onComplete:Void->Void) {
+	public static function runMultipleCommands(p:data.Project, cmds:Array<data.DataTypes.CustomCommand>, onComplete:Void->Void) {
 		if( App.ME.settings.isProjectUntrusted(p.iid) ) {
 			if( onComplete!=null )
 				onComplete();
@@ -188,7 +188,7 @@ class CommandRunner extends ui.modal.Dialog {
 
 		if( cmds.length>0 ) {
 			var idx = 0;
-			function _run(cmd:ldtk.Json.CustomCommand) {
+			function _run(cmd:data.DataTypes.CustomCommand) {
 				new ui.modal.dialog.CommandRunner(p, cmd, ()->{
 					idx++;
 					if( idx<cmds.length )

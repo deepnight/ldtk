@@ -145,6 +145,7 @@
 			A list of custom commands that will be executed by LDtk in various situations.
 			The working directory for all these commands is the project directory.
 			If multiple commands are to be ran at a given moment (eg. before saving), they will be executed in order of appearance here.
+			Each command can be restricted to a specific operating system: it will be ignored when the project is opened on another OS.
 		</info>
 	</dt>
 	<dd class="customCommands">
@@ -153,6 +154,7 @@
 		<ul></ul>
 		<xml id="customCommand">
 			<select class="when"></select>
+			<select class="os"></select>
 			<input type="text" class="command"/>
 			<button class="remove"> <span class="icon delete"></span> </button>
 		</xml>

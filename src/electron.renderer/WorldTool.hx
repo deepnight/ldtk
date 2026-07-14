@@ -17,7 +17,14 @@ class WorldTool extends dn.Process {
 
 	var tmpRender : h2d.Graphics;
 	var cursor : h2d.Graphics;
+	var marqueeRender : h2d.Graphics;
 	var clickedSameLevel = false;
+
+	public var selectedLevels : Array<data.Level> = [];
+	var marqueeOrigin : Null<Coords>;
+	var isGroupDrag = false;
+	var groupDragOrigins : Null< Map<Int, {x:Int, y:Int}> >;
+	var groupInitialNeighbours : Null< Map<Int, Array<String>> >;
 
 
 	public function new() {
@@ -28,12 +35,23 @@ class WorldTool extends dn.Process {
 
 		cursor = new h2d.Graphics();
 		editor.worldRender.root.add(cursor, Const.DP_UI);
+
+		marqueeRender = new h2d.Graphics();
+		editor.worldRender.root.add(marqueeRender, Const.DP_UI);
 	}
 
 	override function onDispose() {
 		super.onDispose();
 		tmpRender.remove();
 		cursor.remove();
+		marqueeRender.remove();
+	}
+
+	public function clearLevelSelection() {
+		if( selectedLevels.length>0 ) {
+			selectedLevels = [];
+			editor.worldRender.updateCurrentHighlight();
+		}
 	}
 
 	@:keep
@@ -157,6 +175,7 @@ class WorldTool extends dn.Process {
 		initialNeighbours = null;
 		dragStarted = false;
 		clicked = true;
+		marqueeOrigin = null;
 		if( !worldMode && editor.curLevel.inBoundsWorld(m.worldX,m.worldY) )
 			clickedLevel = null;
 		else
@@ -172,24 +191,73 @@ class WorldTool extends dn.Process {
 			clickedSameLevel = editor.curLevel==clickedLevel;
 			initialNeighbours = clickedLevel.getNeighboursIids();
 
-			// Pick level
-			editor.selectLevel(clickedLevel);
+			if( App.ME.isCtrlCmdDown() && !App.ME.isAltDown() ) {
+				// Toggle level in multi-selection
+				if( selectedLevels.contains(clickedLevel) ) {
+					selectedLevels.remove(clickedLevel);
+					// The active level is always highlighted: hand the role over to a
+					// remaining selected level so the unselected one loses its border
+					if( editor.curLevel==clickedLevel && selectedLevels.length>0 )
+						editor.selectLevel( selectedLevels[selectedLevels.length-1] );
+				}
+				else {
+					selectedLevels.push(clickedLevel);
+					editor.selectLevel(clickedLevel);
+				}
+				editor.worldRender.updateCurrentHighlight();
+			}
+			else if( !worldMode || !selectedLevels.contains(clickedLevel) ) {
+				// Pick level (discards any multi-selection)
+				selectedLevels = [clickedLevel];
+				editor.selectLevel(clickedLevel);
+				editor.worldRender.updateCurrentHighlight();
+			}
+			// NOTE: in world mode, a plain click on a level already in the multi-selection is
+			// resolved on mouse-up only: dragging moves the whole group, releasing collapses
+			// the selection down to the clicked level.
 		}
+		else if( worldMode && !project.isBackup() )
+			marqueeOrigin = m;
 	}
 
 	public function onMouseUp(m:Coords) {
 		tmpRender.clear();
+		marqueeRender.clear();
 
-		if( clickedLevel!=null ) {
+		if( clickedLevel==null && marqueeOrigin!=null && worldMode ) {
+			if( origin.getPageDist(m)<=getDragThreshold() ) {
+				// Plain click on empty space
+				clearLevelSelection();
+			}
+			else {
+				// Select all levels intersecting the marquee rectangle
+				var left = M.imin(marqueeOrigin.worldX, m.worldX);
+				var right = M.imax(marqueeOrigin.worldX, m.worldX);
+				var top = M.imin(marqueeOrigin.worldY, m.worldY);
+				var bottom = M.imax(marqueeOrigin.worldY, m.worldY);
+
+				if( !App.ME.isCtrlCmdDown() || App.ME.isAltDown() )
+					selectedLevels = [];
+				for( l in curWorld.levels )
+					if( l.worldDepth==editor.curWorldDepth
+						&& dn.Lib.rectangleOverlaps( left, top, right-left, bottom-top, l.worldX, l.worldY, l.pxWid, l.pxHei )
+						&& !selectedLevels.contains(l) )
+						selectedLevels.push(l);
+				editor.worldRender.updateCurrentHighlight();
+			}
+		}
+		else if( clickedLevel!=null ) {
 			if( dragStarted ) {
 				// Drag complete
-				var initialX = clickedLevel.worldX;
-				var initialY = clickedLevel.worldY;
-
 				switch curWorld.worldLayout {
 					case Free, GridVania:
 						curWorld.applyAutoLevelIdentifiers();
-						editor.ge.emit( WorldLevelMoved(clickedLevel, true, initialNeighbours) );
+						for( l in (isGroupDrag ? selectedLevels : [clickedLevel]) ) {
+							var prevNeig = groupInitialNeighbours!=null && groupInitialNeighbours.exists(l.uid)
+								? groupInitialNeighbours.get(l.uid)
+								: initialNeighbours;
+							editor.ge.emit( WorldLevelMoved(l, true, prevNeig) );
+						}
 
 					case LinearHorizontal:
 						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);
@@ -217,10 +285,17 @@ class WorldTool extends dn.Process {
 			// 	// Pick level
 			// 	editor.selectLevel(clickedLevel);
 				// Enter level on "double-click"
-				if( clickedSameLevel )
+				if( clickedSameLevel && !App.ME.isCtrlCmdDown() )
 					editor.setWorldMode(false);
 			// 	else if( !worldMode )
 			// 		editor.camera.scrollTo(m.worldX, m.worldY);
+
+				// Plain click on a member of the multi-selection: collapse selection to it
+				if( !App.ME.isCtrlCmdDown() && selectedLevels.length>1 && selectedLevels.contains(clickedLevel) ) {
+					selectedLevels = [clickedLevel];
+					editor.selectLevel(clickedLevel);
+					editor.worldRender.updateCurrentHighlight();
+				}
 			}
 		}
 
@@ -228,6 +303,10 @@ class WorldTool extends dn.Process {
 		clickedLevel = null;
 		dragStarted = false;
 		clicked = false;
+		isGroupDrag = false;
+		marqueeOrigin = null;
+		groupDragOrigins = null;
+		groupInitialNeighbours = null;
 	}
 
 	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlCmdDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
@@ -285,6 +364,21 @@ class WorldTool extends dn.Process {
 	}
 
 	public function onMouseMove(ev:hxd.Event, m:Coords) {
+		// Marquee level selection over empty space
+		if( clicked && worldMode && clickedLevel==null && marqueeOrigin!=null && origin.getPageDist(m)>=getDragThreshold() ) {
+			ev.cancel = true;
+			var left = M.imin(marqueeOrigin.worldX, m.worldX);
+			var right = M.imax(marqueeOrigin.worldX, m.worldX);
+			var top = M.imin(marqueeOrigin.worldY, m.worldY);
+			var bottom = M.imax(marqueeOrigin.worldY, m.worldY);
+			marqueeRender.clear();
+			marqueeRender.lineStyle(2/editor.camera.adjustedZoom, 0xffcc00);
+			marqueeRender.beginFill(0xffcc00, 0.1);
+			marqueeRender.drawRect(left, top, right-left, bottom-top);
+			marqueeRender.endFill();
+			App.ME.requestCpu();
+		}
+
 		// Start dragging
 		if( clicked && worldMode && !dragStarted && origin.getPageDist(m)>=getDragThreshold() ) {
 			var allow = switch curWorld.worldLayout {
@@ -298,11 +392,46 @@ class WorldTool extends dn.Process {
 				// if( clickedLevel!=null )
 				// 	editor.selectLevel(clickedLevel);
 
+				isGroupDrag = clickedLevel!=null
+					&& selectedLevels.length>1
+					&& selectedLevels.contains(clickedLevel)
+					&& ( switch curWorld.worldLayout {
+						case Free, GridVania: true;
+						case LinearHorizontal, LinearVertical: false;
+					} );
+
 				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlCmdDown() ) {
-					var copy = curWorld.duplicateLevel(clickedLevel);
-					editor.ge.emit( LevelAdded(copy) );
-					editor.selectLevel(copy);
-					clickedLevel = copy;
+					if( isGroupDrag ) {
+						// Duplicate all selected levels, the copies become the dragged selection
+						var oldClicked = clickedLevel;
+						var copies = [];
+						for( l in selectedLevels ) {
+							var copy = curWorld.duplicateLevel(l);
+							editor.ge.emit( LevelAdded(copy) );
+							copies.push(copy);
+							if( l==oldClicked )
+								clickedLevel = copy;
+						}
+						selectedLevels = copies;
+					}
+					else {
+						var copy = curWorld.duplicateLevel(clickedLevel);
+						editor.ge.emit( LevelAdded(copy) );
+						clickedLevel = copy;
+					}
+					editor.selectLevel(clickedLevel);
+				}
+
+				// Store pre-drag positions and neighbours of all dragged levels
+				if( clickedLevel!=null ) {
+					groupDragOrigins = new Map();
+					groupInitialNeighbours = new Map();
+					for( l in (isGroupDrag ? selectedLevels : [clickedLevel]) ) {
+						if( isGroupDrag && !curWorld.levels.contains(l) )
+							continue;
+						groupDragOrigins.set( l.uid, { x:l.worldX, y:l.worldY } );
+						groupInitialNeighbours.set( l.uid, l.getNeighboursIids() );
+					}
 				}
 			}
 		}
@@ -347,9 +476,9 @@ class WorldTool extends dn.Process {
 						clickedLevel.worldY = Std.int( clickedLevel.worldY/g ) * g;
 					}
 
-					// Snap to other levels
+					// Snap to other levels (ignoring members of the dragged group)
 					for(l in curWorld.levels) {
-						if( l==clickedLevel )
+						if( l==clickedLevel || isGroupDrag && selectedLevels.contains(l) )
 							continue;
 
 						if( clickedLevel.getBoundsDist(l) > getLevelSnapDist() )
@@ -401,8 +530,23 @@ class WorldTool extends dn.Process {
 					}
 			}
 
+			// Move the rest of the group along with the anchor level.
+			// Only the anchor snaps to grid/levels, followers inherit its delta.
+			if( isGroupDrag ) {
+				var dx = clickedLevel.worldX - levelOriginX;
+				var dy = clickedLevel.worldY - levelOriginY;
+				for( l in selectedLevels ) {
+					if( l==clickedLevel || !groupDragOrigins.exists(l.uid) )
+						continue;
+					var o = groupDragOrigins.get(l.uid);
+					l.worldX = o.x + dx;
+					l.worldY = o.y + dy;
+				}
+			}
+
 			// Refresh render
-			editor.ge.emit( WorldLevelMoved(clickedLevel, false, null) );
+			for( l in (isGroupDrag ? selectedLevels : [clickedLevel]) )
+				editor.ge.emit( WorldLevelMoved(l, false, null) );
 			App.ME.requestCpu();
 			ev.cancel = true;
 		}

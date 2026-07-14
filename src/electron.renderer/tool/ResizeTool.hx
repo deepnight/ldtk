@@ -9,7 +9,7 @@ typedef ResizeRect = {
 
 class ResizeTool extends Tool<Int> {
 	static var DEFAULT_ALPHA = 0.75;
-	static var HANDLE_RADIUS = 5;
+	static var HANDLE_RADIUS = 3;
 
 	var draggedHandle: Null<RectHandlePos>;
 	var dragOrigin : Coords;
@@ -179,7 +179,7 @@ class ResizeTool extends Tool<Int> {
 	override function onMouseMoveCursor(ev:hxd.Event, m:Coords) {
 		super.onMouseMoveCursor(ev, m);
 
-		if( ev.cancel )
+		if( ev.cancel || editor.selectionTool.isRunning() )
 			return;
 
 		var p = getOveredHandle(m);
@@ -193,6 +193,10 @@ class ResizeTool extends Tool<Int> {
 
 	override function onMouseMove(ev:hxd.Event, m:Coords) {
 		super.onMouseMove(ev, m);
+
+		// Stay out of the way while the selection is being moved around
+		if( editor.selectionTool.isRunning() )
+			return;
 
 		if( !isRunning() ) {
 			// Overing
@@ -308,6 +312,7 @@ class ResizeTool extends Tool<Int> {
 
 	override function postUpdate() {
 		super.postUpdate();
+		g.visible = !editor.selectionTool.isRunning();
 		if( invalidated ) {
 			_rect = null;
 			render();

@@ -39,6 +39,11 @@ typedef AppSettings = {
 	var uiStates : Array<{ id:String, val:Int }>;
 	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
 	var projectTrusts : Array<{ iid:String, trusted:Bool }>;
+
+	var simplifiedRenderInWorldView : Bool;
+	var simplifiedRenderAlphaThreshold : Float;
+	var cameraResetOnWorldModeChange : Bool;
+	var escExitsWorldMode : Bool;
 }
 
 enum abstract UiState(String) {
@@ -117,6 +122,11 @@ class Settings {
 			uiStates: [],
 			lastUiDirs: [],
 			projectTrusts: [],
+
+			simplifiedRenderAlphaThreshold: 0.1,
+			simplifiedRenderInWorldView: true,
+			cameraResetOnWorldModeChange: false,
+			escExitsWorldMode: true,
 		}
 
 		// Load

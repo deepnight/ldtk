@@ -29,10 +29,11 @@ class GenericLevelElementGroup {
 		arrow = new h2d.Graphics(renderWrapper);
 		pointLinks = new h2d.Graphics(renderWrapper);
 		selectRender = new h2d.Graphics(renderWrapper);
-		var f = new dn.heaps.filter.PixelOutline(SELECTION_COLOR);
-		f.setPartialKnockout(0.66);
+		// Outline alpha is 0 to make the selection highlight less intrusive
+		var f = new dn.heaps.filter.PixelOutline(SELECTION_COLOR, 0);
+		f.setPartialKnockout(0.5);
 		selectRender.filter = new h2d.filter.Group([
-			f, new dn.heaps.filter.PixelOutline(0x0),
+			f, new dn.heaps.filter.PixelOutline(0x0, 0),
 		]);
 		invalidateBounds();
 	}
@@ -598,7 +599,14 @@ class GenericLevelElementGroup {
 
 
 	function snapToGrid() {
-		return true;
+		// Grid cells and points can only be moved in grid increments, entities follow the Grid option
+		for(ge in elements)
+			switch ge {
+				case null:
+				case GridCell(_), PointField(_): return true;
+				case Entity(_):
+			}
+		return App.ME.settings.v.grid;
 	}
 
 
@@ -708,6 +716,12 @@ class GenericLevelElementGroup {
 					// Apply movement
 					ei.x += Std.int( getDeltaX(origin, to) );
 					ei.y += Std.int( getDeltaY(origin, to) );
+					if( App.ME.settings.v.grid ) {
+						// Snap to grid honoring the entity pivot, like the placement preview
+						var g = li.def.scaledGridSize;
+						ei.x = M.round( ( M.round( (ei.x - ei.def.pivotX*g) / g ) + ei.def.pivotX ) * g );
+						ei.y = M.round( ( M.round( (ei.y - ei.def.pivotY*g) / g ) + ei.def.pivotY ) * g );
+					}
 					changedLayers.set(li,li);
 
 					// Out of bounds

@@ -337,7 +337,7 @@ class EditProject extends ui.modal.Panel {
 		// Custom commands
 		var jCommands = jForms.find(".customCommands");
 		jCommands.find("ul").empty();
-		function _createCommandJquery(cmd:ldtk.Json.CustomCommand) {
+		function _createCommandJquery(cmd:data.DataTypes.CustomCommand) {
 			var jCmd = jCommands.find("xml#customCommand").children().clone(false, false).wrapAll("<li/>").parent();
 			jCmd.appendTo( jCommands.find("ul") );
 			Input.linkToHtmlInput(cmd.command, jCmd.find(".command"));
@@ -352,6 +352,19 @@ class EditProject extends ui.modal.Panel {
 					case AfterLoad: L.t._("Run after loading");
 					case BeforeSave: L.t._("Run before saving");
 					case AfterSave: L.t._("Run after saving");
+				}
+			);
+			new form.input.EnumSelect(
+				jCmd.find("select.os"),
+				data.DataTypes.CustomCommandOs,
+				false,
+				()->cmd.os,
+				(v)->cmd.os = v,
+				(v)->switch v {
+					case All: L.t._("Any OS");
+					case Windows: L.t._("Windows only");
+					case Mac: L.t._("macOS only");
+					case Linux: L.t._("Linux only");
 				}
 			);
 			var jRem = jCmd.find("button.remove");
@@ -371,7 +384,7 @@ class EditProject extends ui.modal.Panel {
 		}
 		var jAdd = jCommands.find("button.add");
 		jAdd.off().click( _->{
-			var cmd : ldtk.Json.CustomCommand = { command:"", when:Manual }
+			var cmd : data.DataTypes.CustomCommand = { command:"", when:Manual, os:All }
 			project.customCommands.push(cmd);
 			editor.ge.emit(ProjectSettingsChanged);
 		});

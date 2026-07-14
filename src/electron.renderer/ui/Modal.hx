@@ -230,6 +230,16 @@ class Modal extends dn.Process {
 		return false;
 	}
 
+	public static function getLatestOpen() : Null<Modal> {
+		var i = ALL.length-1;
+		while( i>=0 )
+			if( ALL[i].isClosing() )
+				i--;
+			else
+				return ALL[i];
+		return null;
+	}
+
 	public static function hasAnyOpen() {
 		for(e in ALL)
 			if( !e.isClosing() && e.countAsModal() )
