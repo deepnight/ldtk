@@ -33,6 +33,9 @@ class EntityDef {
 
 	public var resizableX : Bool;
 	public var resizableY : Bool;
+	public var flippableX : Bool;
+	public var flippableY : Bool;
+	public var flipAroundPivot : Bool;
 	public var minWidth : Null<Int>;
 	public var maxWidth : Null<Int>;
 	public var minHeight : Null<Int>;
@@ -67,6 +70,8 @@ class EntityDef {
 		identifier = "Entity"+uid;
 		setPivot(0.5,1);
 		resizableX = resizableY = false;
+		flippableX = flippableY = false;
+		flipAroundPivot = false;
 		keepAspectRatio = false;
 		hollow = false;
 		tags = new Tags();
@@ -97,6 +102,14 @@ class EntityDef {
 			return tileRect;
 		else
 			return null;
+	}
+
+	public inline function getFlippedPivotX() {
+		return flipAroundPivot ? ((width - 1) / width) - pivotX : pivotX;
+	}
+
+	public inline function getFlippedPivotY() {
+		return flipAroundPivot ? ((height - 1) / height) - pivotY : pivotY;
 	}
 
 	function set_identifier(id:String) {
@@ -151,6 +164,9 @@ class EntityDef {
 		o.height = JsonTools.readInt( json.height, 16 );
 		o.resizableX = JsonTools.readBool( json.resizableX, false );
 		o.resizableY = JsonTools.readBool( json.resizableY, false );
+		o.flippableX = JsonTools.readBool( json.flippableX, false );
+		o.flippableY = JsonTools.readBool( json.flippableY, false );
+		o.flipAroundPivot = JsonTools.readBool( json.flipAroundPivot, false );
 		o.minWidth = JsonTools.readNullableInt( json.minWidth );
 		o.maxWidth = JsonTools.readNullableInt( json.maxWidth );
 		o.minHeight = JsonTools.readNullableInt( json.minHeight );
@@ -211,6 +227,9 @@ class EntityDef {
 			height: height,
 			resizableX: resizableX,
 			resizableY: resizableY,
+			flippableX: flippableX,
+			flippableY: flippableY,
+			flipAroundPivot: flipAroundPivot,
 			minWidth: minWidth,
 			maxWidth: maxWidth,
 			minHeight: minHeight,
