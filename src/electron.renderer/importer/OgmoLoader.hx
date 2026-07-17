@@ -325,7 +325,8 @@ class OgmoLoader {
 						log.error('Layer "${layerJson.name}" from level ${fp.full} does not match any layer definition');
 						continue;
 					}
-					var li = level.getLayerInstance(ld);
+					// TODO: check if it makes sense to convert multiple level-instances here
+					var li = level.getLayerInstances(ld)[0];
 					li.pxOffsetX = levelJson.offsetX + layerJson.offsetX;
 					li.pxOffsetY = levelJson.offsetY + layerJson.offsetY;
 					switch ld.type {

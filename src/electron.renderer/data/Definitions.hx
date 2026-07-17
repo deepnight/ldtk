@@ -242,7 +242,7 @@ class Definitions {
 
 	public function isLayerSourceOfAnotherOne(?ld:data.def.LayerDef, ?layerDefUid:Int) {
 		for( other in layers )
-			if( ld!=null && other.autoSourceLayerDefUid==ld.uid || layerDefUid!=null && other.autoSourceLayerDefUid==layerDefUid )
+			if( (ld!=null && other.autoSourceLayerDefUid==ld.uid) || (layerDefUid!=null && other.autoSourceLayerDefUid==layerDefUid) )
 				return true;
 
 		return false;
@@ -318,18 +318,6 @@ class Definitions {
 				return ld;
 
 		return null;
-	}
-
-
-	public function getLayerDepth(ld:data.def.LayerDef) {
-		var i = 0;
-		while( i<layers.length && layers[i]!=ld )
-			i++;
-
-		if( i==layers.length )
-			throw "Layer not found";
-
-		return layers.length-1-i;
 	}
 
 
