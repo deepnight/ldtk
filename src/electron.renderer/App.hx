@@ -732,7 +732,7 @@ class App extends dn.Process {
 		if( hasPage() && !curPageProcess.isPaused() ) {
 			var spd = e.ctrlKey ? 0.20 : 0.01;
 			var delta = spd * -e.deltaY;
-			curPageProcess.onAppMouseWheel(delta);
+			curPageProcess.onAppMouseWheel(delta, e.deltaX, e.deltaY, e.ctrlKey);
 		}
 	}
 
