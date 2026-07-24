@@ -158,6 +158,10 @@ class ProjectLoader {
 										var raw = NT.readFileString(path);
 										var lJson = haxe.Json.parse(raw);
 										var l = data.Level.fromJson(p, w, lJson, true);
+										// signal recycling of used values
+										raw = null;
+										lJson = null;
+										// save loaded level data
 										w.levels[curIdx] = l;
 									}
 									catch(e:Dynamic) {
