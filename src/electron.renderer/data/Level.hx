@@ -1,10 +1,14 @@
 package data;
 
+import haxe.io.Path;
+import sys.FileSystem;
+import sys.io.File;
+
 class Level {
 	var _project : Project;
 	public var _world : World;
 
-	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
+	var _cachedJson : Null<{ path:String, json:ldtk.Json.LevelJson }>;
 
 	@:allow(data.Project, data.World)
 	public var uid(default,null) : Int;
@@ -372,15 +376,41 @@ class Level {
 
 
 	public inline function hasJsonCache() return _cachedJson!=null;
-	public inline function invalidateJsonCache() _cachedJson = null;
-	public function rebuildCache() {
+	public inline function invalidateJsonCache() {
+		if( _cachedJson!=null ) {
+			FileSystem.deleteFile( _cachedJson.path );
+		}
 		_cachedJson = null;
+	}
+	public function rebuildCache() {
+		invalidateJsonCache();
 		toJson();
 	}
 
+	function tempDirectory() {
+		var tempDir = Sys.environment()['TMP'];
+		if (tempDir == null) {
+			tempDir = Sys.environment()['TEMP'];
+		}
+		return tempDir;
+	}
+
 	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
+        var tempDir = tempDirectory();
+        var tempFileName = 'level-${this.uid}-${this.iid}.json';
+        var tempFilePath = Path.join([tempDir, tempFileName]);
+
+		try {
+			var jsonStr = ui.ProjectSaver.jsonStringify(_project, json, skipHeader );
+            File.saveContent(tempFilePath, jsonStr);
+			jsonStr = null;
+
+        } catch (e:Dynamic) {
+            trace('An error occurred: $e');
+        }
+
 		_cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(_project, json, skipHeader ),
+			path: tempFilePath,
 			json: json,
 		}
 	}
@@ -394,7 +424,11 @@ class Level {
 	}
 
 	public function getCacheJsonString() : Null<String> {
-		return hasJsonCache() ? _cachedJson.str : null;
+		if( !hasJsonCache() ) {
+			return null;
+		}
+
+		return File.getContent(_cachedJson.path);
 	}
 
 	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {
