@@ -284,13 +284,22 @@ class World {
 		return _project.getLevelAnywhere(uid);
 	}
 
-	public function getLevelAt(worldX:Int, worldY:Int) : Null<Level> {
+	public function getLevelAt(worldX:Int, worldY:Int, worldDepth: Int) : Null<Level> {
 		for(l in levels)
-			if( l.isWorldOver(worldX, worldY) )
+			if( l.worldDepth == worldDepth && l.isWorldOver(worldX, worldY) )
 				return l;
 		return null;
 	}
 
+	public function getLevelsOverlapping(worldX: Int, worldY: Int, width: Int, height: Int, worldDepth: Int) : Array<Level> {
+		var foundLevels = [];
+		for(level in levels) {
+			if(level.worldDepth == worldDepth && level.worldBoundsOverlaps(worldX, worldY, width, height))
+				foundLevels.push(level);
+		}
+
+		return foundLevels;
+	}
 
 	public function getShortName(maxLen=6) {
 		if( identifier.length<=maxLen )

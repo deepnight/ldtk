@@ -504,6 +504,10 @@ class Level {
 			&& wy>=worldY-padding && wy<worldY+pxHei+padding;
 	}
 
+	public inline function worldBoundsOverlaps(x, y, width, height) {
+		return dn.Lib.rectangleOverlaps(worldX, worldY, pxWid, pxHei, x, y, width, height);
+	}
+
 	public function getDist(wx:Int, wy:Int) : Float {
 		if( isWorldOver(wx,wy) )
 			return 0;
