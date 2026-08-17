@@ -128,12 +128,6 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		return dh.getBest();
 	}
 
-
-	static inline function boundsOverlaps(l:data.Level, x,y,w,h) {
-		return dn.Lib.rectangleOverlaps( x, y, w, h, l.worldX, l.worldY, l.pxWid, l.pxHei );
-	}
-
-
 	/**
 		Return a valid level insertion spot near Coords, or null if none.
 	**/
@@ -152,13 +146,12 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 		// Find a spot in world space
 		switch world.worldLayout {
 			case Free, GridVania:
-
-				if( world.getLevelAt(m.worldX, m.worldY)!=null )
+				if( world.getLevelAt(m.worldX, m.worldY, Editor.ME.curWorldDepth)!=null )
 					b.overlaps = true;
 				else {
 					// Deinterlace with existing levels
 					for(l in world.levels)
-						if( boundsOverlaps( l, b.x, b.y, b.wid, b.hei ) ) {
+						if( l.worldBoundsOverlaps(b.x, b.y, b.wid, b.hei) ) {
 							// Source: https://stackoverflow.com/questions/1585525/how-to-find-the-intersection-point-between-a-line-and-a-rectangle
 							var slope = ( (b.y+b.hei*0.5)-l.worldCenterY )  /  ( (b.x+b.wid*0.5)-l.worldCenterX );
 							if( slope*l.pxWid*0.5 >= -l.pxHei*0.5  &&  slope*l.pxWid*0.5 <= l.pxHei*0.5 )
@@ -176,7 +169,7 @@ class LevelSpotPicker extends ui.ValuePicker<Coords> {
 
 					// Deinterlace failed
 					for(l in world.levels)
-						if( boundsOverlaps(l, b.x, b.y, b.wid, b.hei) ) {
+						if( l.worldBoundsOverlaps(b.x, b.y, b.wid, b.hei) ) {
 							b.overlaps = true;
 							break;
 						}
