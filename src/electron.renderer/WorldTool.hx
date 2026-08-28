@@ -13,6 +13,11 @@ class WorldTool extends dn.Process {
 	var origin : Coords;
 	var clicked = false;
 	var dragStarted = false;
+	var boxSelecting = false;
+	var activeDragLevels : Array<data.Level> = [];
+	var dragOriginXs : Map<Int,Int> = new Map();
+	var dragOriginYs : Map<Int,Int> = new Map();
+	var dragInitialNeighbours : Map<Int,Array<String>> = new Map();
 	var worldMode(get,never) : Bool; inline function get_worldMode() return editor.worldMode;
 
 	var tmpRender : h2d.Graphics;
@@ -156,6 +161,11 @@ class WorldTool extends dn.Process {
 		origin = m;
 		initialNeighbours = null;
 		dragStarted = false;
+		boxSelecting = false;
+		activeDragLevels = [];
+		dragOriginXs = new Map();
+		dragOriginYs = new Map();
+		dragInitialNeighbours = new Map();
 		clicked = true;
 		if( !worldMode && editor.curLevel.inBoundsWorld(m.worldX,m.worldY) )
 			clickedLevel = null;
@@ -166,6 +176,14 @@ class WorldTool extends dn.Process {
 			clickedLevel = null;
 
 		if( clickedLevel!=null ) {
+			if( worldMode && App.ME.isCtrlCmdDown() && !App.ME.isAltDown() ) {
+				editor.toggleWorldLevelSelection(clickedLevel);
+				clickedLevel = null;
+				clicked = false;
+				ev.cancel = true;
+				return;
+			}
+
 			levelOriginX = clickedLevel.worldX;
 			levelOriginY = clickedLevel.worldY;
 			ev.cancel = true;
@@ -173,23 +191,36 @@ class WorldTool extends dn.Process {
 			initialNeighbours = clickedLevel.getNeighboursIids();
 
 			// Pick level
-			editor.selectLevel(clickedLevel);
+			if( worldMode && editor.isWorldLevelSelected(clickedLevel) && editor.countWorldLevelSelection()>1 )
+				editor.selectLevel(clickedLevel, false, true);
+			else if( worldMode )
+				editor.replaceWorldLevelSelection([clickedLevel], clickedLevel);
+			else
+				editor.selectLevel(clickedLevel);
 		}
 	}
 
 	public function onMouseUp(m:Coords) {
 		tmpRender.clear();
 
+		if( boxSelecting ) {
+			var selected = getLevelsInSelectionBox(m);
+			if( App.ME.isCtrlCmdDown() )
+				editor.toggleWorldLevelsInSelection(selected);
+			else
+				editor.replaceWorldLevelSelection(selected);
+		}
+		else if( clicked && clickedLevel==null && worldMode && !App.ME.isCtrlCmdDown() && origin.getPageDist(m)<=getDragThreshold() )
+			editor.clearWorldLevelSelection();
+
 		if( clickedLevel!=null ) {
 			if( dragStarted ) {
 				// Drag complete
-				var initialX = clickedLevel.worldX;
-				var initialY = clickedLevel.worldY;
-
 				switch curWorld.worldLayout {
 					case Free, GridVania:
 						curWorld.applyAutoLevelIdentifiers();
-						editor.ge.emit( WorldLevelMoved(clickedLevel, true, initialNeighbours) );
+						for(l in activeDragLevels)
+							editor.ge.emit( WorldLevelMoved(l, true, dragInitialNeighbours.get(l.uid)) );
 
 					case LinearHorizontal:
 						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginX);
@@ -227,14 +258,29 @@ class WorldTool extends dn.Process {
 		// Cleanup
 		clickedLevel = null;
 		dragStarted = false;
+		boxSelecting = false;
+		activeDragLevels = [];
+		dragOriginXs = new Map();
+		dragOriginYs = new Map();
+		dragInitialNeighbours = new Map();
 		clicked = false;
 	}
 
 	inline function getLevelSnapDist() return App.ME.isShiftDown() || App.ME.isCtrlCmdDown() ? 0 : project.getSmartLevelGridSize() / ( editor.camera.adjustedZoom * 0.4 );
 
+	function willOverlapAnyDraggedLevel(cur:data.Level, newWorldX:Int, newWorldY:Int) {
+		for(l in curWorld.levels) {
+			if( l==cur || activeDragLevels.contains(l) )
+				continue;
+			if( dn.Lib.rectangleOverlaps(newWorldX, newWorldY, cur.pxWid, cur.pxHei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
+				return true;
+		}
+		return false;
+	}
+
 	inline function snapLevelX(cur:data.Level, offset:Int, at:Int) {
 		if( M.fabs(cur.worldX + offset - at) <= getLevelSnapDist() ) {
-			if( cur.willOverlapAnyLevel(at-offset, cur.worldY) )
+			if( willOverlapAnyDraggedLevel(cur, at-offset, cur.worldY) )
 				return false;
 			else {
 				cur.worldX = at-offset;
@@ -247,7 +293,7 @@ class WorldTool extends dn.Process {
 
 	inline function snapLevelY(l:data.Level, offset:Int, with:Int) {
 		if( M.fabs(l.worldY + offset - with) <= getLevelSnapDist() ) {
-			if( l.willOverlapAnyLevel(l.worldX, with-offset) )
+			if( willOverlapAnyDraggedLevel(l, l.worldX, with-offset) )
 				return false;
 			else {
 				l.worldY = with-offset;
@@ -294,6 +340,7 @@ class WorldTool extends dn.Process {
 			}
 			if( allow ) {
 				dragStarted = true;
+				boxSelecting = clickedLevel==null;
 				ev.cancel = true;
 				// if( clickedLevel!=null )
 				// 	editor.selectLevel(clickedLevel);
@@ -301,10 +348,40 @@ class WorldTool extends dn.Process {
 				if( clickedLevel!=null && App.ME.isAltDown() && App.ME.isCtrlCmdDown() ) {
 					var copy = curWorld.duplicateLevel(clickedLevel);
 					editor.ge.emit( LevelAdded(copy) );
-					editor.selectLevel(copy);
+					editor.replaceWorldLevelSelection([copy], copy);
 					clickedLevel = copy;
 				}
+
+				activeDragLevels = [];
+				if( clickedLevel!=null ) {
+					var canMoveGroup = switch curWorld.worldLayout {
+						case Free, GridVania: true;
+						case LinearHorizontal, LinearVertical: false;
+					}
+					if( canMoveGroup && editor.isWorldLevelSelected(clickedLevel) && editor.countWorldLevelSelection()>1 )
+						activeDragLevels = editor.getWorldLevelSelection();
+					else
+						activeDragLevels = [clickedLevel];
+
+					dragOriginXs = new Map();
+					dragOriginYs = new Map();
+					dragInitialNeighbours = new Map();
+					for(l in activeDragLevels) {
+						dragOriginXs.set(l.uid, l.worldX);
+						dragOriginYs.set(l.uid, l.worldY);
+						dragInitialNeighbours.set(l.uid, l.getNeighboursIids());
+					}
+					levelOriginX = dragOriginXs.get(clickedLevel.uid);
+					levelOriginY = dragOriginYs.get(clickedLevel.uid);
+				}
 			}
+		}
+
+		if( boxSelecting && dragStarted ) {
+			renderSelectionBox(m);
+			App.ME.requestCpu();
+			ev.cancel = true;
+			return;
 		}
 
 		// Drag
@@ -326,8 +403,6 @@ class WorldTool extends dn.Process {
 				case LinearHorizontal: false;
 				case LinearVertical: true;
 			}
-			var initialX = clickedLevel.worldX;
-			var initialY = clickedLevel.worldY;
 			if( allowX )
 				clickedLevel.worldX = levelOriginX + ( m.worldX - origin.worldX );
 			else
@@ -349,7 +424,7 @@ class WorldTool extends dn.Process {
 
 					// Snap to other levels
 					for(l in curWorld.levels) {
-						if( l==clickedLevel )
+						if( l==clickedLevel || activeDragLevels.contains(l) )
 							continue;
 
 						if( clickedLevel.getBoundsDist(l) > getLevelSnapDist() )
@@ -393,19 +468,66 @@ class WorldTool extends dn.Process {
 						tmpRender.lineTo(i.coord, curWorld.getWorldHeight(clickedLevel)+100);
 					}
 
-				case LinearVertical:
-					var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginY);
-					if( i!=null ) {
-						tmpRender.moveTo(-100, i.coord);
-						tmpRender.lineTo(curWorld.getWorldWidth(clickedLevel)+100, i.coord);
-					}
+					case LinearVertical:
+						var i = ui.vp.LevelSpotPicker.getLinearInsertPoint(project, curWorld, m, clickedLevel, levelOriginY);
+						if( i!=null ) {
+							tmpRender.moveTo(-100, i.coord);
+							tmpRender.lineTo(curWorld.getWorldWidth(clickedLevel)+100, i.coord);
+						}
+			}
+
+			var moveDx = clickedLevel.worldX - dragOriginXs.get(clickedLevel.uid);
+			var moveDy = clickedLevel.worldY - dragOriginYs.get(clickedLevel.uid);
+			if( activeDragLevels.length>1 ) {
+				for(l in activeDragLevels) {
+					if( l==clickedLevel )
+						continue;
+					l.worldX = dragOriginXs.get(l.uid) + moveDx;
+					l.worldY = dragOriginYs.get(l.uid) + moveDy;
+				}
 			}
 
 			// Refresh render
-			editor.ge.emit( WorldLevelMoved(clickedLevel, false, null) );
+			for(l in activeDragLevels)
+				editor.ge.emit( WorldLevelMoved(l, false, null) );
 			App.ME.requestCpu();
 			ev.cancel = true;
 		}
+	}
+
+	function getSelectionBox(m:Coords) {
+		var left = M.imin(origin.worldX, m.worldX);
+		var top = M.imin(origin.worldY, m.worldY);
+		var right = M.imax(origin.worldX, m.worldX);
+		var bottom = M.imax(origin.worldY, m.worldY);
+		return {
+			x: left,
+			y: top,
+			wid: right-left,
+			hei: bottom-top,
+		};
+	}
+
+	function renderSelectionBox(m:Coords) {
+		var r = getSelectionBox(m);
+		tmpRender.clear();
+		tmpRender.lineStyle(2/editor.camera.adjustedZoom, 0x72feff, 0.8);
+		tmpRender.beginFill(0x72feff, 0.12);
+		tmpRender.drawRect(r.x, r.y, r.wid, r.hei);
+		tmpRender.endFill();
+	}
+
+	function getLevelsInSelectionBox(m:Coords) {
+		var r = getSelectionBox(m);
+		var out : Array<data.Level> = [];
+		if( r.wid<=0 || r.hei<=0 )
+			return out;
+
+		for(l in curWorld.levels)
+			if( l.worldDepth==editor.curWorldDepth && dn.Lib.rectangleOverlaps(r.x, r.y, r.wid, r.hei, l.worldX, l.worldY, l.pxWid, l.pxHei) )
+				out.push(l);
+
+		return out;
 	}
 
 	function getLevelAt(worldX:Int, worldY:Int, ?except:data.Level) {

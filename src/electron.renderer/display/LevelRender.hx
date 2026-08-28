@@ -116,6 +116,8 @@ class LevelRender extends dn.Process {
 				updateGridPos();
 				invalidateGrid();
 
+			case WorldLevelSelectionChanged:
+
 			case ProjectSaved, BeforeProjectSaving:
 
 			case ProjectSelected:
