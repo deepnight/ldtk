@@ -184,6 +184,10 @@ class WorldRender extends dn.Process {
 					}
 				}
 
+			case WorldLevelSelectionChanged:
+				for(l in curWorld.levels)
+					getWorldLevel(l).boundsInvalidated = true;
+
 			case ProjectSaved:
 				invalidateAllLevelFields();
 				invalidateAllLevelIdentifiers();
@@ -995,16 +999,23 @@ class WorldRender extends dn.Process {
 		var wl = getWorldLevel(l);
 		if( wl!=null ) {
 			wl.outline.clear();
-			if( !settings.v.showDetails )
+			var isCur = l==editor.curLevel;
+			var isSelected = editor.isWorldLevelSelected(l);
+			if( !settings.v.showDetails && !isSelected )
 				return;
 
-			var thick = (l==editor.curLevel?3:2)*camera.pixelRatio / camera.adjustedZoom;
+			var thick = (isCur?3:2)*camera.pixelRatio / camera.adjustedZoom;
 			var c : dn.Col = l.getSmartColor(false);
 
 			var error = l.getFirstError();
 			if( error!=NoError ) {
 				thick*=4;
 				c = 0xff0000;
+			}
+
+			if( isSelected && !isCur && error==NoError ) {
+				thick = 3*camera.pixelRatio / camera.adjustedZoom;
+				c = 0x72feff;
 			}
 
 			var pad = 1;

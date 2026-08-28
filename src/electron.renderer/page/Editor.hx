@@ -31,6 +31,7 @@ class Editor extends Page {
 	public var curWorldIid : String;
 	public var curLevelId : Int;
 	var curLayerDefUid : Int;
+	var worldLevelSelection : Map<Int,Bool> = new Map();
 
 	// Tools
 	public var worldTool : WorldTool;
@@ -1353,6 +1354,7 @@ class Editor extends Page {
 		if( worldMode )
 			setWorldMode(false);
 
+		clearWorldLevelSelection(false);
 		curWorldIid = w.iid;
 		invalidateCachedLevelErrors();
 
@@ -1369,18 +1371,23 @@ class Editor extends Page {
 	}
 
 
-	public function selectLevel(l:data.Level, fitView=false) {
+	public function selectLevel(l:data.Level, fitView=false, keepWorldLevelSelection=false) {
 		if( curTool.isRunning() )
 			curTool.stopUsing(getMouse());
 
 		if( l._world!=curWorld )
 			selectWorld(l._world);
 
+		if( !keepWorldLevelSelection )
+			clearWorldLevelSelection();
+
 		if( curLevel!=null )
 			worldRender.invalidateLevelRender(curLevel);
 
 		curLevelId = l.uid;
 		ge.emit( LevelSelected(l) );
+		if( keepWorldLevelSelection )
+			ge.emit( WorldLevelSelectionChanged );
 		ge.emit( ViewportChanged(true) );
 		saveLastProjectInfos();
 
@@ -1434,7 +1441,102 @@ class Editor extends Page {
 			return;
 
 		curWorldDepth = depth;
+		clearWorldLevelSelection();
 		ge.emit( WorldDepthSelected(curWorldDepth) );
+	}
+
+	public function isWorldLevelSelected(l:data.Level) {
+		return l!=null && worldLevelSelection.get(l.uid)==true;
+	}
+
+	public function countWorldLevelSelection() {
+		var n = 0;
+		for(uid in worldLevelSelection.keys()) {
+			var l = project.getLevelAnywhere(uid);
+			if( l!=null && l.isInWorld(curWorld) && l.worldDepth==curWorldDepth )
+				n++;
+		}
+		return n;
+	}
+
+	public function getWorldLevelSelection() {
+		var out : Array<data.Level> = [];
+		for(uid in worldLevelSelection.keys()) {
+			var l = project.getLevelAnywhere(uid);
+			if( l!=null && l.isInWorld(curWorld) && l.worldDepth==curWorldDepth )
+				out.push(l);
+		}
+		return out;
+	}
+
+	public function clearWorldLevelSelection(?notify=true) {
+		var any = false;
+		for(_ in worldLevelSelection.keys()) {
+			any = true;
+			break;
+		}
+		if( !any )
+			return;
+
+		worldLevelSelection = new Map();
+		if( notify )
+			ge.emit( WorldLevelSelectionChanged );
+	}
+
+	public function replaceWorldLevelSelection(levels:Array<data.Level>, ?primary:data.Level) {
+		worldLevelSelection = new Map();
+		for(l in levels)
+			if( l!=null && l.isInWorld(curWorld) && l.worldDepth==curWorldDepth )
+				worldLevelSelection.set(l.uid, true);
+
+		if( primary==null && levels.length>0 )
+			primary = levels[0];
+		if( primary!=null )
+			selectLevel(primary, false, true);
+		else
+			ge.emit( WorldLevelSelectionChanged );
+	}
+
+	public function toggleWorldLevelSelection(l:data.Level) {
+		if( l==null )
+			return;
+
+		if( worldLevelSelection.get(l.uid)==true )
+			worldLevelSelection.remove(l.uid);
+		else
+			worldLevelSelection.set(l.uid, true);
+
+		selectLevel(l, false, true);
+	}
+
+	public function addWorldLevelsToSelection(levels:Array<data.Level>, ?primary:data.Level) {
+		for(l in levels)
+			if( l!=null && l.isInWorld(curWorld) && l.worldDepth==curWorldDepth )
+				worldLevelSelection.set(l.uid, true);
+
+		if( primary==null && levels.length>0 )
+			primary = levels[0];
+		if( primary!=null )
+			selectLevel(primary, false, true);
+		else
+			ge.emit( WorldLevelSelectionChanged );
+	}
+
+	public function toggleWorldLevelsInSelection(levels:Array<data.Level>, ?primary:data.Level) {
+		for(l in levels)
+			if( l!=null && l.isInWorld(curWorld) && l.worldDepth==curWorldDepth ) {
+				if( worldLevelSelection.get(l.uid)==true )
+					worldLevelSelection.remove(l.uid);
+				else
+					worldLevelSelection.set(l.uid, true);
+			}
+
+		if( primary==null && levels.length>0 )
+			primary = levels[0];
+		if( primary!=null )
+			selectLevel(primary, false, true);
+		else
+			ge.emit( WorldLevelSelectionChanged );
 	}
 
 
@@ -1992,6 +2094,7 @@ class Editor extends Page {
 		return switch(e) {
 			case ViewportChanged(_): false;
 			case WorldLevelMoved(_): false;
+			case WorldLevelSelectionChanged: false;
 			// case LayerInstanceChangedGlobally(_): false;
 			case WorldMode(_): false;
 			case GridChanged(_): false;
@@ -2021,6 +2124,7 @@ class Editor extends Page {
 				case LevelResized(l): extra = l.uid;
 				case LevelRestoredFromHistory(l):
 				case LevelJsonCacheInvalidated(l):
+				case WorldLevelSelectionChanged:
 				case WorldLevelMoved(l,isFinal, _): if( isFinal ) extra = l.uid;
 				case WorldSettingsChanged:
 				case LayerDefAdded:
@@ -2093,6 +2197,7 @@ class Editor extends Page {
 			case ProjectSaved:
 			case LevelSelected(level):
 				LOG.userAction("Opened level "+level);
+			case WorldLevelSelectionChanged:
 			case LevelSettingsChanged(l): invalidateLevelCache(l);
 			case LevelAdded(l):
 				for(nl in l.getNeighbours())
@@ -2215,6 +2320,7 @@ class Editor extends Page {
 		// Check if events changes the NeedSaving flag
 		switch e {
 			case WorldMode(_):
+			case WorldLevelSelectionChanged:
 			case WorldDepthSelected(_):
 			case AppSettingsChanged:
 			case ViewportChanged(_):
@@ -2246,12 +2352,16 @@ class Editor extends Page {
 			case AppSettingsChanged:
 
 			case WorldMode(active):
+				if( !active )
+					clearWorldLevelSelection();
 				if( !active && curWorldDepth!=curLevel.worldDepth )
 					selectWorldDepth(curLevel.worldDepth);
 				updateWorldDepthsUI();
 
 			case WorldDepthSelected(worldDepth):
 				updateWorldDepthsUI();
+
+			case WorldLevelSelectionChanged:
 
 			case ViewportChanged(zoomChanged):
 
