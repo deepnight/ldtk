@@ -1,3 +1,7 @@
+# 1.5.4
+
+- Fixed excessive memory use when loading and saving large projects with external level files (#1172)
+
 # 1.5.3
 
 - Fixed a crash when trying to add a newly created Entity
