@@ -177,19 +177,23 @@ class ProjectSaver extends dn.Process {
 					beginNextState();
 
 			case CheckLevelCache:
-				// Rebuild levels cache if necessary
-				var ops : Array<ui.modal.Progress.ProgressOp> = [];
-				for(w in project.worlds)
-				for(l in w.levels) {
-					ops.push({
-						label: l.identifier,
-						cb: ()->{
-							if( !l.hasJsonCache() )
-								l.rebuildCache();
-						}
-					});
+				if( project.externalLevels )
+					beginNextState(); // Dirty external levels are serialized one at a time while saving.
+				else {
+					// Rebuild embedded level caches if necessary.
+					var ops : Array<ui.modal.Progress.ProgressOp> = [];
+					for(w in project.worlds)
+					for(l in w.levels) {
+						ops.push({
+							label: l.identifier,
+							cb: ()->{
+								if( !l.hasJsonCache() )
+									l.rebuildCache();
+							}
+						});
+					}
+					new ui.modal.Progress("Preparing levels...", ops, ()->beginNextState());
 				}
-				new ui.modal.Progress("Preparing levels...", ops, ()->beginNextState());
 
 
 			case SavingMainFile:
@@ -224,19 +228,34 @@ class ProjectSaver extends dn.Process {
 
 				if( project.externalLevels ) {
 					logState();
-					initDir(levelDir, Const.LEVEL_EXTENSION);
+					initDir(levelDir);
 
 					var ops = [];
+					var failed = false;
 					for(l in savingData.externLevels) {
 						var fp = dn.FilePath.fromFile( project.makeAbsoluteFilePath(l.relPath) );
+						var uid = l.uid;
+						var id = l.id;
 						ops.push({
-							label: "Level "+l.id,
+							label: "Level "+id,
 							cb: ()->{
-								NT.writeFileString(fp.full, l.jsonStr);
+								if( failed )
+									return;
+								try writeExternalLevelFile(project, uid, fp.full, true)
+								catch(err:Dynamic) {
+									failed = true;
+									App.LOG.error('Failed to save external level "$id": '+Std.string(err));
+									error( L.t._("Could not save external level ::level::. The previous file was preserved.", {level:id}) );
+								}
 							}
 						});
 					}
-					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->beginNextState());
+					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->{
+						if( !failed ) {
+							removeObsoleteExternalLevelFiles(project, savingData.externLevels);
+							beginNextState();
+						}
+					});
 				}
 				else {
 					// Remove previous external levels
@@ -664,6 +683,81 @@ class ProjectSaver extends dn.Process {
 		);
 	}
 
+	static function normalizePath(path:String) : String {
+		var nodePath : Dynamic = js.node.Require.require("path");
+		var out : String = nodePath.resolve(path);
+		var process : Dynamic = js.node.Require.require("process");
+		return process.platform=="win32" ? out.toLowerCase() : out;
+	}
+
+	static inline function samePath(a:String, b:String) {
+		return normalizePath(a)==normalizePath(b);
+	}
+
+	static function atomicFileOperation(targetAbsPath:String, writeTemp:String->Void) {
+		var fp = dn.FilePath.fromFile(targetAbsPath);
+		if( !NT.fileExists(fp.directory) )
+			NT.createDirs(fp.directory);
+
+		var process : Dynamic = js.node.Require.require("process");
+		var tmpPath = targetAbsPath+'.tmp-'+process.pid;
+		var fs : Dynamic = js.node.Require.require("fs");
+		try {
+			if( NT.fileExists(tmpPath) )
+				NT.removeFile(tmpPath);
+			writeTemp(tmpPath);
+			fs.renameSync(tmpPath, targetAbsPath);
+		}
+		catch(err:Dynamic) {
+			try if( NT.fileExists(tmpPath) ) NT.removeFile(tmpPath) catch(_) {}
+			throw err;
+		}
+	}
+
+	/** Write or copy one external level without retaining its JSON alongside other levels. */
+	public static function writeExternalLevelFile(p:data.Project, uid:Int, targetAbsPath:String, updateCache:Bool) {
+		var level = p.getLevelAnywhere(uid);
+		if( level==null )
+			throw 'Unknown level uid $uid';
+
+		var sourceAbsPath = level.getExternalJsonCachePath();
+		if( sourceAbsPath!=null && !NT.fileExists(sourceAbsPath) ) {
+			// Cached file was removed externally: re-serialize from live data instead
+			level.invalidateJsonCache();
+			sourceAbsPath = null;
+		}
+
+		if( sourceAbsPath!=null ) {
+			if( !samePath(sourceAbsPath, targetAbsPath) )
+				atomicFileOperation(targetAbsPath, (tmpPath)->NT.copyFile(sourceAbsPath, tmpPath));
+		}
+		else {
+			var jsonStr = jsonStringify(p, level.toJson());
+			atomicFileOperation(targetAbsPath, (tmpPath)->NT.writeFileString(tmpPath, jsonStr));
+			jsonStr = null;
+		}
+
+		if( updateCache )
+			level.setJsonCacheFromExternalFile(targetAbsPath);
+	}
+
+	static function removeObsoleteExternalLevelFiles(p:data.Project, levels:Array<{ relPath:String, id:String, uid:Int }>) {
+		var expected = new Map<String,Bool>();
+		for(l in levels)
+			expected.set( normalizePath(p.makeAbsoluteFilePath(l.relPath)), true );
+
+		var dir = p.getAbsExternalFilesDir();
+		if( !NT.fileExists(dir) )
+			return;
+		for(fileName in NT.readDir(dir)) {
+			var absPath = dn.FilePath.fromFile(dir+"/"+fileName);
+			if( NT.isDirectory(absPath.full) || absPath.extension==null || absPath.extension.toLowerCase()!=Const.LEVEL_EXTENSION )
+				continue;
+			if( !expected.exists(normalizePath(absPath.full)) )
+				NT.removeFile(absPath.full);
+		}
+	}
+
 	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
 		var savingData : FileSavingData = {
 			projectJsonStr: "?",
@@ -678,24 +772,24 @@ class ProjectSaver extends dn.Process {
 			savingData.projectJsonStr = jsonStringify( project, project.toJson() );
 		}
 		else {
-			// Separate level JSONs
+			// Keep only descriptors. Level contents are copied or serialized one at a time.
 			var idx = 0;
 			for(w in project.worlds)
 			for(l in w.levels)
 				savingData.externLevels.push({
-					jsonStr: !l.hasJsonCache() ? jsonStringify( project, l.toJson() ) : l.getCacheJsonString(),
 					relPath: l.makeExternalRelPath(idx++),
 					id: l.identifier,
+					uid: l.uid,
 				});
 
-			// Build project JSON without level data
+			// Build lightweight project stubs without constructing any layer JSON.
 			var idx = 0;
 			inline function _clearLevelData(levelJson:ldtk.Json.LevelJson) {
 				Reflect.deleteField(levelJson, dn.data.JsonPretty.HEADER_VALUE_NAME);
 				levelJson.layerInstances = null;
 				levelJson.externalRelPath = project.getLevelAnywhere(levelJson.uid).makeExternalRelPath(idx++);
 			}
-			var trimmedProjectJson = project.toJson();
+			var trimmedProjectJson = project.toJson(true);
 			if( project.hasFlag(MultiWorlds) ) {
 				for(worldJson in trimmedProjectJson.worlds)
 				for(levelJson in worldJson.levels)

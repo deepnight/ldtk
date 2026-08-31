@@ -469,7 +469,6 @@ class Home extends Page {
 			function _createNew() {
 				var p = data.Project.createEmpty(fp.full);
 
-				var data = ui.ProjectSaver.prepareProjectSavingData(p);
 				new ui.ProjectSaver(this, p, (success)->{
 					if( success ) {
 						N.msg("New project created: "+p.filePath.full);

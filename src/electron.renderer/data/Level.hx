@@ -1,10 +1,15 @@
 package data;
 
+private enum LevelJsonCache {
+	InMemory(str:String, json:ldtk.Json.LevelJson);
+	ExternalFile(absPath:String);
+}
+
 class Level {
 	var _project : Project;
 	public var _world : World;
 
-	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
+	var _jsonCache : Null<LevelJsonCache>;
 
 	@:allow(data.Project, data.World)
 	public var uid(default,null) : Int;
@@ -144,12 +149,15 @@ class Level {
 
 
 
-	public function toJson(ignoreCache=false) : ldtk.Json.LevelJson {
-		if( !ignoreCache && hasJsonCache() ) {
+	public function toJson(ignoreCache=false, skipLayerInstances=false) : ldtk.Json.LevelJson {
+		if( !ignoreCache && !skipLayerInstances && hasJsonCache() ) {
 			var o = getCacheJsonObject();
-			if( !_project.externalLevels )
-				Reflect.deleteField(o, dn.data.JsonPretty.HEADER_VALUE_NAME);
-			return o;
+			if( o!=null ) {
+				if( !_project.externalLevels )
+					Reflect.deleteField(o, dn.data.JsonPretty.HEADER_VALUE_NAME);
+				return o;
+			}
+			invalidateJsonCache();
 		}
 
 		// World coords are not stored in JSON for automatically organized layouts
@@ -204,12 +212,12 @@ class Level {
 					all.push( getFieldInstance(fd,true).toJson() );
 				all;
 			},
-			layerInstances: layerInstances.map( li->li.toJson() ),
+			layerInstances: skipLayerInstances ? null : layerInstances.map( li->li.toJson() ),
 			__neighbours: ignoreCache ? [] : getNeighboursJson(),
 		}
 
-		// Cache this json
-		if( !ignoreCache )
+		// External projects are cached only after their level file was written successfully.
+		if( !ignoreCache && !skipLayerInstances )
 			setJsonCache(json, false);
 
 		return json;
@@ -282,7 +290,7 @@ class Level {
 			+ "." + Const.LEVEL_EXTENSION;
 	}
 
-	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson, registerToQuickAccess:Bool) {
+	public static function fromJson(p:Project, w:World, json:ldtk.Json.LevelJson, registerToQuickAccess:Bool, ?externalJsonAbsPath:String) {
 		if( json.iid==null )
 			json.iid = p.generateUniqueId_UUID();
 
@@ -317,9 +325,13 @@ class Level {
 				l.fieldInstances.set(fi.defUid, fi);
 			}
 
-		// Init cache
-		crawlObjectRec(json); // Because haxe.Json.parse unescapes "\n" chars, we need to re-escape them before caching the JSON object
-		l.setJsonCache(json, true);
+		// External levels keep only their source path. Embedded levels retain the existing in-memory cache.
+		if( externalJsonAbsPath!=null )
+			l.setJsonCacheFromExternalFile(externalJsonAbsPath);
+		else if( json.layerInstances!=null ) {
+			crawlObjectRec(json); // Because haxe.Json.parse unescapes "\n" chars, we need to re-escape them before caching the JSON object
+			l.setJsonCache(json, true);
+		}
 
 		return l;
 	}
@@ -371,22 +383,41 @@ class Level {
 	}
 
 
-	public inline function hasJsonCache() return _cachedJson!=null;
-	public inline function invalidateJsonCache() _cachedJson = null;
+	public inline function hasJsonCache() return _jsonCache!=null;
+	public inline function invalidateJsonCache() _jsonCache = null;
 	public function rebuildCache() {
-		_cachedJson = null;
-		toJson();
+		invalidateJsonCache();
+		if( !_project.externalLevels )
+			toJson();
 	}
 
 	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
-		_cachedJson = {
-			str: ui.ProjectSaver.jsonStringify(_project, json, skipHeader ),
-			json: json,
+		if( !_project.externalLevels )
+			_jsonCache = InMemory(
+				ui.ProjectSaver.jsonStringify(_project, json, skipHeader),
+				json
+			);
+	}
+
+	public function setJsonCacheFromExternalFile(absPath:String) {
+		_jsonCache = ExternalFile(absPath);
+	}
+
+	public function getExternalJsonCachePath() : Null<String> {
+		return switch _jsonCache {
+			case ExternalFile(absPath): absPath;
+			case InMemory(_, _), null: null;
 		}
 	}
 
-	public inline function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
-		return hasJsonCache() ? _cachedJson.json : null;
+	public function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
+		return switch _jsonCache {
+			case InMemory(_, json): json;
+			case ExternalFile(absPath):
+				try haxe.Json.parse(NT.readFileString(absPath))
+				catch(_) null;
+			case null: null;
+		}
 	}
 
 	public inline function getDisplayIdentifier() {
@@ -394,7 +425,13 @@ class Level {
 	}
 
 	public function getCacheJsonString() : Null<String> {
-		return hasJsonCache() ? _cachedJson.str : null;
+		return switch _jsonCache {
+			case InMemory(str, _): str;
+			case ExternalFile(absPath):
+				try NT.readFileString(absPath)
+				catch(_) null;
+			case null: null;
+		}
 	}
 
 	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {
