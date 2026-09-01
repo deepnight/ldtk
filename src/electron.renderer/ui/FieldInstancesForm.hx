@@ -380,14 +380,23 @@ class FieldInstancesForm {
 						jOpt.attr("selected","selected");
 				}
 
+				var currentEnumValue = fi.getEnumValue(arrayIdx);
+				var currentIllegal = currentEnumValue!=null && !project.forkConfig.isEnumValueAllowed(getEntityInstance(),fi.def,currentEnumValue);
+				if( currentIllegal )
+					markError(jSelect, "filteredEnum");
+
 				for(v in ed.values) {
+					if( !project.forkConfig.isEnumValueAllowed(getEntityInstance(),fi.def,v.id) && v.id!=currentEnumValue )
+						continue;
 					var jOpt = new J('<option/>');
 					jOpt.appendTo(jSelect);
 					jOpt.attr("value",v.id);
 					jOpt.attr("color", C.intToHex(v.color));
 					if( v.tileRect!=null )
 						jOpt.attr("tile", haxe.Json.stringify(v.tileRect));
-					jOpt.text(v.id);
+					jOpt.text(v.id + ( currentIllegal && v.id==currentEnumValue ? " [not allowed]" : "" ));
+					if( currentIllegal && v.id==currentEnumValue )
+						jOpt.attr("disabled","disabled");
 					jOpt.css({
 						color: C.intToHex( C.toWhite(v.color,0.7) ),
 						backgroundColor: C.intToHex( C.toBlack(v.color,0.5) ),
@@ -807,6 +816,9 @@ class FieldInstancesForm {
 
 		// Fields
 		for(fd in fieldDefs) {
+			var relatedEi = getEntityInstance();
+			if( relatedEi!=null && !project.forkConfig.isFieldVisible(relatedEi,fd) )
+				continue;
 			var fi = fieldInstGetter(fd);
 			var domId = "field_"+fd.identifier+"_"+fd.uid;
 

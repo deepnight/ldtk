@@ -17,16 +17,41 @@ class EntityInstance {
 	public var customHeight: Null<Int>;
 
 	public var width(get,never) : Int;
-		inline function get_width() return customWidth!=null ? customWidth : def.width;
+		inline function get_width() {
+			var v = _project.forkConfig.getAppearanceWidth(this);
+			if( v!=null )
+				return v;
+			if( _project.forkConfig.hasAppearanceWidthOverride(def) )
+				return def.width;
+			return customWidth!=null ? customWidth : def.width;
+		}
 
 	public var height(get,never) : Int;
-		inline function get_height() return customHeight!=null ? customHeight : def.height;
+		inline function get_height() {
+			var v = _project.forkConfig.getAppearanceHeight(this);
+			if( v!=null )
+				return v;
+			if( _project.forkConfig.hasAppearanceHeightOverride(def) )
+				return def.height;
+			return customHeight!=null ? customHeight : def.height;
+		}
+
+	public var pivotX(get,never) : Float;
+		inline function get_pivotX() {
+			var v = _project.forkConfig.getAppearancePivotX(this);
+			return v!=null ? v : def.pivotX;
+		}
+	public var pivotY(get,never) : Float;
+		inline function get_pivotY() {
+			var v = _project.forkConfig.getAppearancePivotY(this);
+			return v!=null ? v : def.pivotY;
+		}
 
 	public var fieldInstances : Map<Int, data.inst.FieldInstance> = new Map();
 
-	public var left(get,never) : Int; inline function get_left() return M.round( x - width*def.pivotX );
+	public var left(get,never) : Int; inline function get_left() return M.round( x - width*pivotX );
 	public var right(get,never) : Int; inline function get_right() return left + width;
-	public var top(get,never) : Int; inline function get_top() return M.round( y - height*def.pivotY );
+	public var top(get,never) : Int; inline function get_top() return M.round( y - height*pivotY );
 	public var bottom(get,never) : Int; inline function get_bottom() return top + height;
 
 
@@ -41,8 +66,8 @@ class EntityInstance {
 		return 'EntityInst "${def.identifier}" @$x,$y';
 	}
 
-	inline function get_centerX() return M.round( x + (0.5-def.pivotX)*width );
-	inline function get_centerY() return M.round( y + (0.5-def.pivotY)*height );
+	inline function get_centerX() return M.round( x + (0.5-pivotX)*width );
+	inline function get_centerY() return M.round( y + (0.5-pivotY)*height );
 
 	inline function get_worldX() return Std.int( x + _li.level.worldX );
 	inline function get_worldY() return Std.int( y + _li.level.worldY );
@@ -58,7 +83,7 @@ class EntityInstance {
 			// Fields preceded by "__" are only exported to facilitate parsing
 			__identifier: def.identifier,
 			__grid: [ getCx(li.def), getCy(li.def) ],
-			__pivot: [ JsonTools.writeFloat(def.pivotX), JsonTools.writeFloat(def.pivotY) ],
+			__pivot: [ JsonTools.writeFloat(pivotX), JsonTools.writeFloat(pivotY) ],
 			__tags: def.tags.toArray(),
 			__tile: getSmartTile(),
 			__smartColor: C.intToHex( getSmartColor(false) ),
@@ -137,11 +162,11 @@ class EntityInstance {
 	}
 
 	public inline function getCx(ld:data.def.LayerDef) {
-		return Std.int( ( x + (def.pivotX==1 ? -1 : 0) ) / ld.gridSize );
+		return Std.int( ( x + (pivotX==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
 	public inline function getCy(ld:data.def.LayerDef) {
-		return Std.int( ( y + (def.pivotY==1 ? -1 : 0) ) / ld.gridSize );
+		return Std.int( ( y + (pivotY==1 ? -1 : 0) ) / ld.gridSize );
 	}
 
 	public inline function getPointOriginX(ld:data.def.LayerDef) {
@@ -196,6 +221,9 @@ class EntityInstance {
 	}
 
 	public function getSmartColor(bright:Bool) : dn.Col {
+		var appearanceColor = _project.forkConfig.getAppearanceColor(this);
+		if( appearanceColor!=null )
+			return bright ? dn.legacy.Color.toWhite(appearanceColor,0.5) : appearanceColor;
 		var c : Null<Int> = null;
 		for(fd in def.fieldDefs) {
 			c = getFieldInstance(fd,true).getSmartColor();
@@ -206,6 +234,10 @@ class EntityInstance {
 	}
 
 	public function getSmartTile() : Null<ldtk.Json.TilesetRect> {
+		var appearanceTile = _project.forkConfig.getAppearanceTile(this);
+		if( appearanceTile!=null )
+			return appearanceTile;
+
 		// Check for a tile provided by a field instance
 		for(fd in def.fieldDefs) {
 			var t = getFieldInstance(fd,true).getSmartTile();
@@ -272,7 +304,7 @@ class EntityInstance {
 		for(fi in fieldInstances)
 			if( fi.hasAnyErrorInValues(this) )
 				return true;
-		return false;
+		return _project.forkConfig.hasValidationError(this);
 	}
 
 	public function hasField(fieldDef:data.def.FieldDef) {

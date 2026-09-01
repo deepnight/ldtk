@@ -1,0 +1,175 @@
+name: Aseprite layer picker release
+
+on:
+  push:
+    branches:
+      - feature/aseprite-layer-picker
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ldtk-aseprite-layer-picker-release
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - name: Install Haxe libraries
+        shell: bash
+        run: |
+          haxelib install uuid --quiet
+          haxelib git castle https://github.com/ncannasse/castle
+          haxelib git heaps https://github.com/deepnight/heaps.git
+          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+          haxelib git electron https://github.com/tong/hxelectron.git
+          haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install
+
+      - name: Compile fork
+        working-directory: app
+        run: npm run compile
+
+      - name: Package Windows x64
+        working-directory: app
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder build --win --x64 --publish never
+
+      - name: Rename Windows installer
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -Path "app/redist" -Filter "LDtk * installer.exe" | Select-Object -First 1
+          if (-not $installer) { throw "LDtk Windows installer was not produced" }
+          Copy-Item $installer.FullName "LDtk-1.5.3-Aseprite-Layer-Picker-win-x64.exe"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aseprite-layer-picker-windows
+          path: LDtk-1.5.3-Aseprite-Layer-Picker-win-x64.exe
+          if-no-files-found: error
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - run: haxe setup.hxml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install
+
+      - name: Package universal macOS
+        working-directory: app
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run pack-macos
+
+      - name: Rename macOS installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          DMG=$(find app/redist -maxdepth 1 -type f -name 'LDtk*installer.dmg' | head -n 1)
+          if [ -z "$DMG" ]; then
+            echo "LDtk macOS DMG was not produced"
+            exit 1
+          fi
+          cp "$DMG" "LDtk-1.5.3-Aseprite-Layer-Picker-macOS-universal.dmg"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aseprite-layer-picker-macos
+          path: LDtk-1.5.3-Aseprite-Layer-Picker-macOS-universal.dmg
+          if-no-files-found: error
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - run: haxe setup.hxml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install
+
+      - name: Package Linux x86_64 AppImage
+        working-directory: app
+        run: npm run pack-linux-x86
+
+      - name: Rename Linux AppImage
+        shell: bash
+        run: |
+          set -euo pipefail
+          APPIMAGE=$(find app/redist -maxdepth 1 -type f -name 'LDtk*installer.AppImage' | head -n 1)
+          if [ -z "$APPIMAGE" ]; then
+            echo "LDtk Linux AppImage was not produced"
+            exit 1
+          fi
+          cp "$APPIMAGE" "LDtk-1.5.3-Aseprite-Layer-Picker-linux-x86_64.AppImage"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aseprite-layer-picker-linux
+          path: LDtk-1.5.3-Aseprite-Layer-Picker-linux-x86_64.AppImage
+          if-no-files-found: error
+
+  publish:
+    needs: [windows, macos, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: aseprite-layer-picker-*
+          merge-multiple: true
+          path: dist
+
+      - name: Publish cross-platform prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="aseprite-layer-picker"
+          gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "LDtk 1.5.3 - Aseprite Layer Picker" \
+            --notes "Cross-platform prerelease of the latest RondeI33 LDtk fork. When a .aseprite/.ase file is selected as a new tileset/spritesheet, LDtk now opens a layer picker first. Choose exactly which Aseprite layers should be flattened into the LDtk spritesheet, so normal-map, emission, guide, mask, and other helper layers can be excluded. Nested Aseprite groups are shown as layer paths. The original .aseprite/.ase source is never modified; selected layers are exported to an LDtk-owned PNG under .ldtk-aseprite. Selective importing requires an installed Aseprite application/CLI. This build is based on the current master branch and includes the fork's existing animated-tile preview, Aseprite support, and Atlas Composer features. Includes Windows x64, universal macOS, and Linux x86_64 AppImage builds." \
+            --prerelease

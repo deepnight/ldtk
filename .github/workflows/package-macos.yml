@@ -7,6 +7,10 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -35,9 +39,43 @@ jobs:
       - run: cd app && npm install
       - run: cd app && npm run pack-prepare
       - run: cd app && npm run pack-macos
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
 
-      # Upload
+      - name: Rename universal macOS installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          DMG=$(find app/redist -maxdepth 1 -type f -name 'LDtk*installer.dmg' | head -n 1)
+          if [ -z "$DMG" ]; then
+            echo "No macOS DMG was produced"
+            exit 1
+          fi
+          cp "$DMG" "LDtk-1.5.3-Aseprite-Atlas-Composer-macOS-universal.dmg"
+
+      - name: Add macOS build to test release
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="aseprite-atlas-composer-test"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" \
+              "LDtk-1.5.3-Aseprite-Atlas-Composer-macOS-universal.dmg" \
+              --clobber
+          else
+            gh release create "$TAG" \
+              "LDtk-1.5.3-Aseprite-Atlas-Composer-macOS-universal.dmg" \
+              --target "master" \
+              --title "LDtk 1.5.3 - Aseprite + Atlas Composer test build" \
+              --notes "Experimental test build of the RondeI33 LDtk fork with robust Aseprite tileset support and the selective Atlas Composer. This release includes the universal macOS DMG for both Apple Silicon and Intel Macs." \
+              --prerelease
+          fi
+
+      # Upload Actions artifact too
       - uses: actions/upload-artifact@v7
         with:
           name: mac-distribution
-          path: app/redist/LDtk**installer.dmg
+          path: LDtk-1.5.3-Aseprite-Atlas-Composer-macOS-universal.dmg

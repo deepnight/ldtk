@@ -51,6 +51,11 @@ class FieldDef {
 	public var allowedRefTags : Tags;
 	public var tilesetUid : Null<Int>;
 
+	// Fork-only editor rules, loaded from the sidecar and never serialized in FieldDef JSON.
+	public var visibleWhenFieldUid : Null<Int>;
+	public var visibleWhenValues : Array<Dynamic>;
+	public var enumValueFilter : Array<Dynamic>;
+
 
 	@:allow(data.def.EntityDef, ui.FieldDefsForm)
 	private function new(p:data.Project, uid:Int, t:ldtk.Json.FieldType, array:Bool) {
@@ -83,6 +88,9 @@ class FieldDef {
 		allowedRefTags = new Tags();
 		exportToToc = false;
 		searchable = false;
+		visibleWhenFieldUid = null;
+		visibleWhenValues = [];
+		enumValueFilter = [];
 
 		// Specific default display modes, depending on type
 		switch type {

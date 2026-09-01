@@ -1,6 +1,7 @@
 package tool.lt;
 
 class EntityTool extends tool.LayerTool<Int> {
+	var forkTouchedLayers : Map<Int,data.inst.LayerInstance> = new Map();
 	public var curEntityDef(get,never) : Null<data.def.EntityDef>;
 	static var PREV_CHAINABLE_EI: Null<data.inst.EntityInstance>;
 
@@ -160,6 +161,7 @@ class EntityTool extends tool.LayerTool<Int> {
 							case DiscardOldOnes:
 								while( all.length>=curEntityDef.maxCount ) {
 									var otherEi = all.shift();
+									addForkTouched(project.forkConfig.eraseEntityStamps(otherEi));
 									otherEi._li.removeEntityInstance( otherEi );
 									editor.ge.emit( EntityInstanceRemoved(otherEi) );
 								}
@@ -174,6 +176,7 @@ class EntityTool extends tool.LayerTool<Int> {
 							case MoveLastOne:
 								if( all.length>=curEntityDef.maxCount && all.length>0 ) {
 									var otherEi = all.pop();
+									addForkTouched(project.forkConfig.eraseEntityStamps(otherEi));
 									otherEi._li.removeEntityInstance(otherEi);
 									curLayerInstance.entityInstances.push(otherEi);
 									editor.levelRender.invalidateLayer(curLayerInstance);
@@ -192,6 +195,10 @@ class EntityTool extends tool.LayerTool<Int> {
 						// Finalize entity
 						ei.x = getPlacementX(m);
 						ei.y = getPlacementY(m);
+						var autoChildren = createAutoChildren(ei);
+						addForkTouched(project.forkConfig.paintEntityStamps(ei));
+						for(child in autoChildren)
+							addForkTouched(project.forkConfig.paintEntityStamps(child));
 						onEditAnything();
 						stopUsing(m);
 						if( ei.def.isResizable() ) {
@@ -219,6 +226,8 @@ class EntityTool extends tool.LayerTool<Int> {
 						updateChainRefPreview(m);
 
 						editor.ge.emit( EntityInstanceAdded(ei) );
+						for(child in autoChildren)
+							editor.ge.emit( EntityInstanceAdded(child) );
 					}
 				}
 
@@ -232,10 +241,108 @@ class EntityTool extends tool.LayerTool<Int> {
 	}
 
 
+	function createAutoChildren(parent:data.inst.EntityInstance) : Array<data.inst.EntityInstance> {
+		var created : Array<data.inst.EntityInstance> = [];
+		if( parent.def.autoChildren.length==0 )
+			return created;
+
+		// Auto children are intentionally created only from this fresh-placement path.
+		// Low-level creation, duplication and paste therefore stay non-recursive.
+		parent.tidy(project, curLayerInstance);
+		for(auto in parent.def.autoChildren) {
+			var childDef = project.defs.getEntityDef(auto.entityDefUid);
+			if( childDef==null )
+				continue;
+
+			var amount = auto.count<1 ? 1 : auto.count;
+			for(i in 0...amount) {
+				var child = curLayerInstance.createEntityInstance(childDef);
+				child.x = parent.x + auto.offsetX + i*auto.spacingX;
+				child.y = parent.y + auto.offsetY + i*auto.spacingY;
+				clampAutoChildToLevel(child);
+				child.tidy(project, curLayerInstance);
+
+				for(preset in auto.fieldPresets) {
+					var presetDef = child.def.getFieldDef(preset.fieldDefUid);
+					if( presetDef==null )
+						continue;
+					var fi = child.getFieldInstance(presetDef, true);
+					applyAutoChildPreset(fi, preset.value);
+				}
+
+				if( auto.linkFieldUid!=null ) {
+					var linkDef = parent.def.getFieldDef(auto.linkFieldUid);
+					if( linkDef!=null && linkDef.type==F_EntityRef && linkDef.isArray ) {
+						var linkFi = parent.getFieldInstance(linkDef, true);
+						linkFi.addArrayValue();
+						linkFi.setEntityRefTo(linkFi.getArrayLength()-1, parent, child);
+					}
+				}
+
+				created.push(child);
+			}
+		}
+		return created;
+	}
+
+	function applyAutoChildPreset(fi:data.inst.FieldInstance, value:Dynamic) {
+		if( fi.def.isArray ) {
+			fi.clearValue();
+			var values : Array<Dynamic> = Std.isOfType(value, Array) ? cast value : [ value ];
+			for(v in values) {
+				fi.addArrayValue();
+				fi.parseValue(fi.getArrayLength()-1, autoChildPresetToString(v));
+			}
+		}
+		else
+			fi.parseValue(0, autoChildPresetToString(value));
+	}
+
+	inline function autoChildPresetToString(value:Dynamic) : Null<String> {
+		return value==null ? null : Std.string(value);
+	}
+
+	function clampAutoChildToLevel(ei:data.inst.EntityInstance) {
+		if( ei.width<=curLevel.pxWid ) {
+			if( ei.left<0 )
+				ei.x -= ei.left;
+			if( ei.right>curLevel.pxWid )
+				ei.x -= ei.right-curLevel.pxWid;
+		}
+		else
+			ei.x = M.round(curLevel.pxWid * ei.pivotX);
+
+		if( ei.height<=curLevel.pxHei ) {
+			if( ei.top<0 )
+				ei.y -= ei.top;
+			if( ei.bottom>curLevel.pxHei )
+				ei.y -= ei.bottom-curLevel.pxHei;
+		}
+		else
+			ei.y = M.round(curLevel.pxHei * ei.pivotY);
+	}
+
+
+	function addForkTouched(layers:Array<data.inst.LayerInstance>) {
+		for(li in layers)
+			forkTouchedLayers.set(li.layerDefUid,li);
+	}
+
+	override function saveToHistory() {
+		var layers = [ curLayerInstance ];
+		for(li in forkTouchedLayers)
+			if( layers.indexOf(li)<0 )
+				layers.push(li);
+		editor.curLevelTimeline.saveLayerStates(layers);
+		forkTouchedLayers = new Map();
+	}
+
+
 	function removeAnyEntityOrPointAt(m:Coords) {
 		var ge = editor.getGenericLevelElementAt(m, true);
 		switch ge {
-			case Entity(curLayerInstance, instance):
+			case Entity(li, instance):
+				addForkTouched(project.forkConfig.eraseEntityStamps(instance));
 				editor.curLevelTimeline.markEntityChange(instance);
 				curLayerInstance.removeEntityInstance(instance);
 				editor.ge.emit( EntityInstanceRemoved(instance) );

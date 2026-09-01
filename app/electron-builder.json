@@ -1,11 +1,20 @@
 {
-	"appId": "com.deepnight.ldtk",
-	"artifactName": "${productName} ${version} installer.${ext}",
+	"appId": "com.rondei33.ldtk-smartive",
+	"artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
 
 	"directories": {
 		"buildResources": "buildAssets",
 		"output": "redist"
 	},
+
+	"publish": [
+		{
+			"provider": "github",
+			"owner": "RondeI33",
+			"repo": "ldtk",
+			"releaseType": "release"
+		}
+	],
 
 	"extraFiles": [
 		"extraFiles/embedAtlas",
@@ -25,14 +34,14 @@
 	"fileAssociations": [
 		{
 			"ext": "ldtk",
-			"name": "LDTK Project File",
+			"name": "LDTK-Smartive Project File",
 			"mimeType": "application/json",
 			"icon": "project.ico",
 			"role": "Editor"
 		},
 		{
 			"ext": "ldtkl",
-			"name": "LDTK Level File",
+			"name": "LDTK-Smartive Level File",
 			"mimeType": "application/json",
 			"icon": "level.ico",
 			"role": "Editor"
@@ -41,13 +50,15 @@
 
 	"nsis": {
 		"oneClick": true,
-		"shortcutName": "LDtk"
+		"shortcutName": "LDTK-Smartive"
 	},
 
 	"win": {
-		"target": "nsis",
-		"publish": ["github"]
+		"target": "nsis"
 	},
 
-	"mac": {}
+	"mac": {},
+	"linux": {
+		"target": "AppImage"
+	}
 }

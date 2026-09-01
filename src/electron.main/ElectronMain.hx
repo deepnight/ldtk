@@ -96,7 +96,7 @@ class ElectronMain {
 			webPreferences: { nodeIntegration:true, contextIsolation:false },
 			fullscreenable: true,
 			show: false,
-			title: "LDtk",
+			title: "LDTK-Smartive",
 			icon: __dirname+"/appIcon.png",
 			backgroundColor: '#1e2229'
 		});

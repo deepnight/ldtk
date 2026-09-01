@@ -1,7 +1,7 @@
 class MacroTools {
 	public static macro function getAppChangelogMarkdown() {
-		haxe.macro.Context.registerModuleDependency("Const","docs/CHANGELOG.md");
-		return macro $v{ sys.io.File.getContent("docs/CHANGELOG.md") };
+		haxe.macro.Context.registerModuleDependency("Const","docs/SMARTIVE_CHANGELOG.md");
+		return macro $v{ sys.io.File.getContent("docs/SMARTIVE_CHANGELOG.md") };
 	}
 
 	public static macro function getJsonFormatMarkdown() {
@@ -10,8 +10,8 @@ class MacroTools {
 	}
 
 	public static macro function buildLatestReleaseNotes() {
-		// App latest changelog
-		var raw = sys.io.File.getContent("docs/CHANGELOG.md");
+		// Smartive latest changelog
+		var raw = sys.io.File.getContent("docs/SMARTIVE_CHANGELOG.md");
 		var appCL = new dn.Changelog(raw);
 		var relNotes = [
 			"# " + appCL.latest.version.full + ( appCL.latest.title!=null ? " -- *"+appCL.latest.title+"*" : "" ),
@@ -22,7 +22,6 @@ class MacroTools {
 			sys.FileSystem.createDirectory("./app/buildAssets");
 		var relNotesPath = "./app/buildAssets/release-notes.md";
 		var out = relNotes.join("\n");
-		out = StringTools.replace(out, "![](", "![](https://ldtk.io/files/changelogImg/");
 		try sys.io.File.saveContent(relNotesPath, out)
 			catch(e:Dynamic) haxe.macro.Context.warning("Couldn't write "+relNotesPath, haxe.macro.Context.currentPos());
 
@@ -35,11 +34,20 @@ class MacroTools {
 		var json = haxe.Json.parse(raw);
 		return json.version;
 	}
+
+	public static function getJsonVersionFromFile() : String {
+		return StringTools.trim( sys.io.File.getContent("docs/version.txt") );
+	}
 	#end
 
 	public static macro function getAppVersion() {
 		haxe.macro.Context.registerModuleDependency("MacroTools","app/package.json");
 		return macro $v{ getAppVersionFromPackageJson() };
+	}
+
+	public static macro function getJsonVersion() {
+		haxe.macro.Context.registerModuleDependency("MacroTools","docs/version.txt");
+		return macro $v{ getJsonVersionFromFile() };
 	}
 
 	#if macro

@@ -24,6 +24,11 @@ class EditTilesetDefs extends ui.modal.Panel {
 			jForm.find(".imagePicker .pick").click();
 		});
 
+		// Selectively compose tile cells from multiple image-backed tilesets.
+		jModalAndMask.find(".mainList button.atlasComposer").click( function(_) {
+			new ui.modal.dialog.AtlasComposer();
+		});
+
 		// Create quick search
 		search = new ui.QuickSearch( jList );
 		search.jWrapper.appendTo( jContent.find(".search") );

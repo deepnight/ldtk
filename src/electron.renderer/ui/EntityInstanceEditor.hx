@@ -26,6 +26,7 @@ class EntityInstanceEditor extends dn.Process {
 		closeExisting();
 		CURRENT = this;
 		ei = inst;
+		project.forkConfig.trackEntity(ei);
 		Editor.ME.ge.addGlobalListener(onGlobalEvent);
 
 		link = new h2d.Graphics();
@@ -187,8 +188,17 @@ class EntityInstanceEditor extends dn.Process {
 	}
 
 	function onEntityFieldChanged() {
+		var affected = project.forkConfig.syncTrackedEntity(ei);
 		editor.curLevelTimeline.markEntityChange(ei);
-		editor.curLevelTimeline.saveLayerState(ei._li);
+		var layers = [ ei._li ];
+		for(li in affected)
+			if( layers.indexOf(li)<0 )
+				layers.push(li);
+		editor.curLevelTimeline.saveLayerStates(layers);
+		for(li in layers)
+			editor.levelRender.invalidateLayer(li);
+		editor.selectionTool.invalidateRender();
+		editor.ge.emit(EntityInstanceChanged(ei));
 	}
 
 

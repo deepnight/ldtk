@@ -1,6 +1,7 @@
 class Const {
 #if !macro
 	static var RAW_APP_VERSION : String = MacroTools.getAppVersion();
+	static var RAW_JSON_VERSION : String = MacroTools.getJsonVersion();
 
 	public static function getAppVersionStr(short=false) : String {
 		if( short )
@@ -34,11 +35,17 @@ class Const {
 		return js.Node.process.versions.get("electron");
 	}
 
+	/**
+		The Smartive application version is independent from the LDtk JSON schema
+		version. Keeping this at the upstream compatibility version prevents a
+		Smartive 1.x release from making existing LDtk 1.5.3 projects look old.
+	**/
 	public static function getJsonVersion() : String {
-		return getAppVersionStr(true);
+		return RAW_JSON_VERSION;
 	}
 
-	public static final APP_NAME = "LDtk";
+	public static final APP_NAME = "LDTK-Smartive";
+	public static final JSON_APP_NAME = "LDtk";
 	public static final FILE_EXTENSION = "ldtk";
 	public static final LEVEL_EXTENSION = "ldtkl";
 	public static final POINT_SEPARATOR = ",";
@@ -50,17 +57,17 @@ class Const {
 	// URLs: Deepnight games
 	public static var DEEPNIGHT_DOMAIN = "https://deepnight.net";
 
-	// URLs: LDtk home
+	// URLs: LDtk documentation and format references
 	public static var LDTK_DOMAIN = "https://ldtk.io";
 	public static var HOME_URL = LDTK_DOMAIN;
 	public static var DOCUMENTATION_URL = LDTK_DOMAIN+"/docs";
 	public static var DISCORD_URL = LDTK_DOMAIN+"/go/discord";
 
-	// URLs: misc
-	public static var DOWNLOAD_URL = HOME_URL;
+	// URLs: Smartive releases and issue tracking
+	public static var DOWNLOAD_URL = "https://github.com/RondeI33/ldtk/releases/latest";
 	public static var ITCH_IO_BUY_URL = "https://deepnight.itch.io/ldtk/purchase";
-	public static var ISSUES_URL = "https://github.com/deepnight/ldtk/issues";
-	public static var REPORT_BUG_URL = "https://github.com/deepnight/ldtk/issues/new";
+	public static var ISSUES_URL = "https://github.com/RondeI33/ldtk/issues";
+	public static var REPORT_BUG_URL = "https://github.com/RondeI33/ldtk/issues/new";
 	public static var GITHUB_SPONSOR_URL = "https://github.com/sponsors/deepnight";
 	public static var STEAM_URL = LDTK_DOMAIN+"/go/steam";
 	public static var JSON_DOC_URL = LDTK_DOMAIN+"/json";
@@ -72,8 +79,10 @@ class Const {
 
 
 	public static var JSON_HEADER = {
-		fileType: Const.APP_NAME+" Project JSON",
-		app: Const.APP_NAME,
+		// Keep the canonical LDtk identifiers so existing importers continue to
+		// recognize Smartive project files without special-case handling.
+		fileType: Const.JSON_APP_NAME+" Project JSON",
+		app: Const.JSON_APP_NAME,
 		doc: JSON_DOC_URL,
 		schema: JSON_SCHEMA_URL,
 		appAuthor: "Sebastien 'deepnight' Benard",

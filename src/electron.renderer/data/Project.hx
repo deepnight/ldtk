@@ -16,6 +16,7 @@ class Project {
 	var nextUid = 0;
 	public var iid(default,null) : String;
 	public var defs : Definitions;
+	public var forkConfig : ForkConfig; // not stored in LDtk JSON
 	public var worlds : Array<World> = [];
 	var dummyWorldIid : String;
 
@@ -71,6 +72,7 @@ class Project {
 		levelNamePattern = DEFAULT_LEVEL_NAME_PATTERN;
 
 		defs = new Definitions(this);
+		forkConfig = new ForkConfig(this);
 	}
 
 	public inline function getProjectDir() {
@@ -961,20 +963,27 @@ class Project {
 				var absPath = makeAbsoluteFilePath(relPath);
 				var bytes = NT.readFileBytes(absPath);
 				App.LOG.add("cache", " -> identified as "+dn.Identify.getType(bytes));
-				var base64 = haxe.crypto.Base64.encode(bytes);
-				App.LOG.add("cache", " -> base64 "+base64.length);
 				var pixels = dn.ImageDecoder.decodePixels(bytes);
+				if( pixels==null && misc.AsepriteTools.isAsepritePath(relPath) ) {
+					App.LOG.warning('Native Aseprite decode failed for $relPath; trying the installed Aseprite CLI.');
+					pixels = misc.AsepriteTools.decodePixels(absPath);
+				}
 				if( pixels==null ) {
 					App.LOG.error('Failed to decode pixels: $relPath (identified as ${dn.Identify.getType(bytes)}, err=${dn.ImageDecoder.lastError})');
 					throw "decodePixels failed";
 				}
 				App.LOG.add("cache", " -> pixels "+pixels.width+"x"+pixels.height);
 				pixels.convert(RGBA);
+				// Cached image HTML is always emitted as data:image/png. For Aseprite
+				// sources, cache PNG bytes instead of the original .aseprite container.
+				var renderBytes = misc.AsepriteTools.isAsepritePath(relPath) ? pixels.clone().toPNG() : bytes;
+				var base64 = haxe.crypto.Base64.encode(renderBytes);
+				App.LOG.add("cache", " -> base64 "+base64.length);
 				var texture = h3d.mat.Texture.fromPixels(pixels);
 				imageCache.set( relPath, {
 					fileName: dn.FilePath.extractFileWithExt(relPath),
 					relPath: relPath,
-					bytes: bytes,
+					bytes: renderBytes,
 					base64: base64,
 					pixels: pixels,
 					tex: texture,

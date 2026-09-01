@@ -305,7 +305,9 @@ class SelectionTool extends Tool<Int> {
 			case K.DELETE:
 				var layerInsts = group.getSelectedLayerInstances();
 				if( layerInsts.length>0 ) {
-					deleteSelecteds();
+					for(li in deleteSelecteds())
+						if( layerInsts.indexOf(li)<0 )
+							layerInsts.push(li);
 					for(li in layerInsts) {
 						editor.levelRender.invalidateLayer(li);
 						editor.ge.emit( LayerInstanceChangedGlobally(li) );
@@ -316,7 +318,8 @@ class SelectionTool extends Tool<Int> {
 		}
 	}
 
-	function deleteSelecteds() {
+	function deleteSelecteds() : Array<data.inst.LayerInstance> {
+		var forkTouched : Array<data.inst.LayerInstance> = [];
 		for(ge in group.allElements())
 			switch ge {
 				case null:
@@ -333,6 +336,9 @@ class SelectionTool extends Tool<Int> {
 					}
 
 				case Entity(li, ei):
+					for(stampLi in project.forkConfig.eraseEntityStamps(ei))
+						if( forkTouched.indexOf(stampLi)<0 )
+							forkTouched.push(stampLi);
 					li.removeEntityInstance(ei);
 					editor.curLevelTimeline.markEntityChange(ei);
 					editor.ge.emitAtTheEndOfFrame( EntityInstanceRemoved(ei) );
@@ -343,6 +349,7 @@ class SelectionTool extends Tool<Int> {
 					editor.ge.emitAtTheEndOfFrame( EntityFieldInstanceChanged(ei,fi) );
 			}
 		clear();
+		return forkTouched;
 	}
 
 	override function stopUsing(m:Coords) {

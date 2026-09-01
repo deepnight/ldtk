@@ -1,0 +1,321 @@
+name: LDTK-Smartive release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - app/package.json
+      - docs/SMARTIVE_CHANGELOG.md
+      - .github/workflows/ldtk-smartive-1.0.0-release.yml
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: Rebuild and replace the release for the current package version
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ldtk-smartive-release
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
+      should_release: ${{ steps.release.outputs.should_release }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Smartive version and release state
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE_REBUILD: ${{ github.event_name == 'workflow_dispatch' && inputs.force_rebuild || false }}
+        run: |
+          set -euo pipefail
+
+          VERSION=$(node -p "require('./app/package.json').version")
+          TAG="v${VERSION}"
+
+          VERSION="$VERSION" node <<'NODE'
+          const version = process.env.VERSION;
+          const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(version);
+          if (!match) {
+            throw new Error(`Smartive version must be stable SemVer (major.minor.patch), got: ${version}`);
+          }
+          const [major, minor, patch] = match.slice(1).map(Number);
+          if (major < 1) {
+            throw new Error(`Smartive versioning starts at 1.0.0, got: ${version}`);
+          }
+          if (![major, minor, patch].every(Number.isSafeInteger)) {
+            throw new Error(`Invalid Smartive version: ${version}`);
+          }
+          NODE
+
+          if ! grep -Fxq "# ${VERSION}" docs/SMARTIVE_CHANGELOG.md; then
+            echo "docs/SMARTIVE_CHANGELOG.md is missing a '# ${VERSION}' section."
+            exit 1
+          fi
+
+          NOTES=$(awk -v version="$VERSION" '
+            $0 == "# " version { found=1; next }
+            found && /^# / { exit }
+            found { print }
+          ' docs/SMARTIVE_CHANGELOG.md)
+          if [ -z "${NOTES//[[:space:]]/}" ]; then
+            echo "The changelog section for ${VERSION} is empty."
+            exit 1
+          fi
+          if printf '%s\n' "$NOTES" | grep -qi 'TODO'; then
+            echo "The changelog section for ${VERSION} still contains TODO text."
+            exit 1
+          fi
+
+          SHOULD_RELEASE=true
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 && [ "$FORCE_REBUILD" != "true" ]; then
+            SHOULD_RELEASE=false
+            echo "Release ${TAG} already exists; nothing to publish."
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "should_release=$SHOULD_RELEASE" >> "$GITHUB_OUTPUT"
+          echo "Smartive version: $VERSION"
+          echo "LDtk JSON compatibility version: $(tr -d '\r\n' < docs/version.txt)"
+
+  windows:
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: windows-latest
+    env:
+      SMARTIVE_VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - name: Install Haxe libraries
+        shell: bash
+        run: |
+          haxelib install uuid --quiet
+          haxelib git castle https://github.com/ncannasse/castle
+          haxelib git heaps https://github.com/deepnight/heaps.git
+          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+          haxelib git electron https://github.com/tong/hxelectron.git
+          haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install --no-audit --no-fund
+
+      - name: Verify package version
+        working-directory: app
+        shell: bash
+        run: node -e "const p=require('./package.json'); if(p.version!==process.env.SMARTIVE_VERSION) throw new Error('Version mismatch')"
+
+      - name: Compile fork
+        working-directory: app
+        run: npm run compile
+
+      - name: Package Windows x64 with update metadata
+        working-directory: app
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder build --win --x64 --publish never
+
+      - name: Collect Windows release files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "dist" | Out-Null
+          $installer = Get-ChildItem -Path "app/redist" -Filter "LDTK-Smartive-$env:SMARTIVE_VERSION-win-x64.exe" | Select-Object -First 1
+          if (-not $installer) {
+            Get-ChildItem -Path "app/redist" | Format-Table Name, Length
+            throw "LDTK-Smartive Windows installer was not produced"
+          }
+          Copy-Item $installer.FullName "dist/"
+
+          $blockmap = "$($installer.FullName).blockmap"
+          if (Test-Path $blockmap) {
+            Copy-Item $blockmap "dist/"
+          }
+
+          $latest = "app/redist/latest.yml"
+          if (-not (Test-Path $latest)) {
+            Get-ChildItem -Path "app/redist" | Format-Table Name, Length
+            throw "latest.yml was not produced; Windows auto-update would not work"
+          }
+          Copy-Item $latest "dist/latest.yml"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ldtk-smartive-${{ needs.prepare.outputs.version }}-windows
+          path: dist/*
+          if-no-files-found: error
+
+  macos:
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: macos-latest
+    env:
+      SMARTIVE_VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - run: haxe setup.hxml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install --no-audit --no-fund
+
+      - name: Package universal macOS
+        working-directory: app
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run pack-macos
+
+      - name: Collect macOS release file
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          DMG=$(find app/redist -maxdepth 1 -type f -name "LDTK-Smartive-${SMARTIVE_VERSION}-mac-*.dmg" | head -n 1)
+          if [ -z "$DMG" ]; then
+            find app/redist -maxdepth 1 -type f -print
+            echo "LDTK-Smartive macOS DMG was not produced"
+            exit 1
+          fi
+          cp "$DMG" dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ldtk-smartive-${{ needs.prepare.outputs.version }}-macos
+          path: dist/*
+          if-no-files-found: error
+
+  linux:
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    env:
+      SMARTIVE_VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - run: haxe setup.hxml
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install --no-audit --no-fund
+
+      - name: Package Linux x64 AppImage
+        working-directory: app
+        run: npm run pack-linux-x86
+
+      - name: Collect Linux release file
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          APPIMAGE=$(find app/redist -maxdepth 1 -type f -name "LDTK-Smartive-${SMARTIVE_VERSION}-linux-*.AppImage" | head -n 1)
+          if [ -z "$APPIMAGE" ]; then
+            find app/redist -maxdepth 1 -type f -print
+            echo "LDTK-Smartive Linux AppImage was not produced"
+            exit 1
+          fi
+          cp "$APPIMAGE" dist/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ldtk-smartive-${{ needs.prepare.outputs.version }}-linux
+          path: dist/*
+          if-no-files-found: error
+
+  publish:
+    needs: [prepare, windows, macos, linux]
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    env:
+      SMARTIVE_VERSION: ${{ needs.prepare.outputs.version }}
+      SMARTIVE_TAG: ${{ needs.prepare.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: ldtk-smartive-${{ needs.prepare.outputs.version }}-*
+          merge-multiple: true
+          path: dist
+
+      - name: Build release notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "LDTK-Smartive ${SMARTIVE_VERSION}"
+            echo
+            awk -v version="$SMARTIVE_VERSION" '
+              $0 == "# " version { found=1; next }
+              found && /^# / { exit }
+              found { print }
+            ' docs/SMARTIVE_CHANGELOG.md
+            echo
+            echo "Compatibility: LDtk JSON format $(tr -d '\r\n' < docs/version.txt)."
+          } > release-notes.md
+
+      - name: Publish stable release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # Remove the original one-off prerelease/tag, if present.
+          LEGACY_TAG="ldtk-smartive-v${SMARTIVE_VERSION}"
+          gh release delete "$LEGACY_TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag 2>/dev/null || true
+
+          # A forced rebuild or a previously interrupted publication can leave a release/tag behind.
+          gh release delete "$SMARTIVE_TAG" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag 2>/dev/null || true
+          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/tags/${SMARTIVE_TAG}" >/dev/null 2>&1 || true
+
+          test -f dist/latest.yml
+          ls -lah dist
+
+          gh release create "$SMARTIVE_TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "LDTK-Smartive ${SMARTIVE_VERSION}" \
+            --notes-file release-notes.md \
+            --latest

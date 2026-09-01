@@ -14,6 +14,7 @@ class Boot extends hxd.App {
 
 		Assets.init();
 		Lang.init();
+		misc.AsepriteImportInterceptor.install();
 
 		new App();
 	}

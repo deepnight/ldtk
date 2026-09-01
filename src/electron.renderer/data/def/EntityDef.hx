@@ -46,6 +46,10 @@ class EntityDef {
 	public var limitBehavior : ldtk.Json.EntityLimitBehavior; // what to do when maxCount is reached
 
 	public var fieldDefs : Array<data.def.FieldDef> = [];
+	// Fork-only authoring configuration. These are loaded from <project>.ldtk-fork.json.
+	public var autoChildren : Array<EntityAutoChildDef> = [];
+	public var appearanceOverrides : Array<Dynamic> = [];
+	public var tileStamps : Array<Dynamic> = [];
 
 
 	public function new(p:Project, uid:Int) {
@@ -195,11 +199,14 @@ class EntityDef {
 		for(defJson in JsonTools.readArray(json.fieldDefs) )
 			o.fieldDefs.push( FieldDef.fromJson(p, defJson) );
 
+		for(autoJson in JsonTools.readArray((cast json).autoChildren, null, []))
+			o.autoChildren.push( EntityAutoChildDef.fromJson(autoJson) );
+
 		return o;
 	}
 
 	public function toJson(p:Project) : ldtk.Json.EntityDefJson {
-		return {
+		var json : ldtk.Json.EntityDefJson = {
 			identifier: identifier,
 			uid: uid,
 			tags: tags.toJson(),
@@ -238,7 +245,17 @@ class EntityDef {
 			pivotY: JsonTools.writeFloat( pivotY ),
 
 			fieldDefs: fieldDefs.map( function(fd) return fd.toJson() ),
-		}
+		};
+		// Fork configuration deliberately stays OUT of stock LDtk JSON.
+		return json;
+	}
+
+
+	public function createAutoChild(?entityDefUid:Int) {
+		var ac = new EntityAutoChildDef();
+		ac.entityDefUid = entityDefUid==null ? uid : cast entityDefUid;
+		autoChildren.push(ac);
+		return ac;
 	}
 
 
@@ -317,3 +334,67 @@ class EntityDef {
 		Definitions.tidyFieldDefsArray(p, fieldDefs, this.toString());
 	}
 }
+
+
+typedef EntityAutoChildFieldPreset = {
+	var fieldDefUid : Int;
+	var value : Dynamic;
+}
+
+class EntityAutoChildDef {
+	public var entityDefUid : Int;
+	public var offsetX : Int;
+	public var offsetY : Int;
+	public var count : Int;
+	public var spacingX : Int;
+	public var spacingY : Int;
+	public var linkFieldUid : Null<Int>;
+	public var fieldPresets : Array<EntityAutoChildFieldPreset>;
+
+	public function new() {
+		entityDefUid = -1;
+		offsetX = 0;
+		offsetY = 0;
+		count = 1;
+		spacingX = 0;
+		spacingY = 0;
+		linkFieldUid = null;
+		fieldPresets = [];
+	}
+
+	public static function fromJson(json:Dynamic) {
+		var o = new EntityAutoChildDef();
+		o.entityDefUid = JsonTools.readInt(json.entityDefUid, -1);
+		o.offsetX = JsonTools.readInt(json.offsetX, 0);
+		o.offsetY = JsonTools.readInt(json.offsetY, 0);
+		o.count = JsonTools.readInt(json.count, 1);
+		if( o.count<1 )
+			o.count = 1;
+		o.spacingX = JsonTools.readInt(json.spacingX, 0);
+		o.spacingY = JsonTools.readInt(json.spacingY, 0);
+		o.linkFieldUid = JsonTools.readNullableInt(json.linkFieldUid);
+		for(presetJson in JsonTools.readArray(json.fieldPresets, null, []))
+			o.fieldPresets.push({
+				fieldDefUid: JsonTools.readInt(presetJson.fieldDefUid, -1),
+				value: presetJson.value,
+			});
+		return o;
+	}
+
+	public function toJson() : Dynamic {
+		return {
+			entityDefUid: entityDefUid,
+			offsetX: offsetX,
+			offsetY: offsetY,
+			count: count,
+			spacingX: spacingX,
+			spacingY: spacingY,
+			linkFieldUid: linkFieldUid,
+			fieldPresets: fieldPresets.map( p->{
+				fieldDefUid: p.fieldDefUid,
+				value: p.value,
+			}),
+		}
+	}
+}
+

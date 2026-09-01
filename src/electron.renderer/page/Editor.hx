@@ -54,6 +54,7 @@ class Editor extends Page {
 	var bg : h2d.Bitmap;
 	public var cursor : ui.Cursor;
 	public var gifMode = false;
+	public var showVariablePreviews(default,null) = true;
 	var zenModeRevealed = false;
 
 
@@ -1533,6 +1534,7 @@ class Editor extends Page {
 			setZenMode(v);
 			setZenModeReveal(true);
 		});
+		applyEditOption( jEditOptions.find("li.variablePreviews"), ()->showVariablePreviews, (v)->setVariablePreviews(v) );
 		applyEditOption( jEditOptions.find("li.grid"), ()->settings.v.grid, (v)->setGrid(v) );
 		applyEditOption( jEditOptions.find("li.autoLayerRender"), ()->levelRender.isAutoLayerRenderingEnabled(), (v)->levelRender.setAutoLayerRendering(v) );
 		applyEditOption( jEditOptions.find("li.showDetails"), ()->settings.v.showDetails, (v)->setShowDetails(v) );
@@ -1756,6 +1758,15 @@ class Editor extends Page {
 		N.quick( "Tile enum overlay: "+L.onOff( settings.v.tileEnumOverlays ));
 		updateEditOptions();
 	}
+
+	public function setVariablePreviews(v:Bool) {
+		showVariablePreviews = v;
+		levelRender.invalidateAll();
+		selectionTool.invalidateRender();
+		updateEditOptions();
+		N.quick( "Variable previews: "+L.onOff(showVariablePreviews) );
+	}
+
 
 	public function setShowDetails(v:Bool) {
 		settings.v.showDetails = v;

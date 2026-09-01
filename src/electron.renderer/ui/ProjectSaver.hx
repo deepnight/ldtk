@@ -200,6 +200,7 @@ class ProjectSaver extends dn.Process {
 					label: "Preparing...",
 					cb: ()->{
 						log('  Preparing SavingData...');
+						project.forkConfig.save();
 						savingData = ui.ProjectSaver.prepareProjectSavingData(project);
 					}
 				});
