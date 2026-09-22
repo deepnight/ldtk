@@ -118,6 +118,9 @@ msgstr "**框选空白空间** 开启此选项后，使用 ALT+SHIFT+点击 框�
 msgid "**Show/hide details** When enabled, shows all elements in layers (tiles, entities, intGrid etc.), or only tiles otherwise."
 msgstr "**显示/隐藏细节** 开启时显示图层中的所有元素（图块、实体、IntGrid网格等），关闭时仅显示图块。"
 
+msgid "**Show/hide enum tags** When enabled, shows a color overlay on tiles that have an Enum tag attached to them (see the Tilesets panel to tag tiles using Enums).\nOnly applies to Tiles layers and Auto-layers."
+msgstr "**显示/隐藏枚举标签** 开启时在带有枚举标签的图块上显示颜色遮罩（请在“图块集”面板中使用枚举标记图块）。\n仅适用于“图块图层”和“自动图层”。"
+
 msgid "**Show/hide enum tags** When enabled, shows a color overlay on tiles that have an Enum tag attached to them (see the Tilesets panel to tag tiles using Enums).\\nOnly applies to Tiles layers and Auto-layers."
 msgstr "**显示/隐藏枚举标签** 开启时在带有枚举标签的图块上显示颜色遮罩（请在“图块集”面板中使用枚举标记图块）。\\n仅适用于“图块图层”和“自动图层”。"
 

@@ -104,8 +104,43 @@ class Lang {
 			}
 		}
 
-		if( loaded || t==null )
+		if( loaded || t==null ) {
+			var rawDict = newT.getRawDict();
+			var keysToAdd = new Map<String, String>();
+			for( k in rawDict.keys() ) {
+				var val = rawDict.get(k);
+				if( val==null ) continue;
+				if( val.indexOf("\\\n")>=0 ) {
+					val = StringTools.replace(val, "\\\n", "\n");
+					rawDict.set(k, val);
+				}
+
+				if( k.indexOf("\\\n")>=0 ) {
+					var kReal = StringTools.replace(k, "\\\n", "\n");
+					var kEsc = StringTools.replace(k, "\\\n", "\\n");
+					keysToAdd.set(kReal, val);
+					keysToAdd.set(kEsc, val);
+				}
+				if( k.indexOf("\n")>=0 && k.indexOf("\\\n")<0 ) {
+					var kEsc = StringTools.replace(k, "\n", "\\n");
+					var kEscAndReal = StringTools.replace(k, "\n", "\\\n");
+					keysToAdd.set(kEsc, val);
+					keysToAdd.set(kEscAndReal, val);
+				}
+				if( k.indexOf("\\n")>=0 ) {
+					var kReal = StringTools.replace(k, "\\n", "\n");
+					var kEscAndReal = StringTools.replace(k, "\\n", "\\\n");
+					keysToAdd.set(kReal, val);
+					keysToAdd.set(kEscAndReal, val);
+				}
+			}
+			for( k in keysToAdd.keys() ) {
+				if( !rawDict.exists(k) )
+					rawDict.set(k, keysToAdd.get(k));
+			}
+
 			t = newT;
+		}
 	}
 
 	public static function getText(str:Null<String>, ?vars:Dynamic) : String {
@@ -130,16 +165,25 @@ class Lang {
 		if( dict.exists(normalized) )
 			return t.get(normalized, vars);
 
-		// Handle \n vs \\n representation differences
+		// Handle \n vs \\n vs \\\n representation differences
 		if( trimmed.indexOf("\\n")>=0 ) {
 			var withRealNewlines = StringTools.replace(trimmed, "\\n", "\n");
 			if( dict.exists(withRealNewlines) )
 				return t.get(withRealNewlines, vars);
+			var withEscapedAndReal = StringTools.replace(trimmed, "\\n", "\\\n");
+			if( dict.exists(withEscapedAndReal) )
+				return t.get(withEscapedAndReal, vars);
 		}
 		if( trimmed.indexOf("\n")>=0 ) {
 			var withEscapedNewlines = StringTools.replace(trimmed, "\n", "\\n");
 			if( dict.exists(withEscapedNewlines) )
 				return t.get(withEscapedNewlines, vars);
+			var withEscapedAndReal = StringTools.replace(trimmed, "\n", "\\\n");
+			if( dict.exists(withEscapedAndReal) )
+				return t.get(withEscapedAndReal, vars);
+			var withoutEscapedBackslash = StringTools.replace(trimmed, "\\\n", "\n");
+			if( dict.exists(withoutEscapedBackslash) )
+				return t.get(withoutEscapedBackslash, vars);
 		}
 
 		return t.get(str, vars);
