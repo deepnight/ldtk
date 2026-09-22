@@ -182,9 +182,20 @@ class Settings {
 				if( low.indexOf("de")==0 ) { v.locale = "de"; save(); return "de"; }
 			}
 		} catch(_) {}
+		#else
+		try {
+			var appLocale = electron.main.App.getLocale();
+			if( appLocale!=null ) {
+				var low = appLocale.toLowerCase();
+				if( low.indexOf("zh")==0 ) return "zh-CN";
+				if( low.indexOf("ja")==0 ) return "ja";
+				if( low.indexOf("fr")==0 ) return "fr";
+				if( low.indexOf("es")==0 ) return "es";
+				if( low.indexOf("de")==0 ) return "de";
+			}
+		} catch(_) {}
 		#end
 
-		v.locale = "en";
 		return "en";
 	}
 

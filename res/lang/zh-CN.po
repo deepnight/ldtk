@@ -89,7 +89,7 @@ msgid "(width)"
 msgstr "(宽度)"
 
 msgid ") if you want to license this image for your own use in your game."
-msgstr ") if you want to license this image for your own use in your game."
+msgstr ") 如果您希望在自己的游戏中使用此图像并获得授权许可。"
 
 msgid "**Choose tile(s)** You can hold mouse button to select multiple tiles."
 msgstr "**选择图块** 按住鼠标左键可框选多个图块。"
@@ -2498,7 +2498,7 @@ msgid "Octaves"
 msgstr "倍频 (Octaves)"
 
 msgid "Off"
-msgstr "Off"
+msgstr "关闭"
 
 msgid "Offset"
 msgstr "图层偏移量 (像素)"

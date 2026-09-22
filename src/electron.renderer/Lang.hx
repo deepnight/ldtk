@@ -43,7 +43,7 @@ class Lang {
 			setLanguage(lid);
 		else {
 			#if editor
-			var detected = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : DEFAULT;
+			var detected = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : (new Settings()).getLocale();
 			setLanguage(detected);
 			#else
 			setLanguage(DEFAULT);
@@ -54,7 +54,7 @@ class Lang {
 	public static function setLanguage(lid:String) {
 		if( lid==null || lid=="" ) {
 			#if editor
-			lid = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : DEFAULT;
+			lid = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : (new Settings()).getLocale();
 			#else
 			lid = DEFAULT;
 			#end
@@ -63,32 +63,49 @@ class Lang {
 			lid = DEFAULT;
 
 		CUR = lid;
-		t = new GetText();
+		var newT = new GetText();
 		_initDone = true;
 
 		var loaded = false;
 		#if (electron || nodejs)
 		try {
 			var appDir = dn.js.ElectronTools.getAppResourceDir();
-			var path = dn.FilePath.fromFile(appDir + "res/lang/" + CUR + ".po");
-			if( dn.js.NodeTools.fileExists(path.full) ) {
-				var bytes = dn.js.NodeTools.readFileBytes(path.full);
-				t.readPo(bytes);
+			// Check assets/lang/ first (packaged app)
+			var pAssets = dn.FilePath.fromFile(appDir + "assets/lang/" + CUR + ".po");
+			if( dn.js.NodeTools.fileExists(pAssets.full) ) {
+				var bytes = dn.js.NodeTools.readFileBytes(pAssets.full);
+				newT.readPo(bytes);
 				loaded = true;
+			}
+			// Check res/lang/ (development / unpackaged)
+			if( !loaded ) {
+				var pRes = dn.FilePath.fromFile(appDir + "res/lang/" + CUR + ".po");
+				if( dn.js.NodeTools.fileExists(pRes.full) ) {
+					var bytes = dn.js.NodeTools.readFileBytes(pRes.full);
+					newT.readPo(bytes);
+					loaded = true;
+				}
 			}
 		} catch(_) {}
 		#end
 
 		if( !loaded ) {
 			try {
-				t.readPo( hxd.Res.load("lang/"+CUR+".po").entry.getBytes() );
+				newT.readPo( hxd.Res.load("lang/"+CUR+".po").entry.getBytes() );
 				loaded = true;
 			} catch(e:Dynamic) {
-				try {
-					t.readPo( hxd.Res.load("lang/"+DEFAULT+".po").entry.getBytes() );
-				} catch(_) {}
+				// Failed to load CUR. Do NOT clobber with DEFAULT/en.po if we already have a loaded dictionary
+				if( CUR==DEFAULT && (t==null || !t.getRawDict().keys().hasNext()) ) {
+					try {
+						newT.readPo( hxd.Res.load("lang/"+DEFAULT+".po").entry.getBytes() );
+						loaded = true;
+					} catch(_) {}
+				}
 			}
 		}
+
+		if( loaded || t==null )
+			t = newT;
 	}
 
 	public static function getText(str:Null<String>, ?vars:Dynamic) : String {
@@ -112,6 +129,18 @@ class Lang {
 		var normalized = _multiSpaceRegex.replace( _spaceRegex.replace(trimmed, " "), " " );
 		if( dict.exists(normalized) )
 			return t.get(normalized, vars);
+
+		// Handle \n vs \\n representation differences
+		if( trimmed.indexOf("\\n")>=0 ) {
+			var withRealNewlines = StringTools.replace(trimmed, "\\n", "\n");
+			if( dict.exists(withRealNewlines) )
+				return t.get(withRealNewlines, vars);
+		}
+		if( trimmed.indexOf("\n")>=0 ) {
+			var withEscapedNewlines = StringTools.replace(trimmed, "\n", "\\n");
+			if( dict.exists(withEscapedNewlines) )
+				return t.get(withEscapedNewlines, vars);
+		}
 
 		return t.get(str, vars);
 	}
