@@ -32,14 +32,37 @@ class Lang {
 	static var _multiSpaceRegex = ~/[ ]{2,}/g;
 
 	public static function init(?lid:String) {
-		if( _initDone && lid!=null && lid==CUR )
+		if( _initDone ) {
+			if( lid==null || lid=="" || lid==CUR )
+				return;
+			setLanguage(lid);
 			return;
+		}
 
-		setLanguage(lid==null ? DEFAULT : lid);
+		if( lid!=null && lid!="" )
+			setLanguage(lid);
+		else {
+			#if editor
+			var detected = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : DEFAULT;
+			setLanguage(detected);
+			#else
+			setLanguage(DEFAULT);
+			#end
+		}
 	}
 
 	public static function setLanguage(lid:String) {
-		CUR = lid==null || lid=="" ? DEFAULT : lid;
+		if( lid==null || lid=="" ) {
+			#if editor
+			lid = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : DEFAULT;
+			#else
+			lid = DEFAULT;
+			#end
+		}
+		if( lid==null || lid=="" )
+			lid = DEFAULT;
+
+		CUR = lid;
 		t = new GetText();
 		_initDone = true;
 
@@ -193,7 +216,8 @@ class Lang {
 		if( str==null )
 			return null;
 		else {
-			init();
+			if( t==null )
+				init();
 			return t.untranslated(str);
 		}
 	}

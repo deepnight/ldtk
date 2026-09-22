@@ -166,34 +166,25 @@ class Settings {
 			if( js.Browser.navigator.languages!=null ) {
 				for(full in js.Browser.navigator.languages) {
 					var low = full.toLowerCase();
-					if( low.indexOf("zh")==0 )
-						return "zh-CN";
-					if( low.indexOf("ja")==0 )
-						return "ja";
-					if( low.indexOf("fr")==0 )
-						return "fr";
-					if( low.indexOf("es")==0 )
-						return "es";
-					if( low.indexOf("de")==0 )
-						return "de";
+					if( low.indexOf("zh")==0 ) { v.locale = "zh-CN"; save(); return "zh-CN"; }
+					if( low.indexOf("ja")==0 ) { v.locale = "ja"; save(); return "ja"; }
+					if( low.indexOf("fr")==0 ) { v.locale = "fr"; save(); return "fr"; }
+					if( low.indexOf("es")==0 ) { v.locale = "es"; save(); return "es"; }
+					if( low.indexOf("de")==0 ) { v.locale = "de"; save(); return "de"; }
 				}
 			}
 			if( js.Browser.navigator.language!=null ) {
 				var low = js.Browser.navigator.language.toLowerCase();
-				if( low.indexOf("zh")==0 )
-					return "zh-CN";
-				if( low.indexOf("ja")==0 )
-					return "ja";
-				if( low.indexOf("fr")==0 )
-					return "fr";
-				if( low.indexOf("es")==0 )
-					return "es";
-				if( low.indexOf("de")==0 )
-					return "de";
+				if( low.indexOf("zh")==0 ) { v.locale = "zh-CN"; save(); return "zh-CN"; }
+				if( low.indexOf("ja")==0 ) { v.locale = "ja"; save(); return "ja"; }
+				if( low.indexOf("fr")==0 ) { v.locale = "fr"; save(); return "fr"; }
+				if( low.indexOf("es")==0 ) { v.locale = "es"; save(); return "es"; }
+				if( low.indexOf("de")==0 ) { v.locale = "de"; save(); return "de"; }
 			}
 		} catch(_) {}
 		#end
 
+		v.locale = "en";
 		return "en";
 	}
 
