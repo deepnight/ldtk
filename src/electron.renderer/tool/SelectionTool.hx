@@ -302,6 +302,23 @@ class SelectionTool extends Tool<Int> {
 		super.onKeyPress(keyId);
 
 		switch keyId {
+			case K.UP, K.DOWN:
+				// Manual z-sort an entity
+				if( App.ME.isCtrlCmdDown() && isSingle() )
+					switch group.getElement(0) {
+						case Entity(li, ei) if( li.def.entityDepthSorting==Manual ):
+							var idx = li.entityInstances.indexOf(ei);
+							var targetIdx = idx + (keyId==K.UP ? 1 : -1);
+							if( idx>=0 && targetIdx>=0 && targetIdx<li.entityInstances.length ) {
+								li.entityInstances[idx] = li.entityInstances[targetIdx];
+								li.entityInstances[targetIdx] = ei;
+								editor.curLevelTimeline.markEntityChange(ei);
+								editor.ge.emit( LayerInstanceChangedGlobally(li) );
+								editor.curLevelTimeline.saveLayerStates([li]);
+							}
+						case _:
+					}
+
 			case K.DELETE:
 				var layerInsts = group.getSelectedLayerInstances();
 				if( layerInsts.length>0 ) {
