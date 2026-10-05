@@ -2486,6 +2486,7 @@
 				"uid",
 				"autoRuleGroups",
 				"canSelectWhenInactive",
+				"entityDepthSorting",
 				"excludedTags",
 				"guideGridHei",
 				"guideGridWid",
@@ -2751,6 +2752,14 @@
 					"description": "Width and height of the grid in pixels",
 					"type": [
 						"integer"
+					]
+				},
+				"entityDepthSorting": {
+					"description": "Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`",
+					"enum": [
+						"Manual",
+						"YAscending",
+						"YDescending"
 					]
 				},
 				"parallaxFactorX": {
