@@ -306,13 +306,13 @@ class GenericLevelElementGroup {
 	function getDeltaX(origin:Coords, now:Coords) {
 		return snapToGrid()
 			? ( now.cx - origin.cx ) * getSmartSnapGrid()
-			: now.levelX - origin.levelX;
+			: Std.int( now.levelX - origin.levelX );
 	}
 
 	function getDeltaY(origin:Coords, now:Coords) {
 		return snapToGrid()
 			? ( now.cy - origin.cy ) * getSmartSnapGrid()
-			: now.levelY - origin.levelY;
+			: Std.int( now.levelY - origin.levelY );
 	}
 
 	public function getSmartRelativeLayerInstance() : Null<data.inst.LayerInstance> {
@@ -334,6 +334,9 @@ class GenericLevelElementGroup {
 	}
 
 	public function hasIncompatibleGridSizes() {
+		if( !snapToGrid() )
+			return false;
+
 		var li  = getSmartRelativeLayerInstance();
 		var grid = li==null ? 1 : li.def.gridSize;
 		for( ge in elements )
@@ -419,7 +422,7 @@ class GenericLevelElementGroup {
 				onlyMovingPoints = false;
 				break;
 			}
-		if( onlyMovingPoints || now.cx==origin.cx && now.cy==origin.cy )
+		if( onlyMovingPoints || getDeltaX(origin,now)==0 && getDeltaY(origin,now)==0 )
 			arrow.visible = false;
 		else {
 			var grid = getSmartSnapGrid();
@@ -427,6 +430,12 @@ class GenericLevelElementGroup {
 			var fy = rel.pxParallaxY + (origin.cy+0.5) * grid;
 			var tx = rel.pxParallaxX + (now.cx+0.5) * grid;
 			var ty = rel.pxParallaxY + (now.cy+0.5) * grid;
+			if( !snapToGrid() ) {
+				fx = origin.levelX;
+				fy = origin.levelY;
+				tx = fx + getDeltaX(origin,now);
+				ty = fy + getDeltaY(origin,now);
+			}
 
 			var a = Math.atan2(ty-fy, tx-fx);
 			var size = 6;
@@ -598,7 +607,15 @@ class GenericLevelElementGroup {
 
 
 	function snapToGrid() {
-		return true;
+		if( App.ME.settings.v.grid )
+			return true;
+
+		for(ge in elements)
+			switch ge {
+				case GridCell(_), PointField(_): return true;
+				case Entity(_), null:
+			}
+		return false;
 	}
 
 
