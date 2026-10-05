@@ -689,6 +689,13 @@ class LayerInstance {
 
 	/** ENTITY INSTANCE *******************/
 
+	public function getEntityInstancesInDisplayOrder() : Array<EntityInstance> {
+		var sorted = entityInstances.copy();
+		sorted.sort( (a,b)->a.y-b.y );
+		return sorted;
+	}
+
+
 	public function createEntityInstance(ed:data.def.EntityDef) : Null<EntityInstance> {
 		requireType(Entities);
 

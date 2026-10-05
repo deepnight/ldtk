@@ -1012,7 +1012,7 @@ class Editor extends Page {
 				case AutoLayer:
 
 				case Entities:
-					for(ei in li.entityInstances) {
+					for(ei in li.getEntityInstancesInDisplayOrder()) {
 						if( ei.isOver(m.layerX, m.layerY) ) {
 							ge = GenericLevelElement.Entity(li, ei);
 						}

@@ -176,7 +176,7 @@ class LayerRender {
 
 		case Entities:
 			// Entity layer
-			for(ei in li.entityInstances)
+			for(ei in li.getEntityInstancesInDisplayOrder())
 				entityRenders.push( new EntityRender(ei, li.def, renderTarget) );
 
 
