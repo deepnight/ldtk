@@ -65,6 +65,7 @@ class WorldTool extends dn.Process {
 	public function clearSelection() {
 		selectedLevels = [];
 		selectionRender.clear();
+		selectionRender.x = selectionRender.y = 0;
 		// Restore yellow highlight when clearing selection
 		editor.worldRender.updateCurrentHighlight();
 	}
@@ -87,6 +88,7 @@ class WorldTool extends dn.Process {
 
 	function updateSelectionRender() {
 		selectionRender.clear();
+		selectionRender.x = selectionRender.y = 0;
 
 		// Update the yellow highlight visibility (hide it when multi-selecting)
 		editor.worldRender.updateCurrentHighlight();
@@ -300,6 +302,8 @@ class WorldTool extends dn.Process {
 					// Multi-level movement
 					switch curWorld.worldLayout {
 						case Free, GridVania:
+							applyLevelMove(m);
+							updateSelectionRender();
 							curWorld.applyAutoLevelIdentifiers();
 							// Emit events for all moved levels
 							for( uid in initialLevelPositions.keys() ) {
@@ -528,10 +532,15 @@ class WorldTool extends dn.Process {
 					if( selectedLevels.length > 0 ) {
 						// Duplicate all selected levels
 						var newSelection = [];
+						initialLevelPositions.clear();
 						for( l in selectedLevels ) {
 							var copy = curWorld.duplicateLevel(l);
 							editor.ge.emit( LevelAdded(copy) );
 							newSelection.push(copy);
+							if( l==clickedLevel ) {
+								clickedLevel = copy;
+								editor.selectLevel(copy);
+							}
 							// Update initial positions for the copies
 							initialLevelPositions.set(copy.uid, {
 								x: copy.worldX,
@@ -540,17 +549,7 @@ class WorldTool extends dn.Process {
 							});
 						}
 						selectedLevels = newSelection;
-						if( clickedLevel != null ) {
-							// Find the copy of the clicked level
-							for( l in newSelection ) {
-								if( l.worldX == clickedLevel.worldX + project.defaultGridSize*4 &&
-									l.worldY == clickedLevel.worldY + project.defaultGridSize*4 ) {
-									clickedLevel = l;
-									editor.selectLevel(l);
-									break;
-								}
-							}
-						}
+						updateSelectionRender();
 					}
 					else {
 						var copy = curWorld.duplicateLevel(clickedLevel);
@@ -563,6 +562,41 @@ class WorldTool extends dn.Process {
 		}
 
 		// Drag
+		if( (clickedLevel!=null || selectedLevels.length>0) && dragStarted ) {
+			if( selectedLevels.length>0 ) {
+				// Move the selection ghost; level positions are applied on release.
+				var l = clickedLevel!=null ? clickedLevel : selectedLevels[0];
+				var p = initialLevelPositions.get(l.uid);
+				var x = p.x + m.worldX - origin.worldX;
+				var y = p.y + m.worldY - origin.worldY;
+				switch curWorld.worldLayout {
+					case Free:
+						if( settings.v.grid ) {
+							var g = project.getSmartLevelGridSize();
+							x = Std.int(x/g)*g;
+							y = Std.int(y/g)*g;
+						}
+
+					case GridVania:
+						x = M.floor(x/curWorld.worldGridWidth)*curWorld.worldGridWidth;
+						y = M.floor(y/curWorld.worldGridHeight)*curWorld.worldGridHeight;
+
+					case LinearHorizontal, LinearVertical:
+				}
+				selectionRender.x = x-p.x;
+				selectionRender.y = y-p.y;
+			}
+			else {
+				applyLevelMove(m);
+				editor.ge.emit( WorldLevelMoved(clickedLevel, false, null) );
+			}
+
+			App.ME.requestCpu();
+			ev.cancel = true;
+		}
+	}
+
+	function applyLevelMove(m:Coords) {
 		if( (clickedLevel!=null || selectedLevels.length > 0) && dragStarted ) {
 			// Init tmpRender render
 			tmpRender.clear();
@@ -750,18 +784,6 @@ class WorldTool extends dn.Process {
 					}
 			}
 
-			// Refresh render for all moved levels
-			if( selectedLevels.length > 0 ) {
-				for( l in selectedLevels )
-					editor.ge.emit( WorldLevelMoved(l, false, null) );
-				// Update selection visualization during drag
-				updateSelectionRender();
-			}
-			else if( clickedLevel != null )
-				editor.ge.emit( WorldLevelMoved(clickedLevel, false, null) );
-
-			App.ME.requestCpu();
-			ev.cancel = true;
 		}
 	}
 
