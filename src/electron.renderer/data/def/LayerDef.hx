@@ -22,6 +22,7 @@ class LayerDef {
 	public var inactiveOpacity : Float = 1.0;
 	public var hideInList = false;
 	public var hideFieldsWhenInactive = false;
+	public var entityDepthSorting : ldtk.Json.EntityDepthSorting = Manual;
 	public var canSelectWhenInactive = true;
 	public var renderInWorldView = true;
 	public var pxOffsetX : Int = 0;
@@ -117,6 +118,7 @@ class LayerDef {
 		// o.fadeInactive = JsonTools.readBool(json.fadeInactive, false);
 		o.hideInList = JsonTools.readBool(json.hideInList, false);
 		o.hideFieldsWhenInactive = JsonTools.readBool(json.hideFieldsWhenInactive, true);
+		o.entityDepthSorting = JsonTools.readEnum(ldtk.Json.EntityDepthSorting, json.entityDepthSorting, false, Manual);
 		o.canSelectWhenInactive = JsonTools.readBool(json.canSelectWhenInactive, true);
 		o.renderInWorldView = JsonTools.readBool(json.renderInWorldView, true);
 		o.pxOffsetX = JsonTools.readInt(json.pxOffsetX, 0);
@@ -198,6 +200,7 @@ class LayerDef {
 			inactiveOpacity: JsonTools.writeFloat(inactiveOpacity),
 			hideInList: hideInList,
 			hideFieldsWhenInactive: hideFieldsWhenInactive,
+			entityDepthSorting: JsonTools.writeEnum(entityDepthSorting, false),
 			canSelectWhenInactive: canSelectWhenInactive,
 			renderInWorldView: renderInWorldView,
 			pxOffsetX: pxOffsetX,

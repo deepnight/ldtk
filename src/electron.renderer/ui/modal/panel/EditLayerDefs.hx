@@ -904,6 +904,19 @@ class EditLayerDefs extends ui.modal.Panel {
 
 
 			case Entities:
+				var i = new form.input.EnumSelect(
+					jForms.find("select[name=entityDepthSorting]"),
+					ldtk.Json.EntityDepthSorting,
+					()->cur.entityDepthSorting,
+					(v)->cur.entityDepthSorting = v,
+					(v)->switch v {
+						case Manual: L.t._("Manual");
+						case YAscending: L.t._("Y ascending (higher Y in front)");
+						case YDescending: L.t._("Y descending (lower Y in front)");
+					}
+				);
+				i.onChange = editor.ge.emit.bind(LayerDefChanged(cur.uid, true));
+
 				// Tags
 				var ted = new ui.TagEditor(
 					cur.requiredTags,

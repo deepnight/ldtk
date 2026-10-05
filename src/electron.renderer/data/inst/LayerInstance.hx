@@ -690,8 +690,15 @@ class LayerInstance {
 	/** ENTITY INSTANCE *******************/
 
 	public function getEntityInstancesInDisplayOrder() : Array<EntityInstance> {
+		if( def.entityDepthSorting==Manual )
+			return entityInstances;
+
 		var sorted = entityInstances.copy();
-		sorted.sort( (a,b)->a.y-b.y );
+		switch def.entityDepthSorting {
+			case Manual: // N/A
+			case YAscending: sorted.sort( (a,b)->a.y-b.y );
+			case YDescending: sorted.sort( (a,b)->b.y-a.y );
+		}
 		return sorted;
 	}
 
