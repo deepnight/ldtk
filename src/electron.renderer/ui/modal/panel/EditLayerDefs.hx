@@ -910,7 +910,7 @@ class EditLayerDefs extends ui.modal.Panel {
 					()->cur.entityDepthSorting,
 					(v)->cur.entityDepthSorting = v,
 					(v)->switch v {
-						case Manual: L.t._("Manual");
+						case Manual: L.t._("Manual (CTRL-UP/CTRL-DOWN to change an entity depth)");
 						case YAscending: L.t._("Y ascending (higher Y in front)");
 						case YDescending: L.t._("Y descending (lower Y in front)");
 					}
