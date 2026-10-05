@@ -234,6 +234,8 @@ class WorldTool extends dn.Process {
 			clickedLevel = null;
 
 		if( clickedLevel!=null ) {
+			clickedSameLevel = editor.curLevel==clickedLevel;
+
 			// Handle multi-selection with CTRL/CMD
 			if( App.ME.isCtrlCmdDown() && worldMode ) {
 				if( isSelected(clickedLevel) ) {
@@ -252,7 +254,6 @@ class WorldTool extends dn.Process {
 				// Still allow dragging with multi-selection
 				levelOriginX = clickedLevel.worldX;
 				levelOriginY = clickedLevel.worldY;
-				clickedSameLevel = editor.curLevel==clickedLevel;
 				initialNeighbours = clickedLevel.getNeighboursIids();
 			}
 			else {
@@ -267,7 +268,6 @@ class WorldTool extends dn.Process {
 				levelOriginX = clickedLevel.worldX;
 				levelOriginY = clickedLevel.worldY;
 				ev.cancel = true;
-				clickedSameLevel = editor.curLevel==clickedLevel;
 				initialNeighbours = clickedLevel.getNeighboursIids();
 			}
 		}
