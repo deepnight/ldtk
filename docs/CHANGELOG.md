@@ -1,6 +1,8 @@
 # 1.5.4
 
 - Multi-levels selection in world view (a big thank you to JeremyFa / https://github.com/jeremyfa)
+- Fixed the free (as in "not snapped to grid") drag'n'drop of Entities when the grid is disabled (G shortcut)
+- Added a Layer panel setting to enable Entity visual depth sorting based on its Y coordinate. When in Manual mode, press CTRL-UP/CTRL-DOWN to change an entity depth.
 - In Auto-Layers, you can now pick any number of other layers to prevent local rules to apply at particular coordinates.
 - Added a new Project setting to customize the JSON indentation (Full, Compact or Minified)
 - The online JSON documentation now shows references between UID fields.
