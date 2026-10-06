@@ -1,6 +1,7 @@
 # 1.5.4
 
-- Multi-levels selection in world view (a big thank you to JeremyFa / https://github.com/jeremyfa)
+- Multi-levels selection in world view (thanks to JeremyFa / https://github.com/jeremyfa)
+- Fixed excessive memory use when loading and saving large projects with external level files (#1172, thanks to GameGuyy / https://github.com/GameGuyy)
 - Fixed the free drag'n'drop of Entities (as in "not snapped to grid") when the grid is disabled (G shortcut)
 - Added a Layer panel setting to enable Entity visual depth sorting based on its Y coordinate. When in Manual mode, press CTRL-UP/CTRL-DOWN to change an entity depth.
 - In Auto-Layers, you can now pick any number of other layers to prevent local rules to apply at particular coordinates.
@@ -10,7 +11,6 @@
 - Fixed support for Aseprite 1.3.5 files
 - Fixed the pasting of a copied rule inside an empty group
 - CastleDB: fixed support for unique IDs in lists (note: nested lists in lists are not supported yet)
-- Fixed excessive memory use when loading and saving large projects with external level files (#1172)
 
 # 1.5.3
 
