@@ -2,7 +2,7 @@ package data;
 
 private enum LevelJsonCache {
 	InMemory(str:String, json:ldtk.Json.LevelJson);
-	ExternalFile(absPath:String);
+	ExternalFile(absPath:String, fingerprint:String);
 }
 
 class Level {
@@ -400,21 +400,48 @@ class Level {
 	}
 
 	public function setJsonCacheFromExternalFile(absPath:String) {
-		_jsonCache = ExternalFile(absPath);
+		var fingerprint = getFileFingerprint(absPath);
+		_jsonCache = fingerprint!=null ? ExternalFile(absPath, fingerprint) : null;
+	}
+
+	static function getFileFingerprint(absPath:String) : Null<String> {
+		return try {
+			var stats = js.node.Fs.statSync(absPath);
+			stats.mtime.getTime() + "_" + stats.size;
+		}
+		catch(_) null;
+	}
+
+	/** Drop the external cache if its file was changed or removed outside of LDtk since it was last read/written **/
+	function checkExternalJsonCache() {
+		switch _jsonCache {
+			case ExternalFile(absPath, fingerprint):
+				if( getFileFingerprint(absPath)!=fingerprint ) {
+					App.LOG.warning('Level file changed on disk since last load/save, ignoring it: $absPath');
+					invalidateJsonCache();
+				}
+			case InMemory(_, _), null:
+		}
 	}
 
 	public function getExternalJsonCachePath() : Null<String> {
+		checkExternalJsonCache();
 		return switch _jsonCache {
-			case ExternalFile(absPath): absPath;
+			case ExternalFile(absPath, _): absPath;
 			case InMemory(_, _), null: null;
 		}
 	}
 
 	public function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
+		checkExternalJsonCache();
 		return switch _jsonCache {
 			case InMemory(_, json): json;
-			case ExternalFile(absPath):
-				try haxe.Json.parse(NT.readFileString(absPath))
+			case ExternalFile(absPath, _):
+				try {
+					var json : ldtk.Json.LevelJson = haxe.Json.parse(NT.readFileString(absPath));
+					crawlObjectRec(json); // Same "\n" re-escaping as the in-memory cache
+					json;
+				}
 				catch(_) null;
 			case null: null;
 		}
@@ -425,9 +452,10 @@ class Level {
 	}
 
 	public function getCacheJsonString() : Null<String> {
+		checkExternalJsonCache();
 		return switch _jsonCache {
 			case InMemory(str, _): str;
-			case ExternalFile(absPath):
+			case ExternalFile(absPath, _):
 				try NT.readFileString(absPath)
 				catch(_) null;
 			case null: null;

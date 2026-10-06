@@ -720,12 +720,8 @@ class ProjectSaver extends dn.Process {
 		if( level==null )
 			throw 'Unknown level uid $uid';
 
+		// Null if the level was modified, or if its file was changed/removed outside of LDtk: re-serialize from live data then
 		var sourceAbsPath = level.getExternalJsonCachePath();
-		if( sourceAbsPath!=null && !NT.fileExists(sourceAbsPath) ) {
-			// Cached file was removed externally: re-serialize from live data instead
-			level.invalidateJsonCache();
-			sourceAbsPath = null;
-		}
 
 		if( sourceAbsPath!=null ) {
 			if( !samePath(sourceAbsPath, targetAbsPath) )
