@@ -882,7 +882,7 @@ class JsTools {
 		jCtx.find("select.advanced:visible").each( (idx,e)->{
 			var jOldSelect = new J(e);
 
-			// Create advanced select & options
+			// Create advanced select
 			var jSelect = new J('<div class="advancedSelect"/>');
 			var classes = try (~/\s/).split( jOldSelect.attr("class") ) catch(_) [];
 			for(c in classes)
@@ -891,47 +891,53 @@ class JsTools {
 			jSelect.insertBefore(jOldSelect);
 			jSelect.append('<span class="expand icon expanded"></span>');
 			var hasImages = jOldSelect.find("[tile]").length>0;
-			for(elem in jOldSelect.children("option")) {
-				var jOldOpt = new J(elem);
-				var jOpt = new J('<div class="option"/>');
-				jSelect.append(jOpt);
-				jOpt.attr("value", jOldOpt.attr("value"));
-				jOpt.text( jOldOpt.text() );
-				if( jOldOpt.hasClass("default") )
-					jOpt.addClass("default");
+			function _renderOptions(all=false) {
+				jSelect.find(".option").remove();
+				for(elem in jOldSelect.children("option").filter(all ? "*" : ":selected")) {
+					var jOldOpt = new J(elem);
+					var jOpt = new J('<div class="option"/>');
+					jSelect.append(jOpt);
+					jOpt.attr("value", jOldOpt.attr("value"));
+					jOpt.text( jOldOpt.text() );
+					if( jOldOpt.hasClass("default") )
+						jOpt.addClass("default");
 
-				if( jOldOpt.prop("disabled")==true )
-					jOpt.addClass("disabled");
+					if( jOldOpt.prop("disabled")==true )
+						jOpt.addClass("disabled");
 
-				// Background color
-				if( jOldOpt.is("[color]") ) {
-					var c = dn.Col.parseHex( jOldOpt.attr("color") );
-					jOpt.css("background-color", c.toCssRgba(0.3));
-				}
-
-				// Selected value
-				if( jOldSelect.val()==jOldOpt.attr("value") )
-					jOpt.addClass("selected");
-
-				// Icon
-				if( jOldOpt.attr("tile")!=null ) {
-					var r : ldtk.Json.TilesetRect = haxe.Json.parse(jOldOpt.attr("tile"));
-					var td = try Editor.ME.project.defs.getTilesetDef(r.tilesetUid) catch(_) null;
-					if( td!=null ) {
-						var img = td.getTileHtmlImg(r);
-						jOpt.prepend(img);
+					// Background color
+					if( jOldOpt.is("[color]") ) {
+						var c = dn.Col.parseHex( jOldOpt.attr("color") );
+						jOpt.css("background-color", c.toCssRgba(0.3));
 					}
+
+					// Selected value
+					if( jOldSelect.val()==jOldOpt.attr("value") )
+						jOpt.addClass("selected");
+
+					// Icon
+					if( jOldOpt.attr("tile")!=null ) {
+						var r : ldtk.Json.TilesetRect = haxe.Json.parse(jOldOpt.attr("tile"));
+						var td = try Editor.ME.project.defs.getTilesetDef(r.tilesetUid) catch(_) null;
+						if( td!=null ) {
+							var img = td.getTileHtmlImg(r);
+							jOpt.prepend(img);
+						}
+					}
+					else if( hasImages )
+						jOpt.prepend('<div class="placeholder"></div>');
 				}
-				else if( hasImages )
-					jOpt.prepend('<div class="placeholder"></div>');
 			}
+			_renderOptions();
 
 			// Open select
 			jSelect.click(_->{
+				_renderOptions(true);
 				var uiStateId : Null<Settings.UiState> = cast jOldSelect.attr("id");
 				new ui.modal.dialog.SelectPicker(jSelect, uiStateId, v->{
 					jOldSelect.val(v).change();
 				});
+				_renderOptions();
 			});
 		});
 	}
