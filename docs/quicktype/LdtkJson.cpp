@@ -1,6 +1,5 @@
 //  To parse this JSON data, first install
 //
-//      Boost     http://www.boost.org
 //      json.hpp  https://github.com/nlohmann/json
 //
 //  Then include this file, and then do
@@ -9,10 +8,10 @@
 
 #pragma once
 
-#include <boost/optional.hpp>
+#include <optional>
 #include "json.hpp"
 
-#include <boost/optional.hpp>
+#include <optional>
 #include <stdexcept>
 #include <regex>
 
@@ -26,17 +25,17 @@ namespace nlohmann {
         }
 
         static std::shared_ptr<T> from_json(const json & j) {
-            if (j.is_null()) return std::make_shared<T>(); else return std::make_shared<T>(j.get<T>());
+            if (j.is_null()) return std::shared_ptr<T>(); else return std::make_shared<T>(j.get<T>());
         }
     };
     template <typename T>
-    struct adl_serializer<boost::optional<T>> {
-        static void to_json(json & j, const boost::optional<T> & opt) {
+    struct adl_serializer<std::optional<T>> {
+        static void to_json(json & j, const std::optional<T> & opt) {
             if (!opt) j = nullptr; else j = *opt;
         }
 
-        static boost::optional<T> from_json(const json & j) {
-            if (j.is_null()) return boost::optional<T>(); else return boost::optional<T>(j.get<T>());
+        static std::optional<T> from_json(const json & j) {
+            if (j.is_null()) return std::optional<T>(); else return std::make_optional<T>(j.get<T>());
         }
     };
 }
@@ -75,16 +74,16 @@ namespace quicktype {
         return get_heap_optional<T>(j, property.data());
     }
     template <typename T>
-    inline boost::optional<T> get_stack_optional(const json & j, const char * property) {
+    inline std::optional<T> get_stack_optional(const json & j, const char * property) {
         auto it = j.find(property);
         if (it != j.end() && !it->is_null()) {
-            return j.at(property).get<boost::optional<T>>();
+            return j.at(property).get<std::optional<T>>();
         }
-        return boost::optional<T>();
+        return std::optional<T>();
     }
 
     template <typename T>
-    inline boost::optional<T> get_stack_optional(const json & j, std::string property) {
+    inline std::optional<T> get_stack_optional(const json & j, std::string property) {
         return get_stack_optional<T>(j, property.data());
     }
     #endif
@@ -152,37 +151,37 @@ namespace quicktype {
 
         private:
         std::string type;
-        boost::optional<std::vector<std::string>> accept_file_types;
+        std::optional<std::vector<std::string>> accept_file_types;
         AllowedRefs allowed_refs;
-        boost::optional<int64_t> allowed_refs_entity_uid;
+        std::optional<int64_t> allowed_refs_entity_uid;
         std::vector<std::string> allowed_ref_tags;
         bool allow_out_of_level_ref;
-        boost::optional<int64_t> array_max_length;
-        boost::optional<int64_t> array_min_length;
+        std::optional<int64_t> array_max_length;
+        std::optional<int64_t> array_min_length;
         bool auto_chain_ref;
         bool can_be_null;
         nlohmann::json default_override;
-        boost::optional<std::string> doc;
+        std::optional<std::string> doc;
         bool editor_always_show;
         bool editor_cut_long_values;
-        boost::optional<std::string> editor_display_color;
+        std::optional<std::string> editor_display_color;
         EditorDisplayMode editor_display_mode;
         EditorDisplayPos editor_display_pos;
         double editor_display_scale;
         EditorLinkStyle editor_link_style;
         bool editor_show_in_world;
-        boost::optional<std::string> editor_text_prefix;
-        boost::optional<std::string> editor_text_suffix;
+        std::optional<std::string> editor_text_prefix;
+        std::optional<std::string> editor_text_suffix;
         bool export_to_toc;
         std::string identifier;
         bool is_array;
-        boost::optional<double> max;
-        boost::optional<double> min;
-        boost::optional<std::string> regex;
+        std::optional<double> max;
+        std::optional<double> min;
+        std::optional<std::string> regex;
         bool searchable;
         bool symmetrical_ref;
-        boost::optional<TextLanguageMode> text_language_mode;
-        boost::optional<int64_t> tileset_uid;
+        std::optional<TextLanguageMode> text_language_mode;
+        std::optional<int64_t> tileset_uid;
         std::string field_definition_type;
         int64_t uid;
         bool use_for_smart_color;
@@ -203,8 +202,8 @@ namespace quicktype {
          * Optional list of accepted file extensions for FilePath value type. Includes the dot:
          * `.ext`
          */
-        boost::optional<std::vector<std::string>> get_accept_file_types() const { return accept_file_types; }
-        void set_accept_file_types(boost::optional<std::vector<std::string>> value) { this->accept_file_types = value; }
+        std::optional<std::vector<std::string>> get_accept_file_types() const { return accept_file_types; }
+        void set_accept_file_types(std::optional<std::vector<std::string>> value) { this->accept_file_types = value; }
 
         /**
          * Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
@@ -213,8 +212,8 @@ namespace quicktype {
         AllowedRefs & get_mutable_allowed_refs() { return allowed_refs; }
         void set_allowed_refs(const AllowedRefs & value) { this->allowed_refs = value; }
 
-        boost::optional<int64_t> get_allowed_refs_entity_uid() const { return allowed_refs_entity_uid; }
-        void set_allowed_refs_entity_uid(boost::optional<int64_t> value) { this->allowed_refs_entity_uid = value; }
+        std::optional<int64_t> get_allowed_refs_entity_uid() const { return allowed_refs_entity_uid; }
+        void set_allowed_refs_entity_uid(std::optional<int64_t> value) { this->allowed_refs_entity_uid = value; }
 
         const std::vector<std::string> & get_allowed_ref_tags() const { return allowed_ref_tags; }
         std::vector<std::string> & get_mutable_allowed_ref_tags() { return allowed_ref_tags; }
@@ -227,14 +226,14 @@ namespace quicktype {
         /**
          * Array max length
          */
-        boost::optional<int64_t> get_array_max_length() const { return array_max_length; }
-        void set_array_max_length(boost::optional<int64_t> value) { this->array_max_length = value; }
+        std::optional<int64_t> get_array_max_length() const { return array_max_length; }
+        void set_array_max_length(std::optional<int64_t> value) { this->array_max_length = value; }
 
         /**
          * Array min length
          */
-        boost::optional<int64_t> get_array_min_length() const { return array_min_length; }
-        void set_array_min_length(boost::optional<int64_t> value) { this->array_min_length = value; }
+        std::optional<int64_t> get_array_min_length() const { return array_min_length; }
+        void set_array_min_length(std::optional<int64_t> value) { this->array_min_length = value; }
 
         const bool & get_auto_chain_ref() const { return auto_chain_ref; }
         bool & get_mutable_auto_chain_ref() { return auto_chain_ref; }
@@ -259,8 +258,8 @@ namespace quicktype {
          * User defined documentation for this field to provide help/tips to level designers about
          * accepted values.
          */
-        boost::optional<std::string> get_doc() const { return doc; }
-        void set_doc(boost::optional<std::string> value) { this->doc = value; }
+        std::optional<std::string> get_doc() const { return doc; }
+        void set_doc(std::optional<std::string> value) { this->doc = value; }
 
         const bool & get_editor_always_show() const { return editor_always_show; }
         bool & get_mutable_editor_always_show() { return editor_always_show; }
@@ -270,8 +269,8 @@ namespace quicktype {
         bool & get_mutable_editor_cut_long_values() { return editor_cut_long_values; }
         void set_editor_cut_long_values(const bool & value) { this->editor_cut_long_values = value; }
 
-        boost::optional<std::string> get_editor_display_color() const { return editor_display_color; }
-        void set_editor_display_color(boost::optional<std::string> value) { this->editor_display_color = value; }
+        std::optional<std::string> get_editor_display_color() const { return editor_display_color; }
+        void set_editor_display_color(std::optional<std::string> value) { this->editor_display_color = value; }
 
         /**
          * Possible values: `Hidden`, `ValueOnly`, `NameAndValue`, `EntityTile`, `LevelTile`,
@@ -305,11 +304,11 @@ namespace quicktype {
         bool & get_mutable_editor_show_in_world() { return editor_show_in_world; }
         void set_editor_show_in_world(const bool & value) { this->editor_show_in_world = value; }
 
-        boost::optional<std::string> get_editor_text_prefix() const { return editor_text_prefix; }
-        void set_editor_text_prefix(boost::optional<std::string> value) { this->editor_text_prefix = value; }
+        std::optional<std::string> get_editor_text_prefix() const { return editor_text_prefix; }
+        void set_editor_text_prefix(std::optional<std::string> value) { this->editor_text_prefix = value; }
 
-        boost::optional<std::string> get_editor_text_suffix() const { return editor_text_suffix; }
-        void set_editor_text_suffix(boost::optional<std::string> value) { this->editor_text_suffix = value; }
+        std::optional<std::string> get_editor_text_suffix() const { return editor_text_suffix; }
+        void set_editor_text_suffix(std::optional<std::string> value) { this->editor_text_suffix = value; }
 
         /**
          * If TRUE, the field value will be exported to the `toc` project JSON field. Only applies
@@ -336,21 +335,21 @@ namespace quicktype {
         /**
          * Max limit for value, if applicable
          */
-        boost::optional<double> get_max() const { return max; }
-        void set_max(boost::optional<double> value) { this->max = value; }
+        std::optional<double> get_max() const { return max; }
+        void set_max(std::optional<double> value) { this->max = value; }
 
         /**
          * Min limit for value, if applicable
          */
-        boost::optional<double> get_min() const { return min; }
-        void set_min(boost::optional<double> value) { this->min = value; }
+        std::optional<double> get_min() const { return min; }
+        void set_min(std::optional<double> value) { this->min = value; }
 
         /**
          * Optional regular expression that needs to be matched to accept values. Expected format:
          * `/some_reg_ex/g`, with optional "i" flag.
          */
-        boost::optional<std::string> get_regex() const { return regex; }
-        void set_regex(boost::optional<std::string> value) { this->regex = value; }
+        std::optional<std::string> get_regex() const { return regex; }
+        void set_regex(std::optional<std::string> value) { this->regex = value; }
 
         /**
          * If enabled, this field will be searchable through LDtk command palette
@@ -367,14 +366,14 @@ namespace quicktype {
          * Possible values: &lt;`null`&gt;, `LangPython`, `LangRuby`, `LangJS`, `LangLua`, `LangC`,
          * `LangHaxe`, `LangMarkdown`, `LangJson`, `LangXml`, `LangLog`
          */
-        boost::optional<TextLanguageMode> get_text_language_mode() const { return text_language_mode; }
-        void set_text_language_mode(boost::optional<TextLanguageMode> value) { this->text_language_mode = value; }
+        std::optional<TextLanguageMode> get_text_language_mode() const { return text_language_mode; }
+        void set_text_language_mode(std::optional<TextLanguageMode> value) { this->text_language_mode = value; }
 
         /**
          * UID of the tileset used for a Tile
          */
-        boost::optional<int64_t> get_tileset_uid() const { return tileset_uid; }
-        void set_tileset_uid(boost::optional<int64_t> value) { this->tileset_uid = value; }
+        std::optional<int64_t> get_tileset_uid() const { return tileset_uid; }
+        void set_tileset_uid(std::optional<int64_t> value) { this->tileset_uid = value; }
 
         /**
          * Internal enum representing the possible field types. Possible values: F_Int, F_Float,
@@ -484,7 +483,7 @@ namespace quicktype {
         private:
         bool allow_out_of_bounds;
         std::string color;
-        boost::optional<std::string> doc;
+        std::optional<std::string> doc;
         bool export_to_toc;
         std::vector<FieldDefinition> field_defs;
         double fill_opacity;
@@ -496,10 +495,10 @@ namespace quicktype {
         LimitScope limit_scope;
         double line_opacity;
         int64_t max_count;
-        boost::optional<int64_t> max_height;
-        boost::optional<int64_t> max_width;
-        boost::optional<int64_t> min_height;
-        boost::optional<int64_t> min_width;
+        std::optional<int64_t> max_height;
+        std::optional<int64_t> max_width;
+        std::optional<int64_t> min_height;
+        std::optional<int64_t> min_width;
         std::vector<int64_t> nine_slice_borders;
         double pivot_x;
         double pivot_y;
@@ -508,13 +507,13 @@ namespace quicktype {
         bool resizable_y;
         bool show_name;
         std::vector<std::string> tags;
-        boost::optional<int64_t> tile_id;
+        std::optional<int64_t> tile_id;
         double tile_opacity;
-        boost::optional<TilesetRectangle> tile_rect;
+        std::optional<TilesetRectangle> tile_rect;
         TileRenderMode tile_render_mode;
-        boost::optional<int64_t> tileset_id;
+        std::optional<int64_t> tileset_id;
         int64_t uid;
-        boost::optional<TilesetRectangle> ui_tile_rect;
+        std::optional<TilesetRectangle> ui_tile_rect;
         int64_t width;
 
         public:
@@ -535,8 +534,8 @@ namespace quicktype {
         /**
          * User defined documentation for this element to provide help/tips to level designers.
          */
-        boost::optional<std::string> get_doc() const { return doc; }
-        void set_doc(boost::optional<std::string> value) { this->doc = value; }
+        std::optional<std::string> get_doc() const { return doc; }
+        void set_doc(std::optional<std::string> value) { this->doc = value; }
 
         /**
          * If enabled, all instances of this entity will be listed in the project "Table of content"
@@ -612,26 +611,26 @@ namespace quicktype {
         /**
          * Max pixel height (only applies if the entity is resizable on Y)
          */
-        boost::optional<int64_t> get_max_height() const { return max_height; }
-        void set_max_height(boost::optional<int64_t> value) { this->max_height = value; }
+        std::optional<int64_t> get_max_height() const { return max_height; }
+        void set_max_height(std::optional<int64_t> value) { this->max_height = value; }
 
         /**
          * Max pixel width (only applies if the entity is resizable on X)
          */
-        boost::optional<int64_t> get_max_width() const { return max_width; }
-        void set_max_width(boost::optional<int64_t> value) { this->max_width = value; }
+        std::optional<int64_t> get_max_width() const { return max_width; }
+        void set_max_width(std::optional<int64_t> value) { this->max_width = value; }
 
         /**
          * Min pixel height (only applies if the entity is resizable on Y)
          */
-        boost::optional<int64_t> get_min_height() const { return min_height; }
-        void set_min_height(boost::optional<int64_t> value) { this->min_height = value; }
+        std::optional<int64_t> get_min_height() const { return min_height; }
+        void set_min_height(std::optional<int64_t> value) { this->min_height = value; }
 
         /**
          * Min pixel width (only applies if the entity is resizable on X)
          */
-        boost::optional<int64_t> get_min_width() const { return min_width; }
-        void set_min_width(boost::optional<int64_t> value) { this->min_width = value; }
+        std::optional<int64_t> get_min_width() const { return min_width; }
+        void set_min_width(std::optional<int64_t> value) { this->min_width = value; }
 
         /**
          * An array of 4 dimensions for the up/right/down/left borders (in this order) when using
@@ -695,8 +694,8 @@ namespace quicktype {
          * **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
          * by: `tileRect`
          */
-        boost::optional<int64_t> get_tile_id() const { return tile_id; }
-        void set_tile_id(boost::optional<int64_t> value) { this->tile_id = value; }
+        std::optional<int64_t> get_tile_id() const { return tile_id; }
+        void set_tile_id(std::optional<int64_t> value) { this->tile_id = value; }
 
         const double & get_tile_opacity() const { return tile_opacity; }
         double & get_mutable_tile_opacity() { return tile_opacity; }
@@ -705,8 +704,8 @@ namespace quicktype {
         /**
          * An object representing a rectangle from an existing Tileset
          */
-        boost::optional<TilesetRectangle> get_tile_rect() const { return tile_rect; }
-        void set_tile_rect(boost::optional<TilesetRectangle> value) { this->tile_rect = value; }
+        std::optional<TilesetRectangle> get_tile_rect() const { return tile_rect; }
+        void set_tile_rect(std::optional<TilesetRectangle> value) { this->tile_rect = value; }
 
         /**
          * An enum describing how the Entity tile is rendered inside the Entity bounds. Possible
@@ -720,8 +719,8 @@ namespace quicktype {
         /**
          * Tileset ID used for optional tile display
          */
-        boost::optional<int64_t> get_tileset_id() const { return tileset_id; }
-        void set_tileset_id(boost::optional<int64_t> value) { this->tileset_id = value; }
+        std::optional<int64_t> get_tileset_id() const { return tileset_id; }
+        void set_tileset_id(std::optional<int64_t> value) { this->tileset_id = value; }
 
         /**
          * Unique Int identifier
@@ -733,8 +732,8 @@ namespace quicktype {
         /**
          * This tile overrides the one defined in `tileRect` in the UI
          */
-        boost::optional<TilesetRectangle> get_ui_tile_rect() const { return ui_tile_rect; }
-        void set_ui_tile_rect(boost::optional<TilesetRectangle> value) { this->ui_tile_rect = value; }
+        std::optional<TilesetRectangle> get_ui_tile_rect() const { return ui_tile_rect; }
+        void set_ui_tile_rect(std::optional<TilesetRectangle> value) { this->ui_tile_rect = value; }
 
         /**
          * Pixel width
@@ -750,19 +749,19 @@ namespace quicktype {
         virtual ~EnumValueDefinition() = default;
 
         private:
-        boost::optional<std::vector<int64_t>> tile_src_rect;
+        std::optional<std::vector<int64_t>> tile_src_rect;
         int64_t color;
         std::string id;
-        boost::optional<int64_t> tile_id;
-        boost::optional<TilesetRectangle> tile_rect;
+        std::optional<int64_t> tile_id;
+        std::optional<TilesetRectangle> tile_rect;
 
         public:
         /**
          * **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
          * by: `tileRect`
          */
-        boost::optional<std::vector<int64_t>> get_tile_src_rect() const { return tile_src_rect; }
-        void set_tile_src_rect(boost::optional<std::vector<int64_t>> value) { this->tile_src_rect = value; }
+        std::optional<std::vector<int64_t>> get_tile_src_rect() const { return tile_src_rect; }
+        void set_tile_src_rect(std::optional<std::vector<int64_t>> value) { this->tile_src_rect = value; }
 
         /**
          * Optional color
@@ -782,14 +781,14 @@ namespace quicktype {
          * **WARNING**: this deprecated value is no longer exported since version 1.4.0  Replaced
          * by: `tileRect`
          */
-        boost::optional<int64_t> get_tile_id() const { return tile_id; }
-        void set_tile_id(boost::optional<int64_t> value) { this->tile_id = value; }
+        std::optional<int64_t> get_tile_id() const { return tile_id; }
+        void set_tile_id(std::optional<int64_t> value) { this->tile_id = value; }
 
         /**
          * Optional tileset rectangle to represents this value
          */
-        boost::optional<TilesetRectangle> get_tile_rect() const { return tile_rect; }
-        void set_tile_rect(boost::optional<TilesetRectangle> value) { this->tile_rect = value; }
+        std::optional<TilesetRectangle> get_tile_rect() const { return tile_rect; }
+        void set_tile_rect(std::optional<TilesetRectangle> value) { this->tile_rect = value; }
     };
 
     class EnumDefinition {
@@ -798,29 +797,29 @@ namespace quicktype {
         virtual ~EnumDefinition() = default;
 
         private:
-        boost::optional<std::string> external_file_checksum;
-        boost::optional<std::string> external_rel_path;
-        boost::optional<int64_t> icon_tileset_uid;
+        std::optional<std::string> external_file_checksum;
+        std::optional<std::string> external_rel_path;
+        std::optional<int64_t> icon_tileset_uid;
         std::string identifier;
         std::vector<std::string> tags;
         int64_t uid;
         std::vector<EnumValueDefinition> values;
 
         public:
-        boost::optional<std::string> get_external_file_checksum() const { return external_file_checksum; }
-        void set_external_file_checksum(boost::optional<std::string> value) { this->external_file_checksum = value; }
+        std::optional<std::string> get_external_file_checksum() const { return external_file_checksum; }
+        void set_external_file_checksum(std::optional<std::string> value) { this->external_file_checksum = value; }
 
         /**
          * Relative path to the external file providing this Enum
          */
-        boost::optional<std::string> get_external_rel_path() const { return external_rel_path; }
-        void set_external_rel_path(boost::optional<std::string> value) { this->external_rel_path = value; }
+        std::optional<std::string> get_external_rel_path() const { return external_rel_path; }
+        void set_external_rel_path(std::optional<std::string> value) { this->external_rel_path = value; }
 
         /**
          * Tileset UID if provided
          */
-        boost::optional<int64_t> get_icon_tileset_uid() const { return icon_tileset_uid; }
-        void set_icon_tileset_uid(boost::optional<int64_t> value) { this->icon_tileset_uid = value; }
+        std::optional<int64_t> get_icon_tileset_uid() const { return icon_tileset_uid; }
+        void set_icon_tileset_uid(std::optional<int64_t> value) { this->icon_tileset_uid = value; }
 
         /**
          * User defined unique identifier
@@ -880,7 +879,7 @@ namespace quicktype {
         bool flip_x;
         bool flip_y;
         bool invalidated;
-        boost::optional<int64_t> out_of_bounds_value;
+        std::optional<int64_t> out_of_bounds_value;
         std::vector<int64_t> pattern;
         bool perlin_active;
         double perlin_octaves;
@@ -889,7 +888,7 @@ namespace quicktype {
         double pivot_x;
         double pivot_y;
         int64_t size;
-        boost::optional<std::vector<int64_t>> tile_ids;
+        std::optional<std::vector<int64_t>> tile_ids;
         TileMode tile_mode;
         int64_t tile_random_x_max;
         int64_t tile_random_x_min;
@@ -962,8 +961,8 @@ namespace quicktype {
         /**
          * Default IntGrid value when checking cells outside of level bounds
          */
-        boost::optional<int64_t> get_out_of_bounds_value() const { return out_of_bounds_value; }
-        void set_out_of_bounds_value(boost::optional<int64_t> value) { this->out_of_bounds_value = value; }
+        std::optional<int64_t> get_out_of_bounds_value() const { return out_of_bounds_value; }
+        void set_out_of_bounds_value(std::optional<int64_t> value) { this->out_of_bounds_value = value; }
 
         /**
          * Rule pattern (size x size)
@@ -1016,8 +1015,8 @@ namespace quicktype {
          * **WARNING**: this deprecated value is no longer exported since version 1.5.0  Replaced
          * by: `tileRectsIds`
          */
-        boost::optional<std::vector<int64_t>> get_tile_ids() const { return tile_ids; }
-        void set_tile_ids(boost::optional<std::vector<int64_t>> value) { this->tile_ids = value; }
+        std::optional<std::vector<int64_t>> get_tile_ids() const { return tile_ids; }
+        void set_tile_ids(std::optional<std::vector<int64_t>> value) { this->tile_ids = value; }
 
         /**
          * Defines how tileIds array is used Possible values: `Single`, `Stamp`
@@ -1119,9 +1118,9 @@ namespace quicktype {
         private:
         bool active;
         int64_t biome_requirement_mode;
-        boost::optional<bool> collapsed;
-        boost::optional<std::string> color;
-        boost::optional<TilesetRectangle> icon;
+        std::optional<bool> collapsed;
+        std::optional<std::string> color;
+        std::optional<TilesetRectangle> icon;
         bool is_optional;
         std::string name;
         std::vector<std::string> required_biome_values;
@@ -1141,14 +1140,14 @@ namespace quicktype {
         /**
          * *This field was removed in 1.0.0 and should no longer be used.*
          */
-        boost::optional<bool> get_collapsed() const { return collapsed; }
-        void set_collapsed(boost::optional<bool> value) { this->collapsed = value; }
+        std::optional<bool> get_collapsed() const { return collapsed; }
+        void set_collapsed(std::optional<bool> value) { this->collapsed = value; }
 
-        boost::optional<std::string> get_color() const { return color; }
-        void set_color(boost::optional<std::string> value) { this->color = value; }
+        std::optional<std::string> get_color() const { return color; }
+        void set_color(std::optional<std::string> value) { this->color = value; }
 
-        boost::optional<TilesetRectangle> get_icon() const { return icon; }
-        void set_icon(boost::optional<TilesetRectangle> value) { this->icon = value; }
+        std::optional<TilesetRectangle> get_icon() const { return icon; }
+        void set_icon(std::optional<TilesetRectangle> value) { this->icon = value; }
 
         const bool & get_is_optional() const { return is_optional; }
         bool & get_mutable_is_optional() { return is_optional; }
@@ -1176,6 +1175,11 @@ namespace quicktype {
     };
 
     /**
+     * Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`
+     */
+    enum class EntityDepthSorting : int { MANUAL, Y_ASCENDING, Y_DESCENDING };
+
+    /**
      * IntGrid value definition
      */
     class IntGridValueDefinition {
@@ -1186,8 +1190,8 @@ namespace quicktype {
         private:
         std::string color;
         int64_t group_uid;
-        boost::optional<std::string> identifier;
-        boost::optional<TilesetRectangle> tile;
+        std::optional<std::string> identifier;
+        std::optional<TilesetRectangle> tile;
         int64_t value;
 
         public:
@@ -1205,11 +1209,11 @@ namespace quicktype {
         /**
          * User defined unique identifier
          */
-        boost::optional<std::string> get_identifier() const { return identifier; }
-        void set_identifier(boost::optional<std::string> value) { this->identifier = value; }
+        std::optional<std::string> get_identifier() const { return identifier; }
+        void set_identifier(std::optional<std::string> value) { this->identifier = value; }
 
-        boost::optional<TilesetRectangle> get_tile() const { return tile; }
-        void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
+        std::optional<TilesetRectangle> get_tile() const { return tile; }
+        void set_tile(std::optional<TilesetRectangle> value) { this->tile = value; }
 
         /**
          * The IntGrid value itself
@@ -1228,22 +1232,22 @@ namespace quicktype {
         virtual ~IntGridValueGroupDefinition() = default;
 
         private:
-        boost::optional<std::string> color;
-        boost::optional<std::string> identifier;
+        std::optional<std::string> color;
+        std::optional<std::string> identifier;
         int64_t uid;
 
         public:
         /**
          * User defined color
          */
-        boost::optional<std::string> get_color() const { return color; }
-        void set_color(boost::optional<std::string> value) { this->color = value; }
+        std::optional<std::string> get_color() const { return color; }
+        void set_color(std::optional<std::string> value) { this->color = value; }
 
         /**
          * User defined string identifier
          */
-        boost::optional<std::string> get_identifier() const { return identifier; }
-        void set_identifier(boost::optional<std::string> value) { this->identifier = value; }
+        std::optional<std::string> get_identifier() const { return identifier; }
+        void set_identifier(std::optional<std::string> value) { this->identifier = value; }
 
         /**
          * Group unique ID
@@ -1267,23 +1271,27 @@ namespace quicktype {
         private:
         std::string type;
         std::vector<AutoLayerRuleGroup> auto_rule_groups;
-        boost::optional<int64_t> auto_source_layer_def_uid;
-        boost::optional<int64_t> auto_tileset_def_uid;
-        boost::optional<int64_t> auto_tiles_killed_by_other_layer_uid;
-        boost::optional<int64_t> biome_field_uid;
+        std::optional<int64_t> auto_source_layer_def_uid;
+        std::optional<int64_t> auto_tileset_def_uid;
+        std::optional<int64_t> auto_tiles_killed_by_other_layer_uid;
+        std::optional<int64_t> biome_field_uid;
         bool can_select_when_inactive;
         double display_opacity;
-        boost::optional<std::string> doc;
+        std::optional<std::string> doc;
+        EntityDepthSorting entity_depth_sorting;
         std::vector<std::string> excluded_tags;
         int64_t grid_size;
+        std::optional<std::string> guide_color;
         int64_t guide_grid_hei;
         int64_t guide_grid_wid;
+        double guide_opacity;
         bool hide_fields_when_inactive;
         bool hide_in_list;
         std::string identifier;
         double inactive_opacity;
         std::vector<IntGridValueDefinition> int_grid_values;
         std::vector<IntGridValueGroupDefinition> int_grid_values_groups;
+        std::vector<int64_t> layer_uids_preventing_auto_tiling_here;
         double parallax_factor_x;
         double parallax_factor_y;
         bool parallax_scaling;
@@ -1293,9 +1301,9 @@ namespace quicktype {
         std::vector<std::string> required_tags;
         double tile_pivot_x;
         double tile_pivot_y;
-        boost::optional<int64_t> tileset_def_uid;
+        std::optional<int64_t> tileset_def_uid;
         Type layer_definition_type;
-        boost::optional<std::string> ui_color;
+        std::optional<std::string> ui_color;
         int64_t uid;
         std::vector<std::string> ui_filter_tags;
         bool use_async_render;
@@ -1315,21 +1323,24 @@ namespace quicktype {
         std::vector<AutoLayerRuleGroup> & get_mutable_auto_rule_groups() { return auto_rule_groups; }
         void set_auto_rule_groups(const std::vector<AutoLayerRuleGroup> & value) { this->auto_rule_groups = value; }
 
-        boost::optional<int64_t> get_auto_source_layer_def_uid() const { return auto_source_layer_def_uid; }
-        void set_auto_source_layer_def_uid(boost::optional<int64_t> value) { this->auto_source_layer_def_uid = value; }
+        std::optional<int64_t> get_auto_source_layer_def_uid() const { return auto_source_layer_def_uid; }
+        void set_auto_source_layer_def_uid(std::optional<int64_t> value) { this->auto_source_layer_def_uid = value; }
 
         /**
          * **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
          * by: `tilesetDefUid`
          */
-        boost::optional<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
-        void set_auto_tileset_def_uid(boost::optional<int64_t> value) { this->auto_tileset_def_uid = value; }
+        std::optional<int64_t> get_auto_tileset_def_uid() const { return auto_tileset_def_uid; }
+        void set_auto_tileset_def_uid(std::optional<int64_t> value) { this->auto_tileset_def_uid = value; }
 
-        boost::optional<int64_t> get_auto_tiles_killed_by_other_layer_uid() const { return auto_tiles_killed_by_other_layer_uid; }
-        void set_auto_tiles_killed_by_other_layer_uid(boost::optional<int64_t> value) { this->auto_tiles_killed_by_other_layer_uid = value; }
+        /**
+         * *This field was removed in 1.5.4 and should no longer be used.*
+         */
+        std::optional<int64_t> get_auto_tiles_killed_by_other_layer_uid() const { return auto_tiles_killed_by_other_layer_uid; }
+        void set_auto_tiles_killed_by_other_layer_uid(std::optional<int64_t> value) { this->auto_tiles_killed_by_other_layer_uid = value; }
 
-        boost::optional<int64_t> get_biome_field_uid() const { return biome_field_uid; }
-        void set_biome_field_uid(boost::optional<int64_t> value) { this->biome_field_uid = value; }
+        std::optional<int64_t> get_biome_field_uid() const { return biome_field_uid; }
+        void set_biome_field_uid(std::optional<int64_t> value) { this->biome_field_uid = value; }
 
         /**
          * Allow editor selections when the layer is not currently active.
@@ -1348,8 +1359,15 @@ namespace quicktype {
         /**
          * User defined documentation for this element to provide help/tips to level designers.
          */
-        boost::optional<std::string> get_doc() const { return doc; }
-        void set_doc(boost::optional<std::string> value) { this->doc = value; }
+        std::optional<std::string> get_doc() const { return doc; }
+        void set_doc(std::optional<std::string> value) { this->doc = value; }
+
+        /**
+         * Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`
+         */
+        const EntityDepthSorting & get_entity_depth_sorting() const { return entity_depth_sorting; }
+        EntityDepthSorting & get_mutable_entity_depth_sorting() { return entity_depth_sorting; }
+        void set_entity_depth_sorting(const EntityDepthSorting & value) { this->entity_depth_sorting = value; }
 
         /**
          * An array of tags to forbid some Entities in this layer
@@ -1366,6 +1384,12 @@ namespace quicktype {
         void set_grid_size(const int64_t & value) { this->grid_size = value; }
 
         /**
+         * Color of the optional "guide" grid
+         */
+        std::optional<std::string> get_guide_color() const { return guide_color; }
+        void set_guide_color(std::optional<std::string> value) { this->guide_color = value; }
+
+        /**
          * Height of the optional "guide" grid in pixels
          */
         const int64_t & get_guide_grid_hei() const { return guide_grid_hei; }
@@ -1378,6 +1402,13 @@ namespace quicktype {
         const int64_t & get_guide_grid_wid() const { return guide_grid_wid; }
         int64_t & get_mutable_guide_grid_wid() { return guide_grid_wid; }
         void set_guide_grid_wid(const int64_t & value) { this->guide_grid_wid = value; }
+
+        /**
+         * Opacity of the optional "guide" grid
+         */
+        const double & get_guide_opacity() const { return guide_opacity; }
+        double & get_mutable_guide_opacity() { return guide_opacity; }
+        void set_guide_opacity(const double & value) { this->guide_opacity = value; }
 
         const bool & get_hide_fields_when_inactive() const { return hide_fields_when_inactive; }
         bool & get_mutable_hide_fields_when_inactive() { return hide_fields_when_inactive; }
@@ -1419,6 +1450,10 @@ namespace quicktype {
         const std::vector<IntGridValueGroupDefinition> & get_int_grid_values_groups() const { return int_grid_values_groups; }
         std::vector<IntGridValueGroupDefinition> & get_mutable_int_grid_values_groups() { return int_grid_values_groups; }
         void set_int_grid_values_groups(const std::vector<IntGridValueGroupDefinition> & value) { this->int_grid_values_groups = value; }
+
+        const std::vector<int64_t> & get_layer_uids_preventing_auto_tiling_here() const { return layer_uids_preventing_auto_tiling_here; }
+        std::vector<int64_t> & get_mutable_layer_uids_preventing_auto_tiling_here() { return layer_uids_preventing_auto_tiling_here; }
+        void set_layer_uids_preventing_auto_tiling_here(const std::vector<int64_t> & value) { this->layer_uids_preventing_auto_tiling_here = value; }
 
         /**
          * Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
@@ -1496,8 +1531,8 @@ namespace quicktype {
          * you should probably use the `__tilesetDefUid` value found in layer instances.<br/>  Note:
          * since version 1.0.0, the old `autoTilesetDefUid` was removed and merged into this value.
          */
-        boost::optional<int64_t> get_tileset_def_uid() const { return tileset_def_uid; }
-        void set_tileset_def_uid(boost::optional<int64_t> value) { this->tileset_def_uid = value; }
+        std::optional<int64_t> get_tileset_def_uid() const { return tileset_def_uid; }
+        void set_tileset_def_uid(std::optional<int64_t> value) { this->tileset_def_uid = value; }
 
         /**
          * Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
@@ -1510,8 +1545,8 @@ namespace quicktype {
         /**
          * User defined color for the UI
          */
-        boost::optional<std::string> get_ui_color() const { return ui_color; }
-        void set_ui_color(boost::optional<std::string> value) { this->ui_color = value; }
+        std::optional<std::string> get_ui_color() const { return ui_color; }
+        void set_ui_color(std::optional<std::string> value) { this->ui_color = value; }
 
         /**
          * Unique Int identifier
@@ -1594,19 +1629,19 @@ namespace quicktype {
         private:
         int64_t c_hei;
         int64_t c_wid;
-        boost::optional<std::map<std::string, nlohmann::json>> cached_pixel_data;
+        std::optional<std::map<std::string, nlohmann::json>> cached_pixel_data;
         std::vector<TileCustomMetadata> custom_data;
-        boost::optional<EmbedAtlas> embed_atlas;
+        std::optional<EmbedAtlas> embed_atlas;
         std::vector<EnumTagValue> enum_tags;
         std::string identifier;
         int64_t padding;
         int64_t px_hei;
         int64_t px_wid;
-        boost::optional<std::string> rel_path;
+        std::optional<std::string> rel_path;
         std::vector<std::map<std::string, nlohmann::json>> saved_selections;
         int64_t spacing;
         std::vector<std::string> tags;
-        boost::optional<int64_t> tags_source_enum_uid;
+        std::optional<int64_t> tags_source_enum_uid;
         int64_t tile_grid_size;
         int64_t uid;
 
@@ -1629,8 +1664,8 @@ namespace quicktype {
          * The following data is used internally for various optimizations. It's always synced with
          * source image changes.
          */
-        boost::optional<std::map<std::string, nlohmann::json>> get_cached_pixel_data() const { return cached_pixel_data; }
-        void set_cached_pixel_data(boost::optional<std::map<std::string, nlohmann::json>> value) { this->cached_pixel_data = value; }
+        std::optional<std::map<std::string, nlohmann::json>> get_cached_pixel_data() const { return cached_pixel_data; }
+        void set_cached_pixel_data(std::optional<std::map<std::string, nlohmann::json>> value) { this->cached_pixel_data = value; }
 
         /**
          * An array of custom tile metadata
@@ -1643,8 +1678,8 @@ namespace quicktype {
          * If this value is set, then it means that this atlas uses an internal LDtk atlas image
          * instead of a loaded one. Possible values: &lt;`null`&gt;, `LdtkIcons`
          */
-        boost::optional<EmbedAtlas> get_embed_atlas() const { return embed_atlas; }
-        void set_embed_atlas(boost::optional<EmbedAtlas> value) { this->embed_atlas = value; }
+        std::optional<EmbedAtlas> get_embed_atlas() const { return embed_atlas; }
+        void set_embed_atlas(std::optional<EmbedAtlas> value) { this->embed_atlas = value; }
 
         /**
          * Tileset tags using Enum values specified by `tagsSourceEnumId`. This array contains 1
@@ -1686,8 +1721,8 @@ namespace quicktype {
          * Path to the source file, relative to the current project JSON file<br/>  It can be null
          * if no image was provided, or when using an embed atlas.
          */
-        boost::optional<std::string> get_rel_path() const { return rel_path; }
-        void set_rel_path(boost::optional<std::string> value) { this->rel_path = value; }
+        std::optional<std::string> get_rel_path() const { return rel_path; }
+        void set_rel_path(std::optional<std::string> value) { this->rel_path = value; }
 
         /**
          * Array of group of tiles selections, only meant to be used in the editor
@@ -1713,8 +1748,8 @@ namespace quicktype {
         /**
          * Optional Enum definition UID used for this tileset meta-data
          */
-        boost::optional<int64_t> get_tags_source_enum_uid() const { return tags_source_enum_uid; }
-        void set_tags_source_enum_uid(boost::optional<int64_t> value) { this->tags_source_enum_uid = value; }
+        std::optional<int64_t> get_tags_source_enum_uid() const { return tags_source_enum_uid; }
+        void set_tags_source_enum_uid(std::optional<int64_t> value) { this->tags_source_enum_uid = value; }
 
         const int64_t & get_tile_grid_size() const { return tile_grid_size; }
         int64_t & get_mutable_tile_grid_size() { return tile_grid_size; }
@@ -1805,7 +1840,7 @@ namespace quicktype {
 
         private:
         std::string identifier;
-        boost::optional<TilesetRectangle> tile;
+        std::optional<TilesetRectangle> tile;
         std::string type;
         nlohmann::json value;
         int64_t def_uid;
@@ -1823,8 +1858,8 @@ namespace quicktype {
          * Optional TilesetRect used to display this field (this can be the field own Tile, or some
          * other Tile guessed from the value, like an Enum).
          */
-        boost::optional<TilesetRectangle> get_tile() const { return tile; }
-        void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
+        std::optional<TilesetRectangle> get_tile() const { return tile; }
+        void set_tile(std::optional<TilesetRectangle> value) { this->tile = value; }
 
         /**
          * Type of the field, such as `Int`, `Float`, `String`, `Enum(my_enum_name)`, `Bool`,
@@ -1876,9 +1911,9 @@ namespace quicktype {
         std::vector<double> pivot;
         std::string smart_color;
         std::vector<std::string> tags;
-        boost::optional<TilesetRectangle> tile;
-        boost::optional<int64_t> world_x;
-        boost::optional<int64_t> world_y;
+        std::optional<TilesetRectangle> tile;
+        std::optional<int64_t> world_x;
+        std::optional<int64_t> world_y;
         int64_t def_uid;
         std::vector<FieldInstance> field_instances;
         int64_t height;
@@ -1927,20 +1962,20 @@ namespace quicktype {
          * Optional TilesetRect used to display this entity (it could either be the default Entity
          * tile, or some tile provided by a field value, like an Enum).
          */
-        boost::optional<TilesetRectangle> get_tile() const { return tile; }
-        void set_tile(boost::optional<TilesetRectangle> value) { this->tile = value; }
+        std::optional<TilesetRectangle> get_tile() const { return tile; }
+        void set_tile(std::optional<TilesetRectangle> value) { this->tile = value; }
 
         /**
          * X world coordinate in pixels. Only available in GridVania or Free world layouts.
          */
-        boost::optional<int64_t> get_world_x() const { return world_x; }
-        void set_world_x(boost::optional<int64_t> value) { this->world_x = value; }
+        std::optional<int64_t> get_world_x() const { return world_x; }
+        void set_world_x(std::optional<int64_t> value) { this->world_x = value; }
 
         /**
          * Y world coordinate in pixels Only available in GridVania or Free world layouts.
          */
-        boost::optional<int64_t> get_world_y() const { return world_y; }
-        void set_world_y(boost::optional<int64_t> value) { this->world_y = value; }
+        std::optional<int64_t> get_world_y() const { return world_y; }
+        void set_world_y(std::optional<int64_t> value) { this->world_y = value; }
 
         /**
          * Reference of the **Entity definition** UID
@@ -2167,19 +2202,19 @@ namespace quicktype {
         double opacity;
         int64_t px_total_offset_x;
         int64_t px_total_offset_y;
-        boost::optional<int64_t> tileset_def_uid;
-        boost::optional<std::string> tileset_rel_path;
+        std::optional<int64_t> tileset_def_uid;
+        std::optional<std::string> tileset_rel_path;
         std::string type;
         std::vector<TileInstance> auto_layer_tiles;
         std::vector<EntityInstance> entity_instances;
         std::vector<TileInstance> grid_tiles;
         std::string iid;
-        boost::optional<std::vector<IntGridValueInstance>> int_grid;
+        std::optional<std::vector<IntGridValueInstance>> int_grid;
         std::vector<int64_t> int_grid_csv;
         int64_t layer_def_uid;
         int64_t level_id;
         std::vector<int64_t> optional_rules;
-        boost::optional<int64_t> override_tileset_uid;
+        std::optional<int64_t> override_tileset_uid;
         int64_t px_offset_x;
         int64_t px_offset_y;
         int64_t seed;
@@ -2238,14 +2273,14 @@ namespace quicktype {
         /**
          * The definition UID of corresponding Tileset, if any.
          */
-        boost::optional<int64_t> get_tileset_def_uid() const { return tileset_def_uid; }
-        void set_tileset_def_uid(boost::optional<int64_t> value) { this->tileset_def_uid = value; }
+        std::optional<int64_t> get_tileset_def_uid() const { return tileset_def_uid; }
+        void set_tileset_def_uid(std::optional<int64_t> value) { this->tileset_def_uid = value; }
 
         /**
          * The relative path to corresponding Tileset, if any.
          */
-        boost::optional<std::string> get_tileset_rel_path() const { return tileset_rel_path; }
-        void set_tileset_rel_path(boost::optional<std::string> value) { this->tileset_rel_path = value; }
+        std::optional<std::string> get_tileset_rel_path() const { return tileset_rel_path; }
+        void set_tileset_rel_path(std::optional<std::string> value) { this->tileset_rel_path = value; }
 
         /**
          * Layer type (possible values: IntGrid, Entities, Tiles or AutoLayer)
@@ -2283,8 +2318,8 @@ namespace quicktype {
          * **WARNING**: this deprecated value is no longer exported since version 1.0.0  Replaced
          * by: `intGridCsv`
          */
-        boost::optional<std::vector<IntGridValueInstance>> get_int_grid() const { return int_grid; }
-        void set_int_grid(boost::optional<std::vector<IntGridValueInstance>> value) { this->int_grid = value; }
+        std::optional<std::vector<IntGridValueInstance>> get_int_grid() const { return int_grid; }
+        void set_int_grid(std::optional<std::vector<IntGridValueInstance>> value) { this->int_grid = value; }
 
         /**
          * A list of all values in the IntGrid layer, stored in CSV format (Comma Separated
@@ -2321,8 +2356,8 @@ namespace quicktype {
         /**
          * This layer can use another tileset by overriding the tileset UID here.
          */
-        boost::optional<int64_t> get_override_tileset_uid() const { return override_tileset_uid; }
-        void set_override_tileset_uid(boost::optional<int64_t> value) { this->override_tileset_uid = value; }
+        std::optional<int64_t> get_override_tileset_uid() const { return override_tileset_uid; }
+        void set_override_tileset_uid(std::optional<int64_t> value) { this->override_tileset_uid = value; }
 
         /**
          * X offset in pixels to render this layer, usually 0 (IMPORTANT: this should be added to
@@ -2410,7 +2445,7 @@ namespace quicktype {
         private:
         std::string dir;
         std::string level_iid;
-        boost::optional<int64_t> level_uid;
+        std::optional<int64_t> level_uid;
 
         public:
         /**
@@ -2435,8 +2470,8 @@ namespace quicktype {
          * **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced
          * by: `levelIid`
          */
-        boost::optional<int64_t> get_level_uid() const { return level_uid; }
-        void set_level_uid(boost::optional<int64_t> value) { this->level_uid = value; }
+        std::optional<int64_t> get_level_uid() const { return level_uid; }
+        void set_level_uid(std::optional<int64_t> value) { this->level_uid = value; }
     };
 
     /**
@@ -2456,19 +2491,19 @@ namespace quicktype {
 
         private:
         std::string bg_color;
-        boost::optional<LevelBackgroundPosition> bg_pos;
+        std::optional<LevelBackgroundPosition> bg_pos;
         std::vector<NeighbourLevel> neighbours;
         std::string smart_color;
-        boost::optional<std::string> level_bg_color;
+        std::optional<std::string> level_bg_color;
         double bg_pivot_x;
         double bg_pivot_y;
-        boost::optional<BgPos> level_bg_pos;
-        boost::optional<std::string> bg_rel_path;
-        boost::optional<std::string> external_rel_path;
+        std::optional<BgPos> level_bg_pos;
+        std::optional<std::string> bg_rel_path;
+        std::optional<std::string> external_rel_path;
         std::vector<FieldInstance> field_instances;
         std::string identifier;
         std::string iid;
-        boost::optional<std::vector<LayerInstance>> layer_instances;
+        std::optional<std::vector<LayerInstance>> layer_instances;
         int64_t px_hei;
         int64_t px_wid;
         int64_t uid;
@@ -2489,8 +2524,8 @@ namespace quicktype {
         /**
          * Position informations of the background image, if there is one.
          */
-        boost::optional<LevelBackgroundPosition> get_bg_pos() const { return bg_pos; }
-        void set_bg_pos(boost::optional<LevelBackgroundPosition> value) { this->bg_pos = value; }
+        std::optional<LevelBackgroundPosition> get_bg_pos() const { return bg_pos; }
+        void set_bg_pos(std::optional<LevelBackgroundPosition> value) { this->bg_pos = value; }
 
         /**
          * An array listing all other levels touching this one on the world map. Since 1.4.0, this
@@ -2514,8 +2549,8 @@ namespace quicktype {
          * Background color of the level. If `null`, the project `defaultLevelBgColor` should be
          * used.
          */
-        boost::optional<std::string> get_level_bg_color() const { return level_bg_color; }
-        void set_level_bg_color(boost::optional<std::string> value) { this->level_bg_color = value; }
+        std::optional<std::string> get_level_bg_color() const { return level_bg_color; }
+        void set_level_bg_color(std::optional<std::string> value) { this->level_bg_color = value; }
 
         /**
          * Background image X pivot (0-1)
@@ -2536,21 +2571,21 @@ namespace quicktype {
          * `__bgPos` for resulting position info. Possible values: &lt;`null`&gt;, `Unscaled`,
          * `Contain`, `Cover`, `CoverDirty`, `Repeat`
          */
-        boost::optional<BgPos> get_level_bg_pos() const { return level_bg_pos; }
-        void set_level_bg_pos(boost::optional<BgPos> value) { this->level_bg_pos = value; }
+        std::optional<BgPos> get_level_bg_pos() const { return level_bg_pos; }
+        void set_level_bg_pos(std::optional<BgPos> value) { this->level_bg_pos = value; }
 
         /**
          * The *optional* relative path to the level background image.
          */
-        boost::optional<std::string> get_bg_rel_path() const { return bg_rel_path; }
-        void set_bg_rel_path(boost::optional<std::string> value) { this->bg_rel_path = value; }
+        std::optional<std::string> get_bg_rel_path() const { return bg_rel_path; }
+        void set_bg_rel_path(std::optional<std::string> value) { this->bg_rel_path = value; }
 
         /**
          * This value is not null if the project option "*Save levels separately*" is enabled. In
          * this case, this **relative** path points to the level Json file.
          */
-        boost::optional<std::string> get_external_rel_path() const { return external_rel_path; }
-        void set_external_rel_path(boost::optional<std::string> value) { this->external_rel_path = value; }
+        std::optional<std::string> get_external_rel_path() const { return external_rel_path; }
+        void set_external_rel_path(std::optional<std::string> value) { this->external_rel_path = value; }
 
         /**
          * An array containing this level custom field values.
@@ -2578,8 +2613,8 @@ namespace quicktype {
          * levels separately*" is enabled, this field will be `null`.<br/>  This array is **sorted
          * in display order**: the 1st layer is the top-most and the last is behind.
          */
-        boost::optional<std::vector<LayerInstance>> get_layer_instances() const { return layer_instances; }
-        void set_layer_instances(boost::optional<std::vector<LayerInstance>> value) { this->layer_instances = value; }
+        std::optional<std::vector<LayerInstance>> get_layer_instances() const { return layer_instances; }
+        void set_layer_instances(std::optional<std::vector<LayerInstance>> value) { this->layer_instances = value; }
 
         /**
          * Height of the level in pixels
@@ -2692,7 +2727,7 @@ namespace quicktype {
 
         private:
         std::string identifier;
-        boost::optional<std::vector<ReferenceToAnEntityInstance>> instances;
+        std::optional<std::vector<ReferenceToAnEntityInstance>> instances;
         std::vector<LdtkTocInstanceData> instances_data;
 
         public:
@@ -2704,8 +2739,9 @@ namespace quicktype {
          * **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
          * Replaced by: `instancesData`
          */
-        boost::optional<std::vector<ReferenceToAnEntityInstance>> get_instances() const { return instances; }
-        void set_instances(boost::optional<std::vector<ReferenceToAnEntityInstance>> value) { this->instances = value; }
+        const std::optional<std::vector<ReferenceToAnEntityInstance>> & get_instances() const { return instances; }
+        std::optional<std::vector<ReferenceToAnEntityInstance>> & get_mutable_instances() { return instances; }
+        void set_instances(const std::optional<std::vector<ReferenceToAnEntityInstance>> & value) { this->instances = value; }
 
         const std::vector<LdtkTocInstanceData> & get_instances_data() const { return instances_data; }
         std::vector<LdtkTocInstanceData> & get_mutable_instances_data() { return instances_data; }
@@ -2732,7 +2768,7 @@ namespace quicktype {
         std::vector<Level> levels;
         int64_t world_grid_height;
         int64_t world_grid_width;
-        boost::optional<WorldLayout> world_layout;
+        std::optional<WorldLayout> world_layout;
 
         public:
         /**
@@ -2790,8 +2826,8 @@ namespace quicktype {
          * An enum that describes how levels are organized in this project (ie. linearly or in a 2D
          * space). Possible values: `Free`, `GridVania`, `LinearHorizontal`, `LinearVertical`, `null`
          */
-        boost::optional<WorldLayout> get_world_layout() const { return world_layout; }
-        void set_world_layout(boost::optional<WorldLayout> value) { this->world_layout = value; }
+        std::optional<WorldLayout> get_world_layout() const { return world_layout; }
+        void set_world_layout(std::optional<WorldLayout> value) { this->world_layout = value; }
     };
 
     /**
@@ -2805,119 +2841,147 @@ namespace quicktype {
         virtual ~ForcedRefs() = default;
 
         private:
-        boost::optional<AutoLayerRuleGroup> auto_layer_rule_group;
-        boost::optional<AutoLayerRuleDefinition> auto_rule_def;
-        boost::optional<LdtkCustomCommand> custom_command;
-        boost::optional<Definitions> definitions;
-        boost::optional<EntityDefinition> entity_def;
-        boost::optional<EntityInstance> entity_instance;
-        boost::optional<ReferenceToAnEntityInstance> entity_reference_infos;
-        boost::optional<EnumDefinition> enum_def;
-        boost::optional<EnumValueDefinition> enum_def_values;
-        boost::optional<EnumTagValue> enum_tag_value;
-        boost::optional<FieldDefinition> field_def;
-        boost::optional<FieldInstance> field_instance;
-        boost::optional<GridPoint> grid_point;
-        boost::optional<IntGridValueDefinition> int_grid_value_def;
-        boost::optional<IntGridValueGroupDefinition> int_grid_value_group_def;
-        boost::optional<IntGridValueInstance> int_grid_value_instance;
-        boost::optional<LayerDefinition> layer_def;
-        boost::optional<LayerInstance> layer_instance;
-        boost::optional<Level> level;
-        boost::optional<LevelBackgroundPosition> level_bg_pos_infos;
-        boost::optional<NeighbourLevel> neighbour_level;
-        boost::optional<LdtkTableOfContentEntry> table_of_content_entry;
-        boost::optional<TileInstance> tile;
-        boost::optional<TileCustomMetadata> tile_custom_metadata;
-        boost::optional<TilesetDefinition> tileset_def;
-        boost::optional<TilesetRectangle> tileset_rect;
-        boost::optional<LdtkTocInstanceData> toc_instance_data;
-        boost::optional<World> world;
+        std::optional<AutoLayerRuleGroup> auto_layer_rule_group;
+        std::optional<AutoLayerRuleDefinition> auto_rule_def;
+        std::optional<LdtkCustomCommand> custom_command;
+        std::optional<Definitions> definitions;
+        std::optional<EntityDefinition> entity_def;
+        std::optional<EntityInstance> entity_instance;
+        std::optional<ReferenceToAnEntityInstance> entity_reference_infos;
+        std::optional<EnumDefinition> enum_def;
+        std::optional<EnumValueDefinition> enum_def_values;
+        std::optional<EnumTagValue> enum_tag_value;
+        std::optional<FieldDefinition> field_def;
+        std::optional<FieldInstance> field_instance;
+        std::optional<GridPoint> grid_point;
+        std::optional<IntGridValueDefinition> int_grid_value_def;
+        std::optional<IntGridValueGroupDefinition> int_grid_value_group_def;
+        std::optional<IntGridValueInstance> int_grid_value_instance;
+        std::optional<LayerDefinition> layer_def;
+        std::optional<LayerInstance> layer_instance;
+        std::optional<Level> level;
+        std::optional<LevelBackgroundPosition> level_bg_pos_infos;
+        std::optional<NeighbourLevel> neighbour_level;
+        std::optional<LdtkTableOfContentEntry> table_of_content_entry;
+        std::optional<TileInstance> tile;
+        std::optional<TileCustomMetadata> tile_custom_metadata;
+        std::optional<TilesetDefinition> tileset_def;
+        std::optional<TilesetRectangle> tileset_rect;
+        std::optional<LdtkTocInstanceData> toc_instance_data;
+        std::optional<World> world;
 
         public:
-        boost::optional<AutoLayerRuleGroup> get_auto_layer_rule_group() const { return auto_layer_rule_group; }
-        void set_auto_layer_rule_group(boost::optional<AutoLayerRuleGroup> value) { this->auto_layer_rule_group = value; }
+        const std::optional<AutoLayerRuleGroup> & get_auto_layer_rule_group() const { return auto_layer_rule_group; }
+        std::optional<AutoLayerRuleGroup> & get_mutable_auto_layer_rule_group() { return auto_layer_rule_group; }
+        void set_auto_layer_rule_group(const std::optional<AutoLayerRuleGroup> & value) { this->auto_layer_rule_group = value; }
 
-        boost::optional<AutoLayerRuleDefinition> get_auto_rule_def() const { return auto_rule_def; }
-        void set_auto_rule_def(boost::optional<AutoLayerRuleDefinition> value) { this->auto_rule_def = value; }
+        const std::optional<AutoLayerRuleDefinition> & get_auto_rule_def() const { return auto_rule_def; }
+        std::optional<AutoLayerRuleDefinition> & get_mutable_auto_rule_def() { return auto_rule_def; }
+        void set_auto_rule_def(const std::optional<AutoLayerRuleDefinition> & value) { this->auto_rule_def = value; }
 
-        boost::optional<LdtkCustomCommand> get_custom_command() const { return custom_command; }
-        void set_custom_command(boost::optional<LdtkCustomCommand> value) { this->custom_command = value; }
+        const std::optional<LdtkCustomCommand> & get_custom_command() const { return custom_command; }
+        std::optional<LdtkCustomCommand> & get_mutable_custom_command() { return custom_command; }
+        void set_custom_command(const std::optional<LdtkCustomCommand> & value) { this->custom_command = value; }
 
-        boost::optional<Definitions> get_definitions() const { return definitions; }
-        void set_definitions(boost::optional<Definitions> value) { this->definitions = value; }
+        const std::optional<Definitions> & get_definitions() const { return definitions; }
+        std::optional<Definitions> & get_mutable_definitions() { return definitions; }
+        void set_definitions(const std::optional<Definitions> & value) { this->definitions = value; }
 
-        boost::optional<EntityDefinition> get_entity_def() const { return entity_def; }
-        void set_entity_def(boost::optional<EntityDefinition> value) { this->entity_def = value; }
+        const std::optional<EntityDefinition> & get_entity_def() const { return entity_def; }
+        std::optional<EntityDefinition> & get_mutable_entity_def() { return entity_def; }
+        void set_entity_def(const std::optional<EntityDefinition> & value) { this->entity_def = value; }
 
-        boost::optional<EntityInstance> get_entity_instance() const { return entity_instance; }
-        void set_entity_instance(boost::optional<EntityInstance> value) { this->entity_instance = value; }
+        const std::optional<EntityInstance> & get_entity_instance() const { return entity_instance; }
+        std::optional<EntityInstance> & get_mutable_entity_instance() { return entity_instance; }
+        void set_entity_instance(const std::optional<EntityInstance> & value) { this->entity_instance = value; }
 
-        boost::optional<ReferenceToAnEntityInstance> get_entity_reference_infos() const { return entity_reference_infos; }
-        void set_entity_reference_infos(boost::optional<ReferenceToAnEntityInstance> value) { this->entity_reference_infos = value; }
+        const std::optional<ReferenceToAnEntityInstance> & get_entity_reference_infos() const { return entity_reference_infos; }
+        std::optional<ReferenceToAnEntityInstance> & get_mutable_entity_reference_infos() { return entity_reference_infos; }
+        void set_entity_reference_infos(const std::optional<ReferenceToAnEntityInstance> & value) { this->entity_reference_infos = value; }
 
-        boost::optional<EnumDefinition> get_enum_def() const { return enum_def; }
-        void set_enum_def(boost::optional<EnumDefinition> value) { this->enum_def = value; }
+        const std::optional<EnumDefinition> & get_enum_def() const { return enum_def; }
+        std::optional<EnumDefinition> & get_mutable_enum_def() { return enum_def; }
+        void set_enum_def(const std::optional<EnumDefinition> & value) { this->enum_def = value; }
 
-        boost::optional<EnumValueDefinition> get_enum_def_values() const { return enum_def_values; }
-        void set_enum_def_values(boost::optional<EnumValueDefinition> value) { this->enum_def_values = value; }
+        const std::optional<EnumValueDefinition> & get_enum_def_values() const { return enum_def_values; }
+        std::optional<EnumValueDefinition> & get_mutable_enum_def_values() { return enum_def_values; }
+        void set_enum_def_values(const std::optional<EnumValueDefinition> & value) { this->enum_def_values = value; }
 
-        boost::optional<EnumTagValue> get_enum_tag_value() const { return enum_tag_value; }
-        void set_enum_tag_value(boost::optional<EnumTagValue> value) { this->enum_tag_value = value; }
+        const std::optional<EnumTagValue> & get_enum_tag_value() const { return enum_tag_value; }
+        std::optional<EnumTagValue> & get_mutable_enum_tag_value() { return enum_tag_value; }
+        void set_enum_tag_value(const std::optional<EnumTagValue> & value) { this->enum_tag_value = value; }
 
-        boost::optional<FieldDefinition> get_field_def() const { return field_def; }
-        void set_field_def(boost::optional<FieldDefinition> value) { this->field_def = value; }
+        const std::optional<FieldDefinition> & get_field_def() const { return field_def; }
+        std::optional<FieldDefinition> & get_mutable_field_def() { return field_def; }
+        void set_field_def(const std::optional<FieldDefinition> & value) { this->field_def = value; }
 
-        boost::optional<FieldInstance> get_field_instance() const { return field_instance; }
-        void set_field_instance(boost::optional<FieldInstance> value) { this->field_instance = value; }
+        const std::optional<FieldInstance> & get_field_instance() const { return field_instance; }
+        std::optional<FieldInstance> & get_mutable_field_instance() { return field_instance; }
+        void set_field_instance(const std::optional<FieldInstance> & value) { this->field_instance = value; }
 
-        boost::optional<GridPoint> get_grid_point() const { return grid_point; }
-        void set_grid_point(boost::optional<GridPoint> value) { this->grid_point = value; }
+        const std::optional<GridPoint> & get_grid_point() const { return grid_point; }
+        std::optional<GridPoint> & get_mutable_grid_point() { return grid_point; }
+        void set_grid_point(const std::optional<GridPoint> & value) { this->grid_point = value; }
 
-        boost::optional<IntGridValueDefinition> get_int_grid_value_def() const { return int_grid_value_def; }
-        void set_int_grid_value_def(boost::optional<IntGridValueDefinition> value) { this->int_grid_value_def = value; }
+        const std::optional<IntGridValueDefinition> & get_int_grid_value_def() const { return int_grid_value_def; }
+        std::optional<IntGridValueDefinition> & get_mutable_int_grid_value_def() { return int_grid_value_def; }
+        void set_int_grid_value_def(const std::optional<IntGridValueDefinition> & value) { this->int_grid_value_def = value; }
 
-        boost::optional<IntGridValueGroupDefinition> get_int_grid_value_group_def() const { return int_grid_value_group_def; }
-        void set_int_grid_value_group_def(boost::optional<IntGridValueGroupDefinition> value) { this->int_grid_value_group_def = value; }
+        const std::optional<IntGridValueGroupDefinition> & get_int_grid_value_group_def() const { return int_grid_value_group_def; }
+        std::optional<IntGridValueGroupDefinition> & get_mutable_int_grid_value_group_def() { return int_grid_value_group_def; }
+        void set_int_grid_value_group_def(const std::optional<IntGridValueGroupDefinition> & value) { this->int_grid_value_group_def = value; }
 
-        boost::optional<IntGridValueInstance> get_int_grid_value_instance() const { return int_grid_value_instance; }
-        void set_int_grid_value_instance(boost::optional<IntGridValueInstance> value) { this->int_grid_value_instance = value; }
+        const std::optional<IntGridValueInstance> & get_int_grid_value_instance() const { return int_grid_value_instance; }
+        std::optional<IntGridValueInstance> & get_mutable_int_grid_value_instance() { return int_grid_value_instance; }
+        void set_int_grid_value_instance(const std::optional<IntGridValueInstance> & value) { this->int_grid_value_instance = value; }
 
-        boost::optional<LayerDefinition> get_layer_def() const { return layer_def; }
-        void set_layer_def(boost::optional<LayerDefinition> value) { this->layer_def = value; }
+        const std::optional<LayerDefinition> & get_layer_def() const { return layer_def; }
+        std::optional<LayerDefinition> & get_mutable_layer_def() { return layer_def; }
+        void set_layer_def(const std::optional<LayerDefinition> & value) { this->layer_def = value; }
 
-        boost::optional<LayerInstance> get_layer_instance() const { return layer_instance; }
-        void set_layer_instance(boost::optional<LayerInstance> value) { this->layer_instance = value; }
+        const std::optional<LayerInstance> & get_layer_instance() const { return layer_instance; }
+        std::optional<LayerInstance> & get_mutable_layer_instance() { return layer_instance; }
+        void set_layer_instance(const std::optional<LayerInstance> & value) { this->layer_instance = value; }
 
-        boost::optional<Level> get_level() const { return level; }
-        void set_level(boost::optional<Level> value) { this->level = value; }
+        const std::optional<Level> & get_level() const { return level; }
+        std::optional<Level> & get_mutable_level() { return level; }
+        void set_level(const std::optional<Level> & value) { this->level = value; }
 
-        boost::optional<LevelBackgroundPosition> get_level_bg_pos_infos() const { return level_bg_pos_infos; }
-        void set_level_bg_pos_infos(boost::optional<LevelBackgroundPosition> value) { this->level_bg_pos_infos = value; }
+        const std::optional<LevelBackgroundPosition> & get_level_bg_pos_infos() const { return level_bg_pos_infos; }
+        std::optional<LevelBackgroundPosition> & get_mutable_level_bg_pos_infos() { return level_bg_pos_infos; }
+        void set_level_bg_pos_infos(const std::optional<LevelBackgroundPosition> & value) { this->level_bg_pos_infos = value; }
 
-        boost::optional<NeighbourLevel> get_neighbour_level() const { return neighbour_level; }
-        void set_neighbour_level(boost::optional<NeighbourLevel> value) { this->neighbour_level = value; }
+        const std::optional<NeighbourLevel> & get_neighbour_level() const { return neighbour_level; }
+        std::optional<NeighbourLevel> & get_mutable_neighbour_level() { return neighbour_level; }
+        void set_neighbour_level(const std::optional<NeighbourLevel> & value) { this->neighbour_level = value; }
 
-        boost::optional<LdtkTableOfContentEntry> get_table_of_content_entry() const { return table_of_content_entry; }
-        void set_table_of_content_entry(boost::optional<LdtkTableOfContentEntry> value) { this->table_of_content_entry = value; }
+        const std::optional<LdtkTableOfContentEntry> & get_table_of_content_entry() const { return table_of_content_entry; }
+        std::optional<LdtkTableOfContentEntry> & get_mutable_table_of_content_entry() { return table_of_content_entry; }
+        void set_table_of_content_entry(const std::optional<LdtkTableOfContentEntry> & value) { this->table_of_content_entry = value; }
 
-        boost::optional<TileInstance> get_tile() const { return tile; }
-        void set_tile(boost::optional<TileInstance> value) { this->tile = value; }
+        const std::optional<TileInstance> & get_tile() const { return tile; }
+        std::optional<TileInstance> & get_mutable_tile() { return tile; }
+        void set_tile(const std::optional<TileInstance> & value) { this->tile = value; }
 
-        boost::optional<TileCustomMetadata> get_tile_custom_metadata() const { return tile_custom_metadata; }
-        void set_tile_custom_metadata(boost::optional<TileCustomMetadata> value) { this->tile_custom_metadata = value; }
+        const std::optional<TileCustomMetadata> & get_tile_custom_metadata() const { return tile_custom_metadata; }
+        std::optional<TileCustomMetadata> & get_mutable_tile_custom_metadata() { return tile_custom_metadata; }
+        void set_tile_custom_metadata(const std::optional<TileCustomMetadata> & value) { this->tile_custom_metadata = value; }
 
-        boost::optional<TilesetDefinition> get_tileset_def() const { return tileset_def; }
-        void set_tileset_def(boost::optional<TilesetDefinition> value) { this->tileset_def = value; }
+        const std::optional<TilesetDefinition> & get_tileset_def() const { return tileset_def; }
+        std::optional<TilesetDefinition> & get_mutable_tileset_def() { return tileset_def; }
+        void set_tileset_def(const std::optional<TilesetDefinition> & value) { this->tileset_def = value; }
 
-        boost::optional<TilesetRectangle> get_tileset_rect() const { return tileset_rect; }
-        void set_tileset_rect(boost::optional<TilesetRectangle> value) { this->tileset_rect = value; }
+        const std::optional<TilesetRectangle> & get_tileset_rect() const { return tileset_rect; }
+        std::optional<TilesetRectangle> & get_mutable_tileset_rect() { return tileset_rect; }
+        void set_tileset_rect(const std::optional<TilesetRectangle> & value) { this->tileset_rect = value; }
 
-        boost::optional<LdtkTocInstanceData> get_toc_instance_data() const { return toc_instance_data; }
-        void set_toc_instance_data(boost::optional<LdtkTocInstanceData> value) { this->toc_instance_data = value; }
+        const std::optional<LdtkTocInstanceData> & get_toc_instance_data() const { return toc_instance_data; }
+        std::optional<LdtkTocInstanceData> & get_mutable_toc_instance_data() { return toc_instance_data; }
+        void set_toc_instance_data(const std::optional<LdtkTocInstanceData> & value) { this->toc_instance_data = value; }
 
-        boost::optional<World> get_world() const { return world; }
-        void set_world(boost::optional<World> value) { this->world = value; }
+        const std::optional<World> & get_world() const { return world; }
+        std::optional<World> & get_mutable_world() { return world; }
+        void set_world(const std::optional<World> & value) { this->world = value; }
     };
 
     /**
@@ -2933,6 +2997,11 @@ namespace quicktype {
     enum class ImageExportMode : int { LAYERS_AND_LEVELS, NONE, ONE_IMAGE_PER_LAYER, ONE_IMAGE_PER_LEVEL };
 
     /**
+     * JSON style Possible values: `Minified`, `Compact`, `Full`
+     */
+    enum class JsonStyle : int { COMPACT, FULL, MINIFIED };
+
+    /**
      * This file is a JSON schema of files created by LDtk level editor (https://ldtk.io).
      *
      * This is the root of any Project JSON file. It contains:  - the project settings, - an
@@ -2945,43 +3014,44 @@ namespace quicktype {
         virtual ~LdtkJson() = default;
 
         private:
-        boost::optional<ForcedRefs> forced_refs;
+        std::optional<ForcedRefs> forced_refs;
         double app_build_id;
         int64_t backup_limit;
         bool backup_on_save;
-        boost::optional<std::string> backup_rel_path;
+        std::optional<std::string> backup_rel_path;
         std::string bg_color;
         std::vector<LdtkCustomCommand> custom_commands;
         int64_t default_entity_height;
         int64_t default_entity_width;
         int64_t default_grid_size;
         std::string default_level_bg_color;
-        boost::optional<int64_t> default_level_height;
-        boost::optional<int64_t> default_level_width;
+        std::optional<int64_t> default_level_height;
+        std::optional<int64_t> default_level_width;
         double default_pivot_x;
         double default_pivot_y;
         Definitions defs;
         std::string dummy_world_iid;
         bool export_level_bg;
-        boost::optional<bool> export_png;
+        std::optional<bool> export_png;
         bool export_tiled;
         bool external_levels;
         std::vector<Flag> flags;
         IdentifierStyle identifier_style;
         std::string iid;
         ImageExportMode image_export_mode;
+        JsonStyle json_style;
         std::string json_version;
         std::string level_name_pattern;
         std::vector<Level> levels;
-        bool minify_json;
+        std::optional<bool> minify_json;
         int64_t next_uid;
-        boost::optional<std::string> png_file_pattern;
+        std::optional<std::string> png_file_pattern;
         bool simplified_export;
         std::vector<LdtkTableOfContentEntry> toc;
-        boost::optional<std::string> tutorial_desc;
-        boost::optional<int64_t> world_grid_height;
-        boost::optional<int64_t> world_grid_width;
-        boost::optional<WorldLayout> world_layout;
+        std::optional<std::string> tutorial_desc;
+        std::optional<int64_t> world_grid_height;
+        std::optional<int64_t> world_grid_width;
+        std::optional<WorldLayout> world_layout;
         std::vector<World> worlds;
 
         public:
@@ -2990,8 +3060,9 @@ namespace quicktype {
          * all types, to make sure QuickType finds them and integrate all of them. Otherwise,
          * Quicktype will drop types that are not explicitely used.
          */
-        boost::optional<ForcedRefs> get_forced_refs() const { return forced_refs; }
-        void set_forced_refs(boost::optional<ForcedRefs> value) { this->forced_refs = value; }
+        const std::optional<ForcedRefs> & get_forced_refs() const { return forced_refs; }
+        std::optional<ForcedRefs> & get_mutable_forced_refs() { return forced_refs; }
+        void set_forced_refs(const std::optional<ForcedRefs> & value) { this->forced_refs = value; }
 
         /**
          * LDtk application build identifier.<br/>  This is only used to identify the LDtk version
@@ -3021,8 +3092,8 @@ namespace quicktype {
         /**
          * Target relative path to store backup files
          */
-        boost::optional<std::string> get_backup_rel_path() const { return backup_rel_path; }
-        void set_backup_rel_path(boost::optional<std::string> value) { this->backup_rel_path = value; }
+        std::optional<std::string> get_backup_rel_path() const { return backup_rel_path; }
+        void set_backup_rel_path(std::optional<std::string> value) { this->backup_rel_path = value; }
 
         /**
          * Project background color
@@ -3071,16 +3142,16 @@ namespace quicktype {
          * It will then be `null`. You can enable the Multi-worlds advanced project option to enable
          * the change immediately.<br/><br/>  Default new level height
          */
-        boost::optional<int64_t> get_default_level_height() const { return default_level_height; }
-        void set_default_level_height(boost::optional<int64_t> value) { this->default_level_height = value; }
+        std::optional<int64_t> get_default_level_height() const { return default_level_height; }
+        void set_default_level_height(std::optional<int64_t> value) { this->default_level_height = value; }
 
         /**
          * **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
          * It will then be `null`. You can enable the Multi-worlds advanced project option to enable
          * the change immediately.<br/><br/>  Default new level width
          */
-        boost::optional<int64_t> get_default_level_width() const { return default_level_width; }
-        void set_default_level_width(boost::optional<int64_t> value) { this->default_level_width = value; }
+        std::optional<int64_t> get_default_level_width() const { return default_level_width; }
+        void set_default_level_width(std::optional<int64_t> value) { this->default_level_width = value; }
 
         /**
          * Default X pivot (0 to 1) for new entities
@@ -3121,8 +3192,8 @@ namespace quicktype {
          * **WARNING**: this deprecated value is no longer exported since version 0.9.3  Replaced
          * by: `imageExportMode`
          */
-        boost::optional<bool> get_export_png() const { return export_png; }
-        void set_export_png(boost::optional<bool> value) { this->export_png = value; }
+        std::optional<bool> get_export_png() const { return export_png; }
+        void set_export_png(std::optional<bool> value) { this->export_png = value; }
 
         /**
          * If TRUE, a Tiled compatible file will also be generated along with the LDtk JSON file
@@ -3174,6 +3245,13 @@ namespace quicktype {
         void set_image_export_mode(const ImageExportMode & value) { this->image_export_mode = value; }
 
         /**
+         * JSON style Possible values: `Minified`, `Compact`, `Full`
+         */
+        const JsonStyle & get_json_style() const { return json_style; }
+        JsonStyle & get_mutable_json_style() { return json_style; }
+        void set_json_style(const JsonStyle & value) { this->json_style = value; }
+
+        /**
          * File format version
          */
         const std::string & get_json_version() const { return json_version; }
@@ -3197,12 +3275,12 @@ namespace quicktype {
         void set_levels(const std::vector<Level> & value) { this->levels = value; }
 
         /**
-         * If TRUE, the Json is partially minified (no indentation, nor line breaks, default is
-         * FALSE)
+         * **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+         * Replaced by: `jsonStyle`
          */
-        const bool & get_minify_json() const { return minify_json; }
-        bool & get_mutable_minify_json() { return minify_json; }
-        void set_minify_json(const bool & value) { this->minify_json = value; }
+        const std::optional<bool> & get_minify_json() const { return minify_json; }
+        std::optional<bool> & get_mutable_minify_json() { return minify_json; }
+        void set_minify_json(const std::optional<bool> & value) { this->minify_json = value; }
 
         /**
          * Next Unique integer ID available
@@ -3214,8 +3292,8 @@ namespace quicktype {
         /**
          * File naming pattern for exported PNGs
          */
-        boost::optional<std::string> get_png_file_pattern() const { return png_file_pattern; }
-        void set_png_file_pattern(boost::optional<std::string> value) { this->png_file_pattern = value; }
+        std::optional<std::string> get_png_file_pattern() const { return png_file_pattern; }
+        void set_png_file_pattern(std::optional<std::string> value) { this->png_file_pattern = value; }
 
         /**
          * If TRUE, a very simplified will be generated on saving, for quicker & easier engine
@@ -3237,24 +3315,24 @@ namespace quicktype {
          * This optional description is used by LDtk Samples to show up some informations and
          * instructions.
          */
-        boost::optional<std::string> get_tutorial_desc() const { return tutorial_desc; }
-        void set_tutorial_desc(boost::optional<std::string> value) { this->tutorial_desc = value; }
+        std::optional<std::string> get_tutorial_desc() const { return tutorial_desc; }
+        void set_tutorial_desc(std::optional<std::string> value) { this->tutorial_desc = value; }
 
         /**
          * **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
          * It will then be `null`. You can enable the Multi-worlds advanced project option to enable
          * the change immediately.<br/><br/>  Height of the world grid in pixels.
          */
-        boost::optional<int64_t> get_world_grid_height() const { return world_grid_height; }
-        void set_world_grid_height(boost::optional<int64_t> value) { this->world_grid_height = value; }
+        std::optional<int64_t> get_world_grid_height() const { return world_grid_height; }
+        void set_world_grid_height(std::optional<int64_t> value) { this->world_grid_height = value; }
 
         /**
          * **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
          * It will then be `null`. You can enable the Multi-worlds advanced project option to enable
          * the change immediately.<br/><br/>  Width of the world grid in pixels.
          */
-        boost::optional<int64_t> get_world_grid_width() const { return world_grid_width; }
-        void set_world_grid_width(boost::optional<int64_t> value) { this->world_grid_width = value; }
+        std::optional<int64_t> get_world_grid_width() const { return world_grid_width; }
+        void set_world_grid_width(std::optional<int64_t> value) { this->world_grid_width = value; }
 
         /**
          * **WARNING**: this field will move to the `worlds` array after the "multi-worlds" update.
@@ -3263,8 +3341,8 @@ namespace quicktype {
          * this project (ie. linearly or in a 2D space). Possible values: &lt;`null`&gt;, `Free`,
          * `GridVania`, `LinearHorizontal`, `LinearVertical`
          */
-        boost::optional<WorldLayout> get_world_layout() const { return world_layout; }
-        void set_world_layout(boost::optional<WorldLayout> value) { this->world_layout = value; }
+        std::optional<WorldLayout> get_world_layout() const { return world_layout; }
+        void set_world_layout(std::optional<WorldLayout> value) { this->world_layout = value; }
 
         /**
          * This array will be empty, unless you enable the Multi-Worlds in the project advanced
@@ -3410,6 +3488,9 @@ namespace quicktype {
     void from_json(const json & j, TileMode & x);
     void to_json(json & j, const TileMode & x);
 
+    void from_json(const json & j, EntityDepthSorting & x);
+    void to_json(json & j, const EntityDepthSorting & x);
+
     void from_json(const json & j, Type & x);
     void to_json(json & j, const Type & x);
 
@@ -3430,6 +3511,9 @@ namespace quicktype {
 
     void from_json(const json & j, ImageExportMode & x);
     void to_json(json & j, const ImageExportMode & x);
+
+    void from_json(const json & j, JsonStyle & x);
+    void to_json(json & j, const JsonStyle & x);
 
     inline void from_json(const json & j, LdtkCustomCommand& x) {
         x.set_command(j.at("command").get<std::string>());
@@ -3787,16 +3871,20 @@ namespace quicktype {
         x.set_can_select_when_inactive(j.at("canSelectWhenInactive").get<bool>());
         x.set_display_opacity(j.at("displayOpacity").get<double>());
         x.set_doc(get_stack_optional<std::string>(j, "doc"));
+        x.set_entity_depth_sorting(j.at("entityDepthSorting").get<EntityDepthSorting>());
         x.set_excluded_tags(j.at("excludedTags").get<std::vector<std::string>>());
         x.set_grid_size(j.at("gridSize").get<int64_t>());
+        x.set_guide_color(get_stack_optional<std::string>(j, "guideColor"));
         x.set_guide_grid_hei(j.at("guideGridHei").get<int64_t>());
         x.set_guide_grid_wid(j.at("guideGridWid").get<int64_t>());
+        x.set_guide_opacity(j.at("guideOpacity").get<double>());
         x.set_hide_fields_when_inactive(j.at("hideFieldsWhenInactive").get<bool>());
         x.set_hide_in_list(j.at("hideInList").get<bool>());
         x.set_identifier(j.at("identifier").get<std::string>());
         x.set_inactive_opacity(j.at("inactiveOpacity").get<double>());
         x.set_int_grid_values(j.at("intGridValues").get<std::vector<IntGridValueDefinition>>());
         x.set_int_grid_values_groups(j.at("intGridValuesGroups").get<std::vector<IntGridValueGroupDefinition>>());
+        x.set_layer_uids_preventing_auto_tiling_here(j.at("layerUidsPreventingAutoTilingHere").get<std::vector<int64_t>>());
         x.set_parallax_factor_x(j.at("parallaxFactorX").get<double>());
         x.set_parallax_factor_y(j.at("parallaxFactorY").get<double>());
         x.set_parallax_scaling(j.at("parallaxScaling").get<bool>());
@@ -3825,16 +3913,20 @@ namespace quicktype {
         j["canSelectWhenInactive"] = x.get_can_select_when_inactive();
         j["displayOpacity"] = x.get_display_opacity();
         j["doc"] = x.get_doc();
+        j["entityDepthSorting"] = x.get_entity_depth_sorting();
         j["excludedTags"] = x.get_excluded_tags();
         j["gridSize"] = x.get_grid_size();
+        j["guideColor"] = x.get_guide_color();
         j["guideGridHei"] = x.get_guide_grid_hei();
         j["guideGridWid"] = x.get_guide_grid_wid();
+        j["guideOpacity"] = x.get_guide_opacity();
         j["hideFieldsWhenInactive"] = x.get_hide_fields_when_inactive();
         j["hideInList"] = x.get_hide_in_list();
         j["identifier"] = x.get_identifier();
         j["inactiveOpacity"] = x.get_inactive_opacity();
         j["intGridValues"] = x.get_int_grid_values();
         j["intGridValuesGroups"] = x.get_int_grid_values_groups();
+        j["layerUidsPreventingAutoTilingHere"] = x.get_layer_uids_preventing_auto_tiling_here();
         j["parallaxFactorX"] = x.get_parallax_factor_x();
         j["parallaxFactorY"] = x.get_parallax_factor_y();
         j["parallaxScaling"] = x.get_parallax_scaling();
@@ -4318,10 +4410,11 @@ namespace quicktype {
         x.set_identifier_style(j.at("identifierStyle").get<IdentifierStyle>());
         x.set_iid(j.at("iid").get<std::string>());
         x.set_image_export_mode(j.at("imageExportMode").get<ImageExportMode>());
+        x.set_json_style(j.at("jsonStyle").get<JsonStyle>());
         x.set_json_version(j.at("jsonVersion").get<std::string>());
         x.set_level_name_pattern(j.at("levelNamePattern").get<std::string>());
         x.set_levels(j.at("levels").get<std::vector<Level>>());
-        x.set_minify_json(j.at("minifyJson").get<bool>());
+        x.set_minify_json(get_stack_optional<bool>(j, "minifyJson"));
         x.set_next_uid(j.at("nextUid").get<int64_t>());
         x.set_png_file_pattern(get_stack_optional<std::string>(j, "pngFilePattern"));
         x.set_simplified_export(j.at("simplifiedExport").get<bool>());
@@ -4360,6 +4453,7 @@ namespace quicktype {
         j["identifierStyle"] = x.get_identifier_style();
         j["iid"] = x.get_iid();
         j["imageExportMode"] = x.get_image_export_mode();
+        j["jsonStyle"] = x.get_json_style();
         j["jsonVersion"] = x.get_json_version();
         j["levelNamePattern"] = x.get_level_name_pattern();
         j["levels"] = x.get_levels();
@@ -4380,7 +4474,7 @@ namespace quicktype {
         else if (j == "AfterSave") x = When::AFTER_SAVE;
         else if (j == "BeforeSave") x = When::BEFORE_SAVE;
         else if (j == "Manual") x = When::MANUAL;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"When\""); }
     }
 
     inline void to_json(json & j, const When & x) {
@@ -4389,7 +4483,7 @@ namespace quicktype {
             case When::AFTER_SAVE: j = "AfterSave"; break;
             case When::BEFORE_SAVE: j = "BeforeSave"; break;
             case When::MANUAL: j = "Manual"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"When\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4398,7 +4492,7 @@ namespace quicktype {
         else if (j == "OnlySame") x = AllowedRefs::ONLY_SAME;
         else if (j == "OnlySpecificEntity") x = AllowedRefs::ONLY_SPECIFIC_ENTITY;
         else if (j == "OnlyTags") x = AllowedRefs::ONLY_TAGS;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"AllowedRefs\""); }
     }
 
     inline void to_json(json & j, const AllowedRefs & x) {
@@ -4407,7 +4501,7 @@ namespace quicktype {
             case AllowedRefs::ONLY_SAME: j = "OnlySame"; break;
             case AllowedRefs::ONLY_SPECIFIC_ENTITY: j = "OnlySpecificEntity"; break;
             case AllowedRefs::ONLY_TAGS: j = "OnlyTags"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"AllowedRefs\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4427,7 +4521,7 @@ namespace quicktype {
         else if (j == "RefLinkBetweenCenters") x = EditorDisplayMode::REF_LINK_BETWEEN_CENTERS;
         else if (j == "RefLinkBetweenPivots") x = EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS;
         else if (j == "ValueOnly") x = EditorDisplayMode::VALUE_ONLY;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"EditorDisplayMode\""); }
     }
 
     inline void to_json(json & j, const EditorDisplayMode & x) {
@@ -4447,7 +4541,7 @@ namespace quicktype {
             case EditorDisplayMode::REF_LINK_BETWEEN_CENTERS: j = "RefLinkBetweenCenters"; break;
             case EditorDisplayMode::REF_LINK_BETWEEN_PIVOTS: j = "RefLinkBetweenPivots"; break;
             case EditorDisplayMode::VALUE_ONLY: j = "ValueOnly"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"EditorDisplayMode\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4455,7 +4549,7 @@ namespace quicktype {
         if (j == "Above") x = EditorDisplayPos::ABOVE;
         else if (j == "Beneath") x = EditorDisplayPos::BENEATH;
         else if (j == "Center") x = EditorDisplayPos::CENTER;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"EditorDisplayPos\""); }
     }
 
     inline void to_json(json & j, const EditorDisplayPos & x) {
@@ -4463,7 +4557,7 @@ namespace quicktype {
             case EditorDisplayPos::ABOVE: j = "Above"; break;
             case EditorDisplayPos::BENEATH: j = "Beneath"; break;
             case EditorDisplayPos::CENTER: j = "Center"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"EditorDisplayPos\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4473,7 +4567,7 @@ namespace quicktype {
         else if (j == "DashedLine") x = EditorLinkStyle::DASHED_LINE;
         else if (j == "StraightArrow") x = EditorLinkStyle::STRAIGHT_ARROW;
         else if (j == "ZigZag") x = EditorLinkStyle::ZIG_ZAG;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"EditorLinkStyle\""); }
     }
 
     inline void to_json(json & j, const EditorLinkStyle & x) {
@@ -4483,7 +4577,7 @@ namespace quicktype {
             case EditorLinkStyle::DASHED_LINE: j = "DashedLine"; break;
             case EditorLinkStyle::STRAIGHT_ARROW: j = "StraightArrow"; break;
             case EditorLinkStyle::ZIG_ZAG: j = "ZigZag"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"EditorLinkStyle\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4498,7 +4592,7 @@ namespace quicktype {
         else if (j == "LangPython") x = TextLanguageMode::LANG_PYTHON;
         else if (j == "LangRuby") x = TextLanguageMode::LANG_RUBY;
         else if (j == "LangXml") x = TextLanguageMode::LANG_XML;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"TextLanguageMode\""); }
     }
 
     inline void to_json(json & j, const TextLanguageMode & x) {
@@ -4513,7 +4607,7 @@ namespace quicktype {
             case TextLanguageMode::LANG_PYTHON: j = "LangPython"; break;
             case TextLanguageMode::LANG_RUBY: j = "LangRuby"; break;
             case TextLanguageMode::LANG_XML: j = "LangXml"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"TextLanguageMode\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4521,7 +4615,7 @@ namespace quicktype {
         if (j == "DiscardOldOnes") x = LimitBehavior::DISCARD_OLD_ONES;
         else if (j == "MoveLastOne") x = LimitBehavior::MOVE_LAST_ONE;
         else if (j == "PreventAdding") x = LimitBehavior::PREVENT_ADDING;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"LimitBehavior\""); }
     }
 
     inline void to_json(json & j, const LimitBehavior & x) {
@@ -4529,7 +4623,7 @@ namespace quicktype {
             case LimitBehavior::DISCARD_OLD_ONES: j = "DiscardOldOnes"; break;
             case LimitBehavior::MOVE_LAST_ONE: j = "MoveLastOne"; break;
             case LimitBehavior::PREVENT_ADDING: j = "PreventAdding"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"LimitBehavior\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4537,7 +4631,7 @@ namespace quicktype {
         if (j == "PerLayer") x = LimitScope::PER_LAYER;
         else if (j == "PerLevel") x = LimitScope::PER_LEVEL;
         else if (j == "PerWorld") x = LimitScope::PER_WORLD;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"LimitScope\""); }
     }
 
     inline void to_json(json & j, const LimitScope & x) {
@@ -4545,7 +4639,7 @@ namespace quicktype {
             case LimitScope::PER_LAYER: j = "PerLayer"; break;
             case LimitScope::PER_LEVEL: j = "PerLevel"; break;
             case LimitScope::PER_WORLD: j = "PerWorld"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"LimitScope\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4554,7 +4648,7 @@ namespace quicktype {
         else if (j == "Ellipse") x = RenderMode::ELLIPSE;
         else if (j == "Rectangle") x = RenderMode::RECTANGLE;
         else if (j == "Tile") x = RenderMode::TILE;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"RenderMode\""); }
     }
 
     inline void to_json(json & j, const RenderMode & x) {
@@ -4563,7 +4657,7 @@ namespace quicktype {
             case RenderMode::ELLIPSE: j = "Ellipse"; break;
             case RenderMode::RECTANGLE: j = "Rectangle"; break;
             case RenderMode::TILE: j = "Tile"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"RenderMode\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4575,7 +4669,7 @@ namespace quicktype {
         else if (j == "NineSlice") x = TileRenderMode::NINE_SLICE;
         else if (j == "Repeat") x = TileRenderMode::REPEAT;
         else if (j == "Stretch") x = TileRenderMode::STRETCH;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"TileRenderMode\""); }
     }
 
     inline void to_json(json & j, const TileRenderMode & x) {
@@ -4587,7 +4681,7 @@ namespace quicktype {
             case TileRenderMode::NINE_SLICE: j = "NineSlice"; break;
             case TileRenderMode::REPEAT: j = "Repeat"; break;
             case TileRenderMode::STRETCH: j = "Stretch"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"TileRenderMode\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4595,7 +4689,7 @@ namespace quicktype {
         if (j == "Horizontal") x = Checker::HORIZONTAL;
         else if (j == "None") x = Checker::NONE;
         else if (j == "Vertical") x = Checker::VERTICAL;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"Checker\""); }
     }
 
     inline void to_json(json & j, const Checker & x) {
@@ -4603,21 +4697,37 @@ namespace quicktype {
             case Checker::HORIZONTAL: j = "Horizontal"; break;
             case Checker::NONE: j = "None"; break;
             case Checker::VERTICAL: j = "Vertical"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Checker\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, TileMode & x) {
         if (j == "Single") x = TileMode::SINGLE;
         else if (j == "Stamp") x = TileMode::STAMP;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"TileMode\""); }
     }
 
     inline void to_json(json & j, const TileMode & x) {
         switch (x) {
             case TileMode::SINGLE: j = "Single"; break;
             case TileMode::STAMP: j = "Stamp"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"TileMode\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, EntityDepthSorting & x) {
+        if (j == "Manual") x = EntityDepthSorting::MANUAL;
+        else if (j == "YAscending") x = EntityDepthSorting::Y_ASCENDING;
+        else if (j == "YDescending") x = EntityDepthSorting::Y_DESCENDING;
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"EntityDepthSorting\""); }
+    }
+
+    inline void to_json(json & j, const EntityDepthSorting & x) {
+        switch (x) {
+            case EntityDepthSorting::MANUAL: j = "Manual"; break;
+            case EntityDepthSorting::Y_ASCENDING: j = "YAscending"; break;
+            case EntityDepthSorting::Y_DESCENDING: j = "YDescending"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"EntityDepthSorting\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4626,7 +4736,7 @@ namespace quicktype {
         else if (j == "Entities") x = Type::ENTITIES;
         else if (j == "IntGrid") x = Type::INT_GRID;
         else if (j == "Tiles") x = Type::TILES;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"Type\""); }
     }
 
     inline void to_json(json & j, const Type & x) {
@@ -4635,19 +4745,19 @@ namespace quicktype {
             case Type::ENTITIES: j = "Entities"; break;
             case Type::INT_GRID: j = "IntGrid"; break;
             case Type::TILES: j = "Tiles"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Type\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
     inline void from_json(const json & j, EmbedAtlas & x) {
         if (j == "LdtkIcons") x = EmbedAtlas::LDTK_ICONS;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"EmbedAtlas\""); }
     }
 
     inline void to_json(json & j, const EmbedAtlas & x) {
         switch (x) {
             case EmbedAtlas::LDTK_ICONS: j = "LdtkIcons"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"EmbedAtlas\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4659,7 +4769,7 @@ namespace quicktype {
         else if (j == "MultiWorlds") x = Flag::MULTI_WORLDS;
         else if (j == "PrependIndexToLevelFileNames") x = Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES;
         else if (j == "UseMultilinesType") x = Flag::USE_MULTILINES_TYPE;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"Flag\""); }
     }
 
     inline void to_json(json & j, const Flag & x) {
@@ -4671,7 +4781,7 @@ namespace quicktype {
             case Flag::MULTI_WORLDS: j = "MultiWorlds"; break;
             case Flag::PREPEND_INDEX_TO_LEVEL_FILE_NAMES: j = "PrependIndexToLevelFileNames"; break;
             case Flag::USE_MULTILINES_TYPE: j = "UseMultilinesType"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"Flag\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4681,7 +4791,7 @@ namespace quicktype {
         else if (j == "CoverDirty") x = BgPos::COVER_DIRTY;
         else if (j == "Repeat") x = BgPos::REPEAT;
         else if (j == "Unscaled") x = BgPos::UNSCALED;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"BgPos\""); }
     }
 
     inline void to_json(json & j, const BgPos & x) {
@@ -4691,7 +4801,7 @@ namespace quicktype {
             case BgPos::COVER_DIRTY: j = "CoverDirty"; break;
             case BgPos::REPEAT: j = "Repeat"; break;
             case BgPos::UNSCALED: j = "Unscaled"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"BgPos\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4700,7 +4810,7 @@ namespace quicktype {
         else if (j == "GridVania") x = WorldLayout::GRID_VANIA;
         else if (j == "LinearHorizontal") x = WorldLayout::LINEAR_HORIZONTAL;
         else if (j == "LinearVertical") x = WorldLayout::LINEAR_VERTICAL;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"WorldLayout\""); }
     }
 
     inline void to_json(json & j, const WorldLayout & x) {
@@ -4709,7 +4819,7 @@ namespace quicktype {
             case WorldLayout::GRID_VANIA: j = "GridVania"; break;
             case WorldLayout::LINEAR_HORIZONTAL: j = "LinearHorizontal"; break;
             case WorldLayout::LINEAR_VERTICAL: j = "LinearVertical"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"WorldLayout\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4718,7 +4828,7 @@ namespace quicktype {
         else if (j == "Free") x = IdentifierStyle::FREE;
         else if (j == "Lowercase") x = IdentifierStyle::LOWERCASE;
         else if (j == "Uppercase") x = IdentifierStyle::UPPERCASE;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"IdentifierStyle\""); }
     }
 
     inline void to_json(json & j, const IdentifierStyle & x) {
@@ -4727,7 +4837,7 @@ namespace quicktype {
             case IdentifierStyle::FREE: j = "Free"; break;
             case IdentifierStyle::LOWERCASE: j = "Lowercase"; break;
             case IdentifierStyle::UPPERCASE: j = "Uppercase"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"IdentifierStyle\": " + std::to_string(static_cast<int>(x)));
         }
     }
 
@@ -4736,7 +4846,7 @@ namespace quicktype {
         else if (j == "None") x = ImageExportMode::NONE;
         else if (j == "OneImagePerLayer") x = ImageExportMode::ONE_IMAGE_PER_LAYER;
         else if (j == "OneImagePerLevel") x = ImageExportMode::ONE_IMAGE_PER_LEVEL;
-        else { throw std::runtime_error("Input JSON does not conform to schema!"); }
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"ImageExportMode\""); }
     }
 
     inline void to_json(json & j, const ImageExportMode & x) {
@@ -4745,7 +4855,23 @@ namespace quicktype {
             case ImageExportMode::NONE: j = "None"; break;
             case ImageExportMode::ONE_IMAGE_PER_LAYER: j = "OneImagePerLayer"; break;
             case ImageExportMode::ONE_IMAGE_PER_LEVEL: j = "OneImagePerLevel"; break;
-            default: throw std::runtime_error("Unexpected value in enumeration \"[object Object]\": " + std::to_string(static_cast<int>(x)));
+            default: throw std::runtime_error("Unexpected value in enumeration \"ImageExportMode\": " + std::to_string(static_cast<int>(x)));
+        }
+    }
+
+    inline void from_json(const json & j, JsonStyle & x) {
+        if (j == "Compact") x = JsonStyle::COMPACT;
+        else if (j == "Full") x = JsonStyle::FULL;
+        else if (j == "Minified") x = JsonStyle::MINIFIED;
+        else { throw std::runtime_error("Cannot deserialize to enumeration \"JsonStyle\""); }
+    }
+
+    inline void to_json(json & j, const JsonStyle & x) {
+        switch (x) {
+            case JsonStyle::COMPACT: j = "Compact"; break;
+            case JsonStyle::FULL: j = "Full"; break;
+            case JsonStyle::MINIFIED: j = "Minified"; break;
+            default: throw std::runtime_error("Unexpected value in enumeration \"JsonStyle\": " + std::to_string(static_cast<int>(x)));
         }
     }
 }

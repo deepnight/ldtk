@@ -1,6 +1,6 @@
 // To parse this data:
 //
-//   const Convert = require("./file");
+//   const Convert = require("./LdtkJson");
 //
 //   const ldtkJSON = Convert.toLdtkJSON(json);
 //
@@ -196,10 +196,11 @@ const typeMap = {
         { json: "identifierStyle", js: "identifierStyle", typ: r("IdentifierStyle") },
         { json: "iid", js: "iid", typ: "" },
         { json: "imageExportMode", js: "imageExportMode", typ: r("ImageExportMode") },
+        { json: "jsonStyle", js: "jsonStyle", typ: r("JSONStyle") },
         { json: "jsonVersion", js: "jsonVersion", typ: "" },
         { json: "levelNamePattern", js: "levelNamePattern", typ: "" },
         { json: "levels", js: "levels", typ: a(r("Level")) },
-        { json: "minifyJson", js: "minifyJson", typ: true },
+        { json: "minifyJson", js: "minifyJson", typ: u(undefined, true) },
         { json: "nextUid", js: "nextUid", typ: 0 },
         { json: "pngFilePattern", js: "pngFilePattern", typ: u(undefined, u(null, "")) },
         { json: "simplifiedExport", js: "simplifiedExport", typ: true },
@@ -404,16 +405,20 @@ const typeMap = {
         { json: "canSelectWhenInactive", js: "canSelectWhenInactive", typ: true },
         { json: "displayOpacity", js: "displayOpacity", typ: 3.14 },
         { json: "doc", js: "doc", typ: u(undefined, u(null, "")) },
+        { json: "entityDepthSorting", js: "entityDepthSorting", typ: r("EntityDepthSorting") },
         { json: "excludedTags", js: "excludedTags", typ: a("") },
         { json: "gridSize", js: "gridSize", typ: 0 },
+        { json: "guideColor", js: "guideColor", typ: u(undefined, u(null, "")) },
         { json: "guideGridHei", js: "guideGridHei", typ: 0 },
         { json: "guideGridWid", js: "guideGridWid", typ: 0 },
+        { json: "guideOpacity", js: "guideOpacity", typ: 3.14 },
         { json: "hideFieldsWhenInactive", js: "hideFieldsWhenInactive", typ: true },
         { json: "hideInList", js: "hideInList", typ: true },
         { json: "identifier", js: "identifier", typ: "" },
         { json: "inactiveOpacity", js: "inactiveOpacity", typ: 3.14 },
         { json: "intGridValues", js: "intGridValues", typ: a(r("IntGridValueDefinition")) },
         { json: "intGridValuesGroups", js: "intGridValuesGroups", typ: a(r("IntGridValueGroupDefinition")) },
+        { json: "layerUidsPreventingAutoTilingHere", js: "layerUidsPreventingAutoTilingHere", typ: a(0) },
         { json: "parallaxFactorX", js: "parallaxFactorX", typ: 3.14 },
         { json: "parallaxFactorY", js: "parallaxFactorY", typ: 3.14 },
         { json: "parallaxScaling", js: "parallaxScaling", typ: true },
@@ -684,6 +689,11 @@ const typeMap = {
         "Repeat",
         "Stretch",
     ],
+    "EntityDepthSorting": [
+        "Manual",
+        "YAscending",
+        "YDescending",
+    ],
     "Type": [
         "AutoLayer",
         "Entities",
@@ -726,6 +736,11 @@ const typeMap = {
         "None",
         "OneImagePerLayer",
         "OneImagePerLevel",
+    ],
+    "JSONStyle": [
+        "Compact",
+        "Full",
+        "Minified",
     ],
 };
 

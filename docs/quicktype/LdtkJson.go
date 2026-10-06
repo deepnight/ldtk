@@ -1,4 +1,4 @@
-// This file was generated from JSON Schema using quicktype, do not modify it directly.
+// Code generated from JSON Schema using quicktype. DO NOT EDIT.
 // To parse and unparse this JSON data, add this code to your project and do:
 //
 //    ldtkJSON, err := UnmarshalLdtkJSON(bytes)
@@ -92,6 +92,8 @@ type LdtkJSON struct {
 	// "Image export" option when saving project. Possible values: `None`, `OneImagePerLayer`,                            
 	// `OneImagePerLevel`, `LayersAndLevels`                                                                              
 	ImageExportMode                                                                             ImageExportMode           `json:"imageExportMode"`
+	// JSON style Possible values: `Minified`, `Compact`, `Full`                                                          
+	JSONStyle                                                                                   JSONStyle                 `json:"jsonStyle"`
 	// File format version                                                                                                
 	JSONVersion                                                                                 string                    `json:"jsonVersion"`
 	// The default naming convention for level identifiers.                                                               
@@ -100,9 +102,9 @@ type LdtkJSON struct {
 	// `linearVertical` world layouts (see `worldLayout` value).<br/>  Otherwise, you should                              
 	// refer to the `worldX`,`worldY` coordinates of each Level.                                                          
 	Levels                                                                                      []Level                   `json:"levels"`
-	// If TRUE, the Json is partially minified (no indentation, nor line breaks, default is                               
-	// FALSE)                                                                                                             
-	MinifyJSON                                                                                  bool                      `json:"minifyJson"`
+	// **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+                                  
+	// Replaced by: `jsonStyle`                                                                                           
+	MinifyJSON                                                                                  *bool                     `json:"minifyJson,omitempty"`
 	// Next Unique integer ID available                                                                                   
 	NextUid                                                                                     int64                     `json:"nextUid"`
 	// File naming pattern for exported PNGs                                                                              
@@ -380,6 +382,7 @@ type LayerDefinition struct {
 	// **WARNING**: this deprecated value is no longer exported since version 1.2.0  Replaced                                  
 	// by: `tilesetDefUid`                                                                                                     
 	AutoTilesetDefUid                                                                            *int64                        `json:"autoTilesetDefUid"`
+	// *This field was removed in 1.5.4 and should no longer be used.*                                                         
 	AutoTilesKilledByOtherLayerUid                                                               *int64                        `json:"autoTilesKilledByOtherLayerUid"`
 	BiomeFieldUid                                                                                *int64                        `json:"biomeFieldUid"`
 	// Allow editor selections when the layer is not currently active.                                                         
@@ -388,14 +391,20 @@ type LayerDefinition struct {
 	DisplayOpacity                                                                               float64                       `json:"displayOpacity"`
 	// User defined documentation for this element to provide help/tips to level designers.                                    
 	Doc                                                                                          *string                       `json:"doc"`
+	// Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`                                       
+	EntityDepthSorting                                                                           EntityDepthSorting            `json:"entityDepthSorting"`
 	// An array of tags to forbid some Entities in this layer                                                                  
 	ExcludedTags                                                                                 []string                      `json:"excludedTags"`
 	// Width and height of the grid in pixels                                                                                  
 	GridSize                                                                                     int64                         `json:"gridSize"`
+	// Color of the optional "guide" grid                                                                                      
+	GuideColor                                                                                   *string                       `json:"guideColor"`
 	// Height of the optional "guide" grid in pixels                                                                           
 	GuideGridHei                                                                                 int64                         `json:"guideGridHei"`
 	// Width of the optional "guide" grid in pixels                                                                            
 	GuideGridWid                                                                                 int64                         `json:"guideGridWid"`
+	// Opacity of the optional "guide" grid                                                                                    
+	GuideOpacity                                                                                 float64                       `json:"guideOpacity"`
 	HideFieldsWhenInactive                                                                       bool                          `json:"hideFieldsWhenInactive"`
 	// Hide the layer from the list on the side of the editor view.                                                            
 	HideInList                                                                                   bool                          `json:"hideInList"`
@@ -409,6 +418,7 @@ type LayerDefinition struct {
 	IntGridValues                                                                                []IntGridValueDefinition      `json:"intGridValues"`
 	// Group informations for IntGrid values                                                                                   
 	IntGridValuesGroups                                                                          []IntGridValueGroupDefinition `json:"intGridValuesGroups"`
+	LayerUidsPreventingAutoTilingHere                                                            []int64                       `json:"layerUidsPreventingAutoTilingHere"`
 	// Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling                                    
 	// speed of this layer, creating a fake 3D (parallax) effect.                                                              
 	ParallaxFactorX                                                                              float64                       `json:"parallaxFactorX"`
@@ -970,7 +980,7 @@ const (
 	AfterLoad  When = "AfterLoad"
 	AfterSave  When = "AfterSave"
 	BeforeSave When = "BeforeSave"
-	Manual     When = "Manual"
+	WhenManual When = "Manual"
 )
 
 // Possible values: `Any`, `OnlySame`, `OnlyTags`, `OnlySpecificEntity`
@@ -1103,6 +1113,15 @@ const (
 	Stamp  TileMode = "Stamp"
 )
 
+// Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`
+type EntityDepthSorting string
+
+const (
+	EntityDepthSortingManual EntityDepthSorting = "Manual"
+	YAscending               EntityDepthSorting = "YAscending"
+	YDescending              EntityDepthSorting = "YDescending"
+)
+
 // Type of the layer as Haxe Enum Possible values: `IntGrid`, `Entities`, `Tiles`,
 // `AutoLayer`
 type Type string
@@ -1171,4 +1190,13 @@ const (
 	LayersAndLevels     ImageExportMode = "LayersAndLevels"
 	OneImagePerLayer    ImageExportMode = "OneImagePerLayer"
 	OneImagePerLevel    ImageExportMode = "OneImagePerLevel"
+)
+
+// JSON style Possible values: `Minified`, `Compact`, `Full`
+type JSONStyle string
+
+const (
+	Compact  JSONStyle = "Compact"
+	Full     JSONStyle = "Full"
+	Minified JSONStyle = "Minified"
 )

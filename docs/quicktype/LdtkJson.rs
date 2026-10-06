@@ -116,6 +116,9 @@ pub struct LdtkJson {
     /// `OneImagePerLevel`, `LayersAndLevels`
     pub image_export_mode: ImageExportMode,
 
+    /// JSON style Possible values: `Minified`, `Compact`, `Full`
+    pub json_style: JsonStyle,
+
     /// File format version
     pub json_version: String,
 
@@ -127,9 +130,9 @@ pub struct LdtkJson {
     /// refer to the `worldX`,`worldY` coordinates of each Level.
     pub levels: Vec<Level>,
 
-    /// If TRUE, the Json is partially minified (no indentation, nor line breaks, default is
-    /// FALSE)
-    pub minify_json: bool,
+    /// **WARNING**: this deprecated value will be *removed* completely on version 1.7.0+
+    /// Replaced by: `jsonStyle`
+    pub minify_json: Option<bool>,
 
     /// Next Unique integer ID available
     pub next_uid: i64,
@@ -731,6 +734,7 @@ pub struct LayerDefinition {
     /// by: `tilesetDefUid`
     pub auto_tileset_def_uid: Option<i64>,
 
+    /// *This field was removed in 1.5.4 and should no longer be used.*
     pub auto_tiles_killed_by_other_layer_uid: Option<i64>,
 
     pub biome_field_uid: Option<i64>,
@@ -744,17 +748,26 @@ pub struct LayerDefinition {
     /// User defined documentation for this element to provide help/tips to level designers.
     pub doc: Option<String>,
 
+    /// Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`
+    pub entity_depth_sorting: EntityDepthSorting,
+
     /// An array of tags to forbid some Entities in this layer
     pub excluded_tags: Vec<String>,
 
     /// Width and height of the grid in pixels
     pub grid_size: i64,
 
+    /// Color of the optional "guide" grid
+    pub guide_color: Option<String>,
+
     /// Height of the optional "guide" grid in pixels
     pub guide_grid_hei: i64,
 
     /// Width of the optional "guide" grid in pixels
     pub guide_grid_wid: i64,
+
+    /// Opacity of the optional "guide" grid
+    pub guide_opacity: f64,
 
     pub hide_fields_when_inactive: bool,
 
@@ -774,6 +787,8 @@ pub struct LayerDefinition {
 
     /// Group informations for IntGrid values
     pub int_grid_values_groups: Vec<IntGridValueGroupDefinition>,
+
+    pub layer_uids_preventing_auto_tiling_here: Vec<i64>,
 
     /// Parallax horizontal factor (from -1 to 1, defaults to 0) which affects the scrolling
     /// speed of this layer, creating a fake 3D (parallax) effect.
@@ -961,9 +976,10 @@ pub struct AutoLayerRuleDefinition {
 /// Checker mode Possible values: `None`, `Horizontal`, `Vertical`
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Checker {
-    Horizontal,
+    #[serde(rename = "None")]
+    CheckerNone,
 
-    None,
+    Horizontal,
 
     Vertical,
 }
@@ -974,6 +990,18 @@ pub enum TileMode {
     Single,
 
     Stamp,
+}
+
+/// Entity depth sorting mode. Possible values: `Manual`, `YAscending`, `YDescending`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum EntityDepthSorting {
+    Manual,
+
+    #[serde(rename = "YAscending")]
+    YAscending,
+
+    #[serde(rename = "YDescending")]
+    YDescending,
 }
 
 /// IntGrid value definition
@@ -1701,14 +1729,25 @@ pub enum IdentifierStyle {
 /// `OneImagePerLevel`, `LayersAndLevels`
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ImageExportMode {
+    #[serde(rename = "None")]
+    ImageExportModeNone,
+
     #[serde(rename = "LayersAndLevels")]
     LayersAndLevels,
-
-    None,
 
     #[serde(rename = "OneImagePerLayer")]
     OneImagePerLayer,
 
     #[serde(rename = "OneImagePerLevel")]
     OneImagePerLevel,
+}
+
+/// JSON style Possible values: `Minified`, `Compact`, `Full`
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum JsonStyle {
+    Compact,
+
+    Full,
+
+    Minified,
 }
