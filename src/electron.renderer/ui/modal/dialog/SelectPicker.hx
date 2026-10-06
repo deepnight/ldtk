@@ -64,7 +64,7 @@ class SelectPicker extends ui.modal.Dialog {
 			});
 
 			var jImg = jOpt.find("img:first, .placeholder");
-			jValue.prepend( jImg.clone(false,false) );
+			jValue.prepend(jImg);
 		}
 
 		jAllValues = jValues.find(".value");

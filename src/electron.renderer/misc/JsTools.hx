@@ -893,6 +893,7 @@ class JsTools {
 			var hasImages = jOldSelect.find("[tile]").length>0;
 			function _renderOptions(all=false) {
 				jSelect.find(".option").remove();
+				var delayIdx = 0;
 				for(elem in jOldSelect.children("option").filter(all ? "*" : ":selected")) {
 					var jOldOpt = new J(elem);
 					var jOpt = new J('<div class="option"/>');
@@ -920,7 +921,8 @@ class JsTools {
 						var r : ldtk.Json.TilesetRect = haxe.Json.parse(jOldOpt.attr("tile"));
 						var td = try Editor.ME.project.defs.getTilesetDef(r.tilesetUid) catch(_) null;
 						if( td!=null ) {
-							var img = td.getTileHtmlImg(r);
+							var img = td.getTileHtmlImg(r, 0.01+delayIdx*0.0025);
+							delayIdx++;
 							jOpt.prepend(img);
 						}
 					}

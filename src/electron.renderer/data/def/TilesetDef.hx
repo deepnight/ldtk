@@ -989,18 +989,24 @@ class TilesetDef {
 	}
 
 
-	public function getTileHtmlImg(tileRect:ldtk.Json.TilesetRect) : Null<js.html.Image> {
+	public function getTileHtmlImg(tileRect:ldtk.Json.TilesetRect, delayS=0.0) : Null<js.html.Image> {
 		if( !isAtlasLoaded() )
 			return null;
 
 		if( !isTileRectInBounds(tileRect) )
 			return null; // out of bounds
 
-		var imgData = getOrLoadTilesetImage();
-		var subPixels = imgData.pixels.sub(tileRect.x, tileRect.y, tileRect.w, tileRect.h);
-		var img = new js.html.Image(subPixels.width, subPixels.height);
-		var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
-		img.src = 'data:image/png;base64,$b64';
+		var img = new js.html.Image(tileRect.w, tileRect.h);
+		function _render() {
+			var imgData = getOrLoadTilesetImage();
+			var subPixels = imgData.pixels.sub(tileRect.x, tileRect.y, tileRect.w, tileRect.h);
+			var b64 = haxe.crypto.Base64.encode( subPixels.toPNG() );
+			img.src = 'data:image/png;base64,$b64';
+		}
+		if( delayS>0 )
+			haxe.Timer.delay(_render, Std.int(delayS*1000));
+		else
+			_render();
 		return img;
 	}
 
