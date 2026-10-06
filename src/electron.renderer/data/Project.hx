@@ -1169,6 +1169,14 @@ class Project {
 	/**  USED CHECKS  *****************************************/
 
 	public function isEnumDefUsed(enumDef:data.def.EnumDef) {
+		for(fd in defs.levelFields)
+			switch fd.type {
+				case F_Enum(enumDefUid):
+					if( enumDefUid==enumDef.uid )
+						return true;
+				case _:
+			}
+
 		for( ed in defs.entities )
 		for( fd in ed.fieldDefs )
 			switch fd.type {
@@ -1187,6 +1195,18 @@ class Project {
 	}
 
 	public function isEnumValueUsed(enumDef:data.def.EnumDef, val:String) {
+		for(w in worlds)
+		for(l in w.levels)
+		for(fi in l.fieldInstances)
+			switch fi.def.type {
+				case F_Enum(enumDefUid):
+					if( enumDefUid==enumDef.uid )
+						for(i in 0...fi.getArrayLength())
+							if( fi.getEnumValue(i)==val )
+								return true;
+				case _:
+			}
+
 		for( w in worlds )
 		for( l in w.levels )
 		for( li in l.layerInstances ) {
