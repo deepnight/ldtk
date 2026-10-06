@@ -1838,7 +1838,7 @@ class Editor extends Page {
 			return;
 		ui.Modal.closeAll();
 		if( needSaving )
-			new ui.modal.dialog.UnsavedChanges( bt, App.ME.loadPage.bind( ()->new Home() ) );
+			new ui.modal.dialog.UnsavedChanges( bt, () -> App.ME.loadPage( ()->new Home() ) );
 		else
 			App.ME.loadPage( ()->new Home(), true );
 	}

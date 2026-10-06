@@ -106,7 +106,7 @@ class CrashReport extends Page {
 					for(l in data.externLevels) {
 						var lfp = dn.FilePath.fromFile(dir.full+"/"+l.relPath);
 						NT.createDirs(lfp.directory);
-						NT.writeFileString(lfp.full, l.jsonStr);
+						ui.ProjectSaver.writeExternalLevelFile(unsavedProject, l.uid, lfp.full, false);
 					}
 					jBackup.html("But don't worry, your work was saved in a backup file!");
 

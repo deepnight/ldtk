@@ -21,7 +21,7 @@ jobs:
     steps:
       # Checkout, install haxe and libs
       - uses: actions/checkout@v2
-      - uses: krdlab/setup-haxe@v1
+      - uses: krdlab/setup-haxe@v2
         with:
           haxe-version: ${{ matrix.haxe }}
       - run: haxe -version
@@ -29,15 +29,15 @@ jobs:
       - run: haxelib list
 
       # Node/NPM commands
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v6
         with:
-          node-version: '14'
+          node-version: '20'
       - run: cd app && npm install
       - run: cd app && npm run pack-prepare
       - run: cd app && npm run pack-macos
 
       # Upload
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v7
         with:
           name: mac-distribution
           path: app/redist/LDtk**installer.dmg

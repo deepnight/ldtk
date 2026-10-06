@@ -1,0 +1,96 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<!-- NOTE: app.html's CSP meta is omitted here: under <base> + nwjs it can
+	     block legitimate local loads, and the nw host is a trusted context -->
+
+	<!-- All relative asset paths resolve against the real assets dir -->
+	<base href="../assets/">
+
+	<!-- nwjs host: electron API shim, must load before anything else -->
+	<script type="text/javascript" src="../nwjs/electron-shim.js"></script>
+
+	<!-- Below this line: keep in sync with assets/app.html -->
+
+	<!-- Fix jQuery conflict -->
+	<script>
+		if( typeof module === 'object' ) {
+			window.module = module;
+			module = undefined;
+		}
+	</script>
+
+	<!-- Scripts -->
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+
+	<!-- Restore module value -->
+	<script>
+		if (window.module)
+			module = window.module;
+	</script>
+
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="css/app.min.css"/>
+	<link rel="stylesheet" href="css/codemirror/codemirror.css"/>
+	<link rel="stylesheet" href="css/codemirror/lucario.css"/>
+</head>
+
+
+<body>
+
+	<!-- App HTML components -->
+	<div id="debug"></div>
+
+	<div id="miniNotif"></div>
+	<div id="updateInstall"></div>
+	<div id="clicktrap"></div>
+
+	<canvas id="webgl"></canvas>
+	<div id="page"></div>
+
+	<!-- App boot -->
+	<script type="text/javascript" src="js/renderer.js"></script>
+
+
+	<!-- Element templates -->
+	<xml id="notification">
+		<div class="notification">
+			<div class="content"></div>
+		</div>
+	</xml>
+	<div id="notificationList"></div>
+
+	<xml id="tip">
+		<div class="tip">
+			<div class="content">
+				<div class="text"></div>
+				<div class="keys"></div>
+			</div>
+		</div>
+	</xml>
+
+	<xml id="progressBar">
+		<div class="progressBar">
+			<div class="label"></div>
+			<div class="barWrapper">
+				<div class="bar"></div>
+			</div>
+		</div>
+	</xml>
+
+	<xml id="window">
+		<div class="window">
+			<div class="mask"></div>
+			<div class="wrapper">
+				<div class="content"></div>
+			</div>
+		</div>
+	</xml>
+
+	<!-- Fix jquery/electron issue -->
+	<script type="text/javascript">
+		window.$ = window.jQuery = window.jquery = require('./js/jquery.min.js');
+	</script>
+</body>
+</html>

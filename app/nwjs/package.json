@@ -1,0 +1,11 @@
+{
+	"name": "ldtk-nwjs-host",
+	"description": "Run the LDtk renderer inside nwjs (e.g. hosted from Hide)",
+	"main": "host.html",
+	"window": {
+		"title": "LDtk (nwjs)",
+		"width": 1280,
+		"height": 800,
+		"icon": "../assets/appIcon.png"
+	}
+}

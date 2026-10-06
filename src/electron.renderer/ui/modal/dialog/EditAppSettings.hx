@@ -166,7 +166,7 @@ class EditAppSettings extends ui.modal.Dialog {
 				jOpt.prop("selected",true);
 		}
 		jSelect.change( (_)->{
-			settings.v.fieldsRender = FieldsRender.createByName( jSelect.val() );
+			settings.v.fieldsRender = Settings.FieldsRender.createByName( jSelect.val() );
 			onSettingChanged();
 		});
 

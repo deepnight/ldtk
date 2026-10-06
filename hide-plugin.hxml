@@ -1,0 +1,4 @@
+-cp src
+-lib hxnodejs
+-main hide.plugin.LdtkHidePlugin
+-js app/nwjs/hide-plugin.js

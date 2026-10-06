@@ -72,6 +72,34 @@ From a command line in the `app` folder, run:
 npm run start
 ```
 
+## Running inside Hide (as an editor plugin)
+
+LDtk can run embedded in a [Hide](https://github.com/heapsio/hide) tab.
+
+First build the plugin (from the `ldtk` root dir):
+
+```
+haxe hide-plugin.hxml
+```
+
+This creates `app/nwjs/hide-plugin.js` (sources in `src/hide/plugin/`). Then add to the Hide project's `res/props.json` (`ldtk.project` is optional and resolves relative to `res/`):
+
+```json
+"plugins": [ "/path/to/ldtk/app/nwjs/hide-plugin.js" ],
+"menu.extra": "<menu label='LDtk' component='ldtk.LdtkView'></menu>",
+"ldtk.project": "path/to/world.ldtk"
+```
+
+LDtk then opens from the menu, in its own tab. Bonus: its CastleDB enum sync reads Hide's live database, unsaved changes included.
+
+## Running in NW.js (instead of Electron)
+
+The renderer can also run standalone in [NW.js](https://nwjs.io/), without the Electron main process:
+
+```
+nw app/nwjs
+```
+
 # Contributing
 
 You can read the general Pull Request guidelines here:
