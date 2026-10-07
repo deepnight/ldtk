@@ -3,7 +3,7 @@
 - Multi-levels selection in world view (thanks to JeremyFa / https://github.com/jeremyfa)
 - Fixed excessive memory use when loading and saving large projects with external level files (#1172, thanks to GameGuyy / https://github.com/GameGuyy)
 - Fixed the free drag'n'drop of Entities (as in "not snapped to grid") when the grid is disabled (G shortcut)
-- Added a Layer panel setting to enable Entity visual depth sorting based on its Y coordinate. When in Manual mode, press CTRL-UP/CTRL-DOWN to change an entity depth.
+- Added a Layer panel setting to enable Entity visual depth sorting based on its Y coordinate. When in Manual mode, press CTRL-UP/CTRL-DOWN to change an entity depth. Use CTRL-SHIFT-UP/DOWN to bring to front/back.
 - In Auto-Layers, you can now pick any number of other layers to prevent local rules to apply at particular coordinates.
 - Added a new Project setting to customize the JSON indentation (Full, Compact or Minified)
 - The online JSON documentation now shows references between UID fields.

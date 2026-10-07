@@ -303,18 +303,34 @@ class SelectionTool extends Tool<Int> {
 
 		switch keyId {
 			case K.UP, K.DOWN:
-				// Manual z-sort an entity
+				// Manual z-sort an entity (using Ctrl+Arrow keys)
 				if( App.ME.isCtrlCmdDown() && isSingle() )
 					switch group.getElement(0) {
-						case Entity(li, ei) if( li.def.entityDepthSorting==Manual ):
-							var idx = li.entityInstances.indexOf(ei);
-							var targetIdx = idx + (keyId==K.UP ? 1 : -1);
-							if( idx>=0 && targetIdx>=0 && targetIdx<li.entityInstances.length ) {
-								li.entityInstances[idx] = li.entityInstances[targetIdx];
-								li.entityInstances[targetIdx] = ei;
-								editor.curLevelTimeline.markEntityChange(ei);
-								editor.ge.emit( LayerInstanceChangedGlobally(li) );
-								editor.curLevelTimeline.saveLayerStates([li]);
+						case Entity(li, ei):
+							if( li.def.entityDepthSorting==Manual ) {
+								if( App.ME.isShiftDown() ) {
+									// Move to the top/bottom of the z-order
+									li.entityInstances.remove(ei);
+									if( keyId==K.UP )
+										li.entityInstances.push(ei);
+									else if( keyId==K.DOWN )
+										li.entityInstances.unshift(ei);
+									editor.curLevelTimeline.markEntityChange(ei);
+									editor.ge.emit( LayerInstanceChangedGlobally(li) );
+									editor.curLevelTimeline.saveLayerStates([li]);
+								}
+								else {
+									// Move 1 step in the z-order
+									var idx = li.entityInstances.indexOf(ei);
+									var targetIdx = idx + (keyId==K.UP ? 1 : -1);
+									if( idx>=0 && targetIdx>=0 && targetIdx<li.entityInstances.length ) {
+										li.entityInstances[idx] = li.entityInstances[targetIdx];
+										li.entityInstances[targetIdx] = ei;
+										editor.curLevelTimeline.markEntityChange(ei);
+										editor.ge.emit( LayerInstanceChangedGlobally(li) );
+										editor.curLevelTimeline.saveLayerStates([li]);
+									}
+								}
 							}
 						case _:
 					}
