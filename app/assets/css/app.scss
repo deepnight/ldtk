@@ -5620,9 +5620,9 @@ canvas#webgl {
 							&.SE_Definition	{ color: #ffcc00; background-color: transparentize($color: #ffcc00, $amount: 0.85);}
 							&.SE_World		{ color: #94483b; background-color: transparentize($color: #94483b, $amount: 0.85);}
 							&.SE_Level		{ color: #65d9ff; background-color: transparentize($color: #65d9ff, $amount: 0.85);}
-							&.SE_LevelField	{ color: #65d9ff; background-color: transparentize($color: #65d9ff, $amount: 0.85);}
+							&.SE_LevelField	{ color: #3697b7; background-color: transparentize($color: #3697b7, $amount: 0.85);}
 							&.SE_Layer		{ color: #824cff; background-color: transparentize($color: #824cff, $amount: 0.85);}
-							&.SE_Entity		{ color: #ff7d2d; background-color: transparentize($color: #ff7d2d, $amount: 0.85);}
+							&.SE_Entity		{ color: #ff9554; background-color: transparentize($color: #ff9554, $amount: 0.85);}
 							&.SE_EntityField{ color: #ff7d2d; background-color: transparentize($color: #ff7d2d, $amount: 0.85);}
 						}
 
@@ -5636,9 +5636,9 @@ canvas#webgl {
 							&.SE_Definition	{ background-color: #ffcc00; }
 							&.SE_World		{ background-color: #94483b; }
 							&.SE_Level		{ background-color: #65d9ff; }
-							&.SE_LevelField	{ background-color: #65d9ff; }
+							&.SE_LevelField	{ background-color: #3697b7; }
 							&.SE_Layer		{ background-color: #824cff; }
-							&.SE_Entity		{ background-color: #ff7d2d; }
+							&.SE_Entity		{ background-color: #ff9554; }
 							&.SE_EntityField{ background-color: #ff7d2d; }
 						}
 
