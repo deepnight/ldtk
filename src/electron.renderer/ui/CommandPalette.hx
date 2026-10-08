@@ -41,6 +41,8 @@ class CommandPalette {
 	var curElements : Array<SearchElement> = [];
 	var curUid : Null<String>;
 
+
+
 	public function new() {
 		if( ME!=null )
 			ME.close();
@@ -68,12 +70,12 @@ class CommandPalette {
 				case _:
 			}
 		});
-		jInput.on("input", _->updateResults() );
+		jInput.on("input", _->updateResults(false) );
 		jInput.blur( _->jInput.focus() );
 		jInput.focus();
 
 		initSearchableElements();
-		updateResults();
+		updateResults(false);
 	}
 
 
@@ -275,7 +277,7 @@ class CommandPalette {
 	}
 
 
-	function updateResults() {
+	function updateResults(showAll:Bool) {
 		curElements = [];
 		var raw = cleanupKeywords( jInput.val() );
 		var searchParts = raw.split(" ");
@@ -287,7 +289,7 @@ class CommandPalette {
 			for(e in allElements)
 				if( keywordsMatch(e.cachedKeywords, searchParts) ) {
 					curElements.push(e);
-					if( i++>=MAX_RESULTS ) {
+					if( !showAll && i++>=MAX_RESULTS ) {
 						tooMany = true;
 						break;
 					}
@@ -338,8 +340,12 @@ class CommandPalette {
 		}
 
 		// Too many results
-		if( tooMany )
-			jResults.append('<div class="more"></div>');
+		if( tooMany && !showAll ) {
+			var jMore = new J('<div class="more">Show all results</div>');
+			jMore.click( _->updateResults(true) );
+			jResults.append(jMore);
+
+		}
 
 		if( curElements.length==0 )
 			jResults.hide();

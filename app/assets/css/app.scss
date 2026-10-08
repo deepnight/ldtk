@@ -5589,6 +5589,9 @@ canvas#webgl {
 					padding-bottom: 8px;
 					background-color: $bgDark;
 					border-radius: 3px;
+					max-height: 85vh;
+					overflow-x: hidden;
+					overflow-y: auto;
 
 					.element {
 						display: grid;
@@ -5641,13 +5644,22 @@ canvas#webgl {
 					}
 
 					.more {
-						position: absolute;
-						pointer-events: none;
-						width: 100%;
-						left: 0;
-						bottom: 8px;
-						height: 2em;
+						margin-top: 2px;
+						padding: 10px;
+
+						font-size: 8pt;
+						color: $orange;
+						text-transform: uppercase;
+						text-align: center;
+
+						cursor: pointer;
+						border: 1px solid $orange;
 						background: linear-gradient(0deg, rgba(30,34,41,1) 0%, rgba(30,34,41,0) 100%);
+
+						&:hover {
+							color: white;
+							border-color: white;
+						}
 					}
 				}
 			}
