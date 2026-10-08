@@ -17,6 +17,7 @@ enum ElementCategory {
 	SE_LevelField;
 	SE_Layer;
 	SE_Entity;
+	SE_EntityField;
 }
 
 class CommandPalette {
@@ -174,23 +175,20 @@ class CommandPalette {
 				for(fi in l.fieldInstances) {
 					if( !fi.def.searchable )
 						continue;
-					var values = [];
+
 					for(i in 0...fi.getArrayLength())
 						if( !fi.valueIsNull(i) )
-							values.push(fi.getForDisplay(i));
-					if( values.length==0 )
-						continue;
-					allElements.push({
-						id: l.iid+"_field_"+fi.defUid,
-						cat: SE_LevelField,
-						desc: l.identifier+"."+values.join(", "),
-						ctxDesc: l.identifier,
-						keywords: values,
-						onPick: ()->{
-							editor.selectLevel(l, true);
-							new ui.modal.panel.LevelInstancePanel();
-						},
-					});
+							allElements.push({
+								id: l.iid+"_field_"+fi.defUid,
+								cat: SE_LevelField,
+								desc: l.identifier+"."+fi.getForDisplay(i),
+								ctxDesc: l.identifier,
+								keywords: [ fi.getForDisplay(i) ],
+								onPick: ()->{
+									editor.selectLevel(l, true);
+									new ui.modal.panel.LevelInstancePanel();
+								},
+							});
 				}
 
 				// Layer instances
@@ -225,15 +223,33 @@ class CommandPalette {
 					}
 					allElements.push(searchElem);
 
-					// Entity fields
 					for(fi in ei.fieldInstances) {
 						if( !fi.def.searchable  )
 							continue;
+
+						// Append entity fields to the entity name
+						for(i in 0...fi.getArrayLength())
+							if( !fi.valueIsNull(i) )
+								searchElem.desc += "."+fi.getForDisplay(i);
+
+						// Make individual entity fields searchable
 						for(i in 0...fi.getArrayLength()) {
 							if( fi.valueIsNull(i) )
 								continue;
-							searchElem.desc += "."+fi.getForDisplay(i);
-							searchElem.keywords.push( fi.getForDisplay(i) );
+
+							allElements.push({
+								id: ei.iid+"_field_"+fi.defUid,
+								cat: SE_EntityField,
+								desc: ei.def.identifier+"."+fi.getForDisplay(i),
+								ctxDesc: ei.def.identifier,
+								keywords: [ fi.getForDisplay(i) ],
+								onPick: ()->{
+									editor.selectLevel(l, true);
+									var b = editor.levelRender.bleepEntity(ei);
+									b.delayS = 0.2;
+									b.remainCount = 5;
+								},
+							});
 						}
 					}
 
@@ -253,6 +269,7 @@ class CommandPalette {
 				case SE_LevelField: "level field";
 				case SE_Layer: "layer";
 				case SE_Entity: "entity";
+				case SE_EntityField: "entity field";
 			});
 			e.cachedKeywords = cleanupKeywords( e.keywords.join(" ") );
 		}
@@ -308,6 +325,7 @@ class CommandPalette {
 				case SE_LevelField: "list";
 				case SE_Layer: "layer";
 				case SE_Entity: "entity";
+				case SE_EntityField: "list";
 			}
 			jElement.append('<span class="icon $iconId"></span>');
 
@@ -318,6 +336,7 @@ class CommandPalette {
 				case SE_LevelField: "LField";
 				case SE_Layer: "Layer";
 				case SE_Entity: "Entity";
+				case SE_EntityField: "EField";
 			};
 			jElement.append('<span class="type">$typeDesc</span>');
 
