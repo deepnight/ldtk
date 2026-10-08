@@ -7876,10 +7876,13 @@
 			"bgPos": null,
 			"bgPivotX": 0.5,
 			"bgPivotY": 0.5,
-			"__smartColor": "#919B9E",
+			"__smartColor": "#73C7EB",
 			"__bgPos": null,
 			"externalRelPath": null,
-			"fieldInstances": [{ "__identifier": "roomType", "__type": "LocalEnum.RoomType", "__value": null, "__tile": null, "defUid": 99, "realEditorValues": [] }],
+			"fieldInstances": [{ "__identifier": "roomType", "__type": "LocalEnum.RoomType", "__value": "Save", "__tile": null, "defUid": 99, "realEditorValues": [{
+				"id": "V_String",
+				"params": ["Save"]
+			}] }],
 			"layerInstances": [
 				{
 					"__identifier": "Entities",
