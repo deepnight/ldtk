@@ -100,7 +100,7 @@ class CommandPalette {
 				cat: SE_Definition,
 				desc: ld.identifier,
 				ctxDesc: "Definition",
-				keywords: ["layer", ld.identifier],
+				keywords: [ld.identifier],
 				onPick: ()->{
 					var p = new ui.modal.panel.EditLayerDefs();
 					p.select(ld);
@@ -114,7 +114,7 @@ class CommandPalette {
 				cat: SE_Definition,
 				desc: ed.identifier,
 				ctxDesc: "Definition",
-				keywords: ["entity", ed.identifier],
+				keywords: [ed.identifier],
 				onPick: ()->{
 					var p = new ui.modal.panel.EditEntityDefs();
 					p.selectEntity(ed);
@@ -128,7 +128,7 @@ class CommandPalette {
 				cat: SE_Definition,
 				desc: ed.identifier,
 				ctxDesc: "Definition",
-				keywords: ["enum", ed.identifier],
+				keywords: [ed.identifier],
 				onPick: ()->{
 					var p = new ui.modal.panel.EditEnumDefs();
 					p.selectEnum(ed);
@@ -142,7 +142,7 @@ class CommandPalette {
 				cat: SE_Definition,
 				desc: td.identifier,
 				ctxDesc: "Definition",
-				keywords: ["tileset", td.identifier],
+				keywords: [td.identifier],
 				onPick: ()->{
 					var p = new ui.modal.panel.EditTilesetDefs();
 					p.selectTileset(td);
@@ -166,7 +166,7 @@ class CommandPalette {
 					cat: SE_Level,
 					desc: "Level "+l.identifier,
 					ctxDesc: w.identifier,
-					keywords: [ w.identifier, l.iid ],
+					keywords: [ l.identifier, w.identifier, l.iid ],
 					onPick: ()->editor.selectLevel(l, true),
 				});
 
@@ -183,7 +183,7 @@ class CommandPalette {
 					allElements.push({
 						id: l.iid+"_field_"+fi.defUid,
 						cat: SE_LevelField,
-						desc: l.identifier+"."+values.join("."),
+						desc: l.identifier+"."+values.join(", "),
 						ctxDesc: l.identifier,
 						keywords: values,
 						onPick: ()->{
@@ -200,7 +200,7 @@ class CommandPalette {
 						cat: SE_Layer,
 						desc: "Layer "+li.def.identifier,
 						ctxDesc: l.identifier,
-						keywords: [li.iid],
+						keywords: [ li.iid ],
 						onPick: ()->{
 							editor.selectLevel(l, true);
 							editor.selectLayerInstance(li);
@@ -215,7 +215,7 @@ class CommandPalette {
 						cat: SE_Entity,
 						desc: ei.def.identifier,
 						ctxDesc: l.identifier,
-						keywords: [ei.iid],
+						keywords: [ ei.def.identifier, ei.iid ],
 						onPick: ()->{
 							editor.selectLevel(l, true);
 							var b = editor.levelRender.bleepEntity(ei);
@@ -254,7 +254,6 @@ class CommandPalette {
 				case SE_Layer: "layer";
 				case SE_Entity: "entity";
 			});
-			e.keywords.push(e.desc.toLowerCase());
 			e.cachedKeywords = cleanupKeywords( e.keywords.join(" ") );
 		}
 	}
