@@ -23,7 +23,6 @@ class CommandPalette {
 	static var ME : Null<CommandPalette>;
 
 	static var MAX_RESULTS = 20;
-	static var MAX_DESC_LEN = 40;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
 	public var project(get,never) : data.Project; inline function get_project() return Editor.ME.project;
@@ -87,6 +86,8 @@ class CommandPalette {
 			ME.jInput.select();
 	}
 
+
+	// Create a full list of everything that is searchable in the project
 	function initSearchableElements() {
 		allElements = [];
 
@@ -161,7 +162,7 @@ class CommandPalette {
 				allElements.push({
 					id: l.iid,
 					cat: SE_Level,
-					desc: l.identifier,
+					desc: "Level "+l.identifier,
 					ctxDesc: w.identifier,
 					keywords: [ w.identifier, l.iid ],
 					onPick: ()->editor.selectLevel(l, true),
@@ -180,7 +181,7 @@ class CommandPalette {
 					allElements.push({
 						id: l.iid+"_field_"+fi.defUid,
 						cat: SE_LevelField,
-						desc: fi.def.identifier+"."+values.join("."),
+						desc: l.identifier+"."+values.join("."),
 						ctxDesc: l.identifier,
 						keywords: values.concat([fi.def.identifier, l.identifier, w.identifier]),
 						onPick: ()->{
@@ -195,7 +196,7 @@ class CommandPalette {
 					allElements.push({
 						id: li.iid,
 						cat: SE_Layer,
-						desc: li.def.identifier,
+						desc: "Layer "+li.def.identifier,
 						ctxDesc: l.identifier,
 						keywords: [li.iid],
 						onPick: ()->{
@@ -298,16 +299,28 @@ class CommandPalette {
 		curUid = null;
 		for(e in curElements) {
 			var jElement = new J('<div class="element"></div>');
+
 			var iconId = switch e.cat {
 				case SE_Definition: "project";
 				case SE_World: "world";
-				case SE_Level, SE_LevelField: "level";
+				case SE_Level: "level";
+				case SE_LevelField: "list";
 				case SE_Layer: "layer";
 				case SE_Entity: "entity";
 			}
 			jElement.append('<span class="icon $iconId"></span>');
-			var desc = e.desc.length>=MAX_DESC_LEN ? e.desc.substr(0,MAX_DESC_LEN-3)+"..." : e.desc;
-			jElement.append( new J('<div class="desc"/>').text(desc) );
+
+			var typeDesc = switch e.cat {
+				case SE_Definition: "Def";
+				case SE_World: "World";
+				case SE_Level: "Level";
+				case SE_LevelField: "LField";
+				case SE_Layer: "Layer";
+				case SE_Entity: "Entity";
+			};
+			jElement.append('<span class="type">$typeDesc</span>');
+
+			jElement.append( new J('<div class="desc"/>').text(e.desc) );
 
 			if( e.ctxDesc!=null )
 				jElement.append('<div class="context">${e.ctxDesc}</div>');

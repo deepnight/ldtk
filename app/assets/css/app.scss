@@ -5578,7 +5578,7 @@ canvas#webgl {
 			z-index: 1;
 
 			.content {
-				width: 35em;
+				width: 50em;
 				input[type=text] {
 					width: 100%;
 				}
@@ -5597,11 +5597,20 @@ canvas#webgl {
 						gap: 8px;
 						font-size: 10pt;
 						align-items: center;
-						grid-template-columns: min-content auto min-content;
+						grid-template-columns: min-content 40px auto min-content;
 
 						.context {
 							font-size: 9pt;
 							opacity: 0.5;
+						}
+
+						.type {
+							font-size: 7pt;
+							font-weight: bold;
+							text-transform: uppercase;
+							color: white;
+							opacity: 0.8;
+							overflow: hidden;
 						}
 
 						&:not(.active) {
