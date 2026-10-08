@@ -252,7 +252,7 @@ class EntityRender extends dn.Process {
 			}
 		var smartTile = ei==null ? ed.getDefaultTile() : ei.getSmartTile();
 		if( fieldImageTile!=null )
-			_renderTile(null, ed.tileRenderMode, imageTile);
+			_renderTile(null, ed.tileRenderMode, fieldImageTile);
 		else if( smartTile!=null ) {
 			// Tile (from either Def or a field)
 			_renderTile(smartTile, ed.tileRenderMode);
