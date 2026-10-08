@@ -23,6 +23,7 @@ enum ElementCategory {
 class CommandPalette {
 	static var ME : Null<CommandPalette>;
 
+	static var LAST_SEARCH : String = null;
 	static var MAX_RESULTS = 20;
 
 	public var editor(get,never) : Editor; inline function get_editor() return Editor.ME;
@@ -73,7 +74,10 @@ class CommandPalette {
 		});
 		jInput.on("input", _->updateResults(false) );
 		jInput.blur( _->jInput.focus() );
+		if( LAST_SEARCH!=null )
+			jInput.val(LAST_SEARCH);
 		jInput.focus();
+		jInput.select();
 
 		initSearchableElements();
 		updateResults(false);
@@ -407,6 +411,7 @@ class CommandPalette {
 	}
 
 	function close() {
+		LAST_SEARCH = jInput.val();
 		jCmdPal.remove();
 		jCmdPal = null;
 		if( ME==this )
