@@ -8,6 +8,7 @@
 - You can now use external images as visuals for Entities (and kind of create "decals" using this): add a FilePath field to an entity and pick "Replace entity tile" in the field Display options. You may also want to change the Entity display options to render its tile outside its bounds.
 - Search results (CTRL-K/CTRL-P shortcuts) now include level field values and IIDs
 - Added a "Show all results" to search results window
+- Last search is shown when re-opening the search bar
 - Added a new Project setting to customize the JSON indentation (Full, Compact or Minified)
 - The online JSON documentation now shows references between UID fields.
 - Fixed a crash when updating an external CastleDB file
