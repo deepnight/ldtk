@@ -458,7 +458,7 @@ class FieldDefsForm {
 					case PointPathLoop: L.t._("Show path of points (looping)");
 					case RadiusPx: L.t._("As a radius (pixels)");
 					case RadiusGrid: L.t._("As a radius (grid-based)");
-					case EntityTile: L.t._("Replace entity tile");
+					case EntityTile: curField.type==F_Path ? L.t._("Replace entity tile (image file only)") : L.t._("Replace entity tile");
 					case LevelTile: L.t._("Replace level render in world view");
 					case ArrayCountWithLabel: L.t._("Show array length with label");
 					case ArrayCountNoLabel: L.t._("Show array length only");
@@ -475,7 +475,7 @@ class FieldDefsForm {
 					case ArrayCountNoLabel, ArrayCountWithLabel: curField.isArray;
 
 					case EntityTile:
-						isEntityField() && ( curField.isEnum() || curField.type==F_Tile );
+						isEntityField() && ( curField.isEnum() || curField.type==F_Tile || curField.type==F_Path && !curField.isArray );
 
 					case LevelTile:
 						isLevelField() && ( curField.isEnum() || curField.type==F_Tile );

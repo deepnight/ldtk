@@ -125,8 +125,8 @@ class EntityRender extends dn.Process {
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 
 		// Render a tile
-		function _renderTile(rect:ldtk.Json.TilesetRect, mode:ldtk.Json.EntityTileRenderMode) {
-			if( rect==null || Editor.ME.project.defs.getTilesetDef(rect.tilesetUid)==null ) {
+		function _renderTile(rect:ldtk.Json.TilesetRect, mode:ldtk.Json.EntityTileRenderMode, ?imageTile:h2d.Tile) {
+			if( imageTile==null && ( rect==null || Editor.ME.project.defs.getTilesetDef(rect.tilesetUid)==null ) ) {
 				// Missing tile
 				var p = 2;
 				g.lineStyle(3*zoomScale, 0xff0000);
@@ -143,8 +143,7 @@ class EntityRender extends dn.Process {
 				g.drawRect(0, 0, w, h);
 
 				// Texture
-				var td = Editor.ME.project.defs.getTilesetDef(rect.tilesetUid);
-				var t = td.getTileRect(rect);
+				var t = imageTile ?? Editor.ME.project.defs.getTilesetDef(rect.tilesetUid).getTileRect(rect);
 				var alpha = ed.tileOpacity;
 				switch mode {
 					case Stretch:
@@ -231,8 +230,30 @@ class EntityRender extends dn.Process {
 		}
 
 		// Base render
+		var fieldImageTile : Null<h2d.Tile> = null;
+		if( ei!=null )
+			for(fd in ed.fieldDefs) {
+				if( fd.type!=F_Path || fd.isArray || fd.editorDisplayMode!=EntityTile )
+					continue;
+				var relPath = ei.getFieldInstance(fd,true).getFilePath(0);
+				if( relPath==null )
+					continue;
+				switch dn.FilePath.extractExtension(relPath, true) {
+					case "png", "jpg", "jpeg", "gif", "ase", "aseprite":
+						if( !NT.fileExists(Editor.ME.project.makeAbsoluteFilePath(relPath)) )
+							continue;
+						var img = Editor.ME.project.getOrLoadImage(relPath);
+						if( img!=null ) {
+							fieldImageTile = h2d.Tile.fromTexture(img.tex);
+							break;
+						}
+					case _:
+				}
+			}
 		var smartTile = ei==null ? ed.getDefaultTile() : ei.getSmartTile();
-		if( smartTile!=null ) {
+		if( fieldImageTile!=null )
+			_renderTile(null, ed.tileRenderMode, imageTile);
+		else if( smartTile!=null ) {
 			// Tile (from either Def or a field)
 			_renderTile(smartTile, ed.tileRenderMode);
 		}

@@ -5,6 +5,7 @@
 - Fixed the free drag'n'drop of Entities (as in "not snapped to grid") when the grid is disabled (G shortcut)
 - Added a Layer panel setting to enable Entity visual depth sorting based on its Y coordinate. When in Manual mode, press CTRL-UP/CTRL-DOWN to change an entity depth. Use CTRL-SHIFT-UP/DOWN to bring to front/back.
 - In Auto-Layers, you can now pick any number of other layers to prevent local rules to apply at particular coordinates.
+- You can now use external images as visuals for Entities (and kind of create "decals" using this): add a FilePath field to an entity and pick "Replace entity tile" in the field Display options. You may also want to change the Entity display options to render its tile outside its bounds.
 - Search results (CTRL-K/CTRL-P shortcuts) now include level field values and IIDs
 - Added a "Show all results" to search results window
 - Added a new Project setting to customize the JSON indentation (Full, Compact or Minified)
