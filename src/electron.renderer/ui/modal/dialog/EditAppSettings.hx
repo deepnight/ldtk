@@ -39,7 +39,24 @@ class EditAppSettings extends ui.modal.Dialog {
 			var te = new TextEditor(raw, "LDtk logs", LangLog);
 			te.scrollToEnd();
 		});
-		jContent.find( "button.locateLog").click( (_)->JsTools.locateFile( JsTools.getLogPath(), true ) );
+		// Language
+		var jLang = jForm.find("#appLanguage");
+		jLang.empty();
+		var curLocale = settings.getLocale();
+		for( l in Lang.LANGUAGES ) {
+			var jOpt = new J('<option value="${l.id}"/>');
+			jLang.append(jOpt);
+			jOpt.text(l.label);
+			if( l.id == curLocale )
+				jOpt.prop("selected", true);
+		}
+		jLang.change( (_)->{
+			var chosen = jLang.val();
+			settings.v.locale = chosen;
+			Lang.setLanguage(chosen);
+			onSettingChanged();
+			needRestart = true;
+		});
 
 		// World mode using mousewheel
 		var i = new form.input.EnumSelect(

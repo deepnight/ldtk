@@ -39,6 +39,7 @@ typedef AppSettings = {
 	var uiStates : Array<{ id:String, val:Int }>;
 	var lastUiDirs : Array<{ ?project:String, uiId:String, path:String }>;
 	var projectTrusts : Array<{ iid:String, trusted:Bool }>;
+	var ?locale : String;
 }
 
 enum abstract UiState(String) {
@@ -117,6 +118,7 @@ class Settings {
 			uiStates: [],
 			lastUiDirs: [],
 			projectTrusts: [],
+			locale: null,
 		}
 
 		// Load
@@ -153,6 +155,48 @@ class Settings {
 		#end
 
 		initDefaultGlobalUiState(ShowProjectColors, 1);
+	}
+
+	public function getLocale() : String {
+		if( v.locale!=null && v.locale!="" )
+			return v.locale;
+
+		#if editor
+		try {
+			if( js.Browser.navigator.languages!=null ) {
+				for(full in js.Browser.navigator.languages) {
+					var low = full.toLowerCase();
+					if( low.indexOf("zh")==0 ) { v.locale = "zh-CN"; save(); return "zh-CN"; }
+					if( low.indexOf("ja")==0 ) { v.locale = "ja"; save(); return "ja"; }
+					if( low.indexOf("fr")==0 ) { v.locale = "fr"; save(); return "fr"; }
+					if( low.indexOf("es")==0 ) { v.locale = "es"; save(); return "es"; }
+					if( low.indexOf("de")==0 ) { v.locale = "de"; save(); return "de"; }
+				}
+			}
+			if( js.Browser.navigator.language!=null ) {
+				var low = js.Browser.navigator.language.toLowerCase();
+				if( low.indexOf("zh")==0 ) { v.locale = "zh-CN"; save(); return "zh-CN"; }
+				if( low.indexOf("ja")==0 ) { v.locale = "ja"; save(); return "ja"; }
+				if( low.indexOf("fr")==0 ) { v.locale = "fr"; save(); return "fr"; }
+				if( low.indexOf("es")==0 ) { v.locale = "es"; save(); return "es"; }
+				if( low.indexOf("de")==0 ) { v.locale = "de"; save(); return "de"; }
+			}
+		} catch(_) {}
+		#else
+		try {
+			var appLocale = electron.main.App.getLocale();
+			if( appLocale!=null ) {
+				var low = appLocale.toLowerCase();
+				if( low.indexOf("zh")==0 ) return "zh-CN";
+				if( low.indexOf("ja")==0 ) return "ja";
+				if( low.indexOf("fr")==0 ) return "fr";
+				if( low.indexOf("es")==0 ) return "es";
+				if( low.indexOf("de")==0 ) return "de";
+			}
+		} catch(_) {}
+		#end
+
+		return "en";
 	}
 
 

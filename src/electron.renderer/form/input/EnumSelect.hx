@@ -26,7 +26,8 @@ class EnumSelect<T:EnumValue> extends form.Input<T> {
 
 			jInput.append(jOpt);
 			jOpt.attr("value",k);
-			jOpt.text( nameLocalizer==null ? k : nameLocalizer(t) );
+			var rawLabel = nameLocalizer==null ? k : nameLocalizer(t);
+			jOpt.text( Lang.getText(rawLabel) );
 			if( t==getter() )
 				jOpt.attr("selected","selected");
 		}
@@ -35,7 +36,7 @@ class EnumSelect<T:EnumValue> extends form.Input<T> {
 		if( allowNull ) {
 			var opt = new J("<option/>");
 			jInput.prepend(opt);
-			opt.text( nameLocalizer==null ? Lang.t._("(none)") : nameLocalizer(null) );
+			opt.text( nameLocalizer==null ? Lang.t._("(none)") : Lang.getText(nameLocalizer(null)) );
 			opt.attr("value", "");
 			if( getter()==null )
 				opt.attr("selected","selected");

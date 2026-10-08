@@ -2,6 +2,16 @@ import dn.data.GetText;
 
 class Lang {
 	// Text constants
+	public static var LANGUAGES = [
+		{ id: "en", label: "English" },
+		{ id: "zh-CN", label: "简体中文" },
+		{ id: "ja", label: "日本語" },
+		{ id: "fr", label: "Français" },
+		{ id: "es", label: "Español" },
+		{ id: "de", label: "Deutsch" },
+	];
+
+	// Text constants
 	public static var _Untagged = ()->t._("Untagged");
 	public static var _Duplicate = (?v:String) -> v==null ? t._("Duplicate") : t._("Duplicate ::e::", {e:v});
 	public static var _Copy = (?v:String) -> v==null ? t._("Copy") : t._("Copy ::e::", {e:v});
@@ -14,21 +24,262 @@ class Lang {
 
 	// Misc
 	static var _initDone = false;
-	static var DEFAULT = "en";
+	public static var DEFAULT = "en";
 	public static var CUR = "??";
 	public static var t : GetText;
 
+	static var _spaceRegex = ~/[\r\n\t]+/g;
+	static var _multiSpaceRegex = ~/[ ]{2,}/g;
 
 	public static function init(?lid:String) {
-		if( _initDone )
+		if( _initDone ) {
+			if( lid==null || lid=="" || lid==CUR )
+				return;
+			setLanguage(lid);
+			return;
+		}
+
+		if( lid!=null && lid!="" )
+			setLanguage(lid);
+		else {
+			#if editor
+			var detected = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : (new Settings()).getLocale();
+			setLanguage(detected);
+			#else
+			setLanguage(DEFAULT);
+			#end
+		}
+	}
+
+	public static function setLanguage(lid:String) {
+		if( lid==null || lid=="" ) {
+			#if editor
+			lid = App.ME!=null && App.ME.settings!=null ? App.ME.settings.getLocale() : (new Settings()).getLocale();
+			#else
+			lid = DEFAULT;
+			#end
+		}
+		if( lid==null || lid=="" )
+			lid = DEFAULT;
+
+		CUR = lid;
+		var newT = new GetText();
+		_initDone = true;
+
+		var loaded = false;
+		#if (electron || nodejs)
+		try {
+			var appDir = dn.js.ElectronTools.getAppResourceDir();
+			// Check assets/lang/ first (packaged app)
+			var pAssets = dn.FilePath.fromFile(appDir + "assets/lang/" + CUR + ".po");
+			if( dn.js.NodeTools.fileExists(pAssets.full) ) {
+				var bytes = dn.js.NodeTools.readFileBytes(pAssets.full);
+				newT.readPo(bytes);
+				loaded = true;
+			}
+			// Check res/lang/ (development / unpackaged)
+			if( !loaded ) {
+				var pRes = dn.FilePath.fromFile(appDir + "res/lang/" + CUR + ".po");
+				if( dn.js.NodeTools.fileExists(pRes.full) ) {
+					var bytes = dn.js.NodeTools.readFileBytes(pRes.full);
+					newT.readPo(bytes);
+					loaded = true;
+				}
+			}
+		} catch(_) {}
+		#end
+
+		if( !loaded ) {
+			try {
+				newT.readPo( hxd.Res.load("lang/"+CUR+".po").entry.getBytes() );
+				loaded = true;
+			} catch(e:Dynamic) {
+				// Failed to load CUR. Do NOT clobber with DEFAULT/en.po if we already have a loaded dictionary
+				if( CUR==DEFAULT && (t==null || !t.getRawDict().keys().hasNext()) ) {
+					try {
+						newT.readPo( hxd.Res.load("lang/"+DEFAULT+".po").entry.getBytes() );
+						loaded = true;
+					} catch(_) {}
+				}
+			}
+		}
+
+		if( loaded || t==null ) {
+			var rawDict = newT.getRawDict();
+			var keysToAdd = new Map<String, String>();
+			for( k in rawDict.keys() ) {
+				var val = rawDict.get(k);
+				if( val==null ) continue;
+				if( val.indexOf("\\\n")>=0 ) {
+					val = StringTools.replace(val, "\\\n", "\n");
+					rawDict.set(k, val);
+				}
+
+				if( k.indexOf("\\\n")>=0 ) {
+					var kReal = StringTools.replace(k, "\\\n", "\n");
+					var kEsc = StringTools.replace(k, "\\\n", "\\n");
+					keysToAdd.set(kReal, val);
+					keysToAdd.set(kEsc, val);
+				}
+				if( k.indexOf("\n")>=0 && k.indexOf("\\\n")<0 ) {
+					var kEsc = StringTools.replace(k, "\n", "\\n");
+					var kEscAndReal = StringTools.replace(k, "\n", "\\\n");
+					keysToAdd.set(kEsc, val);
+					keysToAdd.set(kEscAndReal, val);
+				}
+				if( k.indexOf("\\n")>=0 ) {
+					var kReal = StringTools.replace(k, "\\n", "\n");
+					var kEscAndReal = StringTools.replace(k, "\\n", "\\\n");
+					keysToAdd.set(kReal, val);
+					keysToAdd.set(kEscAndReal, val);
+				}
+			}
+			for( k in keysToAdd.keys() ) {
+				if( !rawDict.exists(k) )
+					rawDict.set(k, keysToAdd.get(k));
+			}
+
+			t = newT;
+		}
+	}
+
+	public static function getText(str:Null<String>, ?vars:Dynamic) : String {
+		if( str==null || str.length==0 )
+			return str;
+
+		if( t==null )
+			init();
+
+		var trimmed = StringTools.trim(str);
+		if( trimmed.length==0 )
+			return str;
+
+		var dict = t.getRawDict();
+		if( dict.exists(trimmed) )
+			return t.get(trimmed, vars);
+
+		if( dict.exists(str) )
+			return t.get(str, vars);
+
+		var normalized = _multiSpaceRegex.replace( _spaceRegex.replace(trimmed, " "), " " );
+		if( dict.exists(normalized) )
+			return t.get(normalized, vars);
+
+		// Handle \n vs \\n vs \\\n representation differences
+		if( trimmed.indexOf("\\n")>=0 ) {
+			var withRealNewlines = StringTools.replace(trimmed, "\\n", "\n");
+			if( dict.exists(withRealNewlines) )
+				return t.get(withRealNewlines, vars);
+			var withEscapedAndReal = StringTools.replace(trimmed, "\\n", "\\\n");
+			if( dict.exists(withEscapedAndReal) )
+				return t.get(withEscapedAndReal, vars);
+		}
+		if( trimmed.indexOf("\n")>=0 ) {
+			var withEscapedNewlines = StringTools.replace(trimmed, "\n", "\\n");
+			if( dict.exists(withEscapedNewlines) )
+				return t.get(withEscapedNewlines, vars);
+			var withEscapedAndReal = StringTools.replace(trimmed, "\n", "\\\n");
+			if( dict.exists(withEscapedAndReal) )
+				return t.get(withEscapedAndReal, vars);
+			var withoutEscapedBackslash = StringTools.replace(trimmed, "\\\n", "\n");
+			if( dict.exists(withoutEscapedBackslash) )
+				return t.get(withoutEscapedBackslash, vars);
+		}
+
+		return t.get(str, vars);
+	}
+
+	#if (electron || nodejs)
+	public static function localizeDom(jCtx:js.jquery.JQuery) : Void {
+		if( jCtx==null || t==null || CUR=="en" )
 			return;
 
-		_initDone = true;
-		CUR = lid==null ? DEFAULT : lid;
+		// Localize attributes: title, placeholder, data-title
+		jCtx.find("[title], [placeholder], [data-title]").addBack("[title], [placeholder], [data-title]").each( function(idx, el) {
+			var jEl = new js.jquery.JQuery(el);
+			var title = jEl.attr("title");
+			if( title!=null && title!="" && !StringTools.startsWith(title, "http") && !StringTools.startsWith(title, "mailto:") ) {
+				var trans = getText(title);
+				if( trans!=title )
+					jEl.attr("title", trans);
+			}
+			var dataTitle = jEl.attr("data-title");
+			if( dataTitle!=null && dataTitle!="" && !StringTools.startsWith(dataTitle, "http") && !StringTools.startsWith(dataTitle, "mailto:") ) {
+				var trans = getText(dataTitle);
+				if( trans!=dataTitle )
+					jEl.attr("data-title", trans);
+			}
+			var placeholder = jEl.attr("placeholder");
+			if( placeholder!=null && placeholder!="" ) {
+				var trans = getText(placeholder);
+				if( trans!=placeholder )
+					jEl.attr("placeholder", trans);
+			}
+		});
 
-		t = new GetText();
-		t.readPo( hxd.Res.load("lang/"+CUR+".po").entry.getBytes() );
+		// Localize text nodes and options across all UI elements
+		jCtx.find("*").addBack().each( function(idx, el) {
+			var domEl : js.html.Element = cast el;
+			if( domEl==null )
+				return;
+
+			var tag = domEl.tagName.toLowerCase();
+			if( tag=="script" || tag=="style" || tag=="code" || tag=="pre" || tag=="canvas" || tag=="svg" || tag=="input" || tag=="textarea" )
+				return;
+
+			if( domEl.classList!=null && (domEl.classList.contains("icon") || domEl.classList.contains("key") || domEl.classList.contains("code")) )
+				return;
+
+			// Handle <option> elements in select dropdowns
+			if( tag=="option" ) {
+				var opt : js.html.OptionElement = cast domEl;
+				var rawText = opt.text;
+				if( rawText!=null && rawText.length>0 ) {
+					var trimmed = StringTools.trim(rawText);
+					if( trimmed.length>0 ) {
+						var trans = getText(trimmed);
+						if( trans!=trimmed )
+							opt.text = trans;
+					}
+				}
+				return;
+			}
+
+			// Localize direct text nodes
+			if( domEl.childNodes!=null ) {
+				for(i in 0...domEl.childNodes.length) {
+					var node = domEl.childNodes.item(i);
+					if( node.nodeType == 3 ) { // Node.TEXT_NODE
+						var rawVal = node.nodeValue;
+						if( rawVal==null )
+							continue;
+						var trimmed = StringTools.trim(rawVal);
+						if( trimmed.length==0 )
+							continue;
+
+						var trans = getText(trimmed);
+						if( trans!=trimmed ) {
+							var len = rawVal.length;
+							var start = 0;
+							while( start<len ) {
+								var c = rawVal.charCodeAt(start);
+								if( c==32 || c==9 || c==10 || c==13 ) start++; else break;
+							}
+							var end = len;
+							while( end>start ) {
+								var c = rawVal.charCodeAt(end-1);
+								if( c==32 || c==9 || c==10 || c==13 ) end--; else break;
+							}
+							var leading = rawVal.substring(0, start);
+							var trailing = rawVal.substring(end);
+							node.nodeValue = leading + trans + trailing;
+						}
+					}
+				}
+			}
+		});
 	}
+	#end
 
 	public static inline function onOff(v:Null<Bool>) {
 		return v==true ? t._("ON") : t._("off");
@@ -38,7 +289,8 @@ class Lang {
 		if( str==null )
 			return null;
 		else {
-			init();
+			if( t==null )
+				init();
 			return t.untranslated(str);
 		}
 	}

@@ -793,6 +793,7 @@ class App extends dn.Process {
 
 		// Load
 		settings = new Settings();
+		Lang.init( settings.getLocale() );
 		if( settings.v.lastKnownVersion==null )
 			LOG.warning("  -> New settings");
 

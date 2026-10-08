@@ -13,6 +13,7 @@ class LastChance extends dn.Process {
 		var backupPath = project.filePath.full;
 
 		elem = new J("xml#lastChance").clone().children().first();
+		misc.JsTools.parseComponents(elem);
 		elem.appendTo(App.ME.jBody);
 		elem.find(".action").text(str);
 

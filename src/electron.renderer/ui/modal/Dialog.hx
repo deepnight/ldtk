@@ -41,7 +41,7 @@ class Dialog extends ui.Modal {
 
 
 	public function addTitle(label:LocaleString, atTheBeginning:Bool) {
-		var t = new J('<h2>$label</h2>');
+		var t = new J('<h2>${L.getText(label)}</h2>');
 		if( atTheBeginning )
 			jContent.prepend(t);
 		else
@@ -49,14 +49,14 @@ class Dialog extends ui.Modal {
 	}
 
 	public function addParagraph(str:LocaleString, ?className:String) {
-		var jElem = new J('<p>$str</p>');
+		var jElem = new J('<p>${L.getText(str)}</p>');
 		if( className!=null )
 			jElem.addClass(className);
 		jContent.append(jElem);
 	}
 
 	public function addDiv(str:LocaleString, ?className:String) {
-		var jElem = new J('<div>$str</div>');
+		var jElem = new J('<div>${L.getText(str)}</div>');
 		if( className!=null )
 			jElem.addClass(className);
 		jContent.append(jElem);
@@ -67,7 +67,7 @@ class Dialog extends ui.Modal {
 		var b = new J("<button/>");
 		jButtons.show().append(b);
 		b.attr("type","button");
-		b.text(label);
+		b.text(L.getText(label));
 		if( className!=null )
 			b.addClass(className);
 		b.click( function(ev) {

@@ -9,6 +9,10 @@ class Notification extends dn.Process {
 	private function new(str:String, ?sub:String, ?col:UInt, ?long=false) {
 		super(Editor.ME);
 
+		str = L.getText(str);
+		if( sub!=null )
+			sub = L.getText(sub);
+
 		var jList = new J("#notificationList");
 		jList.find(".latest").removeClass("latest");
 

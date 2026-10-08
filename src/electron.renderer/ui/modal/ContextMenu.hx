@@ -157,7 +157,7 @@ class ContextMenu extends ui.Modal {
 
 
 	public function addTitle(str:LocaleString) {
-		var jTitle = new J('<div class="title">$str</div>');
+		var jTitle = new J('<div class="title">${Lang.getText(str)}</div>');
 		jTitle.appendTo(jContent);
 		applyAnchor();
 	}
@@ -180,10 +180,10 @@ class ContextMenu extends ui.Modal {
 			jElement.append('<span class="icon ${a.iconId}"></span>');
 
 		if( a.label!=null )
-			jElement.append(a.label);
+			jElement.append(L.getText(a.label));
 
 		if( a.subText!=null && a.subText!=a.label )
-			jElement.append('<span class="sub">${a.subText}</span>');
+			jElement.append('<span class="sub">${L.getText(a.subText)}</span>');
 
 		if( a.enable!=null && !a.enable() )
 			jElement.prop("disabled", true);
@@ -353,7 +353,7 @@ class ContextMenu extends ui.Modal {
 
 			case Ctx_Title(label):
 				jElement = new J('<div class="title"/>');
-				jElement.append(label);
+				jElement.append(L.getText(label));
 
 			case Ctx_Separator:
 				jElement = new J('<div class="separator"/>');

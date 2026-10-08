@@ -11,6 +11,7 @@ class Tip extends dn.Process {
 
 		clear();
 		CURRENT = this;
+		str = L.getText(str);
 		text = str;
 		jTip = new J("xml#tip").clone().children().first();
 		jTip.appendTo(App.ME.jBody);
