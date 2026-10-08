@@ -885,7 +885,6 @@ class FieldDefsForm {
 		// Searchable
 		var i = Input.linkToHtmlInput( curField.searchable, jForm.find("input#searchable") );
 		i.onChange = onFieldChange;
-		i.setEnabled( isEntityField() );
 
 		// Array size constraints
 		if( curField.isArray ) {

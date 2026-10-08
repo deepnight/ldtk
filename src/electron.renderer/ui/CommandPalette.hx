@@ -14,6 +14,8 @@ enum ElementCategory {
 	SE_Definition;
 	SE_World;
 	SE_Level;
+	SE_LevelField;
+	SE_Layer;
 	SE_Entity;
 }
 
@@ -151,7 +153,7 @@ class CommandPalette {
 				id: w.iid,
 				cat: SE_World,
 				desc: w.identifier,
-				keywords: [w.identifier],
+				keywords: [w.identifier, w.iid],
 				onPick: ()->editor.selectWorld(w,true),
 			});
 			for(l in w.levels) {
@@ -161,9 +163,46 @@ class CommandPalette {
 					cat: SE_Level,
 					desc: l.identifier,
 					ctxDesc: w.identifier,
-					keywords: [ w.identifier ],
+					keywords: [ w.identifier, l.iid ],
 					onPick: ()->editor.selectLevel(l, true),
 				});
+
+				// Level fields
+				for(fi in l.fieldInstances) {
+					if( !fi.def.searchable )
+						continue;
+					var values = [];
+					for(i in 0...fi.getArrayLength())
+						if( !fi.valueIsNull(i) )
+							values.push(fi.getForDisplay(i));
+					if( values.length==0 )
+						continue;
+					allElements.push({
+						id: l.iid+"_field_"+fi.defUid,
+						cat: SE_LevelField,
+						desc: fi.def.identifier+"."+values.join("."),
+						ctxDesc: l.identifier,
+						keywords: values.concat([fi.def.identifier, l.identifier, w.identifier]),
+						onPick: ()->{
+							editor.selectLevel(l, true);
+							new ui.modal.panel.LevelInstancePanel();
+						},
+					});
+				}
+
+				// Layer instances
+				for(li in l.layerInstances)
+					allElements.push({
+						id: li.iid,
+						cat: SE_Layer,
+						desc: li.def.identifier,
+						ctxDesc: l.identifier,
+						keywords: [li.iid],
+						onPick: ()->{
+							editor.selectLevel(l, true);
+							editor.selectLayerInstance(li);
+						},
+					});
 
 				// Entities
 				for(li in l.layerInstances)
@@ -173,7 +212,7 @@ class CommandPalette {
 						cat: SE_Entity,
 						desc: ei.def.identifier,
 						ctxDesc: l.identifier,
-						keywords: [],
+						keywords: [ei.iid],
 						onPick: ()->{
 							editor.selectLevel(l, true);
 							var b = editor.levelRender.bleepEntity(ei);
@@ -208,6 +247,8 @@ class CommandPalette {
 				case SE_Definition: "definition";
 				case SE_World: "world";
 				case SE_Level: "level";
+				case SE_LevelField: "level field";
+				case SE_Layer: "layer";
 				case SE_Entity: "entity";
 			});
 			e.keywords.push(e.desc.toLowerCase());
@@ -260,12 +301,13 @@ class CommandPalette {
 			var iconId = switch e.cat {
 				case SE_Definition: "project";
 				case SE_World: "world";
-				case SE_Level: "level";
+				case SE_Level, SE_LevelField: "level";
+				case SE_Layer: "layer";
 				case SE_Entity: "entity";
 			}
 			jElement.append('<span class="icon $iconId"></span>');
 			var desc = e.desc.length>=MAX_DESC_LEN ? e.desc.substr(0,MAX_DESC_LEN-3)+"..." : e.desc;
-			jElement.append('<div class="desc">$desc</div>');
+			jElement.append( new J('<div class="desc"/>').text(desc) );
 
 			if( e.ctxDesc!=null )
 				jElement.append('<div class="context">${e.ctxDesc}</div>');
