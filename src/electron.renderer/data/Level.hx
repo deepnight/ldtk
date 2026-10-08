@@ -1,7 +1,7 @@
 package data;
 
 private enum LevelJsonCache {
-	InMemory(str:String, json:ldtk.Json.LevelJson);
+	InMemory(json:ldtk.Json.LevelJson);
 	ExternalFile(absPath:String, fingerprint:String);
 }
 
@@ -394,7 +394,7 @@ class Level {
 	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
 		if( !_project.externalLevels )
 			_jsonCache = InMemory(
-				ui.ProjectSaver.jsonStringify(_project, json, skipHeader),
+				// ui.ProjectSaver.jsonStringify(_project, json, skipHeader),
 				json
 			);
 	}
@@ -420,7 +420,7 @@ class Level {
 					App.LOG.warning('Level file changed on disk since last load/save, ignoring it: $absPath');
 					invalidateJsonCache();
 				}
-			case InMemory(_, _), null:
+			case InMemory(_), null:
 		}
 	}
 
@@ -428,14 +428,14 @@ class Level {
 		checkExternalJsonCache();
 		return switch _jsonCache {
 			case ExternalFile(absPath, _): absPath;
-			case InMemory(_, _), null: null;
+			case InMemory(_), null: null;
 		}
 	}
 
 	public function getCacheJsonObject() : Null<ldtk.Json.LevelJson> {
 		checkExternalJsonCache();
 		return switch _jsonCache {
-			case InMemory(_, json): json;
+			case InMemory(json): json;
 			case ExternalFile(absPath, _):
 				try {
 					var json : ldtk.Json.LevelJson = haxe.Json.parse(NT.readFileString(absPath));
@@ -451,16 +451,16 @@ class Level {
 		return identifier + ( hasJsonCache() ? "" : "*" );
 	}
 
-	public function getCacheJsonString() : Null<String> {
-		checkExternalJsonCache();
-		return switch _jsonCache {
-			case InMemory(str, _): str;
-			case ExternalFile(absPath, _):
-				try NT.readFileString(absPath)
-				catch(_) null;
-			case null: null;
-		}
-	}
+	// public function getCacheJsonString() : Null<String> {
+	// 	checkExternalJsonCache();
+	// 	return switch _jsonCache {
+	// 		case InMemory(str, _): str;
+	// 		case ExternalFile(absPath, _):
+	// 			try NT.readFileString(absPath)
+	// 			catch(_) null;
+	// 		case null: null;
+	// 	}
+	// }
 
 	public function getBgTileInfos() : Null<{ imgData:data.DataTypes.CachedImage, tx:Float, ty:Float, tw:Float, th:Float, dispX:Int, dispY:Int, sx:Float, sy:Float }> {
 		if( !hasBgImage() )
