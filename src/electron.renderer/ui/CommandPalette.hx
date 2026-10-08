@@ -183,7 +183,7 @@ class CommandPalette {
 						cat: SE_LevelField,
 						desc: l.identifier+"."+values.join("."),
 						ctxDesc: l.identifier,
-						keywords: values.concat([fi.def.identifier, l.identifier, w.identifier]),
+						keywords: values,
 						onPick: ()->{
 							editor.selectLevel(l, true);
 							new ui.modal.panel.LevelInstancePanel();
