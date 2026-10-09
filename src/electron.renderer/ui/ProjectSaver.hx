@@ -33,6 +33,7 @@ class ProjectSaver extends dn.Process {
 	var savingData : Null<FileSavingData>;
 	var onComplete : Null< Bool->Void >;
 	var useMetaBar = false;
+	var timeS : Float;
 
 
 	public function new(p:dn.Process, project:data.Project, ?onComplete:(success:Bool)->Void) {
@@ -42,6 +43,7 @@ class ProjectSaver extends dn.Process {
 		this.project = project; // WARNING: no clone() here, so the project should NOT be modified during saving!!
 		QUEUE.push(this);
 
+		timeS = haxe.Timer.stamp();
 		log('Preparing project saving: ${project.filePath.full}...');
 		project.garbageCollectUnusedImages();
 		beginState(InQueue);
@@ -60,7 +62,10 @@ class ProjectSaver extends dn.Process {
 
 	inline function hasEditor() return Editor.ME!=null && !Editor.ME.destroyed;
 
-	inline function log(str:String) App.LOG.add("save", '$str');
+	inline function log(str:String) {
+		App.LOG.add("save", '$str (elapsed=${M.pretty( 1000*(haxe.Timer.stamp()-timeS), 1 )}ms)');
+		timeS = haxe.Timer.stamp();
+	}
 	inline function logState() log('=> $state...');
 
 	function error(str:LocaleString, showOptions=true) {
@@ -241,7 +246,10 @@ class ProjectSaver extends dn.Process {
 							cb: ()->{
 								if( failed )
 									return;
-								try writeExternalLevelFile(project, uid, fp.full, true)
+								try {
+									log('  Writing external level file for "$id"...');
+									writeExternalLevelFile(project, uid, fp.full, true);
+								}
 								catch(err:Dynamic) {
 									failed = true;
 									App.LOG.error('Failed to save external level "$id": '+Std.string(err));
@@ -553,6 +561,7 @@ class ProjectSaver extends dn.Process {
 
 
 	function complete(success:Bool) {
+		log('Save ended with success=$success');
 		destroy();
 
 		if( !success )
