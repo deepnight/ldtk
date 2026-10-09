@@ -4,6 +4,7 @@ class Level {
 	var _project : Project;
 	public var _world : World;
 
+	var settings(get,never) : Settings; inline function get_settings() return App.ME.settings;
 	var _cachedJson : Null<{ str:String, json:ldtk.Json.LevelJson }>;
 
 	@:allow(data.Project, data.World)
@@ -379,9 +380,13 @@ class Level {
 	}
 
 	function setJsonCache(json:ldtk.Json.LevelJson, skipHeader:Bool) {
+		if( settings.v.levelJsonCacheActive ) {
 		_cachedJson = {
 			str: ui.ProjectSaver.jsonStringify(_project, json, skipHeader ),
 			json: json,
+			}
+		} else {
+			_cachedJson = null;
 		}
 	}
 

@@ -14,6 +14,7 @@ typedef AppSettings = {
 	var showDetails : Bool;
 	var useBestGPU : Bool;
 	var startFullScreen: Bool;
+	var levelJsonCacheActive: Bool;
 	var autoInstallUpdates : Bool;
 	var colorBlind : Bool;
 	var blurMask : Bool;
@@ -96,6 +97,7 @@ class Settings {
 			showDetails: true,
 			useBestGPU: true,
 			startFullScreen: false,
+			levelJsonCacheActive: true,
 			autoInstallUpdates: true,
 			colorBlind: false,
 			blurMask: true,

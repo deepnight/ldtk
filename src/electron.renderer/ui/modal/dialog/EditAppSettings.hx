@@ -86,6 +86,13 @@ class EditAppSettings extends ui.modal.Dialog {
 			App.ME.updateBodyClasses();
 		}
 
+		// Levels JSON cache
+		var j = Input.linkToHtmlInput(settings.v.levelJsonCacheActive, jForm.find("#levelJsonCacheActive"));
+		j.onValueChange = (v)->{
+			onSettingChanged();
+			App.ME.updateBodyClasses();
+		}
+
 		// Single layer mode intensity
 		var allValues = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 		if( !allValues.contains(settings.v.singleLayerModeIntensity) ) {
