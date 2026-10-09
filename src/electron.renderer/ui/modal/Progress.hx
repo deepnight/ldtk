@@ -24,7 +24,6 @@ class Progress extends ui.Modal {
 	var curOps : Array<ProgressOp> = [];
 	var curIdx = 0;
 	var opsCount : Int;
-	var startTime = -1.;
 	var jBar : js.jquery.JQuery;
 	var title : String;
 	var onComplete : Null<Void->Void>;
@@ -155,9 +154,6 @@ class Progress extends ui.Modal {
 				updateBar( curOps.length>0 ? curOps[0].label : null );
 
 			case Running:
-				if( startTime<0 )
-					startTime = haxe.Timer.stamp();
-
 				var spent = 0.;
 				while( curOps.length>0 && spent<MAX_FRAME_DURATION_S ) {
 					if( spent>0 && curOps[0].isExpensive ) // ensure "expensive" op start in their own frame
@@ -176,9 +172,8 @@ class Progress extends ui.Modal {
 					updateBar(curOps[0].label);
 
 			case EndFrame:
-				var t = M.pretty( haxe.Timer.stamp()-startTime, 1 );
-				log.def('  Completed (${t}s)...');
-				App.LOG.general('  Progress completed: "$title" (${t}s)');
+				log.def('  Completed...');
+				App.LOG.general('  Progress completed: "$title"');
 				state = Completed;
 				updateBar();
 
