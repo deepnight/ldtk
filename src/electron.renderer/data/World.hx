@@ -34,7 +34,7 @@ class World {
 	}
 
 
-	public function toJson() : ldtk.Json.WorldJson {
+	public function toJson(skipLayerInstances=false) : ldtk.Json.WorldJson {
 		return {
 			iid: iid,
 			identifier: identifier,
@@ -43,7 +43,7 @@ class World {
 			worldGridWidth: worldGridWidth,
 			worldGridHeight: worldGridHeight,
 			worldLayout: JsonTools.writeEnum(worldLayout, false),
-			levels: levels.map( l->l.toJson() ),
+			levels: levels.map( l->l.toJson(false, skipLayerInstances) ),
 		}
 	}
 

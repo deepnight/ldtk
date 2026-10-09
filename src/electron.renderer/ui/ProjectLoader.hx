@@ -105,6 +105,8 @@ class ProjectLoader {
 						null;
 					}
 					#end
+				json = null;
+				raw = null;
 			}
 		});
 
@@ -157,8 +159,10 @@ class ProjectLoader {
 
 										var raw = NT.readFileString(path);
 										var lJson = haxe.Json.parse(raw);
-										var l = data.Level.fromJson(p, w, lJson, true);
+										var l = data.Level.fromJson(p, w, lJson, true, path);
 										w.levels[curIdx] = l;
+										raw = null;
+										lJson = null;
 									}
 									catch(e:Dynamic) {
 										_failedLevel(w, curIdx, "Error while parsing level file "+l.externalRelPath);
