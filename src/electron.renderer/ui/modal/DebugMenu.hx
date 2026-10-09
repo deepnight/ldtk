@@ -124,9 +124,10 @@ class DebugMenu extends ui.modal.ContextMenu {
 				});
 
 				addAction({
-					label: L.untranslated("Flush log to disk"),
+					label: L.untranslated("Flush & open log"),
 					cb: ()->{
 						App.LOG.flushToFile();
+						JsTools.locateFile( App.LOG.logFilePath, true );
 						N.success("Flushed.");
 					}
 				});
