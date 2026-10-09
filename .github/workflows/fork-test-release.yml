@@ -1,0 +1,89 @@
+name: Fork test release
+
+on:
+  push:
+    branches:
+      - feature/aseprite-atlas-composer
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ldtk-aseprite-atlas-test-release
+  cancel-in-progress: true
+
+jobs:
+  windows-test-release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/aseprite-atlas-composer
+          fetch-depth: 0
+
+      - uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: '4.3.3'
+
+      - name: Install Haxe libraries
+        shell: bash
+        run: |
+          haxelib install uuid --quiet
+          haxelib git castle https://github.com/ncannasse/castle
+          haxelib git heaps https://github.com/deepnight/heaps.git
+          haxelib git hxnodejs https://github.com/HaxeFoundation/hxnodejs.git
+          haxelib git electron https://github.com/tong/hxelectron.git
+          haxelib git heaps-aseprite https://github.com/AustinEast/heaps-aseprite.git
+          haxelib git ldtk-haxe-api https://github.com/deepnight/ldtk-haxe-api.git --always
+          haxelib git deepnightLibs https://github.com/deepnight/deepnightLibs.git --always
+          haxelib list
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: app/package.json
+
+      - name: Install Node dependencies
+        working-directory: app
+        run: npm install
+
+      - name: Compile fork
+        working-directory: app
+        run: npm run compile
+
+      - name: Package Windows x64
+        working-directory: app
+        shell: bash
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npx electron-builder build --win --x64 --publish never
+
+      - name: Rename test installer
+        shell: pwsh
+        run: |
+          $installer = Get-ChildItem -Path "app/redist" -Filter "LDtk * installer.exe" | Select-Object -First 1
+          if (-not $installer) { throw "LDtk installer was not produced" }
+          Copy-Item $installer.FullName "LDtk-1.5.3-Aseprite-Atlas-Composer-win-x64.exe"
+
+      - name: Publish prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="aseprite-atlas-composer-test"
+          gh release delete "$TAG" --yes --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" \
+            "LDtk-1.5.3-Aseprite-Atlas-Composer-win-x64.exe" \
+            --target "${GITHUB_SHA}" \
+            --title "LDtk 1.5.3 - Aseprite + Atlas Composer test build" \
+            --notes "Experimental Windows x64 test build of the RondeI33 LDtk fork. Adds robust .aseprite/.ase tileset loading and a selective Atlas Composer for PNG/GIF/JPEG/Aseprite tilesets. Pick individual cells from multiple compatible tilesets; selected cells are packed into a generated atlas, remaining cells are compacted into generated remainder atlases under .ldtk-atlas, and supported LDtk references are remapped. Original artist source image files are not overwritten. The composer refuses migrations that would require one LDtk Tile layer, AutoLayer, Enum icon source, or Tile field to point at two tilesets." \
+            --prerelease
+
+      - name: Upload Actions artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LDtk-Aseprite-Atlas-Composer-win-x64
+          path: LDtk-1.5.3-Aseprite-Atlas-Composer-win-x64.exe
+          if-no-files-found: error

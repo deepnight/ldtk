@@ -97,14 +97,16 @@ class ProjectLoader {
 		progress.addOp({
 			label: "Reading project...",
 			cb: ()->{
-				p = try data.Project.fromJson(filePath, json)
-					#if debug ;
-					#else
-					catch(err:Dynamic) {
-						error( ProjectInit( Std.string(err) ) );
-						null;
-					}
-					#end
+					p = try data.Project.fromJson(filePath, json)
+						#if debug ;
+						#else
+						catch(err:Dynamic) {
+							error( ProjectInit( Std.string(err) ) );
+							null;
+						}
+						#end
+					if( p!=null )
+						p.forkConfig.load();
 			}
 		});
 

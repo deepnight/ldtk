@@ -84,7 +84,24 @@ class FileWatcher extends dn.Process {
 	}
 
 	public function watchImage(relPath:String) {
-		if( relPath!=null )
+		if( relPath==null )
+			return;
+
+		var generated = AsepriteTools.getGeneratedImport(Editor.ME.project, relPath);
+		if( generated!=null ) {
+			// LDtk stores the selected-layer PNG as the actual tileset image, but
+			// watches the artist's .aseprite source. When it changes, regenerate
+			// the PNG using the exact same layer selection and reload the image.
+			watch(
+				Editor.ME.project.makeAbsoluteFilePath(generated.sourceRelPath),
+				()->{
+					if( !AsepriteTools.regenerateGenerated(Editor.ME.project, relPath) )
+						throw "Aseprite selected-layer regeneration did not target the expected PNG.";
+					Editor.ME.onProjectImageChanged(relPath);
+				}
+			);
+		}
+		else
 			watch(
 				Editor.ME.project.makeAbsoluteFilePath(relPath),
 				Editor.ME.onProjectImageChanged.bind(relPath)
@@ -105,13 +122,21 @@ class FileWatcher extends dn.Process {
 	}
 
 	public function stopWatchingRel(relFilePath:String) {
-		stopWatchingAbs( Editor.ME.project.makeAbsoluteFilePath(relFilePath) );
+		if( relFilePath==null )
+			return;
+
+		var generated = AsepriteTools.getGeneratedImport(Editor.ME.project, relFilePath);
+		if( generated!=null )
+			stopWatchingAbs(Editor.ME.project.makeAbsoluteFilePath(generated.sourceRelPath));
+
+		// Also stop a direct watcher if this path wasn't generated, or if an old
+		// build happened to watch the generated PNG itself.
+		stopWatchingAbs(Editor.ME.project.makeAbsoluteFilePath(relFilePath));
 	}
 
 	public function stopWatchingAbs(absFilePath:String) {
 		if( absFilePath==null )
 			return;
-
 		var i = 0;
 		while( i<all.length )
 			if( all[i].path==absFilePath ) {

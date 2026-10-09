@@ -1,9 +1,9 @@
 {
-	"name": "ldtk-nwjs-host",
-	"description": "Run the LDtk renderer inside nwjs (e.g. hosted from Hide)",
+	"name": "ldtk-smartive-nwjs-host",
+	"description": "Run the LDTK-Smartive renderer inside nwjs (for example, hosted from Hide)",
 	"main": "host.html",
 	"window": {
-		"title": "LDtk (nwjs)",
+		"title": "LDTK-Smartive (nwjs)",
 		"width": 1280,
 		"height": 800,
 		"icon": "../assets/appIcon.png"

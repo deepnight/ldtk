@@ -374,7 +374,7 @@ class App extends dn.Process {
 	function checkManualUpdate() {
 		miniNotif("Checking for update (GitHub)...", true);
 		LOG.add("update", "Fetching latest version from GitHub...");
-		dn.js.ElectronUpdater.fetchLatestGitHubReleaseVersion("deepnight","ldtk", (latest)->{
+		dn.js.ElectronUpdater.fetchLatestGitHubReleaseVersion("RondeI33","ldtk", (latest)->{
 			if( latest!=null )
 				LOG.add("update", "Found "+latest.full);
 

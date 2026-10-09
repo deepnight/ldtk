@@ -5,7 +5,8 @@
 
 <div class="mainList">
 	<div class="buttons">
-		<button class="create"> <span class="icon add"></span> </button>
+		<button class="create" title="Create tileset"> <span class="icon add"></span> </button>
+		<button class="atlasComposer" title="Select tiles from multiple PNG/Aseprite/image tilesets and compose a compact atlas"> <span class="icon tile"></span> Atlas </button>
 	</div>
 	<div class="search"></div>
 	<ul class="niceList"></ul>
@@ -21,6 +22,7 @@
 		<info>
 			This is the tileset "atlas" image which contains all the tiles organized in a grid layout.
 			Supported file formats: Aseprite (recommended), PNG, GIF and JPEG.
+			If the built-in Aseprite decoder cannot read a newer .aseprite/.ase document, this fork automatically falls back to the locally installed Aseprite command-line exporter.
 		</info>
 	</dt>
 	<dd class="img">

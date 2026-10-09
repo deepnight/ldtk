@@ -69,6 +69,8 @@ class EditEntityDefs extends ui.modal.Panel {
 		// Create fields editor
 		fieldsForm = new ui.FieldDefsForm( FP_Entity(null) );
 		jContent.find("#fields").replaceWith( fieldsForm.jWrapper );
+		fieldsForm.jWrapper.after( new J('<div class="autoChildrenEditor"/>') );
+		jContent.find(".autoChildrenEditor").after( new J('<div class="forkAuthoringEditor"/>') );
 
 		// Create quick search
 		search = new ui.QuickSearch( jContent.find(".entityList ul") );
@@ -567,6 +569,301 @@ class EditEntityDefs extends ui.modal.Panel {
 	}
 
 
+	function updateAutoChildrenForm() {
+		var jRoot = jContent.find(".autoChildrenEditor");
+		jRoot.empty();
+		if( curEntity==null ) {
+			jRoot.hide();
+			return;
+		}
+		jRoot.show();
+
+		var jHeader = new J('<div class="autoChildrenHeader"/>');
+		jHeader.append('<h2>Auto children</h2>');
+		jHeader.append('<p class="help">Spawn ordinary entities automatically when this entity is freshly placed. Children are not parented after creation.</p>');
+		jHeader.appendTo(jRoot);
+
+		function bindInt(jInput:js.jquery.JQuery, value:Int, cb:Int->Void) {
+			jInput.val(value);
+			jInput.change(_->{
+				var parsed = Std.parseInt(Std.string(jInput.val()));
+				if( !M.isValidNumber(parsed) ) {
+					jInput.val(value);
+					return;
+				}
+				cb(parsed);
+				editor.ge.emit(EntityDefChanged);
+			});
+		}
+
+		for(idx in 0...curEntity.autoChildren.length) {
+			final autoIdx = idx;
+			var auto = curEntity.autoChildren[idx];
+			var jEntry = new J('<div class="autoChildEntry" style="border-top:1px solid rgba(255,255,255,0.12);padding:10px 0;"/>');
+			jEntry.appendTo(jRoot);
+
+			var jTop = new J('<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"/>');
+			jTop.append('<strong>Child '+(idx+1)+'</strong>');
+			var jRemove = new J('<button class="small">Remove</button>');
+			jRemove.appendTo(jTop);
+			jTop.appendTo(jEntry);
+			jRemove.click(_->{
+				curEntity.autoChildren.splice(autoIdx,1);
+				editor.ge.emit(EntityDefChanged);
+			});
+
+			var jChildLine = new J('<div style="margin:4px 0;">Entity <select class="childEntity"></select></div>');
+			jChildLine.appendTo(jEntry);
+			var jChildSelect = jChildLine.find("select");
+			for(ed in project.defs.entities) {
+				var jOpt = new J('<option/>');
+				jOpt.attr("value", ed.uid);
+				jOpt.text(ed.identifier+' (uid '+ed.uid+')');
+				if( ed.uid==auto.entityDefUid )
+					jOpt.attr("selected", "selected");
+				jOpt.appendTo(jChildSelect);
+			}
+			jChildSelect.change(_->{
+				var uid = Std.parseInt(Std.string(jChildSelect.val()));
+				if( M.isValidNumber(uid) ) {
+					auto.entityDefUid = uid;
+					var childDef = project.defs.getEntityDef(uid);
+					var pi = 0;
+					while( pi<auto.fieldPresets.length )
+						if( childDef==null || childDef.getFieldDef(auto.fieldPresets[pi].fieldDefUid)==null )
+							auto.fieldPresets.splice(pi,1);
+						else
+							pi++;
+					editor.ge.emit(EntityDefChanged);
+				}
+			});
+
+			var jNumbers = new J('<div style="display:flex;flex-wrap:wrap;gap:8px;margin:4px 0;"/>');
+			jNumbers.appendTo(jEntry);
+			var jCount = new J('<label>Count <input type="number" min="1" style="width:70px"/></label>');
+			var jOffX = new J('<label>Offset X <input type="number" style="width:80px"/></label>');
+			var jOffY = new J('<label>Offset Y <input type="number" style="width:80px"/></label>');
+			var jSpaceX = new J('<label>Spacing X <input type="number" style="width:80px"/></label>');
+			var jSpaceY = new J('<label>Spacing Y <input type="number" style="width:80px"/></label>');
+			jCount.appendTo(jNumbers); jOffX.appendTo(jNumbers); jOffY.appendTo(jNumbers); jSpaceX.appendTo(jNumbers); jSpaceY.appendTo(jNumbers);
+			bindInt(jCount.find("input"), auto.count, v->auto.count = v<1 ? 1 : v);
+			bindInt(jOffX.find("input"), auto.offsetX, v->auto.offsetX = v);
+			bindInt(jOffY.find("input"), auto.offsetY, v->auto.offsetY = v);
+			bindInt(jSpaceX.find("input"), auto.spacingX, v->auto.spacingX = v);
+			bindInt(jSpaceY.find("input"), auto.spacingY, v->auto.spacingY = v);
+
+			var jLinkLine = new J('<div style="margin:4px 0;">Append child refs to parent field <select class="linkField"><option value="">None</option></select></div>');
+			jLinkLine.appendTo(jEntry);
+			var jLink = jLinkLine.find("select");
+			for(fd in curEntity.fieldDefs)
+				if( fd.type==F_EntityRef && fd.isArray ) {
+					var jOpt = new J('<option/>');
+					jOpt.attr("value", fd.uid);
+					jOpt.text(fd.identifier+' (uid '+fd.uid+')');
+					if( auto.linkFieldUid==fd.uid )
+						jOpt.attr("selected", "selected");
+					jOpt.appendTo(jLink);
+				}
+			jLink.change(_->{
+				var raw = Std.string(jLink.val());
+				auto.linkFieldUid = raw=="" ? null : Std.parseInt(raw);
+				editor.ge.emit(EntityDefChanged);
+			});
+
+			var childDef = project.defs.getEntityDef(auto.entityDefUid);
+			var jPresets = new J('<div class="autoChildPresets" style="margin-top:8px;"><strong>Field presets</strong></div>');
+			jPresets.appendTo(jEntry);
+			for(pi in 0...auto.fieldPresets.length) {
+				final presetIdx = pi;
+				var preset = auto.fieldPresets[pi];
+				var jPreset = new J('<div style="display:flex;gap:6px;align-items:center;margin:4px 0;"><select class="presetField"></select><input class="presetValue" type="text" placeholder="Value"/><button class="small">Remove</button></div>');
+				jPreset.appendTo(jPresets);
+				var jField = jPreset.find("select");
+				if( childDef!=null )
+					for(fd in childDef.fieldDefs) {
+						var jOpt = new J('<option/>');
+						jOpt.attr("value", fd.uid);
+						jOpt.text(fd.identifier+' (uid '+fd.uid+')');
+						if( preset.fieldDefUid==fd.uid )
+							jOpt.attr("selected", "selected");
+						jOpt.appendTo(jField);
+					}
+				jField.change(_->{
+					var uid = Std.parseInt(Std.string(jField.val()));
+					if( M.isValidNumber(uid) ) {
+						preset.fieldDefUid = uid;
+						editor.ge.emit(EntityDefChanged);
+					}
+				});
+				var jValue = jPreset.find("input");
+				jValue.val(preset.value==null ? "" : Std.string(preset.value));
+				jValue.change(_->{
+					preset.value = Std.string(jValue.val());
+					editor.ge.emit(EntityDefChanged);
+				});
+				jPreset.find("button").click(_->{
+					auto.fieldPresets.splice(presetIdx,1);
+					editor.ge.emit(EntityDefChanged);
+				});
+			}
+
+			var jAddPreset = new J('<button class="small">+ Field preset</button>');
+			jAddPreset.appendTo(jPresets);
+			jAddPreset.click(_->{
+				var cd = project.defs.getEntityDef(auto.entityDefUid);
+				if( cd!=null && cd.fieldDefs.length>0 ) {
+					auto.fieldPresets.push({ fieldDefUid:cd.fieldDefs[0].uid, value:"" });
+					editor.ge.emit(EntityDefChanged);
+				}
+			});
+		}
+
+		var jAdd = new J('<button class="create">+ Auto child</button>');
+		jAdd.appendTo(jRoot);
+		jAdd.click(_->{
+			var childUid = curEntity.uid;
+			for(ed in project.defs.entities)
+				if( ed.uid!=curEntity.uid ) {
+					childUid = ed.uid;
+					break;
+				}
+			curEntity.createAutoChild(childUid);
+			editor.ge.emit(EntityDefChanged);
+		});
+
+		JsTools.parseComponents(jRoot);
+	}
+
+
+	function updateForkAuthoringForm() {
+		var jRoot = jContent.find(".forkAuthoringEditor");
+		jRoot.empty();
+		if( curEntity==null ) {
+			jRoot.hide();
+			return;
+		}
+		jRoot.show();
+		jRoot.append('<h2>Fork authoring</h2>');
+		jRoot.append('<p class="help">Stored only in <code>'+project.filePath.fileWithExt+'-fork.json</code>. The LDtk project JSON remains stock-compatible.</p>');
+
+		var jActions = new J('<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;"/>');
+		jActions.appendTo(jRoot);
+		var jSave = new J('<button class="small">Save sidecar</button>').appendTo(jActions);
+		jSave.click(_->{ project.forkConfig.save(); N.debug("Fork sidecar saved"); });
+		var jReload = new J('<button class="small">Reload sidecar</button>').appendTo(jActions);
+		jReload.click(_->{ project.forkConfig.load(); editor.ge.emit(EntityDefChanged); });
+		var jRestamp = new J('<button class="small">Re-stamp current level</button>').appendTo(jActions);
+		jRestamp.click(_->{
+			var layers = project.forkConfig.restampLevel(editor.curLevel);
+			if( layers.length>0 ) {
+				editor.curLevelTimeline.saveLayerStates(layers);
+				for(li in layers)
+					editor.levelRender.invalidateLayer(li);
+			}
+		});
+
+		function addJsonEditor(title:String, value:Dynamic, apply:Dynamic->Void) {
+			var jBlock = new J('<div style="border-top:1px solid rgba(255,255,255,0.12);padding:8px 0;"/>');
+			jBlock.appendTo(jRoot);
+			jBlock.append('<strong>'+title+'</strong>');
+			var jText = new J('<textarea style="width:100%;min-height:92px;font-family:monospace;margin-top:5px;"/>');
+			jText.val(haxe.Json.stringify(value,null,"  "));
+			jText.appendTo(jBlock);
+			var jApply = new J('<button class="small">Apply '+title+'</button>').appendTo(jBlock);
+			jApply.click(_->{
+				try {
+					var parsed = haxe.Json.parse(Std.string(jText.val()));
+					apply(parsed);
+					project.forkConfig.save();
+					project.forkConfig.load();
+					editor.ge.emit(EntityDefChanged);
+				}
+				catch(err:Dynamic) N.error("Invalid fork JSON: "+Std.string(err));
+			});
+		}
+
+		addJsonEditor("Appearance overrides", curEntity.appearanceOverrides, v->{
+			curEntity.appearanceOverrides = Std.isOfType(v,Array) ? cast v : [];
+		});
+		addJsonEditor("Tile stamps", curEntity.tileStamps, v->{
+			curEntity.tileStamps = Std.isOfType(v,Array) ? cast v : [];
+		});
+
+		var fieldRules : Dynamic = {};
+		for(fd in curEntity.fieldDefs)
+			if( fd.visibleWhenFieldUid!=null || fd.visibleWhenValues.length>0 || fd.enumValueFilter.length>0 )
+				Reflect.setField(fieldRules,Std.string(fd.uid),{
+					identifier:fd.identifier,
+					visibleWhenFieldUid:fd.visibleWhenFieldUid,
+					visibleWhenValues:fd.visibleWhenValues,
+					enumValueFilter:fd.enumValueFilter,
+				});
+		addJsonEditor("Conditional / enum field rules", fieldRules, v->{
+			for(fd in curEntity.fieldDefs) {
+				fd.visibleWhenFieldUid = null;
+				fd.visibleWhenValues = [];
+				fd.enumValueFilter = [];
+			}
+			if( v!=null )
+				for(key in Reflect.fields(v)) {
+					var cfg = Reflect.field(v,key);
+					var uid = Std.parseInt(key);
+					var fd = M.isValidNumber(uid) ? curEntity.getFieldDef(uid) : null;
+					if( fd==null && Reflect.field(cfg,"identifier")!=null )
+						for(candidate in curEntity.fieldDefs)
+							if( candidate.identifier==Reflect.field(cfg,"identifier") ) {
+								fd = candidate;
+								break;
+							}
+					if( fd!=null ) {
+						var rawWhen = Reflect.field(cfg,"visibleWhenFieldUid");
+						fd.visibleWhenFieldUid = rawWhen==null ? null : Std.parseInt(Std.string(rawWhen));
+						var vals = Reflect.field(cfg,"visibleWhenValues");
+						fd.visibleWhenValues = vals==null ? [] : cast vals;
+						var filters = Reflect.field(cfg,"enumValueFilter");
+						fd.enumValueFilter = filters==null ? [] : cast filters;
+					}
+				}
+		});
+
+		// Visual tile pickers for configured stamp tiles. JSON remains the precise source for
+		// offsets/gates, while the tile itself can be picked visually in LDtk.
+		for(si in 0...curEntity.tileStamps.length) {
+			var stamp = curEntity.tileStamps[si];
+			var tiles : Array<Dynamic> = Reflect.field(stamp,"tiles");
+			if( tiles==null )
+				continue;
+			for(ti in 0...tiles.length) {
+				var tile = tiles[ti];
+				var tdUid = Std.parseInt(Std.string(Reflect.field(tile,"tilesetUid")));
+				var tileId = Std.parseInt(Std.string(Reflect.field(tile,"tileId")));
+				var td = project.defs.getTilesetDef(tdUid);
+				if( td==null || !M.isValidNumber(tileId) )
+					continue;
+				var jLine = new J('<div style="display:flex;align-items:center;gap:6px;margin:4px 0;"/>').appendTo(jRoot);
+				jLine.append('<span>Stamp '+(si+1)+' tile '+(ti+1)+' (id '+tileId+')</span>');
+				var rect : ldtk.Json.TilesetRect = {
+					tilesetUid:td.uid,
+					x:td.getTileSourceX(tileId), y:td.getTileSourceY(tileId),
+					w:td.tileGridSize, h:td.tileGridSize,
+				};
+				var picker = JsTools.createTileRectPicker(td.uid,rect,r->{
+					if( r==null ) return;
+					var cx = Std.int((r.x-td.padding)/(td.tileGridSize+td.spacing));
+					var cy = Std.int((r.y-td.padding)/(td.tileGridSize+td.spacing));
+					Reflect.setField(tile,"tileId",cx+cy*td.cWid);
+					Reflect.setField(tile,"tilesetUid",td.uid);
+					project.forkConfig.save();
+					editor.ge.emit(EntityDefChanged);
+				});
+				picker.appendTo(jLine);
+			}
+		}
+
+		JsTools.parseComponents(jRoot);
+	}
+
+
 	function updateFieldsForm() {
 		if( curEntity!=null )
 			fieldsForm.useFields(FP_Entity(curEntity), curEntity.fieldDefs);
@@ -574,6 +871,8 @@ class EditEntityDefs extends ui.modal.Panel {
 			fieldsForm.useFields(FP_Entity(null), []);
 			fieldsForm.hide();
 		}
+		updateAutoChildrenForm();
+		updateForkAuthoringForm();
 		checkBackup();
 	}
 

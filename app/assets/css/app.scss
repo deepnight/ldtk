@@ -10266,10 +10266,20 @@ $patternSize : 32px;
 		}
 
 		.rightColumn {
-			overflow: hidden;
-			display: grid;
-			grid-template-rows: min-content auto;
+			min-height: 0;
+			overflow-x: hidden;
+			overflow-y: auto;
+			display: block;
+			padding-right: 4px;
+
 			.entityForm {
+				margin-bottom: 16px;
+			}
+
+			.fieldDefsForm {
+				height: 55vh;
+				min-height: 360px;
+				max-height: 650px;
 				margin-bottom: 16px;
 			}
 		}

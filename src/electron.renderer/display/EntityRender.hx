@@ -114,13 +114,15 @@ class EntityRender extends dn.Process {
 
 		var w = ei!=null ? ei.width : ed.width;
 		var h = ei!=null ? ei.height : ed.height;
+		var pivotX = ei!=null ? ei.pivotX : ed.pivotX;
+		var pivotY = ei!=null ? ei.pivotY : ed.pivotY;
 		var color = ei!=null ? ei.getSmartColor(false) : ed.color;
 
 		var wrapper = new h2d.Object();
 
 		var g = new h2d.Graphics(wrapper);
-		g.x = Std.int( -w*ed.pivotX + (ld!=null ? ld.pxOffsetX : 0) );
-		g.y = Std.int( -h*ed.pivotY + (ld!=null ? ld.pxOffsetY : 0) );
+		g.x = Std.int( -w*pivotX + (ld!=null ? ld.pxOffsetX : 0) );
+		g.y = Std.int( -h*pivotY + (ld!=null ? ld.pxOffsetY : 0) );
 
 		var zoomScale = 1 / Editor.ME.camera.adjustedZoom;
 
@@ -151,7 +153,7 @@ class EntityRender extends dn.Process {
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 						bmp.scaleX = w / bmp.tile.width;
@@ -161,7 +163,7 @@ class EntityRender extends dn.Process {
 						var bmp = new h2d.Bitmap(t, wrapper);
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 						var s = M.fmin(w / bmp.tile.width, h / bmp.tile.height);
@@ -170,8 +172,8 @@ class EntityRender extends dn.Process {
 					case Repeat:
 						var tt = new dn.heaps.TiledTexture(w,h, t, wrapper);
 						tt.alpha = alpha;
-						tt.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
-						tt.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
+						tt.x = -w*pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						tt.y = -h*pivotY + (ld==null ? 0 : ld.pxOffsetY);
 
 					case Cover:
 						var bmp = new h2d.Bitmap(wrapper);
@@ -183,11 +185,11 @@ class EntityRender extends dn.Process {
 						final fw = M.fmin(w, t.width*s) / s;
 						final fh = M.fmin(h, t.height*s) / s;
 						bmp.tile = t.sub(
-							t.width*ed.pivotX - fw*ed.pivotX,
-							t.height*ed.pivotY - fh*ed.pivotY,
+							t.width*pivotX - fw*pivotX,
+							t.height*pivotY - fh*pivotY,
 							fw,fh
 						);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.setScale(s);
 
 					case FullSizeCropped:
@@ -197,11 +199,11 @@ class EntityRender extends dn.Process {
 						final fw = M.fmin(w, t.width);
 						final fh = M.fmin(h, t.height);
 						bmp.tile = t.sub(
-							t.width*ed.pivotX - fw*ed.pivotX,
-							t.height*ed.pivotY - fh*ed.pivotY,
+							t.width*pivotX - fw*pivotX,
+							t.height*pivotY - fh*pivotY,
 							fw, fh
 						);
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 					case FullSizeUncropped:
@@ -209,7 +211,7 @@ class EntityRender extends dn.Process {
 						if( ld!=null )
 							bmp.setPosition(ld.pxOffsetX, ld.pxOffsetY);
 
-						bmp.tile.setCenterRatio(ed.pivotX, ed.pivotY);
+						bmp.tile.setCenterRatio(pivotX, pivotY);
 						bmp.alpha = alpha;
 
 					case NineSlice:
@@ -223,8 +225,8 @@ class EntityRender extends dn.Process {
 						sg.tileCenter = true;
 						sg.width = w;
 						sg.height = h;
-						sg.x = -w*ed.pivotX + (ld==null ? 0 : ld.pxOffsetX);
-						sg.y = -h*ed.pivotY + (ld==null ? 0 : ld.pxOffsetY);
+						sg.x = -w*pivotX + (ld==null ? 0 : ld.pxOffsetX);
+						sg.y = -h*pivotY + (ld==null ? 0 : ld.pxOffsetY);
 
 				}
 			}
@@ -268,9 +270,9 @@ class EntityRender extends dn.Process {
 		// Pivot
 		g.lineStyle(0);
 		g.beginFill(0x0, 0.4);
-		g.drawRect(w*ed.pivotX-1, h*ed.pivotY-1, 3,3);
+		g.drawRect(w*pivotX-1, h*pivotY-1, 3,3);
 		g.beginFill(color, 1);
-		g.drawRect(w*ed.pivotX, h*ed.pivotY, 1,1);
+		g.drawRect(w*pivotX, h*pivotY, 1,1);
 
 		return {
 			wrapper: wrapper,
@@ -290,23 +292,28 @@ class EntityRender extends dn.Process {
 
 	public function renderFields() {
 
+		above.removeChildren();
+		center.removeChildren();
+		beneath.removeChildren();
 		fieldGraphics.clear();
 
 		// Attach fields
 		var color = ei.getSmartColor(false);
 		var ctx : display.FieldInstanceRender.FieldRenderContext = EntityCtx(fieldGraphics, ei, ld);
-		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above ).map( fd->ei.getFieldInstance(fd,true) ),
-			color, ctx, above
-		);
-		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Center ).map( fd->ei.getFieldInstance(fd,true) ),
-			color, ctx, center
-		);
-		FieldInstanceRender.renderFields(
-			ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath ).map( fd->ei.getFieldInstance(fd,true) ),
-			color, ctx, beneath
-		);
+		if( Editor.ME.showVariablePreviews ) {
+			FieldInstanceRender.renderFields(
+				ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Above && ei._project.forkConfig.isFieldVisible(ei,fd) ).map( fd->ei.getFieldInstance(fd,true) ),
+				color, ctx, above
+			);
+			FieldInstanceRender.renderFields(
+				ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Center && ei._project.forkConfig.isFieldVisible(ei,fd) ).map( fd->ei.getFieldInstance(fd,true) ),
+				color, ctx, center
+			);
+			FieldInstanceRender.renderFields(
+				ei.def.fieldDefs.filter( fd->fd.editorDisplayPos==Beneath && ei._project.forkConfig.isFieldVisible(ei,fd) ).map( fd->ei.getFieldInstance(fd,true) ),
+				color, ctx, beneath
+			);
+		}
 
 
 		// Render ref links from entities in different levels

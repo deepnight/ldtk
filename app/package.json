@@ -1,10 +1,17 @@
 {
-	"name": "ldtk",
-	"version": "1.5.3",
+	"name": "ldtk-smartive",
+	"version": "1.0.0",
+	"private": true,
 	"main": "assets/main.js",
-	"productName": "LDtk",
+	"productName": "LDTK-Smartive",
 	"author": "Sebastien Benard",
-	"description": "2D level editor",
+	"description": "LDTK-Smartive 2D level editor",
+	"homepage": "https://github.com/RondeI33/ldtk",
+	"keywords": [
+		"ldtk",
+		"level-editor",
+		"smartive"
+	],
 	"scripts": {
 		"start": "electron .",
 		"compile": "cd ..  &&  haxe main.hxml  &&  haxe renderer.hxml",
@@ -16,7 +23,11 @@
 		"pack-linux-x86": "npm run pack-prepare  &&  electron-builder build --linux --publish never",
 		"pack-linux-arm64": "npm run pack-prepare  &&  electron-builder build --linux --arm64 --publish never",
 		"publish-github": "npm run pack-win -- --publish always",
-		"publish-itchio": "npm run pack-win  &&  butler push \"redist/LDtk %npm_package_version% installer.exe\" deepnight/ldtk:win --userversion-file ../lastBuildVersion.txt",
+		"publish-itchio": "npm run pack-win  &&  butler push \"redist/LDTK-Smartive-%npm_package_version%-win-x64.exe\" RondeI33/ldtk-smartive:win --userversion-file ../lastBuildVersion.txt",
+		"version:patch": "node scripts/bump-smartive-version.mjs patch",
+		"version:minor": "node scripts/bump-smartive-version.mjs minor",
+		"version:major": "node scripts/bump-smartive-version.mjs major",
+		"version:set": "node scripts/bump-smartive-version.mjs",
 		"quicktype": "npm i -g quicktype  &&  npm run qt-cs  &&  npm run qt-js  &&  npm run qt-py  &&  npm run qt-rs  &&  npm run qt-go  &&  npm run qt-cpp",
 		"qt-cs": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.cs --namespace ldtk --any-type dynamic",
 		"qt-js": "quicktype -s schema ../docs/JSON_SCHEMA.json -o ../docs/quicktype/LdtkJson.js",
@@ -27,7 +38,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/deepnight/ldtk.git"
+		"url": "https://github.com/RondeI33/ldtk.git"
 	},
 	"dependencies": {
 		"codemirror": "^5.64.0",
