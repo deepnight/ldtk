@@ -66,7 +66,7 @@ class ProjectSaver extends dn.Process {
 		App.LOG.add("save", '$str (elapsed=${M.pretty( 1000*(haxe.Timer.stamp()-timeS), 1 )}ms)');
 		timeS = haxe.Timer.stamp();
 	}
-	inline function logState() log('=> $state...');
+	inline function logState() log('=> Starting: $state...');
 
 	function error(str:LocaleString, showOptions=true) {
 		var fp = project.filePath.clone();
@@ -110,6 +110,7 @@ class ProjectSaver extends dn.Process {
 			ui.modal.MetaProgress.advance();
 
 		state = s;
+		logState();
 
 		switch s {
 			case InQueue:
@@ -120,7 +121,6 @@ class ProjectSaver extends dn.Process {
 					ui.modal.MetaProgress.start('Saving ${project.filePath.fileWithExt}...', 9);
 				}
 
-				logState();
 				if( project.filePath.isWindowsNetworkDrive ) {
 					error( L._UnsupportedWinNetDir(), false );
 					return;
@@ -152,10 +152,8 @@ class ProjectSaver extends dn.Process {
 				}
 
 			case BeforeSavingActions:
-				if( hasEditor() ) {
-					logState();
+				if( hasEditor() )
 					Editor.ME.ge.emit(BeforeProjectSaving);
-				}
 				else
 					beginNextState();
 
@@ -163,17 +161,14 @@ class ProjectSaver extends dn.Process {
 				ui.modal.dialog.CommandRunner.runMultipleCommands( project, project.getCustomCommmands(BeforeSave), beginNextState );
 
 			case AutoLayers:
-				if( hasEditor() ) { // TODO support this without an Editor?
-					logState();
+				if( hasEditor() ) // TODO support this without an Editor?
 					Editor.ME.checkAutoLayersCache( (anyChange)->beginState(Backup) );
-				}
 				else
 					beginNextState();
 
 			case Backup:
 				// var backupDir = project.getAbsExternalFilesDir() + "/backups";
 				if( project.backupOnSave ) {
-					logState();
 					backupProjectFiles(project, ()->{
 						beginNextState();
 					});
@@ -202,7 +197,6 @@ class ProjectSaver extends dn.Process {
 
 
 			case SavingMainFile:
-				logState();
 				var ops : Array<ui.modal.Progress.ProgressOp> = [];
 
 				ops.push({
@@ -232,7 +226,6 @@ class ProjectSaver extends dn.Process {
 				var levelDir = project.getAbsExternalFilesDir();
 
 				if( project.externalLevels ) {
-					logState();
 					initDir(levelDir);
 
 					var ops = [];
@@ -280,7 +273,6 @@ class ProjectSaver extends dn.Process {
 					: project.getAbsExternalFilesDir()+"/png";
 
 				if( project.getImageExportMode()!=None ) {
-					logState();
 					var ops = [];
 					var count = 0;
 
@@ -426,7 +418,6 @@ class ProjectSaver extends dn.Process {
 
 			case ExportingTiled:
 				if( project.exportTiled ) {
-					logState();
 					ui.modal.Progress.single(
 						L.t._("Exporting Tiled..."),
 						()->{
@@ -453,7 +444,6 @@ class ProjectSaver extends dn.Process {
 
 			case ExportingGMS:
 				if( false ) { // TODO check actual project export setting
-					logState();
 					ui.modal.Progress.single(
 						L.t._("Exporting Tiled..."),
 						()->{
@@ -483,7 +473,6 @@ class ProjectSaver extends dn.Process {
 				var dirFp = dn.FilePath.fromDir( project.getAbsExternalFilesDir()+"/simplified" );
 
 				if( project.simplifiedExport ) {
-					logState();
 					initDir(dirFp.full, "json");
 
 					var p = new ui.modal.Progress( "Simplified data...", ()->beginNextState() );
@@ -544,7 +533,6 @@ class ProjectSaver extends dn.Process {
 				}
 
 				// Finalize
-				logState();
 				log('Saving complete (${project.filePath.fileWithExt})');
 				complete(true);
 		}

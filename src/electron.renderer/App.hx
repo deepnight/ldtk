@@ -40,6 +40,7 @@ class App extends dn.Process {
 
 		// Init logging
 		LOG.logFilePath = JsTools.getLogPath();
+		LOG.timeStampStyle = TS_ElapsedS;
 		LOG.trimFileLines();
 		LOG.emptyEntry();
 		LOG.emptyEntry();
