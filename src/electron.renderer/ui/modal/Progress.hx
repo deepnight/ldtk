@@ -34,7 +34,7 @@ class Progress extends ui.Modal {
 
 		log = new dn.Log();
 		var name = dn.Lib.buildShortName(title, 10);
-		log.def = (s)->log.add("progress", '$name: '+s);
+		log.def = (s)->log.add("progress", '  $name: '+s);
 		this.title = title;
 		ALL.push(this);
 		canBeClosedManually = false;
@@ -44,7 +44,7 @@ class Progress extends ui.Modal {
 
 		jModalAndMask.addClass("progress");
 		jMask.hide();
-		App.LOG.general('Progress created.');
+		App.LOG.general('  Progress created.');
 
 		jContent.append('<div class="title">$title</div>');
 
@@ -142,14 +142,14 @@ class Progress extends ui.Modal {
 
 		switch state {
 			case WaitingOther:
-				log.def("Waiting...");
+				log.def("  Waiting...");
 				if( ALL[0]==this )
 					state = InitFrame;
 
 			case InitFrame:
 				dn.js.ElectronTools.disableThrottling();
-				App.LOG.general('Progress started: : "$title", ${curOps.length} operation(s)');
-				log.def("Started...");
+				App.LOG.general('  Progress started: : "$title", ${curOps.length} operation(s)');
+				log.def("  Started...");
 				state = Running;
 				jMask.fadeIn(500);
 				updateBar( curOps.length>0 ? curOps[0].label : null );
@@ -169,10 +169,6 @@ class Progress extends ui.Modal {
 					var t = haxe.Timer.stamp()-start;
 					spent += t;
 					curIdx++;
-
-					// #if debug
-					// log.def("  "+(op.label==null?"Unknown":op.label)+": "+M.pretty(t,1)+"s");
-					// #end
 				}
 				if( curOps.length==0 )
 					state = EndFrame;
@@ -181,8 +177,8 @@ class Progress extends ui.Modal {
 
 			case EndFrame:
 				var t = M.pretty( haxe.Timer.stamp()-startTime, 1 );
-				log.def('Completed (${t}s)...');
-				App.LOG.general('Progress completed: "$title" (${t}s)');
+				log.def('  Completed (${t}s)...');
+				App.LOG.general('  Progress completed: "$title" (${t}s)');
 				state = Completed;
 				updateBar();
 
