@@ -61,9 +61,9 @@ class Csv {
 
 	public function toString2D() : String {
 		var arr = build2D();
-		var out = "";
+		var out = [];
 		for(cy in 0...hei)
-			out += arr[cy].join(",") + (cy<hei-1?",":"") + "\n";
-		return out;
+			out.push(arr[cy].join(","));
+		return out.join("\n");
 	}
 }
