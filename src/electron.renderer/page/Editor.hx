@@ -722,12 +722,32 @@ class Editor extends Page {
 				);
 
 			case C_Undo:
-				if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() )
+				if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
 					curLevelTimeline.undo();
 
+					var neig = curLevel.getNeighboursIids();
+					for(iid in neig) {
+						var nLevel = project.getLevelAnywhere(iid);
+						invalidateLevelCache( nLevel );
+						for(li in nLevel.layerInstances) {
+							li.applyAllRules();
+						}
+					}
+				}
+
 			case C_Redo:
-				if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() )
+				if( !worldMode && !hasInputFocus() && !ui.Modal.hasAnyOpen() ) {
 					curLevelTimeline.redo();
+
+					var neig = curLevel.getNeighboursIids();
+					for(iid in neig) {
+						var nLevel = project.getLevelAnywhere(iid);
+						invalidateLevelCache( nLevel );
+						for(li in nLevel.layerInstances) {
+							li.applyAllRules();
+						}
+					}
+				}
 
 			case C_AppSettings:
 				if( !ui.Modal.isOpen(ui.modal.dialog.EditAppSettings) ) {
@@ -2112,16 +2132,29 @@ class Editor extends Page {
 					var newNeig = level.getNeighboursIids();
 
 					// Invalidate old neighbours
-					for(iid in oldNeig)
-						invalidateLevelCache( project.getLevelAnywhere(iid) );
+					for(iid in oldNeig) {
+						var nLevel = project.getLevelAnywhere(iid);
+						invalidateLevelCache( nLevel );
+						for(li in nLevel.layerInstances) {
+							li.applyAllRules();
+						}
+					}
 
 					// Invalidate new neighbours
-					for(iid in newNeig)
-						invalidateLevelCache( project.getLevelAnywhere(iid) );
+					for(iid in newNeig) {
+						var nLevel = project.getLevelAnywhere(iid);
+						invalidateLevelCache( nLevel );
+						for(li in nLevel.layerInstances) {
+							li.applyAllRules();
+						}
+					}
 
 					switch curWorld.worldLayout {
 						case Free, GridVania: invalidateLevelCache(level);
 						case LinearHorizontal, LinearVertical: invalidateLevelCache(level);
+					}
+					for(li in level.layerInstances) {
+						li.applyAllRules();
 					}
 				}
 

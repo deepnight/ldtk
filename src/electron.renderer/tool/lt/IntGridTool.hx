@@ -34,6 +34,16 @@ class IntGridTool extends tool.LayerTool<Int> {
 		editor.selectionTool.clear();
 	}
 
+	override function onEditAnything() {
+		super.onEditAnything();
+
+		// Auto-tiles in nearby levels may have updated so we need to mark them as dirty and redraw the nearby level preview
+		for( l in curLevel.getNeighbours()) {
+			editor.invalidateLevelCache(l);
+			editor.worldRender.invalidateLevelRender(l);
+		}
+	}
+
 	override function customCursor(ev:hxd.Event, m:Coords) {
 		super.customCursor(ev,m);
 

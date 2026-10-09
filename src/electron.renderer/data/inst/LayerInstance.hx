@@ -1077,39 +1077,54 @@ class LayerInstance {
 
 	/** Apply all rules to specific cell **/
 	public function applyAllRulesAt(cx:Int, cy:Int, wid:Int, hei:Int) {
-		if( !def.autoLayerRulesCanBeUsed() ) {
-			clearAllAutoTilesCache();
-			return;
-		}
-
-		var source = def.type==IntGrid ? this : def.autoSourceLayerDefUid!=null ? level.getLayerInstance(def.autoSourceLayerDefUid) : null;
-		if( source==null ) {
-			clearAllAutoTilesCache();
-			return;
-		}
-
-		if( autoTilesCache==null ) {
-			applyAllRules();
-			return;
-		}
-
 		// Adjust bounds to also redraw nearby cells
 		var maxRadius = Std.int( Const.MAX_AUTO_PATTERN_SIZE*0.5 );
-		var left = dn.M.imax( 0, cx - maxRadius );
-		var right = dn.M.imin( cWid-1, cx + wid-1 + maxRadius );
-		var top = dn.M.imax( 0, cy - maxRadius );
-		var bottom = dn.M.imin( cHei-1, cy + hei-1 + maxRadius );
+		var worldLeft = level.worldX + (cx - maxRadius) * def.gridSize;
+		var worldRight = level.worldX + (cx + wid + maxRadius) * def.gridSize;
+		var worldTop = level.worldY + (cy - maxRadius) * def.gridSize;
+		var worldBottom = level.worldY + (cy + hei + maxRadius) * def.gridSize;
+		var nearbyLevels = Editor.ME.curWorld.getLevelsOverlapping(worldLeft, worldTop, worldRight-worldLeft, worldBottom-worldTop, level.worldDepth);
 
-		// Apply rules
-		def.iterateActiveRulesInEvalOrder( this, (r)->{
-			clearAutoTilesCacheRect(r, left,top, right-left+1, bottom-top+1);
-			for(x in left...right+1)
-			for(y in top...bottom+1)
-				applyRuleAt(source, r, x,y);
-		});
+		for (nLevel in nearbyLevels) {
+			var li = nLevel.getLayerInstance(layerDefUid);
+			if( !li.def.autoLayerRulesCanBeUsed() ) {
+				li.clearAllAutoTilesCache();
+				continue;
+			}
 
-		// Discard using break-on-match flag
-		applyBreakOnMatchesArea(left,top, right-left+1, bottom-top+1);
+			var source = li.def.type==IntGrid ? li : li.def.autoSourceLayerDefUid!=null ? nLevel.getLayerInstance(li.def.autoSourceLayerDefUid) : null;
+			if( source==null ) {
+				li.clearAllAutoTilesCache();
+				continue;
+			}
+
+			if( li.autoTilesCache==null ) {
+				li.applyAllRules();
+				continue;
+			}
+
+			var levelLeft = dn.M.imax( nLevel.worldX, worldLeft) - nLevel.worldX;
+			var levelRight = dn.M.imin( nLevel.worldX + nLevel.pxWid - li.def.gridSize, worldRight) - nLevel.worldX;
+			var levelTop = dn.M.imax( nLevel.worldY, worldTop ) - nLevel.worldY;
+			var levelBottom = dn.M.imin( nLevel.worldY + nLevel.pxHei - li.def.gridSize, worldBottom) - nLevel.worldY;
+
+			var cLeft = Std.int(levelLeft / li.def.gridSize);
+			var cRight = Std.int(levelRight / li.def.gridSize);
+			var cTop = Std.int(levelTop / li.def.gridSize);
+			var cBottom = Std.int(levelBottom / li.def.gridSize);
+
+			// Apply rules
+			li.def.iterateActiveRulesInEvalOrder( this, (r)->{
+				li.clearAutoTilesCacheRect(r, cLeft, cTop, cRight-cLeft+1, cBottom-cTop+1);
+				for(x in cLeft...cRight+1)
+				for(y in cTop...cBottom+1)
+					li.applyRuleAt(source, r, x,y);
+			});
+
+			// Discard using break-on-match flag
+			li.applyBreakOnMatchesArea(cLeft,cTop, cRight-cLeft+1, cBottom-cTop+1);
+
+		}
 	}
 
 	/** Apply all rules to all cells **/

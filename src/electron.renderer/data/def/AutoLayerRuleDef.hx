@@ -323,16 +323,40 @@ class AutoLayerRuleDef {
 
 	public function isRelevantInLayerAt(sourceLi:data.inst.LayerInstance, cx:Int, cy:Int) {
 		for(v in explicitlyRequiredValues) {
-			if( !sourceLi.containsIntGridValueOrGroup(v) )
+			if( size == 1 && !sourceLi.hasIntGridValueInArea(v,cx,cy) )
 				return false;
-			else if( size==1 && !sourceLi.hasIntGridValueInArea(v,cx,cy) )
-				return false;
-			else if( size>1
-				&& !sourceLi.hasIntGridValueInArea(v,cx-radius,cy-radius)
-				&& !sourceLi.hasIntGridValueInArea(v,cx+radius,cy-radius)
-				&& !sourceLi.hasIntGridValueInArea(v,cx+radius,cy+radius)
-				&& !sourceLi.hasIntGridValueInArea(v,cx-radius,cy+radius) )
+			else if( size > 1) {
+				var worldLeft = sourceLi.level.worldX + (cx - radius) * sourceLi.def.gridSize;
+				var worldRight = sourceLi.level.worldX + (cx + radius) * sourceLi.def.gridSize;
+				var worldTop = sourceLi.level.worldY + (cy - radius) * sourceLi.def.gridSize;
+				var worldBottom = sourceLi.level.worldY + (cy + radius) * sourceLi.def.gridSize;
+				var nearbyLevels = Editor.ME.curWorld.getLevelsOverlapping(worldLeft, worldTop, worldRight-worldLeft, worldBottom-worldTop, sourceLi.level.worldDepth);
+
+				var foundValue = false;
+				for(nLevel in nearbyLevels) {
+					var nLi = nLevel.getLayerInstance(sourceLi.def.uid);
+					var levelLeft = dn.M.imax( nLi.level.worldX, worldLeft) - nLi.level.worldX;
+					var levelRight = dn.M.imin( nLi.level.worldX + nLi.level.pxWid - nLi.def.gridSize, worldRight) - nLi.level.worldX;
+					var levelTop = dn.M.imax( nLi.level.worldY, worldTop ) - nLi.level.worldY;
+					var levelBottom = dn.M.imin( nLi.level.worldY + nLi.level.pxHei - nLi.def.gridSize, worldBottom) - nLi.level.worldY;
+
+					var cLeft = Std.int(levelLeft / nLi.def.gridSize);
+					var cRight = Std.int(levelRight / nLi.def.gridSize);
+					var cTop = Std.int(levelTop / nLi.def.gridSize);
+					var cBottom = Std.int(levelBottom / nLi.def.gridSize);
+
+					if( nLi.hasIntGridValueInArea(v,cLeft,cTop)
+						|| nLi.hasIntGridValueInArea(v,cRight,cTop)
+						|| nLi.hasIntGridValueInArea(v,cRight,cBottom)
+						|| nLi.hasIntGridValueInArea(v,cLeft,cBottom) ) {
+						foundValue = true;
+						break;
+					}
+				}
+				if(!foundValue) {
 					return false;
+				}
+			}
 		}
 		return true;
 	}
@@ -357,8 +381,27 @@ class AutoLayerRuleDef {
 			if( pattern[coordId]==0 )
 				continue;
 
-			value = source.isValid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
-				? source.getIntGrid( cx+dirX*(px-radius), cy+dirY*(py-radius) )
+			var cpx = cx+dirX*(px-radius);
+			var cpy = cy+dirY*(py-radius);
+			var nSource = source;
+			if (!source.isValid(cpx, cpy)) {
+				// This point is in a nearby level, look it up by world position and transform the point to be local to it.
+				var worldX = source.level.worldX + cpx * source.def.gridSize;
+				var worldY = source.level.worldY + cpy * source.def.gridSize;
+				var neighborLevel = Editor.ME.curWorld.getLevelAt(worldX,worldY,source.level.worldDepth);
+				if(neighborLevel != null)
+				{
+					var neighborLayer = neighborLevel.getLayerInstance(source.layerDefUid);
+					var nx = Std.int((worldX - neighborLevel.worldX) / neighborLayer.def.gridSize);
+					var ny = Std.int((worldY - neighborLevel.worldY) / neighborLayer.def.gridSize);
+
+					nSource = neighborLayer;
+					cpx = nx;
+					cpy = ny;
+				}
+			}
+			value = nSource.isValid(cpx, cpy)
+				? nSource.getIntGrid(cpx, cpy)
 				: outOfBoundsValue;
 
 			if( value==null )
@@ -374,7 +417,7 @@ class AutoLayerRuleDef {
 			}
 			else if( dn.M.iabs( pattern[coordId] ) > 999 ) {
 				// Group checks
-				valueInf = source.def.getIntGridValueDef(value);
+				valueInf = nSource.def.getIntGridValueDef(value);
 				if( pattern[coordId]>0 && ( valueInf==null || valueInf.groupUid != Std.int(pattern[coordId]/1000)-1 ) )
 					return false;
 
