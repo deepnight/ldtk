@@ -11,6 +11,7 @@ private enum SavingState {
 	CheckLevelCache;
 	SavingMainFile;
 	SavingExternLevels;
+	RemovingObsoleteExternalLevelFiles;
 	WritingImages;
 	ExportingTiled;
 	ExportingGMS;
@@ -248,11 +249,8 @@ class ProjectSaver extends dn.Process {
 						});
 					}
 					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->{
-						if( !failed ) {
-							logSaveOp('  Removing obsolete external level files...');
-							removeObsoleteExternalLevelFiles(project, savingData.externLevels);
+						if( !failed )
 							beginNextState();
-						}
 					});
 				}
 				else {
@@ -262,6 +260,38 @@ class ProjectSaver extends dn.Process {
 
 					beginNextState();
 				}
+
+			case RemovingObsoleteExternalLevelFiles:
+				var dir = project.getAbsExternalFilesDir();
+				if( NT.fileExists(dir) ) {
+					var ops = [];
+					var expected = new Map<String,Bool>();
+					for(l in savingData.externLevels)
+						ops.push({
+							label: 'Listing expected files',
+							cb: ()->expected.set( normalizePath(project.makeAbsoluteFilePath(l.relPath)), true )
+						});
+
+					for(fileName in NT.readDir(dir))
+						ops.push({
+							label: 'Checking $fileName',
+							cb: ()->{
+								logSaveOp('  Checking external level file "$fileName"...');
+								var absPath = dn.FilePath.fromFile(dir+"/"+fileName);
+								if( NT.isDirectory(absPath.full) || absPath.extension==null || absPath.extension.toLowerCase()!=Const.LEVEL_EXTENSION )
+									return;
+
+								if( !expected.exists(normalizePath(absPath.full)) )
+									NT.removeFile(absPath.full);
+							}
+						});
+
+					new ui.modal.Progress(Lang.t._("Removing obsolete files"), ops, ()->{
+						beginNextState();
+					});
+				}
+				else
+					beginNextState();
 
 
 			case WritingImages:
@@ -581,6 +611,8 @@ class ProjectSaver extends dn.Process {
 
 			case SavingExternLevels:
 
+			case RemovingObsoleteExternalLevelFiles:
+
 			case WritingImages:
 				if( !ui.modal.Progress.hasAny() )
 					beginNextState();
@@ -741,22 +773,6 @@ class ProjectSaver extends dn.Process {
 		}
 	}
 
-	static function removeObsoleteExternalLevelFiles(p:data.Project, levels:Array<{ relPath:String, id:String, uid:Int }>) {
-		var expected = new Map<String,Bool>();
-		for(l in levels)
-			expected.set( normalizePath(p.makeAbsoluteFilePath(l.relPath)), true );
-
-		var dir = p.getAbsExternalFilesDir();
-		if( !NT.fileExists(dir) )
-			return;
-		for(fileName in NT.readDir(dir)) {
-			var absPath = dn.FilePath.fromFile(dir+"/"+fileName);
-			if( NT.isDirectory(absPath.full) || absPath.extension==null || absPath.extension.toLowerCase()!=Const.LEVEL_EXTENSION )
-				continue;
-			if( !expected.exists(normalizePath(absPath.full)) )
-				NT.removeFile(absPath.full);
-		}
-	}
 
 	public static function prepareProjectSavingData(project:data.Project, forceSingleFile=false) : FileSavingData {
 		var savingData : FileSavingData = {
