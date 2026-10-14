@@ -237,7 +237,7 @@ class ProjectSaver extends dn.Process {
 								if( failed )
 									return;
 								try {
-									logSaveOp('  Writing external level file for "$id"...');
+									// logSaveOp('  Writing external level file for "$id"...');
 									writeExternalLevelFile(project, uid, fp.full, true);
 								}
 								catch(err:Dynamic) {
@@ -269,19 +269,18 @@ class ProjectSaver extends dn.Process {
 					for(l in savingData.externLevels)
 						ops.push({
 							label: 'Listing expected files',
-							cb: ()->expected.set( normalizePath(project.makeAbsoluteFilePath(l.relPath)), true )
+							cb: ()->expected.set( normalizeAbsPath(project.makeAbsoluteFilePath(l.relPath)), true )
 						});
 
 					for(fileName in NT.readDir(dir))
 						ops.push({
 							label: 'Checking $fileName',
 							cb: ()->{
-								logSaveOp('  Checking external level file "$fileName"...');
 								var absPath = dn.FilePath.fromFile(dir+"/"+fileName);
 								if( NT.isDirectory(absPath.full) || absPath.extension==null || absPath.extension.toLowerCase()!=Const.LEVEL_EXTENSION )
 									return;
 
-								if( !expected.exists(normalizePath(absPath.full)) )
+								if( !expected.exists(normalizeAbsPath(absPath.full)) )
 									NT.removeFile(absPath.full);
 							}
 						});
@@ -713,15 +712,17 @@ class ProjectSaver extends dn.Process {
 		);
 	}
 
-	static function normalizePath(path:String) : String {
-		var nodePath : Dynamic = js.node.Require.require("path");
-		var out : String = nodePath.resolve(path);
-		var process : Dynamic = js.node.Require.require("process");
-		return process.platform=="win32" ? out.toLowerCase() : out;
+	static function normalizeAbsPath(absPath:String) : String {
+		if( App.isWindows() ) {
+			absPath = StringTools.replace(absPath, "/", "\\");
+			return absPath.toLowerCase();
+		}
+		else
+			return absPath;
 	}
 
-	static inline function samePath(a:String, b:String) {
-		return normalizePath(a)==normalizePath(b);
+	static inline function sameAbsPath(a:String, b:String) {
+		return normalizeAbsPath(a)==normalizeAbsPath(b);
 	}
 
 	static function atomicFileOperation(targetAbsPath:String, writeTemp:String->Void) {
@@ -755,7 +756,7 @@ class ProjectSaver extends dn.Process {
 		logSaveOp('    -> Found external JSON cache path: $sourceAbsPath');
 
 		if( sourceAbsPath!=null ) {
-			if( !samePath(sourceAbsPath, targetAbsPath) ) {
+			if( !sameAbsPath(sourceAbsPath, targetAbsPath) ) {
 				atomicFileOperation(targetAbsPath, (tmpPath)->NT.copyFile(sourceAbsPath, tmpPath));
 				logSaveOp('    -> Wrote external level file: $targetAbsPath');
 			}
