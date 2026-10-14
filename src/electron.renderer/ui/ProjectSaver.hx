@@ -33,7 +33,6 @@ class ProjectSaver extends dn.Process {
 	var savingData : Null<FileSavingData>;
 	var onComplete : Null< Bool->Void >;
 	var useMetaBar = false;
-	var timeS : Float;
 
 
 	public function new(p:dn.Process, project:data.Project, ?onComplete:(success:Bool)->Void) {
@@ -43,8 +42,7 @@ class ProjectSaver extends dn.Process {
 		this.project = project; // WARNING: no clone() here, so the project should NOT be modified during saving!!
 		QUEUE.push(this);
 
-		timeS = haxe.Timer.stamp();
-		log('Preparing project saving: ${project.filePath.full}...');
+		logSaveOp('Preparing project saving: ${project.filePath.full}...');
 		project.garbageCollectUnusedImages();
 		beginState(InQueue);
 		updateState();
@@ -62,11 +60,9 @@ class ProjectSaver extends dn.Process {
 
 	inline function hasEditor() return Editor.ME!=null && !Editor.ME.destroyed;
 
-	inline function log(str:String) {
-		App.LOG.add("save", '$str (elapsed=${M.pretty( 1000*(haxe.Timer.stamp()-timeS), 1 )}ms)');
-		timeS = haxe.Timer.stamp();
+	static inline function logSaveOp(str:String) {
+		App.LOG.add("save", str);
 	}
-	inline function logState() log('=> Starting: $state...');
 
 	function error(str:LocaleString, showOptions=true) {
 		var fp = project.filePath.clone();
@@ -110,7 +106,7 @@ class ProjectSaver extends dn.Process {
 			ui.modal.MetaProgress.advance();
 
 		state = s;
-		logState();
+		logSaveOp('=> Starting: $state...');
 
 		switch s {
 			case InQueue:
@@ -202,7 +198,7 @@ class ProjectSaver extends dn.Process {
 				ops.push({
 					label: "Preparing...",
 					cb: ()->{
-						log('  Preparing SavingData...');
+						logSaveOp('  Preparing SavingData...');
 						savingData = ui.ProjectSaver.prepareProjectSavingData(project);
 					}
 				});
@@ -211,7 +207,7 @@ class ProjectSaver extends dn.Process {
 				ops.push({
 					label: "Writing main file...",
 					cb: ()->{
-						log('  Writing ${project.filePath.full}...');
+						logSaveOp('  Writing ${project.filePath.full}...');
 						try NT.writeFileString(project.filePath.full, savingData.projectJsonStr) catch(_) {
 							failed = true;
 							error( L.t._("Could not write the project JSON file here! Maybe the destination is read-only?") );
@@ -240,7 +236,7 @@ class ProjectSaver extends dn.Process {
 								if( failed )
 									return;
 								try {
-									log('  Writing external level file for "$id"...');
+									logSaveOp('  Writing external level file for "$id"...');
 									writeExternalLevelFile(project, uid, fp.full, true);
 								}
 								catch(err:Dynamic) {
@@ -253,6 +249,7 @@ class ProjectSaver extends dn.Process {
 					}
 					new ui.modal.Progress(Lang.t._("Saving levels"), ops, ()->{
 						if( !failed ) {
+							logSaveOp('  Removing obsolete external level files...');
 							removeObsoleteExternalLevelFiles(project, savingData.externLevels);
 							beginNextState();
 						}
@@ -301,7 +298,7 @@ class ProjectSaver extends dn.Process {
 						ops.push({
 							label: "Level "+level.identifier,
 							cb: ()->{
-								log('Level ${level.identifier}...');
+								logSaveOp('Level ${level.identifier}...');
 
 								switch project.getImageExportMode() {
 									case None: // N/A
@@ -324,7 +321,7 @@ class ProjectSaver extends dn.Process {
 										// Layers
 										var mainLayerImages = new Map();
 										for( li in level.layerInstances ) {
-											log('   -> Layer ${li.def.identifier}...');
+											logSaveOp('   -> Layer ${li.def.identifier}...');
 
 											// Draw
 											var allImages = lr.createPngs(project, level, li);
@@ -402,7 +399,7 @@ class ProjectSaver extends dn.Process {
 						});
 					}
 					new ui.modal.Progress(Lang.t._("PNG export"), ops, ()->{
-						log('  Saved $count PNG(s)...');
+						logSaveOp('  Saved $count PNG(s)...');
 					});
 				}
 				else {
@@ -528,12 +525,12 @@ class ProjectSaver extends dn.Process {
 				// Delete empty project dir
 				var dir = project.getAbsExternalFilesDir();
 				if( NT.fileExists(dir) && !NT.dirContainsAnyFile(dir) ) {
-					log('Removing empty dir: $dir');
+					logSaveOp('Removing empty dir: $dir');
 					NT.removeDir(dir);
 				}
 
 				// Finalize
-				log('Saving complete (${project.filePath.fileWithExt})');
+				logSaveOp('Saving complete (${project.filePath.fileWithExt})');
 				complete(true);
 		}
 	}
@@ -549,7 +546,7 @@ class ProjectSaver extends dn.Process {
 
 
 	function complete(success:Bool) {
-		log('Save ended with success=$success');
+		logSaveOp('Save ended with success=$success');
 		destroy();
 
 		if( !success )
@@ -609,7 +606,7 @@ class ProjectSaver extends dn.Process {
 		var subProjectDir = p.getAbsExternalFilesDir();
 		var sourceDir = dn.FilePath.fromDir( p.filePath.directoryWithSlash );
 		var backupDir = dn.FilePath.fromDir( p.getAbsBackupDir() + "/" + p.makeBackupDirName() );
-		log('Backing up $sourceDir to $backupDir...');
+		logSaveOp('Backing up $sourceDir to $backupDir...');
 
 		// List potential external levels
 		var allRelFiles = [ p.filePath.fileWithExt ];
@@ -622,7 +619,7 @@ class ProjectSaver extends dn.Process {
 		}
 
 		// Copy files
-		log('  Found ${allRelFiles.length} files.');
+		logSaveOp('  Found ${allRelFiles.length} files.');
 		initDir( backupDir.full );
 		var anyError = false;
 		var ops : Array<ui.modal.Progress.ProgressOp> = [];
@@ -652,7 +649,7 @@ class ProjectSaver extends dn.Process {
 				while( all.length>p.backupLimit ) {
 					var b = all.pop();
 					try {
-						log("Removing older backup: "+b.backup.getLastDirectory());
+						logSaveOp("Removing older backup: "+b.backup.getLastDirectory());
 						NT.removeDir(b.backup.directory);
 					}
 					catch(_) {
@@ -663,7 +660,7 @@ class ProjectSaver extends dn.Process {
 		});
 
 		new ui.modal.Progress("Backup", ops, ()->{
-			log('  Done!');
+			logSaveOp('  Done!');
 			if( anyError )
 				error(L.t._("Backup failed!"));
 			else
@@ -723,19 +720,25 @@ class ProjectSaver extends dn.Process {
 
 		// Null if the level was modified, or if its file was changed/removed outside of LDtk: re-serialize from live data then
 		var sourceAbsPath = level.getExternalJsonCachePath();
+		logSaveOp('    -> Found external JSON cache path: $sourceAbsPath');
 
 		if( sourceAbsPath!=null ) {
-			if( !samePath(sourceAbsPath, targetAbsPath) )
+			if( !samePath(sourceAbsPath, targetAbsPath) ) {
 				atomicFileOperation(targetAbsPath, (tmpPath)->NT.copyFile(sourceAbsPath, tmpPath));
+				logSaveOp('    -> Wrote external level file: $targetAbsPath');
+			}
 		}
 		else {
 			var jsonStr = jsonStringify(p, level.toJson());
 			atomicFileOperation(targetAbsPath, (tmpPath)->NT.writeFileString(tmpPath, jsonStr));
 			jsonStr = null;
+			logSaveOp('    -> Wrote external level file: $targetAbsPath');
 		}
 
-		if( updateCache )
+		if( updateCache ) {
 			level.setJsonCacheFromExternalFile(targetAbsPath);
+			logSaveOp('    -> Updated cache for external level file: $targetAbsPath');
+		}
 	}
 
 	static function removeObsoleteExternalLevelFiles(p:data.Project, levels:Array<{ relPath:String, id:String, uid:Int }>) {
