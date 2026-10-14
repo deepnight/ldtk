@@ -3,6 +3,14 @@ import electron.renderer.IpcRenderer;
 import page.CrashReport; // force compilation in debug
 #end
 
+enum abstract NodePlatform(Int) to Int {
+	var NotInitialized;
+	var Unknown;
+	var Linux;
+	var Windows;
+	var MacOS;
+}
+
 class App extends dn.Process {
 	public static var ME : App;
 	public static var LOG : dn.Log = new dn.Log(5000);
@@ -503,9 +511,29 @@ class App extends dn.Process {
 		return ui.ProjectSaver.hasAny() || ui.Modal.hasAnyUnclosable();
 	}
 
-	public static function isLinux() return js.node.Os.platform()=="linux";
-	public static function isWindows() return js.node.Os.platform()=="win32";
-	public static function isMac() return js.node.Os.platform()=="darwin";
+	static var _cachedPlatform : NodePlatform = NotInitialized;
+	static function initPlatform() {
+		if( _cachedPlatform==NotInitialized )
+			_cachedPlatform = switch js.node.Os.platform() {
+				case "linux": Linux;
+				case "win32": Windows;
+				case "darwin": MacOS;
+				case _: Unknown;
+			}
+	}
+	public static function isLinux() {
+		initPlatform();
+		return _cachedPlatform==Linux;
+	}
+	public static function isWindows() {
+		initPlatform();
+		return _cachedPlatform==Windows;
+	}
+	public static function isMac() {
+		initPlatform();
+		return _cachedPlatform==MacOS;
+	}
+
 	// public static function isWindows() return false;
 	// public static function isMac() return true;
 
