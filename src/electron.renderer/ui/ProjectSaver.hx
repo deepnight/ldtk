@@ -753,7 +753,6 @@ class ProjectSaver extends dn.Process {
 
 		// Null if the level was modified, or if its file was changed/removed outside of LDtk: re-serialize from live data then
 		var sourceAbsPath = level.getExternalJsonCachePath();
-		logSaveOp('    -> Found external JSON cache path: $sourceAbsPath');
 
 		if( sourceAbsPath!=null ) {
 			if( !sameAbsPath(sourceAbsPath, targetAbsPath) ) {
@@ -768,10 +767,8 @@ class ProjectSaver extends dn.Process {
 			logSaveOp('    -> Wrote external level file: $targetAbsPath');
 		}
 
-		if( updateCache ) {
+		if( updateCache )
 			level.setJsonCacheFromExternalFile(targetAbsPath);
-			logSaveOp('    -> Updated cache for external level file: $targetAbsPath');
-		}
 	}
 
 
