@@ -2483,7 +2483,8 @@ class Editor extends Page {
 		updateTitle();
 	}
 
-	public inline function invalidateAllLevelsCache() {
+	public function invalidateAllLevelsCache() {
+		App.LOG.add("cache", 'Level cache fully invalidated.');
 		for(w in project.worlds)
 		for(l in w.levels)
 			invalidateLevelCache(l);
@@ -2501,7 +2502,7 @@ class Editor extends Page {
 		}
 	}
 
-	public inline function invalidateCachedLevelErrors() {
+	public function invalidateCachedLevelErrors() {
 		for(l in curWorld.levels)
 			l.invalidateCachedError();
 	}
