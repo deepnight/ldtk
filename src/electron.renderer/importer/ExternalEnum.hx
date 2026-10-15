@@ -352,8 +352,6 @@ class ExternalEnum {
 				applyDiff(diff, relSourcePath);
 				preserveEnumValuesOrder(parseds);
 				updateChecksums(relSourcePath, checksum);
-				if( valuesDataChanged )
-					Editor.ME.invalidateAllLevelsCache();
 				Editor.ME.ge.emit( ExternalEnumsLoaded(true) );
 				N.success( fileName, L.t._("Enums updated successfully.") );
 			}
@@ -400,6 +398,7 @@ class ExternalEnum {
 		var project = Editor.ME.project;
 
 		var anyChange = false;
+		var changedValues = new Map<Int,Array<String>>();
 		for(pe in parseds) {
 			var ed = project.defs.getEnumDef(pe.enumId);
 			if( ed==null )
@@ -410,17 +409,19 @@ class ExternalEnum {
 				if( ev==null )
 					continue;
 
+				var valueChanged = false;
+
 				// Update value color
 				if( supportsColors && pv.data.color!=ev.color ) {
 					ev.color = pv.data.color;
-					anyChange = true;
+					valueChanged = true;
 				}
 
 				if( supportsIcons ) {
 					// Lost tile
 					if( pv.data.tileRect==null && ev.tileRect!=null ) {
 						ev.tileRect = null;
-						anyChange = true;
+						valueChanged = true;
 					}
 
 					// New tile
@@ -432,7 +433,7 @@ class ExternalEnum {
 							w: pv.data.tileRect.w,
 							h: pv.data.tileRect.h,
 						}
-						anyChange = true;
+						valueChanged = true;
 					}
 
 					if( pv.data.tileRect!=null && ev.tileRect!=null ) {
@@ -446,12 +447,43 @@ class ExternalEnum {
 								w: pv.data.tileRect.w,
 								h: pv.data.tileRect.h,
 							}
-							anyChange = true;
+							valueChanged = true;
 						}
 					}
 				}
+				if( valueChanged ) {
+					anyChange = true;
+					if( !changedValues.exists(ed.uid) )
+						changedValues.set(ed.uid, []);
+					changedValues.get(ed.uid).push(pv.valueId);
+				}
 			}
 		}
+
+		// Only levels using the changed values need cache break for field tiles or smart colors.
+		function _usesChangedValue(fi:data.inst.FieldInstance) {
+			switch fi.def.type {
+				case F_Enum(uid):
+					if( changedValues.exists(uid) )
+						for(i in 0...fi.getArrayLength())
+							if( changedValues.get(uid).indexOf(fi.getEnumValue(i))>=0 )
+								return true;
+				case _:
+			}
+			return false;
+		}
+		if( anyChange )
+			for(w in project.worlds)
+			for(l in w.levels) {
+				for(fi in l.fieldInstances)
+					if( _usesChangedValue(fi) )
+						Editor.ME.invalidateLevelCache(l);
+				for(li in l.layerInstances)
+				for(ei in li.entityInstances)
+				for(fi in ei.fieldInstances)
+					if( _usesChangedValue(fi) )
+						Editor.ME.invalidateLevelCache(l);
+			}
 
 		if( anyChange )
 			App.LOG.add("import", 'Some enum values data were updated.');

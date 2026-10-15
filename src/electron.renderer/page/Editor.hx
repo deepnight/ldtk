@@ -440,6 +440,8 @@ class Editor extends Page {
 			return false;
 
 		var oldRelPath = td.relPath;
+		var oldPxWid = td.pxWid;
+		var oldPxHei = td.pxHei;
 		var result = td.importAtlasImage( td.relPath );
 		App.LOG.fileOp(" -> Reload result: "+result);
 		App.LOG.fileOp(" -> pixelData: "+(td.hasValidPixelData() ? "Ok" : "need rebuild"));
@@ -455,7 +457,7 @@ class Editor extends Page {
 						var newRelPath = project.makeRelativeFilePath(newAbsPath);
 						td.importAtlasImage( newRelPath );
 						td.buildPixelDataAndNotify();
-						ge.emit( TilesetImageLoaded(td, false) );
+						ge.emit( TilesetImageLoaded(td, false, true) );
 						levelRender.invalidateAll();
 					});
 				}
@@ -504,7 +506,8 @@ class Editor extends Page {
 			td.buildPixelDataAndNotify();
 		}
 
-		ge.emit( TilesetImageLoaded(td, isInitialLoading) );
+		// No need for cache break if only pixel data changed!
+		ge.emit( TilesetImageLoaded(td, isInitialLoading, oldRelPath!=td.relPath || oldPxWid!=td.pxWid || oldPxHei!=td.pxHei || result!=Ok) );
 		return changed;
 	}
 
@@ -2173,8 +2176,8 @@ class Editor extends Page {
 			case AutoLayerRenderingChanged(lis):
 			case LayerInstanceTilesetChanged(li): invalidateLevelCache(li.level);
 			case TilesetDefChanged(td): invalidateAllLevelsCache();
-			case TilesetImageLoaded(td, init):
-				if( !init )
+			case TilesetImageLoaded(td, init, breaksLevelCache):
+				if( !init && breaksLevelCache )
 					invalidateAllLevelsCache();
 			case TilesetDefAdded(td):
 			case TilesetDefRemoved(td): invalidateAllLevelsCache();
@@ -2231,7 +2234,7 @@ class Editor extends Page {
 			case ProjectSaved:
 			case GridChanged(active):
 			case ShowDetailsChanged(active):
-			case TilesetImageLoaded(td,init):
+			case TilesetImageLoaded(td,init,breaksLevelCache):
 				if( !init )
 					needSaving = true;
 
@@ -2406,7 +2409,7 @@ class Editor extends Page {
 				updateTool();
 				updateGuide();
 
-			case TilesetImageLoaded(td, init):
+			case TilesetImageLoaded(td, init, breaksLevelCache):
 				updateTool();
 
 			case TilesetMetaDataChanged(td):
