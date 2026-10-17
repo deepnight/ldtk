@@ -8,7 +8,7 @@ typedef WorldLevelRender = {
 	var bgWrapper: h2d.Object;
 	var outline: h2d.Graphics;
 	var render: h2d.Object;
-	var edgeLayers : Null< Map<Int, h2d.TileGroup> >;
+	var edgeLayers : Null< Map<String, h2d.TileGroup> >;
 	var fadeMask : h2d.Bitmap;
 	var identifier: h2d.ScaleGrid;
 
@@ -278,8 +278,17 @@ class WorldRender extends dn.Process {
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 
+			case LayerInstanceAdded(li):
+				invalidateLevelRender(li.level);
+
+			case LayerInstanceRemoved(li):
+				invalidateLevelRender(li.level);
+
 			case LayerInstanceSelected(curLi):
 				updateEdgeLayersOpacity();
+
+			case LayerInstancesSorted(l):
+				invalidateLevelRender(l);
 
 			case TilesetDefPixelDataCacheRebuilt(td):
 				invalidateAllLevelRenders();
@@ -856,7 +865,7 @@ class WorldRender extends dn.Process {
 				var edgeTg = new h2d.TileGroup(td.getAtlasTile(), wl.render);
 				if( wl.edgeLayers==null )
 					wl.edgeLayers = new Map();
-				wl.edgeLayers.set(li.layerDefUid, edgeTg);
+				wl.edgeLayers.set(li.iid, edgeTg);
 				// NOTE: layer offsets is already included in tiles render methods
 
 				if( li.def.isAutoLayer() && li.autoTilesCache!=null ) {
@@ -980,13 +989,13 @@ class WorldRender extends dn.Process {
 		// Update edge layers opacity based on active one
 		for(wl in worldLevels)
 		for(li in editor.curLevel.layerInstances) {
-			if( wl.edgeLayers==null || !wl.edgeLayers.exists(li.layerDefUid) )
+			if( wl.edgeLayers==null || !wl.edgeLayers.exists(li.iid) )
 				continue;
 
 			if( li==editor.curLayerInstance )
-				wl.edgeLayers.get(li.layerDefUid).alpha = li.def.displayOpacity;
+				wl.edgeLayers.get(li.iid).alpha = li.def.displayOpacity;
 			else
-				wl.edgeLayers.get(li.layerDefUid).alpha = li.def.displayOpacity * li.def.inactiveOpacity;
+				wl.edgeLayers.get(li.iid).alpha = li.def.displayOpacity * li.def.inactiveOpacity;
 		}
 	}
 

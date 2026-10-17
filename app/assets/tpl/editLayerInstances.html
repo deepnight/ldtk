@@ -1,0 +1,75 @@
+<h2>
+	<div class="icon layer"></div>
+	Level layers
+</h2>
+
+<div class="mainList">
+	<div class="buttons">
+		<button class="create"> <span class="icon add"></span> </button>
+	</div>
+	<div class="search"></div>
+	<ul class="niceList compact"></ul>
+</div>
+
+<div class="help none">
+	Each LEVEL in your project has LAYERS, as seen below. The layer's content can be of various types, including Image Tiles or Integer values.
+</div>
+
+
+<div class="rightColumn type-IntGrid type-IntGridAutoLayer type-AutoLayer type-Tiles type-Entities">
+
+	<div class="collapser" default="open" id="layerPanel_mainForm">General layer settings</div>
+	<dl class="form main">
+		<dt>
+			<label for="layerDefName">Layer definition</label>
+			<info>
+				Each layer in a level has a project-wide definition it refers to.
+			</info>
+		</dt>
+		<dd>
+			<span id="layerDefName"></span>
+			<button class="editLayerDef">Edit definition</button>
+		</dd>
+
+		<dt>
+			<label for="lName">Layer identifier</label>
+			<info class="identifier"></info>
+		</dt>
+		<dd>
+			<input type="text" name="name" id="lName"/>
+		</dd>
+	</dl>
+
+
+	<div class="collapser" default="open" id="layerPanel_uiForm">Display options</div>
+	<dl class="form visuals">
+		<dt>
+			<label>Visual options</label>
+		</dt>
+		<dd class="checkboxes">
+			<label for="visible" title="If enabled, the layer will be rendered.">
+				<input type="checkbox" name="visible" class="small" id="visible"/>
+				Visible
+			</label>
+		</dd>
+	</dl>
+
+	<div class="Entities">
+		<div class="collapser" default="open" id="layerPanel_specificForm"><span class="inlined" id="typeSpecificTitle"></span> settings</div>
+		<dl class="form typeSpecific">
+
+			<div class="Entities">
+				<dt class="advanced">
+					<label>Advanced operations</label>
+				</dt>
+				<dd class="advanced">
+					<button class="moveEntities" title="Use this action to quickly move a selection of entity instances from this layer to another one.\nThis is typically useful if, for example, you added an 'Actor' tag to some entities, and you wanted to move all existing Actors to a new 'ActorsOnly' layer.">
+						Move existing entities to another layer
+					</button>
+				</dd>
+			</div>
+
+		</dl>
+	</div>
+
+</div>

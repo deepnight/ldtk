@@ -1,5 +1,6 @@
 typedef TimelineState = {
-	var layerJsons : Map<Int, ldtk.Json.LayerInstanceJson>;
+	var layerJsons : Map<String, ldtk.Json.LayerInstanceJson>;
+	var layerOrder : Array<String>;
 	var fullLevelJson : Null<ldtk.Json.LevelJson>;
 	var bounds : Null<h2d.col.Bounds>;
 }
@@ -178,8 +179,8 @@ class LevelTimeline {
 				case IntGrid:
 					// Auto-layers based on this IntGrid layer
 					for(dli in level.layerInstances) {
-						if( !deps.exists(dli.layerDefUid) && dli.def.type==AutoLayer && dli.def.autoSourceLayerDefUid==li.layerDefUid )
-							deps.set(dli.layerDefUid, dli);
+						if( !deps.exists(dli.iid) && dli.def.type==AutoLayer && dli.def.autoSourceLayerDefUid==li.layerDefUid )
+							deps.set(dli.iid, dli);
 					}
 
 				case Entities:
@@ -227,8 +228,12 @@ class LevelTimeline {
 		s.fullLevelJson = level.toJson(true);
 
 		// Also store layer instances JSONs (from level JSON)
-		for(layerInstJson in s.fullLevelJson.layerInstances)
-			s.layerJsons.set( layerInstJson.layerDefUid, layerInstJson );
+		s.layerJsons = new Map();
+		s.layerOrder = [];
+		for(layerInstJson in s.fullLevelJson.layerInstances) {
+			s.layerJsons.set( layerInstJson.iid, layerInstJson );
+			s.layerOrder.push(layerInstJson.iid);
+		}
 
 		stopTimer();
 	}
@@ -247,13 +252,14 @@ class LevelTimeline {
 	function prolongatePreviousStates() {
 		var s = states.get(curStateIdx);
 
-		if( s.layerJsons==null )
-			s.layerJsons = new Map(); // not sure why this could happen
-
 		// Layer JSONs
-		for(li in level.layerInstances)
-			if( !s.layerJsons.exists(li.layerDefUid) )
-				s.layerJsons.set(li.layerDefUid, states.get(curStateIdx-1).layerJsons.get(li.layerDefUid));
+		s.layerOrder = [];
+		for(li in level.layerInstances) {
+			if( !s.layerJsons.exists(li.iid) )
+				s.layerJsons.set(li.iid, states.get(curStateIdx-1).layerJsons.get(li.iid));
+
+			s.layerOrder.push(li.iid);
+		}
 
 		// Level JSON
 		if( s.fullLevelJson==null )
@@ -261,7 +267,7 @@ class LevelTimeline {
 	}
 
 
-	inline function isLayerStateStored(ld:data.def.LayerDef) { // TODO useless
+	inline function isLayerStateStored(li:data.inst.LayerInstance) { // TODO useless
 		return true;
 	}
 
@@ -269,6 +275,7 @@ class LevelTimeline {
 		if( states.get(idx)==null )
 			states.set(idx, {
 				layerJsons: new Map(),
+				layerOrder: [],
 				fullLevelJson: null,
 				bounds: null,
 			});
@@ -279,7 +286,7 @@ class LevelTimeline {
 	**/
 	function saveSingleLayerState(li:data.inst.LayerInstance) {
 		// Ignore non-editable layers
-		if( !isLayerStateStored(li.def) )
+		if( !isLayerStateStored(li) )
 			return false;
 
 		// Init state
@@ -287,7 +294,7 @@ class LevelTimeline {
 
 		// Store state
 		var s = getState(curStateIdx);
-		s.layerJsons.set( li.layerDefUid, li.toJson() );
+		s.layerJsons.set( li.iid, li.toJson() );
 
 		invalidatedDebug = true;
 		return true;
@@ -303,8 +310,8 @@ class LevelTimeline {
 	}
 
 
-	inline function getLayerJson(stateIdx:Int, layerDefUid:Int) : Null<ldtk.Json.LayerInstanceJson> {
-		return hasState(stateIdx) ? getState(stateIdx).layerJsons.get(layerDefUid) : null;
+	inline function getLayerJson(stateIdx:Int, layerInstanceIid:String) : Null<ldtk.Json.LayerInstanceJson> {
+		return hasState(stateIdx) ? getState(stateIdx).layerJsons.get(layerInstanceIid) : null;
 	}
 
 
@@ -395,16 +402,16 @@ class LevelTimeline {
 
 		// Restore some layer instances
 		var restoreds = [];
-		for(i in 0...project.defs.layers.length) {
-			var layerDef = project.defs.layers[i];
-			if( isLayerStateStored(layerDef) ) {
-				var layerJson = state.layerJsons.get(layerDef.uid);
-				if( layerJson==null )
-					throw "Missing layer JSON in timeline state "+idx;
+		level.layerInstances = [];
+		for(layerInstanceIid in state.layerOrder) {
+			var layerJson = state.layerJsons.get(layerInstanceIid);
 
-				level.layerInstances[i] = data.inst.LayerInstance.fromJson(project, layerJson);
-				restoreds.push( level.layerInstances[i] );
-			}
+			if( layerJson==null )
+				throw "Missing layer JSON in timeline state "+idx;
+
+			var li = data.inst.LayerInstance.fromJson(project, layerJson);
+			level.layerInstances.push(li);
+			restoreds.push(li);
 		}
 
 		if( restoreds.length>0 )
@@ -542,14 +549,14 @@ class LevelTimeline {
 					if( idx==curTimeline.curStateIdx )
 						jCell.addClass("current");
 
-					var layerJson = curTimeline.getLayerJson(idx, li.layerDefUid);
-					if( !curTimeline.isLayerStateStored(li.def) )
+					var layerJson = curTimeline.getLayerJson(idx, li.iid);
+					if( !curTimeline.isLayerStateStored(li) )
 						jCell.addClass("na");
 					else if( layerJson==null )
 						jCell.addClass("empty");
 					else {
 						jCell.addClass("hasState");
-						if( idx>0 && layerJson==curTimeline.getLayerJson(idx-1, li.layerDefUid) )
+						if( idx>0 && layerJson==curTimeline.getLayerJson(idx-1, li.iid) )
 							jCell.addClass("extend");
 					}
 				}

@@ -303,9 +303,9 @@ class ProjectSaver extends dn.Process {
 										}
 
 										// Layers
-										var mainLayerImages = new Map();
+										var mainLayerImages = new Map<String, Dynamic>();
 										for( li in level.layerInstances ) {
-											log('   -> Layer ${li.def.identifier}...');
+											log('   -> Layer ${li.identifier}...');
 
 											// Draw
 											var allImages = lr.createPngs(project, level, li);
@@ -315,16 +315,16 @@ class ProjectSaver extends dn.Process {
 											// Save PNGs
 											for(i in allImages) {
 												if( i.bytes==null ) {
-													error(L.t._('Failed to create PNG in layer "::layerId::" from level "::levelId::"', {layerId:li.def.identifier, levelId:level.identifier}));
+													error(L.t._('Failed to create PNG in layer "::layerId::" from level "::levelId::"', {layerId:li.identifier, levelId:level.identifier}));
 													return;
 												}
 												if( i.secondarySuffix==null )
-													mainLayerImages.set(li.layerDefUid, i);
+													mainLayerImages.set(li.iid, i);
 												var fp = dn.FilePath.fromDir(pngDir);
 												fp.fileName = project.getPngFileName(
 													project.simplifiedExport ? "%layer_name" : null,
 													level,
-													li.def,
+													li,
 													i.secondarySuffix
 												);
 												fp.extension = "png";
@@ -341,7 +341,7 @@ class ProjectSaver extends dn.Process {
 												tex.clear(level.getBgColor());
 											var wrapper = new h2d.Object();
 											level.iterateLayerInstancesBottomToTop( (li)->{
-												var img = mainLayerImages.get(li.layerDefUid);
+												var img = mainLayerImages.get(li.iid);
 												if( img!=null && img.tex!=null ) {
 													var t = h2d.Tile.fromTexture(img.tex);
 													var bmp = new h2d.Bitmap(t, wrapper);
@@ -373,7 +373,7 @@ class ProjectSaver extends dn.Process {
 
 										// Save PNG
 										var fp = dn.FilePath.fromDir(pngDir);
-										fp.fileName = project.getPngFileName(level, project.defs.layers[0]);
+										fp.fileName = project.getPngFileName(level, level.layerInstances[0]);
 										fp.extension = "png";
 										NT.writeFileBytes(fp.full, pngBytes);
 										count++;
@@ -489,7 +489,7 @@ class ProjectSaver extends dn.Process {
 							// Write CSV file
 							var fp = dirFp.clone();
 							fp.appendDirectory(l.identifier);
-							fp.fileName = li.def.identifier;
+							fp.fileName = li.identifier;
 							fp.extension = "csv";
 							NT.writeFileString( fp.full, csv.toString2D() );
 						}

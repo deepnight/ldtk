@@ -167,6 +167,10 @@ class Clipboard {
 				case CFieldDef:
 					var json : ldtk.Json.FieldDefJson = jsonObj;
 					'Field definition "${json.identifier}"';
+
+				case CLayerInstance:
+					var json : ldtk.Json.LayerInstanceJson = jsonObj;
+					'Layer instance "${json.__identifier}"';
 			}
 	}
 

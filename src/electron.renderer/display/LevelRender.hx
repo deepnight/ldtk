@@ -18,8 +18,8 @@ class LevelRender extends dn.Process {
 
 	var layersWrapper : h2d.Layers;
 
-	/** <LayerDefUID, LayerRender> **/
-	var layerRenders : Map<Int, LayerRender> = new Map();
+	/** <LayerDefUID, <LayerInstanceIID, LayerRender>> **/
+	var layerRenders : Map<Int, Map<String, LayerRender>> = new Map();
 	var asyncTmpRender : Null<dn.heaps.PixelGrid>;
 
 	var bgColor : h2d.Bitmap;
@@ -34,7 +34,7 @@ class LevelRender extends dn.Process {
 	var allInvalidated = true;
 	var uiAndBgInvalidated = false;
 	var gridInvalidated = false;
-	var layerInvalidations : Map<Int, { evaluateRules:Bool, left:Int, right:Int, top:Int, bottom:Int }> = new Map();
+	var layerInvalidations : Map<String, { evaluateRules:Bool, left:Int, right:Int, top:Int, bottom:Int }> = new Map();
 
 
 	public function new() {
@@ -80,8 +80,9 @@ class LevelRender extends dn.Process {
 			case WorldMode(active):
 				if( active ) {
 					// Remove hidden render
-					for(l in layerRenders)
-						l.dispose();
+					for(lrs in layerRenders)
+					for(lr in lrs)
+						lr.dispose();
 					layerRenders = new Map();
 					grid.clear();
 
@@ -148,8 +149,32 @@ class LevelRender extends dn.Process {
 						li.applyAllRules();
 				invalidateAll();
 
+			case LayerInstanceAdded(li):
+				// TODO: check if 'LayerInstancesSorted' should be repliacted here
+				invalidateLayer(li);
+
+			case LayerInstanceRemoved(li):
+				if( layerRenders.exists(li.layerDefUid) ) {
+					var lrs = layerRenders.get(li.layerDefUid);
+					if ( lrs.exists(li.iid) ) {
+						lrs.get(li.iid).dispose();
+						lrs.remove(li.iid);
+					}
+				}
+
 			case LayerInstanceVisiblityChanged(li):
 				applyLayerVisibility(li);
+
+			case LayerInstancesSorted(l):
+				for( li in l.layerInstances ) {
+					var depth = l.getLayerDepth(li);
+					if( layerRenders.exists(li.layerDefUid) ) {
+						var layerRendersForDef = layerRenders.get(li.layerDefUid);
+						if( layerRendersForDef.exists(li.iid) ) {
+							layersWrapper.add( layerRendersForDef.get(li.iid).root, depth );
+						}
+					}
+				}
 
 			case AutoLayerRenderingChanged(lis):
 				for(li in lis)
@@ -170,8 +195,12 @@ class LevelRender extends dn.Process {
 
 			case LayerDefRemoved(uid):
 				if( layerRenders.exists(uid) ) {
-					layerRenders.get(uid).dispose();
+					for( layerRender in layerRenders.get(uid) ) {
+						layerRender.dispose();
+					}
+
 					layerRenders.remove(uid);
+
 					for(li in editor.curLevel.layerInstances)
 						if( !li.def.autoLayerRulesCanBeUsed() )
 							invalidateLayer(li);
@@ -179,14 +208,18 @@ class LevelRender extends dn.Process {
 
 			case LayerDefSorted:
 				for( li in editor.curLevel.layerInstances ) {
-					var depth = editor.project.defs.getLayerDepth(li.def);
-					if( layerRenders.exists(li.layerDefUid) )
-						layersWrapper.add( layerRenders.get(li.layerDefUid).root, depth );
+					var depth = editor.curLevel.getLayerDepth(li);
+					if( layerRenders.exists(li.layerDefUid) ) {
+						var layerRendersForDef = layerRenders.get(li.layerDefUid);
+						if( layerRendersForDef.exists(li.iid) ) {
+							layersWrapper.add( layerRendersForDef.get(li.iid).root, depth );
+						}
+					}
 				}
 
 			case LayerDefChanged(defUid,contentInvalidated):
 				if( contentInvalidated ) {
-					invalidateLayer(defUid);
+					invalidateLayers(defUid);
 					renderGrid();
 				}
 
@@ -199,14 +232,15 @@ class LevelRender extends dn.Process {
 
 			case LayerDefIntGridValueRemoved(defUid,value,used):
 				if( used )
-					invalidateLayer(defUid);
+					invalidateLayers(defUid);
 
 			case LayerRuleAdded(r):
 
 			case LayerRuleChanged(r):
-				var li = editor.curLevel.getLayerInstanceFromRule(r);
-				li.applyRuleToFullLayer(r, true);
-				invalidateLayer(li);
+				for( li in editor.curLevel.getLayerInstancesFromRule(r) ) {
+					li.applyRuleToFullLayer(r, true);
+					invalidateLayer(li);
+				}
 
 			case LayerRuleSeedChanged:
 				invalidateLayer( editor.curLayerInstance );
@@ -216,8 +250,9 @@ class LevelRender extends dn.Process {
 
 			case LayerRuleRemoved(r,invalidates):
 				if( invalidates ) {
-					var li = editor.curLevel.getLayerInstanceFromRule(r);
-					invalidateLayer( li==null ? editor.curLayerInstance : li );
+					for( li in editor.curLevel.getLayerInstancesFromRule(r) ) {
+						invalidateLayer( li==null ? editor.curLayerInstance : li );
+					}
 				}
 
 			case LayerRuleGroupAdded(rg):
@@ -307,7 +342,8 @@ class LevelRender extends dn.Process {
 			case EnumDefSorted:
 		}
 
-		for(lr in layerRenders)
+		for(lrs in layerRenders)
+		for(lr in lrs)
 			lr.onGlobalEvent(e);
 	}
 
@@ -588,8 +624,13 @@ class LevelRender extends dn.Process {
 		renderGrid();
 		renderBg();
 
-		for(ld in editor.project.defs.layers)
-			renderLayer( editor.curLevel.getLayerInstance(ld) );
+		for(lrs in layerRenders)
+		for(lr in lrs)
+			lr.dispose();
+		layerRenders = new Map();
+
+		for(li in editor.curLevel.layerInstances)
+			renderLayer(li);
 	}
 
 	public inline function clearTemp() {
@@ -599,18 +640,24 @@ class LevelRender extends dn.Process {
 
 
 	function renderLayer(li:data.inst.LayerInstance) {
-		layerInvalidations.remove(li.layerDefUid);
+		layerInvalidations.remove(li.iid);
 
 		if( !layerRenders.exists(li.layerDefUid) ) {
+			layerRenders.set(li.layerDefUid, new Map());
+		}
+
+		var lrs = layerRenders.get(li.layerDefUid);
+
+		if( !lrs.exists(li.iid) ) {
 			// Create new render
 			var lr = new LayerRender();
 			lr.render(li, autoLayerRendering);
-			layerRenders.set(li.layerDefUid, lr);
-			layersWrapper.add( lr.root, editor.project.defs.getLayerDepth(li.def) );
+			lrs.set(li.iid, lr);
+			layersWrapper.add( lr.root, editor.curLevel.getLayerDepth(li) );
 		}
 		else {
 			// Refresh render
-			var lr = layerRenders.get(li.layerDefUid);
+			var lr = lrs.get(li.iid);
 			lr.render(li, autoLayerRendering);
 		}
 
@@ -619,7 +666,11 @@ class LevelRender extends dn.Process {
 
 
 	function applyLayerVisibility(li:data.inst.LayerInstance) {
-		var lr = layerRenders.get(li.layerDefUid);
+		var lrs = layerRenders.get(li.layerDefUid);
+		if( lrs==null )
+			return;
+
+		var lr = lrs.get(li.iid);
 		if( lr==null )
 			return;
 
@@ -644,16 +695,13 @@ class LevelRender extends dn.Process {
 
 	@:allow(page.Editor)
 	function applyAllLayersVisibility() {
-		for(ld in editor.project.defs.layers) {
-			var li = editor.curLevel.getLayerInstance(ld);
+		for(li in editor.curLevel.layerInstances) {
 			applyLayerVisibility(li);
 		}
 	}
 
-	public inline function invalidateLayer(?li:data.inst.LayerInstance, ?layerDefUid:Int, evaluateRules=true) {
-		if( li==null )
-			li = editor.curLevel.getLayerInstance(layerDefUid);
-		layerInvalidations.set( li.layerDefUid, { evaluateRules:evaluateRules, left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
+	public inline function invalidateLayer(li:data.inst.LayerInstance, evaluateRules=true) {
+		layerInvalidations.set( li.iid, { evaluateRules:evaluateRules, left:0, right:li.cWid-1, top:0, bottom:li.cHei-1 } );
 
 		if( li.def.type==IntGrid )
 			for(l in editor.curLevel.layerInstances)
@@ -661,9 +709,16 @@ class LevelRender extends dn.Process {
 					invalidateLayer(l);
 	}
 
+	public inline function invalidateLayers(layerDefUid:Int, evaluateRules=true) {
+		for( w in editor.project.worlds )
+		for( l in w.levels )
+		for( li in l.getLayerInstances(layerDefUid))
+			invalidateLayer(li, evaluateRules);
+	}
+
 	public inline function invalidateLayerArea(li:data.inst.LayerInstance, left:Int, right:Int, top:Int, bottom:Int, evaluateRules=true) {
-		if( layerInvalidations.exists(li.layerDefUid) ) {
-			var bounds = layerInvalidations.get(li.layerDefUid);
+		if( layerInvalidations.exists(li.iid) ) {
+			var bounds = layerInvalidations.get(li.iid);
 			bounds.left = M.imin(bounds.left, left);
 			bounds.right = M.imax(bounds.right, right);
 			bounds.top = M.imin(bounds.top, top);
@@ -671,7 +726,7 @@ class LevelRender extends dn.Process {
 			bounds.evaluateRules = evaluateRules;
 		}
 		else
-			layerInvalidations.set( li.layerDefUid, { evaluateRules:evaluateRules, left:left, right:right, top:top, bottom:bottom } );
+			layerInvalidations.set( li.iid, { evaluateRules:evaluateRules, left:left, right:right, top:top, bottom:bottom } );
 
 		// Invalidate linked auto-layers
 		if( li.def.type==IntGrid )
@@ -751,11 +806,11 @@ class LevelRender extends dn.Process {
 
 			// Layers
 			for( li in editor.curLevel.layerInstances )
-				if( layerInvalidations.exists(li.layerDefUid) ) {
+				if( layerInvalidations.exists(li.iid) ) {
 					if( cd.has("asyncRenderSuspended") )
 						if( li.def.useAsyncRender || li.def.autoSourceLayerDefUid!=null && li.def.autoSourceLd.useAsyncRender )
 							continue;
-					var inv = layerInvalidations.get(li.layerDefUid);
+					var inv = layerInvalidations.get(li.iid);
 					if( li.def.isAutoLayer() && inv.evaluateRules )
 						li.applyAllRulesAt( inv.left, inv.top, inv.right-inv.left+1, inv.bottom-inv.top+1 );
 					renderLayer(li);

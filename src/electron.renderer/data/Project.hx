@@ -142,8 +142,8 @@ class Project {
 			: getDefaultImageExportFilePattern();
 	}
 
-	public function getPngFileName(?pattern:String, level:data.Level, ld:data.def.LayerDef, ?extraSuffix:String) {
-		if( ld==null )
+	public function getPngFileName(?pattern:String, level:data.Level, li:data.inst.LayerInstance, ?extraSuffix:String) {
+		if( li==null )
 			return "--ERROR: no layer--";
 
 		var p = pattern!=null ? pattern : getImageExportFilePattern();
@@ -152,13 +152,13 @@ class Project {
 			"%level_name"=>()->level.identifier,
 			"%world"=>()->level._world.identifier,
 			"%level_idx"=>()->dn.Lib.leadingZeros( level._world.getLevelIndex(level), 4),
-			"%layer_name"=>()->ld.identifier,
+			"%layer_name"=>()->li.identifier,
 			"%layer_idx"=>()->{
 				var i = 0;
-				for(l in defs.layers)
-					if( l==ld )
+				for(l in level.layerInstances)
+					if( l==li )
 						break;
-					else switch l.type {
+					else switch l.def.type {
 						case IntGrid, Tiles, AutoLayer: i++;
 						case Entities: // remember to increment PNG layer index too, if entities are rendered one day
 					}
@@ -1230,8 +1230,8 @@ class Project {
 
 	public function isIntGridValueUsed(layer:data.def.LayerDef, valueId:Int) {
 		for(w in worlds)
-		for(l in w.levels) {
-			var li = l.getLayerInstance(layer);
+		for(l in w.levels)
+		for(li in l.getLayerInstances(layer)) {
 			if( li!=null ) {
 				for(cx in 0...li.cWid)
 				for(cy in 0...li.cHei)

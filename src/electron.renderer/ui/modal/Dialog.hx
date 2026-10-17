@@ -89,29 +89,32 @@ class Dialog extends ui.Modal {
 		return b;
 	}
 
-	public function addConfirm(cb:Void->Void) {
+	public function addConfirm(cb:Void->Void) : js.jquery.JQuery {
 		var b = addButton(L.t._("Confirm"), "confirm", function() {
 			cb();
 			close();
 		});
 		b.detach();
 		jButtons.prepend(b);
+		return b;
 	}
 
-	public function addCancel(?cb:Void->Void) {
+	public function addCancel(?cb:Void->Void) : js.jquery.JQuery {
 		var b = addButton(L.t._("Cancel"), "cancel", function() {
 			if( cb!=null )
 				cb();
 			close();
 		});
+		return b;
 	}
 
-	public function addClose(?cb:Void->Void) {
+	public function addClose(?cb:Void->Void) : js.jquery.JQuery {
 		var b = addButton(L.t._("Close"), "confirm", function() {
 			if( cb!=null )
 				cb();
 			close();
 		});
+		return b;
 	}
 
 	override function update() {

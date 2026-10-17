@@ -62,7 +62,7 @@ class IntGridPalette extends ui.ToolPalette {
 				var jTitle = new J('<li class="title collapser"/>');
 				jTitle.appendTo(jList);
 				jTitle.text(g.displayName);
-				jTitle.attr("id", project.iid+"_intGridPalette_"+tool.curLayerInstance.layerDefUid+"_group_"+g.groupUid);
+				jTitle.attr("id", project.iid+"_intGridPalette_"+tool.curLayerInstance.iid+"_group_"+g.groupUid);
 				jTitle.attr("default", "open");
 			}
 
@@ -108,9 +108,9 @@ class IntGridPalette extends ui.ToolPalette {
 
 				ui.modal.ContextMenu.attachTo_new(jLi, false, (ctx:ui.modal.ContextMenu)->{
 					ctx.addAction({
-						label: L.t._("Edit layer"),
+						label: L.t._("Edit layer definition"),
 						cb: ()->{
-							App.ME.executeAppCommand(C_OpenLayerPanel);
+							App.ME.executeAppCommand(C_OpenLayerDefPanel);
 						},
 					});
 				});
