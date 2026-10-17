@@ -1298,14 +1298,27 @@ class Editor extends Page {
 	}
 
 	public var lastMouseWheelDelta = 0.;
-	override function onAppMouseWheel(delta:Float) {
-		super.onAppMouseWheel(delta);
+	var lastMouseWheelDeltaX = 0.;
+	var lastMouseWheelDeltaY = 0.;
+	var lastMouseWheelCtrlKey = false;
+	override function onAppMouseWheel(delta:Float, deltaX:Float, deltaY:Float, ctrlKey:Bool) {
+		super.onAppMouseWheel(delta, deltaX, deltaY, ctrlKey);
 		lastMouseWheelDelta = delta;
+		lastMouseWheelDeltaX = deltaX;
+		lastMouseWheelDeltaY = deltaY;
+		lastMouseWheelCtrlKey = ctrlKey;
 	}
 
 
 	function onHeapsMouseWheel(e:hxd.Event) {
-		deltaZoom( lastMouseWheelDelta*settings.v.mouseWheelSpeed, getMouse() );
+		if( settings.v.enableMacOsTouchPad && !lastMouseWheelCtrlKey ) {
+			camera.levelX += lastMouseWheelDeltaX / camera.adjustedZoom;
+			camera.levelY += lastMouseWheelDeltaY / camera.adjustedZoom;
+			camera.cancelAutoScrolling();
+			App.ME.requestCpu();
+		}
+		else
+			deltaZoom( lastMouseWheelDelta*settings.v.mouseWheelSpeed, getMouse() );
 		cursor.onMouseMove( getMouse() );
 	}
 

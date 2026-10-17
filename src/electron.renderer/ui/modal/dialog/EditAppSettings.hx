@@ -186,6 +186,10 @@ class EditAppSettings extends ui.modal.Dialog {
 			onSettingChanged();
 		});
 
+		// macOS touchpad navigation
+		var i = Input.linkToHtmlInput(settings.v.enableMacOsTouchPad, jForm.find("#enableMacOsTouchPad"));
+		i.onChange = ()->onSettingChanged();
+
 		// Mouse wheel speed
 		var i = Input.linkToHtmlInput(settings.v.mouseWheelSpeed, jForm.find("#mouseWheelSpeed"));
 		i.setBounds(0.25, 3);

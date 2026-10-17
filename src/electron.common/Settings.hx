@@ -27,6 +27,7 @@ typedef AppSettings = {
 
 	var appUiScale : Float;
 	var editorUiScale : Float;
+	var enableMacOsTouchPad : Bool;
 	var mouseWheelSpeed : Float;
 	var autoWorldModeSwitch : AutoWorldModeSwitch;
 	var fieldsRender : FieldsRender;
@@ -112,6 +113,7 @@ class Settings {
 			nearbyTilesRenderingDist: 1,
 			appUiScale: 1.0,
 			editorUiScale: 1.0,
+			enableMacOsTouchPad: false,
 			mouseWheelSpeed: 1.0,
 
 			uiStates: [],

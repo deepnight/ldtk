@@ -730,9 +730,9 @@ class App extends dn.Process {
 
 	function onAppMouseWheel(e:js.html.WheelEvent) {
 		if( hasPage() && !curPageProcess.isPaused() ) {
-			var spd = e.ctrlKey ? 0.20 : 0.01;
+			var spd = e.ctrlKey ? ( settings.v.enableMacOsTouchPad ? 0.10 : 0.20 ) : 0.01;
 			var delta = spd * -e.deltaY;
-			curPageProcess.onAppMouseWheel(delta);
+			curPageProcess.onAppMouseWheel(delta, e.deltaX, e.deltaY, e.ctrlKey);
 		}
 	}
 

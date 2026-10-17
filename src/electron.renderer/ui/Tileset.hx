@@ -684,16 +684,25 @@ class Tileset {
 
 
 	function onPickerMouseWheel(ev:js.html.WheelEvent) {
+		var touchpadNavigation = App.ME.settings.v.enableMacOsTouchPad;
+		if( ev.deltaY==0 && (!touchpadNavigation || ev.deltaX==0) )
+			return;
 
-		if( ev.deltaY!=0 ) {
-			ev.preventDefault();
-			if( viewFitted )
-				return;
+		ev.preventDefault();
+		if( viewFitted )
+			return;
 
+		if( touchpadNavigation && !ev.ctrlKey ) {
+			scrollX += ev.deltaX / zoom;
+			scrollY += ev.deltaY / zoom;
+			tx = ty = null;
+		}
+		else if( ev.deltaY!=0 ) {
 			var oldLocalX = pageToLocalX(ev.pageX);
 			var oldLocalY = pageToLocalY(ev.pageY);
 
-			zoom += -ev.deltaY*0.001 * zoom;
+			var zoomSpeed = touchpadNavigation && ev.ctrlKey ? 0.015 * App.ME.settings.v.mouseWheelSpeed : 0.001;
+			zoom += -ev.deltaY * zoomSpeed * zoom;
 
 			var newLocalX = pageToLocalX(ev.pageX);
 			var newLocalY = pageToLocalY(ev.pageY);
