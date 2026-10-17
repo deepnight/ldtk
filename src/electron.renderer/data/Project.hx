@@ -46,7 +46,7 @@ class Project {
 	public var backupRelPath : Null<String>;
 	public var identifierStyle : ldtk.Json.IdentifierStyle = Capitalize;
 	public var tutorialDesc : Null<String>;
-	public var customCommands : Array<ldtk.Json.CustomCommand> = [];
+	public var customCommands : Array<data.DataTypes.CustomCommand> = [];
 
 	var quickLevelAccessUid : Map<Int, Level> = new Map();
 	var quickLevelAccessIid : Map<String, Level> = new Map();
@@ -307,10 +307,11 @@ class Project {
 		p.backupRelPath = json.backupRelPath;
 		p.pngFilePattern = json.pngFilePattern;
 		p.tutorialDesc = JsonTools.unescapeString(json.tutorialDesc);
-		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:ldtk.Json.CustomCommand)->{
+		p.customCommands = JsonTools.readArray(json.customCommands, []).map( (cmdJson:Dynamic)->{
 			return {
 				command: JsonTools.unescapeString(cmdJson.command),
 				when: JsonTools.readEnum(ldtk.Json.CustomCommandTrigger, cmdJson.when, false, Manual),
+				os: JsonTools.readEnum(data.DataTypes.CustomCommandOs, cmdJson.os, false, All),
 			}
 		});
 
@@ -663,9 +664,10 @@ class Project {
 			backupRelPath: backupRelPath,
 			levelNamePattern: levelNamePattern,
 			tutorialDesc : JsonTools.escapeString(tutorialDesc),
-			customCommands: customCommands.map(cmd->{
+			customCommands: cast customCommands.map(cmd->{ // cast: `os` isn't part of the official ldtk.Json.CustomCommand
 				command: JsonTools.escapeString(cmd.command),
 				when: JsonTools.writeEnum(cmd.when, false),
+				os: JsonTools.writeEnum(cmd.os, false),
 			}),
 
 			flags: {
@@ -1339,7 +1341,16 @@ class Project {
 	}
 
 	public function getCustomCommmands(when:ldtk.Json.CustomCommandTrigger) {
-		return customCommands.filter( cmd->cmd.when==when );
+		return customCommands.filter( cmd->cmd.when==when && commandMatchesHostOs(cmd) );
+	}
+
+	public static function commandMatchesHostOs(cmd:data.DataTypes.CustomCommand) {
+		return switch cmd.os {
+			case null, All: true;
+			case Windows: App.isWindows();
+			case Mac: App.isMac();
+			case Linux: App.isLinux();
+		}
 	}
 
 

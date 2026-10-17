@@ -109,7 +109,7 @@ class EditAppSettings extends ui.modal.Dialog {
 		);
 
 		// Nearby tiles rendering distance
-		var allValues = [0, 1, 1.5, 2];
+		var allValues = [0, 1, 1.5, 2, 4, 8, 16];
 		if( !allValues.contains(settings.v.nearbyTilesRenderingDist) ) {
 			for(v in allValues)
 				if( v>=settings.v.nearbyTilesRenderingDist) {
@@ -149,6 +149,23 @@ class EditAppSettings extends ui.modal.Dialog {
 
 		// Blur mask
 		var i = Input.linkToHtmlInput(settings.v.blurMask, jForm.find("#blurMask"));
+		i.onChange = ()->onSettingChanged();
+
+		// Simplified world view render
+		var i = Input.linkToHtmlInput(settings.v.simplifiedRenderInWorldView, jForm.find("#simplifyWorldView"));
+		i.onChange = ()->onSettingChanged();
+
+		// Simplified world view render alpha threshold
+		var i = Input.linkToHtmlInput(settings.v.simplifiedRenderAlphaThreshold, jForm.find("#simplifiedRenderAlphaThreshold"));
+		i.setBounds(0, 1);
+		i.onChange = ()->onSettingChanged();
+
+		// Camera reset on world mode change (eg. layer change)
+		var i = Input.linkToHtmlInput(settings.v.cameraResetOnWorldModeChange, jForm.find("#cameraResetOnWorldModeChange"));
+		i.onChange = ()->onSettingChanged();
+
+		// Exit world view with ESC
+		var i = Input.linkToHtmlInput(settings.v.escExitsWorldMode, jForm.find("#escExitsWorldMode"));
 		i.onChange = ()->onSettingChanged();
 
 		// Fields render

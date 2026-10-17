@@ -51,3 +51,17 @@ typedef CachedImage = {
 	var pixels: hxd.Pixels;
 	var tex: h3d.mat.Texture;
 }
+
+// Extension of ldtk.Json.CustomCommand: `os` restricts the command to a specific OS (not part of the official JSON schema)
+typedef CustomCommand = {
+	var command : String;
+	var when : ldtk.Json.CustomCommandTrigger;
+	var os : CustomCommandOs;
+}
+
+enum CustomCommandOs {
+	All;
+	Windows;
+	Mac;
+	Linux;
+}

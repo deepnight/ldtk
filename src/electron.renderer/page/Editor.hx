@@ -624,8 +624,11 @@ class Editor extends Page {
 					curTool.popInPalette();
 				else if( specialTool!=null )
 					clearSpecialTool();
-				else if( ui.Modal.hasAnyOpen() )
-					ui.Modal.closeLatest();
+				else if( ui.Modal.hasAnyOpen() ) {
+					// The world panel closes on ESC too (leaving world mode), unless disabled in settings
+					if( settings.v.escExitsWorldMode || !Std.isOfType(ui.Modal.getLatestOpen(), ui.modal.panel.WorldPanel) )
+						ui.Modal.closeLatest();
+				}
 				else if( selectionTool.any() )
 					selectionTool.clear();
 
@@ -740,9 +743,13 @@ class Editor extends Page {
 				if( ui.Modal.hasAnyOpen() )
 					N.error("Cannot run commands for now");
 				else {
-					var manualCmds = project.customCommands.filter( c->c.when==Manual );
-					if( manualCmds.length==0 )
-						ui.Notification.warning("The project has no custom command. You can add one in the Project Settings panel (press P)");
+					var manualCmds = project.getCustomCommmands(Manual);
+					if( manualCmds.length==0 ) {
+						if( project.customCommands.filter( c->c.when==Manual ).length>0 )
+							ui.Notification.warning("The project has no custom command for this OS. You can check commands OS restrictions in the Project Settings panel (press P)");
+						else
+							ui.Notification.warning("The project has no custom command. You can add one in the Project Settings panel (press P)");
+					}
 					else {
 						if( manualCmds.length==1 )
 							ui.modal.dialog.CommandRunner.runSingleCommand(project, manualCmds[0]);
@@ -1380,6 +1387,9 @@ class Editor extends Page {
 			worldRender.invalidateLevelRender(curLevel);
 
 		curLevelId = l.uid;
+		// Outside of world mode, keep the world multi-selection in sync with the active level
+		if( !worldMode && worldTool!=null )
+			worldTool.selectedLevels = [l];
 		ge.emit( LevelSelected(l) );
 		ge.emit( ViewportChanged(true) );
 		saveLastProjectInfos();
@@ -1710,7 +1720,8 @@ class Editor extends Page {
 			jFloatingOptions.css("margin-left", m+"px");
 		}
 
-		camera.onWorldModeChange(worldMode, usedMouseWheel);
+		if( settings.v.cameraResetOnWorldModeChange )
+			camera.onWorldModeChange(worldMode, usedMouseWheel);
 	}
 
 	public function setGrid(v:Bool, notify=true) {
@@ -2246,8 +2257,13 @@ class Editor extends Page {
 			case AppSettingsChanged:
 
 			case WorldMode(active):
-				if( !active && curWorldDepth!=curLevel.worldDepth )
-					selectWorldDepth(curLevel.worldDepth);
+				if( !active ) {
+					if( curWorldDepth!=curLevel.worldDepth )
+						selectWorldDepth(curLevel.worldDepth);
+					// Collapse world multi-selection to the level being opened
+					worldTool.selectedLevels = [curLevel];
+					worldRender.updateCurrentHighlight();
+				}
 				updateWorldDepthsUI();
 
 			case WorldDepthSelected(worldDepth):
@@ -2356,6 +2372,7 @@ class Editor extends Page {
 				Tool.clearSelectionMemory();
 				clearSpecialTool();
 				updateTool();
+				worldTool.clearLevelSelection();
 
 			case LevelSettingsChanged(l):
 				updateGuide();
@@ -2365,6 +2382,8 @@ class Editor extends Page {
 			case LevelAdded(l):
 
 			case LevelRemoved(l):
+				if( worldTool.selectedLevels.remove(l) )
+					worldRender.updateCurrentHighlight();
 
 			case LevelResized(l):
 
@@ -2456,6 +2475,7 @@ class Editor extends Page {
 
 			case WorldSelected(_):
 				updateWorldList();
+				worldTool.clearLevelSelection();
 				// NOTE: a LevelSelected event always happens right after this one
 
 			case WorldCreated(_):

@@ -98,6 +98,27 @@
 				<input type="checkbox" id="blurMask" />
 			</dd>
 
+			<dt>
+				<label for="simplifyWorldView">Simplified world view render</label>
+				<info>
+					If enabled, levels in the World view are rendered using a single colored pixel per tile.
+					If disabled, tiles are rendered in full resolution, which could impact performances on large worlds.
+				</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="simplifyWorldView" />
+			</dd>
+
+			<dt>
+				<label for="simplifiedRenderAlphaThreshold">Simplified render alpha threshold</label>
+				<info>
+					When the simplified world view render is enabled, tiles with an average alpha below this threshold are excluded from the render.
+					Decrease this value if the simplified view is missing details, increase it if too many small details are included.
+				</info>
+			</dt>
+			<dd>
+				<input type="number" id="simplifiedRenderAlphaThreshold" step="0.01" min="0" max="1" />
+			</dd>
 
 		</dl>
 	</div>
@@ -106,6 +127,32 @@
 
 	<div class="right">
 		<dl class="form">
+
+			<dt class="full">
+				<h3>Behavior</h3>
+			</dt>
+
+			<dt>
+				<label for="cameraResetOnWorldModeChange">Auto-fit camera on world mode change</label>
+				<info>
+					If enabled, the camera will automatically zoom to fit when switching between World and Level modes (eg. when changing layers).
+					Disable this option to keep your current camera position instead.
+				</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="cameraResetOnWorldModeChange" />
+			</dd>
+
+			<dt>
+				<label for="escExitsWorldMode">Exit World view with ESC</label>
+				<info>
+					If enabled, pressing ESC while in the World view closes it and returns to the Level view.
+					Disable this option to keep the World view open when pressing ESC.
+				</info>
+			</dt>
+			<dd>
+				<input type="checkbox" id="escExitsWorldMode" />
+			</dd>
 
 			<dt class="full">
 				<h3>Controls</h3>
@@ -186,4 +233,3 @@
 	</div>
 
 </div>
-

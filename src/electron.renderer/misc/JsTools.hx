@@ -931,6 +931,15 @@ class JsTools {
 				var uiStateId : Null<Settings.UiState> = cast jOldSelect.attr("id");
 				new ui.modal.dialog.SelectPicker(jSelect, uiStateId, v->{
 					jOldSelect.val(v).change();
+
+					// Refresh displayed option, as the change event might not rebuild this advanced select
+					for(elem in jSelect.find(".option")) {
+						var jOpt = new J(elem);
+						if( jOpt.attr("value")==jOldSelect.val() )
+							jOpt.addClass("selected");
+						else
+							jOpt.removeClass("selected");
+					}
 				});
 			});
 		});
