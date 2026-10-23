@@ -92,14 +92,14 @@ class Progress extends ui.Modal {
 		return false;
 	}
 
-	public static function getTitleMiniBar(len=4) : String {
+	public static function getTitleMiniBar(len=5) : String {
 		for(p in ALL)
 			if( !p.destroyed ) {
 				var filled = p.opsCount==0 ? len : Std.int(len*p.curIdx/p.opsCount);
-				var bar = "[";
+				var bar = "";
 				for(i in 0...len)
-					bar += i<filled ? "◉" : "∘";
-				return bar+"] ";
+					bar += i<filled ? "▰" : "▱";
+				return bar+"  ";
 			}
 		return "";
 	}
