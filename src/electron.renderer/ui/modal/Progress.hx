@@ -93,15 +93,23 @@ class Progress extends ui.Modal {
 	}
 
 	public static function getTitleMiniBar(len=5) : String {
-		for(p in ALL)
-			if( !p.destroyed ) {
-				var filled = p.opsCount==0 ? len : Std.int(len*p.curIdx/p.opsCount);
-				var bar = "";
-				for(i in 0...len)
-					bar += i<filled ? "▰" : "▱";
-				return bar+"  ";
-			}
-		return "";
+		var ratio = -1.;
+		if( MetaProgress.exists() )
+			ratio = MetaProgress.getProgressRatio();
+		else
+			for(p in ALL)
+				if( !p.destroyed ) {
+					ratio = p.opsCount==0 ? 1 : p.curIdx/p.opsCount;
+					break;
+				}
+
+		if( ratio<0 )
+			return "";
+		var filled = Std.int(len*ratio);
+		var bar = "";
+		for(i in 0...len)
+			bar += i<filled ? "▰" : "▱";
+		return bar+"  ";
 	}
 
 	@:allow(App)

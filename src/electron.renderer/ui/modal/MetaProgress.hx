@@ -38,6 +38,10 @@ class MetaProgress extends ui.Modal {
 	}
 
 
+	public static function getProgressRatio() : Float {
+		return exists() ? ( CUR.max==0 ? 1 : CUR.idx/CUR.max ) : 0;
+	}
+
 	public static inline function exists() return CUR!=null && !CUR.isClosing();
 	public static inline function closeCurrent() {
 		if( exists() )
@@ -75,17 +79,24 @@ class MetaProgress extends ui.Modal {
 
 
 	function updateBar(immediate=false) {
-		targetRatio = 100 * idx/max;
+		targetRatio = max==0 ? 100 : 100 * idx/max;
+		App.ME.updateWindowTitle();
 		if( immediate ) {
 			curRatio = targetRatio;
 			jBar.find(".bar").css({ width:targetRatio+"%" });
 		}
 	}
 
+	override function onClose() {
+		super.onClose();
+		App.ME.updateWindowTitle();
+	}
+
 	override function onDispose() {
 		super.onDispose();
 		if( CUR==this )
 			CUR = null;
+		App.ME.updateWindowTitle();
 	}
 
 	override function update() {
