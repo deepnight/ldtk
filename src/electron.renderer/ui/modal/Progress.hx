@@ -73,6 +73,8 @@ class Progress extends ui.Modal {
 			jBar.find(".label").text( label );
 		else
 			jBar.find(".label").empty();
+
+		App.ME.updateWindowTitle();
 	}
 
 	/**
@@ -88,6 +90,18 @@ class Progress extends ui.Modal {
 			if( !e.destroyed )
 				return true;
 		return false;
+	}
+
+	public static function getTitleMiniBar(len=4) : String {
+		for(p in ALL)
+			if( !p.destroyed ) {
+				var filled = p.opsCount==0 ? len : Std.int(len*p.curIdx/p.opsCount);
+				var bar = "[";
+				for(i in 0...len)
+					bar += i<filled ? "◉" : "∘";
+				return bar+"] ";
+			}
+		return "";
 	}
 
 	@:allow(App)
@@ -132,6 +146,7 @@ class Progress extends ui.Modal {
 	override function onDispose() {
 		super.onDispose();
 		ALL.remove(this);
+		App.ME.updateWindowTitle();
 		updateAllPositions();
 	}
 

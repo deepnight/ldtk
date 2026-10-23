@@ -25,6 +25,8 @@ class App extends dn.Process {
 
 	public var lastKnownMouse : { pageX:Int, pageY:Int };
 	var curPageProcess : Null<Page>;
+	var windowTitle : Null<String>;
+	var lastWindowTitle : Null<String>;
 	public var settings : Settings;
 	var jsKeyDowns : Map<Int,Bool> = new Map();
 	var heapsKeyDowns : Map<Int,Bool> = new Map();
@@ -1055,13 +1057,23 @@ class App extends dn.Process {
 	}
 
 	public function setWindowTitle(?str:String) {
+		windowTitle = str;
+		updateWindowTitle();
+	}
+
+	public function updateWindowTitle() {
+		var str = windowTitle;
 		var base = Const.APP_NAME+" "+Const.getAppVersionStr();
 		if( str==null )
 			str = base;
 		else
 			str = str + "    --    "+base;
 
-		ET.setWindowTitle(str);
+		str = ui.modal.Progress.getTitleMiniBar() + str;
+		if( str!=lastWindowTitle ) {
+			lastWindowTitle = str;
+			ET.setWindowTitle(str);
+		}
 	}
 
 	public inline function hasPage() {
