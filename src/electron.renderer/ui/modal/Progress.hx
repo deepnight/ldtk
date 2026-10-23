@@ -66,7 +66,7 @@ class Progress extends ui.Modal {
 
 
 	function updateBar(?label:String) {
-		var pct = 100 * curIdx/opsCount;
+		var pct = opsCount==0 ? 100 : 100 * curIdx/opsCount;
 		jBar.find(".bar").css({ width:pct+"%" });
 
 		if( label!=null )
