@@ -250,6 +250,7 @@ class TilesetDef {
 		var oldRelPath = relPath;
 		var oldPxWid = pxWid;
 		var oldPxHei = pxHei;
+		var oldCWid = cWid;
 
 		// Init
 		if( relFilePath!=null ) {
@@ -284,7 +285,7 @@ class TilesetDef {
 
 			if( oldRelPath!=null || isUsingEmbedAtlas() && oldPxWid>0 ) {
 				// Try to update previous image
-				return remapAllTileIdsAfterResize(oldPxWid, oldPxHei);
+				return remapAllTileIdsAfterResize(oldPxWid, oldPxHei, oldCWid);
 			}
 			else
 				return Ok;
@@ -292,7 +293,7 @@ class TilesetDef {
 	}
 
 
-	function remapAllTileIdsAfterResize(oldPxWid:Int, oldPxHei:Int) : EditorTypes.ImageLoadingResult {
+	function remapAllTileIdsAfterResize(oldPxWid:Int, oldPxHei:Int, oldCWid:Int) : EditorTypes.ImageLoadingResult {
 		App.LOG.warning('Tileset $identifier remapping (image size changed)...');
 		if( oldPxWid==pxWid && oldPxHei==pxHei )
 			return Ok;
@@ -304,7 +305,11 @@ class TilesetDef {
 			return TrimmedPadding;
 		}
 
-		return remapAllTileIds( dn.M.ceil( oldPxWid/tileGridSize ) );
+		// Height-only expansion with unchanged grid width: existing tile IDs are still valid
+		if( oldPxWid==pxWid && oldCWid==cWid && oldPxHei<pxHei )
+			return Ok;
+
+		return remapAllTileIds(oldCWid);
 	}
 
 
