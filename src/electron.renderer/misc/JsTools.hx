@@ -273,10 +273,12 @@ class JsTools {
 	}
 
 
-	public static function createEntityPreview(project:data.Project, ed:data.def.EntityDef, sizePx=32) {
+	public static function createEntityPreview(project:data.Project, ed:data.def.EntityDef, sizePx=32, setSize=true) {
 		var jWrapper = new J('<div class="entityPreview icon"></div>');
-		jWrapper.css("width", sizePx+"px");
-		jWrapper.css("height", sizePx+"px");
+		if( setSize ) {
+			jWrapper.css("width", sizePx+"px");
+			jWrapper.css("height", sizePx+"px");
+		}
 
 		if( ed.uiTileRect!=null && ed.uiTileRect.w>0 ) {
 			// Alt custom UI tile

@@ -1417,6 +1417,20 @@ div.entityRef {
 	background-repeat: no-repeat;
 	background-position: left center;
 
+	&.hasPreview {
+		grid-template-columns: min-content auto;
+		column-gap: 4px;
+	}
+	> .refPreview {
+		grid-row: 1 / span 2;
+		align-self: center;
+		width: 18px;
+		height: 18px;
+		object-fit: contain;
+		image-rendering: pixelated;
+		pointer-events: none;
+	}
+
 	&.isBackRef {
 		background-image: url("../icons/left.svg");
 	}

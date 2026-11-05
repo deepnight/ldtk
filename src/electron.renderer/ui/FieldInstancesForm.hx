@@ -536,6 +536,22 @@ class FieldInstancesForm {
 					var jRef = JsTools.createEntityRef( tei, jTarget );
 					jRef.attr("id",domId);
 
+					// Ref icon preview (if any)
+					if( fi.def.isArray && tei!=null && getEntityInstance()!=null ) {
+						var tile = tei.getSmartTile();
+						var jIcon : J = null;
+						if( tile!=null && tile!=tei.def.tileRect ) {
+							var td = project.defs.getTilesetDef(tile.tilesetUid);
+							if( td!=null )
+								jIcon = td.createTileHtmlImageFromRect(tile);
+						}
+						if( jIcon==null || jIcon.attr("src")==null )
+							jIcon = JsTools.createEntityPreview(project, tei.def, false);
+
+						jRef.addClass("hasPreview");
+						jRef.prepend( jIcon.addClass("refPreview") );
+					}
+
 					// Follow ref
 					jRef.click( (_)->{
 						if( fi.valueIsNull(arrayIdx) )
