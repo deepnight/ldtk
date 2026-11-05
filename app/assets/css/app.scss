@@ -7317,6 +7317,22 @@ dl.form.fieldInstanceEditor {
 	column-gap: 2px;
 	>dt {
 		max-width: none;
+		.arrayLabel {
+			display: grid;
+			align-content: start;
+			a {
+				justify-self: end;
+				font-size: 7pt;
+				padding: 1;
+				border-radius: 3px;
+				margin-top: 4px;
+				&:hover {
+					color: black;
+					background-color: $orange;
+					text-decoration: none;
+				}
+			}
+		}
 		label {
 			overflow: hidden;
 		}

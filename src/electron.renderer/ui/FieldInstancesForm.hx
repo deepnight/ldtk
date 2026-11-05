@@ -785,6 +785,31 @@ class FieldInstancesForm {
 	}
 
 
+	function emptyArray(fi:FieldInstance) {
+		var source = getEntityInstance();
+		var targets = new Map<String, data.inst.EntityInstance>();
+		if( fi.def.type==F_EntityRef && source!=null )
+			for(i in 0...fi.getArrayLength()) {
+				var target = fi.getEntityRefInstance(i);
+				if( target!=null )
+					targets.set(target.iid, target);
+			}
+
+		fi.clearValue();
+		for(target in targets) {
+			if( !source.hasEntityRefTo(target) )
+				project.unregisterReverseIidRef(source, target);
+
+			if( fi.def.symmetricalRef && target.hasEntityRefTo(source, fi.def) ) {
+				target.tidyLostSymmetricalEntityRefs(fi.def);
+				editor.invalidateLevelCache(target._li.level);
+			}
+		}
+		ValuePicker.cancelCurrent();
+		onFieldChange(fi);
+	}
+
+
 	function onFieldChange(fi:FieldInstance, keepCurrentSpecialTool=false) {
 		if( !keepCurrentSpecialTool )
 			Editor.ME.clearSpecialTool();
@@ -861,7 +886,17 @@ class FieldInstancesForm {
 					if( fi.getArrayMaxLength()>0 )
 						jLabel.append('/${fi.getArrayMaxLength()}');
 				}
-				jDt.append(jLabel);
+				if( fi.getArrayLength()>0 ) {
+					var jArrayLabel = new J('<div class="arrayLabel"/>').appendTo(jDt);
+					jArrayLabel.append(jLabel);
+					var jEmpty = new J('<a href="#"/>').text( L.t._("Empty array") ).appendTo(jArrayLabel);
+					jEmpty.click( ev->{
+						ev.preventDefault();
+						emptyArray(fi);
+					});
+				}
+				else
+					jDt.append(jLabel);
 			}
 			jDt.attr("title", jDt.find("label").text());
 			jDt.attr("noTip", "noTip");
