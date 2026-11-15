@@ -36,6 +36,7 @@ class Progress extends ui.Modal {
 		log.def = (s)->log.add("progress", '  $name: '+s);
 		this.title = title;
 		ALL.push(this);
+		App.ME.requestCpu();
 		canBeClosedManually = false;
 		curOps = ops==null ? [] : ops;
 		opsCount = curOps.length;
@@ -154,6 +155,7 @@ class Progress extends ui.Modal {
 	override function onDispose() {
 		super.onDispose();
 		ALL.remove(this);
+		App.ME.updateCpu();
 		App.ME.updateWindowTitle();
 		updateAllPositions();
 	}
@@ -169,7 +171,6 @@ class Progress extends ui.Modal {
 					state = InitFrame;
 
 			case InitFrame:
-				dn.js.ElectronTools.disableThrottling();
 				App.LOG.general('  Progress started: : "$title", ${curOps.length} operation(s)');
 				log.def("  Started...");
 				state = Running;
@@ -203,7 +204,6 @@ class Progress extends ui.Modal {
 			case Completed:
 				if( onComplete!=null )
 					onComplete();
-				dn.js.ElectronTools.enableThrottling();
 				destroy();
 		}
 

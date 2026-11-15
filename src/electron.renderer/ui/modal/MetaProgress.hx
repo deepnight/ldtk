@@ -23,6 +23,7 @@ class MetaProgress extends ui.Modal {
 
 		this.title = title;
 		CUR = this;
+		App.ME.requestCpu();
 		canBeClosedManually = false;
 		max = ops;
 
@@ -89,6 +90,7 @@ class MetaProgress extends ui.Modal {
 
 	override function onClose() {
 		super.onClose();
+		App.ME.updateCpu();
 		App.ME.updateWindowTitle();
 	}
 
@@ -96,6 +98,7 @@ class MetaProgress extends ui.Modal {
 		super.onDispose();
 		if( CUR==this )
 			CUR = null;
+		App.ME.updateCpu();
 		App.ME.updateWindowTitle();
 	}
 

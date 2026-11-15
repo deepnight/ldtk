@@ -19,6 +19,7 @@
 - Fixed a crash when updating an external CastleDB file
 - Fixed support for Aseprite 1.3.5 files
 - Fixed "Select" UI component that caused heavy lags when it contained lots of values
+- Fixed CPU throttling that caused operations happening in the background to run really slowly
 - Fixed the pasting of a copied rule inside an empty group
 - CastleDB: fixed renaming of an identifier that only exists in Level fields and not in Entity fields
 - CastleDB: fixed support for unique IDs in lists (note: nested lists in lists are not supported yet)

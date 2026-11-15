@@ -40,6 +40,7 @@ class App extends dn.Process {
 	public var clipboard : data.Clipboard;
 
 	var requestedCpuEndTime = 0.;
+	var cpuThrottlingDisabled = false;
 	public var pendingUpdate : Null<{ ver:String, github:Bool }>;
 
 	public var keyBindings : Array<KeyBinding> = [];
@@ -785,12 +786,12 @@ class App extends dn.Process {
 			return;
 
 		focused = true;
+		requestCpu();
 		jsKeyDowns = new Map();
 		heapsKeyDowns = new Map();
 		jsMetaKeyDown = false;
 		if( hasPage() )
 			curPageProcess.onAppFocus();
-		hxd.System.fpsLimit = -1;
 		clipboard.readSystemClipboard();
 	}
 
@@ -816,8 +817,30 @@ class App extends dn.Process {
 
 	public inline function requestCpu(full=true) {
 		requestedCpuEndTime = haxe.Timer.stamp()+2;
+		updateCpu();
 	}
 
+
+	public function updateCpu() {
+		var now = haxe.Timer.stamp();
+		var full = now<=requestedCpuEndTime || ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists();
+		if( full!=cpuThrottlingDisabled ) {
+			cpuThrottlingDisabled = full;
+			if( full )
+				ET.disableThrottling();
+			else
+				ET.enableThrottling();
+		}
+
+		if( full )
+			hxd.System.fpsLimit = -1;
+		else if( !focused )
+			hxd.System.fpsLimit = 2;
+		else if( now>requestedCpuEndTime+4 )
+			hxd.System.fpsLimit = Std.int(Const.FPS*0.2);
+		else
+			hxd.System.fpsLimit = Std.int(Const.FPS*0.5);
+	}
 
 	function loadSettings() {
 		LOG.fileOp("Loading settings from "+Settings.getDir()+"...");
@@ -1126,18 +1149,7 @@ class App extends dn.Process {
 	override function update() {
 		super.update();
 
-		// FPS limit while app isn't focused
-		if( haxe.Timer.stamp()<=requestedCpuEndTime ) // Has recent request
-			hxd.System.fpsLimit = -1;
-		else if( ui.modal.Progress.hasAny() || ui.modal.MetaProgress.exists() ) // progress is running
-			hxd.System.fpsLimit = -1;
-		else if( !focused ) // App is blurred
-			hxd.System.fpsLimit = 2;
-		else if( haxe.Timer.stamp()>requestedCpuEndTime+4 ) // last request is long time ago (idling?)
-			hxd.System.fpsLimit = Std.int(Const.FPS*0.2);
-		else
-			hxd.System.fpsLimit = Std.int(Const.FPS*0.5);
-
+		updateCpu();
 
 		// Process profiling
 		if( dn.Process.PROFILING && !cd.hasSetS("profiler",2) ) {
