@@ -61,7 +61,7 @@ jobs:
       # Node/NPM commands
       - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
       - run: cd app && npm install
       - run: cd app && npm run compile
 
