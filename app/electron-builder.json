@@ -49,5 +49,7 @@
 		"publish": ["github"]
 	},
 
-	"mac": {}
+	"mac": {
+		"minimumSystemVersion": "12.0.0"
+	}
 }
