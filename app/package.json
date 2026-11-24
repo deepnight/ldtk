@@ -31,15 +31,15 @@
 	},
 	"dependencies": {
 		"codemirror": "^5.64.0",
-		"electron-updater": "^5.3.0",
+		"electron-updater": "^6.8.12",
 		"simple-color-picker": "^1.0.5",
 		"sortablejs": "^1.15.0"
 	},
 	"devDependencies": {
-		"electron": "^24.1.2",
-		"electron-builder": "^23.6.0"
+		"electron": "^43.8.12",
+		"electron-builder": "^26.18.1"
 	},
-	"allowScripts": {
-		"electron@24.8.8": true
+	"engines": {
+		"node": ">=22.12.0"
 	}
 }
